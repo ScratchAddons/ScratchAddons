@@ -1,0 +1,32 @@
+{
+	"manifest_version": 2,
+	"name": "Scratch Addons",
+	"description": "[Description]",
+	"version": "0.0.1",
+	"background": {
+		"page": "background/background.html"
+	},
+	"browser_action": {
+		"default_icon": "images/icon.png"
+	},
+	"icons": {
+		"16": "images/icon.png",
+		"48": "images/icon.png",
+		"128": "images/icon.png"
+	},
+	"content_scripts": [{
+		"matches": ["https://scratch.mit.edu/*"],
+		"run_at": "document_idle",
+		"js": ["content-scripts/cs.js"]
+	}],
+	"permissions": [
+		"https://*.scratch.mit.edu/*",
+		"cookies",
+		"webRequest",
+		"webRequestBlocking",
+		"storage",
+		"notifications"
+	],
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+	"web_accessible_resources": ["content-scripts/inject/*", "addon-api/*", "addons/*"]
+}
