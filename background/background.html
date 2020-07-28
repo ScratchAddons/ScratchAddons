@@ -1,0 +1,21 @@
+<head>
+<meta charset="UTF-8">
+
+<!-- Declare scratchAddons object, handle global and local state -->
+<script src="declare-scratchaddons-object.js" type="module"></script>
+<script src="handle-local-state.js" type="module"></script>
+
+<!-- Load handlers. Some expose methods through scratchAddons.methods -->
+<script src="handle-fetch.js" type="module"></script>
+<script src="handle-auth.js" type="module"></script>
+<script src="handle-msgcount.js" type="module"></script>
+<script src="handle-global-state.js" type="module"></script>
+
+<!-- Load manifests into memory -->
+<script src="load-addon-manifests.js" type="module"></script>
+
+<!-- When everything is ready, run scripts -->
+<script src="get-userscripts.js" type="module"></script>
+<script src="get-background-scripts.js" type="module"></script>
+
+</head>

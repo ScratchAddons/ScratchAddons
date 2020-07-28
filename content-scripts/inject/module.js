@@ -1,0 +1,50 @@
+import runUserscript from "./run-userscript.js";
+
+const template = document.getElementById("scratch-addons");
+const getGlobalState = () => JSON.parse(template.getAttribute("data-global-state"));
+
+window.scratchAddons = {};
+scratchAddons.globalState = getGlobalState();
+scratchAddons.eventTargets = {
+    auth: []
+};
+
+const pendingPromises = {};
+pendingPromises.msgCount = [];
+
+scratchAddons.methods = {};
+scratchAddons.methods.getMsgCount = () => {
+    template.setAttribute(`data-request-msgcount__${Date.now()}`, "");
+    let promiseResolver;
+    const promise = new Promise(resolve => promiseResolver = resolve);
+    pendingPromises.msgCount.push(promiseResolver);
+    return promise;
+};
+
+const observer = new MutationObserver(mutationsList => {
+    for(const mutation of mutationsList) {
+        const attr = mutation.attributeName;
+        const attrType = attr.substring(0, attr.indexOf("__"));
+        const attrRawVal = template.getAttribute(attr);
+        let attrVal;
+        try {
+            attrVal = JSON.parse(attrRawVal);
+        } catch(err) {
+            attrVal = attrRawVal;
+        }
+        if(attrVal === null) return;
+        const removeAttr = () => template.removeAttribute(attr);
+        if(attr === "data-global-state") scratchAddons.globalState = getGlobalState();
+        else if(attr === "data-msgcount") {
+            pendingPromises.msgCount.forEach(promiseResolver => promiseResolver(attrVal));
+            pendingPromises.msgCount = [];
+            removeAttr();
+        }
+        else if (attrType === "data-fire-event") {
+            scratchAddons.eventTargets[attrVal.target].forEach(eventTarget => eventTarget.dispatchEvent(new CustomEvent(attrVal.name)));
+        }
+    }
+});
+observer.observe(template, {attributes: true});
+
+for(const addon of JSON.parse(template.getAttribute("data-userscripts"))) runUserscript(addon);
