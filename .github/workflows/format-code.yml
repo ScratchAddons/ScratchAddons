@@ -1,0 +1,25 @@
+name: Format code using prettier
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install Prettier
+        run: yarn add --dev --exact prettier
+      - name: Format code
+        run: yarn prettier --write .
+      - name: Check diff
+        run: git diff --exit-code HEAD
+      - name: Create pull request
+        if: failure()
+        uses: peter-evans/create-pull-request@v2
+        with:
+          commit-message: "style: Format code"
+          title: "Format code for ${{ github.ref }}"
+          branch: "auto-pr/clang-format/${{ github.ref }}"
