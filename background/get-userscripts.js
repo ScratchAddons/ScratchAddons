@@ -1,3 +1,4 @@
+import wildcard from "./wildcard.js";
 if (scratchAddons.localState.allReady) getUsercripts();
 else window.addEventListener("scratchaddonsready", getUsercripts);
 
@@ -40,13 +41,6 @@ function userscriptMatches(data, matches) {
 }
 
 function urlMatchesPattern(_pattern, _url) {
-  const pattern = _pattern.split("/");
-  const url = _url.split("/");
-  while (pattern.length) {
-    const p = pattern.shift();
-    const q = url.shift();
-    if (p !== q && p !== "*") return false;
-  }
-  return true;
+  _url = ((_pattern.endsWith("/")) && (!_url.endsWith("/"))) ? `${_url}/` : _url;
+  return !!(wildcard(_pattern,_url));
 }
-window.urlMatchesPattern = urlMatchesPattern;
