@@ -42,5 +42,6 @@ function userscriptMatches(data, matches) {
 
 function urlMatchesPattern(_pattern, _url) {
   _url = ((_pattern.endsWith("/")) && (!_url.endsWith("/"))) ? `${_url}/` : _url;
+  _url = _url.split("#")[0].split("?")[0];
   return !!(wildcard(_pattern,_url));
 }
