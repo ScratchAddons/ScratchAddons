@@ -11,9 +11,9 @@ jobs:
         with:
           node-version: 12.x
       - name: Install Prettier
-        run: npm install --global prettier
+        run: yarn add --dev --exact prettier
       - name: Format code
-        run: npx prettier --write .
+        run: yarn prettier --write .
       - name: Check diff
         run: git diff --exit-code HEAD
       - name: Create pull request
