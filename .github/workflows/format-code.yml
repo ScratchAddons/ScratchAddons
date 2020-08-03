@@ -12,10 +12,11 @@ jobs:
           node-version: 12.x
       - name: Install Prettier
         run: npm install --global prettier
+      - name: Check format
+        run: npx prettier --check .
       - name: Format code
+        if: failure()
         run: npx prettier --write .
-      - name: Check diff
-        run: git diff --exit-code HEAD
       - name: Create pull request
         if: failure()
         uses: peter-evans/create-pull-request@v2
