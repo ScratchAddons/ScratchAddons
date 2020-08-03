@@ -11,9 +11,9 @@ jobs:
         with:
           node-version: 12.x
       - name: Install Prettier
-        run: yarn add --dev --exact prettier
+        run: npm install --global prettier
       - name: Format code
-        run: yarn prettier --write .
+        run: npx prettier --write .
       - name: Check diff
         run: git diff --exit-code HEAD
       - name: Create pull request
@@ -22,4 +22,4 @@ jobs:
         with:
           commit-message: "style: Format code"
           title: "Format code for ${{ github.ref }}"
-          branch: "auto-pr/clang-format/${{ github.ref }}"
+          branch: "auto-pr/format/${{ github.ref }}"
