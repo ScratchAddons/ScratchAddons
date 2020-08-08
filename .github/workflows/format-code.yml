@@ -22,4 +22,4 @@ jobs:
       - name: Git Auto Commit
         uses: stefanzweifel/git-auto-commit-action@v4.4.0
         with:
-          commit_message: style: format code
+          commit_message: 'style: format code'
