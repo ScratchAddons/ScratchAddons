@@ -16,16 +16,16 @@ jobs:
         id: check
         run: npx prettier --check .
       - name: Format code
-        if: ${{ steps.check.outcome == "failure" }}
+        if: ${{ steps.check.outcome == 'failure' }}
         run: npx prettier --write .
       - name: Commit changed files
         id: commit
-        if: ${{ steps.check.outcome == "failure" }}
+        if: ${{ steps.check.outcome == 'failure' }}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "style: format code"
       - name: Create pull request
-        if: ${{ steps.commit.outcome == "failure" }}
+        if: ${{ steps.commit.outcome == 'failure' }}
         uses: peter-evans/create-pull-request@v3
         with: 
           commit-message: "style: format code"
