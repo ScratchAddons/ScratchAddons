@@ -3,8 +3,7 @@ name: Discussion
 about: Needs discussion
 title: "[Discussion] ..."
 labels: discussion
-assignees: ''
-
+assignees: ""
 ---
 
 <!-- Add what needs to be discussed, and more here -->

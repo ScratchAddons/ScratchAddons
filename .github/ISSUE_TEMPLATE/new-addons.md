@@ -3,8 +3,7 @@ name: New addons
 about: New addons
 title: "[New addon] ..."
 labels: new-addons
-assignees: ''
-
+assignees: ""
 ---
 
 **Describe the new addon**
