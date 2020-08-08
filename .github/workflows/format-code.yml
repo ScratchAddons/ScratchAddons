@@ -17,9 +17,8 @@ jobs:
       - name: Format code
         if: failure()
         run: npx prettier --write .
-      - name: Create pull request
+      - name: Commit changed files
         if: failure()
-      - name: Git Auto Commit
         uses: stefanzweifel/git-auto-commit-action@v4.4.0
         with:
           commit_message: 'style: format code'
