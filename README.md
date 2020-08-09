@@ -1,5 +1,7 @@
 # Welcome to ScratchAddons extension's Github repo!
 
+![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?style=flat-square&color=blue) ![](https://img.shields.io/github/forks/ScratchAddons/ScratchAddons?style=flat-square&color=red) ![](https://img.shields.io/github/watchers/ScratchAddons/ScratchAddons?style=flat-square) ![](https://img.shields.io/github/issues/ScratchAddons/ScratchAddons?color=green&logo=GitHub&logoColor=Red&style=flat-square) ![](https://img.shields.io/github/issues-closed/ScratchAddons/ScratchAddons?color=red&logo=GitHub&logoColor=red&style=flat-square) ![](https://img.shields.io/github/issues-pr/ScratchAddons/ScratchAddons?color=green&logo=GitHub&logoColor=red&style=flat-square) ![](https://img.shields.io/github/issues-pr-closed/ScratchAddons/ScratchAddons?color=red&logo=GitHub&logoColor=red&style=flat-square)
+
 _Note, that this was written by a person, who has a general idea of what's going on, but can't really dive into any details :P_
 
 Let's start nice and simple with:
