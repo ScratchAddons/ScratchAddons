@@ -1,27 +1,27 @@
-# Welcome to ScratchAddons extension's Github repo!
+# Welcome to Scratch Addons's repository!
 
 ![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?style=flat-square&color=blue) ![](https://img.shields.io/github/forks/ScratchAddons/ScratchAddons?style=flat-square&color=red) ![](https://img.shields.io/github/watchers/ScratchAddons/ScratchAddons?style=flat-square) ![](https://img.shields.io/github/issues/ScratchAddons/ScratchAddons?color=green&logo=GitHub&logoColor=Red&style=flat-square) ![](https://img.shields.io/github/issues-closed/ScratchAddons/ScratchAddons?color=red&logo=GitHub&logoColor=red&style=flat-square) ![](https://img.shields.io/github/issues-pr/ScratchAddons/ScratchAddons?color=green&logo=GitHub&logoColor=red&style=flat-square) ![](https://img.shields.io/github/issues-pr-closed/ScratchAddons/ScratchAddons?color=red&logo=GitHub&logoColor=red&style=flat-square)
 
-_Note, that this was written by a person, who has a general idea of what's going on, but can't really dive into any details :P_
+## What is Scratch Addons?
 
-Let's start nice and simple with:
+Scratch Addons is a WebExtension (supports both Chrome and Firefox). Scratch Addons' mission is to combine all existing Scratch extensions, userscripts and userstyles into a single easy-to-access place, while still letting users choose which ones to enable.
 
-## What is this extension for?
+## What's actually an "addon"?
 
-ScratchAddons' mission is to combine all existing Scratch extensions, used by many people into a single easy-to-access place. The extension itself contains various _addons_ - scripts or styles, that modify the look or behaviour of Scratch editor/website.
+An addon is similar to an extension or a userscript, but they use special APIs provided by the Scratch Addons extension. These APIs allow addons to run scripts on a Scratch page (userscripts), run scripts on the background (persistent scripts), or apply styles to the Scratch website (userstyles).  
+Userscripts and persistent scripts can use the `addon.*` JavaScript APIs, which allow them to obtain Scratch-related information (for example, get the current logged in user) and also use extension APIs (like sending notifications).  
+Converting an already existing extension/userscript into an addon, or writing your own, is very easy. [Check out the guide](https://github.com/ScratchAddons/ScratchAddons/wiki/Creating-an-addon).
 
-There aren't many addons yet, since we're still working on the _addon API_ (more on that later), but feel free to add new ones to the `addons` folder using the power of pull requests.
+## If everything is an addon, then what does Scratch Addons do?
 
-## Addon API
+Scratch Addons by itself is just an addon loader. Its main tasks are:
 
-The Addon API allows addons to interact with the environment. It allows them to access stuff, like viewing info about account the user's logged in, sending messages between tabs, adding stuff to editor's context menus, sending notifications, etc.
+- Allow users to enable, disable and configure addons.
+- Run addons and provide APIs to them.
+- Provide global state to addons (for example, the `addon.auth` API)
+- Avoid addons from interfering with each other.
+- Avoid duplicate work from different addons.
 
-TODO: Add a more detailed explanation of API
+## How can I contribute?
 
-## Webpages
-
-Oh right, that's one of the things I'm qualified to talk about! So, currently there is only a "settings" page for the user to manage addons and other extension settings. It is located at `webpages/settings` and contains an HTML, CSS and a few media files.
-
-## Miscellaneous
-
-If you found a bug, or want to suggest new features, please use the [issues tab](https://github.com/ScratchAddons/ScratchAddons/issues). If you want to help with the code or add a new addon, you can do a [pull request](https://github.com/ScratchAddons/ScratchAddons/pulls). I think that's it, i honestly never wrote a proper README.
+If you found a bug, or want to suggest new features, please use the [issues tab](https://github.com/ScratchAddons/ScratchAddons/issues). If you want to help with the code or add a new addon, fork this repository, and then create a [pull request](https://github.com/ScratchAddons/ScratchAddons/pulls).
