@@ -17,10 +17,8 @@ jobs:
       - name: Format code
         if: failure()
         run: npx prettier --write .
-      - name: Create pull request
+      - name: Commit changed files
         if: failure()
-        uses: peter-evans/create-pull-request@v2
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit-message: "style: Format code"
-          title: "Format code for ${{ github.ref }}"
-          branch: "auto-pr/format/${{ github.ref }}"
+          commit_message: "style: format code"
