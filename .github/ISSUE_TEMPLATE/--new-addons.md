@@ -1,5 +1,5 @@
 ---
-name: New addons
+name: "➕ New addons"
 about: New addons
 title: "[New addon] ..."
 labels: new-addons
