@@ -13,21 +13,14 @@ jobs:
       - name: Install Prettier
         run: npm install --global prettier
       - name: Check format
-        id: check
         run: npx prettier --check .
       - name: Format code
-        if: ${{ steps.check.outcome == 'failure' }}
+        if: failure()
         run: npx prettier --write .
-      - name: Commit changed files
-        id: commit
-        if: ${{ steps.check.outcome == 'failure' }}
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "style: format code"
       - name: Create pull request
-        if: ${{ steps.commit.outcome == 'failure' }}
-        uses: peter-evans/create-pull-request@v3
-        with: 
-          commit-message: "style: format code"
+        if: failure()
+        uses: peter-evans/create-pull-request@v2
+        with:
+          commit-message: "style: Format code"
           title: "Format code for ${{ github.ref }}"
           branch: "auto-pr/format/${{ github.ref }}"
