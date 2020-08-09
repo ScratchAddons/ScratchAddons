@@ -45,6 +45,7 @@ function urlMatchesPattern(pattern, url) {
   if (patternURL.origin !== urlURL.origin) return false;
   const patternPath = patternURL.pathname.split("/");
   const urlPath = urlURL.pathname.split("/");
+  if (urlPath[urlPath.length - 1] !== "") urlPath.push("");
   while (patternPath.length) {
     const p = patternPath.shift();
     const q = urlPath.shift();
