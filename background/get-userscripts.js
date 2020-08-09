@@ -39,14 +39,16 @@ function userscriptMatches(data, matches) {
   return false;
 }
 
-function urlMatchesPattern(_pattern, _url) {
-  const pattern = _pattern.split("/");
-  const url = _url.split("/");
-  while (pattern.length) {
-    const p = pattern.shift();
-    const q = url.shift();
+function urlMatchesPattern(pattern, url) {
+  const patternURL = new URL(pattern);
+  const urlURL = new URL(url);
+  if(patternURL.origin !== urlURL.origin) return false;
+  const patternPath = patternURL.pathname.split("/");
+  const urlPath = urlURL.pathname.split("/");
+  while (patternPath.length) {
+    const p = patternPath.shift();
+    const q = urlPath.shift();
     if (p !== q && p !== "*") return false;
   }
   return true;
 }
-window.urlMatchesPattern = urlMatchesPattern;
