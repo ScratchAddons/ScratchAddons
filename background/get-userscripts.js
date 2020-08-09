@@ -42,7 +42,7 @@ function userscriptMatches(data, matches) {
 function urlMatchesPattern(pattern, url) {
   const patternURL = new URL(pattern);
   const urlURL = new URL(url);
-  if(patternURL.origin !== urlURL.origin) return false;
+  if (patternURL.origin !== urlURL.origin) return false;
   const patternPath = patternURL.pathname.split("/");
   const urlPath = urlURL.pathname.split("/");
   while (patternPath.length) {
