@@ -15,6 +15,7 @@ Converting an already existing extension/userscript into an addon, or writing yo
 ## If everything is an addon, then what does Scratch Addons do?
 
 Scratch Addons by itself is just an addon loader. Its main tasks are:
+
 - Allow users to enable, disable and configure addons.
 - Run addons and provide APIs to them.
 - Provide global state to addons (for example, the `addon.auth` API)
