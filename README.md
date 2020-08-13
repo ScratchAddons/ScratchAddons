@@ -1,6 +1,8 @@
-# Welcome to Scratch Addons's repository!
+<p align="center"><img src="https://raw.githubusercontent.com/ScratchAddons/ScratchAddons/master/images/icon.png" width="193" height="193"></p>
 
 ![](https://img.shields.io/github/watchers/ScratchAddons/ScratchAddons?color=blue&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?color=blue&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/forks/ScratchAddons/ScratchAddons?color=blue&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/issues/ScratchAddons/ScratchAddons?color=green&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/issues-closed/ScratchAddons/ScratchAddons?color=red&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/issues-pr/ScratchAddons/ScratchAddons?color=green&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/issues-pr-closed/ScratchAddons/ScratchAddons?color=red&logo=GitHub&logoColor=white&style=flat-square)
+
+# Welcome to Scratch Addons's repository!
 
 ## What is Scratch Addons?
 
