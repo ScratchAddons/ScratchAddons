@@ -9,4 +9,5 @@ scratchAddons.manifests = {};
     scratchAddons.manifests[folderName] = manifest;
   }
   scratchAddons.localState.ready.manifests = true;
+  window.dispatchEvent(new CustomEvent("manifestsready"));
 })();

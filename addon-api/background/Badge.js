@@ -1,6 +1,6 @@
 export default class Badge {
-  constructor(addonsObject) {
-    this._addonId = addonsObject.self.id;
+  constructor(addonObject) {
+    this._addonId = addonObject.self.id;
     this._text = null;
     this._color = null;
     scratchAddons.localState.badges[this._addonId] = {

@@ -1,0 +1,20 @@
+{
+  "name": "Discuss button",
+  "description": "Adds the discuss button to the navbar",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "options": [
+    {
+      "name": "Remove tips button",
+      "id": "removeIdeasBtn",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["community"],
+  "enabled_by_default": false
+}

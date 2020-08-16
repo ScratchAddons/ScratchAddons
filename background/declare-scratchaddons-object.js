@@ -44,6 +44,11 @@ class GlobalStateProxyHandler {
         );
         messageForAllTabs({ fireEvent: { target: "auth", name: "change" } });
       }
+      if (objectPath[0] === "addonSettings" && objectPath[1]) {
+        const settingsEventTarget = scratchAddons.eventTargets.settings.find(eventTarget => eventTarget._addonId === addonId);
+        if(settingsEventTarget) settingsEventTarget.dispatchEvent(new CustomEvent("change"));
+        messageForAllTabs({ fireEvent: { target: "settings", name: "change", addonId: objectPath[1] } });
+      }
     }
     return true;
   }
@@ -60,6 +65,7 @@ console.log(
 
 scratchAddons.eventTargets = {
   auth: [],
+  settings: []
 };
 
 scratchAddons.methods = {};

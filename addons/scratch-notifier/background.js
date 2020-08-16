@@ -22,7 +22,6 @@ async function checkCount() {
   if (msgCount !== newCount) {
     const oldMsgCount = msgCount;
     msgCount = newCount;
-    addon.badge.text = msgCount;
     if (msgCount !== oldMsgCount) checkMessages();
   }
 }
@@ -149,7 +148,6 @@ async function openMessagesPage() {
       url: "https://scratch.mit.edu/messages/",
     });
   }
-  addon.badge.text = null;
   msgCount = 0;
 }
 
@@ -157,7 +155,6 @@ function markAsRead() {
   addon.fetch("https://scratch.mit.edu/site-api/messages/messages-clear/", {
     method: "POST",
   });
-  addon.badge.text = null;
   msgCount = 0;
 }
 
@@ -286,6 +283,5 @@ function htmlToText(html) {
 addon.auth.addEventListener("change", function () {
   msgCount = null;
   mostRecentMsgIds = [];
-  addon.badge.text = null;
   checkCount();
 });

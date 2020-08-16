@@ -8,6 +8,7 @@ const _localState = {
 _localState.ready = {
   auth: false,
   manifests: false,
+  addonSettings: false
 };
 _localState.badges = {};
 

@@ -4,6 +4,7 @@ import fetch from "../common/fetch.js";
 import Notifications from "./Notifications.js";
 import Badge from "./Badge.js";
 import promisify from "../common/promisifier.js";
+import Settings from "../common/Settings.js";
 
 export default class Addon {
   constructor(info) {
@@ -20,6 +21,7 @@ export default class Addon {
     this.fetch = fetch;
     this.browserTabs = promisify(chrome.tabs);
     this.browserWindows = promisify(chrome.windows);
+    this.settings = new Settings(this);
     if (permissions) {
       if (permissions.includes("notifications"))
         this.notifications = promisify(new Notifications(this), false);
@@ -28,7 +30,7 @@ export default class Addon {
   }
   _kill() {
     this.auth._removeEventListeners();
-    this.messages._removeEventListeners();
+    this.settings._removeEventListeners();
     if (this.notifications) this.notifications._removeEventListeners();
     this._timeouts.forEach((timeoutId) => clearTimeout(timeoutId));
     this._intervals.forEach((intervalId) => clearInterval(intervalId));
