@@ -9,6 +9,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     if (
       details.initiator !== `chrome-extension://${chrome.runtime.id}` &&
       details.initiator !== "https://scratch.mit.edu" &&
+      details.originUrl &&
       !details.originUrl.startsWith(chrome.runtime.getURL("")) &&
       !details.originUrl.startsWith("https://scratch.mit.edu")
     )

@@ -21,7 +21,10 @@
       "js": ["content-scripts/cs.js"]
     }
   ],
-  "options_page": "webpages/settings/index.html",
+  "options_ui": {
+    "page": "webpages/settings/index.html",
+    "open_in_tab": true
+  },
   "permissions": [
     "https://*.scratch.mit.edu/*",
     "cookies",
