@@ -10,7 +10,7 @@ async function getBgScripts() {
     const manifest = scratchAddons.manifests[addonId];
     if (manifest.persistent_scripts) {
       let permissions;
-      if(manifest.permissions) permissions = manifest.permissions;
+      if (manifest.permissions) permissions = manifest.permissions;
       else permissions = [];
       // TODO: give permissions according to global addon permissions and setting dependent ones
       addonsWithBgScripts.push({
@@ -21,11 +21,12 @@ async function getBgScripts() {
     }
   }
   addonsWithBgScripts.forEach((addonBgScripts) => {
-    if(scratchAddons.localState.addonsEnabled[addonBgScripts.addonId]) runAddonBgScripts(addonBgScripts)
+    if (scratchAddons.localState.addonsEnabled[addonBgScripts.addonId])
+      runAddonBgScripts(addonBgScripts);
   });
 }
 
-scratchAddons.runBgScriptsById = id => {
-  const findObj = addonsWithBgScripts.find(addon => addon.addonId === id);
-  if(findObj) runAddonBgScripts(findObj);
-}
+scratchAddons.runBgScriptsById = (id) => {
+  const findObj = addonsWithBgScripts.find((addon) => addon.addonId === id);
+  if (findObj) runAddonBgScripts(findObj);
+};

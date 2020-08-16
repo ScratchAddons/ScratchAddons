@@ -8,7 +8,7 @@ window.scratchAddons = {};
 scratchAddons.globalState = getGlobalState();
 scratchAddons.eventTargets = {
   auth: [],
-  settings: []
+  settings: [],
 };
 
 const pendingPromises = {};
@@ -46,12 +46,14 @@ const observer = new MutationObserver((mutationsList) => {
       removeAttr();
     } else if (attrType === "data-fire-event") {
       if (attrVal.addonId) {
-        const settingsEventTarget = scratchAddons.eventTargets.settings.find(eventTarget => eventTarget._addonId === attrVal.addonId);
+        const settingsEventTarget = scratchAddons.eventTargets.settings.find(
+          (eventTarget) => eventTarget._addonId === attrVal.addonId
+        );
         settingsEventTarget.dispatchEvent(new CustomEvent("change"));
-      }
-      else scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
-        eventTarget.dispatchEvent(new CustomEvent(attrVal.name))
-      );
+      } else
+        scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
+          eventTarget.dispatchEvent(new CustomEvent(attrVal.name))
+        );
     }
   }
 });
