@@ -19,6 +19,7 @@ chrome.runtime.onMessage.addListener(async function (
   if (request.getUserscripts) {
     const addons = [];
     for (const addon of addonsWithUserscripts) {
+      if (!scratchAddons.localState.addonsEnabled[addon.addonId]) continue;
       const scriptsToRun = [];
       for (const script of addon.scripts) {
         if (userscriptMatches(request.getUserscripts, script.matches))
