@@ -69,8 +69,13 @@ h1{
     top: 10px;
     left: 0;
 }
-.category .iconify{
-    font-size: 18px;
+
+.category img{
+    height: 18px;
+    filter: brightness(10);
+}
+.category.sel img{
+    filter: brightness(1);
 }
 .category span{
     margin-left: 15px;
