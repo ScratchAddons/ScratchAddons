@@ -38,5 +38,10 @@
     "content-scripts/inject/*",
     "addon-api/*",
     "addons/*"
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "firefox@scratchaddons"
+    }
+  }
 }
