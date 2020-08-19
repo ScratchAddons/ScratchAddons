@@ -1,14 +1,8 @@
 {
   "name": "Scratch Notifier",
-  "description": "Notifications on new messages",
+  "description": "Notifications on new Scratch messages. By World_Languages",
   "permissions": ["notifications"],
   "persistent_scripts": ["background.js"],
-  "userscripts": [
-    {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"]
-    }
-  ],
   "options": [
     {
       "name": "💬 Comments for me (replies and profile comments)",

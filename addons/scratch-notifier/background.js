@@ -10,7 +10,6 @@ const emojis = {
   remixproject: "🔄",
   studioactivity: "🆕",
 };
-global.xyz = 123;
 
 checkCount();
 setInterval(checkCount, 6000);
@@ -18,7 +17,7 @@ setInterval(checkCount, 6000);
 async function checkCount() {
   if (!addon.auth.isLoggedIn) return;
   const newCount = await addon.account.getMsgCount();
-  console.log(newCount);
+  if(newCount === null) return;
   if (msgCount !== newCount) {
     const oldMsgCount = msgCount;
     msgCount = newCount;
@@ -37,7 +36,7 @@ function getMostRecentIds(messagesObj) {
   return arr;
 }
 
-async function newMessage({
+async function notifyMessage({
   emoji,
   messageType,
   actor,
@@ -94,7 +93,7 @@ async function newMessage({
   }
   const notifId = await addon.notifications.create({
     type: "basic",
-    title: "New message!",
+    title: "New Scratch message",
     iconUrl: "/images/icon.png",
     message: text,
     buttons: [
@@ -104,8 +103,7 @@ async function newMessage({
       {
         title: "Mark all as read",
       },
-    ],
-    requireInteraction: true,
+    ]
   });
   const onClick = (e) => {
     if (e.detail.id === notifId) {
@@ -128,7 +126,7 @@ async function newMessage({
       addon.notifications.removeEventListener("click", onClick);
       addon.notifications.removeEventListener("buttonclicked", onButtonClick);
     }
-  });
+  }, { once: true });
 }
 
 async function openMessagesPage() {
@@ -200,7 +198,22 @@ async function checkMessages() {
         }
       }
 
-      // TODO: Check if we want to notify first, according to settings
+      // Return if this notification type is muted
+      if(message.type === "addcomment") {
+        if(messageType === "addcomment/ownProjectNewComment" || messageType === "addcomment/ownProjectReplyToOther") {
+          if(addon.settings.get("commentsonmyprojects_notifications") === false) return;
+        } else {
+          if(addon.settings.get("commentsforme_notifications") === false) return;
+        }
+      } else {
+        try {
+          if(addon.settings.get(`${message.type}_notifications`) === false) return;
+        } catch {
+          // If setting doesn't exist
+          console.warn(`Unexpected message type: ${message.type}`);
+          return;
+        }
+      }
 
       const messageInfo = {
         emoji: emojis[message.type],
@@ -219,7 +232,7 @@ async function checkMessages() {
           message.comment_id || message.gallery_id || message.project_id,
         parent_title: htmlToText(message.parent_title), // Remixes only
       };
-      newMessage(messageInfo);
+      notifyMessage(messageInfo);
     }
     mostRecentMsgIds = getMostRecentIds(messages);
   }
