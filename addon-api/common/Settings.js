@@ -5,7 +5,12 @@ export default class Settings extends EventTarget {
     scratchAddons.eventTargets.settings.push(this);
   }
   get(optionName) {
-    return scratchAddons.globalState.addonSettings[this._addonId][optionName];
+    const settingsObj =
+      scratchAddons.globalState.addonSettings[this._addonId] || {};
+    const value = settingsObj[optionName];
+    if (value === undefined)
+      throw "ScratchAddons exception: invalid setting ID";
+    else return value;
   }
   _removeEventListeners() {
     scratchAddons.eventTargets.settings.splice(
