@@ -17,7 +17,7 @@ setInterval(checkCount, 6000);
 async function checkCount() {
   if (!addon.auth.isLoggedIn) return;
   const newCount = await addon.account.getMsgCount();
-  if(newCount === null) return;
+  if (newCount === null) return;
   if (msgCount !== newCount) {
     const oldMsgCount = msgCount;
     msgCount = newCount;
@@ -103,7 +103,7 @@ async function notifyMessage({
       {
         title: "Mark all as read",
       },
-    ]
+    ],
   });
   const onClick = (e) => {
     if (e.detail.id === notifId) {
@@ -121,12 +121,16 @@ async function notifyMessage({
   };
   addon.notifications.addEventListener("click", onClick);
   addon.notifications.addEventListener("buttonclick", onButtonClick);
-  addon.notifications.addEventListener("close", (e) => {
-    if (e.detail.id === notifId) {
-      addon.notifications.removeEventListener("click", onClick);
-      addon.notifications.removeEventListener("buttonclicked", onButtonClick);
-    }
-  }, { once: true });
+  addon.notifications.addEventListener(
+    "close",
+    (e) => {
+      if (e.detail.id === notifId) {
+        addon.notifications.removeEventListener("click", onClick);
+        addon.notifications.removeEventListener("buttonclicked", onButtonClick);
+      }
+    },
+    { once: true }
+  );
 }
 
 async function openMessagesPage() {
@@ -199,15 +203,23 @@ async function checkMessages() {
       }
 
       // Return if this notification type is muted
-      if(message.type === "addcomment") {
-        if(messageType === "addcomment/ownProjectNewComment" || messageType === "addcomment/ownProjectReplyToOther") {
-          if(addon.settings.get("commentsonmyprojects_notifications") === false) return;
+      if (message.type === "addcomment") {
+        if (
+          messageType === "addcomment/ownProjectNewComment" ||
+          messageType === "addcomment/ownProjectReplyToOther"
+        ) {
+          if (
+            addon.settings.get("commentsonmyprojects_notifications") === false
+          )
+            return;
         } else {
-          if(addon.settings.get("commentsforme_notifications") === false) return;
+          if (addon.settings.get("commentsforme_notifications") === false)
+            return;
         }
       } else {
         try {
-          if(addon.settings.get(`${message.type}_notifications`) === false) return;
+          if (addon.settings.get(`${message.type}_notifications`) === false)
+            return;
         } catch {
           // If setting doesn't exist
           console.warn(`Unexpected message type: ${message.type}`);
