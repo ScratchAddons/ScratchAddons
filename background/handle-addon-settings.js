@@ -5,7 +5,6 @@ chrome.storage.sync.get(
       for (const addonId in scratchAddons.manifests) {
         const manifest = scratchAddons.manifests[addonId];
         const settings = addonSettings[addonId] || {};
-        const permissions = manifest.permissions || [];
         let madeChanges = false;
         if (manifest.options) {
           for (const option of manifest.options) {

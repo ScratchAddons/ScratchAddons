@@ -14,11 +14,15 @@ _globalState.auth = {
 };
 
 class GlobalStateProxyHandler {
-  constructor(name) {
+  constructor(name, target) {
     if (name) this.name = `${name}.`;
-    else this.name = "";
+    else {
+      this.name = "";
+      this._target = target;
+    }
   }
   get(target, key) {
+    if (this.name === "" && key === "_target") return this._target;
     if (typeof target[key] === "object" && target[key] !== null) {
       return new Proxy(
         target[key],
@@ -46,7 +50,7 @@ class GlobalStateProxyHandler {
       }
       if (objectPath[0] === "addonSettings" && objectPath[1]) {
         const settingsEventTarget = scratchAddons.eventTargets.settings.find(
-          (eventTarget) => eventTarget._addonId === addonId
+          (eventTarget) => eventTarget._addonId === objectPath[1]
         );
         if (settingsEventTarget)
           settingsEventTarget.dispatchEvent(new CustomEvent("change"));
@@ -65,7 +69,7 @@ class GlobalStateProxyHandler {
 
 scratchAddons.globalState = new Proxy(
   _globalState,
-  new GlobalStateProxyHandler()
+  new GlobalStateProxyHandler(null, _globalState)
 );
 console.log(
   "Global state initialized!\n",
@@ -81,6 +85,6 @@ scratchAddons.methods = {};
 
 function messageForAllTabs(message) {
   chrome.tabs.query({}, (tabs) =>
-    tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, message))
+    tabs.forEach((tab) => tab.url && chrome.tabs.sendMessage(tab.id, message))
   );
 }
