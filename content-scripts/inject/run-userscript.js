@@ -14,6 +14,10 @@ export default async function runAddonUserscripts({ addonId, scripts }) {
     const x = await import(scriptUrl);
     const log = console.log.bind(console, `[${addonId}]`);
     const warn = console.warn.bind(console, `[${addonId}]`);
-    x.default({addon: addonObj, global: globalObj, console: { ...console, log, warn }});
+    x.default({
+      addon: addonObj,
+      global: globalObj,
+      console: { ...console, log, warn },
+    });
   }
 }

@@ -52,9 +52,19 @@ export default async function runAddonBgScripts({
       `%cDebug addons/${addonId}/${scriptPath}: ${scriptUrl}`,
       "color:red; font-weight: bold; font-size: 1.2em;"
     );
-    const module = await import(chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`));
+    const module = await import(
+      chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`)
+    );
     const log = console.log.bind(console, `[${addonId}]`);
     const warn = console.warn.bind(console, `[${addonId}]`);
-    module.default({addon: addonObj, global: globalObj, console: { ...console, log, warn }, setTimeout: setTimeoutFunc,setInterval: setIntervalFunc, clearTimeout: clearTimeoutFunc, clearInterval: clearIntervalFunc});
+    module.default({
+      addon: addonObj,
+      global: globalObj,
+      console: { ...console, log, warn },
+      setTimeout: setTimeoutFunc,
+      setInterval: setIntervalFunc,
+      clearTimeout: clearTimeoutFunc,
+      clearInterval: clearIntervalFunc,
+    });
   }
 }

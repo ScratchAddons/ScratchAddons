@@ -11,11 +11,7 @@ async function getUsercripts() {
   }
 }
 
-chrome.runtime.onMessage.addListener(function (
-  request,
-  sender,
-  sendResponse
-) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.getUserscripts) {
     const addons = [];
     for (const addon of addonsWithUserscripts) {

@@ -1,6 +1,14 @@
 import commentEmojis from "./comment-emojis.js";
 
-export default async function({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
+export default async function ({
+  addon,
+  global,
+  console,
+  setTimeout,
+  setInterval,
+  clearTimeout,
+  clearInterval,
+}) {
   let msgCount = null;
   let mostRecentMsgIds = [];
   const emojis = {
@@ -130,7 +138,10 @@ export default async function({ addon, global, console, setTimeout, setInterval,
       (e) => {
         if (e.detail.id === notifId) {
           addon.notifications.removeEventListener("click", onClick);
-          addon.notifications.removeEventListener("buttonclicked", onButtonClick);
+          addon.notifications.removeEventListener(
+            "buttonclicked",
+            onButtonClick
+          );
         }
       },
       { once: true }
