@@ -11,7 +11,7 @@ async function getUsercripts() {
   }
 }
 
-chrome.runtime.onMessage.addListener(async function (
+chrome.runtime.onMessage.addListener(function (
   request,
   sender,
   sendResponse
