@@ -16,51 +16,27 @@
       <!-- This is a side menu, from which you select different categories-->
       <div class="categories-block">
         <div class="category">
-          <span
-            class="iconify"
-            data-icon="uil:ellipsis-h"
-            data-inline="false"
-          ></span>
+          <span class="iconify" data-icon="uil:ellipsis-h" data-inline="false"></span>
           <span>All Categories</span>
         </div>
         <div class="category">
-          <span
-            class="iconify"
-            data-icon="uil:brush-alt"
-            data-inline="false"
-          ></span>
+          <span class="iconify" data-icon="uil:brush-alt" data-inline="false"></span>
           <span>Themes</span>
         </div>
         <div class="category sel">
-          <span
-            class="iconify"
-            data-icon="uil:arrow-circle-up"
-            data-inline="false"
-          ></span>
+          <span class="iconify" data-icon="uil:arrow-circle-up" data-inline="false"></span>
           <span>Features</span>
         </div>
         <div class="category">
-          <span
-            class="iconify"
-            data-icon="uil:user-plus"
-            data-inline="false"
-          ></span>
+          <span class="iconify" data-icon="uil:user-plus" data-inline="false"></span>
           <span>User Experience</span>
         </div>
         <div class="category">
-          <span
-            class="iconify"
-            data-icon="uil:wrench"
-            data-inline="false"
-          ></span>
+          <span class="iconify" data-icon="uil:wrench" data-inline="false"></span>
           <span>Optimization</span>
         </div>
         <div class="category">
-          <span
-            class="iconify"
-            data-icon="uil:globe"
-            data-inline="false"
-          ></span>
+          <span class="iconify" data-icon="uil:globe" data-inline="false"></span>
           <span>Scratch Website</span>
         </div>
       </div>
@@ -120,12 +96,10 @@
 
       document.querySelector("#testSwitch").onclick = () => {
         //this statement is true if the switch is on, and false if it's off
-        let state =
-          document.querySelector("#testSwitch").getAttribute("state") == "on";
+        let state = document.querySelector("#testSwitch").getAttribute("state") == "on";
 
         //is the statement above is true, turn the switch off. If it's false, turn it on.
-        if (state)
-          document.querySelector("#testSwitch").setAttribute("state", "off");
+        if (state) document.querySelector("#testSwitch").setAttribute("state", "off");
         else document.querySelector("#testSwitch").setAttribute("state", "on");
       };
     </script>

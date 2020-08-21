@@ -21,8 +21,7 @@ async function getBgScripts() {
     }
   }
   addonsWithBgScripts.forEach((addonBgScripts) => {
-    if (scratchAddons.localState.addonsEnabled[addonBgScripts.addonId])
-      runAddonBgScripts(addonBgScripts);
+    if (scratchAddons.localState.addonsEnabled[addonBgScripts.addonId]) runAddonBgScripts(addonBgScripts);
   });
 }
 

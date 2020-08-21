@@ -45,9 +45,7 @@ function initGUI({ console }) {
     this.forward = [];
 
     function distance(pos, next) {
-      return Math.sqrt(
-        Math.pow(pos.left - next.left, 2) + Math.pow(pos.top - next.top, 2)
-      );
+      return Math.sqrt(Math.pow(pos.left - next.left, 2) + Math.pow(pos.top - next.top, 2));
     }
 
     /**
@@ -176,13 +174,11 @@ function initGUI({ console }) {
   function eventClickHelp(e) {
     if (!document.getElementById("s3devHelpPop")) {
       document.body.insertAdjacentHTML("beforeend", helpHTML);
-      document
-        .getElementById("s3devHelpPop")
-        .addEventListener("mousedown", function (e) {
-          if (e.target.id === "s3devHelpPop") {
-            e.target.remove();
-          }
-        });
+      document.getElementById("s3devHelpPop").addEventListener("mousedown", function (e) {
+        if (e.target.id === "s3devHelpPop") {
+          e.target.remove();
+        }
+      });
     }
     e.preventDefault();
   }
@@ -202,9 +198,7 @@ function initGUI({ console }) {
   }
 
   function getScratchCostumes() {
-    let costumes = costTabBody.querySelectorAll(
-      "div[class^='sprite-selector-item_sprite-name']"
-    );
+    let costumes = costTabBody.querySelectorAll("div[class^='sprite-selector-item_sprite-name']");
     // costTab[0].click();
 
     let myBlocks = [];
@@ -281,9 +275,7 @@ function initGUI({ console }) {
         lower: txt.toLowerCase(),
         clones: null,
       };
-      items.y = root.getRelativeToSurfaceXY
-        ? root.getRelativeToSurfaceXY().y
-        : null;
+      items.y = root.getRelativeToSurfaceXY ? root.getRelativeToSurfaceXY().y : null;
       myBlocks.push(items);
       myBlocksByProcCode[txt] = items;
       return items;
@@ -322,11 +314,7 @@ function initGUI({ console }) {
           let fields = root.inputList[0];
           let typeDesc = fields.fieldRow[0].getText();
           let eventName = fields.fieldRow[1].getText();
-          addBlock(
-            "receive",
-            typeDesc + " " + eventName,
-            root
-          ).eventName = eventName;
+          addBlock("receive", typeDesc + " " + eventName, root).eventName = eventName;
         } catch (e) {
           // eat
         }
@@ -348,20 +336,12 @@ function initGUI({ console }) {
 
     let vars = map.getVariablesOfType("");
     for (const row of vars) {
-      addBlock(
-        row.isLocal ? "var" : "VAR",
-        (row.isLocal ? "var " : "VAR ") + row.name,
-        row
-      );
+      addBlock(row.isLocal ? "var" : "VAR", (row.isLocal ? "var " : "VAR ") + row.name, row);
     }
 
     let lists = map.getVariablesOfType("list");
     for (const row of lists) {
-      addBlock(
-        row.isLocal ? "list" : "LIST",
-        (row.isLocal ? "list " : "LIST ") + row.name,
-        row
-      );
+      addBlock(row.isLocal ? "list" : "LIST", (row.isLocal ? "list " : "LIST ") + row.name, row);
     }
 
     const clsOrder = {
@@ -435,10 +415,7 @@ function initGUI({ console }) {
     }
 
     let label = document.getElementById("s3devFindLabel");
-    offsetX =
-      ddOut.getBoundingClientRect().right -
-      label.getBoundingClientRect().left +
-      26;
+    offsetX = ddOut.getBoundingClientRect().right - label.getBoundingClientRect().left + 26;
     offsetY = 32;
 
     if (foundLi) {
@@ -553,10 +530,7 @@ function initGUI({ console }) {
         cursorY += heightWidth.height + 72;
 
         let maxWidthWithComments = maxWidths[block.id] || 0;
-        maxWidth = Math.max(
-          maxWidth,
-          Math.max(heightWidth.width, maxWidthWithComments)
-        );
+        maxWidth = Math.max(maxWidth, Math.max(heightWidth.width, maxWidthWithComments));
       }
 
       cursorX += maxWidth + 96;
@@ -772,13 +746,8 @@ function initGUI({ console }) {
     for (const topBlock of topBlocks) {
       let kids = topBlock.getDescendants();
       for (const block of kids) {
-        if (
-          block.type === "event_broadcast" ||
-          block.type === "event_broadcastandwait"
-        ) {
-          if (
-            name === block.getChildren()[0].inputList[0].fieldRow[0].getText()
-          ) {
+        if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
+          if (name === block.getChildren()[0].inputList[0].fieldRow[0].getText()) {
             uses.push(block);
           }
         }
@@ -804,12 +773,8 @@ function initGUI({ console }) {
                     </span>
                 `
       );
-      document
-        .getElementById("s3devMultiLeft")
-        .addEventListener("mousedown", multi.navLeft);
-      document
-        .getElementById("s3devMultiRight")
-        .addEventListener("mousedown", multi.navRight);
+      document.getElementById("s3devMultiLeft").addEventListener("mousedown", multi.navLeft);
+      document.getElementById("s3devMultiRight").addEventListener("mousedown", multi.navRight);
 
       multi.idx = 0;
 
@@ -830,23 +795,7 @@ function initGUI({ console }) {
     // function for triggering mouse events
     let fireMouseEvent = function (type, elem, centerX, centerY) {
       let evt = document.createEvent("MouseEvents");
-      evt.initMouseEvent(
-        type,
-        true,
-        true,
-        window,
-        1,
-        1,
-        1,
-        centerX,
-        centerY,
-        false,
-        false,
-        false,
-        false,
-        0,
-        elem
-      );
+      evt.initMouseEvent(type, true, true, window, 1, 1, 1, centerX, centerY, false, false, false, false, 0, elem);
       elem.dispatchEvent(evt);
     };
 
@@ -907,23 +856,15 @@ function initGUI({ console }) {
    * @param selected optional parameter to pass in the costume div to be moved
    */
   function moveCostumeTo(top, selected) {
-    let isSelected =
-      !selected ||
-      selected.className.indexOf("sprite-selector-item_is-selected") >= 0;
+    let isSelected = !selected || selected.className.indexOf("sprite-selector-item_is-selected") >= 0;
     if (!selected) {
-      selected = costTabBody.querySelectorAll(
-        "div[class*='sprite-selector-item_is-selected']"
-      );
+      selected = costTabBody.querySelectorAll("div[class*='sprite-selector-item_is-selected']");
       if (selected.length === 0) {
         return;
       }
-      selected = selected[0].querySelectorAll(
-        "div[class^='sprite-selector-item_sprite-name']"
-      )[0];
+      selected = selected[0].querySelectorAll("div[class^='sprite-selector-item_sprite-name']")[0];
     }
-    let costumes = costTabBody.querySelectorAll(
-      "div[class^='sprite-selector-item_sprite-name']"
-    );
+    let costumes = costTabBody.querySelectorAll("div[class^='sprite-selector-item_sprite-name']");
 
     // First scroll sprite view to reveal top or bottom otherwise this won't work.
     let scroller = selected.closest("div[class*=selector_list-area]");
@@ -949,9 +890,7 @@ function initGUI({ console }) {
     let cls = li.data.cls;
     if (cls === "costume") {
       // Viewing costumes - jump to selected costume
-      let costumes = costTabBody.querySelectorAll(
-        "div[class^='sprite-selector-item_sprite-name']"
-      );
+      let costumes = costTabBody.querySelectorAll("div[class^='sprite-selector-item_sprite-name']");
       let costume = costumes[li.data.y];
       if (costume) {
         costume.click();
@@ -965,12 +904,7 @@ function initGUI({ console }) {
           wrapper.scrollTop = 0;
         }, 10);
       }
-    } else if (
-      cls === "var" ||
-      cls === "VAR" ||
-      cls === "list" ||
-      cls === "LIST"
-    ) {
+    } else if (cls === "var" || cls === "VAR" || cls === "list" || cls === "LIST") {
       // Search now for all instances
       // let wksp = getWorkspace();
       // let blocks = wksp.getVariableUsesById(li.data.labelID);
@@ -1054,9 +988,7 @@ function initGUI({ console }) {
     update: function () {
       let count = document.getElementById("s3devMultiCount");
       count.innerText =
-        multi.blocks && multi.blocks.length > 0
-          ? enc(multi.idx + 1 + " / " + multi.blocks.length)
-          : "0";
+        multi.blocks && multi.blocks.length > 0 ? enc(multi.idx + 1 + " / " + multi.blocks.length) : "0";
     },
     navLeft: function (e) {
       return multi.navSideways(e, -1);
@@ -1066,8 +998,7 @@ function initGUI({ console }) {
     },
     navSideways: function (e, dir) {
       if (multi.blocks && multi.blocks.length > 0) {
-        multi.idx =
-          (multi.idx + dir + multi.blocks.length) % multi.blocks.length; // + length to fix negative modulo js issue.
+        multi.idx = (multi.idx + dir + multi.blocks.length) % multi.blocks.length; // + length to fix negative modulo js issue.
         multi.update();
         centerTop(multi.blocks[multi.idx]);
       }
@@ -1164,11 +1095,7 @@ function initGUI({ console }) {
   }
 
   function enc(str) {
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
+    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
   let prevVal = "";
@@ -1199,14 +1126,10 @@ function initGUI({ console }) {
           li.appendChild(document.createTextNode(procCode.substring(0, i)));
         }
         let bText = document.createElement("b");
-        bText.appendChild(
-          document.createTextNode(procCode.substr(i, val.length))
-        );
+        bText.appendChild(document.createTextNode(procCode.substr(i, val.length)));
         li.appendChild(bText);
         if (i + val.length < procCode.length) {
-          li.appendChild(
-            document.createTextNode(procCode.substr(i + val.length))
-          );
+          li.appendChild(document.createTextNode(procCode.substr(i + val.length)));
         }
         // li.innerHTML = enc(procCode.substring(0, i)) + '<b>' + enc(procCode.substr(i, val.length)) + "</b>" + enc(procCode.substr(i + val.length));
       } else {
@@ -1219,8 +1142,7 @@ function initGUI({ console }) {
     let sel = dd.getElementsByClassName("sel");
     let nxt = null;
     if (sel.length > 0 && sel[0].style.display !== "none") {
-      nxt =
-        dir === -1 ? sel[0].previousSibling : sel[sel.length - 1].nextSibling;
+      nxt = dir === -1 ? sel[0].previousSibling : sel[sel.length - 1].nextSibling;
     } else {
       nxt = dd.children[0];
       dir = 1;
@@ -1286,9 +1208,7 @@ function initGUI({ console }) {
   }
 
   function deepSearch(e) {
-    let selected = document.querySelector(
-      "[class*=sprite-selector-item_is-selected_]"
-    );
+    let selected = document.querySelector("[class*=sprite-selector-item_is-selected_]");
     let wksp = getWorkspace();
     let myTopBlocks = wksp.getTopBlocks();
 
@@ -1330,8 +1250,7 @@ function initGUI({ console }) {
       }
 
       sprite = sprites[i];
-      name = sprite.querySelector("[class*=sprite-selector-item_sprite-name]")
-        .textContent;
+      name = sprite.querySelector("[class*=sprite-selector-item_sprite-name]").textContent;
 
       console.log("Loading " + name);
       let divElement = document.createElement("div");
@@ -1437,16 +1356,8 @@ function initGUI({ console }) {
         let operatorType = binaryOperatorTypes[tree.fn];
         if (operatorType) {
           let xOp = newXml(x, "block", { type: operatorType });
-          translateMathToXml(
-            xml.newXml(xOp, "value", { name: "NUM1" }),
-            tree.args[0],
-            BLOCK_TYPE.number
-          );
-          translateMathToXml(
-            xml.newXml(xOp, "value", { name: "NUM2" }),
-            tree.args[1],
-            BLOCK_TYPE.number
-          );
+          translateMathToXml(xml.newXml(xOp, "value", { name: "NUM1" }), tree.args[0], BLOCK_TYPE.number);
+          translateMathToXml(xml.newXml(xOp, "value", { name: "NUM2" }), tree.args[1], BLOCK_TYPE.number);
           return;
         }
 
@@ -1472,16 +1383,8 @@ function initGUI({ console }) {
         // Method Call
         if (tree.fn.name === "join") {
           let xOp = newXml(x, "block", { type: "operator_join" });
-          translateMathToXml(
-            xml.newXml(xOp, "value", { name: "STRING1" }),
-            tree.args[0],
-            BLOCK_TYPE.text
-          );
-          translateMathToXml(
-            xml.newXml(xOp, "value", { name: "STRING2" }),
-            tree.args[1],
-            BLOCK_TYPE.text
-          );
+          translateMathToXml(xml.newXml(xOp, "value", { name: "STRING1" }), tree.args[0], BLOCK_TYPE.text);
+          translateMathToXml(xml.newXml(xOp, "value", { name: "STRING2" }), tree.args[1], BLOCK_TYPE.text);
           return;
         }
       }
@@ -1563,9 +1466,7 @@ function initGUI({ console }) {
 
     codeTab = guiTabs[0];
     costTab = guiTabs[1];
-    costTabBody = document.querySelector(
-      "div[aria-labelledby=" + costTab.id + "]"
-    );
+    costTabBody = document.querySelector("div[aria-labelledby=" + costTab.id + "]");
 
     if (!document.getElementById("s3devFind")) {
       root.insertAdjacentHTML(
@@ -1628,9 +1529,7 @@ function initGUI({ console }) {
 */
 
   function clickInject(e) {
-    let codeString = window.prompt(
-      "Griffpatch: Enter an expression (i.e. a+2*3)"
-    );
+    let codeString = window.prompt("Griffpatch: Enter an expression (i.e. a+2*3)");
     if (codeString) {
       doInjectScripts(codeString);
     }
@@ -1647,9 +1546,7 @@ function initGUI({ console }) {
     setTimeout(function () {
       let wksp = getWorkspace();
       let v = wksp.getVariableById(selVarID);
-      let varName = window.prompt(
-        `Griffpatch: Switch all '${v.name}' in this sprite for the variable named:`
-      );
+      let varName = window.prompt(`Griffpatch: Switch all '${v.name}' in this sprite for the variable named:`);
       if (varName) {
         doReplaceVariable(selVarID, varName, v.type);
       }
@@ -1690,17 +1587,11 @@ function initGUI({ console }) {
   function eventKeyDown(e) {
     function switchCostume(up) {
       // todo: select previous costume
-      let selected = costTabBody.querySelector(
-        "div[class*='sprite-selector-item_is-selected']"
-      );
-      let node = up
-        ? selected.parentNode.previousSibling
-        : selected.parentNode.nextSibling;
+      let selected = costTabBody.querySelector("div[class*='sprite-selector-item_is-selected']");
+      let node = up ? selected.parentNode.previousSibling : selected.parentNode.nextSibling;
       if (node) {
         let wrapper = node.closest("div[class*=gui_flex-wrapper]");
-        node
-          .querySelector("div[class^='sprite-selector-item_sprite-name']")
-          .click();
+        node.querySelector("div[class^='sprite-selector-item_sprite-name']").click();
         node.scrollIntoView({
           behavior: "auto",
           block: "center",
@@ -1778,11 +1669,7 @@ function initGUI({ console }) {
   }
 
   function eventMouseDown(e) {
-    if (
-      ddOut &&
-      ddOut.classList.contains("vis") &&
-      !e.target.closest("#s3devDDOut")
-    ) {
+    if (ddOut && ddOut.classList.contains("vis") && !e.target.closest("#s3devDDOut")) {
       // If we click outside the dropdown, then instigate the hide code...
       hideDropDown();
     }
@@ -1801,9 +1688,7 @@ function initGUI({ console }) {
       }
     } else if (e.button === 2) {
       // Right click...
-      let spriteSelector = e.target.closest(
-        "div[class*='sprite-selector-item_sprite-selector-item']"
-      );
+      let spriteSelector = e.target.closest("div[class*='sprite-selector-item_sprite-selector-item']");
       if (spriteSelector) {
         let contextMenu = spriteSelector.getElementsByTagName("nav")[0];
         if (!contextMenu.querySelector("div.s3devSTT")) {
@@ -1830,9 +1715,7 @@ function initGUI({ console }) {
             if (!widget) {
               return;
             }
-            let blocklyContextMenu = widget.querySelector(
-              "div.blocklyContextMenu"
-            );
+            let blocklyContextMenu = widget.querySelector("div.blocklyContextMenu");
             if (!blocklyContextMenu) {
               return;
             }
@@ -1877,19 +1760,13 @@ function initGUI({ console }) {
               }
 
               // Is this a variable or a list?
-              if (
-                block &&
-                (block.getCategory() === "data" ||
-                  block.getCategory() === "data-lists")
-              ) {
+              if (block && (block.getCategory() === "data" || block.getCategory() === "data-lists")) {
                 blocklyContextMenu.insertAdjacentHTML(
                   "beforeend",
                   `
                                 <div id="s3devReplaceAllVars" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
                                     <div class="goog-menuitem-content" style="user-select: none;">Swap ${
-                                      block.getCategory() === "data"
-                                        ? "Variable"
-                                        : "List"
+                                      block.getCategory() === "data" ? "Variable" : "List"
                                     } in Sprite</div>
                                 </div>
                                 `
@@ -1900,8 +1777,7 @@ function initGUI({ console }) {
 
             if (blocklyContextMenu.children.length < 15) {
               blocklyContextMenu.style.maxHeight = "none";
-              widget.style.height =
-                blocklyContextMenu.getBoundingClientRect().height + 12 + "px";
+              widget.style.height = blocklyContextMenu.getBoundingClientRect().height + 12 + "px";
               blocklyContextMenu.style.maxHeight = "";
             }
 
@@ -1925,9 +1801,7 @@ function initGUI({ console }) {
                 eventCopyClick(e, 2);
               });
             }
-            copyDiv = blocklyContextMenu.querySelector(
-              "div#s3devReplaceAllVars"
-            );
+            copyDiv = blocklyContextMenu.querySelector("div#s3devReplaceAllVars");
             if (copyDiv) {
               copyDiv.addEventListener("click", clickReplace);
             }
@@ -1947,9 +1821,7 @@ function initGUI({ console }) {
                 }
 
                 // separate child temporarily
-                document.dispatchEvent(
-                  new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true })
-                );
+                document.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
                 if (next || blockOnly === 2) {
                   setTimeout(function () {
                     if (next) {
@@ -1992,19 +1864,9 @@ function initGUI({ console }) {
       }
     } else {
       let chk = e.target;
-      if (
-        chk &&
-        chk.tagName !== "BUTTON" &&
-        chk.getAttribute &&
-        !chk.getAttribute("role")
-      ) {
+      if (chk && chk.tagName !== "BUTTON" && chk.getAttribute && !chk.getAttribute("role")) {
         chk = chk.parentNode;
-        if (
-          chk &&
-          chk.tagName !== "BUTTON" &&
-          chk.getAttribute &&
-          !chk.getAttribute("role")
-        ) {
+        if (chk && chk.tagName !== "BUTTON" && chk.getAttribute && !chk.getAttribute("role")) {
           chk = chk.parentNode;
         }
       }
@@ -2033,13 +1895,8 @@ function initGUI({ console }) {
       chk = e.target.tagName === "SPAN" ? e.target.parentNode : e.target;
 
       if (chk.classList.contains("s3devSTT")) {
-        if (
-          chk.textContent === "Send to top" ||
-          chk.textContent === "Send to bottom"
-        ) {
-          let spriteSelector = e.target.closest(
-            "div[class*='sprite-selector-item_sprite-selector-item']"
-          );
+        if (chk.textContent === "Send to top" || chk.textContent === "Send to bottom") {
+          let spriteSelector = e.target.closest("div[class*='sprite-selector-item_sprite-selector-item']");
           moveCostumeTo(chk.textContent === "Send to top", spriteSelector);
           e.cancelBubble = true;
           e.preventDefault();
@@ -2266,10 +2123,7 @@ function initGUI({ console }) {
 
         let text;
 
-        if (
-          !picklist &&
-          field.className_ === "blocklyText blocklyDropdownText"
-        ) {
+        if (!picklist && field.className_ === "blocklyText blocklyDropdownText") {
           picklist = field.getOptions();
           pickField = field.name;
           if (picklist && picklist.length > 0) {
@@ -2347,8 +2201,7 @@ function initGUI({ console }) {
     let sel = dd.getElementsByClassName("sel");
     let nxt;
     if (sel.length > 0 && sel[0].style.display !== "none") {
-      nxt =
-        dir === -1 ? sel[0].previousSibling : sel[sel.length - 1].nextSibling;
+      nxt = dir === -1 ? sel[0].previousSibling : sel[sel.length - 1].nextSibling;
     } else {
       nxt = dd.children[0];
       dir = 1;
@@ -2411,9 +2264,7 @@ function initGUI({ console }) {
     // block:option.block, dom:option.dom, option:option.option
     if (option.option) {
       // We need to tweak the dropdown in this xml...
-      let field = option.dom.querySelector(
-        "field[name=" + option.pickField + "]"
-      );
+      let field = option.dom.querySelector("field[name=" + option.pickField + "]");
       field.innerText = option.option[0];
       field.setAttribute("id", option.option[1] + "-" + option.option[0]);
     }
