@@ -22,7 +22,7 @@ scratchAddons.methods.getMsgCount = () => {
   return promise;
 };
 scratchAddons.methods.getScratchVM = () => {
-  if(window._scratchAddonsScratchVM) return Promise.resolve(window._scratchAddonsScratchVM);
+  if (window._scratchAddonsScratchVM) return Promise.resolve(window._scratchAddonsScratchVM);
   else return new Promise((resolve) => {});
 };
 
