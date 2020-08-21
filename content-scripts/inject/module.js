@@ -56,12 +56,14 @@ const observer = new MutationObserver((mutationsList) => {
 observer.observe(template, { attributes: true });
 
 for (const addon of JSON.parse(template.getAttribute("data-userscripts"))) {
-  if(addon.scripts.length) runUserscript(addon);
-  if(addon.styles.length) {
-    for(const stylesheetPath of addon.styles) {
+  if (addon.scripts.length) runUserscript(addon);
+  if (addon.styles.length) {
+    for (const stylesheetPath of addon.styles) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = (`${document.getElementById("scratch-addons").getAttribute("data-path")}addons/${addon.addonId}/${stylesheetPath}`);
+      link.href = `${document.getElementById("scratch-addons").getAttribute("data-path")}addons/${
+        addon.addonId
+      }/${stylesheetPath}`;
       document.body.appendChild(link);
     }
   }
