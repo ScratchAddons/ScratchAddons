@@ -6,4 +6,7 @@ export default class Tab {
       ? "scratchr2"
       : null;
   }
+  getScratchVM() {
+    return scratchAddons.methods.getScratchVM();
+  }
 }

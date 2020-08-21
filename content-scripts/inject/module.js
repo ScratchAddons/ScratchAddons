@@ -21,6 +21,10 @@ scratchAddons.methods.getMsgCount = () => {
   pendingPromises.msgCount.push(promiseResolver);
   return promise;
 };
+scratchAddons.methods.getScratchVM = () => {
+  if (window._scratchAddonsScratchVM) return Promise.resolve(window._scratchAddonsScratchVM);
+  else return new Promise((resolve) => {});
+};
 
 const observer = new MutationObserver((mutationsList) => {
   for (const mutation of mutationsList) {
