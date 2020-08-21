@@ -1,12 +1,12 @@
 {
-    "name": "Scratch 3 developer tools",
-    "description": "Adds a find box to the project editor (hotkey: Ctrl+F). By griffpatch",
-    "userscripts": [
-      {
-        "url": "userscript.js",
-        "matches": ["https://scratch.mit.edu/projects/*"]
-      }
-    ],
-    "tags": ["editor"],
-    "enabled_by_default": false
+  "name": "Scratch 3 developer tools",
+  "description": "Adds a find box to the project editor (hotkey: Ctrl+F). By griffpatch",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabled_by_default": false
 }
