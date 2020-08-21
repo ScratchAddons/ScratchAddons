@@ -1,12 +1,4 @@
 export default async function ({ addon, global, console }) {
-  const styles = document.createElement("link");
-  styles.rel = "stylesheet";
-  styles.href = `${addon.self.dir}/userscript.css`;
-  document.body.appendChild(styles);
-  initGUI({ console }); // initGUI doesn't use addon or global, but it does console logs
-}
-
-function initGUI({ console }) {
   const helpHTML = `
 <div id="s3devHelpPop">
 <div>
