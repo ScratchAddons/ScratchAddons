@@ -19,6 +19,11 @@
       "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_idle",
       "js": ["content-scripts/cs.js"]
+    },
+    {
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "run_at": "document_start",
+      "js": ["content-scripts/find-vm-injector.js"]
     }
   ],
   "options_ui": {
