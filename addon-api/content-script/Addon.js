@@ -9,9 +9,7 @@ export default class Addon {
     const { id } = info;
     this.self = {
       id,
-      dir: `${document
-        .getElementById("scratch-addons")
-        .getAttribute("data-path")}addons/${id}`,
+      dir: `${document.getElementById("scratch-addons").getAttribute("data-path")}addons/${id}`,
       browser: typeof InstallTrigger !== "undefined" ? "firefox" : "chrome",
     };
     this.auth = new Auth(this);

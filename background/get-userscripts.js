@@ -18,11 +18,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       if (!scratchAddons.localState.addonsEnabled[addon.addonId]) continue;
       const scriptsToRun = [];
       for (const script of addon.scripts) {
-        if (userscriptMatches(request.getUserscripts, script.matches))
-          scriptsToRun.push(script.url);
+        if (userscriptMatches(request.getUserscripts, script.matches)) scriptsToRun.push(script.url);
       }
-      if (scriptsToRun.length)
-        addons.push({ addonId: addon.addonId, scripts: scriptsToRun });
+      if (scriptsToRun.length) addons.push({ addonId: addon.addonId, scripts: scriptsToRun });
     }
     sendResponse(addons);
   }

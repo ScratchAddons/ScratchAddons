@@ -1,10 +1,6 @@
 import Addon from "../addon-api/background/Addon.js";
 
-export default async function runAddonBgScripts({
-  addonId,
-  permissions,
-  scripts,
-}) {
+export default async function runAddonBgScripts({ addonId, permissions, scripts }) {
   const addonObjReal = new Addon({ id: addonId, permissions });
   const addonObjRevocable = Proxy.revocable(addonObjReal, {});
   const addonObj = addonObjRevocable.proxy;
@@ -52,9 +48,7 @@ export default async function runAddonBgScripts({
       `%cDebug addons/${addonId}/${scriptPath}: ${scriptUrl}`,
       "color:red; font-weight: bold; font-size: 1.2em;"
     );
-    const module = await import(
-      chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`)
-    );
+    const module = await import(chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`));
     const log = console.log.bind(console, `[${addonId}]`);
     const warn = console.warn.bind(console, `[${addonId}]`);
     module.default({

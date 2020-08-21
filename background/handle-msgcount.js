@@ -11,13 +11,8 @@ scratchAddons.methods.getMsgCount = async function () {
     return null;
   }
   try {
-    if (
-      Date.now() - lastCheckTimestamp > 5000 ||
-      username !== lastCheckUsername
-    ) {
-      const req = await fetch(
-        `https://api.scratch.mit.edu/users/${username}/messages/count?timestamp=${Date.now()}`
-      );
+    if (Date.now() - lastCheckTimestamp > 5000 || username !== lastCheckUsername) {
+      const req = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count?timestamp=${Date.now()}`);
       const res = await req.json();
       lastCheckTimestamp = Date.now();
       lastCheckUsername = username;
@@ -31,11 +26,7 @@ scratchAddons.methods.getMsgCount = async function () {
   }
 };
 
-chrome.runtime.onMessage.addListener(async function (
-  request,
-  sender,
-  sendResponse
-) {
+chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
   if (request === "getMsgCount") {
     const count = await scratchAddons.methods.getMsgCount();
     chrome.tabs.sendMessage(sender.tab.id, { setMsgCount: count });

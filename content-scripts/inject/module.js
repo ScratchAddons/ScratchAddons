@@ -1,8 +1,7 @@
 import runUserscript from "./run-userscript.js";
 
 const template = document.getElementById("scratch-addons");
-const getGlobalState = () =>
-  JSON.parse(template.getAttribute("data-global-state"));
+const getGlobalState = () => JSON.parse(template.getAttribute("data-global-state"));
 
 window.scratchAddons = {};
 scratchAddons.globalState = getGlobalState();
@@ -36,12 +35,9 @@ const observer = new MutationObserver((mutationsList) => {
     }
     if (attrVal === null) return;
     const removeAttr = () => template.removeAttribute(attr);
-    if (attr === "data-global-state")
-      scratchAddons.globalState = getGlobalState();
+    if (attr === "data-global-state") scratchAddons.globalState = getGlobalState();
     else if (attr === "data-msgcount") {
-      pendingPromises.msgCount.forEach((promiseResolver) =>
-        promiseResolver(attrVal)
-      );
+      pendingPromises.msgCount.forEach((promiseResolver) => promiseResolver(attrVal));
       pendingPromises.msgCount = [];
       removeAttr();
     } else if (attrType === "data-fire-event") {
@@ -59,5 +55,4 @@ const observer = new MutationObserver((mutationsList) => {
 });
 observer.observe(template, { attributes: true });
 
-for (const addon of JSON.parse(template.getAttribute("data-userscripts")))
-  runUserscript(addon);
+for (const addon of JSON.parse(template.getAttribute("data-userscripts"))) runUserscript(addon);

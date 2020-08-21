@@ -1,14 +1,6 @@
 import commentEmojis from "./comment-emojis.js";
 
-export default async function ({
-  addon,
-  global,
-  console,
-  setTimeout,
-  setInterval,
-  clearTimeout,
-  clearInterval,
-}) {
+export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
   let msgCount = null;
   let mostRecentMsgIds = [];
   const emojis = {
@@ -138,10 +130,7 @@ export default async function ({
       (e) => {
         if (e.detail.id === notifId) {
           addon.notifications.removeEventListener("click", onClick);
-          addon.notifications.removeEventListener(
-            "buttonclicked",
-            onButtonClick
-          );
+          addon.notifications.removeEventListener("buttonclicked", onButtonClick);
         }
       },
       { once: true }
@@ -177,13 +166,10 @@ export default async function ({
 
   async function checkMessages() {
     const res = await addon.fetch(
-      `https://api.scratch.mit.edu/users/${
-        addon.auth.username
-      }/messages?limit=40&offset=0&timestamp=${Date.now()}`
+      `https://api.scratch.mit.edu/users/${addon.auth.username}/messages?limit=40&offset=0&timestamp=${Date.now()}`
     );
     const messages = await res.json();
-    if (mostRecentMsgIds.length === 0)
-      mostRecentMsgIds = getMostRecentIds(messages);
+    if (mostRecentMsgIds.length === 0) mostRecentMsgIds = getMostRecentIds(messages);
     else if (messages[0].id !== mostRecentMsgIds[0]) {
       for (const message of messages) {
         if (mostRecentMsgIds.includes(message.id)) break;
@@ -195,8 +181,7 @@ export default async function ({
             // Project comment
             const replyFor = message.commentee_username;
             if (replyFor === null) messageType += "ownProjectNewComment";
-            else if (replyFor === addon.auth.username)
-              messageType += "projectReplyToSelf";
+            else if (replyFor === addon.auth.username) messageType += "projectReplyToSelf";
             else messageType += "ownProjectReplyToOther";
             commentUrl = `https://scratch.mit.edu/projects/${message.comment_obj_id}/#comments-${message.comment_id}`;
           } else if (message.comment_type === 1) {
@@ -204,8 +189,7 @@ export default async function ({
             const replyFor = message.commentee_username;
             if (profile === addon.auth.username) {
               if (replyFor === null) messageType += "ownProfileNewComment";
-              else if (replyFor === addon.auth.username)
-                messageType += "ownProfileReplyToSelf";
+              else if (replyFor === addon.auth.username) messageType += "ownProfileReplyToSelf";
               else messageType += "ownProfileReplyToOther";
             } else {
               messageType += "otherProfileReplyToSelf";
@@ -223,18 +207,13 @@ export default async function ({
             messageType === "addcomment/ownProjectNewComment" ||
             messageType === "addcomment/ownProjectReplyToOther"
           ) {
-            if (
-              addon.settings.get("commentsonmyprojects_notifications") === false
-            )
-              return;
+            if (addon.settings.get("commentsonmyprojects_notifications") === false) return;
           } else {
-            if (addon.settings.get("commentsforme_notifications") === false)
-              return;
+            if (addon.settings.get("commentsforme_notifications") === false) return;
           }
         } else {
           try {
-            if (addon.settings.get(`${message.type}_notifications`) === false)
-              return;
+            if (addon.settings.get(`${message.type}_notifications`) === false) return;
           } catch {
             // If setting doesn't exist
             console.warn(`Unexpected message type: ${message.type}`);
@@ -249,14 +228,8 @@ export default async function ({
           fragment: htmlToText(message.comment_fragment), // Comments only
           commentee: message.commentee_username, // Comments only
           commentUrl, // Comments only
-          title: htmlToText(
-            message.comment_obj_title ||
-              message.topic_title ||
-              message.title ||
-              message.project_title
-          ),
-          element_id:
-            message.comment_id || message.gallery_id || message.project_id,
+          title: htmlToText(message.comment_obj_title || message.topic_title || message.title || message.project_title),
+          element_id: message.comment_id || message.gallery_id || message.project_id,
           parent_title: htmlToText(message.parent_title), // Remixes only
         };
         notifyMessage(messageInfo);
@@ -273,9 +246,7 @@ export default async function ({
     const matches = value.match(/<img([\w\W]+?)[\/]?>/g);
     if (matches) {
       for (const match of matches) {
-        const src = match.match(
-          /\<img.+src\=(?:\"|\')(.+?)(?:\"|\')(?:.+?)\>/
-        )[1];
+        const src = match.match(/\<img.+src\=(?:\"|\')(.+?)(?:\"|\')(?:.+?)\>/)[1];
         const splitString = src.split("/");
         const imageName = splitString[splitString.length - 1];
         if (commentEmojis[imageName]) {

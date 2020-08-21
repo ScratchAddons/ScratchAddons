@@ -7,8 +7,7 @@ const template = document.createElement("template");
 template.id = "scratch-addons";
 template.setAttribute("data-path", chrome.runtime.getURL(""));
 document.head.appendChild(template);
-const setGlobalState = (json) =>
-  template.setAttribute("data-global-state", JSON.stringify(json));
+const setGlobalState = (json) => template.setAttribute("data-global-state", JSON.stringify(json));
 
 chrome.runtime.sendMessage("getGlobalState", setGlobalState);
 
@@ -45,9 +44,6 @@ const observer = new MutationObserver((mutationsList) => {
 });
 observer.observe(template, { attributes: true });
 
-chrome.runtime.sendMessage(
-  { getUserscripts: { url: location.href } },
-  (res) => {
-    template.setAttribute("data-userscripts", JSON.stringify(res));
-  }
-);
+chrome.runtime.sendMessage({ getUserscripts: { url: location.href } }, (res) => {
+  template.setAttribute("data-userscripts", JSON.stringify(res));
+});

@@ -23,8 +23,7 @@ export default class Addon {
     this.browserWindows = promisify(chrome.windows);
     this.settings = new Settings(this);
     if (permissions) {
-      if (permissions.includes("notifications"))
-        this.notifications = promisify(new Notifications(this), false);
+      if (permissions.includes("notifications")) this.notifications = promisify(new Notifications(this), false);
       if (permissions.includes("badge")) this.badge = new Badge(this);
     }
   }
