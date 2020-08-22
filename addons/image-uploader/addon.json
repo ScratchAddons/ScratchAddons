@@ -1,0 +1,12 @@
+{
+    "name": "Scratch Image Uploader",
+    "description": "Use project thumbnails to upload images to be used on the forums.",
+    "userscripts": [
+      {
+        "url": "userscript.js",
+        "matches": ["https://scratch.mit.edu/discuss/*"]
+      }
+    ],
+    "tags": ["forums"],
+    "enabled_by_default": true
+  }
