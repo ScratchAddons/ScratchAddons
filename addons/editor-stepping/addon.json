@@ -1,0 +1,13 @@
+{
+  "name": "Scratch view stepping",
+  "description": "Allows you to see which block currently executes.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [],
+  "tags": ["editor"],
+  "enabled_by_default": true
+}
