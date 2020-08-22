@@ -12,18 +12,17 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     if (details.originUrl) {
       // Firefox
       const origin = new URL(details.originUrl).origin;
-      if(origin !== chrome.runtime.getURL("").slice(0, -1) &&
-      origin !== "https://scratch.mit.edu") return;
-    }
-    else if(
+      if (origin !== chrome.runtime.getURL("").slice(0, -1) && origin !== "https://scratch.mit.edu") return;
+    } else if (
       // Chrome
       details.initiator !== chrome.runtime.getURL("").slice(0, -1) &&
       details.initiator !== "https://scratch.mit.edu"
-    ) return;
+    )
+      return;
 
     let useFetchHeaderIndex = null;
     let interceptRequest = false || optionRequestIds.includes(details.requestId);
-    if(!interceptRequest) {
+    if (!interceptRequest) {
       for (const i in details.requestHeaders) {
         const headerName = details.requestHeaders[i].name;
         if (headerName === "X-ScratchAddons-Uses-Fetch") {
@@ -63,21 +62,21 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 
 chrome.webRequest.onHeadersReceived.addListener(
   function (details) {
-    if(details.method === "OPTIONS") {
+    if (details.method === "OPTIONS") {
       for (const i in details.responseHeaders) {
         const headerName = details.responseHeaders[i].name;
         if (headerName === "access-control-allow-headers") {
           details.responseHeaders[i].value += ", x-scratchaddons-uses-fetch";
           return {
-            responseHeaders: details.responseHeaders
-          }
+            responseHeaders: details.responseHeaders,
+          };
         }
       }
     }
-  }
-  ,{
+  },
+  {
     urls: ["https://*.scratch.mit.edu/*"],
     types: ["xmlhttprequest"],
   },
   extraInfoSpec2
-  );
+);
