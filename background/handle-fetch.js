@@ -54,7 +54,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     }
   },
   {
-    urls: ["https://*.scratch.mit.edu/*"],
+    urls: ["https://scratch.mit.edu/*", "https://api.scratch.mit.edu/*"],
     types: ["xmlhttprequest"],
   },
   extraInfoSpec
@@ -75,7 +75,7 @@ chrome.webRequest.onHeadersReceived.addListener(
     }
   },
   {
-    urls: ["https://*.scratch.mit.edu/*"],
+    urls: ["https://scratch.mit.edu/*", "https://api.scratch.mit.edu/*"],
     types: ["xmlhttprequest"],
   },
   extraInfoSpec2
