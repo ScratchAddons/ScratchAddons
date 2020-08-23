@@ -1,6 +1,5 @@
 export default async function ({ addon, global, console }) {
-  addon.tab.getScratchVM().then((vm) => {
-    window.virtualMachine = vm;
+    window.virtualMachine = await addon.tab.getScratchVM();
     setInterval(() => {
       Array.prototype.forEach.call(document.querySelectorAll("path[style*='outline' i]"), (e) =>
         e.removeAttribute("style")
@@ -19,5 +18,4 @@ export default async function ({ addon, global, console }) {
         });
       });
     });
-  });
 }
