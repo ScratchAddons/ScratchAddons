@@ -52,7 +52,7 @@ export default async function ({ addon, global, console }) {
         }
       });
     });
-    
+
     //drag and drop. maybe it works on firefox 🤷‍♂️
 
     textBox.addEventListener("dragenter", () => {
@@ -79,7 +79,7 @@ export default async function ({ addon, global, console }) {
       e.preventDefault();
       e.stopPropagation();
 
-      e.dataTransfer.setData('image/*', 'dummy') //firefox support for drag and drop maybe idk i just took this from stackoverflow
+      e.dataTransfer.setData("image/*", "dummy"); //firefox support for drag and drop maybe idk i just took this from stackoverflow
 
       var reader = new FileReader();
 
@@ -95,7 +95,8 @@ export default async function ({ addon, global, console }) {
     });
   }
 
-  function displayError(message) { //display an error into the text box
+  function displayError(message) {
+    //display an error into the text box
     var items = [
       { name: "a cat", url: "https://cdn2.scratch.mit.edu/get_image/project/413649276_9000x7200.png" },
       { name: "a ufo cat", url: "https://cdn2.scratch.mit.edu/get_image/project/414016997_9000x7200.png" },
@@ -104,14 +105,15 @@ export default async function ({ addon, global, console }) {
     ];
 
     var randObj = items[Math.floor(Math.random() * items.length)];
-    console.log('random object:',randObj);
+    console.log("random object:", randObj);
     textFieldEdit.insert(
       textBox,
       `your image could not be uploaded. ${message} here is ${randObj.name}. [img]${randObj.url}[/img]`
     );
   }
 
-  function makeid(length) { //used for random project ids to avoid the thing scratch does to projects with the same id (project-1)
+  function makeid(length) {
+    //used for random project ids to avoid the thing scratch does to projects with the same id (project-1)
     var result = "";
     var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     var charactersLength = characters.length;
@@ -148,8 +150,9 @@ export default async function ({ addon, global, console }) {
     }
   }
 
-  function trash(projectID, rand){ //send a project to the trash
-    console.log('trashing project '+projectID+' which was assigned the random id '+rand)
+  function trash(projectID, rand) {
+    //send a project to the trash
+    console.log("trashing project " + projectID + " which was assigned the random id " + rand);
     fetch(`https://scratch.mit.edu/site-api/projects/all/${projectID}/`, {
       headers: {
         accept: "application/json, text/javascript, */*; q=0.01",
@@ -169,21 +172,20 @@ export default async function ({ addon, global, console }) {
       credentials: "include",
     })
       .catch((err) => {
-        displayError(
-          "we could not move the project to the trash folder. you should delete the project manually."
-        );
+        displayError("we could not move the project to the trash folder. you should delete the project manually.");
         progresselement.remove();
         throw err;
       })
-      .then(dummy => {
+      .then((dummy) => {
         console.log("deleted project successfully 🎉");
       });
   }
 
-  function uploadImage(image) {//the main function
+  function uploadImage(image) {
+    //the main function
     var randomId = makeid(5);
 
-    console.log('uploaded image: ',image);
+    console.log("uploaded image: ", image);
 
     window.progresselement = toolbar.appendChild(document.createElement("li"));
     var token = addon.auth.xToken;
@@ -214,12 +216,12 @@ export default async function ({ addon, global, console }) {
       })
       .then((e) => e.json())
       .then((data) => {
-        console.log('project creation response data: ',data);
+        console.log("project creation response data: ", data);
 
         progresselement.innerHTML = "setting title";
 
         //set title
-        console.log('project id: '+data["content-name"]);
+        console.log("project id: " + data["content-name"]);
         fetch("https://api.scratch.mit.edu/projects/" + data["content-name"], {
           headers: {
             accept: "application/json",
@@ -273,7 +275,7 @@ export default async function ({ addon, global, console }) {
                   progresselement.remove();
                 } catch {}
 
-                trash(data["content-name"], randomId) //delete the project if the upload failed
+                trash(data["content-name"], randomId); //delete the project if the upload failed
               },
               success: function (msg) {
                 console.log("set thumbnail successfully");
@@ -287,7 +289,7 @@ export default async function ({ addon, global, console }) {
 
                 uploadInput.value = null;
 
-                trash(data["content-name"], randomId) //delete the project if the upload was successful
+                trash(data["content-name"], randomId); //delete the project if the upload was successful
               },
             });
           });
