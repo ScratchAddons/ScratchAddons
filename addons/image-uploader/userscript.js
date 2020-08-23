@@ -111,7 +111,7 @@ export default async function ({ addon, global, console }) {
     );
   }
 
-  function makeid(length) { //used for random project ids to avoid the thing scratch does to projects with the same id
+  function makeid(length) { //used for random project ids to avoid the thing scratch does to projects with the same id (project-1)
     var result = "";
     var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     var charactersLength = characters.length;
