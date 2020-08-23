@@ -11,18 +11,20 @@ export default class Tab {
   }
   waitForElement(selector) {
     if (!document.querySelector(selector)) {
-        return new Promise((resolve) => new MutationObserver(function(mutationsList, observer) {
-            if (document.querySelector(selector)) {
-                observer.disconnect();
-                resolve();
-            }
+      return new Promise((resolve) =>
+        new MutationObserver(function (mutationsList, observer) {
+          if (document.querySelector(selector)) {
+            observer.disconnect();
+            resolve();
+          }
         }).observe(document.body, {
-            attributes: true,
-            childList: true,
-            subtree: true
-        }))
+          attributes: true,
+          childList: true,
+          subtree: true,
+        })
+      );
     } else {
-        return Promise.resolve()
+      return Promise.resolve();
     }
   }
 }
