@@ -1,4 +1,4 @@
-import textFieldEdit from "./text-field-edit.js"; //used for editing the forum text box without messing with the edit history
+import textFieldEdit from "../../libraries/text-field-edit.js"; //used for editing the forum text box without messing with the edit history
 
 export default async function ({ addon, global, console }) {
   var toolbar =
