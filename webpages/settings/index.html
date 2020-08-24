@@ -16,27 +16,27 @@
       <!-- This is a side menu, from which you select different categories-->
       <div class="categories-block">
         <div class="category">
-          <span class="iconify" data-icon="uil:ellipsis-h" data-inline="false"></span>
+          <img src="./puzzle.svg" />
           <span>All Categories</span>
         </div>
         <div class="category">
-          <span class="iconify" data-icon="uil:brush-alt" data-inline="false"></span>
+          <img src="./brush.svg" />
           <span>Themes</span>
         </div>
         <div class="category sel">
-          <span class="iconify" data-icon="uil:arrow-circle-up" data-inline="false"></span>
+          <img src="./feature.svg" />
           <span>Features</span>
         </div>
         <div class="category">
-          <span class="iconify" data-icon="uil:user-plus" data-inline="false"></span>
+          <img src="./newuser.svg" />
           <span>User Experience</span>
         </div>
         <div class="category">
-          <span class="iconify" data-icon="uil:wrench" data-inline="false"></span>
-          <span>Optimization</span>
+          <img src="./wrench.svg" />
+          <span>Griffpatch is Fat</span>
         </div>
         <div class="category">
-          <span class="iconify" data-icon="uil:globe" data-inline="false"></span>
+          <img src="./web.svg" />
           <span>Scratch Website</span>
         </div>
       </div>
@@ -75,7 +75,7 @@
                 settings, which appear when you expand it -->
           <div class="addon-body" v-for="addon of addons">
             <div class="addon-topbar">
-              <div class="btn-dropdown"><img src="./expand.svg" alt="v" /></div>
+              <div class="btn-dropdown" id="testDropdown"><img src="./expand.svg" alt="v" /></div>
               <div class="addon-name">{{ addon.name }}</div>
               <div class="badge blue">Recommended</div>
               <div class="badge red">Beta</div>
@@ -84,7 +84,30 @@
               </div>
             </div>
             <div class="addon-settings">
-              <!-- There's none yet, still working on it :P -->
+              <div class="settings-column">
+                <div class="addon-setting">
+                  <div class="setting-label">Your Mood</div>
+                  <input type="text" class="setting-input string" placeholder="How are you?" />
+                </div>
+                <div class="addon-setting">
+                  <div class="setting-label">Your Age</div>
+                  <input type="number" class="setting-input number" placeholder="Aeg" />
+                </div>
+              </div>
+              <div class="settings-column">
+                <div class="addon-setting">
+                  <div class="setting-label">Show Ads pls</div>
+                  <input type="checkbox" class="setting-input check" min="0" max="10" />
+                </div>
+                <div class="addon-setting">
+                  <div class="setting-label">Which Ads?</div>
+                  <div class="filter-options">
+                    <div class="filter-option sel">Haha</div>
+                    <div class="filter-option">Stinky</div>
+                    <div class="filter-option">Poop</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -92,7 +115,7 @@
     </div>
 
     <script>
-      //this is just a test code to see how switches work.
+      //this is just a test code to see how stuff works.
 
       document.querySelector("#testSwitch").onclick = () => {
         //this statement is true if the switch is on, and false if it's off
@@ -102,9 +125,15 @@
         if (state) document.querySelector("#testSwitch").setAttribute("state", "off");
         else document.querySelector("#testSwitch").setAttribute("state", "on");
       };
+
+      document.querySelector("#testDropdown").onclick = () => {
+        //this statement is true if the switch is on, and false if it's off
+        let p = document.querySelector("#testDropdown").parentElement.parentElement;
+        p.classList.toggle("sh");
+      };
     </script>
     <script src="../../libraries/iconify.min.js"></script>
     <script src="../../libraries/vue.js"></script>
-    <script src="index.js"></script>
+    <!-- <script src="index.js"></script> -->
   </body>
 </html>

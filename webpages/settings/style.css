@@ -69,8 +69,13 @@ h1 {
   top: 10px;
   left: 0;
 }
-.category .iconify {
-  font-size: 18px;
+
+.category img {
+  height: 18px;
+  filter: brightness(10);
+}
+.category.sel img {
+  filter: brightness(1);
 }
 .category span {
   margin-left: 15px;
@@ -111,6 +116,10 @@ h1 {
 }
 .btn-dropdown:hover {
   background: rgba(255, 255, 255, 0.05);
+}
+
+.sh .btn-dropdown {
+  transform: rotate(180deg);
 }
 
 .btn-dropdown img {
@@ -158,6 +167,61 @@ h1 {
 }
 .rating span {
   color: #fdab12;
+}
+
+.sh .addon-settings {
+  display: flex;
+}
+.addon-settings {
+  display: none;
+  padding: 0 20px;
+  display: none;
+}
+
+.settings-column {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.addon-setting {
+  margin: 10px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+}
+
+.setting-label {
+  width: 150px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  color: #aaa;
+  font-weight: 600;
+  font-size: 12px;
+  margin-right: 15px;
+}
+
+.setting-input {
+  color: #fff;
+  background: #222222;
+  border: 1px solid #000;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: 0.25s ease;
+  transition-property: box-shadow border;
+}
+.setting-input:focus {
+  outline: none;
+  border-color: #ff7b26;
+  box-shadow: 0 0 0 3px #ff7d265d;
+}
+
+.setting-input.check {
+  height: 20px;
+  width: 20px;
+}
+
+.setting-input.number {
+  border-radius: 20px;
 }
 
 .addon-check {
