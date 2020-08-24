@@ -5,27 +5,26 @@ const addonsWithUserscripts = [];
 async function getUsercripts() {
   for (const addonId in scratchAddons.manifests) {
     const manifest = scratchAddons.manifests[addonId];
-    if (manifest.userscripts) {
-      addonsWithUserscripts.push({ addonId, scripts: manifest.userscripts });
+    if (manifest.userscripts || manifest.userstyles) {
+      addonsWithUserscripts.push({ addonId, scripts: manifest.userscripts || [], styles: manifest.userstyles || [] });
     }
   }
 }
 
-chrome.runtime.onMessage.addListener(async function (
-  request,
-  sender,
-  sendResponse
-) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.getUserscripts) {
     const addons = [];
     for (const addon of addonsWithUserscripts) {
+      if (!scratchAddons.localState.addonsEnabled[addon.addonId]) continue;
       const scriptsToRun = [];
+      const stylesToRun = [];
       for (const script of addon.scripts) {
-        if (userscriptMatches(request.getUserscripts, script.matches))
-          scriptsToRun.push(script.url);
+        if (userscriptMatches(request.getUserscripts, script.matches)) scriptsToRun.push(script.url);
       }
-      if (scriptsToRun.length)
-        addons.push({ addonId: addon.addonId, scripts: scriptsToRun });
+      for (const style of addon.styles) {
+        if (userscriptMatches(request.getUserscripts, style.matches)) stylesToRun.push(style.url);
+      }
+      if (scriptsToRun.length) addons.push({ addonId: addon.addonId, scripts: scriptsToRun, styles: stylesToRun });
     }
     sendResponse(addons);
   }
@@ -39,14 +38,17 @@ function userscriptMatches(data, matches) {
   return false;
 }
 
-function urlMatchesPattern(_pattern, _url) {
-  const pattern = _pattern.split("/");
-  const url = _url.split("/");
-  while (pattern.length) {
-    const p = pattern.shift();
-    const q = url.shift();
+function urlMatchesPattern(pattern, url) {
+  const patternURL = new URL(pattern);
+  const urlURL = new URL(url);
+  if (patternURL.origin !== urlURL.origin) return false;
+  const patternPath = patternURL.pathname.split("/");
+  const urlPath = urlURL.pathname.split("/");
+  if (urlPath[urlPath.length - 1] !== "") urlPath.push("");
+  while (patternPath.length) {
+    const p = patternPath.shift();
+    const q = urlPath.shift();
     if (p !== q && p !== "*") return false;
   }
   return true;
 }
-window.urlMatchesPattern = urlMatchesPattern;

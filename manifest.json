@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Scratch Addons",
   "description": "[Description]",
-  "version": "0.0.1",
+  "version": "3.0",
   "background": {
     "page": "background/background.html"
   },
@@ -19,20 +19,30 @@
       "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_idle",
       "js": ["content-scripts/cs.js"]
+    },
+    {
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "run_at": "document_start",
+      "js": ["content-scripts/find-vm-injector.js"]
     }
   ],
+  "options_ui": {
+    "page": "webpages/settings/index.html",
+    "open_in_tab": true
+  },
   "permissions": [
-    "https://*.scratch.mit.edu/*",
+    "https://scratch.mit.edu/*",
+    "https://api.scratch.mit.edu/*",
     "cookies",
     "webRequest",
     "webRequestBlocking",
     "storage",
     "notifications"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-  "web_accessible_resources": [
-    "content-scripts/inject/*",
-    "addon-api/*",
-    "addons/*"
-  ]
+  "web_accessible_resources": ["content-scripts/inject/*", "addon-api/*", "addons/*"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "firefox@scratchaddons"
+    }
+  }
 }

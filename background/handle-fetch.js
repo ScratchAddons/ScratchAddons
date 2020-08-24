@@ -1,29 +1,37 @@
 const extraInfoSpec = ["blocking", "requestHeaders"];
-if (
-  chrome.webRequest.OnBeforeSendHeadersOptions.hasOwnProperty("EXTRA_HEADERS")
-)
+const extraInfoSpec2 = ["blocking", "responseHeaders"];
+if (chrome.webRequest.OnBeforeSendHeadersOptions.hasOwnProperty("EXTRA_HEADERS")) {
   extraInfoSpec.push("extraHeaders");
+  extraInfoSpec2.push("extraHeaders");
+}
+
+const optionRequestIds = [];
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
   function (details) {
-    if (
-      details.initiator !== `chrome-extension://${chrome.runtime.id}` &&
-      details.initiator !== "https://scratch.mit.edu" &&
-      !details.originUrl.startsWith(chrome.runtime.getURL("")) &&
-      !details.originUrl.startsWith("https://scratch.mit.edu")
+    if (details.originUrl) {
+      // Firefox
+      const origin = new URL(details.originUrl).origin;
+      if (origin !== chrome.runtime.getURL("").slice(0, -1) && origin !== "https://scratch.mit.edu") return;
+    } else if (
+      // Chrome
+      details.initiator !== chrome.runtime.getURL("").slice(0, -1) &&
+      details.initiator !== "https://scratch.mit.edu"
     )
       return;
-    let originHeaderIndex = null;
-    let interceptRequest = false;
-    for (const i in details.requestHeaders) {
-      const headerName = details.requestHeaders[i].name;
-      if (headerName === "Origin") originHeaderIndex = i;
-      else if (headerName === "X-ScratchAddons-Uses-Fetch")
-        interceptRequest = true;
+
+    let useFetchHeaderIndex = null;
+    let interceptRequest = false || optionRequestIds.includes(details.requestId);
+    if (!interceptRequest) {
+      for (const i in details.requestHeaders) {
+        const headerName = details.requestHeaders[i].name;
+        if (headerName === "X-ScratchAddons-Uses-Fetch") {
+          interceptRequest = true;
+          useFetchHeaderIndex = i;
+        }
+      }
     }
     if (interceptRequest) {
-      if (originHeaderIndex)
-        details.requestHeaders.splice(originHeaderIndex, 1);
       details.requestHeaders.push({
         name: "Referer",
         value: "https://scratch.mit.edu/",
@@ -46,8 +54,29 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     }
   },
   {
-    urls: ["https://*.scratch.mit.edu/*"],
+    urls: ["https://scratch.mit.edu/*", "https://api.scratch.mit.edu/*"],
     types: ["xmlhttprequest"],
   },
   extraInfoSpec
+);
+
+chrome.webRequest.onHeadersReceived.addListener(
+  function (details) {
+    if (details.method === "OPTIONS") {
+      for (const i in details.responseHeaders) {
+        const headerName = details.responseHeaders[i].name;
+        if (headerName === "access-control-allow-headers") {
+          details.responseHeaders[i].value += ", x-scratchaddons-uses-fetch";
+          return {
+            responseHeaders: details.responseHeaders,
+          };
+        }
+      }
+    }
+  },
+  {
+    urls: ["https://scratch.mit.edu/*", "https://api.scratch.mit.edu/*"],
+    types: ["xmlhttprequest"],
+  },
+  extraInfoSpec2
 );

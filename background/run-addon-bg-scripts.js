@@ -1,11 +1,6 @@
 import Addon from "../addon-api/background/Addon.js";
-import evalScript from "./eval-background-script.js";
 
-export default async function runAddonBgScripts({
-  addonId,
-  permissions,
-  scripts,
-}) {
+export default async function runAddonBgScripts({ addonId, permissions, scripts }) {
   const addonObjReal = new Addon({ id: addonId, permissions });
   const addonObjRevocable = Proxy.revocable(addonObjReal, {});
   const addonObj = addonObjRevocable.proxy;
@@ -48,26 +43,22 @@ export default async function runAddonBgScripts({
   };
   const globalObj = Object.create(null);
   for (const scriptPath of scripts) {
-    const pseudoUrl = `scratchaddons://bgscripts/${addonId}@${scriptPath
-      .split("/")
-      .join("@")}`;
+    const scriptUrl = chrome.runtime.getURL(`/addons/${addonId}/${scriptPath}`);
     console.log(
-      `%cDebug addons/${addonId}/${scriptPath}: ${pseudoUrl}`,
-      "color:red; font-weight: bold; font-size: 1.3em;"
+      `%cDebug addons/${addonId}/${scriptPath}: ${scriptUrl}`,
+      "color:red; font-weight: bold; font-size: 1.2em;"
     );
-    let codeToEvaluate = "";
-    codeToEvaluate += await (
-      await fetch(`/addons/${addonId}/${scriptPath}`)
-    ).text();
-    codeToEvaluate += "\n//# sourceURL=" + pseudoUrl;
-    evalScript(
-      codeToEvaluate,
-      addonObj,
-      globalObj,
-      setTimeoutFunc,
-      setIntervalFunc,
-      clearTimeoutFunc,
-      clearIntervalFunc
-    );
+    const module = await import(chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`));
+    const log = console.log.bind(console, `[${addonId}]`);
+    const warn = console.warn.bind(console, `[${addonId}]`);
+    module.default({
+      addon: addonObj,
+      global: globalObj,
+      console: { ...console, log, warn },
+      setTimeout: setTimeoutFunc,
+      setInterval: setIntervalFunc,
+      clearTimeout: clearTimeoutFunc,
+      clearInterval: clearIntervalFunc,
+    });
   }
 }

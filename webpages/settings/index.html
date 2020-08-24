@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ScratchAddons</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+    <link href="../../libraries/Sora.css" rel="stylesheet" />
+  </head>
+  <body>
     <div class="navbar">
-        <img src="./logo-small.png" class="logo" alt="Logo">
-        <h1>Manage Addons</h1>
+      <img src="./logo-small.png" class="logo" alt="Logo" />
+      <h1>Settings</h1>
     </div>
     <div class="main">
         <!-- This is a side menu, from which you select different categories-->
@@ -38,70 +38,87 @@
             <div class="category">
                 <img src="./web.svg" />
                 <span>Scratch Website</span>
+                
             </div>
         </div>
+        <div class="category">
+          <span class="iconify" data-icon="uil:user-plus" data-inline="false"></span>
+          <span>User Experience</span>
+        </div>
+        <div class="category">
+          <span class="iconify" data-icon="uil:wrench" data-inline="false"></span>
+          <span>Optimization</span>
+        </div>
+        <div class="category">
+          <span class="iconify" data-icon="uil:globe" data-inline="false"></span>
+          <span>Scratch Website</span>
+        </div>
+      </div>
 
-        <!-- This is a the main menu, where the searchbar and the addon items are located -->
-        <div class="addons-block">
-            <div class="search-box">
-                <input type="text" id="searchBox" placeholder="Search Addons" >
-                <button id="searchBtn"></button>
+      <!-- This is a the main menu, where the searchbar and the addon items are located -->
+      <div class="addons-block">
+        <div class="search-box">
+          <input type="text" id="searchBox" placeholder="Search" />
+          <button id="searchBtn"></button>
 
-                <div class="filter-selector">
-                    <span>State: </span>
-                    <div class="filter-options">
-                        <div class="filter-option sel">All</div>
-                        <div class="filter-option">Not Activated</div>
-                        <div class="filter-option">Activated</div>
-                    </div>
-                </div>
-                <div class="filter-selector">
-                    <span>Type: </span>
-                    <div class="filter-options">
-                        <div class="filter-option sel">Theme</div>
-                        <div class="filter-option">Script</div>
-                    </div>
-                </div>
-                <div class="filter-selector">
-                    <span>More: </span>
-                    <div class="filter-options">
-                        <div class="filter-option">Other Filters</div>
-                    </div>
-                </div>
+          <div class="filter-selector">
+            <span>State: </span>
+            <div class="filter-options">
+              <div class="filter-option sel">All</div>
+              <div class="filter-option">Enabled</div>
+              <div class="filter-option">Disabled</div>
             </div>
+          </div>
+          <div class="filter-selector">
+            <span>Type: </span>
+            <div class="filter-options">
+              <div class="filter-option sel">Theme</div>
+              <div class="filter-option">Script</div>
+            </div>
+          </div>
+          <div class="filter-selector">
+            <span>More: </span>
+            <div class="filter-options">
+              <div class="filter-option">Other Filters</div>
+            </div>
+          </div>
+        </div>
 
-            <div class="addons-container">
-                <!-- This is an individual addon item. It has a top bar where all the info is displayed and 
+        <div class="addons-container">
+          <!-- This is an individual addon item. It has a top bar where all the info is displayed and 
                 settings, which appear when you expand it -->
-                <div class="addon-body">
-                    <div class="addon-topbar">
-                        <div class="btn-dropdown"> <img src="./expand.svg" alt="v"> </div>
-                        <div class="addon-name">DevTools Shortcuts</div>
-                        <div class="badge blue">Recommended</div>
-                        <div class="badge red">Beta</div>
-                        <div class="addon-check">
-                            <switch state="off" id="testSwitch" />
-                        </div>
-                    </div>
-                    <div class="addon-settings">
-                        <!-- There's none yet, still working on it :P -->
-                    </div>
-                </div>
+          <div class="addon-body" v-for="addon of addons">
+            <div class="addon-topbar">
+              <div class="btn-dropdown"><img src="./expand.svg" alt="v" /></div>
+              <div class="addon-name">{{ addon.name }}</div>
+              <div class="badge blue">Recommended</div>
+              <div class="badge red">Beta</div>
+              <div class="addon-check">
+                <switch state="off" id="testSwitch" />
+              </div>
             </div>
+            <div class="addon-settings">
+              <!-- There's none yet, still working on it :P -->
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <script>
-        //this is just a test code to see how switches work. 
+      //this is just a test code to see how switches work.
 
-        document.querySelector('#testSwitch').onclick = () => {
-            //this statement is true if the switch is on, and false if it's off
-            let state = document.querySelector('#testSwitch').getAttribute('state') == 'on';
+      document.querySelector("#testSwitch").onclick = () => {
+        //this statement is true if the switch is on, and false if it's off
+        let state = document.querySelector("#testSwitch").getAttribute("state") == "on";
 
-            //is the statement above is true, turn the switch off. If it's false, turn it on.
-            if(state) document.querySelector('#testSwitch').setAttribute('state', 'off');
-            else document.querySelector('#testSwitch').setAttribute('state', 'on');
-        }
+        //is the statement above is true, turn the switch off. If it's false, turn it on.
+        if (state) document.querySelector("#testSwitch").setAttribute("state", "off");
+        else document.querySelector("#testSwitch").setAttribute("state", "on");
+      };
     </script>
-</body>
+    <script src="../../libraries/iconify.min.js"></script>
+    <script src="../../libraries/vue.js"></script>
+    <script src="index.js"></script>
+  </body>
 </html>

@@ -65,9 +65,7 @@ export default class Notifications extends EventTarget {
   }
   getAll(callback) {
     chrome.notifications.getAll((notifications) => {
-      const notifIds = Object.keys(notifications).filter((notifId) =>
-        notifId.startsWith(this._addonId)
-      );
+      const notifIds = Object.keys(notifications).filter((notifId) => notifId.startsWith(this._addonId));
       const obj = {};
       for (const notifId of notifIds) {
         obj[notifId] = notifications[notifId];

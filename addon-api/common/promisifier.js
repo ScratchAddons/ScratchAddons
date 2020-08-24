@@ -11,8 +11,7 @@ export default function promisify(obj, protectFromSets = true) {
       else return original;
     },
     set(obj, prop, value) {
-      if (protectFromSets)
-        throw "ScratchAddons exception: an addon tried to set a property in a browser API";
+      if (protectFromSets) throw "ScratchAddons exception: an addon tried to set a property in a browser API";
       else obj[prop] = value;
       return true;
     },

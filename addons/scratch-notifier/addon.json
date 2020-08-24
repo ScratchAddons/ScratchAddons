@@ -1,86 +1,73 @@
 {
   "name": "Scratch Notifier",
-  "description": "Notifications on new messages",
-  "permissions": ["badge"],
-  "persistent_scripts": ["background.js", "background2.js"],
-  "userscripts": [
-    {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"]
-    }
-  ],
+  "description": "Notifications on new Scratch messages. By World_Languages",
+  "permissions": ["notifications"],
+  "persistent_scripts": ["background.js"],
   "options": [
-    {
-      "name": "New message notifications",
-      "id": "sendNotifications",
-      "type": "boolean",
-      "default": false,
-      "required_permissions": ["notifications"]
-    },
     {
       "name": "💬 Comments for me (replies and profile comments)",
       "id": "commentsforme_notifications",
-      "type": "child_boolean",
+      "type": "boolean",
       "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "💬 Comments on my projects",
       "id": "commentsonmyprojects_notifications",
-      "type": "child_boolean",
+      "type": "boolean",
       "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "📚 Forum activity",
       "id": "forumpost_notifications",
-      "type": "child_boolean",
+      "type": "boolean",
       "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "❤️ Project loves",
       "id": "loveproject_notifications",
-      "type": "child_boolean",
+      "type": "boolean",
       "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "⭐ Project favorites",
       "id": "favoriteprojec_tnotifications",
-      "type": "child_boolean",
+      "type": "boolean",
       "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "👤 New followers",
       "id": "followuser_notifications",
-      "type": "child_boolean",
+      "type": "boolean",
       "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "✉️ Studio invites",
       "id": "curatorinvite_notifications",
-      "type": "child_boolean",
+      "type": "boolean",
       "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "🆕 Studio activity",
       "id": "studioactivity_notifications",
-      "type": "child_boolean",
+      "type": "boolean",
       "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "🔄 Project remixes",
       "id": "remixproject_notifications",
-      "type": "child_boolean",
+      "type": "boolean",
       "child_of": "sendNotifications",
       "default": true
     }
   ],
   "tags": ["community"],
-  "enabled_by_default": true
+  "enabled_by_default": false
 }
