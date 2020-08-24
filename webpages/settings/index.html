@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ScratchAddons</title>
+    <title>Scratch Addons - Settings</title>
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
   </head>
@@ -13,79 +13,108 @@
       <h1>Settings</h1>
     </div>
     <div class="main">
-      <!-- This is a side menu, from which you select different categories-->
       <div class="categories-block">
-        <div class="category">
-          <img src="./puzzle.svg" />
-          <span>All Categories</span>
+        <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
+          <img src="./list.svg" />
+          <span>All</span>
         </div>
-        <div class="category">
+        <div class="category" :class="{sel: selectedTab === 'editor'}" @click="selectedTab = 'editor'">
+          <img src="./puzzle.svg" />
+          <span>Scratch Editor Features</span>
+        </div>
+        <div class="category" :class="{sel: selectedTab === 'community'}" @click="selectedTab = 'community'">
+          <img src="./web.svg" />
+          <span>Scratch Website Features</span>
+        </div>
+        <div class="category" :class="{sel: selectedTab === 'themes'}" @click="selectedTab = 'themes'">
           <img src="./brush.svg" />
           <span>Themes</span>
         </div>
-        <div class="category sel">
-          <img src="./feature.svg" />
-          <span>Features</span>
-        </div>
-        <div class="category">
-          <img src="./newuser.svg" />
-          <span>User Experience</span>
-        </div>
-        <div class="category">
+        <!--<div class="category">
           <img src="./wrench.svg" />
-          <span>Griffpatch is Fat</span>
-        </div>
-        <div class="category">
-          <img src="./web.svg" />
-          <span>Scratch Website</span>
-        </div>
+          <span>More settings</span>
+        </div>-->
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div class="search-box">
-          <input type="text" id="searchBox" placeholder="Search" />
-          <button id="searchBtn"></button>
-
+          <input type="text" id="searchBox" placeholder="Search" :autofocus="true" v-model="searchInput"/>
+          <button v-show="searchInput === ''" style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey')"></button>
+          <button v-else style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey')" @click="clearSearch()"></button>
           <div class="filter-selector">
-            <span>State: </span>
+            <span class="filter-text">Filter: </span>
             <div class="filter-options">
-              <div class="filter-option sel">All</div>
-              <div class="filter-option">Enabled</div>
-              <div class="filter-option">Disabled</div>
-            </div>
-          </div>
-          <div class="filter-selector">
-            <span>Type: </span>
-            <div class="filter-options">
-              <div class="filter-option sel">Theme</div>
-              <div class="filter-option">Script</div>
-            </div>
-          </div>
-          <div class="filter-selector">
-            <span>More: </span>
-            <div class="filter-options">
-              <div class="filter-option">Other Filters</div>
+              <div 
+              class="filter-option"
+              :class="{'sel': selectedTag === null}"
+              @click="selectedTag = null">
+              All</div>
+              <div 
+              v-for="tag of tags"
+              v-show="tag.tabShow[selectedTab]"
+              class="filter-option"
+              class="badge" :class="{
+                'sel': selectedTag === tag.matchName,
+                'blue': tag.color === 'blue',
+                'yellow': tag.color === 'yellow',
+                'red': tag.color === 'red',
+                'green': tag.color === 'green'}"
+              @click="selectedTag === tag.matchName ? (selectedTag = null) : (selectedTag = tag.matchName)">
+              {{ tag.name }}
+              </div>
             </div>
           </div>
         </div>
 
         <div class="addons-container">
-          <!-- This is an individual addon item. It has a top bar where all the info is displayed and 
-                settings, which appear when you expand it -->
-          <div class="addon-body" v-for="addon of addons">
+          <div class="addon-body" 
+          v-for="addon of manifests" 
+          v-show="addonMatchesFilters(addon) && (selectedTab === 'all' || addon._category === selectedTab)">
             <div class="addon-topbar">
-              <div class="btn-dropdown" id="testDropdown"><img src="./expand.svg" alt="v" /></div>
-              <div class="addon-name">{{ addon.name }}</div>
-              <div class="badge blue">Recommended</div>
-              <div class="badge red">Beta</div>
+              <div class="clickeable-area" @click="addon._expanded = !addon._expanded">
+                <div class="btn-dropdown"><img src="./expand.svg" alt="v" :class="{'reverted': addon._expanded}" /></div>
+                <div class="addon-name">
+                  <img v-if="addon._category === 'editor'" src="./puzzle.svg" class="icon-type">
+                  <img v-if="addon._category === 'community'" src="./web.svg" class="icon-type">
+                  <img v-if="addon._category === 'theme'" src="./brush.svg" class="icon-type">
+                  {{ addon.name }}
+                </div>
+              </div>
+              <div class="badge blue" v-if="addon._tags.recommended">Recommended</div>
+              <div class="badge red" v-if="addon._tags.beta">Beta</div>
+              <div class="badge green" v-if="addon._tags.forums">Forums</div>
+              <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
               <div class="addon-check">
-                <switch state="off" id="testSwitch" />
+                <switch :state="addon._enabled ? 'on' : 'off'" @click="toggleAddon(addon)"/>
               </div>
             </div>
-            <div class="addon-settings">
+            <div class="addon-settings" v-show="addon._expanded">
+              <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
               <div class="settings-column">
-                <div class="addon-setting">
+                <div v-for="setting of addon.options">
+                  <div class="addon-setting" v-if="setting.type === 'boolean'">
+                    <div class="setting-label">{{ setting.name }}</div>
+                    <input type="checkbox" 
+                    class="setting-input check"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @change="updateSettings(addon);"
+                    :disabled="!addon._enabled"
+                    />
+                  </div>
+                    <div class="addon-setting" v-if="setting.type === 'positive_integer'">
+                      <div class="setting-label">{{ setting.name }}</div>
+                      <input type="number" 
+                      class="setting-input number"
+                      v-model="addonSettings[addon._addonId][setting.id]"
+                      @change="updateSettings(addon)"
+                      :disabled="!addon._enabled"
+                      />
+                  </div>
+                </div>
+                </div>
+                <!--
+                <div class="addon-setting" v-for="setting of addon.options">
                   <div class="setting-label">Your Mood</div>
                   <input type="text" class="setting-input string" placeholder="How are you?" />
                 </div>
@@ -94,7 +123,6 @@
                   <input type="number" class="setting-input number" placeholder="Aeg" />
                 </div>
               </div>
-              <div class="settings-column">
                 <div class="addon-setting">
                   <div class="setting-label">Show Ads pls</div>
                   <input type="checkbox" class="setting-input check" min="0" max="10" />
@@ -106,34 +134,14 @@
                     <div class="filter-option">Stinky</div>
                     <div class="filter-option">Poop</div>
                   </div>
-                </div>
-              </div>
+                </div> -->
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <script>
-      //this is just a test code to see how stuff works.
-
-      document.querySelector("#testSwitch").onclick = () => {
-        //this statement is true if the switch is on, and false if it's off
-        let state = document.querySelector("#testSwitch").getAttribute("state") == "on";
-
-        //is the statement above is true, turn the switch off. If it's false, turn it on.
-        if (state) document.querySelector("#testSwitch").setAttribute("state", "off");
-        else document.querySelector("#testSwitch").setAttribute("state", "on");
-      };
-
-      document.querySelector("#testDropdown").onclick = () => {
-        //this statement is true if the switch is on, and false if it's off
-        let p = document.querySelector("#testDropdown").parentElement.parentElement;
-        p.classList.toggle("sh");
-      };
-    </script>
     <script src="../../libraries/iconify.min.js"></script>
     <script src="../../libraries/vue.js"></script>
-    <!-- <script src="index.js"></script> -->
+    <script src="index.js"></script>
   </body>
 </html>
