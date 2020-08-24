@@ -6,7 +6,7 @@ if (scratchAddons.localState.allReady) getBgScripts();
 else window.addEventListener("scratchaddonsready", getBgScripts);
 
 async function getBgScripts() {
-  for (const {manifest, addonId} of scratchAddons.manifests) {
+  for (const { manifest, addonId } of scratchAddons.manifests) {
     if (manifest.persistent_scripts) {
       let permissions;
       if (manifest.permissions) permissions = manifest.permissions;

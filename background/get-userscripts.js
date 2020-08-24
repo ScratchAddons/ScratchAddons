@@ -3,7 +3,7 @@ else window.addEventListener("scratchaddonsready", getUsercripts);
 
 const addonsWithUserscripts = [];
 async function getUsercripts() {
-  for (const {manifest, addonId} of scratchAddons.manifests) {
+  for (const { manifest, addonId } of scratchAddons.manifests) {
     if (manifest.userscripts || manifest.userstyles) {
       addonsWithUserscripts.push({ addonId, scripts: manifest.userscripts || [], styles: manifest.userstyles || [] });
     }
