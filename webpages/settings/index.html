@@ -33,7 +33,7 @@
             </div>
             <div class="category">
                 <img src="./wrench.svg" />
-                <span>Optimization</span>
+                <span>Griffpatch is Fat</span>
             </div>
             <div class="category">
                 <img src="./web.svg" />
@@ -41,19 +41,6 @@
                 
             </div>
         </div>
-        <div class="category">
-          <span class="iconify" data-icon="uil:user-plus" data-inline="false"></span>
-          <span>User Experience</span>
-        </div>
-        <div class="category">
-          <span class="iconify" data-icon="uil:wrench" data-inline="false"></span>
-          <span>Optimization</span>
-        </div>
-        <div class="category">
-          <span class="iconify" data-icon="uil:globe" data-inline="false"></span>
-          <span>Scratch Website</span>
-        </div>
-      </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
@@ -89,7 +76,7 @@
                 settings, which appear when you expand it -->
           <div class="addon-body" v-for="addon of addons">
             <div class="addon-topbar">
-              <div class="btn-dropdown"><img src="./expand.svg" alt="v" /></div>
+              <div class="btn-dropdown" id="testDropdown"><img src="./expand.svg" alt="v" /></div>
               <div class="addon-name">{{ addon.name }}</div>
               <div class="badge blue">Recommended</div>
               <div class="badge red">Beta</div>
@@ -98,7 +85,30 @@
               </div>
             </div>
             <div class="addon-settings">
-              <!-- There's none yet, still working on it :P -->
+                <div class="settings-column">
+                  <div class="addon-setting">
+                    <div class="setting-label">Your Mood</div>
+                    <input type="text" class="setting-input string" placeholder="How are you?" />
+                  </div>
+                  <div class="addon-setting">
+                    <div class="setting-label">Your Age</div>
+                    <input type="number" class="setting-input number" placeholder="Aeg" />
+                  </div>
+                </div>
+                <div class="settings-column">
+                  <div class="addon-setting">
+                    <div class="setting-label">Show Ads pls</div>
+                    <input type="checkbox" class="setting-input check" min="0" max="10" />
+                  </div>
+                  <div class="addon-setting">
+                    <div class="setting-label">Which Ads?</div>
+                    <div class="filter-options">
+                      <div class="filter-option sel">Haha</div>
+                      <div class="filter-option">Stinky</div>
+                      <div class="filter-option">Poop</div>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
         </div>
@@ -116,9 +126,15 @@
         if (state) document.querySelector("#testSwitch").setAttribute("state", "off");
         else document.querySelector("#testSwitch").setAttribute("state", "on");
       };
+
+      document.querySelector("#testDropdown").onclick = () => {
+        //this statement is true if the switch is on, and false if it's off
+        let p = document.querySelector("#testDropdown").parentElement.parentElement;
+        p.classList.toggle('sh');
+      };
     </script>
     <script src="../../libraries/iconify.min.js"></script>
     <script src="../../libraries/vue.js"></script>
-    <script src="index.js"></script>
+    <!-- <script src="index.js"></script> -->
   </body>
 </html>
