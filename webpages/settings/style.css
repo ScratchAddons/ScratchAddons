@@ -44,41 +44,41 @@ h1 {
   padding: 20px 0;
 }
 
-.category{
-    padding: 20px 20px;
-    position: relative;
-    user-select: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+.category {
+  padding: 20px 20px;
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
-.category.sel{
-    color: #ff7b26;
+.category.sel {
+  color: #ff7b26;
 }
-.category:hover{
-    background: rgba(0, 0, 0, 0.1);
+.category:hover {
+  background: rgba(0, 0, 0, 0.1);
 }
-.category.sel::before{
-    content: '';
-    display: block;
-    width: 4px;
-    border-radius: 0 4px 4px 0;
-    height: 40px;
-    background: #ff7b26;
-    position: absolute;
-    top: 10px;
-    left: 0;
+.category.sel::before {
+  content: "";
+  display: block;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  height: 40px;
+  background: #ff7b26;
+  position: absolute;
+  top: 10px;
+  left: 0;
 }
 
-.category img{
-    height: 18px;
-    filter: brightness(10);
+.category img {
+  height: 18px;
+  filter: brightness(10);
 }
-.category.sel img{
-    filter: brightness(1);
+.category.sel img {
+  filter: brightness(1);
 }
-.category span{
-    margin-left: 15px;
+.category span {
+  margin-left: 15px;
 }
 
 .addons-block {
@@ -118,7 +118,7 @@ h1 {
   background: rgba(255, 255, 255, 0.05);
 }
 
-.sh .btn-dropdown{
+.sh .btn-dropdown {
   transform: rotate(180deg);
 }
 
@@ -169,28 +169,28 @@ h1 {
   color: #fdab12;
 }
 
-.sh .addon-settings{
+.sh .addon-settings {
   display: flex;
 }
-.addon-settings{
+.addon-settings {
   display: none;
   padding: 0 20px;
   display: none;
 }
 
-.settings-column{
+.settings-column {
   width: 100%;
   margin-bottom: 10px;
 }
 
-.addon-setting{
+.addon-setting {
   margin: 10px;
   height: 35px;
   display: flex;
   align-items: center;
 }
 
-.setting-label{
+.setting-label {
   width: 150px;
   margin-bottom: 5px;
   text-transform: uppercase;
@@ -200,7 +200,7 @@ h1 {
   margin-right: 15px;
 }
 
-.setting-input{
+.setting-input {
   color: #fff;
   background: #222222;
   border: 1px solid #000;
@@ -209,18 +209,18 @@ h1 {
   transition: 0.25s ease;
   transition-property: box-shadow border;
 }
-.setting-input:focus{
+.setting-input:focus {
   outline: none;
   border-color: #ff7b26;
   box-shadow: 0 0 0 3px #ff7d265d;
 }
 
-.setting-input.check{
+.setting-input.check {
   height: 20px;
   width: 20px;
 }
 
-.setting-input.number{
+.setting-input.number {
   border-radius: 20px;
 }
 

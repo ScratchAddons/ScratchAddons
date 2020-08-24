@@ -13,34 +13,33 @@
       <h1>Settings</h1>
     </div>
     <div class="main">
-        <!-- This is a side menu, from which you select different categories-->
-        <div class="categories-block">
-            <div class="category"> 
-                <img src="./puzzle.svg" />
-                <span>All Categories</span>
-            </div>
-            <div class="category">
-                <img src="./brush.svg" />
-                <span>Themes</span>
-            </div>
-            <div class="category sel">
-                <img src="./feature.svg" />
-                <span>Features</span>
-            </div>
-            <div class="category">
-                <img src="./newuser.svg" />
-                <span>User Experience</span>
-            </div>
-            <div class="category">
-                <img src="./wrench.svg" />
-                <span>Griffpatch is Fat</span>
-            </div>
-            <div class="category">
-                <img src="./web.svg" />
-                <span>Scratch Website</span> 
-                
-            </div>
+      <!-- This is a side menu, from which you select different categories-->
+      <div class="categories-block">
+        <div class="category">
+          <img src="./puzzle.svg" />
+          <span>All Categories</span>
         </div>
+        <div class="category">
+          <img src="./brush.svg" />
+          <span>Themes</span>
+        </div>
+        <div class="category sel">
+          <img src="./feature.svg" />
+          <span>Features</span>
+        </div>
+        <div class="category">
+          <img src="./newuser.svg" />
+          <span>User Experience</span>
+        </div>
+        <div class="category">
+          <img src="./wrench.svg" />
+          <span>Griffpatch is Fat</span>
+        </div>
+        <div class="category">
+          <img src="./web.svg" />
+          <span>Scratch Website</span>
+        </div>
+      </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
@@ -85,30 +84,30 @@
               </div>
             </div>
             <div class="addon-settings">
-                <div class="settings-column">
-                  <div class="addon-setting">
-                    <div class="setting-label">Your Mood</div>
-                    <input type="text" class="setting-input string" placeholder="How are you?" />
-                  </div>
-                  <div class="addon-setting">
-                    <div class="setting-label">Your Age</div>
-                    <input type="number" class="setting-input number" placeholder="Aeg" />
+              <div class="settings-column">
+                <div class="addon-setting">
+                  <div class="setting-label">Your Mood</div>
+                  <input type="text" class="setting-input string" placeholder="How are you?" />
+                </div>
+                <div class="addon-setting">
+                  <div class="setting-label">Your Age</div>
+                  <input type="number" class="setting-input number" placeholder="Aeg" />
+                </div>
+              </div>
+              <div class="settings-column">
+                <div class="addon-setting">
+                  <div class="setting-label">Show Ads pls</div>
+                  <input type="checkbox" class="setting-input check" min="0" max="10" />
+                </div>
+                <div class="addon-setting">
+                  <div class="setting-label">Which Ads?</div>
+                  <div class="filter-options">
+                    <div class="filter-option sel">Haha</div>
+                    <div class="filter-option">Stinky</div>
+                    <div class="filter-option">Poop</div>
                   </div>
                 </div>
-                <div class="settings-column">
-                  <div class="addon-setting">
-                    <div class="setting-label">Show Ads pls</div>
-                    <input type="checkbox" class="setting-input check" min="0" max="10" />
-                  </div>
-                  <div class="addon-setting">
-                    <div class="setting-label">Which Ads?</div>
-                    <div class="filter-options">
-                      <div class="filter-option sel">Haha</div>
-                      <div class="filter-option">Stinky</div>
-                      <div class="filter-option">Poop</div>
-                    </div>
-                  </div>
-                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -130,7 +129,7 @@
       document.querySelector("#testDropdown").onclick = () => {
         //this statement is true if the switch is on, and false if it's off
         let p = document.querySelector("#testDropdown").parentElement.parentElement;
-        p.classList.toggle('sh');
+        p.classList.toggle("sh");
       };
     </script>
     <script src="../../libraries/iconify.min.js"></script>
