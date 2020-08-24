@@ -16,13 +16,10 @@ _globalState.auth = {
 class GlobalStateProxyHandler {
   constructor(name, target) {
     if (name) this.name = `${name}.`;
-    else {
-      this.name = "";
-      this._target = target;
-    }
+    else this._target = target;
   }
   get(target, key) {
-    if (this.name === "" && key === "_target") return this._target;
+    if (key === "_target") return target;
     if (typeof target[key] === "object" && target[key] !== null) {
       return new Proxy(target[key], new GlobalStateProxyHandler(`${this.name}${key}`));
     } else {

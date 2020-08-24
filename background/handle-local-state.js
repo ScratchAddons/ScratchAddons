@@ -16,6 +16,7 @@ class LocalStateProxyHandler {
     else this.name = "";
   }
   get(target, key) {
+    if (key === "_target") return target;
     if (typeof target[key] === "object" && target[key] !== null) {
       return new Proxy(target[key], new LocalStateProxyHandler(`${this.name}${key}`));
     } else {
