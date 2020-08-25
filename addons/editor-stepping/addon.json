@@ -1,5 +1,5 @@
 {
-  "name": "Scratch view stepping",
+  "name": "View stepping",
   "description": "Allows you to see which block currently executes.",
   "userscripts": [
     {

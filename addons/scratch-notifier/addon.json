@@ -1,6 +1,6 @@
 {
   "name": "Scratch Notifier",
-  "description": "Notifications on new Scratch messages. By World_Languages",
+  "description": "Notifications on new Scratch messages. By World_Languages.",
   "permissions": ["notifications"],
   "persistent_scripts": ["background.js"],
   "options": [
