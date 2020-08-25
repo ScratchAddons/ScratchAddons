@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  window.virtualMachine = await addon.tab.getScratchVM();
+  const virtualMachine = await addon.tab.getScratchVM();
   setInterval(() => {
     Array.prototype.forEach.call(document.querySelectorAll("path[style*='outline' i]"), (e) =>
       e.removeAttribute("style")
