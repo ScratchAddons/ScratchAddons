@@ -1,5 +1,5 @@
 {
-  "name": "Scratch Image Uploader",
+  "name": "Image Uploader",
   "description": "Use project thumbnails to upload images to be used on the forums.",
   "userscripts": [
     {
