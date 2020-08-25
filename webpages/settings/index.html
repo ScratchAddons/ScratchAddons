@@ -42,11 +42,11 @@
           <input type="text" id="searchBox" placeholder="Search" :autofocus="true" v-model="searchInput" />
           <button
             v-show="searchInput === ''"
-            style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey')"
+            style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey');"
           ></button>
           <button
             v-else
-            style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey')"
+            style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey');"
             @click="clearSearch()"
           ></button>
           <div class="filter-selector">

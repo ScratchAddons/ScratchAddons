@@ -9,7 +9,6 @@ _globalState.auth = {
   username: null,
   userId: null,
   xToken: null,
-  sessionId: null,
   csrfToken: null,
 };
 
