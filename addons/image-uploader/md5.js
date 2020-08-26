@@ -593,5 +593,5 @@
             BASE64_ENCODE_CHAR[63 & e]);
       return (t = i[o]), (s += BASE64_ENCODE_CHAR[t >>> 2] + BASE64_ENCODE_CHAR[(t << 4) & 63] + "==");
     });
-    export default createMethod();
+  export default createMethod();
 })();
