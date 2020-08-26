@@ -593,13 +593,5 @@
             BASE64_ENCODE_CHAR[63 & e]);
       return (t = i[o]), (s += BASE64_ENCODE_CHAR[t >>> 2] + BASE64_ENCODE_CHAR[(t << 4) & 63] + "==");
     });
-  var exports = createMethod();
-  COMMON_JS
-    ? (module.exports = exports)
-    : ((root.md5 = exports),
-      AMD &&
-        define(function () {
-          return exports;
-        }));
+    export default createMethod();
 })();
-//# sourceMappingURL=/sm/77f2de131f23a8851dd10d51c05754866c8e2ce2183766dbcf14473d1934b4ec.map
