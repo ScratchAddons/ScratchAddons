@@ -1,10 +1,10 @@
 import textFieldEdit from "../../libraries/text-field-edit.js"; //used for editing the forum text box without messing with the edit history
 
-import "./md5.js"
+import "./md5.js";
 
 export default async function ({ addon, global, console }) {
-  var projectUpload = addon.settings.get("project_thumbnails")
-  console.log('use project thumbnails: '+projectUpload)
+  var projectUpload = addon.settings.get("project_thumbnails");
+  console.log("use project thumbnails: " + projectUpload);
 
   var toolbar =
     document.querySelector("#markItUpId_body > div > div.markItUpHeader > ul") ||
@@ -20,17 +20,17 @@ export default async function ({ addon, global, console }) {
 
   uploadInput.addEventListener("change", (e) => {
     var file = uploadInput.files[0];
-    var extension = uploadInput.files[0].name.split('.').pop().toLowerCase()
+    var extension = uploadInput.files[0].name.split(".").pop().toLowerCase();
 
     var reader = new FileReader();
 
     reader.readAsArrayBuffer(file);
 
     reader.onloadend = function () {
-      if(projectUpload){
+      if (projectUpload) {
         uploadProjectImage(reader.result);
       } else {
-        uploadAssetImage(reader.result, extension)
+        uploadAssetImage(reader.result, extension);
       }
     };
     reader.onerror = (err) => {
@@ -58,19 +58,19 @@ export default async function ({ addon, global, console }) {
     textBox.addEventListener("paste", (e) => {
       retrieveImageFromClipboardAsBlob(e, function (imageBlob) {
         if (imageBlob) {
-          if(projectUpload){
+          if (projectUpload) {
             uploadProjectImage(imageBlob);
           } else {
             var reader = new FileReader();
 
             reader.readAsArrayBuffer(imageBlob);
-            
-            reader.onloadend = function () {
-              var extension = imageBlob.name.split('.').pop().toLowerCase()
 
-              uploadAssetImage(reader.result, extension)
-            }
-          }        
+            reader.onloadend = function () {
+              var extension = imageBlob.name.split(".").pop().toLowerCase();
+
+              uploadAssetImage(reader.result, extension);
+            };
+          }
         }
       });
     });
@@ -105,15 +105,15 @@ export default async function ({ addon, global, console }) {
 
       var reader = new FileReader();
 
-      var extension = e.dataTransfer.files[0].name.split('.').pop().toLowerCase()
+      var extension = e.dataTransfer.files[0].name.split(".").pop().toLowerCase();
 
       reader.readAsArrayBuffer(e.dataTransfer.files[0]);
       //console.log(e.dataTransfer)
       reader.onloadend = function () {
-        if(projectUpload){
+        if (projectUpload) {
           uploadProjectImage(reader.result);
         } else {
-          uploadAssetImage(reader.result,extension)
+          uploadAssetImage(reader.result, extension);
         }
       };
       reader.onerror = (err) => {
@@ -323,46 +323,44 @@ export default async function ({ addon, global, console }) {
           });
       });
   }
-  
+
   function uploadAssetImage(image, fileType) {
     window.progresselement = toolbar.appendChild(document.createElement("li"));
 
+    console.log(image);
 
-    console.log(image)
-    
-    var hash = window.md5(image)
-    
-    var type = fileType
+    var hash = window.md5(image);
 
-    console.log('type: '+fileType)
+    var type = fileType;
 
-    progresselement.innerHTML = 'uploading image...'
+    console.log("type: " + fileType);
+
+    progresselement.innerHTML = "uploading image...";
 
     fetch(`https://assets.scratch.mit.edu/${hash}.${type}`, {
-      "headers": {
-        "accept": "*/*",
+      headers: {
+        accept: "*/*",
         "accept-language": "en-US,en;q=0.9",
         "sec-fetch-dest": "empty",
         "sec-fetch-mode": "cors",
-        "sec-fetch-site": "same-site"
+        "sec-fetch-site": "same-site",
       },
-      "referrer": "https://scratch.mit.edu/projects/420455607/editor",
-      "referrerPolicy": "no-referrer-when-downgrade",
-      "body": image,
-      "method": "POST",
-      "mode": "cors",
-      "credentials": "include"
+      referrer: "https://scratch.mit.edu/projects/420455607/editor",
+      referrerPolicy: "no-referrer-when-downgrade",
+      body: image,
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
     })
-    .then(res=>res.json())
-    .then(data=>{
-      textFieldEdit.insert(textBox, `[img]https://assets.scratch.mit.edu/get_image/.%2E/${hash}.${type}[/img]`)
-      progresselement.remove()
-    })
-    .catch((error) => {
-      console.log('oh boi we got an error: ', error);
-      displayError(error)
-      progresselement.remove()
-    });
+      .then((res) => res.json())
+      .then((data) => {
+        textFieldEdit.insert(textBox, `[img]https://assets.scratch.mit.edu/get_image/.%2E/${hash}.${type}[/img]`);
+        progresselement.remove();
+      })
+      .catch((error) => {
+        console.log("oh boi we got an error: ", error);
+        displayError(error);
+        progresselement.remove();
+      });
   }
-  
 }
