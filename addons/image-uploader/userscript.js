@@ -1,5 +1,4 @@
 import textFieldEdit from "../../libraries/text-field-edit.js"; //used for editing the forum text box without messing with the edit history
-
 import md5 from "../../libraries/md5.js";
 
 export default async function ({ addon, global, console }) {
@@ -329,7 +328,7 @@ export default async function ({ addon, global, console }) {
 
     console.log(image);
 
-    var hash = window.md5(image);
+    var hash = md5(image);
 
     var type = fileType;
 
