@@ -1,5 +1,5 @@
-export default async function({ addon, global, console }) {
-  document.body.addEventListener('mousedown', handleClick, true);
+export default async function ({ addon, global, console }) {
+  document.body.addEventListener("mousedown", handleClick, true);
 }
 
 function handleClick(e) {
@@ -7,27 +7,27 @@ function handleClick(e) {
     return;
   }
 
-  const widgetDiv = document.querySelector('.blocklyWidgetDiv');
+  const widgetDiv = document.querySelector(".blocklyWidgetDiv");
   if (!widgetDiv) {
     return;
   }
 
-  if (e.target.closest('.blocklyMainBackground') || e.target.closest('.blocklyBubbleCanvas')) {
-    widgetDiv.classList.remove('u-contextmenu-colored');
+  if (e.target.closest(".blocklyMainBackground") || e.target.closest(".blocklyBubbleCanvas")) {
+    widgetDiv.classList.remove("u-contextmenu-colored");
     return;
   }
 
-  const block = e.target.closest('.blocklyDraggable');
+  const block = e.target.closest(".blocklyDraggable");
   if (!block) {
     return;
   }
 
-  const background = block.querySelector('.blocklyBlockBackground');
+  const background = block.querySelector(".blocklyBlockBackground");
   if (!background) {
     return;
   }
 
-  const fill = background.getAttribute('fill');
+  const fill = background.getAttribute("fill");
   if (!fill) {
     return;
   }
@@ -36,16 +36,16 @@ function handleClick(e) {
   const rgb = parseInt(fillHex, 16);
   const hsl = rgb2hsl(rgb);
   hsl[2] = Math.max(hsl[2] - 15, 0);
-  const border = 'hsl(' + hsl[0] + ', ' + hsl[1] + '%, ' + hsl[2] + '%)';
+  const border = "hsl(" + hsl[0] + ", " + hsl[1] + "%, " + hsl[2] + "%)";
 
-  widgetDiv.classList.add('u-contextmenu-colored');
-  widgetDiv.style.setProperty('--u-contextmenu-bg', fill);
-  widgetDiv.style.setProperty('--u-contextmenu-border', border);
+  widgetDiv.classList.add("u-contextmenu-colored");
+  widgetDiv.style.setProperty("--u-contextmenu-bg", fill);
+  widgetDiv.style.setProperty("--u-contextmenu-border", border);
 }
 
 function rgb2hsl(rgb) {
-  const r = (rgb >> 16 & 0xff) / 0xff;
-  const g = (rgb >> 8 & 0xff) / 0xff;
+  const r = ((rgb >> 16) & 0xff) / 0xff;
+  const g = ((rgb >> 8) & 0xff) / 0xff;
   const b = (rgb & 0xff) / 0xff;
 
   const min = Math.min(r, g, b);
@@ -61,9 +61,15 @@ function rgb2hsl(rgb) {
 
   var h;
   switch (max) {
-    case r: h = ((g - b) / c + 6) % 6; break;
-    case g: h = (b - r) / c + 2; break;
-    case b: h = (r - g) / c + 4; break;
+    case r:
+      h = ((g - b) / c + 6) % 6;
+      break;
+    case g:
+      h = (b - r) / c + 2;
+      break;
+    case b:
+      h = (r - g) / c + 4;
+      break;
   }
   h *= 60;
 
