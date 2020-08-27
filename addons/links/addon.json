@@ -1,13 +1,12 @@
 {
-    "name": "Clickable Links",
-    "description": "Makes all links clickable.",
-    "userscripts": [
-      {
-        "url": "userscript.js",
-        "matches": ["https://scratch.mit.edu/*"]
-      }
-    ],
-    "tags": ["community"],
-    "enabled_by_default": false
-  }
-  
+  "name": "Clickable Links",
+  "description": "Makes all links clickable.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "tags": ["community"],
+  "enabled_by_default": false
+}
