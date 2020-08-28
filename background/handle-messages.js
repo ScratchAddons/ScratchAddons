@@ -13,12 +13,13 @@ let currentlyCheckingMessages = false;
 const msgsArrayPromises = [];
 
 scratchAddons.methods.getMsgCount = function () {
-  const newPromise = new Promise(resolve => msgCountPromises.push(resolve));
-  if(!currentlyCheckingCount) updateMsgCount().then(value => {
-    msgCountPromises.forEach(resolve => resolve(value));
-    msgCountPromises.length = 0;
-    currentlyCheckingCount = false;
-  });
+  const newPromise = new Promise((resolve) => msgCountPromises.push(resolve));
+  if (!currentlyCheckingCount)
+    updateMsgCount().then((value) => {
+      msgCountPromises.forEach((resolve) => resolve(value));
+      msgCountPromises.length = 0;
+      currentlyCheckingCount = false;
+    });
   return newPromise;
 };
 async function updateMsgCount() {
@@ -32,9 +33,9 @@ async function updateMsgCount() {
   try {
     if (Date.now() - lastCountCheck > 5000 || username !== lastCheckUsername) {
       const res = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count?timestamp=${Date.now()}`);
-      if(!res.ok) return null;
+      if (!res.ok) return null;
       const json = await res.json();
-      if(json.count !== lastMsgCount) lastMessagesCheck = null;
+      if (json.count !== lastMsgCount) lastMessagesCheck = null;
       lastCountCheck = Date.now();
       lastCheckUsername = username;
       lastMsgCount = json.count;
@@ -48,15 +49,16 @@ async function updateMsgCount() {
   }
 }
 
-scratchAddons.methods.getMessages = async function ( { offset = 0 } = {}) {
-  if(offset !== 0) return await requestMessages({ offset });
+scratchAddons.methods.getMessages = async function ({ offset = 0 } = {}) {
+  if (offset !== 0) return await requestMessages({ offset });
   else {
-    const newPromise = new Promise(resolve => msgsArrayPromises.push(resolve));
-    if(!currentlyCheckingMessages) checkMessages({ offset }).then(value => {
-      msgsArrayPromises.forEach(resolve => resolve(value));
-      msgsArrayPromises.length = 0;
-      currentlyCheckingMessages = false;
-    });
+    const newPromise = new Promise((resolve) => msgsArrayPromises.push(resolve));
+    if (!currentlyCheckingMessages)
+      checkMessages({ offset }).then((value) => {
+        msgsArrayPromises.forEach((resolve) => resolve(value));
+        msgsArrayPromises.length = 0;
+        currentlyCheckingMessages = false;
+      });
     return newPromise;
   }
 };
@@ -85,12 +87,15 @@ async function checkMessages(options) {
 }
 async function requestMessages(options) {
   try {
-    const res = await fetch(`https://api.scratch.mit.edu/users/${scratchAddons.globalState.auth.username}/messages?limit=40&offset=${options.offset}`, {
-      headers: {
-        "X-Token": scratchAddons.globalState.auth.xToken
+    const res = await fetch(
+      `https://api.scratch.mit.edu/users/${scratchAddons.globalState.auth.username}/messages?limit=40&offset=${options.offset}`,
+      {
+        headers: {
+          "X-Token": scratchAddons.globalState.auth.xToken,
+        },
       }
-    });
-    if(!res.ok) return null;
+    );
+    if (!res.ok) return null;
     const json = await res.json();
     return json;
   } catch (err) {

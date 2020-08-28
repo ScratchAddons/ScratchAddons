@@ -33,7 +33,7 @@ class LocalStateProxyHandler {
         console.log("Everything ready!");
         window.dispatchEvent(new CustomEvent("scratchaddonsready"));
       }
-      if(objectPath[0] === "badges") {
+      if (objectPath[0] === "badges") {
         scratchAddons.updateBadge();
       }
     }

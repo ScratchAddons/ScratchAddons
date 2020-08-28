@@ -155,7 +155,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
 
   async function checkMessages() {
     const messages = await addon.account.getMessages();
-    if(messages === null) return;
+    if (messages === null) return;
     if (lastDateTime === null) lastDateTime = new Date(messages[0].datetime_created).getTime();
     else {
       for (const message of messages) {

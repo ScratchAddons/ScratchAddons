@@ -69,18 +69,20 @@ const vue = new Vue({
       };
 
       const browserLevelPermissions = ["notifications"];
-      const requiredPermissions = (addon.permissions || []).filter(value => browserLevelPermissions.includes(value));
-      if(!addon._enabled && requiredPermissions.length) {
-        chrome.permissions.request({
-          permissions: requiredPermissions
-        }, granted => {
-          if(granted) {
-            console.log("Permissions granted!");
-            toggle();
+      const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
+      if (!addon._enabled && requiredPermissions.length) {
+        chrome.permissions.request(
+          {
+            permissions: requiredPermissions,
+          },
+          (granted) => {
+            if (granted) {
+              console.log("Permissions granted!");
+              toggle();
+            }
           }
-        });
-      } 
-      else toggle();
+        );
+      } else toggle();
     },
     updateSettings(addon) {
       chrome.runtime.sendMessage({
