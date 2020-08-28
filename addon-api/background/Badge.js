@@ -15,17 +15,11 @@ export default class Badge {
     return this._color;
   }
   set text(val) {
-    let realVal = val;
-    if (val === null || val === 0) realVal = "";
-    else if (typeof val === "number") realVal = String(val);
     this._text = val;
-    scratchAddons.localState.badges[this._addonId].text = realVal;
-    chrome.browserAction.setBadgeText({ text: realVal });
+    scratchAddons.localState.badges[this._addonId].text = val;
   }
   set color(val) {
     this._color = val;
     scratchAddons.localState.badges[this._addonId].color = val;
-    chrome.browserAction.setBadgeBackgroundColor({ color: val });
   }
-  // TODO: handle badges elsewhere to allow many addons to use it. move realVal logic there.
 }

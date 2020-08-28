@@ -1,6 +1,8 @@
 export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
-  setInterval(async () => {
+  const setBadge = async () => {
     const msgCount = await addon.account.getMsgCount();
     addon.badge.text = msgCount;
-  }, 1000);
+  };
+  setBadge();
+  setInterval(setBadge, 3000);
 }

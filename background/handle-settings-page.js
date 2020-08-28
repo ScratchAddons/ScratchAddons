@@ -15,6 +15,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (newState === false) {
       const addonObjs = scratchAddons.addons.filter((addonObj) => addonObj.self.id === addonId);
       if (addonObjs) addonObjs.forEach((addonObj) => addonObj._kill());
+      scratchAddons.updateBadge();
     } else {
       scratchAddons.runBgScriptsById(addonId);
     }

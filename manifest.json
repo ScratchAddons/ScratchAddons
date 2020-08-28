@@ -23,7 +23,7 @@
     {
       "matches": ["https://scratch.mit.edu/projects/*"],
       "run_at": "document_start",
-      "js": ["content-scripts/find-vm-injector.js"]
+      "js": ["content-scripts/find-vm.js"]
     }
   ],
   "options_ui": {
@@ -36,9 +36,9 @@
     "cookies",
     "webRequest",
     "webRequestBlocking",
-    "storage",
-    "notifications"
+    "storage"
   ],
+  "optional_permissions": ["notifications"],
   "web_accessible_resources": ["content-scripts/inject/*", "addon-api/*", "addons/*"],
   "browser_specific_settings": {
     "gecko": {

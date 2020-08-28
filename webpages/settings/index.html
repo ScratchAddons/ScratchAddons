@@ -95,7 +95,7 @@
               <div class="badge green" v-if="addon._tags.forums">Forums</div>
               <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
               <div class="addon-check">
-                <switch :state="addon._enabled ? 'on' : 'off'" @click="toggleAddon(addon)" />
+                <switch :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest(addon)" />
               </div>
             </div>
             <div class="addon-settings" v-show="addon._expanded">

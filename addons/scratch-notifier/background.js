@@ -2,7 +2,7 @@ import commentEmojis from "./comment-emojis.js";
 
 export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
   let msgCount = null;
-  let mostRecentMsgIds = [];
+  let lastDateTime = null;
   const emojis = {
     addcomment: "💬",
     forumpost: "📚",
@@ -27,17 +27,6 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       msgCount = newCount;
       if (msgCount !== oldMsgCount) checkMessages();
     }
-  }
-
-  function getMostRecentIds(messagesObj) {
-    const arr = [];
-    for (const message of messagesObj) {
-      arr.push(message.id);
-      // We only need a non-comment as a reference, since comments
-      // are the only types of messages that could dissapear.
-      if (message.type !== "addcomment") break;
-    }
-    return arr;
   }
 
   async function notifyMessage({
@@ -165,14 +154,12 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   }
 
   async function checkMessages() {
-    const res = await addon.fetch(
-      `https://api.scratch.mit.edu/users/${addon.auth.username}/messages?limit=40&offset=0&timestamp=${Date.now()}`
-    );
-    const messages = await res.json();
-    if (mostRecentMsgIds.length === 0) mostRecentMsgIds = getMostRecentIds(messages);
-    else if (messages[0].id !== mostRecentMsgIds[0]) {
+    const messages = await addon.account.getMessages();
+    if(messages === null) return;
+    if (lastDateTime === null) lastDateTime = new Date(messages[0].datetime_created).getTime();
+    else {
       for (const message of messages) {
-        if (mostRecentMsgIds.includes(message.id)) break;
+        if (new Date(message.datetime_created).getTime() <= lastDateTime) break;
         let messageType = message.type;
         let commentUrl;
         if (message.type === "addcomment") {
@@ -207,17 +194,17 @@ export default async function ({ addon, global, console, setTimeout, setInterval
             messageType === "addcomment/ownProjectNewComment" ||
             messageType === "addcomment/ownProjectReplyToOther"
           ) {
-            if (addon.settings.get("commentsonmyprojects_notifications") === false) return;
+            if (addon.settings.get("commentsonmyprojects_notifications") === false) continue;
           } else {
-            if (addon.settings.get("commentsforme_notifications") === false) return;
+            if (addon.settings.get("commentsforme_notifications") === false) continue;
           }
         } else {
           try {
-            if (addon.settings.get(`${message.type}_notifications`) === false) return;
+            if (addon.settings.get(`${message.type}_notifications`) === false) continue;
           } catch {
             // If setting doesn't exist
             console.warn(`Unexpected message type: ${message.type}`);
-            return;
+            continue;
           }
         }
 
@@ -234,7 +221,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         };
         notifyMessage(messageInfo);
       }
-      mostRecentMsgIds = getMostRecentIds(messages);
+      lastDateTime = new Date(messages[0].datetime_created).getTime();
     }
   }
 
@@ -262,7 +249,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
 
   addon.auth.addEventListener("change", function () {
     msgCount = null;
-    mostRecentMsgIds = [];
+    lastDateTime = null;
     checkCount();
   });
 }
