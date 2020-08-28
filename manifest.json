@@ -39,7 +39,7 @@
     "storage"
   ],
   "optional_permissions": ["notifications"],
-  "web_accessible_resources": ["content-scripts/inject/*", "addon-api/*", "addons/*"],
+  "web_accessible_resources": ["content-scripts/inject/*", "addon-api/*", "addons/*", "libraries/*"],
   "browser_specific_settings": {
     "gecko": {
       "id": "firefox@scratchaddons"

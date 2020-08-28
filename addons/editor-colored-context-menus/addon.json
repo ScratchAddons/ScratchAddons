@@ -1,0 +1,18 @@
+{
+  "name": "Colored Context Menus",
+  "description": "Makes the editor context menus colorful.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userscript.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabled_by_default": false
+}

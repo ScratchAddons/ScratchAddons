@@ -1,12 +1,20 @@
 {
   "name": "Image Uploader",
-  "description": "Use project thumbnails to upload images to be used on the forums.",
+  "description": "Integrates image uploading into the forums.",
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
-  "tags": ["forums"],
+  "options": [
+    {
+      "name": "Use project thumbnails",
+      "id": "project_thumbnails",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["forums", "community"],
   "enabled_by_default": false
 }

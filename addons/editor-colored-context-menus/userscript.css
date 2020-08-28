@@ -1,0 +1,13 @@
+.u-contextmenu-colored .blocklyContextMenu {
+  background-color: var(--u-contextmenu-bg);
+  border-color: var(--u-contextmenu-border);
+}
+.u-contextmenu-colored .blocklyContextMenu .goog-menuitem {
+  color: white;
+}
+.u-contextmenu-colored .blocklyContextMenu .goog-menuitem:hover.goog-menuitem-highlight {
+  border-color: transparent;
+}
+.u-contextmenu-colored .blocklyContextMenu .goog-menuitem:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
