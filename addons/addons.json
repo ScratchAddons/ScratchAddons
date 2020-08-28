@@ -5,5 +5,6 @@
   "editor-devtools",
   "editor-stepping",
   "image-uploader",
-  "editor-colored-context-menus"
+  "editor-colored-context-menus",
+  "scratch-messaging"
 ]

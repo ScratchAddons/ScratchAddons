@@ -60,11 +60,29 @@ const vue = new Vue({
     stopPropagation(e) {
       e.stopPropagation();
     },
-    toggleAddon(addon) {
-      const newState = !addon._enabled;
-      addon._enabled = newState;
-      addon._expanded = newState;
-      chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
+    toggleAddonRequest(addon) {
+      const toggle = () => {
+        const newState = !addon._enabled;
+        addon._enabled = newState;
+        addon._expanded = newState;
+        chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
+      };
+
+      const browserLevelPermissions = ["notifications"];
+      const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
+      if (!addon._enabled && requiredPermissions.length) {
+        chrome.permissions.request(
+          {
+            permissions: requiredPermissions,
+          },
+          (granted) => {
+            if (granted) {
+              console.log("Permissions granted!");
+              toggle();
+            }
+          }
+        );
+      } else toggle();
     },
     updateSettings(addon) {
       chrome.runtime.sendMessage({

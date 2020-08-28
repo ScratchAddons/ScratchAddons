@@ -15,7 +15,7 @@ _globalState.auth = {
 class GlobalStateProxyHandler {
   constructor(name, target) {
     if (name) this.name = `${name}.`;
-    else this._target = target;
+    else this.name = "";
   }
   get(target, key) {
     if (key === "_target") return target;
@@ -31,7 +31,10 @@ class GlobalStateProxyHandler {
     messageForAllTabs({ newGlobalState: target });
     if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
       const objectPath = `${this.name}${key}`.split(".");
-      console.log("Global state changed!\n" + objectPath.join(".") + " is now:", value);
+      console.log(
+        "Global state changed!\n" + objectPath.join(".") + " is now:",
+        objectPath[0] === "auth" ? "[redacted]" : value
+      );
       if (objectPath[0] === "auth") {
         scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
         messageForAllTabs({ fireEvent: { target: "auth", name: "change" } });

@@ -8,63 +8,54 @@
       "name": "💬 Comments for me (replies and profile comments)",
       "id": "commentsforme_notifications",
       "type": "boolean",
-      "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "💬 Comments on my projects",
       "id": "commentsonmyprojects_notifications",
       "type": "boolean",
-      "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "📚 Forum activity",
       "id": "forumpost_notifications",
       "type": "boolean",
-      "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "❤️ Project loves",
       "id": "loveproject_notifications",
       "type": "boolean",
-      "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "⭐ Project favorites",
-      "id": "favoriteprojec_tnotifications",
+      "id": "favoriteproject_notifications",
       "type": "boolean",
-      "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "👤 New followers",
       "id": "followuser_notifications",
       "type": "boolean",
-      "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "✉️ Studio invites",
       "id": "curatorinvite_notifications",
       "type": "boolean",
-      "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "🆕 Studio activity",
       "id": "studioactivity_notifications",
       "type": "boolean",
-      "child_of": "sendNotifications",
       "default": true
     },
     {
       "name": "🔄 Project remixes",
       "id": "remixproject_notifications",
       "type": "boolean",
-      "child_of": "sendNotifications",
       "default": true
     }
   ],
