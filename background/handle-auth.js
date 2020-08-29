@@ -3,8 +3,9 @@
   scratchAddons.localState.ready.auth = true;
 })();
 
-chrome.cookies.onChanged.addListener(({ cookie, changeCause }) => {	
-  if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken") checkSession();	
+chrome.cookies.onChanged.addListener(({ cookie, changeCause }) => {
+  if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken")
+    checkSession();
 });
 
 function checkSession() {
@@ -22,7 +23,7 @@ function checkSession() {
         userId: null,
         xToken: null,
         csrfToken: null,
-        scratchLang: null
+        scratchLang: null,
       };
       resolve();
     } else {
@@ -41,7 +42,7 @@ function checkSession() {
               name: "scratchlanguage",
             },
             (cookie) => {
-              if(cookie && cookie.value) scratchLang = cookie.value;
+              if (cookie && cookie.value) scratchLang = cookie.value;
               else scratchLang = navigator.language;
               scratchAddons.globalState.auth = {
                 isLoggedIn: true,
@@ -49,10 +50,11 @@ function checkSession() {
                 userId: json.user.id,
                 xToken: json.user.token,
                 csrfToken,
-                scratchLang
+                scratchLang,
               };
               resolve();
-            });
+            }
+          );
         }
       );
     }
