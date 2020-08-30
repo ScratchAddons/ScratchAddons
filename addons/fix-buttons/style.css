@@ -1,0 +1,5 @@
+    .outer #projectBox,
+    .messages-social,
+    .preview .comments-container {
+        overflow-anchor: none;
+    }

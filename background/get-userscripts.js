@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       for (const style of addon.styles) {
         if (userscriptMatches(request.getUserscripts, style.matches)) stylesToRun.push(style.url);
       }
-      if (scriptsToRun.length) addons.push({ addonId: addon.addonId, scripts: scriptsToRun, styles: stylesToRun });
+      if (scriptsToRun.length || stylesToRun.length) addons.push({ addonId: addon.addonId, scripts: scriptsToRun, styles: stylesToRun });
     }
     sendResponse(addons);
   }
