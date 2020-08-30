@@ -3,8 +3,8 @@
   scratchAddons.localState.ready.auth = true;
 })();
 
-chrome.cookies.onChanged.addListener(({ cookie, changeCause }) => {	
-  if (cookie.name === "scratchsessionsid" && changeCause !== "overwrite") checkSession();	
+chrome.cookies.onChanged.addListener(({ cookie, changeCause }) => {
+  if (cookie.name === "scratchsessionsid" && changeCause !== "overwrite") checkSession();
 });
 
 function checkSession() {

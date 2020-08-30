@@ -1,4 +1,4 @@
-import commentEmojis from "../scratch-notifier/comment-emojis.js"
+import commentEmojis from "../scratch-notifier/comment-emojis.js";
 
 export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
   let lastDateTime;
@@ -15,7 +15,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     comments: {},
     lastMsgCount: null,
     username: addon.auth.username,
-    ready: false
+    ready: false,
   });
 
   addon.auth.addEventListener("change", routine);
@@ -46,7 +46,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
 
     if (checkOld) {
       const messagesToCheck = msgCount > 1000 ? 1000 : msgCount < 41 ? 40 : msgCount;
-      
+
       const seenMessageIds = [];
       for (let checkedPages = 0; seenMessageIds.length < messagesToCheck; checkedPages++) {
         const messagesPage = await addon.account.getMessages({ offset: checkedPages * 40 });
@@ -130,8 +130,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     if (!request.scratchMessaging || !addon.self) return;
     console.log(request);
     const popupRequest = request.scratchMessaging;
-    if(popupRequest === "getData") sendResponse(data.ready ? data : { error : addon.auth.isLoggedIn ? "notReady" : "loggedOut"});
-    if(popupRequest.postComment) sendComment(popupRequest.postComment);
+    if (popupRequest === "getData")
+      sendResponse(data.ready ? data : { error: addon.auth.isLoggedIn ? "notReady" : "loggedOut" });
+    if (popupRequest.postComment) sendComment(popupRequest.postComment);
   });
 
   async function retrieveComments(resourceType, resourceId, commentIds, page = 1) {
@@ -254,7 +255,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     return value;
   }
 
-  window.sendComment = function sendComment({ resourceType, resourceId, content, parent_id, commentee_id}) {
+  window.sendComment = function sendComment({ resourceType, resourceId, content, parent_id, commentee_id }) {
     // For some weird reason, this only works with XHR in Chrome...
     const xhr = new XMLHttpRequest();
     xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/`, true);
@@ -266,7 +267,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       console.log(xhr);
     };
 
-xhr.send(JSON.stringify({ content, parent_id, commentee_id }));
+    xhr.send(JSON.stringify({ content, parent_id, commentee_id }));
     /*fetch(`https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/`, {
       body: JSON.stringify({content, parent_id, commentee_id}),
       method: "POST",
@@ -274,5 +275,5 @@ xhr.send(JSON.stringify({ content, parent_id, commentee_id }));
         "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
       }
     });*/
-  }
+  };
 }
