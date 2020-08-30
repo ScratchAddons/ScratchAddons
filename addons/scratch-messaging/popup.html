@@ -32,7 +32,7 @@
       <span v-show="data.error === 'loggedOut'">Can't access messages, please log in on Scratch.</span>
       <span v-show="data.error === 'addonDisabled'">Please enable the Scratch Messaging addon in <a href="/webpages/settings/index.html" target="_blank">Scratch Addons settings</a></span>
     </div>
-    <div>
+    <div v-show="!data.error">
       <!-- Follows -->
       <div class="message-type" v-show="follows.length">
         <div class="message-type-title" @click="messageTypeExtended.follows = !messageTypeExtended.follows">
@@ -97,6 +97,7 @@
           </a>
           <span class="float-right">
             <span v-show="profile.unreadComments">💬 {{profile.unreadComments}}</span>
+          </span>
         </div>
         <div class="message-type-details" v-show="profile.commentChains.length">
           <div class="comment-chain"
@@ -119,7 +120,6 @@
             resource-type="user"
             :resource-id="profile.username"></comment>
           </div>
-          </div>
         </div>
       </div>
       <!-- Studios -->
@@ -128,6 +128,7 @@
           <a class="message-type-title-text" @click="openStudio(studio.id)">Studio: {{{ studio.title }}}</a>
           <span class="float-right">
             <span v-show="studio.unreadComments">💬 {{studio.unreadComments}}</span>
+          </span>
         </div>
         <div class="message-type-details" v-show="studio.commentChains.length">
           <div class="comment-chain"
@@ -150,7 +151,6 @@
             resource-type="gallery"
             :resource-id="studio.id"></comment>
           </div>
-          </div>
         </div>
       </div>
 
@@ -162,6 +162,7 @@
             <span v-show="project.loves">❤️ {{project.loves}}</span>
             <span v-show="project.favorites">⭐ {{project.favorites}}</span>
             <span v-show="project.unreadComments">💬 {{project.unreadComments}}</span>
+          </span>
         </div>
         <div class="message-type-details" v-show="project.commentChains.length">
           <div class="comment-chain"
