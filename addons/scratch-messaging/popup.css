@@ -1,0 +1,117 @@
+body {
+    margin: 0;
+    font-family: "Sora", sans-serif;
+    width: auto;
+    height: 500px;
+    overflow-x: hidden;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
+a[href] {
+    color: #1aa0d8;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+.message-type-title {
+    font-size: .9rem;
+    color: white;
+    background-color: #d93;
+    padding: 4px 16px 4px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    margin-bottom: 8px;
+}
+.message-type-title:hover {
+    background-color: #fa4;
+}
+.message-type-title-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-right: auto;
+    max-width: 75%;
+}
+.float-right {
+    margin-left: 4px;
+    white-space: nowrap;
+    font-size: .8rem;
+}
+.float-right > span {
+    display: inline-block;
+    margin-left: 2px;
+}
+
+.message-type-details {
+    margin-bottom: 10px;
+    padding: 4px 16px 4px 16px;
+}
+
+.username-list > a {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.comment-chain {
+    padding: 4px 0 4px 0;
+    border-bottom: 1px double gray;
+}
+.message-type-details > .comment-chain:last-child {
+    border-bottom: none;
+}
+.comment {
+    padding: 4px 16px 4px 16px;
+}
+.comment-content {
+    word-break: break-word;
+}
+.comment-author {
+    font-weight: bold;
+}
+.child-comment {
+    padding-left: 24px;
+    border-top: 1px dashed gray;
+}
+.unread {
+    border-left: 2px solid #0f8bc0;
+}
+.reply-button-comment {
+    color: #1aa0d8;
+    visibility: hidden;
+}
+.comment:hover .reply-button-comment {
+    visibility: visible;
+}
+
+.comment-content:after {
+    /* So that empty comments take up a line */
+    content: '\200b';
+}
+
+.reply-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    height: 5rem;
+    font-family: Arial;
+    padding: 8px;
+    resize: vertical;
+}
+.reply-box-buttons {
+    padding-right: 4px;
+}
+.reply-box-buttons > button {
+    border-radius: .25rem;
+    border: 1px solid black;
+    color: white;
+    font-weight: bold;
+    outline: none;
+    margin-right: 4px;
+}
+.comment-chars {
+    float: right;
+}
