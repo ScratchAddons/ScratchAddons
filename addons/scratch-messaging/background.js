@@ -1,5 +1,6 @@
+import commentEmojis from "../scratch-notifier/comment-emojis.js";
+
 export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
-  let lastMsgCount;
   let lastDateTime;
   let data;
   let checkInterval;
@@ -12,13 +13,15 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   const getDefaultData = () => ({
     messages: [],
     comments: {},
+    lastMsgCount: null,
+    username: addon.auth.username,
+    ready: false,
   });
 
   addon.auth.addEventListener("change", routine);
   routine();
 
   async function routine() {
-    lastMsgCount = null;
     lastDateTime = null;
     data = getDefaultData();
     // TODO: remove, this is for easy debugging
@@ -34,18 +37,20 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     // Check if message count changed, if not, return
     const msgCount = await addon.account.getMsgCount();
     window._messaging._msgCount = msgCount;
-    if (lastMsgCount === msgCount) return;
-    lastMsgCount = msgCount;
+    if (data.lastMsgCount === msgCount) return;
+    data.lastMsgCount = msgCount;
 
     let checkedMessages = [];
     let newlyFoundComments = [];
+    data.ready = false;
 
     if (checkOld) {
-      const messagesToCheck = msgCount > 1000 ? 1000 : msgCount;
+      const messagesToCheck = msgCount > 1000 ? 1000 : msgCount < 41 ? 40 : msgCount;
+
       const seenMessageIds = [];
       for (let checkedPages = 0; seenMessageIds.length < messagesToCheck; checkedPages++) {
         const messagesPage = await addon.account.getMessages({ offset: checkedPages * 40 });
-        if (messagesPage === null || messagesPage === []) break;
+        if (messagesPage === null || messagesPage.length === 0) break;
         for (const message of messagesPage) {
           // Make sure we don't add the same message twice,
           // it could happen since we request through pages
@@ -59,8 +64,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     } else {
       checkedMessages = await addon.account.getMessages({ offset: 0 });
     }
-
-    if (checkedMessages === null || checkedMessages === []) return;
+    console.log(checkedMessages);
+    if (checkedMessages === null || checkedMessages.length === 0) return;
     if (!checkOld && lastDateTime === null) lastDateTime = new Date(checkedMessages[0].datetime_created).getTime();
     else {
       for (const message of checkedMessages) {
@@ -86,10 +91,11 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       // Group newly found comments by their location
       for (const commentMessage of newlyFoundComments) {
         // If it's a parent comment that wasn't truncated, we don't need to request it via ajax
-        if (!commentMessage.commentee_username && commentMessage.comment_fragment.length < 250) {
+        if (1 === 2 && /* TODO: */ !commentMessage.commentee_username && commentMessage.comment_fragment.length < 250) {
           data.comments[`${commentLocationPrefixes[commentMessage.comment_type]}_${commentMessage.comment_id}`] = {
             author: commentMessage.actor_username,
-            content: commentMessage.fragment,
+            authorId: commentMessage.actor_id,
+            content: fixCommentContent(commentMessage.comment_fragment),
             date: commentMessage.datetime_created,
             children: [],
             childOf: null,
@@ -114,7 +120,20 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         await retrieveComments("gallery", Number(resourceId), commentLocations[2][resourceId]);
       }
     }
+    data.ready = true;
   }
+
+  // NOTE: addons aren't supposed to use chrome APIs
+  // Until addons have a way to communicate with popups, this is the only way
+  chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    // If this addon has been killed, addon.self will throw
+    if (!request.scratchMessaging || !addon.self) return;
+    console.log(request);
+    const popupRequest = request.scratchMessaging;
+    if (popupRequest === "getData")
+      sendResponse(data.ready ? data : { error: addon.auth.isLoggedIn ? "notReady" : "loggedOut" });
+    if (popupRequest.postComment) sendComment(popupRequest.postComment);
+  });
 
   async function retrieveComments(resourceType, resourceId, commentIds, page = 1) {
     const res = await fetch(
@@ -144,7 +163,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         }
         childrenComments[`${resourceType[0]}_${childId}`] = {
           author: child.querySelector(".name").textContent.trim(),
-          content: child.querySelector(".content").innerHTML.trim().replace(/\n/g, " "),
+          authorId: Number(child.querySelector(".reply").getAttribute("data-commentee-id")),
+          content: fixCommentContent(child.querySelector(".content").innerHTML),
           date: child.querySelector(".time").getAttribute("title"),
           children: null,
           childOf: `${resourceType[0]}_${parentId}`,
@@ -162,7 +182,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       if (foundComment) {
         data.comments[`${resourceType[0]}_${parentId}`] = {
           author: parentComment.querySelector(".name").textContent.trim(),
-          content: parentComment.querySelector(".content").innerHTML.trim().replace(/\n/g, " "),
+          authorId: Number(parentComment.querySelector(".reply").getAttribute("data-commentee-id")),
+          content: fixCommentContent(parentComment.querySelector(".content").innerHTML),
           date: parentComment.querySelector(".time").getAttribute("title"),
           children: Object.keys(childrenComments),
           childOf: null,
@@ -173,7 +194,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       }
     }
     // We haven't found some comments
-    if (page < 4) await retrieveComments(resourceType, resourceId, commentIds, ++page);
+    if (page < 2) await retrieveComments(resourceType, resourceId, commentIds, ++page);
     else
       console.log(
         "Could not find all comments for ",
@@ -217,4 +238,42 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       }
     }
   }
+
+  function fixCommentContent(value) {
+    const matches = value.match(/<img([\w\W]+?)[\/]?>/g);
+    if (matches) {
+      for (const match of matches) {
+        const src = match.match(/\<img.+src\=(?:\"|\')(.+?)(?:\"|\')(?:.+?)\>/)[1];
+        const splitString = src.split("/");
+        const imageName = splitString[splitString.length - 1];
+        if (commentEmojis[imageName]) {
+          value = value.replace(match, commentEmojis[imageName]);
+        }
+      }
+    }
+    value = value.replace(/\n/g, " ").trim(); // Remove newlines
+    return value;
+  }
+
+  window.sendComment = function sendComment({ resourceType, resourceId, content, parent_id, commentee_id }) {
+    // For some weird reason, this only works with XHR in Chrome...
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/`, true);
+    xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
+    xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
+    xhr.setRequestHeader("X-ScratchAddons-Uses-Fetch", "true");
+
+    xhr.onload = function () {
+      console.log(xhr);
+    };
+
+    xhr.send(JSON.stringify({ content, parent_id, commentee_id }));
+    /*fetch(`https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/`, {
+      body: JSON.stringify({content, parent_id, commentee_id}),
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+      }
+    });*/
+  };
 }
