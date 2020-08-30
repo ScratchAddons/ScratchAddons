@@ -18,6 +18,9 @@ export default class Auth extends EventTarget {
   get csrfToken() {
     return scratchAddons.globalState.auth.csrfToken;
   }
+  get scratchLang() {
+    return scratchAddons.globalState.auth.scratchLang;
+  }
   _removeEventListeners() {
     scratchAddons.eventTargets.auth.splice(
       scratchAddons.eventTargets.auth.findIndex((x) => x === this),
