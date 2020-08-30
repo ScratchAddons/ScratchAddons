@@ -1,6 +1,6 @@
 {
   "name": "Load More Scrolling Fix",
-  "description": "Fixes the scrolling when pressing the load more button on Scratch.",
+  "description": "Fixes the scrolling when pressing the load more button on Scratch. By Maximouse.",
   "userstyles": [
     {
       "url": "style.css",
