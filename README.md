@@ -20,8 +20,8 @@ Scratch Addons by itself is just an addon loader. Its main tasks are:
 
 - Allow users to enable, disable and configure addons.
 - Run addons and provide APIs to them.
-- Provide global state to addons (for example, the `addon.auth` API)
-- Pollute prototypes for use with addons
+- Provide global state to addons. (for example, the `addon.auth` API)
+- Pollute prototypes for use with addons.
 - Avoid addons from interfering with each other.
 - Avoid duplicate work from different addons.
 

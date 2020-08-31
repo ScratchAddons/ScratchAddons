@@ -40,6 +40,10 @@ export default class Tab extends EventTarget {
       return Promise.resolve();
     }
   }
+
+  /**
+   * @type {string} editor mode (or empty string for non-editors).
+   */
   get editorMode () {
       const pathname = location.pathname.toLowerCase();
       const split = pathname.split('/').filter(Boolean);
