@@ -49,8 +49,8 @@ export default async function runAddonBgScripts({ addonId, permissions, scripts 
       "color:red; font-weight: bold; font-size: 1.2em;"
     );
     const module = await import(chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`));
-    const log = console.log.bind(console, `[${addonId}]`);
-    const warn = console.warn.bind(console, `[${addonId}]`);
+    const log = console.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
+    const warn = console.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
     module.default({
       addon: addonObj,
       global: globalObj,
