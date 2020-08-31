@@ -14,8 +14,14 @@ export default async function ({ addon, global, console }) {
 
   // The progress bar will hide itself automatically after this many milliseconds without any progress update.
   // The intention here is to make it so that if the progress bar were to break, it would hide itself shortly without sticking around forever.
-  const HIDE_AFTER = 5000;
+  const HIDE_AFTER = 30000;
   let hideTimeout;
+
+  // The progress bar will fully reset this many milliseconds after reaching 100% progress.
+  const RESET_AFTER = 500;
+
+  // The progress bar will always be this % filled, even at 0% progress.
+  const BASE_PROGRESS = 10;
 
   const PROJECT_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\d+$/;
   const REMIX_COPY_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_(?:remix|copy)=1&original_id=\d+.*$/;
@@ -38,14 +44,14 @@ export default async function ({ addon, global, console }) {
   };
 
   const setProgress = (progress) => {
-    progressBar.style.width = `${10 + progress * 90}%`;
+    progressBar.style.width = `${BASE_PROGRESS + progress * (100 - BASE_PROGRESS)}%`;
     clearTimeout(hideTimeout);
     if (progress >= 1) {
       hideProgress();
       loadedAssets = 0;
       totalAssets = 0;
       // After a little bit for the animation to complete, we'll reset the progress bar width to avoid an animation of it going from 1 to 0 the next time it's used.
-      hideTimeout = setTimeout(resetProgress, 1000);
+      hideTimeout = setTimeout(resetProgress, RESET_AFTER);
     } else {
       showProgress();
       hideTimeout = setTimeout(hideProgress, HIDE_AFTER);
