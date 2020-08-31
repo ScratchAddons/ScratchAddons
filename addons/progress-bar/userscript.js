@@ -12,8 +12,14 @@ export default async function ({ addon, global, console }) {
   progressBar.style.pointerEvents = 'none';
   document.body.appendChild(progressBar);
 
+  // The progress bar will hide itself automatically after this many milliseconds without any progress update.
+  // The intention here is to make it so that if the progress bar were to break, it would hide itself shortly without sticking around forever.
   const HIDE_AFTER = 5000;
   let hideTimeout;
+
+  let loadedAssets = 0;
+  let totalAssets = 0;
+  let foundWorker = false;
 
   const hideProgress = () => {
     progressBar.style.opacity = '0';
@@ -45,6 +51,7 @@ export default async function ({ addon, global, console }) {
         const xhr = new XMLHttpRequest();
         xhr.responseType = 'blob';
         xhr.onload = () => {
+          setProgress(1);
           resolve(new Response(xhr.response, {
             status: xhr.status,
             statusText: xhr.statusText
@@ -61,5 +68,27 @@ export default async function ({ addon, global, console }) {
       });
     }
     return originalFetch(url, opts);
+  };
+
+  const handlePostMessage = (e) => {
+    const data = e.data;
+    loadedAssets += data.length;
+    setProgress(loadedAssets / totalAssets);
+  };
+
+  // Scratch uses a Worker to fetch project assets, so we override some Worker prototypes to monitor when assets begin to load.
+  const originalPostMessage = Worker.prototype.postMessage;
+  Worker.prototype.postMessage = function (message, options) {
+    if (typeof message.id === 'string' && typeof message.url === 'string') {
+      totalAssets++;
+      setProgress(loadedAssets / totalAssets);
+
+      // Add our own message handler for this worker to monitor when assets have finished loading.
+      if (!foundWorker) {
+        foundWorker = true;
+        this.addEventListener('message', handlePostMessage);
+      }
+    }
+    originalPostMessage.call(this, message, options);
   };
 }
