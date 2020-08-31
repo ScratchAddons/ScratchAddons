@@ -2,7 +2,7 @@
 
 ![](https://img.shields.io/github/watchers/ScratchAddons/ScratchAddons?color=blue&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?color=blue&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/forks/ScratchAddons/ScratchAddons?color=blue&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/issues/ScratchAddons/ScratchAddons?color=green&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/issues-closed/ScratchAddons/ScratchAddons?color=red&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/issues-pr/ScratchAddons/ScratchAddons?color=green&logo=GitHub&logoColor=white&style=flat-square) ![](https://img.shields.io/github/issues-pr-closed/ScratchAddons/ScratchAddons?color=red&logo=GitHub&logoColor=white&style=flat-square)
 
-# Welcome to Scratch Addons's repository!
+# Welcome to Scratch Addons' repository!
 
 ## What is Scratch Addons?
 
@@ -20,7 +20,7 @@ Scratch Addons by itself is just an addon loader. Its main tasks are:
 
 - Allow users to enable, disable and configure addons.
 - Run addons and provide APIs to them.
-- Provide global state to addons. (for example, the `addon.auth` API)
+- Provide global state to addons (for example, the `addon.auth` API).
 - Pollute prototypes for use with addons.
 - Avoid addons from interfering with each other.
 - Avoid duplicate work from different addons.
