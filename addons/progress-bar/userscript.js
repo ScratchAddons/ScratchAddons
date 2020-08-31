@@ -23,6 +23,10 @@ export default async function ({ addon, global, console }) {
   let totalAssets = 0;
   let foundWorker = false;
 
+  const resetProgress = () => {
+    progressBar.style.width = '0';
+  };
+
   const hideProgress = () => {
     progressBar.style.opacity = '0';
   };
@@ -33,13 +37,15 @@ export default async function ({ addon, global, console }) {
 
   const setProgress = progress => {
     progressBar.style.width = `${10 + (progress * 90)}%`;
+    clearTimeout(hideTimeout);
     if (progress >= 1) {
       hideProgress();
+      // After a little bit for the animation to complete, we'll reset the progress bar width to avoid an animation of it going from 1 to 0 the next time it's used.
+      hideTimeout = setTimeout(resetProgress, 1000);
     } else {
       showProgress();
+      hideTimeout = setTimeout(hideProgress, HIDE_AFTER);
     }
-    clearTimeout(hideTimeout);
-    hideTimeout = setTimeout(hideProgress, HIDE_AFTER);
   };
 
   // Scratch uses fetch() to download the project JSON.
@@ -76,6 +82,7 @@ export default async function ({ addon, global, console }) {
   const originalOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function (method, url) {
     if (method.toLowerCase() === 'put' && PROJECT_REGEX.test(url)) {
+      setProgress(0);
       this.upload.addEventListener('progress', (e) => {
         if (e.lengthComputable) {
           setProgress(e.loaded / e.total);
@@ -95,7 +102,7 @@ export default async function ({ addon, global, console }) {
       // Add our own message handler for this worker to monitor when assets have finished loading.
       if (!foundWorker) {
         foundWorker = true;
-        this.addEventListener('message', (e) => {
+        this.addEventListener('message', e => {
           const data = e.data;
           // Scratch will send multiple assets in a single message with an array.
           loadedAssets += data.length;
