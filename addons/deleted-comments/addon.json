@@ -1,13 +1,12 @@
 {
-    "name": "See deleted comments",
-    "description": "Allows you to see what comments were deleted (but not what they said). By Jeffalo.",
-    "userstyles": [
-      {
-        "url": "style.css",
-        "matches": ["https://scratch.mit.edu/*"]
-      }
-    ],
-    "tags": ["community"],
-    "enabled_by_default": true
-  }
-  
+  "name": "See deleted comments",
+  "description": "Allows you to see what comments were deleted (but not what they said). By Jeffalo.",
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "tags": ["community"],
+  "enabled_by_default": true
+}
