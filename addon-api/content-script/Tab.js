@@ -1,4 +1,4 @@
-import Trap from './Trap.js';
+import Trap from "./Trap.js";
 
 export default class Tab extends EventTarget {
   constructor() {
@@ -10,13 +10,13 @@ export default class Tab extends EventTarget {
       ? "scratchr2"
       : null;
     this.traps = new Trap();
-    __scratchAddonsTraps.addEventListener('fakestatechanged', e => {
-        const newEvent = new CustomEvent('fakestatechanged');
-        newEvent.reducerOrigin = e.reducerOrigin;
-        newEvent.path = e.path;
-        newEvent.prev = e.prev;
-        newEvent.next = e.next;
-        this.dispatchEvent(newEvent);
+    __scratchAddonsTraps.addEventListener("fakestatechanged", (e) => {
+      const newEvent = new CustomEvent("fakestatechanged");
+      newEvent.reducerOrigin = e.reducerOrigin;
+      newEvent.path = e.path;
+      newEvent.prev = e.prev;
+      newEvent.next = e.next;
+      this.dispatchEvent(newEvent);
     });
   }
   getScratchVM() {
@@ -40,13 +40,13 @@ export default class Tab extends EventTarget {
       return Promise.resolve();
     }
   }
-  get editorMode () {
-      const pathname = location.pathname.toLowerCase();
-      const split = pathname.split('/').filter(Boolean);
-      if (!split[0] || split[0] !== 'projects') return '';
-      if (split.includes('editor')) return 'editor';
-      if (split.includes('fullscreen')) return 'fullscreen';
-      if (split.includes('embed')) return 'embed';
-      return 'projectpage';
+  get editorMode() {
+    const pathname = location.pathname.toLowerCase();
+    const split = pathname.split("/").filter(Boolean);
+    if (!split[0] || split[0] !== "projects") return "";
+    if (split.includes("editor")) return "editor";
+    if (split.includes("fullscreen")) return "fullscreen";
+    if (split.includes("embed")) return "embed";
+    return "projectpage";
   }
 }
