@@ -1,12 +1,12 @@
 {
   "name": "See deleted comments",
-  "description": "Allows you to see what comments were deleted (but not what they said). By Jeffalo.",
+  "description": "Allows you to see the author and post date of deleted comments in profiles and studios. By Jeffalo.",
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*/comments"]
     }
   ],
   "tags": ["community"],
-  "enabled_by_default": true
+  "enabled_by_default": false
 }
