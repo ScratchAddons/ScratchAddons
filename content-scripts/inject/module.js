@@ -8,7 +8,7 @@ scratchAddons.globalState = getGlobalState();
 scratchAddons.eventTargets = {
   auth: [],
   settings: [],
-  tab: []
+  tab: [],
 };
 
 const pendingPromises = {};
@@ -24,24 +24,21 @@ scratchAddons.methods.getMsgCount = () => {
 };
 scratchAddons.methods.getScratchVM = () => {
   if (__scratchAddonsTraps._onceMap) {
-      for (const vmAttr of [
-          'vm',
-          'vm.propsVMBind',
-          'vm.propsVMAssign'
-      ]) {
-          const maybeVM = __scratchAddonsTraps._onceMap[vmAttr];
-          if (maybeVM) return Promise.resolve(maybeVM);
-      }
+    for (const vmAttr of ["vm", "vm.propsVMBind", "vm.propsVMAssign"]) {
+      const maybeVM = __scratchAddonsTraps._onceMap[vmAttr];
+      if (maybeVM) return Promise.resolve(maybeVM);
+    }
   }
   if (window._scratchAddonsScratchVM) return Promise.resolve(window._scratchAddonsScratchVM);
-  else return new Promise(resolve => {
-      const handler = e => {
-          if (!e.trapName.startsWith("vm")) return;
-          resolve(e.value);
-          __scratchAddonsTraps._targetOnce.removeEventListener('trapready', handler);
+  else
+    return new Promise((resolve) => {
+      const handler = (e) => {
+        if (!e.trapName.startsWith("vm")) return;
+        resolve(e.value);
+        __scratchAddonsTraps._targetOnce.removeEventListener("trapready", handler);
       };
-      __scratchAddonsTraps._targetOnce.addEventListener('trapready', handler);
-  });
+      __scratchAddonsTraps._targetOnce.addEventListener("trapready", handler);
+    });
 };
 
 const observer = new MutationObserver((mutationsList) => {
