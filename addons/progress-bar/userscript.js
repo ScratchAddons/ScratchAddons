@@ -18,6 +18,7 @@ export default async function ({ addon, global, console }) {
   let hideTimeout;
 
   const PROJECT_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\d+$/;
+  const REMIX_COPY_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_(?:remix|copy)=1&original_id=\d+.*$/;
 
   let loadedAssets = 0;
   let totalAssets = 0;
@@ -81,7 +82,7 @@ export default async function ({ addon, global, console }) {
   // Scratch uses XMLHttpRequest to upload the project JSON.
   const originalOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function (method, url) {
-    if (method.toLowerCase() === 'put' && PROJECT_REGEX.test(url)) {
+    if ((method.toLowerCase() === 'put' && PROJECT_REGEX.test(url)) || (method.toLowerCase() === 'post' && REMIX_COPY_REGEX.test(url))) {
       setProgress(0);
       this.upload.addEventListener('progress', (e) => {
         if (e.lengthComputable) {
