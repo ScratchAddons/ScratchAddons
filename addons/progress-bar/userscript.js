@@ -19,6 +19,7 @@ export default async function ({ addon, global, console }) {
 
   const PROJECT_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\d+$/;
   const REMIX_COPY_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_(?:remix|copy)=1&original_id=\d+.*$/;
+  const ASSET_REGEX = /^https:\/\/assets\.scratch\.mit\.edu\/.*$/;
 
   let loadedAssets = 0;
   let totalAssets = 0;
@@ -41,6 +42,8 @@ export default async function ({ addon, global, console }) {
     clearTimeout(hideTimeout);
     if (progress >= 1) {
       hideProgress();
+      loadedAssets = 0;
+      totalAssets = 0;
       // After a little bit for the animation to complete, we'll reset the progress bar width to avoid an animation of it going from 1 to 0 the next time it's used.
       hideTimeout = setTimeout(resetProgress, 1000);
     } else {
@@ -49,32 +52,47 @@ export default async function ({ addon, global, console }) {
     }
   };
 
-  // Scratch uses fetch() to download the project JSON.
+  // Scratch uses fetch() to download the project JSON and upload project assets.
   const originalFetch = window.fetch;
   window.fetch = (url, opts) => {
-    if (typeof url === 'string' && PROJECT_REGEX.test(url) && opts.method === 'GET') {
-      // This is a request for the project JSON.
-      // Fetch does not support progress monitoring, so we use XMLHttpRequest instead.
-      setProgress(0);
-      return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.responseType = 'blob';
-        xhr.onload = () => {
-          setProgress(1);
-          resolve(new Response(xhr.response, {
-            status: xhr.status,
-            statusText: xhr.statusText
-          }));
-        };
-        xhr.onerror = () => reject(new Error('xhr failed'));
-        xhr.onprogress = e => {
-          if (e.lengthComputable) {
-            setProgress(e.loaded / e.total);
-          }
-        };
-        xhr.open('GET', url);
-        xhr.send();
-      });
+    if (typeof url === 'string' && opts && typeof opts.method === 'string') {
+      if (opts.method.toLowerCase() === 'get' && PROJECT_REGEX.test(url)) {
+        // This is a request for the project JSON.
+        // Fetch does not support progress monitoring, so we use XMLHttpRequest instead.
+        setProgress(0);
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.responseType = 'blob';
+          xhr.onload = () => {
+            setProgress(1);
+            resolve(new Response(xhr.response, {
+              status: xhr.status,
+              statusText: xhr.statusText
+            }));
+          };
+          xhr.onerror = () => reject(new Error('xhr failed'));
+          xhr.onprogress = e => {
+            if (e.lengthComputable) {
+              setProgress(e.loaded / e.total);
+            }
+          };
+          xhr.open('GET', url);
+          xhr.send();
+        });
+      }
+      if (opts.method.toLowerCase() === 'post' && ASSET_REGEX.test(url)) {
+        // This is a request to upload an asset.
+        // Sadly, it doesn't seem to be possible to monitor progress on these requests even with XHR, as the asset endpoint
+        // returns 405s when an OPTIONS preflight request is made, which is required when we put listeners on `xhr.upload`
+        totalAssets++;
+        setProgress(0);
+        return originalFetch(url, opts)
+          .then(response => {
+            loadedAssets++;
+            setProgress(loadedAssets / totalAssets);
+            return response;
+          });
+      }
     }
     return originalFetch(url, opts);
   };
