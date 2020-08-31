@@ -12,8 +12,8 @@ export default async function runAddonUserscripts({ addonId, scripts }) {
       "color:red; font-weight: bold; font-size: 1.2em;"
     );
     const x = await import(scriptUrl);
-    const log = console.log.bind(console, `[${addonId}]`);
-    const warn = console.warn.bind(console, `[${addonId}]`);
+    const log = console.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
+    const warn = console.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
     x.default({
       addon: addonObj,
       global: globalObj,
