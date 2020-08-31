@@ -1,6 +1,6 @@
 export default async function ({ addon, global, console }) {
   const progressBar = document.createElement("div");
-  progressBar.style.position = "absolute";
+  progressBar.style.position = "fixed";
   progressBar.style.top = "0";
   progressBar.style.left = "0";
   progressBar.style.height = "5px";
@@ -13,7 +13,7 @@ export default async function ({ addon, global, console }) {
   document.body.appendChild(progressBar);
 
   // The progress bar will hide itself automatically after this many milliseconds without any progress update.
-  // The intention here is to make it so that if the progress bar were to break, it would hide itself shortly without sticking around forever.
+  // The intention here is to make it so that if the progress bar were to break, it will hide itself automatically.
   const HIDE_AFTER = 30000;
   let hideTimeout;
 
@@ -63,7 +63,7 @@ export default async function ({ addon, global, console }) {
   window.fetch = (url, opts) => {
     if (typeof url === "string" && opts && typeof opts.method === "string") {
       if (opts.method.toLowerCase() === "get" && PROJECT_REGEX.test(url)) {
-        // This is a request for the project JSON.
+        // This is a request to get the project JSON.
         // Fetch does not support progress monitoring, so we use XMLHttpRequest instead.
         setProgress(0);
         return new Promise((resolve, reject) => {
@@ -71,6 +71,7 @@ export default async function ({ addon, global, console }) {
           xhr.responseType = "blob";
           xhr.onload = () => {
             setProgress(1);
+            // As we are emulating fetch(), we need to resolve with a response object.
             resolve(
               new Response(xhr.response, {
                 status: xhr.status,
@@ -90,8 +91,10 @@ export default async function ({ addon, global, console }) {
       }
       if (opts.method.toLowerCase() === "post" && ASSET_REGEX.test(url)) {
         // This is a request to upload an asset.
-        // Sadly, it doesn't seem to be possible to monitor progress on these requests even with XHR, as the asset endpoint
-        // returns 405s when an OPTIONS preflight request is made, which is required when we put listeners on `xhr.upload`
+        // Sadly, it doesn't seem to be possible to monitor upload progress on these requests, even with XHR, as the asset endpoint
+        // returns 405 Method Not Allowed when an OPTIONS preflight request is made, which is required when we put listeners on `xhr.upload`
+        // As a result, this won't display a useful progress bar when uploading a single large asset, but it will still display a useful
+        // progress bar in the case of uploading many assets at once.
         totalAssets++;
         setProgress(loadedAssets / totalAssets);
         return originalFetch(url, opts).then((response) => {
@@ -101,6 +104,7 @@ export default async function ({ addon, global, console }) {
         });
       }
     }
+
     return originalFetch(url, opts);
   };
 
@@ -111,6 +115,7 @@ export default async function ({ addon, global, console }) {
       (method.toLowerCase() === "put" && PROJECT_REGEX.test(url)) ||
       (method.toLowerCase() === "post" && REMIX_COPY_REGEX.test(url))
     ) {
+      // This is a request made for saving, copying, or remixing a project.
       setProgress(0);
       this.upload.addEventListener("progress", (e) => {
         if (e.lengthComputable) {
@@ -118,17 +123,20 @@ export default async function ({ addon, global, console }) {
         }
       });
     }
+
     originalOpen.call(this, method, url);
   };
 
   // Scratch uses a Worker to fetch project assets.
+  // As the worker may be constructed before we run, we have to patch postMessage to monitor message passing.
   const originalPostMessage = Worker.prototype.postMessage;
   Worker.prototype.postMessage = function (message, options) {
     if (typeof message.id === "string" && typeof message.url === "string") {
+      // This is a message passed from the main thread to the worker thread responsible for downloading.
       totalAssets++;
       setProgress(loadedAssets / totalAssets);
 
-      // Add our own message handler for this worker to monitor when assets have finished loading.
+      // Add our own message handler once for this worker to monitor when assets have finished loading.
       if (!foundWorker) {
         foundWorker = true;
         this.addEventListener("message", (e) => {
@@ -139,6 +147,7 @@ export default async function ({ addon, global, console }) {
         });
       }
     }
+
     originalPostMessage.call(this, message, options);
   };
 }
