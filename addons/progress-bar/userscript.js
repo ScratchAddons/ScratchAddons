@@ -81,8 +81,10 @@ export default async function ({ addon, global, console }) {
           };
           xhr.onerror = () => reject(new Error("xhr failed"));
           xhr.onprogress = (e) => {
-            if (e.lengthComputable) {
-              setProgress(e.loaded / e.total);
+            // When the browser doesn't think the length is computable, we'll use the Content-Length header as the length.
+            const length = e.lengthComputable ? e.total : +xhr.getResponseHeader('Content-Length');
+            if (length) {
+              setProgress(e.loaded / length);
             }
           };
           xhr.open("GET", url);
