@@ -1,0 +1,12 @@
+{
+  "name": "Progress Bar",
+  "description": "Shows you download and upload progress for projects.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabled_by_default": false
+}
