@@ -271,7 +271,7 @@ h1 {
 }
 
 .search-box {
-  height: 60px;
+  min-height: 60px;
   background: #2a2a2a;
   display: flex;
   align-items: center;
