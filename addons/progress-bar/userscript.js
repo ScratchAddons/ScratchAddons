@@ -17,6 +17,8 @@ export default async function ({ addon, global, console }) {
   const HIDE_AFTER = 5000;
   let hideTimeout;
 
+  const PROJECT_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\d+$/;
+
   let loadedAssets = 0;
   let totalAssets = 0;
   let foundWorker = false;
@@ -40,10 +42,10 @@ export default async function ({ addon, global, console }) {
     hideTimeout = setTimeout(hideProgress, HIDE_AFTER);
   };
 
-  // Scratch uses fetch() to download the project JSON, so override the global fetch() method to monitor when the project is being downloaded.
+  // Scratch uses fetch() to download the project JSON.
   const originalFetch = window.fetch;
   window.fetch = (url, opts) => {
-    if (typeof url === 'string' && /^https:\/\/projects\.scratch\.mit\.edu\/\d+$/.test(url) && opts.method === 'GET') {
+    if (typeof url === 'string' && PROJECT_REGEX.test(url) && opts.method === 'GET') {
       // This is a request for the project JSON.
       // Fetch does not support progress monitoring, so we use XMLHttpRequest instead.
       setProgress(0);
@@ -70,13 +72,20 @@ export default async function ({ addon, global, console }) {
     return originalFetch(url, opts);
   };
 
-  const handlePostMessage = (e) => {
-    const data = e.data;
-    loadedAssets += data.length;
-    setProgress(loadedAssets / totalAssets);
+  // Scratch uses XMLHttpRequest to upload the project JSON.
+  const originalOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function (method, url) {
+    if (method.toLowerCase() === 'put' && PROJECT_REGEX.test(url)) {
+      this.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          setProgress(e.loaded / e.total);
+        }
+      });
+    }
+    originalOpen.call(this, method, url);
   };
 
-  // Scratch uses a Worker to fetch project assets, so we override some Worker prototypes to monitor when assets begin to load.
+  // Scratch uses a Worker to fetch project assets.
   const originalPostMessage = Worker.prototype.postMessage;
   Worker.prototype.postMessage = function (message, options) {
     if (typeof message.id === 'string' && typeof message.url === 'string') {
@@ -86,7 +95,12 @@ export default async function ({ addon, global, console }) {
       // Add our own message handler for this worker to monitor when assets have finished loading.
       if (!foundWorker) {
         foundWorker = true;
-        this.addEventListener('message', handlePostMessage);
+        this.addEventListener('message', (e) => {
+          const data = e.data;
+          // Scratch will send multiple assets in a single message with an array.
+          loadedAssets += data.length;
+          setProgress(loadedAssets / totalAssets);
+        });
       }
     }
     originalPostMessage.call(this, message, options);
