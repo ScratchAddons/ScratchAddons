@@ -22,9 +22,9 @@
       "js": ["content-scripts/cs.js"]
     },
     {
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
-      "js": ["content-scripts/find-vm.js"]
+      "js": ["content-scripts/prototype-handler.js"]
     }
   ],
   "options_ui": {
