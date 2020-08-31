@@ -1,0 +1,13 @@
+{
+  "name": "Move Your Cat",
+  "description": "Shows script to move your cat when you change locale.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "options": [],
+  "tags": ["prototype", "i18n"],
+  "enabled_by_default": false
+}
