@@ -1,7 +1,6 @@
 export default async ({ addon, console }) => {
   const FLAG = "🏳";
   const INDENT = "    ";
-  window.thatAddon = addon;
   const moveCatScript = [
     (Msg) => Msg.EVENT_WHENFLAGCLICKED.replace("%1", FLAG),
     (Msg) => Msg.MOTION_SETROTATIONSTYLE.replace("%1", `[${Msg.MOTION_SETROTATIONSTYLE_LEFTRIGHT} v]`),
