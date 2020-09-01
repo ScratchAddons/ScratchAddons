@@ -1,4 +1,5 @@
 import Trap from "./Trap.js";
+import ReduxHandler from "./ReduxHandler.js";
 
 export default class Tab extends EventTarget {
   constructor() {
@@ -18,6 +19,7 @@ export default class Tab extends EventTarget {
       newEvent.next = e.next;
       this.dispatchEvent(newEvent);
     });
+    this.redux = new ReduxHandler();
   }
   getScratchVM() {
     return scratchAddons.methods.getScratchVM();
