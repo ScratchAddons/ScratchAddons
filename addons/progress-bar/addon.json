@@ -1,6 +1,6 @@
 {
   "name": "Progress Bar",
-  "description": "Shows you download and upload progress for projects.",
+  "description": "Adds a progress bar for loading and saving projects.",
   "userscripts": [
     {
       "url": "userscript.js",
