@@ -1,0 +1,26 @@
+{
+  "name": "Third-party button",
+  "description": "Adds buttons for viewing projects on forkphorus or other sites.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "options": [
+    {
+      "name": "Add forkphorus",
+      "id": "forkphorus",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Add turbowarp",
+      "id": "turbowarp",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["projects"],
+  "enabled_by_default": true
+}
