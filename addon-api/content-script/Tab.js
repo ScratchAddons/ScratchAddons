@@ -41,12 +41,12 @@ export default class Tab extends EventTarget {
     }
   }
   /**
-   * @type {string} editor mode (or empty string for non-editors).
+   * @type {?string} editor mode (or null for non-editors).
    */
   get editorMode() {
     const pathname = location.pathname.toLowerCase();
     const split = pathname.split("/").filter(Boolean);
-    if (!split[0] || split[0] !== "projects") return "";
+    if (!split[0] || split[0] !== "projects") return null;
     if (split.includes("editor")) return "editor";
     if (split.includes("fullscreen")) return "fullscreen";
     if (split.includes("embed")) return "embed";
