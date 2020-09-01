@@ -24,12 +24,7 @@
     {
       "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
-      "js": ["content-scripts/prototype-handler.js"]
-    },
-    {
-      "matches": ["https://scratch.mit.edu/*"],
-      "run_at": "document_start",
-      "js": ["content-scripts/load-redux.js"]
+      "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js"]
     }
   ],
   "options_ui": {
