@@ -9,7 +9,7 @@ export default async function({ addon, global, console }) {
                 el.removeChild(el.childNodes[0]);
                 el.removeChild(el.childNodes[0]);
                 var turboframe = document.createElement("iframe");
-                turboframe.src="https://turbowarp.org/fullscreen.html#"+id;
+                turboframe.src="https://turbowarp.org/embed.html#"+id;
                 turboframe.width="482.22";
                 turboframe.height="406.22";
                 el.appendChild(turboframe);
