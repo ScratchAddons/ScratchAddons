@@ -1,26 +1,31 @@
 ﻿export default async function ({ addon, global, console }) {
   addon.settings.addEventListener("change", () => console.log("changed!"));
-  const viewon = document.createElement("span");
-
-  viewon.innerHTML = "View on ";
-  viewon.title = "Third-party sites";
-  viewon.style = "font-size:15px;float:right;";
+  const fork = document.createElement("a");
+  const warp = document.createElement("a");
+  
   console.log(window.location.href);
   var projectid = window.location.pathname.split("/")[2];
   console.log(projectid);
-
+  
+  fork.innerHTML = "<div style='margin:auto;color:white;'>forkphorus</div>";
+  fork.href = "https://forkphorus.github.io/#" + projectid;
+  fork.className = "button action-button";
+  fork.style = "display:flex;";
+  
+  warp.innerHTML = "<div style='margin:auto;color:white;'>TurboWarp</div>";
+  warp.href = "https://turbowarp.github.io/#" + projectid;
+  warp.className = "button action-button";
+  warp.style = "display:flex;";
+  
+  if (addon.settings.get("colors")) {
+    fork.style = "display:flex;background-color:black;";
+    warp.style = "display:flex;background-color:red;";//if you know a better color, tell me.
+  }
+  
   if (addon.settings.get("forkphorus")) {
-    viewon.innerHTML += '<a title="forkphorus" href="https://forkphorus.github.io/#' + projectid + '">forkphorus</a>';
+    document.getElementsByClassName("action-buttons")[0].appendChild(fork);
   }
-
   if (addon.settings.get("turbowarp")) {
-    if (viewon.innerHTML != "View on ") {
-      viewon.innerHTML += " or ";
-    }
-    viewon.innerHTML += '<a title="turbowarp" href="https://turbowarp.github.io/#' + projectid + '">turbowarp</a>';
-  }
-
-  if (viewon.innerHTML != "View on ") {
-    document.getElementsByClassName("project-title")[0].appendChild(viewon);
+    document.getElementsByClassName("action-buttons")[0].appendChild(warp);
   }
 }
