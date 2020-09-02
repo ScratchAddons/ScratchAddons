@@ -19,7 +19,3 @@
   background-color: white;
   color: black;
 }
-
-[data-visible="false"] {
-  display: none;
-}
