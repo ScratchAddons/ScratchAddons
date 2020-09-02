@@ -1,0 +1,13 @@
+{
+  "name": "Turbowarp player in editor",
+  "description": "replaces the normal scratch player with the turbowarp eeditor",
+  "persistent_scripts": [],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*/editor/"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabled_by_default": false
+}
