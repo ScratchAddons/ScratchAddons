@@ -12,7 +12,7 @@ export default async function({ addon, global, console }) {
                 turboframe.src="https://turbowarp.org/embed.html#"+id;
                 turboframe.width="482.22";
                 turboframe.height="406.22";
-                el.appendChild(turboframe);
+                el.appendChild(turboframe); 
             } else {
                 setTimeout(check, 300); // try again in 300 milliseconds
             }
