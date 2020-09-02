@@ -11,22 +11,28 @@ export default async function ({ addon, global, console }) {
   function createSearchBar(node) {
     blocklyDropdownMenu = node;
 
+    // Lock the width of the dropdown before adding the search bar.
+    blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
+
     // Create the search bar if it doesn't exist.
     if (!searchBar) {
       searchBar = document.createElement("input");
       searchBar.type = "text";
-      searchBar.addEventListener("input", handleSearchInput);
+      searchBar.addEventListener("input", handleInputEvent);
       searchBar.classList.add("u-dropdown-searchbar");
       blocklyDropDownDiv.insertBefore(searchBar, blocklyDropDownDiv.firstChild);
     }
 
-    searchBar.focus();
-    searchBar.hidden = false;
+    // Lock the height of the dropdown after adding the search bar.
+    blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
 
-    // Lock the width and height of the dropdown so that it doesn't resize as the user searches.
-    const computedStyle = getComputedStyle(blocklyDropDownContent);
-    blocklyDropDownContent.style.width = computedStyle.width;
-    blocklyDropDownContent.style.height = computedStyle.height;
+    // Set the search bar's width to the width of it's container so that is always takes the exact amount of space.
+    // width: 100% in CSS does not do this properly.
+    searchBar.style.width = blocklyDropDownContent.style.width;
+
+    searchBar.value = "";
+    searchBar.hidden = false;
+    searchBar.focus();
   }
 
   function cleanup() {
@@ -38,7 +44,7 @@ export default async function ({ addon, global, console }) {
     searchBar.hidden = true;
   }
 
-  function handleSearchInput(event) {
+  function handleInputEvent(event) {
     const value = event.target.value.toLowerCase();
     for (const item of getItems()) {
       const text = item.textContent.toLowerCase();
