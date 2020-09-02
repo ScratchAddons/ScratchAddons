@@ -4,7 +4,7 @@ export default async function runAddonUserscripts({ addonId, scripts }) {
   const addonObj = new Addon({ id: addonId });
   const globalObj = Object.create(null);
   for (const scriptInfo of scripts) {
-    const {url: scriptPath, runAtComplete} = scriptInfo;
+    const { url: scriptPath, runAtComplete } = scriptInfo;
     const scriptUrl = `${document
       .getElementById("scratch-addons")
       .getAttribute("data-path")}addons/${addonId}/${scriptPath}`;
@@ -22,9 +22,9 @@ export default async function runAddonUserscripts({ addonId, scripts }) {
         console: { ...console, log, warn },
       });
     };
-    if (runAtComplete && document.readyState !== 'complete') {
+    if (runAtComplete && document.readyState !== "complete") {
       console.log(`Waiting for onload: ${addonId}`);
-      window.addEventListener('load', () => loadUserscript(), {once: true});
+      window.addEventListener("load", () => loadUserscript(), { once: true });
     } else {
       await loadUserscript();
     }
