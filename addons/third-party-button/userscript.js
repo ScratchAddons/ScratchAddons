@@ -1,5 +1,7 @@
 ﻿export default async function ({ addon, global, console }) {
   addon.settings.addEventListener("change", () => console.log("changed!"));
+  await addon.tab.waitForElement(".action-buttons");
+   
   const fork = document.createElement("a");
   const warp = document.createElement("a");
 
