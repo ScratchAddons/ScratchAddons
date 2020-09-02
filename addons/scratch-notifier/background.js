@@ -3,6 +3,7 @@ import commentEmojis from "./comment-emojis.js";
 export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
   let msgCount = null;
   let lastDateTime = null;
+  let lastAuthChange; // Used to check if auth changed while waiting for promises to resolve
   const emojis = {
     addcomment: "💬",
     forumpost: "📚",
@@ -19,8 +20,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
 
   async function checkCount() {
     if (!addon.auth.isLoggedIn) return;
+    const previousLastAuthChange = lastAuthChange;
     const newCount = await addon.account.getMsgCount();
-    console.log(newCount);
+    if(previousLastAuthChange !== lastAuthChange) return;
     if (newCount === null) return;
     if (msgCount !== newCount) {
       const oldMsgCount = msgCount;
@@ -154,7 +156,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   }
 
   async function checkMessages() {
+    const previousLastAuthChange = lastAuthChange;
     const messages = await addon.account.getMessages();
+    if(lastAuthChange !== previousLastAuthChange) return;
     if (messages === null) return;
     if (lastDateTime === null) lastDateTime = new Date(messages[0].datetime_created).getTime();
     else {
@@ -250,6 +254,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   addon.auth.addEventListener("change", function () {
     msgCount = null;
     lastDateTime = null;
+    lastAuthChange = Date.now();
     checkCount();
   });
 }

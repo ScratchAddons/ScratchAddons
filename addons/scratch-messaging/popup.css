@@ -1,9 +1,14 @@
+html {
+  font-size: 14px;
+}
+
 body {
   margin: 0;
   font-family: "Sora", sans-serif;
   width: auto;
   height: 500px;
   overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 a {
@@ -17,8 +22,11 @@ a:hover {
   text-decoration: underline;
 }
 
+.message-type {
+  display: initial;
+}
 .message-type-title {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   color: white;
   background-color: #d93;
   padding: 4px 16px 4px 16px;
@@ -26,6 +34,11 @@ a:hover {
   cursor: pointer;
   display: flex;
   margin-bottom: 8px;
+  position: sticky;
+}
+.sticky {
+  position: sticky;
+  top: 0;
 }
 .message-type-title:hover {
   background-color: #fa4;
@@ -40,7 +53,7 @@ a:hover {
 .float-right {
   margin-left: 4px;
   white-space: nowrap;
-  font-size: 0.8rem;
+  font-size: .9rem;
 }
 .float-right > span {
   display: inline-block;
@@ -51,7 +64,6 @@ a:hover {
   margin-bottom: 10px;
   padding: 4px 16px 4px 16px;
 }
-
 .username-list > a {
   display: inline-block;
   margin-right: 10px;
@@ -69,6 +81,10 @@ a:hover {
 }
 .comment-content {
   word-break: break-word;
+  font-size: .8rem;
+}
+.comment-self {
+  color: green;
 }
 .comment-author {
   font-weight: bold;
@@ -82,17 +98,15 @@ a:hover {
 }
 .reply-button-comment {
   color: #1aa0d8;
-  visibility: hidden;
+  opacity: 0;
 }
 .comment:hover .reply-button-comment {
-  visibility: visible;
+  opacity: 1;
 }
-
 .comment-content:after {
   /* So that empty comments take up a line */
   content: "\200b";
 }
-
 .reply-textarea {
   width: 100%;
   box-sizing: border-box;
@@ -100,6 +114,8 @@ a:hover {
   font-family: Arial;
   padding: 8px;
   resize: vertical;
+  margin-top: 8px;
+  font-size: .8rem;
 }
 .reply-box-buttons {
   padding-right: 4px;
@@ -111,7 +127,21 @@ a:hover {
   font-weight: bold;
   outline: none;
   margin-right: 4px;
+  cursor: pointer;
 }
 .comment-chars {
   float: right;
+}
+
+#bottom-bar {
+  position: fixed;
+  z-index: 999;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-top: 1px solid black;
+  font-size: .9rem;
+  text-align: center;
+  padding: 4px;
 }

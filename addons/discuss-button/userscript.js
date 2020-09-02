@@ -1,5 +1,4 @@
 export default async function ({ addon, global, console }) {
-  addon.settings.addEventListener("change", () => console.log("changed!"));
   const link = document.createElement("li");
   link.innerHTML = '<a href="/discuss">Discuss</a>';
   link.className = "link discuss";
