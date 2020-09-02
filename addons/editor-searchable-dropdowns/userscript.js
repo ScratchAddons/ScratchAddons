@@ -1,40 +1,42 @@
 export default async function ({ addon, global, console }) {
-  function addSearch(blocklyDropdownMenu) {
-    const el = document.createElement("input");
-    el.type = "text";
-    el.addEventListener("input", search);
-    el.classList.add("u-dropdown-searchbar");
-    const container = getDropDownMenu();
-    container.insertBefore(el, container.firstChild);
-    el.focus();
+  // The hierarchy is:
+  // blocklyDropDownDiv (position, background color, etc.) -> blocklyDropDownContent (scrollbar) -> blocklyDropdownMenu (items)
+  // The capitalization of dropdown is inconsistent in blockly too.
+  let blocklyDropDownDiv = null;
+  let blocklyDropDownContent = null;
+  let blocklyDropdownMenu = null;
 
-    const blocklyDropDownContent = blocklyDropdownMenu.parentNode;
+  function createSearchBar(node) {
+    blocklyDropdownMenu = node;
+
+    const searchBar = document.createElement("input");
+    searchBar.type = "text";
+    searchBar.addEventListener("input", handleSearchInput);
+    searchBar.classList.add("u-dropdown-searchbar");
+    blocklyDropDownContent.insertBefore(searchBar, blocklyDropDownContent.firstChild);
+    searchBar.focus();
+
     const computedStyle = getComputedStyle(blocklyDropDownContent);
     blocklyDropDownContent.style.width = computedStyle.width;
     blocklyDropDownContent.style.height = computedStyle.height;
-
-    for (const child of getItems()) {
-      child.hidden = false;
-    }
   }
 
-  function search(e) {
-    const value = e.target.value.toLowerCase();
-    for (const child of getItems()) {
-      const text = child.textContent.toLowerCase();
+  function cleanup() {
+    blocklyDropdownMenu = null;
+  }
+
+  function handleSearchInput(event) {
+    const value = event.target.value.toLowerCase();
+    for (const item of getItems()) {
+      const text = item.textContent.toLowerCase();
       const contains = text.includes(value);
-      child.hidden = !contains;
+      item.hidden = !contains;
     }
-  }
-
-  function getDropDownMenu() {
-    return document.querySelector(".blocklyDropdownMenu");
   }
 
   function getItems() {
-    const el = getDropDownMenu();
-    if (el) {
-      return Array.from(el.children).filter((child) => child.tagName !== "INPUT");
+    if (blocklyDropdownMenu) {
+      return Array.from(blocklyDropdownMenu.children).filter((child) => child.tagName !== "INPUT");
     }
     return [];
   }
@@ -68,17 +70,25 @@ export default async function ({ addon, global, console }) {
     });
   }
 
-  findBlocklyDropDownDiv().then((blocklyDropDownDiv) => {
-    const blocklyDropDownContent = blocklyDropDownDiv.querySelector(".blocklyDropDownContent");
+  findBlocklyDropDownDiv().then((div) => {
+    blocklyDropDownDiv = div;
+    blocklyDropDownContent = blocklyDropDownDiv.querySelector(".blocklyDropDownContent");
 
-    // Use a MutationObserver to find out when a dropdown is created.
     const observer = new MutationObserver((mutationList) => {
       for (const mutation of mutationList) {
         if (mutation.type === "childList") {
+          // Look for a dropdown being created.
           for (const node of mutation.addedNodes) {
             if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
-              addSearch(node);
-              return;
+              createSearchBar(node);
+              break;
+            }
+          }
+          // Look for a dropdown being removed.
+          for (const node of mutation.removedNodes) {
+            if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
+              cleanup();
+              break;
             }
           }
         }
