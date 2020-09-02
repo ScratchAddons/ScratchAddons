@@ -6,11 +6,7 @@
   viewon.title = "Third-party sites";
   viewon.style = "font-size:15px;float:right;";
   console.log(window.location.href);
-  var urllist = window.location.href.split("/");
-  var projectid;
-  for (var i = urllist.length; i >= 0 && !projectid; i--) {
-    projectid = urllist[i];
-  }
+  var projectid = window.location.pathname.split("/")[2];
   console.log(projectid);
 
   if (addon.settings.get("forkphorus")) {
