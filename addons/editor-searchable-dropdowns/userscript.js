@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  function addSearch() {
+  function addSearch(blocklyDropdownMenu) {
     const el = document.createElement("input");
     el.type = "text";
     el.addEventListener("input", search);
@@ -7,6 +7,11 @@ export default async function ({ addon, global, console }) {
     const container = getDropDownMenu();
     container.insertBefore(el, container.firstChild);
     el.focus();
+
+    const blocklyDropDownContent = blocklyDropdownMenu.parentNode;
+    const computedStyle = getComputedStyle(blocklyDropDownContent);
+    blocklyDropDownContent.style.width = computedStyle.width;
+    blocklyDropDownContent.style.height = computedStyle.height;
 
     for (const child of getItems()) {
       child.hidden = false;
@@ -22,17 +27,8 @@ export default async function ({ addon, global, console }) {
     }
   }
 
-  let cachedDropDownContentElement = null;
-  function getDropDownContentElement() {
-    if (cachedDropDownContentElement) {
-      return cachedDropDownContentElement;
-    }
-    cachedDropDownContentElement = document.querySelector(".blocklyDropDownContent");
-    return cachedDropDownContentElement;
-  }
-
   function getDropDownMenu() {
-    return getDropDownContentElement().querySelector(".blocklyDropdownMenu");
+    return document.querySelector(".blocklyDropdownMenu");
   }
 
   function getItems() {
@@ -46,7 +42,7 @@ export default async function ({ addon, global, console }) {
   function findBlocklyDropDownDiv() {
     return new Promise((resolve, reject) => {
       // See if the div already exists. This can happen when loading directly into the editor.
-      const div = document.querySelector('.blocklyDropDownDiv');
+      const div = document.querySelector(".blocklyDropDownDiv");
       if (div) {
         resolve(div);
         return;
@@ -67,30 +63,29 @@ export default async function ({ addon, global, console }) {
         }
       });
       observer.observe(document.body, {
-        childList: true
+        childList: true,
       });
-    })
+    });
   }
 
-  findBlocklyDropDownDiv()
-    .then((blocklyDropDownDiv) => {
-      const blocklyDropDownContent = blocklyDropDownDiv.querySelector('.blocklyDropDownContent');
+  findBlocklyDropDownDiv().then((blocklyDropDownDiv) => {
+    const blocklyDropDownContent = blocklyDropDownDiv.querySelector(".blocklyDropDownContent");
 
-      // Use a MutationObserver to find out when a dropdown is created.
-      const observer = new MutationObserver((mutationList) => {
-        for (const mutation of mutationList) {
-          if (mutation.type === "childList") {
-            for (const node of mutation.addedNodes) {
-              if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
-                addSearch();
-                return;
-              }
+    // Use a MutationObserver to find out when a dropdown is created.
+    const observer = new MutationObserver((mutationList) => {
+      for (const mutation of mutationList) {
+        if (mutation.type === "childList") {
+          for (const node of mutation.addedNodes) {
+            if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
+              addSearch(node);
+              return;
             }
           }
         }
-      });
-      observer.observe(blocklyDropDownContent, {
-        childList: true
-      });
+      }
     });
+    observer.observe(blocklyDropDownContent, {
+      childList: true,
+    });
+  });
 }
