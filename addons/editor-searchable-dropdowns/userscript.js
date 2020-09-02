@@ -1,18 +1,4 @@
 export default async function ({ addon, global, console }) {
-  function callback(mutationList) {
-    for (const mutation of mutationList) {
-      if (mutation.type === "childList") {
-        const newNodes = mutation.addedNodes;
-        for (const node of newNodes) {
-          if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
-            addSearch();
-            break;
-          }
-        }
-      }
-    }
-  }
-
   function addSearch() {
     const el = document.createElement("input");
     el.type = "text";
@@ -57,10 +43,54 @@ export default async function ({ addon, global, console }) {
     return [];
   }
 
-  const observer = new MutationObserver(callback);
-  // todo: don't put a MutationObserver on the entire body
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-  });
+  function findBlocklyDropDownDiv() {
+    return new Promise((resolve, reject) => {
+      // See if the div already exists. This can happen when loading directly into the editor.
+      const div = document.querySelector('.blocklyDropDownDiv');
+      if (div) {
+        resolve(div);
+        return;
+      }
+
+      // Otherwise, use a MutationObserver to find out when it's created.
+      const observer = new MutationObserver((mutationList) => {
+        for (const mutation of mutationList) {
+          if (mutation.type === "childList") {
+            for (const node of mutation.addedNodes) {
+              if (node.classList && node.classList.contains("blocklyDropDownDiv")) {
+                resolve(node);
+                observer.disconnect();
+                return;
+              }
+            }
+          }
+        }
+      });
+      observer.observe(document.body, {
+        childList: true
+      });
+    })
+  }
+
+  findBlocklyDropDownDiv()
+    .then((blocklyDropDownDiv) => {
+      const blocklyDropDownContent = blocklyDropDownDiv.querySelector('.blocklyDropDownContent');
+
+      // Use a MutationObserver to find out when a dropdown is created.
+      const observer = new MutationObserver((mutationList) => {
+        for (const mutation of mutationList) {
+          if (mutation.type === "childList") {
+            for (const node of mutation.addedNodes) {
+              if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
+                addSearch();
+                return;
+              }
+            }
+          }
+        }
+      });
+      observer.observe(blocklyDropDownContent, {
+        childList: true
+      });
+    });
 }
