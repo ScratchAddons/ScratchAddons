@@ -35,7 +35,7 @@ class GlobalStateProxyHandler {
         "Global state changed!\n" + objectPath.join(".") + " is now:",
         objectPath[0] === "auth" ? "[redacted]" : value
       );
-      if (objectPath[0] === "auth") {
+      if (objectPath[0] === "auth" && objectPath[1] !== "scratchLang") {
         scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
         messageForAllTabs({ fireEvent: { target: "auth", name: "change" } });
       }
