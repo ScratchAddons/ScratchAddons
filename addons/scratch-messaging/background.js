@@ -17,7 +17,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     ready: false,
   });
 
-  addon.auth.addEventListener("change", () => pendingAuthChange = true);
+  addon.auth.addEventListener("change", () => (pendingAuthChange = true));
   resetData();
   routine();
 
@@ -29,8 +29,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   async function routine() {
     await runCheckMessagesAfter({ checkOld: true }, 0);
     // Can't use while(true) because addon might get disabled
-    while(addon.self) {
-      if(pendingAuthChange) {
+    while (addon.self) {
+      if (pendingAuthChange) {
         pendingAuthChange = false;
         resetData();
         routine();
@@ -42,12 +42,12 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   }
 
   function runCheckMessagesAfter(args, ms) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(async () => {
         await checkMessages(args);
         resolve();
       }, ms);
-    })
+    });
   }
 
   async function checkMessages({ checkOld = false } = {}) {
@@ -105,7 +105,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     // If this addon has been killed, addon.self will throw
     try {
       addon.self;
-    } catch(err) {
+    } catch (err) {
       chrome.runtime.onMessage.removeListener(thisFunction);
     }
     if (!request.scratchMessaging) return;
@@ -113,17 +113,15 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     if (popupRequest === "getData")
       sendResponse(data.ready ? data : { error: addon.auth.isLoggedIn ? "notReady" : "loggedOut" });
     else if (popupRequest.postComment) {
-      sendComment(popupRequest.postComment).then(status => sendResponse(status));
+      sendComment(popupRequest.postComment).then((status) => sendResponse(status));
       return true;
-    }
-    else if(popupRequest.retrieveComments) {
+    } else if (popupRequest.retrieveComments) {
       const commentRequest = popupRequest.retrieveComments;
       retrieveComments(commentRequest.resourceType, commentRequest.resourceId, commentRequest.commentIds)
-       .then(comments => sendResponse(comments))
-       .catch(err => sendResponse({}));
+        .then((comments) => sendResponse(comments))
+        .catch((err) => sendResponse({}));
       return true;
-    }
-    else if(popupRequest === "markAsRead") {
+    } else if (popupRequest === "markAsRead") {
       addon.fetch("https://scratch.mit.edu/site-api/messages/messages-clear/", {
         method: "POST",
       });
@@ -220,30 +218,29 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     return value;
   }
 
-   function sendComment({ resourceType, resourceId, content, parent_id, commentee_id }) {
-      return new Promise(resolve => {
-        // For some weird reason, this only works with XHR in Chrome...
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/`, true);
-        xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
-        xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
-        xhr.setRequestHeader("X-ScratchAddons-Uses-Fetch", "true");
+  function sendComment({ resourceType, resourceId, content, parent_id, commentee_id }) {
+    return new Promise((resolve) => {
+      // For some weird reason, this only works with XHR in Chrome...
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/`, true);
+      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
+      xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
+      xhr.setRequestHeader("X-ScratchAddons-Uses-Fetch", "true");
 
-        xhr.onload = function () {
-          if(xhr.status === 200) {
-            try {
-              const dom = new DOMParser().parseFromString(xhr.responseText, "text/html");
-              const commentId = Number(dom.querySelector(".comment ").getAttribute("data-comment-id"));
-              const content = fixCommentContent(dom.querySelector(".content").innerHTML);
-              resolve({ commentId, username: addon.auth.username, userId: addon.auth.userId, content });
-            } catch(err) {
-              resolve({ error: err });
-            }
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          try {
+            const dom = new DOMParser().parseFromString(xhr.responseText, "text/html");
+            const commentId = Number(dom.querySelector(".comment ").getAttribute("data-comment-id"));
+            const content = fixCommentContent(dom.querySelector(".content").innerHTML);
+            resolve({ commentId, username: addon.auth.username, userId: addon.auth.userId, content });
+          } catch (err) {
+            resolve({ error: err });
           }
-          else resolve({ error: xhr.status })
-        };
+        } else resolve({ error: xhr.status });
+      };
 
-        xhr.send(JSON.stringify({ content, parent_id, commentee_id }));
-     });
+      xhr.send(JSON.stringify({ content, parent_id, commentee_id }));
+    });
   }
 }

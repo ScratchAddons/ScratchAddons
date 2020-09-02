@@ -22,7 +22,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     if (!addon.auth.isLoggedIn) return;
     const previousLastAuthChange = lastAuthChange;
     const newCount = await addon.account.getMsgCount();
-    if(previousLastAuthChange !== lastAuthChange) return;
+    if (previousLastAuthChange !== lastAuthChange) return;
     if (newCount === null) return;
     if (msgCount !== newCount) {
       const oldMsgCount = msgCount;
@@ -158,7 +158,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   async function checkMessages() {
     const previousLastAuthChange = lastAuthChange;
     const messages = await addon.account.getMessages();
-    if(lastAuthChange !== previousLastAuthChange) return;
+    if (lastAuthChange !== previousLastAuthChange) return;
     if (messages === null) return;
     if (lastDateTime === null) lastDateTime = new Date(messages[0].datetime_created).getTime();
     else {

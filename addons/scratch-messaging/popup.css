@@ -53,7 +53,7 @@ a:hover {
 .float-right {
   margin-left: 4px;
   white-space: nowrap;
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 .float-right > span {
   display: inline-block;
@@ -81,7 +81,7 @@ a:hover {
 }
 .comment-content {
   word-break: break-word;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 .comment-self {
   color: green;
@@ -115,7 +115,7 @@ a:hover {
   padding: 8px;
   resize: vertical;
   margin-top: 8px;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 .reply-box-buttons {
   padding-right: 4px;
@@ -141,7 +141,7 @@ a:hover {
   right: 0;
   background-color: white;
   border-top: 1px solid black;
-  font-size: .9rem;
+  font-size: 0.9rem;
   text-align: center;
   padding: 4px;
 }
