@@ -4,7 +4,11 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/users/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*",
+        "https://scratch.mit.edu/studios/*",
+        "https://scratch.mit.edu/users/*"
+      ]
     }
   ],
   "tags": ["community"],
