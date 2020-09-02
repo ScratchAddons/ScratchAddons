@@ -24,7 +24,7 @@
     viewon.innerHTML += '<a title="turbowarp" href="https://turbowarp.github.io/#' + projectid + '">turbowarp</a>';
   }
 
-  if (viewon.innerHTML != "View on ") {
+  if (viewon.innerHTML != "View on ") { 
     document.getElementsByClassName("project-title")[0].appendChild(viewon);
   }
 }
