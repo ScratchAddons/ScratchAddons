@@ -1,6 +1,6 @@
 .u-dropdown-searchbar {
-  /* seems to always fill the entire thing without making a horizontal scrollbar */
-  width: calc(100% - 20px);
+  width: 100%;
+  box-sizing: border-box;
   /* based on styles for the title input */
   color: white;
   background-color: hsla(0, 100%, 100%, 0.25);

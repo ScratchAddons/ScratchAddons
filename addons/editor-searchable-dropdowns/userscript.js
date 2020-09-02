@@ -6,16 +6,23 @@ export default async function ({ addon, global, console }) {
   let blocklyDropDownContent = null;
   let blocklyDropdownMenu = null;
 
+  let searchBar;
+
   function createSearchBar(node) {
     blocklyDropdownMenu = node;
 
-    const searchBar = document.createElement("input");
-    searchBar.type = "text";
-    searchBar.addEventListener("input", handleSearchInput);
-    searchBar.classList.add("u-dropdown-searchbar");
-    blocklyDropDownContent.insertBefore(searchBar, blocklyDropDownContent.firstChild);
+    // Create the search bar if it doesn't exist.
+    if (!searchBar) {
+      searchBar = document.createElement("input");
+      searchBar.type = "text";
+      searchBar.addEventListener("input", handleSearchInput);
+      searchBar.classList.add("u-dropdown-searchbar");
+      blocklyDropDownDiv.insertBefore(searchBar, blocklyDropDownDiv.firstChild);
+    }
+
     searchBar.focus();
 
+    // Lock the width and height of the dropdown so that it doesn't resize as the user searches.
     const computedStyle = getComputedStyle(blocklyDropDownContent);
     blocklyDropDownContent.style.width = computedStyle.width;
     blocklyDropDownContent.style.height = computedStyle.height;
