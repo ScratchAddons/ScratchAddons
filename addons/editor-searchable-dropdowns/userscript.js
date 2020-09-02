@@ -21,6 +21,7 @@ export default async function ({ addon, global, console }) {
     }
 
     searchBar.focus();
+    searchBar.hidden = false;
 
     // Lock the width and height of the dropdown so that it doesn't resize as the user searches.
     const computedStyle = getComputedStyle(blocklyDropDownContent);
@@ -30,6 +31,11 @@ export default async function ({ addon, global, console }) {
 
   function cleanup() {
     blocklyDropdownMenu = null;
+    // Reset all the things we changed about the dropdown menu.
+    // This matters because there's other types of dropdowns such as angle selectors where a search bar doesn't make sense.
+    blocklyDropDownContent.style.width = "";
+    blocklyDropDownContent.style.height = "";
+    searchBar.hidden = true;
   }
 
   function handleSearchInput(event) {
