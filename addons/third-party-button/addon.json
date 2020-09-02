@@ -19,6 +19,12 @@
       "id": "turbowarp",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Use colors",
+      "id": "colors",
+      "type": "boolean",
+      "default": true
     }
   ],
   "tags": ["projects"],
