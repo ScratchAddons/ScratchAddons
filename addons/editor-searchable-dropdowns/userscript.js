@@ -15,6 +15,7 @@ export default async function ({ addon, global, console }) {
     const searchBar = document.createElement("input");
     searchBar.type = "text";
     searchBar.addEventListener("input", handleInputEvent);
+    searchBar.addEventListener("keydown", handleKeyDownEvent);
     searchBar.classList.add("u-dropdown-searchbar");
     blocklyDropDownContent.insertBefore(searchBar, blocklyDropDownContent.firstChild);
 
@@ -38,6 +39,20 @@ export default async function ({ addon, global, console }) {
       const text = item.textContent.toLowerCase();
       const contains = text.includes(value);
       item.hidden = !contains;
+    }
+  }
+
+  function handleKeyDownEvent(event) {
+    if (event.key === "Enter") {
+      const items = getItems();
+      for (const item of items) {
+        if (!item.hidden) {
+          // You can't just do item.click() -- Blockly uses mousedown and mouseup handlers for this, not click.
+          item.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: item, bubbles: true }));
+          item.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: item, bubbles: true }));
+          break;
+        }
+      }
     }
   }
 
