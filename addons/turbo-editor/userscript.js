@@ -1,5 +1,4 @@
 export default async function ({ addon, global, console }) {
-  console.log("Turbowarp Scratch Mod (c) 2020 YOYITsM3M8 has loaded");
   var current_url = document.location; // get url
   var id = current_url.href.split("/")[4]; // get project id from url
   function check() {
