@@ -34,6 +34,10 @@ export default async function ({ addon, global, console }) {
     blocklyDropDownContent.style.height = "";
   }
 
+  function closeDropDown() {
+    document.querySelector(".blocklyToolboxDiv").dispatchEvent(new MouseEvent("mousedown"));
+  }
+
   function selectItem(item, click) {
     // You can't just use click() or focus() because Blockly uses mousedown and mouseup handlers, not click handlers.
     item.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: item, bubbles: true }));
@@ -81,6 +85,8 @@ export default async function ({ addon, global, console }) {
         }
       }
       // If no item was selected, that's fine. Not doing anything is the best solution.
+    } else if (event.key === "Escape") {
+      closeDropDown();
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       // We need to reimplement keyboard navigation to account for hidden items.
 
