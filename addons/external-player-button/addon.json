@@ -44,6 +44,6 @@
       "default": false
     }
   ],
-  "tags": ["projects", "community"],
+  "tags": ["community"],
   "enabled_by_default": false
 }
