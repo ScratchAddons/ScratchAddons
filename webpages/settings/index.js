@@ -129,6 +129,6 @@ vue.$watch("selectedTab", function (newSelectedTab) {
 window.addEventListener("keydown", function (e) {
   if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
     e.preventDefault();
-    $("#searchBox").focus();
+    document.querySelector("#searchBox").focus();
   }
 });
