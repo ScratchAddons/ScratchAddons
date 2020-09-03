@@ -44,6 +44,10 @@ export default async function ({ addon, global, console }) {
 
   function handleKeyDownEvent(event) {
     if (event.key === "Enter") {
+      // If an item is already selected, let the editor handle it.
+      if (document.querySelector('.goog-menuitem-highlight')) {
+        return;
+      }
       const items = getItems();
       for (const item of items) {
         if (!item.hidden) {
