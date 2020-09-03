@@ -18,7 +18,7 @@
   "content_scripts": [
     {
       "matches": ["https://scratch.mit.edu/*"],
-      "run_at": "document_idle",
+      "run_at": "document_end",
       "js": ["content-scripts/cs.js"]
     },
     {
