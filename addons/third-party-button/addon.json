@@ -25,6 +25,18 @@
       "id": "colors",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Replace stage",
+      "id": "stage",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Click again to get to the page",
+      "id": "again",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["projects"],
