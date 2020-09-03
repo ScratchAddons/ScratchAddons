@@ -92,7 +92,16 @@ export default async function ({ addon, global, console }) {
         return;
       }
 
-      for (const item of getItems()) {
+      const items = getItems();
+      if (event.target.value === "" && blocklyDropDownDiv.dataset.category === "events") {
+        const topItem = items[0];
+        // todo: this won't work in languages other than English
+        if (!topItem.hidden && topItem.innerText === "New message") {
+          closeDropDown();
+          return;
+        }
+      }
+      for (const item of items) {
         if (!item.hidden) {
           selectItem(item, true);
           break;
