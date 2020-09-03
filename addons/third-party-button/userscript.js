@@ -35,7 +35,10 @@
       return;
     }
     var newButton = document.createElement("a");
-    newButton.innerHTML = "<div style='margin:auto;color:white;'>" + text + "</div>";
+    var textDiv = document.createElement("div");
+    textDiv.style = "margin:auto;color:white;";
+    textDiv.textContent = text;
+    newButton.appendChild(textDiv);
     newButton.href = url + "#" + projectid;
     newButton.className = "button action-button";
     newButton.style = "display:flex;" + (addon.settings.get("colors") ? "background-color:" + color + ";" : "");
