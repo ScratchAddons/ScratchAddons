@@ -23,6 +23,17 @@ export default async function ({ addon, global, console }) {
     // Lock the height of the dropdown after adding the search bar.
     blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
 
+    // Fix layout issues when the dropdown is opened above the block (instead of below) and there is no scroll bar.
+    const hasScrollBar = blocklyDropDownContent.scrollHeight > blocklyDropDownContent.clientHeight;
+    if (!hasScrollBar) {
+      const blocklyDropDownArrow = blocklyDropDownDiv.querySelector(".blocklyDropDownArrow");
+      if (blocklyDropDownArrow.classList.contains("arrowBottom")) {
+        const searchBarHeight = searchBar.offsetHeight;
+        blocklyDropDownDiv.style.transform += ` translateY(-${searchBarHeight}px)`;
+        blocklyDropDownArrow.style.transform = ` translateY(${searchBarHeight}px) ${blocklyDropDownArrow.style.transform}`;
+      }
+    }
+
     searchBar.focus();
   }
 
