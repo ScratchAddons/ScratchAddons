@@ -34,20 +34,25 @@ export default async function ({ addon, global, console }) {
     blocklyDropDownContent.style.height = "";
   }
 
-  function selectFirstItem(click) {
-    for (const item of getItems()) {
-      if (!item.hidden) {
-        selectItem(item, click);
-        break;
-      }
-    }
-  }
-
   function selectItem(item, click) {
     // You can't just use click() or focus() because Blockly uses mousedown and mouseup handlers, not click handlers.
     item.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: item, bubbles: true }));
     if (click) {
       item.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: item, bubbles: true }));
+    }
+
+    // Scroll the item into view if it is offscreen.
+    const itemTop = item.offsetTop;
+    const itemEnd = itemTop + item.offsetHeight;
+
+    const scrollTop = blocklyDropDownContent.scrollTop;
+    const scrollHeight = blocklyDropDownContent.offsetHeight;
+    const scrollEnd = scrollTop + scrollHeight;
+
+    if (scrollTop > itemTop) {
+      blocklyDropDownContent.scrollTop = itemTop;
+    } else if (itemEnd > scrollEnd) {
+      blocklyDropDownContent.scrollTop = itemEnd - scrollHeight;
     }
   }
 
@@ -69,7 +74,13 @@ export default async function ({ addon, global, console }) {
       }
       // Need to stop propagation in case there are no items to make sure that the editor doesn't try to select a hidden item.
       event.stopPropagation();
-      selectFirstItem(true);
+      for (const item of getItems()) {
+        if (!item.hidden) {
+          selectItem(item, true);
+          break;
+        }
+      }
+      // If no item was selected, that's fine. Not doing anything is the best solution.
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       // We need to reimplement keyboard navigation to account for hidden items.
 
