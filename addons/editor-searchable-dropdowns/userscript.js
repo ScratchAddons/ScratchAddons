@@ -64,32 +64,7 @@ export default async function ({ addon, global, console }) {
   }
 
   function findBlocklyDropDownDiv() {
-    return new Promise((resolve, reject) => {
-      // See if the div already exists. This can happen when loading directly into the editor.
-      const div = document.querySelector(".blocklyDropDownDiv");
-      if (div) {
-        resolve(div);
-        return;
-      }
-
-      // Otherwise, use a MutationObserver to find out when it's created.
-      const observer = new MutationObserver((mutationList) => {
-        for (const mutation of mutationList) {
-          if (mutation.type === "childList") {
-            for (const node of mutation.addedNodes) {
-              if (node.classList && node.classList.contains("blocklyDropDownDiv")) {
-                resolve(node);
-                observer.disconnect();
-                return;
-              }
-            }
-          }
-        }
-      });
-      observer.observe(document.body, {
-        childList: true,
-      });
-    });
+    return addon.tab.waitForElement(".blocklyDropDownDiv").then(() => document.querySelector(".blocklyDropDownDiv"));
   }
 
   findBlocklyDropDownDiv().then((div) => {
