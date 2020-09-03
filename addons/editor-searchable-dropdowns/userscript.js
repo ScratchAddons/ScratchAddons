@@ -34,6 +34,23 @@ export default async function ({ addon, global, console }) {
     blocklyDropDownContent.style.height = "";
   }
 
+  function selectFirstItem(click) {
+    for (const item of getItems()) {
+      if (!item.hidden) {
+        selectItem(item, click);
+        break;
+      }
+    }
+  }
+
+  function selectItem(item, click) {
+    // You can't just use click() or focus() because Blockly uses mousedown and mouseup handlers, not click handlers.
+    item.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: item, bubbles: true }));
+    if (click) {
+      item.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: item, bubbles: true }));
+    }
+  }
+
   function handleInputEvent(event) {
     const value = event.target.value.toLowerCase();
     for (const item of getItems()) {
@@ -45,19 +62,51 @@ export default async function ({ addon, global, console }) {
 
   function handleKeyDownEvent(event) {
     if (event.key === "Enter") {
-      // If an item is already selected, let the editor handle it.
-      if (document.querySelector(".goog-menuitem-highlight")) {
+      // If an item is already selected and is not hidden, let the editor handle it.
+      const selectedItem = document.querySelector(".goog-menuitem-highlight");
+      if (selectedItem && !selectedItem.hidden) {
         return;
       }
-      const items = getItems();
-      for (const item of items) {
-        if (!item.hidden) {
-          // You can't just do item.click() -- Blockly uses mousedown and mouseup handlers for this, not click.
-          item.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: item, bubbles: true }));
-          item.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: item, bubbles: true }));
+      // Need to stop propagation in case there are no items to make sure that the editor doesn't try to select a hidden item.
+      event.stopPropagation();
+      selectFirstItem(true);
+    } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      // We need to reimplement keyboard navigation to account for hidden items.
+
+      event.preventDefault(); // prevent scrolling
+      event.stopPropagation(); // don't let the editor handle it
+
+      const items = getItems().filter((item) => !item.hidden);
+      if (items.length === 0) {
+        // No items.
+        return;
+      }
+
+      let selectedIndex = -1;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].classList.contains("goog-menuitem-highlight")) {
+          selectedIndex = i;
           break;
         }
       }
+
+      const lastIndex = items.length - 1;
+      let newIndex = 0;
+      if (event.key === "ArrowDown") {
+        if (selectedIndex === -1 || selectedIndex === lastIndex) {
+          newIndex = 0;
+        } else {
+          newIndex = selectedIndex + 1;
+        }
+      } else {
+        if (selectedIndex === -1 || selectedIndex === 0) {
+          newIndex = lastIndex;
+        } else {
+          newIndex = selectedIndex - 1;
+        }
+      }
+
+      selectItem(items[newIndex], false);
     }
   }
 
