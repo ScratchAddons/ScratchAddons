@@ -151,32 +151,30 @@ export default async function ({ addon, global, console }) {
     return addon.tab.waitForElement(".blocklyDropDownDiv").then(() => document.querySelector(".blocklyDropDownDiv"));
   }
 
-  findBlocklyDropDownDiv().then((div) => {
-    blocklyDropDownDiv = div;
-    blocklyDropDownContent = blocklyDropDownDiv.querySelector(".blocklyDropDownContent");
+  blocklyDropDownDiv = await findBlocklyDropDownDiv();
+  blocklyDropDownContent = blocklyDropDownDiv.querySelector(".blocklyDropDownContent");
 
-    const observer = new MutationObserver((mutationList) => {
-      for (const mutation of mutationList) {
-        if (mutation.type === "childList") {
-          // Look for a dropdown being created.
-          for (const node of mutation.addedNodes) {
-            if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
-              createSearchBar(node);
-              break;
-            }
+  const observer = new MutationObserver((mutationList) => {
+    for (const mutation of mutationList) {
+      if (mutation.type === "childList") {
+        // Look for a dropdown being created.
+        for (const node of mutation.addedNodes) {
+          if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
+            createSearchBar(node);
+            break;
           }
-          // Look for a dropdown being removed.
-          for (const node of mutation.removedNodes) {
-            if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
-              cleanup();
-              break;
-            }
+        }
+        // Look for a dropdown being removed.
+        for (const node of mutation.removedNodes) {
+          if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
+            cleanup();
+            break;
           }
         }
       }
-    });
-    observer.observe(blocklyDropDownContent, {
-      childList: true,
-    });
+    }
+  });
+  observer.observe(blocklyDropDownContent, {
+    childList: true,
   });
 }
