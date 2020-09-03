@@ -163,14 +163,16 @@ h1 {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.addon-description-full, .addon-credits {
+.addon-description-full,
+.addon-credits {
   width: 100%;
   margin-bottom: 10px;
   white-space: normal;
   color: #dddddd;
 }
 
-.addon-credits a, .addon-license a {
+.addon-credits a,
+.addon-license a {
   color: #6d9bff;
 }
 
