@@ -20,8 +20,8 @@
   warp.style = "display:flex;";
 
   if (addon.settings.get("colors")) {
-    fork.style = "display:flex;background-color:black;";
-    warp.style = "display:flex;background-color:red;"; //if you know a better color, tell me.
+    fork.style = "display:flex;background-color:#1f313e;";
+    warp.style = "display:flex;background-color:#ff4c4c;";
   }
 
   if (addon.settings.get("forkphorus")) {
