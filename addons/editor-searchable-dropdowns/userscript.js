@@ -17,7 +17,7 @@ export default async function ({ addon, global, console }) {
     searchBar.addEventListener("input", handleInputEvent);
     searchBar.addEventListener("keydown", handleKeyDownEvent);
     searchBar.classList.add("u-dropdown-searchbar");
-    blocklyDropDownContent.insertBefore(searchBar, blocklyDropDownContent.firstChild);
+    blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
 
     // Lock the height of the dropdown after adding the search bar.
     blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
