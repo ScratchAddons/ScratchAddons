@@ -10,7 +10,7 @@ export default async function ({ addon, global, console }) {
     blocklyDropdownMenu = node;
     blocklyDropdownMenu.focus = () => {}; // no-op focus() so it can't steal it from the search bar
 
-    // Lock the width of the dropdown before adding the search bar.
+    // Lock the width of the dropdown before adding the search bar, as sometimes adding the searchbar changes the width.
     blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
 
     const searchBar = document.createElement("input");
@@ -23,14 +23,14 @@ export default async function ({ addon, global, console }) {
     // Lock the height of the dropdown after adding the search bar.
     blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
 
-    // Fix layout issues when the dropdown is opened above the block (instead of below) and there is no scroll bar.
+    // Compensate for the scroll bar sometimes making the interface taller by pushing the whole dropdown up.
     const hasScrollBar = blocklyDropDownContent.scrollHeight > blocklyDropDownContent.clientHeight;
     if (!hasScrollBar) {
       const blocklyDropDownArrow = blocklyDropDownDiv.querySelector(".blocklyDropDownArrow");
       if (blocklyDropDownArrow.classList.contains("arrowBottom")) {
         const searchBarHeight = searchBar.offsetHeight;
         blocklyDropDownDiv.style.transform += ` translateY(-${searchBarHeight}px)`;
-        blocklyDropDownArrow.style.transform = ` translateY(${searchBarHeight}px) ${blocklyDropDownArrow.style.transform}`;
+        blocklyDropDownArrow.style.transform = `translateY(${searchBarHeight}px) ${blocklyDropDownArrow.style.transform}`;
       }
     }
 
@@ -75,8 +75,8 @@ export default async function ({ addon, global, console }) {
     const value = event.target.value.toLowerCase();
     for (const item of getItems()) {
       const text = item.textContent.toLowerCase();
-      const contains = text.includes(value);
-      item.hidden = !contains;
+      const hidden = !text.includes(value);
+      item.hidden = hidden;
     }
   }
 
@@ -132,7 +132,6 @@ export default async function ({ addon, global, console }) {
 
       const items = getItems().filter((item) => !item.hidden);
       if (items.length === 0) {
-        // No items.
         return;
       }
 
