@@ -105,7 +105,11 @@ export default async function ({ addon, global, console }) {
       const selectedBlock = getSelectedBlock();
       const items = getItems();
       if (event.target.value === "" && selectedBlock) {
-        if (selectedBlock.type === "event_broadcast" || selectedBlock.type === "event_broadcastandwait" || selectedBlock.type === "event_whenbroadcastreceived") {
+        if (
+          selectedBlock.type === "event_broadcast" ||
+          selectedBlock.type === "event_broadcastandwait" ||
+          selectedBlock.type === "event_whenbroadcastreceived"
+        ) {
           // The top item of these dropdowns is always "New message"
           // When pressing enter on an empty search bar, we close the dropdown instead of making a new broadcast.
           closeDropDown();
