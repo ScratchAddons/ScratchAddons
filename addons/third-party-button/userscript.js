@@ -6,14 +6,14 @@
   var stageid = -1;
   var stageidcount = 0;
 
-  function replaceStage(e, url, w, h, id){
-    if(!addon.settings.get("stage")){
+  function replaceStage(e, url, w, h, id) {
+    if (!addon.settings.get("stage")) {
       return;
     }
-    if(!addon.settings.get("again")){
+    if (!addon.settings.get("again")) {
       e.preventDefault();
     }
-    if(id != stageid){
+    if (id != stageid) {
       e.preventDefault();
       stageid = id;
       //await addon.tab.waitForElement(".guiPlayer"); //That creates an error for some reason
@@ -30,8 +30,7 @@
     }
   }
 
-
-  function addButton(name, text, url, color, w, h){
+  function addButton(name, text, url, color, w, h) {
     if (!addon.settings.get(name)) {
       return;
     }
@@ -39,8 +38,10 @@
     newButton.innerHTML = "<div style='margin:auto;color:white;'>" + text + "</div>";
     newButton.href = url + "#" + projectid;
     newButton.className = "button action-button";
-    newButton.style = "display:flex;" + (addon.settings.get("colors") ? ("background-color:" + color + ";") : "");
-    newButton.addEventListener("click", e => replaceStage(e, url + "embed.html?auto-start=false#", w, h, stageidcount));
+    newButton.style = "display:flex;" + (addon.settings.get("colors") ? "background-color:" + color + ";" : "");
+    newButton.addEventListener("click", (e) =>
+      replaceStage(e, url + "embed.html?auto-start=false#", w, h, stageidcount)
+    );
     stageidcount++;
 
     document.querySelector(".action-buttons").appendChild(newButton);
