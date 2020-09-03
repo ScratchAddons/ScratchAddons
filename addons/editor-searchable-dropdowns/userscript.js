@@ -8,6 +8,7 @@ export default async function ({ addon, global, console }) {
 
   function createSearchBar(node) {
     blocklyDropdownMenu = node;
+    blocklyDropdownMenu.focus = () => {}; // no-op focus() so it can't steal it from the search bar
 
     // Lock the width of the dropdown before adding the search bar.
     blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
