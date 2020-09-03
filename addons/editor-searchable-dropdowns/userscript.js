@@ -71,20 +71,18 @@ export default async function ({ addon, global, console }) {
 
   function handleKeyDownEvent(event) {
     if (event.key === "Enter") {
-      // If an item is already selected and is not hidden, let the editor handle it.
-      const selectedItem = document.querySelector(".goog-menuitem-highlight");
+      event.stopPropagation(); // don't let the editor handle it
+      const selectedItem = blocklyDropdownMenu.querySelector(".goog-menuitem-highlight");
       if (selectedItem && !selectedItem.hidden) {
+        selectItem(selectedItem, true);
         return;
       }
-      // Need to stop propagation in case there are no items to make sure that the editor doesn't try to select a hidden item.
-      event.stopPropagation();
       for (const item of getItems()) {
         if (!item.hidden) {
           selectItem(item, true);
           break;
         }
       }
-      // If no item was selected, that's fine. Not doing anything is the best solution.
     } else if (event.key === "Escape") {
       closeDropDown();
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
