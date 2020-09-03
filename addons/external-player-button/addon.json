@@ -1,6 +1,11 @@
 {
   "name": "External player button",
   "description": "Adds buttons for viewing projects on forkphorus or other sites.",
+  "credits": [
+    {
+      "name":"HTML-Fan/NT"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
