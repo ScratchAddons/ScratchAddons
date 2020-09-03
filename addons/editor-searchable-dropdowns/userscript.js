@@ -82,25 +82,29 @@ export default async function ({ addon, global, console }) {
 
   function handleKeyDownEvent(event) {
     if (event.key === "Enter") {
-      event.stopPropagation(); // don't let the editor handle it
+      // Reimplement enter to select item to account for hidden items and default to the top item.
+      event.stopPropagation();
+      event.preventDefault();
+
       const selectedItem = blocklyDropdownMenu.querySelector(".goog-menuitem-highlight");
       if (selectedItem && !selectedItem.hidden) {
         selectItem(selectedItem, true);
         return;
       }
+
       for (const item of getItems()) {
         if (!item.hidden) {
           selectItem(item, true);
           break;
         }
       }
+      // If there is no top value, just leave the dropdown open.
     } else if (event.key === "Escape") {
       closeDropDown();
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-      // We need to reimplement keyboard navigation to account for hidden items.
-
-      event.preventDefault(); // prevent scrolling
-      event.stopPropagation(); // don't let the editor handle it
+      // Reimplement keyboard navigation to account for hidden items.
+      event.preventDefault();
+      event.stopPropagation();
 
       const items = getItems().filter((item) => !item.hidden);
       if (items.length === 0) {
