@@ -163,11 +163,23 @@ h1 {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.addon-description-full {
+.addon-description-full, .addon-credits {
   width: 100%;
   margin-bottom: 10px;
   white-space: normal;
   color: #dddddd;
+}
+
+.addon-credits a, .addon-license a {
+  color: #6d9bff;
+}
+
+.addon-credits > span {
+  margin-right: 0.5rem;
+}
+
+.addon-credits > span:not(:first-child):not(:last-child)::after {
+  content: ",";
 }
 
 .badge.blue {
@@ -385,4 +397,13 @@ switch[state="on"]::before {
 
 .reverted {
   transform: rotate(180deg);
+}
+
+.licenses-block {
+  padding: 2rem;
+}
+
+.licenses-body pre {
+  white-space: pre-wrap;
+  width: 70%;
 }

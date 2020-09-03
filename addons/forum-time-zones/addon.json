@@ -9,5 +9,6 @@
     }
   ],
   "tags": ["forums", "community"],
-  "enabled_by_default": false
+  "enabled_by_default": false,
+  "libraries": ["moment"]
 }
