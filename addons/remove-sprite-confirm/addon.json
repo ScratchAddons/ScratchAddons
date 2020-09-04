@@ -1,0 +1,14 @@
+{
+  "name": "Remove Sprite Confirm",
+  "description": "Show confirm screen when deleting sprite.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "options": [],
+  "tags": ["editor"],
+  "enabled_by_default": false,
+  "libraries": ["redux"]
+}
