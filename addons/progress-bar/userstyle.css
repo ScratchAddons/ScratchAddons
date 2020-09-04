@@ -38,4 +38,5 @@
 .u-progress-bar-integrated[data-phase="copy"],
 .u-progress-bar-integrated[data-phase="remix"] {
   border-color: black;
+  background-color: black;
 }
