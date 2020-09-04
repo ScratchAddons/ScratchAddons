@@ -28,8 +28,8 @@ function injectRedux() {
           detail: {
             prev: scratchAddonsRedux.state,
             next: (scratchAddonsRedux.state = getState()),
-            action
-          }
+            action,
+          },
         });
         reduxTarget.dispatchEvent(ev);
         return nextReturn;

@@ -3,7 +3,7 @@ import runUserscript from "./run-userscript.js";
 const template = document.getElementById("scratch-addons");
 const getGlobalState = () => {
   const returnValue = JSON.parse(template.getAttribute("data-global-state"));
-  template.removeAttribute('data-global-state');
+  template.removeAttribute("data-global-state");
   return returnValue;
 };
 

@@ -64,14 +64,14 @@ function injectPrototype() {
     const readyEvent = new CustomEvent("trapready", {
       detail: {
         trapName,
-        value
-      }
+        value,
+      },
     });
     onceTarget.dispatchEvent(readyEvent);
     const specificEvent = new CustomEvent(`ready.${trapName}`, {
       detail: {
-        value
-      }
+        value,
+      },
     });
     onceTarget.dispatchEvent(specificEvent);
   };
@@ -96,14 +96,14 @@ function injectPrototype() {
     const readyEvent = new CustomEvent("trapready", {
       detail: {
         trapName,
-        value
-      }
+        value,
+      },
     });
     manyTarget.dispatchEvent(readyEvent);
     const specificEvent = new CustomEvent(`ready.${trapName}`, {
       detail: {
-        value
-      }
+        value,
+      },
     });
     manyTarget.dispatchEvent(specificEvent);
   };
@@ -123,8 +123,8 @@ function injectPrototype() {
         reducerOrigin: origin,
         path,
         prev,
-        next
-      }
+        next,
+      },
     });
     __scratchAddonsTraps.dispatchEvent(ev);
   };

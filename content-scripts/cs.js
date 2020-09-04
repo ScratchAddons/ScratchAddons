@@ -40,15 +40,18 @@ const observer = new MutationObserver((mutationsList) => {
       chrome.runtime.sendMessage("getMsgCount");
       removeAttr();
     }
-    if (attr === "data-clipboard-image" && typeof browser !== 'undefined') {
+    if (attr === "data-clipboard-image" && typeof browser !== "undefined") {
       const dataURL = attrVal;
       removeAttr();
-      browser.runtime.sendMessage({clipboardDataURL: dataURL}).then(res => {
-        template.setAttribute("data-clipboard", "success");
-      }, res => {
-        console.error('Error inside clipboard: ', res);
-        template.setAttribute("data-clipboard", res.toString());
-      });
+      browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
+        (res) => {
+          template.setAttribute("data-clipboard", "success");
+        },
+        (res) => {
+          console.error("Error inside clipboard: ", res);
+          template.setAttribute("data-clipboard", res.toString());
+        }
+      );
     }
   }
 });
