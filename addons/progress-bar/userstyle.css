@@ -10,14 +10,13 @@
   background-color: white;
 }
 
-.u-progress-bar-loading {
+.u-progress-bar-outer[data-state=load-json] {
   width: 250px;
 }
 .u-progress-bar-caption {
   margin: 5px 0;
   height: 20px;
 }
-
-.u-progress-bar-saving {
+.u-progress-bar-outer[data-state=save-json] {
   margin-top: 2px;
 }

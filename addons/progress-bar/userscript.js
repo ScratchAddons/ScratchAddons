@@ -1,60 +1,46 @@
-class ProgressBar {
-  constructor() {
-    this.outer = document.createElement("div");
-    this.outer.className = "u-progress-bar-outer";
-    this.inner = document.createElement("div");
-    this.inner.className = "u-progress-bar-inner";
-    this.outer.appendChild(this.inner);
-
-    this.totalTasks = 0;
-    this.finishedTasks = 0;
-  }
-
-  newTask(n = 1) {
-    this.totalTasks += n;
-    this.setProgress(this.finishedTasks / this.totalTasks);
-  }
-
-  finishTask(n = 1) {
-    this.finishedTasks += n;
-    this.setProgress(this.finishedTasks / this.totalTasks);
-  }
-
-  onchange(progress) {
-    // To be overridden.
-  }
-
-  setProgress(progress) {
-    this.inner.style.width = progress * 100 + "%";
-    this.onchange(progress);
-  }
-}
-
 export default async function ({ addon, global, console }) {
-  const savingProgressBar = new ProgressBar();
-  savingProgressBar.outer.classList.add("u-progress-bar-saving");
-  savingProgressBar.onchange = function (progress) {
-    if (progress >= 1) {
-      this.finishedTasks = 0;
-      this.totalTasks = 0;
-    }
-  };
+  const barOuter = document.createElement("div");
+  barOuter.className = "u-progress-bar-outer";
+  const barInner = document.createElement("div");
+  barInner.className = "u-progress-bar-inner";
+  barOuter.appendChild(barInner);
 
-  const loadingProgressBar = new ProgressBar();
-  loadingProgressBar.outer.classList.add("u-progress-bar-loading");
+  let totalTasks = 0;
+  let finishedTasks = 0;
+  let barState = "project";
+
+  function setProgress(progress) {
+    if (barState === "load-assets") {
+      loadingCaption.innerText = `Loading assets (${finishedTasks}/${totalTasks}) …`;
+    }
+    if (progress >= 1) {
+      totalTasks = 0;
+      finishedTasks = 0;
+    }
+    barInner.style.width = progress * 100 + "%";
+  }
+
+  function updateTasks() {
+    setProgress(finishedTasks / totalTasks);
+  }
+
+  function setProgressState(newState) {
+    if (newState === barState) {
+      return;
+    }
+    barState = newState;
+    barOuter.dataset.state = barState;
+    setProgress(0);
+  }
+
   const loadingCaption = document.createElement("div");
   loadingCaption.innerText = "Loading project data …";
   loadingCaption.className = "u-progress-bar-caption";
-  loadingProgressBar.onchange = function () {
-    if (this.totalTasks > 0) {
-      loadingCaption.innerText = `Loading assets (${this.finishedTasks}/${this.totalTasks}) …`;
-    }
-  };
 
   const PROJECT_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\d+$/;
-  const REMIX_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_remix=1&original_id=\d+.*$/;
-  const COPY_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_copy=1&original_id=\d+.*$/;
-  const ASSET_REGEX = /^https:\/\/assets\.scratch\.mit\.edu\/.*$/;
+  const REMIX_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_remix=1&original_id=\d+/;
+  const COPY_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_copy=1&original_id=\d+/;
+  const ASSET_REGEX = /^https:\/\/assets\.scratch\.mit\.edu\//;
 
   // Scratch uses fetch() to download the project JSON and upload project assets.
   const originalFetch = window.fetch;
@@ -63,12 +49,12 @@ export default async function ({ addon, global, console }) {
       if (opts.method.toLowerCase() === "get" && PROJECT_REGEX.test(url)) {
         // This is a request to get the project JSON.
         // Fetch does not support progress monitoring, so we use XMLHttpRequest instead.
-        loadingProgressBar.setProgress(0);
+        setProgressState("load-json");
         return new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
           xhr.responseType = "blob";
           xhr.onload = () => {
-            loadingProgressBar.setProgress(1);
+            setProgress(1);
             // As we are emulating fetch(), we need to resolve with a Response object.
             resolve(
               new Response(xhr.response, {
@@ -83,7 +69,7 @@ export default async function ({ addon, global, console }) {
             // TODO: Content-Length and e.total have different meanings regarding compression. Need to figure out if that's a problem.
             const length = e.lengthComputable ? e.total : +xhr.getResponseHeader("Content-Length");
             if (length) {
-              loadingProgressBar.setProgress(e.loaded / length);
+              setProgress(e.loaded / length);
             }
           };
           xhr.open("GET", url);
@@ -96,12 +82,12 @@ export default async function ({ addon, global, console }) {
         // returns 405 Method Not Allowed when an OPTIONS preflight request is made, which is required when we put listeners on `xhr.upload`
         // As a result, this won't display a useful progress bar when uploading a single large asset, but it will still display a useful
         // progress bar in the case of uploading many assets at once.
-        if (savingProgressBar.totalTasks === 0) {
-          injectSavingProgressBar();
-        }
-        savingProgressBar.newTask();
+        setProgressState("save-assets");
+        totalTasks++;
+        updateTasks();
         return originalFetch(url, opts).then((response) => {
-          savingProgressBar.finishTask();
+          finishedTasks++;
+          updateTasks();
           return response;
         });
       }
@@ -119,15 +105,16 @@ export default async function ({ addon, global, console }) {
       (method.toLowerCase() === "post" && REMIX_REGEX.test(url))
     ) {
       // This is a request made for saving, remixing, or copying a project.
-      savingProgressBar.setProgress(0);
       if (REMIX_REGEX.test(url)) {
+        setProgressState("remix");
         injectRemixingProgressBar();
       } else {
+        setProgressState("save-json");
         injectSavingProgressBar();
       }
       this.upload.addEventListener("progress", (e) => {
         if (e.lengthComputable) {
-          savingProgressBar.setProgress(e.loaded / e.total);
+          setProgress(e.loaded / e.total);
         }
       });
     }
@@ -141,14 +128,17 @@ export default async function ({ addon, global, console }) {
   const originalPostMessage = Worker.prototype.postMessage;
   Worker.prototype.postMessage = function (message, options) {
     if (typeof message.id === "string" && typeof message.url === "string") {
-      loadingProgressBar.newTask();
+      setProgressState("load-assets");
+      totalTasks++;
+      updateTasks();
 
       // Add our own message handler once for this worker to monitor when assets have finished loading.
       if (!foundWorker) {
         foundWorker = true;
         this.addEventListener("message", (e) => {
           const data = e.data;
-          loadingProgressBar.finishTask(data.length);
+          finishedTasks += data.length;
+          updateTasks();
         });
       }
     }
@@ -161,24 +151,24 @@ export default async function ({ addon, global, console }) {
     const loaderMessageContainerOuter = document.querySelector("[class^=loader_message-container-outer]");
     loaderMessageContainerOuter.hidden = true;
     loaderMessageContainerOuter.parentElement.appendChild(loadingCaption);
-    loaderMessageContainerOuter.parentElement.appendChild(loadingProgressBar.outer);
+    loaderMessageContainerOuter.parentElement.appendChild(barOuter);
   }
 
   async function injectSavingProgressBar() {
     await addon.tab.waitForElement("[class^=inline-message_spinner]");
     const spinner = document.querySelector("[class^=inline-message_spinner]");
     const container = spinner.parentElement.querySelector("span");
-    container.appendChild(savingProgressBar.outer);
+    container.appendChild(barOuter);
   }
 
   async function injectRemixingProgressBar() {
     const remixButton = document.querySelector(".remix-button");
     if (remixButton) {
-      remixButton.appendChild(savingProgressBar.outer);
+      remixButton.appendChild(barOuter);
     } else {
       await addon.tab.waitForElement("[class^=alert_alert-message] span");
       const alertMessage = document.querySelector("[class^=alert_alert-message] span");
-      alertMessage.appendChild(savingProgressBar.outer);
+      alertMessage.appendChild(barOuter);
     }
   }
 
