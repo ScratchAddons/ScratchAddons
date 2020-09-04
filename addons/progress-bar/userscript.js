@@ -47,6 +47,7 @@ export default async function ({ addon, global, console }) {
 
   const loadingCaption = document.createElement("div");
   loadingCaption.innerText = "Loading project data …";
+  loadingCaption.className = "u-progress-bar-caption";
   loadingProgressBar.onchange = function () {
     if (this.totalTasks > 0) {
       loadingCaption.innerText = `${this.finishedTasks}/${this.totalTasks} assets loaded …`;
@@ -150,8 +151,9 @@ export default async function ({ addon, global, console }) {
   async function injectLoadingProgressBar() {
     await addon.tab.waitForElement("[class^=loader_message-container-outer]");
     const loaderMessageContainerOuter = document.querySelector("[class^=loader_message-container-outer]");
-    loaderMessageContainerOuter.parentElement.appendChild(loadingProgressBar.outer);
+    loaderMessageContainerOuter.hidden = true;
     loaderMessageContainerOuter.parentElement.appendChild(loadingCaption);
+    loaderMessageContainerOuter.parentElement.appendChild(loadingProgressBar.outer);
   }
 
   await injectLoadingProgressBar();
