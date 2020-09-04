@@ -56,15 +56,18 @@ export default async function ({ addon, global, console }) {
     }
   }
 
+  // Change the loading phase.
+  // Returns true if the loading phase changed, otherwise false.
   function setLoadingPhase(newPhase) {
     if (loadingPhase === newPhase) {
-      return;
+      return false;
     }
     loadingPhase = newPhase;
     barOuter.dataset.phase = loadingPhase;
     setProgress(0);
     totalTasks = 0;
     finishedTasks = 0;
+    return true;
   }
 
   function updateTasks() {
@@ -116,6 +119,7 @@ export default async function ({ addon, global, console }) {
               // Scratch uses gzip compression which reduces the file size of projects by a bit under half.
               // Optimally we'd be able to look at Content-Encoding to determine the exact compression method used, if any, but browsers will not allow us to see that.
               // TODO: are there any cases where Scratch doesn't use compression?
+              // TODO: compression varies a lot based on content. It might not be worth trying to be smart about this and just do nothing instead.
               const contentLength = +xhr.getResponseHeader("Content-Length");
               if (contentLength) {
                 const uncompressedLength = contentLength * 2;
@@ -200,42 +204,56 @@ export default async function ({ addon, global, console }) {
     originalPostMessage.call(this, message, options);
   };
 
+  function waitForElement(selector) {
+    return addon.tab.waitForElement(selector)
+      .then(() => document.querySelector(selector));
+  }
+
   function beginLoadingProjectJSON() {
-    setLoadingPhase(LOAD_JSON);
-    if (!useTopBar) {
-      injectInLoadingScreen();
+    if (setLoadingPhase(LOAD_JSON)) {
+      if (!useTopBar) {
+        injectInLoadingScreen();
+      }
     }
   }
 
   function beginLoadingAssets() {
-    setLoadingPhase(LOAD_ASSETS);
-    if (!useTopBar) {
-      injectInLoadingScreen();
+    if (setLoadingPhase(LOAD_ASSETS)) {
+      if (!useTopBar) {
+        injectInLoadingScreen();
+      }
     }
   }
 
   function beginSavingAssets() {
-    setLoadingPhase(SAVE_ASSETS);
+    if (setLoadingPhase(SAVE_ASSETS)) {
+      if (!useTopBar) {
+        injectInSaving();
+      }
+    }
   }
 
   function beginSavingProjectJSON() {
-    setLoadingPhase(SAVE_JSON);
-    if (!useTopBar) {
-      injectInSaving();
+    if (setLoadingPhase(SAVE_JSON)) {
+      if (!useTopBar) {
+        injectInSaving();
+      }
     }
   }
 
   function beginCopyingProject() {
-    setLoadingPhase(COPY);
-    if (!useTopBar) {
-      injectInAlertMessage();
+    if (setLoadingPhase(COPY)) {
+      if (!useTopBar) {
+        injectInAlertMessage();
+      }
     }
   }
 
   function beginRemixingProject() {
-    setLoadingPhase(REMIX);
-    if (!useTopBar) {
-      injectInRemixing();
+    if (setLoadingPhase(REMIX)) {
+      if (!useTopBar) {
+        injectInRemixing();
+      }
     }
   }
 
@@ -245,8 +263,7 @@ export default async function ({ addon, global, console }) {
 
   async function injectInLoadingScreen() {
     if (isAlreadyInjected()) return;
-    await addon.tab.waitForElement("[class^=loader_message-container-outer]");
-    const loaderMessageContainerOuter = document.querySelector("[class^=loader_message-container-outer]");
+    const loaderMessageContainerOuter = await waitForElement("[class^=loader_message-container-outer]");
     loaderMessageContainerOuter.hidden = true;
     loaderMessageContainerOuter.parentElement.appendChild(loadingCaption);
     loaderMessageContainerOuter.parentElement.appendChild(barOuter);
@@ -254,8 +271,7 @@ export default async function ({ addon, global, console }) {
 
   async function injectInSaving() {
     if (isAlreadyInjected()) return;
-    await addon.tab.waitForElement("[class^=inline-message_spinner]");
-    const spinner = document.querySelector("[class^=inline-message_spinner]");
+    const spinner = await waitForElement("[class^=inline-message_spinner]");
     const container = spinner.parentElement.querySelector("span");
     container.appendChild(barOuter);
   }
@@ -273,8 +289,7 @@ export default async function ({ addon, global, console }) {
 
   async function injectInAlertMessage() {
     if (isAlreadyInjected()) return;
-    await addon.tab.waitForElement("[class^=alert_alert-message] span");
-    const alertMessage = document.querySelector("[class^=alert_alert-message] span");
+    const alertMessage = await waitForElement("[class^=alert_alert-message] span");
     alertMessage.appendChild(barOuter);
   }
 }
