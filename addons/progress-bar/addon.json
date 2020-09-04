@@ -14,6 +14,14 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "options": [
+    {
+      "name": "Always show progress bar on top of page",
+      "id": "topbar",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "tags": ["editor"],
   "enabled_by_default": false
 }

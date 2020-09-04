@@ -10,13 +10,27 @@
   background-color: white;
 }
 
-.u-progress-bar-outer[data-state=load-json] {
+.u-progress-bar-top {
+  position: fixed;
+  z-index: 1000000; /* a lot */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  border: none;
+  transition: opacity .2s;
+}
+.u-progress-bar-top .u-progress-bar-inner {
+  transition: width .2s;
+}
+
+.u-progress-bar-outer[data-type=load-json] {
   width: 250px;
 }
 .u-progress-bar-caption {
   margin: 5px 0;
   height: 20px;
 }
-.u-progress-bar-outer[data-state=save-json] {
+.u-progress-bar-outer[data-type=save-json] {
   margin-top: 2px;
 }

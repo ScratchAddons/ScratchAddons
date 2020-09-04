@@ -1,36 +1,59 @@
 export default async function ({ addon, global, console }) {
+  const useTopBar = addon.settings.get("topbar");
+
   const barOuter = document.createElement("div");
   barOuter.className = "u-progress-bar-outer";
   const barInner = document.createElement("div");
   barInner.className = "u-progress-bar-inner";
   barOuter.appendChild(barInner);
 
+  if (useTopBar) {
+    barOuter.classList.add("u-progress-bar-top");
+    barOuter.style.opacity = "0";
+    document.body.appendChild(barOuter);
+  }
+
+  const LOAD_JSON = "load-json";
+  const LOAD_ASSETS = "load-assets";
+  const SAVE_JSON = "save-json";
+  const SAVE_ASSETS = "save-assets";
+  const MAKE_REMIX = "remix";
+
   let totalTasks = 0;
   let finishedTasks = 0;
-  let barState = "project";
+  let loadingPhase = "";
+  let resetTimeout;
 
   function setProgress(progress) {
-    if (barState === "load-assets") {
-      loadingCaption.innerText = `Loading assets (${finishedTasks}/${totalTasks}) …`;
+    if (progress < 0) progress = 0;
+    if (progress > 1) progress = 1;
+    if (useTopBar) {
+      barInner.style.width = (10 + progress * 90) + "%";
+      clearTimeout(resetTimeout);
+      resetTimeout = setTimeout(resetProgressWidth, 500);
+      if (progress === 1) {
+        barOuter.style.opacity = '0';
+      } else {
+        barOuter.style.opacity = '1';
+      }
+    } else {
+      barInner.style.width = (progress * 100) + "%";
+      if (loadingPhase === LOAD_ASSETS) {
+        loadingCaption.innerText = `Loading assets (${finishedTasks}/${totalTasks}) …`;
+      }
+      if (progress === 1) {
+        finishedTasks = 0;
+        totalTasks = 0;    
+      }
     }
-    if (progress >= 1) {
-      totalTasks = 0;
-      finishedTasks = 0;
-    }
-    barInner.style.width = progress * 100 + "%";
   }
 
   function updateTasks() {
     setProgress(finishedTasks / totalTasks);
   }
 
-  function setProgressState(newState) {
-    if (newState === barState) {
-      return;
-    }
-    barState = newState;
-    barOuter.dataset.state = barState;
-    setProgress(0);
+  function resetProgressWidth() {
+    barInner.style.width = '0';
   }
 
   const loadingCaption = document.createElement("div");
@@ -49,7 +72,7 @@ export default async function ({ addon, global, console }) {
       if (opts.method.toLowerCase() === "get" && PROJECT_REGEX.test(url)) {
         // This is a request to get the project JSON.
         // Fetch does not support progress monitoring, so we use XMLHttpRequest instead.
-        setProgressState("load-json");
+        beginLoadingProjectJSON();
         return new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
           xhr.responseType = "blob";
@@ -82,7 +105,7 @@ export default async function ({ addon, global, console }) {
         // returns 405 Method Not Allowed when an OPTIONS preflight request is made, which is required when we put listeners on `xhr.upload`
         // As a result, this won't display a useful progress bar when uploading a single large asset, but it will still display a useful
         // progress bar in the case of uploading many assets at once.
-        setProgressState("save-assets");
+        beginSavingAssets();
         totalTasks++;
         updateTasks();
         return originalFetch(url, opts).then((response) => {
@@ -104,13 +127,11 @@ export default async function ({ addon, global, console }) {
       (method.toLowerCase() === "post" && COPY_REGEX.test(url)) ||
       (method.toLowerCase() === "post" && REMIX_REGEX.test(url))
     ) {
-      // This is a request made for saving, remixing, or copying a project.
+      // This is a request to save, remix, or copy a project.
       if (REMIX_REGEX.test(url)) {
-        setProgressState("remix");
-        injectRemixingProgressBar();
+        beginRemixingProject();
       } else {
-        setProgressState("save-json");
-        injectSavingProgressBar();
+        beginSavingProject();
       }
       this.upload.addEventListener("progress", (e) => {
         if (e.lengthComputable) {
@@ -128,7 +149,7 @@ export default async function ({ addon, global, console }) {
   const originalPostMessage = Worker.prototype.postMessage;
   Worker.prototype.postMessage = function (message, options) {
     if (typeof message.id === "string" && typeof message.url === "string") {
-      setProgressState("load-assets");
+      beginLoadingAssets();
       totalTasks++;
       updateTasks();
 
@@ -146,31 +167,48 @@ export default async function ({ addon, global, console }) {
     originalPostMessage.call(this, message, options);
   };
 
-  async function injectLoadingProgressBar() {
-    await addon.tab.waitForElement("[class^=loader_message-container-outer]");
-    const loaderMessageContainerOuter = document.querySelector("[class^=loader_message-container-outer]");
-    loaderMessageContainerOuter.hidden = true;
-    loaderMessageContainerOuter.parentElement.appendChild(loadingCaption);
-    loaderMessageContainerOuter.parentElement.appendChild(barOuter);
-  }
-
-  async function injectSavingProgressBar() {
-    await addon.tab.waitForElement("[class^=inline-message_spinner]");
-    const spinner = document.querySelector("[class^=inline-message_spinner]");
-    const container = spinner.parentElement.querySelector("span");
-    container.appendChild(barOuter);
-  }
-
-  async function injectRemixingProgressBar() {
-    const remixButton = document.querySelector(".remix-button");
-    if (remixButton) {
-      remixButton.appendChild(barOuter);
-    } else {
-      await addon.tab.waitForElement("[class^=alert_alert-message] span");
-      const alertMessage = document.querySelector("[class^=alert_alert-message] span");
-      alertMessage.appendChild(barOuter);
+  async function beginLoadingProjectJSON() {
+    loadingPhase = LOAD_JSON;
+    if (!useTopBar) {
+      await addon.tab.waitForElement("[class^=loader_message-container-outer]");
+      const loaderMessageContainerOuter = document.querySelector("[class^=loader_message-container-outer]");
+      loaderMessageContainerOuter.hidden = true;
+      loaderMessageContainerOuter.parentElement.appendChild(loadingCaption);
+      loaderMessageContainerOuter.parentElement.appendChild(barOuter);
     }
   }
 
-  injectLoadingProgressBar();
+  async function beginLoadingAssets() {
+    loadingPhase = LOAD_ASSETS;
+  }
+
+  async function beginSavingAssets() {
+    loadingPhase = SAVE_ASSETS;
+  }
+
+  async function beginSavingProject() {
+    loadingPhase = SAVE_JSON;
+    if (!useTopBar) {
+      await addon.tab.waitForElement("[class^=inline-message_spinner]");
+      const spinner = document.querySelector("[class^=inline-message_spinner]");
+      const container = spinner.parentElement.querySelector("span");
+      container.appendChild(barOuter);
+    }
+  }
+
+  async function beginRemixingProject() {
+    loadingPhase = MAKE_REMIX;
+    if (!useTopBar) {
+      const remixButton = document.querySelector(".remix-button");
+      if (remixButton) {
+        remixButton.appendChild(barOuter);
+      } else {
+        await addon.tab.waitForElement("[class^=alert_alert-message] span");
+        const alertMessage = document.querySelector("[class^=alert_alert-message] span");
+        alertMessage.appendChild(barOuter);
+      }
+    }
+  }
+
+  beginLoadingProjectJSON();
 }
