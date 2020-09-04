@@ -8,7 +8,7 @@ export default async function () {
       break;
     case "projects":
       // Need to convert #[numbers] to solve conflict between tags and external Scratch player links.
-      document.querySelectorAll(".project-description a").forEach((element) => {
+      document.querySelectorAll(".project-notes a").forEach((element) => {
         if (/\d+/.test(element.textContent)) element.outerHTML = element.textContent;
       });
       linkifyElement(document.querySelector(".project-notes"));
