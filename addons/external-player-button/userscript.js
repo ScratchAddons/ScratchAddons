@@ -36,7 +36,10 @@
     newButton.appendChild(textDiv);
     newButton.href = url + "#" + projectid;
     newButton.className = "button action-button";
-    newButton.style = "display:flex;" + (addon.settings.get("colors") ? "background-color:" + color + ";" : "") + (!addon.settings.get(name) ? "display:none;" : "");
+    newButton.style =
+      "display:flex;" +
+      (addon.settings.get("colors") ? "background-color:" + color + ";" : "") +
+      (!addon.settings.get(name) ? "display:none;" : "");
     newButton.id = "externalPlayerButton" + stageidcount;
     if (addon.settings.get("stage")) {
       newButton.addEventListener("click", (e) =>
@@ -50,27 +53,26 @@
     playerurls.push(url);
   }
 
-  function ignorePlayerLinks(){
+  function ignorePlayerLinks() {
     var url = new URL(document.location);
     url.searchParams.append("ignoreplayerlinks", "true");
     document.location = url.toString();
   }
-    
 
-  function automaticallyReplace(){
+  function automaticallyReplace() {
     if (!addon.settings.get("stage") || !addon.settings.get("autoreplace")) {
       return;
     }
 
-    if((new URL(document.location)).searchParams.get("ignoreplayerlinks")){
+    if (new URL(document.location).searchParams.get("ignoreplayerlinks")) {
       return;
     }
 
-    for(var i = 0;i < playerurls.length;i++){
-      for(var j=0;j<document.getElementsByClassName("project-description").length;j++){
-        if(document.getElementsByClassName("project-description")[j].textContent.indexOf(playerurls[i]) != -1){
-          document.getElementById("externalPlayerButton" + i).click();//Lazy and it requires "Replace stage" to be turned on but I don't care as long as it works.
-          
+    for (var i = 0; i < playerurls.length; i++) {
+      for (var j = 0; j < document.getElementsByClassName("project-description").length; j++) {
+        if (document.getElementsByClassName("project-description")[j].textContent.indexOf(playerurls[i]) != -1) {
+          document.getElementById("externalPlayerButton" + i).click(); //Lazy and it requires "Replace stage" to be turned on but I don't care as long as it works.
+
           var newButton = document.createElement("a");
           var textDiv = document.createElement("div");
           textDiv.style = "margin:auto;color:white;";
@@ -80,7 +82,9 @@
           url.searchParams.set("ignoreplayerlinks", "true");
           newButton.href = url.toString();
           newButton.className = "button action-button";
-          newButton.style = "display:flex;" + (addon.settings.get("colors") ? "background-color:orange;" /*Who knows a better orange?*/: "");
+          newButton.style =
+            "display:flex;" +
+            (addon.settings.get("colors") ? "background-color:orange;" /*Who knows a better orange?*/ : "");
           newButton.id = "ignorePlayerLinks";
           document.querySelector(".action-buttons").appendChild(newButton);
 
