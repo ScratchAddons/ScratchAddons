@@ -1,6 +1,11 @@
 {
   "name": "Progress Bar",
   "description": "Adds a progress bar for loading and saving projects.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
