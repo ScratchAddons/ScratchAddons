@@ -7,6 +7,12 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
   "tags": ["editor"],
   "enabled_by_default": false
 }
