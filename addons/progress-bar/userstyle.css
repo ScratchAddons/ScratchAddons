@@ -35,3 +35,7 @@
   min-width: 100px;
   margin-top: 2px;
 }
+.u-progress-bar-integrated[data-phase=copy],
+.u-progress-bar-integrated[data-phase=remix] {
+  border-color: black;
+}
