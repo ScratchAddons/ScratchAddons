@@ -81,10 +81,6 @@ export default async function ({ addon, global, console }) {
       textBox.style.backgroundColor = "lightgrey";
     });
 
-    textBox.addEventListener("dragover", (e) => {
-      e.preventDefault();
-    });
-
     textBox.addEventListener("dragleave", () => {
       textBox.readonly = false;
       textBox.style.backgroundColor = "white";
