@@ -33,7 +33,7 @@ class ProgressBar {
 export default async function ({ addon, global, console }) {
   const projectSavingProgressBar = new ProgressBar();
   projectSavingProgressBar.outer.classList.add("u-progress-bar-saving");
-  projectSavingProgressBar.onchange = function(progress) {
+  projectSavingProgressBar.onchange = function (progress) {
     if (progress >= 1) {
       this.finishedTasks = 0;
       this.totalTasks = 0;
