@@ -82,6 +82,7 @@ export default async function ({ addon, global, console }) {
           xhr.onerror = () => reject(new Error("xhr failed"));
           xhr.onprogress = (e) => {
             // When the browser doesn't think the length is computable, we'll use the Content-Length header as the length.
+            // TODO: Content-Length and e.total have different meanings regarding compression. Need to figure out if that's a problem.
             const length = e.lengthComputable ? e.total : +xhr.getResponseHeader("Content-Length");
             if (length) {
               loadingProgressBar.setProgress(e.loaded / length);
@@ -117,6 +118,7 @@ export default async function ({ addon, global, console }) {
     ) {
       // This is a request made for saving, copying, or remixing a project.
       projectSavingProgressBar.setProgress(0);
+      injectSavingProgressBar();
       this.upload.addEventListener("progress", (e) => {
         if (e.lengthComputable) {
           projectSavingProgressBar.setProgress(e.loaded / e.total);
@@ -156,5 +158,12 @@ export default async function ({ addon, global, console }) {
     loaderMessageContainerOuter.parentElement.appendChild(loadingProgressBar.outer);
   }
 
-  await injectLoadingProgressBar();
+  async function injectSavingProgressBar() {
+    await addon.tab.waitForElement("[class^=inline-message_spinner]");
+    const spinner = document.querySelector("[class^=inline-message_spinner]");
+    const container = spinner.parentElement.querySelector("span");
+    container.appendChild(projectSavingProgressBar.outer);
+  }
+
+  injectLoadingProgressBar();
 }
