@@ -24,13 +24,14 @@
   transition: width .2s;
 }
 
-.u-progress-bar-outer[data-type=load-json] {
+.u-progress-bar-integrated[data-phase=load-json] {
   width: 250px;
 }
 .u-progress-bar-caption {
   margin: 5px 0;
   height: 20px;
 }
-.u-progress-bar-outer[data-type=save-json] {
+.u-progress-bar-integrated[data-phase=save-json] {
+  min-width: 100px;
   margin-top: 2px;
 }

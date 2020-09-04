@@ -11,41 +11,59 @@ export default async function ({ addon, global, console }) {
     barOuter.classList.add("u-progress-bar-top");
     barOuter.style.opacity = "0";
     document.body.appendChild(barOuter);
+  } else {
+    barOuter.classList.add("u-progress-bar-integrated");
   }
 
+  // We track the loading phase so that we can detect when the phase changed and move the progress bar accordingly.
+  const NONE = "none";
   const LOAD_JSON = "load-json";
   const LOAD_ASSETS = "load-assets";
   const SAVE_JSON = "save-json";
   const SAVE_ASSETS = "save-assets";
-  const MAKE_REMIX = "remix";
+  const REMIX = "remix";
+  let loadingPhase = NONE;
 
   let totalTasks = 0;
   let finishedTasks = 0;
-  let loadingPhase = "";
+
   let resetTimeout;
 
   function setProgress(progress) {
     if (progress < 0) progress = 0;
     if (progress > 1) progress = 1;
     if (useTopBar) {
-      barInner.style.width = (10 + progress * 90) + "%";
-      clearTimeout(resetTimeout);
-      resetTimeout = setTimeout(resetProgressWidth, 500);
+      // The bar is always at least 10% visible to give an indication of something happening, even at 0% progress.
+      barInner.style.width = 10 + progress * 90 + "%";
       if (progress === 1) {
-        barOuter.style.opacity = '0';
+        barOuter.style.opacity = "0";
+        // Reset the progress bar back to 0 width once the animation has completed.
+        // This makes it so that the progress bar won't play a transition of going from 100% to 0% the next time the bar is shown.
+        clearTimeout(resetTimeout);
+        resetTimeout = setTimeout(resetProgressWidth, 500);
       } else {
-        barOuter.style.opacity = '1';
+        barOuter.style.opacity = "1";
       }
     } else {
-      barInner.style.width = (progress * 100) + "%";
+      barInner.style.width = progress * 100 + "%";
       if (loadingPhase === LOAD_ASSETS) {
-        loadingCaption.innerText = `Loading assets (${finishedTasks}/${totalTasks}) …`;
-      }
-      if (progress === 1) {
-        finishedTasks = 0;
-        totalTasks = 0;    
+        loadingCaption.innerText = `Loading assets (${finishedTasks}/${totalTasks}) …`; // TODO: translations
       }
     }
+    if (progress === 1) {
+      loadingPhase = NONE;
+    }
+  }
+
+  function setLoadingPhase(newPhase) {
+    if (loadingPhase === newPhase) {
+      return;
+    }
+    loadingPhase = newPhase;
+    barOuter.dataset.phase = loadingPhase;
+    setProgress(0);
+    totalTasks = 0;
+    finishedTasks = 0;
   }
 
   function updateTasks() {
@@ -53,11 +71,11 @@ export default async function ({ addon, global, console }) {
   }
 
   function resetProgressWidth() {
-    barInner.style.width = '0';
+    barInner.style.width = "0";
   }
 
   const loadingCaption = document.createElement("div");
-  loadingCaption.innerText = "Loading project data …";
+  loadingCaption.innerText = "Loading project data …"; // TODO: translations
   loadingCaption.className = "u-progress-bar-caption";
 
   const PROJECT_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\d+$/;
@@ -88,11 +106,20 @@ export default async function ({ addon, global, console }) {
           };
           xhr.onerror = () => reject(new Error("xhr failed"));
           xhr.onprogress = (e) => {
-            // When the browser doesn't think the length is computable, we'll use the Content-Length header as the length.
-            // TODO: Content-Length and e.total have different meanings regarding compression. Need to figure out if that's a problem.
-            const length = e.lengthComputable ? e.total : +xhr.getResponseHeader("Content-Length");
-            if (length) {
-              setProgress(e.loaded / length);
+            if (e.lengthComputable) {
+              setProgress(e.loaded / e.total);
+            } else {
+              // Some browsers won't mark this as length computable when the request uses compression, as Scratch does.
+              // In these cases, we'll use the Content-Length header instead.
+              // This header contains the compressed size of the response, while this event uses uncompressed sizes, so we have to compensate for compression.
+              // Scratch uses gzip compression which reduces the file size of projects by a bit under half.
+              // Optimally we'd be able to look at Content-Encoding to determine the exact compression method used, if any, but browsers will not allow us to see that.
+              // TODO: are there any cases where Scratch doesn't use compression?
+              const contentLength = +xhr.getResponseHeader("Content-Length");
+              if (contentLength) {
+                const uncompressedLength = contentLength * 2;
+                setProgress(e.loaded / uncompressedLength);
+              }
             }
           };
           xhr.open("GET", url);
@@ -131,8 +158,11 @@ export default async function ({ addon, global, console }) {
       if (REMIX_REGEX.test(url)) {
         beginRemixingProject();
       } else {
-        beginSavingProject();
+        beginSavingProjectJSON();
       }
+      this.upload.addEventListener("loadend", (e) => {
+        setProgress(1);
+      });
       this.upload.addEventListener("progress", (e) => {
         if (e.lengthComputable) {
           setProgress(e.loaded / e.total);
@@ -168,7 +198,7 @@ export default async function ({ addon, global, console }) {
   };
 
   async function beginLoadingProjectJSON() {
-    loadingPhase = LOAD_JSON;
+    setLoadingPhase(LOAD_JSON);
     if (!useTopBar) {
       await addon.tab.waitForElement("[class^=loader_message-container-outer]");
       const loaderMessageContainerOuter = document.querySelector("[class^=loader_message-container-outer]");
@@ -179,15 +209,15 @@ export default async function ({ addon, global, console }) {
   }
 
   async function beginLoadingAssets() {
-    loadingPhase = LOAD_ASSETS;
+    setLoadingPhase(LOAD_ASSETS);
   }
 
   async function beginSavingAssets() {
-    loadingPhase = SAVE_ASSETS;
+    setLoadingPhase(SAVE_ASSETS);
   }
 
-  async function beginSavingProject() {
-    loadingPhase = SAVE_JSON;
+  async function beginSavingProjectJSON() {
+    setLoadingPhase(SAVE_JSON);
     if (!useTopBar) {
       await addon.tab.waitForElement("[class^=inline-message_spinner]");
       const spinner = document.querySelector("[class^=inline-message_spinner]");
@@ -197,7 +227,7 @@ export default async function ({ addon, global, console }) {
   }
 
   async function beginRemixingProject() {
-    loadingPhase = MAKE_REMIX;
+    setLoadingPhase(REMIX);
     if (!useTopBar) {
       const remixButton = document.querySelector(".remix-button");
       if (remixButton) {
@@ -209,6 +239,4 @@ export default async function ({ addon, global, console }) {
       }
     }
   }
-
-  beginLoadingProjectJSON();
 }
