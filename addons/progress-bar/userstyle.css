@@ -10,7 +10,14 @@
   background-color: white;
 }
 
+.u-progress-bar-loading {
+  width: 250px;
+}
 .u-progress-bar-caption {
   margin: 5px 0;
   height: 20px;
+}
+
+.u-progress-bar-saving {
+  margin-top: 2px;
 }

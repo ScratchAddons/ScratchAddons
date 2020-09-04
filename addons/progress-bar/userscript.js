@@ -33,14 +33,12 @@ class ProgressBar {
 export default async function ({ addon, global, console }) {
   const projectSavingProgressBar = new ProgressBar();
   projectSavingProgressBar.outer.classList.add("u-progress-bar-saving");
-  projectSavingProgressBar.onchange = function (progress) {
+  projectSavingProgressBar.onchange = function(progress) {
     if (progress >= 1) {
-      this.outer.style.opacity = "0";
-    } else {
-      this.outer.style.opacity = "1";
+      this.finishedTasks = 0;
+      this.totalTasks = 0;
     }
   };
-  document.body.appendChild(projectSavingProgressBar.outer);
 
   const loadingProgressBar = new ProgressBar();
   loadingProgressBar.outer.classList.add("u-progress-bar-loading");
@@ -98,6 +96,9 @@ export default async function ({ addon, global, console }) {
         // returns 405 Method Not Allowed when an OPTIONS preflight request is made, which is required when we put listeners on `xhr.upload`
         // As a result, this won't display a useful progress bar when uploading a single large asset, but it will still display a useful
         // progress bar in the case of uploading many assets at once.
+        if (projectSavingProgressBar.totalTasks === 0) {
+          injectSavingProgressBar();
+        }
         projectSavingProgressBar.newTask();
         return originalFetch(url, opts).then((response) => {
           projectSavingProgressBar.finishTask();
