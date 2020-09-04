@@ -21,6 +21,7 @@ export default async function ({ addon, global, console }) {
   const LOAD_ASSETS = "load-assets";
   const SAVE_JSON = "save-json";
   const SAVE_ASSETS = "save-assets";
+  const COPY = "copy";
   const REMIX = "remix";
   let loadingPhase = NONE;
 
@@ -157,6 +158,8 @@ export default async function ({ addon, global, console }) {
       // This is a request to save, remix, or copy a project.
       if (REMIX_REGEX.test(url)) {
         beginRemixingProject();
+      } else if (COPY_REGEX.test(url)) {
+        beginCopyingProject();
       } else {
         beginSavingProjectJSON();
       }
@@ -222,6 +225,13 @@ export default async function ({ addon, global, console }) {
     }
   }
 
+  function beginCopyingProject() {
+    setLoadingPhase(COPY);
+    if (!useTopBar) {
+      injectInAlertMessage();
+    }
+  }
+
   function beginRemixingProject() {
     setLoadingPhase(REMIX);
     if (!useTopBar) {
@@ -230,7 +240,7 @@ export default async function ({ addon, global, console }) {
   }
 
   function isAlreadyInjected() {
-    return !!document.querySelector('.u-progress-bar-outer');
+    return !!document.querySelector(".u-progress-bar-outer");
   }
 
   async function injectInLoadingScreen() {
@@ -257,9 +267,14 @@ export default async function ({ addon, global, console }) {
       remixButton.appendChild(barOuter);
       // TODO: the user can still See Inside and the progress bar should move inside with them
     } else {
-      await addon.tab.waitForElement("[class^=alert_alert-message] span");
-      const alertMessage = document.querySelector("[class^=alert_alert-message] span");
-      alertMessage.appendChild(barOuter);
+      await injectInAlertMessage();
     }
+  }
+
+  async function injectInAlertMessage() {
+    if (isAlreadyInjected()) return;
+    await addon.tab.waitForElement("[class^=alert_alert-message] span");
+    const alertMessage = document.querySelector("[class^=alert_alert-message] span");
+    alertMessage.appendChild(barOuter);
   }
 }

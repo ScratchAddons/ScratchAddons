@@ -31,7 +31,9 @@
   margin: 5px 0;
   height: 20px;
 }
-.u-progress-bar-integrated[data-phase=save-json] {
+.u-progress-bar-integrated[data-phase=save-json],
+.u-progress-bar-integrated[data-phase=copy],
+.u-progress-bar-integrated[data-phase=remix] {
   min-width: 100px;
   margin-top: 2px;
 }
