@@ -212,7 +212,7 @@ export default async function ({ addon, global, console }) {
       return;
     }
 
-    const remixButton = document.querySelector(".remix-button");
+    const remixButton = document.querySelector(".remix-button.remixing");
     if (remixButton) {
       remixButton.appendChild(barOuter);
       return;
