@@ -45,7 +45,7 @@
       "default": false
     },
     {
-      "name": "Replace the stage automatically when a recommendation in the instructions or notes is found (requires \"Replace stage\" to be turned on due to laziness)",
+      "name": "Replace the stage automatically when a recommendation in the instructions or notes is found (only works when \"Replace stage\" is turned on)",
       "id": "autoreplace",
       "type": "boolean",
       "default": true
