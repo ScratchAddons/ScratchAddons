@@ -112,19 +112,6 @@ export default async function ({ addon, global, console }) {
           xhr.onprogress = (e) => {
             if (e.lengthComputable) {
               setProgress(e.loaded / e.total);
-            } else {
-              // Some browsers won't mark this as length computable when the request uses compression, as Scratch does.
-              // In these cases, we'll use the Content-Length header instead.
-              // This header contains the compressed size of the response, while this event uses uncompressed sizes, so we have to compensate for compression.
-              // Scratch uses gzip compression which reduces the file size of projects by a bit under half.
-              // Optimally we'd be able to look at Content-Encoding to determine the exact compression method used, if any, but browsers will not allow us to see that.
-              // TODO: are there any cases where Scratch doesn't use compression?
-              // TODO: compression varies a lot based on content. It might not be worth trying to be smart about this and just do nothing instead.
-              const contentLength = +xhr.getResponseHeader("Content-Length");
-              if (contentLength) {
-                const uncompressedLength = contentLength * 2;
-                setProgress(e.loaded / uncompressedLength);
-              }
             }
           };
           xhr.open("GET", url);
