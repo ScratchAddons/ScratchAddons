@@ -1,5 +1,9 @@
 import Trap from "./Trap.js";
 import ReduxHandler from "./ReduxHandler.js";
+import dataURLToBlob from "../../libraries/data-url-to-blob.js";
+
+const DATA_PNG = 'data:image/png;base64,';
+const template = document.getElementById("scratch-addons");
 
 export default class Tab extends EventTarget {
   constructor() {
@@ -11,12 +15,15 @@ export default class Tab extends EventTarget {
       ? "scratchr2"
       : null;
     this.traps = new Trap();
-    __scratchAddonsTraps.addEventListener("fakestatechanged", (e) => {
-      const newEvent = new CustomEvent("fakestatechanged");
-      newEvent.reducerOrigin = e.reducerOrigin;
-      newEvent.path = e.path;
-      newEvent.prev = e.prev;
-      newEvent.next = e.next;
+    __scratchAddonsTraps.addEventListener("fakestatechanged", ({detail}) => {
+      const newEvent = new CustomEvent("fakestatechanged", {
+        detail: {
+          reducerOrigin: detail.reducerOrigin,
+          path: detail.path,
+          prev: detail.prev,
+          next: detail.next
+        }
+      });
       this.dispatchEvent(newEvent);
     });
     this.redux = new ReduxHandler();
@@ -28,9 +35,10 @@ export default class Tab extends EventTarget {
     if (!document.querySelector(selector)) {
       return new Promise((resolve) =>
         new MutationObserver(function (mutationsList, observer) {
-          if (document.querySelector(selector)) {
+          const elem = document.querySelector(selector);
+          if (elem) {
             observer.disconnect();
-            resolve();
+            resolve(elem);
           }
         }).observe(document.body, {
           attributes: true,
@@ -39,7 +47,7 @@ export default class Tab extends EventTarget {
         })
       );
     } else {
-      return Promise.resolve();
+      return Promise.resolve(document.querySelector(selector));
     }
   }
   /**
@@ -53,5 +61,31 @@ export default class Tab extends EventTarget {
     if (split.includes("fullscreen")) return "fullscreen";
     if (split.includes("embed")) return "embed";
     return "projectpage";
+  }
+
+  /**
+   * Copy an PNG image.
+   * @param {string} dataURL data url of the png image
+   * @returns {Promise}
+   */
+  copyImage (dataURL) {
+    if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError('Expected PNG data URL'));
+    if (typeof Clipboard.prototype.write === 'function') {
+      // Chrome
+      const blob = dataURLToBlob(dataURL);
+      const items = [new ClipboardItem({
+        'image/png': blob
+      })];
+      return navigator.clipboard.write(items);
+    } else {
+      // Firefox needs Content Script
+      template.setAttribute("data-clipboard-image", dataURL);
+      return this.waitForElement('[data-clipboard]').then(el => {
+        const attr = el.dataset.clipboard;
+        el.removeAttribute('data-clipboard');
+        if (attr === 'success') return Promise.resolve();
+        return Promise.reject(new Error(`Error inside clipboard handler: ${attr}`))
+      })
+    }
   }
 }

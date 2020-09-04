@@ -24,11 +24,13 @@ function injectRedux() {
       scratchAddonsRedux.state = getState();
       return (next) => (action) => {
         const nextReturn = next(action);
-        const ev = new CustomEvent("statechanged");
-        // Redux expects that every developer will do their duty.
-        ev.prev = scratchAddonsRedux.state;
-        ev.next = scratchAddonsRedux.state = getState();
-        ev.action = action;
+        const ev = new CustomEvent("statechanged", {
+          detail: {
+            prev: scratchAddonsRedux.state,
+            next: (scratchAddonsRedux.state = getState()),
+            action
+          }
+        });
         reduxTarget.dispatchEvent(ev);
         return nextReturn;
       };

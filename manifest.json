@@ -37,7 +37,8 @@
     "cookies",
     "webRequest",
     "webRequestBlocking",
-    "storage"
+    "storage",
+    "clipboardWrite"
   ],
   "optional_permissions": ["notifications"],
   "web_accessible_resources": ["content-scripts/inject/*", "addon-api/*", "addons/*", "libraries/*"],
