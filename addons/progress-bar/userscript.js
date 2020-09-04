@@ -55,21 +55,21 @@ export default async function ({ addon, global, console }) {
     }
     if (progress === 1) {
       loadingPhase = NONE;
+      stopObserver();
     }
   }
 
-  // Change the loading phase.
-  // Returns true if the loading phase changed, otherwise false.
   function setLoadingPhase(newPhase) {
     if (loadingPhase === newPhase) {
-      return false;
+      return;
     }
     loadingPhase = newPhase;
     barOuter.dataset.phase = loadingPhase;
     setProgress(0);
+    inject();
+    startObserver();
     totalTasks = 0;
     finishedTasks = 0;
-    return true;
   }
 
   function updateTasks() {
@@ -96,7 +96,7 @@ export default async function ({ addon, global, console }) {
       if (opts.method.toLowerCase() === "get" && PROJECT_REGEX.test(url)) {
         // This is a request to get the project JSON.
         // Fetch does not support progress monitoring, so we use XMLHttpRequest instead.
-        beginLoadingProjectJSON();
+        setLoadingPhase(LOAD_JSON);
         return new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
           xhr.responseType = "blob";
@@ -124,7 +124,7 @@ export default async function ({ addon, global, console }) {
         // returns 405 Method Not Allowed when an OPTIONS preflight request is made, which is required when we put listeners on `xhr.upload`
         // As a result, this won't display a useful progress bar when uploading a single large asset, but it will still display a useful
         // progress bar in the case of uploading many assets at once.
-        beginSavingAssets();
+        setLoadingPhase(SAVE_ASSETS);
         totalTasks++;
         updateTasks();
         return originalFetch(url, opts).then((response) => {
@@ -148,11 +148,11 @@ export default async function ({ addon, global, console }) {
     ) {
       // This is a request to save, remix, or copy a project.
       if (REMIX_REGEX.test(url)) {
-        beginRemixingProject();
+        setLoadingPhase(REMIX);
       } else if (COPY_REGEX.test(url)) {
-        beginCopyingProject();
+        setLoadingPhase(COPY);
       } else {
-        beginSavingProjectJSON();
+        setLoadingPhase(SAVE_JSON);
       }
       this.upload.addEventListener("loadend", (e) => {
         setProgress(1);
@@ -173,7 +173,7 @@ export default async function ({ addon, global, console }) {
   const originalPostMessage = Worker.prototype.postMessage;
   Worker.prototype.postMessage = function (message, options) {
     if (typeof message.id === "string" && typeof message.url === "string") {
-      beginLoadingAssets();
+      setLoadingPhase(LOAD_ASSETS);
       totalTasks++;
       updateTasks();
 
@@ -191,91 +191,55 @@ export default async function ({ addon, global, console }) {
     originalPostMessage.call(this, message, options);
   };
 
-  function waitForElement(selector) {
-    return addon.tab.waitForElement(selector).then(() => document.querySelector(selector));
-  }
-
-  function beginLoadingProjectJSON() {
-    if (setLoadingPhase(LOAD_JSON)) {
-      if (!useTopBar) {
-        injectInLoadingScreen();
-      }
+  function inject() {
+    // When the progress bar is already in the document, we do not need to do anything.
+    if (document.querySelector(".u-progress-bar-outer")) {
+      return;
     }
-  }
 
-  function beginLoadingAssets() {
-    if (setLoadingPhase(LOAD_ASSETS)) {
-      if (!useTopBar) {
-        injectInLoadingScreen();
-      }
+    const loaderMessageContainerOuter = document.querySelector("[class^=loader_message-container-outer]");
+    if (loaderMessageContainerOuter) {
+      loaderMessageContainerOuter.hidden = true;
+      loaderMessageContainerOuter.parentElement.appendChild(loadingCaption);
+      loaderMessageContainerOuter.parentElement.appendChild(barOuter);
+      return;
     }
-  }
 
-  function beginSavingAssets() {
-    if (setLoadingPhase(SAVE_ASSETS)) {
-      if (!useTopBar) {
-        injectInSaving();
-      }
+    const spinner = document.querySelector("[class^=inline-message_spinner]");
+    if (spinner) {
+      const container = spinner.parentElement.querySelector("span");
+      container.appendChild(barOuter);
+      return;
     }
-  }
 
-  function beginSavingProjectJSON() {
-    if (setLoadingPhase(SAVE_JSON)) {
-      if (!useTopBar) {
-        injectInSaving();
-      }
-    }
-  }
-
-  function beginCopyingProject() {
-    if (setLoadingPhase(COPY)) {
-      if (!useTopBar) {
-        injectInAlertMessage();
-      }
-    }
-  }
-
-  function beginRemixingProject() {
-    if (setLoadingPhase(REMIX)) {
-      if (!useTopBar) {
-        injectInRemixing();
-      }
-    }
-  }
-
-  function isAlreadyInjected() {
-    return !!document.querySelector(".u-progress-bar-outer");
-  }
-
-  async function injectInLoadingScreen() {
-    if (isAlreadyInjected()) return;
-    const loaderMessageContainerOuter = await waitForElement("[class^=loader_message-container-outer]");
-    loaderMessageContainerOuter.hidden = true;
-    loaderMessageContainerOuter.parentElement.appendChild(loadingCaption);
-    loaderMessageContainerOuter.parentElement.appendChild(barOuter);
-  }
-
-  async function injectInSaving() {
-    if (isAlreadyInjected()) return;
-    const spinner = await waitForElement("[class^=inline-message_spinner]");
-    const container = spinner.parentElement.querySelector("span");
-    container.appendChild(barOuter);
-  }
-
-  async function injectInRemixing() {
-    if (isAlreadyInjected()) return;
     const remixButton = document.querySelector(".remix-button");
     if (remixButton) {
       remixButton.appendChild(barOuter);
-      // TODO: the user can still See Inside and the progress bar should move inside with them
-    } else {
-      await injectInAlertMessage();
+      return;
     }
+
+    const alertMessage = document.querySelector("[class^=alert_alert-message] span");
+    if (alertMessage) {
+      alertMessage.appendChild(barOuter);
+      return;
+    }
+
+    // Couldn't find a spot to put the bar, so remove it from the document.
+    barOuter.parentElement.removeChild(barOuter);
   }
 
-  async function injectInAlertMessage() {
-    if (isAlreadyInjected()) return;
-    const alertMessage = await waitForElement("[class^=alert_alert-message] span");
-    alertMessage.appendChild(barOuter);
+  const mutationObserver = new MutationObserver(inject);
+
+  function startObserver() {
+    if (useTopBar) return;
+    mutationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+  }
+
+  function stopObserver() {
+    if (useTopBar) return;
+    mutationObserver.disconnect();
   }
 }
