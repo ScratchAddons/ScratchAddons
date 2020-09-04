@@ -50,7 +50,7 @@ export default async function ({ addon, global, console }) {
   loadingCaption.className = "u-progress-bar-caption";
   loadingProgressBar.onchange = function () {
     if (this.totalTasks > 0) {
-      loadingCaption.innerText = `${this.finishedTasks}/${this.totalTasks} assets loaded …`;
+      loadingCaption.innerText = `Loading assets (${this.finishedTasks}/${this.totalTasks}) …`;
     }
   };
 
