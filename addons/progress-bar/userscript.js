@@ -197,46 +197,69 @@ export default async function ({ addon, global, console }) {
     originalPostMessage.call(this, message, options);
   };
 
-  async function beginLoadingProjectJSON() {
+  function beginLoadingProjectJSON() {
     setLoadingPhase(LOAD_JSON);
     if (!useTopBar) {
-      await addon.tab.waitForElement("[class^=loader_message-container-outer]");
-      const loaderMessageContainerOuter = document.querySelector("[class^=loader_message-container-outer]");
-      loaderMessageContainerOuter.hidden = true;
-      loaderMessageContainerOuter.parentElement.appendChild(loadingCaption);
-      loaderMessageContainerOuter.parentElement.appendChild(barOuter);
+      injectInLoadingScreen();
     }
   }
 
-  async function beginLoadingAssets() {
+  function beginLoadingAssets() {
     setLoadingPhase(LOAD_ASSETS);
+    if (!useTopBar) {
+      injectInLoadingScreen();
+    }
   }
 
-  async function beginSavingAssets() {
+  function beginSavingAssets() {
     setLoadingPhase(SAVE_ASSETS);
   }
 
-  async function beginSavingProjectJSON() {
+  function beginSavingProjectJSON() {
     setLoadingPhase(SAVE_JSON);
     if (!useTopBar) {
-      await addon.tab.waitForElement("[class^=inline-message_spinner]");
-      const spinner = document.querySelector("[class^=inline-message_spinner]");
-      const container = spinner.parentElement.querySelector("span");
-      container.appendChild(barOuter);
+      injectInSaving();
     }
   }
 
-  async function beginRemixingProject() {
+  function beginRemixingProject() {
     setLoadingPhase(REMIX);
     if (!useTopBar) {
-      const remixButton = document.querySelector(".remix-button");
-      if (remixButton) {
-        remixButton.appendChild(barOuter);
-      } else {
-        await addon.tab.waitForElement("[class^=alert_alert-message] span");
-        const alertMessage = document.querySelector("[class^=alert_alert-message] span");
-        alertMessage.appendChild(barOuter);
-      }
+      injectInRemixing();
+    }
+  }
+
+  function isAlreadyInjected() {
+    return !!document.querySelector('.u-progress-bar-outer');
+  }
+
+  async function injectInLoadingScreen() {
+    if (isAlreadyInjected()) return;
+    await addon.tab.waitForElement("[class^=loader_message-container-outer]");
+    const loaderMessageContainerOuter = document.querySelector("[class^=loader_message-container-outer]");
+    loaderMessageContainerOuter.hidden = true;
+    loaderMessageContainerOuter.parentElement.appendChild(loadingCaption);
+    loaderMessageContainerOuter.parentElement.appendChild(barOuter);
+  }
+
+  async function injectInSaving() {
+    if (isAlreadyInjected()) return;
+    await addon.tab.waitForElement("[class^=inline-message_spinner]");
+    const spinner = document.querySelector("[class^=inline-message_spinner]");
+    const container = spinner.parentElement.querySelector("span");
+    container.appendChild(barOuter);
+  }
+
+  async function injectInRemixing() {
+    if (isAlreadyInjected()) return;
+    const remixButton = document.querySelector(".remix-button");
+    if (remixButton) {
+      remixButton.appendChild(barOuter);
+      // TODO: the user can still See Inside and the progress bar should move inside with them
+    } else {
+      await addon.tab.waitForElement("[class^=alert_alert-message] span");
+      const alertMessage = document.querySelector("[class^=alert_alert-message] span");
+      alertMessage.appendChild(barOuter);
     }
   }
 }
