@@ -20,6 +20,12 @@
       "id": "topbar",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Progress bar height (px)",
+      "id": "height",
+      "type": "positive_integer",
+      "default": 5
     }
   ],
   "tags": ["editor"],

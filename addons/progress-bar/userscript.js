@@ -1,8 +1,10 @@
 export default async function ({ addon, global, console }) {
   const useTopBar = addon.settings.get("topbar");
+  const barHeight = addon.settings.get("height");
 
   const barOuter = document.createElement("div");
   barOuter.className = "u-progress-bar-outer";
+  barOuter.style.height = `${barHeight}px`;
   const barInner = document.createElement("div");
   barInner.className = "u-progress-bar-inner";
   barOuter.appendChild(barInner);
@@ -15,7 +17,7 @@ export default async function ({ addon, global, console }) {
     barOuter.classList.add("u-progress-bar-integrated");
   }
 
-  // We track the loading phase so that we can detect when the phase changed and move the progress bar accordingly.
+  // We track the loading phase so that we can detect when the phase changed to reset and move the progress bar accordingly.
   const NONE = "none";
   const LOAD_JSON = "load-json";
   const LOAD_ASSETS = "load-assets";
@@ -98,17 +100,15 @@ export default async function ({ addon, global, console }) {
         return new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
           xhr.responseType = "blob";
-          xhr.onload = () => {
-            setProgress(1);
-            // As we are emulating fetch(), we need to resolve with a Response object.
+          xhr.onload = () =>
             resolve(
               new Response(xhr.response, {
                 status: xhr.status,
                 statusText: xhr.statusText,
               })
             );
-          };
           xhr.onerror = () => reject(new Error("xhr failed"));
+          xhr.onloadend = () => setProgress(1);
           xhr.onprogress = (e) => {
             if (e.lengthComputable) {
               setProgress(e.loaded / e.total);
@@ -205,8 +205,7 @@ export default async function ({ addon, global, console }) {
   };
 
   function waitForElement(selector) {
-    return addon.tab.waitForElement(selector)
-      .then(() => document.querySelector(selector));
+    return addon.tab.waitForElement(selector).then(() => document.querySelector(selector));
   }
 
   function beginLoadingProjectJSON() {
