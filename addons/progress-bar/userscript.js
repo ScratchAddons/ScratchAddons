@@ -31,9 +31,9 @@ class ProgressBar {
 }
 
 export default async function ({ addon, global, console }) {
-  const projectSavingProgressBar = new ProgressBar();
-  projectSavingProgressBar.outer.classList.add("u-progress-bar-saving");
-  projectSavingProgressBar.onchange = function (progress) {
+  const savingProgressBar = new ProgressBar();
+  savingProgressBar.outer.classList.add("u-progress-bar-saving");
+  savingProgressBar.onchange = function (progress) {
     if (progress >= 1) {
       this.finishedTasks = 0;
       this.totalTasks = 0;
@@ -42,7 +42,6 @@ export default async function ({ addon, global, console }) {
 
   const loadingProgressBar = new ProgressBar();
   loadingProgressBar.outer.classList.add("u-progress-bar-loading");
-
   const loadingCaption = document.createElement("div");
   loadingCaption.innerText = "Loading project data …";
   loadingCaption.className = "u-progress-bar-caption";
@@ -53,7 +52,8 @@ export default async function ({ addon, global, console }) {
   };
 
   const PROJECT_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\d+$/;
-  const REMIX_COPY_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_(?:remix|copy)=1&original_id=\d+.*$/;
+  const REMIX_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_remix=1&original_id=\d+.*$/;
+  const COPY_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\?is_copy=1&original_id=\d+.*$/;
   const ASSET_REGEX = /^https:\/\/assets\.scratch\.mit\.edu\/.*$/;
 
   // Scratch uses fetch() to download the project JSON and upload project assets.
@@ -96,12 +96,12 @@ export default async function ({ addon, global, console }) {
         // returns 405 Method Not Allowed when an OPTIONS preflight request is made, which is required when we put listeners on `xhr.upload`
         // As a result, this won't display a useful progress bar when uploading a single large asset, but it will still display a useful
         // progress bar in the case of uploading many assets at once.
-        if (projectSavingProgressBar.totalTasks === 0) {
+        if (savingProgressBar.totalTasks === 0) {
           injectSavingProgressBar();
         }
-        projectSavingProgressBar.newTask();
+        savingProgressBar.newTask();
         return originalFetch(url, opts).then((response) => {
-          projectSavingProgressBar.finishTask();
+          savingProgressBar.finishTask();
           return response;
         });
       }
@@ -115,14 +115,19 @@ export default async function ({ addon, global, console }) {
   XMLHttpRequest.prototype.open = function (method, url) {
     if (
       (method.toLowerCase() === "put" && PROJECT_REGEX.test(url)) ||
-      (method.toLowerCase() === "post" && REMIX_COPY_REGEX.test(url))
+      (method.toLowerCase() === "post" && COPY_REGEX.test(url)) ||
+      (method.toLowerCase() === "post" && REMIX_REGEX.test(url))
     ) {
-      // This is a request made for saving, copying, or remixing a project.
-      projectSavingProgressBar.setProgress(0);
-      injectSavingProgressBar();
+      // This is a request made for saving, remixing, or copying a project.
+      savingProgressBar.setProgress(0);
+      if (REMIX_REGEX.test(url)) {
+        injectRemixingProgressBar();
+      } else {
+        injectSavingProgressBar();
+      }
       this.upload.addEventListener("progress", (e) => {
         if (e.lengthComputable) {
-          projectSavingProgressBar.setProgress(e.loaded / e.total);
+          savingProgressBar.setProgress(e.loaded / e.total);
         }
       });
     }
@@ -163,7 +168,18 @@ export default async function ({ addon, global, console }) {
     await addon.tab.waitForElement("[class^=inline-message_spinner]");
     const spinner = document.querySelector("[class^=inline-message_spinner]");
     const container = spinner.parentElement.querySelector("span");
-    container.appendChild(projectSavingProgressBar.outer);
+    container.appendChild(savingProgressBar.outer);
+  }
+
+  async function injectRemixingProgressBar() {
+    const remixButton = document.querySelector(".remix-button");
+    if (remixButton) {
+      remixButton.appendChild(savingProgressBar.outer);
+    } else {
+      await addon.tab.waitForElement("[class^=alert_alert-message] span");
+      const alertMessage = document.querySelector("[class^=alert_alert-message] span");
+      alertMessage.appendChild(savingProgressBar.outer);
+    }
   }
 
   injectLoadingProgressBar();
