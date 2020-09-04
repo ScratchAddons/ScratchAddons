@@ -13,8 +13,7 @@
       "runAtComplete": false
     }
   ],
-  "options": [
-  ],
+  "options": [],
   "tags": ["community"],
   "enabled_by_default": true
 }
