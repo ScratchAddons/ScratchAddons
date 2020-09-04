@@ -21,7 +21,7 @@
   ],
   "options": [
     {
-      "name": "Always show progress bar on top of page",
+      "name": "Show progress bar on top of page",
       "id": "topbar",
       "type": "boolean",
       "default": false
