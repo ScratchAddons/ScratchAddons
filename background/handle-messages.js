@@ -1,3 +1,6 @@
+const COUNT_CHECK_INTERVAL = 10000;
+const MSGS_CHECK_INTERVAL = 120000; // Ignored if message count change has been seen
+
 let lastCheckUsername = null;
 
 // For getMsgCount
@@ -31,7 +34,7 @@ async function updateMsgCount() {
     return null;
   }
   try {
-    if (Date.now() - lastCountCheck > 5000 || username !== lastCheckUsername) {
+    if (Date.now() - lastCountCheck > COUNT_CHECK_INTERVAL || username !== lastCheckUsername) {
       const res = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count?timestamp=${Date.now()}`);
       if (!res.ok) return null;
       const json = await res.json();
@@ -48,6 +51,18 @@ async function updateMsgCount() {
     return null;
   }
 }
+scratchAddons.methods.clearMessages = async function () {
+  const res = await fetch("https://scratch.mit.edu/site-api/messages/messages-clear/", {
+    method: "POST",
+    headers: {
+      "X-ScratchAddons-Uses-Fetch": "true",
+    },
+  });
+  if (res.ok) {
+    lastCountCheck = Date.now();
+    lastMsgCount = 0;
+  }
+};
 
 scratchAddons.methods.getMessages = async function ({ offset = 0 } = {}) {
   if (offset !== 0) return await requestMessages({ offset });
@@ -71,7 +86,7 @@ async function checkMessages(options) {
     return null;
   }
   try {
-    if (Date.now() - lastMessagesCheck > 60000 || username !== lastCheckUsername) {
+    if (Date.now() - lastMessagesCheck > MSGS_CHECK_INTERVAL || username !== lastCheckUsername) {
       const json = await requestMessages(options);
       lastMessagesCheck = Date.now();
       lastCheckUsername = username;
@@ -104,9 +119,11 @@ async function requestMessages(options) {
   }
 }
 
-chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request === "getMsgCount") {
-    const count = await scratchAddons.methods.getMsgCount();
-    chrome.tabs.sendMessage(sender.tab.id, { setMsgCount: count });
+    (async () => {
+      const count = await scratchAddons.methods.getMsgCount();
+      chrome.tabs.sendMessage(sender.tab.id, { setMsgCount: count });
+    })();
   }
 });
