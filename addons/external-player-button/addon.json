@@ -9,7 +9,8 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "runAtComplete": false
     }
   ],
   "options": [
@@ -42,8 +43,14 @@
       "id": "again",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Replace the stage automatically when a recommendation in the instructions or notes is found (only works when \"Replace stage\" is turned on)",
+      "id": "autoreplace",
+      "type": "boolean",
+      "default": true
     }
   ],
-  "tags": ["community"],
+  "tags": ["community", "beta"],
   "enabled_by_default": false
 }
