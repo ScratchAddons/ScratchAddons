@@ -1,11 +1,16 @@
-﻿export default async function ({ addon, global, console }) {
+﻿export default async function ({ addon, console }) {
   addon.settings.addEventListener("change", () => console.log("changed!"));
+
   while (true) {
-    await addon.tab.waitForElement("a:not(.trueYTLinksViewed)");
-    var element = document.querySelector("a:not(.trueYTLinksViewed)");
-    if (element.href.indexOf("https://scratch.mit.edu/discuss/youtube/") == 0) {
-      element.href = element.href.replace("https://scratch.mit.edu/discuss/youtube/", "https://youtu.be/");
-    }
-    element.classList.add("trueYTLinksViewed");
+    await addon.tab.waitForElement('a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]');
+    var elements = document.querySelectorAll(
+      'a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]'
+    );
+    elements.forEach((element) => {
+      element.href = element.href.replace(
+        "https://scratch.mit.edu/discuss/youtube/",
+        "https://www.youtube.com/watch?v="
+      );
+    });
   }
 }
