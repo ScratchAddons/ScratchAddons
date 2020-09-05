@@ -35,8 +35,8 @@ a:hover {
   display: flex;
   margin-bottom: 8px;
   position: sticky;
-  box-shadow: 0 3px 5px rgba(0,0,0,0.2);
-  text-shadow: 1px 1px rgba(0,0,0,0.5);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
 }
 .hover-reverse {
   background-color: #d93;
@@ -84,11 +84,11 @@ a:hover {
 }
 .comment {
   padding: 4px 16px 4px 16px;
-  font-size: .85rem;
+  font-size: 0.85rem;
 }
 .comment-content {
   word-break: break-word;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 .comment-content-text {
   margin-right: 10px;
@@ -105,9 +105,9 @@ a:hover {
 }
 .popout-comment {
   cursor: pointer;
-  height: .5rem;
+  height: 0.5rem;
   vertical-align: middle;
-  opacity: .6;
+  opacity: 0.6;
 }
 .popout-comment:hover {
   opacity: 1;
@@ -116,7 +116,7 @@ a:hover {
   float: right;
   opacity: 0;
   color: gray;
-  font-size: .65rem;
+  font-size: 0.65rem;
 }
 .bold {
   font-weight: bold;
@@ -135,7 +135,8 @@ a:hover {
   color: #0f8bc0;
   font-weight: bold;
 }
-.comment:hover .reply-button-comment, .comment:hover .delete-btn {
+.comment:hover .reply-button-comment,
+.comment:hover .delete-btn {
   opacity: 1;
 }
 .reply-textarea {
@@ -179,7 +180,7 @@ a:hover {
   font-size: 0.9rem;
   text-align: center;
   padding: 4px;
-  box-shadow: 0 -1px 7px rgba(0,0,0,0.2);
+  box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
   height: 2rem;
   display: flex;
   align-items: center;
@@ -190,9 +191,9 @@ a:hover {
   text-decoration: none;
 }
 #popout {
-  height: .8rem;
+  height: 0.8rem;
   vertical-align: middle;
-  opacity: .6;
+  opacity: 0.6;
 }
 #open-messages {
   color: inherit;

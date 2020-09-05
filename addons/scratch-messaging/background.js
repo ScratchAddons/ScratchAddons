@@ -126,8 +126,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     } else if (popupRequest.deleteComment) {
       const { resourceType, resourceId, commentId } = popupRequest.deleteComment;
       deleteComment({ resourceType, resourceId, commentId })
-      .then((res) => sendResponse(res))
-      .catch((err) => sendResponse(err));
+        .then((res) => sendResponse(res))
+        .catch((err) => sendResponse(err));
       return true;
     }
   });
@@ -259,7 +259,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         } else resolve({ error: xhr.status });
       };
 
-      xhr.send(JSON.stringify({id : String(commentId)}));
+      xhr.send(JSON.stringify({ id: String(commentId) }));
     });
   }
 }

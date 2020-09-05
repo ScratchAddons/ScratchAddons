@@ -9,7 +9,7 @@ const Comment = Vue.extend({
       replying: false,
       replyBoxValue: "",
       deleted: false,
-      deleteStep: 0
+      deleteStep: 0,
     };
   },
   methods: {
@@ -54,10 +54,10 @@ const Comment = Vue.extend({
       );
     },
     deleteComment() {
-      if(this.deleteStep === 0) {
-        setTimeout(() => this.deleteStep = 1, 250);
+      if (this.deleteStep === 0) {
+        setTimeout(() => (this.deleteStep = 1), 250);
         setTimeout(() => {
-          if(this.deleteStep === 1) this.deleteStep = 0;
+          if (this.deleteStep === 1) this.deleteStep = 0;
         }, 5000);
         return;
       }
@@ -70,7 +70,7 @@ const Comment = Vue.extend({
             deleteComment: {
               resourceType: this.resourceType,
               resourceId: this.resourceId,
-              commentId: Number(this.commentId.substring(2))
+              commentId: Number(this.commentId.substring(2)),
             },
           },
         },
@@ -80,14 +80,13 @@ const Comment = Vue.extend({
             this.thisComment.content = previousContent;
             this.deleteStep = 0;
             this.deleted = false;
-          }
-          else {
-            if(this.isParent) this.thisComment.children = [];
+          } else {
+            if (this.isParent) this.thisComment.children = [];
             this.thisComment.content = "[deleted]";
           }
         }
       );
-    }
+    },
   },
   computed: {
     thisComment() {
@@ -101,19 +100,19 @@ const Comment = Vue.extend({
     },
     commentTimeAgo() {
       const commentTimestamp = new Date(this.thisComment.date).getTime();
-      const timeDiffSeconds = (dateNow - commentTimestamp)/1000;
-      let options = {unit: null, divideBy: null};
-      if(timeDiffSeconds < 60) options = {unit: "second", divideBy: 1};
-      else if(timeDiffSeconds < 3600) options = {unit: "minute", divideBy: 60};
-      else if(timeDiffSeconds < 86400) options = {unit: "hour", divideBy: 60*60};
-      else options = {unit: "day", divideBy: 60*60*24};
+      const timeDiffSeconds = (dateNow - commentTimestamp) / 1000;
+      let options = { unit: null, divideBy: null };
+      if (timeDiffSeconds < 60) options = { unit: "second", divideBy: 1 };
+      else if (timeDiffSeconds < 3600) options = { unit: "minute", divideBy: 60 };
+      else if (timeDiffSeconds < 86400) options = { unit: "hour", divideBy: 60 * 60 };
+      else options = { unit: "day", divideBy: 60 * 60 * 24 };
       const timeFormatter = new Intl.RelativeTimeFormat("en", {
         localeMatcher: "best fit",
         numeric: "auto",
         style: "long",
       });
-      return timeFormatter.format(Math.round(-timeDiffSeconds/options.divideBy), options.unit);
-    }
+      return timeFormatter.format(Math.round(-timeDiffSeconds / options.divideBy), options.unit);
+    },
   },
   watch: {
     replying(newVal) {
@@ -191,8 +190,13 @@ const vue = new Vue({
       ];
     },
     canShowMoreMessages() {
-      return this.messagesReady && this.commentsReady && this.showAllMessages === false && this.messages.length > this.showingMessagesAmt;
-    }
+      return (
+        this.messagesReady &&
+        this.commentsReady &&
+        this.showAllMessages === false &&
+        this.messages.length > this.showingMessagesAmt
+      );
+    },
   },
   created() {
     (async () => {

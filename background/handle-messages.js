@@ -52,15 +52,13 @@ async function updateMsgCount() {
   }
 }
 scratchAddons.methods.clearMessages = async function () {
-  const res = await fetch("https://scratch.mit.edu/site-api/messages/messages-clear/",
-   {
-     method: "POST",
-     headers: {
-       "X-ScratchAddons-Uses-Fetch": "true"
-     }
-   }
-  );
-  if(res.ok) {
+  const res = await fetch("https://scratch.mit.edu/site-api/messages/messages-clear/", {
+    method: "POST",
+    headers: {
+      "X-ScratchAddons-Uses-Fetch": "true",
+    },
+  });
+  if (res.ok) {
     lastCountCheck = Date.now();
     lastMsgCount = 0;
   }
