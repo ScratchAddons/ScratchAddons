@@ -68,7 +68,7 @@ const vue = new Vue({
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
       };
 
-      const browserLevelPermissions = ["notifications"];
+      const browserLevelPermissions = ["notifications", "clipboardWrite"];
       const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
       if (!addon._enabled && requiredPermissions.length) {
         chrome.permissions.request(
@@ -125,4 +125,10 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
 
 vue.$watch("selectedTab", function (newSelectedTab) {
   this.selectedTag = null;
+});
+window.addEventListener("keydown", function (e) {
+  if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
+    e.preventDefault();
+    document.querySelector("#searchBox").focus();
+  }
 });

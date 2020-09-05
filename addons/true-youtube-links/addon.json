@@ -1,0 +1,19 @@
+{
+  "name": "True YouTube links",
+  "description": "Replaces links to the embedded site with true YT links",
+  "credits": [
+    {
+      "name": "HTML-Fan/NT"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": false
+    }
+  ],
+  "options": [],
+  "tags": ["community", "forums"],
+  "enabled_by_default": false
+}

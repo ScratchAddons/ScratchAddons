@@ -9,7 +9,8 @@ export default async ({ addon, console }) => {
     (Msg) => INDENT + Msg.MOTION_IFONEDGEBOUNCE,
     (Msg) => INDENT + Msg.LOOKS_NEXTCOSTUME,
   ];
-  addon.tab.addEventListener("fakestatechanged", (e) => {
+  addon.tab.addEventListener("fakestatechanged", ({ detail }) => {
+    const e = detail;
     if (e.reducerOrigin !== "locale" || e.path[0] !== "locale") return;
     if (typeof e.prev === "undefined") return;
     if (e.prev === e.next) return;

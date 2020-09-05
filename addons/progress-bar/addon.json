@@ -1,0 +1,38 @@
+{
+  "name": "Progress Bar",
+  "description": "Adds a progress bar for loading and saving projects.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "options": [
+    {
+      "name": "Show progress bar on top of page",
+      "id": "topbar",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Progress bar height (px)",
+      "id": "height",
+      "type": "positive_integer",
+      "default": 5
+    }
+  ],
+  "tags": ["editor"],
+  "enabled_by_default": false
+}
