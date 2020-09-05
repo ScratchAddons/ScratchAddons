@@ -4,7 +4,7 @@ export default async ({ addon, console }) => {
     const e = detail;
     if (!e.action || e.action.type !== 'scratch-paint/clipboard/SET') return;
     const items = e.next.scratchPaint.clipboard.items;
-    if (!items.length) return;
+    if (items.length !== 1) return;
     const firstItem = items[0];
     // TODO vector support
     if (!Array.isArray(firstItem) || firstItem[0] !== 'Raster') return console.log("copied element is vector");
