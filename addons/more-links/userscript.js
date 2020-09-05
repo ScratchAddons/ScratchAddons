@@ -1,7 +1,7 @@
 import "/libraries/linkify.min.js";
 import "/libraries/linkify-element.min.js";
 
-export default async function () {
+export default async function ({ addon }) {
 
   const pageType = document.location.pathname.substr(1).split("/")[0]
   let comments
@@ -23,7 +23,8 @@ export default async function () {
   }
 
   while (true) {
-    comments = await addon.tab.waitForElement(".comment:not(.more-links-checked)")
+    await addon.tab.waitForElement(".comment:not(.more-links-checked)")
+    comments = document.querySelectorAll(".comment:not(.more-links-checked)")
     comments.forEach(comment => {
       linkifyElement(comment)
       comment.classList.add("more-links-checked")
