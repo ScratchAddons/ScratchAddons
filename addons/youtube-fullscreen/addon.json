@@ -1,20 +1,20 @@
 {
-	"name": "YouTube full screen",
-	"description": "Enables the full screen button in Scratch's YouTube video player",
-	"credits": [
-		{
-			"name": "Maximouse",
-			"link": "https://github.com/mxmou/customize-scratch#watch-youtube-videos-on-scratch-in-full-screen"
-		}
-	],
-	"userscripts": [
-		{
-			"url": "userscript.js",
-			"matches": ["https://scratch.mit.edu/discuss/youtube/*"],
-			"runAtComplete": false
-		}
-	],
-	"options": [],
-	"tags": ["community", "forums"],
-	"enabled_by_default": false
+  "name": "YouTube full screen",
+  "description": "Enables the full screen button in Scratch's YouTube video player",
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://github.com/mxmou/customize-scratch#watch-youtube-videos-on-scratch-in-full-screen"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/discuss/youtube/*"],
+      "runAtComplete": false
+    }
+  ],
+  "options": [],
+  "tags": ["community", "forums"],
+  "enabled_by_default": false
 }
