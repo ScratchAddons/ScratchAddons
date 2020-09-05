@@ -37,10 +37,9 @@
     "cookies",
     "webRequest",
     "webRequestBlocking",
-    "storage",
-    "clipboardWrite"
+    "storage"
   ],
-  "optional_permissions": ["notifications"],
+  "optional_permissions": ["notifications", "clipboardWrite"],
   "web_accessible_resources": ["content-scripts/inject/*", "addon-api/*", "addons/*", "libraries/*"],
   "browser_specific_settings": {
     "gecko": {

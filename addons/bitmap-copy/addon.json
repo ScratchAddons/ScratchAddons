@@ -10,5 +10,6 @@
   "options": [],
   "tags": ["editor"],
   "libraries": ["redux"],
+  "permissions": ["clipboardWrite"],
   "enabled_by_default": false
 }

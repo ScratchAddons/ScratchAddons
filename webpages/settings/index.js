@@ -68,7 +68,7 @@ const vue = new Vue({
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
       };
 
-      const browserLevelPermissions = ["notifications"];
+      const browserLevelPermissions = ["notifications", "clipboard"];
       const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
       if (!addon._enabled && requiredPermissions.length) {
         chrome.permissions.request(
