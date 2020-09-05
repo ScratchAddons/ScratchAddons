@@ -1,0 +1,19 @@
+{
+  "name": "Line breaks in comments",
+  "description": "Makes line breaks in comments possible",
+  "credits": [
+    {
+      "name": "HTML-Fan/NT"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": false
+    }
+  ],
+  "options": [],
+  "tags": ["community"],
+  "enabled_by_default": false
+}
