@@ -2,7 +2,7 @@ import Trap from "./Trap.js";
 import ReduxHandler from "./ReduxHandler.js";
 import dataURLToBlob from "../../libraries/data-url-to-blob.js";
 
-const DATA_PNG = 'data:image/png;base64,';
+const DATA_PNG = "data:image/png;base64,";
 const template = document.getElementById("scratch-addons");
 
 export default class Tab extends EventTarget {
@@ -15,14 +15,14 @@ export default class Tab extends EventTarget {
       ? "scratchr2"
       : null;
     this.traps = new Trap();
-    __scratchAddonsTraps.addEventListener("fakestatechanged", ({detail}) => {
+    __scratchAddonsTraps.addEventListener("fakestatechanged", ({ detail }) => {
       const newEvent = new CustomEvent("fakestatechanged", {
         detail: {
           reducerOrigin: detail.reducerOrigin,
           path: detail.path,
           prev: detail.prev,
-          next: detail.next
-        }
+          next: detail.next,
+        },
       });
       this.dispatchEvent(newEvent);
     });
@@ -68,24 +68,26 @@ export default class Tab extends EventTarget {
    * @param {string} dataURL data url of the png image
    * @returns {Promise}
    */
-  copyImage (dataURL) {
-    if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError('Expected PNG data URL'));
-    if (typeof Clipboard.prototype.write === 'function') {
+  copyImage(dataURL) {
+    if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError("Expected PNG data URL"));
+    if (typeof Clipboard.prototype.write === "function") {
       // Chrome
       const blob = dataURLToBlob(dataURL);
-      const items = [new ClipboardItem({
-        'image/png': blob
-      })];
+      const items = [
+        new ClipboardItem({
+          "image/png": blob,
+        }),
+      ];
       return navigator.clipboard.write(items);
     } else {
       // Firefox needs Content Script
       template.setAttribute("data-clipboard-image", dataURL);
-      return this.waitForElement('[data-clipboard]').then(el => {
+      return this.waitForElement("[data-clipboard]").then((el) => {
         const attr = el.dataset.clipboard;
-        el.removeAttribute('data-clipboard');
-        if (attr === 'success') return Promise.resolve();
-        return Promise.reject(new Error(`Error inside clipboard handler: ${attr}`))
-      })
+        el.removeAttribute("data-clipboard");
+        if (attr === "success") return Promise.resolve();
+        return Promise.reject(new Error(`Error inside clipboard handler: ${attr}`));
+      });
     }
   }
 }
