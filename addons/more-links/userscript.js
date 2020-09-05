@@ -7,7 +7,7 @@ export default async function ({ addon }) {
 
   switch (pageType) {
     case "users":
-      linkifyElement(document.querySelectorAll("#user-details .read-only"));
+      document.querySelectorAll("#user-details .read-only").forEach(element => linkifyElement(element))
       break;
     case "projects":
       // Need to convert #[numbers] to solve conflict between tags and external Scratch player links.
