@@ -61,12 +61,18 @@ function injectPrototype() {
       }
     }
     onceMap[trapName] = value;
-    const readyEvent = new CustomEvent("trapready");
-    readyEvent.trapName = trapName;
-    readyEvent.value = value;
+    const readyEvent = new CustomEvent("trapready", {
+      detail: {
+        trapName,
+        value,
+      },
+    });
     onceTarget.dispatchEvent(readyEvent);
-    const specificEvent = new CustomEvent(`ready.${trapName}`);
-    specificEvent.value = value;
+    const specificEvent = new CustomEvent(`ready.${trapName}`, {
+      detail: {
+        value,
+      },
+    });
     onceTarget.dispatchEvent(specificEvent);
   };
 
@@ -87,12 +93,18 @@ function injectPrototype() {
         console.error("Error when injecting attr:", e);
       }
     }
-    const readyEvent = new CustomEvent("trapready");
-    readyEvent.trapName = trapName;
-    readyEvent.value = value;
+    const readyEvent = new CustomEvent("trapready", {
+      detail: {
+        trapName,
+        value,
+      },
+    });
     manyTarget.dispatchEvent(readyEvent);
-    const specificEvent = new CustomEvent(`ready.${trapName}`);
-    specificEvent.value = value;
+    const specificEvent = new CustomEvent(`ready.${trapName}`, {
+      detail: {
+        value,
+      },
+    });
     manyTarget.dispatchEvent(specificEvent);
   };
 
@@ -106,11 +118,14 @@ function injectPrototype() {
    * @param {*} next next state. note that prev and next can be shallowly or deeply equal.
    */
   const notifyNewState = (origin, path, prev, next) => {
-    const ev = new CustomEvent("fakestatechanged");
-    ev.reducerOrigin = origin;
-    ev.path = path;
-    ev.prev = prev;
-    ev.next = next;
+    const ev = new CustomEvent("fakestatechanged", {
+      detail: {
+        reducerOrigin: origin,
+        path,
+        prev,
+        next,
+      },
+    });
     __scratchAddonsTraps.dispatchEvent(ev);
   };
 

@@ -2,11 +2,14 @@ export default class ReduxHandler extends EventTarget {
   constructor() {
     super();
     if (!__scratchAddonsRedux.target) return;
-    __scratchAddonsRedux.target.addEventListener("statechanged", (e) => {
-      const newEvent = new CustomEvent("statechanged");
-      newEvent.action = e.action;
-      newEvent.prev = e.prev;
-      newEvent.next = e.next;
+    __scratchAddonsRedux.target.addEventListener("statechanged", ({ detail }) => {
+      const newEvent = new CustomEvent("statechanged", {
+        detail: {
+          action: detail.action,
+          prev: detail.prev,
+          next: detail.next,
+        },
+      });
       this.dispatchEvent(newEvent);
     });
   }
