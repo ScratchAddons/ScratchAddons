@@ -1,6 +1,11 @@
 {
   "name": "More links",
   "description": "Adds links for URLs pointing outside scratch.mit.edu.",
+  "credits": [
+    {
+      "name": "Hans5958"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
