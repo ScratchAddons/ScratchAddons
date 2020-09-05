@@ -4,5 +4,5 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     addon.badge.text = msgCount;
   };
   setBadge();
-  setInterval(setBadge, 3000);
+  setInterval(setBadge, 2500);
 }

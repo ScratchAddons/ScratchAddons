@@ -1,3 +1,5 @@
+const dateNow = Date.now();
+
 // <comment> component
 const Comment = Vue.extend({
   template: document.querySelector("template#comment-component").innerHTML,
@@ -6,11 +8,19 @@ const Comment = Vue.extend({
     return {
       replying: false,
       replyBoxValue: "",
+      deleted: false,
+      deleteStep: 0
     };
   },
   methods: {
     openProfile: (username) => window.open(`https://scratch.mit.edu/users/${username}/`),
+    openComment() {
+      const urlPath = this.resourceType === "user" ? "users" : this.resourceType === "gallery" ? "studios" : "projects";
+      const url = `https://scratch.mit.edu/${urlPath}/${this.resourceId}/#comments-${this.commentId.substring(2)}`;
+      window.open(url);
+    },
     postComment() {
+      this.replying = false;
       const parent_pseudo_id = this.isParent ? this.commentId : this.thisComment.childOf;
       const parent_id = Number(parent_pseudo_id.substring(2));
       chrome.runtime.sendMessage(
@@ -39,11 +49,45 @@ const Comment = Vue.extend({
             };
             this.commentsArr[parent_pseudo_id].children.push(newCommentPseudoId);
             this.replyBoxValue = "";
-            this.replying = false;
           }
         }
       );
     },
+    deleteComment() {
+      if(this.deleteStep === 0) {
+        setTimeout(() => this.deleteStep = 1, 250);
+        setTimeout(() => {
+          if(this.deleteStep === 1) this.deleteStep = 0;
+        }, 5000);
+        return;
+      }
+      this.deleted = true;
+      const previousContent = this.thisComment.content;
+      this.thisComment.content = "Deleting comment...";
+      chrome.runtime.sendMessage(
+        {
+          scratchMessaging: {
+            deleteComment: {
+              resourceType: this.resourceType,
+              resourceId: this.resourceId,
+              commentId: Number(this.commentId.substring(2))
+            },
+          },
+        },
+        (res) => {
+          if (res.error) {
+            alert("Error deleting comment - you might not have permission to do this.");
+            this.thisComment.content = previousContent;
+            this.deleteStep = 0;
+            this.deleted = false;
+          }
+          else {
+            if(this.isParent) this.thisComment.children = [];
+            this.thisComment.content = "[deleted]";
+          }
+        }
+      );
+    }
   },
   computed: {
     thisComment() {
@@ -55,6 +99,21 @@ const Comment = Vue.extend({
     username() {
       return vue.username;
     },
+    commentTimeAgo() {
+      const commentTimestamp = new Date(this.thisComment.date).getTime();
+      const timeDiffSeconds = (dateNow - commentTimestamp)/1000;
+      let options = {unit: null, divideBy: null};
+      if(timeDiffSeconds < 60) options = {unit: "second", divideBy: 1};
+      else if(timeDiffSeconds < 3600) options = {unit: "minute", divideBy: 60};
+      else if(timeDiffSeconds < 86400) options = {unit: "hour", divideBy: 60*60};
+      else options = {unit: "day", divideBy: 60*60*24};
+      const timeFormatter = new Intl.RelativeTimeFormat("en", {
+        localeMatcher: "best fit",
+        numeric: "auto",
+        style: "long",
+      });
+      return timeFormatter.format(Math.round(-timeDiffSeconds/options.divideBy), options.unit);
+    }
   },
   watch: {
     replying(newVal) {
@@ -81,6 +140,7 @@ const vue = new Vue({
     commentsProgress: 0,
     showAllMessages: false,
     showingMessagesAmt: null,
+    markedAsRead: false,
 
     follows: [],
     studioInvites: [],
@@ -130,6 +190,9 @@ const vue = new Vue({
         ...this.projects.filter((proj) => proj.unreadComments === 0),
       ];
     },
+    canShowMoreMessages() {
+      return this.messagesReady && this.commentsReady && this.showAllMessages === false && this.messages.length > this.showingMessagesAmt;
+    }
   },
   created() {
     (async () => {
@@ -149,9 +212,12 @@ const vue = new Vue({
   methods: {
     getData() {
       return new Promise((resolve) => {
-        let responded = false;
+        const timeout = setTimeout(() => {
+          this.error = "addonDisabled";
+          resolve(undefined);
+        }, 2000);
         chrome.runtime.sendMessage({ scratchMessaging: "getData" }, (res) => {
-          responded = true;
+          clearTimeout(timeout);
           if (res) {
             this.messages = res.messages;
             this.msgCount = res.lastMsgCount;
@@ -160,30 +226,16 @@ const vue = new Vue({
             resolve(res.error ? false : true);
           }
         });
-        setTimeout(() => {
-          if (!responded) {
-            this.error = "addonDisabled";
-            resolve(undefined);
-          }
-        }, 1000);
       });
     },
 
     // For UI
-    showMoreOrLess() {
-      if (this.messagesReady && this.commentsReady && this.msgCount < 40) this.showAllMessages = !this.showAllMessages;
-    },
     markAsRead() {
       chrome.runtime.sendMessage({ scratchMessaging: "markAsRead" });
-      this.follows = [];
-      this.studioInvites = [];
-      this.forumActivity = [];
-      this.remixes = [];
-      this.profiles = [];
-      this.studios = [];
-      this.projects = [];
-      this.msgCount = 0;
-      this.showingMessagesAmt = 0;
+      this.markedAsRead = true;
+    },
+    reloadPage() {
+      location.reload();
     },
     openProfile: (username) => window.open(`https://scratch.mit.edu/users/${username}/`),
     openProject: (projectId) => window.open(`https://scratch.mit.edu/projects/${projectId}/`),
@@ -196,7 +248,7 @@ const vue = new Vue({
       if (search) return search;
       const obj = {
         id: projectId,
-        title,
+        title: htmlToText(title),
         unreadComments: 0,
         commentChains: [],
         loves: 0,
@@ -223,7 +275,7 @@ const vue = new Vue({
       if (search) return search;
       const obj = {
         id: studioId,
-        title,
+        title: htmlToText(title),
         unreadComments: 0,
         commentChains: [],
         loadedComments: false,
@@ -296,20 +348,20 @@ const vue = new Vue({
           this.studioInvites.push({
             actor: message.actor_username,
             studioId: message.gallery_id,
-            studioTitle: message.title,
+            studioTitle: htmlToText(message.title),
           });
         } else if (message.type === "forumpost") {
           // We only want one message per forum topic
           if (!this.forumActivity.find((obj) => obj.topicId === message.topic_id)) {
             this.forumActivity.push({
               topicId: message.topic_id,
-              topicTitle: message.topic_title,
+              topicTitle: htmlToText(message.topic_title),
             });
           }
         } else if (message.type === "remixproject") {
           this.remixes.push({
-            parentTitle: message.parent_title,
-            remixTitle: message.title,
+            parentTitle: htmlToText(message.parent_title),
+            remixTitle: htmlToText(message.title),
             actor: message.actor_username,
             projectId: message.project_id,
           });
@@ -318,7 +370,7 @@ const vue = new Vue({
           if (!this.studioActivity.find((obj) => obj.studioId === message.gallery_id)) {
             this.studioActivity.push({
               studioId: message.gallery_id,
-              studioTitle: message.title,
+              studioTitle: htmlToText(message.title),
             });
           }
         } else if (message.type === "loveproject") {
@@ -373,3 +425,10 @@ const vue = new Vue({
     },
   },
 });
+
+function htmlToText(html) {
+  if (html === undefined) return;
+  const txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  return txt.value;
+}

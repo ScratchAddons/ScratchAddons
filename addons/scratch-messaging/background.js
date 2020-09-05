@@ -36,7 +36,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         routine();
         break;
       } else {
-        await runCheckMessagesAfter({}, 2000);
+        await runCheckMessagesAfter({}, 5000);
       }
     }
   }
@@ -62,9 +62,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     data.ready = false;
 
     if (checkOld) {
-      const messagesToCheck = msgCount > 1000 ? 1000 : msgCount;
-      // Note: even if messagesToCheck is lower than 40, we'll get all
-      // the messages from the first page (usually 40, may be less)
+      const messagesToCheck = msgCount > 1000 ? 1000 : msgCount < 41 ? 40 : msgCount;
       const seenMessageIds = [];
       for (let checkedPages = 0; seenMessageIds.length < messagesToCheck; checkedPages++) {
         const messagesPage = await addon.account.getMessages({ offset: checkedPages * 40 });
@@ -78,6 +76,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
             if (seenMessageIds.length === msgCount && msgCount > 39) break;
           }
         }
+        if (messagesPage.length !== 40) break;
       }
     } else {
       checkedMessages = await addon.account.getMessages({ offset: 0 });
@@ -107,6 +106,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       addon.self;
     } catch (err) {
       chrome.runtime.onMessage.removeListener(thisFunction);
+      return;
     }
     if (!request.scratchMessaging) return;
     const popupRequest = request.scratchMessaging;
@@ -116,15 +116,19 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       sendComment(popupRequest.postComment).then((status) => sendResponse(status));
       return true;
     } else if (popupRequest.retrieveComments) {
-      const commentRequest = popupRequest.retrieveComments;
-      retrieveComments(commentRequest.resourceType, commentRequest.resourceId, commentRequest.commentIds)
+      const { resourceType, resourceId, commentIds } = popupRequest.retrieveComments;
+      retrieveComments(resourceType, resourceId, commentIds)
         .then((comments) => sendResponse(comments))
-        .catch((err) => sendResponse({}));
+        .catch((err) => sendResponse(err));
       return true;
     } else if (popupRequest === "markAsRead") {
-      addon.fetch("https://scratch.mit.edu/site-api/messages/messages-clear/", {
-        method: "POST",
-      });
+      addon.account.clearMessages();
+    } else if (popupRequest.deleteComment) {
+      const { resourceType, resourceId, commentId } = popupRequest.deleteComment;
+      deleteComment({ resourceType, resourceId, commentId })
+      .then((res) => sendResponse(res))
+      .catch((err) => sendResponse(err));
+      return true;
     }
   });
 
@@ -215,6 +219,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       }
     }
     value = value.replace(/\n/g, " ").trim(); // Remove newlines
+    value = value.replace(/<a href="\//g, '<a href="https://scratch.mit.edu/');
     return value;
   }
 
@@ -223,8 +228,6 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       // For some weird reason, this only works with XHR in Chrome...
       const xhr = new XMLHttpRequest();
       xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/`, true);
-      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
-      xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
       xhr.setRequestHeader("X-ScratchAddons-Uses-Fetch", "true");
 
       xhr.onload = function () {
@@ -241,6 +244,22 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       };
 
       xhr.send(JSON.stringify({ content, parent_id, commentee_id }));
+    });
+  }
+
+  function deleteComment({ resourceType, resourceId, commentId }) {
+    return new Promise((resolve) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/`, true);
+      xhr.setRequestHeader("X-ScratchAddons-Uses-Fetch", "true");
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          resolve(200);
+        } else resolve({ error: xhr.status });
+      };
+
+      xhr.send(JSON.stringify({id : String(commentId)}));
     });
   }
 }

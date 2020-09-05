@@ -1,5 +1,5 @@
 html {
-  width: 360px;
+  width: 400px;
 }
 
 body {
@@ -62,7 +62,7 @@ body {
 }
 
 iframe {
-  width: 352px;
+  width: 392px;
   height: 500px;
   overflow-x: hidden;
   overflow-y: auto;

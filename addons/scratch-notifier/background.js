@@ -16,7 +16,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   };
 
   checkCount();
-  setInterval(checkCount, 6000);
+  setInterval(checkCount, 5000);
 
   async function checkCount() {
     if (!addon.auth.isLoggedIn) return;
@@ -149,9 +149,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   }
 
   function markAsRead() {
-    addon.fetch("https://scratch.mit.edu/site-api/messages/messages-clear/", {
-      method: "POST",
-    });
+    addon.account.clearMessages();
     msgCount = 0;
   }
 
@@ -220,7 +218,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           commentee: message.commentee_username, // Comments only
           commentUrl, // Comments only
           title: htmlToText(message.comment_obj_title || message.topic_title || message.title || message.project_title),
-          element_id: message.comment_id || message.gallery_id || message.project_id || message.topic_title,
+          element_id: message.comment_id || message.gallery_id || message.project_id || message.topic_id,
           parent_title: htmlToText(message.parent_title), // Remixes only
         };
         notifyMessage(messageInfo);
