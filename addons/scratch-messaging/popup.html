@@ -12,13 +12,9 @@
     <template id="comment-component">
       <div class="comment" :class="{'child-comment': !isParent, 'unread': unread}">
         <a class="comment-author" @click="openProfile(thisComment.author)">{{ thisComment.author }}</a>
-         · {{ commentTimeAgo }} ·
-        <img src="./popout.png" class="popout-comment" @click="openComment()" title="Open comment in new tab"></a>
-        <a 
-          @click="deleteComment()"
-          class="delete-btn"
-          :class="{'bold': deleteStep === 1}"
-          v-show="!deleted"
+        · {{ commentTimeAgo }} ·
+        <img src="./popout.png" class="popout-comment" @click="openComment()" title="Open comment in new tab" />
+        <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
           >{{ deleteStep === 0 ? "Delete" : "Click to confirm deletion" }}
         </a>
         <div class="comment-content" :class="{'comment-self' : thisComment.author === username}">
@@ -35,8 +31,8 @@
         <div class="reply-box-comment" v-show="replying">
           <textarea class="reply-textarea" maxlength="500" v-model="replyBoxValue"></textarea>
           <div class="reply-box-buttons">
-            <button @click="postComment()" style="background-color: #4d97ff">Post</button>
-            <button @click="replying = false" style="background-color: gray">Cancel</button>
+            <button @click="postComment()" style="background-color: #4d97ff;">Post</button>
+            <button @click="replying = false" style="background-color: gray;">Cancel</button>
             <span class="comment-chars"> {{500 - lengthOfReplyBoxValue}} characters left </span>
           </div>
         </div>
@@ -44,11 +40,14 @@
     </template>
   </head>
 
-  <body style="display: none" v-show="mounted">
+  <body style="display: none;" v-show="mounted">
     <div v-show="!error">
       <!-- Follows -->
       <div class="message-type" v-show="follows.length">
-        <div class="message-type-title hover-reverse" @click="messageTypeExtended.follows = !messageTypeExtended.follows">
+        <div
+          class="message-type-title hover-reverse"
+          @click="messageTypeExtended.follows = !messageTypeExtended.follows"
+        >
           <span class="message-type-title-text">Follows</span>
           <span class="float-right">👤 {{ follows.length }}</span>
         </div>
@@ -61,14 +60,17 @@
 
       <!-- Studio invites -->
       <div class="message-type" v-show="studioInvites.length">
-        <div class="message-type-title hover-reverse" @click="messageTypeExtended.studioInvites = !messageTypeExtended.studioInvites">
+        <div
+          class="message-type-title hover-reverse"
+          @click="messageTypeExtended.studioInvites = !messageTypeExtended.studioInvites"
+        >
           <span class="message-type-title-text">Studio invites</span>
           <span class="float-right">✉️ {{ studioInvites.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.studioInvites">
           <div v-for="invite of studioInvites">
             <a @click="openProfile(invite.actor)">{{ invite.actor }}</a> invited you to curate
-            <a @click="openStudio(invite.studioId, 'curators')" style="text-decoration: underline"
+            <a @click="openStudio(invite.studioId, 'curators')" style="text-decoration: underline;"
               >{{ invite.studioTitle }}</a
             >
           </div>
@@ -77,14 +79,17 @@
 
       <!-- Forum activity -->
       <div class="message-type" v-show="forumActivity.length">
-        <div class="message-type-title hover-reverse" @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity">
+        <div
+          class="message-type-title hover-reverse"
+          @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity"
+        >
           <span class="message-type-title-text">Forum activity</span>
           <span class="float-right">📚 {{ forumActivity.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.forumActivity">
           <div v-for="forumTopic of forumActivity">
             There are new posts in the forum thread
-            <a @click="openUnreadPostsForums(forumTopic.topicId)" style="text-decoration: underline"
+            <a @click="openUnreadPostsForums(forumTopic.topicId)" style="text-decoration: underline;"
               >{{ forumTopic.topicTitle }}</a
             >
           </div>
@@ -103,22 +108,24 @@
         <div class="message-type-details" v-show="messageTypeExtended.studioActivity">
           <div v-for="studio of studioActivity">
             There was new activity in
-            <a @click="openStudio(studio.studioId)" style="text-decoration: underline">{{ studio.studioTitle }}</a>
+            <a @click="openStudio(studio.studioId)" style="text-decoration: underline;">{{ studio.studioTitle }}</a>
           </div>
         </div>
       </div>
 
       <!-- Remixes -->
       <div class="message-type" v-show="remixes.length">
-        <div class="message-type-title hover-reverse" @click="messageTypeExtended.remixes = !messageTypeExtended.remixes">
+        <div
+          class="message-type-title hover-reverse"
+          @click="messageTypeExtended.remixes = !messageTypeExtended.remixes"
+        >
           <span class="message-type-title-text">Remixes</span>
           <span class="float-right">🔄 {{ remixes.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.remixes">
           <div v-for="remix of remixes">
-            <a @click="openProfile(remix.actor)">{{ remix.actor }}</a> remixed your project "{{ remix.parentTitle }}"
-            as
-            <a @click="openProject(remix.projectId)" style="text-decoration: underline">{{ remix.remixTitle }}</a>
+            <a @click="openProfile(remix.actor)">{{ remix.actor }}</a> remixed your project "{{ remix.parentTitle }}" as
+            <a @click="openProject(remix.projectId)" style="text-decoration: underline;">{{ remix.remixTitle }}</a>
           </div>
         </div>
       </div>
@@ -243,7 +250,7 @@
     </div>
 
     <!-- Show errors, loading, etc. -->
-    <div style="text-align: center; font-size: .9rem; margin-bottom: 3.5rem; font-weight: bold;">
+    <div style="text-align: center; font-size: 0.9rem; margin-bottom: 3.5rem; font-weight: bold;">
       <br />
       <span v-show="error === 'notReady'">Loading messages...</span>
       <span v-show="error === 'loggedOut'">Can't access messages, please log in on Scratch.</span>
@@ -262,7 +269,9 @@
     <div id="bottom-bar" v-show="error !== 'addonDisabled'">
       <a @click="markAsRead()" v-show="!markedAsRead">Mark messages as read</a>
       <span v-show="markedAsRead" style="font-weight: bold;">✓ Marked as read</span>&nbsp;&nbsp;|&nbsp;&nbsp;
-      <a href="https://scratch.mit.edu/messages" id="open-messages">Open messages page&nbsp;&nbsp;<img src="./popout.png" id="popout"></a>
+      <a href="https://scratch.mit.edu/messages" id="open-messages"
+        >Open messages page&nbsp;&nbsp;<img src="./popout.png" id="popout"
+      /></a>
     </div>
   </body>
 </html>
