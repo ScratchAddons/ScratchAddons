@@ -3,7 +3,8 @@ name: "➕ New addons"
 about: New addons
 title: "[New addon] ..."
 labels: new-addons
-assignees: ""
+assignees: ''
+
 ---
 
 **Describe the new addon**
@@ -12,4 +13,4 @@ assignees: ""
 
 **Link to the new addon**
 
-<!-- Add a link to the new addon here. -->
+<!-- Add a link to the new addon here. If you can't, you can remove this. -->
