@@ -223,9 +223,6 @@ export default async function ({ addon, global, console }) {
       alertMessage.appendChild(barOuter);
       return;
     }
-
-    // Couldn't find a spot to put the bar, so remove it from the document.
-    barOuter.parentElement.removeChild(barOuter);
   }
 
   const mutationObserver = new MutationObserver(inject);
