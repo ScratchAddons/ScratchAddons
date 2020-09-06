@@ -140,31 +140,35 @@ export default async function ({ addon, global, console }) {
 
   // Scratch uses XMLHttpRequest to upload the project JSON.
   const originalOpen = XMLHttpRequest.prototype.open;
-  XMLHttpRequest.prototype.open = function (method, url) {
-    if (
-      (method.toLowerCase() === "put" && PROJECT_REGEX.test(url)) ||
-      (method.toLowerCase() === "post" && COPY_REGEX.test(url)) ||
-      (method.toLowerCase() === "post" && REMIX_REGEX.test(url))
-    ) {
-      // This is a request to save, remix, or copy a project.
-      if (REMIX_REGEX.test(url)) {
-        setLoadingPhase(REMIX);
-      } else if (COPY_REGEX.test(url)) {
-        setLoadingPhase(COPY);
-      } else {
-        setLoadingPhase(SAVE_JSON);
-      }
-      this.upload.addEventListener("loadend", (e) => {
-        setProgress(1);
-      });
-      this.upload.addEventListener("progress", (e) => {
-        if (e.lengthComputable) {
-          setProgress(e.loaded / e.total);
+  XMLHttpRequest.prototype.open = function (...args) {
+    const method = args[0];
+    const url = args[1];
+    if (typeof method === "string" && typeof url === "string") {
+      if (
+        (method.toLowerCase() === "put" && PROJECT_REGEX.test(url)) ||
+        (method.toLowerCase() === "post" && COPY_REGEX.test(url)) ||
+        (method.toLowerCase() === "post" && REMIX_REGEX.test(url))
+      ) {
+        // This is a request to save, remix, or copy a project.
+        if (REMIX_REGEX.test(url)) {
+          setLoadingPhase(REMIX);
+        } else if (COPY_REGEX.test(url)) {
+          setLoadingPhase(COPY);
+        } else {
+          setLoadingPhase(SAVE_JSON);
         }
-      });
+        this.upload.addEventListener("loadend", (e) => {
+          setProgress(1);
+        });
+        this.upload.addEventListener("progress", (e) => {
+          if (e.lengthComputable) {
+            setProgress(e.loaded / e.total);
+          }
+        });
+      }
     }
 
-    originalOpen.call(this, method, url);
+    originalOpen.apply(this, args);
   };
 
   // Scratch uses a Worker to fetch project assets.
