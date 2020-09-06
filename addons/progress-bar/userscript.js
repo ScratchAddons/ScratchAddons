@@ -172,7 +172,8 @@ export default async function ({ addon, global, console }) {
   let foundWorker = false;
   const originalPostMessage = Worker.prototype.postMessage;
   Worker.prototype.postMessage = function (message, options) {
-    if (typeof message.id === "string" && typeof message.url === "string") {
+    if (message && typeof message.id === "string" && typeof message.url === "string") {
+      // This is a message passed to the worker to start an asset download.
       setLoadingPhase(LOAD_ASSETS);
       totalTasks++;
       updateTasks();
@@ -182,8 +183,10 @@ export default async function ({ addon, global, console }) {
         foundWorker = true;
         this.addEventListener("message", (e) => {
           const data = e.data;
-          finishedTasks += data.length;
-          updateTasks();
+          if (Array.isArray(data)) {
+            finishedTasks += data.length;
+            updateTasks();
+          }
         });
       }
     }
