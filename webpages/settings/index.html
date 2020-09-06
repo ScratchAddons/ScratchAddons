@@ -32,10 +32,10 @@
           <img src="./brush.svg" />
           <span>Themes</span>
         </div>
-        <!--<div class="category">
+        <div class="category" :class="{sel: selectedTab === 'settings'}" @click="selectedTab = 'settings'">
           <img src="./wrench.svg" />
           <span>More settings</span>
-        </div>-->
+        </div>
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
