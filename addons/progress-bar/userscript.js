@@ -140,31 +140,35 @@ export default async function ({ addon, global, console }) {
 
   // Scratch uses XMLHttpRequest to upload the project JSON.
   const originalOpen = XMLHttpRequest.prototype.open;
-  XMLHttpRequest.prototype.open = function (method, url) {
-    if (
-      (method.toLowerCase() === "put" && PROJECT_REGEX.test(url)) ||
-      (method.toLowerCase() === "post" && COPY_REGEX.test(url)) ||
-      (method.toLowerCase() === "post" && REMIX_REGEX.test(url))
-    ) {
-      // This is a request to save, remix, or copy a project.
-      if (REMIX_REGEX.test(url)) {
-        setLoadingPhase(REMIX);
-      } else if (COPY_REGEX.test(url)) {
-        setLoadingPhase(COPY);
-      } else {
-        setLoadingPhase(SAVE_JSON);
-      }
-      this.upload.addEventListener("loadend", (e) => {
-        setProgress(1);
-      });
-      this.upload.addEventListener("progress", (e) => {
-        if (e.lengthComputable) {
-          setProgress(e.loaded / e.total);
+  XMLHttpRequest.prototype.open = function (...args) {
+    const method = args[0];
+    const url = args[1];
+    if (typeof method === "string" && typeof url === "string") {
+      if (
+        (method.toLowerCase() === "put" && PROJECT_REGEX.test(url)) ||
+        (method.toLowerCase() === "post" && COPY_REGEX.test(url)) ||
+        (method.toLowerCase() === "post" && REMIX_REGEX.test(url))
+      ) {
+        // This is a request to save, remix, or copy a project.
+        if (REMIX_REGEX.test(url)) {
+          setLoadingPhase(REMIX);
+        } else if (COPY_REGEX.test(url)) {
+          setLoadingPhase(COPY);
+        } else {
+          setLoadingPhase(SAVE_JSON);
         }
-      });
+        this.upload.addEventListener("loadend", (e) => {
+          setProgress(1);
+        });
+        this.upload.addEventListener("progress", (e) => {
+          if (e.lengthComputable) {
+            setProgress(e.loaded / e.total);
+          }
+        });
+      }
     }
 
-    originalOpen.call(this, method, url);
+    originalOpen.apply(this, args);
   };
 
   // Scratch uses a Worker to fetch project assets.
@@ -172,7 +176,8 @@ export default async function ({ addon, global, console }) {
   let foundWorker = false;
   const originalPostMessage = Worker.prototype.postMessage;
   Worker.prototype.postMessage = function (message, options) {
-    if (typeof message.id === "string" && typeof message.url === "string") {
+    if (message && typeof message.id === "string" && typeof message.url === "string") {
+      // This is a message passed to the worker to start an asset download.
       setLoadingPhase(LOAD_ASSETS);
       totalTasks++;
       updateTasks();
@@ -182,8 +187,10 @@ export default async function ({ addon, global, console }) {
         foundWorker = true;
         this.addEventListener("message", (e) => {
           const data = e.data;
-          finishedTasks += data.length;
-          updateTasks();
+          if (Array.isArray(data)) {
+            finishedTasks += data.length;
+            updateTasks();
+          }
         });
       }
     }
@@ -223,9 +230,6 @@ export default async function ({ addon, global, console }) {
       alertMessage.appendChild(barOuter);
       return;
     }
-
-    // Couldn't find a spot to put the bar, so remove it from the document.
-    barOuter.parentElement.removeChild(barOuter);
   }
 
   const mutationObserver = new MutationObserver(inject);
