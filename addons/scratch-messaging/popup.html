@@ -6,38 +6,48 @@
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
     <script src="./popup.js" defer></script>
+    <base target="_blank" />
+
+    <!-- <comment> element template -->
     <template id="comment-component">
       <div class="comment" :class="{'child-comment': !isParent, 'unread': unread}">
         <a class="comment-author" @click="openProfile(thisComment.author)">{{ thisComment.author }}</a>
-        <div class="comment-content">
-          {{{ thisComment.content }}} &nbsp;&nbsp;&nbsp;
-          <a class="reply-button-comment" @click="replying = true" v-show="!replying">Reply</a>
+        · {{ commentTimeAgo }} ·
+        <img src="./popout.png" class="popout-comment" @click="openComment()" title="Open comment in new tab" />
+        <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
+          >{{ deleteStep === 0 ? "Delete" : "Click to confirm deletion" }}
+        </a>
+        <div class="comment-content" :class="{'comment-self' : thisComment.author === username}">
+          <span class="comment-content-text">{{{ thisComment.content }}}</span>
+          <a
+            class="reply-button-comment"
+            @click="replying = true"
+            :class="{'replying': replying}"
+            :style="{'visibility': replying ? 'hidden' : 'visible'}"
+            v-show="!deleted"
+            >Reply</a
+          >
         </div>
         <div class="reply-box-comment" v-show="replying">
           <textarea class="reply-textarea" maxlength="500" v-model="replyBoxValue"></textarea>
           <div class="reply-box-buttons">
-            <button @click="postComment()" style="background-color: #0f8bc0">Post</button>
+            <button @click="postComment()" style="background-color: #4d97ff">Post</button>
             <button @click="replying = false" style="background-color: gray">Cancel</button>
-            <span class="comment-chars"> {{500 - lengthOfReplyBoxValue}} </span>
+            <span class="comment-chars"> {{500 - lengthOfReplyBoxValue}} characters left </span>
           </div>
         </div>
       </div>
     </template>
   </head>
+
   <body style="display: none" v-show="mounted">
-    <div v-show="data.error" style="text-align: center">
-      <br />
-      <span v-show="data.error === 'notReady'">Working on it, give us a few seconds...</span>
-      <span v-show="data.error === 'loggedOut'">Can't access messages, please log in on Scratch.</span>
-      <span v-show="data.error === 'addonDisabled'"
-        >Please enable the Scratch Messaging addon in
-        <a href="/webpages/settings/index.html" target="_blank">Scratch Addons settings</a></span
-      >
-    </div>
-    <div v-show="!data.error">
+    <div v-show="!error">
       <!-- Follows -->
       <div class="message-type" v-show="follows.length">
-        <div class="message-type-title" @click="messageTypeExtended.follows = !messageTypeExtended.follows">
+        <div
+          class="message-type-title hover-reverse"
+          @click="messageTypeExtended.follows = !messageTypeExtended.follows"
+        >
           <span class="message-type-title-text">Follows</span>
           <span class="float-right">👤 {{ follows.length }}</span>
         </div>
@@ -50,7 +60,10 @@
 
       <!-- Studio invites -->
       <div class="message-type" v-show="studioInvites.length">
-        <div class="message-type-title" @click="messageTypeExtended.studioInvites = !messageTypeExtended.studioInvites">
+        <div
+          class="message-type-title hover-reverse"
+          @click="messageTypeExtended.studioInvites = !messageTypeExtended.studioInvites"
+        >
           <span class="message-type-title-text">Studio invites</span>
           <span class="float-right">✉️ {{ studioInvites.length }}</span>
         </div>
@@ -66,7 +79,10 @@
 
       <!-- Forum activity -->
       <div class="message-type" v-show="forumActivity.length">
-        <div class="message-type-title" @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity">
+        <div
+          class="message-type-title hover-reverse"
+          @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity"
+        >
           <span class="message-type-title-text">Forum activity</span>
           <span class="float-right">📚 {{ forumActivity.length }}</span>
         </div>
@@ -80,9 +96,29 @@
         </div>
       </div>
 
+      <!-- Studio activity -->
+      <div class="message-type" v-show="studioActivity.length">
+        <div
+          class="message-type-title hover-reverse"
+          @click="messageTypeExtended.studioActivity = !messageTypeExtended.studioActivity"
+        >
+          <span class="message-type-title-text">Studio activity</span>
+          <span class="float-right">🆕 {{ studioActivity.length }}</span>
+        </div>
+        <div class="message-type-details" v-show="messageTypeExtended.studioActivity">
+          <div v-for="studio of studioActivity">
+            There was new activity in
+            <a @click="openStudio(studio.studioId)" style="text-decoration: underline">{{ studio.studioTitle }}</a>
+          </div>
+        </div>
+      </div>
+
       <!-- Remixes -->
       <div class="message-type" v-show="remixes.length">
-        <div class="message-type-title" @click="messageTypeExtended.remixes = !messageTypeExtended.remixes">
+        <div
+          class="message-type-title hover-reverse"
+          @click="messageTypeExtended.remixes = !messageTypeExtended.remixes"
+        >
           <span class="message-type-title-text">Remixes</span>
           <span class="float-right">🔄 {{ remixes.length }}</span>
         </div>
@@ -95,10 +131,14 @@
       </div>
 
       <!-- Profiles -->
-      <div class="message-type" v-for="profile of profilesOrdered">
-        <div class="message-type-title">
+      <div
+        class="message-type"
+        v-for="profile of profilesOrdered"
+        v-show="profile.unreadComments && profile.loadedComments"
+      >
+        <div class="message-type-title sticky">
           <a class="message-type-title-text" @click="openProfile(profile.username)">
-            <span v-if="profile.username === data.username">Your profile</span>
+            <span v-if="profile.username === username">Your profile</span>
             <span v-else>{{ profile.username }}'s profile</span>
           </a>
           <span class="float-right">
@@ -109,7 +149,7 @@
           <div
             class="comment-chain"
             v-for="parentCommentId of profile.commentChains"
-            :class="{'unread': comments[parentCommentId]._unread }"
+            :class="{'unread': isCommentUnread(parentCommentId) }"
           >
             <comment
               :comment-id="parentCommentId"
@@ -124,7 +164,7 @@
               :comment-id="childCommentId"
               :comments-arr="comments"
               :is-parent="false"
-              :unread="comments[parentCommentId]._unread && !comments[parentCommentId]._unread"
+              :unread="isCommentUnread(childCommentId)"
               resource-type="user"
               :resource-id="profile.username"
             ></comment>
@@ -132,8 +172,8 @@
         </div>
       </div>
       <!-- Studios -->
-      <div class="message-type" v-for="studio of studios">
-        <div class="message-type-title">
+      <div class="message-type" v-for="studio of studios" v-show="studio.unreadComments && studio.loadedComments">
+        <div class="message-type-title sticky">
           <a class="message-type-title-text" @click="openStudio(studio.id)">Studio: {{ studio.title }}</a>
           <span class="float-right">
             <span v-show="studio.unreadComments">💬 {{studio.unreadComments}}</span>
@@ -143,7 +183,7 @@
           <div
             class="comment-chain"
             v-for="parentCommentId of studio.commentChains"
-            :class="{'unread': comments[parentCommentId]._unread }"
+            :class="{'unread': isCommentUnread(parentCommentId) }"
           >
             <comment
               :comment-id="parentCommentId"
@@ -158,7 +198,7 @@
               :comment-id="childCommentId"
               :comments-arr="comments"
               :is-parent="false"
-              :unread="comments[parentCommentId]._unread && !comments[parentCommentId]._unread"
+              :unread="isCommentUnread(childCommentId)"
               resource-type="gallery"
               :resource-id="studio.id"
             ></comment>
@@ -167,8 +207,13 @@
       </div>
 
       <!-- Projects -->
-      <div class="message-type" v-for="project of projectsOrdered">
-        <div class="message-type-title">
+      <div
+        class="message-type"
+        v-for="project of projectsOrdered"
+        v-show="project.unreadComments && project.loadedComments || 
+              !project.unreadComments && commentsReady"
+      >
+        <div class="message-type-title sticky">
           <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
           <span class="float-right">
             <span v-show="project.loves">❤️ {{project.loves}}</span>
@@ -180,7 +225,7 @@
           <div
             class="comment-chain"
             v-for="parentCommentId of project.commentChains"
-            :class="{'unread': comments[parentCommentId]._unread }"
+            :class="{'unread': isCommentUnread(parentCommentId) }"
           >
             <comment
               :comment-id="parentCommentId"
@@ -195,13 +240,38 @@
               :comment-id="childCommentId"
               :comments-arr="comments"
               :is-parent="false"
-              :unread="comments[parentCommentId]._unread && !comments[parentCommentId]._unread"
+              :unread="isCommentUnread(childCommentId)"
               resource-type="project"
               :resource-id="project.id"
             ></comment>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Show errors, loading, etc. -->
+    <div style="text-align: center; font-size: 0.9rem; margin-bottom: 3.5rem; font-weight: bold">
+      <br />
+      <span v-show="error === 'notReady'">Loading messages...</span>
+      <span v-show="error === 'loggedOut'">Can't access messages, please log in on Scratch.</span>
+      <span v-show="error === 'addonDisabled'"
+        ><br />Please enable the Scratch Messaging addon in
+        <a href="/webpages/settings/index.html" target="_blank">Scratch Addons settings</a>.</span
+      >
+      <span v-show="messagesReady && !commentsReady">Loading comments...</span>
+      <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">🔄 Reload messages</button>
+      <span v-show="messagesReady && showingMessagesAmt === 0">No unread messages.<br /><br /></span>
+      <button @click="showAllMessages = true" v-show="canShowMoreMessages">➕ Show more messages</button>
+      <br />
+    </div>
+
+    <!-- Bottom bar-->
+    <div id="bottom-bar" v-show="error !== 'addonDisabled'">
+      <a @click="markAsRead()" v-show="!markedAsRead">Mark messages as read</a>
+      <span v-show="markedAsRead" style="font-weight: bold">✓ Marked as read</span>&nbsp;&nbsp;|&nbsp;&nbsp;
+      <a href="https://scratch.mit.edu/messages" id="open-messages"
+        >Open messages page&nbsp;&nbsp;<img src="./popout.png" id="popout"
+      /></a>
     </div>
   </body>
 </html>
