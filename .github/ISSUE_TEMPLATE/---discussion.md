@@ -1,7 +1,7 @@
 ---
 name: "\U0001F4DA Discussion"
 about: Needs discussion
-title: "[Discussion] ..."
+title: ''
 labels: discussion
 assignees: ''
 
