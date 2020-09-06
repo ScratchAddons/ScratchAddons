@@ -21,8 +21,8 @@
       iframe.height = h;
       iframe.style = "border:none;";
 
-      iframe.setAttribute('allowFullScreen', '');
-      iframe.setAttribute('allowTransparency', '');
+      iframe.setAttribute("allowFullScreen", "");
+      iframe.setAttribute("allowTransparency", "");
 
       const el = document.querySelector(".guiPlayer");
       el.replaceChild(iframe, el.childNodes[0]);
