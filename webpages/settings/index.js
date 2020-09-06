@@ -30,7 +30,7 @@ const vue = new Vue({
           editor: true,
           community: true,
           themes: true,
-          settings:false,
+          settings: false,
         },
       },
       {
@@ -43,10 +43,10 @@ const vue = new Vue({
           editor: false,
           community: true,
           themes: false,
-          settings:false,
+          settings: false,
         },
       },
-        {
+      {
         name: "Settings",
         matchType: "tag",
         matchName: "settings",
@@ -56,7 +56,7 @@ const vue = new Vue({
           editor: false,
           community: false,
           themes: false,
-          settings:true,
+          settings: true,
         },
       },
     ],
