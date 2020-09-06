@@ -5,7 +5,7 @@
 .u-contextmenu-colored .blocklyContextMenu .goog-menuitem {
   color: white;
 }
-.u-contextmenu-colored .blocklyContextMenu .goog-menuitem:hover.goog-menuitem-highlight {
+.u-contextmenu-colored .blocklyContextMenu .goog-menuitem:hover.goog-menuitem-highlight, .s3dev-mi:hover {
   border-color: transparent;
 }
 .u-contextmenu-colored .blocklyContextMenu .goog-menuitem:hover {

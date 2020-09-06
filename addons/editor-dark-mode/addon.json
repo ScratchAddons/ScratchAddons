@@ -1,0 +1,17 @@
+{
+  "name": "Dark editor",
+  "description": "Dark mode for the Scratch 3.0 project editor.",
+  "credits": [
+    {
+      "name": "Florrie"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "styles.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor", "theme"],
+  "enabled_by_default": false
+}

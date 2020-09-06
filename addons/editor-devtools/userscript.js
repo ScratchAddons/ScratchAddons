@@ -24,9 +24,11 @@ export default async function ({ addon, global, console }) {
 <p><strong>Ctrl + Left, Ctrl + Right</strong> &ndash; These keys navigate you to the previous / next costume in the sprite.</p>
 <p><strong>Send to Top, Send to Bottom</strong> &ndash; Right click a costume and 2 new menu items are present. These can be used to send the clicked sprite to the top or bottom of the list of costumes for fast re-ordering.</p>
 <hr />
+<div scratch-addons-removed style="display:none;">
 <h2><strong>Other Features</strong></h2>
 <p><strong>Share</strong> &ndash; I have added an 'are you sure?' check to the sharing of projects - Yep I've done that a number of times by mistake - lol</p>
 <hr />
+</div scratch-addons-removed>
 <p>Youtube tutorials -&nbsp;<a target="_blank" href="https://www.youtube.com/user/griffpatch">https://www.youtube.com/user/griffpatch</a></p>
 </div>
 </div>
@@ -1467,7 +1469,7 @@ export default async function ({ addon, global, console }) {
                 <div id="s3devToolBar">
 <!--                    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.2.1/math.min.js" type="text/javascript"></script>-->
                     <label class='title s3devLabel' id=s3devFindLabel>
-                        <span>Find </span>
+                        <span>Find <a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a> </span>
                         <span id=s3devFind class="s3devWrap">
                             <div id='s3devDDOut' class="s3devDDOut">
                                 <input id='s3devInp' class="s3devInp" type='search' placeholder='Find (Ctrl+F)' autocomplete='off'>
