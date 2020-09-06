@@ -66,7 +66,7 @@ const vue = new Vue({
           community: false,
           theme: true,
         },
-      }
+      },
     ],
   },
   methods: {
