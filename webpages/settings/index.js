@@ -17,6 +17,7 @@ const vue = new Vue({
           editor: true,
           community: true,
           themes: false,
+          settings: false,
         },
       },
       {
@@ -29,6 +30,7 @@ const vue = new Vue({
           editor: true,
           community: true,
           themes: true,
+          settings:false,
         },
       },
       {
@@ -41,6 +43,20 @@ const vue = new Vue({
           editor: false,
           community: true,
           themes: false,
+          settings:false,
+        },
+      },
+        {
+        name: "Settings",
+        matchType: "tag",
+        matchName: "settings",
+        color: "green",
+        tabShow: {
+          all: false,
+          editor: false,
+          community: false,
+          themes: false,
+          settings:true,
         },
       },
     ],
