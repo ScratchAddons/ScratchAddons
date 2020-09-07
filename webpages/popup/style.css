@@ -30,9 +30,9 @@ body {
   align-items: center;
 }
 #popout > img {
-  height: .7rem;
+  height: 0.7rem;
   vertical-align: middle;
-  opacity: .6;
+  opacity: 0.6;
 }
 #logo {
   height: 1.2rem;

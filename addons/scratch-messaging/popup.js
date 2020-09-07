@@ -16,7 +16,7 @@ const Comment = Vue.extend({
       replyBoxValue: "",
       deleted: false,
       deleteStep: 0,
-      postingComment: false
+      postingComment: false,
     };
   },
   methods: {
