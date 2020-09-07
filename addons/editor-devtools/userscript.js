@@ -1,4 +1,7 @@
 export default async function ({ addon, global, console }) {
+  // Scratch Addons: do not run if extension is already enabled
+  if (window.initGUI) return;
+
   const helpHTML = `
 <div id="s3devHelpPop">
 <div>
