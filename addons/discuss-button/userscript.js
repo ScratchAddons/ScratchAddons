@@ -1,19 +1,36 @@
 export default async function ({ addon, global, console }) {
+  if (!addon.tab.clientVersion) return;
+
   const link = document.createElement("li");
   link.innerHTML = '<a href="/discuss">Discuss</a>';
   link.className = "link discuss";
 
+  function scratchWww(el) {
+    if (addon.settings.get("removeIdeasBtn")) el.getElementsByTagName("li")[3].remove();
+    el.insertBefore(link, el.getElementsByTagName("li")[3]);
+    el.classList.add("discuss-button-added");
+  }
+
   if (addon.tab.clientVersion === "scratch-www") {
-    if (addon.settings.get("removeIdeasBtn"))
-      document.querySelector("div#navigation div.inner ul").getElementsByTagName("li")[3].remove();
-    document
-      .querySelector("div#navigation div.inner ul")
-      .insertBefore(link, document.querySelector("div#navigation div.inner ul").getElementsByTagName("li")[3]);
+    const check = () => {
+      return new Promise(async (resolve) => {
+        const el = await addon.tab.waitForElement(
+          "div#navigation div.inner ul:not(.discuss-button-added):not(.production)"
+        );
+        scratchWww(el);
+        setTimeout(resolve, 1000);
+      });
+    };
+    check();
+    if (addon.tab.editorMode) {
+      // On a project
+      while (true) {
+        await check();
+      }
+    } else check();
   } else {
-    if (addon.settings.get("removeIdeasBtn"))
-      document.querySelector("div#topnav ul.site-nav").getElementsByTagName("li")[2].remove();
-    document
-      .querySelector("div#topnav ul.site-nav")
-      .insertBefore(link, document.querySelector("div#topnav ul.site-nav").getElementsByTagName("li")[2]);
+    const el = await addon.tab.waitForElement("div#topnav ul.site-nav");
+    if (addon.settings.get("removeIdeasBtn")) el.getElementsByTagName("li")[2].remove();
+    el.insertBefore(link, el.getElementsByTagName("li")[2]);
   }
 }
