@@ -115,27 +115,24 @@
                 <a href="./licenses.html?libraries={{ addon.libraries.join(',') }}">View library licenses</a>
               </div>
               <div class="settings-column">
-                <div v-for="setting of addon.options">
-                  <div class="addon-setting" v-if="setting.type === 'boolean'">
-                    <div class="setting-label">{{ setting.name }}</div>
-                    <input
-                      type="checkbox"
-                      class="setting-input check"
-                      v-model="addonSettings[addon._addonId][setting.id]"
-                      @change="updateSettings(addon);"
-                      :disabled="!addon._enabled"
-                    />
-                  </div>
-                  <div class="addon-setting" v-if="setting.type === 'positive_integer'">
-                    <div class="setting-label">{{ setting.name }}</div>
-                    <input
-                      type="number"
-                      class="setting-input number"
-                      v-model="addonSettings[addon._addonId][setting.id]"
-                      @change="updateSettings(addon)"
-                      :disabled="!addon._enabled"
-                    />
-                  </div>
+                <div class="addon-setting" v-for="setting of addon.options">
+                  <div class="setting-label">{{ setting.name }}</div>
+                  <input
+                    type="checkbox"
+                    class="setting-input check"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @change="updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'boolean'"
+                  />
+                  <input
+                  type="number"
+                  class="setting-input number"
+                  v-model="addonSettings[addon._addonId][setting.id]"
+                  @change="updateSettings(addon)"
+                  :disabled="!addon._enabled"
+                  v-if="setting.type === 'positive_integer'"
+                />
                 </div>
               </div>
               <!--

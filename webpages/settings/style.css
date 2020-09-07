@@ -166,11 +166,15 @@ h1 {
 .addon-description-full,
 .addon-credits {
   width: 100%;
-  margin-bottom: 10px;
   white-space: normal;
   color: #dddddd;
 }
 
+.addon-credits,
+.addon-license {
+  margin-top: 4px;
+  font-size: .9em;
+}
 .addon-credits a,
 .addon-license a {
   color: #6d9bff;
@@ -235,24 +239,27 @@ h1 {
 
 .settings-column {
   width: 100%;
+  margin-top: 10px;
   margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .addon-setting {
   margin: 10px;
+  margin-right: 20px;
   min-height: 35px;
   display: flex;
   align-items: center;
 }
 
 .setting-label {
-  width: 150px;
-  margin-bottom: 5px;
+  width: 200px;
   text-transform: uppercase;
   color: #aaa;
   font-weight: 600;
   font-size: 12px;
-  margin-right: 15px;
+  margin-right: 10px;
 }
 
 .setting-input {
