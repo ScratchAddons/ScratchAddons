@@ -1,6 +1,14 @@
 {
   "name": "Discuss button",
   "description": "Adds the discuss button to the navbar.",
+  "credits": [
+    {
+      "name": "Maximouse"  
+    },
+    {
+      "name": "World_Languages"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
@@ -10,7 +18,7 @@
   ],
   "options": [
     {
-      "name": "Remove tips button",
+      "name": "Remove \"ideas\" button",
       "id": "removeIdeasBtn",
       "type": "boolean",
       "default": false

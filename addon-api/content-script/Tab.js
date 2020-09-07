@@ -9,7 +9,7 @@ export default class Tab extends EventTarget {
   constructor() {
     super();
     if (scratchAddons.eventTargets) scratchAddons.eventTargets.tab.push(this);
-    this.clientVersion = document.querySelector("#app #navigation")
+    this.clientVersion = document.querySelector("#app #navigation") || this.editorMode !== null
       ? "scratch-www"
       : window.Scratch
       ? "scratchr2"
