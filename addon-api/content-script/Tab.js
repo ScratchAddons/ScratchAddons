@@ -9,11 +9,12 @@ export default class Tab extends EventTarget {
   constructor() {
     super();
     if (scratchAddons.eventTargets) scratchAddons.eventTargets.tab.push(this);
-    this.clientVersion = document.querySelector("#app #navigation") || this.editorMode !== null
-      ? "scratch-www"
-      : window.Scratch
-      ? "scratchr2"
-      : null;
+    this.clientVersion =
+      document.querySelector("#app #navigation") || this.editorMode !== null
+        ? "scratch-www"
+        : window.Scratch
+        ? "scratchr2"
+        : null;
     this.traps = new Trap();
     __scratchAddonsTraps.addEventListener("fakestatechanged", ({ detail }) => {
       const newEvent = new CustomEvent("fakestatechanged", {
