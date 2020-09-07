@@ -1,5 +1,15 @@
-import moment from "../../libraries/moment.js";
+function loadMoment() {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js";
+    document.head.appendChild(script);
+    script.onload = resolve;
+  });
+}
+
 export default async function ({ addon, _global, _console }) {
+  await loadMoment();
+
   moment.locale(addon.auth.scratchLang == "en" ? "en-gb" : addon.auth.scratchLang);
   const forum_topic_id = parseInt(
     new URL(document.querySelector("meta[property='og:url']").content).pathname.split("/")[3]
@@ -12,10 +22,8 @@ export default async function ({ addon, _global, _console }) {
     })
     .then((res) => res.json())
     .then((data) => {
-      HTMLCollection.prototype.map = Array.prototype.map;
-      document
-        .getElementsByClassName("blockpost")
-        .map((e) => parseInt(e.id.replace("p", "")))
+      Array.prototype.map
+        .call(document.getElementsByClassName("blockpost"), (e) => parseInt(e.id.replace("p", "")))
         .forEach((e) => {
           var p = data.posts.find((x) => x.id == e);
           if (p) {
