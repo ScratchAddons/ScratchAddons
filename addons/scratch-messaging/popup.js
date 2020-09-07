@@ -1,15 +1,22 @@
-const dateNow = Date.now();
+if (window.parent === window) {
+  // We're not in popup mode!
+  document.body.classList.add("fullscreen");
+  document.documentElement.classList.add("fullscreen");
+}
+
+let dateNow = Date.now();
 
 // <comment> component
 const Comment = Vue.extend({
   template: document.querySelector("template#comment-component").innerHTML,
-  props: ["comment-id", "comments-arr", "is-parent", "unread", "resource-type", "resource-id"],
+  props: ["comment-id", "comments-obj", "is-parent", "unread", "resource-type", "resource-id"],
   data() {
     return {
       replying: false,
       replyBoxValue: "",
       deleted: false,
       deleteStep: 0,
+      postingComment: false,
     };
   },
   methods: {
@@ -20,7 +27,7 @@ const Comment = Vue.extend({
       window.open(url);
     },
     postComment() {
-      this.replying = false;
+      this.postingComment = true;
       const parent_pseudo_id = this.isParent ? this.commentId : this.thisComment.childOf;
       const parent_id = Number(parent_pseudo_id.substring(2));
       chrome.runtime.sendMessage(
@@ -36,18 +43,21 @@ const Comment = Vue.extend({
           },
         },
         (res) => {
+          this.replying = false;
+          this.postingComment = true;
+          dateNow = Date.now();
           if (res.error) alert("Error sending comment");
           else {
             const newCommentPseudoId = `${this.resourceType[0]}_${res.commentId}`;
-            this.commentsArr[newCommentPseudoId] = {
+            Vue.set(this.commentsObj, newCommentPseudoId, {
               author: res.username,
               authorId: res.userId,
               content: res.content,
               date: new Date().toISOString(),
               children: null,
               childOf: parent_pseudo_id,
-            };
-            this.commentsArr[parent_pseudo_id].children.push(newCommentPseudoId);
+            });
+            this.commentsObj[parent_pseudo_id].children.push(newCommentPseudoId);
             this.replyBoxValue = "";
           }
         }
@@ -90,7 +100,7 @@ const Comment = Vue.extend({
   },
   computed: {
     thisComment() {
-      return this.commentsArr[this.commentId];
+      return this.commentsObj[this.commentId];
     },
     lengthOfReplyBoxValue() {
       return this.replyBoxValue.length;
@@ -99,19 +109,19 @@ const Comment = Vue.extend({
       return vue.username;
     },
     commentTimeAgo() {
-      const commentTimestamp = new Date(this.thisComment.date).getTime();
-      const timeDiffSeconds = (dateNow - commentTimestamp) / 1000;
-      let options = { unit: null, divideBy: null };
-      if (timeDiffSeconds < 60) options = { unit: "second", divideBy: 1 };
-      else if (timeDiffSeconds < 3600) options = { unit: "minute", divideBy: 60 };
-      else if (timeDiffSeconds < 86400) options = { unit: "hour", divideBy: 60 * 60 };
-      else options = { unit: "day", divideBy: 60 * 60 * 24 };
       const timeFormatter = new Intl.RelativeTimeFormat("en", {
         localeMatcher: "best fit",
         numeric: "auto",
         style: "long",
       });
-      return timeFormatter.format(Math.round(-timeDiffSeconds / options.divideBy), options.unit);
+      const commentTimestamp = new Date(this.thisComment.date).getTime();
+      const timeDiffSeconds = (dateNow - commentTimestamp) / 1000;
+      let options = { unit: null, divideBy: null };
+      if (timeDiffSeconds < 60) return timeFormatter.format(0, "second");
+      else if (timeDiffSeconds < 3600) options = { unit: "minute", divideBy: 60 };
+      else if (timeDiffSeconds < 86400) options = { unit: "hour", divideBy: 60 * 60 };
+      else options = { unit: "day", divideBy: 60 * 60 * 24 };
+      return timeFormatter.format(-Math.round(timeDiffSeconds / options.divideBy), options.unit);
     },
   },
   watch: {
