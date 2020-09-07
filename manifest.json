@@ -31,6 +31,7 @@
     "page": "webpages/settings/index.html",
     "open_in_tab": true
   },
+  "incognito": "not_allowed",
   "permissions": [
     "https://scratch.mit.edu/*",
     "https://api.scratch.mit.edu/*",
