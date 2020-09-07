@@ -3,7 +3,7 @@
   "description": "Notifications on new Scratch messages. Click the notification to go straight to the message (comment, project, etc.)",
   "credits": [
     {
-    "name": "World_Languages"
+      "name": "World_Languages"
     }
   ],
   "permissions": ["notifications"],

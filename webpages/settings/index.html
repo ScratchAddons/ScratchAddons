@@ -126,13 +126,13 @@
                     v-if="setting.type === 'boolean'"
                   />
                   <input
-                  type="number"
-                  class="setting-input number"
-                  v-model="addonSettings[addon._addonId][setting.id]"
-                  @change="updateSettings(addon)"
-                  :disabled="!addon._enabled"
-                  v-if="setting.type === 'positive_integer'"
-                />
+                    type="number"
+                    class="setting-input number"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @change="updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'positive_integer'"
+                  />
                 </div>
               </div>
               <!--

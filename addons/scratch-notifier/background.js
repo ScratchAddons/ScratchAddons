@@ -104,7 +104,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       if (e.detail.id === notifId) {
         chrome.tabs.create({ url });
         addon.notifications.clear(notifId);
-        if(addon.settings.get("mark_as_read_when_clicked") === true) markAsRead();
+        if (addon.settings.get("mark_as_read_when_clicked") === true) markAsRead();
       }
     };
     const onButtonClick = (e) => {
