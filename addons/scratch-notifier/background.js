@@ -129,24 +129,27 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   }
 
   async function openMessagesPage() {
-    chrome.tabs.query({
-      url: "https://scratch.mit.edu/messages*",
-    }, tabs => {
-      if (tabs[0]) {
-        chrome.windows.update(tabs[0].windowId, {
-          focused: true,
-        });
-        chrome.tabs.update(tabs[0].id, {
-          active: true,
-          url: "https://scratch.mit.edu/messages/",
-        });
-      } else {
-        chrome.tabs.create({
-          url: "https://scratch.mit.edu/messages/",
-        });
+    chrome.tabs.query(
+      {
+        url: "https://scratch.mit.edu/messages*",
+      },
+      (tabs) => {
+        if (tabs[0]) {
+          chrome.windows.update(tabs[0].windowId, {
+            focused: true,
+          });
+          chrome.tabs.update(tabs[0].id, {
+            active: true,
+            url: "https://scratch.mit.edu/messages/",
+          });
+        } else {
+          chrome.tabs.create({
+            url: "https://scratch.mit.edu/messages/",
+          });
+        }
+        msgCount = 0;
       }
-      msgCount = 0;
-    });
+    );
   }
 
   function markAsRead() {

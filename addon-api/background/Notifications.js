@@ -54,22 +54,22 @@ export default class Notifications extends EventTarget {
       delete newOpts.buttons;
       delete newOpts.requireInteraction;
     } else newOpts = opts;
-    return new Promise(resolve => {
-      chrome.notifications.create(notifId, newOpts, callback => resolve(callback));
+    return new Promise((resolve) => {
+      chrome.notifications.create(notifId, newOpts, (callback) => resolve(callback));
     });
   }
   update(...args) {
-    return new Promise(resolve => {
-      chrome.notifications.update(...args, callback => resolve(callback));
-    })
+    return new Promise((resolve) => {
+      chrome.notifications.update(...args, (callback) => resolve(callback));
+    });
   }
   clear(...args) {
-    return new Promise(resolve => {
-      chrome.notifications.clear(...args, callback => resolve(callback));
-    })
+    return new Promise((resolve) => {
+      chrome.notifications.clear(...args, (callback) => resolve(callback));
+    });
   }
   getAll() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       chrome.notifications.getAll((notifications) => {
         const notifIds = Object.keys(notifications).filter((notifId) => notifId.startsWith(this._addonId));
         const obj = {};
@@ -78,7 +78,7 @@ export default class Notifications extends EventTarget {
         }
         resolve(obj);
       });
-    })
+    });
   }
   _removeEventListeners() {
     chrome.notifications.onClicked.removeListener(this._onClicked);
