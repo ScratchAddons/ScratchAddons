@@ -1,10 +1,10 @@
 html {
   font-size: 15px;
   height: 100%;
-  background-color: #e1e1e150;
 }
 html.fullscreen {
   font-size: 15px;
+  background-color: #e1e1e150;
 }
 
 body {
