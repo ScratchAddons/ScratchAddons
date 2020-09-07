@@ -9,6 +9,5 @@
   ],
   "options": [],
   "tags": ["editor"],
-  "enabled_by_default": false,
-  "libraries": ["redux"]
+  "enabled_by_default": false
 }
