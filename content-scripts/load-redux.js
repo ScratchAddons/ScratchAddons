@@ -7,30 +7,30 @@ function injectRedux() {
   // ReDucks: Redux ducktyped
   // Not actual Redux, but should be compatible
   class ReDucks {
-    static compose (...composeArgs) {
-        if (composeArgs.length === 0) return (...args) => args;
-        return (...args) => {
-            const composeArgsReverse = composeArgs.slice(0).reverse();
-            let result = composeArgsReverse.shift()(...args);
-            for (const fn of composeArgsReverse) {
-                result = fn(result);
-            }
-            return result;
-        };
+    static compose(...composeArgs) {
+      if (composeArgs.length === 0) return (...args) => args;
+      return (...args) => {
+        const composeArgsReverse = composeArgs.slice(0).reverse();
+        let result = composeArgsReverse.shift()(...args);
+        for (const fn of composeArgsReverse) {
+          result = fn(result);
+        }
+        return result;
+      };
     }
 
-    static applyMiddleware (...middlewares) {
-        return createStore => ((...createStoreArgs) => {
-            const store = createStore(...createStoreArgs);
-            let {dispatch} = store;
-            const api = {
-                getState: store.getState,
-                dispatch: action => dispatch(action)
-            };
-            const initialized = middlewares.map(middleware => middleware(api));
-            dispatch = ReDucks.compose(...initialized)(store.dispatch);
-            return Object.assign({}, store, {dispatch});
-        });
+    static applyMiddleware(...middlewares) {
+      return (createStore) => (...createStoreArgs) => {
+        const store = createStore(...createStoreArgs);
+        let { dispatch } = store;
+        const api = {
+          getState: store.getState,
+          dispatch: (action) => dispatch(action),
+        };
+        const initialized = middlewares.map((middleware) => middleware(api));
+        dispatch = ReDucks.compose(...initialized)(store.dispatch);
+        return Object.assign({}, store, { dispatch });
+      };
     }
   }
 
