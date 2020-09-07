@@ -1,14 +1,27 @@
 html {
   font-size: 15px;
+  height: 100%;
+  background-color: #e1e1e150;
+}
+html.fullscreen {
+  font-size: 15px;
 }
 
 body {
-  margin: 0;
+  margin: 0 auto;
   font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
   width: auto;
   height: 500px;
   overflow-x: hidden;
   overflow-y: scroll;
+  background-color: white;
+  box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
+}
+body.fullscreen {
+  width: 55%;
+  min-height: calc(100% - 2px);
+  height: auto;
+  border: 1px solid black;
 }
 
 a {
@@ -69,6 +82,7 @@ a:hover {
 .message-type-details {
   margin-bottom: 10px;
   padding: 4px 16px 4px 16px;
+  font-size: .8rem;
 }
 .username-list > a {
   display: inline-block;
@@ -117,6 +131,7 @@ a:hover {
   opacity: 0;
   color: gray;
   font-size: 0.65rem;
+  padding-top: 2px;
 }
 .bold {
   font-weight: bold;
@@ -134,6 +149,7 @@ a:hover {
   opacity: 0;
   color: #0f8bc0;
   font-weight: bold;
+  user-select: none;
 }
 .comment:hover .reply-button-comment,
 .comment:hover .delete-btn {

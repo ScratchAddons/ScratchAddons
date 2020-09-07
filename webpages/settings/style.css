@@ -4,6 +4,7 @@ body {
   margin: 0;
   height: 100vh;
   color: white;
+  font-size: 12px;
 }
 
 .navbar {

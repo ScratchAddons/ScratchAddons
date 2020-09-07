@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <title>Scratch Messaging - Scratch Addons</title>
     <link rel="stylesheet" href="popup.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
@@ -11,9 +12,11 @@
     <!-- <comment> element template -->
     <template id="comment-component">
       <div class="comment" :class="{'child-comment': !isParent, 'unread': unread}">
-        <a class="comment-author" @click="openProfile(thisComment.author)">{{ thisComment.author }}</a>
-        · {{ commentTimeAgo }} ·
-        <img src="./popout.png" class="popout-comment" @click="openComment()" title="Open comment in new tab" />
+          <a class="comment-author" @click="openProfile(thisComment.author)">{{ thisComment.author }}</a>
+          <span v-show="deleteStep !== 1 && !deleted">
+          · {{ commentTimeAgo }}&nbsp;&nbsp;
+          <img src="./popout.png" class="popout-comment" @click="openComment()" title="Open comment in new tab" />
+        </span>
         <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
           >{{ deleteStep === 0 ? "Delete" : "Click to confirm deletion" }}
         </a>
@@ -31,8 +34,8 @@
         <div class="reply-box-comment" v-show="replying">
           <textarea class="reply-textarea" maxlength="500" v-model="replyBoxValue"></textarea>
           <div class="reply-box-buttons">
-            <button @click="postComment()" style="background-color: #4d97ff">Post</button>
-            <button @click="replying = false" style="background-color: gray">Cancel</button>
+            <button @click="!postingComment && postComment()" style="background-color: #4d97ff">{{ postingComment ? "Posting..." : "Post" }}</button>
+            <button @click="replying = false" style="background-color: gray" v-show="!postingComment">Cancel</button>
             <span class="comment-chars"> {{500 - lengthOfReplyBoxValue}} characters left </span>
           </div>
         </div>
@@ -153,7 +156,7 @@
           >
             <comment
               :comment-id="parentCommentId"
-              :comments-arr="comments"
+              :comments-obj="comments"
               :is-parent="true"
               :unread="false"
               resource-type="user"
@@ -162,7 +165,7 @@
             <comment
               v-for="childCommentId of comments[parentCommentId].children"
               :comment-id="childCommentId"
-              :comments-arr="comments"
+              :comments-obj="comments"
               :is-parent="false"
               :unread="isCommentUnread(childCommentId)"
               resource-type="user"
@@ -187,7 +190,7 @@
           >
             <comment
               :comment-id="parentCommentId"
-              :comments-arr="comments"
+              :comments-obj="comments"
               :is-parent="true"
               :unread="false"
               resource-type="gallery"
@@ -196,7 +199,7 @@
             <comment
               v-for="childCommentId of comments[parentCommentId].children"
               :comment-id="childCommentId"
-              :comments-arr="comments"
+              :comments-obj="comments"
               :is-parent="false"
               :unread="isCommentUnread(childCommentId)"
               resource-type="gallery"
@@ -229,7 +232,7 @@
           >
             <comment
               :comment-id="parentCommentId"
-              :comments-arr="comments"
+              :comments-obj="comments"
               :is-parent="true"
               :unread="false"
               resource-type="project"
@@ -238,7 +241,7 @@
             <comment
               v-for="childCommentId of comments[parentCommentId].children"
               :comment-id="childCommentId"
-              :comments-arr="comments"
+              :comments-obj="comments"
               :is-parent="false"
               :unread="isCommentUnread(childCommentId)"
               resource-type="project"
