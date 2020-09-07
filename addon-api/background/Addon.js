@@ -3,7 +3,6 @@ import Account from "../common/Account.js";
 import fetch from "../common/fetch.js";
 import Notifications from "./Notifications.js";
 import Badge from "./Badge.js";
-import promisify from "../common/promisifier.js";
 import Settings from "../common/Settings.js";
 
 export default class Addon {
@@ -19,11 +18,9 @@ export default class Addon {
     this.auth = new Auth(this);
     this.account = new Account();
     this.fetch = fetch;
-    this.browserTabs = promisify(chrome.tabs);
-    this.browserWindows = promisify(chrome.windows);
     this.settings = new Settings(this);
     if (permissions) {
-      if (permissions.includes("notifications")) this.notifications = promisify(new Notifications(this), false);
+      if (permissions.includes("notifications")) this.notifications = new Notifications(this);
       if (permissions.includes("badge")) this.badge = new Badge(this);
     }
   }
