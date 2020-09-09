@@ -5,15 +5,12 @@ export default async ({ addon, console }) => {
   // request LLK/scratch-blocks#2099, but with somewhat fewer changes because we opt to reuse existing functions on
   // DataCategory instead of changing them to be defined on the new VariableCategory and ListCategory prototypes.
 
-  const {
-    ScratchBlocks: Blockly,
-    workspace
-  } = addon.tab.traps.onceValues;
+  const { ScratchBlocks: Blockly, workspace } = addon.tab.traps.onceValues;
 
   Blockly.LIST_CATEGORY_NAME = "LIST";
   Blockly.Msg.CATEGORY_LISTS = "Lists";
 
-  Blockly.VariableCategory = function(workspace) {
+  Blockly.VariableCategory = function (workspace) {
     const variableModelList = workspace.getVariablesOfType("");
     variableModelList.sort(Blockly.VariableModel.compareByName);
     const xmlList = [];
@@ -38,7 +35,7 @@ export default async ({ addon, console }) => {
     return xmlList;
   };
 
-  Blockly.ListCategory = function(workspace) {
+  Blockly.ListCategory = function (workspace) {
     const variableModelList = workspace.getVariablesOfType(Blockly.LIST_VARIABLE_TYPE);
     variableModelList.sort(Blockly.VariableModel.compareByName);
     const xmlList = [];
@@ -73,10 +70,8 @@ export default async ({ addon, console }) => {
     return xmlList;
   };
 
-  workspace.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
-    Blockly.VariableCategory);
-  workspace.registerToolboxCategoryCallback(Blockly.LIST_CATEGORY_NAME,
-    Blockly.ListCategory);
+  workspace.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME, Blockly.VariableCategory);
+  workspace.registerToolboxCategoryCallback(Blockly.LIST_CATEGORY_NAME, Blockly.ListCategory);
 
   // The second step is to change the categories which scratch-gui displays in the category list.
   //
@@ -94,11 +89,13 @@ export default async ({ addon, console }) => {
   });
 
   function overrideToolboxXML(toolboxXML) {
-    if (toolboxXML.includes("custom=\"LIST\"")) {
+    if (toolboxXML.includes('custom="LIST"')) {
       return toolboxXML;
     }
 
-    return toolboxXML.replace(/<category\s*name="%{BKY_CATEGORY_VARIABLES}"[\s\S]*?<\/category>/m, `
+    return toolboxXML.replace(
+      /<category\s*name="%{BKY_CATEGORY_VARIABLES}"[\s\S]*?<\/category>/m,
+      `
       $&
       <category
         name="%{BKY_CATEGORY_LISTS}"
@@ -107,6 +104,7 @@ export default async ({ addon, console }) => {
         secondaryColour="#FF5500"
         custom="LIST">
       </category>
-    `);
+      `
+    );
   }
 };
