@@ -52,3 +52,6 @@ If you found a bug, or want to suggest new features, please use the [issues tab]
 ## License
 
 Scratch Addons is licensed under the terms of the [GNU General Public License v3.0](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE).
+
+## Learn more
+If you would like to know mroe about ScratchAddons, what it does, and who helped feel free to check out the [ScratchAddons official website](scratchaddons.github.io) for more!
