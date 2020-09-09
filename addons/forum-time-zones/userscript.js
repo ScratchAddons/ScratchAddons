@@ -28,7 +28,7 @@ export default async function ({ addon, _global, _console }) {
           var p = data.posts.find((x) => x.id == e);
           if (p) {
             document.querySelector(`#p${e} > .box > .box-head > a`).innerText = moment(
-              new Date(new Date(p.post_time).toLocaleString("en-US", { timeZone: time_zone })).toISOString()
+              new Date(new Date(p.time.posted).toLocaleString("en-US", { timeZone: time_zone })).toISOString()
             ).calendar();
           }
         });
