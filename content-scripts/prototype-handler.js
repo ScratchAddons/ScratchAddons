@@ -167,24 +167,24 @@ function injectPrototype() {
   };
 
   const override = (overrideId) => {
-    return function(...args) {
+    return function (...args) {
       // Dispatch override events first, so handlers have a chance to mutate the args array before it's passed on to
       // extra handlers defined in this file. (This allows addons to work with low-level overrides themselves.)
       const overrideEvent = new CustomEvent("prototypecalled", {
         detail: {
           trapName: overrideId,
           args,
-        }
+        },
       });
       __scratchAddonsTraps.dispatchEvent(overrideEvent);
       const specificEvent = new CustomEvent(`prototype.${overrideId}`, {
         detail: {
           args,
-        }
+        },
       });
       __scratchAddonsTraps.dispatchEvent(specificEvent);
 
-      extraHandlers[overrideId].forEach(fn => fn(args));
+      extraHandlers[overrideId].forEach((fn) => fn(args));
       return oldPrototypes[overrideId].apply(this, args);
     };
   };
