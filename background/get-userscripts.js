@@ -21,6 +21,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         if (userscriptMatches(request.getUserscripts, script, addon.addonId))
           scriptsToRun.push({
             url: script.url,
+            runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
           });
       }
       for (const style of addon.styles) {
