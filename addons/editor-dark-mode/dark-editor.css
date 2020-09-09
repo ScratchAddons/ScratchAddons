@@ -47,29 +47,8 @@ body {
 }
 #s3devCopy:hover,
 #s3devCleanUp:hover {
-  /*s-a* *s-a*/
   border-top-width: 2px !important; /*s-a* *s-a*/
 }
-/*s-a* *s-a*/
-input.s3devInp {
-  background-color: #6d6d6d;
-}
-.s3devInp:hover {
-  background-color: #979797;
-}
-div.s3devDDOut.vis ul.s3devDD {
-  background-color: #6d6d6d;
-}
-div.s3devDDOut.vis {
-  background-color: #6d6d6d;
-}
-.u-dropdown-searchbar {
-  background-color: #979797 !important;
-}
-.u-dropdown-searchbar:focus {
-  box-shadow: none !important;
-}
-/*s-a* *s-a*/
 
 .scratchCategoryMenuItem.categorySelected {
   background: #444 !important;

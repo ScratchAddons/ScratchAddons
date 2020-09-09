@@ -1,0 +1,21 @@
+input.s3devInp {
+  background-color: #6d6d6d;
+}
+input.s3devInp::placeholder {
+  color: #ddd;
+}
+.s3devInp:hover {
+  background-color: #979797;
+}
+div.s3devDDOut.vis ul.s3devDD {
+  background-color: #6d6d6d;
+}
+div.s3devDDOut.vis {
+  background-color: #6d6d6d;
+}
+.u-dropdown-searchbar {
+  background-color: #979797 !important;
+}
+.u-dropdown-searchbar:focus {
+  box-shadow: none !important;
+}
