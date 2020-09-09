@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       for (const script of addon.scripts) {
         if (userscriptMatches(request.getUserscripts, script, addon.addonId))
           scriptsToRun.push({
-            url: script.url
+            url: script.url,
           });
       }
       for (const style of addon.styles) {
@@ -35,7 +35,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 function userscriptMatches(data, scriptOrStyle, addonId) {
   if (scriptOrStyle.setting_match) {
-    const { setting_id, setting_value} = scriptOrStyle.setting_match;
+    const { setting_id, setting_value } = scriptOrStyle.setting_match;
     if (scratchAddons.globalState.addonSettings[addonId][setting_id] !== setting_value) return false;
   }
   const url = data.url;
