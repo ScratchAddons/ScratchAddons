@@ -22,6 +22,12 @@
       "id": "removeIdeasBtn",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Discuss button name",
+      "id": "buttonName",
+      "type": "string",
+      "default": "Discuss"
     }
   ],
   "tags": ["community", "forums"],

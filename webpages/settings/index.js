@@ -108,6 +108,10 @@ const vue = new Vue({
         );
       } else toggle();
     },
+    updateSelect(settingId, newValue, addon) {
+      this.addonSettings[addon._addonId][settingId] = newValue;
+      this.updateSettings(addon);
+    },
     updateSettings(addon) {
       chrome.runtime.sendMessage({
         changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
