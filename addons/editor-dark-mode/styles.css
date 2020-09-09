@@ -193,7 +193,8 @@ div.s3devDDOut.vis {
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
 }
 
-[class^=gui_stage-and-target-wrapper] [class^="button_outlined-button"]:not([class*="menu-bar"]):not([class*="modal"]):not([class*="tag-button_active"]) {
+[class^="gui_stage-and-target-wrapper"]
+  [class^="button_outlined-button"]:not([class*="menu-bar"]):not([class*="modal"]):not([class*="tag-button_active"]) {
   background: #444 !important;
 }
 
