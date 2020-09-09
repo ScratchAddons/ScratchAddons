@@ -135,22 +135,25 @@
                     min="0"
                   />
                   <input
-                  type="text"
-                  class="setting-input string"
-                  v-model="addonSettings[addon._addonId][setting.id]"
-                  @input="updateSettings(addon)"
-                  :disabled="!addon._enabled"
-                  v-if="setting.type === 'string'"
-                  :placeholder="setting.default"
-                  maxlength="100"
-                />
-                <div class="filter-options" v-if="setting.type === 'select'">
-                  <div class="filter-option" 
-                  v-for="option of setting.potential_values"
-                  :class="{'sel' : addonSettings[addon._addonId][setting.id] === option}"
-                  @click="updateSelect(setting.id, option, addon);"
-                  >{{ option }}</div>
-                </div>
+                    type="text"
+                    class="setting-input string"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @input="updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'string'"
+                    :placeholder="setting.default"
+                    maxlength="100"
+                  />
+                  <div class="filter-options" v-if="setting.type === 'select'">
+                    <div
+                      class="filter-option"
+                      v-for="option of setting.potential_values"
+                      :class="{'sel' : addonSettings[addon._addonId][setting.id] === option}"
+                      @click="updateSelect(setting.id, option, addon);"
+                    >
+                      {{ option }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <!--
