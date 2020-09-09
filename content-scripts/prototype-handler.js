@@ -166,32 +166,48 @@ function injectPrototype() {
     notifyNewState("www", realpath, prev, value);
   };
 
+  const override = (overrideId) => {
+    return function(...args) {
+      // Dispatch override events first, so handlers have a chance to mutate the args array before it's passed on to
+      // extra handlers defined in this file. (This allows addons to work with low-level overrides themselves.)
+      const overrideEvent = new CustomEvent("prototypecalled", {
+        detail: {
+          trapName: overrideId,
+          args,
+        }
+      });
+      __scratchAddonsTraps.dispatchEvent(overrideEvent);
+      const specificEvent = new CustomEvent(`prototype.${overrideId}`, {
+        detail: {
+          args,
+        }
+      });
+      __scratchAddonsTraps.dispatchEvent(specificEvent);
+
+      extraHandlers[overrideId].forEach(fn => fn(args));
+      return oldPrototypes[overrideId].apply(this, args);
+    };
+  };
+
   Function.prototype.bind = function (...args) {
     if (args[0] && args[0].hasOwnProperty("editingTarget") && args[0].hasOwnProperty("runtime")) {
       window._scratchAddonsScratchVM = args[0];
       guiState(args[0], "vm");
       createReadyOnce("vm", args[0]);
       window.dispatchEvent(new CustomEvent("vmready"));
+      return oldPrototypes.functionBind.apply(this, args);
     } else {
-      extraHandlers.functionBind.forEach((fn) => fn(args));
+      return override("functionBind").apply(this, args);
     }
-    return oldPrototypes.functionBind.apply(this, args);
   };
-  Array.prototype.push = function (...args) {
-    if (typeof args[0] !== "undefined") {
-      extraHandlers.arrayPush.forEach((fn) => fn(args));
-    }
-    return oldPrototypes.arrayPush.apply(this, args);
-  };
-  Object.assign = function (...args) {
-    extraHandlers.objectAssign.forEach((fn) => fn(args));
-    return oldPrototypes.objectAssign.apply(null, args);
-  };
+  Array.prototype.push = override("arrayPush");
+  Object.assign = override("objectAssign");
 
   // trap Thread
   extraHandlers.arrayPush.push((args) => {
     const maybeThread = args[0];
     if (
+      maybeThread &&
       matchObject(maybeThread, {
         target: null,
         blockContainer: null,
