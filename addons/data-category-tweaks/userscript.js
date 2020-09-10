@@ -11,12 +11,23 @@ export default async ({ addon, console }) => {
   Blockly.Msg.CATEGORY_LISTS = "Lists";
 
   Blockly.VariableCategory = function (workspace) {
+    // VariableCategory (and the ID it is registered as, Blockly.VARIABLE_CATEGORY_NAME) is already referenced within
+    // the palette generation code, so here we're overriding the behavior of an existing category - the one which would
+    // ordinarily contain both Variable and List blocks. Thus, if the "Separate List Category" option of this addon is
+    // disabled, we must be sure to include both variable and list blocks here.
+
     const xmlList = [];
     addVariableCategory(xmlList, workspace);
+    if (!addon.settings.get("separateListCategory")) {
+      addListCategory(xmlList, workspace);
+    }
     return xmlList;
   };
 
   Blockly.ListCategory = function (workspace) {
+    // ListCategory is an altogether new category, so its behavior doesn't need to be changed when the "Separate List
+    // Category" option is disabled - in that case it just won't be referenced at all.
+
     const xmlList = [];
     addListCategory(xmlList, workspace);
     return xmlList;
@@ -102,23 +113,36 @@ export default async ({ addon, console }) => {
     }
   });
 
-  function overrideToolboxXML(toolboxXML) {
-    if (toolboxXML.includes('custom="LIST"')) {
-      return toolboxXML;
-    }
+  function matchCategoryByName(name) {
+    return new RegExp(`<category\\s*name="%{${name}}".*?</category>`, "ms");
+  }
 
-    return toolboxXML.replace(
-      /<category\s*name="%{BKY_CATEGORY_VARIABLES}"[\s\S]*?<\/category>/m,
-      `
-      $&
-      <category
-        name="%{BKY_CATEGORY_LISTS}"
-        id="lists"
-        colour="#FF661A"
-        secondaryColour="#FF5500"
-        custom="LIST">
-      </category>
-      `
-    );
+  function overrideToolboxXML(toolboxXML) {
+    if (addon.settings.get("separateListCategory")) {
+      if (toolboxXML.includes('custom="LIST"')) {
+        return toolboxXML;
+      } else {
+        console.log("ayy", toolboxXML.match(matchCategoryByName("BKY_CATEGORY_VARIABLES")));
+        return toolboxXML.replace(
+          matchCategoryByName("BKY_CATEGORY_VARIABLES"),
+          `
+          $&
+          <category
+            name="%{BKY_CATEGORY_LISTS}"
+            id="lists"
+            colour="#FF661A"
+            secondaryColour="#FF5500"
+            custom="LIST">
+          </category>
+          `
+        );
+      }
+    } else {
+      if (toolboxXML.includes('custom="LIST"')) {
+        return toolboxXML.replace(matchCategoryByName("BKY_CATEGORY_LISTS"), "");
+      } else {
+        return toolboxXML;
+      }
+    }
   }
 };

@@ -7,7 +7,14 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "options": [],
+  "options": [
+    {
+      "name": "Separate List Category",
+      "id": "separateListCategory",
+      "type": "boolean",
+      "default": true
+    }
+  ],
   "tags": ["editor"],
   "permissions": [],
   "enabled_by_default": false
