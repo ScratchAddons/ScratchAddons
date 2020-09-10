@@ -36,9 +36,32 @@ export default async ({ addon, console }) => {
   workspace.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME, Blockly.VariableCategory);
   workspace.registerToolboxCategoryCallback(Blockly.LIST_CATEGORY_NAME, Blockly.ListCategory);
 
+  function addLabel(xmlList, text) {
+    var label = Blockly.Xml.textToDom("<xml><label></label></xml>").firstChild;
+    label.setAttribute("text", text);
+    xmlList.push(label);
+  };
+
   function addVariableList(xmlList, variableModelList, addOneVariableCallback) {
-    for (const variableModel of variableModelList) {
-      addOneVariableCallback(xmlList, variableModel);
+    if (addon.settings.get("separateLocalVariables")) {
+      const globalVariableList = variableModelList.filter(entry => !entry.isLocal);
+      const localVariableList = variableModelList.filter(entry => entry.isLocal);
+      if (globalVariableList.length) {
+        addLabel(xmlList, "For all sprites:");
+        for (const variableModel of globalVariableList) {
+          addOneVariableCallback(xmlList, variableModel);
+        }
+      }
+      if (localVariableList.length) {
+        addLabel(xmlList, "For this sprite only:");
+        for (const variableModel of localVariableList) {
+          addOneVariableCallback(xmlList, variableModel);
+        }
+      }
+    } else {
+      for (const variableModel of variableModelList) {
+        addOneVariableCallback(xmlList, variableModel);
+      }
     }
   }
 

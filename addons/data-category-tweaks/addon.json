@@ -13,6 +13,12 @@
       "id": "separateListCategory",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Separate Sprite-only Variables",
+      "id": "separateLocalVariables",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["editor"],
