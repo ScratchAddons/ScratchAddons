@@ -40,12 +40,12 @@ export default async ({ addon, console }) => {
     var label = Blockly.Xml.textToDom("<xml><label></label></xml>").firstChild;
     label.setAttribute("text", text);
     xmlList.push(label);
-  };
+  }
 
   function addVariableList(xmlList, variableModelList, addOneVariableCallback) {
     if (addon.settings.get("separateLocalVariables")) {
-      const globalVariableList = variableModelList.filter(entry => !entry.isLocal);
-      const localVariableList = variableModelList.filter(entry => entry.isLocal);
+      const globalVariableList = variableModelList.filter((entry) => !entry.isLocal);
+      const localVariableList = variableModelList.filter((entry) => entry.isLocal);
       if (globalVariableList.length) {
         addLabel(xmlList, "For all sprites:");
         for (const variableModel of globalVariableList) {
