@@ -1,15 +1,51 @@
 {
-  "name": "Dark editor",
-  "description": "Dark mode for the Scratch 3.0 project editor.",
+  "name": "Editor dark mode",
+  "description": "Dark mode for the Scratch 3.0 project editor. Multiple options by different authors available.",
   "credits": [
     {
-      "name": "Florrie"
+      "name": "_nix (Dark editor)"
+    },
+    {
+      "name": "infinitytec (3.Dark, 3.Darker)"
     }
   ],
   "userstyles": [
     {
-      "url": "styles.css",
+      "url": "dark-editor.css",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "setting_match": {
+        "setting_id": "selectedMode",
+        "setting_value": "Dark editor"
+      }
+    },
+    {
+      "url": "3dark.css",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "setting_match": {
+        "setting_id": "selectedMode",
+        "setting_value": "3.Dark"
+      }
+    },
+    {
+      "url": "3darker.css",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "setting_match": {
+        "setting_id": "selectedMode",
+        "setting_value": "3.Darker"
+      }
+    },
+    {
+      "url": "global.css",
       "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "options": [
+    {
+      "name": "Dark mode version",
+      "id": "selectedMode",
+      "type": "select",
+      "potential_values": ["Dark editor", "3.Dark", "3.Darker"],
+      "default": "Dark editor"
     }
   ],
   "tags": ["editor", "theme"],

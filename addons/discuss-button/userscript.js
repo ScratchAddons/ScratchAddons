@@ -2,8 +2,11 @@ export default async function ({ addon, global, console }) {
   if (!addon.tab.clientVersion) return;
 
   const link = document.createElement("li");
-  link.innerHTML = '<a href="/discuss">Discuss</a>';
   link.className = "link discuss";
+  const a = document.createElement("a");
+  a.href = "/discuss";
+  a.textContent = addon.settings.get("buttonName");
+  link.appendChild(a);
 
   function scratchWww(el) {
     if (addon.settings.get("removeIdeasBtn")) el.getElementsByTagName("li")[3].remove();
