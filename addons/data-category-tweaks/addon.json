@@ -1,6 +1,6 @@
 {
-  "name": "Separate List Category",
-  "description": "Displays a separate category button for List blocks.",
+  "name": "Data Category Tweaks",
+  "description": "Provides tweaks for the Data (\"Variables\") category in the editor.",
   "userscripts": [
     {
       "url": "userscript.js",
