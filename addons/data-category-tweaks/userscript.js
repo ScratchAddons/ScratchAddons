@@ -145,7 +145,6 @@ export default async ({ addon, console }) => {
       if (toolboxXML.includes('custom="LIST"')) {
         return toolboxXML;
       } else {
-        console.log("ayy", toolboxXML.match(matchCategoryByName("BKY_CATEGORY_VARIABLES")));
         return toolboxXML.replace(
           matchCategoryByName("BKY_CATEGORY_VARIABLES"),
           `
@@ -167,5 +166,71 @@ export default async ({ addon, console }) => {
         return toolboxXML;
       }
     }
+  }
+
+  // The third step is to override the context and dropdown menus on variable and list blocks (if the "Separate Sprite-
+  // only Variables" setting is enabled).
+
+  const variablesMixin = Blockly.Constants.Data.CUSTOM_CONTEXT_MENU_GET_VARIABLE_MIXIN;
+  const listsMixin = Blockly.Constants.Data.CUSTOM_CONTEXT_MENU_GET_LIST_MIXIN;
+
+  overrideContextMenuMixin("CUSTOM_CONTEXT_MENU_GET_VARIABLE_MIXIN", "");
+  overrideContextMenuMixin("CUSTOM_CONTEXT_MENU_GET_LIST_MIXIN", Blockly.LIST_VARIABLE_TYPE);
+  overrideOptionCallbackFactory("VARIABLE_OPTION_CALLBACK_FACTORY");
+  overrideOptionCallbackFactory("LIST_OPTION_CALLBACK_FACTORY");
+
+  function overrideContextMenuMixin(mixinKey, variableType) {
+    const mixin = Blockly.Constants.Data[mixinKey];
+    const oldContextMenuCallback = mixin.customContextMenu;
+    mixin.customContextMenu = function (options) {
+      // This code is only relevant if we've got the "Separate Sprite-only Variables" option, so we skip out and behave
+      // like normal if the option is disabled.
+      if (!addon.settings.get("separateLocalVariables")) {
+        oldContextMenuCallback.call(this, options);
+        return;
+      }
+
+      // Flyout blocks don't show options for swapping the block with other variables, so we don't need to do any
+      // reordering in that case; we just behave like normal.
+      if (this.isInFlyout) {
+        oldContextMenuCallback.call(this, options);
+        return;
+      }
+
+      // The options variable is already going to contain descriptors for options like "Duplicate", "Delete Block",
+      // et cetera. Normally scratch-blocks would pass that same array into the mixin function so that its added
+      // options get added directly to the list, but those are exactly the options we want to intercept and reorder
+      // (they are the options for swapping the variable block out with another variable). So we leave generation to
+      // the original mixin code, but provide it a new empty array to work upon, whose data we will use to push a
+      // different ordering to the actual options variable (and thus the displayed context menu).
+      const variableOptions = [];
+      oldContextMenuCallback.call(this, variableOptions);
+
+      // Then we push to the option list according to global/local variable models. This is based on a sneaky trick
+      // rooted in overrideOptionCallbackFactory - while all we normally find exposed on an option descriptor is the
+      // variable's name (an unreliable datum at best), we have overridden the factory used for generating said
+      // option's click callback, and as such can find the ID of the variable (de facto the most reliable datum)
+      // exposed as an extra property on the option descriptor's callback function.
+      const variableModelList = workspace.getVariablesOfType(variableType);
+      const globalVariableIds = variableModelList.filter((entry) => !entry.isLocal).map((entry) => entry.getId());
+      const localVariableIds = variableModelList.filter((entry) => entry.isLocal).map((entry) => entry.getId());
+      const globalVariableOptions = variableOptions.filter((option) => globalVariableIds.includes(option.callback.id));
+      const localVariableOptions = variableOptions.filter((option) => localVariableIds.includes(option.callback.id));
+      options.push(...globalVariableOptions);
+      // (I'd like to insert a separator here, but Blockly doesn't support separators in context menus through its own
+      // interfaces, which are what we're working with here.)
+      options.push(...localVariableOptions);
+    };
+  }
+
+  function overrideOptionCallbackFactory(factoryKey) {
+    // As mentioned in overrideContextMenuMixin, this utility overrides the callback factory for context menu options
+    // so that the ID of the variable is exposed on the callback (and thus on the option descriptor as a whole).
+    const oldFactory = Blockly.Constants.Data[factoryKey];
+    Blockly.Constants.Data[factoryKey] = function (block, id, fieldName) {
+      const callback = oldFactory(block, id, fieldName);
+      callback.id = id;
+      return callback;
+    };
   }
 };
