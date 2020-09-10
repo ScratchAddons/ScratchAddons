@@ -1,5 +1,5 @@
 export default async ({ addon, console }) => {
-  // The first step of this extension is to provide two new categories from Blockly (i.e. ScratchBlocks).
+  // The first step of this extension is to provide two "new" categories from Blockly (i.e. ScratchBlocks).
   //
   // This code is essentially a transcription of the changes to blocks_vertical/default_toolbox.js in the pull
   // request LLK/scratch-blocks#2099, but with somewhat fewer changes because we opt to reuse existing functions on
@@ -11,15 +11,35 @@ export default async ({ addon, console }) => {
   Blockly.Msg.CATEGORY_LISTS = "Lists";
 
   Blockly.VariableCategory = function (workspace) {
+    const xmlList = [];
+    addVariableCategory(xmlList, workspace);
+    return xmlList;
+  };
+
+  Blockly.ListCategory = function (workspace) {
+    const xmlList = [];
+    addListCategory(xmlList, workspace);
+    return xmlList;
+  };
+
+  workspace.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME, Blockly.VariableCategory);
+  workspace.registerToolboxCategoryCallback(Blockly.LIST_CATEGORY_NAME, Blockly.ListCategory);
+
+  function addVariableList(xmlList, variableModelList, addOneVariableCallback) {
+    for (const variableModel of variableModelList) {
+      addOneVariableCallback(xmlList, variableModel);
+    }
+  }
+
+  function addVariableCategory(xmlList, workspace) {
     const variableModelList = workspace.getVariablesOfType("");
     variableModelList.sort(Blockly.VariableModel.compareByName);
-    const xmlList = [];
 
     Blockly.DataCategory.addCreateButton(xmlList, workspace, "VARIABLE");
 
-    for (const variableModel of variableModelList) {
-      Blockly.DataCategory.addDataVariable(xmlList, variableModel);
-    }
+    addVariableList(xmlList, variableModelList, (xmlList, variable) => {
+      Blockly.DataCategory.addDataVariable(xmlList, variable);
+    });
 
     if (variableModelList.length > 0) {
       xmlList[xmlList.length - 1].setAttribute("gap", 24);
@@ -30,21 +50,19 @@ export default async ({ addon, console }) => {
       Blockly.DataCategory.addShowVariable(xmlList, firstVariable);
       Blockly.DataCategory.addHideVariable(xmlList, firstVariable);
     }
+
     Blockly.DataCategory.addSep(xmlList);
+  }
 
-    return xmlList;
-  };
-
-  Blockly.ListCategory = function (workspace) {
+  function addListCategory(xmlList, workspace) {
     const variableModelList = workspace.getVariablesOfType(Blockly.LIST_VARIABLE_TYPE);
     variableModelList.sort(Blockly.VariableModel.compareByName);
-    const xmlList = [];
 
     Blockly.DataCategory.addCreateButton(xmlList, workspace, "LIST");
 
-    for (const variableModel of variableModelList) {
-      Blockly.DataCategory.addDataList(xmlList, variableModel);
-    }
+    addVariableList(xmlList, variableModelList, (xmlList, variable) => {
+      Blockly.DataCategory.addDataList(xmlList, variable);
+    });
 
     if (variableModelList.length > 0) {
       xmlList[xmlList.length - 1].setAttribute("gap", 24);
@@ -65,13 +83,9 @@ export default async ({ addon, console }) => {
       Blockly.DataCategory.addShowList(xmlList, firstVariable);
       Blockly.DataCategory.addHideList(xmlList, firstVariable);
     }
+
     Blockly.DataCategory.addSep(xmlList);
-
-    return xmlList;
-  };
-
-  workspace.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME, Blockly.VariableCategory);
-  workspace.registerToolboxCategoryCallback(Blockly.LIST_CATEGORY_NAME, Blockly.ListCategory);
+  }
 
   // The second step is to change the categories which scratch-gui displays in the category list.
   //
