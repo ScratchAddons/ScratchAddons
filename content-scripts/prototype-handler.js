@@ -2,11 +2,13 @@ function injectPrototype() {
   const oldPrototypes = {
     functionBind: Function.prototype.bind,
     arrayPush: Array.prototype.push,
+    arraySort: Array.prototype.sort,
     objectAssign: Object.assign,
   };
   const extraHandlers = {
     functionBind: [],
     arrayPush: [],
+    arraySort: [],
     objectAssign: [],
   };
   // Use custom event target
@@ -173,12 +175,14 @@ function injectPrototype() {
       const overrideEvent = new CustomEvent("prototypecalled", {
         detail: {
           trapName: overrideId,
+          target: this,
           args,
         },
       });
       __scratchAddonsTraps.dispatchEvent(overrideEvent);
       const specificEvent = new CustomEvent(`prototype.${overrideId}`, {
         detail: {
+          target: this,
           args,
         },
       });
@@ -201,6 +205,7 @@ function injectPrototype() {
     }
   };
   Array.prototype.push = override("arrayPush");
+  Array.prototype.sort = override("arraySort");
   Object.assign = override("objectAssign");
 
   // trap Thread
