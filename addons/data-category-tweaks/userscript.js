@@ -170,67 +170,96 @@ export default async ({ addon, console }) => {
 
   // The third step is to override the context and dropdown menus on variable and list blocks (if the "Separate Sprite-
   // only Variables" setting is enabled).
+  //
+  // Variables are sorted throughout the scratch-blocks UI using a utility funciton on Blockly.VariableModel,
+  // compareByName. This is the perfect function for us to override to sort global variables before local ones without
+  // writing redundant code across various parts of the editor, as below:
 
-  const variablesMixin = Blockly.Constants.Data.CUSTOM_CONTEXT_MENU_GET_VARIABLE_MIXIN;
-  const listsMixin = Blockly.Constants.Data.CUSTOM_CONTEXT_MENU_GET_LIST_MIXIN;
+  const oldCompareByName = Blockly.VariableModel.compareByName;
+  Blockly.VariableModel.compareByName = function (var1, var2) {
+    if (var1.isLocal && !var2.isLocal) {
+      return 1;
+    } else if (var2.isLocal && !var1.isLocal) {
+      return -1;
+    } else {
+      return oldCompareByName(var1, var2);
+    }
+  };
 
-  overrideContextMenuMixin("CUSTOM_CONTEXT_MENU_GET_VARIABLE_MIXIN", "");
-  overrideContextMenuMixin("CUSTOM_CONTEXT_MENU_GET_LIST_MIXIN", Blockly.LIST_VARIABLE_TYPE);
-  overrideOptionCallbackFactory("VARIABLE_OPTION_CALLBACK_FACTORY");
-  overrideOptionCallbackFactory("LIST_OPTION_CALLBACK_FACTORY");
+  // ...*except* for the fact that there is one particularly outstanding case where compareByName is *not* called, but
+  // a literally identical anonymous function is passed - namely in the code for sorting the options in variable and
+  // list context menus. Rather than write an 80-line special-case solution for that (as we might in other parts of the
+  // UI too, without the simple solution above), we're going to opt to override that very sort() call. But it's buried
+  // deep into a callback function alongside much other code - how are we going to target that one line?
+  //
+  // This is a perfect case for using prototype listeners, since we can override Array.prototype.sort so that it sorts
+  // by a desired function (Blockly.VariableModel.compareByName) instead of the existing one (the normally identical
+  // anonymous function). But we can only do that if we can detect the appropriate call, and how can we do that?
+  // If we start by overriding *all* calls to .sort(), we'll run into a dead end quickly: the only values available to
+  // the override are the "this" object (i.e. the array itself) and the sorting function itself, which is generally
+  // opaque (meaning it can't be distinguished from any other functions - especially in the case of the anonymous sort
+  // we are trying to replace here). Short of filtering the array and confirming it contains exclusively VariableModel
+  // objects, we don't have any way of telling whether the call is one we want to modify. (And this solution would have
+  // far-reaching effects, since it's possible other parts of Scratch have good reason to sort VariableModels in some
+  // *other* sorting order - and since the sorting function is opaque, we have no way of only replacing alphabetical
+  // sorts!) Worse, intercepting every call to .sort() is sure to be bad for performance, especially if we are running
+  // operations like filtering over the contained items to check if it is the type of data we're looking to change the
+  // sorting of.
+  //
+  // Thankfully, we can tackle both of those issues with one solution, which (in general) is this: instead of
+  // intercepting *all* calls to the function we're overriding, we react to a moment when it is likely to be called
+  // soon, taking use of that opportunity to also intercept calls to *other* functions so we can be sure we're
+  // modifying the behavior of exactly the right call. In practice and in the code below, that means...
+  //
+  // * reading the code path which leads to the call we want to override (it's part of the mixins in blocks_vertical/
+  //   data.js)
+  // * finding the closest point at which we can apply any necessary overrides (that's Blockly.Constants.Data.CUSTOM_
+  //   CONTEXT_MENU_ GET_[VARIABLE/LIST]_MIXIN.customContextMenu)
+  // * using those overrides to gather data for matching our call (variablesList is what we're sorting so we need to
+  //   keep track of that variable, it's returned by workspace.getVariablesOfType so that's what we're overriding)
+  // * reacting appropriately if we do match the call we want to modify (replace the sorting function argument with
+  //   the one we overrode above, Blockly.VariableModel.compareByName)
+  // * and finally, cleaning up the overrides we added!
+  //
+  // Note it's possible for any variety of reasons that the call (in this case to .sort()) we're looking for never
+  // gets matched at all; even if we don't match it, we still want to clean up after, to avoid leaving spare listeners
+  // and overrides lying around and sucking up performance. The safest way to do that is with a try...finally clause,
+  // which states that even if errors are thrown, the overrides will still be cleaned. (It's important to take special
+  // care of overrides whenever you are adding them in reaction to some event or call - leaving them untended is a sure
+  // path to bugs and poor performance.)
 
-  function overrideContextMenuMixin(mixinKey, variableType) {
+  overrideContextMenuMixin("CUSTOM_CONTEXT_MENU_GET_VARIABLE_MIXIN");
+  overrideContextMenuMixin("CUSTOM_CONTEXT_MENU_GET_LIST_MIXIN");
+
+  function overrideContextMenuMixin(mixinKey) {
     const mixin = Blockly.Constants.Data[mixinKey];
-    const oldContextMenuCallback = mixin.customContextMenu;
-    mixin.customContextMenu = function (options) {
-      // This code is only relevant if we've got the "Separate Sprite-only Variables" option, so we skip out and behave
-      // like normal if the option is disabled.
-      if (!addon.settings.get("separateLocalVariables")) {
-        oldContextMenuCallback.call(this, options);
-        return;
+    const oldCustomContextMenu = mixin.customContextMenu;
+    mixin.customContextMenu = function (...args) {
+      let variablesList;
+
+      // Apply overrides...
+
+      const oldGetVariablesOfType = this.workspace.getVariablesOfType;
+      this.workspace.getVariablesOfType = function (...args) {
+        return (variablesList = oldGetVariablesOfType.apply(this, args));
+      };
+
+      const handleArraySort = ({ detail: { target, args } }) => {
+        if (target === variablesList) {
+          args[0] = Blockly.VariableModel.compareByName;
+        }
+      };
+      addon.tab.traps.addPrototypeListener("arraySort", handleArraySort);
+
+      // Call the original function...
+
+      try {
+        oldCustomContextMenu.apply(this, args);
+      } finally {
+        // And get rid of the overrides, since we don't need them anymore!
+        this.workspace.getVariablesOfType = oldGetVariablesOfType;
+        addon.tab.traps.removePrototypeListener("arraySort", handleArraySort);
       }
-
-      // Flyout blocks don't show options for swapping the block with other variables, so we don't need to do any
-      // reordering in that case; we just behave like normal.
-      if (this.isInFlyout) {
-        oldContextMenuCallback.call(this, options);
-        return;
-      }
-
-      // The options variable is already going to contain descriptors for options like "Duplicate", "Delete Block",
-      // et cetera. Normally scratch-blocks would pass that same array into the mixin function so that its added
-      // options get added directly to the list, but those are exactly the options we want to intercept and reorder
-      // (they are the options for swapping the variable block out with another variable). So we leave generation to
-      // the original mixin code, but provide it a new empty array to work upon, whose data we will use to push a
-      // different ordering to the actual options variable (and thus the displayed context menu).
-      const variableOptions = [];
-      oldContextMenuCallback.call(this, variableOptions);
-
-      // Then we push to the option list according to global/local variable models. This is based on a sneaky trick
-      // rooted in overrideOptionCallbackFactory - while all we normally find exposed on an option descriptor is the
-      // variable's name (an unreliable datum at best), we have overridden the factory used for generating said
-      // option's click callback, and as such can find the ID of the variable (de facto the most reliable datum)
-      // exposed as an extra property on the option descriptor's callback function.
-      const variableModelList = workspace.getVariablesOfType(variableType);
-      const globalVariableIds = variableModelList.filter((entry) => !entry.isLocal).map((entry) => entry.getId());
-      const localVariableIds = variableModelList.filter((entry) => entry.isLocal).map((entry) => entry.getId());
-      const globalVariableOptions = variableOptions.filter((option) => globalVariableIds.includes(option.callback.id));
-      const localVariableOptions = variableOptions.filter((option) => localVariableIds.includes(option.callback.id));
-      options.push(...globalVariableOptions);
-      // (I'd like to insert a separator here, but Blockly doesn't support separators in context menus through its own
-      // interfaces, which are what we're working with here.)
-      options.push(...localVariableOptions);
-    };
-  }
-
-  function overrideOptionCallbackFactory(factoryKey) {
-    // As mentioned in overrideContextMenuMixin, this utility overrides the callback factory for context menu options
-    // so that the ID of the variable is exposed on the callback (and thus on the option descriptor as a whole).
-    const oldFactory = Blockly.Constants.Data[factoryKey];
-    Blockly.Constants.Data[factoryKey] = function (block, id, fieldName) {
-      const callback = oldFactory(block, id, fieldName);
-      callback.id = id;
-      return callback;
     };
   }
 };
