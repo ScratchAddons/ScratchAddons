@@ -43,11 +43,11 @@ const Comment = Vue.extend({
           },
         },
         (res) => {
-          this.replying = false;
-          this.postingComment = true;
+          this.postingComment = false;
           dateNow = Date.now();
           if (res.error) alert("Error sending comment");
           else {
+            this.replying = false;
             const newCommentPseudoId = `${this.resourceType[0]}_${res.commentId}`;
             Vue.set(this.commentsObj, newCommentPseudoId, {
               author: res.username,
