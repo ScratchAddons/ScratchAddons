@@ -18,14 +18,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       const scriptsToRun = [];
       const stylesToRun = [];
       for (const script of addon.scripts) {
-        if (userscriptMatches(request.getUserscripts, script.matches))
+        if (userscriptMatches(request.getUserscripts, script, addon.addonId))
           scriptsToRun.push({
             url: script.url,
             runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
           });
       }
       for (const style of addon.styles) {
-        if (userscriptMatches(request.getUserscripts, style.matches)) stylesToRun.push(style.url);
+        if (userscriptMatches(request.getUserscripts, style, addon.addonId)) stylesToRun.push(style.url);
       }
       if (scriptsToRun.length || stylesToRun.length)
         addons.push({ addonId: addon.addonId, scripts: scriptsToRun, styles: stylesToRun });
@@ -34,9 +34,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
 });
 
-function userscriptMatches(data, matches) {
+function userscriptMatches(data, scriptOrStyle, addonId) {
+  if (scriptOrStyle.setting_match) {
+    const { setting_id, setting_value } = scriptOrStyle.setting_match;
+    if (scratchAddons.globalState.addonSettings[addonId][setting_id] !== setting_value) return false;
+  }
   const url = data.url;
-  for (const match of matches) {
+  for (const match of scriptOrStyle.matches) {
     if (urlMatchesPattern(match, url)) return true;
   }
   return false;

@@ -1,5 +1,5 @@
-import "/libraries/linkify.min.js";
-import "/libraries/linkify-element.min.js";
+import "https://cdn.jsdelivr.net/npm/linkifyjs@2.1.9/dist/linkify.min.js";
+import "https://cdn.jsdelivr.net/npm/linkifyjs@2.1.9/dist/linkify-element.min.js";
 
 export default async function ({ addon }) {
   const pageType = document.location.pathname.substr(1).split("/")[0];

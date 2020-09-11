@@ -2,10 +2,11 @@
   background-color: var(--u-contextmenu-bg);
   border-color: var(--u-contextmenu-border);
 }
-.u-contextmenu-colored .blocklyContextMenu .goog-menuitem {
+.u-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
   color: white;
 }
-.u-contextmenu-colored .blocklyContextMenu .goog-menuitem:hover.goog-menuitem-highlight {
+.u-contextmenu-colored .blocklyContextMenu .goog-menuitem:hover.goog-menuitem-highlight,
+.s3dev-mi:hover {
   border-color: transparent;
 }
 .u-contextmenu-colored .blocklyContextMenu .goog-menuitem:hover {

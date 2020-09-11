@@ -28,7 +28,7 @@
           <img src="./web.svg" />
           <span>Scratch Website Features</span>
         </div>
-        <div class="category" :class="{sel: selectedTab === 'themes'}" @click="selectedTab = 'themes'">
+        <div class="category" :class="{sel: selectedTab === 'theme'}" @click="selectedTab = 'theme'">
           <img src="./brush.svg" />
           <span>Themes</span>
         </div>
@@ -115,26 +115,44 @@
                 <a href="./licenses.html?libraries={{ addon.libraries.join(',') }}">View library licenses</a>
               </div>
               <div class="settings-column">
-                <div v-for="setting of addon.options">
-                  <div class="addon-setting" v-if="setting.type === 'boolean'">
-                    <div class="setting-label">{{ setting.name }}</div>
-                    <input
-                      type="checkbox"
-                      class="setting-input check"
-                      v-model="addonSettings[addon._addonId][setting.id]"
-                      @change="updateSettings(addon);"
-                      :disabled="!addon._enabled"
-                    />
-                  </div>
-                  <div class="addon-setting" v-if="setting.type === 'positive_integer'">
-                    <div class="setting-label">{{ setting.name }}</div>
-                    <input
-                      type="number"
-                      class="setting-input number"
-                      v-model="addonSettings[addon._addonId][setting.id]"
-                      @change="updateSettings(addon)"
-                      :disabled="!addon._enabled"
-                    />
+                <div class="addon-setting" v-for="setting of addon.options">
+                  <div class="setting-label">{{ setting.name }}</div>
+                  <input
+                    type="checkbox"
+                    class="setting-input check"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @change="updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'boolean'"
+                  />
+                  <input
+                    type="number"
+                    class="setting-input number"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @change="updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'positive_integer'"
+                    min="0"
+                  />
+                  <input
+                    type="text"
+                    class="setting-input string"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @input="updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'string'"
+                    :placeholder="setting.default"
+                    maxlength="100"
+                  />
+                  <div class="filter-options" v-if="setting.type === 'select'">
+                    <div
+                      class="filter-option"
+                      v-for="option of setting.potential_values"
+                      :class="{'sel' : addonSettings[addon._addonId][setting.id] === option}"
+                      @click="updateSelect(setting.id, option, addon);"
+                    >
+                      {{ option }}
+                    </div>
                   </div>
                 </div>
               </div>

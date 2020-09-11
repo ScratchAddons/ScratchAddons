@@ -16,7 +16,7 @@ const vue = new Vue({
           all: true,
           editor: true,
           community: true,
-          themes: false,
+          theme: false,
         },
       },
       {
@@ -28,7 +28,7 @@ const vue = new Vue({
           all: true,
           editor: true,
           community: true,
-          themes: true,
+          theme: false,
         },
       },
       {
@@ -40,7 +40,31 @@ const vue = new Vue({
           all: true,
           editor: false,
           community: true,
-          themes: false,
+          theme: false,
+        },
+      },
+      {
+        name: "For editor",
+        matchType: "tag",
+        matchName: "editor",
+        color: "blue",
+        tabShow: {
+          all: false,
+          editor: false,
+          community: false,
+          theme: true,
+        },
+      },
+      {
+        name: "For website",
+        matchType: "tag",
+        matchName: "community",
+        color: "red",
+        tabShow: {
+          all: false,
+          editor: false,
+          community: false,
+          theme: true,
         },
       },
     ],
@@ -83,6 +107,10 @@ const vue = new Vue({
           }
         );
       } else toggle();
+    },
+    updateSelect(settingId, newValue, addon) {
+      this.addonSettings[addon._addonId][settingId] = newValue;
+      this.updateSettings(addon);
     },
     updateSettings(addon) {
       chrome.runtime.sendMessage({

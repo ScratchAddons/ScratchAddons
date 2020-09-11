@@ -1,5 +1,5 @@
 import textFieldEdit from "../../libraries/text-field-edit.js"; //used for editing the forum text box without messing with the edit history
-import md5 from "../../libraries/md5.js";
+import "https://cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js";
 
 export default async function ({ addon, global, console }) {
   var projectUpload = addon.settings.get("project_thumbnails");

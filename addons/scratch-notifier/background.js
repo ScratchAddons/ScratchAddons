@@ -102,9 +102,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     });
     const onClick = (e) => {
       if (e.detail.id === notifId) {
-        addon.browserTabs.create({ url });
+        chrome.tabs.create({ url });
         addon.notifications.clear(notifId);
-        markAsRead();
+        if (addon.settings.get("mark_as_read_when_clicked") === true) markAsRead();
       }
     };
     const onButtonClick = (e) => {
@@ -129,23 +129,27 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   }
 
   async function openMessagesPage() {
-    const tabs = await addon.browserTabs.query({
-      url: "https://scratch.mit.edu/messages*",
-    });
-    if (tabs[0]) {
-      addon.browserWindows.update(tabs[0].windowId, {
-        focused: true,
-      });
-      addon.browserTabs.update(tabs[0].id, {
-        active: true,
-        url: "https://scratch.mit.edu/messages/",
-      });
-    } else {
-      addon.browserTabs.create({
-        url: "https://scratch.mit.edu/messages/",
-      });
-    }
-    msgCount = 0;
+    chrome.tabs.query(
+      {
+        url: "https://scratch.mit.edu/messages*",
+      },
+      (tabs) => {
+        if (tabs[0]) {
+          chrome.windows.update(tabs[0].windowId, {
+            focused: true,
+          });
+          chrome.tabs.update(tabs[0].id, {
+            active: true,
+            url: "https://scratch.mit.edu/messages/",
+          });
+        } else {
+          chrome.tabs.create({
+            url: "https://scratch.mit.edu/messages/",
+          });
+        }
+        msgCount = 0;
+      }
+    );
   }
 
   function markAsRead() {
