@@ -1,0 +1,27 @@
+{
+  "name": "Data Category Tweaks",
+  "description": "Provides tweaks for the Data (\"Variables\") category in the editor.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "options": [
+    {
+      "name": "Separate List Category",
+      "id": "separateListCategory",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Separate Sprite-only Variables",
+      "id": "separateLocalVariables",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["editor"],
+  "permissions": [],
+  "enabled_by_default": false
+}
