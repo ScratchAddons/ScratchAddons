@@ -1,20 +1,26 @@
-import Addon from "../addon-api/background/Addon.js";
+import Addon from "../../addon-api/background/Addon.js";
 
-export default async function runAddonBgScripts({ addonId, permissions, scripts }) {
+export default async function runPersistentScripts(addonId) {
+  const manifest = scratchAddons.manifests.find(obj => obj.addonId === addonId).manifest;
+  const permissions = manifest.permissions || [];
+  executePersistentScripts({ addonId, permissions, scriptUrls: manifest.persistent_scripts});
+}
+
+async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
   const addonObjReal = new Addon({ id: addonId, permissions });
   const addonObjRevocable = Proxy.revocable(addonObjReal, {});
   const addonObj = addonObjRevocable.proxy;
-  scratchAddons.addons.push(addonObjReal);
+  scratchAddons.addonObjects.push(addonObjReal);
   const clearTimeoutFunc = (timeoutId) => {
-    addonObj._timeouts.splice(
-      addonObj._timeouts.findIndex((x) => x === timeoutId),
+    addonObjReal._timeouts.splice(
+      addonObjReal._timeouts.findIndex((x) => x === timeoutId),
       1
     );
     return clearTimeout(timeoutId);
   };
   const clearIntervalFunc = (intervalId) => {
-    addonObj._intervals.splice(
-      addonObj._intervals.findIndex((x) => x === intervalId),
+    addonObjReal._intervals.splice(
+      addonObjReal._intervals.findIndex((x) => x === intervalId),
       1
     );
     return clearInterval(intervalId);
@@ -24,25 +30,30 @@ export default async function runAddonBgScripts({ addonId, permissions, scripts 
       func();
       clearTimeoutFunc(timeoutId);
     }, interval);
-    addonObj._timeouts.push(timeoutId);
+    addonObjReal._timeouts.push(timeoutId);
     return timeoutId;
   };
   const setIntervalFunc = function (func, interval) {
     const intervalId = setInterval(function () {
       func();
     }, interval);
-    addonObj._intervals.push(intervalId);
+    addonObjReal._intervals.push(intervalId);
     return intervalId;
   };
-  addonObj._revokeProxy = () => {
-    scratchAddons.addons.splice(
-      scratchAddons.addons.findIndex((x) => x === addonObjReal),
+  addonObjReal._revokeProxy = () => {
+    scratchAddons.addonObjects.splice(
+      scratchAddons.addonObjects.findIndex((x) => x === addonObjReal),
       1
     );
     addonObjRevocable.revoke();
   };
+  addonObjReal._restart = () => {
+    addonObjReal._kill();
+    executePersistentScripts({ addonId, permissions, scriptUrls });
+  }
   const globalObj = Object.create(null);
-  for (const scriptPath of scripts) {
+  
+  for (const scriptPath of scriptUrls) {
     const scriptUrl = chrome.runtime.getURL(`/addons/${addonId}/${scriptPath}`);
     console.log(
       `%cDebug addons/${addonId}/${scriptPath}: ${scriptUrl}`,

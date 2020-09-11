@@ -1,72 +1,28 @@
+import globalStateProxy from "./imports/global-state.js";
+import localStateProxy from "./imports/local-state.js";
+
 window.scratchAddons = {};
 
-scratchAddons.addons = [];
+// Store addon objects for persistent scripts
+scratchAddons.addonObjects = [];
 
-const _globalState = {};
-
-_globalState.auth = {
-  isLoggedIn: false,
-  username: null,
-  userId: null,
-  xToken: null,
-  csrfToken: null,
-};
-
-class GlobalStateProxyHandler {
-  constructor(name, target) {
-    if (name) this.name = `${name}.`;
-    else this.name = "";
-  }
-  get(target, key) {
-    if (key === "_target") return target;
-    if (typeof target[key] === "object" && target[key] !== null) {
-      return new Proxy(target[key], new GlobalStateProxyHandler(`${this.name}${key}`));
-    } else {
-      return target[key];
-    }
-  }
-  set(target, key, value) {
-    const oldValue = target[key];
-    target[key] = value;
-    messageForAllTabs({ newGlobalState: target });
-    if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
-      const objectPath = `${this.name}${key}`.split(".");
-      console.log(
-        "Global state changed!\n" + objectPath.join(".") + " is now:",
-        objectPath[0] === "auth" ? "[redacted]" : value
-      );
-      if (objectPath[0] === "auth" && objectPath[1] !== "scratchLang") {
-        scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
-        messageForAllTabs({ fireEvent: { target: "auth", name: "change" } });
-      }
-      if (objectPath[0] === "addonSettings" && objectPath[1]) {
-        const settingsEventTarget = scratchAddons.eventTargets.settings.find(
-          (eventTarget) => eventTarget._addonId === objectPath[1]
-        );
-        if (settingsEventTarget) settingsEventTarget.dispatchEvent(new CustomEvent("change"));
-        messageForAllTabs({
-          fireEvent: {
-            target: "settings",
-            name: "change",
-            addonId: objectPath[1],
-          },
-        });
-      }
-    }
-    return true;
-  }
-}
-
-scratchAddons.globalState = new Proxy(_globalState, new GlobalStateProxyHandler(null, _globalState));
-console.log("Global state initialized!\n", JSON.parse(JSON.stringify(scratchAddons.globalState)));
-
+// Store event targets for addon.* API events
 scratchAddons.eventTargets = {
   auth: [],
   settings: [],
 };
 
+// Event target for local background page events
+scratchAddons.localEvents = new EventTarget();
+
+// Load manifests into memory
+scratchAddons.manifests = [];
+
+// Other files may add their own global methods here so that addon-api files can access them
 scratchAddons.methods = {};
 
-function messageForAllTabs(message) {
-  chrome.tabs.query({}, (tabs) => tabs.forEach((tab) => tab.url && chrome.tabs.sendMessage(tab.id, message)));
-}
+scratchAddons.globalState = globalStateProxy;
+console.log("%cscratchAddons.globalState", "font-weight: bold;", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.globalState)));
+
+scratchAddons.localState = localStateProxy;
+console.log("%cscratchAddons.localState", "font-weight: bold;", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.localState)));

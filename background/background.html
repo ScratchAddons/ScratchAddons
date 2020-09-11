@@ -1,25 +1,27 @@
 <head>
   <meta charset="UTF-8" />
 
-  <!-- Declare scratchAddons object, handle global and local state -->
+  <!-- Declare scratchAddons object, create global and local state -->
   <script src="declare-scratchaddons-object.js" type="module"></script>
-  <script src="handle-local-state.js" type="module"></script>
+
+  <!-- Load manifests into memory -->
+  <script src="load-addon-manifests.js" type="module"></script>
+
+  <!-- When manifests are ready, check addon settings -->
+  <script src="get-addon-settings.js" type="module"></script>
 
   <!-- Load handlers. Some expose methods through scratchAddons.methods -->
   <script src="handle-fetch.js" type="module"></script>
   <script src="handle-auth.js" type="module"></script>
   <script src="handle-messages.js" type="module"></script>
-  <script src="handle-global-state.js" type="module"></script>
-  <script src="handle-settings-page.js" type="module"></script>
-  <script src="handle-addon-settings.js" type="module"></script>
   <script src="handle-browser-badge.js" type="module"></script>
-  <script src="handle-licenses.js" type="module"></script>
   <script src="handle-clipboard.js" type="module"></script>
 
-  <!-- Load manifests into memory -->
-  <script src="load-addon-manifests.js" type="module"></script>
-
-  <!-- When everything is ready, run scripts -->
+  <!-- When everything is ready, run scripts and communicate with content scripts -->
   <script src="get-userscripts.js" type="module"></script>
-  <script src="get-background-scripts.js" type="module"></script>
+  <script src="get-persistent-scripts.js" type="module"></script>
+
+  <!-- Respond to requests by the settings page and others -->
+  <script src="handle-settings-page.js" type="module"></script>
+  <script src="handle-licenses.js" type="module"></script>
 </head>

@@ -10,10 +10,14 @@ export default class Addon {
     const { id, permissions } = info;
     this._timeouts = [];
     this._intervals = [];
+    const that = this;
     this.self = {
       id,
       dir: `${chrome.runtime.getURL("")}addons/${id}`,
       browser: typeof InstallTrigger !== "undefined" ? "firefox" : "chrome",
+      restart() {
+        return that._restart();
+      }
     };
     this.auth = new Auth(this);
     this.account = new Account();

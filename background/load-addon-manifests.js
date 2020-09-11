@@ -1,5 +1,3 @@
-scratchAddons.manifests = [];
-
 (async function () {
   const folderNames = await (await fetch("/addons/addons.json")).json();
   for (const folderName of folderNames) {
@@ -8,5 +6,5 @@ scratchAddons.manifests = [];
     scratchAddons.manifests.push({ addonId: folderName, manifest });
   }
   scratchAddons.localState.ready.manifests = true;
-  window.dispatchEvent(new CustomEvent("manifestsready"));
+  scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
 })();
