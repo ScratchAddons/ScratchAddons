@@ -1,3 +1,5 @@
+import runPersistentScripts from "./imports/run-persistent-scripts.js";
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request === "getSettingsInfo") {
     sendResponse({
@@ -13,14 +15,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       addonsEnabled: scratchAddons.localState.addonsEnabled,
     });
     if (newState === false) {
-      const addonObjs = scratchAddons.addons.filter((addonObj) => addonObj.self.id === addonId);
+      const addonObjs = scratchAddons.addonObjects.filter((addonObj) => addonObj.self.id === addonId);
       if (addonObjs) addonObjs.forEach((addonObj) => addonObj._kill());
-      scratchAddons.updateBadge();
+      scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
     } else {
-      scratchAddons.runBgScriptsById(addonId);
+      runPersistentScripts(addonId);
     }
   } else if (request.changeAddonSettings) {
-    console.log(request.changeAddonSettings);
     const { addonId, newSettings } = request.changeAddonSettings;
     scratchAddons.globalState.addonSettings[addonId] = newSettings;
     chrome.storage.sync.set({

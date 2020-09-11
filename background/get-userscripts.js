@@ -1,8 +1,8 @@
-if (scratchAddons.localState.allReady) getUsercripts();
-else window.addEventListener("scratchaddonsready", getUsercripts);
+if (scratchAddons.localState.allReady) getUserscripts();
+else scratchAddons.localEvents.addEventListener("ready", getUserscripts);
 
 const addonsWithUserscripts = [];
-async function getUsercripts() {
+async function getUserscripts() {
   for (const { manifest, addonId } of scratchAddons.manifests) {
     if (manifest.userscripts || manifest.userstyles) {
       addonsWithUserscripts.push({ addonId, scripts: manifest.userscripts || [], styles: manifest.userstyles || [] });
@@ -12,26 +12,25 @@ async function getUsercripts() {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.getUserscripts) {
-    const addons = [];
+    const response = [];
     for (const addon of addonsWithUserscripts) {
       if (!scratchAddons.localState.addonsEnabled[addon.addonId]) continue;
-      const scriptsToRun = [];
-      const stylesToRun = [];
+      const scripts = [];
+      const styles = [];
       for (const script of addon.scripts) {
         if (userscriptMatches(request.getUserscripts, script, addon.addonId))
-          scriptsToRun.push({
+          scripts.push({
             url: script.url,
             runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
           });
       }
       for (const style of addon.styles) {
-        if (userscriptMatches(request.getUserscripts, style, addon.addonId)) stylesToRun.push(style.url);
+        if (userscriptMatches(request.getUserscripts, style, addon.addonId)) styles.push(style.url);
       }
-      if (scriptsToRun.length || stylesToRun.length)
-        addons.push({ addonId: addon.addonId, scripts: scriptsToRun, styles: stylesToRun });
+      if (scripts.length || styles.length) response.push({ addonId: addon.addonId, scripts, styles });
     }
-    sendResponse(addons);
-  }
+    sendResponse(response);
+  } else if (request === "getGlobalState") sendResponse(scratchAddons.globalState._target); // Firefox breaks if we send a proxy
 });
 
 function userscriptMatches(data, scriptOrStyle, addonId) {
