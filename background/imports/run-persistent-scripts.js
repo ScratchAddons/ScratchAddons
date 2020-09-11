@@ -1,9 +1,9 @@
 import Addon from "../../addon-api/background/Addon.js";
 
 export default async function runPersistentScripts(addonId) {
-  const manifest = scratchAddons.manifests.find(obj => obj.addonId === addonId).manifest;
+  const manifest = scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest;
   const permissions = manifest.permissions || [];
-  executePersistentScripts({ addonId, permissions, scriptUrls: manifest.persistent_scripts});
+  executePersistentScripts({ addonId, permissions, scriptUrls: manifest.persistent_scripts });
 }
 
 async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
@@ -50,9 +50,9 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
   addonObjReal._restart = () => {
     addonObjReal._kill();
     executePersistentScripts({ addonId, permissions, scriptUrls });
-  }
+  };
   const globalObj = Object.create(null);
-  
+
   for (const scriptPath of scriptUrls) {
     const scriptUrl = chrome.runtime.getURL(`/addons/${addonId}/${scriptPath}`);
     console.log(

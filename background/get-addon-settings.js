@@ -19,7 +19,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       }
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabled_by_default;
     }
-    if(madeAnyChanges) chrome.storage.sync.set({ addonSettings, addonsEnabled });
+    if (madeAnyChanges) chrome.storage.sync.set({ addonSettings, addonsEnabled });
     scratchAddons.globalState.addonSettings = addonSettings;
     scratchAddons.localState.addonsEnabled = addonsEnabled;
     scratchAddons.localState.ready.addonSettings = true;

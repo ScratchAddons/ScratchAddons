@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       const styles = [];
       for (const script of addon.scripts) {
         if (userscriptMatches(request.getUserscripts, script, addon.addonId))
-            scripts.push({
+          scripts.push({
             url: script.url,
             runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
           });
@@ -27,12 +27,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       for (const style of addon.styles) {
         if (userscriptMatches(request.getUserscripts, style, addon.addonId)) styles.push(style.url);
       }
-      if (scripts.length || styles.length)
-      response.push({ addonId: addon.addonId, scripts, styles });
+      if (scripts.length || styles.length) response.push({ addonId: addon.addonId, scripts, styles });
     }
     sendResponse(response);
-  }
-  else if (request === "getGlobalState") sendResponse(scratchAddons.globalState._target); // Firefox breaks if we send a proxy
+  } else if (request === "getGlobalState") sendResponse(scratchAddons.globalState._target); // Firefox breaks if we send a proxy
 });
 
 function userscriptMatches(data, scriptOrStyle, addonId) {
