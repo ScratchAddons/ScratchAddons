@@ -189,7 +189,7 @@ body {
   fill: hsla(215, 60%, 40%, 1) !important;
 }
 
-input {
+input:not([name="title"]) {
   background: #444;
   color: #fff !important;
 }
