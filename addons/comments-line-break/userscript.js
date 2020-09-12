@@ -1,27 +1,30 @@
 ﻿export default async function ({ addon, global, console }) {
-  addon.settings.addEventListener("change", () => console.log("changed!"));
-
   while (true) {
-    await addon.tab.waitForElement(
-      ".comment-content:not(.commentsLineBreaksViewed),.comment .content:not(.commentsLineBreaksViewed)"
-    );
-    var element = document.querySelector(
+    var element = await addon.tab.waitForElement(
       ".comment-content:not(.commentsLineBreaksViewed),.comment .content:not(.commentsLineBreaksViewed)"
     );
     element.style = "white-space:break-spaces;";
 
-    if (document.querySelector(".comment .content:not(.commentsLineBreaksViewed)")) {
-      /*element.textContent = element.textContent.slice(15, element.textContent.length);
-      element.textContent = element.textContent.slice(0, element.textContent.indexOf('\n')) + 
-                            element.textContent.slice(element.textContent.indexOf('\n') + 23, element.textContent.length);*/
+    for (var i = 0; i < element.childNodes.length; i++) {
+      var thisNode = element.childNodes[i];
+      var lastNode = element.childNodes[i - 1];
+      var nextNode = element.childNodes[i + 1];
+
+      if (thisNode.nodeType !== document.TEXT_NODE) {
+        continue;
+      }
+
+      var content = thisNode.textContent.trim();
+      if (lastNode && lastNode.nodeType === document.ELEMENT_NODE) {
+        content = " " + content;
+      }
+      if (nextNode && nextNode.nodeType === document.ELEMENT_NODE) {
+        if (content.length > 0) {
+          content = content + " ";
+        }
+      }
+      thisNode.textContent = content;
     }
-
-    //var result = '\n';
-    //for(var i = 0;i < element.textContent.length;i++){
-    //  result += element.textContent[i].charCodeAt(0) + ' ';
-    //}
-
-    element.textContent += "\n\n" + element.innerHTML; //result;
 
     element.classList.add("commentsLineBreaksViewed");
   }
