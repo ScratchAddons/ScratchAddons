@@ -14,16 +14,20 @@
       }
 
       var content = thisNode.textContent;
-      if (i === 0) { // First text node
+      if (i === 0) {
+        // First text node
         content = content.trimStart();
       }
-      if (i === element.childNodes.length - 1) { // Last text node
+      if (i === element.childNodes.length - 1) {
+        // Last text node
         content = content.trimEnd();
       }
-      if (element.closest(".reply") && i === 2) { // "First" text node in reply (comes after parent username link)
+      if (element.closest(".reply") && i === 2) {
+        // "First" text node in reply (comes after parent username link)
         content = " " + content.trimStart();
       }
-      if (nextNode && nextNode.nodeType === document.ELEMENT_NODE && content.length) { // Text node before link
+      if (nextNode && nextNode.nodeType === document.ELEMENT_NODE && content.length) {
+        // Text node before link
         content = content.slice(0, -1);
       }
 
