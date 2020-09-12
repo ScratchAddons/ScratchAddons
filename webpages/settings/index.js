@@ -78,7 +78,8 @@ const vue = new Vue({
       const matchesSearch =
         this.searchInput === "" ||
         addonManifest.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-        addonManifest.description.toLowerCase().includes(this.searchInput.toLowerCase());
+        addonManifest.description.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        addonManifest.credits && addonManifest.credits.map(obj => obj.name.toLowerCase()).some(author => author.includes(this.searchInput.toLowerCase()));
       return matchesTag && matchesSearch;
     },
     stopPropagation(e) {
@@ -137,17 +138,23 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
     manifest._tags.recommended = manifest.tags.includes("recommended");
     manifest._tags.beta = manifest.tags.includes("beta");
     manifest._tags.forums = manifest.tags.includes("forums");
+    manifest._tags.forEditor = manifest.tags.includes("theme") && manifest.tags.includes("editor");
+    manifest._tags.forWebsite = manifest.tags.includes("theme") && manifest.tags.includes("community");
   }
   // Sort: enabled first, then recommended disabled, then other disabled addons. All alphabetically.
   manifests.sort((a, b) => {
-    if (a.manifest._enabled === true && b.manifest._enabled === false) return -1;
-    else if (a.manifest._enabled === b.manifest._enabled) {
-      if (a.manifest.name.localeCompare(b.manifest.name) === 1) {
-        if (a.manifest._tags.recommended === true && b.manifest._tags.recommended === false) return -1;
-        else return 1;
-      } else return -1;
-    } else return 1;
+    if (a.manifest._enabled === true && b.manifest._enabled === true) return a.manifest.name.localeCompare(b.manifest.name);
+    else if (a.manifest._enabled === true && b.manifest._enabled === false) return -1;
+    else if (a.manifest._enabled === false && b.manifest._enabled === false) {
+      if (a.manifest._tags.recommended === true && b.manifest._tags.recommended === false) return -1;
+      else if (a.manifest._tags.recommended === false && b.manifest._tags.recommended === true) return 1;
+      else return a.manifest.name.localeCompare(b.manifest.name);
+    } 
+    else return 1;
   });
+  // Messaging related addons should always go first no matter what
+  manifests.sort((a,b) => a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0);
+  manifests.sort((a,b) => a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0);
   vue.manifests = manifests.map(({ manifest }) => manifest);
 });
 

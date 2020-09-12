@@ -1,6 +1,6 @@
 {
-  "name": "Remove Sprite Confirm",
-  "description": "Show confirm screen when deleting sprite.",
+  "name": "Confirm sprite deletion",
+  "description": "Asks if you're sure when deleting a sprite inside a project.",
   "userscripts": [
     {
       "url": "userscript.js",

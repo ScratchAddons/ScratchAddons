@@ -93,7 +93,9 @@
                 </div>
               </div>
               <div class="badge blue" v-if="addon._tags.recommended">Recommended</div>
+              <div class="badge blue" v-if="selectedTab === 'theme' && addon._tags.forEditor">For editor</div>
               <div class="badge red" v-if="addon._tags.beta">Beta</div>
+              <div class="badge red" v-if="selectedTab === 'theme' && addon._tags.forWebsite">For website</div>
               <div class="badge green" v-if="addon._tags.forums">Forums</div>
               <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
               <div class="addon-check">

@@ -1,6 +1,6 @@
 {
-  "name": "True YouTube links",
-  "description": "Replaces links to the embedded site with true YT links",
+  "name": "True forums YouTube links",
+  "description": "Replaces links to the embedded site with real YouTube links.",
   "credits": [
     {
       "name": "HTML-Fan/NT"

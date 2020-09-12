@@ -1,12 +1,15 @@
 {
-  "name": "Load More Scrolling Fix",
-  "description": "Fixes the scrolling when pressing the load more button on Scratch. By Maximouse.",
+  "name": "\"Load more\" scrolling fix",
+  "description": "Fixes the scrolling when pressing the load more button on Scratch.",
+  "credits": [{
+    "name": "Maximouse"
+  }],
   "userstyles": [
     {
       "url": "style.css",
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
-  "tags": ["community"],
+  "tags": ["community", "recommended"],
   "enabled_by_default": true
 }

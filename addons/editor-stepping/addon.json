@@ -1,6 +1,6 @@
 {
-  "name": "View stepping",
-  "description": "Allows you to see which block currently executes.",
+  "name": "Highlight currently executing blocks",
+  "description": "Adds a blue border to the blocks that are currently running in a project.",
   "userscripts": [
     {
       "url": "userscript.js",
