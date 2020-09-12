@@ -179,7 +179,7 @@ input[type="text"]:not([name="title"]):focus {
 }
 .blocklyZoom,
 [class^="gui_stage-and-target-wrapper"]
- [class^="button_outlined-button"]:not([class*="menu-bar"]):not([class*="modal"]):not([class*="tag-button_active"]),
+  [class^="button_outlined-button"]:not([class*="menu-bar"]):not([class*="modal"]):not([class*="tag-button_active"]),
 .sound-editor_round-button_3NLcW,
 .sound-editor_button-group_SFPoV {
   filter: invert(100) hue-rotate(180deg);
