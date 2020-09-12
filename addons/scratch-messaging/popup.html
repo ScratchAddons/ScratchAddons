@@ -271,7 +271,7 @@
     </div>
 
     <!-- Bottom bar-->
-    <div id="bottom-bar" v-show="error !== 'addonDisabled'">
+    <div id="bottom-bar" v-show="messagesReady">
       <a @click="markAsRead()" v-show="!markedAsRead">Mark messages as read</a>
       <span v-show="markedAsRead" style="font-weight: bold">✓ Marked as read</span>&nbsp;&nbsp;|&nbsp;&nbsp;
       <a href="https://scratch.mit.edu/messages" id="open-messages"
