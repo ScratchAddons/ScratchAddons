@@ -166,19 +166,20 @@ div.custom-procedures_option-card_BtHt3 {
 .library-item_library-item-name_2qMXu {
   color: var(--text) !important;
 }
-input[type="text"],
+input[type="text"]:not([name="title"]),
 .input_input-form_1Y0wX,
 .prompt_variable-name-text-input_1iu8- {
   background: var(--accent);
   color: var(--text) !important;
 }
-input[type="text"]:hover,
-input[type="text"]:focus {
+input[type="text"]:not([name="title"]):hover,
+input[type="text"]:not([name="title"]):focus {
   background: var(--accent);
   filter: brightness(90%);
 }
 .blocklyZoom,
-.stage-header_stage-button_hkl9B,
+[class^="gui_stage-and-target-wrapper"]
+ [class^="button_outlined-button"]:not([class*="menu-bar"]):not([class*="modal"]):not([class*="tag-button_active"]),
 .sound-editor_round-button_3NLcW,
 .sound-editor_button-group_SFPoV {
   filter: invert(100) hue-rotate(180deg);
