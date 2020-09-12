@@ -1,6 +1,11 @@
 {
   "name": "See deleted comments",
-  "description": "Allows you to see the author and post date of deleted comments in profiles and studios. By Jeffalo.",
+  "description": "Allows you to see the author and post date of deleted comments in profiles and studios.",
+  "credits": [
+    {
+      "name": "Jeffalo"
+    }
+  ],
   "userstyles": [
     {
       "url": "style.css",

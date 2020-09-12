@@ -1,5 +1,5 @@
 {
-  "name": "Progress Bar",
+  "name": "Project progress bar",
   "description": "Adds a progress bar for loading and saving projects.",
   "credits": [
     {
@@ -33,6 +33,6 @@
       "default": 5
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "recommended"],
   "enabled_by_default": false
 }

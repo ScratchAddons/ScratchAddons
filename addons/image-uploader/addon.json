@@ -1,5 +1,5 @@
 {
-  "name": "Image Uploader",
+  "name": "Forums image uploader",
   "description": "Integrates image uploading into the forums.",
   "userscripts": [
     {

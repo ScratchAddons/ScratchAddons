@@ -1,6 +1,11 @@
 {
-  "name": "Colored Context Menus",
+  "name": "Colored context menus",
   "description": "Makes the editor context menus colorful when right-clicking a block.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",

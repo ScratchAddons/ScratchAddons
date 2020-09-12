@@ -1,6 +1,6 @@
 {
   "name": "YouTube full screen",
-  "description": "Enables the full screen button in Scratch's YouTube video player",
+  "description": "Enables the full screen button in Scratch's YouTube video player.",
   "credits": [
     {
       "name": "Maximouse",
@@ -15,6 +15,6 @@
     }
   ],
   "options": [],
-  "tags": ["community", "forums"],
+  "tags": ["community", "forums", "recommended"],
   "enabled_by_default": false
 }
