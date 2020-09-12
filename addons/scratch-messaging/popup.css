@@ -15,13 +15,13 @@ body {
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: white;
-  box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
 }
 body.fullscreen {
   width: 55%;
   min-height: calc(100% - 2px);
   height: auto;
   border: 1px solid black;
+  box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
 }
 
 a {
