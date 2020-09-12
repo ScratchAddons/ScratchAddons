@@ -79,7 +79,10 @@ const vue = new Vue({
         this.searchInput === "" ||
         addonManifest.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         addonManifest.description.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-        addonManifest.credits && addonManifest.credits.map(obj => obj.name.toLowerCase()).some(author => author.includes(this.searchInput.toLowerCase()));
+        (addonManifest.credits &&
+          addonManifest.credits
+            .map((obj) => obj.name.toLowerCase())
+            .some((author) => author.includes(this.searchInput.toLowerCase())));
       return matchesTag && matchesSearch;
     },
     stopPropagation(e) {
@@ -143,18 +146,18 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   }
   // Sort: enabled first, then recommended disabled, then other disabled addons. All alphabetically.
   manifests.sort((a, b) => {
-    if (a.manifest._enabled === true && b.manifest._enabled === true) return a.manifest.name.localeCompare(b.manifest.name);
+    if (a.manifest._enabled === true && b.manifest._enabled === true)
+      return a.manifest.name.localeCompare(b.manifest.name);
     else if (a.manifest._enabled === true && b.manifest._enabled === false) return -1;
     else if (a.manifest._enabled === false && b.manifest._enabled === false) {
       if (a.manifest._tags.recommended === true && b.manifest._tags.recommended === false) return -1;
       else if (a.manifest._tags.recommended === false && b.manifest._tags.recommended === true) return 1;
       else return a.manifest.name.localeCompare(b.manifest.name);
-    } 
-    else return 1;
+    } else return 1;
   });
   // Messaging related addons should always go first no matter what
-  manifests.sort((a,b) => a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0);
-  manifests.sort((a,b) => a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0);
+  manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
+  manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
   vue.manifests = manifests.map(({ manifest }) => manifest);
 });
 

@@ -1,9 +1,11 @@
 {
   "name": "Searchable dropdowns",
   "description": "Allows you to search dropdowns in the Scratch editor.",
-  "credits": [{
-    "name": "GarboMuffin"
-  }],
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
