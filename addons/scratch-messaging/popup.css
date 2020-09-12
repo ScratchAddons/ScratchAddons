@@ -58,6 +58,7 @@ a:hover {
 .sticky {
   position: sticky;
   top: 0;
+  z-index: 999;
 }
 .hover-reverse:hover {
   background-color: #fa4;

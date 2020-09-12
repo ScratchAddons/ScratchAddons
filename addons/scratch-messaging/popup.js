@@ -229,10 +229,10 @@ const vue = new Vue({
         const timeout = setTimeout(() => {
           this.error = "addonDisabled";
           resolve(undefined);
-        }, 2000);
+        }, 500);
         chrome.runtime.sendMessage({ scratchMessaging: "getData" }, (res) => {
-          clearTimeout(timeout);
           if (res) {
+            clearTimeout(timeout);
             this.messages = res.messages;
             this.msgCount = res.lastMsgCount;
             this.username = res.username;
