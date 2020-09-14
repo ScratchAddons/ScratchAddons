@@ -1,0 +1,17 @@
+{
+  "name": "Show full signature",
+  "description": "Shows the full signature of users on the forums",
+  "credits": [
+    {
+      "name": "GrahamSH"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+    }
+  ],
+  "tags": ["community"],
+  "enabled_by_default": false
+}
