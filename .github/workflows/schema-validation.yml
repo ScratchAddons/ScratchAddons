@@ -42,4 +42,3 @@ jobs:
         with:
           schema: https://github.com/Hans5958/ScratchAddons-Schemas/raw/master/addon/1.0.json
           jsons: changes.txt
-      
