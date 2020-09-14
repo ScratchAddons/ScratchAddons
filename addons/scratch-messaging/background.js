@@ -93,13 +93,14 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         // Remove extra messages
         data.messages.length = 40;
       }
+      if (data.messages.length > 1000) {
+        data.messages.length = 1000;
+      }
     }
     lastDateTime = new Date(checkedMessages[0].datetime_created).getTime();
     data.ready = true;
   }
 
-  // NOTE: addons aren't supposed to use chrome APIs
-  // Until addons have a way to communicate with popups, this is the only way
   chrome.runtime.onMessage.addListener(function thisFunction(request, sender, sendResponse) {
     // If this addon has been killed, addon.self will throw
     try {
