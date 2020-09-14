@@ -1,4 +1,4 @@
-const vue = new Vue({
+requestEvents: request =>
   el: "body",
   data: {
     manifests: [],
