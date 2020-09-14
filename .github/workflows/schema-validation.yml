@@ -16,7 +16,7 @@ jobs:
   sv:
     name: Validation
     runs-on: ubuntu-latest
-    if: github.repository_owner == "ScratchAddons"
+
 
     steps:
       - name: Checkout code
