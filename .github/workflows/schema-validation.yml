@@ -40,5 +40,5 @@ jobs:
       - name: Validate .json with schema
         uses: Hans5958/validate-json-action@master
         with:
-          schema: https://github.com/Hans5958/ScratchAddons-Schemas/raw/master/addon/1.0.json
+          schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/master/1/1.0.json
           jsons: changes.txt
