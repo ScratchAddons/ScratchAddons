@@ -132,7 +132,7 @@ const Comment = Vue.extend({
 });
 Vue.component("comment", Comment);
 
-requestEvents: request =>
+const vue = new Vue({
   el: "body",
   data: {
     mounted: true, // Always true

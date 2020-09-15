@@ -1,4 +1,4 @@
-requestEvents: request => ({
+const vue = new Vue({
   el: "body",
   data: {
     libraries: [],
