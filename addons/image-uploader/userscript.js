@@ -217,7 +217,7 @@ export default async function ({ addon, global, console }) {
     window.progresselement = toolbar.appendChild(document.createElement("li"));
     var token = addon.auth.xToken;
 
-    progresselement.innerHTML = "creating project";
+    progresselement.innerText = "creating project";
 
     fetch("https://projects.scratch.mit.edu/", {
       headers: {
@@ -245,7 +245,7 @@ export default async function ({ addon, global, console }) {
       .then((data) => {
         console.log("project creation response data: ", data);
 
-        progresselement.innerHTML = "setting title";
+        progresselement.innerText = "setting title";
 
         //set title
         console.log("project id: " + data["content-name"]);
@@ -274,7 +274,7 @@ export default async function ({ addon, global, console }) {
           .then((thing) => {
             console.log("changed title successfully");
 
-            progresselement.innerHTML = "setting thumbnail";
+            progresselement.innerText = "setting thumbnail";
 
             $.ajax({
               //CREDIT TO WORLD LANGUAGES FOR THIS THING
@@ -291,7 +291,7 @@ export default async function ({ addon, global, console }) {
                 xhr.upload.onprogress = function (e) {
                   if (true) {
                     var progress = Math.floor((e.loaded / e.total) * 100) + "%";
-                    progresselement.innerHTML = `uploading thumbnail... ${progress}`;
+                    progresselement.innerText = `uploading thumbnail... ${progress}`;
                   }
                 };
                 return xhr;
@@ -334,7 +334,7 @@ export default async function ({ addon, global, console }) {
 
     console.log("type: " + fileType);
 
-    progresselement.innerHTML = "uploading image...";
+    progresselement.innerText = "uploading image...";
 
     fetch(`https://assets.scratch.mit.edu/${hash}.${type}`, {
       headers: {
