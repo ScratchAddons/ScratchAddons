@@ -16,6 +16,6 @@
     }
   ],
   "tags": ["forums", "community"],
-  "enabled_by_default": false,
+  "enabledByDefault": false,
   "libraries": ["md5", "text-field-edit"]
 }

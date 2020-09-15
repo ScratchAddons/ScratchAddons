@@ -34,9 +34,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 function userscriptMatches(data, scriptOrStyle, addonId) {
-  if (scriptOrStyle.setting_match) {
-    const { setting_id, setting_value } = scriptOrStyle.setting_match;
-    if (scratchAddons.globalState.addonSettings[addonId][setting_id] !== setting_value) return false;
+  if (scriptOrStyle.settingMatch) {
+    const { settingId, settingValue } = scriptOrStyle.settingMatch;
+    if (scratchAddons.globalState.addonSettings[addonId][settingId] !== settingValue) return false;
   }
   const url = data.url;
   for (const match of scriptOrStyle.matches) {

@@ -13,25 +13,25 @@
     {
       "url": "dark-editor.css",
       "matches": ["https://scratch.mit.edu/projects/*"],
-      "setting_match": {
-        "setting_id": "selectedMode",
-        "setting_value": "Dark editor"
+      "optionMatch": {
+        "id": "selectedMode",
+        "value": "Dark editor"
       }
     },
     {
       "url": "3dark.css",
       "matches": ["https://scratch.mit.edu/projects/*"],
-      "setting_match": {
-        "setting_id": "selectedMode",
-        "setting_value": "3.Dark"
+      "optionMatch": {
+        "id": "selectedMode",
+        "value": "3.Dark"
       }
     },
     {
       "url": "3darker.css",
       "matches": ["https://scratch.mit.edu/projects/*"],
-      "setting_match": {
-        "setting_id": "selectedMode",
-        "setting_value": "3.Darker"
+      "optionMatch": {
+        "id": "selectedMode",
+        "value": "3.Darker"
       }
     },
     {
@@ -44,10 +44,10 @@
       "name": "Dark mode version",
       "id": "selectedMode",
       "type": "select",
-      "potential_values": ["Dark editor", "3.Dark", "3.Darker"],
+      "potentialValues": ["Dark editor", "3.Dark", "3.Darker"],
       "default": "Dark editor"
     }
   ],
   "tags": ["editor", "theme"],
-  "enabled_by_default": false
+  "enabledByDefault": false
 }
