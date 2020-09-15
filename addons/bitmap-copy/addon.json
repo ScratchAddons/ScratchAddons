@@ -10,5 +10,6 @@
   "options": [],
   "tags": ["editor", "recommended"],
   "permissions": ["clipboardWrite"],
+  "dom.events.asyncClipboard.dataTransfer": true,
   "enabled_by_default": false
 }
