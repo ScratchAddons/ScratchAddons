@@ -1,14 +1,15 @@
 {
   "manifest_version": 2,
   "name": "Scratch Addons",
-  "description": "[Description]",
-  "version": "3.0.1",
+  "description": "Scratch Addons provides new features and themes for the scratch.mit.edu website and project editor.",
+  "version": "1.0.0",
   "background": {
     "page": "background/background.html"
   },
   "browser_action": {
     "default_icon": "images/icon.png",
-    "default_popup": "webpages/popup/index.html"
+    "default_popup": "webpages/popup/index.html",
+    "default_title": "Scratch Addons (formerly Scratch Messaging Extension)"
   },
   "icons": {
     "16": "images/icon.png",
@@ -31,10 +32,12 @@
     "page": "webpages/settings/index.html",
     "open_in_tab": true
   },
+  "homepage_url": "https://scratchaddons.com",
   "incognito": "not_allowed",
   "permissions": [
     "https://scratch.mit.edu/*",
     "https://api.scratch.mit.edu/*",
+    "https://clouddata.scratch.mit.edu/*",
     "cookies",
     "webRequest",
     "webRequestBlocking",
