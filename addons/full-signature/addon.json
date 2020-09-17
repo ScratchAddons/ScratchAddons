@@ -7,14 +7,37 @@
       "name": "GrahamSH"
     }
   ],
+"options": [
+  {
+    "name": "Show Full Signature",
+    "id": "signature",
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "name": "Show scroll for What I've been doing",
+    "id": "whatworkingon",
+    "type": "boolean",
+    "default": true
+    
+  }
+  ],
   "userstyles": [
     {
       "url": "style.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+      "setting_match": {
+        "setting_id": "signature",
+        "setting_value": "true"
+    }
     }
     {
       "url": "style2.css",
       "matches": ["https://scratch.mit.edu/users/*"]
+      "setting_match": {
+        "setting_id": "whatworkingon",
+        "setting_value": "true"
+    }
     }
   ],
   "tags": ["community", "forums"],
