@@ -1,11 +1,9 @@
-
+# Welcome to Scratch Addons' repository!
 
 [![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/stargazers) [![](https://img.shields.io/github/forks/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/network/members) [![](https://img.shields.io/github/watchers/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/watchers) [![](https://img.shields.io/github/issues/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/issues) [![](https://img.shields.io/github/issues-pr/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/pulls) [![](https://img.shields.io/github/license/ScratchAddons/ScratchAddons?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE) [![](https://img.shields.io/badge/chat-on%20discord-7289da.svg?style=flat-square)](https://discord.gg/Ak8sCDQ)
 <!-- 
 ![](https://img.shields.io/github/v/release/ScratchAddons/ScratchAddons?style=flat-square) ![](https://img.shields.io/amo/users/firefox@scratchaddons?style=flat-square) ![](https://img.shields.io/chrome-web-store/users/whatisthestoreidwwwfplabnoondfjo?style=flat-square) ![](https://img.shields.io/github/downloads/ScratchAddons/ScratchAddons/total?style=flat-square) ![](https://img.shields.io/badge/chat-on%20discord-7289da.svg)
 -->
-
-# Welcome to Scratch Addons' repository!
 
 ## About
 
