@@ -7,7 +7,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "options": [],
   "tags": ["editor", "recommended"],
   "permissions": ["clipboardWrite"],
   "enabled_by_default": false
