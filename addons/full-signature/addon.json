@@ -1,6 +1,7 @@
 {
-  "name": "Show full signature",
-  "description": "Shows the full signature of users on the forums",
+  "name": "Show full areas",
+  "description": "Shows the full signature of users on the forums, and shows full What I've been doing on profiles.
+",
   "credits": [
     {
       "name": "GrahamSH"
@@ -10,6 +11,10 @@
     {
       "url": "style.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+    }
+    {
+      "url": "style2.css",
+      "matches": ["https://scratch.mit.edu/users/*"]
     }
   ],
   "tags": ["community", "forums"],
