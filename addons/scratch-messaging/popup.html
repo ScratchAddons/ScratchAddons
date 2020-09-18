@@ -11,9 +11,9 @@
 
     <!-- <comment> element template -->
     <template id="comment-component">
-      <div class="comment" :class="{'child-comment': !isParent, 'unread': unread}">
+      <div class="comment" :class="{'child-comment': !isParent, 'unread': unread, 'comment-me' : thisComment.author === username}">
         <a class="comment-author" @click="openProfile(thisComment.author)">{{ thisComment.author }}</a>
-        <span v-show="deleteStep !== 1 && !deleted">
+        <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
           · {{ commentTimeAgo }}&nbsp;&nbsp;
           <img src="./popout.png" class="popout-comment" @click="openComment()" title="Open comment in new tab" />
         </span>
@@ -54,7 +54,7 @@
           @click="messageTypeExtended.follows = !messageTypeExtended.follows"
         >
           <span class="message-type-title-text">Follows</span>
-          <span class="float-right">👤 {{ follows.length }}</span>
+          <span class="float-right">🧑 {{ follows.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.follows">
           <div class="username-list">

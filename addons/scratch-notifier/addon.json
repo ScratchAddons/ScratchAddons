@@ -46,7 +46,7 @@
       "default": true
     },
     {
-      "name": "👤 Notify new followers",
+      "name": "🧑 Notify new followers",
       "id": "followuser_notifications",
       "type": "boolean",
       "default": true
