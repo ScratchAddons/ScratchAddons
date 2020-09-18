@@ -1,18 +1,18 @@
 const COUNT_CHECK_INTERVAL = 30000;
 const MSGS_CHECK_INTERVAL = 120000; // Ignored if message count change has been seen
 
-let lastCheckUsername = null;
-
 // For getMsgCount
 let lastCountCheck = null;
 let lastMsgCount = null;
 let currentlyCheckingCount = false;
+let lastCheckUsernameCount = null;
 const msgCountPromises = [];
 
 // For getMessages. These only apply for offset 0.
 let lastMessagesCheck = null;
 let lastMsgsArray = null;
 let currentlyCheckingMessages = false;
+let lastCheckUsernameMessages = null;
 const msgsArrayPromises = [];
 
 scratchAddons.methods.getMsgCount = function () {
@@ -30,17 +30,17 @@ async function updateMsgCount() {
   const username = scratchAddons.globalState.auth.username;
   if (!username) {
     lastMsgCount = null;
-    lastCheckUsername = null;
+    lastCheckUsernameCount = null;
     return null;
   }
   try {
-    if (Date.now() - lastCountCheck > COUNT_CHECK_INTERVAL || username !== lastCheckUsername) {
+    if (Date.now() - lastCountCheck > COUNT_CHECK_INTERVAL || username !== lastCheckUsernameCount) {
       const res = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count?timestamp=${Date.now()}`);
       if (!res.ok) return null;
       const json = await res.json();
       if (json.count !== lastMsgCount) lastMessagesCheck = null;
       lastCountCheck = Date.now();
-      lastCheckUsername = username;
+      lastCheckUsernameCount = username;
       lastMsgCount = json.count;
       return json.count;
     } else {
@@ -82,14 +82,14 @@ async function checkMessages(options) {
   const username = scratchAddons.globalState.auth.username;
   if (!username) {
     lastMsgsArray = null;
-    lastCheckUsername = null;
+    lastCheckUsernameMessages = null;
     return null;
   }
   try {
-    if (Date.now() - lastMessagesCheck > MSGS_CHECK_INTERVAL || username !== lastCheckUsername) {
+    if (Date.now() - lastMessagesCheck > MSGS_CHECK_INTERVAL || username !== lastCheckUsernameMessages) {
       const json = await requestMessages(options);
       lastMessagesCheck = Date.now();
-      lastCheckUsername = username;
+      lastCheckUsernameMessages = username;
       lastMsgsArray = json;
       return json;
     } else {
