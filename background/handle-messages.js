@@ -1,4 +1,4 @@
-const COUNT_CHECK_INTERVAL = 10000;
+const COUNT_CHECK_INTERVAL = 30000;
 const MSGS_CHECK_INTERVAL = 120000; // Ignored if message count change has been seen
 
 let lastCheckUsername = null;
