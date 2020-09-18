@@ -1,0 +1,13 @@
+{
+  "name": "Better forum editor",
+  "description": "Replaces the old forum editor with a more modern, markdown-based one.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "runAtComplete": false
+    }
+  ],
+  "tags": ["forums", "community"],
+  "enabled_by_default": false
+}
