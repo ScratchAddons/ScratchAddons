@@ -112,7 +112,7 @@ const Comment = Vue.extend({
       const timeFormatter = new Intl.RelativeTimeFormat("en", {
         localeMatcher: "best fit",
         numeric: "auto",
-        style: "long",
+        style: "short",
       });
       const commentTimestamp = new Date(this.thisComment.date).getTime();
       const timeDiffSeconds = (dateNow - commentTimestamp) / 1000;

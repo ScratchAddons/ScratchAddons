@@ -14,7 +14,7 @@ body {
   height: 500px;
   overflow-x: hidden;
   overflow-y: scroll;
-  background-color: white;
+  background-color: rgba(77, 151, 255, 0.1);
 }
 body.fullscreen {
   width: 55%;
@@ -46,10 +46,11 @@ a:hover {
   font-weight: bold;
   cursor: default;
   display: flex;
-  margin-bottom: 8px;
+  /*margin-bottom: 8px;*/
   position: sticky;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  /*box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);*/
   text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 .hover-reverse {
   background-color: #d93;
@@ -81,8 +82,9 @@ a:hover {
 }
 
 .message-type-details {
-  margin-bottom: 10px;
-  padding: 4px 16px 4px 16px;
+  /*margin-bottom: 10px;*/
+  /*padding: 4px 16px 4px 16px;*/
+  padding: 12px;
   font-size: 0.8rem;
 }
 .username-list > a {
@@ -91,14 +93,19 @@ a:hover {
 }
 
 .comment-chain {
-  padding: 4px 0 4px 0;
-  border-bottom: 2px double gray;
+  /*padding: 4px 0 4px 0;*/
+  /*border-bottom: 2px double gray;*/
 }
 .message-type-details > .comment-chain:last-child {
   border-bottom: none;
 }
 .comment {
-  padding: 4px 16px 4px 16px;
+  /*padding: 4px 16px 4px 16px;*/
+  padding: 3px 8px;
+  background-color: white;
+  /*border: 1px solid rgba(0, 0, 0, 0.1);*/
+  border-radius: 8px;
+  margin-bottom: 4px;
   font-size: 0.85rem;
 }
 .comment-content {
@@ -116,7 +123,19 @@ a:hover {
   color: green;
 }
 .comment-author {
-  font-weight: bold;
+  font-weight: 600;
+  color: #d84a27;
+}
+.comment-me .comment-author {
+  font-weight: 700;
+  color: green;
+}
+.unread .comment-author {
+  font-weight: 800;
+}
+.comment-time {
+  /*font-weight: 200;*/
+  opacity: 0.5;
 }
 .popout-comment {
   cursor: pointer;
@@ -139,12 +158,14 @@ a:hover {
   color: red;
 }
 .child-comment {
-  padding-left: 4px;
-  margin-left: 24px;
-  border-top: 1px dashed gray;
+  /*padding-left: 4px;*/
+  /*margin-left: 24px;*/
+  /*border-top: 1px dashed gray;*/
+  margin-left: 3em;
 }
 .unread {
-  border-left: 3px solid #0f8bc0;
+  /*border-left: 3px solid #0f8bc0;*/
+  font-weight: 700;
 }
 .reply-button-comment {
   opacity: 0;
@@ -184,6 +205,7 @@ a:hover {
 }
 .comment-chars {
   margin-left: auto;
+  font-weight: normal;
 }
 
 #bottom-bar {

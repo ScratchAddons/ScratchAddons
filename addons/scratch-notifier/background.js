@@ -9,7 +9,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     forumpost: "📚",
     loveproject: "❤️",
     favoriteproject: "⭐",
-    followuser: "👤",
+    followuser: "🧑",
     curatorinvite: "✉️",
     remixproject: "🔄",
     studioactivity: "🆕",
