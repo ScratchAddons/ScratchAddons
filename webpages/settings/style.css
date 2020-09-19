@@ -307,6 +307,7 @@ h1 {
   border-radius: 4px 0 0 4px;
   color: #fff;
   width: 100px;
+  height: 16px;
 }
 .search-box input:focus {
   outline: none;
