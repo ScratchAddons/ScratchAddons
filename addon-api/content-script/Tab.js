@@ -29,6 +29,14 @@ export default class Tab extends EventTarget {
     });
     this.redux = new ReduxHandler();
   }
+  loadScript(url) {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = url;
+      document.head.appendChild(script);
+      script.onload = resolve;
+    });
+  }
   getScratchVM() {
     return scratchAddons.methods.getScratchVM();
   }
