@@ -17,7 +17,7 @@ export default async function ({ addon, _global, _console }) {
       )
     )
   ).default)(),
-  addon.tab.waitForElement("")])
+  addon.tab.waitForElement("#markItUpId_body")])
   const mf = (_) => {
     let o = {};
     _marked.call(o);
