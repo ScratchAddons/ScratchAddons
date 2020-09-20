@@ -1,6 +1,11 @@
 {
   "name": "Forums image uploader",
   "description": "Integrates image uploading into the forums.",
+  "credits": [
+    {
+      "name": "Jeffalo"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
