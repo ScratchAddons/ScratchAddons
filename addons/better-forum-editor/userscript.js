@@ -1,11 +1,5 @@
 export default async function ({ addon, _global, _console }) {
-  let _marked = new Function(await (await fetch("https://cdn.jsdelivr.net/gh/markedjs/marked/lib/marked.js")).text());
-  const mf = (_) => {
-    let o = {};
-    _marked.call(o);
-    return o.marked;
-  };
-  const SimpleMDE = (
+  let [ _marked, SimpleMDE] = await Promise.all([(async()=>new Function(await (await fetch("https://cdn.jsdelivr.net/gh/markedjs/marked/lib/marked.js")).text()))(),(async ()=>(
     await import(
       URL.createObjectURL(
         new Blob(
@@ -22,7 +16,13 @@ export default async function ({ addon, _global, _console }) {
         )
       )
     )
-  ).default;
+  ).default)(),
+  addon.tab.waitForElement("")])
+  const mf = (_) => {
+    let o = {};
+    _marked.call(o);
+    return o.marked;
+  };
   let oe = document.querySelector("#markItUpId_body");
   let editorp = oe.parentElement;
   oe.remove();
