@@ -1,27 +1,9 @@
 export default async function ({ addon, _global, _console }) {
-  let [_marked, SimpleMDE] = await Promise.all([
+  let [_marked] = await Promise.all([
     (async () =>
       new Function(await (await fetch("https://cdn.jsdelivr.net/gh/markedjs/marked/lib/marked.js")).text()))(),
-    (async () =>
-      (
-        await import(
-          URL.createObjectURL(
-            new Blob(
-              [
-                `export default (()=>{${(
-                  await (await fetch("https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js")).text()
-                )
-                  .replace(/\!function\(.\)\{.+?.SimpleMDE=.\(\)\}\}\(function\(\)\{/, "")
-                  .slice(0, -2)})()`,
-              ],
-              {
-                type: "text/javascript",
-              }
-            )
-          )
-        )
-      ).default)(),
-    addon.tab.waitForElement("#markItUpId_body"),
+      addon.tab.loadScript("https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"),
+    addon.tab.waitForElement("#markItUpId_body")
   ]);
   const mf = (_) => {
     let o = {};
