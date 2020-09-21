@@ -70,6 +70,9 @@ const vue = new Vue({
     ],
   },
   methods: {
+    openFeedback() {
+      window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}`)
+    },
     clearSearch() {
       this.searchInput = "";
     },
