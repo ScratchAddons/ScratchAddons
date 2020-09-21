@@ -5,8 +5,8 @@ export default async ({ addon, console }) => {
   // request LLK/scratch-blocks#2099, but with somewhat fewer changes because we opt to reuse existing functions on
   // DataCategory instead of changing them to be defined on the new VariableCategory and ListCategory prototypes.
 
-  if(!addon.tab.traps.onceValues.workspace) 
-    await new Promise(resolve => addon.tab.traps.addOnceListener("workspace", resolve));
+  if (!addon.tab.traps.onceValues.workspace)
+    await new Promise((resolve) => addon.tab.traps.addOnceListener("workspace", resolve));
   const { ScratchBlocks: Blockly, workspace } = addon.tab.traps.onceValues;
 
   Blockly.LIST_CATEGORY_NAME = "LIST";
