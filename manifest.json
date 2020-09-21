@@ -7,14 +7,14 @@
     "page": "background/background.html"
   },
   "browser_action": {
-    "default_icon": "images/icon.png",
+    "default_icon": "images/extension-icon.png",
     "default_popup": "webpages/popup/index.html",
     "default_title": "Scratch Addons (formerly Scratch Messaging Extension)"
   },
   "icons": {
-    "16": "images/icon.png",
-    "48": "images/icon.png",
-    "128": "images/icon.png"
+    "16": "images/extension-icon.png",
+    "48": "images/extension-icon.png",
+    "128": "images/extension-icon.png"
   },
   "content_scripts": [
     {
