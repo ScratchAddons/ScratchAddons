@@ -31,6 +31,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
     sendResponse(response);
   } else if (request === "getGlobalState") sendResponse(scratchAddons.globalState._target); // Firefox breaks if we send a proxy
+  else if (request === "openSettingsOnThisTab") chrome.tabs.update(sender.tab.id, { url: chrome.runtime.getURL("webpages/settings/index.html") });
 });
 
 function userscriptMatches(data, scriptOrStyle, addonId) {
