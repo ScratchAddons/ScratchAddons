@@ -1,3 +1,10 @@
+let path = new URL(location.href).pathname.substring(1);
+if (path[path.length - 1] === "/") path += "/";
+const pathArr = path.split("/");
+if (pathArr[0] === "scratch-addons-extension") {
+  if (pathArr[1] === "settings") chrome.runtime.sendMessage("openSettingsOnThisTab");
+}
+
 const script = document.createElement("script");
 script.type = "module";
 script.src = chrome.runtime.getURL("content-scripts/inject/module.js");
