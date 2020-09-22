@@ -28,9 +28,7 @@
         "setting_id": "signature",
         "setting_value": true
       }
-    }
-  ],
-  "userstyles": [
+    },
     {
       "url": "style2.css",
       "matches": ["https://scratch.mit.edu/users/*"],
