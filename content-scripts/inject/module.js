@@ -68,11 +68,12 @@ const observer = new MutationObserver((mutationsList) => {
         const settingsEventTarget = scratchAddons.eventTargets.settings.find(
           (eventTarget) => eventTarget._addonId === attrVal.addonId
         );
-        settingsEventTarget.dispatchEvent(new CustomEvent("change"));
+        if(settingsEventTarget) settingsEventTarget.dispatchEvent(new CustomEvent("change"));
       } else
         scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
           eventTarget.dispatchEvent(new CustomEvent(attrVal.name))
         );
+      removeAttr();
     }
   }
 });
