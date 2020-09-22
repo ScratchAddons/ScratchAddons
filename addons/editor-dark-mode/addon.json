@@ -12,7 +12,7 @@
   "userstyles": [
     {
       "url": "dark-editor.css",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["https://scratch.mit.edu/projects/*/editor"],
       "setting_match": {
         "setting_id": "selectedMode",
         "setting_value": "Dark editor"
@@ -20,7 +20,7 @@
     },
     {
       "url": "3dark.css",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["https://scratch.mit.edu/projects/*/editor"],
       "setting_match": {
         "setting_id": "selectedMode",
         "setting_value": "3.Dark"
@@ -28,7 +28,7 @@
     },
     {
       "url": "3darker.css",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["https://scratch.mit.edu/projects/*/editor"],
       "setting_match": {
         "setting_id": "selectedMode",
         "setting_value": "3.Darker"
@@ -36,7 +36,7 @@
     },
     {
       "url": "global.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["https://scratch.mit.edu/projects/*/editor"]
     }
   ],
   "options": [
