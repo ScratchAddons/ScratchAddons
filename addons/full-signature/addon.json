@@ -1,54 +1,48 @@
 {
-  "name": "Show full areas",
-  "description": "Shows the full signature of users on the forums, and shows full What I've been doing on profiles.",
-  "credits": [
-    {
-      "name": "GrahamSH"
-    }
-  ],
-  "options": [
-    {
-      "name": "Full Signature Mode",
-      "id": "signature",
-      "type": "select",
-      "potential_values": ["Expand Button", "Always Show", "Off"],
-      "default": "Expand Button"
-    },
-    {
-      "name": "Show scroll for What I've been doing",
-      "id": "whatworkingon",
-      "type": "boolean",
-      "default": true
-    }
-  ],
-  "userstyles": [
-    {
-      "url": "style.css",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "setting_match": {
-        "setting_id": "signature",
-        "setting_value": "Always Show"
-      }
-    },
-    {
-      "url": "style2.css",
-      "matches": ["https://scratch.mit.edu/users/*"],
-      "setting_match": {
-        "setting_id": "whatworkingon",
-        "setting_value": true
-      }
-    }
-  ],
-  "userscripts": [
-    {
-      "url": "expand.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "setting_match": {
-        "setting_id": "signature",
-        "setting_value": "Expand Button"
-      }
-    },
-  ]
-  "tags": ["community", "forums"],
-  "enabled_by_default": false
+	"name": "Show full areas",
+	"description": "Shows the full signature of users on the forums, and shows full What I've been doing on profiles.",
+	"credits": [{
+		"name": "GrahamSH"
+	}],
+	"options": [{
+			"name": "Full Signature Mode",
+			"id": "signature",
+			"type": "select",
+			"potential_values": ["Expand Button", "Always Show", "Off"],
+			"default": "Expand Button"
+		},
+		{
+			"name": "Show scroll for What I've been doing",
+			"id": "whatworkingon",
+			"type": "boolean",
+			"default": true
+		}
+	],
+	"userstyles": [{
+			"url": "style.css",
+			"matches": ["https://scratch.mit.edu/discuss/topic/*"],
+			"setting_match": {
+				"setting_id": "signature",
+				"setting_value": "Always Show"
+			}
+		},
+		{
+			"url": "style2.css",
+			"matches": ["https://scratch.mit.edu/users/*"],
+			"setting_match": {
+				"setting_id": "whatworkingon",
+				"setting_value": true
+			}
+		}
+	],
+	"userscripts": [{
+		"url": "expand.js",
+		"matches": ["https://scratch.mit.edu/discuss/topic/*"],
+		"setting_match": {
+			"setting_id": "signature",
+			"setting_value": "Expand Button"
+		}
+	}],
+	"tags": ["community", "forums"],
+	"enabled_by_default": false
 }
