@@ -9,7 +9,7 @@
   "options": [
     {
       "name": "Full Signature Mode",
-      "id": "signature",
+      "id": "signatureselect",
       "type": "select",
       "potential_values": ["Expand Button", "Always Show", "Off"],
       "default": "Expand Button"
@@ -26,7 +26,7 @@
       "url": "style.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "setting_match": {
-        "setting_id": "signature",
+        "setting_id": "signatureselect",
         "setting_value": "Always Show"
       }
     },
@@ -44,7 +44,7 @@
       "url": "expand.js",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "setting_match": {
-        "setting_id": "signature",
+        "setting_id": "signatureselect",
         "setting_value": "Expand Button"
       }
     }
