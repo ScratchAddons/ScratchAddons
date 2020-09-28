@@ -405,6 +405,10 @@ switch[state="on"]::before {
 .filter-option.sel {
   background: #ff7b26;
 }
+.filter-option.disabled {
+  filter: grayscale(80%);
+  pointer-events: none;
+}
 
 .reverted {
   transform: rotate(180deg);
