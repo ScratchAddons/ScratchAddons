@@ -57,7 +57,7 @@
               <div class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">All</div>
               <div
                 v-for="tag of tags"
-                v-if="tag.tabShow[selectedTab]"
+                v-show="tag.tabShow[selectedTab]"
                 class="filter-option"
                 class="badge"
                 :class="{
