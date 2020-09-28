@@ -49,16 +49,22 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
 }
 
 function urlMatchesPattern(pattern, url) {
-  const patternURL = new URL(pattern);
-  const urlURL = new URL(url);
-  if (patternURL.origin !== urlURL.origin) return false;
-  const patternPath = patternURL.pathname.split("/");
-  const urlPath = urlURL.pathname.split("/");
+  const patternUrl = new URL(pattern);
+  const urlUrl = new URL(url);
+  // We assume both URLs start with https://scratch.mit.edu
+
+  const patternPath = patternUrl.pathname.split("/");
+  const urlPath = urlUrl.pathname.split("/");
+  // Implicit slash at the end of the URL path, if it's not there
   if (urlPath[urlPath.length - 1] !== "") urlPath.push("");
+  // Implicit slash at the end of the pattern, unless it's a wildcard
+  if (patternPath[patternPath.length - 1] !== "" && patternPath[patternPath.length - 1] !== "*") patternPath.push("");
+
   while (patternPath.length) {
-    const p = patternPath.shift();
-    const q = urlPath.shift();
-    if (p !== q && p !== "*") return false;
+    // shift() removes the first item of an array, and returns it
+    const patternItem = patternPath.shift();
+    const urlItem = urlPath.shift();
+    if (patternItem !== urlItem && patternItem !== "*") return false;
   }
   return true;
 }
