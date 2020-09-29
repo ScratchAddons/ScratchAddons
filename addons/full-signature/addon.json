@@ -8,10 +8,11 @@
   ],
   "options": [
     {
-      "name": "Show Full Signature",
-      "id": "signature",
-      "type": "boolean",
-      "default": true
+      "name": "Full Signature Mode",
+      "id": "signatureselect",
+      "type": "select",
+      "potential_values": ["Expand Button", "Always Show", "Off"],
+      "default": "Expand Button"
     },
     {
       "name": "Show scroll for What I've been doing",
@@ -25,8 +26,8 @@
       "url": "style.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "setting_match": {
-        "setting_id": "signature",
-        "setting_value": true
+        "setting_id": "signatureselect",
+        "setting_value": "Always Show"
       }
     },
     {
@@ -35,6 +36,16 @@
       "setting_match": {
         "setting_id": "whatworkingon",
         "setting_value": true
+      }
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "expand.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "setting_match": {
+        "setting_id": "signatureselect",
+        "setting_value": "Expand Button"
       }
     }
   ],
