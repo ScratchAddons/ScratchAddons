@@ -169,6 +169,10 @@ h1 {
   white-space:  pre-line !important;
 }
 
+.addon-warn {
+  color:  #ff2666;
+}
+
 .addon-description-full,
 .addon-credits {
   width: 100%;
