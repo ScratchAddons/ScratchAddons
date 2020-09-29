@@ -105,6 +105,7 @@
           </div>
           <div class="addon-settings" v-show="addon._expanded">
             <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
+            <div class="addon-description-full addon-warn" v-show="addon._expanded">{{ addon.warn }}</div>
             <div class="addon-credits" v-if="addon.credits">
               <span>Credit to:</span>
               <span v-for="credit of addon.credits">
