@@ -166,11 +166,11 @@ h1 {
 }
 
 .addon-description-full {
-  white-space:  pre-line !important;
+  white-space: pre-line !important;
 }
 
 .addon-warn {
-  color:  #ff2666;
+  color: #ff2666 !important;
 }
 
 .addon-description-full,
