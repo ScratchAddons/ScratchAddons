@@ -164,6 +164,11 @@ h1 {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+.addon-description-full {
+  white-space:  pre-line !important;
+}
+
 .addon-description-full,
 .addon-credits {
   width: 100%;
