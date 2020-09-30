@@ -1,6 +1,6 @@
 {
   "name": "Scratch 2.0 → 3.0",
-  "description": "Makes Scratch 2.0-styled pages look like Scratch 3.0",
+  "description": "Makes Scratch 2.0-styled pages look like Scratch 3.0.",
   "tags": ["community", "theme"],
   "credits": [
     {
@@ -18,7 +18,7 @@
         "https://scratch.mit.edu/classes/*",
         "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/projects/*/remixes/",
-        "https://scratch.mit.edu/proejcts/*/studios/",
+        "https://scratch.mit.edu/projects/*/studios/",
         "https://scratch.mit.edu/projects/*/remixtree/",
         "https://scratch.mit.edu/accounts/*",
         "https://scratch.mit.edu/statistics/",
