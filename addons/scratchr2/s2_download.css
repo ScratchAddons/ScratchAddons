@@ -50,7 +50,7 @@ body {
   padding: 8px;
   border-radius: 4px;
   background: #fff;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 .columns h3 {
   color: #575e75;
@@ -63,4 +63,3 @@ a {
 a:hover {
   color: #4280d7;
 }
-

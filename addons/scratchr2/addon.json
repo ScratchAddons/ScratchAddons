@@ -1,103 +1,99 @@
 {
-	"name": "Scratch 2.0 → 3.0",
-	"description": "Makes Scratch 2.0-styled pages look like Scratch 3.0",
-	"tags": ["community", "theme"],
-	"credits": [{
-		"name": "Maximouse",
-		"link": "https://github.com/mxmou/customize-scratch#scratch-30-look-for-old-parts-of-the-website"
-	}],
-	"userstyles": [
-		{
-			"url": "scratchr2.css",
-			"matches": [
-				"https://scratch.mit.edu/discuss/*",
-				"https://scratch.mit.edu/mystuff/",
-				"https://scratch.mit.edu/users/*",
-				"https://scratch.mit.edu/classes/*",
-				"https://scratch.mit.edu/studios/*",
-				"https://scratch.mit.edu/projects/*/remixes/",
-				"https://scratch.mit.edu/proejcts/*/studios/",
-				"https://scratch.mit.edu/projects/*/remixtree/",
-				"https://scratch.mit.edu/accounts/*",
-				"https://scratch.mit.edu/statistics/",
-				"https://scratch.mit.edu/info/quotes/",
-				"https://scratch.mit.edu/info/ext_download/",
-				"https://scratch.mit.edu/cloudmonitor/*",
-				"https://scratch.mit.edu/403/",
-				"https://scratch.mit.edu/404/",
-				"https://scratch.mit.edu/500/"
-			]
-		},
-		{
-			"url": "scratchr2_errors.css",
-			"matches": [
-				"https://scratch.mit.edu/discuss/*",
-				"https://scratch.mit.edu/mystuff/",
-				"https://scratch.mit.edu/users/*",
-				"https://scratch.mit.edu/classes/*",
-				"https://scratch.mit.edu/studios/*",
-				"https://scratch.mit.edu/projects/*/remixes/",
-				"https://scratch.mit.edu/proejcts/*/studios/",
-				"https://scratch.mit.edu/projects/*/remixtree/",
-				"https://scratch.mit.edu/accounts/*",
-				"https://scratch.mit.edu/statistics/",
-				"https://scratch.mit.edu/info/quotes/",
-				"https://scratch.mit.edu/info/ext_download/",
-				"https://scratch.mit.edu/cloudmonitor/*",
-				"https://scratch.mit.edu/403/",
-				"https://scratch.mit.edu/404/",
-				"https://scratch.mit.edu/500/"
-			]
-		},
-		{
-			"url": "forums.css",
-			"matches": ["https://scratch.mit.edu/discuss/*"]
-		},
-		{
-			"url": "forums_topic.css",
-			"matches": ["https://scratch.mit.edu/discuss/topic/*"]
-		},
-		{
-			"url": "forums_yt.css",
-			"matches": ["https://scratch.mit.edu/discuss/youtube/*"]
-		},
-		{
-			"url": "profile.css",
-			"matches": [
-				"https://scratch.mit.edu/users/*",
-				"https://scratch.mit.edu/classes/*"
-			]
-		},
-		{
-			"url": "studio.css",
-			"matches": ["https://scratch.mit.edu/studios/*"]
-		},
-		{
-			"url": "scratchr2_comments.css",
-			"matches": [
-				"https://scratch.mit.edu/users/*",
-				"https://scratch.mit.edu/studios/*"
-			]
-		},
-		{
-			"url": "remixtree.css",
-			"matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
-		},
-		{
-			"url": "mystuff.css",
-			"matches": ["https://scratch.mit.edu/mystuff/"]
-		},
-		{
-			"url": "settings.css",
-			"matches": [
-				"https://scratch.mit.edu/accounts/settings/",
-				"https://scratch.mit.edu/accounts/password_change/",
-				"https://scratch.mit.edu/accounts/email_change/"
-			]
-		},
-		{
-			"url": "quotes.css",
-			"matches": ["https://scratch.mit.edu/info/quotes/"]
-		}
-	]
+  "name": "Scratch 2.0 → 3.0",
+  "description": "Makes Scratch 2.0-styled pages look like Scratch 3.0",
+  "tags": ["community", "theme"],
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://github.com/mxmou/customize-scratch#scratch-30-look-for-old-parts-of-the-website"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "scratchr2.css",
+      "matches": [
+        "https://scratch.mit.edu/discuss/*",
+        "https://scratch.mit.edu/mystuff/",
+        "https://scratch.mit.edu/users/*",
+        "https://scratch.mit.edu/classes/*",
+        "https://scratch.mit.edu/studios/*",
+        "https://scratch.mit.edu/projects/*/remixes/",
+        "https://scratch.mit.edu/proejcts/*/studios/",
+        "https://scratch.mit.edu/projects/*/remixtree/",
+        "https://scratch.mit.edu/accounts/*",
+        "https://scratch.mit.edu/statistics/",
+        "https://scratch.mit.edu/info/quotes/",
+        "https://scratch.mit.edu/info/ext_download/",
+        "https://scratch.mit.edu/cloudmonitor/*",
+        "https://scratch.mit.edu/403/",
+        "https://scratch.mit.edu/404/",
+        "https://scratch.mit.edu/500/"
+      ]
+    },
+    {
+      "url": "scratchr2_errors.css",
+      "matches": [
+        "https://scratch.mit.edu/discuss/*",
+        "https://scratch.mit.edu/mystuff/",
+        "https://scratch.mit.edu/users/*",
+        "https://scratch.mit.edu/classes/*",
+        "https://scratch.mit.edu/studios/*",
+        "https://scratch.mit.edu/projects/*/remixes/",
+        "https://scratch.mit.edu/proejcts/*/studios/",
+        "https://scratch.mit.edu/projects/*/remixtree/",
+        "https://scratch.mit.edu/accounts/*",
+        "https://scratch.mit.edu/statistics/",
+        "https://scratch.mit.edu/info/quotes/",
+        "https://scratch.mit.edu/info/ext_download/",
+        "https://scratch.mit.edu/cloudmonitor/*",
+        "https://scratch.mit.edu/403/",
+        "https://scratch.mit.edu/404/",
+        "https://scratch.mit.edu/500/"
+      ]
+    },
+    {
+      "url": "forums.css",
+      "matches": ["https://scratch.mit.edu/discuss/*"]
+    },
+    {
+      "url": "forums_topic.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+    },
+    {
+      "url": "forums_yt.css",
+      "matches": ["https://scratch.mit.edu/discuss/youtube/*"]
+    },
+    {
+      "url": "profile.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/classes/*"]
+    },
+    {
+      "url": "studio.css",
+      "matches": ["https://scratch.mit.edu/studios/*"]
+    },
+    {
+      "url": "scratchr2_comments.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"]
+    },
+    {
+      "url": "remixtree.css",
+      "matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
+    },
+    {
+      "url": "mystuff.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"]
+    },
+    {
+      "url": "settings.css",
+      "matches": [
+        "https://scratch.mit.edu/accounts/settings/",
+        "https://scratch.mit.edu/accounts/password_change/",
+        "https://scratch.mit.edu/accounts/email_change/"
+      ]
+    },
+    {
+      "url": "quotes.css",
+      "matches": ["https://scratch.mit.edu/info/quotes/"]
+    }
+  ]
 }
