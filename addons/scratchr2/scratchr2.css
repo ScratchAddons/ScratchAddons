@@ -47,16 +47,16 @@ input,
 textarea {
   box-shadow: none;
   border-radius: 8px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(0,0,0,0.2);
   resize: none;
 }
 input:focus {
   border-color: #4d97ff;
-  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
+  box-shadow: 0 0 0 4px rgba(77,151,255,0.25);
 }
 textarea:focus {
   border: 2px solid #4d97ff;
-  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
+  box-shadow: 0 0 0 4px rgba(77,151,255,0.25);
 }
 .button,
 button,
@@ -64,7 +64,7 @@ button,
 button:hover,
 .button.grey,
 button.grey,
-.button[data-control="load-more"]:hover,
+.button[data-control=load-more]:hover,
 .ui-widget button.ui-state-default {
   border-radius: 4px;
   border: none;
@@ -88,20 +88,20 @@ button.small.dropdown.open {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-.button.grey:not([data-control="load-more"]),
+.button.grey:not([data-control=load-more]),
 button.grey,
-.button.grey:not([data-control="load-more"]):hover,
+.button.grey:not([data-control=load-more]):hover,
 button.grey:hover {
   background: #fff;
   color: #4d97ff;
   border: 1px solid #4d97ff;
 }
-.button.grey:not([data-control="load-more"]):hover,
+.button.grey:not([data-control=load-more]):hover,
 button.grey:hover {
   color: #4280d7;
   border-color: #4280d7;
 }
-.button[data-control="load-more"] {
+.button[data-control=load-more] {
   display: block;
   position: static !important;
   width: 942px;
@@ -123,7 +123,7 @@ select {
   padding-left: 16px;
   padding-right: 64px;
   height: 48px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0,0,0,0.1);
   transition: border-color 0.5s ease;
   background: #fafafa url("https://mxmou.github.io/customize-scratch/assets/caret.svg") no-repeat right center;
   color: #575e75;
@@ -199,7 +199,7 @@ h4 {
 .controls.tooltip.force .tooltip-target,
 .control-group.tooltip.force textarea,
 .control-group.tooltip.force .tooltip-target {
-  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
+  box-shadow: 0 0 0 4px rgba(77,151,255,0.25);
 }
 #topnav {
   height: 50px;
@@ -207,8 +207,8 @@ h4 {
 }
 #topnav .innerwrap {
   background: #4d97ff;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 0 3px rgba(0,0,0,0.25);
   height: 50px;
 }
 #topnav .logo {
@@ -235,7 +235,7 @@ h4 {
   line-height: 50px;
 }
 #topnav ul.site-nav li:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0,0,0,0.1);
 }
 #topnav ul.site-nav li a {
   height: 33px;
@@ -262,7 +262,7 @@ h4 {
   cursor: pointer;
   box-shadow: none;
 }
-#topnav form.search input[type="text"] {
+#topnav form.search input[type=text] {
   width: calc(100% - 50px);
   height: 40px;
   margin-top: 5px;
@@ -271,15 +271,15 @@ h4 {
   font-family: inherit;
   font-size: 13.6px;
   color: #fff;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0,0,0,0.1);
   box-shadow: none;
   transition: background-color 0.15s ease;
 }
-#topnav form.search input[type="text"]:focus {
-  background-color: rgba(0, 0, 0, 0.2);
+#topnav form.search input[type=text]:focus {
+  background-color: rgba(0,0,0,0.2);
 }
-#topnav form.search input[type="text"]::placeholder {
-  color: rgba(255, 255, 255, 0.75);
+#topnav form.search input[type=text]::placeholder {
+  color: rgba(255,255,255,0.75);
 }
 #topnav ul.account-nav {
   margin-left: 0;
@@ -333,7 +333,7 @@ h4 {
   width: calc(100% - 30px);
   height: 36px;
   padding: 0 16px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0,0,0,0.1);
 }
 #login button {
   margin: 5px 0;
@@ -358,7 +358,7 @@ h4 {
 #topnav ul.account-nav li.join-scratch:hover,
 #topnav ul.account-nav li.sign-in:hover,
 #topnav ul.account-nav li.sign-in.open {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0,0,0,0.1);
 }
 #topnav ul.account-nav .my-stuff .mystuff-icon {
   background-image: url("https://scratch.mit.edu/images/mystuff.png");
@@ -411,7 +411,7 @@ h4 {
   top: 50px;
   padding-top: 5px;
   border-radius: 0 0 5px 5px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0,0,0,0.1);
   min-width: 140px;
   box-sizing: border-box;
   background-clip: border-box;
@@ -423,17 +423,17 @@ h4 {
   margin: 0;
 }
 #topnav ul.account-nav .logged-in-user.dropdown.open {
-  background-color: rgba(0, 0, 0, 0.1) !important;
+  background-color: rgba(0,0,0,0.1) !important;
 }
 #topnav ul.account-nav ul.user-nav li {
   margin: 0.75em 0;
 }
 #topnav ul.account-nav ul.user-nav li:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0,0,0,0.1);
 }
 #topnav ul.account-nav ul.user-nav li.logout.divider {
   border-radius: 0;
-  border-top-color: rgba(0, 0, 0, 0.1);
+  border-top-color: rgba(0,0,0,0.1);
   padding: 0;
 }
 #topnav li.logout.divider input,
@@ -459,7 +459,7 @@ h4 {
   padding: 0;
   border-radius: 16px;
   border: none;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.15);
 }
 .modal-header,
 .jqui-modal .ui-dialog-titlebar.ui-widget-header {
@@ -477,7 +477,7 @@ h4 {
   height: 32px;
   margin-top: 0;
   border-radius: 16px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0,0,0,0.2);
   line-height: 32px;
   text-align: center;
   color: #fff;
@@ -505,7 +505,7 @@ h4 {
   margin-top: 0;
 }
 #featured-project-modal .modal-body {
-  background: rgba(77, 151, 255, 0.1);
+  background: rgba(77,151,255,0.1);
 }
 #featured-project-modal .project.thumb {
   border: none;
@@ -518,7 +518,8 @@ h4 {
   text-align: right;
 }
 .modal-footer .btn:not(.blue) {
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0,0,0,0.1);
   background: #fff;
   color: #4d97ff;
 }
+

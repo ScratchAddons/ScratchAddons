@@ -25,7 +25,7 @@
   width: 100%;
   border: none;
   background: #fff;
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 1px rgba(0,0,0,0.25);
 }
 .v-tabs ul {
   display: flex;
@@ -50,7 +50,7 @@
   text-shadow: none;
 }
 .v-tabs li:hover {
-  border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 3px solid rgba(0,0,0,0.2);
   background: transparent;
 }
 .v-tabs li:hover a {
@@ -103,7 +103,7 @@
 .action-bar .inner .dropdown,
 .action-bar .inner .dropdown:hover {
   height: 46px;
-  border-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0,0,0,0.1);
   transition: border-color 0.5s ease;
   background: #fafafa url("https://mxmou.github.io/customize-scratch/assets/caret.svg") no-repeat right center;
   color: #575e75;
@@ -151,5 +151,6 @@
   margin-bottom: 14px;
   border-radius: 4px;
   background: #fff;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
 }
+
