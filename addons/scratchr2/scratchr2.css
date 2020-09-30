@@ -1,0 +1,524 @@
+html {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+body {
+  margin: 0;
+}
+a,
+input.link,
+.ui-widget-content a {
+  color: #4d97ff;
+  font-weight: bold;
+  text-decoration: none;
+}
+html,
+body,
+#pagewrapper {
+  background: #fcfcfc;
+  color: #575e75;
+  text-shadow: none;
+}
+label {
+  color: #575e75;
+}
+a.black,
+a.black:visited,
+input.link.black {
+  color: #575e75;
+}
+a:hover,
+a:active,
+a.black:hover,
+a.black:active,
+input.link:hover,
+input.link:active,
+input.link.black:hover,
+input.link.black:active {
+  color: #4280d7;
+  text-decoration: none;
+}
+#content {
+  padding-top: 70px;
+}
+.container {
+  width: 942px;
+}
+input,
+textarea {
+  box-shadow: none;
+  border-radius: 8px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  resize: none;
+}
+input:focus {
+  border-color: #4d97ff;
+  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
+}
+textarea:focus {
+  border: 2px solid #4d97ff;
+  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
+}
+.button,
+button,
+.button:hover,
+button:hover,
+.button.grey,
+button.grey,
+.button[data-control="load-more"]:hover,
+.ui-widget button.ui-state-default {
+  border-radius: 4px;
+  border: none;
+  background: #4d97ff;
+  box-shadow: none;
+  font-family: inherit;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: none;
+  cursor: pointer;
+}
+.button:not(.grey) a,
+.button:not(.grey) a:hover,
+.button:not(.grey) a:visited {
+  color: #fff;
+}
+.button.dropdown.open,
+.button.small.dropdown.open,
+button.dropdown.open,
+button.small.dropdown.open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.button.grey:not([data-control="load-more"]),
+button.grey,
+.button.grey:not([data-control="load-more"]):hover,
+button.grey:hover {
+  background: #fff;
+  color: #4d97ff;
+  border: 1px solid #4d97ff;
+}
+.button.grey:not([data-control="load-more"]):hover,
+button.grey:hover {
+  color: #4280d7;
+  border-color: #4280d7;
+}
+.button[data-control="load-more"] {
+  display: block;
+  position: static !important;
+  width: 942px;
+  margin: auto;
+  text-align: center;
+}
+.dropdown span.dropdown-toggle:not(.black) span.caret {
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  border: none;
+  background: url("https://scratch.mit.edu/images/dropdown.png") no-repeat center center;
+  background-size: 50%;
+  opacity: 1;
+}
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-left: 16px;
+  padding-right: 64px;
+  height: 48px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: border-color 0.5s ease;
+  background: #fafafa url("https://mxmou.github.io/customize-scratch/assets/caret.svg") no-repeat right center;
+  color: #575e75;
+  font-size: 14px;
+}
+select:hover,
+select:focus {
+  background-image: url("https://mxmou.github.io/customize-scratch/assets/caret_hover.svg");
+}
+select:focus {
+  border-color: #4d97ff;
+  outline: none;
+}
+h1,
+h2,
+h3,
+h4 {
+  color: inherit;
+}
+.box {
+  background: #f2f2f2;
+  border-color: #d9d9d9;
+  box-shadow: none;
+}
+.box .box-content,
+.box .box-content .inner {
+  background: #fff;
+  border-color: #d9d9d9;
+}
+.slider-carousel .thumb span.owner a {
+  color: #4d97ff;
+}
+.slider-carousel .thumb span.owner a:hover {
+  color: #4280d7;
+}
+#comments .comments li {
+  border-color: #d9d9d9;
+}
+#comments .comment .info .name a:hover {
+  color: #4d97ff;
+}
+#comments .comment .info .time {
+  color: #b3b3b3;
+}
+.dropdown .dropdown-menu {
+  background-color: #fff;
+  color: #575e75;
+  font-weight: normal;
+  top: 24px;
+  left: -1px;
+  border: 1px solid #4d97ff;
+  box-shadow: none;
+}
+#footer {
+  background-color: #f2f2f2;
+  box-shadow: none;
+}
+#footer a {
+  font-weight: normal;
+}
+#footer ul.footer-col li h4 {
+  color: #575e75;
+}
+.controls.tooltip input:focus,
+.control-group.tooltip input:focus,
+.controls.tooltip textarea:focus,
+.controls.tooltip .tooltip-target:focus,
+.control-group.tooltip textarea:focus,
+.control-group.tooltip .tooltip-target:focus,
+.controls.tooltip.force input,
+.control-group.tooltip.force input,
+.controls.tooltip.force textarea,
+.controls.tooltip.force .tooltip-target,
+.control-group.tooltip.force textarea,
+.control-group.tooltip.force .tooltip-target {
+  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
+}
+#topnav {
+  height: 50px;
+  box-shadow: none;
+}
+#topnav .innerwrap {
+  background: #4d97ff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+  height: 50px;
+}
+#topnav .logo {
+  height: 50px;
+  margin-right: 6px;
+}
+#topnav .logo span {
+  background: url("https://scratch.mit.edu/images/logo_sm.png") no-repeat center center;
+  background-size: 95%;
+  width: 81px;
+  height: 50px;
+  transition: all 0.15s ease;
+}
+#topnav .logo:hover span {
+  background-image: url("https://scratch.mit.edu/images/logo_sm.png");
+  background-size: 100%;
+}
+#topnav ul.site-nav {
+  height: 50px;
+}
+#topnav ul.site-nav li,
+#topnav ul.site-nav li.last {
+  border: none;
+  line-height: 50px;
+}
+#topnav ul.site-nav li:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+#topnav ul.site-nav li a {
+  height: 33px;
+  padding: 13px 15px 4px 15px;
+  font-size: 13.6px;
+  line-height: 24px;
+}
+#topnav form.search {
+  margin: 0 20px;
+}
+#topnav form.search input {
+  margin-bottom: 0;
+}
+#topnav form.search .glass {
+  background: url("https://scratch.mit.edu/images/nav-search-glass.png") no-repeat center center;
+  background-size: 14px 14px;
+  width: 40px;
+  height: 40px;
+  border-right: none;
+  outline: none;
+  padding: 0;
+  margin-top: 5px;
+  opacity: 1;
+  cursor: pointer;
+  box-shadow: none;
+}
+#topnav form.search input[type="text"] {
+  width: calc(100% - 50px);
+  height: 40px;
+  margin-top: 5px;
+  padding: 0 10px 0 40px;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 13.6px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.1);
+  box-shadow: none;
+  transition: background-color 0.15s ease;
+}
+#topnav form.search input[type="text"]:focus {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+#topnav form.search input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+#topnav ul.account-nav {
+  margin-left: 0;
+  margin-bottom: 0;
+}
+#topnav ul.account-nav > li,
+#topnav ul.account-nav > li.join-scratch,
+#topnav ul.account-nav > li:last-child {
+  box-sizing: border-box;
+  height: 50px;
+  padding: 0;
+  border: none;
+  font-size: 13.6px;
+  line-height: 50px;
+}
+#topnav ul.account-nav > li > a,
+#topnav ul.account-nav .sign-in .dropdown-toggle {
+  padding: 13px 15px 4px 15px;
+  display: block;
+  height: 33px;
+  line-height: 24px;
+}
+#topnav ul.account-nav li.join-scratch,
+#topnav ul.account-nav > li > span {
+  font-size: 13.6px;
+}
+#topnav ul.account-nav .sign-in .popover {
+  margin-top: 40px;
+  background-color: #4d97ff;
+  cursor: auto;
+}
+#topnav ul.account-nav .sign-in .popover .arrow::after {
+  border-bottom-color: #4d97ff;
+}
+#login-dropdown .dropdown-menu {
+  max-width: 1000px;
+}
+#login-dropdown .popover-content {
+  padding: 19px;
+}
+#login-dropdown form {
+  width: 200px;
+}
+#topnav ul.account-nav .sign-in form label {
+  padding-top: 5px;
+  color: #fff;
+  font-weight: bold;
+  line-height: 24px;
+}
+#topnav ul.account-nav .sign-in form input {
+  width: calc(100% - 30px);
+  height: 36px;
+  padding: 0 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+#login button {
+  margin: 5px 0;
+  margin-bottom: 6.4px;
+  padding: 9.6px;
+  height: auto;
+  background: #fff;
+  color: #4d97ff;
+  line-height: 24px;
+}
+#topnav ul.account-nav .sign-in form .forgot-password {
+  float: right;
+}
+#topnav ul.account-nav .sign-in form .forgot-password a {
+  color: #fff;
+}
+#topnav ul.account-nav.logged-in > li {
+  border-left: none;
+  line-height: inherit;
+}
+#topnav ul.account-nav.logged-in > li:hover,
+#topnav ul.account-nav li.join-scratch:hover,
+#topnav ul.account-nav li.sign-in:hover,
+#topnav ul.account-nav li.sign-in.open {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+#topnav ul.account-nav .my-stuff .mystuff-icon {
+  background-image: url("https://scratch.mit.edu/images/mystuff.png");
+  background-size: 45%;
+  width: 30px;
+  height: 33px;
+  padding: 13px 10px 4px 10px;
+}
+#topnav ul.account-nav .messages .messages-icon {
+  background-image: url("https://scratch.mit.edu/images/nav-notifications.png");
+  background-size: 45%;
+  width: 30px;
+  height: 33px;
+  padding: 13px 10px 4px 10px;
+  position: relative;
+}
+#topnav ul.account-nav .my-stuff .mystuff-icon:hover,
+#topnav ul.account-nav .messages .messages-icon:hover {
+  background-size: 50%;
+}
+#topnav ul.account-nav .messages .notificationsCount {
+  margin-top: 4px;
+  right: 4px;
+  padding: 0 4px;
+  min-width: 0;
+  height: auto;
+  background-color: #ffab1a;
+  font-size: 11.2px;
+  line-height: 16px;
+}
+#topnav ul.account-nav .logged-in-user {
+  height: 50px;
+}
+#topnav ul.account-nav .logged-in-user .user-icon {
+  border: none;
+  border-radius: 3px;
+  margin-right: 10px;
+  margin-top: 0;
+}
+#topnav ul.account-nav .logged-in-user .dropdown-toggle {
+  padding: 14px 15px 4px 15px;
+  height: 50px;
+  box-sizing: border-box;
+  font-size: 13px;
+  line-height: 24px;
+}
+#topnav ul.account-nav .logged-in-user .dropdown-menu {
+  background-color: #4d97ff;
+  margin-top: 0;
+  top: 50px;
+  padding-top: 5px;
+  border-radius: 0 0 5px 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  min-width: 140px;
+  box-sizing: border-box;
+  background-clip: border-box;
+  width: 100%;
+  font-weight: bold;
+  box-shadow: none;
+}
+#topnav ul.account-nav ul.user-nav {
+  margin: 0;
+}
+#topnav ul.account-nav .logged-in-user.dropdown.open {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+#topnav ul.account-nav ul.user-nav li {
+  margin: 0.75em 0;
+}
+#topnav ul.account-nav ul.user-nav li:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+#topnav ul.account-nav ul.user-nav li.logout.divider {
+  border-radius: 0;
+  border-top-color: rgba(0, 0, 0, 0.1);
+  padding: 0;
+}
+#topnav li.logout.divider input,
+#topnav li.logout.divider input:hover {
+  border-radius: 0;
+  background-color: transparent;
+  padding-left: 10px;
+  font-weight: inherit;
+  cursor: pointer;
+}
+.banner {
+  top: 50px;
+}
+.modal-backdrop,
+.modal-backdrop.fade.in,
+.ui-widget-overlay {
+  background: #4d97ff;
+  opacity: 0.7;
+}
+.modal,
+.jqui-modal,
+.jqui-modal.ui-corner-all {
+  padding: 0;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15);
+}
+.modal-header,
+.jqui-modal .ui-dialog-titlebar.ui-widget-header {
+  padding-left: 16px;
+  padding-top: 8px;
+  padding-right: 8px;
+  border-radius: 16px 16px 0 0;
+  background: #4d97ff;
+  box-shadow: inset 0 -1px 0 0 #4280d7;
+  color: #fff;
+}
+.modal .modal-header .close,
+.jqui-modal .ui-widget-header .ui-dialog-titlebar-close {
+  width: 32px;
+  height: 32px;
+  margin-top: 0;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  line-height: 32px;
+  text-align: center;
+  color: #fff;
+  opacity: 1;
+  text-shadow: none;
+}
+.jqui-modal .ui-widget-header .ui-dialog-titlebar-close {
+  top: 5px;
+}
+.jqui-modal .ui-widget-header .ui-dialog-titlebar-close .ui-icon-closethick {
+  background: url("https://scratch.mit.edu/svgs/modal/close-x.svg") no-repeat 0 0;
+}
+.modal-header label {
+  color: #fff;
+}
+#featured-project-modal label {
+  margin-top: 8px;
+}
+.jqui-modal .ui-dialog-content {
+  padding: 16px;
+}
+.jqui-modal .ui-dialog-buttonpane {
+  padding: 16px;
+  padding-top: 0;
+  margin-top: 0;
+}
+#featured-project-modal .modal-body {
+  background: rgba(77, 151, 255, 0.1);
+}
+#featured-project-modal .project.thumb {
+  border: none;
+  background: #fff;
+}
+.modal-footer {
+  border-radius: 0 0 16px 16px;
+  border: none;
+  background: transparent;
+  text-align: right;
+}
+.modal-footer .btn:not(.blue) {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  color: #4d97ff;
+}
