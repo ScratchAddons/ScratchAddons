@@ -93,7 +93,7 @@
 #profile-box .player {
   border-radius: 4px;
   border: none;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 .activity-stream .actor a {
   color: #575e75 !important;
@@ -101,7 +101,7 @@
 #content > .box:not(#profile-data):not(.slider-carousel-container) {
   border-radius: 0;
   border: none;
-  background: rgba(77,151,255,0.1);
+  background: rgba(77, 151, 255, 0.1);
   padding-top: 16px;
   padding-bottom: 16px;
   margin-bottom: 0;
@@ -148,4 +148,3 @@
 #comments .more-replies {
   background-color: #eaf1fc;
 }
-
