@@ -30,7 +30,9 @@ Scratch Addons by itself is just an addon loader. Its main tasks are:
 - Avoid duplicate work from different addons.
 
 ## Installation
-
+### From the chrome webstore
+Simply go to [the Scratch Addons extension](https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco) in the Google Chrome Webstore and click ```add extension``` and follow the on-screen steps.
+### Download and instal locally
 No build is required. After cloning the repository to your computer, just load the extension by following these steps.
 
 - Chrome
