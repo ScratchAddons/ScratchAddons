@@ -1,0 +1,23 @@
+#content {
+  width: 942px;
+  margin-top: 20px;
+}
+#content .box,
+#content .box .box-head,
+#content .box .box-content {
+  border-radius: 0;
+  border: none;
+  background: transparent;
+}
+#content > .cols > .col-10 > .box .box-head {
+  display: none;
+}
+#content > .cols > .col-10 > .box .box-content {
+  padding: 0;
+}
+.youtube-player {
+  width: 100%;
+}
+#content > .cols > .col-6 > .box .box-head {
+  padding-top: 0;
+}
