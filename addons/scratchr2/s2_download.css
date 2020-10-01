@@ -1,0 +1,65 @@
+html,
+body {
+  margin: 0;
+  background: #fcfcfc;
+  color: #575e75;
+}
+.box {
+  width: 100%;
+  border-radius: 0;
+  box-shadow: none;
+}
+.box .box-head {
+  display: none;
+}
+.box,
+.box .box-content {
+  border: none;
+  background: transparent;
+}
+.box .box-header {
+  background: #4d97ff;
+}
+.box .box-header h2 {
+  width: 942px;
+  margin: auto;
+  padding-top: 25px;
+  padding-bottom: 29px;
+  color: #fff;
+  font-size: 40px;
+  line-height: 1.7em;
+}
+.box .box-content > :not(.box-header) {
+  width: 942px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.lg-msg::before {
+  content: "Scratch 2.0 is outdated. The current version of Scratch, 3.0, can be downloaded from https://scratch.mit.edu/download.";
+  display: block;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+.columns {
+  display: flex;
+}
+.columns > * {
+  flex-grow: 1;
+  flex-basis: 0;
+  margin: 7px;
+  padding: 8px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+.columns h3 {
+  color: #575e75;
+}
+a {
+  color: #4d97ff;
+  font-weight: bold;
+  text-decoration: none;
+}
+a:hover {
+  color: #4280d7;
+}

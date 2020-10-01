@@ -338,7 +338,7 @@ h1 {
   border-bottom: none;
 }
 
-switch {
+.switch {
   display: block;
   background: #111;
   width: 40px;
@@ -348,7 +348,7 @@ switch {
   cursor: pointer;
   transition: all 0.25s ease;
 }
-switch::before {
+.switch::before {
   content: "";
   position: absolute;
   display: block;
@@ -361,10 +361,10 @@ switch::before {
   transition: all 0.25s ease;
 }
 
-switch[state="on"] {
+.switch[state="on"] {
   background: #ff7b26;
 }
-switch[state="on"]::before {
+.switch[state="on"]::before {
   background: #fff;
   left: 25px;
 }
@@ -404,6 +404,10 @@ switch[state="on"]::before {
 }
 .filter-option.sel {
   background: #ff7b26;
+}
+.filter-option.disabled {
+  filter: grayscale(80%);
+  pointer-events: none;
 }
 
 .reverted {
