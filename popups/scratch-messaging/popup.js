@@ -23,8 +23,9 @@ const Comment = Vue.extend({
     openProfile: (username) => window.open(`https://scratch.mit.edu/users/${username}/`),
     openComment() {
       const urlPath =
-        this.resourceType === "user" ? "users" : this.resourceType === "gallery" ? "studios/comments" : "projects";
-      const url = `https://scratch.mit.edu/${urlPath}/${this.resourceId}/#comments-${this.commentId.substring(2)}`;
+        this.resourceType === "user" ? "users" : this.resourceType === "gallery" ? "studios" : "projects";
+      const commentPath = this.resourceType === "gallery" ? "comments/" : "";
+      const url = `https://scratch.mit.edu/${urlPath}/${this.resourceId}/${commentPath}#comments-${this.commentId.substring(2)}`;
       window.open(url);
     },
     postComment() {
