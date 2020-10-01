@@ -39,18 +39,18 @@ a:visited:hover {
   content: url("https://scratch.mit.edu/static/assets/3cfc9b39a0d002246119d47f6756d77e.svg");
 }
 .box-head {
-    display: block!important;
-    clear: both!important;
-    margin: 0!important;
-    border-top: 1px solid white!important;
-    border-bottom: 1px solid #d9d9d9!important;
-    border-radius: 10px 10px 0 0!important;
-    background-color: #f2f2f2!important;
-    padding: 8px 20px!important;
-    height: 20px!important;
-    overflow: hidden!important;
+  display: block !important;
+  clear: both !important;
+  margin: 0 !important;
+  border-top: 1px solid white !important;
+  border-bottom: 1px solid #d9d9d9 !important;
+  border-radius: 10px 10px 0 0 !important;
+  background-color: #f2f2f2 !important;
+  padding: 8px 20px !important;
+  height: 20px !important;
+  overflow: hidden !important;
 }
 h1 {
-    line-height: 1.1rem;
-    font-size: 1.1rem;
+  line-height: 1.1rem;
+  font-size: 1.1rem;
 }
