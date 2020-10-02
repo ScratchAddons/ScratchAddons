@@ -2,10 +2,13 @@
   "// Note: these addons need this exact order to work properly,",
   "// because the first in the list gets their CSS injected first,",
   "// and so on, and we want dark mode to make other addons dark.",
+  "// For editor:",
   "editor-searchable-dropdowns",
   "editor-devtools",
   "editor-dark-mode",
   "editor-colored-context-menus",
+  "// For website:",
+  "scratchr2",
 
   "// Other addons:",
   "msg-count-badge",
@@ -24,5 +27,6 @@
   "youtube-fullscreen",
   "data-category-tweaks",
   "full-signature",
-  "better-forum-editor"
+  "better-forum-editor",
+  "forum-search"
 ]
