@@ -324,7 +324,8 @@ export default async function ({ addon, global, console }) {
       });
   }
 
-  function uploadAssetImage(image, fileType) { //MAIN CODE
+  function uploadAssetImage(image, fileType) {
+    //MAIN CODE
     window.progresselement = toolbar.appendChild(document.createElement("li"));
 
     console.log(image);
