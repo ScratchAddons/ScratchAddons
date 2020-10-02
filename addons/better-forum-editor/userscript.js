@@ -1,7 +1,14 @@
 export default async function ({ addon, _global, _console }) {
   let [_marked] = await Promise.all([
     (async () =>
-      new Function(await (await fetch("https://cdn.jsdelivr.net/gh/markedjs/marked/lib/marked.js")).text()))(),
+      new Function((await (await fetch("https://cdn.jsdelivr.net/gh/markedjs/marked/lib/marked.js")).text()).replace(/(var|let|const)?\s*escapeTest\s*=[\S\s]*?escapeReplacements[\S\s]*?\};?/,`  var escapeTest = /[\[\]]/;
+  var escapeReplace = /[[\[\]]]/g;
+  var escapeTestNoEncode = /[[\[\]]/;
+  var escapeReplaceNoEncode = /[\[\]]/g;
+  var escapeReplacements = {
+    '[': '\\\\{',
+    ']': '\\\\]',
+  };`)))(),
     addon.tab.loadScript("https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"),
     addon.tab.waitForElement("#markItUpId_body"),
   ]);
