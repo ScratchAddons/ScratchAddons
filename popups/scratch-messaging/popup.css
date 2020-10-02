@@ -186,6 +186,8 @@ a:hover {
   resize: vertical;
   margin-top: 8px;
   font-size: 0.8rem;
+  border-radius: 8px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
 }
 .reply-box-buttons {
   padding-right: 4px;
