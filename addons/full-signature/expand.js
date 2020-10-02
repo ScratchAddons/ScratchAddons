@@ -2,7 +2,7 @@ $(".postsignature").attr("id", function (i) {
   return "signature" + i;
 });
 
-$(".postsignature").prepend('<button class="expand">Expand</button >');
+$(".postfootright > ul").prepend('<li class="expand"><a href="javascript:;">Expand Signature</a> | </li>');
 
 $(".expand").attr("id", function (i) {
   return "expand" + i;
