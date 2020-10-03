@@ -4,6 +4,9 @@
   "credits": [
     {
       "name": "GrahamSH"
+    },
+    {
+      "name": "NitroCipher/ZenithRogue"
     }
   ],
   "options": [
@@ -23,7 +26,15 @@
   ],
   "userstyles": [
     {
-      "url": "style.css",
+      "url": "expand.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "setting_match": {
+        "setting_id": "signatureselect",
+        "setting_value": "Expand Button"
+      }
+    },
+    {
+      "url": "always.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "setting_match": {
         "setting_id": "signatureselect",
@@ -31,7 +42,7 @@
       }
     },
     {
-      "url": "style2.css",
+      "url": "working.css",
       "matches": ["https://scratch.mit.edu/users/*"],
       "setting_match": {
         "setting_id": "whatworkingon",
