@@ -147,6 +147,15 @@
                   :placeholder="setting.default"
                   maxlength="100"
                 />
+                <input
+                  type="color"
+                  class="setting-input color"
+                  v-model="addonSettings[addon._addonId][setting.id]"
+                  @input="updateSettings(addon)"
+                  :disabled="!addon._enabled"
+                  v-if="setting.type === 'color'"
+                  :placeholder="setting.default"
+                />
                 <div class="filter-options" v-if="setting.type === 'select'">
                   <div
                     class="filter-option"
