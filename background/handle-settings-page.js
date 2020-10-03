@@ -22,7 +22,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       runPersistentScripts(addonId);
     }
 
-    if (scratchAddons.manifests.find(obj => obj.addonId === addonId).manifest.tags.includes("theme")) scratchAddons.localEvents.dispatchEvent(new CustomEvent("themesUpdated"));
+    if (scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest.tags.includes("theme"))
+      scratchAddons.localEvents.dispatchEvent(new CustomEvent("themesUpdated"));
   } else if (request.changeAddonSettings) {
     const { addonId, newSettings } = request.changeAddonSettings;
     scratchAddons.globalState.addonSettings[addonId] = newSettings;
@@ -30,6 +31,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       addonSettings: scratchAddons.globalState.addonSettings,
     });
 
-    if (scratchAddons.manifests.find(obj => obj.addonId === addonId).manifest.tags.includes("theme")) scratchAddons.localEvents.dispatchEvent(new CustomEvent("themesUpdated"));
+    if (scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest.tags.includes("theme"))
+      scratchAddons.localEvents.dispatchEvent(new CustomEvent("themesUpdated"));
   }
 });

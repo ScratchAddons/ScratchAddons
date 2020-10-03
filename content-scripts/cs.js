@@ -12,11 +12,11 @@ let domLoaded = false;
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
-  if(request.userscriptsAndUserstyles) {
+  if (request.userscriptsAndUserstyles) {
     sendResponse("OK");
-    document.querySelectorAll(".scratch-addons-css").forEach(style => style.remove());
-    for(const addon of request.userscriptsAndUserstyles) {
-      for(const css of addon.styles) {
+    document.querySelectorAll(".scratch-addons-css").forEach((style) => style.remove());
+    for (const addon of request.userscriptsAndUserstyles) {
+      for (const css of addon.styles) {
         const style = document.createElement("style");
         style.classList.add("scratch-addons-css");
         style.textContent = css;
@@ -26,7 +26,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     userscriptsAndUserstyles = request.userscriptsAndUserstyles;
     if (firstRun && domLoaded) onReady();
     firstRun = false;
-  } else if(request === "getInitialUrl") {
+  } else if (request === "getInitialUrl") {
     sendResponse(initialUrl);
   }
 });
