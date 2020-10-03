@@ -40,7 +40,11 @@ class StateProxy {
 }
 
 function messageForAllTabs(message) {
-  chrome.tabs.query({}, (tabs) => tabs.forEach((tab) => tab.url && chrome.tabs.sendMessage(tab.id, message)));
+  chrome.tabs.query({}, (tabs) =>
+    tabs.forEach(
+      (tab) => (tab.url || (!tab.url && typeof browser !== "undefined")) && chrome.tabs.sendMessage(tab.id, message)
+    )
+  );
 }
 
 function stateChange(parentObjectPath, key, value) {
