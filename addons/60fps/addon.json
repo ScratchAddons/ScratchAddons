@@ -1,18 +1,17 @@
 {
-    "name": "60FPS",
-    "description": "Ctrl+Click the green flag to toggle 60fps.",
-    "credits": [
-      {
-        "name": "Jeffalo"
-      }
-    ],
-    "userscripts": [
-      {
-        "url": "userscript.js",
-        "matches": ["https://scratch.mit.edu/projects/*"]
-      }
-    ],
-    "tags": [],
-    "enabled_by_default": false
-  }
-  
+  "name": "60FPS",
+  "description": "Ctrl+Click the green flag to toggle 60fps.",
+  "credits": [
+    {
+      "name": "Jeffalo"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": [],
+  "enabled_by_default": false
+}
