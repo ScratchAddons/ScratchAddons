@@ -15,7 +15,7 @@
       "id": "signatureselect",
       "type": "select",
       "potential_values": ["Expand Button in Footer", "Expand Button in Message Body", "Always Show", "Off"],
-      "default": "Expand Button"
+      "default": "Expand Button in Footer"
     },
     {
       "name": "Show scroll for What I've been doing",
