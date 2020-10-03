@@ -14,7 +14,7 @@
       "name": "Full Signature Mode",
       "id": "signatureselect",
       "type": "select",
-      "potential_values": ["Expand Button", "Always Show", "Off"],
+      "potential_values": ["Expand Button in Footer", "Expand Button in Message Body", "Always Show", "Off"],
       "default": "Expand Button"
     },
     {
@@ -30,7 +30,7 @@
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "setting_match": {
         "setting_id": "signatureselect",
-        "setting_value": "Expand Button"
+        "setting_value": "Expand Button in Footer"
       }
     },
     {
@@ -56,7 +56,15 @@
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "setting_match": {
         "setting_id": "signatureselect",
-        "setting_value": "Expand Button"
+        "setting_value": "Expand Button in Footer"
+      }
+    },
+    {
+      "url": "expand_body.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "setting_match": {
+        "setting_id": "signatureselect",
+        "setting_value": "Expand Button in Message Body"
       }
     }
   ],
