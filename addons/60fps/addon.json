@@ -1,5 +1,5 @@
 {
-    "name": "60FPS",
+    "name": "60FPS Player Mode",
     "description": "Ctrl+Click the green flag to toggle 60fps.",
     "credits": [
       {
@@ -12,7 +12,7 @@
         "matches": ["https://scratch.mit.edu/projects/*"]
       }
     ],
-    "tags": [],
+    "tags": ["editor"],
     "enabled_by_default": false
   }
   
