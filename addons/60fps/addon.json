@@ -1,0 +1,17 @@
+{
+  "name": "60FPS Player Mode",
+  "description": "Alt+Click the green flag to toggle 60FPS.",
+  "credits": [
+    {
+      "name": "Jeffalo"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabled_by_default": false
+}
