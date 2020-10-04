@@ -7,7 +7,7 @@ export default async function ({ addon, global, console }) {
     
     var mode = true;
     button.addEventListener("click", (e) => {
-        if (e.ctrlKey) {
+        if (e.altKey) {
             e.preventDefault();
             mode = !mode;
             vm.setCompatibilityMode(mode);
