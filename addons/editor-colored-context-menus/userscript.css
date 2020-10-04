@@ -1,6 +1,6 @@
 .u-contextmenu-colored .blocklyContextMenu {
-  background-color: var(--u-contextmenu-bg);
-  border-color: var(--u-contextmenu-border);
+  background-color: var(--u-contextmenu-bg) !important;
+  border-color: var(--u-contextmenu-border) !important;
 }
 .u-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
   color: white;
