@@ -1,6 +1,7 @@
 {
   "name": "Highlight currently executing blocks",
   "description": "Adds a blue border to the blocks that are currently running in a project.",
+  "warning": "WARNING: this feature is experimental and hurts performance when running Scratch projects.",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -8,6 +9,6 @@
     }
   ],
   "traps": true,
-  "tags": ["editor"],
+  "tags": ["editor", "beta"],
   "enabled_by_default": false
 }
