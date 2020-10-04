@@ -154,6 +154,7 @@
                   @input="updateSettings(addon)"
                   :disabled="!addon._enabled"
                   v-if="setting.type === 'color'"
+                  :placeholder="setting.default"
                 />
                 <div class="filter-options" v-if="setting.type === 'select'">
                   <div
