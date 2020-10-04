@@ -165,12 +165,9 @@ h1 {
   text-overflow: ellipsis;
 }
 
-.addon-description-full {
-  white-space: pre-line !important;
-}
-
 .addon-warn {
-  color: #ff2666 !important;
+  color: #ff2666;
+  font-weight: bold;
 }
 
 .addon-description-full,
@@ -216,6 +213,10 @@ h1 {
   background: #fd662b;
   border-color: #d84a12;
 }
+.badge.darkgreen {
+  background: #006c67;
+  border-color: #043b39;
+}
 .filter-option.sel.blue {
   background: #175ef8;
 }
@@ -229,6 +230,9 @@ h1 {
 }
 .filter-option.sel.red {
   background: #d84a12;
+}
+.filter-option.sel.darkgreen {
+  background: #006c67;
 }
 
 .rating {
