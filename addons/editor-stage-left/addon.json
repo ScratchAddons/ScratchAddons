@@ -1,7 +1,6 @@
 {
   "name": "Display stage on left side",
   "description": "Moves the stage to the left side of the editor.",
-  "warning": "Due to a Scratch Editor bug, you will be unable to drag scripts between your sprites when this is enabled.",
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"
