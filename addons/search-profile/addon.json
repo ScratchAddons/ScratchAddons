@@ -1,10 +1,10 @@
-﻿{
-        "name": "Search Profile",
-        "description": "Allows you to go to a users profile when you search their username",
-        "userscripts": {
-                "url": "userscript.js",
-                "matches": ["https://scratch.mit.edu/search/*"]
-        },
-        "tags": ["community", "search"],
-        "enabled_by_default": false
+{
+  "name": "Search Profile",
+  "description": "Allows you to go to a users profile when you search their username",
+  "userscripts": {
+          "url": "userscript.js",
+          "matches": ["https://scratch.mit.edu/search/*"]
+  },
+  "tags": ["community", "search"],
+  "enabled_by_default": false
 }
