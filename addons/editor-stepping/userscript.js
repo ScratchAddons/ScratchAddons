@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  const virtualMachine = await addon.tab.getScratchVM();
+  const virtualMachine = addon.tab.traps.onceValues.vm;
   const removeHighlight = () =>
     Array.prototype.forEach.call(document.querySelectorAll("path[style*='outline' i]"), (e) =>
       e.removeAttribute("style")

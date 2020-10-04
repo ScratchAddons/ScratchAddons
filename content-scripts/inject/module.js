@@ -1,4 +1,4 @@
-import runUserscript from "./run-userscript.js";
+import runAddonUserscripts from "./run-userscript.js";
 
 const template = document.getElementById("scratch-addons");
 const getGlobalState = () => {
@@ -25,24 +25,6 @@ scratchAddons.methods.getMsgCount = () => {
   const promise = new Promise((resolve) => (promiseResolver = resolve));
   pendingPromises.msgCount.push(promiseResolver);
   return promise;
-};
-scratchAddons.methods.getScratchVM = () => {
-  if (__scratchAddonsTraps._onceMap) {
-    for (const vmAttr of ["vm", "vm.propsVMBind", "vm.propsVMAssign"]) {
-      const maybeVM = __scratchAddonsTraps._onceMap[vmAttr];
-      if (maybeVM) return Promise.resolve(maybeVM);
-    }
-  }
-  if (window._scratchAddonsScratchVM) return Promise.resolve(window._scratchAddonsScratchVM);
-  else
-    return new Promise((resolve) => {
-      const handler = (e) => {
-        if (!e.trapName.startsWith("vm")) return;
-        resolve(e.value);
-        __scratchAddonsTraps._targetOnce.removeEventListener("trapready", handler);
-      };
-      __scratchAddonsTraps._targetOnce.addEventListener("trapready", handler);
-    });
 };
 
 const observer = new MutationObserver((mutationsList) => {
@@ -80,5 +62,5 @@ const observer = new MutationObserver((mutationsList) => {
 observer.observe(template, { attributes: true });
 
 for (const addon of JSON.parse(template.getAttribute("data-addons"))) {
-  if (addon.scripts.length) runUserscript(addon);
+  if (addon.scripts.length) runAddonUserscripts(addon);
 }
