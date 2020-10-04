@@ -7,12 +7,19 @@
       "name": "NitroCipher/ZenithRogue"
     }
   ],
+  "userscripts": [
+    {
+      "url": "fix-share-the-love.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
   "userstyles": [
     {
       "url": "stageleft.css",
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "traps": true,
   "tags": ["editor", "theme", "beta"],
   "enabled_by_default": false
 }
