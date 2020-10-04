@@ -3,8 +3,16 @@
   overflow-y: scroll;
   padding: 10px;
   padding-top: 20px;
+  display: none;
 }
 
 .post_body_html img {
   max-width: 100%;
+}
+
+#forum-search-input {
+  width: 85%;
+}
+#forum-search-dropdown {
+  width: 15%;
 }
