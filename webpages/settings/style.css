@@ -422,3 +422,8 @@ h1 {
   white-space: pre-wrap;
   width: 70%;
 }
+input[type="color" i] {
+  height: 20px;
+  width: 20px;
+  padding: 1px 2px;
+}
