@@ -10,18 +10,32 @@ let userscriptsAndUserstyles;
 let firstRun = true;
 let domLoaded = false;
 
+function injectUserstyles(object) {
+  for (const addon of object) {
+    for (const css of addon.styles) {
+      const style = document.createElement("style");
+      style.classList.add("scratch-addons-css");
+      style.textContent = css;
+      document.documentElement.appendChild(style);
+    }
+  }
+}
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request.userscriptsAndUserstyles) {
     sendResponse("OK");
     document.querySelectorAll(".scratch-addons-css").forEach((style) => style.remove());
-    for (const addon of request.userscriptsAndUserstyles) {
-      for (const css of addon.styles) {
-        const style = document.createElement("style");
-        style.classList.add("scratch-addons-css");
-        style.textContent = css;
-        document.documentElement.appendChild(style);
-      }
+
+    if (document.head) injectUserstyles(request.userscriptsAndUserstyles);
+    else {
+      const observer = new MutationObserver(() => {
+        if (document.head) {
+          injectUserstyles(request.userscriptsAndUserstyles);
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.documentElement, { subtree: true });
     }
     userscriptsAndUserstyles = request.userscriptsAndUserstyles;
     if (firstRun && domLoaded) onReady();
