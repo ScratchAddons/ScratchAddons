@@ -1,0 +1,22 @@
+.stage-header_stage-button-icon_3zzFK {
+  transform: scaleX(-1);
+}
+.target-pane_target-pane_3S5E6 {
+  -webkit-flex-direction: row-reverse;
+  -ms-flex-direction: row-reverse;
+  flex-direction: row-reverse;
+}
+[dir="ltr"] .target-pane_stage-selector-wrapper_qekSW {
+  margin-left: 0;
+  margin-right: calc(0.5rem / 2);
+}
+.sprite-selector_sprite-selector_2KgCX {
+  margin-left: calc(0.5rem / 2);
+  margin-right: 0;
+}
+.gui_flex-wrapper_uXHkj {
+  -webkit-flex-direction: row-reverse;
+  -ms-flex-direction: row-reverse;
+  flex-direction: row-reverse;
+  overflow-x: hidden;
+}
