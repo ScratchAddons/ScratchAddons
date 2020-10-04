@@ -26,8 +26,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.userscriptsAndUserstyles) {
     sendResponse("OK");
     document.querySelectorAll(".scratch-addons-css").forEach((style) => style.remove());
-    
-    if(document.head) injectUserstyles(request.userscriptsAndUserstyles);
+
+    if (document.head) injectUserstyles(request.userscriptsAndUserstyles);
     else {
       const observer = new MutationObserver(() => {
         if (document.head) {
@@ -35,7 +35,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           observer.disconnect();
         }
       });
-      observer.observe(document.documentElement, {subtree: true});
+      observer.observe(document.documentElement, { subtree: true });
     }
     userscriptsAndUserstyles = request.userscriptsAndUserstyles;
     if (firstRun && domLoaded) onReady();
