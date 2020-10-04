@@ -7,6 +7,8 @@
   "editor-devtools",
   "editor-dark-mode",
   "editor-colored-context-menus",
+  "editor-stage-left",
+
   "// For website:",
   "scratchr2",
 
@@ -29,5 +31,6 @@
   "full-signature",
   "forum-search",
   "60fps",
-  "search-profile"
+  "search-profile",
+  "better-emojis"
 ]

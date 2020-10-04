@@ -56,8 +56,7 @@
             <div class="filter-options">
               <div class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">All</div>
               <div
-                v-for="tag of tags"
-                v-show="tag.tabShow[selectedTab]"
+                v-for="tag of tagsToShow"
                 class="filter-option"
                 class="badge"
                 :class="{
@@ -65,7 +64,9 @@
                 'blue': tag.color === 'blue',
                 'yellow': tag.color === 'yellow',
                 'red': tag.color === 'red',
-                'green': tag.color === 'green'}"
+                'green': tag.color === 'green',
+                'darkgreen': tag.color === 'darkgreen'
+                }"
                 @click="selectedTag === tag.matchName ? (selectedTag = null) : (selectedTag = tag.matchName)"
               >
                 {{ tag.name }}
@@ -93,9 +94,9 @@
                 </div>
               </div>
               <div class="badge blue" v-if="addon._tags.recommended">Recommended</div>
-              <div class="badge blue" v-if="selectedTab === 'theme' && addon._tags.forEditor">For editor</div>
+              <div class="badge darkgreen" v-if="addon._tags.forEditor">For editor</div>
               <div class="badge red" v-if="addon._tags.beta">Beta</div>
-              <div class="badge red" v-if="selectedTab === 'theme' && addon._tags.forWebsite">For website</div>
+              <div class="badge yellow" v-if="addon._tags.forWebsite">For website</div>
               <div class="badge green" v-if="addon._tags.forums">Forums</div>
               <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
               <div class="addon-check">
@@ -105,6 +106,7 @@
           </div>
           <div class="addon-settings" v-show="addon._expanded">
             <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
+            <div class="addon-warn" v-show="addon._expanded">{{ addon.warning }}</div>
             <div class="addon-credits" v-if="addon.credits">
               <span>Credit to:</span>
               <span v-for="credit of addon.credits">
