@@ -341,7 +341,7 @@ function injectPrototype() {
   });
 }
 
-if(localStorage.getItem("sa-trapsEnabled") === "true") {
+if (localStorage.getItem("sa-trapsEnabled") === "true") {
   const injectPrototypeScript = document.createElement("script");
   injectPrototypeScript.append(document.createTextNode("(" + injectPrototype + ")()"));
   (document.head || document.documentElement).appendChild(injectPrototypeScript);

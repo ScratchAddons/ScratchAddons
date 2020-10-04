@@ -14,7 +14,7 @@ export default class Tab {
         : window.Scratch
         ? "scratchr2"
         : null;
-    if(info.traps) {
+    if (info.traps) {
       this.traps = new Trap();
       __scratchAddonsTraps.addEventListener("fakestatechanged", ({ detail }) => {
         const newEvent = new CustomEvent("fakestatechanged", {

@@ -39,7 +39,8 @@ async function sendUserscriptsAndUserstyles(url, tabId) {
     for (const style of addon.styles) {
       if (userscriptMatches({ url }, style, addon.addonId)) styleUrls.push(style.url);
     }
-    if (scripts.length || styleUrls.length) data.push({ addonId: addon.addonId, scripts, traps: addon.traps, styleUrls, styles: [] });
+    if (scripts.length || styleUrls.length)
+      data.push({ addonId: addon.addonId, scripts, traps: addon.traps, styleUrls, styles: [] });
   }
 
   const promises = [];

@@ -4,21 +4,31 @@ function setLocalStorage(arr) {
   const iframe = document.createElement("iframe");
   iframe.src = "https://scratch.mit.edu/projects/0111001101100001/embed";
   document.body.appendChild(iframe);
-  window.addEventListener("message", (event) => {
-    if (event.origin === "https://scratch.mit.edu" && event.data === "ready") {
-      iframe.contentWindow.postMessage(arr, "*");
-      window.addEventListener("message", (event) => {
-        if (event.origin === "https://scratch.mit.edu" && event.data === "OK") {
-          iframe.remove();
-        }
-      }, {once: true});
-    }
-  }, {once: true});
+  window.addEventListener(
+    "message",
+    (event) => {
+      if (event.origin === "https://scratch.mit.edu" && event.data === "ready") {
+        iframe.contentWindow.postMessage(arr, "*");
+        window.addEventListener(
+          "message",
+          (event) => {
+            if (event.origin === "https://scratch.mit.edu" && event.data === "OK") {
+              iframe.remove();
+            }
+          },
+          { once: true }
+        );
+      }
+    },
+    { once: true }
+  );
 }
 
 function setTrapsLocalStorageValue() {
-  const enabled = scratchAddons.manifests.filter((obj) => scratchAddons.localState.addonsEnabled[obj.addonId]).some((obj) => obj.manifest.traps);
-  setLocalStorage([{key: "sa-trapsEnabled", value: enabled}]);
+  const enabled = scratchAddons.manifests
+    .filter((obj) => scratchAddons.localState.addonsEnabled[obj.addonId])
+    .some((obj) => obj.manifest.traps);
+  setLocalStorage([{ key: "sa-trapsEnabled", value: enabled }]);
 }
 
 if (scratchAddons.localState.allReady) setTrapsLocalStorageValue();
