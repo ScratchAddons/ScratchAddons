@@ -19,18 +19,19 @@ body {
 }
 
 body::-webkit-scrollbar {
-    width: 10px;
+  width: 10px;
 }
 body::-webkit-scrollbar-track {
-    background: #edf4ff;
+  background: #edf4ff;
 }
 body::-webkit-scrollbar-thumb {
-    background-color: #adf;
-    border-radius: 2px;
+  background-color: #adf;
+  border-radius: 2px;
 }
-body:hover::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb:hover {
-    background-color: #ff7b26;
-    border-radius: 2px;
+body:hover::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #ff7b26;
+  border-radius: 2px;
 }
 
 body.fullscreen {
@@ -119,14 +120,15 @@ a:hover {
 .comment {
   /*padding: 4px 16px 4px 16px;*/
   padding: 3px 8px;
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255, 255, 255, 0.5);
   /*border: 1px solid rgba(0, 0, 0, 0.1);*/
   border-radius: 8px;
   margin-bottom: 4px;
   font-size: 0.85rem;
 }
-.comment.unread, .unread .comment {
-    background-color: white;
+.comment.unread,
+.unread .comment {
+  background-color: white;
 }
 .comment-content {
   word-break: break-word;
