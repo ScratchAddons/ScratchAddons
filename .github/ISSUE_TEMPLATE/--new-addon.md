@@ -1,8 +1,8 @@
 ---
-name: "➕ New addons"
-about: New addons
+name: "➕ New addon"
+about: New addon
 title: ''
-labels: new-addons
+labels: new addon
 assignees: ''
 
 ---

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Scratch Addons - Cloud games</title>
+    <link rel="stylesheet" href="popup.css" />
+    <link href="../../libraries/Sora.css" rel="stylesheet" />
+    <script src="../../libraries/vue.js" defer></script>
+    <script src="./popup.js" defer></script>
+  </head>
+
+  <body style="display: none" v-show="loaded">
+    <div v-for="project of projectsSorted">
+      <div class="title" @click="project.extended = !project.extended;">
+        <a class="project-name">{{ project.title }}</a>
+        <span class="float-right">👤 {{ project.amt }}</span>
+      </div>
+      <div class="project-details" v-show="project.amt > 0 && project.extended">
+        <div class="username-list">
+          <a v-for="user of project.users">{{ user }}</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

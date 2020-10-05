@@ -1,6 +1,7 @@
 {
   "name": "Display stage on left side",
   "description": "Moves the stage to the left side of the editor.",
+  "warning": "This feature might make Scratch projects lag, especially if you're not using a powerful computer. Performance will be enhanced in future updates.",
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"
@@ -19,6 +20,6 @@
     }
   ],
   "traps": true,
-  "tags": ["editor", "theme", "beta"],
+  "tags": ["editor", "theme"],
   "enabled_by_default": false
 }
