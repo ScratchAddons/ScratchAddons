@@ -7,6 +7,8 @@
   "editor-devtools",
   "editor-dark-mode",
   "editor-colored-context-menus",
+  "editor-stage-left",
+
   "// For website:",
   "scratchr2",
 
@@ -28,5 +30,8 @@
   "data-category-tweaks",
   "full-signature",
   "better-forum-editor",
-  "forum-search"
+  "forum-search",
+  "60fps",
+  "better-emojis",
+  "cloud-games"
 ]

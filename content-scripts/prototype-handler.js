@@ -340,6 +340,9 @@ function injectPrototype() {
     }
   });
 }
-const injectPrototypeScript = document.createElement("script");
-injectPrototypeScript.append(document.createTextNode("(" + injectPrototype + ")()"));
-(document.head || document.documentElement).appendChild(injectPrototypeScript);
+
+if (localStorage.getItem("sa-trapsEnabled") === "true") {
+  const injectPrototypeScript = document.createElement("script");
+  injectPrototypeScript.append(document.createTextNode("(" + injectPrototype + ")()"));
+  (document.head || document.documentElement).appendChild(injectPrototypeScript);
+} else console.log("Scratch Addons: traps disabled");

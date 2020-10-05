@@ -4,6 +4,9 @@
   "credits": [
     {
       "name": "GrahamSH"
+    },
+    {
+      "name": "NitroCipher/ZenithRogue"
     }
   ],
   "options": [
@@ -11,8 +14,8 @@
       "name": "Full Signature Mode",
       "id": "signatureselect",
       "type": "select",
-      "potential_values": ["Expand Button", "Always Show", "Off"],
-      "default": "Expand Button"
+      "potential_values": ["Expand Button in Footer", "Expand Button in Message Body", "Always Show", "Off"],
+      "default": "Expand Button in Message Body"
     },
     {
       "name": "Show scroll for What I've been doing",
@@ -23,7 +26,15 @@
   ],
   "userstyles": [
     {
-      "url": "style.css",
+      "url": "expand.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "setting_match": {
+        "setting_id": "signatureselect",
+        "setting_value": "Expand Button in Footer"
+      }
+    },
+    {
+      "url": "always.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "setting_match": {
         "setting_id": "signatureselect",
@@ -31,7 +42,7 @@
       }
     },
     {
-      "url": "style2.css",
+      "url": "working.css",
       "matches": ["https://scratch.mit.edu/users/*"],
       "setting_match": {
         "setting_id": "whatworkingon",
@@ -45,7 +56,15 @@
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "setting_match": {
         "setting_id": "signatureselect",
-        "setting_value": "Expand Button"
+        "setting_value": "Expand Button in Footer"
+      }
+    },
+    {
+      "url": "expand_body.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "setting_match": {
+        "setting_id": "signatureselect",
+        "setting_value": "Expand Button in Message Body"
       }
     }
   ],

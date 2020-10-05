@@ -1,31 +1,27 @@
-// Add id to each signature
-$(".postsignature").attr("id", function (i) {
-  return "signature" + i;
+// For every post with a signature line, add an id, and create expand button
+$(".box-content").each(function (index) {
+  $(this)
+    .find(".postmsg > .postsignature")
+    .attr("id", "signature" + index);
+  if ($(this).find(".postmsg > .postsignature").length !== 0) {
+    $(this)
+      .find(".postfootright > ul")
+      .prepend(`<li class="expand" id="expand${index}"><a href="javascript:;">Expand Signature</a></li>`);
+    $(this).find(".postfootright > ul > .postreport").prepend("| ");
+  }
 });
 
-// Add P element to each postsignature. The content is Expand Signature ▼
-$(".postsignature").prepend(
-  '<p style="cursor:pointer; color: #4d97ff; font-weight: bold;" class="expand">Expand Signature ▼</p>'
-);
-
-// Add id to each expand element
-$(".expand").attr("id", function (i) {
-  return "expand" + i;
-});
-
-// When the expand element is clicked, it gets it's id, removes the expand bit from it.
-// Then, it adds a style element, that uses the id and adds it to the signature and the style. This expands it.
-// Todo: Work on being able to close signature.
+// When the expand element is clicked, add the expanded class to the corresponding signature
+// Clicking again removes the expanded class
 $(".expand").click(function () {
   var id = this.id.replace("expand", "");
-  var styles = "#signature" + id + "{max-height:fit-content!important;}";
-  var newstyle = document.createTextNode(styles);
-  var head, style;
-  head = document.getElementsByTagName("head")[0];
-  if (!head) {
-    return;
+  if ($("#signature" + id).hasClass("expanded")) {
+    $("#signature" + id).removeClass("expanded");
+    $(this).html($(this).html().replace("Collapse", "Expand"));
+    //console.log("Collapsed signature #"+id);
+  } else {
+    $("#signature" + id).addClass("expanded");
+    $(this).html($(this).html().replace("Expand", "Collapse"));
+    //console.log("Expanded signature #"+id);
   }
-  style = document.createElement("style");
-  style.appendChild(newstyle);
-  head.appendChild(style);
 });

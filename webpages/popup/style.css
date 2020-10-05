@@ -15,7 +15,7 @@ body {
   color: white;
   display: flex;
   font-size: 1.2rem;
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
 }
 #title-text,
 #settings {
@@ -29,13 +29,16 @@ body {
   justify-content: center;
   align-items: center;
 }
+#fullscreen {
+  display: none;
+}
 #popout > img {
-  height: 0.7rem;
+  height: 0.6rem;
   vertical-align: middle;
   opacity: 0.6;
 }
 #logo {
-  height: 1.2rem;
+  height: 2rem;
   vertical-align: middle;
 }
 #settings {
@@ -56,14 +59,38 @@ body {
 }
 
 #popup-chooser {
-  background-color: #adf;
   color: #159;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   flex-grow: 1;
   font-size: 1rem;
-  padding: 4px;
+  align-items: stretch;
+  height: 35px;
+  background-color: #edf4ff;
+  padding-top: 12px;
+  border-bottom: 4px solid #adf;
+}
+.popup-name {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  padding-left: 12px;
+  padding-right: 12px;
+  /* border-left: 2px solid white; */
+  cursor: pointer;
+  border-radius: 12px 12px 0 0;
+}
+.popup-name:last-child {
+  /* border-right: 2px solid white; */
+}
+.popup-name.sel {
+  background-color: #adf;
+}
+#other-popups a {
+  cursor: pointer;
 }
 
 iframe {

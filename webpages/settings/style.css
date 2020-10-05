@@ -164,6 +164,12 @@ h1 {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+.addon-warn {
+  color: #ff2666;
+  font-weight: bold;
+}
+
 .addon-description-full,
 .addon-credits {
   width: 100%;
@@ -207,6 +213,10 @@ h1 {
   background: #fd662b;
   border-color: #d84a12;
 }
+.badge.darkgreen {
+  background: #006c67;
+  border-color: #043b39;
+}
 .filter-option.sel.blue {
   background: #175ef8;
 }
@@ -220,6 +230,9 @@ h1 {
 }
 .filter-option.sel.red {
   background: #d84a12;
+}
+.filter-option.sel.darkgreen {
+  background: #006c67;
 }
 
 .rating {
@@ -306,7 +319,7 @@ h1 {
   border: none;
   border-radius: 4px 0 0 4px;
   color: #fff;
-  width: 100px;
+  width: 150px;
   height: 16px;
 }
 .search-box input:focus {
@@ -421,4 +434,9 @@ h1 {
 .licenses-body pre {
   white-space: pre-wrap;
   width: 70%;
+}
+input[type="color" i] {
+  height: 20px;
+  width: 20px;
+  padding: 1px 2px;
 }

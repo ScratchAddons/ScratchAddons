@@ -16,7 +16,7 @@ const vue = new Vue({
           all: true,
           editor: true,
           community: true,
-          theme: false,
+          theme: true,
         },
       },
       {
@@ -28,7 +28,7 @@ const vue = new Vue({
           all: true,
           editor: true,
           community: true,
-          theme: false,
+          theme: true,
         },
       },
       {
@@ -37,7 +37,7 @@ const vue = new Vue({
         matchName: "forums",
         color: "green",
         tabShow: {
-          all: true,
+          all: false,
           editor: false,
           community: true,
           theme: false,
@@ -47,7 +47,7 @@ const vue = new Vue({
         name: "For editor",
         matchType: "tag",
         matchName: "editor",
-        color: "blue",
+        color: "darkgreen",
         tabShow: {
           all: false,
           editor: false,
@@ -59,7 +59,7 @@ const vue = new Vue({
         name: "For website",
         matchType: "tag",
         matchName: "community",
-        color: "red",
+        color: "yellow",
         tabShow: {
           all: false,
           editor: false,
@@ -69,7 +69,24 @@ const vue = new Vue({
       },
     ],
   },
+  computed: {
+    tagsToShow() {
+      return this.tags.filter((tag) => tag.tabShow[this.selectedTab]);
+    },
+  },
   methods: {
+    openReview() {
+      if (typeof browser === "undefined") {
+        window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
+      } else {
+        window.open(
+          `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`
+        );
+      }
+    },
+    openCredits() {
+      window.open(`https://scratchaddons.com/contributors`);
+    },
     openFeedback() {
       window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}`);
     },

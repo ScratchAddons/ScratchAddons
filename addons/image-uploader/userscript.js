@@ -4,7 +4,7 @@ export default async function ({ addon, global, console }) {
   await addon.tab.loadScript("https://cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js");
 
   var projectUpload = addon.settings.get("project_thumbnails");
-  console.log("use project thumbnails: " + projectUpload);
+  //console.log("use project thumbnails: " + projectUpload); //commented out because spammy in console
 
   var toolbar =
     document.querySelector("#markItUpId_body > div > div.markItUpHeader > ul") ||
@@ -101,7 +101,7 @@ export default async function ({ addon, global, console }) {
       e.preventDefault();
       e.stopPropagation();
 
-      e.dataTransfer.setData("image/*", "dummy"); //firefox support for drag and drop maybe idk i just took this from stackoverflow
+      e.dataTransfer.setData("image/*", "dummy"); //firefox support for drag i think
 
       var reader = new FileReader();
 
@@ -136,7 +136,7 @@ export default async function ({ addon, global, console }) {
     console.log("random object:", randObj);
     textFieldEdit.insert(
       textBox,
-      `your image could not be uploaded. ${message} here is ${randObj.name}. [img]${randObj.url}[/img]`
+      `sorry, your image could not be uploaded. ${message} here is ${randObj.name}. [img]${randObj.url}[/img]`
     );
   }
 
@@ -179,7 +179,7 @@ export default async function ({ addon, global, console }) {
   }
 
   function trash(projectID, rand) {
-    //send a project to the trash
+    //send a project to the trash. it cannot perm delete the project
     console.log("trashing project " + projectID + " which was assigned the random id " + rand);
     fetch(`https://scratch.mit.edu/site-api/projects/all/${projectID}/`, {
       headers: {
@@ -325,6 +325,7 @@ export default async function ({ addon, global, console }) {
   }
 
   function uploadAssetImage(image, fileType) {
+    //MAIN CODE
     window.progresselement = toolbar.appendChild(document.createElement("li"));
 
     console.log(image);
@@ -335,7 +336,7 @@ export default async function ({ addon, global, console }) {
 
     console.log("type: " + fileType);
 
-    progresselement.innerText = "uploading image...";
+    progresselement.innerText = "uploading...";
 
     fetch(`https://assets.scratch.mit.edu/${hash}.${type}`, {
       headers: {

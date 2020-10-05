@@ -5,28 +5,29 @@ import dataURLToBlob from "../../libraries/data-url-to-blob.js";
 const DATA_PNG = "data:image/png;base64,";
 const template = document.getElementById("scratch-addons");
 
-export default class Tab extends EventTarget {
-  constructor() {
-    super();
-    if (scratchAddons.eventTargets) scratchAddons.eventTargets.tab.push(this);
+export default class Tab {
+  constructor(info) {
+    scratchAddons.eventTargets.tab.push(this);
     this.clientVersion =
       document.querySelector("#app #navigation") || this.editorMode !== null
         ? "scratch-www"
         : window.Scratch
         ? "scratchr2"
         : null;
-    this.traps = new Trap();
-    __scratchAddonsTraps.addEventListener("fakestatechanged", ({ detail }) => {
-      const newEvent = new CustomEvent("fakestatechanged", {
-        detail: {
-          reducerOrigin: detail.reducerOrigin,
-          path: detail.path,
-          prev: detail.prev,
-          next: detail.next,
-        },
+    if (info.traps) {
+      this.traps = new Trap();
+      __scratchAddonsTraps.addEventListener("fakestatechanged", ({ detail }) => {
+        const newEvent = new CustomEvent("fakestatechanged", {
+          detail: {
+            reducerOrigin: detail.reducerOrigin,
+            path: detail.path,
+            prev: detail.prev,
+            next: detail.next,
+          },
+        });
+        this.traps.dispatchEvent(newEvent);
       });
-      this.dispatchEvent(newEvent);
-    });
+    }
     this.redux = new ReduxHandler();
   }
   loadScript(url) {

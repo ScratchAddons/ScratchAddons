@@ -19,13 +19,19 @@
   "content_scripts": [
     {
       "matches": ["https://scratch.mit.edu/*"],
-      "run_at": "document_end",
+      "run_at": "document_start",
       "js": ["content-scripts/cs.js"]
     },
     {
       "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
       "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js"]
+    },
+    {
+      "matches": ["https://scratch.mit.edu/projects/0111001101100001/embed"],
+      "run_at": "document_start",
+      "js": ["content-scripts/sa-embed.js"],
+      "all_frames": true
     }
   ],
   "options_ui": {
@@ -41,7 +47,8 @@
     "cookies",
     "webRequest",
     "webRequestBlocking",
-    "storage"
+    "storage",
+    "webNavigation"
   ],
   "optional_permissions": ["notifications", "clipboardWrite"],
   "web_accessible_resources": ["content-scripts/inject/*", "addon-api/*", "addons/*", "libraries/*"],

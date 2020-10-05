@@ -15,7 +15,25 @@ body {
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: rgba(77, 151, 255, 0.1);
+  scrollbar-width: thin;
 }
+
+body::-webkit-scrollbar {
+  width: 10px;
+}
+body::-webkit-scrollbar-track {
+  background: #edf4ff;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #adf;
+  border-radius: 2px;
+}
+body:hover::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #ff7b26;
+  border-radius: 2px;
+}
+
 body.fullscreen {
   width: 55%;
   min-height: calc(100% - 2px);
@@ -50,7 +68,7 @@ a:hover {
   position: sticky;
   /*box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);*/
   text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 .hover-reverse {
   background-color: #d93;
@@ -84,7 +102,7 @@ a:hover {
 .message-type-details {
   /*margin-bottom: 10px;*/
   /*padding: 4px 16px 4px 16px;*/
-  padding: 12px;
+  padding: 8px;
   font-size: 0.8rem;
 }
 .username-list > a {
@@ -102,11 +120,15 @@ a:hover {
 .comment {
   /*padding: 4px 16px 4px 16px;*/
   padding: 3px 8px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.5);
   /*border: 1px solid rgba(0, 0, 0, 0.1);*/
   border-radius: 8px;
   margin-bottom: 4px;
   font-size: 0.85rem;
+}
+.comment.unread,
+.unread .comment {
+  background-color: white;
 }
 .comment-content {
   word-break: break-word;
@@ -131,7 +153,7 @@ a:hover {
   color: green;
 }
 .unread .comment-author {
-  font-weight: 800;
+  font-weight: 700;
 }
 .comment-time {
   /*font-weight: 200;*/
@@ -141,7 +163,7 @@ a:hover {
   cursor: pointer;
   height: 0.5rem;
   vertical-align: middle;
-  opacity: 0.6;
+  opacity: 0;
 }
 .popout-comment:hover {
   opacity: 1;
@@ -165,7 +187,7 @@ a:hover {
 }
 .unread {
   /*border-left: 3px solid #0f8bc0;*/
-  font-weight: 700;
+  font-weight: 500;
 }
 .reply-button-comment {
   opacity: 0;
@@ -177,6 +199,9 @@ a:hover {
 .comment:hover .delete-btn {
   opacity: 1;
 }
+.comment:hover .popout-comment {
+  opacity: 0.6;
+}
 .reply-textarea {
   width: 100%;
   box-sizing: border-box;
@@ -186,6 +211,8 @@ a:hover {
   resize: vertical;
   margin-top: 8px;
   font-size: 0.8rem;
+  border-radius: 8px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
 }
 .reply-box-buttons {
   padding-right: 4px;
@@ -215,11 +242,11 @@ a:hover {
   left: 0;
   right: 0;
   background-color: white;
-  border-top: 1px solid black;
+  border-top: 1px solid #00000038;
   font-size: 0.9rem;
   text-align: center;
-  padding: 4px;
-  box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
+  padding-bottom: 2px;
+  box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.1);
   height: 2rem;
   display: flex;
   align-items: center;
