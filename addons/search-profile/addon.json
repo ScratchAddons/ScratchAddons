@@ -7,6 +7,6 @@
     "matches": ["https://scratch.mit.edu/search/*"]
     }
   ],
-  "tags": ["community", "search"],
+  "tags": ["community"],
   "enabled_by_default": false
 }
