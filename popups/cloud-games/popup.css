@@ -17,6 +17,22 @@ body {
   background-color: rgba(77, 151, 255, 0.1);
 }
 
+body::-webkit-scrollbar {
+  width: 10px;
+}
+body::-webkit-scrollbar-track {
+  background: #edf4ff;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #adf;
+  border-radius: 2px;
+}
+body:hover::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #ff7b26;
+  border-radius: 2px;
+}
+
 a {
   cursor: pointer;
   text-decoration: none;
