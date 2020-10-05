@@ -76,14 +76,16 @@ const vue = new Vue({
   },
   methods: {
     openReview() {
-     var browsercheck = typeof browser === "undefined"
-     if (browsercheck == 'true') {
-       window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
-     } else {
-       window.open(`https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco?hl=en-GB`);
-     }
+      var browsercheck = typeof browser === "undefined";
+      if (browsercheck == "true") {
+        window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
+      } else {
+        window.open(
+          `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco?hl=en-GB`
+        );
+      }
     },
-     openCredits() {
+    openCredits() {
       window.open(`https://scratchaddons.com/contributors`);
     },
     openFeedback() {
