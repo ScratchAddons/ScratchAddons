@@ -15,7 +15,7 @@ body {
   color: white;
   display: flex;
   font-size: 1.2rem;
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
 }
 #title-text,
 #settings {
@@ -61,12 +61,15 @@ body {
 #popup-chooser {
   color: #159;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   flex-grow: 1;
   font-size: 1rem;
   align-items: stretch;
   height: 35px;
+  background-color: #edf4ff;
+  padding-top: 12px;
+  border-bottom: 4px solid #adf;
 }
 .popup-name {
   display: flex;
@@ -76,14 +79,15 @@ body {
   font-size: 0.9rem;
   padding-left: 12px;
   padding-right: 12px;
-  border-left: 2px solid white;
+  /* border-left: 2px solid white; */
   cursor: pointer;
+  border-radius: 12px 12px 0 0;
 }
 .popup-name:last-child {
-  border-right: 2px solid white;
+  /* border-right: 2px solid white; */
 }
 .popup-name.sel {
-  background-color: #bcf;
+  background-color: #adf;
 }
 #other-popups a {
   cursor: pointer;
