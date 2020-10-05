@@ -76,8 +76,7 @@ const vue = new Vue({
   },
   methods: {
     openReview() {
-      var browsercheck = typeof browser === "undefined";
-      if (browsercheck == "true") {
+      if (typeof browser === "undefined") {
         window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
       } else {
         window.open(
