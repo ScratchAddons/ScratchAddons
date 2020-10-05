@@ -1,0 +1,16 @@
+{
+"name": "forums-markdown",
+"description": "Use markdown/html in your forum posts and topics.",
+"tags": ["community"],
+"userscripts": [
+  {
+    "url": "userscript.js",
+    "matches": ["https://scratch.mit.edu/discuss/*"]
+  }
+],
+"credits": [
+  {
+    "name": "Pufferfish101007",
+  }
+]
+}
