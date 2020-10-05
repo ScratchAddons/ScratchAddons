@@ -75,6 +75,18 @@ const vue = new Vue({
     },
   },
   methods: {
+    openReview() {
+      if (typeof browser === "undefined") {
+        window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
+      } else {
+        window.open(
+          `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`
+        );
+      }
+    },
+    openCredits() {
+      window.open(`https://scratchaddons.com/contributors`);
+    },
     openFeedback() {
       window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}`);
     },
