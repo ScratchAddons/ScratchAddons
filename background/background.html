@@ -1,6 +1,9 @@
 <head>
   <meta charset="UTF-8" />
 
+  <!-- Transition from Scratch Messaging Extension -->
+  <script src="transition.js" type="module"></script>
+
   <!-- Declare scratchAddons object, create global and local state -->
   <script src="declare-scratchaddons-object.js" type="module"></script>
 
@@ -12,6 +15,7 @@
 
   <!-- Load handlers. Some expose methods through scratchAddons.methods -->
   <script src="handle-fetch.js" type="module"></script>
+  <script src="handle-cookie.js" type="module"></script>
   <script src="handle-auth.js" type="module"></script>
   <script src="handle-messages.js" type="module"></script>
   <script src="handle-browser-badge.js" type="module"></script>

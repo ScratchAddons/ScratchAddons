@@ -15,7 +15,7 @@ export default class Addon {
     this.auth = new Auth(this);
     this.account = new Account();
     this.fetch = fetch;
-    this.tab = new Tab();
+    this.tab = new Tab(info);
     this.settings = new Settings(this);
   }
 }

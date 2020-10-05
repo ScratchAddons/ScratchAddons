@@ -164,6 +164,12 @@ h1 {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+.addon-warn {
+  color: #ff2666;
+  font-weight: bold;
+}
+
 .addon-description-full,
 .addon-credits {
   width: 100%;
@@ -207,6 +213,10 @@ h1 {
   background: #fd662b;
   border-color: #d84a12;
 }
+.badge.darkgreen {
+  background: #006c67;
+  border-color: #043b39;
+}
 .filter-option.sel.blue {
   background: #175ef8;
 }
@@ -220,6 +230,9 @@ h1 {
 }
 .filter-option.sel.red {
   background: #d84a12;
+}
+.filter-option.sel.darkgreen {
+  background: #006c67;
 }
 
 .rating {
@@ -306,7 +319,8 @@ h1 {
   border: none;
   border-radius: 4px 0 0 4px;
   color: #fff;
-  width: 100px;
+  width: 150px;
+  height: 16px;
 }
 .search-box input:focus {
   outline: none;
@@ -337,7 +351,7 @@ h1 {
   border-bottom: none;
 }
 
-switch {
+.switch {
   display: block;
   background: #111;
   width: 40px;
@@ -347,7 +361,7 @@ switch {
   cursor: pointer;
   transition: all 0.25s ease;
 }
-switch::before {
+.switch::before {
   content: "";
   position: absolute;
   display: block;
@@ -360,10 +374,10 @@ switch::before {
   transition: all 0.25s ease;
 }
 
-switch[state="on"] {
+.switch[state="on"] {
   background: #ff7b26;
 }
-switch[state="on"]::before {
+.switch[state="on"]::before {
   background: #fff;
   left: 25px;
 }
@@ -404,6 +418,10 @@ switch[state="on"]::before {
 .filter-option.sel {
   background: #ff7b26;
 }
+.filter-option.disabled {
+  filter: grayscale(80%);
+  pointer-events: none;
+}
 
 .reverted {
   transform: rotate(180deg);
@@ -416,4 +434,9 @@ switch[state="on"]::before {
 .licenses-body pre {
   white-space: pre-wrap;
   width: 70%;
+}
+input[type="color" i] {
+  height: 20px;
+  width: 20px;
+  padding: 1px 2px;
 }

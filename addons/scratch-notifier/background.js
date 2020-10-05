@@ -189,7 +189,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
             }
             commentUrl = `https://scratch.mit.edu/users/${message.comment_obj_title}/#comments-${message.comment_id}`;
           } else if (message.comment_type === 2) {
-            messageType = "studio";
+            messageType += "studio";
             commentUrl = `https://scratch.mit.edu/studios/${message.comment_obj_id}/comments/#comments-${message.comment_id}`;
           }
         }

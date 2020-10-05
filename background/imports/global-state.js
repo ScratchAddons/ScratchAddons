@@ -40,7 +40,11 @@ class StateProxy {
 }
 
 function messageForAllTabs(message) {
-  chrome.tabs.query({}, (tabs) => tabs.forEach((tab) => tab.url && chrome.tabs.sendMessage(tab.id, message)));
+  chrome.tabs.query({}, (tabs) =>
+    tabs.forEach(
+      (tab) => (tab.url || (!tab.url && typeof browser !== "undefined")) && chrome.tabs.sendMessage(tab.id, message)
+    )
+  );
 }
 
 function stateChange(parentObjectPath, key, value) {
@@ -63,20 +67,20 @@ function stateChange(parentObjectPath, key, value) {
     objectPathArr[0] === "auth" ? "[redacted]" : value,
     `\nChanged by: ${setterUrl}`
   );
-  if (objectPath[0] === "auth" && key !== "scratchLang") {
+  if (objectPathArr[0] === "auth" && key !== "scratchLang") {
     scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
     messageForAllTabs({ fireEvent: { target: "auth", name: "change" } });
-  } else if (objectPath[0] === "addonSettings") {
+  } else if (objectPathArr[0] === "addonSettings") {
     // Send event to persistent script and userscripts, if they exist.
     const settingsEventTarget = scratchAddons.eventTargets.settings.find(
-      (eventTarget) => eventTarget._addonId === objectPath[1]
+      (eventTarget) => eventTarget._addonId === objectPathArr[1]
     );
     if (settingsEventTarget) settingsEventTarget.dispatchEvent(new CustomEvent("change"));
     messageForAllTabs({
       fireEvent: {
         target: "settings",
         name: "change",
-        addonId: objectPath[1],
+        addonId: objectPathArr[1],
       },
     });
   }

@@ -1,4 +1,7 @@
-export default class Trap {
+export default class Trap extends EventTarget {
+  constructor() {
+    super();
+  }
   /**
    * @type {object.<string, *>} mapping for the Once objects trapped.
    */

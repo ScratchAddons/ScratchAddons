@@ -1,14 +1,5 @@
-function loadMoment() {
-  return new Promise((resolve) => {
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js";
-    document.head.appendChild(script);
-    script.onload = resolve;
-  });
-}
-
 export default async function ({ addon, _global, _console }) {
-  await loadMoment();
+  await addon.tab.loadScript("https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js");
 
   moment.locale(addon.auth.scratchLang == "en" ? "en-gb" : addon.auth.scratchLang);
   const forum_topic_id = parseInt(

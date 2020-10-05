@@ -16,7 +16,7 @@ const vue = new Vue({
           all: true,
           editor: true,
           community: true,
-          theme: false,
+          theme: true,
         },
       },
       {
@@ -28,7 +28,7 @@ const vue = new Vue({
           all: true,
           editor: true,
           community: true,
-          theme: false,
+          theme: true,
         },
       },
       {
@@ -37,7 +37,7 @@ const vue = new Vue({
         matchName: "forums",
         color: "green",
         tabShow: {
-          all: true,
+          all: false,
           editor: false,
           community: true,
           theme: false,
@@ -47,7 +47,7 @@ const vue = new Vue({
         name: "For editor",
         matchType: "tag",
         matchName: "editor",
-        color: "blue",
+        color: "darkgreen",
         tabShow: {
           all: false,
           editor: false,
@@ -59,7 +59,7 @@ const vue = new Vue({
         name: "For website",
         matchType: "tag",
         matchName: "community",
-        color: "red",
+        color: "yellow",
         tabShow: {
           all: false,
           editor: false,
@@ -69,7 +69,15 @@ const vue = new Vue({
       },
     ],
   },
+  computed: {
+    tagsToShow() {
+      return this.tags.filter((tag) => tag.tabShow[this.selectedTab]);
+    },
+  },
   methods: {
+    openFeedback() {
+      window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}`);
+    },
     clearSearch() {
       this.searchInput = "";
     },
@@ -123,10 +131,14 @@ const vue = new Vue({
       console.log("Updated", this.addonSettings[addon._addonId]);
     },
   },
+  watch: {
+    selectedTab() {
+      this.selectedTag = null;
+    },
+  },
 });
 
 chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addonSettings }) => {
-  console.log(manifests, addonsEnabled, addonSettings);
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
     manifest._category = manifest.tags.includes("theme")
@@ -161,11 +173,8 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   vue.manifests = manifests.map(({ manifest }) => manifest);
 });
 
-vue.$watch("selectedTab", function (newSelectedTab) {
-  this.selectedTag = null;
-});
 window.addEventListener("keydown", function (e) {
-  if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
+  if (e.ctrlKey && e.key === "f") {
     e.preventDefault();
     document.querySelector("#searchBox").focus();
   }
