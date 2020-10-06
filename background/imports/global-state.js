@@ -50,12 +50,7 @@ function messageForAllTabs(message) {
 function stateChange(parentObjectPath, key, value) {
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
-  console.log(
-    `%c${objectPath}`,
-    "font-weight: bold;",
-    "is now: ",
-    objectPathArr[0] === "auth" ? "[redacted]" : value
-  );
+  console.log(`%c${objectPath}`, "font-weight: bold;", "is now: ", objectPathArr[0] === "auth" ? "[redacted]" : value);
   if (objectPathArr[0] === "auth" && key !== "scratchLang") {
     scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
     messageForAllTabs({ fireEvent: { target: "auth", name: "change" } });
