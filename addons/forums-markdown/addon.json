@@ -4,13 +4,14 @@
 "tags": ["community"],
 "userscripts": [
   {
-    "url": "userscript.js",
+    "url": "editor.js",
     "matches": ["https://scratch.mit.edu/discuss/*"]
   }
 ],
 "credits": [
   {
     "name": "Pufferfish101007",
+    "link": "https://scratch.mit.edu/users/pufferfish101007"
   }
 ],
 "options": [
