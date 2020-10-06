@@ -1,12 +1,12 @@
-// Script for creating topic page
-// Because the pages are set out differently so this is easier for me to understand
+
 export default async function ({ addon, global, console }) {
 
-// Set up variables
+// Set up DOM variables for different pages
+  if (window.location.href.includes("/topic/create") {
   var submitButton = document.querySelector("button.button")[0],
   textarea = document.querySelector("#id_body"),
   form = document.querySelector("#post");
-  
+  }
   submitButton.type = "button"; // Stops the button from submitting the post request before we've converted all the markdown
   
   submitButton.addEventListener("click", (event) => {
@@ -14,8 +14,11 @@ export default async function ({ addon, global, console }) {
     form.submit();
   }
   
-  function translateMarkdownToHTML(markdown) {
+  function markdownToHTML(markdown) {
     return markdown;
+  }
+  function bbcodeToMarkdown(bbcode) {
+    return bbcode;
   }
 }
 
