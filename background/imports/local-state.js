@@ -37,24 +37,13 @@ class StateProxy {
 }
 
 function stateChange(parentObjectPath, key, value) {
-  const stackTrace = new Error().stack.split("\n")[3];
-  let setterUrl = stackTrace.substring(
-    stackTrace.includes("@")
-      ? stackTrace.indexOf("@") + 1
-      : stackTrace.includes("(")
-      ? stackTrace.indexOf("(") + 1
-      : stackTrace.indexOf("at ") + 3,
-    stackTrace.includes(")") ? stackTrace.indexOf(")") : stackTrace.length
-  );
-
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
   console.log(
     `%c${objectPath}`,
     "font-weight: bold;",
     "is now: ",
-    objectPathArr[0] === "auth" ? "[redacted]" : value,
-    `\nChanged by: ${setterUrl}`
+    objectPathArr[0] === "auth" ? "[redacted]" : value
   );
   if (objectPathArr[0] === "ready" && Object.values(scratchAddons.localState.ready).every((x) => x === true)) {
     console.log("Everything ready!");
