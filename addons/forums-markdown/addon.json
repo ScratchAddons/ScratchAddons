@@ -12,5 +12,19 @@
   {
     "name": "Pufferfish101007",
   }
-]
+],
+"options": [
+  {
+    "name": "Replace BBCode with markdown when editing posts/signature, where applicable",
+    "id": "edit_md",
+    "type": "boolean",
+    "default": true
+  },
+  {
+    "name": "Replace BBCode with markdown when quoting posts, where applicable",
+    "id": "quote_md",
+    "type": "boolean",
+    "default": false
+  }
+  ]
 }
