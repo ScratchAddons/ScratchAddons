@@ -1,11 +1,11 @@
 {
 "name": "forums-markdown",
-"description": "Use markdown/html in your forum posts and topics.",
-"tags": ["community"],
+"description": "(Almost) full markdown/html support in your forum posts and topics.",
+"tags": ["forums", "community"],
 "userscripts": [
   {
-    "url": "editor.js",
-    "matches": ["https://scratch.mit.edu/discuss/*"]
+    "url": "userscript.js",
+    "matches": ["https://scratch.mit.edu/discuss/*/topic/create/", "https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/post/*/edit/", "https://scratch.mit.edu/discuss/settings/*" ]
   }
 ],
 "credits": [
@@ -26,6 +26,12 @@
     "id": "quote_md",
     "type": "boolean",
     "default": false
-  }
+  },
+  {
+    "name": "Insert markdown instead of bbcode when using the editor menu",
+    "id": "menu_md",
+    "type": "boolean",
+    "default": true
+    }
   ]
 }
