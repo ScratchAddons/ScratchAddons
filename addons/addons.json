@@ -1,7 +1,7 @@
 [
   "// Note: these addons need this exact order to work properly,",
   "// because the first in the list gets their CSS injected first,",
-  "// and so on, and we want dark mode to make other addons dark.",
+  "// and so on, and we want themes to override other styles.",
   "// For editor:",
   "editor-searchable-dropdowns",
   "editor-devtools",
@@ -10,6 +10,7 @@
   "editor-stage-left",
 
   "// For website:",
+  "forum-search",
   "scratchr2",
 
   "// Other addons:",
@@ -29,7 +30,6 @@
   "youtube-fullscreen",
   "data-category-tweaks",
   "full-signature",
-  "forum-search",
   "60fps",
   "better-emojis",
   "cloud-games"
