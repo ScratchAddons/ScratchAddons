@@ -12,7 +12,12 @@
   "userstyles": [
     {
       "url": "dark-editor.css",
-      "matches": ["https://scratch.mit.edu/projects/*/", "https://scratch.mit.edu/projects/*/editor", "https://scratch.mit.edu/projects/*/fullscreen", "https://scratch.mit.edu/projects/editor"],
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
       "setting_match": {
         "setting_id": "selectedMode",
         "setting_value": "Dark editor"
@@ -20,7 +25,12 @@
     },
     {
       "url": "3dark.css",
-      "matches": ["https://scratch.mit.edu/projects/*/", "https://scratch.mit.edu/projects/*/editor", "https://scratch.mit.edu/projects/*/fullscreen", "https://scratch.mit.edu/projects/editor"],
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
       "setting_match": {
         "setting_id": "selectedMode",
         "setting_value": "3.Dark"
@@ -28,7 +38,12 @@
     },
     {
       "url": "3darker.css",
-      "matches": ["https://scratch.mit.edu/projects/*/", "https://scratch.mit.edu/projects/*/editor", "https://scratch.mit.edu/projects/*/fullscreen", "https://scratch.mit.edu/projects/editor"],
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
       "setting_match": {
         "setting_id": "selectedMode",
         "setting_value": "3.Darker"
