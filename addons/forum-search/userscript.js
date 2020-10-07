@@ -44,7 +44,7 @@ function appendSearch(box, query, page, term) {
     .then((res) => res.json())
     .then((data) => {
       hits = data.hits;
-      if(hits === 0){
+      if (hits === 0) {
         //there were no hits
         box.removeChild(box.lastChild);
         box.appendChild(document.createTextNode("Your search returned no results"));
