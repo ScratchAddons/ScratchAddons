@@ -14,17 +14,29 @@ export default async function ({ addon, global, console }) {
       //console.log('click')
       if (e.altKey) {
         e.preventDefault();
-        console.log("toggle 60fps");
-        mode = !mode;
-        vm.setCompatibilityMode(mode);
-
-        if (mode) {
-          button.style.filter = "";
-        } else {
-          //60fps
-          button.style.filter = "hue-rotate(90deg)";
-        }
+        toggle60()
       }
     });
+
+    button.addEventListener("dblclick", (e) => {
+      //console.log('click')
+      if (e.altKey) {
+        e.preventDefault();
+        toggle60()
+      }
+    });
+  }
+
+  function toggle60() {
+    console.log("toggle 60fps");
+    mode = !mode;
+    vm.setCompatibilityMode(mode);
+
+    if (mode) {
+      button.style.filter = "";
+    } else {
+      //60fps
+      button.style.filter = "hue-rotate(90deg)";
+    }
   }
 }
