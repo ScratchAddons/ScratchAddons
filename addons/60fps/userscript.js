@@ -13,6 +13,7 @@ export default async function ({ addon, global, console }) {
     button.addEventListener("click", (e) => {
       //console.log('click')
       if (e.altKey) {
+        e.preventDefault()
         console.log("toggle 60fps");
         mode = !mode;
         vm.setCompatibilityMode(mode);
