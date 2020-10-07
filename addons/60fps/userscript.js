@@ -14,7 +14,7 @@ export default async function ({ addon, global, console }) {
       //console.log('click')
       if (e.altKey) {
         e.preventDefault();
-        toggle60()
+        toggle60();
       }
     });
 
@@ -22,7 +22,7 @@ export default async function ({ addon, global, console }) {
       //console.log('click')
       if (e.altKey) {
         e.preventDefault();
-        toggle60()
+        toggle60();
       }
     });
   }
