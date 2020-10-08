@@ -11,6 +11,7 @@ export default async function ({ addon }) {
       break;
     case "projects":
       // Need to convert #[numbers] to solve conflict between tags and external Scratch player links.
+      await addon.tab.waitForElement(".project-description a");
       document.querySelectorAll(".project-description a").forEach((element) => {
         if (/\d+/.test(element.textContent)) element.outerHTML = element.textContent;
       });
