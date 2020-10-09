@@ -159,7 +159,7 @@ body {
 }
 
 [class^="gui_tab"] span {
-  font-weight: 800;
+  /* s-a */ font-weight: 700;
 }
 
 [class^="gui_tab"] li:not([aria-selected="true"]) > span {
@@ -289,4 +289,9 @@ input:not([name="title"]):not([name="q"]):focus {
 
 [class^="tool-select-base_tool-select"] {
   filter: brightness(2) saturate(0.25);
+}
+
+/* s-a */
+.paint-editor_button-group-button-icon_10kVn, .color-picker_swatch-icon_Z7osI, .scratchCategoryId-music > .scratchCategoryItemIcon {
+  filter: brightness(100);
 }

@@ -25,6 +25,10 @@
 .Popover-body {
   background: var(--accent) /*s-a* !important *s-a*/;
   color: var(--text) /*s-a* !important *s-a*/;
+}
+.context-menu_context-menu_2SJM-,
+.blocklyWidgetDiv .goog-menu,
+.Popover-body {
   border: 1px solid white;
 }
 .goog-menuitem-content,

@@ -2,7 +2,7 @@
   --main-bg: #111111;
   --secondary-bg: #151515;
   --accent: #202020;
-  --text: #bfbfbf;
+  --text: #ffffff;
 }
 .menu-bar_main-menu_3wjWH,
 .modal_header_1h7ps,
@@ -25,6 +25,10 @@
 .Popover-body {
   background: var(--accent) /*s-a* !important *s-a*/;
   color: var(--text) /*s-a* !important *s-a*/;
+}
+.context-menu_context-menu_2SJM-,
+.blocklyWidgetDiv .goog-menu,
+.Popover-body {
   border: 1px solid white;
 }
 .goog-menuitem-content,
