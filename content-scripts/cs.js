@@ -53,19 +53,23 @@ function injectUserstylesAndThemes({ userstyleUrls, themes }) {
   }
 }
 
-function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, themes }) {
-  for (const addonId in globalState.addonSettings) {
-    for (const settingName in globalState.addonSettings[addonId]) {
-      const settingValue = globalState.addonSettings[addonId][settingName];
+function setCssVariables(addonSettings) {
+  for (const addonId in addonSettings) {
+    for (const settingName in addonSettings[addonId]) {
+      const settingValue = addonSettings[addonId][settingName];
       if (typeof settingValue === "string" || typeof settingValue === "number")
         document.documentElement.style.setProperty(
           `--${addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-${settingName.replace(/-([a-z])/g, (g) =>
             g[1].toUpperCase()
           )}`,
-          globalState.addonSettings[addonId][settingName]
+          addonSettings[addonId][settingName]
         );
     }
   }
+}
+
+function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, themes }) {
+  setCssVariables(globalState.addonSettings);
   injectUserstylesAndThemes({ userstyleUrls, themes });
 
   const template = document.createElement("template");
@@ -81,8 +85,10 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
   document.head.appendChild(script);
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.newGlobalState) template.setAttribute("data-global-state", JSON.stringify(request.newGlobalState));
-    else if (request.fireEvent) {
+    if (request.newGlobalState) {
+      template.setAttribute("data-global-state", JSON.stringify(request.newGlobalState));
+      setCssVariables(request.newGlobalState.addonSettings);
+    } else if (request.fireEvent) {
       const eventDetails = JSON.stringify(request.fireEvent);
       template.setAttribute(`data-fire-event__${Date.now()}`, eventDetails);
     } else if (request.setMsgCount) {
