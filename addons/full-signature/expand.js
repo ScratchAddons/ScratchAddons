@@ -17,6 +17,7 @@ $(".expand").click(function () {
   var id = this.id.replace("expand", "");
   if ($("#signature" + id).hasClass("expanded")) {
     $("#signature" + id).removeClass("expanded");
+    $("#signature" + id).removeAttr("style");
     $(this).html($(this).html().replace("Collapse", "Expand"));
     //console.log("Collapsed signature #"+id);
   } else {
