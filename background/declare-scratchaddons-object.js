@@ -36,3 +36,6 @@ console.log(
   "initialized:\n",
   JSON.parse(JSON.stringify(scratchAddons.localState))
 );
+
+// Set uninstall URL
+chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");
