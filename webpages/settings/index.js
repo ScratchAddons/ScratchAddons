@@ -1,6 +1,7 @@
 const vue = new Vue({
   el: "body",
   data: {
+    loaded: false,
     manifests: [],
     selectedTab: "all",
     selectedTag: null,
@@ -183,6 +184,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
   manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
   vue.manifests = manifests.map(({ manifest }) => manifest);
+  vue.loaded = true;
 });
 
 window.addEventListener("keydown", function (e) {
