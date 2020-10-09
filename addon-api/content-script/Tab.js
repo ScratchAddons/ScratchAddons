@@ -9,9 +9,9 @@ export default class Tab {
   constructor(info) {
     scratchAddons.eventTargets.tab.push(this);
     this.clientVersion =
-      document.querySelector("#app #navigation") || this.editorMode !== null
+        document.querySelector("meta[name='format-detection']")
         ? "scratch-www"
-        : window.Scratch
+        : document.querySelector("script[type='text/javascript']")
         ? "scratchr2"
         : null;
     if (info.traps) {
@@ -50,7 +50,7 @@ export default class Tab {
             observer.disconnect();
             resolve(elem);
           }
-        }).observe(document.body, {
+        }).observe(document.documentElement, {
           attributes: true,
           childList: true,
           subtree: true,

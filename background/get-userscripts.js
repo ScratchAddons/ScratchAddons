@@ -1,82 +1,79 @@
-if (scratchAddons.localState.allReady) getUserscripts();
-else scratchAddons.localEvents.addEventListener("ready", getUserscripts);
-
-const addonsWithScriptsOrStyles = [];
-async function getUserscripts() {
-  for (const { manifest, addonId } of scratchAddons.manifests) {
-    if (manifest.userscripts || manifest.userstyles) {
-      addonsWithScriptsOrStyles.push({
-        addonId,
-        traps: manifest.traps || null,
-        scripts: manifest.userscripts || [],
-        styles: manifest.userstyles || [],
-      });
-    }
-  }
-}
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request === "getGlobalState") sendResponse(scratchAddons.globalState._target);
-  // Firefox breaks if we send a proxy
-  else if (request === "openSettingsOnThisTab")
+  if (request === "openSettingsOnThisTab")
     chrome.tabs.update(sender.tab.id, { url: chrome.runtime.getURL("webpages/settings/index.html") });
 });
 
-async function sendUserscriptsAndUserstyles(url, tabId) {
-  if (new URL(url).origin !== "https://scratch.mit.edu") return;
-  const data = [];
-  for (const addon of addonsWithScriptsOrStyles) {
-    if (!scratchAddons.localState.addonsEnabled[addon.addonId]) continue;
-    const scripts = [];
-    const styleUrls = [];
-    for (const script of addon.scripts) {
-      if (userscriptMatches({ url }, script, addon.addonId))
-        scripts.push({
+async function getContentScriptInfo(url, tabId) {
+  const data = {
+    globalState: {},
+    addonsWithUserscripts: [],
+    userstyleUrls: [],
+    themes: []
+  };
+  const fetchThemeStylesPromises = [];
+  
+  for (const { addonId, manifest } of scratchAddons.manifests) {
+    if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
+
+    const userscripts = [];
+    for (const script of manifest.userscripts || []) {
+      if (userscriptMatches({ url }, script, addonId))
+        userscripts.push({
           url: script.url,
           runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
         });
     }
-    for (const style of addon.styles) {
-      if (userscriptMatches({ url }, style, addon.addonId)) styleUrls.push(style.url);
+    if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts, traps: manifest.traps });
+
+    if (manifest.tags.includes("theme")) {
+      const styleUrls = [];
+      for (const style of manifest.userstyles || []) {
+        if (userscriptMatches({ url }, style, addonId)) styleUrls.push(style.url);
+      }
+      if (styleUrls.length) {
+        const styles = [];
+        data.themes.push({ addonId, styles });
+        for (const styleUrl of styleUrls) {
+          fetchThemeStylesPromises.push(
+            fetch(chrome.runtime.getURL(`/addons/${addonId}/${styleUrl}`))
+              .then((res) => res.text())
+              .then((text) => (styles.push(text)))
+          );
+        }
+      }
+    } else {
+      for (const style of manifest.userstyles || []) {
+        if (userscriptMatches({ url }, style, addonId)) data.userstyleUrls.push(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
+      }
     }
-    if (scripts.length || styleUrls.length)
-      data.push({ addonId: addon.addonId, scripts, traps: addon.traps, styleUrls, styles: [] });
   }
 
-  const promises = [];
-  for (const addon of data) {
-    for (const i in addon.styleUrls) {
-      promises.push(
-        fetch(chrome.runtime.getURL(`/addons/${addon.addonId}/${addon.styleUrls[i]}`))
-          .then((res) => res.text())
-          .then((text) => (addon.styles[i] = text))
-      );
-    }
-  }
+  await Promise.all(fetchThemeStylesPromises);
+  data.globalState = scratchAddons.globalState._target;
 
-  await Promise.all(promises);
-  let receivedResponse = false;
-  chrome.tabs.sendMessage(tabId, { userscriptsAndUserstyles: data }, (res) => res && (receivedResponse = true));
-  setTimeout(() => {
-    if (!receivedResponse) {
-      const interval = setInterval(
-        () =>
-          chrome.tabs.sendMessage(tabId, { userscriptsAndUserstyles: data }, (res) => res && clearInterval(interval)),
-        250
-      );
-      setTimeout(() => clearInterval(interval), 30000);
-    }
-  }, 1000);
+  return data;
 }
-chrome.webNavigation.onCommitted.addListener((request) => sendUserscriptsAndUserstyles(request.url, request.tabId), {
+
+chrome.webNavigation.onCommitted.addListener(async (request) => {
+  const data = await getContentScriptInfo(request.url, request.tabId);
+  let receivedResponse = false;
+  chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, (res) => res && (receivedResponse = true));
+  const interval = setInterval(
+    () =>
+      chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, (res) => res && clearInterval(interval)),
+    200
+  );
+}, {
   url: [{ hostEquals: "scratch.mit.edu" }],
 });
 scratchAddons.localEvents.addEventListener("themesUpdated", () => {
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(tab.id, "getInitialUrl", (res) => {
-          if (res) sendUserscriptsAndUserstyles(res, tab.id);
+        chrome.tabs.sendMessage(tab.id, "getInitialUrl", async (res) => {
+          if (res) {
+            chrome.tabs.sendMessage(tab.id, { themesUpdated: (await getContentScriptInfo(res, tab.id)).themes});
+          }
         });
       }
     })
