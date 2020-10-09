@@ -8,12 +8,11 @@ const template = document.getElementById("scratch-addons");
 export default class Tab {
   constructor(info) {
     scratchAddons.eventTargets.tab.push(this);
-    this.clientVersion =
-        document.querySelector("meta[name='format-detection']")
-        ? "scratch-www"
-        : document.querySelector("script[type='text/javascript']")
-        ? "scratchr2"
-        : null;
+    this.clientVersion = document.querySelector("meta[name='format-detection']")
+      ? "scratch-www"
+      : document.querySelector("script[type='text/javascript']")
+      ? "scratchr2"
+      : null;
     if (info.traps) {
       this.traps = new Trap();
       __scratchAddonsTraps.addEventListener("fakestatechanged", ({ detail }) => {

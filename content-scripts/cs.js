@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.contentScriptInfo) {
     sendResponse("OK");
     if (receivedContentScriptInfo) return;
-    receivedContentScriptInfo =  true;
+    receivedContentScriptInfo = true;
 
     if (document.head) onHeadAvailable(request.contentScriptInfo);
     else {
@@ -28,7 +28,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request === "getInitialUrl") {
     sendResponse(initialUrl);
   } else if (request.themesUpdated) {
-    injectUserstylesAndThemes({ themes : request.themesUpdated})
+    injectUserstylesAndThemes({ themes: request.themesUpdated });
   }
 });
 
@@ -53,14 +53,17 @@ function injectUserstylesAndThemes({ userstyleUrls, themes }) {
   }
 }
 
-function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, themes}) {
+function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, themes }) {
   for (const addonId in globalState.addonSettings) {
     for (const settingName in globalState.addonSettings[addonId]) {
       const settingValue = globalState.addonSettings[addonId][settingName];
-      if(typeof settingValue === "string" || typeof settingValue === "number")
+      if (typeof settingValue === "string" || typeof settingValue === "number")
         document.documentElement.style.setProperty(
-          `--${addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-${settingName.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}`,
-           globalState.addonSettings[addonId][settingName]);
+          `--${addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-${settingName.replace(/-([a-z])/g, (g) =>
+            g[1].toUpperCase()
+          )}`,
+          globalState.addonSettings[addonId][settingName]
+        );
     }
   }
   injectUserstylesAndThemes({ userstyleUrls, themes });

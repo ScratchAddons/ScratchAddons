@@ -8,10 +8,10 @@ async function getContentScriptInfo(url, tabId) {
     globalState: {},
     addonsWithUserscripts: [],
     userstyleUrls: [],
-    themes: []
+    themes: [],
   };
   const fetchThemeStylesPromises = [];
-  
+
   for (const { addonId, manifest } of scratchAddons.manifests) {
     if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
 
@@ -37,13 +37,14 @@ async function getContentScriptInfo(url, tabId) {
           fetchThemeStylesPromises.push(
             fetch(chrome.runtime.getURL(`/addons/${addonId}/${styleUrl}`))
               .then((res) => res.text())
-              .then((text) => (styles.push(text)))
+              .then((text) => styles.push(text))
           );
         }
       }
     } else {
       for (const style of manifest.userstyles || []) {
-        if (userscriptMatches({ url }, style, addonId)) data.userstyleUrls.push(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
+        if (userscriptMatches({ url }, style, addonId))
+          data.userstyleUrls.push(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
       }
     }
   }
@@ -54,25 +55,28 @@ async function getContentScriptInfo(url, tabId) {
   return data;
 }
 
-chrome.webNavigation.onCommitted.addListener(async (request) => {
-  const data = await getContentScriptInfo(request.url, request.tabId);
-  let receivedResponse = false;
-  chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, (res) => res && (receivedResponse = true));
-  const interval = setInterval(
-    () =>
-      chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, (res) => res && clearInterval(interval)),
-    200
-  );
-}, {
-  url: [{ hostEquals: "scratch.mit.edu" }],
-});
+chrome.webNavigation.onCommitted.addListener(
+  async (request) => {
+    const data = await getContentScriptInfo(request.url, request.tabId);
+    let receivedResponse = false;
+    chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, (res) => res && (receivedResponse = true));
+    const interval = setInterval(
+      () =>
+        chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, (res) => res && clearInterval(interval)),
+      200
+    );
+  },
+  {
+    url: [{ hostEquals: "scratch.mit.edu" }],
+  }
+);
 scratchAddons.localEvents.addEventListener("themesUpdated", () => {
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", async (res) => {
           if (res) {
-            chrome.tabs.sendMessage(tab.id, { themesUpdated: (await getContentScriptInfo(res, tab.id)).themes});
+            chrome.tabs.sendMessage(tab.id, { themesUpdated: (await getContentScriptInfo(res, tab.id)).themes });
           }
         });
       }
