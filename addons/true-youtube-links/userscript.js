@@ -1,6 +1,4 @@
 ﻿export default async function ({ addon, console }) {
-  addon.settings.addEventListener("change", () => console.log("changed!"));
-
   while (true) {
     await addon.tab.waitForElement('a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]');
     var elements = document.querySelectorAll(
