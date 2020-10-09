@@ -39,7 +39,7 @@ for (const popup of popups) {
     popoutA.appendChild(img);
     el.appendChild(popoutA);
   }
-  el.onclick = () => currentPopup !== popup && setPopup(popup);
+  el.onclick = () => {if (currentPopup !== popup) setPopup(popup)};
   document.getElementById("popup-chooser").appendChild(el);
 }
 
