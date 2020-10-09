@@ -61,6 +61,6 @@ const observer = new MutationObserver((mutationsList) => {
 });
 observer.observe(template, { attributes: true });
 
-for (const addon of JSON.parse(template.getAttribute("data-addons"))) {
+for (const addon of JSON.parse(template.getAttribute("data-userscripts"))) {
   if (addon.scripts.length) runAddonUserscripts(addon);
 }

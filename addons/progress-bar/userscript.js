@@ -1,10 +1,8 @@
 export default async function ({ addon, global, console }) {
   const useTopBar = addon.settings.get("topbar");
-  const barHeight = addon.settings.get("height");
 
   const barOuter = document.createElement("div");
   barOuter.className = "u-progress-bar-outer";
-  barOuter.style.height = `${barHeight}px`;
   const barInner = document.createElement("div");
   barInner.className = "u-progress-bar-inner";
   barOuter.appendChild(barInner);
@@ -12,7 +10,7 @@ export default async function ({ addon, global, console }) {
   if (useTopBar) {
     barOuter.classList.add("u-progress-bar-top");
     barOuter.style.opacity = "0";
-    document.body.appendChild(barOuter);
+    addon.tab.waitForElement("body").then(() => document.body.appendChild(barOuter));
   } else {
     barOuter.classList.add("u-progress-bar-integrated");
   }
@@ -234,7 +232,8 @@ export default async function ({ addon, global, console }) {
 
   const mutationObserver = new MutationObserver(inject);
 
-  function startObserver() {
+  async function startObserver() {
+    await addon.tab.waitForElement("body");
     if (useTopBar) return;
     mutationObserver.observe(document.body, {
       childList: true,

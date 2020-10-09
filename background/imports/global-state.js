@@ -29,7 +29,7 @@ class StateProxy {
   set(target, key, value) {
     const oldValue = target[key];
     target[key] = value;
-    messageForAllTabs({ newGlobalState: target });
+    messageForAllTabs({ newGlobalState: _globalState });
 
     if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
       stateChange(this.name, key, value);
