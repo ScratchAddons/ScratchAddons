@@ -83,3 +83,6 @@
   left: -13px;
   border-color: rgba(132, 111, 199, 0.2);
 }
+#comments .more-replies .pulldown {
+  color: #4d97ff;
+}
