@@ -1,6 +1,8 @@
 html {
   font-size: 15px;
   height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #ff7b26 #adf;
 }
 html.fullscreen {
   font-size: 15px;
