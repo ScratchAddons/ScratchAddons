@@ -1,0 +1,26 @@
+{
+  "name": "Forums image uploader",
+  "description": "Integrates image uploading into the forums.",
+  "credits": [
+    {
+      "name": "Jeffalo"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/discuss/*"]
+    }
+  ],
+  "options": [
+    {
+      "name": "Use project thumbnails",
+      "id": "project_thumbnails",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["forums", "community"],
+  "enabled_by_default": false,
+  "libraries": ["md5", "text-field-edit"]
+}

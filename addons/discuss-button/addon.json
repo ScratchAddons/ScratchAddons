@@ -1,0 +1,35 @@
+{
+  "name": "Discuss button",
+  "description": "Adds the discuss button to the navbar.",
+  "credits": [
+    {
+      "name": "Maximouse"
+    },
+    {
+      "name": "World_Languages"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": false
+    }
+  ],
+  "options": [
+    {
+      "name": "Remove \"ideas\" button",
+      "id": "removeIdeasBtn",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Discuss button name",
+      "id": "buttonName",
+      "type": "string",
+      "default": "Discuss"
+    }
+  ],
+  "tags": ["community", "forums"],
+  "enabled_by_default": false
+}

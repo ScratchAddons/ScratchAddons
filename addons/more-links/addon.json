@@ -1,0 +1,21 @@
+{
+  "name": "More links",
+  "description": "Adds links for URLs pointing outside scratch.mit.edu.",
+  "credits": [
+    {
+      "name": "Hans5958"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "https://scratch.mit.edu/projects/*",
+        "https://scratch.mit.edu/studios/*",
+        "https://scratch.mit.edu/users/*"
+      ]
+    }
+  ],
+  "tags": ["community"],
+  "enabled_by_default": false
+}

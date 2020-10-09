@@ -1,0 +1,56 @@
+a:visited {
+  color: #4d97ff;
+}
+a:active,
+a:active:hover,
+a:visited:hover {
+  color: #4280d7;
+}
+#zoomContainer {
+  height: 24px;
+}
+.zoom {
+  background: #fff;
+  height: 24px;
+}
+.zoom img {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
+.zoom:hover {
+  margin: 0;
+}
+#zoomOut {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+#zoomOut img {
+  content: url("https://scratch.mit.edu/static/assets/1fa6345d57ffc67eccd9f44cf6a383dd.svg");
+}
+#zoomEqual img {
+  content: url("https://scratch.mit.edu/static/assets/dba629c24296756d68a135988fe96011.svg");
+}
+#zoomIn {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+#zoomIn img {
+  content: url("https://scratch.mit.edu/static/assets/3cfc9b39a0d002246119d47f6756d77e.svg");
+}
+.box .box-head {
+  display: block;
+  clear: both;
+  margin: 0;
+  border-top: 1px solid white;
+  border-bottom: 1px solid #d9d9d9;
+  border-radius: 10px 10px 0 0;
+  background-color: #f2f2f2;
+  padding: 8px 20px;
+  height: 20px;
+  overflow: hidden;
+}
+h1 {
+  line-height: 1.1rem;
+  font-size: 1.1rem;
+}

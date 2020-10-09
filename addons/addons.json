@@ -1,1 +1,37 @@
-["scratch-notifier"]
+[
+  "// Note: these addons need this exact order to work properly,",
+  "// because the first in the list gets their CSS injected first,",
+  "// and so on, and we want themes to override other styles.",
+  "// For editor:",
+  "editor-searchable-dropdowns",
+  "editor-devtools",
+  "editor-dark-mode",
+  "editor-colored-context-menus",
+  "editor-stage-left",
+
+  "// For website:",
+  "forum-search",
+  "scratchr2",
+
+  "// Other addons:",
+  "msg-count-badge",
+  "scratch-notifier",
+  "discuss-button",
+  "editor-stepping",
+  "image-uploader",
+  "scratch-messaging",
+  "forum-time-zones",
+  "fix-buttons",
+  "remove-sprite-confirm",
+  "true-youtube-links",
+  "progress-bar",
+  "bitmap-copy",
+  "more-links",
+  "youtube-fullscreen",
+  "data-category-tweaks",
+  "full-signature",
+  "60fps",
+  "search-profile",
+  "better-emojis",
+  "cloud-games"
+]

@@ -1,0 +1,13 @@
+{
+  "name": "Bitmap images copying",
+  "description": "Allows you to actually copy a bitmap image from the paint editor, so that you can paste it in other websites or software.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor", "recommended"],
+  "permissions": ["clipboardWrite"],
+  "enabled_by_default": false
+}

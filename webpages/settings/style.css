@@ -4,6 +4,7 @@ body {
   margin: 0;
   height: 100vh;
   color: white;
+  font-size: 12px;
 }
 
 .navbar {
@@ -69,8 +70,13 @@ h1 {
   top: 10px;
   left: 0;
 }
-.category .iconify {
-  font-size: 18px;
+
+.category img {
+  height: 18px;
+  filter: brightness(10);
+}
+.category.sel img {
+  filter: brightness(1);
 }
 .category span {
   margin-left: 15px;
@@ -105,7 +111,6 @@ h1 {
 .btn-dropdown {
   display: flex;
   align-items: center;
-  cursor: pointer;
   padding: 5px;
   border-radius: 4px;
 }
@@ -113,23 +118,81 @@ h1 {
   background: rgba(255, 255, 255, 0.05);
 }
 
+.sh .btn-dropdown {
+  transform: rotate(180deg);
+}
+
 .btn-dropdown img {
   height: 23px;
 }
 
+.clickeable-area {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
 .addon-name {
-  margin: 10px;
+  margin-left: 15px;
   font-weight: 300;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.icon-type {
+  height: 16px;
+  vertical-align: middle;
+  filter: brightness(10);
+  margin-right: 8px;
 }
 
 .badge {
-  background: #000;
+  background: gray;
   color: #fff;
   border-radius: 4px;
   padding: 2px 5px;
   font-size: 12px;
   margin-left: 10px;
   border-bottom: 2px solid #111;
+}
+
+.addon-description {
+  margin-left: 10px;
+  color: gray;
+  width: 35vw;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.addon-warn {
+  color: #ff2666;
+  font-weight: bold;
+}
+
+.addon-description-full,
+.addon-credits {
+  width: 100%;
+  white-space: normal;
+  color: #dddddd;
+}
+
+.addon-credits,
+.addon-license {
+  margin-top: 4px;
+  font-size: 0.9em;
+}
+.addon-credits a,
+.addon-license a {
+  color: #6d9bff;
+}
+
+.addon-credits > span {
+  margin-right: 0.5rem;
+}
+
+.addon-credits > span:not(:first-child):not(:last-child)::after {
+  content: ",";
 }
 
 .badge.blue {
@@ -150,6 +213,27 @@ h1 {
   background: #fd662b;
   border-color: #d84a12;
 }
+.badge.darkgreen {
+  background: #006c67;
+  border-color: #043b39;
+}
+.filter-option.sel.blue {
+  background: #175ef8;
+}
+.filter-option.sel.green {
+  background: #78fd2b;
+  color: #333333;
+}
+.filter-option.sel.yellow {
+  background: #fddd2b;
+  color: #333333;
+}
+.filter-option.sel.red {
+  background: #d84a12;
+}
+.filter-option.sel.darkgreen {
+  background: #006c67;
+}
 
 .rating {
   margin-left: 20px;
@@ -160,13 +244,69 @@ h1 {
   color: #fdab12;
 }
 
+.sh .addon-settings {
+  display: flex;
+}
+.addon-settings {
+  padding: 0 20px;
+}
+
+.settings-column {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.addon-setting {
+  margin: 10px;
+  margin-right: 20px;
+  min-height: 35px;
+  display: flex;
+  align-items: center;
+}
+
+.setting-label {
+  width: 200px;
+  text-transform: uppercase;
+  color: #aaa;
+  font-weight: 600;
+  font-size: 12px;
+  margin-right: 10px;
+}
+
+.setting-input {
+  color: #fff;
+  background: #222222;
+  border: 1px solid #000;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: 0.25s ease;
+  transition-property: box-shadow border;
+}
+.setting-input:focus {
+  outline: none;
+  border-color: #ff7b26;
+  box-shadow: 0 0 0 3px #ff7d265d;
+}
+
+.setting-input.check {
+  height: 20px;
+  width: 20px;
+}
+
+.setting-input.number {
+  border-radius: 20px;
+}
+
 .addon-check {
   margin-left: auto;
   padding: 5px;
 }
 
 .search-box {
-  height: 60px;
+  min-height: 60px;
   background: #2a2a2a;
   display: flex;
   align-items: center;
@@ -179,7 +319,8 @@ h1 {
   border: none;
   border-radius: 4px 0 0 4px;
   color: #fff;
-  width: 100px;
+  width: 150px;
+  height: 16px;
 }
 .search-box input:focus {
   outline: none;
@@ -190,20 +331,27 @@ h1 {
 
 .search-box button {
   background: #111;
-  background-image: url("https://api.iconify.design/uil:search.svg?color=grey");
+  /* Background URL set by Vue */
   background-repeat: no-repeat;
   background-position: center;
-  height: 35px;
+  height: 36px;
   width: 45px;
   border: none;
   border-radius: 0 4px 4px 0;
-}
-.search-box button:hover {
-  background-image: url("https://api.iconify.design/uil:search.svg?color=white");
+  outline: none;
   cursor: pointer;
 }
 
-switch {
+.search-box .badge {
+  cursor: pointer;
+  border-bottom: none;
+}
+.search-box .badge .selected-badge {
+  cursor: pointer;
+  border-bottom: none;
+}
+
+.switch {
   display: block;
   background: #111;
   width: 40px;
@@ -213,7 +361,7 @@ switch {
   cursor: pointer;
   transition: all 0.25s ease;
 }
-switch::before {
+.switch::before {
   content: "";
   position: absolute;
   display: block;
@@ -226,10 +374,10 @@ switch::before {
   transition: all 0.25s ease;
 }
 
-switch[state="on"] {
+.switch[state="on"] {
   background: #ff7b26;
 }
-switch[state="on"]::before {
+.switch[state="on"]::before {
   background: #fff;
   left: 25px;
 }
@@ -241,7 +389,7 @@ switch[state="on"]::before {
   align-items: center;
 }
 
-.filter-selector span {
+.filter-text {
   font-weight: 600;
   margin-right: 20px;
 }
@@ -269,4 +417,26 @@ switch[state="on"]::before {
 }
 .filter-option.sel {
   background: #ff7b26;
+}
+.filter-option.disabled {
+  filter: grayscale(80%);
+  pointer-events: none;
+}
+
+.reverted {
+  transform: rotate(180deg);
+}
+
+.licenses-block {
+  padding: 2rem;
+}
+
+.licenses-body pre {
+  white-space: pre-wrap;
+  width: 70%;
+}
+input[type="color" i] {
+  height: 20px;
+  width: 20px;
+  padding: 1px 2px;
 }

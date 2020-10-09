@@ -1,0 +1,28 @@
+{
+  "name": "Data category tweaks",
+  "description": "Provides tweaks for the Data (\"Variables\") category in the editor.",
+  "warning": "This feature might make Scratch projects lag, especially if you're not using a powerful computer. Performance will be enhanced in future updates.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "options": [
+    {
+      "name": "Separate List Category",
+      "id": "separateListCategory",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Separate Sprite-only Variables",
+      "id": "separateLocalVariables",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "traps": true,
+  "tags": ["editor"],
+  "enabled_by_default": false
+}
