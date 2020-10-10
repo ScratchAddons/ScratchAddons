@@ -27,7 +27,7 @@ function handleClick(e) {
     return;
   }
 
-  const fill = background.getAttribute("fill");
+  const fill = window.getComputedStyle(background).getPropertyValue("fill");
   if (!fill) {
     return;
   }
@@ -40,7 +40,7 @@ function handleClick(e) {
 
   widgetDiv.classList.add("u-contextmenu-colored");
   widgetDiv.style.setProperty("--u-contextmenu-bg", fill);
-  widgetDiv.style.setProperty("--u-contextmenu-border", border);
+  widgetDiv.style.setProperty("#003", border);
 }
 
 function rgb2hsl(rgb) {

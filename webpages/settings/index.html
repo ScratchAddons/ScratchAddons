@@ -127,7 +127,7 @@
             <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
               <a href="./licenses.html?libraries={{ addon.libraries.join(',') }}">View library licenses</a>
             </div>
-            <div class="settings-column">
+            <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
               <div class="addon-setting" v-for="setting of addon.options">
                 <div class="setting-label">{{ setting.name }}</div>
                 <input
@@ -166,12 +166,22 @@
                   v-if="setting.type === 'color'"
                   :placeholder="setting.default"
                 />
+                <button
+                  type="clear-button"
+                  class="setting-input"
+                  v-model="addonSettings[addon._addonId][setting.id]"
+                  :disabled="!addon._enabled"
+                  v-if="setting.type === 'color'"
+                  @click="updateOption(setting.id, setting.default, addon)"
+                >
+                  Clear
+                </button>
                 <div class="filter-options" v-if="setting.type === 'select'">
                   <div
                     class="filter-option"
                     v-for="option of setting.potential_values"
                     :class="{'sel' : addonSettings[addon._addonId][setting.id] === option, 'disabled': !addon._enabled}"
-                    @click="updateSelect(setting.id, option, addon);"
+                    @click="updateOption(setting.id, option, addon);"
                   >
                     {{ option }}
                   </div>
