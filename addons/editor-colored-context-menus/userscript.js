@@ -40,7 +40,7 @@ function handleClick(e) {
 
   widgetDiv.classList.add("u-contextmenu-colored");
   widgetDiv.style.setProperty("--u-contextmenu-bg", fill);
-  widgetDiv.style.setProperty("#003", border);
+  widgetDiv.style.setProperty("--u-contextmenu-border", border);
 }
 
 function rgb2hsl(rgb) {
