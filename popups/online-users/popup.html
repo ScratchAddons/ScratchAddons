@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Scratch Addons - Online users</title>
+    <link rel="stylesheet" href="popup.css" />
+    <link href="../../libraries/Sora.css" rel="stylesheet" />
+    <script src="../../libraries/vue.js" defer></script>
+    <script src="./popup.js" defer></script>
+  </head>
+
+  <body style="display: none" v-show="loaded">
+    <div id="search">
+      <!-- searches online users -->
+    </div>
+    
+    <ul v-if="searching">
+      <li v-for="(user, index) in onlineUsers" :style="{ list-style-image: 'url(' + usersPfp[index] + ')' }">
+        <a :href="usersUrls[index]">{{ user }} </a>
+      </li>
+    </ul>
+  </body>
+</html>
