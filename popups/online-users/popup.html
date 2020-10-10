@@ -16,7 +16,7 @@
 
     <ul v-if="searching">
       <li v-for="(user, index) in onlineUsers" :style="{ list-style-image: 'url(' + usersPfp[index] + ')' }">
-        <a :href="usersUrls[index]">{{ user }} </a>
+        <a :href="usersUrls[index]"> {{ user }} </a>
       </li>
     </ul>
   </body>
