@@ -29,7 +29,7 @@ class StateProxy {
   set(target, key, value) {
     const oldValue = target[key];
     target[key] = value;
-    messageForAllTabs({ newGlobalState: target });
+    messageForAllTabs({ newGlobalState: _globalState });
 
     if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
       stateChange(this.name, key, value);
@@ -48,25 +48,9 @@ function messageForAllTabs(message) {
 }
 
 function stateChange(parentObjectPath, key, value) {
-  const stackTrace = new Error().stack.split("\n")[3];
-  let setterUrl = stackTrace.substring(
-    stackTrace.includes("@")
-      ? stackTrace.indexOf("@") + 1
-      : stackTrace.includes("(")
-      ? stackTrace.indexOf("(") + 1
-      : stackTrace.indexOf("at ") + 3,
-    stackTrace.includes(")") ? stackTrace.indexOf(")") : stackTrace.length
-  );
-
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
-  console.log(
-    `%c${objectPath}`,
-    "font-weight: bold;",
-    "is now: ",
-    objectPathArr[0] === "auth" ? "[redacted]" : value,
-    `\nChanged by: ${setterUrl}`
-  );
+  console.log(`%c${objectPath}`, "font-weight: bold;", "is now: ", objectPathArr[0] === "auth" ? "[redacted]" : value);
   if (objectPathArr[0] === "auth" && key !== "scratchLang") {
     scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
     messageForAllTabs({ fireEvent: { target: "auth", name: "change" } });

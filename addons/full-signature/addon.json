@@ -11,11 +11,10 @@
   ],
   "options": [
     {
-      "name": "Full Signature Mode",
-      "id": "signatureselect",
-      "type": "select",
-      "potential_values": ["Expand Button in Footer", "Expand Button in Message Body", "Always Show", "Off"],
-      "default": "Expand Button in Message Body"
+      "name": "Show scroll for forum signatures",
+      "id": "signature",
+      "type": "boolean",
+      "default": true
     },
     {
       "name": "Show scroll for What I've been doing",
@@ -26,19 +25,11 @@
   ],
   "userstyles": [
     {
-      "url": "expand.css",
+      "url": "signature.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "setting_match": {
-        "setting_id": "signatureselect",
-        "setting_value": "Expand Button in Footer"
-      }
-    },
-    {
-      "url": "always.css",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "setting_match": {
-        "setting_id": "signatureselect",
-        "setting_value": "Always Show"
+        "setting_id": "signature",
+        "setting_value": true
       }
     },
     {
@@ -47,24 +38,6 @@
       "setting_match": {
         "setting_id": "whatworkingon",
         "setting_value": true
-      }
-    }
-  ],
-  "userscripts": [
-    {
-      "url": "expand.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "setting_match": {
-        "setting_id": "signatureselect",
-        "setting_value": "Expand Button in Footer"
-      }
-    },
-    {
-      "url": "expand_body.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "setting_match": {
-        "setting_id": "signatureselect",
-        "setting_value": "Expand Button in Message Body"
       }
     }
   ],

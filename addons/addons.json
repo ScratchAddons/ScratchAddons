@@ -1,10 +1,10 @@
 [
-  "// Note: these addons need this exact order to work properly,",
+  "// Note: these themes need this exact order to work properly,",
   "// because the first in the list gets their CSS injected first,",
-  "// and so on, and we want dark mode to make other addons dark.",
+  "// and so on, and we want some themes to override others.",
+  "// UPDATE v1.1.0: themes are now always injected after non-theme",
+  "// userstyles, so only themes should be listed here.",
   "// For editor:",
-  "editor-searchable-dropdowns",
-  "editor-devtools",
   "editor-dark-mode",
   "editor-colored-context-menus",
   "editor-stage-left",
@@ -13,6 +13,9 @@
   "scratchr2",
 
   "// Other addons:",
+  "editor-searchable-dropdowns",
+  "editor-devtools",
+  "forum-search",
   "msg-count-badge",
   "scratch-notifier",
   "discuss-button",
@@ -29,8 +32,8 @@
   "youtube-fullscreen",
   "data-category-tweaks",
   "full-signature",
-  "forum-search",
   "60fps",
+  "search-profile",
   "better-emojis",
   "cloud-games"
 ]

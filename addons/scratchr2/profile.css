@@ -98,7 +98,7 @@
 .activity-stream .actor a {
   color: #575e75 !important;
 }
-#content > .box:not(#profile-data):not(.slider-carousel-container) {
+#content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404) {
   border-radius: 0;
   border: none;
   background: rgba(77, 151, 255, 0.1);

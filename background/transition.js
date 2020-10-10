@@ -3,3 +3,4 @@ chrome.runtime.onInstalled.addListener((details) => {
     chrome.tabs.create({ url: "https://scratchaddons.com/scratch-messaging-transition" });
   }
 });
+chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");

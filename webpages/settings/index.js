@@ -1,6 +1,7 @@
 const vue = new Vue({
   el: "body",
   data: {
+    loaded: false,
     manifests: [],
     selectedTab: "all",
     selectedTag: null,
@@ -75,6 +76,18 @@ const vue = new Vue({
     },
   },
   methods: {
+    openReview() {
+      if (typeof browser !== "undefined") {
+        window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
+      } else {
+        window.open(
+          `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`
+        );
+      }
+    },
+    openCredits() {
+      window.open(`https://scratchaddons.com/contributors`);
+    },
     openFeedback() {
       window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}`);
     },
@@ -171,6 +184,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
   manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
   vue.manifests = manifests.map(({ manifest }) => manifest);
+  vue.loaded = true;
 });
 
 window.addEventListener("keydown", function (e) {

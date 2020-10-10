@@ -17,6 +17,8 @@ const popups = [
   },
 ];
 
+let currentPopup = popups[0];
+
 for (const popup of popups) {
   const el = document.createElement("div");
   el.classList.add("popup-name");
@@ -37,12 +39,16 @@ for (const popup of popups) {
     popoutA.appendChild(img);
     el.appendChild(popoutA);
   }
-  el.onclick = () => setPopup(popup);
+  el.onclick = () => {
+    if (currentPopup !== popup) setPopup(popup);
+  };
   document.getElementById("popup-chooser").appendChild(el);
 }
-setPopup(popups[0]);
+
+setPopup(currentPopup);
 
 function setPopup(popup) {
+  currentPopup = popup;
   document.getElementById("iframe").src = `../../popups/${popup.url}`;
   if (document.querySelector(".popup-name.sel")) document.querySelector(".popup-name.sel").classList.remove("sel");
   document.querySelector(`.popup-name[data-id="${popup.addonId}"]`).classList.add("sel");

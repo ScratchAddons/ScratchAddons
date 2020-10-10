@@ -9,7 +9,7 @@
     <script src="../../libraries/vue.js" defer></script>
     <script src="index.js" defer></script>
   </head>
-  <body>
+  <body style="display: none" v-show="loaded">
     <div class="navbar">
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1>Settings</h1>
@@ -32,7 +32,15 @@
           <img src="./brush.svg" />
           <span>Themes</span>
         </div>
-        <div class="category" style="margin-top: auto; cursor: pointer" @click="openFeedback()">
+        <div class="category" style="margin-top: auto; cursor: pointer" @click="openCredits()">
+          <img src="./credits.svg" />
+          <span>Credits</span>
+        </div>
+        <div class="category" style="cursor: pointer" @click="openReview()">
+          <img src="./review.svg" />
+          <span>Review</span>
+        </div>
+        <div class="category" style="cursor: pointer" @click="openFeedback()">
           <img src="./feedback.svg" />
           <span>Send feedback</span>
         </div>

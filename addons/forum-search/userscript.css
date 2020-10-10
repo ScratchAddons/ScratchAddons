@@ -6,6 +6,14 @@
   display: none;
 }
 
+.forum-search-list .blockpost .box-head a {
+  display: inline-block;
+  max-width: 60%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .post_body_html img {
   max-width: 100%;
 }

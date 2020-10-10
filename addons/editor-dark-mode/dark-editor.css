@@ -159,7 +159,8 @@ body {
 }
 
 [class^="gui_tab"] span {
-  font-weight: 800;
+  /* s-a */
+  font-weight: 700;
 }
 
 [class^="gui_tab"] li:not([aria-selected="true"]) > span {
@@ -189,16 +190,16 @@ body {
   fill: hsla(215, 60%, 40%, 1) !important;
 }
 
-input:not([name="title"]) {
+input:not([name="title"]):not([name="q"]) {
   background: #444;
   color: #fff !important;
 }
 
-input::placeholder {
+input:not([name="title"]):not([name="q"])::placeholder {
   color: #ddd;
 }
 
-input:focus {
+input:not([name="title"]):not([name="q"]):focus {
   box-shadow: 0 0 0 0.25rem hsla(215, 100%, 55%, 0.45) !important;
 }
 
@@ -289,4 +290,11 @@ input:focus {
 
 [class^="tool-select-base_tool-select"] {
   filter: brightness(2) saturate(0.25);
+}
+
+/* s-a */
+.paint-editor_button-group-button-icon_10kVn,
+.color-picker_swatch-icon_Z7osI,
+.scratchCategoryId-music > .scratchCategoryItemIcon {
+  filter: brightness(100);
 }

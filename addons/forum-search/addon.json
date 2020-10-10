@@ -1,5 +1,5 @@
 {
-  "name": "Forum Search",
+  "name": "Forums search",
   "description": "Adds a post search to the forum homepage. Uses ScratchDB for information.",
   "credits": [
     {
@@ -18,6 +18,6 @@
       "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
-  "tags": ["forums", "community", "beta"],
+  "tags": ["forums", "community"],
   "enabled_by_default": false
 }
