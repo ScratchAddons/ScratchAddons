@@ -2,7 +2,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request === "sendContentScriptInfo") {
     chrome.tabs.sendMessage(sender.tab.id, "getInitialUrl", async (res) => {
       if (res) {
-        chrome.tabs.sendMessage(sender.tab.id, { contentScriptInfo: (await getContentScriptInfo(res)) });
+        chrome.tabs.sendMessage(sender.tab.id, { contentScriptInfo: await getContentScriptInfo(res) });
       }
     });
   }
@@ -69,7 +69,8 @@ const intervalsMap = new Map();
 // - Sending the data every 100ms
 // - Sending the data straight away to that tab - won't work most times
 // - Wait until the content script sends "ready" and and then send the data
-chrome.webRequest.onBeforeRequest.addListener(async (request) => {
+chrome.webRequest.onBeforeRequest.addListener(
+  async (request) => {
     if (intervalsMap.has(request.tabId)) {
       // This might happen with a redirect, we don't want to keep sending or listening for old data on the tab
       const info = intervalsMap.get(request.tabId);
@@ -83,32 +84,37 @@ chrome.webRequest.onBeforeRequest.addListener(async (request) => {
       clearInterval(intervalId);
       chrome.runtime.onMessage.removeListener(listener);
       if (intervalsMap.has(tabId) && intervalsMap.get(tabId).intervalId === intervalId) intervalsMap.delete(tabId);
-    }
+    };
 
     let messageListener;
 
     let timesSent = 0;
-    const interval = setInterval(
-      () => {
-        chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, (res) => {
-          if (res) removeInterval(request.tabId, interval, messageListener);
-        });
-        timesSent++;
-        if (timesSent === 300) removeInterval(request.tabId, interval, messageListener);
-      },
-      100
-    );
+    const interval = setInterval(() => {
+      chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, (res) => {
+        if (res) removeInterval(request.tabId, interval, messageListener);
+      });
+      timesSent++;
+      if (timesSent === 300) removeInterval(request.tabId, interval, messageListener);
+    }, 100);
 
     messageListener = (request, sender, sendResponse) => {
       if (request === "ready" && sender.tab.id === request.tabId) {
-        chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, res => res && removeInterval(request.tabId, interval, messageListener));
+        chrome.tabs.sendMessage(
+          request.tabId,
+          { contentScriptInfo: data },
+          (res) => res && removeInterval(request.tabId, interval, messageListener)
+        );
       }
     };
     chrome.runtime.onMessage.addListener(messageListener);
 
-    intervalsMap.set(request.tabId, { intervalId: interval, messageListener } );
+    intervalsMap.set(request.tabId, { intervalId: interval, messageListener });
 
-    chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, res => res && removeInterval(request.tabId, interval, messageListener));
+    chrome.tabs.sendMessage(
+      request.tabId,
+      { contentScriptInfo: data },
+      (res) => res && removeInterval(request.tabId, interval, messageListener)
+    );
   },
   {
     urls: ["https://scratch.mit.edu/*"],

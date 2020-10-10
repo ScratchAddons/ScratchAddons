@@ -37,12 +37,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.runtime.sendMessage("ready");
 window.addEventListener("load", () => {
   if (!receivedContentScriptInfo) {
-    // This might happen sometimes, the background page might not 
+    // This might happen sometimes, the background page might not
     // have seen this tab loading, for example, at startup.
     chrome.runtime.sendMessage("sendContentScriptInfo");
   }
 });
-
 
 function injectUserstylesAndThemes({ userstyleUrls, themes }) {
   document.querySelectorAll(".scratch-addons-theme").forEach((style) => style.remove());
