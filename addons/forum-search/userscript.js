@@ -235,9 +235,9 @@ export default async function ({ addon, global, console }) {
   searchContent.id = "forum-search-list";
 
   // now add the search bar
-  let navIndex = document.querySelector("ul.conr");
-  navIndex.parentNode.after(searchContent);
-  navIndex.parentNode.after(search);
+  let navIndex = document.querySelector("#brdmenu");
+  navIndex.after(searchContent);
+  navIndex.after(search);
 
   search.addEventListener("submit", (e) => {
     triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value);
