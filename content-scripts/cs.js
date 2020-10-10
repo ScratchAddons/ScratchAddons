@@ -10,9 +10,12 @@ let receivedContentScriptInfo = false;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request.contentScriptInfo) {
-    sendResponse("OK");
+    // The request wasn't for this exact URL, might happen sometimes
+    if (request.contentScriptInfo.url !== initialUrl) return;
+    // Only run once - updates go through themesUpdated
     if (receivedContentScriptInfo) return;
     receivedContentScriptInfo = true;
+    sendResponse("OK");
 
     if (document.head) onHeadAvailable(request.contentScriptInfo);
     else {
@@ -31,6 +34,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     injectUserstylesAndThemes({ themes: request.themesUpdated });
   }
 });
+chrome.runtime.sendMessage("ready");
+window.addEventListener("load", () => {
+  if (!receivedContentScriptInfo) {
+    // This might happen sometimes, the background page might not 
+    // have seen this tab loading, for example, at startup.
+    chrome.runtime.sendMessage("sendContentScriptInfo");
+  }
+});
+
 
 function injectUserstylesAndThemes({ userstyleUrls, themes }) {
   document.querySelectorAll(".scratch-addons-theme").forEach((style) => style.remove());

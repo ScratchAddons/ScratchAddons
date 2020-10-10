@@ -1,10 +1,18 @@
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request === "sendContentScriptInfo") {
+    chrome.tabs.sendMessage(sender.tab.id, "getInitialUrl", async (res) => {
+      if (res) {
+        chrome.tabs.sendMessage(sender.tab.id, { contentScriptInfo: (await getContentScriptInfo(res)) });
+      }
+    });
+  }
   if (request === "openSettingsOnThisTab")
     chrome.tabs.update(sender.tab.id, { url: chrome.runtime.getURL("webpages/settings/index.html") });
 });
 
-async function getContentScriptInfo(url, tabId) {
+async function getContentScriptInfo(url) {
   const data = {
+    url,
     globalState: {},
     addonsWithUserscripts: [],
     userstyleUrls: [],
@@ -55,28 +63,66 @@ async function getContentScriptInfo(url, tabId) {
   return data;
 }
 
-chrome.webNavigation.onCommitted.addListener(
-  async (request) => {
+// Key: int tabId, value: object { intervalId, messageListener }
+const intervalsMap = new Map();
+// In order to send information as soon as possible, data is sent in 3 ways:
+// - Sending the data every 100ms
+// - Sending the data straight away to that tab - won't work most times
+// - Wait until the content script sends "ready" and and then send the data
+chrome.webRequest.onBeforeRequest.addListener(async (request) => {
+    if (intervalsMap.has(request.tabId)) {
+      // This might happen with a redirect, we don't want to keep sending or listening for old data on the tab
+      const info = intervalsMap.get(request.tabId);
+      clearInterval(info.intervalId);
+      chrome.runtime.onMessage.removeListener(info.messageListener);
+    }
+
     const data = await getContentScriptInfo(request.url, request.tabId);
-    let receivedResponse = false;
-    chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, (res) => res && (receivedResponse = true));
+
+    const removeInterval = (tabId, intervalId, listener) => {
+      clearInterval(intervalId);
+      chrome.runtime.onMessage.removeListener(listener);
+      if (intervalsMap.has(tabId) && intervalsMap.get(tabId).intervalId === intervalId) intervalsMap.delete(tabId);
+    }
+
+    let messageListener;
+
+    let timesSent = 0;
     const interval = setInterval(
-      () =>
-        chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, (res) => res && clearInterval(interval)),
-      200
+      () => {
+        chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, (res) => {
+          if (res) removeInterval(request.tabId, interval, messageListener);
+        });
+        timesSent++;
+        if (timesSent === 300) removeInterval(request.tabId, interval, messageListener);
+      },
+      100
     );
+
+    messageListener = (request, sender, sendResponse) => {
+      if (request === "ready" && sender.tab.id === request.tabId) {
+        chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, res => res && removeInterval(request.tabId, interval, messageListener));
+      }
+    };
+    chrome.runtime.onMessage.addListener(messageListener);
+
+    intervalsMap.set(request.tabId, { intervalId: interval, messageListener } );
+
+    chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, res => res && removeInterval(request.tabId, interval, messageListener));
   },
   {
-    url: [{ hostEquals: "scratch.mit.edu" }],
+    urls: ["https://scratch.mit.edu/*"],
+    types: ["main_frame"],
   }
 );
+
 scratchAddons.localEvents.addEventListener("themesUpdated", () => {
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", async (res) => {
           if (res) {
-            chrome.tabs.sendMessage(tab.id, { themesUpdated: (await getContentScriptInfo(res, tab.id)).themes });
+            chrome.tabs.sendMessage(tab.id, { themesUpdated: (await getContentScriptInfo(res)).themes });
           }
         });
       }
