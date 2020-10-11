@@ -47,7 +47,7 @@ export default class Notifications extends EventTarget {
     }
     // if muted, do not create notification and trigger close event immediately
     if (dontgetnotification === true) {
-      break
+      break;
     }
     const notifId = `${this._addonId}__${Date.now()}`;
     let newOpts;
