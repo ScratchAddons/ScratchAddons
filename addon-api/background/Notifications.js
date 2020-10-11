@@ -45,7 +45,10 @@ export default class Notifications extends EventTarget {
     if (typeof opts !== "object") {
       throw "ScratchAddons exception: do not specify a notification ID.";
     }
-    // TODO: if muted, do not create notification and trigger close event immediately
+    // if muted, do not create notification and trigger close event immediately
+    if (dontgetnotification === true) {
+      break
+    }
     const notifId = `${this._addonId}__${Date.now()}`;
     let newOpts;
     if (typeof InstallTrigger !== "undefined") {

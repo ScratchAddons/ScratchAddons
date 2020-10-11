@@ -1,3 +1,5 @@
+var dontgetnotification = null //declare notification variable globally
+
 scratchAddons.localEvents.addEventListener("badgeUpdateNeeded", () => {
   // Note: for now, only one addon can use the badge.
   // If you want your addon to use the badge's text
@@ -5,7 +7,7 @@ scratchAddons.localEvents.addEventListener("badgeUpdateNeeded", () => {
   const hardcodedBadgeUser = "msg-count-badge";
   if (scratchAddons.localState.addonsEnabled[hardcodedBadgeUser]) {
     let text = scratchAddons.localState.badges[hardcodedBadgeUser].text;
-    if (text === null || text === 0) text = "";
+    if (text === null || text === 0 || dontgetnotification === true) text = "";
     else if (typeof text === "number") text = String(text);
     chrome.browserAction.setBadgeText({ text });
     let color = scratchAddons.localState.badges[hardcodedBadgeUser].color;
