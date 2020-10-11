@@ -33,6 +33,7 @@ export default async function ({ addon, global, console }) {
     },
     sounds: {
       color: "#CF63CF",
+      alt: "sound",
     },
     events: {
       color: "#DE9E2E",
