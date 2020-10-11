@@ -12,6 +12,12 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "theme3.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
   "options": [
     {
       "name": "motion",
