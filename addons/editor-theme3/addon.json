@@ -1,6 +1,6 @@
 {
-  "name": "Theme3 - Customizable block colors",
-  "description": "Customize your block color theme with easy color selectors",
+  "name": "Customizable block colors",
+  "description": "Edit block colors for each category in the editor.",
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"
