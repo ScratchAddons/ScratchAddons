@@ -54,6 +54,7 @@ export default async function ({ addon, global, console }) {
     "data-lists": {
       color: "#FF661A",
       alt: "lists",
+      var: "dataLists",
     },
     custom: {
       color: "#FF6680",
@@ -67,47 +68,35 @@ export default async function ({ addon, global, console }) {
 
   for (var prop in categories) {
     if (addon.settings.get("randomize-color")) {
-      categories[prop].color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-    } else {
-      categories[prop].color = addon.settings.get(prop + "-color");
+      document
+        .querySelector("html")
+        .style.setProperty(
+          `--editorTheme3-${categories[prop].var ? categories[prop].var : prop}Color`,
+          "#" + ("00000" + ((Math.random() * (1 << 24)) | 0).toString(16)).slice(-6)
+        );
     }
     stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground {
-			fill: ${categories[prop].color};
-			stroke: ${adjust(categories[prop].color, -35)} !important;
+			fill: var(--editorTheme3-${categories[prop].var ? categories[prop].var : prop}Color);
 		}
 		.scratchCategoryId-${categories[prop].alt ? categories[prop].alt : prop} > .scratchCategoryItemBubble {
-			background-color: ${categories[prop].color} !important;
+			background-color: var(--editorTheme3-${categories[prop].var ? categories[prop].var : prop}Color) !important;
 		}
 	    `;
     if (prop == "custom") {
       stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
-				fill: ${categories[prop].color} !important;
-				stroke: ${adjust(categories[prop].color, -35)} !important;
+				fill: var(--editorTheme3-${prop}Color) !important;
         	}`;
     }
     if (prop == "sensing") {
       stylesheet += `path.blocklyBlockBackground[fill="#5CB1D6"] {
-				fill: ${categories[prop].color};
-				stroke: ${adjust(categories[prop].color, -35)} !important;
+				fill: var(--editorTheme3-${prop}Color);
         	}`;
     }
     if (prop == "events") {
       stylesheet += `path.blocklyBlockBackground[fill="#FFBF00"] {
-				fill: ${categories[prop].color};
-				stroke: ${adjust(categories[prop].color, -35)} !important;
+				fill: var(--editorTheme3-${prop}Color);
         	}`;
     }
-  }
-
-  function adjust(color, amount) {
-    return (
-      "#" +
-      color
-        .replace(/^#/, "")
-        .replace(/../g, (color) =>
-          ("0" + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2)
-        )
-    );
   }
 
   style.innerHTML = stylesheet;
