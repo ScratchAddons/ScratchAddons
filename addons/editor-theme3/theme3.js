@@ -99,7 +99,7 @@ export default async function ({ addon, global, console }) {
     }
   }
 
-  style.innerHTML = stylesheet;
+  style.textContent = stylesheet;
 
   document.head.appendChild(style);
 }
