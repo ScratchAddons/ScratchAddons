@@ -53,10 +53,10 @@ function injectUserstylesAndThemes({ userstyleUrls, themes }) {
     else document.documentElement.appendChild(link);
   }
   for (const theme of themes) {
-    // theme.addonId currently unutilized
     for (const css of theme.styles) {
       const style = document.createElement("style");
       style.classList.add("scratch-addons-theme");
+      style.setAttribute("data-addon-id", theme.addonId);
       style.textContent = css;
       if (document.body) document.documentElement.insertBefore(style, document.body);
       else document.documentElement.appendChild(style);
