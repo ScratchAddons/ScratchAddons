@@ -8,7 +8,6 @@ export default async function ({ addon, global, console }) {
   const status = response.status;
   // If the user page exists make the link to the user page
   if (status === 200) {
-
     //Select where the new tab will be appended, and create a new tab
     const tab = nav.appendChild(document.createElement("a")),
       li = tab.appendChild(document.createElement("li")),
