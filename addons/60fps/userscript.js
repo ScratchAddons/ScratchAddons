@@ -5,7 +5,7 @@ export default async function ({ addon, global, console }) {
 
   let altPressesCount = 0;
   let altPressedRecently = false;
-  window.addEventListener("keydown", event => {
+  window.addEventListener("keydown", (event) => {
     if (event.key === "Alt") {
       altPressesCount++;
       const pressCount = altPressesCount;
