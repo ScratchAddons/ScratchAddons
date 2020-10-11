@@ -12,7 +12,15 @@
         <img src="../../images/icon.png" id="logo" alt="Logo" />
         <span id="title-text">Scratch Addons</span>
       </div>
-      <div id="MuteUnmute" title="Notifications On/Off">//TODO: Add a switch between svgs</div>
+      <div id="MuteUnmute" title="Notifications On/Off"> <script type="text/javascript">
+      if (localStorage.getItem("notifset") == true) {
+        <img src="./notificontrue.png" />
+      }
+      else if (localStorage.getItem("notifset") == false) {
+        <img src="./notificonfalse.png" />
+      }
+        </script>
+       //TODO: Add a switch between svgs</div>
       <div id="settings" title="Settings"><img src="./settings.svg" /></div>
     </div>
     <div id="popups">

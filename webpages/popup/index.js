@@ -1,9 +1,8 @@
 document.getElementById("MuteUnmute").onclick = function () {
-  var dontgetnotification === localStorage.getItem("notifset");
-  if (dontgetnotification === true) {
+  if (localStorage.getItem("notifset") === true) {
     localStorage.setItem("notifset", false);
   }
-  else if (dontgetnotification === false || null) {
+  else if (localStorage.getItem("notifset") === false || null) {
     localStorage.setItem("notifset", true);
   }
 }
