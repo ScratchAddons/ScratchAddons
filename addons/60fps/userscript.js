@@ -17,8 +17,7 @@ export default async function ({ addon, global, console }) {
   });
 
   while (true) {
-    let button = await addon.tab.waitForElement("img.green-flag_green-flag_1kiAo:not([fpschecked])");
-    button.setAttribute("fpschecked", "true");
+    let button = await addon.tab.waitForElement("img.green-flag_green-flag_1kiAo", { markAsSeen: true });
     let mode = true;
 
     button.addEventListener("click", (e) => {
