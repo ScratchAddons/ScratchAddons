@@ -15,11 +15,6 @@ const popups = [
     name: "☁️ Games",
     url: "cloud-games/popup.html",
   },
-  {
-    asdonId: "online-users",
-    name: "👤 Online users",
-    url: "online-users/popup.html",
-  },
 ];
 
 let currentPopup = popups[0];
