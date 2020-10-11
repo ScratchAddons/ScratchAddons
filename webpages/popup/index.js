@@ -1,3 +1,13 @@
+document.getElementById("MuteUnmute").onclick = () => {
+  var dontgetnotification === localStorage.getItem("notifset")
+  if (dontgetnotification === true) { 
+    dontgetnotification === false //TODO: Change var to false
+  }
+  else if (dontgetnotification === false || null) {
+    dontgetnotification === true //TODO: Change to true
+  }
+}
+
 document.getElementById("settings").onclick = () => {
   chrome.runtime.openOptionsPage();
   setTimeout(() => window.close(), 100);

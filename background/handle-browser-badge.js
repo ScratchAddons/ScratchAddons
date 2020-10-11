@@ -1,4 +1,7 @@
-var dontgetnotification = null //declare notification variable globally
+if (localStorage.getItem("notifset") ==! true || false) {
+  var dontgetnotification = null; 
+  localStorage.setItem("notifset", dontgetnotification); //access notification variable globally
+}
 
 scratchAddons.localEvents.addEventListener("badgeUpdateNeeded", () => {
   // Note: for now, only one addon can use the badge.
