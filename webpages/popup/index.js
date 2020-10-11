@@ -1,10 +1,10 @@
-document.getElementById("MuteUnmute").onclick = () => {
-  var dontgetnotification === localStorage.getItem("notifset")
-  if (dontgetnotification === true) { 
-    dontgetnotification === false //TODO: Change var to false
+document.getElementById("MuteUnmute").onclick = function () {
+  var dontgetnotification === localStorage.getItem("notifset");
+  if (dontgetnotification === true) {
+    localStorage.setItem("notifset", false);
   }
   else if (dontgetnotification === false || null) {
-    dontgetnotification === true //TODO: Change to true
+    localStorage.setItem("notifset", true);
   }
 }
 
