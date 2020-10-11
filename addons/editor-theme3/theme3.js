@@ -10,7 +10,7 @@ export default async function ({ addon, global, console }) {
 	g[data-argument-type="dropdown"] > rect,
 	g[data-argument-type="variable"] > rect,
 	g[data-argument-type="variable"] > path,
-	g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"] > path,
+	g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > path,
 	path[data-argument-type="boolean"] {
 		stroke: #0003;
 		fill: #0001;
