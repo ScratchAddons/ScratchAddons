@@ -7,10 +7,10 @@ var vue = new Vue({
   computed: {
     usersPfp: function () {
       var list;
-      this.users.forEach((user) => {
-        fetch("https://api.scratch.mit.edu/users/" + user)
-          .then((res) => res.json())
-          .then((json) => list.push(json.profile.images["32x32"]));
+      this.users.forEach(async function (user) {
+        const response = await fetch("https://api.scratch.mit.edu/users/" + user);
+        const json = await response.json();
+        list.push(json.profile.images["32x32"]);
       });
       return list;
     },
@@ -27,4 +27,4 @@ var vue = new Vue({
 fetchUsers();
 vue.loaded = true;
 
-function fetchUsers() {}
+async function fetchUsers() {}
