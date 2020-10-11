@@ -86,6 +86,58 @@
       "default": false
     }
   ],
+  "presets": [
+    {
+      "name": "Scratch 2.0 colors",
+      "id": "colors2",
+      "values": [
+        {
+          "id": "motion-color",
+          "value": "#4C97FF"
+        },
+        {
+          "id": "looks-color",
+          "value": "#9966FF"
+        },
+        {
+          "id": "sounds-color",
+          "value": "#CF63CF"
+        },
+        {
+          "id": "events-color",
+          "value": "#DE9E2E"
+        },
+        {
+          "id": "control-color",
+          "value": "#FFBF00"
+        },
+        {
+          "id": "sensing-color",
+          "value": "#5CB1D6"
+        },
+        {
+          "id": "operators-color",
+          "value": "#59C059"
+        },
+        {
+          "id": "data-color",
+          "value": "#FF8C1A"
+        },
+        {
+          "id": "data-lists-color",
+          "value": "#FF661A"
+        },
+        {
+          "id": "custom-color",
+          "value": "#FF6680"
+        },
+        {
+          "id": "Pen-color",
+          "value": "#0FBD8C"
+        }
+      ]
+    }
+  ],
   "traps": true,
   "tags": ["editor", "theme", "beta"],
   "enabled_by_default": false

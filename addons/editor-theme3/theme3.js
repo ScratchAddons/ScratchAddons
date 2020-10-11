@@ -40,12 +40,6 @@ export default async function ({ addon, global, console }) {
     control: {
       color: "#FFBF00",
     },
-    // "events": {
-    // 	"color": "#FFBF00"
-    // },
-    // "control": {
-    // 	"color": "#FFAB19"
-    // },
     sensing: {
       color: "#5CB1D6",
     },
@@ -58,6 +52,7 @@ export default async function ({ addon, global, console }) {
     },
     "data-lists": {
       color: "#FF661A",
+      alt: "lists",
     },
     custom: {
       color: "#FF6680",
