@@ -3,26 +3,37 @@ export default async function ({ addon, global, console }) {
 
   const vm = addon.tab.traps.onceValues.vm;
 
-  while (true) {
-    var button = await addon.tab.waitForElement("img.green-flag_green-flag_1kiAo:not([fpschecked])");
-    button.setAttribute("fpschecked", "true");
-    var mode = true;
+  let altPressesCount = 0;
+  let altPressedRecently = false;
+  window.addEventListener("keydown", event => {
+    if (event.key === "Alt") {
+      altPressesCount++;
+      const pressCount = altPressesCount;
+      altPressedRecently = true;
+      setTimeout(() => {
+        if (pressCount === altPressesCount) altPressedRecently = false;
+      }, 2500);
+    }
+  });
 
-    //console.log('just added class')
+  while (true) {
+    let button = await addon.tab.waitForElement("img.green-flag_green-flag_1kiAo:not([fpschecked])");
+    button.setAttribute("fpschecked", "true");
+    let mode = true;
 
     button.addEventListener("click", (e) => {
-      //console.log('click')
       if (e.altKey) {
-        console.log("toggle 60fps");
         mode = !mode;
         vm.setCompatibilityMode(mode);
-
-        if (mode) {
-          button.style.filter = "";
-        } else {
-          //60fps
-          button.style.filter = "hue-rotate(90deg)";
-        }
+        button.style.filter = mode ? "" : "hue-rotate(90deg)";
+      }
+    });
+    button.addEventListener("contextmenu", (e) => {
+      if (altPressedRecently) {
+        e.preventDefault();
+        mode = !mode;
+        vm.setCompatibilityMode(mode);
+        button.style.filter = mode ? "" : "hue-rotate(90deg)";
       }
     });
   }
