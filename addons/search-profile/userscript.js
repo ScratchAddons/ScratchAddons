@@ -8,7 +8,7 @@ export default async function ({ addon, global, console }) {
     span = li.appendChild(document.createElement("span"));
 
   //Link to the profile
-  tab.href = "/users/" + decodeURIComponent(document.querySelector('[name="q"]').value).trim() + "/";
+  tab.href = "/users/" + document.querySelector('[name="q"]').value.trim() + "/";
 
   //Set up the image.
   img.src = addon.self.dir + "/user.svg";
