@@ -12,9 +12,11 @@
     "default_title": "Scratch Addons"
   },
   "icons": {
-    "16": "images/extension-icon.png",
-    "48": "images/extension-icon.png",
-    "128": "images/extension-icon.png"
+    "16": "images/icon.png",
+    "32": "images/icon.png",
+    "48": "images/icon.png",
+    "96": "images/icon.png",
+    "128": "images/icon.png"
   },
   "content_scripts": [
     {
