@@ -263,6 +263,10 @@ h1 {
   flex-wrap: wrap;
 }
 
+.disabled {
+  opacity: 50%;
+}
+
 .addon-setting {
   margin: 10px;
   margin-right: 20px;
@@ -439,8 +443,9 @@ h1 {
   white-space: pre-wrap;
   width: 70%;
 }
+
 input[type="color" i] {
-  height: 20px;
-  width: 20px;
+  height: 29px;
+  width: 100px;
   padding: 1px 2px;
 }

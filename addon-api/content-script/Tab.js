@@ -28,6 +28,7 @@ export default class Tab {
       });
     }
     this.redux = new ReduxHandler();
+    this._waitForElementSet = new WeakSet();
   }
   loadScript(url) {
     return new Promise((resolve) => {
@@ -40,24 +41,29 @@ export default class Tab {
   getScratchVM() {
     return scratchAddons.methods.getScratchVM();
   }
-  waitForElement(selector) {
-    if (!document.querySelector(selector)) {
-      return new Promise((resolve) =>
-        new MutationObserver(function (mutationsList, observer) {
-          const elem = document.querySelector(selector);
-          if (elem) {
-            observer.disconnect();
-            resolve(elem);
-          }
-        }).observe(document.documentElement, {
-          attributes: true,
-          childList: true,
-          subtree: true,
-        })
-      );
-    } else {
-      return Promise.resolve(document.querySelector(selector));
+  waitForElement(selector, { markAsSeen = false } = {}) {
+    const firstQuery = document.querySelectorAll(selector);
+    for (const element of firstQuery) {
+      if (this._waitForElementSet.has(element)) continue;
+      if (markAsSeen) this._waitForElementSet.add(element);
+      return Promise.resolve(element);
     }
+    return new Promise((resolve) =>
+      new MutationObserver((mutationsList, observer) => {
+        const elements = document.querySelectorAll(selector);
+        for (const element of elements) {
+          if (this._waitForElementSet.has(element)) continue;
+          observer.disconnect();
+          resolve(element);
+          if (markAsSeen) this._waitForElementSet.add(element);
+          break;
+        }
+      }).observe(document.documentElement, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+      })
+    );
   }
   /**
    * @type {?string} editor mode (or null for non-editors).

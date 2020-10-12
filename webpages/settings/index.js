@@ -133,7 +133,7 @@ const vue = new Vue({
         );
       } else toggle();
     },
-    updateSelect(settingId, newValue, addon) {
+    updateOption(settingId, newValue, addon) {
       this.addonSettings[addon._addonId][settingId] = newValue;
       this.updateSettings(addon);
     },
@@ -185,6 +185,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
   vue.manifests = manifests.map(({ manifest }) => manifest);
   vue.loaded = true;
+  document.getElementById("searchBox").focus();
 });
 
 window.addEventListener("keydown", function (e) {

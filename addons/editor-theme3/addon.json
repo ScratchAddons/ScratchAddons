@@ -1,0 +1,98 @@
+{
+  "name": "Customizable block colors",
+  "description": "Edit block colors for each category in the editor.",
+  "credits": [
+    {
+      "name": "NitroCipher/ZenithRogue"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "theme3.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "theme3.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "options": [
+    {
+      "name": "motion",
+      "id": "motion-color",
+      "type": "color",
+      "default": "#4C97FF"
+    },
+    {
+      "name": "looks",
+      "id": "looks-color",
+      "type": "color",
+      "default": "#9966FF"
+    },
+    {
+      "name": "sounds",
+      "id": "sounds-color",
+      "type": "color",
+      "default": "#CF63CF"
+    },
+    {
+      "name": "events",
+      "id": "events-color",
+      "type": "color",
+      "default": "#FFBF00"
+    },
+    {
+      "name": "control",
+      "id": "control-color",
+      "type": "color",
+      "default": "#FFAB19"
+    },
+    {
+      "name": "sensing",
+      "id": "sensing-color",
+      "type": "color",
+      "default": "#5CB1D6"
+    },
+    {
+      "name": "operators",
+      "id": "operators-color",
+      "type": "color",
+      "default": "#59C059"
+    },
+    {
+      "name": "variables",
+      "id": "data-color",
+      "type": "color",
+      "default": "#FF8C1A"
+    },
+    {
+      "name": "lists",
+      "id": "data-lists-color",
+      "type": "color",
+      "default": "#FF661A"
+    },
+    {
+      "name": "custom",
+      "id": "custom-color",
+      "type": "color",
+      "default": "#FF6680"
+    },
+    {
+      "name": "Pen",
+      "id": "Pen-color",
+      "type": "color",
+      "default": "#0FBD8C"
+    },
+    {
+      "name": "RANDOMIZE",
+      "id": "randomize-color",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "traps": true,
+  "tags": ["editor", "theme", "beta"],
+  "enabled_by_default": false
+}
