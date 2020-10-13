@@ -133,8 +133,8 @@ const vue = new Vue({
         );
       } else toggle();
     },
-    updateOption(settingId, newValue, addon) {
-      this.addonSettings[addon._addonId][settingId] = newValue;
+    updateOption(id, newValue, addon) {
+      this.addonSettings[addon._addonId][id] = newValue;
       this.updateSettings(addon);
     },
     updateSettings(addon) {

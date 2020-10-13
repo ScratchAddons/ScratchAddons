@@ -34,5 +34,5 @@
     }
   ],
   "tags": ["editor", "recommended"],
-  "enabled_by_default": false
+  "enabledByDefault": false
 }
