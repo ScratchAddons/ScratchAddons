@@ -5,8 +5,9 @@ import dataURLToBlob from "../../libraries/data-url-to-blob.js";
 const DATA_PNG = "data:image/png;base64,";
 const template = document.getElementById("scratch-addons");
 
-export default class Tab {
+export default class Tab extends EventTarget {
   constructor(info) {
+    super();
     scratchAddons.eventTargets.tab.push(this);
     this.clientVersion = document.querySelector("meta[name='format-detection']")
       ? "scratch-www"
