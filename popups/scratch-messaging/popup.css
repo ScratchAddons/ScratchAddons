@@ -1,8 +1,9 @@
 html {
-  font-size: 15px;
+  font-size: 12px;
   height: 100%;
   scrollbar-width: thin;
-  scrollbar-color: #ff7b26 #adf;
+  scrollbar-color: #ff7b26;
+  color: #dddddd;
 }
 html.fullscreen {
   font-size: 15px;
@@ -11,12 +12,12 @@ html.fullscreen {
 
 body {
   margin: 0 auto;
-  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+  font-family: "Sora", sans-serif;
   width: auto;
   height: 500px;
   overflow-x: hidden;
   overflow-y: scroll;
-  background-color: rgba(77, 151, 255, 0.1);
+  background-color: #222;
   scrollbar-width: thin;
 }
 
@@ -24,10 +25,10 @@ body::-webkit-scrollbar {
   width: 10px;
 }
 body::-webkit-scrollbar-track {
-  background: #edf4ff;
+  background: #222;
 }
 body::-webkit-scrollbar-thumb {
-  background-color: #adf;
+  background-color: #2a2a2a;
   border-radius: 2px;
 }
 body:hover::-webkit-scrollbar-thumb,
@@ -55,40 +56,76 @@ a:hover {
   text-decoration: underline;
 }
 
-.message-type {
-  display: initial;
+button {
+  color: #fff;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #2a2a2a;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
+
+.btn-dropdown {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-radius: 4px;
+}
+.btn-dropdown:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sh .btn-dropdown {
+  transform: rotate(180deg);
+}
+
+.reverted {
+  transform: rotate(180deg);
+}
+
+.btn-dropdown img {
+  height: 23px;
+}
+
+.message-type {
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #2a2a2a;
+  margin: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
 .message-type-title {
-  font-size: 1.1rem;
+  font-size: 12px;
   color: white;
-  background-color: #fa4;
-  padding: 4px 16px 4px 16px;
-  font-weight: bold;
+  padding: 10px;
   cursor: default;
   display: flex;
-  /*margin-bottom: 8px;*/
   position: sticky;
-  /*box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);*/
-  text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  align-items: center;
+  border-bottom: 1px solid rgba(56, 52, 52, 0.2);
 }
+
+.message-type-details {
+  padding: 0px 20px 20px 20px;
+  font-size: 12px;
+}
+
 .hover-reverse {
-  background-color: #d93;
   cursor: pointer;
 }
 .sticky {
   position: sticky;
   top: 0;
   z-index: 999;
-}
-.hover-reverse:hover {
-  background-color: #fa4;
+  margin: 10px 0px;
 }
 .message-type-title-text {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   margin-right: auto;
+  margin-left: 15px;
   max-width: 75%;
 }
 .float-right {
@@ -101,15 +138,17 @@ a:hover {
   margin-left: 2px;
 }
 
-.message-type-details {
-  /*margin-bottom: 10px;*/
-  /*padding: 4px 16px 4px 16px;*/
-  padding: 8px;
-  font-size: 0.8rem;
-}
 .username-list > a {
   display: inline-block;
   margin-right: 10px;
+}
+
+.thread-list {
+  margin-bottom: 20px;
+}
+
+.thread-list:last-child {
+  margin-bottom: 0px !important;
 }
 
 .comment-chain {
@@ -122,11 +161,11 @@ a:hover {
 .comment {
   /*padding: 4px 16px 4px 16px;*/
   padding: 3px 8px;
-  background-color: rgba(255, 255, 255, 0.5);
-  /*border: 1px solid rgba(0, 0, 0, 0.1);*/
+  background: #222222;
+  border: 1px solid #000;
   border-radius: 8px;
   margin-bottom: 4px;
-  font-size: 0.85rem;
+  font-size: 12px;
 }
 .comment.unread,
 .unread .comment {
@@ -134,7 +173,6 @@ a:hover {
 }
 .comment-content {
   word-break: break-word;
-  font-size: 0.8rem;
 }
 .comment-content-text {
   margin-right: 10px;
@@ -243,7 +281,7 @@ a:hover {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: white;
+  background: #222;
   border-top: 1px solid #00000038;
   font-size: 0.9rem;
   text-align: center;
@@ -262,6 +300,7 @@ a:hover {
   height: 0.8rem;
   vertical-align: middle;
   opacity: 0.6;
+  filter: invert(1);
 }
 #open-messages {
   color: inherit;
