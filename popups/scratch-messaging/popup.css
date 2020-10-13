@@ -7,7 +7,6 @@ html {
 }
 html.fullscreen {
   font-size: 15px;
-  background-color: #e1e1e150;
 }
 
 body {
@@ -58,6 +57,7 @@ a:hover {
 
 button {
   color: #fff;
+  font-size: 12px;
   border-radius: 4px;
   border: 1px solid #333;
   background: #2a2a2a;
@@ -141,6 +141,10 @@ button {
   display: inline-block;
   margin-left: 2px;
 }
+.username-list {
+  padding: 0px 20px 20px 20px;
+  font-size: 12px;
+}
 
 .username-list > a {
   display: inline-block;
@@ -168,7 +172,7 @@ button {
 }
 .comment.unread,
 .unread .comment {
-  background-color: white;
+  background-color: #000;
 }
 .comment-content {
   word-break: break-word;
@@ -282,17 +286,16 @@ button {
   right: 0;
   background: #222;
   border-top: 1px solid #00000038;
-  font-size: 0.9rem;
+  font-size: 12px;
   text-align: center;
-  padding-bottom: 2px;
   box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.1);
-  height: 2rem;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 #bottom-bar > a:hover {
-  font-weight: bold;
+  color: #ff7b26;
   text-decoration: none;
 }
 #popout {
