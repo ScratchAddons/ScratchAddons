@@ -7,7 +7,7 @@
     "page": "background/background.html"
   },
   "browser_action": {
-    "default_icon": "images/extension-icon.png",
+    "default_icon": "images/icon.png",
     "default_popup": "webpages/popup/index.html",
     "default_title": "Scratch Addons"
   },
