@@ -103,12 +103,16 @@ button {
   display: flex;
   position: sticky;
   align-items: center;
-  border-bottom: 1px solid rgba(56, 52, 52, 0.2);
 }
 
-.message-type-details {
+.thread-list:first-line {
+  line-height: 0px;
+}
+
+.thread-list {
   padding: 0px 20px 20px 20px;
   font-size: 12px;
+  white-space: pre-line;
 }
 
 .hover-reverse {
@@ -143,10 +147,6 @@ button {
   margin-right: 10px;
 }
 
-.thread-list {
-  margin-bottom: 20px;
-}
-
 .thread-list:last-child {
   margin-bottom: 0px !important;
 }
@@ -159,12 +159,11 @@ button {
   border-bottom: none;
 }
 .comment {
-  /*padding: 4px 16px 4px 16px;*/
   padding: 3px 8px;
   background: #222222;
   border: 1px solid #000;
   border-radius: 8px;
-  margin-bottom: 4px;
+  margin: 8px;
   font-size: 12px;
 }
 .comment.unread,

@@ -88,7 +88,6 @@
         <div class="message-type-details" v-show="messageTypeExtended.studioInvites">
           <div class="thread-list" v-for="invite of studioInvites">
             <a @click="openProfile(invite.actor)">{{ invite.actor }}</a> invited you to curate
-          </br>
             <a @click="openStudio(invite.studioId, 'curators')" style="text-decoration: underline"
               >{{ invite.studioTitle }}</a
             >
@@ -115,7 +114,6 @@
         <div class="message-type-details" v-show="messageTypeExtended.forumActivity">
           <div class="thread-list" v-for="forumTopic of forumActivity">
             There are new posts in the forum thread
-          </br>
             <a @click="openUnreadPostsForums(forumTopic.topicId)" style="text-decoration: underline"
               >{{ forumTopic.topicTitle }}</a
             >
@@ -142,7 +140,6 @@
         <div class="message-type-details" v-show="messageTypeExtended.studioActivity">
           <div class="thread-list" v-for="studio of studioActivity">
             There was new activity in
-            </br>
             <a @click="openStudio(studio.studioId)" style="text-decoration: underline">{{ studio.studioTitle }}</a>
           </div>
         </div>
@@ -174,7 +171,7 @@
         v-for="profile of profilesOrdered"
         v-show="profile.unreadComments && profile.loadedComments"
       >
-        <div class="message-type-title sticky">
+        <div class="message-type-title">
           <a class="message-type-title-text" @click="openProfile(profile.username)">
             <span v-if="profile.username === username">Your profile</span>
             <span v-else>{{ profile.username }}'s profile</span>
@@ -211,7 +208,7 @@
       </div>
       <!-- Studios -->
       <div class="message-type" v-for="studio of studios" v-show="studio.unreadComments && studio.loadedComments">
-        <div class="message-type-title sticky">
+        <div class="message-type-title">
           <a class="message-type-title-text" @click="openStudio(studio.id)">Studio: {{ studio.title }}</a>
           <span class="float-right">
             <span v-show="studio.unreadComments">💬 {{studio.unreadComments}}</span>
@@ -251,7 +248,7 @@
         v-show="project.unreadComments && project.loadedComments || 
               !project.unreadComments && commentsReady"
       >
-        <div class="message-type-title sticky">
+        <div class="message-type-title">
           <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
           <span class="float-right">
             <span v-show="project.loves">❤️ {{project.loves}}</span>
