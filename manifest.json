@@ -1,49 +1,59 @@
 {
   "manifest_version": 2,
   "name": "Scratch Addons",
-  "description": "[Description]",
-  "version": "3.0",
+  "description": "Scratch Addons provides new features and themes for the scratch.mit.edu website and project editor.",
+  "version": "1.1.1",
   "background": {
     "page": "background/background.html"
   },
   "browser_action": {
-    "default_icon": "images/icon.png",
-    "default_popup": "webpages/popup/index.html"
+    "default_icon": "images/extension-icon.png",
+    "default_popup": "webpages/popup/index.html",
+    "default_title": "Scratch Addons"
   },
   "icons": {
-    "16": "images/icon.png",
-    "48": "images/icon.png",
-    "128": "images/icon.png"
+    "16": "images/extension-icon.png",
+    "48": "images/extension-icon.png",
+    "128": "images/extension-icon.png"
   },
   "content_scripts": [
     {
       "matches": ["https://scratch.mit.edu/*"],
-      "run_at": "document_idle",
+      "run_at": "document_start",
       "js": ["content-scripts/cs.js"]
     },
     {
       "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
       "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js"]
+    },
+    {
+      "matches": ["https://scratch.mit.edu/projects/0111001101100001/embed"],
+      "run_at": "document_start",
+      "js": ["content-scripts/sa-embed.js"],
+      "all_frames": true
     }
   ],
   "options_ui": {
     "page": "webpages/settings/index.html",
     "open_in_tab": true
   },
+  "homepage_url": "https://scratchaddons.com",
+  "incognito": "not_allowed",
   "permissions": [
     "https://scratch.mit.edu/*",
     "https://api.scratch.mit.edu/*",
+    "https://clouddata.scratch.mit.edu/*",
     "cookies",
     "webRequest",
     "webRequestBlocking",
     "storage"
   ],
-  "optional_permissions": ["notifications"],
+  "optional_permissions": ["notifications", "clipboardWrite"],
   "web_accessible_resources": ["content-scripts/inject/*", "addon-api/*", "addons/*", "libraries/*"],
   "browser_specific_settings": {
     "gecko": {
-      "id": "firefox@scratchaddons"
+      "id": "griffpatch@griffpatch.co.uk"
     }
   }
 }

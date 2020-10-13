@@ -1,0 +1,7 @@
+.activity-stream {
+  overflow-y: scroll !important;
+}
+
+ul.activity-stream div {
+  width: 90%;
+}

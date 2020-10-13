@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  const virtualMachine = await addon.tab.getScratchVM();
+  const virtualMachine = addon.tab.traps.onceValues.vm;
   const removeHighlight = () =>
     Array.prototype.forEach.call(document.querySelectorAll("path[style*='outline' i]"), (e) =>
       e.removeAttribute("style")
@@ -12,7 +12,7 @@ export default async function ({ addon, global, console }) {
   addon.tab.traps.addManyListener("thread", (e) => {
     if (e[addon.tab.traps.numMany] && e[addon.tab.traps.numMany] > 1) return;
     const workspace = addon.tab.traps.onceValues.workspace;
-    const thread = e.value;
+    const thread = e.detail.value;
     const threadAccessKey = Symbol();
     Object.defineProperty(thread, threadAccessKey, {
       value: thread.blockGlowInFrame,

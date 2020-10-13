@@ -9,9 +9,9 @@
     <script src="../../libraries/vue.js" defer></script>
     <script src="index.js" defer></script>
   </head>
-  <body>
+  <body style="display: none" v-show="loaded">
     <div class="navbar">
-      <img src="./logo-small.png" class="logo" alt="Logo" />
+      <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1>Settings</h1>
     </div>
     <div class="main">
@@ -28,14 +28,22 @@
           <img src="./web.svg" />
           <span>Scratch Website Features</span>
         </div>
-        <div class="category" :class="{sel: selectedTab === 'themes'}" @click="selectedTab = 'themes'">
+        <div class="category" :class="{sel: selectedTab === 'theme'}" @click="selectedTab = 'theme'">
           <img src="./brush.svg" />
           <span>Themes</span>
         </div>
-        <!--<div class="category">
-          <img src="./wrench.svg" />
-          <span>More settings</span>
-        </div>-->
+        <div class="category" style="margin-top: auto; cursor: pointer" @click="openCredits()">
+          <img src="./credits.svg" />
+          <span>Credits</span>
+        </div>
+        <div class="category" style="cursor: pointer" @click="openReview()">
+          <img src="./review.svg" />
+          <span>Review</span>
+        </div>
+        <div class="category" style="cursor: pointer" @click="openFeedback()">
+          <img src="./feedback.svg" />
+          <span>Send feedback</span>
+        </div>
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
@@ -56,8 +64,7 @@
             <div class="filter-options">
               <div class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">All</div>
               <div
-                v-for="tag of tags"
-                v-show="tag.tabShow[selectedTab]"
+                v-for="tag of tagsToShow"
                 class="filter-option"
                 class="badge"
                 :class="{
@@ -65,7 +72,9 @@
                 'blue': tag.color === 'blue',
                 'yellow': tag.color === 'yellow',
                 'red': tag.color === 'red',
-                'green': tag.color === 'green'}"
+                'green': tag.color === 'green',
+                'darkgreen': tag.color === 'darkgreen'
+                }"
                 @click="selectedTag === tag.matchName ? (selectedTag = null) : (selectedTag = tag.matchName)"
               >
                 {{ tag.name }}
@@ -93,61 +102,91 @@
                 </div>
               </div>
               <div class="badge blue" v-if="addon._tags.recommended">Recommended</div>
+              <div class="badge darkgreen" v-if="addon._tags.forEditor">For editor</div>
               <div class="badge red" v-if="addon._tags.beta">Beta</div>
+              <div class="badge yellow" v-if="addon._tags.forWebsite">For website</div>
               <div class="badge green" v-if="addon._tags.forums">Forums</div>
               <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
               <div class="addon-check">
-                <switch :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest(addon)" />
+                <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest(addon)" />
               </div>
             </div>
-            <div class="addon-settings" v-show="addon._expanded">
-              <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
-              <div class="settings-column">
-                <div v-for="setting of addon.options">
-                  <div class="addon-setting" v-if="setting.type === 'boolean'">
-                    <div class="setting-label">{{ setting.name }}</div>
-                    <input
-                      type="checkbox"
-                      class="setting-input check"
-                      v-model="addonSettings[addon._addonId][setting.id]"
-                      @change="updateSettings(addon);"
-                      :disabled="!addon._enabled"
-                    />
-                  </div>
-                  <div class="addon-setting" v-if="setting.type === 'positive_integer'">
-                    <div class="setting-label">{{ setting.name }}</div>
-                    <input
-                      type="number"
-                      class="setting-input number"
-                      v-model="addonSettings[addon._addonId][setting.id]"
-                      @change="updateSettings(addon)"
-                      :disabled="!addon._enabled"
-                    />
+          </div>
+          <div class="addon-settings" v-show="addon._expanded">
+            <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
+            <div class="addon-warn" v-show="addon._expanded">{{ addon.warning }}</div>
+            <div class="addon-credits" v-if="addon.credits">
+              <span>Credit to:</span>
+              <span v-for="credit of addon.credits">
+                <span v-if="credit.link">
+                  <a href="{{ credit.link }}" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a>
+                </span>
+                <span v-else="credit.link">{{ credit.name }}</span>
+              </span>
+            </div>
+            <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
+              <a href="./licenses.html?libraries={{ addon.libraries.join(',') }}">View library licenses</a>
+            </div>
+            <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
+              <div class="addon-setting" v-for="setting of addon.options">
+                <div class="setting-label">{{ setting.name }}</div>
+                <input
+                  type="checkbox"
+                  class="setting-input check"
+                  v-model="addonSettings[addon._addonId][setting.id]"
+                  @change="updateSettings(addon)"
+                  :disabled="!addon._enabled"
+                  v-if="setting.type === 'boolean'"
+                />
+                <input
+                  type="number"
+                  class="setting-input number"
+                  v-model="addonSettings[addon._addonId][setting.id]"
+                  @change="updateSettings(addon)"
+                  :disabled="!addon._enabled"
+                  v-if="setting.type === 'positive_integer'"
+                  min="0"
+                />
+                <input
+                  type="text"
+                  class="setting-input string"
+                  v-model="addonSettings[addon._addonId][setting.id]"
+                  @input="updateSettings(addon)"
+                  :disabled="!addon._enabled"
+                  v-if="setting.type === 'string'"
+                  :placeholder="setting.default"
+                  maxlength="100"
+                />
+                <input
+                  type="color"
+                  class="setting-input color"
+                  v-model="addonSettings[addon._addonId][setting.id]"
+                  @input="updateSettings(addon)"
+                  :disabled="!addon._enabled"
+                  v-if="setting.type === 'color'"
+                  :placeholder="setting.default"
+                />
+                <button
+                  type="clear-button"
+                  class="setting-input"
+                  v-model="addonSettings[addon._addonId][setting.id]"
+                  :disabled="!addon._enabled"
+                  v-if="setting.type === 'color'"
+                  @click="updateOption(setting.id, setting.default, addon)"
+                >
+                  Clear
+                </button>
+                <div class="filter-options" v-if="setting.type === 'select'">
+                  <div
+                    class="filter-option"
+                    v-for="option of setting.potential_values"
+                    :class="{'sel' : addonSettings[addon._addonId][setting.id] === option, 'disabled': !addon._enabled}"
+                    @click="updateOption(setting.id, option, addon);"
+                  >
+                    {{ option }}
                   </div>
                 </div>
               </div>
-              <!--
-                <div class="addon-setting" v-for="setting of addon.options">
-                  <div class="setting-label">Your Mood</div>
-                  <input type="text" class="setting-input string" placeholder="How are you?" />
-                </div>
-                <div class="addon-setting">
-                  <div class="setting-label">Your Age</div>
-                  <input type="number" class="setting-input number" placeholder="Aeg" />
-                </div>
-              </div>
-                <div class="addon-setting">
-                  <div class="setting-label">Show Ads pls</div>
-                  <input type="checkbox" class="setting-input check" min="0" max="10" />
-                </div>
-                <div class="addon-setting">
-                  <div class="setting-label">Which Ads?</div>
-                  <div class="filter-options">
-                    <div class="filter-option sel">Haha</div>
-                    <div class="filter-option">Stinky</div>
-                    <div class="filter-option">Poop</div>
-                  </div>
-                </div> -->
             </div>
           </div>
         </div>

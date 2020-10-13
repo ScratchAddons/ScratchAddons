@@ -1,6 +1,7 @@
 const vue = new Vue({
   el: "body",
   data: {
+    loaded: false,
     manifests: [],
     selectedTab: "all",
     selectedTag: null,
@@ -16,7 +17,7 @@ const vue = new Vue({
           all: true,
           editor: true,
           community: true,
-          themes: false,
+          theme: true,
         },
       },
       {
@@ -28,7 +29,7 @@ const vue = new Vue({
           all: true,
           editor: true,
           community: true,
-          themes: true,
+          theme: true,
         },
       },
       {
@@ -37,15 +38,59 @@ const vue = new Vue({
         matchName: "forums",
         color: "green",
         tabShow: {
-          all: true,
+          all: false,
           editor: false,
           community: true,
-          themes: false,
+          theme: false,
+        },
+      },
+      {
+        name: "For editor",
+        matchType: "tag",
+        matchName: "editor",
+        color: "darkgreen",
+        tabShow: {
+          all: false,
+          editor: false,
+          community: false,
+          theme: true,
+        },
+      },
+      {
+        name: "For website",
+        matchType: "tag",
+        matchName: "community",
+        color: "yellow",
+        tabShow: {
+          all: false,
+          editor: false,
+          community: false,
+          theme: true,
         },
       },
     ],
   },
+  computed: {
+    tagsToShow() {
+      return this.tags.filter((tag) => tag.tabShow[this.selectedTab]);
+    },
+  },
   methods: {
+    openReview() {
+      if (typeof browser !== "undefined") {
+        window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
+      } else {
+        window.open(
+          `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`
+        );
+      }
+    },
+    openCredits() {
+      window.open(`https://scratchaddons.com/contributors`);
+    },
+    openFeedback() {
+      window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}`);
+    },
     clearSearch() {
       this.searchInput = "";
     },
@@ -54,7 +99,11 @@ const vue = new Vue({
       const matchesSearch =
         this.searchInput === "" ||
         addonManifest.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-        addonManifest.description.toLowerCase().includes(this.searchInput.toLowerCase());
+        addonManifest.description.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        (addonManifest.credits &&
+          addonManifest.credits
+            .map((obj) => obj.name.toLowerCase())
+            .some((author) => author.includes(this.searchInput.toLowerCase())));
       return matchesTag && matchesSearch;
     },
     stopPropagation(e) {
@@ -68,7 +117,7 @@ const vue = new Vue({
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
       };
 
-      const browserLevelPermissions = ["notifications"];
+      const browserLevelPermissions = ["notifications", "clipboardWrite"];
       const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
       if (!addon._enabled && requiredPermissions.length) {
         chrome.permissions.request(
@@ -84,6 +133,10 @@ const vue = new Vue({
         );
       } else toggle();
     },
+    updateOption(settingId, newValue, addon) {
+      this.addonSettings[addon._addonId][settingId] = newValue;
+      this.updateSettings(addon);
+    },
     updateSettings(addon) {
       chrome.runtime.sendMessage({
         changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
@@ -91,10 +144,14 @@ const vue = new Vue({
       console.log("Updated", this.addonSettings[addon._addonId]);
     },
   },
+  watch: {
+    selectedTab() {
+      this.selectedTag = null;
+    },
+  },
 });
 
 chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addonSettings }) => {
-  console.log(manifests, addonsEnabled, addonSettings);
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
     manifest._category = manifest.tags.includes("theme")
@@ -109,20 +166,31 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
     manifest._tags.recommended = manifest.tags.includes("recommended");
     manifest._tags.beta = manifest.tags.includes("beta");
     manifest._tags.forums = manifest.tags.includes("forums");
+    manifest._tags.forEditor = manifest.tags.includes("theme") && manifest.tags.includes("editor");
+    manifest._tags.forWebsite = manifest.tags.includes("theme") && manifest.tags.includes("community");
   }
   // Sort: enabled first, then recommended disabled, then other disabled addons. All alphabetically.
   manifests.sort((a, b) => {
-    if (a.manifest._enabled === true && b.manifest._enabled === false) return -1;
-    else if (a.manifest._enabled === b.manifest._enabled) {
-      if (a.manifest.name.localeCompare(b.manifest.name) === 1) {
-        if (a.manifest._tags.recommended === true && b.manifest._tags.recommended === false) return -1;
-        else return 1;
-      } else return -1;
+    if (a.manifest._enabled === true && b.manifest._enabled === true)
+      return a.manifest.name.localeCompare(b.manifest.name);
+    else if (a.manifest._enabled === true && b.manifest._enabled === false) return -1;
+    else if (a.manifest._enabled === false && b.manifest._enabled === false) {
+      if (a.manifest._tags.recommended === true && b.manifest._tags.recommended === false) return -1;
+      else if (a.manifest._tags.recommended === false && b.manifest._tags.recommended === true) return 1;
+      else return a.manifest.name.localeCompare(b.manifest.name);
     } else return 1;
   });
+  // Messaging related addons should always go first no matter what
+  manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
+  manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
   vue.manifests = manifests.map(({ manifest }) => manifest);
+  vue.loaded = true;
+  document.getElementById("searchBox").focus();
 });
 
-vue.$watch("selectedTab", function (newSelectedTab) {
-  this.selectedTag = null;
+window.addEventListener("keydown", function (e) {
+  if (e.ctrlKey && e.key === "f") {
+    e.preventDefault();
+    document.querySelector("#searchBox").focus();
+  }
 });

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scratch Addons - Licenses</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="../../libraries/Sora.css" rel="stylesheet" />
+    <script src="../../libraries/vue.js" defer></script>
+    <script src="licenses.js" defer></script>
+  </head>
+  <body>
+    <div class="navbar">
+      <a href="./index.html"><img src="../../images/icon.png" class="logo" alt="Logo" /></a>
+      <h1>Licenses</h1>
+    </div>
+    <div class="main">
+      <div class="licenses-block">
+        <div class="license-container">
+          <div class="licenses-body" v-for="library of libraries">
+            <h2>License for library {{ library.name }}</h2>
+            <pre>{{ library.license }}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

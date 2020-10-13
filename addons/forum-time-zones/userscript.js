@@ -1,5 +1,6 @@
-import moment from "../../libraries/moment.js";
 export default async function ({ addon, _global, _console }) {
+  await addon.tab.loadScript("https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js");
+
   moment.locale(addon.auth.scratchLang == "en" ? "en-gb" : addon.auth.scratchLang);
   const forum_topic_id = parseInt(
     new URL(document.querySelector("meta[property='og:url']").content).pathname.split("/")[3]
@@ -11,16 +12,15 @@ export default async function ({ addon, _global, _console }) {
       throw "fetch error";
     })
     .then((res) => res.json())
-    .then((data) => {
-      HTMLCollection.prototype.map = Array.prototype.map;
-      document
-        .getElementsByClassName("blockpost")
-        .map((e) => parseInt(e.id.replace("p", "")))
+    .then(async (data) => {
+      await addon.tab.waitForElement(".blockpost");
+      Array.prototype.map
+        .call(document.getElementsByClassName("blockpost"), (e) => parseInt(e.id.replace("p", "")))
         .forEach((e) => {
           var p = data.posts.find((x) => x.id == e);
           if (p) {
             document.querySelector(`#p${e} > .box > .box-head > a`).innerText = moment(
-              new Date(new Date(p.post_time).toLocaleString("en-US", { timeZone: time_zone })).toISOString()
+              new Date(new Date(p.time.posted).toLocaleString("en-US", { timeZone: time_zone })).toISOString()
             ).calendar();
           }
         });

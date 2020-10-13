@@ -1,64 +1,75 @@
 {
   "name": "Scratch Notifier",
-  "description": "Notifications on new Scratch messages. By World_Languages.",
+  "description": "Notifications on new Scratch messages. Click the notification to go straight to the message (comment, project, etc.)",
+  "credits": [
+    {
+      "name": "World_Languages"
+    }
+  ],
   "permissions": ["notifications"],
   "persistent_scripts": ["background.js"],
   "options": [
     {
-      "name": "💬 Comments for me (replies and profile comments)",
+      "name": "Mark all messages as read after clicking notification",
+      "id": "mark_as_read_when_clicked",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "💬 Notify profile comments & replies",
       "id": "commentsforme_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "💬 Comments on my projects",
+      "name": "💬 Notify comments on my projects",
       "id": "commentsonmyprojects_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "📚 Forum activity",
+      "name": "📚 Notify forum activity",
       "id": "forumpost_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "❤️ Project loves",
+      "name": "❤️ Notify loves",
       "id": "loveproject_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "⭐ Project favorites",
+      "name": "⭐ Notify favorites",
       "id": "favoriteproject_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "👤 New followers",
+      "name": "🧑 Notify new followers",
       "id": "followuser_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "✉️ Studio invites",
+      "name": "✉️ Notify studio invites",
       "id": "curatorinvite_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "🆕 Studio activity",
+      "name": "🆕 Notify studio activity",
       "id": "studioactivity_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "🔄 Project remixes",
+      "name": "🔄 Notify remixes",
       "id": "remixproject_notifications",
       "type": "boolean",
       "default": true
     }
   ],
-  "tags": ["community"],
+  "tags": ["community", "recommended"],
   "enabled_by_default": false
 }

@@ -1,4 +1,7 @@
-export default class Trap {
+export default class Trap extends EventTarget {
+  constructor() {
+    super();
+  }
   /**
    * @type {object.<string, *>} mapping for the Once objects trapped.
    */
@@ -60,5 +63,25 @@ export default class Trap {
     const eventName = trapName === "*" ? "trapready" : `ready.${trapName}`;
     if (!__scratchAddonsTraps._targetMany) throw new Error("Event target not initialized");
     __scratchAddonsTraps._targetMany.removeEventListener(eventName, fn);
+  }
+
+  /**
+   * Adds listener for prototype functions trapped.
+   * @param {string} trapName Trap name to listen to. Can be '*' for any.
+   * @param {function} fn callback passed to addEventListener.
+   */
+  addPrototypeListener(trapName, fn) {
+    const eventName = trapName === "*" ? "prototypecalled" : `prototype.${trapName}`;
+    __scratchAddonsTraps.addEventListener(eventName, fn);
+  }
+
+  /**
+   * Removes listener for prototype functions trapped.
+   * @param {string} trapName Trap name to listen to. Can be '*' for any.
+   * @param {function} fn callback passed to removeEventListener.
+   */
+  removePrototypeListener(trapName, fn) {
+    const eventName = trapName === "*" ? "prototypecalled" : `prototype.${trapName}`;
+    __scratchAddonsTraps.removeEventListener(eventName, fn);
   }
 }

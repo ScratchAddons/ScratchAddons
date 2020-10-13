@@ -1,9 +1,14 @@
+html {
+  background: #2a2a2a;
+}
+
 body {
   background: #222;
   font-family: "Sora", sans-serif;
   margin: 0;
   height: 100vh;
   color: white;
+  font-size: 12px;
 }
 
 .navbar {
@@ -142,7 +147,7 @@ h1 {
   height: 16px;
   vertical-align: middle;
   filter: brightness(10);
-  margin-right: 5px;
+  margin-right: 8px;
 }
 
 .badge {
@@ -163,11 +168,35 @@ h1 {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.addon-description-full {
+
+.addon-warn {
+  color: #ff2666;
+  font-weight: bold;
+}
+
+.addon-description-full,
+.addon-credits {
   width: 100%;
-  margin-bottom: 10px;
   white-space: normal;
   color: #dddddd;
+}
+
+.addon-credits,
+.addon-license {
+  margin-top: 4px;
+  font-size: 0.9em;
+}
+.addon-credits a,
+.addon-license a {
+  color: #6d9bff;
+}
+
+.addon-credits > span {
+  margin-right: 0.5rem;
+}
+
+.addon-credits > span:not(:first-child):not(:last-child)::after {
+  content: ",";
 }
 
 .badge.blue {
@@ -188,6 +217,10 @@ h1 {
   background: #fd662b;
   border-color: #d84a12;
 }
+.badge.darkgreen {
+  background: #006c67;
+  border-color: #043b39;
+}
 .filter-option.sel.blue {
   background: #175ef8;
 }
@@ -201,6 +234,9 @@ h1 {
 }
 .filter-option.sel.red {
   background: #d84a12;
+}
+.filter-option.sel.darkgreen {
+  background: #006c67;
 }
 
 .rating {
@@ -221,24 +257,31 @@ h1 {
 
 .settings-column {
   width: 100%;
+  margin-top: 10px;
   margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.disabled {
+  opacity: 50%;
 }
 
 .addon-setting {
   margin: 10px;
+  margin-right: 20px;
   min-height: 35px;
   display: flex;
   align-items: center;
 }
 
 .setting-label {
-  width: 150px;
-  margin-bottom: 5px;
+  width: 200px;
   text-transform: uppercase;
   color: #aaa;
   font-weight: 600;
   font-size: 12px;
-  margin-right: 15px;
+  margin-right: 10px;
 }
 
 .setting-input {
@@ -284,7 +327,8 @@ h1 {
   border: none;
   border-radius: 4px 0 0 4px;
   color: #fff;
-  width: 100px;
+  width: 150px;
+  height: 16px;
 }
 .search-box input:focus {
   outline: none;
@@ -315,7 +359,7 @@ h1 {
   border-bottom: none;
 }
 
-switch {
+.switch {
   display: block;
   background: #111;
   width: 40px;
@@ -325,7 +369,7 @@ switch {
   cursor: pointer;
   transition: all 0.25s ease;
 }
-switch::before {
+.switch::before {
   content: "";
   position: absolute;
   display: block;
@@ -338,10 +382,10 @@ switch::before {
   transition: all 0.25s ease;
 }
 
-switch[state="on"] {
+.switch[state="on"] {
   background: #ff7b26;
 }
-switch[state="on"]::before {
+.switch[state="on"]::before {
   background: #fff;
   left: 25px;
 }
@@ -382,7 +426,26 @@ switch[state="on"]::before {
 .filter-option.sel {
   background: #ff7b26;
 }
+.filter-option.disabled {
+  filter: grayscale(80%);
+  pointer-events: none;
+}
 
 .reverted {
   transform: rotate(180deg);
+}
+
+.licenses-block {
+  padding: 2rem;
+}
+
+.licenses-body pre {
+  white-space: pre-wrap;
+  width: 70%;
+}
+
+input[type="color" i] {
+  height: 29px;
+  width: 100px;
+  padding: 1px 2px;
 }

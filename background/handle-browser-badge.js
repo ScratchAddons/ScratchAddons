@@ -1,4 +1,4 @@
-scratchAddons.updateBadge = function () {
+scratchAddons.localEvents.addEventListener("badgeUpdateNeeded", () => {
   // Note: for now, only one addon can use the badge.
   // If you want your addon to use the badge's text
   // or color, please open an issue on GitHub.
@@ -15,4 +15,4 @@ scratchAddons.updateBadge = function () {
     // Hide badge
     chrome.browserAction.setBadgeText({ text: "" });
   }
-};
+});

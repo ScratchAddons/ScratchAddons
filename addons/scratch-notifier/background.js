@@ -3,24 +3,26 @@ import commentEmojis from "./comment-emojis.js";
 export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
   let msgCount = null;
   let lastDateTime = null;
+  let lastAuthChange; // Used to check if auth changed while waiting for promises to resolve
   const emojis = {
     addcomment: "💬",
     forumpost: "📚",
     loveproject: "❤️",
     favoriteproject: "⭐",
-    followuser: "👤",
+    followuser: "🧑",
     curatorinvite: "✉️",
     remixproject: "🔄",
     studioactivity: "🆕",
   };
 
   checkCount();
-  setInterval(checkCount, 6000);
+  setInterval(checkCount, 5000);
 
   async function checkCount() {
     if (!addon.auth.isLoggedIn) return;
+    const previousLastAuthChange = lastAuthChange;
     const newCount = await addon.account.getMsgCount();
-    console.log(newCount);
+    if (previousLastAuthChange !== lastAuthChange) return;
     if (newCount === null) return;
     if (msgCount !== newCount) {
       const oldMsgCount = msgCount;
@@ -100,9 +102,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     });
     const onClick = (e) => {
       if (e.detail.id === notifId) {
-        addon.browserTabs.create({ url });
+        chrome.tabs.create({ url });
         addon.notifications.clear(notifId);
-        markAsRead();
+        if (addon.settings.get("mark_as_read_when_clicked") === true) markAsRead();
       }
     };
     const onButtonClick = (e) => {
@@ -127,34 +129,38 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   }
 
   async function openMessagesPage() {
-    const tabs = await addon.browserTabs.query({
-      url: "https://scratch.mit.edu/messages*",
-    });
-    if (tabs[0]) {
-      addon.browserWindows.update(tabs[0].windowId, {
-        focused: true,
-      });
-      addon.browserTabs.update(tabs[0].id, {
-        active: true,
-        url: "https://scratch.mit.edu/messages/",
-      });
-    } else {
-      addon.browserTabs.create({
-        url: "https://scratch.mit.edu/messages/",
-      });
-    }
-    msgCount = 0;
+    chrome.tabs.query(
+      {
+        url: "https://scratch.mit.edu/messages*",
+      },
+      (tabs) => {
+        if (tabs[0]) {
+          chrome.windows.update(tabs[0].windowId, {
+            focused: true,
+          });
+          chrome.tabs.update(tabs[0].id, {
+            active: true,
+            url: "https://scratch.mit.edu/messages/",
+          });
+        } else {
+          chrome.tabs.create({
+            url: "https://scratch.mit.edu/messages/",
+          });
+        }
+        msgCount = 0;
+      }
+    );
   }
 
   function markAsRead() {
-    addon.fetch("https://scratch.mit.edu/site-api/messages/messages-clear/", {
-      method: "POST",
-    });
+    addon.account.clearMessages();
     msgCount = 0;
   }
 
   async function checkMessages() {
+    const previousLastAuthChange = lastAuthChange;
     const messages = await addon.account.getMessages();
+    if (lastAuthChange !== previousLastAuthChange) return;
     if (messages === null) return;
     if (lastDateTime === null) lastDateTime = new Date(messages[0].datetime_created).getTime();
     else {
@@ -183,7 +189,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
             }
             commentUrl = `https://scratch.mit.edu/users/${message.comment_obj_title}/#comments-${message.comment_id}`;
           } else if (message.comment_type === 2) {
-            messageType = "studio";
+            messageType += "studio";
             commentUrl = `https://scratch.mit.edu/studios/${message.comment_obj_id}/comments/#comments-${message.comment_id}`;
           }
         }
@@ -216,7 +222,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           commentee: message.commentee_username, // Comments only
           commentUrl, // Comments only
           title: htmlToText(message.comment_obj_title || message.topic_title || message.title || message.project_title),
-          element_id: message.comment_id || message.gallery_id || message.project_id || message.topic_title,
+          element_id: message.comment_id || message.gallery_id || message.project_id || message.topic_id,
           parent_title: htmlToText(message.parent_title), // Remixes only
         };
         notifyMessage(messageInfo);
@@ -250,6 +256,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   addon.auth.addEventListener("change", function () {
     msgCount = null;
     lastDateTime = null;
+    lastAuthChange = Date.now();
     checkCount();
   });
 }

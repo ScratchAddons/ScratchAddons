@@ -8,6 +8,9 @@ export default class Account extends EventTarget {
   getMessages(...args) {
     return scratchAddons.methods.getMessages(...args);
   }
+  clearMessages() {
+    return scratchAddons.methods.clearMessages();
+  }
 }
 
 // TODO: should this be an event target?

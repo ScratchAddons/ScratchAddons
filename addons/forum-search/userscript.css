@@ -1,0 +1,26 @@
+.forum-search-list {
+  max-height: 50vh;
+  overflow-y: scroll;
+  padding: 10px;
+  padding-top: 20px;
+  display: none;
+}
+
+.forum-search-list .blockpost .box-head a {
+  display: inline-block;
+  max-width: 60%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.post_body_html img {
+  max-width: 100%;
+}
+
+#forum-search-input {
+  width: 85%;
+}
+#forum-search-dropdown {
+  width: 15%;
+}

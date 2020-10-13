@@ -1,0 +1,44 @@
+name: Schema validation
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - addons/*/addon.json
+  pull_request:
+    branches:
+      - master
+    paths:
+      - addons/*/addon.json
+
+jobs:
+  sv:
+    name: Validation
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'ScratchAddons'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Find changed files
+        id: changed
+        uses: Hans5958/changed-files@master
+        with:
+          pattern: '^addons\/.*\/addon.json$'
+          repo-token: ${{ github.token }}
+
+      - name: Write changed files
+        uses: DamianReeves/write-file-action@v1.0
+        with:
+          path: changes.txt
+          contents: |
+            ${{ steps.changed.outputs.files_created }}
+            ${{ steps.changed.outputs.files_updated }}
+
+      - name: Validate .json with schema
+        uses: Hans5958/validate-json-action@master
+        with:
+          schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/master/1/1.1.json
+          jsons: changes.txt

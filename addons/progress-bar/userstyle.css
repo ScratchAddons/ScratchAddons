@@ -1,0 +1,43 @@
+.u-progress-bar-outer {
+  width: 100%;
+  height: calc(1px * var(--progressBar-height));
+  box-sizing: border-box;
+  border: 1px solid white;
+}
+.u-progress-bar-inner {
+  width: 0;
+  height: 100%;
+  background-color: white;
+}
+
+.u-progress-bar-top {
+  position: fixed;
+  z-index: 1000000; /* a lot */
+  top: 0;
+  left: 0;
+  width: 100%;
+  border: none;
+  transition: opacity 0.2s;
+}
+.u-progress-bar-top .u-progress-bar-inner {
+  transition: width 0.2s;
+}
+
+.u-progress-bar-integrated[data-phase="load-json"] {
+  width: 250px;
+}
+.u-progress-bar-caption {
+  margin: 5px 0;
+  height: 20px;
+}
+.u-progress-bar-integrated[data-phase="save-json"],
+.u-progress-bar-integrated[data-phase="copy"],
+.u-progress-bar-integrated[data-phase="remix"] {
+  min-width: 100px;
+  margin-top: 2px;
+}
+.u-progress-bar-integrated[data-phase="copy"],
+.u-progress-bar-integrated[data-phase="remix"] {
+  border-color: black;
+  background-color: black;
+}

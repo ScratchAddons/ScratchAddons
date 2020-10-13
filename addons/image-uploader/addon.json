@@ -1,6 +1,11 @@
 {
-  "name": "Image Uploader",
+  "name": "Forums image uploader",
   "description": "Integrates image uploading into the forums.",
+  "credits": [
+    {
+      "name": "Jeffalo"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
@@ -16,5 +21,6 @@
     }
   ],
   "tags": ["forums", "community"],
-  "enabled_by_default": false
+  "enabled_by_default": false,
+  "libraries": ["md5", "text-field-edit"]
 }
