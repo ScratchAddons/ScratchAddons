@@ -13,6 +13,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["community", "recommended"],
+  "tags": ["community"],
   "enabled_by_default": false
 }
