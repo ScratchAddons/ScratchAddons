@@ -2,7 +2,8 @@
   "manifest_version": 2,
   "name": "Scratch Addons",
   "description": "Scratch Addons provides new features and themes for the scratch.mit.edu website and project editor.",
-  "version": "1.1.1",
+  "version": "1.2.0",
+  "version_name": "1.2.0 Prerelease",
   "background": {
     "page": "background/background.html"
   },
