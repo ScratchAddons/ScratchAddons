@@ -1,0 +1,18 @@
+{
+  "name": "Last Edit Tooltip",
+  "description": "Hover over a project's share date for information on when it was last editted.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://www.scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["community", "recommended"],
+  "enabled_by_default": false
+}
