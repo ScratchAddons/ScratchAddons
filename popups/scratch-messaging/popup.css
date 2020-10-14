@@ -167,7 +167,7 @@ button {
 }
 .comment {
   padding: 3px 8px;
-  background: rgba(0, 0, 0, .4);
+  background: rgba(0, 0, 0, 0.4);
   border: 1px solid #000;
   border-radius: 6px;
   margin: 8px;
@@ -175,7 +175,7 @@ button {
 }
 .comment.unread,
 .unread .comment {
-  background-color: rgba(0,0,0,.2);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .comment-content {
   word-break: break-word;
@@ -196,7 +196,7 @@ button {
 }
 .comment-me .comment-author {
   font-weight: 700;
-  color: rgba(255,255,255, .9);
+  color: rgba(255, 255, 255, 0.9);
 }
 .unread .comment-author {
   font-weight: 700;
@@ -216,7 +216,7 @@ button {
 }
 .delete-btn {
   float: right;
-  opacity: .6;
+  opacity: 0.6;
   color: gray;
   font-size: 0.65rem;
   padding-top: 2px;
@@ -238,8 +238,9 @@ button {
   font-weight: bold;
   user-select: none;
 }
-.comment .reply-button-comment, .comment .delete-btn {
-    transition: opacity 0.3s ease;
+.comment .reply-button-comment,
+.comment .delete-btn {
+  transition: opacity 0.3s ease;
 }
 
 .comment:hover .reply-button-comment,
@@ -250,10 +251,10 @@ button {
   opacity: 0.6;
 }
 .reply-textarea {
-    color: white;
-    caret-color: white;
-    font-family: Arial;
-    transition: background-color 0.4s ease, border-color 0.4s ease;
+  color: white;
+  caret-color: white;
+  font-family: Arial;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
   width: 100%;
   box-sizing: border-box;
   height: 5rem;
@@ -264,12 +265,12 @@ button {
   font-size: 0.8rem;
   border-radius: 8px;
   border: 2px solid rgba(255, 255, 255, 0.2);
-  background: rgba(0,0,0,.3);
+  background: rgba(0, 0, 0, 0.3);
 }
 .reply-textarea:focus {
-    outline: none;
-    background-color: rgba(0,0,0,.2);
-    border-color: rgba(255,255,255,.4);
+  outline: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 .reply-box-buttons {
   padding-right: 4px;
