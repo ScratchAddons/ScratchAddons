@@ -1,22 +1,22 @@
 html {
-  font-size: 15px;
+  font-size: 12px;
   height: 100%;
   scrollbar-width: thin;
-  scrollbar-color: #ff7b26 #adf;
+  scrollbar-color: #ff7b26;
+  color: #dddddd;
 }
 html.fullscreen {
   font-size: 15px;
-  background-color: #e1e1e150;
 }
 
 body {
   margin: 0 auto;
-  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+  font-family: "Sora", sans-serif;
   width: auto;
   height: 500px;
   overflow-x: hidden;
   overflow-y: scroll;
-  background-color: rgba(77, 151, 255, 0.1);
+  background-color: #222;
   scrollbar-width: thin;
 }
 
@@ -24,10 +24,10 @@ body::-webkit-scrollbar {
   width: 10px;
 }
 body::-webkit-scrollbar-track {
-  background: #edf4ff;
+  background: #222;
 }
 body::-webkit-scrollbar-thumb {
-  background-color: #adf;
+  background-color: #2a2a2a;
   border-radius: 2px;
 }
 body:hover::-webkit-scrollbar-thumb,
@@ -45,50 +45,94 @@ body.fullscreen {
 }
 
 a {
+  transition: border-color 0.3s ease;
   cursor: pointer;
   text-decoration: none;
+  border-bottom: 1px solid transparent;
 }
 a[href] {
   color: #1aa0d8;
 }
 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  border-bottom: 1px solid #0f8bc0;
+}
+
+button {
+  color: #fff;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #2a2a2a;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.btn-dropdown {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-radius: 4px;
+}
+.btn-dropdown:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sh .btn-dropdown {
+  transform: rotate(180deg);
+}
+
+.reverted {
+  transform: rotate(180deg);
+}
+
+.btn-dropdown img {
+  height: 23px;
 }
 
 .message-type {
-  display: initial;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #2a2a2a;
+  margin: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
+
 .message-type-title {
-  font-size: 1.1rem;
+  font-size: 12px;
   color: white;
-  background-color: #fa4;
-  padding: 4px 16px 4px 16px;
-  font-weight: bold;
+  padding: 10px;
   cursor: default;
   display: flex;
-  /*margin-bottom: 8px;*/
   position: sticky;
-  /*box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);*/
-  text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  align-items: center;
 }
+
+.thread-list:first-line {
+  line-height: 0px;
+}
+
+.thread-list {
+  padding: 0px 20px 20px 20px;
+  font-size: 12px;
+  white-space: pre-line;
+}
+
 .hover-reverse {
-  background-color: #d93;
   cursor: pointer;
 }
 .sticky {
   position: sticky;
   top: 0;
   z-index: 999;
-}
-.hover-reverse:hover {
-  background-color: #fa4;
+  margin: 10px 0px;
 }
 .message-type-title-text {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   margin-right: auto;
+  margin-left: 15px;
   max-width: 75%;
 }
 .float-right {
@@ -100,16 +144,18 @@ a:hover {
   display: inline-block;
   margin-left: 2px;
 }
-
-.message-type-details {
-  /*margin-bottom: 10px;*/
-  /*padding: 4px 16px 4px 16px;*/
-  padding: 8px;
-  font-size: 0.8rem;
+.username-list {
+  padding: 0px 20px 20px 20px;
+  font-size: 12px;
 }
+
 .username-list > a {
   display: inline-block;
   margin-right: 10px;
+}
+
+.thread-list:last-child {
+  margin-bottom: 0px !important;
 }
 
 .comment-chain {
@@ -120,21 +166,19 @@ a:hover {
   border-bottom: none;
 }
 .comment {
-  /*padding: 4px 16px 4px 16px;*/
   padding: 3px 8px;
-  background-color: rgba(255, 255, 255, 0.5);
-  /*border: 1px solid rgba(0, 0, 0, 0.1);*/
-  border-radius: 8px;
-  margin-bottom: 4px;
-  font-size: 0.85rem;
+  background: rgba(0, 0, 0, .4);
+  border: 1px solid #000;
+  border-radius: 6px;
+  margin: 8px;
+  font-size: 12px;
 }
 .comment.unread,
 .unread .comment {
-  background-color: white;
+  background-color: rgba(0,0,0,.2);
 }
 .comment-content {
   word-break: break-word;
-  font-size: 0.8rem;
 }
 .comment-content-text {
   margin-right: 10px;
@@ -144,7 +188,7 @@ a:hover {
   content: "\200b";
 }
 .comment-self {
-  color: green;
+  color: white;
 }
 .comment-author {
   font-weight: 600;
@@ -152,7 +196,7 @@ a:hover {
 }
 .comment-me .comment-author {
   font-weight: 700;
-  color: green;
+  color: rgba(255,255,255, .9);
 }
 .unread .comment-author {
   font-weight: 700;
@@ -172,7 +216,7 @@ a:hover {
 }
 .delete-btn {
   float: right;
-  opacity: 0;
+  opacity: .6;
   color: gray;
   font-size: 0.65rem;
   padding-top: 2px;
@@ -182,13 +226,10 @@ a:hover {
   color: red;
 }
 .child-comment {
-  /*padding-left: 4px;*/
-  /*margin-left: 24px;*/
-  /*border-top: 1px dashed gray;*/
   margin-left: 3em;
 }
 .unread {
-  /*border-left: 3px solid #0f8bc0;*/
+  /* border-left: 3px solid #0f8bc0; */
   font-weight: 500;
 }
 .reply-button-comment {
@@ -197,6 +238,10 @@ a:hover {
   font-weight: bold;
   user-select: none;
 }
+.comment .reply-button-comment, .comment .delete-btn {
+    transition: opacity 0.3s ease;
+}
+
 .comment:hover .reply-button-comment,
 .comment:hover .delete-btn {
   opacity: 1;
@@ -205,6 +250,10 @@ a:hover {
   opacity: 0.6;
 }
 .reply-textarea {
+    color: white;
+    caret-color: white;
+    font-family: Arial;
+    transition: background-color 0.4s ease, border-color 0.4s ease;
   width: 100%;
   box-sizing: border-box;
   height: 5rem;
@@ -214,7 +263,13 @@ a:hover {
   margin-top: 8px;
   font-size: 0.8rem;
   border-radius: 8px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0,0,0,.3);
+}
+.reply-textarea:focus {
+    outline: none;
+    background-color: rgba(0,0,0,.2);
+    border-color: rgba(255,255,255,.4);
 }
 .reply-box-buttons {
   padding-right: 4px;
@@ -243,25 +298,25 @@ a:hover {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: white;
+  background: #222;
   border-top: 1px solid #00000038;
-  font-size: 0.9rem;
+  font-size: 12px;
   text-align: center;
-  padding-bottom: 2px;
   box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.1);
-  height: 2rem;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 #bottom-bar > a:hover {
-  font-weight: bold;
+  color: #ff7b26;
   text-decoration: none;
 }
 #popout {
   height: 0.8rem;
   vertical-align: middle;
   opacity: 0.6;
+  filter: invert(1);
 }
 #open-messages {
   color: inherit;
