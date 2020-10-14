@@ -89,7 +89,7 @@ const vue = new Vue({
       window.open(`https://scratchaddons.com/contributors`);
     },
     openFeedback() {
-      window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version_name}`);
+      window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}`);
     },
     clearSearch() {
       this.searchInput = "";
