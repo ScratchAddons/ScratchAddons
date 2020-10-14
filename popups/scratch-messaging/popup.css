@@ -184,9 +184,6 @@ button {
   /* So that empty comments take up a line */
   content: "\200b";
 }
-.comment-self {
-  color: green;
-}
 .comment-author {
   font-weight: 600;
   color: #d84a27;
