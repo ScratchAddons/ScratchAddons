@@ -15,7 +15,7 @@
         <a class="project-name">{{ project.title }}</a>
         <img
           title="Open in new browser tab"
-          @click="window.open(`https://scratch.mit.edu/projects/${project.id}`);"
+          v-on:click="window.open(`https://scratch.mit.edu/projects/${project.id}`);"
           style="cursor: pointer"
           src="../scratch-messaging/popout.png"
         />
