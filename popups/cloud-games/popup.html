@@ -12,7 +12,11 @@
   <body style="display: none" v-show="loaded">
     <div v-for="project of projectsSorted">
       <div class="title" @click="project.extended = !project.extended;">
-        <a class="project-name" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank" style="color: white !important"
+        <a
+          class="project-name"
+          :href="'https://scratch.mit.edu/projects/' + project.id"
+          target="_blank"
+          style="color: white !important"
           >{{ project.title }}</a
         >
         <span class="float-right">👤 {{ project.amt }}</span>
