@@ -1,0 +1,13 @@
+{
+  "name": "Search profile",
+  "description": "Allows you to go to a user's profile when you search their username.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/search/*"],
+      "runAtComplete": false
+    }
+  ],
+  "tags": ["community"],
+  "enabled_by_default": false
+}

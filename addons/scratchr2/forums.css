@@ -1,0 +1,130 @@
+#content {
+  width: 100%;
+  min-width: 942px;
+  padding-top: 50px;
+}
+.linkst,
+.linksb,
+.blocktable,
+.blockpost,
+.block,
+.djangobb #reply,
+.djangobb > .box:not(#brdheader):not(#brdfooter),
+.blockform {
+  width: 942px;
+  margin: auto;
+}
+#messages {
+  margin-bottom: 40px;
+}
+#brdheader {
+  margin-bottom: 40px;
+  padding-top: 20px;
+  padding-bottom: 8px;
+  border: none;
+  border-radius: 0;
+  background: #0fbd8c;
+  color: #fff;
+}
+#brdheader > .box-head {
+  width: 942px;
+  margin: auto;
+  padding: 0;
+  border: none;
+}
+#brdheader .box-head h2 {
+  padding: 5px 0;
+  margin-bottom: 16px;
+  color: #fff;
+  font-size: 40px;
+  line-height: 1.7em;
+}
+#brdmenu {
+  width: 942px;
+  margin: auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+#brdmenu a {
+  color: #fff;
+}
+#brdmenu a:hover {
+  text-decoration: underline;
+}
+#brdheader form {
+  width: 942px;
+  margin: auto;
+  margin-top: 8px;
+}
+#forum-search-input {
+  width: calc(85% - 8px);
+  margin-right: 8px;
+  height: 48px;
+}
+.forum-search-list {
+  width: 942px;
+  margin: auto;
+  padding: 0;
+  margin-top: 8px;
+}
+.forum-search-list .blockpost {
+  width: 100%;
+  color: #575e75;
+}
+.forum-search-list .blockpost div.box {
+  background: #4d97ff;
+}
+#brdfooter {
+  margin-top: 40px;
+  margin-bottom: 0;
+  border-radius: 0;
+  border: none;
+}
+#brdfooter .box-content {
+  box-sizing: border-box;
+  width: 942px;
+  margin: auto;
+  padding-top: 20px;
+  padding-left: 4px;
+  padding-right: 4px;
+  background: transparent;
+}
+#brdfooter .box-content button {
+  margin: 0;
+}
+.blockpost div.box {
+  background-color: #0fbd8c;
+  border-top-color: #0fbd8c;
+}
+.blockpost .box-head {
+  border-top-color: #0fbd8c;
+}
+.blockpost .box-head a:hover {
+  text-decoration: underline;
+}
+.blockpost .box-content,
+.postright,
+.postfootright {
+  background-color: #fff;
+}
+.postleft,
+.postfootleft {
+  background-color: #f2f2f2;
+}
+.postright,
+.postfootright {
+  border-left-color: #f2f2f2;
+}
+.djangobb th,
+.tc2,
+.tc3 {
+  background: #f2f2f2;
+}
+.topic_isread a {
+  font-weight: normal;
+}
+.djangobb > .postmsg {
+  box-sizing: border-box;
+  padding: 8px;
+}

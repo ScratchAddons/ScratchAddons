@@ -1,14 +1,7 @@
-//import promisify from "../common/promisifier.js";
-
-//const promisified = promisify(chrome.notifications);
-
 export default class Notifications extends EventTarget {
   constructor(addonObject) {
     super();
     this._addonId = addonObject.self.id;
-    this.update = chrome.notifications.update;
-    this.clear = chrome.notifications.clear;
-    this.onButtonClicked = chrome.notifications.onButtonClicked;
 
     this._onClicked = (notifId) => {
       if (notifId.startsWith(this._addonId)) {
@@ -52,7 +45,7 @@ export default class Notifications extends EventTarget {
     if (typeof opts !== "object") {
       throw "ScratchAddons exception: do not specify a notification ID.";
     }
-    // TODO: if muted, do not create notification and trigger close event immediatelly
+    // TODO: if muted, do not create notification and trigger close event immediately
     const notifId = `${this._addonId}__${Date.now()}`;
     let newOpts;
     if (typeof InstallTrigger !== "undefined") {
@@ -61,18 +54,30 @@ export default class Notifications extends EventTarget {
       delete newOpts.buttons;
       delete newOpts.requireInteraction;
     } else newOpts = opts;
-    return chrome.notifications.create(notifId, newOpts, callback);
+    return new Promise((resolve) => {
+      chrome.notifications.create(notifId, newOpts, (callback) => resolve(callback));
+    });
   }
-  getAll(callback) {
-    chrome.notifications.getAll((notifications) => {
-      const notifIds = Object.keys(notifications).filter((notifId) =>
-        notifId.startsWith(this._addonId)
-      );
-      const obj = {};
-      for (const notifId of notifIds) {
-        obj[notifId] = notifications[notifId];
-      }
-      return callback(obj);
+  update(...args) {
+    return new Promise((resolve) => {
+      chrome.notifications.update(...args, (callback) => resolve(callback));
+    });
+  }
+  clear(...args) {
+    return new Promise((resolve) => {
+      chrome.notifications.clear(...args, (callback) => resolve(callback));
+    });
+  }
+  getAll() {
+    return new Promise((resolve) => {
+      chrome.notifications.getAll((notifications) => {
+        const notifIds = Object.keys(notifications).filter((notifId) => notifId.startsWith(this._addonId));
+        const obj = {};
+        for (const notifId of notifIds) {
+          obj[notifId] = notifications[notifId];
+        }
+        resolve(obj);
+      });
     });
   }
   _removeEventListeners() {

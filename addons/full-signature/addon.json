@@ -1,0 +1,46 @@
+{
+  "name": "Show full areas",
+  "description": "Shows the full signature of users on the forums, and shows full What I've been doing on profiles.",
+  "credits": [
+    {
+      "name": "GrahamSH"
+    },
+    {
+      "name": "NitroCipher/ZenithRogue"
+    }
+  ],
+  "options": [
+    {
+      "name": "Show scroll for forum signatures",
+      "id": "signature",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show scroll for What I've been doing",
+      "id": "whatworkingon",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "signature.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "setting_match": {
+        "setting_id": "signature",
+        "setting_value": true
+      }
+    },
+    {
+      "url": "working.css",
+      "matches": ["https://scratch.mit.edu/users/*"],
+      "setting_match": {
+        "setting_id": "whatworkingon",
+        "setting_value": true
+      }
+    }
+  ],
+  "tags": ["community", "forums"],
+  "enabled_by_default": false
+}

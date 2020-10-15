@@ -15,11 +15,11 @@ export default class Auth extends EventTarget {
   get xToken() {
     return scratchAddons.globalState.auth.xToken;
   }
-  get sessionId() {
-    return scratchAddons.globalState.auth.sessionId;
-  }
   get csrfToken() {
     return scratchAddons.globalState.auth.csrfToken;
+  }
+  get scratchLang() {
+    return scratchAddons.globalState.auth.scratchLang;
   }
   _removeEventListeners() {
     scratchAddons.eventTargets.auth.splice(

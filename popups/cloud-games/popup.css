@@ -1,0 +1,85 @@
+html {
+  font-size: 15px;
+  height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #ff7b26 #adf;
+}
+
+body {
+  margin: 0 auto;
+  font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+  width: auto;
+  height: 500px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background-color: rgba(77, 151, 255, 0.1);
+}
+
+body::-webkit-scrollbar {
+  width: 10px;
+}
+body::-webkit-scrollbar-track {
+  background: #edf4ff;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #adf;
+  border-radius: 2px;
+}
+body:hover::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #ff7b26;
+  border-radius: 2px;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+}
+a[href] {
+  color: #1aa0d8;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.title {
+  font-size: 1.1rem;
+  color: white;
+  padding: 4px 16px 4px 16px;
+  font-weight: bold;
+  display: flex;
+  position: sticky;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: #d93;
+  cursor: pointer;
+}
+.title:hover {
+  background-color: #fa4;
+}
+
+.project-name {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-right: auto;
+  max-width: 75%;
+}
+.float-right {
+  margin-left: 4px;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+.float-right > span {
+  display: inline-block;
+  margin-left: 2px;
+}
+
+.project-details {
+  padding: 12px;
+  font-size: 0.8rem;
+}
+.username-list > a {
+  display: inline-block;
+  margin-right: 10px;
+}

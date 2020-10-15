@@ -1,0 +1,150 @@
+#content {
+  width: 100%;
+}
+#profile-data,
+#content > .slider-carousel-container {
+  width: 942px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.slider-carousel.horizontal .slider-carousel-control {
+  width: 40px;
+  height: 40px;
+}
+.slider-carousel-control,
+.slider-carousel-control:hover,
+.slider-carousel .slider-carousel-control.off {
+  opacity: 1;
+  background-color: transparent;
+  color: transparent;
+  background-size: 70%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.slider-carousel-control.arrow-left {
+  background-image: url("https://scratch.mit.edu/svgs/carousel/prev_ui-dark-gray.svg");
+}
+.slider-carousel-control.arrow-right {
+  background-image: url("https://scratch.mit.edu/svgs/carousel/next_ui-dark-gray.svg");
+}
+.slider-carousel .thumb span.title a {
+  font-weight: bold /* instead of 800 */;
+}
+.gallery.thumb span.image img {
+  margin: 0;
+}
+.gallery.thumb span.image,
+#profile-data,
+#profile-data .box-head,
+#profile-box,
+#profile-box .inner,
+#profile-box .doing,
+#profile-data .footer {
+  border: none;
+  background: transparent;
+}
+#profile-data .box-head,
+#profile-data .footer {
+  padding: 0;
+  border-radius: 0;
+}
+#profile-box .about {
+  padding-left: 0;
+}
+#profile-box .doing {
+  padding-right: 0;
+}
+.box .box-head .portrait {
+  height: 64px;
+  margin-right: 16px;
+}
+.box .box-head .portrait img {
+  width: 64px;
+  height: 64px;
+  border-radius: 5px;
+  border: none;
+}
+.box .box-head .header-text h2 {
+  font-size: 28px;
+  font-weight: normal;
+  line-height: normal;
+}
+.header-text .profile-details {
+  color: #575e75;
+}
+.header-text .profile-details .group {
+  border-color: #575e75;
+}
+#profile-data .box-head .buttons {
+  top: 0;
+  right: 0;
+}
+#profile-box .inner {
+  padding-top: 16px !important;
+}
+#bio-readonly,
+#status-readonly,
+#profile-box #bio textarea,
+#profile-box #status textarea {
+  border: 2px solid transparent;
+  box-shadow: none;
+  color: #575e75;
+}
+#profile-box .player {
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+.activity-stream .actor a {
+  color: #575e75 !important;
+}
+#content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404) {
+  border-radius: 0;
+  border: none;
+  background: rgba(77, 151, 255, 0.1);
+  padding-top: 16px;
+  padding-bottom: 16px;
+  margin-bottom: 0;
+}
+#content > .box:not(#profile-data):not(.slider-carousel-container) .box-head,
+#content > .box:not(#profile-data):not(.slider-carousel-container) .box-content {
+  border: none;
+  background: transparent;
+  width: 942px;
+  margin: auto;
+}
+#content > .box:not(#profile-data):not(.slider-carousel-container) .box-head {
+  padding: 16px 0;
+}
+#content > .box:not(#profile-data):not(.slider-carousel-container) .box-head h4 {
+  font-size: 20px;
+  line-height: 1.7em;
+}
+#comments #comments-enabled-box {
+  padding: 0;
+  padding-bottom: 16px;
+  border-bottom: none;
+}
+#comments #comment-form {
+  padding: 0;
+  margin-bottom: 24px;
+}
+#comments #comment-form textarea {
+  width: 857px;
+  height: 80px;
+  padding: 1rem;
+}
+#comments .comment form {
+  margin-left: 1.5rem;
+}
+#comments .comment form textarea {
+  width: 837.5px;
+  height: 80px;
+  padding: 1rem;
+}
+#comments .reply .comment form textarea {
+  width: 767.5px;
+}
+#comments .more-replies {
+  background-color: #eaf1fc;
+}

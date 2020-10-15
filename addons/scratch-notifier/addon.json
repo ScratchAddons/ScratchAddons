@@ -1,86 +1,75 @@
 {
   "name": "Scratch Notifier",
-  "description": "Notifications on new messages",
-  "permissions": ["badge"],
-  "persistent_scripts": ["background.js", "background2.js"],
-  "userscripts": [
+  "description": "Notifications on new Scratch messages. Click the notification to go straight to the message (comment, project, etc.)",
+  "credits": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"]
+      "name": "World_Languages"
     }
   ],
+  "permissions": ["notifications"],
+  "persistent_scripts": ["background.js"],
   "options": [
     {
-      "name": "New message notifications",
-      "id": "sendNotifications",
+      "name": "Mark all messages as read after clicking notification",
+      "id": "mark_as_read_when_clicked",
       "type": "boolean",
-      "default": false,
-      "required_permissions": ["notifications"]
+      "default": true
     },
     {
-      "name": "💬 Comments for me (replies and profile comments)",
+      "name": "💬 Notify profile comments & replies",
       "id": "commentsforme_notifications",
-      "type": "child_boolean",
-      "child_of": "sendNotifications",
+      "type": "boolean",
       "default": true
     },
     {
-      "name": "💬 Comments on my projects",
+      "name": "💬 Notify comments on my projects",
       "id": "commentsonmyprojects_notifications",
-      "type": "child_boolean",
-      "child_of": "sendNotifications",
+      "type": "boolean",
       "default": true
     },
     {
-      "name": "📚 Forum activity",
+      "name": "📚 Notify forum activity",
       "id": "forumpost_notifications",
-      "type": "child_boolean",
-      "child_of": "sendNotifications",
+      "type": "boolean",
       "default": true
     },
     {
-      "name": "❤️ Project loves",
+      "name": "❤️ Notify loves",
       "id": "loveproject_notifications",
-      "type": "child_boolean",
-      "child_of": "sendNotifications",
+      "type": "boolean",
       "default": true
     },
     {
-      "name": "⭐ Project favorites",
-      "id": "favoriteprojec_tnotifications",
-      "type": "child_boolean",
-      "child_of": "sendNotifications",
+      "name": "⭐ Notify favorites",
+      "id": "favoriteproject_notifications",
+      "type": "boolean",
       "default": true
     },
     {
-      "name": "👤 New followers",
+      "name": "🧑 Notify new followers",
       "id": "followuser_notifications",
-      "type": "child_boolean",
-      "child_of": "sendNotifications",
+      "type": "boolean",
       "default": true
     },
     {
-      "name": "✉️ Studio invites",
+      "name": "✉️ Notify studio invites",
       "id": "curatorinvite_notifications",
-      "type": "child_boolean",
-      "child_of": "sendNotifications",
+      "type": "boolean",
       "default": true
     },
     {
-      "name": "🆕 Studio activity",
+      "name": "🆕 Notify studio activity",
       "id": "studioactivity_notifications",
-      "type": "child_boolean",
-      "child_of": "sendNotifications",
+      "type": "boolean",
       "default": true
     },
     {
-      "name": "🔄 Project remixes",
+      "name": "🔄 Notify remixes",
       "id": "remixproject_notifications",
-      "type": "child_boolean",
-      "child_of": "sendNotifications",
+      "type": "boolean",
       "default": true
     }
   ],
-  "tags": ["community"],
-  "enabled_by_default": true
+  "tags": ["community", "recommended"],
+  "enabled_by_default": false
 }
