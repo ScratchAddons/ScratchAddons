@@ -1,9 +1,9 @@
 blank_issues_enabled: true
 contact_links:
-  - name: 📚 Discussion
+  - name: 💬 Discussion
     url: https://github.com/ScratchAddons/ScratchAddons/discussions/new?category_id=16783727
     about: Needs discussion (moved to Discussions)
-  - name: ❓ Question
+  - name: ❓ Help/questions
     url: https://github.com/ScratchAddons/ScratchAddons/discussions/new?category_id=16783729
     about: Ask a question (moved to Discussions)
   - name: 📝 Send feedback
