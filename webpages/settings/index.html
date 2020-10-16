@@ -32,6 +32,10 @@
           <img src="./brush.svg" />
           <span>Themes</span>
         </div>
+        <div v-if="easter"class="category" :class="{sel: selectedTab === 'easteregg'}" @click="selectedTab = 'easteregg'">
+          <img src="./brush.svg" />
+          <span>Mystery</span>
+        </div>
         <div class="category" style="margin-top: auto; cursor: pointer" @click="openCredits()">
           <img src="./credits.svg" />
           <span>Credits</span>
