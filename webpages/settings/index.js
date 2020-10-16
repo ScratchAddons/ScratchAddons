@@ -68,6 +68,19 @@ const vue = new Vue({
           theme: true,
         },
       },
+      {
+        name: "Easter egg",
+        matchType: "tag",
+        matchName: "easteregg",
+        color: "yellow",
+        tabShow: {
+          all: false,
+          editor: false,
+          community: false,
+          theme: false,
+          easteregg: true
+        },
+      },
     ],
   },
   computed: {
