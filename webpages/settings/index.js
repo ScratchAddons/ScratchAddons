@@ -98,7 +98,7 @@ const vue = new Vue({
         );
       }
     },
-    easter() {
+  easter() {
       var allowedKeys = {
   37: 'left',
   38: 'up',
@@ -135,8 +135,8 @@ document.addEventListener('keydown', function(e) {
     konamiCodePosition = 0;
   }
 });
- }
-    }
+ },
+  
     openCredits() {
       window.open(`https://scratchaddons.com/contributors`);
     },
