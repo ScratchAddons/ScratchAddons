@@ -181,6 +181,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
     manifest._tags.forums = manifest.tags.includes("forums");
     manifest._tags.forEditor = manifest.tags.includes("theme") && manifest.tags.includes("editor");
     manifest._tags.forWebsite = manifest.tags.includes("theme") && manifest.tags.includes("community");
+    manifest._tags.easteregg = manifest.tags.includes("easteregg");
   }
   // Sort: enabled first, then recommended disabled, then other disabled addons. All alphabetically.
   manifests.sort((a, b) => {
