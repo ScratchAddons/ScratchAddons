@@ -1,18 +1,17 @@
 {
-    "name": "Missing glasses",
-    "description": "POV: You forgot your glasses at home",
-    "credits": [
-      {
-        "name": "Jeffalo"
-      }
-    ],
-    "userstyles": [
-      {
-        "url": "glasses.css",
-        "matches": ["https://scratch.mit.edu/*"]
-      }
-    ],
-    "tags": ["theme"],
-    "enabledByDefault": false
-  }
-  
+  "name": "Missing glasses",
+  "description": "POV: You forgot your glasses at home",
+  "credits": [
+    {
+      "name": "Jeffalo"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "glasses.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "tags": ["theme"],
+  "enabledByDefault": false
+}
