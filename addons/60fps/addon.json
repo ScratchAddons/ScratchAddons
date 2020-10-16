@@ -15,5 +15,5 @@
   ],
   "traps": true,
   "tags": ["editor"],
-  "enabled_by_default": false
+  "enabledByDefault": false
 }
