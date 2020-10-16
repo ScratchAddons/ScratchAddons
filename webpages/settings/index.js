@@ -89,7 +89,7 @@ const vue = new Vue({
       window.open(`https://scratchaddons.com/contributors`);
     },
     openFeedback() {
-      window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}`);
+      window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version_name}`);
     },
     clearSearch() {
       this.searchInput = "";
@@ -185,7 +185,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
   vue.manifests = manifests.map(({ manifest }) => manifest);
   vue.loaded = true;
-  document.getElementById("searchBox").focus();
+  setTimeout(() => document.getElementById("searchBox").focus(), 0);
 });
 
 window.addEventListener("keydown", function (e) {

@@ -49,7 +49,7 @@
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div class="search-box">
-          <input type="text" id="searchBox" placeholder="Search" :autofocus="true" v-model="searchInput" />
+          <input type="text" id="searchBox" placeholder="Search" v-model="searchInput" />
           <button
             v-show="searchInput === ''"
             style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey')"
