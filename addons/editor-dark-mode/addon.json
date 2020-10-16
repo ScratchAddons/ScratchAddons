@@ -18,7 +18,7 @@
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
       ],
-      "optionMatch": {
+      "settingMatch": {
         "id": "selectedMode",
         "value": "Dark editor"
       }
@@ -31,7 +31,7 @@
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
       ],
-      "optionMatch": {
+      "settingMatch": {
         "id": "selectedMode",
         "value": "3.Dark"
       }
@@ -44,7 +44,7 @@
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
       ],
-      "optionMatch": {
+      "settingMatch": {
         "id": "selectedMode",
         "value": "3.Darker"
       }
@@ -54,7 +54,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "options": [
+  "settings": [
     {
       "name": "Dark mode version",
       "id": "selectedMode",

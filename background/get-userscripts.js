@@ -137,8 +137,8 @@ scratchAddons.localEvents.addEventListener("themesUpdated", () => {
 });
 
 function userscriptMatches(data, scriptOrStyle, addonId) {
-  if (scriptOrStyle.optionMatch) {
-    const { id, value } = scriptOrStyle.optionMatch;
+  if (scriptOrStyle.settingMatch) {
+    const { id, value } = scriptOrStyle.settingMatch;
     if (scratchAddons.globalState.addonSettings[addonId][id] !== value) return false;
   }
   const url = data.url;

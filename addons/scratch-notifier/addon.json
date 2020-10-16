@@ -8,7 +8,7 @@
   ],
   "permissions": ["notifications"],
   "persistentScripts": ["background.js"],
-  "options": [
+  "settings": [
     {
       "name": "Mark all messages as read after clicking notification",
       "id": "mark_as_read_when_clicked",

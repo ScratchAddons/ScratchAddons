@@ -9,7 +9,7 @@
       "name": "NitroCipher/ZenithRogue"
     }
   ],
-  "options": [
+  "settings": [
     {
       "name": "Show scroll for forum signatures",
       "id": "signature",
@@ -27,7 +27,7 @@
     {
       "url": "signature.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "optionMatch": {
+      "settingMatch": {
         "id": "signature",
         "value": true
       }
@@ -35,7 +35,7 @@
     {
       "url": "working.css",
       "matches": ["https://scratch.mit.edu/users/*"],
-      "optionMatch": {
+      "settingMatch": {
         "id": "whatworkingon",
         "value": true
       }

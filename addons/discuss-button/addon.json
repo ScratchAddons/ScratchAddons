@@ -16,7 +16,7 @@
       "runAtComplete": false
     }
   ],
-  "options": [
+  "settings": [
     {
       "name": "Remove \"ideas\" button",
       "id": "removeIdeasBtn",

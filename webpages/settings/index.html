@@ -128,7 +128,7 @@
               <a href="./licenses.html?libraries={{ addon.libraries.join(',') }}">View library licenses</a>
             </div>
             <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
-              <div class="addon-setting" v-for="setting of addon.options">
+              <div class="addon-setting" v-for="setting of addon.settings">
                 <div class="setting-label">{{ setting.name }}</div>
                 <input
                   type="checkbox"

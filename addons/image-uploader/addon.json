@@ -12,7 +12,7 @@
       "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
-  "options": [
+  "settings": [
     {
       "name": "Use project thumbnails",
       "id": "project_thumbnails",

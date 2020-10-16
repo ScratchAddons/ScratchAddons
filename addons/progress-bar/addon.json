@@ -19,7 +19,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "options": [
+  "settings": [
     {
       "name": "Show progress bar at top of page",
       "id": "topbar",
