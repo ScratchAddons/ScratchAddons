@@ -78,7 +78,7 @@ const vue = new Vue({
           editor: false,
           community: false,
           theme: false,
-          easteregg: true
+          easteregg: true,
         },
       },
     ],
