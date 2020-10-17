@@ -5,7 +5,7 @@
   "credits": [
     {
       "name": "Maximouse (TBD name)",
-      "//link": "TODO"
+      "link": "TODO:"
     },
     {
       "name": "Ucrash (Dark WWW)",
@@ -24,12 +24,11 @@
   ],
   "settings": [
     {
-      "name": "Dark mode version",
+      "name": "Dark mode version (TODO: add mxmou's styling and set as default)",
       "id": "selectedMode",
       "type": "select",
       "potentialValues": ["Dark WWW"],
-      "default": "Dark WWW",
-      "//TODO": "set mxmou's version as default"
+      "default": "Dark WWW"
     }
   ]
 }
