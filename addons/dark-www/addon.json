@@ -1,0 +1,19 @@
+{
+  "name": "Dark WWW",
+  "description": "Dark Theme for Scratch Website",
+  "tags": ["community", "beta", "theme"],
+  "credits": [
+    {
+      "name": "Ucrash",
+      "link": "https://github.com/gducrash"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "general.css",
+      "matches": [
+        "https://scratch.mit.edu/*"
+      ]
+    }
+  ]
+}
