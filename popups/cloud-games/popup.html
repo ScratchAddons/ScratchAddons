@@ -10,7 +10,7 @@
   </head>
 
   <body style="display: none" v-show="loaded">
-    <div v-for="project of projectsSorted">
+    <div class="games" v-for="project of projectsSorted">
       <div class="title" @click="project.extended = !project.extended;">
         <a class="project-name">{{ project.title }}</a>
         <span class="float-right">👤 {{ project.amt }}</span>
