@@ -3,7 +3,7 @@ export default async function ({ addon, global, console }) {
     for (let show of document.getElementsByClassName("pagination")) show.style.display = "none";
     let page = 1;
     let lock = false;
-    window.onscroll = function (ev) {
+    window.addEventListener("scroll", () => {
       if (
         window.scrollY + window.innerHeight >=
         document.getElementById("djangobbindex").offsetHeight - document.getElementById("footer").offsetHeight
@@ -30,6 +30,6 @@ export default async function ({ addon, global, console }) {
             });
         }
       }
-    };
+    });
   }
 }

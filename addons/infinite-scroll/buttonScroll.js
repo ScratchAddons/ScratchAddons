@@ -1,7 +1,7 @@
 async function commentLoader(addon, heightControl, selector) {
   await addon.tab.waitForElement(selector);
   document.querySelector(selector).style.display = "none";
-  window.onscroll = async function (ev) {
+  window.addEventListener("scroll", async () => {
     if (window.scrollY + window.innerHeight >= document.getElementById(heightControl).offsetHeight - 500) {
       if (document.querySelector(selector)) {
         document.querySelector(selector).click();
@@ -9,7 +9,7 @@ async function commentLoader(addon, heightControl, selector) {
         document.querySelector(selector).style.display = "none";
       }
     }
-  };
+  });
 }
 
 export default async function ({ addon, global, console }) {
