@@ -1,7 +1,9 @@
 export default async function ({ addon, global, console }) {
   const nav = await addon.tab.waitForElement(".sub-nav.tabs");
   // Get the search term and get the api end point to check the username
-  const userPage = `https://api.scratch.mit.edu/accounts/checkusername/${document.querySelector('[name="q"]').value.trim()}/`;
+  const userPage = `https://api.scratch.mit.edu/accounts/checkusername/${document
+    .querySelector('[name="q"]')
+    .value.trim()}/`;
   // Fetch the user page to see whether the user exists
   const response = await fetch(userPage);
   // Get the json of the response
