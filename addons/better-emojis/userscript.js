@@ -23,7 +23,7 @@ export default async function ({ addon, global, console }) {
     const treeWalker = document.createTreeWalker(body, NodeFilter.SHOW_ELEMENT);
     let currentNode = treeWalker.currentNode;
     while (currentNode) {
-      if (currentNode.className) {
+        if (typeof currentNode.className === "string") {
         if (currentNode.className.includes("easter-egg")) checkEmoji(currentNode);
         else if (currentNode.className.includes("emoji")) checkEmojiNew(currentNode);
       }
