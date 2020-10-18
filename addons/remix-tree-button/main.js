@@ -26,7 +26,7 @@ export default async function ({ addon, global, console }) {
         let len = [1, 3, 6];
         let filter = s.split('').filter(f => !hex.includes(f));
         if(s.startsWith('#')) filter = s.split('').slice(1).filter(f => !hex.includes(f.toLowerCase()));
-        console.log(filter, len.includes(s.length), len.includes(s.length - 1));
+        console.log(s);
         if(s.startsWith('#')){
             if(filter == "" && len.includes(s.length - 1)) t = s;
         }else{

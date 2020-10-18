@@ -17,10 +17,10 @@
     ],
     "settings": [
       {
-        "name": "Button Color (leave blank for default)",
+        "name": "Button Color",
         "id": "buttonColor",
-        "type": "string",
-        "default": ""
+        "type": "color",
+        "default": "#4d97ff"
       }
     ]
   }
