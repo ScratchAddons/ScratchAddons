@@ -12,6 +12,7 @@
 
   "// For website:",
   "scratchr2",
+  "dark-www",
 
   "// Other addons:",
   "editor-searchable-dropdowns",
@@ -40,4 +41,5 @@
   "studio-tools",
   "last-edit-tooltip",
   "semicolon"
+  "infinite-scroll"
 ]

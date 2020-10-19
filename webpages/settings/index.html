@@ -169,12 +169,11 @@
                 <button
                   type="clear-button"
                   class="setting-input"
-                  v-model="addonSettings[addon._addonId][setting.id]"
                   :disabled="!addon._enabled"
                   v-if="setting.type === 'color'"
                   @click="updateOption(setting.id, setting.default, addon)"
                 >
-                  Clear
+                  Reset
                 </button>
                 <div class="filter-options" v-if="setting.type === 'select'">
                   <div
