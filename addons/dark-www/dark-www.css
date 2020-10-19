@@ -600,3 +600,35 @@ input.link.black {
 #tree {
   background-color: #252525;
 }
+
+.join-flow-title {
+  color: #4d97ff;
+}
+
+.select .join-flow-select {
+  background-color: #333;
+}
+
+.gender-radio-row {
+  background-color: #303030;
+}
+
+input.formik-radio-input, 
+.formik-radio-input input,
+.join-flow-input {
+  color: white;
+  background-color: #2b2b2b;
+}
+
+.join-flow-privacy-message {
+  color: rgb(255 255 255 / 60%);
+}
+
+.join-flow-input::placeholder {
+  color: #888;
+}
+
+.nvtooltip {
+    background-color: rgb(65 68 76);
+    border: 1px solid rgb(0 0 0 / 44%);
+}
