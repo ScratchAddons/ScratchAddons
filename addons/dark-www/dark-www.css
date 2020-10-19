@@ -582,3 +582,21 @@ a.black:visited,
 input.link.black {
   color: #b6c2ea;
 }
+
+.intro-banner {
+  background-color: #242527;
+}
+
+.intro-banner .intro-container {
+  background-color: #344256;
+}
+
+.intro-banner .intro-button {
+  background-color: #151515;
+  color: #ffffff;
+}
+
+
+#tree {
+  background-color: #252525;
+}
