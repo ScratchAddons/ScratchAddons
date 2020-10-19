@@ -1,12 +1,14 @@
 export default async function ({ addon, global, console }) {
+  while True {
   if (document.body.contains(document.querySelector('#signature'))) {
-    return
+    console.log('Signature already existed')
   } else {
       if (document.location.href.split("/")[5] == "editor") {
-        return
+        console.log('In editor');
       } else {
           var semicolon = document.createElement("p");
           semicolon.textContent = ";";
           semicolon.classList.add("semicolon");
           document.body.appendChild(semicolon);
+      }
 }
