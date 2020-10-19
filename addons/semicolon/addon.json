@@ -19,6 +19,6 @@
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
-  "tags": ["community", "forums", "editor"],
+  "tags": ["community"],
   "enabledByDefault": false
 }
