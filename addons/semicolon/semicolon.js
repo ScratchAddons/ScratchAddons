@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console }) {
   while (true) {
   if (document.body.contains(document.querySelector('#signature'))) {
-    console.log('Signature already existed')
+    console.log('Signature already existed');
   } else {
       if (document.location.href.split("/")[5] == "editor") {
         console.log('In editor');
@@ -11,4 +11,6 @@ export default async function ({ addon, global, console }) {
           semicolon.classList.add("semicolon");
           document.body.appendChild(semicolon);
       }
+  }
+}
 }
