@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  while True {
+  while (true) {
   if (document.body.contains(document.querySelector('#signature'))) {
     console.log('Signature already existed')
   } else {
