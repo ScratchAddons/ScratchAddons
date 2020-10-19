@@ -1,5 +1,4 @@
 export default async function ({ addon, global, console }) {
-  while (true) {
     if (document.body.contains(document.querySelector("#signature"))) {
       console.log("Signature already existed");
     } else {
@@ -12,5 +11,4 @@ export default async function ({ addon, global, console }) {
         document.body.appendChild(semicolon);
       }
     }
-  }
 }
