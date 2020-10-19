@@ -9,11 +9,11 @@
     }
   ],
   "userscripts": [
-      {
-          "url": "main.js",
-          "matches": ["https://scratch.mit.edu/projects/*"],
-          "runAtComplete": true
-      }
+    {
+      "url": "main.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "runAtComplete": true
+    }
   ],
   "settings": [
     {
@@ -24,4 +24,3 @@
     }
   ]
 }
-  
