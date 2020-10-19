@@ -19,14 +19,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "settings": [
-    {
-      "name": "Show the amount out of 300",
-      "id": "outOf",
-      "type": "boolean",
-      "default": false
-    }
-  ],
   "traps": true,
   "tags": ["editor"],
   "enabledByDefault": false
