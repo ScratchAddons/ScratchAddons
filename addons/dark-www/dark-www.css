@@ -629,6 +629,27 @@ input.formik-radio-input,
 }
 
 .nvtooltip {
-    background-color: rgb(65 68 76);
-    border: 1px solid rgb(0 0 0 / 44%);
+  background-color: rgb(65 68 76);
+  border: 1px solid rgb(0 0 0 / 44%);
+}
+
+.gray-area {
+  background-color: #101010;
+}
+
+img.tips-icon {
+  filter: invert(1);
+}
+
+.tips-getting-started,
+.tips-activity-guides {
+  background-color: #242527;
+}
+
+.ttt-tile {
+  background-color: #1b1c1d;
+}
+
+.tips-divider {
+  border-top-color: #000;
 }
