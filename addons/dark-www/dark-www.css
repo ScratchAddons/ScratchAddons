@@ -596,7 +596,6 @@ input.link.black {
   color: #ffffff;
 }
 
-
 #tree {
   background-color: #252525;
 }
@@ -613,7 +612,7 @@ input.link.black {
   background-color: #303030;
 }
 
-input.formik-radio-input, 
+input.formik-radio-input,
 .formik-radio-input input,
 .join-flow-input {
   color: white;
