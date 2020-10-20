@@ -3,13 +3,13 @@
 }
 
 #popup-bar {
-    background-color: #dbdbdb;
+    background-color: #f0f0f0;
 }
 
 #popup-chooser {
     color: #222;
-    background: #c9c8c8;
-    border: 1px solid #666;
+    background: #f0f0f0;
+    border: 1px solid #aaa;
 }
 
 .popup-name {

@@ -3,7 +3,7 @@ html{
 }
 
 body {
-    background: #e4e4e4;
+    background: #ffffff;
     color: #222;
 }
 
@@ -17,27 +17,27 @@ body {
 }
 
 .search-box {
-    background: #dbdbdb;
+    background: #fcfcfc;
 }
 
 .search-box input, .search-box button {
-    background-color: #c9c8c8;
+    background-color: #f0f0f0;
     color: #222;
 }
 
 .filter-options{
-    background: #c9c8c8;
-    border-color: #666;
+    background: #f0f0f0;
+    border-color: #aaa;
 }
 
 .filter-option {
-    border-right-color: #666;
+    border-right-color: #aaa;
 }
 .filter-option.sel{
     color: #fff;
 }
 .filter-option:hover{
-    background: #aaaaaa;
+    background: #e9e9e9;
 }
 .filter-option.sel:hover{
     background: #ff7b26;
@@ -62,8 +62,8 @@ body {
   }
 
 .addon-body {
-    background: #d1d1d1;
-    border: 1px solid #bbbbbb;
+    background: #f7f7f7;
+    border: 1px solid #cfcfcf;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 

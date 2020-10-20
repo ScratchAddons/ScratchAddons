@@ -23,8 +23,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 .message-type {
-    border: 1px solid #b6b6b6;
-    background: #d1d1d1;
+    border: 1px solid #cfcfcf;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: #f7f7f7;
 }
 .message-type-title {
     color: black;
