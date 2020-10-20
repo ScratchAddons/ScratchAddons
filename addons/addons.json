@@ -29,6 +29,7 @@
   "remove-sprite-confirm",
   "true-youtube-links",
   "progress-bar",
+  "remix-tree-button",
   "bitmap-copy",
   "more-links",
   "youtube-fullscreen",
@@ -41,5 +42,6 @@
   "studio-tools",
   "last-edit-tooltip",
   "infinite-scroll",
-  "mouse-pos"
+  "mouse-pos",
+  "clones"
 ]
