@@ -1,12 +1,12 @@
 //theme switching
-const lightThemeLink = document.createElement('link');
-lightThemeLink.setAttribute('rel', 'stylesheet');
-lightThemeLink.setAttribute('href', 'light.css');
+const lightThemeLink = document.createElement("link");
+lightThemeLink.setAttribute("rel", "stylesheet");
+lightThemeLink.setAttribute("href", "light.css");
 
-chrome.storage.sync.get(['globalTheme'], function(r) {
+chrome.storage.sync.get(["globalTheme"], function (r) {
   let rr = false; //true = light, false = dark
-  if(r.globalTheme) rr = r.globalTheme;
-  if(rr){
+  if (r.globalTheme) rr = r.globalTheme;
+  if (rr) {
     document.head.appendChild(lightThemeLink);
   }
 });
@@ -107,14 +107,14 @@ const vue = new Vue({
     clearSearch() {
       this.searchInput = "";
     },
-    switchTheme(){
-      chrome.storage.sync.get(['globalTheme'], function(r) {
+    switchTheme() {
+      chrome.storage.sync.get(["globalTheme"], function (r) {
         let rr = true; //true = light, false = dark
-        if(r.globalTheme) rr = !r.globalTheme;
-        chrome.storage.sync.set({globalTheme: rr}, function() {
-          if(rr){
+        if (r.globalTheme) rr = !r.globalTheme;
+        chrome.storage.sync.set({ globalTheme: rr }, function () {
+          if (rr) {
             document.head.appendChild(lightThemeLink);
-          }else{
+          } else {
             document.head.removeChild(lightThemeLink);
           }
         });
