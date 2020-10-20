@@ -1,0 +1,17 @@
+body {
+    background: #fff;
+}
+
+.games {
+    border: 1px solid #b6b6b6;
+    background: #d1d1d1;
+    color: #222;
+}
+
+.title{
+    color: #222;
+}
+
+.title a{
+    color: #222;
+}

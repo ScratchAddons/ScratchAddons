@@ -1,0 +1,27 @@
+#popups {
+    background-color: #e4e4e4;
+}
+
+#popup-bar {
+    background-color: #dbdbdb;
+}
+
+#popup-chooser {
+    color: #222;
+    background: #c9c8c8;
+    border: 1px solid #666;
+}
+
+.popup-name {
+    border-right: 1px solid #666;
+}
+.popup-name:last-child {
+    border-right: none;
+}
+.popup-name.sel {
+    color: #fff;
+}
+
+iframe {
+    background-color: #e4e4e4;
+}
