@@ -159,15 +159,6 @@ h4 {
 .slider-carousel .thumb span.owner a:hover {
   color: #4280d7;
 }
-#comments .comments li {
-  border-color: #d9d9d9;
-}
-#comments .comment .info .name a:hover {
-  color: #4d97ff;
-}
-#comments .comment .info .time {
-  color: #b3b3b3;
-}
 .dropdown .dropdown-menu {
   background-color: #fff;
   color: #575e75;
