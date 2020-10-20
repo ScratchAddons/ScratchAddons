@@ -1,0 +1,78 @@
+{
+  "name": "Infinite scrolling",
+  "description": "Allow for scrolling on different parts of the site without having to click to \"load more\".",
+  "credits": [
+    {
+      "name": "DatOneLefty"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Forums",
+      "id": "forumScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Profile Comments",
+      "id": "profileCommentScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Project Comments",
+      "id": "projectScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Studio Comments",
+      "id": "studioScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Messages",
+      "id": "messageScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Fix Footer",
+      "id": "showFooter",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "forumScroll.js",
+      "matches": ["https://scratch.mit.edu/discuss/*"],
+      "settingMatch": {
+        "id": "forumScroll",
+        "value": true
+      }
+    },
+    {
+      "url": "buttonScroll.js",
+      "matches": [
+        "https://scratch.mit.edu/projects/*",
+        "https://scratch.mit.edu/studios/*/comments",
+        "https://scratch.mit.edu/users/*",
+        "https://scratch.mit.edu/messages"
+      ]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userscript.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "settingMatch": {
+        "id": "showFooter",
+        "value": true
+      }
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": false
+}

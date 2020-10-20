@@ -9,7 +9,7 @@
       "name": "griffpatch"
     }
   ],
-  "persistent_scripts": ["background.js"],
+  "persistentScripts": ["background.js"],
   "tags": ["community", "recommended"],
-  "enabled_by_default": true
+  "enabledByDefault": true
 }

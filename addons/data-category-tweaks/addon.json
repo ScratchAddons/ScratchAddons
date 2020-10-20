@@ -8,7 +8,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "options": [
+  "settings": [
     {
       "name": "Separate List Category",
       "id": "separateListCategory",
@@ -24,5 +24,5 @@
   ],
   "traps": true,
   "tags": ["editor"],
-  "enabled_by_default": false
+  "enabledByDefault": false
 }

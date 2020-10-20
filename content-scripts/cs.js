@@ -67,8 +67,8 @@ function injectUserstylesAndThemes({ userstyleUrls, themes }) {
 function setCssVariables(addonSettings) {
   for (const addonId in addonSettings) {
     for (const settingName in addonSettings[addonId]) {
-      const settingValue = addonSettings[addonId][settingName];
-      if (typeof settingValue === "string" || typeof settingValue === "number")
+      const value = addonSettings[addonId][settingName];
+      if (typeof value === "string" || typeof value === "number")
         document.documentElement.style.setProperty(
           `--${addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-${settingName.replace(/-([a-z])/g, (g) =>
             g[1].toUpperCase()

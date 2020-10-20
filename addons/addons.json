@@ -12,6 +12,7 @@
 
   "// For website:",
   "scratchr2",
+  "dark-www",
 
   "// Other addons:",
   "editor-searchable-dropdowns",
@@ -28,6 +29,7 @@
   "remove-sprite-confirm",
   "true-youtube-links",
   "progress-bar",
+  "remix-tree-button",
   "bitmap-copy",
   "more-links",
   "youtube-fullscreen",
@@ -37,5 +39,7 @@
   "search-profile",
   "better-emojis",
   "cloud-games",
-  "studio-tools"
+  "studio-tools",
+  "last-edit-tooltip",
+  "infinite-scroll"
 ]

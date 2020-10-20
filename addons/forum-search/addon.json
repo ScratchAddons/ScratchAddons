@@ -19,5 +19,5 @@
     }
   ],
   "tags": ["forums", "community"],
-  "enabled_by_default": false
+  "enabledByDefault": false
 }
