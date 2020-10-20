@@ -6,8 +6,7 @@ export default async function ({ addon, global, console }) {
   while (true) {
     let bar = await addon.tab.waitForElement(".controls_controls-container_2xinB", { markAsSeen: true });
 
-    if (document.location.href.split("/")[5] == "editor") {
-      // my attempt at detecting if they're in the editor?
+    if (addon.tab.editorMode === "editor") {
       var countContainerContainer = document.createElement("div");
       var countContainer = document.createElement("div");
       var count = document.createElement("span");
@@ -54,11 +53,7 @@ export default async function ({ addon, global, console }) {
         count.style.color = "";
         icon.src = addon.self.dir + "/cat.svg";
       }
-      if (addon.settings.get("outOf")) {
-        count.innerText = `clones: ${v}/300`;
-      } else {
-        count.innerText = `clones: ${v}`;
-      }
+      count.innerText = `clones: ${v}`;
     }
   }
 }
