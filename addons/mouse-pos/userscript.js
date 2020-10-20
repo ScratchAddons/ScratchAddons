@@ -6,7 +6,7 @@ export default async function ({ addon, global, console }) {
   while (true) {
     let bar = await addon.tab.waitForElement(".controls_controls-container_2xinB", { markAsSeen: true });
 
-    if (document.location.href.split("/")[5] == "editor") {
+    if (addon.tab.editorMode === "editor") {
       // my attempt at detecting if they're in the editor?
       var posContainerContainer = document.createElement("div");
       var posContainer = document.createElement("div");
