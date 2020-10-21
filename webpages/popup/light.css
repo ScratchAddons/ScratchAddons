@@ -9,14 +9,10 @@
 #popup-chooser {
   color: #222;
   background: #f0f0f0;
-  border: 1px solid #aaa;
 }
 
 .popup-name {
-  border-right: 1px solid #666;
-}
-.popup-name:last-child {
-  border-right: none;
+  border: 1px solid #aaa;
 }
 .popup-name.sel {
   color: #fff;
