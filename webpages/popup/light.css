@@ -25,3 +25,10 @@
 iframe {
   background-color: #e4e4e4;
 }
+
+.popup-name img {
+  filter: invert(0);
+}
+.popup-name.sel img {
+  filter: invert(1);
+}
