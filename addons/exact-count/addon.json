@@ -1,6 +1,6 @@
 {
   "name": "Show exact count",
-  "description": "Shows the exact count for user and studio info instead of just 100+.",
+  "description": "Shows the exact count for user and studio info.",
   "credits": [
     {
       "name": "TheColaber",
@@ -15,7 +15,7 @@
   ],
   "settings": [
     {
-      "name": "Exact count for profiles",
+      "name": "Exact counts for profiles",
       "id": "user",
       "type": "boolean",
       "default": true
