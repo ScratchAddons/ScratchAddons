@@ -9,10 +9,10 @@ export default async function({
     request.onreadystatechange = function() {
       if (request.readyState == 4) {
         let pageLen = JSON.parse(request.response).length
-        if (pageLen == 20) {
+        if (pageLen == 40) {
           countProjects(url, offset + delta, delta, callback);
         } else if (pageLen > 0) {
-          let count = 20 * (offset-1) + pageLen;
+          let count = 40 * (offset-1) + pageLen;
           callback(count);
         } else {
           offset -= delta;
@@ -26,7 +26,7 @@ export default async function({
 
 
   if (document.querySelector("[data-count=projects]").innerText == "100+") {
-    const apiUrlPrefix = "https://api.scratch.mit.edu/studios/" + (/[0-9]+/).exec(location.href)[0] + "/projects/?limit=20&offset=";
+    const apiUrlPrefix = "https://api.scratch.mit.edu/studios/" + (/[0-9]+/).exec(location.href)[0] + "/projects/?limit=40&offset=";
     countProjects(apiUrlPrefix, 0, 10000, function(count) {
       document.querySelector("[data-count=projects]").innerText = count;
     });
