@@ -55,10 +55,10 @@ body {
   color: #333333;
 }
 .filter-option.sel.red:hover {
-  background: #d84a12;
+  background: #fd662b;
 }
 .filter-option.sel.darkgreen:hover {
-  background: #006c67;
+  background: #00b1a8;
 }
 
 .addon-body {
