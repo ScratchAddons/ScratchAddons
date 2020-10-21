@@ -1,0 +1,34 @@
+#popups {
+  background-color: #e4e4e4;
+}
+
+#popup-bar {
+  background-color: #f0f0f0;
+}
+
+#popup-chooser {
+  color: #222;
+  background: #f0f0f0;
+  border: 1px solid #aaa;
+}
+
+.popup-name {
+  border-right: 1px solid #666;
+}
+.popup-name:last-child {
+  border-right: none;
+}
+.popup-name.sel {
+  color: #fff;
+}
+
+iframe {
+  background-color: #e4e4e4;
+}
+
+.popup-name img {
+  filter: invert(0);
+}
+.popup-name.sel img {
+  filter: invert(1);
+}

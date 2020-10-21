@@ -42,7 +42,11 @@
         </div>
         <div class="category" style="cursor: pointer" @click="openFeedback()">
           <img src="./feedback.svg" />
-          <span>Send feedback</span>
+          <span>Send Feedback</span>
+        </div>
+        <div class="category" style="cursor: pointer" @click="switchTheme()">
+          <img src="./theme.svg" />
+          <span>Switch Theme</span>
         </div>
       </div>
 
@@ -168,7 +172,7 @@
                 />
                 <button
                   type="clear-button"
-                  class="setting-input"
+                  class="small-button"
                   :disabled="!addon._enabled"
                   v-if="setting.type === 'color'"
                   @click="updateOption(setting.id, setting.default, addon)"

@@ -27,7 +27,7 @@ body {
 #fullscreen {
   display: none;
 }
-#popout > img {
+.popup-name img {
   height: 0.6rem;
   vertical-align: middle;
   opacity: 0.6;
