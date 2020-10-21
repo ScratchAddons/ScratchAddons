@@ -47,3 +47,8 @@ body::-webkit-scrollbar-thumb {
 .comment.unread {
   background-color: #fff;
 }
+
+.reply-textarea {
+  background-color: #f2f2f2;
+  color: black;
+}

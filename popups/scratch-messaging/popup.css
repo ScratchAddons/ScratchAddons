@@ -237,6 +237,8 @@ button {
   font-size: 0.8rem;
   border-radius: 8px;
   border: 2px solid rgba(0, 0, 0, 0.2);
+  background-color: #222222;
+  color: white;
 }
 .reply-box-buttons {
   padding-right: 4px;
