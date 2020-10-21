@@ -225,8 +225,8 @@ h1 {
   border-color: #d84a12;
 }
 .badge.darkgreen {
-  background: #006c67;
-  border-color: #043b39;
+  background: #00b1a8;
+  border-color: #047773;
 }
 .filter-option.sel.blue {
   background: #175ef8;
@@ -240,10 +240,10 @@ h1 {
   color: #333333;
 }
 .filter-option.sel.red {
-  background: #d84a12;
+  background: #fd662b;
 }
 .filter-option.sel.darkgreen {
-  background: #006c67;
+  background: #00b1a8;
 }
 
 .rating {
