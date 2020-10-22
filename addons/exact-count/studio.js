@@ -12,7 +12,7 @@ export default async function({
         if (pageLen == 40) {
           countProjects(url, offset + delta, delta, callback);
         } else if (pageLen > 0) {
-          let count = 40 * (offset-1) + pageLen;
+          let count = 40 * offset + pageLen;
           callback(count);
         } else {
           offset -= delta;
