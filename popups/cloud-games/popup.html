@@ -21,9 +21,7 @@
         <div class="username-list">
           <a v-for="user of project.users">{{ user }}</a>
         </div>
-        <div class="username-list" v-show="project.amt === 0">
-          No users currently playing
-        </div>
+        <div class="username-list" v-show="project.amt === 0">No users currently playing</div>
       </div>
     </div>
   </body>

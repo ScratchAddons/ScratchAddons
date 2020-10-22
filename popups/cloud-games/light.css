@@ -1,6 +1,6 @@
 body {
   background: #fff;
-  scrollbar-color: #b8b8b8 rgba(0,0,0,0);;
+  scrollbar-color: #b8b8b8 rgba(0, 0, 0, 0);
 }
 body::-webkit-scrollbar-thumb {
   background-color: #b8b8b8;
