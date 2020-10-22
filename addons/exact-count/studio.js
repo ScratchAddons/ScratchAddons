@@ -26,7 +26,7 @@ export default async function({
 
 
   if (document.querySelector("[data-count=projects]").innerText == "100+") {
-    const apiUrlPrefix = "https://api.scratch.mit.edu/studios/" + (/[0-9]+/).exec(location.href)[0] + "/projects/?limit=40&offset=";
+    const apiUrlPrefix = "https://api.scratch.mit.edu/studios/" + (/[0-9]+/).exec(location.pathname)[0] + "/projects/?limit=40&offset=";
     countProjects(apiUrlPrefix, 0, 10000, function(count) {
       document.querySelector("[data-count=projects]").innerText = count;
     });
