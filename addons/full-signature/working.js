@@ -1,9 +1,12 @@
 export default async function ({ addon, global, console }) {
-  let activityStream = document.querySelectorAll(".activity-stream li")
+  let activityStream = document.querySelectorAll(".activity-stream li");
   let parser = new DOMParser();
-  let htmlparse = parser.parseFromString(`
+  let htmlparse = parser.parseFromString(
+    `
     <button class="load-more-wibd">Load More</button>
-    `, 'text/html');
+    `,
+    "text/html"
+  );
   document.querySelector(".activity-stream").appendChild(htmlparse.querySelector("button"));
   let dataLoaded = 6;
   let loadMore = document.querySelector(".load-more-wibd");
@@ -21,10 +24,13 @@ export default async function ({ addon, global, console }) {
         dummyEl.innerHTML = text;
         let lastDataLoad = dataLoaded;
         for (; dataLoaded < lastDataLoad + 6; dataLoaded++) {
-          htmlparse = parser.parseFromString(`
+          htmlparse = parser.parseFromString(
+            `
             <li>${dummyEl.querySelectorAll("ul li")[dataLoaded].innerHTML}</li>
-            `, 'text/html');
-          activityStream[activityStream.length-1].appendChild(htmlparse.querySelector("li"));
+            `,
+            "text/html"
+          );
+          activityStream[activityStream.length - 1].appendChild(htmlparse.querySelector("li"));
         }
         dummyEl.remove();
       });
