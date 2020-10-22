@@ -12,7 +12,7 @@
     {
       "url": "main.js",
       "matches": ["https://scratch.mit.edu/projects/*"],
-      "runAtComplete": true
+      "runAtComplete": false
     }
   ],
   "settings": [
