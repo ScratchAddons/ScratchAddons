@@ -1,3 +1,16 @@
+//theme switching
+const lightThemeLink = document.createElement("link");
+lightThemeLink.setAttribute("rel", "stylesheet");
+lightThemeLink.setAttribute("href", "light.css");
+
+chrome.storage.sync.get(["globalTheme"], function (r) {
+  let rr = false; //true = light, false = dark
+  if (r.globalTheme) rr = r.globalTheme;
+  if (rr) {
+    document.head.appendChild(lightThemeLink);
+  }
+});
+
 document.getElementById("settings").onclick = () => {
   chrome.runtime.openOptionsPage();
   setTimeout(() => window.close(), 100);

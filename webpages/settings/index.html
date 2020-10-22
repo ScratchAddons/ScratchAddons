@@ -42,7 +42,11 @@
         </div>
         <div class="category" style="cursor: pointer" @click="openFeedback()">
           <img src="./feedback.svg" />
-          <span>Send feedback</span>
+          <span>Send Feedback</span>
+        </div>
+        <div class="category" style="cursor: pointer" @click="switchTheme()">
+          <img src="./theme.svg" />
+          <span>Switch Theme</span>
         </div>
       </div>
 
@@ -128,7 +132,7 @@
               <a href="./licenses.html?libraries={{ addon.libraries.join(',') }}">View library licenses</a>
             </div>
             <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
-              <div class="addon-setting" v-for="setting of addon.options">
+              <div class="addon-setting" v-for="setting of addon.settings">
                 <div class="setting-label">{{ setting.name }}</div>
                 <input
                   type="checkbox"
@@ -168,18 +172,17 @@
                 />
                 <button
                   type="clear-button"
-                  class="setting-input"
-                  v-model="addonSettings[addon._addonId][setting.id]"
+                  class="small-button"
                   :disabled="!addon._enabled"
                   v-if="setting.type === 'color'"
                   @click="updateOption(setting.id, setting.default, addon)"
                 >
-                  Clear
+                  Reset
                 </button>
                 <div class="filter-options" v-if="setting.type === 'select'">
                   <div
                     class="filter-option"
-                    v-for="option of setting.potential_values"
+                    v-for="option of setting.potentialValues"
                     :class="{'sel' : addonSettings[addon._addonId][setting.id] === option, 'disabled': !addon._enabled}"
                     @click="updateOption(setting.id, option, addon);"
                   >

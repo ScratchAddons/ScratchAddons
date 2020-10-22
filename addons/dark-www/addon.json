@@ -1,0 +1,34 @@
+{
+  "name": "Website dark mode",
+  "description": "Dark theme for the Scratch website, both for 2.0 and 3.0 pages. Multiple options by different authors available.",
+  "tags": ["community", "theme"],
+  "credits": [
+    {
+      "name": "Maximouse (TBD name)",
+      "link": "TODO:"
+    },
+    {
+      "name": "Ucrash (Dark WWW)",
+      "link": "https://github.com/gducrash"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "dark-www.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "Dark WWW"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Dark mode version (TODO: add mxmou's styling and set as default)",
+      "id": "selectedMode",
+      "type": "select",
+      "potentialValues": ["Dark WWW"],
+      "default": "Dark WWW"
+    }
+  ]
+}

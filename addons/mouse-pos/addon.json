@@ -1,0 +1,25 @@
+{
+  "name": "Mouse position",
+  "description": "Displays your mouse position next to the flag in the editor.",
+  "warning": "This feature might make Scratch projects lag, especially if you're not using a powerful computer. Performance will be enhanced in future updates.",
+  "credits": [
+    {
+      "name": "Jeffalo"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "traps": true,
+  "tags": ["editor"],
+  "enabledByDefault": false
+}

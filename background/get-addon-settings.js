@@ -4,8 +4,8 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
     for (const { manifest, addonId } of scratchAddons.manifests) {
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
-      if (manifest.options) {
-        for (const option of manifest.options) {
+      if (manifest.settings) {
+        for (const option of manifest.settings) {
           if (settings[option.id] === undefined) {
             madeChangesToAddon = true;
             madeAnyChanges = true;
@@ -17,7 +17,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         console.log(`Changed settings for addon ${addonId}`);
         addonSettings[addonId] = settings;
       }
-      if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabled_by_default;
+      if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
     }
     if (madeAnyChanges) chrome.storage.sync.set({ addonSettings, addonsEnabled });
     scratchAddons.globalState.addonSettings = addonSettings;

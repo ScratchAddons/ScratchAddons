@@ -171,7 +171,14 @@ h1 {
 
 .addon-warn {
   color: #ff2666;
+  padding: 10px;
+  background: rgba(255, 38, 103, 0.2);
+  border-radius: 5px;
   font-weight: bold;
+  margin: 10px 0;
+}
+.addon-warn:empty {
+  display: none;
 }
 
 .addon-description-full,
@@ -218,8 +225,8 @@ h1 {
   border-color: #d84a12;
 }
 .badge.darkgreen {
-  background: #006c67;
-  border-color: #043b39;
+  background: #00b1a8;
+  border-color: #047773;
 }
 .filter-option.sel.blue {
   background: #175ef8;
@@ -233,10 +240,10 @@ h1 {
   color: #333333;
 }
 .filter-option.sel.red {
-  background: #d84a12;
+  background: #fd662b;
 }
 .filter-option.sel.darkgreen {
-  background: #006c67;
+  background: #00b1a8;
 }
 
 .rating {
@@ -447,5 +454,28 @@ h1 {
 input[type="color" i] {
   height: 29px;
   width: 100px;
-  padding: 1px 2px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.small-button {
+  margin-left: 10px;
+  background: #222;
+  border: 1px solid #000;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+.small-button:hover {
+  background: #151515;
+}
+
+.setting-input.color::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
 }
