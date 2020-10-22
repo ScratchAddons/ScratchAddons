@@ -1,0 +1,51 @@
+{
+  "name": "Show exact count",
+  "description": "Shows the exact count for user and studio info.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "Maximouse",
+      "link": "https://mxmou.github.io/exactcount"
+    },
+    {
+      "name": "World_Languages"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Exact counts for profiles",
+      "id": "user",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Exact count for studios",
+      "id": "studio",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "user.js",
+      "matches": ["https://scratch.mit.edu/users/*/"],
+      "settingMatch": {
+        "id": "user",
+        "value": true
+      }
+    },
+    {
+      "url": "studio.js",
+      "matches": ["https://scratch.mit.edu/studios/*"],
+      "settingMatch": {
+        "id": "studio",
+        "value": true
+      }
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": false
+}
