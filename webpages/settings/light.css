@@ -101,6 +101,12 @@ body {
   color: #2a67eb;
 }
 
+.setting-input {
+  color: #000;
+  background: #efefef;
+  border: 1px solid #acacac;
+}
+
 .small-button {
   background: #c9c8c8;
   border-color: #666;
