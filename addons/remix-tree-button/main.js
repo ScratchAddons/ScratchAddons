@@ -1,8 +1,8 @@
 export default async function ({ addon, global, console }) {
   //define remix tree button elements
-  function loadRemixButton(){
-    if(document.querySelector('#scratchAddonsRemixTreeBtn')) return;
-    if(addon.tab.editorMode == "projectpage"){
+  function loadRemixButton() {
+    if (document.querySelector("#scratchAddonsRemixTreeBtn")) return;
+    if (addon.tab.editorMode == "projectpage") {
       addon.tab.waitForElement(".flex-row.subactions").then(() => {
         const subactions = document.querySelector(".flex-row.subactions").querySelector(".action-buttons");
 
