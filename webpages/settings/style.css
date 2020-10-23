@@ -483,7 +483,7 @@ input[type="color"]::-webkit-color-swatch {
 .addon-notice {
   color: black;
   padding: 10px;
-  background: rgb(255 235 59 / 0.5);
+  background: rgb(255 235 59 / 0.7);
   border-radius: 5px;
   font-weight: bold;
   margin: 10px 0;
