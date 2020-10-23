@@ -20,7 +20,7 @@ export default async function ({ addon, global, console }) {
         var html = parser.parseFromString(response, "text/html");
         html.querySelectorAll("ul > li").forEach((li, index) => {
           if (index > dataLoaded && index < dataLoaded + 6) {
-            activityStream[activityStream.length - 1].appendChild(li);
+            activityStream[activityStream.length - 1].append(li);
           }
         });
         dataLoaded += 6;
