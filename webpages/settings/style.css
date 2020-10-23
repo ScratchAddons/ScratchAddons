@@ -486,7 +486,7 @@ element.style {
 .addon-notice {
   color: black;
   padding: 10px;
-  background: rgb(255 235 59 / 0.2);
+  background: rgb(255 235 59 / 0.5);
   border-radius: 5px;
   font-weight: bold;
   margin: 10px 0;
