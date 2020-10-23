@@ -170,7 +170,7 @@ h1 {
 }
 
 .addon-warn {
-  color: #ff2666;
+  color: white;
   padding: 10px;
   background: rgba(255, 38, 103, 0.2);
   border-radius: 5px;
@@ -487,4 +487,7 @@ input[type="color"]::-webkit-color-swatch {
   border-radius: 5px;
   font-weight: bold;
   margin: 10px 0;
+}
+.addon-notice:empty {
+  display: none;
 }

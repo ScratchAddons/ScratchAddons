@@ -76,6 +76,10 @@ body {
   color: #111;
 }
 
+.addon-warn {
+  color: black;
+}
+
 .addon-body img {
   filter: invert(100%) brightness(0);
 }
