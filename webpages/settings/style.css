@@ -480,9 +480,6 @@ input[type="color"]::-webkit-color-swatch {
   border: none;
 }
 
-element.style {
-}
-
 .addon-notice {
   color: black;
   padding: 10px;
