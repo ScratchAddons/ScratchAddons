@@ -67,7 +67,7 @@ function setPopup(popup) {
   document.querySelector(`.popup-name[data-id="${popup.addonId}"]`).classList.add("sel");
 }
 var version = document.getElementById("version");
-version.innerText = 'v' + chrome.runtime.getManifest().version;
+version.innerText = "v" + chrome.runtime.getManifest().version;
 version.onclick = () => {
   window.open("https://github.com/ScratchAddons/ScratchAddons/releases");
   setTimeout(() => window.close(), 100);
