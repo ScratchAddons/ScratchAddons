@@ -1,0 +1,22 @@
+body {
+  background: #fff;
+  scrollbar-color: #b8b8b8 rgba(0, 0, 0, 0);
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #b8b8b8;
+}
+
+.games {
+  border: 1px solid #cfcfcf;
+  background: #f7f7f7;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: #222;
+}
+
+.title {
+  color: #222;
+}
+
+.title a {
+  color: #222;
+}

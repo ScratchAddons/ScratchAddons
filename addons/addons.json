@@ -25,14 +25,13 @@
   "image-uploader",
   "scratch-messaging",
   "forum-time-zones",
-  "fix-buttons",
   "remove-sprite-confirm",
   "true-youtube-links",
   "progress-bar",
+  "remix-tree-button",
   "bitmap-copy",
   "more-links",
   "youtube-fullscreen",
-  "data-category-tweaks",
   "full-signature",
   "60fps",
   "search-profile",
@@ -41,5 +40,8 @@
   "studio-tools",
   "last-edit-tooltip",
   "semicolon",
-  "infinite-scroll"
+  "infinite-scroll",
+  "mouse-pos",
+  "clones",
+  "exact-count"
 ]

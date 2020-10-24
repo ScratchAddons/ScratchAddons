@@ -2,7 +2,7 @@ html {
   font-size: 12px;
   height: 100%;
   scrollbar-width: thin;
-  scrollbar-color: #ff7b26;
+  scrollbar-color: #ff7b26 rgba(0, 0, 0, 0);
   color: #dddddd;
 }
 
@@ -14,23 +14,13 @@ body {
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: #222;
-  scrollbar-width: thin;
 }
 
 body::-webkit-scrollbar {
   width: 10px;
 }
-body::-webkit-scrollbar-track {
-  background: #222;
-}
 body::-webkit-scrollbar-thumb {
-  background-color: #2a2a2a;
-  border-radius: 2px;
-}
-body:hover::-webkit-scrollbar-thumb,
-body::-webkit-scrollbar-thumb:hover {
   background-color: #ff7b26;
-  border-radius: 2px;
 }
 
 a {
@@ -47,14 +37,15 @@ a:hover {
 .title {
   top: 0;
   z-index: 999;
-  margin: 10px;
   font-size: 12px;
   color: white;
-  padding: 10px;
+  padding: 12px;
+  padding-bottom: none;
+  margin-bottom: 12px;
   cursor: default;
   display: flex;
-  position: sticky;
   align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .project-name {
@@ -87,6 +78,10 @@ a:hover {
   border-radius: 4px;
   border: 1px solid #333;
   background: #2a2a2a;
-  margin: 10px;
+  margin: 6px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.title a {
+  color: white;
 }
