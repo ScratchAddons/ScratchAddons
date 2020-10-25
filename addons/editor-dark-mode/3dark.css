@@ -67,8 +67,8 @@
 .sprite-info_sprite-info_3EyZh,
 .sprite-selector-item_sprite-selector-item_kQm-i:hover,
 .stage-selector_header_2GVr1 {
-    background: var(--secondary-bg);
-    color: var(--text);
+  background: var(--secondary-bg);
+  color: var(--text);
 }
 .stage-selector_header-title_33xCt,
 .stage-selector_header-title_33xCt {
@@ -181,8 +181,7 @@ input[type="text"]:not([name="title"]):not([name="q"]):not([name="username"]):no
   color: var(--text) !important;
 }
 input[type="text"]:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword):hover,
-input[type="text"]:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword):focus
-{
+input[type="text"]:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword):focus {
   background: var(--accent);
   filter: brightness(90%);
 }
