@@ -3,10 +3,10 @@
   "description": "Dark mode for the Scratch 3.0 project editor. Multiple options by different authors available.",
   "credits": [
     {
-      "name": "_nix (Dark editor)"
+      "name": "infinitytec (3.Dark, 3.Darker)"
     },
     {
-      "name": "infinitytec (3.Dark, 3.Darker)"
+      "name": "_nix (Dark editor)"
     }
   ],
   "userstyles": [
@@ -52,6 +52,19 @@
     {
       "url": "global.css",
       "matches": ["https://scratch.mit.edu/projects/*"]
+    },
+    {
+      "url": "text-shadow.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "settingMatch": {
+        "id": "textShadow",
+        "value": true
+      }
     }
   ],
   "settings": [
@@ -59,8 +72,14 @@
       "name": "Dark mode version",
       "id": "selectedMode",
       "type": "select",
-      "potentialValues": ["Dark editor", "3.Dark", "3.Darker"],
-      "default": "Dark editor"
+      "potentialValues": ["3.Darker", "3.Dark", "Dark editor"],
+      "default": "3.Darker"
+    },
+    {
+      "name": "Text shadow on blocks",
+      "id": "textShadow",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["editor", "theme"],

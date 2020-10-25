@@ -4,6 +4,19 @@ if (window.parent === window) {
   document.documentElement.classList.add("fullscreen");
 }
 
+//theme
+const lightThemeLink = document.createElement("link");
+lightThemeLink.setAttribute("rel", "stylesheet");
+lightThemeLink.setAttribute("href", "light.css");
+
+chrome.storage.sync.get(["globalTheme"], function (r) {
+  let rr = false; //true = light, false = dark
+  if (r.globalTheme) rr = r.globalTheme;
+  if (rr) {
+    document.head.appendChild(lightThemeLink);
+  }
+});
+
 let dateNow = Date.now();
 
 // <comment> component

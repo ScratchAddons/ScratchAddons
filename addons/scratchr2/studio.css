@@ -71,7 +71,6 @@
   box-sizing: border-box;
   height: 30px;
   border: none;
-  color: #575e75;
 }
 #tabs li.active a,
 #tabs li.active:hover a {
@@ -132,18 +131,18 @@
   padding-right: 0;
 }
 #comments #comment-form textarea {
-  width: 631px;
+  width: 630px;
   height: 100px;
 }
 #comments .comment form {
-  margin-left: 1.5rem;
+  margin-left: 1rem;
 }
 #comments .comment form textarea {
-  width: 611.5px;
+  width: 619px;
   height: 100px;
 }
 #comments .reply .comment form textarea {
-  width: 541.5px;
+  width: 549px;
 }
 #comments .more-replies {
   background-color: #fcfcfc;
