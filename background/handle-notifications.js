@@ -34,7 +34,6 @@ function contextMenuUnmuted() {
     contexts: ["browser_action"],
   });
   for (const period of periods) {
-    console.log(period.name);
     chrome.contextMenus.create({
       title: period.name,
       parentId: "mute",
