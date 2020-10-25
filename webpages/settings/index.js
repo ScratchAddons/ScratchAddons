@@ -169,9 +169,8 @@ const vue = new Vue({
       });
       console.log("Updated", this.addonSettings[addon._addonId]);
     },
-    loadPreset(id, addon) {
+    loadPreset(preset, addon) {
       if (window.confirm("Are you sure you want to load this preset?")) {
-        var preset = addon.presets.filter((item) => item.id == id)[0];
         for (const property in preset.values) {
           this.updateOption(property, preset.values[property], addon);
         }

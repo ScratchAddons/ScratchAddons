@@ -177,10 +177,6 @@ h1 {
   font-weight: bold;
   margin: 10px 0;
 }
-.addon-warn:empty {
-  display: none;
-}
-
 .addon-description-full,
 .addon-credits {
   width: 100%;
@@ -517,7 +513,4 @@ input[type="color"]::-webkit-color-swatch {
   border-radius: 5px;
   font-weight: bold;
   margin: 10px 0;
-}
-.addon-notice:empty {
-  display: none;
 }
