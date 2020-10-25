@@ -1,6 +1,28 @@
 export default async function ({ addon, global, console }) {
   var style = document.createElement("style");
-  var stylesheet = "";
+  var stylesheet = `path.blocklyBlockBackground[fill="#FF6680"],
+    path.blocklyBlockBackground[fill="#5CB1D6"],
+    path.blocklyBlockBackground[fill="#FFBF00"],
+    g[data-category] > path.blocklyBlockBackground {
+      stroke: #0003;
+    }
+    g[data-argument-type="dropdown"] > path,
+    g[data-argument-type="dropdown"] > rect,
+    g[data-argument-type="variable"] > rect,
+    g[data-argument-type="variable"] > path,
+    g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > path,
+    path[data-argument-type="boolean"] {
+      stroke: #0003;
+      fill: #0001;
+    }
+    g[data-argument-type*="text"] > path,
+    g > line {
+      stroke: #0002;
+    }
+    .scratchCategoryItemBubble {
+      border-color: #0003 !important;
+    }
+	`;
 
   var categories = {
     motion: {
@@ -45,14 +67,6 @@ export default async function ({ addon, global, console }) {
   };
 
   for (var prop in categories) {
-    if (addon.settings.get("randomize-color")) {
-      document
-        .querySelector("html")
-        .style.setProperty(
-          `--editorTheme3-${categories[prop].var ? categories[prop].var : prop}Color`,
-          "#" + ("00000" + ((Math.random() * (1 << 24)) | 0).toString(16)).slice(-6)
-        );
-    }
     stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground {
 			fill: var(--editorTheme3-${categories[prop].var ? categories[prop].var : prop}Color);
 		}
@@ -77,5 +91,7 @@ export default async function ({ addon, global, console }) {
     }
   }
 
-  document.querySelector(".scratch-addons-theme[data-addon-id='editor-theme3']").textContent += stylesheet;
+  style.textContent = stylesheet;
+
+  document.head.appendChild(style);
 }

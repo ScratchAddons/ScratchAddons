@@ -262,12 +262,21 @@ h1 {
   padding: 0 20px;
 }
 
+.presets-column {
+  align-items: center;
+}
+
+.presets-column,
 .settings-column {
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
   display: flex;
   flex-wrap: wrap;
+}
+
+.presets-column > .setting-label {
+  margin-left: 10px;
 }
 
 .disabled {
