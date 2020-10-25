@@ -324,6 +324,26 @@ h1 {
   border-radius: 20px;
 }
 
+.large-button {
+  color: #fff;
+  background: #222222;
+  border: 1px solid #000;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: 0.25s ease;
+  outline: none;
+  height: 32px;
+}
+.large-button:hover {
+  outline: none;
+  background: #151515;
+}
+
+.clear-button {
+  border-radius: 0 4px 4px 0px;
+  border-left: none !important;
+}
+
 .addon-check {
   margin-left: auto;
   padding: 5px;
@@ -461,10 +481,11 @@ h1 {
 }
 
 input[type="color" i] {
-  height: 29px;
+  height: 30px;
   width: 100px;
   padding: 0;
   overflow: hidden;
+  border-radius: 4px 0px 0px 4px;
 }
 
 .small-button {

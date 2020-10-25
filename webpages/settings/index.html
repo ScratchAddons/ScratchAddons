@@ -173,7 +173,7 @@
                 />
                 <button
                   type="clear-button"
-                  class="small-button"
+                  class="large-button clear-button"
                   :disabled="!addon._enabled"
                   v-if="setting.type === 'color'"
                   @click="updateOption(setting.id, setting.default, addon)"
@@ -196,8 +196,8 @@
               <div class="setting-label">Presets</div>
               <div class="addon-setting" v-for="preset of addon.presets">
                 <button
-                  type="clear-button"
-                  class="setting-input"
+                  type="preset-button"
+                  class="large-button"
                   :disabled="!addon._enabled"
                   @click="loadPreset(preset.id, addon)"
                 >
