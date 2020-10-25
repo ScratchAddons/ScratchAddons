@@ -100,7 +100,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         },
       ],
     });
-    if(!notifId) return;
+    if (!notifId) return;
     const onClick = (e) => {
       if (e.detail.id === notifId) {
         chrome.tabs.create({ url });
