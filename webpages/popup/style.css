@@ -101,8 +101,10 @@ iframe {
   background-color: #222;
 }
 #version {
-  color: lightgray;
-  margin: 5px;
-  vertical-align: middle;
-  text-decoration: none;
+    color: white;
+    margin: 5px;
+    vertical-align: middle;
+    text-decoration: none;
+    opacity: 0.75;
+    font-size: .70rem;
 }
