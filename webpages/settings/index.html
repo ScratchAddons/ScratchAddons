@@ -112,14 +112,8 @@
               <div class="badge green" v-if="addon._tags.forums">Forums</div>
               <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
               <div class="addon-check">
-                <div class="clear-settings">
-                  <img
-                    v-show="addon._expanded"
-                    v-if="addon.settings"
-                    src="./undo.svg"
-                    class="icon-type"
-                    @click="loadDefaults(addon)"
-                  />
+                <div v-show="addon._expanded" v-if="addon.settings" class="clear-settings">
+                  <img src="./undo.svg" class="icon-type" @click="loadDefaults(addon)" />
                 </div>
                 <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest(addon)" />
               </div>
