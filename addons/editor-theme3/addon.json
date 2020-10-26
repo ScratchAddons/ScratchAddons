@@ -91,8 +91,9 @@
   "enabledByDefault": false,
   "presets": [
     {
-      "name": "2.0ish",
-      "id": "colors2",
+      "name": "3.0 Tweaks",
+      "id": "tweaks",
+      "description": "Events, Control, and Custom blocks with 2.0 inspired colors",
       "values": {
         "events-color": "#DE9E2E",
         "control-color": "#FFBF00",
@@ -100,8 +101,9 @@
       }
     },
     {
-      "name": "Original Scratch 2.0 colors",
+      "name": "2.0 Colors",
       "id": "original",
+      "description": "The original block colors from Scratch 2.0",
       "values": {
         "motion-color": "#4a6cd4",
         "looks-color": "#8a55d7",
@@ -114,23 +116,6 @@
         "data-lists-color": "#cc5b22",
         "custom-color": "#632d99",
         "Pen-color": "#0e9a6c"
-      }
-    },
-    {
-      "name": "Reset all to default",
-      "id": "default",
-      "values": {
-        "motion-color": "#4C97FF",
-        "looks-color": "#9966FF",
-        "sounds-color": "#CF63CF",
-        "events-color": "#FFBF00",
-        "control-color": "#FFAB19",
-        "sensing-color": "#5CB1D6",
-        "operators-color": "#59C059",
-        "data-color": "#FF8C1A",
-        "data-lists-color": "#FF661A",
-        "custom-color": "#FF6680",
-        "Pen-color": "#0FBD8C"
       }
     }
   ]

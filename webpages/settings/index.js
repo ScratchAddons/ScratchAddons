@@ -177,6 +177,14 @@ const vue = new Vue({
         console.log(`Loaded preset ${preset.id} for ${addon.id}`);
       }
     },
+    loadDefaults(addon) {
+      if (window.confirm("Are you sure you want to reset this addon to default settings?")) {
+        for (const property of addon.settings) {
+          this.updateOption(property.id, property.default, addon);
+        }
+        console.log(`Loaded default values for ${addon.id}`);
+      }
+    },
   },
   watch: {
     selectedTab() {

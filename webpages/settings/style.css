@@ -343,6 +343,7 @@ h1 {
 .addon-check {
   margin-left: auto;
   padding: 5px;
+  display: flex;
 }
 
 .search-box {
@@ -389,6 +390,16 @@ h1 {
 .search-box .badge .selected-badge {
   cursor: pointer;
   border-bottom: none;
+}
+
+.clear-settings {
+  display: flex;
+  align-items: center;
+  padding: 0 0px 0px 8px;
+  border-radius: 4px;
+}
+.clear-settings:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .switch {
