@@ -100,3 +100,9 @@ iframe {
   overflow-y: scroll;
   background-color: #222;
 }
+#version {
+    color: lightgray;
+    margin: 5px;
+    vertical-align: middle;
+    text-decoration: none;
+}
