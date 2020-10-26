@@ -92,6 +92,7 @@ button {
   cursor: default;
   display: flex;
   align-items: center;
+  user-select: none;
 }
 .message-type-title:not(.hover-reverse) {
   position: sticky;

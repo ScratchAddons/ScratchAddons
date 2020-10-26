@@ -44,7 +44,8 @@ body::-webkit-scrollbar-thumb {
   filter: none;
 }
 
-.comment.unread {
+.comment.unread,
+.unread .comment {
   background-color: #fff;
 }
 
