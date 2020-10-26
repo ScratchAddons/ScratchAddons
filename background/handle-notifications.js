@@ -5,7 +5,7 @@ const periods = [
   },
   {
     name: "1 hour",
-    mins: 480,
+    mins: 60,
   },
   {
     name: "8 hours",
