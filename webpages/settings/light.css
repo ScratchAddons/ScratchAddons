@@ -111,6 +111,15 @@ body {
   border: 1px solid #acacac;
 }
 
+.large-button {
+  color: #000;
+  background: #efefef;
+  border: 1px solid #acacac;
+}
+.large-button:hover {
+  background: #aaaaaa;
+}
+
 .small-button {
   background: #c9c8c8;
   border-color: #666;

@@ -169,6 +169,22 @@ const vue = new Vue({
       });
       console.log("Updated", this.addonSettings[addon._addonId]);
     },
+    loadPreset(preset, addon) {
+      if (window.confirm("Are you sure you want to load this preset?")) {
+        for (const property in preset.values) {
+          this.updateOption(property, preset.values[property], addon);
+        }
+        console.log(`Loaded preset ${preset.id} for ${addon.id}`);
+      }
+    },
+    loadDefaults(addon) {
+      if (window.confirm("Are you sure you want to reset this addon to default settings?")) {
+        for (const property of addon.settings) {
+          this.updateOption(property.id, property.default, addon);
+        }
+        console.log(`Loaded default values for ${addon.id}`);
+      }
+    },
   },
   watch: {
     selectedTab() {
