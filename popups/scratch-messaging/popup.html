@@ -24,15 +24,15 @@
           >{{ deleteStep === 0 ? "Delete" : "Click to confirm deletion" }}
         </a>
         <div class="comment-content" :class="{'comment-self' : thisComment.author === username}">
-          <span class="comment-content-text">{{{ thisComment.content }}}</span>
-          <a
+          <span class="comment-content-text">{{{ thisComment.content }}} <a
             class="reply-button-comment"
             @click="replying = true"
             :class="{'replying': replying}"
             :style="{'visibility': replying ? 'hidden' : 'visible'}"
             v-show="!deleted"
             >Reply</a
-          >
+          ></span>
+          
         </div>
         <div class="reply-box-comment" v-show="replying">
           <textarea class="reply-textarea" maxlength="500" v-model="replyBoxValue"></textarea>
