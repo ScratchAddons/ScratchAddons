@@ -28,11 +28,12 @@ body {
   display: none;
 }
 .popup-name img {
-  height: 0.6rem;
   vertical-align: middle;
-  opacity: 0.6;
-  padding-left: 5px;
-  filter: invert(1);
+  filter: brightness(10);
+  height: 14px;
+}
+.popup-title {
+  padding: 0 5px;
 }
 #logo {
   height: 30px;
@@ -99,4 +100,12 @@ iframe {
   border: none;
   overflow-y: scroll;
   background-color: #222;
+}
+#version {
+  color: white;
+  margin: 5px;
+  vertical-align: middle;
+  text-decoration: none;
+  opacity: 0.75;
+  font-size: 0.7rem;
 }

@@ -397,6 +397,7 @@ h1 {
   align-items: center;
   padding: 0 0px 0px 8px;
   border-radius: 4px;
+  margin-right: 8px;
 }
 .clear-settings:hover {
   background: rgba(255, 255, 255, 0.05);

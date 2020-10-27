@@ -1,4 +1,5 @@
 //theme switching
+
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
@@ -10,7 +11,6 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
     document.head.appendChild(lightThemeLink);
   }
 });
-
 document.getElementById("settings").onclick = () => {
   chrome.runtime.openOptionsPage();
   setTimeout(() => window.close(), 100);
@@ -19,13 +19,15 @@ document.getElementById("settings").onclick = () => {
 const popups = [
   {
     addonId: "scratch-messaging",
-    name: "✉️ Messaging",
+    icon: "./envelope.svg",
+    name: `Messaging`,
     url: "scratch-messaging/popup.html",
     fullscreen: true,
   },
   {
     addonId: "cloud-games",
-    name: "☁️ Games",
+    icon: "./cloud.svg",
+    name: "Games",
     url: "cloud-games/popup.html",
   },
 ];
@@ -36,7 +38,14 @@ for (const popup of popups) {
   const el = document.createElement("div");
   el.classList.add("popup-name");
   el.setAttribute("data-id", popup.addonId);
+  if (popup.icon) {
+    const icon = document.createElement("img");
+    icon.classList.add("popup-icon");
+    icon.setAttribute("src", popup.icon);
+    el.appendChild(icon);
+  }
   const a = document.createElement("a");
+  a.classList.add("popup-title");
   a.textContent = popup.name;
   el.appendChild(a);
   if (popup.fullscreen) {
@@ -47,11 +56,12 @@ for (const popup of popups) {
     popoutA.target = "_blank";
     popoutA.onclick = () => setTimeout(() => window.close(), 100);
     const img = document.createElement("img");
-    img.src = "./popout.png";
+    img.src = "./popout.svg";
     img.title = "Open in new browser tab";
     popoutA.appendChild(img);
     el.appendChild(popoutA);
   }
+
   el.onclick = () => {
     if (currentPopup !== popup) setPopup(popup);
   };
@@ -66,3 +76,9 @@ function setPopup(popup) {
   if (document.querySelector(".popup-name.sel")) document.querySelector(".popup-name.sel").classList.remove("sel");
   document.querySelector(`.popup-name[data-id="${popup.addonId}"]`).classList.add("sel");
 }
+var version = document.getElementById("version");
+version.innerText = "v" + chrome.runtime.getManifest().version;
+version.onclick = () => {
+  window.open("https://github.com/ScratchAddons/ScratchAddons/releases");
+  setTimeout(() => window.close(), 100);
+};

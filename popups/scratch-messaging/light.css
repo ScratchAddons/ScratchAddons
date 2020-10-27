@@ -40,11 +40,16 @@ body::-webkit-scrollbar-thumb {
   border: 1px solid #b9b9b9;
 }
 
+.small-icon:not(.colored) {
+  filter: brightness(0);
+}
+
 .popout-comment {
   filter: none;
 }
 
-.comment.unread {
+.comment.unread,
+.unread .comment {
   background-color: #fff;
 }
 

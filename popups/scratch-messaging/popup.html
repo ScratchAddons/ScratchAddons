@@ -17,8 +17,8 @@
       >
         <a class="comment-author" @click="openProfile(thisComment.author)">{{ thisComment.author }}</a>
         <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
-          · {{ commentTimeAgo }}&nbsp;&nbsp;
-          <img src="./popout.png" class="popout-comment" @click="openComment()" title="Open comment in new tab" />
+          · {{ commentTimeAgo }}
+          <img src="./popout.svg" class="popout-comment" @click="openComment()" title="Open comment in new tab" />
         </span>
         <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
           >{{ deleteStep === 0 ? "Delete" : "Click to confirm deletion" }}
@@ -60,7 +60,7 @@
             <img src="../../webpages/settings/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.follows}" />
           </div>
           <span class="message-type-title-text">Follows</span>
-          <span class="float-right">🧑 {{ follows.length }}</span>
+          <span class="float-right"><img class="small-icon" src="./follow.svg" /> {{ follows.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.follows">
           <div class="username-list">
@@ -83,7 +83,7 @@
             />
           </div>
           <span class="message-type-title-text">Studio invites</span>
-          <span class="float-right">✉️ {{ studioInvites.length }}</span>
+          <span class="float-right"><img class="small-icon" src="./studio-add.svg" /> {{ studioInvites.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.studioInvites">
           <div class="thread-list" v-for="invite of studioInvites">
@@ -109,7 +109,7 @@
             />
           </div>
           <span class="message-type-title-text">Forum activity</span>
-          <span class="float-right">📚 {{ forumActivity.length }}</span>
+          <span class="float-right"><img class="small-icon" src="./forum.svg" /> {{ forumActivity.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.forumActivity">
           <div class="thread-list" v-for="forumTopic of forumActivity">
@@ -135,7 +135,7 @@
             />
           </div>
           <span class="message-type-title-text">Studio activity</span>
-          <span class="float-right">🆕 {{ studioActivity.length }}</span>
+          <span class="float-right"><img class="small-icon" src="./studio.svg" /> {{ studioActivity.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.studioActivity">
           <div class="thread-list" v-for="studio of studioActivity">
@@ -155,7 +155,7 @@
             <img src="../../webpages/settings/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.remixes}" />
           </div>
           <span class="message-type-title-text">Remixes</span>
-          <span class="float-right">🔄 {{ remixes.length }}</span>
+          <span class="float-right"><img class="small-icon" src="./remix.svg" /> {{ remixes.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.remixes">
           <div v-for="remix of remixes" class="thread-list">
@@ -177,7 +177,9 @@
             <span v-else>{{ profile.username }}'s profile</span>
           </a>
           <span class="float-right">
-            <span v-show="profile.unreadComments">💬 {{profile.unreadComments}}</span>
+            <span v-show="profile.unreadComments"
+              ><img class="small-icon" src="./comment.svg" /> {{profile.unreadComments}}</span
+            >
           </span>
         </div>
         <div class="message-type-details" v-show="profile.commentChains.length">
@@ -211,7 +213,9 @@
         <div class="message-type-title">
           <a class="message-type-title-text" @click="openStudio(studio.id)">Studio: {{ studio.title }}</a>
           <span class="float-right">
-            <span v-show="studio.unreadComments">💬 {{studio.unreadComments}}</span>
+            <span v-show="studio.unreadComments"
+              ><img class="small-icon" src="./comment.svg" /> {{studio.unreadComments}}</span
+            >
           </span>
         </div>
         <div class="message-type-details" v-show="studio.commentChains.length">
@@ -251,9 +255,13 @@
         <div class="message-type-title">
           <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
           <span class="float-right">
-            <span v-show="project.loves">❤️ {{project.loves}}</span>
-            <span v-show="project.favorites">⭐ {{project.favorites}}</span>
-            <span v-show="project.unreadComments">💬 {{project.unreadComments}}</span>
+            <span v-show="project.loves"><img class="small-icon colored" src="./heart.svg" /> {{project.loves}}</span>
+            <span v-show="project.favorites"
+              ><img class="small-icon colored" src="./star.svg" /> {{project.favorites}}</span
+            >
+            <span v-show="project.unreadComments"
+              ><img class="small-icon" src="./comment.svg" /> {{project.unreadComments}}</span
+            >
           </span>
         </div>
         <div class="message-type-details" v-show="project.commentChains.length">
@@ -294,18 +302,24 @@
         <a href="/webpages/settings/index.html" target="_blank">Scratch Addons settings</a>.</span
       >
       <span v-show="messagesReady && !commentsReady">Loading comments...</span>
-      <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">🔄 Reload messages</button>
+      <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">
+        <img class="small-icon" src="./reload.svg" /> Reload messages
+      </button>
       <span v-show="messagesReady && showingMessagesAmt === 0">No unread messages.<br /><br /></span>
-      <button @click="showAllMessages = true" v-show="canShowMoreMessages">➕ Show more messages</button>
+      <button @click="showAllMessages = true" v-show="canShowMoreMessages">
+        <img class="small-icon" src="./plus.svg" /> Show more messages
+      </button>
       <br />
     </div>
 
     <!-- Bottom bar-->
     <div id="bottom-bar" v-show="messagesReady">
       <a @click="markAsRead()" v-show="!markedAsRead">Mark messages as read</a>
-      <span v-show="markedAsRead" style="font-weight: bold">✓ Marked as read</span>&nbsp;&nbsp;|&nbsp;&nbsp;
+      <span v-show="markedAsRead" style="font-weight: bold"
+        ><img class="small-icon" src="./read.svg" /> Marked as read</span
+      >&nbsp;&nbsp;|&nbsp;&nbsp;
       <a href="https://scratch.mit.edu/messages" id="open-messages"
-        >Open messages page&nbsp;&nbsp;<img src="./popout.png" id="popout"
+        >Open messages page&nbsp;&nbsp;<img src="./popout.svg" id="popout"
       /></a>
     </div>
   </body>
