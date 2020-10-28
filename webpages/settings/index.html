@@ -42,7 +42,11 @@
         </div>
         <div class="category" style="cursor: pointer" @click="openFeedback()">
           <img src="./feedback.svg" />
-          <span>Send feedback</span>
+          <span>Send Feedback</span>
+        </div>
+        <div class="category" style="cursor: pointer" @click="switchTheme()">
+          <img src="./theme.svg" />
+          <span>Switch Theme</span>
         </div>
       </div>
 
@@ -108,13 +112,22 @@
               <div class="badge green" v-if="addon._tags.forums">Forums</div>
               <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
               <div class="addon-check">
+                <div
+                  v-show="addon._expanded"
+                  v-if="addon.settings"
+                  class="clear-settings"
+                  title="Reset to default settings"
+                >
+                  <img src="./undo.svg" class="icon-type" @click="loadDefaults(addon)" />
+                </div>
                 <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest(addon)" />
               </div>
             </div>
           </div>
           <div class="addon-settings" v-show="addon._expanded">
             <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
-            <div class="addon-warn" v-show="addon._expanded">{{ addon.warning }}</div>
+            <div class="addon-warn" v-if="addon.warning" v-show="addon._expanded">{{ addon.warning }}</div>
+            <div class="addon-notice" v-if="addon.notice" v-show="addon._expanded">{{ addon.notice }}</div>
             <div class="addon-credits" v-if="addon.credits">
               <span>Credit to:</span>
               <span v-for="credit of addon.credits">
@@ -168,7 +181,7 @@
                 />
                 <button
                   type="clear-button"
-                  class="setting-input"
+                  class="large-button clear-button"
                   :disabled="!addon._enabled"
                   v-if="setting.type === 'color'"
                   @click="updateOption(setting.id, setting.default, addon)"
@@ -185,6 +198,20 @@
                     {{ option }}
                   </div>
                 </div>
+              </div>
+            </div>
+            <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
+              <div class="setting-label">Presets</div>
+              <div class="addon-setting" v-for="preset of addon.presets">
+                <button
+                  type="preset-button"
+                  class="large-button"
+                  :disabled="!addon._enabled"
+                  @click="loadPreset(preset, addon)"
+                  :title="preset.description"
+                >
+                  {{preset.name}}
+                </button>
               </div>
             </div>
           </div>

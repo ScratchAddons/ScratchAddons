@@ -1,3 +1,16 @@
+//theme switching
+
+const lightThemeLink = document.createElement("link");
+lightThemeLink.setAttribute("rel", "stylesheet");
+lightThemeLink.setAttribute("href", "light.css");
+
+chrome.storage.sync.get(["globalTheme"], function (r) {
+  let rr = false; //true = light, false = dark
+  if (r.globalTheme) rr = r.globalTheme;
+  if (rr) {
+    document.head.appendChild(lightThemeLink);
+  }
+});
 document.getElementById("settings").onclick = () => {
   chrome.runtime.openOptionsPage();
   setTimeout(() => window.close(), 100);
@@ -53,3 +66,9 @@ function setPopup(popup) {
   if (document.querySelector(".popup-name.sel")) document.querySelector(".popup-name.sel").classList.remove("sel");
   document.querySelector(`.popup-name[data-id="${popup.addonId}"]`).classList.add("sel");
 }
+var version = document.getElementById("version");
+version.innerText = "v" + chrome.runtime.getManifest().version;
+version.onclick = () => {
+  window.open("https://scratchaddons.com/changelog?versionname=" + chrome.runtime.getManifest().version_name);
+  setTimeout(() => window.close(), 100);
+};

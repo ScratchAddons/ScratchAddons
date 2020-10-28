@@ -158,7 +158,7 @@
           <span class="float-right">🔄 {{ remixes.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.remixes">
-          <div v-for="remix of remixes">
+          <div v-for="remix of remixes" class="thread-list">
             <a @click="openProfile(remix.actor)">{{ remix.actor }}</a> remixed your project "{{ remix.parentTitle }}" as
             <a @click="openProject(remix.projectId)" style="text-decoration: underline">{{ remix.remixTitle }}</a>
           </div>

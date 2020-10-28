@@ -1,7 +1,7 @@
 {
   "name": "Display stage on left side",
   "description": "Moves the stage to the left side of the editor.",
-  "warning": "Make sure to refresh the editor after enabling/disabling.",
+  "notice": "Make sure to refresh the editor after enabling/disabling.",
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"

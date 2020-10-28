@@ -1,0 +1,138 @@
+html {
+  background: white;
+}
+
+body {
+  background: #ffffff;
+  color: #222;
+}
+
+.categories-block {
+  background: #ecebeb;
+}
+
+.category img {
+  filter: brightness(0);
+}
+
+.search-box {
+  background: #fcfcfc;
+}
+
+.search-box input,
+.search-box button {
+  background-color: #f0f0f0;
+  color: #222;
+}
+
+.filter-options {
+  background: #f0f0f0;
+  border-color: #aaa;
+}
+
+.filter-option {
+  border-right-color: #aaa;
+}
+.filter-option.sel {
+  color: #fff;
+}
+.filter-option:hover {
+  background: #e9e9e9;
+}
+.filter-option.sel:hover {
+  background: #ff7b26;
+}
+
+.filter-option.sel.blue:hover {
+  background: #175ef8;
+}
+.filter-option.sel.green:hover {
+  background: #78fd2b;
+  color: #333333;
+}
+.filter-option.sel.yellow:hover {
+  background: #fddd2b;
+  color: #333333;
+}
+.filter-option.sel.red:hover {
+  background: #fd662b;
+}
+.filter-option.sel.darkgreen:hover {
+  background: #00b1a8;
+}
+
+.addon-body {
+  background: #f7f7f7;
+  border: 1px solid #cfcfcf;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.addon-description {
+  color: #000;
+}
+
+.addon-description-full,
+.addon-credits {
+  color: #111;
+}
+
+.addon-warn {
+  color: black;
+}
+
+.addon-body img {
+  filter: invert(100%) brightness(0);
+}
+
+.btn-dropdown:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.addon-name {
+  font-weight: 400;
+}
+
+.category.sel {
+  font-weight: 600;
+}
+
+.setting-label {
+  color: #555;
+}
+
+.addon-credits a,
+.addon-license a {
+  color: #2a67eb;
+}
+
+.setting-input {
+  color: #000;
+  background: #efefef;
+  border: 1px solid #acacac;
+}
+
+.large-button {
+  color: #000;
+  background: #efefef;
+  border: 1px solid #acacac;
+}
+.large-button:hover {
+  background: #aaaaaa;
+}
+
+.small-button {
+  background: #c9c8c8;
+  border-color: #666;
+  color: #222;
+}
+.small-button:hover {
+  background: #aaaaaa;
+}
+
+.switch {
+  display: block;
+  background: #888;
+}
+.switch::before {
+  background: #fff;
+}
