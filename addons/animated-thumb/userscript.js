@@ -78,9 +78,9 @@ export default async function({ addon, global, console }) {
               xhr: function() {
                 var xhr = $.ajaxSettings.xhr();
                 xhr.upload.onprogress = function(e) {
-                  if (!document.getElementById("snackbar").innerHTML.includes("Error")) {
+                  if (!document.getElementById("snackbar").innerText.includes("Error")) {
                     var progress = Math.floor(e.loaded / e.total * 100) + '%';
-                    document.getElementById("snackbar").innerHTML = "Uploading file " + progress;
+                    document.getElementById("snackbar").innerText = "Uploading file " + progress;
                   }
                 };
                 return xhr;
