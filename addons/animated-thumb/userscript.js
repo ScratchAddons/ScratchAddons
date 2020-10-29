@@ -1,6 +1,6 @@
 export default async function({ addon, global, console }) {
   while (true) {
-    let nav = await addon.tab.waitForElement(".menu-bar_main-menu_3wjWH", {markAsSeen: true});
+    let nav = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {markAsSeen: true});
     let setthumb = document.createElement("div")
     setthumb.classList.add("menu-bar_menu-bar-item_oLDa-")
     let thumbinner = document.createElement("span")
@@ -161,8 +161,6 @@ export default async function({ addon, global, console }) {
           document.getElementById("uploadthumbnail").onchange = function() {
             if (document.getElementById('uploadthumbnail').files[0]) upload(document.getElementById('uploadthumbnail').files[0]);
           };
-        } else {
-          document.getElementById("uploadthumbnail").click();
         }
 
         if (!document.getElementById("uploadthumbnaildrag")) {
