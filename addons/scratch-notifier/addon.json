@@ -16,6 +16,12 @@
       "default": true
     },
     {
+      "name": "Meow Sound",
+      "id": "meow_sound",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "💬 Notify profile comments & replies",
       "id": "commentsforme_notifications",
       "type": "boolean",
