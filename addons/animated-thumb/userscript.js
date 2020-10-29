@@ -15,6 +15,12 @@ export default async function({ addon, global, console }) {
     thumbcontent.append(thumbspan)
     nav.append(setthumb)
     setthumb.addEventListener("click", function(e) {
+      if (document.querySelector("#snackbar")) {
+        if (document.querySelector("#snackbar").classList[0] == "show") {
+          document.querySelector("#snackbar").classList.remove("show")
+          return;
+        }
+      }
       var parser = document.createElement("a");
       parser.href = document.location.href;
       var projectID = parser.pathname.replace(/\D/g, '');
@@ -47,7 +53,7 @@ export default async function({ addon, global, console }) {
 
         let upload = function upload(filelocation) {
 
-          document.getElementById("snackbar").innerHTML = "Reading file...";
+          document.getElementById("snackbar").innerText = "Reading file...";
 
           var reader1 = new FileReader();
 
