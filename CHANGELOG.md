@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+<!-- sa-changelog-start -->
+
 ## [v1.2.1]
 
 ### Summary
@@ -73,3 +75,5 @@ Initial release.
 [v1.1.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.1.1
 [v1.1.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.1.0
 [v1.0.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.0.0
+
+<!-- sa-changelog-end -->
