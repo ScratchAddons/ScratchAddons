@@ -14,6 +14,12 @@ export default async function({ addon, global, console }) {
     thumbspan.innerText = "Set Thumbnail"
     thumbcontent.append(thumbspan)
     nav.append(setthumb)
+    let brElt = document.createElement("br")
+    let selectThumb = document.createElement("a")
+    selectThumb.id = "selectThumbnailFile"
+    selectThumb.innerText = "Select an image"
+    let closeThumb = document.createElement("a")
+    closeThumb.innerText = "Close"
     setthumb.addEventListener("click", function(e) {
       if (document.querySelector("#snackbar")) {
         if (document.querySelector("#snackbar").classList[0] == "show") {
@@ -33,12 +39,36 @@ export default async function({ addon, global, console }) {
       function animThumbnailMain() {
         let error = function error(err) {
           if (String(err).includes("parameter 1 is not of type 'Blob'.")) {
-            document.getElementById("snackbar").innerHTML = 'Error - please upload a downloaded file,<br> not an image from another website.<br><a id="selectThumbnailFile">Select an image</a><br><a onclick="document.getElementById(\'snackbar\').className=\'\';">Close</a>';
+            let firstext = document.createElement("span")
+            firstext.innerText = "Error - please upload a downloaded file,"
+            let secondtext = document.createElement("span")
+            firstext.innerText = "not an image from another website."
+            closeThumb.onclick = function () {
+              document.getElementById('snackbar').className='';
+            }
+            document.getElementById("snackbar").innerText = ""
+            document.getElementById("snackbar").append(firstext)
+            document.getElementById("snackbar").append(brElt)
+            document.getElementById("snackbar").append(secondtext)
+            document.getElementById("snackbar").append(brElt)
+            document.getElementById("snackbar").append(selectThumb)
+            document.getElementById("snackbar").append(brElt)
+            document.getElementById("snackbar").append(closeThumb)
             document.getElementById("selectThumbnailFile").onclick = function() {
               document.getElementById("uploadthumbnail").click();
             };
           } else {
-            document.getElementById("snackbar").innerHTML = 'Error - try a smaller image.<br><a id="selectThumbnailFile">Select an image</a><br><a onclick="document.getElementById(\'snackbar\').className=\'\';">Close</a>';
+            let firstext = document.createElement("span")
+            firstext.innerText = "Error - try a smaller image."
+            closeThumb.onclick = function () {
+              document.getElementById('snackbar').className='';
+            }
+            document.getElementById("snackbar").innerText = ""
+            document.getElementById("snackbar").append(firstext)
+            document.getElementById("snackbar").append(brElt)
+            document.getElementById("snackbar").append(selectThumb)
+            document.getElementById("snackbar").append(brElt)
+            document.getElementById("snackbar").append(closeThumb)
             document.getElementById("selectThumbnailFile").onclick = function() {
               document.getElementById("uploadthumbnail").click();
             };
@@ -86,10 +116,15 @@ export default async function({ addon, global, console }) {
                 return xhr;
               },
               success: function(msg) {
-                document.getElementById("snackbar").innerHTML = 'The thumbnail was successfully changed.<br><a id="selectThumbnailFile">Select another image</a><br><a onclick="document.getElementById(\'snackbar\').className=\'\';">Close</a>';
-                document.getElementById("selectThumbnailFile").onclick = function() {
-                  document.getElementById("uploadthumbnail").click();
-                };
+                let firstext = document.createElement("span")
+                firstext.innerText = "The thumbnail was successfully changed."
+                closeThumb.onclick = function () {
+                  document.getElementById('snackbar').className='';
+                }
+                document.getElementById("snackbar").innerText = ""
+                document.getElementById("snackbar").append(firstext)
+                document.getElementById("snackbar").append(brElt)
+                document.getElementById("snackbar").append(closeThumb)
               },
               error: function() {
                 error();
@@ -102,8 +137,17 @@ export default async function({ addon, global, console }) {
         var snackbar = document.createElement("div");
         snackbar.id = "snackbar";
         document.body.appendChild(snackbar);
-        document.getElementById("snackbar").innerHTML = '<a id="selectThumbnailFile">Select an image</a> or drag and drop anywhere on this page.<br>Best Thumbnail size is 480x360.<br><a onclick="document.getElementById(\'snackbar\').className=\'\';">Close</a>';
-        document.getElementById("selectThumbnailFile").onclick = function() {
+        let firstext = document.createElement("span")
+        firstext.innerText = " or drag and drop anywhere on this page."
+        closeThumb.onclick = function () {
+          document.getElementById('snackbar').className='';
+        }
+        document.getElementById("snackbar").innerText = ""
+        document.getElementById("snackbar").append(selectThumb)
+        document.getElementById("snackbar").append(firstext)
+        document.getElementById("snackbar").append(brElt)
+        document.getElementById("snackbar").append(closeThumb)
+        selectThumb.onclick = function() {
           document.getElementById("uploadthumbnail").click();
         };
         document.getElementById("snackbar").className = "show";
