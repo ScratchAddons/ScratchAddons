@@ -86,6 +86,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     } else if (messageType === "studioactivity") {
       text += `There was new activity in studio "${title}" today`;
     }
+    let meow = new Audio(chrome.runtime.getURL("addons/scratch-notifier/meow.wav"));
+    if (addon.settings.get("meow_sound")) meow.play();
     const notifId = await addon.notifications.create({
       type: "basic",
       title: "New Scratch message",
