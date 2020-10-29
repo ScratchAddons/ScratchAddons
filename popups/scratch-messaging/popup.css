@@ -222,6 +222,7 @@ button {
   color: #0f8bc0;
   font-weight: bold;
   user-select: none;
+  text-align: right;
 }
 .comment:hover .reply-button-comment,
 .comment:hover .delete-btn {
