@@ -3,8 +3,8 @@ import Addon from "../../addon-api/background/Addon.js";
 export default async function runPersistentScripts(addonId) {
   const manifest = scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest;
   const permissions = manifest.permissions || [];
-  if (manifest.persistent_scripts)
-    executePersistentScripts({ addonId, permissions, scriptUrls: manifest.persistent_scripts });
+  if (manifest.persistentScripts)
+    executePersistentScripts({ addonId, permissions, scriptUrls: manifest.persistentScripts });
 }
 
 async function executePersistentScripts({ addonId, permissions, scriptUrls }) {

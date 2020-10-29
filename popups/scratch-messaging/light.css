@@ -1,0 +1,55 @@
+body {
+  background: white;
+  color: #222;
+  scrollbar-color: #b8b8b8 rgba(0, 0, 0, 0);
+}
+
+button {
+  border: 1px solid #8f8f8f;
+  background: #e0e0e0;
+  color: #222;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #b8b8b8;
+}
+
+#bottom-bar {
+  background: #e3e3e3;
+}
+#bottom-bar img {
+  filter: invert(0%);
+}
+
+.message-type {
+  border: 1px solid #cfcfcf;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: #f7f7f7;
+}
+.message-type-title {
+  color: black;
+}
+.btn-dropdown img {
+  filter: invert(1);
+}
+.btn-dropdown:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.comment {
+  background: #f2f2f2;
+  border: 1px solid #b9b9b9;
+}
+
+.popout-comment {
+  filter: none;
+}
+
+.comment.unread,
+.unread .comment {
+  background-color: #fff;
+}
+
+.reply-textarea {
+  background-color: #f2f2f2;
+  color: black;
+}

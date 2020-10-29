@@ -1,6 +1,6 @@
 ---
 name: "✨ Feature"
-about: Feature request
+about: Request for a new feature
 title: ''
 labels: enhancement
 assignees: ''

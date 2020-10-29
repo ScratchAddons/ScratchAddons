@@ -56,6 +56,9 @@
           class="message-type-title hover-reverse"
           @click="messageTypeExtended.follows = !messageTypeExtended.follows"
         >
+          <div class="btn-dropdown">
+            <img src="../../webpages/settings/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.follows}" />
+          </div>
           <span class="message-type-title-text">Follows</span>
           <span class="float-right">🧑 {{ follows.length }}</span>
         </div>
@@ -72,11 +75,18 @@
           class="message-type-title hover-reverse"
           @click="messageTypeExtended.studioInvites = !messageTypeExtended.studioInvites"
         >
+          <div class="btn-dropdown">
+            <img
+              src="../../webpages/settings/expand.svg"
+              alt="v"
+              :class="{'reverted': messageTypeExtended.studioInvites}"
+            />
+          </div>
           <span class="message-type-title-text">Studio invites</span>
           <span class="float-right">✉️ {{ studioInvites.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.studioInvites">
-          <div v-for="invite of studioInvites">
+          <div class="thread-list" v-for="invite of studioInvites">
             <a @click="openProfile(invite.actor)">{{ invite.actor }}</a> invited you to curate
             <a @click="openStudio(invite.studioId, 'curators')" style="text-decoration: underline"
               >{{ invite.studioTitle }}</a
@@ -91,11 +101,18 @@
           class="message-type-title hover-reverse"
           @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity"
         >
+          <div class="btn-dropdown">
+            <img
+              src="../../webpages/settings/expand.svg"
+              alt="v"
+              :class="{'reverted': messageTypeExtended.forumActivity}"
+            />
+          </div>
           <span class="message-type-title-text">Forum activity</span>
           <span class="float-right">📚 {{ forumActivity.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.forumActivity">
-          <div v-for="forumTopic of forumActivity">
+          <div class="thread-list" v-for="forumTopic of forumActivity">
             There are new posts in the forum thread
             <a @click="openUnreadPostsForums(forumTopic.topicId)" style="text-decoration: underline"
               >{{ forumTopic.topicTitle }}</a
@@ -110,11 +127,18 @@
           class="message-type-title hover-reverse"
           @click="messageTypeExtended.studioActivity = !messageTypeExtended.studioActivity"
         >
+          <div class="btn-dropdown">
+            <img
+              src="../../webpages/settings/expand.svg"
+              alt="v"
+              :class="{'reverted': messageTypeExtended.studioActivity}"
+            />
+          </div>
           <span class="message-type-title-text">Studio activity</span>
           <span class="float-right">🆕 {{ studioActivity.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.studioActivity">
-          <div v-for="studio of studioActivity">
+          <div class="thread-list" v-for="studio of studioActivity">
             There was new activity in
             <a @click="openStudio(studio.studioId)" style="text-decoration: underline">{{ studio.studioTitle }}</a>
           </div>
@@ -127,11 +151,14 @@
           class="message-type-title hover-reverse"
           @click="messageTypeExtended.remixes = !messageTypeExtended.remixes"
         >
+          <div class="btn-dropdown">
+            <img src="../../webpages/settings/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.remixes}" />
+          </div>
           <span class="message-type-title-text">Remixes</span>
           <span class="float-right">🔄 {{ remixes.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.remixes">
-          <div v-for="remix of remixes">
+          <div v-for="remix of remixes" class="thread-list">
             <a @click="openProfile(remix.actor)">{{ remix.actor }}</a> remixed your project "{{ remix.parentTitle }}" as
             <a @click="openProject(remix.projectId)" style="text-decoration: underline">{{ remix.remixTitle }}</a>
           </div>
@@ -144,7 +171,7 @@
         v-for="profile of profilesOrdered"
         v-show="profile.unreadComments && profile.loadedComments"
       >
-        <div class="message-type-title sticky">
+        <div class="message-type-title">
           <a class="message-type-title-text" @click="openProfile(profile.username)">
             <span v-if="profile.username === username">Your profile</span>
             <span v-else>{{ profile.username }}'s profile</span>
@@ -181,7 +208,7 @@
       </div>
       <!-- Studios -->
       <div class="message-type" v-for="studio of studios" v-show="studio.unreadComments && studio.loadedComments">
-        <div class="message-type-title sticky">
+        <div class="message-type-title">
           <a class="message-type-title-text" @click="openStudio(studio.id)">Studio: {{ studio.title }}</a>
           <span class="float-right">
             <span v-show="studio.unreadComments">💬 {{studio.unreadComments}}</span>
@@ -221,7 +248,7 @@
         v-show="project.unreadComments && project.loadedComments || 
               !project.unreadComments && commentsReady"
       >
-        <div class="message-type-title sticky">
+        <div class="message-type-title">
           <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
           <span class="float-right">
             <span v-show="project.loves">❤️ {{project.loves}}</span>

@@ -10,5 +10,5 @@
   ],
   "traps": true,
   "tags": ["editor", "beta"],
-  "enabled_by_default": false
+  "enabledByDefault": false
 }

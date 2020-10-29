@@ -1,3 +1,16 @@
+//theme switching
+const lightThemeLink = document.createElement("link");
+lightThemeLink.setAttribute("rel", "stylesheet");
+lightThemeLink.setAttribute("href", "light.css");
+
+chrome.storage.sync.get(["globalTheme"], function (r) {
+  let rr = false; //true = light, false = dark
+  if (r.globalTheme) rr = r.globalTheme;
+  if (rr) {
+    document.head.appendChild(lightThemeLink);
+  }
+});
+
 const vue = new Vue({
   el: "body",
   data: {
@@ -89,10 +102,23 @@ const vue = new Vue({
       window.open(`https://scratchaddons.com/contributors`);
     },
     openFeedback() {
-      window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}`);
+      window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version_name}`);
     },
     clearSearch() {
       this.searchInput = "";
+    },
+    switchTheme() {
+      chrome.storage.sync.get(["globalTheme"], function (r) {
+        let rr = true; //true = light, false = dark
+        if (r.globalTheme) rr = !r.globalTheme;
+        chrome.storage.sync.set({ globalTheme: rr }, function () {
+          if (rr) {
+            document.head.appendChild(lightThemeLink);
+          } else {
+            document.head.removeChild(lightThemeLink);
+          }
+        });
+      });
     },
     addonMatchesFilters(addonManifest) {
       const matchesTag = this.selectedTag === null || addonManifest.tags.includes(this.selectedTag);
@@ -133,8 +159,8 @@ const vue = new Vue({
         );
       } else toggle();
     },
-    updateOption(settingId, newValue, addon) {
-      this.addonSettings[addon._addonId][settingId] = newValue;
+    updateOption(id, newValue, addon) {
+      this.addonSettings[addon._addonId][id] = newValue;
       this.updateSettings(addon);
     },
     updateSettings(addon) {
@@ -142,6 +168,22 @@ const vue = new Vue({
         changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
       });
       console.log("Updated", this.addonSettings[addon._addonId]);
+    },
+    loadPreset(preset, addon) {
+      if (window.confirm("Are you sure you want to load this preset?")) {
+        for (const property in preset.values) {
+          this.updateOption(property, preset.values[property], addon);
+        }
+        console.log(`Loaded preset ${preset.id} for ${addon.id}`);
+      }
+    },
+    loadDefaults(addon) {
+      if (window.confirm("Are you sure you want to reset this addon to default settings?")) {
+        for (const property of addon.settings) {
+          this.updateOption(property.id, property.default, addon);
+        }
+        console.log(`Loaded default values for ${addon.id}`);
+      }
     },
   },
   watch: {
@@ -185,7 +227,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
   vue.manifests = manifests.map(({ manifest }) => manifest);
   vue.loaded = true;
-  document.getElementById("searchBox").focus();
+  setTimeout(() => document.getElementById("searchBox").focus(), 0);
 });
 
 window.addEventListener("keydown", function (e) {

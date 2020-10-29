@@ -12,6 +12,7 @@
 
   "// For website:",
   "scratchr2",
+  "// TODO // dark-www",
 
   "// Other addons:",
   "editor-searchable-dropdowns",
@@ -24,17 +25,22 @@
   "image-uploader",
   "scratch-messaging",
   "forum-time-zones",
-  "fix-buttons",
   "remove-sprite-confirm",
   "true-youtube-links",
   "progress-bar",
+  "remix-tree-button",
   "bitmap-copy",
   "more-links",
   "youtube-fullscreen",
-  "data-category-tweaks",
   "full-signature",
   "60fps",
   "search-profile",
   "better-emojis",
-  "cloud-games"
+  "cloud-games",
+  "studio-tools",
+  "last-edit-tooltip",
+  "infinite-scroll",
+  "mouse-pos",
+  "clones",
+  "exact-count"
 ]

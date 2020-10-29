@@ -1,6 +1,6 @@
 ---
 name: "➕ New addon"
-about: New addon
+about: Suggest a new addon
 title: ''
 labels: new addon
 assignees: ''

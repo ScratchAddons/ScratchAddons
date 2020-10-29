@@ -1,0 +1,17 @@
+{
+  "name": "Studio manager tools",
+  "description": "Lets you easily promote or remove anyone from your studios, as well as leaving any studio, through the \"curators\" tab.",
+  "credits": [
+    {
+      "name": "World_Languages"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/studios/*/curators"]
+    }
+  ],
+  "tags": ["community", "recommended"],
+  "enabledByDefault": false
+}
