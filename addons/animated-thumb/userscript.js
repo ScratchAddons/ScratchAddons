@@ -25,12 +25,6 @@ export default async function({ addon, global, console }) {
       document.getElementsByTagName('head')[0].appendChild(script);
 
       function animThumbnailMain() {
-        let snackBarCSS = function() {
-          var css = document.createElement("style");
-          css.innerHTML = '#snackbar { visibility: hidden; min-width: 250px; margin-left: -125px; background-color: black; color: #fff; text-align: center; border-radius: 2px; padding: 16px; position: fixed; z-index: 1; left: 50%; top: 50px; } #snackbar.show { visibility: visible; } ';
-          document.head.appendChild(css);
-        }
-
         let error = function error(err) {
           if (String(err).includes("parameter 1 is not of type 'Blob'.")) {
             document.getElementById("snackbar").innerHTML = 'Error - please upload a downloaded file,<br> not an image from another website.<br><a id="selectThumbnailFile">Select an image</a><br><a onclick="document.getElementById(\'snackbar\').className=\'\';">Close</a>';
@@ -98,8 +92,6 @@ export default async function({ addon, global, console }) {
           };
           reader.readAsArrayBuffer(filelocation);
         }
-
-        snackBarCSS();
 
         var snackbar = document.createElement("div");
         snackbar.id = "snackbar";
