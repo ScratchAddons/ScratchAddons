@@ -1,0 +1,23 @@
+{
+  "name": "Messages in editor",
+  "description": "Displayes your message count in the editor.",
+  "credits": [
+    {
+      "name": "TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": false
+}
