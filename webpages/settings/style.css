@@ -547,7 +547,12 @@ input[type="color"]::-webkit-color-swatch {
   width: 80%;
   border-radius: 10px;
 }
-
+.close:hover {
+  
+  color: #555;
+  text-decoration: none;
+  cursor: pointer;
+}
 /* The Close Button */
 .close {
   color: #fff;
@@ -556,12 +561,7 @@ input[type="color"]::-webkit-color-swatch {
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
-  color: #333;
-  text-decoration: none;
-  cursor: pointer;
-}
+
 
 .settings-heading {
   margin: 10px 10px 24px 10px;
