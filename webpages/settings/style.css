@@ -527,7 +527,6 @@ input[type="color"]::-webkit-color-swatch {
   margin: 10px 0;
 }
 .modal {
-  display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   padding-top: 100px; /* Location of the box */
@@ -545,7 +544,6 @@ input[type="color"]::-webkit-color-swatch {
   background-color: #222;
   margin: auto;
   padding: 20px;
-  border: 1px solid #222;
   width: 80%;
   border-radius: 10px;
 }

@@ -44,9 +44,9 @@
           <img src="./feedback.svg" />
           <span>Send Feedback</span>
         </div>
-        <div class="category" style="cursor: pointer" @click="switchTheme()">
+        <div class="category" style="cursor: pointer" @click='modalToggle()'>
           <img src="./theme.svg" />
-          <span>Switch Theme</span>
+          <span>More Settings</span>
         </div>
       </div>
 
@@ -218,11 +218,12 @@
         </div>
       </div>
     </div>
-    <div class="modal">
+    <div v-show="isOpen" class="modal">
       <div class="modal-content">
+        <span @click="modalToggle()" class="close">&times;</span>
         <h1 class="settings-heading">More Settings</h1>
-        <div class="setting-body"><div class="setting-description">Setting</div></div>
+        <div class="setting-body"><button @click="switchTheme()" class="large-button"><img src="./theme.svg" style="vertical-align:middle; margin-right:5px;"/>Light/Dark Mode</div></div>
       </div>
-    </div>
+      </div>
   </body>
 </html>

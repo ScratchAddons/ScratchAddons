@@ -2,7 +2,6 @@
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
-
 chrome.storage.sync.get(["globalTheme"], function (r) {
   let rr = false; //true = light, false = dark
   if (r.globalTheme) rr = r.globalTheme;
@@ -14,6 +13,7 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 const vue = new Vue({
   el: "body",
   data: {
+    isOpen: false,
     loaded: false,
     manifests: [],
     selectedTab: "all",
@@ -89,6 +89,9 @@ const vue = new Vue({
     },
   },
   methods: {
+    modalToggle: function(){
+      this.isOpen = !this.isOpen;
+    },
     openReview() {
       if (typeof browser !== "undefined") {
         window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);

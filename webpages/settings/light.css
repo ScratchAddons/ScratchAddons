@@ -136,3 +136,9 @@ body {
 .switch::before {
   background: #fff;
 }
+.modal-content {
+  background-color: #fcfcfc;
+}
+.close {
+  color:#000;
+}
