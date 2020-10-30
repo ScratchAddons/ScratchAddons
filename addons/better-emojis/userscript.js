@@ -105,3 +105,4 @@ export default async function ({ addon, global, console }) {
         el.src = addon.self.dir + "/images/pizza-cat.svg";
     }
   }
+}
