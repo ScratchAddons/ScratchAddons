@@ -89,7 +89,7 @@ const vue = new Vue({
     },
   },
   methods: {
-    modalToggle: function(){
+    modalToggle: function () {
       this.isOpen = !this.isOpen;
     },
     openReview() {
