@@ -2,9 +2,7 @@
   "name": "Resizable comment input",
   "description": "Makes the comment input box vertically resizable.",
   "tags": ["community"],
-  "credits": [
-    {"name": "Maximouse"}
-  ],
+  "credits": [{ "name": "Maximouse" }],
   "userstyles": [
     {
       "url": "userstyle.css",
