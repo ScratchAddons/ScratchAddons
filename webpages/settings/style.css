@@ -545,7 +545,6 @@ input[type="color"]::-webkit-color-swatch {
   background-color: #222;
   margin: auto;
   padding: 20px;
-  border: 1px solid #222;
   width: 80%;
   border-radius: 10px;
 }
