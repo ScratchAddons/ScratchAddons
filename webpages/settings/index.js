@@ -90,7 +90,7 @@ const vue = new Vue({
   },
   methods: {
     pass() {
-      console.log('pass');
+      console.log("pass");
     },
     modalToggle: function () {
       this.isOpen = !this.isOpen;
