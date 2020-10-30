@@ -140,8 +140,8 @@ body {
   background-color: #fcfcfc;
 }
 .close {
-  filter:invert(1);
+  filter: invert(1);
 }
 .modal-content img {
-    filter: invert(1);
+  filter: invert(1);
 }
