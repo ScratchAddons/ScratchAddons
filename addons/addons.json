@@ -42,5 +42,6 @@
   "infinite-scroll",
   "mouse-pos",
   "clones",
-  "exact-count"
+  "exact-count",
+  "faster-loading"
 ]
