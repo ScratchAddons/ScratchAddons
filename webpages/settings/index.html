@@ -70,7 +70,6 @@
               <div
                 v-for="tag of tagsToShow"
                 class="filter-option"
-                class="badge"
                 :class="{
                 'sel': selectedTag === tag.matchName,
                 'blue': tag.color === 'blue',
@@ -221,10 +220,25 @@
     <div v-show="isOpen" class="modal">
       <div class="modal-content">
         <span @click="modalToggle()" class="close">&times;</span>
-        <h1 class="settings-heading">More Settings</h1>
-        <div class="setting-body"><button @click="switchTheme()" class="large-button"><img src="./theme.svg" style="vertical-align:middle; margin-right:5px;"/>Light/Dark Mode</button></div>
+        <h1 class="settings-heading">More Settings</h1><div class="settings-block">
+        <div class="settings-block">
+        <div class="setting-body"><div class="filter-selector">
+            <span class="filter-text"><img src="./theme.svg" style="vertical-align:middle; margin-right:5px;"/>Light/Dark Mode: </span>
+            <div class="filter-options">
+              <div  @click="selectedMode = 'light'" v-bind:class="{sel :selectedMode == 'light'}" class="filter-option" >
+                Light
+                </div>
+              <div @click="selectedMode = 'dark'" v-bind:class="{sel :selectedMode == 'dark'}" class="filter-option" >
+                Dark
+                </div>
+            </div>
+          </div><span class="addon-description">This allows you to switch between light and dark modes for the popup and addon. Try them out!</span></div>
+        </div>
+        <div class="footer"><span>Scratch Addons Version <a href="https://scratchaddons.com/changelog">{{ version }}</a></span></div>
+        
         </div>
       </div>
-      </div>
+    </div>
+  </div>
   </body>
 </html>
