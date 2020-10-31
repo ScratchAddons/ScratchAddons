@@ -6,39 +6,41 @@ export default async function ({ addon, global, console }) {
   var playing = true;
   var threads = [];
 
-  var hasPauseVar = false
+  var hasPauseVar = false;
 
-  vm.runtime.on('PROJECT_RUN_START', function () {
-    console.log('loaded')
-    pauseVar()
-  })
-
-
+  vm.runtime.on("PROJECT_RUN_START", function () {
+    console.log("loaded");
+    pauseVar();
+  });
 
   function pauseVar() {
-    var variable = Object.values(_scratchAddonsScratchVM.runtime.getTargetForStage().variables).find(a => a.name == 'sa_pause')
+    var variable = Object.values(_scratchAddonsScratchVM.runtime.getTargetForStage().variables).find(
+      (a) => a.name == "sa_pause"
+    );
     if (variable) {
-      hasPauseVar = true
-      variable._value = variable.value
+      hasPauseVar = true;
+      variable._value = variable.value;
 
-      Object.defineProperty(variable, 'value', {
+      Object.defineProperty(variable, "value", {
         get: function () {
-          return this._value
+          return this._value;
         },
         set: function (v) {
-          if (v == 'pause') {
+          if (v == "pause") {
             threads = vm.runtime.threads;
             vm.runtime.threads = [];
-            setTimeout(function () { vm.runtime.audioEngine.audioContext.suspend(); }, 5)// it waits a tiny bit because the audio does weird things
+            setTimeout(function () {
+              vm.runtime.audioEngine.audioContext.suspend();
+            }, 5); // it waits a tiny bit because the audio does weird things
             vm.runtime.ioDevices.clock.pause();
-            document.querySelector('.pause-btn').src = addon.self.dir + "/play.svg";
-            playing = false
-            return (this._value = 'paused')
+            document.querySelector(".pause-btn").src = addon.self.dir + "/play.svg";
+            playing = false;
+            return (this._value = "paused");
           } else {
-            return (this._value = v)
+            return (this._value = v);
           }
         },
-      })
+      });
     }
   }
 
