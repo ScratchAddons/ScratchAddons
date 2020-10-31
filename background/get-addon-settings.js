@@ -16,7 +16,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             if (
               addonId === "editor-dark-mode" &&
               option.id === "textShadow" &&
-              chrome.runtime.getManifest().version === "1.2.0"
+              chrome.runtime.getManifest().version.startsWith("1.2")
             ) {
               // Note: addonsEnabled["editor-dark-mode"] is undefined if it's the first extension run ever
               if (addonsEnabled["editor-dark-mode"] === false) {

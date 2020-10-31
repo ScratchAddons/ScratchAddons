@@ -11,8 +11,15 @@ export default async function ({ addon, global, console }) {
         if (!lock) {
           lock = true;
           page++;
+          let nextPage;
+          if (location.search) {
+            let search = location.search.replace(/(&|\?)page=[0-9]+/, "");
+            nextPage = `https://scratch.mit.edu${location.pathname}${search}&page=${page}`;
+          } else {
+            nextPage = `https://scratch.mit.edu${location.pathname}?page=${page}`;
+          }
           window
-            .fetch(`https://scratch.mit.edu${document.location.pathname}?page=${page}`)
+            .fetch(nextPage)
             .catch((err) => {
               console.log("Unable to fetch the page!");
             })
@@ -20,11 +27,21 @@ export default async function ({ addon, global, console }) {
             .then((data) => {
               let parser = new DOMParser();
               let doc = parser.parseFromString(data, "text/html");
-              let table = document.getElementById("vf").getElementsByTagName("tbody")[0];
-              let posts = doc.getElementById("vf").getElementsByTagName("tr");
+              let table, posts;
+              let vf = document.getElementById("vf");
+              if (vf) {
+                table = vf.getElementsByTagName("tbody")[0];
+                posts = doc.getElementById("vf").getElementsByTagName("tr");
+              } else {
+                table = document.getElementById("djangobbindex");
+                posts = doc.getElementById("djangobbindex").getElementsByClassName("blockpost");
+              }
               for (let i = 1; i < posts.length; i++) {
-                let row = table.insertRow(-1);
-                row.innerHTML = posts[i].innerHTML;
+                if (vf) {
+                  table.appendChild(posts[i]);
+                } else {
+                  table.insertBefore(posts[i], table.querySelector(".postlinksb"));
+                }
               }
               lock = false;
             });
