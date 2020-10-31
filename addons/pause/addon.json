@@ -1,6 +1,6 @@
 {
-  "name": "Pause projects",
-  "description": "THE IMPOSSIBLE HAS BEEN DONE.",
+  "name": "Pause button",
+  "description": "Adds a pause button next to the green flag. You can also programmatically pause a project in Scratch by setting a global variable called sa_pause to \"pause\".",
   "warning": "This feature might make Scratch projects lag, especially if you're not using a powerful computer. Performance will be enhanced in future updates.",
   "credits": [
     {
