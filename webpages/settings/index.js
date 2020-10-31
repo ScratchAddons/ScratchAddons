@@ -14,7 +14,7 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 const vue = new Vue({
   el: "body",
   data: {
-    selectedMode: '',
+    selectedMode: "",
     isOpen: false,
     loaded: false,
     manifests: [],
@@ -102,7 +102,7 @@ const vue = new Vue({
     },
     version() {
       return chrome.runtime.getManifest().version;
-    }
+    },
   },
   methods: {
     modalToggle: function () {
@@ -243,16 +243,16 @@ window.addEventListener("keydown", function (e) {
   }
 });
 theme = chrome.storage.sync.get(["globalTheme"], function (r) {
-          console.log(theme)
-      });
-console.log(theme)
-while (this.selectedMode == 'dark' & theme !== false) {
+  console.log(theme);
+});
+console.log(theme);
+while ((this.selectedMode == "dark") & (theme !== false)) {
   chrome.storage.sync.set({ globalTheme: false }, function () {
-    console.log(this.selectedMode + ' mode set')
+    console.log(this.selectedMode + " mode set");
   });
 }
-while (this.selectedMode == 'light' & theme !== true) {
+while ((this.selectedMode == "light") & (theme !== true)) {
   chrome.storage.sync.set({ globalTheme: true }, function () {
-    console.log(this.selectedMode + ' mode set')
+    console.log(this.selectedMode + " mode set");
   });
 }

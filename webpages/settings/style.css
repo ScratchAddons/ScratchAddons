@@ -545,7 +545,7 @@ input[type="color"]::-webkit-color-swatch {
   padding: 20px;
   width: 80%;
   border-radius: 10px;
-  min-height:500px;
+  min-height: 500px;
 }
 .close:hover {
   color: #555;
@@ -564,14 +564,14 @@ input[type="color"]::-webkit-color-swatch {
   margin: 10px 10px 24px 10px;
 }
 .footer {
-  position:fixed;
-  vertical-align:bottom;
-  text-align:center;
+  position: fixed;
+  vertical-align: bottom;
+  text-align: center;
   width: 80%;
-  color:gray;
+  color: gray;
 }
 .footer a {
-  color:gray;
+  color: gray;
 }
 .settings-block {
   height: 435px;
