@@ -19,14 +19,14 @@ document.getElementById("settings").onclick = () => {
 const popups = [
   {
     addonId: "scratch-messaging",
-    icon: "./envelope.svg",
+    icon: "../../images/icons/envelope.svg",
     name: `Messaging`,
     url: "scratch-messaging/popup.html",
     fullscreen: true,
   },
   {
     addonId: "cloud-games",
-    icon: "./cloud.svg",
+    icon: "../../images/icons/cloud.svg",
     name: "Games",
     url: "cloud-games/popup.html",
   },
@@ -56,7 +56,7 @@ for (const popup of popups) {
     popoutA.target = "_blank";
     popoutA.onclick = () => setTimeout(() => window.close(), 100);
     const img = document.createElement("img");
-    img.src = "./popout.svg";
+    img.src = "../../images/icons/popout.svg";
     img.title = "Open in new browser tab";
     popoutA.appendChild(img);
     el.appendChild(popoutA);

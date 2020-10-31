@@ -185,6 +185,12 @@ const vue = new Vue({
         console.log(`Loaded default values for ${addon.id}`);
       }
     },
+    textParse(text) {
+      const regex = /@([a-zA-Z0-9.\-]*)/g;
+      return text.replace(regex, (icon) => {
+        return `<img class="inline-icon" src="../../images/icons/${icon.slice(1)}"/>`;
+      });
+    },
   },
   watch: {
     selectedTab() {
