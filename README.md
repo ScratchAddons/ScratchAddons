@@ -75,6 +75,14 @@ After downloading the extension to your computer, just load it by following thes
 
 If you found a bug, or want to suggest new features, please use the [issues tab](https://github.com/ScratchAddons/ScratchAddons/issues). If you want to help with the code or add a new addon, fork this repository, and then create a [pull request](https://github.com/ScratchAddons/ScratchAddons/pulls). Also, please read our [contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/CONTRIBUTING.md).
 
+## Support
+
+Thanks to everyone who uses Scratch Addons. We hope that this extension meets your needs and makes Scratch more accessible and flexible. We would really appreciate it if you followed the contributors on Scratch and Github to keep this exquisite extension running. A big thanks to our contributors: 
+
+[World_Languages](https://scratch.mit.edu/users/World_Languages)
+
+[Samuraininja360](https://scratch.mit.edu/users/samuraininja360)
+
 ## License
 
 Scratch Addons is licensed under the terms of the [GNU General Public License v3.0](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE).
