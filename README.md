@@ -56,7 +56,7 @@ Scratch Addons by itself is just an addon loader. Its main tasks are:
 No build is required. You may download the source code by doing one of these steps.
 
 1. Cloning the repository by running `git clone https://github.com/ScratchAddons/ScratchAddons.git`.
-2. Download the zipball of the current state of the repository [here](https://github.com/ScratchAddons/ScratchAddons/archive/readme.zip).
+2. Download the zipball of the current state of the repository [here](https://github.com/ScratchAddons/ScratchAddons/archive/master.zip).
 3. Download one of the builds on [the releases page](https://github.com/ScratchAddons/ScratchAddons/releases). (.zip recommended)
 
 After downloading the extension to your computer, just load it by following these steps.
