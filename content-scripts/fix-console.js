@@ -1,7 +1,7 @@
 function fixConsole() {
-    window._realConsole = {
-        ...console
-    };
+  window._realConsole = {
+    ...console,
+  };
 }
 
 const fixConsoleScript = document.createElement("script");
