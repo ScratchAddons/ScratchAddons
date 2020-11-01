@@ -1,4 +1,4 @@
-.sa-editormessages{
+.sa-editormessages {
   background-image: url(https://scratch.mit.edu/images/nav-notifications.png);
   background-repeat: no-repeat;
   background-position: center center;
@@ -14,25 +14,25 @@
   height: 33px;
   text-decoration: none;
   color: white;
-  font-size: .85rem;
+  font-size: 0.85rem;
   font-weight: bold;
 }
 
-.sa-editormessages:hover{
+.sa-editormessages:hover {
   background-color: hsla(0, 0%, 0%, 0.15);
 }
 
-.sa-editormessages-count{
+.sa-editormessages-count {
   display: block;
   position: absolute;
-  top: .5rem;
+  top: 0.5rem;
   right: 12.8rem;
   border-radius: 1rem;
   background-color: #ffab1a;
-  padding: 0 .25rem;
+  padding: 0 0.25rem;
   text-indent: 0;
   line-height: 1rem;
   color: white;
-  font-size: .7rem;
+  font-size: 0.7rem;
   font-weight: bold;
 }
