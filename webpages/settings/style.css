@@ -296,6 +296,11 @@ h1 {
   margin-right: 10px;
 }
 
+.inline-icon {
+  height: 16px;
+  vertical-align: bottom;
+}
+
 .setting-input {
   color: #fff;
   background: #222222;

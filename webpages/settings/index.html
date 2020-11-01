@@ -17,35 +17,35 @@
     <div class="main">
       <div class="categories-block">
         <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
-          <img src="./list.svg" />
+          <img src="../../images/icons/list.svg" />
           <span>All</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'editor'}" @click="selectedTab = 'editor'">
-          <img src="./puzzle.svg" />
+          <img src="../../images/icons/puzzle.svg" />
           <span>Scratch Editor Features</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'community'}" @click="selectedTab = 'community'">
-          <img src="./web.svg" />
+          <img src="../../images/icons/web.svg" />
           <span>Scratch Website Features</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'theme'}" @click="selectedTab = 'theme'">
-          <img src="./brush.svg" />
+          <img src="../../images/icons/brush.svg" />
           <span>Themes</span>
         </div>
         <div class="category" style="margin-top: auto; cursor: pointer" @click="openCredits()">
-          <img src="./credits.svg" />
+          <img src="../../images/icons/users.svg" />
           <span>Credits</span>
         </div>
         <div class="category" style="cursor: pointer" @click="openReview()">
-          <img src="./review.svg" />
+          <img src="../../images/icons/star.svg" />
           <span>Review</span>
         </div>
         <div class="category" style="cursor: pointer" @click="openFeedback()">
-          <img src="./feedback.svg" />
+          <img src="../../images/icons/comment.svg" />
           <span>Send Feedback</span>
         </div>
         <div class="category" style="cursor: pointer" @click="switchTheme()">
-          <img src="./theme.svg" />
+          <img src="../../images/icons/theme.svg" />
           <span>Switch Theme</span>
         </div>
       </div>
@@ -96,12 +96,12 @@
             <div class="addon-topbar">
               <div class="clickeable-area" @click="addon._expanded = !addon._expanded">
                 <div class="btn-dropdown">
-                  <img src="./expand.svg" alt="v" :class="{'reverted': addon._expanded}" />
+                  <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': addon._expanded}" />
                 </div>
                 <div class="addon-name">
-                  <img v-if="addon._category === 'editor'" src="./puzzle.svg" class="icon-type" />
-                  <img v-if="addon._category === 'community'" src="./web.svg" class="icon-type" />
-                  <img v-if="addon._category === 'theme'" src="./brush.svg" class="icon-type" />
+                  <img v-if="addon._category === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
+                  <img v-if="addon._category === 'community'" src="../../images/icons/web.svg" class="icon-type" />
+                  <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
                   {{ addon.name }}
                 </div>
               </div>
@@ -117,8 +117,9 @@
                   v-if="addon.settings"
                   class="clear-settings"
                   title="Reset to default settings"
+                  @click="loadDefaults(addon)"
                 >
-                  <img src="./undo.svg" class="icon-type" @click="loadDefaults(addon)" />
+                  <img src="../../images/icons/undo.svg" class="icon-type" />
                 </div>
                 <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest(addon)" />
               </div>
@@ -142,7 +143,7 @@
             </div>
             <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
               <div class="addon-setting" v-for="setting of addon.settings">
-                <div class="setting-label">{{ setting.name }}</div>
+                <div class="setting-label" v-html="textParse(setting.name, addon)"></div>
                 <input
                   type="checkbox"
                   class="setting-input check"
