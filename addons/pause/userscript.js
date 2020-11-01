@@ -28,9 +28,13 @@ export default async function ({ addon, global, console }) {
   const oldFlag = vm.runtime.greenFlag;
 
   vm.runtime.greenFlag = function () {
-    img.src = addon.self.dir + "/pause.svg";
-    playing = true;
-    return oldFlag.call(vm.runtime, arguments);
+    vm.runtime.audioEngine.audioContext.resume()
+    .then(()=>{
+      vm.runtime.ioDevices.clock.resume();
+      img.src = addon.self.dir + "/pause.svg";
+      playing = true;
+      return oldFlag.call(vm.runtime, arguments);
+    })
   };
 
   while (true) {
