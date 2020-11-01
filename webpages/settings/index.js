@@ -258,8 +258,8 @@ window.addEventListener("keydown", function (e) {
 });
 
 chrome.storage.sync.get({ globalTheme }, function (theme) {
-    while (theme.globalTheme !== this.selectedMode)
-      chrome.storage.sync.set( { globalTheme: this.selectedMode}, function (theme) {
-        console.log(theme)
-      });
-  });
+  while (theme.globalTheme !== this.selectedMode)
+    chrome.storage.sync.set({ globalTheme: this.selectedMode }, function (theme) {
+      console.log(theme);
+    });
+});
