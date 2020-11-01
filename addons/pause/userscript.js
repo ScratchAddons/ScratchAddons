@@ -10,7 +10,7 @@ export default async function ({ addon, global, console }) {
 
   vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
     if (proccode.startsWith("sa-pause")) {
-      console.log("is for me");
+      console.log("👉👈is for me");
       threads = vm.runtime.threads;
       vm.runtime.threads.forEach((i) => {
         i.status = 3;
@@ -24,6 +24,14 @@ export default async function ({ addon, global, console }) {
     }
     return oldStepToProcedure.call(this, thread, proccode);
   };
+
+  const oldFlag = vm.runtime.greenFlag;
+
+  vm.runtime.greenFlag = function (){
+    img.src = addon.self.dir + "/pause.svg";
+    playing = true;
+    return oldFlag.call(vm.runtime, arguments)
+  }
 
   while (true) {
     let bar = await addon.tab.waitForElement("[class^='controls_controls-container']", { markAsSeen: true });
@@ -39,27 +47,20 @@ export default async function ({ addon, global, console }) {
 
     img.addEventListener("click", (e) => {
       if (!playing) {
-        if (vm.runtime.threads.length == 0) vm.runtime.threads = threads;
-        vm.runtime.audioEngine.audioContext.resume();
-        vm.runtime.ioDevices.clock.resume();
-        img.src = addon.self.dir + "/pause.svg";
+        vm.runtime.audioEngine.audioContext.resume().then(() => {
+          if (vm.runtime.threads.length == 0) vm.runtime.threads = threads;
+          vm.runtime.ioDevices.clock.resume();
+          img.src = addon.self.dir + "/pause.svg";
+        });
       } else {
-        threads = vm.runtime.threads;
-        vm.runtime.threads = [];
-        vm.runtime.audioEngine.audioContext.suspend();
-        vm.runtime.ioDevices.clock.pause();
-        img.src = addon.self.dir + "/play.svg";
+        vm.runtime.audioEngine.audioContext.suspend().then(() => {
+          threads = vm.runtime.threads;
+          vm.runtime.threads = [];
+          vm.runtime.ioDevices.clock.pause();
+          img.src = addon.self.dir + "/play.svg";
+        })
       }
       playing = !playing;
-    });
-
-    document.querySelector("[class^='green-flag']").addEventListener("click", (e) => {
-      //just incase someone presses greenflag after it has been pauseds
-      threads = [];
-      vm.runtime.audioEngine.audioContext.resume();
-      vm.runtime.ioDevices.clock.resume();
-      img.src = addon.self.dir + "/pause.svg";
-      playing = true;
     });
 
     //TODO: break points in scratch code
