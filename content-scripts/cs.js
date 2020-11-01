@@ -145,31 +145,33 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
 }
 
 function forumWarning() {
-  let postArea = document.querySelector("form#post > label")
-  if (postArea) {
-    var errorList = document.querySelector("form#post > label > ul")
-    if (!errorList) {
-      let typeArea = postArea.querySelector("div")
-      errorList = document.createElement("ul")
-      errorList.classList.add("errorlist")
-      postArea.insertBefore(errorList, typeArea)
+  if (document.querySelectorAll(".linksb > ul li a")[1].innerText == "Bugs and Glitches") {
+    let postArea = document.querySelector("form#post > label")
+    if (postArea) {
+      var errorList = document.querySelector("form#post > label > ul")
+      if (!errorList) {
+        let typeArea = postArea.querySelector("div")
+        errorList = document.createElement("ul")
+        errorList.classList.add("errorlist")
+        postArea.insertBefore(errorList, typeArea)
+      }
+      let addonError = document.createElement("li")
+      let reportLink = document.createElement("a")
+      reportLink.href = "https://scratchaddons.com/feedback"
+      reportLink.innerText = "here"
+      let text1 = document.createElement("span")
+      text1.innerText = "Is this about a bug or glitch? Make sure it isn't from ScratchAddons. If it is, report it ";
+      let text2 = document.createElement("span")
+      text2.innerText = ". Suggestions for an addons? Then talk about it ";
+      let text3 = document.createElement("span")
+      text3.innerText = ".";
+      addonError.appendChild(text1)
+      addonError.appendChild(reportLink)
+      addonError.appendChild(text2)
+      reportLink = reportLink.cloneNode(true);
+      addonError.appendChild(reportLink)
+      addonError.appendChild(text3)
+      errorList.appendChild(addonError)
     }
-    let addonError = document.createElement("li")
-    let reportLink = document.createElement("a")
-    reportLink.href = "https://scratchaddons.com/feedback"
-    reportLink.innerText = "here"
-    let text1 = document.createElement("span")
-    text1.innerText = "Is this about a bug or glitch? Make sure it isn't from ScratchAddons. If it is, report it ";
-    let text2 = document.createElement("span")
-    text2.innerText = ". Suggestions for an addons? Then talk about it ";
-    let text3 = document.createElement("span")
-    text3.innerText = ".";
-    addonError.appendChild(text1)
-    addonError.appendChild(reportLink)
-    addonError.appendChild(text2)
-    reportLink = reportLink.cloneNode(true);
-    addonError.appendChild(reportLink)
-    addonError.appendChild(text3)
-    errorList.appendChild(addonError)
   }
 }
