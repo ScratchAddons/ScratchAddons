@@ -27,11 +27,11 @@ export default async function ({ addon, global, console }) {
 
   const oldFlag = vm.runtime.greenFlag;
 
-  vm.runtime.greenFlag = function (){
+  vm.runtime.greenFlag = function () {
     img.src = addon.self.dir + "/pause.svg";
     playing = true;
-    return oldFlag.call(vm.runtime, arguments)
-  }
+    return oldFlag.call(vm.runtime, arguments);
+  };
 
   while (true) {
     let bar = await addon.tab.waitForElement("[class^='controls_controls-container']", { markAsSeen: true });
@@ -58,7 +58,7 @@ export default async function ({ addon, global, console }) {
           vm.runtime.threads = [];
           vm.runtime.ioDevices.clock.pause();
           img.src = addon.self.dir + "/play.svg";
-        })
+        });
       }
       playing = !playing;
     });
