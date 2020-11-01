@@ -36,7 +36,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 chrome.runtime.sendMessage("ready");
 window.addEventListener("load", () => {
-  forumWarning()
+  forumWarning();
   if (!receivedContentScriptInfo) {
     // This might happen sometimes, the background page might not
     // have seen this tab loading, for example, at startup.
@@ -146,32 +146,32 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
 
 function forumWarning() {
   if (window.location.pathname == "/discuss/3/topic/add/") {
-    let postArea = document.querySelector("form#post > label")
+    let postArea = document.querySelector("form#post > label");
     if (postArea) {
-      var errorList = document.querySelector("form#post > label > ul")
+      var errorList = document.querySelector("form#post > label > ul");
       if (!errorList) {
-        let typeArea = postArea.querySelector("strong")
-        errorList = document.createElement("ul")
-        errorList.classList.add("errorlist")
-        postArea.insertBefore(errorList, typeArea)
+        let typeArea = postArea.querySelector("strong");
+        errorList = document.createElement("ul");
+        errorList.classList.add("errorlist");
+        postArea.insertBefore(errorList, typeArea);
       }
-      let addonError = document.createElement("li")
-      let reportLink = document.createElement("a")
-      reportLink.href = "https://scratchaddons.com/feedback"
-      reportLink.innerText = "here"
-      let text1 = document.createElement("span")
+      let addonError = document.createElement("li");
+      let reportLink = document.createElement("a");
+      reportLink.href = "https://scratchaddons.com/feedback";
+      reportLink.innerText = "here";
+      let text1 = document.createElement("span");
       text1.innerText = "Is this about a bug or glitch? Make sure it isn't from ScratchAddons. If it is, report it ";
-      let text2 = document.createElement("span")
+      let text2 = document.createElement("span");
       text2.innerText = ". Suggestions for an addons? Then talk about it ";
-      let text3 = document.createElement("span")
+      let text3 = document.createElement("span");
       text3.innerText = ".";
-      addonError.appendChild(text1)
-      addonError.appendChild(reportLink)
-      addonError.appendChild(text2)
+      addonError.appendChild(text1);
+      addonError.appendChild(reportLink);
+      addonError.appendChild(text2);
       reportLink = reportLink.cloneNode(true);
-      addonError.appendChild(reportLink)
-      addonError.appendChild(text3)
-      errorList.appendChild(addonError)
+      addonError.appendChild(reportLink);
+      addonError.appendChild(text3);
+      errorList.appendChild(addonError);
     }
   }
 }
