@@ -269,8 +269,6 @@ window.addEventListener("keydown", function (e) {
     document.querySelector("#searchBox").focus();
   }
 });
-<<<<<<< HEAD
-=======
 theme = chrome.storage.sync.get(["globalTheme"], function (r) {
   console.log(theme);
 });
@@ -285,4 +283,3 @@ while ((this.selectedMode == "light") & (theme !== true)) {
     console.log(this.selectedMode + " mode set");
   });
 }
->>>>>>> parent of 3849aa5... Changes
