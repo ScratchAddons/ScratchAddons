@@ -7,20 +7,20 @@ export default async function ({ addon, global, console }) {
   var threads = [];
 
   const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;
-  
-  vm.runtime.sequencer.stepToProcedure = function (thread, proccode){
-    if(proccode.startsWith('sa-pause')) {
-      console.log('is for me')
+
+  vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
+    if (proccode.startsWith("sa-pause")) {
+      console.log("is for me");
       threads = vm.runtime.threads;
       vm.runtime.threads = [];
       vm.runtime.audioEngine.audioContext.suspend();
       vm.runtime.ioDevices.clock.pause();
-      playing = false
-      document.querySelector('.pause-btn').src = addon.self.dir + "/play.svg";
+      playing = false;
+      document.querySelector(".pause-btn").src = addon.self.dir + "/play.svg";
       return;
     }
-    return oldStepToProcedure.call(this, thread, proccode)
-  }
+    return oldStepToProcedure.call(this, thread, proccode);
+  };
 
   while (true) {
     let bar = await addon.tab.waitForElement("[class^='controls_controls-container']", { markAsSeen: true });
