@@ -117,10 +117,6 @@ button {
   z-index: 999;
   margin: 10px 0px;
 }
-.small-icon {
-  height: 14px;
-  vertical-align: text-bottom;
-}
 .message-type-title-text {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -132,7 +128,7 @@ button {
 .float-right {
   margin-left: 4px;
   white-space: nowrap;
-  font-size: 12px;
+  font-size: 0.9rem;
 }
 .float-right > span {
   display: inline-block;
@@ -196,8 +192,9 @@ button {
 }
 .popout-comment {
   cursor: pointer;
-  height: 10px;
-  vertical-align: text-top;
+  height: 0.5rem;
+  vertical-align: middle;
+  filter: brightness(0) invert(1);
 }
 .delete-btn {
   float: right;
