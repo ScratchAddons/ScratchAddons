@@ -26,7 +26,7 @@
     {
       "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
-      "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js"]
+      "js": ["content-scripts/prototype-handler.js", "content-scripts/load-redux.js", "content-scripts/fix-console.js"]
     },
     {
       "matches": ["https://scratch.mit.edu/projects/0111001101100001/embed"],

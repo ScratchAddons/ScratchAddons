@@ -191,6 +191,20 @@ const vue = new Vue({
         console.log(`Loaded default values for ${addon.id}`);
       }
     },
+    textParse(text, addon) {
+      const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
+      return text.replace(regex, (icon) => {
+        if (icon[0] == "\\") {
+          return icon.slice(1);
+        }
+        if (icon[0] == "@") {
+          return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
+        }
+        if (icon[0] == "#") {
+          return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
+        }
+      });
+    },
   },
   watch: {
     selectedTab() {
