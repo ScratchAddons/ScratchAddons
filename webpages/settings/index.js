@@ -89,8 +89,8 @@ const vue = new Vue({
       return this.tags.filter((tag) => tag.tabShow[this.selectedTab]);
     },
     version() {
-      return chrome.runtime.getManifest().version
-    }
+      return chrome.runtime.getManifest().version;
+    },
   },
   methods: {
     modalToggle: function () {
