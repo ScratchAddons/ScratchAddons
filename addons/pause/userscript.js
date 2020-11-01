@@ -6,42 +6,20 @@ export default async function ({ addon, global, console }) {
   var playing = true;
   var threads = [];
 
-  var hasPauseVar = false;
-
-  vm.runtime.on("PROJECT_RUN_START", function () {
-    console.log("loaded");
-    pauseVar();
-  });
-
-  function pauseVar() {
-    var variable = Object.values(_scratchAddonsScratchVM.runtime.getTargetForStage().variables).find(
-      (a) => a.name == "sa_pause"
-    );
-    if (variable) {
-      hasPauseVar = true;
-      variable._value = variable.value;
-
-      Object.defineProperty(variable, "value", {
-        get: function () {
-          return this._value;
-        },
-        set: function (v) {
-          if (v == "pause") {
-            threads = vm.runtime.threads;
-            vm.runtime.threads = [];
-            setTimeout(function () {
-              vm.runtime.audioEngine.audioContext.suspend();
-            }, 5); // it waits a tiny bit because the audio does weird things
-            vm.runtime.ioDevices.clock.pause();
-            document.querySelector(".pause-btn").src = addon.self.dir + "/play.svg";
-            playing = false;
-            return (this._value = "paused");
-          } else {
-            return (this._value = v);
-          }
-        },
-      });
+  const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;
+  
+  vm.runtime.sequencer.stepToProcedure = function (thread, proccode){
+    if(proccode.startsWith('sa-pause')) {
+      console.log('is for me')
+      threads = vm.runtime.threads;
+      vm.runtime.threads = [];
+      vm.runtime.audioEngine.audioContext.suspend();
+      vm.runtime.ioDevices.clock.pause();
+      playing = false
+      document.querySelector('.pause-btn').src = addon.self.dir + "/play.svg";
+      return;
     }
+    return oldStepToProcedure.call(this, thread, proccode)
   }
 
   while (true) {
