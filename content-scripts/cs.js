@@ -145,12 +145,12 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
 }
 
 function forumWarning() {
-  if (document.querySelectorAll(".linksb > ul li a")[1].innerText == "Bugs and Glitches") {
+  if (window.location.pathname == "/discuss/3/topic/add/") {
     let postArea = document.querySelector("form#post > label")
     if (postArea) {
       var errorList = document.querySelector("form#post > label > ul")
       if (!errorList) {
-        let typeArea = postArea.querySelector("div")
+        let typeArea = postArea.querySelector("strong")
         errorList = document.createElement("ul")
         errorList.classList.add("errorlist")
         postArea.insertBefore(errorList, typeArea)
