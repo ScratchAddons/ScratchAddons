@@ -2,7 +2,6 @@ export default async function ({ addon, global, console }) {
   let url = window.location.href;
   let user1 = url.substring(30, 100);
   let username = user1.substring(0, user1.indexOf("/"));
-  let dalength = document.getElementsByClassName("box-head").length;
   var boxNumber = 1
   getUserData({
     boxheadName: "Shared Projects",
@@ -43,7 +42,9 @@ export default async function ({ addon, global, console }) {
         let follownum = response.substring(find, find + 200).match(/\(([^)]+)\)/)[1];
         let a = `${details.boxheadName} (${follownum})`;
         let current = document.querySelectorAll(".box-head h4")[boxNumber - 1]
-        if (current.innerText.startsWith(details.boxheadName)) {
+        let viewAll = new URL(document.querySelectorAll(".box-head a")[boxNumber - 1].href)
+        let link = viewAll.pathname.substring(viewAll.pathname.indexOf("/users/" + username), viewAll.pathname.length)
+        if (link = details.url + '/') {
           current.innerText = a;
           boxNumber++
         }
