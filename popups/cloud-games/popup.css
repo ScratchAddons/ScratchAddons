@@ -59,7 +59,7 @@ a:hover {
 .float-right {
   margin-left: 4px;
   white-space: nowrap;
-  font-size: 12px;
+  font-size: 0.9rem;
 }
 .float-right > span {
   display: inline-block;
@@ -85,9 +85,4 @@ a:hover {
 
 .title a {
   color: white;
-}
-
-.small-icon {
-  height: 14px;
-  vertical-align: text-bottom;
 }

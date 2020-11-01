@@ -19,15 +19,13 @@ document.getElementById("settings").onclick = () => {
 const popups = [
   {
     addonId: "scratch-messaging",
-    icon: "./envelope.svg",
-    name: `Messaging`,
+    name: "✉️ Messaging",
     url: "scratch-messaging/popup.html",
     fullscreen: true,
   },
   {
     addonId: "cloud-games",
-    icon: "./cloud.svg",
-    name: "Games",
+    name: "☁️ Games",
     url: "cloud-games/popup.html",
   },
 ];
@@ -38,14 +36,7 @@ for (const popup of popups) {
   const el = document.createElement("div");
   el.classList.add("popup-name");
   el.setAttribute("data-id", popup.addonId);
-  if (popup.icon) {
-    const icon = document.createElement("img");
-    icon.classList.add("popup-icon");
-    icon.setAttribute("src", popup.icon);
-    el.appendChild(icon);
-  }
   const a = document.createElement("a");
-  a.classList.add("popup-title");
   a.textContent = popup.name;
   el.appendChild(a);
   if (popup.fullscreen) {
@@ -56,12 +47,11 @@ for (const popup of popups) {
     popoutA.target = "_blank";
     popoutA.onclick = () => setTimeout(() => window.close(), 100);
     const img = document.createElement("img");
-    img.src = "./popout.svg";
+    img.src = "./popout.png";
     img.title = "Open in new browser tab";
     popoutA.appendChild(img);
     el.appendChild(popoutA);
   }
-
   el.onclick = () => {
     if (currentPopup !== popup) setPopup(popup);
   };

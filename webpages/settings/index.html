@@ -117,9 +117,8 @@
                   v-if="addon.settings"
                   class="clear-settings"
                   title="Reset to default settings"
-                  @click="loadDefaults(addon)"
                 >
-                  <img src="./undo.svg" class="icon-type" />
+                  <img src="./undo.svg" class="icon-type" @click="loadDefaults(addon)" />
                 </div>
                 <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest(addon)" />
               </div>

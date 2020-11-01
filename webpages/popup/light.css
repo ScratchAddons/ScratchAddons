@@ -23,8 +23,8 @@ iframe {
 }
 
 .popup-name img {
-  filter: brightness(0);
+  filter: invert(0);
 }
 .popup-name.sel img {
-  filter: brightness(10);
+  filter: invert(1);
 }

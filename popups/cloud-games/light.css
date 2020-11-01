@@ -20,7 +20,3 @@ body::-webkit-scrollbar-thumb {
 .title a {
   color: #222;
 }
-
-.small-icon:not(.colored) {
-  filter: brightness(0);
-}
