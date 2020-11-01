@@ -2,10 +2,10 @@
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
+
 chrome.storage.sync.get(["globalTheme"], function (r) {
   let rr = false; //true = light, false = dark
   if (r.globalTheme) rr = r.globalTheme;
-  theme = r.globalTheme;
   if (rr) {
     document.head.appendChild(lightThemeLink);
   }
@@ -14,7 +14,6 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 const vue = new Vue({
   el: "body",
   data: {
-    selectedMode: "",
     isOpen: false,
     loaded: false,
     manifests: [],
@@ -86,23 +85,12 @@ const vue = new Vue({
     ],
   },
   computed: {
-    theme() {
-      chrome.storage.sync.get(["globalTheme"], function (r) {
-        let rr = false; //true = light, false = dark
-        if (r.globalTheme) rr = r.globalTheme;
-        theme = r.globalTheme;
-        if (rr) {
-          document.head.appendChild(lightThemeLink);
-        }
-      });
-      return theme;
-    },
     tagsToShow() {
       return this.tags.filter((tag) => tag.tabShow[this.selectedTab]);
     },
     version() {
-      return chrome.runtime.getManifest().version;
-    },
+      return chrome.runtime.getManifest().version
+    }
   },
   methods: {
     modalToggle: function () {
@@ -125,6 +113,19 @@ const vue = new Vue({
     },
     clearSearch() {
       this.searchInput = "";
+    },
+    switchTheme() {
+      chrome.storage.sync.get(["globalTheme"], function (r) {
+        let rr = true; //true = light, false = dark
+        if (r.globalTheme) rr = !r.globalTheme;
+        chrome.storage.sync.set({ globalTheme: rr }, function () {
+          if (rr) {
+            document.head.appendChild(lightThemeLink);
+          } else {
+            document.head.removeChild(lightThemeLink);
+          }
+        });
+      });
     },
     addonMatchesFilters(addonManifest) {
       const matchesTag = this.selectedTag === null || addonManifest.tags.includes(this.selectedTag);
@@ -168,19 +169,6 @@ const vue = new Vue({
     updateOption(id, newValue, addon) {
       this.addonSettings[addon._addonId][id] = newValue;
       this.updateSettings(addon);
-    },
-    switchTheme() {
-      chrome.storage.sync.get(["globalTheme"], function (r) {
-        let rr = true; //true = light, false = dark
-        if (r.globalTheme) rr = !r.globalTheme;
-        chrome.storage.sync.set({ globalTheme: rr }, function () {
-          if (rr) {
-            document.head.appendChild(lightThemeLink);
-          } else {
-            document.head.removeChild(lightThemeLink);
-          }
-        });
-      });
     },
     updateSettings(addon) {
       chrome.runtime.sendMessage({
@@ -269,17 +257,3 @@ window.addEventListener("keydown", function (e) {
     document.querySelector("#searchBox").focus();
   }
 });
-theme = chrome.storage.sync.get(["globalTheme"], function (r) {
-  console.log(theme);
-});
-console.log(theme);
-while ((this.selectedMode == "dark") & (theme !== false)) {
-  chrome.storage.sync.set({ globalTheme: false }, function () {
-    console.log(this.selectedMode + " mode set");
-  });
-}
-while ((this.selectedMode == "light") & (theme !== true)) {
-  chrome.storage.sync.set({ globalTheme: true }, function () {
-    console.log(this.selectedMode + " mode set");
-  });
-}
