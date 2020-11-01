@@ -229,15 +229,15 @@
                   </span>
                   <div class="filter-options">
                     <div
-                      @click="selectedMode = 'light'"
-                      v-bind:class="{sel :selectedMode == 'light'}"
+                      @click="selectedMode = true"
+                      v-bind:class="{sel :selectedMode == true}"
                       class="filter-option"
                     >
                       Light
                     </div>
                     <div
-                      @click="selectedMode = 'dark'"
-                      v-bind:class="{sel :selectedMode == 'dark'}"
+                      @click="selectedMode = false"
+                      v-bind:class="{sel :selectedMode == false}"
                       class="filter-option"
                     >
                       Dark

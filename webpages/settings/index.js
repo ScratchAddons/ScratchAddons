@@ -242,17 +242,10 @@ window.addEventListener("keydown", function (e) {
     document.querySelector("#searchBox").focus();
   }
 });
-theme = chrome.storage.sync.get(["globalTheme"], function (r) {
-  console.log(theme);
-});
-console.log(theme);
-while ((this.selectedMode == "dark") & (theme !== false)) {
-  chrome.storage.sync.set({ globalTheme: false }, function () {
-    console.log(this.selectedMode + " mode set");
+
+chrome.storage.sync.get({ globalTheme }, function (theme) {
+    while (theme.globalTheme !== this.selectedMode)
+      chrome.storage.sync.set( { globalTheme: this.selectedMode}, function (theme) {
+        console.log(theme)
+      });
   });
-}
-while ((this.selectedMode == "light") & (theme !== true)) {
-  chrome.storage.sync.set({ globalTheme: true }, function () {
-    console.log(this.selectedMode + " mode set");
-  });
-}
