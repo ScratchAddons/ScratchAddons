@@ -169,6 +169,19 @@ const vue = new Vue({
       this.addonSettings[addon._addonId][id] = newValue;
       this.updateSettings(addon);
     },
+    switchTheme() {
+      chrome.storage.sync.get(["globalTheme"], function (r) {
+        let rr = true; //true = light, false = dark
+        if (r.globalTheme) rr = !r.globalTheme;
+        chrome.storage.sync.set({ globalTheme: rr }, function () {
+          if (rr) {
+            document.head.appendChild(lightThemeLink);
+          } else {
+            document.head.removeChild(lightThemeLink);
+          }
+        });
+      });
+    },
     updateSettings(addon) {
       chrome.runtime.sendMessage({
         changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
@@ -255,11 +268,4 @@ window.addEventListener("keydown", function (e) {
     e.preventDefault();
     document.querySelector("#searchBox").focus();
   }
-});
-
-chrome.storage.sync.get({ globalTheme }, function (theme) {
-  while (theme.globalTheme !== this.selectedMode)
-    chrome.storage.sync.set({ globalTheme: this.selectedMode }, function (theme) {
-      console.log(theme);
-    });
 });
