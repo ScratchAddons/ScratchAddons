@@ -12,9 +12,9 @@ export default async function ({ addon, global, console }) {
     if (proccode.startsWith("sa-pause")) {
       console.log("is for me");
       threads = vm.runtime.threads;
-      vm.runtime.threads.forEach(i=>{
-        i.status = 3
-      })
+      vm.runtime.threads.forEach((i) => {
+        i.status = 3;
+      });
       vm.runtime.threads = [];
       vm.runtime.audioEngine.audioContext.suspend();
       vm.runtime.ioDevices.clock.pause();
