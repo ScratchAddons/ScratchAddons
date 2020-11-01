@@ -269,3 +269,20 @@ window.addEventListener("keydown", function (e) {
     document.querySelector("#searchBox").focus();
   }
 });
+<<<<<<< HEAD
+=======
+theme = chrome.storage.sync.get(["globalTheme"], function (r) {
+  console.log(theme);
+});
+console.log(theme);
+while ((this.selectedMode == "dark") & (theme !== false)) {
+  chrome.storage.sync.set({ globalTheme: false }, function () {
+    console.log(this.selectedMode + " mode set");
+  });
+}
+while ((this.selectedMode == "light") & (theme !== true)) {
+  chrome.storage.sync.set({ globalTheme: true }, function () {
+    console.log(this.selectedMode + " mode set");
+  });
+}
+>>>>>>> parent of 3849aa5... Changes
