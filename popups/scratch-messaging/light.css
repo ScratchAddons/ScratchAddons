@@ -16,9 +16,6 @@ body::-webkit-scrollbar-thumb {
 #bottom-bar {
   background: #e3e3e3;
 }
-#bottom-bar img {
-  filter: invert(0%);
-}
 
 .message-type {
   border: 1px solid #cfcfcf;
@@ -40,8 +37,16 @@ body::-webkit-scrollbar-thumb {
   border: 1px solid #b9b9b9;
 }
 
+.small-icon:not(.colored) {
+  filter: brightness(0);
+}
+
 .popout-comment {
   filter: none;
+}
+
+#popout {
+  filter: brightness(0);
 }
 
 .comment.unread,

@@ -42,5 +42,7 @@
   "infinite-scroll",
   "mouse-pos",
   "clones",
-  "exact-count"
+  "exact-count",
+  "resizable-comment-input",
+  "animated-thumb"
 ]
