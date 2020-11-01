@@ -43,5 +43,7 @@
   "mouse-pos",
   "clones",
   "exact-count",
-  "editor-messages"
+  "editor-messages",
+  "resizable-comment-input",
+  "animated-thumb"
 ]
