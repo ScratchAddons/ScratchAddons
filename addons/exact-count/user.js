@@ -5,28 +5,28 @@ export default async function ({ addon, global, console }) {
   getUserData([
     {
       boxheadName: "Shared Projects",
-      url: "projects"
+      url: "projects",
     },
     {
       boxheadName: "Favorite Projects",
-      url: "favorites"
+      url: "favorites",
     },
     {
       boxheadName: "Studios I'm Following",
-      url: "studios_following"
+      url: "studios_following",
     },
     {
       boxheadName: "Studios I Curate",
-      url: "studios"
+      url: "studios",
     },
     {
       boxheadName: "Following",
-      url: "following"
+      url: "following",
     },
     {
       boxheadName: "Followers",
-      url: "followers"
-    }
+      url: "followers",
+    },
   ]);
 
   function getUserData(details) {
@@ -38,11 +38,11 @@ export default async function ({ addon, global, console }) {
           let find = response.search("<h2>");
           let follownum = response.substring(find, find + 200).match(/\(([^)]+)\)/)[1];
           let a = `${details[j].boxheadName} (${follownum})`;
-          let boxHeads = document.querySelectorAll(".box-head")
-          for (let i = 1; i < boxHeads.length-1; i++) {
-            let viewAll = new URL(boxHeads[i].querySelector("a").href).pathname
-            let link =  viewAll.split("/users/" + username + "/")[1];
-            if (link == details[j].url + '/') {
+          let boxHeads = document.querySelectorAll(".box-head");
+          for (let i = 1; i < boxHeads.length - 1; i++) {
+            let viewAll = new URL(boxHeads[i].querySelector("a").href).pathname;
+            let link = viewAll.split("/users/" + username + "/")[1];
+            if (link == details[j].url + "/") {
               boxHeads[i].querySelector("h4").innerText = a;
             }
           }
