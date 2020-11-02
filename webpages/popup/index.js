@@ -19,13 +19,15 @@ document.getElementById("settings").onclick = () => {
 const popups = [
   {
     addonId: "scratch-messaging",
-    name: "✉️ Messaging",
+    icon: "../../images/icons/envelope.svg",
+    name: `Messaging`,
     url: "scratch-messaging/popup.html",
     fullscreen: true,
   },
   {
     addonId: "cloud-games",
-    name: "☁️ Games",
+    icon: "../../images/icons/cloud.svg",
+    name: "Games",
     url: "cloud-games/popup.html",
   },
 ];
@@ -36,7 +38,14 @@ for (const popup of popups) {
   const el = document.createElement("div");
   el.classList.add("popup-name");
   el.setAttribute("data-id", popup.addonId);
+  if (popup.icon) {
+    const icon = document.createElement("img");
+    icon.classList.add("popup-icon");
+    icon.setAttribute("src", popup.icon);
+    el.appendChild(icon);
+  }
   const a = document.createElement("a");
+  a.classList.add("popup-title");
   a.textContent = popup.name;
   el.appendChild(a);
   if (popup.fullscreen) {
@@ -47,11 +56,12 @@ for (const popup of popups) {
     popoutA.target = "_blank";
     popoutA.onclick = () => setTimeout(() => window.close(), 100);
     const img = document.createElement("img");
-    img.src = "./popout.png";
+    img.src = "../../images/icons/popout.svg";
     img.title = "Open in new browser tab";
     popoutA.appendChild(img);
     el.appendChild(popoutA);
   }
+
   el.onclick = () => {
     if (currentPopup !== popup) setPopup(popup);
   };
@@ -69,6 +79,6 @@ function setPopup(popup) {
 var version = document.getElementById("version");
 version.innerText = "v" + chrome.runtime.getManifest().version;
 version.onclick = () => {
-  window.open("https://github.com/ScratchAddons/ScratchAddons/releases");
+  window.open("https://scratchaddons.com/changelog?versionname=" + chrome.runtime.getManifest().version_name);
   setTimeout(() => window.close(), 100);
 };
