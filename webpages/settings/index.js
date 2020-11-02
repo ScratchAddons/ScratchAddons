@@ -17,7 +17,7 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 const vue = new Vue({
   el: "body",
   data: {
-    theme: '',
+    theme: "",
     isOpen: false,
     loaded: false,
     manifests: [],
