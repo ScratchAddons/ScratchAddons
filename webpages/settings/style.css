@@ -618,3 +618,6 @@ input[type="color"]::-webkit-color-swatch {
   display: flex;
   align-items: center;
 }
+.setting-setting {
+  margin-top:10px;
+}

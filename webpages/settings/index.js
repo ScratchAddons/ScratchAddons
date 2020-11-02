@@ -8,12 +8,16 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   if (r.globalTheme) rr = r.globalTheme;
   if (rr) {
     document.head.appendChild(lightThemeLink);
+    vue.theme = true;
+  } else {
+    vue.theme = false;
   }
 });
 
 const vue = new Vue({
   el: "body",
   data: {
+    theme: '',
     isOpen: false,
     loaded: false,
     manifests: [],
@@ -114,15 +118,17 @@ const vue = new Vue({
     clearSearch() {
       this.searchInput = "";
     },
-    switchTheme() {
+    setTheme(mode) {
       chrome.storage.sync.get(["globalTheme"], function (r) {
         let rr = true; //true = light, false = dark
-        if (r.globalTheme) rr = !r.globalTheme;
+        rr = mode;
         chrome.storage.sync.set({ globalTheme: rr }, function () {
           if (rr) {
             document.head.appendChild(lightThemeLink);
+            vue.theme = true;
           } else {
             document.head.removeChild(lightThemeLink);
+            vue.theme = false;
           }
         });
       });

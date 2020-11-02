@@ -227,16 +227,24 @@
             <div class="setting-body">
               <div class="addon-topbar">
                 <span class="addon-name"
-                  ><img src="../../images/icons/theme.svg" style="vertical-align: middle; margin-right: 5px" />Light/Dark Mode:
+                  ><img src="../../images/icons/theme.svg" style="vertical-align: middle; margin-right: 5px" />Light/Dark Theme:
                 </span>
               </div>
               <div class="setting-settings">
               <span class="settings-description"
-                >This allows you to switch between light and dark modes for the popup and addon.</span
+                >This allows you to switch between light and dark themes for the popup and addon.</span
               >
-              <button @click="switchTheme()" class="large-button">
-                Toggle Theme
-              </button>
+              <div class="setting-setting">
+              <div class="filter-selector">
+            <div class="filter-text">Theme:</div>
+            <div class="filter-options">
+              <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">Light Theme</div>
+              <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">Dark Theme</div>
+
+            </div>
+            </div>
+          </div>
+              
               </div>
             </div>
           </div>
