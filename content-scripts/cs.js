@@ -5,6 +5,7 @@ const pathArr = path.split("/");
 if (pathArr[0] === "scratch-addons-extension") {
   if (pathArr[1] === "settings") chrome.runtime.sendMessage("openSettingsOnThisTab");
 }
+if (path === "discuss/3/topic/add//") window.addEventListener("load", forumWarning);
 
 let receivedContentScriptInfo = false;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -36,7 +37,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 chrome.runtime.sendMessage("ready");
 window.addEventListener("load", () => {
-  if (path == "discuss/3/topic/add//") forumWarning();
   if (!receivedContentScriptInfo) {
     // This might happen sometimes, the background page might not
     // have seen this tab loading, for example, at startup.
@@ -157,17 +157,14 @@ function forumWarning() {
     let addonError = document.createElement("li");
     let reportLink = document.createElement("a");
     reportLink.href = "https://scratchaddons.com/feedback";
-    reportLink.innerText = "here";
+    reportLink.target = "_blank";
+    reportLink.innerText = "report it here";
     let text1 = document.createElement("span");
-    text1.innerText = "Is this about a bug or glitch? Make sure it isn't from ScratchAddons. If it is, report it ";
-    let text2 = document.createElement("span");
-    text2.innerText = ". Suggestions for an addons? Then talk about it ";
+    text1.innerText = "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when "
+      + "all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please ";
     let text3 = document.createElement("span");
     text3.innerText = ".";
     addonError.appendChild(text1);
-    addonError.appendChild(reportLink);
-    addonError.appendChild(text2);
-    reportLink = reportLink.cloneNode(true);
     addonError.appendChild(reportLink);
     addonError.appendChild(text3);
     errorList.appendChild(addonError);
