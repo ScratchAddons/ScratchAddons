@@ -1,0 +1,17 @@
+{
+  "name": "Cat blocks!",
+  "description": "We all love 'em! We all need 'em!",
+  "credits": [
+    {
+      "name": "TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": false
+}
