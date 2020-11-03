@@ -24,9 +24,6 @@
 
 .sa-editormessages-count {
   display: block;
-  position: absolute;
-  top: 0.5rem;
-  right: 12.8rem;
   border-radius: 1rem;
   background-color: #ffab1a;
   padding: 0 0.25rem;
@@ -35,4 +32,9 @@
   color: white;
   font-size: 0.7rem;
   font-weight: bold;
+  margin-left: 19px;
+  height: 15px;
+  width: 8px;
+  position: relative;
+  text-align: center;
 }
