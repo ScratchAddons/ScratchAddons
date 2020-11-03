@@ -8,8 +8,11 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   if (rr) {
     document.head.appendChild(lightThemeLink);
     vue.theme = true;
+    vue.themepath = '../../images/icons/moon.svg';
   } else {
     vue.theme = false;
+    vue.themepath = '../../images/icons/theme.svg';
+
   }
 });
 
@@ -17,6 +20,7 @@ const vue = new Vue({
   el: "body",
   data: {
     theme: "",
+    themepath: '',
     isOpen: false,
     loaded: false,
     manifests: [],
@@ -117,21 +121,6 @@ const vue = new Vue({
     clearSearch() {
       this.searchInput = "";
     },
-    switchTheme() {
-      chrome.storage.sync.get(["globalTheme"], function (r) {
-        let rr = true; //true = light, false = dark
-        if (r.globalTheme) rr = !r.globalTheme;
-        chrome.storage.sync.set({ globalTheme: rr }, function () {
-          if (rr) {
-            document.head.appendChild(lightThemeLink);
-            vue.theme = true;
-          } else {
-            document.head.removeChild(lightThemeLink);
-            vue.theme = false;
-          }
-        });
-      });
-    },
     setTheme(mode) {
       chrome.storage.sync.get(["globalTheme"], function (r) {
         let rr = true; //true = light, false = dark
@@ -140,9 +129,11 @@ const vue = new Vue({
           if (rr && r.globalTheme !== rr) {
             document.head.appendChild(lightThemeLink);
             vue.theme = true;
+            vue.themepath = '../../images/icons/moon.svg';
           } else if (r.globalTheme !== rr) {
             document.head.removeChild(lightThemeLink);
             vue.theme = false;
+            vue.themepath = '../../images/icons/theme.svg';
           }
         });
       });

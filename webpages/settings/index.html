@@ -13,7 +13,7 @@
     <div class="navbar">
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1>Settings</h1>
-      <img @click="switchTheme()" class="theme-switch" src="../../images/icons/theme.svg">
+      <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themepath">
     </div>
     <div class="main">
       <div class="categories-block">
