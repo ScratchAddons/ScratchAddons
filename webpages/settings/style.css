@@ -626,5 +626,5 @@ input[type="color"]::-webkit-color-swatch {
   float: right;
   right: 25px;
   position: fixed;
-  cursor:pointer;
+  cursor: pointer;
 }

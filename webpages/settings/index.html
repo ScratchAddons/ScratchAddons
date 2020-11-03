@@ -13,7 +13,7 @@
     <div class="navbar">
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1>Settings</h1>
-      <img @click="switchTheme()" class="theme-switch" src="../../images/icons/theme.svg">
+      <img @click="switchTheme()" class="theme-switch" src="../../images/icons/theme.svg" />
     </div>
     <div class="main">
       <div class="categories-block">
@@ -253,9 +253,12 @@
           </div>
         </div>
         <div class="footer">
-          <span>Scratch Addons <a href="https://scratchaddons.com/changelog" title="View Changelog"> v{{ version }}</a></span>
+          <span
+            >Scratch Addons
+            <a href="https://scratchaddons.com/changelog" title="View Changelog"> v{{ version }}</a></span
+          >
         </div>
       </div>
     </div>
   </body>
-</html> 
+</html>
