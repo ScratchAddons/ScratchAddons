@@ -8,12 +8,17 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   if (r.globalTheme) rr = r.globalTheme;
   if (rr) {
     document.head.appendChild(lightThemeLink);
+    vue.theme = true;
+  } else {
+    vue.theme = false;
   }
 });
 
 const vue = new Vue({
   el: "body",
   data: {
+    theme: "",
+    isOpen: false,
     loaded: false,
     manifests: [],
     selectedTab: "all",
@@ -87,8 +92,14 @@ const vue = new Vue({
     tagsToShow() {
       return this.tags.filter((tag) => tag.tabShow[this.selectedTab]);
     },
+    version() {
+      return chrome.runtime.getManifest().version;
+    },
   },
   methods: {
+    modalToggle: function () {
+      this.isOpen = !this.isOpen;
+    },
     openReview() {
       if (typeof browser !== "undefined") {
         window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
@@ -107,15 +118,17 @@ const vue = new Vue({
     clearSearch() {
       this.searchInput = "";
     },
-    switchTheme() {
+    setTheme(mode) {
       chrome.storage.sync.get(["globalTheme"], function (r) {
         let rr = true; //true = light, false = dark
-        if (r.globalTheme) rr = !r.globalTheme;
+        rr = mode;
         chrome.storage.sync.set({ globalTheme: rr }, function () {
-          if (rr) {
+          if (rr && r.globalTheme !== rr) {
             document.head.appendChild(lightThemeLink);
-          } else {
+            vue.theme = true;
+          } else if (r.globalTheme !== rr) {
             document.head.removeChild(lightThemeLink);
+            vue.theme = false;
           }
         });
       });
