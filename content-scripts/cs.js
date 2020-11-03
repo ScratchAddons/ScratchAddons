@@ -5,6 +5,7 @@ const pathArr = path.split("/");
 if (pathArr[0] === "scratch-addons-extension") {
   if (pathArr[1] === "settings") chrome.runtime.sendMessage("openSettingsOnThisTab");
 }
+if (path === "discuss/3/topic/add//") window.addEventListener("load", forumWarning);
 
 let receivedContentScriptInfo = false;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -141,4 +142,32 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
     }
   });
   observer.observe(template, { attributes: true });
+}
+
+function forumWarning() {
+  let postArea = document.querySelector("form#post > label");
+  if (postArea) {
+    var errorList = document.querySelector("form#post > label > ul");
+    if (!errorList) {
+      let typeArea = postArea.querySelector("strong");
+      errorList = document.createElement("ul");
+      errorList.classList.add("errorlist");
+      postArea.insertBefore(errorList, typeArea);
+    }
+    let addonError = document.createElement("li");
+    let reportLink = document.createElement("a");
+    reportLink.href = "https://scratchaddons.com/feedback";
+    reportLink.target = "_blank";
+    reportLink.innerText = "report it here";
+    let text1 = document.createElement("span");
+    text1.innerText =
+      "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when " +
+      "all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please ";
+    let text3 = document.createElement("span");
+    text3.innerText = ".";
+    addonError.appendChild(text1);
+    addonError.appendChild(reportLink);
+    addonError.appendChild(text3);
+    errorList.appendChild(addonError);
+  }
 }

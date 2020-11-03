@@ -1,0 +1,12 @@
+{
+  "name": "Resizable comment input",
+  "description": "Makes the comment input box vertically resizable.",
+  "tags": ["community"],
+  "credits": [{ "name": "Maximouse" }],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ]
+}
