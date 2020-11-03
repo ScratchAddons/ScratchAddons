@@ -123,10 +123,10 @@ const vue = new Vue({
         let rr = true; //true = light, false = dark
         rr = mode;
         chrome.storage.sync.set({ globalTheme: rr }, function () {
-          if (rr) {
+          if (rr && r.globalTheme !== rr) {
             document.head.appendChild(lightThemeLink);
             vue.theme = true;
-          } else {
+          } else if (r.globalTheme !== rr) {
             document.head.removeChild(lightThemeLink);
             vue.theme = false;
           }
