@@ -160,8 +160,9 @@ function forumWarning() {
     reportLink.target = "_blank";
     reportLink.innerText = "report it here";
     let text1 = document.createElement("span");
-    text1.innerText = "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when "
-      + "all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please ";
+    text1.innerText =
+      "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when " +
+      "all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please ";
     let text3 = document.createElement("span");
     text3.innerText = ".";
     addonError.appendChild(text1);
