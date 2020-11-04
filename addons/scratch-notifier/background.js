@@ -88,13 +88,19 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     }
 
     fetch(chrome.runtime.getURL("addons/scratch-notifier/addon.json"))
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      let sound = new Audio(chrome.runtime.getURL(`addons/scratch-notifier/${data.settings[1].soundValues[data.settings[1].potentialValues.indexOf(addon.settings.get("playsound"))]}`));
-      sound.play();
-    });
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        let sound = new Audio(
+          chrome.runtime.getURL(
+            `addons/scratch-notifier/${
+              data.settings[1].soundValues[data.settings[1].potentialValues.indexOf(addon.settings.get("playsound"))]
+            }`
+          )
+        );
+        sound.play();
+      });
 
     const notifId = await addon.notifications.create({
       type: "basic",
