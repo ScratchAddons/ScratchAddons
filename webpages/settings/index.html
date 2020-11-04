@@ -198,6 +198,16 @@
                     {{ option }}
                   </div>
                 </div>
+                <div class="filter-options" v-if="setting.type === 'soundselect'">
+                  <div
+                    class="filter-option"
+                    v-for="option of setting.potentialValues"
+                    :class="{'sel' : addonSettings[addon._addonId][setting.id] === option, 'disabled': !addon._enabled}"
+                    @click="playsound(setting.id, option, addon)"
+                  >
+                    {{ option }}
+                  </div>
+                </div>
               </div>
             </div>
             <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
