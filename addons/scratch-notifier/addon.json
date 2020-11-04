@@ -16,10 +16,12 @@
       "default": true
     },
     {
-      "name": "Meow Sound",
-      "id": "meow_sound",
-      "type": "boolean",
-      "default": false
+      "name": "Play Sound",
+      "id": "playsound",
+      "type": "soundselect",
+      "potentialValues": ["None", "Ping", "Meow", "Insight", "Little Dwarf"],
+      "soundValues": [null, "ping.mp3", "meow.wav", "insight.mp3", "littleDwarf.mp3"],
+      "default": "None"
     },
     {
       "name": "💬 Notify profile comments & replies",
