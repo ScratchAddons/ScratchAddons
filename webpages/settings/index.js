@@ -170,12 +170,16 @@ const vue = new Vue({
       console.log("Updated", this.addonSettings[addon._addonId]);
     },
     playsound(id, newValue, addon) {
-      this.updateOption(id, newValue, addon)
+      this.updateOption(id, newValue, addon);
       for (var i = 0; i < addon.settings.length; i++) {
-        let setting = addon.settings[i]
+        let setting = addon.settings[i];
         if (setting.id == id) {
           if (setting.soundValues[setting.potentialValues.indexOf(newValue)]) {
-            let sound = new Audio(chrome.runtime.getURL(`addons/${addon._addonId}/${setting.soundValues[setting.potentialValues.indexOf(newValue)]}`));
+            let sound = new Audio(
+              chrome.runtime.getURL(
+                `addons/${addon._addonId}/${setting.soundValues[setting.potentialValues.indexOf(newValue)]}`
+              )
+            );
             sound.play();
           }
           break;
