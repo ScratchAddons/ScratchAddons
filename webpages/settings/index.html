@@ -13,6 +13,7 @@
     <div class="navbar">
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1>Settings</h1>
+      <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themepath" />
     </div>
     <div class="main">
       <div class="categories-block">
@@ -250,9 +251,27 @@
               </div>
             </div>
           </div>
+          <div class="setting-body" v-if="false">
+            <div class="addon-topbar">
+              <span class="addon-name"
+                ><img src="../../images/icons/theme.svg" style="vertical-align: middle; margin-right: 5px" />Language:
+              </span>
+            </div>
+            <div class="setting-settings">
+              <div class="setting-setting">
+                <div>Language</div>
+                <select>
+                  <option>English</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="footer">
-          <span>Scratch Addons <a href="https://scratchaddons.com/changelog"> v{{ version }}</a></span>
+          <span
+            >Scratch Addons
+            <a href="https://scratchaddons.com/changelog" title="View Changelog"> v{{ version }}</a></span
+          >
         </div>
       </div>
     </div>
