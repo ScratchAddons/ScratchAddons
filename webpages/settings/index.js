@@ -8,11 +8,10 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   if (rr) {
     document.head.appendChild(lightThemeLink);
     vue.theme = true;
-    vue.themepath = '../../images/icons/moon.svg';
+    vue.themepath = "../../images/icons/moon.svg";
   } else {
     vue.theme = false;
-    vue.themepath = '../../images/icons/theme.svg';
-
+    vue.themepath = "../../images/icons/theme.svg";
   }
 });
 
@@ -20,7 +19,7 @@ const vue = new Vue({
   el: "body",
   data: {
     theme: "",
-    themepath: '',
+    themepath: "",
     isOpen: false,
     loaded: false,
     manifests: [],
@@ -129,11 +128,11 @@ const vue = new Vue({
           if (rr && r.globalTheme !== rr) {
             document.head.appendChild(lightThemeLink);
             vue.theme = true;
-            vue.themepath = '../../images/icons/moon.svg';
+            vue.themepath = "../../images/icons/moon.svg";
           } else if (r.globalTheme !== rr) {
             document.head.removeChild(lightThemeLink);
             vue.theme = false;
-            vue.themepath = '../../images/icons/theme.svg';
+            vue.themepath = "../../images/icons/theme.svg";
           }
         });
       });
