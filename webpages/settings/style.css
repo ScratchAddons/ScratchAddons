@@ -621,3 +621,24 @@ input[type="color"]::-webkit-color-swatch {
 .setting-setting {
   margin-top: 10px;
 }
+.theme-switch {
+  height: 25px;
+  float: right;
+  right: 25px;
+  position: fixed;
+  cursor: pointer;
+}
+.large-dropdown {
+  color: #fff;
+  background: #222222;
+  border: 1px solid #000;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: 0.25s ease;
+  outline: none;
+  height: 32px;
+}
+.large-dropdown:hover {
+  outline: none;
+  background: #151515;
+}

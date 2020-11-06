@@ -26,6 +26,12 @@
       "id": "studio",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Exact count for forum user",
+      "id": "forumuser",
+      "type": "boolean",
+      "default": true
     }
   ],
   "userscripts": [
@@ -42,6 +48,14 @@
       "matches": ["https://scratch.mit.edu/studios/*"],
       "settingMatch": {
         "id": "studio",
+        "value": true
+      }
+    },
+    {
+      "url": "forum.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "settingMatch": {
+        "id": "forumuser",
         "value": true
       }
     }

@@ -44,6 +44,7 @@
   "clones",
   "exact-count",
   "cat-blocks",
+  "pause",
   "resizable-comment-input",
   "animated-thumb"
 ]
