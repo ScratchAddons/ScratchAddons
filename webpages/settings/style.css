@@ -9,8 +9,6 @@ body {
   height: 100vh;
   color: white;
   font-size: 12px;
-  scrollbar-width: thin;
-  scrollbar-color: grey none;
 }
 
 .navbar {
@@ -97,6 +95,8 @@ h1 {
 .addons-container {
   overflow-y: auto;
   padding: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: grey none;
 }
 
 .addon-body {
