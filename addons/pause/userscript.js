@@ -10,7 +10,6 @@ export default async function ({ addon, global, console }) {
 
   vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
     if (proccode.startsWith("sa-pause")) {
-      console.log("👉👈is for me");
       threads = vm.runtime.threads;
       vm.runtime.threads.forEach((i) => {
         i.status = 3;
