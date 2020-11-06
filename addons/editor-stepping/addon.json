@@ -8,7 +8,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  ,
   "tags": ["editor"],
   "enabledByDefault": false
 }

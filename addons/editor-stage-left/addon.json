@@ -19,7 +19,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  ,
   "tags": ["editor", "theme"],
   "enabledByDefault": false
 }
