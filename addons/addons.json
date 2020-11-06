@@ -43,5 +43,7 @@
   "mouse-pos",
   "clones",
   "exact-count",
-  "pause"
+  "pause",
+  "resizable-comment-input",
+  "animated-thumb"
 ]
