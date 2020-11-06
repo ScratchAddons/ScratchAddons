@@ -7,14 +7,14 @@ export default async function ({ addon, global, console }) {
   loadMore.innerText = "Load More";
   let dataLoaded = 6;
   fetch(`
-    https://scratch.mit.edu/messages/ajax/user-activity/?user=${
-      window.location.pathname.substring(7).slice(0, -1)
-    }&max=1000000`)
+    https://scratch.mit.edu/messages/ajax/user-activity/?user=${window.location.pathname
+      .substring(7)
+      .slice(0, -1)}&max=1000000`)
     .then((response) => response.text())
     .then((response) => {
       let html = new DOMParser().parseFromString(response, "text/html");
       loadMore.addEventListener("click", function () {
-        let lastScroll = document.querySelector(".activity-stream").scrollTop
+        let lastScroll = document.querySelector(".activity-stream").scrollTop;
         html.querySelectorAll("ul > li").forEach((li, index) => {
           if (index > dataLoaded && index < dataLoaded + 6) {
             activityStream[activityStream.length - 1].append(li);
@@ -23,7 +23,7 @@ export default async function ({ addon, global, console }) {
         dataLoaded += 6;
         document.querySelector(".activity-stream").scrollTop = lastScroll;
         if (dataLoaded >= html.querySelectorAll("ul > li").length) {
-          loadMore.remove()
+          loadMore.remove();
         }
       });
     });
