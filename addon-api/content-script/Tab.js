@@ -15,7 +15,7 @@ export default class Tab extends EventTarget {
       ? "scratchr2"
       : null;
     this.traps = new Trap();
-    if (__scratchAddonsTraps)
+    if (window.__scratchAddonsTraps)
       __scratchAddonsTraps.addEventListener("fakestatechanged", ({ detail }) => {
         const newEvent = new CustomEvent("fakestatechanged", {
           detail: {
