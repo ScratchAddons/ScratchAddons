@@ -7,9 +7,7 @@ export default async function ({ addon, global, console }) {
   loadMore.innerText = "Load More";
   let dataLoaded = 6;
   fetch(`
-    https://scratch.mit.edu/messages/ajax/user-activity/?user=${window.location.pathname
-      .substring(7)
-      .slice(0, -1)}&max=1000000`)
+    https://scratch.mit.edu/messages/ajax/user-activity/?user=${Scratch.INIT_DATA.PROFILE.model.id}&max=1000000`)
     .then((response) => response.text())
     .then((response) => {
       let html = new DOMParser().parseFromString(response, "text/html");
