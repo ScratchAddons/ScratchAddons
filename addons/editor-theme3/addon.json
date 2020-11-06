@@ -86,7 +86,6 @@
       "default": "#0FBD8C"
     }
   ],
-  "traps": true,
   "tags": ["editor", "theme"],
   "enabledByDefault": false,
   "presets": [
