@@ -121,7 +121,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     }
 
     const soundSetting = addon.settings.get("notification_sound");
-    if (soundSetting === "Scratch Addons ping") new Audio(addon.dir.self + "ping.mp3").play();
+    if (soundSetting === "Scratch Addons ping") new Audio(addon.self.dir + "/ping.mp3").play();
 
     const notifId = await addon.notifications.create({
       type: "basic",

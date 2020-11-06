@@ -168,7 +168,6 @@ button {
 }
 .comment-content-text {
   margin-right: 10px;
-  display: inline-block;
   overflow: hidden; /* Avoid zalgo */
 }
 .comment-content-text:after {
@@ -235,7 +234,7 @@ button {
   padding: 8px;
   resize: vertical;
   margin-top: 8px;
-  font-size: 0.8rem;
+  font-size: 12px;
   border-radius: 8px;
   border: 2px solid rgba(0, 0, 0, 0.2);
   background-color: #222222;
