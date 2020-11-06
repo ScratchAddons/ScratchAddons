@@ -14,20 +14,18 @@ export default class Tab extends EventTarget {
       : document.querySelector("script[type='text/javascript']")
       ? "scratchr2"
       : null;
-    if (info.traps) {
-      this.traps = new Trap();
-      __scratchAddonsTraps.addEventListener("fakestatechanged", ({ detail }) => {
-        const newEvent = new CustomEvent("fakestatechanged", {
-          detail: {
-            reducerOrigin: detail.reducerOrigin,
-            path: detail.path,
-            prev: detail.prev,
-            next: detail.next,
-          },
-        });
-        this.traps.dispatchEvent(newEvent);
+    this.traps = new Trap();
+    __scratchAddonsTraps.addEventListener("fakestatechanged", ({ detail }) => {
+      const newEvent = new CustomEvent("fakestatechanged", {
+        detail: {
+          reducerOrigin: detail.reducerOrigin,
+          path: detail.path,
+          prev: detail.prev,
+          next: detail.next,
+        },
       });
-    }
+      this.traps.dispatchEvent(newEvent);
+    });
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
   }
