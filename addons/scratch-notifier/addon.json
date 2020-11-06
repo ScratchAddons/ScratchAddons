@@ -19,6 +19,13 @@
       "default": true
     },
     {
+      "name": "Notification sound",
+      "id": "notification_sound",
+      "type": "select",
+      "potentialValues": ["Silent", "System default", "Scratch Addons ping"],
+      "default": "System default"
+    },
+    {
       "name": "@comment.svg Notify profile comments & replies",
       "id": "commentsforme_notifications",
       "type": "boolean",
