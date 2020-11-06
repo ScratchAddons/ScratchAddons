@@ -219,3 +219,17 @@ input[type="text"]:not([name="title"]):not([name="q"]):not([name="username"]):no
   border: 2px solid var(--accent);
   border-radius: 0.4rem;
 }
+
+.Popover-body {
+  background: var(--secondary-bg);
+  border-color: var(--accent-color);
+}
+[class^="color-picker_row-header"] {
+  color: var(--text);
+}
+[class^="color-picker_divider"] {
+  border-color: var(--accent-color);
+}
+[class^="color-picker_swatch"] {
+  border-color: var(--accent-color);
+}
