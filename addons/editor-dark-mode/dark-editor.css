@@ -299,3 +299,7 @@ input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="pass
 .blocklyZoom > image {
   opacity: 1;
 }
+
+.stage-wrapper_full-screen_2hjMb {
+  background-color: #222 !important;
+}
