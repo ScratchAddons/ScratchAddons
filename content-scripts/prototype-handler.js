@@ -37,7 +37,7 @@ function injectPrototype() {
     });
     onceTarget.dispatchEvent(specificEvent);
   };
-  
+
   Function.prototype.bind = function (...args) {
     if (Function.prototype.bind === oldPrototypes.functionBind) {
       // Just in case some code stores the bind function once on startup, then always uses it.

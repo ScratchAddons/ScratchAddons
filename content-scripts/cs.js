@@ -46,7 +46,7 @@ window.addEventListener("load", () => {
 
 function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
   document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
-    if(!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
+    if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
   });
   for (const userstyleUrl of userstyleUrls || []) {
     const link = document.createElement("link");

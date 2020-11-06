@@ -10,8 +10,7 @@ export default async function ({ addon, global, console }) {
     if (addon.tab.editorMode === "editor") {
       removeInterval();
       addInterval();
-    }
-    else removeInterval();
+    } else removeInterval();
   });
 
   function addInterval() {

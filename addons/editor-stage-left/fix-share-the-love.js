@@ -14,11 +14,14 @@ export default function ({ addon, global, console }) {
 
   if (addon.tab.editorMode === "editor") {
     const interval = setInterval(() => {
-      if(Blockly.getMainWorkspace()) {
+      if (Blockly.getMainWorkspace()) {
         inject(Blockly.getMainWorkspace());
         clearInterval(interval);
       }
     }, 100);
   }
-  addon.tab.addEventListener("urlChange", () => addon.tab.editorMode === "editor" && inject(Blockly.getMainWorkspace()));
+  addon.tab.addEventListener(
+    "urlChange",
+    () => addon.tab.editorMode === "editor" && inject(Blockly.getMainWorkspace())
+  );
 }
