@@ -51,12 +51,13 @@ for (const popup of popups) {
   if (popup.fullscreen) {
     a.textContent += "\u00a0";
     const popoutA = document.createElement("a");
-    popoutA.id = "popout";
+    popoutA.className = "popout";
     popoutA.href = `../../popups/${popup.url}`;
     popoutA.target = "_blank";
     popoutA.onclick = () => setTimeout(() => window.close(), 100);
     const img = document.createElement("img");
     img.src = "../../images/icons/popout.svg";
+    img.className = "popout-img";
     img.title = "Open in new browser tab";
     popoutA.appendChild(img);
     el.appendChild(popoutA);
