@@ -652,11 +652,11 @@ input[type="color"]::-webkit-color-swatch {
 
 /* hide track */
 ::-webkit-scrollbar-track {
-  background: none; 
+  background: none;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: grey; 
+  background: grey;
   border-radius: 4px;
 }
