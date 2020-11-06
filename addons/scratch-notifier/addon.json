@@ -19,12 +19,11 @@
       "default": true
     },
     {
-      "name": "Play Sound",
-      "id": "playsound",
-      "type": "soundselect",
-      "potentialValues": ["None", "Ping", "Meow", "Insight", "Little Dwarf"],
-      "soundValues": [null, "ping.mp3", "meow.wav", "insight.mp3", "littleDwarf.mp3"],
-      "default": "None"
+      "name": "Notification sound",
+      "id": "notification_sound",
+      "type": "select",
+      "potentialValues": ["Silent", "System default", "Scratch Addons ping"],
+      "default": "System default"
     },
     {
       "name": "@comment.svg Notify profile comments & replies",

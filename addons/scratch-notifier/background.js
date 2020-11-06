@@ -120,20 +120,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       }
     }
 
-    fetch(chrome.runtime.getURL("addons/scratch-notifier/addon.json"))
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        let sound = new Audio(
-          chrome.runtime.getURL(
-            `addons/scratch-notifier/${
-              data.settings[1].soundValues[data.settings[1].potentialValues.indexOf(addon.settings.get("playsound"))]
-            }`
-          )
-        );
-        sound.play();
-      });
+    const soundSetting = addon.settings.get("notification_sound");
+    if (soundSetting === "Scratch Addons ping") new Audio(addon.dir.self + "ping.mp3").play();
 
     const notifId = await addon.notifications.create({
       type: "basic",
@@ -148,6 +136,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           title: "Mark all as read",
         },
       ],
+      silent: soundSetting === "System default" ? false : true,
     });
     if (!notifId) return;
     const onClick = (e) => {
