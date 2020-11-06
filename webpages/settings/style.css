@@ -95,6 +95,8 @@ h1 {
 .addons-container {
   overflow-y: auto;
   padding: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: grey none;
 }
 
 .addon-body {
@@ -641,4 +643,22 @@ input[type="color"]::-webkit-color-swatch {
 .large-dropdown:hover {
   outline: none;
   background: #151515;
+}
+
+/*scrollbar*/
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* hide track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 4px;
 }

@@ -1,7 +1,6 @@
 body {
   background: white;
   color: #222;
-  scrollbar-color: #b8b8b8 rgba(0, 0, 0, 0);
 }
 
 button {
@@ -9,10 +8,6 @@ button {
   background: #e0e0e0;
   color: #222;
 }
-body::-webkit-scrollbar-thumb {
-  background-color: #b8b8b8;
-}
-
 #bottom-bar {
   background: #e3e3e3;
 }
