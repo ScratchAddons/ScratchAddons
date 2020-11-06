@@ -51,6 +51,6 @@
       }
     }
   ],
-  "tags": ["community", "forums"],
-  "enabledByDefault": false
+  "tags": ["community", "forums", "recommended"],
+  "enabledByDefault": true
 }
