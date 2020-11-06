@@ -8,7 +8,7 @@
       "runAtComplete": false
     }
   ],
-  "tags": ["forums", "community"],
+  "tags": ["forums", "community", "beta"],
   "enabledByDefault": false,
   "libraries": ["moment"]
 }

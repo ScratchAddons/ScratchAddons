@@ -1,6 +1,6 @@
 {
   "name": "Show exact count",
-  "description": "Shows the exact count for user and studio info.",
+  "description": "Shows the exact count for user and studio info. Uses ScratchDB for forums information.",
   "credits": [
     {
       "name": "TheColaber",
@@ -60,6 +60,6 @@
       }
     }
   ],
-  "tags": ["community"],
+  "tags": ["community", "recommended"],
   "enabledByDefault": false
 }
