@@ -99,7 +99,7 @@ const vue = new Vue({
     },
     versionName() {
       return chrome.runtime.getManifest().version_name;
-    }
+    },
   },
   methods: {
     modalToggle: function () {
