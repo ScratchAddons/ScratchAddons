@@ -97,6 +97,9 @@ const vue = new Vue({
     version() {
       return chrome.runtime.getManifest().version;
     },
+    versionName() {
+      return chrome.runtime.getManifest().version_name;
+    }
   },
   methods: {
     modalToggle: function () {
