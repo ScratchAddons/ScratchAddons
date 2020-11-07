@@ -21,54 +21,54 @@ g > line {
   border-color: #0003 !important;
 }
 
-.s3devDD li.operators{
+.s3devDD li.operators {
   background-color: var(--editorTheme3-operatorsColor);
 }
 
-.s3devDD li.looks{
+.s3devDD li.looks {
   background-color: var(--editorTheme3-looksColor);
 }
 
-.s3devDD li.data{
+.s3devDD li.data {
   background-color: var(--editorTheme3-dataColor);
 }
 
-.s3devDD li.sounds{
+.s3devDD li.sounds {
   background-color: var(--editorTheme3-soundsColor);
 }
 
-.s3devDD li.motion{
+.s3devDD li.motion {
   background-color: var(--editorTheme3-motionColor);
 }
 
-.s3devDD li.control{
+.s3devDD li.control {
   background-color: var(--editorTheme3-controlColor);
 }
 
-.s3devDD li.events{
+.s3devDD li.events {
   background-color: var(--editorTheme3-eventsColor);
 }
 
-.s3devDD li.data-lists{
+.s3devDD li.data-lists {
   background-color: var(--editorTheme3-dataListsColor);
 }
 
-.s3devDD li.sensing{
+.s3devDD li.sensing {
   background-color: var(--editorTheme3-sensingColor);
 }
 
-.s3devDD li.extension{
+.s3devDD li.extension {
   background-color: var(--editorTheme3-extensionsColor);
 }
 
-[data-category='Pen'] > path.blocklyBlockBackground,
-[data-category='Music'] > path.blocklyBlockBackground,
-[data-category='Video Sensing'] > path.blocklyBlockBackground,
-[data-category='Text to Speech'] > path.blocklyBlockBackground,
-[data-category='Translate'] > path.blocklyBlockBackground,
-[data-category='Makey Makey'] > path.blocklyBlockBackground,
-[data-category='micro:bit'] > path.blocklyBlockBackground,
-[data-category='LEGO EV3'] > path.blocklyBlockBackground,
-[data-category='BOOST'] > path.blocklyBlockBackground{
+[data-category="Pen"] > path.blocklyBlockBackground,
+[data-category="Music"] > path.blocklyBlockBackground,
+[data-category="Video Sensing"] > path.blocklyBlockBackground,
+[data-category="Text to Speech"] > path.blocklyBlockBackground,
+[data-category="Translate"] > path.blocklyBlockBackground,
+[data-category="Makey Makey"] > path.blocklyBlockBackground,
+[data-category="micro:bit"] > path.blocklyBlockBackground,
+[data-category="LEGO EV3"] > path.blocklyBlockBackground,
+[data-category="BOOST"] > path.blocklyBlockBackground {
   fill: var(--editorTheme3-extensionsColor);
 }
