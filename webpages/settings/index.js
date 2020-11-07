@@ -265,8 +265,7 @@ window.addEventListener("keydown", function (e) {
   if (e.ctrlKey && e.key === "f") {
     e.preventDefault();
     document.querySelector("#searchBox").focus();
-  }
-  else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
+  } else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
     e.preventDefault();
     vue.searchInput = "";
   }
