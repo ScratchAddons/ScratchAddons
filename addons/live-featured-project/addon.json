@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/master/1/1.2.json",
   "name": "Live featured project",
   "description": "Shows interactive embed of the featured project, directly from the user's profile page. Based on the implementation on Mega Scratch Userscript.",
   "credits": [

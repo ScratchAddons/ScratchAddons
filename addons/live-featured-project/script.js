@@ -1,4 +1,4 @@
-export default async function (addon) {
+export default async function ({ addon }) {
   const showMenu = addon.settings.get("showMenu");
   const forceAlternative = addon.settings.get("forceAlternative");
   const alternativePlayer = addon.settings.get("alternativePlayer");
