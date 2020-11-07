@@ -6,23 +6,29 @@ export default async function ({ addon, global, console }) {
   loadMore.classList.add("load-more-wibd");
   loadMore.innerText = "Load More";
   let dataLoaded = 6;
-  fetch(`
-    https://scratch.mit.edu/messages/ajax/user-activity/?user=${Scratch.INIT_DATA.PROFILE.model.id}&max=1000000`)
-    .then((response) => response.text())
-    .then((response) => {
-      let html = new DOMParser().parseFromString(response, "text/html");
-      loadMore.addEventListener("click", function () {
-        let lastScroll = document.querySelector(".activity-stream").scrollTop;
-        html.querySelectorAll("ul > li").forEach((li, index) => {
-          if (index > dataLoaded && index < dataLoaded + 6) {
-            activityStream[activityStream.length - 1].append(li);
+  loadMore.addEventListener("click", function () {
+    loadMore.style.visibility = "hidden";
+    fetch(`
+      https://scratch.mit.edu/messages/ajax/user-activity/?user=${Scratch.INIT_DATA.PROFILE.model.id}&max=1000000`)
+      .then((response) => response.text())
+      .then((response) => {
+        let html = new DOMParser().parseFromString(response, "text/html");
+        const show = function () {
+          let lastScroll = document.querySelector(".activity-stream").scrollTop;
+          html.querySelectorAll("ul > li").forEach((li, index) => {
+            if (index > dataLoaded && index < dataLoaded + 6) {
+              activityStream[activityStream.length - 1].append(li);
+            }
+          });
+          dataLoaded += 6;
+          document.querySelector(".activity-stream").scrollTop = lastScroll;
+          if (dataLoaded >= html.querySelectorAll("ul > li").length) {
+            loadMore.remove();
           }
-        });
-        dataLoaded += 6;
-        document.querySelector(".activity-stream").scrollTop = lastScroll;
-        if (dataLoaded >= html.querySelectorAll("ul > li").length) {
-          loadMore.remove();
-        }
+        };
+        show();
+        loadMore.style.visibility = "visible";
+        loadMore.addEventListener("click", show);
       });
-    });
+  }, { once: true });
 }
