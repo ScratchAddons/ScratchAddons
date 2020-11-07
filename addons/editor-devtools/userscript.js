@@ -2087,7 +2087,8 @@ export default async function ({ addon, global, console }) {
 
       li.innerText = desc;
       li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
-      li.className = "var " + (option.block.isScratchExtension ? "extension" : option.block.getCategory()) + " " + bType; // proc.cls;
+      li.className =
+        "var " + (option.block.isScratchExtension ? "extension" : option.block.getCategory()) + " " + bType; // proc.cls;
       dd.appendChild(li);
     }
 
