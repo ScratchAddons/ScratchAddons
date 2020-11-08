@@ -20,11 +20,11 @@
 
 #forum-search-input {
   flex: 1 0 0;
+  margin-right: 0.25rem;
 }
 
 #forum-search-dropdown {
   flex: 0 1 15%;
-  margin-left: 0.25rem;
 }
 
 #forum-search-form {
