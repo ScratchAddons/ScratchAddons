@@ -7,6 +7,10 @@
     },
     {
       "name": "NitroCipher/ZenithRogue"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
   "settings": [
@@ -21,6 +25,12 @@
       "id": "whatworkingon",
       "type": "boolean",
       "default": true
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "working.js",
+      "matches": ["https://scratch.mit.edu/users/*"]
     }
   ],
   "userstyles": [
@@ -41,6 +51,6 @@
       }
     }
   ],
-  "tags": ["community", "forums"],
-  "enabledByDefault": false
+  "tags": ["community", "forums", "recommended"],
+  "enabledByDefault": true
 }

@@ -1,0 +1,54 @@
+{
+  "name": "Live featured project",
+  "description": "Shows interactive embed of the featured project, directly from the user's profile page. Based on the implementation on Mega Scratch Userscript.",
+  "credits": [
+    {
+      "name": "GRA0007 (original)",
+      "link": "https://github.com/MegaScratchUserscript/Mega-Scratch-Userscript/blob/master/originals/GRA0007/scratchultimate.user.js#L23-L46"
+    },
+    {
+      "name": "Hans5958 (remake)"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "script.js",
+      "matches": ["https://scratch.mit.edu/users/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/users/*"]
+    }
+  ],
+  "settings": [
+    {
+      "id": "showMenu",
+      "name": "Show project menu (top bar)",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "id": "autoPlay",
+      "name": "Auto-play projects",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "id": "forceAlternative",
+      "name": "Force using alternative player",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "id": "alternativePlayer",
+      "name": "Alternative player",
+      "type": "select",
+      "default": "TurboWarp",
+      "potentialValues": ["TurboWarp", "forkphorus"]
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": true
+}

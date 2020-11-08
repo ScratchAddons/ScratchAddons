@@ -1,7 +1,6 @@
 body {
   background: white;
   color: #222;
-  scrollbar-color: #b8b8b8 rgba(0, 0, 0, 0);
 }
 
 button {
@@ -9,15 +8,8 @@ button {
   background: #e0e0e0;
   color: #222;
 }
-body::-webkit-scrollbar-thumb {
-  background-color: #b8b8b8;
-}
-
 #bottom-bar {
   background: #e3e3e3;
-}
-#bottom-bar img {
-  filter: invert(0%);
 }
 
 .message-type {
@@ -40,8 +32,16 @@ body::-webkit-scrollbar-thumb {
   border: 1px solid #b9b9b9;
 }
 
+.small-icon:not(.colored) {
+  filter: brightness(0);
+}
+
 .popout-comment {
-  filter: none;
+  filter: brightness(0);
+}
+
+#popout {
+  filter: brightness(0);
 }
 
 .comment.unread,
