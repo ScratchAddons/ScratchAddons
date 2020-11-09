@@ -12,9 +12,10 @@ automatically create a PR on the website to synchronize the changes!
 -->
 
 <!-- sa-changelog-start -->
+
 ## [v1.3.1]
 
-- The "live featured project" addon was accidentally enabled by default. This update fixes that.
+The "live featured project" addon was accidentally enabled by default. This update fixes that.
 
 ## [v1.3.0]
 
@@ -67,7 +68,7 @@ automatically create a PR on the website to synchronize the changes!
 
 ## [v1.2.0] [YANKED]
 
-Only released on Firefox due to an issue with perfomance warnings not showing. See v1.2.1.
+Only released on Firefox due to an issue with perfomance warnings not showing. See [v1.2.1].
 
 ## [v1.1.1]
 
@@ -97,7 +98,7 @@ Only released on Firefox due to an issue with perfomance warnings not showing. S
 
 ## [v1.1.0] [YANKED]
 
-Not released due to a permissions issue. See v1.1.1.
+Not released due to a permissions issue. See [v1.1.1].
 
 ## [v1.0.0]
 
