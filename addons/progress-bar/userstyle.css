@@ -23,7 +23,9 @@
   transition: width 0.2s;
 }
 
-.u-progress-bar-integrated[data-phase="load-json"] {
+.u-progress-bar-integrated[data-phase="load-json"],
+.u-progress-bar-integrated[data-phase="load-assets"] {
+  margin: auto;
   width: 250px;
 }
 .u-progress-bar-caption {
