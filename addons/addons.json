@@ -43,6 +43,8 @@
   "mouse-pos",
   "clones",
   "exact-count",
+  "pause",
   "resizable-comment-input",
-  "animated-thumb"
+  "animated-thumb",
+  "live-featured-project"
 ]

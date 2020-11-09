@@ -95,6 +95,8 @@ h1 {
 .addons-container {
   overflow-y: auto;
   padding: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: grey none;
 }
 
 .addon-body {
@@ -620,4 +622,43 @@ input[type="color"]::-webkit-color-swatch {
 }
 .setting-setting {
   margin-top: 10px;
+}
+.theme-switch {
+  height: 25px;
+  float: right;
+  right: 25px;
+  position: fixed;
+  cursor: pointer;
+}
+.large-dropdown {
+  color: #fff;
+  background: #222222;
+  border: 1px solid #000;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: 0.25s ease;
+  outline: none;
+  height: 32px;
+}
+.large-dropdown:hover {
+  outline: none;
+  background: #151515;
+}
+
+/*scrollbar*/
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* hide track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 4px;
 }

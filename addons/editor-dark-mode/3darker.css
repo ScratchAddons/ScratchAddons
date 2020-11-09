@@ -208,3 +208,21 @@ input[type="password"][name="password"]:focus {
   border: 2px solid var(--accent);
   border-radius: 0.4rem;
 }
+
+.Popover-body {
+  background: var(--secondary-bg);
+  border-color: var(--accent-color);
+}
+[class^="color-picker_row-header"] {
+  color: var(--text);
+}
+[class^="color-picker_divider"] {
+  border-color: var(--accent-color);
+}
+[class^="color-picker_swatch"] {
+  border-color: var(--accent-color);
+}
+
+.stage-wrapper_full-screen_2hjMb {
+  background-color: black !important;
+}

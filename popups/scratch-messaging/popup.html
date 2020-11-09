@@ -17,7 +17,7 @@
       >
         <a class="comment-author" @click="openProfile(thisComment.author)">{{ thisComment.author }}</a>
         <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
-          · {{ commentTimeAgo }}
+          · {{ commentTimeAgo }}&nbsp;&nbsp;
           <img
             src="../../images/icons/popout.svg"
             class="popout-comment"
