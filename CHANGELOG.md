@@ -12,6 +12,9 @@ automatically create a PR on the website to synchronize the changes!
 -->
 
 <!-- sa-changelog-start -->
+## [v1.3.1]
+
+- The "live featured project" addon was accidentally enabled by default. This update fixes that.
 
 ## [v1.3.0]
 
@@ -99,7 +102,7 @@ Not released due to a permissions issue. See v1.1.1.
 ## [v1.0.0]
 
 Initial release.
-
+[v1.3.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.1
 [v1.3.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.0
 [v1.2.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.2.1
 [v1.2.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.2.0
