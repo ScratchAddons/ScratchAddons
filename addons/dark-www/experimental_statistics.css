@@ -1,0 +1,5 @@
+.box .box-content {
+/* Charts don't look well on dark background */
+  background: #fff;
+  color: #575e75;
+}

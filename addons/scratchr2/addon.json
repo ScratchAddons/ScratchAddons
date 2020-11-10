@@ -94,6 +94,10 @@
     {
       "url": "quotes.css",
       "matches": ["https://scratch.mit.edu/info/quotes/"]
+    },
+    {
+      "url": "experimental_dark_compatibility.css",
+      "matches": ["https://scratch.mit.edu/*"]
     }
   ]
 }
