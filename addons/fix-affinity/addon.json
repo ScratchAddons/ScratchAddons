@@ -1,14 +1,13 @@
 {
-    "name": "Fix affinity",
-    "description": "TODO",
-    "userscripts": [
-      {
-        "url": "userscript.js",
-        "matches": ["https://scratch.mit.edu/projects/*"],
-        "runAtComplete": false
-      }
-    ],
-    "tags": ["editor"],
-    "enabledByDefault": false
+  "name": "Fix affinity",
+  "description": "TODO",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "runAtComplete": false
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": false
 }
-  
