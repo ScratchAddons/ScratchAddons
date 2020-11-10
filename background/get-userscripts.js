@@ -45,7 +45,9 @@ async function getContentScriptInfo(url) {
           fetchThemeStylesPromises.push(
             fetch(chrome.runtime.getURL(`/addons/${addonId}/${styleUrl}`))
               .then((res) => res.text())
-              .then((text) => {styles[styleUrl] = text})
+              .then((text) => {
+                styles[styleUrl] = text;
+              })
           );
         }
       }
