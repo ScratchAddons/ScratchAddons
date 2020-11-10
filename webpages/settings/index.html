@@ -180,7 +180,7 @@
                     v-if="setting.type === 'color'"
                     :placeholder="setting.default"
                   />
-                  
+
                   <button
                     type="clear-button"
                     class="large-button clear-button"
@@ -191,16 +191,16 @@
                     Reset
                   </button>
                   <input
-                  type="text"
-                  class="setting-input key"
-                  v-model="addonSettings[addon._addonId][setting.id]"
-                  @input="updateSettings(addon)"
-                  :disabled="!addon._enabled"
-                  v-if="setting.type === 'key'"
-                  :placeholder="setting.default"
-                  maxlength="100"
-                  :id="setting.id"
-                />
+                    type="text"
+                    class="setting-input key"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @input="updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'key'"
+                    :placeholder="setting.default"
+                    maxlength="100"
+                    :id="setting.id"
+                  />
                   <div class="filter-options" v-if="setting.type === 'select'">
                     <div
                       class="filter-option"
