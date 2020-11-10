@@ -23,23 +23,20 @@
   transition: width 0.2s;
 }
 
-.u-progress-bar-integrated[data-phase="load-json"],
-.u-progress-bar-integrated[data-phase="load-assets"] {
-  margin: auto;
-  width: 250px;
-}
 .u-progress-bar-caption {
   margin: 5px 0;
   height: 20px;
 }
-.u-progress-bar-integrated[data-phase="save-json"],
-.u-progress-bar-integrated[data-phase="copy"],
-.u-progress-bar-integrated[data-phase="remix"] {
+
+[class^="loader_background"] .u-progress-bar-integrated {
+  margin: auto;
+  width: 250px;
+}
+[class^="inline-message_inline-message"].u-progress-bar-integrated {
   min-width: 100px;
   margin-top: 2px;
 }
-.u-progress-bar-integrated[data-phase="copy"],
-.u-progress-bar-integrated[data-phase="remix"] {
+.remix-button .u-progress-bar-integrated {
   border-color: black;
   background-color: black;
 }

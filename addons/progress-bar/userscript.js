@@ -62,7 +62,6 @@ export default async function ({ addon, global, console }) {
       return;
     }
     loadingPhase = newPhase;
-    barOuter.dataset.phase = loadingPhase;
     setProgress(0);
     inject();
     startObserver();
