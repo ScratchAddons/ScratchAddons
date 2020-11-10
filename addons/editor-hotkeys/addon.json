@@ -1,0 +1,37 @@
+{
+  "name": "Editor hotkeys",
+  "description": "Adds hotkey shortcuts for the editor. A shortcut must have Ctrl in it, shift is optional, and any letter/symbol of your choice. In the boxes below, don't type your hotkey, accually do it.",
+  "credits": [
+    {
+      "name": "TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Green Flag",
+      "id": "greenflag",
+      "type": "key",
+      "default": "Ctrl + Shift + G"
+    },
+    {
+      "name": "Stop Sign",
+      "id": "stopsign",
+      "type": "key",
+      "default": "Ctrl + Shift + S"
+    },
+    {
+      "name": "See Project Page/Inside",
+      "id": "projectpage",
+      "type": "key",
+      "default": "Ctrl + Shift + I"
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": false
+}
