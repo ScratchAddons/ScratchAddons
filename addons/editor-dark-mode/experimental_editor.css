@@ -6,7 +6,7 @@
   background-color: #001533;
 }
 .project-title-input_title-field_en5Gd:hover {
-  background: rgba(0,21,51,0.5);
+  background: rgba(0, 21, 51, 0.5);
 }
 .gui_tab_27Unf,
 .selector_wrapper_8_BHs {
@@ -108,13 +108,13 @@
   background: #4c4401;
 }
 .scratchCommentTextarea::placeholder {
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 .scratchCommentText {
   fill: #fff;
 }
 .stage_stage_1fD7k {
-  border-color: rgba(255,255,255,0.15);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 .sprite-selector-item_sprite-info_-I0i_,
 .stage-selector_header-title_33xCt,
@@ -174,16 +174,18 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   filter: brightness(0) invert(1);
 }
 img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
-  filter: brightness(0) invert(1) drop-shadow(0px 0px 2px rgba(0,0,0,0.15)) !important;
+  filter: brightness(0) invert(1) drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.15)) !important;
 }
-.stage-header_stage-size-toggle-group_17LtK .stage-header_stage-button_hkl9B:not(.stage-header_stage-button-toggled-off_AJ8yG) .stage-header_stage-button-icon_3zzFK {
+.stage-header_stage-size-toggle-group_17LtK
+  .stage-header_stage-button_hkl9B:not(.stage-header_stage-button-toggled-off_AJ8yG)
+  .stage-header_stage-button-icon_3zzFK {
   filter: none;
 }
 .preview .guiPlayer .project-info-alert {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
 }
 .selector_new-buttons_2qHDd::before {
-  background: linear-gradient(rgba(19,26,32,0), #131a20);
+  background: linear-gradient(rgba(19, 26, 32, 0), #131a20);
 }
 .blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-content {
   color: #444 !important;

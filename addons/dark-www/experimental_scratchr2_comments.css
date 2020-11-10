@@ -4,11 +4,11 @@
 }
 #comments .comments li,
 #comments ul.comments ul li {
-/* Remove separators */
+  /* Remove separators */
   border: none;
 }
 #comments .comment .info .content,
-#comments .comment .info > div:not(.name):not(.content):not([data-content=reply-form]) {
+#comments .comment .info > div:not(.name):not(.content):not([data-content="reply-form"]) {
   border-color: #606060;
   background-color: var(--scratchr2-dark-boxbg, transparent);
 }
@@ -19,7 +19,7 @@
   border-color: #606060;
 }
 #comments .highlighted {
-  background: rgba(77,151,255,0.1);
+  background: rgba(77, 151, 255, 0.1);
 }
 #comments .comment .info .name a {
   color: #fff;

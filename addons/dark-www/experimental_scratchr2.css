@@ -23,7 +23,7 @@ select,
 }
 input,
 textarea {
-  border: 2px solid rgba(255,255,255,0.2);
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 .button,
 button,
@@ -31,19 +31,19 @@ button,
 button:hover,
 .button.grey,
 button.grey,
-.button[data-control=load-more]:hover,
+.button[data-control="load-more"]:hover,
 .ui-widget button.ui-state-default {
   text-shadow: none;
 }
-.button.grey:not([data-control=load-more]),
+.button.grey:not([data-control="load-more"]),
 button.grey,
-.button.grey:not([data-control=load-more]):hover,
+.button.grey:not([data-control="load-more"]):hover,
 button.grey:hover {
   background-color: #282828;
   background-image: none;
   color: var(--scratchr2-link-color, #fff);
 }
-.button.grey:not([data-control=load-more]):hover,
+.button.grey:not([data-control="load-more"]):hover,
 button.grey:hover {
   color: var(--scratchr2-active-color, #ccc);
 }
@@ -102,7 +102,7 @@ h4 {
   border-right: none;
 }
 #topnav ul.account-nav .logged-in-user .dropdown-menu {
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   background-clip: border-box;
 }
 #featured-project-modal .project.thumb {

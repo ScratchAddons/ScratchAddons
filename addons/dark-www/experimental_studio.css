@@ -14,7 +14,7 @@
   color: #fff;
 }
 #tabs li:hover a {
-  border-bottom: 3px solid rgba(255,255,255,0.2);
+  border-bottom: 3px solid rgba(255, 255, 255, 0.2);
 }
 #tabs li.active a {
   background: #282828;
