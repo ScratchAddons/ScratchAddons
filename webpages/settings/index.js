@@ -250,11 +250,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
     for (let i = 0; i < keyInputs.length; i++) {
       keyInputs[i].addEventListener("keydown", function (e) {
         e.preventDefault();
-        e.target.value = e.ctrlKey
-          ? "Ctrl" +
-            (e.shiftKey ? " + Shift" : "") +
-            (e.key == "Control" || e.key == "Shift" ? "" : (e.ctrlKey ? " + " : "") + e.key.toUpperCase())
-          : "";
+        e.target.value = (e.ctrlKey ? "Ctrl" + (e.shiftKey ? " + Shift" : "") + (e.key == "Control" || e.key == "Shift" ? "" : (e.ctrlKey ? " + " : "") + (e.key.toUpperCase() === e.key ? (e.code.includes("Digit") ? e.code.substring(5, e.code.length) : e.key) : e.key.toUpperCase())) : "");
         for (let j = 0; j < vue.manifests.length; j++) {
           if (vue.manifests[j].settings) {
             for (let k = 0; k < vue.manifests[j].settings.length; k++) {
