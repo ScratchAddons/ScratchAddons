@@ -211,6 +211,34 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
     manifest._tags.forEditor = manifest.tags.includes("theme") && manifest.tags.includes("editor");
     manifest._tags.forWebsite = manifest.tags.includes("theme") && manifest.tags.includes("community");
   }
+  setTimeout(function () {
+    let keyInputs = document.querySelectorAll(".key");
+    for (let i = 0; i < keyInputs.length; i++) {
+      keyInputs[i].addEventListener("keydown", function (e) {
+        e.preventDefault();
+        e.target.value = e.ctrlKey
+          ? "Ctrl" +
+            (e.shiftKey ? " + Shift" : "") +
+            (e.key == "Control" || e.key == "Shift" ? "" : (e.ctrlKey ? " + " : "") + e.key.toUpperCase())
+          : "";
+        for (let j = 0; j < vue.manifests.length; j++) {
+          if (vue.manifests[j].settings) {
+            for (let k = 0; k < vue.manifests[j].settings.length; k++) {
+              if (vue.manifests[j].settings[k].id == e.target.id) {
+                vue.updateOption(e.target.id, e.target.value, vue.manifests[j]);
+                objectVals = Object.values(vue.addonSettings[vue.manifests[j]._addonId]);
+                return;
+              }
+            }
+          }
+        }
+      });
+      keyInputs[i].addEventListener("keyup", function (e) {
+        e.target.value =
+          e.target.value == "Ctrl" || objectVals.filter((v) => v === e.target.value).length > 1 ? "" : e.target.value;
+      });
+    }
+  }, 2000);
   // Sort: enabled first, then recommended disabled, then other disabled addons. All alphabetically.
   manifests.sort((a, b) => {
     if (a.manifest._enabled === true && b.manifest._enabled === true)
