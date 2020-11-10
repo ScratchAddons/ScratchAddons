@@ -36,7 +36,8 @@
   min-width: 100px;
   margin-top: 2px;
 }
-.remix-button .u-progress-bar-integrated {
+.remix-button .u-progress-bar-integrated,
+[class^="alert_alert"] .u-progress-bar-integrated {
   border-color: black;
   background-color: black;
 }
