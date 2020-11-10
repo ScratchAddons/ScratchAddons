@@ -582,3 +582,73 @@ a.black:visited,
 input.link.black {
   color: #b6c2ea;
 }
+
+.intro-banner {
+  background-color: #242527;
+}
+
+.intro-banner .intro-container {
+  background-color: #344256;
+}
+
+.intro-banner .intro-button {
+  background-color: #151515;
+  color: #ffffff;
+}
+
+#tree {
+  background-color: #252525;
+}
+
+.join-flow-title {
+  color: #4d97ff;
+}
+
+.select .join-flow-select {
+  background-color: #333;
+}
+
+.gender-radio-row {
+  background-color: #303030;
+}
+
+input.formik-radio-input,
+.formik-radio-input input,
+.join-flow-input {
+  color: white;
+  background-color: #2b2b2b;
+}
+
+.join-flow-privacy-message {
+  color: rgb(255 255 255 / 60%);
+}
+
+.join-flow-input::placeholder {
+  color: #888;
+}
+
+.nvtooltip {
+  background-color: rgb(65 68 76);
+  border: 1px solid rgb(0 0 0 / 44%);
+}
+
+.gray-area {
+  background-color: #101010;
+}
+
+img.tips-icon {
+  filter: invert(1);
+}
+
+.tips-getting-started,
+.tips-activity-guides {
+  background-color: #242527;
+}
+
+.ttt-tile {
+  background-color: #1b1c1d;
+}
+
+.tips-divider {
+  border-top-color: #000;
+}

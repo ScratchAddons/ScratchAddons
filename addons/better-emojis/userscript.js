@@ -53,45 +53,45 @@ export default async function ({ addon, global, console }) {
     if (el.src.includes("images/easter_eggs/rainbow-cat.png")) el.src = addon.self.dir + "/images/rainbow-cat.svg";
     if (el.src.includes("images/easter_eggs/pizza-cat.png")) el.src = addon.self.dir + "/images/pizza-cat.svg";
   }
-}
 
-// Sets the src of the given Scratch 3.0 cat emoji to a custom image
-function checkEmojiNew(el) {
-  switch (el.src) {
-    case "https://scratch.mit.edu/images/emoji/cat.png":
-      el.src = addon.self.dir + "/images/cat.svg";
-      break;
-    case "https://scratch.mit.edu/images/emoji/aww-cat.png":
-      el.src = addon.self.dir + "/images/aww-cat.svg";
-      break;
-    case "https://scratch.mit.edu/images/emoji/cool-cat.png":
-      el.src = addon.self.dir + "/images/cool-cat.svg";
-      break;
-    case "https://scratch.mit.edu/images/emoji/tongue-out-cat.png":
-      el.src = addon.self.dir + "/images/tongue-out-cat.svg";
-      break;
-    case "https://scratch.mit.edu/images/emoji/wink-cat.png":
-      el.src = addon.self.dir + "/images/wink-cat.svg";
-      break;
-    case "https://scratch.mit.edu/images/emoji/lol-cat.png":
-      el.src = addon.self.dir + "/images/lol-cat.svg";
-      break;
-    case "https://scratch.mit.edu/images/emoji/upside-down-cat.png":
-      el.src = addon.self.dir + "/images/upside-down-cat.svg";
-      break;
-    case "https://scratch.mit.edu/images/emoji/huh-cat.png":
-      el.src = addon.self.dir + "/images/cute-cat.svg";
-      break;
-    case "https://scratch.mit.edu/images/emoji/love-it-cat.png":
-      el.src = addon.self.dir + "/images/love-it-cat.svg";
-      break;
-    case "https://scratch.mit.edu/images/emoji/fav-it-cat.png":
-      el.src = addon.self.dir + "/images/fav-it-cat.svg";
-      break;
-    case "https://scratch.mit.edu/images/emoji/rainbow-cat.png":
-      el.src = addon.self.dir + "/images/rainbow-cat.svg";
-      break;
-    case "https://scratch.mit.edu/images/emoji/pizza-cat.png":
-      el.src = addon.self.dir + "/images/pizza-cat.svg";
+  // Sets the src of the given Scratch 3.0 cat emoji to a custom image
+  function checkEmojiNew(el) {
+    switch (el.src) {
+      case "https://scratch.mit.edu/images/emoji/cat.png":
+        el.src = addon.self.dir + "/images/cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/aww-cat.png":
+        el.src = addon.self.dir + "/images/aww-cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/cool-cat.png":
+        el.src = addon.self.dir + "/images/cool-cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/tongue-out-cat.png":
+        el.src = addon.self.dir + "/images/tongue-out-cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/wink-cat.png":
+        el.src = addon.self.dir + "/images/wink-cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/lol-cat.png":
+        el.src = addon.self.dir + "/images/lol-cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/upside-down-cat.png":
+        el.src = addon.self.dir + "/images/upside-down-cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/huh-cat.png":
+        el.src = addon.self.dir + "/images/cute-cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/love-it-cat.png":
+        el.src = addon.self.dir + "/images/love-it-cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/fav-it-cat.png":
+        el.src = addon.self.dir + "/images/fav-it-cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/rainbow-cat.png":
+        el.src = addon.self.dir + "/images/rainbow-cat.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/pizza-cat.png":
+        el.src = addon.self.dir + "/images/pizza-cat.svg";
+    }
   }
 }

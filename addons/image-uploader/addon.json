@@ -12,14 +12,6 @@
       "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
-  "settings": [
-    {
-      "name": "Use project thumbnails",
-      "id": "project_thumbnails",
-      "type": "boolean",
-      "default": false
-    }
-  ],
   "tags": ["forums", "community"],
   "enabledByDefault": false,
   "libraries": ["md5", "text-field-edit"]
