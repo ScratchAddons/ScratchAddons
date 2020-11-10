@@ -23,7 +23,7 @@ export default async function ({ addon, global, console }) {
   document.addEventListener("keydown", function (e) {
     for (var i = 0; i < allSettings.length; i++) {
       let converted = convert(addon.settings.get(allSettings[i]));
-      if (e.shiftKey == converted.shiftKey && e.ctrlKey && e.key == converted.key) {
+      if (e.shiftKey == converted.shiftKey && e.ctrlKey && (Number.isInteger(converted.key) ? (e.shiftKey ? e.code == "Digit" + converted.key : e.key == converted.key) : e.key == converted.key)) {
         e.preventDefault();
         if (i == 0) {
           click('[class^="green-flag_green-flag"]');
