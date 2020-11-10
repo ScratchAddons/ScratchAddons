@@ -28,11 +28,12 @@ body {
   display: none;
 }
 .popup-name img {
-  height: 0.6rem;
   vertical-align: middle;
-  opacity: 0.6;
-  padding-left: 5px;
-  filter: invert(1);
+  filter: brightness(10);
+  height: 18px;
+}
+.popup-title {
+  padding: 0 5px;
 }
 #logo {
   height: 30px;
@@ -87,8 +88,8 @@ body {
 .popup-name.sel {
   background-color: #ff7b26;
 }
-#other-popups a {
-  cursor: pointer;
+.popout > .popout-img {
+  height: 10px;
 }
 
 iframe {

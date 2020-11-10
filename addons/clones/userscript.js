@@ -4,7 +4,7 @@ export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.onceValues.vm;
 
   while (true) {
-    let bar = await addon.tab.waitForElement(".controls_controls-container_2xinB", { markAsSeen: true });
+    let bar = await addon.tab.waitForElement("[class^='controls_controls-container']", { markAsSeen: true });
 
     if (addon.tab.editorMode === "editor") {
       var countContainerContainer = document.createElement("div");

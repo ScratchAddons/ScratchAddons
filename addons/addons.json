@@ -43,5 +43,9 @@
   "mouse-pos",
   "clones",
   "exact-count",
-  "editor-hotkeys"
+  "editor-hotkeys",
+  "pause",
+  "resizable-comment-input",
+  "animated-thumb",
+  "live-featured-project"
 ]

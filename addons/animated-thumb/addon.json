@@ -1,0 +1,22 @@
+{
+  "name": "Thumbnails setter",
+  "description": "Adds a button to the editor to set the thumbnail of your project to any image (including gifs).",
+  "credits": [
+    {
+      "name": "World_Languages",
+      "link": "https://github.com/WorldLanguages/animatedThumbnailsBookmarklet/blob/master/code.js"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "url": "userscript.js"
+    }
+  ],
+  "tags": ["editor", "community", "recommended"],
+  "enabledByDefault": true
+}
