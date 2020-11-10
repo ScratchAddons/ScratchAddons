@@ -28,3 +28,4 @@ jobs:
           workflow: Changelog Update
           repo: ScratchAddons/website
           token: ${{ steps.generate-token.outputs.token }}
+          ref: refs/heads/master
