@@ -1,6 +1,5 @@
 export default function ({ addon, global, console }) {
-  const inject = () => {
-    const workspace = addon.tab.traps.onceValues.workspace;
+  const inject = (workspace) => {
     const originalGetClientRect = workspace.toolbox_.getClientRect;
     workspace.toolbox_.getClientRect = function () {
       // we are trying to undo the effect of BIG_NUM in https://github.com/LLK/scratch-blocks/blob/ab26fa2960643fa38fbc7b91ca2956be66055070/core/flyout_vertical.js#L739
@@ -13,6 +12,16 @@ export default function ({ addon, global, console }) {
     };
   };
 
-  if (addon.tab.traps.onceValues.workspace) inject();
-  else addon.tab.traps.addOnceListener("workspace", inject);
+  if (addon.tab.editorMode === "editor") {
+    const interval = setInterval(() => {
+      if (Blockly.getMainWorkspace()) {
+        inject(Blockly.getMainWorkspace());
+        clearInterval(interval);
+      }
+    }, 100);
+  }
+  addon.tab.addEventListener(
+    "urlChange",
+    () => addon.tab.editorMode === "editor" && inject(Blockly.getMainWorkspace())
+  );
 }

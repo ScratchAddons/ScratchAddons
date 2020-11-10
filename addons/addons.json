@@ -44,6 +44,8 @@
   "clones",
   "exact-count",
   "editor-messages",
+  "pause",
   "resizable-comment-input",
-  "animated-thumb"
+  "animated-thumb",
+  "live-featured-project"
 ]
