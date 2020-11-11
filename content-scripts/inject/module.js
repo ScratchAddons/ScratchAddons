@@ -18,10 +18,7 @@ const addons = JSON.parse(template.getAttribute("data-userscripts"));
 
 window.scratchAddons = {};
 scratchAddons.globalState = getGlobalState();
-scratchAddons.l10n = new Localization(
-  getL10NURLs(),
-  Object.values(addons).map((addon) => addon.addonId)
-);
+scratchAddons.l10n = new Localization(getL10NURLs());
 scratchAddons.eventTargets = {
   auth: [],
   settings: [],
