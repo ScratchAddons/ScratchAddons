@@ -1,6 +1,7 @@
 {
   "name": "Editor hotkeys",
-  "description": "Adds hotkey shortcuts for the editor. A shortcut must have Ctrl in it, shift is optional, and any letter/symbol of your choice. In the boxes below, don't type your hotkey, accually do it.",
+  "description": "Adds hotkey shortcuts for the editor.",
+  "notice": "Note: A shortcut must have Ctrl in it, shift is optional, and any letter/symbol of your choice. In the boxes below, don't type your hotkey, accually do it. A shortcut you may choose may have another purpose for the editor.",
   "credits": [
     {
       "name": "TheColaber"
