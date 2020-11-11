@@ -93,7 +93,7 @@ h4 {
   box-shadow: none;
 }
 #footer ul.footer-col li h4 {
-  color: #fff;
+  color: #fff !important; /* !important is needed, see #701 */
 }
 #topnav {
   box-shadow: none;

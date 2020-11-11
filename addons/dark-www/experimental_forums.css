@@ -50,13 +50,13 @@
 }
 .markItUpHeader > ul > li,
 .markItUpHeader > ul > .markItUpDropMenu {
-  background-color: #e0e0e0;
+  background-color: #e0e0e0 !important; /* #701 */
   border-radius: 3px;
   margin-right: 4px;
   margin-bottom: 6px;
 }
 .markItUpHeader > ul > .markItUpDropMenu {
-  background-position: 20px center;
+  background-position: 20px center !important; /* #701 */
 }
 .markItUpHeader > ul > .markItUpDropMenu > a {
   width: 24px;
@@ -67,7 +67,7 @@
 }
 .markItUpHeader > ul > li > a,
 .markItUp .browser-os-button a {
-  background-position: center center;
+  background-position: center center !important; /* #701 */
 }
 .markItUpHeader > ul > .markItUpSeparator {
   height: 22px;
