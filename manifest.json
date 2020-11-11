@@ -47,7 +47,7 @@
     "alarms"
   ],
   "optional_permissions": ["notifications", "clipboardWrite"],
-  "web_accessible_resources": ["content-scripts/inject/*", "addon-api/*", "addons/*", "libraries/*"],
+  "web_accessible_resources": ["content-scripts/inject/*", "addon-api/*", "addons/*", "libraries/*", "addons-l10n/*/*.json"],
   "browser_specific_settings": {
     "gecko": {
       "id": "griffpatch@griffpatch.co.uk"

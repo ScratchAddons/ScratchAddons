@@ -9,7 +9,7 @@ if (path === "discuss/3/topic/add//") window.addEventListener("load", forumWarni
 
 let receivedContentScriptInfo = false;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("[Message from background]", request);
+  // console.log("[Message from background]", request);
   if (request.contentScriptInfo) {
     // The request wasn't for this exact URL, might happen sometimes
     if (request.contentScriptInfo.url !== initialUrl) return;
@@ -83,7 +83,7 @@ function setCssVariables(addonSettings) {
   }
 }
 
-function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, themes }) {
+function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, userstyleUrls, themes }) {
   setCssVariables(globalState.addonSettings);
   injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate: false });
 
@@ -92,6 +92,7 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
   template.setAttribute("data-path", chrome.runtime.getURL(""));
   template.setAttribute("data-userscripts", JSON.stringify(addonsWithUserscripts));
   template.setAttribute("data-global-state", JSON.stringify(globalState));
+  template.setAttribute("data-l10njson", JSON.stringify(l10njson));
   document.head.appendChild(template);
 
   const script = document.createElement("script");
