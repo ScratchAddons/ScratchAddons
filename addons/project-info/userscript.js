@@ -1,7 +1,7 @@
-export default async function ({addon, console}) {
+export default async function ({ addon, console }) {
   let projectInfo;
   while (true) {
-    const buttons = await addon.tab.waitForElement(".preview .project-buttons", {markAsSeen: true});
+    const buttons = await addon.tab.waitForElement(".preview .project-buttons", { markAsSeen: true });
     const container = document.createElement("div");
     container.className = "sa-project-info";
     buttons.insertBefore(container, buttons.firstChild);
@@ -11,24 +11,24 @@ export default async function ({addon, console}) {
       if ("targets" in projectData) {
         let scriptCount = 0;
         for (let target of projectData.targets) {
-          scriptCount += Object.values(target.blocks).filter(block => block.topLevel).length;
+          scriptCount += Object.values(target.blocks).filter((block) => block.topLevel).length;
         }
         projectInfo = {
           spriteCount: projectData.targets.length - 1, // see scratch-www/src/lib/project-info.js, line 10
-          scriptCount: scriptCount
+          scriptCount: scriptCount,
         };
       } else if ("info" in projectData) {
         projectInfo = projectData.info;
       } else {
-        projectInfo = {spriteCount: "?", scriptCount: "?"};
+        projectInfo = { spriteCount: "?", scriptCount: "?" };
       }
     }
-    container.appendChild(document.createTextNode(
-      projectInfo.spriteCount + (projectInfo.spriteCount == 1 ? " sprite" : " sprites")
-    ));
+    container.appendChild(
+      document.createTextNode(projectInfo.spriteCount + (projectInfo.spriteCount == 1 ? " sprite" : " sprites"))
+    );
     container.appendChild(document.createElement("br"));
-    container.appendChild(document.createTextNode(
-      projectInfo.scriptCount + (projectInfo.scriptCount == 1 ? " script" : " scripts")
-    ));
+    container.appendChild(
+      document.createTextNode(projectInfo.scriptCount + (projectInfo.scriptCount == 1 ? " script" : " scripts"))
+    );
   }
 }
