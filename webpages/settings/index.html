@@ -241,12 +241,8 @@
                 <div class="filter-selector">
                   <div class="filter-text">Theme:</div>
                   <div class="filter-options">
-                    <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">
-                      Light Theme
-                    </div>
-                    <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">
-                      Dark Theme
-                    </div>
+                    <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">Light</div>
+                    <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">Dark</div>
                   </div>
                 </div>
               </div>
