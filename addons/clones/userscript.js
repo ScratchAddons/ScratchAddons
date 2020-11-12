@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   console.log("clones counter enabled");
 
   const vm = addon.tab.traps.onceValues.vm;
@@ -53,7 +53,7 @@ export default async function ({ addon, global, console }) {
         count.style.color = "";
         icon.src = addon.self.dir + "/cat.svg";
       }
-      count.innerText = `clones: ${v}`;
+      count.innerText = msg("clones", {cloneCount: v});
     }
   }
 }

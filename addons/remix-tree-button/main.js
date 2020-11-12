@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   //define remix tree button elements
   function loadRemixButton() {
     if (document.querySelector("#scratchAddonsRemixTreeBtn")) return;
@@ -9,7 +9,7 @@ export default async function ({ addon, global, console }) {
         const remixtree = document.createElement("button");
 
         const remixtreeSpan = document.createElement("span");
-        remixtreeSpan.innerText = "Remix Tree";
+        remixtreeSpan.innerText = msg("remix-tree");
         remixtree.className = "button action-button remixtree-button";
         remixtree.id = "scratchAddonsRemixTreeBtn";
         remixtree.appendChild(remixtreeSpan);

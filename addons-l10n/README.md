@@ -5,7 +5,7 @@ String can be obtained by `scratchAddons.l10n.get()` function (which does not pr
 ## File name
 Files are placed under `addons-l10n/LOCALECODE` folder, where the locale code is lowercased IETF language tag used by Scratch (e.g. en, zh-tw). Note that 2-letter code will be used if ones with regions are unavailable; e.g. if en-US is unavailable, it uses en.
 
-File name is `ADDONID.json`, where addonid is the addon id. `_general.json` contains messages that are shared by addons. While it is possible to overwrite other addons' messages, it is not encouraged. Note that if addons are disabled, corresponding message files will not be loaded.
+File name is `ADDONID.json`, where addonid is the addon id. `_general.json` contains messages that are shared by addons. Note that if addons are disabled, corresponding message files will not be loaded.
 
 ## File contents
 The message file is a JSON file.

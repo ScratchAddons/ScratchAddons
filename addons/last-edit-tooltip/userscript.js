@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   fetch("https://api.scratch.mit.edu" + document.location.pathname)
     .then(function (response) {
       return response.json();
@@ -10,9 +10,9 @@ export default async function ({ addon, global, console }) {
           let dateMod = new Date(text.history.modified);
           element.setAttribute(
             "title",
-            `Modified: ${dateMod.toLocaleString("en-us", {
+            msg("modified", {date: `${dateMod.toLocaleString("en-us", {
               month: "short",
-            })} ${dateMod.getDay()}, ${dateMod.getFullYear()}`
+            })} ${dateMod.getDay()}, ${dateMod.getFullYear()}`})
           );
         }
       }

@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, msg }) {
   const showMenu = addon.settings.get("showMenu");
   const forceAlternative = addon.settings.get("forceAlternative");
   const alternativePlayer = addon.settings.get("alternativePlayer");
@@ -21,7 +21,7 @@ export default async function ({ addon }) {
 
   const changeFeaturedElement = document.createElement("div");
   changeFeaturedElement.id = "lfp-change-featured";
-  changeFeaturedElement.textContent = "Change featured project";
+  changeFeaturedElement.textContent = msg("change-featured");
   changeFeaturedElement.addEventListener("click", () => {
     document.querySelector('#profile-box .player [data-control="edit"]').click();
   });

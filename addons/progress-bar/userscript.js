@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   const useTopBar = addon.settings.get("topbar");
 
   const barOuter = document.createElement("div");
@@ -48,7 +48,10 @@ export default async function ({ addon, global, console }) {
     } else {
       barInner.style.width = progress * 100 + "%";
       if (loadingPhase === LOAD_ASSETS) {
-        loadingCaption.innerText = `Loading assets (${finishedTasks}/${totalTasks}) …`; // TODO: translations
+        loadingCaption.innerText = msg("loading-assets", {
+            loaded: finishedTasks,
+            loading: totalTasks
+        });
       }
     }
     if (progress === 1) {
@@ -79,7 +82,7 @@ export default async function ({ addon, global, console }) {
   }
 
   const loadingCaption = document.createElement("div");
-  loadingCaption.innerText = "Loading project data …"; // TODO: translations
+  loadingCaption.innerText = msg("loading-project");
   loadingCaption.className = "u-progress-bar-caption";
 
   const PROJECT_REGEX = /^https:\/\/projects\.scratch\.mit\.edu\/\d+$/;
