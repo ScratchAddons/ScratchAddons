@@ -73,6 +73,6 @@
       }
     }
   ],
-  "tags": ["community"],
+  "tags": ["community", "beta"],
   "enabledByDefault": false
 }

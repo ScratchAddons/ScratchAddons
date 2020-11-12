@@ -2,7 +2,7 @@ html {
   font-size: 12px;
   height: 100%;
   scrollbar-width: thin;
-  scrollbar-color: #ff7b26 rgba(0, 0, 0, 0);
+  scrollbar-color: grey none;
   color: #dddddd;
 }
 
@@ -14,13 +14,6 @@ body {
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: #222;
-}
-
-body::-webkit-scrollbar {
-  width: 10px;
-}
-body::-webkit-scrollbar-thumb {
-  background-color: #ff7b26;
 }
 
 a {
@@ -59,7 +52,7 @@ a:hover {
 .float-right {
   margin-left: 4px;
   white-space: nowrap;
-  font-size: 0.9rem;
+  font-size: 12px;
 }
 .float-right > span {
   display: inline-block;
@@ -85,4 +78,26 @@ a:hover {
 
 .title a {
   color: white;
+}
+
+.small-icon {
+  height: 14px;
+  vertical-align: text-bottom;
+}
+/*scrollbar*/
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* hide track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 4px;
 }

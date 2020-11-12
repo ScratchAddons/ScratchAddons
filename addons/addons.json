@@ -43,5 +43,10 @@
   "mouse-pos",
   "clones",
   "exact-count",
-  "project-notes-tabs"
+  "project-notes-tabs",
+  "pause",
+  "resizable-comment-input",
+  "animated-thumb",
+  "live-featured-project",
+  "search-load-more-fix"
 ]

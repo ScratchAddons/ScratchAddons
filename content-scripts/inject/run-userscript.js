@@ -14,12 +14,12 @@ export default async function runAddonUserscripts({ addonId, scripts, traps }) {
     );
     const loadUserscript = async () => {
       const module = await import(scriptUrl);
-      const log = console.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
-      const warn = console.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
+      const log = _realConsole.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
+      const warn = _realConsole.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
       module.default({
         addon: addonObj,
         global: globalObj,
-        console: { ...console, log, warn },
+        console: { ..._realConsole, log, warn },
       });
     };
     if (runAtComplete && document.readyState !== "complete") {
