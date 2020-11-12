@@ -56,7 +56,8 @@ function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
     else document.documentElement.appendChild(link);
   }
   for (const theme of themes) {
-    for (const css of theme.styles) {
+    for (const styleUrl of theme.styleUrls) {
+      const css = theme.styles[styleUrl];
       if (isUpdate && css.startsWith("/* sa-autoupdate-theme-ignore */")) continue;
       const style = document.createElement("style");
       style.classList.add("scratch-addons-theme");

@@ -51,13 +51,15 @@ async function getContentScriptInfo(url) {
         if (userscriptMatches({ url }, style, addonId)) styleUrls.push(style.url);
       }
       if (styleUrls.length) {
-        const styles = [];
-        data.themes.push({ addonId, styles });
+        const styles = {};
+        data.themes.push({ addonId, styleUrls, styles });
         for (const styleUrl of styleUrls) {
           fetchThemeStylesPromises.push(
             fetch(chrome.runtime.getURL(`/addons/${addonId}/${styleUrl}`))
               .then((res) => res.text())
-              .then((text) => styles.push(text))
+              .then((text) => {
+                styles[styleUrl] = text;
+              })
           );
         }
       }
