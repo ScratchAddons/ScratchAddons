@@ -6,6 +6,11 @@ export default class Localization extends EventTarget {
     this._urls = urls;
     this.generalLoaded = false;
     this.messages = {};
+    this._date = new Intl.DateTimeFormat();
+    this._datetime = new Intl.DateTimeFormat([], {
+        timeStyle: "short",
+        dateStyle: "short"
+    });
   }
 
   _replacePlaceholders(msg, placeholders) {
@@ -34,6 +39,11 @@ export default class Localization extends EventTarget {
           this.messages = Object.assign(messages, this.messages);
       }
       if (addonId === "_general") {
+          this._date = new Intl.DateTimeFormat(this.locale);
+          this._datetime = new Intl.DateTimeFormat(this.locale, {
+              timeStyle: "short",
+              dateStyle: "short"
+          });
           this.generalLoaded = true;
       }
   }
@@ -58,5 +68,13 @@ export default class Localization extends EventTarget {
 
   get localeName() {
     return this.messages._locale_name || "English";
+  }
+  
+  date (dateObj) {
+      return this._date.format(dateObj);
+  }
+  
+  datetime (dateObj) {
+      return this._datetime.format(dateObj);
   }
 }

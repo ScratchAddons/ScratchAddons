@@ -10,9 +10,7 @@ export default async function ({ addon, global, console, msg }) {
           let dateMod = new Date(text.history.modified);
           element.setAttribute(
             "title",
-            msg("modified", {date: `${dateMod.toLocaleString("en-us", {
-              month: "short",
-            })} ${dateMod.getDay()}, ${dateMod.getFullYear()}`})
+            msg("modified", {date: scratchAddons.l10n.date(dateMod)})
           );
         }
       }

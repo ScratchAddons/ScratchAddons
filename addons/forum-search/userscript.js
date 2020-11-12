@@ -83,7 +83,8 @@ function appendSearch(box, query, page, term, msg) {
 
         let boxTime = document.createElement("span");
         boxTime.classList = "conr";
-        boxTime.appendChild(document.createTextNode(new Date(post.time.posted).toLocaleString("en-US")));
+        const localizedPostDate = scratchAddons.l10n.datetime(new Date(post.time.posted));
+        boxTime.appendChild(document.createTextNode(localizedPostDate));
         boxHead.appendChild(boxTime);
 
         // post content
@@ -141,10 +142,10 @@ function appendSearch(box, query, page, term, msg) {
         postLeftDl.appendChild(document.createElement("br"));
 
         postLeftDl.appendChild(createTextBox(msg("first-checked"), "black username", 1));
-        postLeftDl.appendChild(createTextBox(new Date(post.time.first_checked).toLocaleString("en-US"), "", 2));
+        postLeftDl.appendChild(createTextBox(scratchAddons.l10n.datetime(new Date(post.time.first_checked)), "", 2));
 
         postLeftDl.appendChild(createTextBox(msg("last-checked"), "black username", 1));
-        postLeftDl.appendChild(createTextBox(new Date(post.time.html_last_checked).toLocaleString("en-US"), "", 2));
+        postLeftDl.appendChild(createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_first_checked)), "", 2));
 
         let postRight = document.createElement("div");
         postRight.classList = "postright";
@@ -168,7 +169,7 @@ function appendSearch(box, query, page, term, msg) {
             document.createTextNode(
               msg("last-edited-by", {
                   username: post.editor,
-                  datetime: new Date(post.time.edited).toLocaleString("en-US")
+                  datetime: scratchAddons.l10n.datetime(new Date(post.time.edited))
               })
             )
           );
