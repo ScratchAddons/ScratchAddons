@@ -1,0 +1,12 @@
+{
+  "name": "Fix \"Load more\" scrolling in search results",
+  "description": "Makes the \"Load more\" button not scroll the page down in search results.",
+  "tags": ["community", "recommended"],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/search/*"]
+    }
+  ],
+  "enabledByDefault": true
+}
