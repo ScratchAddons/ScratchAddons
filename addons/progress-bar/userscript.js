@@ -62,7 +62,6 @@ export default async function ({ addon, global, console }) {
       return;
     }
     loadingPhase = newPhase;
-    barOuter.dataset.phase = loadingPhase;
     setProgress(0);
     inject();
     startObserver();
@@ -233,8 +232,9 @@ export default async function ({ addon, global, console }) {
   const mutationObserver = new MutationObserver(inject);
 
   async function startObserver() {
-    await addon.tab.waitForElement("body");
     if (useTopBar) return;
+    await addon.tab.waitForElement("body");
+    inject();
     mutationObserver.observe(document.body, {
       childList: true,
       subtree: true,
