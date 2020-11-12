@@ -12,7 +12,7 @@ export default async function ({ addon, global, console }) {
             "title",
             `Modified: ${dateMod.toLocaleString("en-us", {
               month: "short",
-            })} ${dateMod.getDay()}, ${dateMod.getFullYear()}`
+            })} ${dateMod.getDate()}, ${dateMod.getFullYear()}`
           );
         }
       }
