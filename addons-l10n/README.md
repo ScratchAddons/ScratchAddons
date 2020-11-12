@@ -16,6 +16,8 @@ The message file is a JSON file.
 
 Keys are prefixed with addon IDs: e.g. `set-thumbnail` message on `animated-thumb` addon will be `animated-thumb/set-thumbnail`.
 
+Message names that start with `@` are reserved for use inside manifest. For example, `extension-x/@name` represents the addon's name on the manifest file.
+
 ## Placeholders
 Placeholder formats are similar to WebExtension placeholders, like this: `foo $placeholder1$ bar`.
 
@@ -29,6 +31,7 @@ The second argument of the functions accepts an object which will have the place
 {
     "_locale": "meow",
     "_locale_name": "Meow",
+    "extension-x/@name": "Extension X",
     "extension-x/loaded": "meow $name$ meow!"
 }
 ```
