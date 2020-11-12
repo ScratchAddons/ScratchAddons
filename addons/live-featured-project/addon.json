@@ -45,8 +45,8 @@
       "id": "alternativePlayer",
       "name": "Alternative player",
       "type": "select",
-      "default": "TurboWarp",
-      "potentialValues": ["TurboWarp", "forkphorus"]
+      "default": "None",
+      "potentialValues": ["None", "TurboWarp", "forkphorus"]
     }
   ],
   "tags": ["community"],
