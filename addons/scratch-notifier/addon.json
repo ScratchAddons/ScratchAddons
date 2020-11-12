@@ -4,6 +4,12 @@
   "credits": [
     {
       "name": "World_Languages"
+    },
+    {
+      "name": "NitroCipher/ZenithRogue"
+    },
+    {
+      "name": "notificationsounds.com (Scratch Addons ping)"
     }
   ],
   "permissions": ["notifications"],
@@ -16,55 +22,62 @@
       "default": true
     },
     {
-      "name": "💬 Notify profile comments & replies",
+      "name": "Notification sound",
+      "id": "notification_sound",
+      "type": "select",
+      "potentialValues": ["Silent", "System default", "Scratch Addons ping"],
+      "default": "System default"
+    },
+    {
+      "name": "@comment.svg Notify profile comments & replies",
       "id": "commentsforme_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "💬 Notify comments on my projects",
+      "name": "@comment.svg Notify comments on my projects",
       "id": "commentsonmyprojects_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "📚 Notify forum activity",
+      "name": "@forum.svg Notify forum activity",
       "id": "forumpost_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "❤️ Notify loves",
+      "name": "@heart.svg Notify loves",
       "id": "loveproject_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "⭐ Notify favorites",
+      "name": "@star.svg Notify favorites",
       "id": "favoriteproject_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "🧑 Notify new followers",
+      "name": "@follow.svg Notify new followers",
       "id": "followuser_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "✉️ Notify studio invites",
+      "name": "@studio-add.svg Notify studio invites",
       "id": "curatorinvite_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "🆕 Notify studio activity",
+      "name": "@studio.svg Notify studio activity",
       "id": "studioactivity_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "🔄 Notify remixes",
+      "name": "@remix.svg Notify remixes",
       "id": "remixproject_notifications",
       "type": "boolean",
       "default": true

@@ -1,7 +1,6 @@
 {
   "name": "Clone counter",
   "description": "Adds a counter in the editor which shows the total amount of clones.",
-  "warning": "This feature might make Scratch projects lag, especially if you're not using a powerful computer. Performance will be enhanced in future updates.",
   "credits": [
     {
       "name": "Jeffalo"
@@ -19,7 +18,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "traps": true,
   "tags": ["editor"],
   "enabledByDefault": false
 }

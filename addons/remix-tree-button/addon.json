@@ -15,6 +15,12 @@
       "runAtComplete": false
     }
   ],
+  "userstyles": [
+    {
+      "url": "button.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
   "settings": [
     {
       "name": "Button Color",
