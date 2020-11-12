@@ -7,9 +7,11 @@ body {
 */
 #footer {
   position: fixed;
+  top: initial;
   bottom: 0;
   width: 100%;
   height: 38px;
+  z-index: 20;
   transition-duration: 0.5s;
 }
 #footer:hover {

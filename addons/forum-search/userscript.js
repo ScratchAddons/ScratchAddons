@@ -186,6 +186,7 @@ export default async function ({ addon, global, console }) {
   await addon.tab.loadScript("https://scratchblocks.github.io/js/scratchblocks-v3.5-min.js");
   // create the search bar
   let search = document.createElement("form");
+  search.id = "forum-search-form";
   let searchBar = document.createElement("input");
   searchBar.id = "forum-search-input";
   searchBar.setAttribute("type", "text");

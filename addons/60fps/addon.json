@@ -1,7 +1,6 @@
 {
   "name": "60FPS player mode",
   "description": "Alt+Click the green flag to toggle 60FPS.",
-  "warning": "This feature might make Scratch projects lag, especially if you're not using a powerful computer. Performance will be enhanced in future updates.",
   "credits": [
     {
       "name": "Jeffalo"
@@ -13,7 +12,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "traps": true,
-  "tags": ["editor"],
-  "enabledByDefault": false
+  "tags": ["editor", "recommended"],
+  "enabledByDefault": true
 }

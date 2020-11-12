@@ -26,8 +26,12 @@ chrome.storage.local.get("muted", (obj) => {
   else contextMenuUnmuted();
 });
 
+chrome.contextMenus.removeAll();
+let currentMenuItem = null;
+
 function contextMenuUnmuted() {
-  chrome.contextMenus.remove("unmute");
+  if (currentMenuItem === "unmute") chrome.contextMenus.remove("unmute");
+  currentMenuItem = "mute";
   chrome.contextMenus.create({
     id: "mute",
     title: "Mute for...",
@@ -53,7 +57,8 @@ function contextMenuUnmuted() {
 }
 
 function contextMenuMuted() {
-  chrome.contextMenus.remove("mute");
+  if (currentMenuItem === "mute") chrome.contextMenus.remove("mute");
+  currentMenuItem = "unmute";
   chrome.contextMenus.create({
     id: "unmute",
     title: "Unmute",
