@@ -1,10 +1,6 @@
-.lfp-scratch.lfp-hide-menu iframe,
-.lfp-turbowarp.lfp-hide-menu iframe {
+.lfp-hide-menu[data-player="scratch"] iframe,
+.lfp-hide-menu[data-player="turbowarp"] iframe {
   margin-top: -44px;
-}
-
-.lfp-forkphorus.lfp-hide-menu iframe {
-  margin-top: -2.25rem;
 }
 
 #lfp-embed {
@@ -38,6 +34,6 @@
   display: block;
 }
 
-.stage.lfp-loaded #featured-project {
+#lfp-embed + #featured-project {
   display: none;
 }
