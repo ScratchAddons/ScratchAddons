@@ -1,0 +1,5 @@
+{
+  "editor-stepping/@name": "Highlight currently executing blocks",
+  "editor-stepping/@description": "Adds a blue border to the blocks that are currently running in a project.",
+  "editor-stepping/@notice": "Scratch Addons v1.3.0 update: this feature is not experimental anymore, and should not affect project performance heavily."
+}

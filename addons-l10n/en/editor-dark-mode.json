@@ -1,0 +1,9 @@
+{
+    "editor-dark-mode/@name": "Editor dark mode",
+    "editor-dark-mode/@description": "Dark mode for the Scratch 3.0 project editor. Multiple options by different authors available.",
+    "editor-dark-mode/@opt-name-selectedMode": "Dark mode version",
+    "editor-dark-mode/@opt-name-textShadow": "Text shadow on blocks",
+    "editor-dark-mode/@opt-select-selectedMode-3-darker": "3.Darker",
+    "editor-dark-mode/@opt-select-selectedMode-3-dark": "3.Dark",
+    "editor-dark-mode/@opt-select-selectedMode-dark-editor": "Dark Editor"
+}

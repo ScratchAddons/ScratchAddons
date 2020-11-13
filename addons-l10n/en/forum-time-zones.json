@@ -1,0 +1,4 @@
+{
+  "forum-time-zones/@name": "Forums time zone",
+  "forum-time-zones/@description": "Converts the post times to the client's time zone."
+}

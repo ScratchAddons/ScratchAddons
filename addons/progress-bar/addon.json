@@ -1,6 +1,6 @@
 {
-  "name": "Project progress bar",
-  "description": "Adds a progress bar for loading and saving projects.",
+  "name": null,
+  "description": null,
   "credits": [
     {
       "name": "GarboMuffin"
@@ -21,13 +21,13 @@
   ],
   "settings": [
     {
-      "name": "Show progress bar at top of page",
+      "name": null,
       "id": "topbar",
       "type": "boolean",
       "default": false
     },
     {
-      "name": "Progress bar height (px)",
+      "name": null,
       "id": "height",
       "type": "positive_integer",
       "default": 5

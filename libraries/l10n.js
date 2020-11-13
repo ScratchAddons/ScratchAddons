@@ -35,6 +35,7 @@ export default class LocalizationProvider extends EventTarget {
     if (Object.prototype.hasOwnProperty.call(this.messages, key)) {
       return this._replacePlaceholders(this.messages[key], placeholders);
     }
+    console.warn('Key missing:', key);
     return key;
   }
   
@@ -42,6 +43,7 @@ export default class LocalizationProvider extends EventTarget {
     if (Object.prototype.hasOwnProperty.call(this.messages, key)) {
       return this._replacePlaceholders(escapeHTML(this.messages[key]), placeholders);
     }
+    console.warn('Key missing:', key);
     return key;
   }
 

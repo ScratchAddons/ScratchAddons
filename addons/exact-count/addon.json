@@ -1,6 +1,6 @@
 {
-  "name": "Show exact count",
-  "description": "Shows the exact count for user and studio info. Uses ScratchDB for forums information.",
+  "name": null,
+  "description": null,
   "credits": [
     {
       "name": "TheColaber",
@@ -16,19 +16,19 @@
   ],
   "settings": [
     {
-      "name": "Exact counts for profiles",
+      "name": null,
       "id": "user",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Exact count for studios",
+      "name": null,
       "id": "studio",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Exact count for forum user",
+      "name": null,
       "id": "forumuser",
       "type": "boolean",
       "default": true

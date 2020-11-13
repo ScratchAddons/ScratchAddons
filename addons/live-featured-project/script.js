@@ -92,13 +92,13 @@ export default async function ({ addon, msg }) {
   stageElement.classList.add("lfp-loaded");
 
   if (forceAlternative) {
-    if (alternativePlayer === "TurboWarp") loadTurboWarp();
+    if (alternativePlayer === "turbowarp") loadTurboWarp();
     else loadForkphorus();
   } else {
     loadScratch();
     iframeElement.addEventListener("load", () => {
       if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
-        if (alternativePlayer === "TurboWarp") loadTurboWarp();
+        if (alternativePlayer === "turbowarp") loadTurboWarp();
         else loadForkphorus();
       }
     });

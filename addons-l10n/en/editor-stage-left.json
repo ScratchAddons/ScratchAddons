@@ -1,0 +1,5 @@
+{
+    "editor-stage-left/@name": "Display stage on left side",
+    "editor-stage-left/@description": "Moves the stage to the left side of the editor.",
+    "editor-stage-left/@notice": "Refresh the editor after enabling/disabling this theme."
+}

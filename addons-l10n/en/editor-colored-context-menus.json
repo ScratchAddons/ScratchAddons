@@ -1,0 +1,5 @@
+{
+    "editor-colored-context-menus/@name": "Colored context menus",
+    "editor-colored-context-menus/@description": "Makes the editor context menus colorful when right-clicking a block.",
+    "editor-colored-context-menus/@notice": "Refresh the editor after enabling this theme."
+}

@@ -1,6 +1,6 @@
 {
-  "name": "Scratch Notifier",
-  "description": "Notifications on new Scratch messages. Click the notification to go straight to the message (comment, project, etc.)",
+  "name": null,
+  "description": null,
   "credits": [
     {
       "name": "World_Languages"
@@ -16,68 +16,72 @@
   "persistentScripts": ["background.js"],
   "settings": [
     {
-      "name": "Mark all messages as read after clicking notification",
+      "name": null,
       "id": "mark_as_read_when_clicked",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Notification sound",
+      "name": null,
       "id": "notification_sound",
       "type": "select",
-      "potentialValues": ["Silent", "System default", "Scratch Addons ping"],
-      "default": "System default"
+      "potentialValues": [
+          {"id": "silent"},
+          {"id": "system-default"},
+          {"id": "addons-ping"}
+      ],
+      "default": "system-default"
     },
     {
-      "name": "@comment.svg Notify profile comments & replies",
+      "name": null,
       "id": "commentsforme_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "@comment.svg Notify comments on my projects",
+      "name": null,
       "id": "commentsonmyprojects_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "@forum.svg Notify forum activity",
+      "name": null,
       "id": "forumpost_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "@heart.svg Notify loves",
+      "name": null,
       "id": "loveproject_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "@star.svg Notify favorites",
+      "name": null,
       "id": "favoriteproject_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "@follow.svg Notify new followers",
+      "name": null,
       "id": "followuser_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "@studio-add.svg Notify studio invites",
+      "name": null,
       "id": "curatorinvite_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "@studio.svg Notify studio activity",
+      "name": null,
       "id": "studioactivity_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "@remix.svg Notify remixes",
+      "name": null,
       "id": "remixproject_notifications",
       "type": "boolean",
       "default": true

@@ -1,3 +1,7 @@
 {
+    "full-signature/@name": "Show full areas",
+    "full-signature/@description": "Shows the full signature of users on the forums, and shows full What I've been doing on profiles.",
+    "full-signature/@opt-name-signature": "Show scroll for forum signatures",
+    "full-signature/@opt-name-whatworkingon": "Show scroll for What I've been doing",
     "full-signature/load-more": "Load More"
 }

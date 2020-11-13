@@ -1,0 +1,5 @@
+{
+  "bitmap-copy/@name": "Bitmap images copying",
+  "bitmap-copy/@description": "Allows you to actually copy a bitmap image from the paint editor, so that you can paste it in other websites or software.",
+  "bitmap-copy/@notice": "\"Right click → copy\" is not supported. You must press Ctrl+C while a bitmap image is selected."
+}

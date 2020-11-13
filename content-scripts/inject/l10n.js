@@ -1,4 +1,4 @@
-import LocalizationProvider from "../../libraries/autoescaper.js";
+import LocalizationProvider from "../../libraries/l10n.js";
 
 export default class UserscriptLocalizationProvider extends LocalizationProvider {
   constructor(urls) {

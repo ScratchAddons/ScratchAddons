@@ -121,7 +121,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     }
 
     const soundSetting = addon.settings.get("notification_sound");
-    if (soundSetting === "Scratch Addons ping") new Audio(addon.self.dir + "/ping.mp3").play();
+    if (soundSetting === "addons-ping") new Audio(addon.self.dir + "/ping.mp3").play();
 
     const notifId = await addon.notifications.create({
       type: "basic",
@@ -136,7 +136,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           title: "Mark all as read",
         },
       ],
-      silent: soundSetting === "System default" ? false : true,
+      silent: soundSetting === "system-default" ? false : true,
     });
     if (!notifId) return;
     const onClick = (e) => {

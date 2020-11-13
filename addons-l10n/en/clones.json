@@ -1,3 +1,5 @@
 {
+  "clones/@name": "Clone counter",
+  "clones/@description": "Adds a counter in the editor which shows the total amount of clones.",
     "clones/clones": "clones: $cloneCount$"
 }

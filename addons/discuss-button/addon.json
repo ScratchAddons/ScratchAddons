@@ -1,6 +1,6 @@
 {
-  "name": "Discuss button",
-  "description": "Adds the discuss button to the navbar.",
+  "name": null,
+  "description": null,
   "credits": [
     {
       "name": "Maximouse"
@@ -18,16 +18,16 @@
   ],
   "settings": [
     {
-      "name": "Remove \"ideas\" button",
+      "name": null,
       "id": "removeIdeasBtn",
       "type": "boolean",
       "default": false
     },
     {
-      "name": "Discuss button name",
+      "name": null,
       "id": "buttonName",
       "type": "string",
-      "default": "Discuss"
+      "default": null
     }
   ],
   "tags": ["community", "forums"],

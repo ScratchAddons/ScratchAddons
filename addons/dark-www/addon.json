@@ -1,6 +1,6 @@
 {
-  "name": "Website dark mode",
-  "description": "Dark theme for the Scratch website, both for 2.0 and 3.0 pages. Multiple options by different authors available.",
+  "name": null,
+  "description": null, 
   "tags": ["community", "theme"],
   "credits": [
     {
@@ -18,17 +18,17 @@
       "matches": ["https://scratch.mit.edu/*"],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Dark WWW"
+        "value": "dark-www"
       }
     }
   ],
   "settings": [
     {
-      "name": "Dark mode version (TODO: add mxmou's styling and set as default)",
+      "name": null,
       "id": "selectedMode",
       "type": "select",
-      "potentialValues": ["Dark WWW"],
-      "default": "Dark WWW"
+      "potentialValues": [{"id": "dark-www"}],
+      "default": "dark-www"
     }
   ]
 }

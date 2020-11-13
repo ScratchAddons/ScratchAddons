@@ -1,13 +1,15 @@
 import LocalizationProvider from "../libraries/l10n.js";
 
-class BackgroundLocalizationProvider extends LocalizationProvider {
+export default class BackgroundLocalizationProvider extends LocalizationProvider {
     constructor () {
         super();
         this.loaded = [];
     }
     
     async load (addonIds) {
-        addonIds = ["_general", ...addonIds].filter(addonId => !this.loaded.includes(addonId));
+        addonIds = ["_general", ...addonIds].filter(
+            addonId => !addonId.startsWith("//") && !this.loaded.includes(addonId)
+        );
         const ui = chrome.i18n.getUILanguage();
         const locales = [ui];
         if (ui.includes("-")) locales.push(ui.split("-")[0]);

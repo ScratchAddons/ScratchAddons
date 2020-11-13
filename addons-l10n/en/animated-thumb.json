@@ -1,4 +1,6 @@
 {
+    "animated-thumb/@name": "Thumbnails setter",
+    "animated-thumb/@description": "Adds a button to the editor to set the thumbnail of your project to any image (including gifs).",
     "animated-thumb/set-thumbnail": "Set Thumbnail",
     "animated-thumb/added-by": "Button added by Scratch Addons browser extension"
 }

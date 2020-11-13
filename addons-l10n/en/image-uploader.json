@@ -1,4 +1,6 @@
 {
+    "image-uploader/@name": "Forums image uploader",
+    "image-uploader/@description": "Integrates image uploading into the forums.",
     "image-uploader/load-error": "There was an error reading the file.",
     "image-uploader/upload-image": "Upload Image",
     "image-uploader/upload": "Upload",

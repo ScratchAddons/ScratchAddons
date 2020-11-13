@@ -1,7 +1,7 @@
 {
-  "name": "Customizable block colors",
-  "description": "Edit block colors for each category in the editor.",
-  "notice": "Refresh the editor after enabling/disabling this theme.",
+  "name": null,
+  "description": null,
+  "notice": null,
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"
@@ -21,67 +21,67 @@
   ],
   "settings": [
     {
-      "name": "motion",
+      "name": null,
       "id": "motion-color",
       "type": "color",
       "default": "#4C97FF"
     },
     {
-      "name": "looks",
+      "name": null,
       "id": "looks-color",
       "type": "color",
       "default": "#9966FF"
     },
     {
-      "name": "sounds",
+      "name": null,
       "id": "sounds-color",
       "type": "color",
       "default": "#CF63CF"
     },
     {
-      "name": "events",
+      "name": null,
       "id": "events-color",
       "type": "color",
       "default": "#FFBF00"
     },
     {
-      "name": "control",
+      "name": null,
       "id": "control-color",
       "type": "color",
       "default": "#FFAB19"
     },
     {
-      "name": "sensing",
+      "name": null,
       "id": "sensing-color",
       "type": "color",
       "default": "#5CB1D6"
     },
     {
-      "name": "operators",
+      "name": null,
       "id": "operators-color",
       "type": "color",
       "default": "#59C059"
     },
     {
-      "name": "variables",
+      "name": null,
       "id": "data-color",
       "type": "color",
       "default": "#FF8C1A"
     },
     {
-      "name": "lists",
+      "name": null,
       "id": "data-lists-color",
       "type": "color",
       "default": "#FF661A"
     },
     {
-      "name": "custom",
+      "name": null,
       "id": "custom-color",
       "type": "color",
       "default": "#FF6680"
     },
     {
-      "name": "Pen",
+      "name": null,
       "id": "Pen-color",
       "type": "color",
       "default": "#0FBD8C"
@@ -91,9 +91,9 @@
   "enabledByDefault": false,
   "presets": [
     {
-      "name": "3.0 Tweaks",
+      "name": null,
       "id": "tweaks",
-      "description": "Events, Control, and Custom blocks with 2.0 inspired colors",
+      "description": null,
       "values": {
         "events-color": "#DE9E2E",
         "control-color": "#FFBF00",
@@ -101,9 +101,9 @@
       }
     },
     {
-      "name": "2.0 Colors",
+      "name": null,
       "id": "original",
-      "description": "The original block colors from Scratch 2.0",
+      "description": null,
       "values": {
         "motion-color": "#4a6cd4",
         "looks-color": "#8a55d7",

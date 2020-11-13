@@ -1,6 +1,6 @@
 {
-  "name": "Live featured project",
-  "description": "Shows interactive embed of the featured project, directly from the user's profile page. Based on the implementation on Mega Scratch Userscript.",
+  "name": null,
+  "description": null,
   "credits": [
     {
       "name": "GRA0007 (original)",
@@ -25,28 +25,28 @@
   "settings": [
     {
       "id": "showMenu",
-      "name": "Show project menu (top bar)",
+      "name": null,
       "type": "boolean",
       "default": false
     },
     {
       "id": "autoPlay",
-      "name": "Auto-play projects",
+      "name": null,
       "type": "boolean",
       "default": false
     },
     {
       "id": "forceAlternative",
-      "name": "Force using alternative player",
+      "name": null,
       "type": "boolean",
       "default": false
     },
     {
       "id": "alternativePlayer",
-      "name": "Alternative player",
+      "name": null,
       "type": "select",
-      "default": "TurboWarp",
-      "potentialValues": ["TurboWarp", "forkphorus"]
+      "default": "turbowarp",
+      "potentialValues": [{"id": "turbowarp"}, {"id": "forkphorus"}]
     }
   ],
   "tags": ["community"],

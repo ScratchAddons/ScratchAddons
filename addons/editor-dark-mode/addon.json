@@ -1,6 +1,6 @@
 {
-  "name": "Editor dark mode",
-  "description": "Dark mode for the Scratch 3.0 project editor. Multiple options by different authors available.",
+  "name": null,
+  "description": null,
   "credits": [
     {
       "name": "infinitytec (3.Dark, 3.Darker)"
@@ -20,7 +20,7 @@
       ],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Dark editor"
+        "value": "dark-editor"
       }
     },
     {
@@ -33,7 +33,7 @@
       ],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "3.Dark"
+        "value": "3-dark"
       }
     },
     {
@@ -46,7 +46,7 @@
       ],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "3.Darker"
+        "value": "3-darker"
       }
     },
     {
@@ -69,14 +69,18 @@
   ],
   "settings": [
     {
-      "name": "Dark mode version",
+      "name": null,
       "id": "selectedMode",
       "type": "select",
-      "potentialValues": ["3.Darker", "3.Dark", "Dark editor"],
-      "default": "3.Darker"
+      "potentialValues": [
+          {"id": "3-darker"},
+          {"id": "3-dark"},
+          {"id": "dark-editor"}
+      ],
+      "default": "3-darker"
     },
     {
-      "name": "Text shadow on blocks",
+      "name": null,
       "id": "textShadow",
       "type": "boolean",
       "default": false

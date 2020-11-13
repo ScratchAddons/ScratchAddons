@@ -1,0 +1,6 @@
+{
+    "dark-www/@name": "Website dark mode",
+    "dark-www/@description":"Dark theme for the Scratch website, both for 2.0 and 3.0 pages. Multiple options by different authors available.", 
+    "dark-www/@opt-name-selectedMode": "Dark mode version (TODO: add mxmou's styling and set as default)",
+    "dark-www/@opt-select-selectedMode-dark-www": "Dark WWW"
+}

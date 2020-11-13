@@ -1,6 +1,6 @@
 {
-  "name": "Confirm sprite deletion",
-  "description": "Asks if you're sure when deleting a sprite inside a project.",
+  "name": null,
+  "description": null,
   "userscripts": [
     {
       "url": "userscript.js",

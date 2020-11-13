@@ -194,10 +194,10 @@
                     <div
                       class="filter-option"
                       v-for="option of setting.potentialValues"
-                      :class="{'sel' : addonSettings[addon._addonId][setting.id] === option, 'disabled': !addon._enabled}"
-                      @click="updateOption(setting.id, option, addon);"
+                      :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
+                      @click="updateOption(setting.id, option.id, addon);"
                     >
-                      {{ option }}
+                      {{ option.name }}
                     </div>
                   </div>
                 </div>

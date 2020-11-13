@@ -1,4 +1,4 @@
-This folder is for userscripts. For messages used by background scripts, check `_locales` folder.
+This folder is for addons. For messages used by non-addons (such as options), check `_locales` folder.
 
 String can be obtained by `scratchAddons.l10n.get()` function (which does not prefix the message key) or `msg` function passed to userscripts (which prefixes the message key).
 

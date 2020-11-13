@@ -1,6 +1,6 @@
 {
-  "name": "Show full areas",
-  "description": "Shows the full signature of users on the forums, and shows full What I've been doing on profiles.",
+  "name": null,
+  "description": null,
   "credits": [
     {
       "name": "GrahamSH"
@@ -15,13 +15,13 @@
   ],
   "settings": [
     {
-      "name": "Show scroll for forum signatures",
+      "name": null,
       "id": "signature",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Show scroll for What I've been doing",
+      "name": null,
       "id": "whatworkingon",
       "type": "boolean",
       "default": true
