@@ -159,17 +159,12 @@ body {
 }
 
 [class^="gui_tab"] span {
-  font-weight: 800;
+  /* s-a */
+  font-weight: 700;
 }
 
 [class^="gui_tab"] li:not([aria-selected="true"]) > span {
   color: hsla(215, 100%, 85%, 0.5) !important;
-}
-
-/** Makes block text a little easier to read. **/
-.blocklyDraggable > .blocklyText,
-.blocklyDraggable > g > text {
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
 }
 
 [class^="gui_stage-and-target-wrapper"]
@@ -189,16 +184,16 @@ body {
   fill: hsla(215, 60%, 40%, 1) !important;
 }
 
-input:not([name="title"]):not([name="q"]) {
+input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword) {
   background: #444;
   color: #fff !important;
 }
 
-input:not([name="title"]):not([name="q"])::placeholder {
+input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword)::placeholder {
   color: #ddd;
 }
 
-input:not([name="title"]):not([name="q"]):focus {
+input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword):focus {
   box-shadow: 0 0 0 0.25rem hsla(215, 100%, 55%, 0.45) !important;
 }
 
@@ -289,4 +284,22 @@ input:not([name="title"]):not([name="q"]):focus {
 
 [class^="tool-select-base_tool-select"] {
   filter: brightness(2) saturate(0.25);
+}
+
+/* s-a */
+.paint-editor_button-group-button-icon_10kVn,
+.color-picker_swatch-icon_Z7osI,
+.scratchCategoryId-music > .scratchCategoryItemIcon {
+  filter: brightness(100);
+}
+
+.blocklyZoom {
+  filter: invert(100) hue-rotate(180deg);
+}
+.blocklyZoom > image {
+  opacity: 1;
+}
+
+.stage-wrapper_full-screen_2hjMb {
+  background-color: #222 !important;
 }

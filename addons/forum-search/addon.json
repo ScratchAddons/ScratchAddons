@@ -4,6 +4,9 @@
   "credits": [
     {
       "name": "DatOneLefty"
+    },
+    {
+      "name": "Hans5958"
     }
   ],
   "userscripts": [
@@ -19,5 +22,5 @@
     }
   ],
   "tags": ["forums", "community"],
-  "enabled_by_default": false
+  "enabledByDefault": false
 }

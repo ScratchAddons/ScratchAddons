@@ -98,7 +98,7 @@
 .activity-stream .actor a {
   color: #575e75 !important;
 }
-#content > .box:not(#profile-data):not(.slider-carousel-container) {
+#content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404) {
   border-radius: 0;
   border: none;
   background: rgba(77, 151, 255, 0.1);
@@ -135,15 +135,15 @@
   padding: 1rem;
 }
 #comments .comment form {
-  margin-left: 1.5rem;
+  margin-left: 1rem;
 }
 #comments .comment form textarea {
-  width: 837.5px;
+  width: 845px;
   height: 80px;
   padding: 1rem;
 }
 #comments .reply .comment form textarea {
-  width: 767.5px;
+  width: 775px;
 }
 #comments .more-replies {
   background-color: #eaf1fc;

@@ -3,10 +3,10 @@
   "description": "Dark mode for the Scratch 3.0 project editor. Multiple options by different authors available.",
   "credits": [
     {
-      "name": "_nix (Dark editor)"
+      "name": "infinitytec (3.Dark, 3.Darker)"
     },
     {
-      "name": "infinitytec (3.Dark, 3.Darker)"
+      "name": "_nix (Dark editor)"
     }
   ],
   "userstyles": [
@@ -18,9 +18,9 @@
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
       ],
-      "setting_match": {
-        "setting_id": "selectedMode",
-        "setting_value": "Dark editor"
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "Dark editor"
       }
     },
     {
@@ -31,9 +31,9 @@
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
       ],
-      "setting_match": {
-        "setting_id": "selectedMode",
-        "setting_value": "3.Dark"
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "3.Dark"
       }
     },
     {
@@ -44,25 +44,44 @@
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
       ],
-      "setting_match": {
-        "setting_id": "selectedMode",
-        "setting_value": "3.Darker"
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "3.Darker"
       }
     },
     {
       "url": "global.css",
       "matches": ["https://scratch.mit.edu/projects/*"]
+    },
+    {
+      "url": "text-shadow.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "settingMatch": {
+        "id": "textShadow",
+        "value": true
+      }
     }
   ],
-  "options": [
+  "settings": [
     {
       "name": "Dark mode version",
       "id": "selectedMode",
       "type": "select",
-      "potential_values": ["Dark editor", "3.Dark", "3.Darker"],
-      "default": "Dark editor"
+      "potentialValues": ["3.Darker", "3.Dark", "Dark editor"],
+      "default": "3.Darker"
+    },
+    {
+      "name": "Text shadow on blocks",
+      "id": "textShadow",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["editor", "theme"],
-  "enabled_by_default": false
+  "enabledByDefault": false
 }

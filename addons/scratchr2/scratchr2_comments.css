@@ -23,13 +23,13 @@
   border-bottom: none;
   border-top-right-radius: 5px;
   padding: 1rem;
-  margin-left: 1.5rem;
+  margin-left: 1rem;
   margin-bottom: 0;
   background-color: #fff;
   overflow: visible !important;
 }
 #comments .comment .info > div:not(.name):not(.content):not([data-content="reply-form"]) {
-  margin-left: 1.5rem;
+  margin-left: 1rem;
   padding: 1rem;
   padding-top: 0;
   border-bottom-left-radius: 5px;
@@ -66,20 +66,14 @@
   border-radius: 8px;
 }
 #comments .comment .info .name a {
-  color: #575e75;
+  color: #4d97ff;
 }
-#comments .removed {
-  background: transparent !important;
+#comments .comment .info .name a:hover {
+  color: #4280d7;
 }
-#comments .removed .info .content,
-#comments .removed .info > div:not(.name):not(.content):not([data-content="reply-form"]) {
-  background: rgba(132, 111, 199, 0.2);
+#comments .comment .info .time {
+  color: #b3b3b3;
 }
-#comments .removed .content::before {
-  border-color: transparent;
-}
-#comments .removed .content::after {
-  top: -1px;
-  left: -13px;
-  border-color: rgba(132, 111, 199, 0.2);
+#comments .more-replies .pulldown {
+  color: #4d97ff;
 }

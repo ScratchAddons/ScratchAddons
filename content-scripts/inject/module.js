@@ -27,6 +27,17 @@ scratchAddons.methods.getMsgCount = () => {
   return promise;
 };
 
+const originalReplaceState = history.replaceState;
+history.replaceState = function () {
+  const oldUrl = location.href;
+  const newUrl = new URL(arguments[2], document.baseURI).href;
+  const returnValue = originalReplaceState.apply(history, arguments);
+  for (const eventTarget of scratchAddons.eventTargets.tab) {
+    eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
+  }
+  return returnValue;
+};
+
 const observer = new MutationObserver((mutationsList) => {
   for (const mutation of mutationsList) {
     const attr = mutation.attributeName;
@@ -61,6 +72,6 @@ const observer = new MutationObserver((mutationsList) => {
 });
 observer.observe(template, { attributes: true });
 
-for (const addon of JSON.parse(template.getAttribute("data-addons"))) {
+for (const addon of JSON.parse(template.getAttribute("data-userscripts"))) {
   if (addon.scripts.length) runAddonUserscripts(addon);
 }

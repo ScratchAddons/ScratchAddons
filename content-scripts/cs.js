@@ -5,70 +5,106 @@ const pathArr = path.split("/");
 if (pathArr[0] === "scratch-addons-extension") {
   if (pathArr[1] === "settings") chrome.runtime.sendMessage("openSettingsOnThisTab");
 }
+if (path === "discuss/3/topic/add//") window.addEventListener("load", forumWarning);
 
-let userscriptsAndUserstyles;
-let firstRun = true;
-let domLoaded = false;
-
-function injectUserstyles(object) {
-  for (const addon of object) {
-    for (const css of addon.styles) {
-      const style = document.createElement("style");
-      style.classList.add("scratch-addons-css");
-      style.textContent = css;
-      document.documentElement.appendChild(style);
-    }
-  }
-}
-
+let receivedContentScriptInfo = false;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
-  if (request.userscriptsAndUserstyles) {
+  if (request.contentScriptInfo) {
+    // The request wasn't for this exact URL, might happen sometimes
+    if (request.contentScriptInfo.url !== initialUrl) return;
+    // Only run once - updates go through themesUpdated
+    if (receivedContentScriptInfo) return;
+    receivedContentScriptInfo = true;
     sendResponse("OK");
-    document.querySelectorAll(".scratch-addons-css").forEach((style) => style.remove());
 
-    if (document.head) injectUserstyles(request.userscriptsAndUserstyles);
+    if (document.head) onHeadAvailable(request.contentScriptInfo);
     else {
       const observer = new MutationObserver(() => {
         if (document.head) {
-          injectUserstyles(request.userscriptsAndUserstyles);
+          onHeadAvailable(request.contentScriptInfo);
           observer.disconnect();
         }
       });
       observer.observe(document.documentElement, { subtree: true });
     }
-    userscriptsAndUserstyles = request.userscriptsAndUserstyles;
-    if (firstRun && domLoaded) onReady();
-    firstRun = false;
+    contentScriptInfo = request.contentScriptInfo;
   } else if (request === "getInitialUrl") {
     sendResponse(initialUrl);
+  } else if (request.themesUpdated) {
+    injectUserstylesAndThemes({ themes: request.themesUpdated, isUpdate: true });
+  }
+});
+chrome.runtime.sendMessage("ready");
+window.addEventListener("load", () => {
+  if (!receivedContentScriptInfo) {
+    // This might happen sometimes, the background page might not
+    // have seen this tab loading, for example, at startup.
+    chrome.runtime.sendMessage("sendContentScriptInfo");
   }
 });
 
-window.addEventListener("DOMContentLoaded", () => {
-  domLoaded = true;
-  if (userscriptsAndUserstyles) onReady();
-});
+function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
+  document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
+    if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
+  });
+  for (const userstyleUrl of userstyleUrls || []) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = userstyleUrl;
+    if (document.body) document.documentElement.insertBefore(link, document.body);
+    else document.documentElement.appendChild(link);
+  }
+  for (const theme of themes) {
+    for (const styleUrl of theme.styleUrls) {
+      const css = theme.styles[styleUrl];
+      if (isUpdate && css.startsWith("/* sa-autoupdate-theme-ignore */")) continue;
+      const style = document.createElement("style");
+      style.classList.add("scratch-addons-theme");
+      style.setAttribute("data-addon-id", theme.addonId);
+      style.textContent = css;
+      if (document.body) document.documentElement.insertBefore(style, document.body);
+      else document.documentElement.appendChild(style);
+    }
+  }
+}
 
-// On DOM ready and data ready
-function onReady() {
+function setCssVariables(addonSettings) {
+  for (const addonId in addonSettings) {
+    for (const settingName in addonSettings[addonId]) {
+      const value = addonSettings[addonId][settingName];
+      if (typeof value === "string" || typeof value === "number")
+        document.documentElement.style.setProperty(
+          `--${addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-${settingName.replace(/-([a-z])/g, (g) =>
+            g[1].toUpperCase()
+          )}`,
+          addonSettings[addonId][settingName]
+        );
+    }
+  }
+}
+
+function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, themes }) {
+  setCssVariables(globalState.addonSettings);
+  injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate: false });
+
+  const template = document.createElement("template");
+  template.id = "scratch-addons";
+  template.setAttribute("data-path", chrome.runtime.getURL(""));
+  template.setAttribute("data-userscripts", JSON.stringify(addonsWithUserscripts));
+  template.setAttribute("data-global-state", JSON.stringify(globalState));
+  document.head.appendChild(template);
+
   const script = document.createElement("script");
   script.type = "module";
   script.src = chrome.runtime.getURL("content-scripts/inject/module.js");
   document.head.appendChild(script);
 
-  const template = document.createElement("template");
-  template.id = "scratch-addons";
-  template.setAttribute("data-path", chrome.runtime.getURL(""));
-  template.setAttribute("data-addons", JSON.stringify(userscriptsAndUserstyles));
-  document.head.appendChild(template);
-  const setGlobalState = (json) => template.setAttribute("data-global-state", JSON.stringify(json));
-
-  chrome.runtime.sendMessage("getGlobalState", setGlobalState);
-
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.newGlobalState) setGlobalState(request.newGlobalState);
-    else if (request.fireEvent) {
+    if (request.newGlobalState) {
+      template.setAttribute("data-global-state", JSON.stringify(request.newGlobalState));
+      setCssVariables(request.newGlobalState.addonSettings);
+    } else if (request.fireEvent) {
       const eventDetails = JSON.stringify(request.fireEvent);
       template.setAttribute(`data-fire-event__${Date.now()}`, eventDetails);
     } else if (request.setMsgCount) {
@@ -110,4 +146,32 @@ function onReady() {
     }
   });
   observer.observe(template, { attributes: true });
+}
+
+function forumWarning() {
+  let postArea = document.querySelector("form#post > label");
+  if (postArea) {
+    var errorList = document.querySelector("form#post > label > ul");
+    if (!errorList) {
+      let typeArea = postArea.querySelector("strong");
+      errorList = document.createElement("ul");
+      errorList.classList.add("errorlist");
+      postArea.insertBefore(errorList, typeArea);
+    }
+    let addonError = document.createElement("li");
+    let reportLink = document.createElement("a");
+    reportLink.href = "https://scratchaddons.com/feedback";
+    reportLink.target = "_blank";
+    reportLink.innerText = "report it here";
+    let text1 = document.createElement("span");
+    text1.innerText =
+      "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when " +
+      "all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please ";
+    let text3 = document.createElement("span");
+    text3.innerText = ".";
+    addonError.appendChild(text1);
+    addonError.appendChild(reportLink);
+    addonError.appendChild(text3);
+    errorList.appendChild(addonError);
+  }
 }

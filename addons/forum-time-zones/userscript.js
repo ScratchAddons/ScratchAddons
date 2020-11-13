@@ -12,7 +12,8 @@ export default async function ({ addon, _global, _console }) {
       throw "fetch error";
     })
     .then((res) => res.json())
-    .then((data) => {
+    .then(async (data) => {
+      await addon.tab.waitForElement(".blockpost");
       Array.prototype.map
         .call(document.getElementsByClassName("blockpost"), (e) => parseInt(e.id.replace("p", "")))
         .forEach((e) => {

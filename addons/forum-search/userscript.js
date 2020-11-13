@@ -186,6 +186,7 @@ export default async function ({ addon, global, console }) {
   await addon.tab.loadScript("https://scratchblocks.github.io/js/scratchblocks-v3.5-min.js");
   // create the search bar
   let search = document.createElement("form");
+  search.id = "forum-search-form";
   let searchBar = document.createElement("input");
   searchBar.id = "forum-search-input";
   searchBar.setAttribute("type", "text");
@@ -235,9 +236,9 @@ export default async function ({ addon, global, console }) {
   searchContent.id = "forum-search-list";
 
   // now add the search bar
-  let navIndex = document.querySelector("ul.conr");
-  navIndex.parentNode.after(searchContent);
-  navIndex.parentNode.after(search);
+  let navIndex = document.querySelector("#brdmenu");
+  navIndex.after(searchContent);
+  navIndex.after(search);
 
   search.addEventListener("submit", (e) => {
     triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value);

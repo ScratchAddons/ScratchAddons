@@ -5,17 +5,17 @@ import dataURLToBlob from "../../libraries/data-url-to-blob.js";
 const DATA_PNG = "data:image/png;base64,";
 const template = document.getElementById("scratch-addons");
 
-export default class Tab {
+export default class Tab extends EventTarget {
   constructor(info) {
+    super();
     scratchAddons.eventTargets.tab.push(this);
-    this.clientVersion =
-      document.querySelector("#app #navigation") || this.editorMode !== null
-        ? "scratch-www"
-        : window.Scratch
-        ? "scratchr2"
-        : null;
-    if (info.traps) {
-      this.traps = new Trap();
+    this.clientVersion = document.querySelector("meta[name='format-detection']")
+      ? "scratch-www"
+      : document.querySelector("script[type='text/javascript']")
+      ? "scratchr2"
+      : null;
+    this.traps = new Trap();
+    if (window.__scratchAddonsTraps)
       __scratchAddonsTraps.addEventListener("fakestatechanged", ({ detail }) => {
         const newEvent = new CustomEvent("fakestatechanged", {
           detail: {
@@ -27,8 +27,8 @@ export default class Tab {
         });
         this.traps.dispatchEvent(newEvent);
       });
-    }
     this.redux = new ReduxHandler();
+    this._waitForElementSet = new WeakSet();
   }
   loadScript(url) {
     return new Promise((resolve) => {
@@ -41,24 +41,29 @@ export default class Tab {
   getScratchVM() {
     return scratchAddons.methods.getScratchVM();
   }
-  waitForElement(selector) {
-    if (!document.querySelector(selector)) {
-      return new Promise((resolve) =>
-        new MutationObserver(function (mutationsList, observer) {
-          const elem = document.querySelector(selector);
-          if (elem) {
-            observer.disconnect();
-            resolve(elem);
-          }
-        }).observe(document.body, {
-          attributes: true,
-          childList: true,
-          subtree: true,
-        })
-      );
-    } else {
-      return Promise.resolve(document.querySelector(selector));
+  waitForElement(selector, { markAsSeen = false } = {}) {
+    const firstQuery = document.querySelectorAll(selector);
+    for (const element of firstQuery) {
+      if (this._waitForElementSet.has(element)) continue;
+      if (markAsSeen) this._waitForElementSet.add(element);
+      return Promise.resolve(element);
     }
+    return new Promise((resolve) =>
+      new MutationObserver((mutationsList, observer) => {
+        const elements = document.querySelectorAll(selector);
+        for (const element of elements) {
+          if (this._waitForElementSet.has(element)) continue;
+          observer.disconnect();
+          resolve(element);
+          if (markAsSeen) this._waitForElementSet.add(element);
+          break;
+        }
+      }).observe(document.documentElement, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+      })
+    );
   }
   /**
    * @type {?string} editor mode (or null for non-editors).

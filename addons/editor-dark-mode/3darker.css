@@ -2,7 +2,7 @@
   --main-bg: #111111;
   --secondary-bg: #151515;
   --accent: #202020;
-  --text: #bfbfbf;
+  --text: #ffffff;
 }
 .menu-bar_main-menu_3wjWH,
 .modal_header_1h7ps,
@@ -25,6 +25,10 @@
 .Popover-body {
   background: var(--accent) /*s-a* !important *s-a*/;
   color: var(--text) /*s-a* !important *s-a*/;
+}
+.context-menu_context-menu_2SJM-,
+.blocklyWidgetDiv .goog-menu,
+.Popover-body {
   border: 1px solid white;
 }
 .goog-menuitem-content,
@@ -61,11 +65,14 @@
   color: var(--text);
 }
 .sprite-info_sprite-info_3EyZh,
-.stage-selector_header_2GVr1,
-.stage-selector_header-title_33xCt,
-.stage-selector_header-title_33xCt,
-.sprite-selector-item_sprite-selector-item_kQm-i:hover {
+.sprite-selector-item_sprite-selector-item_kQm-i:hover,
+.stage-selector_header_2GVr1 {
   background: var(--secondary-bg);
+  color: var(--text);
+}
+.stage-selector_header-title_33xCt,
+.stage-selector_header-title_33xCt {
+  /* background: var(--secondary-bg); */
   color: var(--text);
 }
 .blocklyFlyoutButtonBackground {
@@ -166,14 +173,16 @@ div.custom-procedures_option-card_BtHt3 {
 .library-item_library-item-name_2qMXu {
   color: var(--text) !important;
 }
-input[type="text"]:not([name="title"]):not([name="q"]),
+input[type="text"]:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword),
 .input_input-form_1Y0wX,
 .prompt_variable-name-text-input_1iu8- {
   background: var(--accent);
   color: var(--text) !important;
 }
-input[type="text"]:not([name="title"]):not([name="q"]):hover,
-input[type="text"]:not([name="title"]):not([name="q"]):focus {
+input[type="text"]:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword):hover,
+input[type="text"]:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword):focus,
+input[type="password"][name="password"]:hover,
+input[type="password"][name="password"]:focus {
   background: var(--accent);
   filter: brightness(90%);
 }
@@ -198,4 +207,22 @@ input[type="text"]:not([name="title"]):not([name="q"]):focus {
 .paint-editor_canvas-container_x2D0a {
   border: 2px solid var(--accent);
   border-radius: 0.4rem;
+}
+
+.Popover-body {
+  background: var(--secondary-bg);
+  border-color: var(--accent-color);
+}
+[class^="color-picker_row-header"] {
+  color: var(--text);
+}
+[class^="color-picker_divider"] {
+  border-color: var(--accent-color);
+}
+[class^="color-picker_swatch"] {
+  border-color: var(--accent-color);
+}
+
+.stage-wrapper_full-screen_2hjMb {
+  background-color: black !important;
 }
