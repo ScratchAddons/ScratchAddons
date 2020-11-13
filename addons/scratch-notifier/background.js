@@ -1,6 +1,6 @@
 import commentEmojis from "./comment-emojis.js";
 
-export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
+export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval, msg }) {
   let msgCount = null;
   let lastDateTime = null;
   let lastAuthChange; // Used to check if auth changed while waiting for promises to resolve
@@ -50,72 +50,72 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       var notificationTitle;
       switch (messageType.split("/")[1]) {
         case "ownProjectNewComment":
-          notificationTitle = `${actor} commented on your project "${title}"`;
+          notificationTitle = msg("notif-own-project", {actor, title});
           text = fragment;
           break;
         case "projectReplyToSelf":
-          notificationTitle = `${actor} replied to you on project "${title}"`;
+          notificationTitle = msg("notif-project-reply", {actor, title});
           text = fragment;
           break;
         case "ownProjectReplyToOther":
-          notificationTitle = `${actor} replied to ${commentee} on project "${title}"`;
+          notificationTitle = msg("notif-own-project-reply", {actor, commentee, title});
           text = fragment;
           break;
         case "ownProfileNewComment":
-          notificationTitle = `${actor} commented on your profile`;
+          notificationTitle = msg("notif-profile", {actor});
           text = fragment;
           break;
         case "ownProfileReplyToSelf":
-          notificationTitle = `${actor} replied to you on your profile`;
+          notificationTitle = msg("notif-own-profile-reply", {actor});
           text = fragment;
           break;
         case "ownProfileReplyToOther":
-          notificationTitle = `${actor} replied to ${commentee} on your profile`;
+          notificationTitle = msg("notif-own-profile-reply-other", {actor, commentee});
           text = fragment;
           break;
         case "otherProfileReplyToSelf":
-          notificationTitle = `${actor} replied on ${title}'s profile`;
+          notificationTitle = msg("notif-profile-reply", {actor, title});
           text = fragment;
           break;
         case "studio":
-          notificationTitle = `${actor} replied in studio "${title}"`;
+          notificationTitle = msg("notif-studio-reply", {actor, title});
           text = fragment;
           break;
         default:
-          notificationTitle = "New Scratch comment";
+          notificationTitle = msg("notif-comment");
           break;
       }
     } else {
       switch (messageType) {
         case "forumpost":
-          notificationTitle = `There are new posts in the forum thread "${title}"`;
+          notificationTitle = msg("notif-forum", {title});
           url = `https://scratch.mit.edu/discuss/topic/${element_id}/unread/`;
           break;
         case "loveproject":
-          notificationTitle = `${actor} loved your project "${title}"`;
+          notificationTitle = msg("notif-love", {actor, title});
           url = `https://scratch.mit.edu/users/${actor}/`;
           break;
         case "favoriteproject":
-          notificationTitle = `${actor} favorited your project "${title}"`;
+          notificationTitle = msg("notif-fav", {actor, title});
           url = `https://scratch.mit.edu/users/${actor}/`;
           break;
         case "followuser":
-          notificationTitle = `${actor} is now following you`;
+          notificationTitle = msg("notif-follow", {actor});
           url = `https://scratch.mit.edu/users/${actor}/`;
           break;
         case "curatorinvite":
-          notificationTitle = `${actor} invited you to curate the studio "${title}"`;
+          notificationTitle = msg("notif-invite", {actor, title});
           url = `https://scratch.mit.edu/studios/${element_id}/curators/`;
           break;
         case "remixproject":
-          notificationTitle = `${actor} remixed your project "${parent_title}" as "${title}"`;
+          notificationTitle = msg("notif-remix", {actor, parent_title, title});
           url = `https://scratch.mit.edu/projects/${element_id}/`;
           break;
         case "studioactivity":
-          notificationTitle = `There was new activity in studio "${title}" today`;
+          notificationTitle = msg("notif-studio", {title});
           break;
         default:
-          notificationTitle = "New Scratch message";
+          notificationTitle = msg("notif-generic");
           break;
       }
     }
@@ -130,10 +130,10 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       message: text,
       buttons: [
         {
-          title: "Open messages page",
+          title: msg("open"),
         },
         {
-          title: "Mark all as read",
+          title: msg("clear"),
         },
       ],
       silent: soundSetting === "system-default" ? false : true,

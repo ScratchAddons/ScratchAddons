@@ -73,6 +73,7 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
       setInterval: setIntervalFunc,
       clearTimeout: clearTimeoutFunc,
       clearInterval: clearIntervalFunc,
+      msg: (key, placeholders) => scratchAddons.l10n.get(`${addonId}/${key}`, placeholders),
     });
   }
 }
