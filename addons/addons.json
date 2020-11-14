@@ -47,5 +47,8 @@
   "resizable-comment-input",
   "animated-thumb",
   "live-featured-project",
-  "fix-uploaded-svgs"
+  "fix-uploaded-svgs",
+  "project-info",
+  "curator-link",
+  "search-load-more-fix"
 ]

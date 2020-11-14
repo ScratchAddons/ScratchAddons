@@ -4,7 +4,8 @@ export default async function ({ addon, global, console }) {
       fetch("https://scratchdb.lefty.one/v2/forum/user/info/" + userbox.querySelector("a").innerText)
         .then((response) => response.json())
         .then((data) => {
-          userbox.childNodes[6].nodeValue = `${data.counts.total.count}`;
+          userbox.childNodes[6].nodeValue =
+            data.counts.total.count + (data.counts.total.count == 1 ? " post" : " posts");
         });
     }
   }
