@@ -3,7 +3,14 @@
   Usage: autoescaper`trusted code ${untrusted value}`
 */
 
-const escapeHTML = str => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
+const _textarea = document.createElement("textarea");
+
+const escapeHTML = str => {
+    _textarea.innerHTML = str;
+    const val = _textarea.innerText;
+    _textarea.innerHTML = "";
+    return val;
+};
 const autoescaper = (strings, ...dangerous) => {
     let r = '';
     let i = 0;

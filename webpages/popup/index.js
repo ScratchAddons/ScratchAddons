@@ -4,6 +4,9 @@ const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
 
+document.getElementById("title-text").textContent = chrome.i18n.getMessage("extensionName");
+document.getElementById("settings").textContent = chrome.i18n.getMessage("settings");
+
 chrome.storage.sync.get(["globalTheme"], function (r) {
   let rr = false; //true = light, false = dark
   if (r.globalTheme) rr = r.globalTheme;
@@ -20,14 +23,14 @@ const popups = [
   {
     addonId: "scratch-messaging",
     icon: "../../images/icons/envelope.svg",
-    name: `Messaging`,
+    name: chrome.i18n.getMessage("messaging"),
     url: "scratch-messaging/popup.html",
     fullscreen: true,
   },
   {
     addonId: "cloud-games",
     icon: "../../images/icons/cloud.svg",
-    name: "Games",
+    name: chrome.i18n.getMessage("games"),
     url: "cloud-games/popup.html",
   },
 ];
@@ -58,7 +61,7 @@ for (const popup of popups) {
     const img = document.createElement("img");
     img.src = "../../images/icons/popout.svg";
     img.className = "popout-img";
-    img.title = "Open in new browser tab";
+    img.title = chrome.i18n.getMessage("openInNewTab");
     popoutA.appendChild(img);
     el.appendChild(popoutA);
   }
@@ -79,6 +82,7 @@ function setPopup(popup) {
 }
 var version = document.getElementById("version");
 version.innerText = "v" + chrome.runtime.getManifest().version;
+version.title = chrome.i18n.getMessage("changelog");
 version.onclick = () => {
   window.open("https://scratchaddons.com/changelog?versionname=" + chrome.runtime.getManifest().version_name);
   setTimeout(() => window.close(), 100);
