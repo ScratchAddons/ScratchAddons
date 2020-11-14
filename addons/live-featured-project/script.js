@@ -29,20 +29,16 @@ export default async function ({ addon, msg }) {
   wrapperElement.appendChild(iframeElement);
   if (document.querySelector('#profile-box .player [data-control="edit"]'))
     wrapperElement.appendChild(changeFeaturedElement);
-  stageElement.appendChild(wrapperElement);
+  stageElement.prepend(wrapperElement);
+
+  if (showMenu) wrapperElement.classList.add("lfp-show-menu");
+  else wrapperElement.classList.add("lfp-hide-menu");
 
   // Functions for loading embeds
 
   const loadScratch = () => {
-    wrapperElement.className = "lfp-scratch";
-
-    if (showMenu) {
-      wrapperElement.classList.add("lfp-show-menu");
-    } else {
-      iframeElement.setAttribute("height", "260");
-      wrapperElement.classList.add("lfp-hide-menu");
-    }
-
+    wrapperElement.dataset.player = "scratch";
+    if (!showMenu) iframeElement.setAttribute("height", "260");
     iframeElement.setAttribute("src", `https://scratch.mit.edu/projects/embed/${projectId}/?autostart=true`);
 
     // Auto-start Scratch players (sadly need to be done automatically)
@@ -62,44 +58,51 @@ export default async function ({ addon, msg }) {
             subtree: true,
           });
         },
-        { once: true }
+        {
+          once: true,
+        }
       );
   };
 
   const loadTurboWarp = () => {
     iframeElement.setAttribute("src", `https://turbowarp.org/embed.html${autoPlay ? "?autoplay" : ""}#${projectId}`);
-    wrapperElement.className = "lfp-turbowarp";
-
-    if (showMenu) {
-      wrapperElement.classList.add("lfp-show-menu");
-    } else {
-      iframeElement.setAttribute("height", "260");
-      wrapperElement.classList.add("lfp-hide-menu");
-    }
+    wrapperElement.dataset.player = "turbowarp";
+    if (!showMenu) iframeElement.setAttribute("height", "260");
   };
 
   const loadForkphorus = () => {
-    wrapperElement.className = "lfp-forkphorus";
+    wrapperElement.dataset.player = "forkphorus";
     iframeElement.setAttribute(
       "src",
       `https://forkphorus.github.io/embed.html?id=${projectId}&auto-start=${autoPlay}&ui=${showMenu}`
     );
-    if (!autoPlay) frameElement.setAttribute("width", "239");
   };
 
   // Start loading the players
 
+<<<<<<< HEAD
   stageElement.classList.add("lfp-loaded");
 
   if (forceAlternative) {
     if (alternativePlayer === "turbowarp") loadTurboWarp();
     else loadForkphorus();
+=======
+  if (forceAlternative && alternativePlayer !== "none") {
+    if (alternativePlayer === "turbowarp") loadTurboWarp();
+    else if (alternativePlayer === "forkphorus") loadForkphorus();
+>>>>>>> 2cd9e7dab3f9e3f50395b2c69c72ad3369c9fbf5
   } else {
     loadScratch();
     iframeElement.addEventListener("load", () => {
       if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
+<<<<<<< HEAD
         if (alternativePlayer === "turbowarp") loadTurboWarp();
         else loadForkphorus();
+=======
+        if (alternativePlayer === "turbowarp") loadTurboWarp();
+        else if (alternativePlayer === "forkphorus") loadForkphorus();
+        else stageElement.removeChild(wrapperElement);
+>>>>>>> 2cd9e7dab3f9e3f50395b2c69c72ad3369c9fbf5
       }
     });
   }

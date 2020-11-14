@@ -5,6 +5,7 @@
     "live-featured-project/@opt-name-autoPlay": "Auto-play projects (for alternative players)",
     "live-featured-project/@opt-name-forceAlternative": "Force using alternative player",
     "live-featured-project/@opt-name-alternativePlayer": "Alternative player",
+    "live-featured-project/@opt-select-alternativePlayer-none": "None",
     "live-featured-project/@opt-select-alternativePlayer-turbowarp": "TurboWarp",
     "live-featured-project/@opt-select-alternativePlayer-forkphorus": "forkphorus",
     "live-featured-project/change-featured": "Change featured project"
