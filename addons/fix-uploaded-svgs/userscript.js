@@ -12,7 +12,10 @@ export default async function ({ addon, global, console }) {
             const xmlParser = new DOMParser();
             const xmlDocument = xmlParser.parseFromString(text, "text/xml");
             const svgElement = xmlDocument.children[0];
-            if (svgElement.height.baseVal.valueAsString === "100%" && svgElement.width.baseVal.valueAsString === "100%") {
+            if (
+              svgElement.height.baseVal.valueAsString === "100%" &&
+              svgElement.width.baseVal.valueAsString === "100%"
+            ) {
               svgElement.removeAttribute("height");
               svgElement.removeAttribute("width");
               text = xmlDocument.documentElement.outerHTML;
