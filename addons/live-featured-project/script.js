@@ -80,29 +80,16 @@ export default async function ({ addon, msg }) {
 
   // Start loading the players
 
-<<<<<<< HEAD
-  stageElement.classList.add("lfp-loaded");
-
-  if (forceAlternative) {
-    if (alternativePlayer === "turbowarp") loadTurboWarp();
-    else loadForkphorus();
-=======
   if (forceAlternative && alternativePlayer !== "none") {
     if (alternativePlayer === "turbowarp") loadTurboWarp();
     else if (alternativePlayer === "forkphorus") loadForkphorus();
->>>>>>> 2cd9e7dab3f9e3f50395b2c69c72ad3369c9fbf5
   } else {
     loadScratch();
     iframeElement.addEventListener("load", () => {
       if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
-<<<<<<< HEAD
-        if (alternativePlayer === "turbowarp") loadTurboWarp();
-        else loadForkphorus();
-=======
         if (alternativePlayer === "turbowarp") loadTurboWarp();
         else if (alternativePlayer === "forkphorus") loadForkphorus();
         else stageElement.removeChild(wrapperElement);
->>>>>>> 2cd9e7dab3f9e3f50395b2c69c72ad3369c9fbf5
       }
     });
   }
