@@ -5,7 +5,7 @@ lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
 
 document.getElementById("title-text").textContent = chrome.i18n.getMessage("extensionName");
-document.getElementById("settings").textContent = chrome.i18n.getMessage("settings");
+document.getElementById("settings-icon").title = chrome.i18n.getMessage("settings");
 
 chrome.storage.sync.get(["globalTheme"], function (r) {
   let rr = false; //true = light, false = dark
