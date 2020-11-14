@@ -1,8 +1,15 @@
+import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
+import {escapeHTML} from "../../libraries/autoescaper.js";
+
+(async () => {
+
 if (window.parent === window) {
   // We're not in popup mode!
   document.body.classList.add("fullscreen");
   document.documentElement.classList.add("fullscreen");
 }
+
+const l10n = new WebsiteLocalizationProvider();
 
 //theme
 const lightThemeLink = document.createElement("link");
@@ -17,6 +24,47 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
+const usedMessages = [
+    "scratch-messaging/send-error",
+    "scratch-messaging/deleting",
+    "scratch-messaging/delete-error",
+    "scratch-messaging/deleted",
+    "scratch-messaging/popup-title",
+    "scratch-messaging/open-new-tab",
+    "scratch-messaging/delete",
+    "scratch-messaging/delete-confirm",
+    "scratch-messaging/reply",
+    "scratch-messaging/posting",
+    "scratch-messaging/post",
+    "scratch-messaging/cancel",
+    "scratch-messaging/chars-left",
+    "scratch-messaging/follows",
+    "scratch-messaging/studio-invites",
+    "scratch-messaging/curate-invite",
+    "scratch-messaging/forum",
+    "scratch-messaging/forum-new-post",
+    "scratch-messaging/studio-activity",
+    "scratch-messaging/new-activity",
+    "scratch-messaging/remixes",
+    "scratch-messaging/remix-as",
+    "scratch-messaging/your-profile",
+    "scratch-messaging/others-profile",
+    "scratch-messaging/studio",
+    "scratch-messaging/loading",
+    "scratch-messaging/logged-out",
+    "scratch-messaging/disabled",
+    "scratch-messaging/settings",
+    "scratch-messaging/loading-comments",
+    "scratch-messaging/reload",
+    "scratch-messaging/no-unread",
+    "scratch-messaging/show-more",
+    "scratch-messaging/mark-as-read",
+    "scratch-messaging/marked-as-read",
+    "scratch-messaging/open-messages"
+];
+
+await l10n.loadMessages(usedMessages);
+
 let dateNow = Date.now();
 
 // <comment> component
@@ -30,6 +78,15 @@ const Comment = Vue.extend({
       deleted: false,
       deleteStep: 0,
       postingComment: false,
+      messages: {
+          openNewTabMsg : l10n.get("scratch-messaging/open-new-tab"),
+          deleteMsg: l10n.get("scratch-messaging/delete"),
+          deleteConfirmMsg: l10n.get("scratch-messaging/delete-confirm"),
+          replyMsg: l10n.get("scratch-messaging/reply"),
+          postingMsg: l10n.get("scratch-messaging/posting"),
+          postMsg: l10n.get("scratch-messaging/post"),
+          cancelMsg: l10n.get("scratch-messaging/cancel")
+      }
     };
   },
   methods: {
@@ -61,7 +118,7 @@ const Comment = Vue.extend({
         (res) => {
           this.postingComment = false;
           dateNow = Date.now();
-          if (res.error) alert("Error sending comment");
+          if (res.error) alert(l10n.get("scratch-messaging/send-error"));
           else {
             this.replying = false;
             const newCommentPseudoId = `${this.resourceType[0]}_${res.commentId}`;
@@ -89,7 +146,7 @@ const Comment = Vue.extend({
       }
       this.deleted = true;
       const previousContent = this.thisComment.content;
-      this.thisComment.content = "Deleting comment...";
+      this.thisComment.content = l10n.escaped("scratch-messaging/deleting");
       chrome.runtime.sendMessage(
         {
           scratchMessaging: {
@@ -102,13 +159,13 @@ const Comment = Vue.extend({
         },
         (res) => {
           if (res.error) {
-            alert("Error deleting comment - you might not have permission to do this.");
+            alert(l10n.get("scratch-messaging/delete-error"));
             this.thisComment.content = previousContent;
             this.deleteStep = 0;
             this.deleted = false;
           } else {
             if (this.isParent) this.thisComment.children = [];
-            this.thisComment.content = "[deleted]";
+            this.thisComment.content = l10n.escaped("scratch-messaging/deleted");
           }
         }
       );
@@ -118,8 +175,8 @@ const Comment = Vue.extend({
     thisComment() {
       return this.commentsObj[this.commentId];
     },
-    lengthOfReplyBoxValue() {
-      return this.replyBoxValue.length;
+    replyBoxLeftMsg() {
+      return l10n.get("scratch-messaging/chars-left", {num: 500 - this.replyBoxValue.length});
     },
     username() {
       return vue.username;
@@ -184,6 +241,24 @@ const vue = new Vue({
       studioActivity: false,
       remixes: false,
     },
+    
+    uiMessages: {
+        followsMsg: l10n.get("scratch-messaging/follows"),
+        studioInvitesMsg: l10n.get("scratch-messaging/studio-invites"),
+        forumMsg: l10n.get("scratch-messaging/forum"),
+        studioActivityMsg: l10n.get("scratch-messaging/studio-activity"),
+        remixesMsg: l10n.get("scratch-messaging/remixes"),
+        yourProfileMsg: l10n.get("scratch-messaging/your-profile"),
+        loadingMsg: l10n.get("scratch-messaging/loading"),
+        loggedOutMsg: l10n.get("scratch-messaging/logged-out"),
+        loadingCommentsMsg: l10n.get("scratch-messaging/loading-comments"),
+        reloadMsg: l10n.get("scratch-messaging/reload"),
+        noUnreadMsg: l10n.get("scratch-messaging/no-unread"),
+        showMoreMsg: l10n.get("scratch-messaging/show-more"),
+        markAsReadMsg: l10n.get("scratch-messaging/mark-as-read"),
+        markedAsReadMsg: l10n.get("scratch-messaging/marked-as-read"),
+        openMessagesMsg: l10n.get("scratch-messaging/open-messages")
+    }
   },
   watch: {
     showAllMessages(newVal) {
@@ -223,8 +298,16 @@ const vue = new Vue({
         this.messages.length > this.showingMessagesAmt
       );
     },
+    settingsLink () {
+        return l10n.escaped("scratch-messaging/disabled", {
+            settings: `<a href="/webpages/settings/index.html" target="_blank">${
+                l10n.escaped("scratch-messaging/settings")
+            }</a>`
+        });
+    }
   },
   created() {
+    document.title = l10n.get("scratch-messaging/popup-title");
     (async () => {
       let fetched = await this.getData();
       if (fetched) this.analyzeMessages();
@@ -453,12 +536,62 @@ const vue = new Vue({
       }
       this.commentsReady = true;
     },
+    studioInviteHTML (invite) {
+        const actor = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/users/${invite.actor}/"
+        >${invite.actor}</a>`;
+        const title = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/studios/${invite.studioId}/curators/"
+            style="text-decoration: underline"
+        >${escapeHTML(invite.studioTitle)}</a>`;
+        return l10n.escaped("scratch-messaging/curate-invite", {actor, title});
+    },
+    forumHTML (forumTopic) {
+        const title = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/discuss/topic/${forumTopic.topicId}/unread/"
+            style="text-decoration: underline"
+        >${escapeHTML(forumTopic.topicTitle)}</a>`;
+        return l10n.escaped("scratch-messaging/forum-new-post", {title});
+    },
+    studioActivityHTML (studio) {
+        const title = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/studios/${studio.studioId}/curators/"
+            style="text-decoration: underline"
+        >${escapeHTML(studio.studioTitle)}</a>`;
+        return l10n.escaped("scratch-messaging/new-activity", {title});
+    },
+    remixHTML (remix) {
+        const actor = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/users/${remix.actor}/"
+        >${remix.actor}</a>`;
+        const title = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/projects/${remix.projectId}/"
+            style="text-decoration: underline"
+        >${escapeHTML(remix.remixTitle)}</a>`;
+        return l10n.escaped("scratch-messaging/remix-as", {
+            actor,
+            title,
+            parentTitle: escapeHTML(remix.parentTitle)
+        });
+    },
+    othersProfile (username) {
+        return l10n.get("scratch-messaging/others-profile", {username});
+    },
+    studioText (title) {
+        return l10n.get("scratch-messaging/studio", {title});
+    }
   },
 });
 
 function htmlToText(html) {
-  if (html === undefined) return;
-  const txt = document.createElement("textarea");
-  txt.innerHTML = html;
-  return txt.value;
+    // compat
+  return escapeHTML(html);
 }
+
+})();

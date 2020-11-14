@@ -1,3 +1,9 @@
+import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
+
+(async () => {
+
+const l10n = new WebsiteLocalizationProvider();
+
 //theme
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
@@ -11,11 +17,14 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
+await l10n.loadMessages(["cloud-games/popup-title", "cloud-games/no-users"]);
+
 const vue = new Vue({
   el: "body",
   data: {
     projects: [],
     loaded: false,
+    messages: {noUsersMsg: l10n.get("cloud-games/no-users")}
   },
   computed: {
     projectsSorted() {
@@ -37,6 +46,7 @@ const vue = new Vue({
     },
   },
   async created() {
+    document.title = l10n.get("cloud-games/popup-title");
     const res = await fetch("https://api.scratch.mit.edu/studios/539952/projects/?limit=40");
     const projects = await res.json();
     this.projects = projects
@@ -47,3 +57,5 @@ const vue = new Vue({
     this.loaded = true;
   },
 });
+
+})();

@@ -14,13 +14,17 @@ export default class LocalizationProvider extends EventTarget {
     });
   }
 
-  _replacePlaceholders(msg, placeholders) {
+  static _replacePlaceholders(msg, placeholders) {
     return msg.replace(/\$([\w-]+)\$/g, (_, placeholder) => {
       if (Object.prototype.hasOwnProperty.call(placeholders, placeholder)) {
         return placeholders[placeholder];
       }
       return "";
     });
+  }
+  
+  _replacePlaceholders (...args) {
+      return LocalizationProvider._replacePlaceholders(...args);
   }
   
   _refreshDateTime () {

@@ -1,6 +1,10 @@
 This folder is for addons. For messages used by non-addons (such as options), check `_locales` folder.
 
-String can be obtained by `scratchAddons.l10n.get()` function (which does not prefix the message key) or `msg` function passed to userscripts (which prefixes the message key).
+## Obtaining translations
+`LocalizationProvider`'s subclasses are used to obtain translations.
+- `UserscriptLocalizationProvider` fetches translations using URL provided from background in `loadByAddonId`. This can be accessed via `scratchAddons.l10n` or `msg`/`safeMsg` passed to userscript functions. This is for userscripts, which get executed inside Scratch website origin.
+- `BackgroundLocalizationProvider` fetches translations using the UI locale in `load`. This can be accessed via `scratchAddons.l10n` or `msg` passed to background script functions. This is for background scripts, such as notifications.
+- `WebsiteLocalizationProvider` fetches translations using IPC (between BackgroundLocalizationProvider). Instances may be created on all pages, and `loadMessages` is used to load messages. This can be used from content scripts, option screens and popups.
 
 ## File name
 Files are placed under `addons-l10n/LOCALECODE` folder, where the locale code is lowercased IETF language tag used by Scratch (e.g. en, zh-tw). Note that 2-letter code will be used if ones with regions are unavailable; e.g. if en-US is unavailable, it uses en.
