@@ -1,0 +1,18 @@
+{
+  "name": "Feature Unshared Projects",
+  "description": "When settings youe profiles featured project, also allows setting unshared projects.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*/"]
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": false
+}
