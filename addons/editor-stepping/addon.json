@@ -1,14 +1,13 @@
 {
   "name": "Highlight currently executing blocks",
   "description": "Adds a blue border to the blocks that are currently running in a project.",
-  "warning": "WARNING: this feature is experimental and hurts performance when running Scratch projects.",
+  "notice": "Scratch Addons v1.3.0 update: this feature is not experimental anymore, and should not affect project performance heavily.",
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "traps": true,
-  "tags": ["editor", "beta"],
+  "tags": ["editor"],
   "enabledByDefault": false
 }

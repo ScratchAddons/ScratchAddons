@@ -154,7 +154,7 @@ div.custom-procedures_option-card_BtHt3 {
 }
 .stage_stage-wrapper-overlay_fmZuD,
 .stage-header_stage-header-wrapper-overlay_5vfJa {
-  background: black;
+  background: var(--main-bg);
 }
 .stage_stage-overlay-content_ePv_6 {
   border: none;
@@ -218,4 +218,22 @@ input[type="text"]:not([name="title"]):not([name="q"]):not([name="username"]):no
 .paint-editor_canvas-container_x2D0a {
   border: 2px solid var(--accent);
   border-radius: 0.4rem;
+}
+
+.Popover-body {
+  background: var(--secondary-bg);
+  border-color: var(--accent-color);
+}
+[class^="color-picker_row-header"] {
+  color: var(--text);
+}
+[class^="color-picker_divider"] {
+  border-color: var(--accent-color);
+}
+[class^="color-picker_swatch"] {
+  border-color: var(--accent-color);
+}
+
+.stage-wrapper_full-screen_2hjMb {
+  background-color: var(--main-bg) !important;
 }

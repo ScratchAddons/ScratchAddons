@@ -3,7 +3,7 @@ import textFieldEdit from "./text-field-edit.js"; //used for editing the forum t
 export default async function ({ addon, global, console }) {
   await addon.tab.loadScript("https://cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js");
 
-  var projectUpload = addon.settings.get("project_thumbnails");
+  var projectUpload = false;
   //console.log("use project thumbnails: " + projectUpload); //commented out because spammy in console
 
   var toolbar =

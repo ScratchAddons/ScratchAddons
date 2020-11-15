@@ -1,0 +1,23 @@
+{
+  "name": "Pause button",
+  "description": "Adds a pause button next to the green flag. You can also programmatically pause a project in Scratch (also known as breakpoints) by creating a custom block with name \"sa-pause\" and using that block.",
+  "credits": [
+    {
+      "name": "Jeffalo"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor", "beta"],
+  "enabledByDefault": false
+}

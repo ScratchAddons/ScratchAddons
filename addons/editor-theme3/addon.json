@@ -1,6 +1,7 @@
 {
   "name": "Customizable block colors",
   "description": "Edit block colors for each category in the editor.",
+  "notice": "Refresh the editor after enabling/disabling this theme.",
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"
@@ -86,7 +87,6 @@
       "default": "#0FBD8C"
     }
   ],
-  "traps": true,
   "tags": ["editor", "theme"],
   "enabledByDefault": false,
   "presets": [
