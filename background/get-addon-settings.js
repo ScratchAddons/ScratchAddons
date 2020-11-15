@@ -2,15 +2,14 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
   const func = () => {
     let madeAnyChanges = false;
 
-    // TODO: remove on v1.5.0
     // Used to map old name to new ID
     const oldToNewMap = {
       "3.Dark": "3-dark",
       "3.Darker": "3-darker",
       "Dark Editor": "dark-editor",
       "Dark WWW": "dark-www",
-      TurboWarp: "turbowarp",
-      Silent: "silent",
+      "TurboWarp": "turbowarp",
+      "Silent": "silent",
       "System default": "system-default",
       "Scratch Addons ping": "addons-ping",
     };
