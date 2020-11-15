@@ -8,8 +8,8 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       "3.Darker": "3-darker",
       "Dark Editor": "dark-editor",
       "Dark WWW": "dark-www",
-      "TurboWarp": "turbowarp",
-      "Silent": "silent",
+      TurboWarp: "turbowarp",
+      Silent: "silent",
       "System default": "system-default",
       "Scratch Addons ping": "addons-ping",
     };
