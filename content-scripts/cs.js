@@ -9,7 +9,7 @@ if (path === "discuss/3/topic/add//") window.addEventListener("load", forumWarni
 
 let receivedContentScriptInfo = false;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // console.log("[Message from background]", request);
+  console.log("[Message from background]", request);
   if (request.contentScriptInfo) {
     // The request wasn't for this exact URL, might happen sometimes
     if (request.contentScriptInfo.url !== initialUrl) return;
