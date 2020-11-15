@@ -26,14 +26,14 @@ export default async function ({ addon, console, msg }) {
     container.appendChild(
       msg(
           projectInfo.spriteCount == 1 ? "sprite" : "sprites",
-          projectInfo.spriteCount
+          {num: projectInfo.spriteCount}
       )
     );
     container.appendChild(document.createElement("br"));
     container.appendChild(
         msg(
             projectInfo.spriteCount == 1 ? "script" : "scripts",
-            projectInfo.spriteCount
+            {num: projectInfo.spriteCount}
         )
     );
   }
