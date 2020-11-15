@@ -46,7 +46,7 @@
       "name": null,
       "type": "select",
       "default": "none",
-      "potentialValues": [{"id": "none"}, {"id": "turbowarp"}, {"id": "forkphorus"}]
+      "potentialValues": [{ "id": "none" }, { "id": "turbowarp" }, { "id": "forkphorus" }]
     }
   ],
   "tags": ["community"],

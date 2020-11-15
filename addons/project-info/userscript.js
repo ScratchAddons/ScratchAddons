@@ -23,18 +23,8 @@ export default async function ({ addon, console, msg }) {
         projectInfo = { spriteCount: "?", scriptCount: "?" };
       }
     }
-    container.appendChild(
-      msg(
-          projectInfo.spriteCount == 1 ? "sprite" : "sprites",
-          {num: projectInfo.spriteCount}
-      )
-    );
+    container.appendChild(msg(projectInfo.spriteCount == 1 ? "sprite" : "sprites", { num: projectInfo.spriteCount }));
     container.appendChild(document.createElement("br"));
-    container.appendChild(
-        msg(
-            projectInfo.spriteCount == 1 ? "script" : "scripts",
-            {num: projectInfo.spriteCount}
-        )
-    );
+    container.appendChild(msg(projectInfo.spriteCount == 1 ? "script" : "scripts", { num: projectInfo.spriteCount }));
   }
 }

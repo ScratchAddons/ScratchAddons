@@ -72,11 +72,7 @@
       "name": null,
       "id": "selectedMode",
       "type": "select",
-      "potentialValues": [
-          {"id": "3-darker"},
-          {"id": "3-dark"},
-          {"id": "dark-editor"}
-      ],
+      "potentialValues": [{ "id": "3-darker" }, { "id": "3-dark" }, { "id": "dark-editor" }],
       "default": "3-darker"
     },
     {

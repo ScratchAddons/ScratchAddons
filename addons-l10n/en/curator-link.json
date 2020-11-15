@@ -1,6 +1,6 @@
 {
-    "curator-link/@name": "Curator Link",
-    "curator-link/@description": "Creates a clickable link for the curator of the front page.",
-    "curator-link/@opt-name-styleAsNormalText": "Style as normal text",
-    "curator-link/curated-by": "Projects Curated by $user$"
+  "curator-link/@name": "Curator Link",
+  "curator-link/@description": "Creates a clickable link for the curator of the front page.",
+  "curator-link/@opt-name-styleAsNormalText": "Style as normal text",
+  "curator-link/curated-by": "Projects Curated by $user$"
 }

@@ -68,7 +68,9 @@
           <div class="filter-selector">
             <span class="filter-text">{{ msg("filter") }} </span>
             <div class="filter-options">
-              <div class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">{{ msg("all") }}</div>
+              <div class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">
+                {{ msg("all") }}
+              </div>
               <div
                 v-for="tag of tagsToShow"
                 class="filter-option"
@@ -229,19 +231,22 @@
           <div class="setting-body">
             <div class="addon-topbar">
               <span class="addon-name"
-                ><img src="../../images/icons/theme.svg" style="vertical-align: middle; margin-right: 5px" /> {{ msg("scratchAddonsTheme") }}
+                ><img src="../../images/icons/theme.svg" style="vertical-align: middle; margin-right: 5px" /> {{
+                msg("scratchAddonsTheme") }}
               </span>
             </div>
             <div class="setting-settings">
-              <span class="settings-description"
-                >{{ msg("scratchAddonsThemeDescription") }}</span
-              >
+              <span class="settings-description">{{ msg("scratchAddonsThemeDescription") }}</span>
               <div class="setting-setting">
                 <div class="filter-selector">
                   <div class="filter-text">{{ msg("theme") }}</div>
                   <div class="filter-options">
-                    <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">{{ msg("light") }}</div>
-                    <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">{{ msg("dark") }}</div>
+                    <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">
+                      {{ msg("light") }}
+                    </div>
+                    <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">
+                      {{ msg("dark") }}
+                    </div>
                   </div>
                 </div>
               </div>

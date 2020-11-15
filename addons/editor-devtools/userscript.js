@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
   // Scratch Addons: do not run if extension is already enabled
   if (window.initGUI) return;
-  
+
   // 0-indexed 6 = July
   const releaseDate = new Date(2020, 6, 4);
   const releaseDateLocalized = new Intl.DateTimeFormat(scratchAddons.l10n.locale).format(releaseDate);
@@ -14,8 +14,8 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     version: "0.2.4",
     date: releaseDateLocalized,
     ndash: "&ndash;",
-    url: '<a target="_blank" rel="noreferrer noopener" href="https://www.youtube.com/user/griffpatch">Griffpatch</a>'
-})}</p>
+    url: '<a target="_blank" rel="noreferrer noopener" href="https://www.youtube.com/user/griffpatch">Griffpatch</a>',
+  })}</p>
 <hr />
 <h2><strong>${m("changes024")}</strong></h2>
 <p><strong>${m("ctrl-space")}</strong> &ndash; ${m("ctrl-space-desc")}</p>
@@ -36,7 +36,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 <p><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-desc")}</p>
 <p><strong>${m("send-top-bottom")}</strong> &ndash; ${m("send-top-bottom-desc")}</p>
 <hr />
-<p>${m("youtube")} -&nbsp;<a target="_blank" href="https://www.youtube.com/user/griffpatch">https://www.youtube.com/user/griffpatch</a></p>
+<p>${m(
+    "youtube"
+  )} -&nbsp;<a target="_blank" href="https://www.youtube.com/user/griffpatch">https://www.youtube.com/user/griffpatch</a></p>
 </div>
 </div>
 `;
@@ -501,9 +503,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     let orphanCount = result.orphans.blocks.length;
     if (orphanCount > 0) {
       let message = msg("orphaned", {
-          count: orphanCount,
-          plural: orphanCount === 1 ? msg("block") : msg("blocks"),
-          it: orphanCount === 1 ? msg("it") : msg("them")
+        count: orphanCount,
+        plural: orphanCount === 1 ? msg("block") : msg("blocks"),
+        it: orphanCount === 1 ? msg("it") : msg("them"),
       });
       if (confirm(message)) {
         for (const block of result.orphans.blocks) {
@@ -566,10 +568,10 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       if (unusedLocals.length > 0) {
         const unusedCount = unusedLocals.length;
         let message = msg("unused-var", {
-            count: unusedCount,
-            it: unusedCount === 1 ? msg("it") : msg("them"),
-            plural: unusedCount === 1 ? msg("variable") : msg("variables"),
-            list: unusedCount === 1 ? msg("it-is") : msg("they-are")
+          count: unusedCount,
+          it: unusedCount === 1 ? msg("it") : msg("them"),
+          plural: unusedCount === 1 ? msg("variable") : msg("variables"),
+          list: unusedCount === 1 ? msg("it-is") : msg("they-are"),
         });
         for (let i = 0; i < unusedLocals.length; i++) {
           let orphan = unusedLocals[i];
@@ -1257,7 +1259,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
       console.log("Loading " + name);
       let divElement = document.createElement("div");
-      divElement.appendChild(document.createTextNode(msg("searching-in", {name})));
+      divElement.appendChild(document.createTextNode(msg("searching-in", { name })));
       overlay.appendChild(divElement);
 
       setTimeout(nextSprite, 50);
@@ -1478,16 +1480,24 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                 <div id="s3devToolBar">
 <!--                    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.2.1/math.min.js" type="text/javascript"></script>-->
                     <label class='title s3devLabel' id=s3devFindLabel>
-                        <span>${m("find")} <a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a> </span>
+                        <span>${m(
+                          "find"
+                        )} <a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a> </span>
                         <span id=s3devFind class="s3devWrap">
                             <div id='s3devDDOut' class="s3devDDOut">
-                                <input id='s3devInp' class="s3devInp" type='search' placeholder='${m("find-placeholder")}' autocomplete='off'>
+                                <input id='s3devInp' class="s3devInp" type='search' placeholder='${m(
+                                  "find-placeholder"
+                                )}' autocomplete='off'>
                                 <ul id='s3devDD' class="s3devDD"></ul>
                             </div>
                         </span>
                         <a id="s3devDeep" class="s3devAction s3devHide" href="#">${m("deep")}</a>
-                        <div style="display: none;"><a href="#" class="s3devAction" id="s3devHelp"><b>${m("help")}</b></a>
-                        <a href="https://www.youtube.com/user/griffpatch" class="s3devAction" target="_blank" id="s3devHelp">${m("tutorials")}</a></div>
+                        <div style="display: none;"><a href="#" class="s3devAction" id="s3devHelp"><b>${m(
+                          "help"
+                        )}</b></a>
+                        <a href="https://www.youtube.com/user/griffpatch" class="s3devAction" target="_blank" id="s3devHelp">${m(
+                          "tutorials"
+                        )}</a></div>
                     </label>
 <!--                    <a id="s3devCleanUp" class="s3devAction" href="#">Clean Up</a>-->
                     <a id="s3devInject" class="s3devAction s3devHide" href="#">${m("inject")}</a>
@@ -1549,7 +1559,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     setTimeout(function () {
       let wksp = getWorkspace();
       let v = wksp.getVariableById(selVarID);
-      let varName = window.prompt(msg("replace", {name: v.name}));
+      let varName = window.prompt(msg("replace", { name: v.name }));
       if (varName) {
         doReplaceVariable(selVarID, varName, v.type);
       }
@@ -1699,7 +1709,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
             "beforeend",
             `
                             <div class="react-contextmenu-item context-menu_menu-item_3cioN s3devSTT" role="menuitem"
-                                tabindex="-1" aria-disabled="false" style="border-top: 1px solid hsla(0, 0%, 0%, 0.15);"><span>${m("top")}</span></div>
+                                tabindex="-1" aria-disabled="false" style="border-top: 1px solid hsla(0, 0%, 0%, 0.15);"><span>${m(
+                                  "top"
+                                )}</span></div>
                             <div class="react-contextmenu-item context-menu_menu-item_3cioN s3devSTT" role="menuitem"
                                 tabindex="-1" aria-disabled="false"><span>${m("bottom")}</span></div>
                         `
@@ -1750,13 +1762,19 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                   "beforeend",
                   `
                                     <div id="s3devCopy" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
-                                        <div class="goog-menuitem-content" style="user-select: none;">${m("copy-all")}</div>
+                                        <div class="goog-menuitem-content" style="user-select: none;">${m(
+                                          "copy-all"
+                                        )}</div>
                                     </div>
                                     <div id="s3devCopyBlock" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
-                                        <div class="goog-menuitem-content" style="user-select: none;">${m("copy-block")}</div>
+                                        <div class="goog-menuitem-content" style="user-select: none;">${m(
+                                          "copy-block"
+                                        )}</div>
                                     </div>
                                     <div id="s3devCutBlock" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
-                                        <div class="goog-menuitem-content" style="user-select: none;">${m("cut-block")}</div>
+                                        <div class="goog-menuitem-content" style="user-select: none;">${m(
+                                          "cut-block"
+                                        )}</div>
                                     </div>
                                 `
                 );
@@ -1769,7 +1787,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                   `
                                 <div id="s3devReplaceAllVars" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
                                     <div class="goog-menuitem-content" style="user-select: none;">${m("swap", {
-                                        var: block.getCategory() === "data" ? m("variables") : m("lists")
+                                      var: block.getCategory() === "data" ? m("variables") : m("lists"),
                                     })}</div>
                                 </div>
                                 `
@@ -1930,7 +1948,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                     <span style="display:none;">${m("insert")} </span>
                     <span id=s3devInsert class="s3devWrap">
                         <div id='s3devIDDOut' class="s3devDDOut">
-                            <input id='s3devIInp' class="s3devInp" type='search' placeholder='${m("start-typing")}' autocomplete='off'>
+                            <input id='s3devIInp' class="s3devInp" type='search' placeholder='${m(
+                              "start-typing"
+                            )}' autocomplete='off'>
                             <ul id='s3devIDD' class="s3devDD"></ul>
                         </div>
                     </span>

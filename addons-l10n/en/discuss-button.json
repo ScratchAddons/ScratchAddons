@@ -1,7 +1,7 @@
 {
-    "discuss-button/@name": "Discuss button",
-    "discuss-button/@description": "Adds the discuss button to the navbar.",
-    "discuss-button/@opt-name-removeIdeasBtn": "Remove \"ideas\" button",
-    "discuss-button/@opt-name-buttonName": "Discuss button name",
-    "discuss-button/@opt-default-buttonName": "Discuss"
+  "discuss-button/@name": "Discuss button",
+  "discuss-button/@description": "Adds the discuss button to the navbar.",
+  "discuss-button/@opt-name-removeIdeasBtn": "Remove \"ideas\" button",
+  "discuss-button/@opt-name-buttonName": "Discuss button name",
+  "discuss-button/@opt-default-buttonName": "Discuss"
 }

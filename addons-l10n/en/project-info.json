@@ -1,8 +1,8 @@
 {
-    "project-info/@name": "Sprite and script count",
-    "project-info/@description": "Shows the number of sprites and scripts a project has.",
-    "project-info/sprite": "$num$ sprite",
-    "project-info/sprites": "$num$ sprites",
-    "project-info/script": "$num$ script",
-    "project-info/scripts": "$num$ scripts"
+  "project-info/@name": "Sprite and script count",
+  "project-info/@description": "Shows the number of sprites and scripts a project has.",
+  "project-info/sprite": "$num$ sprite",
+  "project-info/sprites": "$num$ sprites",
+  "project-info/script": "$num$ script",
+  "project-info/scripts": "$num$ scripts"
 }

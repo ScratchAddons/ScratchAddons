@@ -1,5 +1,5 @@
 {
-    "remove-sprite-confirm/@name": "Confirm sprite deletion",
-    "remove-sprite-confirm/@description": "Asks if you're sure when deleting a sprite inside a project.",
-    "remove-sprite-confirm/confirm": "Do you want to delete the sprite?"
+  "remove-sprite-confirm/@name": "Confirm sprite deletion",
+  "remove-sprite-confirm/@description": "Asks if you're sure when deleting a sprite inside a project.",
+  "remove-sprite-confirm/confirm": "Do you want to delete the sprite?"
 }

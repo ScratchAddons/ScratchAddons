@@ -145,7 +145,9 @@ function appendSearch(box, query, page, term, msg) {
         postLeftDl.appendChild(createTextBox(scratchAddons.l10n.datetime(new Date(post.time.first_checked)), "", 2));
 
         postLeftDl.appendChild(createTextBox(msg("last-checked"), "black username", 1));
-        postLeftDl.appendChild(createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_first_checked)), "", 2));
+        postLeftDl.appendChild(
+          createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_first_checked)), "", 2)
+        );
 
         let postRight = document.createElement("div");
         postRight.classList = "postright";
@@ -168,8 +170,8 @@ function appendSearch(box, query, page, term, msg) {
           postEditMessage.appendChild(
             document.createTextNode(
               msg("last-edited-by", {
-                  username: post.editor,
-                  datetime: scratchAddons.l10n.datetime(new Date(post.time.edited))
+                username: post.editor,
+                datetime: scratchAddons.l10n.datetime(new Date(post.time.edited)),
               })
             )
           );
@@ -206,12 +208,12 @@ export default async function ({ addon, global, console, msg }) {
         .innerText.substring(2)
         .trim();
       locationQuery = ` +topic:${pathSplit[3]}`;
-      searchPlaceholder = msg("search-topic", {topic: topicTitle});
+      searchPlaceholder = msg("search-topic", { topic: topicTitle });
       break;
     case 4:
       let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].innerHTML;
       locationQuery = ` +category:"${category}"`;
-      searchPlaceholder = msg("search-cat", {cat: category});
+      searchPlaceholder = msg("search-cat", { cat: category });
       break;
   }
   searchBar.setAttribute("placeholder", searchPlaceholder);

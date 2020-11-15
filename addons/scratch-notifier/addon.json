@@ -25,11 +25,7 @@
       "name": null,
       "id": "notification_sound",
       "type": "select",
-      "potentialValues": [
-          {"id": "silent"},
-          {"id": "system-default"},
-          {"id": "addons-ping"}
-      ],
+      "potentialValues": [{ "id": "silent" }, { "id": "system-default" }, { "id": "addons-ping" }],
       "default": "system-default"
     },
     {

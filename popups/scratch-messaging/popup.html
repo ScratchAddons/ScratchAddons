@@ -45,7 +45,9 @@
             <button @click="!postingComment && postComment()" style="background-color: #4d97ff">
               {{ postingComment ? messages.postingMsg : messages.postMsg }}
             </button>
-            <button @click="replying = false" style="background-color: gray" v-show="!postingComment">{{ messages.cancelMsg }}</button>
+            <button @click="replying = false" style="background-color: gray" v-show="!postingComment">
+              {{ messages.cancelMsg }}
+            </button>
             <span class="comment-chars"> {{ replyBoxLeftMsg }}</span>
           </div>
         </div>
@@ -91,9 +93,7 @@
           >
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.studioInvites">
-          <div class="thread-list" v-for="invite of studioInvites">
-            {{{ studioInviteHTML(invite) }}}
-          </div>
+          <div class="thread-list" v-for="invite of studioInvites">{{{ studioInviteHTML(invite) }}}</div>
         </div>
       </div>
 
@@ -112,9 +112,7 @@
           >
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.forumActivity">
-          <div class="thread-list" v-for="forumTopic of forumActivity">
-            {{{ forumHTML(forumTopic) }}}
-          </div>
+          <div class="thread-list" v-for="forumTopic of forumActivity">{{{ forumHTML(forumTopic) }}}</div>
         </div>
       </div>
 
@@ -137,9 +135,7 @@
           >
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.studioActivity">
-          <div class="thread-list" v-for="studio of studioActivity">
-            {{{ studioActivityHTML(studio) }}}
-          </div>
+          <div class="thread-list" v-for="studio of studioActivity">{{{ studioActivityHTML(studio) }}}</div>
         </div>
       </div>
 
@@ -158,9 +154,7 @@
           >
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.remixes">
-          <div v-for="remix of remixes" class="thread-list">
-            {{{ remixHTML(remix) }}}
-          </div>
+          <div v-for="remix of remixes" class="thread-list">{{{ remixHTML(remix) }}}</div>
         </div>
       </div>
 
@@ -298,9 +292,7 @@
       <br />
       <span v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</span>
       <span v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</span>
-      <span v-show="error === 'addonDisabled'"
-        ><br />{{{ settingsLink }}}</span
-      >
+      <span v-show="error === 'addonDisabled'"><br />{{{ settingsLink }}}</span>
       <span v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</span>
       <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">
         <img class="small-icon" src="../../images/icons/reload.svg" /> {{ uiMessages.reloadMsg }}

@@ -105,8 +105,8 @@ const vue = new Vue({
     modalToggle: function () {
       this.isOpen = !this.isOpen;
     },
-    msg (message, ...params) {
-        return chrome.i18n.getMessage(message, ...params);
+    msg(message, ...params) {
+      return chrome.i18n.getMessage(message, ...params);
     },
     openReview() {
       if (typeof browser !== "undefined") {

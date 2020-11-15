@@ -22,7 +22,7 @@ export default async function runAddonUserscripts({ addonId, scripts, traps }) {
         global: globalObj,
         console: { ..._realConsole, log, warn },
         msg: (key, placeholders) => scratchAddons.l10n.get(`${addonId}/${key}`, placeholders),
-        safeMsg: (key, placeholders) => scratchAddons.l10n.escaped(`${addonId}/${key}`, placeholders)
+        safeMsg: (key, placeholders) => scratchAddons.l10n.escaped(`${addonId}/${key}`, placeholders),
       });
     };
     if (runAtComplete && document.readyState !== "complete") {

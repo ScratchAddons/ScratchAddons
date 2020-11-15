@@ -49,8 +49,8 @@ export default async function ({ addon, global, console, msg }) {
       barInner.style.width = progress * 100 + "%";
       if (loadingPhase === LOAD_ASSETS) {
         loadingCaption.innerText = msg("loading-assets", {
-            loaded: finishedTasks,
-            loading: totalTasks
+          loaded: finishedTasks,
+          loading: totalTasks,
         });
       }
     }

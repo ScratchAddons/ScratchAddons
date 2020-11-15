@@ -53,7 +53,7 @@ export default async function ({ addon, global, console, msg }) {
         count.style.color = "";
         icon.src = addon.self.dir + "/cat.svg";
       }
-      count.innerText = msg("clones", {cloneCount: v});
+      count.innerText = msg("clones", { cloneCount: v });
     }
   }
 }

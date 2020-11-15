@@ -1,15 +1,15 @@
 {
-    "exact-count/@name": "Show exact count",
-    "exact-count/@description": "Shows the exact count for user and studio info. Uses ScratchDB for forums information.",
-    "exact-count/@opt-name-user": "Exact counts for profiles",
-    "exact-count/@opt-name-studio": "Exact count for studios",
-    "exact-count/@opt-name-forumuser": "Exact count for forum user",
-    "exact-count/shared-projects": "Shared Projects",
-    "exact-count/favorite-projects": "Favorite Projects",
-    "exact-count/following-studios": "Studios I'm Following",
-    "exact-count/curating-studios": "Studios I'm Curating",
-    "exact-count/following": "Following",
-    "exact-count/follower": "Followers",
-    "exact-count/post": "$num$ post",
-    "exact-count/posts": "$num$ posts"
+  "exact-count/@name": "Show exact count",
+  "exact-count/@description": "Shows the exact count for user and studio info. Uses ScratchDB for forums information.",
+  "exact-count/@opt-name-user": "Exact counts for profiles",
+  "exact-count/@opt-name-studio": "Exact count for studios",
+  "exact-count/@opt-name-forumuser": "Exact count for forum user",
+  "exact-count/shared-projects": "Shared Projects",
+  "exact-count/favorite-projects": "Favorite Projects",
+  "exact-count/following-studios": "Studios I'm Following",
+  "exact-count/curating-studios": "Studios I'm Curating",
+  "exact-count/following": "Following",
+  "exact-count/follower": "Followers",
+  "exact-count/post": "$num$ post",
+  "exact-count/posts": "$num$ posts"
 }

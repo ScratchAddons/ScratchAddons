@@ -1,6 +1,6 @@
 {
   "name": null,
-  "description": null, 
+  "description": null,
   "tags": ["community", "theme"],
   "credits": [
     {
@@ -27,7 +27,7 @@
       "name": null,
       "id": "selectedMode",
       "type": "select",
-      "potentialValues": [{"id": "dark-www"}],
+      "potentialValues": [{ "id": "dark-www" }],
       "default": "dark-www"
     }
   ]
