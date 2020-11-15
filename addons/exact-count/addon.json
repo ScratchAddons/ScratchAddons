@@ -57,7 +57,8 @@
       "settingMatch": {
         "id": "forumuser",
         "value": true
-      }
+      },
+      "runAtComplete": false
     }
   ],
   "tags": ["community", "recommended"],
