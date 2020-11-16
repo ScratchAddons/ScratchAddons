@@ -208,7 +208,7 @@ export default async function ({ addon, global, console }) {
     control_if_else: [
       {
         opcode: "control_if",
-        remap: { SUBSTACK2: 'split' }
+        remap: { SUBSTACK2: "split" },
       },
     ],
     sensing_mousex: [
@@ -270,7 +270,7 @@ export default async function ({ addon, global, console }) {
             // Determine block position because it's not set at this point.
             const inputId = inputXml.id;
             const inputBlock = Blockly.getMainWorkspace().getBlockById(inputId);
-            const position = inputBlock.getRelativeToSurfaceXY()
+            const position = inputBlock.getRelativeToSurfaceXY();
             inputXml.setAttribute("x", position.x);
             inputXml.setAttribute("y", position.y);
             pasteSeparately.push(inputXml);
