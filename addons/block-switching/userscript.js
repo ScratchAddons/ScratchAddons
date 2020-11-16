@@ -432,50 +432,46 @@ export default async function ({ addon, global, console }) {
     sensing_mousey: ['sensing_mousex'],
   };
 
-  const genuid = () => {
-    // https://github.com/LLK/scratch-blocks/blob/691111ee526f297735d43dff610b39dd4ab2ea70/core/utils.js#L610-L633
-    const soup = '!#$%()*+,-./:;=?@[]^_`{|}~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    const length = 20;
-    const soupLength = soup.length;
-    const id = [];
-    for (let i = 0; i < length; i++) {
-      id[i] = soup.charAt(Math.random() * soupLength);
-    }
-    return id.join('');
-  };
-
   const switchBlockCallback = (block, newOpcode) => () => {
+    // Make a copy of the block with the proper type set.
+    // It doesn't seem to be possible to change a Block's type after it's created, so we'll just make a new block instead.
     const xml = blockToDom(block);
     xml.setAttribute('type', newOpcode);
 
-    // We need to find the actual Block object once it's pasted.
-    // To do that, we'll generate a random ID ahead of time instead of letting Scratch makes it own.
-    const randomId = genuid();
-    xml.setAttribute('id', randomId);
-
-    Blockly.getMainWorkspace().paste(xml);
-    const newBlock = Blockly.getMainWorkspace().getBlockById(randomId);
-
+    const id = block.id;
     const parent = block.getParent();
+
+    let parentConnection;
+    let blockConnectionType;
+    let blockPosition;
     if (parent) {
-      // We have to setup some connections.
-      const blockConnections = block.getConnections_();
+      // If the block has a parent, find out which connection we will have to reattach later.
       const parentConnections = parent.getConnections_();
-      const newConnections = newBlock.getConnections_();
-
-      // TODO: clean this up; figure out if determining typ eof blockToParentConnection is even necessary
-      const blockToParentConnection = blockConnections.find((connection) => connection.targetConnection && connection.targetConnection.sourceBlock_ === parent);
-      const parentToBlockConnection = parentConnections.find((connection) => connection.targetConnection && connection.targetConnection.sourceBlock_ === block);
-      const newConnection = newConnections.find((connection) => connection.type === blockToParentConnection.type);
-
-
-      newConnection.connect(parentToBlockConnection);
+      const blockConnections = block.getConnections_();
+      const blockToParentConnection = blockConnections.find((c) => c.targetConnection && c.targetConnection.sourceBlock_ === parent);
+      blockConnectionType = blockToParentConnection.type;
+      parentConnection = parentConnections.find((c) => c.targetConnection && c.targetConnection.sourceBlock_ === block);
     } else {
-      // TODO: Move the block to the proper spot.
-      // block.dispose();
+      // If the block has no parent, figure out where to move the new block.
+      blockPosition = block.getRelativeToSurfaceXY();
     }
 
+    // Remove the old black and insert the new one.
     block.dispose();
+    Blockly.getMainWorkspace().paste(xml);
+    // The new block will have the same ID as the old one.
+    const newBlock = Blockly.getMainWorkspace().getBlockById(id);
+
+    if (parentConnection) {
+      const newBlockConnections = newBlock.getConnections_();
+      const newBlockConnection = newBlockConnections.find((c) => c.type === blockConnectionType);
+      newBlockConnection.connect(parentConnection);
+    } else {
+      // Blocks are pasted at (0, 0)
+      newBlock.moveBy(blockPosition.x, blockPosition.y);
+    }
+
+    // TODO: unmangle undo history
   };
 
   const customContextMenuHandler = function (options) {
