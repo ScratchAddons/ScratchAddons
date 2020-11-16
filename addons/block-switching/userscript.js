@@ -425,6 +425,8 @@ export default async function ({ addon, global, console }) {
     sound_changevolumeby: "Switch to change volume",
   };
 
+  let addBorderToContextMenu = false;
+
   const blockToDom = (block) => {
     // Blockly/Scratch has logic to convert individual blocks to XML, but this is not part of the global Blockly object.
     // It does, however, expose a method to convert the entire workspace to XML which we can use.
@@ -518,6 +520,7 @@ export default async function ({ addon, global, console }) {
   };
 
   const customContextMenuHandler = function (options) {
+    addBorderToContextMenu = true;
     const switches = blockSwitches[this.type];
     for (const opcodeData of switches) {
       // TODO: use l10n api when its merged
@@ -555,15 +558,38 @@ export default async function ({ addon, global, console }) {
     }
   };
 
+  const mutationObserverCallback = mutations => {
+    for (const mutation of mutations) {
+      for (const node of mutation.addedNodes) {
+        if (node.classList.contains('blocklyContextMenu')) {
+          if (!addBorderToContextMenu) {
+            continue;
+          }
+          addBorderToContextMenu = false;
+          const children = node.children;
+          if (children[3]) {
+            children[3].style.paddingTop = '2px';
+            children[3].style.borderTop = '1px solid hsla(0, 0%, 0%, 0.15)';
+          }
+        }
+      }
+    }
+  };
+
   const inject = () => {
     const workspace = Blockly.getMainWorkspace();
     if (workspace._blockswitchingInjected) {
       return;
     }
+    mutationObserver.observe(document.querySelector('.blocklyWidgetDiv'), {
+      childList: true
+    });
     workspace._blockswitchingInjected = true;
     workspace.getAllBlocks().forEach(injectCustomContextMenu);
     workspace.addChangeListener(changeListener);
   };
+
+  const mutationObserver = new MutationObserver(mutationObserverCallback);
 
   if (addon.tab.editorMode === "editor") {
     const interval = setInterval(() => {
