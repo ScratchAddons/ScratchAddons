@@ -1,5 +1,56 @@
 export default async function ({ addon, global, console }) {
   const blockSwitches = {
+    control_if: [
+      {
+        opcode: "control_if_else",
+      },
+    ],
+    control_if_else: [
+      {
+        opcode: "control_if",
+        remap: { SUBSTACK2: "split" },
+      },
+    ],
+    data_changevariableby: [
+      {
+        opcode: "data_setvariableto",
+      },
+    ],
+    data_setvariableto: [
+      {
+        opcode: "data_changevariableby",
+      },
+    ],
+    data_showvariable: [
+      {
+        opcode: "data_hidevariable",
+      },
+    ],
+    data_hidevariable: [
+      {
+        opcode: "data_showvariable",
+      },
+    ],
+    looks_show: [
+      {
+        opcode: "looks_hide",
+      },
+    ],
+    looks_hide: [
+      {
+        opcode: "looks_show",
+      },
+    ],
+    looks_nextcostume: [
+      {
+        opcode: 'looks_nextbackdrop'
+      }
+    ],
+    looks_nextbackdrop: [
+      {
+        opcode: 'looks_nextcostume'
+      }
+    ],
     motion_turnright: [
       {
         opcode: "motion_turnleft",
@@ -8,6 +59,72 @@ export default async function ({ addon, global, console }) {
     motion_turnleft: [
       {
         opcode: "motion_turnright",
+      },
+    ],
+    motion_setx: [
+      {
+        opcode: "motion_changexby",
+        remap: { X: "DX" },
+      },
+      {
+        opcode: "motion_sety",
+        remap: { X: "Y" },
+      },
+      {
+        opcode: "motion_changeyby",
+        remap: { X: "DY" },
+      },
+    ],
+    motion_changexby: [
+      {
+        opcode: "motion_setx",
+        remap: { DX: "X" },
+      },
+      {
+        opcode: "motion_sety",
+        remap: { DX: "Y" },
+      },
+      {
+        opcode: "motion_changeyby",
+        remap: { DX: "DY" },
+      },
+    ],
+    motion_sety: [
+      {
+        opcode: "motion_setx",
+        remap: { Y: "X" },
+      },
+      {
+        opcode: "motion_changexby",
+        remap: { Y: "DX" },
+      },
+      {
+        opcode: "motion_changeyby",
+        remap: { Y: "DY" },
+      },
+    ],
+    motion_changeyby: [
+      {
+        opcode: "motion_setx",
+        remap: { DY: "X" },
+      },
+      {
+        opcode: "motion_changexby",
+        remap: { DY: "DX" },
+      },
+      {
+        opcode: "motion_sety",
+        remap: { DY: "Y" },
+      },
+    ],
+    motion_xposition: [
+      {
+        opcode: "motion_yposition",
+      },
+    ],
+    motion_yposition: [
+      {
+        opcode: "motion_xposition",
       },
     ],
     operator_equals: [
@@ -112,113 +229,6 @@ export default async function ({ addon, global, console }) {
     operator_or: [
       {
         opcode: "operator_and",
-      },
-    ],
-    motion_setx: [
-      {
-        opcode: "motion_changexby",
-        remap: { X: "DX" },
-      },
-      {
-        opcode: "motion_sety",
-        remap: { X: "Y" },
-      },
-      {
-        opcode: "motion_changeyby",
-        remap: { X: "DY" },
-      },
-    ],
-    motion_changexby: [
-      {
-        opcode: "motion_setx",
-        remap: { DX: "X" },
-      },
-      {
-        opcode: "motion_sety",
-        remap: { DX: "Y" },
-      },
-      {
-        opcode: "motion_changeyby",
-        remap: { DX: "DY" },
-      },
-    ],
-    motion_sety: [
-      {
-        opcode: "motion_setx",
-        remap: { Y: "X" },
-      },
-      {
-        opcode: "motion_changexby",
-        remap: { Y: "DX" },
-      },
-      {
-        opcode: "motion_changeyby",
-        remap: { Y: "DY" },
-      },
-    ],
-    motion_changeyby: [
-      {
-        opcode: "motion_setx",
-        remap: { DY: "X" },
-      },
-      {
-        opcode: "motion_changexby",
-        remap: { DY: "DX" },
-      },
-      {
-        opcode: "motion_sety",
-        remap: { DY: "Y" },
-      },
-    ],
-    data_setvariableto: [
-      {
-        opcode: "data_changevariableby",
-      },
-    ],
-    data_changevariableby: [
-      {
-        opcode: "data_setvariableto",
-      },
-    ],
-    data_showvariable: [
-      {
-        opcode: "data_hidevariable",
-      },
-    ],
-    data_hidevariable: [
-      {
-        opcode: "data_showvariable",
-      },
-    ],
-    motion_xposition: [
-      {
-        opcode: "motion_yposition",
-      },
-    ],
-    motion_yposition: [
-      {
-        opcode: "motion_xposition",
-      },
-    ],
-    looks_show: [
-      {
-        opcode: "looks_hide",
-      },
-    ],
-    looks_hide: [
-      {
-        opcode: "looks_show",
-      },
-    ],
-    control_if: [
-      {
-        opcode: "control_if_else",
-      },
-    ],
-    control_if_else: [
-      {
-        opcode: "control_if",
-        remap: { SUBSTACK2: "split" },
       },
     ],
     sensing_mousex: [
