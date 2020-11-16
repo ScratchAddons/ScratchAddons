@@ -104,6 +104,16 @@ export default async function ({ addon, global, console }) {
         opcode: "operator_divide",
       },
     ],
+    operator_and: [
+      {
+        opcode: 'operator_or'
+      }
+    ],
+    operator_or: [
+      {
+        opcode: 'operator_and'
+      }
+    ],
     motion_setx: [
       {
         opcode: "motion_changexby",
