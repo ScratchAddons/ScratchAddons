@@ -558,18 +558,18 @@ export default async function ({ addon, global, console }) {
     }
   };
 
-  const mutationObserverCallback = mutations => {
+  const mutationObserverCallback = (mutations) => {
     for (const mutation of mutations) {
       for (const node of mutation.addedNodes) {
-        if (node.classList.contains('blocklyContextMenu')) {
+        if (node.classList.contains("blocklyContextMenu")) {
           if (!addBorderToContextMenu) {
             continue;
           }
           addBorderToContextMenu = false;
           const children = node.children;
           if (children[3]) {
-            children[3].style.paddingTop = '2px';
-            children[3].style.borderTop = '1px solid hsla(0, 0%, 0%, 0.15)';
+            children[3].style.paddingTop = "2px";
+            children[3].style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
           }
         }
       }
@@ -581,8 +581,8 @@ export default async function ({ addon, global, console }) {
     if (workspace._blockswitchingInjected) {
       return;
     }
-    mutationObserver.observe(document.querySelector('.blocklyWidgetDiv'), {
-      childList: true
+    mutationObserver.observe(document.querySelector(".blocklyWidgetDiv"), {
+      childList: true,
     });
     workspace._blockswitchingInjected = true;
     workspace.getAllBlocks().forEach(injectCustomContextMenu);
