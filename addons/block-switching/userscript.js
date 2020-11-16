@@ -1,29 +1,225 @@
 export default async function ({ addon, global, console }) {
   const blockSwitches = {
-    motion_turnright: ['motion_turnleft'],
-    motion_turnleft: ['motion_turnright'],
-    operator_equals: ['operator_gt', 'operator_lt'],
-    operator_gt: ['operator_equals', 'operator_lt'],
-    operator_lt: ['operator_equals', 'operator_gt'],
-    operator_add: ['operator_subtract', 'operator_multiply', 'operator_divide', 'operator_mod'],
-    operator_subtract: ['operator_add', 'operator_multiply', 'operator_divide', 'operator_mod'],
-    operator_multiply: ['operator_add', 'operator_subtract', 'operator_divide', 'operator_mod'],
-    operator_divide: ['operator_add', 'operator_subtract', 'operator_multiply', 'operator_mod'],
-    operator_mod: ['operator_add', 'operator_subtract', 'operator_multiply', 'operator_divide'],
-    motion_setx: ['motion_changexby', 'motion_sety', 'motion_changeyby'],
-    motion_changexby: ['motion_setx', 'motion_sety', 'motion_changeyby'],
-    motion_sety: ['motion_setx', 'motion_changexby', 'motion_changeyby'],
-    motion_changeyby: ['motion_setx', 'motion_changexby', 'motion_sety'],
-    data_setvariableto: ['data_changevariableby'],
-    data_changevariableby: ['data_setvariableto'],
-    motion_xposition: ['motion_yposition'],
-    motion_yposition: ['motion_xposition'],
-    looks_show: ['looks_hide'],
-    looks_hide: ['looks_show'],
-    control_if: ['control_if_else'],
-    control_if_else: ['control_if'], // TODO: what to do with blocks in the else branch?
-    sensing_mousex: ['sensing_mousey'],
-    sensing_mousey: ['sensing_mousex'],
+    motion_turnright: [
+      {
+        opcode: "motion_turnleft"
+      }
+    ],
+    motion_turnleft: [
+      {
+        opcode: "motion_turnright"
+      }
+    ],
+    operator_equals: [
+      {
+        opcode: "operator_gt"
+      },
+      {
+        opcode: "operator_lt"
+      }
+    ],
+    operator_gt: [
+      {
+        opcode: "operator_equals"
+      },
+      {
+        opcode: "operator_lt"
+      }
+    ],
+    operator_lt: [
+      {
+        opcode: "operator_equals"
+      },
+      {
+        opcode: "operator_gt"
+      }
+    ],
+    operator_add: [
+      {
+        opcode: "operator_subtract"
+      },
+      {
+        opcode: "operator_multiply"
+      },
+      {
+        opcode: "operator_divide"
+      },
+      {
+        opcode: "operator_mod"
+      }
+    ],
+    operator_subtract: [
+      {
+        opcode: "operator_add"
+      },
+      {
+        opcode: "operator_multiply"
+      },
+      {
+        opcode: "operator_divide"
+      },
+      {
+        opcode: "operator_mod"
+      }
+    ],
+    operator_multiply: [
+      {
+        opcode: "operator_add"
+      },
+      {
+        opcode: "operator_subtract"
+      },
+      {
+        opcode: "operator_divide"
+      },
+      {
+        opcode: "operator_mod"
+      }
+    ],
+    operator_divide: [
+      {
+        opcode: "operator_add"
+      },
+      {
+        opcode: "operator_subtract"
+      },
+      {
+        opcode: "operator_multiply"
+      },
+      {
+        opcode: "operator_mod"
+      }
+    ],
+    operator_mod: [
+      {
+        opcode: "operator_add"
+      },
+      {
+        opcode: "operator_subtract"
+      },
+      {
+        opcode: "operator_multiply"
+      },
+      {
+        opcode: "operator_divide"
+      }
+    ],
+    motion_setx: [
+      {
+        opcode: "motion_changexby",
+        remap: {X: 'DX'}
+      },
+      {
+        opcode: "motion_sety",
+        remap: {X: 'Y'}
+      },
+      {
+        opcode: "motion_changeyby",
+        remap: {X: 'DY'}
+      }
+    ],
+    motion_changexby: [
+      {
+        opcode: "motion_setx",
+        remap: {DX: 'X'}
+      },
+      {
+        opcode: "motion_sety",
+        remap: {DX: 'Y'}
+      },
+      {
+        opcode: "motion_changeyby",
+        remap: {DX: 'DY'}
+      }
+    ],
+    motion_sety: [
+      {
+        opcode: "motion_setx",
+        remap: {Y: 'X'}
+      },
+      {
+        opcode: "motion_changexby",
+        remap: {Y: 'DX'}
+      },
+      {
+        opcode: "motion_changeyby",
+        remap: {Y: 'DY'}
+      }
+    ],
+    motion_changeyby: [
+      {
+        opcode: "motion_setx",
+        remap: {DY: 'X'}
+      },
+      {
+        opcode: "motion_changexby",
+        remap: {DY: 'DX'}
+      },
+      {
+        opcode: "motion_sety",
+        remap: {DY: 'Y'}
+      }
+    ],
+    data_setvariableto: [
+      {
+        opcode: "data_changevariableby"
+      }
+    ],
+    data_changevariableby: [
+      {
+        opcode: "data_setvariableto"
+      }
+    ],
+    data_showvariable: [
+      {
+        opcode: "data_hidevariable"
+      }
+    ],
+    data_hidevariable: [
+      {
+        opcode: "data_showvariable"
+      }
+    ],
+    motion_xposition: [
+      {
+        opcode: "motion_yposition"
+      }
+    ],
+    motion_yposition: [
+      {
+        opcode: "motion_xposition"
+      }
+    ],
+    looks_show: [
+      {
+        opcode: "looks_hide"
+      }
+    ],
+    looks_hide: [
+      {
+        opcode: "looks_show"
+      }
+    ],
+    control_if: [
+      {
+        opcode: "control_if_else"
+      }
+    ],
+    control_if_else: [
+      {
+        opcode: "control_if"
+      }
+    ],
+    sensing_mousex: [
+      {
+        opcode: "sensing_mousey"
+      }
+    ],
+    sensing_mousey: [
+      {
+        opcode: "sensing_mousex"
+      }
+    ]
   };
 
   const blockToDom = (block) => {
@@ -36,11 +232,11 @@ export default async function ({ addon, global, console }) {
     return workspaceXml.querySelector(`[id="${block.id}"]`);
   };
 
-  const switchBlockCallback = (block, newOpcode) => () => {
+  const menuCallbackFactory = (block, opcodeData) => () => {
     // Make a copy of the block with the proper type set.
     // It doesn't seem to be possible to change a Block's type after it's created, so we'll just make a new block instead.
     const xml = blockToDom(block);
-    xml.setAttribute('type', newOpcode);
+    xml.setAttribute('type', opcodeData.opcode);
 
     const id = block.id;
     const parent = block.getParent();
@@ -48,12 +244,26 @@ export default async function ({ addon, global, console }) {
     let parentConnection;
     let blockConnectionType;
     if (parent) {
-      // If the block has a parent, find out which connection we will have to reattach later.
+      // If the block has a parent, find out which connections we will have to reattach later.
       const parentConnections = parent.getConnections_();
+      parentConnection = parentConnections.find((c) => c.targetConnection && c.targetConnection.sourceBlock_ === block);
+      // There's two types of connections from child -> parent. We need to figure out which one is used.
       const blockConnections = block.getConnections_();
       const blockToParentConnection = blockConnections.find((c) => c.targetConnection && c.targetConnection.sourceBlock_ === parent);
       blockConnectionType = blockToParentConnection.type;
-      parentConnection = parentConnections.find((c) => c.targetConnection && c.targetConnection.sourceBlock_ === block);
+    }
+
+    // Apply input remappings.
+    if (opcodeData.remap) {
+      for (const child of xml.children) {
+        if (child.tagName === 'VALUE') {
+          const oldName = child.getAttribute('name');
+          const newName = opcodeData.remap[oldName];
+          if (newName) {
+            child.setAttribute('name', newName);
+          }
+        }
+      }
     }
 
     // Remove the old black and insert the new one.
@@ -77,11 +287,11 @@ export default async function ({ addon, global, console }) {
     }
 
     const switches = blockSwitches[this.type];
-    for (const opcode of switches) {
+    for (const opcodeData of switches) {
       options.push({
         enabled: true,
-        text: opcode, // TODO: display human readable name; translate
-        callback: switchBlockCallback(this, opcode)
+        text: opcodeData.opcode, // TODO: display human readable name; translate
+        callback: menuCallbackFactory(this, opcodeData)
       });
     }
   };
