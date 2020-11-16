@@ -1,0 +1,17 @@
+{
+  "name": "Block switching",
+  "description": "Right click on a block to switch it to a related block.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": false
+}
