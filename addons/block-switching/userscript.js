@@ -1,5 +1,15 @@
 export default async function ({ addon, global, console }) {
   const blockSwitches = {
+    event_broadcast: [
+      {
+        opcode: "event_broadcastandwait",
+      },
+    ],
+    event_broadcastandwait: [
+      {
+        opcode: "event_broadcast",
+      },
+    ],
     control_if: [
       {
         opcode: "control_if_else",
@@ -31,6 +41,40 @@ export default async function ({ addon, global, console }) {
         opcode: "data_showvariable",
       },
     ],
+    looks_changeeffectby: [
+      {
+        opcode: "looks_seteffectto",
+        remap: { CHANGE: "VALUE" },
+      },
+    ],
+    looks_seteffectto: [
+      {
+        opcode: "looks_changeeffectby",
+        remap: { VALUE: "CHANGE" },
+      },
+    ],
+    looks_changesizeby: [
+      {
+        opcode: "looks_setsizeto",
+        remap: { CHANGE: "SIZE" },
+      },
+    ],
+    looks_setsizeto: [
+      {
+        opcode: "looks_changesizeby",
+        remap: { SIZE: "CHANGE" },
+      },
+    ],
+    looks_costumenumbername: [
+      {
+        opcode: "looks_backdropnumbername",
+      },
+    ],
+    looks_backdropnumbername: [
+      {
+        opcode: "looks_costumenumbername",
+      },
+    ],
     looks_show: [
       {
         opcode: "looks_hide",
@@ -43,13 +87,13 @@ export default async function ({ addon, global, console }) {
     ],
     looks_nextcostume: [
       {
-        opcode: 'looks_nextbackdrop'
-      }
+        opcode: "looks_nextbackdrop",
+      },
     ],
     looks_nextbackdrop: [
       {
-        opcode: 'looks_nextcostume'
-      }
+        opcode: "looks_nextcostume",
+      },
     ],
     motion_turnright: [
       {
@@ -231,6 +275,56 @@ export default async function ({ addon, global, console }) {
         opcode: "operator_and",
       },
     ],
+    pen_penDown: [
+      {
+        opcode: "pen_penUp",
+      },
+    ],
+    pen_penUp: [
+      {
+        opcode: "pen_penDown",
+      },
+    ],
+    pen_setPenColorParamTo: [
+      {
+        opcode: "pen_changePenColorParamBy",
+      },
+    ],
+    pen_changePenColorParamBy: [
+      {
+        opcode: "pen_setPenColorParamTo",
+      },
+    ],
+    pen_changePenHueBy: [
+      {
+        opcode: "pen_setPenHueToNumber",
+      },
+    ],
+    pen_setPenHueToNumber: [
+      {
+        opcode: "pen_changePenHueBy",
+      },
+    ],
+    pen_changePenShadeBy: [
+      {
+        opcode: "pen_setPenShadeToNumber",
+      },
+    ],
+    pen_setPenShadeToNumber: [
+      {
+        opcode: "pen_changePenShadeBy",
+      },
+    ],
+    pen_changePenSizeBy: [
+      {
+        opcode: "pen_setPenSizeTo",
+      },
+    ],
+    pen_setPenSizeTo: [
+      {
+        opcode: "pen_changePenSizeBy",
+      },
+    ],
     sensing_mousex: [
       {
         opcode: "sensing_mousey",
@@ -239,6 +333,36 @@ export default async function ({ addon, global, console }) {
     sensing_mousey: [
       {
         opcode: "sensing_mousex",
+      },
+    ],
+    sound_play: [
+      {
+        opcode: "sound_playuntildone",
+      },
+    ],
+    sound_playuntildone: [
+      {
+        opcode: "sound_play",
+      },
+    ],
+    sound_changeeffectby: [
+      {
+        opcode: "sound_seteffectto",
+      },
+    ],
+    sound_seteffectto: [
+      {
+        opcode: "sound_changeeffectby",
+      },
+    ],
+    sound_setvolumeto: [
+      {
+        opcode: "sound_changevolumeby",
+      },
+    ],
+    sound_changevolumeby: [
+      {
+        opcode: "sound_setvolumeto",
       },
     ],
   };
