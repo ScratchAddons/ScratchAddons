@@ -92,6 +92,11 @@ export default async function ({ addon, global, console }) {
       return;
     }
 
+    if (block._blockswitchingNativeContextMenu) {
+      // Already replaced custom menu
+      return;
+    }
+
     block._blockswitchingNativeContextMenu = block.customContextMenu;
     block.customContextMenu = customContextMenuHandler;
   }
