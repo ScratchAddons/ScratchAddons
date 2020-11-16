@@ -367,6 +367,64 @@ export default async function ({ addon, global, console }) {
     ],
   };
 
+  // temporary until l10n is merged
+  const messages = {
+    "event_broadcast": "Broadcast",
+    "event_broadcastandwait": "Broadcast and wait",
+    "control_if": "If",
+    "control_if_else": "If else",
+    "data_changevariableby": "Change variable",
+    "data_setvariableto": "Set variable",
+    "data_showvariable": "Show variable",
+    "data_hidevariable": "Hide variable",
+    "looks_changeeffectby": "Change effect",
+    "looks_seteffectto": "Set effect",
+    "looks_changesizeby": "Change size",
+    "looks_setsizeto": "Set size",
+    "looks_costumenumbername": "Costume number/name",
+    "looks_backdropnumbername": "Backdrop number/name",
+    "looks_show": "Show",
+    "looks_hide": "Hide",
+    "looks_nextcostume": "Next costume",
+    "looks_nextbackdrop": "Next backdrop",
+    "motion_turnright": "Turn right",
+    "motion_turnleft": "Turn left",
+    "motion_setx": "Set X",
+    "motion_changexby": "Change X",
+    "motion_sety": "Set Y",
+    "motion_changeyby": "Change Y",
+    "motion_xposition": "X",
+    "motion_yposition": "Y",
+    "operator_equals": "=",
+    "operator_gt": ">",
+    "operator_lt": "<",
+    "operator_add": "+",
+    "operator_subtract": "-",
+    "operator_multiply": "*",
+    "operator_divide": "/",
+    "operator_mod": "%",
+    "operator_and": "and",
+    "operator_or": "or",
+    "pen_penDown": "Pen down",
+    "pen_penUp": "Pen up",
+    "pen_setPenColorParamTo": "Set parameter",
+    "pen_changePenColorParamBy": "Change parameter",
+    "pen_changePenHueBy": "Change hue",
+    "pen_setPenHueToNumber": "Set hue",
+    "pen_changePenShadeBy": "Change shade",
+    "pen_setPenShadeToNumber": "Set shade",
+    "pen_changePenSizeBy": "Change size",
+    "pen_setPenSizeTo": "Set size",
+    "sensing_mousex": "Mouse X",
+    "sensing_mousey": "Mouse Y",
+    "sound_play": "Play",
+    "sound_playuntildone": "Play until done",
+    "sound_changeeffectby": "Change effect",
+    "sound_seteffectto": "Set effect",
+    "sound_setvolumeto": "Set volume",
+    "sound_changevolumeby": "Change volume"
+  };
+
   const blockToDom = (block) => {
     // Blockly/Scratch has logic to convert individual blocks to XML, but this is not part of the global Blockly object.
     // It does, however, expose a method to convert the entire workspace to XML which we can use.
@@ -462,9 +520,11 @@ export default async function ({ addon, global, console }) {
   const customContextMenuHandler = function (options) {
     const switches = blockSwitches[this.type];
     for (const opcodeData of switches) {
+      // TODO: use l10n api when its merged
+      const translation = messages[opcodeData.opcode] || opcodeData.opcode;
       options.push({
         enabled: true,
-        text: opcodeData.opcode, // TODO: display human readable name; translate
+        text: translation,
         callback: menuCallbackFactory(this, opcodeData),
       });
     }
