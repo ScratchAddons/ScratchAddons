@@ -208,6 +208,7 @@ export default async function ({ addon, global, console }) {
     control_if_else: [
       {
         opcode: "control_if",
+        remap: { SUBSTACK2: 'split' }
       },
     ],
     sensing_mousex: [
@@ -255,13 +256,26 @@ export default async function ({ addon, global, console }) {
       blockConnectionType = blockToParentConnection.type;
     }
 
+    const pasteSeparately = [];
     // Apply input remappings.
     if (opcodeData.remap) {
-      for (const child of xml.children) {
-        if (child.tagName === "VALUE") {
-          const oldName = child.getAttribute("name");
-          const newName = opcodeData.remap[oldName];
-          if (newName) {
+      const childNodes = Array.from(xml.children);
+      for (const child of childNodes) {
+        const oldName = child.getAttribute("name");
+        const newName = opcodeData.remap[oldName];
+        if (newName) {
+          if (newName === "split") {
+            // This input will be split off into its own script.
+            const inputXml = child.firstChild;
+            // Determine block position because it's not set at this point.
+            const inputId = inputXml.id;
+            const inputBlock = Blockly.getMainWorkspace().getBlockById(inputId);
+            const position = inputBlock.getRelativeToSurfaceXY()
+            inputXml.setAttribute("x", position.x);
+            inputXml.setAttribute("y", position.y);
+            pasteSeparately.push(inputXml);
+            xml.removeChild(child);
+          } else {
             child.setAttribute("name", newName);
           }
         }
@@ -271,6 +285,10 @@ export default async function ({ addon, global, console }) {
     // Remove the old black and insert the new one.
     block.dispose();
     Blockly.getMainWorkspace().paste(xml);
+    for (const separateBlock of pasteSeparately) {
+      Blockly.getMainWorkspace().paste(separateBlock);
+    }
+
     // The new block will have the same ID as the old one.
     const newBlock = Blockly.getMainWorkspace().getBlockById(id);
 
@@ -309,7 +327,9 @@ export default async function ({ addon, global, console }) {
       return;
     }
 
-    block._blockswitchingNativeContextMenu = block.customContextMenu;
+    if (block.customContextMenu) {
+      block._blockswitchingNativeContextMenu = block.customContextMenu;
+    }
     block.customContextMenu = customContextMenuHandler;
   };
 
