@@ -1,0 +1,29 @@
+name: GitHub pages
+
+on:
+  push:
+    branches:
+      - master
+      - jsdoc
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build
+        uses: andstor/jsdoc-action@v1
+        with:
+          source_dir: ./addon-api
+          output_dir: ./docs
+          front_page: README.md
+          template: docdash
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          force_orphan: true
