@@ -27,7 +27,12 @@
         "https://scratch.mit.edu/cloudmonitor/*",
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
-        "https://scratch.mit.edu/500/"
+        "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/login",
+        "https://scratch.mit.edu/login_retry",
+        "https://scratch.mit.edu/cloudmonitor/*",
+        "https://scratch.mit.edu/accounts/login"
+
       ]
     },
     {
