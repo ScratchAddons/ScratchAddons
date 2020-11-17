@@ -1,6 +1,16 @@
 {
   "name": "Search profile",
   "description": "Allows you to go to a user's profile when you search their username.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "Geotale",
+      "link": "https://github.com/Geotale"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
