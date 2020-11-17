@@ -1,6 +1,6 @@
 {
-  "name": null,
-  "description": null,
+  "name": "Show exact count",
+  "description": "Shows the exact count for user and studio info. Uses ScratchDB for forums information.",
   "credits": [
     {
       "name": "TheColaber",
@@ -16,19 +16,19 @@
   ],
   "settings": [
     {
-      "name": null,
+      "name": "Exact counts for profiles",
       "id": "user",
       "type": "boolean",
       "default": true
     },
     {
-      "name": null,
+      "name": "Exact count for studios",
       "id": "studio",
       "type": "boolean",
       "default": true
     },
     {
-      "name": null,
+      "name": "Exact count for forum user",
       "id": "forumuser",
       "type": "boolean",
       "default": true
@@ -37,7 +37,9 @@
   "userscripts": [
     {
       "url": "user.js",
-      "matches": ["https://scratch.mit.edu/users/*/"],
+      "matches": [
+        "https://scratch.mit.edu/users/*/"
+      ],
       "settingMatch": {
         "id": "user",
         "value": true
@@ -45,7 +47,9 @@
     },
     {
       "url": "studio.js",
-      "matches": ["https://scratch.mit.edu/studios/*"],
+      "matches": [
+        "https://scratch.mit.edu/studios/*"
+      ],
       "settingMatch": {
         "id": "studio",
         "value": true
@@ -53,13 +57,19 @@
     },
     {
       "url": "forum.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "matches": [
+        "https://scratch.mit.edu/discuss/topic/*"
+      ],
       "settingMatch": {
         "id": "forumuser",
         "value": true
       }
     }
   ],
-  "tags": ["community", "recommended"],
-  "enabledByDefault": false
+  "tags": [
+    "community",
+    "recommended"
+  ],
+  "enabledByDefault": false,
+  "l10n": true
 }

@@ -1,6 +1,3 @@
 {
-  "remix-tree-button/@name": "Remix tree button on project pages",
-  "remix-tree-button/@description": "Brings back the remix tree button to project pages.",
-  "remix-tree-button/@opt-name-buttonColor": "Button Color",
   "remix-tree-button/remix-tree": "Remix Tree"
 }

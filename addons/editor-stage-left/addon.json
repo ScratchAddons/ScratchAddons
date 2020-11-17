@@ -1,7 +1,7 @@
 {
-  "name": null,
-  "description": null,
-  "notice": null,
+  "name": "Display stage on left side",
+  "description": "Moves the stage to the left side of the editor.",
+  "notice": "Refresh the editor after enabling/disabling this theme.",
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"
@@ -10,15 +10,23 @@
   "userscripts": [
     {
       "url": "fix-share-the-love.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
   "userstyles": [
     {
       "url": "stageleft.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
-  "tags": ["editor", "theme"],
-  "enabledByDefault": false
+  "tags": [
+    "editor",
+    "theme"
+  ],
+  "enabledByDefault": false,
+  "l10n": true
 }

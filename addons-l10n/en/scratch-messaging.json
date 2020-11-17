@@ -1,6 +1,4 @@
 {
-  "scratch-messaging/@name": "Scratch Messaging",
-  "scratch-messaging/@description": "Available when clicking the Scratch Addons icon. Provides easy reading and replying to your Scratch messages: groups messages by project, shows full comment text and context, allows direct comment replying.",
   "scratch-messaging/send-error": "Error sending comment",
   "scratch-messaging/deleting": "Deleting comment...",
   "scratch-messaging/delete-error": "Error deleting comment - you might not have permission to do this.",

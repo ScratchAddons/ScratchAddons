@@ -1,6 +1,6 @@
 {
-  "name": null,
-  "description": null,
+  "name": "More links",
+  "description": "Adds links for URLs pointing outside scratch.mit.edu.",
   "credits": [
     {
       "name": "Hans5958"
@@ -16,6 +16,9 @@
       ]
     }
   ],
-  "tags": ["community"],
-  "enabledByDefault": false
+  "tags": [
+    "community"
+  ],
+  "enabledByDefault": false,
+  "l10n": true
 }

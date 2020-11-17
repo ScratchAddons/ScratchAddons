@@ -1,6 +1,6 @@
 {
-  "name": null,
-  "description": null,
+  "name": "Live featured project",
+  "description": "Shows interactive embed of the featured project, directly from the user's profile page. Based on the implementation on Mega Scratch Userscript.",
   "credits": [
     {
       "name": "GRA0007 (original)",
@@ -13,42 +13,62 @@
   "userscripts": [
     {
       "url": "script.js",
-      "matches": ["https://scratch.mit.edu/users/*"]
+      "matches": [
+        "https://scratch.mit.edu/users/*"
+      ]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/users/*"]
+      "matches": [
+        "https://scratch.mit.edu/users/*"
+      ]
     }
   ],
   "settings": [
     {
       "id": "showMenu",
-      "name": null,
+      "name": "Show project menu (top bar)",
       "type": "boolean",
       "default": false
     },
     {
       "id": "autoPlay",
-      "name": null,
+      "name": "Auto-play projects (for alternative players)",
       "type": "boolean",
       "default": false
     },
     {
       "id": "forceAlternative",
-      "name": null,
+      "name": "Force using alternative player",
       "type": "boolean",
       "default": false
     },
     {
       "id": "alternativePlayer",
-      "name": null,
+      "name": "Alternative player",
       "type": "select",
       "default": "none",
-      "potentialValues": [{ "id": "none" }, { "id": "turbowarp" }, { "id": "forkphorus" }]
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "turbowarp",
+          "name": "TurboWarp"
+        },
+        {
+          "id": "forkphorus",
+          "name": "forkphorus"
+        }
+      ]
     }
   ],
-  "tags": ["community"],
-  "enabledByDefault": false
+  "tags": [
+    "community"
+  ],
+  "enabledByDefault": false,
+  "l10n": true
 }

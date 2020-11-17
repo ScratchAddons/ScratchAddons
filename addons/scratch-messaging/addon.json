@@ -1,6 +1,6 @@
 {
-  "name": null,
-  "description": null,
+  "name": "Scratch Messaging",
+  "description": "Available when clicking the Scratch Addons icon. Provides easy reading and replying to your Scratch messages: groups messages by project, shows full comment text and context, allows direct comment replying.",
   "credits": [
     {
       "name": "World_Languages"
@@ -9,7 +9,13 @@
       "name": "griffpatch"
     }
   ],
-  "persistentScripts": ["background.js"],
-  "tags": ["community", "recommended"],
-  "enabledByDefault": true
+  "persistentScripts": [
+    "background.js"
+  ],
+  "tags": [
+    "community",
+    "recommended"
+  ],
+  "enabledByDefault": true,
+  "l10n": true
 }

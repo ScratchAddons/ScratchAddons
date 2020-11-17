@@ -1,23 +1,24 @@
 (async function () {
   const folderNames = await (await fetch("/addons/addons.json")).json();
   await scratchAddons.l10n.load(folderNames);
+  const useDefault = scratchAddons.l10n.locale.startsWith("en");
   for (const folderName of folderNames) {
     if (folderName.startsWith("//")) continue;
     const manifest = await (await fetch(`/addons/${folderName}/addon.json`)).json();
     for (const prop of ["name", "description", "notice", "warning"]) {
-      if (manifest[prop] === null) {
+      if (manifest.l10n && !useDefault) {
         manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`);
       }
     }
     for (const preset of manifest.presets || []) {
       for (const prop of ["name", "description"]) {
-        if (preset[prop] === null) {
+        if (manifest.l10n && !useDefault) {
           preset[prop] = scratchAddons.l10n.get(`${folderName}/@preset-${prop}-${preset.id}`);
         }
       }
     }
     for (const option of manifest.settings || []) {
-      if (option.name === null) {
+      if (manifest.l10n && !useDefault) {
         option.name = scratchAddons.l10n.get(`${folderName}/@opt-name-${option.id}`, {
           commentIcon: "@comment.svg",
           forumIcon: "@forum.svg",
@@ -31,14 +32,16 @@
       }
       switch (option.type) {
         case "string":
-          if (option.default === null) {
+          if (manifest.l10n && !useDefault) {
             option.default = scratchAddons.l10n.get(`${folderName}/@opt-default-${option.id}`);
           }
           break;
         case "select":
           option.potentialValues = option.potentialValues.map((value) => {
             if (value && value.id) {
-              value.name = scratchAddons.l10n.get(`${folderName}/@opt-select-${option.id}-${value.id}`);
+              if (manifest.l10n && !useDefault) {
+                value.name = scratchAddons.l10n.get(`${folderName}/@opt-select-${option.id}-${value.id}`);
+              }
               return value;
             }
             return { name: value, id: value };

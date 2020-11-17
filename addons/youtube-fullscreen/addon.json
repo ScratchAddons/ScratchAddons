@@ -1,6 +1,6 @@
 {
-  "name": null,
-  "description": null,
+  "name": "YouTube full screen",
+  "description": "Enables the full screen button in Scratch's YouTube video player.",
   "credits": [
     {
       "name": "Maximouse",
@@ -10,10 +10,17 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/youtube/*"],
+      "matches": [
+        "https://scratch.mit.edu/discuss/youtube/*"
+      ],
       "runAtComplete": false
     }
   ],
-  "tags": ["community", "forums", "recommended"],
-  "enabledByDefault": false
+  "tags": [
+    "community",
+    "forums",
+    "recommended"
+  ],
+  "enabledByDefault": false,
+  "l10n": true
 }

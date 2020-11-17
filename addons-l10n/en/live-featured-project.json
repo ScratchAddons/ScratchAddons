@@ -1,12 +1,3 @@
 {
-  "live-featured-project/@name": "Live featured project",
-  "live-featured-project/@description": "Shows interactive embed of the featured project, directly from the user's profile page. Based on the implementation on Mega Scratch Userscript.",
-  "live-featured-project/@opt-name-showMenu": "Show project menu (top bar)",
-  "live-featured-project/@opt-name-autoPlay": "Auto-play projects (for alternative players)",
-  "live-featured-project/@opt-name-forceAlternative": "Force using alternative player",
-  "live-featured-project/@opt-name-alternativePlayer": "Alternative player",
-  "live-featured-project/@opt-select-alternativePlayer-none": "None",
-  "live-featured-project/@opt-select-alternativePlayer-turbowarp": "TurboWarp",
-  "live-featured-project/@opt-select-alternativePlayer-forkphorus": "forkphorus",
   "live-featured-project/change-featured": "Change featured project"
 }

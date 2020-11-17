@@ -1,5 +1,3 @@
 {
-  "last-edit-tooltip/@name": "Last edit tooltip",
-  "last-edit-tooltip/@description": "Hover over a project's share date for information on when it was last edited.",
   "last-edit-tooltip/modified": "Modified: $date$"
 }

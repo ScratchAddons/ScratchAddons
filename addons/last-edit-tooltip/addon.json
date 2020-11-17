@@ -1,6 +1,6 @@
 {
-  "name": null,
-  "description": null,
+  "name": "Last edit tooltip",
+  "description": "Hover over a project's share date for information on when it was last edited.",
   "credits": [
     {
       "name": "TheColaber",
@@ -10,9 +10,14 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
-  "tags": ["community"],
-  "enabledByDefault": false
+  "tags": [
+    "community"
+  ],
+  "enabledByDefault": false,
+  "l10n": true
 }

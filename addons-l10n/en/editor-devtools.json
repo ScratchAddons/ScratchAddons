@@ -1,6 +1,4 @@
 {
-  "editor-devtools/@name": "Developer tools",
-  "editor-devtools/@description": "Adds a find box and new menu options to the editor: copy/paste blocks, better tidy up, go to custom block definition, and more!",
   "editor-devtools/help-title": "Scratch 3 Developer Tools",
   "editor-devtools/version": "Version $version$ - Released $date$ $ndash$ by $url$",
   "editor-devtools/changes024": "Changes in 0.2.3 - 0.2.4",

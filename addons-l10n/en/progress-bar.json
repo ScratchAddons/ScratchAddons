@@ -1,8 +1,4 @@
 {
-  "progress-bar/@name": "Project progress bar",
-  "progress-bar/@description": "Adds a progress bar for loading and saving projects.",
-  "progress-bar/@opt-name-topbar": "Show progress bar at top of page",
-  "progress-bar/@opt-name-height": "Progress bar height (px)",
   "progress-bar/loading-assets": "Loading assets ($loaded$/$loading$)...",
   "progress-bar/loading-project": "Loading project data..."
 }

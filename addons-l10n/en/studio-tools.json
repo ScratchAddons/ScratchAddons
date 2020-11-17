@@ -1,6 +1,4 @@
 {
-  "studio-tools/@name": "Studio manager tools",
-  "studio-tools/@description": "Lets you easily promote or remove anyone from your studios, as well as leaving any studio, through the \"curators\" tab.",
   "studio-tools/ipr": "Invite/promote/remove curators",
   "studio-tools/promote": "Promote curator",
   "studio-tools/remove": "Remove curator",

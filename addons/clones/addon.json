@@ -1,6 +1,6 @@
 {
-  "name": null,
-  "description": null,
+  "name": "Clone counter",
+  "description": "Adds a counter in the editor which shows the total amount of clones.",
   "credits": [
     {
       "name": "Jeffalo"
@@ -9,15 +9,22 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
-  "tags": ["editor"],
-  "enabledByDefault": false
+  "tags": [
+    "editor"
+  ],
+  "enabledByDefault": false,
+  "l10n": true
 }

@@ -1,6 +1,6 @@
 {
-  "name": null,
-  "description": null,
+  "name": "Mouse position",
+  "description": "Displays your mouse position next to the flag in the editor.",
   "credits": [
     {
       "name": "Jeffalo"
@@ -9,15 +9,22 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": [
+        "https://scratch.mit.edu/projects/*"
+      ]
     }
   ],
-  "tags": ["editor"],
-  "enabledByDefault": false
+  "tags": [
+    "editor"
+  ],
+  "enabledByDefault": false,
+  "l10n": true
 }
