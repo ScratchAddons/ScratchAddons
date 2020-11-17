@@ -15,7 +15,7 @@ jobs:
       - name: Build
         uses: andstor/jsdoc-action@v1
         with:
-          source_dir: ./
+          source_dir: ./addon-api
           output_dir: ./docs
           front_page: README.md
           template: docdash
