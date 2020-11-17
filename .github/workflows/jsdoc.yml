@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - jsdoc
 
 jobs:
   deploy:
