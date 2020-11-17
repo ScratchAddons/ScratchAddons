@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Trap.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Trap.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>export default class Trap extends EventTarget {
+  constructor() {
+    super();
+  }
+  /**
+   * @type {object.&lt;string, *>} mapping for the Once objects trapped.
+   */
+  get onceValues() {
+    return __scratchAddonsTraps._onceMap;
+  }
+  /**
+   * @type {symbol} Symbol for accessing props of trapped objects.
+   */
+  get numOnce() {
+    return __scratchAddonsTraps._trapNumOnce;
+  }
+  /**
+   * @type {symbol} Symbol for accessing props of trapped objects.
+   */
+  get numMany() {
+    return __scratchAddonsTraps._trapNumMany;
+  }
+
+  /**
+   * Adds listener for Once objects trapped.
+   * @param {string} trapName Trap name to listen to. Can be '*' for any.
+   * @param {function} fn callback passed to addEventListener.
+   */
+  addOnceListener(trapName, fn) {
+    const eventName = trapName === "*" ? "trapready" : `ready.${trapName}`;
+    if (!__scratchAddonsTraps._targetOnce) throw new Error("Event target not initialized");
+    __scratchAddonsTraps._targetOnce.addEventListener(eventName, fn);
+  }
+
+  /**
+   * Removes listener for Once objects trapped.
+   * @param {string} trapName Trap name to listen to. Can be '*' for any.
+   * @param {function} fn callback passed to removeEventListener.
+   */
+  removeOnceListener(trapName, fn) {
+    const eventName = trapName === "*" ? "trapready" : `ready.${trapName}`;
+    if (!__scratchAddonsTraps._targetOnce) throw new Error("Event target not initialized");
+    __scratchAddonsTraps._targetOnce.removeEventListener(eventName, fn);
+  }
+
+  /**
+   * Adds listener for Many objects trapped.
+   * @param {string} trapName Trap name to listen to. Can be '*' for any.
+   * @param {function} fn callback passed to addEventListener.
+   */
+  addManyListener(trapName, fn) {
+    const eventName = trapName === "*" ? "trapready" : `ready.${trapName}`;
+    if (!__scratchAddonsTraps._targetMany) throw new Error("Event target not initialized");
+    __scratchAddonsTraps._targetMany.addEventListener(eventName, fn);
+  }
+
+  /**
+   * Removes listener for Many objects trapped.
+   * @param {string} trapName Trap name to listen to. Can be '*' for any.
+   * @param {function} fn callback passed to removeEventListener.
+   */
+  removeManyListener(trapName, fn) {
+    const eventName = trapName === "*" ? "trapready" : `ready.${trapName}`;
+    if (!__scratchAddonsTraps._targetMany) throw new Error("Event target not initialized");
+    __scratchAddonsTraps._targetMany.removeEventListener(eventName, fn);
+  }
+
+  /**
+   * Adds listener for prototype functions trapped.
+   * @param {string} trapName Trap name to listen to. Can be '*' for any.
+   * @param {function} fn callback passed to addEventListener.
+   */
+  addPrototypeListener(trapName, fn) {
+    const eventName = trapName === "*" ? "prototypecalled" : `prototype.${trapName}`;
+    __scratchAddonsTraps.addEventListener(eventName, fn);
+  }
+
+  /**
+   * Removes listener for prototype functions trapped.
+   * @param {string} trapName Trap name to listen to. Can be '*' for any.
+   * @param {function} fn callback passed to removeEventListener.
+   */
+  removePrototypeListener(trapName, fn) {
+    const eventName = trapName === "*" ? "prototypecalled" : `prototype.${trapName}`;
+    __scratchAddonsTraps.removeEventListener(eventName, fn);
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addManyListener">addManyListener</a></li><li><a href="global.html#addOnceListener">addOnceListener</a></li><li><a href="global.html#addPrototypeListener">addPrototypeListener</a></li><li><a href="global.html#copyImage">copyImage</a></li><li><a href="global.html#dispatch">dispatch</a></li><li><a href="global.html#editorMode">editorMode</a></li><li><a href="global.html#numMany">numMany</a></li><li><a href="global.html#numOnce">numOnce</a></li><li><a href="global.html#onceValues">onceValues</a></li><li><a href="global.html#removeManyListener">removeManyListener</a></li><li><a href="global.html#removeOnceListener">removeOnceListener</a></li><li><a href="global.html#removePrototypeListener">removePrototypeListener</a></li><li><a href="global.html#state">state</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Nov 16 2020 20:20:12 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
