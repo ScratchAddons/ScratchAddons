@@ -14,13 +14,12 @@ export default async function ({ addon, global, console }) {
   span.innerText = "Profile";
 
   //Check if user exsits
-  fetch(url)
-    .then((response) => {
-      if (response.ok) tab.href = url;
-      else {
-        img.style.filter = "grayscale(100%) brightness(100%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(1)";
-        span.style.color = "red";
-        li.title = user + " does not exist!"
-      }
-    });
+  fetch(url).then((response) => {
+    if (response.ok) tab.href = url;
+    else {
+      img.style.filter = "grayscale(100%) brightness(100%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(1)";
+      span.style.color = "red";
+      li.title = user + " does not exist!";
+    }
+  });
 }
