@@ -19,6 +19,7 @@ jobs:
           source_dir: ./addon-api
           output_dir: ./docs
           front_page: README.md
+          template: docdash
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
