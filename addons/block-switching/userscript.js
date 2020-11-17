@@ -425,7 +425,7 @@ export default async function ({ addon, global, console }) {
     sound_changevolumeby: "change volume",
   };
 
-  let addBorderToContextMenu = false;
+  let addBorderToContextMenuItem = -1;
 
   const blockToDom = (block) => {
     // Blockly/Scratch has logic to convert individual blocks to XML, but this is not part of the global Blockly object.
@@ -520,7 +520,7 @@ export default async function ({ addon, global, console }) {
   };
 
   const customContextMenuHandler = function (options) {
-    addBorderToContextMenu = true;
+    addBorderToContextMenuItem = options.length;
     const switches = blockSwitches[this.type];
     for (const opcodeData of switches) {
       // TODO: use l10n api when its merged
@@ -562,15 +562,14 @@ export default async function ({ addon, global, console }) {
     for (const mutation of mutations) {
       for (const node of mutation.addedNodes) {
         if (node.classList.contains("blocklyContextMenu")) {
-          if (!addBorderToContextMenu) {
+          if (addBorderToContextMenuItem === -1) {
             continue;
           }
-          addBorderToContextMenu = false;
           const children = node.children;
-          if (children[3]) {
-            children[3].style.paddingTop = "2px";
-            children[3].style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
-          }
+          const item = children[addBorderToContextMenuItem];
+          item.style.paddingTop = "2px";
+          item.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+          addBorderToContextMenuItem = -1;
         }
       }
     }
