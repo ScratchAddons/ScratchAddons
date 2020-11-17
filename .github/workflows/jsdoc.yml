@@ -3,7 +3,6 @@ name: GitHub pages
 on:
   push:
     branches:
-      - master
       - jsdoc
 
 jobs:
@@ -16,7 +15,7 @@ jobs:
       - name: Build
         uses: andstor/jsdoc-action@v1
         with:
-          source_dir: ./addon-api
+          source_dir: ./
           output_dir: ./docs
           front_page: README.md
           template: docdash
