@@ -21,6 +21,17 @@ export default async function ({ addon, global, console }) {
         remap: { SUBSTACK2: "split" },
       },
     ],
+    control_repeat_until: [
+      {
+        opcode: "control_wait_until",
+        remap: { SUBSTACK: "split" }
+      },
+    ],
+    control_wait_until: [
+      {
+        opcode: "control_repeat_until",
+      },
+    ],
     data_changevariableby: [
       {
         opcode: "data_setvariableto",
