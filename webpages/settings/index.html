@@ -106,6 +106,7 @@
                   <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
                   {{ addon.name }}
                 </div>
+                <div v-if="versionName.includes('-prerelease')" class="addon-id">{{ addon._addonId }}</div>
               </div>
               <div class="badge blue" v-if="addon._tags.recommended">Recommended</div>
               <div class="badge darkgreen" v-if="addon._tags.forEditor">For editor</div>
