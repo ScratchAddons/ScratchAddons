@@ -384,6 +384,8 @@ export default async function ({ addon, global, console }) {
     event_broadcastandwait: "broadcast and wait",
     control_if: "if",
     control_if_else: "if... else",
+    control_repeat_until: "repeat until",
+    control_wait_until: "wait until",
     data_changevariableby: "change variable",
     data_setvariableto: "set variable",
     data_showvariable: "show variable",
