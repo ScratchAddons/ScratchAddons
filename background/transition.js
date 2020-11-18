@@ -8,4 +8,5 @@ chrome.runtime.onInstalled.addListener((details) => {
     chrome.tabs.create({ url: "https://scratchaddons.com/welcome" });
   }
 });
-if (!chrome.runtime.getManifest().version_name.includes("-prerelease")) chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");
+if (!chrome.runtime.getManifest().version_name.includes("-prerelease"))
+  chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");
