@@ -19,9 +19,9 @@ The "live featured project" addon was accidentally enabled by default. This upda
 
 ## [v1.3.0]
 
-- Project performance problems fixed - performance warnings removed (#431)
-- "Highlight currently executing blocks" does not hurt performance/lag anymore (#336)
-- New SVG icons instead of emojis in the extension popup and Scratch Notifier notifications (#617)
+- Project performance problems fixed - performance warnings removed ([#431](https://github.com/ScratchAddons/ScratchAddons/issues/431))
+- "Highlight currently executing blocks" does not hurt performance/lag anymore ([#336](https://github.com/ScratchAddons/ScratchAddons/issues/336))
+- New SVG icons instead of emojis in the extension popup and Scratch Notifier notifications ([#617](https://github.com/ScratchAddons/ScratchAddons/issues/617))
 - Settings page: new "more settings" button and theme switch in the top right
 - New addon: thumbnail setter (enabled by default for all users)
 - New addon: resizable comment input (enabled by default for all users)
@@ -33,14 +33,14 @@ The "live featured project" addon was accidentally enabled by default. This upda
 - Fix remix tree button not working
 - Fix inaccurate number of projects in a studio (show exact count addon)
 - Fix wrong row titles in show exact count addon
-- Dark mode fixes (#656, #658)
+- Dark mode fixes ([#656](https://github.com/ScratchAddons/ScratchAddons/issues/656), [#658](https://github.com/ScratchAddons/ScratchAddons/issues/658))
 
 #### Addon development changes:
 
 - `addon.tab.traps` API traps removed to fix performance issues (except Scratch VM object). In the future, we'll discuss how future addons should implement traps
 - Ability to use icons within setting names
 - Ability to mark a theme userstyle as non-updatable with `/* sa-autoupdate-theme-ignore */`
-- Fix console.log sometimes not working (bug caused by Scratch, not Scratch Addons, see #662)
+- Fix console.log sometimes not working (bug caused by Scratch, not Scratch Addons, see [#662](https://github.com/ScratchAddons/ScratchAddons/issues/662))
 
 ## [v1.2.1]
 
@@ -53,18 +53,18 @@ The "live featured project" addon was accidentally enabled by default. This upda
 - New addon: mouse position
 - New addon: remix tree button on project pages
 - New addon: show exact count
-- Removed addon: data category tweaks, because it caused irreversible bugs to projects (#396)
-- Removed addon: load more scrolling fix, because the issue was fixed by the Scratch Team (#506)
+- Removed addon: data category tweaks, because it caused irreversible bugs to projects ([#396](https://github.com/ScratchAddons/ScratchAddons/issues/396))
+- Removed addon: load more scrolling fix, because the issue was fixed by the Scratch Team ([#506](https://github.com/ScratchAddons/ScratchAddons/issues/506))
 - Ability to reset all addon settings
 - `Mute for...` option when right clicking the extension icon
-- Fix bug: links to cloud games not working (#500) 
+- Fix bug: links to cloud games not working ([#500](https://github.com/ScratchAddons/ScratchAddons/issues/500))
 
 #### Addon development changes:
 
-- Ability to use `addon.tab.waitForElement(selector, { markAsSeen: true })` to avoid having to manually add class names to elements to mark them as seen (#470)
+- Ability to use `addon.tab.waitForElement(selector, { markAsSeen: true })` to avoid having to manually add class names to elements to mark them as seen ([#470](https://github.com/ScratchAddons/ScratchAddons/issues/470))
 - New `urlChange` event on `addon.tab`
 - `notice` property in the manifest
-- Setting presets (#563)
+- Setting presets ([#563](https://github.com/ScratchAddons/ScratchAddons/issues/563))
 
 ## [v1.2.0] [YANKED]
 
@@ -113,3 +113,4 @@ Initial release.
 [v1.0.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.0.0
 
 <!-- sa-changelog-end -->
+
