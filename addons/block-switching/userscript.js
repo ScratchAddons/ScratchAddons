@@ -24,7 +24,7 @@ export default async function ({ addon, global, console }) {
     control_repeat_until: [
       {
         opcode: "control_wait_until",
-        remap: { SUBSTACK: "split" }
+        remap: { SUBSTACK: "split" },
       },
     ],
     control_wait_until: [
