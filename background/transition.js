@@ -23,9 +23,5 @@ chrome.runtime.onInstalled.addListener((details) => {
     });
   }
 });
-<<<<<<< HEAD
 if (!chrome.runtime.getManifest().version_name.includes("-prerelease"))
   chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");
-=======
-chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");
->>>>>>> parent of 8762c45... Remove transition and uninstall link
