@@ -147,7 +147,7 @@ const vue = new Vue({
     setDevTools(val) {
       chrome.storage.sync.get(["devTools"], function (r) {
         chrome.storage.sync.set({ devTools: !val }, function () {
-          vue.devTools = !val
+          vue.devTools = !val;
         });
       });
     },
