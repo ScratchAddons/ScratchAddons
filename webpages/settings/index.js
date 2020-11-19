@@ -14,12 +14,16 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
     vue.themepath = "../../images/icons/theme.svg";
   }
 });
+chrome.storage.sync.get(["devTools"], function (r) {
+  if (r.devTools) vue.devTools = r.devTools;
+});
 
 const vue = new Vue({
   el: "body",
   data: {
     theme: "",
     themepath: "",
+    devTools: false,
     isOpen: false,
     loaded: false,
     manifests: [],
@@ -137,6 +141,13 @@ const vue = new Vue({
             vue.theme = false;
             vue.themepath = "../../images/icons/theme.svg";
           }
+        });
+      });
+    },
+    setDevTools(val) {
+      chrome.storage.sync.get(["devTools"], function (r) {
+        chrome.storage.sync.set({ devTools: !val }, function () {
+          vue.devTools = !val
         });
       });
     },
