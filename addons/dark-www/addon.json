@@ -1,10 +1,7 @@
 {
   "name": "Website dark mode",
   "description": "Dark theme for the Scratch website, both for 2.0 and 3.0 pages. Multiple options by different authors available.",
-  "tags": [
-    "community",
-    "theme"
-  ],
+  "tags": ["community", "theme"],
   "credits": [
     {
       "name": "Maximouse (Experimental Dark)",
@@ -18,9 +15,7 @@
   "userstyles": [
     {
       "url": "dark-www.css",
-      "matches": [
-        "https://scratch.mit.edu/*"
-      ],
+      "matches": ["https://scratch.mit.edu/*"],
       "settingMatch": {
         "id": "selectedMode",
         "value": "dark-www"

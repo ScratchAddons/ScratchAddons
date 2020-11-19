@@ -10,17 +10,11 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/discuss/youtube/*"
-      ],
+      "matches": ["https://scratch.mit.edu/discuss/youtube/*"],
       "runAtComplete": false
     }
   ],
-  "tags": [
-    "community",
-    "forums",
-    "recommended"
-  ],
+  "tags": ["community", "forums", "recommended"],
   "enabledByDefault": false,
   "l10n": true
 }

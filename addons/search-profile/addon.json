@@ -4,15 +4,11 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/search/*"
-      ],
+      "matches": ["https://scratch.mit.edu/search/*"],
       "runAtComplete": false
     }
   ],
-  "tags": [
-    "community"
-  ],
+  "tags": ["community"],
   "enabledByDefault": false,
   "l10n": true
 }

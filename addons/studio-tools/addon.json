@@ -9,15 +9,10 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/studios/*/curators"
-      ]
+      "matches": ["https://scratch.mit.edu/studios/*/curators"]
     }
   ],
-  "tags": [
-    "community",
-    "recommended"
-  ],
+  "tags": ["community", "recommended"],
   "enabledByDefault": true,
   "l10n": true
 }

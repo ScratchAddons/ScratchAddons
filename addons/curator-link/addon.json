@@ -11,17 +11,13 @@
   "userscripts": [
     {
       "url": "script.js",
-      "matches": [
-        "https://scratch.mit.edu/"
-      ]
+      "matches": ["https://scratch.mit.edu/"]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": [
-        "https://scratch.mit.edu/"
-      ],
+      "matches": ["https://scratch.mit.edu/"],
       "settingMatch": {
         "id": "styleAsNormalText",
         "value": true
@@ -36,9 +32,7 @@
       "default": false
     }
   ],
-  "tags": [
-    "community"
-  ],
+  "tags": ["community"],
   "enabledByDefault": false,
   "l10n": true
 }

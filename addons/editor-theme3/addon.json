@@ -10,17 +10,13 @@
   "userscripts": [
     {
       "url": "theme3.js",
-      "matches": [
-        "https://scratch.mit.edu/projects/*"
-      ]
+      "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
   "userstyles": [
     {
       "url": "theme3.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*"
-      ]
+      "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
   "settings": [
@@ -91,10 +87,7 @@
       "default": "#0FBD8C"
     }
   ],
-  "tags": [
-    "editor",
-    "theme"
-  ],
+  "tags": ["editor", "theme"],
   "enabledByDefault": false,
   "presets": [
     {

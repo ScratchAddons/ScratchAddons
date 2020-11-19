@@ -12,9 +12,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/*"
-      ],
+      "matches": ["https://scratch.mit.edu/*"],
       "runAtComplete": false
     }
   ],
@@ -32,10 +30,7 @@
       "default": "Discuss"
     }
   ],
-  "tags": [
-    "community",
-    "forums"
-  ],
+  "tags": ["community", "forums"],
   "enabledByDefault": false,
   "l10n": true
 }

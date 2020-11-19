@@ -16,9 +16,7 @@
       ]
     }
   ],
-  "tags": [
-    "community"
-  ],
+  "tags": ["community"],
   "enabledByDefault": false,
   "l10n": true
 }

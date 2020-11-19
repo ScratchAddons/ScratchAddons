@@ -70,9 +70,7 @@
     },
     {
       "url": "global.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*"
-      ]
+      "matches": ["https://scratch.mit.edu/projects/*"]
     },
     {
       "url": "text-shadow.css",
@@ -120,10 +118,7 @@
       "default": false
     }
   ],
-  "tags": [
-    "editor",
-    "theme"
-  ],
+  "tags": ["editor", "theme"],
   "enabledByDefault": false,
   "l10n": true
 }

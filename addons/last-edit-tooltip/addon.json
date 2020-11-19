@@ -10,14 +10,10 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/projects/*"
-      ]
+      "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": [
-    "community"
-  ],
+  "tags": ["community"],
   "enabledByDefault": false,
   "l10n": true
 }

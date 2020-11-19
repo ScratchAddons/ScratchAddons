@@ -1,9 +1,7 @@
 {
   "name": "Remix tree button on project pages",
   "description": "Brings back the remix tree button to project pages.",
-  "tags": [
-    "community"
-  ],
+  "tags": ["community"],
   "credits": [
     {
       "name": "Ucrash",
@@ -13,18 +11,14 @@
   "userscripts": [
     {
       "url": "main.js",
-      "matches": [
-        "https://scratch.mit.edu/projects/*"
-      ],
+      "matches": ["https://scratch.mit.edu/projects/*"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "button.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*"
-      ]
+      "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
   "settings": [

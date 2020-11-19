@@ -30,17 +30,13 @@
   "userscripts": [
     {
       "url": "working.js",
-      "matches": [
-        "https://scratch.mit.edu/users/*"
-      ]
+      "matches": ["https://scratch.mit.edu/users/*"]
     }
   ],
   "userstyles": [
     {
       "url": "signature.css",
-      "matches": [
-        "https://scratch.mit.edu/discuss/topic/*"
-      ],
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "settingMatch": {
         "id": "signature",
         "value": true
@@ -48,20 +44,14 @@
     },
     {
       "url": "working.css",
-      "matches": [
-        "https://scratch.mit.edu/users/*"
-      ],
+      "matches": ["https://scratch.mit.edu/users/*"],
       "settingMatch": {
         "id": "whatworkingon",
         "value": true
       }
     }
   ],
-  "tags": [
-    "community",
-    "forums",
-    "recommended"
-  ],
+  "tags": ["community", "forums", "recommended"],
   "enabledByDefault": true,
   "l10n": true
 }

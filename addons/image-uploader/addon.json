@@ -9,19 +9,11 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/discuss/*"
-      ]
+      "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
-  "tags": [
-    "forums",
-    "community"
-  ],
+  "tags": ["forums", "community"],
   "enabledByDefault": false,
-  "libraries": [
-    "md5",
-    "text-field-edit"
-  ],
+  "libraries": ["md5", "text-field-edit"],
   "l10n": true
 }

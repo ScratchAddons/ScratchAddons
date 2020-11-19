@@ -10,10 +10,7 @@
       "name": "griffpatch"
     }
   ],
-  "tags": [
-    "community",
-    "recommended"
-  ],
+  "tags": ["community", "recommended"],
   "enabledByDefault": true,
   "l10n": true
 }

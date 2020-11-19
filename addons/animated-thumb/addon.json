@@ -13,17 +13,11 @@
   ],
   "userscripts": [
     {
-      "matches": [
-        "https://scratch.mit.edu/projects/*"
-      ],
+      "matches": ["https://scratch.mit.edu/projects/*"],
       "url": "userscript.js"
     }
   ],
-  "tags": [
-    "editor",
-    "community",
-    "recommended"
-  ],
+  "tags": ["editor", "community", "recommended"],
   "enabledByDefault": true,
   "l10n": true
 }

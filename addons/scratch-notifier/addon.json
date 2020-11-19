@@ -12,12 +12,8 @@
       "name": "notificationsounds.com (Scratch Addons ping)"
     }
   ],
-  "permissions": [
-    "notifications"
-  ],
-  "persistentScripts": [
-    "background.js"
-  ],
+  "permissions": ["notifications"],
+  "persistentScripts": ["background.js"],
   "settings": [
     {
       "name": "Mark all messages as read after clicking notification",
@@ -100,10 +96,7 @@
       "default": true
     }
   ],
-  "tags": [
-    "community",
-    "recommended"
-  ],
+  "tags": ["community", "recommended"],
   "enabledByDefault": false,
   "l10n": true
 }

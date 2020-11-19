@@ -1,11 +1,7 @@
 {
   "name": "Scratch 2.0 \u2192 3.0",
   "description": "Makes Scratch 2.0-styled pages look like Scratch 3.0.",
-  "tags": [
-    "community",
-    "theme",
-    "recommended"
-  ],
+  "tags": ["community", "theme", "recommended"],
   "credits": [
     {
       "name": "Maximouse",
@@ -57,53 +53,35 @@
     },
     {
       "url": "forums.css",
-      "matches": [
-        "https://scratch.mit.edu/discuss/*"
-      ]
+      "matches": ["https://scratch.mit.edu/discuss/*"]
     },
     {
       "url": "forums_topic.css",
-      "matches": [
-        "https://scratch.mit.edu/discuss/topic/*/"
-      ]
+      "matches": ["https://scratch.mit.edu/discuss/topic/*/"]
     },
     {
       "url": "forums_yt.css",
-      "matches": [
-        "https://scratch.mit.edu/discuss/youtube/*/"
-      ]
+      "matches": ["https://scratch.mit.edu/discuss/youtube/*/"]
     },
     {
       "url": "profile.css",
-      "matches": [
-        "https://scratch.mit.edu/users/*/",
-        "https://scratch.mit.edu/classes/*/"
-      ]
+      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/classes/*/"]
     },
     {
       "url": "studio.css",
-      "matches": [
-        "https://scratch.mit.edu/studios/*"
-      ]
+      "matches": ["https://scratch.mit.edu/studios/*"]
     },
     {
       "url": "scratchr2_comments.css",
-      "matches": [
-        "https://scratch.mit.edu/users/*/",
-        "https://scratch.mit.edu/studios/*"
-      ]
+      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/studios/*"]
     },
     {
       "url": "remixtree.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/remixtree/"
-      ]
+      "matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
     },
     {
       "url": "mystuff.css",
-      "matches": [
-        "https://scratch.mit.edu/mystuff/"
-      ]
+      "matches": ["https://scratch.mit.edu/mystuff/"]
     },
     {
       "url": "settings.css",
