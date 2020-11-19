@@ -169,6 +169,7 @@ const vue = new Vue({
 
     follows: [],
     studioInvites: [],
+    studioPromotions: [],
     forumActivity: [],
     studioActivity: [],
     remixes: [],
@@ -180,6 +181,7 @@ const vue = new Vue({
     messageTypeExtended: {
       follows: false,
       studioInvites: false,
+      studioPromotions: false,
       forumActivity: false,
       studioActivity: false,
       remixes: false,
@@ -376,6 +378,12 @@ const vue = new Vue({
           this.follows.push(message.actor_username);
         } else if (message.type === "curatorinvite") {
           this.studioInvites.push({
+            actor: message.actor_username,
+            studioId: message.gallery_id,
+            studioTitle: htmlToText(message.title),
+          });
+        } else if (message.type === "becomeownerstudio") {
+          this.studioPromotions.push({
             actor: message.actor_username,
             studioId: message.gallery_id,
             studioTitle: htmlToText(message.title),
