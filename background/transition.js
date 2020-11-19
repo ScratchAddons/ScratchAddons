@@ -32,4 +32,4 @@ chrome.storage.onChanged.addListener(function (changes) {
     if (changes.devTools.newValue) chrome.runtime.setUninstallURL("");
     if (!changes.devTools.newValue) chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");
   }
-})
+});
