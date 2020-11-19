@@ -253,17 +253,21 @@
           <div class="setting-body">
             <div class="addon-topbar">
               <span class="addon-name"
-                ><img src="../../images/icons/web.svg" style="vertical-align: middle; margin-right: 5px" />ScratchAddons DevTools
+                ><img src="../../images/icons/web.svg" style="vertical-align: middle; margin-right: 5px" />ScratchAddons
+                DevTools
               </span>
             </div>
             <div class="setting-settings">
-              <span class="settings-description"
-                >This enables ScratchAddon's Developer Tools.</span
-              >
+              <span class="settings-description">This enables ScratchAddon's Developer Tools.</span>
               <div class="setting-setting">
                 <div class="filter-selector">
                   <div class="filter-text">DevTools:</div>
-                  <input type="checkbox" class="setting-input check" @click="setDevTools(devTools)" :checked="devTools">
+                  <input
+                    type="checkbox"
+                    class="setting-input check"
+                    @click="setDevTools(devTools)"
+                    :checked="devTools"
+                  />
                 </div>
               </div>
             </div>
