@@ -11,6 +11,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     favoriteproject: "star",
     followuser: "follow",
     curatorinvite: "studio-add",
+    becomeownerstudio: "studio-promote",
     remixproject: "remix",
     studioactivity: "studio",
   };
@@ -105,6 +106,10 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           break;
         case "curatorinvite":
           notificationTitle = `${actor} invited you to curate the studio "${title}"`;
+          url = `https://scratch.mit.edu/studios/${element_id}/curators/`;
+          break;
+        case "becomeownerstudio":
+          notificationTitle = `${actor} promoted you to manager of the studio "${title}"`;
           url = `https://scratch.mit.edu/studios/${element_id}/curators/`;
           break;
         case "remixproject":

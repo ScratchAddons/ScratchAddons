@@ -71,6 +71,12 @@
       "default": true
     },
     {
+      "name": "@studio-promote.svg Notify studio promotions",
+      "id": "becomeownerstudio_notifications",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "@studio.svg Notify studio activity",
       "id": "studioactivity_notifications",
       "type": "boolean",
