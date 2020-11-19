@@ -23,5 +23,13 @@ chrome.runtime.onInstalled.addListener((details) => {
     });
   }
 });
-if (!chrome.runtime.getManifest().version_name.includes("-prerelease"))
-  chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");
+chrome.storage.sync.get(["devTools"], function (r) {
+  if (r.devTools) chrome.runtime.setUninstallURL("");
+  if (!r.devTools) chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");
+});
+chrome.storage.onChanged.addListener(function (changes) {
+  if (changes.devTools) {
+    if (changes.devTools.newValue) chrome.runtime.setUninstallURL("");
+    if (!changes.devTools.newValue) chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");
+  }
+})
