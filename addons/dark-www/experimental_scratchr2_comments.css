@@ -1,0 +1,26 @@
+/* Comments */
+#comments form .small-text {
+  color: #fff;
+}
+#comments .comments li,
+#comments ul.comments ul li {
+  /* Remove separators */
+  border: none;
+}
+#comments .comment .info .content,
+#comments .comment .info > div:not(.name):not(.content):not([data-content="reply-form"]) {
+  border-color: #606060;
+  background-color: var(--scratchr2-dark-boxbg, transparent);
+}
+#comments .content::after {
+  border-color: #282828;
+}
+#comments .content::before {
+  border-color: #606060;
+}
+#comments .highlighted {
+  background: rgba(77, 151, 255, 0.1);
+}
+#comments .comment .info .name a {
+  color: #fff;
+}

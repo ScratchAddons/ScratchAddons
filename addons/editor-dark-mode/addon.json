@@ -3,10 +3,16 @@
   "description": "Dark mode for the Scratch 3.0 project editor. Multiple options by different authors available.",
   "credits": [
     {
-      "name": "infinitytec (3.Dark, 3.Darker)"
+      "name": "infinitytec (3.Dark, 3.Darker)",
+      "link": "https://github.com/infinitytec"
     },
     {
-      "name": "_nix (Dark editor)"
+      "name": "_nix (Dark editor)",
+      "link": "https://github.com/towerofnix"
+    },
+    {
+      "name": "Maximouse (Experimental Dark)",
+      "link": "https://github.com/mxmou/customize-scratch"
     }
   ],
   "userstyles": [
@@ -50,6 +56,19 @@
       }
     },
     {
+      "url": "experimental_editor.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
       "url": "global.css",
       "matches": [
         "https://scratch.mit.edu/projects/*"
@@ -86,6 +105,10 @@
         {
           "id": "dark-editor",
           "name": "Dark Editor"
+        },
+        {
+          "id": "experimental-dark",
+          "name": "Experimental Dark"
         }
       ],
       "default": "3-darker"
