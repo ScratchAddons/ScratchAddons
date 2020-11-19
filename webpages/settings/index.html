@@ -106,7 +106,7 @@
                   <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
                   {{ addon.name }}
                 </div>
-                <div v-if="versionName.includes('-prerelease')" class="addon-id">{{ addon._addonId }}</div>
+                <div v-if="devTools" class="addon-id">{{ addon._addonId }}</div>
               </div>
               <div class="badge blue" v-if="addon._tags.recommended">Recommended</div>
               <div class="badge darkgreen" v-if="addon._tags.forEditor">For editor</div>
@@ -246,6 +246,24 @@
                     <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">Light</div>
                     <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">Dark</div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="setting-body">
+            <div class="addon-topbar">
+              <span class="addon-name"
+                ><img src="../../images/icons/web.svg" style="vertical-align: middle; margin-right: 5px" />ScratchAddons DevTools
+              </span>
+            </div>
+            <div class="setting-settings">
+              <span class="settings-description"
+                >This enables ScratchAddon's Developer Tools.</span
+              >
+              <div class="setting-setting">
+                <div class="filter-selector">
+                  <div class="filter-text">DevTools:</div>
+                  <input type="checkbox" class="setting-input check" @click="setDevTools(devTools)" :checked="devTools">
                 </div>
               </div>
             </div>
