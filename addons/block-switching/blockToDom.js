@@ -1,7 +1,6 @@
 /**
- * ScratchAddons:
- * This file is imported from https://github.com/LLK/scratch-blocks/blob/develop/core/xml.js
- * It has been modified to remove unnecessary bits and cleaned up.
+ * This file is imported from https://github.com/LLK/scratch-blocks/
+ * It has been cleaned up and unnecessary functions have been removed.
  * Original license is below.
  * 
  * @license
@@ -30,7 +29,10 @@ const DUMMY_INPUT = 5;
 // Partially implements goog.dom.createDom.
 const createDom = function(tagName, /* unused */ _params, children) {
   const element = document.createElement(tagName);
-  if (Array.isArray(children)) {
+  if (children !== undefined) {
+    if (!Array.isArray(children)) {
+      children = [children];
+    }
     for (const child of children) {
       if (typeof child === 'string') {
         element.appendChild(document.createTextNode(child));
@@ -205,10 +207,7 @@ const scratchCommentToDom_ = function(block, element) {
       commentElement.setAttribute('h', hw.height);
       commentElement.setAttribute('w', hw.width);
       var xy = block.comment.getXY();
-      // TODO: works in RTL?
-      commentElement.setAttribute('x',
-          Math.round(block.workspace.RTL ? block.workspace.getWidth() - xy.x - hw.width :
-          xy.x));
+      commentElement.setAttribute('x', xy.x);
       commentElement.setAttribute('y', xy.y);
       commentElement.setAttribute('minimized', block.comment.isMinimized());
 
