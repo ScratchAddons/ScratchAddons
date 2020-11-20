@@ -25,7 +25,7 @@ export default async function ({ addon, global, console }) {
         setInterval(setMessages, 5000);
         addon.tab.removeEventListener("urlChange", thisFunction);
       }
-    })
+    });
   }
 
   while (true) {
