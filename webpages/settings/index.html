@@ -175,6 +175,17 @@
                     maxlength="100"
                   />
                   <input
+                    type="text"
+                    class="setting-input key"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @input="updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'key'"
+                    :placeholder="setting.default"
+                    maxlength="100"
+                    :id="setting.id"
+                  />
+                  <input
                     type="color"
                     class="setting-input color"
                     v-model="addonSettings[addon._addonId][setting.id]"
