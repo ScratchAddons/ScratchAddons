@@ -492,6 +492,15 @@ export default async function ({ addon, global, console, msg }) {
 
   let addBorderToContextMenuItem = -1;
 
+  const genuid = () => {
+    const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
+    let result = "";
+    for (let i = 0; i < 20; i++) {
+      result += CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+    }
+    return result;
+  };
+
   const menuCallbackFactory = (block, opcodeData) => () => {
     if (opcodeData.opcode === "noop") {
       return;
@@ -575,7 +584,7 @@ export default async function ({ addon, global, console, msg }) {
     // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
     // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
     setTimeout(() => {
-      const group = Symbol();
+      const group = genuid();
       for (let i = undoStack.length - 1; i >= 0 && !undoStack[i]._blockswitchingLastUndo; i--) {
         undoStack[i].group = group;
       }
