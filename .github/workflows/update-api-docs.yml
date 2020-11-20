@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - jsdoc-ify # remove after merged
     paths:
       - addon-api/**
       - .github/workflows/update-api-docs.yml
