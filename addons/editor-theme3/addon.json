@@ -81,7 +81,7 @@
       "default": "#FF6680"
     },
     {
-      "name": "Pen",
+      "name": "pen",
       "id": "Pen-color",
       "type": "color",
       "default": "#0FBD8C"
