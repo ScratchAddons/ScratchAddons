@@ -15,6 +15,12 @@
   "tags": ["editor"],
   "settings": [
     {
+      "name": "Show option to change block to self",
+      "id": "noop",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Motion blocks",
       "id": "motion",
       "type": "boolean",

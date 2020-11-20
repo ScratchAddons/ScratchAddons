@@ -3,8 +3,13 @@ import blockToDom from "./blockToDom.js";
 export default async function ({ addon, global, console }) {
   const blockSwitches = {};
 
+  const noopSwitch = {
+    opcode: "noop",
+  };
+
   if (addon.settings.get("motion")) {
     blockSwitches["motion_turnright"] = [
+      noopSwitch,
       {
         opcode: "motion_turnleft",
       },
@@ -13,8 +18,10 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "motion_turnright",
       },
+      noopSwitch,
     ];
     blockSwitches["motion_setx"] = [
+      noopSwitch,
       {
         opcode: "motion_changexby",
         remap: { X: "DX" },
@@ -33,6 +40,7 @@ export default async function ({ addon, global, console }) {
         opcode: "motion_setx",
         remap: { DX: "X" },
       },
+      noopSwitch,
       {
         opcode: "motion_sety",
         remap: { DX: "Y" },
@@ -51,6 +59,7 @@ export default async function ({ addon, global, console }) {
         opcode: "motion_changexby",
         remap: { Y: "DX" },
       },
+      noopSwitch,
       {
         opcode: "motion_changeyby",
         remap: { Y: "DY" },
@@ -69,8 +78,10 @@ export default async function ({ addon, global, console }) {
         opcode: "motion_sety",
         remap: { DY: "Y" },
       },
+      noopSwitch,
     ];
     blockSwitches["motion_xposition"] = [
+      noopSwitch,
       {
         opcode: "motion_yposition",
       },
@@ -79,20 +90,30 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "motion_xposition",
       },
+      noopSwitch,
     ];
   }
 
   if (addon.settings.get("looks")) {
+    blockSwitches["looks_seteffectto"] = [
+      noopSwitch,
+      {
+        opcode: "looks_changeeffectby",
+        remap: { VALUE: "CHANGE" },
+      },
+    ];
     blockSwitches["looks_changeeffectby"] = [
       {
         opcode: "looks_seteffectto",
         remap: { CHANGE: "VALUE" },
       },
+      noopSwitch,
     ];
-    blockSwitches["looks_seteffectto"] = [
+    blockSwitches["looks_setsizeto"] = [
+      noopSwitch,
       {
-        opcode: "looks_changeeffectby",
-        remap: { VALUE: "CHANGE" },
+        opcode: "looks_changesizeby",
+        remap: { SIZE: "CHANGE" },
       },
     ];
     blockSwitches["looks_changesizeby"] = [
@@ -100,14 +121,10 @@ export default async function ({ addon, global, console }) {
         opcode: "looks_setsizeto",
         remap: { CHANGE: "SIZE" },
       },
-    ];
-    blockSwitches["looks_setsizeto"] = [
-      {
-        opcode: "looks_changesizeby",
-        remap: { SIZE: "CHANGE" },
-      },
+      noopSwitch,
     ];
     blockSwitches["looks_costumenumbername"] = [
+      noopSwitch,
       {
         opcode: "looks_backdropnumbername",
       },
@@ -116,8 +133,10 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "looks_costumenumbername",
       },
+      noopSwitch,
     ];
     blockSwitches["looks_show"] = [
+      noopSwitch,
       {
         opcode: "looks_hide",
       },
@@ -126,8 +145,10 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "looks_show",
       },
+      noopSwitch,
     ];
     blockSwitches["looks_nextcostume"] = [
+      noopSwitch,
       {
         opcode: "looks_nextbackdrop",
       },
@@ -136,11 +157,13 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "looks_nextcostume",
       },
+      noopSwitch,
     ];
   }
 
   if (addon.settings.get("sound")) {
     blockSwitches["sound_play"] = [
+      noopSwitch,
       {
         opcode: "sound_playuntildone",
       },
@@ -149,18 +172,22 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "sound_play",
       },
+      noopSwitch,
+    ];
+    blockSwitches["sound_seteffectto"] = [
+      noopSwitch,
+      {
+        opcode: "sound_changeeffectby",
+      },
     ];
     blockSwitches["sound_changeeffectby"] = [
       {
         opcode: "sound_seteffectto",
       },
-    ];
-    blockSwitches["sound_seteffectto"] = [
-      {
-        opcode: "sound_changeeffectby",
-      },
+      noopSwitch,
     ];
     blockSwitches["sound_setvolumeto"] = [
+      noopSwitch,
       {
         opcode: "sound_changevolumeby",
       },
@@ -169,11 +196,13 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "sound_setvolumeto",
       },
+      noopSwitch,
     ];
   }
 
   if (addon.settings.get("event")) {
     blockSwitches["event_broadcast"] = [
+      noopSwitch,
       {
         opcode: "event_broadcastandwait",
       },
@@ -182,11 +211,13 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "event_broadcast",
       },
+      noopSwitch,
     ];
   }
 
   if (addon.settings.get("control")) {
     blockSwitches["control_if"] = [
+      noopSwitch,
       {
         opcode: "control_if_else",
       },
@@ -196,8 +227,10 @@ export default async function ({ addon, global, console }) {
         opcode: "control_if",
         remap: { SUBSTACK2: "split" },
       },
+      noopSwitch,
     ];
     blockSwitches["control_repeat_until"] = [
+      noopSwitch,
       {
         opcode: "control_wait_until",
         remap: { SUBSTACK: "split" },
@@ -207,6 +240,7 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "control_repeat_until",
       },
+      noopSwitch,
     ];
   }
 
@@ -215,11 +249,13 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "operator_gt",
       },
+      noopSwitch,
       {
         opcode: "operator_lt",
       },
     ];
     blockSwitches["operator_gt"] = [
+      noopSwitch,
       {
         opcode: "operator_equals",
       },
@@ -229,13 +265,15 @@ export default async function ({ addon, global, console }) {
     ];
     blockSwitches["operator_lt"] = [
       {
-        opcode: "operator_equals",
-      },
-      {
         opcode: "operator_gt",
       },
+      {
+        opcode: "operator_equals",
+      },
+      noopSwitch,
     ];
     blockSwitches["operator_add"] = [
+      noopSwitch,
       {
         opcode: "operator_subtract",
       },
@@ -253,6 +291,7 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "operator_add",
       },
+      noopSwitch,
       {
         opcode: "operator_multiply",
       },
@@ -270,6 +309,7 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "operator_subtract",
       },
+      noopSwitch,
       {
         opcode: "operator_divide",
       },
@@ -287,6 +327,7 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "operator_multiply",
       },
+      noopSwitch,
       {
         opcode: "operator_mod",
       },
@@ -304,8 +345,10 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "operator_divide",
       },
+      noopSwitch,
     ];
     blockSwitches["operator_and"] = [
+      noopSwitch,
       {
         opcode: "operator_or",
       },
@@ -314,11 +357,13 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "operator_and",
       },
+      noopSwitch,
     ];
   }
 
   if (addon.settings.get("sensing")) {
     blockSwitches["sensing_mousex"] = [
+      noopSwitch,
       {
         opcode: "sensing_mousey",
       },
@@ -327,21 +372,25 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "sensing_mousex",
       },
+      noopSwitch,
     ];
   }
 
   if (addon.settings.get("data")) {
-    blockSwitches["data_changevariableby"] = [
-      {
-        opcode: "data_setvariableto",
-      },
-    ];
     blockSwitches["data_setvariableto"] = [
+      noopSwitch,
       {
         opcode: "data_changevariableby",
       },
     ];
+    blockSwitches["data_changevariableby"] = [
+      {
+        opcode: "data_setvariableto",
+      },
+      noopSwitch,
+    ];
     blockSwitches["data_showvariable"] = [
+      noopSwitch,
       {
         opcode: "data_hidevariable",
       },
@@ -350,11 +399,37 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "data_showvariable",
       },
+      noopSwitch,
+    ];
+    blockSwitches["data_showlist"] = [
+      noopSwitch,
+      {
+        opcode: "data_hidelist",
+      },
+    ];
+    blockSwitches["data_hidelist"] = [
+      {
+        opcode: "data_showlist",
+      },
+      noopSwitch,
+    ];
+    blockSwitches["data_replaceitemoflist"] = [
+      noopSwitch,
+      {
+        opcode: "data_insertatlist",
+      },
+    ];
+    blockSwitches["data_insertatlist"] = [
+      {
+        opcode: "data_replaceitemoflist",
+      },
+      noopSwitch,
     ];
   }
 
   if (addon.settings.get("extension")) {
     blockSwitches["pen_penDown"] = [
+      noopSwitch,
       {
         opcode: "pen_penUp",
       },
@@ -363,8 +438,10 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "pen_penDown",
       },
+      noopSwitch,
     ];
     blockSwitches["pen_setPenColorParamTo"] = [
+      noopSwitch,
       {
         opcode: "pen_changePenColorParamBy",
       },
@@ -373,36 +450,43 @@ export default async function ({ addon, global, console }) {
       {
         opcode: "pen_setPenColorParamTo",
       },
+      noopSwitch,
+    ];
+    blockSwitches["pen_setPenHueToNumber"] = [
+      noopSwitch,
+      {
+        opcode: "pen_changePenHueBy",
+      },
     ];
     blockSwitches["pen_changePenHueBy"] = [
       {
         opcode: "pen_setPenHueToNumber",
       },
+      noopSwitch,
     ];
-    blockSwitches["pen_setPenHueToNumber"] = [
+    blockSwitches["pen_setPenShadeToNumber"] = [
+      noopSwitch,
       {
-        opcode: "pen_changePenHueBy",
+        opcode: "pen_changePenShadeBy",
       },
     ];
     blockSwitches["pen_changePenShadeBy"] = [
       {
         opcode: "pen_setPenShadeToNumber",
       },
+      noopSwitch,
     ];
-    blockSwitches["pen_setPenShadeToNumber"] = [
+    blockSwitches["pen_setPenSizeTo"] = [
+      noopSwitch,
       {
-        opcode: "pen_changePenShadeBy",
+        opcode: "pen_changePenSizeBy",
       },
     ];
     blockSwitches["pen_changePenSizeBy"] = [
       {
         opcode: "pen_setPenSizeTo",
       },
-    ];
-    blockSwitches["pen_setPenSizeTo"] = [
-      {
-        opcode: "pen_changePenSizeBy",
-      },
+      noopSwitch,
     ];
   }
 
@@ -418,6 +502,10 @@ export default async function ({ addon, global, console }) {
     data_setvariableto: "set variable",
     data_showvariable: "show variable",
     data_hidevariable: "hide variable",
+    data_showlist: "show list",
+    data_hidelist: "hide list",
+    data_replaceitemoflist: "replace item",
+    data_insertatlist: "insert item",
     looks_changeeffectby: "change effect",
     looks_seteffectto: "set effect",
     looks_changesizeby: "change size",
@@ -469,6 +557,10 @@ export default async function ({ addon, global, console }) {
   let addBorderToContextMenuItem = -1;
 
   const menuCallbackFactory = (block, opcodeData) => () => {
+    if (opcodeData.opcode === "noop") {
+      return;
+    }
+
     const workspace = block.workspace;
 
     // Make a copy of the block with the proper type set.
@@ -558,8 +650,13 @@ export default async function ({ addon, global, console }) {
     addBorderToContextMenuItem = options.length;
     const switches = blockSwitches[this.type];
     for (const opcodeData of switches) {
+      const isNoop = opcodeData.opcode === "noop";
+      if (isNoop && !addon.settings.get("noop")) {
+        continue;
+      }
+      const translationOpcode = isNoop ? this.type : opcodeData.opcode;
       // TODO: use l10n api when its merged
-      const translation = messages[opcodeData.opcode] || opcodeData.opcode;
+      const translation = messages[translationOpcode] || translationOpcode;
       options.push({
         enabled: true,
         text: translation,
