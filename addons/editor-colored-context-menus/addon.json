@@ -20,5 +20,6 @@
     }
   ],
   "tags": ["editor", "theme"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }
