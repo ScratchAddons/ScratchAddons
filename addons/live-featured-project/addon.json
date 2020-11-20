@@ -31,7 +31,7 @@
     },
     {
       "id": "autoPlay",
-      "name": "Auto-play projects",
+      "name": "Auto-play projects (for alternative players)",
       "type": "boolean",
       "default": false
     },
@@ -45,10 +45,24 @@
       "id": "alternativePlayer",
       "name": "Alternative player",
       "type": "select",
-      "default": "None",
-      "potentialValues": ["None", "TurboWarp", "forkphorus"]
+      "default": "none",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "turbowarp",
+          "name": "TurboWarp"
+        },
+        {
+          "id": "forkphorus",
+          "name": "forkphorus"
+        }
+      ]
     }
   ],
   "tags": ["community"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }

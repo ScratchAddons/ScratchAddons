@@ -17,6 +17,7 @@
       "url": "userscript.js"
     }
   ],
-  "tags": ["editor", "community", "recommended"],
-  "enabledByDefault": true
+  "tags": ["editor", "recommended"],
+  "enabledByDefault": true,
+  "l10n": true
 }

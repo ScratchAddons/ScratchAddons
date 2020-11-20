@@ -14,7 +14,11 @@ const vue = new Vue({
   data: {
     libraries: [],
   },
-  methods: {},
+  methods: {
+    msg(message, ...param) {
+      return chrome.i18n.getMessage(message, ...param);
+    },
+  },
 });
 
 chrome.runtime.sendMessage("getLibraryInfo", (libraryLicenses) => {
@@ -49,3 +53,5 @@ chrome.runtime.sendMessage("getLibraryInfo", (libraryLicenses) => {
     });
   }
 });
+
+document.title = chrome.i18n.getMessage("licensesTitle");

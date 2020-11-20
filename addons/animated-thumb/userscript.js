@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
       markAsSeen: true,
@@ -6,7 +6,7 @@ export default async function ({ addon, global, console }) {
     if (!document.querySelectorAll("[class^='author-info_username-line']").length > 0) {
       let setthumb = document.createElement("div");
       setthumb.classList.add("menu-bar_menu-bar-item_oLDa-");
-      setthumb.title = "Button added by Scratch Addons browser extension";
+      setthumb.title = msg("added-by");
       let thumbinner = document.createElement("span");
       thumbinner.style.borderWidth = "1px";
       thumbinner.style.borderStyle = "solid";
@@ -21,7 +21,7 @@ export default async function ({ addon, global, console }) {
       setthumb.classList.add("button_content_3jdgj");
       thumbinner.append(thumbcontent);
       let thumbspan = document.createElement("span");
-      thumbspan.innerText = "Set Thumbnail";
+      thumbspan.innerText = msg("set-thumbnail");
       thumbcontent.append(thumbspan);
       nav.append(setthumb);
       setthumb.addEventListener("click", function (e) {

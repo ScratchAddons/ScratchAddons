@@ -21,3 +21,8 @@
   color: #5cb1d6;
   white-space: nowrap;
 }
+
+/* Use pseudo elements to avoid firing mutation observers by just moving the cursor */
+.pos-container > span::after {
+  content: attr(data-content);
+}
