@@ -537,7 +537,8 @@ input[type="color"]::-webkit-color-swatch {
   display: flex;
   align-items: center;
 }
-.addon-notice img, .addon-warn img{
+.addon-notice img,
+.addon-warn img {
   height: 40px;
   margin-right: 10px;
 }
