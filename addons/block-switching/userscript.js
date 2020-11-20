@@ -456,7 +456,7 @@ export default async function ({ addon, global, console }) {
     let parentConnection;
     let blockConnectionType;
     if (parent) {
-      // If the block has a parent, find out which connection we will have to reattach later.
+      // If the block has a parent, find the parent -> child connection that will be reattached later.
       const parentConnections = parent.getConnections_();
       parentConnection = parentConnections.find((c) => c.targetConnection && c.targetConnection.sourceBlock_ === block);
       // There's two types of connections from child -> parent. We need to figure out which one is used.
@@ -518,14 +518,14 @@ export default async function ({ addon, global, console }) {
       newBlockConnection.connect(parentConnection);
     }
 
-    // TODO: figure out why undoStack_ takes a bit to update and see if this workaround is good enough
+    // Events are delayed with a setTimeout(f, 0):
+    // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
     setTimeout(() => {
-      // Give all of our undo events the same group so that they get undone/redone at the same time.
       const group = Symbol();
-      for (var i = undoStack.length - 1; i >= 0 && !undoStack[i]._blockswitchingLastUndo; i--) {
+      for (let i = undoStack.length - 1; i >= 0 && !undoStack[i]._blockswitchingLastUndo; i--) {
         undoStack[i].group = group;
       }
-    });
+    }, 0);
   };
 
   const customContextMenuHandler = function (options) {
