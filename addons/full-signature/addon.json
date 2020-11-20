@@ -52,5 +52,6 @@
     }
   ],
   "tags": ["community", "forums", "recommended"],
-  "enabledByDefault": true
+  "enabledByDefault": true,
+  "l10n": true
 }

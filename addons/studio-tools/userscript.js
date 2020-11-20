@@ -1,7 +1,7 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   const backbone = new Scratch.Gallery.CuratorList({ gallery_id: Scratch.INIT_DATA.GALLERY.model.id });
   if (document.getElementById("curator-action-bar")) {
-    document.querySelector("#show-add-curator > span").textContent = "Invite/promote/remove curators";
+    document.querySelector("#show-add-curator > span").textContent = msg("ipr");
     document.getElementById("show-add-curator").style.borderColor = "#ff7b26";
 
     const promoteButton = document.createElement("div");
@@ -9,7 +9,7 @@ export default async function ({ addon, global, console }) {
     promoteButton.style.marginLeft = "1px";
     promoteButton.style.borderColor = "#ff7b26";
     const promoteSpan = document.createElement("span");
-    promoteSpan.textContent = "Promote curator";
+    promoteSpan.textContent = msg("promote");
     promoteButton.appendChild(promoteSpan);
     promoteButton.addEventListener("click", () => {
       const value = document.getElementById("curator_ids").value.trim();
@@ -31,7 +31,7 @@ export default async function ({ addon, global, console }) {
     removeButton.style.marginLeft = "2px";
     removeButton.style.borderColor = "#ff7b26";
     const removeSpan = document.createElement("span");
-    removeSpan.textContent = "Remove curator";
+    removeSpan.textContent = msg("remove");
     removeButton.appendChild(removeSpan);
     removeButton.addEventListener("click", () => {
       const value = document.getElementById("curator_ids").value.trim();
@@ -53,13 +53,13 @@ export default async function ({ addon, global, console }) {
     leaveButton.style.marginLeft = "4px";
     leaveButton.style.borderColor = "#ff7b26";
     const leaveSpan = document.createElement("span");
-    leaveSpan.textContent = "Leave studio";
+    leaveSpan.textContent = msg("leave");
     leaveButton.appendChild(leaveSpan);
     leaveButton.addEventListener("click", () => {
       if (Scratch.INIT_DATA.GALLERY.model.is_owner) {
-        alert("The owner of a studio can't leave.");
+        alert(msg("owner-error"));
       } else {
-        const confirmation = confirm("Are you sure you want to leave this studio?");
+        const confirmation = confirm(msg("leave-confirm"));
         if (confirmation) {
           const fakeDiv = document.createElement("div");
           fakeDiv.setAttribute("data-id", Scratch.INIT_DATA.LOGGED_IN_USER.model.username);
@@ -84,10 +84,10 @@ export default async function ({ addon, global, console }) {
     leaveButton.style.marginLeft = "4px";
     leaveButton.style.borderColor = "#ff7b26";
     const leaveSpan = document.createElement("span");
-    leaveSpan.textContent = "Leave studio";
+    leaveSpan.textContent = msg("leave");
     leaveButton.appendChild(leaveSpan);
     leaveButton.addEventListener("click", () => {
-      const confirmation = confirm("Are you sure you want to leave this studio?");
+      const confirmation = confirm(msg("leave-confirm"));
       if (confirmation) {
         const fakeDiv = document.createElement("div");
         fakeDiv.setAttribute("data-id", Scratch.INIT_DATA.LOGGED_IN_USER.model.username);

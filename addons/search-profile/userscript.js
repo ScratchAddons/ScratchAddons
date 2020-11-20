@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   const nav = await addon.tab.waitForElement(".sub-nav.tabs");
 
   //Select where the new tab will be appended, and create a new tab
@@ -15,5 +15,5 @@ export default async function ({ addon, global, console }) {
   img.className = "tab-icon";
 
   //Add the text below the image
-  span.innerText = "Profile";
+  span.innerText = msg("profile");
 }

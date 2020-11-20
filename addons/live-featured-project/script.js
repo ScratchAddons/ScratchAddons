@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, msg }) {
   const showMenu = addon.settings.get("showMenu");
   const forceAlternative = addon.settings.get("forceAlternative");
   const alternativePlayer = addon.settings.get("alternativePlayer");
@@ -21,7 +21,7 @@ export default async function ({ addon }) {
 
   const changeFeaturedElement = document.createElement("div");
   changeFeaturedElement.id = "lfp-change-featured";
-  changeFeaturedElement.textContent = "Change featured project";
+  changeFeaturedElement.textContent = msg("change-featured");
   changeFeaturedElement.addEventListener("click", () => {
     document.querySelector('#profile-box .player [data-control="edit"]').click();
   });
@@ -80,14 +80,14 @@ export default async function ({ addon }) {
 
   // Start loading the players
 
-  if (forceAlternative && alternativePlayer !== "None") {
-    if (alternativePlayer === "TurboWarp") loadTurboWarp();
+  if (forceAlternative && alternativePlayer !== "none") {
+    if (alternativePlayer === "turbowarp") loadTurboWarp();
     else if (alternativePlayer === "forkphorus") loadForkphorus();
   } else {
     loadScratch();
     iframeElement.addEventListener("load", () => {
       if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
-        if (alternativePlayer === "TurboWarp") loadTurboWarp();
+        if (alternativePlayer === "turbowarp") loadTurboWarp();
         else if (alternativePlayer === "forkphorus") loadForkphorus();
         else stageElement.removeChild(wrapperElement);
       }
