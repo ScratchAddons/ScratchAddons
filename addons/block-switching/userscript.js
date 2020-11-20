@@ -235,6 +235,17 @@ export default async function ({ addon, global, console, msg }) {
         opcode: "control_wait_until",
         remap: { SUBSTACK: "split" },
       },
+      {
+        opcode: "control_forever",
+        remap: { CONDITION: "split" },
+      },
+    ];
+    blockSwitches["control_forever"] = [
+      {
+        opcode: "control_repeat_until",
+        remap: { SUBSTACK: "split" },
+      },
+      noopSwitch,
     ];
     blockSwitches["control_wait_until"] = [
       {

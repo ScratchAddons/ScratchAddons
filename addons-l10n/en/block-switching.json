@@ -4,6 +4,7 @@
   "block-switching/control_if": "if",
   "block-switching/control_if_else": "if... else",
   "block-switching/control_repeat_until": "repeat until",
+  "block-switching/control_forever": "forever",
   "block-switching/control_wait_until": "wait until",
   "block-switching/data_changevariableby": "change variable",
   "block-switching/data_setvariableto": "set variable",
