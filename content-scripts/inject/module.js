@@ -1,4 +1,5 @@
 import runAddonUserscripts from "./run-userscript.js";
+import Localization from "./l10n.js";
 
 const template = document.getElementById("scratch-addons");
 const getGlobalState = () => {
@@ -7,8 +8,17 @@ const getGlobalState = () => {
   return returnValue;
 };
 
+const getL10NURLs = () => {
+  const returnValue = JSON.parse(template.getAttribute("data-l10njson"));
+  template.removeAttribute("data-l10njson");
+  return returnValue;
+};
+
+const addons = JSON.parse(template.getAttribute("data-userscripts"));
+
 window.scratchAddons = {};
 scratchAddons.globalState = getGlobalState();
+scratchAddons.l10n = new Localization(getL10NURLs());
 scratchAddons.eventTargets = {
   auth: [],
   settings: [],
@@ -72,6 +82,6 @@ const observer = new MutationObserver((mutationsList) => {
 });
 observer.observe(template, { attributes: true });
 
-for (const addon of JSON.parse(template.getAttribute("data-userscripts"))) {
+for (const addon of addons) {
   if (addon.scripts.length) runAddonUserscripts(addon);
 }

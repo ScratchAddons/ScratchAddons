@@ -59,7 +59,7 @@ export default class Tab extends EventTarget {
           break;
         }
       }).observe(document.documentElement, {
-        attributes: true,
+        attributes: false,
         childList: true,
         subtree: true,
       })

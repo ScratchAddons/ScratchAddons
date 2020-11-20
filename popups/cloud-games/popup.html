@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Scratch Addons - Cloud games</title>
+    <title></title>
     <link rel="stylesheet" href="popup.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
-    <script src="./popup.js" defer></script>
+    <script src="./popup.js" type="module"></script>
   </head>
 
   <body style="display: none" v-show="loaded">
@@ -21,7 +21,7 @@
         <div class="username-list">
           <a v-for="user of project.users">{{ user }}</a>
         </div>
-        <div class="username-list" v-show="project.amt === 0">No users currently playing</div>
+        <div class="username-list" v-show="project.amt === 0">{{ messages.noUsersMsg }}</div>
       </div>
     </div>
   </body>
