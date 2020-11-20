@@ -19,5 +19,6 @@
     }
   ],
   "tags": ["editor", "beta"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }

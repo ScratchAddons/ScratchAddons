@@ -2,6 +2,18 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
   const func = () => {
     let madeAnyChanges = false;
 
+    // Used to map old name to new ID
+    const oldToNewMap = {
+      "3.Dark": "3-dark",
+      "3.Darker": "3-darker",
+      "Dark Editor": "dark-editor",
+      "Dark WWW": "dark-www",
+      TurboWarp: "turbowarp",
+      Silent: "silent",
+      "System default": "system-default",
+      "Scratch Addons ping": "addons-ping",
+    };
+
     // TODO: remove on v1.4.0
     // Turns on some old addons for existing users, after the removal of the prototype
     // handler. To detect if this is the first run on v1.3.0 update, we check if a
@@ -23,6 +35,11 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             madeChangesToAddon = true;
             madeAnyChanges = true;
             settings[option.id] = option.default;
+          }
+          // TODO: remove in v1.5.0
+          if (option.type === "select" && oldToNewMap.hasOwnProperty(settings[option.id])) {
+            settings[option.id] = oldToNewMap[settings[option.id]];
+            madeChangesToAddon = madeAnyChanges = true;
           }
         }
       }

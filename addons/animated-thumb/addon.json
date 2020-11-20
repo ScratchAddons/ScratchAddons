@@ -18,5 +18,6 @@
     }
   ],
   "tags": ["editor", "community", "recommended"],
-  "enabledByDefault": true
+  "enabledByDefault": true,
+  "l10n": true
 }

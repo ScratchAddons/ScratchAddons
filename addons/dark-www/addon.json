@@ -18,7 +18,7 @@
       "matches": ["https://scratch.mit.edu/*"],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Dark WWW"
+        "value": "dark-www"
       }
     },
     {
@@ -48,7 +48,7 @@
       ],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Experimental Dark"
+        "value": "experimental-dark"
       }
     },
     {
@@ -73,7 +73,7 @@
       ],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Experimental Dark"
+        "value": "experimental-dark"
       }
     },
     {
@@ -81,7 +81,7 @@
       "matches": ["https://scratch.mit.edu/discuss/*"],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Experimental Dark"
+        "value": "experimental-dark"
       }
     },
     {
@@ -89,7 +89,7 @@
       "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/classes/*"],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Experimental Dark"
+        "value": "experimental-dark"
       }
     },
     {
@@ -97,7 +97,7 @@
       "matches": ["https://scratch.mit.edu/studios/*"],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Experimental Dark"
+        "value": "experimental-dark"
       }
     },
     {
@@ -105,7 +105,7 @@
       "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Experimental Dark"
+        "value": "experimental-dark"
       }
     },
     {
@@ -113,7 +113,7 @@
       "matches": ["https://scratch.mit.edu/mystuff/"],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Experimental Dark"
+        "value": "experimental-dark"
       }
     },
     {
@@ -125,7 +125,7 @@
       ],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Experimental Dark"
+        "value": "experimental-dark"
       }
     },
     {
@@ -133,7 +133,7 @@
       "matches": ["https://scratch.mit.edu/statistics/"],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Experimental Dark"
+        "value": "experimental-dark"
       }
     },
     {
@@ -141,7 +141,7 @@
       "matches": ["https://scratch.mit.edu/info/quotes/"],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Experimental Dark"
+        "value": "experimental-dark"
       }
     },
     {
@@ -149,7 +149,7 @@
       "matches": ["https://scratch.mit.edu/contact-us/"],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Experimental Dark"
+        "value": "experimental-dark"
       }
     }
   ],
@@ -158,8 +158,18 @@
       "name": "Dark mode version",
       "id": "selectedMode",
       "type": "select",
-      "potentialValues": ["Experimental Dark", "Dark WWW"],
-      "default": "Experimental Dark"
+      "potentialValues": [
+        {
+          "id": "dark-www",
+          "name": "Dark WWW"
+        },
+        {
+          "id": "experimental-dark",
+          "name": "Experimental Dark"
+        }
+      ],
+      "default": "experimental-dark"
     }
-  ]
+  ],
+  "l10n": true
 }

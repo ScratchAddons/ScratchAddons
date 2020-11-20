@@ -1,10 +1,10 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   let activityStream = document.querySelectorAll(".activity-stream li");
   let container = document.querySelector(".activity-stream").appendChild(document.createElement("div"));
   container.classList.add("load-more-wibd-container");
   let loadMore = container.appendChild(document.createElement("button"));
   loadMore.classList.add("load-more-wibd");
-  loadMore.innerText = "Load more";
+  loadMore.innerText = msg("load-more");
   let dataLoaded = 6;
   loadMore.addEventListener(
     "click",
