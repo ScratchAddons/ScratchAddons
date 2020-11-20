@@ -13,5 +13,61 @@
     }
   ],
   "tags": ["editor"],
+  "settings": [
+    {
+      "name": "Motion blocks",
+      "id": "motion",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Looks blocks",
+      "id": "looks",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Sound blocks",
+      "id": "sound",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Event blocks",
+      "id": "event",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Control blocks",
+      "id": "control",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Operator blocks",
+      "id": "operator",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Sensing blocks",
+      "id": "sensing",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Data blocks",
+      "id": "data",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Extension blocks",
+      "id": "extension",
+      "type": "boolean",
+      "default": true
+    }
+  ],
   "enabledByDefault": false
 }

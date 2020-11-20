@@ -1,124 +1,20 @@
 import blockToDom from "./blockToDom.js";
 
 export default async function ({ addon, global, console }) {
-  const blockSwitches = {
-    event_broadcast: [
-      {
-        opcode: "event_broadcastandwait",
-      },
-    ],
-    event_broadcastandwait: [
-      {
-        opcode: "event_broadcast",
-      },
-    ],
-    control_if: [
-      {
-        opcode: "control_if_else",
-      },
-    ],
-    control_if_else: [
-      {
-        opcode: "control_if",
-        remap: { SUBSTACK2: "split" },
-      },
-    ],
-    control_repeat_until: [
-      {
-        opcode: "control_wait_until",
-        remap: { SUBSTACK: "split" },
-      },
-    ],
-    control_wait_until: [
-      {
-        opcode: "control_repeat_until",
-      },
-    ],
-    data_changevariableby: [
-      {
-        opcode: "data_setvariableto",
-      },
-    ],
-    data_setvariableto: [
-      {
-        opcode: "data_changevariableby",
-      },
-    ],
-    data_showvariable: [
-      {
-        opcode: "data_hidevariable",
-      },
-    ],
-    data_hidevariable: [
-      {
-        opcode: "data_showvariable",
-      },
-    ],
-    looks_changeeffectby: [
-      {
-        opcode: "looks_seteffectto",
-        remap: { CHANGE: "VALUE" },
-      },
-    ],
-    looks_seteffectto: [
-      {
-        opcode: "looks_changeeffectby",
-        remap: { VALUE: "CHANGE" },
-      },
-    ],
-    looks_changesizeby: [
-      {
-        opcode: "looks_setsizeto",
-        remap: { CHANGE: "SIZE" },
-      },
-    ],
-    looks_setsizeto: [
-      {
-        opcode: "looks_changesizeby",
-        remap: { SIZE: "CHANGE" },
-      },
-    ],
-    looks_costumenumbername: [
-      {
-        opcode: "looks_backdropnumbername",
-      },
-    ],
-    looks_backdropnumbername: [
-      {
-        opcode: "looks_costumenumbername",
-      },
-    ],
-    looks_show: [
-      {
-        opcode: "looks_hide",
-      },
-    ],
-    looks_hide: [
-      {
-        opcode: "looks_show",
-      },
-    ],
-    looks_nextcostume: [
-      {
-        opcode: "looks_nextbackdrop",
-      },
-    ],
-    looks_nextbackdrop: [
-      {
-        opcode: "looks_nextcostume",
-      },
-    ],
-    motion_turnright: [
+  const blockSwitches = {};
+
+  if (addon.settings.get("motion")) {
+    blockSwitches["motion_turnright"] = [
       {
         opcode: "motion_turnleft",
       },
-    ],
-    motion_turnleft: [
+    ];
+    blockSwitches["motion_turnleft"] = [
       {
         opcode: "motion_turnright",
       },
-    ],
-    motion_setx: [
+    ];
+    blockSwitches["motion_setx"] = [
       {
         opcode: "motion_changexby",
         remap: { X: "DX" },
@@ -131,8 +27,8 @@ export default async function ({ addon, global, console }) {
         opcode: "motion_changeyby",
         remap: { X: "DY" },
       },
-    ],
-    motion_changexby: [
+    ];
+    blockSwitches["motion_changexby"] = [
       {
         opcode: "motion_setx",
         remap: { DX: "X" },
@@ -145,8 +41,8 @@ export default async function ({ addon, global, console }) {
         opcode: "motion_changeyby",
         remap: { DX: "DY" },
       },
-    ],
-    motion_sety: [
+    ];
+    blockSwitches["motion_sety"] = [
       {
         opcode: "motion_setx",
         remap: { Y: "X" },
@@ -159,8 +55,8 @@ export default async function ({ addon, global, console }) {
         opcode: "motion_changeyby",
         remap: { Y: "DY" },
       },
-    ],
-    motion_changeyby: [
+    ];
+    blockSwitches["motion_changeyby"] = [
       {
         opcode: "motion_setx",
         remap: { DY: "X" },
@@ -173,212 +69,342 @@ export default async function ({ addon, global, console }) {
         opcode: "motion_sety",
         remap: { DY: "Y" },
       },
-    ],
-    motion_xposition: [
+    ];
+    blockSwitches["motion_xposition"] = [
       {
         opcode: "motion_yposition",
       },
-    ],
-    motion_yposition: [
+    ];
+    blockSwitches["motion_yposition"] = [
       {
         opcode: "motion_xposition",
       },
-    ],
-    operator_equals: [
+    ];
+  }
+
+  if (addon.settings.get("looks")) {
+    blockSwitches["looks_changeeffectby"] = [
       {
-        opcode: "operator_gt",
+        opcode: "looks_seteffectto",
+        remap: { CHANGE: "VALUE" },
       },
+    ];
+    blockSwitches["looks_seteffectto"] = [
       {
-        opcode: "operator_lt",
+        opcode: "looks_changeeffectby",
+        remap: { VALUE: "CHANGE" },
       },
-    ],
-    operator_gt: [
+    ];
+    blockSwitches["looks_changesizeby"] = [
       {
-        opcode: "operator_equals",
+        opcode: "looks_setsizeto",
+        remap: { CHANGE: "SIZE" },
       },
+    ];
+    blockSwitches["looks_setsizeto"] = [
       {
-        opcode: "operator_lt",
+        opcode: "looks_changesizeby",
+        remap: { SIZE: "CHANGE" },
       },
-    ],
-    operator_lt: [
+    ];
+    blockSwitches["looks_costumenumbername"] = [
       {
-        opcode: "operator_equals",
+        opcode: "looks_backdropnumbername",
       },
+    ];
+    blockSwitches["looks_backdropnumbername"] = [
       {
-        opcode: "operator_gt",
+        opcode: "looks_costumenumbername",
       },
-    ],
-    operator_add: [
+    ];
+    blockSwitches["looks_show"] = [
       {
-        opcode: "operator_subtract",
+        opcode: "looks_hide",
       },
+    ];
+    blockSwitches["looks_hide"] = [
       {
-        opcode: "operator_multiply",
+        opcode: "looks_show",
       },
+    ];
+    blockSwitches["looks_nextcostume"] = [
       {
-        opcode: "operator_divide",
+        opcode: "looks_nextbackdrop",
       },
+    ];
+    blockSwitches["looks_nextbackdrop"] = [
       {
-        opcode: "operator_mod",
+        opcode: "looks_nextcostume",
       },
-    ],
-    operator_subtract: [
-      {
-        opcode: "operator_add",
-      },
-      {
-        opcode: "operator_multiply",
-      },
-      {
-        opcode: "operator_divide",
-      },
-      {
-        opcode: "operator_mod",
-      },
-    ],
-    operator_multiply: [
-      {
-        opcode: "operator_add",
-      },
-      {
-        opcode: "operator_subtract",
-      },
-      {
-        opcode: "operator_divide",
-      },
-      {
-        opcode: "operator_mod",
-      },
-    ],
-    operator_divide: [
-      {
-        opcode: "operator_add",
-      },
-      {
-        opcode: "operator_subtract",
-      },
-      {
-        opcode: "operator_multiply",
-      },
-      {
-        opcode: "operator_mod",
-      },
-    ],
-    operator_mod: [
-      {
-        opcode: "operator_add",
-      },
-      {
-        opcode: "operator_subtract",
-      },
-      {
-        opcode: "operator_multiply",
-      },
-      {
-        opcode: "operator_divide",
-      },
-    ],
-    operator_and: [
-      {
-        opcode: "operator_or",
-      },
-    ],
-    operator_or: [
-      {
-        opcode: "operator_and",
-      },
-    ],
-    pen_penDown: [
-      {
-        opcode: "pen_penUp",
-      },
-    ],
-    pen_penUp: [
-      {
-        opcode: "pen_penDown",
-      },
-    ],
-    pen_setPenColorParamTo: [
-      {
-        opcode: "pen_changePenColorParamBy",
-      },
-    ],
-    pen_changePenColorParamBy: [
-      {
-        opcode: "pen_setPenColorParamTo",
-      },
-    ],
-    pen_changePenHueBy: [
-      {
-        opcode: "pen_setPenHueToNumber",
-      },
-    ],
-    pen_setPenHueToNumber: [
-      {
-        opcode: "pen_changePenHueBy",
-      },
-    ],
-    pen_changePenShadeBy: [
-      {
-        opcode: "pen_setPenShadeToNumber",
-      },
-    ],
-    pen_setPenShadeToNumber: [
-      {
-        opcode: "pen_changePenShadeBy",
-      },
-    ],
-    pen_changePenSizeBy: [
-      {
-        opcode: "pen_setPenSizeTo",
-      },
-    ],
-    pen_setPenSizeTo: [
-      {
-        opcode: "pen_changePenSizeBy",
-      },
-    ],
-    sensing_mousex: [
-      {
-        opcode: "sensing_mousey",
-      },
-    ],
-    sensing_mousey: [
-      {
-        opcode: "sensing_mousex",
-      },
-    ],
-    sound_play: [
+    ];
+  }
+
+  if (addon.settings.get("sound")) {
+    blockSwitches["sound_play"] = [
       {
         opcode: "sound_playuntildone",
       },
-    ],
-    sound_playuntildone: [
+    ];
+    blockSwitches["sound_playuntildone"] = [
       {
         opcode: "sound_play",
       },
-    ],
-    sound_changeeffectby: [
+    ];
+    blockSwitches["sound_changeeffectby"] = [
       {
         opcode: "sound_seteffectto",
       },
-    ],
-    sound_seteffectto: [
+    ];
+    blockSwitches["sound_seteffectto"] = [
       {
         opcode: "sound_changeeffectby",
       },
-    ],
-    sound_setvolumeto: [
+    ];
+    blockSwitches["sound_setvolumeto"] = [
       {
         opcode: "sound_changevolumeby",
       },
-    ],
-    sound_changevolumeby: [
+    ];
+    blockSwitches["sound_changevolumeby"] = [
       {
         opcode: "sound_setvolumeto",
       },
-    ],
-  };
+    ];
+  }
+
+  if (addon.settings.get("event")) {
+    blockSwitches["event_broadcast"] = [
+      {
+        opcode: "event_broadcastandwait",
+      },
+    ];
+    blockSwitches["event_broadcastandwait"] = [
+      {
+        opcode: "event_broadcast",
+      },
+    ];
+  }
+
+  if (addon.settings.get("control")) {
+    blockSwitches["control_if"] = [
+      {
+        opcode: "control_if_else",
+      },
+    ];
+    blockSwitches["control_if_else"] = [
+      {
+        opcode: "control_if",
+        remap: { SUBSTACK2: "split" },
+      },
+    ];
+    blockSwitches["control_repeat_until"] = [
+      {
+        opcode: "control_wait_until",
+        remap: { SUBSTACK: "split" },
+      },
+    ];
+    blockSwitches["control_wait_until"] = [
+      {
+        opcode: "control_repeat_until",
+      },
+    ];
+  }
+
+  if (addon.settings.get("operator")) {
+    blockSwitches["operator_equals"] = [
+      {
+        opcode: "operator_gt",
+      },
+      {
+        opcode: "operator_lt",
+      },
+    ];
+    blockSwitches["operator_gt"] = [
+      {
+        opcode: "operator_equals",
+      },
+      {
+        opcode: "operator_lt",
+      },
+    ];
+    blockSwitches["operator_lt"] = [
+      {
+        opcode: "operator_equals",
+      },
+      {
+        opcode: "operator_gt",
+      },
+    ];
+    blockSwitches["operator_add"] = [
+      {
+        opcode: "operator_subtract",
+      },
+      {
+        opcode: "operator_multiply",
+      },
+      {
+        opcode: "operator_divide",
+      },
+      {
+        opcode: "operator_mod",
+      },
+    ];
+    blockSwitches["operator_subtract"] = [
+      {
+        opcode: "operator_add",
+      },
+      {
+        opcode: "operator_multiply",
+      },
+      {
+        opcode: "operator_divide",
+      },
+      {
+        opcode: "operator_mod",
+      },
+    ];
+    blockSwitches["operator_multiply"] = [
+      {
+        opcode: "operator_add",
+      },
+      {
+        opcode: "operator_subtract",
+      },
+      {
+        opcode: "operator_divide",
+      },
+      {
+        opcode: "operator_mod",
+      },
+    ];
+    blockSwitches["operator_divide"] = [
+      {
+        opcode: "operator_add",
+      },
+      {
+        opcode: "operator_subtract",
+      },
+      {
+        opcode: "operator_multiply",
+      },
+      {
+        opcode: "operator_mod",
+      },
+    ];
+    blockSwitches["operator_mod"] = [
+      {
+        opcode: "operator_add",
+      },
+      {
+        opcode: "operator_subtract",
+      },
+      {
+        opcode: "operator_multiply",
+      },
+      {
+        opcode: "operator_divide",
+      },
+    ];
+    blockSwitches["operator_and"] = [
+      {
+        opcode: "operator_or",
+      },
+    ];
+    blockSwitches["operator_or"] = [
+      {
+        opcode: "operator_and",
+      },
+    ];
+  }
+
+  if (addon.settings.get("sensing")) {
+    blockSwitches["sensing_mousex"] = [
+      {
+        opcode: "sensing_mousey",
+      },
+    ];
+    blockSwitches["sensing_mousey"] = [
+      {
+        opcode: "sensing_mousex",
+      },
+    ];
+  }
+
+  if (addon.settings.get("data")) {
+    blockSwitches["data_changevariableby"] = [
+      {
+        opcode: "data_setvariableto",
+      },
+    ];
+    blockSwitches["data_setvariableto"] = [
+      {
+        opcode: "data_changevariableby",
+      },
+    ];
+    blockSwitches["data_showvariable"] = [
+      {
+        opcode: "data_hidevariable",
+      },
+    ];
+    blockSwitches["data_hidevariable"] = [
+      {
+        opcode: "data_showvariable",
+      },
+    ];
+  }
+
+  if (addon.settings.get("extension")) {
+    blockSwitches["pen_penDown"] = [
+      {
+        opcode: "pen_penUp",
+      },
+    ];
+    blockSwitches["pen_penUp"] = [
+      {
+        opcode: "pen_penDown",
+      },
+    ];
+    blockSwitches["pen_setPenColorParamTo"] = [
+      {
+        opcode: "pen_changePenColorParamBy",
+      },
+    ];
+    blockSwitches["pen_changePenColorParamBy"] = [
+      {
+        opcode: "pen_setPenColorParamTo",
+      },
+    ];
+    blockSwitches["pen_changePenHueBy"] = [
+      {
+        opcode: "pen_setPenHueToNumber",
+      },
+    ];
+    blockSwitches["pen_setPenHueToNumber"] = [
+      {
+        opcode: "pen_changePenHueBy",
+      },
+    ];
+    blockSwitches["pen_changePenShadeBy"] = [
+      {
+        opcode: "pen_setPenShadeToNumber",
+      },
+    ];
+    blockSwitches["pen_setPenShadeToNumber"] = [
+      {
+        opcode: "pen_changePenShadeBy",
+      },
+    ];
+    blockSwitches["pen_changePenSizeBy"] = [
+      {
+        opcode: "pen_setPenSizeTo",
+      },
+    ];
+    blockSwitches["pen_setPenSizeTo"] = [
+      {
+        opcode: "pen_changePenSizeBy",
+      },
+    ];
+  }
 
   // temporary until l10n is merged
   const messages = {
