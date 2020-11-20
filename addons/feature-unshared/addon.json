@@ -1,6 +1,6 @@
 {
   "name": "Feature unshared projects",
-  "description": "When settings youe profiles featured project, also allows setting unshared projects.",
+  "description": "Allows you to choose unshared projects after clicking \"change featured project\" in your profile.",
   "credits": [
     {
       "name": "TheColaber",
