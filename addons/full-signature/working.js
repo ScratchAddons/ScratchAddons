@@ -5,7 +5,7 @@ export default async function ({ addon, global, console, msg }) {
     container.classList.add("load-more-wibd-container");
     let loadMore = container.appendChild(document.createElement("button"));
     loadMore.classList.add("load-more-wibd");
-    loadMore.innerText = msg("loadmore");
+    loadMore.innerText = msg("load-more");
     let dataLoaded = 6;
     loadMore.addEventListener(
       "click",
