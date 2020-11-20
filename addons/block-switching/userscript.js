@@ -1,6 +1,6 @@
 import blockToDom from "./blockToDom.js";
 
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   const blockSwitches = {};
 
   const noopSwitch = {
@@ -490,70 +490,6 @@ export default async function ({ addon, global, console }) {
     ];
   }
 
-  // temporary until l10n is merged
-  const messages = {
-    event_broadcast: "broadcast",
-    event_broadcastandwait: "broadcast and wait",
-    control_if: "if",
-    control_if_else: "if... else",
-    control_repeat_until: "repeat until",
-    control_wait_until: "wait until",
-    data_changevariableby: "change variable",
-    data_setvariableto: "set variable",
-    data_showvariable: "show variable",
-    data_hidevariable: "hide variable",
-    data_showlist: "show list",
-    data_hidelist: "hide list",
-    data_replaceitemoflist: "replace item",
-    data_insertatlist: "insert item",
-    looks_changeeffectby: "change effect",
-    looks_seteffectto: "set effect",
-    looks_changesizeby: "change size",
-    looks_setsizeto: "set size",
-    looks_costumenumbername: "costume number or name",
-    looks_backdropnumbername: "backdrop number or name",
-    looks_show: "show",
-    looks_hide: "hide",
-    looks_nextcostume: "next costume",
-    looks_nextbackdrop: "next backdrop",
-    motion_turnright: "turn right",
-    motion_turnleft: "turn left",
-    motion_setx: "set x",
-    motion_changexby: "change x",
-    motion_sety: "set y",
-    motion_changeyby: "change y",
-    motion_xposition: "x position",
-    motion_yposition: "y position",
-    operator_equals: "=",
-    operator_gt: ">",
-    operator_lt: "<",
-    operator_add: "+",
-    operator_subtract: "-",
-    operator_multiply: "*",
-    operator_divide: "/",
-    operator_mod: "mod",
-    operator_and: "and",
-    operator_or: "or",
-    pen_penDown: "pen down",
-    pen_penUp: "pen up",
-    pen_setPenColorParamTo: "set parameter",
-    pen_changePenColorParamBy: "change parameter",
-    pen_changePenHueBy: "change hue",
-    pen_setPenHueToNumber: "set hue",
-    pen_changePenShadeBy: "change shade",
-    pen_setPenShadeToNumber: "set shade",
-    pen_changePenSizeBy: "change size",
-    pen_setPenSizeTo: "set size",
-    sensing_mousex: "mouse x",
-    sensing_mousey: "mouse y",
-    sound_play: "play",
-    sound_playuntildone: "play until done",
-    sound_changeeffectby: "change effect",
-    sound_seteffectto: "set effect",
-    sound_setvolumeto: "set volume",
-    sound_changevolumeby: "change volume",
-  };
-
   let addBorderToContextMenuItem = -1;
 
   const menuCallbackFactory = (block, opcodeData) => () => {
@@ -657,8 +593,7 @@ export default async function ({ addon, global, console }) {
         continue;
       }
       const translationOpcode = isNoop ? this.type : opcodeData.opcode;
-      // TODO: use l10n api when its merged
-      const translation = messages[translationOpcode] || translationOpcode;
+      const translation = msg(translationOpcode);
       options.push({
         enabled: true,
         text: translation,
