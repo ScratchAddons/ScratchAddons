@@ -248,7 +248,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
     manifest._tags.forEditor = manifest.tags.includes("theme") && manifest.tags.includes("editor");
     manifest._tags.forWebsite = manifest.tags.includes("theme") && manifest.tags.includes("community");
   }
-    setTimeout(function () {
+  setTimeout(function () {
     let keyInputs = document.querySelectorAll(".key");
     for (let i = 0; i < keyInputs.length; i++) {
       keyInputs[i].addEventListener("keydown", function (e) {
