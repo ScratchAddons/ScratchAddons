@@ -108,7 +108,7 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
     } else if (request.fireEvent) {
       const eventDetails = JSON.stringify(request.fireEvent);
       template.setAttribute(`data-fire-event__${Date.now()}`, eventDetails);
-    } else if (request.setMsgCount) {
+    } else if (typeof request.setMsgCount !== "undefined") {
       template.setAttribute("data-msgcount", request.setMsgCount);
     }
   });
