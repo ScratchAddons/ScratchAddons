@@ -1,4 +1,4 @@
-import blockToDom from './blockToDom.js';
+import blockToDom from "./blockToDom.js";
 
 export default async function ({ addon, global, console }) {
   const blockSwitches = {
