@@ -636,7 +636,7 @@ export default async function ({ addon, global, console }) {
       newBlockConnection.connect(parentConnection);
     }
 
-    // Events are delayed with a setTimeout(f, 0):
+    // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
     // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
     setTimeout(() => {
       const group = Symbol();
@@ -647,7 +647,9 @@ export default async function ({ addon, global, console }) {
   };
 
   const customContextMenuHandler = function (options) {
-    addBorderToContextMenuItem = options.length;
+    if (addon.settings.get("border")) {
+      addBorderToContextMenuItem = options.length;
+    }
     const switches = blockSwitches[this.type];
     for (const opcodeData of switches) {
       const isNoop = opcodeData.opcode === "noop";

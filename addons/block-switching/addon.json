@@ -21,6 +21,12 @@
       "default": true
     },
     {
+      "name": "Add border",
+      "id": "border",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Motion blocks",
       "id": "motion",
       "type": "boolean",
