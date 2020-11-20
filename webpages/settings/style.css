@@ -178,6 +178,8 @@ h1 {
   border-radius: 5px;
   font-weight: bold;
   margin: 10px 0;
+  display: flex;
+  align-items: center;
 }
 .addon-description-full,
 .addon-credits {
@@ -532,6 +534,15 @@ input[type="color"]::-webkit-color-swatch {
   border-radius: 5px;
   font-weight: bold;
   margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+.addon-notice img, .addon-warn img{
+  height: 40px;
+  margin-right: 10px;
+}
+.addon-warn img {
+  filter: brightness(0) invert(1);
 }
 .modal {
   position: fixed;
