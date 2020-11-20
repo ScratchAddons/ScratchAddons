@@ -105,16 +105,16 @@
   height: 46px;
   border-color: rgba(0, 0, 0, 0.1);
   transition: border-color 0.5s ease;
-  background: #fafafa url("https://mxmou.github.io/customize-scratch/assets/caret.svg") no-repeat right center;
+  background: #fafafa url("%addon-self-dir%/assets/caret.svg") no-repeat right center;
   color: #575e75;
   font-weight: normal;
 }
 .action-bar .inner .dropdown:hover {
-  background-image: url("https://mxmou.github.io/customize-scratch/assets/caret_hover.svg");
+  background-image: url("%addon-self-dir%/assets/caret_hover.svg");
 }
 .action-bar .inner .dropdown:focus,
 .action-bar .inner .dropdown.open {
-  background-image: url("https://mxmou.github.io/customize-scratch/assets/caret_hover.svg");
+  background-image: url("%addon-self-dir%/assets/caret_hover.svg");
   border-color: #4d97ff;
 }
 .action-bar .inner .dropdown .dropdown-toggle {

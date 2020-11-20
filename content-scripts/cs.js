@@ -57,7 +57,9 @@ function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
   }
   for (const theme of themes) {
     for (const styleUrl of theme.styleUrls) {
-      const css = theme.styles[styleUrl];
+      let css = theme.styles[styleUrl];
+      // Replace %addon-self-dir% for relative URLs
+      css = css.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${theme.addonId}`));
       if (isUpdate && css.startsWith("/* sa-autoupdate-theme-ignore */")) continue;
       const style = document.createElement("style");
       style.classList.add("scratch-addons-theme");
