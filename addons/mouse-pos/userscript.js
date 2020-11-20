@@ -26,7 +26,7 @@ export default async function ({ addon, global, console }) {
       var x = vm.runtime.ioDevices.mouse.__scratchX ? vm.runtime.ioDevices.mouse.__scratchX : 0;
       var y = vm.runtime.ioDevices.mouse.__scratchY ? vm.runtime.ioDevices.mouse.__scratchY : 0;
 
-      pos.innerText = `${x}, ${y}`;
+      pos.setAttribute("data-content", `${x}, ${y}`);
 
       Object.defineProperty(vm.runtime.ioDevices.mouse, "_scratchX", {
         get: function () {
@@ -44,7 +44,7 @@ export default async function ({ addon, global, console }) {
         },
         set: function (sety) {
           y = sety;
-          pos.innerText = `${x}, ${y}`;
+          pos.setAttribute("data-content", `${x}, ${y}`);
           return (this.__scratchY = sety);
         },
       });
