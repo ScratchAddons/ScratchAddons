@@ -6,7 +6,7 @@ body {
   background: #222;
   font-family: "Sora", sans-serif;
   margin: 0;
-  height: 100vh;
+  min-height: 100vh;
   color: white;
   font-size: 12px;
 }
@@ -508,7 +508,6 @@ h1 {
 
 .licenses-body pre {
   white-space: pre-wrap;
-  width: 70%;
 }
 
 input[type="color" i] {
