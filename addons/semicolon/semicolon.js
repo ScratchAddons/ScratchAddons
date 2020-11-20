@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  if (document.body.contains(document.querySelector("#signature"))) {
+  if (document.querySelector("body #signature")) {
     console.log("Signature already exists!");
   } else {
     if (addon.tab.editorMode === "editor") {
