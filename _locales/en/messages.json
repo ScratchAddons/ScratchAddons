@@ -18,22 +18,22 @@
     "message": "View changelog"
   },
   "15min": {
-    "message": "15 minutes"
+    "message": "For 15 minutes"
   },
   "1hour": {
-    "message": "1 hour"
+    "message": "For 1 hour"
   },
   "8hours": {
-    "message": "8 hours"
+    "message": "For 8 hours"
   },
   "24hours": {
-    "message": "24 hours"
+    "message": "For 24 hours"
   },
   "untilEnabled": {
     "message": "Until I turn it back on"
   },
   "muteFor": {
-    "message": "Mute for:"
+    "message": "Mute"
   },
   "unmute": {
     "message": "Unmute"
