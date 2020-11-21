@@ -12,7 +12,7 @@
 
   "// For website:",
   "scratchr2",
-  "// TODO // dark-www",
+  "dark-www",
 
   "// Other addons:",
   "editor-searchable-dropdowns",
@@ -43,12 +43,16 @@
   "mouse-pos",
   "clones",
   "exact-count",
+  "editor-messages",
   "pause",
   "resizable-comment-input",
   "animated-thumb",
   "live-featured-project",
+  "fix-uploaded-svgs",
   "project-info",
   "curator-link",
   "search-load-more-fix",
-  "feature-unshared"
-]
+  "feature-unshared",
+  "project-notes-tabs",
+  "block-switching"
+

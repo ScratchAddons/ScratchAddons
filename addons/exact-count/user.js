@@ -1,30 +1,30 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   let url = window.location.href;
   let user1 = url.substring(30, 100);
   let username = user1.substring(0, user1.indexOf("/"));
   getUserData([
     {
-      boxheadName: "Shared Projects",
+      boxheadName: msg("shared-projects"),
       url: "projects",
     },
     {
-      boxheadName: "Favorite Projects",
+      boxheadName: msg("favorite-projects"),
       url: "favorites",
     },
     {
-      boxheadName: "Studios I'm Following",
+      boxheadName: msg("following-studios"),
       url: "studios_following",
     },
     {
-      boxheadName: "Studios I Curate",
+      boxheadName: msg("curating-studios"),
       url: "studios",
     },
     {
-      boxheadName: "Following",
+      boxheadName: msg("following"),
       url: "following",
     },
     {
-      boxheadName: "Followers",
+      boxheadName: msg("followers"),
       url: "followers",
     },
   ]);

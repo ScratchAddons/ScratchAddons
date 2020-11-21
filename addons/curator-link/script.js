@@ -1,15 +1,14 @@
-export default async function () {
-  var oldh4 = document.querySelector(".inner:last-of-type h4");
-  var curator = oldh4.textContent.split(" ")[3];
+export default async function ({ safeMsg }) {
+  const oldh4 = document.querySelector(".inner:last-of-type h4");
 
-  var newh4 = document.createElement("h4");
-  newh4.textContent = "Projects Curated by ";
+  const resp = await fetch("https://api.scratch.mit.edu/proxy/featured");
+  const result = await resp.json();
+  const curator = result.curator_top_projects[0].curator_name;
 
-  var link = document.createElement("a");
+  const link = document.createElement("a");
   link.textContent = curator;
   link.href = `https://scratch.mit.edu/users/${curator}`;
   link.id = "curator-link";
-  newh4.appendChild(link);
 
-  oldh4.replaceWith(newh4);
+  oldh4.innerHTML = safeMsg("curated-by", { user: link.outerHTML });
 }

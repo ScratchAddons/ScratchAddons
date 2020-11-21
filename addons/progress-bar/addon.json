@@ -34,5 +34,6 @@
     }
   ],
   "tags": ["editor", "recommended"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }

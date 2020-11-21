@@ -125,13 +125,13 @@ select {
   height: 48px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   transition: border-color 0.5s ease;
-  background: #fafafa url("https://mxmou.github.io/customize-scratch/assets/caret.svg") no-repeat right center;
+  background: #fafafa url("%addon-self-dir%/assets/caret.svg") no-repeat right center;
   color: #575e75;
   font-size: 14px;
 }
 select:hover,
 select:focus {
-  background-image: url("https://mxmou.github.io/customize-scratch/assets/caret_hover.svg");
+  background-image: url("%addon-self-dir%/assets/caret_hover.svg");
 }
 select:focus {
   border-color: #4d97ff;
