@@ -27,7 +27,7 @@ function handleClick(e) {
     return;
   }
 
-  const fill = background.getAttribute("fill");
+  const fill = window.getComputedStyle(background).getPropertyValue("fill");
   if (!fill) {
     return;
   }

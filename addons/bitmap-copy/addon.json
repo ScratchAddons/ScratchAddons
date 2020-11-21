@@ -1,7 +1,7 @@
 {
   "name": "Bitmap images copying",
   "description": "Allows you to actually copy a bitmap image from the paint editor, so that you can paste it in other websites or software.",
-  "warning": "\"Right click → copy\" is not supported. You must press Ctrl+C while a bitmap image is selected.",
+  "notice": "\"Right click \u2192 copy\" is not supported. You must press Ctrl+C while a bitmap image is selected.",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -10,5 +10,6 @@
   ],
   "tags": ["editor", "recommended"],
   "permissions": ["clipboardWrite"],
-  "enabled_by_default": false
+  "enabledByDefault": false,
+  "l10n": true
 }

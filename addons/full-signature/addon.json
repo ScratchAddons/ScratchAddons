@@ -7,9 +7,13 @@
     },
     {
       "name": "NitroCipher/ZenithRogue"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
-  "options": [
+  "settings": [
     {
       "name": "Show scroll for forum signatures",
       "id": "signature",
@@ -23,24 +27,31 @@
       "default": true
     }
   ],
+  "userscripts": [
+    {
+      "url": "working.js",
+      "matches": ["https://scratch.mit.edu/users/*"]
+    }
+  ],
   "userstyles": [
     {
       "url": "signature.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "setting_match": {
-        "setting_id": "signature",
-        "setting_value": true
+      "settingMatch": {
+        "id": "signature",
+        "value": true
       }
     },
     {
       "url": "working.css",
       "matches": ["https://scratch.mit.edu/users/*"],
-      "setting_match": {
-        "setting_id": "whatworkingon",
-        "setting_value": true
+      "settingMatch": {
+        "id": "whatworkingon",
+        "value": true
       }
     }
   ],
-  "tags": ["community", "forums"],
-  "enabled_by_default": false
+  "tags": ["community", "forums", "recommended"],
+  "enabledByDefault": true,
+  "l10n": true
 }

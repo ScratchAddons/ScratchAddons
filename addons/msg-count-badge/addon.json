@@ -1,8 +1,9 @@
 {
   "name": "Message count on extension icon",
   "description": "Adds the current message count in the Scratch Addons icon.",
-  "persistent_scripts": ["background.js"],
+  "persistentScripts": ["background.js"],
   "permissions": ["badge"],
   "tags": ["community", "recommended"],
-  "enabled_by_default": true
+  "enabledByDefault": true,
+  "l10n": true
 }

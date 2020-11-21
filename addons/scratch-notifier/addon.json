@@ -4,11 +4,17 @@
   "credits": [
     {
       "name": "World_Languages"
+    },
+    {
+      "name": "NitroCipher/ZenithRogue"
+    },
+    {
+      "name": "notificationsounds.com (Scratch Addons ping)"
     }
   ],
   "permissions": ["notifications"],
-  "persistent_scripts": ["background.js"],
-  "options": [
+  "persistentScripts": ["background.js"],
+  "settings": [
     {
       "name": "Mark all messages as read after clicking notification",
       "id": "mark_as_read_when_clicked",
@@ -16,60 +22,81 @@
       "default": true
     },
     {
-      "name": "💬 Notify profile comments & replies",
+      "name": "Notification sound",
+      "id": "notification_sound",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "silent",
+          "name": "Silent"
+        },
+        {
+          "id": "system-default",
+          "name": "System default"
+        },
+        {
+          "id": "addons-ping",
+          "name": "Scratch Addons ping"
+        }
+      ],
+      "default": "system-default"
+    },
+    {
+      "name": "@comment.svg Notify profile comments & replies",
       "id": "commentsforme_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "💬 Notify comments on my projects",
+      "name": "@comment.svg Notify comments on my projects",
       "id": "commentsonmyprojects_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "📚 Notify forum activity",
+      "name": "@forum.svg Notify forum activity",
       "id": "forumpost_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "❤️ Notify loves",
+      "name": "@heart.svg Notify loves",
       "id": "loveproject_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "⭐ Notify favorites",
+      "name": "@star.svg Notify favorites",
       "id": "favoriteproject_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "🧑 Notify new followers",
+      "name": "@follow.svg Notify new followers",
       "id": "followuser_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "✉️ Notify studio invites",
+      "name": "@studio-add.svg Notify studio invites",
       "id": "curatorinvite_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "🆕 Notify studio activity",
+      "name": "@studio.svg Notify studio activity",
       "id": "studioactivity_notifications",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "🔄 Notify remixes",
+      "name": "@remix.svg Notify remixes",
       "id": "remixproject_notifications",
       "type": "boolean",
       "default": true
     }
   ],
   "tags": ["community", "recommended"],
-  "enabled_by_default": false
+  "enabledByDefault": false,
+  "l10n": true
 }

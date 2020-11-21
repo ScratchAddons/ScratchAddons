@@ -19,7 +19,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "options": [
+  "settings": [
     {
       "name": "Show progress bar at top of page",
       "id": "topbar",
@@ -34,5 +34,6 @@
     }
   ],
   "tags": ["editor", "recommended"],
-  "enabled_by_default": false
+  "enabledByDefault": false,
+  "l10n": true
 }

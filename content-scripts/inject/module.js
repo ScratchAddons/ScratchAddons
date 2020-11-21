@@ -1,4 +1,5 @@
 import runAddonUserscripts from "./run-userscript.js";
+import Localization from "./l10n.js";
 
 const template = document.getElementById("scratch-addons");
 const getGlobalState = () => {
@@ -7,8 +8,17 @@ const getGlobalState = () => {
   return returnValue;
 };
 
+const getL10NURLs = () => {
+  const returnValue = JSON.parse(template.getAttribute("data-l10njson"));
+  template.removeAttribute("data-l10njson");
+  return returnValue;
+};
+
+const addons = JSON.parse(template.getAttribute("data-userscripts"));
+
 window.scratchAddons = {};
 scratchAddons.globalState = getGlobalState();
+scratchAddons.l10n = new Localization(getL10NURLs());
 scratchAddons.eventTargets = {
   auth: [],
   settings: [],
@@ -25,6 +35,17 @@ scratchAddons.methods.getMsgCount = () => {
   const promise = new Promise((resolve) => (promiseResolver = resolve));
   pendingPromises.msgCount.push(promiseResolver);
   return promise;
+};
+
+const originalReplaceState = history.replaceState;
+history.replaceState = function () {
+  const oldUrl = location.href;
+  const newUrl = new URL(arguments[2], document.baseURI).href;
+  const returnValue = originalReplaceState.apply(history, arguments);
+  for (const eventTarget of scratchAddons.eventTargets.tab) {
+    eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
+  }
+  return returnValue;
 };
 
 const observer = new MutationObserver((mutationsList) => {
@@ -61,6 +82,6 @@ const observer = new MutationObserver((mutationsList) => {
 });
 observer.observe(template, { attributes: true });
 
-for (const addon of JSON.parse(template.getAttribute("data-userscripts"))) {
+for (const addon of addons) {
   if (addon.scripts.length) runAddonUserscripts(addon);
 }

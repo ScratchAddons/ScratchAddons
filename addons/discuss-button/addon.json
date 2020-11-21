@@ -16,7 +16,7 @@
       "runAtComplete": false
     }
   ],
-  "options": [
+  "settings": [
     {
       "name": "Remove \"ideas\" button",
       "id": "removeIdeasBtn",
@@ -31,5 +31,6 @@
     }
   ],
   "tags": ["community", "forums"],
-  "enabled_by_default": false
+  "enabledByDefault": false,
+  "l10n": true
 }

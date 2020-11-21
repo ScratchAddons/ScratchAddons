@@ -1,9 +1,12 @@
 {
-  "name": "Forums search",
+  "name": "Forum Search",
   "description": "Adds a post search to the forum homepage. Uses ScratchDB for information.",
   "credits": [
     {
       "name": "DatOneLefty"
+    },
+    {
+      "name": "Hans5958"
     }
   ],
   "userscripts": [
@@ -19,5 +22,6 @@
     }
   ],
   "tags": ["forums", "community"],
-  "enabled_by_default": false
+  "enabledByDefault": false,
+  "l10n": true
 }

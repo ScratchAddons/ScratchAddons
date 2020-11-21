@@ -9,40 +9,38 @@ body {
 }
 
 #header {
-  font-weight: bold;
-  font-size: 110%;
-  background-color: white;
-  color: white;
+  background-color: #ff7b26;
   display: flex;
-  font-size: 1.2rem;
-  /* border-bottom: 1px solid black; */
+  height: 60px;
 }
 #title-text,
 #settings {
-  font-weight: 600;
-  padding: 8px;
+  font-size: 18px;
+  font-weight: 400;
 }
 #title {
-  background-color: #ff7b26;
   flex-grow: 1;
   display: flex;
-  justify-content: center;
   align-items: center;
+  padding: 0 20px;
 }
 #fullscreen {
   display: none;
 }
-#popout > img {
-  height: 0.6rem;
+.popup-name img {
   vertical-align: middle;
-  opacity: 0.6;
+  filter: brightness(10);
+  height: 18px;
+}
+.popup-title {
+  padding: 0 5px;
 }
 #logo {
-  height: 2rem;
+  height: 30px;
+  margin-right: 20px;
   vertical-align: middle;
 }
 #settings {
-  background-color: #d84a12;
   padding-left: 20px;
   padding-right: 20px;
   cursor: pointer;
@@ -51,56 +49,63 @@ body {
   justify-content: center;
 }
 #settings > img {
-  height: 1.2rem;
+  height: 24px;
 }
 
 #popups {
-  background-color: #adf;
+  background-color: #222;
+}
+
+#popup-bar {
+  background-color: #2a2a2a;
+  padding: 10px;
+  padding-bottom: 0px;
 }
 
 #popup-chooser {
-  color: #159;
   display: flex;
-  /* justify-content: center; */
-  align-items: center;
-  flex-grow: 1;
-  font-size: 1rem;
-  align-items: stretch;
+  color: #fff;
+  width: -moz-fit-content;
+  width: fit-content;
   height: 35px;
-  background-color: #edf4ff;
-  padding-top: 12px;
-  border-bottom: 4px solid #adf;
+  overflow: hidden;
 }
 .popup-name {
   display: flex;
   height: 100%;
   justify-content: center;
   align-items: center;
-  font-size: 0.9rem;
+  font-size: 10px;
   padding-left: 12px;
   padding-right: 12px;
-  /* border-left: 2px solid white; */
   cursor: pointer;
+  border: 1px solid #000;
   border-radius: 12px 12px 0 0;
 }
-.popup-name:last-child {
-  /* border-right: 2px solid white; */
+.popup-name:not(:last-child) {
+  border-right: none;
 }
 .popup-name.sel {
-  background-color: #adf;
+  background-color: #ff7b26;
 }
-#other-popups a {
-  cursor: pointer;
+.popout > .popout-img {
+  height: 10px;
 }
 
 iframe {
-  width: 392px;
-  height: 500px;
+  width: 400px;
+  height: 468px;
   overflow-x: hidden;
   overflow-y: auto;
-  border: 4px solid #adf;
-  border-top: none;
-  border-bottom-width: 2px;
+  border: none;
   overflow-y: scroll;
-  background-color: white;
+  background-color: #222;
+}
+#version {
+  color: white;
+  margin: 5px;
+  vertical-align: middle;
+  text-decoration: none;
+  opacity: 0.75;
+  font-size: 0.7rem;
 }

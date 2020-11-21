@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scratch Addons - Licenses</title>
+    <title></title>
+    <link rel="icon" href="../../images/icon.png" />
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
@@ -12,13 +13,13 @@
   <body>
     <div class="navbar">
       <a href="./index.html"><img src="../../images/icon.png" class="logo" alt="Logo" /></a>
-      <h1>Licenses</h1>
+      <h1>{{ msg("licenses") }}</h1>
     </div>
     <div class="main">
       <div class="licenses-block">
         <div class="license-container">
           <div class="licenses-body" v-for="library of libraries">
-            <h2>License for library {{ library.name }}</h2>
+            <h2>{{ msg("licensesForLibrary", library.name) }}</h2>
             <pre>{{ library.license }}</pre>
           </div>
         </div>

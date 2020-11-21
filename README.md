@@ -13,6 +13,7 @@
 [![](https://img.shields.io/amo/users/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=users&color=FF7139)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)
 [![](https://img.shields.io/github/v/release/ScratchAddons/ScratchAddons?style=flat-square&logo=github&logoColor=white&label=version&color=181717)](https://github.com/ScratchAddons/ScratchAddons/releases)
 [![](https://img.shields.io/github/downloads/ScratchAddons/ScratchAddons/total?style=flat-square&logo=github&logoColor=white&label=downloads&color=181717)](https://github.com/ScratchAddons/ScratchAddons/releases)<!-- 2 spaces -->  
+[![](https://img.shields.io/badge/discuss-on_github-181717.svg?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/discussions)
 [![](https://img.shields.io/badge/chat-on_discord-7289da.svg?style=flat-square)](https://discord.gg/Ak8sCDQ)
 [![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)
 
@@ -55,7 +56,7 @@ Scratch Addons by itself is just an addon loader. Its main tasks are:
 No build is required. You may download the source code by doing one of these steps.
 
 1. Cloning the repository by running `git clone https://github.com/ScratchAddons/ScratchAddons.git`.
-2. Download the zipball of the current state of the repository [here](https://github.com/ScratchAddons/ScratchAddons/archive/readme.zip).
+2. Download the zipball of the current state of the repository [here](https://github.com/ScratchAddons/ScratchAddons/archive/master.zip).
 3. Download one of the builds on [the releases page](https://github.com/ScratchAddons/ScratchAddons/releases). (.zip recommended)
 
 After downloading the extension to your computer, just load it by following these steps.
