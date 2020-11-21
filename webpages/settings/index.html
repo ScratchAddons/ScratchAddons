@@ -183,7 +183,9 @@
                     v-if="setting.type === 'key'"
                     :placeholder="setting.default"
                     maxlength="100"
-                    :id="setting.id"
+                    :data-addon-id="addon._addonId"
+                    :data-setting-id="setting.id"
+                    spellcheck="false"
                   />
                   <input
                     type="color"
