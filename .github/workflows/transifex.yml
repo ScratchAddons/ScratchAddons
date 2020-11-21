@@ -15,5 +15,5 @@ jobs:
       - name: Push and pull strings
         uses: ScratchAddons/l10n-script@main
         env:
-            TX_TOKEN: ${{ secrets.TX_TOKEN }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
