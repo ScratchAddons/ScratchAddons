@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   const nav = await addon.tab.waitForElement(".sub-nav.tabs");
   // Get the search term and get the api end point to check the username
   const searchTerm = document.querySelector('[name="q"]').value.trim();
@@ -16,6 +16,6 @@ export default async function ({ addon, global, console }) {
     img.className = "tab-icon";
 
     //Add the text below the image
-    span.innerText = "Profile";
+    span.innerText = msg("profile");
   }
 }
