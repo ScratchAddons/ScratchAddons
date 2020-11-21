@@ -1,0 +1,5 @@
+{
+  "curator-link/curated-by": "Projekte kuratiert von $user$",
+  "curator-link/@name": "Kurator Link",
+  "curator-link/@description": "Kreiert einen klickbaren Link für den Kurator der Titelseite."
+}
