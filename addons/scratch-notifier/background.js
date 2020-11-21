@@ -113,6 +113,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           break;
         case "studioactivity":
           notificationTitle = msg("notif-studio", { title });
+          url = `https://scratch.mit.edu/studios/${element_id}/activity`
           break;
         default:
           notificationTitle = msg("notif-generic");
