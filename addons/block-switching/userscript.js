@@ -436,6 +436,9 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
+    // Switching for these is implemented by Scratch. We only define them here to optionally add a border.
+    blockSwitches["data_variable"] = [];
+    blockSwitches["data_listcontents"] = [];
   }
 
   if (addon.settings.get("extension")) {
@@ -606,6 +609,11 @@ export default async function ({ addon, global, console, msg }) {
     if (addon.settings.get("border")) {
       addBorderToContextMenuItem = options.length;
     }
+
+    if (this._originalCustomContextMenu) {
+      this._originalCustomContextMenu.call(this, options);
+    }
+
     const switches = blockSwitches[this.type];
     for (const opcodeData of switches) {
       const isNoop = opcodeData.opcode === "noop";
@@ -628,8 +636,13 @@ export default async function ({ addon, global, console, msg }) {
       return;
     }
 
-    if (block.customContextMenu) {
+    if (block._customContextMenuInjected) {
       return;
+    }
+    block._customContextMenuInjected = true;
+
+    if (block.customContextMenu) {
+      block._originalCustomContextMenu = block.customContextMenu;
     }
 
     block.customContextMenu = customContextMenuHandler;
@@ -656,8 +669,10 @@ export default async function ({ addon, global, console, msg }) {
           }
           const children = node.children;
           const item = children[addBorderToContextMenuItem];
-          item.style.paddingTop = "2px";
-          item.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+          if (item) {
+            item.style.paddingTop = "2px";
+            item.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+          }
           addBorderToContextMenuItem = -1;
         }
       }
