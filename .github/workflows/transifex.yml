@@ -17,4 +17,4 @@ jobs:
         env:
             TX_TOKEN: ${{ secrets.TX_TOKEN }}
         with:
-            token: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
