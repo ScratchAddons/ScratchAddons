@@ -34,6 +34,6 @@
       "default": false
     }
   ],
-  "tags": ["community", "forums", "recommended"],
+  "tags": ["community", "recommended"],
   "enabledByDefault": false
 }
