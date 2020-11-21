@@ -12,7 +12,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "recommended"],
   "settings": [
     {
       "name": "Show option to change block to self",
