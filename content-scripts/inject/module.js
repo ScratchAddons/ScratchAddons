@@ -48,6 +48,17 @@ history.replaceState = function () {
   return returnValue;
 };
 
+const originalPushState = history.pushState;
+history.pushState = function () {
+  const oldUrl = location.href;
+  const newUrl = new URL(arguments[2], document.baseURI).href;
+  const returnValue = originalPushState.apply(history, arguments);
+  for (const eventTarget of scratchAddons.eventTargets.tab) {
+    eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
+  }
+  return returnValue;
+};
+
 const observer = new MutationObserver((mutationsList) => {
   for (const mutation of mutationsList) {
     const attr = mutation.attributeName;

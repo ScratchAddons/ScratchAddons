@@ -502,13 +502,17 @@ h1 {
   transform: rotate(180deg);
 }
 
+.licenses {
+  height: 100%;
+  min-height: 100vh;
+}
+
 .licenses-block {
   padding: 2rem;
 }
 
 .licenses-body pre {
   white-space: pre-wrap;
-  width: 70%;
 }
 
 input[type="color" i] {
