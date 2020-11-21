@@ -8,7 +8,7 @@
       "runAtComplete": false
     }
   ],
-  "credits": [{"name": "Geotale"}, {"name": "pufferfish101007"}],
+  "credits": [{ "name": "Geotale" }, { "name": "pufferfish101007" }],
   "tags": ["community"],
   "enabledByDefault": false,
   "l10n": true
