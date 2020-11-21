@@ -1,8 +1,5 @@
 name: Pull and push strings via Transifex
-on:
-  - workflow_dispatch
-  - schedule:
-    cron: 0 0 * * *
+on: ["workflow_dispatch", {"schedule": {"cron": "0 0 * * *"}}]
 
 jobs:
   format:
