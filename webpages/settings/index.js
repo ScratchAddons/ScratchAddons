@@ -285,7 +285,11 @@ function handleKeySettings() {
                   : e.key
                 : e.key.toUpperCase()))
         : "";
-      vue.updateOption(e.target.getAttribute("data-setting-id"), e.target.value, vue.manifests.find(manifest => manifest._addonId === e.target.getAttribute("data-addon-id")));
+      vue.updateOption(
+        e.target.getAttribute("data-setting-id"),
+        e.target.value,
+        vue.manifests.find((manifest) => manifest._addonId === e.target.getAttribute("data-addon-id"))
+      );
     });
     input.addEventListener("keyup", function (e) {
       // Ctrl by itself isn't a hotkey
