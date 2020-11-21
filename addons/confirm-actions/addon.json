@@ -1,0 +1,39 @@
+{
+  "name": "Confirm actions",
+  "description": "Actions you take like sharing projects and following users will first have you confirming to do so, in case you don't.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "Confirm Project Sharing",
+      "id": "projectsharing",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Confirm Following/Unfollowing",
+      "id": "followinguser",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Confirm Joining Studio",
+      "id": "joiningstudio",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["community", "forums", "recommended"],
+  "enabledByDefault": false
+}
