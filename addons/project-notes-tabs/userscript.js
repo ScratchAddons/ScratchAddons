@@ -10,19 +10,19 @@ export default async function ({ addon, global, console }) {
       projectNotes.querySelector(".description-block")
     );
     tabs.classList.add("tabs-sa");
-    tabs.setAttribute("style", "margin-bottom: 0px;");
+    tabs.style.marginBottom = "0px"
     if (allLabels - 1) {
       let intTab = tabs.appendChild(document.createElement("div"));
       intTab.classList.add("tab-choice-sa");
       let innerTab = intTab.appendChild(document.createElement("span"));
       innerTab.innerText = "Instructions";
-      intTab.setAttribute("style", "margin-left: 5px;");
+      intTab.style.marginLeft = "5px"
     }
     let notesTab = tabs.appendChild(document.createElement("div"));
     notesTab.classList.add("tab-choice-sa");
     let innerTab = notesTab.appendChild(document.createElement("span"));
     innerTab.innerText = "Notes and Credits";
-    if (!(allLabels - 1)) notesTab.setAttribute("style", "margin-left: 5px;");
+    if (!(allLabels - 1)) notesTab.style.marginLeft = "5px"
     for (var i = 0; i < tabs.querySelectorAll(".tab-choice-sa").length; i++) {
       tabs.querySelectorAll(".tab-choice-sa")[i].addEventListener("click", function (e) {
         selectTab((e.path[0].classList.length ? e.path[0].children[0] : e.path[0]).innerText == "Instructions" ? 0 : 1);
@@ -32,8 +32,8 @@ export default async function ({ addon, global, console }) {
     function selectTab(tab) {
       tabs.querySelectorAll(".tab-choice-sa")[tab].classList.add("sa-selected");
       tabs.querySelectorAll(".tab-choice-sa")[!tab + 0].classList.remove("sa-selected");
-      document.querySelectorAll(".description-block")[tab].setAttribute("style", "margin-bottom:0rem;");
-      document.querySelectorAll(".description-block")[!tab + 0].setAttribute("style", "display:none;");
+      document.querySelectorAll(".description-block")[tab].style.marginBottom = "0rem"
+      document.querySelectorAll(".description-block")[!tab + 0].style.display = "none"
     }
   }
 }
