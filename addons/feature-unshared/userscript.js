@@ -5,13 +5,14 @@ export default async function ({ addon, global, console }) {
     while (popup.querySelector("li")) {
       popup.querySelector("li").remove();
     }
+    let loadMoreText = document.querySelector("[data-control='load-more'] > span").textContent;
     popup.querySelector("[data-control='load-more']").remove();
     let loadMore = popup.querySelector(".modal-body").appendChild(document.createElement("div"));
     loadMore.setAttribute("class", "button small grey");
     loadMore.id = "sa-loadMore-projects";
     loadMore.setAttribute("style", "margin:auto;width:100%;text-align:center;");
     let text = loadMore.appendChild(document.createElement("span"));
-    text.innerText = "Load More";
+    text.innerText = loadMoreText;
     appendOptions(page);
     loadMore.addEventListener("click", function () {
       page++;
