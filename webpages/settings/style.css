@@ -502,8 +502,9 @@ h1 {
   transform: rotate(180deg);
 }
 
-.licenses-body {
+.licenses {
   height: 100%;
+  min-height: 100vh;
 }
 
 .licenses-block {
