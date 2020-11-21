@@ -504,7 +504,7 @@ export default async function ({ addon, global, console, msg }) {
   // Switching for these is implemented by Scratch. We only define them here to optionally add a border.
   // Because we don't implement the switching ourselves, this is not controlled by the data category option.
   blockSwitches["data_variable"] = [];
-  blockSwitches["data_listcontents"] = [];  
+  blockSwitches["data_listcontents"] = [];
 
   let addBorderToContextMenuItem = -1;
 
