@@ -16,5 +16,4 @@ jobs:
         uses: ScratchAddons/l10n-script@main
         env:
             TX_TOKEN: ${{ secrets.TX_TOKEN }}
-        with:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
