@@ -254,7 +254,7 @@
           </div>
         </div>
         <div class="footer">
-          <span
+          <p
             >{{ msg("extensionName") }}
             <a
               href="https://scratchaddons.com/changelog?versionname={{ versionName }}"
@@ -262,8 +262,12 @@
               target="_blank"
             >
               v{{ version }}</a
-            ></span
+            ></p
           >
+          <p><a
+              href="./licenses.html?libraries=intl-messageformat,vue"
+              target="_blank"
+              >{{ msg("libraryCredits") }}</a></p>
         </div>
       </div>
     </div>

@@ -130,5 +130,8 @@
   },
   "licensesForLibrary": {
     "message": "Licenses for library $1"
+  },
+  "libraryCredits": {
+    "message": "View licenses of used libraries"
   }
 }

@@ -591,7 +591,6 @@ input[type="color"]::-webkit-color-swatch {
   margin: 10px 10px 24px 10px;
 }
 .footer {
-  position: fixed;
   vertical-align: bottom;
   text-align: center;
   width: 800px;
@@ -601,7 +600,6 @@ input[type="color"]::-webkit-color-swatch {
   color: gray;
 }
 .settings-block {
-  height: 435px;
   margin-top: 30px;
 }
 .modal .large-button {
