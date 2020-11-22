@@ -539,8 +539,10 @@ input[type="color"]::-webkit-color-swatch {
 }
 .addon-notice img,
 .addon-warn img {
-  height: 40px;
+  height: 15px;
   margin-right: 10px;
+  display: flex;
+  flex: 0 0;
 }
 .addon-warn img {
   filter: brightness(0) invert(1);
