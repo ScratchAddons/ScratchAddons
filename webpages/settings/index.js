@@ -265,7 +265,38 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   vue.manifests = manifests.map(({ manifest }) => manifest);
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
+  setTimeout(handleKeySettings, 0);
 });
+
+function handleKeySettings() {
+  let keyInputs = document.querySelectorAll(".key");
+  for (const input of keyInputs) {
+    input.addEventListener("keydown", function (e) {
+      e.preventDefault();
+      e.target.value = e.ctrlKey
+        ? "Ctrl" +
+          (e.shiftKey ? " + Shift" : "") +
+          (e.key == "Control" || e.key == "Shift"
+            ? ""
+            : (e.ctrlKey ? " + " : "") +
+              (e.key.toUpperCase() === e.key
+                ? e.code.includes("Digit")
+                  ? e.code.substring(5, e.code.length)
+                  : e.key
+                : e.key.toUpperCase()))
+        : "";
+      vue.updateOption(
+        e.target.getAttribute("data-setting-id"),
+        e.target.value,
+        vue.manifests.find((manifest) => manifest._addonId === e.target.getAttribute("data-addon-id"))
+      );
+    });
+    input.addEventListener("keyup", function (e) {
+      // Ctrl by itself isn't a hotkey
+      if (e.target.value == "Ctrl") e.target.value = "";
+    });
+  }
+}
 
 window.addEventListener("keydown", function (e) {
   if (e.ctrlKey && e.key === "f") {
