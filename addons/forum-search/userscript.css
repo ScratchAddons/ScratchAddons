@@ -19,8 +19,17 @@
 }
 
 #forum-search-input {
-  width: 85%;
+  flex: 1 0 0;
+  margin-right: 0.25rem;
 }
+
 #forum-search-dropdown {
-  width: 15%;
+  flex: 0 1 15%;
+}
+
+#forum-search-form {
+  padding: 6px 20px;
+  display: flex;
+  background: white;
+  border-top: 1px solid #e0e0e0;
 }

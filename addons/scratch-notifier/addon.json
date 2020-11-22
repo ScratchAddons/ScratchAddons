@@ -7,6 +7,9 @@
     },
     {
       "name": "NitroCipher/ZenithRogue"
+    },
+    {
+      "name": "notificationsounds.com (Scratch Addons ping)"
     }
   ],
   "permissions": ["notifications"],
@@ -22,8 +25,21 @@
       "name": "Notification sound",
       "id": "notification_sound",
       "type": "select",
-      "potentialValues": ["Silent", "System default", "Scratch Addons ping"],
-      "default": "System default"
+      "potentialValues": [
+        {
+          "id": "silent",
+          "name": "Silent"
+        },
+        {
+          "id": "system-default",
+          "name": "System default"
+        },
+        {
+          "id": "addons-ping",
+          "name": "Scratch Addons ping"
+        }
+      ],
+      "default": "system-default"
     },
     {
       "name": "@comment.svg Notify profile comments & replies",
@@ -81,5 +97,6 @@
     }
   ],
   "tags": ["community", "recommended"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }

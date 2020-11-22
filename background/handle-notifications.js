@@ -1,22 +1,22 @@
 const periods = [
   {
-    name: "15 minutes",
+    name: chrome.i18n.getMessage("15min"),
     mins: 15,
   },
   {
-    name: "1 hour",
+    name: chrome.i18n.getMessage("1hour"),
     mins: 60,
   },
   {
-    name: "8 hours",
+    name: chrome.i18n.getMessage("8hours"),
     mins: 480,
   },
   {
-    name: "24 hours",
+    name: chrome.i18n.getMessage("24hours"),
     mins: 1440,
   },
   {
-    name: "Until I turn it back on",
+    name: chrome.i18n.getMessage("untilEnabled"),
     mins: Infinity,
   },
 ];
@@ -26,11 +26,15 @@ chrome.storage.local.get("muted", (obj) => {
   else contextMenuUnmuted();
 });
 
+chrome.contextMenus.removeAll();
+let currentMenuItem = null;
+
 function contextMenuUnmuted() {
-  chrome.contextMenus.remove("unmute");
+  if (currentMenuItem === "unmute") chrome.contextMenus.remove("unmute");
+  currentMenuItem = "mute";
   chrome.contextMenus.create({
     id: "mute",
-    title: "Mute for...",
+    title: chrome.i18n.getMessage("muteFor"),
     contexts: ["browser_action"],
   });
   for (const period of periods) {
@@ -53,10 +57,11 @@ function contextMenuUnmuted() {
 }
 
 function contextMenuMuted() {
-  chrome.contextMenus.remove("mute");
+  if (currentMenuItem === "mute") chrome.contextMenus.remove("mute");
+  currentMenuItem = "unmute";
   chrome.contextMenus.create({
     id: "unmute",
-    title: "Unmute",
+    title: chrome.i18n.getMessage("unmute"),
     contexts: ["browser_action"],
     onclick: () => {
       contextMenuUnmuted();

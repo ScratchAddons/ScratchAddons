@@ -32,7 +32,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request === "getInitialUrl") {
     sendResponse(initialUrl);
   } else if (request.themesUpdated) {
-    injectUserstylesAndThemes({ themes: request.themesUpdated });
+    injectUserstylesAndThemes({ themes: request.themesUpdated, isUpdate: true });
   }
 });
 chrome.runtime.sendMessage("ready");
@@ -44,8 +44,10 @@ window.addEventListener("load", () => {
   }
 });
 
-function injectUserstylesAndThemes({ userstyleUrls, themes }) {
-  document.querySelectorAll(".scratch-addons-theme").forEach((style) => style.remove());
+function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
+  document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
+    if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
+  });
   for (const userstyleUrl of userstyleUrls || []) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
@@ -54,7 +56,11 @@ function injectUserstylesAndThemes({ userstyleUrls, themes }) {
     else document.documentElement.appendChild(link);
   }
   for (const theme of themes) {
-    for (const css of theme.styles) {
+    for (const styleUrl of theme.styleUrls) {
+      let css = theme.styles[styleUrl];
+      // Replace %addon-self-dir% for relative URLs
+      css = css.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${theme.addonId}`));
+      if (isUpdate && css.startsWith("/* sa-autoupdate-theme-ignore */")) continue;
       const style = document.createElement("style");
       style.classList.add("scratch-addons-theme");
       style.setAttribute("data-addon-id", theme.addonId);
@@ -80,15 +86,16 @@ function setCssVariables(addonSettings) {
   }
 }
 
-function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, themes }) {
+function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, userstyleUrls, themes }) {
   setCssVariables(globalState.addonSettings);
-  injectUserstylesAndThemes({ userstyleUrls, themes });
+  injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate: false });
 
   const template = document.createElement("template");
   template.id = "scratch-addons";
   template.setAttribute("data-path", chrome.runtime.getURL(""));
   template.setAttribute("data-userscripts", JSON.stringify(addonsWithUserscripts));
   template.setAttribute("data-global-state", JSON.stringify(globalState));
+  template.setAttribute("data-l10njson", JSON.stringify(l10njson));
   document.head.appendChild(template);
 
   const script = document.createElement("script");
@@ -103,7 +110,7 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
     } else if (request.fireEvent) {
       const eventDetails = JSON.stringify(request.fireEvent);
       template.setAttribute(`data-fire-event__${Date.now()}`, eventDetails);
-    } else if (request.setMsgCount) {
+    } else if (typeof request.setMsgCount !== "undefined") {
       template.setAttribute("data-msgcount", request.setMsgCount);
     }
   });

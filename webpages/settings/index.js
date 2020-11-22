@@ -29,7 +29,7 @@ const vue = new Vue({
     addonSettings: {},
     tags: [
       {
-        name: "Recommended",
+        name: chrome.i18n.getMessage("recommended"),
         matchType: "tag",
         matchName: "recommended",
         color: "blue",
@@ -41,7 +41,7 @@ const vue = new Vue({
         },
       },
       {
-        name: "Beta",
+        name: chrome.i18n.getMessage("beta"),
         matchType: "tag",
         matchName: "beta",
         color: "red",
@@ -53,7 +53,7 @@ const vue = new Vue({
         },
       },
       {
-        name: "Forums",
+        name: chrome.i18n.getMessage("forums"),
         matchType: "tag",
         matchName: "forums",
         color: "green",
@@ -65,7 +65,7 @@ const vue = new Vue({
         },
       },
       {
-        name: "For editor",
+        name: chrome.i18n.getMessage("forEditor"),
         matchType: "tag",
         matchName: "editor",
         color: "darkgreen",
@@ -77,7 +77,7 @@ const vue = new Vue({
         },
       },
       {
-        name: "For website",
+        name: chrome.i18n.getMessage("forWebsite"),
         matchType: "tag",
         matchName: "community",
         color: "yellow",
@@ -97,10 +97,16 @@ const vue = new Vue({
     version() {
       return chrome.runtime.getManifest().version;
     },
+    versionName() {
+      return chrome.runtime.getManifest().version_name;
+    },
   },
   methods: {
     modalToggle: function () {
       this.isOpen = !this.isOpen;
+    },
+    msg(message, ...params) {
+      return chrome.i18n.getMessage(message, ...params);
     },
     openReview() {
       if (typeof browser !== "undefined") {
@@ -187,7 +193,7 @@ const vue = new Vue({
       console.log("Updated", this.addonSettings[addon._addonId]);
     },
     loadPreset(preset, addon) {
-      if (window.confirm("Are you sure you want to load this preset?")) {
+      if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
         for (const property in preset.values) {
           this.updateOption(property, preset.values[property], addon);
         }
@@ -195,7 +201,7 @@ const vue = new Vue({
       }
     },
     loadDefaults(addon) {
-      if (window.confirm("Are you sure you want to reset this addon to default settings?")) {
+      if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
         for (const property of addon.settings) {
           this.updateOption(property.id, property.default, addon);
         }
@@ -265,5 +271,10 @@ window.addEventListener("keydown", function (e) {
   if (e.ctrlKey && e.key === "f") {
     e.preventDefault();
     document.querySelector("#searchBox").focus();
+  } else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
+    e.preventDefault();
+    vue.searchInput = "";
   }
 });
+
+document.title = chrome.i18n.getMessage("settingsTitle");

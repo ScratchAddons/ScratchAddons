@@ -95,6 +95,8 @@ h1 {
 .addons-container {
   overflow-y: auto;
   padding: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: grey none;
 }
 
 .addon-body {
@@ -319,6 +321,22 @@ h1 {
 .setting-input.check {
   height: 20px;
   width: 20px;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: white;
+  background-size: 20px 20px;
+  background-position: center center;
+}
+
+.setting-input.check:checked {
+  background-color: #175ef8;
+  background-image: url(../../images/icons/check.svg);
+}
+
+.setting-input.check:hover:not(:focus) {
+  border-color: #0e44b8;
 }
 
 .setting-input.number {
@@ -484,13 +502,17 @@ h1 {
   transform: rotate(180deg);
 }
 
+.licenses {
+  height: 100%;
+  min-height: 100vh;
+}
+
 .licenses-block {
   padding: 2rem;
 }
 
 .licenses-body pre {
   white-space: pre-wrap;
-  width: 70%;
 }
 
 input[type="color" i] {
@@ -641,4 +663,22 @@ input[type="color"]::-webkit-color-swatch {
 .large-dropdown:hover {
   outline: none;
   background: #151515;
+}
+
+/*scrollbar*/
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* hide track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 4px;
 }

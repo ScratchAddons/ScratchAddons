@@ -13,5 +13,6 @@
     }
   ],
   "tags": ["community", "recommended"],
-  "enabledByDefault": false
+  "enabledByDefault": true,
+  "l10n": true
 }

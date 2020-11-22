@@ -28,5 +28,6 @@
       "type": "color",
       "default": "#4d97ff"
     }
-  ]
+  ],
+  "l10n": true
 }

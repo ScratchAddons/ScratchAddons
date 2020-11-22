@@ -30,7 +30,7 @@ body {
 .popup-name img {
   vertical-align: middle;
   filter: brightness(10);
-  height: 14px;
+  height: 18px;
 }
 .popup-title {
   padding: 0 5px;
@@ -88,8 +88,8 @@ body {
 .popup-name.sel {
   background-color: #ff7b26;
 }
-#other-popups a {
-  cursor: pointer;
+.popout > .popout-img {
+  height: 10px;
 }
 
 iframe {
