@@ -105,4 +105,18 @@ export default class Tab extends EventTarget {
       });
     }
   }
+  
+  /**
+   * Obtain translation used by Scratch.
+   * @param {string} key Translation key.
+   * @returns {string} Translation.
+  */
+  scratchMessage (key) {
+      if (this.clientVersion === "scratch-www") {
+          return window._messages[window._locale][key] || key;
+      }
+      if (this.clientVersion === "scratchr2") {
+          return window.django.gettext(key);
+      }
+  }
 }
