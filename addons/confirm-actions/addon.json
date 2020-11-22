@@ -1,6 +1,6 @@
 {
   "name": "Confirm actions",
-  "description": "Actions you take like sharing projects and following users will first have you confirming to do so, in case you don't.",
+  "description": "Asks if you're sure when committing actions under your Scratch account, such as sharing projects. ",
   "credits": [
     {
       "name": "TheColaber",
@@ -16,19 +16,19 @@
   ],
   "settings": [
     {
-      "name": "Confirm Project Sharing",
+      "name": "Confirm project sharing",
       "id": "projectsharing",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Confirm Following/Unfollowing",
+      "name": "Confirm following/unfollowing",
       "id": "followinguser",
       "type": "boolean",
       "default": false
     },
     {
-      "name": "Confirm Joining Studio",
+      "name": "Confirm joining studios",
       "id": "joiningstudio",
       "type": "boolean",
       "default": false
