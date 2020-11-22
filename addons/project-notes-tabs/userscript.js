@@ -33,6 +33,7 @@ export default async function ({ addon, global, console }) {
       tabs.querySelectorAll(".tab-choice-sa")[tab].classList.add("sa-selected");
       tabs.querySelectorAll(".tab-choice-sa")[!tab + 0].classList.remove("sa-selected");
       document.querySelectorAll(".description-block")[tab].style.marginBottom = "0rem";
+      document.querySelectorAll(".description-block")[tab].style.display = "block";
       document.querySelectorAll(".description-block")[!tab + 0].style.display = "none";
     }
   }
