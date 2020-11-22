@@ -1,3 +1,4 @@
 {
-  "search-profile/profile": "Profile"
+  "search-profile/profile": "Profile",
+  "search-profile/invalid-username": "\"$username$\" is an invalid username!"
 }
