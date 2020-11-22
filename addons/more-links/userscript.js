@@ -12,8 +12,8 @@ export default async function ({ addon }) {
     case "projects":
       // Need to convert #[numbers] to solve conflict between tags and external Scratch player links.
       document.querySelectorAll(".project-description a").forEach((element) => {
-        if (/^#\d+$/.test(element.textContent)) {
-            element.parentElement.insertBefore(document.createTextNode(element.textContent), element);
+        if (/^#\d+$/.test(element.textContent) && element.previousSibling instanceof Text) {
+            element.previousSibling.textContent += element.textContent;
             element.remove();
         }
       });
