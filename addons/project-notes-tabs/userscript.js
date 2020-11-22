@@ -27,7 +27,9 @@ export default async function ({ addon, global, console }) {
     if (!(allLabels - 1)) notesTab.style.marginLeft = "5px";
     for (var i = 0; i < tabs.querySelectorAll(".tab-choice-sa").length; i++) {
       tabs.querySelectorAll(".tab-choice-sa")[i].addEventListener("click", function (e) {
-        selectTab((e.path[0].classList.length ? e.path[0].children[0] : e.path[0]).innerText === instructionsLabel ? 0 : 1);
+        selectTab(
+          (e.path[0].classList.length ? e.path[0].children[0] : e.path[0]).innerText === instructionsLabel ? 0 : 1
+        );
       });
     }
     selectTab(0);
