@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, global, console }) {
   const instructionsLabel = addon.tab.scratchMessage("project.instructionsLabel");
   const creditsLabel = addon.tab.scratchMessage("project.notesAndCreditsLabel");
   while (true) {
