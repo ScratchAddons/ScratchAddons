@@ -40,7 +40,7 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     function doCloneChecks(v) {
-      if (v == 0) {
+      if (v <= 0) {
         countContainerContainer.style.display = "none";
       } else {
         countContainerContainer.style.display = "";
