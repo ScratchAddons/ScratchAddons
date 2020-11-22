@@ -1,9 +1,9 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   if (addon.settings.get("projectsharing"))
-    actionAlert("[class*='share-button_share-button'], .banner-button", "Are you sure you want to share?");
+    actionAlert("[class*='share-button_share-button'], .banner-button", msg("share"));
   if (addon.settings.get("followinguser"))
-    actionAlert(".follow-button", "Are you sure you want to follow/unfollow this user?");
-  if (addon.settings.get("joiningstudio")) actionAlert("a.accept", "Are you sure you would like to join this studio?");
+    actionAlert(".follow-button", msg("follow"));
+  if (addon.settings.get("joiningstudio")) actionAlert("a.accept", msg("joinstudio"));
   async function actionAlert(queryButton, res) {
     while (true) {
       let button = await addon.tab.waitForElement(queryButton, { markAsSeen: true });
