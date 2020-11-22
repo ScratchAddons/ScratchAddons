@@ -1,5 +1,5 @@
 {
-    "confirm-actions/share": "Are you sure you want to share?",
-    "confirm-actions/follow": "Are you sure you want to follow/unfollow this user?",
-    "confirm-actions/joinstudio": "Are you sure you would like to join this studio?"
+  "confirm-actions/share": "Are you sure you want to share?",
+  "confirm-actions/follow": "Are you sure you want to follow/unfollow this user?",
+  "confirm-actions/joinstudio": "Are you sure you would like to join this studio?"
 }
