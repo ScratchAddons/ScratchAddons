@@ -4,11 +4,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   if (request && request.messages) {
     return sendResponse(
-      request.messages.map((value) =>
-        typeof value === "string"
-          ? scratchAddons.l10n.messages[value] || value
-          : scratchAddons.l10n.get(value.msg, value.placeholders)
-      )
+      request.messages.map(value => scratchAddons.l10n.messages[value] || value)
     );
   }
   if (request && request.loadMsgByAddonIds) {

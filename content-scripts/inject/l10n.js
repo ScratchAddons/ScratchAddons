@@ -21,6 +21,7 @@ export default class UserscriptLocalizationProvider extends LocalizationProvider
       } catch (_) {
         continue;
       }
+      this._generateCache(messages);
       this.messages = Object.assign(messages, this.messages);
     }
     if (addonId === "_general") {

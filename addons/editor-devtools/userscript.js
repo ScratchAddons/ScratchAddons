@@ -31,7 +31,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 <p><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-desc")}</p>
 <p><strong>${m("ctrl-space")}</strong> &ndash; ${m("ctrl-space-desc")}</p>
 <hr />
-<h2><strong>${m("costume-bar-features")}</strong></h2>
+<h2><strong>${m("costume-tab-features")}</strong></h2>
 <p><strong>${m("find-bar")}</strong> &ndash; ${m("find-bar-costume-desc")}</p>
 <p><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-desc")}</p>
 <p><strong>${m("send-top-bottom")}</strong> &ndash; ${m("send-top-bottom-desc")}</p>
@@ -503,9 +503,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     let orphanCount = result.orphans.blocks.length;
     if (orphanCount > 0) {
       let message = msg("orphaned", {
-        count: orphanCount,
-        plural: orphanCount === 1 ? msg("block") : msg("blocks"),
-        it: orphanCount === 1 ? msg("it") : msg("them"),
+        count: orphanCount
       });
       if (confirm(message)) {
         for (const block of result.orphans.blocks) {
