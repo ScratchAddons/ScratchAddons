@@ -503,7 +503,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     let orphanCount = result.orphans.blocks.length;
     if (orphanCount > 0) {
       let message = msg("orphaned", {
-        count: orphanCount
+        count: orphanCount,
       });
       if (confirm(message)) {
         for (const block of result.orphans.blocks) {
