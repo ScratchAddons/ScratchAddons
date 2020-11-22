@@ -225,8 +225,10 @@
     </div>
     <div v-show="isOpen" class="modal">
       <div class="modal-content">
-        <span @click="modalToggle()" class="close">&times;</span>
-        <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
+        <div>
+          <span @click="modalToggle()" class="close">&times;</span>
+          <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
+        </div>
         <div class="settings-block">
           <div class="setting-body">
             <div class="addon-topbar">
