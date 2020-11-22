@@ -1,0 +1,75 @@
+{
+  "name": "Better messages Filter",
+  "description": "Filters you scratch messages on the messages page with the settings you choose.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/messages/"],
+      "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "@comment.svg Notify profile comments & replies",
+      "id": "commentsforme",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "@comment.svg Notify comments on my projects",
+      "id": "commentsonmyprojects",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "@forum.svg Notify forum activity",
+      "id": "forumpost",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "@heart.svg Notify loves",
+      "id": "loveproject",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "@star.svg Notify favorites",
+      "id": "favoriteproject",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "@follow.svg Notify new followers",
+      "id": "followuser",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "@studio-add.svg Notify studio invites",
+      "id": "curatorinvite",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "@studio.svg Notify studio activity",
+      "id": "studioactivity",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "@remix.svg Notify remixes",
+      "id": "remixproject",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": false
+}
