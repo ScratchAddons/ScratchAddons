@@ -541,7 +541,6 @@ input[type="color"]::-webkit-color-swatch {
 .addon-warn img {
   height: 15px;
   margin-right: 10px;
-  display: flex;
   flex: 0 0;
 }
 .addon-warn img {
