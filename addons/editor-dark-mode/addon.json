@@ -119,6 +119,5 @@
     }
   ],
   "tags": ["editor", "theme"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }
