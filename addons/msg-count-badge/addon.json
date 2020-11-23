@@ -4,6 +4,5 @@
   "persistentScripts": ["background.js"],
   "permissions": ["badge"],
   "tags": ["community", "recommended"],
-  "enabledByDefault": true,
-  "l10n": true
+  "enabledByDefault": true
 }
