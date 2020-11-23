@@ -10,9 +10,21 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.tabs.update(sender.tab.id, { url: chrome.runtime.getURL("webpages/settings/index.html") });
 });
 
+function getL10NURLs() {
+  const langCode = scratchAddons.globalState.auth.scratchLang.toLowerCase();
+  const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
+  if (langCode.includes("-")) {
+    urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
+  }
+  const enJSON = chrome.runtime.getURL("addons-l10n/en");
+  if (!urls.includes(enJSON)) urls.push(enJSON);
+  return urls;
+}
+
 async function getContentScriptInfo(url) {
   const data = {
     url,
+    l10njson: getL10NURLs(),
     globalState: {},
     addonsWithUserscripts: [],
     userstyleUrls: [],
@@ -39,13 +51,15 @@ async function getContentScriptInfo(url) {
         if (userscriptMatches({ url }, style, addonId)) styleUrls.push(style.url);
       }
       if (styleUrls.length) {
-        const styles = [];
-        data.themes.push({ addonId, styles });
+        const styles = {};
+        data.themes.push({ addonId, styleUrls, styles });
         for (const styleUrl of styleUrls) {
           fetchThemeStylesPromises.push(
             fetch(chrome.runtime.getURL(`/addons/${addonId}/${styleUrl}`))
               .then((res) => res.text())
-              .then((text) => styles.push(text))
+              .then((text) => {
+                styles[styleUrl] = text;
+              })
           );
         }
       }

@@ -90,7 +90,5 @@ export default async function ({ addon, global, console }) {
     }
   }
 
-  style.textContent = stylesheet;
-
-  document.head.appendChild(style);
+  document.querySelector(".scratch-addons-theme[data-addon-id='editor-theme3']").textContent += stylesheet;
 }

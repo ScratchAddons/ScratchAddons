@@ -1,10 +1,10 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   console.log("clones counter enabled");
 
   const vm = addon.tab.traps.onceValues.vm;
 
   while (true) {
-    let bar = await addon.tab.waitForElement(".controls_controls-container_2xinB", { markAsSeen: true });
+    let bar = await addon.tab.waitForElement("[class^='controls_controls-container']", { markAsSeen: true });
 
     if (addon.tab.editorMode === "editor") {
       var countContainerContainer = document.createElement("div");
@@ -40,7 +40,7 @@ export default async function ({ addon, global, console }) {
     }
 
     function doCloneChecks(v) {
-      if (v == 0) {
+      if (v <= 0) {
         countContainerContainer.style.display = "none";
       } else {
         countContainerContainer.style.display = "";
@@ -53,7 +53,7 @@ export default async function ({ addon, global, console }) {
         count.style.color = "";
         icon.src = addon.self.dir + "/cat.svg";
       }
-      count.innerText = `clones: ${v}`;
+      count.innerText = msg("clones", { cloneCount: v });
     }
   }
 }

@@ -80,6 +80,10 @@ body {
   color: black;
 }
 
+.addon-notice img {
+  filter: brightness(0);
+}
+
 .addon-body img {
   filter: invert(100%) brightness(0);
 }
@@ -135,4 +139,21 @@ body {
 }
 .switch::before {
   background: #fff;
+}
+.modal-content {
+  background-color: #fcfcfc;
+}
+.close {
+  filter: invert(1);
+}
+.modal-content img {
+  filter: invert(1);
+}
+.setting-body {
+  background: #f7f7f7;
+  border: 1px solid #cfcfcf;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.setting-body img {
+  filter: invert(100%) brightness(0);
 }

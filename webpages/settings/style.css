@@ -95,6 +95,8 @@ h1 {
 .addons-container {
   overflow-y: auto;
   padding: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: grey none;
 }
 
 .addon-body {
@@ -176,6 +178,8 @@ h1 {
   border-radius: 5px;
   font-weight: bold;
   margin: 10px 0;
+  display: flex;
+  align-items: center;
 }
 .addon-description-full,
 .addon-credits {
@@ -296,6 +300,11 @@ h1 {
   margin-right: 10px;
 }
 
+.inline-icon {
+  height: 16px;
+  vertical-align: bottom;
+}
+
 .setting-input {
   color: #fff;
   background: #222222;
@@ -314,6 +323,22 @@ h1 {
 .setting-input.check {
   height: 20px;
   width: 20px;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: white;
+  background-size: 20px 20px;
+  background-position: center center;
+}
+
+.setting-input.check:checked {
+  background-color: #175ef8;
+  background-image: url(../../images/icons/check.svg);
+}
+
+.setting-input.check:hover:not(:focus) {
+  border-color: #0e44b8;
 }
 
 .setting-input.number {
@@ -479,13 +504,17 @@ h1 {
   transform: rotate(180deg);
 }
 
+.licenses {
+  height: 100%;
+  min-height: 100vh;
+}
+
 .licenses-block {
   padding: 2rem;
 }
 
 .licenses-body pre {
   white-space: pre-wrap;
-  width: 70%;
 }
 
 input[type="color" i] {
@@ -525,4 +554,146 @@ input[type="color"]::-webkit-color-swatch {
   border-radius: 5px;
   font-weight: bold;
   margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+.addon-notice img,
+.addon-warn img {
+  height: 15px;
+  margin-right: 10px;
+  flex: 0 0;
+}
+.addon-warn img {
+  filter: brightness(0) invert(1);
+}
+.modal {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: #222;
+  margin: auto;
+  padding: 20px;
+  width: 800px;
+  border-radius: 10px;
+  height: 75%;
+  display: flex;
+  flex-direction: column;
+}
+.close:hover {
+  color: #555;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.close {
+  color: #fff;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.settings-heading {
+  margin: 10px 10px 24px 10px;
+}
+.footer {
+  text-align: center;
+  width: 800px;
+  color: gray;
+  margin-top: auto;
+}
+.footer a {
+  color: gray;
+}
+.settings-block {
+  margin-top: 30px;
+}
+.modal .large-button {
+  display: block;
+  margin: 7px;
+}
+.setting-body {
+  margin: 10px;
+  background: #2a2a2a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+.setting-settings {
+  padding: 0 20px;
+}
+.setting-setting {
+  margin: 10px;
+  margin-right: 20px;
+  min-height: 35px;
+  display: flex;
+  align-items: center;
+}
+.setting-description {
+  margin-left: 10px;
+  color: gray;
+  width: 35vw;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.addon-name {
+  margin-left: 15px;
+  font-weight: 300;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.setting-setting {
+  margin-top: 10px;
+}
+.theme-switch {
+  height: 25px;
+  float: right;
+  right: 25px;
+  position: fixed;
+  cursor: pointer;
+}
+.large-dropdown {
+  color: #fff;
+  background: #222222;
+  border: 1px solid #000;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: 0.25s ease;
+  outline: none;
+  height: 32px;
+}
+.large-dropdown:hover {
+  outline: none;
+  background: #151515;
+}
+
+/*scrollbar*/
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* hide track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 4px;
 }

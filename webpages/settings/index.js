@@ -2,18 +2,25 @@
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
-
 chrome.storage.sync.get(["globalTheme"], function (r) {
   let rr = false; //true = light, false = dark
   if (r.globalTheme) rr = r.globalTheme;
   if (rr) {
     document.head.appendChild(lightThemeLink);
+    vue.theme = true;
+    vue.themepath = "../../images/icons/moon.svg";
+  } else {
+    vue.theme = false;
+    vue.themepath = "../../images/icons/theme.svg";
   }
 });
 
 const vue = new Vue({
   el: "body",
   data: {
+    theme: "",
+    themepath: "",
+    isOpen: false,
     loaded: false,
     manifests: [],
     selectedTab: "all",
@@ -22,7 +29,7 @@ const vue = new Vue({
     addonSettings: {},
     tags: [
       {
-        name: "Recommended",
+        name: chrome.i18n.getMessage("recommended"),
         matchType: "tag",
         matchName: "recommended",
         color: "blue",
@@ -34,7 +41,7 @@ const vue = new Vue({
         },
       },
       {
-        name: "Beta",
+        name: chrome.i18n.getMessage("beta"),
         matchType: "tag",
         matchName: "beta",
         color: "red",
@@ -46,7 +53,7 @@ const vue = new Vue({
         },
       },
       {
-        name: "Forums",
+        name: chrome.i18n.getMessage("forums"),
         matchType: "tag",
         matchName: "forums",
         color: "green",
@@ -58,7 +65,7 @@ const vue = new Vue({
         },
       },
       {
-        name: "For editor",
+        name: chrome.i18n.getMessage("forEditor"),
         matchType: "tag",
         matchName: "editor",
         color: "darkgreen",
@@ -70,7 +77,7 @@ const vue = new Vue({
         },
       },
       {
-        name: "For website",
+        name: chrome.i18n.getMessage("forWebsite"),
         matchType: "tag",
         matchName: "community",
         color: "yellow",
@@ -87,8 +94,20 @@ const vue = new Vue({
     tagsToShow() {
       return this.tags.filter((tag) => tag.tabShow[this.selectedTab]);
     },
+    version() {
+      return chrome.runtime.getManifest().version;
+    },
+    versionName() {
+      return chrome.runtime.getManifest().version_name;
+    },
   },
   methods: {
+    modalToggle: function () {
+      this.isOpen = !this.isOpen;
+    },
+    msg(message, ...params) {
+      return chrome.i18n.getMessage(message, ...params);
+    },
     openReview() {
       if (typeof browser !== "undefined") {
         window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
@@ -107,15 +126,19 @@ const vue = new Vue({
     clearSearch() {
       this.searchInput = "";
     },
-    switchTheme() {
+    setTheme(mode) {
       chrome.storage.sync.get(["globalTheme"], function (r) {
         let rr = true; //true = light, false = dark
-        if (r.globalTheme) rr = !r.globalTheme;
+        rr = mode;
         chrome.storage.sync.set({ globalTheme: rr }, function () {
-          if (rr) {
+          if (rr && r.globalTheme !== rr) {
             document.head.appendChild(lightThemeLink);
-          } else {
+            vue.theme = true;
+            vue.themepath = "../../images/icons/moon.svg";
+          } else if (r.globalTheme !== rr) {
             document.head.removeChild(lightThemeLink);
+            vue.theme = false;
+            vue.themepath = "../../images/icons/theme.svg";
           }
         });
       });
@@ -170,7 +193,7 @@ const vue = new Vue({
       console.log("Updated", this.addonSettings[addon._addonId]);
     },
     loadPreset(preset, addon) {
-      if (window.confirm("Are you sure you want to load this preset?")) {
+      if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
         for (const property in preset.values) {
           this.updateOption(property, preset.values[property], addon);
         }
@@ -178,12 +201,26 @@ const vue = new Vue({
       }
     },
     loadDefaults(addon) {
-      if (window.confirm("Are you sure you want to reset this addon to default settings?")) {
+      if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
         for (const property of addon.settings) {
           this.updateOption(property.id, property.default, addon);
         }
         console.log(`Loaded default values for ${addon.id}`);
       }
+    },
+    textParse(text, addon) {
+      const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
+      return text.replace(regex, (icon) => {
+        if (icon[0] == "\\") {
+          return icon.slice(1);
+        }
+        if (icon[0] == "@") {
+          return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
+        }
+        if (icon[0] == "#") {
+          return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
+        }
+      });
     },
   },
   watch: {
@@ -228,11 +265,47 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   vue.manifests = manifests.map(({ manifest }) => manifest);
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
+  setTimeout(handleKeySettings, 0);
 });
+
+function handleKeySettings() {
+  let keyInputs = document.querySelectorAll(".key");
+  for (const input of keyInputs) {
+    input.addEventListener("keydown", function (e) {
+      e.preventDefault();
+      e.target.value = e.ctrlKey
+        ? "Ctrl" +
+          (e.shiftKey ? " + Shift" : "") +
+          (e.key == "Control" || e.key == "Shift"
+            ? ""
+            : (e.ctrlKey ? " + " : "") +
+              (e.key.toUpperCase() === e.key
+                ? e.code.includes("Digit")
+                  ? e.code.substring(5, e.code.length)
+                  : e.key
+                : e.key.toUpperCase()))
+        : "";
+      vue.updateOption(
+        e.target.getAttribute("data-setting-id"),
+        e.target.value,
+        vue.manifests.find((manifest) => manifest._addonId === e.target.getAttribute("data-addon-id"))
+      );
+    });
+    input.addEventListener("keyup", function (e) {
+      // Ctrl by itself isn't a hotkey
+      if (e.target.value == "Ctrl") e.target.value = "";
+    });
+  }
+}
 
 window.addEventListener("keydown", function (e) {
   if (e.ctrlKey && e.key === "f") {
     e.preventDefault();
     document.querySelector("#searchBox").focus();
+  } else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
+    e.preventDefault();
+    vue.searchInput = "";
   }
 });
+
+document.title = chrome.i18n.getMessage("settingsTitle");

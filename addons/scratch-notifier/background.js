@@ -1,18 +1,18 @@
 import commentEmojis from "./comment-emojis.js";
 
-export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
+export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval, msg }) {
   let msgCount = null;
   let lastDateTime = null;
   let lastAuthChange; // Used to check if auth changed while waiting for promises to resolve
   const emojis = {
-    addcomment: "💬",
-    forumpost: "📚",
-    loveproject: "❤️",
-    favoriteproject: "⭐",
-    followuser: "🧑",
-    curatorinvite: "✉️",
-    remixproject: "🔄",
-    studioactivity: "🆕",
+    addcomment: "comment",
+    forumpost: "forum",
+    loveproject: "heart",
+    favoriteproject: "star",
+    followuser: "follow",
+    curatorinvite: "studio-add",
+    remixproject: "remix",
+    studioactivity: "studio",
   };
 
   checkCount();
@@ -44,61 +44,100 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   }) {
     let text = "";
     let url;
-    if (emoji) text += `${emoji} `;
     if (messageType.startsWith("addcomment/")) {
       url = commentUrl;
       if (title.length > 20) title = `${title.substring(0, 17).trimEnd()}...`;
-      if (messageType === "addcomment/ownProjectNewComment") {
-        text += `${actor} commented in your project "${title}":\n${fragment}`;
-      } else if (messageType === "addcomment/projectReplyToSelf") {
-        text += `${actor} replied to you in project "${title}":\n${fragment}`;
-      } else if (messageType === "addcomment/ownProjectReplyToOther") {
-        text += `${actor} replied to ${commentee} in project "${title}":\n${fragment}`;
-      } else if (messageType === "addcomment/ownProfileNewComment") {
-        text += `${actor} commented in your profile:\n${fragment}`;
-      } else if (messageType === "addcomment/ownProfileReplyToSelf") {
-        text += `${actor} replied to you in your profile:\n${fragment}`;
-      } else if (messageType === "addcomment/ownProfileReplyToOther") {
-        text += `${actor} replied to ${commentee} in your profile:\n${fragment}`;
-      } else if (messageType === "addcomment/otherProfileReplyToSelf") {
-        text += `${actor} replied in ${title}'s profile:\n${fragment}`;
-      } else if (messageType === "addcomment/studio") {
-        text += `${actor} replied in studio "${title}":\n${fragment}`;
+      var notificationTitle;
+      switch (messageType.split("/")[1]) {
+        case "ownProjectNewComment":
+          notificationTitle = msg("notif-own-project", { actor, title });
+          text = fragment;
+          break;
+        case "projectReplyToSelf":
+          notificationTitle = msg("notif-project-reply", { actor, title });
+          text = fragment;
+          break;
+        case "ownProjectReplyToOther":
+          notificationTitle = msg("notif-own-project-reply", { actor, commentee, title });
+          text = fragment;
+          break;
+        case "ownProfileNewComment":
+          notificationTitle = msg("notif-profile", { actor });
+          text = fragment;
+          break;
+        case "ownProfileReplyToSelf":
+          notificationTitle = msg("notif-own-profile-reply", { actor });
+          text = fragment;
+          break;
+        case "ownProfileReplyToOther":
+          notificationTitle = msg("notif-own-profile-reply-other", { actor, commentee });
+          text = fragment;
+          break;
+        case "otherProfileReplyToSelf":
+          notificationTitle = msg("notif-profile-reply", { actor, title });
+          text = fragment;
+          break;
+        case "studio":
+          notificationTitle = msg("notif-studio-reply", { actor, title });
+          text = fragment;
+          break;
+        default:
+          notificationTitle = msg("notif-comment");
+          break;
       }
-    } else if (messageType === "forumpost") {
-      text += `There are new posts in the forum thread "${title}"`;
-      url = `https://scratch.mit.edu/discuss/topic/${element_id}/unread/`;
-    } else if (messageType === "loveproject") {
-      text += `${actor} loved your project "${title}"`;
-      url = `https://scratch.mit.edu/users/${actor}/`;
-    } else if (messageType === "favoriteproject") {
-      text += `${actor} favorited your project "${title}"`;
-      url = `https://scratch.mit.edu/users/${actor}/`;
-    } else if (messageType === "followuser") {
-      text += `${actor} is now following you`;
-      url = `https://scratch.mit.edu/users/${actor}/`;
-    } else if (messageType === "curatorinvite") {
-      text += `${actor} invited you to curate the studio "${title}"`;
-      url = `https://scratch.mit.edu/studios/${element_id}/curators/`;
-    } else if (messageType === "remixproject") {
-      text += `${actor} remixed your project "${parent_title}" as "${title}"`;
-      url = `https://scratch.mit.edu/projects/${element_id}/`;
-    } else if (messageType === "studioactivity") {
-      text += `There was new activity in studio "${title}" today`;
+    } else {
+      switch (messageType) {
+        case "forumpost":
+          notificationTitle = msg("notif-forum", { title });
+          url = `https://scratch.mit.edu/discuss/topic/${element_id}/unread/`;
+          break;
+        case "loveproject":
+          notificationTitle = msg("notif-love", { actor, title });
+          url = `https://scratch.mit.edu/users/${actor}/`;
+          break;
+        case "favoriteproject":
+          notificationTitle = msg("notif-fav", { actor, title });
+          url = `https://scratch.mit.edu/users/${actor}/`;
+          break;
+        case "followuser":
+          notificationTitle = msg("notif-follow", { actor });
+          url = `https://scratch.mit.edu/users/${actor}/`;
+          break;
+        case "curatorinvite":
+          notificationTitle = msg("notif-invite", { actor, title });
+          url = `https://scratch.mit.edu/studios/${element_id}/curators/`;
+          break;
+        case "remixproject":
+          notificationTitle = msg("notif-remix", { actor, parent_title, title });
+          url = `https://scratch.mit.edu/projects/${element_id}/`;
+          break;
+        case "studioactivity":
+          notificationTitle = msg("notif-studio", { title });
+          url = `https://scratch.mit.edu/studios/${element_id}/activity`;
+          break;
+        default:
+          notificationTitle = msg("notif-generic");
+          break;
+      }
     }
+
+    const soundSetting = addon.settings.get("notification_sound");
+    if (soundSetting === "addons-ping") new Audio(addon.self.dir + "/ping.mp3").play();
+
     const notifId = await addon.notifications.create({
       type: "basic",
-      title: "New Scratch message",
-      iconUrl: "/images/icon.png",
+      title: notificationTitle,
+      iconUrl: emoji ? `../../images/icons/${emoji}.svg` : "/images/icon.png",
       message: text,
       buttons: [
         {
-          title: "Open messages page",
+          title: msg("open"),
         },
         {
-          title: "Mark all as read",
+          title: msg("clear"),
         },
       ],
+      silent: soundSetting === "system-default" ? false : true,
     });
     if (!notifId) return;
     const onClick = (e) => {

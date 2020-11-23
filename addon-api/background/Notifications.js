@@ -53,7 +53,9 @@ export default class Notifications extends EventTarget {
       // On Firefox, remove notification properties that throw.
       delete newOpts.buttons;
       delete newOpts.requireInteraction;
+      delete newOpts.silent;
     } else newOpts = opts;
+    newOpts.contextMessage = "Scratch Addons";
     return new Promise((resolve) => {
       chrome.notifications.create(notifId, newOpts, (callback) => resolve(callback));
     });

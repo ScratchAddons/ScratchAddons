@@ -17,7 +17,7 @@ export default async function ({ addon, global, console }) {
   });
 
   while (true) {
-    let button = await addon.tab.waitForElement("img.green-flag_green-flag_1kiAo", { markAsSeen: true });
+    let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", { markAsSeen: true });
     let mode = true;
 
     button.addEventListener("click", (e) => {

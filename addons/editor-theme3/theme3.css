@@ -1,3 +1,28 @@
+/* sa-autoupdate-theme-ignore */
+
+path.blocklyBlockBackground[fill="#FF6680"],
+path.blocklyBlockBackground[fill="#5CB1D6"],
+path.blocklyBlockBackground[fill="#FFBF00"],
+g[data-category] > path.blocklyBlockBackground {
+  stroke: #0003;
+}
+g[data-argument-type="dropdown"] > path,
+g[data-argument-type="dropdown"] > rect,
+g[data-argument-type="variable"] > rect,
+g[data-argument-type="variable"] > path,
+g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > path,
+path[data-argument-type="boolean"] {
+  stroke: #0003;
+  fill: #0001;
+}
+g[data-argument-type*="text"] > path,
+g > line {
+  stroke: #0002;
+}
+.scratchCategoryItemBubble {
+  border-color: #0003 !important;
+}
+
 path.blocklyBlockBackground[fill="#FF6680"],
 path.blocklyBlockBackground[fill="#5CB1D6"],
 path.blocklyBlockBackground[fill="#FFBF00"],

@@ -2,7 +2,7 @@ html {
   font-size: 12px;
   height: 100%;
   scrollbar-width: thin;
-  scrollbar-color: #ff7b26 rgba(0, 0, 0, 0);
+  scrollbar-color: grey none;
   color: #dddddd;
 }
 html.fullscreen {
@@ -17,13 +17,6 @@ body {
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: #222;
-}
-
-body::-webkit-scrollbar {
-  width: 10px;
-}
-body::-webkit-scrollbar-thumb {
-  background-color: #ff7b26;
 }
 
 body.fullscreen {
@@ -117,6 +110,13 @@ button {
   z-index: 999;
   margin: 10px 0px;
 }
+.small-icon {
+  height: 14px;
+  vertical-align: text-bottom;
+}
+.small-icon:not(.colored) {
+  filter: brightness(100);
+}
 .message-type-title-text {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -128,7 +128,7 @@ button {
 .float-right {
   margin-left: 4px;
   white-space: nowrap;
-  font-size: 0.9rem;
+  font-size: 12px;
 }
 .float-right > span {
   display: inline-block;
@@ -168,7 +168,6 @@ button {
 }
 .comment-content-text {
   margin-right: 10px;
-  display: inline-block;
   overflow: hidden; /* Avoid zalgo */
 }
 .comment-content-text:after {
@@ -192,9 +191,9 @@ button {
 }
 .popout-comment {
   cursor: pointer;
-  height: 0.5rem;
-  vertical-align: middle;
-  filter: brightness(0) invert(1);
+  height: 10px;
+  vertical-align: text-top;
+  filter: brightness(100);
 }
 .delete-btn {
   float: right;
@@ -235,7 +234,7 @@ button {
   padding: 8px;
   resize: vertical;
   margin-top: 8px;
-  font-size: 0.8rem;
+  font-size: 12px;
   border-radius: 8px;
   border: 2px solid rgba(0, 0, 0, 0.2);
   background-color: #222222;
@@ -286,11 +285,29 @@ button {
   height: 0.8rem;
   vertical-align: middle;
   opacity: 0.6;
-  filter: invert(1);
+  filter: brightness(100);
 }
 #open-messages {
   color: inherit;
 }
 #open-messages:hover #popout {
   opacity: 1;
+  filter: none;
+}
+/*scrollbar*/
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* hide track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 4px;
 }
