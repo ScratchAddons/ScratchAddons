@@ -569,7 +569,6 @@ input[type="color"]::-webkit-color-swatch {
 .modal {
   position: fixed;
   z-index: 1;
-  padding-top: 100px;
   left: 0;
   top: 0;
   width: 100%;
@@ -577,6 +576,9 @@ input[type="color"]::-webkit-color-swatch {
   overflow: auto;
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
@@ -585,7 +587,9 @@ input[type="color"]::-webkit-color-swatch {
   padding: 20px;
   width: 800px;
   border-radius: 10px;
-  min-height: 500px;
+  height: 75%;
+  display: flex;
+  flex-direction: column;
 }
 .close:hover {
   color: #555;
@@ -604,17 +608,15 @@ input[type="color"]::-webkit-color-swatch {
   margin: 10px 10px 24px 10px;
 }
 .footer {
-  position: fixed;
-  vertical-align: bottom;
   text-align: center;
   width: 800px;
   color: gray;
+  margin-top: auto;
 }
 .footer a {
   color: gray;
 }
 .settings-block {
-  height: 435px;
   margin-top: 30px;
 }
 .modal .large-button {

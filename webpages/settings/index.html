@@ -242,8 +242,10 @@
     </div>
     <div v-show="isOpen" class="modal">
       <div class="modal-content">
-        <span @click="modalToggle()" class="close">&times;</span>
-        <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
+        <div>
+          <span @click="modalToggle()" class="close">&times;</span>
+          <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
+        </div>
         <div class="settings-block">
           <div class="setting-body">
             <div class="addon-topbar">
@@ -271,16 +273,19 @@
           </div>
         </div>
         <div class="footer">
-          <span
-            >{{ msg("extensionName") }}
+          <p>
+            {{ msg("extensionName") }}
             <a
               href="https://scratchaddons.com/changelog?versionname={{ versionName }}"
               title="{{ msg('changelog') }}"
               target="_blank"
             >
               v{{ version }}</a
-            ></span
-          >
+            >
+          </p>
+          <p>
+            <a href="./licenses.html?libraries=intl-messageformat,vue" target="_blank">{{ msg("libraryCredits") }}</a>
+          </p>
         </div>
       </div>
     </div>

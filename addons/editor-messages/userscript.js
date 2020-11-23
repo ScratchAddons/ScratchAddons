@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console }) {
   const messages = document.createElement("a");
   messages.href = "/messages/";
-  messages.title = "Messages";
+  messages.title = addon.tab.scratchMessage("general.messages");
   messages.classList.add("sa-editormessages");
   let messageCount = document.createElement("span");
   messageCount.classList.add("sa-editormessages-count");

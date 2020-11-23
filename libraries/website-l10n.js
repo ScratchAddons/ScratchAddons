@@ -10,5 +10,7 @@ export default class WebsiteLocalizationProvider extends LocalizationProvider {
             return acc;
         }, {});
         this.messages = Object.assign(keyValue, this.messages);
+        this._refreshDateTime();
+        this._generateCache(keyValue);
     }
 }
