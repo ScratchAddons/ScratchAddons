@@ -7,10 +7,10 @@
   "forum-search/posts-sitewide": "User Posts Site-wide",
   "forum-search/first-checked": "First Checked:",
   "forum-search/last-checked": "Last Checked:",
-  "forum-search/last-edited-by": "Last edited by $username$ ($datetime$)",
+  "forum-search/last-edited-by": "Last edited by {username} ({datetime})",
   "forum-search/placeholder": "Search posts on the entire Scratch Forums",
-  "forum-search/search-topic": "Search posts in \"$topic$\"",
-  "forum-search/search-cat": "Search posts in \"$cat$\"",
+  "forum-search/search-topic": "Search posts in \"{topic}\"",
+  "forum-search/search-cat": "Search posts in \"{cat}\"",
   "forum-search/relevance": "relevance",
   "forum-search/newest": "newest",
   "forum-search/oldest": "oldest"

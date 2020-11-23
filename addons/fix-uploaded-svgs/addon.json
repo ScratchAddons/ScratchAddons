@@ -9,5 +9,6 @@
     }
   ],
   "tags": ["editor"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }
