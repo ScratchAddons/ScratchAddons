@@ -54,7 +54,7 @@
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
-      <div class="addons-block">
+      <div class="addons-block" @click="closesidebar()">
         <div class="search-box">
           <input type="text" id="searchBox" placeholder="Search" v-model="searchInput" />
           <button

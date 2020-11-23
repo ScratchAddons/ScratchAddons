@@ -106,6 +106,11 @@ const vue = new Vue({
     },
   },
   methods: {
+    closesidebar: function () {
+      if (this.categoryopen) {
+        vue.sidebarToggle()
+      }
+    },
     modalToggle: function () {
       this.isOpen = !this.isOpen;
       if (vue.smallmode){
