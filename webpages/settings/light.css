@@ -80,6 +80,10 @@ body {
   color: black;
 }
 
+.addon-notice img {
+  filter: brightness(0);
+}
+
 .addon-body img {
   filter: invert(100%) brightness(0);
 }

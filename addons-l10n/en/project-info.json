@@ -1,6 +1,4 @@
 {
-  "project-info/sprite": "$num$ sprite",
-  "project-info/sprites": "$num$ sprites",
-  "project-info/script": "$num$ script",
-  "project-info/scripts": "$num$ scripts"
+  "project-info/sprite": "{num, plural, =1 {1 sprite} other {# sprites}}",
+  "project-info/script": "{num, plural, =1 {1 script} other {# scripts}}"
 }
