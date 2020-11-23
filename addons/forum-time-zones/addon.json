@@ -10,6 +10,5 @@
   ],
   "tags": ["forums", "community", "beta"],
   "enabledByDefault": false,
-  "libraries": ["moment"],
-  "l10n": true
+  "libraries": ["moment"]
 }
