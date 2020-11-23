@@ -160,3 +160,6 @@ body {
 .categories-shrink {
   filter: brightness(0);
 }
+.collapsed {
+  width: 0px;
+}
