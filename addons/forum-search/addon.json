@@ -19,5 +19,6 @@
     }
   ],
   "tags": ["forums", "community"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "libraries": ["scratchblocks"]
 }

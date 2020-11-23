@@ -1,6 +1,6 @@
 export default async function ({ addon }) {
-  await addon.tab.loadScript("https://cdn.jsdelivr.net/npm/linkifyjs@2.1.9/dist/linkify.min.js");
-  await addon.tab.loadScript("https://cdn.jsdelivr.net/npm/linkifyjs@2.1.9/dist/linkify-element.min.js");
+  await addon.tab.loadScript(addon.self.lib+"/linkify.min.js");
+  await addon.tab.loadScript(addon.self.lib+"/linkify-element.min.js");
 
   const pageType = document.location.pathname.substr(1).split("/")[0];
   let comments;

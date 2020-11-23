@@ -1,5 +1,8 @@
 {
   "md5": "MIT",
   "moment": "MIT",
-  "text-field-edit": "MIT"
+  "text-field-edit": "MIT",
+  "scratchblocks": "MIT",
+  "linkify": "MIT",
+  "vue": "MIT"
 }

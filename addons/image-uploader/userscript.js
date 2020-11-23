@@ -1,7 +1,7 @@
 import textFieldEdit from "./text-field-edit.js"; //used for editing the forum text box without messing with the edit history
 
 export default async function ({ addon, global, console }) {
-  await addon.tab.loadScript("https://cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js");
+  await addon.tab.loadScript(addon.self.lib + "/md5.min.js");
 
   var projectUpload = false;
   //console.log("use project thumbnails: " + projectUpload); //commented out because spammy in console

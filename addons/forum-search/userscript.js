@@ -183,7 +183,7 @@ function appendSearch(box, query, page, term) {
 }
 
 export default async function ({ addon, global, console }) {
-  await addon.tab.loadScript("https://scratchblocks.github.io/js/scratchblocks-v3.5-min.js");
+  await addon.tab.loadScript(addon.self.lib + "/scratchblocks-v3.5-min.js");
   // create the search bar
   let search = document.createElement("form");
   let searchBar = document.createElement("input");

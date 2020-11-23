@@ -17,5 +17,6 @@
     }
   ],
   "tags": ["community"],
+  "libraries": ["linkify"],
   "enabledByDefault": false
 }
