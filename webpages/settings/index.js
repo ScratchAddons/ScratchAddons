@@ -1,4 +1,3 @@
-
 //theme switching
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
@@ -108,16 +107,16 @@ const vue = new Vue({
   methods: {
     modalToggle: function () {
       this.isOpen = !this.isOpen;
-      if (vue.smallmode){
-        vue.sidebarToggle()
+      if (vue.smallmode) {
+        vue.sidebarToggle();
       }
     },
     sidebarToggle: function () {
       this.categoryopen = !this.categoryopen;
       if (this.categoryopen) {
-        vue.switchpath = '../../images/icons/close.svg'
+        vue.switchpath = "../../images/icons/close.svg";
       } else {
-        vue.switchpath = '../../images/icons/switch.svg'
+        vue.switchpath = "../../images/icons/switch.svg";
       }
     },
     msg(message, ...params) {
@@ -324,16 +323,16 @@ window.addEventListener("keydown", function (e) {
 });
 
 document.title = chrome.i18n.getMessage("settingsTitle");
-function resize(){
-  if (window.innerWidth < 1000 & vue.smallmode != true) {
-    vue.smallmode = true
-    vue.categoryopen = false
-    vue.switchpath = '../../images/icons/switch.svg'
-  }  else if (vue.smallmode != false) {
-    vue.smallmode = false
-    vue.categoryopen = true
-    vue.switchpath = '../../images/icons/close.svg'
+function resize() {
+  if ((window.innerWidth < 1000) & (vue.smallmode != true)) {
+    vue.smallmode = true;
+    vue.categoryopen = false;
+    vue.switchpath = "../../images/icons/switch.svg";
+  } else if (vue.smallmode != false) {
+    vue.smallmode = false;
+    vue.categoryopen = true;
+    vue.switchpath = "../../images/icons/close.svg";
   }
 }
-window.onresize = resize
-resize()
+window.onresize = resize;
+resize();

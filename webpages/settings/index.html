@@ -12,12 +12,12 @@
   </head>
   <body style="display: none" v-show="loaded">
     <div class="navbar">
-      <img  :src="switchpath" class="toggle" @click="sidebarToggle()" v-show="smallmode" alt="Logo" />
+      <img :src="switchpath" class="toggle" @click="sidebarToggle()" v-show="smallmode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1>{{ msg("settings") }}</h1>
       <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themepath" />
     </div>
-    <div class="main" >
+    <div class="main">
       <div class="categories-block" v-show="categoryopen" :class="{smallmode: smallmode === true}">
         <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
           <img src="../../images/icons/list.svg" />

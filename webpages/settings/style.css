@@ -706,5 +706,5 @@ input[type="color"]::-webkit-color-swatch {
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
 }
 .toggle {
-  cursor: pointer
+  cursor: pointer;
 }
