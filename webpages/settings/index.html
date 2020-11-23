@@ -55,7 +55,7 @@
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block" @click="closesidebar()">
-        <div class="search-box">
+        <div class="search-box" :class="{smallmode: smallmode === true}">
           <input type="text" id="searchBox" placeholder="Search" v-model="searchInput" />
           <button
             v-show="searchInput === ''"
@@ -110,12 +110,14 @@
                   {{ addon.name }}
                 </div>
               </div>
+              <div class="addon-badge-container" :class="{hidden: smallmode}">
               <div class="badge blue" v-if="addon._tags.recommended">{{ msg("recommended") }}</div>
               <div class="badge darkgreen" v-if="addon._tags.forEditor">{{ msg("forEditor") }}</div>
               <div class="badge red" v-if="addon._tags.beta">{{ msg("beta") }}</div>
               <div class="badge yellow" v-if="addon._tags.forWebsite">{{ msg("forWebsite") }}</div>
               <div class="badge green" v-if="addon._tags.forums">{{ msg("forums") }}</div>
               <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
+            </div>
               <div class="addon-check">
                 <div
                   v-show="addon._expanded"

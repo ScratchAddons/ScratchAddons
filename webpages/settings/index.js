@@ -15,6 +15,7 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
+
 const vue = new Vue({
   el: "body",
   data: {
@@ -329,7 +330,7 @@ window.addEventListener("keydown", function (e) {
 
 document.title = chrome.i18n.getMessage("settingsTitle");
 function resize() {
-  if ((window.innerWidth < 1000) & (vue.smallmode != true)) {
+  if (window.innerWidth < 1000) {
     vue.smallmode = true;
     vue.categoryopen = false;
     vue.switchpath = "../../images/icons/switch.svg";

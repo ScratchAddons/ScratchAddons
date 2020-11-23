@@ -709,3 +709,11 @@ input[type="color"]::-webkit-color-swatch {
   cursor: pointer;
   margin-right: 10px;
 }
+.search-box.smallmode {
+  overflow: scroll;
+}
+@media only screen and (max-width: 350px) {
+  .hidden {
+    display: none;
+  }
+}
