@@ -47,12 +47,19 @@
           <img src="../../images/icons/comment.svg" />
           <span>{{ msg("feedback") }}</span>
         </div>
-        <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px;" @click="modalToggle()">
+        <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
           <span>{{ msg("moreSettings") }}</span>
         </div>
       </div>
-      <div v-show="smallmode === false"class="categories-shrink" style="display: block!important" @click="sidebarToggle()"><img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryopen === false}"></div>
+      <div
+        v-show="smallmode === false"
+        class="categories-shrink"
+        style="display: block !important"
+        @click="sidebarToggle()"
+      >
+        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryopen === false}" />
+      </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block" @click="closesidebar()">

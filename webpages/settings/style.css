@@ -720,7 +720,7 @@ input[type="color"]::-webkit-color-swatch {
 .categories-shrink {
   text-align: right;
   bottom: 0;
-  position:fixed;
+  position: fixed;
   margin: 5px;
   margin-top: 7px;
   cursor: pointer;
