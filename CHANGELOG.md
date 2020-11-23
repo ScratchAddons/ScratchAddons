@@ -13,6 +13,14 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.3.3]
+
+Minor extension structure change after Mozilla Add-ons review (moves libraries used by addons, previously loaded from CDNs, to the "libraries" folder). No noticeable changes for users.
+
+## [v1.3.2]
+
+Fixes a security issue in the "More links" addon. ([Click here for more information](https://github.com/ScratchAddons/ScratchAddons/security/advisories/GHSA-6qfq-px3r-xj4p)).
+
 ## [v1.3.1]
 
 The "live featured project" addon was accidentally enabled by default. This update fixes that.
