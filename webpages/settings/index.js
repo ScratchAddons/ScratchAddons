@@ -18,9 +18,11 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 const vue = new Vue({
   el: "body",
   data: {
+    smallmode: false,
     theme: "",
     themepath: "",
     isOpen: false,
+    categoryopen: true,
     loaded: false,
     manifests: [],
     selectedTab: "all",
@@ -104,6 +106,9 @@ const vue = new Vue({
   methods: {
     modalToggle: function () {
       this.isOpen = !this.isOpen;
+    },
+    sidebarToggle: function () {
+      this.categoryopen = !this.categoryopen;
     },
     msg(message, ...params) {
       return chrome.i18n.getMessage(message, ...params);

@@ -697,3 +697,10 @@ input[type="color"]::-webkit-color-swatch {
   background: grey;
   border-radius: 4px;
 }
+.categories-block.smallmode {
+  border-radius: 0px 0px 10px 10px;
+  margin-left: 10px;
+  z-index: 10;
+  position: absolute;
+  height: 32rem;
+}
