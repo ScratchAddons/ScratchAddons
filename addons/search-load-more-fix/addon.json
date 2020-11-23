@@ -8,6 +8,5 @@
       "matches": ["https://scratch.mit.edu/search/*"]
     }
   ],
-  "enabledByDefault": true,
-  "l10n": true
+  "enabledByDefault": true
 }
