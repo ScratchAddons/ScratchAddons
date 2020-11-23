@@ -11,7 +11,7 @@
   "scratch-messaging/posting": "Posting...",
   "scratch-messaging/post": "Post",
   "scratch-messaging/cancel": "Cancel",
-  "scratch-messaging/chars-left": "{num, plural, =1 {1 character left} other {# characters left}}",
+  "scratch-messaging/chars-left": "{num, plural, one {1 character left} other {# characters left}}",
   "scratch-messaging/follows": "Follows",
   "scratch-messaging/studio-invites": "Studio invites",
   "scratch-messaging/curate-invite": "{actor} invited you to curate {title}",
