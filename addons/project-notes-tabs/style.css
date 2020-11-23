@@ -32,4 +32,5 @@
 
 .project-description {
   height: -webkit-fill-available;
+  width: -moz-available;
 }
