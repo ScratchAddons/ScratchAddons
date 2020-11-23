@@ -13,6 +13,5 @@
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
-  "enabledByDefault": true,
-  "l10n": true
+  "enabledByDefault": true
 }
