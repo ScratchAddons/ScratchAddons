@@ -19,7 +19,7 @@ Minor extension structure change after Mozilla Add-ons review (moves libraries u
 
 ## [v1.3.2]
 
-Fixes a security issue in the "More links" addon. ([Click here for more information](https://github.com/ScratchAddons/ScratchAddons/security/advisories/GHSA-6qfq-px3r-xj4p)).
+Fixes a security issue in the "More links" addon. [Click here for more information](https://github.com/ScratchAddons/ScratchAddons/security/advisories/GHSA-6qfq-px3r-xj4p).
 
 ## [v1.3.1]
 
@@ -112,6 +112,8 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.3.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.3
+[v1.3.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.2
 [v1.3.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.1
 [v1.3.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.0
 [v1.2.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.2.1
