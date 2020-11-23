@@ -8,14 +8,21 @@ export default class UserscriptLocalizationProvider extends LocalizationProvider
   }
 
   async loadByAddonId(addonId) {
-    if (addonId !== "_general" && !this.generalLoaded) {
-      await this.loadByAddonId("_general");
+    let valid = true;
+    if (addonId !== "_general") {
+      if (!this.generalLoaded) {
+        await this.loadByAddonId("_general");
+      }
+      let addonJSON = await fetch(`${document.getElementById("scratch-addons").getAttribute("data-path")}addons/${addonId}/addon.json`)
+      addonJSON = await addonJSON.json()
+      valid = addonJSON.l10n
     }
     for (const dir of this._urls) {
       let resp;
       let messages = {};
       const url = `${dir}/${addonId}.json`;
       try {
+        if (!valid) continue;
         resp = await fetch(url);
         messages = await resp.json();
       } catch (_) {
