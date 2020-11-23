@@ -1,180 +1,185 @@
 import textFieldEdit from "./text-field-edit.js"; //used for editing the forum text box without messing with the edit history
-import md5 from "./md5.js"
+import md5 from "./md5.js";
 export default async function ({ addon, global, console, msg, safeMsg }) {
-    var toolbar =
-        document.querySelector("#markItUpId_body > div > div.markItUpHeader > ul") ||
-        document.querySelector("#markItUpId_signature > div > div.markItUpHeader > ul");
+  var toolbar =
+    document.querySelector("#markItUpId_body > div > div.markItUpHeader > ul") ||
+    document.querySelector("#markItUpId_signature > div > div.markItUpHeader > ul");
 
-    var textBox = document.querySelector("#id_body") || document.querySelector("#id_signature");
+  var textBox = document.querySelector("#id_body") || document.querySelector("#id_signature");
 
-    //input  hidden)
-    var uploadInput = document.createElement("input");
-    uploadInput.type = "file";
+  //input  hidden)
+  var uploadInput = document.createElement("input");
+  uploadInput.type = "file";
 
-    uploadInput.accept = "image/*";
-    uploadInput.style.display = 'none'
+  uploadInput.accept = "image/*";
+  uploadInput.style.display = "none";
 
-    //button (the one the user interacts with)
-    var inputButtonContainer = document.createElement('li')
-    inputButtonContainer.className = 'markItUpButton markItUpButton17'
+  //button (the one the user interacts with)
+  var inputButtonContainer = document.createElement("li");
+  inputButtonContainer.className = "markItUpButton markItUpButton17";
 
-    var inputButton = document.createElement('a')
-    inputButton.id = 'uploadButton'
+  var inputButton = document.createElement("a");
+  inputButton.id = "uploadButton";
 
-    inputButton.title = msg('upload-image')
-    inputButton.style.backgroundImage = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABVUlEQVQ4jc3SO0tCYRzH8WcOegNtTb2BXkO1SNBuFyJqC1uihhqCNCIH8xKU8BzzcspQEskWC8IWcRCji8WxEnrSCKqh+dvQRTwcybZ+8J3+8Jn+QvyL2byHfDe9c7r/d8CdJlB5JVB5xeZOt10DcKV+gHazuVINQNi9iIUDizJfWdzsXhOQrDeXqOEz3vllvtbAngIgm822DKABJB6b27n/AeZST8zEqyylr4jmT3DsVi0A/a45rQxAOByme+2BzuUbRpOb3L4MIBbLSClNwHa5ua0SALFYDOeZTn/mnI6goke/pmvbsACCpUb+AsJfACASiTB1tULwfZF15Wb+eRDn27gFsHqE2Mh/5skhPDkANE2j/3iWseIkExcOhorD9F32moBh/4iwezEHIKVEKUWtVsMwDOr1OkopE9Bi34CUklAohK7rxONxotEomqa1Bfh++6QPwtgXjMvZERUAAAAASUVORK5CYII=')"
+  inputButton.title = msg("upload-image");
+  inputButton.style.backgroundImage =
+    "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABVUlEQVQ4jc3SO0tCYRzH8WcOegNtTb2BXkO1SNBuFyJqC1uihhqCNCIH8xKU8BzzcspQEskWC8IWcRCji8WxEnrSCKqh+dvQRTwcybZ+8J3+8Jn+QvyL2byHfDe9c7r/d8CdJlB5JVB5xeZOt10DcKV+gHazuVINQNi9iIUDizJfWdzsXhOQrDeXqOEz3vllvtbAngIgm822DKABJB6b27n/AeZST8zEqyylr4jmT3DsVi0A/a45rQxAOByme+2BzuUbRpOb3L4MIBbLSClNwHa5ua0SALFYDOeZTn/mnI6goke/pmvbsACCpUb+AsJfACASiTB1tULwfZF15Wb+eRDn27gFsHqE2Mh/5skhPDkANE2j/3iWseIkExcOhorD9F32moBh/4iwezEHIKVEKUWtVsMwDOr1OkopE9Bi34CUklAohK7rxONxotEomqa1Bfh++6QPwtgXjMvZERUAAAAASUVORK5CYII=')";
 
-    inputButtonContainer.appendChild(inputButton)
+  inputButtonContainer.appendChild(inputButton);
 
-    //add it
-    if (toolbar && textBox) { //make sure that i can type here and that there's a textbox
-        document.querySelector('.markItUpButton5').insertAdjacentElement('afterend', inputButtonContainer)
-        document.body.appendChild(uploadInput)
-    }
+  //add it
+  if (toolbar && textBox) {
+    //make sure that i can type here and that there's a textbox
+    document.querySelector(".markItUpButton5").insertAdjacentElement("afterend", inputButtonContainer);
+    document.body.appendChild(uploadInput);
+  }
 
-    //events
-    inputButton.addEventListener('click', e => { //click on the button
-        uploadInput.click() //simulate clicking on the real input
-    })
+  //events
+  inputButton.addEventListener("click", (e) => {
+    //click on the button
+    uploadInput.click(); //simulate clicking on the real input
+  });
 
-    uploadInput.addEventListener('change', e => { //when the input has a new file
-        var file = uploadInput.files[0];
-        var extension = uploadInput.files[0].name.split(".").pop().toLowerCase();
+  uploadInput.addEventListener("change", (e) => {
+    //when the input has a new file
+    var file = uploadInput.files[0];
+    var extension = uploadInput.files[0].name.split(".").pop().toLowerCase();
+    var reader = new FileReader();
+
+    reader.readAsArrayBuffer(file);
+
+    reader.onloadend = function () {
+      uploadAssetImage(reader.result, extension);
+    };
+
+    reader.onerror = (err) => {
+      alert(msg("load-error"));
+      progresselement.remove();
+      throw err;
+    };
+  });
+
+  textBox.addEventListener("paste", (e) => {
+    retrieveImageFromClipboardAsBlob(e, (imageBlob) => {
+      if (imageBlob) {
         var reader = new FileReader();
 
-        reader.readAsArrayBuffer(file);
+        reader.readAsArrayBuffer(imageBlob);
 
         reader.onloadend = function () {
-            uploadAssetImage(reader.result, extension);
+          var extension = imageBlob.name.split(".").pop().toLowerCase();
+
+          uploadAssetImage(reader.result, extension);
         };
 
         reader.onerror = (err) => {
-            alert(msg("load-error"));
-            progresselement.remove();
-            throw err;
+          alert(msg("load-error"));
+          progresselement.remove();
+          throw err;
         };
-    })
-
-    textBox.addEventListener('paste', e => {
-        retrieveImageFromClipboardAsBlob(e, (imageBlob) => {
-            if (imageBlob) {
-                var reader = new FileReader();
-
-                reader.readAsArrayBuffer(imageBlob);
-
-                reader.onloadend = function () {
-                    var extension = imageBlob.name.split(".").pop().toLowerCase();
-
-                    uploadAssetImage(reader.result, extension);
-                };
-
-                reader.onerror = (err) => {
-                    alert(msg("load-error"));
-                    progresselement.remove();
-                    throw err;
-                };
-            }
-        })
-    })
-
-    textBox.addEventListener("dragenter", () => {
-        textBox.style.backgroundColor = "lightgrey";
+      }
     });
+  });
 
-    textBox.addEventListener("dragleave", () => {
-        textBox.style.backgroundColor = "white";
-    });
+  textBox.addEventListener("dragenter", () => {
+    textBox.style.backgroundColor = "lightgrey";
+  });
 
-    textBox.addEventListener("dragend", () => {
-        textBox.style.backgroundColor = "white";
-    });
+  textBox.addEventListener("dragleave", () => {
+    textBox.style.backgroundColor = "white";
+  });
 
-    textBox.addEventListener('drop', e => {
-        textBox.style.backgroundColor = "";
-        console.log(e.dataTransfer)
-        var file = e.dataTransfer.files[0]
-        if (file) {
-            e.preventDefault();
-            e.stopPropagation();
+  textBox.addEventListener("dragend", () => {
+    textBox.style.backgroundColor = "white";
+  });
 
-            var reader = new FileReader();
-            reader.readAsArrayBuffer(file)
+  textBox.addEventListener("drop", (e) => {
+    textBox.style.backgroundColor = "";
+    console.log(e.dataTransfer);
+    var file = e.dataTransfer.files[0];
+    if (file) {
+      e.preventDefault();
+      e.stopPropagation();
 
-            reader.onloadend = function () {
-                var extension = file.name.split(".").pop().toLowerCase();
+      var reader = new FileReader();
+      reader.readAsArrayBuffer(file);
 
-                uploadAssetImage(reader.result, extension);
-            };
+      reader.onloadend = function () {
+        var extension = file.name.split(".").pop().toLowerCase();
 
-            reader.onerror = (err) => {
-                alert(msg("load-error"));
-                progresselement.remove();
-                throw err;
-            };
-        }
+        uploadAssetImage(reader.result, extension);
+      };
 
-
-    })
-
-    //cool functions below
-    function retrieveImageFromClipboardAsBlob(pasteEvent, callback) {
-        if (pasteEvent.clipboardData == false) {
-            if (typeof callback == "function") {
-                callback(undefined);
-            }
-        }
-
-        var items = pasteEvent.clipboardData.items;
-
-        if (items == undefined) {
-            if (typeof callback == "function") {
-                callback(undefined);
-            }
-        }
-
-        for (var i = 0; i < items.length; i++) {
-            // Skip content if not image
-            if (items[i].type.indexOf("image") == -1) continue;
-            // Retrieve image on clipboard as blob
-            var blob = items[i].getAsFile();
-
-            if (typeof callback == "function") {
-                callback(blob);
-            }
-        }
+      reader.onerror = (err) => {
+        alert(msg("load-error"));
+        progresselement.remove();
+        throw err;
+      };
     }
-    async function uploadAssetImage(image, fileType) {
-        //this is the stuff that matters
-        window.progresselement = toolbar.appendChild(document.createElement("li"));
+  });
 
-        console.log(image);
-
-        var hash = md5(image);
-        var type = fileType;
-        console.log("type: " + fileType);
-
-        progresselement.innerText = msg("uploading");
-
-        try {
-            var res = await fetch(`https://assets.scratch.mit.edu/${hash}.${type}`, {
-                body: image,
-                method: "POST",
-                mode: "cors",
-                credentials: "include",
-            })
-            var data = await res.json()
-
-            if (data.status == 'ok') {
-                textFieldEdit.insert(textBox, `[img]https://assets.scratch.mit.edu/get_image/.%2E/${data['content-name']}[/img]`);
-                progresselement.remove();
-            } else {
-                alert('error from scratch while uploading image')
-                progresselement.remove();
-            }
-        } catch (error) {
-            alert(error)
-            console.log(error)
-            progresselement.remove();
-        }
+  //cool functions below
+  function retrieveImageFromClipboardAsBlob(pasteEvent, callback) {
+    if (pasteEvent.clipboardData == false) {
+      if (typeof callback == "function") {
+        callback(undefined);
+      }
     }
+
+    var items = pasteEvent.clipboardData.items;
+
+    if (items == undefined) {
+      if (typeof callback == "function") {
+        callback(undefined);
+      }
+    }
+
+    for (var i = 0; i < items.length; i++) {
+      // Skip content if not image
+      if (items[i].type.indexOf("image") == -1) continue;
+      // Retrieve image on clipboard as blob
+      var blob = items[i].getAsFile();
+
+      if (typeof callback == "function") {
+        callback(blob);
+      }
+    }
+  }
+  async function uploadAssetImage(image, fileType) {
+    //this is the stuff that matters
+    window.progresselement = toolbar.appendChild(document.createElement("li"));
+
+    console.log(image);
+
+    var hash = md5(image);
+    var type = fileType;
+    console.log("type: " + fileType);
+
+    progresselement.innerText = msg("uploading");
+
+    try {
+      var res = await fetch(`https://assets.scratch.mit.edu/${hash}.${type}`, {
+        body: image,
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+      });
+      var data = await res.json();
+
+      if (data.status == "ok") {
+        textFieldEdit.insert(
+          textBox,
+          `[img]https://assets.scratch.mit.edu/get_image/.%2E/${data["content-name"]}[/img]`
+        );
+        progresselement.remove();
+      } else {
+        alert("error from scratch while uploading image");
+        progresselement.remove();
+      }
+    } catch (error) {
+      alert(error);
+      console.log(error);
+      progresselement.remove();
+    }
+  }
 }
