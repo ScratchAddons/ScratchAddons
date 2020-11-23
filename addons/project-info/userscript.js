@@ -1,4 +1,4 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
   let projectInfo;
   while (true) {
     const buttons = await addon.tab.waitForElement(".preview .project-buttons", { markAsSeen: true });
@@ -23,12 +23,8 @@ export default async function ({ addon, console }) {
         projectInfo = { spriteCount: "?", scriptCount: "?" };
       }
     }
-    container.appendChild(
-      document.createTextNode(projectInfo.spriteCount + (projectInfo.spriteCount == 1 ? " sprite" : " sprites"))
-    );
+    container.appendChild(document.createTextNode(msg("sprite", { num: projectInfo.spriteCount })));
     container.appendChild(document.createElement("br"));
-    container.appendChild(
-      document.createTextNode(projectInfo.scriptCount + (projectInfo.scriptCount == 1 ? " script" : " scripts"))
-    );
+    container.appendChild(document.createTextNode(msg("script", { num: projectInfo.spriteCount })));
   }
 }

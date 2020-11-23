@@ -1,0 +1,40 @@
+{
+  "name": "Confirm actions",
+  "description": "Asks if you're sure when committing actions under your Scratch account, such as sharing projects. ",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "Confirm project sharing",
+      "id": "projectsharing",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Confirm following/unfollowing",
+      "id": "followinguser",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Confirm joining studios",
+      "id": "joiningstudio",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["community", "recommended"],
+  "enabledByDefault": false,
+  "l10n": true
+}

@@ -1,0 +1,4 @@
+{
+  "progress-bar/loading-assets": "Loading assets ({loaded}/{loading})...",
+  "progress-bar/loading-project": "Loading project data..."
+}

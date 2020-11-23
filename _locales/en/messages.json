@@ -1,0 +1,137 @@
+{
+  "extensionName": {
+    "message": "Scratch Addons"
+  },
+  "extensionDescription": {
+    "message": "Scratch Addons provides new features and themes for the scratch.mit.edu website and project editor."
+  },
+  "messaging": {
+    "message": "Messaging"
+  },
+  "games": {
+    "message": "Games"
+  },
+  "openInNewTab": {
+    "message": "Open in new browser tab"
+  },
+  "changelog": {
+    "message": "View changelog"
+  },
+  "15min": {
+    "message": "For 15 minutes"
+  },
+  "1hour": {
+    "message": "For 1 hour"
+  },
+  "8hours": {
+    "message": "For 8 hours"
+  },
+  "24hours": {
+    "message": "For 24 hours"
+  },
+  "untilEnabled": {
+    "message": "Until I turn it back on"
+  },
+  "muteFor": {
+    "message": "Mute"
+  },
+  "unmute": {
+    "message": "Unmute"
+  },
+  "recommended": {
+    "message": "Recommended"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "forums": {
+    "message": "Forums"
+  },
+  "forEditor": {
+    "message": "For editor"
+  },
+  "forWebsite": {
+    "message": "For website"
+  },
+  "confirmPreset": {
+    "message": "Are you sure you want to load this preset?"
+  },
+  "confirmReset": {
+    "message": "Are you sure you want to reset this addon to default settings?"
+  },
+  "settingsTitle": {
+    "message": "Settings - Scratch Addons"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "all": {
+    "message": "All"
+  },
+  "editorFeatures": {
+    "message": "Scratch Editor Features"
+  },
+  "websiteFeatures": {
+    "message": "Scratch Website Features"
+  },
+  "themes": {
+    "message": "Themes"
+  },
+  "theme": {
+    "message": "Theme:"
+  },
+  "credits": {
+    "message": "Credits"
+  },
+  "review": {
+    "message": "Review"
+  },
+  "feedback": {
+    "message": "Send Feedback"
+  },
+  "moreSettings": {
+    "message": "More Settings"
+  },
+  "filter": {
+    "message": "Filter:"
+  },
+  "resetToDefault": {
+    "message": "Reset to default settings"
+  },
+  "creditTo": {
+    "message": "Credit to:"
+  },
+  "viewLicenses": {
+    "message": "View library licenses"
+  },
+  "reset": {
+    "message": "Reset"
+  },
+  "presets": {
+    "message": "Presets"
+  },
+  "scratchAddonsTheme": {
+    "message": "Scratch Addons theme"
+  },
+  "scratchAddonsThemeDescription": {
+    "message": "This allows you to switch between light and dark themes for this settings page, and the extension's popup."
+  },
+  "light": {
+    "message": "Light"
+  },
+  "dark": {
+    "message": "Dark"
+  },
+  "licensesTitle": {
+    "message": "Licenses - Scratch Addons"
+  },
+  "licenses": {
+    "message": "Licenses"
+  },
+  "licensesForLibrary": {
+    "message": "Licenses for library $1"
+  },
+  "libraryCredits": {
+    "message": "View licenses of used libraries"
+  }
+}
