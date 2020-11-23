@@ -15,7 +15,10 @@ export default async function ({ addon, console }) {
           let element = await addon.tab.waitForElement(".project-description", { markAsSeen: true });
           // Need to convert #[numbers] to solve conflict between tags and external Scratch player links.
           document.querySelectorAll(".project-description a").forEach((element) => {
-            if (/\d+/.test(element.textContent)) element.outerHTML = element.textContent;
+              if (/^#\d+$/.test(element.textContent) && element.previousSibling instanceof Text) {
+                  element.previousSibling.textContent += element.textContent;
+                  element.remove();
+              }
           });
           element.normalize();
           linkifyElement(element);
