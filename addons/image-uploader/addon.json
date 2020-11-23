@@ -8,7 +8,7 @@
   ],
   "userscripts": [
     {
-      "url": "userscript.js",
+      "url": "new-userscript.js",
       "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
