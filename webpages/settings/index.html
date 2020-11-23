@@ -12,7 +12,7 @@
   </head>
   <body style="display: none" v-show="loaded">
     <div class="navbar">
-      <img src="../../images/icons/switch.svg" class="toggle" @click="sidebarToggle()" v-show="smallmode" alt="Logo" />
+      <img  :src="switchpath" class="toggle" @click="sidebarToggle()" v-show="smallmode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1>{{ msg("settings") }}</h1>
       <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themepath" />

@@ -703,4 +703,5 @@ input[type="color"]::-webkit-color-swatch {
   z-index: 10;
   position: absolute;
   height: 32rem;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
 }
