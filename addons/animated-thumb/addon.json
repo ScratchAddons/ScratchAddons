@@ -17,6 +17,12 @@
       "url": "userscript.js"
     }
   ],
+  "userstyles": [
+    {
+      "url": "userscript.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
   "tags": ["editor", "community", "recommended"],
   "enabledByDefault": true
 }
