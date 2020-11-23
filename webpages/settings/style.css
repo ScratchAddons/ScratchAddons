@@ -585,7 +585,7 @@ input[type="color"]::-webkit-color-swatch {
   background-color: #222;
   margin: auto;
   padding: 20px;
-  width: 800px;
+  width: 55rem;
   border-radius: 10px;
   height: 75%;
   display: flex;
@@ -704,4 +704,7 @@ input[type="color"]::-webkit-color-swatch {
   position: absolute;
   height: 32rem;
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+}
+.toggle {
+  cursor: pointer
 }

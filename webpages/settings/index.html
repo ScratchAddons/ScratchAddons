@@ -17,7 +17,7 @@
       <h1>{{ msg("settings") }}</h1>
       <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themepath" />
     </div>
-    <div class="main">
+    <div class="main" >
       <div class="categories-block" v-show="categoryopen" :class="{smallmode: smallmode === true}">
         <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
           <img src="../../images/icons/list.svg" />
