@@ -11,7 +11,7 @@ export default async function ({ addon, console, msg }) {
         if (!canAction) {
           e.cancelBubble = true;
           e.preventDefault();
-          if (confirm("Scratch Addons:\n" + res)) {
+          if (confirm(res)) {
             canAction = true;
             button.click();
           }
