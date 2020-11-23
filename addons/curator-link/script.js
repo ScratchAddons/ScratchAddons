@@ -1,4 +1,5 @@
-export default async function ({ safeMsg }) {
+import { escapeHTML } from "../../libraries/autoescaper.js";
+export default async function ({ addon }) {
   const oldh4 = document.querySelector(".inner:last-of-type h4");
 
   const resp = await fetch("https://api.scratch.mit.edu/proxy/featured");
@@ -10,5 +11,8 @@ export default async function ({ safeMsg }) {
   link.href = `https://scratch.mit.edu/users/${curator}`;
   link.id = "curator-link";
 
-  oldh4.innerHTML = safeMsg("curated-by", { user: link.outerHTML });
+  oldh4.innerHTML = escapeHTML(addon.tab.scratchMessage("splash.projectsCuratedBy")).replace(
+    "{curatorId}",
+    link.outerHTML
+  );
 }

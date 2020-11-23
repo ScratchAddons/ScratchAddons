@@ -26,6 +26,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
         } catch (_) {
           continue;
         }
+        this._generateCache(messages);
         this.messages = Object.assign(messages, this.messages);
       }
     }
