@@ -704,6 +704,7 @@ input[type="color"]::-webkit-color-swatch {
   position: absolute;
   height: 32rem;
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+  overflow: scroll;
 }
 .toggle {
   cursor: pointer;
@@ -711,6 +712,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 .search-box.smallMode {
   overflow: scroll;
+  overflow-y: hidden;
 }
 @media only screen and (max-width: 370px) {
   .badge {
