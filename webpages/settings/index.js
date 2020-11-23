@@ -107,7 +107,7 @@ const vue = new Vue({
   methods: {
     closesidebar: function () {
       if (this.categoryopen) {
-        vue.sidebarToggle()
+        vue.sidebarToggle();
       }
     },
     modalToggle: function () {
