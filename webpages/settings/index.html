@@ -47,11 +47,12 @@
           <img src="../../images/icons/comment.svg" />
           <span>{{ msg("feedback") }}</span>
         </div>
-        <div class="category" style="cursor: pointer; margin-top: 12px" @click="modalToggle()">
+        <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px;" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
           <span>{{ msg("moreSettings") }}</span>
         </div>
       </div>
+      <div v-show="smallmode === false"class="categories-shrink" style="display: block!important" @click="sidebarToggle()"><img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryopen === false}"></div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block" @click="closesidebar()">
@@ -110,14 +111,12 @@
                   {{ addon.name }}
                 </div>
               </div>
-              <div class="addon-badge-container" :class="{hidden: smallmode}">
               <div class="badge blue" v-if="addon._tags.recommended">{{ msg("recommended") }}</div>
               <div class="badge darkgreen" v-if="addon._tags.forEditor">{{ msg("forEditor") }}</div>
               <div class="badge red" v-if="addon._tags.beta">{{ msg("beta") }}</div>
               <div class="badge yellow" v-if="addon._tags.forWebsite">{{ msg("forWebsite") }}</div>
               <div class="badge green" v-if="addon._tags.forums">{{ msg("forums") }}</div>
               <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
-            </div>
               <div class="addon-check">
                 <div
                   v-show="addon._expanded"

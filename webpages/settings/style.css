@@ -712,8 +712,19 @@ input[type="color"]::-webkit-color-swatch {
 .search-box.smallmode {
   overflow: scroll;
 }
-@media only screen and (max-width: 350px) {
-  .hidden {
+@media only screen and (max-width: 370px) {
+  .badge {
     display: none;
   }
+}
+.categories-shrink {
+  text-align: right;
+  bottom: 0;
+  position:fixed;
+  margin: 5px;
+  margin-top: 7px;
+  cursor: pointer;
+}
+.flipped {
+  transform: scaleX(-1);
 }
