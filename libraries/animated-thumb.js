@@ -1,6 +1,7 @@
 export default class ThumbSetter {
-    constructor (projectId) {
+    constructor (messages, projectId) {
         this._input = null;
+        this.messages = messages;
         this.projectId = projectId || location.pathname.replace(/\D/g,'');
     }
     
@@ -52,9 +53,9 @@ export default class ThumbSetter {
             );
         } catch (e) {
             console.error("Error while uploading a thumbnail:", e);
-            alert("File could not be uploaded. Perhaps it's too big?");
+            alert(this.messages.error);
             throw e;
         }
-        alert("File uploaded.");
+        alert(this.messages.success);
     }
 }

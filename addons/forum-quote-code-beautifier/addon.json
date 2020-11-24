@@ -23,5 +23,6 @@
       "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
-  "tags": ["forums"]
+  "tags": ["forums"],
+  "l10n": true
 }
