@@ -591,17 +591,11 @@ input[type="color"]::-webkit-color-swatch {
   display: flex;
   flex-direction: column;
 }
-.close:hover {
-  color: #555;
-  text-decoration: none;
-  cursor: pointer;
-}
+
 
 .close {
-  color: #fff;
   float: right;
-  font-size: 28px;
-  font-weight: bold;
+  cursor: pointer;
 }
 
 .settings-heading {

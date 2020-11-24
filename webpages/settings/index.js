@@ -109,6 +109,9 @@ const vue = new Vue({
       if (this.categoryOpen && this.smallMode) {
         vue.sidebarToggle();
       }
+      if (this.isOpen) {
+        this.modalToggle
+      }
     },
 
     modalToggle: function () {
