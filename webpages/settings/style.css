@@ -592,7 +592,6 @@ input[type="color"]::-webkit-color-swatch {
   flex-direction: column;
 }
 
-
 .close {
   float: right;
   cursor: pointer;
