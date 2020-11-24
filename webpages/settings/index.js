@@ -110,7 +110,7 @@ const vue = new Vue({
         vue.sidebarToggle();
       }
       if (this.isOpen) {
-        this.modalToggle
+        this.modalToggle;
       }
     },
 
