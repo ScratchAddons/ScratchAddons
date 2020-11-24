@@ -118,7 +118,7 @@
                   {{ addon.name }}
                 </div>
               </div>
-              <div class="badge blue" v-if="addon._tags.recommended">{{ msg("recommended") }}</div>
+              <div class="badge blue tooltip" v-if="addon._tags.recommended">{{ msg("recommended") }}<span class="tooltiptext">{{ msg("recommendedTooltip") }}</span></div>
               <div class="badge darkgreen" v-if="addon._tags.forEditor">{{ msg("forEditor") }}</div>
               <div class="badge red" v-if="addon._tags.beta">{{ msg("beta") }}</div>
               <div class="badge yellow" v-if="addon._tags.forWebsite">{{ msg("forWebsite") }}</div>

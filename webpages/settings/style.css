@@ -705,6 +705,7 @@ input[type="color"]::-webkit-color-swatch {
   height: 32rem;
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
   overflow: scroll;
+  overflow-x: hidden;
 }
 .toggle {
   cursor: pointer;
@@ -730,3 +731,42 @@ input[type="color"]::-webkit-color-swatch {
 .flipped {
   transform: scaleX(-1);
 }
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted rgb(255 255 255 / 0.5);
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 12rem;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px 10px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.tooltip .tooltiptext {
+  top: -5px;
+  left: 105%;
+}
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%; /* To the left of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
+

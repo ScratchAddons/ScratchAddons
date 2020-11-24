@@ -133,5 +133,9 @@
   },
   "libraryCredits": {
     "message": "View licenses of used libraries"
+  },
+  "recommendedTooltip": {
+    "message": "This addon is recommended by Scratch Addons. Try it out!"
   }
+
 }
