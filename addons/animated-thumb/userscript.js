@@ -28,8 +28,8 @@ export default async function ({ addon, global, console, msg }) {
       nav.append(setthumb);
       setthumb.addEventListener("click", function (e) {
         const setter = new ThumbSetter({
-            success: msg("success"),
-            error: msg("error")
+          success: msg("success"),
+          error: msg("error"),
         });
         setter.addFileInput();
         setter.showInput();
