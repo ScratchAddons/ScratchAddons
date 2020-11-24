@@ -23,5 +23,6 @@
   ],
   "tags": ["forums", "community"],
   "enabledByDefault": false,
+  "libraries": ["scratchblocks"],
   "l10n": true
 }

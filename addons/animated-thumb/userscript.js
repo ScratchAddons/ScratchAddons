@@ -1,3 +1,5 @@
+import ThumbSetter from "../../libraries/animated-thumb.js";
+
 export default async function ({ addon, global, console, msg }) {
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
@@ -25,7 +27,9 @@ export default async function ({ addon, global, console, msg }) {
       thumbcontent.append(thumbspan);
       nav.append(setthumb);
       setthumb.addEventListener("click", function (e) {
-        addon.tab.loadScript("https://worldlanguages.github.io/animatedThumbnailsBookmarklet/code.js");
+        const setter = new ThumbSetter();
+        setter.addFileInput();
+        setter.showInput();
       });
     }
   }

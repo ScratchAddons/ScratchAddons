@@ -1476,7 +1476,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         "beforeend",
         `
                 <div id="s3devToolBar">
-<!--                    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.2.1/math.min.js" type="text/javascript"></script>-->
                     <label class='title s3devLabel' id=s3devFindLabel>
                         <span>${m(
                           "find"
