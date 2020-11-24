@@ -7,7 +7,7 @@ This folder is for addons. For messages used by non-addons (such as options), ch
 - `WebsiteLocalizationProvider` fetches translations using IPC (between BackgroundLocalizationProvider). Instances may be created on all pages, and `loadMessages` is used to load messages. This can be used from content scripts, option screens and popups.
 
 ## File name
-Files are placed under `addons-l10n/LOCALECODE` folder, where the locale code is lowercased IETF language tag used by Scratch (e.g. en, zh-tw). Note that 2-letter code will be used if ones with regions are unavailable; e.g. if en-US is unavailable, it uses en.
+Files are placed under `addons-l10n/LOCALECODE` folder, where the locale code is lowercased IETF language tag used by Scratch (e.g. en, zh-tw). Note that 2-letter code will be used if ones with regions are unavailable; e.g. if ja-JP is unavailable, it uses ja. English (en) is used as a fallback, so if ja is unavailable, en is loaded.
 
 File name is `ADDONID.json`, where addonid is the addon id. `_general.json` contains messages that are shared by addons. Note that if addons are disabled, corresponding message files will not be loaded.
 
@@ -20,12 +20,41 @@ The message file is a JSON file.
 
 Keys are prefixed with addon IDs: e.g. `set-thumbnail` message on `animated-thumb` addon will be `animated-thumb/set-thumbnail`.
 
-Message names that start with `@` are reserved for use inside manifest. For example, `extension-x/@name` represents the addon's name on the manifest file.
+Message names that start with `@` are reserved for use inside manifest. For example, `extension-x/@name` represents the addon's name on the manifest file. See below for details.
 
-## Placeholders
-Placeholder formats are similar to WebExtension placeholders, like this: `foo $placeholder1$ bar`.
+## Placeholders and Plurals
+See the [ICU messaging format](https://unicode-org.github.io/icu/userguide/format_parse/messages/) for details. In short:
+- `{PLACEHOLDER_NAME}` is used for placeholders; e.g. `Press {keyCode} key.`
+- `{PLACEHOLDER_NAME, plural, one {MESSAGE FOR ONE} other {MESSAGE FOR OTHER}}` is used for plurals; e.g. `{count, plural, one {Here it is, one apple.} other {Here they are, # apples.}}`
 
-The second argument of the functions accepts an object which will have the placeholder name (case-sensitive) as the key and the value.
+The second argument of the functions accepts an object which will have the placeholder name (case-sensitive) as the key and the value. For example, you can call `msg("press-key", {keyCode: "space"})` or `msg("apple", {count: 100})`.
+
+## Manifest (addon.json)
+### l10n key
+`l10n` key on `addon.json` determines whether:
+- the translation is ready to be translated on translation services (currently Transifex)
+- `addon.json` keys are localized
+
+If `l10n` is not set (or is false), the addon's messages cannot be translated on translation services, and `addon.json` keys will not be localized. However, this **does not** mean `addons-l10n` is not loaded at all; Userscripts can still load translations if `l10n` is not specified, although that usually only loads English messages because other languages would be unavailable at that point.
+
+### Localized keys
+If `l10n: true` is set, these keys are overridden by the translated ones, if it exists. Here are the keys on addon.json and the message file:
+- `name` - `addon-id/@name`
+- `description` - `addon-id/@description`
+- `notice` - `addon-id/@notice`
+- `warning` - `addon-id/@warning`
+
+Preset names and descriptions can be localized, too:
+- `preset.name` - `addon-id/@preset-name-PRESETID`
+- `preset.description` - `addon-id/@preset-description-PRESETID`
+
+Setting default values can be translated if the `type` is `string`:
+- `setting.default` - `addon-id/@setting-default-SETTINGID`
+
+Setting potential values can be translated:
+- `potentialValue.name` - `addon-id/@setting-select-SETTINGID-POTENTIALVALUEID`
+
+Note that in most cases you **only have to set `l10n: true`**, as English messages are fetched from the addon.json, not `addons-l10n/en`.
 
 ## Example
 
@@ -36,12 +65,12 @@ The second argument of the functions accepts an object which will have the place
     "_locale": "meow",
     "_locale_name": "Meow",
     "extension-x/@name": "Extension X",
-    "extension-x/loaded": "meow $name$ meow!"
+    "extension-x/loaded": "meow {name} meow! {catCount, plural, one {A cat is meowing!} other {# cats are meowing!}}"
 }
 ```
 
 ```js
 export default async function ({msg}) {
-    console.log(msg('loaded', {name: 'Extension X'}));
+    console.log(msg('loaded', {name: 'Extension X', catCount: 5}));
 }
 ```
