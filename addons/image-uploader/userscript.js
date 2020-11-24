@@ -1,6 +1,10 @@
 import textFieldEdit from "./text-field-edit.js"; //used for editing the forum text box without messing with the edit history
-import md5 from "./md5.js";
 export default async function ({ addon, global, console, msg, safeMsg }) {
+  await addon.tab.loadScript(addon.self.lib + "/md5.min.js");
+
+  var projectUpload = false;
+  //console.log("use project thumbnails: " + projectUpload); //commented out because spammy in console
+
   var toolbar =
     document.querySelector("#markItUpId_body > div > div.markItUpHeader > ul") ||
     document.querySelector("#markItUpId_signature > div > div.markItUpHeader > ul");
