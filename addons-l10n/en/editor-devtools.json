@@ -49,6 +49,7 @@
   "editor-devtools/cut-block": "Cut Block",
   "editor-devtools/swap": "Swap {var} in sprite",
   "editor-devtools/lists": "lists",
+  "editor-devtools/variables": "variables",
   "editor-devtools/inset": "Insert",
   "editor-devtools/start-typing": "Start Typing..."
 }
