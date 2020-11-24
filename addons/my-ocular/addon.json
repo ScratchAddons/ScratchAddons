@@ -1,0 +1,20 @@
+{
+    "name": "Show my-ocular status",
+    "description": "Shows my-ocular statuses under usernames on the forums.",
+    "notice": "This addon makes requests to an external server (https://my-ocular.jeffalo.net)",
+    "credits": [
+      {
+        "name": "Jeffalo"
+      }
+    ],
+    "userscripts": [
+      {
+        "url": "userscript.js",
+        "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+      }
+    ],
+    "tags": ["forums", "community"],
+    "enabledByDefault": false,
+    "l10n": false
+  }
+  
