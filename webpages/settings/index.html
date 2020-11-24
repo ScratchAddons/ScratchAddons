@@ -122,9 +122,9 @@
                 {{ msg("recommended") }}<span class="tooltiptext">{{ msg("recommendedTooltip") }}</span>
               </div>
               <div class="badge darkgreen" v-if="addon._tags.forEditor">{{ msg("forEditor") }}</div>
-              <div class="badge red" v-if="addon._tags.beta">{{ msg("beta") }}</div>
+              <div class="badge red tooltip" v-if="addon._tags.beta">{{ msg("beta") }}<div class="tooltiptext">{{ msg("betaTooltip") }}</div></div>
               <div class="badge yellow" v-if="addon._tags.forWebsite">{{ msg("forWebsite") }}</div>
-              <div class="badge green" v-if="addon._tags.forums">{{ msg("forums") }}</div>
+              <div class="badge green tooltip" v-if="addon._tags.forums">{{ msg("forums") }}<div class="tooltiptext">{{ msg("forumsTooltip") }}</div> </div>
               <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
               <div class="addon-check">
                 <div
@@ -251,7 +251,7 @@
         </div>
       </div>
     </div>
-    <div v-show="isOpen" class="modal">
+    <div v-show="isOpen" class="modal" @click="closesidebar()">
       <div class="modal-content">
         <div>
           <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" style="">

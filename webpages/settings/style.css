@@ -409,11 +409,11 @@ h1 {
 }
 
 .search-box .badge {
-  cursor: pointer;
+  cursor: default;
   border-bottom: none;
 }
 .search-box .badge .selected-badge {
-  cursor: pointer;
+  cursor: default;
   border-bottom: none;
 }
 

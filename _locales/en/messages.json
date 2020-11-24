@@ -135,6 +135,13 @@
     "message": "View licenses of used libraries"
   },
   "recommendedTooltip": {
-    "message": "This addon is recommended by Scratch Addons. Try it out!"
+    "message": "This is recommended by Scratch Addons. Try it out!"
+  },
+  "betaTooltip": {
+    "message": "Keep in mind that this addon might have bugs."
+  },
+  "forumsTooltip": {
+    "message": "This addon applies to Scratch's Discussion Forums."
   }
+  
 }
