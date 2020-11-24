@@ -1,6 +1,6 @@
 {
     "name": "Show my-ocular status",
-    "description": "Shows my-ocular statuses under usernames on the forums. This addon makes requests to an external server (https://my-ocular.jeffalo.net) to obtain status data.",
+    "description": "Shows my-ocular statuses under usernames on the forums. Uses my-ocular.jeffalo.net to obtain status data. Statuses are moderated and filtered.",
     "credits": [
       {
         "name": "Jeffalo"
