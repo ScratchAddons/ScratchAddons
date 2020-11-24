@@ -157,3 +157,9 @@ body {
 .setting-body img {
   filter: invert(100%) brightness(0);
 }
+.categories-shrink {
+  filter: brightness(0);
+}
+.collapsed {
+  width: 0px;
+}
