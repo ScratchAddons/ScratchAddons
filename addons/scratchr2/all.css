@@ -1,0 +1,6 @@
+
+/*Smooths the border on projects and splits the text underneath*/
+.thumb img {
+    margin-bottom: 2px;
+    border-radius: 5px;
+}
