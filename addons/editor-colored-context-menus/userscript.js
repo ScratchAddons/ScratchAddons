@@ -17,12 +17,21 @@ function handleClick(e) {
     return;
   }
 
-  const block = e.target.closest(".blocklyDraggable");
+  let block = e.target.closest("[data-id]");
   if (!block) {
     return;
   }
 
-  const background = block.querySelector(".blocklyBlockBackground");
+  let blocklyBlock = Blockly.getMainWorkspace().getBlockById(block.dataset.id);
+  // Keep jumping to the parent block until we find a non-shadow block.
+  while (blocklyBlock && blocklyBlock.isShadow()) {
+    blocklyBlock = blocklyBlock.getParent();
+  }
+  if (!blocklyBlock) {
+    return;
+  }
+
+  const background = blocklyBlock.getSvgRoot().querySelector(".blocklyBlockBackground");
   if (!background) {
     return;
   }
