@@ -54,6 +54,8 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
   };
   const globalObj = Object.create(null);
 
+  await scratchAddons.l10n.load([addonId]);
+
   for (const scriptPath of scriptUrls) {
     const scriptUrl = chrome.runtime.getURL(`/addons/${addonId}/${scriptPath}`);
     console.log(
@@ -71,6 +73,7 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
       setInterval: setIntervalFunc,
       clearTimeout: clearTimeoutFunc,
       clearInterval: clearIntervalFunc,
+      msg: (key, placeholders) => scratchAddons.l10n.get(`${addonId}/${key}`, placeholders),
     });
   }
 }

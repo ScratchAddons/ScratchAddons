@@ -1,6 +1,6 @@
 import textFieldEdit from "./text-field-edit.js"; //used for editing the forum text box without messing with the edit history
 
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg, safeMsg }) {
   await addon.tab.loadScript(addon.self.lib + "/md5.min.js");
 
   var projectUpload = false;
@@ -34,7 +34,7 @@ export default async function ({ addon, global, console }) {
       }
     };
     reader.onerror = (err) => {
-      displayError("there was an error reading the file");
+      displayError(msg("load-error"));
       throw err;
     };
   });
@@ -47,7 +47,11 @@ export default async function ({ addon, global, console }) {
       .querySelector(".markItUpButton5")
       .insertAdjacentHTML(
         "afterend",
-        `<li class="markItUpButton markItUpButton17"><a id="uploadButton" href="javascript:;" title="Upload Image" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABVUlEQVQ4jc3SO0tCYRzH8WcOegNtTb2BXkO1SNBuFyJqC1uihhqCNCIH8xKU8BzzcspQEskWC8IWcRCji8WxEnrSCKqh+dvQRTwcybZ+8J3+8Jn+QvyL2byHfDe9c7r/d8CdJlB5JVB5xeZOt10DcKV+gHazuVINQNi9iIUDizJfWdzsXhOQrDeXqOEz3vllvtbAngIgm822DKABJB6b27n/AeZST8zEqyylr4jmT3DsVi0A/a45rQxAOByme+2BzuUbRpOb3L4MIBbLSClNwHa5ua0SALFYDOeZTn/mnI6goke/pmvbsACCpUb+AsJfACASiTB1tULwfZF15Wb+eRDn27gFsHqE2Mh/5skhPDkANE2j/3iWseIkExcOhorD9F32moBh/4iwezEHIKVEKUWtVsMwDOr1OkopE9Bi34CUklAohK7rxONxotEomqa1Bfh++6QPwtgXjMvZERUAAAAASUVORK5CYII=');">Upload</a></li>`
+        `<li class="markItUpButton markItUpButton17"><a id="uploadButton" href="javascript:;" title="${safeMsg(
+          "upload-image"
+        )}" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABVUlEQVQ4jc3SO0tCYRzH8WcOegNtTb2BXkO1SNBuFyJqC1uihhqCNCIH8xKU8BzzcspQEskWC8IWcRCji8WxEnrSCKqh+dvQRTwcybZ+8J3+8Jn+QvyL2byHfDe9c7r/d8CdJlB5JVB5xeZOt10DcKV+gHazuVINQNi9iIUDizJfWdzsXhOQrDeXqOEz3vllvtbAngIgm822DKABJB6b27n/AeZST8zEqyylr4jmT3DsVi0A/a45rQxAOByme+2BzuUbRpOb3L4MIBbLSClNwHa5ua0SALFYDOeZTn/mnI6goke/pmvbsACCpUb+AsJfACASiTB1tULwfZF15Wb+eRDn27gFsHqE2Mh/5skhPDkANE2j/3iWseIkExcOhorD9F32moBh/4iwezEHIKVEKUWtVsMwDOr1OkopE9Bi34CUklAohK7rxONxotEomqa1Bfh++6QPwtgXjMvZERUAAAAASUVORK5CYII=');">${safeMsg(
+          "upload"
+        )}</a></li>`
       );
 
     document.querySelector("#uploadButton").onmousedown = (e) => {
@@ -117,7 +121,7 @@ export default async function ({ addon, global, console }) {
         }
       };
       reader.onerror = (err) => {
-        displayError("there was an error reading the file");
+        displayError(msg("load-error"));
         throw err;
       };
     });
@@ -126,17 +130,21 @@ export default async function ({ addon, global, console }) {
   function displayError(message) {
     //display an error into the text box
     var items = [
-      { name: "a cat", url: "https://cdn2.scratch.mit.edu/get_image/project/413649276_9000x7200.png" },
-      { name: "a ufo cat", url: "https://cdn2.scratch.mit.edu/get_image/project/414016997_9000x7200.png" },
-      { name: "an alpaca", url: "https://cdn2.scratch.mit.edu/get_image/project/414018264_9000x7200.png" },
-      { name: "appel", url: "https://cdn2.scratch.mit.edu/get_image/project/414018433_9000x7200.png" },
+      { name: msg("cat"), url: "https://cdn2.scratch.mit.edu/get_image/project/413649276_9000x7200.png" },
+      { name: msg("ufo-cat"), url: "https://cdn2.scratch.mit.edu/get_image/project/414016997_9000x7200.png" },
+      { name: msg("alpaca"), url: "https://cdn2.scratch.mit.edu/get_image/project/414018264_9000x7200.png" },
+      { name: msg("appel"), url: "https://cdn2.scratch.mit.edu/get_image/project/414018433_9000x7200.png" },
     ];
 
     var randObj = items[Math.floor(Math.random() * items.length)];
     console.log("random object:", randObj);
     textFieldEdit.insert(
       textBox,
-      `sorry, your image could not be uploaded. ${message} here is ${randObj.name}. [img]${randObj.url}[/img]`
+      msg("error", {
+        error: message,
+        name: randObj.name,
+        url: randObj.url,
+      })
     );
   }
 
@@ -200,7 +208,7 @@ export default async function ({ addon, global, console }) {
       credentials: "include",
     })
       .catch((err) => {
-        displayError("we could not move the project to the trash folder. you should delete the project manually.");
+        displayError(msg("trash"));
         progresselement.remove();
         throw err;
       })
@@ -218,7 +226,7 @@ export default async function ({ addon, global, console }) {
     window.progresselement = toolbar.appendChild(document.createElement("li"));
     var token = addon.auth.xToken;
 
-    progresselement.innerText = "creating project";
+    progresselement.innerText = msg("creating");
 
     fetch("https://projects.scratch.mit.edu/", {
       headers: {
@@ -238,7 +246,7 @@ export default async function ({ addon, global, console }) {
       credentials: "include",
     })
       .catch((err) => {
-        displayError("there was an error creating the project.");
+        displayError(msg("create-error"));
         progresselement.remove();
         throw err;
       })
@@ -246,7 +254,7 @@ export default async function ({ addon, global, console }) {
       .then((data) => {
         console.log("project creation response data: ", data);
 
-        progresselement.innerText = "setting title";
+        progresselement.innerText = msg("title");
 
         //set title
         console.log("project id: " + data["content-name"]);
@@ -268,14 +276,14 @@ export default async function ({ addon, global, console }) {
           credentials: "omit",
         })
           .catch((err) => {
-            displayError("there was an error setting the project title.");
+            displayError(msg("title-error"));
             progresselement.remove();
             throw err;
           })
           .then((thing) => {
             console.log("changed title successfully");
 
-            progresselement.innerText = "setting thumbnail";
+            progresselement.innerText = msg("thumb");
 
             $.ajax({
               //CREDIT TO WORLD LANGUAGES FOR THIS THING
@@ -298,7 +306,7 @@ export default async function ({ addon, global, console }) {
                 return xhr;
               },
               error: function () {
-                displayError("perhaps try uploading a smaller image.");
+                displayError(msg("size"));
                 try {
                   progresselement.remove();
                 } catch {}
@@ -336,7 +344,7 @@ export default async function ({ addon, global, console }) {
 
     console.log("type: " + fileType);
 
-    progresselement.innerText = "uploading...";
+    progresselement.innerText = msg("uploading");
 
     fetch(`https://assets.scratch.mit.edu/${hash}.${type}`, {
       headers: {

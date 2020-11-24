@@ -178,6 +178,8 @@ h1 {
   border-radius: 5px;
   font-weight: bold;
   margin: 10px 0;
+  display: flex;
+  align-items: center;
 }
 .addon-description-full,
 .addon-credits {
@@ -321,6 +323,22 @@ h1 {
 .setting-input.check {
   height: 20px;
   width: 20px;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: white;
+  background-size: 20px 20px;
+  background-position: center center;
+}
+
+.setting-input.check:checked {
+  background-color: #175ef8;
+  background-image: url(../../images/icons/check.svg);
+}
+
+.setting-input.check:hover:not(:focus) {
+  border-color: #0e44b8;
 }
 
 .setting-input.number {
@@ -486,13 +504,17 @@ h1 {
   transform: rotate(180deg);
 }
 
+.licenses {
+  height: 100%;
+  min-height: 100vh;
+}
+
 .licenses-block {
   padding: 2rem;
 }
 
 .licenses-body pre {
   white-space: pre-wrap;
-  width: 70%;
 }
 
 input[type="color" i] {
@@ -532,11 +554,21 @@ input[type="color"]::-webkit-color-swatch {
   border-radius: 5px;
   font-weight: bold;
   margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+.addon-notice img,
+.addon-warn img {
+  height: 15px;
+  margin-right: 10px;
+  flex: 0 0;
+}
+.addon-warn img {
+  filter: brightness(0) invert(1);
 }
 .modal {
   position: fixed;
   z-index: 1;
-  padding-top: 100px;
   left: 0;
   top: 0;
   width: 100%;
@@ -544,6 +576,9 @@ input[type="color"]::-webkit-color-swatch {
   overflow: auto;
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
@@ -552,7 +587,9 @@ input[type="color"]::-webkit-color-swatch {
   padding: 20px;
   width: 800px;
   border-radius: 10px;
-  min-height: 500px;
+  height: 75%;
+  display: flex;
+  flex-direction: column;
 }
 .close:hover {
   color: #555;
@@ -571,17 +608,15 @@ input[type="color"]::-webkit-color-swatch {
   margin: 10px 10px 24px 10px;
 }
 .footer {
-  position: fixed;
-  vertical-align: bottom;
   text-align: center;
   width: 800px;
   color: gray;
+  margin-top: auto;
 }
 .footer a {
   color: gray;
 }
 .settings-block {
-  height: 435px;
   margin-top: 30px;
 }
 .modal .large-button {

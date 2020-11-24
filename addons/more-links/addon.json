@@ -18,5 +18,6 @@
   ],
   "tags": ["community"],
   "libraries": ["linkify"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }

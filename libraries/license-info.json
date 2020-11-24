@@ -4,5 +4,7 @@
   "text-field-edit": "MIT",
   "scratchblocks": "MIT",
   "linkify": "MIT",
+  "scratch-blocks": "Apache-2.0",
+  "intl-messageformat": "BSD3c",
   "vue": "MIT"
 }

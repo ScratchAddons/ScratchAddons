@@ -1,0 +1,3 @@
+{
+  "clones/clones": "{cloneCount, plural, one {clone: 1} other {clones: #}}"
+}

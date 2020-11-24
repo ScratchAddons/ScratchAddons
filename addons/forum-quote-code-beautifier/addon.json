@@ -1,0 +1,27 @@
+{
+  "name": "Customized quotes & code blocks on forums",
+  "description": "Shows nicer code and quote blocks on the forums.",
+  "credits": [
+    {
+      "name": "GrahamSH (Port)"
+    },
+    {
+      "name": "Boomer001 (Userstyle)"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Border Color",
+      "id": "bordercolor",
+      "type": "color",
+      "default": "#28A5DA"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "main.css",
+      "matches": ["https://scratch.mit.edu/discuss/*"]
+    }
+  ],
+  "tags": ["forums"]
+}

@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scratch Addons - Settings</title>
+    <title></title>
+    <link rel="icon" href="../../images/icon.png" />
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
@@ -12,42 +13,42 @@
   <body style="display: none" v-show="loaded">
     <div class="navbar">
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
-      <h1>Settings</h1>
+      <h1>{{ msg("settings") }}</h1>
       <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themepath" />
     </div>
     <div class="main">
       <div class="categories-block">
         <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
           <img src="../../images/icons/list.svg" />
-          <span>All</span>
+          <span>{{ msg("all") }}</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'editor'}" @click="selectedTab = 'editor'">
           <img src="../../images/icons/puzzle.svg" />
-          <span>Scratch Editor Features</span>
+          <span>{{ msg("editorFeatures") }}</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'community'}" @click="selectedTab = 'community'">
           <img src="../../images/icons/web.svg" />
-          <span>Scratch Website Features</span>
+          <span>{{ msg("websiteFeatures") }}</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'theme'}" @click="selectedTab = 'theme'">
           <img src="../../images/icons/brush.svg" />
-          <span>Themes</span>
+          <span>{{ msg("themes") }}</span>
         </div>
         <div class="category" style="margin-top: auto; cursor: pointer" @click="openCredits()">
           <img src="../../images/icons/users.svg" />
-          <span>Credits</span>
+          <span>{{ msg("credits") }}</span>
         </div>
         <div class="category" style="cursor: pointer" @click="openReview()">
           <img src="../../images/icons/star.svg" />
-          <span>Review</span>
+          <span>{{ msg("review") }}</span>
         </div>
         <div class="category" style="cursor: pointer" @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
-          <span>Send Feedback</span>
+          <span>{{ msg("feedback") }}</span>
         </div>
         <div class="category" style="cursor: pointer; margin-top: 12px" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
-          <span>More Settings</span>
+          <span>{{ msg("moreSettings") }}</span>
         </div>
       </div>
 
@@ -65,9 +66,11 @@
             @click="clearSearch()"
           ></button>
           <div class="filter-selector">
-            <span class="filter-text">Filter: </span>
+            <span class="filter-text">{{ msg("filter") }} </span>
             <div class="filter-options">
-              <div class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">All</div>
+              <div class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">
+                {{ msg("all") }}
+              </div>
               <div
                 v-for="tag of tagsToShow"
                 class="filter-option"
@@ -106,18 +109,18 @@
                   {{ addon.name }}
                 </div>
               </div>
-              <div class="badge blue" v-if="addon._tags.recommended">Recommended</div>
-              <div class="badge darkgreen" v-if="addon._tags.forEditor">For editor</div>
-              <div class="badge red" v-if="addon._tags.beta">Beta</div>
-              <div class="badge yellow" v-if="addon._tags.forWebsite">For website</div>
-              <div class="badge green" v-if="addon._tags.forums">Forums</div>
+              <div class="badge blue" v-if="addon._tags.recommended">{{ msg("recommended") }}</div>
+              <div class="badge darkgreen" v-if="addon._tags.forEditor">{{ msg("forEditor") }}</div>
+              <div class="badge red" v-if="addon._tags.beta">{{ msg("beta") }}</div>
+              <div class="badge yellow" v-if="addon._tags.forWebsite">{{ msg("forWebsite") }}</div>
+              <div class="badge green" v-if="addon._tags.forums">{{ msg("forums") }}</div>
               <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
               <div class="addon-check">
                 <div
                   v-show="addon._expanded"
                   v-if="addon.settings"
                   class="clear-settings"
-                  title="Reset to default settings"
+                  title="{{ msg('resetToDefault') }}"
                   @click="loadDefaults(addon)"
                 >
                   <img src="../../images/icons/undo.svg" class="icon-type" />
@@ -127,10 +130,14 @@
             </div>
             <div class="addon-settings" v-show="addon._expanded">
               <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
-              <div class="addon-warn" v-if="addon.warning" v-show="addon._expanded">{{ addon.warning }}</div>
-              <div class="addon-notice" v-if="addon.notice" v-show="addon._expanded">{{ addon.notice }}</div>
+              <div class="addon-warn" v-if="addon.warning" v-show="addon._expanded">
+                <img src="../../images/icons/warning.svg" />{{ addon.warning }}
+              </div>
+              <div class="addon-notice" v-if="addon.notice" v-show="addon._expanded">
+                <img src="../../images/icons/notice.svg" />{{ addon.notice }}
+              </div>
               <div class="addon-credits" v-if="addon.credits">
-                <span>Credit to:</span>
+                <span>{{ msg("creditTo") }}</span>
                 <span v-for="credit of addon.credits">
                   <span v-if="credit.link">
                     <a href="{{ credit.link }}" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a>
@@ -139,7 +146,7 @@
                 </span>
               </div>
               <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
-                <a href="./licenses.html?libraries={{ addon.libraries.join(',') }}">View library licenses</a>
+                <a href="./licenses.html?libraries={{ addon.libraries.join(',') }}">{{ msg("viewLicenses") }}</a>
               </div>
               <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
                 <div class="addon-setting" v-for="setting of addon.settings">
@@ -172,6 +179,19 @@
                     maxlength="100"
                   />
                   <input
+                    type="text"
+                    class="setting-input key"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @input="updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'key'"
+                    :placeholder="setting.default"
+                    maxlength="100"
+                    :data-addon-id="addon._addonId"
+                    :data-setting-id="setting.id"
+                    spellcheck="false"
+                  />
+                  <input
                     type="color"
                     class="setting-input color"
                     v-model="addonSettings[addon._addonId][setting.id]"
@@ -187,22 +207,22 @@
                     v-if="setting.type === 'color'"
                     @click="updateOption(setting.id, setting.default, addon)"
                   >
-                    Reset
+                    {{ msg("reset") }}
                   </button>
                   <div class="filter-options" v-if="setting.type === 'select'">
                     <div
                       class="filter-option"
                       v-for="option of setting.potentialValues"
-                      :class="{'sel' : addonSettings[addon._addonId][setting.id] === option, 'disabled': !addon._enabled}"
-                      @click="updateOption(setting.id, option, addon);"
+                      :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
+                      @click="updateOption(setting.id, option.id, addon);"
                     >
-                      {{ option }}
+                      {{ option.name }}
                     </div>
                   </div>
                 </div>
               </div>
               <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
-                <div class="setting-label">Presets</div>
+                <div class="setting-label">{{ msg("presets") }}</div>
                 <div class="addon-setting" v-for="preset of addon.presets">
                   <button
                     type="preset-button"
@@ -222,63 +242,50 @@
     </div>
     <div v-show="isOpen" class="modal">
       <div class="modal-content">
-        <span @click="modalToggle()" class="close">&times;</span>
-        <h1 class="setting-heading">More Settings</h1>
+        <div>
+          <span @click="modalToggle()" class="close">&times;</span>
+          <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
+        </div>
         <div class="settings-block">
           <div class="setting-body">
             <div class="addon-topbar">
               <span class="addon-name"
-                ><img src="../../images/icons/theme.svg" style="vertical-align: middle; margin-right: 5px" />Scratch
-                Addons theme
+                ><img src="../../images/icons/theme.svg" style="vertical-align: middle; margin-right: 5px" /> {{
+                msg("scratchAddonsTheme") }}
               </span>
             </div>
             <div class="setting-settings">
-              <span class="settings-description"
-                >This allows you to switch between light and dark themes for this settings page, and the extension's
-                popup.</span
-              >
+              <span class="settings-description">{{ msg("scratchAddonsThemeDescription") }}</span>
               <div class="setting-setting">
                 <div class="filter-selector">
-                  <div class="filter-text">Theme:</div>
+                  <div class="filter-text">{{ msg("theme") }}</div>
                   <div class="filter-options">
                     <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">
-                      Light Theme
+                      {{ msg("light") }}
                     </div>
                     <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">
-                      Dark Theme
+                      {{ msg("dark") }}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="setting-body" v-if="false">
-            <div class="addon-topbar">
-              <span class="addon-name"
-                ><img src="../../images/icons/theme.svg" style="vertical-align: middle; margin-right: 5px" />Language:
-              </span>
-            </div>
-            <div class="setting-settings">
-              <div class="setting-setting">
-                <div>Language</div>
-                <select>
-                  <option>English</option>
-                </select>
-              </div>
-            </div>
-          </div>
         </div>
         <div class="footer">
-          <span
-            >Scratch Addons
+          <p>
+            {{ msg("extensionName") }}
             <a
               href="https://scratchaddons.com/changelog?versionname={{ versionName }}"
-              title="View Changelog"
+              title="{{ msg('changelog') }}"
               target="_blank"
             >
               v{{ version }}</a
-            ></span
-          >
+            >
+          </p>
+          <p>
+            <a href="./licenses.html?libraries=intl-messageformat,vue" target="_blank">{{ msg("libraryCredits") }}</a>
+          </p>
         </div>
       </div>
     </div>

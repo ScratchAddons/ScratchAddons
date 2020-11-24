@@ -56,7 +56,10 @@ function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
     else document.documentElement.appendChild(link);
   }
   for (const theme of themes) {
-    for (const css of theme.styles) {
+    for (const styleUrl of theme.styleUrls) {
+      let css = theme.styles[styleUrl];
+      // Replace %addon-self-dir% for relative URLs
+      css = css.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${theme.addonId}`));
       if (isUpdate && css.startsWith("/* sa-autoupdate-theme-ignore */")) continue;
       const style = document.createElement("style");
       style.classList.add("scratch-addons-theme");
@@ -83,7 +86,7 @@ function setCssVariables(addonSettings) {
   }
 }
 
-function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, themes }) {
+function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, userstyleUrls, themes }) {
   setCssVariables(globalState.addonSettings);
   injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate: false });
 
@@ -92,6 +95,7 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
   template.setAttribute("data-path", chrome.runtime.getURL(""));
   template.setAttribute("data-userscripts", JSON.stringify(addonsWithUserscripts));
   template.setAttribute("data-global-state", JSON.stringify(globalState));
+  template.setAttribute("data-l10njson", JSON.stringify(l10njson));
   document.head.appendChild(template);
 
   const script = document.createElement("script");
@@ -106,7 +110,7 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
     } else if (request.fireEvent) {
       const eventDetails = JSON.stringify(request.fireEvent);
       template.setAttribute(`data-fire-event__${Date.now()}`, eventDetails);
-    } else if (request.setMsgCount) {
+    } else if (typeof request.setMsgCount !== "undefined") {
       template.setAttribute("data-msgcount", request.setMsgCount);
     }
   });

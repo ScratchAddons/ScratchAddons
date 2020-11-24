@@ -59,7 +59,7 @@ export default class Tab extends EventTarget {
           break;
         }
       }).observe(document.documentElement, {
-        attributes: true,
+        attributes: false,
         childList: true,
         subtree: true,
       })
@@ -103,6 +103,20 @@ export default class Tab extends EventTarget {
         if (attr === "success") return Promise.resolve();
         return Promise.reject(new Error(`Error inside clipboard handler: ${attr}`));
       });
+    }
+  }
+
+  /**
+   * Obtain translation used by Scratch.
+   * @param {string} key Translation key.
+   * @returns {string} Translation.
+   */
+  scratchMessage(key) {
+    if (this.clientVersion === "scratch-www") {
+      return window._messages[window._locale][key] || key;
+    }
+    if (this.clientVersion === "scratchr2") {
+      return window.django.gettext(key);
     }
   }
 }

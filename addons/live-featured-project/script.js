@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async function ({ addon, msg }) {
   const showMenu = addon.settings.get("showMenu");
   const forceAlternative = addon.settings.get("forceAlternative");
   const alternativePlayer = addon.settings.get("alternativePlayer");
@@ -21,7 +21,7 @@ export default async function ({ addon }) {
 
   const changeFeaturedElement = document.createElement("div");
   changeFeaturedElement.id = "lfp-change-featured";
-  changeFeaturedElement.textContent = "Change featured project";
+  changeFeaturedElement.textContent = msg("change-featured");
   changeFeaturedElement.addEventListener("click", () => {
     document.querySelector('#profile-box .player [data-control="edit"]').click();
   });
@@ -29,20 +29,16 @@ export default async function ({ addon }) {
   wrapperElement.appendChild(iframeElement);
   if (document.querySelector('#profile-box .player [data-control="edit"]'))
     wrapperElement.appendChild(changeFeaturedElement);
-  stageElement.appendChild(wrapperElement);
+  stageElement.prepend(wrapperElement);
+
+  if (showMenu) wrapperElement.classList.add("lfp-show-menu");
+  else wrapperElement.classList.add("lfp-hide-menu");
 
   // Functions for loading embeds
 
   const loadScratch = () => {
-    wrapperElement.className = "lfp-scratch";
-
-    if (showMenu) {
-      wrapperElement.classList.add("lfp-show-menu");
-    } else {
-      iframeElement.setAttribute("height", "260");
-      wrapperElement.classList.add("lfp-hide-menu");
-    }
-
+    wrapperElement.dataset.player = "scratch";
+    if (!showMenu) iframeElement.setAttribute("height", "260");
     iframeElement.setAttribute("src", `https://scratch.mit.edu/projects/embed/${projectId}/?autostart=true`);
 
     // Auto-start Scratch players (sadly need to be done automatically)
@@ -62,44 +58,38 @@ export default async function ({ addon }) {
             subtree: true,
           });
         },
-        { once: true }
+        {
+          once: true,
+        }
       );
   };
 
   const loadTurboWarp = () => {
     iframeElement.setAttribute("src", `https://turbowarp.org/embed.html${autoPlay ? "?autoplay" : ""}#${projectId}`);
-    wrapperElement.className = "lfp-turbowarp";
-
-    if (showMenu) {
-      wrapperElement.classList.add("lfp-show-menu");
-    } else {
-      iframeElement.setAttribute("height", "260");
-      wrapperElement.classList.add("lfp-hide-menu");
-    }
+    wrapperElement.dataset.player = "turbowarp";
+    if (!showMenu) iframeElement.setAttribute("height", "260");
   };
 
   const loadForkphorus = () => {
-    wrapperElement.className = "lfp-forkphorus";
+    wrapperElement.dataset.player = "forkphorus";
     iframeElement.setAttribute(
       "src",
       `https://forkphorus.github.io/embed.html?id=${projectId}&auto-start=${autoPlay}&ui=${showMenu}`
     );
-    if (!autoPlay) frameElement.setAttribute("width", "239");
   };
 
   // Start loading the players
 
-  stageElement.classList.add("lfp-loaded");
-
-  if (forceAlternative) {
-    if (alternativePlayer === "TurboWarp") loadTurboWarp();
-    else loadForkphorus();
+  if (forceAlternative && alternativePlayer !== "none") {
+    if (alternativePlayer === "turbowarp") loadTurboWarp();
+    else if (alternativePlayer === "forkphorus") loadForkphorus();
   } else {
     loadScratch();
     iframeElement.addEventListener("load", () => {
       if (iframeElement.contentDocument.querySelector(".not-available-outer") !== null) {
-        if (alternativePlayer === "TurboWarp") loadTurboWarp();
-        else loadForkphorus();
+        if (alternativePlayer === "turbowarp") loadTurboWarp();
+        else if (alternativePlayer === "forkphorus") loadForkphorus();
+        else stageElement.removeChild(wrapperElement);
       }
     });
   }
