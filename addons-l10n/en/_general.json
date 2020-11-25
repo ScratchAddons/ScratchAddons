@@ -1,5 +1,10 @@
 {
   "_locale": "en",
   "_locale_name": "English",
-  "test-plural-1": "This is a test. {x, plural, one {one msg. hmm? it's here:} other {# msgs. hmm? it's here:}}"
+  "test-plural-1": "This is a test. {x, plural, one {one msg. hmm? it's here:} other {# msgs. hmm? it's here:}}",
+  "test-plural-2": "{x, plural, one {one msg. hmm? it's here:} other {# msgs. hmm? it's here:}}",
+  "test-plural-3": "{x, plural, one {one msg. hmm it's here:} other {# msgs. hmm it's here:}}",
+  "test-plural-4": "{x, plural, one {one msg. hmm? its here:} other {# msgs. hmm? its here:}}",
+  "test-plural-5": "{x, plural, one {one msg. hmm? it's here} other {# msgs. hmm? it's here}}",
+  "test-plural-6": "{x, plural, one {one msg. hmm? it's here:} other {# msgs. hmm? it's here:} }"
 }
