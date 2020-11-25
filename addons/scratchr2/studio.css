@@ -170,3 +170,7 @@ ul.curators li img {
 .notification-feed {
   padding: 0;
 }
+.thumb img {
+  border-radius:5px;
+  margin-bottom:2px:
+}
