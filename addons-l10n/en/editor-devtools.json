@@ -28,8 +28,8 @@
   "editor-devtools/send-top-bottom": "Send to Top, Send to Bottom",
   "editor-devtools/send-top-bottom-desc": "Right click a costume and 2 new menu items are present. These can be used to send the clicked sprite to the top or bottom of the list of costumes for fast re-ordering.",
   "editor-devtools/youtube": "YouTube tutorials",
-  "editor-devtools/orphaned": "Griffpatch: {count, plural, one {I found 1 orphaned reporter block} other {I found # orphaned reporter blocks} }. {count, plural, one {Shall I delete it for you?} other {Shall I delete them for you?} }\n",
-  "editor-devtools/unused-var": "Griffpatch: {count, plural, one {I found 1 unused local variable} other {I found # unused local variables} }. {count, plural, one {Shall I delete it for you?} other {Shall I delete them for you?} } {count, plural, one {Here it is:} other {Here they are:} }\n",
+  "editor-devtools/orphaned": "{count, plural, one {Griffpatch: I found 1 orphaned reporter block. Shall I delete it for you?} other {Griffpatch: I found # orphaned reporter blocks. Shall I delete them for you?} }",
+  "editor-devtools/unused-var": "{count, plural, one {Griffpatch: I found 1 unused local variable. Shall I delete it for you? Here it is:\n} other {Griffpatch: I found # unused local variables. Shall I delete them for you? Here they are:\n} }",
   "editor-devtools/searching-in": "Searching in {name}",
   "editor-devtools/var-not-exist": "That variable does not exist...",
   "editor-devtools/find": "Find",
@@ -49,6 +49,7 @@
   "editor-devtools/cut-block": "Cut Block",
   "editor-devtools/swap": "Swap {var} in sprite",
   "editor-devtools/lists": "lists",
+  "editor-devtools/variables": "variables",
   "editor-devtools/inset": "Insert",
   "editor-devtools/start-typing": "Start Typing..."
 }
