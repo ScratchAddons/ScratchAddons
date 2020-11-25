@@ -1,14 +1,7 @@
 export default async function ({ addon, global, console }) {
-  let user1 = window.location.href.substring(30, 100)
+  let user1 = window.location.href.substring(30, 100);
   let username = user1.substring(0, user1.indexOf("/"));
-  let details = [
-    "projects",
-    "favorites",
-    "studios_following",
-    "studios",
-    "following",
-    "followers"
-  ]
+  let details = ["projects", "favorites", "studios_following", "studios", "following", "followers"];
   for (let j = 0; j < details.length; j++) {
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -22,10 +15,11 @@ export default async function ({ addon, global, console }) {
             let viewAll = new URL(boxHeads[i].querySelector("a").href).pathname;
             let link = viewAll.split("/users/" + username + "/")[1];
             if (link == details[j] + "/") {
-              let boxheadName = boxHeads[i].querySelector("h4")
-              let boxVal = boxheadName.innerText.match(/\([0-9+]+\)/g)
-              if (boxVal) boxheadName.innerText = boxheadName.innerText.substring(0, boxheadName.innerText.indexOf(boxVal[0]))
-              boxheadName.innerText+= ` (${follownum})`;
+              let boxheadName = boxHeads[i].querySelector("h4");
+              let boxVal = boxheadName.innerText.match(/\([0-9+]+\)/g);
+              if (boxVal)
+                boxheadName.innerText = boxheadName.innerText.substring(0, boxheadName.innerText.indexOf(boxVal[0]));
+              boxheadName.innerText += ` (${follownum})`;
             }
           }
         }
