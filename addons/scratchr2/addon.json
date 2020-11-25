@@ -100,10 +100,6 @@
     {
       "url": "experimental_dark_compatibility.css",
       "matches": ["https://scratch.mit.edu/*"]
-    },
-    {
-      "url": "all.css",
-      "matches": ["https://scratch.mit.edu/*"]
     }
   ],
   "l10n": true
