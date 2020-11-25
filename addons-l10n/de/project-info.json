@@ -1,1 +1,1 @@
-{"project-info/@name":"Figuren und Skript Anzahl","project-info/@description":"Zeigt die Anzahl der Figuren und Skripte die ein Projekt besitzt."}
+{"project-info/sprite":"{num, plural, one {1 Figur} other {# Figuren}}","project-info/script":"{num, plural, one {1 Skript} other {# Skripte}}","project-info/@name":"Figuren und Skript Anzahl","project-info/@description":"Zeigt die Anzahl der Figuren und Skripte die ein Projekt besitzt."}
