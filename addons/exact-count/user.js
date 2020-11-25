@@ -13,13 +13,12 @@ export default async function ({ addon, global, console }) {
         for (let i = 1; i < boxHeads.length - 1; i++) {
           if (boxHeads[i].querySelector("a")) {
             let viewAll = new URL(boxHeads[i].querySelector("a").href).pathname;
-            let link = viewAll.split("/users/" + username + "/")[1];
-            if (link == details[j] + "/") {
-              let boxheadName = boxHeads[i].querySelector("h4");
-              let boxVal = boxheadName.innerText.match(/\([0-9+]+\)/g);
-              if (boxVal)
-                boxheadName.innerText = boxheadName.innerText.substring(0, boxheadName.innerText.indexOf(boxVal[0]));
-              boxheadName.innerText += ` (${follownum})`;
+            let link = viewAll.toLowerCase().split("/users/" + username.toLowerCase() + "/")[1];
+            if (link.toLowerCase() == details[j].toLowerCase() + "/") {
+              let boxheadName = boxHeads[i].querySelector("h4")
+              let boxVal = boxheadName.innerText.match(/\([0-9+]+\)/g)
+              if (boxVal) boxheadName.innerText = boxheadName.innerText.substring(0, boxheadName.innerText.indexOf(boxVal[0]))
+              boxheadName.innerText+= ` (${follownum})`;
             }
           }
         }
