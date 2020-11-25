@@ -6,3 +6,5 @@ addons-l10n/*/*.json
 
 _locales/*/messages.json
 !_locales/en/messages.json
+
+.github/workflows/*

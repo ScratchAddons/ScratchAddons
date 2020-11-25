@@ -8,19 +8,22 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   if (rr) {
     document.head.appendChild(lightThemeLink);
     vue.theme = true;
-    vue.themepath = "../../images/icons/moon.svg";
+    vue.themePath = "../../images/icons/moon.svg";
   } else {
     vue.theme = false;
-    vue.themepath = "../../images/icons/theme.svg";
+    vue.themePath = "../../images/icons/theme.svg";
   }
 });
 
 const vue = new Vue({
   el: "body",
   data: {
+    smallMode: false,
     theme: "",
-    themepath: "",
+    themePath: "",
+    switchPath: "../../images/icons/switch.svg",
     isOpen: false,
+    categoryOpen: true,
     loaded: false,
     manifests: [],
     selectedTab: "all",
@@ -102,8 +105,28 @@ const vue = new Vue({
     },
   },
   methods: {
+    closesidebar: function () {
+      if (this.categoryOpen && this.smallMode) {
+        vue.sidebarToggle();
+      }
+      if (this.isOpen) {
+        this.modalToggle;
+      }
+    },
+
     modalToggle: function () {
       this.isOpen = !this.isOpen;
+      if (vue.smallMode) {
+        vue.sidebarToggle();
+      }
+    },
+    sidebarToggle: function () {
+      this.categoryOpen = !this.categoryOpen;
+      if (this.categoryOpen) {
+        vue.switchPath = "../../images/icons/close.svg";
+      } else {
+        vue.switchPath = "../../images/icons/switch.svg";
+      }
     },
     msg(message, ...params) {
       return chrome.i18n.getMessage(message, ...params);
@@ -134,11 +157,11 @@ const vue = new Vue({
           if (rr && r.globalTheme !== rr) {
             document.head.appendChild(lightThemeLink);
             vue.theme = true;
-            vue.themepath = "../../images/icons/moon.svg";
+            vue.themePath = "../../images/icons/moon.svg";
           } else if (r.globalTheme !== rr) {
             document.head.removeChild(lightThemeLink);
             vue.theme = false;
-            vue.themepath = "../../images/icons/theme.svg";
+            vue.themePath = "../../images/icons/theme.svg";
           }
         });
       });
@@ -309,3 +332,16 @@ window.addEventListener("keydown", function (e) {
 });
 
 document.title = chrome.i18n.getMessage("settingsTitle");
+function resize() {
+  if (window.innerWidth < 1000) {
+    vue.smallMode = true;
+    vue.categoryOpen = false;
+    vue.switchPath = "../../images/icons/switch.svg";
+  } else if (vue.smallMode != false) {
+    vue.smallMode = false;
+    vue.categoryOpen = true;
+    vue.switchPath = "../../images/icons/close.svg";
+  }
+}
+window.onresize = resize;
+resize();
