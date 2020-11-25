@@ -40,7 +40,11 @@ export default async function ({ addon, global, console }) {
       document.querySelectorAll(".description-block")[tab].style.display = "block";
       document.querySelectorAll(".description-block")[!tab + 0].style.display = "none";
     }
-    await addon.tab.waitForElement(".remix-credit", { markAsSeen: true });
-    projectNotes.insertBefore(tabs, projectNotes.querySelector(".description-block"));
+    (async function remixHandeler() {
+      while (true) {
+        await addon.tab.waitForElement(".remix-credit", { markAsSeen: true });
+        projectNotes.insertBefore(tabs, projectNotes.querySelector(".description-block"));
+      }
+    })();
   }
 }
