@@ -1,7 +1,16 @@
 export default async function ({ addon, global, console }) {
   let project;
-  let onionLayer;
+  // let vectorOnionLayer;
+  // let rasterOnionLayer;
   let paperCanvas;
+
+  const PaperConstants = {
+    Raster: null,
+    Layer: null,
+    Point: null,
+    Rectangle: null,
+    CENTER: null
+  };
 
   const foundPaper = (_project) => {
     if (project === _project) {
@@ -12,18 +21,55 @@ export default async function ({ addon, global, console }) {
 
     const originalExportSVG = project.exportSVG;
     project.exportSVG = function (...args) {
-      onionLayer.remove();
-      const ret = originalExportSVG.call(this, ...args);
-      this.addLayer(onionLayer);
-      return ret;
+      const onionLayers = [];
+      for (const layer of this.layers) {
+        if (layer.data.sa_isOnionLayer) {
+          onionLayers.push(layer);
+        }
+      }
+      for (const layer of onionLayers) {
+        layer.remove();
+      }
+      const result = originalExportSVG.call(this, ...args);
+      for (const layer of onionLayers) {
+        this.addLayer(layer);
+      }
+      return result;
     };
 
-    const paintLayer = project.activeLayer;
-    onionLayer = new project.activeLayer.constructor();
-    console.log("onionLayer", onionLayer);
-    onionLayer.opacity = 0.2;
-    onionLayer.locked = true;
-    paintLayer.activate();
+    // const paintLayer = project.activeLayer;
+
+    // setTimeout(function () {
+    //   vectorOnionLayer = new project.activeLayer.constructor();
+    //   console.log("onionLayer", vectorOnionLayer);
+    //   vectorOnionLayer.opacity = 0.2;
+    //   vectorOnionLayer.locked = true;
+
+    //   const rasterLayerRaster = project.layers.find(i => i.data.isRasterLayer).children[0];
+    //   rasterOnionLayer = new project.activeLayer.constructor();
+    //   const canvas = document.createElement('canvas');
+    //   canvas.width = 480 * 2;
+    //   canvas.height = 360 * 2;
+    //   canvas.getContext('2d').imageSmoothingEnabled = false;
+    //   const raster = new rasterLayerRaster.constructor(canvas);
+    //   raster.parent = rasterOnionLayer;
+    //   raster.position = rasterLayerRaster.position;
+    // });
+
+    if (PaperConstants.Layer === null) {
+      setTimeout(() => {
+        PaperConstants.Layer = project.activeLayer.constructor;
+
+        const rasterLayer = project.layers.find(i => i.data.isRasterLayer);
+        PaperConstants.Raster = rasterLayer.children[0].constructor;
+
+        PaperConstants.Point = rasterLayer.position.constructor;
+
+        PaperConstants.Rectangle = rasterLayer.getBounds().constructor;
+
+        PaperConstants.CENTER = new PaperConstants.Point(480, 360);
+      });
+    }
   };
 
   const foundPaperCanvas = (_paperCanvas) => {
@@ -32,9 +78,47 @@ export default async function ({ addon, global, console }) {
     }
     paperCanvas = _paperCanvas;
     console.log("paperCanvas", paperCanvas);
+
+    // When importing a new image, remove onion layers.
+    const originalImportImage = paperCanvas.importImage;
+    paperCanvas.importImage = function (...args) {
+      removeOnionLayers();
+      originalImportImage.call(this, ...args);
+      setTimeout(() => {
+        updateOnionLayers();
+      })
+    };
   };
 
-  const updateOnionLayer = () => {
+  const createCanvas = (width, height) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext('2d').imageSmoothingEnabled = false;
+    return canvas;
+  };
+
+  const createOnionLayer = () => {
+    const layer = new PaperConstants.Layer();
+    layer.opacity = 0.2;
+    layer.locked = true;
+    layer.data.sa_isOnionLayer = true;
+    return layer;
+  };
+
+  const removeOnionLayers = () => {
+    if (!project) {
+      return;
+    }
+    const layers = project.layers;
+    for (let i = layers.length - 1; i >= 0; i--) {
+      if (layers[i].data.sa_isOnionLayer) {
+        layers[i].remove();
+      }
+    }
+  };
+
+  const updateOnionLayers = () => {
     const costumeList = Array.from(document.querySelector("[class^='selector_list-area']").children);
     let selectedCostume = -1;
     for (let i = 0; i < costumeList.length; i++) {
@@ -65,6 +149,8 @@ export default async function ({ addon, global, console }) {
       throw new Error("Assumptions invalid.");
     }
 
+    removeOnionLayers();
+
     const activeLayer = project.activeLayer;
 
     const originalRecalibrate = paperCanvas.recalibrateSize;
@@ -76,14 +162,31 @@ export default async function ({ addon, global, console }) {
       });
     }
 
-    onionLayer.bringToFront();
-    onionLayer.removeChildren();
-    onionLayer.activate();
+    if (costume.dataFormat === "svg") {
+      const layer = createOnionLayer();
+      layer.activate();
+      paperCanvas.importSvg(asset, costume.rotationCenterX, costume.rotationCenterY);
+    } else if (costume.dataFormat === "png" || costume.dataFormat === "jpg") {
+      const layer = createOnionLayer();
+      const raster = new PaperConstants.Raster(createCanvas(960, 720));
+      raster.parent = layer;
+      raster.guide = true;
+      raster.locked = true;
+      raster.position = PaperConstants.CENTER;
 
-    paperCanvas.importImage(costume.dataFormat, asset, costume.rotationCenterX, costume.rotationCenterY);
+      const mask = new PaperConstants.Rectangle(layer.getBounds());
+      mask.guide = true;
+      mask.locked = true;
+      mask.clipMask = true;
+
+      const image = new Image();
+      image.onload = () => {
+        raster.drawImage(image, 480 - costume.rotationCenterX, 360 - costume.rotationCenterY);
+        paperCanvas.recalibrateSize();
+      };
+      image.src = asset;
+    }
   };
-
-  window.e = updateOnionLayer;
 
   // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
   Object.defineProperty(Object.prototype, "_view", {
