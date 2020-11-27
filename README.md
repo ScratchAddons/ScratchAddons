@@ -1,5 +1,5 @@
 <img src="https://raw.githubusercontent.com/ScratchAddons/ScratchAddons/master/images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
-# Welcome to Scratch Addons' repository!
+<h1 align='center'>Welcome to the Scratch Addons repository!</h1>
 
 [![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/stargazers) 
 [![](https://img.shields.io/github/forks/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/network/members)
@@ -17,11 +17,13 @@
 [![](https://img.shields.io/badge/chat-on_discord-7289da.svg?style=flat-square)](https://discord.gg/Ak8sCDQ)
 [![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)
 
-## About
+Welcome to Scratch Addons! Scratch Addons is an extension that aims to make user experience on [Scratch](https://scratch.mit.edu) better, it does this by combining many other userscripts, extensions, and styles. Feel free to read more below!
+
+<h2 align='center'>About</h2>
 
 Scratch Addons is a WebExtension (supports both Chrome and Firefox). Scratch Addons' mission is to combine all existing Scratch extensions, userscripts and userstyles into a single easy-to-access place, while still letting users choose which ones to enable.
 
-### What's actually an "addon"?
+### What exactly is an "addon"?
 
 An addon is similar to an extension or a userscript, but they use special APIs provided by the Scratch Addons extension. These APIs allow addons to run scripts on a Scratch page (userscripts), run scripts on the background (persistent scripts), or apply styles to the Scratch website (userstyles).
 
