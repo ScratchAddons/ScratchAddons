@@ -1,7 +1,5 @@
 export default async function ({ addon, global, console }) {
   let project;
-  // let vectorOnionLayer;
-  // let rasterOnionLayer;
   let paperCanvas;
 
   const PaperConstants = {
@@ -36,25 +34,6 @@ export default async function ({ addon, global, console }) {
       }
       return result;
     };
-
-    // const paintLayer = project.activeLayer;
-
-    // setTimeout(function () {
-    //   vectorOnionLayer = new project.activeLayer.constructor();
-    //   console.log("onionLayer", vectorOnionLayer);
-    //   vectorOnionLayer.opacity = 0.2;
-    //   vectorOnionLayer.locked = true;
-
-    //   const rasterLayerRaster = project.layers.find(i => i.data.isRasterLayer).children[0];
-    //   rasterOnionLayer = new project.activeLayer.constructor();
-    //   const canvas = document.createElement('canvas');
-    //   canvas.width = 480 * 2;
-    //   canvas.height = 360 * 2;
-    //   canvas.getContext('2d').imageSmoothingEnabled = false;
-    //   const raster = new rasterLayerRaster.constructor(canvas);
-    //   raster.parent = rasterOnionLayer;
-    //   raster.position = rasterLayerRaster.position;
-    // });
 
     if (PaperConstants.Layer === null) {
       setTimeout(() => {
