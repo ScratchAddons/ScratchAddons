@@ -115,7 +115,7 @@
                   <img v-if="addon._category === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
                   <img v-if="addon._category === 'community'" src="../../images/icons/web.svg" class="icon-type" />
                   <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
-                  {{ addon.name }}
+                  <span @click.ctrl="devShowAddonIds">{{ addon.name }}</span>
                 </div>
               </div>
               <div class="badge blue tooltip" v-if="addon._tags.recommended">
