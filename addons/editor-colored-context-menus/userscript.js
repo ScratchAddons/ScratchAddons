@@ -31,7 +31,7 @@ function handleClick(e) {
     return;
   }
 
-  const background = blocklyBlock.getSvgRoot().querySelector(".blocklyBlockBackground");
+  const background = blocklyBlock.svgPath_;
   if (!background) {
     return;
   }
