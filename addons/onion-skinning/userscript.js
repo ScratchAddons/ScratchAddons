@@ -4,6 +4,9 @@ export default async function ({ addon, global, console }) {
   let paperCanvas;
 
   const foundPaper = (_project) => {
+    if (project === _project) {
+      return;
+    }
     project = _project;
     console.log("project", _project);
 
@@ -14,11 +17,6 @@ export default async function ({ addon, global, console }) {
       this.addLayer(onionLayer);
       return ret;
     };
-  };
-
-  const foundPaperCanvas = (_paperCanvas) => {
-    paperCanvas = _paperCanvas;
-    console.log("paperCanvas", paperCanvas);
 
     const paintLayer = project.activeLayer;
     onionLayer = new project.activeLayer.constructor();
@@ -26,8 +24,14 @@ export default async function ({ addon, global, console }) {
     onionLayer.opacity = 0.2;
     onionLayer.locked = true;
     paintLayer.activate();
+  };
 
-    updateOnionLayer();    
+  const foundPaperCanvas = (_paperCanvas) => {
+    if (paperCanvas === _paperCanvas) {
+      return;
+    }
+    paperCanvas = _paperCanvas;
+    console.log("paperCanvas", paperCanvas);
   };
 
   const updateOnionLayer = () => {
@@ -47,7 +51,7 @@ export default async function ({ addon, global, console }) {
     }
 
     if (selectedCostume === 0) {
-      // Can"t show an onion skin if there is no previous skin.
+      // Can't show an onion skin if there is no previous skin.
       return;
     }
 
@@ -57,21 +61,29 @@ export default async function ({ addon, global, console }) {
     const costume = vm.editingTarget.sprite.costumes[onionIndex];
     const asset = vm.getCostume(onionIndex);
 
-    if (typeof paperCanvas.initializeSvg !== "function" || typeof paperCanvas.importSvg !== "function") {
+    if (typeof paperCanvas.importImage !== "function" || typeof paperCanvas.recalibrateSize !== "function") {
       throw new Error("Assumptions invalid.");
     }
 
-    const originalInitializeSvg = paperCanvas.initializeSvg;
-    paperCanvas.initializeSvg = function (...args) {
-      const paintLayer = project.activeLayer;
-      onionLayer.activate();
-      originalInitializeSvg.call(this, ...args);
-      paintLayer.activate();
-      paperCanvas.initializeSvg = originalInitializeSvg;
-    };
+    const activeLayer = project.activeLayer;
 
-    paperCanvas.importSvg(asset, costume.rotationCenterX, costume.rotationCenterY);
+    const originalRecalibrate = paperCanvas.recalibrateSize;
+    paperCanvas.recalibrateSize = function (callback) {
+      originalRecalibrate.call(this, function () {
+        if (callback) callback();
+        activeLayer.activate();
+        paperCanvas.recalibrateSize = originalRecalibrate;
+      });
+    }
+
+    onionLayer.bringToFront();
+    onionLayer.removeChildren();
+    onionLayer.activate();
+
+    paperCanvas.importImage(costume.dataFormat, asset, costume.rotationCenterX, costume.rotationCenterY);
   };
+
+  window.e = updateOnionLayer;
 
   // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
   Object.defineProperty(Object.prototype, "_view", {
@@ -85,17 +97,15 @@ export default async function ({ addon, global, console }) {
     }
   });
 
-  // https://github.com/LLK/scratch-paint/blob/develop/src/containers/paper-canvas.jsx
-  Object.defineProperty(Object.prototype, "queuedImport", {
+  // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L45-L51
+  Object.defineProperty(Object.prototype, "shouldZoomToFit", {
     set(value) {
       // TODO: this can and will break things
-      Object.defineProperty(this, "queuedImport", {
+      Object.defineProperty(this, "shouldZoomToFit", {
         value: value,
         writable: true
       });
-      setTimeout(() => {
-        foundPaperCanvas(this);
-      }, 1000);
+      foundPaperCanvas(this);
     }
   });
 }
