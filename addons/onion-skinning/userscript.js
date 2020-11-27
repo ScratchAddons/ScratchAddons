@@ -7,7 +7,7 @@ export default async function ({ addon, global, console }) {
     Layer: null,
     Point: null,
     Rectangle: null,
-    CENTER: null
+    CENTER: null,
   };
 
   const foundPaper = (_project) => {
@@ -39,7 +39,7 @@ export default async function ({ addon, global, console }) {
       setTimeout(() => {
         PaperConstants.Layer = project.activeLayer.constructor;
 
-        const rasterLayer = project.layers.find(i => i.data.isRasterLayer);
+        const rasterLayer = project.layers.find((i) => i.data.isRasterLayer);
         PaperConstants.Raster = rasterLayer.children[0].constructor;
 
         PaperConstants.Point = rasterLayer.position.constructor;
@@ -65,15 +65,15 @@ export default async function ({ addon, global, console }) {
       originalImportImage.call(this, ...args);
       setTimeout(() => {
         updateOnionLayers();
-      })
+      });
     };
   };
 
   const createCanvas = (width, height) => {
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
-    canvas.getContext('2d').imageSmoothingEnabled = false;
+    canvas.getContext("2d").imageSmoothingEnabled = false;
     return canvas;
   };
 
@@ -139,7 +139,7 @@ export default async function ({ addon, global, console }) {
         activeLayer.activate();
         paperCanvas.recalibrateSize = originalRecalibrate;
       });
-    }
+    };
 
     if (costume.dataFormat === "svg") {
       const layer = createOnionLayer();
@@ -173,10 +173,10 @@ export default async function ({ addon, global, console }) {
       // TODO: this can and will break things
       Object.defineProperty(this, "_view", {
         value: value,
-        writable: true
+        writable: true,
       });
       foundPaper(this);
-    }
+    },
   });
 
   // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L45-L51
@@ -185,9 +185,9 @@ export default async function ({ addon, global, console }) {
       // TODO: this can and will break things
       Object.defineProperty(this, "shouldZoomToFit", {
         value: value,
-        writable: true
+        writable: true,
       });
       foundPaperCanvas(this);
-    }
+    },
   });
 }
