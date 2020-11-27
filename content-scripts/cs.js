@@ -152,7 +152,7 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
   observer.observe(template, { attributes: true });
 }
 
-const escapeHTML = str => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
+const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
 function forumWarning() {
   let postArea = document.querySelector("form#post > label");
