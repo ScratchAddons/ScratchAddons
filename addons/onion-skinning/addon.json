@@ -1,7 +1,6 @@
 {
   "name": "Onion Skinning",
-  "description": "Makes the editor context menus colorful when right-clicking a block.",
-  "notice": "Refresh the editor after enabling this theme.",
+  "description": "",
   "credits": [
     {
       "name": "GarboMuffin"
@@ -19,7 +18,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor", "theme"],
+  "tags": ["editor", "beta"],
   "enabledByDefault": false,
   "l10n": true
 }
