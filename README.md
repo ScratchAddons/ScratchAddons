@@ -1,6 +1,7 @@
 <img src="https://raw.githubusercontent.com/ScratchAddons/ScratchAddons/master/images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
 # Welcome to Scratch Addons' repository!
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9a6674f980de40978cbea41320ba4bca)](https://app.codacy.com/gh/ScratchAddons/ScratchAddons?utm_source=github.com&utm_medium=referral&utm_content=ScratchAddons/ScratchAddons&utm_campaign=Badge_Grade)
 [![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/stargazers) 
 [![](https://img.shields.io/github/forks/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/network/members)
 [![](https://img.shields.io/github/watchers/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/watchers) 
