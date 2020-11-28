@@ -26,7 +26,7 @@ export default async function ({ addon, global, console, msg }) {
     const originalAddLayer = project.addLayer;
     project.addLayer = function (layer) {
       originalAddLayer.call(this, layer);
-      if (layer.data && layer.data.isBackgroundGuideLayer) {
+      if (layer.data.isBackgroundGuideLayer) {
         let onion;
         while ((onion = storedOnionLayers.shift())) {
           originalAddLayer.call(this, onion);
