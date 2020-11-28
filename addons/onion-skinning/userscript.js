@@ -32,7 +32,7 @@ export default async function ({ addon, global, console, msg }) {
 
     // Scratch uses importJSON to undo or redo
     // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/helper/undo.js#L37
-    // This will remove our onion layers, so we will just add them back when it's done.
+    // The code prior to this will remove our onion layers, so we have to manually add them back.
     const originalImportJSON = project.importJSON;
     project.importJSON = function (json) {
       originalImportJSON.call(this, json);
@@ -49,7 +49,7 @@ export default async function ({ addon, global, console, msg }) {
       backgroundGuideLayer.remove = function () {
         originalRemove.call(this);
         for (const layer of project.layers) {
-          if (layer.data && layer.data.sa_isOnionLayer) {
+          if (layer.data.sa_isOnionLayer) {
             storedOnionLayers.push(layer);
           }
         }
@@ -116,7 +116,7 @@ export default async function ({ addon, global, console, msg }) {
     const layers = project.layers;
     for (let i = layers.length - 1; i >= 0; i--) {
       const layer = layers[i];
-      if (layer.data && layer.data.sa_isOnionLayer) {
+      if (layer.data.sa_isOnionLayer) {
         layer.remove();
       }
     }
@@ -140,6 +140,7 @@ export default async function ({ addon, global, console, msg }) {
 
       const layer = createOnionLayer();
       layer.opacity = opacity;
+      layer.activate();
 
       if (dataFormat === "svg") {
         // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L196-L218
@@ -250,8 +251,8 @@ export default async function ({ addon, global, console, msg }) {
       throw new Error("Couldn't find selected costume");
     }
 
-    const activeLayer = project.activeLayer;
     removeOnionLayers();
+    const activeLayer = project.activeLayer;
 
     const opacityLevels = addon.settings
       .get("opacity")
@@ -271,6 +272,9 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const setEnabled = (_enabled) => {
+    if (enabled === _enabled) {
+      return;
+    }
     enabled = _enabled;
     if (enabled) {
       updateOnionLayers();
@@ -304,14 +308,7 @@ export default async function ({ addon, global, console, msg }) {
     },
   });
 
-  const onionButtonClicked = () => {
-    setEnabled(!enabled);
-  };
-
-  while (true) {
-    const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
-      markAsSeen: true,
-    });
+  const createControls = (canvasControls) => {
     const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
 
     const controlsContainer = document.createElement("div");
@@ -330,7 +327,7 @@ export default async function ({ addon, global, console, msg }) {
     onionButton.classList.add("sa-onion-button");
     onionButton.dataset.enabled = enabled;
     onionButton.setAttribute("role", "button");
-    onionButton.addEventListener("click", onionButtonClicked);
+    onionButton.addEventListener("click", () => setEnabled(!enabled));
     onionButton.title = msg("button-title");
 
     const img = document.createElement("img");
@@ -345,5 +342,13 @@ export default async function ({ addon, global, console, msg }) {
     controlsContainer.appendChild(onionControlsContainer);
     controlsContainer.appendChild(zoomControlsContainer);
     canvasControls.appendChild(controlsContainer);
+  }
+
+  while (true) {
+    const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
+      markAsSeen: true,
+    });
+
+    createControls(canvasControls);
   }
 }
