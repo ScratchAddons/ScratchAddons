@@ -81,6 +81,7 @@ export default async function ({ addon, global, console }) {
     const layer = new PaperConstants.Layer();
     layer.opacity = 0.2;
     layer.locked = true;
+    layer.guide = true;
     layer.data.sa_isOnionLayer = true;
     return layer;
   };
@@ -95,6 +96,15 @@ export default async function ({ addon, global, console }) {
         layers[i].remove();
       }
     }
+  };
+
+  const recurseItem = (item, callback) => {
+    if (item.children) {
+      for (const child of item.children) {
+        recurseItem(child, callback);
+      }
+    }
+    callback(item);
   };
 
   const updateOnionLayers = () => {
@@ -132,18 +142,23 @@ export default async function ({ addon, global, console }) {
 
     const activeLayer = project.activeLayer;
 
-    const originalRecalibrate = paperCanvas.recalibrateSize;
-    paperCanvas.recalibrateSize = function (callback) {
-      originalRecalibrate.call(this, function () {
-        if (callback) callback();
-        activeLayer.activate();
-        paperCanvas.recalibrateSize = originalRecalibrate;
-      });
-    };
-
     if (costume.dataFormat === "svg") {
       const layer = createOnionLayer();
       layer.activate();
+  
+      const originalRecalibrate = paperCanvas.recalibrateSize;
+      paperCanvas.recalibrateSize = function (callback) {
+        originalRecalibrate.call(this, function () {
+          if (callback) callback();
+          activeLayer.activate();
+          paperCanvas.recalibrateSize = originalRecalibrate;
+          recurseItem(layer, (item) => {
+            item.locked = true;
+            item.guide = true;
+          });
+        });
+      };
+    
       paperCanvas.importSvg(asset, costume.rotationCenterX, costume.rotationCenterY);
     } else if (costume.dataFormat === "png" || costume.dataFormat === "jpg") {
       const layer = createOnionLayer();
@@ -161,7 +176,7 @@ export default async function ({ addon, global, console }) {
       const image = new Image();
       image.onload = () => {
         raster.drawImage(image, 480 - costume.rotationCenterX, 360 - costume.rotationCenterY);
-        paperCanvas.recalibrateSize();
+        activeLayer.activate();
       };
       image.src = asset;
     }
