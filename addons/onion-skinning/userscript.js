@@ -46,7 +46,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     };
 
-    // At this point the project hasn't even finished its constructor yet, so we can't access layers yet.
+    // At this point the project hasn't even finished its constructor, so we can't access layers yet.
     setTimeout(() => {
       // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/helper/layer.js#L114
       // When background guide layer is removed, hide onion layers.
@@ -267,12 +267,11 @@ export default async function ({ addon, global, console, msg }) {
       .split(",")
       .map((i) => +i);
 
-    const selectedCostume = vm.editingTarget.sprite.costumes[selectedCostumeIndex];
-
     try {
       for (let i = selectedCostumeIndex - 1, j = 0; i >= 0 && j < settings.layers; i--, j++) {
         const layer = createOnionLayer();
         layer.opacity = opacityLevels[j];
+        activeLayer.activate();
 
         const onionCostume = vm.editingTarget.sprite.costumes[i];
         const onionAsset = vm.getCostume(i);
@@ -280,10 +279,6 @@ export default async function ({ addon, global, console, msg }) {
         if (onionCostume.dataFormat === "svg") {
           await vectorLayer(layer, onionCostume, onionAsset);
         } else if (onionCostume.dataFormat === "png" || onionCostume.dataFormat === "jpg") {
-          if (selectedCostume.dataFormat === "svg") {
-            // Raster onion layers on a vector image currently causes weird errors and corruption.
-            continue;
-          }
           await rasterLayer(layer, onionCostume, onionAsset);
         }
       }
