@@ -65,7 +65,7 @@ After downloading the extension to your computer, just load it by following thes
 - Google Chrome
   1. Open `chrome://extensions` to open the Extension Management page by typing it into your address bar.
   2. Enable Developer Mode by clicking the toggle switch next to Developer mode.
-  3. Click the `LOAD UNPACKED` button on the top and select the extension directory which has the `manifest.json` file in it. 
+  3. Click the `Load unpacked` button on the top and select the extension directory which has the `manifest.json` file in it. 
 
 - Mozilla Firefox
   1. Open `about:debugging` to open the add-ons page by typing it into your address bar.
