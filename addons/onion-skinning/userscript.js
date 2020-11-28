@@ -1,8 +1,8 @@
 export default async function ({ addon, global, console, msg }) {
   let project = null;
   let paperCanvas = null;
-  let enabled = true;
   let onionButton = null;
+  let enabled = addon.settings.get("default");
   const storedOnionLayers = [];
   const PaperConstants = {
     Raster: null,
@@ -249,18 +249,12 @@ export default async function ({ addon, global, console, msg }) {
     const activeLayer = project.activeLayer;
     removeOnionLayers();
 
-    const OPACITY = [
-      // TODO: user configurable
-      0.25,
-      0.15,
-      0.05,
-    ];
-
-    const LAYERS = 1; // TODO: user configurable
+    const opacityLevels = addon.settings.get("opacity").split(",").map((i) => +i);
+    const layers = addon.settings.get("layers");
 
     try {
-      for (let i = selectedCostumeIndex - 1, j = 0; i >= 0 && j < LAYERS; i--, j++) {
-        await addOnionLayer(i, OPACITY[j]);
+      for (let i = selectedCostumeIndex - 1, j = 0; i >= 0 && j < layers; i--, j++) {
+        await addOnionLayer(i, opacityLevels[j]);
       }
     } catch (e) {
       console.error(e);

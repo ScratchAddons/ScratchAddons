@@ -18,6 +18,26 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "settings": [
+    {
+      "id": "default",
+      "name": "Enable by default",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "id": "layers",
+      "name": "Layers",
+      "type": "positive_integer",
+      "default": 1
+    },
+    {
+      "id": "opacity",
+      "name": "Opacity levels",
+      "type": "string",
+      "default": "0.25,0.15,0.05"
+    }
+  ],
   "tags": ["editor", "beta"],
   "enabledByDefault": false,
   "l10n": true
