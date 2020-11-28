@@ -118,7 +118,7 @@ export default async function ({ addon, global, console }) {
 
   // Scale item and its strokes by factor
   const scaleWithStrokes = function (root, factor, pivot) {
-    recursePaperItem(root, item => {
+    recursePaperItem(root, (item) => {
       if (item.className === "PointText") {
         // Text outline size is controlled by text transform matrix, thus it's already scaled.
         return;
@@ -128,78 +128,81 @@ export default async function ({ addon, global, console }) {
       }
     });
     root.scale(factor, pivot);
-};
+  };
 
-  const addOnionLayer = (index, opacity) => new Promise((resolve, reject) => {
-    const vm = addon.tab.traps.onceValues.vm;
-    const costume = vm.editingTarget.sprite.costumes[index];
-    let asset = vm.getCostume(index);
+  const addOnionLayer = (index, opacity) =>
+    new Promise((resolve, reject) => {
+      const vm = addon.tab.traps.onceValues.vm;
+      const costume = vm.editingTarget.sprite.costumes[index];
+      let asset = vm.getCostume(index);
 
-    const layer = createOnionLayer();
-    layer.opacity = opacity;
+      const layer = createOnionLayer();
+      layer.opacity = opacity;
 
-    if (costume.dataFormat === "svg") {
-      asset = asset.split(/<\s*svg:/).join('<');
-      asset = asset.split(/<\/\s*svg:/).join('</');
-      const svgAttrs = asset.match(/<svg [^>]*>/);
-      if (svgAttrs && svgAttrs[0].indexOf('xmlns=') === -1) {
-        asset = asset.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
-      }
-      const parser = new DOMParser();
-      const svgDom = parser.parseFromString(asset, 'text/xml');
-      const viewBox = svgDom.documentElement.attributes.viewBox ? svgDom.documentElement.attributes.viewBox.value.match(/\S+/g) : null;
-      if (viewBox) {
-        for (let i = 0; i < viewBox.length; i++) {
-          viewBox[i] = parseFloat(viewBox[i]);
+      if (costume.dataFormat === "svg") {
+        asset = asset.split(/<\s*svg:/).join("<");
+        asset = asset.split(/<\/\s*svg:/).join("</");
+        const svgAttrs = asset.match(/<svg [^>]*>/);
+        if (svgAttrs && svgAttrs[0].indexOf("xmlns=") === -1) {
+          asset = asset.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ');
         }
-      }
-
-      project.importSVG(asset, {
-        expandShapes: true,
-        onLoad: (item) => {
-          if (!item) {
-            reject(new Error('could not load onion skin'));
-            return;
+        const parser = new DOMParser();
+        const svgDom = parser.parseFromString(asset, "text/xml");
+        const viewBox = svgDom.documentElement.attributes.viewBox
+          ? svgDom.documentElement.attributes.viewBox.value.match(/\S+/g)
+          : null;
+        if (viewBox) {
+          for (let i = 0; i < viewBox.length; i++) {
+            viewBox[i] = parseFloat(viewBox[i]);
           }
-          item.remove();
+        }
 
-          ensureClockwise(item);
-          scaleWithStrokes(item, 2, new PaperConstants.Point(0, 0));
-          recursePaperItem(item, (i) => {
-            i.locked = true;
-            i.guide = true;
-          });
+        project.importSVG(asset, {
+          expandShapes: true,
+          onLoad: (item) => {
+            if (!item) {
+              reject(new Error("could not load onion skin"));
+              return;
+            }
+            item.remove();
 
-          let rotationPoint = new PaperConstants.Point(costume.rotationCenterX, costume.rotationCenterY);
-          if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
-            rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
-          }
-          item.translate(PaperConstants.CENTER.subtract(rotationPoint.multiply(2)));
+            ensureClockwise(item);
+            scaleWithStrokes(item, 2, new PaperConstants.Point(0, 0));
+            recursePaperItem(item, (i) => {
+              i.locked = true;
+              i.guide = true;
+            });
 
-          layer.addChild(item);
+            let rotationPoint = new PaperConstants.Point(costume.rotationCenterX, costume.rotationCenterY);
+            if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
+              rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
+            }
+            item.translate(PaperConstants.CENTER.subtract(rotationPoint.multiply(2)));
+
+            layer.addChild(item);
+            resolve();
+          },
+        });
+      } else if (costume.dataFormat === "png" || costume.dataFormat === "jpg") {
+        const raster = new PaperConstants.Raster(createCanvas(960, 720));
+        raster.parent = layer;
+        raster.guide = true;
+        raster.locked = true;
+        raster.position = PaperConstants.CENTER;
+
+        const mask = new PaperConstants.Rectangle(layer.getBounds());
+        mask.guide = true;
+        mask.locked = true;
+        mask.clipMask = true;
+
+        const image = new Image();
+        image.onload = () => {
+          raster.drawImage(image, 480 - costume.rotationCenterX, 360 - costume.rotationCenterY);
           resolve();
-        }
-      });
-    } else if (costume.dataFormat === "png" || costume.dataFormat === "jpg") {
-      const raster = new PaperConstants.Raster(createCanvas(960, 720));
-      raster.parent = layer;
-      raster.guide = true;
-      raster.locked = true;
-      raster.position = PaperConstants.CENTER;
-
-      const mask = new PaperConstants.Rectangle(layer.getBounds());
-      mask.guide = true;
-      mask.locked = true;
-      mask.clipMask = true;
-
-      const image = new Image();
-      image.onload = () => {
-        raster.drawImage(image, 480 - costume.rotationCenterX, 360 - costume.rotationCenterY);
-        resolve();
-      };
-      image.src = asset;
-    }
-  });
+        };
+        image.src = asset;
+      }
+    });
 
   const updateOnionLayers = async () => {
     const costumeList = Array.from(document.querySelector("[class^='selector_list-area']").children);
@@ -220,10 +223,11 @@ export default async function ({ addon, global, console }) {
     const activeLayer = project.activeLayer;
     removeOnionLayers();
 
-    const OPACITY = [ // TODO: configurable
+    const OPACITY = [
+      // TODO: configurable
       0.5,
       0.2,
-      0.1
+      0.1,
     ];
 
     const LAYERS = 1; // TODO: configurable
