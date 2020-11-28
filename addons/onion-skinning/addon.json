@@ -1,6 +1,6 @@
 {
   "name": "Onion Skinning",
-  "description": "",
+  "description": "Shows transparent overlays of previous costumes when editing a costume.",
   "credits": [
     {
       "name": "GarboMuffin"
