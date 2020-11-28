@@ -249,7 +249,10 @@ export default async function ({ addon, global, console, msg }) {
     const activeLayer = project.activeLayer;
     removeOnionLayers();
 
-    const opacityLevels = addon.settings.get("opacity").split(",").map((i) => +i);
+    const opacityLevels = addon.settings
+      .get("opacity")
+      .split(",")
+      .map((i) => +i);
     const layers = addon.settings.get("layers");
 
     try {
