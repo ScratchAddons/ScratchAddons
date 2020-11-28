@@ -1,12 +1,11 @@
 <img src="https://raw.githubusercontent.com/ScratchAddons/ScratchAddons/master/images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
 # Welcome to Scratch Addons' repository!
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9a6674f980de40978cbea41320ba4bca)](https://app.codacy.com/gh/ScratchAddons/ScratchAddons?utm_source=github.com&utm_medium=referral&utm_content=ScratchAddons/ScratchAddons&utm_campaign=Badge_Grade)
-[![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/stargazers) 
+[![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/stargazers)
 [![](https://img.shields.io/github/forks/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/network/members)
-[![](https://img.shields.io/github/watchers/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/watchers) 
-[![](https://img.shields.io/github/issues/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/issues) 
-[![](https://img.shields.io/github/issues-pr/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/pulls) 
+[![](https://img.shields.io/github/watchers/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/watchers)
+[![](https://img.shields.io/github/issues/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/issues)
+[![](https://img.shields.io/github/issues-pr/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/pulls)
 [![](https://img.shields.io/github/license/ScratchAddons/ScratchAddons?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE) <!-- 2 spaces -->  
 [![](https://img.shields.io/chrome-web-store/v/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=version&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
 [![](https://img.shields.io/chrome-web-store/users/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=users&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
@@ -16,7 +15,8 @@
 [![](https://img.shields.io/github/downloads/ScratchAddons/ScratchAddons/total?style=flat-square&logo=github&logoColor=white&label=downloads&color=181717)](https://github.com/ScratchAddons/ScratchAddons/releases)<!-- 2 spaces -->  
 [![](https://img.shields.io/badge/discuss-on_github-181717.svg?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/discussions)
 [![](https://img.shields.io/badge/chat-on_discord-7289da.svg?style=flat-square)](https://discord.gg/Ak8sCDQ)
-[![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)
+[![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)<!-- 2 spaces -->  
+[![](https://img.shields.io/codacy/grade/9a6674f980de40978cbea41320ba4bca?logo=codacy&style=flat-square)](https://app.codacy.com/gh/ScratchAddons/ScratchAddons?utm_source=github.com&utm_medium=referral&utm_content=ScratchAddons/ScratchAddons&utm_campaign=Badge_Grade)
 
 ## About
 
