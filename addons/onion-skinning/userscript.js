@@ -17,38 +17,46 @@ export default async function ({ addon, global, console }) {
     project = _project;
     console.log("project", _project);
 
-    const originalExportSVG = project.exportSVG;
-    project.exportSVG = function (...args) {
-      const onionLayers = [];
-      for (const layer of this.layers) {
-        if (layer.data.sa_isOnionLayer) {
-          onionLayers.push(layer);
+    const storedOnionLayers = [];
+
+    const originalAddLayer = project.addLayer;
+    project.addLayer = function (layer) {
+      originalAddLayer.call(this, layer);
+      if (layer.data.isBackgroundGuideLayer) {
+        let onion;
+        while (onion = storedOnionLayers.shift()) {
+          originalAddLayer.call(this, onion);
         }
       }
-      for (const layer of onionLayers) {
-        layer.remove();
-      }
-      const result = originalExportSVG.call(this, ...args);
-      for (const layer of onionLayers) {
-        this.addLayer(layer);
-      }
-      return result;
     };
 
-    if (PaperConstants.Layer === null) {
-      setTimeout(() => {
-        PaperConstants.Layer = project.activeLayer.constructor;
+    setTimeout(() => {
+      const backgroundGuideLayer = project.layers.find((i) => i.data.isBackgroundGuideLayer);
+      const originalRemove = backgroundGuideLayer.remove;
+      backgroundGuideLayer.remove = function () {
+        originalRemove.call(this);
+        // When background guide layer is removed, also remove onion layers.
+        for (const layer of project.layers) {
+          if (layer.data.sa_isOnionLayer) {
+            storedOnionLayers.push(layer);
+          }
+        }
+        for (const layer of storedOnionLayers) {
+          layer.remove();
+        }
+      };
 
+      if (PaperConstants.Layer === null) {
+        PaperConstants.Layer = project.activeLayer.constructor;
+  
         const rasterLayer = project.layers.find((i) => i.data.isRasterLayer);
         PaperConstants.Raster = rasterLayer.children[0].constructor;
-
         PaperConstants.Point = rasterLayer.position.constructor;
-
         PaperConstants.Rectangle = rasterLayer.getBounds().constructor;
-
+  
         PaperConstants.CENTER = new PaperConstants.Point(480, 360);
-      });
-    }
+      }
+    });
   };
 
   const foundPaperCanvas = (_paperCanvas) => {
@@ -98,13 +106,12 @@ export default async function ({ addon, global, console }) {
   };
 
   const recursePaperItem = (item, callback) => {
-    if (item.className === "Group") {
+    if (item.children) {
       for (const child of item.children) {
         recursePaperItem(child, callback);
       }
-    } else {
-      callback(item);
     }
+    callback(item);
   };
 
   // Make item clockwise. Drill down into groups.
@@ -225,9 +232,9 @@ export default async function ({ addon, global, console }) {
 
     const OPACITY = [
       // TODO: configurable
-      0.5,
-      0.2,
-      0.1,
+      0.25,
+      0.15,
+      0.05,
     ];
 
     const LAYERS = 1; // TODO: configurable
