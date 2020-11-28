@@ -1,9 +1,9 @@
-export default async function ({ addon, global, console }) {
-  let project;
-  let paperCanvas;
-
+export default async function ({ addon, global, console, msg }) {
+  let project = null;
+  let paperCanvas = null;
+  let enabled = true;
+  let onionButton = null;
   const storedOnionLayers = [];
-
   const PaperConstants = {
     Raster: null,
     Layer: null,
@@ -36,7 +36,9 @@ export default async function ({ addon, global, console }) {
     const originalImportJSON = project.importJSON;
     project.importJSON = function (json) {
       originalImportJSON.call(this, json);
-      updateOnionLayers();
+      if (enabled) {
+        updateOnionLayers();
+      }
     };
 
     // At this point the project hasn't even finished its constructor yet, so we can't access layers yet.
@@ -80,9 +82,11 @@ export default async function ({ addon, global, console }) {
     paperCanvas.importImage = function (...args) {
       removeOnionLayers();
       originalImportImage.call(this, ...args);
-      setTimeout(() => {
-        updateOnionLayers();
-      });
+      if (enabled) {
+        setTimeout(() => {
+          updateOnionLayers();
+        });
+      }
     };
   };
 
@@ -284,4 +288,50 @@ export default async function ({ addon, global, console }) {
       foundPaperCanvas(this);
     },
   });
+
+  const onionButtonClicked = () => {
+    enabled = !enabled;
+    if (enabled) {
+      updateOnionLayers();
+    } else {
+      removeOnionLayers();
+    }
+    onionButton.dataset.enabled = enabled;
+  };
+
+  while (true) {
+    const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {markAsSeen: true});
+    const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
+
+    const controlsContainer = document.createElement("div");
+    controlsContainer.className = "sa-onion-group-container";
+    controlsContainer.dir = "";
+    
+    const onionControlsContainer = document.createElement("div");
+    onionControlsContainer.className = zoomControlsContainer.className;
+    onionControlsContainer.dir = "";
+
+    const onionControlsGroup = document.createElement("div");
+    onionControlsGroup.className = zoomControlsContainer.firstChild.className;
+
+    onionButton = document.createElement("span");
+    onionButton.className = zoomControlsContainer.firstChild.firstChild.className;
+    onionButton.classList.add('sa-onion-button');
+    onionButton.dataset.enabled = enabled;
+    onionButton.setAttribute("role", "button");
+    onionButton.addEventListener("click", onionButtonClicked);
+
+    const img = document.createElement("img");
+    img.className = zoomControlsContainer.firstChild.firstChild.firstChild.className;
+    img.draggable = false;
+    img.alt = msg("button-title");
+    img.src = addon.self.dir + "/onion.svg";
+
+    onionButton.appendChild(img);
+    onionControlsGroup.appendChild(onionButton);
+    onionControlsContainer.appendChild(onionControlsGroup);
+    controlsContainer.appendChild(onionControlsContainer);
+    controlsContainer.appendChild(zoomControlsContainer);
+    canvasControls.appendChild(controlsContainer);
+  }
 }

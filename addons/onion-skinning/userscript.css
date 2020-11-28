@@ -1,0 +1,8 @@
+.sa-onion-group-container {
+  display: flex;
+  flex-direction: row; /* TODO: check how this looks in RTL*/
+}
+
+.sa-onion-button[data-enabled="true"] {
+  background-color: hsla(215, 100%, 65%, 0.20);
+}
