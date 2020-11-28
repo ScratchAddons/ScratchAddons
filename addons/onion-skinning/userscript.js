@@ -133,7 +133,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const vectorLayer = (layer, costume, asset) =>
     new Promise((resolve, reject) => {
-      const {rotationCenterX, rotationCenterY} = costume;
+      const { rotationCenterX, rotationCenterY } = costume;
       // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L196-L218
       asset = asset.split(/<\s*svg:/).join("<");
       asset = asset.split(/<\/\s*svg:/).join("</");
@@ -151,7 +151,7 @@ export default async function ({ addon, global, console, msg }) {
           viewBox[i] = parseFloat(viewBox[i]);
         }
       }
-  
+
       project.importSVG(asset, {
         expandShapes: true,
         onLoad: (root) => {
@@ -159,14 +159,14 @@ export default async function ({ addon, global, console, msg }) {
             reject(new Error("could not load onion skin"));
             return;
           }
-  
+
           root.remove();
-  
+
           // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L269-L272
           if (root.children && root.children.length === 1) {
             root = root.reduce();
           }
-  
+
           // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L274-L275
           recursePaperItem(root, (i) => {
             if (i.className === "PathItem") {
@@ -181,9 +181,9 @@ export default async function ({ addon, global, console, msg }) {
             i.guide = true;
           });
           root.scale(2, new PaperConstants.Point(0, 0));
-  
+
           // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L277-L287
-          if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
+          if (typeof rotationCenterX !== "undefined" && typeof rotationCenterY !== "undefined") {
             let rotationPoint = new PaperConstants.Point(rotationCenterX, rotationCenterY);
             if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
               rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
@@ -192,7 +192,7 @@ export default async function ({ addon, global, console, msg }) {
           } else {
             root.translate(PaperConstants.CENTER.subtract(root.bounds.width, root.bounds.height));
           }
-  
+
           layer.addChild(root);
           resolve();
         },
@@ -201,7 +201,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const rasterLayer = (layer, costume, asset) =>
     new Promise((resolve, reject) => {
-      let {rotationCenterX, rotationCenterY} = costume;
+      let { rotationCenterX, rotationCenterY } = costume;
 
       const raster = new PaperConstants.Raster(createCanvas(960, 720));
       raster.parent = layer;
@@ -352,7 +352,7 @@ export default async function ({ addon, global, console, msg }) {
     controlsContainer.appendChild(onionControlsContainer);
     controlsContainer.appendChild(zoomControlsContainer);
     canvasControls.appendChild(controlsContainer);
-  }
+  };
 
   while (true) {
     const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
