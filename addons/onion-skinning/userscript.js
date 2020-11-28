@@ -266,6 +266,16 @@ export default async function ({ addon, global, console, msg }) {
     activeLayer.activate();
   };
 
+  const setEnabled = (_enabled) => {
+    enabled = _enabled;
+    if (enabled) {
+      updateOnionLayers();
+    } else {
+      removeOnionLayers();
+    }
+    onionButton.dataset.enabled = enabled;
+  };
+
   // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
   Object.defineProperty(Object.prototype, "_view", {
     set(value) {
@@ -291,13 +301,7 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   const onionButtonClicked = () => {
-    enabled = !enabled;
-    if (enabled) {
-      updateOnionLayers();
-    } else {
-      removeOnionLayers();
-    }
-    onionButton.dataset.enabled = enabled;
+    setEnabled(!enabled);
   };
 
   while (true) {
