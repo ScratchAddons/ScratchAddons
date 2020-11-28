@@ -97,46 +97,90 @@ export default async function ({ addon, global, console }) {
     }
   };
 
-  const recurseItem = (item, callback) => {
-    if (item.children) {
+  const recursePaperItem = (item, callback) => {
+    if (item.className === "Group") {
       for (const child of item.children) {
-        recurseItem(child, callback);
+        recursePaperItem(child, callback);
       }
+    } else {
+      callback(item);
     }
-    callback(item);
   };
+
+  // Make item clockwise. Drill down into groups.
+  const ensureClockwise = function (root) {
+    recursePaperItem(root, (item) => {
+      if (item.className === "PathItem") {
+        item.clockwise = true;
+      }
+    });
+  };
+
+  // Scale item and its strokes by factor
+  const scaleWithStrokes = function (root, factor, pivot) {
+    recursePaperItem(root, item => {
+      if (item.className === "PointText") {
+        // Text outline size is controlled by text transform matrix, thus it's already scaled.
+        return;
+      }
+      if (item.strokeWidth) {
+        item.strokeWidth = item.strokeWidth * factor;
+      }
+    });
+    root.scale(factor, pivot);
+};
 
   const addOnionLayer = (index, opacity) => new Promise((resolve, reject) => {
     const vm = addon.tab.traps.onceValues.vm;
     const costume = vm.editingTarget.sprite.costumes[index];
-    const asset = vm.getCostume(index);
-
-    if (typeof paperCanvas.importSvg !== "function" || typeof paperCanvas.recalibrateSize !== "function") {
-      throw new Error("Assumptions invalid.");
-    }
+    let asset = vm.getCostume(index);
 
     const layer = createOnionLayer();
     layer.opacity = opacity;
 
     if (costume.dataFormat === "svg") {
-      layer.activate();
-  
-      const originalRecalibrate = paperCanvas.recalibrateSize;
-      paperCanvas.recalibrateSize = function (callback) {
-        originalRecalibrate.call(this, () => {
-          if (callback) callback();
-          paperCanvas.recalibrateSize = originalRecalibrate;
-          recurseItem(layer, (item) => {
-            item.locked = true;
-            item.guide = true;
+      asset = asset.split(/<\s*svg:/).join('<');
+      asset = asset.split(/<\/\s*svg:/).join('</');
+      const svgAttrs = asset.match(/<svg [^>]*>/);
+      if (svgAttrs && svgAttrs[0].indexOf('xmlns=') === -1) {
+        asset = asset.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+      }
+      const parser = new DOMParser();
+      const svgDom = parser.parseFromString(asset, 'text/xml');
+      const viewBox = svgDom.documentElement.attributes.viewBox ? svgDom.documentElement.attributes.viewBox.value.match(/\S+/g) : null;
+      if (viewBox) {
+        for (let i = 0; i < viewBox.length; i++) {
+          viewBox[i] = parseFloat(viewBox[i]);
+        }
+      }
+
+      project.importSVG(asset, {
+        expandShapes: true,
+        onLoad: (item) => {
+          if (!item) {
+            reject(new Error('could not load onion skin'));
+            return;
+          }
+          item.remove();
+
+          ensureClockwise(item);
+          scaleWithStrokes(item, 2, new PaperConstants.Point(0, 0));
+          recursePaperItem(item, (i) => {
+            i.locked = true;
+            i.guide = true;
           });
+
+          let rotationPoint = new PaperConstants.Point(costume.rotationCenterX, costume.rotationCenterY);
+          if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
+            rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
+          }
+          item.translate(PaperConstants.CENTER.subtract(rotationPoint.multiply(2)));
+
+          layer.addChild(item);
           resolve();
-        });
-      };
-    
-      paperCanvas.importSvg(asset, costume.rotationCenterX, costume.rotationCenterY);
+        }
+      });
     } else if (costume.dataFormat === "png" || costume.dataFormat === "jpg") {
-      const layer = createOnionLayer();
       const raster = new PaperConstants.Raster(createCanvas(960, 720));
       raster.parent = layer;
       raster.guide = true;
@@ -171,10 +215,6 @@ export default async function ({ addon, global, console }) {
     if (selectedCostume === -1) {
       // Should never happen.
       throw new Error("Couldn't find selected costume");
-    }
-
-    if (typeof paperCanvas.importSvg !== "function" || typeof paperCanvas.recalibrateSize !== "function") {
-      throw new Error("Assumptions invalid.");
     }
 
     const activeLayer = project.activeLayer;
