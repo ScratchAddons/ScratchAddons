@@ -19,6 +19,7 @@ export default async function ({ addon, global, console, msg }) {
     project = _project;
 
     // When background guide layer is added, show onion layers.
+    // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/helper/layer.js#L145
     const originalAddLayer = project.addLayer;
     project.addLayer = function (layer) {
       originalAddLayer.call(this, layer);
@@ -43,8 +44,9 @@ export default async function ({ addon, global, console, msg }) {
 
     // At this point the project hasn't even finished its constructor yet, so we can't access layers yet.
     setTimeout(() => {
-      const backgroundGuideLayer = project.layers.find((i) => i.data.isBackgroundGuideLayer);
+      // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/helper/layer.js#L114
       // When background guide layer is removed, hide onion layers.
+      const backgroundGuideLayer = project.layers.find((i) => i.data.isBackgroundGuideLayer);
       const originalRemove = backgroundGuideLayer.remove;
       backgroundGuideLayer.remove = function () {
         originalRemove.call(this);
@@ -77,13 +79,18 @@ export default async function ({ addon, global, console, msg }) {
     }
     paperCanvas = _paperCanvas;
 
-    // When importing a new image, remove onion layers.
+    // importImage is called to start loading an image.
+    // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L124
     const originalImportImage = paperCanvas.importImage;
     paperCanvas.importImage = function (...args) {
       removeOnionLayers();
       originalImportImage.call(this, ...args);
     };
 
+    // recalibrateSize is called when the canvas finishes loading an image.
+    // all paths of importImage will result in a call to this method.
+    // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L310-L327
+    // We use this to know when to add layers.
     const originalRecalibrateSize = paperCanvas.recalibrateSize;
     paperCanvas.recalibrateSize = function (callback) {
       originalRecalibrateSize.call(this, () => {
