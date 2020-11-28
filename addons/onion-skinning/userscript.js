@@ -24,7 +24,7 @@ export default async function ({ addon, global, console }) {
       // When background guide layer is added, show onion layers.
       if (layer.data && layer.data.isBackgroundGuideLayer) {
         let onion;
-        while (onion = storedOnionLayers.shift()) {
+        while ((onion = storedOnionLayers.shift())) {
           originalAddLayer.call(this, onion);
         }
       }
@@ -54,12 +54,12 @@ export default async function ({ addon, global, console }) {
 
       if (PaperConstants.Layer === null) {
         PaperConstants.Layer = project.activeLayer.constructor;
-  
+
         const rasterLayer = project.layers.find((i) => i.data.isRasterLayer);
         PaperConstants.Raster = rasterLayer.children[0].constructor;
         PaperConstants.Point = rasterLayer.position.constructor;
         PaperConstants.Rectangle = rasterLayer.getBounds().constructor;
-  
+
         PaperConstants.CENTER = new PaperConstants.Point(480, 360);
       }
     });
@@ -120,39 +120,18 @@ export default async function ({ addon, global, console }) {
     callback(item);
   };
 
-  // Make item clockwise. Drill down into groups.
-  const ensureClockwise = function (root) {
-    recursePaperItem(root, (item) => {
-      if (item.className === "PathItem") {
-        item.clockwise = true;
-      }
-    });
-  };
-
-  // Scale item and its strokes by factor
-  const scaleWithStrokes = function (root, factor, pivot) {
-    recursePaperItem(root, (item) => {
-      if (item.className === "PointText") {
-        // Text outline size is controlled by text transform matrix, thus it's already scaled.
-        return;
-      }
-      if (item.strokeWidth) {
-        item.strokeWidth = item.strokeWidth * factor;
-      }
-    });
-    root.scale(factor, pivot);
-  };
-
   const addOnionLayer = (index, opacity) =>
     new Promise((resolve, reject) => {
       const vm = addon.tab.traps.onceValues.vm;
       const costume = vm.editingTarget.sprite.costumes[index];
+      const {dataFormat, rotationCenterX, rotationCenterY} = costume;
       let asset = vm.getCostume(index);
 
       const layer = createOnionLayer();
       layer.opacity = opacity;
 
-      if (costume.dataFormat === "svg") {
+      if (dataFormat === "svg") {
+        // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L196-L218
         asset = asset.split(/<\s*svg:/).join("<");
         asset = asset.split(/<\/\s*svg:/).join("</");
         const svgAttrs = asset.match(/<svg [^>]*>/);
@@ -172,31 +151,46 @@ export default async function ({ addon, global, console }) {
 
         project.importSVG(asset, {
           expandShapes: true,
-          onLoad: (item) => {
-            if (!item) {
+          onLoad: (root) => {
+            if (!root) {
               reject(new Error("could not load onion skin"));
               return;
             }
-            item.remove();
 
-            ensureClockwise(item);
-            scaleWithStrokes(item, 2, new PaperConstants.Point(0, 0));
-            recursePaperItem(item, (i) => {
+            root.remove();
+
+            // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L269-L272
+            if (root.children && root.children.length === 1) {
+              root = root.reduce();
+            }
+
+            // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L274-L275
+            recursePaperItem(root, (i) => {
+              if (i.className === "PathItem") {
+                i.clockwise = true;
+              }
+              if (i.className !== "PointText") {
+                if (i.strokeWidth) {
+                  i.strokeWidth = i.strokeWidth * 2;
+                }
+              }
               i.locked = true;
               i.guide = true;
             });
+            root.scale(2, new PaperConstants.Point(0, 0));
 
-            let rotationPoint = new PaperConstants.Point(costume.rotationCenterX, costume.rotationCenterY);
+            // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L277-L287
+            let rotationPoint = new PaperConstants.Point(rotationCenterX, rotationCenterY);
             if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
               rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
             }
-            item.translate(PaperConstants.CENTER.subtract(rotationPoint.multiply(2)));
+            root.translate(PaperConstants.CENTER.subtract(rotationPoint.multiply(2)));
 
-            layer.addChild(item);
+            layer.addChild(root);
             resolve();
           },
         });
-      } else if (costume.dataFormat === "png" || costume.dataFormat === "jpg") {
+      } else if (dataFormat === "png" || dataFormat === "jpg") {
         const raster = new PaperConstants.Raster(createCanvas(960, 720));
         raster.parent = layer;
         raster.guide = true;
@@ -207,26 +201,27 @@ export default async function ({ addon, global, console }) {
         image.onload = () => {
           // TODO: Scratch draws the image twice for some reason...?
           // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L158-L165
-          raster.drawImage(image, 480 - costume.rotationCenterX, 360 - costume.rotationCenterY);
+          raster.drawImage(image, 480 - rotationCenterX, 360 - rotationCenterY);
           resolve();
         };
         image.src = asset;
       }
     });
 
-  const updateOnionLayers = async () => {
+  const getSelectedCostumeIndex = () => {
     const costumeList = Array.from(document.querySelector("[class^='selector_list-area']").children);
-    let selectedCostume = -1;
     for (let i = 0; i < costumeList.length; i++) {
       const item = costumeList[i].firstChild;
       if (item && item.className.includes("is-selected")) {
-        selectedCostume = i;
-        break;
+        return i;
       }
     }
+    return -1;
+  }
 
-    if (selectedCostume === -1) {
-      // Should never happen.
+  const updateOnionLayers = async () => {
+    const selectedCostumeIndex = getSelectedCostumeIndex();
+    if (selectedCostumeIndex === -1) {
       throw new Error("Couldn't find selected costume");
     }
 
@@ -243,12 +238,18 @@ export default async function ({ addon, global, console }) {
     const LAYERS = 1; // TODO: configurable
     // const LAYERS = 3;
 
-    for (let i = selectedCostume - 1, j = 0; i >= 0 && j < LAYERS; i--, j++) {
-      await addOnionLayer(i, OPACITY[j]);
+    try {
+      for (let i = selectedCostumeIndex - 1, j = 0; i >= 0 && j < LAYERS; i--, j++) {
+        await addOnionLayer(i, OPACITY[j]);
+      }
+    } catch (e) {
+      console.error(e);
     }
 
     activeLayer.activate();
   };
+
+  // TODO: button :)
 
   // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
   Object.defineProperty(Object.prototype, "_view", {
