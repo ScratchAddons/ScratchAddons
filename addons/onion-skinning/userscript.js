@@ -79,7 +79,6 @@ export default async function ({ addon, global, console }) {
 
   const createOnionLayer = () => {
     const layer = new PaperConstants.Layer();
-    layer.opacity = 0.2;
     layer.locked = true;
     layer.guide = true;
     layer.data.sa_isOnionLayer = true;
@@ -107,55 +106,31 @@ export default async function ({ addon, global, console }) {
     callback(item);
   };
 
-  const updateOnionLayers = () => {
-    const costumeList = Array.from(document.querySelector("[class^='selector_list-area']").children);
-    let selectedCostume = -1;
-    for (let i = 0; i < costumeList.length; i++) {
-      const item = costumeList[i].firstChild;
-      if (item && item.className.includes("is-selected")) {
-        selectedCostume = i;
-        break;
-      }
-    }
-
-    if (selectedCostume === -1) {
-      // Should never happen.
-      throw new Error("Couldn't find selected costume");
-    }
-
-    if (selectedCostume === 0) {
-      // Can't show an onion skin if there is no previous skin.
-      return;
-    }
-
-    const onionIndex = selectedCostume - 1;
-
+  const addOnionLayer = (index, opacity) => new Promise((resolve, reject) => {
     const vm = addon.tab.traps.onceValues.vm;
-    const costume = vm.editingTarget.sprite.costumes[onionIndex];
-    const asset = vm.getCostume(onionIndex);
+    const costume = vm.editingTarget.sprite.costumes[index];
+    const asset = vm.getCostume(index);
 
-    if (typeof paperCanvas.importImage !== "function" || typeof paperCanvas.recalibrateSize !== "function") {
+    if (typeof paperCanvas.importSvg !== "function" || typeof paperCanvas.recalibrateSize !== "function") {
       throw new Error("Assumptions invalid.");
     }
 
-    removeOnionLayers();
-
-    const activeLayer = project.activeLayer;
+    const layer = createOnionLayer();
+    layer.opacity = opacity;
 
     if (costume.dataFormat === "svg") {
-      const layer = createOnionLayer();
       layer.activate();
   
       const originalRecalibrate = paperCanvas.recalibrateSize;
       paperCanvas.recalibrateSize = function (callback) {
-        originalRecalibrate.call(this, function () {
+        originalRecalibrate.call(this, () => {
           if (callback) callback();
-          activeLayer.activate();
           paperCanvas.recalibrateSize = originalRecalibrate;
           recurseItem(layer, (item) => {
             item.locked = true;
             item.guide = true;
           });
+          resolve();
         });
       };
     
@@ -176,10 +151,49 @@ export default async function ({ addon, global, console }) {
       const image = new Image();
       image.onload = () => {
         raster.drawImage(image, 480 - costume.rotationCenterX, 360 - costume.rotationCenterY);
-        activeLayer.activate();
+        resolve();
       };
       image.src = asset;
     }
+  });
+
+  const updateOnionLayers = async () => {
+    const costumeList = Array.from(document.querySelector("[class^='selector_list-area']").children);
+    let selectedCostume = -1;
+    for (let i = 0; i < costumeList.length; i++) {
+      const item = costumeList[i].firstChild;
+      if (item && item.className.includes("is-selected")) {
+        selectedCostume = i;
+        break;
+      }
+    }
+
+    if (selectedCostume === -1) {
+      // Should never happen.
+      throw new Error("Couldn't find selected costume");
+    }
+
+    if (typeof paperCanvas.importSvg !== "function" || typeof paperCanvas.recalibrateSize !== "function") {
+      throw new Error("Assumptions invalid.");
+    }
+
+    const activeLayer = project.activeLayer;
+    removeOnionLayers();
+
+    const OPACITY = [ // TODO: configurable
+      0.5,
+      0.2,
+      0.1
+    ];
+
+    const LAYERS = 1; // TODO: configurable
+    // const LAYERS = 3;
+
+    for (let i = selectedCostume - 1, j = 0; i >= 0 && j < LAYERS; i--, j++) {
+      await addOnionLayer(i, OPACITY[j]);
+    }
+
+    activeLayer.activate();
   };
 
   // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
