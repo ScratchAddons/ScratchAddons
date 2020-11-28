@@ -27,6 +27,7 @@ export default async function ({ addon, global, console, msg }) {
         let onion;
         while ((onion = storedOnionLayers.shift())) {
           originalAddLayer.call(this, onion);
+          onion.bringToFront();
         }
       }
     };
