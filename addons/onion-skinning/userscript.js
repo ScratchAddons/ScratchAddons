@@ -131,107 +131,100 @@ export default async function ({ addon, global, console, msg }) {
     callback(item);
   };
 
-  const addOnionLayer = (index, opacity) =>
+  const vectorLayer = (layer, costume, asset) =>
     new Promise((resolve, reject) => {
-      const vm = addon.tab.traps.onceValues.vm;
-      const costume = vm.editingTarget.sprite.costumes[index];
-      let { dataFormat, rotationCenterX, rotationCenterY } = costume;
-      let asset = vm.getCostume(index);
-
-      const layer = createOnionLayer();
-      layer.opacity = opacity;
-      layer.activate();
-
-      if (dataFormat === "svg") {
-        // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L196-L218
-        asset = asset.split(/<\s*svg:/).join("<");
-        asset = asset.split(/<\/\s*svg:/).join("</");
-        const svgAttrs = asset.match(/<svg [^>]*>/);
-        if (svgAttrs && svgAttrs[0].indexOf("xmlns=") === -1) {
-          asset = asset.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ');
-        }
-        const parser = new DOMParser();
-        const svgDom = parser.parseFromString(asset, "text/xml");
-        const viewBox = svgDom.documentElement.attributes.viewBox
-          ? svgDom.documentElement.attributes.viewBox.value.match(/\S+/g)
-          : null;
-        if (viewBox) {
-          for (let i = 0; i < viewBox.length; i++) {
-            viewBox[i] = parseFloat(viewBox[i]);
-          }
-        }
-
-        project.importSVG(asset, {
-          expandShapes: true,
-          onLoad: (root) => {
-            if (!root) {
-              reject(new Error("could not load onion skin"));
-              return;
-            }
-
-            root.remove();
-
-            // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L269-L272
-            if (root.children && root.children.length === 1) {
-              root = root.reduce();
-            }
-
-            // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L274-L275
-            recursePaperItem(root, (i) => {
-              if (i.className === "PathItem") {
-                i.clockwise = true;
-              }
-              if (i.className !== "PointText" && !i.children) {
-                if (i.strokeWidth) {
-                  i.strokeWidth = i.strokeWidth * 2;
-                }
-              }
-              i.locked = true;
-              i.guide = true;
-            });
-            root.scale(2, new PaperConstants.Point(0, 0));
-
-            // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L277-L287
-            if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
-              let rotationPoint = new PaperConstants.Point(rotationCenterX, rotationCenterY);
-              if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
-                rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
-              }
-              root.translate(PaperConstants.CENTER.subtract(rotationPoint.multiply(2)));
-            } else {
-              root.translate(PaperConstants.CENTER.subtract(root.bounds.width, root.bounds.height));
-            }
-
-            layer.addChild(root);
-            resolve();
-          },
-        });
-      } else if (dataFormat === "png" || dataFormat === "jpg") {
-        const raster = new PaperConstants.Raster(createCanvas(960, 720));
-        raster.parent = layer;
-        raster.guide = true;
-        raster.locked = true;
-        raster.position = PaperConstants.CENTER;
-
-        const image = new Image();
-        image.onload = () => {
-          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L151-L156
-          if (typeof rotationCenterX === "undefined") {
-            rotationCenterX = image.width / 2;
-          }
-          if (typeof rotationCenterY === "undefined") {
-            rotationCenterY = image.height / 2;
-          }
-
-          // TODO: Scratch draws the image twice for some reason...?
-          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L158-L165
-          raster.drawImage(image, 480 - rotationCenterX, 360 - rotationCenterY);
-          resolve();
-        };
-        image.src = asset;
-      } else {
-        throw new Error(`Unknown data format: ${dataFormat}`);
+      const {rotationCenterX, rotationCenterY} = costume;
+      // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L196-L218
+      asset = asset.split(/<\s*svg:/).join("<");
+      asset = asset.split(/<\/\s*svg:/).join("</");
+      const svgAttrs = asset.match(/<svg [^>]*>/);
+      if (svgAttrs && svgAttrs[0].indexOf("xmlns=") === -1) {
+        asset = asset.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ');
       }
+      const parser = new DOMParser();
+      const svgDom = parser.parseFromString(asset, "text/xml");
+      const viewBox = svgDom.documentElement.attributes.viewBox
+        ? svgDom.documentElement.attributes.viewBox.value.match(/\S+/g)
+        : null;
+      if (viewBox) {
+        for (let i = 0; i < viewBox.length; i++) {
+          viewBox[i] = parseFloat(viewBox[i]);
+        }
+      }
+  
+      project.importSVG(asset, {
+        expandShapes: true,
+        onLoad: (root) => {
+          if (!root) {
+            reject(new Error("could not load onion skin"));
+            return;
+          }
+  
+          root.remove();
+  
+          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L269-L272
+          if (root.children && root.children.length === 1) {
+            root = root.reduce();
+          }
+  
+          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L274-L275
+          recursePaperItem(root, (i) => {
+            if (i.className === "PathItem") {
+              i.clockwise = true;
+            }
+            if (i.className !== "PointText" && !i.children) {
+              if (i.strokeWidth) {
+                i.strokeWidth = i.strokeWidth * 2;
+              }
+            }
+            i.locked = true;
+            i.guide = true;
+          });
+          root.scale(2, new PaperConstants.Point(0, 0));
+  
+          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L277-L287
+          if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
+            let rotationPoint = new PaperConstants.Point(rotationCenterX, rotationCenterY);
+            if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
+              rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
+            }
+            root.translate(PaperConstants.CENTER.subtract(rotationPoint.multiply(2)));
+          } else {
+            root.translate(PaperConstants.CENTER.subtract(root.bounds.width, root.bounds.height));
+          }
+  
+          layer.addChild(root);
+          resolve();
+        },
+      });
+    });
+
+  const rasterLayer = (layer, costume, asset) =>
+    new Promise((resolve, reject) => {
+      let {rotationCenterX, rotationCenterY} = costume;
+
+      const raster = new PaperConstants.Raster(createCanvas(960, 720));
+      raster.parent = layer;
+      raster.guide = true;
+      raster.locked = true;
+      raster.position = PaperConstants.CENTER;
+
+      const image = new Image();
+      image.onload = () => {
+        // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L151-L156
+        if (typeof rotationCenterX === "undefined") {
+          rotationCenterX = image.width / 2;
+        }
+        if (typeof rotationCenterY === "undefined") {
+          rotationCenterY = image.height / 2;
+        }
+
+        // TODO: Scratch draws the image twice for some reason...?
+        // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L158-L165
+        raster.drawImage(image, 480 - rotationCenterX, 360 - rotationCenterY);
+        resolve();
+      };
+      image.src = asset;
     });
 
   const getSelectedCostumeIndex = () => {
@@ -253,6 +246,7 @@ export default async function ({ addon, global, console, msg }) {
 
     removeOnionLayers();
     const activeLayer = project.activeLayer;
+    const vm = addon.tab.traps.onceValues.vm;
 
     const opacityLevels = addon.settings
       .get("opacity")
@@ -260,9 +254,25 @@ export default async function ({ addon, global, console, msg }) {
       .map((i) => +i);
     const layers = addon.settings.get("layers");
 
+    const selectedCostume = vm.editingTarget.sprite.costumes[selectedCostumeIndex];
+
     try {
       for (let i = selectedCostumeIndex - 1, j = 0; i >= 0 && j < layers; i--, j++) {
-        await addOnionLayer(i, opacityLevels[j]);
+        const layer = createOnionLayer();
+        layer.opacity = opacityLevels[j];
+
+        const onionCostume = vm.editingTarget.sprite.costumes[i];
+        const onionAsset = vm.getCostume(i);
+
+        if (onionCostume.dataFormat === "svg") {
+          await vectorLayer(layer, onionCostume, onionAsset);
+        } else if (onionCostume.dataFormat === "png" || onionCostume.dataFormat === "jpg") {
+          if (selectedCostume.dataFormat === "svg") {
+            // Raster onion layers on a vector image currently causes weird errors and corruption.
+            continue;
+          }
+          await rasterLayer(layer, onionCostume, onionAsset);
+        }
       }
     } catch (e) {
       console.error(e);
