@@ -18,10 +18,10 @@ export default async function ({ addon, global, console }) {
     }
     project = _project;
 
+    // When background guide layer is added, show onion layers.
     const originalAddLayer = project.addLayer;
     project.addLayer = function (layer) {
       originalAddLayer.call(this, layer);
-      // When background guide layer is added, show onion layers.
       if (layer.data && layer.data.isBackgroundGuideLayer) {
         let onion;
         while ((onion = storedOnionLayers.shift())) {
@@ -30,18 +30,22 @@ export default async function ({ addon, global, console }) {
       }
     };
 
+    // Scratch uses importJSON to undo or redo
+    // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/helper/undo.js#L37
+    // This will remove our onion layers, so we will just add them back when it's done.
     const originalImportJSON = project.importJSON;
     project.importJSON = function (json) {
       originalImportJSON.call(this, json);
       updateOnionLayers();
     };
 
+    // At this point the project hasn't even finished its constructor yet, so we can't access layers yet.
     setTimeout(() => {
       const backgroundGuideLayer = project.layers.find((i) => i.data.isBackgroundGuideLayer);
+      // When background guide layer is removed, hide onion layers.
       const originalRemove = backgroundGuideLayer.remove;
       backgroundGuideLayer.remove = function () {
         originalRemove.call(this);
-        // When background guide layer is removed, hide onion layers.
         for (const layer of project.layers) {
           if (layer.data && layer.data.sa_isOnionLayer) {
             storedOnionLayers.push(layer);
@@ -99,14 +103,12 @@ export default async function ({ addon, global, console }) {
   };
 
   const removeOnionLayers = () => {
-    if (!project) {
-      return;
-    }
     storedOnionLayers.length = 0;
     const layers = project.layers;
     for (let i = layers.length - 1; i >= 0; i--) {
-      if (layers[i].data.sa_isOnionLayer) {
-        layers[i].remove();
+      const layer = layers[i];
+      if (layer.data && layer.data.sa_isOnionLayer) {
+        layer.remove();
       }
     }
   };
@@ -124,7 +126,7 @@ export default async function ({ addon, global, console }) {
     new Promise((resolve, reject) => {
       const vm = addon.tab.traps.onceValues.vm;
       const costume = vm.editingTarget.sprite.costumes[index];
-      const {dataFormat, rotationCenterX, rotationCenterY} = costume;
+      let { dataFormat, rotationCenterX, rotationCenterY } = costume;
       let asset = vm.getCostume(index);
 
       const layer = createOnionLayer();
@@ -199,6 +201,14 @@ export default async function ({ addon, global, console }) {
 
         const image = new Image();
         image.onload = () => {
+          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L151-L156
+          if (typeof rotationCenterX === 'undefined') {
+            rotationCenterX = image.width / 2;
+          }
+          if (typeof rotationCenterY === 'undefined') {
+            rotationCenterY = image.height / 2;
+          }
+
           // TODO: Scratch draws the image twice for some reason...?
           // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L158-L165
           raster.drawImage(image, 480 - rotationCenterX, 360 - rotationCenterY);
@@ -217,7 +227,7 @@ export default async function ({ addon, global, console }) {
       }
     }
     return -1;
-  }
+  };
 
   const updateOnionLayers = async () => {
     const selectedCostumeIndex = getSelectedCostumeIndex();
