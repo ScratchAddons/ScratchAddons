@@ -180,7 +180,7 @@ export default async function ({ addon, global, console, msg }) {
               if (i.className === "PathItem") {
                 i.clockwise = true;
               }
-              if (i.className !== "PointText") {
+              if (i.className !== "PointText" && !i.children) {
                 if (i.strokeWidth) {
                   i.strokeWidth = i.strokeWidth * 2;
                 }
