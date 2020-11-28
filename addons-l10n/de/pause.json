@@ -1,1 +1,1 @@
-{"pause/@name":"Pausier Knopf","pause/@description":"Fügt einen Pausier Knopf neben der grünen Flagge. Sie können auch programmatisch ein Scratchprojekt pausieren (genannt Breakpoints) indem sie einen neuen Block erstellen mit dem Namen \"sa-pause\" und ihn dann benutzen."}
+{"pause/pause":"Pausieren","pause/@name":"Pausier Knopf","pause/@description":"Fügt einen Pausier Knopf neben der grünen Flagge. Sie können auch programmatisch ein Scratchprojekt pausieren (genannt Breakpoints) indem sie einen neuen Block erstellen mit dem Namen \"sa-pause\" und ihn dann benutzen."}

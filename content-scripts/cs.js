@@ -61,6 +61,7 @@ function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
       // Replace %addon-self-dir% for relative URLs
       css = css.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${theme.addonId}`));
       if (isUpdate && css.startsWith("/* sa-autoupdate-theme-ignore */")) continue;
+      css += `\n/*# sourceURL=${styleUrl} */`;
       const style = document.createElement("style");
       style.classList.add("scratch-addons-theme");
       style.setAttribute("data-addon-id", theme.addonId);
@@ -151,6 +152,8 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
   observer.observe(template, { attributes: true });
 }
 
+const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
+
 function forumWarning() {
   let postArea = document.querySelector("form#post > label");
   if (postArea) {
@@ -165,16 +168,10 @@ function forumWarning() {
     let reportLink = document.createElement("a");
     reportLink.href = "https://scratchaddons.com/feedback";
     reportLink.target = "_blank";
-    reportLink.innerText = "report it here";
+    reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     let text1 = document.createElement("span");
-    text1.innerText =
-      "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when " +
-      "all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please ";
-    let text3 = document.createElement("span");
-    text3.innerText = ".";
+    text1.innerHTML = escapeHTML(chrome.i18n.getMessage("forumWarning", "$1")).replace("$1", reportLink.outerHTML);
     addonError.appendChild(text1);
-    addonError.appendChild(reportLink);
-    addonError.appendChild(text3);
     errorList.appendChild(addonError);
   }
 }

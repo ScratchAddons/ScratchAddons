@@ -10,3 +10,7 @@ please report it (see below).
 
 If you find a vulnerability within Scratch Addons (any repository belonging to the organization) please contact World_Languages privately by emailing worldxlanguages@gmail.com.
 If you don't get a response within 48 hours, please create an issue in this repository mentioning you sent an email.
+
+## Vulnerabilities Disclosed
+
+See our advisories that we have published for vulnerabilities that we have disclosed on [this page](https://github.com/ScratchAddons/ScratchAddons/security/advisories?state=published).
