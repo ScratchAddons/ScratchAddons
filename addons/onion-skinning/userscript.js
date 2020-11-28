@@ -206,10 +206,10 @@ export default async function ({ addon, global, console, msg }) {
         const image = new Image();
         image.onload = () => {
           // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L151-L156
-          if (typeof rotationCenterX === 'undefined') {
+          if (typeof rotationCenterX === "undefined") {
             rotationCenterX = image.width / 2;
           }
-          if (typeof rotationCenterY === 'undefined') {
+          if (typeof rotationCenterY === "undefined") {
             rotationCenterY = image.height / 2;
           }
 
@@ -300,13 +300,15 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   while (true) {
-    const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {markAsSeen: true});
+    const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
+      markAsSeen: true,
+    });
     const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
 
     const controlsContainer = document.createElement("div");
     controlsContainer.className = "sa-onion-group-container";
     controlsContainer.dir = "";
-    
+
     const onionControlsContainer = document.createElement("div");
     onionControlsContainer.className = zoomControlsContainer.className;
     onionControlsContainer.dir = "";
@@ -316,7 +318,7 @@ export default async function ({ addon, global, console, msg }) {
 
     onionButton = document.createElement("span");
     onionButton.className = zoomControlsContainer.firstChild.firstChild.className;
-    onionButton.classList.add('sa-onion-button');
+    onionButton.classList.add("sa-onion-button");
     onionButton.dataset.enabled = enabled;
     onionButton.setAttribute("role", "button");
     onionButton.addEventListener("click", onionButtonClicked);
