@@ -2,7 +2,6 @@ export default async function ({ addon, global, console, msg }) {
   let project = null;
   let paperCanvas = null;
   let onionButton = null;
-  let enabled = addon.settings.get("default");
   const storedOnionLayers = [];
   const PaperConstants = {
     Raster: null,
@@ -10,6 +9,10 @@ export default async function ({ addon, global, console, msg }) {
     Point: null,
     Rectangle: null,
     CENTER: null,
+  };
+  const settings = {
+    enabled: addon.settings.get("default"),
+    layers: addon.settings.get("layers"),
   };
 
   const foundPaper = (_project) => {
@@ -38,7 +41,7 @@ export default async function ({ addon, global, console, msg }) {
     const originalImportJSON = project.importJSON;
     project.importJSON = function (json) {
       originalImportJSON.call(this, json);
-      if (enabled) {
+      if (settings.enabled) {
         updateOnionLayers();
       }
     };
@@ -96,7 +99,7 @@ export default async function ({ addon, global, console, msg }) {
     paperCanvas.recalibrateSize = function (callback) {
       originalRecalibrateSize.call(this, () => {
         if (callback) callback();
-        if (enabled) {
+        if (settings.enabled) {
           updateOnionLayers();
         }
       });
@@ -232,6 +235,9 @@ export default async function ({ addon, global, console, msg }) {
         raster.drawImage(image, 480 - rotationCenterX, 360 - rotationCenterY);
         resolve();
       };
+      image.onerror = () => {
+        reject(new Error('could not load image'));
+      };
       image.src = asset;
     });
 
@@ -260,12 +266,11 @@ export default async function ({ addon, global, console, msg }) {
       .get("opacity")
       .split(",")
       .map((i) => +i);
-    const layers = addon.settings.get("layers");
 
     const selectedCostume = vm.editingTarget.sprite.costumes[selectedCostumeIndex];
 
     try {
-      for (let i = selectedCostumeIndex - 1, j = 0; i >= 0 && j < layers; i--, j++) {
+      for (let i = selectedCostumeIndex - 1, j = 0; i >= 0 && j < settings.layers; i--, j++) {
         const layer = createOnionLayer();
         layer.opacity = opacityLevels[j];
 
@@ -290,16 +295,16 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const setEnabled = (_enabled) => {
-    if (enabled === _enabled) {
+    if (settings.enabled === _enabled) {
       return;
     }
-    enabled = _enabled;
-    if (enabled) {
+    settings.enabled = _enabled;
+    if (settings.enabled) {
       updateOnionLayers();
     } else {
       removeOnionLayers();
     }
-    onionButton.dataset.enabled = enabled;
+    onionButton.dataset.enabled = settings.enabled;
   };
 
   // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
@@ -343,19 +348,40 @@ export default async function ({ addon, global, console, msg }) {
     onionButton = document.createElement("span");
     onionButton.className = zoomControlsContainer.firstChild.firstChild.className;
     onionButton.classList.add("sa-onion-button");
-    onionButton.dataset.enabled = enabled;
+    onionButton.dataset.enabled = settings.enabled;
     onionButton.setAttribute("role", "button");
-    onionButton.addEventListener("click", () => setEnabled(!enabled));
-    onionButton.title = msg("button-title");
+    onionButton.addEventListener("click", () => setEnabled(!settings.enabled));
+    onionButton.title = msg("onion-title");
 
-    const img = document.createElement("img");
-    img.className = zoomControlsContainer.firstChild.firstChild.firstChild.className;
-    img.draggable = false;
-    img.alt = msg("button-title");
-    img.src = addon.self.dir + "/onion.svg";
+    const onionImage = document.createElement("img");
+    onionImage.className = zoomControlsContainer.firstChild.firstChild.firstChild.className;
+    onionImage.draggable = false;
+    onionImage.alt = msg("onion-title");
+    onionImage.src = addon.self.dir + "/onion.svg";
 
-    onionButton.appendChild(img);
+    const settingButton = document.createElement("span");
+    settingButton.className = onionButton.className;
+    settingButton.setAttribute("role", "button");
+    settingButton.addEventListener("click", () => {
+      const layers = prompt("how many layers", settings.layers);
+      settings.layers = layers;
+
+      if (settings.enabled) {
+        updateOnionLayers();
+      }
+    });
+    settingButton.title = msg("settings-title");
+
+    const settingImage = document.createElement("img");
+    settingImage.className = onionImage.className;
+    settingImage.draggable = false;
+    settingImage.alt = msg("settings-title");
+    settingImage.src = addon.self.dir + "/settings.svg";
+
+    onionButton.appendChild(onionImage);
+    settingButton.appendChild(settingImage);
     onionControlsGroup.appendChild(onionButton);
+    onionControlsGroup.appendChild(settingButton);
     onionControlsContainer.appendChild(onionControlsGroup);
     controlsContainer.appendChild(onionControlsContainer);
     controlsContainer.appendChild(zoomControlsContainer);
