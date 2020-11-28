@@ -142,5 +142,11 @@
   },
   "forumsTooltip": {
     "message": "This addon applies to Scratch's Discussion Forums."
+  },
+  "reportItHere": {
+    "message": "report it here"
+  },
+  "forumWarning": {
+    "message": "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
   }
 }
