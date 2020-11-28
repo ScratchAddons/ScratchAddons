@@ -2,6 +2,8 @@ export default async function ({ addon, global, console }) {
   let project;
   let paperCanvas;
 
+  const storedOnionLayers = [];
+
   const PaperConstants = {
     Raster: null,
     Layer: null,
@@ -15,14 +17,12 @@ export default async function ({ addon, global, console }) {
       return;
     }
     project = _project;
-    console.log("project", _project);
-
-    const storedOnionLayers = [];
 
     const originalAddLayer = project.addLayer;
     project.addLayer = function (layer) {
       originalAddLayer.call(this, layer);
-      if (layer.data.isBackgroundGuideLayer) {
+      // When background guide layer is added, show onion layers.
+      if (layer.data && layer.data.isBackgroundGuideLayer) {
         let onion;
         while (onion = storedOnionLayers.shift()) {
           originalAddLayer.call(this, onion);
@@ -30,14 +30,20 @@ export default async function ({ addon, global, console }) {
       }
     };
 
+    const originalImportJSON = project.importJSON;
+    project.importJSON = function (json) {
+      originalImportJSON.call(this, json);
+      updateOnionLayers();
+    };
+
     setTimeout(() => {
       const backgroundGuideLayer = project.layers.find((i) => i.data.isBackgroundGuideLayer);
       const originalRemove = backgroundGuideLayer.remove;
       backgroundGuideLayer.remove = function () {
         originalRemove.call(this);
-        // When background guide layer is removed, also remove onion layers.
+        // When background guide layer is removed, hide onion layers.
         for (const layer of project.layers) {
-          if (layer.data.sa_isOnionLayer) {
+          if (layer.data && layer.data.sa_isOnionLayer) {
             storedOnionLayers.push(layer);
           }
         }
@@ -64,7 +70,6 @@ export default async function ({ addon, global, console }) {
       return;
     }
     paperCanvas = _paperCanvas;
-    console.log("paperCanvas", paperCanvas);
 
     // When importing a new image, remove onion layers.
     const originalImportImage = paperCanvas.importImage;
@@ -97,6 +102,7 @@ export default async function ({ addon, global, console }) {
     if (!project) {
       return;
     }
+    storedOnionLayers.length = 0;
     const layers = project.layers;
     for (let i = layers.length - 1; i >= 0; i--) {
       if (layers[i].data.sa_isOnionLayer) {
@@ -197,13 +203,10 @@ export default async function ({ addon, global, console }) {
         raster.locked = true;
         raster.position = PaperConstants.CENTER;
 
-        const mask = new PaperConstants.Rectangle(layer.getBounds());
-        mask.guide = true;
-        mask.locked = true;
-        mask.clipMask = true;
-
         const image = new Image();
         image.onload = () => {
+          // TODO: Scratch draws the image twice for some reason...?
+          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L158-L165
           raster.drawImage(image, 480 - costume.rotationCenterX, 360 - costume.rotationCenterY);
           resolve();
         };
