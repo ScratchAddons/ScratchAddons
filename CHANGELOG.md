@@ -13,6 +13,32 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.4.0]
+
+- Scratch Addons is now localized! We'll soon be writing how you can help translate Scratch Addons to your language.
+- Responsive settings page
+- New addon: website dark mode
+- New addon: block switching [recommended]
+- New addon: sprite and script count
+- New addon: messages in editor
+- New addon: project notes tabs
+- New addon: feature unshared projects
+- New addon: confirm actions
+- New addon: fix broken SVG uploads
+- New addon: customized quotes & code blocks on forums
+- New addon: curator link
+- New addon: show my-ocular status
+- Enhancement: fix performance when dragging blocks in the editor
+- Bug fix: exact forum count removing the word "posts" after the post count
+- Bug fix: "last edit tooltip" showing incorrect date
+- Bug fix: clone count showing negative numbers
+
+#### Addon development changes:
+- Because of localization, any English strings used in addon JavaScript must be put in `addon-l10n/en/addon-name.json`. Then, you can get these strings from the `msg` function that is passed to the default function of your module.
+- Source URL was added to theme CSS ([#849](https://github.com/ScratchAddons/ScratchAddons/issues/849))
+- Addition of `%addon-self-dir%` placeholder in theme CSS
+- Settings of type `"key"` for hotkeys, not yet used by any addon.
+
 ## [v1.3.3]
 
 Minor extension structure change after Mozilla Add-ons review (moves libraries used by addons, previously loaded from CDNs, to the "libraries" folder). No noticeable changes for users.
@@ -112,6 +138,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.4.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.4.0
 [v1.3.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.3
 [v1.3.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.2
 [v1.3.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.1
