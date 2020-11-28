@@ -191,11 +191,15 @@ export default async function ({ addon, global, console, msg }) {
             root.scale(2, new PaperConstants.Point(0, 0));
 
             // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L277-L287
-            let rotationPoint = new PaperConstants.Point(rotationCenterX, rotationCenterY);
-            if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
-              rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
+            if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
+              let rotationPoint = new PaperConstants.Point(rotationCenterX, rotationCenterY);
+              if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
+                rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
+              }
+              root.translate(PaperConstants.CENTER.subtract(rotationPoint.multiply(2)));
+            } else {
+              root.translate(PaperConstants.CENTER.subtract(root.bounds.width, root.bounds.height));
             }
-            root.translate(PaperConstants.CENTER.subtract(rotationPoint.multiply(2)));
 
             layer.addChild(root);
             resolve();
@@ -327,6 +331,7 @@ export default async function ({ addon, global, console, msg }) {
     onionButton.dataset.enabled = enabled;
     onionButton.setAttribute("role", "button");
     onionButton.addEventListener("click", onionButtonClicked);
+    onionButton.title = msg("button-title");
 
     const img = document.createElement("img");
     img.className = zoomControlsContainer.firstChild.firstChild.firstChild.className;
