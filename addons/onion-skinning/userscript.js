@@ -82,11 +82,16 @@ export default async function ({ addon, global, console, msg }) {
     paperCanvas.importImage = function (...args) {
       removeOnionLayers();
       originalImportImage.call(this, ...args);
-      if (enabled) {
-        setTimeout(() => {
+    };
+
+    const originalRecalibrateSize = paperCanvas.recalibrateSize;
+    paperCanvas.recalibrateSize = function (callback) {
+      originalRecalibrateSize.call(this, () => {
+        if (callback) callback();
+        if (enabled) {
           updateOnionLayers();
-        });
-      }
+        }
+      });
     };
   };
 
@@ -219,6 +224,8 @@ export default async function ({ addon, global, console, msg }) {
           resolve();
         };
         image.src = asset;
+      } else {
+        throw new Error(`Unknown data format: ${dataFormat}`);
       }
     });
 
@@ -243,14 +250,13 @@ export default async function ({ addon, global, console, msg }) {
     removeOnionLayers();
 
     const OPACITY = [
-      // TODO: configurable
+      // TODO: user configurable
       0.25,
       0.15,
       0.05,
     ];
 
-    const LAYERS = 1; // TODO: configurable
-    // const LAYERS = 3;
+    const LAYERS = 1; // TODO: user configurable
 
     try {
       for (let i = selectedCostumeIndex - 1, j = 0; i >= 0 && j < LAYERS; i--, j++) {
@@ -262,8 +268,6 @@ export default async function ({ addon, global, console, msg }) {
 
     activeLayer.activate();
   };
-
-  // TODO: button :)
 
   // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
   Object.defineProperty(Object.prototype, "_view", {
