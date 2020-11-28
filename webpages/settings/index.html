@@ -163,7 +163,9 @@
                 </span>
               </div>
               <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
-                <a href="./licenses.html?libraries={{ addon.libraries.join(',') }}">{{ msg("viewLicenses") }}</a>
+                <a target="_blank" href="./licenses.html?libraries={{ addon.libraries.join(',') }}"
+                  >{{ msg("viewLicenses") }}</a
+                >
               </div>
               <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
                 <div class="addon-setting" v-for="setting of addon.settings">
