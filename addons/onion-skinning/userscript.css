@@ -6,3 +6,13 @@
 .sa-onion-button[data-enabled="true"] {
   background-color: #4C97FF;
 }
+
+.sa-onion-settings {
+  position: absolute;
+  background: white;
+  bottom: 24px;
+  right: 24px;
+  width: 250px;
+  height: 100px;
+  border: 1px solid black;
+}

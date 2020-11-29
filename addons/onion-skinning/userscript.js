@@ -302,6 +302,12 @@ export default async function ({ addon, global, console, msg }) {
     onionButton.dataset.enabled = settings.enabled;
   };
 
+  const rerenderIfEnabled = () => {
+    if (settings.enabled) {
+      updateOnionLayers();
+    }
+  };
+
   // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
   Object.defineProperty(Object.prototype, "_view", {
     set(value) {
@@ -328,6 +334,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const createControls = (canvasControls) => {
     const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
+    const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
 
     const controlsContainer = document.createElement("div");
     controlsContainer.className = "sa-onion-group-container";
@@ -358,11 +365,12 @@ export default async function ({ addon, global, console, msg }) {
     settingButton.className = onionButton.className;
     settingButton.setAttribute("role", "button");
     settingButton.addEventListener("click", () => {
-      const layers = prompt("how many layers", settings.layers);
-      settings.layers = layers;
-
-      if (settings.enabled) {
-        updateOnionLayers();
+      if (settingsPage.parentNode) {
+        settingsPage.parentNode.removeChild(settingsPage);
+        settingButton.dataset.enabled = false;
+      } else {
+        canvasContainer.appendChild(settingsPage);
+        settingButton.dataset.enabled = true;
       }
     });
     settingButton.title = msg("settings-title");
@@ -381,6 +389,31 @@ export default async function ({ addon, global, console, msg }) {
     controlsContainer.appendChild(onionControlsContainer);
     controlsContainer.appendChild(zoomControlsContainer);
     canvasControls.appendChild(controlsContainer);
+
+    const settingsPage = document.createElement("div");
+    settingsPage.classList.add("sa-onion-settings");
+
+    const settingsHeader = document.createElement("div");
+    settingsHeader.className = "sa-onion-settings-header";
+    settingsHeader.textContent = "Onion Skinning Settings";
+
+    const behindContainer = document.createElement("div");
+    behindContainer.appendChild(document.createTextNode("Show previous costumes: "));
+
+    const behindInput = document.createElement("input");
+    behindInput.type = "number";
+    behindInput.min = 1;
+    behindInput.max = 3;
+    behindInput.step = 1;
+    behindInput.value = settings.layers;
+    behindInput.addEventListener("input", (e) => {
+      settings.layers = +e.target.value;
+      rerenderIfEnabled();
+    });
+    behindContainer.appendChild(behindInput);
+
+    settingsPage.appendChild(settingsHeader);
+    settingsPage.appendChild(behindContainer);
   };
 
   while (true) {
