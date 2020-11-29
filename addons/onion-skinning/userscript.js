@@ -127,6 +127,10 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const removeOnionLayers = () => {
+    if (!project) {
+      return;
+    }
+
     storedOnionLayers.length = 0;
     const layers = project.layers;
     for (let i = layers.length - 1; i >= 0; i--) {
@@ -257,7 +261,11 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const updateOnionLayers = async () => {
-    // TODO: when the paint editor initially loads, this runs 3 times.
+    if (!project) {
+      return;
+    }
+
+    // TODO: when the paint editor initially loads, this runs 3 times for some reason
 
     const selectedCostumeIndex = getSelectedCostumeIndex();
     if (selectedCostumeIndex === -1) {
