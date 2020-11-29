@@ -262,20 +262,32 @@ export default async function ({ addon, global, console, msg }) {
     removeOnionLayers();
     const activeLayer = project.activeLayer;
     const vm = addon.tab.traps.onceValues.vm;
+    const costumes = vm.editingTarget.sprite.costumes;
 
+    // TODO: this is a terrible way to do this
     const opacityLevels = addon.settings
       .get("opacity")
       .split(",")
       .map((i) => +i);
 
+    const startIndex = Math.max(0, selectedCostumeIndex - settings.previous);
+    const endIndex = Math.min(costumes.length - 1, selectedCostumeIndex + settings.next);
+
     try {
-      // TODO: implement next
-      for (let i = selectedCostumeIndex - 1, j = 0; i >= 0 && j < settings.previous; i--, j++) {
+      for (let i = startIndex; i <= endIndex; i++) {
+        if (i === selectedCostumeIndex) {
+          continue;
+        }
+
         const layer = createOnionLayer();
-        layer.opacity = opacityLevels[j];
+        // Creating a new layer will automatically activate it.
+        // We do not want to steal activation as doing so causes corruption.
         activeLayer.activate();
 
-        const onionCostume = vm.editingTarget.sprite.costumes[i];
+        const distanceFromSelected = Math.abs(i - selectedCostumeIndex) - 1;
+        layer.opacity = opacityLevels[distanceFromSelected];
+
+        const onionCostume = costumes[i];
         const onionAsset = vm.getCostume(i);
 
         if (onionCostume.dataFormat === "svg") {
@@ -304,7 +316,7 @@ export default async function ({ addon, global, console, msg }) {
     onionButton.dataset.enabled = settings.enabled;
   };
 
-  const rerenderIfEnabled = () => {
+  const reupdateIfEnabled = () => {
     if (settings.enabled) {
       updateOnionLayers();
     }
@@ -403,6 +415,12 @@ export default async function ({ addon, global, console, msg }) {
     settingsHeader.className = "sa-onion-settings-header";
     settingsHeader.textContent = msg("settings");
 
+    const setInputValueToNumber = (e) => {
+      if (e.target.checkValidity()) {
+        e.target.value = +e.target.value;
+      }
+    };
+
     const previousContainer = document.createElement("label");
     previousContainer.appendChild(document.createTextNode(msg("previous")));
     const previousInput = document.createElement("input");
@@ -414,9 +432,10 @@ export default async function ({ addon, global, console, msg }) {
     previousInput.addEventListener("input", (e) => {
       if (e.target.checkValidity()) {
         settings.previous = +e.target.value;
-        rerenderIfEnabled();
+        reupdateIfEnabled();
       }
     });
+    previousInput.addEventListener("blur", setInputValueToNumber);
 
     const nextContainer = document.createElement("label");
     nextContainer.appendChild(document.createTextNode(msg("next")));
@@ -429,9 +448,10 @@ export default async function ({ addon, global, console, msg }) {
     nextInput.addEventListener("input", (e) => {
       if (e.target.checkValidity()) {
         settings.next = +e.target.value;
-        rerenderIfEnabled();
+        reupdateIfEnabled();
       }
     });
+    nextInput.addEventListener("blur", setInputValueToNumber);
 
     previousContainer.appendChild(previousInput);
     nextContainer.appendChild(nextInput);
