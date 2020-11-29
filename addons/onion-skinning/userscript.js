@@ -335,27 +335,40 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
+  // TODO: only apply terrible hacks in editor?
+
   // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
   Object.defineProperty(Object.prototype, "_view", {
     set(value) {
-      // TODO: this can and will break things
       Object.defineProperty(this, "_view", {
         value: value,
         writable: true,
       });
-      foundPaper(this);
+      if (
+        typeof this.activeLayer === "object" &&
+        Array.isArray(this.layers) &&
+        typeof this.addLayer === "function" &&
+        typeof this.importJSON === "function" &&
+        typeof this.importSVG === "function"
+      ) {
+        foundPaper(this);
+      }
     },
   });
 
   // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L45-L51
   Object.defineProperty(Object.prototype, "shouldZoomToFit", {
     set(value) {
-      // TODO: this can and will break things
       Object.defineProperty(this, "shouldZoomToFit", {
         value: value,
         writable: true,
       });
-      foundPaperCanvas(this);
+      if (
+        typeof this.importImage === "function" &&
+        typeof this.recalibrateSize === "function"
+      ) {
+        foundPaperCanvas(this);
+      }
     },
   });
 
