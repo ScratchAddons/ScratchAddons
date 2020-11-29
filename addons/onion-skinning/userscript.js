@@ -335,42 +335,44 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  // TODO: only apply terrible hacks in editor?
+  const installPrototypeHacks = () => {
+    // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
+    Object.defineProperty(Object.prototype, "_view", {
+      set(value) {
+        Object.defineProperty(this, "_view", {
+          value: value,
+          writable: true,
+          enumerable: true,
+          configurable: true,
+        });
+        if (
+          typeof this.activeLayer === "object" &&
+          Array.isArray(this.layers) &&
+          typeof this.addLayer === "function" &&
+          typeof this.importJSON === "function" &&
+          typeof this.importSVG === "function"
+        ) {
+          foundPaper(this);
+        }
+      },
+    });
 
-  // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
-  Object.defineProperty(Object.prototype, "_view", {
-    set(value) {
-      Object.defineProperty(this, "_view", {
-        value: value,
-        writable: true,
-      });
-      if (
-        typeof this.activeLayer === "object" &&
-        Array.isArray(this.layers) &&
-        typeof this.addLayer === "function" &&
-        typeof this.importJSON === "function" &&
-        typeof this.importSVG === "function"
-      ) {
-        foundPaper(this);
-      }
-    },
-  });
-
-  // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L45-L51
-  Object.defineProperty(Object.prototype, "shouldZoomToFit", {
-    set(value) {
-      Object.defineProperty(this, "shouldZoomToFit", {
-        value: value,
-        writable: true,
-      });
-      if (
-        typeof this.importImage === "function" &&
-        typeof this.recalibrateSize === "function"
-      ) {
-        foundPaperCanvas(this);
-      }
-    },
-  });
+    // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L45-L51
+    // In Scratch, this block should always run.
+    Object.defineProperty(Object.prototype, "shouldZoomToFit", {
+      set(value) {
+        Object.defineProperty(this, "shouldZoomToFit", {
+          value: value,
+          writable: true,
+          enumerable: true,
+          configurable: true,
+        });
+        if (typeof this.importImage === "function" && typeof this.recalibrateSize === "function") {
+          foundPaperCanvas(this);
+        }
+      },
+    });
+  };
 
   const createControls = (canvasControls) => {
     const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
@@ -511,11 +513,27 @@ export default async function ({ addon, global, console, msg }) {
     settingsPage.appendChild(opacityContainer);
   };
 
-  while (true) {
-    const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
-      markAsSeen: true,
-    });
+  const controlsLoop = async () => {
+    while (true) {
+      const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
+        markAsSeen: true,
+      });
 
-    createControls(canvasControls);
+      createControls(canvasControls);
+    }
+  };
+
+  if (addon.tab.editorMode === "editor") {
+    installPrototypeHacks();
+  } else {
+    const listener = () => {
+      if (addon.tab.editorMode === "editor") {
+        installPrototypeHacks();
+        addon.tab.removeEventListener("urlChange", listener);
+      }
+    };
+    addon.tab.addEventListener("urlChange", listener);
   }
+
+  controlsLoop();
 }
