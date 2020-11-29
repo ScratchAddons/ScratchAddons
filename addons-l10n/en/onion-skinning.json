@@ -1,4 +1,6 @@
 {
-  "onion-skinning/onion-title": "Onion Skinning",
-  "onion-skinning/settings-title": "Settings"
+  "onion-skinning/onion": "Onion Skinning",
+  "onion-skinning/settings": "Onion Skinning Settings",
+  "onion-skinning/previous": "Show previous costumes: ",
+  "onion-skinning/next": "Show next costumes: "
 }

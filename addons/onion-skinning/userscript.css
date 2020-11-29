@@ -4,15 +4,33 @@
 }
 
 .sa-onion-button[data-enabled="true"] {
-  background-color: #4C97FF;
+  background-color: #4c97ff;
 }
 
 .sa-onion-settings {
   position: absolute;
-  background: white;
   bottom: 24px;
   right: 24px;
-  width: 250px;
-  height: 100px;
+  padding: 1px;
   border: 1px solid black;
+  /* TODO: dark mode */
+  background: white;
+  color: black;
 }
+
+.sa-onion-settings-header {
+  text-align: center;
+  font-weight: bold;
+}
+
+.sa-onion-settings label {
+  text-align: right;
+  display: block;
+}
+
+.sa-onion-settings input[type="number"] {
+  width: 40px;
+  box-sizing: border-box;
+}
+
+/* TODO: more clear indication of valid/invalid inputs */

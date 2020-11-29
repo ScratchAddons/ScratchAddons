@@ -12,7 +12,8 @@ export default async function ({ addon, global, console, msg }) {
   };
   const settings = {
     enabled: addon.settings.get("default"),
-    layers: addon.settings.get("layers"),
+    previous: addon.settings.get("previous"),
+    next: addon.settings.get("next"),
   };
 
   const foundPaper = (_project) => {
@@ -236,7 +237,7 @@ export default async function ({ addon, global, console, msg }) {
         resolve();
       };
       image.onerror = () => {
-        reject(new Error('could not load image'));
+        reject(new Error("could not load image"));
       };
       image.src = asset;
     });
@@ -268,7 +269,8 @@ export default async function ({ addon, global, console, msg }) {
       .map((i) => +i);
 
     try {
-      for (let i = selectedCostumeIndex - 1, j = 0; i >= 0 && j < settings.layers; i--, j++) {
+      // TODO: implement next
+      for (let i = selectedCostumeIndex - 1, j = 0; i >= 0 && j < settings.previous; i--, j++) {
         const layer = createOnionLayer();
         layer.opacity = opacityLevels[j];
         activeLayer.activate();
@@ -336,6 +338,8 @@ export default async function ({ addon, global, console, msg }) {
     const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
     const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
 
+    // Buttons
+
     const controlsContainer = document.createElement("div");
     controlsContainer.className = "sa-onion-group-container";
     controlsContainer.dir = "";
@@ -353,12 +357,12 @@ export default async function ({ addon, global, console, msg }) {
     onionButton.dataset.enabled = settings.enabled;
     onionButton.setAttribute("role", "button");
     onionButton.addEventListener("click", () => setEnabled(!settings.enabled));
-    onionButton.title = msg("onion-title");
+    onionButton.title = msg("onion");
 
     const onionImage = document.createElement("img");
     onionImage.className = zoomControlsContainer.firstChild.firstChild.firstChild.className;
     onionImage.draggable = false;
-    onionImage.alt = msg("onion-title");
+    onionImage.alt = msg("onion");
     onionImage.src = addon.self.dir + "/onion.svg";
 
     const settingButton = document.createElement("span");
@@ -373,12 +377,12 @@ export default async function ({ addon, global, console, msg }) {
         settingButton.dataset.enabled = true;
       }
     });
-    settingButton.title = msg("settings-title");
+    settingButton.title = msg("settings");
 
     const settingImage = document.createElement("img");
     settingImage.className = onionImage.className;
     settingImage.draggable = false;
-    settingImage.alt = msg("settings-title");
+    settingImage.alt = msg("settings");
     settingImage.src = addon.self.dir + "/settings.svg";
 
     onionButton.appendChild(onionImage);
@@ -390,30 +394,50 @@ export default async function ({ addon, global, console, msg }) {
     controlsContainer.appendChild(zoomControlsContainer);
     canvasControls.appendChild(controlsContainer);
 
+    // Settings
+
     const settingsPage = document.createElement("div");
     settingsPage.classList.add("sa-onion-settings");
 
     const settingsHeader = document.createElement("div");
     settingsHeader.className = "sa-onion-settings-header";
-    settingsHeader.textContent = "Onion Skinning Settings";
+    settingsHeader.textContent = msg("settings");
 
-    const behindContainer = document.createElement("div");
-    behindContainer.appendChild(document.createTextNode("Show previous costumes: "));
-
-    const behindInput = document.createElement("input");
-    behindInput.type = "number";
-    behindInput.min = 1;
-    behindInput.max = 3;
-    behindInput.step = 1;
-    behindInput.value = settings.layers;
-    behindInput.addEventListener("input", (e) => {
-      settings.layers = +e.target.value;
-      rerenderIfEnabled();
+    const previousContainer = document.createElement("label");
+    previousContainer.appendChild(document.createTextNode(msg("previous")));
+    const previousInput = document.createElement("input");
+    previousInput.type = "number";
+    previousInput.min = 0;
+    previousInput.max = 3;
+    previousInput.step = 1;
+    previousInput.value = settings.previous;
+    previousInput.addEventListener("input", (e) => {
+      if (e.target.checkValidity()) {
+        settings.previous = +e.target.value;
+        rerenderIfEnabled();
+      }
     });
-    behindContainer.appendChild(behindInput);
 
+    const nextContainer = document.createElement("label");
+    nextContainer.appendChild(document.createTextNode(msg("next")));
+    const nextInput = document.createElement("input");
+    nextInput.type = "number";
+    nextInput.min = 0;
+    nextInput.max = 3;
+    nextInput.step = 1;
+    nextInput.value = settings.next;
+    nextInput.addEventListener("input", (e) => {
+      if (e.target.checkValidity()) {
+        settings.next = +e.target.value;
+        rerenderIfEnabled();
+      }
+    });
+
+    previousContainer.appendChild(previousInput);
+    nextContainer.appendChild(nextInput);
     settingsPage.appendChild(settingsHeader);
-    settingsPage.appendChild(behindContainer);
+    settingsPage.appendChild(previousContainer);
+    settingsPage.appendChild(nextContainer);
   };
 
   while (true) {

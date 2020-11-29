@@ -26,10 +26,16 @@
       "default": false
     },
     {
-      "id": "layers",
-      "name": "Layers",
+      "id": "previous",
+      "name": "Previous Costumes",
       "type": "positive_integer",
       "default": 1
+    },
+    {
+      "id": "next",
+      "name": "Next Costumes",
+      "type": "positive_integer",
+      "default": 0
     },
     {
       "id": "opacity",
