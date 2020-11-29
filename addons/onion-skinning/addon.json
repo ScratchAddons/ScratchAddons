@@ -27,21 +27,39 @@
     },
     {
       "id": "previous",
-      "name": "Previous Costumes",
+      "name": "Default previous costumes",
       "type": "positive_integer",
       "default": 1
     },
     {
       "id": "next",
-      "name": "Next Costumes",
+      "name": "Default next costumes",
       "type": "positive_integer",
       "default": 0
     },
     {
-      "id": "opacity",
-      "name": "Opacity levels",
-      "type": "string",
-      "default": "0.25,0.15,0.05"
+      "id": "opacity0",
+      "name": "Default opacity 0 (%)",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 25
+    },
+    {
+      "id": "opacity1",
+      "name": "Default opacity 1 (%)",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 15
+    },
+    {
+      "id": "opacity2",
+      "name": "Default opacity 2 (%)",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 5
     }
   ],
   "tags": ["editor", "beta"],

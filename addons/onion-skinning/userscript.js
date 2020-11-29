@@ -14,6 +14,11 @@ export default async function ({ addon, global, console, msg }) {
     enabled: addon.settings.get("default"),
     previous: +addon.settings.get("previous"),
     next: +addon.settings.get("next"),
+    opacityLevels: [
+      +addon.settings.get("opacity0"),
+      +addon.settings.get("opacity1"),
+      +addon.settings.get("opacity2"),
+    ],
   };
 
   const foundPaper = (_project) => {
@@ -262,15 +267,13 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     removeOnionLayers();
-    const activeLayer = project.activeLayer;
-    const vm = addon.tab.traps.onceValues.vm;
-    const costumes = vm.editingTarget.sprite.costumes;
 
-    // TODO: this is a terrible way to do this
-    const opacityLevels = addon.settings
-      .get("opacity")
-      .split(",")
-      .map((i) => +i);
+    const vm = addon.tab.traps.onceValues.vm;
+    if (!vm) {
+      return;
+    }
+    const activeLayer = project.activeLayer;
+    const costumes = vm.editingTarget.sprite.costumes;
 
     const startIndex = Math.max(0, selectedCostumeIndex - settings.previous);
     const endIndex = Math.min(costumes.length - 1, selectedCostumeIndex + settings.next);
@@ -281,13 +284,20 @@ export default async function ({ addon, global, console, msg }) {
           continue;
         }
 
+        const distanceFromSelected = Math.abs(i - selectedCostumeIndex) - 1;
+        const opacity = settings.opacityLevels[distanceFromSelected] / 100;
+
+        if (!opacity) {
+          // Do not make a layer at all if opacity is 0 or somehow undefined.
+          continue;
+        }
+
         const layer = createOnionLayer();
+        layer.opacity = opacity;
+
         // Creating a new layer will automatically activate it.
         // We do not want to steal activation as doing so causes corruption.
         activeLayer.activate();
-
-        const distanceFromSelected = Math.abs(i - selectedCostumeIndex) - 1;
-        layer.opacity = opacityLevels[distanceFromSelected];
 
         const onionCostume = costumes[i];
         const onionAsset = vm.getCostume(i);
@@ -296,12 +306,15 @@ export default async function ({ addon, global, console, msg }) {
           await vectorLayer(layer, onionCostume, onionAsset);
         } else if (onionCostume.dataFormat === "png" || onionCostume.dataFormat === "jpg") {
           await rasterLayer(layer, onionCostume, onionAsset);
+        } else {
+          throw new Error(`Unknown data format: ${onionCostume.dataFormat}`);
         }
       }
     } catch (e) {
       console.error(e);
     }
 
+    // Regardless of any errors, we **need** to make sure the original active layer still retains activation.
     activeLayer.activate();
   };
 
