@@ -427,9 +427,9 @@ export default async function ({ addon, global, console, msg }) {
     previousContainer.appendChild(document.createTextNode(msg("previous")));
     const previousInput = document.createElement("input");
     previousInput.type = "number";
-    previousInput.min = 0;
-    previousInput.max = 3;
-    previousInput.step = 1;
+    previousInput.min = "0";
+    previousInput.max = "3";
+    previousInput.step = "1";
     previousInput.value = settings.previous;
     previousInput.addEventListener("input", (e) => {
       if (e.target.checkValidity()) {
@@ -443,9 +443,9 @@ export default async function ({ addon, global, console, msg }) {
     nextContainer.appendChild(document.createTextNode(msg("next")));
     const nextInput = document.createElement("input");
     nextInput.type = "number";
-    nextInput.min = 0;
-    nextInput.max = 3;
-    nextInput.step = 1;
+    nextInput.min = "0";
+    nextInput.max = "3";
+    nextInput.step = "1";
     nextInput.value = settings.next;
     nextInput.addEventListener("input", (e) => {
       if (e.target.checkValidity()) {
