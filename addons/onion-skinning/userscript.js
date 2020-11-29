@@ -14,11 +14,7 @@ export default async function ({ addon, global, console, msg }) {
     enabled: addon.settings.get("default"),
     previous: +addon.settings.get("previous"),
     next: +addon.settings.get("next"),
-    opacityLevels: [
-      +addon.settings.get("opacity0"),
-      +addon.settings.get("opacity1"),
-      +addon.settings.get("opacity2"),
-    ],
+    opacityLevels: [+addon.settings.get("opacity0"), +addon.settings.get("opacity1"), +addon.settings.get("opacity2")],
   };
 
   const foundPaper = (_project) => {
@@ -331,7 +327,7 @@ export default async function ({ addon, global, console, msg }) {
     onionButton.dataset.enabled = settings.enabled;
   };
 
-  const reupdateIfEnabled = () => {
+  const settingsChanged = () => {
     if (settings.enabled) {
       updateOnionLayers();
     }
@@ -439,6 +435,7 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     const previousContainer = document.createElement("label");
+    previousContainer.className = "sa-onion-settings-group";
     previousContainer.appendChild(document.createTextNode(msg("previous")));
     const previousInput = document.createElement("input");
     previousInput.type = "number";
@@ -449,12 +446,13 @@ export default async function ({ addon, global, console, msg }) {
     previousInput.addEventListener("input", (e) => {
       if (e.target.checkValidity()) {
         settings.previous = +e.target.value;
-        reupdateIfEnabled();
+        settingsChanged();
       }
     });
     previousInput.addEventListener("blur", setInputValueToNumber);
 
     const nextContainer = document.createElement("label");
+    nextContainer.className = "sa-onion-settings-group";
     nextContainer.appendChild(document.createTextNode(msg("next")));
     const nextInput = document.createElement("input");
     nextInput.type = "number";
@@ -465,16 +463,37 @@ export default async function ({ addon, global, console, msg }) {
     nextInput.addEventListener("input", (e) => {
       if (e.target.checkValidity()) {
         settings.next = +e.target.value;
-        reupdateIfEnabled();
+        settingsChanged();
       }
     });
     nextInput.addEventListener("blur", setInputValueToNumber);
+
+    const opacityContainer = document.createElement("div");
+    opacityContainer.className = "sa-onion-settings-group";
+    opacityContainer.appendChild(document.createTextNode("Opacity %: "));
+    for (let i = 0; i < 3; i++) {
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = "0";
+      input.max = "100";
+      input.step = "1";
+      input.value = settings.opacityLevels[i];
+      input.addEventListener("blur", setInputValueToNumber);
+      input.addEventListener("input", (e) => {
+        if (e.target.checkValidity()) {
+          settings.opacityLevels[i] = +e.target.value;
+          settingsChanged();
+        }
+      });
+      opacityContainer.appendChild(input);
+    }
 
     previousContainer.appendChild(previousInput);
     nextContainer.appendChild(nextInput);
     settingsPage.appendChild(settingsHeader);
     settingsPage.appendChild(previousContainer);
     settingsPage.appendChild(nextContainer);
+    settingsPage.appendChild(opacityContainer);
   };
 
   while (true) {

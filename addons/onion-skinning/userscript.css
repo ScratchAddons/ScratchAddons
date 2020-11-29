@@ -19,15 +19,15 @@
   color: black;
 }
 
-.sa-onion-settings-header {
-  text-align: center;
-  font-weight: bold;
-}
-
-.sa-onion-settings label {
+.sa-onion-settings-group {
   /* TODO: not aligned properly in RTL */
   text-align: right;
   display: block;
+}
+
+.sa-onion-settings-header {
+  text-align: center;
+  font-weight: bold;
 }
 
 .sa-onion-settings input[type="number"] {
