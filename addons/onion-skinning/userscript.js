@@ -27,7 +27,7 @@ export default async function ({ addon, global, console, msg }) {
     // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/helper/layer.js#L145
     const originalAddLayer = project.addLayer;
     project.addLayer = function (layer) {
-      originalAddLayer.call(this, layer);
+      const result = originalAddLayer.call(this, layer);
       if (layer.data.isBackgroundGuideLayer) {
         let onion;
         while ((onion = storedOnionLayers.shift())) {
@@ -35,6 +35,7 @@ export default async function ({ addon, global, console, msg }) {
           onion.bringToFront();
         }
       }
+      return result;
     };
 
     // Scratch uses importJSON to undo or redo
@@ -42,10 +43,11 @@ export default async function ({ addon, global, console, msg }) {
     // The code prior to this will remove our onion layers, so we have to manually add them back.
     const originalImportJSON = project.importJSON;
     project.importJSON = function (json) {
-      originalImportJSON.call(this, json);
+      const result = originalImportJSON.call(this, json);
       if (settings.enabled) {
         updateOnionLayers();
       }
+      return result;
     };
 
     // At this point the project hasn't even finished its constructor, so we can't access layers yet.
@@ -90,7 +92,7 @@ export default async function ({ addon, global, console, msg }) {
     const originalImportImage = paperCanvas.importImage;
     paperCanvas.importImage = function (...args) {
       removeOnionLayers();
-      originalImportImage.call(this, ...args);
+      return originalImportImage.call(this, ...args);
     };
 
     // recalibrateSize is called when the canvas finishes loading an image.
@@ -99,7 +101,7 @@ export default async function ({ addon, global, console, msg }) {
     // We use this to know when to add layers.
     const originalRecalibrateSize = paperCanvas.recalibrateSize;
     paperCanvas.recalibrateSize = function (callback) {
-      originalRecalibrateSize.call(this, () => {
+      return originalRecalibrateSize.call(this, () => {
         if (callback) callback();
         if (settings.enabled) {
           updateOnionLayers();
