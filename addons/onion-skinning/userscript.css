@@ -9,7 +9,6 @@
 
 .sa-onion-settings {
   position: absolute;
-  /* TODO: wrong spot in RTL */
   bottom: 24px;
   right: 24px;
   padding: 1px;
@@ -19,10 +18,14 @@
   color: black;
 }
 
+[dir="rtl"] .sa-onion-settings {
+  right: initial;
+  left: 24px;
+}
+
 .sa-onion-settings-group {
-  /* TODO: not aligned properly in RTL */
-  text-align: right;
-  display: block;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .sa-onion-settings-header {
