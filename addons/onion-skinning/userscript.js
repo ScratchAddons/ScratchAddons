@@ -380,15 +380,7 @@ export default async function ({ addon, global, console, msg }) {
     const settingButton = document.createElement("span");
     settingButton.className = onionButton.className;
     settingButton.setAttribute("role", "button");
-    settingButton.addEventListener("click", () => {
-      if (settingsPage.parentNode) {
-        settingsPage.parentNode.removeChild(settingsPage);
-        settingButton.dataset.enabled = false;
-      } else {
-        canvasContainer.appendChild(settingsPage);
-        settingButton.dataset.enabled = true;
-      }
-    });
+    settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
     settingButton.title = msg("settings");
 
     const settingImage = document.createElement("img");
@@ -410,6 +402,16 @@ export default async function ({ addon, global, console, msg }) {
 
     const settingsPage = document.createElement("div");
     settingsPage.classList.add("sa-onion-settings");
+
+    const setSettingsOpen = (open) => {
+      settingButton.dataset.enabled = open;
+      if (open) {
+        canvasContainer.appendChild(settingsPage);
+      } else {
+        settingsPage.parentNode.removeChild(settingsPage);
+      }
+    };
+    const areSettingsOpen = () => !!settingsPage.parentNode;
 
     const settingsHeader = document.createElement("div");
     settingsHeader.className = "sa-onion-settings-header";
