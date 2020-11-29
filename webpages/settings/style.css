@@ -729,6 +729,7 @@ input[type="color"]::-webkit-color-swatch {
   position: relative;
   display: inline-block;
   border-bottom: 1px dotted rgb(255 255 255 / 0.5);
+  cursor: default;
 }
 
 .tooltip .tooltiptext {
