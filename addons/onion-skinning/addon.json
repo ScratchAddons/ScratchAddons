@@ -39,7 +39,7 @@
     },
     {
       "id": "opacity0",
-      "name": "Default opacity 0 (%)",
+      "name": "Default opacity 1 (%)",
       "type": "integer",
       "min": 0,
       "max": 100,
@@ -47,7 +47,7 @@
     },
     {
       "id": "opacity1",
-      "name": "Default opacity 1 (%)",
+      "name": "Default opacity 2 (%)",
       "type": "integer",
       "min": 0,
       "max": 100,
@@ -55,7 +55,7 @@
     },
     {
       "id": "opacity2",
-      "name": "Default opacity 2 (%)",
+      "name": "Default opacity 3 (%)",
       "type": "integer",
       "min": 0,
       "max": 100,
