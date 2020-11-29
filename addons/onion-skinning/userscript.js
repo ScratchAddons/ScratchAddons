@@ -12,8 +12,8 @@ export default async function ({ addon, global, console, msg }) {
   };
   const settings = {
     enabled: addon.settings.get("default"),
-    previous: addon.settings.get("previous"),
-    next: addon.settings.get("next"),
+    previous: +addon.settings.get("previous"),
+    next: +addon.settings.get("next"),
   };
 
   const foundPaper = (_project) => {
@@ -254,6 +254,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const updateOnionLayers = async () => {
+    // TODO: when the paint editor initially loads, this runs 3 times.
+
     const selectedCostumeIndex = getSelectedCostumeIndex();
     if (selectedCostumeIndex === -1) {
       throw new Error("Couldn't find selected costume");
