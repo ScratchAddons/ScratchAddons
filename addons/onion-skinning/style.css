@@ -3,6 +3,10 @@
   flex-direction: row;
 }
 
+.sa-onion-button:focus-within {
+  background-color: hsla(215, 100%, 65%, 0.20);
+}
+
 .sa-onion-button[data-enabled="true"] {
   background-color: #4c97ff;
 }
@@ -64,6 +68,8 @@
   border: 0;
   background: transparent;
   -moz-appearance: textfield;
+  border: 0;
+  outline: 0;
 }
 
 .sa-onion-settings-input::-webkit-outer-spin-button,
