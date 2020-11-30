@@ -63,6 +63,11 @@
   text-align: center;
   border: 0;
   background: transparent;
-  -webkit-appearance: none;
   -moz-appearance: textfield;
+}
+
+.sa-onion-settings-input::-webkit-outer-spin-button,
+.sa-onion-settings-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

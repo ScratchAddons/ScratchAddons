@@ -516,6 +516,9 @@ export default async function ({ addon, global, console, msg }) {
           currentInput.value = "0";
         }
       });
+      current.addEventListener("click", (e) => {
+        currentInput.focus();
+      });
       current.appendChild(currentInput);
       group.appendChild(current);
 
