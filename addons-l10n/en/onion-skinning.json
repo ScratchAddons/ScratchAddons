@@ -3,6 +3,6 @@
   "onion-skinning/settings": "Onion Skinning Settings",
   "onion-skinning/previous": "Previous costumes",
   "onion-skinning/next": "Next costumes",
-  "onion-skinning/opacity": "Opacity",
-  "onion-skinning/opacityStep": "Opacity step"
+  "onion-skinning/opacity": "Opacity (%)",
+  "onion-skinning/opacityStep": "Opacity step (%)"
 }

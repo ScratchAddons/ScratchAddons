@@ -39,7 +39,7 @@
     },
     {
       "id": "opacity",
-      "name": "Opacity",
+      "name": "Opacity (%)",
       "type": "integer",
       "min": 0,
       "max": 100,
@@ -47,14 +47,14 @@
     },
     {
       "id": "opacityStep",
-      "name": "Opacity Step",
+      "name": "Opacity Step (%)",
       "type": "integer",
       "min": 0,
       "max": 100,
       "default": 10
     }
   ],
-  "tags": ["editor", "beta"],
+  "tags": ["editor", "recommended"],
   "enabledByDefault": false,
   "l10n": true
 }
