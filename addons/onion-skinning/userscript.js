@@ -238,8 +238,6 @@ export default async function ({ addon, global, console, msg }) {
           rotationCenterY = image.height / 2;
         }
 
-        // TODO: Scratch draws the image twice for some reason...?
-        // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L158-L165
         raster.drawImage(image, 480 - rotationCenterX, 360 - rotationCenterY);
         resolve();
       };
