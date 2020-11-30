@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   let project = null;
   let paperCanvas = null;
-  let onionButton = null;
+  let toggleButton = null;
   const storedOnionLayers = [];
   const PaperConstants = {
     Raster: null,
@@ -332,7 +332,7 @@ export default async function ({ addon, global, console, msg }) {
     } else {
       removeOnionLayers();
     }
-    onionButton.dataset.enabled = settings.enabled;
+    toggleButton.dataset.enabled = settings.enabled;
   };
 
   const settingsChanged = () => {
@@ -390,45 +390,45 @@ export default async function ({ addon, global, console, msg }) {
     controlsContainer.className = "sa-onion-group-container";
     controlsContainer.dir = "";
 
-    const onionControlsContainer = document.createElement("div");
-    onionControlsContainer.className = zoomControlsContainer.className;
-    onionControlsContainer.dir = "";
+    const toggleControlsContainer = document.createElement("div");
+    toggleControlsContainer.className = zoomControlsContainer.className;
+    toggleControlsContainer.dir = "";
 
-    const onionControlsGroup = document.createElement("div");
-    onionControlsGroup.className = zoomControlsContainer.firstChild.className;
+    const toggleControlsGroup = document.createElement("div");
+    toggleControlsGroup.className = zoomControlsContainer.firstChild.className;
 
-    onionButton = document.createElement("span");
-    onionButton.className = zoomControlsContainer.firstChild.firstChild.className;
-    onionButton.classList.add("sa-onion-button");
-    onionButton.dataset.enabled = settings.enabled;
-    onionButton.setAttribute("role", "button");
-    onionButton.addEventListener("click", () => setEnabled(!settings.enabled));
-    onionButton.title = msg("onion");
+    toggleButton = document.createElement("span");
+    toggleButton.className = zoomControlsContainer.firstChild.firstChild.className;
+    toggleButton.classList.add("sa-onion-button");
+    toggleButton.dataset.enabled = settings.enabled;
+    toggleButton.setAttribute("role", "button");
+    toggleButton.addEventListener("click", () => setEnabled(!settings.enabled));
+    toggleButton.title = msg("toggle");
 
-    const onionImage = document.createElement("img");
-    onionImage.className = zoomControlsContainer.firstChild.firstChild.firstChild.className;
-    onionImage.draggable = false;
-    onionImage.alt = msg("onion");
-    onionImage.src = addon.self.dir + "/onion.svg";
+    const toggleImage = document.createElement("img");
+    toggleImage.className = zoomControlsContainer.firstChild.firstChild.firstChild.className;
+    toggleImage.draggable = false;
+    toggleImage.alt = msg("toggle");
+    toggleImage.src = addon.self.dir + "/toggle.svg";
 
     const settingButton = document.createElement("span");
-    settingButton.className = onionButton.className;
+    settingButton.className = toggleButton.className;
     settingButton.setAttribute("role", "button");
     settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
     settingButton.title = msg("settings");
 
     const settingImage = document.createElement("img");
-    settingImage.className = onionImage.className;
+    settingImage.className = toggleImage.className;
     settingImage.draggable = false;
     settingImage.alt = msg("settings");
     settingImage.src = addon.self.dir + "/settings.svg";
 
-    onionButton.appendChild(onionImage);
+    toggleButton.appendChild(toggleImage);
     settingButton.appendChild(settingImage);
-    onionControlsGroup.appendChild(onionButton);
-    onionControlsGroup.appendChild(settingButton);
-    onionControlsContainer.appendChild(onionControlsGroup);
-    controlsContainer.appendChild(onionControlsContainer);
+    toggleControlsGroup.appendChild(toggleButton);
+    toggleControlsGroup.appendChild(settingButton);
+    toggleControlsContainer.appendChild(toggleControlsGroup);
+    controlsContainer.appendChild(toggleControlsContainer);
     controlsContainer.appendChild(zoomControlsContainer);
     canvasControls.appendChild(controlsContainer);
 
