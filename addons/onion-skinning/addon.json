@@ -14,7 +14,7 @@
   ],
   "userstyles": [
     {
-      "url": "userscript.css",
+      "url": "style.css",
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],

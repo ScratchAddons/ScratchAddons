@@ -37,6 +37,18 @@
   left: 24px;
 }
 
+.sa-onion-settings-tip {
+  position: absolute;
+  bottom: 0;
+  transform: translateY(100%);
+  right: 100px;
+}
+
+.sa-onion-settings-polygon {
+  fill: white;
+  stroke: #ddd;
+}
+
 .sa-onion-settings-group {
   display: flex;
   justify-content: flex-end;

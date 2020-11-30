@@ -511,12 +511,22 @@ export default async function ({ addon, global, console, msg }) {
       opacityContainer.appendChild(input);
     }
 
+    const settingsTip = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    settingsTip.setAttribute("class", "sa-onion-settings-tip");
+    settingsTip.setAttribute("width", "14");
+    settingsTip.setAttribute("height", "7");
+    const settingsTipShape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    settingsTipShape.setAttribute("class", "sa-onion-settings-polygon");
+    settingsTipShape.setAttribute("points", "0,0 7,7, 14,0");
+    settingsTip.appendChild(settingsTipShape);
+
     previousContainer.appendChild(previousInput);
     nextContainer.appendChild(nextInput);
     settingsPage.appendChild(settingsHeader);
     settingsPage.appendChild(previousContainer);
     settingsPage.appendChild(nextContainer);
     settingsPage.appendChild(opacityContainer);
+    settingsPage.appendChild(settingsTip);
     canvasContainer.appendChild(settingsPage);
   };
 
