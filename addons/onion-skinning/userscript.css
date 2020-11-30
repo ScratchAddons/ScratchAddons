@@ -26,6 +26,7 @@
 .sa-onion-settings-group {
   display: flex;
   justify-content: flex-end;
+  align-items: baseline;
 }
 
 .sa-onion-settings-header {
