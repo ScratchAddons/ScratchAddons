@@ -1,3 +1,7 @@
+// TODO: when next and previous === 0, disable
+// TODO: when enabled if next and previous === 0, set previous = 1
+// TODO: don't recreate our DOM each time
+
 export default async function ({ addon, global, console, msg }) {
   let project = null;
   let paperCanvas = null;
@@ -439,13 +443,9 @@ export default async function ({ addon, global, console, msg }) {
 
     const setSettingsOpen = (open) => {
       settingButton.dataset.enabled = open;
-      if (open) {
-        canvasContainer.appendChild(settingsPage);
-      } else {
-        settingsPage.parentNode.removeChild(settingsPage);
-      }
+      settingsPage.dataset.visible = open;
     };
-    const areSettingsOpen = () => !!settingsPage.parentNode;
+    const areSettingsOpen = () => settingsPage.dataset.visible === "true";
 
     const settingsHeader = document.createElement("div");
     settingsHeader.className = "sa-onion-settings-header";
@@ -517,6 +517,7 @@ export default async function ({ addon, global, console, msg }) {
     settingsPage.appendChild(previousContainer);
     settingsPage.appendChild(nextContainer);
     settingsPage.appendChild(opacityContainer);
+    canvasContainer.appendChild(settingsPage);
   };
 
   const controlsLoop = async () => {
