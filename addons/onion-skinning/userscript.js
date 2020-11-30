@@ -1,5 +1,4 @@
 // TODO: when enabled if next and previous === 0, set previous = 1
-// TODO: don't recreate our DOM each time
 
 export default async function ({ addon, global, console, msg }) {
   let project = null;
@@ -389,180 +388,184 @@ export default async function ({ addon, global, console, msg }) {
     });
   };
 
-  const createControls = (canvasControls) => {
-    const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
-    const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
-
-    const groupClass = zoomControlsContainer.firstChild.className;
-    const buttonClass = zoomControlsContainer.firstChild.firstChild.className;
-    const imageClass = zoomControlsContainer.firstChild.firstChild.firstChild.className;
-
-    const createGroup = () => {
-      const el = document.createElement("div");
-      el.className = groupClass;
-      return el;
-    };
-
-    const createButton = () => {
-      const el = document.createElement("span");
-      el.className = buttonClass;
-      el.classList.add("sa-onion-button");
-      el.setAttribute("role", "button");
-      return el;
-    };
-
-    const createButtonImage = () => {
-      const el = document.createElement("img");
-      el.classList = imageClass;
-      el.draggable = false;
-      return el;
-    };
-
-    // Buttons
-
-    const controlsContainer = document.createElement("div");
-    controlsContainer.className = "sa-onion-group-container";
-    controlsContainer.dir = "";
-
-    const toggleControlsContainer = document.createElement("div");
-    toggleControlsContainer.className = zoomControlsContainer.className;
-    toggleControlsContainer.dir = "";
-
-    const toggleControlsGroup = createGroup();
-    toggleButton = createButton();
-    toggleButton.dataset.enabled = settings.enabled;
-    toggleButton.addEventListener("click", () => setEnabled(!settings.enabled));
-    toggleButton.title = msg("toggle");
-    const toggleImage = createButtonImage();
-    toggleImage.alt = msg("toggle");
-    toggleImage.src = addon.self.dir + "/toggle.svg";
-    toggleButton.appendChild(toggleImage);
-    toggleControlsGroup.appendChild(toggleButton);
-
-    const settingButton = createButton();
-    settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
-    settingButton.title = msg("settings");
-    const settingImage = createButtonImage();
-    settingImage.alt = msg("settings");
-    settingImage.src = addon.self.dir + "/settings.svg";
-    settingButton.appendChild(settingImage);
-    toggleControlsGroup.appendChild(settingButton);
-
-    toggleControlsContainer.appendChild(toggleControlsGroup);
-    controlsContainer.appendChild(toggleControlsContainer);
-    controlsContainer.appendChild(zoomControlsContainer);
-    canvasControls.appendChild(controlsContainer);
-
-    // Settings
-
-    const settingsPage = document.createElement("div");
-    settingsPage.classList.add("sa-onion-settings");
-
-    const setSettingsOpen = (open) => {
-      settingButton.dataset.enabled = open;
-      settingsPage.dataset.visible = open;
-    };
-    const areSettingsOpen = () => settingsPage.dataset.visible === "true";
-
-    const settingsTip = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    settingsTip.setAttribute("class", "sa-onion-settings-tip");
-    settingsTip.setAttribute("width", "14");
-    settingsTip.setAttribute("height", "7");
-    const settingsTipShape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-    settingsTipShape.setAttribute("class", "sa-onion-settings-polygon");
-    settingsTipShape.setAttribute("points", "0,0 7,7, 14,0");
-    settingsTip.appendChild(settingsTipShape);
-
-    for (const type of ["previous", "next"]) {
-      const container = document.createElement("div");
-      container.className = "sa-onion-settings-group";
-
-      const label = document.createElement("div");
-      label.textContent = msg(type);
-      container.appendChild(label);
-
-      const group = createGroup();
-
-      const decrement = createButton();
-      const decrementImage = createButtonImage();
-      decrementImage.src = addon.self.dir + "/decrement.svg";
-      decrement.appendChild(decrementImage);
-      group.appendChild(decrement);
-
-      const MIN = 0;
-      const MAX = 9; // TODO: compute based on settings
-
-      const current = createButton();
-      const currentInput = document.createElement("input");
-      currentInput.className = "sa-onion-settings-input";
-      currentInput.min = MIN;
-      currentInput.max = MAX;
-      currentInput.step = "1";
-      currentInput.type = "number";
-      currentInput.value = settings[type];
-      currentInput.addEventListener("input", (e) => {
-        if (currentInput.value.length === 0) {
-          settings[type] = 0;
-          settingsChanged();
-          return;
-        }
-        let value = +currentInput.value;
-        if (value > MAX) {
-          value = MAX;
-        } else if (value < MIN) {
-          value = MIN;
-        }
-        currentInput.value = value;
-        settings[type] = value;
-        settingsChanged();
-      });
-      currentInput.addEventListener("blur", () => {
-        if (!currentInput.value) {
-          currentInput.value = "0";
-        }
-      });
-      current.addEventListener("click", (e) => {
-        currentInput.focus();
-      });
-      current.appendChild(currentInput);
-      group.appendChild(current);
-
-      const increment = createButton();
-      const incrementImage = createButtonImage();
-      incrementImage.src = addon.self.dir + "/increment.svg";
-      increment.appendChild(incrementImage);
-      group.appendChild(increment);
-
-      decrement.addEventListener("click", () => {
-        if (settings[type] > MIN) {
-          settings[type]--;
-          currentInput.value = settings[type];
-          settingsChanged();
-        }
-      });
-      increment.addEventListener("click", () => {
-        if (settings[type] < MAX) {
-          settings[type]++;
-          currentInput.value = settings[type];
-          settingsChanged();
-        }
-      });
-
-      container.appendChild(group);
-      settingsPage.appendChild(container);
-    }
-
-    settingsPage.appendChild(settingsTip);
-    canvasContainer.appendChild(settingsPage);
+  const createGroup = () => {
+    const el = document.createElement("div");
+    el.className = "sa-onion-group";
+    return el;
   };
 
+  const createButton = () => {
+    const el = document.createElement("span");
+    el.className = "sa-onion-button";
+    el.setAttribute("role", "button");
+    return el;
+  };
+
+  const createButtonImage = () => {
+    const el = document.createElement("img");
+    el.className = "sa-onion-image";
+    el.draggable = false;
+    return el;
+  };
+
+  const paintEditorControlsContainer = document.createElement("div");
+  paintEditorControlsContainer.className = "sa-onion-controls-container";
+  paintEditorControlsContainer.dir = "";
+
+  const toggleControlsGroup = createGroup();
+  toggleButton = createButton();
+  toggleButton.dataset.enabled = settings.enabled;
+  toggleButton.addEventListener("click", () => setEnabled(!settings.enabled));
+  toggleButton.title = msg("toggle");
+  const toggleImage = createButtonImage();
+  toggleImage.alt = msg("toggle");
+  toggleImage.src = addon.self.dir + "/toggle.svg";
+  toggleButton.appendChild(toggleImage);
+  toggleControlsGroup.appendChild(toggleButton);
+
+  const settingButton = createButton();
+  settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
+  settingButton.title = msg("settings");
+  const settingImage = createButtonImage();
+  settingImage.alt = msg("settings");
+  settingImage.src = addon.self.dir + "/settings.svg";
+  settingButton.appendChild(settingImage);
+  toggleControlsGroup.appendChild(settingButton);
+
+  paintEditorControlsContainer.appendChild(toggleControlsGroup);
+
+  const settingsPage = document.createElement("div");
+  settingsPage.classList.add("sa-onion-settings");
+
+  const setSettingsOpen = (open) => {
+    settingButton.dataset.enabled = open;
+    settingsPage.dataset.visible = open;
+  };
+  const areSettingsOpen = () => settingsPage.dataset.visible === "true";
+
+  const settingsTip = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  settingsTip.setAttribute("class", "sa-onion-settings-tip");
+  settingsTip.setAttribute("width", "14");
+  settingsTip.setAttribute("height", "7");
+  const settingsTipShape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+  settingsTipShape.setAttribute("class", "sa-onion-settings-polygon");
+  settingsTipShape.setAttribute("points", "0,0 7,7, 14,0");
+  settingsTip.appendChild(settingsTipShape);
+
+  for (const type of ["previous", "next"]) {
+    const container = document.createElement("div");
+    container.className = "sa-onion-settings-group";
+
+    const label = document.createElement("div");
+    label.textContent = msg(type);
+    container.appendChild(label);
+
+    const group = createGroup();
+
+    const decrement = createButton();
+    const decrementImage = createButtonImage();
+    decrementImage.src = addon.self.dir + "/decrement.svg";
+    decrement.appendChild(decrementImage);
+    group.appendChild(decrement);
+
+    const MIN = 0;
+    const MAX = 9; // TODO: compute based on settings
+
+    const current = createButton();
+    const currentInput = document.createElement("input");
+    currentInput.className = "sa-onion-settings-input";
+    currentInput.min = MIN;
+    currentInput.max = MAX;
+    currentInput.step = "1";
+    currentInput.type = "number";
+    currentInput.value = settings[type];
+    currentInput.addEventListener("input", (e) => {
+      if (currentInput.value.length === 0) {
+        settings[type] = 0;
+        settingsChanged();
+        return;
+      }
+      let value = +currentInput.value;
+      if (value > MAX) {
+        value = MAX;
+      } else if (value < MIN) {
+        value = MIN;
+      }
+      currentInput.value = value;
+      settings[type] = value;
+      settingsChanged();
+    });
+    currentInput.addEventListener("blur", () => {
+      if (!currentInput.value) {
+        currentInput.value = "0";
+      }
+    });
+    current.addEventListener("click", (e) => {
+      currentInput.focus();
+    });
+    current.appendChild(currentInput);
+    group.appendChild(current);
+
+    const increment = createButton();
+    const incrementImage = createButtonImage();
+    incrementImage.src = addon.self.dir + "/increment.svg";
+    increment.appendChild(incrementImage);
+    group.appendChild(increment);
+
+    decrement.addEventListener("click", () => {
+      if (settings[type] > MIN) {
+        settings[type]--;
+        currentInput.value = settings[type];
+        settingsChanged();
+      }
+    });
+    increment.addEventListener("click", () => {
+      if (settings[type] < MAX) {
+        settings[type]++;
+        currentInput.value = settings[type];
+        settingsChanged();
+      }
+    });
+
+    container.appendChild(group);
+    settingsPage.appendChild(container);
+  }
+
+  settingsPage.appendChild(settingsTip);
+
   const controlsLoop = async () => {
+    let fixedClassNames = false;
     while (true) {
       const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
         markAsSeen: true,
       });
+      const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
+      const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
 
-      createControls(canvasControls);
+      const oldZoomControlsContainer = paintEditorControlsContainer.querySelector("[class^='paint-editor_zoom-controls']");
+      if (oldZoomControlsContainer) {
+        oldZoomControlsContainer.parentNode.removeChild(oldZoomControlsContainer);
+      }
+
+      paintEditorControlsContainer.appendChild(zoomControlsContainer);
+      canvasControls.appendChild(paintEditorControlsContainer);
+      canvasContainer.appendChild(settingsPage);
+
+      if (!fixedClassNames) {
+        fixedClassNames = true;
+        const groupClass = zoomControlsContainer.firstChild.className;
+        const buttonClass = zoomControlsContainer.firstChild.firstChild.className;
+        const imageClass = zoomControlsContainer.firstChild.firstChild.firstChild.className;
+        for (const el of document.querySelectorAll(".sa-onion-group")) {
+          el.className += ' ' + groupClass;
+        }
+        for (const el of document.querySelectorAll(".sa-onion-button")) {
+          el.className += ' ' + buttonClass;
+        }
+        for (const el of document.querySelectorAll(".sa-onion-image")) {
+          el.className += ' ' + imageClass;
+        }
+      }
     }
   };
 
