@@ -41,6 +41,7 @@
   position: absolute;
   bottom: 0;
   transform: translateY(100%);
+  /* TODO: RTL? */
   right: 100px;
 }
 
@@ -55,14 +56,13 @@
   align-items: baseline;
 }
 
-.sa-onion-settings-header {
-  text-align: center;
-  font-weight: bold;
-}
-
-.sa-onion-settings input[type="number"] {
-  width: 40px;
+.sa-onion-settings-input {
+  width: 20px;
+  height: 100%;
   box-sizing: border-box;
+  text-align: center;
+  border: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
 }
-
-/* TODO: more clear indication of valid/invalid inputs */
