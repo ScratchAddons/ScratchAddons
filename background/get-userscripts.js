@@ -1,6 +1,6 @@
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request === "sendContentScriptInfo") {
-    chrome.tabs.sendMessage(sender.tab.id, "getInitialUrl", {frameId: sender.tab.frameId}, async (res) => {
+    chrome.tabs.sendMessage(sender.tab.id, "getInitialUrl", { frameId: sender.tab.frameId }, async (res) => {
       if (res) {
         chrome.tabs.sendMessage(sender.tab.id, { contentScriptInfo: await getContentScriptInfo(res) });
       }
@@ -92,7 +92,7 @@ chrome.webRequest.onBeforeRequest.addListener(
       try {
         await new Promise((resolve, reject) => {
           // Message the main frame of the tab, if we get a response, it's scratch.mit.edu
-          chrome.tabs.sendMessage(request.tabId, "getInitialUrl", {frameId: 0}, (res) => {
+          chrome.tabs.sendMessage(request.tabId, "getInitialUrl", { frameId: 0 }, (res) => {
             if (res) resolve();
           });
           setTimeout(reject, 500);
@@ -120,7 +120,7 @@ chrome.webRequest.onBeforeRequest.addListener(
 
     let timesSent = 0;
     const interval = setInterval(() => {
-      chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, {frameId: request.frameId}, (res) => {
+      chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, { frameId: request.frameId }, (res) => {
         if (res) removeInterval(`${request.tabId},${request.frameId}`, interval, messageListener);
       });
       timesSent++;
@@ -128,7 +128,11 @@ chrome.webRequest.onBeforeRequest.addListener(
     }, 100);
 
     messageListener = (request, sender, sendResponse) => {
-      if (request === "ready" && sender.tab.id === request.tabId && sender.tab.frameId === requestAnimationFrame.frameId) {
+      if (
+        request === "ready" &&
+        sender.tab.id === request.tabId &&
+        sender.tab.frameId === requestAnimationFrame.frameId
+      ) {
         chrome.tabs.sendMessage(
           request.tabId,
           { contentScriptInfo: data },
@@ -159,9 +163,13 @@ scratchAddons.localEvents.addEventListener("themesUpdated", () => {
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(tab.id, "getInitialUrl", {frameId: 0}, async (res) => {
+        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
           if (res) {
-            chrome.tabs.sendMessage(tab.id, { themesUpdated: (await getContentScriptInfo(res)).themes }, {frameId: 0});
+            chrome.tabs.sendMessage(
+              tab.id,
+              { themesUpdated: (await getContentScriptInfo(res)).themes },
+              { frameId: 0 }
+            );
           }
         });
       }
