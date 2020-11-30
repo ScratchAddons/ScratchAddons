@@ -1,9 +1,8 @@
-// TODO: when enabled if next and previous === 0, set previous = 1
+// TODO: improve inputs using keydown
 
 export default async function ({ addon, global, console, msg }) {
   let project = null;
   let paperCanvas = null;
-  let toggleButton = null;
   const storedOnionLayers = [];
   const PaperConstants = {
     Raster: null,
@@ -330,6 +329,10 @@ export default async function ({ addon, global, console, msg }) {
     }
     settings.enabled = _enabled;
     if (settings.enabled) {
+      if (settings.next === 0 && settings.previous === 0) {
+        settings.previous = 1;
+        layerInputs.previous.value = 1;
+      }
       updateOnionLayers();
     } else {
       removeOnionLayers();
@@ -408,12 +411,17 @@ export default async function ({ addon, global, console, msg }) {
     return el;
   };
 
+  //
+  // Controls below editor
+  //
+
   const paintEditorControlsContainer = document.createElement("div");
   paintEditorControlsContainer.className = "sa-onion-controls-container";
   paintEditorControlsContainer.dir = "";
 
   const toggleControlsGroup = createGroup();
-  toggleButton = createButton();
+
+  const toggleButton = createButton();
   toggleButton.dataset.enabled = settings.enabled;
   toggleButton.addEventListener("click", () => setEnabled(!settings.enabled));
   toggleButton.title = msg("toggle");
@@ -434,8 +442,12 @@ export default async function ({ addon, global, console, msg }) {
 
   paintEditorControlsContainer.appendChild(toggleControlsGroup);
 
+  //
+  // Settings page
+  //
+
   const settingsPage = document.createElement("div");
-  settingsPage.classList.add("sa-onion-settings");
+  settingsPage.className = "sa-onion-settings";
 
   const setSettingsOpen = (open) => {
     settingButton.dataset.enabled = open;
@@ -452,30 +464,24 @@ export default async function ({ addon, global, console, msg }) {
   settingsTipShape.setAttribute("points", "0,0 7,7, 14,0");
   settingsTip.appendChild(settingsTipShape);
 
+  const layerInputs = {};
   for (const type of ["previous", "next"]) {
     const container = document.createElement("div");
-    container.className = "sa-onion-settings-group";
+    container.className = "sa-onion-settings-line";
 
     const label = document.createElement("div");
+    label.className = "sa-onion-settings-label";
     label.textContent = msg(type);
     container.appendChild(label);
 
     const group = createGroup();
 
-    const decrement = createButton();
-    const decrementImage = createButtonImage();
-    decrementImage.src = addon.self.dir + "/decrement.svg";
-    decrement.appendChild(decrementImage);
-    group.appendChild(decrement);
-
-    const MIN = 0;
-    const MAX = 9; // TODO: compute based on settings
-
-    const current = createButton();
+    const currentButton = createButton();
     const currentInput = document.createElement("input");
+    layerInputs[type] = currentInput;
     currentInput.className = "sa-onion-settings-input";
-    currentInput.min = MIN;
-    currentInput.max = MAX;
+    currentInput.min = "0";
+    currentInput.max = "9"; // TODO: compute based on settings
     currentInput.step = "1";
     currentInput.type = "number";
     currentInput.value = settings[type];
@@ -486,10 +492,10 @@ export default async function ({ addon, global, console, msg }) {
         return;
       }
       let value = +currentInput.value;
-      if (value > MAX) {
-        value = MAX;
-      } else if (value < MIN) {
-        value = MIN;
+      if (value > +currentInput.max) {
+        value = +currentInput.max;
+      } else if (value < 0) {
+        value = 0;
       }
       currentInput.value = value;
       settings[type] = value;
@@ -500,33 +506,38 @@ export default async function ({ addon, global, console, msg }) {
         currentInput.value = "0";
       }
     });
-    current.addEventListener("click", (e) => {
+    currentButton.addEventListener("click", (e) => {
       currentInput.focus();
     });
-    current.appendChild(currentInput);
-    group.appendChild(current);
+    currentButton.appendChild(currentInput);
 
-    const increment = createButton();
-    const incrementImage = createButtonImage();
-    incrementImage.src = addon.self.dir + "/increment.svg";
-    increment.appendChild(incrementImage);
-    group.appendChild(increment);
-
-    decrement.addEventListener("click", () => {
-      if (settings[type] > MIN) {
+    const decrementButton = createButton();
+    const decrementImage = createButtonImage();
+    decrementImage.src = addon.self.dir + "/decrement.svg";
+    decrementButton.appendChild(decrementImage);
+    decrementButton.addEventListener("click", () => {
+      if (settings[type] > 0) {
         settings[type]--;
         currentInput.value = settings[type];
         settingsChanged();
       }
     });
-    increment.addEventListener("click", () => {
-      if (settings[type] < MAX) {
+
+    const incrementButton = createButton();
+    const incrementImage = createButtonImage();
+    incrementImage.src = addon.self.dir + "/increment.svg";
+    incrementButton.appendChild(incrementImage);
+    incrementButton.addEventListener("click", () => {
+      if (settings[type] < +currentInput.max) {
         settings[type]++;
         currentInput.value = settings[type];
         settingsChanged();
       }
     });
 
+    group.appendChild(decrementButton);
+    group.appendChild(currentButton);
+    group.appendChild(incrementButton);
     container.appendChild(group);
     settingsPage.appendChild(container);
   }

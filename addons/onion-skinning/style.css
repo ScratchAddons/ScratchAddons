@@ -46,7 +46,7 @@
   bottom: 0;
   transform: translateY(100%);
   /* TODO: RTL? */
-  right: 100px;
+  right: 93px;
 }
 
 .sa-onion-settings-polygon {
@@ -54,7 +54,7 @@
   stroke: #ddd;
 }
 
-.sa-onion-settings-group {
+.sa-onion-settings-line {
   display: flex;
   justify-content: flex-end;
   align-items: baseline;
