@@ -526,14 +526,14 @@ export default async function ({ addon, global, console, msg }) {
       group.appendChild(increment);
 
       decrement.addEventListener("click", () => {
-        if (settings[type] > currentInput.min) {
+        if (settings[type] > MIN) {
           settings[type]--;
           currentInput.value = settings[type];
           settingsChanged();
         }
       });
       increment.addEventListener("click", () => {
-        if (settings[type] < currentInput.max) {
+        if (settings[type] < MAX) {
           settings[type]++;
           currentInput.value = settings[type];
           settingsChanged();
