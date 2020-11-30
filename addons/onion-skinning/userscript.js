@@ -1,4 +1,3 @@
-// TODO: when next and previous === 0, disable
 // TODO: when enabled if next and previous === 0, set previous = 1
 // TODO: don't recreate our DOM each time
 
@@ -341,7 +340,13 @@ export default async function ({ addon, global, console, msg }) {
 
   const settingsChanged = () => {
     if (settings.enabled) {
+      if (settings.previous === 0 && settings.next === 0) {
+        setEnabled(false);
+        return;
+      }
       updateOnionLayers();
+    } else if (settings.previous > 0 || settings.next > 0) {
+      setEnabled(true);
     }
   };
 
