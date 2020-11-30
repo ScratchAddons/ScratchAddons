@@ -340,18 +340,6 @@ export default async function ({ addon, global, console, msg }) {
     toggleButton.dataset.enabled = settings.enabled;
   };
 
-  const settingsChanged = () => {
-    if (settings.enabled) {
-      if (settings.previous === 0 && settings.next === 0) {
-        setEnabled(false);
-        return;
-      }
-      updateOnionLayers();
-    } else if (settings.previous > 0 || settings.next > 0) {
-      setEnabled(true);
-    }
-  };
-
   const installPrototypeHacks = () => {
     // https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Project.js#L64-L65
     Object.defineProperty(Object.prototype, "_view", {
@@ -389,6 +377,19 @@ export default async function ({ addon, global, console, msg }) {
         }
       },
     });
+  };
+
+  const settingsChanged = () => {
+    updateInputMinMax();
+    if (settings.enabled) {
+      if (settings.previous === 0 && settings.next === 0) {
+        setEnabled(false);
+        return;
+      }
+      updateOnionLayers();
+    } else if (settings.previous > 0 || settings.next > 0) {
+      setEnabled(true);
+    }
   };
 
   const createGroup = () => {
@@ -463,9 +464,10 @@ export default async function ({ addon, global, console, msg }) {
   settingsTipShape.setAttribute("class", "sa-onion-settings-polygon");
   settingsTipShape.setAttribute("points", "0,0 7,7, 14,0");
   settingsTip.appendChild(settingsTipShape);
+  settingsPage.appendChild(settingsTip);
 
   const layerInputs = {};
-  for (const type of ["previous", "next"]) {
+  for (const type of ["previous", "next", "opacity", "opacityStep"]) {
     const container = document.createElement("div");
     container.className = "sa-onion-settings-line";
 
@@ -475,15 +477,19 @@ export default async function ({ addon, global, console, msg }) {
     container.appendChild(label);
 
     const group = createGroup();
-
     const currentButton = createButton();
+
+    const filler = document.createElement("div");
+    filler.style.width = "20px";
+    currentButton.appendChild(filler);
+
     const currentInput = document.createElement("input");
     layerInputs[type] = currentInput;
     currentInput.className = "sa-onion-settings-input";
-    currentInput.min = "0";
-    currentInput.max = "9"; // TODO: compute based on settings
-    currentInput.step = "1";
     currentInput.type = "number";
+    currentInput.step = "1";
+    currentInput.min = "0";
+    currentInput.max = "100"; // TODO
     currentInput.value = settings[type];
     currentInput.addEventListener("input", (e) => {
       if (currentInput.value.length === 0) {
@@ -505,9 +511,6 @@ export default async function ({ addon, global, console, msg }) {
       if (!currentInput.value) {
         currentInput.value = "0";
       }
-    });
-    currentButton.addEventListener("click", (e) => {
-      currentInput.focus();
     });
     currentButton.appendChild(currentInput);
 
@@ -542,7 +545,13 @@ export default async function ({ addon, global, console, msg }) {
     settingsPage.appendChild(container);
   }
 
-  settingsPage.appendChild(settingsTip);
+  const updateInputMinMax = () => {
+    const maxLayers = Math.ceil(settings.opacity / settings.opacityStep);
+    layerInputs.previous.max = maxLayers;
+    layerInputs.next.max = maxLayers;
+  };
+
+  updateInputMinMax();
 
   const controlsLoop = async () => {
     let fixedClassNames = false;
@@ -553,7 +562,9 @@ export default async function ({ addon, global, console, msg }) {
       const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
       const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
 
-      const oldZoomControlsContainer = paintEditorControlsContainer.querySelector("[class^='paint-editor_zoom-controls']");
+      const oldZoomControlsContainer = paintEditorControlsContainer.querySelector(
+        "[class^='paint-editor_zoom-controls']"
+      );
       if (oldZoomControlsContainer) {
         oldZoomControlsContainer.parentNode.removeChild(oldZoomControlsContainer);
       }
@@ -568,13 +579,13 @@ export default async function ({ addon, global, console, msg }) {
         const buttonClass = zoomControlsContainer.firstChild.firstChild.className;
         const imageClass = zoomControlsContainer.firstChild.firstChild.firstChild.className;
         for (const el of document.querySelectorAll(".sa-onion-group")) {
-          el.className += ' ' + groupClass;
+          el.className += " " + groupClass;
         }
         for (const el of document.querySelectorAll(".sa-onion-button")) {
-          el.className += ' ' + buttonClass;
+          el.className += " " + buttonClass;
         }
         for (const el of document.querySelectorAll(".sa-onion-image")) {
-          el.className += ' ' + imageClass;
+          el.className += " " + imageClass;
         }
       }
     }
