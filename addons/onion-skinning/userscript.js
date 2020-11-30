@@ -17,7 +17,8 @@ export default async function ({ addon, global, console, msg }) {
     enabled: addon.settings.get("default"),
     previous: +addon.settings.get("previous"),
     next: +addon.settings.get("next"),
-    opacityLevels: [+addon.settings.get("opacity0"), +addon.settings.get("opacity1"), +addon.settings.get("opacity2")],
+    opacity: +addon.settings.get("opacity"),
+    opacityStep: +addon.settings.get("opacityStep"),
   };
 
   const foundPaper = (_project) => {
@@ -291,16 +292,15 @@ export default async function ({ addon, global, console, msg }) {
           continue;
         }
 
-        const distanceFromSelected = Math.abs(i - selectedCostumeIndex) - 1;
-        const opacity = settings.opacityLevels[distanceFromSelected] / 100;
+        const distance = Math.abs(i - selectedCostumeIndex) - 1;
+        const opacity = settings.opacity - settings.opacityStep * distance;
 
-        if (!opacity) {
-          // Do not make a layer at all if opacity is 0 or somehow undefined.
+        if (opacity <= 0) {
           continue;
         }
 
         const layer = createOnionLayer();
-        layer.opacity = opacity;
+        layer.opacity = opacity / 100;
 
         // Creating a new layer will automatically activate it.
         // We do not want to steal activation as doing so causes corruption.
@@ -490,7 +490,7 @@ export default async function ({ addon, global, console, msg }) {
       group.appendChild(decrement);
 
       const MIN = 0;
-      const MAX = 3;
+      const MAX = 9; // TODO: compute based on settings
 
       const current = createButton();
       const currentInput = document.createElement("input");

@@ -38,28 +38,20 @@
       "default": 0
     },
     {
-      "id": "opacity0",
-      "name": "Default opacity 1 (%)",
+      "id": "opacity",
+      "name": "Opacity",
       "type": "integer",
       "min": 0,
       "max": 100,
       "default": 25
     },
     {
-      "id": "opacity1",
-      "name": "Default opacity 2 (%)",
+      "id": "opacityStep",
+      "name": "Opacity Step",
       "type": "integer",
       "min": 0,
       "max": 100,
-      "default": 15
-    },
-    {
-      "id": "opacity2",
-      "name": "Default opacity 3 (%)",
-      "type": "integer",
-      "min": 0,
-      "max": 100,
-      "default": 5
+      "default": 10
     }
   ],
   "tags": ["editor", "beta"],
