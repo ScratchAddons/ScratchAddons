@@ -58,18 +58,18 @@
        type="xygrid" />
   </sodipodi:namedview>
   <rect
-     y="10.134081"
-     x="2.5122766"
-     height="3.731838"
-     width="18.975447"
+     y="11.357635"
+     x="3.2497394"
+     height="1.2847281"
+     width="17.500521"
      id="rect849"
-     style="fill:#575e75;stroke-width:1.30394" />
+     style="fill:#575e75;stroke-width:0.734736" />
   <rect
      transform="rotate(90)"
-     style="fill:#575e75;stroke-width:1.30394"
-     id="rect1420"
-     width="18.975447"
-     height="3.731838"
-     x="2.5122766"
-     y="-13.865919" />
+     style="fill:#575e75;stroke-width:0.734736"
+     id="rect8"
+     width="17.500521"
+     height="1.2847281"
+     x="3.2497382"
+     y="-12.642364" />
 </svg>
