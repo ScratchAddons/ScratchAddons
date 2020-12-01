@@ -21,8 +21,14 @@
       "default": true
     },
     {
-      "name": "Show scroll for What I've been doing",
+      "name": "Show scroll for \"What I've been doing\"",
       "id": "whatworkingon",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show scroll for \"What's Happening?\"",
+      "id": "whathappen",
       "type": "boolean",
       "default": true
     }
@@ -30,7 +36,19 @@
   "userscripts": [
     {
       "url": "working.js",
-      "matches": ["https://scratch.mit.edu/users/*"]
+      "matches": ["https://scratch.mit.edu/users/*"],
+      "settingMatch": {
+        "id": "whatworkingon",
+        "value": true
+      }
+    },
+    {
+      "url": "happen.js",
+      "matches": ["https://scratch.mit.edu/"],
+      "settingMatch": {
+        "id": "whathappen",
+        "value": true
+      }
     }
   ],
   "userstyles": [
@@ -47,6 +65,14 @@
       "matches": ["https://scratch.mit.edu/users/*"],
       "settingMatch": {
         "id": "whatworkingon",
+        "value": true
+      }
+    },
+    {
+      "url": "happen.css",
+      "matches": ["https://scratch.mit.edu/"],
+      "settingMatch": {
+        "id": "whathappen",
         "value": true
       }
     }
