@@ -1,11 +1,17 @@
+try {
+  if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
+} catch {
+  throw "Scratch Addons: not first party iframe";
+}
+
 let initialUrl = location.href;
 let path = new URL(initialUrl).pathname.substring(1);
-if (path[path.length - 1] === "/") path += "/";
+if (path[path.length - 1] !== "/") path += "/";
 const pathArr = path.split("/");
 if (pathArr[0] === "scratch-addons-extension") {
   if (pathArr[1] === "settings") chrome.runtime.sendMessage("openSettingsOnThisTab");
 }
-if (path === "discuss/3/topic/add//") window.addEventListener("load", forumWarning);
+if (path === "discuss/3/topic/add/") window.addEventListener("load", forumWarning);
 
 let receivedContentScriptInfo = false;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
