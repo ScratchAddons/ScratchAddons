@@ -1,0 +1,12 @@
+.activity-ul {
+  overflow-y: scroll !important;
+  height: 300px;
+}
+
+.load-more-wh {
+  outline: none;
+}
+
+.load-more-wh-container {
+  text-align: center;
+}
