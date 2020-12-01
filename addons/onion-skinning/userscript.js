@@ -1,6 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   let project = null;
   let paperCanvas = null;
+  let expectingImport = false;
   const storedOnionLayers = [];
   const PaperConstants = {
     Raster: null,
@@ -91,6 +92,7 @@ export default async function ({ addon, global, console, msg }) {
     // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L124
     const originalImportImage = paperCanvas.importImage;
     paperCanvas.importImage = function (...args) {
+      expectingImport = true;
       removeOnionLayers();
       return originalImportImage.call(this, ...args);
     };
@@ -103,8 +105,11 @@ export default async function ({ addon, global, console, msg }) {
     paperCanvas.recalibrateSize = function (callback) {
       return originalRecalibrateSize.call(this, () => {
         if (callback) callback();
-        if (settings.enabled) {
-          updateOnionLayers();
+        if (expectingImport) {
+          expectingImport = false;
+          if (settings.enabled) {
+            updateOnionLayers();
+          }
         }
       });
     };
@@ -263,11 +268,9 @@ export default async function ({ addon, global, console, msg }) {
       return;
     }
 
-    // TODO: when the paint editor initially loads, this runs 3 times for some reason
-
     const selectedCostumeIndex = getSelectedCostumeIndex();
     if (selectedCostumeIndex === -1) {
-      throw new Error("Couldn't find selected costume");
+      return;
     }
 
     removeOnionLayers();
