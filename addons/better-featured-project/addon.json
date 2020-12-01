@@ -10,14 +10,20 @@
     "userscripts": [
         {
             "url": "userscript.js",
-            "matches": ["https://scratch.mit.edu/users/*"]
+            "matches": [
+                "https://scratch.mit.edu/users/*"
+            ]
         }
     ],
     "userstyles": [
         {
             "url": "userstyle.css",
-            "matches": ["https://scratch.mit.edu/users/*"]
+            "matches": [
+                "https://scratch.mit.edu/users/*"
+            ]
         }
     ],
-    "tags": ["community"]
+    "tags": [
+        "community"
+    ]
 }
