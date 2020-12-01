@@ -1,0 +1,117 @@
+#profile-data .box-head{
+    padding-top: 250px !important;
+    padding-bottom: 20px !important;
+    background: linear-gradient( rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.5)), var(--featured-thumb) !important;
+    background-size: cover !important;
+    background-position: center !important;
+    text-shadow: rgba(0,0,0,0.5) 0 0 10px;
+    border: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+#profile-data .box-head h2, #profile-data .box-head h3{
+    color: white;
+}
+#profile-data .box-head .profile-details{
+    color: white;
+}
+#profile-data .box-head .profile-details .group{
+    border-right-color: white;
+}
+#profile-data .box-head .profile-details .location{
+    display: block !important;
+}
+#profile-data .box-head .portrait img{
+    border: none;
+}
+#profile-data .box-head .buttons{
+    top: auto !important;
+    bottom: 26px !important;
+    right: 20px !important;
+}
+#better-featured-project-name{
+    color: white !important;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+#better-featured-project-overlay{
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+#profile-data .box-head .avatar [data-control="edit"]{
+    width: 100% !important;
+    height: calc(100% - 16px) !important;
+    padding: 0;
+    padding-top: 16px;
+    margin: 0;
+    text-align: center;
+    opacity: 1;
+    background-color: rgba(0,0,0,.5);
+    border-radius: 0;
+}
+#profile-data .box-head .avatar [data-control="edit"] input.hidden{
+    width: 100%;
+    height: 100%;
+}
+#profile-data .box-head .avatar img{
+    background-color: transparent;
+}
+#featured-project-modal .modal-footer::after{
+    content: var(--refresh-notice);
+}
+.user-content .player{
+    box-shadow: none !important;
+    border: none !important;
+}
+.user-content .player .stage #featured-project, .user-content .player .title, .user-content .player .featured-project-heading{
+    display: none !important;
+}
+#user-details{
+    width: 800px !important;
+}
+#user-details h3:nth-child(4){
+    position: absolute;
+    top: 0;
+    left: 340px;
+}
+#status, #status-readonly{
+    position: absolute;
+    top: 32px;
+    left: 340px;
+}
+#activity-feed .activity-stream{
+    height: 100px !important;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+#profile-box .inner{
+    height: 140px !important;
+}
+.doing{
+    height: 130px !important;
+    overflow: hidden;
+}
+.profile-details span{
+    display: inline !important;
+}
+.profile-details #better-follower-count{
+    border-left: 1px solid white;
+    margin-left: 5px;
+    padding-left: 5px;
+}
+#lfp-embed{
+    position: absolute;
+    bottom: 110px;
+    left: 290px;
+}
+#lfp-change-featured{
+    display: none !important;
+}

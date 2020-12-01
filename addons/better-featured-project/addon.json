@@ -1,0 +1,23 @@
+{
+    "name": "Profile page banner",
+    "description": "Makes your featured project into a nice-looking banner for your profile.",
+    "credits": [
+        {
+            "name": "Ezlambry",
+            "link": "https://ezlambry.github.io"
+        }
+    ],
+    "userscripts": [
+        {
+            "url": "userscript.js",
+            "matches": ["https://scratch.mit.edu/users/*"]
+        }
+    ],
+    "userstyles": [
+        {
+            "url": "userstyle.css",
+            "matches": ["https://scratch.mit.edu/users/*"]
+        }
+    ],
+    "tags": ["community"]
+}
