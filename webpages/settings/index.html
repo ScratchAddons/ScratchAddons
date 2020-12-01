@@ -115,7 +115,7 @@
                   <img v-if="addon._category === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
                   <img v-if="addon._category === 'community'" src="../../images/icons/web.svg" class="icon-type" />
                   <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
-                  {{ addon.name }}
+                  <span @click.ctrl="devShowAddonIds">{{ addon.name }}</span>
                 </div>
               </div>
               <div class="badge blue tooltip" v-if="addon._tags.recommended">
@@ -163,7 +163,9 @@
                 </span>
               </div>
               <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
-                <a href="./licenses.html?libraries={{ addon.libraries.join(',') }}">{{ msg("viewLicenses") }}</a>
+                <a target="_blank" href="./licenses.html?libraries={{ addon.libraries.join(',') }}"
+                  >{{ msg("viewLicenses") }}</a
+                >
               </div>
               <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
                 <div class="addon-setting" v-for="setting of addon.settings">
