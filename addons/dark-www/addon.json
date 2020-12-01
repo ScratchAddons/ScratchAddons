@@ -6,21 +6,9 @@
     {
       "name": "Maximouse (Experimental Dark)",
       "link": "https://github.com/mxmou/customize-scratch"
-    },
-    {
-      "name": "Ucrash (Dark WWW)",
-      "link": "https://github.com/gducrash"
     }
   ],
   "userstyles": [
-    {
-      "url": "dark-www.css",
-      "matches": ["https://scratch.mit.edu/*"],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "dark-www"
-      }
-    },
     {
       "url": "experimental_scratchwww.css",
       "matches": [
@@ -159,10 +147,6 @@
       "id": "selectedMode",
       "type": "select",
       "potentialValues": [
-        {
-          "id": "dark-www",
-          "name": "Dark WWW"
-        },
         {
           "id": "experimental-dark",
           "name": "Experimental Dark"
