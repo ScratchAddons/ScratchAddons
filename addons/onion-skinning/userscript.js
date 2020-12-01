@@ -1,5 +1,3 @@
-// TODO: improve inputs using keydown
-
 export default async function ({ addon, global, console, msg }) {
   let project = null;
   let paperCanvas = null;
@@ -380,7 +378,6 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const settingsChanged = () => {
-    updateInputMinMax();
     if (settings.enabled) {
       if (settings.previous === 0 && settings.next === 0) {
         setEnabled(false);
@@ -489,7 +486,7 @@ export default async function ({ addon, global, console, msg }) {
     currentInput.type = "number";
     currentInput.step = "1";
     currentInput.min = "0";
-    currentInput.max = "100"; // TODO
+    currentInput.max = "100";
     currentInput.value = settings[type];
     currentInput.addEventListener("input", (e) => {
       if (currentInput.value.length === 0) {
@@ -544,14 +541,6 @@ export default async function ({ addon, global, console, msg }) {
     container.appendChild(group);
     settingsPage.appendChild(container);
   }
-
-  const updateInputMinMax = () => {
-    const maxLayers = Math.ceil(settings.opacity / settings.opacityStep);
-    layerInputs.previous.max = maxLayers;
-    layerInputs.next.max = maxLayers;
-  };
-
-  updateInputMinMax();
 
   const controlsLoop = async () => {
     let fixedClassNames = false;

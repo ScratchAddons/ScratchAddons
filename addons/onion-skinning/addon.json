@@ -28,14 +28,18 @@
     {
       "id": "previous",
       "name": "Default previous costumes",
-      "type": "positive_integer",
-      "default": 1
+      "type": "integer",
+      "default": 1,
+      "min": 0,
+      "max": 100
     },
     {
       "id": "next",
       "name": "Default next costumes",
-      "type": "positive_integer",
-      "default": 0
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "max": 100
     },
     {
       "id": "opacity",
