@@ -1,10 +1,10 @@
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-p,
+body:not(.sa-body-editor),
+body:not(.sa-body-editor) h1,
+body:not(.sa-body-editor) h2,
+body:not(.sa-body-editor) h3,
+body:not(.sa-body-editor) h4,
+body:not(.sa-body-editor) h5,
+body:not(.sa-body-editor) p,
 .news li p,
 a.social-messages-profile-link,
 .outer .sort-mode .select select,
@@ -143,12 +143,6 @@ input[type="checkbox"].formik-checkbox,
 }
 .social-message-icon {
   opacity: 0.5;
-}
-.stage-header_stage-header-wrapper-overlay_5vfJa {
-  background: #333;
-}
-.stage_stage-wrapper-overlay_fmZuD {
-  background: #282828;
 }
 .intro-banner {
   background: transparent;
