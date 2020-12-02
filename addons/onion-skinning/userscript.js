@@ -2,6 +2,7 @@ export default async function ({ addon, global, console, msg }) {
   let project = null;
   let paperCanvas = null;
   let expectingImport = false;
+  let _maskingCanvas = null;
   const storedOnionLayers = [];
   const PaperConstants = {
     Raster: null,
@@ -16,6 +17,7 @@ export default async function ({ addon, global, console, msg }) {
     next: +addon.settings.get("next"),
     opacity: +addon.settings.get("opacity"),
     opacityStep: +addon.settings.get("opacityStep"),
+    mode: addon.settings.get("mode"),
   };
 
   const foundPaper = (_project) => {
@@ -155,7 +157,19 @@ export default async function ({ addon, global, console, msg }) {
     callback(item);
   };
 
-  const vectorLayer = (layer, costume, asset) =>
+  const getMaskingCanvas = (width, height) => {
+    if (_maskingCanvas) {
+      _maskingCanvas.width = width;
+      _maskingCanvas.height = height;
+      return _maskingCanvas;
+    }
+    _maskingCanvas = createCanvas(width, height);
+    return _maskingCanvas;
+  };
+
+  const getTint = (isBefore) => isBefore ? "red" : "blue";
+
+  const vectorLayer = (layer, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
       const { rotationCenterX, rotationCenterY } = costume;
       // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L196-L218
@@ -206,6 +220,18 @@ export default async function ({ addon, global, console, msg }) {
           });
           root.scale(2, new PaperConstants.Point(0, 0));
 
+          if (settings.mode === "tint") {
+            const color = getTint(isBefore);
+            recursePaperItem(root, (i) => {
+              if (i.strokeColor) {
+                i.strokeColor = color;
+              }
+              if (i.fillColor) {
+                i.fillColor = color;
+              }
+            });
+          }
+
           // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L277-L287
           if (typeof rotationCenterX !== "undefined" && typeof rotationCenterY !== "undefined") {
             let rotationPoint = new PaperConstants.Point(rotationCenterX, rotationCenterY);
@@ -223,7 +249,7 @@ export default async function ({ addon, global, console, msg }) {
       });
     });
 
-  const rasterLayer = (layer, costume, asset) =>
+  const rasterLayer = (layer, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
       let { rotationCenterX, rotationCenterY } = costume;
 
@@ -243,7 +269,19 @@ export default async function ({ addon, global, console, msg }) {
           rotationCenterY = image.height / 2;
         }
 
-        raster.drawImage(image, 480 - rotationCenterX, 360 - rotationCenterY);
+        if (settings.mode === "tint") {
+          const color = getTint(isBefore);
+          const maskingCanvas = getMaskingCanvas(image.width, image.height);
+          const maskingContext = maskingCanvas.getContext("2d");
+          maskingContext.fillStyle = color;
+          maskingContext.fillRect(0, 0, image.width, image.height);
+          maskingContext.globalCompositeOperation = "destination-in";
+          maskingContext.drawImage(image, 0, 0);
+          raster.drawImage(maskingCanvas, 480 - rotationCenterX, 360 - rotationCenterY);
+        } else {
+          raster.drawImage(image, 480 - rotationCenterX, 360 - rotationCenterY);
+        }
+
         resolve();
       };
       image.onerror = () => {
@@ -291,6 +329,7 @@ export default async function ({ addon, global, console, msg }) {
           continue;
         }
 
+        const isBefore = i < selectedCostumeIndex;
         const distance = Math.abs(i - selectedCostumeIndex) - 1;
         const opacity = settings.opacity - settings.opacityStep * distance;
 
@@ -309,9 +348,9 @@ export default async function ({ addon, global, console, msg }) {
         const onionAsset = vm.getCostume(i);
 
         if (onionCostume.dataFormat === "svg") {
-          await vectorLayer(layer, onionCostume, onionAsset);
+          await vectorLayer(layer, onionCostume, onionAsset, isBefore);
         } else if (onionCostume.dataFormat === "png" || onionCostume.dataFormat === "jpg") {
-          await rasterLayer(layer, onionCostume, onionAsset);
+          await rasterLayer(layer, onionCostume, onionAsset, isBefore);
         } else {
           throw new Error(`Unknown data format: ${onionCostume.dataFormat}`);
         }

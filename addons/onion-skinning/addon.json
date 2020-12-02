@@ -56,6 +56,22 @@
       "min": 0,
       "max": 100,
       "default": 10
+    },
+    {
+      "id": "mode",
+      "name": "Default mode",
+      "type": "select",
+      "default": "merge",
+      "potentialValues": [
+        {
+          "id": "merge",
+          "name": "Merge images"
+        },
+        {
+          "id": "tint",
+          "name": "Color tint"
+        }
+      ]
     }
   ],
   "tags": ["editor", "recommended"],
