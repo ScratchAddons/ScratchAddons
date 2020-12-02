@@ -20,7 +20,7 @@ export default async function ({ addon, global, console, msg }) {
     layering: addon.settings.get("layering"),
     mode: addon.settings.get("mode"),
     beforeTint: addon.settings.get("beforeTint"),
-    afterTint: addon.settings.get("afterTint")
+    afterTint: addon.settings.get("afterTint"),
   };
 
   const foundPaper = (_project) => {
@@ -192,7 +192,7 @@ export default async function ({ addon, global, console, msg }) {
     return _maskingCanvas;
   };
 
-  const getTint = (isBefore) => isBefore ? settings.beforeTint : settings.afterTint;
+  const getTint = (isBefore) => (isBefore ? settings.beforeTint : settings.afterTint);
 
   const vectorLayer = (layer, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
