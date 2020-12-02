@@ -58,6 +58,22 @@
       "default": 10
     },
     {
+      "id": "layering",
+      "name": "Default layering",
+      "type": "select",
+      "default": "front",
+      "potentialValues": [
+        {
+          "id": "front",
+          "name": "In front"
+        },
+        {
+          "id": "back",
+          "name": "Behind"
+        }
+      ]
+    },
+    {
       "id": "mode",
       "name": "Default mode",
       "type": "select",
@@ -74,13 +90,13 @@
       ]
     },
     {
-      "name": "Before Tint",
+      "name": "Default before tint",
       "id": "beforeTint",
       "type": "color",
       "default": "#FF0000"
     },
     {
-      "name": "After Tint",
+      "name": "Default after tint",
       "id": "afterTint",
       "type": "color",
       "default": "#0000FF"

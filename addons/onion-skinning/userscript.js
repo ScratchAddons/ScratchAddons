@@ -17,6 +17,7 @@ export default async function ({ addon, global, console, msg }) {
     next: +addon.settings.get("next"),
     opacity: +addon.settings.get("opacity"),
     opacityStep: +addon.settings.get("opacityStep"),
+    layering: addon.settings.get("layering"),
     mode: addon.settings.get("mode"),
     beforeTint: addon.settings.get("beforeTint"),
     afterTint: addon.settings.get("afterTint")
@@ -37,8 +38,8 @@ export default async function ({ addon, global, console, msg }) {
         let onion;
         while ((onion = storedOnionLayers.shift())) {
           originalAddLayer.call(this, onion);
-          onion.bringToFront();
         }
+        relayerOnionLayers();
       }
       return result;
     };
@@ -146,6 +147,25 @@ export default async function ({ addon, global, console, msg }) {
       const layer = layers[i];
       if (layer.data.sa_isOnionLayer) {
         layer.remove();
+      }
+    }
+  };
+
+  const relayerOnionLayers = () => {
+    if (!project) {
+      return;
+    }
+    const paintingLayer = project.layers.find((i) => i.data.isPaintingLayer);
+    if (!paintingLayer) {
+      return;
+    }
+    let index = settings.layering === "front" ? paintingLayer.index : paintingLayer.index - 1;
+    for (const layer of project.layers) {
+      if (layer.data.sa_isOnionLayer) {
+        if (settings.layering === "front") {
+          index++;
+        }
+        project.insertLayer(index, layer);
       }
     }
   };
@@ -341,6 +361,7 @@ export default async function ({ addon, global, console, msg }) {
 
         const layer = createOnionLayer();
         layer.opacity = opacity / 100;
+        relayerOnionLayers();
 
         // Creating a new layer will automatically activate it.
         // We do not want to steal activation as doing so causes corruption.
