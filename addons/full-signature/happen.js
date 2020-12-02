@@ -12,7 +12,6 @@ export default async function ({ addon, global, console, msg }) {
     let displayedFetch = [];
     loadMore.addEventListener("click", async function () {
       dataLoaded += 5;
-      console.log(Math.floor(dataLoaded / 40) * 40);
       if (dataLoaded > fetched.length) {
         await addon
           .fetch(
@@ -29,7 +28,6 @@ export default async function ({ addon, global, console, msg }) {
           });
       }
       displayedFetch = fetched.slice(0, dataLoaded);
-      console.log(displayedFetch);
       await addon.tab.redux.dispatch({ type: "SET_ROWS", rowType: "activity", rows: displayedFetch });
       document.querySelector(".activity-ul").appendChild(container);
       if (dataLoaded > fetched.length) container.remove();
