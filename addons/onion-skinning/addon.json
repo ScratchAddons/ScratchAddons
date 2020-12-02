@@ -72,6 +72,18 @@
           "name": "Color tint"
         }
       ]
+    },
+    {
+      "name": "Before Tint",
+      "id": "beforeTint",
+      "type": "color",
+      "default": "#FF0000"
+    },
+    {
+      "name": "After Tint",
+      "id": "afterTint",
+      "type": "color",
+      "default": "#0000FF"
     }
   ],
   "tags": ["editor", "recommended"],

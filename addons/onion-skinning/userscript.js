@@ -18,6 +18,8 @@ export default async function ({ addon, global, console, msg }) {
     opacity: +addon.settings.get("opacity"),
     opacityStep: +addon.settings.get("opacityStep"),
     mode: addon.settings.get("mode"),
+    beforeTint: addon.settings.get("beforeTint"),
+    afterTint: addon.settings.get("afterTint")
   };
 
   const foundPaper = (_project) => {
@@ -167,7 +169,7 @@ export default async function ({ addon, global, console, msg }) {
     return _maskingCanvas;
   };
 
-  const getTint = (isBefore) => isBefore ? "red" : "blue";
+  const getTint = (isBefore) => isBefore ? settings.beforeTint : settings.afterTint;
 
   const vectorLayer = (layer, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
