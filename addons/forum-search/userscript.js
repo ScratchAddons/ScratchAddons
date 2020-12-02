@@ -146,7 +146,7 @@ function appendSearch(box, query, page, term, msg) {
 
         postLeftDl.appendChild(createTextBox(msg("last-checked"), "black username", 1));
         postLeftDl.appendChild(
-          createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_first_checked)), "", 2)
+          createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_last_checked)), "", 2)
         );
 
         let postRight = document.createElement("div");
