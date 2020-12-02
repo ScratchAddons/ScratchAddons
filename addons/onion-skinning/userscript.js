@@ -155,17 +155,20 @@ export default async function ({ addon, global, console, msg }) {
     if (!project) {
       return;
     }
-    const paintingLayer = project.layers.find((i) => i.data.isPaintingLayer);
-    if (!paintingLayer) {
-      return;
-    }
-    let index = settings.layering === "front" ? paintingLayer.index : paintingLayer.index - 1;
+    const onions = [];
     for (const layer of project.layers) {
       if (layer.data.sa_isOnionLayer) {
-        if (settings.layering === "front") {
-          index++;
-        }
-        project.insertLayer(index, layer);
+        onions.push(layer);
+      }
+    }
+    // TODO: ensure layer remains consistent
+    if (settings.layering === "front") {
+      for (const layer of onions) {
+        project.addLayer(layer);
+      }
+    } else {
+      for (const layer of onions) {
+        project.insertLayer(1, layer);
       }
     }
   };
