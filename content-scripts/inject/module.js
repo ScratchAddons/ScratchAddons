@@ -40,6 +40,7 @@ scratchAddons.methods.getMsgCount = () => {
 function bodyIsEditorClassCheck() {
   const pathname = location.pathname.toLowerCase();
   const split = pathname.split("/").filter(Boolean);
+  if (!split[0] || split[0] !== "projects") return;
   if (split.includes("editor") || split.includes("fullscreen")) document.body.classList.add("sa-body-editor");
   else document.body.classList.remove("sa-body-editor");
 }
