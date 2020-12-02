@@ -37,6 +37,14 @@ scratchAddons.methods.getMsgCount = () => {
   return promise;
 };
 
+function bodyIsEditorClassCheck() {
+  const pathname = location.pathname.toLowerCase();
+  const split = pathname.split("/").filter(Boolean);
+  if (split.includes("editor") || split.includes("fullscreen")) document.body.classList.add("sa-body-editor");
+  else document.body.classList.remove("sa-body-editor");
+}
+bodyIsEditorClassCheck();
+
 const originalReplaceState = history.replaceState;
 history.replaceState = function () {
   const oldUrl = location.href;
@@ -45,6 +53,7 @@ history.replaceState = function () {
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
+  bodyIsEditorClassCheck();
   return returnValue;
 };
 
@@ -56,6 +65,7 @@ history.pushState = function () {
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
+  bodyIsEditorClassCheck();
   return returnValue;
 };
 
