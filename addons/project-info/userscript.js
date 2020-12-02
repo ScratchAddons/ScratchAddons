@@ -25,6 +25,6 @@ export default async function ({ addon, console, msg }) {
     }
     container.appendChild(document.createTextNode(msg("sprite", { num: projectInfo.spriteCount })));
     container.appendChild(document.createElement("br"));
-    container.appendChild(document.createTextNode(msg("script", { num: projectInfo.spriteCount })));
+    container.appendChild(document.createTextNode(msg("script", { num: projectInfo.scriptCount })));
   }
 }
