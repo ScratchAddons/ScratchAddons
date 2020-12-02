@@ -13,6 +13,14 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.4.1]
+
+- Fix website dark mode affecting the editor, sometimes making text unreadable
+- Fix typos and incorrect uses of title case
+- Fix script and sprite count addon working incorrectly
+- Fix forum search working incorrectly
+- Fix localization bugs
+
 ## [v1.4.0]
 
 - Scratch Addons is now localized! We'll soon be writing how you can help translate Scratch Addons to your language.
@@ -138,6 +146,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.4.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.4.1
 [v1.4.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.4.0
 [v1.3.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.3
 [v1.3.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.2
