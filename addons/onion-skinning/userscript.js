@@ -467,10 +467,11 @@ export default async function ({ addon, global, console, msg }) {
     return el;
   };
 
-  const createButtonImage = () => {
+  const createButtonImage = (name) => {
     const el = document.createElement("img");
     el.className = "sa-onion-image";
     el.draggable = false;
+    el.src = addon.self.dir + "/" + name + ".svg";
     return el;
   };
 
@@ -488,19 +489,13 @@ export default async function ({ addon, global, console, msg }) {
   toggleButton.dataset.enabled = settings.enabled;
   toggleButton.addEventListener("click", () => setEnabled(!settings.enabled));
   toggleButton.title = msg("toggle");
-  const toggleImage = createButtonImage();
-  toggleImage.alt = msg("toggle");
-  toggleImage.src = addon.self.dir + "/toggle.svg";
-  toggleButton.appendChild(toggleImage);
+  toggleButton.appendChild(createButtonImage("toggle"));
   toggleControlsGroup.appendChild(toggleButton);
 
   const settingButton = createButton();
   settingButton.addEventListener("click", () => setSettingsOpen(!areSettingsOpen()));
   settingButton.title = msg("settings");
-  const settingImage = createButtonImage();
-  settingImage.alt = msg("settings");
-  settingImage.src = addon.self.dir + "/settings.svg";
-  settingButton.appendChild(settingImage);
+  settingButton.appendChild(createButtonImage("settings"));
   toggleControlsGroup.appendChild(settingButton);
 
   paintEditorControlsContainer.appendChild(toggleControlsGroup);
@@ -517,16 +512,6 @@ export default async function ({ addon, global, console, msg }) {
     settingsPage.dataset.visible = open;
   };
   const areSettingsOpen = () => settingsPage.dataset.visible === "true";
-
-  const settingsTip = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  settingsTip.setAttribute("class", "sa-onion-settings-tip");
-  settingsTip.setAttribute("width", "14");
-  settingsTip.setAttribute("height", "7");
-  const settingsTipShape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-  settingsTipShape.setAttribute("class", "sa-onion-settings-polygon");
-  settingsTipShape.setAttribute("points", "0,0 7,7, 14,0");
-  settingsTip.appendChild(settingsTipShape);
-  settingsPage.appendChild(settingsTip);
 
   const layerInputs = {};
   for (const type of ["previous", "next", "opacity", "opacityStep"]) {
@@ -577,9 +562,7 @@ export default async function ({ addon, global, console, msg }) {
     currentButton.appendChild(currentInput);
 
     const decrementButton = createButton();
-    const decrementImage = createButtonImage();
-    decrementImage.src = addon.self.dir + "/decrement.svg";
-    decrementButton.appendChild(decrementImage);
+    decrementButton.appendChild(createButtonImage("decrement"));
     decrementButton.addEventListener("click", () => {
       if (settings[type] > 0) {
         settings[type]--;
@@ -589,9 +572,7 @@ export default async function ({ addon, global, console, msg }) {
     });
 
     const incrementButton = createButton();
-    const incrementImage = createButtonImage();
-    incrementImage.src = addon.self.dir + "/increment.svg";
-    incrementButton.appendChild(incrementImage);
+    incrementButton.appendChild(createButtonImage("increment"));
     incrementButton.addEventListener("click", () => {
       if (settings[type] < +currentInput.max) {
         settings[type]++;
@@ -606,6 +587,76 @@ export default async function ({ addon, global, console, msg }) {
     container.appendChild(group);
     settingsPage.appendChild(container);
   }
+
+  const modeContainer = document.createElement("div");
+  modeContainer.className = "sa-onion-settings-line";
+  const modeLabel = document.createElement("div");
+  modeLabel.className = "sa-onion-settings-label";
+  modeLabel.textContent = "Mode";
+  const modeGroup = createGroup();
+  modeContainer.appendChild(modeLabel);
+  const modeMergeButton = createButton();
+  modeMergeButton.appendChild(document.createTextNode("Merge"));
+  modeGroup.appendChild(modeMergeButton);
+  modeMergeButton.addEventListener("click", (e) => {
+    settings.mode = "merge";
+    modeTintButton.dataset.enabled = false;
+    modeMergeButton.dataset.enabled = true;
+    settingsChanged();
+  });
+  modeMergeButton.dataset.enabled = settings.mode === "merge";
+  const modeTintButton = createButton();
+  modeTintButton.appendChild(document.createTextNode("Tint"));
+  modeGroup.appendChild(modeTintButton);
+  modeTintButton.addEventListener("click", (e) => {
+    settings.mode = "tint";
+    modeTintButton.dataset.enabled = true;
+    modeMergeButton.dataset.enabled = false;
+    settingsChanged();
+  });
+  modeTintButton.dataset.enabled = settings.mode === "tint";
+  modeContainer.appendChild(modeGroup);
+  settingsPage.appendChild(modeContainer);
+
+  const layeringContainer = document.createElement("div");
+  layeringContainer.className = "sa-onion-settings-line";
+  const layeringLabel = document.createElement("div");
+  layeringLabel.className = "sa-onion-settings-label";
+  layeringLabel.textContent = "Layering";
+  const layeringGroup = createGroup();
+  layeringContainer.appendChild(layeringLabel);
+  const layeringFrontButton = createButton();
+  layeringFrontButton.appendChild(document.createTextNode("Front"));
+  layeringGroup.appendChild(layeringFrontButton);
+  layeringFrontButton.addEventListener("click", (e) => {
+    settings.layering = "front";
+    layeringBehindButton.dataset.enabled = false;
+    layeringFrontButton.dataset.enabled = true;
+    settingsChanged();
+  });
+  layeringFrontButton.dataset.enabled = settings.layering === "front";
+  const layeringBehindButton = createButton();
+  layeringBehindButton.appendChild(document.createTextNode("Behind"));
+  layeringGroup.appendChild(layeringBehindButton);
+  layeringBehindButton.addEventListener("click", (e) => {
+    settings.layering = "behind";
+    layeringBehindButton.dataset.enabled = true;
+    layeringFrontButton.dataset.enabled = false;
+    settingsChanged();
+  });
+  layeringBehindButton.dataset.enabled = settings.layering === "behind";
+  layeringContainer.appendChild(layeringGroup);
+  settingsPage.appendChild(layeringContainer);
+
+  const settingsTip = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  settingsTip.setAttribute("class", "sa-onion-settings-tip");
+  settingsTip.setAttribute("width", "14");
+  settingsTip.setAttribute("height", "7");
+  const settingsTipShape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+  settingsTipShape.setAttribute("class", "sa-onion-settings-polygon");
+  settingsTipShape.setAttribute("points", "0,0 7,7, 14,0");
+  settingsTip.appendChild(settingsTipShape);
+  settingsPage.appendChild(settingsTip);
 
   const controlsLoop = async () => {
     let fixedClassNames = false;
