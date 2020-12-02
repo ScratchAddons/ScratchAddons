@@ -43,7 +43,8 @@ function bodyIsEditorClassCheck() {
   if (split.includes("editor") || split.includes("fullscreen")) document.body.classList.add("sa-body-editor");
   else document.body.classList.remove("sa-body-editor");
 }
-bodyIsEditorClassCheck();
+if (!document.body) document.addEventListener("DOMContentLoaded", bodyIsEditorClassCheck);
+else bodyIsEditorClassCheck();
 
 const originalReplaceState = history.replaceState;
 history.replaceState = function () {
