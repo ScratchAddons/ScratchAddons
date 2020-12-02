@@ -45,6 +45,7 @@
     {
       "url": "happen.js",
       "matches": ["https://scratch.mit.edu/"],
+      "runAtComplete": false,
       "settingMatch": {
         "id": "whathappen",
         "value": true
