@@ -1,7 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
   function createBetterProfilePage(featuredThumb, featuredLink, featuredHeading, featuredTitle) {
     document.documentElement.style.setProperty("--featured-thumb", `url("${featuredThumb}")`);
-    document.documentElement.style.setProperty("--refresh-notice", `\"${msg("refresh-notice")}\"`);
     let profileUsername = document.querySelector(".header-text h2").innerText;
     if (profileUsername.slice(-1) == "*") {
       profileUsername = profileUsername.slice(0, -1);
@@ -26,6 +25,13 @@ export default async function ({ addon, global, console, msg }) {
         ).innerText;
         document.querySelector("#better-change-featured-project").onclick = function () {
           document.querySelector('#featured-project [data-control="edit"]').click();
+          setTimeout(function () {
+            document.querySelector("#featured-project-modal .btn.blue.btn-primary").onclick = function () {
+              setTimeout(function () {
+                location = location;
+              }, 400);
+            };
+          }, 200);
         };
       }
       boxHead

@@ -65,9 +65,6 @@
 #profile-data .box-head .avatar img {
   background-color: transparent;
 }
-#featured-project-modal .modal-footer::after {
-  content: var(--refresh-notice);
-}
 .user-content .player {
   box-shadow: none !important;
   border: none !important;
@@ -91,6 +88,10 @@
   top: 32px;
   left: 340px;
 }
+#status span[data-content="prompt"] {
+  position: relative;
+  left: 0;
+}
 #activity-feed .activity-stream {
   height: 100px !important;
   overflow-x: hidden;
@@ -105,11 +106,6 @@
 }
 .profile-details span {
   display: inline !important;
-}
-.profile-details #better-follower-count {
-  border-left: 1px solid white;
-  margin-left: 5px;
-  padding-left: 5px;
 }
 #lfp-embed {
   position: absolute;
