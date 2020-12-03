@@ -1,4 +1,4 @@
-body:not(.sa-body-editor),
+html > body:not(.sa-body-editor),
 body:not(.sa-body-editor) h1,
 body:not(.sa-body-editor) h2,
 body:not(.sa-body-editor) h3,
