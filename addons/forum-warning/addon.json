@@ -1,0 +1,25 @@
+{
+  "name": "Forum Warning",
+  "description": "Adds warning on Discussion Forum to prevent you from advertising Scratch Addons",
+  "warning": "Note that there is a Scratch policy that bans advertising browser extensions.",
+  "tags": ["community", "forums", "recommended"],
+  "userscripts": [
+    {
+      "matches": [
+        "https://scratch.mit.edu/discuss/topic/*",
+        "https://scratch.mit.edu/discuss/*/topic/add/"
+      ],
+      "url": "userscript.js"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Block advertisements from being posted",
+      "id": "blockPosts",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "enabledByDefault": true,
+  "l10n": true
+}
