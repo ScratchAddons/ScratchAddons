@@ -1,0 +1,37 @@
+/* Profile page */
+.header-text .profile-details,
+#bio-readonly,
+#status-readonly,
+#profile-box #bio textarea,
+#profile-box #status textarea {
+  color: #fff;
+}
+.header-text .profile-details .group {
+  border-color: #fff;
+}
+#profile-box .player,
+#profile-box .doing,
+#profile-data .footer,
+#comments #comments-enabled-box {
+  border: none;
+}
+#profile-box .doing,
+.slider-carousel-control {
+  background-color: transparent;
+}
+.empty-field {
+  background: #0d2f3f;
+  border-color: #124954;
+  color: #fff;
+}
+.activity-stream .actor a {
+  color: #fff !important;
+}
+.slider-carousel .thumb img,
+.gallery.thumb span.image img {
+  border-color: #606060;
+}
+#comments .more-replies {
+  background-color: #252c37;
+  box-shadow: 0 -25px 20px -10px #000;
+}

@@ -1,5 +1,6 @@
 import globalStateProxy from "./imports/global-state.js";
 import localStateProxy from "./imports/local-state.js";
+import BackgroundLocalizationProvider from "./l10n.js";
 
 window.scratchAddons = {};
 
@@ -20,6 +21,9 @@ scratchAddons.manifests = [];
 
 // Other files may add their own global methods here so that addon-api files can access them
 scratchAddons.methods = {};
+
+scratchAddons.l10n = new BackgroundLocalizationProvider();
+// Can't load translations here.
 
 scratchAddons.globalState = globalStateProxy;
 console.log(

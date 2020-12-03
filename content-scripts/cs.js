@@ -1,11 +1,17 @@
+try {
+  if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
+} catch {
+  throw "Scratch Addons: not first party iframe";
+}
+
 let initialUrl = location.href;
 let path = new URL(initialUrl).pathname.substring(1);
-if (path[path.length - 1] === "/") path += "/";
+if (path[path.length - 1] !== "/") path += "/";
 const pathArr = path.split("/");
 if (pathArr[0] === "scratch-addons-extension") {
   if (pathArr[1] === "settings") chrome.runtime.sendMessage("openSettingsOnThisTab");
 }
-if (path === "discuss/3/topic/add//") window.addEventListener("load", forumWarning);
+if (path === "discuss/3/topic/add/") window.addEventListener("load", forumWarning);
 
 let receivedContentScriptInfo = false;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -56,8 +62,12 @@ function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
     else document.documentElement.appendChild(link);
   }
   for (const theme of themes) {
-    for (const css of theme.styles) {
+    for (const styleUrl of theme.styleUrls) {
+      let css = theme.styles[styleUrl];
+      // Replace %addon-self-dir% for relative URLs
+      css = css.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${theme.addonId}`));
       if (isUpdate && css.startsWith("/* sa-autoupdate-theme-ignore */")) continue;
+      css += `\n/*# sourceURL=${styleUrl} */`;
       const style = document.createElement("style");
       style.classList.add("scratch-addons-theme");
       style.setAttribute("data-addon-id", theme.addonId);
@@ -83,7 +93,7 @@ function setCssVariables(addonSettings) {
   }
 }
 
-function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, themes }) {
+function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, userstyleUrls, themes }) {
   setCssVariables(globalState.addonSettings);
   injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate: false });
 
@@ -92,6 +102,7 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
   template.setAttribute("data-path", chrome.runtime.getURL(""));
   template.setAttribute("data-userscripts", JSON.stringify(addonsWithUserscripts));
   template.setAttribute("data-global-state", JSON.stringify(globalState));
+  template.setAttribute("data-l10njson", JSON.stringify(l10njson));
   document.head.appendChild(template);
 
   const script = document.createElement("script");
@@ -106,7 +117,7 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
     } else if (request.fireEvent) {
       const eventDetails = JSON.stringify(request.fireEvent);
       template.setAttribute(`data-fire-event__${Date.now()}`, eventDetails);
-    } else if (request.setMsgCount) {
+    } else if (typeof request.setMsgCount !== "undefined") {
       template.setAttribute("data-msgcount", request.setMsgCount);
     }
   });
@@ -147,6 +158,8 @@ function onHeadAvailable({ globalState, addonsWithUserscripts, userstyleUrls, th
   observer.observe(template, { attributes: true });
 }
 
+const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
+
 function forumWarning() {
   let postArea = document.querySelector("form#post > label");
   if (postArea) {
@@ -161,16 +174,10 @@ function forumWarning() {
     let reportLink = document.createElement("a");
     reportLink.href = "https://scratchaddons.com/feedback";
     reportLink.target = "_blank";
-    reportLink.innerText = "report it here";
+    reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     let text1 = document.createElement("span");
-    text1.innerText =
-      "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when " +
-      "all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please ";
-    let text3 = document.createElement("span");
-    text3.innerText = ".";
+    text1.innerHTML = escapeHTML(chrome.i18n.getMessage("forumWarning", "$1")).replace("$1", reportLink.outerHTML);
     addonError.appendChild(text1);
-    addonError.appendChild(reportLink);
-    addonError.appendChild(text3);
     errorList.appendChild(addonError);
   }
 }

@@ -31,7 +31,11 @@
     },
     {
       "id": "autoPlay",
+<<<<<<< HEAD
       "name": "Auto-play projects",
+=======
+      "name": "Auto-play projects (for alternative players)",
+>>>>>>> b75a7312d02ba4231aa4e29bc3979ed509932170
       "type": "boolean",
       "default": false
     },
@@ -45,10 +49,33 @@
       "id": "alternativePlayer",
       "name": "Alternative player",
       "type": "select",
+<<<<<<< HEAD
       "default": "TurboWarp",
       "potentialValues": ["TurboWarp", "forkphorus"]
     }
   ],
   "tags": ["community"],
   "enabledByDefault": false
+=======
+      "default": "none",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "turbowarp",
+          "name": "TurboWarp"
+        },
+        {
+          "id": "forkphorus",
+          "name": "forkphorus"
+        }
+      ]
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": false,
+  "l10n": true
+>>>>>>> b75a7312d02ba4231aa4e29bc3979ed509932170
 }
