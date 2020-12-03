@@ -13,18 +13,18 @@ export default async ({ addon, msg, safeMsg }) => {
   const warning = document.createElement("li");
   warning.classList.add("sa-forum-warning");
   warning.innerHTML = safeMsg("warning", {
-    reportLink: reportLink.outerHTML
+    reportLink: reportLink.outerHTML,
   });
   errorlist.appendChild(warning);
-  
+
   if (addon.settings.get("blockPosts")) {
     const textarea = document.querySelector("textarea#id_body");
     textarea.addEventListener("input", () => {
-      if (/scratch[ -]?(?:addons|messaging[ -]extension)/ig.test(textarea.value)) {
+      if (/scratch[ -]?(?:addons|messaging[ -]extension)/gi.test(textarea.value)) {
         textarea.setCustomValidity(msg("post-blocked"));
       } else {
         textarea.setCustomValidity("");
       }
-    })
+    });
   }
 };

@@ -156,4 +156,3 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
   });
   observer.observe(template, { attributes: true });
 }
-

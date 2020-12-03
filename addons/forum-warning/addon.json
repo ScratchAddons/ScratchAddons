@@ -5,10 +5,7 @@
   "tags": ["community", "forums", "recommended"],
   "userscripts": [
     {
-      "matches": [
-        "https://scratch.mit.edu/discuss/topic/*",
-        "https://scratch.mit.edu/discuss/*/topic/add/"
-      ],
+      "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/*/topic/add/"],
       "url": "userscript.js"
     }
   ],
