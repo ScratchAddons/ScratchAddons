@@ -58,7 +58,7 @@ export default async function ({ addon, global, console }) {
 }
 
 async function hideInSmallStageMode({ addon }) {
-  while(true) {
+  while (true) {
     await addon.tab.waitForElement(".stage-header_stage-size-toggle-group_17LtK", { markAsSeen: true });
 
     document.querySelector(".stage-header_stage-button-first_y_CLF").addEventListener("click", () => {

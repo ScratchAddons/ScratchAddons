@@ -36,7 +36,7 @@ export default async function ({ addon, global, console, msg }) {
     } else {
       countContainerContainer.style.display = "";
     }
-  
+
     if (v == 300) {
       count.style.color = "#ff6680";
       icon.src = addon.self.dir + "/300cats.svg";
@@ -61,7 +61,7 @@ export default async function ({ addon, global, console, msg }) {
 }
 
 async function hideInSmallStageMode({ addon }) {
-  while(true) {
+  while (true) {
     await addon.tab.waitForElement(".stage-header_stage-size-toggle-group_17LtK", { markAsSeen: true });
 
     document.querySelector(".stage-header_stage-button-first_y_CLF").addEventListener("click", () => {
