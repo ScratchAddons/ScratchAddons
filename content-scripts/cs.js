@@ -32,7 +32,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           observer.disconnect();
         }
       });
-      observer.observe(document.documentElement, { subtree: true });
+      observer.observe(document.documentElement, { subtree: true, childList: true });
     }
     contentScriptInfo = request.contentScriptInfo;
   } else if (request === "getInitialUrl") {
