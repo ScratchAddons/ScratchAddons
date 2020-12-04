@@ -631,11 +631,11 @@ export default async function ({ addon, global, console, msg }) {
   modeContainer.className = "sa-onion-settings-line";
   const modeLabel = document.createElement("div");
   modeLabel.className = "sa-onion-settings-label";
-  modeLabel.textContent = "Mode";
+  modeLabel.textContent = msg("mode");
   const modeGroup = createGroup();
   modeContainer.appendChild(modeLabel);
   const modeMergeButton = createButton();
-  modeMergeButton.appendChild(document.createTextNode("Merge"));
+  modeMergeButton.appendChild(document.createTextNode(msg("merge")));
   modeGroup.appendChild(modeMergeButton);
   modeMergeButton.addEventListener("click", (e) => {
     settings.mode = "merge";
@@ -645,7 +645,7 @@ export default async function ({ addon, global, console, msg }) {
   });
   modeMergeButton.dataset.enabled = settings.mode === "merge";
   const modeTintButton = createButton();
-  modeTintButton.appendChild(document.createTextNode("Tint"));
+  modeTintButton.appendChild(document.createTextNode(msg("tint")));
   modeGroup.appendChild(modeTintButton);
   modeTintButton.addEventListener("click", (e) => {
     settings.mode = "tint";
@@ -661,11 +661,11 @@ export default async function ({ addon, global, console, msg }) {
   layeringContainer.className = "sa-onion-settings-line";
   const layeringLabel = document.createElement("div");
   layeringLabel.className = "sa-onion-settings-label";
-  layeringLabel.textContent = "Layering";
+  layeringLabel.textContent = msg("layering");
   const layeringGroup = createGroup();
   layeringContainer.appendChild(layeringLabel);
   const layeringFrontButton = createButton();
-  layeringFrontButton.appendChild(document.createTextNode("Front"));
+  layeringFrontButton.appendChild(document.createTextNode(msg("front")));
   layeringGroup.appendChild(layeringFrontButton);
   layeringFrontButton.addEventListener("click", (e) => {
     settings.layering = "front";
@@ -675,7 +675,7 @@ export default async function ({ addon, global, console, msg }) {
   });
   layeringFrontButton.dataset.enabled = settings.layering === "front";
   const layeringBehindButton = createButton();
-  layeringBehindButton.appendChild(document.createTextNode("Behind"));
+  layeringBehindButton.appendChild(document.createTextNode(msg("behind")));
   layeringGroup.appendChild(layeringBehindButton);
   layeringBehindButton.addEventListener("click", (e) => {
     settings.layering = "behind";

@@ -4,5 +4,11 @@
   "onion-skinning/previous": "Previous costumes",
   "onion-skinning/next": "Next costumes",
   "onion-skinning/opacity": "Opacity (%)",
-  "onion-skinning/opacityStep": "Opacity step (%)"
+  "onion-skinning/opacityStep": "Opacity step (%)",
+  "onion-skinning/mode": "Mode",
+  "onion-skinning/merge": "Merge",
+  "onion-skinning/tint": "Tint",
+  "onion-skinning/layering": "Layering",
+  "onion-skinning/front": "Front",
+  "onion-skinning/behind": "Behind"
 }
