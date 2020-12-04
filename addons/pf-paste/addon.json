@@ -1,0 +1,17 @@
+{
+  "name": "Greeting Paste",
+  "description": "An addon that let's you greet people without typing.",
+  "credits": [
+    {
+      "name": "Touchcreator, retronbv & The Colaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*"]
+    }
+  ],
+  "tags": ["community", "beta", "paste"],
+  "enabled_by_default": false
+}
