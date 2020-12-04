@@ -148,5 +148,11 @@
   },
   "forumWarning": {
     "message": "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
+  },
+  "forumWarningGeneral": {
+    "message": "Message from Scratch Addons extension: Scratch policy forbids discussion about browser extensions, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found bugs, please $1."
+  },
+  "search": {
+    "message": "Search"
   }
 }

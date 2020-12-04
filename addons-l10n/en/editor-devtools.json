@@ -50,6 +50,6 @@
   "editor-devtools/swap": "Swap {var} in sprite",
   "editor-devtools/lists": "lists",
   "editor-devtools/variables": "variables",
-  "editor-devtools/inset": "Insert",
+  "editor-devtools/insert": "Insert",
   "editor-devtools/start-typing": "Start Typing..."
 }
