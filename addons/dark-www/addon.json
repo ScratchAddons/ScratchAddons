@@ -57,7 +57,8 @@
         "https://scratch.mit.edu/cloudmonitor/*",
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
-        "https://scratch.mit.edu/500/"
+        "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/news"
       ],
       "settingMatch": {
         "id": "selectedMode",

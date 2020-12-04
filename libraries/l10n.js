@@ -50,7 +50,7 @@ export default class LocalizationProvider extends EventTarget {
         return (new MessageFormat(message, this.locale)).format(placeholders);
       }
       console.warn('Key missing:', key);
-      return fallback || ey;
+      return fallback || key;
   }
 
   get(key, placeholders = {}, fallback = "") {
