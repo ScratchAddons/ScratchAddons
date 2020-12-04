@@ -47,7 +47,7 @@ g > line {
 }
 
 .blocklyEditableText rect {
-  fill: var(--editorTheme3-customColor)
+  fill: var(--editorTheme3-customColor);
 }
 
 .fieldTextInput {
