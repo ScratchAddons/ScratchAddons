@@ -15,7 +15,7 @@ if (path === "discuss/3/topic/add/") {
   window.addEventListener("load", () => forumWarning("forumWarning"));
 } else if (path.startsWith("discuss/topic/")) {
   window.addEventListener("load", () => {
-    if (document.querySelector("div.linkst > ul > li > a[href$=\"18/\"]")) {
+    if (document.querySelector("div.linkst > ul > li > a[href=\"/discuss/18/\"]")) {
       forumWarning("forumWarningGeneral");
     }
   });
