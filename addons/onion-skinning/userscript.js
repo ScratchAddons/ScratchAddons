@@ -11,6 +11,17 @@ export default async function ({ addon, global, console, msg }) {
     Rectangle: null,
     CENTER: null,
   };
+
+  const parseHexColor = (color) => {
+    const hexString = color.substr(1);
+    const hexNumber = parseInt(hexString, 16);
+    return [
+      (hexNumber >> 16) & 0xff, // R
+      (hexNumber >> 8) & 0xff, // G
+      hexNumber & 0xff, // B
+    ];
+  };
+
   const settings = {
     enabled: addon.settings.get("default"),
     previous: +addon.settings.get("previous"),
@@ -19,8 +30,8 @@ export default async function ({ addon, global, console, msg }) {
     opacityStep: +addon.settings.get("opacityStep"),
     layering: addon.settings.get("layering"),
     mode: addon.settings.get("mode"),
-    beforeTint: addon.settings.get("beforeTint"),
-    afterTint: addon.settings.get("afterTint"),
+    beforeTint: parseHexColor(addon.settings.get("beforeTint")),
+    afterTint: parseHexColor(addon.settings.get("afterTint")),
   };
 
   const foundPaper = (_project) => {
@@ -161,7 +172,7 @@ export default async function ({ addon, global, console, msg }) {
         onions.push(layer);
       }
     }
-    // TODO: ensure layer remains consistent
+    onions.sort((a, b) => a.data.sa_onionIndex - b.data.sa_onionIndex);
     if (settings.layering === "front") {
       for (const layer of onions) {
         project.addLayer(layer);
@@ -192,7 +203,26 @@ export default async function ({ addon, global, console, msg }) {
     return _maskingCanvas;
   };
 
-  const getTint = (isBefore) => (isBefore ? settings.beforeTint : settings.afterTint);
+  const getTint = (red, green, blue, isBefore) => {
+    red /= 255;
+    green /= 255;
+    blue /= 255;
+    const referenceColor = isBefore ? settings.beforeTint : settings.afterTint;
+    const colorAverage = (red + green + blue) / 3;
+    const WEIGHT = 1.5;
+    const weighted = colorAverage / WEIGHT + (1 - 1 / WEIGHT);
+    return [referenceColor[0] * weighted, referenceColor[1] * weighted, referenceColor[2] * weighted];
+  };
+
+  const toHexColor = ([red, green, blue]) => {
+    const r = Math.round(red).toString(16).padStart(2, "0");
+    const g = Math.round(green).toString(16).padStart(2, "0");
+    const b = Math.round(blue).toString().padStart(2, "0");
+    return `#${r}${g}${b}`;
+  };
+
+  const getPaperColorTint = (color, isBefore) =>
+    toHexColor(getTint(color.red * 255, color.green * 255, color.blue * 255, isBefore));
 
   const vectorLayer = (layer, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
@@ -225,11 +255,6 @@ export default async function ({ addon, global, console, msg }) {
 
           root.remove();
 
-          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L269-L272
-          if (root.children && root.children.length === 1) {
-            root = root.reduce();
-          }
-
           // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L274-L275
           recursePaperItem(root, (i) => {
             if (i.className === "PathItem") {
@@ -246,13 +271,12 @@ export default async function ({ addon, global, console, msg }) {
           root.scale(2, new PaperConstants.Point(0, 0));
 
           if (settings.mode === "tint") {
-            const color = getTint(isBefore);
             recursePaperItem(root, (i) => {
               if (i.strokeColor) {
-                i.strokeColor = color;
+                i.strokeColor = getPaperColorTint(i.strokeColor, isBefore);
               }
               if (i.fillColor) {
-                i.fillColor = color;
+                i.fillColor = getPaperColorTint(i.fillColor, isBefore);
               }
             });
           }
@@ -295,13 +319,25 @@ export default async function ({ addon, global, console, msg }) {
         }
 
         if (settings.mode === "tint") {
-          const color = getTint(isBefore);
           const maskingCanvas = getMaskingCanvas(image.width, image.height);
           const maskingContext = maskingCanvas.getContext("2d");
-          maskingContext.fillStyle = color;
-          maskingContext.fillRect(0, 0, image.width, image.height);
-          maskingContext.globalCompositeOperation = "destination-in";
           maskingContext.drawImage(image, 0, 0);
+          const imageData = maskingContext.getImageData(0, 0, image.width, image.height);
+          const data = imageData.data;
+          for (let i = 0; i < data.length; i += 4 /* RGBA */) {
+            const red = data[i + 0];
+            const green = data[i + 1];
+            const blue = data[i + 2];
+            const alpha = data[i + 3];
+            if (alpha === 0) {
+              continue;
+            }
+            const [newRed, newGreen, newBlue] = getTint(red, green, blue, isBefore);
+            data[i + 0] = newRed;
+            data[i + 1] = newGreen;
+            data[i + 2] = newBlue;
+          }
+          maskingContext.putImageData(imageData, 0, 0);
           raster.drawImage(maskingCanvas, 480 - rotationCenterX, 360 - rotationCenterY);
         } else {
           raster.drawImage(image, 480 - rotationCenterX, 360 - rotationCenterY);
@@ -363,11 +399,11 @@ export default async function ({ addon, global, console, msg }) {
         }
 
         const layer = createOnionLayer();
+        layer.data.sa_onionIndex = i;
         layer.opacity = opacity / 100;
         relayerOnionLayers();
 
-        // Creating a new layer will automatically activate it.
-        // We do not want to steal activation as doing so causes corruption.
+        // Important: Make sure that we do not change the active layer of the editor as doing so can cause corruption.
         activeLayer.activate();
 
         const onionCostume = costumes[i];
@@ -385,7 +421,7 @@ export default async function ({ addon, global, console, msg }) {
       console.error(e);
     }
 
-    // Regardless of any errors, we **need** to make sure the original active layer still retains activation.
+    // Important: Regardless of any errors, we need to make sure the original active layer is still active.
     activeLayer.activate();
   };
 

@@ -18,7 +18,7 @@
 .sa-onion-settings {
   position: absolute;
   bottom: 0;
-  right: 24px;
+  right: 16px;
   /* based on the styles for the color dropdown */
   padding: 4px;
   border-radius: 4px;
@@ -35,7 +35,7 @@
 }
 
 .sa-onion-settings[data-visible="true"] {
-  bottom: 24px;
+  bottom: 16px;
   pointer-events: auto;
   opacity: 1;
 }
@@ -77,7 +77,7 @@
   bottom: 0;
   transform: translateY(100%);
   /* TODO: RTL? */
-  right: 93px;
+  right: 101px;
 }
 
 .sa-onion-settings-polygon {
