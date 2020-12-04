@@ -11,7 +11,15 @@ const pathArr = path.split("/");
 if (pathArr[0] === "scratch-addons-extension") {
   if (pathArr[1] === "settings") chrome.runtime.sendMessage("openSettingsOnThisTab");
 }
-if (path === "discuss/3/topic/add/") window.addEventListener("load", forumWarning);
+if (path === "discuss/3/topic/add/") {
+  window.addEventListener("load", () => forumWarning("forumWarning"));
+} else if (path.startsWith("discuss/topic/")) {
+  window.addEventListener("load", () => {
+    if (document.querySelector("div.linkst > ul > li > a[href$=\"18/\"]")) {
+      forumWarning("forumWarningGeneral");
+    }
+  });
+}
 
 let receivedContentScriptInfo = false;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -160,7 +168,7 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
-function forumWarning() {
+function forumWarning(key) {
   let postArea = document.querySelector("form#post > label");
   if (postArea) {
     var errorList = document.querySelector("form#post > label > ul");
@@ -176,7 +184,7 @@ function forumWarning() {
     reportLink.target = "_blank";
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     let text1 = document.createElement("span");
-    text1.innerHTML = escapeHTML(chrome.i18n.getMessage("forumWarning", "$1")).replace("$1", reportLink.outerHTML);
+    text1.innerHTML = escapeHTML(chrome.i18n.getMessage(key, "$1")).replace("$1", reportLink.outerHTML);
     addonError.appendChild(text1);
     errorList.appendChild(addonError);
   }
