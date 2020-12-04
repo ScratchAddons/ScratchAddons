@@ -12,6 +12,6 @@
       "matches": ["https://scratch.mit.edu/users/*"]
     }
   ],
-  "tags": [],
+  "tags": ["community", "beta",],
   "enabled_by_default": false
 }
