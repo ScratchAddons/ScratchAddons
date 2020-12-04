@@ -45,3 +45,11 @@ g > line {
 .scratchCategoryItemBubble {
   border-color: #0003 !important;
 }
+
+.blocklyEditableText rect {
+  fill: var(--editorTheme3-customColor)
+}
+
+.fieldTextInput {
+  border-color: var(--editorTheme3-customColor) !important;
+}
