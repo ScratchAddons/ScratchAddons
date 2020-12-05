@@ -23,16 +23,35 @@ export default async function ({ addon, global, console, msg }) {
         document.querySelector("#better-change-featured-project").innerText = document.querySelector(
           '#featured-project [data-control="edit"]'
         ).innerText;
-        document.querySelector("#better-change-featured-project").onclick = function () {
+        document.querySelector("#better-change-featured-project").addEventListener("click", function () {
           document.querySelector('#featured-project [data-control="edit"]').click();
-          setTimeout(function () {
-            document.querySelector("#featured-project-modal .btn.blue.btn-primary").onclick = function () {
-              setTimeout(function () {
-                location = location;
-              }, 400);
-            };
-          }, 200);
-        };
+          let checkFeaturedProjectModalTimes = 0;
+          var checkFeaturedProjectModal = setInterval(function () {
+            checkFeaturedProjectModalTimes++;
+            if (document.querySelector("#featured-project-modal") != null) {
+              clearInterval(checkFeaturedProjectModal);
+              document
+                .querySelector("#featured-project-modal .btn.blue.btn-primary")
+                .addEventListener("click", function () {
+                  let checkFeaturedProjectTimes = 0;
+                  let checkFeaturedProjectLink = document.querySelector("#featured-project").href;
+                  var checkFeaturedProject = setInterval(function () {
+                    checkFeaturedProjectTimes++;
+                    if (checkFeaturedProjectTimes > 1000) {
+                      clearInterval(checkFeaturedProject);
+                    }
+                    if (checkFeaturedProjectLink != document.querySelector("#featured-project").href) {
+                      clearInterval(checkFeaturedProject);
+                      document.documentElement.style.setProperty("--featured-thumb", `url("")`);
+                      location.reload();
+                    }
+                  }, 10);
+                });
+            } else if (checkFeaturedProjectModalTimes > 1000) {
+              clearInterval(checkFeaturedProjectModal);
+            }
+          }, 10);
+        });
       }
       boxHead
         .insertAdjacentElement("afterbegin", document.createElement("a"))
@@ -45,17 +64,12 @@ export default async function ({ addon, global, console, msg }) {
   }
   if (document.querySelector(".user-content .stage") != null) {
     createBetterProfilePage(
-      document.querySelector(".user-content .stage img").src.slice(0, -11) + "480x360.png",
+      document.querySelector(".user-content .stage img").src,
       document.querySelector(".user-content .stage a").href,
       document.querySelector(".featured-project-heading").innerText,
       document.querySelector(".user-content .player .title a").innerText
     );
   } else if (document.querySelector("#profile-avatar img") != null) {
-    createBetterProfilePage(
-      document.querySelector("#profile-avatar img").src.slice(0, -9) + "1000x1000.png",
-      "",
-      "",
-      ""
-    );
+    createBetterProfilePage(document.querySelector("#profile-avatar img").src, "", "", "");
   }
 }
