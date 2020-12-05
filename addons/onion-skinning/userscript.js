@@ -441,7 +441,11 @@ export default async function ({ addon, global, console, msg }) {
     if (settings.enabled) {
       if (settings.next === 0 && settings.previous === 0) {
         settings.previous = 1;
-        layerInputs.previous.value = 1;
+        layerInputs.previous.value = settings.previous;
+      }
+      if (settings.opacity === 0) {
+        settings.opacity = 25;
+        layerInputs.opacity.value = settings.opacity;
       }
       updateOnionLayers();
     } else {
@@ -490,11 +494,11 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const settingsChanged = (onlyRelayerNeeded) => {
+    if ((settings.previous === 0 && settings.next === 0) || settings.opacity === 0) {
+      setEnabled(false);
+      return;
+    }
     if (settings.enabled) {
-      if (settings.previous === 0 && settings.next === 0) {
-        setEnabled(false);
-        return;
-      }
       if (onlyRelayerNeeded) {
         relayerOnionLayers();
       } else {
