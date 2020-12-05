@@ -66,10 +66,10 @@
       "potentialValues": [
         {
           "id": "front",
-          "name": "In front"
+          "name": "Front"
         },
         {
-          "id": "back",
+          "id": "behind",
           "name": "Behind"
         }
       ]
@@ -91,13 +91,13 @@
       ]
     },
     {
-      "name": "Default before tint",
+      "name": "Previous costume tint",
       "id": "beforeTint",
       "type": "color",
       "default": "#FF0000"
     },
     {
-      "name": "Default after tint",
+      "name": "Next costume tint",
       "id": "afterTint",
       "type": "color",
       "default": "#0000FF"
