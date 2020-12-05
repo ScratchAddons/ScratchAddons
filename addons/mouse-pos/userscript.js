@@ -1,5 +1,7 @@
 export default async function ({ addon, global, console }) {
   console.log("mouse pos enabled");
+  
+  let pos = null;
 
   const vm = addon.tab.traps.onceValues.vm;
 
@@ -9,7 +11,7 @@ export default async function ({ addon, global, console }) {
   var x = vm.runtime.ioDevices.mouse.__scratchX ? vm.runtime.ioDevices.mouse.__scratchX : 0;
   var y = vm.runtime.ioDevices.mouse.__scratchY ? vm.runtime.ioDevices.mouse.__scratchY : 0;
 
-  const showUpdatedValue = () => pos.setAttribute("data-content", `${x}, ${y}`);
+  const showUpdatedValue = () => pos && pos.setAttribute("data-content", `${x}, ${y}`);
 
   Object.defineProperty(vm.runtime.ioDevices.mouse, "_scratchX", {
     get: function () {
@@ -42,7 +44,7 @@ export default async function ({ addon, global, console }) {
       // my attempt at detecting if they're in the editor?
       var posContainerContainer = document.createElement("div");
       var posContainer = document.createElement("div");
-      var pos = document.createElement("span");
+      pos = document.createElement("span");
 
       posContainerContainer.className = "pos-container-container";
       posContainer.className = "pos-container";
