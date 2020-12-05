@@ -353,3 +353,5 @@ function resize() {
 }
 window.onresize = resize;
 resize();
+
+chrome.runtime.sendMessage("checkPermissions");

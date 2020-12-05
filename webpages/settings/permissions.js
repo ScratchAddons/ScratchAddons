@@ -28,7 +28,7 @@ document.title = chrome.i18n.getMessage("permissionsTitle");
 const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
 
 document.getElementById("permissionsBtn").addEventListener("click", async () => {
-  const manifest = await (await fetch("/manifest.json")).json();
+  const manifest = chrome.runtime.getManifest();
   const origins = manifest.permissions.filter((url) => url.startsWith("https://"));
 
   const isAlreadyGranted = await promisify(chrome.permissions.contains)({ origins });

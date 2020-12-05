@@ -799,6 +799,7 @@ input[type="color"]::-webkit-color-swatch {
   height: 6rem;
   width: 18rem;
   font-size: 2.5rem;
+  cursor: pointer;
 }
 
 #screenshot {

@@ -1,24 +1,28 @@
-chrome.permissions.contains(
-  {
-    permissions: ["webRequest", "webRequestBlocking", "cookies"],
-    origins: ["https://scratch.mit.edu/*", "https://api.scratch.mit.edu/*", "https://clouddata.scratch.mit.edu/*"],
-  },
-  async (hasPermissions) => {
-    if (hasPermissions) {
-      // Load remaining scripts
-      await import("./handle-fetch.js");
-      await import("./handle-cookie.js");
-      await import("./handle-auth.js");
-      await import("./handle-messages.js");
+const onPermissionsRevoked = () => {
+  console.error("Site access is not granted.");
+  chrome.tabs.create({
+    active: true,
+    url: "/webpages/settings/permissions.html"
+  });
+};
 
-      await import("./get-userscripts.js");
-      await import("./get-persistent-scripts.js");
-    } else {
-      console.error("Could not load addons; site access was not granted");
-      chrome.tabs.create({
-        active: true,
-        url: "/webpages/settings/permissions.html",
-      });
+const checkPermissions = (sendResponse) => {
+  chrome.permissions.contains({
+    origins: chrome.runtime.getManifest().permissions.filter((url) => url.startsWith("https://"))  
+  }, (hasPermissions) => {
+    if (!hasPermissions) {
+      onPermissionsRevoked();
     }
-  }
-);
+    sendResponse(hasPermissions);
+  });
+};
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request !== "checkPermissions") return;
+  checkPermissions(sendResponse);
+  return true;
+});
+
+chrome.permissions.onRemoved.addListener(onPermissionsRevoked);
+
+checkPermissions(() => {});
