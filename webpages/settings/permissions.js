@@ -5,7 +5,7 @@ lightThemeLink.setAttribute("href", "light.css");
 const vue = new Vue({
   el: "body",
   data: {
-    screenshotPath: "../../images/screenshots/permissions-dark.png"
+    screenshotPath: "../../images/screenshots/permissions-dark.png",
   },
   methods: {
     msg(message, ...param) {
@@ -13,7 +13,6 @@ const vue = new Vue({
     },
   },
 });
-
 
 chrome.storage.sync.get(["globalTheme"], function (r) {
   let rr = false; //true = light, false = dark
@@ -26,17 +25,17 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 
 document.title = chrome.i18n.getMessage("permissionsTitle");
 
-const promisify = callbackFn => ((...args) => new Promise(resolve => callbackFn(...args, resolve)));
+const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
 
 document.getElementById("permissionsBtn").addEventListener("click", async () => {
   const manifest = await (await fetch("/manifest.json")).json();
-  const origins = manifest.permissions.filter(url => url.startsWith("https://"));
-  
+  const origins = manifest.permissions.filter((url) => url.startsWith("https://"));
+
   const isAlreadyGranted = await promisify(chrome.permissions.contains)({ origins });
   if (isAlreadyGranted) {
     return window.close();
   }
-    
+
   const granted = await promisify(chrome.permissions.request)({ origins });
   if (granted) {
     return chrome.runtime.reload();
