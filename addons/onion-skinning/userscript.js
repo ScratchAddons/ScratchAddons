@@ -2,7 +2,6 @@ export default async function ({ addon, global, console, msg }) {
   let project = null;
   let paperCanvas = null;
   let expectingImport = false;
-  let _maskingCanvas = null;
   const storedOnionLayers = [];
   const PaperConstants = {
     Raster: null,
@@ -193,16 +192,6 @@ export default async function ({ addon, global, console, msg }) {
     callback(item);
   };
 
-  const getMaskingCanvas = (width, height) => {
-    if (_maskingCanvas) {
-      _maskingCanvas.width = width;
-      _maskingCanvas.height = height;
-      return _maskingCanvas;
-    }
-    _maskingCanvas = createCanvas(width, height);
-    return _maskingCanvas;
-  };
-
   const getTint = (red, green, blue, isBefore) => {
     red /= 255;
     green /= 255;
@@ -223,6 +212,27 @@ export default async function ({ addon, global, console, msg }) {
 
   const getPaperColorTint = (color, isBefore) =>
     toHexColor(getTint(color.red * 255, color.green * 255, color.blue * 255, isBefore));
+
+  const tintRaster = (raster, isBefore) => {
+    const {width, height} = raster.canvas;
+    const context = raster.context;
+    const imageData = context.getImageData(0, 0, width, height);
+    const data = imageData.data;
+    for (let i = 0; i < data.length; i += 4 /* RGBA */) {
+      const red = data[i + 0];
+      const green = data[i + 1];
+      const blue = data[i + 2];
+      const alpha = data[i + 3];
+      if (alpha === 0) {
+        continue;
+      }
+      const [newRed, newGreen, newBlue] = getTint(red, green, blue, isBefore);
+      data[i + 0] = newRed;
+      data[i + 1] = newGreen;
+      data[i + 2] = newBlue;
+    }
+    context.putImageData(imageData, 0, 0);
+  };
 
   const makeVectorLayer = (layer, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
@@ -288,6 +298,9 @@ export default async function ({ addon, global, console, msg }) {
                   i.fillColor = getPaperColorTint(i.fillColor, isBefore);
                 }
               }
+              if (i.canvas) {
+                tintRaster(i, isBefore);
+              }
             });
           }
 
@@ -312,45 +325,31 @@ export default async function ({ addon, global, console, msg }) {
     new Promise((resolve, reject) => {
       let { rotationCenterX, rotationCenterY } = costume;
 
-      const raster = new PaperConstants.Raster(createCanvas(960, 720));
-      raster.parent = layer;
-      raster.guide = true;
-      raster.locked = true;
-      raster.position = PaperConstants.CENTER;
-
       const image = new Image();
       image.onload = () => {
+        const width = image.width;
+        const height = image.height;
+
         // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L151-L156
         if (typeof rotationCenterX === "undefined") {
-          rotationCenterX = image.width / 2;
+          rotationCenterX = width / 2;
         }
         if (typeof rotationCenterY === "undefined") {
-          rotationCenterY = image.height / 2;
+          rotationCenterY = height / 2;
         }
 
+        const raster = new PaperConstants.Raster(createCanvas(width, height));
+        raster.parent = layer;
+        raster.guide = true;
+        raster.locked = true;
+        const x = width / 2 + (480 - rotationCenterX);
+        const y = height / 2 + (360 - rotationCenterY);
+        raster.position = new PaperConstants.Point(x, y);
+
+        raster.drawImage(image, 0, 0);
+
         if (settings.mode === "tint") {
-          const maskingCanvas = getMaskingCanvas(image.width, image.height);
-          const maskingContext = maskingCanvas.getContext("2d");
-          maskingContext.drawImage(image, 0, 0);
-          const imageData = maskingContext.getImageData(0, 0, image.width, image.height);
-          const data = imageData.data;
-          for (let i = 0; i < data.length; i += 4 /* RGBA */) {
-            const red = data[i + 0];
-            const green = data[i + 1];
-            const blue = data[i + 2];
-            const alpha = data[i + 3];
-            if (alpha === 0) {
-              continue;
-            }
-            const [newRed, newGreen, newBlue] = getTint(red, green, blue, isBefore);
-            data[i + 0] = newRed;
-            data[i + 1] = newGreen;
-            data[i + 2] = newBlue;
-          }
-          maskingContext.putImageData(imageData, 0, 0);
-          raster.drawImage(maskingCanvas, 480 - rotationCenterX, 360 - rotationCenterY);
-        } else {
-          raster.drawImage(image, 480 - rotationCenterX, 360 - rotationCenterY);
+          tintRaster(raster, isBefore);
         }
 
         resolve();
