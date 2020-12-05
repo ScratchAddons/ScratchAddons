@@ -87,3 +87,5 @@ version.onclick = () => {
   window.open("https://scratchaddons.com/changelog?versionname=" + chrome.runtime.getManifest().version_name);
   setTimeout(() => window.close(), 100);
 };
+
+chrome.runtime.sendMessage("checkPermissions");
