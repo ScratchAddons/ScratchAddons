@@ -17,7 +17,7 @@ function handleClick(e) {
     return;
   }
 
-  let block = e.target.closest("[data-id]");
+  const block = e.target.closest("[data-id]");
   if (!block) {
     return;
   }
