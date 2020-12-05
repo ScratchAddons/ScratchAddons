@@ -147,11 +147,13 @@
             </div>
             <div class="addon-settings" v-show="addon._expanded">
               <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
-              <div class="addon-warn" v-if="addon.warning" v-show="addon._expanded">
-                <img src="../../images/icons/warning.svg" />{{ addon.warning }}
-              </div>
-              <div class="addon-notice" v-if="addon.notice" v-show="addon._expanded">
-                <img src="../../images/icons/notice.svg" />{{ addon.notice }}
+              <div id="extra" v-for="extra of addon.extra">
+                <div class="addon-warn" v-if="extra.type == 'warning'" v-show="addon._expanded">
+                  <img src="../../images/icons/warning.svg" />{{ extra.text }}
+                </div>
+                <div class="addon-notice" v-if="extra.type == 'notice'" v-show="addon._expanded">
+                  <img src="../../images/icons/notice.svg" />{{ extra.text }}
+                </div>
               </div>
               <div class="addon-credits" v-if="addon.credits">
                 <span>{{ msg("creditTo") }}</span>
