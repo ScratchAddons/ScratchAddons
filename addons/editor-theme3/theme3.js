@@ -95,6 +95,14 @@ export default async function ({ addon, global, console }) {
           background-color: var(--editorTheme3-${prop}Color) !important;
         }`;
     }
+    if (prop === "Pen") {
+      stylesheet += `path.blocklyBlockBackground[fill="#0FBD8C"] {
+				fill: var(--editorTheme3-${prop}Color);
+        }
+        .blocklyDropDownDiv[style*="rgb(15, 189, 140)"] {
+          background-color: var(--editorTheme3-${prop}Color) !important;
+        }`;
+    }
   }
 
   document.querySelector(".scratch-addons-theme[data-addon-id='editor-theme3']").textContent += stylesheet;
