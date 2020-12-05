@@ -6,11 +6,9 @@
 .sa-onion-button {
   position: relative;
 }
-
 .sa-onion-button:focus-within {
   background-color: hsla(215, 100%, 65%, 0.2);
 }
-
 .sa-onion-button[data-enabled="true"] {
   background-color: #4c97ff;
 }
@@ -29,17 +27,14 @@
   transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
   opacity: 0;
   pointer-events: none;
-  /* TODO: dark mode */
   background: white;
   color: black;
 }
-
 .sa-onion-settings[data-visible="true"] {
   bottom: 16px;
   pointer-events: auto;
   opacity: 1;
 }
-
 [dir="rtl"] .sa-onion-settings {
   right: initial;
   left: 24px;
@@ -76,10 +71,11 @@
   position: absolute;
   bottom: 0;
   transform: translateY(100%);
-  /* TODO: RTL? */
   right: 101px;
 }
-
+[dir="rtl"] .sa-onion-settings-tip {
+  right: 118px;
+}
 .sa-onion-settings-polygon {
   fill: white;
   stroke: #ddd;

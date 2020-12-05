@@ -153,6 +153,7 @@ export default async function ({ addon, global, console, msg }) {
 
     storedOnionLayers.length = 0;
     const layers = project.layers;
+    // Iterate downward because we remove items mid-iteration
     for (let i = layers.length - 1; i >= 0; i--) {
       const layer = layers[i];
       if (layer.data.sa_isOnionLayer) {
@@ -193,11 +194,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const getTint = (red, green, blue, isBefore) => {
-    red /= 255;
-    green /= 255;
-    blue /= 255;
     const referenceColor = isBefore ? settings.beforeTint : settings.afterTint;
-    const colorAverage = (red + green + blue) / 3;
+    const colorAverage = (red + green + blue) / 3 / 255;
     const WEIGHT = 1.5;
     const weighted = colorAverage / WEIGHT + (1 - 1 / WEIGHT);
     return [referenceColor[0] * weighted, referenceColor[1] * weighted, referenceColor[2] * weighted];
@@ -214,8 +212,9 @@ export default async function ({ addon, global, console, msg }) {
     toHexColor(getTint(color.red * 255, color.green * 255, color.blue * 255, isBefore));
 
   const tintRaster = (raster, isBefore) => {
-    const {width, height} = raster.canvas;
+    const { width, height } = raster.canvas;
     const context = raster.context;
+    // TODO: check to see if this is a performance issue
     const imageData = context.getImageData(0, 0, width, height);
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4 /* RGBA */) {
@@ -474,7 +473,7 @@ export default async function ({ addon, global, console, msg }) {
     });
 
     // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L45-L51
-    // In Scratch, this block should always run.
+    // In Scratch, this code block should always run.
     Object.defineProperty(Object.prototype, "shouldZoomToFit", {
       set(value) {
         Object.defineProperty(this, "shouldZoomToFit", {
@@ -490,13 +489,17 @@ export default async function ({ addon, global, console, msg }) {
     });
   };
 
-  const settingsChanged = () => {
+  const settingsChanged = (onlyRelayerNeeded) => {
     if (settings.enabled) {
       if (settings.previous === 0 && settings.next === 0) {
         setEnabled(false);
         return;
       }
-      updateOnionLayers();
+      if (onlyRelayerNeeded) {
+        relayerOnionLayers();
+      } else {
+        updateOnionLayers();
+      }
     } else if (settings.previous > 0 || settings.next > 0) {
       setEnabled(true);
     }
@@ -680,7 +683,7 @@ export default async function ({ addon, global, console, msg }) {
     settings.layering = "front";
     layeringBehindButton.dataset.enabled = false;
     layeringFrontButton.dataset.enabled = true;
-    settingsChanged();
+    settingsChanged(true);
   });
   layeringFrontButton.dataset.enabled = settings.layering === "front";
   const layeringBehindButton = createButton();
@@ -690,17 +693,18 @@ export default async function ({ addon, global, console, msg }) {
     settings.layering = "behind";
     layeringBehindButton.dataset.enabled = true;
     layeringFrontButton.dataset.enabled = false;
-    settingsChanged();
+    settingsChanged(true);
   });
   layeringBehindButton.dataset.enabled = settings.layering === "behind";
   layeringContainer.appendChild(layeringGroup);
   settingsPage.appendChild(layeringContainer);
 
-  const settingsTip = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  const settingsTip = document.createElementNS(SVG_NS, "svg");
   settingsTip.setAttribute("class", "sa-onion-settings-tip");
   settingsTip.setAttribute("width", "14");
   settingsTip.setAttribute("height", "7");
-  const settingsTipShape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+  const settingsTipShape = document.createElementNS(SVG_NS, "polygon");
   settingsTipShape.setAttribute("class", "sa-onion-settings-polygon");
   settingsTipShape.setAttribute("points", "0,0 7,7, 14,0");
   settingsTip.appendChild(settingsTipShape);
@@ -715,6 +719,8 @@ export default async function ({ addon, global, console, msg }) {
       const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
       const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
 
+      // TODO: when leaving the paint editor, references to the old zoom controls are kept around by our DOM
+      // Need to investigate whether this leaks memory or other issues.
       const oldZoomControlsContainer = paintEditorControlsContainer.querySelector(
         "[class^='paint-editor_zoom-controls']"
       );
