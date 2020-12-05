@@ -729,6 +729,7 @@ input[type="color"]::-webkit-color-swatch {
   position: relative;
   display: inline-block;
   border-bottom: 1px dotted rgb(255 255 255 / 0.5);
+  cursor: default;
 }
 
 .tooltip .tooltiptext {
@@ -761,4 +762,46 @@ input[type="color"]::-webkit-color-swatch {
   border-width: 5px;
   border-style: solid;
   border-color: transparent black transparent transparent;
+}
+
+.permissions div.main {
+  justify-content: center;
+  display: grid;
+  grid-template-rows: 14rem 10rem;
+}
+
+.permissions-block {
+  margin-top: 3rem;
+  font-size: 1.25rem;
+}
+
+.permissions-block h2 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.permissions-steps {
+  display: flex;
+  align-items: flex-end;
+}
+
+.permissions-steps > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.permissions-steps > div:not(:last-child) {
+  margin-right: 2rem;
+}
+
+#permissionsBtn {
+  height: 6rem;
+  width: 18rem;
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+#screenshot {
+  height: 10rem;
 }

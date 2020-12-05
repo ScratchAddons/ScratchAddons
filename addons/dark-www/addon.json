@@ -6,21 +6,9 @@
     {
       "name": "Maximouse (Experimental Dark)",
       "link": "https://github.com/mxmou/customize-scratch"
-    },
-    {
-      "name": "Ucrash (Dark WWW)",
-      "link": "https://github.com/gducrash"
     }
   ],
   "userstyles": [
-    {
-      "url": "dark-www.css",
-      "matches": ["https://scratch.mit.edu/*"],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "dark-www"
-      }
-    },
     {
       "url": "experimental_scratchwww.css",
       "matches": [
@@ -44,7 +32,9 @@
         "https://scratch.mit.edu/terms_of_use/",
         "https://scratch.mit.edu/privacy_policy/",
         "https://scratch.mit.edu/DMCA/",
-        "https://scratch.mit.edu/conference/"
+        "https://scratch.mit.edu/conference/",
+        "https://scratch.mit.edu/scratch_1.4",
+        "https://scratch.mit.edu/sec"
       ],
       "settingMatch": {
         "id": "selectedMode",
@@ -69,7 +59,9 @@
         "https://scratch.mit.edu/cloudmonitor/*",
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
-        "https://scratch.mit.edu/500/"
+        "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/news",
+        "https://scratch.mit.edu/help/videos/*"
       ],
       "settingMatch": {
         "id": "selectedMode",
@@ -159,10 +151,6 @@
       "id": "selectedMode",
       "type": "select",
       "potentialValues": [
-        {
-          "id": "dark-www",
-          "name": "Dark WWW"
-        },
         {
           "id": "experimental-dark",
           "name": "Experimental Dark"

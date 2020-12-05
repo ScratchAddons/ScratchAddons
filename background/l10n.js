@@ -26,10 +26,10 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
         } catch (_) {
           continue;
         }
-        this._generateCache(messages);
         this.messages = Object.assign(messages, this.messages);
       }
     }
+    this._generateCache();
     this._refreshDateTime();
     this.loaded.concat(addonIds);
   }

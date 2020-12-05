@@ -245,6 +245,14 @@ const vue = new Vue({
         }
       });
     },
+    devShowAddonIds(event) {
+      if (!this.versionName.endsWith("-prerelease") || this.shownAddonIds) return;
+      event.stopPropagation();
+      this.shownAddonIds = true;
+      this.manifests.forEach((manifest) => {
+        manifest.name = manifest._addonId;
+      });
+    },
   },
   watch: {
     selectedTab() {
@@ -345,3 +353,5 @@ function resize() {
 }
 window.onresize = resize;
 resize();
+
+chrome.runtime.sendMessage("checkPermissions");
