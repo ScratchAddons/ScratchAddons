@@ -178,8 +178,15 @@ export default async function ({ addon, global, console, msg }) {
         project.addLayer(layer);
       }
     } else {
-      for (const layer of onions) {
-        project.insertLayer(1, layer);
+      const rasterLayer = project.layers.find((i) => i.data.isRasterLayer);
+      if (rasterLayer.index === 0) {
+        for (const layer of onions) {
+          project.insertLayer(0, layer);
+        }
+      } else {
+        for (const layer of onions) {
+          project.insertLayer(1, layer);
+        }
       }
     }
   };
