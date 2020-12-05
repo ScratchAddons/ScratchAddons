@@ -224,7 +224,7 @@ export default async function ({ addon, global, console, msg }) {
   const getPaperColorTint = (color, isBefore) =>
     toHexColor(getTint(color.red * 255, color.green * 255, color.blue * 255, isBefore));
 
-  const vectorLayer = (layer, costume, asset, isBefore) =>
+  const makeVectorLayer = (layer, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
       const { rotationCenterX, rotationCenterY } = costume;
       // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L196-L218
@@ -271,12 +271,22 @@ export default async function ({ addon, global, console, msg }) {
           root.scale(2, new PaperConstants.Point(0, 0));
 
           if (settings.mode === "tint") {
+            const gradients = new Set();
             recursePaperItem(root, (i) => {
               if (i.strokeColor) {
                 i.strokeColor = getPaperColorTint(i.strokeColor, isBefore);
               }
               if (i.fillColor) {
-                i.fillColor = getPaperColorTint(i.fillColor, isBefore);
+                const gradient = i.fillColor.gradient;
+                if (gradient) {
+                  if (gradients.has(gradient)) return;
+                  gradients.add(gradient);
+                  for (const stop of gradient.stops) {
+                    stop.color = getPaperColorTint(stop.color, isBefore);
+                  }
+                } else {
+                  i.fillColor = getPaperColorTint(i.fillColor, isBefore);
+                }
               }
             });
           }
@@ -298,7 +308,7 @@ export default async function ({ addon, global, console, msg }) {
       });
     });
 
-  const rasterLayer = (layer, costume, asset, isBefore) =>
+  const makeRasterLayer = (layer, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
       let { rotationCenterX, rotationCenterY } = costume;
 
@@ -410,9 +420,9 @@ export default async function ({ addon, global, console, msg }) {
         const onionAsset = vm.getCostume(i);
 
         if (onionCostume.dataFormat === "svg") {
-          await vectorLayer(layer, onionCostume, onionAsset, isBefore);
+          await makeVectorLayer(layer, onionCostume, onionAsset, isBefore);
         } else if (onionCostume.dataFormat === "png" || onionCostume.dataFormat === "jpg") {
-          await rasterLayer(layer, onionCostume, onionAsset, isBefore);
+          await makeRasterLayer(layer, onionCostume, onionAsset, isBefore);
         } else {
           throw new Error(`Unknown data format: ${onionCostume.dataFormat}`);
         }
