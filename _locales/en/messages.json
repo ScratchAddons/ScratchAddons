@@ -165,7 +165,7 @@
     "message": "Please enable site access"
   },
   "enablePermissionsDescription": {
-    "message": "Scratch Addons need site access permission to run addons."
+    "message": "Scratch Addons needs site access permission to run addons."
   },
   "enableButton": {
     "message": "Enable"
