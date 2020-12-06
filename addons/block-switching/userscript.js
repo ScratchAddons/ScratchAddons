@@ -587,11 +587,13 @@ export default async function ({ addon, global, console, msg }) {
       noopSwitch,
       {
         opcode: "boost_motorOnForRotation",
+        remap: {DURATION: "ROTATION"},
       },
     ];
     blockSwitches["boost_motorOnForRotation"] = [
       {
         opcode: "boost_motorOnFor",
+        remap: {ROTATION: "DURATION"},
       },
       noopSwitch,
     ];
