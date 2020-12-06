@@ -1,0 +1,9 @@
+{
+  "name": "Persistent thumbnail",
+  "description": "Don't allow thumbnails to be overwritten when saving.",
+  "notice": "This addon should be used with \"Thumbnails setter\" addon, otherwise you cannot set thumbnails at all.",
+  "persistentScripts": ["background.js"],
+  "tags": ["editor", "community"],
+  "enabledByDefault": false,
+  "l10n": true
+}

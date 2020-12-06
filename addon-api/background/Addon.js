@@ -27,8 +27,14 @@ export default class Addon {
       if (permissions.includes("notifications")) this.notifications = new Notifications(this);
       if (permissions.includes("badge")) this.badge = new Badge(this);
     }
+    this._onKilled = [];
   }
   _kill() {
+    for (const fn of this._onKilled) {
+      if (typeof fn === "function") {
+        fn(this);
+      }
+    }
     this.auth._removeEventListeners();
     this.settings._removeEventListeners();
     if (this.notifications) this.notifications._removeEventListeners();

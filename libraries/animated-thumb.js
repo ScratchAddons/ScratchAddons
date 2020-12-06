@@ -47,7 +47,8 @@ export default class ThumbSetter {
                     body: file,
                     credentials: "include",
                     headers: {
-                        "X-CSRFToken": this.getCSRFToken()
+                        "X-CSRFToken": this.getCSRFToken(),
+                        "X-ScratchAddons-Allow-Persistent": "true"
                     }
                 }
             );
