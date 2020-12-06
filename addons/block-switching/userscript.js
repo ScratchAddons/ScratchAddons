@@ -159,6 +159,42 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
+     blockSwitches["looks_think"] = [
+      noopSwitch,
+      {
+        opcode: "looks_say",
+      },
+    ];
+    blockSwitches["looks_say"] = [
+      {
+        opcode: "looks_think",
+      },
+      noopSwitch,
+    ];
+     blockSwitches["looks_thinkforsecs"] = [
+      noopSwitch,
+      {
+        opcode: "looks_sayforsecs",
+      },
+    ];
+    blockSwitches["looks_sayforsecs"] = [
+      {
+        opcode: "looks_thinkforsecs",
+      },
+      noopSwitch,
+    ];
+     blockSwitches["looks_switchbackdropto"] = [
+      noopSwitch,
+      {
+        opcode: "looks_switchbackdroptoandwait",
+      },
+    ];
+    blockSwitches["looks_switchbackdroptoandwait"] = [
+      {
+        opcode: "looks_switchbackdropto",
+      },
+      noopSwitch,
+    ];
   }
 
   if (addon.settings.get("sound")) {
@@ -496,6 +532,102 @@ export default async function ({ addon, global, console, msg }) {
     blockSwitches["pen_changePenSizeBy"] = [
       {
         opcode: "pen_setPenSizeTo",
+      },
+      noopSwitch,
+    ];
+    blockSwitches["music_setTempo"] = [
+      noopSwitch,
+      {
+        opcode: "music_changeTempo",
+      },
+    ];
+    blockSwitches["music_changeTempo"] = [
+      {
+        opcode: "music_setTempo",
+      },
+      noopSwitch,
+    ];
+     blockSwitches["ev3_motorTurnClockwise"] = [
+      noopSwitch,
+      {
+        opcode: "ev3_motorTurnCounterClockwise",
+      },
+    ];
+    blockSwitches["ev3_motorTurnCounterClockwise"] = [
+      {
+        opcode: "ev3_motorTurnClockwise",
+      },
+      noopSwitch,
+    ];
+    blockSwitches["ev3_whenBrightnessLessThan"] = [
+      noopSwitch,
+      {
+        opcode: "ev3_whenDistanceLessThan",
+      },
+    ];
+    blockSwitches["ev3_whenDistanceLessThan"] = [
+      {
+        opcode: "ev3_whenBrightnessLessThan",
+      },
+      noopSwitch,
+    ];
+     blockSwitches["ev3_getBrightness"] = [
+      noopSwitch,
+      {
+        opcode: "ev3_getDistance",
+      },
+    ];
+    blockSwitches["ev3_getDistance"] = [
+      {
+        opcode: "ev3_getBrightness",
+      },
+      noopSwitch,
+    ];
+     blockSwitches["boost_motorOnFor"] = [
+      noopSwitch,
+      {
+        opcode: "boost_motorOnForRotation",
+      },
+    ];
+    blockSwitches["boost_motorOnForRotation"] = [
+      {
+        opcode: "boost_motorOnFor",
+      },
+      noopSwitch,
+    ];
+      blockSwitches["boost_motorOn"] = [
+      noopSwitch,
+      {
+        opcode: "boost_motorOff",
+      },
+    ];
+    blockSwitches["boost_motorOff"] = [
+      {
+        opcode: "boost_motorOn",
+      },
+      noopSwitch,
+    ];
+         blockSwitches["wedo2_motorOn"] = [
+      noopSwitch,
+      {
+        opcode: "wedo2_motorOff",
+      },
+    ];
+    blockSwitches["wedo2_motorOff"] = [
+      {
+        opcode: "wedo2_motorOn",
+      },
+      noopSwitch,
+    ];
+          blockSwitches["gdxfor_getSpinSpeed"] = [
+      noopSwitch,
+      {
+        opcode: "gdxfor_getAcceleration",
+      },
+    ];
+    blockSwitches["gdxfor_getAcceleration"] = [
+      {
+        opcode: "gdxfor_getSpinSpeed",
       },
       noopSwitch,
     ];
