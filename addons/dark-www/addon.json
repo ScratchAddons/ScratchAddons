@@ -11,9 +11,7 @@
   "userscripts": [
     {
       "url": "disable-on-editor.js",
-      "matches": [
-        "https://scratch.mit.edu/projects/*"
-      ]
+      "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
   "userstyles": [
