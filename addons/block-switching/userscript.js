@@ -159,7 +159,7 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
-     blockSwitches["looks_think"] = [
+    blockSwitches["looks_think"] = [
       noopSwitch,
       {
         opcode: "looks_say",
@@ -171,7 +171,7 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
-     blockSwitches["looks_thinkforsecs"] = [
+    blockSwitches["looks_thinkforsecs"] = [
       noopSwitch,
       {
         opcode: "looks_sayforsecs",
@@ -183,7 +183,7 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
-     blockSwitches["looks_switchbackdropto"] = [
+    blockSwitches["looks_switchbackdropto"] = [
       noopSwitch,
       {
         opcode: "looks_switchbackdroptoandwait",
@@ -547,7 +547,7 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
-     blockSwitches["ev3_motorTurnClockwise"] = [
+    blockSwitches["ev3_motorTurnClockwise"] = [
       noopSwitch,
       {
         opcode: "ev3_motorTurnCounterClockwise",
@@ -571,7 +571,7 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
-     blockSwitches["ev3_getBrightness"] = [
+    blockSwitches["ev3_getBrightness"] = [
       noopSwitch,
       {
         opcode: "ev3_getDistance",
@@ -583,7 +583,7 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
-     blockSwitches["boost_motorOnFor"] = [
+    blockSwitches["boost_motorOnFor"] = [
       noopSwitch,
       {
         opcode: "boost_motorOnForRotation",
@@ -595,7 +595,7 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
-      blockSwitches["boost_motorOn"] = [
+    blockSwitches["boost_motorOn"] = [
       noopSwitch,
       {
         opcode: "boost_motorOff",
@@ -607,7 +607,7 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
-         blockSwitches["wedo2_motorOn"] = [
+    blockSwitches["wedo2_motorOn"] = [
       noopSwitch,
       {
         opcode: "wedo2_motorOff",
@@ -619,7 +619,7 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
-          blockSwitches["gdxfor_getSpinSpeed"] = [
+    blockSwitches["gdxfor_getSpinSpeed"] = [
       noopSwitch,
       {
         opcode: "gdxfor_getAcceleration",
