@@ -154,5 +154,32 @@
   },
   "search": {
     "message": "Search"
+  },
+  "permissionsTitle": {
+    "message": "Permissions - Scratch Addons"
+  },
+  "permissions": {
+    "message": "Permissions"
+  },
+  "enablePermissionsTitle": {
+    "message": "Please enable site access"
+  },
+  "enablePermissionsDescription": {
+    "message": "Scratch Addons needs site access permission to work."
+  },
+  "enableButton": {
+    "message": "Enable"
+  },
+  "enableButtonDescription": {
+    "message": "Click the button to enable."
+  },
+  "permissionsScreenAlt": {
+    "message": "Screenshot of a dialog to enable site access"
+  },
+  "clickAllowDescription": {
+    "message": "Click \"Allow\". Scratch Addons will reload and the addons will start working correctly again"
+  },
+  "permissionsDenied": {
+    "message": "Site access could not be enabled. Try again."
   }
 }
