@@ -1,4 +1,4 @@
-.postsignature {
+.postsignature > div:last-child {
   overflow-y: auto !important;
   resize: vertical;
   max-height: fit-content !important;
