@@ -211,7 +211,7 @@ export default async function ({ addon, global, console, msg }) {
   const toHexColor = ([red, green, blue]) => {
     const r = Math.round(red).toString(16).padStart(2, "0");
     const g = Math.round(green).toString(16).padStart(2, "0");
-    const b = Math.round(blue).toString().padStart(2, "0");
+    const b = Math.round(blue).toString(16).padStart(2, "0");
     return `#${r}${g}${b}`;
   };
 
