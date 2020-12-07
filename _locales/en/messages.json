@@ -133,5 +133,53 @@
   },
   "libraryCredits": {
     "message": "View licenses of used libraries"
+  },
+  "recommendedTooltip": {
+    "message": "This is recommended by Scratch Addons. Try it out!"
+  },
+  "betaTooltip": {
+    "message": "Keep in mind that this addon might have bugs."
+  },
+  "forumsTooltip": {
+    "message": "This addon applies to Scratch's Discussion Forums."
+  },
+  "reportItHere": {
+    "message": "report it here"
+  },
+  "forumWarning": {
+    "message": "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
+  },
+  "forumWarningGeneral": {
+    "message": "Message from Scratch Addons extension: Scratch policy forbids discussion about browser extensions, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found bugs, please $1."
+  },
+  "search": {
+    "message": "Search"
+  },
+  "permissionsTitle": {
+    "message": "Permissions - Scratch Addons"
+  },
+  "permissions": {
+    "message": "Permissions"
+  },
+  "enablePermissionsTitle": {
+    "message": "Please enable site access"
+  },
+  "enablePermissionsDescription": {
+    "message": "Scratch Addons needs site access permission to work."
+  },
+  "enableButton": {
+    "message": "Enable"
+  },
+  "enableButtonDescription": {
+    "message": "Click the button to enable."
+  },
+  "permissionsScreenAlt": {
+    "message": "Screenshot of a dialog to enable site access"
+  },
+  "clickAllowDescription": {
+    "message": "Click \"Allow\". Scratch Addons will reload and the addons will start working correctly again"
+  },
+  "permissionsDenied": {
+    "message": "Site access could not be enabled. Try again."
   }
 }

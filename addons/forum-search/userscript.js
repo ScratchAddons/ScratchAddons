@@ -146,7 +146,7 @@ function appendSearch(box, query, page, term, msg) {
 
         postLeftDl.appendChild(createTextBox(msg("last-checked"), "black username", 1));
         postLeftDl.appendChild(
-          createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_first_checked)), "", 2)
+          createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_last_checked)), "", 2)
         );
 
         let postRight = document.createElement("div");
@@ -191,7 +191,7 @@ function appendSearch(box, query, page, term, msg) {
 }
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.loadScript("https://scratchblocks.github.io/js/scratchblocks-v3.5-min.js");
+  await addon.tab.loadScript(addon.self.lib + "/scratchblocks-v3.5-min.js");
   // create the search bar
   let search = document.createElement("form");
   search.id = "forum-search-form";

@@ -409,11 +409,11 @@ h1 {
 }
 
 .search-box .badge {
-  cursor: pointer;
+  cursor: default;
   border-bottom: none;
 }
 .search-box .badge .selected-badge {
-  cursor: pointer;
+  cursor: default;
   border-bottom: none;
 }
 
@@ -585,23 +585,16 @@ input[type="color"]::-webkit-color-swatch {
   background-color: #222;
   margin: auto;
   padding: 20px;
-  width: 800px;
+  width: 50rem;
   border-radius: 10px;
   height: 75%;
   display: flex;
   flex-direction: column;
 }
-.close:hover {
-  color: #555;
-  text-decoration: none;
-  cursor: pointer;
-}
 
 .close {
-  color: #fff;
   float: right;
-  font-size: 28px;
-  font-weight: bold;
+  cursor: pointer;
 }
 
 .settings-heading {
@@ -696,4 +689,119 @@ input[type="color"]::-webkit-color-swatch {
 ::-webkit-scrollbar-thumb {
   background: grey;
   border-radius: 4px;
+}
+.categories-block.smallMode {
+  border-radius: 0px 0px 10px 10px;
+  margin-left: 10px;
+  z-index: 10;
+  position: absolute;
+  height: 32rem;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.toggle {
+  cursor: pointer;
+  margin-right: 10px;
+}
+.search-box.smallMode {
+  overflow: scroll;
+  overflow-y: hidden;
+}
+@media only screen and (max-width: 370px) {
+  .badge {
+    display: none;
+  }
+}
+.categories-shrink {
+  text-align: right;
+  bottom: 0;
+  position: fixed;
+  margin: 5px;
+  margin-top: 7px;
+  cursor: pointer;
+}
+.flipped {
+  transform: scaleX(-1);
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted rgb(255 255 255 / 0.5);
+  cursor: default;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 12rem;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px 10px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.tooltip .tooltiptext {
+  top: -5px;
+  left: 105%;
+}
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%; /* To the left of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
+
+.permissions div.main {
+  justify-content: center;
+  display: grid;
+  grid-template-rows: 14rem 10rem;
+}
+
+.permissions-block {
+  margin-top: 3rem;
+  font-size: 1.25rem;
+}
+
+.permissions-block h2 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.permissions-steps {
+  display: flex;
+  align-items: flex-end;
+}
+
+.permissions-steps > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.permissions-steps > div:not(:last-child) {
+  margin-right: 2rem;
+}
+
+#permissionsBtn {
+  height: 6rem;
+  width: 18rem;
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+#screenshot {
+  height: 10rem;
 }

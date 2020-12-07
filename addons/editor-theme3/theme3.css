@@ -96,4 +96,11 @@ g > line {
 [data-category="LEGO EV3"] > path.blocklyBlockBackground,
 [data-category="BOOST"] > path.blocklyBlockBackground {
   fill: var(--editorTheme3-extensionsColor);
+
+.blocklyEditableText rect {
+  fill: var(--editorTheme3-customColor);
+}
+
+.fieldTextInput {
+  border-color: var(--editorTheme3-customColor) !important;
 }

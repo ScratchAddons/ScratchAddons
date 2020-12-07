@@ -35,7 +35,7 @@ export default class LocalizationProvider extends EventTarget {
       }
   }
   
-  _get (key, placeholders, messageHandler) {
+  _get (key, placeholders, messageHandler, fallback) {
       // Use cache if raw message is requested, and cache is up-to-date
       if (
           messageHandler === null &&
@@ -50,15 +50,15 @@ export default class LocalizationProvider extends EventTarget {
         return (new MessageFormat(message, this.locale)).format(placeholders);
       }
       console.warn('Key missing:', key);
-      return key;
+      return fallback || key;
   }
 
-  get(key, placeholders = {}) {
-    return this._get(key, placeholders, null);
+  get(key, placeholders = {}, fallback = "") {
+    return this._get(key, placeholders, null, fallback);
   }
   
-  escaped(key, placeholders = {}) {
-    return this._get(key, placeholders, message => escapeHTML(message));
+  escaped(key, placeholders = {}, fallback = "") {
+    return this._get(key, placeholders, message => escapeHTML(message), fallback);
   }
 
   get locale() {

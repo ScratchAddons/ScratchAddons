@@ -11,6 +11,7 @@ export default class UserscriptLocalizationProvider extends LocalizationProvider
     if (addonId !== "_general" && !this.generalLoaded) {
       await this.loadByAddonId("_general");
     }
+    let addonMessages = {};
     for (const dir of this._urls) {
       let resp;
       let messages = {};
@@ -21,9 +22,10 @@ export default class UserscriptLocalizationProvider extends LocalizationProvider
       } catch (_) {
         continue;
       }
-      this._generateCache(messages);
+      addonMessages = Object.assign(messages, addonMessages);
       this.messages = Object.assign(messages, this.messages);
     }
+    this._generateCache(addonMessages);
     if (addonId === "_general") {
       this._refreshDateTime();
       this.generalLoaded = true;
