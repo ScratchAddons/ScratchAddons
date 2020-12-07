@@ -1,0 +1,15 @@
+.activity-ul {
+  overflow-y: scroll !important;
+  height: 300px;
+}
+
+.load-more-wh {
+  outline: none;
+  margin: 0 auto;
+  width: 90%;
+  padding: 0.4em 1.25em;
+}
+
+.load-more-wh-container {
+  text-align: center;
+}

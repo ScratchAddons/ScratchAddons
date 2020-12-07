@@ -8,6 +8,12 @@
       "link": "https://github.com/mxmou/customize-scratch"
     }
   ],
+  "userscripts": [
+    {
+      "url": "disable-on-editor.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
   "userstyles": [
     {
       "url": "experimental_scratchwww.css",
@@ -32,7 +38,9 @@
         "https://scratch.mit.edu/terms_of_use/",
         "https://scratch.mit.edu/privacy_policy/",
         "https://scratch.mit.edu/DMCA/",
-        "https://scratch.mit.edu/conference/"
+        "https://scratch.mit.edu/conference/",
+        "https://scratch.mit.edu/scratch_1.4",
+        "https://scratch.mit.edu/sec"
       ],
       "settingMatch": {
         "id": "selectedMode",
@@ -57,7 +65,9 @@
         "https://scratch.mit.edu/cloudmonitor/*",
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
-        "https://scratch.mit.edu/500/"
+        "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/news",
+        "https://scratch.mit.edu/help/videos/*"
       ],
       "settingMatch": {
         "id": "selectedMode",

@@ -14,5 +14,5 @@
   ],
   "tags": ["forums", "community"],
   "enabledByDefault": false,
-  "l10n": false
+  "l10n": true
 }
