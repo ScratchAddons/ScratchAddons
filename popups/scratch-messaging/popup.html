@@ -73,7 +73,7 @@
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.follows">
           <div class="username-list">
-            <a v-for="follower of follows" @click="openProfile(follower)">{{follower}}</a>
+            <a v-for="follower of follows" href="https://scratch.mit.edu/users/{{ follower }}">{{follower}}</a>
           </div>
         </div>
       </div>
