@@ -561,7 +561,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       studioActivityHTML(studio) {
         const title = `<a target="_blank"
             rel="noopener noreferrer"
-            href="https://scratch.mit.edu/studios/${studio.studioId}/curators/"
+            href="https://scratch.mit.edu/studios/${studio.studioId}/activity/"
             style="text-decoration: underline"
         >${escapeHTML(studio.studioTitle)}</a>`;
         return l10n.escaped("scratch-messaging/new-activity", { title });
