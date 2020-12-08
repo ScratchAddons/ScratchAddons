@@ -8,12 +8,6 @@
       "link": "https://github.com/mxmou/customize-scratch"
     }
   ],
-  "userscripts": [
-    {
-      "url": "disable-on-editor.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
-    }
-  ],
   "userstyles": [
     {
       "url": "experimental_scratchwww.css",
