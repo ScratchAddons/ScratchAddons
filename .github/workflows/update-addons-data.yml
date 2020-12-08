@@ -1,0 +1,30 @@
+name: Update website addons data
+
+on:
+  release:
+    types: [released]
+  # Want to trigger manually? Go to the link below.
+  # https://github.com/ScratchAddons/website/actions?query=workflow%3A%22Addons+Data+Update%22
+
+jobs:
+  update:
+    name: Update
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'ScratchAddons'
+
+    steps:
+      - name: Generate token
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.BOT_APP_ID }}
+          private_key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+      - name: Invoke workflow
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Addons Data Update
+          repo: ScratchAddons/website
+          token: ${{ steps.generate-token.outputs.token }}
+          ref: refs/heads/master
+          inputs: '{ "ref": "${{ github.event.tag_name }}" }'

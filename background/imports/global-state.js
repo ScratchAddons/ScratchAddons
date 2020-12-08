@@ -40,6 +40,9 @@ class StateProxy {
 }
 
 function messageForAllTabs(message) {
+  // May log errors to the console in Firefox, where we don't have the permission
+  // to read URLs from tabs even if we have content scripts on them.
+  // No need to specify frame IDs, because this message should also arrive to iframes.
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach(
       (tab) => (tab.url || (!tab.url && typeof browser !== "undefined")) && chrome.tabs.sendMessage(tab.id, message)

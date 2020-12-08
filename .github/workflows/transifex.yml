@@ -6,6 +6,7 @@ on:
 jobs:
   transifex:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'ScratchAddons'
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js

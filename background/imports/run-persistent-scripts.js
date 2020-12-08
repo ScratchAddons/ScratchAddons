@@ -54,8 +54,6 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
   };
   const globalObj = Object.create(null);
 
-  await scratchAddons.l10n.load([addonId]);
-
   for (const scriptPath of scriptUrls) {
     const scriptUrl = chrome.runtime.getURL(`/addons/${addonId}/${scriptPath}`);
     console.log(
