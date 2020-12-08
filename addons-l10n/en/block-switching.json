@@ -75,7 +75,7 @@
   "block-switching/ev3_getBrightness": "brightness",
   "block-switching/ev3_getDistance": "distance",
   "block-switching/boost_motorOnFor": "turn motor on for seconds",
-  "block-switching/boost_motorOnForRotations": "turn motor on for rotations",
+  "block-switching/boost_motorOnForRotation": "turn motor on for rotations",
   "block-switching/boost_motorOn": "turn motor on",
   "block-switching/boost_motorOff": "turn motor off",
   "block-switching/wedo2_motorOn": "turn motor on",
