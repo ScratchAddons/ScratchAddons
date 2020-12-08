@@ -24,7 +24,7 @@ body:not(.sa-body-editor) .join-flow-title {
 }
 .monitor_label_ci1ok {
   /* For some strange reason, variable names inherit their color from the body, unlike list title names */
-  color: #575E75;
+  color: #575e75;
 }
 #view,
 .outer #projectBox,
