@@ -3,7 +3,7 @@ import ShowBroadcast from "./show-broadcast.js";
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
   // Scratch Addons: do not run if extension is already enabled
   if (window.initGUI) return;
-  
+
   const showBroadcastSingleton = new ShowBroadcast(addon);
 
   // 0-indexed 6 = July
@@ -1758,7 +1758,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
               let wksp = getWorkspace();
               let block = wksp.getBlockById(dataId);
               let isFlyOut = block.workspace.isFlyout;
-              
+
               const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
               if (BROADCAST_BLOCKS.includes(block.type)) {
                 // Show Broadcast
@@ -1768,13 +1768,13 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                     const googMenuItemContent = Object.assign(document.createElement("div"), {
                       textContent: msg(`show-${showKey}`.toLowerCase()),
                       style: "user-select: none;",
-                      className: "goog-menuitem-content"
+                      className: "goog-menuitem-content",
                     });
                     const googMenuItem = Object.assign(document.createElement("div"), {
                       id: `s3devShow${showKey}`,
                       className: "goog-menuitem s3dev-mi",
                       role: "menuitem",
-                      style: "user-select: none;"
+                      style: "user-select: none;",
                     });
                     googMenuItem.addEventListener("click", () => {
                       wksp.setVisible(false);
