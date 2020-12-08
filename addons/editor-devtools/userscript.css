@@ -457,3 +457,8 @@ ul#s3devIDD {
   background-color: rgba(0, 0, 0, 0.6);
   color: white;
 }
+
+[data-highlighted="true"] {
+  background-color: hsla(30, 100%, 55%, 1) !important; /* orange */
+  color: white !important;
+}
