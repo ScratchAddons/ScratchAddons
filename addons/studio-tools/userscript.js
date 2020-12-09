@@ -1,11 +1,11 @@
 export default async function ({ addon, global, console, msg }) {
   const backbone = new Scratch.Gallery.CuratorList({ gallery_id: Scratch.INIT_DATA.GALLERY.model.id });
 
-  const addedByExtension = document.createElement("span")
-  addedByExtension.textContent = msg("added-by")
-  addedByExtension.style.fontSize = ".7rem"
-  addedByExtension.style.fontStyle = "italic"
-  addedByExtension.style.marginLeft = "2px"
+  const addedByExtension = document.createElement("span");
+  addedByExtension.textContent = msg("added-by");
+  addedByExtension.style.fontSize = ".7rem";
+  addedByExtension.style.fontStyle = "italic";
+  addedByExtension.style.marginLeft = "2px";
   if (document.getElementById("curator-action-bar")) {
     document.querySelector("#show-add-curator > span").textContent = msg("ipr");
 
@@ -76,9 +76,7 @@ export default async function ({ addon, global, console, msg }) {
       .getElementById("curator-action-bar")
       .insertBefore(leaveButton, document.getElementById("show-add-curator").nextSibling);
 
-      document
-      .getElementById("curator-action-bar")
-      .insertBefore(addedByExtension, leaveButton.nextSibling);
+    document.getElementById("curator-action-bar").insertBefore(addedByExtension, leaveButton.nextSibling);
   } else {
     const res = await fetch(`https://scratch.mit.edu/studios/${Scratch.INIT_DATA.GALLERY.model.id}/`);
     const text = await res.text();
@@ -106,7 +104,7 @@ export default async function ({ addon, global, console, msg }) {
     innerDiv.className = "inner";
     innerDiv.id = "curator-action-bar";
     innerDiv.appendChild(leaveButton);
-    innerDiv.appendChild(addedByExtension)
+    innerDiv.appendChild(addedByExtension);
     const actionBarDiv = document.createElement("div");
     actionBarDiv.className = "action-bar white scroll";
     actionBarDiv.appendChild(innerDiv);
