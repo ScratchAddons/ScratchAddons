@@ -51,5 +51,9 @@
   "editor-devtools/lists": "lists",
   "editor-devtools/variables": "variables",
   "editor-devtools/insert": "Insert",
-  "editor-devtools/start-typing": "Start Typing..."
+  "editor-devtools/start-typing": "Start Typing...",
+  "editor-devtools/show-senders": "Show senders",
+  "editor-devtools/show-receivers": "Show receivers",
+  "editor-devtools/show-broadcast": "Show Broadcast Senders/Receivers",
+  "editor-devtools/show-broadcast-desc": "Right-click a broadcast block, then click \"Show senders\" or \"Show receivers\". Sprites with the block will get highlighted."
 }
