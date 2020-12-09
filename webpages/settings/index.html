@@ -188,6 +188,16 @@
                     min="0"
                   />
                   <input
+                    type="number"
+                    class="setting-input number"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @change="updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'integer'"
+                    :min="setting.min"
+                    :max="setting.max"
+                  />
+                  <input
                     type="text"
                     class="setting-input string"
                     v-model="addonSettings[addon._addonId][setting.id]"

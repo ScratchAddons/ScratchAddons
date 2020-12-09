@@ -1,6 +1,10 @@
+import ShowBroadcast from "./show-broadcast.js";
+
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
   // Scratch Addons: do not run if extension is already enabled
   if (window.initGUI) return;
+
+  const showBroadcastSingleton = new ShowBroadcast(addon);
 
   // 0-indexed 6 = July
   const releaseDate = new Date(2020, 6, 4);
@@ -26,6 +30,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 <p><strong>${m("improved-tidy-up")}</strong> &ndash; ${m("improved-tidy-up-desc")}</p>
 <p><strong>${m("copy-to-clipboard")}</strong> &ndash; ${m("copy-to-clipboard-desc")}</p>
 <p><strong>${m("paste-from-clipboard")}</strong> &ndash; ${m("paste-from-clipboard-desc")}</p>
+<p><strong>${m("show-broadcast")}</strong> &ndash; ${m("show-broadcast-desc")}</p>
 <p><strong>${m("swap-variable")}</strong> &ndash; ${m("swap-variable-desc")}</p>
 <p><strong>${m("middleclick")}</strong> &ndash; ${m("middleclick-desc")}</p>
 <p><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-desc")}</p>
@@ -1753,6 +1758,34 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
               let wksp = getWorkspace();
               let block = wksp.getBlockById(dataId);
               let isFlyOut = block.workspace.isFlyout;
+
+              const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
+              if (BROADCAST_BLOCKS.includes(block.type)) {
+                // Show Broadcast
+                const broadcastId = showBroadcastSingleton.getAssociatedBroadcastId(dataId);
+                if (broadcastId) {
+                  for (const showKey of ["Senders", "Receivers"]) {
+                    const googMenuItemContent = Object.assign(document.createElement("div"), {
+                      textContent: msg(`show-${showKey}`.toLowerCase()),
+                      style: "user-select: none;",
+                      className: "goog-menuitem-content",
+                    });
+                    const googMenuItem = Object.assign(document.createElement("div"), {
+                      id: `s3devShow${showKey}`,
+                      className: "goog-menuitem s3dev-mi",
+                      role: "menuitem",
+                      style: "user-select: none;",
+                    });
+                    googMenuItem.addEventListener("click", () => {
+                      wksp.setVisible(false);
+                      wksp.setVisible(true);
+                      showBroadcastSingleton[`show${showKey}`](broadcastId);
+                    });
+                    googMenuItem.appendChild(googMenuItemContent);
+                    blocklyContextMenu.appendChild(googMenuItem);
+                  }
+                }
+              }
 
               if (!isFlyOut) {
                 blocklyContextMenu.insertAdjacentHTML(
