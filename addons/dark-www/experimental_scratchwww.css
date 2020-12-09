@@ -165,3 +165,11 @@ body:not(.sa-body-editor) .select select option,
 .studio-list-bottom-gradient {
   background: linear-gradient(rgba(40, 40, 40, 0), #282828);
 }
+
+[class^=loader_background] {
+  background-color: #252525;
+}
+
+.project-info-alert {
+  color: #575e75;
+}
