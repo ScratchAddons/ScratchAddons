@@ -166,7 +166,7 @@ body:not(.sa-body-editor) .select select option,
   background: linear-gradient(rgba(40, 40, 40, 0), #282828);
 }
 
-[class^=loader_background] {
+[class^="loader_background"] {
   background-color: #252525;
 }
 
