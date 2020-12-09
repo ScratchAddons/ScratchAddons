@@ -67,19 +67,5 @@
   "block-switching/sound_setvolumeto": "set volume",
   "block-switching/sound_changevolumeby": "change volume",
   "block-switching/music_setTempo": "set tempo",
-  "block-switching/music_changeTempo": "change tempo",
-  "block-switching/ev3_motorTurnClockwise": "turn this way",
-  "block-switching/ev3_motorTurnCounterClockwise": "turn that way",
-  "block-switching/ev3_whenBrightnessLessThan": "when brightness is less than",
-  "block-switching/ev3_whenDistanceLessThan": "when distance is less than",
-  "block-switching/ev3_getBrightness": "brightness",
-  "block-switching/ev3_getDistance": "distance",
-  "block-switching/boost_motorOnFor": "turn motor on for seconds",
-  "block-switching/boost_motorOnForRotation": "turn motor on for rotations",
-  "block-switching/boost_motorOn": "turn motor on",
-  "block-switching/boost_motorOff": "turn motor off",
-  "block-switching/wedo2_motorOn": "turn motor on",
-  "block-switching/wedo2_motorOff": "turn motor off",
-  "block-switching/gdxfor_getSpinSpeed": "spin speed",
-  "block-switching/gdxfor_getAcceleration": "acceleration"
+  "block-switching/music_changeTempo": "change tempo"
 }
