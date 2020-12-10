@@ -15,9 +15,6 @@
 .blocklySvg {
   background: var(--main-bg);
 }
-.blocklyMainBackground {
-  fill: var(--secondary-bg) !important;
-}
 .context-menu_context-menu_2SJM-,
 .blocklyWidgetDiv .goog-menu,
 .goog-menuitem-highlight /*s-a* *s-a*/ ,
