@@ -1,4 +1,4 @@
-html > body:not(.sa-body-editor),
+html > body:not(.sa-body-editor):not(.monitor_monitor-container_2J9gl),
 body:not(.sa-body-editor) h1,
 body:not(.sa-body-editor) h2,
 body:not(.sa-body-editor) h3,
@@ -19,8 +19,12 @@ a.social-messages-profile-link,
 .subactions .share-date,
 .developers #faq p,
 .social-form,
-.join-flow-title {
+body:not(.sa-body-editor) .join-flow-title {
   color: #fff;
+}
+.monitor_label_ci1ok {
+  /* For some strange reason, variable names inherit their color from the body, unlike list title names */
+  color: #575e75;
 }
 #view,
 .outer #projectBox,
@@ -36,7 +40,7 @@ a.social-messages-profile-link,
 .developers .title-banner.faq-banner,
 .credits .supporters,
 .download .installation,
-.gender-radio-row {
+body:not(.sa-body-editor) .gender-radio-row {
   background: #333;
 }
 .thumbnail .thumbnail-loves::before,
@@ -62,14 +66,14 @@ img.tips-icon,
 }
 .box,
 .box .box-content,
-.button.white,
+body:not(.sa-body-editor) .button.white,
 .tab-background,
 .outer .tab-background,
 .tabs,
 .tabs li:hover,
 .intro-banner .intro-button,
 .os-chooser,
-.modal-content,
+body:not(.sa-body-editor) .modal-content,
 .grid .thumbnail,
 .ttt-tile,
 .about .body,
@@ -133,11 +137,11 @@ input[type="checkbox"].formik-checkbox,
   background: #282828;
   color: #fff;
 }
-.select select,
-.select select:hover,
-.select select:focus,
-.select select option,
-.select .join-flow-select {
+body:not(.sa-body-editor) .select select,
+body:not(.sa-body-editor) .select select:hover,
+body:not(.sa-body-editor) .select select:focus,
+body:not(.sa-body-editor) .select select option,
+.select .join-flow-join-flow-select {
   color: #fff;
   background-color: #282828;
 }
@@ -160,4 +164,12 @@ input[type="checkbox"].formik-checkbox,
 }
 .studio-list-bottom-gradient {
   background: linear-gradient(rgba(40, 40, 40, 0), #282828);
+}
+
+[class^="loader_background"] {
+  background-color: #252525;
+}
+
+.project-info-alert {
+  color: #575e75;
 }

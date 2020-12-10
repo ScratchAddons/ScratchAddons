@@ -159,6 +159,42 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
+    blockSwitches["looks_think"] = [
+      noopSwitch,
+      {
+        opcode: "looks_say",
+      },
+    ];
+    blockSwitches["looks_say"] = [
+      {
+        opcode: "looks_think",
+      },
+      noopSwitch,
+    ];
+    blockSwitches["looks_thinkforsecs"] = [
+      noopSwitch,
+      {
+        opcode: "looks_sayforsecs",
+      },
+    ];
+    blockSwitches["looks_sayforsecs"] = [
+      {
+        opcode: "looks_thinkforsecs",
+      },
+      noopSwitch,
+    ];
+    blockSwitches["looks_switchbackdropto"] = [
+      noopSwitch,
+      {
+        opcode: "looks_switchbackdroptoandwait",
+      },
+    ];
+    blockSwitches["looks_switchbackdroptoandwait"] = [
+      {
+        opcode: "looks_switchbackdropto",
+      },
+      noopSwitch,
+    ];
   }
 
   if (addon.settings.get("sound")) {
@@ -496,6 +532,18 @@ export default async function ({ addon, global, console, msg }) {
     blockSwitches["pen_changePenSizeBy"] = [
       {
         opcode: "pen_setPenSizeTo",
+      },
+      noopSwitch,
+    ];
+    blockSwitches["music_setTempo"] = [
+      noopSwitch,
+      {
+        opcode: "music_changeTempo",
+      },
+    ];
+    blockSwitches["music_changeTempo"] = [
+      {
+        opcode: "music_setTempo",
       },
       noopSwitch,
     ];

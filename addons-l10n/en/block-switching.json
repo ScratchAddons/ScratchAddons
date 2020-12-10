@@ -24,6 +24,12 @@
   "block-switching/looks_hide": "hide",
   "block-switching/looks_nextcostume": "next costume",
   "block-switching/looks_nextbackdrop": "next backdrop",
+  "block-switching/looks_say": "say",
+  "block-switching/looks_think": "think",
+  "block-switching/looks_sayforsecs": "say for seconds",
+  "block-switching/looks_thinkforsecs": "think for seconds",
+  "block-switching/looks_switchbackdropto": "switch backdrop",
+  "block-switching/looks_switchbackdroptoandwait": "switch backdrop and wait",
   "block-switching/motion_turnright": "turn right",
   "block-switching/motion_turnleft": "turn left",
   "block-switching/motion_setx": "set x",
@@ -59,5 +65,7 @@
   "block-switching/sound_changeeffectby": "change effect",
   "block-switching/sound_seteffectto": "set effect",
   "block-switching/sound_setvolumeto": "set volume",
-  "block-switching/sound_changevolumeby": "change volume"
+  "block-switching/sound_changevolumeby": "change volume",
+  "block-switching/music_setTempo": "set tempo",
+  "block-switching/music_changeTempo": "change tempo"
 }
