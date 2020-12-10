@@ -131,7 +131,7 @@
       "default": false
     },
     {
-      "name": "Toggle dots",
+      "name": "Show dots",
       "id": "toggledots",
       "type": "boolean",
       "default": false
