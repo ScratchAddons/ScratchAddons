@@ -1,10 +1,11 @@
 {
   "name": "Colored context menus",
   "description": "Makes the editor context menus colorful when right-clicking a block.",
-  "extra": [
+  "info": [
     {
       "type": "notice",
-      "text": "Refresh the editor after enabling this theme."
+      "text": "Refresh the editor after enabling/disabling this theme.",
+      "id": "refresheditor"
     }
   ],
   "credits": [
