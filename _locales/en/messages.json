@@ -181,5 +181,8 @@
   },
   "permissionsDenied": {
     "message": "Site access could not be enabled. Try again."
+  },
+  "translate": {
+    "message": "Help Translate"
   }
 }
