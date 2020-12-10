@@ -35,15 +35,19 @@
           <img src="../../images/icons/brush.svg" />
           <span>{{ msg("themes") }}</span>
         </div>
-        <div class="category" style="margin-top: auto; cursor: pointer" @click="openCredits()">
+        <div class="category" style="margin-top: auto;" @click="openPage('https://scratchaddons.com/contributors')">
           <img src="../../images/icons/users.svg" />
           <span>{{ msg("credits") }}</span>
         </div>
-        <div class="category" style="cursor: pointer" @click="openReview()">
+        <div class="category"  @click="openReview()">
           <img src="../../images/icons/star.svg" />
           <span>{{ msg("review") }}</span>
         </div>
-        <div class="category" style="cursor: pointer" @click="openFeedback()">
+        <div class="category"  @click="openPage('https://github.com/ScratchAddons/ScratchAddons/wiki/How-to-join-the-localization-team')">
+          <img src="../../images/icons/translate.svg" />
+          <span>{{ msg("translate") }}</span>
+        </div>
+        <div class="category"  @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
           <span>{{ msg("feedback") }}</span>
         </div>

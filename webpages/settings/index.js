@@ -140,8 +140,8 @@ const vue = new Vue({
         );
       }
     },
-    openCredits() {
-      window.open(`https://scratchaddons.com/contributors`);
+    openPage(page) {
+      window.open(page)
     },
     openFeedback() {
       window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version_name}`);
