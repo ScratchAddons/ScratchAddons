@@ -141,7 +141,7 @@ const vue = new Vue({
       }
     },
     openPage(page) {
-      window.open(page)
+      window.open(page);
     },
     openFeedback() {
       window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version_name}`);
