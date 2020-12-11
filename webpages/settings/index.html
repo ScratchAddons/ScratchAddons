@@ -45,7 +45,10 @@
         </div>
         <div class="category" @click="openPage('https://scratchaddons.com/translate')">
           <img src="../../images/icons/translate.svg" />
-          <span>{{ msg("translate") }}</span>
+          <span>{{ msg("translate") }} </span>
+          <div class="badge purple tooltip" style="cursor: pointer">
+            {{ msg("new") }}
+          </div>
         </div>
         <div class="category" @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
@@ -121,6 +124,9 @@
                   <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
                   <span @click.ctrl="devShowAddonIds">{{ addon.name }}</span>
                 </div>
+              </div>
+              <div class="badge purple tooltip" v-if="addon._addonId === 'onion-skinning'">
+                {{ msg("new") }}
               </div>
               <div class="badge blue tooltip" v-if="addon._tags.recommended">
                 {{ msg("recommended") }}<span class="tooltiptext">{{ msg("recommendedTooltip") }}</span>

@@ -8,19 +8,9 @@ chrome.runtime.onInstalled.addListener((details) => {
     chrome.tabs.create({ url: "https://scratchaddons.com/welcome" });
   }
 
-  // TODO: remove in v1.4.0
-  // Disable live featured projects for all users
-  if (
-    details.previousVersion &&
-    details.previousVersion === "1.3.0" &&
-    chrome.runtime.getManifest().version === "1.3.1"
-  ) {
-    scratchAddons.localEvents.addEventListener("ready", () => {
-      scratchAddons.localState.addonsEnabled["live-featured-project"] = false;
-      chrome.storage.sync.set({
-        addonsEnabled: scratchAddons.localState.addonsEnabled,
-      });
-    });
+  if (details.reason === "install" && chrome.runtime.getManifest().version.startsWith("1.5.")) {
+    // Avoid showing update notification to new users
+    chrome.storage.sync.set({'v1.5.0-banner': true})
   }
 });
 chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");

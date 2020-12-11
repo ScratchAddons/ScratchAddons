@@ -293,6 +293,8 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   // Messaging related addons should always go first no matter what
   manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
   manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
+  // TODO: remove in v1.6.0
+  manifests.sort((a, b) => (a.addonId === "onion-skinning" ? -1 : b.addonId === "onion-skinning" ? 1 : 0));
   vue.manifests = manifests.map(({ manifest }) => manifest);
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);

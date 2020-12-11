@@ -210,6 +210,10 @@ h1 {
   background: #175ef8;
   border-color: #0e44b8;
 }
+.badge.purple {
+  background: rgb(177, 23, 248);
+  border-color: #b20eb8;
+}
 .badge.green {
   background: #78fd2b;
   color: #333333;

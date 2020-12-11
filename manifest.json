@@ -55,7 +55,8 @@
     "addon-api/*",
     "addons/*",
     "libraries/*",
-    "addons-l10n/*/*.json"
+    "addons-l10n/*/*.json",
+    "images/onion.png"
   ],
   "browser_specific_settings": {
     "gecko": {

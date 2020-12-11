@@ -53,6 +53,9 @@
   "forWebsite": {
     "message": "For website"
   },
+  "new": {
+    "message": "New!"
+  },
   "confirmPreset": {
     "message": "Are you sure you want to load this preset?"
   },
@@ -184,5 +187,32 @@
   },
   "translate": {
     "message": "Help Translate"
+  },
+  "extensionUpdate": {
+    "message": "Scratch Addons extension update"
+  },
+  "v1_5_0__1": {
+    "message": "New feature: onion skinning"
+  },
+  "v1_5_0__2": {
+    "message": ", for animating in the editor. Go to"
+  },
+  "v1_5_0__3": {
+    "message": "Scratch Addons settings"
+  },
+  "v1_5_0__4": {
+    "message": "to enable it."
+  },
+  "v1_5_0__5": {
+    "message": "Speak another language?"
+  },
+  "v1_5_0__6": {
+    "message": "Help translate Scratch Addons"
+  },
+  "v1_5_0__7": {
+    "message": "See full v1.5.0 changelog"
+  },
+  "v1_5_0__8": {
+    "message": "Scratch Addons is not affiliated with Scratch."
   }
 }
