@@ -25,7 +25,10 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   keys.forEach((addon, i) => {
     if (res.addonsEnabled[addon]) {
       let manifest = res.manifests.find((o) => o.addonId == addon).manifest;
-      if (manifest.popup) popups.push(manifest.popup);
+      if (manifest.popup) {
+        manifest.popup.addonId = addon;
+        popups.push(manifest.popup);
+      }
     }
   });
 
