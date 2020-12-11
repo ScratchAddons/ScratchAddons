@@ -10,7 +10,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 
   if (details.reason === "install" && chrome.runtime.getManifest().version.startsWith("1.5.")) {
     // Avoid showing update notification to new users
-    chrome.storage.sync.set({'v1.5.0-banner': true})
+    chrome.storage.sync.set({ "v1.5.0-banner": true });
   }
 });
 chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");

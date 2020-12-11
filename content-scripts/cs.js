@@ -56,9 +56,9 @@ window.addEventListener("load", () => {
     // have seen this tab loading, for example, at startup.
     chrome.runtime.sendMessage("sendContentScriptInfo");
   }
-  chrome.storage.sync.get(['v1.5.0-banner'], function(result) {
+  chrome.storage.sync.get(["v1.5.0-banner"], function (result) {
     if (!result["v1.5.0-banner"]) {
-      chrome.storage.sync.set({'v1.5.0-banner': true})
+      chrome.storage.sync.set({ "v1.5.0-banner": true });
       const updateNotif = document.createElement("div");
       updateNotif.innerHTML = `
       <div id="sa-notification" style="position: fixed; bottom: 20px; right: 20px; width: 500px; max-height: 200px; display: flex; align-items: center; border: 1px solid white; padding: 8px; background-color: #333; color: white; z-index: 99999;     font-family: Arial;
@@ -70,19 +70,31 @@ window.addEventListener("load", () => {
           <span title="Close" style="float: right; cursor:pointer;" onclick="document.querySelector('#sa-notification').style.display='none'"> x </span>
           <br /> <br />
           <span style="display: block; font-size: 14px;">
-              <b>${chrome.i18n.getMessage("v1_5_0__1")}</b>${chrome.i18n.getMessage("v1_5_0__2")} <a href="https://scratch.mit.edu/scratch-addons-extension/settings" target="_blank">${chrome.i18n.getMessage("v1_5_0__3")}</a> ${chrome.i18n.getMessage("v1_5_0__4")}<br />
+              <b>${chrome.i18n.getMessage("v1_5_0__1")}</b>${chrome.i18n.getMessage(
+        "v1_5_0__2"
+      )} <a href="https://scratch.mit.edu/scratch-addons-extension/settings" target="_blank">${chrome.i18n.getMessage(
+        "v1_5_0__3"
+      )}</a> ${chrome.i18n.getMessage("v1_5_0__4")}<br />
               <br />
-              ${chrome.i18n.getMessage("v1_5_0__5")} <a href="https://scratchaddons.com/translate" target="_blank">${chrome.i18n.getMessage("v1_5_0__6")}</a><br />
+              ${chrome.i18n.getMessage(
+                "v1_5_0__5"
+              )} <a href="https://scratchaddons.com/translate" target="_blank">${chrome.i18n.getMessage(
+        "v1_5_0__6"
+      )}</a><br />
               <br />
-              <a href="https://scratchaddons.com/changelog?versionname=1.5.0" target="_blank">${chrome.i18n.getMessage("v1_5_0__7")}</a> | 
-              <a href="https://scratchaddons.com/feedback?version=1.5.0-notif" target="_blank">${chrome.i18n.getMessage("feedback")}</a>
+              <a href="https://scratchaddons.com/changelog?versionname=1.5.0" target="_blank">${chrome.i18n.getMessage(
+                "v1_5_0__7"
+              )}</a> | 
+              <a href="https://scratchaddons.com/feedback?version=1.5.0-notif" target="_blank">${chrome.i18n.getMessage(
+                "feedback"
+              )}</a>
               <br />
               <small>${chrome.i18n.getMessage("v1_5_0__8")}</small>
           </span>
       </div>
     </div>
     
-      `
+      `;
       document.body.appendChild(updateNotif);
     }
   });
