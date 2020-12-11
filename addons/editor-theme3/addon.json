@@ -86,7 +86,7 @@
     },
     {
       "name": "extensions",
-      "id": "extensions-color",
+      "id": "Pen-color",
       "type": "color",
       "default": "#0FBD8C"
     }
@@ -119,7 +119,7 @@
         "data-color": "#ee7d16",
         "data-lists-color": "#cc5b22",
         "custom-color": "#632d99",
-        "extensions-color": "#0e9a6c"
+        "Pen-color": "#0e9a6c"
       }
     }
   ],
