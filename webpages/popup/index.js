@@ -19,67 +19,67 @@ document.getElementById("settings").onclick = () => {
   setTimeout(() => window.close(), 100);
 };
 
-const popups = [
-  {
-    addonId: "scratch-messaging",
-    icon: "../../images/icons/envelope.svg",
-    name: chrome.i18n.getMessage("messaging"),
-    url: "scratch-messaging/popup.html",
-    fullscreen: true,
-  },
-  {
-    addonId: "cloud-games",
-    icon: "../../images/icons/cloud.svg",
-    name: chrome.i18n.getMessage("games"),
-    url: "cloud-games/popup.html",
-  },
-];
+chrome.runtime.sendMessage("getSettingsInfo", res => {
+  let popups = [];
+  let keys = Object.keys(res.addonsEnabled);
+  keys.forEach((addon, i) => {
+    if (res.addonsEnabled[addon]) {
+      let manifest = res.manifests.find(o => o.addonId == addon).manifest;
+      if (manifest.popup) popups.push(manifest.popup)
+    }
+  })
 
-let currentPopup = popups[0];
+  let order = ["scratch-messaging", "cloud-games"]
+  order.forEach((addon, i) => {
+    popups = popups.sort((a, b) => order.indexOf(a.addonId) - order.indexOf(b.addonId))
+  });
 
-for (const popup of popups) {
-  const el = document.createElement("div");
-  el.classList.add("popup-name");
-  el.setAttribute("data-id", popup.addonId);
-  if (popup.icon) {
-    const icon = document.createElement("img");
-    icon.classList.add("popup-icon");
-    icon.setAttribute("src", popup.icon);
-    el.appendChild(icon);
+  let currentPopup = popups[0];
+  for (const popup of popups) {
+    const el = document.createElement("div");
+    el.classList.add("popup-name");
+    el.setAttribute("data-id", popup.addonId);
+    if (popup.icon) {
+      const icon = document.createElement("img");
+      icon.classList.add("popup-icon");
+      icon.setAttribute("src", popup.icon);
+      el.appendChild(icon);
+    }
+    const a = document.createElement("a");
+    a.classList.add("popup-title");
+    a.textContent = chrome.i18n.getMessage(popup.name);
+    el.appendChild(a);
+    if (popup.fullscreen) {
+      a.textContent += "\u00a0";
+      const popoutA = document.createElement("a");
+      popoutA.className = "popout";
+      popoutA.href = `../../popups/${popup.addonId}/popup.html`;
+      popoutA.target = "_blank";
+      popoutA.onclick = () => setTimeout(() => window.close(), 100);
+      const img = document.createElement("img");
+      img.src = "../../images/icons/popout.svg";
+      img.className = "popout-img";
+      img.title = chrome.i18n.getMessage("openInNewTab");
+      popoutA.appendChild(img);
+      el.appendChild(popoutA);
+    }
+
+    el.onclick = () => {
+      if (currentPopup !== popup) setPopup(popup);
+    };
+    document.getElementById("popup-chooser").appendChild(el);
   }
-  const a = document.createElement("a");
-  a.classList.add("popup-title");
-  a.textContent = popup.name;
-  el.appendChild(a);
-  if (popup.fullscreen) {
-    a.textContent += "\u00a0";
-    const popoutA = document.createElement("a");
-    popoutA.className = "popout";
-    popoutA.href = `../../popups/${popup.url}`;
-    popoutA.target = "_blank";
-    popoutA.onclick = () => setTimeout(() => window.close(), 100);
-    const img = document.createElement("img");
-    img.src = "../../images/icons/popout.svg";
-    img.className = "popout-img";
-    img.title = chrome.i18n.getMessage("openInNewTab");
-    popoutA.appendChild(img);
-    el.appendChild(popoutA);
+
+  setPopup(currentPopup);
+
+  function setPopup(popup) {
+    currentPopup = popup;
+    document.getElementById("iframe").src = `../../popups/${popup.addonId}/popup.html`;
+    if (document.querySelector(".popup-name.sel")) document.querySelector(".popup-name.sel").classList.remove("sel");
+    document.querySelector(`.popup-name[data-id="${popup.addonId}"]`).classList.add("sel");
   }
+})
 
-  el.onclick = () => {
-    if (currentPopup !== popup) setPopup(popup);
-  };
-  document.getElementById("popup-chooser").appendChild(el);
-}
-
-setPopup(currentPopup);
-
-function setPopup(popup) {
-  currentPopup = popup;
-  document.getElementById("iframe").src = `../../popups/${popup.url}`;
-  if (document.querySelector(".popup-name.sel")) document.querySelector(".popup-name.sel").classList.remove("sel");
-  document.querySelector(`.popup-name[data-id="${popup.addonId}"]`).classList.add("sel");
-}
 var version = document.getElementById("version");
 version.innerText = "v" + chrome.runtime.getManifest().version;
 version.title = chrome.i18n.getMessage("changelog");
