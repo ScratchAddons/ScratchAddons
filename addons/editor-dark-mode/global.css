@@ -29,3 +29,7 @@ div.s3devDDOut.vis {
   border-top: 9px solid #6d6d6d;
   border-bottom: 10px solid #6d6d6d;
 }
+
+.sa-onion-image {
+  filter: brightness(0) invert(1);
+}
