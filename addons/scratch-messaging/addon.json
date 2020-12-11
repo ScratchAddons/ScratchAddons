@@ -10,7 +10,6 @@
     }
   ],
   "popup": {
-    "addonId": "scratch-messaging",
     "icon": "../../images/icons/envelope.svg",
     "name": "messaging",
     "fullscreen": true
