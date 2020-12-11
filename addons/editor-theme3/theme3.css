@@ -86,18 +86,6 @@ g > line {
   background-color: var(--editorTheme3-extensionsColor);
 }
 
-[data-category="Pen"] > path.blocklyBlockBackground,
-[data-category="Music"] > path.blocklyBlockBackground,
-[data-category="Video Sensing"] > path.blocklyBlockBackground,
-[data-category="Text to Speech"] > path.blocklyBlockBackground,
-[data-category="Translate"] > path.blocklyBlockBackground,
-[data-category="Makey Makey"] > path.blocklyBlockBackground,
-[data-category="micro:bit"] > path.blocklyBlockBackground,
-[data-category="LEGO EV3"] > path.blocklyBlockBackground,
-[data-category="BOOST"] > path.blocklyBlockBackground {
-  fill: var(--editorTheme3-extensionsColor);
-}
-
 .blocklyEditableText rect {
   fill: var(--editorTheme3-customColor);
 }
