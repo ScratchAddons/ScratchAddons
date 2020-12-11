@@ -10,7 +10,6 @@
     }
   ],
   "popup": {
-    "addonId": "cloud-games",
     "icon": "../../images/icons/cloud.svg",
     "name": "games"
   },
