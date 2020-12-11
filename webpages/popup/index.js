@@ -19,19 +19,19 @@ document.getElementById("settings").onclick = () => {
   setTimeout(() => window.close(), 100);
 };
 
-chrome.runtime.sendMessage("getSettingsInfo", res => {
+chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   let popups = [];
   let keys = Object.keys(res.addonsEnabled);
   keys.forEach((addon, i) => {
     if (res.addonsEnabled[addon]) {
-      let manifest = res.manifests.find(o => o.addonId == addon).manifest;
-      if (manifest.popup) popups.push(manifest.popup)
+      let manifest = res.manifests.find((o) => o.addonId == addon).manifest;
+      if (manifest.popup) popups.push(manifest.popup);
     }
-  })
+  });
 
-  let order = ["scratch-messaging", "cloud-games"]
+  let order = ["scratch-messaging", "cloud-games"];
   order.forEach((addon, i) => {
-    popups = popups.sort((a, b) => order.indexOf(a.addonId) - order.indexOf(b.addonId))
+    popups = popups.sort((a, b) => order.indexOf(a.addonId) - order.indexOf(b.addonId));
   });
 
   let currentPopup = popups[0];
@@ -78,7 +78,7 @@ chrome.runtime.sendMessage("getSettingsInfo", res => {
     if (document.querySelector(".popup-name.sel")) document.querySelector(".popup-name.sel").classList.remove("sel");
     document.querySelector(`.popup-name[data-id="${popup.addonId}"]`).classList.add("sel");
   }
-})
+});
 
 var version = document.getElementById("version");
 version.innerText = "v" + chrome.runtime.getManifest().version;
