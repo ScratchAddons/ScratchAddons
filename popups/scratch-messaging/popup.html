@@ -292,7 +292,6 @@
       <br />
       <span v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</span>
       <span v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</span>
-      <span v-show="error === 'addonDisabled'"><br />{{{ settingsLink }}}</span>
       <span v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</span>
       <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">
         <img class="small-icon" src="../../images/icons/reload.svg" /> {{ uiMessages.reloadMsg }}
