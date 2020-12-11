@@ -60,8 +60,10 @@ export default async function ({ addon, global, console }) {
       color: "#FF6680",
       alt: "myBlocks",
     },
-    extensions: {
+    Pen: {
+      // For historical reasons, this is called "Pen".
       color: "#0FBD8C",
+      alt: "pen",
     },
   };
 
