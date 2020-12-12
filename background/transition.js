@@ -9,10 +9,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   ) {
     chrome.tabs.create({ url: "https://scratchaddons.com/welcome" });
   }
-  
+
   if (details.reason === "install") {
     chrome.storage.local.set({
-      bannerSettings: {lastShown: `${major}.${minor}`}
+      bannerSettings: { lastShown: `${major}.${minor}` },
     });
   }
 });

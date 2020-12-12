@@ -196,7 +196,7 @@ function forumWarning(key) {
 
 const showBanner = () => {
   const makeBr = () => document.createElement("br");
-  
+
   const notifOuterBody = document.createElement("div");
   const notifInnerBody = Object.assign(document.createElement("div"), {
     id: "sa-notification",
@@ -215,88 +215,80 @@ const showBanner = () => {
     z-index: 99999;
     font-family: sans-serif;
     text-shadow: none;
-    line-height: 1em;`
+    line-height: 1em;`,
   });
   const notifImage = Object.assign(document.createElement("img"), {
     alt: chrome.i18n.getMessage("onionSkinAlt"),
     src: chrome.runtime.getURL("/images/cs/onion.png"),
-    style: "height: 125px"
+    style: "height: 125px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
-    style: "margin: 12px;"
+    style: "margin: 12px;",
   });
   const notifTitle = Object.assign(document.createElement("span"), {
     style: "font-size: 18px;",
-    textContent: chrome.i18n.getMessage("extensionUpdate")
+    textContent: chrome.i18n.getMessage("extensionUpdate"),
   });
   const notifClose = Object.assign(document.createElement("span"), {
     style: "float: right; cursor:pointer;",
     title: chrome.i18n.getMessage("close"),
-    textContent: "x"
+    textContent: "x",
   });
-  notifClose.addEventListener("click", () => notifInnerBody.remove(), {once: true});
-  
+  notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
+
   const NOTIF_TEXT_STYLE = "display: block; font-size: 14px;";
-  
+
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1", DOLLARS)).replace(/\$(\d+)/g, (_, i) => [
-      Object.assign(
-        document.createElement("b"),
-        {textContent: chrome.i18n.getMessage("newFeature")}
-      ).outerHTML,
-      Object.assign(
-        document.createElement("b"),
-        {textContent: chrome.i18n.getMessage("onionSkin")}
-      ).outerHTML,
-      Object.assign(
-        document.createElement("a"),
-        {
-          href: "https://scratch.mit.edu/scratch-addons-extension/settings",
-          target: "_blank",
-          textContent: chrome.i18n.getMessage("scratchAddonsSettings")
-        }
-      ).outerHTML
-    ][Number(i) - 1])
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1", DOLLARS)).replace(
+      /\$(\d+)/g,
+      (_, i) =>
+        [
+          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
+          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("onionSkin") }).outerHTML,
+          Object.assign(document.createElement("a"), {
+            href: "https://scratch.mit.edu/scratch-addons-extension/settings",
+            target: "_blank",
+            textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
+          }).outerHTML,
+        ][Number(i) - 1]
+    ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
     innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo2", DOLLARS)).replace(
       "$1",
-      Object.assign(
-        document.createElement("a"),
-        {
-          href: "https://scratchaddons.com/translate",
-          target: "_blank",
-          textContent: chrome.i18n.getMessage("helpTranslateScratchAddons")
-        }
-      ).outerHTML
-    )
+      Object.assign(document.createElement("a"), {
+        href: "https://scratchaddons.com/translate",
+        target: "_blank",
+        textContent: chrome.i18n.getMessage("helpTranslateScratchAddons"),
+      }).outerHTML
+    ),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
-    style: NOTIF_TEXT_STYLE
+    style: NOTIF_TEXT_STYLE,
   });
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: "https://scratchaddons.com/changelog?versionname=1.5.0",
     target: "_blank",
-    textContent: chrome.i18n.getMessage("fullChangelog", "v1.5.0")
+    textContent: chrome.i18n.getMessage("fullChangelog", "v1.5.0"),
   });
   const notifFooterSeparator = document.createTextNode(" | ");
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
     href: "https://scratchaddons.com/feedback",
     target: "_blank",
-    textContent: chrome.i18n.getMessage("feedback")
+    textContent: chrome.i18n.getMessage("feedback"),
   });
   const notifFooterLegal = Object.assign(document.createElement("small"), {
-    textContent: chrome.i18n.getMessage("notAffiliated")
+    textContent: chrome.i18n.getMessage("notAffiliated"),
   });
   notifFooter.appendChild(notifFooterChangelog);
   notifFooter.appendChild(notifFooterSeparator);
   notifFooter.appendChild(notifFooterFeedback);
   notifFooter.appendChild(makeBr());
   notifFooter.appendChild(notifFooterLegal);
-  
+
   notifText.appendChild(notifTitle);
   notifText.appendChild(notifClose);
   notifText.appendChild(makeBr());
@@ -305,12 +297,12 @@ const showBanner = () => {
   notifText.appendChild(notifInnerText2);
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
-  
+
   notifInnerBody.appendChild(notifImage);
   notifInnerBody.appendChild(notifText);
-  
+
   notifOuterBody.appendChild(notifInnerBody);
-  
+
   document.body.appendChild(notifOuterBody);
 };
 
@@ -322,15 +314,11 @@ const handleBanner = async () => {
   // Using local because browser extensions may not be updated at the same time across browsers
   const settings = await promisify(chrome.storage.local.get)(["bannerSettings"]);
   const force = !settings || !settings.bannerSettings;
-  
+
   if (force || settings.bannerSettings.lastShown !== currentVersionMajorMinor) {
     console.log("Banner shown.");
     await promisify(chrome.storage.local.set)({
-      bannerSettings: Object.assign(
-        {},
-        settings.bannerSettings,
-        {lastShown: currentVersionMajorMinor}
-      )
+      bannerSettings: Object.assign({}, settings.bannerSettings, { lastShown: currentVersionMajorMinor }),
     });
     showBanner();
   }
@@ -339,5 +327,5 @@ const handleBanner = async () => {
 if (document.readyState !== "loading") {
   handleBanner();
 } else {
-  window.addEventListener("DOMContentLoaded", handleBanner, {once: true});
+  window.addEventListener("DOMContentLoaded", handleBanner, { once: true });
 }
