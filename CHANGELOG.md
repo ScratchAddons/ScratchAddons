@@ -13,6 +13,23 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.5.0]
+
+- New addon: onion skinning
+- New addon: profile page banner
+- Editor devtools: option to show broadcast senders and receivers
+- New setting to avoid overwriting thumbnails in thumbnails setter addon
+- New setting to show "load more" in the front page's "What's happening" (show full areas addon)
+- More blocks supported in block switching addon
+- Customizable block colors: affect "colorful context menus" and editor devtools middle click feature.
+- Addons now run in iframes, so for example, you can now use pause button and live featured project together.
+- Warn users if extension site access was disabled, which breaks Scratch Addons.
+- Remove orange outline in "set thumbnail" and "leave studio" buttons
+- Add "help translate" button in settings page
+- Bug fixes in website dark editor
+- Firefox bug fix: addons not working
+- Various other bug fixes
+
 ## [v1.4.1]
 
 - Fix website dark mode affecting the editor, sometimes making text unreadable
@@ -146,6 +163,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.5.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.5.0
 [v1.4.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.4.1
 [v1.4.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.4.0
 [v1.3.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.3.3
