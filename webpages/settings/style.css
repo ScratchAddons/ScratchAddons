@@ -732,7 +732,7 @@ input[type="color"]::-webkit-color-swatch {
   cursor: default;
 }
 
-.tooltip .tooltiptext {
+.tooltip .tooltiptext, .tooltiptextspecial {
   visibility: hidden;
   width: 12rem;
   background-color: black;
@@ -746,14 +746,20 @@ input[type="color"]::-webkit-color-swatch {
   z-index: 1;
 }
 
-.tooltip:hover .tooltiptext {
+.tooltip:hover .tooltiptext, .tooltiptextspecial {
   visibility: visible;
 }
-.tooltip .tooltiptext {
+
+.tooltip .tooltiptext, .tooltiptextspecial {
   top: -5px;
   left: 105%;
 }
-.tooltip .tooltiptext::after {
+
+.tooltiptextspecial {
+  padding-right: 23px;
+}
+
+.tooltip .tooltiptext::after, .tooltiptextspecial::after {
   content: " ";
   position: absolute;
   top: 50%;
@@ -763,6 +769,23 @@ input[type="color"]::-webkit-color-swatch {
   border-style: solid;
   border-color: transparent black transparent transparent;
 }
+
+.tooltiptextspecial::before {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  background-image: url(https://api.iconify.design/bi:x.svg?color=grey);
+  height: 20px;
+  width: 20px;
+  transform: translate(5px, -50%);
+  cursor: pointer;
+}
+
+.tooltiptextspecial a {
+  color: #6d9bff;
+}
+
 
 .permissions div.main {
   justify-content: center;
