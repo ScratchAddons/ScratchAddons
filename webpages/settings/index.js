@@ -306,7 +306,7 @@ function createTooltip() {
     "Block switching": "An old 2.0 feature!",
     "Cloud games": "Shows in the popup! From the original extension.",
     "Developer tools": "From the extension by griffpatch.",
-    "Fix \"Load more\" scrolling in search results": "This bug only applys to chrome.",
+    'Fix "Load more" scrolling in search results': "This bug only applys to chrome.",
     "Scratch Notifier": "From the extension by World_Languages.",
     "Thumbnails setter": "Set the thumbnails for your projects while also not letting Scratch change it.",
     "Colored context menus": "An old 2.0 feature!",
@@ -321,7 +321,7 @@ function createTooltip() {
     "*": [
       "Some addons have settings, enable them in the dropdowns!",
       "Some addons are marked as beta... be careful!",
-      "There are even more setting! Try clicking the \"More Settings\" button on the left!",
+      'There are even more setting! Try clicking the "More Settings" button on the left!',
       "Can you help translate? Click $0 to learn more!",
       "Want to make an addon? Click $1 to learn more!",
       "Try some filters! Might help find what you need!",
@@ -330,48 +330,51 @@ function createTooltip() {
       "No addons take information... You can check out our code $2!",
       "Did you find bugs? Report them $3!",
       "Have an new idea for an addon? Ask for one $3!",
-      "Enjoying this extension? Rate us $4!"
-    ]
-  }
+      "Enjoying this extension? Rate us $4!",
+    ],
+  };
   let links = {
-    "$0": {
-      "replace": "here",
-      "link": "https://github.com/ScratchAddons/ScratchAddons/wiki/How-to-join-the-localization-team"
+    $0: {
+      replace: "here",
+      link: "https://github.com/ScratchAddons/ScratchAddons/wiki/How-to-join-the-localization-team",
     },
-    "$1": {
-      "replace": "here",
-      "link": "https://github.com/ScratchAddons/ScratchAddons/wiki/Creating-an-addon"
+    $1: {
+      replace: "here",
+      link: "https://github.com/ScratchAddons/ScratchAddons/wiki/Creating-an-addon",
     },
-    "$2": {
-      "replace": "here",
-      "link": "https://github.com/ScratchAddons/ScratchAddons"
+    $2: {
+      replace: "here",
+      link: "https://github.com/ScratchAddons/ScratchAddons",
     },
-    "$3": {
-      "replace": "here",
-      "method": "openFeedback"
+    $3: {
+      replace: "here",
+      method: "openFeedback",
     },
-    "$4": {
-      "replace": "here",
-      "method": "openReview"
-    }
-  }
-  let addonname = document.querySelectorAll(".addon-name")[vue.manifests.findIndex(o => !o._enabled && !o.tags.includes("beta") && Math.random() > 0.7)];
+    $4: {
+      replace: "here",
+      method: "openReview",
+    },
+  };
+  let addonname = document.querySelectorAll(".addon-name")[
+    vue.manifests.findIndex((o) => !o._enabled && !o.tags.includes("beta") && Math.random() > 0.7)
+  ];
   if (addonname) {
-    addonname.classList.add("tooltip")
+    addonname.classList.add("tooltip");
     let tooltip = addonname.appendChild(document.createElement("span"));
     tooltip.className = "tooltiptextspecial";
-    let tooltiptext = phrases[addonname.innerText.trim()] || phrases["*"][Math.floor(Math.random() * phrases["*"].length)];
+    let tooltiptext =
+      phrases[addonname.innerText.trim()] || phrases["*"][Math.floor(Math.random() * phrases["*"].length)];
     while (tooltiptext.includes("$")) {
-      tooltip.appendChild(document.createTextNode(tooltiptext.substring(0, tooltiptext.indexOf("$"))))
+      tooltip.appendChild(document.createTextNode(tooltiptext.substring(0, tooltiptext.indexOf("$"))));
       let link = tooltip.appendChild(document.createElement("a"));
-      let linkInfo = links["$" + tooltiptext.charAt(tooltiptext.indexOf("$") + 1)]
-      if (linkInfo.link) link.href = linkInfo.link
-      else link.setAttribute("data-click", linkInfo.method)
-      link.innerText = linkInfo.replace
-      tooltiptext = tooltiptext.substring(tooltiptext.indexOf("$")+2, tooltiptext.length)
+      let linkInfo = links["$" + tooltiptext.charAt(tooltiptext.indexOf("$") + 1)];
+      if (linkInfo.link) link.href = linkInfo.link;
+      else link.setAttribute("data-click", linkInfo.method);
+      link.innerText = linkInfo.replace;
+      tooltiptext = tooltiptext.substring(tooltiptext.indexOf("$") + 2, tooltiptext.length);
     }
     tooltip.appendChild(document.createTextNode(tooltiptext));
-    tooltip.addEventListener("click", e => {
+    tooltip.addEventListener("click", (e) => {
       e.preventDefault();
       e.cancelBubble = true;
       if (e.target.tagName == "A") {
