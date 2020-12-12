@@ -293,11 +293,11 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
       else return a.manifest.name.localeCompare(b.manifest.name);
     } else return 1;
   });
-  // New addons
-  manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
-  // Messaging related addons should always go first no matter what
+  // Messaging related addons should always go first no matter what (rule broken below)
   manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
   manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
+  // New addons should always go first no matter what
+  manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
   vue.manifests = manifests.map(({ manifest }) => manifest);
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
