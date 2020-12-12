@@ -312,12 +312,12 @@ const handleBanner = async () => {
   const currentVersionMajorMinor = `${major}.${minor}`;
   // Making this configurable in the future?
   // Using local because browser extensions may not be updated at the same time across browsers
-  const settings = await promisify(chrome.storage.local.get)(["bannerSettings"]);
+  const settings = await promisify(chrome.storage.local.get.bind(chrome.storage.local))(["bannerSettings"]);
   const force = !settings || !settings.bannerSettings;
 
   if (force || settings.bannerSettings.lastShown !== currentVersionMajorMinor) {
     console.log("Banner shown.");
-    await promisify(chrome.storage.local.set)({
+    await promisify(chrome.storage.local.set.bind(chrome.storage.local))({
       bannerSettings: Object.assign({}, settings.bannerSettings, { lastShown: currentVersionMajorMinor }),
     });
     showBanner();
