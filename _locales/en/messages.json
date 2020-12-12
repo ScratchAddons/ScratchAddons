@@ -214,5 +214,8 @@
   },
   "onionSkinAlt": {
     "message": "Dog inside costume editor with Onion Skinning enabled. Credit to Scratch sprite library."
+  },
+  "new": {
+    "message": "New!"
   }
 }
