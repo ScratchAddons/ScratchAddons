@@ -184,5 +184,38 @@
   },
   "translate": {
     "message": "Help Translate"
+  },
+  "extensionUpdate": {
+    "message": "Scratch Addons extension update"
+  },
+  "extensionUpdateInfo1": {
+    "message": "$1: $2 for animating in the editor. Go to $3 to enable it."
+  },
+  "newFeature": {
+    "message": "New feature"
+  },
+  "onionSkin": {
+    "message": "onion skinning"
+  },
+  "scratchAddonsSettings": {
+    "message": "Scratch Addons settings"
+  },
+  "extensionUpdateInfo2": {
+    "message": "Speak another language? $1"
+  },
+  "helpTranslateScratchAddons": {
+    "message": "Help translate Scratch Addons"
+  },
+  "fullChangelog": {
+    "message": "See full $1 changelog"
+  },
+  "notAffiliated": {
+    "message": "Scratch Addons is not affiliated with Scratch."
+  },
+  "onionSkinAlt": {
+    "message": "Dog inside costume editor with Onion Skinning enabled. Credit to Scratch sprite library."
+  },
+  "new": {
+    "message": "New!"
   }
 }
