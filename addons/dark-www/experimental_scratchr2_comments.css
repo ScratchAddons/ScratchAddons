@@ -24,3 +24,6 @@
 #comments .comment .info .name a {
   color: #fff;
 }
+#comments #comments-loading {
+  background-color: transparent;
+}
