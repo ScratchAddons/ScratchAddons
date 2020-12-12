@@ -732,7 +732,8 @@ input[type="color"]::-webkit-color-swatch {
   cursor: default;
 }
 
-.tooltip .tooltiptext, .tooltiptextspecial {
+.tooltip .tooltiptext,
+.tooltiptextspecial {
   visibility: hidden;
   width: 12rem;
   background-color: black;
@@ -746,11 +747,13 @@ input[type="color"]::-webkit-color-swatch {
   z-index: 1;
 }
 
-.tooltip:hover .tooltiptext, .tooltiptextspecial {
+.tooltip:hover .tooltiptext,
+.tooltiptextspecial {
   visibility: visible;
 }
 
-.tooltip .tooltiptext, .tooltiptextspecial {
+.tooltip .tooltiptext,
+.tooltiptextspecial {
   top: -5px;
   left: 105%;
 }
@@ -759,7 +762,8 @@ input[type="color"]::-webkit-color-swatch {
   padding-right: 23px;
 }
 
-.tooltip .tooltiptext::after, .tooltiptextspecial::after {
+.tooltip .tooltiptext::after,
+.tooltiptextspecial::after {
   content: " ";
   position: absolute;
   top: 50%;
@@ -785,7 +789,6 @@ input[type="color"]::-webkit-color-swatch {
 .tooltiptextspecial a {
   color: #6d9bff;
 }
-
 
 .permissions div.main {
   justify-content: center;
