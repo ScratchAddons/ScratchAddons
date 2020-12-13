@@ -13,21 +13,21 @@ export default async function ({ addon, global, console }) {
     statusSpan.title = `This is ${username}'s ocular status, displayed with Scratch Addons. You can set one at https://my-ocular.jeffalo.net.`;
     statusSpan.innerText = statusText;
 
-        var dot = document.createElement("span");
-        dot.title = `This is ${username}'s ocular favourite colour, displayed with Scratch Addons. You can set one at https://my-ocular.jeffalo.net.`
-        dot.style.height = "10px";
-        dot.style.width = "10px";
-        dot.style.marginLeft = "5px";
-        dot.style.backgroundColor = "#bbb"; //default incase bad
-        dot.style.borderRadius = "50%";
+    var dot = document.createElement("span");
+    dot.title = `This is ${username}'s ocular favourite colour, displayed with Scratch Addons. You can set one at https://my-ocular.jeffalo.net.`;
+    dot.style.height = "10px";
+    dot.style.width = "10px";
+    dot.style.marginLeft = "5px";
+    dot.style.backgroundColor = "#bbb"; //default incase bad
+    dot.style.borderRadius = "50%";
 
-        dot.style.setProperty("display", "inline-block", "important") // i have to do it like this because .style doesn't let me set prio, and fetaured project banner messes with this without !importnat
+    dot.style.setProperty("display", "inline-block", "important"); // i have to do it like this because .style doesn't let me set prio, and fetaured project banner messes with this without !importnat
 
-        dot.style.backgroundColor = color;        
-        
-        var location = document.createElement('span') // create a new location element
-        location.classList.add('group') // give it the group class so it fits in
-        location.innerText = container.innerText // set it to the old innertext
+    dot.style.backgroundColor = color;
+
+    var location = document.createElement("span"); // create a new location element
+    location.classList.add("group"); // give it the group class so it fits in
+    location.innerText = container.innerText; // set it to the old innertext
 
     var location = document.createElement("span"); // create a new location element
     location.classList.add("group"); // give it the group class so it fits in
