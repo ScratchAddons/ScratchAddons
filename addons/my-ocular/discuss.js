@@ -23,8 +23,6 @@ export default async function ({ addon, global, console }) {
 
       dot.style.backgroundColor = color;
 
-      console.log(color);
-
       i.appendChild(br);
       i.appendChild(status);
       i.appendChild(dot);
