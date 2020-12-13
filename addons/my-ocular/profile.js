@@ -20,7 +20,9 @@ export default async function ({ addon, global, console }) {
         dot.style.marginLeft = "5px";
         dot.style.backgroundColor = "#bbb"; //default incase bad
         dot.style.borderRadius = "50%";
-        dot.style.display = "inline-block";
+
+        dot.style.setProperty("display", "inline-block", "important") // i have to do it like this because .style doesn't let me set prio, and fetaured project banner messes with this without !importnat
+
         dot.style.backgroundColor = color;        
         
         var location = document.createElement('span') // create a new location element
