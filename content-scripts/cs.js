@@ -272,7 +272,7 @@ const showBanner = () => {
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/changelog?versionname=${chrome.runtime.getManifest().version}-notif`,
     target: "_blank",
-    textContent: chrome.i18n.getMessage("fullChangelog", "v"+chrome.runtime.getManifest().version),
+    textContent: chrome.i18n.getMessage("fullChangelog", "v" + chrome.runtime.getManifest().version),
   });
   const notifFooterSeparator = document.createTextNode(" | ");
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
