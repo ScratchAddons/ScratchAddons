@@ -270,13 +270,13 @@ const showBanner = () => {
     style: NOTIF_TEXT_STYLE,
   });
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
-    href: "https://scratchaddons.com/changelog?versionname=1.5.0",
+    href: `https://scratchaddons.com/changelog?versionname=${chrome.runtime.getManifest().version}-notif`,
     target: "_blank",
-    textContent: chrome.i18n.getMessage("fullChangelog", "v1.5.0"),
+    textContent: chrome.i18n.getMessage("fullChangelog", "v"+chrome.runtime.getManifest().version),
   });
   const notifFooterSeparator = document.createTextNode(" | ");
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
-    href: "https://scratchaddons.com/feedback",
+    href: `https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}-notif`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("feedback"),
   });
