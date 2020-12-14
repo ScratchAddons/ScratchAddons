@@ -10,9 +10,6 @@ export default async function ({ addon, global, console, msg }) {
       setthumb.classList.add("menu-bar_menu-bar-item_oLDa-");
       setthumb.title = msg("added-by");
       let thumbinner = document.createElement("span");
-      thumbinner.style.borderWidth = "1px";
-      thumbinner.style.borderStyle = "solid";
-      thumbinner.style.borderColor = "rgb(255, 123, 38)";
       thumbinner.setAttribute(
         "class",
         "button_outlined-button_1bS__ menu-bar_menu-bar-button_3IDN0 community-button_community-button_2Lo_g"

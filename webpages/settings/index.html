@@ -35,15 +35,20 @@
           <img src="../../images/icons/brush.svg" />
           <span>{{ msg("themes") }}</span>
         </div>
-        <div class="category" style="margin-top: auto; cursor: pointer" @click="openCredits()">
+        <div class="category" style="margin-top: auto" @click="openPage('https://scratchaddons.com/contributors')">
           <img src="../../images/icons/users.svg" />
           <span>{{ msg("credits") }}</span>
         </div>
-        <div class="category" style="cursor: pointer" @click="openReview()">
+        <div class="category" @click="openReview()">
           <img src="../../images/icons/star.svg" />
           <span>{{ msg("review") }}</span>
         </div>
-        <div class="category" style="cursor: pointer" @click="openFeedback()">
+        <div class="category" @click="openPage('https://scratchaddons.com/translate')">
+          <img src="../../images/icons/translate.svg" />
+          <span>{{ msg("translate") }}</span>
+          <div class="badge purple tooltip" style="cursor: pointer">{{ msg("new") }}</div>
+        </div>
+        <div class="category" @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
           <span>{{ msg("feedback") }}</span>
         </div>
@@ -121,6 +126,7 @@
               <div class="badge blue tooltip" v-if="addon._tags.recommended">
                 {{ msg("recommended") }}<span class="tooltiptext">{{ msg("recommendedTooltip") }}</span>
               </div>
+              <div class="badge purple" v-if="addon._tags.new">{{ msg("new") }}</div>
               <div class="badge darkgreen" v-if="addon._tags.forEditor">{{ msg("forEditor") }}</div>
               <div class="badge red tooltip" v-if="addon._tags.beta">
                 {{ msg("beta") }}
@@ -186,6 +192,16 @@
                     :disabled="!addon._enabled"
                     v-if="setting.type === 'positive_integer'"
                     min="0"
+                  />
+                  <input
+                    type="number"
+                    class="setting-input number"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @change="updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'integer'"
+                    :min="setting.min"
+                    :max="setting.max"
                   />
                   <input
                     type="text"
