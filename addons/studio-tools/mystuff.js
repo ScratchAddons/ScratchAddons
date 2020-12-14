@@ -5,13 +5,18 @@ export default async function ({ addon, global, console, msg }) {
       let leaveButton = item.appendChild(document.createElement("a"));
       leaveButton.className = "unshare";
       leaveButton.innerText = "Leave";
-      leaveButton.setAttribute("data-id", item.parentElement.querySelector(".title a").href.match(/[0-9]+/g))
+      leaveButton.setAttribute("data-id", item.parentElement.querySelector(".title a").href.match(/[0-9]+/g));
       leaveButton.addEventListener("click", async function (e) {
         if (confirm(msg("leave-confirm"))) {
-          await addon.fetch(`https://scratch.mit.edu/site-api/users/curators-in/${leaveButton.getAttribute("data-id")}/remove/?usernames=${Scratch.INIT_DATA.LOGGED_IN_USER.model.username}`, { method: "PUT" });
-          window.location.reload()
+          await addon.fetch(
+            `https://scratch.mit.edu/site-api/users/curators-in/${leaveButton.getAttribute(
+              "data-id"
+            )}/remove/?usernames=${Scratch.INIT_DATA.LOGGED_IN_USER.model.username}`,
+            { method: "PUT" }
+          );
+          window.location.reload();
         }
-      })
+      });
     }
   }
 }
