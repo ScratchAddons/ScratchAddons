@@ -1,0 +1,27 @@
+{
+  "name": "Better color picker",
+  "description": "Add hex code input to Scratch color pickers.",
+  "tags": ["editor"],
+  "credits": [{
+    "name": "Richie Bendall",
+    "link": "https://github.com/ScratchAddons/ScratchAddons/issues/311"
+  }],
+  "userscripts": [
+    {
+      "url": "paint-editor.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    },
+    {
+      "url": "code-editor.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "enabledByDefault": false,
+  "l10n": true
+}
