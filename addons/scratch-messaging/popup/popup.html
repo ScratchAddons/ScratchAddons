@@ -85,7 +85,11 @@
           @click="messageTypeExtended.studioInvites = !messageTypeExtended.studioInvites"
         >
           <div class="btn-dropdown">
-            <img src="../../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.studioInvites}" />
+            <img
+              src="../../../images/icons/expand.svg"
+              alt="v"
+              :class="{'reverted': messageTypeExtended.studioInvites}"
+            />
           </div>
           <span class="message-type-title-text">{{ uiMessages.studioInvitesMsg }}</span>
           <span class="float-right"
@@ -104,7 +108,11 @@
           @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity"
         >
           <div class="btn-dropdown">
-            <img src="../../../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.forumActivity}" />
+            <img
+              src="../../../../images/icons/expand.svg"
+              alt="v"
+              :class="{'reverted': messageTypeExtended.forumActivity}"
+            />
           </div>
           <span class="message-type-title-text">{{ uiMessages.forumMsg }}</span>
           <span class="float-right"
