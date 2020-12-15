@@ -14,24 +14,16 @@
         <span id="title-text">{{ msg("extensionName") }}</span>
         <span><a id="version" href="#" title="{{ msg('changelog') }}" @click="openChangelog()">v{{ version }}</a></span>
       </div>
-      <div id="settings" @click="openSettingsPage()">
-        <img src="../../images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}" />
-      </div>
+      <div id="settings" @click="openSettingsPage()"><img src="../../images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}"/></div>
     </div>
     <div id="popups">
       <div id="popup-bar">
         <div id="popup-chooser">
           <div v-for="popup of popups" class="popup-name" data-id="{{ popup.addonId }}" @click="setPopup(popup)">
-            <img v-if="popup.icon" :src="popup.icon" class="popup-icon" />
+            <img v-if="popup.icon" :src="popup.icon" class="popup-icon">
             <a class="popup-title">{{ msg(popup.name) + (popup.fullscreen ? "\u00a0" : "") }}</a>
-            <a
-              v-if="popup.fullscreen"
-              class="popout"
-              href="../../popups/{{ popup.addonId }}/popup.html"
-              target="_blank"
-              @click="closePopup()"
-            >
-              <img src="../../images/icons/popout.svg" class="popout-img" title="{{ msg('openInNewTab') }}" />
+            <a v-if="popup.fullscreen" class="popout" href="../../popups/{{ popup.addonId }}/popup.html" target="_blank" @click="closePopup()">
+              <img src="../../images/icons/popout.svg" class="popout-img" title="{{ msg('openInNewTab') }}">
             </a>
           </div>
         </div>
