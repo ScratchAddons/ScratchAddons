@@ -50,7 +50,7 @@ const vue = new Vue({
 
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   let order = ["scratch-messaging", "cloud-games"];
-  let keys = Object.keys(res.addonsEnabled).filter(k => res.addonsEnabled[k] && order.includes(k))
+  let keys = Object.keys(res.addonsEnabled).filter((k) => res.addonsEnabled[k] && order.includes(k));
   keys.forEach((addon, i) => {
     res.manifests.find((o) => o.addonId == addon).manifest.popup.addonId = addon;
     vue.popups.push(res.manifests.find((o) => o.addonId == addon).manifest.popup);
