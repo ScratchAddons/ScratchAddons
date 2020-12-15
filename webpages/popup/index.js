@@ -39,7 +39,7 @@ const vue = new Vue({
     setPopup(popup) {
       if (vue.currentPopup !== popup) {
         vue.currentPopup = popup;
-        document.getElementById("iframe").src = `../../popups/${popup.addonId}/popup.html`;
+        document.getElementById("iframe").src = `../../addons/${popup.addonId}/popup/popup.html`;
         if (document.querySelector(".popup-name.sel"))
           document.querySelector(".popup-name.sel").classList.remove("sel");
         document.querySelector(`.popup-name[data-id="${popup.addonId}"]`).classList.add("sel");
@@ -50,9 +50,7 @@ const vue = new Vue({
 
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   let order = ["scratch-messaging", "cloud-games"];
-  let keys = Object.keys(res.addonsEnabled).filter(
-    (k) => res.addonsEnabled[k] && res.manifests.find((o) => o.addonId == k).manifest.popup
-  );
+  let keys = Object.keys(res.addonsEnabled).filter(k => res.addonsEnabled[k] && order.includes(k))
   keys.forEach((addon, i) => {
     res.manifests.find((o) => o.addonId == addon).manifest.popup.addonId = addon;
     vue.popups.push(res.manifests.find((o) => o.addonId == addon).manifest.popup);
