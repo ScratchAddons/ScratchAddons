@@ -11,7 +11,7 @@
 
   <body style="display: none" v-show="loaded">
     <div class="games" v-for="project of projectsSorted">
-      <div class="title" @click="false && project.extended = !project.extended;">
+      <div class="title">
         <a class="project-name" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
           >{{ project.title }}</a
         >
