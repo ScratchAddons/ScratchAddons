@@ -1,11 +1,11 @@
 {
-  "name": "Better color picker",
-  "description": "Add hex code input to Scratch color pickers.",
+  "name": "HEX color picker",
+  "description": "Adds hex code input to color pickers.",
   "tags": ["editor"],
   "credits": [
     {
       "name": "Richie Bendall",
-      "link": "https://github.com/ScratchAddons/ScratchAddons/issues/311"
+      "link": "https://github.com/ScratchAddons/ScratchAddons/issues/311#issuecomment-699510743"
     }
   ],
   "userscripts": [
