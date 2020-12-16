@@ -56,7 +56,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     vue.popups.push(res.manifests.find((o) => o.addonId == addon).manifest.popup);
     vue.popups = vue.popups.sort((a, b) => order.indexOf(a.addonId) - order.indexOf(b.addonId));
   });
-  setTimeout(() => vue.setPopup(vue.popups[0]), 0);
+  if (vue.popups.length) setTimeout(() => vue.setPopup(vue.popups[0]), 0);
 });
 
 chrome.runtime.sendMessage("checkPermissions");

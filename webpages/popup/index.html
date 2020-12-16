@@ -23,7 +23,7 @@
         <div id="popup-chooser">
           <div v-for="popup of popups" class="popup-name" data-id="{{ popup.addonId }}" @click="setPopup(popup)">
             <img v-if="popup.icon" :src="popup.icon" class="popup-icon" />
-            <a class="popup-title">{{ msg(popup.name) + (popup.fullscreen ? "\u00a0" : "") }}</a>
+            <a class="popup-title">{{ msg(popup.id) + (popup.fullscreen ? "\u00a0" : "") }}</a>
             <a
               v-if="popup.fullscreen"
               class="popout"

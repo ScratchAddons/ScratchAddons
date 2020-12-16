@@ -11,6 +11,7 @@
   ],
   "popup": {
     "icon": "../../images/icons/cloud.svg",
+    "id": "games",
     "name": "Games"
   },
   "tags": ["community", "recommended"],
