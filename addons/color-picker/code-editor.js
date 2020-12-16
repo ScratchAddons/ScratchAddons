@@ -28,7 +28,7 @@ export default async ({ addon, console, msg }) => {
         setTimeout(() => {
           document.body.classList.remove("sa-hide-eye-dropper-background");
         }, 50);
-      }
+      };
       const onEyeDropperOpened = (e) => {
         if (e.detail.action.type !== "scratch-gui/color-picker/ACTIVATE_COLOR_PICKER") return;
         addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
@@ -36,12 +36,12 @@ export default async ({ addon, console, msg }) => {
         setTimeout(() => {
           addon.tab.redux.dispatch({
             type: "scratch-gui/color-picker/DEACTIVATE_COLOR_PICKER",
-            color: hex
+            color: hex,
           });
         }, 50);
       };
       addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
-      document.body.classList.add("sa-hide-eye-dropper-background")
+      document.body.classList.add("sa-hide-eye-dropper-background");
       elem.click();
     };
     const defaultColor = getColor();
