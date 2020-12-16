@@ -10,11 +10,7 @@
   ],
   "userscripts": [
     {
-      "url": "paint-editor.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
-    },
-    {
-      "url": "code-editor.js",
+      "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],

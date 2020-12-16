@@ -3,7 +3,6 @@ import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
 export default async ({ addon, console, msg }) => {
   let elem;
   let prevEventHandler;
-  await addon.tab.loadScript(addon.self.lib + "/tinycolor-min.js");
   while (true) {
     elem = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', { markAsSeen: true });
     addon.tab.redux.initialize();

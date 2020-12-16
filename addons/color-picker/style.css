@@ -18,3 +18,8 @@
   outline: none;
   width: 115px;
 }
+
+body.sa-hide-eye-dropper-background div[class*="stage_color-picker-background"] {
+  /* Do not show eye dropper background if the color picker is "fake" */
+  display: none;
+}
