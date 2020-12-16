@@ -22,6 +22,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "libraries": ["tinycolor2"],
   "enabledByDefault": false,
   "l10n": true
 }
