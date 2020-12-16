@@ -211,11 +211,16 @@ const vue = new Vue({
       this.addonSettings[addon._addonId][id] = newValue;
       this.updateSettings(addon);
     },
-    updateSettings(addon) {
-      chrome.runtime.sendMessage({
-        changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
-      });
-      console.log("Updated", this.addonSettings[addon._addonId]);
+    updateSettings(addon, { wait = 0, settingId = null } = {}) {
+      const value = settingId && this.addonSettings[addon._addonId][settingId];
+      setTimeout(() => {
+        if (!settingId || settingId && this.addonSettings[addon._addonId][settingId] === value) {
+          chrome.runtime.sendMessage({
+            changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
+          });
+          console.log("Updated", this.addonSettings[addon._addonId]);
+        }
+      }, wait);
     },
     loadPreset(preset, addon) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
