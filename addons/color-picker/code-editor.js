@@ -17,15 +17,15 @@ export default async ({ addon, console, msg }) => {
     if (!addon.tab.redux.state || !addon.tab.redux.state.scratchGui) return;
     // The only way to reliably set color is to invoke eye dropper via click()
     // then faking that the eye dropper reported the value.
-    const onEyeDropperClosed = (e) => {
-      if (e.detail.action.type !== "scratch-gui/color-picker/DEACTIVATE_COLOR_PICKER") return;
+    const onEyeDropperClosed = ({ detail }) => {
+      if (detail.action.type !== "scratch-gui/color-picker/DEACTIVATE_COLOR_PICKER") return;
       addon.tab.redux.removeEventListener("statechanged", onEyeDropperClosed);
       setTimeout(() => {
         document.body.classList.remove("sa-hide-eye-dropper-background");
       }, 50);
     };
-    const onEyeDropperOpened = (e) => {
-      if (e.detail.action.type !== "scratch-gui/color-picker/ACTIVATE_COLOR_PICKER") return;
+    const onEyeDropperOpened = ({ detail }) => {
+      if (detail.action.type !== "scratch-gui/color-picker/ACTIVATE_COLOR_PICKER") return;
       addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
       addon.tab.redux.addEventListener("statechanged", onEyeDropperClosed);
       setTimeout(() => {

@@ -26,8 +26,8 @@ export default async ({ addon, console, msg }) => {
     if (!addon.tab.redux.state || !addon.tab.redux.state.scratchPaint) return;
     // The only way to reliably set color is to invoke eye dropper via click()
     // then faking that the eye dropper reported the value.
-    const onEyeDropperOpened = (e) => {
-      if (e.detail.action.type !== "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER") return;
+    const onEyeDropperOpened = ({ detail }) => {
+      if (detail.action.type !== "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER") return;
       addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
       setTimeout(() => {
         const previousTool = addon.tab.redux.state.scratchPaint.color.eyeDropper.previousTool;
@@ -73,9 +73,8 @@ export default async ({ addon, console, msg }) => {
       if (!getHexRegex().test(value)) return;
       setColor((saColorPickerColor.value = normalizeHex(value)), element);
     });
-    prevEventHandler = (e) => {
-      const type = e.detail.action.type;
-      if (type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
+    prevEventHandler = ({ detail }) => {
+      if (detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
         setTimeout(() => {
           const color = getColor(element);
           saColorPickerColor.value = color || "#000000";
