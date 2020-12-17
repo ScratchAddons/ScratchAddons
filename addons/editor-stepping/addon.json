@@ -4,7 +4,8 @@
   "extra": [
     {
       "type": "notice",
-      "text": "Scratch Addons v1.3.0 update: this feature is not experimental anymore, and should not affect project performance heavily."
+      "text": "Scratch Addons v1.3.0 update: this feature is not experimental anymore, and should not affect project performance heavily.",
+      "id": "experimentalupdate"
     }
   ],
   "userscripts": [
