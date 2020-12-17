@@ -12,7 +12,6 @@
   "popup": {
     "icon": "../../images/icons/envelope.svg",
     "name": "Messaging",
-    "id": "messaging",
     "fullscreen": true
   },
   "persistentScripts": ["background.js"],
