@@ -1,6 +1,9 @@
 import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
+import RateLimiter from "../../libraries/rate-limiter.js";
 
 export default async ({ addon, console, msg }) => {
+  // 500-ms rate limit
+  const rateLimiter = new RateLimiter(250);
   const getColor = (element) => {
     const { children } = element.parentElement;
     // h: 0 - 360
@@ -41,6 +44,7 @@ export default async ({ addon, console, msg }) => {
   };
   while (true) {
     const element = await addon.tab.waitForElement("button.scratchEyedropper", { markAsSeen: true });
+    rateLimiter.abort(false);
     if (addon.tab.editorMode !== "editor") continue;
     addon.tab.redux.initialize();
     const defaultColor = getColor(element);
@@ -59,9 +63,9 @@ export default async ({ addon, console, msg }) => {
       placeholder: msg("hex"),
       value: defaultColor || "",
     });
-    saColorPickerColor.addEventListener("change", () => {
-      setColor((saColorPickerText.value = saColorPickerColor.value), element);
-    });
+    saColorPickerColor.addEventListener("input", () => rateLimiter.limit(
+      () => setColor((saColorPickerText.value = saColorPickerColor.value), element)
+    ));
     saColorPickerText.addEventListener("change", () => {
       const { value } = saColorPickerText;
       if (!getHexRegex().test(value)) return;

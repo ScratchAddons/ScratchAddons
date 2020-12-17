@@ -1,7 +1,10 @@
 import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
+import RateLimiter from "../../libraries/rate-limiter.js";
 
 export default async ({ addon, console, msg }) => {
   let prevEventHandler;
+  // 500-ms rate limit
+  const rateLimiter = new RateLimiter(250);
   const getColor = (element) => {
     let fillOrStroke;
     const state = addon.tab.redux.state;
@@ -43,6 +46,7 @@ export default async ({ addon, console, msg }) => {
   };
   while (true) {
     const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', { markAsSeen: true });
+    rateLimiter.abort(false);
     addon.tab.redux.initialize();
     if (addon.tab.redux && typeof prevEventHandler === "function") {
       addon.tab.redux.removeEventListener("statechanged", prevEventHandler);
@@ -65,9 +69,9 @@ export default async ({ addon, console, msg }) => {
       placeholder: msg("hex"),
       value: defaultColor || "",
     });
-    saColorPickerColor.addEventListener("change", () => {
-      setColor((saColorPickerText.value = saColorPickerColor.value), element);
-    });
+    saColorPickerColor.addEventListener("input", () => rateLimiter.limit(
+      () => setColor((saColorPickerText.value = saColorPickerColor.value), element)
+    ));
     saColorPickerText.addEventListener("change", () => {
       const { value } = saColorPickerText;
       if (!getHexRegex().test(value)) return;
