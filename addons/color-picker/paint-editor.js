@@ -1,56 +1,55 @@
 import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
 
 export default async ({ addon, console, msg }) => {
-  let elem;
   let prevEventHandler;
+  const getColor = (element) => {
+    let fillOrStroke;
+    const state = addon.tab.redux.state;
+    if (state.scratchPaint.modals.fillColor) {
+      fillOrStroke = "fill";
+    } else if (state.scratchPaint.modals.strokeColor) {
+      fillOrStroke = "stroke";
+    } else {
+      fillOrStroke = "ihadastroke";
+      return;
+    }
+    const colorType = state.scratchPaint.fillMode.colorIndex;
+    const primaryOrSecondary = ["primary", "secondary"][colorType];
+    const color = state.scratchPaint.color[`${fillOrStroke}Color`][primaryOrSecondary];
+    if (color === null || color === "scratch-paint/style-path/mixed") return;
+    // This value can be arbitrary - it can be HEX, RGB, etc.
+    // Use tinycolor to convert them.
+    return tinycolor(color).toHexString();
+  };
+  const setColor = (hex, element) => {
+    hex = normalizeHex(hex);
+    if (!addon.tab.redux.state || !addon.tab.redux.state.scratchPaint) return;
+    // The only way to reliably set color is to invoke eye dropper via click()
+    // then faking that the eye dropper reported the value.
+    const onEyeDropperOpened = (e) => {
+      if (e.detail.action.type !== "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER") return;
+      addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
+      setTimeout(() => {
+        const previousTool = addon.tab.redux.state.scratchPaint.color.eyeDropper.previousTool;
+        if (previousTool) previousTool.activate();
+        addon.tab.redux.state.scratchPaint.color.eyeDropper.callback(hex);
+        addon.tab.redux.dispatch({
+          type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
+        });
+      }, 50);
+    };
+    addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
+    element.children[1].children[0].click();
+  };
   while (true) {
-    elem = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', { markAsSeen: true });
+    const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', { markAsSeen: true });
     addon.tab.redux.initialize();
     if (addon.tab.redux && typeof prevEventHandler === "function") {
       addon.tab.redux.removeEventListener("statechanged", prevEventHandler);
       prevEventHandler = null;
     }
     if (addon.tab.editorMode !== "editor") continue;
-    const getColor = () => {
-      let fillOrStroke;
-      const state = addon.tab.redux.state;
-      if (state.scratchPaint.modals.fillColor) {
-        fillOrStroke = "fill";
-      } else if (state.scratchPaint.modals.strokeColor) {
-        fillOrStroke = "stroke";
-      } else {
-        fillOrStroke = "ihadastroke";
-        return;
-      }
-      const colorType = state.scratchPaint.fillMode.colorIndex;
-      const primaryOrSecondary = ["primary", "secondary"][colorType];
-      const color = state.scratchPaint.color[`${fillOrStroke}Color`][primaryOrSecondary];
-      if (color === null || color === "scratch-paint/style-path/mixed") return;
-      // This value can be arbitrary - it can be HEX, RGB, etc.
-      // Use tinycolor to convert them.
-      return tinycolor(color).toHexString();
-    };
-    const setColor = (hex) => {
-      hex = normalizeHex(hex);
-      if (!addon.tab.redux.state || !addon.tab.redux.state.scratchPaint) return;
-      // The only way to reliably set color is to invoke eye dropper via click()
-      // then faking that the eye dropper reported the value.
-      const onEyeDropperOpened = (e) => {
-        if (e.detail.action.type !== "scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER") return;
-        addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
-        setTimeout(() => {
-          const previousTool = addon.tab.redux.state.scratchPaint.color.eyeDropper.previousTool;
-          if (previousTool) previousTool.activate();
-          addon.tab.redux.state.scratchPaint.color.eyeDropper.callback(hex);
-          addon.tab.redux.dispatch({
-            type: "scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER",
-          });
-        }, 50);
-      };
-      addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
-      elem.children[1].children[0].click();
-    };
-    const defaultColor = getColor();
+    const defaultColor = getColor(element);
     const saColorPicker = Object.assign(document.createElement("div"), {
       className: "sa-color-picker sa-color-picker-paint",
     });
@@ -67,18 +66,18 @@ export default async ({ addon, console, msg }) => {
       value: defaultColor || "",
     });
     saColorPickerColor.addEventListener("change", () => {
-      setColor((saColorPickerText.value = saColorPickerColor.value));
+      setColor((saColorPickerText.value = saColorPickerColor.value), element);
     });
     saColorPickerText.addEventListener("change", () => {
-      const val = saColorPickerText.value;
-      if (!getHexRegex().test(val)) return;
-      setColor((saColorPickerColor.value = normalizeHex(val)));
+      const { value } = saColorPickerText;
+      if (!getHexRegex().test(value)) return;
+      setColor((saColorPickerColor.value = normalizeHex(value)), element);
     });
     prevEventHandler = (e) => {
       const type = e.detail.action.type;
       if (type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
         setTimeout(() => {
-          const color = getColor();
+          const color = getColor(element);
           saColorPickerColor.value = color || "#000000";
           saColorPickerText.value = color || "";
         }, 100);
@@ -87,6 +86,6 @@ export default async ({ addon, console, msg }) => {
     addon.tab.redux.addEventListener("statechanged", prevEventHandler);
     saColorPicker.appendChild(saColorPickerColor);
     saColorPicker.appendChild(saColorPickerText);
-    elem.parentElement.insertBefore(saColorPicker, elem);
+    element.parentElement.insertBefore(saColorPicker, element);
   }
 };

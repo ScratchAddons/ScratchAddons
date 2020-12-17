@@ -1,50 +1,49 @@
 import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
 
 export default async ({ addon, console, msg }) => {
-  let elem;
+  const getColor = (element) => {
+    const { children } = element.parentElement;
+    // h: 0 - 360
+    const h = children[1].getAttribute("aria-valuenow");
+    // s: 0 - 1
+    const s = children[3].getAttribute("aria-valuenow");
+    // v: 0 - 255, divide by 255
+    const vMultipliedBy255 = children[5].getAttribute("aria-valuenow");
+    const v = Number(vMultipliedBy255) / 255;
+    return tinycolor(`hsv(${h}, ${s}, ${v || 0})`).toHexString();
+  };
+  const setColor = (hex, element) => {
+    hex = normalizeHex(hex);
+    if (!addon.tab.redux.state || !addon.tab.redux.state.scratchGui) return;
+    // The only way to reliably set color is to invoke eye dropper via click()
+    // then faking that the eye dropper reported the value.
+    const onEyeDropperClosed = (e) => {
+      if (e.detail.action.type !== "scratch-gui/color-picker/DEACTIVATE_COLOR_PICKER") return;
+      addon.tab.redux.removeEventListener("statechanged", onEyeDropperClosed);
+      setTimeout(() => {
+        document.body.classList.remove("sa-hide-eye-dropper-background");
+      }, 50);
+    };
+    const onEyeDropperOpened = (e) => {
+      if (e.detail.action.type !== "scratch-gui/color-picker/ACTIVATE_COLOR_PICKER") return;
+      addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
+      addon.tab.redux.addEventListener("statechanged", onEyeDropperClosed);
+      setTimeout(() => {
+        addon.tab.redux.dispatch({
+          type: "scratch-gui/color-picker/DEACTIVATE_COLOR_PICKER",
+          color: hex,
+        });
+      }, 50);
+    };
+    addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
+    document.body.classList.add("sa-hide-eye-dropper-background");
+    element.click();
+  };
   while (true) {
-    elem = await addon.tab.waitForElement("button.scratchEyedropper", { markAsSeen: true });
+    const element = await addon.tab.waitForElement("button.scratchEyedropper", { markAsSeen: true });
     if (addon.tab.editorMode !== "editor") continue;
     addon.tab.redux.initialize();
-    const getColor = () => {
-      const children = elem.parentElement.children;
-      // h: 0 - 360
-      const h = children[1].getAttribute("aria-valuenow");
-      // s: 0 - 1
-      const s = children[3].getAttribute("aria-valuenow");
-      // v: 0 - 255, divide by 255
-      const vMultipliedBy255 = children[5].getAttribute("aria-valuenow");
-      const v = Number(vMultipliedBy255) / 255;
-      return tinycolor(`hsv(${h}, ${s}, ${v || 0})`).toHexString();
-    };
-    const setColor = (hex) => {
-      hex = normalizeHex(hex);
-      if (!addon.tab.redux.state || !addon.tab.redux.state.scratchGui) return;
-      // The only way to reliably set color is to invoke eye dropper via click()
-      // then faking that the eye dropper reported the value.
-      const onEyeDropperClosed = (e) => {
-        if (e.detail.action.type !== "scratch-gui/color-picker/DEACTIVATE_COLOR_PICKER") return;
-        addon.tab.redux.removeEventListener("statechanged", onEyeDropperClosed);
-        setTimeout(() => {
-          document.body.classList.remove("sa-hide-eye-dropper-background");
-        }, 50);
-      };
-      const onEyeDropperOpened = (e) => {
-        if (e.detail.action.type !== "scratch-gui/color-picker/ACTIVATE_COLOR_PICKER") return;
-        addon.tab.redux.removeEventListener("statechanged", onEyeDropperOpened);
-        addon.tab.redux.addEventListener("statechanged", onEyeDropperClosed);
-        setTimeout(() => {
-          addon.tab.redux.dispatch({
-            type: "scratch-gui/color-picker/DEACTIVATE_COLOR_PICKER",
-            color: hex,
-          });
-        }, 50);
-      };
-      addon.tab.redux.addEventListener("statechanged", onEyeDropperOpened);
-      document.body.classList.add("sa-hide-eye-dropper-background");
-      elem.click();
-    };
-    const defaultColor = getColor();
+    const defaultColor = getColor(element);
     const saColorPicker = Object.assign(document.createElement("div"), {
       className: "sa-color-picker sa-color-picker-code",
     });
@@ -61,15 +60,15 @@ export default async ({ addon, console, msg }) => {
       value: defaultColor || "",
     });
     saColorPickerColor.addEventListener("change", () => {
-      setColor((saColorPickerText.value = saColorPickerColor.value));
+      setColor((saColorPickerText.value = saColorPickerColor.value), element);
     });
     saColorPickerText.addEventListener("change", () => {
-      const val = saColorPickerText.value;
-      if (!getHexRegex().test(val)) return;
-      setColor((saColorPickerColor.value = normalizeHex(val)));
+      const { value } = saColorPickerText;
+      if (!getHexRegex().test(value)) return;
+      setColor((saColorPickerColor.value = normalizeHex(value)), element);
     });
     saColorPicker.appendChild(saColorPickerColor);
     saColorPicker.appendChild(saColorPickerText);
-    elem.parentElement.insertBefore(saColorPicker, elem);
+    element.parentElement.insertBefore(saColorPicker, element);
   }
 };

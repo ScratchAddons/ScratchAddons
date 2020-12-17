@@ -1,11 +1,14 @@
 {
-  "name": "HEX color picker",
-  "description": "Adds hex code input to color pickers.",
-  "tags": ["editor"],
+  "name": "Hex color picker",
+  "description": "Adds hex code inputs to color pickers.",
+  "tags": ["editor", "recommended"],
   "credits": [
     {
       "name": "Richie Bendall",
       "link": "https://github.com/ScratchAddons/ScratchAddons/issues/311#issuecomment-699510743"
+    },
+    {
+      "name": "apple502j"
     }
   ],
   "userscripts": [
