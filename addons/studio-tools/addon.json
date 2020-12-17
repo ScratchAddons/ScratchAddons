@@ -12,7 +12,7 @@
   ],
   "settings": [
     {
-      "name": "Add Studio tools in \"My Stuff\"",
+      "name": "Add leave button in studios section of \"My Stuff\"",
       "type": "boolean",
       "default": true,
       "id": "mystufftools"
