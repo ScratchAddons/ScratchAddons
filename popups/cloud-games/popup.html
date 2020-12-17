@@ -19,8 +19,10 @@
       </div>
       <div class="project-details" v-show="true || project.amt > 0 && project.extended">
         <div class="username-list">
-          <span v-for="user of project.users"><a :href="'https://scratch.mit.edu/users/' + user" target="_blank">{{ user }}</a></span>
-</div>
+          <span v-for="user of project.users"
+            ><a :href="'https://scratch.mit.edu/users/' + user" target="_blank">{{ user }}</a></span
+          >
+        </div>
         <div class="username-list" v-show="project.amt === 0">{{ messages.noUsersMsg }}</div>
       </div>
     </div>
