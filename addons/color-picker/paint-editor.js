@@ -69,9 +69,9 @@ export default async ({ addon, console, msg }) => {
       placeholder: msg("hex"),
       value: defaultColor || "",
     });
-    saColorPickerColor.addEventListener("input", () => rateLimiter.limit(
-      () => setColor((saColorPickerText.value = saColorPickerColor.value), element)
-    ));
+    saColorPickerColor.addEventListener("input", () =>
+      rateLimiter.limit(() => setColor((saColorPickerText.value = saColorPickerColor.value), element))
+    );
     saColorPickerText.addEventListener("change", () => {
       const { value } = saColorPickerText;
       if (!getHexRegex().test(value)) return;
