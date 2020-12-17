@@ -3,7 +3,7 @@ import RateLimiter from "../../libraries/rate-limiter.js";
 
 export default async ({ addon, console, msg }) => {
   let prevEventHandler;
-  // 500-ms rate limit
+  // 250-ms rate limit
   const rateLimiter = new RateLimiter(250);
   const getColor = (element) => {
     let fillOrStroke;
