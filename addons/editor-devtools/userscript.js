@@ -2133,7 +2133,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     options.sort((a, b) => a.desc.localeCompare(b.desc));
 
     const dd = document.getElementById("s3devIDD");
-
     for (const option of options) {
       const li = document.createElement("li");
       const desc = option.desc;
@@ -2144,7 +2143,8 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
       li.innerText = desc;
       li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
-      li.className = "var " + option.block.getCategory() + " " + bType; // proc.cls;
+      li.className =
+        "var " + (option.block.isScratchExtension ? "extension" : option.block.getCategory()) + " " + bType; // proc.cls;
       dd.appendChild(li);
     }
 
