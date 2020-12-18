@@ -112,7 +112,7 @@ const vue = new Vue({
       if (devMode === "always") return true;
       if (devMode === "never") return false;
       else return this.versionName.endsWith("-prerelease");
-    }
+    },
   },
   methods: {
     closesidebar: function () {
@@ -183,7 +183,7 @@ const vue = new Vue({
         return;
       }
       chrome.storage.sync.set({
-        developerMode: mode
+        developerMode: mode,
       });
     },
     addonMatchesFilters(addonManifest) {

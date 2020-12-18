@@ -319,13 +319,21 @@
                 <div class="filter-selector">
                   <div class="filter-text">{{ msg("developerModeEnable") }}</div>
                   <div class="filter-options">
-                    <div class="filter-option" :class="{'sel': developerMode === 'always'}" @click="setDevMode('always')">
+                    <div
+                      class="filter-option"
+                      :class="{'sel': developerMode === 'always'}"
+                      @click="setDevMode('always')"
+                    >
                       {{ msg("always") }}
                     </div>
                     <div class="filter-option" :class="{'sel': developerMode === 'never'}" @click="setDevMode('never')">
                       {{ msg("never") }}
                     </div>
-                    <div class="filter-option" :class="{'sel': developerMode === 'undefined'}" @click="setDevMode(undefined)">
+                    <div
+                      class="filter-option"
+                      :class="{'sel': developerMode === 'undefined'}"
+                      @click="setDevMode(undefined)"
+                    >
                       {{ msg("onlyOnDevelopmentVersion") }}
                     </div>
                   </div>
