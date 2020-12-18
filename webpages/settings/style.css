@@ -809,3 +809,7 @@ input[type="color"]::-webkit-color-swatch {
 #screenshot {
   height: 10rem;
 }
+
+.invert {
+  filter: brightness(0) invert(1);
+}
