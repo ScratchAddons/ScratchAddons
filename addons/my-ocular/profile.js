@@ -10,11 +10,11 @@ export default async function ({ addon, global, console }) {
   var color = data.color;
   if (statusText) {
     var statusSpan = document.createElement("i"); // for whatever reason, chrome turns variable named status into text. why the heck. aaaaaaaaaaaaaaaaaa
-    statusSpan.title = `This is ${username}'s ocular status, displayed with Scratch Addons. You can set one at https://my-ocular.jeffalo.net.`;
+    statusSpan.title = `This is a customized status from my-ocular, displayed with Scratch Addons. You can set your own at https://my-ocular.jeffalo.net.`;
     statusSpan.innerText = statusText;
 
     var dot = document.createElement("span");
-    dot.title = `This is ${username}'s ocular favourite colour, displayed with Scratch Addons. You can set one at https://my-ocular.jeffalo.net.`;
+    dot.title = `This is a customized status from my-ocular, displayed with Scratch Addons. You can set your own at https://my-ocular.jeffalo.net.`;
     dot.style.height = "10px";
     dot.style.width = "10px";
     dot.style.marginLeft = "5px";
