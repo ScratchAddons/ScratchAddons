@@ -17,7 +17,7 @@
     },
     {
       "url": "profile.js",
-      "matches": ["https://scratch.mit.edu/users/*"],
+      "matches": ["https://scratch.mit.edu/users/*/"],
       "settingMatch": {
         "id": "profile",
         "value": true
