@@ -4,7 +4,7 @@ const NEW_ADDONS = ["onion-skinning"];
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
-chrome.storage.sync.get(["globalTheme"], function (r) {
+chrome.storage.sync.get(["globalTheme", "developerMode"], function (r) {
   let rr = false; //true = light, false = dark
   if (r.globalTheme) rr = r.globalTheme;
   if (rr) {
@@ -15,6 +15,7 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
     vue.theme = false;
     vue.themePath = "../../images/icons/theme.svg";
   }
+  vue.developerMode = String(r.developerMode);
 });
 
 const vue = new Vue({
@@ -23,6 +24,7 @@ const vue = new Vue({
     smallMode: false,
     theme: "",
     themePath: "",
+    developerMode: "undefined",
     switchPath: "../../images/icons/switch.svg",
     isOpen: false,
     categoryOpen: true,
@@ -105,6 +107,12 @@ const vue = new Vue({
     versionName() {
       return chrome.runtime.getManifest().version_name;
     },
+    devModeEnabled() {
+      const devMode = this.developerMode;
+      if (devMode === "always") return true;
+      if (devMode === "never") return false;
+      else return this.versionName.endsWith("-prerelease");
+    }
   },
   methods: {
     closesidebar: function () {
@@ -166,6 +174,16 @@ const vue = new Vue({
             vue.themePath = "../../images/icons/theme.svg";
           }
         });
+      });
+    },
+    setDevMode(mode) {
+      vue.developerMode = String(mode);
+      if (typeof mode === "undefined") {
+        chrome.storage.sync.remove("developerMode");
+        return;
+      }
+      chrome.storage.sync.set({
+        developerMode: mode
       });
     },
     addonMatchesFilters(addonManifest) {
@@ -253,11 +271,16 @@ const vue = new Vue({
       });
     },
     devShowAddonIds(event) {
-      if (!this.versionName.endsWith("-prerelease") || this.shownAddonIds) return;
+      if (!this.devModeEnabled) return;
       event.stopPropagation();
-      this.shownAddonIds = true;
+      this.shownAddonIds = !this.shownAddonIds;
       this.manifests.forEach((manifest) => {
-        manifest.name = manifest._addonId;
+        if (this.shownAddonIds) {
+          manifest._actualName = manifest.name;
+          manifest.name = manifest._addonId;
+        } else {
+          manifest.name = manifest._actualName;
+        }
       });
     },
   },

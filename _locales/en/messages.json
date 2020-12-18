@@ -217,5 +217,23 @@
   },
   "new": {
     "message": "New!"
+  },
+  "developerMode": {
+    "message": "Developer Mode"
+  },
+  "developerModeDescription": {
+    "message": "Enable developer mode for Scratch Addons developers."
+  },
+  "developerModeEnable": {
+    "message": "Enable:"
+  },
+  "always": {
+    "message": "Always"
+  },
+  "never": {
+    "message": "Never"
+  },
+  "onlyOnDevelopmentVersion": {
+    "message": "Only on dev version"
   }
 }

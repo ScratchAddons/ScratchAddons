@@ -306,6 +306,33 @@
               </div>
             </div>
           </div>
+          <div class="setting-body">
+            <div class="addon-topbar">
+              <span class="addon-name"
+                ><img src="../../images/icons/wrench.svg" style="vertical-align: middle; margin-right: 5px" /> {{
+                msg("developerMode") }}
+              </span>
+            </div>
+            <div class="setting-settings">
+              <span class="settings-description">{{ msg("developerModeDescription") }}</span>
+              <div class="setting-setting">
+                <div class="filter-selector">
+                  <div class="filter-text">{{ msg("developerModeEnable") }}</div>
+                  <div class="filter-options">
+                    <div class="filter-option" :class="{'sel': developerMode === 'always'}" @click="setDevMode('always')">
+                      {{ msg("always") }}
+                    </div>
+                    <div class="filter-option" :class="{'sel': developerMode === 'never'}" @click="setDevMode('never')">
+                      {{ msg("never") }}
+                    </div>
+                    <div class="filter-option" :class="{'sel': developerMode === 'undefined'}" @click="setDevMode(undefined)">
+                      {{ msg("onlyOnDevelopmentVersion") }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="footer">
           <p>
