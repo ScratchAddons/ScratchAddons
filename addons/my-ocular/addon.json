@@ -1,5 +1,5 @@
 {
-  "name": "Show ocular status",
+  "name": "Show my-ocular status",
   "description": "Shows ocular statuses and favorite colours. Uses my-ocular.jeffalo.net to obtain status data. Statuses are moderated and filtered.",
   "credits": [
     {
