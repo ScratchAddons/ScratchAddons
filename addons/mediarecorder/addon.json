@@ -1,0 +1,13 @@
+{
+  "name": "Record project video",
+  "description": "Record project's stage, without sound.",
+  "tags": ["editor", "beta"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "enabledByDefault": false,
+  "l10n": true
+}
