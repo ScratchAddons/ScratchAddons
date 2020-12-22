@@ -1,6 +1,6 @@
 {
   "name": "Record project video",
-  "description": "Record project's stage, without sound.",
+  "description": "Adds a \"start recording\" button to the editor that allows you to record the project's stage (no sound).",
   "tags": ["editor", "beta"],
   "userscripts": [
     {
