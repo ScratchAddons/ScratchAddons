@@ -1,4 +1,4 @@
-const NEW_ADDONS = ["onion-skinning"];
+const NEW_ADDONS = ["color-picker"];
 
 //theme switching
 const lightThemeLink = document.createElement("link");
