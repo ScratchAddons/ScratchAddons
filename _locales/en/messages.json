@@ -189,13 +189,13 @@
     "message": "Scratch Addons extension update"
   },
   "extensionUpdateInfo1": {
-    "message": "$1: $2 for animating in the editor. Go to $3 to enable it."
+    "message": "$1: $2 for choosing colors easily. Go to $3 to enable it."
   },
   "newFeature": {
     "message": "New feature"
   },
-  "onionSkin": {
-    "message": "onion skinning"
+  "hexColorPicker": {
+    "message": "hex color picker"
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
@@ -212,8 +212,8 @@
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
-  "onionSkinAlt": {
-    "message": "Dog inside costume editor with Onion Skinning enabled. Credit to Scratch sprite library."
+  "hexColorPickerAlt": {
+    "message": "Screenshot of a color picker with hex code input."
   },
   "new": {
     "message": "New!"
