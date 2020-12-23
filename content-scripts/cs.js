@@ -246,7 +246,8 @@ const showBanner = () => {
       (_, i) =>
         [
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
-          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("hexColorPicker") }).outerHTML,
+          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("hexColorPicker") })
+            .outerHTML,
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings",
             target: "_blank",
