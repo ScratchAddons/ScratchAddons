@@ -23,7 +23,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
     const makeLabel = (l10n) => {
       const label = new DOMParser().parseFromString("<label></label>", "text/xml").firstChild;
-      label.setAttribute("text", msg(l10n)); // TODO l10n
+      label.setAttribute("text", msg(l10n));
       return label;
     };
 
@@ -34,20 +34,20 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         }
         variables[i].setAttribute("gap", BIG_GAP);
       }
-    }
+    };
 
     const separateLocals = (xml) => {
-      const makeNewButton = xml[0];
       const variables = xml.filter((i) => i.getAttribute("id"));
-      const blocks = xml.filter((i) => !i.getAttribute("id") && !i.getAttribute("text"));
-
-      if (blocks.length === 0) {
+      // No blocks means no variables, so don't try to do anything.
+      if (variables.length === 0) {
         return xml;
       }
 
+      const makeNewButton = xml[0];
+      const blocks = xml.filter((i) => !i.getAttribute("id") && !i.getAttribute("text"));
+
       const local = [];
       const global = [];
-
       for (const variableXML of variables) {
         const id = variableXML.getAttribute("id");
         const variable = workspace.getVariableById(id);
@@ -65,7 +65,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         fixGaps(global);
         result.push(...global);
       }
-      
+
       if (local.length) {
         result.push(makeLabel("for-this-sprite-only"));
         fixGaps(local);
@@ -73,7 +73,6 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       }
 
       result.push(...blocks);
-
       return result;
     };
 
@@ -87,13 +86,14 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     }
 
     workspace = Blockly.getMainWorkspace();
-    const VariableCategory = workspace.toolboxCategoryCallbacks_.VARIABLE;
 
-    let variableCategory = [];
-    let listCategory = [];
+    const DataCategory = workspace.toolboxCategoryCallbacks_.VARIABLE;
+    let variableCategory;
+    let listCategory;
 
-    workspace.registerToolboxCategoryCallback("VARIABLE", function variableCategoryCallback(workspace) {
-      let result = VariableCategory(workspace);
+    const variableCategoryCallback = (workspace) => {
+      let result = DataCategory(workspace);
+      console.log("Called with", result);
 
       if (addon.settings.get("separateLocalVariables")) {
         result = separateLocalVariables(result);
@@ -107,11 +107,19 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       variableCategory = variables;
       listCategory = lists;
       return variableCategory;
-    });
+    };
 
-    workspace.registerToolboxCategoryCallback("LIST", function listCategoryCallback(workspace) {
+    const listCategoryCallback = (workspace) => {
       return listCategory;
-    });
+    };
+
+    const flyout = workspace.getFlyout();
+    const oldShow = flyout.show;
+    flyout.show = function (xml) {
+      workspace.registerToolboxCategoryCallback("VARIABLE", variableCategoryCallback);
+      workspace.registerToolboxCategoryCallback("LIST", listCategoryCallback);
+      oldShow.call(this, xml);
+    };
 
     // We use Scratch's extension category mechanism to replace the data category with our own.
     // https://github.com/LLK/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
