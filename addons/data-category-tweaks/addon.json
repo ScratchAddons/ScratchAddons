@@ -21,7 +21,7 @@
       "default": false
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "beta"],
   "enabledByDefault": false,
   "l10n": true
 }
