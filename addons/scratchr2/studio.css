@@ -57,7 +57,7 @@
   height: 30px;
   margin-left: 0;
   background: #fff;
-  box-shadow: 0 0 1px rgba(0,0,0,0.25);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
   text-align: center;
 }
 #tabs li {
@@ -77,7 +77,7 @@
   border-bottom: 3px solid #0fbd8c;
 }
 #tabs li:hover a {
-  border-bottom: 3px solid rgba(0,0,0,0.2);
+  border-bottom: 3px solid rgba(0, 0, 0, 0.2);
 }
 .box .box-content .action-bar .inner {
   border: none;
@@ -87,8 +87,8 @@
 .box .box-content .action-bar.white .inner {
   background: transparent;
 }
-#add-project-dialog input[type=text],
-#add-curator-dialog input[type=text] {
+#add-project-dialog input[type="text"],
+#add-curator-dialog input[type="text"] {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -98,7 +98,7 @@
   border-width: 2px;
 }
 #explore-bar #explore-header {
-  border-color: rgba(0,0,0,0.15);
+  border-color: rgba(0, 0, 0, 0.15);
   background: #fff;
   box-shadow: none;
   color: #575e75;
@@ -118,7 +118,7 @@
   padding: 8px;
   border-radius: 4px;
   background: #fff;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 .media-grid.projects .project.thumb.item:nth-child(4n) {
   margin-right: 0;
@@ -147,7 +147,7 @@
 #comments .more-replies {
   background-color: #fcfcfc;
 }
-.button[data-control=load-more] {
+.button[data-control="load-more"] {
   width: 698px;
 }
 .tab-content h2 {
@@ -162,7 +162,7 @@ ul.curators li {
   border-radius: 4px;
   border: none;
   background: #fff;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 ul.curators li img {
   border: none;
