@@ -119,3 +119,7 @@ tbody#logs * {
 #search-input {
   background-color: #fff;
 }
+
+.ui-dialog-content {
+  color: black;
+}

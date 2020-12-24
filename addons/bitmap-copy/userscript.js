@@ -1,5 +1,6 @@
 export default async ({ addon, console }) => {
   if (!addon.tab.redux.state) return console.warn("Redux is not available!");
+  addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
     const e = detail;
     if (!e.action || e.action.type !== "scratch-paint/clipboard/SET") return;

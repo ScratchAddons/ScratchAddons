@@ -230,7 +230,7 @@
                     type="color"
                     class="setting-input color"
                     v-model="addonSettings[addon._addonId][setting.id]"
-                    @input="updateSettings(addon)"
+                    @input="updateSettings(addon, {wait: 250, settingId: setting.id})"
                     :disabled="!addon._enabled"
                     v-if="setting.type === 'color'"
                     :placeholder="setting.default"
