@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg, safeMsg }) {
+export default async function ({ addon, global, console, msg }) {
   // This needs to be stored in a separate variable updated in getBlocksXML
   // because addon.settings and actual workspace state do not necessarily match.
   let hasSeparateListCategory = false;
@@ -147,7 +147,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
             custom="VARIABLE">
           </category>
           <category
-            name="${/* TODO not sure if this is right?? */ safeMsg("list-category")}"
+            name="${msg("list-category")}"
             id="list"
             colour="#FF661A"
             secondaryColour="#FF5500"
