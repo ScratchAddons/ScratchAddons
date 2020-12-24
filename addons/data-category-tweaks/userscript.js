@@ -93,7 +93,6 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
     const variableCategoryCallback = (workspace) => {
       let result = DataCategory(workspace);
-      console.log("Called with", result);
 
       if (addon.settings.get("separateLocalVariables")) {
         result = separateLocalVariables(result);
