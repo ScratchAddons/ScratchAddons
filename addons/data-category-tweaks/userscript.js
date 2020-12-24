@@ -3,10 +3,9 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   // because addon.settings and actual workspace state do not necessarily match.
   let hasSeparateListCategory = false;
 
-  let vm;
   let workspace;
 
-  const separateListCategory = (toolboxXML) => {
+  const separateVariableCategories = (toolboxXML) => {
     const listButtonIndex = toolboxXML.findIndex((i) => i.getAttribute("callbackkey") === "CREATE_LIST");
     return {
       variables: toolboxXML.slice(0, listButtonIndex),
@@ -15,9 +14,8 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   };
 
   const separateLocalVariables = (toolboxXML) => {
-    const { variables, lists } = separateListCategory(toolboxXML);
+    const { variables, lists } = separateVariableCategories(toolboxXML);
 
-    // TODO: get these from Blockly?
     const SMALL_GAP = 8;
     const BIG_GAP = 24;
 
@@ -37,28 +35,28 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     };
 
     const separateLocals = (xml) => {
-      const variables = xml.filter((i) => i.getAttribute("id"));
-      // No blocks means no variables, so don't try to do anything.
-      if (variables.length === 0) {
-        return xml;
-      }
-
-      const makeNewButton = xml[0];
-      const blocks = xml.filter((i) => !i.getAttribute("id") && !i.getAttribute("text"));
-
-      const local = [];
+      const before = [];
       const global = [];
-      for (const variableXML of variables) {
-        const id = variableXML.getAttribute("id");
-        const variable = workspace.getVariableById(id);
-        if (variable.isLocal) {
-          local.push(variableXML);
+      const local = [];
+      const after = [];
+
+      for (const blockXML of xml) {
+        if (blockXML.hasAttribute("id")) {
+          const id = blockXML.getAttribute("id");
+          const variable = workspace.getVariableById(id);
+          if (variable.isLocal) {
+            local.push(blockXML);
+          } else {
+            global.push(blockXML);
+          }
+        } else if (blockXML.tagName === "BUTTON") {
+          before.push(blockXML);
         } else {
-          global.push(variableXML);
+          after.push(blockXML);
         }
       }
 
-      const result = [makeNewButton];
+      const result = before;
 
       if (global.length) {
         result.push(makeLabel("for-all-sprites"));
@@ -72,8 +70,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         result.push(...local);
       }
 
-      result.push(...blocks);
-      return result;
+      return result.concat(after);
     };
 
     return [...separateLocals(variables), ...separateLocals(lists)];
@@ -102,7 +99,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         return result;
       }
 
-      const { variables, lists } = separateListCategory(result);
+      const { variables, lists } = separateVariableCategories(result);
       variableCategory = variables;
       listCategory = lists;
       return variableCategory;
@@ -123,7 +120,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     // We use Scratch's extension category mechanism to replace the data category with our own.
     // https://github.com/LLK/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
     // https://github.com/LLK/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
-    vm = addon.tab.traps.onceValues.vm;
+    const vm = addon.tab.traps.onceValues.vm;
     const originalGetBlocksXML = vm.runtime.getBlocksXML;
     vm.runtime.getBlocksXML = function (target) {
       const result = originalGetBlocksXML.call(this, target);
