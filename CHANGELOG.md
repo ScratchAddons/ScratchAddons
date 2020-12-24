@@ -13,12 +13,12 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
-## [v1.5.1]
+## [v1.5.1] - 2020-12-15
 
 - Bug fix: Onion skin addon groups together every vector costume ([#1035](https://github.com/ScratchAddons/ScratchAddons/issues/1035))
 - Bug fix: loading comment section not black with website dark mode enabled
 
-## [v1.5.0]
+## [v1.5.0] - 2020-12-13
 
 - New addon: onion skinning
 - New addon: profile page banner
@@ -35,7 +35,7 @@ automatically create a PR on the website to synchronize the changes!
 - Firefox bug fix: addons not working
 - Various other bug fixes
 
-## [v1.4.1]
+## [v1.4.1] - 2020-12-03
 
 - Fix website dark mode affecting the editor, sometimes making text unreadable
 - Fix typos and incorrect uses of title case
@@ -43,7 +43,7 @@ automatically create a PR on the website to synchronize the changes!
 - Fix forum search working incorrectly
 - Fix localization bugs
 
-## [v1.4.0]
+## [v1.4.0] - 2020-11-29
 
 - Scratch Addons is now localized! We'll soon be writing how you can help translate Scratch Addons to your language.
 - Responsive settings page
@@ -69,19 +69,19 @@ automatically create a PR on the website to synchronize the changes!
 - Addition of `%addon-self-dir%` placeholder in theme CSS
 - Settings of type `"key"` for hotkeys, not yet used by any addon.
 
-## [v1.3.3]
+## [v1.3.3] - 2020-11-24
 
 Minor extension structure change after Mozilla Add-ons review (moves libraries used by addons, previously loaded from CDNs, to the "libraries" folder). No noticeable changes for users.
 
-## [v1.3.2]
+## [v1.3.2] - 2020-11-24
 
 Fixes a security issue in the "More links" addon. [Click here for more information](https://github.com/ScratchAddons/ScratchAddons/security/advisories/GHSA-6qfq-px3r-xj4p).
 
-## [v1.3.1]
+## [v1.3.1] - 2020-11-09
 
 The "live featured project" addon was accidentally enabled by default. This update fixes that.
 
-## [v1.3.0]
+## [v1.3.0] - 2020-11-08
 
 - Project performance problems fixed - performance warnings removed ([#431](https://github.com/ScratchAddons/ScratchAddons/issues/431))
 - "Highlight currently executing blocks" does not hurt performance/lag anymore ([#336](https://github.com/ScratchAddons/ScratchAddons/issues/336))
@@ -106,7 +106,7 @@ The "live featured project" addon was accidentally enabled by default. This upda
 - Ability to mark a theme userstyle as non-updatable with `/* sa-autoupdate-theme-ignore */`
 - Fix console.log sometimes not working (bug caused by Scratch, not Scratch Addons, see [#662](https://github.com/ScratchAddons/ScratchAddons/issues/662))
 
-## [v1.2.1]
+## [v1.2.1] - 2020-10-27
 
 - New popup styling, matching the Scratch Addons settings page
 - Light theme option for the Scratch Addons popup and settings page
@@ -130,11 +130,11 @@ The "live featured project" addon was accidentally enabled by default. This upda
 - `notice` property in the manifest
 - Setting presets ([#563](https://github.com/ScratchAddons/ScratchAddons/issues/563))
 
-## [v1.2.0] [YANKED]
+## [v1.2.0] - 2020-10-27 [YANKED]
 
 Only released on Firefox due to an issue with perfomance warnings not showing. See [v1.2.1].
 
-## [v1.1.1]
+## [v1.1.1] - 2020-10-11
 
 - Bug fixes
 - New theme: Scratch 2.0 → Scratch 3.0
@@ -160,11 +160,11 @@ Only released on Firefox due to an issue with perfomance warnings not showing. S
 
 - Links to "credits" and "review" pages on settings page.
 
-## [v1.1.0] [YANKED]
+## [v1.1.0] - 2020-10-10 [YANKED]
 
 Not released due to a permissions issue. See [v1.1.1].
 
-## [v1.0.0]
+## [v1.0.0] - 2020-09-24
 
 Initial release.
 
@@ -183,4 +183,3 @@ Initial release.
 [v1.0.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.0.0
 
 <!-- sa-changelog-end -->
-
