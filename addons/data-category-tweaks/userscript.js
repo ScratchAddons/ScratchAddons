@@ -157,6 +157,13 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       }
       return result;
     };
+
+    // If an editingTarget is already set, emitWorkspaceUpdate has already been called once.
+    // Call it again to force toolbox update.
+    // Workspace updates are slow, so don't do them unless necessary.
+    if (vm.editingTarget) {
+      vm.emitWorkspaceUpdate();
+    }
   };
 
   if (addon.tab.editorMode === "editor") {
