@@ -85,16 +85,16 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     injected = true;
 
     const workspace = Blockly.getMainWorkspace();
-    if (!workspace) throw new Error('expected workspace');
+    if (!workspace) throw new Error("expected workspace");
 
     const vm = addon.tab.traps.onceValues.vm;
-    if (!vm) throw new Error('expected vm');
+    if (!vm) throw new Error("expected vm");
 
     const flyout = workspace.getFlyout();
-    if (!flyout) throw new Error('expected flyout');
+    if (!flyout) throw new Error("expected flyout");
 
     const DataCategory = workspace.toolboxCategoryCallbacks_.VARIABLE;
-    if (!DataCategory) throw new Error('expected data category');
+    if (!DataCategory) throw new Error("expected data category");
 
     let variableCategory;
     let listCategory;
