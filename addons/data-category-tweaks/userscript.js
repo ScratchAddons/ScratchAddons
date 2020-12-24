@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, safeMsg }) {
+export default async function ({ addon, global, console, msg, safeMsg }) {
   // This needs to be stored in a separate variable updated in getBlocksXML
   // because addon.settings and actual workspace state do not necessarily match.
   let hasSeparateListCategory = false;
@@ -10,29 +10,46 @@ export default async function ({ addon, global, console, safeMsg }) {
     const listButtonIndex = toolboxXML.findIndex((i) => i.getAttribute("callbackkey") === "CREATE_LIST");
     return {
       variables: toolboxXML.slice(0, listButtonIndex),
-      lists: toolboxXML.slice(listButtonIndex, toolboxXML.length)
+      lists: toolboxXML.slice(listButtonIndex, toolboxXML.length),
     };
   };
 
   const separateLocalVariables = (toolboxXML) => {
-    const {variables, lists} = separateListCategory(toolboxXML);
+    const { variables, lists } = separateListCategory(toolboxXML);
 
-    const separate = (xml) => {
+    // TODO: get these from Blockly?
+    const SMALL_GAP = 8;
+    const BIG_GAP = 24;
+
+    const makeLabel = (l10n) => {
+      const label = new DOMParser().parseFromString("<label></label>", "text/xml").firstChild;
+      label.setAttribute("text", msg(l10n)); // TODO l10n
+      return label;
+    };
+
+    const fixGaps = (variables) => {
+      if (variables.length > 0) {
+        for (var i = 0; i < variables.length - 1; i++) {
+          variables[i].setAttribute("gap", SMALL_GAP);
+        }
+        variables[i].setAttribute("gap", BIG_GAP);
+      }
+    }
+
+    const separateLocals = (xml) => {
       const makeNewButton = xml[0];
-      const variables = xml.filter((i) => i.getAttribute('id'));
-      const blocks = xml.filter((i) => !i.getAttribute('id') && !i.getAttribute('text'));
+      const variables = xml.filter((i) => i.getAttribute("id"));
+      const blocks = xml.filter((i) => !i.getAttribute("id") && !i.getAttribute("text"));
 
       if (blocks.length === 0) {
         return xml;
       }
 
-      // TODO fix gap properties
-
       const local = [];
       const global = [];
 
       for (const variableXML of variables) {
-        const id = variableXML.getAttribute('id');
+        const id = variableXML.getAttribute("id");
         const variable = workspace.getVariableById(id);
         if (variable.isLocal) {
           local.push(variableXML);
@@ -41,21 +58,17 @@ export default async function ({ addon, global, console, safeMsg }) {
         }
       }
 
-      const result = [
-        makeNewButton
-      ];
+      const result = [makeNewButton];
 
       if (global.length) {
-        const globalLabel = new DOMParser().parseFromString('<label></label>', 'text/xml').firstChild;
-        globalLabel.setAttribute('text', 'For all sprites:'); // TODO l10n  
-        result.push(globalLabel);
+        result.push(makeLabel("for-all-sprites"));
+        fixGaps(global);
         result.push(...global);
       }
-
+      
       if (local.length) {
-        const localLabel = new DOMParser().parseFromString('<label></label>', 'text/xml').firstChild;
-        localLabel.setAttribute('text', 'For this sprite only:'); // TODO l10n
-        result.push(localLabel);
+        result.push(makeLabel("for-this-sprite-only"));
+        fixGaps(local);
         result.push(...local);
       }
 
@@ -64,10 +77,7 @@ export default async function ({ addon, global, console, safeMsg }) {
       return result;
     };
 
-    return [
-      ...separate(variables),
-      ...separate(lists)
-    ];
+    return [...separateLocals(variables), ...separateLocals(lists)];
   };
 
   const injectWorkspace = () => {
@@ -93,7 +103,7 @@ export default async function ({ addon, global, console, safeMsg }) {
         return result;
       }
 
-      const {variables, lists} = separateListCategory(result);
+      const { variables, lists } = separateListCategory(result);
       variableCategory = variables;
       listCategory = lists;
       return variableCategory;
@@ -123,7 +133,7 @@ export default async function ({ addon, global, console, safeMsg }) {
             custom="VARIABLE">
           </category>
           <category
-            name="${/* TODO not sure if this is right?? */safeMsg("list-category")}"
+            name="${/* TODO not sure if this is right?? */ safeMsg("list-category")}"
             id="list"
             colour="#FF661A"
             secondaryColour="#F1570B"
@@ -137,7 +147,7 @@ export default async function ({ addon, global, console, safeMsg }) {
 
   if (addon.tab.editorMode === "editor") {
     const interval = setInterval(() => {
-      if (typeof Blockly === 'object' && Blockly.getMainWorkspace()) {
+      if (typeof Blockly === "object" && Blockly.getMainWorkspace()) {
         injectWorkspace();
         clearInterval(interval);
       }
