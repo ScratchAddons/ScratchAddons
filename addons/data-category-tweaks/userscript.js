@@ -5,7 +5,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
   let workspace;
 
-  const separateVariableCategories = (toolboxXML) => {
+  const separateVariablesByType = (toolboxXML) => {
     const listButtonIndex = toolboxXML.findIndex((i) => i.getAttribute("callbackkey") === "CREATE_LIST");
     return {
       variables: toolboxXML.slice(0, listButtonIndex),
@@ -14,7 +14,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   };
 
   const separateLocalVariables = (toolboxXML) => {
-    const { variables, lists } = separateVariableCategories(toolboxXML);
+    const { variables, lists } = separateVariablesByType(toolboxXML);
 
     const SMALL_GAP = 8;
     const BIG_GAP = 24;
@@ -34,7 +34,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       }
     };
 
-    const separateLocals = (xml) => {
+    const separateVariablesByScope = (xml) => {
       const before = [];
       const global = [];
       const local = [];
@@ -50,8 +50,10 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
             global.push(blockXML);
           }
         } else if (blockXML.tagName === "BUTTON") {
+          // "Make a Variable" always goes first.
           before.push(blockXML);
         } else {
+          // "set variable to", etc. always go after.
           after.push(blockXML);
         }
       }
@@ -73,7 +75,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       return result.concat(after);
     };
 
-    return [...separateLocals(variables), ...separateLocals(lists)];
+    return separateVariablesByScope(variables).concat(separateVariablesByScope(lists));
   };
 
   const injectWorkspace = () => {
@@ -99,13 +101,13 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         return result;
       }
 
-      const { variables, lists } = separateVariableCategories(result);
+      const { variables, lists } = separateVariablesByType(result);
       variableCategory = variables;
       listCategory = lists;
       return variableCategory;
     };
 
-    const listCategoryCallback = (workspace) => {
+    const listCategoryCallback = () => {
       return listCategory;
     };
 
