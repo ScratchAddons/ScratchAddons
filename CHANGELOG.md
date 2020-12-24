@@ -17,9 +17,83 @@ automatically create a PR on the website to synchronize the changes!
 
 ## [v1.5.1] - 2020-12-15
 
+### Fixed
+
+- Comment loading screen is not dark when using dark-www (#1019)
+- Onion-skinning groups images unintentionally (#1037)
+
 ## [v1.5.0] - 2020-12-13
 
+### Added
+
+#### Addons
+
+- Onion skinning (#879)
+- Profile page banner (#895)
+
+#### Extension and Addon API
+
+- Show full areas supports loading more in What's Happening (#899)
+- Warning when posting on Japanese forum (#944)
+- Warning when site access is off (#950)
+- A way to disable thumbnail overwriting (#964)
+- Block switching supports more blocks (#979)
+- New devtools feature for showing broadcast senders and receivers (#980)
+- Button to open translation page (#1002)
+- Notification for updates (#1016)
+- "New" tag for addons (#1016)
+
+### Changed
+
+#### Extension and Addon API
+
+- Load addons inside frames (#897)
+- Localization updates
+
+### Fixed
+
+#### Addons
+
+- Customizable block colors: Addon did not affect devtools middle click feature (#669)
+- Customizable block colors: Custom colors do not apply to custom blocks (#948)
+- Customizable block colors: Custom colors do not apply to dropdowns (#956)
+- Customizable block colors: Custom colors do not apply to extension blocks in non-English environment (#956)
+- Customized quotes & code blocks on forums: Addon categorized as editor addon (#989)
+- Mouse position: Addon crashes in project view (#954)
+- Scratch 2.0 → 3.0: /news is not supported (#941)
+- Scratch Messaging: "Show More" button is partially hidden (#929)
+- Scratch Messaging: Addon links to curators page for activity messages (#969)
+- Scratch Messaging: Follower name links uses onClick (#969)
+- Show my-ocular status: Addon is not localized (#925)
+- Studio manager tools: Buttons don't have text when hovered (#994)
+- Studio manager tools: Buttons don't have text when hovered (#994)
+- Website dark mode: Project comments are unreadable with dark mode (#928)
+- Website dark mode: /news is not supported (#941)
+- Website dark mode: Some pages are not listed in dark mode list (#949)
+- Website dark mode: Addon still loads on editors (#960)
+- Website dark mode: Addon does not make cloudmonitor rows dark (#960)
+- Website dark mode: Addon changes variable monitor color (#981)
+- Website dark mode: Addon styles in-editor Join Flow (#981)
+- Website dark mode: Addon styles list row backgrounds when focused (#981)
+- Website dark mode: Addon does not apply to loading screen (#995)
+- Website dark mode: Addon makes search input dark (#995)
+- Website dark mode: Addon makes project warnings unreadable (#995)
+- Some addons overflow in small stage (#930)
+- Addons sometimes don't load in Firefox (#935)
+
+#### Extension and Addon API
+
+- Most translations don't load (#925)
+- "Search" placeholder is not localized (#925)
+
 ## [v1.4.1] - 2020-12-03
+
+### Fixed
+
+- Forum search: Fix crashes (#901)
+- Messages in editor: Typo in addon description (#903)
+- Sprite and script count: Script count was inaccurate (#904)
+- Addons have incorrect name (#887)
 
 ## [v1.4.0] - 2020-11-29
 
