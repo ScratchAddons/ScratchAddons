@@ -142,7 +142,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
             name="${/* TODO not sure if this is right?? */ safeMsg("list-category")}"
             id="list"
             colour="#FF661A"
-            secondaryColour="#F1570B"
+            secondaryColour="#FF5500"
             custom="LIST">
           </category>`,
         });
