@@ -13,7 +13,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     };
   };
 
-  const separateLocalVariables = (toolboxXML) => {
+  const separateLocalVariables = (workspace, toolboxXML) => {
     const { variables, lists } = separateVariablesByType(toolboxXML);
 
     const SMALL_GAP = 8;
@@ -43,11 +43,11 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       for (const blockXML of xml) {
         if (blockXML.hasAttribute("id")) {
           const id = blockXML.getAttribute("id");
-          const variable = Blockly.getMainWorkspace().getVariableById(id);
-          if (variable.isLocal) {
-            local.push(blockXML);
-          } else {
+          const variable = workspace.getVariableById(id);
+          if (!variable || !variable.isLocal) {
             global.push(blockXML);
+          } else {
+            local.push(blockXML);
           }
         } else if (blockXML.tagName === "BUTTON") {
           // "Make a Variable" always goes first.
@@ -103,7 +103,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       let result = DataCategory(workspace);
 
       if (addon.settings.get("separateLocalVariables")) {
-        result = separateLocalVariables(result);
+        result = separateLocalVariables(workspace, result);
       }
 
       if (!hasSeparateListCategory) {
