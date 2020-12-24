@@ -1,5 +1,6 @@
 {
   "name": "Data Category Tweaks",
+  "description": "Provides tweaks for the Data (\"Variables\") category in the editor.",
   "credits": [
     {
       "name": "GarboMuffin"
