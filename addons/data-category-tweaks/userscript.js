@@ -3,7 +3,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   // because addon.settings and actual workspace state do not necessarily match.
   let hasSeparateListCategory = false;
 
-  let workspace;
+  let injected = false;
 
   const separateVariablesByType = (toolboxXML) => {
     const listButtonIndex = toolboxXML.findIndex((i) => i.getAttribute("callbackkey") === "CREATE_LIST");
@@ -43,7 +43,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       for (const blockXML of xml) {
         if (blockXML.hasAttribute("id")) {
           const id = blockXML.getAttribute("id");
-          const variable = workspace.getVariableById(id);
+          const variable = Blockly.getMainWorkspace().getVariableById(id);
           if (variable.isLocal) {
             local.push(blockXML);
           } else {
@@ -79,14 +79,23 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   };
 
   const injectWorkspace = () => {
-    if (workspace) {
-      // Already injected.
+    if (injected) {
       return;
     }
+    injected = true;
 
-    workspace = Blockly.getMainWorkspace();
+    const workspace = Blockly.getMainWorkspace();
+    if (!workspace) throw new Error('expected workspace');
+
+    const vm = addon.tab.traps.onceValues.vm;
+    if (!vm) throw new Error('expected vm');
+
+    const flyout = workspace.getFlyout();
+    if (!flyout) throw new Error('expected flyout');
 
     const DataCategory = workspace.toolboxCategoryCallbacks_.VARIABLE;
+    if (!DataCategory) throw new Error('expected data category');
+
     let variableCategory;
     let listCategory;
 
@@ -108,21 +117,20 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     };
 
     const listCategoryCallback = () => {
+      // Computed in variable category callback
       return listCategory;
     };
 
-    const flyout = workspace.getFlyout();
     const oldShow = flyout.show;
     flyout.show = function (xml) {
-      workspace.registerToolboxCategoryCallback("VARIABLE", variableCategoryCallback);
-      workspace.registerToolboxCategoryCallback("LIST", listCategoryCallback);
+      this.workspace_.registerToolboxCategoryCallback("VARIABLE", variableCategoryCallback);
+      this.workspace_.registerToolboxCategoryCallback("LIST", listCategoryCallback);
       oldShow.call(this, xml);
     };
 
     // We use Scratch's extension category mechanism to replace the data category with our own.
     // https://github.com/LLK/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
     // https://github.com/LLK/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
-    const vm = addon.tab.traps.onceValues.vm;
     const originalGetBlocksXML = vm.runtime.getBlocksXML;
     vm.runtime.getBlocksXML = function (target) {
       const result = originalGetBlocksXML.call(this, target);
