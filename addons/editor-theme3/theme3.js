@@ -53,7 +53,7 @@ export default async function ({ addon, global, console }) {
     },
     "data-lists": {
       color: "#FF661A",
-      alt: "list",
+      alt: "lists",
       var: "dataLists",
     },
     custom: {

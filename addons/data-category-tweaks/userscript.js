@@ -152,7 +152,7 @@ export default async function ({ addon, global, console, msg }) {
           </category>
           <category
             name="${msg("list-category")}"
-            id="list"
+            id="lists"
             colour="#FF661A"
             secondaryColour="#FF5500"
             custom="LIST">
