@@ -20,7 +20,7 @@ export default async function ({ addon, global, console, msg }) {
     const BIG_GAP = 24;
 
     const makeLabel = (l10n) => {
-      const label = new DOMParser().parseFromString("<label></label>", "text/xml").firstChild;
+      const label = document.createElement("label");
       label.setAttribute("text", msg(l10n));
       return label;
     };
