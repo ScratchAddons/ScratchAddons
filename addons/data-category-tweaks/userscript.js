@@ -87,11 +87,11 @@ export default async function ({ addon, global, console, msg }) {
     const workspace = Blockly.getMainWorkspace();
     if (!workspace) throw new Error("expected workspace");
 
-    const vm = addon.tab.traps.onceValues.vm;
-    if (!vm) throw new Error("expected vm");
-
     const flyout = workspace.getFlyout();
     if (!flyout) throw new Error("expected flyout");
+
+    const vm = addon.tab.traps.onceValues.vm;
+    if (!vm) throw new Error("expected vm");
 
     const DataCategory = workspace.toolboxCategoryCallbacks_.VARIABLE;
     if (!DataCategory) throw new Error("expected data category");
@@ -117,19 +117,23 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     const listCategoryCallback = () => {
-      // Computed in variable category callback
+      // Computed in variable category callback, which should be called before this method.
       return listCategory;
     };
 
-    const oldShow = flyout.show;
+    // Each time a new workspace is made, these callbacks are reset.
+    // It seems like each workspace re-uses the same flyout, so whenever this flyout is updated, re-register the callbacks.
+    // https://github.com/LLK/scratch-blocks/blob/61f02e4cac0f963abd93013842fe536ef24a0e98/core/flyout_base.js#L469
+    const originalShow = flyout.show;
     flyout.show = function (xml) {
       this.workspace_.registerToolboxCategoryCallback("VARIABLE", variableCategoryCallback);
       this.workspace_.registerToolboxCategoryCallback("LIST", listCategoryCallback);
-      oldShow.call(this, xml);
+      originalShow.call(this, xml);
     };
 
     // We use Scratch's extension category mechanism to replace the data category with our own.
     // https://github.com/LLK/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
+    // https://github.com/LLK/scratch-gui/blob/2ceab00370ad7bd8ecdf5c490e70fd02152b3e2a/src/lib/make-toolbox-xml.js#L763
     // https://github.com/LLK/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
     const originalGetBlocksXML = vm.runtime.getBlocksXML;
     vm.runtime.getBlocksXML = function (target) {
@@ -158,8 +162,8 @@ export default async function ({ addon, global, console, msg }) {
       return result;
     };
 
-    // If an editingTarget is already set, emitWorkspaceUpdate has already been called once.
-    // Call it again to force toolbox update.
+    // If editingTarget has not been set yet, we have injected before the editor has loaded and emitWorkspaceUpdate will be called later.
+    // Otherwise, it's possible that the editor has already loaded and updated its toolbox, so force a workspace update.
     // Workspace updates are slow, so don't do them unless necessary.
     if (vm.editingTarget) {
       vm.emitWorkspaceUpdate();
