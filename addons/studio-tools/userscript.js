@@ -69,6 +69,7 @@ export default async function ({ addon, global, console, msg }) {
           const dummyChild = document.createElement("a");
           fakeDiv.appendChild(dummyChild);
           backbone.removeCurator({ target: dummyChild });
+          window.location.reload();
         }
       }
     });
@@ -98,6 +99,7 @@ export default async function ({ addon, global, console, msg }) {
         const dummyChild = document.createElement("a");
         fakeDiv.appendChild(dummyChild);
         backbone.removeCurator({ target: dummyChild });
+        window.location.reload();
       }
     });
     const innerDiv = document.createElement("div");

@@ -5,6 +5,10 @@
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
   "userscripts": [
@@ -81,7 +85,7 @@
       "default": "#FF6680"
     },
     {
-      "name": "pen",
+      "name": "extensions",
       "id": "Pen-color",
       "type": "color",
       "default": "#0FBD8C"

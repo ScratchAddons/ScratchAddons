@@ -115,3 +115,11 @@ h4 {
 tbody#logs * {
   background-color: inherit !important;
 }
+
+#search-input {
+  background-color: #fff;
+}
+
+.ui-dialog-content {
+  color: black;
+}

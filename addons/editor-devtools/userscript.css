@@ -293,6 +293,14 @@ div.s3devDDOut.vis ul.s3devDD {
   background-color: rgb(255, 77, 106);
 }
 
+.extension {
+  background-color: rgb(15 189 140);
+}
+.extension:hover,
+.extension.sel {
+  background-color: rgb(11 158 117);
+}
+
 /*.s3devDD>li.hat::before {                           content: '◠ ';}*/
 /*.s3devDD>li.hat::before {                           content: '▲ ';}*/
 /*.s3devDD>li.block::before {                         content: '■ ';}*/
