@@ -1,3 +1,5 @@
+const NEW_ADDONS = ["color-picker"];
+
 //theme switching
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
@@ -140,8 +142,8 @@ const vue = new Vue({
         );
       }
     },
-    openCredits() {
-      window.open(`https://scratchaddons.com/contributors`);
+    openPage(page) {
+      window.open(page);
     },
     openFeedback() {
       window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version_name}`);
@@ -209,11 +211,16 @@ const vue = new Vue({
       this.addonSettings[addon._addonId][id] = newValue;
       this.updateSettings(addon);
     },
-    updateSettings(addon) {
-      chrome.runtime.sendMessage({
-        changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
-      });
-      console.log("Updated", this.addonSettings[addon._addonId]);
+    updateSettings(addon, { wait = 0, settingId = null } = {}) {
+      const value = settingId && this.addonSettings[addon._addonId][settingId];
+      setTimeout(() => {
+        if (!settingId || (settingId && this.addonSettings[addon._addonId][settingId] === value)) {
+          chrome.runtime.sendMessage({
+            changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
+          });
+          console.log("Updated", this.addonSettings[addon._addonId]);
+        }
+      }, wait);
     },
     loadPreset(preset, addon) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
@@ -278,6 +285,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
     manifest._tags.forums = manifest.tags.includes("forums");
     manifest._tags.forEditor = manifest.tags.includes("theme") && manifest.tags.includes("editor");
     manifest._tags.forWebsite = manifest.tags.includes("theme") && manifest.tags.includes("community");
+    manifest._tags.new = NEW_ADDONS.includes(addonId);
   }
   // Sort: enabled first, then recommended disabled, then other disabled addons. All alphabetically.
   manifests.sort((a, b) => {
@@ -290,9 +298,11 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
       else return a.manifest.name.localeCompare(b.manifest.name);
     } else return 1;
   });
-  // Messaging related addons should always go first no matter what
+  // Messaging related addons should always go first no matter what (rule broken below)
   manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
   manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
+  // New addons should always go first no matter what
+  manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
   vue.manifests = manifests.map(({ manifest }) => manifest);
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);

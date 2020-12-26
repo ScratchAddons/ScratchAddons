@@ -46,7 +46,7 @@ Scratch Addons by itself is just an addon loader. Its main tasks are:
 ### From extension stores
 
 [![](https://img.shields.io/chrome-web-store/v/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=install&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)  
-&nbsp;&nbsp;&nbsp;&nbsp;↳ Install on Google Chrome, Opera, Brave, Vivaldi, Mircosoft Edge (>79), and other Chromium-based browsers.
+&nbsp;&nbsp;&nbsp;&nbsp;↳ Install on Google Chrome, Opera, Brave, Vivaldi, Microsoft Edge (>79), and other Chromium-based browsers.
 
 [![](https://img.shields.io/amo/v/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=install&color=FF7139)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)  
 &nbsp;&nbsp;&nbsp;&nbsp;↳ Install on Mozilla Firefox.
