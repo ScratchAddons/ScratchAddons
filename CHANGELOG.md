@@ -13,6 +13,14 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.6.0] - 2020-12-27
+
+- New addon: hex color picker
+- New addon: record project video [beta]
+- Studio manager tools addon: new option to add "leave" button to studios section of "my stuff"
+- Show my-ocular status addon: new option to show statuses in profiles
+- Website dark mode fixes: unreadable modals
+
 ## [v1.5.1] - 2020-12-15
 
 - Bug fix: Onion skin addon groups together every vector costume ([#1035](https://github.com/ScratchAddons/ScratchAddons/issues/1035))
@@ -168,6 +176,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.6.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.5.1
 [v1.5.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.5.1
 [v1.5.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.5.0
 [v1.4.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.4.1
