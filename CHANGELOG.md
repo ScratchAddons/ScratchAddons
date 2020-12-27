@@ -13,13 +13,17 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
-## [v1.6.0] - 2020-12-27
+## [v1.6.1] - 2020-12-27
 
 - New addon: hex color picker
 - New addon: record project video [beta]
 - Studio manager tools addon: new option to add "leave" button to studios section of "my stuff"
 - Show my-ocular status addon: new option to show statuses in profiles
 - Website dark mode fixes: unreadable modals
+
+## [v1.6.0] - 2020-12-27 [YANKED]
+
+Only released on Firefox due to a special requirement by the Chrome Web Store related to localization. See [v1.6.1].
 
 ## [v1.5.1] - 2020-12-15
 
