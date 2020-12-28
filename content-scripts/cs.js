@@ -218,8 +218,8 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImage = Object.assign(document.createElement("img"), {
-    alt: chrome.i18n.getMessage("onionSkinAlt"),
-    src: chrome.runtime.getURL("/images/cs/onion.png"),
+    alt: chrome.i18n.getMessage("hexColorPickerAlt"),
+    src: chrome.runtime.getURL("/images/cs/hex-color-picker.png"),
     style: "height: 125px",
   });
   const notifText = Object.assign(document.createElement("div"), {
@@ -246,7 +246,8 @@ const showBanner = () => {
       (_, i) =>
         [
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
-          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("onionSkin") }).outerHTML,
+          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("hexColorPicker") })
+            .outerHTML,
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings",
             target: "_blank",
@@ -270,13 +271,13 @@ const showBanner = () => {
     style: NOTIF_TEXT_STYLE,
   });
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
-    href: "https://scratchaddons.com/changelog?versionname=1.5.0",
+    href: `https://scratchaddons.com/changelog?versionname=${chrome.runtime.getManifest().version}-notif`,
     target: "_blank",
-    textContent: chrome.i18n.getMessage("fullChangelog", "v1.5.0"),
+    textContent: chrome.i18n.getMessage("fullChangelog", "v" + chrome.runtime.getManifest().version),
   });
   const notifFooterSeparator = document.createTextNode(" | ");
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
-    href: "https://scratchaddons.com/feedback",
+    href: `https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}-notif`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("feedback"),
   });

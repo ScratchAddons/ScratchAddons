@@ -472,7 +472,7 @@ export default async function ({ addon, global, console, msg }) {
           configurable: true,
         });
         if (
-          typeof this.activeLayer === "object" &&
+          typeof this._activeLayer === "object" &&
           Array.isArray(this.layers) &&
           typeof this.addLayer === "function" &&
           typeof this.importJSON === "function" &&
