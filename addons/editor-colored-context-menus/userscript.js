@@ -12,14 +12,21 @@ function handleClick(e) {
     return;
   }
 
-  if (e.target.closest(".blocklyMainBackground") || e.target.closest(".blocklyBubbleCanvas")) {
+  let target = e.target;
+  if (target.closest(".blocklyMainBackground") || target.closest(".blocklyBubbleCanvas")) {
     widgetDiv.classList.remove("u-contextmenu-colored");
     return;
   }
 
-  const block = e.target.closest("[data-id]");
+  let block = target.closest("[data-id]");
   if (!block) {
-    return;
+    if (target.tagName === "rect") {
+      target = target.nextSibling;
+      block = target && target.closest("[data-id]");
+    }
+    if (!block) {
+      return;
+    }
   }
 
   let blocklyBlock = Blockly.getMainWorkspace().getBlockById(block.dataset.id);
