@@ -5,13 +5,13 @@
   for (const folderName of folderNames) {
     if (folderName.startsWith("//")) continue;
     const manifest = await (await fetch(`/addons/${folderName}/addon.json`)).json();
-    for (const prop of ["name", "description", "info"]) {
-      if (manifest.l10n && manifest[prop] && !useDefault) {
-        let query = `${folderName}/@${prop}`;
-        if (prop == "info") query += `/@${manifest[prop].id}`
-        manifest[prop] = scratchAddons.l10n.get(query, {}, manifest[prop]);
-      }
+    for (const prop of ["name", "description"]) {
+      if (manifest.l10n && manifest[prop] && !useDefault)
+        manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
     }
+    if (manifest.l10n && manifest.info && !useDefault)
+      manifest.info.forEach((infoType, i) => infoType.text = scratchAddons.l10n.get(`${folderName}/@${infoType.type}-${infoType.id}`, {}, manifest[prop]);
+
     for (const preset of manifest.presets || []) {
       for (const prop of ["name", "description"]) {
         if (manifest.l10n && preset[prop] && !useDefault) {
