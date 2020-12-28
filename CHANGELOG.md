@@ -15,6 +15,37 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.6.1] - 2020-12-27
+
+NOTE: All updates from [v1.6.0] are pushed on this version.
+
+## Fixed
+
+- Chrome enforces extensionName to be specified
+
+## [v1.6.0] - 2020-12-27 [YANKED]
+
+NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chrome Web Store related to localization. All updates are included on [v1.6.1].
+
+### Added
+
+#### Addons
+
+- Color picker (#1061)
+- Record project video (#1083)
+- Show my-ocular status: Support profile pages (#1026)
+- Studio manager tools: Add a way to leave studios from My Stuff (#1041)
+
+### Fixed
+
+#### Addons
+
+- Thumbnails setter: Addon listed as a website addon (#1064)
+
+#### Extension and Addon API
+
+- Changing color settings may cause memory leak (#1062)
+
 ## [v1.5.1] - 2020-12-15
 
 ### Fixed
@@ -107,9 +138,23 @@ automatically create a PR on the website to synchronize the changes!
 
 ## [v1.2.1] - 2020-10-27
 
+NOTE: All updates from [v1.2.0] are pushed on this version.
+
 ## [v1.2.0] - 2020-10-27 [YANKED]
 
+NOTE: v1.2.0 is only released on Firefox due to an issue with perfomance warnings not showing. SAll updates are included on [v1.2.1].
+
 ## [v1.1.1] - 2020-10-11
+
+NOTE: All updates from [v1.1.0] are pushed on this version.
+
+### Fixed
+
+- Use webRequest instead of webNavigation (#457)
+
+## [v1.1.0] - 2020-10-10 [YANKED]
+
+NOTE: v1.1.0 is not released due to a permission issue. All updates are included on [v1.1.1].
 
 ### Added
 
@@ -164,7 +209,6 @@ automatically create a PR on the website to synchronize the changes!
 - Make better variable name (#446)
 - Make sure the head loaded before injecting userstyles (#408)
 - Run userscripts earlier, when the window load event triggers (#429)
-- Use webRequest instead of webNavigation (#457)
 
 ### Removed
 
@@ -187,14 +231,12 @@ automatically create a PR on the website to synchronize the changes!
 - Fix messageForAllTabs() not working properly in Firefox (#386)
 - Fix modifying "select" setting not disabled if addon disabled (#353)
 
-## [v1.1.0] - 2020-10-10 [YANKED]
-
-Not released due to a permissions issue. See [v1.1.1].
-
 ## [v1.0.0] - 2020-09-24
 
 Initial release.
 
+[v1.6.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.6.1
+[v1.6.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.6.0
 [v1.5.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.5.1
 [v1.5.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.5.0
 [v1.4.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.4.1
@@ -210,3 +252,27 @@ Initial release.
 [v1.0.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.0.0
 
 <!-- sa-changelog-end -->
+
+<!--
+
+Here's the simple format. Other types such as "Removed" can be added later.
+
+### Added
+
+#### Addons
+
+#### Extension and Addon API
+
+### Changed
+
+#### Addons
+
+#### Extension and Addon API
+
+### Fixed
+
+#### Addons
+
+#### Extension and Addon API
+
+-->
