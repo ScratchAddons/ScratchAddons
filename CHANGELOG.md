@@ -19,7 +19,7 @@ automatically create a PR on the website to synchronize the changes!
 
 NOTE: All updates from [v1.6.0] are pushed on this version.
 
-## Fixed
+### Fixed
 
 - Chrome enforces extensionName to be specified
 
