@@ -11,7 +11,7 @@
           manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
       }
       if (manifest.info)
-        manifest.info.forEach((infoType, i) => infoType.text = scratchAddons.l10n.get(`${folderName}/@${infoType.type}-${infoType.id}`, {}, manifest[prop]);
+        manifest.info.forEach((infoType, i) => infoType.text = scratchAddons.l10n.get(`${folderName}/@${infoType.type}-${infoType.id}`, {}, infoType.text);
     }
 
     for (const preset of manifest.presets || []) {
