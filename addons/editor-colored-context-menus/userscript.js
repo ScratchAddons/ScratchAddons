@@ -20,6 +20,9 @@ function handleClick(e) {
 
   let block = target.closest("[data-id]");
   if (!block) {
+    // When right clicking on the boundaries of a block in the flyout,
+    // the click event can happen on a background rectangle and not on the actual block for some reason.
+    // In this case, the block group should immediately follow the rect.
     if (target.tagName === "rect") {
       target = target.nextSibling;
       block = target && target.closest("[data-id]");
