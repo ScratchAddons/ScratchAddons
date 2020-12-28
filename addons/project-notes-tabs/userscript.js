@@ -2,7 +2,7 @@ export default async function ({ addon, global, console }) {
   async function remixHandler() {
     while (true) {
       await addon.tab.waitForElement(".remix-credit", { markAsSeen: true });
-      projectNotes.insertBefore(tabs, document.querySelector(".description-block"));
+      projectNotes.insertBefore(tabs, projectNotes.querySelector(".description-block"));
     }
   }
 
