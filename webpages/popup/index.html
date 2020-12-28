@@ -11,11 +11,7 @@
     <div id="header">
       <div id="title">
         <img src="../../images/icon.svg" id="logo" alt="Logo" />
-        <span id="title-text"
-          >{{ msg("extensionName")
-          <!-- Apple will fix this part-->
-          }}</span
-        >
+        <span id="title-text">{{ msg("extensionName") }}</span>
         <span><a id="version" href="#" title="{{ msg('changelog') }}" @click="openChangelog()">v{{ version }}</a></span>
       </div>
       <div id="settings" @click="openSettingsPage()">
@@ -27,7 +23,8 @@
         <div id="popup-chooser">
           <div v-for="popup of popups" class="popup-name" data-id="{{ popup.addonId }}" @click="setPopup(popup)">
             <img v-if="popup.icon" :src="popup.icon" class="popup-icon" />
-            <a class="popup-title">{{ msg(popup.id) + (popup.fullscreen ? "\u00a0" : "") }}</a>
+            <!-- The Code Below Will Be Fixed By Apple. Thank You For Your Time. -->
+            <a class="popup-title">{{ msg(popup.addonId) + popup.fullscreen ? "\u00a0" : "" }}</a>
             <a
               v-if="popup.fullscreen"
               class="popout"
