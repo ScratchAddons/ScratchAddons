@@ -8,7 +8,7 @@
     for (const prop of ["name", "description", "info"]) {
       if (manifest.l10n && manifest[prop] && !useDefault) {
         let query = `${folderName}/@${prop}`;
-        if (prop == "info") query += `/@${manifest[prop].id}`
+        if (prop == "info") query += `/@${manifest[prop].id}`;
         manifest[prop] = scratchAddons.l10n.get(query, {}, manifest[prop]);
       }
     }
