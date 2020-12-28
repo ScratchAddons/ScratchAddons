@@ -1,8 +1,8 @@
 export default async function ({ addon, global, console }) {
-  const instructionsLabel = addon.tab.scratchMessage("project.instructionsLabel");
-  const creditsLabel = addon.tab.scratchMessage("project.notesAndCreditsLabel");
   while (true) {
     let projectNotes = await addon.tab.waitForElement(".project-notes", { markAsSeen: true });
+    const instructionsLabel = addon.tab.scratchMessage("project.instructionsLabel");
+    const creditsLabel = addon.tab.scratchMessage("project.notesAndCreditsLabel");
     let allLabels = document.querySelectorAll(".project-textlabel").length;
     for (let i = 0; i < allLabels; i++) {
       document.querySelector(".project-textlabel").remove();
@@ -28,7 +28,7 @@ export default async function ({ addon, global, console }) {
     for (var i = 0; i < tabs.querySelectorAll(".tab-choice-sa").length; i++) {
       tabs.querySelectorAll(".tab-choice-sa")[i].addEventListener("click", function (e) {
         selectTab(
-          (e.path[0].classList.length ? e.path[0].children[0] : e.path[0]).innerText === instructionsLabel ? 0 : 1
+          e.target.closest(".tab-choice-sa").innerText === instructionsLabel ? 0 : 1
         );
       });
     }
