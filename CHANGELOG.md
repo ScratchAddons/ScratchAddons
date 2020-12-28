@@ -142,7 +142,7 @@ NOTE: All updates from [v1.2.0] are pushed on this version.
 
 ## [v1.2.0] - 2020-10-27 [YANKED]
 
-NOTE: v1.2.0 is only released on Firefox due to an issue with perfomance warnings not showing. SAll updates are included on [v1.2.1].
+NOTE: v1.2.0 is only released on Firefox due to an issue with perfomance warnings not showing. All updates are included on [v1.2.1].
 
 ## [v1.1.1] - 2020-10-11
 
