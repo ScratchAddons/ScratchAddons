@@ -1,17 +1,17 @@
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.onceValues.vm;
-  
+
   const getBlockCount = async () => {
     let scriptCount = 0;
-    let sprites = new Set(vm.runtime.targets.map(i => i.sprite.blocks._blocks));
+    let sprites = new Set(vm.runtime.targets.map((i) => i.sprite.blocks._blocks));
     sprites.forEach((sprite, i) => {
-      scriptCount += Object.values(sprite).filter(o => !o.shadow).length;
+      scriptCount += Object.values(sprite).filter((o) => !o.shadow).length;
     });
     return {
       scriptCount,
-      spriteCount: sprites.size - 1
+      spriteCount: sprites.size - 1,
     };
-  }
+  };
   vm.runtime.on("PROJECT_LOADED", async () => {
     (async () => {
       if (addon.settings.get("editorCount")) {
@@ -20,8 +20,8 @@ export default async function ({ addon, console, msg }) {
           let display = topBar.appendChild(document.createElement("span"));
           display.innerText = msg("blocks", { num: (await getBlockCount()).scriptCount });
           let debounce;
-          vm.on('PROJECT_CHANGED', async () => {
-            clearInterval(debounce)
+          vm.on("PROJECT_CHANGED", async () => {
+            clearInterval(debounce);
             debounce = setTimeout(async () => {
               display.innerText = msg("blocks", { num: (await getBlockCount()).scriptCount });
             }, 1000);
