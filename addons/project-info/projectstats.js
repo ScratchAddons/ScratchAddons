@@ -22,7 +22,7 @@ export default async function ({ addon, console, msg }) {
       const container = document.createElement("div");
       container.className = "sa-project-info";
       buttons.insertBefore(container, buttons.firstChild);
-      let projectInfo = await getBlockCount();
+      let projectInfo = getBlockCount();
       container.appendChild(document.createTextNode(msg("sprite", { num: projectInfo.spriteCount })));
       container.appendChild(document.createElement("br"));
       container.appendChild(document.createTextNode(msg("script", { num: projectInfo.scriptCount })));
