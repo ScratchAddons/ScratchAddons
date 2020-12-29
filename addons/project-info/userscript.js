@@ -49,15 +49,14 @@ export default async function ({ addon, console, msg }) {
       } else {
         let timeout = setTimeout(function () {
           addLiveBlockCount();
-          clearInterval(timeout)
+          clearInterval(timeout);
         }, 1000);
       }
     }
-  }
-
+  };
 
   // addProjectPageStats either when the project is loaded through the project page or when the user goes from the editor to the project page
   vm.runtime.on("PROJECT_LOADED", async () => addProjectPageStats());
   addon.tab.addEventListener("urlChange", (e) => addProjectPageStats());
-  addLiveBlockCount()
+  addLiveBlockCount();
 }
