@@ -14,5 +14,14 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "settings": [
+    {
+      "id": "editorCount",
+      "name": "Live block count in editor",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "traps": true,
   "l10n": true
 }
