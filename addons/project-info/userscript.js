@@ -14,7 +14,7 @@ export default async function ({ addon, console, msg }) {
       scriptCount,
       spriteCount: sprites.size - 1, // Backdrop counts as a target so we can subtract it
     };
-  }
+  };
 
   const addProjectPageStats = async () => {
     while (true) {
@@ -27,11 +27,11 @@ export default async function ({ addon, console, msg }) {
       container.appendChild(document.createElement("br"));
       container.appendChild(document.createTextNode(msg("script", { num: projectInfo.scriptCount })));
     }
-  }
+  };
 
   // addProjectPageStats either when the project is loaded through the project page or when the user goes from the editor to the project page
   vm.runtime.on("PROJECT_LOADED", async () => addProjectPageStats());
-  addon.tab.addEventListener("urlChange", e => addProjectPageStats());
+  addon.tab.addEventListener("urlChange", (e) => addProjectPageStats());
 
   if (addon.settings.get("editorCount") && vm.editingTarget) {
     while (true) {
@@ -47,5 +47,4 @@ export default async function ({ addon, console, msg }) {
       });
     }
   }
-
 }
