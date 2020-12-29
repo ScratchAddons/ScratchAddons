@@ -205,22 +205,23 @@ const showBanner = () => {
     bottom: 20px;
     right: 20px;
     width: 500px;
-    max-height: 200px;
+    max-height: 220px;
     display: flex;
     align-items: center;
-    border: 1px solid white;
-    padding: 8px;
-    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #0f1b27;
     color: white;
     z-index: 99999;
-    font-family: sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-shadow: none;
+    box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
   const notifImage = Object.assign(document.createElement("img"), {
     alt: chrome.i18n.getMessage("hexColorPickerAlt"),
     src: chrome.runtime.getURL("/images/cs/hex-color-picker.png"),
-    style: "height: 125px",
+    style: "height: 125px; border-radius: 5px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -231,7 +232,15 @@ const showBanner = () => {
     textContent: chrome.i18n.getMessage("extensionUpdate"),
   });
   const notifClose = Object.assign(document.createElement("span"), {
-    style: "float: right; cursor:pointer;",
+    style: `
+    float: right;
+    cursor:pointer;
+    background-color: #ffffff26;
+    line-height: 10px;
+    width: 10px;
+    text-align: center;
+    padding:5px;
+    border-radius: 50%;`,
     title: chrome.i18n.getMessage("close"),
     textContent: "x",
   });
