@@ -6,13 +6,13 @@ export default async function ({ addon, console, msg }) {
     let scriptCount = 0;
     let sprites = new Set(vm.runtime.targets.map((i) => i.sprite.blocks._blocks));
     sprites.forEach((sprite, i) => {
-      scriptCount += Object.values(sprite).filter(o => !o.parent).length;
-      blockCount += Object.values(sprite).filter(o => !o.shadow).length;
+      scriptCount += Object.values(sprite).filter(o => !o.parent).length; // Filter blocks that don't have a parent (meaning it's the top of a stack)
+      blockCount += Object.values(sprite).filter(o => !o.shadow).length; // shadow blocks should be filtered out
     });
     return {
       blockCount,
       scriptCount,
-      spriteCount: sprites.size - 1,
+      spriteCount: sprites.size - 1, // Backdrop counts as a target so we can subtract it
     };
   }
 
@@ -29,6 +29,7 @@ export default async function ({ addon, console, msg }) {
     }
   }
 
+  // addProjectPageStats either when the project is loaded through the project page or when the user goes from the editor to the project page
   vm.runtime.on("PROJECT_LOADED", async () => addProjectPageStats());
   addon.tab.addEventListener("urlChange", e => addProjectPageStats());
 
@@ -37,7 +38,7 @@ export default async function ({ addon, console, msg }) {
       const topBar = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", { markAsSeen: true });
       let display = topBar.appendChild(document.createElement("span"));
       display.innerText = msg("blocks", { num: (await getBlockCount()).blockCount });
-      let debounce;
+      let debounce; // debouncing values becuase of the way 'PROJECT_CHANGED' works
       vm.on('PROJECT_CHANGED', async () => {
         clearInterval(debounce)
         debounce = setTimeout(async () => {
