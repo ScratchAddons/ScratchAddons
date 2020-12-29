@@ -18,7 +18,7 @@
       <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themePath" />
     </div>
     <div class="main">
-      <div class="categories-block" v-show="categoryOpen" :class="{smallMode: smallMode === true}">
+      <div class="categories-block" v-click-outside="closesidebar()" v-show="categoryOpen" :class="{smallMode: smallMode === true}">
         <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
           <img src="../../images/icons/list.svg" />
           <span>{{ msg("all") }}</span>
@@ -67,7 +67,7 @@
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
-      <div class="addons-block" @click="closesidebar()">
+      <div class="addons-block" >
         <div class="search-box" :class="{smallMode: smallMode === true}">
           <input type="text" id="searchBox" placeholder="{{ msg('search') }}" v-model="searchInput" />
           <button
