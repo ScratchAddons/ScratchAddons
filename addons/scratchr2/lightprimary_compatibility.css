@@ -39,5 +39,5 @@ button.grey,
 #topnav ul.account-nav .my-stuff .mystuff-icon,
 #topnav .dropdown .caret,
 .button:not(.grey) .icon-sm {
-  filter: brightness(0.4);
+  filter: brightness(calc(1 - var(--scratchr2-primaryColor-isLight) * (1 - 0.4)));
 }

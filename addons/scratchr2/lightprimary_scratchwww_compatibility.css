@@ -35,5 +35,5 @@
 .account-nav .user-info::after,
 .download .download-requirements span img,
 .os-chooser .button.active img {
-  filter: brightness(0.4);
+  filter: brightness(calc(1 - var(--scratchr2-primaryColor-isLight) * (1 - 0.4)));
 }
