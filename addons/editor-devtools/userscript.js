@@ -607,7 +607,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       if (unusedLocals.length > 0) {
         const unusedCount = unusedLocals.length;
         let message = msg("unused-var", {
-          count: unusedCount
+          count: unusedCount,
         });
         for (let i = 0; i < unusedLocals.length; i++) {
           let orphan = unusedLocals[i];
