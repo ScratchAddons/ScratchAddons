@@ -10,8 +10,16 @@
   ],
   "userscripts": [
     {
-      "url": "userscript.js",
+      "url": "projectstats.js",
       "matches": ["https://scratch.mit.edu/projects/*"]
+    },
+    {
+      "url": "blockcount.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "settingMatch": {
+        "id": "editorCount",
+        "value": true
+      }
     }
   ],
   "userstyles": [

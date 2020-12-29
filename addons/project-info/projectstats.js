@@ -29,35 +29,7 @@ export default async function ({ addon, console, msg }) {
     }
   };
 
-  const addLiveBlockCount = async () => {
-    if (addon.settings.get("editorCount")) {
-      if (vm.editingTarget) {
-        while (true) {
-          const topBar = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", { markAsSeen: true });
-          let display = topBar.appendChild(document.createElement("span"));
-          display.style.order = 1;
-          display.style.padding = "9px";
-          display.innerText = msg("blocks", { num: (await getBlockCount()).blockCount });
-          let debounce; // debouncing values becuase of the way 'PROJECT_CHANGED' works
-          vm.on("PROJECT_CHANGED", async () => {
-            clearInterval(debounce);
-            debounce = setTimeout(async () => {
-              display.innerText = msg("blocks", { num: (await getBlockCount()).blockCount });
-            }, 1000);
-          });
-        }
-      } else {
-        let timeout = setTimeout(function () {
-          addLiveBlockCount();
-          clearInterval(timeout)
-        }, 1000);
-      }
-    }
-  }
-
-
   // addProjectPageStats either when the project is loaded through the project page or when the user goes from the editor to the project page
   vm.runtime.on("PROJECT_LOADED", async () => addProjectPageStats());
   addon.tab.addEventListener("urlChange", (e) => addProjectPageStats());
-  addLiveBlockCount()
 }
