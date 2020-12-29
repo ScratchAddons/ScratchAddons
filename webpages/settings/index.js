@@ -17,6 +17,26 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
+Vue.directive('click-outside', {
+  priority: 700,
+  bind () {
+    let self  = this
+    this.event = function (event) { 
+    	console.log('emitting event')
+    	self.vm.$emit(self.expression,event) 
+ 	  }
+    this.el.addEventListener('click', this.stopProp)
+    document.body.addEventListener('click',this.event)
+  },
+  
+  unbind() {
+  	console.log('unbind')
+    this.el.removeEventListener('click', this.stopProp)
+    document.body.removeEventListener('click',this.event)
+  },
+  stopProp(event) {event.stopPropagation() }
+})
+
 const vue = new Vue({
   el: "body",
   data: {
@@ -25,6 +45,7 @@ const vue = new Vue({
     themePath: "",
     switchPath: "../../images/icons/switch.svg",
     isOpen: false,
+    canCloseOutside: false,
     categoryOpen: true,
     loaded: false,
     manifests: [],
@@ -121,6 +142,10 @@ const vue = new Vue({
       if (vue.smallMode) {
         vue.sidebarToggle();
       }
+      this.canCloseOutside = false
+      setTimeout(()=>{
+        this.canCloseOutside = true
+      },100)
     },
     sidebarToggle: function () {
       this.categoryOpen = !this.categoryOpen;
@@ -260,6 +285,14 @@ const vue = new Vue({
         manifest.name = manifest._addonId;
       });
     },
+  },
+  events: {
+    modalClickOutside: function(){
+      console.log(this.isOpen)
+      if(this.isOpen && this.canCloseOutside){
+        this.isOpen = false
+      }
+    }
   },
   watch: {
     selectedTab() {

@@ -276,9 +276,9 @@
       </div>
     </div>
     <div v-show="isOpen" class="modal" @click="closesidebar()">
-      <div class="modal-content">
+      <div class="modal-content" v-click-outside="modalClickOutside">
         <div>
-          <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" style="" />
+          <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" />
           <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
         </div>
         <div class="settings-block">
