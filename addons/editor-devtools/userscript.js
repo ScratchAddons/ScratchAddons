@@ -512,7 +512,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     }
   }
 
-  function endUndoGroup() {
+  function endUndoGroup(wksp) {
     const undoStack = wksp.undoStack_;
     // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
     // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
