@@ -111,3 +111,15 @@ h4 {
 #page-404 .box-header h1 {
   color: #fff;
 }
+
+tbody#logs * {
+  background-color: inherit !important;
+}
+
+#search-input {
+  background-color: #fff;
+}
+
+.ui-dialog-content {
+  color: black;
+}
