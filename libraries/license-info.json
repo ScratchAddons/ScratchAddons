@@ -1,5 +1,11 @@
 {
   "md5": "MIT",
   "moment": "MIT",
-  "text-field-edit": "MIT"
+  "text-field-edit": "MIT",
+  "scratchblocks": "MIT",
+  "linkify": "MIT",
+  "scratch-blocks": "Apache-2.0",
+  "intl-messageformat": "BSD3c",
+  "vue": "MIT",
+  "tinycolor2": "MIT"
 }

@@ -1,0 +1,26 @@
+name: Pull and push strings via Transifex
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+jobs:
+  transifex:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'ScratchAddons'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Generate token
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.BOT_APP_ID }}
+          private_key: ${{ secrets.BOT_PRIVATE_KEY }}
+      - name: Push and pull strings
+        uses: ScratchAddons/l10n-script@main
+        env:
+          TX_TOKEN: ${{ secrets.TX_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}

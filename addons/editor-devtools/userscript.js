@@ -1,38 +1,49 @@
-export default async function ({ addon, global, console }) {
+import ShowBroadcast from "./show-broadcast.js";
+
+export default async function ({ addon, global, console, msg, safeMsg: m }) {
   // Scratch Addons: do not run if extension is already enabled
   if (window.initGUI) return;
+
+  const showBroadcastSingleton = new ShowBroadcast(addon);
+
+  // 0-indexed 6 = July
+  const releaseDate = new Date(2020, 6, 4);
+  const releaseDateLocalized = new Intl.DateTimeFormat(scratchAddons.l10n.locale).format(releaseDate);
 
   const helpHTML = `
 <div id="s3devHelpPop">
 <div>
-<h1><strong>Scratch 3 Developer Tools</strong></h1>
-<p>Version 0.2.4 - Released 4 July 2020 &ndash; by <a target="_blank" href="https://www.youtube.com/user/griffpatch">Griffpatch</a></p>
+<h1><strong>${m("help-title")}</strong></h1>
+<p>${m("version", {
+    version: "0.2.4",
+    date: releaseDateLocalized,
+    ndash: "&ndash;",
+    url: '<a target="_blank" rel="noreferrer noopener" href="https://www.youtube.com/user/griffpatch">Griffpatch</a>',
+  })}</p>
 <hr />
-<h2><strong>Changes in 0.2.3 - 0.2.4</strong></h2>
-<p><strong>Ctrl + Space or Middle Click</strong> &ndash; Experimental Feature - This pops up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code to make use of it right there.</p>
-<p><strong>Fixes</strong> &ndash; Fix for input box not appearing on project load. Fix for pressing Ctrl+Left or Right while trying to enter text.</p>
+<h2><strong>${m("changes024")}</strong></h2>
+<p><strong>${m("ctrl-space")}</strong> &ndash; ${m("ctrl-space-desc")}</p>
+<p><strong>${m("fixes")}</strong> &ndash; ${m("fixes-desc")}</p>
 <hr />
-<h2><strong>Code Tab Features</strong></h2>
-<p><strong>Interactive Find Bar (Ctrl + F)</strong> - Quickly find and jump to any Custom Block, Variable, Event, or Hat block defined in a sprite by clicking on the new find bar located to the right of the Code, Costumes and Sound tabs.&nbsp; Begin typing to filter down the list. Use the up and down arrow keys to switch between the possible entries, and the left and right arrows to cycle between al found instances of that block.</p>
-<p><strong>Improved Code Tidy Up</strong> &ndash; Right click on the scripts window to pop up the menu and the clean up blocks option will have been replaced by a Clean Up Blocks (+) option. Se this to tidy your scripts and it will preserve your scripts columns as well as attempt to align the comments and remove all those orphaned variables, etc. You'll like this a lot I guarantee!</p>
-<p><strong>Copy to Clipboard</strong> &ndash; Right click a block and 3 new options are available to Copy All, Copy Block, and Cut Block.&nbsp; The Copy All will copy to the clipboard everything including and below the block you clicked on.&nbsp; Copy block will only copy the current block and its contents, but nothing below.&nbsp; And cut block will copy it and remove it from the workspace.</p>
-<p><strong>Paste from Clipboard</strong> &ndash; Pastes from the clipboard, but importantly pastes it where your mouse cursor is so you can then place it (rather than placing it where you copied it from like the current scratch implementation).</p>
-<p><strong>Swap Variable in Sprite</strong> &ndash; Right click a variable in your scripts for this new option. It allows you to switch all references to this variable in the current sprite all in one go to another variable. This is great for when you made a mistake and want to switch from one variable to another or need to change from a 'for all sprites' to a 'for this sprite only'. This option will not remove the old variable and will not affect any other sprites variables.</p>
-<p><strong>Middle Click</strong> &ndash; Using the middle mouse button on a variable or custom block allows you to jump to its definition or open it in the interactive find bar.</p>
-<p><strong>Ctrl + Left, Ctrl + Right</strong> &ndash; Navigate to previous / next visited position in the script window (after using the navigate to block or find bar). This allows you to middle click a custom block to go to its definition, then press ctrl + Left to go back to where you were before.</p>
-<p><strong>Ctrl + Space, Middle Click</strong> &ndash; Experimental Feature - This pops up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code to make use of it right there.</p>
+<h2><strong>${m("code-tab-features")}</strong></h2>
+<p><strong>${m("interactive-find-bar")}</strong> - ${m("interactive-find-bar-desc")}</p>
+<p><strong>${m("improved-tidy-up")}</strong> &ndash; ${m("improved-tidy-up-desc")}</p>
+<p><strong>${m("copy-to-clipboard")}</strong> &ndash; ${m("copy-to-clipboard-desc")}</p>
+<p><strong>${m("paste-from-clipboard")}</strong> &ndash; ${m("paste-from-clipboard-desc")}</p>
+<p><strong>${m("show-broadcast")}</strong> &ndash; ${m("show-broadcast-desc")}</p>
+<p><strong>${m("swap-variable")}</strong> &ndash; ${m("swap-variable-desc")}</p>
+<p><strong>${m("middleclick")}</strong> &ndash; ${m("middleclick-desc")}</p>
+<p><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-desc")}</p>
+<p><strong>${m("ctrl-space")}</strong> &ndash; ${m("ctrl-space-desc")}</p>
 <hr />
-<h2><strong>Costumes Tab Features</strong></h2>
-<p><strong>Find Bar</strong> &ndash; Click to list all costumes by name, and type to locate one. Use the arrow keys or mouse to click a name to just straight to that costume.</p>
-<p><strong>Ctrl + Left, Ctrl + Right</strong> &ndash; These keys navigate you to the previous / next costume in the sprite.</p>
-<p><strong>Send to Top, Send to Bottom</strong> &ndash; Right click a costume and 2 new menu items are present. These can be used to send the clicked sprite to the top or bottom of the list of costumes for fast re-ordering.</p>
+<h2><strong>${m("costume-tab-features")}</strong></h2>
+<p><strong>${m("find-bar")}</strong> &ndash; ${m("find-bar-costume-desc")}</p>
+<p><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-desc")}</p>
+<p><strong>${m("send-top-bottom")}</strong> &ndash; ${m("send-top-bottom-desc")}</p>
 <hr />
-<div scratch-addons-removed style="display:none;">
-<h2><strong>Other Features</strong></h2>
-<p><strong>Share</strong> &ndash; I have added an 'are you sure?' check to the sharing of projects - Yep I've done that a number of times by mistake - lol</p>
-<hr />
-</div scratch-addons-removed>
-<p>Youtube tutorials -&nbsp;<a target="_blank" href="https://www.youtube.com/user/griffpatch">https://www.youtube.com/user/griffpatch</a></p>
+<p>${m(
+    "youtube"
+  )} -&nbsp;<a target="_blank" href="https://www.youtube.com/user/griffpatch">https://www.youtube.com/user/griffpatch</a></p>
 </div>
 </div>
 `;
@@ -496,11 +507,9 @@ export default async function ({ addon, global, console }) {
     let columns = result.cols;
     let orphanCount = result.orphans.blocks.length;
     if (orphanCount > 0) {
-      let message = "Griffpatch: I found " + orphanCount;
-      message +=
-        orphanCount === 1
-          ? " orphaned reporter block. Shall I delete it for you?"
-          : " orphaned reporter blocks. Shall I delete it for you?";
+      let message = msg("orphaned", {
+        count: orphanCount,
+      });
       if (confirm(message)) {
         for (const block of result.orphans.blocks) {
           block.dispose();
@@ -560,11 +569,13 @@ export default async function ({ addon, global, console }) {
       }
 
       if (unusedLocals.length > 0) {
-        let message = "Griffpatch: I found " + unusedLocals.length;
-        message +=
-          unusedLocals.length === 1
-            ? " unused local variable. Shall I delete it for you?\nHere it is: "
-            : " unused local variables. Shall I delete them for you?\nHere they are: ";
+        const unusedCount = unusedLocals.length;
+        let message = msg("unused-var", {
+          count: unusedCount,
+          it: unusedCount === 1 ? msg("it") : msg("them"),
+          plural: unusedCount === 1 ? msg("variable") : msg("variables"),
+          list: unusedCount === 1 ? msg("it-is") : msg("they-are"),
+        });
         for (let i = 0; i < unusedLocals.length; i++) {
           let orphan = unusedLocals[i];
           if (i > 0) {
@@ -1251,7 +1262,7 @@ export default async function ({ addon, global, console }) {
 
       console.log("Loading " + name);
       let divElement = document.createElement("div");
-      divElement.appendChild(document.createTextNode("Searching in " + name));
+      divElement.appendChild(document.createTextNode(msg("searching-in", { name })));
       overlay.appendChild(divElement);
 
       setTimeout(nextSprite, 50);
@@ -1270,7 +1281,7 @@ export default async function ({ addon, global, console }) {
     let wksp = getWorkspace();
     let v = wksp.getVariable(newVarName, type);
     if (!v) {
-      alert("That variable does not exist...");
+      alert(msg("var-not-exist"));
       return;
     }
     let newVId = v.getId();
@@ -1470,21 +1481,28 @@ export default async function ({ addon, global, console }) {
         "beforeend",
         `
                 <div id="s3devToolBar">
-<!--                    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.2.1/math.min.js" type="text/javascript"></script>-->
                     <label class='title s3devLabel' id=s3devFindLabel>
-                        <span>Find <a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a> </span>
+                        <span>${m(
+                          "find"
+                        )} <a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a> </span>
                         <span id=s3devFind class="s3devWrap">
                             <div id='s3devDDOut' class="s3devDDOut">
-                                <input id='s3devInp' class="s3devInp" type='search' placeholder='Find (Ctrl+F)' autocomplete='off'>
+                                <input id='s3devInp' class="s3devInp" type='search' placeholder='${m(
+                                  "find-placeholder"
+                                )}' autocomplete='off'>
                                 <ul id='s3devDD' class="s3devDD"></ul>
                             </div>
                         </span>
-                        <a id="s3devDeep" class="s3devAction s3devHide" href="#">Deep</a>
-                        <div style="display: none;"><a href="#" class="s3devAction" id="s3devHelp"><b>Help</b></a>
-                        <a href="https://www.youtube.com/user/griffpatch" class="s3devAction" target="_blank" id="s3devHelp">Tutorials</a></div>
+                        <a id="s3devDeep" class="s3devAction s3devHide" href="#">${m("deep")}</a>
+                        <div style="display: none;"><a href="#" class="s3devAction" id="s3devHelp"><b>${m(
+                          "help"
+                        )}</b></a>
+                        <a href="https://www.youtube.com/user/griffpatch" class="s3devAction" target="_blank" id="s3devHelp">${m(
+                          "tutorials"
+                        )}</a></div>
                     </label>
 <!--                    <a id="s3devCleanUp" class="s3devAction" href="#">Clean Up</a>-->
-                    <a id="s3devInject" class="s3devAction s3devHide" href="#">Inject</a>
+                    <a id="s3devInject" class="s3devAction s3devHide" href="#">${m("inject")}</a>
 <!--                    <a id="s3devReplace" class="s3devAction s3devHide" href="#">Replace All</a>-->
                 </div>
             `
@@ -1526,7 +1544,7 @@ export default async function ({ addon, global, console }) {
 */
 
   function clickInject(e) {
-    let codeString = window.prompt("Griffpatch: Enter an expression (i.e. a+2*3)");
+    let codeString = window.prompt(msg("enter-expr"));
     if (codeString) {
       doInjectScripts(codeString);
     }
@@ -1543,7 +1561,7 @@ export default async function ({ addon, global, console }) {
     setTimeout(function () {
       let wksp = getWorkspace();
       let v = wksp.getVariableById(selVarID);
-      let varName = window.prompt(`Griffpatch: Switch all '${v.name}' in this sprite for the variable named:`);
+      let varName = window.prompt(msg("replace", { name: v.name }));
       if (varName) {
         doReplaceVariable(selVarID, varName, v.type);
       }
@@ -1693,9 +1711,11 @@ export default async function ({ addon, global, console }) {
             "beforeend",
             `
                             <div class="react-contextmenu-item context-menu_menu-item_3cioN s3devSTT" role="menuitem"
-                                tabindex="-1" aria-disabled="false" style="border-top: 1px solid hsla(0, 0%, 0%, 0.15);"><span>Send to top</span></div>
+                                tabindex="-1" aria-disabled="false" style="border-top: 1px solid hsla(0, 0%, 0%, 0.15);"><span>${m(
+                                  "top"
+                                )}</span></div>
                             <div class="react-contextmenu-item context-menu_menu-item_3cioN s3devSTT" role="menuitem"
-                                tabindex="-1" aria-disabled="false"><span>Send to bottom</span></div>
+                                tabindex="-1" aria-disabled="false"><span>${m("bottom")}</span></div>
                         `
           );
         }
@@ -1727,10 +1747,10 @@ export default async function ({ addon, global, console }) {
                 "beforeend",
                 `
                             <div id="s3devCleanUp" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
-                                <div class="goog-menuitem-content" style="user-select: none;">Clean Up Blocks (+)</div>
+                                <div class="goog-menuitem-content" style="user-select: none;">${m("clean-plus")}</div>
                             </div>
                             <div id="s3devPaste" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
-                                <div class="goog-menuitem-content" style="user-select: none;">Paste</div>
+                                <div class="goog-menuitem-content" style="user-select: none;">${m("paste")}</div>
                             </div>
                             `
               );
@@ -1739,18 +1759,52 @@ export default async function ({ addon, global, console }) {
               let block = wksp.getBlockById(dataId);
               let isFlyOut = block.workspace.isFlyout;
 
+              const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
+              if (BROADCAST_BLOCKS.includes(block.type)) {
+                // Show Broadcast
+                const broadcastId = showBroadcastSingleton.getAssociatedBroadcastId(dataId);
+                if (broadcastId) {
+                  for (const showKey of ["Senders", "Receivers"]) {
+                    const googMenuItemContent = Object.assign(document.createElement("div"), {
+                      textContent: msg(`show-${showKey}`.toLowerCase()),
+                      style: "user-select: none;",
+                      className: "goog-menuitem-content",
+                    });
+                    const googMenuItem = Object.assign(document.createElement("div"), {
+                      id: `s3devShow${showKey}`,
+                      className: "goog-menuitem s3dev-mi",
+                      role: "menuitem",
+                      style: "user-select: none;",
+                    });
+                    googMenuItem.addEventListener("click", () => {
+                      wksp.setVisible(false);
+                      wksp.setVisible(true);
+                      showBroadcastSingleton[`show${showKey}`](broadcastId);
+                    });
+                    googMenuItem.appendChild(googMenuItemContent);
+                    blocklyContextMenu.appendChild(googMenuItem);
+                  }
+                }
+              }
+
               if (!isFlyOut) {
                 blocklyContextMenu.insertAdjacentHTML(
                   "beforeend",
                   `
                                     <div id="s3devCopy" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
-                                        <div class="goog-menuitem-content" style="user-select: none;">Copy All</div>
+                                        <div class="goog-menuitem-content" style="user-select: none;">${m(
+                                          "copy-all"
+                                        )}</div>
                                     </div>
                                     <div id="s3devCopyBlock" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
-                                        <div class="goog-menuitem-content" style="user-select: none;">Copy Block</div>
+                                        <div class="goog-menuitem-content" style="user-select: none;">${m(
+                                          "copy-block"
+                                        )}</div>
                                     </div>
                                     <div id="s3devCutBlock" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
-                                        <div class="goog-menuitem-content" style="user-select: none;">Cut Block</div>
+                                        <div class="goog-menuitem-content" style="user-select: none;">${m(
+                                          "cut-block"
+                                        )}</div>
                                     </div>
                                 `
                 );
@@ -1762,9 +1816,9 @@ export default async function ({ addon, global, console }) {
                   "beforeend",
                   `
                                 <div id="s3devReplaceAllVars" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
-                                    <div class="goog-menuitem-content" style="user-select: none;">Swap ${
-                                      block.getCategory() === "data" ? "Variable" : "List"
-                                    } in Sprite</div>
+                                    <div class="goog-menuitem-content" style="user-select: none;">${m("swap", {
+                                      var: block.getCategory() === "data" ? m("variables") : m("lists"),
+                                    })}</div>
                                 </div>
                                 `
                 );
@@ -1892,9 +1946,9 @@ export default async function ({ addon, global, console }) {
       chk = e.target.tagName === "SPAN" ? e.target.parentNode : e.target;
 
       if (chk.classList.contains("s3devSTT")) {
-        if (chk.textContent === "Send to top" || chk.textContent === "Send to bottom") {
+        if (chk.textContent === m("top") || chk.textContent === m("bottom")) {
           let spriteSelector = e.target.closest("div[class*='sprite-selector-item_sprite-selector-item']");
-          moveCostumeTo(chk.textContent === "Send to top", spriteSelector);
+          moveCostumeTo(chk.textContent === m("top"), spriteSelector);
           e.cancelBubble = true;
           e.preventDefault();
         }
@@ -1921,10 +1975,12 @@ export default async function ({ addon, global, console }) {
       `
             <div id="s3devFloatingBar">
                 <label class='title s3devLabel' id=s3devInsertLabel>
-                    <span style="display:none;">Insert </span>
+                    <span style="display:none;">${m("insert")} </span>
                     <span id=s3devInsert class="s3devWrap">
                         <div id='s3devIDDOut' class="s3devDDOut">
-                            <input id='s3devIInp' class="s3devInp" type='search' placeholder='Start Typing...' autocomplete='off'>
+                            <input id='s3devIInp' class="s3devInp" type='search' placeholder='${m(
+                              "start-typing"
+                            )}' autocomplete='off'>
                             <ul id='s3devIDD' class="s3devDD"></ul>
                         </div>
                     </span>
@@ -2077,7 +2133,6 @@ export default async function ({ addon, global, console }) {
     options.sort((a, b) => a.desc.localeCompare(b.desc));
 
     const dd = document.getElementById("s3devIDD");
-
     for (const option of options) {
       const li = document.createElement("li");
       const desc = option.desc;
@@ -2088,7 +2143,8 @@ export default async function ({ addon, global, console }) {
 
       li.innerText = desc;
       li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
-      li.className = "var " + option.block.getCategory() + " " + bType; // proc.cls;
+      li.className =
+        "var " + (option.block.isScratchExtension ? "extension" : option.block.getCategory()) + " " + bType; // proc.cls;
       dd.appendChild(li);
     }
 

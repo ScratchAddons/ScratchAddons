@@ -1,0 +1,175 @@
+html > body:not(.sa-body-editor):not(.monitor_monitor-container_2J9gl),
+body:not(.sa-body-editor) h1,
+body:not(.sa-body-editor) h2,
+body:not(.sa-body-editor) h3,
+body:not(.sa-body-editor) h4,
+body:not(.sa-body-editor) h5,
+body:not(.sa-body-editor) p,
+.news li p,
+a.social-messages-profile-link,
+.outer .sort-mode .select select,
+.grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
+.thumbnail-column .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
+.thumbnail .thumbnail-loves,
+.thumbnail .thumbnail-favorites,
+.thumbnail .thumbnail-remixes,
+.thumbnail .thumbnail-views,
+#footer,
+#donor,
+.subactions .share-date,
+.developers #faq p,
+.social-form,
+body:not(.sa-body-editor) .join-flow-title {
+  color: #fff;
+}
+.monitor_label_ci1ok {
+  /* For some strange reason, variable names inherit their color from the body, unlike list title names */
+  color: #575e75;
+}
+#view,
+.outer #projectBox,
+.tips-getting-started,
+.tips-activity-guides {
+  background: #202020;
+}
+.box .box-header,
+.gray-area,
+#footer,
+#donor,
+.parents .title-banner.faq-banner,
+.developers .title-banner.faq-banner,
+.credits .supporters,
+.download .installation,
+body:not(.sa-body-editor) .gender-radio-row {
+  background: #333;
+}
+.thumbnail .thumbnail-loves::before,
+.thumbnail .thumbnail-favorites::before,
+.thumbnail .thumbnail-remixes::before,
+.thumbnail .thumbnail-views::before,
+.project-loves::before,
+.project-favorites::before,
+.project-remixes::before,
+.project-views::before,
+img.tips-icon,
+.tabs li:not(.active) .tab-icon {
+  filter: brightness(0) invert(1);
+}
+.project-loves.loved::before,
+.project-favorites.favorited::before {
+  filter: none;
+}
+.credits .logo-grid {
+  /* Some logos don't look well on dark background */
+  background: #f7f6f8;
+  color: #575e75;
+}
+.box,
+.box .box-content,
+body:not(.sa-body-editor) .button.white,
+.tab-background,
+.outer .tab-background,
+.tabs,
+.tabs li:hover,
+.intro-banner .intro-button,
+.os-chooser,
+body:not(.sa-body-editor) .modal-content,
+.grid .thumbnail,
+.ttt-tile,
+.about .body,
+.messages-social-list,
+.comment-text,
+.comment .comment-body .comment-bubble,
+.comment .comment-body .comment-bubble::before {
+  background: #282828;
+}
+.comment-text::after {
+  border-color: #282828;
+}
+.tabs li,
+.tabs li:hover,
+.tabs li.active:hover {
+  color: #fff;
+}
+.tabs li:hover {
+  border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+.outer .categories li {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.outer .categories li:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.box,
+.box .box-header,
+.textarea,
+.news li:nth-child(even),
+.thumbnail .thumbnail-image img,
+.outer .sort-controls,
+.video-player,
+.about .body,
+.about .body img,
+.about .body iframe,
+.messages-social-list,
+.social-message,
+.comment-text,
+.comment-text::before,
+.compose-comment .textarea-row textarea:not(:focus),
+.comment .comment-body .comment-bubble,
+.comment .comment-body .comment-bubble::before,
+input[type="checkbox"].formik-checkbox,
+.developers #projects h3,
+.developers #principles h3,
+.developers #donate,
+.developers #donate h3,
+.developers #faq,
+.information-page .info-outer nav,
+.conf2020-panel {
+  border-color: #606060;
+}
+.box .box-header {
+  border-top-color: transparent;
+}
+.inplace-input,
+.inplace-textarea,
+.textarea,
+.modal {
+  background: #282828;
+  color: #fff;
+}
+body:not(.sa-body-editor) .select select,
+body:not(.sa-body-editor) .select select:hover,
+body:not(.sa-body-editor) .select select:focus,
+body:not(.sa-body-editor) .select select option,
+.select .join-flow-join-flow-select {
+  color: #fff;
+  background-color: #282828;
+}
+.social-message-icon {
+  opacity: 0.5;
+}
+.intro-banner {
+  background: transparent;
+}
+.developers .title-banner.masthead {
+  background: #075e46;
+}
+.comment .comment-body .comment-bubble.comment-bubble-reported,
+.comment .comment-body .comment-bubble.comment-bubble-reported::before {
+  background: #371528;
+  border-color: #601;
+}
+.replies.collapsed > .comment:last-of-type::after {
+  background: linear-gradient(rgba(37, 44, 55, 0), #252c37);
+}
+.studio-list-bottom-gradient {
+  background: linear-gradient(rgba(40, 40, 40, 0), #282828);
+}
+
+[class^="loader_background"] {
+  background-color: #252525;
+}
+
+.project-info-alert {
+  color: #575e75;
+}

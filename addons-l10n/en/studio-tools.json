@@ -1,0 +1,9 @@
+{
+  "studio-tools/ipr": "Invite/promote/remove curators",
+  "studio-tools/promote": "Promote curator",
+  "studio-tools/remove": "Remove curator",
+  "studio-tools/leave": "Leave studio",
+  "studio-tools/owner-error": "You are the owner of the studio.",
+  "studio-tools/leave-confirm": "Are you sure you want to leave this studio?",
+  "studio-tools/added-by": "Button added by Scratch Addons browser extension"
+}
