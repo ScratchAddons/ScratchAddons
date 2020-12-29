@@ -137,7 +137,7 @@ div.s3devDDOut.vis ul.s3devDD {
 }
 
 #s3devDD > li::before {
-  content: "● ";
+  content: "\25CF "; /* ● */
 }
 
 .define {
