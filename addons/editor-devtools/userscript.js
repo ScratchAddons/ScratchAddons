@@ -2160,9 +2160,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     let picklist, pickField;
 
     let dom = doms[block.id];
-    if (!dom) {
-      debugger;
-    }
 
     // dom = doms[block.type];
 
