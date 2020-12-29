@@ -6,8 +6,8 @@ export default async function ({ addon, console, msg }) {
     let scriptCount = 0;
     let sprites = new Set(vm.runtime.targets.map((i) => i.sprite.blocks._blocks));
     sprites.forEach((sprite, i) => {
-      scriptCount += Object.values(sprite).filter(o => !o.parent).length; // Filter blocks that don't have a parent (meaning it's the top of a stack)
-      blockCount += Object.values(sprite).filter(o => !o.shadow).length; // shadow blocks should be filtered out
+      scriptCount += Object.values(sprite).filter((o) => !o.parent).length; // Filter blocks that don't have a parent (meaning it's the top of a stack)
+      blockCount += Object.values(sprite).filter((o) => !o.shadow).length; // shadow blocks should be filtered out
     });
     return {
       blockCount,
@@ -39,8 +39,8 @@ export default async function ({ addon, console, msg }) {
       let display = topBar.appendChild(document.createElement("span"));
       display.innerText = msg("blocks", { num: (await getBlockCount()).blockCount });
       let debounce; // debouncing values becuase of the way 'PROJECT_CHANGED' works
-      vm.on('PROJECT_CHANGED', async () => {
-        clearInterval(debounce)
+      vm.on("PROJECT_CHANGED", async () => {
+        clearInterval(debounce);
         debounce = setTimeout(async () => {
           display.innerText = msg("blocks", { num: (await getBlockCount()).blockCount });
         }, 1000);
