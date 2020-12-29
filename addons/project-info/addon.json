@@ -2,6 +2,12 @@
   "name": "Sprite and script count",
   "description": "Shows the number of sprites and scripts a project has.",
   "tags": ["community"],
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
