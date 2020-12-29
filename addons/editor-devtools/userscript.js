@@ -496,6 +496,34 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     element.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: element, bubbles: true }));
   }
 
+  function genuid() {
+    const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
+    let result = "";
+    for (let i = 0; i < 20; i++) {
+      result += CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+    }
+    return result;
+  }
+
+  function startUndoGroup(wksp) {
+    const undoStack = wksp.undoStack_;
+    if (undoStack.length) {
+      undoStack[undoStack.length - 1]._devtoolsLastUndo = true;
+    }
+  }
+
+  function endUndoGroup() {
+    const undoStack = wksp.undoStack_;
+    // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
+    // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
+    setTimeout(() => {
+      const group = genuid();
+      for (let i = undoStack.length - 1; i >= 0 && !undoStack[i]._devtoolsLastUndo; i--) {
+        undoStack[i].group = group;
+      }
+    }, 0);
+  }
+
   /**
    * A much nicer way of laying out the blocks into columns
    */
@@ -508,6 +536,8 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       setTimeout(doCleanUp, 0);
       return;
     }
+
+    startUndoGroup(wksp);
 
     let result = getOrderedTopBlockColumns(true);
     let columns = result.cols;
@@ -595,6 +625,8 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
           }
         }
       }
+
+      endUndoGroup(wksp);
     }, 100);
   }
 
@@ -1292,6 +1324,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     }
     let newVId = v.getId();
 
+    startUndoGroup(wksp);
     let blocks = getVariableUsesById(varId);
     for (const block of blocks) {
       try {
@@ -1304,6 +1337,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         // ignore
       }
     }
+    endUndoGroup(wksp);
   }
 
   class XML {
