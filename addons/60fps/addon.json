@@ -20,7 +20,7 @@
     {
       "name": "FPS",
       "id": "framerate",
-      "type": "string",
+      "type": "positive_integer",
       "default": "60"
     }
   ],
