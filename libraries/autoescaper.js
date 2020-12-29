@@ -7,7 +7,7 @@ const _textarea = document.createElement("textarea");
 
 const escapeHTML = str => {
     _textarea.innerHTML = str;
-    const val = _textarea.innerText;
+    const val = _textarea.innerText.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
     _textarea.innerHTML = "";
     return val;
 };
