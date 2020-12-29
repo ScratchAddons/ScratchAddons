@@ -38,7 +38,7 @@ export default async function ({ addon, console, msg }) {
         clearTimeout(timeout);
       }, 1000);
     }
-  }
+  };
 
   addLiveBlockCount();
 }
