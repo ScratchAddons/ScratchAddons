@@ -489,6 +489,13 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     return topBlocks;
   }
 
+  function hidePopups(wksp) {
+    // Fire fake mouse events to trick the popup into hiding.
+    const element = wksp.getToolbox().HtmlDiv;
+    element.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: element, bubbles: true }));
+    element.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: element, bubbles: true }));
+  }
+
   /**
    * A much nicer way of laying out the blocks into columns
    */
@@ -497,8 +504,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       e.cancelBubble = true;
       e.preventDefault();
       let wksp = getWorkspace();
-      wksp.setVisible(false);
-      wksp.setVisible(true);
+      hidePopups(wksp);
       setTimeout(doCleanUp, 0);
       return;
     }
@@ -1554,9 +1560,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
   function clickReplace(e) {
     let wksp = getWorkspace();
-    // Toggle workspace visibility to hide the popup
-    wksp.setVisible(false);
-    wksp.setVisible(true);
+    hidePopups(wksp);
 
     setTimeout(function () {
       let wksp = getWorkspace();
@@ -1777,8 +1781,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                       style: "user-select: none;",
                     });
                     googMenuItem.addEventListener("click", () => {
-                      wksp.setVisible(false);
-                      wksp.setVisible(true);
+                      hidePopups(wksp);
                       showBroadcastSingleton[`show${showKey}`](broadcastId);
                     });
                     googMenuItem.appendChild(googMenuItemContent);
@@ -1859,9 +1862,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
             function eventCopyClick(e, blockOnly) {
               let wksp = getWorkspace();
-              // Toggle workspace visibility to hide the popup
-              wksp.setVisible(false);
-              wksp.setVisible(true);
+              hidePopups(wksp);
 
               let block = wksp.getBlockById(dataId);
               if (block) {
@@ -1891,9 +1892,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
             if (pasteDiv) {
               pasteDiv.addEventListener("click", function () {
                 let wksp = getWorkspace();
-                // Toggle workspace visibility to hide the popup
-                wksp.setVisible(false);
-                wksp.setVisible(true);
+                hidePopups(wksp);
 
                 let ids = getTopBlockIDs();
 
