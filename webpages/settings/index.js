@@ -17,25 +17,27 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
-Vue.directive('click-outside', {
+Vue.directive("click-outside", {
   priority: 700,
-  bind () {
-    let self  = this
-    this.event = function (event) { 
-    	console.log('emitting event')
-    	self.vm.$emit(self.expression,event) 
- 	  }
-    this.el.addEventListener('click', this.stopProp)
-    document.body.addEventListener('click',this.event)
+  bind() {
+    let self = this;
+    this.event = function (event) {
+      console.log("emitting event");
+      self.vm.$emit(self.expression, event);
+    };
+    this.el.addEventListener("click", this.stopProp);
+    document.body.addEventListener("click", this.event);
   },
-  
+
   unbind() {
-  	console.log('unbind')
-    this.el.removeEventListener('click', this.stopProp)
-    document.body.removeEventListener('click',this.event)
+    console.log("unbind");
+    this.el.removeEventListener("click", this.stopProp);
+    document.body.removeEventListener("click", this.event);
   },
-  stopProp(event) {event.stopPropagation() }
-})
+  stopProp(event) {
+    event.stopPropagation();
+  },
+});
 
 const vue = new Vue({
   el: "body",
@@ -142,10 +144,10 @@ const vue = new Vue({
       if (vue.smallMode) {
         vue.sidebarToggle();
       }
-      this.canCloseOutside = false
-      setTimeout(()=>{
-        this.canCloseOutside = true
-      },100)
+      this.canCloseOutside = false;
+      setTimeout(() => {
+        this.canCloseOutside = true;
+      }, 100);
     },
     sidebarToggle: function () {
       this.categoryOpen = !this.categoryOpen;
@@ -287,12 +289,12 @@ const vue = new Vue({
     },
   },
   events: {
-    modalClickOutside: function(){
-      console.log(this.isOpen)
-      if(this.isOpen && this.canCloseOutside){
-        this.isOpen = false
+    modalClickOutside: function () {
+      console.log(this.isOpen);
+      if (this.isOpen && this.canCloseOutside) {
+        this.isOpen = false;
       }
-    }
+    },
   },
   watch: {
     selectedTab() {
