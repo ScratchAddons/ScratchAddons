@@ -1915,7 +1915,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                     }
                     if (blockOnly === 2) {
                       let block = wksp.getBlockById(dataId);
+                      startUndoGroup(wksp);
                       block.dispose(true);
+                      endUndoGroup(wksp);
                     }
                   }, 0);
                 }
