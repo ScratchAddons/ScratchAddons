@@ -1,7 +1,7 @@
 export default async function ({ addon, console, msg }) {
   const vm = addon.tab.traps.onceValues.vm;
 
-  const getBlockCount = async () => {
+  const getBlockCount = () => {
     let blockCount = 0;
     let scriptCount = 0;
     let sprites = new Set(vm.runtime.targets.map((i) => i.sprite.blocks._blocks));
