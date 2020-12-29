@@ -28,6 +28,5 @@
       "default": false
     }
   ],
-  "traps": true,
   "l10n": true
 }
