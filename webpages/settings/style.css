@@ -578,8 +578,8 @@ input[type="color"]::-webkit-color-swatch {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgb(0 0 0 / 65%);
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
   justify-content: center;
