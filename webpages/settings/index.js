@@ -1,6 +1,8 @@
 import downloadBlob from "../../libraries/download-blob.js";
 const NEW_ADDONS = ["color-picker"];
 
+const browserLevelPermissions = ["notifications", "clipboardWrite"];
+
 //theme switching
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
@@ -39,15 +41,34 @@ const serializeSettings = async () => {
   return JSON.stringify(serialized);
 };
 
-const deserializeSettings = async (str) => {
+const deserializeSettings = async (str, manifests) => {
   const obj = JSON.parse(str);
   const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
   const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
   const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
+  const pendingPermissions = {};
   for (const addonId of Object.keys(obj.addons)) {
     const addonValue = obj.addons[addonId];
-    addonsEnabled[addonId] = addonValue.enabled;
+    const addonManifest = manifests.find(m => m._addonId === addonId);
+    if (!addonManifest) continue;
+    const permissionsRequired = addonManifest.permissions || [];
+    const browserPermissionsRequired = permissionsRequired.filter(p => browserLevelPermissions.includes(p));
+    console.log(addonId, permissionsRequired, browserPermissionsRequired);
+    if (addonValue.enabled && browserPermissionsRequired.length) {
+      pendingPermissions[addonId] = browserPermissionsRequired;
+    } else {
+      addonsEnabled[addonId] = addonValue.enabled;
+    }
     addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
+  }
+  if (Object.keys(pendingPermissions).length) {
+    const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
+      permissions: Object.values(pendingPermissions).flat()
+    });
+    console.log(pendingPermissions, granted);
+    Object.keys(pendingPermissions).forEach(addonId => {
+      addonsEnabled[addonId] = granted;
+    });
   }
   await syncSet({
     globalTheme: obj.core.lightTheme,
@@ -257,7 +278,6 @@ const vue = new Vue({
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
       };
 
-      const browserLevelPermissions = ["notifications", "clipboardWrite"];
       const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
       if (!addon._enabled && requiredPermissions.length) {
         chrome.permissions.request(
@@ -340,7 +360,8 @@ const vue = new Vue({
       });
       inputElem.addEventListener(
         "change",
-        async () => {
+        async (e) => {
+          console.log(e);
           const file = inputElem.files[0];
           if (!file) {
             inputElem.remove();
@@ -350,7 +371,7 @@ const vue = new Vue({
           const text = await file.text();
           inputElem.remove();
           try {
-            await deserializeSettings(text);
+            await deserializeSettings(text, vue.manifests);
           } catch (e) {
             console.warn("Error when importing settings:", e);
             alert(chrome.i18n.getMessage("importFailed"));
