@@ -285,7 +285,6 @@ const vue = new Vue({
         let file = loadButton.files[0];
         if (file.type == "application/json") {
           let text = JSON.parse(await file.text());
-          console.log(text);
           document.querySelectorAll(".addon-body").forEach((addonBody, i) => {
             let addonData = text[addonBody.getAttribute("data-id")]
             let addonSwitch = addonBody.querySelector(".switch")
