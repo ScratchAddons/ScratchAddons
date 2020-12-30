@@ -49,10 +49,10 @@ const deserializeSettings = async (str, manifests) => {
   const pendingPermissions = {};
   for (const addonId of Object.keys(obj.addons)) {
     const addonValue = obj.addons[addonId];
-    const addonManifest = manifests.find(m => m._addonId === addonId);
+    const addonManifest = manifests.find((m) => m._addonId === addonId);
     if (!addonManifest) continue;
     const permissionsRequired = addonManifest.permissions || [];
-    const browserPermissionsRequired = permissionsRequired.filter(p => browserLevelPermissions.includes(p));
+    const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
     console.log(addonId, permissionsRequired, browserPermissionsRequired);
     if (addonValue.enabled && browserPermissionsRequired.length) {
       pendingPermissions[addonId] = browserPermissionsRequired;
@@ -63,10 +63,10 @@ const deserializeSettings = async (str, manifests) => {
   }
   if (Object.keys(pendingPermissions).length) {
     const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
-      permissions: Object.values(pendingPermissions).flat()
+      permissions: Object.values(pendingPermissions).flat(),
     });
     console.log(pendingPermissions, granted);
-    Object.keys(pendingPermissions).forEach(addonId => {
+    Object.keys(pendingPermissions).forEach((addonId) => {
       addonsEnabled[addonId] = granted;
     });
   }
