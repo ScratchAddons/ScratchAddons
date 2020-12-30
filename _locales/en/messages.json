@@ -241,5 +241,8 @@
   },
   "importFailed": {
     "message": "The settings file is invalid. Please try again."
+  },
+  "confirmImport": {
+    
   }
 }

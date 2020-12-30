@@ -22,6 +22,8 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 
 const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
 
+let handleConfirmClicked = null;
+
 const serializeSettings = async () => {
   const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
   const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
@@ -41,7 +43,7 @@ const serializeSettings = async () => {
   return JSON.stringify(serialized);
 };
 
-const deserializeSettings = async (str, manifests) => {
+const deserializeSettings = async (str, manifests, confirmElem) => {
   const obj = JSON.parse(str);
   const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
   const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
@@ -61,20 +63,32 @@ const deserializeSettings = async (str, manifests) => {
     }
     addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
   }
-  if (Object.keys(pendingPermissions).length) {
-    const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
-      permissions: Object.values(pendingPermissions).flat(),
-    });
-    console.log(pendingPermissions, granted);
-    Object.keys(pendingPermissions).forEach((addonId) => {
-      addonsEnabled[addonId] = granted;
-    });
-  }
-  await syncSet({
-    globalTheme: obj.core.lightTheme,
-    addonsEnabled,
-    addonSettings,
+  if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, {once: true});
+  let resolvePromise = null;
+  const resolveOnConfirmPromise = new Promise(resolve => {
+    resolvePromise = resolve;
   });
+  handleConfirmClicked = async () => {
+    handleConfirmClicked = null;
+    if (Object.keys(pendingPermissions).length) {
+      const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
+        permissions: Object.values(pendingPermissions).flat(),
+      });
+      console.log(pendingPermissions, granted);
+      Object.keys(pendingPermissions).forEach((addonId) => {
+        addonsEnabled[addonId] = granted;
+      });
+    }
+    await syncSet({
+      globalTheme: obj.core.lightTheme,
+      addonsEnabled,
+      addonSettings,
+    });
+    resolvePromise();
+  };
+  confirmElem.hidden = false;
+  confirmElem.addEventListener("click", handleConfirmClicked, {once: true});
+  return resolveOnConfirmPromise;
 };
 
 Vue.directive("click-outside", {
@@ -370,10 +384,12 @@ const vue = new Vue({
           }
           const text = await file.text();
           inputElem.remove();
+          const confirmElem = document.getElementById("confirmImport");
           try {
-            await deserializeSettings(text, vue.manifests);
+            await deserializeSettings(text, vue.manifests, confirmImport);
           } catch (e) {
             console.warn("Error when importing settings:", e);
+            confirmImport.hidden = true;
             alert(chrome.i18n.getMessage("importFailed"));
             return;
           }
