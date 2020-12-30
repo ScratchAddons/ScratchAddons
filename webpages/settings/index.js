@@ -86,7 +86,7 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
     });
     resolvePromise();
   };
-  confirmElem.hidden = false;
+  confirmElem.classList.remove("hidden-button");
   confirmElem.addEventListener("click", handleConfirmClicked, {once: true});
   return resolveOnConfirmPromise;
 };
@@ -389,7 +389,7 @@ const vue = new Vue({
             await deserializeSettings(text, vue.manifests, confirmImport);
           } catch (e) {
             console.warn("Error when importing settings:", e);
-            confirmImport.hidden = true;
+            confirmImport.classList.add("hidden-button");
             alert(chrome.i18n.getMessage("importFailed"));
             return;
           }

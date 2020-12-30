@@ -680,6 +680,10 @@ input[type="color"]::-webkit-color-swatch {
   outline: none;
   background: #151515;
 }
+.hidden-button {
+  /* needs !important because it conlicts with display: block */
+  display: none !important;
+}
 
 /*scrollbar*/
 
