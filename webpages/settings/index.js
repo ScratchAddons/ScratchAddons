@@ -22,32 +22,28 @@ const promisify = (callbackFn) => (...args) => new Promise((resolve) => callback
 
 const serializeSettings = async () => {
   const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-  const storedSettings = await syncGet([
-    "globalTheme",
-    "addonSettings",
-    "addonsEnabled"
-  ]);
+  const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
   const serialized = {
     core: {
       lightTheme: storedSettings.globalTheme,
-      version: chrome.runtime.getManifest().version_name
+      version: chrome.runtime.getManifest().version_name,
     },
-    addons: {}
+    addons: {},
   };
   for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
     serialized.addons[addonId] = {
       enabled: storedSettings.addonsEnabled[addonId],
-      settings: storedSettings.addonSettings[addonId] || {}
+      settings: storedSettings.addonSettings[addonId] || {},
     };
   }
   return JSON.stringify(serialized);
 };
 
-const deserializeSettings = async str => {
+const deserializeSettings = async (str) => {
   const obj = JSON.parse(str);
   const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
   const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
-  const {addonSettings, addonsEnabled} = await syncGet(["addonSettings", "addonsEnabled"]);
+  const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
   for (const addonId of Object.keys(obj.addons)) {
     const addonValue = obj.addons[addonId];
     addonsEnabled[addonId] = addonValue.enabled;
@@ -56,9 +52,9 @@ const deserializeSettings = async str => {
   await syncSet({
     globalTheme: obj.core.lightTheme,
     addonsEnabled,
-    addonSettings
+    addonSettings,
   });
-}
+};
 
 Vue.directive("click-outside", {
   priority: 700,
@@ -331,8 +327,8 @@ const vue = new Vue({
       });
     },
     exportSettings() {
-      serializeSettings().then(serialized => {
-        const blob = new Blob([serialized], {type: "application/json"});
+      serializeSettings().then((serialized) => {
+        const blob = new Blob([serialized], { type: "application/json" });
         downloadBlob("scratch-addons-settings.json", blob);
       });
     },
@@ -340,27 +336,31 @@ const vue = new Vue({
       const inputElem = Object.assign(document.createElement("input"), {
         hidden: true,
         type: "file",
-        accept: "application/json"
+        accept: "application/json",
       });
-      inputElem.addEventListener("change", async () => {
-        const file = inputElem.files[0];
-        if (!file) {
+      inputElem.addEventListener(
+        "change",
+        async () => {
+          const file = inputElem.files[0];
+          if (!file) {
+            inputElem.remove();
+            alert(chrome.i18n.getMessage("fileNotSelected"));
+            return;
+          }
+          const text = await file.text();
           inputElem.remove();
-          alert(chrome.i18n.getMessage("fileNotSelected"));
-          return;
-        }
-        const text = await file.text();
-        inputElem.remove();
-        try {
-          await deserializeSettings(text);
-        } catch (e) {
-          console.warn('Error when importing settings:', e);
-          alert(chrome.i18n.getMessage("importFailed"));
-          return;
-        }
-        alert(chrome.i18n.getMessage("importSuccess"));
-        chrome.runtime.reload();
-      }, {once: true});
+          try {
+            await deserializeSettings(text);
+          } catch (e) {
+            console.warn("Error when importing settings:", e);
+            alert(chrome.i18n.getMessage("importFailed"));
+            return;
+          }
+          alert(chrome.i18n.getMessage("importSuccess"));
+          chrome.runtime.reload();
+        },
+        { once: true }
+      );
       document.body.appendChild(inputElem);
       inputElem.click();
     },

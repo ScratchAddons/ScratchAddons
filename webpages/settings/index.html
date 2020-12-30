@@ -314,8 +314,12 @@
           <div class="setting-body">
             <div class="addon-topbar">
               <span class="addon-name"
-                ><img src="../../images/icons/import-export.svg" style="vertical-align: middle; margin-right: 5px" :class="{'dark': theme === false}"/> {{
-                msg("exportAndImportSettings") }}
+                ><img
+                  src="../../images/icons/import-export.svg"
+                  style="vertical-align: middle; margin-right: 5px"
+                  :class="{'dark': theme === false}"
+                />
+                {{ msg("exportAndImportSettings") }}
               </span>
             </div>
             <div class="setting-settings">
@@ -323,13 +327,13 @@
               <span class="settings-description">{{ msg("useBrowserSync") }}</span>
               <div class="setting-setting">
                 <div class="setting-setting">
-                   <div class="filter-selector">
-                     <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
-                   </div>
-                   <div class="filter-selector">
-                     <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
-                   </div>
-                 </div>
+                  <div class="filter-selector">
+                    <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
+                  </div>
+                  <div class="filter-selector">
+                    <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
