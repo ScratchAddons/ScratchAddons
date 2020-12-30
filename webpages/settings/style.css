@@ -114,6 +114,10 @@ h1 {
   align-items: center;
 }
 
+.setting-body img.dark {
+  filter: brightness(10);
+}
+
 .btn-dropdown {
   display: flex;
   align-items: center;

@@ -217,5 +217,29 @@
   },
   "new": {
     "message": "New!"
+  },
+  "exportAndImportSettings": {
+    "message": "Export and Import Settings"
+  },
+  "exportAndImportSettingsDescription": {
+    "message": "Export settings for use on other computers, or import settings."
+  },
+  "useBrowserSync": {
+    "message": "You can also use the browser's built-in sync options, if enabled."
+  },
+  "export": {
+    "message": "Export Settings"
+  },
+  "import": {
+    "message": "Import Settings"
+  },
+  "fileNotSelected": {
+    "message": "Please select a settings file."
+  },
+  "importSuccess": {
+    "message": "Settings have been imported successfully. Scratch Addons will reload."
+  },
+  "importFailed": {
+    "message": "The settings file is invalid. Please try again."
   }
 }
