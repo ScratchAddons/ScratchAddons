@@ -260,6 +260,49 @@ const vue = new Vue({
         manifest.name = manifest._addonId;
       });
     },
+    downloadSettings() {
+      chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addonSettings }) => {
+        let addons = Object.keys(addonsEnabled).filter(addon => addonsEnabled[addon])
+        let settings = {};
+        addons.forEach((addon, i) => settings[addon] = addonSettings[addon] ? addonSettings[addon] : {});
+        let file = new Blob([JSON.stringify(settings)], {type: "application/json"});
+        var a = document.createElement("a");
+        let downloadUrl = URL.createObjectURL(file)
+        a.href = downloadUrl;
+        a.download = "sa-settings";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(downloadUrl);
+        }, 0);
+      });
+    },
+    uploadSettings() {
+      let loadButton = document.querySelector(".load-settings-button");
+      loadButton.click();
+      loadButton.onchange = async (e) => {
+        let file = loadButton.files[0];
+        if (file.type == "application/json") {
+          let text = JSON.parse(await file.text());
+          console.log(text);
+          document.querySelectorAll(".addon-body").forEach((addonBody, i) => {
+            let addonData = text[addonBody.getAttribute("data-id")]
+            let addonSwitch = addonBody.querySelector(".switch")
+            if (addonData) {
+              if (addonSwitch.getAttribute("state") == "off") addonSwitch.click();
+              addonBody.querySelectorAll(".addon-setting").forEach((addonSetting, i) => {
+                let settingID = addonSetting.getAttribute("data-setting-id")
+                this.updateOption(settingID, addonData[settingID], this.manifests.find(addon => addon._addonId == addonBody.getAttribute("data-id")))
+              });
+            } else {
+              if (addonSwitch.getAttribute("state") == "on") addonSwitch.click();
+            }
+
+          });
+        }
+      }
+    },
   },
   watch: {
     selectedTab() {

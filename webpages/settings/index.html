@@ -108,6 +108,7 @@
         <div class="addons-container">
           <div
             class="addon-body"
+            :data-id="addon._addonId"
             v-for="addon of manifests"
             v-show="addonMatchesFilters(addon) && (selectedTab === 'all' || addon._category === selectedTab)"
           >
@@ -174,7 +175,7 @@
                 >
               </div>
               <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
-                <div class="addon-setting" v-for="setting of addon.settings">
+                <div class="addon-setting" :data-setting-id="setting.id" v-for="setting of addon.settings">
                   <div class="setting-label" v-html="textParse(setting.name, addon)"></div>
                   <input
                     type="checkbox"
@@ -302,6 +303,45 @@
                       {{ msg("dark") }}
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+        <div class="settings-block">
+          <div class="setting-body">
+            <div class="addon-topbar">
+              <span class="addon-name"
+                ><img src="../../images/icons/import-export.svg" style="vertical-align: middle; margin-right: 5px; filter: brightness(10);" />Save/Load Settings</span>
+            </div>
+            <div class="setting-settings">
+              <span class="settings-description">This allows you to copy your exsisting settings, or load an exsisting code.</span>
+              <div class="setting-setting">
+                <div class="filter-selector">
+                  <div class="filter-text">Save code:</div>
+                  <button
+                    class="large-button"
+                    @click="downloadSettings()"
+                  >Download</button>
+                </div>
+                <div class="filter-selector">
+                  <div class="filter-text">Load code:</div>
+                  <input
+                    type="file"
+                    style="display: none;"
+                    accept=".json"
+                    class="load-settings-button"
+                  >
+                  <button
+                    class="large-button"
+                    @click="uploadSettings()"
+                  >Upload</button>
                 </div>
               </div>
             </div>
