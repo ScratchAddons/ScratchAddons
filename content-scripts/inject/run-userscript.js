@@ -13,13 +13,16 @@ export default async function runAddonUserscripts({ addonId, scripts, traps }) {
       "color:red; font-weight: bold; font-size: 1.2em;"
     );
     const loadUserscript = async () => {
+      await scratchAddons.l10n.loadByAddonId(addonId);
       const module = await import(scriptUrl);
-      const log = console.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
-      const warn = console.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
+      const log = _realConsole.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
+      const warn = _realConsole.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
       module.default({
         addon: addonObj,
         global: globalObj,
-        console: { ...console, log, warn },
+        console: { ..._realConsole, log, warn },
+        msg: (key, placeholders) => scratchAddons.l10n.get(`${addonId}/${key}`, placeholders),
+        safeMsg: (key, placeholders) => scratchAddons.l10n.escaped(`${addonId}/${key}`, placeholders),
       });
     };
     if (runAtComplete && document.readyState !== "complete") {

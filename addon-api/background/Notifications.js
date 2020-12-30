@@ -45,7 +45,7 @@ export default class Notifications extends EventTarget {
     if (typeof opts !== "object") {
       throw "ScratchAddons exception: do not specify a notification ID.";
     }
-    // TODO: if muted, do not create notification and trigger close event immediately
+    if (scratchAddons.muted) return Promise.resolve(null);
     const notifId = `${this._addonId}__${Date.now()}`;
     let newOpts;
     if (typeof InstallTrigger !== "undefined") {
@@ -53,7 +53,9 @@ export default class Notifications extends EventTarget {
       // On Firefox, remove notification properties that throw.
       delete newOpts.buttons;
       delete newOpts.requireInteraction;
+      delete newOpts.silent;
     } else newOpts = opts;
+    newOpts.contextMessage = chrome.i18n.getMessage("extensionName");
     return new Promise((resolve) => {
       chrome.notifications.create(notifId, newOpts, (callback) => resolve(callback));
     });
@@ -79,6 +81,9 @@ export default class Notifications extends EventTarget {
         resolve(obj);
       });
     });
+  }
+  get muted() {
+    return scratchAddons.muted;
   }
   _removeEventListeners() {
     chrome.notifications.onClicked.removeListener(this._onClicked);

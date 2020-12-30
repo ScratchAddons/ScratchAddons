@@ -1,0 +1,6 @@
+.code,
+.postmsg blockquote {
+  border: none;
+  border-left: 2px solid var(--forumQuoteCodeBeautifier-bordercolor);
+  background: rgba(0, 0, 0, 0.03);
+}

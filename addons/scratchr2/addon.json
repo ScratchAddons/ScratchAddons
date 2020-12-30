@@ -1,5 +1,5 @@
 {
-  "name": "Scratch 2.0 → 3.0",
+  "name": "Scratch 2.0 \u2192 3.0",
   "description": "Makes Scratch 2.0-styled pages look like Scratch 3.0.",
   "tags": ["community", "theme", "recommended"],
   "credits": [
@@ -27,7 +27,10 @@
         "https://scratch.mit.edu/cloudmonitor/*",
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
-        "https://scratch.mit.edu/500/"
+        "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/login",
+        "https://scratch.mit.edu/login_retry",
+        "https://scratch.mit.edu/news"
       ]
     },
     {
@@ -48,7 +51,8 @@
         "https://scratch.mit.edu/cloudmonitor/*",
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
-        "https://scratch.mit.edu/500/"
+        "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/news"
       ]
     },
     {
@@ -94,6 +98,11 @@
     {
       "url": "quotes.css",
       "matches": ["https://scratch.mit.edu/info/quotes/"]
+    },
+    {
+      "url": "experimental_dark_compatibility.css",
+      "matches": ["https://scratch.mit.edu/*"]
     }
-  ]
+  ],
+  "l10n": true
 }
