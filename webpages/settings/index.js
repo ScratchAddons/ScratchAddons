@@ -63,9 +63,9 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
     }
     addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
   }
-  if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, {once: true});
+  if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
   let resolvePromise = null;
-  const resolveOnConfirmPromise = new Promise(resolve => {
+  const resolveOnConfirmPromise = new Promise((resolve) => {
     resolvePromise = resolve;
   });
   handleConfirmClicked = async () => {
@@ -87,7 +87,7 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
     resolvePromise();
   };
   confirmElem.classList.remove("hidden-button");
-  confirmElem.addEventListener("click", handleConfirmClicked, {once: true});
+  confirmElem.addEventListener("click", handleConfirmClicked, { once: true });
   return resolveOnConfirmPromise;
 };
 
