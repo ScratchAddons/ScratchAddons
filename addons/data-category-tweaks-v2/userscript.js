@@ -121,11 +121,10 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       return listCategory;
     };
 
-    // Each time a new workspace is made, these callbacks are reset.
-    // It seems like each workspace re-uses the same flyout, so whenever this flyout is updated, re-register the callbacks.
+    // Each time a new workspace is made, these callbacks are reset, so re-register whenever a flyout is shown.
     // https://github.com/LLK/scratch-blocks/blob/61f02e4cac0f963abd93013842fe536ef24a0e98/core/flyout_base.js#L469
-    const originalShow = flyout.show;
-    flyout.show = function (xml) {
+    const originalShow = flyout.constructor.prototype.show;
+    flyout.constructor.prototype.show = function (xml) {
       this.workspace_.registerToolboxCategoryCallback("VARIABLE", variableCategoryCallback);
       this.workspace_.registerToolboxCategoryCallback("LIST", listCategoryCallback);
       originalShow.call(this, xml);
