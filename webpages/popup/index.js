@@ -19,6 +19,12 @@ document.getElementById("settings").onclick = () => {
   setTimeout(() => window.close(), 100);
 };
 
+window.addEventListener("load", () => {
+  let height = window.innerHeight - 2;
+  console.log(height);
+  document.documentElement.style.setProperty("--height", `${height}px`);
+});
+
 const popups = [
   {
     addonId: "scratch-messaging",
