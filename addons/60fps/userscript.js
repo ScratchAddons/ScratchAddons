@@ -24,7 +24,7 @@ export default async function ({ addon, global, console }) {
         else setFPS(30);
         button.style.filter = mode ? "hue-rotate(90deg)" : "";
       }
-    }
+    };
     button.addEventListener("click", (e) => flagListener(e));
     button.addEventListener("contextmenu", (e) => flagListener(e));
 
