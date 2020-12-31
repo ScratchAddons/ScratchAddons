@@ -739,6 +739,12 @@ export default async function ({ addon, global, console, msg }) {
     workspace._blockswitchingInjected = true;
     workspace.getAllBlocks().forEach(injectCustomContextMenu);
     workspace.addChangeListener(changeListener);
+    const languageSelector = document.querySelector("[class^=\"language-selector_language-select\"]");
+    if (languageSelector) {
+      languageSelector.addEventListener('change', () => {
+        setTimeout(inject);
+      });
+    }
   };
 
   const mutationObserver = new MutationObserver(mutationObserverCallback);
