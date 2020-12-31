@@ -10,6 +10,10 @@
   ],
   "userstyles": [
     {
+      "url": "scrollbar.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    },
+    {
       "url": "experimental_scratchwww.css",
       "matches": [
         "https://scratch.mit.edu/",

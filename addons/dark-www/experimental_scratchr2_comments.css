@@ -1,4 +1,7 @@
 /* Comments */
+.box .box-content .template-feature-off {
+  color: #fff;
+}
 #comments form .small-text {
   color: #fff;
 }
