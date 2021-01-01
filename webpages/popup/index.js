@@ -20,7 +20,7 @@ document.getElementById("settings").onclick = () => {
 };
 
 window.addEventListener("load", () => {
-  let height = window.innerHeight - 2;
+  let height = window.innerHeight - 3;
   document.documentElement.style.setProperty("--height", `${height}px`);
 });
 
