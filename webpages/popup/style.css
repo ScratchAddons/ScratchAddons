@@ -3,6 +3,7 @@ html {
 }
 
 body {
+  height: var(--height, 599px);
   margin: 0;
   font-family: "Sora", sans-serif;
   color: white;
@@ -94,7 +95,7 @@ body {
 
 iframe {
   width: 400px;
-  height: 468px;
+  height: calc(var(--height, 599px) - 107px);
   overflow-x: hidden;
   overflow-y: auto;
   border: none;
