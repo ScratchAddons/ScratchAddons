@@ -238,6 +238,13 @@ const vue = new Vue({
       this.addonSettings[addon._addonId][id] = newValue;
       this.updateSettings(addon);
     },
+    checkValidity(addon, setting) {
+      // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
+      let input = document.querySelector(
+        `input[type='number'][data-addon-id='${addon._addonId}'][data-setting-id='${setting.id}']`
+      );
+      this.addonSettings[addon._addonId][setting.id] = input.validity.valid ? input.value : setting.default;
+    },
     updateSettings(addon, { wait = 0, settingId = null } = {}) {
       const value = settingId && this.addonSettings[addon._addonId][settingId];
       setTimeout(() => {
