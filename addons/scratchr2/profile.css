@@ -148,3 +148,7 @@
 #comments .more-replies {
   background-color: #eaf1fc;
 }
+
+.portrait [data-control="edit"] {
+  border-top-left-radius: 5px;
+}

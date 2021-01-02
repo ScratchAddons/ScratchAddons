@@ -19,3 +19,13 @@ div.s3devDDOut.vis {
 .u-dropdown-searchbar:focus {
   box-shadow: none !important;
 }
+
+.s3devDD > li.boolean::before {
+  border-top: 9px solid #6d6d6d;
+  border-bottom: 10px solid #6d6d6d;
+}
+
+.s3devDD > li.boolean::after {
+  border-top: 9px solid #6d6d6d;
+  border-bottom: 10px solid #6d6d6d;
+}

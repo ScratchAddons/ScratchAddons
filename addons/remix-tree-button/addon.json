@@ -12,7 +12,13 @@
     {
       "url": "main.js",
       "matches": ["https://scratch.mit.edu/projects/*"],
-      "runAtComplete": true
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "button.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
   "settings": [
@@ -22,5 +28,6 @@
       "type": "color",
       "default": "#4d97ff"
     }
-  ]
+  ],
+  "l10n": true
 }

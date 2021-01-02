@@ -2,7 +2,7 @@ html {
   font-size: 12px;
   height: 100%;
   scrollbar-width: thin;
-  scrollbar-color: #ff7b26;
+  scrollbar-color: grey none;
   color: #dddddd;
 }
 html.fullscreen {
@@ -13,27 +13,10 @@ body {
   margin: 0 auto;
   font-family: "Sora", sans-serif;
   width: auto;
-  height: 500px;
+  height: 490px;
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: #222;
-  scrollbar-width: thin;
-}
-
-body::-webkit-scrollbar {
-  width: 10px;
-}
-body::-webkit-scrollbar-track {
-  background: #222;
-}
-body::-webkit-scrollbar-thumb {
-  background-color: #2a2a2a;
-  border-radius: 2px;
-}
-body:hover::-webkit-scrollbar-thumb,
-body::-webkit-scrollbar-thumb:hover {
-  background-color: #ff7b26;
-  border-radius: 2px;
 }
 
 body.fullscreen {
@@ -91,28 +74,31 @@ button {
   border-radius: 4px;
   border: 1px solid #333;
   background: #2a2a2a;
-  margin: 10px;
+  margin: 6px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 .message-type-title {
   font-size: 12px;
   color: white;
-  padding: 10px;
+  padding: 6px;
   cursor: default;
   display: flex;
-  position: sticky;
   align-items: center;
+  user-select: none;
 }
-
-.thread-list:first-line {
-  line-height: 0px;
+.message-type-title:not(.hover-reverse) {
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 999;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .thread-list {
   padding: 0px 20px 20px 20px;
   font-size: 12px;
-  white-space: pre-line;
 }
 
 .hover-reverse {
@@ -123,6 +109,13 @@ button {
   top: 0;
   z-index: 999;
   margin: 10px 0px;
+}
+.small-icon {
+  height: 14px;
+  vertical-align: text-bottom;
+}
+.small-icon:not(.colored) {
+  filter: brightness(100);
 }
 .message-type-title-text {
   white-space: nowrap;
@@ -135,7 +128,7 @@ button {
 .float-right {
   margin-left: 4px;
   white-space: nowrap;
-  font-size: 0.9rem;
+  font-size: 12px;
 }
 .float-right > span {
   display: inline-block;
@@ -155,10 +148,6 @@ button {
   margin-bottom: 0px !important;
 }
 
-.comment-chain {
-  /*padding: 4px 0 4px 0;*/
-  /*border-bottom: 2px double gray;*/
-}
 .message-type-details > .comment-chain:last-child {
   border-bottom: none;
 }
@@ -179,6 +168,7 @@ button {
 }
 .comment-content-text {
   margin-right: 10px;
+  overflow: hidden; /* Avoid zalgo */
 }
 .comment-content-text:after {
   /* So that empty comments take up a line */
@@ -201,12 +191,9 @@ button {
 }
 .popout-comment {
   cursor: pointer;
-  height: 0.5rem;
-  vertical-align: middle;
-  opacity: 0;
-}
-.popout-comment:hover {
-  opacity: 1;
+  height: 10px;
+  vertical-align: text-top;
+  filter: brightness(100);
 }
 .delete-btn {
   float: right;
@@ -239,9 +226,6 @@ button {
 .comment:hover .delete-btn {
   opacity: 1;
 }
-.comment:hover .popout-comment {
-  opacity: 0.6;
-}
 .reply-textarea {
   width: 100%;
   box-sizing: border-box;
@@ -250,9 +234,11 @@ button {
   padding: 8px;
   resize: vertical;
   margin-top: 8px;
-  font-size: 0.8rem;
+  font-size: 12px;
   border-radius: 8px;
   border: 2px solid rgba(0, 0, 0, 0.2);
+  background-color: #222222;
+  color: white;
 }
 .reply-box-buttons {
   padding-right: 4px;
@@ -299,11 +285,29 @@ button {
   height: 0.8rem;
   vertical-align: middle;
   opacity: 0.6;
-  filter: invert(1);
+  filter: brightness(100);
 }
 #open-messages {
   color: inherit;
 }
 #open-messages:hover #popout {
   opacity: 1;
+  filter: none;
+}
+/*scrollbar*/
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* hide track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 4px;
 }

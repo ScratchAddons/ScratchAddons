@@ -1,0 +1,46 @@
+{
+  "name": "Thumbnails setter",
+  "description": "Adds a button to the editor to set the thumbnail of your project to any image (including gifs).",
+  "notice": "Turn on \"Prevent thumbnail from being overwritten\" if you don't want to reset thumbnail every time you save.",
+  "credits": [
+    {
+      "name": "World_Languages",
+      "link": "https://github.com/WorldLanguages/animatedThumbnailsBookmarklet/blob/master/code.js"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "url": "userscript.js"
+    },
+    {
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "url": "persistent-thumb.js",
+      "settingMatch": {
+        "id": "persistentThumb",
+        "value": true
+      }
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userscript.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Prevent thumbnail from being overwritten",
+      "type": "boolean",
+      "default": false,
+      "id": "persistentThumb"
+    }
+  ],
+  "tags": ["editor", "recommended"],
+  "enabledByDefault": true,
+  "l10n": true
+}

@@ -52,10 +52,13 @@
 #brdmenu a:hover {
   text-decoration: underline;
 }
-#brdheader form {
+#forum-search-form {
   width: 942px;
   margin: auto;
   margin-top: 8px;
+  padding: none;
+  background: none;
+  border-top: none;
 }
 #forum-search-input {
   width: calc(85% - 8px);
@@ -73,7 +76,7 @@
   color: #575e75;
 }
 .forum-search-list .blockpost div.box {
-  background: #4d97ff;
+  background: var(--scratchr2-primaryColor);
 }
 #brdfooter {
   margin-top: 40px;

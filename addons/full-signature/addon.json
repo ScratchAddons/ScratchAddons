@@ -7,6 +7,10 @@
     },
     {
       "name": "NitroCipher/ZenithRogue"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
   "settings": [
@@ -17,10 +21,35 @@
       "default": true
     },
     {
-      "name": "Show scroll for What I've been doing",
+      "name": "Show scroll for \"What I've been doing\"",
       "id": "whatworkingon",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Show scroll for \"What's Happening?\"",
+      "id": "whathappen",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "working.js",
+      "matches": ["https://scratch.mit.edu/users/*"],
+      "settingMatch": {
+        "id": "whatworkingon",
+        "value": true
+      }
+    },
+    {
+      "url": "happen.js",
+      "matches": ["https://scratch.mit.edu/"],
+      "runAtComplete": false,
+      "settingMatch": {
+        "id": "whathappen",
+        "value": true
+      }
     }
   ],
   "userstyles": [
@@ -39,8 +68,17 @@
         "id": "whatworkingon",
         "value": true
       }
+    },
+    {
+      "url": "happen.css",
+      "matches": ["https://scratch.mit.edu/"],
+      "settingMatch": {
+        "id": "whathappen",
+        "value": true
+      }
     }
   ],
-  "tags": ["community", "forums"],
-  "enabledByDefault": false
+  "tags": ["community", "forums", "recommended"],
+  "enabledByDefault": true,
+  "l10n": true
 }

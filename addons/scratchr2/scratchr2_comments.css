@@ -66,14 +66,14 @@
   border-radius: 8px;
 }
 #comments .comment .info .name a {
-  color: #4d97ff;
+  color: var(--scratchr2-linkColor);
 }
 #comments .comment .info .name a:hover {
-  color: #4280d7;
+  color: var(--scratchr2-activeColor);
 }
 #comments .comment .info .time {
   color: #b3b3b3;
 }
 #comments .more-replies .pulldown {
-  color: #4d97ff;
+  color: var(--scratchr2-linkColor);
 }
