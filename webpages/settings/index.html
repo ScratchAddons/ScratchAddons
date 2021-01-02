@@ -192,7 +192,8 @@
                     :disabled="!addon._enabled"
                     v-if="setting.type === 'positive_integer'"
                     min="0"
-                    :data-id="addon._addonId + '/' + setting.id"
+                    :data-addon-id="addon._addonId"
+                    :data-setting-id="setting.id"
                   />
                   <input
                     type="number"
@@ -203,8 +204,8 @@
                     v-if="setting.type === 'integer'"
                     :min="setting.min"
                     :max="setting.max"
-                    :data-id="addon._addonId + '/' + setting.id"
-                  />
+                    :data-addon-id="addon._addonId"
+                    :data-setting-id="setting.id"                  />
                   <input
                     type="text"
                     class="setting-input string"
