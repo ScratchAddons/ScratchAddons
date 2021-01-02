@@ -211,6 +211,11 @@ const vue = new Vue({
       this.addonSettings[addon._addonId][id] = newValue;
       this.updateSettings(addon);
     },
+    checkValidity(addon, setting) {
+      // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
+      let input = document.querySelector(`input[type='number'][data-id='${addon._addonId}/${setting.id}']`)
+      input.value = input.validity.valid ? input.value : setting.default
+    },
     updateSettings(addon, { wait = 0, settingId = null } = {}) {
       const value = settingId && this.addonSettings[addon._addonId][settingId];
       setTimeout(() => {
@@ -307,7 +312,6 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
   setTimeout(handleKeySettings, 0);
-  setTimeout(handleMinInputs, 0);
 });
 
 function handleKeySettings() {
@@ -338,14 +342,6 @@ function handleKeySettings() {
       if (e.target.value == "Ctrl") e.target.value = "";
     });
   }
-}
-
-function handleMinInputs() {
-  document
-    .querySelectorAll("input[type='number'][min]")
-    .forEach((input, i) =>
-      input.addEventListener("change", (e) => (input.value = input.value < input.min ? input.min : input.value))
-    );
 }
 
 window.addEventListener("keydown", function (e) {
