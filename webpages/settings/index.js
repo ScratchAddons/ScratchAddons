@@ -341,7 +341,11 @@ function handleKeySettings() {
 }
 
 function handleMinInputs() {
-  document.querySelectorAll("input[type='number'][min]").forEach((input, i) => input.addEventListener("change", (e) => input.value = input.value < input.min ? input.min : input.value));
+  document
+    .querySelectorAll("input[type='number'][min]")
+    .forEach((input, i) =>
+      input.addEventListener("change", (e) => (input.value = input.value < input.min ? input.min : input.value))
+    );
 }
 
 window.addEventListener("keydown", function (e) {
