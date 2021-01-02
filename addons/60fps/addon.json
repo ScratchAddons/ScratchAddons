@@ -20,7 +20,8 @@
     {
       "name": "FPS",
       "id": "framerate",
-      "type": "positive_integer",
+      "type": "integer",
+      "min": 1,
       "default": 60
     }
   ],

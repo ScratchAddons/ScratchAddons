@@ -307,6 +307,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
   setTimeout(handleKeySettings, 0);
+  setTimeout(handleMinInputs, 0);
 });
 
 function handleKeySettings() {
@@ -337,6 +338,10 @@ function handleKeySettings() {
       if (e.target.value == "Ctrl") e.target.value = "";
     });
   }
+}
+
+function handleMinInputs() {
+  document.querySelectorAll("input[type='number'][min]").forEach((input, i) => input.addEventListener("change", (e) => input.value = input.value < input.min ? input.min : input.value));
 }
 
 window.addEventListener("keydown", function (e) {
