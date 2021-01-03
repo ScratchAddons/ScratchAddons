@@ -1,0 +1,7 @@
+.box .box-head h2 {
+  color: rgb(
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 87)),
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 94)),
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 117))
+  );
+}

@@ -14,7 +14,7 @@
   padding-top: 20px;
   padding-bottom: 8px;
   border-radius: 0;
-  background: #4d97ff;
+  background: var(--scratchr2-primaryColor);
 }
 .box .box-head h2 {
   width: 942px;
@@ -57,10 +57,10 @@
 }
 .v-tabs li a {
   padding: 0;
-  color: #4d97ff;
+  color: var(--scratchr2-primaryColor);
 }
 .v-tabs li:hover a {
-  color: #4280d7;
+  color: var(--scratchr2-activeColor);
 }
 .v-tabs li.active a {
   color: #575e75;

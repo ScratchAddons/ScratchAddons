@@ -57,6 +57,9 @@
 .monitor_list-header_-cp0o {
   border-color: #444;
 }
+.blocklyWidgetDiv .goog-menuitem {
+  border-color: #444 !important;
+}
 .gui_tab_27Unf.gui_is-selected_sHAiu {
   background-color: #282828;
 }
@@ -191,10 +194,11 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
   color: #444 !important;
 }
 .blocklyWidgetDiv .goog-menuitem-highlight {
-  border-color: transparent;
+  border-color: transparent !important;
 }
 .blocklyWidgetDiv .goog-menuitem-highlight,
-.blocklyWidgetDiv .goog-menuitem-hover {
+.blocklyWidgetDiv .goog-menuitem-hover,
+.s3dev-mi:hover {
   background-color: #4d97ff;
 }
 .Popover-tipShape {

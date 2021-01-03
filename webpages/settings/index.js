@@ -1,4 +1,7 @@
+import downloadBlob from "../../libraries/download-blob.js";
 const NEW_ADDONS = ["color-picker"];
+
+const browserLevelPermissions = ["notifications", "clipboardWrite"];
 
 //theme switching
 const lightThemeLink = document.createElement("link");
@@ -17,6 +20,99 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
+const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
+
+let handleConfirmClicked = null;
+
+const serializeSettings = async () => {
+  const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
+  const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
+  const serialized = {
+    core: {
+      lightTheme: storedSettings.globalTheme,
+      version: chrome.runtime.getManifest().version_name,
+    },
+    addons: {},
+  };
+  for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
+    serialized.addons[addonId] = {
+      enabled: storedSettings.addonsEnabled[addonId],
+      settings: storedSettings.addonSettings[addonId] || {},
+    };
+  }
+  return JSON.stringify(serialized);
+};
+
+const deserializeSettings = async (str, manifests, confirmElem) => {
+  const obj = JSON.parse(str);
+  const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
+  const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
+  const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
+  const pendingPermissions = {};
+  for (const addonId of Object.keys(obj.addons)) {
+    const addonValue = obj.addons[addonId];
+    const addonManifest = manifests.find((m) => m._addonId === addonId);
+    if (!addonManifest) continue;
+    const permissionsRequired = addonManifest.permissions || [];
+    const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
+    console.log(addonId, permissionsRequired, browserPermissionsRequired);
+    if (addonValue.enabled && browserPermissionsRequired.length) {
+      pendingPermissions[addonId] = browserPermissionsRequired;
+    } else {
+      addonsEnabled[addonId] = addonValue.enabled;
+    }
+    addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
+  }
+  if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
+  let resolvePromise = null;
+  const resolveOnConfirmPromise = new Promise((resolve) => {
+    resolvePromise = resolve;
+  });
+  handleConfirmClicked = async () => {
+    handleConfirmClicked = null;
+    if (Object.keys(pendingPermissions).length) {
+      const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
+        permissions: Object.values(pendingPermissions).flat(),
+      });
+      console.log(pendingPermissions, granted);
+      Object.keys(pendingPermissions).forEach((addonId) => {
+        addonsEnabled[addonId] = granted;
+      });
+    }
+    await syncSet({
+      globalTheme: !!obj.core.lightTheme,
+      addonsEnabled,
+      addonSettings,
+    });
+    resolvePromise();
+  };
+  confirmElem.classList.remove("hidden-button");
+  confirmElem.addEventListener("click", handleConfirmClicked, { once: true });
+  return resolveOnConfirmPromise;
+};
+
+Vue.directive("click-outside", {
+  priority: 700,
+  bind() {
+    let self = this;
+    this.event = function (event) {
+      console.log("emitting event");
+      self.vm.$emit(self.expression, event);
+    };
+    this.el.addEventListener("click", this.stopProp);
+    document.body.addEventListener("click", this.event);
+  },
+
+  unbind() {
+    console.log("unbind");
+    this.el.removeEventListener("click", this.stopProp);
+    document.body.removeEventListener("click", this.event);
+  },
+  stopProp(event) {
+    event.stopPropagation();
+  },
+});
+
 const vue = new Vue({
   el: "body",
   data: {
@@ -25,6 +121,7 @@ const vue = new Vue({
     themePath: "",
     switchPath: "../../images/icons/switch.svg",
     isOpen: false,
+    canCloseOutside: false,
     categoryOpen: true,
     loaded: false,
     manifests: [],
@@ -121,6 +218,10 @@ const vue = new Vue({
       if (vue.smallMode) {
         vue.sidebarToggle();
       }
+      this.canCloseOutside = false;
+      setTimeout(() => {
+        this.canCloseOutside = true;
+      }, 100);
     },
     sidebarToggle: function () {
       this.categoryOpen = !this.categoryOpen;
@@ -191,7 +292,6 @@ const vue = new Vue({
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
       };
 
-      const browserLevelPermissions = ["notifications", "clipboardWrite"];
       const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
       if (!addon._enabled && requiredPermissions.length) {
         chrome.permissions.request(
@@ -210,6 +310,13 @@ const vue = new Vue({
     updateOption(id, newValue, addon) {
       this.addonSettings[addon._addonId][id] = newValue;
       this.updateSettings(addon);
+    },
+    checkValidity(addon, setting) {
+      // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
+      let input = document.querySelector(
+        `input[type='number'][data-addon-id='${addon._addonId}'][data-setting-id='${setting.id}']`
+      );
+      this.addonSettings[addon._addonId][setting.id] = input.validity.valid ? input.value : setting.default;
     },
     updateSettings(addon, { wait = 0, settingId = null } = {}) {
       const value = settingId && this.addonSettings[addon._addonId][settingId];
@@ -259,6 +366,55 @@ const vue = new Vue({
       this.manifests.forEach((manifest) => {
         manifest.name = manifest._addonId;
       });
+    },
+    exportSettings() {
+      serializeSettings().then((serialized) => {
+        const blob = new Blob([serialized], { type: "application/json" });
+        downloadBlob("scratch-addons-settings.json", blob);
+      });
+    },
+    importSettings() {
+      const inputElem = Object.assign(document.createElement("input"), {
+        hidden: true,
+        type: "file",
+        accept: "application/json",
+      });
+      inputElem.addEventListener(
+        "change",
+        async (e) => {
+          console.log(e);
+          const file = inputElem.files[0];
+          if (!file) {
+            inputElem.remove();
+            alert(chrome.i18n.getMessage("fileNotSelected"));
+            return;
+          }
+          const text = await file.text();
+          inputElem.remove();
+          const confirmElem = document.getElementById("confirmImport");
+          try {
+            await deserializeSettings(text, vue.manifests, confirmImport);
+          } catch (e) {
+            console.warn("Error when importing settings:", e);
+            confirmImport.classList.add("hidden-button");
+            alert(chrome.i18n.getMessage("importFailed"));
+            return;
+          }
+          alert(chrome.i18n.getMessage("importSuccess"));
+          chrome.runtime.reload();
+        },
+        { once: true }
+      );
+      document.body.appendChild(inputElem);
+      inputElem.click();
+    },
+  },
+  events: {
+    modalClickOutside: function (e) {
+      console.log(this.isOpen);
+      if (this.isOpen && this.canCloseOutside && e.isTrusted) {
+        this.isOpen = false;
+      }
     },
   },
   watch: {

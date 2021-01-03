@@ -8,6 +8,12 @@
       "link": "https://github.com/mxmou/customize-scratch"
     }
   ],
+  "userscripts": [
+    {
+      "url": "experimental_forums_preview.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/settings/*/"]
+    }
+  ],
   "userstyles": [
     {
       "url": "experimental_scratchwww.css",
@@ -143,6 +149,10 @@
         "id": "selectedMode",
         "value": "experimental-dark"
       }
+    },
+    {
+      "url": "pygments.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
   ],
   "settings": [
