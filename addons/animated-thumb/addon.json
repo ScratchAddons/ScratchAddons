@@ -4,8 +4,13 @@
   "info": [
     {
       "type": "notice",
-      "text": "Turn on \"Prevent thumbnail from being overwritten\" if you don't want to reset thumbnail every time you save. Your project may be marked as NFE (not for everyone) if the thumbnail is animated!",
+      "text": "Turn on \"Prevent thumbnail from being overwritten\" if you don't want to reset thumbnail every time you save.",
       "id": "nooverwite"
+    },
+    {
+      "type": "warning",
+      "text": "Your project may be marked as NFE (not for everyone) if the thumbnail is animated!",
+      "id": "animatednfe"
     }
   ],
   "credits": [
