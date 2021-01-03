@@ -43,7 +43,6 @@
   "mouse-pos",
   "clones",
   "exact-count",
-  "cat-blocks",
   "editor-messages",
   "pause",
   "resizable-comment-input",
@@ -64,5 +63,6 @@
   "color-picker",
   "onion-skinning",
   "better-quoter",
-  "data-category-tweaks-v2"
+  "data-category-tweaks-v2",
+  "better-messages"
 ]

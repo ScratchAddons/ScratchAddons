@@ -1,0 +1,47 @@
+{
+	"name": "Better Messages Page",
+	"description": "Improvements to the messages page, including alt account's messages, custom message types, turning off studio notifications, and more.",
+	"tags": [
+		"community",
+		"beta",
+		"new"
+	],
+	"enabledByDefault": false,
+	"userstyles": [
+		{
+			"url": "style.css",
+			"matches": [
+				"https://scratch.mit.edu/messages"
+			]
+		}
+	],
+	"userscripts": [
+		{
+			"url": "script.min.js",
+			"matches": [
+				"https://scratch.mit.edu/messages"
+			]
+		},
+		{
+			"url": "badge.js",
+			"matches": [
+				"https://scratch.mit.edu/*"
+			]
+		}
+	],
+	"settings": [
+		{
+			"name": "Alternate accounts (seperate multiple with spaces)",
+			"id": "alt_accs",
+			"type": "string",
+			"default": ""
+		}
+	],
+	"credits": [
+		{
+			"name": "RedGuy7",
+			"link": "https://paul-s-reid.com/web-dev/"
+		}
+	],
+	"l10n": true
+}
