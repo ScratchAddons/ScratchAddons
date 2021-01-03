@@ -2,6 +2,9 @@
 #brdheader {
   background: #075e46;
 }
+.forum-search-list .blockpost {
+  color: #fff;
+}
 .blockpost .box-content,
 .postright,
 .postfootright {
@@ -30,7 +33,7 @@
 .djangobb td,
 .djangobb th,
 .djangobb blockquote,
-.markItUpPreviewFrame {
+.code {
   border-color: #606060;
 }
 .postright,
@@ -42,7 +45,8 @@
 .blockpost label {
   box-shadow: 1px 0 #606060;
 }
-.djangobb blockquote {
+.djangobb blockquote,
+.code {
   background: #333;
 }
 .djangobb hr {
@@ -76,4 +80,8 @@
 }
 .markItUpHeader > ul > li:hover {
   background-color: #fff;
+}
+.markItUpPreviewFrame {
+  border-color: #606060 !important;
+  background: transparent;
 }

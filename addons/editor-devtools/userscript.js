@@ -489,6 +489,41 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     return topBlocks;
   }
 
+  function hidePopups(wksp) {
+    // Fire fake mouse events to trick the popup into hiding.
+    const element = wksp.getToolbox().HtmlDiv;
+    element.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: element, bubbles: true }));
+    element.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: element, bubbles: true }));
+  }
+
+  function genuid() {
+    const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
+    let result = "";
+    for (let i = 0; i < 20; i++) {
+      result += CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+    }
+    return result;
+  }
+
+  function startUndoGroup(wksp) {
+    const undoStack = wksp.undoStack_;
+    if (undoStack.length) {
+      undoStack[undoStack.length - 1]._devtoolsLastUndo = true;
+    }
+  }
+
+  function endUndoGroup(wksp) {
+    const undoStack = wksp.undoStack_;
+    // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
+    // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
+    setTimeout(() => {
+      const group = genuid();
+      for (let i = undoStack.length - 1; i >= 0 && !undoStack[i]._devtoolsLastUndo; i--) {
+        undoStack[i].group = group;
+      }
+    }, 0);
+  }
+
   /**
    * A much nicer way of laying out the blocks into columns
    */
@@ -497,11 +532,12 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       e.cancelBubble = true;
       e.preventDefault();
       let wksp = getWorkspace();
-      wksp.setVisible(false);
-      wksp.setVisible(true);
+      hidePopups(wksp);
       setTimeout(doCleanUp, 0);
       return;
     }
+
+    startUndoGroup(wksp);
 
     let result = getOrderedTopBlockColumns(true);
     let columns = result.cols;
@@ -572,9 +608,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         const unusedCount = unusedLocals.length;
         let message = msg("unused-var", {
           count: unusedCount,
-          it: unusedCount === 1 ? msg("it") : msg("them"),
-          plural: unusedCount === 1 ? msg("variable") : msg("variables"),
-          list: unusedCount === 1 ? msg("it-is") : msg("they-are"),
         });
         for (let i = 0; i < unusedLocals.length; i++) {
           let orphan = unusedLocals[i];
@@ -589,6 +622,8 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
           }
         }
       }
+
+      endUndoGroup(wksp);
     }, 100);
   }
 
@@ -1286,6 +1321,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     }
     let newVId = v.getId();
 
+    startUndoGroup(wksp);
     let blocks = getVariableUsesById(varId);
     for (const block of blocks) {
       try {
@@ -1298,6 +1334,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         // ignore
       }
     }
+    endUndoGroup(wksp);
   }
 
   class XML {
@@ -1554,9 +1591,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
   function clickReplace(e) {
     let wksp = getWorkspace();
-    // Toggle workspace visibility to hide the popup
-    wksp.setVisible(false);
-    wksp.setVisible(true);
+    hidePopups(wksp);
 
     setTimeout(function () {
       let wksp = getWorkspace();
@@ -1777,8 +1812,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                       style: "user-select: none;",
                     });
                     googMenuItem.addEventListener("click", () => {
-                      wksp.setVisible(false);
-                      wksp.setVisible(true);
+                      hidePopups(wksp);
                       showBroadcastSingleton[`show${showKey}`](broadcastId);
                     });
                     googMenuItem.appendChild(googMenuItemContent);
@@ -1859,9 +1893,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
             function eventCopyClick(e, blockOnly) {
               let wksp = getWorkspace();
-              // Toggle workspace visibility to hide the popup
-              wksp.setVisible(false);
-              wksp.setVisible(true);
+              hidePopups(wksp);
 
               let block = wksp.getBlockById(dataId);
               if (block) {
@@ -1880,7 +1912,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                     }
                     if (blockOnly === 2) {
                       let block = wksp.getBlockById(dataId);
+                      startUndoGroup(wksp);
                       block.dispose(true);
+                      endUndoGroup(wksp);
                     }
                   }, 0);
                 }
@@ -1891,9 +1925,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
             if (pasteDiv) {
               pasteDiv.addEventListener("click", function () {
                 let wksp = getWorkspace();
-                // Toggle workspace visibility to hide the popup
-                wksp.setVisible(false);
-                wksp.setVisible(true);
+                hidePopups(wksp);
 
                 let ids = getTopBlockIDs();
 
@@ -2161,9 +2193,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     let picklist, pickField;
 
     let dom = doms[block.id];
-    if (!dom) {
-      debugger;
-    }
 
     // dom = doms[block.type];
 

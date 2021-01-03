@@ -41,8 +41,9 @@ If `l10n` is not set (or is false), the addon's messages cannot be translated on
 If `l10n: true` is set, these keys are overridden by the translated ones, if it exists. Here are the keys on addon.json and the message file:
 - `name` - `addon-id/@name`
 - `description` - `addon-id/@description`
-- `notice` - `addon-id/@notice`
-- `warning` - `addon-id/@warning`
+
+Detailed information can be translated:
+- `info.text` - `addon-id/@info-INFOID`.
 
 Preset names and descriptions can be localized, too:
 - `preset.name` - `addon-id/@preset-name-PRESETID`

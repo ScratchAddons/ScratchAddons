@@ -1,0 +1,39 @@
+#navigation #navigation .dropdown,
+#navigation .dropdown.with-arrow::before,
+.intro-banner .intro-container,
+.title-banner.mod-messages,
+.download .download-header,
+.os-chooser .button.active,
+.step .step-number-row .step-number,
+#navigation .link > a,
+#navigation .inner > ul > li.search .input[type="text"],
+#navigation .account-nav .user-info,
+.login,
+#navigation .dropdown a:link,
+#navigation .dropdown a:visited,
+#navigation .dropdown a:active,
+.intro-banner .intro-header,
+.title-banner-h1.mod-messages,
+.download .download-header .download-info .download-copy .download-title {
+  color: rgb(
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 87)),
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 94)),
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 117))
+  );
+}
+#navigation .inner > ul > li.search .input[type="text"]::placeholder {
+  color: rgba(
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 87)),
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 94)),
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 117)),
+    0.75
+  );
+}
+#navigation .inner > ul > li.search .btn-search,
+#navigation .messages > a,
+#navigation .mystuff > a,
+.account-nav .user-info::after,
+.download .download-requirements span img,
+.os-chooser .button.active img {
+  filter: brightness(calc(1 - var(--scratchr2-primaryColor-isLight) * (1 - 0.4)));
+}

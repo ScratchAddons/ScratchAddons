@@ -76,7 +76,7 @@
   color: #575e75;
 }
 .forum-search-list .blockpost div.box {
-  background: #4d97ff;
+  background: var(--scratchr2-primaryColor);
 }
 #brdfooter {
   margin-top: 40px;

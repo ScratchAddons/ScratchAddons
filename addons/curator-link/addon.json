@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/master/1/1.3.json",
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/master/1/1.7.json",
   "name": "Curator link",
   "description": "Creates a clickable link for the curator of the front page.",
   "credits": [

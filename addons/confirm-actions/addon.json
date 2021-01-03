@@ -22,7 +22,7 @@
       "default": true
     },
     {
-      "name": "Confirm following/unfollowing",
+      "name": "Confirm following/unfollowing users",
       "id": "followinguser",
       "type": "boolean",
       "default": false
