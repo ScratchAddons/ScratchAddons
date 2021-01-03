@@ -1,6 +1,6 @@
 {
-  "name": "Cat blocks!",
-  "description": "We all love 'em! We all need 'em!",
+  "name": "Cat blocks",
+  "description": "Brings back editor cat hat blocks from April Fools 2020",
   "credits": [
     {
       "name": "TheColaber"
@@ -12,6 +12,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor"],
+  "tags": ["easterEgg"],
   "enabledByDefault": false
 }
