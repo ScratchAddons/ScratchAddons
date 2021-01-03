@@ -9,11 +9,11 @@
       for (const prop of ["name", "description"]) {
         if (manifest[prop]) manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
       }
-      if (manifest.info)
-        manifest.info.forEach(
-          (infoType, i) =>
-            (infoType.text = scratchAddons.l10n.get(`${folderName}/@info-${infoType.id}`, {}, infoType.text))
-        );
+      if (manifest.info) {
+        for (const info of manifest.info || []) {
+          info.text = scratchAddons.l10n.get(`${folderName}/@info-${info.id}`, {}, info.text);
+        }
+      }
     }
 
     for (const preset of manifest.presets || []) {
