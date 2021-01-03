@@ -12,7 +12,6 @@ function testLightprimary(hex) {
 
 export default async function ({ addon, console }) {
   testLightprimary(addon.settings.get("primaryColor"));
-  console.log(addon);
   addon.settings.addEventListener("change", function () {
     testLightprimary(addon.settings.get("primaryColor"));
   });
