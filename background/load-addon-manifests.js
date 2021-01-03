@@ -7,11 +7,13 @@
     const manifest = await (await fetch(`/addons/${folderName}/addon.json`)).json();
     if (manifest.l10n && !useDefault) {
       for (const prop of ["name", "description"]) {
-        if (manifest[prop])
-          manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
+        if (manifest[prop]) manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
       }
       if (manifest.info)
-        manifest.info.forEach((infoType, i) => infoType.text = scratchAddons.l10n.get(`${folderName}/@info-${infoType.id}`, {}, infoType.text));
+        manifest.info.forEach(
+          (infoType, i) =>
+            (infoType.text = scratchAddons.l10n.get(`${folderName}/@info-${infoType.id}`, {}, infoType.text))
+        );
     }
 
     for (const preset of manifest.presets || []) {
