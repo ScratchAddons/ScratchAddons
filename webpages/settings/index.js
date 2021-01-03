@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["color-picker"];
+const NEW_ADDONS = ["data-category-tweaks-v2"];
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 
