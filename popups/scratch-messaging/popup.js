@@ -361,7 +361,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         if (search) return search;
         const obj = {
           id: projectId,
-          title: htmlToText(title),
+          title,
           unreadComments: 0,
           commentChains: [],
           loves: 0,
@@ -388,7 +388,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         if (search) return search;
         const obj = {
           id: studioId,
-          title: htmlToText(title),
+          title,
           unreadComments: 0,
           commentChains: [],
           loadedComments: false,
@@ -461,20 +461,20 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
             this.studioInvites.push({
               actor: message.actor_username,
               studioId: message.gallery_id,
-              studioTitle: htmlToText(message.title),
+              studioTitle: message.title,
             });
           } else if (message.type === "forumpost") {
             // We only want one message per forum topic
             if (!this.forumActivity.find((obj) => obj.topicId === message.topic_id)) {
               this.forumActivity.push({
                 topicId: message.topic_id,
-                topicTitle: htmlToText(message.topic_title),
+                topicTitle: message.topic_title,
               });
             }
           } else if (message.type === "remixproject") {
             this.remixes.push({
-              parentTitle: htmlToText(message.parent_title),
-              remixTitle: htmlToText(message.title),
+              parentTitle: message.parent_title,
+              remixTitle: message.title,
               actor: message.actor_username,
               projectId: message.project_id,
             });
@@ -483,7 +483,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
             if (!this.studioActivity.find((obj) => obj.studioId === message.gallery_id)) {
               this.studioActivity.push({
                 studioId: message.gallery_id,
-                studioTitle: htmlToText(message.title),
+                studioTitle: message.title,
               });
             }
           } else if (message.type === "loveproject") {
@@ -590,9 +590,4 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       },
     },
   });
-
-  function htmlToText(html) {
-    // compat
-    return escapeHTML(html);
-  }
 })();
