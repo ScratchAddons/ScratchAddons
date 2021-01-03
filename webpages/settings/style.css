@@ -114,6 +114,10 @@ h1 {
   align-items: center;
 }
 
+.setting-body img.dark {
+  filter: brightness(10);
+}
+
 .btn-dropdown {
   display: flex;
   align-items: center;
@@ -675,6 +679,13 @@ input[type="color"]::-webkit-color-swatch {
 .large-dropdown:hover {
   outline: none;
   background: #151515;
+}
+.hidden-button {
+  /* needs !important because it conlicts with display: block */
+  display: none !important;
+}
+#confirmImport {
+  border-color: #ff7b26;
 }
 
 /*scrollbar*/
