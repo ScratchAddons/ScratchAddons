@@ -4,7 +4,7 @@ export default class ThumbSetter {
         this.messages = messages;
         this.projectId = projectId || location.pathname.replace(/\D/g,'');
     }
-    
+
     addFileInput () {
         const input = this._input = document.createElement("input");
         input.type = "file";
@@ -13,11 +13,11 @@ export default class ThumbSetter {
         input.addEventListener("change", this.onInput.bind(this), {once: true});
         document.body.appendChild(input);
     }
-    
+
     showInput () {
         if (this._input) this._input.click();
     }
-    
+
     onInput () {
         let promise = Promise.resolve();
         if (this._input && this._input.files && this._input.files[0]) {
@@ -25,7 +25,7 @@ export default class ThumbSetter {
         }
         promise.finally(() => this.removeFileInput());
     }
-    
+
     removeFileInput () {
         if (this._input) {
             this._input.remove();
@@ -37,7 +37,7 @@ export default class ThumbSetter {
         const tokens = /scratchcsrftoken=([\w]+)/.exec(document.cookie);
         return tokens[1];
     }
-    
+
     async upload (file) {
         try {
             await fetch(

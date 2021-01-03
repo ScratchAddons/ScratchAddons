@@ -63,7 +63,7 @@ export default async ({ addon, console, msg }) => {
       value: defaultColor || "#000000",
     });
     const saColorPickerText = Object.assign(document.createElement("input"), {
-      className: "sa-color-picker-text sa-color-picker-paint-text",
+      className: "sa-color-picker-text sa-color-picker-paint-text input_input-form_1Y0wX",
       type: "text",
       pattern: "^#?([0-9a-fA-F]{3}){1,2}$",
       placeholder: msg("hex"),

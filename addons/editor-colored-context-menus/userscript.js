@@ -12,17 +12,36 @@ function handleClick(e) {
     return;
   }
 
-  if (e.target.closest(".blocklyMainBackground") || e.target.closest(".blocklyBubbleCanvas")) {
+  let target = e.target;
+  if (target.closest(".blocklyMainBackground") || target.closest(".blocklyBubbleCanvas")) {
     widgetDiv.classList.remove("u-contextmenu-colored");
     return;
   }
 
-  const block = e.target.closest(".blocklyDraggable");
+  let block = target.closest("[data-id]");
   if (!block) {
+    // When right clicking on the boundaries of a block in the flyout,
+    // the click event can happen on a background rectangle and not on the actual block for some reason.
+    // In this case, the block group should immediately follow the rect.
+    if (target.tagName === "rect") {
+      target = target.nextSibling;
+      block = target && target.closest("[data-id]");
+    }
+    if (!block) {
+      return;
+    }
+  }
+
+  let blocklyBlock = Blockly.getMainWorkspace().getBlockById(block.dataset.id);
+  // Keep jumping to the parent block until we find a non-shadow block.
+  while (blocklyBlock && blocklyBlock.isShadow()) {
+    blocklyBlock = blocklyBlock.getParent();
+  }
+  if (!blocklyBlock) {
     return;
   }
 
-  const background = block.querySelector(".blocklyBlockBackground");
+  const background = blocklyBlock.svgPath_;
   if (!background) {
     return;
   }
