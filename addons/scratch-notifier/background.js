@@ -14,6 +14,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     remixproject: "remix",
     studioactivity: "studio",
   };
+  const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
   checkCount();
   setInterval(checkCount, 5000);
@@ -261,9 +262,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           fragment: htmlToText(message.comment_fragment), // Comments only
           commentee: message.commentee_username, // Comments only
           commentUrl, // Comments only
-          title: htmlToText(message.comment_obj_title || message.topic_title || message.title || message.project_title),
+          title: escapeHTML(message.comment_obj_title || message.topic_title || message.title || message.project_title),
           element_id: message.comment_id || message.gallery_id || message.project_id || message.topic_id,
-          parent_title: htmlToText(message.parent_title), // Remixes only
+          parent_title: escapeHTML(message.parent_title), // Remixes only
         };
         notifyMessage(messageInfo);
       }
