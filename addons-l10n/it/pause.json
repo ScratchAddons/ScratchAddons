@@ -1,1 +1,1 @@
-{"pause/pause":"Pausa","pause/@name":"Pulsante Pausa","pause/@description":"Aggiunge un pulsante accanto alla bandiera verde per mettere in pausa un progetto. Puoi anche mettere in pausa un progetto via codice (conosciuto anche come breakpoint) creando un blocco personalizzato chiamaro \"sa-pause\" e usando questo blocco."}
+{"pause/pause":"Pausa","pause/@name":"Pulsante Pausa"}
