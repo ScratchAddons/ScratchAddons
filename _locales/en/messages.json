@@ -222,10 +222,10 @@
     "message": "Export and Import Settings"
   },
   "exportAndImportSettingsDescription": {
-    "message": "Export settings for use on other computers, or import settings."
+    "message": "Export settings as a JSON file for use on other computers."
   },
   "useBrowserSync": {
-    "message": "You can also use the browser's built-in sync options, if enabled."
+    "message": "You can also enable your browser's built-in sync options to automatically synchronize the settings between devices."
   },
   "export": {
     "message": "Export Settings"

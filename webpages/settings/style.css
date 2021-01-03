@@ -684,6 +684,9 @@ input[type="color"]::-webkit-color-swatch {
   /* needs !important because it conlicts with display: block */
   display: none !important;
 }
+#confirmImport {
+  border-color: #ff7b26;
+}
 
 /*scrollbar*/
 
