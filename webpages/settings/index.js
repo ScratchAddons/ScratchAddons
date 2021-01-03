@@ -205,7 +205,11 @@ const vue = new Vue({
           addonManifest.credits
             .map((obj) => obj.name.toLowerCase())
             .some((author) => author.includes(this.searchInput.toLowerCase())));
-      return matchesTag && matchesSearch;
+      // Show disabled easter egg addons only if category is easterEgg
+      const matchesEasterEgg = addonManifest.tags.includes("easterEgg")
+        ? this.selectedTab === "easterEgg" || addonManifest._enabled
+        : true;
+      return matchesTag && matchesSearch && matchesEasterEgg;
     },
     stopPropagation(e) {
       e.stopPropagation();
@@ -287,7 +291,7 @@ const vue = new Vue({
       });
     },
     devShowAddonIds(event) {
-      if (!this.versionName.endsWith("-prerelease") || this.shownAddonIds) return;
+      if (!this.versionName.endsWith("-prerelease") || this.shownAddonIds || !event.ctrlKey) return;
       event.stopPropagation();
       this.shownAddonIds = true;
       this.manifests.forEach((manifest) => {
@@ -313,7 +317,9 @@ const vue = new Vue({
 chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addonSettings }) => {
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
-    manifest._category = manifest.tags.includes("theme")
+    manifest._category = manifest.tags.includes("easterEgg")
+      ? "easterEgg"
+      : manifest.tags.includes("theme")
       ? "theme"
       : manifest.tags.includes("community")
       ? "community"
@@ -405,5 +411,27 @@ function resize() {
 }
 window.onresize = resize;
 resize();
+
+// Konami code easter egg
+let cursor = 0;
+const KONAMI_CODE = [
+  "ArrowUp",
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowLeft",
+  "ArrowRight",
+  "KeyB",
+  "KeyA",
+];
+document.addEventListener("keydown", (e) => {
+  cursor = e.code === KONAMI_CODE[cursor] ? cursor + 1 : 0;
+  if (cursor === KONAMI_CODE.length) {
+    vue.selectedTab = "easterEgg";
+    setTimeout(() => (vue.searchInput = ""), 0); // Allow konami code in autofocused search bar
+  }
+});
 
 chrome.runtime.sendMessage("checkPermissions");
