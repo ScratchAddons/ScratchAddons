@@ -289,7 +289,7 @@
     </div>
 
     <!-- Show errors, loading, etc. -->
-    <div style="text-align: center; font-size: 0.9rem; margin-bottom: 3.5rem; font-weight: bold">
+    <div style="text-align: center; font-size: 0.9rem; padding-bottom: 3.5rem; font-weight: bold">
       <br />
       <span v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</span>
       <span v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</span>
@@ -302,7 +302,6 @@
       <button @click="showAllMessages = true" v-show="canShowMoreMessages">
         <img class="small-icon" src="../../images/icons/plus.svg" /> {{ uiMessages.showMoreMsg }}
       </button>
-      <br /><br /><br /><br />
     </div>
 
     <!-- Bottom bar-->
