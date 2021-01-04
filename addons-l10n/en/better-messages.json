@@ -1,4 +1,8 @@
 {
-	"better-messages/msg": "Hiii"
-  }
-  
+	"better-messages/years": "years ago",
+	"better-messages/months": "months ago",
+	"better-messages/days": "days ago",
+	"better-messages/hours": "hours ago",
+	"better-messages/minutes": "minutes ago",
+	"better-messages/secconds": "secconds ago"
+}

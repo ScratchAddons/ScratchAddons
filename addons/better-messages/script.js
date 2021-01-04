@@ -71,12 +71,37 @@ export default async function ({
 		function printMessages() {
 			if (Object.keys(messages).length == users.length) {
 				messages = rsort(messages.flat())
-				document.getElementsByClassName("messages-social-list")[0].innerHTML =""
-				messages.forEach(message => document.getElementsByClassName("messages-social-list")[0].innerHTML += `<li class="social-message mod-${messageHTML(message)}</div></div><span class="social-message-date"><span>${message.datetime_created}</span></span></div></li>`)
+				document.getElementsByClassName("messages-social-list")[0].innerHTML = ""
+				messages.forEach(message => document.getElementsByClassName("messages-social-list")[0].innerHTML += `<li class="social-message mod-${messageHTML(message)}</div></div><span class="social-message-date"><span>${timeSince(message.datetime_created)}</span></span></div></li>`)
 				//ADD duplicate detection
-				console.log(messages)
 				//document.querySelector(".messages-social-list .loading").outerHTML = "";
 			}
+		}
+
+
+		function timeSince(date) {
+			var seconds = Math.floor((new Date() - date) / 1000);
+			var interval = seconds / 31536000;
+			if (interval > 1) {
+				return Math.floor(interval) + " " + msg("years")
+			}
+			interval = seconds / 2592000;
+			if (interval > 1) {
+				return Math.floor(interval) + " " + msg("months")
+			}
+			interval = seconds / 86400;
+			if (interval > 1) {
+				return Math.floor(interval) + " " + msg("days")
+			}
+			interval = seconds / 3600;
+			if (interval > 1) {
+				return Math.floor(interval) + " " + msg("hours")
+			}
+			interval = seconds / 60;
+			if (interval > 1) {
+				return Math.floor(interval) + " " + msg("minutes")
+			}
+			return Math.floor(seconds) + " " + msg("seconds")
 		}
 
 		function messageHTML(message) {
