@@ -246,12 +246,12 @@
     "message": "Confirm"
   },
   "enableAll": {
-    message: "Enable All"
+    "message": "Enable All"
   },
   "disableAll": {
-    message: "Disable All"
+    "message": "Disable All"
   },
   "invertSelection": {
-    message: "Invert Selection"
+    "message": "Invert Selection"
   }
 }
