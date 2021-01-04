@@ -335,7 +335,7 @@ const vue = new Vue({
     },
     loadPreset(preset, addon) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
-        for (const property in preset.values) {
+        for (const property of Object.keys(preset.values)) {
           this.updateOption(property, preset.values[property], addon);
         }
         console.log(`Loaded preset ${preset.id} for ${addon.id}`);
@@ -352,13 +352,13 @@ const vue = new Vue({
     textParse(text, addon) {
       const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
       return text.replace(regex, (icon) => {
-        if (icon[0] == "\\") {
+        if (icon[0] === "\\") {
           return icon.slice(1);
         }
-        if (icon[0] == "@") {
+        if (icon[0] === "@") {
           return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
         }
-        if (icon[0] == "#") {
+        if (icon[0] === "#") {
           return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
         }
       });
@@ -397,10 +397,10 @@ const vue = new Vue({
           inputElem.remove();
           const confirmElem = document.getElementById("confirmImport");
           try {
-            await deserializeSettings(text, vue.manifests, confirmImport);
+            await deserializeSettings(text, vue.manifests, confirmElem);
           } catch (e) {
             console.warn("Error when importing settings:", e);
-            confirmImport.classList.add("hidden-button");
+            confirmElem.classList.add("hidden-button");
             alert(chrome.i18n.getMessage("importFailed"));
             return;
           }
@@ -479,7 +479,7 @@ function handleKeySettings() {
       e.target.value = e.ctrlKey
         ? "Ctrl" +
           (e.shiftKey ? " + Shift" : "") +
-          (e.key == "Control" || e.key == "Shift"
+          (e.key === "Control" || e.key === "Shift"
             ? ""
             : (e.ctrlKey ? " + " : "") +
               (e.key.toUpperCase() === e.key
@@ -496,7 +496,7 @@ function handleKeySettings() {
     });
     input.addEventListener("keyup", function (e) {
       // Ctrl by itself isn't a hotkey
-      if (e.target.value == "Ctrl") e.target.value = "";
+      if (e.target.value === "Ctrl") e.target.value = "";
     });
   }
 }
@@ -517,7 +517,7 @@ function resize() {
     vue.smallMode = true;
     vue.categoryOpen = false;
     vue.switchPath = "../../images/icons/switch.svg";
-  } else if (vue.smallMode != false) {
+  } else if (vue.smallMode !== false) {
     vue.smallMode = false;
     vue.categoryOpen = true;
     vue.switchPath = "../../images/icons/close.svg";

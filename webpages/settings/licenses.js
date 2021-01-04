@@ -31,7 +31,7 @@ chrome.runtime.sendMessage("getLibraryInfo", (libraryLicenses) => {
   for (const library of libraries) {
     const licenseName = libraryLicenses[library];
     if (!licenseName) continue;
-    if (licenseNameToText.hasOwnProperty(licenseName)) {
+    if (Object.prototype.hasOwnProperty.call(licenseNameToText, licenseName)) {
       vue.libraries = [
         ...vue.libraries,
         {

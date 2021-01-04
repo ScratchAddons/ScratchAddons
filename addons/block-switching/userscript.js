@@ -681,7 +681,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const injectCustomContextMenu = (block) => {
     const type = block.type;
-    if (!blockSwitches.hasOwnProperty(type)) {
+    if (!Object.prototype.hasOwnProperty.call(blockSwitches, type)) {
       return;
     }
 
