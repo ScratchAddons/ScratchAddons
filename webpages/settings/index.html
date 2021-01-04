@@ -88,7 +88,7 @@
           <div class="filter-selector">
             <span class="filter-text">{{ msg("filter") }} </span>
             <div class="top-button-box">
-              <div class="top-button" :class="{'sel': selectedTag === null}" @click="selectedTag = null">
+              <div class="top-button" class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">
                 {{ msg("all") }}
               </div>
               <div
