@@ -254,4 +254,10 @@
   "invertSelection": {
     "message": "Invert Selection"
   }
+  "openAll": {
+    "message": "Expand All"
+  },
+  "collapseAll": {
+    "message": "Collapse All"
+  },
 }
