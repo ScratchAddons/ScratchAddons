@@ -1,7 +1,4 @@
 export default async function ({ addon, global, console }) {
-  if (document.querySelector("body #signature")) {
-    console.log("Signature already exists!");
-  } else {
     if (addon.tab.editorMode === "editor") {
       console.log("In editor!");
     } else {
@@ -10,5 +7,5 @@ export default async function ({ addon, global, console }) {
       semicolon.classList.add("semicolon");
       document.body.appendChild(semicolon);
     }
-  }
+  
 }
