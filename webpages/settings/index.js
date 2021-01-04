@@ -569,3 +569,7 @@ document.getElementById("openAll").addEventListener("click", () => {
 document.getElementById("closeAll").addEventListener("click", () => {
   Object.values(document.querySelectorAll('.btn-dropdown img.reverted')).forEach(s=>s.click())
 });
+
+document.getElementById("invertOptions").addEventListener("click", () => {
+  Object.values(document.querySelectorAll('.btn-dropdown img')).forEach(s=>s.click())
+});
