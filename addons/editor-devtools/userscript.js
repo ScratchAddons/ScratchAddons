@@ -199,7 +199,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     let wksp2 = Blockly.getMainWorkspace();
     if (wksp2.getToolbox()) {
       // Sadly get get workspace does not always return the 'real' workspace... Not sure how to get that at the moment,
-      //  but we can work out whether it's the right one by whether it hsa a toolbox.
+      //  but we can work out whether it's the right one by whether it has a toolbox.
       wksp = wksp2;
     }
     return wksp;
@@ -654,7 +654,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
       // todo: tie comments to blocks... find widths and width of block stack row...
       for (const comment of topComments) {
-        // coment.autoPosition_();
+        // comment.autoPosition_();
         // Hiding and showing repositions the comment right next to it's block - nice!
         if (comment.setVisible) {
           comment.setVisible(false);
