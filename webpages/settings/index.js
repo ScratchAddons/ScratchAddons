@@ -550,16 +550,16 @@ document.addEventListener("keydown", (e) => {
 
 chrome.runtime.sendMessage("checkPermissions");
 
-function enableAll(){
+document.getElementById("enableAll").addEventListener("click", () => {
   Object.values(document.querySelectorAll('.switch[state=off]')).forEach(s=>s.click())
   Object.values(document.querySelectorAll('.reverted')).forEach(s=>s.click())
-}
+});
 
-function disableAll(){
+document.getElementById("disableAll").addEventListener("click", () => {
   Object.values(document.querySelectorAll('.switch[state=on]')).forEach(s=>s.click())
-}
+});
 
-function invertSelection(){
+document.getElementById("invertSelection").addEventListener("click", () => {
   Object.values(document.querySelectorAll('.switch')).forEach(s=>s.click())
   Object.values(document.querySelectorAll('.reverted')).forEach(s=>s.click())
-}
+});
