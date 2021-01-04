@@ -5,10 +5,18 @@ export default async function ({ addon, global, console }) {
     quoteButton.setAttribute("onclick", "return false");
     quoteButton.addEventListener("mouseup", (e) => {
       let blockpost = quoteButton.closest(".blockpost");
-      if (window.getSelection().toString().length)
+      let selection = window.getSelection();
+      let selectionStr = selection.toString();
+      if (
+        selectionStr &&
+        selection.anchorNode &&
+        blockpost.contains(selection.anchorNode) &&
+        selection.focusNode &&
+        blockpost.contains(selection.focusNode)
+      )
         textarea.value += `[quote=${
           blockpost.querySelector(".black.username").innerText
-        }]${window.getSelection().toString()}[/quote]`;
+        }]${selectionStr}[/quote]`;
       else copy_paste(blockpost.id);
       textarea.scrollIntoView(false);
       textarea.focus();
