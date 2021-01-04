@@ -193,18 +193,21 @@ h1 {
   align-items: center;
 }
 
-.addon-description-full, .addon-credits {
+.addon-description-full,
+.addon-credits {
   width: 100%;
   white-space: normal;
   color: #dddddd;
 }
 
-.addon-credits, .addon-license {
+.addon-credits,
+.addon-license {
   margin-top: 4px;
   font-size: 0.9em;
 }
 
-.addon-credits a, .addon-license a {
+.addon-credits a,
+.addon-license a {
   color: #6d9bff;
 }
 
@@ -292,7 +295,8 @@ h1 {
   align-items: center;
 }
 
-.presets-column, .settings-column {
+.presets-column,
+.settings-column {
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -504,7 +508,8 @@ h1 {
   margin-right: 20px;
 }
 
-.filter-options, .bulk-enable-disable {
+.filter-options,
+.bulk-enable-disable {
   display: flex;
   border-radius: 4px;
   overflow: hidden;
@@ -514,17 +519,20 @@ h1 {
   user-select: none;
 }
 
-.filter-option, .enable-disable-button {
+.filter-option,
+.enable-disable-button {
   padding: 10px;
   border-right: 1px solid #000;
 }
 
-.filter-option:hover, .enable-disable-button:hover {
+.filter-option:hover,
+.enable-disable-button:hover {
   cursor: pointer;
   background: #1a1a1a;
 }
 
-.filter-option:last-child, .enable-disable-button:last-child {
+.filter-option:last-child,
+.enable-disable-button:last-child {
   border-right: none;
 }
 
@@ -532,7 +540,8 @@ h1 {
   background: #ff7b26;
 }
 
-.filter-option.disabled, .enable-disable-button.disabled {
+.filter-option.disabled,
+.enable-disable-button.disabled {
   filter: grayscale(80%);
   pointer-events: none;
 }
@@ -596,7 +605,8 @@ input[type="color"]::-webkit-color-swatch {
   align-items: center;
 }
 
-.addon-notice img, .addon-warn img {
+.addon-notice img,
+.addon-warn img {
   height: 15px;
   margin-right: 10px;
   flex: 0 0;
