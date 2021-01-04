@@ -552,7 +552,6 @@ chrome.runtime.sendMessage("checkPermissions");
 
 document.getElementById("enableAll").addEventListener("click", () => {
   Object.values(document.querySelectorAll('.switch[state=off]')).forEach(s=>s.click())
-  Object.values(document.querySelectorAll('.reverted')).forEach(s=>s.click())
 });
 
 document.getElementById("disableAll").addEventListener("click", () => {
@@ -561,4 +560,12 @@ document.getElementById("disableAll").addEventListener("click", () => {
 
 document.getElementById("invertSelection").addEventListener("click", () => {
   Object.values(document.querySelectorAll('.switch')).forEach(s=>s.click())
+});
+
+document.getElementById("openAll").addEventListener("click", () => {
+  Object.values(document.querySelectorAll('.btn-dropdown img:not(.reverted)')).forEach(s=>s.click())
+});
+
+document.getElementById("closeAll").addEventListener("click", () => {
+  Object.values(document.querySelectorAll('.btn-dropdown img.reverted')).forEach(s=>s.click())
 });
