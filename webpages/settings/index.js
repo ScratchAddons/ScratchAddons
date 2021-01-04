@@ -561,5 +561,4 @@ document.getElementById("disableAll").addEventListener("click", () => {
 
 document.getElementById("invertSelection").addEventListener("click", () => {
   Object.values(document.querySelectorAll('.switch')).forEach(s=>s.click())
-  Object.values(document.querySelectorAll('.reverted')).forEach(s=>s.click())
 });
