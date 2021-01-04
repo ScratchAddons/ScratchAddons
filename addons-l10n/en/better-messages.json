@@ -1,8 +1,8 @@
 {
-	"better-messages/years": "years ago",
-	"better-messages/months": "months ago",
-	"better-messages/days": "days ago",
-	"better-messages/hours": "hours ago",
-	"better-messages/minutes": "minutes ago",
-	"better-messages/secconds": "secconds ago"
+	"better-messages/years": "{number} years ago",
+	"better-messages/months": "{number} months ago",
+	"better-messages/days": "{number} days ago",
+	"better-messages/hours": "{number} hours ago",
+	"better-messages/minutes": "{number} minutes ago",
+	"better-messages/secconds": "{number} secconds ago"
 }

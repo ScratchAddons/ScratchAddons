@@ -48,9 +48,9 @@ export default async function ({
 			// parse the stored cookie containing IDs and XTokens to make the next loop simpler
 			var uValue = Object.values(user);
 			var uKeys = Object.keys(user);
-			parseCookie.name[index] = uKeys.indexOf("name") > -1 ? uValue[uKeys.indexOf("name")] : ""
-			parseCookie.token[index] = uKeys.indexOf("token") > -1 ? uValue[uKeys.indexOf("token")] : ""
-			parseCookie.id[index] = uKeys.indexOf("id") > -1 ? uValue[uKeys.indexOf("id")] : ""
+			parseCookie.name[index] = uKeys.indexOf("name") > -1 ? uValue[uKeys.indexOf("name")]: ""
+			parseCookie.token[index] = uKeys.indexOf("token") > -1 ? uValue[uKeys.indexOf("token")]: ""
+			parseCookie.id[index] = uKeys.indexOf("id") > -1 ? uValue[uKeys.indexOf("id")]: ""
 		})
 		settingUsers.forEach((user, index) => {
 			// get the IDs and XTokens of each user that will have messages combined
@@ -83,25 +83,25 @@ export default async function ({
 			var seconds = Math.floor((new Date() - date) / 1000);
 			var interval = seconds / 31536000;
 			if (interval > 1) {
-				return Math.floor(interval) + " " + msg("years")
+				return msg("years", {number: Math.floor(interval)})
 			}
 			interval = seconds / 2592000;
 			if (interval > 1) {
-				return Math.floor(interval) + " " + msg("months")
+				return msg("months", {number: Math.floor(interval)})
 			}
 			interval = seconds / 86400;
 			if (interval > 1) {
-				return Math.floor(interval) + " " + msg("days")
+				return msg("days", {number: Math.floor(interval)})
 			}
 			interval = seconds / 3600;
 			if (interval > 1) {
-				return Math.floor(interval) + " " + msg("hours")
+				return msg("hours", {number: Math.floor(interval)})
 			}
 			interval = seconds / 60;
 			if (interval > 1) {
-				return Math.floor(interval) + " " + msg("minutes")
+				return msg("minutes", {number: Math.floor(interval)})
 			}
-			return Math.floor(seconds) + " " + msg("seconds")
+			return msg("seconds", {number: Math.floor(secconds)})
 		}
 
 		function messageHTML(message) {

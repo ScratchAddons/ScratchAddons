@@ -31,7 +31,7 @@
 	],
 	"settings": [
 		{
-			"name": "Alternate accounts (seperate multiple with spaces)",
+			"name": "Scratch account(s) (seperate multiple with spaces)",
 			"id": "alt_accs",
 			"type": "string",
 			"default": ""
