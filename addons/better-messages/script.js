@@ -26,6 +26,7 @@ function required() {
 }
 export default async function ({
 	addon,
+	console,
 	safeMsg
 }) {
 	if (addon.auth.isLoggedIn) {
@@ -70,17 +71,21 @@ export default async function ({
 		setCookie("accounts", JSON.stringify(users))
 
 		var messageIndex = 0;
+		console.log(messageIndex)
 
 		function printMessages() {
 			if (Object.keys(messages).length == users.length) {
-				messages = rsort(messages.flat(), "unread","datetime_created")
+				messages = rsort(messages.flat(), "read", "datetime_created")
 				document.getElementsByClassName("messages-social-list")[0].innerHTML = ""
-				for (; messageIndex < messageIndex + 20; messageIndex++) {
-					const message = messages[messageIndex];
+				var currentIndex = messageIndex
+				for (; messageIndex < currentIndex + 20; messageIndex++) {
+					console.log(messageIndex)
+					var message = messages[messageIndex];
 					document.getElementsByClassName("messages-social-list")[0].innerHTML += `<li class="social-message mod-${messageHTML(message)}</div></div><span class="social-message-date"><span>${timeSince(new Date(message.datetime_created))}</span></span></div></li>`
 				}
 				//ADD duplicate detection
 				//document.querySelector(".messages-social-list .loading").outerHTML = "";
+
 			}
 		}
 
@@ -208,11 +213,8 @@ export default async function ({
 				//		parsedInvite[0].message = "<a href='[url]'>You are invited to become a Scratcher! Click here to learn more.</a>" //FIX url
 				//		alerts[index] = alerts[index].concat(parsedInvite)
 				//		alerts.forEach((_, i) => alerts[index][i].recipient_id = userinfo.id)
-				//	}
-				//})}
+				//})
 			}
 		})
-		//FIX https://api.scratch.mit.edu/users/user/messages/count message count
-		//ADD unread message highighting
 	}
 }
