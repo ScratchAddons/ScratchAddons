@@ -41,11 +41,11 @@ button.grey,
 button.grey:hover {
   background-color: #282828;
   background-image: none;
-  color: var(--scratchr2-link-color, #fff);
+  color: var(--scratchr2-linkColor, #fff);
 }
 .button.grey:not([data-control="load-more"]):hover,
 button.grey:hover {
-  color: var(--scratchr2-active-color, #ccc);
+  color: var(--scratchr2-activeColor, #ccc);
 }
 .box {
   background: #333;
@@ -118,4 +118,8 @@ tbody#logs * {
 
 #search-input {
   background-color: #fff;
+}
+
+.ui-dialog-content {
+  color: black;
 }

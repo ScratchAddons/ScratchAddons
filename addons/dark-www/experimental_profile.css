@@ -16,7 +16,8 @@
   border: none;
 }
 #profile-box .doing,
-.slider-carousel-control {
+.slider-carousel-control,
+.gallery.thumb span.image {
   background-color: transparent;
 }
 .empty-field {
@@ -28,6 +29,7 @@
   color: #fff !important;
 }
 .slider-carousel .thumb img,
+.gallery.thumb span.image,
 .gallery.thumb span.image img {
   border-color: #606060;
 }

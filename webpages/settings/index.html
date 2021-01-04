@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
+    <script src="../set-lang.js" defer></script>
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
-    <script src="index.js" defer></script>
+    <script src="index.js" type="module"></script>
   </head>
   <body style="display: none" v-show="loaded">
     <div class="navbar">
@@ -18,7 +19,12 @@
       <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themePath" />
     </div>
     <div class="main">
-      <div class="categories-block" v-show="categoryOpen" :class="{smallMode: smallMode === true}">
+      <div
+        class="categories-block"
+        v-click-outside="closesidebar()"
+        v-show="categoryOpen"
+        :class="{smallMode: smallMode === true}"
+      >
         <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
           <img src="../../images/icons/list.svg" />
           <span>{{ msg("all") }}</span>
@@ -31,7 +37,12 @@
           <img src="../../images/icons/web.svg" />
           <span>{{ msg("websiteFeatures") }}</span>
         </div>
-        <div class="category" :class="{sel: selectedTab === 'theme'}" @click="selectedTab = 'theme'">
+        <div
+          class="category"
+          style="margin-bottom: 12px"
+          :class="{sel: selectedTab === 'theme'}"
+          @click="selectedTab = 'theme'"
+        >
           <img src="../../images/icons/brush.svg" />
           <span>{{ msg("themes") }}</span>
         </div>
@@ -67,7 +78,7 @@
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
-      <div class="addons-block" @click="closesidebar()">
+      <div class="addons-block">
         <div class="search-box" :class="{smallMode: smallMode === true}">
           <input type="text" id="searchBox" placeholder="{{ msg('search') }}" v-model="searchInput" />
           <button
@@ -120,7 +131,12 @@
                   <img v-if="addon._category === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
                   <img v-if="addon._category === 'community'" src="../../images/icons/web.svg" class="icon-type" />
                   <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
-                  <span @click.ctrl="devShowAddonIds">{{ addon.name }}</span>
+                  <img
+                    v-if="addon._category === 'easterEgg'"
+                    src="../../images/icons/egg-easter.svg"
+                    class="icon-type"
+                  />
+                  <span @click="devShowAddonIds">{{ addon.name }}</span>
                 </div>
               </div>
               <div class="badge blue tooltip" v-if="addon._tags.recommended">
@@ -153,11 +169,13 @@
             </div>
             <div class="addon-settings" v-show="addon._expanded">
               <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
-              <div class="addon-warn" v-if="addon.warning" v-show="addon._expanded">
-                <img src="../../images/icons/warning.svg" />{{ addon.warning }}
-              </div>
-              <div class="addon-notice" v-if="addon.notice" v-show="addon._expanded">
-                <img src="../../images/icons/notice.svg" />{{ addon.notice }}
+              <div id="info" v-for="info of addon.info">
+                <div class="addon-warn" v-if="info.type == 'warning'" v-show="addon._expanded">
+                  <img src="../../images/icons/warning.svg" />{{ info.text }}
+                </div>
+                <div class="addon-notice" v-if="info.type == 'notice'" v-show="addon._expanded">
+                  <img src="../../images/icons/notice.svg" />{{ info.text }}
+                </div>
               </div>
               <div class="addon-credits" v-if="addon.credits">
                 <span>{{ msg("creditTo") }}</span>
@@ -188,20 +206,24 @@
                     type="number"
                     class="setting-input number"
                     v-model="addonSettings[addon._addonId][setting.id]"
-                    @change="updateSettings(addon)"
+                    @change="checkValidity(addon, setting) || updateSettings(addon)"
                     :disabled="!addon._enabled"
                     v-if="setting.type === 'positive_integer'"
                     min="0"
+                    :data-addon-id="addon._addonId"
+                    :data-setting-id="setting.id"
                   />
                   <input
                     type="number"
                     class="setting-input number"
                     v-model="addonSettings[addon._addonId][setting.id]"
-                    @change="updateSettings(addon)"
+                    @change="checkValidity(addon, setting) || updateSettings(addon)"
                     :disabled="!addon._enabled"
                     v-if="setting.type === 'integer'"
                     :min="setting.min"
                     :max="setting.max"
+                    :data-addon-id="addon._addonId"
+                    :data-setting-id="setting.id"
                   />
                   <input
                     type="text"
@@ -230,7 +252,7 @@
                     type="color"
                     class="setting-input color"
                     v-model="addonSettings[addon._addonId][setting.id]"
-                    @input="updateSettings(addon)"
+                    @input="updateSettings(addon, {wait: 250, settingId: setting.id})"
                     :disabled="!addon._enabled"
                     v-if="setting.type === 'color'"
                     :placeholder="setting.default"
@@ -276,9 +298,9 @@
       </div>
     </div>
     <div v-show="isOpen" class="modal" @click="closesidebar()">
-      <div class="modal-content">
+      <div class="modal-content" v-click-outside="modalClickOutside">
         <div>
-          <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" style="" />
+          <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" />
           <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
         </div>
         <div class="settings-block">
@@ -301,6 +323,33 @@
                     <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">
                       {{ msg("dark") }}
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="setting-body">
+            <div class="addon-topbar">
+              <span class="addon-name"
+                ><img
+                  src="../../images/icons/import-export.svg"
+                  style="vertical-align: middle; margin-right: 5px"
+                  :class="{'dark': theme === false}"
+                />
+                {{ msg("exportAndImportSettings") }}
+              </span>
+            </div>
+            <div class="setting-settings">
+              <span class="settings-description">{{ msg("exportAndImportSettingsDescription") }}</span>
+              <span class="settings-description">{{ msg("useBrowserSync") }}</span>
+              <div class="setting-setting">
+                <div class="setting-setting">
+                  <div class="filter-selector">
+                    <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
+                  </div>
+                  <div class="filter-selector">
+                    <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
+                    <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
                   </div>
                 </div>
               </div>
