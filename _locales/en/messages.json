@@ -244,5 +244,14 @@
   },
   "confirmImport": {
     "message": "Confirm"
+  },
+  "enableAll": {
+    message: "Enable All"
+  },
+  "disableAll": {
+    message: "Disable All"
+  },
+  "invertSelection": {
+    message: "Invert Selection"
   }
 }
