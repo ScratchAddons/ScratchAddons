@@ -252,12 +252,15 @@
     "message": "Disable All"
   },
   "invertSelection": {
-    "message": "Invert Selection"
-  }
+    "message": "Invert Selected Addons"
+  },
   "openAll": {
     "message": "Expand All"
   },
-  "collapseAll": {
+  "closeAll": {
     "message": "Collapse All"
   },
+  "invertOptions": {
+    "message": "Invert Open Options"
+  }
 }
