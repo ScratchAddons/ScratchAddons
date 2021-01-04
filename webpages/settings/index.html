@@ -87,13 +87,13 @@
           ></button>
           <div class="filter-selector">
             <span class="filter-text">{{ msg("filter") }} </span>
-            <div class="filter-options">
-              <div class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">
+            <div class="top-button-box">
+              <div class="top-button" :class="{'sel': selectedTag === null}" @click="selectedTag = null">
                 {{ msg("all") }}
               </div>
               <div
                 v-for="tag of tagsToShow"
-                class="filter-option"
+                class="top-button"
                 class="badge"
                 :class="{
                 'sel': selectedTag === tag.matchName,
@@ -109,10 +109,15 @@
               </div>
             </div>
           </div>
-          <div class="bulk-enable-disable">
-            <div id="enableAll" class="enable-disable-button">{{ msg("enableAll") }}</div>
-            <div id="disableAll" class="enable-disable-button">{{ msg("disableAll") }}</div>
-            <div is="invertSelection" class="enable-disable-button">{{ msg("invertSelection") }}</div>
+          <div class="top-button-box">
+            <div id="enableAll" class="top-button">{{ msg("enableAll") }}</div>
+            <div id="disableAll" class="top-button">{{ msg("disableAll") }}</div>
+            <div id="invertSelection" class="top-button">{{ msg("invertSelection") }}</div>
+          </div>
+          <div class="top-button-box">
+            <div id="openAll" class="top-button">{{ msg("openAll") }}</div>
+            <div id="closeAll" class="top-button">{{ msg("closeAll") }}</div>
+            <div id="invertOptions" class="top-button">{{ msg("invertOptions") }}</div>
           </div>
         </div>
 
