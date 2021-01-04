@@ -6,5 +6,6 @@ Third party libraries included are:
 - vue (https://raw.githubusercontent.com/vuejs/vue/v1.0.28-csp/dist/vue.js)
 - intl-messageformat (https://unpkg.com/intl-messageformat@9.3.19/intl-messageformat.umd.min.js)
 - tinycolor2 (https://raw.githubusercontent.com/bgrins/TinyColor/1.4.2/dist/tinycolor-min.js)
+- DOMPurify (https://raw.githubusercontent.com/cure53/DOMPurify/2.2.6/dist/purify.min.js)
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).

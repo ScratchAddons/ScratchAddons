@@ -17,7 +17,12 @@ function cleanPost(post) {
     segment.innerHTML = segment.innerHTML.replace(/</g, "&lt;");
   }
 
-  return readableDom.documentElement.innerHTML;
+  return DOMPurify.sanitize(segment.documentElement, {
+    USE_PROFILES: {
+      html: true
+    },
+    IN_PLACE: true
+  });
 }
 
 function triggerNewSearch(searchContent, query, sort, msg) {
@@ -191,7 +196,10 @@ function appendSearch(box, query, page, term, msg) {
 }
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.loadScript(addon.self.lib + "/scratchblocks-v3.5-min.js");
+  await Promise.all([
+    addon.tab.loadScript(addon.self.lib + "/scratchblocks-v3.5-min.js"),
+    addon.tab.loadScript(addon.self.lib + "/dompurify.min.js"),
+  ]);
   // create the search bar
   let search = document.createElement("form");
   search.id = "forum-search-form";
