@@ -1,822 +1,876 @@
 html {
-  background: #2a2a2a;
+    background: #2a2a2a;
 }
 
 body {
-  background: #222;
-  font-family: "Sora", sans-serif;
-  margin: 0;
-  height: 100vh;
-  color: white;
-  font-size: 12px;
+    background: #222;
+    font-family: "Sora", sans-serif;
+    margin: 0;
+    height: 100vh;
+    color: white;
+    font-size: 12px;
 }
 
 .navbar {
-  height: 60px;
-  background: #ff7b26;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+    height: 60px;
+    background: #ff7b26;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
 }
 
 h1 {
-  font-size: 18px;
-  margin: 0;
-  font-weight: 400;
+    font-size: 18px;
+    margin: 0;
+    font-weight: 400;
 }
 
 .logo {
-  height: 30px;
-  margin-right: 20px;
+    height: 30px;
+    margin-right: 20px;
 }
 
 .main {
-  display: flex;
-  height: calc(100% - 60px);
-  width: 100%;
-  align-items: stretch;
+    display: flex;
+    height: calc(100% - 60px);
+    width: 100%;
+    align-items: stretch;
 }
 
 .categories-block {
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  flex-grow: 0;
-  background: #333;
-  width: 300px;
-  padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    flex-grow: 0;
+    background: #333;
+    width: 300px;
+    padding: 20px 0;
 }
 
 .category {
-  padding: 20px 20px;
-  position: relative;
-  user-select: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+    padding: 20px 20px;
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
+
 .category.sel {
-  color: #ff7b26;
+    color: #ff7b26;
 }
+
 .category:hover {
-  background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.1);
 }
+
 .category.sel::before {
-  content: "";
-  display: block;
-  width: 4px;
-  border-radius: 0 4px 4px 0;
-  height: 40px;
-  background: #ff7b26;
-  position: absolute;
-  top: 10px;
-  left: 0;
+    content: "";
+    display: block;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    height: 40px;
+    background: #ff7b26;
+    position: absolute;
+    top: 10px;
+    left: 0;
 }
 
 .category img {
-  height: 18px;
-  filter: brightness(10);
+    height: 18px;
+    filter: brightness(10);
 }
+
 .category.sel img {
-  filter: brightness(1);
+    filter: brightness(1);
 }
+
 .category span {
-  margin-left: 15px;
+    margin-left: 15px;
 }
 
 .addons-block {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .addons-container {
-  overflow-y: auto;
-  padding: 20px;
-  scrollbar-width: thin;
-  scrollbar-color: grey none;
+    overflow-y: auto;
+    padding: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: grey none;
 }
 
 .addon-body {
-  margin: 10px;
-  background: #2a2a2a;
-  border: 1px solid #333;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+    margin: 10px;
+    background: #2a2a2a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 .addon-topbar {
-  height: 50px;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
+    height: 50px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
 }
 
 .setting-body img.dark {
-  filter: brightness(10);
+    filter: brightness(10);
 }
 
 .btn-dropdown {
-  display: flex;
-  align-items: center;
-  padding: 5px;
-  border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 4px;
 }
+
 .btn-dropdown:hover {
-  background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .sh .btn-dropdown {
-  transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .btn-dropdown img {
-  height: 23px;
+    height: 23px;
 }
 
 .clickeable-area {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .addon-name {
-  margin-left: 15px;
-  font-weight: 300;
-  height: 100%;
-  display: flex;
-  align-items: center;
+    margin-left: 15px;
+    font-weight: 300;
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
+
 .icon-type {
-  height: 16px;
-  vertical-align: middle;
-  filter: brightness(10);
-  margin-right: 8px;
+    height: 16px;
+    vertical-align: middle;
+    filter: brightness(10);
+    margin-right: 8px;
 }
 
 .badge {
-  background: gray;
-  color: #fff;
-  border-radius: 4px;
-  padding: 2px 5px;
-  font-size: 12px;
-  margin-left: 10px;
-  border-bottom: 2px solid #111;
+    background: gray;
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-size: 12px;
+    margin-left: 10px;
+    border-bottom: 2px solid #111;
 }
 
 .addon-description {
-  margin-left: 10px;
-  color: gray;
-  width: 35vw;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+    margin-left: 10px;
+    color: gray;
+    width: 35vw;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .addon-warn {
-  color: white;
-  padding: 10px;
-  background: rgba(255, 38, 103, 0.2);
-  border-radius: 5px;
-  font-weight: bold;
-  margin: 10px 0;
-  display: flex;
-  align-items: center;
-}
-.addon-description-full,
-.addon-credits {
-  width: 100%;
-  white-space: normal;
-  color: #dddddd;
+    color: white;
+    padding: 10px;
+    background: rgba(255, 38, 103, 0.2);
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
 }
 
-.addon-credits,
-.addon-license {
-  margin-top: 4px;
-  font-size: 0.9em;
+.addon-description-full, .addon-credits {
+    width: 100%;
+    white-space: normal;
+    color: #dddddd;
 }
-.addon-credits a,
-.addon-license a {
-  color: #6d9bff;
+
+.addon-credits, .addon-license {
+    margin-top: 4px;
+    font-size: 0.9em;
+}
+
+.addon-credits a, .addon-license a {
+    color: #6d9bff;
 }
 
 .addon-credits > span {
-  margin-right: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .addon-credits > span:not(:first-child):not(:last-child)::after {
-  content: ",";
+    content: ",";
 }
 
 .badge.blue {
-  background: #175ef8;
-  border-color: #0e44b8;
+    background: #175ef8;
+    border-color: #0e44b8;
 }
+
 .badge.green {
-  background: #78fd2b;
-  color: #333333;
-  border-color: #53b31c;
+    background: #78fd2b;
+    color: #333333;
+    border-color: #53b31c;
 }
+
 .badge.yellow {
-  background: #fddd2b;
-  color: #333333;
-  border-color: #fdab12;
+    background: #fddd2b;
+    color: #333333;
+    border-color: #fdab12;
 }
+
 .badge.red {
-  background: #fd662b;
-  border-color: #d84a12;
+    background: #fd662b;
+    border-color: #d84a12;
 }
+
 .badge.darkgreen {
-  background: #00b1a8;
-  border-color: #047773;
+    background: #00b1a8;
+    border-color: #047773;
 }
+
 .badge.purple {
-  background: rgb(177, 23, 248);
-  border-color: #b20eb8;
+    background: rgb(177, 23, 248);
+    border-color: #b20eb8;
 }
+
 .filter-option.sel.blue {
-  background: #175ef8;
+    background: #175ef8;
 }
+
 .filter-option.sel.green {
-  background: #78fd2b;
-  color: #333333;
+    background: #78fd2b;
+    color: #333333;
 }
+
 .filter-option.sel.yellow {
-  background: #fddd2b;
-  color: #333333;
+    background: #fddd2b;
+    color: #333333;
 }
+
 .filter-option.sel.red {
-  background: #fd662b;
+    background: #fd662b;
 }
+
 .filter-option.sel.darkgreen {
-  background: #00b1a8;
+    background: #00b1a8;
 }
 
 .rating {
-  margin-left: 20px;
-  font-size: 20px;
-  color: #aaa;
+    margin-left: 20px;
+    font-size: 20px;
+    color: #aaa;
 }
+
 .rating span {
-  color: #fdab12;
+    color: #fdab12;
 }
 
 .sh .addon-settings {
-  display: flex;
+    display: flex;
 }
+
 .addon-settings {
-  padding: 0 20px;
+    padding: 0 20px;
 }
 
 .presets-column {
-  align-items: center;
+    align-items: center;
 }
 
-.presets-column,
-.settings-column {
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  flex-wrap: wrap;
+.presets-column, .settings-column {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .presets-column > .setting-label {
-  margin-left: 10px;
+    margin-left: 10px;
 }
 
 .disabled {
-  opacity: 50%;
+    opacity: 50%;
 }
 
 .addon-setting {
-  margin: 10px;
-  margin-right: 20px;
-  min-height: 35px;
-  display: flex;
-  align-items: center;
+    margin: 10px;
+    margin-right: 20px;
+    min-height: 35px;
+    display: flex;
+    align-items: center;
 }
 
 .setting-label {
-  width: 200px;
-  text-transform: uppercase;
-  color: #aaa;
-  font-weight: 600;
-  font-size: 12px;
-  margin-right: 10px;
+    width: 200px;
+    text-transform: uppercase;
+    color: #aaa;
+    font-weight: 600;
+    font-size: 12px;
+    margin-right: 10px;
 }
 
 .inline-icon {
-  height: 16px;
-  vertical-align: bottom;
+    height: 16px;
+    vertical-align: bottom;
 }
 
 .setting-input {
-  color: #fff;
-  background: #222222;
-  border: 1px solid #000;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: 0.25s ease;
-  transition-property: box-shadow border;
+    color: #fff;
+    background: #222222;
+    border: 1px solid #000;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: 0.25s ease;
+    transition-property: box-shadow border;
 }
+
 .setting-input:focus {
-  outline: none;
-  border-color: #ff7b26;
-  box-shadow: 0 0 0 3px #ff7d265d;
+    outline: none;
+    border-color: #ff7b26;
+    box-shadow: 0 0 0 3px #ff7d265d;
 }
 
 .setting-input.check {
-  height: 20px;
-  width: 20px;
-  padding: 0;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-color: white;
-  background-size: 20px 20px;
-  background-position: center center;
+    height: 20px;
+    width: 20px;
+    padding: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: white;
+    background-size: 20px 20px;
+    background-position: center center;
 }
 
 .setting-input.check:checked {
-  background-color: #175ef8;
-  background-image: url(../../images/icons/check.svg);
+    background-color: #175ef8;
+    background-image: url(../../images/icons/check.svg);
 }
 
 .setting-input.check:hover:not(:focus) {
-  border-color: #0e44b8;
+    border-color: #0e44b8;
 }
 
 .setting-input.number {
-  border-radius: 20px;
+    border-radius: 20px;
 }
 
 .large-button {
-  color: #fff;
-  background: #222222;
-  border: 1px solid #000;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: 0.25s ease;
-  outline: none;
-  height: 32px;
+    color: #fff;
+    background: #222222;
+    border: 1px solid #000;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: 0.25s ease;
+    outline: none;
+    height: 32px;
 }
+
 .large-button:hover {
-  outline: none;
-  background: #151515;
+    outline: none;
+    background: #151515;
 }
 
 .clear-button {
-  border-radius: 0 4px 4px 0px;
-  border-left: none !important;
+    border-radius: 0 4px 4px 0px;
+    border-left: none !important;
 }
 
 .addon-check {
-  margin-left: auto;
-  padding: 5px;
-  display: flex;
+    margin-left: auto;
+    padding: 5px;
+    display: flex;
 }
 
 .search-box {
-  min-height: 60px;
-  background: #2a2a2a;
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
+    min-height: 60px;
+    background: #2a2a2a;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
 }
 
 .search-box input {
-  background: #111;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px 0 0 4px;
-  color: #fff;
-  width: 150px;
-  height: 16px;
+    background: #111;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    color: #fff;
+    width: 150px;
+    height: 16px;
 }
+
 .search-box input:focus {
-  outline: none;
+    outline: none;
 }
+
 .search-box input::placeholder {
-  color: #777;
+    color: #777;
 }
 
 .search-box button {
-  background: #111;
-  /* Background URL set by Vue */
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 36px;
-  width: 45px;
-  border: none;
-  border-radius: 0 4px 4px 0;
-  outline: none;
-  cursor: pointer;
+    background: #111;
+    /* Background URL set by Vue */
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 36px;
+    width: 45px;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    outline: none;
+    cursor: pointer;
 }
 
 .search-box .badge {
-  cursor: default;
-  border-bottom: none;
+    cursor: default;
+    border-bottom: none;
 }
+
 .search-box .badge .selected-badge {
-  cursor: default;
-  border-bottom: none;
+    cursor: default;
+    border-bottom: none;
 }
 
 .clear-settings {
-  display: flex;
-  align-items: center;
-  padding: 0 0px 0px 8px;
-  border-radius: 4px;
-  margin-right: 8px;
+    display: flex;
+    align-items: center;
+    padding: 0 0px 0px 8px;
+    border-radius: 4px;
+    margin-right: 8px;
 }
+
 .clear-settings:hover {
-  background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .switch {
-  display: block;
-  background: #111;
-  width: 40px;
-  height: 20px;
-  border-radius: 10px;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.25s ease;
+    display: block;
+    background: #111;
+    width: 40px;
+    height: 20px;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.25s ease;
 }
+
 .switch::before {
-  content: "";
-  position: absolute;
-  display: block;
-  width: 10px;
-  height: 10px;
-  background: #aaa;
-  border-radius: 5px;
-  top: 5px;
-  left: 5px;
-  transition: all 0.25s ease;
+    content: "";
+    position: absolute;
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: #aaa;
+    border-radius: 5px;
+    top: 5px;
+    left: 5px;
+    transition: all 0.25s ease;
 }
 
 .switch[state="on"] {
-  background: #ff7b26;
+    background: #ff7b26;
 }
+
 .switch[state="on"]::before {
-  background: #fff;
-  left: 25px;
+    background: #fff;
+    left: 25px;
 }
 
 .filter-selector {
-  display: flex;
-  font-size: 12px;
-  margin-left: 20px;
-  align-items: center;
+    display: flex;
+    font-size: 12px;
+    margin: 20px;
+    align-items: center;
 }
 
 .filter-text {
-  font-weight: 600;
-  margin-right: 20px;
+    font-weight: 600;
+    margin-right: 20px;
 }
 
-.filter-options {
-  display: flex;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #222;
-  border: 1px solid #000;
-  font-size: 10px;
-  user-select: none;
+.filter-options, .bulk-enable-disable {
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #222;
+    border: 1px solid #000;
+    font-size: 10px;
+    user-select: none;
 }
 
-.filter-option {
-  padding: 10px;
-  border-right: 1px solid #000;
+.filter-option, .enable-disable-button {
+    padding: 10px;
+    border-right: 1px solid #000;
 }
-.filter-option:hover {
-  cursor: pointer;
-  background: #1a1a1a;
+
+.filter-option:hover, .enable-disable-button:hover {
+    cursor: pointer;
+    background: #1a1a1a;
 }
-.filter-option:last-child {
-  border-right: none;
+
+.filter-option:last-child, .enable-disable-button:last-child {
+    border-right: none;
 }
+
 .filter-option.sel {
-  background: #ff7b26;
+    background: #ff7b26;
 }
-.filter-option.disabled {
-  filter: grayscale(80%);
-  pointer-events: none;
+
+.filter-option.disabled, .enable-disable-button.disabled {
+    filter: grayscale(80%);
+    pointer-events: none;
 }
 
 .reverted {
-  transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .licenses {
-  height: 100%;
-  min-height: 100vh;
+    height: 100%;
+    min-height: 100vh;
 }
 
 .licenses-block {
-  padding: 2rem;
+    padding: 2rem;
 }
 
 .licenses-body pre {
-  white-space: pre-wrap;
+    white-space: pre-wrap;
 }
 
 input[type="color" i] {
-  height: 30px;
-  width: 100px;
-  padding: 0;
-  overflow: hidden;
-  border-radius: 4px 0px 0px 4px;
+    height: 30px;
+    width: 100px;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 4px 0px 0px 4px;
 }
 
 .small-button {
-  margin-left: 10px;
-  background: #222;
-  border: 1px solid #000;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: white;
-  font-size: 12px;
-  cursor: pointer;
+    margin-left: 10px;
+    background: #222;
+    border: 1px solid #000;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
 }
+
 .small-button:hover {
-  background: #151515;
+    background: #151515;
 }
 
 .setting-input.color::-webkit-color-swatch-wrapper {
-  padding: 0;
+    padding: 0;
 }
 
 input[type="color"]::-webkit-color-swatch {
-  border: none;
+    border: none;
 }
 
 .addon-notice {
-  color: black;
-  padding: 10px;
-  background: rgb(255 235 59 / 0.7);
-  border-radius: 5px;
-  font-weight: bold;
-  margin: 10px 0;
-  display: flex;
-  align-items: center;
+    color: black;
+    padding: 10px;
+    background: rgb(255 235 59 / 0.7);
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
 }
-.addon-notice img,
+
+.addon-notice img, .addon-warn img {
+    height: 15px;
+    margin-right: 10px;
+    flex: 0 0;
+}
+
 .addon-warn img {
-  height: 15px;
-  margin-right: 10px;
-  flex: 0 0;
+    filter: brightness(0) invert(1);
 }
-.addon-warn img {
-  filter: brightness(0) invert(1);
-}
+
 .modal {
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0 0 0 / 65%);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0 0 0 / 65%);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-content {
-  background-color: #222;
-  margin: auto;
-  padding: 20px;
-  width: 50rem;
-  border-radius: 10px;
-  height: 75%;
-  display: flex;
-  flex-direction: column;
+    background-color: #222;
+    margin: auto;
+    padding: 20px;
+    width: 50rem;
+    border-radius: 10px;
+    height: 75%;
+    display: flex;
+    flex-direction: column;
 }
 
 .close {
-  float: right;
-  cursor: pointer;
+    float: right;
+    cursor: pointer;
 }
 
 .settings-heading {
-  margin: 10px 10px 24px 10px;
+    margin: 10px 10px 24px 10px;
 }
+
 .footer {
-  text-align: center;
-  width: 800px;
-  color: gray;
-  margin-top: auto;
+    text-align: center;
+    width: 800px;
+    color: gray;
+    margin-top: auto;
 }
+
 .footer a {
-  color: gray;
+    color: gray;
 }
+
 .settings-block {
-  margin-top: 30px;
+    margin-top: 30px;
 }
+
 .modal .large-button {
-  display: block;
-  margin: 7px;
+    display: block;
+    margin: 7px;
 }
+
 .setting-body {
-  margin: 10px;
-  background: #2a2a2a;
-  border: 1px solid #333;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+    margin: 10px;
+    background: #2a2a2a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
+
 .setting-settings {
-  padding: 0 20px;
+    padding: 0 20px;
 }
+
 .setting-setting {
-  margin: 10px;
-  margin-right: 20px;
-  min-height: 35px;
-  display: flex;
-  align-items: center;
+    margin: 10px;
+    margin-right: 20px;
+    min-height: 35px;
+    display: flex;
+    align-items: center;
 }
+
 .setting-description {
-  margin-left: 10px;
-  color: gray;
-  width: 35vw;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+    margin-left: 10px;
+    color: gray;
+    width: 35vw;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
+
 .addon-name {
-  margin-left: 15px;
-  font-weight: 300;
-  height: 100%;
-  display: flex;
-  align-items: center;
+    margin-left: 15px;
+    font-weight: 300;
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
+
 .setting-setting {
-  margin-top: 10px;
+    margin-top: 10px;
 }
+
 .theme-switch {
-  height: 25px;
-  float: right;
-  right: 25px;
-  position: fixed;
-  cursor: pointer;
+    height: 25px;
+    float: right;
+    right: 25px;
+    position: fixed;
+    cursor: pointer;
 }
+
 .large-dropdown {
-  color: #fff;
-  background: #222222;
-  border: 1px solid #000;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: 0.25s ease;
-  outline: none;
-  height: 32px;
+    color: #fff;
+    background: #222222;
+    border: 1px solid #000;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: 0.25s ease;
+    outline: none;
+    height: 32px;
 }
+
 .large-dropdown:hover {
-  outline: none;
-  background: #151515;
+    outline: none;
+    background: #151515;
 }
+
 .hidden-button {
-  /* needs !important because it conlicts with display: block */
-  display: none !important;
+    /* needs !important because it conlicts with display: block */
+    display: none !important;
 }
+
 #confirmImport {
-  border-color: #ff7b26;
+    border-color: #ff7b26;
 }
 
 /*scrollbar*/
-
 /* width */
 ::-webkit-scrollbar {
-  width: 7px;
+    width: 7px;
 }
 
 /* hide track */
 ::-webkit-scrollbar-track {
-  background: none;
+    background: none;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: grey;
-  border-radius: 4px;
+    background: grey;
+    border-radius: 4px;
 }
+
 .categories-block.smallMode {
-  border-radius: 0px 0px 10px 10px;
-  margin-left: 10px;
-  z-index: 10;
-  position: absolute;
-  height: 35rem;
-  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
-  overflow: scroll;
-  overflow-x: hidden;
+    border-radius: 0px 0px 10px 10px;
+    margin-left: 10px;
+    z-index: 10;
+    position: absolute;
+    height: 35rem;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+    overflow: scroll;
+    overflow-x: hidden;
 }
+
 .toggle {
-  cursor: pointer;
-  margin-right: 10px;
+    cursor: pointer;
+    margin-right: 10px;
 }
+
 .search-box.smallMode {
-  overflow: scroll;
-  overflow-y: hidden;
+    overflow: scroll;
+    overflow-y: hidden;
 }
+
 @media only screen and (max-width: 370px) {
-  .badge {
-    display: none;
-  }
+    .badge {
+        display: none;
+    }
 }
+
 .categories-shrink {
-  text-align: right;
-  bottom: 0;
-  position: fixed;
-  margin: 5px;
-  margin-top: 7px;
-  cursor: pointer;
+    text-align: right;
+    bottom: 0;
+    position: fixed;
+    margin: 5px;
+    margin-top: 7px;
+    cursor: pointer;
 }
+
 .flipped {
-  transform: scaleX(-1);
+    transform: scaleX(-1);
 }
 
 .tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted rgb(255 255 255 / 0.5);
-  cursor: default;
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted rgb(255 255 255 / 0.5);
+    cursor: default;
 }
 
 .tooltip .tooltiptext {
-  visibility: hidden;
-  width: 12rem;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 10px 10px;
-
-  /* Position the tooltip */
-  position: absolute;
-  z-index: 1;
+    visibility: hidden;
+    width: 12rem;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px 10px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
 }
 
 .tooltip:hover .tooltiptext {
-  visibility: visible;
+    visibility: visible;
 }
+
 .tooltip .tooltiptext {
-  top: -5px;
-  left: 105%;
+    top: -5px;
+    left: 105%;
 }
+
 .tooltip .tooltiptext::after {
-  content: " ";
-  position: absolute;
-  top: 50%;
-  right: 100%; /* To the left of the tooltip */
-  margin-top: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent black transparent transparent;
+    content: " ";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    /* To the left of the tooltip */
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
 }
 
 .permissions div.main {
-  justify-content: center;
-  display: grid;
-  grid-template-rows: 14rem 10rem;
+    justify-content: center;
+    display: grid;
+    grid-template-rows: 14rem 10rem;
 }
 
 .permissions-block {
-  margin-top: 3rem;
-  font-size: 1.25rem;
+    margin-top: 3rem;
+    font-size: 1.25rem;
 }
 
 .permissions-block h2 {
-  font-size: 3rem;
-  margin: 0;
+    font-size: 3rem;
+    margin: 0;
 }
 
 .permissions-steps {
-  display: flex;
-  align-items: flex-end;
+    display: flex;
+    align-items: flex-end;
 }
 
 .permissions-steps > div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .permissions-steps > div:not(:last-child) {
-  margin-right: 2rem;
+    margin-right: 2rem;
 }
 
 #permissionsBtn {
-  height: 6rem;
-  width: 18rem;
-  font-size: 2.5rem;
-  cursor: pointer;
+    height: 6rem;
+    width: 18rem;
+    font-size: 2.5rem;
+    cursor: pointer;
 }
 
 #screenshot {
-  height: 10rem;
+    height: 10rem;
 }
