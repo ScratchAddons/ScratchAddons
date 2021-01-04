@@ -633,10 +633,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
    * @returns {boolean}
    */
   function isBlockAnOrphan(topBlock) {
-    if (topBlock.getOutputShape() && !topBlock.getSurroundParent()) {
-      return true;
-    }
-    return false;
+    return !!topBlock.outputConnection;
   }
 
   /**
