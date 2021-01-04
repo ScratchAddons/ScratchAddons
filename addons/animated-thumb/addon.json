@@ -1,7 +1,18 @@
 {
   "name": "Thumbnails setter",
   "description": "Adds a button to the editor to set the thumbnail of your project to any image (including gifs).",
-  "notice": "Turn on \"Prevent thumbnail from being overwritten\" if you don't want to reset thumbnail every time you save.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Turn on \"Prevent thumbnail from being overwritten\" if you don't want to reset thumbnail every time you save.",
+      "id": "nooverwite"
+    },
+    {
+      "type": "warning",
+      "text": "Your project may be marked as NFE (not for everyone) by the Scratch Team if the thumbnail is animated. NFE projects aren't able to get into the front page, the explore page, or search results.",
+      "id": "animatednfe"
+    }
+  ],
   "credits": [
     {
       "name": "World_Languages",
@@ -40,7 +51,7 @@
       "id": "persistentThumb"
     }
   ],
-  "tags": ["editor", "community", "recommended"],
+  "tags": ["editor", "recommended"],
   "enabledByDefault": true,
   "l10n": true
 }

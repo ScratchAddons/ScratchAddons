@@ -43,6 +43,7 @@
   "mouse-pos",
   "clones",
   "exact-count",
+  "cat-blocks",
   "editor-messages",
   "pause",
   "resizable-comment-input",
@@ -59,5 +60,9 @@
   "block-switching",
   "my-ocular",
   "better-featured-project",
-  "onion-skinning"
+  "mediarecorder",
+  "color-picker",
+  "onion-skinning",
+  "better-quoter",
+  "data-category-tweaks-v2"
 ]

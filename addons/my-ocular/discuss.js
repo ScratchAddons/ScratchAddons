@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   var lefts = document.querySelectorAll("div.postleft > dl");
   lefts.forEach(async (i) => {
     var username = i.children[0].innerText;
@@ -11,9 +11,11 @@ export default async function ({ addon, global, console }) {
     if (userStatus) {
       var br = document.createElement("br");
       var status = document.createElement("i");
+      status.title = msg("status-hover");
       status.innerText = userStatus;
 
       var dot = document.createElement("span");
+      dot.title = msg("status-hover");
       dot.style.height = "10px";
       dot.style.width = "10px";
       dot.style.marginLeft = "5px";
@@ -22,8 +24,6 @@ export default async function ({ addon, global, console }) {
       dot.style.display = "inline-block";
 
       dot.style.backgroundColor = color;
-
-      console.log(color);
 
       i.appendChild(br);
       i.appendChild(status);

@@ -1,4 +1,4 @@
-export default {
+export default Object.assign(Object.create(null), {
   "meow.png": "[meow emoji]",
   "gobo.png": "[gobo emoji]",
   "waffle.png": "[waffle emoji]",
@@ -27,4 +27,4 @@ export default {
   "fav-it-cat.png": "🤩",
   "rainbow-cat.png": "[rainbow cat emoji]",
   "pizza-cat.png": "[cat eating pizza emoji]",
-};
+});

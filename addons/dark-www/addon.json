@@ -10,8 +10,8 @@
   ],
   "userscripts": [
     {
-      "url": "disable-on-editor.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "url": "experimental_forums_preview.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/settings/*/"]
     }
   ],
   "userstyles": [
@@ -149,6 +149,10 @@
         "id": "selectedMode",
         "value": "experimental-dark"
       }
+    },
+    {
+      "url": "pygments.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
   ],
   "settings": [

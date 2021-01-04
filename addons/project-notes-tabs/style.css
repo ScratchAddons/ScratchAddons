@@ -1,8 +1,7 @@
 .tabs-sa {
   display: flex;
-  width: -moz-fit-content;
-  width: fit-content;
   overflow: hidden;
+  margin-bottom: 0 !important;
 }
 
 .tab-choice-sa {
@@ -18,6 +17,7 @@
   border-radius: 12px 12px 0 0;
   border-color: rgba(77, 151, 255, 0.1);
   background-color: rgb(63 120 202 / 4%);
+  margin-left: 5px;
 }
 
 .tab-choice-sa span {
@@ -26,11 +26,16 @@
   font-weight: bold;
 }
 
-.sa-selected {
+.tab-choice-selected-sa {
   background-color: rgba(77, 151, 255, 0.1);
 }
 
+.description-block {
+  overflow: auto;
+  margin-bottom: 0 !important;
+}
+
 .project-description {
-  height: -webkit-fill-available;
-  width: -moz-available;
+  height: 100%;
+  box-sizing: border-box;
 }

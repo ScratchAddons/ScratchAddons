@@ -159,6 +159,42 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
+    blockSwitches["looks_think"] = [
+      noopSwitch,
+      {
+        opcode: "looks_say",
+      },
+    ];
+    blockSwitches["looks_say"] = [
+      {
+        opcode: "looks_think",
+      },
+      noopSwitch,
+    ];
+    blockSwitches["looks_thinkforsecs"] = [
+      noopSwitch,
+      {
+        opcode: "looks_sayforsecs",
+      },
+    ];
+    blockSwitches["looks_sayforsecs"] = [
+      {
+        opcode: "looks_thinkforsecs",
+      },
+      noopSwitch,
+    ];
+    blockSwitches["looks_switchbackdropto"] = [
+      noopSwitch,
+      {
+        opcode: "looks_switchbackdroptoandwait",
+      },
+    ];
+    blockSwitches["looks_switchbackdroptoandwait"] = [
+      {
+        opcode: "looks_switchbackdropto",
+      },
+      noopSwitch,
+    ];
   }
 
   if (addon.settings.get("sound")) {
@@ -243,7 +279,6 @@ export default async function ({ addon, global, console, msg }) {
     blockSwitches["control_forever"] = [
       {
         opcode: "control_repeat_until",
-        remap: { SUBSTACK: "split" },
       },
       noopSwitch,
     ];
@@ -499,6 +534,18 @@ export default async function ({ addon, global, console, msg }) {
       },
       noopSwitch,
     ];
+    blockSwitches["music_setTempo"] = [
+      noopSwitch,
+      {
+        opcode: "music_changeTempo",
+      },
+    ];
+    blockSwitches["music_changeTempo"] = [
+      {
+        opcode: "music_setTempo",
+      },
+      noopSwitch,
+    ];
   }
 
   // Switching for these is implemented by Scratch. We only define them here to optionally add a border.
@@ -692,6 +739,12 @@ export default async function ({ addon, global, console, msg }) {
     workspace._blockswitchingInjected = true;
     workspace.getAllBlocks().forEach(injectCustomContextMenu);
     workspace.addChangeListener(changeListener);
+    const languageSelector = document.querySelector('[class^="language-selector_language-select"]');
+    if (languageSelector) {
+      languageSelector.addEventListener("change", () => {
+        setTimeout(inject);
+      });
+    }
   };
 
   const mutationObserver = new MutationObserver(mutationObserverCallback);
