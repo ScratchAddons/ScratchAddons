@@ -19,9 +19,9 @@ function cleanPost(post) {
 
   return DOMPurify.sanitize(segment.documentElement, {
     USE_PROFILES: {
-      html: true
+      html: true,
     },
-    IN_PLACE: true
+    IN_PLACE: true,
   });
 }
 
