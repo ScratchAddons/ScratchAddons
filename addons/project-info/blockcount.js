@@ -24,7 +24,7 @@ export default async function ({ addon, console, msg }) {
         display.style.order = 1;
         display.style.padding = "9px";
         display.innerText = msg("blocks", { num: getBlockCount().blockCount });
-        let debounce; // debouncing values becuase of the way 'PROJECT_CHANGED' works
+        let debounce; // debouncing values because of the way 'PROJECT_CHANGED' works
         vm.on("PROJECT_CHANGED", async () => {
           clearTimeout(debounce);
           debounce = setTimeout(async () => {
