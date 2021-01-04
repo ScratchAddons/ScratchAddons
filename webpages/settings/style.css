@@ -7,6 +7,7 @@ body {
   font-family: "Sora", sans-serif;
   margin: 0;
   height: 100vh;
+  overflow: hidden;
   color: white;
   font-size: 12px;
 }
@@ -19,12 +20,17 @@ body {
   align-items: center;
   padding: 0 20px;
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+  user-select: none;
 }
 
 h1 {
   font-size: 18px;
   margin: 0;
   font-weight: 400;
+}
+
+.navbar a {
+	height: 30px;
 }
 
 .logo {
@@ -45,7 +51,8 @@ h1 {
   flex-shrink: 0;
   flex-grow: 0;
   background: #333;
-  width: 300px;
+  min-width: 300px;
+  overflow-y: auto;
   padding: 20px 0;
 }
 
@@ -87,14 +94,15 @@ h1 {
 }
 
 .addons-block {
-  width: 100%;
+  flex-grow: 1;
+  flex-shrink: 1;
   display: flex;
   flex-direction: column;
 }
 
 .addons-container {
   overflow-y: auto;
-  padding: 20px;
+  padding: 10px 20px;
   scrollbar-width: thin;
   scrollbar-color: grey none;
 }
@@ -380,7 +388,8 @@ h1 {
   background: #2a2a2a;
   display: flex;
   align-items: center;
-  padding: 10px 20px;
+  padding: 10px 30px;
+  user-select: none;
 }
 
 .search-box input {
@@ -699,7 +708,8 @@ input[type="color"]::-webkit-color-swatch {
   margin-left: 10px;
   z-index: 10;
   position: absolute;
-  height: 35rem;
+  max-height: calc(100vh - 60px);
+  box-sizing: border-box;
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
   overflow: scroll;
   overflow-x: hidden;
@@ -724,6 +734,7 @@ input[type="color"]::-webkit-color-swatch {
   margin: 5px;
   margin-top: 7px;
   cursor: pointer;
+  user-select: none;
 }
 .flipped {
   transform: scaleX(-1);
