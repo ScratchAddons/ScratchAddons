@@ -31,10 +31,11 @@ export default async function ({
 	if (addon.auth.isLoggedIn) {
 		// set variables
 		var settingUsers = addon.settings.get("alt_accs").split(/[^a-zA-Z0-9_-]+/)
+		var cookieUsers
 		try {
-			var cookieUsers = JSON.parse(getCookie("sa-accounts"))
-		} catch (e) {
-			var cookieUsers = [];
+			cookieUsers = JSON.parse(getCookie("sa-accounts"))
+		} catch {
+			cookieUsers = [];
 		}
 		var users = []
 		var messages = []
@@ -68,11 +69,16 @@ export default async function ({
 		})
 		setCookie("accounts", JSON.stringify(users))
 
+		var messageIndex = 0;
+
 		function printMessages() {
 			if (Object.keys(messages).length == users.length) {
 				messages = rsort(messages.flat())
 				document.getElementsByClassName("messages-social-list")[0].innerHTML = ""
-				messages.forEach(message => document.getElementsByClassName("messages-social-list")[0].innerHTML += `<li class="social-message mod-${messageHTML(message)}</div></div><span class="social-message-date"><span>${timeSince(new Date(message.datetime_created))}</span></span></div></li>`)
+				for (; messageIndex < messageIndex + 20; messageIndex++) {
+					const message = messages[messageIndex];
+					document.getElementsByClassName("messages-social-list")[0].innerHTML += `<li class="social-message mod-${messageHTML(message)}</div></div><span class="social-message-date"><span>${timeSince(new Date(message.datetime_created))}</span></span></div></li>`
+				}
 				//ADD duplicate detection
 				//document.querySelector(".messages-social-list .loading").outerHTML = "";
 			}
