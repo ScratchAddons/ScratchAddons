@@ -26,7 +26,7 @@ function required() {
 }
 export default async function ({
 	addon,
-	msg
+	safeMsg
 }) {
 	if (addon.auth.isLoggedIn) {
 		// set variables
@@ -72,7 +72,7 @@ export default async function ({
 			if (Object.keys(messages).length == users.length) {
 				messages = rsort(messages.flat())
 				document.getElementsByClassName("messages-social-list")[0].innerHTML = ""
-				messages.forEach(message => document.getElementsByClassName("messages-social-list")[0].innerHTML += `<li class="social-message mod-${messageHTML(message)}</div></div><span class="social-message-date"><span>${timeSince(message.datetime_created)}</span></span></div></li>`)
+				messages.forEach(message => document.getElementsByClassName("messages-social-list")[0].innerHTML += `<li class="social-message mod-${messageHTML(message)}</div></div><span class="social-message-date"><span>${timeSince(new Date(message.datetime_created))}</span></span></div></li>`)
 				//ADD duplicate detection
 				//document.querySelector(".messages-social-list .loading").outerHTML = "";
 			}
@@ -83,36 +83,36 @@ export default async function ({
 			var seconds = Math.floor((new Date() - date) / 1000);
 			var interval = seconds / 31536000;
 			if (interval > 1) {
-				return msg("years", {
+				return safeMsg("years", {
 					number: Math.floor(interval)
 				})
 			}
 			interval = seconds / 2592000;
 			if (interval > 1) {
-				return msg("months", {
+				return safeMsg("months", {
 					number: Math.floor(interval)
 				})
 			}
 			interval = seconds / 86400;
 			if (interval > 1) {
-				return msg("days", {
+				return safeMsg("days", {
 					number: Math.floor(interval)
 				})
 			}
 			interval = seconds / 3600;
 			if (interval > 1) {
-				return msg("hours", {
+				return safeMsg("hours", {
 					number: Math.floor(interval)
 				})
 			}
 			interval = seconds / 60;
 			if (interval > 1) {
-				return msg("minutes", {
+				return safeMsg("minutes", {
 					number: Math.floor(interval)
 				})
 			}
-			return msg("seconds", {
-				number: Math.floor(secconds)
+			return safeMsg("seconds", {
+				number: Math.floor(seconds)
 			})
 		}
 
