@@ -479,8 +479,8 @@ h1 {
   margin-right: 20px;
 }
 
-.filter-options,
-.bulk-enable-disable {
+.bulk-enable-disable,
+.filter-options {
   display: flex;
   border-radius: 4px;
   overflow: hidden;
@@ -490,18 +490,18 @@ h1 {
   user-select: none;
 }
 
-.filter-option,
-.enable-disable-button {
+.enable-disable-button,
+.filter-option {
   padding: 10px;
   border-right: 1px solid #000;
 }
-.filter-option:hover,
-.enable-disable-button:hover {
+.enable-disable-button:hover,
+.filter-option:hover {
   cursor: pointer;
   background: #1a1a1a;
 }
-.filter-option:last-child,
-.enable-disable-button:last-child {
+.enable-disable-button:last-child,
+.filter-option:last-child {
   border-right: none;
 }
 .filter-option.sel {
@@ -740,10 +740,10 @@ input[type="color"]::-webkit-color-swatch {
   margin-top: 7px;
   cursor: pointer;
 }
-
 .flipped {
   transform: scaleX(-1);
 }
+
 .tooltip {
   position: relative;
   display: inline-block;
@@ -776,7 +776,7 @@ input[type="color"]::-webkit-color-swatch {
   content: " ";
   position: absolute;
   top: 50%;
-  right: 100%;  /* To the left of the tooltip */
+  right: 100%; /* To the left of the tooltip */
   margin-top: -5px;
   border-width: 5px;
   border-style: solid;
