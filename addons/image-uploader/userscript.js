@@ -24,7 +24,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
   var inputButton = document.createElement("a");
   inputButton.id = "uploadButton";
-  
+
   let progresselement;
 
   inputButton.title = msg("upload-image");

@@ -12,7 +12,7 @@
     "__scratchAddonsTraps": "writable",
     "__scratchAddonsRedux": "writable",
     "_realConsole": "writable",
-    
+
     // Third Party-defined
     "Vue": "readonly",
     "IntlMessageFormat": "readonly",
@@ -20,11 +20,11 @@
     "md5": "readonly",
     "scratchblocks": "readonly",
     "tinycolor": "readonly",
-    
+
     // Scratch-defined
     "Scratch": "readonly",
     "Blockly": "readonly",
-    
+
     // Non-standard API
     "Clipboard": "readonly",
     "ClipboardItem": "readonly"
@@ -37,7 +37,7 @@
     "default-case-last": 2,
     "eqeqeq": 2,
     "guard-for-in": 2,
-    "no-empty": [2, {"allowEmptyCatch": true}],
+    "no-empty": [2, { "allowEmptyCatch": true }],
     "no-caller": 2,
     "no-implied-eval": 2,
     "no-new-wrappers": 2,
@@ -46,7 +46,7 @@
     "no-unused-vars": 0,
     "no-useless-escape": 0,
     "no-inner-declarations": 0,
-    "no-constant-condition": [2, {"checkLoops": false}]
+    "no-constant-condition": [2, { "checkLoops": false }]
   },
   "overrides": [
     {
