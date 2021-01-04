@@ -14,9 +14,7 @@ export default async function ({ addon, global, console }) {
         selection.focusNode &&
         blockpost.contains(selection.focusNode)
       )
-        textarea.value += `[quote=${
-          blockpost.querySelector(".black.username").innerText
-        }]${selectionStr}[/quote]`;
+        textarea.value += `[quote=${blockpost.querySelector(".black.username").innerText}]${selectionStr}[/quote]`;
       else copy_paste(blockpost.id);
       textarea.scrollIntoView(false);
       textarea.focus();
