@@ -236,21 +236,21 @@ h1 {
   background: rgb(177, 23, 248);
   border-color: #b20eb8;
 }
-.filter-option.sel.blue {
+.top-button.sel.blue {
   background: #175ef8;
 }
-.filter-option.sel.green {
+.top-button.sel.green {
   background: #78fd2b;
   color: #333333;
 }
-.filter-option.sel.yellow {
+.top-button.sel.yellow {
   background: #fddd2b;
   color: #333333;
 }
-.filter-option.sel.red {
+.top-button.sel.red {
   background: #fd662b;
 }
-.filter-option.sel.darkgreen {
+.top-button.sel.darkgreen {
   background: #00b1a8;
 }
 
@@ -479,8 +479,7 @@ h1 {
   margin-right: 20px;
 }
 
-.bulk-enable-disable,
-.filter-options {
+.top-button-box {
   display: flex;
   border-radius: 4px;
   overflow: hidden;
@@ -490,24 +489,21 @@ h1 {
   user-select: none;
 }
 
-.enable-disable-button,
-.filter-option {
+.top-button {
   padding: 10px;
   border-right: 1px solid #000;
 }
-.enable-disable-button:hover,
-.filter-option:hover {
+.top-buton:hover {
   cursor: pointer;
   background: #1a1a1a;
 }
-.enable-disable-button:last-child,
-.filter-option:last-child {
+.top-button:last-child {
   border-right: none;
 }
-.filter-option.sel {
+.top-button.sel {
   background: #ff7b26;
 }
-.filter-option.disabled {
+.top-button.disabled {
   filter: grayscale(80%);
   pointer-events: none;
 }
@@ -729,7 +725,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 @media only screen and (max-width: 370px) {
   .badge {
-    display: none;
+  display: none;
   }
 }
 .categories-shrink {
