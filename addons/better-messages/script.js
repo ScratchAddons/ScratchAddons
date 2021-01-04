@@ -5,20 +5,20 @@ function rsort(array, by1, by2) {
 }
 
 function setCookie(cname = required(), cvalue = required(), exdays = 365) {
-	var expires = new Date();
+	var expires = new Date()
 	expires.setTime(expires.getTime() + (exdays * 24 * 60 * 60 * 1000))
-	expires.toUTCString();
-	document.cookie = "sa-" + cname + "=" + cvalue + ";expires=" + expires + ";path=/";
+	expires.toUTCString()
+	document.cookie = "sa-" + cname + "=" + cvalue + ";expires=" + expires + ";path=/"
 }
 
 function getCookie(cname = required()) {
 	var result = ""
 	document.cookie.split(';').forEach(cookie => {
 		if (cookie.trim().indexOf(cname) == 0) {
-			result = cookie.trim().substring((cname + "=").length);
+			result = cookie.trim().substring((cname + "=").length)
 		}
 	})
-	return result;
+	return result
 }
 
 function required() {
@@ -36,7 +36,7 @@ export default async function ({
 		try {
 			cookieUsers = JSON.parse(getCookie("sa-accounts"))
 		} catch {
-			cookieUsers = [];
+			cookieUsers = []
 		}
 		var users = []
 		var messages = []
@@ -48,8 +48,8 @@ export default async function ({
 		}
 		cookieUsers.forEach((user, index) => {
 			// parse the stored cookie containing IDs and XTokens to make the next loop simpler
-			var uValue = Object.values(user);
-			var uKeys = Object.keys(user);
+			var uValue = Object.values(user)
+			var uKeys = Object.keys(user)
 			parseCookie.name[index] = uKeys.indexOf("name") > -1 ? uValue[uKeys.indexOf("name")] : ""
 			parseCookie.token[index] = uKeys.indexOf("token") > -1 ? uValue[uKeys.indexOf("token")] : ""
 			parseCookie.id[index] = uKeys.indexOf("id") > -1 ? uValue[uKeys.indexOf("id")] : ""
@@ -70,53 +70,52 @@ export default async function ({
 		})
 		setCookie("accounts", JSON.stringify(users))
 
-		var messageIndex = 0;
+		var messageIndex = 0
 		console.log(messageIndex)
 
 		function printMessages() {
 			if (Object.keys(messages).length == users.length) {
-				messages = rsort(messages.flat(), "read", "datetime_created")
+				messages = rsort(messages.flat(), "unread", "datetime_created")
 				document.getElementsByClassName("messages-social-list")[0].innerHTML = ""
 				var currentIndex = messageIndex
 				for (; messageIndex < currentIndex + 20; messageIndex++) {
 					console.log(messageIndex)
-					var message = messages[messageIndex];
+					var message = messages[messageIndex]
 					document.getElementsByClassName("messages-social-list")[0].innerHTML += `<li class="social-message mod-${messageHTML(message)}</div></div><span class="social-message-date"><span>${timeSince(new Date(message.datetime_created))}</span></span></div></li>`
 				}
 				//ADD duplicate detection
-				//document.querySelector(".messages-social-list .loading").outerHTML = "";
 
 			}
 		}
 
 
 		function timeSince(date) {
-			var seconds = Math.floor((new Date() - date) / 1000);
-			var interval = seconds / 31536000;
+			var seconds = Math.floor((new Date() - date) / 1000)
+			var interval = seconds / 31536000
 			if (interval > 1) {
 				return safeMsg("years", {
 					number: Math.floor(interval)
 				})
 			}
-			interval = seconds / 2592000;
+			interval = seconds / 2592000
 			if (interval > 1) {
 				return safeMsg("months", {
 					number: Math.floor(interval)
 				})
 			}
-			interval = seconds / 86400;
+			interval = seconds / 86400
 			if (interval > 1) {
 				return safeMsg("days", {
 					number: Math.floor(interval)
 				})
 			}
-			interval = seconds / 3600;
+			interval = seconds / 3600
 			if (interval > 1) {
 				return safeMsg("hours", {
 					number: Math.floor(interval)
 				})
 			}
-			interval = seconds / 60;
+			interval = seconds / 60
 			if (interval > 1) {
 				return safeMsg("minutes", {
 					number: Math.floor(interval)
@@ -197,11 +196,14 @@ export default async function ({
 			} else {
 				fetch("https://api.scratch.mit.edu/users/" + user.name + "/messages?x-token=" + user.token).then(response => response.json()).then(usermessages => {
 					messages[index] = usermessages
-					usermessages.forEach((_, ind) => {
-						messages[index][ind].recipient_id = user.id;
-						messages[index][ind].recipient_name = user.name
+					fetch("https://api.scratch.mit.edu/users/" + user.name + "/messages/count").then(response => response.json()).then(count=>{
+						usermessages.forEach((_, ind) => {
+							messages[index][ind].recipient_id = user.id
+							messages[index][ind].recipient_name = user.name
+							messages[index][ind].unread = (ind <= count-1)
+						})
+						printMessages()
 					})
-					printMessages()
 				})
 				//fetch("https://api.scratch.mit.edu/users/" + user.name + "/messages/admin?x-token=" + user.token).then(response => response.json()).then(useralerts => {
 				//	alerts[index] = alerts[index].concat(useralerts)
