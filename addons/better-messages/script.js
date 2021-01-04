@@ -26,7 +26,6 @@ function required() {
 }
 export default async function ({
 	addon,
-	console,
 	safeMsg
 }) {
 	if (addon.auth.isLoggedIn) {
@@ -71,7 +70,6 @@ export default async function ({
 		setCookie("accounts", JSON.stringify(users))
 
 		var messageIndex = 0
-		console.log(messageIndex)
 
 		function printMessages() {
 			if (Object.keys(messages).length == users.length) {
@@ -79,7 +77,6 @@ export default async function ({
 				document.getElementsByClassName("messages-social-list")[0].innerHTML = ""
 				var currentIndex = messageIndex
 				for (; messageIndex < currentIndex + 20; messageIndex++) {
-					console.log(messageIndex)
 					var message = messages[messageIndex]
 					document.getElementsByClassName("messages-social-list")[0].innerHTML += `<li class="social-message mod-${messageHTML(message)}</div></div><span class="social-message-date"><span>${timeSince(new Date(message.datetime_created))}</span></span></div></li>`
 				}
@@ -196,11 +193,11 @@ export default async function ({
 			} else {
 				fetch("https://api.scratch.mit.edu/users/" + user.name + "/messages?x-token=" + user.token).then(response => response.json()).then(usermessages => {
 					messages[index] = usermessages
-					fetch("https://api.scratch.mit.edu/users/" + user.name + "/messages/count").then(response => response.json()).then(count=>{
+					fetch("https://api.scratch.mit.edu/users/" + user.name + "/messages/count").then(response => response.json()).then(count => {
 						usermessages.forEach((_, ind) => {
 							messages[index][ind].recipient_id = user.id
 							messages[index][ind].recipient_name = user.name
-							messages[index][ind].unread = (ind <= count-1)
+							messages[index][ind].unread = (ind <= count - 1)
 						})
 						printMessages()
 					})
