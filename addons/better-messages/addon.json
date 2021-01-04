@@ -17,7 +17,7 @@
 	],
 	"userscripts": [
 		{
-			"url": "script.min.js",
+			"url": "script.js",
 			"matches": [
 				"https://scratch.mit.edu/messages"
 			]

@@ -125,7 +125,7 @@ export default async function ({
 					return `user-join"><div class="flex-row mod-social-message"><div class="social-message-content"><div><span>Welcome to Scratch, ${message.actor_username}! After you make projects and comments, you'll get messages about them here. Go <a href="/explore">Explore</a> or <a href="/projects/editor/?tutorial=getStarted">make a project</a>.</span>`
 					//IMPROVE by moving to "alerts"
 				case "loginrequired":
-					return `sa-error"><div class="flex-row mod-social-message"><div class="social-message-content"><img alt="notification image" src="//www.pikpng.com/pngl/b/131-1312304_attention-png.png" class="social-message-icon" width="1rem"><div><p class="comment-message-info"><span>Scratch Addons error: <code>Unrecognised message type - ${message.type}</code>. Please post this error on <a href="https://github.com/ScratchAddons/ScratchAddons/issues/new?assignees=RedGuy12&amp;labels=bug&amp;template=---bug.md&amp;title=Unrecognised%20message%20type:%20${message.type}">GitHub</a> or report it via <a href="https://scratchaddons.com/feedback">Scratch Addons Feedback</a>. Wherever you report it, please make sure you include the following error code: </span></p><div class="flex-row mod-sa-error"><div class="error-text"><pre class="sa-error">JSON message: ${JSON.stringify(message).replaceAll("<", "&lt;").replaceAll(">", "&gt;")}</pre></div></div>`
+					return `sa-error"><div class="flex-row mod-social-message"><div class="social-message-content"><img alt="notification image" src="//www.pikpng.com/pngl/b/131-1312304_attention-png.png" class="social-message-icon" width="1rem"><div><span>Scratch Addons error: <code>Missing username, ID, and/or XToken for account - ${message.recipient_name}</code>. <strong>This will most likely be fixed by logging into the account ${message.recipient_name}.</strong></span></p></div></div>`
 				default:
 					return `sa-error"><div class="flex-row mod-social-message"><div class="social-message-content"><img alt="notification image" src="//www.pikpng.com/pngl/b/131-1312304_attention-png.png" class="social-message-icon" width="1rem"><div><p class="comment-message-info"><span>Scratch Addons error: <code>Unrecognised message type - ${message.type}</code>. Please post this error on <a href="https://github.com/ScratchAddons/ScratchAddons/issues/new?assignees=RedGuy12&amp;labels=bug&amp;template=---bug.md&amp;title=Unrecognised%20message%20type:%20${message.type}">GitHub</a> or report it via <a href="https://scratchaddons.com/feedback">Scratch Addons Feedback</a>. Wherever you report it, please make sure you include the following error code: </span></p><div class="flex-row mod-sa-error"><div class="error-text"><pre class="sa-error">JSON message: ${JSON.stringify(message).replaceAll("<", "&lt;").replaceAll(">", "&gt;")}</pre></div></div>`
 			}
@@ -140,7 +140,8 @@ export default async function ({
 					"datetime_created": "2020-07-12T18:58:27.000Z",
 					"type": "loginrequired",
 					"recipient_id": user.id,
-					"recipient_name": user.name
+					"recipient_name": user.name,
+					"xtoken": user.token
 				}]
 				printMessages()
 			} else {
