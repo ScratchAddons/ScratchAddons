@@ -10,7 +10,7 @@ export default async function ({ addon, global, console }) {
           blockpost.querySelector(".black.username").innerText
         }]${window.getSelection().toString()}[/quote]`;
       else copy_paste(blockpost.id);
-      textarea.scrollIntoView();
+      textarea.scrollIntoView(false);
       textarea.focus();
     });
   }
