@@ -91,6 +91,18 @@ const vue = new Vue({
           theme: true,
         },
       },
+      {
+        name: chrome.i18n.getMessage("popup"),
+        matchType: "tag",
+        matchName: "popup",
+        color: "yellow",
+        tabShow: {
+          all: true,
+          editor: false,
+          community: false,
+          theme: false,
+        },
+      },
     ],
   },
   computed: {
