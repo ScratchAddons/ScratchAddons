@@ -1,11 +1,6 @@
 export default async function ({ addon, global, console }) {
-  var semicolon = document.createElement("p");
-  semicolon.textContent = ";";
-  semicolon.classList.add("semicolon");
-  document.body.appendChild(semicolon);
-
-  addon.tab.addEventListener("urlChange", () => {
-    var semicolon = document.createElement("p");
+(function ready {
+      var semicolon = document.createElement("p");
     semicolon.textContent = ";";
     semicolon.classList.add("semicolon");
     document.body.appendChild(semicolon);
@@ -16,4 +11,5 @@ export default async function ({ addon, global, console }) {
       document.getElementsByClassName("semicolon")[0].style.display = "block";
     }
   });
-}
+})();
+  addon.tab.addEventListener("urlChange", ready())
