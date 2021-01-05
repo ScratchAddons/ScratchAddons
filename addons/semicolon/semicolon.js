@@ -1,16 +1,15 @@
 export default async function ({ addon, global, console }) {
-const ready = () => {
-      var semicolon = document.createElement("p");
-    semicolon.textContent = ";";
-    semicolon.classList.add("semicolon");
-    document.body.appendChild(semicolon);
-
+  const semicolon = document.createElement("p");
+  semicolon.textContent = ";";
+  semicolon.classList.add("semicolon");
+  document.body.appendChild(semicolon);
+  const ready = () => {
     if (addon.tab.editorMode === "editor" || addon.tab.editorMode === "fullscreen") {
-      document.getElementsByClassName("semicolon")[0].style.display = "none";
+      semicolon.style.display = "none";
     } else {
-      document.getElementsByClassName("semicolon")[0].style.display = "block";
+      semicolon.style.display = "block";
     }
-  });
+  };
+  ready();
+  addon.tab.addEventListener("urlChange", ready);
 }
-ready()
-addon.tab.addEventListener("urlChange", ready)
