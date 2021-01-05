@@ -17,15 +17,15 @@
 	],
 	"userscripts": [
 		{
-			"url": "script.js",
-			"matches": [
-				"https://scratch.mit.edu/messages"
-			]
-		},
-		{
 			"url": "badge.js",
 			"matches": [
 				"https://scratch.mit.edu/*"
+			]
+		},
+		{
+			"url": "script.js",
+			"matches": [
+				"https://scratch.mit.edu/messages"
 			]
 		}
 	],
