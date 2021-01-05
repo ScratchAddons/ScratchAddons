@@ -36,9 +36,8 @@ jobs:
           contents: |
             ${{ steps.changed.outputs.files_created }}
             ${{ steps.changed.outputs.files_updated }}
-
       - name: Validate .json with schema
         uses: Hans5958/validate-json-action@master
         with:
-          schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/popup/1/1.6.json
+          schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/master/1/1.6.json
           jsons: changes.txt
