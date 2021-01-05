@@ -52,7 +52,12 @@ async function getContentScriptInfo(url) {
       }
       if (styleUrls.length) {
         const styles = {};
-        data.themes.push({ addonId, styleUrls, styles });
+        data.themes.push({
+          addonId,
+          styleUrls,
+          styles,
+          refreshRequired: manifest.refreshRequired,
+        });
         for (const styleUrl of styleUrls) {
           fetchThemeStylesPromises.push(
             fetch(chrome.runtime.getURL(`/addons/${addonId}/${styleUrl}`))

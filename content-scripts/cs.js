@@ -63,7 +63,7 @@ window.addEventListener("load", () => {
 
 function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
   document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
-    if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
+    if (style.getAttribute("data-require-refresh") !== "true") style.remove();
   });
   for (const userstyleUrl of userstyleUrls || []) {
     const link = document.createElement("link");
@@ -77,11 +77,12 @@ function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
       let css = theme.styles[styleUrl];
       // Replace %addon-self-dir% for relative URLs
       css = css.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${theme.addonId}`));
-      if (isUpdate && css.startsWith("/* sa-autoupdate-theme-ignore */")) continue;
+      if (isUpdate && theme.refreshRequired) continue;
       css += `\n/*# sourceURL=${styleUrl} */`;
       const style = document.createElement("style");
       style.classList.add("scratch-addons-theme");
       style.setAttribute("data-addon-id", theme.addonId);
+      style.setAttribute("data-require-refresh", String(theme.refreshRequired));
       style.textContent = css;
       if (document.body) document.documentElement.insertBefore(style, document.body);
       else document.documentElement.appendChild(style);

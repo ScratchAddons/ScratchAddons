@@ -244,5 +244,8 @@
   },
   "confirmImport": {
     "message": "Confirm"
+  },
+  "refreshRequired": {
+    "message": "Refresh the editor after enabling/disabling this theme."
   }
 }

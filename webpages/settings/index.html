@@ -169,12 +169,17 @@
             </div>
             <div class="addon-settings" v-show="addon._expanded">
               <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
-              <div id="info" v-for="info of addon.info">
-                <div class="addon-warn" v-if="info.type == 'warning'" v-show="addon._expanded">
-                  <img src="../../images/icons/warning.svg" />{{ info.text }}
+              <div id="info">
+                <div v-for="info of addon.info">
+                  <div class="addon-warn" v-if="info.type == 'warning'" v-show="addon._expanded">
+                    <img src="../../images/icons/warning.svg" />{{ info.text }}
+                  </div>
+                  <div class="addon-notice" v-if="info.type == 'notice'" v-show="addon._expanded">
+                    <img src="../../images/icons/notice.svg" />{{ info.text }}
+                  </div>
                 </div>
-                <div class="addon-notice" v-if="info.type == 'notice'" v-show="addon._expanded">
-                  <img src="../../images/icons/notice.svg" />{{ info.text }}
+                <div v-if="addon.refreshRequired" class="addon-notice addon-refresh-notice" v-show="addon._expanded">
+                  <img src="../../images/icons/notice.svg" />{{ msg("refreshRequired") }}
                 </div>
               </div>
               <div class="addon-credits" v-if="addon.credits">
