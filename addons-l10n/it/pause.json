@@ -1,1 +1,1 @@
-{"pause/pause":"Pausa","pause/@name":"Pulsante Pausa"}
+{"pause/pause":"Pausa","pause/@name":"Pulsante Pausa","pause/@description":"Aggiunge un tasto pausa accanto alla bandiera verde.","pause/@info-programpause":"Puoi anche mettere in pausa un progetto via codice in Scratch (anche conosciuto come breakpoint) creando un blocco, chiamandolo \"sa-pause\" e utilizzandolo."}
