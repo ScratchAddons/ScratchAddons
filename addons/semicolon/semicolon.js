@@ -13,4 +13,4 @@ const ready = () => {
   });
 }
 ready()
-  addon.tab.addEventListener("urlChange", ready)
+addon.tab.addEventListener("urlChange", ready)
