@@ -10,6 +10,11 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
+window.addEventListener("load", () => {
+  let height = window.innerHeight - 3;
+  document.documentElement.style.setProperty("--height", `${height}px`);
+});
+
 const vue = new Vue({
   el: "body",
   data: {

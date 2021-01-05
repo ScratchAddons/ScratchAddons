@@ -279,7 +279,6 @@ export default async function ({ addon, global, console, msg }) {
     blockSwitches["control_forever"] = [
       {
         opcode: "control_repeat_until",
-        remap: { SUBSTACK: "split" },
       },
       noopSwitch,
     ];
@@ -682,7 +681,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const injectCustomContextMenu = (block) => {
     const type = block.type;
-    if (!blockSwitches.hasOwnProperty(type)) {
+    if (!Object.prototype.hasOwnProperty.call(blockSwitches, type)) {
       return;
     }
 
@@ -740,6 +739,12 @@ export default async function ({ addon, global, console, msg }) {
     workspace._blockswitchingInjected = true;
     workspace.getAllBlocks().forEach(injectCustomContextMenu);
     workspace.addChangeListener(changeListener);
+    const languageSelector = document.querySelector('[class^="language-selector_language-select"]');
+    if (languageSelector) {
+      languageSelector.addEventListener("change", () => {
+        setTimeout(inject);
+      });
+    }
   };
 
   const mutationObserver = new MutationObserver(mutationObserverCallback);

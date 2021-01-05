@@ -354,7 +354,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         if (search) return search;
         const obj = {
           id: projectId,
-          title: htmlToText(title),
+          title,
           unreadComments: 0,
           commentChains: [],
           loves: 0,
@@ -381,7 +381,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         if (search) return search;
         const obj = {
           id: studioId,
-          title: htmlToText(title),
+          title,
           unreadComments: 0,
           commentChains: [],
           loadedComments: false,
@@ -416,7 +416,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
             },
             (comments) => {
               if (Object.keys(comments).length === 0) elementObject.unreadComments = 0;
-              for (const commentId in comments) {
+              for (const commentId of Object.keys(comments)) {
                 const commentObject = comments[commentId];
                 Vue.set(this.comments, commentId, commentObject);
                 const chainId = commentObject.childOf || commentId;
@@ -445,29 +445,27 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         const messagesToCheck =
           this.msgCount > 40 ? this.messages.length : showAll ? this.messages.length : this.msgCount;
         this.showingMessagesAmt = messagesToCheck;
-        for (const indexString in this.messages.slice(0, messagesToCheck)) {
-          const index = Number(indexString);
-          const message = this.messages[index];
+        for (const message of this.messages.slice(0, messagesToCheck)) {
           if (message.type === "followuser") {
             this.follows.push(message.actor_username);
           } else if (message.type === "curatorinvite") {
             this.studioInvites.push({
               actor: message.actor_username,
               studioId: message.gallery_id,
-              studioTitle: htmlToText(message.title),
+              studioTitle: message.title,
             });
           } else if (message.type === "forumpost") {
             // We only want one message per forum topic
             if (!this.forumActivity.find((obj) => obj.topicId === message.topic_id)) {
               this.forumActivity.push({
                 topicId: message.topic_id,
-                topicTitle: htmlToText(message.topic_title),
+                topicTitle: message.topic_title,
               });
             }
           } else if (message.type === "remixproject") {
             this.remixes.push({
-              parentTitle: htmlToText(message.parent_title),
-              remixTitle: htmlToText(message.title),
+              parentTitle: message.parent_title,
+              remixTitle: message.title,
               actor: message.actor_username,
               projectId: message.project_id,
             });
@@ -476,7 +474,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
             if (!this.studioActivity.find((obj) => obj.studioId === message.gallery_id)) {
               this.studioActivity.push({
                 studioId: message.gallery_id,
-                studioTitle: htmlToText(message.title),
+                studioTitle: message.title,
               });
             }
           } else if (message.type === "loveproject") {
@@ -583,9 +581,4 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       },
     },
   });
-
-  function htmlToText(html) {
-    // compat
-    return escapeHTML(html);
-  }
 })();

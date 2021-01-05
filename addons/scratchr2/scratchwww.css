@@ -1,0 +1,26 @@
+a:link,
+a:visited,
+.button.white,
+.news li h4,
+.intro-banner .intro-button,
+.comment .comment-body .comment-bottom-row .comment-reply {
+  color: var(--scratchr2-linkColor);
+}
+a:hover,
+.news li:hover h4 {
+  color: var(--scratchr2-activeColor);
+}
+#navigation,
+#navigation .dropdown,
+#navigation .dropdown.with-arrow::before,
+.intro-banner .intro-container,
+.title-banner.mod-messages,
+.download .download-header,
+.os-chooser .button.active,
+.step .step-number-row .step-number {
+  background-color: var(--scratchr2-primaryColor);
+  color: #fff;
+}
+a.social-messages-profile-link {
+  color: inherit;
+}

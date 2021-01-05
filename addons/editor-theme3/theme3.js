@@ -61,33 +61,48 @@ export default async function ({ addon, global, console }) {
       alt: "myBlocks",
     },
     Pen: {
+      // For historical reasons, this is called "Pen".
       color: "#0FBD8C",
       alt: "pen",
     },
   };
 
-  for (var prop in categories) {
+  for (var prop of Object.keys(categories)) {
     stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground {
 			fill: var(--editorTheme3-${categories[prop].var ? categories[prop].var : prop}Color);
 		}
 		.scratchCategoryId-${categories[prop].alt ? categories[prop].alt : prop} > .scratchCategoryItemBubble {
 			background-color: var(--editorTheme3-${categories[prop].var ? categories[prop].var : prop}Color) !important;
 		}
+    .blocklyDropDownDiv[data-category="${prop}"] {
+      background-color: var(--editorTheme3-${categories[prop].var ? categories[prop].var : prop}Color) !important;
+    }
 	    `;
-    if (prop == "custom") {
+    if (prop === "custom") {
       stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
 				fill: var(--editorTheme3-${prop}Color) !important;
         	}`;
     }
-    if (prop == "sensing") {
+    if (prop === "sensing") {
       stylesheet += `path.blocklyBlockBackground[fill="#5CB1D6"] {
 				fill: var(--editorTheme3-${prop}Color);
         	}`;
     }
-    if (prop == "events") {
+    if (prop === "events") {
       stylesheet += `path.blocklyBlockBackground[fill="#FFBF00"] {
 				fill: var(--editorTheme3-${prop}Color);
-        	}`;
+        }
+        .blocklyDropDownDiv[style*="rgb(255, 191, 0)"] {
+          background-color: var(--editorTheme3-${prop}Color) !important;
+        }`;
+    }
+    if (prop === "Pen") {
+      stylesheet += `path.blocklyBlockBackground[fill="#0FBD8C"] {
+				fill: var(--editorTheme3-${prop}Color);
+        }
+        .blocklyDropDownDiv[style*="rgb(15, 189, 140)"] {
+          background-color: var(--editorTheme3-${prop}Color) !important;
+        }`;
     }
   }
 

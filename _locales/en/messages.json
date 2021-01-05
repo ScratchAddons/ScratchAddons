@@ -181,5 +181,68 @@
   },
   "permissionsDenied": {
     "message": "Site access could not be enabled. Try again."
+  },
+  "translate": {
+    "message": "Help Translate"
+  },
+  "extensionUpdate": {
+    "message": "Scratch Addons extension update"
+  },
+  "extensionUpdateInfo1": {
+    "message": "$1: $2 for choosing colors easily. Go to $3 to enable it."
+  },
+  "newFeature": {
+    "message": "New feature"
+  },
+  "hexColorPicker": {
+    "message": "hex color picker"
+  },
+  "scratchAddonsSettings": {
+    "message": "Scratch Addons settings"
+  },
+  "extensionUpdateInfo2": {
+    "message": "Speak another language? $1"
+  },
+  "helpTranslateScratchAddons": {
+    "message": "Help translate Scratch Addons"
+  },
+  "fullChangelog": {
+    "message": "See full $1 changelog"
+  },
+  "notAffiliated": {
+    "message": "Scratch Addons is not affiliated with Scratch."
+  },
+  "hexColorPickerAlt": {
+    "message": "Screenshot of a color picker with hex code input."
+  },
+  "new": {
+    "message": "New!"
+  },
+  "exportAndImportSettings": {
+    "message": "Export and Import Settings"
+  },
+  "exportAndImportSettingsDescription": {
+    "message": "Export settings as a JSON file for use on other computers."
+  },
+  "useBrowserSync": {
+    "message": "You can also enable your browser's built-in sync options to automatically synchronize the settings between devices."
+  },
+  "export": {
+    "message": "Export Settings"
+  },
+  "import": {
+    "message": "Import Settings"
+  },
+  "fileNotSelected": {
+    "message": "Please select a settings file."
+  },
+  "importSuccess": {
+    "message": "Settings have been imported successfully. Scratch Addons will reload."
+  },
+  "importFailed": {
+    "message": "The settings file is invalid. Please try again."
+  },
+  "confirmImport": {
+    "message": "Confirm"
   }
 }

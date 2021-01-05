@@ -50,7 +50,7 @@ export default async function ({ addon, global, console, msg }) {
     img.addEventListener("click", (e) => {
       if (!playing) {
         vm.runtime.audioEngine.audioContext.resume().then(() => {
-          if (vm.runtime.threads.length == 0) vm.runtime.threads = threads;
+          if (vm.runtime.threads.length === 0) vm.runtime.threads = threads;
           vm.runtime.ioDevices.clock.resume();
           img.src = addon.self.dir + "/pause.svg";
         });

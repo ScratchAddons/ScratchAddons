@@ -37,7 +37,6 @@
   "editor-devtools/deep": "Deep",
   "editor-devtools/help": "Help",
   "editor-devtools/tutorials": "Tutorials",
-  "editor-devtools/inject": "Inject",
   "editor-devtools/enter-expr": "Griffpatch: Enter an expression (i.e. a+2*3)",
   "editor-devtools/replace": "Griffpatch: Switch all {name} in this sprite for the variable named:",
   "editor-devtools/top": "Send to top",

@@ -20,7 +20,7 @@ export default async function ({ addon, global, console }) {
     set: function (setx) {
       x = setx;
       showUpdatedValue();
-      return (this.__scratchX = setx);
+      this.__scratchX = setx;
     },
   });
 
@@ -31,7 +31,7 @@ export default async function ({ addon, global, console }) {
     set: function (sety) {
       y = sety;
       showUpdatedValue();
-      return (this.__scratchY = sety);
+      this.__scratchY = sety;
     },
   });
 

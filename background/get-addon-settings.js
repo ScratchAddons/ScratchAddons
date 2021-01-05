@@ -24,8 +24,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             madeAnyChanges = true;
             settings[option.id] = option.default;
           }
-          // TODO: remove in v1.5.0
-          if (option.type === "select" && oldToNewMap.hasOwnProperty(settings[option.id])) {
+          if (option.type === "select" && Object.prototype.hasOwnProperty.call(oldToNewMap, settings[option.id])) {
             settings[option.id] = oldToNewMap[settings[option.id]];
             madeChangesToAddon = madeAnyChanges = true;
           }
