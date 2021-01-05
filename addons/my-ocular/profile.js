@@ -25,17 +25,13 @@ export default async function ({ addon, global, console, msg }) {
 
     dot.style.backgroundColor = color;
 
-    var location = document.createElement("span"); // create a new location element
-    location.classList.add("group"); // give it the group class so it fits in
-    location.innerText = container.innerText; // set it to the old innertext
-
-    var location = document.createElement("span"); // create a new location element
-    location.classList.add("group"); // give it the group class so it fits in
-    location.innerText = container.innerText; // set it to the old innertext
+    var locationElem = document.createElement("span"); // create a new location element
+    locationElem.classList.add("group"); // give it the group class so it fits in
+    locationElem.innerText = container.innerText; // set it to the old innertext
 
     container.innerText = ""; // clear the old location
 
-    container.appendChild(location); // give it the location
+    container.appendChild(locationElem); // give it the location
     container.appendChild(statusSpan);
     container.appendChild(dot);
   }

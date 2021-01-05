@@ -22,6 +22,8 @@
  * limitations under the License.
  */
 
+/* eslint-disable */
+
 const INPUT_VALUE = 1;
 const NEXT_STATEMENT = 3;
 const DUMMY_INPUT = 5;

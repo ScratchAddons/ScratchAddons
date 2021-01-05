@@ -42,7 +42,11 @@ function injectPrototype() {
     if (Function.prototype.bind === oldPrototypes.functionBind) {
       // Just in case some code stores the bind function once on startup, then always uses it.
       return oldPrototypes.functionBind.apply(this, args);
-    } else if (args[0] && args[0].hasOwnProperty("editingTarget") && args[0].hasOwnProperty("runtime")) {
+    } else if (
+      args[0] &&
+      Object.prototype.hasOwnProperty.call(args[0], "editingTarget") &&
+      Object.prototype.hasOwnProperty.call(args[0], "runtime")
+    ) {
       createReadyOnce("vm", args[0]);
       // After finding the VM, return to previous Function.prototype.bind
       Function.prototype.bind = oldPrototypes.functionBind;

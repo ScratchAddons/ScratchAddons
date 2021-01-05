@@ -1,3 +1,4 @@
+/* global copy_paste */
 export default async function ({ addon, global, console }) {
   let textarea = document.querySelector(".markItUpEditor");
   while (true) {

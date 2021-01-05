@@ -2,11 +2,11 @@ export default async function ({ addon, global, console, msg }) {
   function createBetterProfilePage(featuredThumb, featuredLink, featuredHeading, featuredTitle) {
     document.documentElement.style.setProperty("--featured-thumb", `url("${featuredThumb}")`);
     let profileUsername = document.querySelector(".header-text h2").innerText;
-    if (profileUsername.slice(-1) == "*") {
+    if (profileUsername.slice(-1) === "*") {
       profileUsername = profileUsername.slice(0, -1);
     }
     let boxHead = document.querySelector("#profile-data .box-head");
-    if (featuredLink != "") {
+    if (featuredLink !== "") {
       if (document.querySelector(".user-content .player .title a").innerText.replace(/\s/g, "").length > 0) {
         boxHead.appendChild(document.createElement("div")).setAttribute("id", "better-featured-project-name");
         document.querySelector("#better-featured-project-name").appendChild(document.createElement("h2"));
@@ -14,7 +14,7 @@ export default async function ({ addon, global, console, msg }) {
         document.querySelector("#better-featured-project-name h2").innerText = featuredHeading;
         document.querySelector("#better-featured-project-name h3").innerText = featuredTitle;
       }
-      if (document.querySelector('#featured-project [data-control="edit"]') != null) {
+      if (document.querySelector('#featured-project [data-control="edit"]') !== null) {
         boxHead.appendChild(document.createElement("div")).setAttribute("class", "buttons");
         document
           .querySelector("#profile-data .box-head .buttons")
@@ -28,7 +28,7 @@ export default async function ({ addon, global, console, msg }) {
           let checkFeaturedProjectModalTimes = 0;
           var checkFeaturedProjectModal = setInterval(function () {
             checkFeaturedProjectModalTimes++;
-            if (document.querySelector("#featured-project-modal") != null) {
+            if (document.querySelector("#featured-project-modal") !== null) {
               clearInterval(checkFeaturedProjectModal);
               document
                 .querySelector("#featured-project-modal .btn.blue.btn-primary")
@@ -40,7 +40,7 @@ export default async function ({ addon, global, console, msg }) {
                     if (checkFeaturedProjectTimes > 1000) {
                       clearInterval(checkFeaturedProject);
                     }
-                    if (checkFeaturedProjectLink != document.querySelector("#featured-project").href) {
+                    if (checkFeaturedProjectLink !== document.querySelector("#featured-project").href) {
                       clearInterval(checkFeaturedProject);
                       document.documentElement.style.setProperty("--featured-thumb", `url("")`);
                       location.reload();
@@ -62,14 +62,14 @@ export default async function ({ addon, global, console, msg }) {
       .querySelector(".profile-details .location")
       .insertAdjacentText("beforebegin", `(${document.querySelector(".profile-details span:nth-child(2)").title})`);
   }
-  if (document.querySelector(".user-content .stage") != null) {
+  if (document.querySelector(".user-content .stage") !== null) {
     createBetterProfilePage(
       document.querySelector(".user-content .stage img").src,
       document.querySelector(".user-content .stage a").href,
       document.querySelector(".featured-project-heading").innerText,
       document.querySelector(".user-content .player .title a").innerText
     );
-  } else if (document.querySelector("#profile-avatar img") != null) {
+  } else if (document.querySelector("#profile-avatar img") !== null) {
     createBetterProfilePage(document.querySelector("#profile-avatar img").src, "", "", "");
   }
 }

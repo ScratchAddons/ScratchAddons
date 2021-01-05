@@ -46,7 +46,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
       observer.observe(document.documentElement, { subtree: true, childList: true });
     }
-    contentScriptInfo = request.contentScriptInfo;
   } else if (request === "getInitialUrl") {
     sendResponse(initialUrl);
   } else if (request.themesUpdated) {
@@ -91,8 +90,8 @@ function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
 }
 
 function setCssVariables(addonSettings) {
-  for (const addonId in addonSettings) {
-    for (const settingName in addonSettings[addonId]) {
+  for (const addonId of Object.keys(addonSettings)) {
+    for (const settingName of Object.keys(addonSettings[addonId])) {
       const value = addonSettings[addonId][settingName];
       if (typeof value === "string" || typeof value === "number")
         document.documentElement.style.setProperty(
