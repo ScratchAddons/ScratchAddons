@@ -1,5 +1,5 @@
-import WebsiteLocalizationProvider from "../../../libraries/website-l10n.js";
-import { escapeHTML } from "../../../libraries/autoescaper.js";
+import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
+import { escapeHTML } from "../../libraries/autoescaper.js";
 
 (async () => {
   if (window.parent === window) {

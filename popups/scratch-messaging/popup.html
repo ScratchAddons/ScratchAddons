@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <title></title>
     <link rel="stylesheet" href="popup.css" />
-    <link href="../../../libraries/Sora.css" rel="stylesheet" />
-    <script src="../../../libraries/vue.js" defer></script>
+    <link href="../../libraries/Sora.css" rel="stylesheet" />
+    <script src="../../libraries/vue.js" defer></script>
     <script src="./popup.js" type="module"></script>
     <base target="_blank" />
 
@@ -19,7 +19,7 @@
         <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
           · {{ commentTimeAgo }}&nbsp;&nbsp;
           <img
-            src="../../../images/icons/popout.svg"
+            src="../../images/icons/popout.svg"
             class="popout-comment"
             @click="openComment()"
             title="{{ messages.openNewTabMsg }}"
@@ -64,11 +64,11 @@
           @click="messageTypeExtended.follows = !messageTypeExtended.follows"
         >
           <div class="btn-dropdown">
-            <img src="../../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.follows}" />
+            <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.follows}" />
           </div>
           <span class="message-type-title-text">{{ uiMessages.followsMsg }}</span>
           <span class="float-right"
-            ><img class="small-icon" src="../../../images/icons/follow.svg" /> {{ follows.length }}</span
+            ><img class="small-icon" src="../../images/icons/follow.svg" /> {{ follows.length }}</span
           >
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.follows">
@@ -86,14 +86,14 @@
         >
           <div class="btn-dropdown">
             <img
-              src="../../../images/icons/expand.svg"
+              src="../../images/icons/expand.svg"
               alt="v"
               :class="{'reverted': messageTypeExtended.studioInvites}"
             />
           </div>
           <span class="message-type-title-text">{{ uiMessages.studioInvitesMsg }}</span>
           <span class="float-right"
-            ><img class="small-icon" src="../../../images/icons/studio-add.svg" /> {{ studioInvites.length }}</span
+            ><img class="small-icon" src="../../images/icons/studio-add.svg" /> {{ studioInvites.length }}</span
           >
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.studioInvites">
@@ -109,14 +109,14 @@
         >
           <div class="btn-dropdown">
             <img
-              src="../../../../images/icons/expand.svg"
+              src="../../../images/icons/expand.svg"
               alt="v"
               :class="{'reverted': messageTypeExtended.forumActivity}"
             />
           </div>
           <span class="message-type-title-text">{{ uiMessages.forumMsg }}</span>
           <span class="float-right"
-            ><img class="small-icon" src="../../../images/icons/forum.svg" /> {{ forumActivity.length }}</span
+            ><img class="small-icon" src="../../images/icons/forum.svg" /> {{ forumActivity.length }}</span
           >
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.forumActivity">
@@ -132,14 +132,14 @@
         >
           <div class="btn-dropdown">
             <img
-              src="../../../images/icons/expand.svg"
+              src="../../images/icons/expand.svg"
               alt="v"
               :class="{'reverted': messageTypeExtended.studioActivity}"
             />
           </div>
           <span class="message-type-title-text">{{ uiMessages.studioActivityMsg }}</span>
           <span class="float-right"
-            ><img class="small-icon" src="../../../images/icons/studio.svg" /> {{ studioActivity.length }}</span
+            ><img class="small-icon" src="../../images/icons/studio.svg" /> {{ studioActivity.length }}</span
           >
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.studioActivity">
@@ -154,11 +154,11 @@
           @click="messageTypeExtended.remixes = !messageTypeExtended.remixes"
         >
           <div class="btn-dropdown">
-            <img src="../../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.remixes}" />
+            <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.remixes}" />
           </div>
           <span class="message-type-title-text">{{ uiMessages.remixesMsg }}</span>
           <span class="float-right"
-            ><img class="small-icon" src="../../../images/icons/remix.svg" /> {{ remixes.length }}</span
+            ><img class="small-icon" src="../../images/icons/remix.svg" /> {{ remixes.length }}</span
           >
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.remixes">
@@ -179,7 +179,7 @@
           </a>
           <span class="float-right">
             <span v-show="profile.unreadComments"
-              ><img class="small-icon" src="../../../images/icons/comment.svg" /> {{profile.unreadComments}}</span
+              ><img class="small-icon" src="../../images/icons/comment.svg" /> {{profile.unreadComments}}</span
             >
           </span>
         </div>
@@ -215,7 +215,7 @@
           <a class="message-type-title-text" @click="openStudio(studio.id)">{{ studioText(studio.title) }}</a>
           <span class="float-right">
             <span v-show="studio.unreadComments"
-              ><img class="small-icon" src="../../../images/icons/comment.svg" /> {{studio.unreadComments}}</span
+              ><img class="small-icon" src="../../images/icons/comment.svg" /> {{studio.unreadComments}}</span
             >
           </span>
         </div>
@@ -257,13 +257,13 @@
           <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
           <span class="float-right">
             <span v-show="project.loves"
-              ><img class="small-icon colored" src="../../../images/icons/heart.svg" /> {{project.loves}}</span
+              ><img class="small-icon colored" src="../../images/icons/heart.svg" /> {{project.loves}}</span
             >
             <span v-show="project.favorites"
-              ><img class="small-icon colored" src="../../../images/icons/star.svg" /> {{project.favorites}}</span
+              ><img class="small-icon colored" src="../../images/icons/star.svg" /> {{project.favorites}}</span
             >
             <span v-show="project.unreadComments"
-              ><img class="small-icon" src="../../../images/icons/comment.svg" /> {{project.unreadComments}}</span
+              ><img class="small-icon" src="../../images/icons/comment.svg" /> {{project.unreadComments}}</span
             >
           </span>
         </div>
@@ -302,11 +302,11 @@
       <span v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</span>
       <span v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</span>
       <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">
-        <img class="small-icon" src="../../../images/icons/reload.svg" /> {{ uiMessages.reloadMsg }}
+        <img class="small-icon" src="../../images/icons/reload.svg" /> {{ uiMessages.reloadMsg }}
       </button>
       <span v-show="messagesReady && showingMessagesAmt === 0">{{ uiMessages.noUnreadMsg }}<br /><br /></span>
       <button @click="showAllMessages = true" v-show="canShowMoreMessages">
-        <img class="small-icon" src="../../../images/icons/plus.svg" /> {{ uiMessages.showMoreMsg }}
+        <img class="small-icon" src="../../images/icons/plus.svg" /> {{ uiMessages.showMoreMsg }}
       </button>
       <br /><br /><br /><br />
     </div>
@@ -315,10 +315,10 @@
     <div id="bottom-bar" v-show="messagesReady">
       <a @click="markAsRead()" v-show="!markedAsRead">{{ uiMessages.markAsReadMsg }}</a>
       <span v-show="markedAsRead" style="font-weight: bold"
-        ><img class="small-icon" src="../../../images/icons/read.svg" /> {{ uiMessages.markedAsReadMsg }}</span
+        ><img class="small-icon" src="../../images/icons/read.svg" /> {{ uiMessages.markedAsReadMsg }}</span
       >&nbsp;&nbsp;|&nbsp;&nbsp;
       <a href="https://scratch.mit.edu/messages" id="open-messages"
-        >{{ uiMessages.openMessagesMsg }}&nbsp;&nbsp;<img src="../../../images/icons/popout.svg" id="popout"
+        >{{ uiMessages.openMessagesMsg }}&nbsp;&nbsp;<img src="../../images/icons/popout.svg" id="popout"
       /></a>
     </div>
   </body>

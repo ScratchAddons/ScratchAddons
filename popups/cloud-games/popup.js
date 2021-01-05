@@ -1,4 +1,4 @@
-import WebsiteLocalizationProvider from "../../../libraries/website-l10n.js";
+import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
 
 (async () => {
   const l10n = new WebsiteLocalizationProvider();

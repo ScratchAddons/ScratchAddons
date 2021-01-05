@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <title></title>
     <link rel="stylesheet" href="popup.css" />
-    <link href="../../../libraries/Sora.css" rel="stylesheet" />
-    <script src="../../../libraries/vue.js" defer></script>
+    <link href="../../libraries/Sora.css" rel="stylesheet" />
+    <script src="../../libraries/vue.js" defer></script>
     <script src="./popup.js" type="module"></script>
   </head>
 
@@ -16,7 +16,7 @@
           >{{ project.title }}</a
         >
         <span class="float-right"
-          ><img class="small-icon" src="../../../images/icons/users.svg" /> {{ project.amt }}</span
+          ><img class="small-icon" src="../../images/icons/users.svg" /> {{ project.amt }}</span
         >
       </div>
       <div class="project-details" v-show="true || project.amt > 0 && project.extended">
