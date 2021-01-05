@@ -8,8 +8,8 @@ export default async function ({ addon, global, console }) {
         e.cancelBubble = true;
         e.preventDefault();
         mode = !mode;
-        if (mode) vm.editingTarget.blocks.runtime.audioEngine.audioContext.suspend()
-        else vm.editingTarget.blocks.runtime.audioEngine.audioContext.resume()
+        if (mode) vm.editingTarget.blocks.runtime.audioEngine.audioContext.suspend();
+        else vm.editingTarget.blocks.runtime.audioEngine.audioContext.resume();
       }
     });
   }
