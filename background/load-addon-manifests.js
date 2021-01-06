@@ -14,6 +14,9 @@
           info.text = scratchAddons.l10n.get(`${folderName}/@info-${info.id}`, {}, info.text);
         }
       }
+      if (manifest.popup) {
+        manifest.popup.name = scratchAddons.l10n.get(`${folderName}/@name`, {}, manifest.popup.name);
+      }
     }
 
     for (const preset of manifest.presets || []) {

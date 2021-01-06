@@ -48,15 +48,15 @@ const vue = new Vue({
       }
     },
     iframeSrc(addonId) {
-      return `../../webpages/settings/index.html`;
-      return `../../popups/${addonId}/popup.html`;
+      let url = vue.popups.find((a) => a._addonId == addonId).url;
+      return url ? url : `../../popups/${addonId}/popup.html`;
     },
   },
 });
 
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   // If order unspecified, addon goes first. All new popups should be added here.
-  const TAB_ORDER = ["scratch-messaging", "cloud-games"];
+  const TAB_ORDER = ["scratch-messaging", "cloud-games", "popup-settings"];
   const addonsWithPopups = Object.keys(res.addonsEnabled)
     .filter((addonId) => res.addonsEnabled[addonId] === true)
     .map((addonId) => res.manifests.find((addon) => addon.addonId === addonId))

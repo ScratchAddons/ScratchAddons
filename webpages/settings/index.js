@@ -20,6 +20,11 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
+if (window.parent !== window) {
+  // We're in a popup!
+  document.body.classList.add("iframe");
+}
+
 const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
 
 let handleConfirmClicked = null;
@@ -466,6 +471,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
       else return a.manifest.name.localeCompare(b.manifest.name);
     } else return 1;
   });
+  manifests = manifests.filter((a) => !a.manifest.tags.includes("pseudoaddon"));
   if (!document.body.classList.contains("iframe")) {
     // Messaging related addons should always go first no matter what (rule broken below)
     manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));

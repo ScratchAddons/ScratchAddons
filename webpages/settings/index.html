@@ -11,7 +11,7 @@
     <script src="../../libraries/vue.js" defer></script>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded" class="iframe">
+  <body style="display: none" v-show="loaded">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
