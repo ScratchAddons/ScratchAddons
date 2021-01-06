@@ -13,7 +13,7 @@
     "icon": "../../images/icons/cloud.svg",
     "name": "Games"
   },
-  "tags": ["community", "recommended", "popup"],
+  "tags": ["community", "recommended"],
   "enabledByDefault": true,
   "l10n": true
 }
