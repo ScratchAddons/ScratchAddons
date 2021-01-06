@@ -7,16 +7,17 @@
     <link rel="icon" href="../../images/icon.png" />
     <script src="../set-lang.js" defer></script>
     <link rel="stylesheet" href="style.css" />
+    <link href="../../libraries/Icons.css" rel="stylesheet" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
     <script src="index.js" type="module"></script>
   </head>
   <body style="display: none" v-show="loaded">
     <div class="navbar">
-      <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
+      <img :src="switchPath" class="toggle uil" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1>{{ msg("settings") }}</h1>
-      <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themePath" />
+      <i @click="setTheme(!theme)" class="theme-switch uil" v-bind:class="themePath"></i>
     </div>
     <div class="main">
       <div
@@ -26,15 +27,15 @@
         :class="{smallMode: smallMode === true}"
       >
         <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
-          <img src="../../images/icons/list.svg" />
+          <i class="uil uil-list-ul"></i>
           <span>{{ msg("all") }}</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'editor'}" @click="selectedTab = 'editor'">
-          <img src="../../images/icons/puzzle.svg" />
+          <i class="uil uil-puzzle-piece"></i>
           <span>{{ msg("editorFeatures") }}</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'community'}" @click="selectedTab = 'community'">
-          <img src="../../images/icons/web.svg" />
+          <i class="uil uil-globe"></i>
           <span>{{ msg("websiteFeatures") }}</span>
         </div>
         <div
@@ -43,15 +44,15 @@
           :class="{sel: selectedTab === 'theme'}"
           @click="selectedTab = 'theme'"
         >
-          <img src="../../images/icons/brush.svg" />
+          <i class="uil uil-brush-alt"></i>
           <span>{{ msg("themes") }}</span>
         </div>
         <div class="category" style="margin-top: auto" @click="openPage('https://scratchaddons.com/contributors')">
-          <img src="../../images/icons/users.svg" />
+          <i class="uil uil-users-alt"></i>
           <span>{{ msg("credits") }}</span>
         </div>
         <div class="category" @click="openReview()">
-          <img src="../../images/icons/star.svg" />
+          <i class="uil uil-star"></i>
           <span>{{ msg("review") }}</span>
         </div>
         <div class="category" @click="openPage('https://scratchaddons.com/translate')">
@@ -60,11 +61,11 @@
           <div class="badge purple tooltip" style="cursor: pointer">{{ msg("new") }}</div>
         </div>
         <div class="category" @click="openFeedback()">
-          <img src="../../images/icons/comment.svg" />
+          <i class="uil uil-comment-alt-lines"></i>
           <span>{{ msg("feedback") }}</span>
         </div>
         <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
-          <img src="../../images/icons/wrench.svg" />
+          <i class="uil uil-wrench"></i>
           <span>{{ msg("moreSettings") }}</span>
         </div>
       </div>
@@ -74,17 +75,18 @@
         style="display: block !important"
         @click="sidebarToggle()"
       >
-        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === false}" />
+        <i
+          class="uil uil-angle-left"
+          src="../../images/icons/left-arrow.svg"
+          :class="{flipped: categoryOpen === false}"
+        ></i>
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div class="search-box" :class="{smallMode: smallMode === true}">
           <input type="text" id="searchBox" placeholder="{{ msg('search') }}" v-model="searchInput" />
-          <button
-            v-show="searchInput === ''"
-            style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey')"
-          ></button>
+          <button v-show="searchInput === ''"><i class="uil uil-search"></i></button>
           <button
             v-else
             style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey')"
@@ -125,16 +127,16 @@
             <div class="addon-topbar">
               <div class="clickeable-area" @click="addon._expanded = !addon._expanded">
                 <div class="btn-dropdown">
-                  <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': addon._expanded}" />
+                  <i alt="v" class="uil uil-angle-up" :class="{'reverted': addon._expanded}"></i>
                 </div>
                 <div class="addon-name">
-                  <img v-if="addon._category === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
-                  <img v-if="addon._category === 'community'" src="../../images/icons/web.svg" class="icon-type" />
-                  <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
+                  <i v-if="addon._category === 'editor'" class="icon-type uil uil-puzzle-piece"></i>
+                  <i v-if="addon._category === 'community'" class="icon-type uil uil-globe"></i>
+                  <i v-if="addon._category === 'theme'" class="icon-type uil uil-brush-alt"></i>
                   <img
                     v-if="addon._category === 'easterEgg'"
                     src="../../images/icons/egg-easter.svg"
-                    class="icon-type"
+                    class="svg-icon-type animate-pulse"
                   />
                   <span @click="devShowAddonIds">{{ addon.name }}</span>
                 </div>
@@ -162,7 +164,7 @@
                   title="{{ msg('resetToDefault') }}"
                   @click="loadDefaults(addon)"
                 >
-                  <img src="../../images/icons/undo.svg" class="icon-type" />
+                  <img src="../../images/icons/undo.svg" class="svg-icon-type" />
                 </div>
                 <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest(addon)"></div>
               </div>

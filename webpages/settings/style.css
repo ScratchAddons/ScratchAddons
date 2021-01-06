@@ -158,6 +158,9 @@ h1 {
   align-items: center;
 }
 .icon-type {
+  margin-right: 8px;
+}
+.svg-icon-type {
   height: 16px;
   vertical-align: middle;
   filter: brightness(10);
@@ -669,11 +672,11 @@ input[type="color"]::-webkit-color-swatch {
   margin-top: 10px;
 }
 .theme-switch {
-  height: 25px;
   float: right;
   right: 25px;
   position: fixed;
   cursor: pointer;
+  font-size: 25px
 }
 .large-dropdown {
   color: #fff;
@@ -746,6 +749,7 @@ input[type="color"]::-webkit-color-swatch {
   margin-top: 7px;
   cursor: pointer;
   user-select: none;
+  font-size: 24px
 }
 .flipped {
   transform: scaleX(-1);
@@ -830,4 +834,17 @@ input[type="color"]::-webkit-color-swatch {
 
 #screenshot {
   height: 10rem;
+}
+.category > i {
+  font-size: 1.15rem
+}
+.addon-name > .uil {
+  font-size:17px;
+}
+
+.btn-dropdown > i {
+  font-size: 22px
+}
+.search-box > button > i {
+  color: grey
 }

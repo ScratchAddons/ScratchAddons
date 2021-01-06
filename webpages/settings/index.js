@@ -13,10 +13,10 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   if (rr) {
     document.head.appendChild(lightThemeLink);
     vue.theme = true;
-    vue.themePath = "../../images/icons/moon.svg";
+    vue.themePath = "uil-moon";
   } else {
     vue.theme = false;
-    vue.themePath = "../../images/icons/theme.svg";
+    vue.themePath = "uil-brightness-half";
   }
 });
 
@@ -260,11 +260,11 @@ const vue = new Vue({
           if (rr && r.globalTheme !== rr) {
             document.head.appendChild(lightThemeLink);
             vue.theme = true;
-            vue.themePath = "../../images/icons/moon.svg";
+            vue.themePath = "uil-moon";
           } else if (r.globalTheme !== rr) {
             document.head.removeChild(lightThemeLink);
             vue.theme = false;
-            vue.themePath = "../../images/icons/theme.svg";
+            vue.themePath = "uil-brightness-half";
           }
         });
       });
