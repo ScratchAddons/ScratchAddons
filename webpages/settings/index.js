@@ -472,9 +472,20 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
     manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
     // New addons should always go first no matter what
     manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
+    vue.manifests = manifests.map(({ manifest }) => manifest);
+    vue.loaded = true;
+  } else {
+    chrome.tabs.query({currentWindow: true, active: true}, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", undefined, (res) => {
+        if (typeof chrome.runtime.lastError == "undefined") {
+          let addonIDs = Object.values(res).map((x) => x.addonId);
+          manifests.sort((a, b) => (addonIDs.includes(a.addonId) ? -1 : addonIDs.includes(b.addonId) ? 1 : 0));
+        }
+        vue.manifests = manifests.map(({ manifest }) => manifest);
+        vue.loaded = true;
+      });
+    });
   }
-  vue.manifests = manifests.map(({ manifest }) => manifest);
-  vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
   setTimeout(handleKeySettings, 0);
 });

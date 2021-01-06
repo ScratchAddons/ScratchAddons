@@ -122,7 +122,9 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
   document.head.appendChild(script);
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.newGlobalState) {
+    if (request === "getRunningAddons") {
+      sendResponse({...addonsWithUserscripts, ...themes })
+    } else if (request.newGlobalState) {
       template.setAttribute("data-global-state", JSON.stringify(request.newGlobalState));
       setCssVariables(request.newGlobalState.addonSettings);
     } else if (request.fireEvent) {
