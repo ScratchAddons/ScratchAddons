@@ -15,7 +15,7 @@
         }
       }
       if (manifest.popup) {
-        manifest.popup.name = scratchAddons.l10n.get(`${folderName}/@name`, {}, manifest.popup.name);
+        manifest.popup.name = scratchAddons.l10n.get(`${folderName}/@popup-name`, {}, manifest.popup.name);
       }
     }
 
