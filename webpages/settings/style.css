@@ -64,6 +64,10 @@ h1 {
   display: flex;
   align-items: center;
 }
+.category.category-small {
+  padding: 15px 20px 15px 20px;
+}
+
 .category.sel {
   color: #ff7b26;
 }
@@ -98,6 +102,7 @@ h1 {
   flex-shrink: 1;
   display: flex;
   flex-direction: column;
+  /* TODO */ overflow-x: hidden;
 }
 
 .addons-container {
@@ -105,6 +110,7 @@ h1 {
   padding: 10px 20px;
   scrollbar-width: thin;
   scrollbar-color: grey none;
+  /* TODO */ overflow-x: hidden;
 }
 
 .addon-body {
@@ -392,6 +398,7 @@ h1 {
   background: #2a2a2a;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 10px 30px;
   user-select: none;
 }
@@ -730,12 +737,30 @@ input[type="color"]::-webkit-color-swatch {
   margin-right: 10px;
 }
 .search-box.smallMode {
-  overflow: scroll;
   overflow-y: hidden;
 }
-@media only screen and (max-width: 370px) {
+@media only screen and (max-width: 500px) {
   .badge {
+    display: none !important;
+  }
+  .addon-description {
     display: none;
+  }
+  .filter-selector {
+    display: none;
+  }
+  .search-box {
+    padding: 0;
+  }
+  .navbar {
+    display: none;
+  }
+  .main {
+    /* No calc -60px because there's no navbar */
+    height: 100%;
+  }
+  .addon-setting {
+    flex-direction: column;
   }
 }
 .categories-shrink {

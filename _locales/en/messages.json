@@ -77,6 +77,9 @@
   "themes": {
     "message": "Themes"
   },
+  "popupFeatures": {
+    "message": "Extension Popup Features"
+  },
   "theme": {
     "message": "Theme:"
   },
@@ -244,5 +247,11 @@
   },
   "confirmImport": {
     "message": "Confirm"
+  },
+  "noPopupFeatures": {
+    "message": "No enabled extension popup features."
+  },
+  "settingsToEnablePopups": {
+    "message": "Go to $1 to enable popup features."
   }
 }

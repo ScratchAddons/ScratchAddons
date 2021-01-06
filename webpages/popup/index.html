@@ -12,8 +12,9 @@
     <div id="header">
       <div id="title">
         <img src="../../images/icon.svg" id="logo" alt="Logo" />
-        <span id="title-text">{{ msg("extensionName") }}</span>
-        <span><a id="version" href="#" title="{{ msg('changelog') }}" @click="openChangelog()">v{{ version }}</a></span>
+        <!-- Hide template HTML until Vue loads -->
+        <span id="title-text" style="display: none;" v-show="true">{{ msg("extensionName") }}</span>
+        <span><a id="version" style="display: none;" v-show="true" href="#" title="{{ msg('changelog') }}" @click="openChangelog()">v{{ version }}</a></span>
       </div>
       <div id="settings" @click="openSettingsPage()">
         <img src="../../images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}" />
@@ -21,15 +22,14 @@
     </div>
     <div id="popups">
       <div id="popup-bar">
-        <div id="popup-chooser">
-          <div v-for="popup of popups" class="popup-name" data-id="{{ popup.addonId }}" @click="setPopup(popup)">
+        <div id="popup-chooser" style="visibility: hidden;" :style="{ visibility: 'visible' }">
+          <div v-for="popup of popups" class="popup-name" :class="{ sel: currentPopup === popup }" @click="setPopup(popup)">
             <img v-if="popup.icon" :src="popup.icon" class="popup-icon" />
-            <!-- The Code Below Will Be Fixed By Apple. Thank You For Your Time. -->
-            <a class="popup-title">{{ msg(popup.addonId) + popup.fullscreen ? "\u00a0" : "" }}</a>
+            <a class="popup-title">{{ popup.name }} {{ popup.fullscreen ? "\u00a0" : "" }}</a>
             <a
               v-if="popup.fullscreen"
               class="popout"
-              href="../../popups/{{ popup.addonId }}/popup.html"
+              href="../../popups/{{ popup._addonId }}/popup.html"
               target="_blank"
               @click="closePopup()"
             >
@@ -38,7 +38,16 @@
           </div>
         </div>
       </div>
-      <iframe id="iframe"></iframe>
+      <div v-if="!noPopups">
+        <iframe v-for="popup in popupsWithIframes" v-show="currentPopup === popup" :src="iframeSrc(popup._addonId)" :key="popup._addonId"></iframe>
+      </div>
+      <div id="no-tabs" style="display: none;" v-show="noPopups">
+        <div>
+        <span id="no-tabs-title">{{ msg("noPopupFeatures") }}</span>
+        <br>
+        <span id="no-tabs-description">{{ msg("settingsToEnablePopups")}} <a @click="openSettingsPage()" style="cursor: pointer; text-decoration: underline;">{{ msg("scratchAddonsSettings") }}</a></span>
+        </div>
+      </div>
     </div>
   </body>
 </html>

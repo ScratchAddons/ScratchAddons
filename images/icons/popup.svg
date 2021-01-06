@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="brush.svg"
+   id="svg8"
+   version="1.1"
+   style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+   viewBox="0 0 20 20"
+   preserveAspectRatio="xMidYMid meet"
+   height="20"
+   width="20">
+  <metadata
+     id="metadata14">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs12" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg8"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:cy="9.4077218"
+     inkscape:cx="10.13631"
+     inkscape:zoom="29.344931"
+     showgrid="false"
+     id="namedview10"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <g
+     id="g4"
+     fill="none">
+    <path
+       style="fill:#ff7b26;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       sodipodi:nodetypes="ssssssssscsscssccsssssscssc"
+       id="path2"
+       fill="#626262"
+       d="m 17.897,5.5 c 0,-1.3807119 -2.019288,-3.4 -3.4,-3.4 h -9 c -1.380712,0 -3.4,2.0192881 -3.4,3.4 v 9 c 0,1.380712 2.019288,3.4 3.4,3.4 h 9 c 1.380712,0 3.4,-2.019288 3.4,-3.4 z M 3.997,8.9 V 5.5 C 3.997,4.6715729 4.668573,4 5.497,4 h 6.1 v 4.1 c 0,0.2761424 -0.523858,0.8 -0.8,0.8 z m 9.2,-4.9 h 1.3 c 0.828427,0 1.5,0.6715729 1.5,1.5 v 9 c 0,0.828427 -0.671573,1.5 -1.5,1.5 h -9 c -0.828427,0 -1.5,-0.671573 -1.5,-1.5 v -4 h 7.2 c 0.828427,0 1.981177,-1.2717868 2,-2.1 z" />
+  </g>
+</svg>

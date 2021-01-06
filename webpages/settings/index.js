@@ -140,6 +140,7 @@ const vue = new Vue({
           editor: true,
           community: true,
           theme: true,
+          popup: true
         },
       },
       {
@@ -152,6 +153,7 @@ const vue = new Vue({
           editor: true,
           community: true,
           theme: true,
+          popup: true
         },
       },
       {
@@ -188,18 +190,6 @@ const vue = new Vue({
           editor: false,
           community: false,
           theme: true,
-        },
-      },
-      {
-        name: chrome.i18n.getMessage("popup"),
-        matchType: "tag",
-        matchName: "popup",
-        color: "yellow",
-        tabShow: {
-          all: true,
-          editor: false,
-          community: false,
-          theme: false,
         },
       },
     ],
@@ -443,16 +433,18 @@ const vue = new Vue({
 chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addonSettings }) => {
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
-    manifest._category = manifest.tags.includes("easterEgg")
+    manifest._category = manifest.popup ? "popup" : manifest.tags.includes("easterEgg")
       ? "easterEgg"
       : manifest.tags.includes("theme")
       ? "theme"
       : manifest.tags.includes("community")
       ? "community"
       : "editor";
+    // Exception:
+    if (addonId === "msg-count-badge") manifest._category = "popup";
     manifest._enabled = addonsEnabled[addonId];
     manifest._addonId = addonId;
-    manifest._expanded = manifest._enabled;
+    manifest._expanded = document.body.classList.contains("iframe") ? false : manifest._enabled;
     manifest._tags = {};
     manifest._tags.recommended = manifest.tags.includes("recommended");
     manifest._tags.beta = manifest.tags.includes("beta");
@@ -472,11 +464,13 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
       else return a.manifest.name.localeCompare(b.manifest.name);
     } else return 1;
   });
-  // Messaging related addons should always go first no matter what (rule broken below)
-  manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
-  manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
-  // New addons should always go first no matter what
-  manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
+  if (!document.body.classList.contains("iframe")) {
+    // Messaging related addons should always go first no matter what (rule broken below)
+    manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
+    manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
+    // New addons should always go first no matter what
+    manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
+  }
   vue.manifests = manifests.map(({ manifest }) => manifest);
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);

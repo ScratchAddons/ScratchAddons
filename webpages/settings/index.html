@@ -11,7 +11,7 @@
     <script src="../../libraries/vue.js" defer></script>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded">
+  <body style="display: none" v-show="loaded" class="iframe">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
@@ -37,29 +37,33 @@
           <img src="../../images/icons/web.svg" />
           <span>{{ msg("websiteFeatures") }}</span>
         </div>
-        <div
-          class="category"
-          style="margin-bottom: 12px"
-          :class="{sel: selectedTab === 'theme'}"
-          @click="selectedTab = 'theme'"
-        >
+        <div class="category" :class="{sel: selectedTab === 'theme'}" @click="selectedTab = 'theme'">
           <img src="../../images/icons/brush.svg" />
           <span>{{ msg("themes") }}</span>
         </div>
-        <div class="category" style="margin-top: auto" @click="openPage('https://scratchaddons.com/contributors')">
+        <div
+          class="category"
+          :class="{sel: selectedTab === 'popup'}"
+          @click="selectedTab = 'popup'"
+          style="margin-bottom: 12px"
+        >
+          <img src="../../images/icons/popup.svg" />
+          <span>{{ msg("popupFeatures") }}</span>
+        </div>
+        <div class="category category-small" style="margin-top: auto" @click="openPage('https://scratchaddons.com/contributors')">
           <img src="../../images/icons/users.svg" />
           <span>{{ msg("credits") }}</span>
         </div>
-        <div class="category" @click="openReview()">
+        <div class="category category-small" @click="openReview()" style="display: none;">
           <img src="../../images/icons/star.svg" />
           <span>{{ msg("review") }}</span>
         </div>
-        <div class="category" @click="openPage('https://scratchaddons.com/translate')">
+        <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
           <img src="../../images/icons/translate.svg" />
           <span>{{ msg("translate") }}</span>
           <div class="badge purple tooltip" style="cursor: pointer">{{ msg("new") }}</div>
         </div>
-        <div class="category" @click="openFeedback()">
+        <div class="category category-small" @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
           <span>{{ msg("feedback") }}</span>
         </div>
@@ -136,6 +140,7 @@
                     src="../../images/icons/egg-easter.svg"
                     class="icon-type"
                   />
+                  <img v-if="addon._category === 'popup'" src="../../images/icons/popup.svg" class="icon-type" />
                   <span @click="devShowAddonIds">{{ addon.name }}</span>
                 </div>
               </div>

@@ -11,8 +11,10 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 });
 
 window.addEventListener("load", () => {
-  let height = window.innerHeight - 3;
-  document.documentElement.style.setProperty("--height", `${height}px`);
+  setTimeout(() => {
+    let height = window.innerHeight - 3;
+    document.documentElement.style.setProperty("--height", `${height}px`);
+  }, 0);
 });
 
 const vue = new Vue({
@@ -20,11 +22,9 @@ const vue = new Vue({
   data: {
     popups: [],
     currentPopup: null,
-  },
-  computed: {
-    version() {
-      return chrome.runtime.getManifest().version;
-    },
+    popupsWithIframes: [],
+    noPopups: false,
+    version: chrome.runtime.getManifest().version
   },
   methods: {
     msg(message, ...params) {
@@ -35,33 +35,37 @@ const vue = new Vue({
     },
     openSettingsPage() {
       chrome.runtime.openOptionsPage();
-      closePopup();
+      this.closePopup();
     },
     openChangelog() {
       window.open("https://scratchaddons.com/changelog?versionname=" + chrome.runtime.getManifest().version_name);
-      closePopup();
+      this.closePopup();
     },
     setPopup(popup) {
-      if (vue.currentPopup !== popup) {
-        vue.currentPopup = popup;
-        document.getElementById("iframe").src = `../../addons/${popup.addonId}/popup/popup.html`;
-        if (document.querySelector(".popup-name.sel"))
-          document.querySelector(".popup-name.sel").classList.remove("sel");
-        document.querySelector(`.popup-name[data-id="${popup.addonId}"]`).classList.add("sel");
+      if (this.currentPopup !== popup) {
+        this.currentPopup = popup;
+        if(this.popupsWithIframes.indexOf(popup) === -1) this.popupsWithIframes.push(popup)
       }
     },
+    iframeSrc(addonId) {
+      return `chrome-extension://aeepldbjfoihffgcaejikpoeppffnlbd/webpages/settings/index.html`
+      return `../../popups/${addonId}/popup.html`;
+    }
   },
 });
 
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
-  let order = ["scratch-messaging", "cloud-games"];
-  let keys = Object.keys(res.addonsEnabled).filter((k) => res.addonsEnabled[k] && order.includes(k));
-  keys.forEach((addon, i) => {
-    res.manifests.find((o) => o.addonId == addon).manifest.popup.addonId = addon;
-    vue.popups.push(res.manifests.find((o) => o.addonId == addon).manifest.popup);
-    vue.popups = vue.popups.sort((a, b) => order.indexOf(a.addonId) - order.indexOf(b.addonId));
-  });
-  if (vue.popups.length) setTimeout(() => vue.setPopup(vue.popups[0]), 0);
+  // If order unspecified, addon goes first. All new popups should be added here.
+  const TAB_ORDER = ["scratch-messaging", "cloud-games"];
+  const addonsWithPopups = Object.keys(res.addonsEnabled)
+    .filter((addonId) => res.addonsEnabled[addonId] === true)
+    .map((addonId) => res.manifests.find((addon) => addon.addonId === addonId))
+    .filter(({ manifest }) => manifest.popup)
+    // TODO: localize manifest.popup.name
+    .sort(({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA));
+  vue.popups = addonsWithPopups.map(({ addonId, manifest }) => (manifest.popup._addonId = addonId) && manifest.popup);
+  if(vue.popups.length) vue.setPopup(vue.popups[0]);
+  else vue.noPopups = true;
 });
 
 chrome.runtime.sendMessage("checkPermissions");
