@@ -48,7 +48,7 @@ const vue = new Vue({
       }
     },
     iframeSrc(addonId) {
-      return `chrome-extension://aeepldbjfoihffgcaejikpoeppffnlbd/webpages/settings/index.html`;
+      return `../../webpages/settings/index.html`;
       return `../../popups/${addonId}/popup.html`;
     },
   },

@@ -400,7 +400,6 @@ h1 {
   background: #2a2a2a;
   display: flex;
   align-items: center;
-  justify-content: center;
   padding: 10px 30px;
   user-select: none;
 }
@@ -741,7 +740,7 @@ input[type="color"]::-webkit-color-swatch {
 .search-box.smallMode {
   overflow-y: hidden;
 }
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 540px) {
   .badge {
     display: none !important;
   }
@@ -761,8 +760,11 @@ input[type="color"]::-webkit-color-swatch {
     /* No calc -60px because there's no navbar */
     height: 100%;
   }
-  .addon-setting {
-    flex-direction: column;
+  .search-box {
+    justify-content: center;
+  }
+  .setting-label {
+    width: 70px;
   }
 }
 .categories-shrink {
