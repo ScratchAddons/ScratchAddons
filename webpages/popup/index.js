@@ -47,8 +47,7 @@ const vue = new Vue({
       }
     },
     iframeSrc(addonId) {
-      let url = vue.popups.find((a) => a._addonId == addonId).url;
-      return url ? url : `../../popups/${addonId}/popup.html`;
+      return vue.popups.find((addon) => addon._addonId == addonId).url || `../../popups/${addonId}/popup.html`;
     },
   },
 });
@@ -56,13 +55,21 @@ const vue = new Vue({
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   // If order unspecified, addon goes first. All new popups should be added here.
   const TAB_ORDER = ["scratch-messaging", "cloud-games", "popup-settings"];
-  const addonsWithPopups = Object.keys(res.addonsEnabled)
+  const popupObjects = Object.keys(res.addonsEnabled)
     .filter((addonId) => res.addonsEnabled[addonId] === true)
     .map((addonId) => res.manifests.find((addon) => addon.addonId === addonId))
+    // Note an enabled addon might not exist anymore!
+    .filter(findManifest => findManifest !== undefined)
     .filter(({ manifest }) => manifest.popup)
-    // TODO: localize manifest.popup.name
-    .sort(({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA));
-  vue.popups = addonsWithPopups.map(({ addonId, manifest }) => (manifest.popup._addonId = addonId) && manifest.popup);
+    .sort(({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA))
+    .map(({ addonId, manifest }) => (manifest.popup._addonId = addonId) && manifest.popup);
+  popupObjects.push({
+    name: chrome.i18n.getMessage("quickSettings"),
+    icon: "../../images/icons/settings.svg",
+    url: "../../webpages/settings/index.html",
+    _addonId: "__settings__"
+  });
+  vue.popups = popupObjects;
   vue.setPopup(vue.popups[0]);
 });
 

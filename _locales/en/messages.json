@@ -247,5 +247,8 @@
   },
   "confirmImport": {
     "message": "Confirm"
+  },
+  "quickSettings": {
+    "message": "Quick settings"
   }
 }
