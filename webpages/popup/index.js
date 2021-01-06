@@ -23,7 +23,6 @@ const vue = new Vue({
     popups: [],
     currentPopup: null,
     popupsWithIframes: [],
-    noPopups: false,
     version: chrome.runtime.getManifest().version,
   },
   methods: {
@@ -64,8 +63,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     // TODO: localize manifest.popup.name
     .sort(({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA));
   vue.popups = addonsWithPopups.map(({ addonId, manifest }) => (manifest.popup._addonId = addonId) && manifest.popup);
-  if (vue.popups.length) vue.setPopup(vue.popups[0]);
-  else vue.noPopups = true;
+  vue.setPopup(vue.popups[0]);
 });
 
 chrome.runtime.sendMessage("checkPermissions");

@@ -53,26 +53,12 @@
           </div>
         </div>
       </div>
-      <div v-if="!noPopups">
-        <iframe
-          v-for="popup in popupsWithIframes"
-          v-show="currentPopup === popup"
-          :src="iframeSrc(popup._addonId)"
-          :key="popup._addonId"
-        ></iframe>
-      </div>
-      <div id="no-tabs" style="display: none" v-show="noPopups">
-        <div>
-          <span id="no-tabs-title">{{ msg("noPopupFeatures") }}</span>
-          <br />
-          <span id="no-tabs-description"
-            >{{ msg("settingsToEnablePopups")}}
-            <a @click="openSettingsPage()" style="cursor: pointer; text-decoration: underline"
-              >{{ msg("scratchAddonsSettings") }}</a
-            ></span
-          >
-        </div>
-      </div>
+      <iframe
+        v-for="popup in popupsWithIframes"
+        v-show="currentPopup === popup"
+        :src="iframeSrc(popup._addonId)"
+        :key="popup._addonId"
+      ></iframe>
     </div>
   </body>
 </html>
