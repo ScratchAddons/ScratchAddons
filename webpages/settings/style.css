@@ -676,7 +676,7 @@ input[type="color"]::-webkit-color-swatch {
   right: 25px;
   position: fixed;
   cursor: pointer;
-  font-size: 25px
+  font-size: 25px;
 }
 .large-dropdown {
   color: #fff;
@@ -749,7 +749,7 @@ input[type="color"]::-webkit-color-swatch {
   margin-top: 7px;
   cursor: pointer;
   user-select: none;
-  font-size: 24px
+  font-size: 24px;
 }
 .flipped {
   transform: scaleX(-1);
@@ -836,15 +836,15 @@ input[type="color"]::-webkit-color-swatch {
   height: 10rem;
 }
 .category > i {
-  font-size: 1.15rem
+  font-size: 1.15rem;
 }
 .addon-name > .uil {
-  font-size:17px;
+  font-size: 17px;
 }
 
 .btn-dropdown > i {
-  font-size: 22px
+  font-size: 22px;
 }
 .search-box > button > i {
-  color: grey
+  color: grey;
 }
