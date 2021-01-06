@@ -629,4 +629,4 @@ if (document.body.classList.contains("iframe")) {
     },
     { passive: true }
   );
-  }
+}
