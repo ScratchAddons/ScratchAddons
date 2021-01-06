@@ -310,27 +310,30 @@ const vue = (window.vue = new Vue({
 
       const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
       if (!addon._enabled && requiredPermissions.length) {
-        chrome.permissions.contains({
-          permissions: requiredPermissions
-        }, result => {
-          if (result === false) {
-            if (document.body.classList.contains("iframe")) {
-              this.addonToEnable = addon.name;
-              document.querySelector(".popup").style.display = "";
-            } else
-            chrome.permissions.request(
-              {
-                permissions: requiredPermissions,
-              },
-              (granted) => {
-                if (granted) {
-                  console.log("Permissions granted!");
-                  toggle();
-                }
-              }
-            );
-          } else toggle();
-        })
+        chrome.permissions.contains(
+          {
+            permissions: requiredPermissions,
+          },
+          (result) => {
+            if (result === false) {
+              if (document.body.classList.contains("iframe")) {
+                this.addonToEnable = addon.name;
+                document.querySelector(".popup").style.display = "";
+              } else
+                chrome.permissions.request(
+                  {
+                    permissions: requiredPermissions,
+                  },
+                  (granted) => {
+                    if (granted) {
+                      console.log("Permissions granted!");
+                      toggle();
+                    }
+                  }
+                );
+            } else toggle();
+          }
+        );
       } else toggle();
     },
     updateOption(id, newValue, addon) {
@@ -472,7 +475,7 @@ const vue = (window.vue = new Vue({
     openFullSettings() {
       chrome.runtime.openOptionsPage();
       setTimeout(() => window.parent.close(), 100);
-    }
+    },
   },
   events: {
     modalClickOutside: function (e) {
