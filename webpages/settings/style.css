@@ -122,6 +122,9 @@ h1 {
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
+.addon-body.addon-body-margin-bottom {
+  margin-bottom: 30px;
+}
 
 .addon-topbar {
   height: 50px;
@@ -921,4 +924,14 @@ input[type="color"]::-webkit-color-swatch {
 
 .popup .large-button {
   margin-right: 20px;
+}
+
+#running-page {
+  font-weight: bold;
+  padding: 10px;
+  position: sticky;
+  top: 0;
+  background-color: #222222;
+  z-index: 999;
+  transition: opacity 0.25s ease-in-out;
 }

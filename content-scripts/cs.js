@@ -122,9 +122,7 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
   document.head.appendChild(script);
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request === "getRunningAddons") {
-      sendResponse({ ...addonsWithUserscripts, ...themes });
-    } else if (request.newGlobalState) {
+    if (request.newGlobalState) {
       template.setAttribute("data-global-state", JSON.stringify(request.newGlobalState));
       setCssVariables(request.newGlobalState.addonSettings);
     } else if (request.fireEvent) {
@@ -132,7 +130,10 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
       template.setAttribute(`data-fire-event__${Date.now()}`, eventDetails);
     } else if (typeof request.setMsgCount !== "undefined") {
       template.setAttribute("data-msgcount", request.setMsgCount);
-    }
+    } else if (request === "getRunningAddons") {
+      // We need to send themes that might have been injected dynamically
+      sendResponse([...(new Set([...addonsWithUserscripts.map(obj => obj.addonId), ...Array.from(document.querySelectorAll(".scratch-addons-theme")).map(style => style.getAttribute("data-addon-id"))]))]);
+    } 
   });
 
   const observer = new MutationObserver((mutationsList) => {

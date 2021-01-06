@@ -125,10 +125,13 @@
         </div>
 
         <div class="addons-container">
+          <div id="running-page" v-show="popupOpenedOnScratchTab && searchInput === ''">{{ msg("runningOnThisPage") }} </div>
           <div
             class="addon-body"
+            :class="{ 'addon-body-margin-bottom': addon._marginBottom && searchInput === '' }"
             v-for="addon of manifests"
             v-show="addonMatchesFilters(addon) && (selectedTab === 'all' || addon._category === selectedTab)"
+            :data-has-margin-bottom="addon._marginBottom"
           >
             <div class="addon-topbar">
               <div class="clickeable-area" @click="addon._expanded = !addon._expanded">

@@ -250,5 +250,8 @@
   },
   "quickSettings": {
     "message": "Quick settings"
+  },
+  "runningOnThisPage": {
+    "message": "Running on this page:"
   }
 }
