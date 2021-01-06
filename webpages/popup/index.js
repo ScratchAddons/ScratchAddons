@@ -59,7 +59,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     .filter((addonId) => res.addonsEnabled[addonId] === true)
     .map((addonId) => res.manifests.find((addon) => addon.addonId === addonId))
     // Note an enabled addon might not exist anymore!
-    .filter(findManifest => findManifest !== undefined)
+    .filter((findManifest) => findManifest !== undefined)
     .filter(({ manifest }) => manifest.popup)
     .sort(({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA))
     .map(({ addonId, manifest }) => (manifest.popup._addonId = addonId) && manifest.popup);
@@ -67,7 +67,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     name: chrome.i18n.getMessage("quickSettings"),
     icon: "../../images/icons/settings.svg",
     url: "../../webpages/settings/index.html",
-    _addonId: "__settings__"
+    _addonId: "__settings__",
   });
   vue.popups = popupObjects;
   vue.setPopup(vue.popups[0]);
