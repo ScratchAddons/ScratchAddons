@@ -1,6 +1,6 @@
 {
   "name": "Show full areas",
-  "description": "Shows the full signature of users on the forums, and shows full What I've been doing on profiles.",
+  "description": "Shows the full signature of users on the forums, stops Scratchblocks from being cut off at the edge of the screen, and shows full What I've been doing on profiles.",
   "credits": [
     {
       "name": "GrahamSH"
@@ -17,6 +17,12 @@
     {
       "name": "Show scroll for forum signatures",
       "id": "signature",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show scroll for Scratchblocks",
+      "id": "blocks",
       "type": "boolean",
       "default": true
     },
@@ -58,6 +64,14 @@
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "settingMatch": {
         "id": "signature",
+        "value": true
+      }
+    },
+    {
+      "url": "blocks.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "settingMatch": {
+        "id": "blocks",
         "value": true
       }
     },
