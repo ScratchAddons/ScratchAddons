@@ -36,6 +36,7 @@ jobs:
           contents: |
             ${{ steps.changed.outputs.files_created }}
             ${{ steps.changed.outputs.files_updated }}
+
       - name: Validate .json with schema
         uses: Hans5958/validate-json-action@master
         with:
