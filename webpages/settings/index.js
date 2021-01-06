@@ -135,6 +135,7 @@ const vue = (window.vue = new Vue({
     searchInput: "",
     addonSettings: {},
     popupOpenedOnScratchTab: false,
+    addonToEnable: null,
     tags: [
       {
         name: chrome.i18n.getMessage("recommended"),
@@ -309,17 +310,27 @@ const vue = (window.vue = new Vue({
 
       const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
       if (!addon._enabled && requiredPermissions.length) {
-        chrome.permissions.request(
-          {
-            permissions: requiredPermissions,
-          },
-          (granted) => {
-            if (granted) {
-              console.log("Permissions granted!");
-              toggle();
-            }
-          }
-        );
+        chrome.permissions.contains({
+          permissions: requiredPermissions
+        }, result => {
+          if (result === false) {
+            if (document.body.classList.contains("iframe")) {
+              this.addonToEnable = addon.name;
+              document.querySelector(".popup").style.display = "";
+            } else
+            chrome.permissions.request(
+              {
+                permissions: requiredPermissions,
+              },
+              (granted) => {
+                if (granted) {
+                  console.log("Permissions granted!");
+                  toggle();
+                }
+              }
+            );
+          } else toggle();
+        })
       } else toggle();
     },
     updateOption(id, newValue, addon) {
@@ -426,6 +437,7 @@ const vue = (window.vue = new Vue({
     popupOrderAddonsEnabledFirst() {
       return new Promise((resolve) => {
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+          if (!tabs[0].id) return;
           chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
             console.log(res);
             if (res && res.length) {
@@ -457,6 +469,10 @@ const vue = (window.vue = new Vue({
         });
       });
     },
+    openFullSettings() {
+      chrome.runtime.openOptionsPage();
+      setTimeout(() => window.parent.close(), 100);
+    }
   },
   events: {
     modalClickOutside: function (e) {

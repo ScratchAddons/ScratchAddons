@@ -880,7 +880,6 @@ input[type="color"]::-webkit-color-swatch {
   background: #2a2a2a;
   box-shadow: 0px -3px 15px 2px rgb(42 42 42);
   height: 180px;
-  width: 380px;
   text-align: center;
   padding: 20px;
   top: 10px;
@@ -889,6 +888,10 @@ input[type="color"]::-webkit-color-swatch {
   font-family: "Sora", sans-serif;
   transition: top 300ms cubic-bezier(0.17, 0.04, 0.03, 0.94);
   animation: dropDown 1.6s 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 @keyframes dropDown {

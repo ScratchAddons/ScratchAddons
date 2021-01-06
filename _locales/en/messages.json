@@ -253,5 +253,14 @@
   },
   "runningOnThisPage": {
     "message": "Running on this page:"
+  },
+  "settingsPagePermission": {
+    "message": "To enable the \"$1\" addon, go to the full screen settings page."
+  },
+  "openFullSettings": {
+    "message": "Open full screen settings"
+  },
+  "skipOpenFullSettings": {
+    "message": "Skip"
   }
 }
