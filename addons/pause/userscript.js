@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-export default async function ({ addon, global, console }) {
-=======
 export default async function ({ addon, global, console, msg }) {
->>>>>>> b75a7312d02ba4231aa4e29bc3979ed509932170
   console.log("pause enabled");
 
   const vm = addon.tab.traps.onceValues.vm;
@@ -47,11 +43,7 @@ export default async function ({ addon, global, console, msg }) {
     if (playing) img.src = addon.self.dir + "/pause.svg";
     if (!playing) img.src = addon.self.dir + "/play.svg";
     img.draggable = false;
-<<<<<<< HEAD
-    img.title = "Pause";
-=======
     img.title = msg("pause");
->>>>>>> b75a7312d02ba4231aa4e29bc3979ed509932170
 
     document.querySelector("[class^='green-flag']").insertAdjacentElement("afterend", img);
 

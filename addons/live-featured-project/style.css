@@ -1,20 +1,8 @@
-<<<<<<< HEAD
-.lfp-scratch.lfp-hide-menu iframe,
-.lfp-turbowarp.lfp-hide-menu iframe {
-  margin-top: -44px;
-}
-
-.lfp-forkphorus.lfp-hide-menu iframe {
-  margin-top: -2.25rem;
-}
-
-=======
 .lfp-hide-menu[data-player="scratch"] iframe,
 .lfp-hide-menu[data-player="turbowarp"] iframe {
   margin-top: -44px;
 }
 
->>>>>>> b75a7312d02ba4231aa4e29bc3979ed509932170
 #lfp-embed {
   overflow: hidden;
   height: 216px;
@@ -46,10 +34,6 @@
   display: block;
 }
 
-<<<<<<< HEAD
-.stage.lfp-loaded #featured-project {
-=======
 #lfp-embed + #featured-project {
->>>>>>> b75a7312d02ba4231aa4e29bc3979ed509932170
   display: none;
 }
