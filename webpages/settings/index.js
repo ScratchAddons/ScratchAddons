@@ -481,7 +481,7 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
     vue.manifests = manifests.map(({ manifest }) => manifest);
     vue.loaded = true;
   } else {
-    chrome.tabs.query({currentWindow: true, active: true}, (tabs) => {
+    chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", undefined, (res) => {
         if (typeof chrome.runtime.lastError == "undefined") {
           let addonIDs = Object.values(res).map((x) => x.addonId);
