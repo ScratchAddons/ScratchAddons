@@ -613,18 +613,20 @@ function isElementAboveViewport(el) {
   return isVisible;
 }
 
-document.querySelector(".addons-container").addEventListener(
-  "scroll",
-  () => {
-    const el = document.querySelector(".addon-body[data-has-margin-bottom]");
-    if (!el) return;
-    if (isElementAboveViewport(el)) {
-      console.log("hidden");
-      document.querySelector("#running-page").style.opacity = 1;
-    } else {
-      console.log("visible");
-      document.querySelector("#running-page").style.opacity = 0;
-    }
-  },
-  { passive: true }
-);
+if (document.body.classList.contains("iframe")) {
+  document.querySelector(".addons-container").addEventListener(
+    "scroll",
+    () => {
+      const el = document.querySelector(".addon-body[data-has-margin-bottom]");
+      if (!el) return;
+      if (isElementAboveViewport(el)) {
+        console.log("hidden");
+        document.querySelector("#running-page").style.opacity = 1;
+      } else {
+        console.log("visible");
+        document.querySelector("#running-page").style.opacity = 0;
+      }
+    },
+    { passive: true }
+  );
+  }
