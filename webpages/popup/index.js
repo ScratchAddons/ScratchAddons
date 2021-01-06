@@ -24,7 +24,7 @@ const vue = new Vue({
     currentPopup: null,
     popupsWithIframes: [],
     noPopups: false,
-    version: chrome.runtime.getManifest().version
+    version: chrome.runtime.getManifest().version,
   },
   methods: {
     msg(message, ...params) {
@@ -44,13 +44,13 @@ const vue = new Vue({
     setPopup(popup) {
       if (this.currentPopup !== popup) {
         this.currentPopup = popup;
-        if(this.popupsWithIframes.indexOf(popup) === -1) this.popupsWithIframes.push(popup)
+        if (this.popupsWithIframes.indexOf(popup) === -1) this.popupsWithIframes.push(popup);
       }
     },
     iframeSrc(addonId) {
-      return `chrome-extension://aeepldbjfoihffgcaejikpoeppffnlbd/webpages/settings/index.html`
+      return `chrome-extension://aeepldbjfoihffgcaejikpoeppffnlbd/webpages/settings/index.html`;
       return `../../popups/${addonId}/popup.html`;
-    }
+    },
   },
 });
 
@@ -64,7 +64,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     // TODO: localize manifest.popup.name
     .sort(({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA));
   vue.popups = addonsWithPopups.map(({ addonId, manifest }) => (manifest.popup._addonId = addonId) && manifest.popup);
-  if(vue.popups.length) vue.setPopup(vue.popups[0]);
+  if (vue.popups.length) vue.setPopup(vue.popups[0]);
   else vue.noPopups = true;
 });
 

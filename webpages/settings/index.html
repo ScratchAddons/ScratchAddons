@@ -50,11 +50,15 @@
           <img src="../../images/icons/popup.svg" />
           <span>{{ msg("popupFeatures") }}</span>
         </div>
-        <div class="category category-small" style="margin-top: auto" @click="openPage('https://scratchaddons.com/contributors')">
+        <div
+          class="category category-small"
+          style="margin-top: auto"
+          @click="openPage('https://scratchaddons.com/contributors')"
+        >
           <img src="../../images/icons/users.svg" />
           <span>{{ msg("credits") }}</span>
         </div>
-        <div class="category category-small" @click="openReview()" style="display: none;">
+        <div class="category category-small" @click="openReview()" style="display: none">
           <img src="../../images/icons/star.svg" />
           <span>{{ msg("review") }}</span>
         </div>

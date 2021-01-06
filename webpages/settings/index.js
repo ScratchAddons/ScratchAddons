@@ -140,7 +140,7 @@ const vue = new Vue({
           editor: true,
           community: true,
           theme: true,
-          popup: true
+          popup: true,
         },
       },
       {
@@ -153,7 +153,7 @@ const vue = new Vue({
           editor: true,
           community: true,
           theme: true,
-          popup: true
+          popup: true,
         },
       },
       {
@@ -433,7 +433,9 @@ const vue = new Vue({
 chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addonSettings }) => {
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
-    manifest._category = manifest.popup ? "popup" : manifest.tags.includes("easterEgg")
+    manifest._category = manifest.popup
+      ? "popup"
+      : manifest.tags.includes("easterEgg")
       ? "easterEgg"
       : manifest.tags.includes("theme")
       ? "theme"
