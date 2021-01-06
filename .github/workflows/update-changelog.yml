@@ -7,7 +7,10 @@ on:
       - master
     paths:
       - CHANGELOG.md
+<<<<<<< HEAD
+=======
       - .github/workflows/update-changelog.yml
+>>>>>>> b75a7312d02ba4231aa4e29bc3979ed509932170
 
 jobs:
   update:
@@ -29,4 +32,7 @@ jobs:
           workflow: Changelog Update
           repo: ScratchAddons/website
           token: ${{ steps.generate-token.outputs.token }}
+<<<<<<< HEAD
+=======
           ref: refs/heads/master
+>>>>>>> b75a7312d02ba4231aa4e29bc3979ed509932170

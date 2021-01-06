@@ -26,6 +26,10 @@
     }
   ],
   "tags": ["editor", "beta"],
+<<<<<<< HEAD
+  "enabledByDefault": false
+=======
   "enabledByDefault": false,
   "l10n": true
+>>>>>>> b75a7312d02ba4231aa4e29bc3979ed509932170
 }
