@@ -152,7 +152,7 @@ h1 {
 }
 
 .setting-body img.dark {
-  filter: brightness(10);
+  filter: invert(0) brightness(10);
 }
 
 .btn-dropdown {
@@ -189,7 +189,7 @@ h1 {
 .icon-type {
   height: 16px;
   vertical-align: middle;
-  filter: brightness(10);
+  filter: invert(0) brightness(10);
   margin-right: 8px;
 }
 
