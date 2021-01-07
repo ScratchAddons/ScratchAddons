@@ -3,7 +3,7 @@ export default async function ({ addon, global, console }) {
     var selection = window.getSelection();
     if (selection.rangeCount > 0) {
       // if something is selected
-      range = selection.getRangeAt(0);
+      let range = selection.getRangeAt(0);
       var clonedSelection = range.cloneContents();
       var html = document.createElement("div");
       html.appendChild(clonedSelection);
@@ -124,7 +124,7 @@ export default async function ({ addon, global, console }) {
       else quote.textContent = `[quote]\n${quote.textContent}[/quote]\n`;
     }
 
-    return html.body.textContent;
+    return html.textContent;
   }
 
   let textarea = document.querySelector(".markItUpEditor");
