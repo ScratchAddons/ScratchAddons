@@ -87,13 +87,12 @@
           ></button>
           <div class="filter-selector">
             <span class="filter-text">{{ msg("filter") }} </span>
-            <div class="top-button-box">
-              <div class="top-button" class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">
+            <div class="filter-options">
+              <div class="filter-option" class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">
                 {{ msg("all") }}
               </div>
               <div
                 v-for="tag of tagsToShow"
-                class="top-button"
                 class="filter-option"
                 class="badge"
                 :class="{
@@ -110,15 +109,15 @@
               </div>
             </div>
           </div>
-          <div class="top-button-box">
-            <div id="enableAll" class="top-button">{{ msg("enableAll") }}</div>
-            <div id="disableAll" class="top-button">{{ msg("disableAll") }}</div>
-            <div id="invertSelection" class="top-button">{{ msg("invertSelection") }}</div>
+          <div class="filter-options">
+            <div id="enableAll" class="filter-option">{{ msg("enableAll") }}</div>
+            <div id="disableAll" class="filter-option">{{ msg("disableAll") }}</div>
+            <div id="invertSelection" class="filter-option">{{ msg("invertSelection") }}</div>
           </div>
-          <div style="margin-left:20px" class="top-button-box">
-            <div id="openAll" class="top-button">{{ msg("openAll") }}</div>
-            <div id="closeAll" class="top-button">{{ msg("closeAll") }}</div>
-            <div id="invertOptions" class="top-button">{{ msg("invertOptions") }}</div>
+          <div style="margin-left:20px" class="filter-options">
+            <div id="openAll" class="filter-option">{{ msg("openAll") }}</div>
+            <div id="closeAll" class="filter-option">{{ msg("closeAll") }}</div>
+            <div id="invertOptions" class="filter-option">{{ msg("invertOptions") }}</div>
           </div>
         </div>
 
