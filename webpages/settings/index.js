@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["data-category-tweaks-v2"];
+const NEW_ADDONS = ["data-category-tweaks-v2", "mute-project"];
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 
@@ -544,7 +544,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
   });
   if (!document.body.classList.contains("iframe")) {
     // New addons should always go first no matter what
-    manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
+    manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) && NEW_ADDONS.includes(b.addonId) ? NEW_ADDONS.indexOf(a.addonId) - NEW_ADDONS.indexOf(b.addonId) : NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
     vue.manifests = manifests.map(({ manifest }) => manifest);
   } else {
     vue.manifests = manifests.map(({ manifest }) => manifest);
