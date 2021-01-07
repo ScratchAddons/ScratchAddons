@@ -752,6 +752,7 @@ input[type="color"]::-webkit-color-swatch {
   }
   .search-box {
     padding: 0;
+    justify-content: center;
   }
   .navbar {
     display: none;
@@ -760,16 +761,17 @@ input[type="color"]::-webkit-color-swatch {
     /* No calc -60px because there's no navbar */
     height: 100%;
   }
-  .search-box {
-    justify-content: center;
-  }
   .setting-label {
     flex: 2;
     margin-top: 5px;
     margin-bottom: 5px;
   }
   .addons-container {
-    padding: 0px !important;
+    padding: 0px;
+    overflow-y: visible;
+  }
+  .addons-block {
+    overflow-y: auto;
   }
   .filter-options {
     flex-wrap: wrap;
