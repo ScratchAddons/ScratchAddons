@@ -482,10 +482,14 @@ const vue = (window.vue = new Vue({
     },
     hidePopup() {
       document.querySelector(".popup").style.animation = "closePopup 1.6s 1";
-      document.querySelector(".popup").addEventListener("animationend", () => {
-        this.showPopupModal = false;
-      }, { once: true })
-    }
+      document.querySelector(".popup").addEventListener(
+        "animationend",
+        () => {
+          this.showPopupModal = false;
+        },
+        { once: true }
+      );
+    },
   },
   events: {
     modalClickOutside: function (e) {
