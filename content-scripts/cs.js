@@ -228,7 +228,7 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImage = Object.assign(document.createElement("img"), {
-    alt: chrome.i18n.getMessage("hexColorPickerAlt"),
+    alt: chrome.i18n.getMessage("dataTweaksAlt"),
     src: chrome.runtime.getURL("/images/cs/hex-color-picker.png"),
     style: "height: 125px; border-radius: 5px",
   });

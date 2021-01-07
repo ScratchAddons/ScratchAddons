@@ -215,8 +215,8 @@
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
-  "hexColorPickerAlt": {
-    "message": "Screenshot of a color picker with hex code input."
+  "dataTweaksAlt": {
+    "message": "Screenshot of the Scratch Editor with a \"lists\" block category, and variables split into global and local sections."
   },
   "new": {
     "message": "New!"
