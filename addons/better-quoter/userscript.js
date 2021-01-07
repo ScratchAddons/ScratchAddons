@@ -142,9 +142,7 @@ export default async function ({ addon, global, console }) {
         selection.focusNode &&
         blockpost.contains(selection.focusNode)
       )
-        textarea.value += `[quote=${blockpost.querySelector(".black.username").innerText}]${htmlToBBCode(
-          getHTMLOfSelection()
-        )}[/quote]`;
+        textarea.value += `[quote=${blockpost.querySelector(".black.username").innerText}]${getSelectionBBCode()}[/quote]`;
       else copy_paste(blockpost.id);
       textarea.scrollIntoView(false);
       textarea.focus();
