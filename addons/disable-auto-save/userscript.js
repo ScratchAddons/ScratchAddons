@@ -3,9 +3,14 @@ export default async ({ addon,console }) => {
     // shamelessly stolen from animated-thumb/persistent-thumb.js
     const xhrOpen = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function (method, path, ...args) {
-        if (!manualPress && method === "put" && String(path).startsWith("https://projects.scratch.mit.edu/")){
-            if(manualPress) manualPress = false;
-            else method = "OPTIONS";
+        if (method === "put" && String(path).startsWith("https://projects.scratch.mit.edu/")){
+            //only block if it isn't a manual save
+            if(manualPress){
+                console.log("manual press");
+                //method = "OPTIONS"; //debugging
+            }else{
+                method = "OPTIONS";
+            }
         }
         return xhrOpen.call(this, method, path, ...args);
     };
@@ -14,22 +19,36 @@ export default async ({ addon,console }) => {
     addon.tab.addEventListener("urlChange", function(event) { addMutationListeners(); });
 
     async function addMutationListeners(){
+        console.log("mutating");
         //add a function to the "Save Now" button to disable request interception if it was a manual save
-        let saveContainer = await addon.tab.waitForElement("[class^='menu-bar_menu-bar-item_oLDa-']", {markAsSeen: true,});
+        var saveContainer = await addon.tab.waitForElement("[class^='menu-bar_account-info-group_MeJZP']", {markAsSeen: true,});
+        saveContainer = saveContainer.childNodes[0];
         const saveObserver = new MutationObserver(function (mutations) {
-            if(saveContainer.childNodes[0] && saveContainer.childNodes[0].className === "save-status_save-now_2shdk")
-                saveContainer.childNodes[0].addEventListener("click", function(){manualPress = true;})
+            if(saveContainer.childNodes[0]){
+                if(saveContainer.childNodes[0].className == "save-status_save-now_2shdk"){
+                    manualPress = false;
+                    saveContainer.childNodes[0].addEventListener("click", function(){manualPress = true;})
+                }
+            }
         });
         saveObserver.observe(saveContainer, { childList: true, });
-        //hide the "can't save" warnings scratch gives us (don't worry, there won't be any zombie warnings)
-        let alertContainer = await addon.tab.waitForElement("[class^='alerts_alerts-inner-container_1KTuF box_box_2jjDp']", {markAsSeen: true,});
+        var alertContainer = await addon.tab.waitForElement("[class^='alerts_alerts-inner-container_1KTuF box_box_2jjDp']", {markAsSeen: true,});
         //edgecase: exit editor and enter editor
         if(addon.tab.editorMode == "editor" && alertContainer.childNodes[0] !== undefined){
             alertContainer.childNodes[0].style.visibility = "hidden";
         }
+        //hide the "can't save" warnings scratch gives us (don't worry, there won't be any zombie warnings)
         const alertObserver = new MutationObserver(function (mutations) {
-            if(alertContainer.childNodes[0] && !manualPress)
-                alertContainer.childNodes[0].style.visibility = "hidden";
+            if(alertContainer.childNodes[0]){
+                if(manualPress){
+                    alertContainer.childNodes[0].style.visibility = "";
+                    alertContainer.childNodes[0].childNodes[1].childNodes[0].addEventListener("click", function(){manualPress = true;})
+                    manualPress = false;
+                }else{
+                    alertContainer.childNodes[0].style.visibility = "hidden";
+                    console.log("hide message");
+                }
+            }
         });
         alertObserver.observe(alertContainer, { childList: true, });
     }
