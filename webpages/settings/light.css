@@ -67,6 +67,28 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.addon-body:target {
+  animation: addonBlinkLight 2s 1;
+}
+
+@keyframes addonBlinkLight {
+  10% {
+    border: 1px solid #f7f7f7;
+  }
+  25% {
+    border: 1px solid #7e7e7e;
+  }
+  50% {
+    border: 1px solid #f7f7f7;
+  }
+  75% {
+    border: 1px solid #7e7e7e;
+  }
+  100% {
+    border: 1px solid #f7f7f7;
+  }
+}
+
 .addon-description {
   color: #000;
 }
