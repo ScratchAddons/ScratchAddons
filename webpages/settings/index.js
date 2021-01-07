@@ -442,7 +442,8 @@ const vue = (window.vue = new Vue({
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
           if (!tabs[0].id) return;
           chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
-            console.log(res);
+            // Just so we don't get any errors in the console if we don't get any responce from a non scratch tab.
+            chrome.runtime.lastError;
             if (res && res.length) {
               this.popupOpenedOnScratchTab = true;
               this.manifests.sort((a, b) =>
@@ -638,13 +639,7 @@ if (document.body.classList.contains("iframe")) {
     () => {
       const el = document.querySelector(".addon-body[data-has-margin-bottom]");
       if (!el) return;
-      if (isElementAboveViewport(el)) {
-        console.log("hidden");
-        document.querySelector("#running-page").style.opacity = 1;
-      } else {
-        console.log("visible");
-        document.querySelector("#running-page").style.opacity = 0;
-      }
+      document.querySelector("#running-page").style.opacity = isElementAboveViewport(el) ? 1 : 0;
     },
     { passive: true }
   );
