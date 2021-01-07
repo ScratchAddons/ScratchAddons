@@ -98,6 +98,7 @@
             style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey')"
             @click="clearSearch()"
           ></button>
+          <div id="popup-more-settings" v-show="isIframe"><button @click="openFullSettings()" class="large-button">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ msg("moreSettings") }}</button></div>
           <div class="filter-selector">
             <span class="filter-text">{{ msg("filter") }} </span>
             <div class="filter-options">
@@ -387,11 +388,11 @@
         </div>
       </div>
     </div>
-    <div class="popup" style="display: none">
+    <div class="popup" v-show="showPopupModal" style="display: none">
       <div class="label">{{ msg("settingsPagePermission", addonToEnable) }}</div>
       <div>
         <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
-        <button class="large-button">{{ msg("skipOpenFullSettings") }}</button>
+        <button class="large-button" @click="hidePopup()">{{ msg("skipOpenFullSettings") }}</button>
       </div>
     </div>
   </body>

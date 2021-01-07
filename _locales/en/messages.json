@@ -249,10 +249,10 @@
     "message": "Confirm"
   },
   "quickSettings": {
-    "message": "Quick settings"
+    "message": "Addons"
   },
   "runningOnThisPage": {
-    "message": "Running on this page:"
+    "message": "Addons currently running on this tab:"
   },
   "settingsPagePermission": {
     "message": "To enable the \"$1\" addon, go to the full screen settings page."
