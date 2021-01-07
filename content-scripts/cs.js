@@ -259,13 +259,9 @@ const showBanner = () => {
 
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
-    textContent: chrome.i18n.getMessage("extensionHasUpdated", DOLLARS).replace(
-      /\$(\d+)/g,
-      (_, i) =>
-        [
-          chrome.runtime.getManifest().version
-        ][Number(i) - 1]
-    ),
+    textContent: chrome.i18n
+      .getMessage("extensionHasUpdated", DOLLARS)
+      .replace(/\$(\d+)/g, (_, i) => [chrome.runtime.getManifest().version][Number(i) - 1]),
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -286,7 +282,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2")
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -295,7 +291,7 @@ const showBanner = () => {
     href: `https://scratchaddons.com/changelog?versionname=${chrome.runtime.getManifest().version}-notif`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("changelog"),
-    style: "text-transform: capitalize;" // Convert to title case
+    style: "text-transform: capitalize;", // Convert to title case
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}-notif`,
