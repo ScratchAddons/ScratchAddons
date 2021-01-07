@@ -5,6 +5,10 @@
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "pufferfish101007",
+      "link": "https://scratch.mit.edu"
     }
   ],
   "userscripts": [
@@ -14,5 +18,7 @@
     }
   ],
   "tags": ["forums", "community"],
-  "l10n": true
+  "l10n": true,
+  "warning": "Scratchblocks tags are not supported, and the bbcode may not be 100% accurate. To get fully accurate quotes, quote as normal and delete any parts that you don't need."
 }
+
