@@ -479,7 +479,7 @@ h1 {
   margin-right: 20px;
 }
 
-.filter-option-box {
+.filter-options {
   display: flex;
   border-radius: 4px;
   overflow: hidden;
@@ -493,7 +493,7 @@ h1 {
   padding: 10px;
   border-right: 1px solid #000;
 }
-.top-buton:hover {
+.filter-option:hover {
   cursor: pointer;
   background: #1a1a1a;
 }
@@ -725,7 +725,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 @media only screen and (max-width: 370px) {
   .badge {
-  display: none;
+    display: none;
   }
 }
 .categories-shrink {
