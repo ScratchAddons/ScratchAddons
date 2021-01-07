@@ -236,21 +236,21 @@ h1 {
   background: rgb(177, 23, 248);
   border-color: #b20eb8;
 }
-.top-button.sel.blue {
+.filter-option.sel.blue {
   background: #175ef8;
 }
-.top-button.sel.green {
+.filter-option.sel.green {
   background: #78fd2b;
   color: #333333;
 }
-.top-button.sel.yellow {
+.filter-option.sel.yellow {
   background: #fddd2b;
   color: #333333;
 }
-.top-button.sel.red {
+.filter-option.sel.red {
   background: #fd662b;
 }
-.top-button.sel.darkgreen {
+.filter-option.sel.darkgreen {
   background: #00b1a8;
 }
 
@@ -479,7 +479,7 @@ h1 {
   margin-right: 20px;
 }
 
-.top-button-box {
+.filter-option-box {
   display: flex;
   border-radius: 4px;
   overflow: hidden;
@@ -489,7 +489,7 @@ h1 {
   user-select: none;
 }
 
-.top-button {
+.filter-option {
   padding: 10px;
   border-right: 1px solid #000;
 }
@@ -497,13 +497,13 @@ h1 {
   cursor: pointer;
   background: #1a1a1a;
 }
-.top-button:last-child {
+.filter-option:last-child {
   border-right: none;
 }
-.top-button.sel {
+.filter-option.sel {
   background: #ff7b26;
 }
-.top-button.disabled {
+.filter-option.disabled {
   filter: grayscale(80%);
   pointer-events: none;
 }
