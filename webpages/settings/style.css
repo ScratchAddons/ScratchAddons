@@ -111,6 +111,28 @@ h1 {
   scrollbar-color: grey none;
 }
 
+.addon-body:target {
+  animation: addonBlink 2s 1;
+}
+
+@keyframes addonBlink {
+  10% {
+    border: 1px solid #333;
+  }
+  25% {
+    border: 1px solid #7e7e7e;
+  }
+  50% {
+    border: 1px solid #333;
+  }
+  75% {
+    border: 1px solid #7e7e7e;
+  }
+  100% {
+    border: 1px solid #333;
+  }
+}
+
 .addon-body {
   margin: 10px;
   background: #2a2a2a;

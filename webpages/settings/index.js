@@ -319,6 +319,7 @@ const vue = (window.vue = new Vue({
               if (document.body.classList.contains("iframe")) {
                 this.addonToEnable = addon.name;
                 document.querySelector(".popup").style.display = "";
+                document.querySelector(".popup").setAttribute("data-addon-id", addon._addonId);
               } else
                 chrome.permissions.request(
                   {
@@ -474,7 +475,7 @@ const vue = (window.vue = new Vue({
       });
     },
     openFullSettings() {
-      chrome.runtime.openOptionsPage();
+      window.open(`${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${document.querySelector(".popup").getAttribute("data-addon-id")}`)
       setTimeout(() => window.parent.close(), 100);
     },
   },
@@ -545,6 +546,13 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
   }
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
   setTimeout(handleKeySettings, 0);
+  setTimeout(() => {
+    let hash = window.location.hash;
+    if (hash) {
+      window.location.hash = "";
+      window.location.hash = hash;
+    }
+  }, 0);
 });
 
 function handleKeySettings() {

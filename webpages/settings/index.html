@@ -134,6 +134,7 @@
             v-for="addon of manifests"
             v-show="addonMatchesFilters(addon) && (selectedTab === 'all' || addon._category === selectedTab)"
             :data-has-margin-bottom="addon._marginBottom"
+            :id="'addon-' + addon._addonId"
           >
             <div class="addon-topbar">
               <div class="clickeable-area" @click="addon._expanded = !addon._expanded">
