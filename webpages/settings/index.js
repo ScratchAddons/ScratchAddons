@@ -319,10 +319,9 @@ const vue = (window.vue = new Vue({
           (result) => {
             if (result === false) {
               if (document.body.classList.contains("iframe")) {
-                this.addonToEnable = addon.name;
+                this.addonToEnable = addon;
                 document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
                 this.showPopupModal = true;
-                document.querySelector(".popup").setAttribute("data-addon-id", addon._addonId);
               } else
                 chrome.permissions.request(
                   {
@@ -479,9 +478,7 @@ const vue = (window.vue = new Vue({
     },
     openFullSettings() {
       window.open(
-        `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${document
-          .querySelector(".popup")
-          .getAttribute("data-addon-id")}`
+        `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${this.addonToEnable._addonId}`
       );
       setTimeout(() => window.parent.close(), 100);
     },
@@ -562,6 +559,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
   setTimeout(handleKeySettings, 0);
   setTimeout(() => {
+    // Set hash again after loading addons, to force scroll to addon
     let hash = window.location.hash;
     if (hash) {
       window.location.hash = "";
