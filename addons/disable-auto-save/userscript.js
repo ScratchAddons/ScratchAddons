@@ -14,18 +14,18 @@ export default async ({ addon,console }) => {
 
     async function addMutationListeners(){
         //add a function to the "Save Now" button to disable request interception if it was a manual save
-        var saveContainer = await addon.tab.waitForElement("[class^='menu-bar_account-info-group_MeJZP']", {markAsSeen: true,});
+        var saveContainer = await addon.tab.waitForElement("[class^='menu-bar_account-info-group']", {markAsSeen: true,});
         saveContainer = saveContainer.childNodes[0];
         const saveObserver = new MutationObserver(function (mutations) {
             if(saveContainer.childNodes[0]){
-                if(saveContainer.childNodes[0].className == "save-status_save-now_2shdk"){
+                if(saveContainer.childNodes[0].className.startsWith("save-status_save-now")){
                     manualPress = false;
                     saveContainer.childNodes[0].addEventListener("click", function(){manualPress = true;})
                 }
             }
         });
         saveObserver.observe(saveContainer, { childList: true, });
-        var alertContainer = await addon.tab.waitForElement("[class^='alerts_alerts-inner-container_1KTuF box_box_2jjDp']", {markAsSeen: true,});
+        var alertContainer = await addon.tab.waitForElement("[class^='alerts_alerts-inner-container']", {markAsSeen: true,});
         //edgecase: exit editor and enter editor
         if(addon.tab.editorMode == "editor" && alertContainer.childNodes[0] !== undefined){
             alertContainer.childNodes[0].style.visibility = "hidden";
