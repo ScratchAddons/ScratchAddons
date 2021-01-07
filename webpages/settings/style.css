@@ -884,9 +884,9 @@ input[type="color"]::-webkit-color-swatch {
   height: 180px;
   text-align: center;
   padding: 20px;
-  top: 10px;
+  top: 0px;
   color: white;
-  border-radius: 10px;
+  border-radius: 0px 0px 10px 10px;
   font-family: "Sora", sans-serif;
   transition: top 300ms cubic-bezier(0.17, 0.04, 0.03, 0.94);
   animation: dropDown 1.6s 1;
@@ -900,26 +900,21 @@ input[type="color"]::-webkit-color-swatch {
   0% {
     top: -400px;
   }
-  80% {
-    top: 15px;
-  }
   100% {
-    top: 10px;
+    top: 0px;
   }
 }
 
 @keyframes closePopup {
   0% {
-    top: 10px;
-  }
-  20% {
-    top: 15px;
+    top: 0px;
   }
   100% {
     top: -400px;
   }
 }
 
+/* TODO: This "focus-within" is the problem as the button is lefted focased after the popup is closed */
 .popup:focus-within {
   animation: closePopup 1.6s 1;
 }
