@@ -30,7 +30,7 @@ export default async ({ addon,console }) => {
         if(addon.tab.editorMode == "editor" && alertContainer.childNodes[0] !== undefined){
             alertContainer.childNodes[0].style.visibility = "hidden";
         }
-        //hide the "can't save" warnings scratch gives us (don't worry, there won't be any zombie warnings)
+        //hide the "can't save" warnings scratch gives us (don't worry, there won't be any zombie warnings :P)
         const alertObserver = new MutationObserver(function (mutations) {
             if(alertContainer.childNodes[0]){
                 if(manualPress){
