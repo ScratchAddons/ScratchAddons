@@ -298,13 +298,6 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
           this.messages.length > this.showingMessagesAmt
         );
       },
-      settingsLink() {
-        return l10n.escaped("scratch-messaging/disabled", {
-          settings: `<a href="/webpages/settings/index.html" target="_blank">${l10n.escaped(
-            "scratch-messaging/settings"
-          )}</a>`,
-        });
-      },
     },
     created() {
       document.title = l10n.get("scratch-messaging/popup-title");

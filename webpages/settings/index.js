@@ -20,6 +20,11 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
+if (window.parent !== window) {
+  // We're in a popup!
+  document.body.classList.add("iframe");
+}
+
 const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
 
 let handleConfirmClicked = null;
@@ -113,7 +118,7 @@ Vue.directive("click-outside", {
   },
 });
 
-const vue = new Vue({
+const vue = (window.vue = new Vue({
   el: "body",
   data: {
     smallMode: false,
@@ -129,6 +134,10 @@ const vue = new Vue({
     selectedTag: null,
     searchInput: "",
     addonSettings: {},
+    popupOpenedOnScratchTab: false,
+    addonToEnable: null,
+    showPopupModal: false,
+    isIframe: window.parent !== window,
     tags: [
       {
         name: chrome.i18n.getMessage("recommended"),
@@ -140,6 +149,7 @@ const vue = new Vue({
           editor: true,
           community: true,
           theme: true,
+          popup: true,
         },
       },
       {
@@ -152,6 +162,7 @@ const vue = new Vue({
           editor: true,
           community: true,
           theme: true,
+          popup: true,
         },
       },
       {
@@ -292,21 +303,38 @@ const vue = new Vue({
       const toggle = () => {
         const newState = !addon._enabled;
         addon._enabled = newState;
-        addon._expanded = newState;
+        // Do not extend when enabling in popup mode
+        addon._expanded = document.body.classList.contains("iframe") && !addon._expanded ? false : newState;
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
+
+        if (document.body.classList.contains("iframe")) setTimeout(() => this.popupOrderAddonsEnabledFirst(), 500);
       };
 
       const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
       if (!addon._enabled && requiredPermissions.length) {
-        chrome.permissions.request(
+        chrome.permissions.contains(
           {
             permissions: requiredPermissions,
           },
-          (granted) => {
-            if (granted) {
-              console.log("Permissions granted!");
-              toggle();
-            }
+          (result) => {
+            if (result === false) {
+              if (document.body.classList.contains("iframe")) {
+                this.addonToEnable = addon;
+                document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
+                this.showPopupModal = true;
+              } else
+                chrome.permissions.request(
+                  {
+                    permissions: requiredPermissions,
+                  },
+                  (granted) => {
+                    if (granted) {
+                      console.log("Permissions granted!");
+                      toggle();
+                    }
+                  }
+                );
+            } else toggle();
           }
         );
       } else toggle();
@@ -412,6 +440,56 @@ const vue = new Vue({
       document.body.appendChild(inputElem);
       inputElem.click();
     },
+    popupOrderAddonsEnabledFirst() {
+      return new Promise((resolve) => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+          if (!tabs[0].id) return;
+          chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
+            // Just so we don't get any errors in the console if we don't get any responce from a non scratch tab.
+            chrome.runtime.lastError;
+            if (res && res.length) {
+              this.popupOpenedOnScratchTab = true;
+              this.manifests.sort((a, b) =>
+                res.includes(a._addonId) && res.includes(b._addonId)
+                  ? a.name.localeCompare(b.name)
+                  : res.includes(a._addonId)
+                  ? -1
+                  : res.includes(b._addonId)
+                  ? 1
+                  : 0
+              );
+              // Find last currently running addon to add bottom margin
+              const currentMarginBottomAddon = this.manifests.find((manifest) => manifest._marginBottom === true);
+              if (currentMarginBottomAddon) Vue.set(currentMarginBottomAddon, "_marginBottom", false);
+              let lastManifest;
+              for (const manifest of this.manifests) {
+                if (!res.includes(manifest._addonId)) {
+                  console.log(manifest);
+                  Vue.set(lastManifest, "_marginBottom", true);
+                  break;
+                }
+                lastManifest = manifest;
+              }
+              resolve();
+            } else resolve();
+          });
+        });
+      });
+    },
+    openFullSettings() {
+      window.open(`${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${this.addonToEnable._addonId}`);
+      setTimeout(() => window.parent.close(), 100);
+    },
+    hidePopup() {
+      document.querySelector(".popup").style.animation = "closePopup 1.6s 1";
+      document.querySelector(".popup").addEventListener(
+        "animationend",
+        () => {
+          this.showPopupModal = false;
+        },
+        { once: true }
+      );
+    },
   },
   events: {
     modalClickOutside: function (e) {
@@ -426,21 +504,25 @@ const vue = new Vue({
       this.selectedTag = null;
     },
   },
-});
+}));
 
-chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addonSettings }) => {
+chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
-    manifest._category = manifest.tags.includes("easterEgg")
+    manifest._category = manifest.popup
+      ? "popup"
+      : manifest.tags.includes("easterEgg")
       ? "easterEgg"
       : manifest.tags.includes("theme")
       ? "theme"
       : manifest.tags.includes("community")
       ? "community"
       : "editor";
+    // Exception:
+    if (addonId === "msg-count-badge") manifest._category = "popup";
     manifest._enabled = addonsEnabled[addonId];
     manifest._addonId = addonId;
-    manifest._expanded = manifest._enabled;
+    manifest._expanded = document.body.classList.contains("iframe") ? false : manifest._enabled;
     manifest._tags = {};
     manifest._tags.recommended = manifest.tags.includes("recommended");
     manifest._tags.beta = manifest.tags.includes("beta");
@@ -460,15 +542,28 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
       else return a.manifest.name.localeCompare(b.manifest.name);
     } else return 1;
   });
-  // Messaging related addons should always go first no matter what (rule broken below)
-  manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
-  manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
-  // New addons should always go first no matter what
-  manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
-  vue.manifests = manifests.map(({ manifest }) => manifest);
+  if (!document.body.classList.contains("iframe")) {
+    // Messaging related addons should always go first no matter what (rule broken below)
+    manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
+    manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
+    // New addons should always go first no matter what
+    manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
+    vue.manifests = manifests.map(({ manifest }) => manifest);
+  } else {
+    vue.manifests = manifests.map(({ manifest }) => manifest);
+    await vue.popupOrderAddonsEnabledFirst();
+  }
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
   setTimeout(handleKeySettings, 0);
+  setTimeout(() => {
+    // Set hash again after loading addons, to force scroll to addon
+    let hash = window.location.hash;
+    if (hash) {
+      window.location.hash = "";
+      window.location.hash = hash;
+    }
+  }, 0);
 });
 
 function handleKeySettings() {
@@ -549,3 +644,21 @@ document.addEventListener("keydown", (e) => {
 });
 
 chrome.runtime.sendMessage("checkPermissions");
+
+function isElementAboveViewport(el) {
+  const rect = el.getBoundingClientRect();
+  const elemBottom = rect.bottom;
+  return elemBottom >= 0;
+}
+
+if (document.body.classList.contains("iframe")) {
+  document.querySelector(".addons-block").addEventListener(
+    "scroll",
+    () => {
+      const el = document.querySelector(".addon-body[data-has-margin-bottom]");
+      if (!el) return;
+      document.querySelector("#running-page").style.opacity = isElementAboveViewport(el) ? 1 : 0;
+    },
+    { passive: true }
+  );
+}

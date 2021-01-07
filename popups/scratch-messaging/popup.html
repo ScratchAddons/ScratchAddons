@@ -105,7 +105,11 @@
           @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity"
         >
           <div class="btn-dropdown">
-            <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.forumActivity}" />
+            <img
+              src="../../../images/icons/expand.svg"
+              alt="v"
+              :class="{'reverted': messageTypeExtended.forumActivity}"
+            />
           </div>
           <span class="message-type-title-text">{{ uiMessages.forumMsg }}</span>
           <span class="float-right"
@@ -243,7 +247,7 @@
       <div
         class="message-type"
         v-for="project of projectsOrdered"
-        v-show="project.unreadComments && project.loadedComments || 
+        v-show="project.unreadComments && project.loadedComments ||
               !project.unreadComments && commentsReady"
       >
         <div class="message-type-title">
@@ -293,7 +297,6 @@
       <br />
       <span v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</span>
       <span v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</span>
-      <span v-show="error === 'addonDisabled'"><br />{{{ settingsLink }}}</span>
       <span v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</span>
       <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">
         <img class="small-icon" src="../../images/icons/reload.svg" /> {{ uiMessages.reloadMsg }}

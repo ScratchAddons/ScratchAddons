@@ -12,7 +12,7 @@
 
   <body style="display: none" v-show="loaded">
     <div class="games" v-for="project of projectsSorted">
-      <div class="title" @click="false && project.extended = !project.extended;">
+      <div class="title">
         <a class="project-name" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
           >{{ project.title }}</a
         >
@@ -20,7 +20,9 @@
       </div>
       <div class="project-details" v-show="true || project.amt > 0 && project.extended">
         <div class="username-list">
-          <a v-for="user of project.users">{{ user }}</a>
+          <a v-for="user of project.users" :href="'https://scratch.mit.edu/users/' + user" target="_blank"
+            >{{ user }}</a
+          >
         </div>
         <div class="username-list" v-show="project.amt === 0">{{ messages.noUsersMsg }}</div>
       </div>
