@@ -1,31 +1,16 @@
-export default async function ({ addon, global, console }) {
-  function getHTMLOfSelection () {
-    var range;
-    if (document.selection && document.selection.createRange) {
-      range = document.selection.createRange();
-      return range.htmlText;
-    }
-    else if (window.getSelection) {
-      var selection = window.getSelection();
-      if (selection.rangeCount > 0) {
-        range = selection.getRangeAt(0);
-        var clonedSelection = range.cloneContents();
-        var div = document.createElement('div');
-        div.appendChild(clonedSelection);
-        return div.innerHTML;
-      }
-      else {
-        return '';
-      }
-    }
-    else {
-      return '';
-    }
-  }
+export default async function ({ addon, global, console }) {    
+ function getSelectionBBCode() {
 
- function htmlToBBCode(a) {
-  let html = new DOMParser().parseFromString(a, "text/html");
-
+  var selection = window.getSelection();
+        if (selection.rangeCount > 0) { // if something is selected
+          range = selection.getRangeAt(0);
+          var clonedSelection = range.cloneContents();
+          var html = document.createElement('div');
+          html.appendChild(clonedSelection);
+        } else { // nothing is selected
+          return '';
+        }
+      
   // new lines
   let lineBreaks = html.querySelectorAll("br");
   for (let br of lineBreaks) br.insertAdjacentHTML("afterend", "\n");
@@ -53,11 +38,11 @@ export default async function ({ addon, global, console }) {
         img.src
       )
     ) {
-      if (smilieReplaces[img.src.split("smilies/")[1].split(".")[0]])
-        img.outerHTML =
-          smilieReplaces[img.src.split("smilies/")[1].split(".")[0]];
-      else img.outerHTML = `[img]${img.src}[/img]`;
-    } else img.outerHTML = `[img]${img.src}[/img]`;
+      if (smilieReplaces[img.src.split("smilies/")[1].split(".")[0]]) {
+        img.parentNode.insertBefore(document.createTextNode(smilieReplaces[img.src.split("smilies/")[1].split(".")[0]]), img);
+      } else img.parentNode.insertBefore(document.createTextNode(`[img${img.src}[/img]`), img);
+    } 
+    else img.parentNode.insertBefore(document.createTextNode(`[img]${img.src}[/img]`), img);
   }
 
   // bold, italic, underline, strikethrough, big, small and color
