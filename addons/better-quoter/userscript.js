@@ -1,152 +1,145 @@
 export default async function ({ addon, global, console }) {
-  function getHTMLOfSelection () {
+  function getHTMLOfSelection() {
     var range;
     if (document.selection && document.selection.createRange) {
       range = document.selection.createRange();
       return range.htmlText;
-    }
-    else if (window.getSelection) {
+    } else if (window.getSelection) {
       var selection = window.getSelection();
       if (selection.rangeCount > 0) {
         range = selection.getRangeAt(0);
         var clonedSelection = range.cloneContents();
-        var div = document.createElement('div');
+        var div = document.createElement("div");
         div.appendChild(clonedSelection);
         return div.innerHTML;
+      } else {
+        return "";
       }
-      else {
-        return '';
-      }
-    }
-    else {
-      return '';
+    } else {
+      return "";
     }
   }
 
- function htmlToBBCode(a) {
-  let html = new DOMParser().parseFromString(a, "text/html");
+  function htmlToBBCode(a) {
+    let html = new DOMParser().parseFromString(a, "text/html");
 
-  // new lines
-  let lineBreaks = html.querySelectorAll("br");
-  for (let br of lineBreaks) br.insertAdjacentHTML("afterend", "\n");
+    // new lines
+    let lineBreaks = html.querySelectorAll("br");
+    for (let br of lineBreaks) br.insertAdjacentHTML("afterend", "\n");
 
-  // images and smileys
-  let smilieReplaces = {
-    smile: ":)",
-    neutral: ":|",
-    sad: ":(",
-    big_smile: ":D",
-    yikes: ":o",
-    wink: ";)",
-    hmm: ":/",
-    tongue: ":P",
-    lol: ":lol:",
-    mad: ":mad:",
-    roll: ":rolleyes",
-    cool: ":cool:"
-  };
+    // images and smileys
+    let smilieReplaces = {
+      smile: ":)",
+      neutral: ":|",
+      sad: ":(",
+      big_smile: ":D",
+      yikes: ":o",
+      wink: ";)",
+      hmm: ":/",
+      tongue: ":P",
+      lol: ":lol:",
+      mad: ":mad:",
+      roll: ":rolleyes",
+      cool: ":cool:",
+    };
 
-  let imgs = html.querySelectorAll("img");
-  for (let img of imgs) {
-    if (
-      /\/\/cdn\.scratch\.mit\.edu\/scratchr2\/static\/__[a-z0-9]{32}__\/djangobb_forum\/img\/smilies\/[a-z_]{3,9}\.png/.test(
-        img.src
-      )
-    ) {
-      if (smilieReplaces[img.src.split("smilies/")[1].split(".")[0]])
-        img.outerHTML =
-          smilieReplaces[img.src.split("smilies/")[1].split(".")[0]];
-      else img.outerHTML = `[img]${img.src}[/img]`;
-    } else img.outerHTML = `[img]${img.src}[/img]`;
-  }
+    let imgs = html.querySelectorAll("img");
+    for (let img of imgs) {
+      if (
+        /\/\/cdn\.scratch\.mit\.edu\/scratchr2\/static\/__[a-z0-9]{32}__\/djangobb_forum\/img\/smilies\/[a-z_]{3,9}\.png/.test(
+          img.src
+        )
+      ) {
+        if (smilieReplaces[img.src.split("smilies/")[1].split(".")[0]])
+          img.outerHTML = smilieReplaces[img.src.split("smilies/")[1].split(".")[0]];
+        else img.outerHTML = `[img]${img.src}[/img]`;
+      } else img.outerHTML = `[img]${img.src}[/img]`;
+    }
 
-  // bold, italic, underline, strikethrough, big, small and color
-  let bbReplaces = {
-    italic: "i",
-    bold: "b",
-    big: "big",
-    small: "small",
-    underline: "u",
-    strikethrough: "s"
-  };
-  let spans = html.querySelectorAll("span");
-  for (let span of spans) {
-    if (span.className.startsWith("bb-")) {
-      span.insertAdjacentHTML(
-        "afterbegin",
-        `[${bbReplaces[span.className.slice(3)]}]`
-      );
-      span.insertAdjacentHTML(
-        "beforeend",
-        `[/${bbReplaces[span.className.slice(3)]}]`
-      );
-    } else if (span.style.color) {
-      let color = span.style.color;
-      
-      function componentToHex(c) {
-        var hex = c.toString(16);
-        return hex.length == 1 ? "0" + hex : hex;
-      }
+    // bold, italic, underline, strikethrough, big, small and color
+    let bbReplaces = {
+      italic: "i",
+      bold: "b",
+      big: "big",
+      small: "small",
+      underline: "u",
+      strikethrough: "s",
+    };
+    let spans = html.querySelectorAll("span");
+    for (let span of spans) {
+      if (span.className.startsWith("bb-")) {
+        span.insertAdjacentHTML("afterbegin", `[${bbReplaces[span.className.slice(3)]}]`);
+        span.insertAdjacentHTML("beforeend", `[/${bbReplaces[span.className.slice(3)]}]`);
+      } else if (span.style.color) {
+        let color = span.style.color;
 
-      function rgbToHex(r, g, b) {
-        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-      }
-      
-      if (color.startsWith("rgb")) {
-        let rgbValues = color.slice(4, color.length - 1).split(/, ?/).map(x => Number(x));
-      
-          span.insertAdjacentHTML("afterbegin", `[color=${rgbToHex(...rgbValues).toUpperCase()}]`);
+        function componentToHex(c) {
+          var hex = c.toString(16);
+          return hex.length == 1 ? "0" + hex : hex;
         }
-      else span.insertAdjacentHTML("afterbegin", `[color=${color}]`);
-      span.insertAdjacentHTML("beforeend", "[/color]");
+
+        function rgbToHex(r, g, b) {
+          return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+        }
+
+        if (color.startsWith("rgb")) {
+          let rgbValues = color
+            .slice(4, color.length - 1)
+            .split(/, ?/)
+            .map((x) => Number(x));
+
+          span.insertAdjacentHTML("afterbegin", `[color=${rgbToHex(...rgbValues).toUpperCase()}]`);
+        } else span.insertAdjacentHTML("afterbegin", `[color=${color}]`);
+        span.insertAdjacentHTML("beforeend", "[/color]");
+      }
     }
-  }
-  
-  // links
-  // todo: try and gues where dictionary/wiki/wp etc. tags are being used?
-  let links = html.querySelectorAll("a");
-  for (let link of links) {
-    link.insertAdjacentHTML("afterbegin", `[url=${link.href}]`);
-    link.insertAdjacentHTML("beforeend", "[/url]");
-  }
-  
-  
- // lists
-  let lis = html.querySelectorAll("li");
-  for (let li of lis) li.textContent = `[*]${li.textContent}`;
-  let uls = html.querySelectorAll("ul");
-  for (let ul of uls) ul.textContent = `[list]\n${ul.textContent}[/list]\n`;
-  let ols = html.querySelectorAll("ol");
-  for (let ol of ols) ol.textContent = `[list=1]\n${ol.textContent}[/list]\n`;
 
-  // scratchblocks - just get rid of them for now
-  // todo: support scratchblocks
-  let scratchBlocksPres = html.getElementsByClassName("blocks");
-  for (let pre of scratchBlocksPres) {
-    pre.textContent = "~scratchblocks~\n";
+    // links
+    // todo: try and gues where dictionary/wiki/wp etc. tags are being used?
+    let links = html.querySelectorAll("a");
+    for (let link of links) {
+      link.insertAdjacentHTML("afterbegin", `[url=${link.href}]`);
+      link.insertAdjacentHTML("beforeend", "[/url]");
+    }
+
+    // lists
+    let lis = html.querySelectorAll("li");
+    for (let li of lis) li.textContent = `[*]${li.textContent}`;
+    let uls = html.querySelectorAll("ul");
+    for (let ul of uls) ul.textContent = `[list]\n${ul.textContent}[/list]\n`;
+    let ols = html.querySelectorAll("ol");
+    for (let ol of ols) ol.textContent = `[list=1]\n${ol.textContent}[/list]\n`;
+
+    // scratchblocks - just get rid of them for now
+    // todo: support scratchblocks
+    let scratchBlocksPres = html.getElementsByClassName("blocks");
+    for (let pre of scratchBlocksPres) {
+      pre.textContent = "~scratchblocks~\n";
+    }
+
+    // code blocks
+    let codeBlocks = html.querySelectorAll("div.code");
+    for (let codeBlock of codeBlocks) codeBlock.textContent = `[code]\n${codeBlock.textContent}[/code]\n`;
+
+    // quotes
+    let quotes = html.querySelectorAll("blockquote");
+    for (let quote of quotes) {
+      let author = quote.querySelector("p.bb-quote-author");
+      if (author)
+        quote.textContent = `[quote=${author.textContent.slice(0, author.textContent.length - 7)}]\n${
+          quote.textContent
+        }[/quote]\n`;
+      else quote.textContent = `[quote]\n${quote.textContent}[/quote]\n`;
+    }
+
+    return html.body.textContent;
   }
-  
-  // code blocks
-  let codeBlocks = html.querySelectorAll("div.code");
-  for (let codeBlock of codeBlocks) codeBlock.textContent = `[code]\n${codeBlock.textContent}[/code]\n`;
-
-   // quotes
-   let quotes = html.querySelectorAll("blockquote");
-   for (let quote of quotes) {
-     let author = quote.querySelector("p.bb-quote-author");
-     if (author) quote.textContent = `[quote=${author.textContent.slice(0, author.textContent.length - 7)}]\n${quote.textContent}[/quote]\n`
-     else quote.textContent = `[quote]\n${quote.textContent}[/quote]\n`
-   }
-
-  return html.body.textContent;
-}
 
   let textarea = document.querySelector(".markItUpEditor");
   while (true) {
     let quoteButton = await addon.tab.waitForElement(".postquote a", { markAsSeen: true });
     quoteButton.setAttribute("onclick", "return false");
     quoteButton.addEventListener("mouseup", (e) => {
-     
       let blockpost = quoteButton.closest(".blockpost");
       let selection = window.getSelection();
       let selectionStr = selection.toString();
@@ -156,8 +149,11 @@ export default async function ({ addon, global, console }) {
         blockpost.contains(selection.anchorNode) &&
         selection.focusNode &&
         blockpost.contains(selection.focusNode)
-      ) textarea.value += `[quote=${blockpost.querySelector(".black.username").innerText}]${htmlToBBCode(getHTMLOfSelection())}[/quote]`;
-      else copy_paste(blockpost.id); 
+      )
+        textarea.value += `[quote=${blockpost.querySelector(".black.username").innerText}]${htmlToBBCode(
+          getHTMLOfSelection()
+        )}[/quote]`;
+      else copy_paste(blockpost.id);
       textarea.scrollIntoView(false);
       textarea.focus();
     });
