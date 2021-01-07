@@ -8,7 +8,7 @@
     },
     {
       "name": "pufferfish101007",
-      "link": "https://scratch.mit.edu"
+      "link": "https://scratch.mit.edu/users/pufferfish101007"
     }
   ],
   "userscripts": [
@@ -19,6 +19,12 @@
   ],
   "tags": ["forums", "community"],
   "l10n": true,
-  "warning": "Scratchblocks tags are not supported, and the bbcode may not be 100% accurate. To get fully accurate quotes, quote as normal and delete any parts that you don't need."
+  "info": [
+     {
+        "type": "notice",
+        "text": "Scratchblocks tags are not supported, and the bbcode may not be 100% accurate. To get fully accurate quotes, quote as normal and delete any parts that you don't need.",
+        "id": "scratchblocks_notice"
+      }
+    ]
 }
 
