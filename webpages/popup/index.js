@@ -44,6 +44,7 @@ const vue = new Vue({
       if (this.currentPopup !== popup) {
         this.currentPopup = popup;
         if (this.popupsWithIframes.indexOf(popup) === -1) this.popupsWithIframes.push(popup);
+        setTimeout(() => document.querySelector("iframe:not([style='display: none;'])").focus(), 0);
       }
     },
     iframeSrc(addonId) {
@@ -65,7 +66,7 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     .map(({ addonId, manifest }) => (manifest.popup._addonId = addonId) && manifest.popup);
   popupObjects.push({
     name: chrome.i18n.getMessage("quickSettings"),
-    icon: "../../images/icons/settings.svg",
+    icon: "../../images/icons/wrench.svg",
     url: "../../webpages/settings/index.html",
     _addonId: "__settings__",
   });

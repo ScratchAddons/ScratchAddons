@@ -136,6 +136,8 @@ const vue = (window.vue = new Vue({
     addonSettings: {},
     popupOpenedOnScratchTab: false,
     addonToEnable: null,
+    showPopupModal: false,
+    isIframe: window.parent !== window,
     tags: [
       {
         name: chrome.i18n.getMessage("recommended"),
@@ -318,7 +320,8 @@ const vue = (window.vue = new Vue({
             if (result === false) {
               if (document.body.classList.contains("iframe")) {
                 this.addonToEnable = addon.name;
-                document.querySelector(".popup").style.display = "";
+                document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
+                this.showPopupModal = true;
                 document.querySelector(".popup").setAttribute("data-addon-id", addon._addonId);
               } else
                 chrome.permissions.request(
@@ -478,6 +481,16 @@ const vue = (window.vue = new Vue({
       window.open(`${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${document.querySelector(".popup").getAttribute("data-addon-id")}`)
       setTimeout(() => window.parent.close(), 100);
     },
+    hidePopup() {
+      document.querySelector(".popup").style.animation = "closePopup 1.6s 1";
+      document.querySelector(".popup").addEventListener(
+        "animationend",
+        () => {
+          this.showPopupModal = false;
+        },
+        { once: true }
+      );
+    },
   },
   events: {
     modalClickOutside: function (e) {
@@ -494,7 +507,7 @@ const vue = (window.vue = new Vue({
   },
 }));
 
-chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addonSettings }) => {
+chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
     manifest._category = manifest.popup
@@ -537,13 +550,11 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
     // New addons should always go first no matter what
     manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
     vue.manifests = manifests.map(({ manifest }) => manifest);
-    vue.loaded = true;
   } else {
     vue.manifests = manifests.map(({ manifest }) => manifest);
-    vue.popupOrderAddonsEnabledFirst().then(() => {
-      vue.loaded = true;
-    });
+    await vue.popupOrderAddonsEnabledFirst();
   }
+  vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
   setTimeout(handleKeySettings, 0);
   setTimeout(() => {
@@ -636,13 +647,12 @@ chrome.runtime.sendMessage("checkPermissions");
 
 function isElementAboveViewport(el) {
   const rect = el.getBoundingClientRect();
-  const elemTop = rect.top;
-  const isVisible = elemTop - 40 >= 0;
-  return isVisible;
+  const elemBottom = rect.bottom;
+  return elemBottom >= 0;
 }
 
 if (document.body.classList.contains("iframe")) {
-  document.querySelector(".addons-container").addEventListener(
+  document.querySelector(".addons-block").addEventListener(
     "scroll",
     () => {
       const el = document.querySelector(".addon-body[data-has-margin-bottom]");
