@@ -4,13 +4,7 @@ export default async ({ addon,console }) => {
     const xhrOpen = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function (method, path, ...args) {
         if (method === "put" && String(path).startsWith("https://projects.scratch.mit.edu/")){
-            //only block if it isn't a manual save
-            if(manualPress){
-                console.log("manual press");
-                //method = "OPTIONS"; //debugging
-            }else{
-                method = "OPTIONS";
-            }
+            if(!manualPress) method = "OPTIONS";
         }
         return xhrOpen.call(this, method, path, ...args);
     };
@@ -19,7 +13,6 @@ export default async ({ addon,console }) => {
     addon.tab.addEventListener("urlChange", function(event) { addMutationListeners(); });
 
     async function addMutationListeners(){
-        console.log("mutating");
         //add a function to the "Save Now" button to disable request interception if it was a manual save
         var saveContainer = await addon.tab.waitForElement("[class^='menu-bar_account-info-group_MeJZP']", {markAsSeen: true,});
         saveContainer = saveContainer.childNodes[0];
@@ -44,10 +37,7 @@ export default async ({ addon,console }) => {
                     alertContainer.childNodes[0].style.visibility = "";
                     alertContainer.childNodes[0].childNodes[1].childNodes[0].addEventListener("click", function(){manualPress = true;})
                     manualPress = false;
-                }else{
-                    alertContainer.childNodes[0].style.visibility = "hidden";
-                    console.log("hide message");
-                }
+                }else alertContainer.childNodes[0].style.visibility = "hidden";
             }
         });
         alertObserver.observe(alertContainer, { childList: true, });
