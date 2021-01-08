@@ -93,7 +93,7 @@ export default async function ({ addon, global, console }) {
       link.insertAdjacentHTML("afterbegin", `[url=${link.href}]`);
       link.insertAdjacentHTML("beforeend", "[/url]");
     }
-    
+
     // center
     let divs = html.querySelectorAll("div");
     for (let div of divs) {
