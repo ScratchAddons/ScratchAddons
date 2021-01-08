@@ -650,29 +650,40 @@ document.addEventListener("keydown", (e) => {
 
 chrome.runtime.sendMessage("checkPermissions");
 
-
 document.getElementById("enableAll").addEventListener("click", () => {
-  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=off]')).forEach(s=>s.click())
+  Object.values(
+    document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=off]')
+  ).forEach((s) => s.click());
 });
 
 document.getElementById("disableAll").addEventListener("click", () => {
-  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=on]')).forEach(s=>s.click())
+  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=on]')).forEach((s) =>
+    s.click()
+  );
 });
 
 document.getElementById("invertSelection").addEventListener("click", () => {
-  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch')).forEach(s=>s.click())
+  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch')).forEach((s) =>
+    s.click()
+  );
 });
 
 document.getElementById("openAll").addEventListener("click", () => {
-  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img:not(.reverted)')).forEach(s=>s.click())
+  Object.values(
+    document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img:not(.reverted)')
+  ).forEach((s) => s.click());
 });
 
 document.getElementById("closeAll").addEventListener("click", () => {
-  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img.reverted')).forEach(s=>s.click())
+  Object.values(
+    document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img.reverted')
+  ).forEach((s) => s.click());
 });
 
 document.getElementById("invertOptions").addEventListener("click", () => {
-  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img')).forEach(s=>s.click())
+  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img')).forEach((s) =>
+    s.click()
+  );
 });
 function isElementAboveViewport(el) {
   const rect = el.getBoundingClientRect();
