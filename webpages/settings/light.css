@@ -10,9 +10,6 @@ body {
   color: #222;
 }
 
-.category img {
-  filter: brightness(0);
-}
 
 .search-box {
   background: #fcfcfc;
@@ -104,7 +101,7 @@ body {
 img :not(.navbar, .icon-type) {
   filter: invert(100%) brightness(0);
 }
-.icon-type, .btn-dropdown img, .categories-shrink img {
+.icon-type, .btn-dropdown img, .categories-shrink img, .category img {
   filter: invert(1) brightness(0);
 }
 .btn-dropdown:hover {

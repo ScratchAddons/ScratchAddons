@@ -1,3 +1,5 @@
+@import url('../styles/colors.css');
+@import url('../styles/components/tooltips.css');
 html {
   background: var(--accent-1);
 }
@@ -822,53 +824,6 @@ input[type="color"]::-webkit-color-swatch {
   transform: scaleX(-1);
 }
 
-.tooltip {
-  position: relative;
-  /* making the .tooltip span a container for the tooltip text */
-  border-bottom: 1px dashed #000;
-  /* little indicater to indicate it's hoverable */
-  cursor: default;
-}
-
-.tooltiptext {
-  /* here's the magic */
-  position: absolute;
-  /* vertically center */
-  top: 50%;
-  transform: translateY(-50%);
-  /* move to right */
-  left: 95%;
-  margin-left: 15px;
-  /* and add a small left margin */
-  /* basic styles */
-  width: 200px;
-  padding: 10px;
-  border-radius: 10px;
-  background: #000;
-  color: #fff;
-  text-align: center;
-  /* display: none; */
-  visibility: hidden;
-  /* hide by default */
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-}
-.tooltip .tooltiptext::after {
-  content: " ";
-  position: absolute;
-  top: 50%;
-  right: 100%; /* To the left of the tooltip */
-  margin-top: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent black transparent transparent;
-}
-
-.tooltiptext:hover .tooltiptext:after {
-  visibility: visible;
-}
 .permissions div.main {
   justify-content: center;
   display: grid;
@@ -923,7 +878,6 @@ input[type="color"]::-webkit-color-swatch {
   top: 0px;
   color: white;
   border-radius: 0px 0px 10px 10px;
-  font-family: "Sora", sans-serif;
   transition: top 300ms cubic-bezier(0.17, 0.04, 0.03, 0.94);
   display: flex;
   flex-direction: column;
