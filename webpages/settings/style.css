@@ -253,12 +253,12 @@ h1 {
 }
 .badge.green {
   background: #78fd2b;
-  color: var(--accent-3)333;
+  color: var(--accent-3) 333;
   border-color: #53b31c;
 }
 .badge.yellow {
   background: #fddd2b;
-  color: var(--accent-3)333;
+  color: var(--accent-3) 333;
   border-color: #fdab12;
 }
 .badge.red {
@@ -278,11 +278,11 @@ h1 {
 }
 .filter-option.sel.green {
   background: #78fd2b;
-  color: var(--accent-3)333;
+  color: var(--accent-3) 333;
 }
 .filter-option.sel.yellow {
   background: #fddd2b;
-  color: var(--accent-3)333;
+  color: var(--accent-3) 333;
 }
 .filter-option.sel.red {
   background: #fd662b;
