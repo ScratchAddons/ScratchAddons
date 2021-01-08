@@ -1,5 +1,5 @@
-@import url('../styles/colors.css');
-@import url('../styles/components/tooltips.css');
+@import url("../styles/colors.css");
+@import url("../styles/components/tooltips.css");
 html {
   background: var(--accent-1);
 }

@@ -10,7 +10,6 @@ body {
   color: #222;
 }
 
-
 .search-box {
   background: #fcfcfc;
 }
@@ -96,18 +95,18 @@ body {
   color: black;
 }
 
-
-
 img :not(.navbar, .icon-type) {
   filter: invert(100%) brightness(0);
 }
-.icon-type, .btn-dropdown img, .categories-shrink img, .category img {
+.icon-type,
+.btn-dropdown img,
+.categories-shrink img,
+.category img {
   filter: invert(1) brightness(0);
 }
 .btn-dropdown:hover {
   background: rgba(0, 0, 0, 0.1);
 }
-
 
 .category.sel {
   font-weight: 600;
@@ -159,7 +158,6 @@ img :not(.navbar, .icon-type) {
   background: #f7f7f7;
   border: 1px solid #cfcfcf;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
 }
 
 #running-page {
