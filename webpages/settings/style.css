@@ -1,9 +1,9 @@
 html {
-  background: #2a2a2a;
+  background: var(--accent-1);
 }
 
 body {
-  background: #222;
+  background: var(--accent-2);
   font-family: "Sora", sans-serif;
   margin: 0;
   height: 100vh;
@@ -14,7 +14,7 @@ body {
 
 .navbar {
   height: 60px;
-  background: #ff7b26;
+  background: var(--brand-orange);
   color: #fff;
   display: flex;
   align-items: center;
@@ -69,7 +69,7 @@ h1 {
 }
 
 .category.sel {
-  color: #ff7b26;
+  color: var(--brand-orange);
 }
 .category:hover {
   background: rgba(0, 0, 0, 0.1);
@@ -80,7 +80,7 @@ h1 {
   width: 4px;
   border-radius: 0 4px 4px 0;
   height: 40px;
-  background: #ff7b26;
+  background: var(--brand-orange);
   position: absolute;
   top: 10px;
   left: 0;
@@ -113,7 +113,7 @@ h1 {
 
 .addon-body {
   margin: 10px;
-  background: #2a2a2a;
+  background: var(--accent-1);
   border: 1px solid #333;
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
@@ -353,7 +353,7 @@ h1 {
 
 .setting-input {
   color: #fff;
-  background: #222222;
+  background: var(--accent-2);
   border: 1px solid #000;
   padding: 8px 12px;
   border-radius: 4px;
@@ -362,7 +362,7 @@ h1 {
 }
 .setting-input:focus {
   outline: none;
-  border-color: #ff7b26;
+  border-color: var(--brand-orange);
   box-shadow: 0 0 0 3px #ff7d265d;
 }
 
@@ -393,7 +393,7 @@ h1 {
 
 .large-button {
   color: #fff;
-  background: #222222;
+  background: var(--accent-2);
   border: 1px solid #000;
   padding: 8px 12px;
   border-radius: 4px;
@@ -421,7 +421,7 @@ h1 {
 
 .search-box {
   min-height: 60px;
-  background: #2a2a2a;
+  background: var(--accent-1);
   display: flex;
   align-items: center;
   padding: 10px 30px;
@@ -501,7 +501,7 @@ h1 {
 }
 
 .switch[state="on"] {
-  background: #ff7b26;
+  background: var(--brand-orange);
 }
 .switch[state="on"]::before {
   background: #fff;
@@ -524,7 +524,7 @@ h1 {
   display: flex;
   border-radius: 4px;
   overflow: hidden;
-  background: #222;
+  background: var(--accent-2);
   border: 1px solid #000;
   font-size: 10px;
   user-select: none;
@@ -542,7 +542,7 @@ h1 {
   border-right: none;
 }
 .filter-option.sel {
-  background: #ff7b26;
+  background: var(--brand-orange);
 }
 .filter-option.disabled {
   filter: grayscale(80%);
@@ -576,7 +576,7 @@ input[type="color" i] {
 
 .small-button {
   margin-left: 10px;
-  background: #222;
+  background: var(--accent-2);
   border: 1px solid #000;
   padding: 5px 10px;
   border-radius: 5px;
@@ -631,7 +631,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 .modal-content {
-  background-color: #222;
+  background-color: var(--accent-2);
   margin: auto;
   padding: 20px;
   width: 50rem;
@@ -667,7 +667,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 .setting-body {
   margin: 10px;
-  background: #2a2a2a;
+  background: var(--accent-1);
   border: 1px solid #333;
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
@@ -709,7 +709,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 .large-dropdown {
   color: #fff;
-  background: #222222;
+  background: var(--accent-2);
   border: 1px solid #000;
   padding: 8px 12px;
   border-radius: 4px;
@@ -726,7 +726,7 @@ input[type="color"]::-webkit-color-swatch {
   display: none !important;
 }
 #confirmImport {
-  border-color: #ff7b26;
+  border-color: var(--brand-orange);
 }
 
 /*scrollbar*/
@@ -915,7 +915,7 @@ input[type="color"]::-webkit-color-swatch {
   position: fixed;
   left: calc(50% - 200px);
   z-index: 1000000;
-  background: #2a2a2a;
+  background: var(--accent-1);
   box-shadow: 0px -3px 15px 2px rgb(42 42 42);
   height: 180px;
   text-align: center;
@@ -967,7 +967,7 @@ input[type="color"]::-webkit-color-swatch {
   padding: 10px;
   position: sticky;
   top: 0;
-  background-color: #222222;
+  background-color: var(--accent-2);
   z-index: 999;
 }
 
