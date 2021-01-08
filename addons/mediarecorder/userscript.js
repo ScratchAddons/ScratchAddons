@@ -38,7 +38,6 @@ export default async ({ addon, console, msg }) => {
       // Timer
       let secs = Number(prompt(msg("seconds")));
       if (!secs) return;
-      secs = Math.max(5, Math.min(30, secs));
 
       // Initialize MediaRecorder
       recordBuffer = [];
