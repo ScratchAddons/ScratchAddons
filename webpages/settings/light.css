@@ -99,21 +99,18 @@ body {
   color: black;
 }
 
-.addon-notice img {
-  filter: brightness(0);
-}
 
-.addon-body img {
+
+img :not(.navbar, .icon-type) {
   filter: invert(100%) brightness(0);
 }
-
+.icon-type, .btn-dropdown img, .categories-shrink img {
+  filter: invert(1) brightness(0);
+}
 .btn-dropdown:hover {
   background: rgba(0, 0, 0, 0.1);
 }
 
-.addon-name {
-  font-weight: 400;
-}
 
 .category.sel {
   font-weight: 600;
@@ -160,19 +157,12 @@ body {
 .close {
   filter: invert(1);
 }
-.modal-content img {
-  filter: invert(1);
-}
+
 .setting-body {
   background: #f7f7f7;
   border: 1px solid #cfcfcf;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-.setting-body img {
-  filter: invert(100%) brightness(0);
-}
-.categories-shrink {
-  filter: brightness(0);
+
 }
 
 #running-page {
