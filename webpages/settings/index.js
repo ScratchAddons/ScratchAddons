@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["data-category-tweaks-v2"];
+const NEW_ADDONS = ["data-category-tweaks-v2", "mute-project"];
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 
@@ -19,6 +19,11 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
     vue.themePath = "../../images/icons/theme.svg";
   }
 });
+
+if (window.parent !== window) {
+  // We're in a popup!
+  document.body.classList.add("iframe");
+}
 
 const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
 
@@ -113,7 +118,7 @@ Vue.directive("click-outside", {
   },
 });
 
-const vue = new Vue({
+const vue = (window.vue = new Vue({
   el: "body",
   data: {
     smallMode: false,
@@ -129,6 +134,10 @@ const vue = new Vue({
     selectedTag: null,
     searchInput: "",
     addonSettings: {},
+    popupOpenedOnScratchTab: false,
+    addonToEnable: null,
+    showPopupModal: false,
+    isIframe: window.parent !== window,
     tags: [
       {
         name: chrome.i18n.getMessage("recommended"),
@@ -140,6 +149,7 @@ const vue = new Vue({
           editor: true,
           community: true,
           theme: true,
+          popup: true,
         },
       },
       {
@@ -152,6 +162,7 @@ const vue = new Vue({
           editor: true,
           community: true,
           theme: true,
+          popup: true,
         },
       },
       {
@@ -292,21 +303,38 @@ const vue = new Vue({
       const toggle = () => {
         const newState = !addon._enabled;
         addon._enabled = newState;
-        addon._expanded = newState;
+        // Do not extend when enabling in popup mode
+        addon._expanded = document.body.classList.contains("iframe") && !addon._expanded ? false : newState;
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
+
+        if (document.body.classList.contains("iframe")) setTimeout(() => this.popupOrderAddonsEnabledFirst(), 500);
       };
 
       const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
       if (!addon._enabled && requiredPermissions.length) {
-        chrome.permissions.request(
+        chrome.permissions.contains(
           {
             permissions: requiredPermissions,
           },
-          (granted) => {
-            if (granted) {
-              console.log("Permissions granted!");
-              toggle();
-            }
+          (result) => {
+            if (result === false) {
+              if (document.body.classList.contains("iframe")) {
+                this.addonToEnable = addon;
+                document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
+                this.showPopupModal = true;
+              } else
+                chrome.permissions.request(
+                  {
+                    permissions: requiredPermissions,
+                  },
+                  (granted) => {
+                    if (granted) {
+                      console.log("Permissions granted!");
+                      toggle();
+                    }
+                  }
+                );
+            } else toggle();
           }
         );
       } else toggle();
@@ -335,7 +363,7 @@ const vue = new Vue({
     },
     loadPreset(preset, addon) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
-        for (const property in preset.values) {
+        for (const property of Object.keys(preset.values)) {
           this.updateOption(property, preset.values[property], addon);
         }
         console.log(`Loaded preset ${preset.id} for ${addon.id}`);
@@ -352,13 +380,13 @@ const vue = new Vue({
     textParse(text, addon) {
       const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
       return text.replace(regex, (icon) => {
-        if (icon[0] == "\\") {
+        if (icon[0] === "\\") {
           return icon.slice(1);
         }
-        if (icon[0] == "@") {
+        if (icon[0] === "@") {
           return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
         }
-        if (icon[0] == "#") {
+        if (icon[0] === "#") {
           return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
         }
       });
@@ -397,10 +425,10 @@ const vue = new Vue({
           inputElem.remove();
           const confirmElem = document.getElementById("confirmImport");
           try {
-            await deserializeSettings(text, vue.manifests, confirmImport);
+            await deserializeSettings(text, vue.manifests, confirmElem);
           } catch (e) {
             console.warn("Error when importing settings:", e);
-            confirmImport.classList.add("hidden-button");
+            confirmElem.classList.add("hidden-button");
             alert(chrome.i18n.getMessage("importFailed"));
             return;
           }
@@ -411,6 +439,56 @@ const vue = new Vue({
       );
       document.body.appendChild(inputElem);
       inputElem.click();
+    },
+    popupOrderAddonsEnabledFirst() {
+      return new Promise((resolve) => {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+          if (!tabs[0].id) return;
+          chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
+            // Just so we don't get any errors in the console if we don't get any responce from a non scratch tab.
+            chrome.runtime.lastError;
+            if (res && res.length) {
+              this.popupOpenedOnScratchTab = true;
+              this.manifests.sort((a, b) =>
+                res.includes(a._addonId) && res.includes(b._addonId)
+                  ? a.name.localeCompare(b.name)
+                  : res.includes(a._addonId)
+                  ? -1
+                  : res.includes(b._addonId)
+                  ? 1
+                  : 0
+              );
+              // Find last currently running addon to add bottom margin
+              const currentMarginBottomAddon = this.manifests.find((manifest) => manifest._marginBottom === true);
+              if (currentMarginBottomAddon) Vue.set(currentMarginBottomAddon, "_marginBottom", false);
+              let lastManifest;
+              for (const manifest of this.manifests) {
+                if (!res.includes(manifest._addonId)) {
+                  console.log(manifest);
+                  Vue.set(lastManifest, "_marginBottom", true);
+                  break;
+                }
+                lastManifest = manifest;
+              }
+              resolve();
+            } else resolve();
+          });
+        });
+      });
+    },
+    openFullSettings() {
+      window.open(`${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${this.addonToEnable._addonId}`);
+      setTimeout(() => window.parent.close(), 100);
+    },
+    hidePopup() {
+      document.querySelector(".popup").style.animation = "closePopup 1.6s 1";
+      document.querySelector(".popup").addEventListener(
+        "animationend",
+        () => {
+          this.showPopupModal = false;
+        },
+        { once: true }
+      );
     },
   },
   events: {
@@ -426,21 +504,25 @@ const vue = new Vue({
       this.selectedTag = null;
     },
   },
-});
+}));
 
-chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addonSettings }) => {
+chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
-    manifest._category = manifest.tags.includes("easterEgg")
+    manifest._category = manifest.popup
+      ? "popup"
+      : manifest.tags.includes("easterEgg")
       ? "easterEgg"
       : manifest.tags.includes("theme")
       ? "theme"
       : manifest.tags.includes("community")
       ? "community"
       : "editor";
+    // Exception:
+    if (addonId === "msg-count-badge") manifest._category = "popup";
     manifest._enabled = addonsEnabled[addonId];
     manifest._addonId = addonId;
-    manifest._expanded = manifest._enabled;
+    manifest._expanded = document.body.classList.contains("iframe") ? false : manifest._enabled;
     manifest._tags = {};
     manifest._tags.recommended = manifest.tags.includes("recommended");
     manifest._tags.beta = manifest.tags.includes("beta");
@@ -460,15 +542,33 @@ chrome.runtime.sendMessage("getSettingsInfo", ({ manifests, addonsEnabled, addon
       else return a.manifest.name.localeCompare(b.manifest.name);
     } else return 1;
   });
-  // Messaging related addons should always go first no matter what (rule broken below)
-  manifests.sort((a, b) => (a.addonId === "msg-count-badge" ? -1 : b.addonId === "msg-count-badge" ? 1 : 0));
-  manifests.sort((a, b) => (a.addonId === "scratch-messaging" ? -1 : b.addonId === "scratch-messaging" ? 1 : 0));
-  // New addons should always go first no matter what
-  manifests.sort((a, b) => (NEW_ADDONS.includes(a.addonId) ? -1 : NEW_ADDONS.includes(b.addonId) ? 1 : 0));
-  vue.manifests = manifests.map(({ manifest }) => manifest);
+  if (!document.body.classList.contains("iframe")) {
+    // New addons should always go first no matter what
+    manifests.sort((a, b) =>
+      NEW_ADDONS.includes(a.addonId) && NEW_ADDONS.includes(b.addonId)
+        ? NEW_ADDONS.indexOf(a.addonId) - NEW_ADDONS.indexOf(b.addonId)
+        : NEW_ADDONS.includes(a.addonId)
+        ? -1
+        : NEW_ADDONS.includes(b.addonId)
+        ? 1
+        : 0
+    );
+    vue.manifests = manifests.map(({ manifest }) => manifest);
+  } else {
+    vue.manifests = manifests.map(({ manifest }) => manifest);
+    await vue.popupOrderAddonsEnabledFirst();
+  }
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
   setTimeout(handleKeySettings, 0);
+  setTimeout(() => {
+    // Set hash again after loading addons, to force scroll to addon
+    let hash = window.location.hash;
+    if (hash) {
+      window.location.hash = "";
+      window.location.hash = hash;
+    }
+  }, 0);
 });
 
 function handleKeySettings() {
@@ -479,7 +579,7 @@ function handleKeySettings() {
       e.target.value = e.ctrlKey
         ? "Ctrl" +
           (e.shiftKey ? " + Shift" : "") +
-          (e.key == "Control" || e.key == "Shift"
+          (e.key === "Control" || e.key === "Shift"
             ? ""
             : (e.ctrlKey ? " + " : "") +
               (e.key.toUpperCase() === e.key
@@ -496,7 +596,7 @@ function handleKeySettings() {
     });
     input.addEventListener("keyup", function (e) {
       // Ctrl by itself isn't a hotkey
-      if (e.target.value == "Ctrl") e.target.value = "";
+      if (e.target.value === "Ctrl") e.target.value = "";
     });
   }
 }
@@ -517,7 +617,7 @@ function resize() {
     vue.smallMode = true;
     vue.categoryOpen = false;
     vue.switchPath = "../../images/icons/switch.svg";
-  } else if (vue.smallMode != false) {
+  } else if (vue.smallMode !== false) {
     vue.smallMode = false;
     vue.categoryOpen = true;
     vue.switchPath = "../../images/icons/close.svg";
@@ -550,6 +650,7 @@ document.addEventListener("keydown", (e) => {
 
 chrome.runtime.sendMessage("checkPermissions");
 
+
 document.getElementById("enableAll").addEventListener("click", () => {
   Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=off]')).forEach(s=>s.click())
 });
@@ -573,3 +674,20 @@ document.getElementById("closeAll").addEventListener("click", () => {
 document.getElementById("invertOptions").addEventListener("click", () => {
   Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img')).forEach(s=>s.click())
 });
+function isElementAboveViewport(el) {
+  const rect = el.getBoundingClientRect();
+  const elemBottom = rect.bottom;
+  return elemBottom >= 0;
+}
+
+if (document.body.classList.contains("iframe")) {
+  document.querySelector(".addons-block").addEventListener(
+    "scroll",
+    () => {
+      const el = document.querySelector(".addon-body[data-has-margin-bottom]");
+      if (!el) return;
+      document.querySelector("#running-page").style.opacity = isElementAboveViewport(el) ? 1 : 0;
+    },
+    { passive: true }
+  );
+}

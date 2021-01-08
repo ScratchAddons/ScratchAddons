@@ -298,13 +298,6 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
           this.messages.length > this.showingMessagesAmt
         );
       },
-      settingsLink() {
-        return l10n.escaped("scratch-messaging/disabled", {
-          settings: `<a href="/webpages/settings/index.html" target="_blank">${l10n.escaped(
-            "scratch-messaging/settings"
-          )}</a>`,
-        });
-      },
     },
     created() {
       document.title = l10n.get("scratch-messaging/popup-title");
@@ -423,7 +416,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
             },
             (comments) => {
               if (Object.keys(comments).length === 0) elementObject.unreadComments = 0;
-              for (const commentId in comments) {
+              for (const commentId of Object.keys(comments)) {
                 const commentObject = comments[commentId];
                 Vue.set(this.comments, commentId, commentObject);
                 const chainId = commentObject.childOf || commentId;
@@ -452,9 +445,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         const messagesToCheck =
           this.msgCount > 40 ? this.messages.length : showAll ? this.messages.length : this.msgCount;
         this.showingMessagesAmt = messagesToCheck;
-        for (const indexString in this.messages.slice(0, messagesToCheck)) {
-          const index = Number(indexString);
-          const message = this.messages[index];
+        for (const message of this.messages.slice(0, messagesToCheck)) {
           if (message.type === "followuser") {
             this.follows.push(message.actor_username);
           } else if (message.type === "curatorinvite") {

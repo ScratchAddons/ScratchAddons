@@ -11,7 +11,7 @@ export default async function ({ addon, global, console, msg }) {
     },
     set: function (v) {
       doCloneChecks(v);
-      return (this.__cloneCounter = v);
+      this.__cloneCounter = v;
     },
   });
 
@@ -37,7 +37,7 @@ export default async function ({ addon, global, console, msg }) {
       countContainerContainer.style.display = "";
     }
 
-    if (v == 300) {
+    if (v === 300) {
       count.style.color = "#ff6680";
       icon.src = addon.self.dir + "/300cats.svg";
     } else {

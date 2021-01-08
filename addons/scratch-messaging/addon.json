@@ -9,6 +9,11 @@
       "name": "griffpatch"
     }
   ],
+  "popup": {
+    "icon": "../../images/icons/envelope.svg",
+    "name": "Messaging",
+    "fullscreen": true
+  },
   "persistentScripts": ["background.js"],
   "tags": ["community", "recommended"],
   "enabledByDefault": true,

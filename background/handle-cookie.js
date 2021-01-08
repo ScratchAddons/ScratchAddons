@@ -1,6 +1,6 @@
 // Remove Set-Cookie header that forces logout when they should not
 const specs = ["responseHeaders", "blocking"];
-if (chrome.webRequest.OnBeforeSendHeadersOptions.hasOwnProperty("EXTRA_HEADERS")) {
+if (Object.prototype.hasOwnProperty.call(chrome.webRequest.OnBeforeSendHeadersOptions, "EXTRA_HEADERS")) {
   specs.push("extraHeaders");
 }
 

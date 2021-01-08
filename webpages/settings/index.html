@@ -41,20 +41,33 @@
           <img src="../../images/icons/brush.svg" />
           <span>{{ msg("themes") }}</span>
         </div>
-        <div class="category" style="margin-top: auto" @click="openPage('https://scratchaddons.com/contributors')">
+        <div
+          class="category"
+          :class="{sel: selectedTab === 'popup'}"
+          @click="selectedTab = 'popup'"
+          style="margin-bottom: 12px"
+        >
+          <img src="../../images/icons/popup.svg" />
+          <span>{{ msg("popupFeatures") }}</span>
+        </div>
+        <div
+          class="category category-small"
+          style="margin-top: auto"
+          @click="openPage('https://scratchaddons.com/contributors')"
+        >
           <img src="../../images/icons/users.svg" />
           <span>{{ msg("credits") }}</span>
         </div>
-        <div class="category" @click="openReview()">
+        <div class="category category-small" @click="openReview()" style="display: none">
           <img src="../../images/icons/star.svg" />
           <span>{{ msg("review") }}</span>
         </div>
-        <div class="category" @click="openPage('https://scratchaddons.com/translate')">
+        <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
           <img src="../../images/icons/translate.svg" />
           <span>{{ msg("translate") }}</span>
           <div class="badge purple tooltip" style="cursor: pointer">{{ msg("new") }}</div>
         </div>
-        <div class="category" @click="openFeedback()">
+        <div class="category category-small" @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
           <span>{{ msg("feedback") }}</span>
         </div>
@@ -85,6 +98,11 @@
             style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey')"
             @click="clearSearch()"
           ></button>
+          <div id="popup-more-settings" v-show="isIframe">
+            <button @click="openFullSettings()" class="large-button">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ msg("moreSettings") }}
+            </button>
+          </div>
           <div class="filter-selector">
             <span class="filter-text">{{ msg("filter") }} </span>
             <div class="filter-options">
@@ -122,10 +140,16 @@
         </div>
 
         <div class="addons-container">
+          <div id="running-page" v-show="popupOpenedOnScratchTab && searchInput === ''">
+            {{ msg("runningOnThisPage") }}
+          </div>
           <div
             class="addon-body"
+            :class="{ 'addon-body-margin-bottom': addon._marginBottom && searchInput === '' }"
             v-for="addon of manifests"
             v-show="addonMatchesFilters(addon) && (selectedTab === 'all' || addon._category === selectedTab)"
+            :data-has-margin-bottom="addon._marginBottom"
+            :id="'addon-' + addon._addonId"
           >
             <div class="addon-topbar">
               <div class="clickeable-area" @click="addon._expanded = !addon._expanded">
@@ -141,6 +165,7 @@
                     src="../../images/icons/egg-easter.svg"
                     class="icon-type"
                   />
+                  <img v-if="addon._category === 'popup'" src="../../images/icons/popup.svg" class="icon-type" />
                   <span @click="devShowAddonIds">{{ addon.name }}</span>
                 </div>
               </div>
@@ -376,6 +401,13 @@
             <a href="./licenses.html?libraries=intl-messageformat,vue" target="_blank">{{ msg("libraryCredits") }}</a>
           </p>
         </div>
+      </div>
+    </div>
+    <div class="popup" v-show="showPopupModal" style="display: none">
+      <div class="label">{{ msg("settingsPagePermission", addonToEnable.name) }}</div>
+      <div>
+        <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
+        <button class="large-button" @click="hidePopup()">{{ msg("skipOpenFullSettings") }}</button>
       </div>
     </div>
   </body>

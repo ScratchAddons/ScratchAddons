@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   while (true) {
     let item = await addon.tab.waitForElement(".media-stats", { markAsSeen: true });
-    if (window.location.hash == "#galleries" && item.childElementCount == 2) {
+    if (window.location.hash === "#galleries" && item.childElementCount === 2) {
       let leaveButton = item.appendChild(document.createElement("a"));
       leaveButton.className = "unshare";
       leaveButton.innerText = msg("leave");

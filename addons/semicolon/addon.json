@@ -1,0 +1,24 @@
+{
+  "name": "Semicolon glitch",
+  "description": "Adds the semicolon glitch back to Scratch.",
+  "credits": [
+    {
+      "name": "GrahamSH"
+    }
+  ],
+
+  "userstyles": [
+    {
+      "url": "semicolon.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "semicolon.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "tags": ["easterEgg"],
+  "enabledByDefault": false
+}

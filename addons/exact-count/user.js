@@ -14,7 +14,7 @@ export default async function ({ addon, global, console }) {
           if (boxHeads[i].querySelector("a")) {
             let viewAll = new URL(boxHeads[i].querySelector("a").href).pathname;
             let link = viewAll.toLowerCase().split("/users/" + username.toLowerCase() + "/")[1];
-            if (link.toLowerCase() == details[j].toLowerCase() + "/") {
+            if (link.toLowerCase() === details[j].toLowerCase() + "/") {
               let boxheadName = boxHeads[i].querySelector("h4");
               let boxVal = boxheadName.innerText.match(/\([0-9+]+\)/g);
               if (boxVal)

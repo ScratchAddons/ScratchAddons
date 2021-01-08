@@ -39,6 +39,7 @@
   "cloud-games",
   "studio-tools",
   "last-edit-tooltip",
+  "semicolon",
   "infinite-scroll",
   "mouse-pos",
   "clones",
@@ -64,5 +65,6 @@
   "color-picker",
   "onion-skinning",
   "better-quoter",
-  "data-category-tweaks-v2"
+  "data-category-tweaks-v2",
+  "mute-project"
 ]

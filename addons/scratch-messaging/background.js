@@ -186,7 +186,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           children: Object.keys(childrenComments),
           childOf: null,
         };
-        for (const childCommentId in childrenComments) {
+        for (const childCommentId of Object.keys(childrenComments)) {
           commentsObj[childCommentId] = childrenComments[childCommentId];
         }
       }
