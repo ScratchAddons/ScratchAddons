@@ -50,7 +50,7 @@ h1 {
   flex-direction: column;
   flex-shrink: 0;
   flex-grow: 0;
-  background: #333;
+  background: var(--accent-3);
   min-width: 300px;
   overflow-y: auto;
   padding: 20px 0;
@@ -114,7 +114,7 @@ h1 {
 .addon-body {
   margin: 10px;
   background: var(--accent-1);
-  border: 1px solid #333;
+  border: 1px solid var(--accent-3);
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
@@ -124,19 +124,19 @@ h1 {
 
 @keyframes addonBlink {
   10% {
-    border: 1px solid #333;
+    border: 1px solid var(--accent-3);
   }
   25% {
     border: 1px solid #7e7e7e;
   }
   50% {
-    border: 1px solid #333;
+    border: 1px solid var(--accent-3);
   }
   75% {
     border: 1px solid #7e7e7e;
   }
   100% {
-    border: 1px solid #333;
+    border: 1px solid var(--accent-3);
   }
 }
 
@@ -253,12 +253,12 @@ h1 {
 }
 .badge.green {
   background: #78fd2b;
-  color: #333333;
+  color: var(--accent-3)333;
   border-color: #53b31c;
 }
 .badge.yellow {
   background: #fddd2b;
-  color: #333333;
+  color: var(--accent-3)333;
   border-color: #fdab12;
 }
 .badge.red {
@@ -278,11 +278,11 @@ h1 {
 }
 .filter-option.sel.green {
   background: #78fd2b;
-  color: #333333;
+  color: var(--accent-3)333;
 }
 .filter-option.sel.yellow {
   background: #fddd2b;
-  color: #333333;
+  color: var(--accent-3)333;
 }
 .filter-option.sel.red {
   background: #fd662b;
@@ -294,7 +294,7 @@ h1 {
 .rating {
   margin-left: 20px;
   font-size: 20px;
-  color: #aaa;
+  color: var(--accent-4);
 }
 .rating span {
   color: #fdab12;
@@ -340,7 +340,7 @@ h1 {
 .setting-label {
   width: 200px;
   text-transform: uppercase;
-  color: #aaa;
+  color: var(--accent-4);
   font-weight: 600;
   font-size: 12px;
   margin-right: 10px;
@@ -352,7 +352,7 @@ h1 {
 }
 
 .setting-input {
-  color: #fff;
+  color: var(--accent-5);
   background: var(--accent-2);
   border: 1px solid #000;
   padding: 8px 12px;
@@ -392,7 +392,7 @@ h1 {
 }
 
 .large-button {
-  color: #fff;
+  color: var(--accent-5);
   background: var(--accent-2);
   border: 1px solid #000;
   padding: 8px 12px;
@@ -433,7 +433,7 @@ h1 {
   padding: 10px 15px;
   border: none;
   border-radius: 4px 0 0 4px;
-  color: #fff;
+  color: var(--accent-5);
   width: 150px;
   height: 16px;
 }
@@ -493,7 +493,7 @@ h1 {
   display: block;
   width: 10px;
   height: 10px;
-  background: #aaa;
+  background: var(--accent-4);
   border-radius: 5px;
   top: 5px;
   left: 5px;
@@ -668,7 +668,7 @@ input[type="color"]::-webkit-color-swatch {
 .setting-body {
   margin: 10px;
   background: var(--accent-1);
-  border: 1px solid #333;
+  border: 1px solid var(--accent-3);
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
@@ -708,7 +708,7 @@ input[type="color"]::-webkit-color-swatch {
   cursor: pointer;
 }
 .large-dropdown {
-  color: #fff;
+  color: var(--accent-5);
   background: var(--accent-2);
   border: 1px solid #000;
   padding: 8px 12px;
