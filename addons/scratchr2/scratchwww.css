@@ -13,11 +13,17 @@ a:hover,
 #navigation,
 #navigation .dropdown,
 #navigation .dropdown.with-arrow::before,
+.button,
 .intro-banner .intro-container,
+.subactions .action-buttons .action-button,
 .title-banner.mod-messages,
 .download .download-header,
 .os-chooser .button.active,
-.step .step-number-row .step-number {
+.step .step-number-row .step-number,
+.title-banner.mod-blue-bg,
+.title-banner.mod-conference,
+#footer .inner .media li,
+.wedo .top-banner {
   background-color: var(--scratchr2-primaryColor);
   color: #fff;
 }
