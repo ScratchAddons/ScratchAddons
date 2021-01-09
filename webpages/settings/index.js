@@ -477,7 +477,11 @@ const vue = (window.vue = new Vue({
       });
     },
     openFullSettings() {
-      window.open(`${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${this.addonToEnable && this.addonToEnable._addonId}`);
+      window.open(
+        `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
+          this.addonToEnable && this.addonToEnable._addonId
+        }`
+      );
       setTimeout(() => window.parent.close(), 100);
     },
     hidePopup() {
