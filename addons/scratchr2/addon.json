@@ -1,11 +1,13 @@
 {
   "name": "Scratch 2.0 \u2192 3.0",
   "description": "Makes Scratch 2.0-styled pages look like Scratch 3.0.",
-  "info": [{
-    "type": "notice",
-    "id": "refresh",
-    "text": "If text in the navigation bar is hard to read after changing the primary color, reload the page and it will adjust automatically.",
-  }],
+  "info": [
+    {
+      "type": "notice",
+      "id": "refresh",
+      "text": "If text in the navigation bar is hard to read after changing the primary color, reload the page and it will adjust automatically."
+    }
+  ],
   "tags": ["community", "theme", "recommended"],
   "credits": [
     {
