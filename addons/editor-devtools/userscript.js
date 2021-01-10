@@ -1,10 +1,17 @@
-import ShowBroadcast from "./show-broadcast.js";
+// import ShowBroadcast from "./show-broadcast.js";
+import Utils from "./utils.js";
+import DomHelpers from "./dom-helpers.js";
+import BlockInstance from "./BlockInstance.js";
 
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
   // Scratch Addons: do not run if extension is already enabled
-  if (window.initGUI) return;
+  if (window.initGUI) {
+    return;
+  }
 
-  const showBroadcastSingleton = new ShowBroadcast(addon);
+  const vm = addon.tab.traps.onceValues.vm;
+  const utils = new Utils(addon);
+  const domHelpers = new DomHelpers(addon);
 
   // 0-indexed 6 = July
   const releaseDate = new Date(2020, 6, 4);
@@ -18,7 +25,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     version: "0.2.4",
     date: releaseDateLocalized,
     ndash: "&ndash;",
-    url: '<a target="_blank" rel="noreferrer noopener" href="https://www.youtube.com/user/griffpatch">Griffpatch</a>',
+    url: '<a target="_blank" rel="noreferrer noopener" href="https://www.youtube.com/griffpatch">Griffpatch</a>',
   })}</p>
 <hr />
 <h2><strong>${m("changes024")}</strong></h2>
@@ -43,114 +50,24 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 <hr />
 <p>${m(
     "youtube"
-  )} -&nbsp;<a target="_blank" href="https://www.youtube.com/user/griffpatch">https://www.youtube.com/user/griffpatch</a></p>
+  )} -&nbsp;<a target="_blank" href="https://www.youtube.com/griffpatch">https://www.youtube.com/user/griffpatch</a></p>
 </div>
 </div>
 `;
-
-  const NavHist = function () {
-    this.views = [];
-    this.forward = [];
-
-    function distance(pos, next) {
-      return Math.sqrt(Math.pow(pos.left - next.left, 2) + Math.pow(pos.top - next.top, 2));
-    }
-
-    /**
-     * Keep a record of the scroll and zoom position
-     */
-    this.storeView = function (next, dist) {
-      this.forward = [];
-      let wksp = getWorkspace(),
-        s = wksp.getMetrics();
-
-      let pos = { left: s.viewLeft, top: s.viewTop };
-      if (!next || distance(pos, next) > dist) {
-        this.views.push(pos);
-      }
-    };
-
-    this.peek = function () {
-      return this.views.length > 0 ? this.views[this.views.length - 1] : null;
-    };
-
-    this.goBack = function () {
-      let wksp = getWorkspace(),
-        s = wksp.getMetrics();
-
-      let pos = { left: s.viewLeft, top: s.viewTop };
-      let view = this.peek();
-      if (!view) {
-        return;
-      }
-      if (distance(pos, view) < 64) {
-        // Go back to current if we are already far away from it
-        if (this.views.length > 1) {
-          this.views.pop();
-          this.forward.push(view);
-        }
-      }
-
-      view = this.peek();
-      if (!view) {
-        return;
-      }
-
-      let sx = view.left - s.contentLeft,
-        sy = view.top - s.contentTop;
-
-      // transform.setTranslate(-600,0);
-
-      wksp.scrollbar.set(sx, sy);
-
-      /*
-            let blocklySvg = document.getElementsByClassName('blocklySvg')[0];
-            let blocklyBlockCanvas = blocklySvg.getElementsByClassName('blocklyBlockCanvas')[0];
-            let transform = blocklyBlockCanvas.transform.baseVal.getItem(0);
-            let scale = blocklyBlockCanvas.transform.baseVal.getItem(1);
-
-            let transformMatrix = transform.matrix;
-            let scaleMatrix = scale.matrix;
-
-            console.log('Transform - getMetrics', s);
-            console.log('sx, sy: ', sx, sy);
-            console.log('left, top: ', view.left, view.top);
-            console.log('contentLeft, right:', s.contentLeft, s.contentTop);
-            console.log('transform, scale matrix: ', transformMatrix, scaleMatrix);
-*/
-    };
-
-    this.goForward = function () {
-      let view = this.forward.pop();
-      if (!view) {
-        return;
-      }
-      this.views.push(view);
-
-      let wksp = getWorkspace(),
-        s = wksp.getMetrics();
-
-      let sx = view.left - s.contentLeft,
-        sy = view.top - s.contentTop;
-
-      wksp.scrollbar.set(sx, sy);
-    };
-  };
 
   let find,
     findInp,
     ddOut,
     dd,
     wksp,
-    offsetX = 32,
-    offsetY = 32,
+    // offsetX = 32,
+    // offsetY = 32,
     codeTab,
     costTab,
     costTabBody,
     selVarID,
     floatInp,
     blockCursor,
-    navHist = new NavHist(),
     canShare = false,
     events = [];
 
@@ -191,20 +108,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     e.preventDefault();
   }
 
-  /**
-   *
-   * @returns Blockly.Workspace
-   */
-  function getWorkspace() {
-    let wksp2 = Blockly.getMainWorkspace();
-    if (wksp2.getToolbox()) {
-      // Sadly get get workspace does not always return the 'real' workspace... Not sure how to get that at the moment,
-      //  but we can work out whether it's the right one by whether it has a toolbox.
-      wksp = wksp2;
-    }
-    return wksp;
-  }
-
   function getScratchCostumes() {
     let costumes = costTabBody.querySelectorAll("div[class^='sprite-selector-item_sprite-name']");
     // costTab[0].click();
@@ -216,19 +119,11 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
      * @param cls
      * @param txt
      * @param root
-     * @returns {{clones: null, procCode: *, labelID: *, lower: *, y: number, cls: *}|*}
+     * @returns BlockItem
      */
     function addBlock(cls, txt, root) {
       let id = root.className;
-      let items = {
-        cls: cls,
-        procCode: txt,
-        labelID: id,
-        y: 0,
-        lower: txt.toLowerCase(),
-        clones: null,
-      };
-      // items.y = root.getRelativeToSurfaceXY ? root.getRelativeToSurfaceXY().y : null;
+      let items = new BlockItem(cls, txt, id, 0);
       myBlocks.push(items);
       myBlocksByProcCode[txt] = items;
       return items;
@@ -243,6 +138,37 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     return { procs: myBlocks };
   }
 
+  class BlockItem {
+    constructor(cls, procCode, labelID, y) {
+      this.cls = cls;
+      this.procCode = procCode;
+      this.labelID = labelID;
+      this.y = y;
+      this.lower = procCode.toLowerCase();
+      this.clones = null;
+      this.eventName = null;
+    }
+
+    /**
+     * True if the blockID matches a black represented by this BlockItem
+     * @param id
+     * @returns {boolean}
+     */
+    matchesID(id) {
+      if (this.labelID === id) {
+        return true;
+      }
+      if (this.clones) {
+        for (const clone of this.clones) {
+          if (clone.id === id) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+  }
+
   /**
    * Fetch the scratch 3 block list
    * @returns jsonFetch object
@@ -255,7 +181,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
     // todo - get blockyly from an svg???
 
-    let wksp = getWorkspace();
+    let wksp = utils.getWorkspace();
     let topBlocks = wksp.getTopBlocks();
     // console.log(topBlocks);
 
@@ -263,7 +189,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
      * @param cls
      * @param txt
      * @param root
-     * @returns {{clones: null, procCode: *, labelID: *, lower: *, y: number, cls: *}|*}
+     * @returns BlockItem
      */
     function addBlock(cls, txt, root) {
       let id = root.id ? root.id : root.getId ? root.getId() : null;
@@ -275,14 +201,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         clone.clones.push(id);
         return clone;
       }
-      let items = {
-        cls: cls,
-        procCode: txt,
-        labelID: id,
-        y: 0,
-        lower: txt.toLowerCase(),
-        clones: null,
-      };
+      let items = new BlockItem(cls, txt, id, 0);
       items.y = root.getRelativeToSurfaceXY ? root.getRelativeToSurfaceXY().y : null;
       myBlocks.push(items);
       myBlocksByProcCode[txt] = items;
@@ -322,7 +241,8 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
           let fields = root.inputList[0];
           let typeDesc = fields.fieldRow[0].getText();
           let eventName = fields.fieldRow[1].getText();
-          addBlock("receive", typeDesc + " " + eventName, root).eventName = eventName;
+          // addBlock('receive', typeDesc + ' ' + eventName, root).eventName = eventName;
+          addBlock("receive", "event " + eventName, root).eventName = eventName;
         } catch (e) {
           // eat
         }
@@ -352,16 +272,44 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       addBlock(row.isLocal ? "list" : "LIST", (row.isLocal ? "list " : "LIST ") + row.name, row);
     }
 
-    const clsOrder = {
-      flag: 0,
-      receive: 1,
-      event: 2,
-      define: 3,
-      var: 4,
-      VAR: 5,
-      list: 6,
-      LIST: 7,
-    };
+    const events = getCallsToEvents();
+    for (const event of events) {
+      addBlock("receive", "event " + event.eventName, event.block).eventName = event.eventName;
+    }
+
+    /*
+                const runtime = vm.runtime;
+                // Now let's also add event broadcasts (not just hat blocks)
+                const target = runtime.getEditingTarget();
+                const blocks = target.blocks;
+                if (blocks._blocks) {
+                    for (const id in blocks._blocks) {
+                        if (!blocks._blocks.hasOwnProperty(id)) {
+                            continue;
+                        }
+                        const block = blocks._blocks[id];
+                        if (block.opcode === 'event_broadcast_menu') {
+
+                            debugger;
+
+                            // Now get the parent block that is the actual broadcast or broadcast and wait
+                            const broadcastBlock = blocks.getBlock(block.parent);
+                            let b = new BlockInstance(target, broadcastBlock);
+
+                            const fieldName = block.fields.BROADCAST_OPTION.value;
+                            addBlock('receive', 'event ' + fieldName, b).eventName = broadcastBlock.eventName;
+
+                            //
+                            // let fields = root.inputList[0];
+                            // let typeDesc = fields.fieldRow[0].getText();
+                            // let eventName = fields.fieldRow[1].getText();
+                            // addBlock('receive', 'event ' + eventName, root).eventName = eventName;
+                        }
+                    }
+                }
+        */
+
+    const clsOrder = { flag: 0, receive: 1, event: 2, define: 3, var: 4, VAR: 5, list: 6, LIST: 7 };
 
     myBlocks.sort(function (a, b) {
       let t = clsOrder[a.cls] - clsOrder[b.cls];
@@ -405,14 +353,17 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     dom_removeChildren(dd);
 
     let foundLi = null;
-    let procs = scratchBlocks.procs;
+    /**
+     * @type {[BlockItem]}
+     */
+    const procs = scratchBlocks.procs;
     for (const proc of procs) {
       let li = document.createElement("li");
       li.innerText = proc.procCode;
       li.data = proc;
       li.className = proc.cls;
       if (focusID) {
-        if (proc.labelID === focusID) {
+        if (proc.matchesID(focusID)) {
           foundLi = li;
           li.classList.add("sel");
         } else {
@@ -423,8 +374,8 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     }
 
     let label = document.getElementById("s3devFindLabel");
-    offsetX = ddOut.getBoundingClientRect().right - label.getBoundingClientRect().left + 26;
-    offsetY = 32;
+    utils.offsetX = ddOut.getBoundingClientRect().right - label.getBoundingClientRect().left + 26;
+    utils.offsetY = 32;
 
     if (foundLi) {
       clickDropDownRow(foundLi, wksp, instanceBlock);
@@ -496,34 +447,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     element.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: element, bubbles: true }));
   }
 
-  function genuid() {
-    const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
-    let result = "";
-    for (let i = 0; i < 20; i++) {
-      result += CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
-    }
-    return result;
-  }
-
-  function startUndoGroup(wksp) {
-    const undoStack = wksp.undoStack_;
-    if (undoStack.length) {
-      undoStack[undoStack.length - 1]._devtoolsLastUndo = true;
-    }
-  }
-
-  function endUndoGroup(wksp) {
-    const undoStack = wksp.undoStack_;
-    // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
-    // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
-    setTimeout(() => {
-      const group = genuid();
-      for (let i = undoStack.length - 1; i >= 0 && !undoStack[i]._devtoolsLastUndo; i--) {
-        undoStack[i].group = group;
-      }
-    }, 0);
-  }
-
   /**
    * A much nicer way of laying out the blocks into columns
    */
@@ -531,13 +454,13 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     if (e) {
       e.cancelBubble = true;
       e.preventDefault();
-      let wksp = getWorkspace();
+      let wksp = utils.getWorkspace();
       hidePopups(wksp);
       setTimeout(doCleanUp, 0);
       return;
     }
 
-    startUndoGroup(wksp);
+    utils.startUndoGroup(wksp);
 
     let result = getOrderedTopBlockColumns(true);
     let columns = result.cols;
@@ -589,7 +512,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
     setTimeout(function () {
       // Locate unused local variables...
-      let workspace = getWorkspace();
+      let workspace = utils.getWorkspace();
       let map = workspace.getVariableMap();
       let vars = map.getVariablesOfType("");
 
@@ -623,7 +546,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         }
       }
 
-      endUndoGroup(wksp);
+      utils.endUndoGroup(wksp);
     }, 100);
   }
 
@@ -642,7 +565,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
    * @returns {{orphans: {blocks: [], x: number, count: number}, cols: []}}
    */
   function getOrderedTopBlockColumns(separateOrphans) {
-    let w = getWorkspace();
+    let w = utils.getWorkspace();
     let topBlocks = w.getTopBlocks();
     let maxWidths = {};
 
@@ -754,7 +677,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
    * @return {!Array.<!Blockly.Block>} Array of block usages.
    */
   function getCallsToProcedureById(id) {
-    let w = getWorkspace();
+    let w = utils.getWorkspace();
     let procBlock = w.getBlockById(id);
     let label = procBlock.getChildren()[0];
     let procCode = label.getProcCode();
@@ -782,13 +705,57 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
    */
   function getCallsToEventsByName(name) {
     let uses = []; // Definition First, then calls to it
+
+    const runtime = vm.runtime;
+    const targets = runtime.targets; // The sprites / stage
+
+    for (const target of targets) {
+      if (!target.isOriginal) {
+        continue; // Skip clones
+      }
+
+      const blocks = target.blocks;
+      if (!blocks._blocks) {
+        continue;
+      }
+
+      for (const id in blocks._blocks) {
+        if (!blocks._blocks.hasOwnProperty(id)) {
+          continue;
+        }
+        const block = blocks._blocks[id];
+        // To find event broadcaster blocks, we look for the nested "event_broadcast_menu" blocks first that match the event name
+        if (block.opcode === "event_broadcast_menu" && block.fields.BROADCAST_OPTION.value === name) {
+          // Now get the parent block that is the actual broadcast or broadcast and wait
+          const broadcastBlock = blocks.getBlock(block.parent);
+          uses.push(new BlockInstance(target, broadcastBlock));
+        } else if (block.opcode === "event_whenbroadcastreceived" && block.fields.BROADCAST_OPTION.value === name) {
+          uses.push(new BlockInstance(target, block));
+        }
+      }
+    }
+
+    return uses;
+  }
+
+  /**
+   * Find all the uses of a named procedure.
+   * @param {string} id ID of the variable to find.
+   * @return {!Array} Array of event names used in this sprite.
+   */
+  function getCallsToEvents() {
+    const uses = []; // Definition First, then calls to it
+    const found = {};
+
     let topBlocks = getTopBlocks(true);
     for (const topBlock of topBlocks) {
       let kids = topBlock.getDescendants();
       for (const block of kids) {
         if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
-          if (name === block.getChildren()[0].inputList[0].fieldRow[0].getText()) {
-            uses.push(block);
+          const eventName = block.getChildren()[0].inputList[0].fieldRow[0].getText();
+          if (!found[eventName]) {
+            found[eventName] = block;
+            uses.push({ eventName: eventName, block: block });
           }
         }
       }
@@ -819,7 +786,14 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       multi.idx = 0;
 
       if (instanceBlock) {
-        multi.idx = blocks.indexOf(instanceBlock);
+        for (let i = 0; i < blocks.length; i++) {
+          const block = blocks[i];
+          if (block.id === instanceBlock.id) {
+            multi.idx = i;
+            break;
+          }
+        }
+        // multi.idx = blocks.indexOf(instanceBlock);
       }
 
       multi.blocks = blocks;
@@ -829,65 +803,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         centerTop(blocks[multi.idx]);
       }
     }
-  }
-
-  function triggerDragAndDrop(selectorDrag, selectorDrop, mouseXY) {
-    // function for triggering mouse events
-    let fireMouseEvent = function (type, elem, centerX, centerY) {
-      let evt = document.createEvent("MouseEvents");
-      evt.initMouseEvent(type, true, true, window, 1, 1, 1, centerX, centerY, false, false, false, false, 0, elem);
-      elem.dispatchEvent(evt);
-    };
-
-    // fetch target elements
-    let elemDrag = selectorDrag; // document.querySelector(selectorDrag);
-    let elemDrop = selectorDrop; // document.querySelector(selectorDrop);
-    if (!elemDrag /* || !elemDrop*/) return false;
-
-    // calculate positions
-    let pos = elemDrag.getBoundingClientRect();
-    let center1X = Math.floor((pos.left + pos.right) / 2);
-    let center1Y = Math.floor((pos.top + pos.bottom) / 2);
-
-    // mouse over dragged element and mousedown
-    fireMouseEvent("mouseover", elemDrag, center1X, center1Y);
-    fireMouseEvent("mousedown", elemDrag, center1X, center1Y);
-
-    // start dragging process over to drop target
-    fireMouseEvent("dragstart", elemDrag, center1X, center1Y);
-    fireMouseEvent("drag", elemDrag, center1X, center1Y);
-    fireMouseEvent("mousemove", elemDrag, center1X, center1Y);
-
-    if (!elemDrop) {
-      if (mouseXY) {
-        // console.log(mouseXY);
-        let center2X = mouseXY.x;
-        let center2Y = mouseXY.y;
-        fireMouseEvent("drag", elemDrag, center2X, center2Y);
-        fireMouseEvent("mousemove", elemDrag, center2X, center2Y);
-      }
-      return false;
-    }
-
-    pos = elemDrop.getBoundingClientRect();
-    let center2X = Math.floor((pos.left + pos.right) / 2);
-    let center2Y = Math.floor((pos.top + pos.bottom) / 2);
-
-    fireMouseEvent("drag", elemDrag, center2X, center2Y);
-    fireMouseEvent("mousemove", elemDrop, center2X, center2Y);
-
-    // trigger dragging process on top of drop target
-    fireMouseEvent("mouseenter", elemDrop, center2X, center2Y);
-    fireMouseEvent("dragenter", elemDrop, center2X, center2Y);
-    fireMouseEvent("mouseover", elemDrop, center2X, center2Y);
-    fireMouseEvent("dragover", elemDrop, center2X, center2Y);
-
-    // release dragged element on top of drop target
-    fireMouseEvent("drop", elemDrop, center2X, center2Y);
-    fireMouseEvent("dragend", elemDrag, center2X, center2Y);
-    fireMouseEvent("mouseup", elemDrag, center2X, center2Y);
-
-    return true;
   }
 
   /**
@@ -911,7 +826,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     let lastScroll = scroller.scrollTop;
     scroller.scrollTop = top ? 0 : scroller.scrollHeight;
 
-    triggerDragAndDrop(selected, costumes[top ? 0 : costumes.length - 1]);
+    domHelpers.triggerDragAndDrop(selected, costumes[top ? 0 : costumes.length - 1], undefined);
     if (!isSelected) {
       // Restore Scroll position
       scroller.scrollTop = lastScroll;
@@ -954,13 +869,27 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       let blocks = getCallsToProcedureById(li.data.labelID);
       buildNavigationCarousel(nav, li, blocks, instanceBlock);
     } else if (cls === "receive") {
-      let blocks = [workspace.getBlockById(li.data.labelID)];
-      if (li.data.clones) {
-        for (const cloneID of li.data.clones) {
-          blocks.push(workspace.getBlockById(cloneID));
+      /*
+                        let blocks = [workspace.getBlockById(li.data.labelID)];
+                        if (li.data.clones) {
+                            for (const cloneID of li.data.clones) {
+                                blocks.push(workspace.getBlockById(cloneID))
+                            }
+                        }
+                        blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
+            */
+      // Now, fetch the events from the scratch runtime instead of blockly
+      let blocks = getCallsToEventsByName(li.data.eventName);
+      if (!instanceBlock) {
+        // Can we start by selecting the first block on 'this' sprite
+        const currentTargetID = utils.getEditingTarget().id;
+        for (const block of blocks) {
+          if (block.targetId === currentTargetID) {
+            instanceBlock = block;
+            break;
+          }
         }
       }
-      blocks = blocks.concat(getCallsToEventsByName(li.data.eventName));
       buildNavigationCarousel(nav, li, blocks, instanceBlock);
     } else if (li.data.clones) {
       let blocks = [workspace.getBlockById(li.data.labelID)];
@@ -979,7 +908,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
   function dropDownClick(e) {
     // console.log(e);
-    let workspace = getWorkspace();
+    let workspace = utils.getWorkspace();
 
     if (prevVal === null) {
       prevVal = findInp.value; // Hack to stop filter change if not entered data into edt box, but clicked on row
@@ -1025,10 +954,13 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   let multi = {
     idx: 0,
     blocks: null,
+    selID: null,
+
     update: function () {
-      let count = document.getElementById("s3devMultiCount");
+      const count = document.getElementById("s3devMultiCount");
       count.innerText =
         multi.blocks && multi.blocks.length > 0 ? enc(multi.idx + 1 + " / " + multi.blocks.length) : "0";
+      this.selID = multi.idx < multi.blocks.length ? multi.blocks[multi.idx].id : null;
     },
     navLeft: function (e) {
       return multi.navSideways(e, -1);
@@ -1050,88 +982,13 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     },
   };
 
-  let myFlash = { block: null, timerID: null, colour: null };
-  let myFlashTimer;
-
   /**
    * Based on wksp.centerOnBlock(li.data.labelID);
    * @param e
    * @param force if true, the view always moves, otherwise only move if the selected element is not entirely visible
    */
   function centerTop(e, force) {
-    let wksp = getWorkspace();
-    if ((e = e && e.id ? e : wksp.getBlockById(e))) {
-      let root = e.getRootBlock();
-      let base = e;
-      while (base.getOutputShape() && base.getSurroundParent()) {
-        base = base.getSurroundParent();
-      }
-
-      let ePos = base.getRelativeToSurfaceXY(), // Align with the top of the block
-        rPos = root.getRelativeToSurfaceXY(), // Align with the left of the block 'stack'
-        eSiz = e.getHeightWidth(),
-        scale = wksp.scale,
-        // x = (ePos.x + (wksp.RTL ? -1 : 1) * eSiz.width / 2) * scale,
-        x = rPos.x * scale,
-        y = ePos.y * scale,
-        xx = e.width + x, // Turns out they have their x & y stored locally, and they are the actual size rather than scaled or including children...
-        yy = e.height + y,
-        // xx = eSiz.width * scale + x,
-        // yy = eSiz.height * scale + y,
-
-        s = wksp.getMetrics();
-
-      // On screen?
-
-      // ratio = wksp.scrollbar.hScroll.ratio_;
-      // w.scrollbar.hScroll.scrollViewSize_
-
-      if (
-        x < s.viewLeft + offsetX - 4 ||
-        xx > s.viewLeft + s.viewWidth ||
-        y < s.viewTop + offsetY - 4 ||
-        yy > s.viewTop + s.viewHeight
-      ) {
-        // sx = s.contentLeft + s.viewWidth / 2 - x,
-        let sx = x - s.contentLeft - offsetX,
-          // sy = s.contentTop - y + Math.max(Math.min(32, 32 * scale), (s.viewHeight - yh) / 2);
-          sy = y - s.contentTop - offsetY;
-
-        navHist.storeView(navHist.peek(), 64);
-
-        // wksp.hideChaff(),
-        wksp.scrollbar.set(sx, sy);
-        navHist.storeView({ left: sx, top: sy }, 64);
-      }
-
-      doFlash(e);
-    }
-  }
-
-  function doFlash(block) {
-    if (myFlash.timerID > 0) {
-      clearTimeout(myFlash.timerID);
-      myFlash.block.setColour(myFlash.colour);
-    }
-
-    let count = 4;
-    let flashOn = true;
-    myFlash.colour = block.getColour();
-    myFlash.block = block;
-
-    function flash() {
-      // wksp.glowBlock(e.id, flashOn);
-      myFlash.block.setColour(flashOn ? "#ffff80" : myFlash.colour);
-      flashOn = !flashOn;
-      count--;
-      if (count > 0) {
-        myFlash.timerID = setTimeout(flash, 200);
-      } else {
-        myFlash.timerID = 0;
-      }
-    }
-
-    flash();
+    utils.centerTop(e, force);
   }
 
   function enc(str) {
@@ -1202,22 +1059,26 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
   function inputKeyDown(e) {
     if (e.keyCode === 38) {
+      // Up Arrow
       navigateFilter(-1);
       e.preventDefault();
       return;
     }
     if (e.keyCode === 40) {
+      // Down Arrow
       navigateFilter(1);
       e.preventDefault();
       return;
     }
     if (e.keyCode === 37) {
+      // Left Arrow
       let sel = dd.getElementsByClassName("sel");
       if (sel && multi.blocks) {
         multi.navLeft(e);
       }
     }
     if (e.keyCode === 39) {
+      // Right Arrow
       let sel = dd.getElementsByClassName("sel");
       if (sel && multi.blocks) {
         multi.navRight(e);
@@ -1248,14 +1109,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   }
 
   function deepSearch(e) {
-    let selected = document.querySelector("[class*=sprite-selector-item_is-selected_]");
-    let wksp = getWorkspace();
-    let myTopBlocks = wksp.getTopBlocks();
-
-    let dict = {};
-
-    wksp.setVisible(false);
-
     document.body.insertAdjacentHTML(
       "beforeend",
       `
@@ -1265,52 +1118,48 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     );
 
     let overlay = document.getElementById("s3devOverlay");
-    let sprites = document.querySelectorAll("[class*=sprite-selector_sprite_]");
-    let sprite = null,
-      name = null;
-    let i = -1;
+    overlay.addEventListener("click", function (e) {
+      overlay.remove();
+    });
 
-    function nextSprite() {
-      if (sprite !== null) {
-        let topBlocks;
-        if (sprite === selected) {
-          topBlocks = myTopBlocks;
-        } else {
-          sprite.click();
-          topBlocks = wksp.getTopBlocks();
-        }
+    // todo: use scratch runtime instead!
 
-        dict[name] = topBlocks;
+    const runtime = vm.runtime;
+    const targets = runtime.targets; // The sprites / stage
+
+    let dict = {};
+
+    for (const target of targets) {
+      if (!target.isOriginal) {
+        continue; // Skip clones
       }
 
-      if (++i >= sprites.length) {
-        selected.click(); // Back to first -- todo: watch out for background selection
-        wksp.setVisible(true);
-        return overlay.remove();
-      }
+      const name = target.getName();
+      const isStage = target.isStage;
+      const blocks = target.blocks;
+      const scripts = blocks.getScripts();
 
-      sprite = sprites[i];
-      name = sprite.querySelector("[class*=sprite-selector-item_sprite-name]").textContent;
-
-      console.log("Loading " + name);
       let divElement = document.createElement("div");
-      divElement.appendChild(document.createTextNode(msg("searching-in", { name })));
+      divElement.appendChild(document.createTextNode("Searching in " + name));
+      divElement.appendChild(document.createTextNode(", Top Scripts x" + scripts.length));
       overlay.appendChild(divElement);
 
-      setTimeout(nextSprite, 50);
+      const sprite = (dict[name] = {});
+      sprite.scripts = [];
+
+      for (const script of scripts) {
+        const block = blocks.getBlock(script);
+        const top = { id: script, opcode: block.opcode, block: block };
+        sprite.scripts.push(top);
+      }
     }
-
-    nextSprite();
-
-    // for (const sprite of sprites) {
-    // }
 
     e.preventDefault();
     return true;
   }
 
   function doReplaceVariable(varId, newVarName, type) {
-    let wksp = getWorkspace();
+    let wksp = utils.getWorkspace();
     let v = wksp.getVariable(newVarName, type);
     if (!v) {
       alert(msg("var-not-exist"));
@@ -1318,7 +1167,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     }
     let newVId = v.getId();
 
-    startUndoGroup(wksp);
+    utils.startUndoGroup(wksp);
     let blocks = getVariableUsesById(varId);
     for (const block of blocks) {
       try {
@@ -1331,7 +1180,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         // ignore
       }
     }
-    endUndoGroup(wksp);
+    utils.endUndoGroup(wksp);
   }
 
   class XML {
@@ -1359,62 +1208,91 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     }
   }
 
-  function simulateDragDrop(sourceNode, destinationNode) {
-    const EVENT_TYPES = {
-      MOUSE_OVER: "mouseover",
-      MOUSE_DOWN: "mousedown",
-      MOUSE_MOVE: "mousemove",
-      MOUSE_OUT: "mouseout",
-      MOUSE_UP: "mouseup",
+  /*
+  function doInjectScripts(codeString) {
+    let w = getWorkspace();
+    let xml = new XML(); // document.implementation.createDocument(null, "xml");
+    let x = xml.xmlDoc.firstChild;
+
+    let tree = math.parse(codeString);
+    console.log(tree);
+
+    const binaryOperatorTypes = {
+      add: "operator_add",
+      subtract: "operator_subtract",
+      multiply: "operator_multiply",
+      divide: "operator_divide",
     };
 
-    function createCustomEvent(type) {
-      let event = new CustomEvent("CustomEvent");
-      event.initCustomEvent(type, true, true, null);
-      event.dataTransfer = {
-        data: {},
-        setData: function (type, val) {
-          this.data[type] = val;
-        },
-        getData: function (type) {
-          return this.data[type];
-        },
-      };
-      return event;
+    const BLOCK_TYPE = {
+      number: "math_number",
+      text: "text",
+    };
+
+    function translateMathToXml(x, tree, shadowType) {
+      let xShadowField = null;
+      if (shadowType) {
+        let xShadow = xml.newXml(x, "shadow", { type: shadowType });
+        if (shadowType === BLOCK_TYPE.number) {
+          xShadowField = xml.newXml(xShadow, "field", { name: "NUM" });
+        } else if (shadowType === BLOCK_TYPE.text) {
+          xShadowField = xml.newXml(xShadow, "field", { name: "TEXT" });
+        }
+      }
+
+      if (!tree || !tree.type) {
+        return;
+      }
+
+      if (tree.type === "OperatorNode") {
+        let operatorType = binaryOperatorTypes[tree.fn];
+        if (operatorType) {
+          let xOp = newXml(x, "block", { type: operatorType });
+          translateMathToXml(xml.newXml(xOp, "value", { name: "NUM1" }), tree.args[0], BLOCK_TYPE.number);
+          translateMathToXml(xml.newXml(xOp, "value", { name: "NUM2" }), tree.args[1], BLOCK_TYPE.number);
+          return;
+        }
+
+        return;
+      }
+
+      if (tree.type === "ConstantNode") {
+        // number or text in quotes
+        if (xShadowField) {
+          xml.setAttr(xShadowField, { text: tree.value });
+        }
+        return;
+      }
+
+      if (tree.type === "SymbolNode") {
+        // variable
+        let xVar = xml.newXml(x, "block", { type: "data_variable" });
+        xml.newXml(xVar, "field", { name: "VARIABLE", text: tree.name });
+        return;
+      }
+
+      if (tree.type === "FunctionNode") {
+        // Method Call
+        if (tree.fn.name === "join") {
+          let xOp = newXml(x, "block", { type: "operator_join" });
+          translateMathToXml(xml.newXml(xOp, "value", { name: "STRING1" }), tree.args[0], BLOCK_TYPE.text);
+          translateMathToXml(xml.newXml(xOp, "value", { name: "STRING2" }), tree.args[1], BLOCK_TYPE.text);
+          return;
+        }
+      }
     }
 
-    function dispatchEvent(node, type, event) {
-      if (node.dispatchEvent) {
-        return node.dispatchEvent(event);
-      }
-      if (node.fireEvent) {
-        return node.fireEvent("on" + type, event);
-      }
-    }
+    translateMathToXml(x, tree);
+    console.log(x);
 
-    let event = createCustomEvent(EVENT_TYPES.DRAG_START);
-    dispatchEvent(sourceNode, EVENT_TYPES.DRAG_START, event);
-
-    let dropEvent = createCustomEvent(EVENT_TYPES.DROP);
-    dropEvent.dataTransfer = event.dataTransfer;
-    dispatchEvent(destinationNode, EVENT_TYPES.DROP, dropEvent);
-
-    let dragEndEvent = createCustomEvent(EVENT_TYPES.DRAG_END);
-    dragEndEvent.dataTransfer = event.dataTransfer;
-    dispatchEvent(sourceNode, EVENT_TYPES.DRAG_END, dragEndEvent);
-
-    // var event = new MouseEvent('click', {
-    //     view: window,
-    //     bubbles: true,
-    //     cancelable: true
-    // });
-    // var cb = document.getElementById('checkbox');
-    // var cancelled = !cb.dispatchEvent(event);
+    let ids = Blockly.Xml.domToWorkspace(x, w);
+    console.log(ids);
   }
+   */
 
   // Loop until the DOM is ready for us...
   function initInner() {
-    let root = document.querySelector("ul[class*=gui_tab-list_");
+    let root = document.querySelector("ul[class*=gui_tab-list_]");
     let guiTabs = root && root.childNodes;
     if (!guiTabs || guiTabs.length < 3) {
       setTimeout(initInner, 1000);
@@ -1451,7 +1329,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                         <div style="display: none;"><a href="#" class="s3devAction" id="s3devHelp"><b>${m(
                           "help"
                         )}</b></a>
-                        <a href="https://www.youtube.com/user/griffpatch" class="s3devAction" target="_blank" id="s3devHelp">${m(
+                        <a href="https://www.youtube.com/griffpatch" class="s3devAction" target="_blank" id="s3devHelp">${m(
                           "tutorials"
                         )}</a></div>
                     </label>
@@ -1482,25 +1360,37 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     bindOnce(document, "mousedown", eventMouseDown, true); // true to capture all mouse downs 'before' the dom events handle them
     bindOnce(document.getElementById("s3devDeep"), "click", deepSearch);
     // bindOnce(document.getElementById('s3devCleanUp'),'click', clickCleanUp);
+    // bindOnce(document.getElementById("s3devInject"), "click", clickInject);
     // bindOnce(document.getElementById('s3devReplace'), 'click', clickReplace);
   }
 
   /*
-    function clickCleanUp(e) {
-        // if (window.confirm('Griffpatch: Tidy up your scripts?')) {
-            doCleanUp();
-        // }
-        e.preventDefault();
-        return false;
+        function clickCleanUp(e) {
+            // if (window.confirm('Griffpatch: Tidy up your scripts?')) {
+                doCleanUp();
+            // }
+            e.preventDefault();
+            return false;
+        }
+    */
+
+  /*
+  function clickInject(e) {
+    let codeString = window.prompt("Griffpatch: Enter an expression (i.e. a+2*3)");
+    if (codeString) {
+      doInjectScripts(codeString);
     }
-*/
+    e.preventDefault();
+    return false;
+  }
+  */
 
   function clickReplace(e) {
-    let wksp = getWorkspace();
+    let wksp = utils.getWorkspace();
     hidePopups(wksp);
 
     setTimeout(function () {
-      let wksp = getWorkspace();
+      let wksp = utils.getWorkspace();
       let v = wksp.getVariableById(selVarID);
       let varName = window.prompt(msg("replace", { name: v.name }));
       if (varName) {
@@ -1513,7 +1403,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
   function getTopBlockIDs() {
     // Paste!!! Try to center after the event??
-    let wksp = getWorkspace();
+    let wksp = utils.getWorkspace();
     let topBlocks = wksp.getTopBlocks();
     let ids = new Set();
     for (const block of topBlocks) {
@@ -1523,14 +1413,14 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   }
 
   function beginDragOfNewBlocksNotInIDs(ids) {
-    let wksp = getWorkspace();
+    let wksp = utils.getWorkspace();
     let topBlocks = wksp.getTopBlocks();
     for (const block of topBlocks) {
       if (!ids.has(block.id)) {
         // console.log("I found a new block!!! - " + block.id);
         // todo: move the block to the mouse pointer?
         let mouseXYClone = { x: mouseXY.x, y: mouseXY.y };
-        triggerDragAndDrop(block.svgPath_, null, mouseXYClone);
+        domHelpers.triggerDragAndDrop(block.svgPath_, null, mouseXYClone);
       }
     }
   }
@@ -1573,7 +1463,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     }
 
     if (e.key === " " && ctrlKey) {
-      // Ctrl + F (Override default Ctrl+F find)
+      // Ctrl + Space (Inject Code)
       middleClickWorkspace(e);
       e.cancelBubble = true;
       e.preventDefault();
@@ -1586,7 +1476,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         return;
       }
       if (isScriptEditor()) {
-        navHist.goBack();
+        utils.navigationHistory.goBack();
       } else if (isCostumeEditor()) {
         switchCostume(true);
       }
@@ -1601,7 +1491,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         return;
       }
       if (isScriptEditor()) {
-        navHist.goForward();
+        utils.navigationHistory.goForward();
       } else if (isCostumeEditor()) {
         switchCostume(false);
       }
@@ -1696,10 +1586,11 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                             `
               );
             } else {
-              let wksp = getWorkspace();
+              let wksp = utils.getWorkspace();
               let block = wksp.getBlockById(dataId);
               let isFlyOut = block.workspace.isFlyout;
 
+              /* todo - look at this menu code ***** !!!!!
               const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
               if (BROADCAST_BLOCKS.includes(block.type)) {
                 // Show Broadcast
@@ -1726,6 +1617,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                   }
                 }
               }
+              */
 
               if (!isFlyOut) {
                 blocklyContextMenu.insertAdjacentHTML(
@@ -1798,7 +1690,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
             }
 
             function eventCopyClick(e, blockOnly) {
-              let wksp = getWorkspace();
+              let wksp = utils.getWorkspace();
               hidePopups(wksp);
 
               let block = wksp.getBlockById(dataId);
@@ -1818,9 +1710,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                     }
                     if (blockOnly === 2) {
                       let block = wksp.getBlockById(dataId);
-                      startUndoGroup(wksp);
+                      utils.startUndoGroup(wksp);
                       block.dispose(true);
-                      endUndoGroup(wksp);
+                      utils.endUndoGroup(wksp);
                     }
                   }, 0);
                 }
@@ -1830,7 +1722,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
             let pasteDiv = blocklyContextMenu.querySelector("div#s3devPaste");
             if (pasteDiv) {
               pasteDiv.addEventListener("click", function () {
-                let wksp = getWorkspace();
+                let wksp = utils.getWorkspace();
                 hidePopups(wksp);
 
                 let ids = getTopBlockIDs();
@@ -1958,7 +1850,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       return;
     }
 
-    let w = getWorkspace();
+    let w = utils.getWorkspace();
     let dataId = blockSvg.getAttribute("data-id");
     let block = w.getBlockById(dataId);
     if (!block) {
@@ -1975,7 +1867,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         // todo: navigate to definition
         let findProcCode = block.getProcCode();
 
-        let wksp = getWorkspace();
+        let wksp = utils.getWorkspace();
         let topBlocks = wksp.getTopBlocks();
         for (const root of topBlocks) {
           if (root.type === "procedures_definition") {
@@ -2020,12 +1912,24 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         e.cancelBubble = true;
         e.preventDefault();
         return;
+      }
 
-        // data_variable
-        // block.getVars()[0].id
+      if (
+        block.type === "event_whenbroadcastreceived" ||
+        block.type === "event_broadcastandwait" ||
+        block.type === "event_broadcast"
+      ) {
+        // todo: actually index the broadcasts...!
+        let id = block.id;
 
-        // block.inputList[0].fieldRow[0].getText()
-        // Blockly.getMainWorkspace().getVariable('PLAYER X');
+        findInp.focus();
+        showDropDown(null, id, block);
+
+        selVarID = id;
+
+        e.cancelBubble = true;
+        e.preventDefault();
+        return;
       }
     }
 
@@ -2071,6 +1975,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     options.sort((a, b) => a.desc.localeCompare(b.desc));
 
     const dd = document.getElementById("s3devIDD");
+
     for (const option of options) {
       const li = document.createElement("li");
       const desc = option.desc;
@@ -2206,9 +2111,28 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     }
   }
 
+  /**
+   * This is a feature in progress - can we have a virtual cursor that allows the next injected element position be automated
+   * @param block a blockly block
+   * @param typ type
+   */
   function findNextHole(block, typ) {
-    // Mysterious no-op function
-    // Nobody knows what it is intended to do
+    /*
+    const inputs = block.inputList;
+    if (inputs) {
+      /!** Blockly.Input *!/
+      for (const input of inputs) {
+        const fieldRow = input.fieldRow;
+        if (fieldRow) {
+          /!** Blockly.FieldNumber *!/
+          for (const field of fieldRow) {
+            if (field.argType_ && field.argType_.includes(typ)) {
+            }
+          }
+        }
+      }
+    }
+*/
   }
 
   /**
@@ -2219,7 +2143,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     e.cancelBubble = true;
     e.preventDefault();
 
-    let wksp = getWorkspace();
+    let wksp = utils.getWorkspace();
 
     let sel = e && e.target;
     if (sel.tagName === "B") {
@@ -2263,7 +2187,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       }
     }
 
-    triggerDragAndDrop(block.svgPath_, null, { x: mouseXY.x, y: mouseXY.y });
+    domHelpers.triggerDragAndDrop(block.svgPath_, null, { x: mouseXY.x, y: mouseXY.y });
 
     blockCursor = block;
   }
@@ -2295,15 +2219,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     const max = 25;
 
     let split = val.split(" ");
-    /*
-        let split = val.replace(/[-[\]{}()*+?.,\\^$|#\\s]/g, '\\$&').split(' ');
-        let regExStr = '';
-        for (const token of split) {
-            regExStr += '(\\b' + token + ').*';
-        }
-        let regExp = new RegExp(regExStr);
-*/
-
     let listLI = dd.getElementsByTagName("li");
     for (const li of listLI) {
       const procCode = li.data.text;
@@ -2361,5 +2276,5 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     p.append(dd);
   }
 
-  setTimeout(initInner, 1000);
+  setTimeout(initInner, 500);
 }
