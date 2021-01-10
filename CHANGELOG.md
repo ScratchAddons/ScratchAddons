@@ -13,6 +13,26 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.7.0] - 2021-01-10
+
+- New "addons" tab in extension popup: easily see what addons are running in the current page, enable addons, and change their settings, directly after clicking the Scratch Addons icon in the top right of your browser!
+- Ability to customize the tabs in the extension popup (such as hiding "cloud games" from the popup if disabled).
+- New addon: data category tweaks (version 2)
+- New addon: mute project player
+- New addon: better forum quoter
+- Type the konami code in the settings page for a surprise :)
+- Scratch 2.0→3.0 addon: new color settings
+- Sprite and script count addon: new "live block count in editor" setting
+- 60FPS player mode addon: custom FPS number setting
+- Ability to import and export Scratch Addons settings as a .json file, available inside "more settings" in the settings page.
+- Bug fix: double scrollbar in extension popup if browser zoom over 100%
+- Bug fix: browsers now display certain non-English characters correctly, such as i/İ in Turkish and ß/SS in German.
+- Bug fixes and better performance in editor devtools, colorful context menus, project notes tabs, block switching, dark modes, and more.
+
+#### Addon development changes:
+- Addons can now provide more than 1 warning and notice through the `info` manifest property.
+- Popups aren't hardcoded anymore, and they must be specified through the `popup` manifest property. If an addon is disabled, its popup tab is hidden.
+
 ## [v1.6.1] - 2020-12-27
 
 - New addon: hex color picker
@@ -180,6 +200,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.7.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.0
 [v1.6.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.6.1
 [v1.6.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.5.1
 [v1.5.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.5.1
