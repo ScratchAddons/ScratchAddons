@@ -43,12 +43,12 @@ const vue = new Vue({
     setPopup(popup) {
       if (this.currentPopup !== popup) {
         this.currentPopup = popup;
-        if (this.popupsWithIframes.indexOf(popup) === -1) this.popupsWithIframes.push(popup);
+        if (!this.popupsWithIframes.includes(popup)) this.popupsWithIframes.push(popup);
         setTimeout(() => document.querySelector("iframe:not([style='display: none;'])").focus(), 0);
       }
     },
     iframeSrc(addonId) {
-      return vue.popups.find((addon) => addon._addonId == addonId).url || `../../popups/${addonId}/popup.html`;
+      return vue.popups.find((addon) => addon._addonId === addonId).url || `../../popups/${addonId}/popup.html`;
     },
   },
 });
