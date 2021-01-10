@@ -1,0 +1,53 @@
+.badge {
+  background: gray;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 12px;
+  margin-left: 10px;
+  border-bottom: 2px solid #111;
+}
+
+.badge.blue {
+  background: #175ef8;
+  border-color: #0e44b8;
+}
+.badge.green {
+  background: #78fd2b;
+  color: #333;
+  border-color: #53b31c;
+}
+.badge.yellow {
+  background: #fddd2b;
+  color: #333;
+  border-color: #fdab12;
+}
+.badge.red {
+  background: #fd662b;
+  border-color: #d84a12;
+}
+.badge.darkgreen {
+  background: #00b1a8;
+  border-color: #047773;
+}
+.badge.purple {
+  background: rgb(177, 23, 248);
+  border-color: #b20eb8;
+}
+.filter-option.sel.blue {
+  background: #175ef8;
+}
+.filter-option.sel.green {
+  background: #78fd2b;
+  color: #333;
+}
+.filter-option.sel.yellow {
+  background: #fddd2b;
+  color: #333;
+}
+.filter-option.sel.red {
+  background: #fd662b;
+}
+.filter-option.sel.darkgreen {
+  background: #00b1a8;
+}
