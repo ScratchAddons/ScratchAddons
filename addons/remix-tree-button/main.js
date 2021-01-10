@@ -18,9 +18,6 @@ export default async function ({ addon, global, console, msg }) {
             window.location.href.split("projects")[1].split("/")[1]
           }/remixtree`;
         });
-        if (addon.settings.get("buttonColor")) {
-          remixtree.style.backgroundColor = addon.settings.get("buttonColor");
-        }
         subactions.appendChild(remixtree);
       });
     }
