@@ -177,6 +177,15 @@ body:not(.sa-body-editor) .select select option,
 .join-flow-privacy-message {
   color: rgba(255, 255, 255, 0.6);
 }
+.emoji[src$="meow.png"] {
+  content: url(%addon-self-dir%/assets/meow.png);
+}
+.emoji[src$="gobo.png"] {
+  content: url(%addon-self-dir%/assets/gobo.png);
+}
+.emoji[src$="waffle.png"] {
+  content: url(%addon-self-dir%/assets/waffle.png);
+}
 
 [class^="loader_background"] {
   background-color: #252525;
