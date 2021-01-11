@@ -15,6 +15,85 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.7.0] - 2021-01-10
+
+> TODO: Grouping done, need to format the wording
+
+### Added
+
+#### Addons
+
+- Semicolon glitch (#507)
+- Cat blocks (#639)
+- Data category tweaks (v2) (#1097)
+- Better forum quoter (#1127)
+- Mute project player (#1217)
+
+#### Extension and Addon API
+
+- Add a way to disable popups (#1006)
+- New popup for changing settings (#1006)
+- Add a way to change Scratch colors (#1096)
+- Add block counter in project-info (#1121)
+- Add a way to set FPS to values other than 60 (#1131)
+- Add a way to export and import settings (#1136)
+- Support for easter egg addons (#1177)
+
+### Changed
+
+#### Addons
+
+#### Extension and Addon API
+
+- Messaging related addons no longer go to the top (#1242)
+
+### Fixed
+
+#### Addons
+
+- cloud-games do not link to users (#1006)
+- project-notes-tab does not work in Firefox (#1117)
+- Instructions do not fill empty space in Firefox when using project-notes-tab (#1117)
+- project-notes-tab errors when a section is missing (#1117)
+- project-notes-tab can call Instructions tab "Notes and Credits" (#1117)
+- Buttons added by project-notes-tab overlaps with remix credits (#1117)
+- project-notes-tab loads on onload, rather than DOMContentLoaded (#1117)
+- Colored context menus do not apply when right-clicking the edge (#1119)
+- Colored context menus do not apply to procedure arguments (#1119)
+- editor-devtools may perform slow operations (#1120)
+- Actions performed by editor-devtools required multiple undos when reverting (#1120)
+- CSS in editor-devtools may cause encoding error (#1120)
+- block-switching does not work after switching languages (#1139)
+- block-switching mishandles forever block (#1139)
+- hex-color-picker has wrong background color on dark mode (#1142)
+- dark-www does not make studio thumbnail border dark (#1160)
+- dark-www is not compatible with other addons (#1160)
+- dark-www does not make post preview dark (#1160)
+- dark-www does not affect syntax highlighting in forums (#1160)
+- confirm-actions runs on studios and topics (#1166)
+- scratch-notifier crashes when receiving crafted message (#1172)
+- scratch-notifier converts tags in project titles to emojis (#1172)
+- scratch-messaging double escapes tags (#1172)
+- scratchr2 changes the color of usernames in Messages page (#1189)
+- project-notes-tab description has a typo (#1190)
+- editor-devtools can remove extension blocks that are not orphaned (#1196)
+- dark-www and scratchr2 do not run on some pages (#1259)
+
+#### Extension and Addon API
+
+- Update notification uses wrong font (#1125)
+- Clicking outside "More Settings" modal does not close the modal (#1125)
+- XSS filter does not escape quotes (#1128)
+- Popup has two scrollbars (#1145)
+- Extension option shows incorrect letters when localized (#1159)
+- Uninstall URL still opens in prerelease (#1164)
+- Popups are misaligned (#1187)
+- Icons are blurry (#1243)
+- getMsgCount errors when used in userscripts (#1245)
+- Tooltips are misaligned (#1252)
+- Site access screen opens on Firefox (#1258)
+
+
 ## [v1.6.1] - 2020-12-27
 
 NOTE: All updates from [v1.6.0] are pushed on this version.
@@ -235,6 +314,7 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.7.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.0
 [v1.6.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.6.1
 [v1.6.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.6.0
 [v1.5.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.5.1
