@@ -130,6 +130,16 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
       template.setAttribute(`data-fire-event__${Date.now()}`, eventDetails);
     } else if (typeof request.setMsgCount !== "undefined") {
       template.setAttribute("data-msgcount", request.setMsgCount);
+    } else if (request === "getRunningAddons") {
+      // We need to send themes that might have been injected dynamically
+      sendResponse([
+        ...new Set([
+          ...addonsWithUserscripts.map((obj) => obj.addonId),
+          ...Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
+            style.getAttribute("data-addon-id")
+          ),
+        ]),
+      ]);
     }
   });
 
@@ -203,8 +213,8 @@ const showBanner = () => {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 500px;
-    max-height: 220px;
+    width: 600px;
+    max-height: 270px;
     display: flex;
     align-items: center;
     padding: 10px;
@@ -219,8 +229,8 @@ const showBanner = () => {
   });
   const notifImage = Object.assign(document.createElement("img"), {
     alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/hex-color-picker.png"),
-    style: "height: 125px; border-radius: 5px",
+    src: chrome.runtime.getURL("/images/cs/data-cat-tweaks.png"),
+    style: "height: 150px; border-radius: 5px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -245,8 +255,14 @@ const showBanner = () => {
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
-  const NOTIF_TEXT_STYLE = "display: block; font-size: 14px;";
+  const NOTIF_TEXT_STYLE = "display: block; font-size: 14px; color: white !important;";
 
+  const notifInnerText0 = Object.assign(document.createElement("span"), {
+    style: NOTIF_TEXT_STYLE + "font-weight: bold;",
+    textContent: chrome.i18n
+      .getMessage("extensionHasUpdated", DOLLARS)
+      .replace(/\$(\d+)/g, (_, i) => [chrome.runtime.getManifest().version][Number(i) - 1]),
+  });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
     innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1", DOLLARS)).replace(
@@ -266,14 +282,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo2", DOLLARS)).replace(
-      "$1",
-      Object.assign(document.createElement("a"), {
-        href: "https://scratchaddons.com/translate",
-        target: "_blank",
-        textContent: chrome.i18n.getMessage("helpTranslateScratchAddons"),
-      }).outerHTML
-    ),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -281,25 +290,34 @@ const showBanner = () => {
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/changelog?versionname=${chrome.runtime.getManifest().version}-notif`,
     target: "_blank",
-    textContent: chrome.i18n.getMessage("fullChangelog", "v" + chrome.runtime.getManifest().version),
+    textContent: chrome.i18n.getMessage("changelog"),
+    style: "text-transform: capitalize;", // Convert to title case
   });
-  const notifFooterSeparator = document.createTextNode(" | ");
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}-notif`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("feedback"),
   });
+  const notifFooterTranslate = Object.assign(document.createElement("a"), {
+    href: "https://scratchaddons.com/translate",
+    target: "_blank",
+    textContent: chrome.i18n.getMessage("translate"),
+  });
   const notifFooterLegal = Object.assign(document.createElement("small"), {
     textContent: chrome.i18n.getMessage("notAffiliated"),
   });
   notifFooter.appendChild(notifFooterChangelog);
-  notifFooter.appendChild(notifFooterSeparator);
+  notifFooter.appendChild(document.createTextNode(" | "));
   notifFooter.appendChild(notifFooterFeedback);
+  notifFooter.appendChild(document.createTextNode(" | "));
+  notifFooter.appendChild(notifFooterTranslate);
   notifFooter.appendChild(makeBr());
   notifFooter.appendChild(notifFooterLegal);
 
   notifText.appendChild(notifTitle);
   notifText.appendChild(notifClose);
+  notifText.appendChild(makeBr());
+  notifText.appendChild(notifInnerText0);
   notifText.appendChild(makeBr());
   notifText.appendChild(notifInnerText1);
   notifText.appendChild(makeBr());

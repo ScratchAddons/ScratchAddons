@@ -18,6 +18,7 @@ export default async function ({ addon, global, console }) {
     let mode = false;
     const flagListener = (e) => {
       if (altPressedRecently) {
+        e.cancelBubble = true;
         e.preventDefault();
         mode = !mode;
         if (mode) setFPS(addon.settings.get("framerate"));

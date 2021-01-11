@@ -1,13 +1,6 @@
 {
   "name": "Cloud games",
   "description": "Available when clicking the Scratch Addons icon. Shows you how many Scratchers are currently on multiplayer projects, and their usernames.",
-  "info": [
-    {
-      "type": "notice",
-      "text": "Note: disabling this feature has no real effect. You'll be able to customize the extension popup in future versions.",
-      "id": "noeffect"
-    }
-  ],
   "credits": [
     {
       "name": "World_Languages"
@@ -16,6 +9,10 @@
       "name": "griffpatch"
     }
   ],
+  "popup": {
+    "icon": "../../images/icons/cloud.svg",
+    "name": "Games"
+  },
   "tags": ["community", "recommended"],
   "enabledByDefault": true,
   "l10n": true

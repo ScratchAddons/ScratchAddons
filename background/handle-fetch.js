@@ -21,9 +21,9 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
       return;
 
     let useFetchHeaderIndex = null;
-    let interceptRequest = false || optionRequestIds.includes(details.requestId);
-    if (!interceptRequest) {
-      for (let i = 0; i < details.responseHeaders.length; i++) {
+    let interceptRequest = optionRequestIds.includes(details.requestId);
+    if (!interceptRequest && details.requestHeaders) {
+      for (let i = 0; i < details.requestHeaders.length; i++) {
         const headerName = details.requestHeaders[i].name;
         if (headerName === "X-ScratchAddons-Uses-Fetch") {
           interceptRequest = true;
@@ -62,7 +62,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 
 chrome.webRequest.onHeadersReceived.addListener(
   function (details) {
-    if (details.method === "OPTIONS") {
+    if (details.method === "OPTIONS" && details.responseHeaders) {
       for (let i = 0; i < details.responseHeaders.length; i++) {
         const headerName = details.responseHeaders[i].name;
         if (headerName === "access-control-allow-headers") {
