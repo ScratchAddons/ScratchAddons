@@ -13,6 +13,10 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.7.1] - 2021-01-11
+
+Fixes bug where "website dark mode" would affect certain elements of the Scratch editor.
+
 ## [v1.7.0] - 2021-01-10
 
 - New "addons" tab in extension popup: easily see what addons are running in the current page, enable addons, and change their settings, directly after clicking the Scratch Addons icon in the top right of your browser!
@@ -200,6 +204,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.7.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.1
 [v1.7.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.0
 [v1.6.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.6.1
 [v1.6.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.5.1
