@@ -1,5 +1,5 @@
 {
-  "name": "Disable auto save",
+  "name": "Disable auto-save",
   "description": "Disables the automatic saving of projects while editing.",
   "credits": [
     {
@@ -13,6 +13,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["community"],
-  "enabledByDefault": true
+  "tags": ["editor", "beta"],
+  "enabledByDefault": false,
+  "l10n": true
 }
