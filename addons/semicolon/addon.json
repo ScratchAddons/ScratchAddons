@@ -12,7 +12,6 @@
       "url": "semicolon.css",
       "matches": ["https://scratch.mit.edu/*"]
     }
-    }
   ],
   "userscripts": [
     {
