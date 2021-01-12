@@ -5,8 +5,15 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
   let injected = false;
 
+  let vm;
+
+  const SMALL_GAP = 8;
+  const BIG_GAP = 24;
+
   const separateVariablesByType = (toolboxXML) => {
-    const listButtonIndex = toolboxXML.findIndex((i) => i.getAttribute("callbackkey") === "CREATE_LIST");
+    const listButtonIndex = toolboxXML.findIndex(
+      (i) => i.getAttribute("callbackkey") === "CREATE_LIST" || i.getAttribute("type") === "data_addtolist"
+    );
     return {
       variables: toolboxXML.slice(0, listButtonIndex),
       lists: toolboxXML.slice(listButtonIndex, toolboxXML.length),
@@ -15,9 +22,6 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
   const separateLocalVariables = (workspace, toolboxXML) => {
     const { variables, lists } = separateVariablesByType(toolboxXML);
-
-    const SMALL_GAP = 8;
-    const BIG_GAP = 24;
 
     const makeLabel = (l10n) => {
       const label = document.createElement("label");
@@ -49,12 +53,10 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
           } else {
             local.push(blockXML);
           }
-        } else if (blockXML.tagName === "BUTTON") {
-          // "Make a Variable" always goes first.
-          before.push(blockXML);
-        } else {
-          // "set variable to", etc. always go after.
+        } else if (global.length || local.length) {
           after.push(blockXML);
+        } else {
+          before.push(blockXML);
         }
       }
 
@@ -78,6 +80,33 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     return separateVariablesByScope(variables).concat(separateVariablesByScope(lists));
   };
 
+  const moveReportersDown = (toolboxXML) => {
+    const { variables, lists } = separateVariablesByType(toolboxXML);
+
+    const moveReportersToEnd = (xml) => {
+      const reporters = [];
+      const everythingElse = [];
+
+      for (const blockXML of xml) {
+        if (blockXML.hasAttribute("id") || blockXML.tagName === "BUTTON") {
+          // Round reporters and the create variable button
+          reporters.push(blockXML);
+        } else {
+          // Everything else like "change variable by 1"
+          everythingElse.push(blockXML);
+        }
+      }
+
+      if (everythingElse.length) {
+        everythingElse[everythingElse.length - 1].setAttribute("gap", BIG_GAP);
+      }
+
+      return everythingElse.concat(reporters);
+    };
+
+    return moveReportersToEnd(variables).concat(moveReportersToEnd(lists));
+  };
+
   const injectWorkspace = () => {
     if (injected) {
       return;
@@ -90,7 +119,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     const flyout = workspace.getFlyout();
     if (!flyout) throw new Error("expected flyout");
 
-    const vm = addon.tab.traps.onceValues.vm;
+    vm = addon.tab.traps.onceValues.vm;
     if (!vm) throw new Error("expected vm");
 
     const DataCategory = workspace.toolboxCategoryCallbacks_.VARIABLE;
@@ -101,6 +130,10 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
     const variableCategoryCallback = (workspace) => {
       let result = DataCategory(workspace);
+
+      if (addon.settings.get("moveReportersDown")) {
+        result = moveReportersDown(result);
+      }
 
       if (addon.settings.get("separateLocalVariables")) {
         result = separateLocalVariables(workspace, result);
@@ -168,6 +201,22 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       vm.emitWorkspaceUpdate();
     }
   };
+
+  addon.settings.addEventListener("change", (e) => {
+    // When the separate list category option changes, we need to do a workspace update.
+    // For all other options, just refresh the toolbox.
+    // Always doing both of these in response to a settings change causes many issues.
+    if (addon.settings.get("separateListCategory") !== hasSeparateListCategory) {
+      if (vm && vm.editingTarget) {
+        vm.emitWorkspaceUpdate();
+      }
+    } else {
+      const workspace = Blockly.getMainWorkspace();
+      if (workspace) {
+        workspace.refreshToolboxSelection_();
+      }
+    }
+  });
 
   if (addon.tab.editorMode === "editor") {
     const interval = setInterval(() => {

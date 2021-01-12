@@ -25,9 +25,15 @@
       "id": "separateLocalVariables",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Move Reporters Below",
+      "id": "moveReportersDown",
+      "type": "boolean",
+      "default": false
     }
   ],
-  "tags": ["editor", "beta"],
+  "tags": ["editor"],
   "enabledByDefault": false,
   "l10n": true
 }
