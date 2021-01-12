@@ -1,6 +1,7 @@
 html,
 html > body:not(.sa-body-editor),
-#pagewrapper {
+#pagewrapper,
+.semicolon {
   background: #202020;
   color: #fff;
   text-shadow: none;
