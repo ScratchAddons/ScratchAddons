@@ -27,7 +27,7 @@
       "default": false
     },
     {
-      "name": "Move Reporters Below",
+      "name": "Move Reporters Under Operations",
       "id": "moveReportersDown",
       "type": "boolean",
       "default": false
