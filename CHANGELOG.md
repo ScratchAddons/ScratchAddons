@@ -15,9 +15,13 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
-## [v1.7.0] - 2021-01-10
+## [v1.7.1] - 2021-01-11
 
-> TODO: Grouping done, need to format the wording
+### Fixed
+
+- Website dark mode: Certain elements of the Scratch editor affected
+
+## [v1.7.0] - 2021-01-10
 
 ### Added
 
@@ -51,33 +55,34 @@ automatically create a PR on the website to synchronize the changes!
 
 #### Addons
 
-- cloud-games do not link to users (#1006)
-- project-notes-tab does not work in Firefox (#1117)
-- Instructions do not fill empty space in Firefox when using project-notes-tab (#1117)
-- project-notes-tab errors when a section is missing (#1117)
-- project-notes-tab can call Instructions tab "Notes and Credits" (#1117)
-- Buttons added by project-notes-tab overlaps with remix credits (#1117)
-- project-notes-tab loads on onload, rather than DOMContentLoaded (#1117)
-- Colored context menus do not apply when right-clicking the edge (#1119)
-- Colored context menus do not apply to procedure arguments (#1119)
-- editor-devtools may perform slow operations (#1120)
-- Actions performed by editor-devtools required multiple undos when reverting (#1120)
-- CSS in editor-devtools may cause encoding error (#1120)
-- block-switching does not work after switching languages (#1139)
-- block-switching mishandles forever block (#1139)
-- hex-color-picker has wrong background color on dark mode (#1142)
-- dark-www does not make studio thumbnail border dark (#1160)
-- dark-www is not compatible with other addons (#1160)
-- dark-www does not make post preview dark (#1160)
-- dark-www does not affect syntax highlighting in forums (#1160)
-- confirm-actions runs on studios and topics (#1166)
-- scratch-notifier crashes when receiving crafted message (#1172)
-- scratch-notifier converts tags in project titles to emojis (#1172)
-- scratch-messaging double escapes tags (#1172)
-- scratchr2 changes the color of usernames in Messages page (#1189)
-- project-notes-tab description has a typo (#1190)
-- editor-devtools can remove extension blocks that are not orphaned (#1196)
-- dark-www and scratchr2 do not run on some pages (#1259)
+- Block switching: Addon does not work after switching languages (#1139)
+- Block switching: Addon mishandles forever block (#1139)
+- Cloud games: Add links to users (#1006)
+- Colored context menus: No color when right-clicking the edge (#1119)
+- Colored context menus: No color on new procedure arguments (#1119)
+- Confirm actions: Addon runs on studios and topics (#1166)
+- Developer tools: Optimize slow operations (#1120)
+- Developer tools: Actions required multiple undos when reverting (#1120)
+- Developer tools: CSS may cause encoding error (#1120)
+- Developer tools: Extension blocks that are not orphaned can be removed (#1196)
+- Hex color picker: Wrong background color on dark mode (#1142)
+- Project notes tabs: Addon does not work in Firefox (#1117)
+- Project notes tabs: Instructions do not fill empty space in Firefox (#1117)
+- Project notes tabs: Errors when a section is missing (#1117)
+- Project notes tabs: Projects with only instructions would have "Notes and Credits" on the tab (#1117)
+- Project notes tabs: Buttons overlaps with remix credits (#1117)
+- Project notes tabs: Addon loads on onload, rather than DOMContentLoaded (#1117)
+- Project notes tabs: Description has a typo (#1190)
+- Website dark mode: Studio thumbnail border does not affected (#1160)
+- Website dark mode: Compatibility with other addons (#1160)
+- Website dark mode: Post preview does not affected (#1160)
+- Website dark mode: Syntax highlighting in forums does not affected (#1160)
+- Scratch 2.0 → 3.0: Color on usernames in Messages page affected (#1189)
+- Scratch 2.0 → 3.0: Some pages are not supported (#1259)
+- Scratch Messaging: Remove double escaping on tags (#1172)
+- Scratch Notifier: Addon crashes when receiving crafted message (#1172)
+- Scratch Notifier: Tags in project titles to emojis converted (#1172)
+- Website dark mode: Some pages are not supported (#1259)
 
 #### Extension and Addon API
 
