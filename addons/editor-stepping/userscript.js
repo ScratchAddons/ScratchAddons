@@ -15,8 +15,9 @@ export default async function ({ addon, global, console }) {
 
   function addInterval() {
     const interval = setInterval(() => {
-      Array.prototype.forEach.call(document.querySelectorAll("path[style*='outline' i]"), (e) =>
-        e.style.outline = ""
+      Array.prototype.forEach.call(
+        document.querySelectorAll("path[style*='outline' i]"),
+        (e) => (e.style.outline = "")
       );
       virtualMachine.runtime.threads.forEach((thread) => {
         thread.stack.forEach((e) => {
