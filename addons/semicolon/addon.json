@@ -10,7 +10,19 @@
   "userstyles": [
     {
       "url": "semicolon.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "settingMatch": {
+        "id": "inverted",
+        "value": false
+      }
+    },
+    {
+      "url": "inverted.css",
       "matches": ["https://scratch.mit.edu/*"]
+      "settingMatch": {
+        "id": "inverted",
+        "value": true
+      }
     }
   ],
   "userscripts": [
@@ -20,5 +32,13 @@
     }
   ],
   "tags": ["easterEgg"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "settings": [
+    {
+      "name": "Invert the colors of the semicolon (black background and white semicolon). Useful with the Website dark mode addon",
+      "id": "inverted",
+      "type": "boolean",
+      "default": false
+    }
+  ]
 }
