@@ -22,8 +22,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 
     let useFetchHeaderIndex = null;
     let interceptRequest = optionRequestIds.includes(details.requestId);
-    if (!interceptRequest && details.responseHeaders) {
-      for (let i = 0; i < details.responseHeaders.length; i++) {
+    if (!interceptRequest && details.requestHeaders) {
+      for (let i = 0; i < details.requestHeaders.length; i++) {
         const headerName = details.requestHeaders[i].name;
         if (headerName === "X-ScratchAddons-Uses-Fetch") {
           interceptRequest = true;

@@ -394,7 +394,7 @@
       </div>
     </div>
     <div class="popup" v-show="showPopupModal" style="display: none">
-      <div class="label">{{ msg("settingsPagePermission", addonToEnable.name) }}</div>
+      <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
       <div>
         <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
         <button class="large-button" @click="hidePopup()">{{ msg("skipOpenFullSettings") }}</button>
