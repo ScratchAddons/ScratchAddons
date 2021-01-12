@@ -27,11 +27,11 @@ automatically create a PR on the website to synchronize the changes!
 
 #### Addons
 
-- Semicolon glitch (#507)
+- Better forum quoter (#1127)
 - Cat blocks (#639)
 - Data category tweaks (v2) (#1097)
-- Better forum quoter (#1127)
 - Mute project player (#1217)
+- Semicolon glitch (#507)
 
 #### Extension and Addon API
 
