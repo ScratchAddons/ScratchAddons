@@ -18,7 +18,7 @@
     },
     {
       "url": "inverted.css",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["https://scratch.mit.edu/*"],
       "settingMatch": {
         "id": "inverted",
         "value": true
