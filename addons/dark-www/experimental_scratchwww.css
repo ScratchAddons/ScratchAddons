@@ -30,7 +30,8 @@ body:not(.sa-body-editor) .join-flow-title,
 #view,
 .outer #projectBox,
 .tips-getting-started,
-.tips-activity-guides {
+.tips-activity-guides,
+.semicolon {
   background: #202020;
 }
 .box .box-header,
