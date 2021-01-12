@@ -10,7 +10,7 @@
   "userstyles": [
     {
       "url": "semicolon.css",
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": ["https://scratch.mit.edu/*"]
     }
     }
   ],
@@ -21,5 +21,5 @@
     }
   ],
   "tags": ["easterEgg"],
-  "enabledByDefault": false,
+  "enabledByDefault": false
 }
