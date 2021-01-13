@@ -1,35 +1,34 @@
 export default async function ({ addon, global, console }) {
-  var LEFT_EAR_UP = 'c-1,-12.5 5.3,-23.3 8.4,-24.8c3.7,-1.8 16.5,13.1 18.4,15.4';
-var LEFT_EAR_DOWN = 'c-5.8,-4.8 -8,-18 -4.9,-19.5c3.7,-1.8 24.5,11.1 31.7,10.1';
-var RIGHT_EAR_UP = 'c1.9,-2.3 14.7,-17.2 18.4,-15.4c3.1,1.5 9.4,12.3 8.4,24.8';
-var RIGHT_EAR_DOWN = 'c7.2,1 28,-11.9 31.7,-10.1c3.1,1.5 0.9,14.7 -4.9,19.5';
-// Ears look slightly different for define hat blocks
-var DEFINE_HAT_LEFT_EAR_UP = 'c0,-7.1 3.7,-13.3 9.3,-16.9c1.7,-7.5 5.4,-13.2 7.6,-14.2c2.6,-1.3 10,6 14.6,11.1';
-var DEFINE_HAT_RIGHT_EAR_UP = 'h33c4.6,-5.1 11.9,-12.4 14.6,-11.1c1.9,0.9 4.9,5.2 6.8,11.1c2.6,0,5.2,0,7.8,0';
-var DEFINE_HAT_LEFT_EAR_DOWN = 'c0,-4.6 1.6,-8.9 4.3,-12.3c-2.4,-5.6 -2.9,-12.4 -0.7,-13.4c2.1,-1 9.6,2.6 17,5.8c2.6,0 6.2,0 10.9,0';
-var DEFINE_HAT_RIGHT_EAR_DOWN = 'c0,0 25.6,0 44,0c7.4,-3.2 14.8,-6.8 16.9,-5.8c1.2,0.6 1.6,2.9 1.3,5.8';
+  var LEFT_EAR_UP = 'c -1 -12.5 5.3 -23.3 8.4 -24.8 c 3.7 -1.8 16.5 13.1 18.4 15.4';
+  var LEFT_EAR_DOWN = 'c -5.8 -4.8 -8 -18 -4.9 -19.5 c 3.7 -1.8 24.5 11.1 31.7 10.1';
+  var RIGHT_EAR_UP = 'c 1.9 -2.3 14.7 -17.2 18.4 -15.4 c 3.1 1.5 9.4 12.3 8.4 24.8';
+  var RIGHT_EAR_DOWN = 'c 7.2 1 28 -11.9 31.7 -10.1 c 3.1 1.5 0.9 14.7 -4.9 19.5';
+  // Ears look slightly different for define hat blocks
+  var DEFINE_HAT_LEFT_EAR_UP = 'c 0 -7.1 3.7 -13.3 9.3 -16.9 c 1.7 -7.5 5.4 -13.2 7.6 -14.2 c 2.6 -1.3 10 6 14.6 11.1';
+  var DEFINE_HAT_RIGHT_EAR_UP = 'h 33 c 4.6 -5.1 11.9 -12.4 14.6 -11.1 c 1.9 0.9 4.9 5.2 6.8 11.1 c 2.6 0 5.2 0 7.8 0';
+  var DEFINE_HAT_LEFT_EAR_DOWN = 'c 0 -4.6 1.6 -8.9 4.3 -12.3 c -2.4 -5.6 -2.9 -12.4 -0.7 -13.4 c 2.1 -1 9.6 2.6 17 5.8 c 2.6 0 6.2 0 10.9 0';
+  var DEFINE_HAT_RIGHT_EAR_DOWN = 'c 0 0 25.6 0 44 0 c 7.4 -3.2 14.8 -6.8 16.9 -5.8 c 1.2 0.6 1.6 2.9 1.3 5.8';
+
   async function catBlockify(hat) {
     while (true) {
       if (hat) {
         let hatblock = await addon.tab.waitForElement("[data-shapes='hat']", { markAsSeen: true });
         let hatpath = hatblock.querySelector("path").getAttribute("d");
 
-        hatblock.querySelector("path").setAttribute("d",
-          hatpath.replace(
+        hatblock.querySelector("path").style.d =
+          `path("${hatpath.replace(
             "c 25,-22 71,-22 96,0",
             `c2.6,-2.3 5.5,-4.3 8.5,-6.2${LEFT_EAR_UP}c8.4,-1.3 17,-1.3 25.4,0${RIGHT_EAR_UP}c3,1.8 5.9,3.9 8.5,6.1`
-          )
-        )
+          )}")`
         insertCatStuff(hatblock);
       } else {
         let customblock = await addon.tab.waitForElement("[data-shapes='c-block c-1 hat']", { markAsSeen: true });
         let custompath = customblock.querySelector("path").getAttribute("d");
-        customblock.querySelector("path").setAttribute("d",
-          custompath.replace(
+        customblock.querySelector("path").style.d =
+            `path("${custompath.replace(
             "a 20,20 0 0,1 20,-20",
             DEFINE_HAT_LEFT_EAR_UP + DEFINE_HAT_RIGHT_EAR_UP
-          )
-        )
+          )}")`
         insertCatStuff(customblock);
       }
     }
@@ -101,27 +100,20 @@ var DEFINE_HAT_RIGHT_EAR_DOWN = 'c0,0 25.6,0 44,0c7.4,-3.2 14.8,-6.8 16.9,-5.8c1
     });
 
     ear1.addEventListener("mouseenter", () => {
-      console.log("test");
       clearTimeout(earFn);
       clearTimeout(ear2Fn);
       // ear flick
       ear2.setAttribute('fill-opacity','');
       ear1.setAttribute('fill-opacity','0');
-      var bodyPath = svgBlock.getAttribute('d');
-      bodyPath = bodyPath.replace(LEFT_EAR_UP, LEFT_EAR_DOWN);
-      bodyPath = bodyPath.replace(DEFINE_HAT_LEFT_EAR_UP, DEFINE_HAT_LEFT_EAR_DOWN);
-      bodyPath = bodyPath.replace(RIGHT_EAR_DOWN, RIGHT_EAR_UP);
-      bodyPath = bodyPath.replace(DEFINE_HAT_RIGHT_EAR_DOWN, DEFINE_HAT_RIGHT_EAR_UP);
-      svgBlock.setAttribute('d', bodyPath);
-
+      svgBlock.style.d = svgBlock.style.d.replace(LEFT_EAR_UP, LEFT_EAR_DOWN);
+      svgBlock.style.d = svgBlock.style.d.replace(DEFINE_HAT_LEFT_EAR_UP, DEFINE_HAT_LEFT_EAR_DOWN);
+      svgBlock.style.d = svgBlock.style.d.replace(RIGHT_EAR_DOWN, RIGHT_EAR_UP);
+      svgBlock.style.d = svgBlock.style.d.replace(DEFINE_HAT_RIGHT_EAR_DOWN, DEFINE_HAT_RIGHT_EAR_UP);
       // reset after a short delay
       ear2Fn = setTimeout(() => {
         ear1.setAttribute('fill-opacity','');
-        var bodyPath = svgBlock.getAttribute('d');
-        var bodyPath = svgBlock.getAttribute('d');
-        bodyPath = bodyPath.replace(LEFT_EAR_DOWN, LEFT_EAR_UP);
-        bodyPath = bodyPath.replace(DEFINE_HAT_LEFT_EAR_DOWN, DEFINE_HAT_LEFT_EAR_UP);
-        svgBlock.setAttribute('d', bodyPath);
+        svgBlock.style.d = svgBlock.style.d.replace(LEFT_EAR_DOWN, LEFT_EAR_UP);
+        svgBlock.style.d = svgBlock.style.d.replace(DEFINE_HAT_LEFT_EAR_DOWN, DEFINE_HAT_LEFT_EAR_UP);
       }, 50);
     });
 
@@ -131,20 +123,16 @@ var DEFINE_HAT_RIGHT_EAR_DOWN = 'c0,0 25.6,0 44,0c7.4,-3.2 14.8,-6.8 16.9,-5.8c1
       // ear flick
       ear1.setAttribute('fill-opacity','');
       ear2.setAttribute('fill-opacity','0');
-      var bodyPath = svgBlock.getAttribute('d');
-      bodyPath = bodyPath.replace(RIGHT_EAR_UP, RIGHT_EAR_DOWN);
-      bodyPath = bodyPath.replace(DEFINE_HAT_RIGHT_EAR_UP, DEFINE_HAT_RIGHT_EAR_DOWN);
-      bodyPath = bodyPath.replace(LEFT_EAR_DOWN, LEFT_EAR_UP);
-      bodyPath = bodyPath.replace(DEFINE_HAT_LEFT_EAR_DOWN, DEFINE_HAT_LEFT_EAR_UP);
-      svgBlock.setAttribute('d', bodyPath);
+      svgBlock.style.d = svgBlock.style.d.replace(RIGHT_EAR_UP, RIGHT_EAR_DOWN);
+      svgBlock.style.d = svgBlock.style.d.replace(DEFINE_HAT_RIGHT_EAR_UP, DEFINE_HAT_RIGHT_EAR_DOWN);
+      svgBlock.style.d = svgBlock.style.d.replace(LEFT_EAR_DOWN, LEFT_EAR_UP);
+      svgBlock.style.d = svgBlock.style.d.replace(DEFINE_HAT_LEFT_EAR_DOWN, DEFINE_HAT_LEFT_EAR_UP);
 
       // reset after a short delay
       earFn = setTimeout(() => {
         ear2.setAttribute('fill-opacity','');
-        var bodyPath = svgBlock.getAttribute('d');
-        bodyPath = bodyPath.replace(RIGHT_EAR_DOWN, RIGHT_EAR_UP);
-        bodyPath = bodyPath.replace(DEFINE_HAT_RIGHT_EAR_DOWN, DEFINE_HAT_RIGHT_EAR_UP);
-        svgBlock.setAttribute('d', bodyPath);
+        svgBlock.style.d = svgBlock.style.d.replace(RIGHT_EAR_DOWN, RIGHT_EAR_UP);
+        svgBlock.style.d = svgBlock.style.d.replace(DEFINE_HAT_RIGHT_EAR_DOWN, DEFINE_HAT_RIGHT_EAR_UP);
       }, 50);
     });
   }
