@@ -12,7 +12,7 @@
 .intro-banner .intro-header,
 .intro-banner .intro-container,
 .title-banner.mod-messages,
-.subactions .action-buttons .action-button,
+.subactions .action-buttons .action-button:not(.remixtree-button),
 .title-banner-h1.mod-messages,
 .download .download-header,
 .download .download-header .download-info .download-copy .download-title,
@@ -43,7 +43,7 @@
 .account-nav .user-info::after,
 .button img,
 .preview .see-inside-button:before,
-.subactions .action-buttons .action-button:before,
+.subactions .action-buttons .action-button:not(.remixtree-button):before,
 .download .download-requirements span img,
 .os-chooser .button.active img,
 #footer .inner .media li img {

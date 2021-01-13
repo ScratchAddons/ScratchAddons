@@ -54,7 +54,6 @@
   "fix-uploaded-svgs",
   "project-info",
   "curator-link",
-  "search-load-more-fix",
   "confirm-actions",
   "feature-unshared",
   "project-notes-tabs",
@@ -66,5 +65,6 @@
   "onion-skinning",
   "better-quoter",
   "data-category-tweaks-v2",
-  "mute-project"
+  "mute-project",
+  "disable-auto-save"
 ]
