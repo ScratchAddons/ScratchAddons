@@ -79,23 +79,25 @@ export default async function ({ addon, global, console }) {
     ear1.setAttribute("fill", "#FFD5E6");
     ear1.setAttribute("fill-opacity", "");
 
-    let blinkFn, earFn, ear2Fn,
-    svgBlock = to.querySelector("path");
+    let blinkFn,
+      earFn,
+      ear2Fn,
+      svgBlock = to.querySelector("path");
 
     svgBlock.addEventListener("mouseenter", () => {
       clearTimeout(blinkFn);
       // blink
-      eye1.setAttribute('fill-opacity','0');
-      eye2.setAttribute('fill-opacity','0');
-      path1.setAttribute('fill-opacity','0.6');
-      path2.setAttribute('fill-opacity','0.6');
+      eye1.setAttribute("fill-opacity", "0");
+      eye2.setAttribute("fill-opacity", "0");
+      path1.setAttribute("fill-opacity", "0.6");
+      path2.setAttribute("fill-opacity", "0.6");
 
       // reset after a short delay
       blinkFn = setTimeout(() => {
-        eye1.setAttribute('fill-opacity','0.6');
-        eye2.setAttribute('fill-opacity','0.6');
-        path1.setAttribute('fill-opacity','0');
-        path2.setAttribute('fill-opacity','0');
+        eye1.setAttribute("fill-opacity", "0.6");
+        eye2.setAttribute("fill-opacity", "0.6");
+        path1.setAttribute("fill-opacity", "0");
+        path2.setAttribute("fill-opacity", "0");
       }, 100);
     });
 
