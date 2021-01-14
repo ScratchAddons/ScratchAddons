@@ -15,11 +15,11 @@ export default async function ({ addon, global, console }) {
     lockDisplay.src = addon.self.dir + "/unlock.svg";
     lockDisplay.style.top = `${flyOut.getBoundingClientRect().top}px`;
     lockDisplay.style.left = `${flyOut.getBoundingClientRect().right - 32}px`;
-    lockDisplay.className = "sa-lock-image"
+    lockDisplay.className = "sa-lock-image";
     lockDisplay.onclick = function () {
       flyoutLock = !flyoutLock;
       lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
-    }
+    };
 
     function onmouseenter() {
       flyOut.classList.remove("sa-flyoutClose");
