@@ -119,7 +119,6 @@ export default async function (o) {
         }
         return oldStepToProcedure.call(this, thread, proccode);
     }
-    ;
 }
 
 function updateAria(target) {
