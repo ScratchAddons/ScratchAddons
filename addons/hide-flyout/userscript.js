@@ -21,23 +21,33 @@ export default async function ({ addon, global, console }) {
       lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
     }
 
+    function getSpeedValue() {
+      let data = {
+        "none": "0",
+        "short": "0.25",
+        "default": "0.5",
+        "long": "1"
+      }
+      return data[addon.settings.get("speed")];
+    }
+
     function onmouseenter() {
       flyOut.classList.remove("sa-flyoutClose");
-      flyOut.style.animation = `openFlyout ${addon.settings.get("speed")}s 1`;
+      flyOut.style.animation = `openFlyout ${getSpeedValue()}s 1`;
       scrollBar.classList.remove("sa-flyoutClose");
-      scrollBar.style.animation = `openScrollbar ${addon.settings.get("speed")}s 1`;
+      scrollBar.style.animation = `openScrollbar ${getSpeedValue()}s 1`;
       lockDisplay.classList.remove("sa-flyoutClose");
-      lockDisplay.style.animation = `openLock ${addon.settings.get("speed")}s 1`;
+      lockDisplay.style.animation = `openLock ${getSpeedValue()}s 1`;
     }
     function onmouseleave(e) {
       // If we go behind the flyout or the user has locked it, let's return
       if ((e && e.clientX <= scrollBar.getBoundingClientRect().left) || flyoutLock) return;
       flyOut.classList.add("sa-flyoutClose");
-      flyOut.style.animation = `closeFlyout ${addon.settings.get("speed")}s 1`;
+      flyOut.style.animation = `closeFlyout ${getSpeedValue()}s 1`;
       scrollBar.classList.add("sa-flyoutClose");
-      scrollBar.style.animation = `closeScrollbar ${addon.settings.get("speed")}s 1`;
+      scrollBar.style.animation = `closeScrollbar ${getSpeedValue()}s 1`;
       lockDisplay.classList.add("sa-flyoutClose");
-      lockDisplay.style.animation = `closeLock ${addon.settings.get("speed")}s 1`;
+      lockDisplay.style.animation = `closeLock ${getSpeedValue()}s 1`;
     }
     onmouseleave(); // close flyout on load
     placeHolderDiv.onmouseenter = onmouseenter;

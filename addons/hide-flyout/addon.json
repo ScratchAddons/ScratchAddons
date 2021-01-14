@@ -21,9 +21,27 @@
   ],
   "settings": [
     {
-      "name": "Flyout speed",
+      "name": "Flyout duration",
       "id": "speed",
-      "type": "string",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "short",
+          "name": "Short"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "long",
+          "name": "Long"
+        }
+      ],
       "default": 0.5
     }
   ],
