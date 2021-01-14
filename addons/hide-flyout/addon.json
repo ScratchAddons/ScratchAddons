@@ -1,0 +1,25 @@
+{
+  "name": "Auto-hide block palette",
+  "description": "Hides the block palette and shows when you hover on it.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+
+  "tags": ["editor"],
+  "l10n": true
+}

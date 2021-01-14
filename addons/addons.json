@@ -66,5 +66,6 @@
   "better-quoter",
   "data-category-tweaks-v2",
   "mute-project",
-  "disable-auto-save"
+  "disable-auto-save",
+  "hide-flyout"
 ]

@@ -1,0 +1,43 @@
+@keyframes openFlyout {
+  0% {
+    transform: translate(-200px, 0px);
+  }
+  100% {
+    transform: translate(60px, 0px);
+  }
+}
+
+@keyframes closeFlyout {
+  0% {
+    transform: translate(60px, 0px);
+  }
+  100% {
+    transform: translate(-200px, 0px);
+  }
+}
+
+.blocklyFlyout.sa-flyoutClose {
+  transform: translate(-200px, 0px) !important;
+}
+
+.blocklyFlyoutScrollbar.sa-flyoutClose {
+  transform: translateX(35px) !important;
+}
+
+@keyframes openScrollbar {
+  0% {
+    transform: translateX(35px);
+  }
+  100% {
+    transform: translateX(296.5px);
+  }
+}
+
+@keyframes closeScrollbar {
+  0% {
+    transform: translateX(296.5px);
+  }
+  100% {
+    transform: translateX(35px);
+  }
+}
