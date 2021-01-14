@@ -1,8 +1,7 @@
 {
   "name": "Accessibile Projects",
   "description": "Adds support for WAI-ARIA and custom cursors to the Scratch player.",
-  "info": [
-  ],
+  "info": [],
   "credits": [
     {
       "name": "A-E-"
