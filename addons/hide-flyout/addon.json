@@ -19,7 +19,14 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-
+  "settings": [
+    {
+      "name": "Flyout speed",
+      "id": "speed",
+      "type": "string",
+      "default": 0.5
+    }
+  ],
   "tags": ["editor", "recommended"],
   "l10n": true
 }

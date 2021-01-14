@@ -1,3 +1,26 @@
+.blocklyFlyout.sa-flyoutClose {
+  transform: translate(-200px, 0px) !important;
+}
+
+.blocklyFlyoutScrollbar.sa-flyoutClose {
+  transform: translateX(35px) !important;
+}
+
+.sa-lock-image.sa-flyoutClose {
+  transform: translateX(-260px);
+}
+
+.sa-flyout-placeHolder {
+  position: fixed;
+}
+
+.sa-lock-image {
+  position: fixed;
+  z-index: 20;
+  width: 20px;
+  cursor: pointer;
+}
+
 @keyframes openFlyout {
   0% {
     transform: translate(-200px, 0px);
@@ -16,18 +39,6 @@
   }
 }
 
-.blocklyFlyout.sa-flyoutClose {
-  transform: translate(-200px, 0px) !important;
-}
-
-.blocklyFlyoutScrollbar.sa-flyoutClose {
-  transform: translateX(35px) !important;
-}
-
-.sa-flyout-placeHolder {
-  position: fixed;
-}
-
 @keyframes openScrollbar {
   0% {
     transform: translateX(35px);
@@ -43,5 +54,24 @@
   }
   100% {
     transform: translateX(35px);
+  }
+}
+
+@keyframes openLock {
+  0% {
+    transform: translateX(-260px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+
+@keyframes closeLock {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(-260px);
   }
 }
