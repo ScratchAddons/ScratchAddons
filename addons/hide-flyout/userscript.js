@@ -17,11 +17,10 @@ export default async function ({ addon, global, console }) {
         flyOut.style.animation = "closeFlyout 1s 1";
         scrollBar.classList.add("sa-flyoutClose");
         scrollBar.style.animation = "closeScrollbar 1s 1";
-
       }
       state = e.clientX - sidePos < 310;
     }
     document.removeEventListener("mousemove", mouseMove);
-    document.addEventListener("mousemove", mouseMove)
+    document.addEventListener("mousemove", mouseMove);
   }
 }
