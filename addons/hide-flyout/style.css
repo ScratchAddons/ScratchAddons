@@ -24,6 +24,10 @@
   transform: translateX(35px) !important;
 }
 
+.sa-flyout-placeHolder {
+  position: fixed;
+}
+
 @keyframes openScrollbar {
   0% {
     transform: translateX(35px);
