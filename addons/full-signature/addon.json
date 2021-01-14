@@ -55,7 +55,7 @@
   "userstyles": [
     {
       "url": "signature.css",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/settings/*"],
       "settingMatch": {
         "id": "signature",
         "value": true

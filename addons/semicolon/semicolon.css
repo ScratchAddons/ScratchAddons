@@ -1,4 +1,5 @@
 .semicolon {
   margin: 0;
-  background: white;
+  background: white !important;
+  color: black !important;
 }
