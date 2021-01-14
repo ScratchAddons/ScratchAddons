@@ -1,0 +1,26 @@
+{
+  "name": "Accessibile Projects",
+  "description": "Adds support for WAI-ARIA and custom cursors to the Scratch player.",
+  "info": [
+  ],
+  "credits": [
+    {
+      "name": "A-E-"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["beta"],
+  "enabledByDefault": false,
+  "l10n": true
+}
