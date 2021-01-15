@@ -1,6 +1,6 @@
 {
   "name": "Auto-hide block palette",
-  "description": "Hides the block palette and shows when you hover on it.",
+  "description": "Hides the block palette if not hovered. Click the lock icon to lock it in place temporarily. Alternatively, use \"category click\" mode.",
   "credits": [
     {
       "name": "TheColaber",
@@ -21,7 +21,7 @@
   ],
   "settings": [
     {
-      "name": "Flyout duration",
+      "name": "Animation duration",
       "id": "speed",
       "type": "select",
       "potentialValues": [
@@ -45,7 +45,7 @@
       "default": "default"
     },
     {
-      "name": "Toggle on",
+      "name": "Toggle on...",
       "id": "toggle",
       "type": "select",
       "potentialValues": [
