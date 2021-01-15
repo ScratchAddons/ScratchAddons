@@ -3,7 +3,7 @@ export default async function ({ addon, global, console }) {
 
   let pos = null;
 
-  const vm = addon.tab.traps.onceValues.vm;
+  const vm = addon.tab.traps.vm;
 
   vm.runtime.ioDevices.mouse.__scratchX = vm.runtime.ioDevices.mouse._scratchX;
   vm.runtime.ioDevices.mouse.__scratchY = vm.runtime.ioDevices.mouse._scratchY;

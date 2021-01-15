@@ -119,7 +119,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     const flyout = workspace.getFlyout();
     if (!flyout) throw new Error("expected flyout");
 
-    vm = addon.tab.traps.onceValues.vm;
+    vm = addon.tab.traps.vm;
     if (!vm) throw new Error("expected vm");
 
     const DataCategory = workspace.toolboxCategoryCallbacks_.VARIABLE;
