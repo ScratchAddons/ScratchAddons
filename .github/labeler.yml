@@ -12,7 +12,7 @@ scope:\ l10n:
   - _locales/**
   - addons-l10n/**
 
-scope:\ webpages: 
+scope:\ webpages:
   - addons/**
 
 scope:\ meta:
