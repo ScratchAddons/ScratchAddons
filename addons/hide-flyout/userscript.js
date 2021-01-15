@@ -2,6 +2,7 @@ export default async function ({ addon, global, console }) {
   while (true) {
     let flyOut = await addon.tab.waitForElement(".blocklyFlyout", { markAsSeen: true });
     let scrollBar = document.querySelector(".blocklyFlyoutScrollbar");
+    let blocklySvg = document.querySelector(".blocklySvg");
 
     // Placeholder Div
     let placeHolderDiv = document.body.appendChild(document.createElement("div"));
@@ -10,20 +11,24 @@ export default async function ({ addon, global, console }) {
     placeHolderDiv.style.width = `${flyOut.getBoundingClientRect().width}px`;
     placeHolderDiv.style.left = `${flyOut.getBoundingClientRect().left}px`;
     placeHolderDiv.style.top = `${flyOut.getBoundingClientRect().top}px`;
+
     let flyoutLock = false;
-    let blocklySvg = document.querySelector(".blocklySvg");
+
+    // Lock Img
     let lockDisplay = document.createElement("img");
     lockDisplay.src = addon.self.dir + "/unlock.svg";
     lockDisplay.style.top = `${flyOut.getBoundingClientRect().top}px`;
     lockDisplay.style.left = `${flyOut.getBoundingClientRect().right - 32}px`;
     lockDisplay.className = "sa-lock-image";
-    if (!addon.settings.get("catagoryclick")) {
-      lockDisplay.onclick = function () {
-        flyoutLock = !flyoutLock;
-        lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
-      };
+    lockDisplay.onclick = () => {
+      flyoutLock = !flyoutLock;
+      lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
+    };
+
+    // Only append if we don't have "catagoryclick" on
+    if (!addon.settings.get("catagoryclick"))
       document.body.appendChild(lockDisplay)
-    }
+
 
     function getSpeedValue() {
       let data = {
@@ -42,17 +47,20 @@ export default async function ({ addon, global, console }) {
       scrollBar.style.animation = `openScrollbar ${getSpeedValue()}s 1`;
       lockDisplay.classList.remove("sa-flyoutClose");
       lockDisplay.style.animation = `openLock ${getSpeedValue()}s 1`;
+      setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), getSpeedValue() * 1000);
     }
     function onmouseleave(e) {
       // If we go behind the flyout or the user has locked it, let's return
-      if ((addon.settings.get("catagoryclick") && (e && e.clientX <= scrollBar.getBoundingClientRect().left)) || flyoutLock) return;
+      if ((e && e.clientX <= scrollBar.getBoundingClientRect().left) || flyoutLock) return;
       flyOut.classList.add("sa-flyoutClose");
       flyOut.style.animation = `closeFlyout ${getSpeedValue()}s 1`;
       scrollBar.classList.add("sa-flyoutClose");
       scrollBar.style.animation = `closeScrollbar ${getSpeedValue()}s 1`;
       lockDisplay.classList.add("sa-flyoutClose");
       lockDisplay.style.animation = `closeLock ${getSpeedValue()}s 1`;
+      setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), getSpeedValue() * 1000);
     }
+
     onmouseleave(); // close flyout on load
     if (addon.settings.get("catagoryclick")) {
       let toggle = false;
@@ -60,14 +68,12 @@ export default async function ({ addon, global, console }) {
       while (true) {
         let catagory = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
         catagory.onclick = (e) => {
-          if (toggle && selectedCat == catagory) {
+          if (toggle && selectedCat == catagory)
             onmouseleave();
-            toggle = false;
-          } else if (!toggle) {
+          else if (!toggle)
             onmouseenter();
-            toggle = true;
-          }
-          selectedCat = catagory;
+
+          toggle = !toggle, selectedCat = catagory;
         }
       }
     } else {
