@@ -26,9 +26,7 @@ export default async function ({ addon, global, console }) {
     };
 
     // Only append if we don't have "catagoryclick" on
-    if (!addon.settings.get("catagoryclick"))
-      document.body.appendChild(lockDisplay)
-
+    if (!addon.settings.get("catagoryclick")) document.body.appendChild(lockDisplay);
 
     function getSpeedValue() {
       let data = {
@@ -68,13 +66,11 @@ export default async function ({ addon, global, console }) {
       while (true) {
         let catagory = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
         catagory.onclick = (e) => {
-          if (toggle && selectedCat == catagory)
-            onmouseleave();
-          else if (!toggle)
-            onmouseenter();
+          if (toggle && selectedCat == catagory) onmouseleave();
+          else if (!toggle) onmouseenter();
 
-          toggle = !toggle, selectedCat = catagory;
-        }
+          (toggle = !toggle), (selectedCat = catagory);
+        };
       }
     } else {
       placeHolderDiv.onmouseenter = onmouseenter;
