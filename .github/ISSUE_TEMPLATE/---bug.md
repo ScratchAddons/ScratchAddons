@@ -2,7 +2,7 @@
 name: "\U0001F41B Bug"
 about: Report a bug
 title: ''
-labels: bug
+labels: 'type: bug, status: needs triage'
 assignees: ''
 
 ---
