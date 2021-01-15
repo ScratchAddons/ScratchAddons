@@ -2,7 +2,7 @@ scope:\ addon api:
   - addons/**
 
 scope:\ ci:
-  - .github/workflows/*"
+  - .github/workflows/*
 
 scope:\ extension workings:
   - background/**
@@ -16,7 +16,7 @@ scope:\ webpages:
   - addons/**
 
 scope:\ meta:
-  - .github/**
-  - "!.github/workflows/*
-  - *
+  - ".github/**"
+  - "!.github/workflows/*"
+  - "*"
   - "!*/**"
