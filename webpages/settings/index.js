@@ -491,22 +491,34 @@ const vue = (window.vue = new Vue({
       );
     },
     enableAll() {
-      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=off]')).forEach(s => s.click());
+      Object.values(
+        document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=off]')
+      ).forEach((s) => s.click());
     },
     disableAll() {
-      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=on]')).forEach(s => s.click());
+      Object.values(
+        document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=on]')
+      ).forEach((s) => s.click());
     },
     invertSelection() {
-      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch')).forEach(s => s.click());
+      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch')).forEach((s) =>
+        s.click()
+      );
     },
     openAll() {
-      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img:not(.reverted)')).forEach(s => s.click());
+      Object.values(
+        document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img:not(.reverted)')
+      ).forEach((s) => s.click());
     },
     closeAll() {
-      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img.reverted')).forEach(s => s.click());
+      Object.values(
+        document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img.reverted')
+      ).forEach((s) => s.click());
     },
     invertOptions() {
-      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img')).forEach(s => s.click());
+      Object.values(
+        document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img')
+      ).forEach((s) => s.click());
     },
   },
   events: {
