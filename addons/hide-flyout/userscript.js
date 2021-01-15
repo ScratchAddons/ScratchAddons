@@ -12,7 +12,7 @@ export default async function ({ addon, global, console }) {
     placeHolderDiv.style.top = `${flyOut.getBoundingClientRect().top}px`;
     let flyoutLock = false;
     let lockDisplay = document.body.appendChild(document.createElement("img"));
-    let blocklySvg = document.querySelector(".blocklySvg")
+    let blocklySvg = document.querySelector(".blocklySvg");
 
     lockDisplay.src = addon.self.dir + "/unlock.svg";
     lockDisplay.style.top = `${flyOut.getBoundingClientRect().top}px`;
