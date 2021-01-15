@@ -1,6 +1,6 @@
 export default async function ({ addon, global, console }) {
   let gloabal_fps = 30;
-  const vm = addon.tab.traps.onceValues.vm;
+  const vm = addon.tab.traps.vm;
   let altPressesCount = 0;
   let altPressedRecently = false;
   window.addEventListener("keydown", (event) => {

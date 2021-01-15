@@ -44,7 +44,7 @@ export default async ({ addon, console, msg }) => {
       recordBuffer = [];
       isRecording = true;
       recordElem.textContent = msg("stop");
-      const vm = addon.tab.traps.onceValues.vm;
+      const vm = addon.tab.traps.vm;
       const stream = vm.runtime.renderer.canvas.captureStream();
       const mediaStreamDestination = vm.runtime.audioEngine.audioContext.createMediaStreamDestination();
       vm.runtime.audioEngine.inputNode.connect(mediaStreamDestination);
