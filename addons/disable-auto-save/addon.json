@@ -1,6 +1,13 @@
 {
   "name": "Disable auto-save",
   "description": "Disables the automatic saving of projects while editing.",
+  "info": [
+    {
+      "type": "warning",
+      "text": "This will disable all types of project autosaving. Make sure to manually save your changes frequently to avoid losing them.",
+      "id": "manuallysave"
+    }
+  ],
   "credits": [
     {
       "name": "RustingRobot",
@@ -13,7 +20,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor", "beta"],
+  "tags": ["editor"],
   "enabledByDefault": false,
   "l10n": true
 }

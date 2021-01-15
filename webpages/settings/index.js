@@ -303,8 +303,13 @@ const vue = (window.vue = new Vue({
       const toggle = () => {
         const newState = !addon._enabled;
         addon._enabled = newState;
-        // Do not extend when enabling in popup mode
-        addon._expanded = document.body.classList.contains("iframe") && !addon._expanded ? false : newState;
+        // Do not extend when enabling in popup mode, unless addon has warnings
+        addon._expanded =
+          document.body.classList.contains("iframe") &&
+          !addon._expanded &&
+          (addon.info || []).every((item) => item.type !== "warning")
+            ? false
+            : newState;
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
 
         if (document.body.classList.contains("iframe")) setTimeout(() => this.popupOrderAddonsEnabledFirst(), 500);
