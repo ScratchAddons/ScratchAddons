@@ -43,7 +43,7 @@ export default async function ({ addon, global, console }) {
     }
     function onmouseleave(e) {
       // If we go behind the flyout or the user has locked it, let's return
-      if ((e && e.clientX <= scrollBar.getBoundingClientRect().left) || flyoutLock) return;
+      if ((addon.settings.get("catagoryclick") && (e && e.clientX <= scrollBar.getBoundingClientRect().left)) || flyoutLock) return;
       flyOut.classList.add("sa-flyoutClose");
       flyOut.style.animation = `closeFlyout ${getSpeedValue()}s 1`;
       scrollBar.classList.add("sa-flyoutClose");
@@ -52,7 +52,25 @@ export default async function ({ addon, global, console }) {
       lockDisplay.style.animation = `closeLock ${getSpeedValue()}s 1`;
     }
     onmouseleave(); // close flyout on load
-    placeHolderDiv.onmouseenter = onmouseenter;
-    blocklySvg.onmouseenter = onmouseleave;
+    if (addon.settings.get("catagoryclick")) {
+      let toggle = false;
+      let selectedCat = null;
+      while (true) {
+        let catagory = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
+        catagory.onclick = (e) => {
+          if (toggle && selectedCat == catagory) {
+            onmouseleave();
+            toggle = false;
+          } else if (!toggle) {
+            onmouseenter();
+            toggle = true;
+          }
+          selectedCat = catagory;
+        }
+      }
+    } else {
+      placeHolderDiv.onmouseenter = onmouseenter;
+      blocklySvg.onmouseenter = onmouseleave;
+    }
   }
 }

@@ -42,7 +42,13 @@
           "name": "Long"
         }
       ],
-      "default": 0.5
+      "default": "default"
+    },
+    {
+      "name": "Toggle flyout when catagory clicked",
+      "id": "catagoryclick",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["editor", "recommended"],
