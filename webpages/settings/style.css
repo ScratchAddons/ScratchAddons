@@ -824,7 +824,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 .tooltip {
-  position:relative;
+  position: relative;
   /* making the .tooltip span a container for the tooltip text */
   border-bottom: 1px dashed #000;
   /* little indicater to indicate it's hoverable */
