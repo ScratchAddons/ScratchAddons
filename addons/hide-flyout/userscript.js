@@ -7,11 +7,13 @@ export default async function ({ addon, global, console }) {
     let placeHolderDiv = document.body.appendChild(document.createElement("div"));
     placeHolderDiv.className = "sa-flyout-placeHolder";
     placeHolderDiv.style.height = `${flyOut.getBoundingClientRect().height}px`;
-    placeHolderDiv.style.width = `${flyOut.getBoundingClientRect().width - 5}px`;
+    placeHolderDiv.style.width = `${flyOut.getBoundingClientRect().width}px`;
     placeHolderDiv.style.left = `${flyOut.getBoundingClientRect().left}px`;
     placeHolderDiv.style.top = `${flyOut.getBoundingClientRect().top}px`;
     let flyoutLock = false;
     let lockDisplay = document.body.appendChild(document.createElement("img"));
+    let blocklySvg = document.querySelector(".blocklySvg")
+
     lockDisplay.src = addon.self.dir + "/unlock.svg";
     lockDisplay.style.top = `${flyOut.getBoundingClientRect().top}px`;
     lockDisplay.style.left = `${flyOut.getBoundingClientRect().right - 32}px`;
@@ -51,6 +53,6 @@ export default async function ({ addon, global, console }) {
     }
     onmouseleave(); // close flyout on load
     placeHolderDiv.onmouseenter = onmouseenter;
-    scrollBar.onmouseleave = onmouseleave;
+    blocklySvg.onmouseenter = onmouseleave;
   }
 }
