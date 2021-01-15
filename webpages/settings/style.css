@@ -824,32 +824,39 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 .tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted rgb(255 255 255 / 0.5);
+  position:relative;
+  /* making the .tooltip span a container for the tooltip text */
+  border-bottom: 1px dashed #000;
+  /* little indicater to indicate it's hoverable */
   cursor: default;
 }
 
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 12rem;
-  background-color: black;
+.tooltiptext {
+  /* here's the magic */
+  position: absolute;
+  /* vertically center */
+  top: 50%;
+  transform: translateY(-50%);
+  /* Bring it on top of other tags */
+  z-index: 10;
+  /* move to right */
+  left: 95%;
+  margin-left: 15px;
+  /* and add a small left margin */
+  /* basic styles */
+  width: 200px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #000;
   color: #fff;
   text-align: center;
-  border-radius: 6px;
-  padding: 10px 10px;
-
-  /* Position the tooltip */
-  position: absolute;
-  z-index: 1;
+  /* display: none; */
+  visibility: hidden;
+  /* hide by default */
 }
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
-}
-.tooltip .tooltiptext {
-  top: -5px;
-  left: 105%;
 }
 .tooltip .tooltiptext::after {
   content: " ";
@@ -862,6 +869,9 @@ input[type="color"]::-webkit-color-swatch {
   border-color: transparent black transparent transparent;
 }
 
+.tooltiptext:hover .tooltiptext:after {
+  visibility: visible;
+}
 .permissions div.main {
   justify-content: center;
   display: grid;
