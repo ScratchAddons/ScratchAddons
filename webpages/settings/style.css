@@ -771,7 +771,8 @@ input[type="color"]::-webkit-color-swatch {
   .addon-description {
     display: none;
   }
-  .filter-selector, .filter-options {
+  .filter-selector,
+  .filter-options {
     display: none;
   }
   .search-box {
