@@ -11,17 +11,19 @@ export default async function ({ addon, global, console }) {
     placeHolderDiv.style.left = `${flyOut.getBoundingClientRect().left}px`;
     placeHolderDiv.style.top = `${flyOut.getBoundingClientRect().top}px`;
     let flyoutLock = false;
-    let lockDisplay = document.body.appendChild(document.createElement("img"));
     let blocklySvg = document.querySelector(".blocklySvg");
-
+    let lockDisplay = document.createElement("img");
     lockDisplay.src = addon.self.dir + "/unlock.svg";
     lockDisplay.style.top = `${flyOut.getBoundingClientRect().top}px`;
     lockDisplay.style.left = `${flyOut.getBoundingClientRect().right - 32}px`;
     lockDisplay.className = "sa-lock-image";
-    lockDisplay.onclick = function () {
-      flyoutLock = !flyoutLock;
-      lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
-    };
+    if (!addon.settings.get("catagoryclick")) {
+      lockDisplay.onclick = function () {
+        flyoutLock = !flyoutLock;
+        lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
+      };
+      document.body.appendChild(lockDisplay)
+    }
 
     function getSpeedValue() {
       let data = {
@@ -43,11 +45,7 @@ export default async function ({ addon, global, console }) {
     }
     function onmouseleave(e) {
       // If we go behind the flyout or the user has locked it, let's return
-      if (
-        (addon.settings.get("catagoryclick") && e && e.clientX <= scrollBar.getBoundingClientRect().left) ||
-        flyoutLock
-      )
-        return;
+      if ((addon.settings.get("catagoryclick") && (e && e.clientX <= scrollBar.getBoundingClientRect().left)) || flyoutLock) return;
       flyOut.classList.add("sa-flyoutClose");
       flyOut.style.animation = `closeFlyout ${getSpeedValue()}s 1`;
       scrollBar.classList.add("sa-flyoutClose");
@@ -70,7 +68,7 @@ export default async function ({ addon, global, console }) {
             toggle = true;
           }
           selectedCat = catagory;
-        };
+        }
       }
     } else {
       placeHolderDiv.onmouseenter = onmouseenter;
