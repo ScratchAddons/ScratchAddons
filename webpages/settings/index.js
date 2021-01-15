@@ -477,11 +477,7 @@ const vue = (window.vue = new Vue({
       });
     },
     openFullSettings() {
-      window.open(
-        `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
-          this.addonToEnable && this.addonToEnable._addonId
-        }`
-      );
+      window.open(`${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${this.addonToEnable._addonId}`);
       setTimeout(() => window.parent.close(), 100);
     },
     hidePopup() {
@@ -493,6 +489,24 @@ const vue = (window.vue = new Vue({
         },
         { once: true }
       );
+    },
+    enableAll() {
+      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=off]')).forEach(s => s.click());
+    },
+    disableAll() {
+      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=on]')).forEach(s => s.click());
+    },
+    invertSelection() {
+      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch')).forEach(s => s.click());
+    },
+    openAll() {
+      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img:not(.reverted)')).forEach(s => s.click());
+    },
+    closeAll() {
+      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img.reverted')).forEach(s => s.click());
+    },
+    invertOptions() {
+      Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img')).forEach(s => s.click());
     },
   },
   events: {
@@ -654,41 +668,6 @@ document.addEventListener("keydown", (e) => {
 
 chrome.runtime.sendMessage("checkPermissions");
 
-document.getElementById("enableAll").addEventListener("click", () => {
-  Object.values(
-    document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=off]')
-  ).forEach((s) => s.click());
-});
-
-document.getElementById("disableAll").addEventListener("click", () => {
-  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch[state=on]')).forEach((s) =>
-    s.click()
-  );
-});
-
-document.getElementById("invertSelection").addEventListener("click", () => {
-  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .switch')).forEach((s) =>
-    s.click()
-  );
-});
-
-document.getElementById("openAll").addEventListener("click", () => {
-  Object.values(
-    document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img:not(.reverted)')
-  ).forEach((s) => s.click());
-});
-
-document.getElementById("closeAll").addEventListener("click", () => {
-  Object.values(
-    document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img.reverted')
-  ).forEach((s) => s.click());
-});
-
-document.getElementById("invertOptions").addEventListener("click", () => {
-  Object.values(document.querySelectorAll('.addon-body:not([style="display: none;"]) .btn-dropdown img')).forEach((s) =>
-    s.click()
-  );
-});
 function isElementAboveViewport(el) {
   const rect = el.getBoundingClientRect();
   const elemBottom = rect.bottom;
