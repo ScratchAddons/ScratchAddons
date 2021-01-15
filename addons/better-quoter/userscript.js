@@ -1,3 +1,4 @@
+/* global copy_paste */
 export default async function ({ addon, global, console }) {
   function getSelectionBBCode() {
     var selection = window.getSelection();
@@ -14,10 +15,10 @@ export default async function ({ addon, global, console }) {
 
     // new lines
     let lineBreaks = html.querySelectorAll("br");
-    for (let br of lineBreaks) br.insertAdjacentHTML("afterend", "\n");
+    for (let br of lineBreaks) br.insertAdjacentText("afterend", "\n");
 
     // images and smileys
-    let smilieReplaces = {
+    let smilieReplaces = Object.assign(Object.create(null), {
       smile: ":)",
       neutral: ":|",
       sad: ":(",
@@ -30,7 +31,7 @@ export default async function ({ addon, global, console }) {
       mad: ":mad:",
       roll: ":rolleyes",
       cool: ":cool:",
-    };
+    });
 
     let imgs = html.querySelectorAll("img");
     for (let img of imgs) {
@@ -60,14 +61,14 @@ export default async function ({ addon, global, console }) {
     let spans = html.querySelectorAll("span");
     for (let span of spans) {
       if (span.className.startsWith("bb-")) {
-        span.insertAdjacentHTML("afterbegin", `[${bbReplaces[span.className.slice(3)]}]`);
-        span.insertAdjacentHTML("beforeend", `[/${bbReplaces[span.className.slice(3)]}]`);
+        span.insertAdjacentText("afterbegin", `[${bbReplaces[span.className.slice(3)]}]`);
+        span.insertAdjacentText("beforeend", `[/${bbReplaces[span.className.slice(3)]}]`);
       } else if (span.style.color) {
         let color = span.style.color;
 
         function componentToHex(c) {
           var hex = c.toString(16);
-          return hex.length == 1 ? "0" + hex : hex;
+          return hex.length === 1 ? "0" + hex : hex;
         }
 
         function rgbToHex(r, g, b) {
@@ -80,9 +81,9 @@ export default async function ({ addon, global, console }) {
             .split(/, ?/)
             .map((x) => Number(x));
 
-          span.insertAdjacentHTML("afterbegin", `[color=${rgbToHex(...rgbValues).toUpperCase()}]`);
-        } else span.insertAdjacentHTML("afterbegin", `[color=${color}]`);
-        span.insertAdjacentHTML("beforeend", "[/color]");
+          span.insertAdjacentText("afterbegin", `[color=${rgbToHex(...rgbValues).toUpperCase()}]`);
+        } else span.insertAdjacentText("afterbegin", `[color=${color}]`);
+        span.insertAdjacentText("beforeend", "[/color]");
       }
     }
 
@@ -90,16 +91,16 @@ export default async function ({ addon, global, console }) {
     // todo: try and gues where dictionary/wiki/wp etc. tags are being used?
     let links = html.querySelectorAll("a");
     for (let link of links) {
-      link.insertAdjacentHTML("afterbegin", `[url=${link.href}]`);
-      link.insertAdjacentHTML("beforeend", "[/url]");
+      link.insertAdjacentText("afterbegin", `[url=${link.href}]`);
+      link.insertAdjacentText("beforeend", "[/url]");
     }
 
     // center
     let divs = html.querySelectorAll("div");
     for (let div of divs) {
-      if (div.style.textAlign == "center") {
-        div.insertAdjacentHTML("afterbegin", "[center]");
-        div.insertAdjacentHTML("beforeend", "[/center]");
+      if (div.style.textAlign === "center") {
+        div.insertAdjacentText("afterbegin", "[center]");
+        div.insertAdjacentText("beforeend", "[/center]");
       }
     }
 
