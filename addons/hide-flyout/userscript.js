@@ -26,7 +26,7 @@ export default async function ({ addon, global, console }) {
     };
 
     // Only append if we don't have "catagoryclick" on
-    if (!addon.settings.get("catagoryclick")) document.body.appendChild(lockDisplay);
+    if (addon.settings.get("toggle") == "hover") document.body.appendChild(lockDisplay);
 
     function getSpeedValue() {
       let data = {
@@ -60,21 +60,20 @@ export default async function ({ addon, global, console }) {
     }
 
     onmouseleave(); // close flyout on load
-    if (addon.settings.get("catagoryclick")) {
-      let toggle = false;
-      let selectedCat = null;
-      while (true) {
-        let catagory = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
-        catagory.onclick = (e) => {
-          if (toggle && selectedCat == catagory) onmouseleave();
-          else if (!toggle) onmouseenter();
-
-          (toggle = !toggle), (selectedCat = catagory);
-        };
-      }
-    } else {
+    let toggle = false;
+    let selectedCat = null;
+    if (addon.settings.get("toggle") == "hover") {
       placeHolderDiv.onmouseenter = onmouseenter;
       blocklySvg.onmouseenter = onmouseleave;
+    }
+
+    while (true) {
+      let catagory = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
+      catagory.onclick = (e) => {
+        if (toggle && selectedCat == catagory && addon.settings.get("toggle") == "category") onmouseleave();
+        else if (!toggle) onmouseenter();
+        if (addon.settings.get("toggle") == "category") (toggle = !toggle), (selectedCat = catagory);
+      };
     }
   }
 }

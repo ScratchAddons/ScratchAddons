@@ -45,10 +45,20 @@
       "default": "default"
     },
     {
-      "name": "Toggle flyout when catagory clicked",
-      "id": "catagoryclick",
-      "type": "boolean",
-      "default": false
+      "name": "Toggle on",
+      "id": "toggle",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "hover",
+          "name": "Hover"
+        },
+        {
+          "id": "category",
+          "name": "Category click"
+        }
+      ],
+      "default": "hover"
     }
   ],
   "tags": ["editor", "recommended"],
