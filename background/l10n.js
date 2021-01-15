@@ -15,8 +15,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     if (ui.includes("-")) locales.push(ui.split("-")[0]);
     if (!locales.includes("en")) locales.push("en");
 
-    localeLoop:
-    for (const locale of locales) {
+    localeLoop: for (const locale of locales) {
       for (const addonId of addonIds) {
         let resp;
         let messages = {};
