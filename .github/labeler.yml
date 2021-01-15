@@ -1,21 +1,21 @@
-"scope: addon api":
+scope:\ addon api:
   - addons/**
 
-"scope: ci":
+scope:\ ci:
   - .github/workflows/*"
 
-"scope: extension workings":
+scope:\ extension workings:
   - background/**
   - content-scripts/**
 
-"scope: l10n":
+scope:\ l10n:
   - _locales/**
   - addons-l10n/**
 
-"scope: webpages": 
+scope:\ webpages: 
   - addons/**
 
-"scope: meta":
+scope:\ meta:
   - .github/**
   - "!.github/workflows/*
   - *
