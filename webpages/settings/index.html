@@ -164,7 +164,7 @@
               </div>
               <div class="badge purple" v-if="addon._tags.new">{{ msg("new") }}</div>
               <div class="badge darkgreen" v-if="addon._tags.forEditor">{{ msg("forEditor") }}</div>
-              <div class="badge red tooltip" v-if="addon._tags.beta">
+              <div class="badge red tooltip beta-badge" v-if="addon._tags.beta">
                 {{ msg("beta") }}
                 <div class="tooltiptext">{{ msg("betaTooltip") }}</div>
               </div>
