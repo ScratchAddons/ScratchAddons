@@ -128,14 +128,14 @@
             </div>
           </div>
           <div class="filter-options">
-            <div id="enableAll" class="filter-option">{{ msg("enableAll") }}</div>
-            <div id="disableAll" class="filter-option">{{ msg("disableAll") }}</div>
-            <div id="invertSelection" class="filter-option">{{ msg("invertSelection") }}</div>
+            <div @click="enableAll()" class="filter-option">{{ msg("enableAll") }}</div>
+            <div @click="disableAll()" class="filter-option">{{ msg("disableAll") }}</div>
+            <div @click="invertSelection()" class="filter-option">{{ msg("invertSelection") }}</div>
           </div>
           <div style="margin-left: 20px" class="filter-options">
-            <div id="openAll" class="filter-option">{{ msg("openAll") }}</div>
-            <div id="closeAll" class="filter-option">{{ msg("closeAll") }}</div>
-            <div id="invertOptions" class="filter-option">{{ msg("invertOptions") }}</div>
+            <div @click="openAll()" class="filter-option">{{ msg("openAll") }}</div>
+            <div @click="closeAll()" class="filter-option">{{ msg("closeAll") }}</div>
+            <div @click="invertOptions()" class="filter-option">{{ msg("invertOptions") }}</div>
           </div>
         </div>
 
@@ -404,7 +404,7 @@
       </div>
     </div>
     <div class="popup" v-show="showPopupModal" style="display: none">
-      <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
+      <div class="label">{{ msg("settingsPagePermission", addonToEnable.name) }}</div>
       <div>
         <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
         <button class="large-button" @click="hidePopup()">{{ msg("skipOpenFullSettings") }}</button>
