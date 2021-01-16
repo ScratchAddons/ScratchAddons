@@ -1,8 +1,10 @@
+import Listenable from "./Listenable.js";
+
 /**
  * Handles accounts.
- * @extends EventTarget
+ * @extends Listenable
  */
-export default class Account extends EventTarget {
+export default class Account extends Listenable {
   constructor() {
     super();
   }

@@ -1,8 +1,10 @@
+import Listenable from "../common/Listenable.js";
+
 /**
  * Manages object trapping.
- * @extends EventTarget
+ * @extends Listenable
  */
-export default class Trap extends EventTarget {
+export default class Trap extends Listenable {
   constructor(tab) {
     super();
     this._react_internal_key = undefined;

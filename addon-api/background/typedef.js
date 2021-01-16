@@ -4,7 +4,7 @@
  * export default async function (util)
  * Note that commonly it is done by using detructing syntax.
  * @typedef {object} BackgroundScriptUtilities
- * @property {Addon} addon - APIs for addons
+ * @property {BackgroundScriptAddon} addon - APIs for addons
  * @property {function} setInterval - Works like setInterval but with addon unloading support.
  * @property {function} clearInterval - Works like clearInterval but with addon unloading support.
  * @property {function} setTimeout - Works like setTimeout but with addon unloading support.

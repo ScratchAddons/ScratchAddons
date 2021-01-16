@@ -1,9 +1,11 @@
+import Listenable from "../common/Listenable.js";
+
 /**
  * Handles Redux state.
- * @extends EventTarget
+ * @extends Listenable
  * @property {boolean} initialized Whether the handler is initialized or not.
  */
-export default class ReduxHandler extends EventTarget {
+export default class ReduxHandler extends Listenable {
   constructor() {
     super();
     this.initialized = false;

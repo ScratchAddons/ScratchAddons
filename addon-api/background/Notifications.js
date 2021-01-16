@@ -1,8 +1,10 @@
+import Listenable from "../common/Listenable.js";
+
 /**
  * Handles notifications.
- * @extends EventTarget
+ * @extends Listenable
  */
-export default class Notifications extends EventTarget {
+export default class Notifications extends Listenable {
   constructor(addonObject) {
     super();
     this._addonId = addonObject.self.id;
@@ -116,7 +118,7 @@ export default class Notifications extends EventTarget {
   get muted() {
     return scratchAddons.muted;
   }
-  _removeEventListeners() {
+  dispose() {
     chrome.notifications.onClicked.removeListener(this._onClicked);
     chrome.notifications.onClosed.removeListener(this._onClosed);
     chrome.notifications.onButtonClicked.removeListener(this._onButtonClicked);

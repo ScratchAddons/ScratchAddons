@@ -1,5 +1,6 @@
 import Trap from "./Trap.js";
 import ReduxHandler from "./ReduxHandler.js";
+import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/data-url-to-blob.js";
 
 const DATA_PNG = "data:image/png;base64,";
@@ -7,15 +8,14 @@ const template = document.getElementById("scratch-addons");
 
 /**
  * APIs specific to userscripts.
- * @extends EventTarget
+ * @extends Listenable
  * @property {?string} clientVersion - version of the renderer (scratch-www, scratchr2, etc)
  * @property {Trap} traps
  * @property {ReduxHandler} redux
  */
-export default class Tab extends EventTarget {
+export default class Tab extends Listenable {
   constructor(info) {
     super();
-    scratchAddons.eventTargets.tab.push(this);
     this.clientVersion = document.querySelector("meta[name='format-detection']")
       ? "scratch-www"
       : document.querySelector("script[type='text/javascript']")
@@ -124,5 +124,12 @@ export default class Tab extends EventTarget {
     if (this.clientVersion === "scratchr2") {
       return window.django.gettext(key);
     }
+  }
+  
+  /**
+   * @private
+   */
+  get _eventTargetKey() {
+    return "tab";
   }
 }

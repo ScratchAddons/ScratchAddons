@@ -1,11 +1,12 @@
+import Listenable from "./Listenable.js";
+
 /**
  * Authentication related utilities.
- * @extends EventTarget
+ * @extends Listenable
  */
-export default class Auth extends EventTarget {
+export default class Auth extends Listenable {
   constructor(addonObject) {
     super();
-    scratchAddons.eventTargets.auth.push(this);
   }
   /**
    * Whether the user is logged in or not.
@@ -49,10 +50,11 @@ export default class Auth extends EventTarget {
   get scratchLang() {
     return scratchAddons.globalState.auth.scratchLang;
   }
-  _removeEventListeners() {
-    scratchAddons.eventTargets.auth.splice(
-      scratchAddons.eventTargets.auth.findIndex((x) => x === this),
-      1
-    );
+  
+  /**
+   * @private
+   */
+  get _eventTargetKey() {
+    return "auth";
   }
 }

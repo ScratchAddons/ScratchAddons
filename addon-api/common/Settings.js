@@ -1,11 +1,13 @@
+import Listenable from "./Listenable.js";
+
 /**
  * Manages settings.
+ * @extends Listenable
  */
-export default class Settings extends EventTarget {
+export default class Settings extends Listenable {
   constructor(addonObject) {
     super();
     this._addonId = addonObject.self.id;
-    scratchAddons.eventTargets.settings.push(this);
   }
   /**
    * Gets a setting.
@@ -19,10 +21,10 @@ export default class Settings extends EventTarget {
     if (value === undefined) throw "ScratchAddons exception: invalid setting ID";
     else return value;
   }
-  _removeEventListeners() {
-    scratchAddons.eventTargets.settings.splice(
-      scratchAddons.eventTargets.settings.findIndex((x) => x === this),
-      1
-    );
+  /**
+   * @private
+   */
+  get _eventTargetKey() {
+    return "settings";
   }
 }
