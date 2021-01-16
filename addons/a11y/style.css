@@ -11,7 +11,7 @@
   z-index: 0;
   opacity: 0.5;
 }
-.aria-item:focus {
+.aria-item[tabindex]:focus {
   outline: none;
   border-color: hsla(215, 100%, 65%, 1);
   -webkit-box-shadow: 0 0 0 0.25rem hsla(215, 100%, 65%, 0.35);
@@ -23,9 +23,11 @@
   width: calc(var(--aria-bounds-width) / 480 * 100%);
   height: calc(var(--aria-bounds-height) / 360 * 100%);
   top: calc(((360 / 2) - var(--aria-bounds-top)) / 360 * 100%);
+  transition: border 0.25s ease-out, box-shadow 0.25s ease-out;
+}
+.aria-item[tabindex] {
   border-radius: 3px;
   border: 1px solid hsla(0, 0%, 0%, 0.15);
-  transition: border 0.25s ease-out, box-shadow 0.25s ease-out;
 }
 
 .aria-item[role="button"] {

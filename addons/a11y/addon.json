@@ -3,7 +3,8 @@
   "description": "Adds support for WAI-ARIA and custom cursors to the Scratch player.",
   "credits": [
     {
-      "name": "A-E-"
+      "name": "A-E-",
+      "link": "https://scratch.mit.edu/users/A-E-/"
     }
   ],
   "userscripts": [
@@ -18,7 +19,15 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["beta", "editor"],
+  "settings": [
+    {
+      "name": "Enable tab navigation for sprites.",
+      "id": "tabNav",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["editor", "beta"],
   "enabledByDefault": false,
   "l10n": true
 }

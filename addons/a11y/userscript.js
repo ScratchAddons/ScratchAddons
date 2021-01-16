@@ -1,5 +1,8 @@
-let wrap, vm, addon, safeMsg;
+let wrap, vm, addon, safeMsg, msg;
 let a11yObjects = {};
+let getTabNav=function getTabNav(){
+    return false
+}
 window.a11yObjects = a11yObjects;
 let blockColorOverrides = {};
 blockColorOverrides["set sprite aria role to %s"] = blockColorOverrides["set sprite label to %s"] = {
@@ -40,6 +43,10 @@ async function ensureWrap() {
 
 function cleanUp() {
     let targets = vm.runtime.targets.map((e)=>e.id);
+    targets.forEach(e=>{
+        a11yObjects[e] = a11yObjects[e] || {}
+    }
+    )
     Object.keys(a11yObjects).filter((e)=>!targets.includes(e)).forEach((e)=>{
         a11yObjects[e].ele.remove();
         delete a11yObjects[e];
@@ -151,9 +158,14 @@ const injectWorkspace = ()=>{
 }
 ;
 export default async function (o) {
-    let {global, console, msg} = o;
+    let {global} = o;
+    getTabNav=function getTabNav(){
+        return o.addon.settings.get("tabNav")
+    }
     addon = o.addon;
     safeMsg = o.safeMsg;
+    msg=o.msg
+    console=o.console
     console.log("a11y support enabled");
     vm = addon.tab.traps.onceValues.vm;
     ensureWrap();
@@ -183,6 +195,8 @@ export default async function (o) {
 }
 
 function updateAria(target) {
+    if (!wrap)
+        return
     if (!target.visible) {
         if (a11yObjects[target.id]) {
             if (a11yObjects[target.id].ele)
@@ -195,9 +209,13 @@ function updateAria(target) {
         a11yObjects[target.id].ele = document.createElement("div");
         a11yObjects[target.id].ele.className = "aria-item";
         a11yObjects[target.id].ele.dataset.spriteId = target.id;
-        a11yObjects[target.id].ele.setAttribute("tabindex", "-1");
         wrap.append(a11yObjects[target.id].ele);
     }
+    if(getTabNav()){
+        a11yObjects[target.id].ele.setAttribute("tabindex", "0");
+        }else{
+            a11yObjects[target.id].ele.removeAttribute("tabindex");
+        }
     let bounds = target.renderer.getBounds(target.drawableID);
     a11yObjects[target.id].ele.style.setProperty("--aria-bounds-width", bounds.width);
     a11yObjects[target.id].ele.style.setProperty("--aria-bounds-height", bounds.height);
@@ -208,8 +226,15 @@ function updateAria(target) {
     } else {
         a11yObjects[target.id].ele.removeAttribute("role");
     }
-    if (a11yObjects[target.id].label) {
-        a11yObjects[target.id].ele.setAttribute("aria-label", a11yObjects[target.id].label);
+    let bubbleMessage = "";
+    let state = target.getCustomState("Scratch.looks");
+    if (state) {
+        if (state.text && state.text.trim()) {
+            bubbleMessage = msg(state.type+"Bubble",{text:state.text.trim()})
+        }
+    }
+    if (a11yObjects[target.id].label || bubbleMessage) {
+        a11yObjects[target.id].ele.setAttribute("aria-label", a11yObjects[target.id].label?a11yObjects[target.id].label+" " + bubbleMessage:bubbleMessage);
     } else {
         a11yObjects[target.id].ele.removeAttribute("aria-label");
     }
