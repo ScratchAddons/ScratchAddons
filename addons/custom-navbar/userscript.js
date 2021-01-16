@@ -7,7 +7,7 @@ export default async function ({ addon, global, console }) {
           navbar.querySelectorAll("li a")[i].innerText = getSettings()[i].innerText;
           navbar.querySelectorAll("li a")[i].href = getSettings()[i].href;
         } else {
-          let navSpans = navbar.querySelectorAll("li a span")
+          let navSpans = navbar.querySelectorAll("li a span");
           navSpans[i].innerText = getSettings()[i].innerText;
           navSpans[i].parentElement.href = getSettings()[i].href;
         }
@@ -22,7 +22,7 @@ export default async function ({ addon, global, console }) {
     for (var i = 1; i < 5; i++)
       data.push({
         innerText: addon.settings.get(`item${i}`),
-        href: addon.settings.get(`item${i}url`)
+        href: addon.settings.get(`item${i}url`),
       });
     return data;
   }
