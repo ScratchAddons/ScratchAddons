@@ -1,3 +1,5 @@
+/** @typedef {import("./Addon.js").default} BackgroundScriptAddon */
+// prettier-ignore
 /**
  * Background scripts must default-export an async function
  * that takes this object as a sole argument, e.g.

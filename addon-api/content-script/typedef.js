@@ -1,3 +1,5 @@
+/** @typedef {import("./Addon.js").default} UserscriptAddon */
+// prettier-ignore
 /**
  * Userscripts must default-export an async function
  * that takes this object as a sole argument, e.g.
