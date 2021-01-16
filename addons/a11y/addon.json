@@ -1,6 +1,13 @@
 {
   "name": "Project accessibility support",
   "description": "Adds screen reader support to the Scratch player.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "We're exploring new accessibility tools. If you've found this addon useful or have any suggestions, please send us a message through scratchaddons.com/feedback and include your Scratch username so that we can reply.",
+      "id": "newA11yTools"
+    }
+  ],
   "credits": [
     {
       "name": "A-E-",
