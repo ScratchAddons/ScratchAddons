@@ -12,7 +12,7 @@
  * @property {function} msg - Gets localized message from addons-l10n folder. Supports placeholders and plurals.
  * @property {string} msg.locale - Current locale used by msg function.
  * @property {object} global - Object accessible by all userscripts of the same addon.
- * @property {object} console - Console API with formatting.
+ * @property {Console} console - Console API with formatting.
  */
 
 export default {};

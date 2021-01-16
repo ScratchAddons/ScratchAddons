@@ -9,7 +9,7 @@
  * @property {string} msg.locale - Current locale used by msg function.
  * @property {function} safeMsg - Gets localized and HTML-escaped messages. Placeholders are NOT escaped.
  * @property {object} global - Object accessible by all userscripts of the same addon.
- * @property {object} console - Console API with formatting.
+ * @property {Console} console - Console API with formatting.
  */
 
 export default {};
