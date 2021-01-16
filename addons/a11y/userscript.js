@@ -81,6 +81,7 @@ async function renderLoop() {
 let injected;
 
 const injectWorkspace = () => {
+  if(!!window.ENABLE_A11Y_BLOCKS){
   if (injected) {
     return;
   }
@@ -168,6 +169,7 @@ const injectWorkspace = () => {
   if (vm.editingTarget) {
     vm.emitWorkspaceUpdate();
   }
+}
 };
 export default async function (o) {
   let { global } = o;
@@ -193,6 +195,7 @@ export default async function (o) {
     }
     return oldStepToProcedure.call(this, thread, proccode);
   };
+  
   if (addon.tab.editorMode === "editor") {
     const interval = setInterval(() => {
       if (typeof Blockly === "object" && Blockly.getMainWorkspace()) {
