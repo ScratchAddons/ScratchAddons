@@ -1,6 +1,6 @@
 {
-  "name": "Accessibile Projects",
-  "description": "Adds support for WAI-ARIA and custom cursors to the Scratch player.",
+  "name": "Project accessibility support",
+  "description": "Adds screen reader support to the Scratch player, and blocks to set WAI-ARIA labels and roles for sprites to the editor.",
   "credits": [
     {
       "name": "A-E-",
