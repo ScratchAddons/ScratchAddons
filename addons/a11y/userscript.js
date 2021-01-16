@@ -81,77 +81,77 @@ async function renderLoop() {
 let injected;
 
 const injectWorkspace = () => {
-  if(!!window.ENABLE_A11Y_BLOCKS){
-  if (injected) {
-    return;
-  }
-  injected = true;
-
-  const workspace = Blockly.getMainWorkspace();
-  if (!workspace) throw new Error("expected workspace");
-
-  let BlockSvg = Object.values(Blockly.getMainWorkspace().getFlyout().checkboxes_)[0].block.constructor;
-  let oldUpdateColor = BlockSvg.prototype.updateColour;
-  BlockSvg.prototype.updateColour = function (...a) {
-    if (this.procCode_) {
-      let p = this.procCode_;
-      if (blockColorOverrides[p.trim().toLowerCase()]) {
-        let c = blockColorOverrides[p.trim().toLowerCase()];
-        this.colour_ = c.color;
-        this.colourSecondary_ = c.secondaryColor;
-        this.colourTertiary_ = c.tertiaryColor;
-        let updateChildColors = function updateChildColors() {
-          this.childBlocks_.forEach(
-            ((e) => {
-              e.setColour(e.getColour(), e.getColourSecondary(), this.getColourTertiary());
-            }).bind(this)
-          );
-        }.bind(this);
-        updateChildColors();
-        const oldPush = this.childBlocks_.__proto__.push.bind(this.childBlocks_);
-        this.childBlocks_.push = function (...a) {
-          updateChildColors();
-          return oldPush(...a);
-        };
-      }
+  if (!!window.ENABLE_A11Y_BLOCKS) {
+    if (injected) {
+      return;
     }
-    return oldUpdateColor.call(this, ...a);
-  };
+    injected = true;
 
-  const flyout = workspace.getFlyout();
-  if (!flyout) throw new Error("expected flyout");
+    const workspace = Blockly.getMainWorkspace();
+    if (!workspace) throw new Error("expected workspace");
 
-  vm = addon.tab.traps.onceValues.vm;
-  if (!vm) throw new Error("expected vm");
+    let BlockSvg = Object.values(Blockly.getMainWorkspace().getFlyout().checkboxes_)[0].block.constructor;
+    let oldUpdateColor = BlockSvg.prototype.updateColour;
+    BlockSvg.prototype.updateColour = function (...a) {
+      if (this.procCode_) {
+        let p = this.procCode_;
+        if (blockColorOverrides[p.trim().toLowerCase()]) {
+          let c = blockColorOverrides[p.trim().toLowerCase()];
+          this.colour_ = c.color;
+          this.colourSecondary_ = c.secondaryColor;
+          this.colourTertiary_ = c.tertiaryColor;
+          let updateChildColors = function updateChildColors() {
+            this.childBlocks_.forEach(
+              ((e) => {
+                e.setColour(e.getColour(), e.getColourSecondary(), this.getColourTertiary());
+              }).bind(this)
+            );
+          }.bind(this);
+          updateChildColors();
+          const oldPush = this.childBlocks_.__proto__.push.bind(this.childBlocks_);
+          this.childBlocks_.push = function (...a) {
+            updateChildColors();
+            return oldPush(...a);
+          };
+        }
+      }
+      return oldUpdateColor.call(this, ...a);
+    };
 
-  // Each time a new workspace is made, these callbacks are reset, so re-register whenever a flyout is shown.
-  // https://github.com/LLK/scratch-blocks/blob/61f02e4cac0f963abd93013842fe536ef24a0e98/core/flyout_base.js#L469
-  const originalShow = flyout.constructor.prototype.show;
-  flyout.constructor.prototype.show = function (xml) {
-    this.workspace_.registerToolboxCategoryCallback("A11Y", function (e) {
-      return [
-        ...new DOMParser()
-          .parseFromString(
-            `<top><block type="procedures_call" gap="16"><mutation generateshadows="true" proccode="set sprite aria role to %s" argumentids="[&quot;czc6,OD@W7qzCng-$6Ut&quot;]" argumentnames="[&quot;role&quot;]" argumentdefaults="[&quot;img&quot;]" warp="false"></mutation></block>
+    const flyout = workspace.getFlyout();
+    if (!flyout) throw new Error("expected flyout");
+
+    vm = addon.tab.traps.onceValues.vm;
+    if (!vm) throw new Error("expected vm");
+
+    // Each time a new workspace is made, these callbacks are reset, so re-register whenever a flyout is shown.
+    // https://github.com/LLK/scratch-blocks/blob/61f02e4cac0f963abd93013842fe536ef24a0e98/core/flyout_base.js#L469
+    const originalShow = flyout.constructor.prototype.show;
+    flyout.constructor.prototype.show = function (xml) {
+      this.workspace_.registerToolboxCategoryCallback("A11Y", function (e) {
+        return [
+          ...new DOMParser()
+            .parseFromString(
+              `<top><block type="procedures_call" gap="16"><mutation generateshadows="true" proccode="set sprite aria role to %s" argumentids="[&quot;czc6,OD@W7qzCng-$6Ut&quot;]" argumentnames="[&quot;role&quot;]" argumentdefaults="[&quot;img&quot;]" warp="false"></mutation></block>
 <block type="procedures_call" gap="16"><mutation generateshadows="true" proccode="set sprite label to %s" argumentids="[&quot;E|XlmQQ}1C:3vH-VY2Q_&quot;]" argumentnames="[&quot;text&quot;]" argumentdefaults="[&quot;&quot;]" warp="false"></mutation></block></top>`,
-            "text/xml"
-          )
-          .querySelectorAll("block"),
-      ];
-    });
-    originalShow.call(this, xml);
-  };
+              "text/xml"
+            )
+            .querySelectorAll("block"),
+        ];
+      });
+      originalShow.call(this, xml);
+    };
 
-  // We use Scratch's extension category mechanism to replace the data category with our own.
-  // https://github.com/LLK/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
-  // https://github.com/LLK/scratch-gui/blob/2ceab00370ad7bd8ecdf5c490e70fd02152b3e2a/src/lib/make-toolbox-xml.js#L763
-  // https://github.com/LLK/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
-  const originalGetBlocksXML = vm.runtime.getBlocksXML;
-  vm.runtime.getBlocksXML = function (target) {
-    const result = originalGetBlocksXML.call(this, target);
-    result.push({
-      id: "a11ycat",
-      xml: `
+    // We use Scratch's extension category mechanism to replace the data category with our own.
+    // https://github.com/LLK/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
+    // https://github.com/LLK/scratch-gui/blob/2ceab00370ad7bd8ecdf5c490e70fd02152b3e2a/src/lib/make-toolbox-xml.js#L763
+    // https://github.com/LLK/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
+    const originalGetBlocksXML = vm.runtime.getBlocksXML;
+    vm.runtime.getBlocksXML = function (target) {
+      const result = originalGetBlocksXML.call(this, target);
+      result.push({
+        id: "a11ycat",
+        xml: `
           <category
             name="${safeMsg("a11y-category")}"
             id="a11ycat"
@@ -159,17 +159,17 @@ const injectWorkspace = () => {
             secondaryColour="#3aa8a4"
             custom="A11Y">
           </category>`,
-    });
-    return result;
-  };
+      });
+      return result;
+    };
 
-  // If editingTarget has not been set yet, we have injected before the editor has loaded and emitWorkspaceUpdate will be called later.
-  // Otherwise, it's possible that the editor has already loaded and updated its toolbox, so force a workspace update.
-  // Workspace updates are slow, so don't do them unless necessary.
-  if (vm.editingTarget) {
-    vm.emitWorkspaceUpdate();
+    // If editingTarget has not been set yet, we have injected before the editor has loaded and emitWorkspaceUpdate will be called later.
+    // Otherwise, it's possible that the editor has already loaded and updated its toolbox, so force a workspace update.
+    // Workspace updates are slow, so don't do them unless necessary.
+    if (vm.editingTarget) {
+      vm.emitWorkspaceUpdate();
+    }
   }
-}
 };
 export default async function (o) {
   let { global } = o;
@@ -195,7 +195,7 @@ export default async function (o) {
     }
     return oldStepToProcedure.call(this, thread, proccode);
   };
-  
+
   if (addon.tab.editorMode === "editor") {
     const interval = setInterval(() => {
       if (typeof Blockly === "object" && Blockly.getMainWorkspace()) {
