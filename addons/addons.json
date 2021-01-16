@@ -20,6 +20,7 @@
   "forum-search",
   "msg-count-badge",
   "scratch-notifier",
+  "discuss-button",
   "editor-stepping",
   "image-uploader",
   "scratch-messaging",
@@ -66,6 +67,5 @@
   "data-category-tweaks-v2",
   "mute-project",
   "disable-auto-save",
-  "hide-flyout",
-  "custom-navbar"
+  "hide-flyout"
 ]
