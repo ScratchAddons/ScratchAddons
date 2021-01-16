@@ -14,3 +14,5 @@
  * @property {object} global - Object accessible by all userscripts of the same addon.
  * @property {object} console - Console API with formatting.
  */
+
+export default {};
