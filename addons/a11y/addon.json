@@ -1,6 +1,6 @@
 {
   "name": "Project accessibility support",
-  "description": "Adds screen reader support to the Scratch player.",
+  "description": "Adds limited screen reader support to the Scratch player, including WAI-ARIA labels and roles.",
   "info": [
     {
       "type": "notice",
