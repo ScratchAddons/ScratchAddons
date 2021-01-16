@@ -1,0 +1,69 @@
+{
+  "name": "Custom Navbar",
+  "description": "Change and tweak all the buttons on that Navigation bar.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "Item 1",
+      "id": "item1",
+      "type": "string",
+      "default": "Create"
+    },
+    {
+      "name": "Item 1 url",
+      "id": "item1url",
+      "type": "string",
+      "default": "https://scratch.mit.edu/create"
+    },
+    {
+      "name": "Item 2",
+      "id": "item2",
+      "type": "string",
+      "default": "Explore"
+    },
+    {
+      "name": "Item 2 url",
+      "id": "item2url",
+      "type": "string",
+      "default": "https://scratch.mit.edu/explore/projects/all"
+    },
+    {
+      "name": "Item 3",
+      "id": "item3",
+      "type": "string",
+      "default": "Ideas"
+    },
+    {
+      "name": "Item 3 url",
+      "id": "item3url",
+      "type": "string",
+      "default": "https://scratch.mit.edu/ideas"
+    },
+    {
+      "name": "Item 4",
+      "id": "item4",
+      "type": "string",
+      "default": "About"
+    },
+    {
+      "name": "Item 4 url",
+      "id": "item4url",
+      "type": "string",
+      "default": "https://scratch.mit.edu/about"
+    }
+  ],
+  "tags": ["community"],
+  "l10n": true
+}
