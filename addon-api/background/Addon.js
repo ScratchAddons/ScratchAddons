@@ -37,7 +37,7 @@ export default class BackgroundScriptAddon extends Addon {
   /**
    * @private
    */
-  get path() {
+  get _path() {
     return chrome.runtime.getURL("");
   }
 }

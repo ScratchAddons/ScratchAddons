@@ -24,11 +24,11 @@ export default class Addon {
     Object.defineProperties(this.self, {
       dir: {
         enumerable: true,
-        get: () => `${this.path}addons/${info.id}`,
+        get: () => `${this._path}addons/${info.id}`,
       },
       lib: {
         enumerable: true,
-        get: () => `${this.path}libraries`,
+        get: () => `${this._path}libraries`,
       },
     });
     this.auth = new Auth(this);
@@ -41,7 +41,7 @@ export default class Addon {
    * @abstract
    * @private
    */
-  get path() {
+  get _path() {
     throw new Error("Subclasses must implement this.");
   }
 }
