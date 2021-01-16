@@ -1,3 +1,7 @@
+/**
+ * Manages object trapping.
+ * @extends EventTarget
+ */
 export default class Trap extends EventTarget {
   constructor(tab) {
     super();
@@ -9,15 +13,30 @@ export default class Trap extends EventTarget {
     this._cache = Object.create(null);
   }
 
+  /**
+   * scratch-vm instance.
+   * @throws when on non-project page.
+   * @type {object}
+   */
   get vm() {
     if (!this._getEditorMode()) throw new Error("Cannot access vm on non-project page");
     return __scratchAddonsTraps._onceMap.vm;
   }
 
+  /**
+   * @private
+   */
   get REACT_INTERNAL_PREFIX() {
     return "__reactInternalInstance$";
   }
 
+  /**
+   * Gets Blockly instance actually used by Scratch.
+   * This is different from window.Blockly.
+   * @async
+   * @throws when on non-project page.
+   * @returns {Promise<object>}
+   */
   async getBlockly() {
     if (this._cache.Blockly) return this._cache.Blockly;
     const editorMode = this._getEditorMode();

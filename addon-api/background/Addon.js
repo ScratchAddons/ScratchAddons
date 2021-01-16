@@ -5,6 +5,20 @@ import Notifications from "./Notifications.js";
 import Badge from "./Badge.js";
 import Settings from "../common/Settings.js";
 
+/**
+ * An addon.
+ * @property {object} self - the addon's metadata.
+ * @property {string} self.id - the addon's ID.
+ * @property {string} self.dir - the directory the addon is stored in.
+ * @property {string} self.browser - the browser used.
+ * @property {function} self.restart - restarts the addon.
+ * @property {Auth} auth
+ * @property {Account} account
+ * @property {function} fetch - fetches resource from Scratch API with authentication.
+ * @property {Settings} settings
+ * @property {Notifications} [notifications]
+ * @property {Badge} [badge]
+ */
 export default class Addon {
   constructor(info) {
     const { id, permissions } = info;

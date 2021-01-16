@@ -5,6 +5,13 @@ import dataURLToBlob from "../../libraries/data-url-to-blob.js";
 const DATA_PNG = "data:image/png;base64,";
 const template = document.getElementById("scratch-addons");
 
+/**
+ * APIs specific to userscripts.
+ * @extends EventTarget
+ * @property {?string} clientVersion - version of the renderer (scratch-www, scratchr2, etc)
+ * @property {Trap} traps
+ * @property {ReduxHandler} redux
+ */
 export default class Tab extends EventTarget {
   constructor(info) {
     super();
@@ -18,6 +25,11 @@ export default class Tab extends EventTarget {
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
   }
+  /**
+   * Loads a script by URL.
+   * @param {string} url - script URL.
+   * @returns {Promise}
+   */
   loadScript(url) {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -26,10 +38,15 @@ export default class Tab extends EventTarget {
       script.onload = resolve;
     });
   }
-  getScratchVM() {
-    return scratchAddons.methods.getScratchVM();
-  }
-  waitForElement(selector, { markAsSeen = false } = {}) {
+  /**
+   * Waits until an element renders, then return the element.
+   * @param {string} selector - argument passed to querySelector.
+   * @param {object} opts - options.
+   * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
+   * @returns {Promise<Element>} - element found.
+   */
+  waitForElement(selector, opts = {}) {
+    const markAsSeen = !!opts.markAsSeen;
     const firstQuery = document.querySelectorAll(selector);
     for (const element of firstQuery) {
       if (this._waitForElementSet.has(element)) continue;
@@ -54,7 +71,8 @@ export default class Tab extends EventTarget {
     );
   }
   /**
-   * @type {?string} editor mode (or null for non-editors).
+   * editor mode (or null for non-editors).
+   * @type {?string}
    */
   get editorMode() {
     const pathname = location.pathname.toLowerCase();
@@ -67,8 +85,8 @@ export default class Tab extends EventTarget {
   }
 
   /**
-   * Copy an PNG image.
-   * @param {string} dataURL data url of the png image
+   * Copies an PNG image.
+   * @param {string} dataURL - data url of the png image
    * @returns {Promise}
    */
   copyImage(dataURL) {
@@ -95,8 +113,8 @@ export default class Tab extends EventTarget {
   }
 
   /**
-   * Obtain translation used by Scratch.
-   * @param {string} key Translation key.
+   * Gets translation used by Scratch.
+   * @param {string} key - Translation key.
    * @returns {string} Translation.
    */
   scratchMessage(key) {
