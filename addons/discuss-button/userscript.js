@@ -21,7 +21,7 @@ function getSettings() {
   for (var i = 1; i < 5; i++)
     data.push({
       innerText: addon.settings.get(`item${i}`),
-      href: addon.settings.get(`item${i}url`),
+      href: addon.settings.get(`itemurl${i}`),
     });
   return data;
 }

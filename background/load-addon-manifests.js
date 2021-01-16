@@ -26,45 +26,73 @@
         }
       }
     }
-    for (const option of manifest.settings || []) {
-      if (manifest.l10n && !useDefault) {
-        option.name = scratchAddons.l10n.get(
-          `${folderName}/@settings-name-${option.id}`,
-          {
-            commentIcon: "@comment.svg",
-            forumIcon: "@forum.svg",
-            heartIcon: "@heart.svg",
-            starIcon: "@star.svg",
-            followIcon: "@follow.svg",
-            studioAddIcon: "@studio-add.svg",
-            studioIcon: "@studio.svg",
-            remixIcon: "@remix.svg",
-          },
-          option.name
-        );
-      }
-      switch (option.type) {
-        case "string":
-          if (manifest.l10n && !useDefault) {
-            option.default = scratchAddons.l10n.get(`${folderName}/@settings-default-${option.id}`, {}, option.default);
-          }
-          break;
-        case "select":
-          option.potentialValues = option.potentialValues.map((value) => {
-            if (value && value.id) {
-              if (manifest.l10n && !useDefault) {
-                value.name = scratchAddons.l10n.get(
-                  `${folderName}/@settings-select-${option.id}-${value.id}`,
-                  {},
-                  value.name
-                );
-              }
-              return value;
+    manifest.settings = handleSettings(manifest.settings);
+    function handleSettings(settings) {
+      for (const option of settings || []) {
+        if (manifest.l10n && !useDefault) {
+          option.name = scratchAddons.l10n.get(
+            `${folderName}/@settings-name-${option.id}`,
+            {
+              commentIcon: "@comment.svg",
+              forumIcon: "@forum.svg",
+              heartIcon: "@heart.svg",
+              starIcon: "@star.svg",
+              followIcon: "@follow.svg",
+              studioAddIcon: "@studio-add.svg",
+              studioIcon: "@studio.svg",
+              remixIcon: "@remix.svg",
+            },
+            option.name
+          );
+        }
+        switch (option.type) {
+          case "string":
+            if (manifest.l10n && !useDefault) {
+              option.default = scratchAddons.l10n.get(`${folderName}/@settings-default-${option.id}`, {}, option.default);
             }
-            return { name: value, id: value };
-          });
-          break;
+            break;
+          case "select":
+            option.potentialValues = option.potentialValues.map((value) => {
+              if (value && value.id) {
+                if (manifest.l10n && !useDefault) {
+                  value.name = scratchAddons.l10n.get(
+                    `${folderName}/@settings-select-${option.id}-${value.id}`,
+                    {},
+                    value.name
+                  );
+                }
+                return value;
+              }
+              return { name: value, id: value };
+            });
+            break;
+          case "dynamic-length":
+            for (let temp of option.template) {
+              temp.name = scratchAddons.l10n.get(
+                `${folderName}/@settings-dynamic-temp-${temp.id}`,
+                {},
+                temp.name
+              );
+            }
+            for (let def of option.defaults) {
+              def.forEach((item, i) => {
+                if (item.id)
+                  item = scratchAddons.l10n.get(
+                    `${folderName}/@settings-dynamic-${option.id}-${item.id}`,
+                    {},
+                    item.value
+                  );
+
+                let defval = JSON.parse(JSON.stringify(option.template[i]));
+                defval.default = item;
+                def[i] = defval;
+              });
+            }
+            console.log(option);
+            break;
+        }
       }
+      return settings;
     }
     scratchAddons.manifests.push({ addonId: folderName, manifest });
   }
