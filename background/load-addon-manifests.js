@@ -48,7 +48,11 @@
         switch (option.type) {
           case "string":
             if (manifest.l10n && !useDefault) {
-              option.default = scratchAddons.l10n.get(`${folderName}/@settings-default-${option.id}`, {}, option.default);
+              option.default = scratchAddons.l10n.get(
+                `${folderName}/@settings-default-${option.id}`,
+                {},
+                option.default
+              );
             }
             break;
           case "select":
@@ -68,11 +72,7 @@
             break;
           case "dynamic-length":
             for (let temp of option.template) {
-              temp.name = scratchAddons.l10n.get(
-                `${folderName}/@settings-dynamic-temp-${temp.id}`,
-                {},
-                temp.name
-              );
+              temp.name = scratchAddons.l10n.get(`${folderName}/@settings-dynamic-temp-${temp.id}`, {}, temp.name);
             }
             for (let def of option.defaults) {
               def.forEach((item, i) => {
