@@ -33,7 +33,7 @@ export default class BackgroundScriptAddon extends Addon {
     this._intervals.forEach((intervalId) => clearInterval(intervalId));
     this._revokeProxy();
   }
-  
+
   /**
    * @private
    */

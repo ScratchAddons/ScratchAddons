@@ -50,7 +50,7 @@ export default class Auth extends Listenable {
   get scratchLang() {
     return scratchAddons.globalState.auth.scratchLang;
   }
-  
+
   /**
    * @private
    */

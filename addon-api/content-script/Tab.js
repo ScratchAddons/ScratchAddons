@@ -125,7 +125,7 @@ export default class Tab extends Listenable {
       return window.django.gettext(key);
     }
   }
-  
+
   /**
    * @private
    */

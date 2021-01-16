@@ -24,19 +24,19 @@ export default class Addon {
     Object.defineProperties(this.self, {
       dir: {
         enumerable: true,
-        get: () => `${this.path}addons/${info.id}`
+        get: () => `${this.path}addons/${info.id}`,
       },
       lib: {
         enumerable: true,
         get: () => `${this.path}libraries`,
-      }
-    })
+      },
+    });
     this.auth = new Auth(this);
     this.account = new Account();
     this.fetch = fetch;
     this.settings = new Settings(this);
   }
-  
+
   /**
    * @abstract
    * @private

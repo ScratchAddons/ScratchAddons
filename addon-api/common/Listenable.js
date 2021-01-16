@@ -9,29 +9,29 @@ export default class Listenable extends EventTarget {
       scratchAddons.eventTargets[this._eventTargetKey].push(this);
     }
   }
-  
+
   /**
    * @private
    */
-  dispatchEvent (...args){
+  dispatchEvent(...args) {
     return super.dispatchEvent(...args);
   }
-  
+
   /**
    * If the subclass removes stale references using dispose(),
    * this key will be used.
    * @type {?string}
    * @private
    */
-  get _eventTargetKey () {
+  get _eventTargetKey() {
     return null;
   }
-  
+
   /**
    * Destructor of this instance.
    * @private
    */
-  dispose () {
+  dispose() {
     const key = this._eventTargetKey;
     if (key === null) return;
     scratchAddons.eventTargets[key].splice(
