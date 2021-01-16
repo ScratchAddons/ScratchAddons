@@ -1,10 +1,10 @@
 {
   "name": "Project accessibility support",
-  "description": "Adds limited screen reader support to the Scratch player, including WAI-ARIA labels and roles.",
+  "description": "Adds limited support for screen readers and other assistive technology to the Scratch player, including WAI-ARIA labels and roles. It currently supports say and think bubbles, but not text in costumes. Functionality that allows projects to explicitly share labels and roles is still being tested.",
   "info": [
     {
       "type": "notice",
-      "text": "We're exploring new accessibility tools. If you've found this addon useful or have any suggestions, please send us a message through scratchaddons.com/feedback and include your Scratch username so that we can reply.",
+      "text": "We're exploring new accessibility tools. If you've found this addon useful or have any suggestions, please send us a message by clicking "Send Feedback" on the left, and include your Scratch username so that we can reply.",
       "id": "newA11yTools"
     }
   ],
