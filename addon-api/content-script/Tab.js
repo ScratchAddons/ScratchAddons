@@ -2,6 +2,7 @@ import Trap from "./Trap.js";
 import ReduxHandler from "./ReduxHandler.js";
 import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/data-url-to-blob.js";
+import getWorkerScript from "./worker.js";
 
 const DATA_PNG = "data:image/png;base64,";
 const template = document.getElementById("scratch-addons");
@@ -16,6 +17,7 @@ const template = document.getElementById("scratch-addons");
 export default class Tab extends Listenable {
   constructor(info) {
     super();
+    this._addonId = info.id;
     this.clientVersion = document.querySelector("meta[name='format-detection']")
       ? "scratch-www"
       : document.querySelector("script[type='text/javascript']")
@@ -131,5 +133,21 @@ export default class Tab extends Listenable {
    */
   get _eventTargetKey() {
     return "tab";
+  }
+  
+  /**
+   * Loads a Web Worker.
+   * @async
+   * @param {string} url URL of the worker to load.
+   * @returns {Promise<Worker>} worker.
+   */
+  async loadWorker(url) {
+    const resp = await fetch(url);
+    const script = await resp.text();
+    const workerScript = getWorkerScript(this, script, url);
+    const blob = new Blob([workerScript], {type: "text/javascript"});
+    const workerURL = URL.createObjectURL(blob);
+    const worker = new Worker(workerURL);
+    return new Promise((resolve) => worker.addEventListener("message", () => resolve(worker), { once: true }));
   }
 }
