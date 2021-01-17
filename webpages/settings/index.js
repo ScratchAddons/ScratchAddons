@@ -513,6 +513,13 @@ const vue = (window.vue = new Vue({
       this.selectedTag = null;
     },
   },
+  components: {
+    root: {
+      name: "root",
+      template: "#settings-temp",
+      props: { settings: Object },
+    },
+  },
 }));
 
 chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
