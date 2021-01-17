@@ -311,7 +311,13 @@
                       </div>
                     </div>
                   </script>
-                  <root v-bind:setting="setting" v-bind:addon="addon" v-bind:addonsettings="addonSettings" v-bind:msg="msg" v-bind:textparse="textParse"></root>
+                  <root
+                    v-bind:setting="setting"
+                    v-bind:addon="addon"
+                    v-bind:addonsettings="addonSettings"
+                    v-bind:msg="msg"
+                    v-bind:textparse="textParse"
+                  ></root>
                 </div>
               </div>
               <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
