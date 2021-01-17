@@ -212,7 +212,10 @@
                 >
               </div>
               <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
-                <div :class="setting.type === 'dynamic-length' ? '' : 'addon-setting'" v-for="setting of addon.settings">
+                <div
+                  :class="setting.type === 'dynamic-length' ? '' : 'addon-setting'"
+                  v-for="setting of addon.settings"
+                >
                   <script type="text/x-template" id="settings-temp">
                     <div class="setting-label" v-html="textparse(setting.name, addon)"></div>
                     <div
