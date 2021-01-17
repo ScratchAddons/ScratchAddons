@@ -1,13 +1,23 @@
 import runPersistentScripts from "./imports/run-persistent-scripts.js";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  // Message used to load popups as well
   if (request === "getSettingsInfo") {
-    sendResponse({
-      manifests: scratchAddons.manifests,
-      // Firefox breaks if we send proxies
-      addonsEnabled: scratchAddons.localState._target.addonsEnabled,
-      addonSettings: scratchAddons.globalState._target.addonSettings,
-    });
+    const sendRes = () =>
+      sendResponse({
+        manifests: scratchAddons.manifests,
+        // Firefox breaks if we send proxies
+        addonsEnabled: scratchAddons.localState._target.addonsEnabled,
+        addonSettings: scratchAddons.globalState._target.addonSettings,
+      });
+    // Data might have not loaded yet, or be partial.
+    // Only respond when all data is ready
+    if (scratchAddons.localState.allReady) {
+      sendRes();
+    } else {
+      scratchAddons.localEvents.addEventListener("ready", sendRes);
+      return true;
+    }
   } else if (request.changeEnabledState) {
     const { addonId, newState } = request.changeEnabledState;
     scratchAddons.localState.addonsEnabled[addonId] = newState;

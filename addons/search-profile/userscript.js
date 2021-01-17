@@ -6,11 +6,7 @@ export default async function ({ addon, global, console, msg }) {
     img = li.appendChild(document.createElement("img")),
     span = li.appendChild(document.createElement("span")),
     user = document.querySelector('[name="q"]').value.trim(),
-    valid =
-      user.length <= 20 &&
-      user.length >= 3 &&
-      !user.includes(" ") &&
-      user.match(/([\x30-\x39]|[\x41-\x5a]|[\x61-\x7a]|\x2d|\x5f)+/g)[0] == user;
+    valid = /^[\w-]{3,20}$/g.test(user);
   //Set up elements
   img.src = addon.self.dir + "/user.svg";
   img.className = "tab-icon";

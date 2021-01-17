@@ -2,7 +2,7 @@
 name: "✨ Feature"
 about: Request for a new feature
 title: ''
-labels: enhancement
+labels: 'type: enhancement, status: needs triage'
 assignees: ''
 
 ---

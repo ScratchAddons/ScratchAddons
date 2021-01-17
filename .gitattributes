@@ -1,4 +1,4 @@
 *.md export-ignore
 LICENSE export-ignore
 .* export-ignore
-CODEOWNERS export-ignore
+typedef.js export-ignore

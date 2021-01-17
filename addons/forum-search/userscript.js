@@ -108,7 +108,7 @@ function appendSearch(box, query, page, term, msg) {
         postLeftDl.appendChild(document.createElement("br"));
         postLeftDl.appendChild(document.createElement("br"));
 
-        if (locationQuery != "") {
+        if (locationQuery !== "") {
           let userPostButton = document.createElement("a");
           userPostButton.appendChild(document.createTextNode(msg("posts-here")));
           userPostButton.addEventListener("click", () => {
@@ -146,7 +146,7 @@ function appendSearch(box, query, page, term, msg) {
 
         postLeftDl.appendChild(createTextBox(msg("last-checked"), "black username", 1));
         postLeftDl.appendChild(
-          createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_first_checked)), "", 2)
+          createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_last_checked)), "", 2)
         );
 
         let postRight = document.createElement("div");
@@ -162,7 +162,7 @@ function appendSearch(box, query, page, term, msg) {
         postHTML.insertAdjacentHTML("beforeend", cleanPost(post.content.html));
         postMsg.appendChild(postHTML);
 
-        if (post.editor != null) {
+        if (post.editor) {
           let postEdit = document.createElement("p");
           postEdit.classList = "postedit";
           let postEditMessage = document.createElement("em");
@@ -201,7 +201,7 @@ export default async function ({ addon, global, console, msg }) {
   let pathSplit = window.location.pathname.split("/");
   let searchPlaceholder = msg("placeholder");
   switch (pathSplit.length) {
-    case 5:
+    case 5: {
       let topicTitle = document
         .getElementsByClassName("linkst")[0]
         .getElementsByTagName("li")[2]
@@ -210,11 +210,13 @@ export default async function ({ addon, global, console, msg }) {
       locationQuery = ` +topic:${pathSplit[3]}`;
       searchPlaceholder = msg("search-topic", { topic: topicTitle });
       break;
-    case 4:
+    }
+    case 4: {
       let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].innerHTML;
       locationQuery = ` +category:"${category}"`;
       searchPlaceholder = msg("search-cat", { cat: category });
       break;
+    }
   }
   searchBar.setAttribute("placeholder", searchPlaceholder);
   search.appendChild(searchBar);
@@ -254,7 +256,7 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   searchDropdown.addEventListener("change", (e) => {
-    if (searchBar.value != "") {
+    if (searchBar.value !== "") {
       triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value, msg);
     }
   });

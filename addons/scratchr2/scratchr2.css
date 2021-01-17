@@ -7,7 +7,7 @@ body {
 a,
 input.link,
 .ui-widget-content a {
-  color: #4d97ff;
+  color: var(--scratchr2-linkColor);
   font-weight: bold;
   text-decoration: none;
 }
@@ -18,9 +18,7 @@ body,
   color: #575e75;
   text-shadow: none;
 }
-label {
-  color: #575e75;
-}
+label,
 a.black,
 a.black:visited,
 input.link.black {
@@ -34,7 +32,7 @@ input.link:hover,
 input.link:active,
 input.link.black:hover,
 input.link.black:active {
-  color: #4280d7;
+  color: var(--scratchr2-activeColor);
   text-decoration: none;
 }
 #content {
@@ -51,12 +49,12 @@ textarea {
   resize: none;
 }
 input:focus {
-  border-color: #4d97ff;
   box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
+  border-color: var(--scratchr2-primaryColor);
 }
 textarea:focus {
-  border: 2px solid #4d97ff;
   box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
+  border: 2px solid var(--scratchr2-primaryColor);
 }
 .button,
 button,
@@ -68,7 +66,7 @@ button.grey,
 .ui-widget button.ui-state-default {
   border-radius: 4px;
   border: none;
-  background: #4d97ff;
+  background: var(--scratchr2-primaryColor);
   box-shadow: none;
   font-family: inherit;
   font-weight: bold;
@@ -93,13 +91,13 @@ button.grey,
 .button.grey:not([data-control="load-more"]):hover,
 button.grey:hover {
   background: #fff;
-  color: #4d97ff;
-  border: 1px solid #4d97ff;
+  color: var(--scratchr2-linkColor);
+  border: 1px solid var(--scratchr2-primaryColor);
 }
 .button.grey:not([data-control="load-more"]):hover,
 button.grey:hover {
-  color: #4280d7;
-  border-color: #4280d7;
+  color: var(--scratchr2-activeColor);
+  border-color: var(--scratchr2-activeColor);
 }
 .button[data-control="load-more"] {
   display: block;
@@ -134,7 +132,7 @@ select:focus {
   background-image: url("%addon-self-dir%/assets/caret_hover.svg");
 }
 select:focus {
-  border-color: #4d97ff;
+  border-color: var(--scratchr2-primaryColor);
   outline: none;
 }
 h1,
@@ -154,10 +152,10 @@ h4 {
   border-color: #d9d9d9;
 }
 .slider-carousel .thumb span.owner a {
-  color: #4d97ff;
+  color: var(--scratchr2-linkColor);
 }
 .slider-carousel .thumb span.owner a:hover {
-  color: #4280d7;
+  color: var(--scratchr2-activeColor);
 }
 .dropdown .dropdown-menu {
   background-color: #fff;
@@ -165,7 +163,7 @@ h4 {
   font-weight: normal;
   top: 24px;
   left: -1px;
-  border: 1px solid #4d97ff;
+  border: 1px solid var(--scratchr2-primaryColor);
   box-shadow: none;
 }
 #footer {
@@ -197,9 +195,9 @@ h4 {
   box-shadow: none;
 }
 #topnav .innerwrap {
-  background: #4d97ff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+  background: var(--scratchr2-primaryColor);
   height: 50px;
 }
 #topnav .logo {
@@ -299,11 +297,11 @@ h4 {
 }
 #topnav ul.account-nav .sign-in .popover {
   margin-top: 40px;
-  background-color: #4d97ff;
+  background-color: var(--scratchr2-primaryColor);
   cursor: auto;
 }
 #topnav ul.account-nav .sign-in .popover .arrow::after {
-  border-bottom-color: #4d97ff;
+  border-bottom-color: var(--scratchr2-primaryColor);
 }
 #login-dropdown .dropdown-menu {
   max-width: 1000px;
@@ -332,7 +330,7 @@ h4 {
   padding: 9.6px;
   height: auto;
   background: #fff;
-  color: #4d97ff;
+  color: var(--scratchr2-primaryColor);
   line-height: 24px;
 }
 #topnav ul.account-nav .sign-in form .forgot-password {
@@ -397,7 +395,7 @@ h4 {
   line-height: 24px;
 }
 #topnav ul.account-nav .logged-in-user .dropdown-menu {
-  background-color: #4d97ff;
+  background-color: var(--scratchr2-primaryColor);
   margin-top: 0;
   top: 50px;
   padding-top: 5px;
@@ -441,7 +439,7 @@ h4 {
 .modal-backdrop,
 .modal-backdrop.fade.in,
 .ui-widget-overlay {
-  background: #4d97ff;
+  background: var(--scratchr2-primaryColor);
   opacity: 0.7;
 }
 .modal,
@@ -458,8 +456,8 @@ h4 {
   padding-top: 8px;
   padding-right: 8px;
   border-radius: 16px 16px 0 0;
-  background: #4d97ff;
-  box-shadow: inset 0 -1px 0 0 #4280d7;
+  background: var(--scratchr2-primaryColor);
+  box-shadow: inset 0 -1px 0 0 var(--scratchr2-activeColor);
   color: #fff;
 }
 .modal .modal-header .close,
@@ -511,5 +509,5 @@ h4 {
 .modal-footer .btn:not(.blue) {
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: #fff;
-  color: #4d97ff;
+  color: var(--scratchr2-linkColor);
 }

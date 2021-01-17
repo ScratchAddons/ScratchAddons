@@ -37,7 +37,6 @@
   "editor-devtools/deep": "Deep",
   "editor-devtools/help": "Help",
   "editor-devtools/tutorials": "Tutorials",
-  "editor-devtools/inject": "Inject",
   "editor-devtools/enter-expr": "Griffpatch: Enter an expression (i.e. a+2*3)",
   "editor-devtools/replace": "Griffpatch: Switch all {name} in this sprite for the variable named:",
   "editor-devtools/top": "Send to top",
@@ -50,6 +49,10 @@
   "editor-devtools/swap": "Swap {var} in sprite",
   "editor-devtools/lists": "lists",
   "editor-devtools/variables": "variables",
-  "editor-devtools/inset": "Insert",
-  "editor-devtools/start-typing": "Start Typing..."
+  "editor-devtools/insert": "Insert",
+  "editor-devtools/start-typing": "Start Typing...",
+  "editor-devtools/show-senders": "Show senders",
+  "editor-devtools/show-receivers": "Show receivers",
+  "editor-devtools/show-broadcast": "Show Broadcast Senders/Receivers",
+  "editor-devtools/show-broadcast-desc": "Right-click a broadcast block, then click \"Show senders\" or \"Show receivers\". Sprites with the block will get highlighted."
 }

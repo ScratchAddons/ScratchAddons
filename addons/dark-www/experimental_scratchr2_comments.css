@@ -24,3 +24,15 @@
 #comments .comment .info .name a {
   color: #fff;
 }
+#comments #comments-loading {
+  background-color: transparent;
+}
+#comments .easter-egg[src$="meow.png"] {
+  content: url(%addon-self-dir%/assets/meow.png);
+}
+#comments .easter-egg[src$="gobo.png"] {
+  content: url(%addon-self-dir%/assets/gobo.png);
+}
+#comments .easter-egg[src$="waffle.png"] {
+  content: url(%addon-self-dir%/assets/waffle.png);
+}

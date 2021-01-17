@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
+    <script src="../set-lang.js" defer></script>
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
-    <script src="index.js" defer></script>
+    <script src="index.js" type="module"></script>
   </head>
   <body style="display: none" v-show="loaded">
     <div class="navbar">
@@ -18,7 +19,12 @@
       <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themePath" />
     </div>
     <div class="main">
-      <div class="categories-block" v-show="categoryOpen" :class="{smallMode: smallMode === true}">
+      <div
+        class="categories-block"
+        v-click-outside="closesidebar()"
+        v-show="categoryOpen"
+        :class="{smallMode: smallMode === true}"
+      >
         <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
           <img src="../../images/icons/list.svg" />
           <span>{{ msg("all") }}</span>
@@ -35,15 +41,33 @@
           <img src="../../images/icons/brush.svg" />
           <span>{{ msg("themes") }}</span>
         </div>
-        <div class="category" style="margin-top: auto; cursor: pointer" @click="openCredits()">
+        <div
+          class="category"
+          :class="{sel: selectedTab === 'popup'}"
+          @click="selectedTab = 'popup'"
+          style="margin-bottom: 12px"
+        >
+          <img src="../../images/icons/popup.svg" />
+          <span>{{ msg("popupFeatures") }}</span>
+        </div>
+        <div
+          class="category category-small"
+          style="margin-top: auto"
+          @click="openPage('https://scratchaddons.com/contributors')"
+        >
           <img src="../../images/icons/users.svg" />
           <span>{{ msg("credits") }}</span>
         </div>
-        <div class="category" style="cursor: pointer" @click="openReview()">
+        <div class="category category-small" @click="openReview()" style="display: none">
           <img src="../../images/icons/star.svg" />
           <span>{{ msg("review") }}</span>
         </div>
-        <div class="category" style="cursor: pointer" @click="openFeedback()">
+        <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
+          <img src="../../images/icons/translate.svg" />
+          <span>{{ msg("translate") }}</span>
+          <div class="badge purple tooltip" style="cursor: pointer">{{ msg("new") }}</div>
+        </div>
+        <div class="category category-small" @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
           <span>{{ msg("feedback") }}</span>
         </div>
@@ -62,9 +86,9 @@
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
-      <div class="addons-block" @click="closesidebar()">
+      <div class="addons-block">
         <div class="search-box" :class="{smallMode: smallMode === true}">
-          <input type="text" id="searchBox" placeholder="Search" v-model="searchInput" />
+          <input type="text" id="searchBox" placeholder="{{ msg('search') }}" v-model="searchInput" />
           <button
             v-show="searchInput === ''"
             style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey')"
@@ -74,6 +98,11 @@
             style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey')"
             @click="clearSearch()"
           ></button>
+          <div id="popup-more-settings" v-show="isIframe">
+            <button @click="openFullSettings()" class="large-button">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ msg("moreSettings") }}
+            </button>
+          </div>
           <div class="filter-selector">
             <span class="filter-text">{{ msg("filter") }} </span>
             <div class="filter-options">
@@ -101,10 +130,16 @@
         </div>
 
         <div class="addons-container">
+          <div id="running-page" v-show="popupOpenedOnScratchTab && searchInput === ''">
+            {{ msg("runningOnThisPage") }}
+          </div>
           <div
             class="addon-body"
+            :class="{ 'addon-body-margin-bottom': addon._marginBottom && searchInput === '' }"
             v-for="addon of manifests"
             v-show="addonMatchesFilters(addon) && (selectedTab === 'all' || addon._category === selectedTab)"
+            :data-has-margin-bottom="addon._marginBottom"
+            :id="'addon-' + addon._addonId"
           >
             <div class="addon-topbar">
               <div class="clickeable-area" @click="addon._expanded = !addon._expanded">
@@ -115,14 +150,21 @@
                   <img v-if="addon._category === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
                   <img v-if="addon._category === 'community'" src="../../images/icons/web.svg" class="icon-type" />
                   <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
-                  {{ addon.name }}
+                  <img
+                    v-if="addon._category === 'easterEgg'"
+                    src="../../images/icons/egg-easter.svg"
+                    class="icon-type"
+                  />
+                  <img v-if="addon._category === 'popup'" src="../../images/icons/popup.svg" class="icon-type" />
+                  <span @click="devShowAddonIds">{{ addon.name }}</span>
                 </div>
               </div>
               <div class="badge blue tooltip" v-if="addon._tags.recommended">
                 {{ msg("recommended") }}<span class="tooltiptext">{{ msg("recommendedTooltip") }}</span>
               </div>
+              <div class="badge purple" v-if="addon._tags.new">{{ msg("new") }}</div>
               <div class="badge darkgreen" v-if="addon._tags.forEditor">{{ msg("forEditor") }}</div>
-              <div class="badge red tooltip" v-if="addon._tags.beta">
+              <div class="badge red tooltip beta-badge" v-if="addon._tags.beta">
                 {{ msg("beta") }}
                 <div class="tooltiptext">{{ msg("betaTooltip") }}</div>
               </div>
@@ -147,11 +189,13 @@
             </div>
             <div class="addon-settings" v-show="addon._expanded">
               <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
-              <div class="addon-warn" v-if="addon.warning" v-show="addon._expanded">
-                <img src="../../images/icons/warning.svg" />{{ addon.warning }}
-              </div>
-              <div class="addon-notice" v-if="addon.notice" v-show="addon._expanded">
-                <img src="../../images/icons/notice.svg" />{{ addon.notice }}
+              <div id="info" v-for="info of addon.info">
+                <div class="addon-warn" v-if="info.type == 'warning'" v-show="addon._expanded">
+                  <img src="../../images/icons/warning.svg" />{{ info.text }}
+                </div>
+                <div class="addon-notice" v-if="info.type == 'notice'" v-show="addon._expanded">
+                  <img src="../../images/icons/notice.svg" />{{ info.text }}
+                </div>
               </div>
               <div class="addon-credits" v-if="addon.credits">
                 <span>{{ msg("creditTo") }}</span>
@@ -163,7 +207,9 @@
                 </span>
               </div>
               <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
-                <a href="./licenses.html?libraries={{ addon.libraries.join(',') }}">{{ msg("viewLicenses") }}</a>
+                <a target="_blank" href="./licenses.html?libraries={{ addon.libraries.join(',') }}"
+                  >{{ msg("viewLicenses") }}</a
+                >
               </div>
               <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
                 <div class="addon-setting" v-for="setting of addon.settings">
@@ -180,10 +226,24 @@
                     type="number"
                     class="setting-input number"
                     v-model="addonSettings[addon._addonId][setting.id]"
-                    @change="updateSettings(addon)"
+                    @change="checkValidity(addon, setting) || updateSettings(addon)"
                     :disabled="!addon._enabled"
                     v-if="setting.type === 'positive_integer'"
                     min="0"
+                    :data-addon-id="addon._addonId"
+                    :data-setting-id="setting.id"
+                  />
+                  <input
+                    type="number"
+                    class="setting-input number"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @change="checkValidity(addon, setting) || updateSettings(addon)"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'integer'"
+                    :min="setting.min"
+                    :max="setting.max"
+                    :data-addon-id="addon._addonId"
+                    :data-setting-id="setting.id"
                   />
                   <input
                     type="text"
@@ -212,7 +272,7 @@
                     type="color"
                     class="setting-input color"
                     v-model="addonSettings[addon._addonId][setting.id]"
-                    @input="updateSettings(addon)"
+                    @input="updateSettings(addon, {wait: 250, settingId: setting.id})"
                     :disabled="!addon._enabled"
                     v-if="setting.type === 'color'"
                     :placeholder="setting.default"
@@ -258,9 +318,9 @@
       </div>
     </div>
     <div v-show="isOpen" class="modal" @click="closesidebar()">
-      <div class="modal-content">
+      <div class="modal-content" v-click-outside="modalClickOutside">
         <div>
-          <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" style="" />
+          <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" />
           <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
         </div>
         <div class="settings-block">
@@ -288,6 +348,33 @@
               </div>
             </div>
           </div>
+          <div class="setting-body">
+            <div class="addon-topbar">
+              <span class="addon-name"
+                ><img
+                  src="../../images/icons/import-export.svg"
+                  style="vertical-align: middle; margin-right: 5px"
+                  :class="{'dark': theme === false}"
+                />
+                {{ msg("exportAndImportSettings") }}
+              </span>
+            </div>
+            <div class="setting-settings">
+              <span class="settings-description">{{ msg("exportAndImportSettingsDescription") }}</span>
+              <span class="settings-description">{{ msg("useBrowserSync") }}</span>
+              <div class="setting-setting">
+                <div class="setting-setting">
+                  <div class="filter-selector">
+                    <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
+                  </div>
+                  <div class="filter-selector">
+                    <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
+                    <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="footer">
           <p>
@@ -304,6 +391,13 @@
             <a href="./licenses.html?libraries=intl-messageformat,vue" target="_blank">{{ msg("libraryCredits") }}</a>
           </p>
         </div>
+      </div>
+    </div>
+    <div class="popup" v-show="showPopupModal" style="display: none">
+      <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
+      <div>
+        <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
+        <button class="large-button" @click="hidePopup()">{{ msg("skipOpenFullSettings") }}</button>
       </div>
     </div>
   </body>

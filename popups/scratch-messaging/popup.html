@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title></title>
+    <script src="../../webpages/set-lang.js" defer></script>
     <link rel="stylesheet" href="popup.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
@@ -73,7 +74,7 @@
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.follows">
           <div class="username-list">
-            <a v-for="follower of follows" @click="openProfile(follower)">{{follower}}</a>
+            <a v-for="follower of follows" href="https://scratch.mit.edu/users/{{ follower }}">{{follower}}</a>
           </div>
         </div>
       </div>
@@ -104,7 +105,11 @@
           @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity"
         >
           <div class="btn-dropdown">
-            <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.forumActivity}" />
+            <img
+              src="../../../images/icons/expand.svg"
+              alt="v"
+              :class="{'reverted': messageTypeExtended.forumActivity}"
+            />
           </div>
           <span class="message-type-title-text">{{ uiMessages.forumMsg }}</span>
           <span class="float-right"
@@ -242,7 +247,7 @@
       <div
         class="message-type"
         v-for="project of projectsOrdered"
-        v-show="project.unreadComments && project.loadedComments || 
+        v-show="project.unreadComments && project.loadedComments ||
               !project.unreadComments && commentsReady"
       >
         <div class="message-type-title">
@@ -288,11 +293,10 @@
     </div>
 
     <!-- Show errors, loading, etc. -->
-    <div style="text-align: center; font-size: 0.9rem; margin-bottom: 3.5rem; font-weight: bold">
+    <div style="text-align: center; font-size: 0.9rem; padding-bottom: 3.5rem; font-weight: bold">
       <br />
       <span v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</span>
       <span v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</span>
-      <span v-show="error === 'addonDisabled'"><br />{{{ settingsLink }}}</span>
       <span v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</span>
       <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">
         <img class="small-icon" src="../../images/icons/reload.svg" /> {{ uiMessages.reloadMsg }}
@@ -301,7 +305,6 @@
       <button @click="showAllMessages = true" v-show="canShowMoreMessages">
         <img class="small-icon" src="../../images/icons/plus.svg" /> {{ uiMessages.showMoreMsg }}
       </button>
-      <br />
     </div>
 
     <!-- Bottom bar-->

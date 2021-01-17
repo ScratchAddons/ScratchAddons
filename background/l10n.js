@@ -15,7 +15,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     if (ui.includes("-")) locales.push(ui.split("-")[0]);
     if (!locales.includes("en")) locales.push("en");
 
-    for (const locale of locales) {
+    localeLoop: for (const locale of locales) {
       for (const addonId of addonIds) {
         let resp;
         let messages = {};
@@ -24,12 +24,13 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
           resp = await fetch(url);
           messages = await resp.json();
         } catch (_) {
+          if (addonId === "_general") continue localeLoop;
           continue;
         }
-        this._generateCache(messages);
         this.messages = Object.assign(messages, this.messages);
       }
     }
+    this._generateCache();
     this._refreshDateTime();
     this.loaded.concat(addonIds);
   }

@@ -1,10 +1,10 @@
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-p,
+html > body:not(.sa-body-editor):not(.monitor_monitor-container_2J9gl),
+body:not(.sa-body-editor) h1,
+body:not(.sa-body-editor) h2,
+body:not(.sa-body-editor) h3,
+body:not(.sa-body-editor) h4,
+body:not(.sa-body-editor) h5,
+body:not(.sa-body-editor) p,
 .news li p,
 a.social-messages-profile-link,
 .outer .sort-mode .select select,
@@ -19,8 +19,13 @@ a.social-messages-profile-link,
 .subactions .share-date,
 .developers #faq p,
 .social-form,
-.join-flow-title {
+body:not(.sa-body-editor) .join-flow-title,
+.initiatives-section .initiatives-tools .subsection-tag.collaborator {
   color: #fff;
+}
+.monitor_label_ci1ok {
+  /* For some strange reason, variable names inherit their color from the body, unlike list title names */
+  color: #575e75;
 }
 #view,
 .outer #projectBox,
@@ -36,7 +41,8 @@ a.social-messages-profile-link,
 .developers .title-banner.faq-banner,
 .credits .supporters,
 .download .installation,
-.gender-radio-row {
+body:not(.sa-body-editor) .gender-radio-row,
+.wedo .banner {
   background: #333;
 }
 .thumbnail .thumbnail-loves::before,
@@ -62,21 +68,25 @@ img.tips-icon,
 }
 .box,
 .box .box-content,
-.button.white,
+body:not(.sa-body-editor) .button.white,
 .tab-background,
 .outer .tab-background,
 .tabs,
 .tabs li:hover,
 .intro-banner .intro-button,
 .os-chooser,
-.modal-content,
+body:not(.sa-body-editor) .modal-content,
 .grid .thumbnail,
 .ttt-tile,
 .about .body,
 .messages-social-list,
 .comment-text,
 .comment .comment-body .comment-bubble,
-.comment .comment-body .comment-bubble::before {
+.comment .comment-body .comment-bubble::before,
+.milestones-section .milestone-box,
+.supporters-section .comment-text,
+.card,
+.extension-landing .project-card {
   background: #282828;
 }
 .comment-text::after {
@@ -93,7 +103,8 @@ img.tips-icon,
 .outer .categories li {
   background-color: rgba(255, 255, 255, 0.1);
 }
-.outer .categories li:hover {
+.outer .categories li:hover,
+.supporters-section .supporters-level hr {
   background-color: rgba(255, 255, 255, 0.2);
 }
 .box,
@@ -120,7 +131,9 @@ input[type="checkbox"].formik-checkbox,
 .developers #donate h3,
 .developers #faq,
 .information-page .info-outer nav,
-.conf2020-panel {
+.conf2020-panel,
+.extension-landing hr,
+.extension-landing .project-card {
   border-color: #606060;
 }
 .box .box-header {
@@ -133,22 +146,16 @@ input[type="checkbox"].formik-checkbox,
   background: #282828;
   color: #fff;
 }
-.select select,
-.select select:hover,
-.select select:focus,
-.select select option,
-.select .join-flow-select {
+body:not(.sa-body-editor) .select select,
+body:not(.sa-body-editor) .select select:hover,
+body:not(.sa-body-editor) .select select:focus,
+body:not(.sa-body-editor) .select select option,
+.select .join-flow-join-flow-select {
   color: #fff;
   background-color: #282828;
 }
 .social-message-icon {
   opacity: 0.5;
-}
-.stage-header_stage-header-wrapper-overlay_5vfJa {
-  background: #333;
-}
-.stage_stage-wrapper-overlay_fmZuD {
-  background: #282828;
 }
 .intro-banner {
   background: transparent;
@@ -166,4 +173,24 @@ input[type="checkbox"].formik-checkbox,
 }
 .studio-list-bottom-gradient {
   background: linear-gradient(rgba(40, 40, 40, 0), #282828);
+}
+.join-flow-privacy-message {
+  color: rgba(255, 255, 255, 0.6);
+}
+.emoji[src$="meow.png"] {
+  content: url(%addon-self-dir%/assets/meow.png);
+}
+.emoji[src$="gobo.png"] {
+  content: url(%addon-self-dir%/assets/gobo.png);
+}
+.emoji[src$="waffle.png"] {
+  content: url(%addon-self-dir%/assets/waffle.png);
+}
+
+[class^="loader_background"] {
+  background-color: #252525;
+}
+
+.project-info-alert {
+  color: #575e75;
 }

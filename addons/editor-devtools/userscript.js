@@ -1,6 +1,10 @@
+import ShowBroadcast from "./show-broadcast.js";
+
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
   // Scratch Addons: do not run if extension is already enabled
   if (window.initGUI) return;
+
+  const showBroadcastSingleton = new ShowBroadcast(addon);
 
   // 0-indexed 6 = July
   const releaseDate = new Date(2020, 6, 4);
@@ -26,6 +30,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 <p><strong>${m("improved-tidy-up")}</strong> &ndash; ${m("improved-tidy-up-desc")}</p>
 <p><strong>${m("copy-to-clipboard")}</strong> &ndash; ${m("copy-to-clipboard-desc")}</p>
 <p><strong>${m("paste-from-clipboard")}</strong> &ndash; ${m("paste-from-clipboard-desc")}</p>
+<p><strong>${m("show-broadcast")}</strong> &ndash; ${m("show-broadcast-desc")}</p>
 <p><strong>${m("swap-variable")}</strong> &ndash; ${m("swap-variable-desc")}</p>
 <p><strong>${m("middleclick")}</strong> &ndash; ${m("middleclick-desc")}</p>
 <p><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-desc")}</p>
@@ -194,7 +199,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     let wksp2 = Blockly.getMainWorkspace();
     if (wksp2.getToolbox()) {
       // Sadly get get workspace does not always return the 'real' workspace... Not sure how to get that at the moment,
-      //  but we can work out whether it's the right one by whether it hsa a toolbox.
+      //  but we can work out whether it's the right one by whether it has a toolbox.
       wksp = wksp2;
     }
     return wksp;
@@ -484,6 +489,41 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     return topBlocks;
   }
 
+  function hidePopups(wksp) {
+    // Fire fake mouse events to trick the popup into hiding.
+    const element = wksp.getToolbox().HtmlDiv;
+    element.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: element, bubbles: true }));
+    element.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: element, bubbles: true }));
+  }
+
+  function genuid() {
+    const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
+    let result = "";
+    for (let i = 0; i < 20; i++) {
+      result += CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+    }
+    return result;
+  }
+
+  function startUndoGroup(wksp) {
+    const undoStack = wksp.undoStack_;
+    if (undoStack.length) {
+      undoStack[undoStack.length - 1]._devtoolsLastUndo = true;
+    }
+  }
+
+  function endUndoGroup(wksp) {
+    const undoStack = wksp.undoStack_;
+    // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
+    // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
+    setTimeout(() => {
+      const group = genuid();
+      for (let i = undoStack.length - 1; i >= 0 && !undoStack[i]._devtoolsLastUndo; i--) {
+        undoStack[i].group = group;
+      }
+    }, 0);
+  }
+
   /**
    * A much nicer way of laying out the blocks into columns
    */
@@ -492,11 +532,12 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       e.cancelBubble = true;
       e.preventDefault();
       let wksp = getWorkspace();
-      wksp.setVisible(false);
-      wksp.setVisible(true);
+      hidePopups(wksp);
       setTimeout(doCleanUp, 0);
       return;
     }
+
+    startUndoGroup(wksp);
 
     let result = getOrderedTopBlockColumns(true);
     let columns = result.cols;
@@ -567,9 +608,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         const unusedCount = unusedLocals.length;
         let message = msg("unused-var", {
           count: unusedCount,
-          it: unusedCount === 1 ? msg("it") : msg("them"),
-          plural: unusedCount === 1 ? msg("variable") : msg("variables"),
-          list: unusedCount === 1 ? msg("it-is") : msg("they-are"),
         });
         for (let i = 0; i < unusedLocals.length; i++) {
           let orphan = unusedLocals[i];
@@ -584,6 +622,8 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
           }
         }
       }
+
+      endUndoGroup(wksp);
     }, 100);
   }
 
@@ -593,10 +633,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
    * @returns {boolean}
    */
   function isBlockAnOrphan(topBlock) {
-    if (topBlock.getOutputShape() && !topBlock.getSurroundParent()) {
-      return true;
-    }
-    return false;
+    return !!topBlock.outputConnection;
   }
 
   /**
@@ -614,7 +651,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
       // todo: tie comments to blocks... find widths and width of block stack row...
       for (const comment of topComments) {
-        // coment.autoPosition_();
+        // comment.autoPosition_();
         // Hiding and showing repositions the comment right next to it's block - nice!
         if (comment.setVisible) {
           comment.setVisible(false);
@@ -1281,6 +1318,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     }
     let newVId = v.getId();
 
+    startUndoGroup(wksp);
     let blocks = getVariableUsesById(varId);
     for (const block of blocks) {
       try {
@@ -1293,6 +1331,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         // ignore
       }
     }
+    endUndoGroup(wksp);
   }
 
   class XML {
@@ -1318,86 +1357,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       }
       return x;
     }
-  }
-
-  function doInjectScripts(codeString) {
-    let w = getWorkspace();
-    let xml = new XML(); // document.implementation.createDocument(null, "xml");
-    let x = xml.xmlDoc.firstChild;
-
-    let tree = math.parse(codeString);
-    console.log(tree);
-
-    const binaryOperatorTypes = {
-      add: "operator_add",
-      subtract: "operator_subtract",
-      multiply: "operator_multiply",
-      divide: "operator_divide",
-    };
-
-    const BLOCK_TYPE = {
-      number: "math_number",
-      text: "text",
-    };
-
-    function translateMathToXml(x, tree, shadowType) {
-      let xShadowField = null;
-      if (shadowType) {
-        let xShadow = xml.newXml(x, "shadow", { type: shadowType });
-        if (shadowType === BLOCK_TYPE.number) {
-          xShadowField = xml.newXml(xShadow, "field", { name: "NUM" });
-        } else if (shadowType === BLOCK_TYPE.text) {
-          xShadowField = xml.newXml(xShadow, "field", { name: "TEXT" });
-        }
-      }
-
-      if (!tree || !tree.type) {
-        return;
-      }
-
-      if (tree.type === "OperatorNode") {
-        let operatorType = binaryOperatorTypes[tree.fn];
-        if (operatorType) {
-          let xOp = newXml(x, "block", { type: operatorType });
-          translateMathToXml(xml.newXml(xOp, "value", { name: "NUM1" }), tree.args[0], BLOCK_TYPE.number);
-          translateMathToXml(xml.newXml(xOp, "value", { name: "NUM2" }), tree.args[1], BLOCK_TYPE.number);
-          return;
-        }
-
-        return;
-      }
-
-      if (tree.type === "ConstantNode") {
-        // number or text in quotes
-        if (xShadowField) {
-          xml.setAttr(xShadowField, { text: tree.value });
-        }
-        return;
-      }
-
-      if (tree.type === "SymbolNode") {
-        // variable
-        let xVar = xml.newXml(x, "block", { type: "data_variable" });
-        xml.newXml(xVar, "field", { name: "VARIABLE", text: tree.name });
-        return;
-      }
-
-      if (tree.type === "FunctionNode") {
-        // Method Call
-        if (tree.fn.name === "join") {
-          let xOp = newXml(x, "block", { type: "operator_join" });
-          translateMathToXml(xml.newXml(xOp, "value", { name: "STRING1" }), tree.args[0], BLOCK_TYPE.text);
-          translateMathToXml(xml.newXml(xOp, "value", { name: "STRING2" }), tree.args[1], BLOCK_TYPE.text);
-          return;
-        }
-      }
-    }
-
-    translateMathToXml(x, tree);
-    console.log(x);
-
-    let ids = Blockly.Xml.domToWorkspace(x, w);
-    console.log(ids);
   }
 
   function simulateDragDrop(sourceNode, destinationNode) {
@@ -1457,12 +1416,12 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   function initInner() {
     let root = document.querySelector("ul[class*=gui_tab-list_");
     let guiTabs = root && root.childNodes;
-    if (guiTabs == null || guiTabs.length < 3) {
+    if (!guiTabs || guiTabs.length < 3) {
       setTimeout(initInner, 1000);
       return;
     }
 
-    if (codeTab && guiTabs[0] != codeTab) {
+    if (codeTab && guiTabs[0] !== codeTab) {
       // We have been CHANGED!!! - Happens when going to project page, and then back inside again!!!
       unbindAllEvents();
     }
@@ -1497,7 +1456,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                         )}</a></div>
                     </label>
 <!--                    <a id="s3devCleanUp" class="s3devAction" href="#">Clean Up</a>-->
-                    <a id="s3devInject" class="s3devAction s3devHide" href="#">${m("inject")}</a>
 <!--                    <a id="s3devReplace" class="s3devAction s3devHide" href="#">Replace All</a>-->
                 </div>
             `
@@ -1524,7 +1482,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     bindOnce(document, "mousedown", eventMouseDown, true); // true to capture all mouse downs 'before' the dom events handle them
     bindOnce(document.getElementById("s3devDeep"), "click", deepSearch);
     // bindOnce(document.getElementById('s3devCleanUp'),'click', clickCleanUp);
-    bindOnce(document.getElementById("s3devInject"), "click", clickInject);
     // bindOnce(document.getElementById('s3devReplace'), 'click', clickReplace);
   }
 
@@ -1538,20 +1495,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     }
 */
 
-  function clickInject(e) {
-    let codeString = window.prompt(msg("enter-expr"));
-    if (codeString) {
-      doInjectScripts(codeString);
-    }
-    e.preventDefault();
-    return false;
-  }
-
   function clickReplace(e) {
     let wksp = getWorkspace();
-    // Toggle workspace visibility to hide the popup
-    wksp.setVisible(false);
-    wksp.setVisible(true);
+    hidePopups(wksp);
 
     setTimeout(function () {
       let wksp = getWorkspace();
@@ -1754,6 +1700,33 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
               let block = wksp.getBlockById(dataId);
               let isFlyOut = block.workspace.isFlyout;
 
+              const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
+              if (BROADCAST_BLOCKS.includes(block.type)) {
+                // Show Broadcast
+                const broadcastId = showBroadcastSingleton.getAssociatedBroadcastId(dataId);
+                if (broadcastId) {
+                  for (const showKey of ["Senders", "Receivers"]) {
+                    const googMenuItemContent = Object.assign(document.createElement("div"), {
+                      textContent: msg(`show-${showKey}`.toLowerCase()),
+                      style: "user-select: none;",
+                      className: "goog-menuitem-content",
+                    });
+                    const googMenuItem = Object.assign(document.createElement("div"), {
+                      id: `s3devShow${showKey}`,
+                      className: "goog-menuitem s3dev-mi",
+                      role: "menuitem",
+                      style: "user-select: none;",
+                    });
+                    googMenuItem.addEventListener("click", () => {
+                      hidePopups(wksp);
+                      showBroadcastSingleton[`show${showKey}`](broadcastId);
+                    });
+                    googMenuItem.appendChild(googMenuItemContent);
+                    blocklyContextMenu.appendChild(googMenuItem);
+                  }
+                }
+              }
+
               if (!isFlyOut) {
                 blocklyContextMenu.insertAdjacentHTML(
                   "beforeend",
@@ -1826,9 +1799,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
             function eventCopyClick(e, blockOnly) {
               let wksp = getWorkspace();
-              // Toggle workspace visibility to hide the popup
-              wksp.setVisible(false);
-              wksp.setVisible(true);
+              hidePopups(wksp);
 
               let block = wksp.getBlockById(dataId);
               if (block) {
@@ -1847,7 +1818,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                     }
                     if (blockOnly === 2) {
                       let block = wksp.getBlockById(dataId);
+                      startUndoGroup(wksp);
                       block.dispose(true);
+                      endUndoGroup(wksp);
                     }
                   }, 0);
                 }
@@ -1858,9 +1831,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
             if (pasteDiv) {
               pasteDiv.addEventListener("click", function () {
                 let wksp = getWorkspace();
-                // Toggle workspace visibility to hide the popup
-                wksp.setVisible(false);
-                wksp.setVisible(true);
+                hidePopups(wksp);
 
                 let ids = getTopBlockIDs();
 
@@ -2100,7 +2071,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     options.sort((a, b) => a.desc.localeCompare(b.desc));
 
     const dd = document.getElementById("s3devIDD");
-
     for (const option of options) {
       const li = document.createElement("li");
       const desc = option.desc;
@@ -2111,7 +2081,8 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
       li.innerText = desc;
       li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
-      li.className = "var " + option.block.getCategory() + " " + bType; // proc.cls;
+      li.className =
+        "var " + (option.block.isScratchExtension ? "extension" : option.block.getCategory()) + " " + bType; // proc.cls;
       dd.appendChild(li);
     }
 
@@ -2128,9 +2099,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     let picklist, pickField;
 
     let dom = doms[block.id];
-    if (!dom) {
-      debugger;
-    }
 
     // dom = doms[block.type];
 
@@ -2239,20 +2207,8 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   }
 
   function findNextHole(block, typ) {
-    const inputs = block.inputList;
-    if (inputs) {
-      /** Blockly.Input */
-      for (const input of inputs) {
-        const fieldRow = input.fieldRow;
-        if (fieldRow) {
-          /** Blockly.FieldNumber */
-          for (const field of fieldRow) {
-            if (field.argType_ && field.argType_.includes(typ)) {
-            }
-          }
-        }
-      }
-    }
+    // Mysterious no-op function
+    // Nobody knows what it is intended to do
   }
 
   /**

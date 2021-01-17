@@ -1,10 +1,10 @@
 a:visited {
-  color: #4d97ff;
+  color: var(--scratchr2-linkColor);
 }
 a:active,
 a:active:hover,
 a:visited:hover {
-  color: #4280d7;
+  color: var(--scratchr2-activeColor);
 }
 #zoomContainer {
   height: 24px;
