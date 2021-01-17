@@ -67,11 +67,7 @@
           break;
         case "dynamic-length":
           for (let temp of option.template) {
-            temp.name = scratchAddons.l10n.get(
-              `${folderName}/@settings-dynamic-temp-${temp.id}`,
-              {},
-              temp.name
-            );
+            temp.name = scratchAddons.l10n.get(`${folderName}/@settings-dynamic-temp-${temp.id}`, {}, temp.name);
           }
           for (let def of option.defaults) {
             def.forEach((item, i) => {
