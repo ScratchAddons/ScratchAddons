@@ -138,8 +138,8 @@ export default class Tab extends Listenable {
   /**
    * Loads a Web Worker.
    * @async
-   * @param {string} url URL of the worker to load.
-   * @returns {Promise<Worker>} worker.
+   * @param {string} url - URL of the worker to load.
+   * @returns {Promise<Worker>} - worker.
    */
   async loadWorker(url) {
     const resp = await fetch(url);
