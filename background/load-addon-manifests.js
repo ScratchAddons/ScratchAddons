@@ -66,6 +66,11 @@
           });
           break;
         case "dynamic-length":
+          option.buttonText = scratchAddons.l10n.get(
+            `${folderName}/@settings-dynamic-buttonText`,
+            {},
+            option.buttonText
+          );
           for (let temp of option.template) {
             temp.name = scratchAddons.l10n.get(`${folderName}/@settings-dynamic-temp-${temp.id}`, {}, temp.name);
           }

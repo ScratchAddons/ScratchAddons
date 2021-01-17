@@ -212,18 +212,21 @@
                 >
               </div>
               <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
-                <div class="addon-setting" v-for="setting of addon.settings">
+                <div :class="setting.type === 'dynamic-length' ? '' : 'addon-setting'" v-for="setting of addon.settings">
                   <script type="text/x-template" id="settings-temp">
                     <div class="setting-label" v-html="textparse(setting.name, addon)"></div>
                     <div
-                    class="dynamic-setting"
                     v-if="setting.type === 'dynamic-length'"
                     >
-                    <div class="addon-setting" v-for="def of setting.defaults">
-                      <div v-for="sett of def">
-                        <root v-bind:setting="sett" v-bind:addon="addon" v-bind:addonsettings="addonSettings" v-bind:msg="msg" v-bind:textparse="textParse"></root>
+                      <div class="dynamic-option" v-for="def of setting.defaults">
+                        <img class="dynamic-trash" src="../../images/icons/close.svg" />
+                        <div class="dynamic-border">
+                          <div class="addon-setting" v-for="sett of def">
+                            <root v-bind:setting="sett" v-bind:addon="addon" v-bind:addonsettings="addonSettings" v-bind:msg="msg" v-bind:textparse="textParse"></root>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                      <button class="large-button">{{ setting.buttonText }}</button>
                     </div>
                     <input
                       type="checkbox"

@@ -728,6 +728,22 @@ input[type="color"]::-webkit-color-swatch {
 #confirmImport {
   border-color: #ff7b26;
 }
+.dynamic-option {
+  display: flex;
+  flex-wrap: wrap;
+}
+.dynamic-border {
+  background: #313131;
+  border-radius: 10px;
+  padding: 1px 0px 1px 0px;
+  margin: 8px 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.dynamic-trash {
+  margin-right: 5px;
+  cursor: pointer;
+}
 
 /*scrollbar*/
 
