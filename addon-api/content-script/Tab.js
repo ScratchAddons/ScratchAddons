@@ -134,7 +134,7 @@ export default class Tab extends Listenable {
   get _eventTargetKey() {
     return "tab";
   }
-  
+
   /**
    * Loads a Web Worker.
    * @async
@@ -145,7 +145,7 @@ export default class Tab extends Listenable {
     const resp = await fetch(url);
     const script = await resp.text();
     const workerScript = getWorkerScript(this, script, url);
-    const blob = new Blob([workerScript], {type: "text/javascript"});
+    const blob = new Blob([workerScript], { type: "text/javascript" });
     const workerURL = URL.createObjectURL(blob);
     const worker = new Worker(workerURL);
     return new Promise((resolve) => worker.addEventListener("message", () => resolve(worker), { once: true }));

@@ -3,9 +3,12 @@
  */
 export default (tab, script, url) => {
   script = script.replace(/^export default (?:async )?/, "");
-  script = script.replace(/\) +(?:=>)? +\{/, (match) => `${match}
+  script = script.replace(
+    /\) +(?:=>)? +\{/,
+    (match) => `${match}
   postMessage("STARTED");
-  `);
+  `
+  );
   return `
   (async ${script})({
     addon: {
@@ -33,4 +36,4 @@ export default (tab, script, url) => {
     }
   });
   `;
-}
+};
