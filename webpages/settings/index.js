@@ -384,7 +384,7 @@ const vue = (window.vue = new Vue({
     },
     textParse(text, addon) {
       const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
-      return text.replace(regex, (icon) => {
+      return (text || "").replace(regex, (icon) => {
         if (icon[0] === "\\") {
           return icon.slice(1);
         }
@@ -516,13 +516,14 @@ const vue = (window.vue = new Vue({
   components: {
     root: {
       name: "root",
-      template: "#settings-temp",
-      props: { settings: Object },
+      props: ["setting", "addon", "addonsettings", "msg", "textparse"],
+      template: document.querySelector("#settings-temp").textContent,
     },
   },
 }));
 
 chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
+  console.log(manifests.find(o => o.addonId == "discuss-button"));
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
     manifest._category = manifest.popup

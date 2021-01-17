@@ -212,22 +212,23 @@
                 >
               </div>
               <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
-                <script type="text/x-template" id="settings-temp">
-                  <template>
-                    <div class="setting-label" v-html="textParse(setting.name, addon)"></div>
+                <div class="addon-setting" v-for="setting of addon.settings">
+                  <script type="text/x-template" id="settings-temp">
+                    <div class="setting-label" v-html="textparse(setting.name, addon)"></div>
                     <div
                     class="dynamic-setting"
                     v-if="setting.type === 'dynamic-length'"
                     >
-                      <!-- <div class="addon-setting" v-for="setting of addon.settings">
-                        <root v-bind:settingsTemp="setting"></root>
-                      </div> -->
-                      <!-- Inside here we want to load the settings -->
+                    <div class="addon-setting" v-for="def of setting.defaults">
+                      <div v-for="sett of def">
+                        <root v-bind:setting="sett" v-bind:addon="addon" v-bind:addonsettings="addonSettings" v-bind:msg="msg" v-bind:textparse="textParse"></root>
+                      </div>
+                    </div>
                     </div>
                     <input
                       type="checkbox"
                       class="setting-input check"
-                      v-model="addonSettings[addon._addonId][setting.id]"
+                      v-model="addonsettings[addon._addonId][setting.id]"
                       @change="updateSettings(addon)"
                       :disabled="!addon._enabled"
                       v-if="setting.type === 'boolean'"
@@ -235,7 +236,7 @@
                     <input
                       type="number"
                       class="setting-input number"
-                      v-model="addonSettings[addon._addonId][setting.id]"
+                      v-model="addonsettings[addon._addonId][setting.id]"
                       @change="checkValidity(addon, setting) || updateSettings(addon)"
                       :disabled="!addon._enabled"
                       v-if="setting.type === 'positive_integer'"
@@ -246,7 +247,7 @@
                     <input
                       type="number"
                       class="setting-input number"
-                      v-model="addonSettings[addon._addonId][setting.id]"
+                      v-model="addonsettings[addon._addonId][setting.id]"
                       @change="checkValidity(addon, setting) || updateSettings(addon)"
                       :disabled="!addon._enabled"
                       v-if="setting.type === 'integer'"
@@ -258,7 +259,7 @@
                     <input
                       type="text"
                       class="setting-input string"
-                      v-model="addonSettings[addon._addonId][setting.id]"
+                      v-model="addonsettings[addon._addonId][setting.id]"
                       @input="updateSettings(addon)"
                       :disabled="!addon._enabled"
                       v-if="setting.type === 'string'"
@@ -268,7 +269,7 @@
                     <input
                       type="text"
                       class="setting-input key"
-                      v-model="addonSettings[addon._addonId][setting.id]"
+                      v-model="addonsettings[addon._addonId][setting.id]"
                       @input="updateSettings(addon)"
                       :disabled="!addon._enabled"
                       v-if="setting.type === 'key'"
@@ -281,7 +282,7 @@
                     <input
                       type="color"
                       class="setting-input color"
-                      v-model="addonSettings[addon._addonId][setting.id]"
+                      v-model="addonsettings[addon._addonId][setting.id]"
                       @input="updateSettings(addon, {wait: 250, settingId: setting.id})"
                       :disabled="!addon._enabled"
                       v-if="setting.type === 'color'"
@@ -300,16 +301,14 @@
                       <div
                         class="filter-option"
                         v-for="option of setting.potentialValues"
-                        :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
+                        :class="{'sel' : addonsettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
                         @click="updateOption(setting.id, option.id, addon);"
                       >
                         {{ option.name }}
                       </div>
                     </div>
-                  </template>
-                </script>
-                <div class="addon-setting" v-for="setting of addon.settings">
-                  <root v-bind:settings="setting"></root>
+                  </script>
+                  <root v-bind:setting="setting" v-bind:addon="addon" v-bind:addonsettings="addonSettings" v-bind:msg="msg" v-bind:textparse="textParse"></root>
                 </div>
               </div>
               <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
