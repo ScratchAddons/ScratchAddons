@@ -71,6 +71,29 @@ export default async ({ addon, console, msg }) => {
       recordOptionFlag.appendChild(recordOptionFlagInput);
       recordOptionFlag.appendChild(recordOptionFlagLabel);
       recordOptionInner.appendChild(recordOptionFlag);
+      
+      // Stop sign
+      const recordOptionStop = document.createElement("p");
+      const recordOptionStopInput = Object.assign(document.createElement("input"), {
+        type: "checkbox",
+        defaultChecked: true,
+        id: "recordOptionStopInput",
+      });
+      const recordOptionStopLabel = Object.assign(document.createElement("label"), {
+        htmlFor: "recordOptionStopInput",
+        textContent: msg("record-until-stop"),
+      });
+      recordOptionFlagInput.addEventListener("change", () => {
+        const disabled = recordOptionStopInput.disabled = !recordOptionFlagInput.checked;
+        if (disabled) {
+          recordOptionStopLabel.title = msg("record-until-stop-disabled", {
+            afterFlagOption: msg("record-after-flag")
+          });
+        }
+      });
+      recordOptionStop.appendChild(recordOptionStopInput);
+      recordOptionStop.appendChild(recordOptionStopLabel);
+      recordOptionInner.appendChild(recordOptionStop);
 
       let resolvePromise = null;
       const optionPromise = new Promise((resolve) => {
@@ -115,6 +138,7 @@ export default async ({ addon, console, msg }) => {
             secs: Number(recordOptionSecondsInput.value),
             audioEnabled: recordOptionAudioInput.checked,
             waitUntilFlag: recordOptionFlagInput.checked,
+            useStopSign: !recordOptionStopInput.disabled && recordOptionStopInput.checked,
           }),
         { once: true }
       );
@@ -134,22 +158,32 @@ export default async ({ addon, console, msg }) => {
     let isRecording = false;
     let isWaitingForFlag = false;
     let waitingForFlagFunc = null;
+    let abortController = null;
+    let stopSignFunc = null;
     let recordBuffer = [];
     let recorder;
     let timeout;
     const disposeRecorder = () => {
       isRecording = false;
       recordElem.textContent = msg("record");
+      recordElem.title = "";
       recorder = null;
       recordBuffer = [];
       clearTimeout(timeout);
       timeout = 0;
+      if (stopSignFunc) {
+        addon.tab.traps.vm.runtime.off("PROJECT_STOP_ALL", stopSignFunc);
+        stopSignFunc = null;
+      }
     };
     const stopRecording = (force) => {
-      if (isWaitingForFlag && waitingForFlagFunc) {
+      if (isWaitingForFlag) {
         addon.tab.traps.vm.runtime.off("PROJECT_START", waitingForFlagFunc);
         isWaitingForFlag = false;
         waitingForFlagFunc = null;
+        abortController.abort();
+        abortController = null;
+        disposeRecorder();
         return;
       }
       if (!isRecording || !recorder || recorder.state === "inactive") return;
@@ -171,17 +205,32 @@ export default async ({ addon, console, msg }) => {
       // Initialize MediaRecorder
       recordBuffer = [];
       isRecording = true;
-      recordElem.textContent = msg("stop");
       const vm = addon.tab.traps.vm;
       if (opts.waitUntilFlag) {
         isWaitingForFlag = true;
-        await new Promise((resolve) => {
-          waitingForFlagFunc = () => resolve();
-          vm.runtime.once("PROJECT_START", waitingForFlagFunc);
+        Object.assign(recordElem, {
+          textContent: msg("click-flag"),
+          title: msg("click-flag-description")
         });
+        abortController = new AbortController();
+        try {
+          await Promise.race([
+            new Promise((resolve) => {
+              waitingForFlagFunc = () => resolve();
+              vm.runtime.once("PROJECT_START", waitingForFlagFunc);
+            }),
+            new Promise((_, reject) => {
+              abortController.signal.addEventListener("abort", () => reject("aborted"), { once: true })
+            })
+          ]);
+        } catch (e) {
+          if (e.message === "aborted") return;
+          throw e;
+        }
       }
+      recordElem.textContent = msg("stop");
       isWaitingForFlag = false;
-      waitingForFlagFunc = null;
+      waitingForFlagFunc = abortController = null;
       const stream = vm.runtime.renderer.canvas.captureStream();
       if (opts.audioEnabled) {
         const mediaStreamDestination = vm.runtime.audioEngine.audioContext.createMediaStreamDestination();
@@ -197,6 +246,10 @@ export default async ({ addon, console, msg }) => {
         stopRecording(true);
       };
       timeout = setTimeout(() => stopRecording(false), secs * 1000);
+      if (opts.useStopSign) {
+        stopSignFunc = () => stopRecording();
+        vm.runtime.once("PROJECT_STOP_ALL", stopSignFunc);
+      }
       recorder.start(1000);
     };
     recordElem.addEventListener("click", async () => {
