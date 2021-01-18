@@ -68,5 +68,6 @@
   "data-category-tweaks-v2",
   "mute-project",
   "disable-auto-save",
-  "hide-flyout"
+  "hide-flyout",
+  "comments-linebreaks"
 ]

@@ -25,8 +25,14 @@ export default async function ({ addon, global, console }) {
       lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
     };
 
-    // Only append if we don't have "catagoryclick" on
-    if (addon.settings.get("toggle") == "hover") document.body.appendChild(lockDisplay);
+    // Only append and add onclick listeners if we don't have "catagoryclick" on
+    if (addon.settings.get("toggle") == "hover") {
+      document.body.appendChild(lockDisplay);
+      let tabs = document.querySelectorAll("li[class^=react-tabs_react-tabs]");
+      for (let tab of tabs)
+        tab.onclick = () =>
+          (lockDisplay.style.display = placeHolderDiv.style.display = [...tabs].indexOf(tab) == 0 ? "" : "none");
+    }
 
     function getSpeedValue() {
       let data = {
