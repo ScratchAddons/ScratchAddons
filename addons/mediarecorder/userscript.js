@@ -229,7 +229,8 @@ export default async ({ addon, console, msg }) => {
         }
       }
       let secondsElapsed = 0;
-      const setStopTextContent = () => recordElem.textContent = msg("stop", { elapsed: secondsElapsed, left: opts.secs});
+      const setStopTextContent = () =>
+        (recordElem.textContent = msg("stop", { elapsed: secondsElapsed, left: opts.secs }));
       setStopTextContent();
       isWaitingForFlag = false;
       waitingForFlagFunc = abortController = null;
@@ -246,7 +247,7 @@ export default async ({ addon, console, msg }) => {
         secondsElapsed++;
         setStopTextContent();
         recordBuffer.push(e.data);
-      }
+      };
       recorder.onerror = (e) => {
         console.warn("Recorder error:", e.error);
         stopRecording(true);
