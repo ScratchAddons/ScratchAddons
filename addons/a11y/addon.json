@@ -28,7 +28,7 @@
   ],
   "settings": [
     {
-      "name": "Enable tab navigation for sprites.",
+      "name": "Enable tab navigation for sprites",
       "id": "tabNav",
       "type": "boolean",
       "default": false
