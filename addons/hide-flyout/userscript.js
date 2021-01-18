@@ -29,7 +29,7 @@ export default async function ({ addon, global, console }) {
     if (addon.settings.get("toggle") == "hover") {
       document.body.appendChild(lockDisplay);
       let tabs = document.querySelectorAll("li[class^=react-tabs_react-tabs]");
-      for (let tab of tabs) tab.onclick = () => (lockDisplay.style.display = [...tabs].indexOf(tab) == 0 ? "" : "none");
+      for (let tab of tabs) tab.onclick = () => (lockDisplay.style.display = placeHolderDiv.style.display = [...tabs].indexOf(tab) == 0 ? "" : "none");
     }
 
     function getSpeedValue() {
