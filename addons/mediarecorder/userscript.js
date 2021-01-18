@@ -29,7 +29,7 @@ export default async ({ addon, console, msg }) => {
       const recordOptionSecondsInput = Object.assign(document.createElement("input"), {
         type: "number",
         min: 1,
-        max: 120,
+        max: 300,
         defaultValue: 30,
         id: "recordOptionSecondsInput",
       });
@@ -166,7 +166,7 @@ export default async ({ addon, console, msg }) => {
     };
     const startRecording = async (opts) => {
       // Timer
-      const secs = Math.min(120, Math.max(1, opts.secs));
+      const secs = Math.min(300, Math.max(1, opts.secs));
 
       // Initialize MediaRecorder
       recordBuffer = [];
