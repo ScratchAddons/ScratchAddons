@@ -219,14 +219,21 @@
                     v-if="setting.type === 'dynamic-length'"
                     >
                       <div class="dynamic-option" v-for="def of setting.defaults">
-                        <img class="dynamic-trash" src="../../images/icons/close.svg" />
+                        <img
+                        class="dynamic-trash"
+                        src="../../images/icons/close.svg"
+                        @click="updateSettings(addon)"
+                        />
                         <div class="dynamic-border">
                           <div class="addon-setting" v-for="sett of def">
-                            <root v-bind:setting="sett" v-bind:addon="addon" v-bind:addonsettings="addonSettings" v-bind:msg="msg" v-bind:textparse="textParse"></root>
+                            <root v-bind:setting="sett" v-bind:addon="addon" v-bind:addonsettings="addonsettings" v-bind:msg="msg" v-bind:textparse="textparse"></root>
                           </div>
                         </div>
                       </div>
-                      <button class="large-button">{{ setting.buttonText }}</button>
+                      <button
+                      class="large-button"
+                      @click="updateSettings(addon)"
+                      >{{ setting.buttonText }}</button>
                     </div>
                     <input
                       type="checkbox"

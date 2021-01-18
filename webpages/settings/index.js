@@ -523,7 +523,6 @@ const vue = (window.vue = new Vue({
 }));
 
 chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
-  console.log(manifests.find((o) => o.addonId == "discuss-button"));
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
     manifest._category = manifest.popup

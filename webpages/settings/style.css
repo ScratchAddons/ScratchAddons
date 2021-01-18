@@ -739,10 +739,12 @@ input[type="color"]::-webkit-color-swatch {
   margin: 8px 0px;
   display: flex;
   flex-wrap: wrap;
+  flex: 1;
 }
 .dynamic-trash {
   margin-right: 5px;
   cursor: pointer;
+  width: 25px;
 }
 
 /*scrollbar*/
