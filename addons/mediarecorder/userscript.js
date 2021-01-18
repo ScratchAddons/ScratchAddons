@@ -7,19 +7,23 @@ export default async ({ addon, console, msg }) => {
     });
     const getOptions = () => {
       const recordOption = Object.assign(document.createElement("div"), {
-        className: "mediaRecorderPopup"
+        className: "mediaRecorderPopup",
       });
       const recordOptionInner = document.createElement("div");
-      recordOptionInner.appendChild(Object.assign(document.createElement("h1"), {
-        textContent: msg("option-title"),
-        title: msg("added-by")
-      }));
-      
-      recordOptionInner.appendChild(Object.assign(document.createElement("p"), {
-        textContent: msg("record-description"),
-        className: "recordOptionDescription"
-      }));
-      
+      recordOptionInner.appendChild(
+        Object.assign(document.createElement("h1"), {
+          textContent: msg("option-title"),
+          title: msg("added-by"),
+        })
+      );
+
+      recordOptionInner.appendChild(
+        Object.assign(document.createElement("p"), {
+          textContent: msg("record-description"),
+          className: "recordOptionDescription",
+        })
+      );
+
       // Seconds
       const recordOptionSeconds = document.createElement("p");
       const recordOptionSecondsInput = Object.assign(document.createElement("input"), {
@@ -27,11 +31,11 @@ export default async ({ addon, console, msg }) => {
         min: 1,
         max: 120,
         defaultValue: 30,
-        id: "recordOptionSecondsInput"
+        id: "recordOptionSecondsInput",
       });
       const recordOptionSecondsLabel = Object.assign(document.createElement("label"), {
         htmlFor: "recordOptionSecondsInput",
-        textContent: msg("record-duration")
+        textContent: msg("record-duration"),
       });
       recordOptionSeconds.appendChild(recordOptionSecondsLabel);
       recordOptionSeconds.appendChild(recordOptionSecondsInput);
@@ -42,12 +46,12 @@ export default async ({ addon, console, msg }) => {
       const recordOptionAudioInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
         defaultChecked: true,
-        id: "recordOptionAudioInput"
+        id: "recordOptionAudioInput",
       });
       const recordOptionAudioLabel = Object.assign(document.createElement("label"), {
         htmlFor: "recordOptionAudioInput",
         textContent: msg("record-audio"),
-        title: msg("record-audio-description")
+        title: msg("record-audio-description"),
       });
       recordOptionAudio.appendChild(recordOptionAudioInput);
       recordOptionAudio.appendChild(recordOptionAudioLabel);
@@ -58,69 +62,74 @@ export default async ({ addon, console, msg }) => {
       const recordOptionFlagInput = Object.assign(document.createElement("input"), {
         type: "checkbox",
         defaultChecked: true,
-        id: "recordOptionFlagInput"
+        id: "recordOptionFlagInput",
       });
       const recordOptionFlagLabel = Object.assign(document.createElement("label"), {
         htmlFor: "recordOptionFlagInput",
-        textContent: msg("record-after-flag")
+        textContent: msg("record-after-flag"),
       });
       recordOptionFlag.appendChild(recordOptionFlagInput);
       recordOptionFlag.appendChild(recordOptionFlagLabel);
       recordOptionInner.appendChild(recordOptionFlag);
-      
+
       let resolvePromise = null;
-      const optionPromise = new Promise(resolve => {
+      const optionPromise = new Promise((resolve) => {
         resolvePromise = resolve;
       });
       let handleOptionClose = null;
-      
-      const handleClickOutside = e => {
+
+      const handleClickOutside = (e) => {
         if (recordOptionInner.contains(e.target)) return;
         handleOptionClose(null);
       };
-      
+
       document.body.addEventListener("click", handleClickOutside, {
-        capture: true
+        capture: true,
       });
-      
-      handleOptionClose = value => {
+
+      handleOptionClose = (value) => {
         resolvePromise(value);
         document.body.removeEventListener("click", handleClickOutside, {
-          capture: true
+          capture: true,
         });
         recordOption.remove();
       };
-      
+
       const buttonRow = Object.assign(document.createElement("div"), {
-        className: "mediaRecorderPopupButtons"
+        className: "mediaRecorderPopupButtons",
       });
       const cancelButton = Object.assign(document.createElement("button"), {
         textContent: msg("cancel"),
-        className: "mediaRecorderPopupCancelButton"
+        className: "mediaRecorderPopupCancelButton",
       });
       cancelButton.addEventListener("click", () => handleOptionClose(null), { once: true });
       buttonRow.appendChild(cancelButton);
       const startButton = Object.assign(document.createElement("button"), {
         textContent: msg("start"),
-        className: "mediaRecorderPopupStartButton"
+        className: "mediaRecorderPopupStartButton",
       });
-      startButton.addEventListener("click", () => handleOptionClose({
-        secs: Number(recordOptionSecondsInput.value),
-        audioEnabled: recordOptionAudioInput.checked,
-        waitUntilFlag: recordOptionFlagInput.checked
-      }), { once: true });
+      startButton.addEventListener(
+        "click",
+        () =>
+          handleOptionClose({
+            secs: Number(recordOptionSecondsInput.value),
+            audioEnabled: recordOptionAudioInput.checked,
+            waitUntilFlag: recordOptionFlagInput.checked,
+          }),
+        { once: true }
+      );
       buttonRow.appendChild(startButton);
       recordOptionInner.appendChild(buttonRow);
-      
+
       recordOption.appendChild(recordOptionInner);
       document.body.appendChild(recordOption);
-      
+
       return optionPromise;
     };
     const recordElem = Object.assign(document.createElement("div"), {
       className: "sa-record " + elem.className,
       textContent: msg("record"),
-      title: msg("added-by")
+      title: msg("added-by"),
     });
     let isRecording = false;
     let isWaitingForFlag = false;
@@ -166,7 +175,7 @@ export default async ({ addon, console, msg }) => {
       const vm = addon.tab.traps.vm;
       if (opts.waitUntilFlag) {
         isWaitingForFlag = true;
-        await new Promise(resolve => {
+        await new Promise((resolve) => {
           waitingForFlagFunc = () => resolve();
           vm.runtime.once("PROJECT_START", waitingForFlagFunc);
         });
