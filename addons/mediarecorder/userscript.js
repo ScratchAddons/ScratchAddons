@@ -228,7 +228,9 @@ export default async ({ addon, console, msg }) => {
           throw e;
         }
       }
-      recordElem.textContent = msg("stop");
+      let secondsElapsed = 0;
+      const setStopTextContent = () => recordElem.textContent = msg("stop", { elapsed: secondsElapsed, left: opts.secs});
+      setStopTextContent();
       isWaitingForFlag = false;
       waitingForFlagFunc = abortController = null;
       const stream = vm.runtime.renderer.canvas.captureStream();
@@ -240,7 +242,11 @@ export default async ({ addon, console, msg }) => {
         }
       }
       recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
-      recorder.ondataavailable = (e) => recordBuffer.push(e.data);
+      recorder.ondataavailable = (e) => {
+        secondsElapsed++;
+        setStopTextContent();
+        recordBuffer.push(e.data);
+      }
       recorder.onerror = (e) => {
         console.warn("Recorder error:", e.error);
         stopRecording(true);
