@@ -15,13 +15,14 @@ export default async function ({ addon, global, console }) {
   load();
   addon.settings.removeEventListener("change", load);
   addon.settings.addEventListener("change", load);
-}
-function getSettings() {
-  let data = [];
-  for (var i = 1; i < 5; i++)
-    data.push({
-      innerText: addon.settings.get(`item${i}`),
-      href: addon.settings.get(`itemurl${i}`),
-    });
-  return data;
+  function getSettings() {
+    let data = [];
+    for (var i = 1; i < 5; i++)
+      data.push({
+        innerText: addon.settings.get(`item${i}`),
+        href: addon.settings.get(`itemurl${i}`),
+      });
+    return data;
+  }
+
 }

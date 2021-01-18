@@ -746,6 +746,18 @@ input[type="color"]::-webkit-color-swatch {
   cursor: pointer;
   width: 25px;
 }
+.dynamic-settings {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+}
+.dynamic-drag {
+  filter: brightness(3);
+  width: 18px;
+  margin: 20px 5px 20px 5px;
+  cursor: grab;
+  display: flex;
+}
 
 /*scrollbar*/
 

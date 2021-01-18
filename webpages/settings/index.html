@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
+    <script src="../../libraries/vue-slicksort.js" defer></script>
     <script src="index.js" type="module"></script>
   </head>
   <body style="display: none" v-show="loaded">
@@ -228,8 +229,14 @@
                         @click="updateSettings(addon)"
                         />
                         <div class="dynamic-border">
-                          <div class="addon-setting" v-for="sett of def">
-                            <root v-bind:setting="sett" v-bind:addon="addon" v-bind:addonsettings="addonsettings" v-bind:msg="msg" v-bind:textparse="textparse"></root>
+                          <img
+                          class="dynamic-drag"
+                          src="../../images/icons/drag.svg"
+                          />
+                          <div class="dynamic-settings">
+                            <div class="addon-setting" v-for="sett of def">
+                              <root v-bind:setting="sett" v-bind:addon="addon" v-bind:addonsettings="addonsettings" v-bind:msg="msg" v-bind:textparse="textparse"></root>
+                            </div>
                           </div>
                         </div>
                       </div>
