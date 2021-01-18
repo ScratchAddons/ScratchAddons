@@ -71,7 +71,7 @@ export default async ({ addon, console, msg }) => {
       recordOptionFlag.appendChild(recordOptionFlagInput);
       recordOptionFlag.appendChild(recordOptionFlagLabel);
       recordOptionInner.appendChild(recordOptionFlag);
-      
+
       // Stop sign
       const recordOptionStop = document.createElement("p");
       const recordOptionStopInput = Object.assign(document.createElement("input"), {
@@ -84,10 +84,10 @@ export default async ({ addon, console, msg }) => {
         textContent: msg("record-until-stop"),
       });
       recordOptionFlagInput.addEventListener("change", () => {
-        const disabled = recordOptionStopInput.disabled = !recordOptionFlagInput.checked;
+        const disabled = (recordOptionStopInput.disabled = !recordOptionFlagInput.checked);
         if (disabled) {
           recordOptionStopLabel.title = msg("record-until-stop-disabled", {
-            afterFlagOption: msg("record-after-flag")
+            afterFlagOption: msg("record-after-flag"),
           });
         }
       });
@@ -210,7 +210,7 @@ export default async ({ addon, console, msg }) => {
         isWaitingForFlag = true;
         Object.assign(recordElem, {
           textContent: msg("click-flag"),
-          title: msg("click-flag-description")
+          title: msg("click-flag-description"),
         });
         abortController = new AbortController();
         try {
@@ -220,8 +220,8 @@ export default async ({ addon, console, msg }) => {
               vm.runtime.once("PROJECT_START", waitingForFlagFunc);
             }),
             new Promise((_, reject) => {
-              abortController.signal.addEventListener("abort", () => reject("aborted"), { once: true })
-            })
+              abortController.signal.addEventListener("abort", () => reject("aborted"), { once: true });
+            }),
           ]);
         } catch (e) {
           if (e.message === "aborted") return;
