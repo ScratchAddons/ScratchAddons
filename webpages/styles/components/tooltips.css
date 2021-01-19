@@ -12,6 +12,8 @@
   /* vertically center */
   top: 50%;
   transform: translateY(-50%);
+  /* Bring it on top of other tags */
+  z-index: 10;
   /* move to right */
   left: 95%;
   margin-left: 15px;
