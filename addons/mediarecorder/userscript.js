@@ -234,7 +234,7 @@ export default async ({ addon, console, msg }) => {
       let secondsElapsed = 0;
       const setProgress = () => {
         recordElem.title = msg("progress", {
-          percent: (secondsElapsed / opts.secs * 100).toFixed(0)
+          percent: ((secondsElapsed / opts.secs) * 100).toFixed(0),
         });
       };
       recordElem.textContent = msg("stop");
