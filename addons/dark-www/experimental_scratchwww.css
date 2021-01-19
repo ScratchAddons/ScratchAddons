@@ -19,7 +19,8 @@ a.social-messages-profile-link,
 .subactions .share-date,
 .developers #faq p,
 .social-form,
-body:not(.sa-body-editor) .join-flow-title {
+body:not(.sa-body-editor) .join-flow-title,
+.initiatives-section .initiatives-tools .subsection-tag.collaborator {
   color: #fff;
 }
 .monitor_label_ci1ok {
@@ -40,7 +41,8 @@ body:not(.sa-body-editor) .join-flow-title {
 .developers .title-banner.faq-banner,
 .credits .supporters,
 .download .installation,
-body:not(.sa-body-editor) .gender-radio-row {
+body:not(.sa-body-editor) .gender-radio-row,
+.wedo .banner {
   background: #333;
 }
 .thumbnail .thumbnail-loves::before,
@@ -80,7 +82,11 @@ body:not(.sa-body-editor) .modal-content,
 .messages-social-list,
 .comment-text,
 .comment .comment-body .comment-bubble,
-.comment .comment-body .comment-bubble::before {
+.comment .comment-body .comment-bubble::before,
+.milestones-section .milestone-box,
+.supporters-section .comment-text,
+.card,
+.extension-landing .project-card {
   background: #282828;
 }
 .comment-text::after {
@@ -97,7 +103,8 @@ body:not(.sa-body-editor) .modal-content,
 .outer .categories li {
   background-color: rgba(255, 255, 255, 0.1);
 }
-.outer .categories li:hover {
+.outer .categories li:hover,
+.supporters-section .supporters-level hr {
   background-color: rgba(255, 255, 255, 0.2);
 }
 .box,
@@ -124,7 +131,9 @@ input[type="checkbox"].formik-checkbox,
 .developers #donate h3,
 .developers #faq,
 .information-page .info-outer nav,
-.conf2020-panel {
+.conf2020-panel,
+.extension-landing hr,
+.extension-landing .project-card {
   border-color: #606060;
 }
 .box .box-header {
@@ -164,6 +173,18 @@ body:not(.sa-body-editor) .select select option,
 }
 .studio-list-bottom-gradient {
   background: linear-gradient(rgba(40, 40, 40, 0), #282828);
+}
+.join-flow-privacy-message {
+  color: rgba(255, 255, 255, 0.6);
+}
+.emoji[src$="meow.png"] {
+  content: url(%addon-self-dir%/assets/meow.png);
+}
+.emoji[src$="gobo.png"] {
+  content: url(%addon-self-dir%/assets/gobo.png);
+}
+.emoji[src$="waffle.png"] {
+  content: url(%addon-self-dir%/assets/waffle.png);
 }
 
 [class^="loader_background"] {

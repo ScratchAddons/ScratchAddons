@@ -647,8 +647,11 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 @media only screen and (max-width: 540px) {
-  .badge {
+  .badge:not(.beta-badge) {
     display: none !important;
+  }
+  .tooltiptext {
+    display: none;
   }
   .addon-description {
     display: none;

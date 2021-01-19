@@ -258,6 +258,6 @@
     "message": "Open full screen settings"
   },
   "skipOpenFullSettings": {
-    "message": "Skip"
+    "message": "Cancel"
   }
 }

@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   console.log("pause enabled");
 
-  const vm = addon.tab.traps.onceValues.vm;
+  const vm = addon.tab.traps.vm;
 
   var playing = true;
   var threads = [];

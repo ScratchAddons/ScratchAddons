@@ -16,7 +16,6 @@
     // Third Party-defined
     "Vue": "readonly",
     "IntlMessageFormat": "readonly",
-    "linkifyElement": "readonly",
     "md5": "readonly",
     "scratchblocks": "readonly",
     "tinycolor": "readonly",

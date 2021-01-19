@@ -44,7 +44,13 @@ export default async ({ addon, console, msg }) => {
       recordBuffer = [];
       isRecording = true;
       recordElem.textContent = msg("stop");
-      const stream = addon.tab.traps.onceValues.vm.runtime.renderer.canvas.captureStream();
+      const vm = addon.tab.traps.vm;
+      const stream = vm.runtime.renderer.canvas.captureStream();
+      const mediaStreamDestination = vm.runtime.audioEngine.audioContext.createMediaStreamDestination();
+      vm.runtime.audioEngine.inputNode.connect(mediaStreamDestination);
+      for (const track of mediaStreamDestination.stream.getAudioTracks()) {
+        stream.addTrack(track);
+      }
       recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
       recorder.ondataavailable = (e) => recordBuffer.push(e.data);
       recorder.onerror = (e) => {
