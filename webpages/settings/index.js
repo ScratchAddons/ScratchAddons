@@ -450,7 +450,7 @@ const vue = (window.vue = new Vue({
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
           if (!tabs[0].id) return;
           chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
-            // Just so we don't get any errors in the console if we don't get any responce from a non scratch tab.
+            // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
             chrome.runtime.lastError;
             if (res && res.length) {
               this.popupOpenedOnScratchTab = true;

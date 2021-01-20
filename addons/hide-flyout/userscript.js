@@ -25,7 +25,7 @@ export default async function ({ addon, global, console }) {
       lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
     };
 
-    // Only append and add onclick listeners if we don't have "catagoryclick" on
+    // Only append and add onclick listeners if we don't have "categoryclick" on
     if (addon.settings.get("toggle") == "hover") {
       document.body.appendChild(lockDisplay);
       let tabs = document.querySelectorAll("li[class^=react-tabs_react-tabs]");
@@ -74,11 +74,11 @@ export default async function ({ addon, global, console }) {
     }
 
     while (true) {
-      let catagory = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
-      catagory.onclick = (e) => {
-        if (toggle && selectedCat == catagory && addon.settings.get("toggle") == "category") onmouseleave();
+      let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
+      category.onclick = (e) => {
+        if (toggle && selectedCat == category && addon.settings.get("toggle") == "category") onmouseleave();
         else if (!toggle) onmouseenter();
-        if (addon.settings.get("toggle") == "category") (toggle = !toggle), (selectedCat = catagory);
+        if (addon.settings.get("toggle") == "category") (toggle = !toggle), (selectedCat = category);
       };
     }
   }
