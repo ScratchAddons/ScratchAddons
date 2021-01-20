@@ -46,28 +46,6 @@ function cleanUp() {
     });
 }
 
-async function renderLoop() {
-  while (true) {
-    cleanUp();
-    for (let e of Object.entries(a11yObjects)) {
-      updateAria(vm.runtime.targets.filter((a) => a.id === e[0])[0]);
-    }
-    vm.runtime.targets.forEach(
-      (e) =>
-        (e.blocks._cache.procedureParamNames["set sprite aria role to %s"] = [
-          ["text"],
-          ["czc6,OD@W7qzCng-$6Ut"],
-          ["img"],
-        ])
-    );
-    vm.runtime.targets.forEach(
-      (e) =>
-        (e.blocks._cache.procedureParamNames["set sprite label to %s"] = [["text"], ["E|XlmQQ}1C:3vH-VY2Q_"], [""]])
-    );
-    await new Promise((cb) => requestAnimationFrame((_) => cb()));
-  }
-}
-
 let injected;
 
 const injectWorkspace = () => {
@@ -215,6 +193,27 @@ export default async function (o) {
       );
     } else {
       a11yObjects[target.id].ele.removeAttribute("aria-label");
+    }
+  }
+  async function renderLoop() {
+    while (true) {
+      cleanUp();
+      for (let e of Object.entries(a11yObjects)) {
+        updateAria(vm.runtime.targets.filter((a) => a.id === e[0])[0]);
+      }
+      vm.runtime.targets.forEach(
+        (e) =>
+          (e.blocks._cache.procedureParamNames["set sprite aria role to %s"] = [
+            ["text"],
+            ["czc6,OD@W7qzCng-$6Ut"],
+            ["img"],
+          ])
+      );
+      vm.runtime.targets.forEach(
+        (e) =>
+          (e.blocks._cache.procedureParamNames["set sprite label to %s"] = [["text"], ["E|XlmQQ}1C:3vH-VY2Q_"], [""]])
+      );
+      await new Promise((cb) => requestAnimationFrame((_) => cb()));
     }
   }
 
