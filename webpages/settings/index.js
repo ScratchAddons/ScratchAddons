@@ -2,6 +2,15 @@ import downloadBlob from "../../libraries/download-blob.js";
 const NEW_ADDONS = ["data-category-tweaks-v2", "mute-project"];
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
+let grantedOptionalPermissions = [];
+const updateGrantedPermissions = () => chrome.permissions.getAll(
+  ({ permissions }) => {
+    grantedOptionalPermissions = permissions.filter(p => browserLevelPermissions.includes(p));
+  }
+);
+updateGrantedPermissions();
+chrome.permissions.onAdded.addListener(updateGrantedPermissions);
+chrome.permissions.onRemoved.addListener(updateGrantedPermissions);
 
 //theme switching
 const lightThemeLink = document.createElement("link");
@@ -317,31 +326,25 @@ const vue = (window.vue = new Vue({
 
       const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
       if (!addon._enabled && requiredPermissions.length) {
-        chrome.permissions.contains(
-          {
-            permissions: requiredPermissions,
-          },
-          (result) => {
-            if (result === false) {
-              if (document.body.classList.contains("iframe")) {
-                this.addonToEnable = addon;
-                document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
-                this.showPopupModal = true;
-              } else
-                chrome.permissions.request(
-                  {
-                    permissions: requiredPermissions,
-                  },
-                  (granted) => {
-                    if (granted) {
-                      console.log("Permissions granted!");
-                      toggle();
-                    }
+        const result = requiredPermissions.every(p => grantedOptionalPermissions.includes(p));
+          if (result === false) {
+            if (document.body.classList.contains("iframe")) {
+              this.addonToEnable = addon;
+              document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
+              this.showPopupModal = true;
+            } else
+              chrome.permissions.request(
+                {
+                  permissions: requiredPermissions,
+                },
+                (granted) => {
+                  if (granted) {
+                    console.log("Permissions granted!");
+                    toggle();
                   }
-                );
-            } else toggle();
-          }
-        );
+                }
+              );
+          } else toggle();
       } else toggle();
     },
     updateOption(id, newValue, addon) {
