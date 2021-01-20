@@ -33,15 +33,6 @@ function makeWrap() {
   wrap.addEventListener("wheel", pass2canvas);
 }
 
-async function ensureWrap() {
-  while (true) {
-    await addon.tab.waitForElement('[class*="stage_stage-wrapper_"] [class*="stage_stage_"][class*="box_box_"]', {
-      markAsSeen: true,
-    });
-    makeWrap();
-  }
-}
-
 function cleanUp() {
   let targets = vm.runtime.targets.map((e) => e.id);
   targets.forEach((e) => {
@@ -172,11 +163,66 @@ const injectWorkspace = () => {
 };
 export default async function (o) {
   const { global, addon, safeMsg, msg, console } = o;
+  async function ensureWrap() {
+    while (true) {
+      await addon.tab.waitForElement('[class*="stage_stage-wrapper_"] [class*="stage_stage_"][class*="box_box_"]', {
+        markAsSeen: true,
+      });
+      makeWrap();
+    }
+  }
+  function updateAria(target) {
+    if (!wrap) return;
+    if (!target.visible) {
+      if (a11yObjects[target.id]) {
+        if (a11yObjects[target.id].ele) a11yObjects[target.id].ele.remove();
+      }
+      return;
+    }
+    a11yObjects[target.id] = a11yObjects[target.id] || {};
+    if (!a11yObjects[target.id].ele || (a11yObjects[target.id].ele && !a11yObjects[target.id].ele.isConnected)) {
+      a11yObjects[target.id].ele = document.createElement("div");
+      a11yObjects[target.id].ele.className = "aria-item";
+      a11yObjects[target.id].ele.dataset.spriteId = target.id;
+      wrap.append(a11yObjects[target.id].ele);
+    }
+    if (getTabNav()) {
+      a11yObjects[target.id].ele.setAttribute("tabindex", "0");
+    } else {
+      a11yObjects[target.id].ele.removeAttribute("tabindex");
+    }
+    let bounds = target.renderer.getBounds(target.drawableID);
+    a11yObjects[target.id].ele.style.setProperty("--aria-bounds-width", bounds.width);
+    a11yObjects[target.id].ele.style.setProperty("--aria-bounds-height", bounds.height);
+    a11yObjects[target.id].ele.style.setProperty("--aria-bounds-top", bounds.top);
+    a11yObjects[target.id].ele.style.setProperty("--aria-bounds-left", bounds.left);
+    if (a11yObjects[target.id].role) {
+      a11yObjects[target.id].ele.setAttribute("role", a11yObjects[target.id].role);
+    } else {
+      a11yObjects[target.id].ele.removeAttribute("role");
+    }
+    let bubbleMessage = "";
+    let state = target.getCustomState("Scratch.looks");
+    if (state) {
+      if (state.text && state.text.trim()) {
+        bubbleMessage = msg(state.type + "Bubble", { text: state.text.trim() });
+      }
+    }
+    if (a11yObjects[target.id].label || bubbleMessage) {
+      a11yObjects[target.id].ele.setAttribute(
+        "aria-label",
+        a11yObjects[target.id].label ? a11yObjects[target.id].label + " " + bubbleMessage : bubbleMessage
+      );
+    } else {
+      a11yObjects[target.id].ele.removeAttribute("aria-label");
+    }
+  }
+
   getTabNav = function getTabNav() {
     return o.addon.settings.get("tabNav");
   };
   console.log("a11y support enabled");
-  vm = addon.tab.traps.onceValues.vm;
+  vm = addon.tab.traps.vm;
   ensureWrap();
   renderLoop();
   const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;
@@ -200,51 +246,4 @@ export default async function (o) {
     }, 100);
   }
   addon.tab.addEventListener("urlChange", () => addon.tab.editorMode === "editor" && injectWorkspace());
-}
-
-function updateAria(target) {
-  if (!wrap) return;
-  if (!target.visible) {
-    if (a11yObjects[target.id]) {
-      if (a11yObjects[target.id].ele) a11yObjects[target.id].ele.remove();
-    }
-    return;
-  }
-  a11yObjects[target.id] = a11yObjects[target.id] || {};
-  if (!a11yObjects[target.id].ele || (a11yObjects[target.id].ele && !a11yObjects[target.id].ele.isConnected)) {
-    a11yObjects[target.id].ele = document.createElement("div");
-    a11yObjects[target.id].ele.className = "aria-item";
-    a11yObjects[target.id].ele.dataset.spriteId = target.id;
-    wrap.append(a11yObjects[target.id].ele);
-  }
-  if (getTabNav()) {
-    a11yObjects[target.id].ele.setAttribute("tabindex", "0");
-  } else {
-    a11yObjects[target.id].ele.removeAttribute("tabindex");
-  }
-  let bounds = target.renderer.getBounds(target.drawableID);
-  a11yObjects[target.id].ele.style.setProperty("--aria-bounds-width", bounds.width);
-  a11yObjects[target.id].ele.style.setProperty("--aria-bounds-height", bounds.height);
-  a11yObjects[target.id].ele.style.setProperty("--aria-bounds-top", bounds.top);
-  a11yObjects[target.id].ele.style.setProperty("--aria-bounds-left", bounds.left);
-  if (a11yObjects[target.id].role) {
-    a11yObjects[target.id].ele.setAttribute("role", a11yObjects[target.id].role);
-  } else {
-    a11yObjects[target.id].ele.removeAttribute("role");
-  }
-  let bubbleMessage = "";
-  let state = target.getCustomState("Scratch.looks");
-  if (state) {
-    if (state.text && state.text.trim()) {
-      bubbleMessage = msg(state.type + "Bubble", { text: state.text.trim() });
-    }
-  }
-  if (a11yObjects[target.id].label || bubbleMessage) {
-    a11yObjects[target.id].ele.setAttribute(
-      "aria-label",
-      a11yObjects[target.id].label ? a11yObjects[target.id].label + " " + bubbleMessage : bubbleMessage
-    );
-  } else {
-    a11yObjects[target.id].ele.removeAttribute("aria-label");
-  }
 }
