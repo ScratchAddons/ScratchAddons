@@ -120,7 +120,7 @@ const injectWorkspace = () => {
     const flyout = workspace.getFlyout();
     if (!flyout) throw new Error("expected flyout");
 
-    vm = addon.tab.traps.onceValues.vm;
+    vm = addon.tab.traps.vm;
     if (!vm) throw new Error("expected vm");
 
     // Each time a new workspace is made, these callbacks are reset, so re-register whenever a flyout is shown.
