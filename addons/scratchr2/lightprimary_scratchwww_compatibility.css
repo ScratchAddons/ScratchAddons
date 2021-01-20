@@ -38,7 +38,7 @@
   );
 }
 #navigation .inner > ul > li.search .btn-search,
-#navigation .messages > a,
+#navigation .messages > a::before,
 #navigation .mystuff > a,
 .account-nav .user-info::after,
 .button img,
@@ -50,6 +50,23 @@
   filter: brightness(calc(1 - var(--scratchr2-primaryColor-isLight) * (1 - 0.4)));
 }
 
+#navigation .messages > a {
+  background-image: none;
+}
+#navigation .messages > a::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: url(https://scratch.mit.edu/images/nav-notifications.png) no-repeat center center;
+  background-size: 45%;
+}
+#navigation .messages > a:hover::before {
+  background-size: 50%;
+}
 .preview .remix-button,
 .os-chooser .button:not(.active) {
   color: #fff;
