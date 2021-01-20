@@ -163,7 +163,6 @@ export default async ({ addon, console, msg }) => {
     let recordBuffer = [];
     let recorder;
     let timeout;
-    let secsInterval;
     const disposeRecorder = () => {
       isRecording = false;
       recordElem.textContent = msg("record");
@@ -172,8 +171,6 @@ export default async ({ addon, console, msg }) => {
       recordBuffer = [];
       clearTimeout(timeout);
       timeout = 0;
-      clearInterval(secsInterval);
-      secsInterval = 0;
       if (stopSignFunc) {
         addon.tab.traps.vm.runtime.off("PROJECT_STOP_ALL", stopSignFunc);
         stopSignFunc = null;
@@ -231,14 +228,7 @@ export default async ({ addon, console, msg }) => {
           throw e;
         }
       }
-      let secondsElapsed = 0;
-      const setProgress = () => {
-        recordElem.title = msg("progress", {
-          percent: ((secondsElapsed / opts.secs) * 100).toFixed(0),
-        });
-      };
       recordElem.textContent = msg("stop");
-      setProgress();
       isWaitingForFlag = false;
       waitingForFlagFunc = abortController = null;
       const stream = vm.runtime.renderer.canvas.captureStream();
@@ -253,10 +243,6 @@ export default async ({ addon, console, msg }) => {
       recorder.ondataavailable = (e) => {
         recordBuffer.push(e.data);
       };
-      secsInterval = setInterval(() => {
-        secondsElapsed++;
-        setProgress();
-      }, 1000);
       recorder.onerror = (e) => {
         console.warn("Recorder error:", e.error);
         stopRecording(true);

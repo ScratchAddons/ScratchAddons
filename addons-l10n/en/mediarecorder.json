@@ -13,6 +13,5 @@
   "mediarecorder/added-by": "Added by Scratch Addons browser extension",
   "mediarecorder/click-flag": "Waiting...",
   "mediarecorder/click-flag-description": "Click the green flag to start recording. Click this button to stop.",
-  "mediarecorder/record-until-stop-disabled": "You need to enable \"{afterFlagOption}\" to use this option.",
-  "mediarecorder/progress": "{percent}% recorded"
+  "mediarecorder/record-until-stop-disabled": "You need to enable \"{afterFlagOption}\" to use this option."
 }
