@@ -3,7 +3,6 @@ let a11yObjects = {};
 let getTabNav = function getTabNav() {
   return false;
 };
-window.a11yObjects = a11yObjects;
 let blockColorOverrides = {};
 blockColorOverrides["set sprite aria role to %s"] = blockColorOverrides["set sprite label to %s"] = {
   color: "#43cfca",
