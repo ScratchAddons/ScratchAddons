@@ -357,15 +357,26 @@ h4 {
   padding: 13px 10px 4px 10px;
 }
 #topnav ul.account-nav .messages .messages-icon {
-  background-image: url("https://scratch.mit.edu/images/nav-notifications.png");
-  background-size: 45%;
+  background-image: none;
   width: 30px;
   height: 33px;
   padding: 13px 10px 4px 10px;
   position: relative;
 }
+#topnav ul.account-nav .messages .messages-icon::before {
+  /* Move icon into a pseudo-element so filters can be applied to it separately */
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: url("https://scratch.mit.edu/images/nav-notifications.png") no-repeat center center;
+  background-size: 45%;
+}
 #topnav ul.account-nav .my-stuff .mystuff-icon:hover,
-#topnav ul.account-nav .messages .messages-icon:hover {
+#topnav ul.account-nav .messages .messages-icon:hover::before {
   background-size: 50%;
 }
 #topnav ul.account-nav .messages .notificationsCount {
