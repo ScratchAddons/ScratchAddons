@@ -60,7 +60,7 @@ async function renderLoop() {
   while (true) {
     cleanUp();
     for (let e of Object.entries(a11yObjects)) {
-      updateAria(vm.runtime.targets.filter((a) => a.id == e[0])[0]);
+      updateAria(vm.runtime.targets.filter((a) => a.id === e[0])[0]);
     }
     vm.runtime.targets.forEach(
       (e) =>
@@ -81,7 +81,7 @@ async function renderLoop() {
 let injected;
 
 const injectWorkspace = () => {
-  if (!!window.ENABLE_A11Y_BLOCKS) {
+  if (window.ENABLE_A11Y_BLOCKS) {
     if (injected) {
       return;
     }
@@ -108,7 +108,7 @@ const injectWorkspace = () => {
             );
           }.bind(this);
           updateChildColors();
-          const oldPush = this.childBlocks_.__proto__.push.bind(this.childBlocks_);
+          const oldPush = this.childBlocks_.constructor.prototype.push.bind(this.childBlocks_);
           this.childBlocks_.push = function (...a) {
             updateChildColors();
             return oldPush(...a);
@@ -172,24 +172,20 @@ const injectWorkspace = () => {
   }
 };
 export default async function (o) {
-  let { global } = o;
+  const { global, addon, safeMsg, msg, console } = o;
   getTabNav = function getTabNav() {
     return o.addon.settings.get("tabNav");
   };
-  addon = o.addon;
-  safeMsg = o.safeMsg;
-  msg = o.msg;
-  console = o.console;
   console.log("a11y support enabled");
   vm = addon.tab.traps.onceValues.vm;
   ensureWrap();
   renderLoop();
   const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;
   vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
-    if (proccode.trim().toLowerCase() == "set sprite aria role to %s") {
+    if (proccode.trim().toLowerCase() === "set sprite aria role to %s") {
       a11yObjects[thread.target.id] = a11yObjects[thread.target.id] || {};
       a11yObjects[thread.target.id].role = Object.values(thread.stackFrames[0].params)[0];
-    } else if (proccode.trim().toLowerCase() == "set sprite label to %s") {
+    } else if (proccode.trim().toLowerCase() === "set sprite label to %s") {
       a11yObjects[thread.target.id] = a11yObjects[thread.target.id] || {};
       a11yObjects[thread.target.id].label = Object.values(thread.stackFrames[0].params)[0];
     }
