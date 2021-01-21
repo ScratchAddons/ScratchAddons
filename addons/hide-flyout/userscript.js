@@ -50,7 +50,7 @@ export default async function ({ addon, global, console }) {
         return data[addon.settings.get("speed")];
       }
 
-      function onmouseenter(speed) {
+      function onmouseenter(speed = {}) {
         speed = typeof speed == "object" ? getSpeedValue() : speed;
         flyOut.classList.remove("sa-flyoutClose");
         flyOut.style.animation = `openFlyout ${speed}s 1`;
@@ -97,7 +97,7 @@ export default async function ({ addon, global, console }) {
           // Event casted when you switch between tabs
           case "scratch-gui/mode/SET_PLAYER":
             // always true or false
-            lockDisplay.style.display = e.detail.action.isPlayerOnly == 0 ? "block" : "none";
+            lockDisplay.style.display = e.detail.action.isPlayerOnly ? "none" : "block";
             break;
         }
       });
@@ -105,9 +105,10 @@ export default async function ({ addon, global, console }) {
       while (true) {
         let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
         category.onclick = (e) => {
-          if (toggle && selectedCat === category && addon.settings.get("toggle") === "category") onmouseleave();
+          if (toggle && selectedCat == category && addon.settings.get("toggle") === "category") onmouseleave();
           else if (!toggle) onmouseenter();
-          if (addon.settings.get("toggle") === "category") (toggle = !toggle), (selectedCat = category);
+          else return selectedCat = category;
+          if (addon.settings.get("toggle") === "category") toggle = !toggle;
         };
       }
     })();
