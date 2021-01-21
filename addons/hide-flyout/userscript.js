@@ -24,7 +24,7 @@ export default async function ({ addon, global, console }) {
       };
 
       function positionElements() {
-        let addition = flyOut.classList.contains("sa-flyoutClose") ? 260 : 0
+        let addition = flyOut.classList.contains("sa-flyoutClose") ? 260 : 0;
         placeHolderDiv.style.height = `${flyOut.getBoundingClientRect().height - 20}px`;
         placeHolderDiv.style.width = `${flyOut.getBoundingClientRect().width}px`;
         placeHolderDiv.style.left = `${flyOut.getBoundingClientRect().left + addition}px`;
@@ -92,10 +92,7 @@ export default async function ({ addon, global, console }) {
             // always 0, 1, 2
             lockDisplay.style.display = e.detail.action.activeTabIndex == 0 ? "block" : "none";
             if (e.detail.action.activeTabIndex == 0)
-              onmouseenter(0),
-                positionElements(),
-                toggle = true,
-                justStart = true;
+              onmouseenter(0), positionElements(), (toggle = true), (justStart = true);
             break;
           // Event casted when you switch between tabs
           case "scratch-gui/mode/SET_PLAYER":
@@ -109,7 +106,8 @@ export default async function ({ addon, global, console }) {
         let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
         category.onclick = (e) => {
           let allIn = [...document.querySelectorAll(".scratchCategoryMenuItem")].find((e) => e == category);
-          if (toggle && (selectedCat == category || allIn) && addon.settings.get("toggle") === "category") onmouseleave(), (selectedCat = category), (justStart = false);
+          if (toggle && (selectedCat == category || allIn) && addon.settings.get("toggle") === "category")
+            onmouseleave(), (selectedCat = category), (justStart = false);
           else if (!toggle) onmouseenter(), (selectedCat = category), (justStart = false);
           else return (selectedCat = category), (justStart = false);
           if (addon.settings.get("toggle") === "category") toggle = !toggle;
