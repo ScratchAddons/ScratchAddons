@@ -646,9 +646,6 @@ input[type="color"]::-webkit-color-swatch {
   cursor: pointer;
 }
 
-.settings-heading {
-  margin: 10px 10px 24px 10px;
-}
 .footer {
   text-align: center;
   width: 800px;
@@ -659,14 +656,20 @@ input[type="color"]::-webkit-color-swatch {
   color: gray;
 }
 .settings-block {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 .modal .large-button {
   display: block;
-  margin: 7px;
+  margin-right: 10px;
+}
+.modal .filter-selector {
+  margin: 0;
+}
+.modal .addon-name {
+  margin-left: 10px;
 }
 .setting-body {
-  margin: 10px;
+  margin: 10px 0;
   background: #2a2a2a;
   border: 1px solid #333;
   border-radius: 4px;
@@ -676,7 +679,7 @@ input[type="color"]::-webkit-color-swatch {
   padding: 0 20px;
 }
 .setting-setting {
-  margin: 10px;
+  margin: 10px 0;
   margin-right: 20px;
   min-height: 35px;
   display: flex;
@@ -696,9 +699,6 @@ input[type="color"]::-webkit-color-swatch {
   height: 100%;
   display: flex;
   align-items: center;
-}
-.setting-setting {
-  margin-top: 10px;
 }
 .theme-switch {
   height: 25px;
