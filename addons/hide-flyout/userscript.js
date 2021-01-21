@@ -1,8 +1,9 @@
 export default async function ({ addon, global, console }) {
-  var placeHolderDiv = null, lockDisplay = null;
+  var placeHolderDiv = null,
+    lockDisplay = null;
   while (true) {
     let flyOut = await addon.tab.waitForElement(".blocklyFlyout", { markAsSeen: true });
-    let blocklySvg = await addon.tab.waitForElement(".blocklySvg",  { markAsSeen: true });
+    let blocklySvg = await addon.tab.waitForElement(".blocklySvg", { markAsSeen: true });
     (async () => {
       let scrollBar = document.querySelector(".blocklyFlyoutScrollbar");
 
@@ -91,12 +92,12 @@ export default async function ({ addon, global, console }) {
           // Event casted when you switch between tabs
           case "scratch-gui/navigation/ACTIVATE_TAB":
             // always 0, 1, 2
-            lockDisplay.style.display = e.detail.action.activeTabIndex == 0 ? "block" : "none"
+            lockDisplay.style.display = e.detail.action.activeTabIndex == 0 ? "block" : "none";
             break;
           // Event casted when you switch between tabs
           case "scratch-gui/mode/SET_PLAYER":
             // always true or false
-            lockDisplay.style.display = e.detail.action.isPlayerOnly == 0 ? "block" : "none"
+            lockDisplay.style.display = e.detail.action.isPlayerOnly == 0 ? "block" : "none";
             break;
         }
       });
