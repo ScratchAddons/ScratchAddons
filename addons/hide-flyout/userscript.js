@@ -1,6 +1,7 @@
 export default async function ({ addon, global, console }) {
   var placeHolderDiv = null,
-    lockDisplay = null;
+    lockDisplay = null,
+    flyoutLock = false;
   while (true) {
     let flyOut = await addon.tab.waitForElement(".blocklyFlyout", { markAsSeen: true });
     let blocklySvg = await addon.tab.waitForElement(".blocklySvg", { markAsSeen: true });
@@ -11,8 +12,6 @@ export default async function ({ addon, global, console }) {
       if (placeHolderDiv) placeHolderDiv.remove();
       placeHolderDiv = document.body.appendChild(document.createElement("div"));
       placeHolderDiv.className = "sa-flyout-placeHolder";
-
-      let flyoutLock = false;
 
       // Lock Img
       if (lockDisplay) lockDisplay.remove();
@@ -25,16 +24,13 @@ export default async function ({ addon, global, console }) {
       };
 
       function positionElements() {
-        onmouseenter(0);
-        setTimeout(() => {
-          placeHolderDiv.style.height = `${flyOut.getBoundingClientRect().height - 20}px`;
-          placeHolderDiv.style.width = `${flyOut.getBoundingClientRect().width}px`;
-          placeHolderDiv.style.left = `${flyOut.getBoundingClientRect().left}px`;
-          placeHolderDiv.style.top = `${flyOut.getBoundingClientRect().top}px`;
-          lockDisplay.style.top = `${flyOut.getBoundingClientRect().top}px`;
-          lockDisplay.style.left = `${flyOut.getBoundingClientRect().right - 32}px`;
-          onmouseleave();
-        }, 0);
+        let addition = flyOut.classList.contains("sa-flyoutClose") ? 260 : 0
+        placeHolderDiv.style.height = `${flyOut.getBoundingClientRect().height - 20}px`;
+        placeHolderDiv.style.width = `${flyOut.getBoundingClientRect().width}px`;
+        placeHolderDiv.style.left = `${flyOut.getBoundingClientRect().left + addition}px`;
+        placeHolderDiv.style.top = `${flyOut.getBoundingClientRect().top}px`;
+        lockDisplay.style.top = `${flyOut.getBoundingClientRect().top}px`;
+        lockDisplay.style.left = `${flyOut.getBoundingClientRect().right - 32 + addition}px`;
       }
 
       // Only append if we don't have "categoryclick" on
@@ -74,8 +70,9 @@ export default async function ({ addon, global, console }) {
 
       // position elements which closes flyout on load
       positionElements();
-      let toggle = false;
-      let selectedCat = null;
+      let toggle = true,
+        selectedCat = null,
+        justStart = true;
       if (addon.settings.get("toggle") === "hover") {
         placeHolderDiv.onmouseenter = onmouseenter;
         blocklySvg.onmouseenter = onmouseleave;
@@ -84,8 +81,9 @@ export default async function ({ addon, global, console }) {
       addon.tab.redux.initialize();
       addon.tab.redux.addEventListener("statechanged", (e) => {
         switch (e.detail.action.type) {
-          // Event casted when switch to small or normal size stage
+          // Event casted when switch to small or normal size stage or when screen size changed.
           case "scratch-gui/StageSize/SET_STAGE_SIZE":
+          case "scratch-gui/workspace-metrics/UPDATE_METRICS":
             positionElements();
             break;
 
@@ -93,6 +91,11 @@ export default async function ({ addon, global, console }) {
           case "scratch-gui/navigation/ACTIVATE_TAB":
             // always 0, 1, 2
             lockDisplay.style.display = e.detail.action.activeTabIndex == 0 ? "block" : "none";
+            if (e.detail.action.activeTabIndex == 0)
+              onmouseenter(0),
+                positionElements(),
+                toggle = true,
+                justStart = true;
             break;
           // Event casted when you switch between tabs
           case "scratch-gui/mode/SET_PLAYER":
@@ -105,9 +108,10 @@ export default async function ({ addon, global, console }) {
       while (true) {
         let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
         category.onclick = (e) => {
-          if (toggle && selectedCat == category && addon.settings.get("toggle") === "category") onmouseleave();
-          else if (!toggle) onmouseenter();
-          else return (selectedCat = category);
+          let allIn = [...document.querySelectorAll(".scratchCategoryMenuItem")].find((e) => e == category);
+          if (toggle && (selectedCat == category || allIn) && addon.settings.get("toggle") === "category") onmouseleave(), (selectedCat = category), (justStart = false);
+          else if (!toggle) onmouseenter(), (selectedCat = category), (justStart = false);
+          else return (selectedCat = category), (justStart = false);
           if (addon.settings.get("toggle") === "category") toggle = !toggle;
         };
       }
