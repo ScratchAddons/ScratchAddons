@@ -7,15 +7,25 @@ export default async ({ addon, console, msg }) => {
     });
     const getOptions = () => {
       const recordOption = Object.assign(document.createElement("div"), {
-        className: "mediaRecorderPopup",
+        className: "modal_modal-overlay_1Lcbx",
       });
-      const recordOptionInner = document.createElement("div");
-      recordOptionInner.appendChild(
-        Object.assign(document.createElement("h1"), {
+      const recordOptionPopup = Object.assign(document.createElement("div"), {
+        className: "mediaRecorderPopup modal_modal-content_1h3ll",
+      });
+      const recordOptionHeader = Object.assign(document.createElement("div"), {
+        className: "modal_header_1h7ps",
+      });
+      recordOptionHeader.appendChild(
+        Object.assign(document.createElement("div"), {
+		  className: "modal_header-item_2zQTd modal_header-item-title_tLOU5",
           textContent: msg("option-title"),
           title: msg("added-by"),
         })
       );
+	  recordOptionPopup.appendChild(recordOptionHeader);
+	  const recordOptionInner = Object.assign(document.createElement("div"), {
+		className: "mediaRecorderPopupContent",
+	  });
 
       recordOptionInner.appendChild(
         Object.assign(document.createElement("p"), {
@@ -32,6 +42,7 @@ export default async ({ addon, console, msg }) => {
         max: 300,
         defaultValue: 30,
         id: "recordOptionSecondsInput",
+		className: "prompt_variable-name-text-input_1iu8-",
       });
       const recordOptionSecondsLabel = Object.assign(document.createElement("label"), {
         htmlFor: "recordOptionSecondsInput",
@@ -102,7 +113,7 @@ export default async ({ addon, console, msg }) => {
       let handleOptionClose = null;
 
       const handleClickOutside = (e) => {
-        if (recordOptionInner.contains(e.target)) return;
+        if (recordOptionPopup.contains(e.target)) return;
         handleOptionClose(null);
       };
 
@@ -119,17 +130,16 @@ export default async ({ addon, console, msg }) => {
       };
 
       const buttonRow = Object.assign(document.createElement("div"), {
-        className: "mediaRecorderPopupButtons",
+        className: "mediaRecorderPopupButtons prompt_button-row_3Wc5Z",
       });
       const cancelButton = Object.assign(document.createElement("button"), {
         textContent: msg("cancel"),
-        className: "mediaRecorderPopupCancelButton",
       });
       cancelButton.addEventListener("click", () => handleOptionClose(null), { once: true });
       buttonRow.appendChild(cancelButton);
       const startButton = Object.assign(document.createElement("button"), {
         textContent: msg("start"),
-        className: "mediaRecorderPopupStartButton",
+        className: "prompt_ok-button_3QFdD",
       });
       startButton.addEventListener(
         "click",
@@ -145,7 +155,8 @@ export default async ({ addon, console, msg }) => {
       buttonRow.appendChild(startButton);
       recordOptionInner.appendChild(buttonRow);
 
-      recordOption.appendChild(recordOptionInner);
+	  recordOptionPopup.appendChild(recordOptionInner);
+      recordOption.appendChild(recordOptionPopup);
       document.body.appendChild(recordOption);
 
       return optionPromise;

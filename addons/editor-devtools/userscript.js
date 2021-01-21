@@ -11,9 +11,17 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   const releaseDateLocalized = new Intl.DateTimeFormat(scratchAddons.l10n.locale).format(releaseDate);
 
   const helpHTML = `
-<div id="s3devHelpPop">
-<div>
-<h1><strong>${m("help-title")}</strong></h1>
+<div id="s3devHelpPop" class="modal_modal-overlay_1Lcbx">
+<div class="modal_modal-content_1h3ll">
+<div class="modal_header_1h7ps">
+  <div class="modal_header-item_2zQTd modal_header-item-title_tLOU5">${m("help-title")}</div>
+  <div class="modal_header-item_2zQTd modal_header-item-close_2XDeL">
+    <div class="close-button close-button_close-button_lOp2G close-button_large_2oadS">
+	  <img class="close-button_close-icon_HBCuO" src="/static/assets/cb666b99d3528f91b52f985dfb102afa.svg">
+	</div>
+  </div>
+</div>
+<div id="s3devHelpContent">
 <p>${m("version", {
     version: "0.2.4",
     date: releaseDateLocalized,
@@ -44,6 +52,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 <p>${m(
     "youtube"
   )} -&nbsp;<a target="_blank" href="https://www.youtube.com/user/griffpatch">https://www.youtube.com/user/griffpatch</a></p>
+</div>
 </div>
 </div>
 `;
@@ -182,10 +191,13 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   function eventClickHelp(e) {
     if (!document.getElementById("s3devHelpPop")) {
       document.body.insertAdjacentHTML("beforeend", helpHTML);
-      document.getElementById("s3devHelpPop").addEventListener("mousedown", function (e) {
+      document.getElementById("s3devHelpPop").addEventListener("click", function (e) {
         if (e.target.id === "s3devHelpPop") {
           e.target.remove();
         }
+      });
+      document.querySelector("#s3devHelpPop .close-button").addEventListener("click", function (e) {
+        document.getElementById("s3devHelpPop").remove();
       });
     }
     e.preventDefault();
@@ -1441,7 +1453,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                         )} <a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a> </span>
                         <span id=s3devFind class="s3devWrap">
                             <div id='s3devDDOut' class="s3devDDOut">
-                                <input id='s3devInp' class="s3devInp" type='search' placeholder='${m(
+                                <input id='s3devInp' class="s3devInp input_input-form_l9eYg" type='search' placeholder='${m(
                                   "find-placeholder"
                                 )}' autocomplete='off'>
                                 <ul id='s3devDD' class="s3devDD"></ul>
@@ -1916,7 +1928,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
                     <span style="display:none;">${m("insert")} </span>
                     <span id=s3devInsert class="s3devWrap">
                         <div id='s3devIDDOut' class="s3devDDOut">
-                            <input id='s3devIInp' class="s3devInp" type='search' placeholder='${m(
+                            <input id='s3devIInp' class="s3devInp input_input-form_l9eYg" type='search' placeholder='${m(
                               "start-typing"
                             )}' autocomplete='off'>
                             <ul id='s3devIDD' class="s3devDD"></ul>
