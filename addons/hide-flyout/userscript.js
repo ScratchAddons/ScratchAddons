@@ -107,7 +107,7 @@ export default async function ({ addon, global, console }) {
         category.onclick = (e) => {
           if (toggle && selectedCat == category && addon.settings.get("toggle") === "category") onmouseleave();
           else if (!toggle) onmouseenter();
-          else return selectedCat = category;
+          else return (selectedCat = category);
           if (addon.settings.get("toggle") === "category") toggle = !toggle;
         };
       }
