@@ -17,15 +17,15 @@ export default async ({ addon, console, msg }) => {
       });
       recordOptionHeader.appendChild(
         Object.assign(document.createElement("div"), {
-		  className: "modal_header-item_2zQTd modal_header-item-title_tLOU5",
+          className: "modal_header-item_2zQTd modal_header-item-title_tLOU5",
           textContent: msg("option-title"),
           title: msg("added-by"),
         })
       );
-	  recordOptionPopup.appendChild(recordOptionHeader);
-	  const recordOptionInner = Object.assign(document.createElement("div"), {
-		className: "mediaRecorderPopupContent",
-	  });
+      recordOptionPopup.appendChild(recordOptionHeader);
+      const recordOptionInner = Object.assign(document.createElement("div"), {
+        className: "mediaRecorderPopupContent",
+      });
 
       recordOptionInner.appendChild(
         Object.assign(document.createElement("p"), {
@@ -42,7 +42,7 @@ export default async ({ addon, console, msg }) => {
         max: 300,
         defaultValue: 30,
         id: "recordOptionSecondsInput",
-		className: "prompt_variable-name-text-input_1iu8-",
+        className: "prompt_variable-name-text-input_1iu8-",
       });
       const recordOptionSecondsLabel = Object.assign(document.createElement("label"), {
         htmlFor: "recordOptionSecondsInput",
@@ -155,7 +155,7 @@ export default async ({ addon, console, msg }) => {
       buttonRow.appendChild(startButton);
       recordOptionInner.appendChild(buttonRow);
 
-	  recordOptionPopup.appendChild(recordOptionInner);
+      recordOptionPopup.appendChild(recordOptionInner);
       recordOption.appendChild(recordOptionPopup);
       document.body.appendChild(recordOption);
 
