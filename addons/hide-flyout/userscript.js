@@ -47,7 +47,7 @@ export default async function ({ addon, global, console }) {
       }
 
       function onmouseenter(speed = {}) {
-        speed = typeof speed == "object" ? getSpeedValue() : speed;
+        speed = typeof speed === "object" ? getSpeedValue() : speed;
         flyOut.classList.remove("sa-flyoutClose");
         flyOut.style.animation = `openFlyout ${speed}s 1`;
         scrollBar.classList.remove("sa-flyoutClose");
@@ -90,8 +90,8 @@ export default async function ({ addon, global, console }) {
           // Event casted when you switch between tabs
           case "scratch-gui/navigation/ACTIVATE_TAB":
             // always 0, 1, 2
-            lockDisplay.style.display = e.detail.action.activeTabIndex == 0 ? "block" : "none";
-            if (e.detail.action.activeTabIndex == 0)
+            lockDisplay.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
+            if (e.detail.action.activeTabIndex === 0)
               onmouseenter(0), positionElements(), (toggle = true), (justStart = true);
             break;
           // Event casted when you switch between tabs
@@ -105,8 +105,8 @@ export default async function ({ addon, global, console }) {
       while (true) {
         let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
         category.onclick = (e) => {
-          let allIn = [...document.querySelectorAll(".scratchCategoryMenuItem")].find((e) => e == category);
-          if (toggle && (selectedCat == category || allIn) && addon.settings.get("toggle") === "category")
+          let allIn = [...document.querySelectorAll(".scratchCategoryMenuItem")].find((e) => e === category);
+          if (toggle && (selectedCat === category || allIn) && addon.settings.get("toggle") === "category")
             onmouseleave(), (selectedCat = category), (justStart = false);
           else if (!toggle) onmouseenter(), (selectedCat = category), (justStart = false);
           else return (selectedCat = category), (justStart = false);
