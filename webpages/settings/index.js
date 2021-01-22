@@ -118,7 +118,6 @@ Vue.directive("click-outside", {
   },
 });
 
-const { ContainerMixin, ElementMixin, HandleDirective } = window.VueSlicksort;
 const vue = (window.vue = new Vue({
   el: "body",
   data: {
