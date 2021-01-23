@@ -91,6 +91,7 @@ export default async function ({ addon, global, console }) {
           case "scratch-gui/navigation/ACTIVATE_TAB":
             // always 0, 1, 2
             lockDisplay.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
+            placeHolderDiv.style.display = e.detail.action.activeTabIndex == 0 ? "block" : "none";
             if (e.detail.action.activeTabIndex === 0)
               onmouseenter(0), positionElements(), (toggle = true), (justStart = true);
             break;
@@ -98,6 +99,7 @@ export default async function ({ addon, global, console }) {
           case "scratch-gui/mode/SET_PLAYER":
             // always true or false
             lockDisplay.style.display = e.detail.action.isPlayerOnly ? "none" : "block";
+            placeHolderDiv.style.display = e.detail.action.activeTabIndex == 0 ? "block" : "none";
             break;
         }
       });
