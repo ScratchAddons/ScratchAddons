@@ -2,6 +2,13 @@
 #brdheader {
   background: #075e46;
 }
+#forum-search-form {
+  background-color: inherit;
+  border-top-color: #606060;
+}
+#forum-search-dropdown {
+  border-color: #606060;
+}
 .forum-search-list .blockpost {
   color: #fff;
 }

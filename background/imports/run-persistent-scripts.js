@@ -63,6 +63,8 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
     const module = await import(chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`));
     const log = console.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
     const warn = console.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
+    const msg = (key, placeholders) => scratchAddons.l10n.get(`${addonId}/${key}`, placeholders);
+    msg.locale = scratchAddons.l10n.locale;
     module.default({
       addon: addonObj,
       global: globalObj,
@@ -71,7 +73,7 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
       setInterval: setIntervalFunc,
       clearTimeout: clearTimeoutFunc,
       clearInterval: clearIntervalFunc,
-      msg: (key, placeholders) => scratchAddons.l10n.get(`${addonId}/${key}`, placeholders),
+      msg,
     });
   }
 }

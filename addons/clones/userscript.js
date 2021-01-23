@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   console.log("clones counter enabled");
 
-  const vm = addon.tab.traps.onceValues.vm;
+  const vm = addon.tab.traps.vm;
 
   vm.runtime.__cloneCounter = vm.runtime._cloneCounter;
 

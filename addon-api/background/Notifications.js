@@ -1,4 +1,10 @@
-export default class Notifications extends EventTarget {
+import Listenable from "../common/Listenable.js";
+
+/**
+ * Handles notifications.
+ * @extends Listenable
+ */
+export default class Notifications extends Listenable {
   constructor(addonObject) {
     super();
     this._addonId = addonObject.self.id;
@@ -41,6 +47,17 @@ export default class Notifications extends EventTarget {
     chrome.notifications.onClosed.addListener(this._onClosed);
     chrome.notifications.onButtonClicked.addListener(this._onButtonClicked);
   }
+  /**
+   * Creates a notification.
+   * @param {object} opts - options
+   * @param {Array.<{title: string}>=} opts.buttons - buttons to be displayed.
+   * @param {boolean=} opts.silent - whether the notification should play system notification sound or not.
+   * @param {string} opts.type - type of the notification, usually "basic".
+   * @param {string} opts.title - title of the notification.
+   * @param {string} opts.iconUrl - URL of the icon to be displayed.
+   * @param {string} opts.message - message to be displayed.
+   * @returns {Promise}
+   */
   create(opts, callback) {
     if (typeof opts !== "object") {
       throw "ScratchAddons exception: do not specify a notification ID.";
@@ -60,16 +77,28 @@ export default class Notifications extends EventTarget {
       chrome.notifications.create(notifId, newOpts, (callback) => resolve(callback));
     });
   }
+  /**
+   * Updates existing notifications.
+   * @returns {Promise}
+   */
   update(...args) {
     return new Promise((resolve) => {
       chrome.notifications.update(...args, (callback) => resolve(callback));
     });
   }
+  /**
+   * Clears existing notifications.
+   * @returns {Promise}
+   */
   clear(...args) {
     return new Promise((resolve) => {
       chrome.notifications.clear(...args, (callback) => resolve(callback));
     });
   }
+  /**
+   * Gets all notifications from the addon.
+   * @returns {Promise<object[]>} - notifications found.
+   */
   getAll() {
     return new Promise((resolve) => {
       chrome.notifications.getAll((notifications) => {
@@ -82,10 +111,14 @@ export default class Notifications extends EventTarget {
       });
     });
   }
+  /**
+   * Whether notifications are muted or not.
+   * @type {boolean}
+   */
   get muted() {
     return scratchAddons.muted;
   }
-  _removeEventListeners() {
+  dispose() {
     chrome.notifications.onClicked.removeListener(this._onClicked);
     chrome.notifications.onClosed.removeListener(this._onClosed);
     chrome.notifications.onButtonClicked.removeListener(this._onButtonClicked);

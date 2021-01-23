@@ -389,7 +389,7 @@ export default async function ({ addon, global, console, msg }) {
 
     removeOnionLayers();
 
-    const vm = addon.tab.traps.onceValues.vm;
+    const vm = addon.tab.traps.vm;
     if (!vm) {
       return;
     }

@@ -65,7 +65,6 @@
         <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
           <img src="../../images/icons/translate.svg" />
           <span>{{ msg("translate") }}</span>
-          <div class="badge purple tooltip" style="cursor: pointer">{{ msg("new") }}</div>
         </div>
         <div class="category category-small" @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
@@ -164,7 +163,7 @@
               </div>
               <div class="badge purple" v-if="addon._tags.new">{{ msg("new") }}</div>
               <div class="badge darkgreen" v-if="addon._tags.forEditor">{{ msg("forEditor") }}</div>
-              <div class="badge red tooltip" v-if="addon._tags.beta">
+              <div class="badge red tooltip beta-badge" v-if="addon._tags.beta">
                 {{ msg("beta") }}
                 <div class="tooltiptext">{{ msg("betaTooltip") }}</div>
               </div>

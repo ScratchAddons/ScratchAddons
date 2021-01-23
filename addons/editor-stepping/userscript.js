@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  const virtualMachine = addon.tab.traps.onceValues.vm;
+  const virtualMachine = addon.tab.traps.vm;
 
   let removeInterval = () => {};
   if (addon.tab.editorMode === "editor") {

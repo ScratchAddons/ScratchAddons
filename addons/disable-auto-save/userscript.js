@@ -31,7 +31,7 @@ export default async ({ addon, console }) => {
     saveObserver.observe(saveContainer, { childList: true });
     var alertContainer = await addon.tab.waitForElement("[class^='alerts_alerts-inner-container']");
     //edgecase: exit editor and enter editor
-    if (addon.tab.editorMode == "editor" && alertContainer.childNodes[0] !== undefined) {
+    if (addon.tab.editorMode === "editor" && alertContainer.childNodes[0] !== undefined) {
       alertContainer.childNodes[0].style.visibility = "hidden";
     }
     //hide the "can't save" warnings scratch gives us (don't worry, there won't be any zombie warnings :P)

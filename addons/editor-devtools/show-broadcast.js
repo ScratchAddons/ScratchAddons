@@ -3,7 +3,7 @@
 export default class ShowBroadcast {
   constructor(addon) {
     this.addon = addon;
-    this.vm = this.addon.tab.traps.onceValues.vm;
+    this.vm = this.addon.tab.traps.vm;
     this.highlights = {
       timeoutId: 0,
       callback: () => {},
