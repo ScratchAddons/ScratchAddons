@@ -92,3 +92,9 @@
   border-color: #606060 !important;
   background: transparent;
 }
+
+.uploadStatus {
+  height: 19px;
+  color: black;
+  padding: 1.5px;
+}
