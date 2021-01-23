@@ -5,6 +5,10 @@ export default class BlockItem {
     this.labelID = labelID;
     this.y = y;
     this.lower = procCode.toLowerCase();
+    /**
+     * An Array of block ids
+     * @type {Array.<string>}
+     */
     this.clones = null;
     this.eventName = null;
   }
@@ -19,8 +23,8 @@ export default class BlockItem {
       return true;
     }
     if (this.clones) {
-      for (const clone of this.clones) {
-        if (clone.id === id) {
+      for (const cloneID of this.clones) {
+        if (cloneID === id) {
           return true;
         }
       }

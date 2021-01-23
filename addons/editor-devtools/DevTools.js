@@ -1797,9 +1797,18 @@ export default class DevTools {
       this.getBlockText(block, options, doms);
     }
 
-    options.sort((a, b) => a.desc.localeCompare(b.desc));
+    // Griffpatch - on second thoughts - lets sort blocks by length so that shortest ones appear at the top.
+    options.sort((a, b) =>
+      a.desc.length < b.desc.length ? -1 : a.desc.length > b.desc.length ? 1 : a.desc.localeCompare(b.desc)
+    );
+
+    // Previous sort was just alphabetical
+    // options.sort((a, b) => a.desc.localeCompare(b.desc));
 
     const dd = document.getElementById("s3devIDD");
+
+    let count = 0;
+    //DROPDOWN_BLOCK_LIST_MAX_ROWS
 
     for (const option of options) {
       const li = document.createElement("li");
@@ -1809,10 +1818,16 @@ export default class DevTools {
 
       let bType = this.getEdgeTypeClass(option.block);
 
+      count++;
+
       li.innerText = desc;
       li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
       li.className =
         "var " + (option.block.isScratchExtension ? "extension" : option.block.getCategory()) + " " + bType; // proc.cls;
+      if (count > DROPDOWN_BLOCK_LIST_MAX_ROWS) {
+        // Limit maximum number of rows to prevent lag when no filter is applied
+        li.style.display = "none";
+      }
       dd.appendChild(li);
     }
 
@@ -1822,6 +1837,13 @@ export default class DevTools {
     // console.log(options);
   }
 
+  /**
+   * Flesh out a blocks description - duplicate up blocks with contained picklists (like list drop downs)
+   * @param block
+   * @param options
+   * @param doms
+   * @returns {string}
+   */
   getBlockText(block, options, doms) {
     // block.type;  "looks_nextbackdrop"
 
@@ -1832,30 +1854,41 @@ export default class DevTools {
 
     // dom = doms[block.type];
 
-    for (const input of block.inputList) {
-      // input.name = "", input.type = 5
-      let fields = input.fieldRow;
-      for (const field of fields) {
-        // field --- Blockly.FieldLabel .className = "blocklyText"
-        // Blockly.FieldDropdown --- .className = "blocklyText blocklyDropdownText"
+    const process = (block) => {
+      for (const input of block.inputList) {
+        // input.name = "", input.type = 5
+        let fields = input.fieldRow;
+        for (const field of fields) {
+          // field --- Blockly.FieldLabel .className = "blocklyText"
+          // Blockly.FieldDropdown --- .className = "blocklyText blocklyDropdownText"
 
-        let text;
+          let text;
 
-        if (!picklist && field.className_ === "blocklyText blocklyDropdownText") {
-          picklist = field.getOptions();
-          pickField = field.name;
-          if (picklist && picklist.length > 0) {
-            text = "^^";
+          if (!picklist && field.className_ === "blocklyText blocklyDropdownText") {
+            picklist = field.getOptions();
+            pickField = field.name;
+            if (picklist && picklist.length > 0) {
+              text = "^^";
+            } else {
+              text = field.getText();
+            }
           } else {
             text = field.getText();
           }
-        } else {
-          text = field.getText();
+
+          desc = (desc ? desc + " " : "") + text;
         }
 
-        desc = (desc ? desc + " " : "") + text;
+        if (input.connection) {
+          let innerBlock = input.connection.targetBlock();
+          if (innerBlock) {
+            process(innerBlock); // Recursive process connected child blocks...
+          }
+        }
       }
-    }
+    };
+
+    process(block);
 
     if (picklist) {
       for (const item of picklist) {
@@ -1974,6 +2007,12 @@ export default class DevTools {
     if (sel.tagName === "B") {
       sel = sel.parentNode;
     }
+
+    if (e instanceof MouseEvent && sel.tagName !== "LI") {
+      // Mouse clicks need to be on a block...
+      return;
+    }
+
     if (!sel || !sel.data) {
       let dd = document.getElementById("s3devIDD");
       sel = dd.querySelector(".sel");
@@ -2041,7 +2080,6 @@ export default class DevTools {
     dd.remove();
 
     let count = 0;
-    const max = 25;
 
     let split = val.split(" ");
     let listLI = dd.getElementsByTagName("li");
@@ -2064,7 +2102,7 @@ export default class DevTools {
         im = idx + find.length;
       }
 
-      if (count < max && match) {
+      if (count < DROPDOWN_BLOCK_LIST_MAX_ROWS && match) {
         li.style.display = "block";
         this.dom_removeChildren(li);
 
@@ -2242,6 +2280,8 @@ class Col {
     this.blocks = blocks;
   }
 }
+
+const DROPDOWN_BLOCK_LIST_MAX_ROWS = 25;
 
 let rhdd = 0;
 let rhdd2 = 0;
