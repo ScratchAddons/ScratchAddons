@@ -10,7 +10,7 @@ export default class Utils {
      * Scratch Virtual Machine
      * @type {null|*}
      */
-    this.vm = this.addon.tab.traps.onceValues.vm;
+    this.vm = this.addon.tab.traps.vm;
     // this._myFlash = { block: null, timerID: null, colour: null };
     this.offsetX = 32;
     this.offsetY = 32;

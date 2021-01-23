@@ -14,7 +14,7 @@ export default class DevTools {
     /**
      * @type {VirtualMachine}
      */
-    this.vm = addon.tab.traps.onceValues.vm;
+    this.vm = addon.tab.traps.vm;
     this.utils = new Utils(addon);
     this.domHelpers = new DomHelpers(addon);
     this.multi = new Multi(this.utils);

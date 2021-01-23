@@ -1,7 +1,7 @@
 export default class DomHelpers {
   constructor(addon) {
     this.addon = addon;
-    this.vm = addon.tab.traps.onceValues.vm;
+    this.vm = addon.tab.traps.vm;
     /**
      * @type {eventDetails[]}
      */
