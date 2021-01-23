@@ -12,12 +12,6 @@
       "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
-  "userstyles": [
-    {
-      "url": "userstyle.css",
-      "matches": ["https://scratch.mit.edu/discuss/*"]
-    }
-  ],
   "tags": ["forums", "community"],
   "enabledByDefault": false,
   "libraries": ["md5", "text-field-edit"],
