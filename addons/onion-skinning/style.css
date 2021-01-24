@@ -1,6 +1,7 @@
 .sa-onion-controls-container {
   display: flex;
   flex-direction: row;
+  height: calc(1.95rem + 2px);
 }
 
 .sa-onion-button {
