@@ -220,7 +220,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
-[v1.7.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.8.0
+[v1.8.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.8.0
 [v1.7.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.1
 [v1.7.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.0
 [v1.6.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.6.1
