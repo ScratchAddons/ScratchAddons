@@ -10,7 +10,8 @@ export default async function ({ addon, global, console }) {
 
       // Placeholder Div
       if (placeHolderDiv) placeHolderDiv.remove();
-      placeHolderDiv = document.body.appendChild(document.createElement("div"));
+      placeHolderDiv = document.createElement("div");
+      if (addon.settings.get("toggle") === "hover") document.body.appendChild(placeHolderDiv);
       placeHolderDiv.className = "sa-flyout-placeHolder";
 
       // Lock Img
