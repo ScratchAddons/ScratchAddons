@@ -41,6 +41,10 @@ Scratch Addons by itself is just an addon loader. Its main tasks are:
 - Avoid addons from interfering with each other.
 - Avoid duplicate work from different addons.
 
+### Addons outside of Scratch Addons itself
+
+Other extensions (and even forks of Scratch) can also provide their users with most addons from Scratch Addons, as long as a compatibility layer for `addon.*` and other parts of the addon loader is present. Notable examples are the [Scratch 3 Developer Tools extension](https://github.com/ScratchAddons/DevtoolsExtension) and the [TurboWarp](https://github.com/TurboWarp/scratch-gui/tree/develop/src/addons) editor. These also inherit translations from the Scratch Addons project.
+
 ## Install
 
 ### From extension stores
