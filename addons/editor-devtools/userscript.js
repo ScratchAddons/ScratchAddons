@@ -1,10 +1,12 @@
 import DevTools from "./DevTools.js";
 
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
-  // Scratch Addons: do not run if extension is already enabled
-
   // noinspection JSUnresolvedVariable
-  if (window.initGUI) {
+  if (
+    window.initGUI ||
+    (!addon.self._isDevtoolsExtension && document.head.classList.contains("griffpatchDevtoolsExtensionEnabled"))
+  ) {
+    console.log("Extension running, stopping addon");
     return;
   }
 
