@@ -23,7 +23,7 @@ automatically create a PR on the website to synchronize the changes!
 - Record project video addon: you can now record up to 5 minutes of project video and audio
 - Data category tweaks addon: new “move data blocks above variable list” setting
 - Removed addon: “fix ‘Load more’ scrolling in search results”, the bug was fixed in newer browser versions
-- Bug fix: unreadable search bar input with "website dark mode" enabled and "Scratch 2.0→3.0" disabled
+- Bug fix: unreadable search bar input with "website dark mode" enabled and "Scratch 2.0 → 3.0" disabled
 - Bug fix: permission prompts not working in Firefox
 
 #### Addon development changes:
