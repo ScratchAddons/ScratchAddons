@@ -9,15 +9,15 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   }
 
   // 0-indexed 6 = July
-  const releaseDate = new Date(2020, 6, 4);
-  const releaseDateLocalized = new Intl.DateTimeFormat(scratchAddons.l10n.locale).format(releaseDate);
+  const releaseDate = new Date(2021, 1, 8);
+  const releaseDateLocalized = new Intl.DateTimeFormat(msg.locale).format(releaseDate);
 
   const helpHTML = `
 <div id="s3devHelpPop">
 <div>
 <h1><strong>${m("help-title")}</strong></h1>
 <p>${m("version", {
-    version: "0.2.4",
+    version: "1.9.0",
     date: releaseDateLocalized,
     ndash: "&ndash;",
     url: '<a target="_blank" rel="noreferrer noopener" href="https://www.youtube.com/griffpatch">Griffpatch</a>',

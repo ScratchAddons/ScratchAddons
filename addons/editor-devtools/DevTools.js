@@ -2163,9 +2163,11 @@ export default class DevTools {
         `
                 <div id="s3devToolBar">
                     <label class='title s3devLabel' id=s3devFindLabel>
-                        <span>${this.m(
-                          "find"
-                        )} <a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a> </span>
+                        <span>${this.m("find")} ${
+          this.addon.self._isDevtoolsExtension
+            ? ""
+            : '<a href="#" class="s3devAction" id="s3devHelp" style="/*s-a*/ margin-left: 0; font-size: 10px; /*s-a*/">(?)</a>'
+        } </span>
                         <span id=s3devFind class="s3devWrap">
                             <div id='s3devDDOut' class="s3devDDOut">
                                 <input id='s3devInp' class="s3devInp" type='search' placeholder='${this.m(
@@ -2175,9 +2177,9 @@ export default class DevTools {
                             </div>
                         </span>
                         <a id="s3devDeep" class="s3devAction s3devHide" href="#">${this.m("deep")}</a>
-                        <div style="display: none;"><a href="#" class="s3devAction" id="s3devHelp"><b>${this.m(
-                          "help"
-                        )}</b></a>
+                        <div ${
+                          this.addon.self._isDevtoolsExtension ? "" : 'style="display: none;"'
+                        }><a href="#" class="s3devAction" id="s3devHelp"><b>${this.m("help")}</b></a>
                         <a href="https://www.youtube.com/griffpatch" class="s3devAction" target="_blank" id="s3devHelp">${this.m(
                           "tutorials"
                         )}</a></div>
@@ -2186,7 +2188,7 @@ export default class DevTools {
 <!--                    <a id="s3devReplace" class="s3devAction s3devHide" href="#">Replace All</a>-->
                 </div>
             `
-      ); // div style="display: none;" added by Scratch Addons
+      );
 
       this.find = document.getElementById("s3devFind");
       this.findInp = document.getElementById("s3devInp");
