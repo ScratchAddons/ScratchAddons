@@ -56,6 +56,10 @@
         {
           "id": "category",
           "name": "Category click"
+        },
+        {
+          "id": "cathover",
+          "name": "Category hover"
         }
       ],
       "default": "hover"

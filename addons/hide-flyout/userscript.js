@@ -57,17 +57,16 @@ export default async function ({ addon, global, console }) {
         lockDisplay.style.animation = `openLock ${speed}s 1`;
         setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
       }
-      function onmouseleave(e) {
+      function onmouseleave(e, speed = getSpeedValue()) {
         // If we go behind the flyout or the user has locked it, let's return
         if ((e && e.clientX <= scrollBar.getBoundingClientRect().left) || flyoutLock) return;
-        document.querySelector(".blocklyDropDownDiv").style.display = "none";
         flyOut.classList.add("sa-flyoutClose");
-        flyOut.style.animation = `closeFlyout ${getSpeedValue()}s 1`;
+        flyOut.style.animation = `closeFlyout ${speed}s 1`;
         scrollBar.classList.add("sa-flyoutClose");
-        scrollBar.style.animation = `closeScrollbar ${getSpeedValue()}s 1`;
+        scrollBar.style.animation = `closeScrollbar ${speed}s 1`;
         lockDisplay.classList.add("sa-flyoutClose");
-        lockDisplay.style.animation = `closeLock ${getSpeedValue()}s 1`;
-        setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), getSpeedValue() * 1000);
+        lockDisplay.style.animation = `closeLock ${speed}s 1`;
+        setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
       }
 
       // position elements which closes flyout on load
@@ -75,10 +74,9 @@ export default async function ({ addon, global, console }) {
       let toggle = true,
         selectedCat = null,
         justStart = true;
-      if (addon.settings.get("toggle") === "hover") {
-        placeHolderDiv.onmouseenter = onmouseenter;
+      if (addon.settings.get("toggle") === "hover")
+        placeHolderDiv.onmouseenter = onmouseenter,
         blocklySvg.onmouseenter = onmouseleave;
-      }
 
       addon.tab.redux.initialize();
       addon.tab.redux.addEventListener("statechanged", (e) => {
@@ -106,6 +104,8 @@ export default async function ({ addon, global, console }) {
         }
       });
 
+      if (addon.settings.get("toggle") === "cathover") onmouseleave(null, 0)
+
       while (true) {
         let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
         category.onclick = (e) => {
@@ -116,6 +116,9 @@ export default async function ({ addon, global, console }) {
           else return (selectedCat = category), (justStart = false);
           if (addon.settings.get("toggle") === "category") toggle = !toggle;
         };
+        if (addon.settings.get("toggle") === "cathover")
+          category.onmouseover = onmouseenter,
+          category.onmouseleave = () => onmouseleave();
       }
     })();
   }
