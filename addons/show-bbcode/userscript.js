@@ -1,5 +1,5 @@
 function viewSource(post, msg) {
-  return function(event) {
+  return function (event) {
     event.preventDefault();
     const body = post.querySelector(".postmsg");
     if (event.target.getAttribute("data-state") === "post") {
@@ -19,8 +19,8 @@ function viewSource(post, msg) {
       }
       event.target.setAttribute("data-state", "loading");
       source.innerText = msg("loading");
-      fetch("https://scratch.mit.edu/discuss/post/" + post.id.substring(1) + "/source/").then(function(res) {
-        res.text().then(function(text) {
+      fetch("https://scratch.mit.edu/discuss/post/" + post.id.substring(1) + "/source/").then(function (res) {
+        res.text().then(function (text) {
           event.target.setAttribute("data-state", "source");
           source.innerText = event.target.sourceText = text;
         });
@@ -35,7 +35,7 @@ function viewSource(post, msg) {
   };
 }
 
-export default async function({ addon, console, msg }) {
+export default async function ({ addon, console, msg }) {
   for (const post of document.querySelectorAll(".blockpost")) {
     const actionRow = post.querySelector(".postfootright ul");
     const sourceItem = document.createElement("li");
