@@ -59,6 +59,7 @@ export default async function ({ addon, global, console }) {
       function onmouseleave(e) {
         // If we go behind the flyout or the user has locked it, let's return
         if ((e && e.clientX <= scrollBar.getBoundingClientRect().left) || flyoutLock) return;
+        document.querySelector(".blocklyDropDownDiv").style.display = "none";
         flyOut.classList.add("sa-flyoutClose");
         flyOut.style.animation = `closeFlyout ${getSpeedValue()}s 1`;
         scrollBar.classList.add("sa-flyoutClose");
