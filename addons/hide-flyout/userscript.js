@@ -59,7 +59,7 @@ export default async function ({ addon, global, console }) {
       }
       function onmouseleave(e, speed = getSpeedValue()) {
         // If we go behind the flyout or the user has locked it, let's return
-        if ((e && e.clientX <= scrollBar.getBoundingClientRect().left) || flyoutLock) return;
+        if (addon.settings.get("toggle") !== "cathover" && (e && e.clientX <= scrollBar.getBoundingClientRect().left) || flyoutLock) return;
         flyOut.classList.add("sa-flyoutClose");
         flyOut.style.animation = `closeFlyout ${speed}s 1`;
         scrollBar.classList.add("sa-flyoutClose");
@@ -115,7 +115,7 @@ export default async function ({ addon, global, console }) {
           if (addon.settings.get("toggle") === "category") toggle = !toggle;
         };
         if (addon.settings.get("toggle") === "cathover")
-          (category.onmouseover = onmouseenter), (category.onmouseleave = () => onmouseleave());
+          (category.onmouseover = onmouseenter), (flyOut.onmouseleave = onmouseleave);
       }
     })();
   }
