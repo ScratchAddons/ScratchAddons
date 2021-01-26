@@ -7,5 +7,6 @@
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
-  "tags": ["easterEgg"]
+  "tags": ["easterEgg"],
+  "l10n": true
 }
