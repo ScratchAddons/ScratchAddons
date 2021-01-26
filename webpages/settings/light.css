@@ -94,6 +94,9 @@ body {
 .addon-warn {
   color: black;
 }
+.addon-warn img {
+  filter: none;
+}
 
 img :not(.navbar, .icon-type) {
   filter: invert(100%) brightness(0);
