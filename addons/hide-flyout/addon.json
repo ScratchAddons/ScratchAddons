@@ -54,12 +54,12 @@
           "name": "Hover"
         },
         {
-          "id": "category",
-          "name": "Category click"
-        },
-        {
           "id": "cathover",
           "name": "Category hover"
+        },
+        {
+          "id": "category",
+          "name": "Category click"
         }
       ],
       "default": "hover"
