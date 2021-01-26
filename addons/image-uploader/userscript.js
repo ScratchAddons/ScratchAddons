@@ -154,7 +154,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   async function uploadAssetImage(image, fileType) {
     //this is the stuff that matters
     progresselement = toolbar.appendChild(document.createElement("li"));
-
+    progresselement.className = "uploadStatus";
     console.log(image);
 
     var hash = md5(image);
