@@ -765,8 +765,11 @@ input[type="color"]::-webkit-color-swatch {
   overflow-y: hidden;
 }
 @media only screen and (max-width: 540px) {
-  .badge {
+  .badge:not(.beta-badge) {
     display: none !important;
+  }
+  .tooltiptext {
+    display: none;
   }
   .addon-description {
     display: none;
@@ -836,6 +839,8 @@ input[type="color"]::-webkit-color-swatch {
   /* vertically center */
   top: 50%;
   transform: translateY(-50%);
+  /* Bring it on top of other tags */
+  z-index: 10;
   /* move to right */
   left: 95%;
   margin-left: 15px;

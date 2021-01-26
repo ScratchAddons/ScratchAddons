@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   console.log("clones counter enabled");
 
-  const vm = addon.tab.traps.onceValues.vm;
+  const vm = addon.tab.traps.vm;
 
   vm.runtime.__cloneCounter = vm.runtime._cloneCounter;
 
@@ -62,12 +62,12 @@ export default async function ({ addon, global, console, msg }) {
 
 async function hideInSmallStageMode({ addon }) {
   while (true) {
-    await addon.tab.waitForElement(".stage-header_stage-size-toggle-group_17LtK", { markAsSeen: true });
+    await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group']", { markAsSeen: true });
 
-    document.querySelector(".stage-header_stage-button-first_y_CLF").addEventListener("click", () => {
+    document.querySelector("[class*='stage-header_stage-button-first']").addEventListener("click", () => {
       document.querySelector(".clone-container-container").style.display = "none";
     });
-    document.querySelector(".stage-header_stage-button-last_eeKZ4").addEventListener("click", () => {
+    document.querySelector("[class*='stage-header_stage-button-last']").addEventListener("click", () => {
       document.querySelector(".clone-container-container").style.display = "";
     });
   }

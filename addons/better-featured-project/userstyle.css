@@ -115,3 +115,6 @@
 #lfp-change-featured {
   display: none !important;
 }
+#bio-readonly {
+  width: 285px;
+}

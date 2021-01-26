@@ -1,0 +1,5 @@
+{
+  "a11y/a11y-category": "Accessibility",
+  "a11y/sayBubble": "Sprite is saying \"{text}\".",
+  "a11y/thinkBubble": "Sprite is thinking \"{text}\"."
+}

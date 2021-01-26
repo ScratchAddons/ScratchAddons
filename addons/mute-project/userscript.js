@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  const vm = addon.tab.traps.onceValues.vm;
+  const vm = addon.tab.traps.vm;
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", { markAsSeen: true });
     let mode = false;

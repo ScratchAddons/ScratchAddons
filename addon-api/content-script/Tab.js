@@ -1,35 +1,37 @@
 import Trap from "./Trap.js";
 import ReduxHandler from "./ReduxHandler.js";
+import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/data-url-to-blob.js";
+import getWorkerScript from "./worker.js";
 
 const DATA_PNG = "data:image/png;base64,";
 const template = document.getElementById("scratch-addons");
 
-export default class Tab extends EventTarget {
+/**
+ * APIs specific to userscripts.
+ * @extends Listenable
+ * @property {?string} clientVersion - version of the renderer (scratch-www, scratchr2, etc)
+ * @property {Trap} traps
+ * @property {ReduxHandler} redux
+ */
+export default class Tab extends Listenable {
   constructor(info) {
     super();
-    scratchAddons.eventTargets.tab.push(this);
+    this._addonId = info.id;
     this.clientVersion = document.querySelector("meta[name='format-detection']")
       ? "scratch-www"
       : document.querySelector("script[type='text/javascript']")
       ? "scratchr2"
       : null;
-    this.traps = new Trap();
-    if (window.__scratchAddonsTraps)
-      __scratchAddonsTraps.addEventListener("fakestatechanged", ({ detail }) => {
-        const newEvent = new CustomEvent("fakestatechanged", {
-          detail: {
-            reducerOrigin: detail.reducerOrigin,
-            path: detail.path,
-            prev: detail.prev,
-            next: detail.next,
-          },
-        });
-        this.traps.dispatchEvent(newEvent);
-      });
+    this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
   }
+  /**
+   * Loads a script by URL.
+   * @param {string} url - script URL.
+   * @returns {Promise}
+   */
   loadScript(url) {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -38,10 +40,15 @@ export default class Tab extends EventTarget {
       script.onload = resolve;
     });
   }
-  getScratchVM() {
-    return scratchAddons.methods.getScratchVM();
-  }
-  waitForElement(selector, { markAsSeen = false } = {}) {
+  /**
+   * Waits until an element renders, then return the element.
+   * @param {string} selector - argument passed to querySelector.
+   * @param {object} opts - options.
+   * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
+   * @returns {Promise<Element>} - element found.
+   */
+  waitForElement(selector, opts = {}) {
+    const markAsSeen = !!opts.markAsSeen;
     const firstQuery = document.querySelectorAll(selector);
     for (const element of firstQuery) {
       if (this._waitForElementSet.has(element)) continue;
@@ -66,7 +73,8 @@ export default class Tab extends EventTarget {
     );
   }
   /**
-   * @type {?string} editor mode (or null for non-editors).
+   * editor mode (or null for non-editors).
+   * @type {?string}
    */
   get editorMode() {
     const pathname = location.pathname.toLowerCase();
@@ -79,8 +87,8 @@ export default class Tab extends EventTarget {
   }
 
   /**
-   * Copy an PNG image.
-   * @param {string} dataURL data url of the png image
+   * Copies an PNG image.
+   * @param {string} dataURL - data url of the png image
    * @returns {Promise}
    */
   copyImage(dataURL) {
@@ -107,8 +115,8 @@ export default class Tab extends EventTarget {
   }
 
   /**
-   * Obtain translation used by Scratch.
-   * @param {string} key Translation key.
+   * Gets translation used by Scratch.
+   * @param {string} key - Translation key.
    * @returns {string} Translation.
    */
   scratchMessage(key) {
@@ -118,5 +126,28 @@ export default class Tab extends EventTarget {
     if (this.clientVersion === "scratchr2") {
       return window.django.gettext(key);
     }
+  }
+
+  /**
+   * @private
+   */
+  get _eventTargetKey() {
+    return "tab";
+  }
+
+  /**
+   * Loads a Web Worker.
+   * @async
+   * @param {string} url - URL of the worker to load.
+   * @returns {Promise<Worker>} - worker.
+   */
+  async loadWorker(url) {
+    const resp = await fetch(url);
+    const script = await resp.text();
+    const workerScript = getWorkerScript(this, script, url);
+    const blob = new Blob([workerScript], { type: "text/javascript" });
+    const workerURL = URL.createObjectURL(blob);
+    const worker = new Worker(workerURL);
+    return new Promise((resolve) => worker.addEventListener("message", () => resolve(worker), { once: true }));
   }
 }

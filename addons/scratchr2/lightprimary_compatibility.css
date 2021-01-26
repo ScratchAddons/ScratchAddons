@@ -35,7 +35,7 @@ button.grey,
   );
 }
 #topnav form.search .glass,
-#topnav ul.account-nav .messages .messages-icon,
+#topnav ul.account-nav .messages .messages-icon::before,
 #topnav ul.account-nav .my-stuff .mystuff-icon,
 #topnav .dropdown .caret,
 .button:not(.grey) .icon-sm {

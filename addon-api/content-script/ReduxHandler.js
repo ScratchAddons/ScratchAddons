@@ -1,4 +1,11 @@
-export default class ReduxHandler extends EventTarget {
+import Listenable from "../common/Listenable.js";
+
+/**
+ * Handles Redux state.
+ * @extends Listenable
+ * @property {boolean} initialized Whether the handler is initialized or not.
+ */
+export default class ReduxHandler extends Listenable {
   constructor() {
     super();
     this.initialized = false;
@@ -24,7 +31,8 @@ export default class ReduxHandler extends EventTarget {
   }
 
   /**
-   * @type {object} redux state
+   * Redux state.
+   * @type {object}
    */
   get state() {
     return __scratchAddonsRedux.state;
@@ -32,7 +40,8 @@ export default class ReduxHandler extends EventTarget {
 
   /**
    * Dispatches redux state change.
-   * @param {object} payload payload to pass to redux.
+   * @param {object} payload - payload to pass to redux.
+   * @throws when Redux is unavailable.
    */
   dispatch(payload) {
     if (!__scratchAddonsRedux.dispatch) throw new Error("Redux is unavailable");

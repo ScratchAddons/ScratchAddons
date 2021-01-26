@@ -1,1 +1,1 @@
-{"clones/@name":"Compteur de clones","clones/@description":"Ajoute un compteur dans l'éditeur pour voir le nombre total de clones"}
+{"clones/clones":"clones : {cloneCount}","clones/@name":"Compteur de clones","clones/@description":"Ajoute un compteur dans l'éditeur pour voir le compte total de clones."}
