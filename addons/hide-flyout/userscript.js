@@ -109,8 +109,7 @@ export default async function ({ addon, global, console }) {
       while (true) {
         let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
         category.onclick = (e) => {
-          let allIn = [...document.querySelectorAll(".scratchCategoryMenuItem")].find((e) => e === category);
-          if (toggle && (selectedCat === category || allIn) && addon.settings.get("toggle") === "category")
+          if (toggle && selectedCat === category && addon.settings.get("toggle") === "category")
             onmouseleave(), (selectedCat = category), (justStart = false);
           else if (!toggle) onmouseenter(), (selectedCat = category), (justStart = false);
           else return (selectedCat = category), (justStart = false);
