@@ -37,7 +37,7 @@ function viewSource(post, msg) {
 
 export default async function ({ addon, console, msg }) {
   while (true) {
-    const post = await addon.tab.waitForElement(".blockpost", {markAsSeen: true});
+    const post = await addon.tab.waitForElement(".blockpost", { markAsSeen: true });
     const actionRow = post.querySelector(".postfootright ul");
     const sourceItem = document.createElement("li");
     const quoteItem = actionRow.querySelector(".postquote");
