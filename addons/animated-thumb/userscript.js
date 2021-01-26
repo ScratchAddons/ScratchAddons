@@ -5,7 +5,7 @@ export default async function ({ addon, global, console, msg }) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
       markAsSeen: true,
     });
-    if (!document.querySelectorAll("[class^='author-info_username-line']").length > 0) {
+    if (!document.querySelector("[class^='author-info_username-line']")) {
       let setthumb = document.createElement("div");
       setthumb.classList.add("menu-bar_menu-bar-item_oLDa-");
       setthumb.title = msg("added-by");
