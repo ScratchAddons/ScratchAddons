@@ -32,6 +32,6 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     }
     this._generateCache();
     this._refreshDateTime();
-    this.loaded.concat(addonIds);
+    this.loaded = this.loaded.concat(addonIds);
   }
 }

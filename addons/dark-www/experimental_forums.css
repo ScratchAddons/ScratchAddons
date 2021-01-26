@@ -85,8 +85,8 @@
   background-color: #606060;
   color: transparent;
 }
-.markItUpHeader > ul > li:hover {
-  background-color: #fff;
+.markItUpHeader > ul > li.uploadStatus {
+  background: transparent !important;
 }
 .markItUpPreviewFrame {
   border-color: #606060 !important;

@@ -27,7 +27,7 @@
       "default": false
     },
     {
-      "name": "Move Reporters Under Operations",
+      "name": "Move data blocks above variables list",
       "id": "moveReportersDown",
       "type": "boolean",
       "default": false

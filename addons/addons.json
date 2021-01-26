@@ -69,5 +69,7 @@
   "mute-project",
   "disable-auto-save",
   "hide-flyout",
-  "comments-linebreaks"
+  "comments-linebreaks",
+  "account-settings-capitalize",
+  "show-bbcode"
 ]

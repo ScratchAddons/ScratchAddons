@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["data-category-tweaks-v2", "mute-project"];
+const NEW_ADDONS = ["hide-flyout", "mediarecorder"];
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];

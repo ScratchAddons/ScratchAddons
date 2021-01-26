@@ -205,7 +205,7 @@ input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="pass
 /** Menu bar **/
 
 [class^="gui_menu-bar"],
-[class^="modal_header"] {
+[class^="modal_header"]:not([class^="modal_header-item"]) {
   background-color: hsla(215, 20%, 35%, 1);
 }
 
