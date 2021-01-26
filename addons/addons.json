@@ -69,5 +69,6 @@
   "mute-project",
   "disable-auto-save",
   "hide-flyout",
-  "comments-linebreaks"
+  "comments-linebreaks",
+  "show-bbcode"
 ]
