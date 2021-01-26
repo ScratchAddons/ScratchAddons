@@ -75,8 +75,7 @@ export default async function ({ addon, global, console }) {
         selectedCat = null,
         justStart = true;
       if (addon.settings.get("toggle") === "hover")
-        placeHolderDiv.onmouseenter = onmouseenter,
-        blocklySvg.onmouseenter = onmouseleave;
+        (placeHolderDiv.onmouseenter = onmouseenter), (blocklySvg.onmouseenter = onmouseleave);
 
       addon.tab.redux.initialize();
       addon.tab.redux.addEventListener("statechanged", (e) => {
@@ -104,7 +103,7 @@ export default async function ({ addon, global, console }) {
         }
       });
 
-      if (addon.settings.get("toggle") === "cathover") onmouseleave(null, 0)
+      if (addon.settings.get("toggle") === "cathover") onmouseleave(null, 0);
 
       while (true) {
         let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
@@ -117,8 +116,7 @@ export default async function ({ addon, global, console }) {
           if (addon.settings.get("toggle") === "category") toggle = !toggle;
         };
         if (addon.settings.get("toggle") === "cathover")
-          category.onmouseover = onmouseenter,
-          category.onmouseleave = () => onmouseleave();
+          (category.onmouseover = onmouseenter), (category.onmouseleave = () => onmouseleave());
       }
     })();
   }
