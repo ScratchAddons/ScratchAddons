@@ -55,6 +55,9 @@ export default class DevTools {
           e.target.remove();
         }
       });
+      document.querySelector("#s3devHelpPop .close-button").addEventListener("click", function (e) {
+        document.getElementById("s3devHelpPop").remove();
+      });
     }
     e.preventDefault();
   }
@@ -1633,7 +1636,7 @@ export default class DevTools {
                     <span style="display:none;">${this.m("insert")} </span>
                     <span id=s3devInsert class="s3devWrap">
                         <div id='s3devIDDOut' class="s3devDDOut">
-                            <input id='s3devIInp' class="s3devInp" type='search' placeholder='${this.m(
+                            <input id='s3devIInp' class="s3devInp input_input-form_l9eYg" type='search' placeholder='${this.m(
                               "start-typing"
                             )}' autocomplete='off'>
                             <ul id='s3devIDD' class="s3devDD"></ul>
@@ -2170,7 +2173,7 @@ export default class DevTools {
         } </span>
                         <span id=s3devFind class="s3devWrap">
                             <div id='s3devDDOut' class="s3devDDOut">
-                                <input id='s3devInp' class="s3devInp" type='search' placeholder='${this.m(
+                                <input id='s3devInp' class="s3devInp input_input-form_l9eYg" type='search' placeholder='${this.m(
                                   "find-placeholder"
                                 )}' autocomplete='off'>
                                 <ul id='s3devDD' class="s3devDD"></ul>
