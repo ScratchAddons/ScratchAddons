@@ -1,0 +1,23 @@
+{
+  "name": "Linebreaks in comments",
+  "description": "Shows the linebreaks (pressing enter) in comments.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "https://scratch.mit.edu/users/*/",
+        "https://scratch.mit.edu/projects/*",
+        "https://scratch.mit.edu/studios/*/comments"
+      ],
+      "runAtComplete": false
+    }
+  ],
+  "tags": ["community"],
+  "l10n": true
+}

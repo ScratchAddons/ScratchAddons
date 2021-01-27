@@ -1,0 +1,4 @@
+.account-nav .dropdown > li:nth-child(3),
+ul.user-nav > li:nth-child(3) {
+  text-transform: capitalize;
+}

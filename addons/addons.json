@@ -9,6 +9,7 @@
   "editor-colored-context-menus",
   "editor-stage-left",
   "editor-theme3",
+  "a11y",
 
   "// For website:",
   "scratchr2",
@@ -67,5 +68,8 @@
   "data-category-tweaks-v2",
   "mute-project",
   "disable-auto-save",
-  "hide-flyout"
+  "hide-flyout",
+  "comments-linebreaks",
+  "account-settings-capitalize",
+  "show-bbcode"
 ]

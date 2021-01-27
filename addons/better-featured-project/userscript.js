@@ -1,10 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
   function createBetterProfilePage(featuredThumb, featuredLink, featuredHeading, featuredTitle) {
     document.documentElement.style.setProperty("--featured-thumb", `url("${featuredThumb}")`);
-    let profileUsername = document.querySelector(".header-text h2").innerText;
-    if (profileUsername.slice(-1) === "*") {
-      profileUsername = profileUsername.slice(0, -1);
-    }
     let boxHead = document.querySelector("#profile-data .box-head");
     if (featuredLink !== "") {
       if (document.querySelector(".user-content .player .title a").innerText.replace(/\s/g, "").length > 0) {

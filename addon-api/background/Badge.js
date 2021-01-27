@@ -1,3 +1,6 @@
+/**
+ * Represents badge.
+ */
 export default class Badge {
   constructor(addonObject) {
     this._addonId = addonObject.self.id;
@@ -8,9 +11,17 @@ export default class Badge {
       color: null,
     };
   }
+  /**
+   * Text shown on the badge.
+   * @type {?string}
+   */
   get text() {
     return this._text;
   }
+  /**
+   * Color of the badge.
+   * @type {?string}
+   */
   get color() {
     return this._color;
   }

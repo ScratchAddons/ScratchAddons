@@ -1,0 +1,40 @@
+{
+  "name": "Project screen reader support",
+  "description": "Adds limited support for screen readers to the Scratch player. It currently supports say and think bubbles. Functionality that allows projects to explicitly share labels and roles is still being tested.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "We're exploring new accessibility tools. If you've found this addon useful or have any suggestions, please send us a message by clicking \"Send Feedback\" on the left, and include your Scratch username so that we can reply.",
+      "id": "newA11yTools"
+    }
+  ],
+  "credits": [
+    {
+      "name": "A-E-",
+      "link": "https://scratch.mit.edu/users/A-E-/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Enable tab navigation for sprites",
+      "id": "tabNav",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["editor", "beta"],
+  "enabledByDefault": false,
+  "l10n": true
+}

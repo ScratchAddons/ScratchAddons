@@ -1,0 +1,12 @@
+{
+  "name": "Fix capitalization of Account Settings",
+  "description": "Changes \"Account settings\" in the account menu to \"Account Settings\".",
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "tags": ["easterEgg"],
+  "l10n": true
+}
