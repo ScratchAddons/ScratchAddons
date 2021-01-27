@@ -394,7 +394,7 @@ div.s3devDDOut.vis ul.s3devDD {
   margin-top: 20vh;
 }
 
-#s3devHelpPop [class*='modal_header-item-title'] {
+#s3devHelpPop [class*="modal_header-item-title"] {
   margin: 0 -20rem 0 0;
 }
 
