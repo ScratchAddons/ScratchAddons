@@ -15,9 +15,17 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   const releaseDateLocalized = new Intl.DateTimeFormat(msg.locale).format(releaseDate);
 
   const helpHTML = `
-<div id="s3devHelpPop">
-<div>
-<h1><strong>${m("help-title")}</strong></h1>
+<div id="s3devHelpPop" class="modal_modal-overlay_1Lcbx">
+<div class="modal_modal-content_1h3ll">
+<div class="modal_header_1h7ps">
+  <div class="modal_header-item_2zQTd modal_header-item-title_tLOU5">${m("help-title")}</div>
+  <div class="modal_header-item_2zQTd modal_header-item-close_2XDeL">
+    <div class="close-button close-button_close-button_lOp2G close-button_large_2oadS">
+	  <img class="close-button_close-icon_HBCuO" src="/static/assets/cb666b99d3528f91b52f985dfb102afa.svg">
+	</div>
+  </div>
+</div>
+<div id="s3devHelpContent">
 <p>${m("version", {
     version: "1.9.0",
     date: releaseDateLocalized,
@@ -48,6 +56,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 <p>${m(
     "youtube"
   )} -&nbsp;<a target="_blank" href="https://www.youtube.com/griffpatch">https://www.youtube.com/user/griffpatch</a></p>
+</div>
 </div>
 </div>
 `;
