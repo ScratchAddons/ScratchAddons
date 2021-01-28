@@ -173,6 +173,8 @@ export default class Tab extends Listenable {
       classNames.forEach((string) => (res += string + " "));
     }
     res = res.slice(0, -1);
+    // Sanitize just in case
+    res = res.replace(/"/g, "");
     return res;
   }
 }
