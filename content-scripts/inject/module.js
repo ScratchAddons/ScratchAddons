@@ -119,7 +119,9 @@ function loadClasses() {
             !(
               styleSheet.ownerNode.textContent.startsWith(
                 "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library."
-              ) && styleSheet.ownerNode.textContent.includes("input_input-form")
+              ) &&
+              (styleSheet.ownerNode.textContent.includes("input_input-form") ||
+                styleSheet.ownerNode.textContent.includes("label_input-group_"))
             )
         )
         .map((e) => {
