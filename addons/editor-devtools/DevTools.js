@@ -1365,11 +1365,15 @@ export default class DevTools {
           contextMenu.insertAdjacentHTML(
             "beforeend",
             `
-                            <div class="${this.addon.tab.scratchClass("context-menu_menu-item", { others: ["react-contextmenu-item", "s3devSTT"] })}" role="menuitem"
+                            <div class="${this.addon.tab.scratchClass("context-menu_menu-item", {
+                              others: ["react-contextmenu-item", "s3devSTT"],
+                            })}" role="menuitem"
                                 tabindex="-1" aria-disabled="false" style="border-top: 1px solid hsla(0, 0%, 0%, 0.15);"><span>${this.m(
                                   "top"
                                 )}</span></div>
-                            <div class="${this.addon.tab.scratchClass("context-menu_menu-item", { others: ["react-contextmenu-item", "s3devSTT"] })}" role="menuitem"
+                            <div class="${this.addon.tab.scratchClass("context-menu_menu-item", {
+                              others: ["react-contextmenu-item", "s3devSTT"],
+                            })}" role="menuitem"
                                 tabindex="-1" aria-disabled="false"><span>${this.m("bottom")}</span></div>
                         `
           );
@@ -1636,9 +1640,9 @@ export default class DevTools {
                     <span style="display:none;">${this.m("insert")} </span>
                     <span id=s3devInsert class="s3devWrap">
                         <div id='s3devIDDOut' class="s3devDDOut">
-                            <input id='s3devIInp' class="${this.addon.tab.scratchClass("input_input-form", { others : "s3devInp" })}" type='search' placeholder='${this.m(
-                              "start-typing"
-                            )}' autocomplete='off'>
+                            <input id='s3devIInp' class="${this.addon.tab.scratchClass("input_input-form", {
+                              others: "s3devInp",
+                            })}" type='search' placeholder='${this.m("start-typing")}' autocomplete='off'>
                             <ul id='s3devIDD' class="s3devDD"></ul>
                         </div>
                     </span>
@@ -2173,9 +2177,9 @@ export default class DevTools {
         } </span>
                         <span id=s3devFind class="s3devWrap">
                             <div id='s3devDDOut' class="s3devDDOut">
-                                <input id='s3devInp' class="${this.addon.tab.scratchClass("input_input-form", { others: "s3devInp" })}" type='search' placeholder='${this.m(
-                                  "find-placeholder"
-                                )}' autocomplete='off'>
+                                <input id='s3devInp' class="${this.addon.tab.scratchClass("input_input-form", {
+                                  others: "s3devInp",
+                                })}" type='search' placeholder='${this.m("find-placeholder")}' autocomplete='off'>
                                 <ul id='s3devDD' class="s3devDD"></ul>
                             </div>
                         </span>
