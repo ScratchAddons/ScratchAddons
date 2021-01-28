@@ -114,6 +114,14 @@ function loadClasses() {
   scratchAddons.classNames.arr = [
     ...new Set(
       [...document.styleSheets]
+        .filter(
+          (styleSheet) =>
+            !(
+              styleSheet.ownerNode.textContent.startsWith(
+                "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library."
+              ) && styleSheet.ownerNode.textContent.includes("input_input-form")
+            )
+        )
         .map((e) => {
           try {
             return [...e.cssRules];
