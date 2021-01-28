@@ -151,6 +151,13 @@ export default class Tab extends Listenable {
     return new Promise((resolve) => worker.addEventListener("message", () => resolve(worker), { once: true }));
   }
 
+    /**
+   * Gets the hashed class name for a Scratch stylesheet class name.
+   * @param {...*} args Unhashed class names.
+   * @param {object} opts - options.
+   * @param {String[]|String} opts.others - Non-Scratch class or classes to merge.
+   * @returns {string} Hashed class names.
+   */
   scratchClass(...args) {
     let res = "";
     args
