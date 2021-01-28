@@ -259,5 +259,23 @@
   },
   "skipOpenFullSettings": {
     "message": "Cancel"
+  },
+  "extensionStoreDescription1": {
+    "message": "➖ scratch.mit.edu features ➖\n- Messaging: click the extension icon to get a summary of your messages.\n- Cloud games: see who's playing multiplayer games.\n- Notifier: get browser notifications when you get new messages.\n- Navigation bar customization: re-add the “discuss” button.\n- Make 2.0-styled pages look like 3.0.\n- Website and editor dark modes.\n- And more!"
+  },
+  "extensionStoreDescription2": {
+    "message": "➖ Project editor features ➖\n- Developer tools: adds a find box and new menu options to the editor.\n- 60FPS player mode.\n- Pause button.\n- Onion skinning.\n- Auto-hide block palette.\n- Display stage on left side.\n- And more!\n"
+  },
+  "extensionStoreDescription3": {
+    "message": "Keep in mind, all features are togglable! To enable or disable them, go to the settings page by clicking this extension’s icon under “extensions” in the top-right corner of your browser, and then click the gear icon."
+  },
+  "extensionStoreDescription4": {
+    "message": "No usernames or passwords are stored, and you are required to be signed into your Scratch account in your browser for some features to work."
+  },
+  "extensionStoreDescription5": {
+    "message": "This extension is open source software licensed under GPL v3.\nTo contribute or check the source code: https://github.com/ScratchAddons\nFor more information, go to: ScratchAddons.com"
+  },
+  "extensionStoreDescription6": {
+    "message": "This project is not affiliated, associated, or in any way officially connected with the Scratch website, Team, Foundation, or any of its affiliates."
   }
 }
