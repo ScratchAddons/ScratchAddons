@@ -46,6 +46,16 @@ input.s3devInp {
   min-width: 100%;
   box-sizing: border-box;
   height: 1.5rem;
+
+  /* Change Scratch default styles */
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  padding-left: 0.4em;
+}
+
+input.s3devInp:focus {
+  /* Change Scratch default styles */
+  box-shadow: none;
 }
 
 /* Drop down from find button */
