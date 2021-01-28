@@ -14,7 +14,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   const releaseDate = new Date(2021, 1, 8);
   const releaseDateLocalized = new Intl.DateTimeFormat(msg.locale).format(releaseDate);
 
-  // TODO: use addon.tab.scratchClass sanitized
   const helpHTML = `
 <div id="s3devHelpPop" class="${addon.tab.scratchClass("modal_modal-overlay")}">
 <div class="${addon.tab.scratchClass("modal_modal-content")}">
