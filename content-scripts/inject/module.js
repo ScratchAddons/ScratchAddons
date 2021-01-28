@@ -146,13 +146,13 @@ function loadClasses() {
   });
 }
 
-if(document.querySelector("title")) loadClasses();
+if (document.querySelector("title")) loadClasses();
 else {
-const stylesObserver = new MutationObserver((mutationsList) => {
-  if (document.querySelector("title")) {
-    stylesObserver.disconnect();
-    loadClasses();
-  }
-});
-stylesObserver.observe(document.head, { childList: true });
+  const stylesObserver = new MutationObserver((mutationsList) => {
+    if (document.querySelector("title")) {
+      stylesObserver.disconnect();
+      loadClasses();
+    }
+  });
+  stylesObserver.observe(document.head, { childList: true });
 }

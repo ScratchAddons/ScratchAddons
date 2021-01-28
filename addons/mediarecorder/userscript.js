@@ -10,7 +10,7 @@ export default async ({ addon, console, msg }) => {
         className: addon.tab.scratchClass("modal_modal-overlay"),
       });
       const recordOptionPopup = Object.assign(document.createElement("div"), {
-        className: addon.tab.scratchClass("modal_modal-content", {others: "mediaRecorderPopup"}),
+        className: addon.tab.scratchClass("modal_modal-content", { others: "mediaRecorderPopup" }),
       });
       const recordOptionHeader = Object.assign(document.createElement("div"), {
         className: addon.tab.scratchClass("modal_header"),
@@ -130,7 +130,7 @@ export default async ({ addon, console, msg }) => {
       };
 
       const buttonRow = Object.assign(document.createElement("div"), {
-        className: addon.tab.scratchClass("prompt_button-row", {others:"mediaRecorderPopupButtons"}),
+        className: addon.tab.scratchClass("prompt_button-row", { others: "mediaRecorderPopupButtons" }),
       });
       const cancelButton = Object.assign(document.createElement("button"), {
         textContent: msg("cancel"),
