@@ -12,8 +12,12 @@ export default async function ({ addon, global, console, msg }) {
       let thumbinner = document.createElement("span");
       thumbinner.setAttribute(
         "class",
-        addon.tab.scratchClass("button_outlined-button", "menu-bar_menu-bar-button", "community-button_community-button"
-      ));
+        addon.tab.scratchClass(
+          "button_outlined-button",
+          "menu-bar_menu-bar-button",
+          "community-button_community-button"
+        )
+      );
       thumbinner.setAttribute("role", "button");
       setthumb.append(thumbinner);
       let thumbcontent = document.createElement("div");
