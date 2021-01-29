@@ -13,6 +13,13 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.8.1] - 2021-01-29
+
+- Bug fix: "more links" treating non-links as links
+- Bug fix: "Scratch 2.0→3.0" showing gray text on page load by default
+- Bug fix: "Website dark mode" causing unreadable text on "Forums image uploader"
+- Bug fix: "Auto-hide block palette" causing reporter return value bubbles to remain on screen
+
 ## [v1.8.0] - 2021-01-25
 
 - New addon: auto-hide block palette [recommended]
@@ -220,6 +227,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.8.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.8.1
 [v1.8.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.8.0
 [v1.7.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.1
 [v1.7.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.0
