@@ -3,17 +3,35 @@ export default async function ({ addon, global, console }) {
     let comment = await addon.tab.waitForElement(".comment .content, .comment-content", { markAsSeen: true });
     comment.style.whiteSpace = "break-spaces";
     if (!comment.classList.contains("comment-content")) {
-      for (let child of comment.childNodes)
+      let nodes = comment.childNodes;
+      for (let child of nodes)
         if (child.nodeName === "#text") {
-          child.textContent = child.textContent.trim();
-          if (child.textContent.length) {
+          if (child == nodes[0]) {
+            child.textContent = child.textContent.trimStart();
+            if (!child.nextSibling) {
+              child.textContent = child.textContent.trim();
+            }
+          } else {
+            if (child == nodes[nodes.length - 1]) {
+              child.textContent = child.textContent.trimEnd();
+            }
+            let firstA = [...nodes].find(n => n.tagName === "A" && (!n.previousSibling || n.previousSibling.textContent == ""));
+
             if (
-              child.previousSibling &&
-              child.previousSibling.tagName === "A" &&
-              child.previousSibling === comment.childNodes[1]
-            )
-              child.textContent = " " + child.textContent;
-            if (child.nextSibling && child.nextSibling.tagName === "A") child.textContent += " ";
+              firstA &&
+              child.previousSibling === firstA &&
+              child.previousSibling.tagName === "A"
+            ) {
+              if (child.textContent.startsWith(" *")) {
+                console.log(child.textContent);
+                child.textContent = "* " + child.textContent.split("").splice(
+                  child.textContent.split("").indexOf(child.textContent.split("").find(c => ![10, 32, 42].includes(c.charCodeAt(0)))),
+                    child.textContent.split("").indexOf(child.textContent.split("").find(c => ![10, 32, 42].includes(c.charCodeAt(0)))
+                  )
+                ).join("")
+              }
+              child.textContent = " " + child.textContent.trimStart();
+            }
           }
         }
     }
