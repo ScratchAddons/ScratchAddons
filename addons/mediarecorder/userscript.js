@@ -7,17 +7,17 @@ export default async ({ addon, console, msg }) => {
     });
     const getOptions = () => {
       const recordOption = Object.assign(document.createElement("div"), {
-        className: "modal_modal-overlay_1Lcbx",
+        className: addon.tab.scratchClass("modal_modal-overlay"),
       });
       const recordOptionPopup = Object.assign(document.createElement("div"), {
-        className: "mediaRecorderPopup modal_modal-content_1h3ll",
+        className: addon.tab.scratchClass("modal_modal-content", { others: "mediaRecorderPopup" }),
       });
       const recordOptionHeader = Object.assign(document.createElement("div"), {
-        className: "modal_header_1h7ps",
+        className: addon.tab.scratchClass("modal_header"),
       });
       recordOptionHeader.appendChild(
         Object.assign(document.createElement("div"), {
-          className: "modal_header-item_2zQTd modal_header-item-title_tLOU5",
+          className: addon.tab.scratchClass("modal_header-item", "modal_header-item-title"),
           textContent: msg("option-title"),
           title: msg("added-by"),
         })
@@ -42,7 +42,7 @@ export default async ({ addon, console, msg }) => {
         max: 300,
         defaultValue: 30,
         id: "recordOptionSecondsInput",
-        className: "prompt_variable-name-text-input_1iu8-",
+        className: addon.tab.scratchClass("prompt_variable-name-text-input"),
       });
       const recordOptionSecondsLabel = Object.assign(document.createElement("label"), {
         htmlFor: "recordOptionSecondsInput",
@@ -130,7 +130,7 @@ export default async ({ addon, console, msg }) => {
       };
 
       const buttonRow = Object.assign(document.createElement("div"), {
-        className: "mediaRecorderPopupButtons prompt_button-row_3Wc5Z",
+        className: addon.tab.scratchClass("prompt_button-row", { others: "mediaRecorderPopupButtons" }),
       });
       const cancelButton = Object.assign(document.createElement("button"), {
         textContent: msg("cancel"),
@@ -139,7 +139,7 @@ export default async ({ addon, console, msg }) => {
       buttonRow.appendChild(cancelButton);
       const startButton = Object.assign(document.createElement("button"), {
         textContent: msg("start"),
-        className: "prompt_ok-button_3QFdD",
+        className: addon.tab.scratchClass("prompt_ok-button"),
       });
       startButton.addEventListener(
         "click",

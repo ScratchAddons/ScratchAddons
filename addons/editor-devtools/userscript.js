@@ -15,13 +15,17 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   const releaseDateLocalized = new Intl.DateTimeFormat(msg.locale).format(releaseDate);
 
   const helpHTML = `
-<div id="s3devHelpPop" class="modal_modal-overlay_1Lcbx">
-<div class="modal_modal-content_1h3ll">
-<div class="modal_header_1h7ps">
-  <div class="modal_header-item_2zQTd modal_header-item-title_tLOU5">${m("help-title")}</div>
-  <div class="modal_header-item_2zQTd modal_header-item-close_2XDeL">
-    <div class="close-button close-button_close-button_lOp2G close-button_large_2oadS">
-	  <img class="close-button_close-icon_HBCuO" src="/static/assets/cb666b99d3528f91b52f985dfb102afa.svg">
+<div id="s3devHelpPop" class="${addon.tab.scratchClass("modal_modal-overlay")}">
+<div class="${addon.tab.scratchClass("modal_modal-content")}">
+<div class="${addon.tab.scratchClass("modal_header")}">
+  <div class="${addon.tab.scratchClass("modal_header-item", "modal_header-item-title")}">${m("help-title")}</div>
+  <div class="${addon.tab.scratchClass("modal_header-item", "modal_header-item-close")}">
+    <div class="${addon.tab.scratchClass("close-button_close-button", "close-button_large", {
+      others: "close-button",
+    })}">
+	  <img class="${addon.tab.scratchClass(
+      "close-button_close-icon"
+    )}" src="/static/assets/cb666b99d3528f91b52f985dfb102afa.svg">
 	</div>
   </div>
 </div>
