@@ -15,20 +15,26 @@ export default async function ({ addon, global, console }) {
             if (child == nodes[nodes.length - 1]) {
               child.textContent = child.textContent.trimEnd();
             }
-            let firstA = [...nodes].find(n => n.tagName === "A" && (!n.previousSibling || n.previousSibling.textContent == ""));
+            let firstA = [...nodes].find(
+              (n) => n.tagName === "A" && (!n.previousSibling || n.previousSibling.textContent == "")
+            );
 
-            if (
-              firstA &&
-              child.previousSibling === firstA &&
-              child.previousSibling.tagName === "A"
-            ) {
+            if (firstA && child.previousSibling === firstA && child.previousSibling.tagName === "A") {
               if (child.textContent.startsWith(" *")) {
                 console.log(child.textContent);
-                child.textContent = "* " + child.textContent.split("").splice(
-                  child.textContent.split("").indexOf(child.textContent.split("").find(c => ![10, 32, 42].includes(c.charCodeAt(0)))),
-                    child.textContent.split("").indexOf(child.textContent.split("").find(c => ![10, 32, 42].includes(c.charCodeAt(0)))
-                  )
-                ).join("")
+                child.textContent =
+                  "* " +
+                  child.textContent
+                    .split("")
+                    .splice(
+                      child.textContent
+                        .split("")
+                        .indexOf(child.textContent.split("").find((c) => ![10, 32, 42].includes(c.charCodeAt(0)))),
+                      child.textContent
+                        .split("")
+                        .indexOf(child.textContent.split("").find((c) => ![10, 32, 42].includes(c.charCodeAt(0))))
+                    )
+                    .join("");
               }
               child.textContent = " " + child.textContent.trimStart();
             }
