@@ -3,8 +3,7 @@ import DevTools from "./DevTools.js";
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
   // noinspection JSUnresolvedVariable
   if (
-    !addon.self._isDevtoolsExtension &&
-    (window.initGUI || document.head.classList.contains("griffpatchDevtoolsExtensionEnabled"))
+    !addon.self._isDevtoolsExtension && window.initGUI
   ) {
     console.log("Extension running, stopping addon");
     return;
