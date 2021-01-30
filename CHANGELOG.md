@@ -13,7 +13,112 @@ automatically create a PR on the website to synchronize the changes!
 
 -->
 
+<!--
+
+Here's the simple format. Other types such as "Removed" can be added later.
+
+### Added
+
+#### Addons
+
+#### Extension and Addon API
+
+### Changed
+
+#### Addons
+
+#### Extension and Addon API
+
+### Fixed
+
+#### Addons
+
+#### Extension and Addon API
+
+-->
+
 <!-- sa-changelog-start -->
+
+## [v1.8.1] - 2021-01-29
+
+### Changed
+
+- Make some classes not use hardcoded hashes (#1403)
+- Fix unused vars and return values
+
+### Fixed
+
+- Auto-hide block palette: Addon causing reporter return value bubbles to remain on screen
+- More links: Words with ellipsis treated as links due to faulty regex (#1416)
+- Scratch 2.0 → 3.0: Gray text shown on page load by default (#1417)
+- Website dark mode: Forums image uploader text unreadable (#1389)
+
+## [v1.8.0] - 2021-01-25
+
+### Added
+
+#### Addons
+
+- Disable auto-save (#1232)
+- Hide block palette (#1319)
+- Project screen reader support (#1332)
+- Linebreaks in comments (#1338)
+- Better forum quoter: Include BBCode (#1230)
+- Cat blocks: Add blinking (#1310)
+- Data category tweaks: Move reporters under operations section (#1300)
+- Record project video: Support sound recording (#1321)
+- Record project video: Improve UI and add options (#1347)
+- Show full areas: Support signature settings (#1251)
+
+#### Extension and Addon API
+
+- Add msg.locale (#1314)
+- Add Trap.getBlockly (#1331)
+- Add JSDoc (#1339)
+
+### Changed
+
+#### Extension and Addon API
+
+- Tooltips are rendered below tags (#1318)
+- Refactor traps (#1331)
+- Show beta tag in settings popup (#1336)
+- Show warnings in settings popup (#1336)
+- Used incorrect cases README and CREDITS (#1344)
+- Use SPDX indentifier in licenses (#1344)
+- Add web worker support on userscripts (#1345)
+- Bump intl-messageformat (#1348)
+
+### Fixed
+
+#### Addons
+
+- Cat blocks: fix missing ears (#1306)
+- Developer tools: Help window is incompatible with "Website dark mode" (#1372)
+- Editor dark mode: Custom procedure modal title cut (#1372)
+- Infinite scrolling: Remove blank space scratchr2 footer (#1375)
+- More links: Addon blocks main thread (#1345)
+- Scratch 2.0 → 3.0: Remix tree button color affected (#1275)
+- Semicolon glitch: Semicolon has wrong color (#1297)
+- Website dark mode: 1Emojis have white background (#1276)
+- Website dark mode: 2Search bar made unreadable (#1360)
+- Website dark mode: 3Message count made unreadable (#1365)
+
+#### Extension and Addon API
+
+- LocalizationProvider logs excessive amount of errors (#1335)
+- Addons with permission requirements cannot be enabled on Firefox (#1359)
+
+### Removed
+
+#### Addons
+
+- Fix "Load more" scrolling in search results (#1311)
+- Highlight currently executing blocks: Remove notice (#1312)
+
+#### Extension and Addon API
+
+- Remove unused API Tab.getScratchVM (#1339)
 
 ## [v1.7.1] - 2021-01-11
 
@@ -319,6 +424,8 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.8.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.8.1
+[v1.8.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.8.0
 [v1.7.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.1
 [v1.7.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.0
 [v1.6.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.6.1
@@ -338,27 +445,3 @@ Initial release.
 [v1.0.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.0.0
 
 <!-- sa-changelog-end -->
-
-<!--
-
-Here's the simple format. Other types such as "Removed" can be added later.
-
-### Added
-
-#### Addons
-
-#### Extension and Addon API
-
-### Changed
-
-#### Addons
-
-#### Extension and Addon API
-
-### Fixed
-
-#### Addons
-
-#### Extension and Addon API
-
--->
