@@ -319,15 +319,31 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 
 ## [v1.3.3] - 2020-11-24
 
+### Changed
+
+- Moves libraries used by addons, previously loaded from CDNs, to the `libraries` folder
+
 ## [v1.3.2] - 2020-11-24
 
+### Fixed
+
+- More links: Fix security issue due to faulty regular expression (GHSA-6qfq-px3r-xj4p)
+
 ## [v1.3.1] - 2020-11-09
+
+### Fixed
+
+- Live featured project: Disable addon by default
 
 ## [v1.3.0] - 2020-11-08
 
 ## [v1.2.1] - 2020-10-27
 
 NOTE: All updates from [v1.2.0] are pushed on this version.
+
+### Fixed
+
+- Fix addon warning not showing (#571)
 
 ## [v1.2.0] - 2020-10-27 [YANKED]
 
