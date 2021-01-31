@@ -94,6 +94,12 @@
       "id": "remixproject_notifications",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "@admin-users.svg Notify studio promotions",
+      "id": "becomeownerstudio_notifications",
+      "type": "boolean",
+      "default": true
     }
   ],
   "tags": ["community", "recommended"],

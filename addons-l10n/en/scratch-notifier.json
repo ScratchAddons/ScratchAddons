@@ -17,5 +17,6 @@
   "scratch-notifier/notif-studio": "There was new activity in studio \"{title}\" today",
   "scratch-notifier/notif-generic": "New Scratch message",
   "scratch-notifier/open": "Open messages page",
-  "scratch-notifier/clear": "Mark all as read"
+  "scratch-notifier/clear": "Mark all as read",
+  "scratch-notifier/notif-promotion": "{actor} promoted you to manager for the studio \"{title}\""
 }
