@@ -23,46 +23,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
     }
   });
 
-  const usedMessages = [
-    "scratch-messaging/send-error",
-    "scratch-messaging/deleting",
-    "scratch-messaging/delete-error",
-    "scratch-messaging/deleted",
-    "scratch-messaging/popup-title",
-    "scratch-messaging/open-new-tab",
-    "scratch-messaging/delete",
-    "scratch-messaging/delete-confirm",
-    "scratch-messaging/reply",
-    "scratch-messaging/posting",
-    "scratch-messaging/post",
-    "scratch-messaging/cancel",
-    "scratch-messaging/chars-left",
-    "scratch-messaging/follows",
-    "scratch-messaging/studio-invites",
-    "scratch-messaging/curate-invite",
-    "scratch-messaging/forum",
-    "scratch-messaging/forum-new-post",
-    "scratch-messaging/studio-activity",
-    "scratch-messaging/new-activity",
-    "scratch-messaging/remixes",
-    "scratch-messaging/remix-as",
-    "scratch-messaging/your-profile",
-    "scratch-messaging/others-profile",
-    "scratch-messaging/studio",
-    "scratch-messaging/loading",
-    "scratch-messaging/logged-out",
-    "scratch-messaging/disabled",
-    "scratch-messaging/settings",
-    "scratch-messaging/loading-comments",
-    "scratch-messaging/reload",
-    "scratch-messaging/no-unread",
-    "scratch-messaging/show-more",
-    "scratch-messaging/mark-as-read",
-    "scratch-messaging/marked-as-read",
-    "scratch-messaging/open-messages",
-  ];
-
-  await l10n.loadMessages(usedMessages);
+  await l10n.loadByAddonId("scratch-messaging");
 
   let dateNow = Date.now();
 
@@ -226,6 +187,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
 
       follows: [],
       studioInvites: [],
+      studioPromotions: [],
       forumActivity: [],
       studioActivity: [],
       remixes: [],
@@ -237,6 +199,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       messageTypeExtended: {
         follows: false,
         studioInvites: false,
+        studioPromotions: false,
         forumActivity: false,
         studioActivity: false,
         remixes: false,
@@ -258,6 +221,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         markAsReadMsg: l10n.get("scratch-messaging/mark-as-read"),
         markedAsReadMsg: l10n.get("scratch-messaging/marked-as-read"),
         openMessagesMsg: l10n.get("scratch-messaging/open-messages"),
+        studioPromotionsMsg: l10n.get("scratch-messaging/studio-promotions"),
       },
     },
     watch: {
@@ -266,6 +230,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         this.commentsProgress = 0;
         this.follows = [];
         this.studioInvites = [];
+        this.studioPromotions = [];
         this.forumActivity = [];
         this.studioActivity = [];
         this.remixes = [];
@@ -454,6 +419,12 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
               studioId: message.gallery_id,
               studioTitle: message.title,
             });
+          } else if (message.type === "becomeownerstudio") {
+            this.studioPromotions.push({
+              actor: message.actor_username,
+              studioId: message.gallery_id,
+              studioTitle: message.gallery_title,
+            });
           } else if (message.type === "forumpost") {
             // We only want one message per forum topic
             if (!this.forumActivity.find((obj) => obj.topicId === message.topic_id)) {
@@ -540,6 +511,18 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
             style="text-decoration: underline"
         >${escapeHTML(invite.studioTitle)}</a>`;
         return l10n.escaped("scratch-messaging/curate-invite", { actor, title });
+      },
+      studioPromotionHTML(promotion) {
+        const actor = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/users/${promotion.actor}/"
+        >${promotion.actor}</a>`;
+        const title = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/studios/${promotion.studioId}/curators/"
+            style="text-decoration: underline"
+        >${escapeHTML(promotion.studioTitle)}</a>`;
+        return l10n.escaped("scratch-messaging/studio-promotion", { actor, title });
       },
       forumHTML(forumTopic) {
         const title = `<a target="_blank"
