@@ -266,7 +266,12 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           fragment: htmlToText(message.comment_fragment), // Comments only
           commentee: message.commentee_username, // Comments only
           commentUrl, // Comments only
-          title: message.comment_obj_title || message.topic_title || message.title || message.project_title || message.gallery_title,
+          title:
+            message.comment_obj_title ||
+            message.topic_title ||
+            message.title ||
+            message.project_title ||
+            message.gallery_title,
           element_id: message.comment_id || message.gallery_id || message.project_id || message.topic_id,
           parent_title: message.parent_title, // Remixes only
         };
