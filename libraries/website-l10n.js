@@ -1,16 +1,12 @@
 import LocalizationProvider from "./l10n.js";
 
 export default class WebsiteLocalizationProvider extends LocalizationProvider {
-    async loadMessages (messages) {
+    async loadByAddonId (addonId) {
         const translations = await new Promise(
-            resolve => chrome.runtime.sendMessage({ messages }, resolve)
+            resolve => chrome.runtime.sendMessage({ l10nAddonId: addonId }, resolve)
         );
-        const keyValue = messages.reduce((acc, cur, idx) => {
-            acc[cur] = translations[idx];
-            return acc;
-        }, {});
-        this.messages = Object.assign(keyValue, this.messages);
+        this.messages = Object.assign(translations, this.messages);
         this._refreshDateTime();
-        this._generateCache(keyValue);
+        this._generateCache(translations);
     }
 }

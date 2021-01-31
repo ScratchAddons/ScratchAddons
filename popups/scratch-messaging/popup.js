@@ -23,46 +23,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
     }
   });
 
-  const usedMessages = [
-    "scratch-messaging/send-error",
-    "scratch-messaging/deleting",
-    "scratch-messaging/delete-error",
-    "scratch-messaging/deleted",
-    "scratch-messaging/popup-title",
-    "scratch-messaging/open-new-tab",
-    "scratch-messaging/delete",
-    "scratch-messaging/delete-confirm",
-    "scratch-messaging/reply",
-    "scratch-messaging/posting",
-    "scratch-messaging/post",
-    "scratch-messaging/cancel",
-    "scratch-messaging/chars-left",
-    "scratch-messaging/follows",
-    "scratch-messaging/studio-invites",
-    "scratch-messaging/curate-invite",
-    "scratch-messaging/forum",
-    "scratch-messaging/forum-new-post",
-    "scratch-messaging/studio-activity",
-    "scratch-messaging/new-activity",
-    "scratch-messaging/remixes",
-    "scratch-messaging/remix-as",
-    "scratch-messaging/your-profile",
-    "scratch-messaging/others-profile",
-    "scratch-messaging/studio",
-    "scratch-messaging/loading",
-    "scratch-messaging/logged-out",
-    "scratch-messaging/disabled",
-    "scratch-messaging/settings",
-    "scratch-messaging/loading-comments",
-    "scratch-messaging/reload",
-    "scratch-messaging/no-unread",
-    "scratch-messaging/show-more",
-    "scratch-messaging/mark-as-read",
-    "scratch-messaging/marked-as-read",
-    "scratch-messaging/open-messages",
-  ];
-
-  await l10n.loadMessages(usedMessages);
+  await l10n.loadByAddonId("scratch-messaging");
 
   let dateNow = Date.now();
 

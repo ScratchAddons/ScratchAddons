@@ -16,7 +16,7 @@ import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
     }
   });
 
-  await l10n.loadMessages(["cloud-games/popup-title", "cloud-games/no-users"]);
+  await l10n.loadByAddonId("cloud-games");
 
   const vue = new Vue({
     el: "body",
