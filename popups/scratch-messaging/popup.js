@@ -452,15 +452,15 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
           } else if (message.type === "loveproject") {
             const projectObject = this.getProjectObject(message.project_id, message.title);
             projectObject.loveCount++;
-            const findLover = projectObject.loversAndFavers.find(obj => obj.username === message.actor_username);
+            const findLover = projectObject.loversAndFavers.find((obj) => obj.username === message.actor_username);
             if (findLover) findLover.loved = true;
-            else projectObject.loversAndFavers.push({username: message.actor_username, loved: true, faved: false});
+            else projectObject.loversAndFavers.push({ username: message.actor_username, loved: true, faved: false });
           } else if (message.type === "favoriteproject") {
             const projectObject = this.getProjectObject(message.project_id, message.project_title);
             projectObject.favoriteCount++;
-            const findFaver = projectObject.loversAndFavers.find(obj => obj.username === message.actor_username);
+            const findFaver = projectObject.loversAndFavers.find((obj) => obj.username === message.actor_username);
             if (findFaver) findFaver.faved = true;
-            else projectObject.loversAndFavers.push({username: message.actor_username, loved: false, faved: true});
+            else projectObject.loversAndFavers.push({ username: message.actor_username, loved: false, faved: true });
           } else if (message.type === "addcomment") {
             const resourceId = message.comment_type === 1 ? message.comment_obj_title : message.comment_obj_id;
             let location = commentLocations[message.comment_type].find((obj) => obj.resourceId === resourceId);
@@ -573,9 +573,9 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       },
       projectLoversAndFavers(project) {
         // First lovers&favers, then favers-only, then lovers only. Lower is better
-        const priorityOf = obj => obj.loved && obj.faved ? 0 : obj.faved ? 1 : 2;
+        const priorityOf = (obj) => (obj.loved && obj.faved ? 0 : obj.faved ? 1 : 2);
         let str = "";
-        const arr = project.loversAndFavers.slice(0, 20).sort((a,b) => {
+        const arr = project.loversAndFavers.slice(0, 20).sort((a, b) => {
           const priorityA = priorityOf(a);
           const priorityB = priorityOf(b);
           if (priorityA > priorityB) return 1;
@@ -590,7 +590,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
           if (i !== arr.length - 1) str += "<br>";
         });
         return str;
-      }
+      },
     },
   });
 })();
