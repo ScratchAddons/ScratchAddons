@@ -28,6 +28,13 @@
   /* display: none; */
   visibility: hidden;
   /* hide by default */
+  border: 2px solid #aaa;
+}
+.tooltiptext.tooltiptextleft {
+  left: auto;
+  right: 95%;
+  margin-left: 0;
+  margin-right: 15px;
 }
 
 .tooltip:hover .tooltiptext {
@@ -42,6 +49,12 @@
   border-width: 5px;
   border-style: solid;
   border-color: transparent black transparent transparent;
+  white-space: normal;
+}
+.tooltip .tooltiptext.tooltiptextleft::after {
+  right: auto;
+  left: 100%;
+  border-color: transparent transparent transparent black;
 }
 
 .tooltiptext:hover .tooltiptext:after {

@@ -276,12 +276,15 @@
         <div class="message-type-title">
           <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
           <span class="float-right">
-            <span v-show="project.loves"
-              ><img class="small-icon colored" src="../../images/icons/heart.svg" /> {{project.loves}}</span
-            >
-            <span v-show="project.favorites"
-              ><img class="small-icon colored" src="../../images/icons/star.svg" /> {{project.favorites}}</span
-            >
+            <div class="tooltip" style="display: inline-block; margin-right: 6px;">
+              <span v-show="project.loveCount"
+                ><img class="small-icon colored" src="../../images/icons/heart.svg" /> {{project.loveCount}}</span
+              >
+              <span v-show="project.favoriteCount"
+                ><img class="small-icon colored" src="../../images/icons/star.svg" /> {{project.favoriteCount}}</span
+              >
+              <span class="tooltiptext tooltiptextleft" v-html="projectLoversAndFavers(project)"></span>
+            </div>
             <span v-show="project.unreadComments"
               ><img class="small-icon" src="../../images/icons/comment.svg" /> {{project.unreadComments}}</span
             >

@@ -322,8 +322,9 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
           title,
           unreadComments: 0,
           commentChains: [],
-          loves: 0,
-          favorites: 0,
+          loveCount: 0,
+          favoriteCount: 0,
+          loversAndFavers: [],
           loadedComments: false,
         };
         this.projects.push(obj);
@@ -449,9 +450,17 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
               });
             }
           } else if (message.type === "loveproject") {
-            this.getProjectObject(message.project_id, message.title).loves++;
+            const projectObject = this.getProjectObject(message.project_id, message.title);
+            projectObject.loveCount++;
+            const findLover = projectObject.loversAndFavers.find(obj => obj.username === message.actor_username);
+            if (findLover) findLover.loved = true;
+            else projectObject.loversAndFavers.push({username: message.actor_username, loved: true, faved: false});
           } else if (message.type === "favoriteproject") {
-            this.getProjectObject(message.project_id, message.project_title).favorites++;
+            const projectObject = this.getProjectObject(message.project_id, message.project_title);
+            projectObject.favoriteCount++;
+            const findFaver = projectObject.loversAndFavers.find(obj => obj.username === message.actor_username);
+            if (findFaver) findFaver.faved = true;
+            else projectObject.loversAndFavers.push({username: message.actor_username, loved: false, faved: true});
           } else if (message.type === "addcomment") {
             const resourceId = message.comment_type === 1 ? message.comment_obj_title : message.comment_obj_id;
             let location = commentLocations[message.comment_type].find((obj) => obj.resourceId === resourceId);
@@ -562,6 +571,26 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       studioText(title) {
         return l10n.get("scratch-messaging/studio", { title });
       },
+      projectLoversAndFavers(project) {
+        // First lovers&favers, then favers-only, then lovers only. Lower is better
+        const priorityOf = obj => obj.loved && obj.faved ? 0 : obj.faved ? 1 : 2;
+        let str = "";
+        const arr = project.loversAndFavers.slice(0, 20).sort((a,b) => {
+          const priorityA = priorityOf(a);
+          const priorityB = priorityOf(b);
+          if (priorityA > priorityB) return 1;
+          else if (priorityB > priorityA) return -1;
+          else return 0;
+        });
+        arr.forEach((obj, i) => {
+          if (obj.loved) str += `<img class="small-icon colored" src="../../images/icons/heart.svg">`;
+          if (obj.faved) str += `<img class="small-icon colored" src="../../images/icons/star.svg">`;
+          str += " ";
+          str += `<a href="https://scratch.mit.edu/users/${obj.username}/">${obj.username}</a>`;
+          if (i !== arr.length - 1) str += "<br>";
+        });
+        return str;
+      }
     },
   });
 })();
