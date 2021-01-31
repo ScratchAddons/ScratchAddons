@@ -48,7 +48,7 @@ Fixes bug where "website dark mode" would affect certain elements of the Scratch
 - New addon: mute project player
 - New addon: better forum quoter
 - Type the konami code in the settings page for a surprise :)
-- Scratch 2.0→3.0 addon: new color settings
+- Scratch 2.0 → 3.0 addon: new color settings
 - Sprite and script count addon: new "live block count in editor" setting
 - 60FPS player mode addon: custom FPS number setting
 - Ability to import and export Scratch Addons settings as a .json file, available inside "more settings" in the settings page.
