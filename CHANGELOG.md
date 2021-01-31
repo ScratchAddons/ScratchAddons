@@ -61,8 +61,8 @@ Here's the simple format. Other types such as "Removed" can be added later.
 
 - Disable auto-save (#1232)
 - Hide block palette (#1319)
-- Project screen reader support (#1332)
 - Linebreaks in comments (#1338)
+- Project screen reader support (#1332)
 - Better forum quoter: Include BBCode (#1230)
 - Cat blocks: Add blinking (#1310)
 - Data category tweaks: Move reporters under operations section (#1300)
@@ -72,15 +72,15 @@ Here's the simple format. Other types such as "Removed" can be added later.
 
 #### Extension and Addon API
 
-- Add msg.locale (#1314)
-- Add Trap.getBlockly (#1331)
-- Add JSDoc (#1339)
+- `msg.locale` (#1314)
+- `Trap.getBlockly` (#1331)
+- JSDoc (#1339)
 
 ### Changed
 
 #### Extension and Addon API
 
-- Tooltips are rendered below tags (#1318)
+- Render tooltips above tags (#1318)
 - Refactor traps (#1331)
 - Show beta tag in settings popup (#1336)
 - Show warnings in settings popup (#1336)
@@ -137,20 +137,18 @@ Here's the simple format. Other types such as "Removed" can be added later.
 - Data category tweaks (v2) (#1097)
 - Mute project player (#1217)
 - Semicolon glitch (#507)
+- Sprite and script count: Block counter (#1121)
 
 #### Extension and Addon API
 
-- Add a way to disable popups (#1006)
+- A way to disable popups (#1006)
 - New popup for changing settings (#1006)
-- Add a way to change Scratch colors (#1096)
-- Add block counter in project-info (#1121)
-- Add a way to set FPS to values other than 60 (#1131)
-- Add a way to export and import settings (#1136)
+- A way to change Scratch colors (#1096)
+- A way to set FPS to values other than 60 (#1131)
+- A way to export and import settings (#1136)
 - Support for easter egg addons (#1177)
 
 ### Changed
-
-#### Addons
 
 #### Extension and Addon API
 
@@ -321,21 +319,82 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 
 ### Changed
 
-- Moves libraries used by addons, previously loaded from CDNs, to the `libraries` folder
+- Moves libraries to the `libraries` folder (998781b)
 
 ## [v1.3.2] - 2020-11-24
 
 ### Fixed
 
-- More links: Fix security issue due to faulty regular expression (GHSA-6qfq-px3r-xj4p)
+- More links: Fix security issue due to faulty regular expression (GHSA-6qfq-px3r-xj4p, #827)
 
 ## [v1.3.1] - 2020-11-09
 
 ### Fixed
 
-- Live featured project: Disable addon by default
+- Live featured project: Disable addon by default (#684)
 
 ## [v1.3.0] - 2020-11-08
+
+### Added
+
+#### Addons
+
+- Live featured project (#633)
+- Pause button (#619)
+- Resizable comment input (#608)
+- Thumbnails setter (#602)
+- Last edit tooltip: Fix errors when the project is unshared (#629)
+- Scratch Notifier: Add sound when you get a message (#595)
+- Show full areas: Add load more button on profile page (#630)
+
+#### Extension and Addon API
+
+- More settings (#609)
+- A warning on the Scratch forums to avoid posts about Scratch Addons (#626)
+- Theme switch (#641)
+- /* sa-autoupdate-theme-ignore */` (#652)
+
+### Changed
+
+#### Addons
+
+- Dark mode editor: make fullscreen dark (#658)
+- Editor dark mode: Style color picker on 3.Dark(er) (#656)
+- Enable some old addons for all users on v1.3.0 (#655)
+- Forums image uploader: Do not use project thumbnails (#653)
+- Show full areas: Only load data if the user clicks "load more" (#665)
+
+#### Extension and Addon API
+
+- Revamp icons (#617)
+- Remove dark mode default changer (#625)
+- Revamp scrollbar design (#651)
+- Many little UI changes & fixes (#659)
+- Use `ESC` to clear search on settings page (#664)
+- Add version name and open in new tab in the link to changelog in settings (#677)
+
+### Fixed
+
+#### Addons
+
+- Better emojis: Remove extraneous bracket (#586)
+- Better emojis: Add extraneous bracket back (#605)
+- Customizable block colors: Add warning for traps (#629)
+- Exact count: Fix on studios (#599)
+- Infinite scrolling: Fix bug when showing your topics/posts in the forums (#601)
+- Remix tree button on project pages: Fix remix button to work on all project pages (#581)
+- Use dynamic CSS selector instead of static (#606)
+
+#### Extension and Addon API
+
+- Fix `.zip` download link (#577)
+- Fix background console errors (#663)
+
+### Removed
+
+#### Extension and Addon API
+
+- Remove prototype handler (#652)
 
 ## [v1.2.1] - 2020-10-27
 
