@@ -18,10 +18,12 @@ export default async function ({ addon, global, console, msg }) {
   countContainerContainer.appendChild(icon);
   countContainerContainer.appendChild(countContainer);
   countContainer.appendChild(count);
-  
+
   let lastChecked = 0;
-  
-  const cache = Array(301).fill().map((_, i) => msg("clones", { cloneCount: i }));
+
+  const cache = Array(301)
+    .fill()
+    .map((_, i) => msg("clones", { cloneCount: i }));
 
   function doCloneChecks() {
     const v = vm.runtime._cloneCounter;
@@ -31,7 +33,7 @@ export default async function ({ addon, global, console, msg }) {
     count.dataset.str = cache[v] || "";
     return true;
   }
-  
+
   const check = () => {
     if (doCloneChecks() && addon.tab.editorMode === "editor") {
       if (!countContainerContainer.isConnected) {
@@ -40,7 +42,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
   };
-  vm.runtime.on('targetWasRemoved', (t) => {
+  vm.runtime.on("targetWasRemoved", (t) => {
     // Fix bug with inaccurate clone counter
     if (t.isOriginal) vm.runtime.changeCloneCounter(1);
   });
