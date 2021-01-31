@@ -187,6 +187,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
 
       follows: [],
       studioInvites: [],
+      studioPromotions: [],
       forumActivity: [],
       studioActivity: [],
       remixes: [],
@@ -198,6 +199,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       messageTypeExtended: {
         follows: false,
         studioInvites: false,
+        studioPromotions: false,
         forumActivity: false,
         studioActivity: false,
         remixes: false,
@@ -219,6 +221,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         markAsReadMsg: l10n.get("scratch-messaging/mark-as-read"),
         markedAsReadMsg: l10n.get("scratch-messaging/marked-as-read"),
         openMessagesMsg: l10n.get("scratch-messaging/open-messages"),
+        studioPromotionsMsg: l10n.get("scratch-messaging/studio-promotions"),
       },
     },
     watch: {
@@ -227,6 +230,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         this.commentsProgress = 0;
         this.follows = [];
         this.studioInvites = [];
+        this.studioPromotions = [];
         this.forumActivity = [];
         this.studioActivity = [];
         this.remixes = [];
@@ -415,6 +419,12 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
               studioId: message.gallery_id,
               studioTitle: message.title,
             });
+          } else if (message.type === "becomeownerstudio") {
+            this.studioPromotions.push({
+              actor: message.actor_username,
+              studioId: message.gallery_id,
+              studioTitle: message.gallery_title,
+            });
           } else if (message.type === "forumpost") {
             // We only want one message per forum topic
             if (!this.forumActivity.find((obj) => obj.topicId === message.topic_id)) {
@@ -501,6 +511,18 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
             style="text-decoration: underline"
         >${escapeHTML(invite.studioTitle)}</a>`;
         return l10n.escaped("scratch-messaging/curate-invite", { actor, title });
+      },
+      studioPromotionHTML(promotion) {
+        const actor = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/users/${promotion.actor}/"
+        >${promotion.actor}</a>`;
+        const title = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/studios/${promotion.studioId}/curators/"
+            style="text-decoration: underline"
+        >${escapeHTML(promotion.studioTitle)}</a>`;
+        return l10n.escaped("scratch-messaging/studio-promotion", { actor, title });
       },
       forumHTML(forumTopic) {
         const title = `<a target="_blank"
