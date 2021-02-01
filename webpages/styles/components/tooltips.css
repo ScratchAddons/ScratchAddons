@@ -25,9 +25,9 @@
   background: #000;
   color: #fff;
   text-align: center;
-  opacity: 0;
+  visibility: hidden;
 
-  box-shadow: 0px 0px 16px 10px #50505017;
+  box-shadow: 0px 0px 16px 10px #3b3b3b52;
 }
 .tooltiptext.tooltiptextleft {
   left: auto;
@@ -37,8 +37,7 @@
 }
 
 .tooltip:hover .tooltiptext {
-  opacity: 1;
-  transition: opacity 0.2s;
+  visibility: visible;
 }
 .tooltip .tooltiptext::after {
   content: " ";
