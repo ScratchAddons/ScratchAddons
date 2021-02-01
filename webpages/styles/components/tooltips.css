@@ -25,10 +25,9 @@
   background: #000;
   color: #fff;
   text-align: center;
-  /* display: none; */
-  visibility: hidden;
-  /* hide by default */
-  border: 2px solid #aaa;
+  opacity: 0;
+
+  box-shadow: 0px 0px 16px 10px #50505017;
 }
 .tooltiptext.tooltiptextleft {
   left: auto;
@@ -38,7 +37,8 @@
 }
 
 .tooltip:hover .tooltiptext {
-  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.2s;
 }
 .tooltip .tooltiptext::after {
   content: " ";
