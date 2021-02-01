@@ -31,9 +31,11 @@
 }
 .tooltiptext.tooltiptextleft {
   left: auto;
+  top: -3px;
   right: 95%;
   margin-left: 0;
   margin-right: 15px;
+  transform: none;
 }
 
 .tooltip:hover .tooltiptext {
@@ -52,6 +54,7 @@
 }
 .tooltip .tooltiptext.tooltiptextleft::after {
   right: auto;
+  top: 15px;
   left: 100%;
   border-color: transparent transparent transparent black;
 }

@@ -269,12 +269,13 @@
       <!-- Projects -->
       <div
         class="message-type"
-        v-for="project of projectsOrdered"
+        v-for="(i, project) in projectsOrdered"
         v-show="project.unreadComments && project.loadedComments ||
               !project.unreadComments && commentsReady"
       >
-        <div class="message-type-title">
-          <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
+        <div class="message-type-title" :style="{zIndex: 9999 - i}">
+          <a class="message-type-title-text" @click="openProject(project.id)"
+          >{{ project.title }}</a>
           <span class="float-right">
             <div class="tooltip" style="display: inline-block; margin-right: 6px">
               <span v-show="project.loveCount"
