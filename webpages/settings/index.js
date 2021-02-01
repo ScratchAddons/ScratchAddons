@@ -320,7 +320,9 @@ const vue = (window.vue = new Vue({
           !addon._expanded &&
           (addon.info || []).every((item) => item.type !== "warning")
             ? false
-            : (event.shiftKey ? false : newState);
+            : event.shiftKey
+            ? false
+            : newState;
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
 
         if (document.body.classList.contains("iframe")) setTimeout(() => this.popupOrderAddonsEnabledFirst(), 500);
