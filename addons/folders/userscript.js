@@ -17,6 +17,14 @@ export default async function ({ addon, global, console, msg }) {
     return name.substr(0, idx);
   };
 
+  const getNameWithoutFolder = (name) => {
+    const idx = name.indexOf("/");
+    if (idx === -1) {
+      return name;
+    }
+    return name.substr(idx + 1);
+  };
+
   const getSortableHOCFromElement = (el) => {
     const nearestSpriteSelector = el.closest("[class*='sprite-selector_sprite-selector']");
     if (nearestSpriteSelector) {
@@ -47,7 +55,7 @@ export default async function ({ addon, global, console, msg }) {
             encodeDataURI() {
               return addon.self.dir + "/back.svg";
             },
-          }
+          },
         };
         if (type === TYPE_SPRITES) {
           backItem.id = ID_BACK;
@@ -59,7 +67,10 @@ export default async function ({ addon, global, console, msg }) {
         for (const item of propItems) {
           const itemFolder = getFolderFromName(item.name);
           if (itemFolder === folderName) {
-            items.push(item);
+            items.push({
+              ...item,
+              name: getNameWithoutFolder(item.name),
+            });
           }
         }
       } else {
