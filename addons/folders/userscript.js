@@ -1,7 +1,11 @@
 export default async function ({ addon, global, console, msg }) {
   const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-  const ID_FOLDER_PREFIX = "sa_folder_folder_";
-  const ID_BACK = "sa_folder_back";
+  const ID_PREFIX = "sa_";
+  const ID_FOLDER_PREFIX = `${ID_PREFIX}folder_folder_`;
+  const ID_BACK = `${ID_PREFIX}folder_back`;
+
+  const TYPE_SPRITES = 1;
+  const TYPE_ASSETS = 2;
 
   let reactInternalKey;
 
@@ -22,7 +26,7 @@ export default async function ({ addon, global, console, msg }) {
     if (nearestAssetPanelWrapper) {
       return nearestAssetPanelWrapper[reactInternalKey].child.child.stateNode;
     }
-    throw new Error('cannot find SortableHOC');
+    throw new Error("cannot find SortableHOC");
   };
 
   const setFolder = (component, folder) => {
@@ -32,67 +36,90 @@ export default async function ({ addon, global, console, msg }) {
     });
   };
 
-  const patchSortableHOC = (SortableHOC) => {
-    SortableHOC.prototype.componentDidUpdate = function (prevProps, prevState) {
-      console.log(this.props.items);
-      const folder = this.state ? this.state.folder : null;
-      if (!prevState || prevState.folder !== folder || prevProps.items !== this.props.items) {
-        const items = [];
-  
-        if (folder) {
-          const backItem = {
-            name: msg("back"),
-            id: ID_BACK,
-            costume: {
-              asset: {
-                encodeDataURI() {
-                  return addon.self.dir + '/back.svg';
-                }
-              }
-            }
-          };
-          items.push(backItem);
-  
-          for (const item of this.props.items) {
-            const itemFolder = getFolderFromName(item.name);
-            if (itemFolder === folder) {
-              items.push(item);
-            }
+  const patchSortableHOC = (SortableHOC, type) => {
+    const processItems = (folderName, propItems) => {
+      const items = [];
+
+      if (folderName) {
+        const backItem = {
+          name: msg("back"),
+          asset: {
+            encodeDataURI() {
+              return addon.self.dir + "/back.svg";
+            },
           }
+        };
+        if (type === TYPE_SPRITES) {
+          backItem.id = ID_BACK;
         } else {
-          const folderItems = {};
-          for (const item of this.props.items) {
-            const itemFolder = getFolderFromName(item.name);
-            if (itemFolder) {
-              if (!folderItems[itemFolder]) {
-                const itemProp = {
-                  name: `[F] ${itemFolder}`, // TODO
-                  id: `${ID_FOLDER_PREFIX}${itemFolder}`,
-                  costume: item.costume,
-                };
-                folderItems[itemFolder] = itemProp;
-                items.push(itemProp);
-              }
-              // if (item.id === this.props.selectedId) {
-              //   this.props.selectedId = folderItems[itemFolder].id;
-              // }
-            } else {
-              items.push(item);
-            }
+          backItem.details = ID_BACK;
+        }
+        items.push(backItem);
+
+        for (const item of propItems) {
+          const itemFolder = getFolderFromName(item.name);
+          if (itemFolder === folderName) {
+            items.push(item);
           }
         }
+      } else {
+        const folderItems = {};
+        for (const item of propItems) {
+          const itemFolder = getFolderFromName(item.name);
+          if (itemFolder) {
+            if (!folderItems[itemFolder]) {
+              const folderItem = {
+                name: `[F] ${itemFolder}`, // TODO
+              };
+              if (type === TYPE_SPRITES) {
+                folderItem.id = `${ID_FOLDER_PREFIX}${itemFolder}`;
+                folderItem.costume = item.costume;
+              } else {
+                folderItem.details = `${ID_FOLDER_PREFIX}${itemFolder}`;
+                folderItem.asset = item.asset;
+              }
+              folderItems[itemFolder] = folderItem;
+              items.push(folderItem);
+            }
+          } else {
+            items.push(item);
+          }
+        }
+      }
+
+      for (const item of items) {
+        if (item.asset) {
+          item.costume = {
+            asset: item.asset,
+          };
+        }
+      }
+
+      return items;
+    };
+
+    SortableHOC.prototype.componentDidMount = function () {
+      this.setState({
+        items: processItems(null, this.props.items),
+      });
+    };
+
+    SortableHOC.prototype.componentDidUpdate = function (prevProps, prevState) {
+      const folder = this.state ? this.state.folder : null;
+      if (!prevState || prevState.folder !== folder || prevProps.items !== this.props.items) {
         this.setState({
-          items,
+          items: processItems(folder, this.props.items),
         });
       }
     };
-  
+
     const originalSortableHOCRender = SortableHOC.prototype.render;
     SortableHOC.prototype.render = function () {
       if (!this.state) {
+        // TODO: remove?
         return originalSortableHOCRender.call(this);
       }
-  
+
       const originalItems = this.props.items;
       this.props.items = this.state.items;
       const result = originalSortableHOCRender.call(this);
@@ -104,30 +131,44 @@ export default async function ({ addon, global, console, msg }) {
   const patchSpriteSelectorItem = (SpriteSelectorItem) => {
     const originalSpriteSelectorItemHandleClick = SpriteSelectorItem.prototype.handleClick;
     SpriteSelectorItem.prototype.handleClick = function (e) {
-      if (typeof this.props.id === 'string') {
-        if (this.props.id === ID_BACK) {
-          e.preventDefault();
-          setFolder(this, null);
-          return;
-        }
-        if (this.props.id.startsWith(ID_FOLDER_PREFIX)) {
-          e.preventDefault();
-          const folderName = this.props.id.substr(ID_FOLDER_PREFIX.length);
-          setFolder(this, folderName);
-          return;
+      if (!this.noClick) {
+        const id = this.props.id || this.props.details;
+        if (typeof id === "string") {
+          if (id === ID_BACK) {
+            e.preventDefault();
+            setFolder(this, null);
+            return;
+          }
+          if (id.startsWith(ID_FOLDER_PREFIX)) {
+            e.preventDefault();
+            setFolder(this, id.substr(ID_FOLDER_PREFIX.length));
+            return;
+          }
         }
       }
       originalSpriteSelectorItemHandleClick.call(this, e);
+    };
+
+    const originalRender = SpriteSelectorItem.prototype.render;
+    SpriteSelectorItem.prototype.render = function () {
+      if (typeof this.props.details === "string" && this.props.details.startsWith(ID_PREFIX)) {
+        const details = this.props.details;
+        this.props.details = "";
+        const result = originalRender.call(this);
+        this.props.details = details;
+        return result;
+      }
+      return originalRender.call(this);
     };
   };
 
   // Sprite list
   {
-    const spriteSelectorItemElement = await addon.tab.waitForElement("[class*='sprite-selector_sprite-wrapper']");  
+    const spriteSelectorItemElement = await addon.tab.waitForElement("[class*='sprite-selector_sprite-wrapper']");
     reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
     const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
     const spriteSelectorItemInstance = spriteSelectorItemElement[reactInternalKey].child.child.child.stateNode;
-    patchSortableHOC(sortableHOCInstance.constructor);
+    patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
     patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
     sortableHOCInstance.forceUpdate();
   }
@@ -136,7 +177,7 @@ export default async function ({ addon, global, console, msg }) {
   {
     const selectorListItem = await addon.tab.waitForElement("[class*='selector_list-item']");
     const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
-    patchSortableHOC(sortableHOCInstance.constructor);
+    patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
     sortableHOCInstance.forceUpdate();
   }
 }
