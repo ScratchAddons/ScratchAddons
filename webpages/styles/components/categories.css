@@ -39,9 +39,11 @@
   left: 0;
 }
 
-.category img {
+.category img, .category svg {
   height: 18px;
+  width: 18px;
   filter: brightness(10);
+  color: white;
 }
 .category.sel img {
   filter: brightness(1);

@@ -211,6 +211,7 @@ const vue = (window.vue = new Vue({
       },
     ],
   },
+
   computed: {
     tagsToShow() {
       return this.tags.filter((tag) => tag.tabShow[this.selectedTab]);
@@ -678,3 +679,6 @@ if (document.body.classList.contains("iframe")) {
     { passive: true }
   );
 }
+
+
+setTimeout(function () {icon()}, 200)

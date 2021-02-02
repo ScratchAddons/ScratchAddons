@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
-    <script src="index.js" type="module"></script>
+    <script src="../../libraries/icon.js" defer></script>
+    <script src="index.js" type="module" defer></script>  
   </head>
   <body style="display: none" v-show="loaded">
     <div class="navbar">
@@ -30,15 +31,15 @@
           <span>{{ msg("all") }}</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'editor'}" @click="selectedTab = 'editor'">
-          <img src="../../images/icons/puzzle.svg" />
+          <i class="icon" data-set="uil" data-icon="puzzle-piece"></i>
           <span>{{ msg("editorFeatures") }}</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'community'}" @click="selectedTab = 'community'">
-          <img src="../../images/icons/web.svg" />
+          <i class="icon" data-set="uil" data-icon="globe"></i>
           <span>{{ msg("websiteFeatures") }}</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'theme'}" @click="selectedTab = 'theme'">
-          <img src="../../images/icons/brush.svg" />
+          <i class="icon" data-set="uil" data-icon="brush-alt"></i>
           <span>{{ msg("themes") }}</span>
         </div>
         <div
@@ -55,7 +56,7 @@
           style="margin-top: auto"
           @click="openPage('https://scratchaddons.com/contributors')"
         >
-          <img src="../../images/icons/users.svg" />
+        <i class="icon" data-set="uil" data-icon="users-alt"></i>
           <span>{{ msg("credits") }}</span>
         </div>
         <div class="category category-small" @click="openReview()" style="display: none">
@@ -71,7 +72,7 @@
           <span>{{ msg("feedback") }}</span>
         </div>
         <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
-          <img src="../../images/icons/wrench.svg" />
+          <i class="icon" data-set="uil" data-icon="wrench"></i>
           <span>{{ msg("moreSettings") }}</span>
         </div>
       </div>
@@ -146,9 +147,9 @@
                   <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': addon._expanded}" />
                 </div>
                 <div class="addon-name">
-                  <img v-if="addon._category === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
-                  <img v-if="addon._category === 'community'" src="../../images/icons/web.svg" class="icon-type" />
-                  <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
+                  <i v-if="addon._category === 'editor'" class="icon icon-type" data-set="uil" data-icon="puzzle-piece"></i>
+                  <i v-if="addon._category === 'community'" class="icon icon-type" data-set="uil" data-icon="globe"></i>
+                  <i v-if="addon._category === 'theme'" class="icon icon-type" data-set="uil" data-icon="brush-alt"></i>
                   <img
                     v-if="addon._category === 'easterEgg'"
                     src="../../images/icons/egg-easter.svg"
@@ -181,7 +182,7 @@
                   title="{{ msg('resetToDefault') }}"
                   @click="loadDefaults(addon)"
                 >
-                  <img src="../../images/icons/undo.svg" class="icon-type" />
+                <i class="icon icon-type flipped" data-set="uil" data-icon="redo"></i>
                 </div>
                 <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest(addon)"></div>
               </div>
@@ -190,10 +191,12 @@
               <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
               <div id="info" v-for="info of addon.info">
                 <div class="addon-warn" v-if="info.type == 'warning'" v-show="addon._expanded">
-                  <img src="../../images/icons/warning.svg" />{{ info.text }}
+                  <i class="icon" data-set="uil" data-icon="exclamation-triangle"></i>
+                {{ info.text }}
                 </div>
                 <div class="addon-notice" v-if="info.type == 'notice'" v-show="addon._expanded">
-                  <img src="../../images/icons/notice.svg" />{{ info.text }}
+                  <i class="icon" data-set="uil" data-icon="exclamation-circle"></i>
+                  {{ info.text }}
                 </div>
               </div>
               <div class="addon-credits" v-if="addon.credits">
