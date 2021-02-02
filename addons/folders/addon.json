@@ -1,6 +1,6 @@
 {
-  "name": "Sprite folders",
-  "description": "AAAAA",
+  "name": "Folders",
+  "description": "Adds folders to the sprite, costume, and sound lists.",
   "credits": [
     {
       "name": "GarboMuffin"
@@ -9,10 +9,11 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "runAtComplete": false
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "beta"],
   "enabledByDefault": false,
   "l10n": true
 }

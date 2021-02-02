@@ -7,6 +7,12 @@ export default async function ({ addon, global, console, msg }) {
   const TYPE_SPRITES = 1;
   const TYPE_ASSETS = 2;
 
+  const leaveFolderAsset = {
+    encodeDataURI() {
+      return addon.self.dir + "/leave-folder.svg";
+    },
+  };
+
   let reactInternalKey;
 
   const getFolderFromName = (name) => {
@@ -37,32 +43,23 @@ export default async function ({ addon, global, console, msg }) {
     throw new Error("cannot find SortableHOC");
   };
 
-  const setFolder = (component, folder) => {
-    const sortableHOCInstance = getSortableHOCFromElement(component.ref);
-    sortableHOCInstance.setState({
-      folder,
-    });
-  };
-
   const patchSortableHOC = (SortableHOC, type) => {
     const processItems = (folderName, propItems) => {
+      console.log(propItems);
       const items = [];
 
       if (folderName) {
-        const backItem = {
-          name: msg("back"),
-          asset: {
-            encodeDataURI() {
-              return addon.self.dir + "/back.svg";
-            },
-          },
+        const leaveFolderItem = {
+          asset: leaveFolderAsset,
         };
         if (type === TYPE_SPRITES) {
-          backItem.id = ID_BACK;
+          leaveFolderItem.name = msg("leave-folder");
+          leaveFolderItem.id = ID_BACK;
         } else {
-          backItem.details = ID_BACK;
+          leaveFolderItem.name = ID_BACK;
+          leaveFolderItem.details = ID_BACK;
         }
-        items.push(backItem);
+        items.push(leaveFolderItem);
 
         for (const item of propItems) {
           const itemFolder = getFolderFromName(item.name);
@@ -79,13 +76,13 @@ export default async function ({ addon, global, console, msg }) {
           const itemFolder = getFolderFromName(item.name);
           if (itemFolder) {
             if (!folderItems[itemFolder]) {
-              const folderItem = {
-                name: `[F] ${itemFolder}`, // TODO
-              };
+              const folderItem = {};
               if (type === TYPE_SPRITES) {
+                folderItem.name = `[F] ${itemFolder}`;
                 folderItem.id = `${ID_FOLDER_PREFIX}${itemFolder}`;
                 folderItem.costume = item.costume;
               } else {
+                folderItem.name = `${ID_FOLDER_PREFIX}${itemFolder}`;
                 folderItem.details = `${ID_FOLDER_PREFIX}${itemFolder}`;
                 folderItem.asset = item.asset;
               }
@@ -140,6 +137,13 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const patchSpriteSelectorItem = (SpriteSelectorItem) => {
+    const setFolder = (component, folder) => {
+      const sortableHOCInstance = getSortableHOCFromElement(component.ref);
+      sortableHOCInstance.setState({
+        folder,
+      });
+    };
+
     const originalSpriteSelectorItemHandleClick = SpriteSelectorItem.prototype.handleClick;
     SpriteSelectorItem.prototype.handleClick = function (e) {
       if (!this.noClick) {
@@ -164,9 +168,16 @@ export default async function ({ addon, global, console, msg }) {
     SpriteSelectorItem.prototype.render = function () {
       if (typeof this.props.details === "string" && this.props.details.startsWith(ID_PREFIX)) {
         const details = this.props.details;
+        const name = this.props.name;
         this.props.details = "";
+        if (this.props.name === ID_BACK) {
+          this.props.name = msg("leave-folder");
+        } else {
+          this.props.name = `[F] ${name.substr(ID_FOLDER_PREFIX.length)}`;
+        }
         const result = originalRender.call(this);
         this.props.details = details;
+        this.props.name = name;
         return result;
       }
       return originalRender.call(this);
