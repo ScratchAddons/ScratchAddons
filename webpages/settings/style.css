@@ -706,7 +706,7 @@ input[type="color"]::-webkit-color-swatch {
   user-select: none;
 }
 .flipped {
-  transform: scaleX(-1)!important;
+  transform: scaleX(-1) !important;
 }
 
 .permissions div.main {

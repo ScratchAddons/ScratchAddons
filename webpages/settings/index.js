@@ -680,5 +680,6 @@ if (document.body.classList.contains("iframe")) {
   );
 }
 
-
-setTimeout(function () {icon()}, 200)
+setTimeout(function () {
+  icon();
+}, 200);

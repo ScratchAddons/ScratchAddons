@@ -10,7 +10,7 @@
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
     <script src="../../libraries/icon.js" defer></script>
-    <script src="index.js" type="module" defer></script>  
+    <script src="index.js" type="module" defer></script>
   </head>
   <body style="display: none" v-show="loaded">
     <div class="navbar">
@@ -56,7 +56,7 @@
           style="margin-top: auto"
           @click="openPage('https://scratchaddons.com/contributors')"
         >
-        <i class="icon" data-set="uil" data-icon="users-alt"></i>
+          <i class="icon" data-set="uil" data-icon="users-alt"></i>
           <span>{{ msg("credits") }}</span>
         </div>
         <div class="category category-small" @click="openReview()" style="display: none">
@@ -147,7 +147,12 @@
                   <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': addon._expanded}" />
                 </div>
                 <div class="addon-name">
-                  <i v-if="addon._category === 'editor'" class="icon icon-type" data-set="uil" data-icon="puzzle-piece"></i>
+                  <i
+                    v-if="addon._category === 'editor'"
+                    class="icon icon-type"
+                    data-set="uil"
+                    data-icon="puzzle-piece"
+                  ></i>
                   <i v-if="addon._category === 'community'" class="icon icon-type" data-set="uil" data-icon="globe"></i>
                   <i v-if="addon._category === 'theme'" class="icon icon-type" data-set="uil" data-icon="brush-alt"></i>
                   <img
@@ -182,7 +187,7 @@
                   title="{{ msg('resetToDefault') }}"
                   @click="loadDefaults(addon)"
                 >
-                <i class="icon icon-type flipped" data-set="uil" data-icon="redo"></i>
+                  <i class="icon icon-type flipped" data-set="uil" data-icon="redo"></i>
                 </div>
                 <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest(addon)"></div>
               </div>
@@ -192,7 +197,7 @@
               <div id="info" v-for="info of addon.info">
                 <div class="addon-warn" v-if="info.type == 'warning'" v-show="addon._expanded">
                   <i class="icon" data-set="uil" data-icon="exclamation-triangle"></i>
-                {{ info.text }}
+                  {{ info.text }}
                 </div>
                 <div class="addon-notice" v-if="info.type == 'notice'" v-show="addon._expanded">
                   <i class="icon" data-set="uil" data-icon="exclamation-circle"></i>
