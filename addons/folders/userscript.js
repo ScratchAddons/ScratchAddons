@@ -4,10 +4,13 @@ export default async function ({ addon, global, console, msg }) {
   const ID_FOLDER_PREFIX = `${ID_PREFIX}folder_folder_`;
   const ID_BACK = `${ID_PREFIX}folder_back`;
 
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
   const TYPE_SPRITES = 1;
   const TYPE_ASSETS = 2;
 
   const leaveFolderAsset = {
+    assetId: ID_BACK,
     encodeDataURI() {
       return addon.self.dir + "/leave-folder.svg";
     },
@@ -44,8 +47,51 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const patchSortableHOC = (SortableHOC, type) => {
+    // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
+
+    const PREVIEW_POSITIONS = [
+      // x, y
+      [0, 0],
+      [16, 0],
+      [0, 16],
+      [16, 16],
+    ];
+
+    const createFolderPreview = (items) => {
+      const svg = document.createElementNS(SVG_NS, "svg");
+      svg.setAttribute("width", "32");
+      svg.setAttribute("height", "32");
+      for (let i = 0; i < Math.min(PREVIEW_POSITIONS.length, items.length); i++) {
+        const item = items[i];
+        const image = document.createElementNS(SVG_NS, "image");
+        image.setAttribute("width", "16");
+        image.setAttribute("height", "16");
+        image.setAttribute("x", PREVIEW_POSITIONS[i][0]);
+        image.setAttribute("y", PREVIEW_POSITIONS[i][1]);
+        if (item.asset) {
+          image.setAttribute("href", item.asset.encodeDataURI());
+        } else if (item.costume && item.costume.asset) {
+          image.setAttribute("href", item.costume.asset.encodeDataURI());
+        }
+        svg.appendChild(image);
+      }
+      return "data:image/svg+xml;," + new XMLSerializer().serializeToString(svg);
+    };
+
+    const getFolderPreviewAssetId = (items) => {
+      const ids = ["sa_folder_preview"];
+      for (let i = 0; i < Math.min(PREVIEW_POSITIONS.length, items.length); i++) {
+        const item = items[i];
+        if (item.asset) {
+          ids.push(item.asset.assetId);
+        } else if (item.costume && item.costume.asset) {
+          ids.push(item.costume.asset.assetId);
+        }
+      }
+      return ids.join("||");
+    };
+
     const processItems = (folderName, propItems) => {
-      console.log(propItems);
       const items = [];
 
       if (folderName) {
@@ -71,68 +117,45 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
       } else {
-        const folderItems = {};
+        const folders = {};
         for (const item of propItems) {
           const itemFolder = getFolderFromName(item.name);
           if (itemFolder) {
-            if (!folderItems[itemFolder]) {
-              const folderItem = {};
+            if (!folders[itemFolder]) {
+              const folderItem = {
+                items: [],
+              };
+              const id = `${ID_FOLDER_PREFIX}${itemFolder}`;
+              const asset = {
+                // We don't know these when the item is created
+                get assetId() {
+                  return getFolderPreviewAssetId(folderItem.items);
+                },
+                encodeDataURI() {
+                  return createFolderPreview(folderItem.items);
+                },
+              };
               if (type === TYPE_SPRITES) {
-                folderItem.name = `[F] ${itemFolder}`;
-                folderItem.id = `${ID_FOLDER_PREFIX}${itemFolder}`;
-
-                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                svg.setAttribute('width', '32');
-                svg.setAttribute('height', '32');
-                debugger;
-                const sameItems = propItems
-                  .filter(i => getFolderFromName(i.name) === itemFolder);
-                const POSITIONS = [
-                  // x, y
-                  [0, 0],
-                  [16, 0],
-                  [0, 16],
-                  [16, 16]
-                ];
-
-                for (let i = 0; i < Math.min(POSITIONS.length, sameItems.length); i++) {
-                  const thisItem = sameItems[i];
-                  const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-                  image.setAttribute('width', '16');
-                  image.setAttribute('height', '16');
-                  image.setAttribute('x', POSITIONS[i][0]);
-                  image.setAttribute('y', POSITIONS[i][1]);
-                  image.setAttribute('href', thisItem.costume.asset.encodeDataURI());
-                  svg.appendChild(image);
-                }
-
+                folderItem.name = `[F] ${itemFolder}`; // TODO
+                folderItem.id = id;
                 folderItem.costume = {
-                  asset: {
-                    assetId: Math.random(), // TODO
-                    encodeDataURI() {
-                      return 'data:image/svg+xml;base64,' + btoa(new XMLSerializer().serializeToString(svg));
-                    }
-                  }
+                  asset,
                 };
               } else {
-                folderItem.name = `${ID_FOLDER_PREFIX}${itemFolder}`;
-                folderItem.details = `${ID_FOLDER_PREFIX}${itemFolder}`;
-                folderItem.asset = item.asset;
+                folderItem.name = id;
+                folderItem.details = id;
+                folderItem.asset = asset;
               }
-              folderItems[itemFolder] = folderItem;
-              items.push(folderItem);
+              folders[itemFolder] = folderItem;
             }
+            folders[itemFolder].items.push(item);
           } else {
             items.push(item);
           }
         }
-      }
-
-      for (const item of items) {
-        if (item.asset) {
-          item.costume = {
-            asset: item.asset,
-          };
+        for (const folder of Object.keys(folders).reverse()) {
+          const item = folders[folder];
+          items.unshift(item);
         }
       }
 
@@ -176,6 +199,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const patchSpriteSelectorItem = (SpriteSelectorItem) => {
+    // SpriteSelectorItem should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/containers/sprite-selector-item.jsx#L16
+
     const setFolder = (component, folder) => {
       const sortableHOCInstance = getSortableHOCFromElement(component.ref);
       sortableHOCInstance.setState({
