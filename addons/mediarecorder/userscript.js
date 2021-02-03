@@ -67,7 +67,7 @@ export default async ({ addon, console, msg }) => {
       recordOptionAudio.appendChild(recordOptionAudioInput);
       recordOptionAudio.appendChild(recordOptionAudioLabel);
       recordOptionInner.appendChild(recordOptionAudio);
-      
+
       // Mic
       const recordOptionMic = document.createElement("p");
       const recordOptionMicInput = Object.assign(document.createElement("input"), {
@@ -271,7 +271,7 @@ export default async ({ addon, console, msg }) => {
       const stream = new MediaStream();
       const videoStream = vm.runtime.renderer.canvas.captureStream();
       stream.addTrack(videoStream.getVideoTracks()[0]);
-      
+
       const ctx = new AudioContext();
       const dest = ctx.createMediaStreamDestination();
       if (opts.audioEnabled) {
