@@ -4,7 +4,7 @@
   "mediarecorder/option-title": "Record Options",
   "mediarecorder/record-duration": "Record Duration (in seconds)",
   "mediarecorder/record-audio": "Include project sounds",
-  "mediarecorder/record-mic": "Include sounds from mic",
+  "mediarecorder/record-mic": "Include sounds from microphone",
   "mediarecorder/record-audio-description": "This does not include Text-to-Speech.",
   "mediarecorder/record-after-flag": "Do not start recording until the Green Flag is clicked",
   "mediarecorder/record-until-stop": "Stop recording after the project has stopped",
