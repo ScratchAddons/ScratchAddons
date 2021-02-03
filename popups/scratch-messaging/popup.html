@@ -278,7 +278,7 @@
           <span class="float-right">
             <div
               class="tooltip"
-              v-show="project.loveCount || project.favoriteCount"
+              v-if="project.loveCount || project.favoriteCount"
               style="display: inline-block; padding-left: 6px; padding-right: 6px"
             >
               <span v-show="project.loveCount"
