@@ -239,7 +239,7 @@ export default async ({ addon, console, msg }) => {
         try {
           micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         } catch (e) {
-          if (e.name !== "NotAllowedError") throw e;
+          if (e.name !== "NotAllowedError" && e.name !== "NotFoundError") throw e;
           opts.micEnabled = false;
         }
       }
