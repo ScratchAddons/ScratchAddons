@@ -9,12 +9,16 @@ export default async function ({ addon, global, console, msg }) {
   const TYPE_SPRITES = 1;
   const TYPE_ASSETS = 2;
 
-  const vm = addon.tab.traps.vm;
+  // We run too early, will be set later
+  let vm;
 
   const leaveFolderAsset = {
     assetId: ID_BACK,
     encodeDataURI() {
       return addon.self.dir + "/leave-folder.svg";
+    },
+    sa: {
+      back: true,
     },
   };
 
@@ -22,6 +26,10 @@ export default async function ({ addon, global, console, msg }) {
 
   let currentSpriteFolder;
 
+  /**
+   * getFolderFromName("B") === null
+   * getFolderFromName("A/b") === "A"
+   */
   const getFolderFromName = (name) => {
     const idx = name.indexOf("/");
     if (idx === -1) {
@@ -30,6 +38,10 @@ export default async function ({ addon, global, console, msg }) {
     return name.substr(0, idx);
   };
 
+  /**
+   * getNameWithoutFolder("B") === "B"
+   * getNameWithoutFolder("A/b") === "b"
+   */
   const getNameWithoutFolder = (name) => {
     const idx = name.indexOf("/");
     if (idx === -1) {
@@ -38,9 +50,18 @@ export default async function ({ addon, global, console, msg }) {
     return name.substr(idx + 1);
   };
 
+  /**
+   * setFolderOfName("B", "y") === "y/B"
+   * setFolderOfName("c/B", "y") === "y/B"
+   * setFolderOfName("B", null) === "B"
+   * setFolderOfName("c/B", null) === "B"
+   */
   const setFolderOfName = (name, folder) => {
     const basename = getNameWithoutFolder(name);
-    return `${folder}/${basename}`;
+    if (folder) {
+      return `${folder}/${basename}`;
+    }
+    return basename;
   };
 
   const getSortableHOCFromElement = (el) => {
@@ -103,6 +124,9 @@ export default async function ({ addon, global, console, msg }) {
 
     const processItems = (folderName, props) => {
       const items = [];
+      const result = {
+        items,
+      };
 
       if (folderName) {
         const leaveFolderItem = {};
@@ -113,8 +137,6 @@ export default async function ({ addon, global, console, msg }) {
             asset: leaveFolderAsset,
           };
         } else {
-          leaveFolderItem.name = ID_BACK;
-          leaveFolderItem.details = ID_BACK;
           leaveFolderItem.asset = leaveFolderAsset;
         }
         items.push(leaveFolderItem);
@@ -135,7 +157,6 @@ export default async function ({ addon, global, console, msg }) {
         for (let i = 0; i < props.items.length; i++) {
           const item = props.items[i];
           const itemFolder = getFolderFromName(item.name);
-          const isSelected = type === TYPE_SPRITES ? props.selectedId === item.id : props.selectedItemIndex === i;
 
           if (itemFolder) {
             if (!folders[itemFolder]) {
@@ -144,6 +165,9 @@ export default async function ({ addon, global, console, msg }) {
               };
               const id = `${ID_FOLDER_PREFIX}${itemFolder}`;
               const asset = {
+                sa: {
+                  folder: itemFolder,
+                },
                 // We don't know these when the item is created
                 get assetId() {
                   return getFolderPreviewAssetId(folderItem.items);
@@ -159,8 +183,6 @@ export default async function ({ addon, global, console, msg }) {
                   asset,
                 };
               } else {
-                folderItem.name = id;
-                folderItem.details = id;
                 folderItem.asset = asset;
               }
               folders[itemFolder] = folderItem;
@@ -169,11 +191,32 @@ export default async function ({ addon, global, console, msg }) {
             folders[itemFolder].items.push(item);
           } else {
             items.push(item);
+            if (type === TYPE_ASSETS) {
+              if (!item.asset) {
+                item.asset = {};
+              }
+              if (!item.asset.sa) {
+                item.asset.sa = {};
+              }
+              item.asset.sa.index = i;
+            }
+          }
+
+          if (type === TYPE_SPRITES) {
+            // const isSelected = props.selectedId === item.id;
+            // if (isSelected) {
+            //   selectedId = items[items.length - 1].id;
+            // }
+          } else if (type === TYPE_ASSETS) {
+            const isSelected = props.selectedItemIndex === i;
+            if (isSelected) {
+              result.selectedItemIndex = items.length - 1;
+            }
           }
         }
       }
 
-      return items;
+      return result;
     };
 
     // const originalGetOrdering = SortableHOC.prototype.getOrdering;
@@ -184,9 +227,6 @@ export default async function ({ addon, global, console, msg }) {
 
     SortableHOC.prototype.componentDidMount = function () {
       currentSpriteFolder = null;
-      this.setState({
-        items: processItems(null, this.props),
-      });
     };
 
     SortableHOC.prototype.componentDidUpdate = function (prevProps, prevState) {
@@ -199,39 +239,28 @@ export default async function ({ addon, global, console, msg }) {
             oldTarget &&
             newTarget &&
             oldTarget.sprite &&
-            newTarget.sprite
+            newTarget.sprite &&
+            newTarget.isSprite() // ignore stages
           ) {
             const oldFolder = getFolderFromName(oldTarget.sprite.name);
             const newFolder = getFolderFromName(newTarget.sprite.name);
             if (oldFolder !== newFolder) {
               this.setState({
-                folder: newFolder
+                folder: newFolder,
               });
               return;
             }
           }
         }
       }
-
-      // Update item state when folder state changes (TODO: weird hack, try to remove this)
-      let folder = this.state ? this.state.folder : null;
-      if (!prevState || prevState.folder !== folder || prevProps.items !== this.props.items) {
-        currentSpriteFolder = folder;
-        this.setState({
-          items: processItems(folder, this.props),
-        });
-      }
     };
 
     const originalSortableHOCRender = SortableHOC.prototype.render;
     SortableHOC.prototype.render = function () {
-      if (!this.state) {
-        // TODO: remove?
-        return originalSortableHOCRender.call(this);
-      }
-
       const originalItems = this.props.items;
-      this.props.items = this.state.items;
+      // state might not exist yet
+      const folder = this.state ? this.state.folder : null;
+      Object.assign(this.props, processItems(folder, this.props));
       const result = originalSortableHOCRender.call(this);
       this.props.items = originalItems;
       return result;
@@ -250,46 +279,52 @@ export default async function ({ addon, global, console, msg }) {
 
     const originalSpriteSelectorItemHandleClick = SpriteSelectorItem.prototype.handleClick;
     SpriteSelectorItem.prototype.handleClick = function (e) {
-      if (!this.noClick) {
-        const id = this.props.id || this.props.details;
-        if (typeof id === "string") {
-          if (id === ID_BACK) {
-            e.preventDefault();
-            setFolder(this, null);
-            return;
+      if (this.props.asset && this.props.asset.sa && !this.noClick) {
+        const sa = this.props.asset.sa;
+        if (sa.back) {
+          e.preventDefault();
+          setFolder(this, null);
+          return;
+        }
+        if (typeof sa.folder === "string") {
+          e.preventDefault();
+          setFolder(this, sa.folder);
+          return;
+        }
+        if (typeof sa.index === "number") {
+          if (this.props.onClick) {
+            this.props.onClick(sa.index);
           }
-          if (id.startsWith(ID_FOLDER_PREFIX)) {
-            e.preventDefault();
-            setFolder(this, id.substr(ID_FOLDER_PREFIX.length));
-            return;
-          }
+          return;
         }
       }
-      originalSpriteSelectorItemHandleClick.call(this, e);
+      return originalSpriteSelectorItemHandleClick.call(this, e);
     };
 
     const originalRender = SpriteSelectorItem.prototype.render;
     SpriteSelectorItem.prototype.render = function () {
-      if (
-        (typeof this.props.details === "string" && this.props.details.startsWith(ID_PREFIX)) ||
-        (typeof this.props.id === "string" && this.props.id.startsWith(ID_PREFIX))
-      ) {
+      if (this.props.asset && this.props.asset.sa) {
+        const sa = this.props.asset.sa;
         const originalProps = this.props;
         this.props = {
-          ...this.props
+          ...this.props,
         };
 
-        this.props.details = "";
-        if (this.props.name === ID_BACK) {
+        if (sa.back) {
           this.props.name = msg("leave-folder");
-        } else if (this.props.name.startsWith(ID_PREFIX)) {
-          this.props.name = `[F] ${this.props.name.substr(ID_FOLDER_PREFIX.length)}`;
         }
-        this.props.onDeleteButtonClick = null;
-        this.props.onDuplicateButtonClick = null;
-        this.props.onExportButtonClick = null;
-        this.props.onDeleteButtonClick = null;
-        this.props.selected = false;
+        if (sa.folder) {
+          // TODO
+          this.props.name = sa.folder;
+          this.props.details = "Folder";
+        }
+        if (sa.back || sa.folder) {
+          this.props.onDeleteButtonClick = null;
+          this.props.onDuplicateButtonClick = null;
+          this.props.onExportButtonClick = null;
+          this.props.onDeleteButtonClick = null;
+          this.props.selected = false;
+        }
 
         const result = originalRender.call(this);
 
@@ -310,6 +345,7 @@ export default async function ({ addon, global, console, msg }) {
     patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
     sortableHOCInstance.forceUpdate();
 
+    vm = addon.tab.traps.vm;
     const originalInstallTargets = vm.installTargets;
     vm.installTargets = function (targets, extensions, wholeProject) {
       if (currentSpriteFolder) {
