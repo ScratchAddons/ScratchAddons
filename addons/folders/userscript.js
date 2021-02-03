@@ -383,7 +383,12 @@ export default async function ({ addon, global, console, msg }) {
     const originalReorderTarget = vm.reorderTarget;
     vm.reorderTarget = function (targetIndex, newIndex) {
       const isFolder = (item) => {
-        return item.costume && item.costume.asset && item.costume.asset.sa && typeof item.costume.asset.sa.folder === 'string';
+        return (
+          item.costume &&
+          item.costume.asset &&
+          item.costume.asset.sa &&
+          typeof item.costume.asset.sa.folder === "string"
+        );
       };
       const getRealIndex = (item) => {
         if (isFolder(item)) {
