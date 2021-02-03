@@ -95,15 +95,17 @@ export default async function ({ addon, global, console, msg }) {
       const items = [];
 
       if (folderName) {
-        const leaveFolderItem = {
-          asset: leaveFolderAsset,
-        };
+        const leaveFolderItem = {};
         if (type === TYPE_SPRITES) {
           leaveFolderItem.name = msg("leave-folder");
           leaveFolderItem.id = ID_BACK;
+          leaveFolderItem.costume = {
+            asset: leaveFolderAsset,
+          };
         } else {
           leaveFolderItem.name = ID_BACK;
           leaveFolderItem.details = ID_BACK;
+          leaveFolderItem.asset = leaveFolderAsset;
         }
         items.push(leaveFolderItem);
 
@@ -230,18 +232,32 @@ export default async function ({ addon, global, console, msg }) {
 
     const originalRender = SpriteSelectorItem.prototype.render;
     SpriteSelectorItem.prototype.render = function () {
-      if (typeof this.props.details === "string" && this.props.details.startsWith(ID_PREFIX)) {
-        const details = this.props.details;
-        const name = this.props.name;
+      if (
+        (typeof this.props.details === "string" && this.props.details.startsWith(ID_PREFIX)) ||
+        (typeof this.props.id === "string" && this.props.id.startsWith(ID_PREFIX))
+      ) {
+        const originalDetails = this.props.details;
+        const originalName = this.props.name;
+        const originalDragRecognizer = this.dragRecognizer;
+
         this.props.details = "";
         if (this.props.name === ID_BACK) {
           this.props.name = msg("leave-folder");
-        } else {
-          this.props.name = `[F] ${name.substr(ID_FOLDER_PREFIX.length)}`;
+        } else if (this.props.name.startsWith(ID_PREFIX)) {
+          this.props.name = `[F] ${originalName.substr(ID_FOLDER_PREFIX.length)}`;
         }
+        // Disable context menu
+        this.dragRecognizer = {
+          gestureInProgress() {
+            return true;
+          },
+        };
+
         const result = originalRender.call(this);
-        this.props.details = details;
-        this.props.name = name;
+
+        this.props.details = originalDetails;
+        this.props.name = originalName;
+        this.dragRecognizer = originalDragRecognizer;
         return result;
       }
       return originalRender.call(this);
