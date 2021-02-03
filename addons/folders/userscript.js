@@ -9,6 +9,8 @@ export default async function ({ addon, global, console, msg }) {
   const TYPE_SPRITES = 1;
   const TYPE_ASSETS = 2;
 
+  const vm = addon.tab.traps.vm;
+
   const leaveFolderAsset = {
     assetId: ID_BACK,
     encodeDataURI() {
@@ -17,6 +19,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   let reactInternalKey;
+
+  let currentSpriteFolder;
 
   const getFolderFromName = (name) => {
     const idx = name.indexOf("/");
@@ -32,6 +36,11 @@ export default async function ({ addon, global, console, msg }) {
       return name;
     }
     return name.substr(idx + 1);
+  };
+
+  const setFolderOfName = (name, folder) => {
+    const basename = getNameWithoutFolder(name);
+    return `${folder}/${basename}`;
   };
 
   const getSortableHOCFromElement = (el) => {
@@ -92,7 +101,7 @@ export default async function ({ addon, global, console, msg }) {
       return id;
     };
 
-    const processItems = (folderName, propItems) => {
+    const processItems = (folderName, props) => {
       const items = [];
 
       if (folderName) {
@@ -110,7 +119,7 @@ export default async function ({ addon, global, console, msg }) {
         }
         items.push(leaveFolderItem);
 
-        for (const item of propItems) {
+        for (const item of props.items) {
           const itemFolder = getFolderFromName(item.name);
           if (itemFolder === folderName) {
             items.push({
@@ -120,9 +129,14 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
       } else {
-        const folders = {};
-        for (const item of propItems) {
+        // Do not use {}, otherwise folders named after Object.prototype members will not work
+        const folders = Object.create(null);
+
+        for (let i = 0; i < props.items.length; i++) {
+          const item = props.items[i];
           const itemFolder = getFolderFromName(item.name);
+          const isSelected = type === TYPE_SPRITES ? props.selectedId === item.id : props.selectedItemIndex === i;
+
           if (itemFolder) {
             if (!folders[itemFolder]) {
               const folderItem = {
@@ -150,15 +164,12 @@ export default async function ({ addon, global, console, msg }) {
                 folderItem.asset = asset;
               }
               folders[itemFolder] = folderItem;
+              items.push(folderItem);
             }
             folders[itemFolder].items.push(item);
           } else {
             items.push(item);
           }
-        }
-        for (const folder of Object.keys(folders).reverse()) {
-          const item = folders[folder];
-          items.unshift(item);
         }
       }
 
@@ -172,16 +183,42 @@ export default async function ({ addon, global, console, msg }) {
     // };
 
     SortableHOC.prototype.componentDidMount = function () {
+      currentSpriteFolder = null;
       this.setState({
-        items: processItems(null, this.props.items),
+        items: processItems(null, this.props),
       });
     };
 
     SortableHOC.prototype.componentDidUpdate = function (prevProps, prevState) {
-      const folder = this.state ? this.state.folder : null;
+      // When the selected sprite has changed, switch to its folder.
+      if (type === TYPE_SPRITES) {
+        if (prevProps.selectedId !== this.props.selectedId) {
+          const oldTarget = vm.runtime.getTargetById(prevProps.selectedId);
+          const newTarget = vm.runtime.getTargetById(this.props.selectedId);
+          if (
+            oldTarget &&
+            newTarget &&
+            oldTarget.sprite &&
+            newTarget.sprite
+          ) {
+            const oldFolder = getFolderFromName(oldTarget.sprite.name);
+            const newFolder = getFolderFromName(newTarget.sprite.name);
+            if (oldFolder !== newFolder) {
+              this.setState({
+                folder: newFolder
+              });
+              return;
+            }
+          }
+        }
+      }
+
+      // Update item state when folder state changes (TODO: weird hack, try to remove this)
+      let folder = this.state ? this.state.folder : null;
       if (!prevState || prevState.folder !== folder || prevProps.items !== this.props.items) {
+        currentSpriteFolder = folder;
         this.setState({
-          items: processItems(folder, this.props.items),
+          items: processItems(folder, this.props),
         });
       }
     };
@@ -246,12 +283,13 @@ export default async function ({ addon, global, console, msg }) {
         if (this.props.name === ID_BACK) {
           this.props.name = msg("leave-folder");
         } else if (this.props.name.startsWith(ID_PREFIX)) {
-          this.props.name = `[F] ${originalName.substr(ID_FOLDER_PREFIX.length)}`;
+          this.props.name = `[F] ${this.props.name.substr(ID_FOLDER_PREFIX.length)}`;
         }
         this.props.onDeleteButtonClick = null;
         this.props.onDuplicateButtonClick = null;
         this.props.onExportButtonClick = null;
         this.props.onDeleteButtonClick = null;
+        this.props.selected = false;
 
         const result = originalRender.call(this);
 
@@ -271,6 +309,26 @@ export default async function ({ addon, global, console, msg }) {
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
     patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
     sortableHOCInstance.forceUpdate();
+
+    const originalInstallTargets = vm.installTargets;
+    vm.installTargets = function (targets, extensions, wholeProject) {
+      if (currentSpriteFolder) {
+        for (const target of targets) {
+          if (target.sprite) {
+            target.sprite.name = setFolderOfName(target.sprite.name, currentSpriteFolder);
+          }
+        }
+      }
+      return originalInstallTargets.call(this, targets, extensions, wholeProject);
+    };
+    // TODO
+    // const originalRenameSprite = vm.renameSprite;
+    // vm.renameSprite = function (targetId, newName) {
+    //   if (currentSpriteFolder) {
+    //     newName = setFolderOfName(newName, currentSpriteFolder);
+    //   }
+    //   return originalRenameSprite.call(this, targetId, newName);
+    // };
   }
 
   // Costume and sound list
