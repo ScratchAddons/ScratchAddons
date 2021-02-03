@@ -80,7 +80,40 @@ export default async function ({ addon, global, console, msg }) {
               if (type === TYPE_SPRITES) {
                 folderItem.name = `[F] ${itemFolder}`;
                 folderItem.id = `${ID_FOLDER_PREFIX}${itemFolder}`;
-                folderItem.costume = item.costume;
+
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('width', '32');
+                svg.setAttribute('height', '32');
+                debugger;
+                const sameItems = propItems
+                  .filter(i => getFolderFromName(i.name) === itemFolder);
+                const POSITIONS = [
+                  // x, y
+                  [0, 0],
+                  [16, 0],
+                  [0, 16],
+                  [16, 16]
+                ];
+
+                for (let i = 0; i < Math.min(POSITIONS.length, sameItems.length); i++) {
+                  const thisItem = sameItems[i];
+                  const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+                  image.setAttribute('width', '16');
+                  image.setAttribute('height', '16');
+                  image.setAttribute('x', POSITIONS[i][0]);
+                  image.setAttribute('y', POSITIONS[i][1]);
+                  image.setAttribute('href', thisItem.costume.asset.encodeDataURI());
+                  svg.appendChild(image);
+                }
+
+                folderItem.costume = {
+                  asset: {
+                    assetId: Math.random(), // TODO
+                    encodeDataURI() {
+                      return 'data:image/svg+xml;base64,' + btoa(new XMLSerializer().serializeToString(svg));
+                    }
+                  }
+                };
               } else {
                 folderItem.name = `${ID_FOLDER_PREFIX}${itemFolder}`;
                 folderItem.details = `${ID_FOLDER_PREFIX}${itemFolder}`;
@@ -105,6 +138,12 @@ export default async function ({ addon, global, console, msg }) {
 
       return items;
     };
+
+    // const originalGetOrdering = SortableHOC.prototype.getOrdering;
+    // SortableHOC.prototype.getOrdering = function (items, draggingIndex, newIndex) {
+    //   const result = originalGetOrdering.call(this, items, draggingIndex, newIndex);
+    //   return result;
+    // };
 
     SortableHOC.prototype.componentDidMount = function () {
       this.setState({
