@@ -991,6 +991,7 @@ export default class DevTools {
       if (sel.length === 0) {
         this.navigateFilter(1);
       }
+      // noinspection JSUnresolvedFunction
       document.activeElement.blur();
       e.preventDefault();
       return;
@@ -1002,6 +1003,7 @@ export default class DevTools {
         this.findInp.value = ""; // Clear search first, then close on second press
         this.inputChange(e);
       } else {
+        // noinspection JSUnresolvedFunction
         document.activeElement.blur();
       }
       e.preventDefault();
@@ -1896,7 +1898,13 @@ export default class DevTools {
     if (picklist) {
       for (const item of picklist) {
         let code = item[1];
-        if (code === "DELETE_VARIABLE_ID" || code === "RENAME_VARIABLE_ID") {
+        if (
+          typeof code !== "string" || // Audio Record is a function!
+          code === "DELETE_VARIABLE_ID" ||
+          code === "RENAME_VARIABLE_ID" ||
+          code === "NEW_BROADCAST_MESSAGE_ID" ||
+          code === "NEW_BROADCAST_MESSAGE_ID"
+        ) {
           continue; // Skip these
         }
         options.push({
@@ -2032,8 +2040,12 @@ export default class DevTools {
     if (option.option) {
       // We need to tweak the dropdown in this xml...
       let field = option.dom.querySelector("field[name=" + option.pickField + "]");
-      field.innerText = option.option[0];
-      field.setAttribute("id", option.option[1] + "-" + option.option[0]);
+      if (field.getAttribute("id")) {
+        field.innerText = option.option[0];
+        field.setAttribute("id", option.option[1] + "-" + option.option[0]);
+      } else {
+        field.innerText = option.option[1]; // griffpatch - oops! option.option[1] not 0?
+      }
     }
 
     x.appendChild(option.dom);
@@ -2161,6 +2173,7 @@ export default class DevTools {
     this.costTabBody = document.querySelector("div[aria-labelledby=" + this.costTab.id + "]");
 
     if (!document.getElementById("s3devFind")) {
+      // noinspection JSUnresolvedVariable
       root.insertAdjacentHTML(
         "beforeend",
         `
