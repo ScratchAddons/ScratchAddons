@@ -1,0 +1,32 @@
+{
+  "name": "Auto-add extensions",
+  "description": "Adds the pen extension automaticly.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Music",
+      "id": "music",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Pen",
+      "id": "pen",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Video Sensing",
+      "id": "videoSensing",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "tags": ["editor"],
+  "l10n": true
+}
