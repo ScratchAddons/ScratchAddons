@@ -1,5 +1,6 @@
 import downloadBlob from "../../libraries/download-blob.js";
 const NEW_ADDONS = ["hide-flyout", "mediarecorder"];
+import icons from "../../libraries/iconset.js";
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];
@@ -681,5 +682,5 @@ if (document.body.classList.contains("iframe")) {
 }
 
 setTimeout(function () {
-  icon();
+  icon(icons);
 }, 200);
