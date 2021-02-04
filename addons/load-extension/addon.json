@@ -25,6 +25,24 @@
       "id": "videoSensing",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Text to Speach",
+      "id": "text2speech",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Translate",
+      "id": "translate",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Makey Makey",
+      "id": "makeymakey",
+      "type": "boolean",
+      "default": true
     }
   ],
   "tags": ["editor"],
