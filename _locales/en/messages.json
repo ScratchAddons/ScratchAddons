@@ -195,25 +195,25 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-    "message": "$1: $2, which hides the block palette if not hovered or clicked. Go to $3 to enable it."
+    "message": "$1: $2 in Scratch Messaging by hovering the love/favorite count. Studio promotion messages are now supported in both Scratch Messaging and Scratch Notifier."
   },
   "newFeature": {
     "message": "New feature"
   },
   "hexColorPicker": {
-    "message": "auto-hide block palette"
+    "message": "see who loved and favorited your projects"
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2": {
-    "message": "The \"record project video\" feature which previously only recorded video, can now record up to 5 minutes of project video and audio."
+  "message": "The \"Auto-hide block palette\" addon now has a \"category hover\" mode. \"Record project video\" can now include your microphone's sound input."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
   "dataTweaksAlt": {
-    "message": "Video showcasing the \"auto-hide block palette\" feature."
+    "message": "Screenshot of the new Scratch Messaging feature."
   },
   "new": {
     "message": "New!"
