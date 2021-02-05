@@ -1,0 +1,25 @@
+{
+  "name": "Copy link button",
+  "description": "Adds \"Copy Link\" button to comments.",
+  "userscripts": [{
+    "url": "userscript.js",
+    "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"],
+    "runAtComplete": false
+  }],
+  "settings": [{
+      "name": "Add button besides Reply button",
+      "id": "reply",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Add button besides Report button",
+      "id": "report",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "tags": ["community", "recommended", "beta"],
+  "enabledByDefault": false,
+  "l10n": true
+}
