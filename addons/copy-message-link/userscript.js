@@ -14,7 +14,6 @@ export default async function ({
       newElem.className = 'reply';
       newElem.textContent = 'Copy Link';
       newElem.setAttribute('onclick', `
-      function() {
         let newElem2 = document.createElement('textarea');
         newElem2.value = \`\${location.href.split('#')[0]}#\${this.parentElement.parentElement.parentElement.id}\`;
         document.body.appendChild(newElem2);
@@ -22,7 +21,7 @@ export default async function ({
         document.execCommand('copy');
         document.body.removeChild(newElem2);
         delete newElem2;
-      }`);
+        `);
       newElem.setAttribute('nohref', 'nohref');
       document.querySelector(`div#${elem.id} > div.info > div:nth-child(3)`).appendChild(newElem);
     });
@@ -34,7 +33,6 @@ export default async function ({
       newElem.className = 'actions report';
       newElem.textContent = 'Copy link';
       newElem.setAttribute('onclick', `
-    function() {
       let newElem2 = document.createElement('textarea');
       newElem2.value = \`\${location.href.split('#')[0]}#\${elem.parentElement.parentElement.id}\`;
       document.body.appendChild(newElem2);
@@ -42,7 +40,7 @@ export default async function ({
       document.execCommand('copy');
       document.body.removeChild(newElem2);
       delete newElem2;
-    }`);
+      `);
       newElem.setAttribute('nohref', 'nohref');
       document.querySelector(`div#${elem.id} > div.actions-wrap`).appendChild(newElem);
     });

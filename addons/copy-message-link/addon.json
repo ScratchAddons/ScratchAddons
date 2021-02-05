@@ -3,7 +3,7 @@
   "description": "Adds \"Copy Link\" button to comments.",
   "userscripts": [{
     "url": "userscript.js",
-    "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"],
+    "matches": ["https://scratch.mit.edu/*"],
     "runAtComplete": false
   }],
   "settings": [{
@@ -19,7 +19,6 @@
       "default": true
     }
   ],
-  "tags": ["community", "recommended", "beta"],
-  "enabledByDefault": false,
-  "l10n": true
+  "tags": ["community", "beta"],
+  "enabledByDefault": false
 }
