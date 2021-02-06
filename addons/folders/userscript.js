@@ -358,6 +358,11 @@ export default async function ({ addon, global, console, msg }) {
           this.props.onExportButtonClick = null;
           this.props.onDeleteButtonClick = null;
           this.props.selected = false;
+          this.props.number = null;
+        }
+        if (typeof sa.index === 'number') {
+          // 1-indexed
+          this.props.number = sa.index + 1;
         }
 
         const result = originalRender.call(this);
