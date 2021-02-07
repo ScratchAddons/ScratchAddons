@@ -136,115 +136,85 @@ export default async function ({ addon, global, console, msg }) {
       return id;
     };
 
-    const processItems = (folderName, props) => {
+    const processItems = (openFolders, props) => {
       const items = [];
       const result = {
         items,
       };
 
-      if (folderName !== null) {
-        // TODO should not be draggable
-        const backData = {
-          back: true
-        };
-        const backItem = {
-          name: backData
-        };
-        if (type === TYPE_SPRITES) {
-          backItem.costume = {
-            asset: leaveFolderAsset
-          };
-        } else if (type === TYPE_ASSETS) {
-          backItem.asset = leaveFolderAsset;
-        }
-        items.push(backItem);
+      // Do not use {}, otherwise folders named after Object.prototype members will not work
+      const folderItems = Object.create(null);
+      const folderIndexes = Object.create(null);
 
-        for (var i = 0; i < props.items.length; i++) {
-          const item = props.items[i];
-          const itemFolder = getFolderFromName(item.name);
-          if (itemFolder === folderName) {
-            const itemData = {
-              realName: getNameWithoutFolder(item.name)
+      for (let i = 0; i < props.items.length; i++) {
+        const item = props.items[i];
+        const itemFolderName = getFolderFromName(item.name);
+        const itemData = {
+          realName: item.name,
+        };
+        const newItem = {
+          name: itemData
+        };
+        let itemVisible = true;
+
+        if (type === TYPE_SPRITES) {
+          newItem.costume = item.costume;
+          newItem.id = item.id;
+        } else if (type === TYPE_ASSETS) {
+          itemData.realIndex = i;
+          newItem.asset = item.asset;
+        }
+
+        if (itemFolderName !== null) {
+          if (!folderItems[itemFolderName]) {
+            const folderData = {
+              folder: itemFolderName
             };
-            const newItem = {
-              name: itemData
+            const folderItem = {
+              items: [],
+              name: folderData
+            };
+            const folderAsset = {
+              // We don't know these when the folder item is created
+              get assetId() {
+                return getFolderPreviewAssetId(folderItem.items);
+              },
+              encodeDataURI() {
+                return createFolderPreview(folderItem.items);
+              },
             };
             if (type === TYPE_SPRITES) {
-              newItem.costume = item.costume;
-              newItem.id = item.id;
-            } else if (type === TYPE_ASSETS) {
-              itemData.realIndex = i;
-              newItem.asset = item.asset;
-              const isSelected = props.selectedItemIndex === i;
-              if (isSelected) {
-                // no need to subtract 1 from length because the leave folder item offsets it
-                result.selectedItemIndex = items.length;
-              }
+              folderItem.costume = {
+                asset: folderAsset,
+              };
+            } else {
+              folderItem.asset = folderAsset;
             }
-            items.push(newItem);
+            folderItems[itemFolderName] = folderItem;
+            folderIndexes[itemFolderName] = items.length;
+            items.push(folderItem);
           }
-        }
-      } else {
-        // Do not use {}, otherwise folders named after Object.prototype members will not work
-        const folders = Object.create(null);
-
-        for (let i = 0; i < props.items.length; i++) {
-          const item = props.items[i];
-          const itemFolder = getFolderFromName(item.name);
-          const itemData = {
-            realName: item.name,
-          };
-          const newItem = {
-            name: itemData
-          };
-
-          if (type === TYPE_SPRITES) {
-            newItem.costume = item.costume;
-            newItem.id = item.id;
-          } else if (type === TYPE_ASSETS) {
-            itemData.realIndex = i;
-            newItem.asset = item.asset;
-          }
-
-          if (itemFolder !== null) {
-            if (!folders[itemFolder]) {
-              const folderData = {
-                folder: itemFolder
-              };
-              const folderItem = {
-                items: [],
-                name: folderData
-              };
-              const folderAsset = {
-                // We don't know these when the folder item is created
-                get assetId() {
-                  return getFolderPreviewAssetId(folderItem.items);
-                },
-                encodeDataURI() {
-                  return createFolderPreview(folderItem.items);
-                },
-              };
-              if (type === TYPE_SPRITES) {
-                folderItem.costume = {
-                  asset: folderAsset,
-                };
-              } else {
-                folderItem.asset = folderAsset;
-              }
-              folders[itemFolder] = folderItem;
-              items.push(folderItem);
-            }
-            folders[itemFolder].items.push(newItem);
+          itemData.realName = getNameWithoutFolder(itemData.realName);
+          folderItems[itemFolderName].items.push(newItem);
+          if (openFolders.indexOf(itemFolderName) !== -1) {
+            const index = ++folderIndexes[itemFolderName];
+            items.splice(index, 0, newItem);
           } else {
-            items.push(newItem);
+            itemVisible = false;
           }
+        } else {
+          items.push(newItem);
+        }
 
-          if (type === TYPE_SPRITES) {
+        if (type === TYPE_SPRITES) {
 
-          } else if (type === TYPE_ASSETS) {
-            const isSelected = props.selectedItemIndex === i;
-            if (isSelected) {
+        } else if (type === TYPE_ASSETS) {
+          const isSelected = props.selectedItemIndex === i;
+          if (isSelected) {
+            if (itemVisible) {
               result.selectedItemIndex = items.length - 1;
+            } else {
+              result.selectedItemIndex = -1;
             }
           }
         }
@@ -275,36 +245,36 @@ export default async function ({ addon, global, console, msg }) {
 
     SortableHOC.prototype.componentDidUpdate = function (prevProps, prevState) {
       // When the selected sprite has changed, switch to its folder.
-      if (type === TYPE_SPRITES) {
-        if (prevProps.selectedId !== this.props.selectedId) {
-          const oldTarget = vm.runtime.getTargetById(prevProps.selectedId);
-          const newTarget = vm.runtime.getTargetById(this.props.selectedId);
-          if (
-            oldTarget &&
-            newTarget &&
-            oldTarget.sprite &&
-            newTarget.sprite &&
-            newTarget.isSprite() // ignore switching to stage
-          ) {
-            const oldFolder = getFolderFromName(oldTarget.sprite.name);
-            const newFolder = getFolderFromName(newTarget.sprite.name);
-            if (oldFolder !== newFolder) {
-              this.setState({
-                folder: newFolder,
-              });
-              return;
-            }
-          }
-        }
-      }
+    //   if (type === TYPE_SPRITES) {
+    //     if (prevProps.selectedId !== this.props.selectedId) {
+    //       const oldTarget = vm.runtime.getTargetById(prevProps.selectedId);
+    //       const newTarget = vm.runtime.getTargetById(this.props.selectedId);
+    //       if (
+    //         oldTarget &&
+    //         newTarget &&
+    //         oldTarget.sprite &&
+    //         newTarget.sprite &&
+    //         newTarget.isSprite() // ignore switching to stage
+    //       ) {
+    //         const oldFolder = getFolderFromName(oldTarget.sprite.name);
+    //         const newFolder = getFolderFromName(newTarget.sprite.name);
+    //         if (oldFolder !== newFolder) {
+    //           this.setState({
+    //             folder: newFolder,
+    //           });
+    //           return;
+    //         }
+    //       }
+    //     }
+    //   }
     };
 
     const originalSortableHOCRender = SortableHOC.prototype.render;
     SortableHOC.prototype.render = function () {
       const originalItems = this.props.items;
       // state might not exist yet
-      const folder = this.state ? this.state.folder : null;
-      Object.assign(this.props, processItems(folder, this.props));
+      const folders = this.state && this.state.folders || [];
+      Object.assign(this.props, processItems(folders, this.props));
       if (type === TYPE_SPRITES) {
         currentSpriteItems = this.props.items;
       } else if (type === TYPE_ASSETS) {
@@ -319,10 +289,19 @@ export default async function ({ addon, global, console, msg }) {
   const patchSpriteSelectorItem = (SpriteSelectorItem) => {
     // SpriteSelectorItem should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/containers/sprite-selector-item.jsx#L16
 
-    const setFolder = (component, folder) => {
+    const toggleFolder = (component, folder) => {
       const sortableHOCInstance = getSortableHOCFromElement(component.ref);
-      sortableHOCInstance.setState({
-        folder,
+      sortableHOCInstance.setState((prevState) => {
+        const existingFolders = prevState && prevState.folders || [];
+        if (existingFolders.includes(folder)) {
+          return {
+            folders: existingFolders.filter(i => i !== folder)
+          };
+        } else {
+          return {
+            folders: [...existingFolders, folder]
+          };
+        }
       });
     };
 
@@ -332,12 +311,12 @@ export default async function ({ addon, global, console, msg }) {
       if (itemData) {
         if (itemData.back) {
           e.preventDefault();
-          setFolder(this, null);
+          toggleFolder(this, null);
           return;
         }
         if (typeof itemData.folder === "string") {
           e.preventDefault();
-          setFolder(this, itemData.folder);
+          toggleFolder(this, itemData.folder);
           return;
         }
         if (typeof itemData.realIndex === "number") {
