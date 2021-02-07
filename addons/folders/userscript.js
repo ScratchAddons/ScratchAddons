@@ -75,6 +75,35 @@ export default async function ({ addon, global, console, msg }) {
     return null;
   };
 
+  let folderColorStylesheet = null;
+  const folderColors = Object.create(null);
+  const getFolderColorClass = (folderName) => {
+    const hashCode = (str) => {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        let char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash | 0;
+      }
+      return hash;
+    };
+
+    if (!folderColors[folderName]) {
+      if (!folderColorStylesheet) {
+        folderColorStylesheet = document.createElement('style');
+        document.head.appendChild(folderColorStylesheet);
+      }
+      // Every folder needs a random-ish color, but it should also stay consistent between visits.
+      const hash = hashCode(folderName);
+      const color = `hsla(${(hash & 0xff) / 0xff * 360}deg, 100%, 85%, 0.5)`;
+      const id = Object.keys(folderColors).length;
+      const className = `sa-folders-color-${id}`;
+      folderColors[folderName] = className;
+      folderColorStylesheet.textContent += `.${className} { background-color: ${color}; }\n`;
+    }
+    return folderColors[folderName];
+  };
+
   const patchSortableHOC = (SortableHOC, type) => {
     // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
 
@@ -186,6 +215,7 @@ export default async function ({ addon, global, console, msg }) {
           }
 
           itemData.realName = getNameWithoutFolder(itemData.realName);
+          itemData.inFolder = itemFolderName;
           folderItems[itemFolderName].items.push(newItem);
           if (isOpen) {
             const index = ++folderIndexes[itemFolderName];
@@ -335,6 +365,10 @@ export default async function ({ addon, global, console, msg }) {
           this.props.onDeleteButtonClick = null;
           this.props.selected = false;
           this.props.number = null;
+          this.props.className += ` ${getFolderColorClass(itemData.folder)}`;
+        }
+        if (typeof itemData.inFolder === 'string') {
+          this.props.className += ` ${getFolderColorClass(itemData.inFolder)}`;
         }
 
         const result = originalRender.call(this);
@@ -359,6 +393,7 @@ export default async function ({ addon, global, console, msg }) {
 
     const originalInstallTargets = vm.installTargets;
     vm.installTargets = function (targets, extensions, wholeProject) {
+      // TODO: this is broken
       if (currentSpriteFolder) {
         for (const target of targets) {
           if (target.sprite) {
