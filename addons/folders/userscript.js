@@ -12,16 +12,6 @@ export default async function ({ addon, global, console, msg }) {
   // We run too early, will be set later
   let vm;
 
-  const leaveFolderAsset = {
-    assetId: ID_BACK,
-    encodeDataURI() {
-      return addon.self.dir + "/leave-folder.svg";
-    },
-    sa: {
-      back: true,
-    },
-  };
-
   let reactInternalKey;
 
   let currentSpriteFolder;
@@ -79,11 +69,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const getItemData = (item) => {
-    if (
-      item &&
-      item.name &&
-      typeof item.name === 'object'
-    ) {
+    if (item && item.name && typeof item.name === "object") {
       return item.name;
     }
     return null;
@@ -91,25 +77,25 @@ export default async function ({ addon, global, console, msg }) {
 
   const patchSortableHOC = (SortableHOC, type) => {
     // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
-    const SIZE = 64;
 
+    const PREVIEW_SIZE = 64;
     const PREVIEW_POSITIONS = [
       // x, y
       [0, 0],
-      [SIZE / 2, 0],
-      [0, SIZE / 2],
-      [SIZE / 2, SIZE / 2],
+      [PREVIEW_SIZE / 2, 0],
+      [0, PREVIEW_SIZE / 2],
+      [PREVIEW_SIZE / 2, PREVIEW_SIZE / 2],
     ];
 
     const createFolderPreview = (items) => {
       const svg = document.createElementNS(SVG_NS, "svg");
-      svg.setAttribute("width", SIZE);
-      svg.setAttribute("height", SIZE);
+      svg.setAttribute("width", PREVIEW_SIZE);
+      svg.setAttribute("height", PREVIEW_SIZE);
       for (let i = 0; i < Math.min(PREVIEW_POSITIONS.length, items.length); i++) {
         const item = items[i];
         const image = document.createElementNS(SVG_NS, "image");
-        image.setAttribute("width", SIZE / 2);
-        image.setAttribute("height", SIZE / 2);
+        image.setAttribute("width", PREVIEW_SIZE / 2);
+        image.setAttribute("height", PREVIEW_SIZE / 2);
         image.setAttribute("x", PREVIEW_POSITIONS[i][0]);
         image.setAttribute("y", PREVIEW_POSITIONS[i][1]);
         if (item.asset) {
@@ -153,7 +139,7 @@ export default async function ({ addon, global, console, msg }) {
           realName: item.name,
         };
         const newItem = {
-          name: itemData
+          name: itemData,
         };
         let itemVisible = true;
 
@@ -168,11 +154,11 @@ export default async function ({ addon, global, console, msg }) {
         if (itemFolderName !== null) {
           if (!folderItems[itemFolderName]) {
             const folderData = {
-              folder: itemFolderName
+              folder: itemFolderName,
             };
             const folderItem = {
               items: [],
-              name: folderData
+              name: folderData,
             };
             const folderAsset = {
               // We don't know these when the folder item is created
@@ -207,7 +193,6 @@ export default async function ({ addon, global, console, msg }) {
         }
 
         if (type === TYPE_SPRITES) {
-
         } else if (type === TYPE_ASSETS) {
           const isSelected = props.selectedItemIndex === i;
           if (isSelected) {
@@ -223,20 +208,17 @@ export default async function ({ addon, global, console, msg }) {
       return result;
     };
 
-    const originalGetMouseOverIndex = SortableHOC.prototype.getMouseOverIndex;
-    SortableHOC.prototype.getMouseOverIndex = function () {
-      const result = originalGetMouseOverIndex.call(this);
-      // Do not allow people to drag things before the "Leave folder" button
-      if (result === 0 && this.props.items.length > 1) {
-        const firstItem = this.props.items[0];
-        const itemData = getItemData(firstItem);
-        if (itemData) {
-          if (itemData.back) {
-            return 1;
-          }
+    SortableHOC.prototype.saInitialSetup = function () {
+      let folders = [];
+      if (type === TYPE_SPRITES) {
+        const target = vm.runtime.getTargetById(this.props.selectedId);
+        if (target && target.sprite && target.isSprite()) {
+          folders = [getFolderFromName(target.sprite.name)];
         }
       }
-      return result;
+      this.setState({
+        folders,
+      });
     };
 
     SortableHOC.prototype.componentDidMount = function () {
@@ -244,37 +226,34 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     SortableHOC.prototype.componentDidUpdate = function (prevProps, prevState) {
-      // When the selected sprite has changed, switch to its folder.
-    //   if (type === TYPE_SPRITES) {
-    //     if (prevProps.selectedId !== this.props.selectedId) {
-    //       const oldTarget = vm.runtime.getTargetById(prevProps.selectedId);
-    //       const newTarget = vm.runtime.getTargetById(this.props.selectedId);
-    //       if (
-    //         oldTarget &&
-    //         newTarget &&
-    //         oldTarget.sprite &&
-    //         newTarget.sprite &&
-    //         newTarget.isSprite() // ignore switching to stage
-    //       ) {
-    //         const oldFolder = getFolderFromName(oldTarget.sprite.name);
-    //         const newFolder = getFolderFromName(newTarget.sprite.name);
-    //         if (oldFolder !== newFolder) {
-    //           this.setState({
-    //             folder: newFolder,
-    //           });
-    //           return;
-    //         }
-    //       }
-    //     }
-    //   }
+      // When the selected sprite has changed, open its folder.
+      if (type === TYPE_SPRITES) {
+        if (prevProps.selectedId !== this.props.selectedId) {
+          const oldTarget = vm.runtime.getTargetById(prevProps.selectedId);
+          const newTarget = vm.runtime.getTargetById(this.props.selectedId);
+          if (
+            oldTarget &&
+            newTarget &&
+            oldTarget.sprite &&
+            newTarget.sprite &&
+            newTarget.isSprite() // ignore switching to stage
+          ) {
+            const oldFolder = getFolderFromName(oldTarget.sprite.name);
+            const newFolder = getFolderFromName(newTarget.sprite.name);
+            if (oldFolder !== newFolder && !this.state.folders.includes(newFolder)) {
+              this.setState((prevState) => ({
+                folders: [...prevState.folders, newFolder],
+              }));
+            }
+          }
+        }
+      }
     };
 
     const originalSortableHOCRender = SortableHOC.prototype.render;
     SortableHOC.prototype.render = function () {
       const originalItems = this.props.items;
-      // state might not exist yet
-      const folders = this.state && this.state.folders || [];
-      Object.assign(this.props, processItems(folders, this.props));
+      Object.assign(this.props, processItems(this.state.folders, this.props));
       if (type === TYPE_SPRITES) {
         currentSpriteItems = this.props.items;
       } else if (type === TYPE_ASSETS) {
@@ -292,14 +271,14 @@ export default async function ({ addon, global, console, msg }) {
     const toggleFolder = (component, folder) => {
       const sortableHOCInstance = getSortableHOCFromElement(component.ref);
       sortableHOCInstance.setState((prevState) => {
-        const existingFolders = prevState && prevState.folders || [];
+        const existingFolders = prevState.folders;
         if (existingFolders.includes(folder)) {
           return {
-            folders: existingFolders.filter(i => i !== folder)
+            folders: existingFolders.filter((i) => i !== folder),
           };
         } else {
           return {
-            folders: [...existingFolders, folder]
+            folders: [...existingFolders, folder],
           };
         }
       });
@@ -309,11 +288,6 @@ export default async function ({ addon, global, console, msg }) {
     SpriteSelectorItem.prototype.handleClick = function (e) {
       const itemData = getItemData(this.props);
       if (itemData) {
-        if (itemData.back) {
-          e.preventDefault();
-          toggleFolder(this, null);
-          return;
-        }
         if (typeof itemData.folder === "string") {
           e.preventDefault();
           toggleFolder(this, itemData.folder);
@@ -339,21 +313,16 @@ export default async function ({ addon, global, console, msg }) {
           ...this.props,
         };
 
-        if (typeof itemData.realName === 'string') {
+        if (typeof itemData.realName === "string") {
           this.props.name = itemData.realName;
         }
-        if (typeof itemData.realIndex === 'number') {
+        if (typeof itemData.realIndex === "number") {
           // Convert 0-indexed to 1-indexed
           this.props.number = itemData.realIndex + 1;
         }
-        if (typeof itemData.folder === 'string') {
+        if (typeof itemData.folder === "string") {
           this.props.name = itemData.folder;
           this.props.details = "Folder";
-        }
-        if (itemData.back) {
-          this.props.name = msg("leave-folder");
-        }
-        if (itemData.back || typeof itemData.folder === "string") {
           this.props.onDeleteButtonClick = null;
           this.props.onDuplicateButtonClick = null;
           this.props.onExportButtonClick = null;
@@ -374,14 +343,14 @@ export default async function ({ addon, global, console, msg }) {
   // Sprite list
   {
     const spriteSelectorItemElement = await addon.tab.waitForElement("[class*='sprite-selector_sprite-wrapper']");
+    vm = addon.tab.traps.vm;
     reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
     const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
     const spriteSelectorItemInstance = spriteSelectorItemElement[reactInternalKey].child.child.child.stateNode;
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
     patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
-    sortableHOCInstance.forceUpdate();
+    sortableHOCInstance.saInitialSetup();
 
-    vm = addon.tab.traps.vm;
     const originalInstallTargets = vm.installTargets;
     vm.installTargets = function (targets, extensions, wholeProject) {
       if (currentSpriteFolder) {
@@ -527,6 +496,6 @@ export default async function ({ addon, global, console, msg }) {
     const selectorListItem = await addon.tab.waitForElement("[class*='selector_list-item']");
     const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
-    sortableHOCInstance.forceUpdate();
+    sortableHOCInstance.saInitialSetup();
   }
 }
