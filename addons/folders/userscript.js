@@ -78,6 +78,17 @@ export default async function ({ addon, global, console, msg }) {
     throw new Error("cannot find SortableHOC");
   };
 
+  const getItemData = (item) => {
+    if (
+      item &&
+      item.name &&
+      typeof item.name === 'object'
+    ) {
+      return item.name;
+    }
+    return null;
+  };
+
   const patchSortableHOC = (SortableHOC, type) => {
     // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
 
@@ -130,27 +141,46 @@ export default async function ({ addon, global, console, msg }) {
         items,
       };
 
-      if (folderName) {
+      if (folderName !== null) {
         // TODO should not be draggable
-        const leaveFolderItem = {};
+        const backData = {
+          back: true
+        };
+        const backItem = {
+          name: backData
+        };
         if (type === TYPE_SPRITES) {
-          leaveFolderItem.name = msg("leave-folder");
-          leaveFolderItem.id = ID_BACK;
-          leaveFolderItem.costume = {
-            asset: leaveFolderAsset,
+          backItem.costume = {
+            asset: leaveFolderAsset
           };
-        } else {
-          leaveFolderItem.asset = leaveFolderAsset;
+        } else if (type === TYPE_ASSETS) {
+          backItem.asset = leaveFolderAsset;
         }
-        items.push(leaveFolderItem);
+        items.push(backItem);
 
-        for (const item of props.items) {
+        for (var i = 0; i < props.items.length; i++) {
+          const item = props.items[i];
           const itemFolder = getFolderFromName(item.name);
           if (itemFolder === folderName) {
-            items.push({
-              ...item,
-              name: getNameWithoutFolder(item.name),
-            });
+            const itemData = {
+              realName: getNameWithoutFolder(item.name)
+            };
+            const newItem = {
+              name: itemData
+            };
+            if (type === TYPE_SPRITES) {
+              newItem.costume = item.costume;
+              newItem.id = item.id;
+            } else if (type === TYPE_ASSETS) {
+              itemData.realIndex = i;
+              newItem.asset = item.asset;
+              const isSelected = props.selectedItemIndex === i;
+              if (isSelected) {
+                // no need to subtract 1 from length because the leave folder item offsets it
+                result.selectedItemIndex = items.length;
+              }
+            }
+            items.push(newItem);
           }
         }
       } else {
@@ -160,34 +190,32 @@ export default async function ({ addon, global, console, msg }) {
         for (let i = 0; i < props.items.length; i++) {
           const item = props.items[i];
           const itemFolder = getFolderFromName(item.name);
+          const itemData = {
+            realName: item.name,
+          };
+          const newItem = {
+            name: itemData
+          };
 
           if (type === TYPE_SPRITES) {
-            // TODO
+            newItem.costume = item.costume;
+            newItem.id = item.id;
           } else if (type === TYPE_ASSETS) {
-            if (!item.asset) {
-              item.asset = {
-                encodeDataURI() {
-                  return "";
-                },
-              };
-            }
-            if (!item.asset.sa) {
-              item.asset.sa = {};
-            }
-            item.asset.sa.index = i;
+            itemData.realIndex = i;
+            newItem.asset = item.asset;
           }
 
-          if (itemFolder) {
+          if (itemFolder !== null) {
             if (!folders[itemFolder]) {
+              const folderData = {
+                folder: itemFolder
+              };
               const folderItem = {
                 items: [],
+                name: folderData
               };
-              const id = `${ID_FOLDER_PREFIX}${itemFolder}`;
-              const asset = {
-                sa: {
-                  folder: itemFolder,
-                },
-                // We don't know these when the item is created
+              const folderAsset = {
+                // We don't know these when the folder item is created
                 get assetId() {
                   return getFolderPreviewAssetId(folderItem.items);
                 },
@@ -196,27 +224,22 @@ export default async function ({ addon, global, console, msg }) {
                 },
               };
               if (type === TYPE_SPRITES) {
-                folderItem.name = `[F] ${itemFolder}`; // TODO
-                folderItem.id = id;
                 folderItem.costume = {
-                  asset,
+                  asset: folderAsset,
                 };
               } else {
-                folderItem.asset = asset;
+                folderItem.asset = folderAsset;
               }
               folders[itemFolder] = folderItem;
               items.push(folderItem);
             }
-            folders[itemFolder].items.push(item);
+            folders[itemFolder].items.push(newItem);
           } else {
-            items.push(item);
+            items.push(newItem);
           }
 
           if (type === TYPE_SPRITES) {
-            // const isSelected = props.selectedId === item.id;
-            // if (isSelected) {
-            //   selectedId = items[items.length - 1].id;
-            // }
+
           } else if (type === TYPE_ASSETS) {
             const isSelected = props.selectedItemIndex === i;
             if (isSelected) {
@@ -235,19 +258,10 @@ export default async function ({ addon, global, console, msg }) {
       // Do not allow people to drag things before the "Leave folder" button
       if (result === 0 && this.props.items.length > 1) {
         const firstItem = this.props.items[0];
-        if (type === TYPE_SPRITES) {
-          if (firstItem.costume && firstItem.costume.asset && firstItem.costume.asset.sa) {
-            const sa = firstItem.costume.asset.sa;
-            if (sa.back) {
-              return 1;
-            }
-          }
-        } else if (type === TYPE_ASSETS) {
-          if (firstItem.asset && firstItem.asset.sa) {
-            const sa = firstItem.asset.sa;
-            if (sa.back) {
-              return 1;
-            }
+        const itemData = getItemData(firstItem);
+        if (itemData) {
+          if (itemData.back) {
+            return 1;
           }
         }
       }
@@ -269,7 +283,7 @@ export default async function ({ addon, global, console, msg }) {
             newTarget &&
             oldTarget.sprite &&
             newTarget.sprite &&
-            newTarget.isSprite() // ignore stages
+            newTarget.isSprite() // ignore switching to stage
           ) {
             const oldFolder = getFolderFromName(oldTarget.sprite.name);
             const newFolder = getFolderFromName(newTarget.sprite.name);
@@ -313,22 +327,22 @@ export default async function ({ addon, global, console, msg }) {
 
     const originalSpriteSelectorItemHandleClick = SpriteSelectorItem.prototype.handleClick;
     SpriteSelectorItem.prototype.handleClick = function (e) {
-      if (this.props.asset && this.props.asset.sa && !this.noClick) {
-        const sa = this.props.asset.sa;
-        if (sa.back) {
+      const itemData = getItemData(this.props);
+      if (itemData) {
+        if (itemData.back) {
           e.preventDefault();
           setFolder(this, null);
           return;
         }
-        if (typeof sa.folder === "string") {
+        if (typeof itemData.folder === "string") {
           e.preventDefault();
-          setFolder(this, sa.folder);
+          setFolder(this, itemData.folder);
           return;
         }
-        if (typeof sa.index === "number") {
+        if (typeof itemData.realIndex === "number") {
           e.preventDefault();
           if (this.props.onClick) {
-            this.props.onClick(sa.index);
+            this.props.onClick(itemData.realIndex);
           }
           return;
         }
@@ -338,31 +352,34 @@ export default async function ({ addon, global, console, msg }) {
 
     const originalRender = SpriteSelectorItem.prototype.render;
     SpriteSelectorItem.prototype.render = function () {
-      if (this.props.asset && this.props.asset.sa) {
-        const sa = this.props.asset.sa;
+      const itemData = getItemData(this.props);
+      if (itemData) {
         const originalProps = this.props;
         this.props = {
           ...this.props,
         };
 
-        if (sa.back) {
-          this.props.name = msg("leave-folder");
+        if (typeof itemData.realName === 'string') {
+          this.props.name = itemData.realName;
         }
-        if (typeof sa.folder === "string") {
-          this.props.name = sa.folder;
+        if (typeof itemData.realIndex === 'number') {
+          // Convert 0-indexed to 1-indexed
+          this.props.number = itemData.realIndex + 1;
+        }
+        if (typeof itemData.folder === 'string') {
+          this.props.name = itemData.folder;
           this.props.details = "Folder";
         }
-        if (sa.back || typeof sa.folder === "string") {
+        if (itemData.back) {
+          this.props.name = msg("leave-folder");
+        }
+        if (itemData.back || typeof itemData.folder === "string") {
           this.props.onDeleteButtonClick = null;
           this.props.onDuplicateButtonClick = null;
           this.props.onExportButtonClick = null;
           this.props.onDeleteButtonClick = null;
           this.props.selected = false;
           this.props.number = null;
-        }
-        if (typeof sa.index === 'number') {
-          // 1-indexed
-          this.props.number = sa.index + 1;
         }
 
         const result = originalRender.call(this);
@@ -397,134 +414,132 @@ export default async function ({ addon, global, console, msg }) {
       return originalInstallTargets.call(this, targets, extensions, wholeProject);
     };
 
-    const originalReorderTarget = vm.reorderTarget;
-    vm.reorderTarget = function (targetIndex, newIndex) {
-      const isFolder = (item) => {
-        return (
-          item &&
-          item.costume &&
-          item.costume.asset &&
-          item.costume.asset.sa &&
-          typeof item.costume.asset.sa.folder === "string"
-        );
-      };
-      const getRealIndex = (item) => {
-        if (isFolder(item)) {
-          const folder = item.costume.asset.sa.folder;
-          for (let i = 0; i < this.runtime.targets.length; i++) {
-            const target = this.runtime.targets[i];
-            if (target.sprite && getFolderFromName(target.sprite.name) === folder) {
-              return i;
-            }
-          }
-        }
-        for (let i = 0; i < this.runtime.targets.length; i++) {
-          const target = this.runtime.targets[i];
-          if (target.id === item.id) {
-            return i;
-          }
-        }
-        return -1;
-      };
+    // const originalReorderTarget = vm.reorderTarget;
+    // vm.reorderTarget = function (targetIndex, newIndex) {
+    //   const isFolder = (item) => {
+    //     return (
+    //       item &&
+    //       typeof item.name === 'object' &&
+    //       typeof item.name.folder === 'string'
+    //     );
+    //   };
+    //   const getRealIndex = (item) => {
+    //     if (isFolder(item)) {
+    //       const folder = item.costume.asset.sa.folder;
+    //       for (let i = 0; i < this.runtime.targets.length; i++) {
+    //         const target = this.runtime.targets[i];
+    //         if (target.sprite && getFolderFromName(target.sprite.name) === folder) {
+    //           return i;
+    //         }
+    //       }
+    //     }
+    //     for (let i = 0; i < this.runtime.targets.length; i++) {
+    //       const target = this.runtime.targets[i];
+    //       if (target.id === item.id) {
+    //         return i;
+    //       }
+    //     }
+    //     return -1;
+    //   };
 
-      const item = currentSpriteItems[targetIndex - 1];
-      const itemAtNewIndex = currentSpriteItems[newIndex - 1];
-      if (isFolder(item)) {
-        let insertAtIndex = getRealIndex(itemAtNewIndex);
-        const items = [];
-        const folder = item.costume.asset.sa.folder;
-        for (let i = this.runtime.targets.length - 1; i >= 0; i--) {
-          const target = this.runtime.targets[i];
-          if (target.sprite && getFolderFromName(target.sprite.name) === folder) {
-            items.push(target);
-            this.runtime.targets.splice(i, 1);
-            if (i < insertAtIndex) {
-              insertAtIndex--;
-            }
-          }
-        }
-        if (newIndex > targetIndex) {
-          insertAtIndex++;
-        }
-        this.runtime.targets.splice(insertAtIndex, 0, ...items.reverse());
-        this.emitTargetsUpdate();
-        return true;
-      } else {
-        const realItemIndex = getRealIndex(item, false);
-        const realIndexOfItemAtNewIndex = getRealIndex(itemAtNewIndex);
-        if (realItemIndex !== -1 && realIndexOfItemAtNewIndex !== -1) {
-          return originalReorderTarget.call(this, realItemIndex, realIndexOfItemAtNewIndex);
-        }
-      }
-      return originalReorderTarget.call(this, targetIndex, newIndex);
-    };
+    //   const item = currentSpriteItems[targetIndex - 1];
+    //   const itemAtNewIndex = currentSpriteItems[newIndex - 1];
+    //   if (isFolder(item)) {
+    //     let insertAtIndex = getRealIndex(itemAtNewIndex);
+    //     const items = [];
+    //     const folder = item.costume.asset.sa.folder;
+    //     for (let i = this.runtime.targets.length - 1; i >= 0; i--) {
+    //       const target = this.runtime.targets[i];
+    //       if (target.sprite && getFolderFromName(target.sprite.name) === folder) {
+    //         items.push(target);
+    //         this.runtime.targets.splice(i, 1);
+    //         if (i < insertAtIndex) {
+    //           insertAtIndex--;
+    //         }
+    //       }
+    //     }
+    //     if (newIndex > targetIndex) {
+    //       insertAtIndex++;
+    //     }
+    //     this.runtime.targets.splice(insertAtIndex, 0, ...items.reverse());
+    //     this.emitTargetsUpdate();
+    //     return true;
+    //   } else {
+    //     const realItemIndex = getRealIndex(item, false);
+    //     const realIndexOfItemAtNewIndex = getRealIndex(itemAtNewIndex);
+    //     if (realItemIndex !== -1 && realIndexOfItemAtNewIndex !== -1) {
+    //       return originalReorderTarget.call(this, realItemIndex, realIndexOfItemAtNewIndex);
+    //     }
+    //   }
+    //   return originalReorderTarget.call(this, targetIndex, newIndex);
+    // };
 
     // TODO: huge amounts of code duplication here
     // TODO: do this on sounds too
-    const originalReorderCostume = vm.reorderCostume;
-    vm.reorderCostume = function (targetId, costumeIndex, newIndex) {
-      const target = this.runtime.getTargetById(targetId);
-      const costumes = target && target.sprite && target.sprite.costumes;
-      if (costumes) {
-        const isFolder = (item) => {
-          return item && item.asset && item.asset.sa && typeof item.asset.sa.folder === "string";
-        };
-        const getRealIndex = (item) => {
-          if (isFolder(item)) {
-            const folder = item.asset.sa.folder;
-            for (let i = 0; i < costumes.length; i++) {
-              const costume = costumes[i];
-              if (getFolderFromName(costume.name) === folder) {
-                return i;
-              }
-            }
-          }
-          for (let i = 0; i < costumes.length; i++) {
-            const costume = costumes[i];
-            if (costume.asset === item.asset) {
-              return i;
-            }
-          }
-          return -1;
-        };
+    // const originalReorderCostume = vm.reorderCostume;
+    // vm.reorderCostume = function (targetId, costumeIndex, newIndex) {
+    //   const target = this.runtime.getTargetById(targetId);
+    //   const costumes = target && target.sprite && target.sprite.costumes;
+    //   if (costumes) {
+    //     const isFolder = (item) => {
+    //       return item && item.asset && item.asset.sa && typeof item.asset.sa.folder === "string";
+    //     };
+    //     const getRealIndex = (item) => {
+    //       if (isFolder(item)) {
+    //         const folder = item.asset.sa.folder;
+    //         for (let i = 0; i < costumes.length; i++) {
+    //           const costume = costumes[i];
+    //           if (getFolderFromName(costume.name) === folder) {
+    //             return i;
+    //           }
+    //         }
+    //       }
+    //       for (let i = 0; i < costumes.length; i++) {
+    //         const costume = costumes[i];
+    //         if (costume.asset === item.asset) {
+    //           return i;
+    //         }
+    //       }
+    //       return -1;
+    //     };
 
-        const item = currentAssetItems[costumeIndex];
-        const itemAtNewIndex = currentAssetItems[newIndex];
-        let insertAtIndex = getRealIndex(itemAtNewIndex);
+    //     const item = currentAssetItems[costumeIndex];
+    //     const itemAtNewIndex = currentAssetItems[newIndex];
+    //     let insertAtIndex = getRealIndex(itemAtNewIndex);
 
-        const items = [];
-        if (isFolder(item)) {
-          const folder = item.asset.sa.folder;
-          for (let i = costumes.length - 1; i >= 0; i--) {
-            const costume = costumes[i];
-            if (getFolderFromName(costume.name) === folder) {
-              if (i < insertAtIndex) {
-                insertAtIndex--;
-              }
-              items.push(costume);
-              costumes.splice(i, 1);
-            }
-          }
-        } else {
-          const itemIndex = getRealIndex(item);
-          if (itemIndex < insertAtIndex) {
-            insertAtIndex--;
-          } else {
-            insertAtIndex++;
-          }
-          items.push(costumes[itemIndex]);
-          costumes.splice(itemIndex, 1);
-        }
+    //     const items = [];
+    //     if (isFolder(item)) {
+    //       const folder = item.asset.sa.folder;
+    //       for (let i = costumes.length - 1; i >= 0; i--) {
+    //         const costume = costumes[i];
+    //         if (getFolderFromName(costume.name) === folder) {
+    //           if (i < insertAtIndex) {
+    //             insertAtIndex--;
+    //           }
+    //           items.push(costume);
+    //           costumes.splice(i, 1);
+    //         }
+    //       }
+    //     } else {
+    //       const itemIndex = getRealIndex(item);
+    //       if (itemIndex < insertAtIndex) {
+    //         insertAtIndex--;
+    //       } else {
+    //         insertAtIndex++;
+    //       }
+    //       items.push(costumes[itemIndex]);
+    //       costumes.splice(itemIndex, 1);
+    //     }
 
-        if (newIndex > costumeIndex) {
-          insertAtIndex++;
-        }
-        costumes.splice(insertAtIndex, 0, ...items.reverse());
-        target.sprite.costumes = costumes;
-        return;
-      }
-      return originalReorderCostume.call(this, targetId, costumeIndex, newIndex);
-    };
+    //     if (newIndex > costumeIndex) {
+    //       insertAtIndex++;
+    //     }
+    //     costumes.splice(insertAtIndex, 0, ...items.reverse());
+    //     target.sprite.costumes = costumes;
+    //     return;
+    //   }
+    //   return originalReorderCostume.call(this, targetId, costumeIndex, newIndex);
+    // };
   }
 
   // Costume and sound list
