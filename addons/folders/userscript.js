@@ -91,24 +91,25 @@ export default async function ({ addon, global, console, msg }) {
 
   const patchSortableHOC = (SortableHOC, type) => {
     // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
+    const SIZE = 64;
 
     const PREVIEW_POSITIONS = [
       // x, y
       [0, 0],
-      [16, 0],
-      [0, 16],
-      [16, 16],
+      [SIZE / 2, 0],
+      [0, SIZE / 2],
+      [SIZE / 2, SIZE / 2],
     ];
 
     const createFolderPreview = (items) => {
       const svg = document.createElementNS(SVG_NS, "svg");
-      svg.setAttribute("width", "32");
-      svg.setAttribute("height", "32");
+      svg.setAttribute("width", SIZE);
+      svg.setAttribute("height", SIZE);
       for (let i = 0; i < Math.min(PREVIEW_POSITIONS.length, items.length); i++) {
         const item = items[i];
         const image = document.createElementNS(SVG_NS, "image");
-        image.setAttribute("width", "16");
-        image.setAttribute("height", "16");
+        image.setAttribute("width", SIZE / 2);
+        image.setAttribute("height", SIZE / 2);
         image.setAttribute("x", PREVIEW_POSITIONS[i][0]);
         image.setAttribute("y", PREVIEW_POSITIONS[i][1]);
         if (item.asset) {
