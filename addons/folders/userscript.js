@@ -151,10 +151,14 @@ export default async function ({ addon, global, console, msg }) {
           newItem.asset = item.asset;
         }
 
-        if (itemFolderName !== null) {
+        if (itemFolderName === null) {
+          items.push(newItem);
+        } else {
+          const isOpen = openFolders.indexOf(itemFolderName) !== -1;
           if (!folderItems[itemFolderName]) {
             const folderData = {
               folder: itemFolderName,
+              folderOpen: isOpen,
             };
             const folderItem = {
               items: [],
@@ -180,20 +184,18 @@ export default async function ({ addon, global, console, msg }) {
             folderIndexes[itemFolderName] = items.length;
             items.push(folderItem);
           }
+
           itemData.realName = getNameWithoutFolder(itemData.realName);
           folderItems[itemFolderName].items.push(newItem);
-          if (openFolders.indexOf(itemFolderName) !== -1) {
+          if (isOpen) {
             const index = ++folderIndexes[itemFolderName];
             items.splice(index, 0, newItem);
           } else {
             itemVisible = false;
           }
-        } else {
-          items.push(newItem);
         }
 
-        if (type === TYPE_SPRITES) {
-        } else if (type === TYPE_ASSETS) {
+        if (type === TYPE_ASSETS) {
           const isSelected = props.selectedItemIndex === i;
           if (isSelected) {
             if (itemVisible) {
@@ -322,7 +324,11 @@ export default async function ({ addon, global, console, msg }) {
         }
         if (typeof itemData.folder === "string") {
           this.props.name = itemData.folder;
-          this.props.details = "Folder";
+          if (itemData.folderOpen) {
+            this.props.details = msg("open-folder");
+          } else {
+            this.props.details = msg("closed-folder");
+          }
           this.props.onDeleteButtonClick = null;
           this.props.onDuplicateButtonClick = null;
           this.props.onExportButtonClick = null;
