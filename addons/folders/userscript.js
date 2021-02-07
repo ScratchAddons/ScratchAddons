@@ -68,6 +68,10 @@ export default async function ({ addon, global, console, msg }) {
     throw new Error("cannot find SortableHOC");
   };
 
+  const clamp = (n, min, max) => {
+    return Math.min(Math.max(n, min), max);
+  };
+
   const getItemData = (item) => {
     if (item && item.name && typeof item.name === "object") {
       return item.name;
@@ -78,11 +82,12 @@ export default async function ({ addon, global, console, msg }) {
   let folderColorStylesheet = null;
   const folderColors = Object.create(null);
   const getFolderColorClass = (folderName) => {
+    // Based on java's String.hashCode
+    // https://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/src/share/classes/java/lang/String.java#l1452
     const hashCode = (str) => {
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
-        let char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
+        hash = 31 * hash + str.charCodeAt(i);
         hash = hash | 0;
       }
       return hash;
@@ -152,89 +157,104 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     const processItems = (openFolders, props) => {
-      const items = [];
-      const result = {
-        items,
-      };
-
-      // Do not use {}, otherwise folders named after Object.prototype members will not work
-      const folderItems = Object.create(null);
-      const folderIndexes = Object.create(null);
-
-      for (let i = 0; i < props.items.length; i++) {
-        const item = props.items[i];
+      const processItem = (item, visible) => {
         const itemFolderName = getFolderFromName(item.name);
         const itemData = {
           realName: item.name,
+          realIndex: i,
+          inFolder: itemFolderName
         };
         const newItem = {
           name: itemData,
         };
-        let itemVisible = true;
 
         if (type === TYPE_SPRITES) {
           newItem.costume = item.costume;
           newItem.id = item.id;
         } else if (type === TYPE_ASSETS) {
-          itemData.realIndex = i;
           newItem.asset = item.asset;
         }
 
-        if (itemFolderName === null) {
-          items.push(newItem);
-        } else {
-          const isOpen = openFolders.indexOf(itemFolderName) !== -1;
-          if (!folderItems[itemFolderName]) {
-            const folderData = {
-              folder: itemFolderName,
-              folderOpen: isOpen,
-            };
-            const folderItem = {
-              items: [],
-              name: folderData,
-            };
-            const folderAsset = {
-              // We don't know these when the folder item is created
-              get assetId() {
-                return getFolderPreviewAssetId(folderItem.items);
-              },
-              encodeDataURI() {
-                return createFolderPreview(folderItem.items);
-              },
-            };
-            if (type === TYPE_SPRITES) {
-              folderItem.costume = {
-                asset: folderAsset,
-              };
-            } else {
-              folderItem.asset = folderAsset;
-            }
-            folderItems[itemFolderName] = folderItem;
-            folderIndexes[itemFolderName] = items.length;
-            items.push(folderItem);
-          }
+        return {
+          newItem,
+          itemData
+        };
+      };
 
-          itemData.realName = getNameWithoutFolder(itemData.realName);
-          itemData.inFolder = itemFolderName;
-          folderItems[itemFolderName].items.push(newItem);
-          if (isOpen) {
-            const index = ++folderIndexes[itemFolderName];
-            items.splice(index, 0, newItem);
-          } else {
-            itemVisible = false;
-          }
-        }
+      const items = [];
+      const result = {
+        items,
+      };
 
-        if (type === TYPE_ASSETS) {
-          const isSelected = props.selectedItemIndex === i;
-          if (isSelected) {
-            if (itemVisible) {
+      let i = 0;
+      while (i < props.items.length) {
+        const item = props.items[i];
+        const folderName = getFolderFromName(item.name);
+
+        if (folderName === null) {
+          items.push(processItem(item).newItem);
+          if (type === TYPE_ASSETS) {
+            const isSelected = props.selectedItemIndex === i;
+            if (isSelected) {
               result.selectedItemIndex = items.length - 1;
-            } else {
-              result.selectedItemIndex = -1;
             }
           }
+        } else {
+          const isOpen = openFolders.indexOf(folderName) !== -1;
+          const folderData = {
+            folder: folderName,
+            folderOpen: isOpen,
+          };
+          const folderItems = [];
+          const folderItem = {
+            items: folderItems,
+            name: folderData,
+          };
+          const folderAsset = {
+            // We don't know these when the folder item is created
+            get assetId() {
+              return getFolderPreviewAssetId(folderItem.items);
+            },
+            encodeDataURI() {
+              return createFolderPreview(folderItem.items);
+            },
+          };
+          if (type === TYPE_SPRITES) {
+            folderItem.costume = {
+              asset: folderAsset,
+            };
+          } else {
+            folderItem.asset = folderAsset;
+          }
+          items.push(folderItem);
+
+          while (i < props.items.length) {
+            const newItem = props.items[i];
+            const processedItem = processItem(newItem);
+            if (getFolderFromName(newItem.name) !== folderName) {
+              break;
+            }
+            folderItems.push(newItem);
+            processedItem.itemData.realName = getNameWithoutFolder(processedItem.itemData.realName);
+            if (isOpen) {
+              items.push(processedItem.newItem);
+            }
+            if (type === TYPE_ASSETS) {
+              const isSelected = props.selectedItemIndex === i;
+              if (isSelected) {
+                if (isOpen) {
+                  result.selectedItemIndex = items.length - 1;
+                } else {
+                  result.selectedItemIndex = -1;
+                }
+              }
+            }  
+            i++;
+          }
+          i--;
         }
+
+        i++;
       }
 
       return result;
@@ -285,7 +305,7 @@ export default async function ({ addon, global, console, msg }) {
     const originalSortableHOCRender = SortableHOC.prototype.render;
     SortableHOC.prototype.render = function () {
       const originalItems = this.props.items;
-      Object.assign(this.props, processItems(this.state.folders, this.props));
+      Object.assign(this.props, processItems(this.state && this.state.folders || [], this.props));
       if (type === TYPE_SPRITES) {
         currentSpriteItems = this.props.items;
       } else if (type === TYPE_ASSETS) {
@@ -303,7 +323,7 @@ export default async function ({ addon, global, console, msg }) {
     const toggleFolder = (component, folder) => {
       const sortableHOCInstance = getSortableHOCFromElement(component.ref);
       sortableHOCInstance.setState((prevState) => {
-        const existingFolders = prevState.folders;
+        const existingFolders = prevState && prevState.folders || [];
         if (existingFolders.includes(folder)) {
           return {
             folders: existingFolders.filter((i) => i !== folder),
@@ -325,7 +345,7 @@ export default async function ({ addon, global, console, msg }) {
           toggleFolder(this, itemData.folder);
           return;
         }
-        if (typeof itemData.realIndex === "number") {
+        if (typeof this.props.number === 'number' && typeof itemData.realIndex === "number") {
           e.preventDefault();
           if (this.props.onClick) {
             this.props.onClick(itemData.realIndex);
@@ -348,7 +368,7 @@ export default async function ({ addon, global, console, msg }) {
         if (typeof itemData.realName === "string") {
           this.props.name = itemData.realName;
         }
-        if (typeof itemData.realIndex === "number") {
+        if (typeof this.props.number === 'number' && typeof itemData.realIndex === "number") {
           // Convert 0-indexed to 1-indexed
           this.props.number = itemData.realIndex + 1;
         }
@@ -404,7 +424,49 @@ export default async function ({ addon, global, console, msg }) {
       return originalInstallTargets.call(this, targets, extensions, wholeProject);
     };
 
-    // const originalReorderTarget = vm.reorderTarget;
+    const originalReorderTarget = vm.reorderTarget;
+    vm.reorderTarget = function (targetIndex, newIndex) {
+      targetIndex = clamp(targetIndex, 0, currentSpriteItems.length - 1);
+      newIndex = clamp(newIndex, 0, currentSpriteItems.length - 1);
+      if (targetIndex === newIndex) {
+        return false;
+      }
+
+      let targets = this.runtime.targets;
+
+      const targetItem = currentSpriteItems[targetIndex - 1];
+      const itemAtNewIndex = currentSpriteItems[newIndex - 1];
+      const targetItemData = getItemData(targetItem);
+      const itemAtNewIndexData = getItemData(itemAtNewIndex);
+
+      if (!targetItemData || !itemAtNewIndexData) {
+        console.warn('should never happen');
+        return false;
+      }
+
+      if (typeof targetItemData.folder === 'string') {
+        // Moving a folder.
+      } else {
+        const target = vm.runtime.getTargetById(targetItem.id);
+        targetIndex = this.runtime.targets.findIndex(i => i === target);
+
+        const newTarget = vm.runtime.getTargetById(itemAtNewIndex.id);
+        newIndex = this.runtime.targets.findIndex(i => i === newTarget);
+
+        const newFolder = itemAtNewIndexData.inFolder;
+        vm.renameSprite(target.id, setFolderOfName(target.getName(), newFolder));
+
+        targets = [
+          ...targets.slice(0, targetIndex),
+          ...targets.slice(targetIndex + 1)
+        ];
+        targets.splice(newIndex, 0, target);
+      }
+
+      this.runtime.targets = targets;
+      this.emitTargetsUpdate();
+      return true;
+    };
     // vm.reorderTarget = function (targetIndex, newIndex) {
     //   const isFolder = (item) => {
     //     return (
