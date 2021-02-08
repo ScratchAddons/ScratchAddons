@@ -500,7 +500,7 @@ export default async function ({ addon, global, console, msg }) {
           return false;
         }
         realNewIndex = this.runtime.targets.findIndex((i) => i === newTarget);
-      } else if (typeof itemAtNewIndexData.folder === 'string') {
+      } else if (typeof itemAtNewIndexData.folder === "string") {
         const firstItem = itemAtNewIndex.items[0];
         const newTarget = vm.runtime.getTargetById(firstItem.id);
         if (!newTarget) {
@@ -511,7 +511,7 @@ export default async function ({ addon, global, console, msg }) {
           realNewIndex--;
         }
       } else {
-        console.warn('should never happen');
+        console.warn("should never happen");
         return false;
       }
       targets.splice(realNewIndex, 0, ...reorderingTargets);
