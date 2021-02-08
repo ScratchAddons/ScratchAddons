@@ -13,6 +13,18 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.9.0] - 2021-02-08
+
+- New addon: show BBCode [forums]
+- New easter egg addon: fix capitalization of Account Settings. You can access easter egg addons by typing the konami code in the settings page.
+- Scratch Messaging: now shows who loved and favorited projects
+- Scratch Messaging & Scratch Notifier: now support studio promotion messages
+- Auto-hide block palette addon: new "category hover" mode
+- Record project video: new option to include microphone input
+- Mute project player addon: now shows an icon when the project is muted
+- Bug fixes in "linebreaks in comments" addon
+- Clone counter addon: improve performance
+
 ## [v1.8.1] - 2021-01-29
 
 - Bug fix: "more links" treating non-links as links
@@ -227,6 +239,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.9.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.0
 [v1.8.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.8.1
 [v1.8.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.8.0
 [v1.7.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.1
