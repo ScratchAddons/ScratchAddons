@@ -13,7 +13,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     curatorinvite: "studio-add",
     remixproject: "remix",
     studioactivity: "studio",
-    becomeownerstudio: "admin-users",
+    becomeownerstudio: "adminusers",
   };
 
   checkCount();
