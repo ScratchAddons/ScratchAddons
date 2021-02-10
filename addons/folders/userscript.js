@@ -79,6 +79,14 @@ export default async function ({ addon, global, console, msg }) {
     return null;
   };
 
+  const openFolderAsset = {
+    assetId: 'sa_folders_folder',
+    encodeDataURI() {
+      // Doesn't actually need to be a data: URI
+      return addon.self.dir + '/folder.svg';
+    }
+  };
+
   let folderColorStylesheet = null;
   const folderColors = Object.create(null);
   const getFolderColorClass = (folderName) => {
@@ -213,7 +221,7 @@ export default async function ({ addon, global, console, msg }) {
             items: folderItems,
             name: folderData,
           };
-          const folderAsset = {
+          const folderAsset = isOpen ? openFolderAsset : {
             // We don't know these when the folder item is created
             get assetId() {
               return getFolderPreviewAssetId(folderItem.items);
