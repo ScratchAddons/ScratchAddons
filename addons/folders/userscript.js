@@ -80,11 +80,11 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const openFolderAsset = {
-    assetId: 'sa_folders_folder',
+    assetId: "sa_folders_folder",
     encodeDataURI() {
       // Doesn't actually need to be a data: URI
-      return addon.self.dir + '/folder.svg';
-    }
+      return addon.self.dir + "/folder.svg";
+    },
   };
 
   let folderColorStylesheet = null;
@@ -221,15 +221,17 @@ export default async function ({ addon, global, console, msg }) {
             items: folderItems,
             name: folderData,
           };
-          const folderAsset = isOpen ? openFolderAsset : {
-            // We don't know these when the folder item is created
-            get assetId() {
-              return getFolderPreviewAssetId(folderItem.items);
-            },
-            encodeDataURI() {
-              return createFolderPreview(folderItem.items);
-            },
-          };
+          const folderAsset = isOpen
+            ? openFolderAsset
+            : {
+                // We don't know these when the folder item is created
+                get assetId() {
+                  return getFolderPreviewAssetId(folderItem.items);
+                },
+                encodeDataURI() {
+                  return createFolderPreview(folderItem.items);
+                },
+              };
           if (type === TYPE_SPRITES) {
             folderItem.costume = {
               asset: folderAsset,
@@ -273,6 +275,7 @@ export default async function ({ addon, global, console, msg }) {
 
     SortableHOC.prototype.saInitialSetup = function () {
       let folders = [];
+      // TODO: do this for assets as well
       if (type === TYPE_SPRITES) {
         const target = vm.runtime.getTargetById(this.props.selectedId);
         if (target && target.sprite && target.isSprite()) {
@@ -330,24 +333,122 @@ export default async function ({ addon, global, console, msg }) {
 
   const patchSpriteSelectorItem = (SpriteSelectorItem) => {
     // SpriteSelectorItem should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/containers/sprite-selector-item.jsx#L16
-    const addContextMenuItems = (component) => {
-      const menu = component.ref.querySelector("nav[role=menu]");
 
-      if (menu.saFolderInitialized) {
-        return;
-      }
-      menu.saFolderInitialized = true;
+    const closeContextMenu = () => {
+      document.body.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: document.body, bubbles: true }));
+    };
 
-      const addToFolderButton = document.createElement("div");
-      addToFolderButton.className = addon.tab.scratchClass(
+    const createMenuItem = (text, callback, border) => {
+      const el = document.createElement("div");
+      el.className = addon.tab.scratchClass(
         "context-menu_menu-item",
-        "context-menu_menu-item-bordered",
+        border ? "context-menu_menu-item-bordered" : null,
         {
-          others: "react-contextmenu-item",
+          others: ["react-contextmenu-item", "sa-folders-contextmenu-item"],
         }
       );
-      addToFolderButton.textContent = "add to folder";
-      menu.appendChild(addToFolderButton);
+      el.setAttribute("role", "menuitem");
+      el.setAttribute("tabindex", "-1");
+      el.setAttribute("aria-disabled", "false");
+      el.textContent = text;
+      el.addEventListener(
+        "click",
+        (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          closeContextMenu();
+          callback();
+        },
+        true
+      );
+      return el;
+    };
+
+    const getAllFolders = (component) => {
+      const result = new Set();
+      let items;
+      if (component.props.id) {
+        items = currentSpriteItems;
+      } else {
+        items = currentAssetItems;
+      }
+      for (const item of items) {
+        const data = getItemData(item);
+        if (typeof data.folder === "string") {
+          result.add(data.folder);
+        }
+      }
+      return Array.from(result);
+    };
+
+    const addContextMenuItems = (component) => {
+      const data = getItemData(component.props);
+      if (!data) {
+        return;
+      }
+
+      const menu = component.ref.querySelector("nav[role=menu]");
+      if (!menu) {
+        return;
+      }
+
+      let container = menu.querySelector(".sa-folders-contextmenu-container");
+      if (container) {
+        while (container.firstChild) {
+          container.removeChild(container.firstChild);
+        }
+      } else {
+        container = document.createElement("div");
+        container.className = "sa-folders-contextmenu-container";
+        menu.appendChild(container);
+      }
+
+      const setFolder = (folder) => {
+        if (component.props.id) {
+          const target = vm.runtime.getTargetById(component.props.id);
+          const targets = vm.runtime.targets.filter((i) => i !== target);
+
+          let insertAt = targets.length;
+          let found = false;
+          for (let i = 0; i < targets.length; i++) {
+            if (getFolderFromName(targets[i].getName()) === folder) {
+              found = true;
+              insertAt = i;
+              break;
+            }
+          }
+
+          targets.splice(insertAt, 0, target);
+          vm.runtime.targets = targets;
+          vm.renameSprite(component.props.id, setFolderOfName(target.getName(), folder));
+        }
+      };
+
+      container.appendChild(
+        createMenuItem(
+          msg("create-folder"),
+          () => {
+            setFolder(data.realName);
+          },
+          true
+        )
+      );
+
+      const currentFolder = data.inFolder;
+      for (const folder of getAllFolders(component)) {
+        if (folder !== currentFolder) {
+          container.appendChild(
+            createMenuItem(
+              msg("add-to-folder", {
+                folder,
+              }),
+              () => {
+                setFolder(folder);
+              }
+            )
+          );
+        }
+      }
     };
 
     const toggleFolder = (component, folder) => {
@@ -474,6 +575,7 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       let targets = this.runtime.targets;
+      const originalTargets = this.runtime.targets;
 
       const targetItem = currentSpriteItems[targetIndex - 1];
       const itemAtNewIndex = currentSpriteItems[newIndex - 1];
@@ -507,13 +609,13 @@ export default async function ({ addon, global, console, msg }) {
       } else if (newIndex === currentSpriteItems.length) {
         realNewIndex = targets.length;
       } else if (itemAtNewIndex.id) {
-        newFolder = typeof itemAtNewIndexData.inFolder === 'string' ? itemAtNewIndexData.inFolder : null;
+        newFolder = typeof itemAtNewIndexData.inFolder === "string" ? itemAtNewIndexData.inFolder : null;
         let newTarget = vm.runtime.getTargetById(itemAtNewIndex.id);
         if (!newTarget) {
           console.warn("should never happen");
           return false;
         }
-        realNewIndex = targets.findIndex((i) => i === newTarget);
+        realNewIndex = targets.indexOf(newTarget);
         if (newIndex > targetIndex) {
           realNewIndex++;
         }
@@ -521,7 +623,7 @@ export default async function ({ addon, global, console, msg }) {
         newFolder = itemAtNewIndexData.folder;
         let item;
         let offset = 0;
-        if (typeof targetItemData.inFolder === 'string' && targetItemData.inFolder === itemAtNewIndexData.folder) {
+        if (typeof targetItemData.inFolder === "string" && targetItemData.inFolder === itemAtNewIndexData.folder) {
           // If an item in a folder is dropped onto its folder icon, move it out of the folder.
           item = itemAtNewIndex.items[0];
           newFolder = null;
@@ -531,12 +633,19 @@ export default async function ({ addon, global, console, msg }) {
         } else {
           item = itemAtNewIndex.items[0];
         }
-        const newTarget = vm.runtime.getTargetById(item.id);
-        if (!newTarget) {
-          console.warn("should never happen");
-          return false;
+        let newTarget = vm.runtime.getTargetById(item.id);
+        if (newTarget) {
+          realNewIndex = targets.indexOf(newTarget) + offset;
+        } else {
+          // Edge case: Dragging the first item of a list on top of the folder item
+          vm.runtime.targets = originalTargets;
+          newTarget = vm.runtime.getTargetById(item.id);
+          if (!newTarget) {
+            console.warn("should never happen");
+            return false;
+          }
+          realNewIndex = originalTargets.indexOf(newTarget) + offset;
         }
-        realNewIndex = targets.findIndex((i) => i === newTarget) + offset;
       } else {
         console.warn("should never happen");
         return false;
@@ -553,7 +662,7 @@ export default async function ({ addon, global, console, msg }) {
       this.emitTargetsUpdate();
 
       // If the folder has changed, update sprite names to match.
-      if (typeof targetItemData.folder !== 'string' && targetItemData.inFolder !== newFolder) {
+      if (typeof targetItemData.folder !== "string" && targetItemData.inFolder !== newFolder) {
         for (const target of reorderingTargets) {
           vm.renameSprite(target.id, setFolderOfName(target.getName(), newFolder));
         }

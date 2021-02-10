@@ -1,30 +1,8 @@
-/* .sa-folders-color-0 {
-  background-color: hsla(0deg, 100%, 85%, 0.25);
+.sa-folders-contextmenu-container {
 }
-.sa-folders-color-1 {
-  background-color: hsla(36deg, 100%, 85%, 0.25);
+
+.sa-folders-contextmenu-item {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.sa-folders-color-2 {
-  background-color: hsla(72deg, 100%, 85%, 0.25);
-}
-.sa-folders-color-3 {
-  background-color: hsla(108deg, 100%, 85%, 0.25);
-}
-.sa-folders-color-4 {
-  background-color: hsla(144deg, 100%, 85%, 0.25);
-}
-.sa-folders-color-5 {
-  background-color: hsla(180deg, 100%, 85%, 0.25);
-}
-.sa-folders-color-6 {
-  background-color: hsla(216deg, 100%, 85%, 0.25);
-}
-.sa-folders-color-7 {
-  background-color: hsla(252deg, 100%, 85%, 0.25);
-}
-.sa-folders-color-8 {
-  background-color: hsla(288deg, 100%, 85%, 0.25);
-}
-.sa-folders-color-9 {
-  background-color: hsla(324deg, 100%, 85%, 0.25);
-} */
