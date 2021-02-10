@@ -10,9 +10,10 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     addonIds = ["_general", ...addonIds].filter(
       (addonId) => !addonId.startsWith("//") && !this.loaded.includes(addonId)
     );
-    const ui = chrome.i18n.getUILanguage();
+    const ui = chrome.i18n.getUILanguage().toLowerCase();
     const locales = [ui];
     if (ui.includes("-")) locales.push(ui.split("-")[0]);
+    if (ui.startsWith("pt") && ui !== "pt-br") locales.push("pt-br");
     if (!locales.includes("en")) locales.push("en");
 
     localeLoop: for (const locale of locales) {

@@ -13,6 +13,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 function getL10NURLs() {
   const langCode = scratchAddons.globalState.auth.scratchLang.toLowerCase();
   const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
+  if (langCode === "pt") {
+    urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
+  }
   if (langCode.includes("-")) {
     urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
   }
