@@ -495,44 +495,70 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
-      // Remove targets and insert them in their new location.
+      let newFolder = null;
+
       targets = targets.filter((i) => !reorderingTargets.includes(i));
+      // Set targets immediately to fix getTargetById. This will be set again later.
+      this.runtime.targets = targets;
+
       let realNewIndex;
       if (newIndex === 1) {
         realNewIndex = 1;
       } else if (newIndex === currentSpriteItems.length) {
         realNewIndex = targets.length;
       } else if (itemAtNewIndex.id) {
+        newFolder = typeof itemAtNewIndexData.inFolder === 'string' ? itemAtNewIndexData.inFolder : null;
         let newTarget = vm.runtime.getTargetById(itemAtNewIndex.id);
         if (!newTarget) {
+          console.warn("should never happen");
           return false;
         }
-        realNewIndex = this.runtime.targets.findIndex((i) => i === newTarget);
+        realNewIndex = targets.findIndex((i) => i === newTarget);
+        if (newIndex > targetIndex) {
+          realNewIndex++;
+        }
       } else if (typeof itemAtNewIndexData.folder === "string") {
-        const firstItem = itemAtNewIndex.items[0];
-        const newTarget = vm.runtime.getTargetById(firstItem.id);
+        newFolder = itemAtNewIndexData.folder;
+        let item;
+        let offset = 0;
+        if (typeof targetItemData.inFolder === 'string' && targetItemData.inFolder === itemAtNewIndexData.folder) {
+          // If an item in a folder is dropped onto its folder icon, move it out of the folder.
+          item = itemAtNewIndex.items[0];
+          newFolder = null;
+        } else if (!itemAtNewIndexData.folderOpen && newIndex > targetIndex) {
+          item = itemAtNewIndex.items[itemAtNewIndex.items.length - 1];
+          offset = 1;
+        } else {
+          item = itemAtNewIndex.items[0];
+        }
+        const newTarget = vm.runtime.getTargetById(item.id);
         if (!newTarget) {
+          console.warn("should never happen");
           return false;
         }
-        realNewIndex = this.runtime.targets.findIndex((i) => i === newTarget);
-        if (itemAtNewIndexData.folderOpen) {
-          realNewIndex--;
-        }
+        realNewIndex = targets.findIndex((i) => i === newTarget) + offset;
       } else {
         console.warn("should never happen");
         return false;
       }
-      targets.splice(realNewIndex, 0, ...reorderingTargets);
 
-      if (!(typeof targetItemData.folder === "string" && typeof itemAtNewIndexData.inFolder !== "string")) {
-        const newFolder = itemAtNewIndexData.inFolder;
+      if (realNewIndex < 0 || realNewIndex > targets.length) {
+        console.warn("should never happen");
+        return false;
+      }
+
+      // Insert the sprites back and trigger update.
+      targets.splice(realNewIndex, 0, ...reorderingTargets);
+      this.runtime.targets = targets;
+      this.emitTargetsUpdate();
+
+      // If the folder has changed, update sprite names to match.
+      if (typeof targetItemData.folder !== 'string' && targetItemData.inFolder !== newFolder) {
         for (const target of reorderingTargets) {
           vm.renameSprite(target.id, setFolderOfName(target.getName(), newFolder));
         }
       }
 
-      this.runtime.targets = targets;
-      this.emitTargetsUpdate();
       return true;
     };
   }
