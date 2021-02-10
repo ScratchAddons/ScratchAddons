@@ -309,6 +309,9 @@ const vue = (window.vue = new Vue({
     },
     toggleAddonRequest(addon) {
       const toggle = () => {
+        // Prevents selecting text when the shift key is being help down
+        event.preventDefault();
+
         const newState = !addon._enabled;
         addon._enabled = newState;
         // Do not extend when enabling in popup mode, unless addon has warnings
@@ -316,6 +319,8 @@ const vue = (window.vue = new Vue({
           document.body.classList.contains("iframe") &&
           !addon._expanded &&
           (addon.info || []).every((item) => item.type !== "warning")
+            ? false
+            : event.shiftKey
             ? false
             : newState;
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });

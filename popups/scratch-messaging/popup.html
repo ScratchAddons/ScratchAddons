@@ -113,7 +113,7 @@
           </div>
           <span class="message-type-title-text">{{ uiMessages.studioPromotionsMsg }}</span>
           <span class="float-right"
-            ><img class="small-icon" src="../../images/icons/admin-users.svg" /> {{ studioPromotions.length }}</span
+            ><img class="small-icon" src="../../images/icons/adminusers.svg" /> {{ studioPromotions.length }}</span
           >
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.studioPromotions">
@@ -269,19 +269,26 @@
       <!-- Projects -->
       <div
         class="message-type"
-        v-for="project of projectsOrdered"
+        v-for="(i, project) in projectsOrdered"
         v-show="project.unreadComments && project.loadedComments ||
               !project.unreadComments && commentsReady"
       >
-        <div class="message-type-title">
+        <div class="message-type-title" :style="{zIndex: 9999 - i}">
           <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
           <span class="float-right">
-            <span v-show="project.loves"
-              ><img class="small-icon colored" src="../../images/icons/heart.svg" /> {{project.loves}}</span
+            <div
+              class="tooltip"
+              v-if="project.loveCount || project.favoriteCount"
+              style="display: inline-block; padding-left: 6px; padding-right: 6px"
             >
-            <span v-show="project.favorites"
-              ><img class="small-icon colored" src="../../images/icons/star.svg" /> {{project.favorites}}</span
-            >
+              <span v-show="project.loveCount"
+                ><img class="small-icon colored" src="../../images/icons/heart.svg" /> {{project.loveCount}}</span
+              >
+              <span v-show="project.favoriteCount"
+                ><img class="small-icon colored" src="../../images/icons/star.svg" /> {{project.favoriteCount}}</span
+              >
+              <span class="tooltiptext tooltiptextleft" v-html="projectLoversAndFavers(project)"></span>
+            </div>
             <span v-show="project.unreadComments"
               ><img class="small-icon" src="../../images/icons/comment.svg" /> {{project.unreadComments}}</span
             >

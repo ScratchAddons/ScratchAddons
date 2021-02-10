@@ -96,7 +96,7 @@
       "default": true
     },
     {
-      "name": "@admin-users.svg Notify studio promotions",
+      "name": "@adminusers.svg Notify studio promotions",
       "id": "becomeownerstudio_notifications",
       "type": "boolean",
       "default": true

@@ -25,9 +25,17 @@
   background: #000;
   color: #fff;
   text-align: center;
-  /* display: none; */
   visibility: hidden;
-  /* hide by default */
+
+  box-shadow: 0px 0px 16px 10px #3b3b3b52;
+}
+.tooltiptext.tooltiptextleft {
+  left: auto;
+  top: -3px;
+  right: 95%;
+  margin-left: 0;
+  margin-right: 4px;
+  transform: none;
 }
 
 .tooltip:hover .tooltiptext {
@@ -42,6 +50,13 @@
   border-width: 5px;
   border-style: solid;
   border-color: transparent black transparent transparent;
+  white-space: normal;
+}
+.tooltip .tooltiptext.tooltiptextleft::after {
+  right: auto;
+  top: 15px;
+  left: 100%;
+  border-color: transparent transparent transparent black;
 }
 
 .tooltiptext:hover .tooltiptext:after {

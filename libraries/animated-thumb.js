@@ -40,7 +40,7 @@ export default class ThumbSetter {
 
     async upload (file) {
         try {
-            await fetch(
+            const resp = await fetch(
                 `https://scratch.mit.edu/internalapi/project/thumbnail/${this.projectId}/set/`,
                 {
                     method: "POST",
@@ -51,6 +51,7 @@ export default class ThumbSetter {
                     }
                 }
             );
+            if (!resp.ok) throw new Error("Server responded with: ", resp.status);
         } catch (e) {
             console.error("Error while uploading a thumbnail:", e);
             alert(this.messages.error);
