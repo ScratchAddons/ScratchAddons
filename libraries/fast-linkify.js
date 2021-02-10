@@ -1,7 +1,7 @@
 // Note: the regex below contains catastrophic backtracking.
 // However, if someone wanted to crash the website, there are many other (and better) ways.
 // Note that the regex is grouped for split() support.
-const getURLRegex = () => /((?:https?:\/\/)?[\w-]+(?:\.[\w-]+)+(?:\/[^\s"%<>\\^`{|}]*)?)/g;
+const getURLRegex = () => /((?:https?:\/\/)?(?:[\w-]+\.)+(?:xn--[a-zA-Z\d]+|[a-zA-Z]{2,})(?:\/[^\s"%<>\\^`{|}]*)?)/g;
 
 const _linkify = (child) => {
   if (!(child instanceof Text)) return;
