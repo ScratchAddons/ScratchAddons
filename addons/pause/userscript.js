@@ -9,7 +9,7 @@ export default async function ({ addon, global, console, msg }) {
   img.addEventListener("click", () => setPaused(!paused));
 
   let paused = false;
-  let pausedThreadState = new Map();
+  let pausedThreadState = new WeakMap();
   const edgeActivatedHats = new Set();
 
   const setPaused = (_paused) => {
@@ -36,11 +36,6 @@ export default async function ({ addon, global, console, msg }) {
           thread.status = /* STATUS_PROMISE_WAIT */ 1;
         }
       }
-      for (const thread of Array.from(pausedThreadState.keys())) {
-        if (!vm.runtime.threads.includes(thread)) {
-          pausedThreadState.delete(thread);
-        }
-      }
 
       for (const hat of Object.keys(vm.runtime._hats)) {
         if (vm.runtime._hats[hat].edgeActivated) {
@@ -65,7 +60,7 @@ export default async function ({ addon, global, console, msg }) {
           thread.status = pausedState.status;
         }
       }
-      pausedThreadState.clear();
+      pausedThreadState = new WeakMap();
 
       for (const hat of Object.keys(vm.runtime._hats)) {
         if (edgeActivatedHats.has(hat)) {
@@ -109,10 +104,18 @@ export default async function ({ addon, global, console, msg }) {
     return originalPostData.call(this, data);
   };
 
-  const originalEmitProjectRunStatus = vm.runtime._emitProjectRunStatus;
-  vm.runtime._emitProjectRunStatus = function (threadCount) {
-    threadCount -= pausedThreadState.size;
-    return originalEmitProjectRunStatus.call(this, threadCount);
+  // Fix project running/stopped state
+  const originalGetMonitorThreadCount = vm.runtime._getMonitorThreadCount;
+  vm.runtime._getMonitorThreadCount = function (threads) {
+    let count = originalGetMonitorThreadCount.call(this, threads);
+    if (paused) {
+      for (const thread of threads) {
+        if (pausedThreadState.has(thread)) {
+          count++;
+        }
+      }
+    }
+    return count;
   };
 
   while (true) {
