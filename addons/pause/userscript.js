@@ -38,6 +38,10 @@ export default async function ({ addon, global, console, msg }) {
           vm.runtime._hats[hat].edgeActivated = false;
         }
       }
+
+      // Immediately emit project stop
+      // Scratch will do this automatically, but it might take a couple frames
+      vm.runtime.emit("PROJECT_RUN_STOP");
     } else {
       vm.runtime.audioEngine.audioContext.resume();
       vm.runtime.ioDevices.clock.resume();
