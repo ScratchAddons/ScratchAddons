@@ -41,6 +41,8 @@ export default async function ({ addon, global, console, msg }) {
           vm.runtime._hats[hat].edgeActivated = false;
         }
       }
+
+      vm.runtime.emit("PROJECT_RUN_STOP");
     } else {
       vm.runtime.audioEngine.audioContext.resume();
       vm.runtime.ioDevices.clock.resume();
@@ -62,6 +64,8 @@ export default async function ({ addon, global, console, msg }) {
           vm.runtime._hats[hat].edgeActivated = true;
         }
       }
+
+      vm.runtime.emit("PROJECT_RUN_START");
     }
   };
 
