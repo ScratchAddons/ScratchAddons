@@ -1,10 +1,10 @@
 {
   "name": "Forkphorus Project player",
   "description": "Replaces the normal project player with the Forkphorus project player on the project page",
-  "credits":[
-     {
-        "name": "galli"
-     }
+  "credits": [
+    {
+      "name": "galli"
+    }
   ],
   "userscripts": [
     {
