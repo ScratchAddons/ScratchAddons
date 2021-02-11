@@ -12,7 +12,7 @@ export default async function ({ addon, global, console, msg }) {
 
   let paused = false;
   let pauseTime;
-  let oldThreadStatus = new WeakMap();
+  let oldThreadStatus = new Map();
   const edgeActivatedHats = new Set();
 
   const setPaused = (_paused) => {
@@ -27,7 +27,7 @@ export default async function ({ addon, global, console, msg }) {
       vm.runtime.ioDevices.clock.pause();
       img.src = addon.self.dir + "/play.svg";
 
-      oldThreadStatus = new WeakMap();
+      oldThreadStatus.clear();
       for (const thread of vm.runtime.threads) {
         if (!isMonitorThread(thread)) {
           oldThreadStatus.set(thread, thread.status);
@@ -41,8 +41,6 @@ export default async function ({ addon, global, console, msg }) {
           vm.runtime._hats[hat].edgeActivated = false;
         }
       }
-
-      vm.runtime.emit("PROJECT_RUN_STOP");
     } else {
       vm.runtime.audioEngine.audioContext.resume();
       vm.runtime.ioDevices.clock.resume();
@@ -58,14 +56,13 @@ export default async function ({ addon, global, console, msg }) {
           thread.status = oldThreadStatus.get(thread);
         }
       }
+      oldThreadStatus.clear();
 
       for (const hat of Object.keys(vm.runtime._hats)) {
         if (edgeActivatedHats.has(hat)) {
           vm.runtime._hats[hat].edgeActivated = true;
         }
       }
-
-      vm.runtime.emit("PROJECT_RUN_START");
     }
   };
 
@@ -101,6 +98,12 @@ export default async function ({ addon, global, console, msg }) {
       return r;
     }
     return originalPostData.call(this, data);
+  };
+
+  const originalEmitProjectRunStatus = vm.runtime._emitProjectRunStatus;
+  vm.runtime._emitProjectRunStatus = function (threadCount) {
+    threadCount -= oldThreadStatus.size;
+    return originalEmitProjectRunStatus.call(this, threadCount);
   };
 
   while (true) {
