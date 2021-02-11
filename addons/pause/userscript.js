@@ -15,6 +15,9 @@ export default async function ({ addon, global, console, msg }) {
   let oldThreadStatus = new WeakMap();
 
   const setPaused = (_paused) => {
+    if (paused === _paused) {
+      return;
+    }
     paused = _paused;
 
     if (paused) {
