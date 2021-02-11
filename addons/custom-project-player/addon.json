@@ -3,7 +3,8 @@
   "description": "Replaces the normal project player with the Forkphorus project player on the project page",
   "credits": [
     {
-      "name": "galli"
+      "name": "galli",
+      "link": "https://github.com/sjrnoodles"
     }
   ],
   "userscripts": [
