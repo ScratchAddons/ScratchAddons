@@ -117,6 +117,26 @@ export default async function ({ addon, global, console, msg }) {
     return folderColors[folderName];
   };
 
+  const fixTargetOrder = () => {
+    const folders = Object.create(null);
+    const result = [];
+    for (const target of vm.runtime.targets) {
+      const folder = getFolderFromName(target.getName());
+      if (typeof folder === 'string') {
+        if (!folders[folder]) {
+          folders[folder] = [];
+          result.push(folders[folder]);
+        }
+        folders[folder].push(target);
+      } else {
+        result.push(target);
+      }
+    }
+    const newTargetList = result.flat();
+    vm.runtime.targets = newTargetList;
+    vm.emitTargetsUpdate();
+  };
+
   const patchSortableHOC = (SortableHOC, type) => {
     // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
 
@@ -279,7 +299,7 @@ export default async function ({ addon, global, console, msg }) {
       if (type === TYPE_SPRITES) {
         const target = vm.runtime.getTargetById(this.props.selectedId);
         if (target && target.sprite && target.isSprite()) {
-          folders = [getFolderFromName(target.sprite.name)];
+          folders = [getFolderFromName(target.getName())];
         }
       }
       this.setState({
@@ -288,7 +308,14 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     SortableHOC.prototype.componentDidMount = function () {
-      currentSpriteFolder = null;
+      if (type === TYPE_SPRITES) {
+        const selectedTarget = vm.runtime.getTargetById(this.props.selectedId);
+        if (selectedTarget) {
+          currentSpriteFolder = getFolderFromName(selectedTarget.getName());
+        } else {
+          currentSpriteFolder = null;
+        }
+      }
     };
 
     SortableHOC.prototype.componentDidUpdate = function (prevProps, prevState) {
@@ -297,15 +324,14 @@ export default async function ({ addon, global, console, msg }) {
         if (prevProps.selectedId !== this.props.selectedId) {
           const oldTarget = vm.runtime.getTargetById(prevProps.selectedId);
           const newTarget = vm.runtime.getTargetById(this.props.selectedId);
+          currentSpriteFolder = getFolderFromName(newTarget.getName());
           if (
             oldTarget &&
             newTarget &&
-            oldTarget.sprite &&
-            newTarget.sprite &&
             newTarget.isSprite() // ignore switching to stage
           ) {
-            const oldFolder = getFolderFromName(oldTarget.sprite.name);
-            const newFolder = getFolderFromName(newTarget.sprite.name);
+            const oldFolder = getFolderFromName(oldTarget.getName());
+            const newFolder = getFolderFromName(newTarget.getName());
             if (oldFolder !== newFolder && !this.state.folders.includes(newFolder)) {
               this.setState((prevState) => ({
                 folders: [...prevState.folders, newFolder],
@@ -556,7 +582,8 @@ export default async function ({ addon, global, console, msg }) {
 
     const originalInstallTargets = vm.installTargets;
     vm.installTargets = function (targets, extensions, wholeProject) {
-      // TODO: this is broken
+      // TODO: do something like this on costumes and sounds as well
+      // Update the names to be in the folder.
       if (currentSpriteFolder) {
         for (const target of targets) {
           if (target.sprite) {
@@ -564,7 +591,10 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
       }
-      return originalInstallTargets.call(this, targets, extensions, wholeProject);
+      const result = originalInstallTargets.call(this, targets, extensions, wholeProject);
+      return result.then(() => {
+        fixTargetOrder();
+      });
     };
 
     vm.reorderTarget = function (targetIndex, newIndex) {
@@ -620,18 +650,19 @@ export default async function ({ addon, global, console, msg }) {
           realNewIndex++;
         }
       } else if (typeof itemAtNewIndexData.folder === "string") {
-        newFolder = itemAtNewIndexData.folder;
         let item;
         let offset = 0;
         if (typeof targetItemData.inFolder === "string" && targetItemData.inFolder === itemAtNewIndexData.folder) {
           // If an item in a folder is dropped onto its folder icon, move it out of the folder.
           item = itemAtNewIndex.items[0];
-          newFolder = null;
         } else if (!itemAtNewIndexData.folderOpen && newIndex > targetIndex) {
           item = itemAtNewIndex.items[itemAtNewIndex.items.length - 1];
           offset = 1;
+        } else if (!itemAtNewIndexData.folderOpen && newIndex < targetIndex) {
+          item = itemAtNewIndex.items[0];
         } else {
           item = itemAtNewIndex.items[0];
+          newFolder = itemAtNewIndexData.folder;
         }
         let newTarget = vm.runtime.getTargetById(item.id);
         if (newTarget) {
