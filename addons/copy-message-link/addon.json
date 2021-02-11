@@ -1,17 +1,21 @@
 {
   "name": "Copy link button",
   "description": "Adds \"Copy Link\" button to comments. Button copies link to comments, which you can use to show someone a comment. Works with profiles and studios.",
-  "credits": [
+  "credits": [{
+    "name": "Sly-Little-Fox",
+    "link": "https://github.com/Sly-Little-Fox/"
+  }],
+  "userscripts": [{
+      "url": "profile.js",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"],
+      "runAtComplete": false
+    },
     {
-      "name": "Sly-Little-Fox",
-      "link": "https://github.com/Sly-Little-Fox/"
+      "url": "project.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "runAtComplete": false
     }
   ],
-  "userscripts": [{ 
-    "url": "userscript.js",
-    "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"],
-    "runAtComplete": false
-  }],
   "settings": [{
       "name": "Add button besides Reply button",
       "id": "reply",
