@@ -4,10 +4,9 @@ export default async function ({ addon, global, console }) {
   pid = pid.join("");
 
   while (1) {
-	  
-    let alerts = await addon.tab.waitForElement(".project-info-alert"); // this is the thing that says that the project uses your username. 
+    let alerts = await addon.tab.waitForElement(".project-info-alert"); // this is the thing that says that the project uses your username.
     document.getElementsByClassName("project-info-alert")[0].remove();
-		  
+
     let player = await addon.tab.waitForElement(".guiPlayer", { markAsSeen: true });
     var FPP = document.createElement("iframe");
     FPP.src = "https://forkphorus.github.io/embed.html?id=" + pid + "&auto-start=true&light-content=false";
@@ -20,7 +19,5 @@ export default async function ({ addon, global, console }) {
     target.remove();
 
     document.querySelector(".guiPlayer").appendChild(FPP);
-
-
   }
 }
