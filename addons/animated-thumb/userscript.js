@@ -28,7 +28,7 @@ export default async function ({ addon, global, console, msg }) {
       thumbcontent.append(thumbspan);
       nav.append(setthumb);
       setthumb.addEventListener("click", function (e) {
-        const setter = new ThumbSetter(key => msg(`/${key}`));
+        const setter = new ThumbSetter((key) => msg(`/${key}`));
         setter.addFileInput();
         setter.showInput();
       });

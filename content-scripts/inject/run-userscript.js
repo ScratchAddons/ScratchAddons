@@ -17,20 +17,16 @@ export default async function runAddonUserscripts({ addonId, scripts, traps }) {
       const module = await import(scriptUrl);
       const log = _realConsole.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
       const warn = _realConsole.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
-      const msg = (key, placeholders) => scratchAddons.l10n.get(
-        key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`,
-        placeholders
-      );
+      const msg = (key, placeholders) =>
+        scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
       msg.locale = scratchAddons.l10n.locale;
       module.default({
         addon: addonObj,
         global: globalObj,
         console: { ..._realConsole, log, warn },
         msg,
-        safeMsg: (key, placeholders) => scratchAddons.l10n.escaped(
-          key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`,
-          placeholders
-        ),
+        safeMsg: (key, placeholders) =>
+          scratchAddons.l10n.escaped(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders),
       });
     };
     if (runAtComplete && document.readyState !== "complete") {
