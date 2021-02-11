@@ -1,6 +1,6 @@
 {
   "name": "Copy link button",
-  "description": "Adds \"Copy Link\" button to comments. Button copies link to comments, which you can use to show someone a comment. Works with profiles and studios.",
+  "description": "Adds \"Copy Link\" button to comments. Button copies link to comments, which you can use to show someone a comment.",
   "credits": [{
     "name": "Sly-Little-Fox",
     "link": "https://github.com/Sly-Little-Fox/"

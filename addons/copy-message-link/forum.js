@@ -1,9 +1,10 @@
+// Dead userscript
+
 export default async function ({
   addon,
   global,
   console
 }) {
-  if (!addon.tab.clientVersion) return;
   await addon.tab.waitForElement("div.blockpost", {
     markAsSeen: true
   });
