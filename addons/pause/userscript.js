@@ -13,6 +13,7 @@ export default async function ({ addon, global, console, msg }) {
   let paused = false;
   let pauseTime;
   let oldThreadStatus = new WeakMap();
+  const edgeActivatedHats = new Set();
 
   const setPaused = (_paused) => {
     if (paused === _paused) {
@@ -33,6 +34,13 @@ export default async function ({ addon, global, console, msg }) {
           thread.status = /* STATUS_PROMISE_WAIT */ 1;
         }
       }
+
+      for (const hat of Object.keys(vm.runtime._hats)) {
+        if (vm.runtime._hats[hat].edgeActivated) {
+          edgeActivatedHats.add(hat);
+          vm.runtime._hats[hat].edgeActivated = false;
+        }
+      }
     } else {
       vm.runtime.audioEngine.audioContext.resume();
       vm.runtime.ioDevices.clock.resume();
@@ -46,6 +54,12 @@ export default async function ({ addon, global, console, msg }) {
             stackFrame.executionContext.timer.startTime += dt;
           }
           thread.status = oldThreadStatus.get(thread);
+        }
+      }
+
+      for (const hat of Object.keys(vm.runtime._hats)) {
+        if (edgeActivatedHats.has(hat)) {
+          vm.runtime._hats[hat].edgeActivated = true;
         }
       }
     }
