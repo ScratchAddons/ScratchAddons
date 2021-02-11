@@ -1,8 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  const isMonitorThread = (thread) => !!thread.updateMonitor;
-
   const img = document.createElement("img");
   img.className = "pause-btn";
   img.src = addon.self.dir + "/pause.svg";
@@ -15,23 +13,32 @@ export default async function ({ addon, global, console, msg }) {
   const edgeActivatedHats = new Set();
 
   const setPaused = (_paused) => {
-    const oldPaused = paused;
     paused = _paused;
 
     if (paused) {
       vm.runtime.audioEngine.audioContext.suspend();
-      if (!oldPaused) {
+      if (!vm.runtime.ioDevices.clock._paused) {
         vm.runtime.ioDevices.clock.pause();
       }
       img.src = addon.self.dir + "/play.svg";
 
       for (const thread of vm.runtime.threads) {
-        if (!isMonitorThread(thread) && !pausedThreadState.has(thread)) {
+        if (
+          !thread.updateMonitor &&
+          thread.status !== /* STATUS_DONE */ 4 &&
+          !thread.isKilled &&
+          !pausedThreadState.has(thread)
+        ) {
           pausedThreadState.set(thread, {
             pauseTime: vm.runtime.currentMSecs,
-            status: thread.status
+            status: thread.status,
           });
           thread.status = /* STATUS_PROMISE_WAIT */ 1;
+        }
+      }
+      for (const thread of Array.from(pausedThreadState.keys())) {
+        if (!vm.runtime.threads.includes(thread)) {
+          pausedThreadState.delete(thread);
         }
       }
 
@@ -46,12 +53,13 @@ export default async function ({ addon, global, console, msg }) {
       vm.runtime.ioDevices.clock.resume();
       img.src = addon.self.dir + "/pause.svg";
 
+      const now = Date.now();
       for (const thread of vm.runtime.threads) {
         const stackFrame = thread.peekStackFrame();
         const pausedState = pausedThreadState.get(thread);
         if (pausedState) {
           if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
-            const dt = Date.now() - pausedState.pauseTime;
+            const dt = now - pausedState.pauseTime;
             stackFrame.executionContext.timer.startTime += dt;
           }
           thread.status = pausedState.status;
