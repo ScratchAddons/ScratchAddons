@@ -11,26 +11,26 @@ export default async function ({ addon, global, console, msg }) {
   img.addEventListener("click", () => setPaused(!paused));
 
   let paused = false;
-  let pauseTime;
-  let oldThreadStatus = new Map();
+  let pausedThreadState = new Map();
   const edgeActivatedHats = new Set();
 
   const setPaused = (_paused) => {
-    if (paused === _paused) {
-      return;
-    }
+    const oldPaused = paused;
     paused = _paused;
 
     if (paused) {
-      pauseTime = vm.runtime.currentMSecs;
       vm.runtime.audioEngine.audioContext.suspend();
-      vm.runtime.ioDevices.clock.pause();
+      if (!oldPaused) {
+        vm.runtime.ioDevices.clock.pause();
+      }
       img.src = addon.self.dir + "/play.svg";
 
-      oldThreadStatus.clear();
       for (const thread of vm.runtime.threads) {
-        if (!isMonitorThread(thread)) {
-          oldThreadStatus.set(thread, thread.status);
+        if (!isMonitorThread(thread) && !pausedThreadState.has(thread)) {
+          pausedThreadState.set(thread, {
+            pauseTime: vm.runtime.currentMSecs,
+            status: thread.status
+          });
           thread.status = /* STATUS_PROMISE_WAIT */ 1;
         }
       }
@@ -46,17 +46,18 @@ export default async function ({ addon, global, console, msg }) {
       vm.runtime.ioDevices.clock.resume();
       img.src = addon.self.dir + "/pause.svg";
 
-      const dt = Date.now() - pauseTime;
       for (const thread of vm.runtime.threads) {
         const stackFrame = thread.peekStackFrame();
-        if (oldThreadStatus.has(thread)) {
+        const pausedState = pausedThreadState.get(thread);
+        if (pausedState) {
           if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
+            const dt = Date.now() - pausedState.pauseTime;
             stackFrame.executionContext.timer.startTime += dt;
           }
-          thread.status = oldThreadStatus.get(thread);
+          thread.status = pausedState.status;
         }
       }
-      oldThreadStatus.clear();
+      pausedThreadState.clear();
 
       for (const hat of Object.keys(vm.runtime._hats)) {
         if (edgeActivatedHats.has(hat)) {
@@ -102,7 +103,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const originalEmitProjectRunStatus = vm.runtime._emitProjectRunStatus;
   vm.runtime._emitProjectRunStatus = function (threadCount) {
-    threadCount -= oldThreadStatus.size;
+    threadCount -= pausedThreadState.size;
     return originalEmitProjectRunStatus.call(this, threadCount);
   };
 
