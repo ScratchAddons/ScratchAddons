@@ -64,7 +64,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   while (true) {
-    await addon.tab.waitForElement("[class^='controls_controls-container']", { markAsSeen: true });
-    document.querySelector("[class^='green-flag']").insertAdjacentElement("afterend", img);
+    const flag = await addon.tab.waitForElement("[class^='green-flag']", { markAsSeen: true });
+    flag.insertAdjacentElement("afterend", img);
   }
 }
