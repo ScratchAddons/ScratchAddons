@@ -1,0 +1,17 @@
+{
+  "name": "Forkphorus Project player",
+  "description": "Replaces the normal project player with the Forkphorus project player on the project page",
+  "credits":[
+     {
+        "name": "galli"
+     }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["community", "beta"],
+  "enabledByDefault": false
+}
