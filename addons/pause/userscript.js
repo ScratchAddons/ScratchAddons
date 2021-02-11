@@ -91,6 +91,18 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
+  const originalPostData = vm.runtime.ioDevices.keyboard.postData;
+  vm.runtime.ioDevices.keyboard.postData = function (data) {
+    if (paused) {
+      const originalEmit = this.runtime.emit;
+      this.runtime.emit = () => {}; // no-op
+      const r = originalPostData.call(this, data);
+      this.runtime.emit = originalEmit;
+      return r;
+    }
+    return originalPostData.call(this, data);
+  };
+
   while (true) {
     const flag = await addon.tab.waitForElement("[class^='green-flag']", { markAsSeen: true });
     flag.insertAdjacentElement("afterend", img);
