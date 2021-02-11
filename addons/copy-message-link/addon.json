@@ -17,18 +17,20 @@
     }
   ],
   "settings": [{
-      "name": "Add button besides Reply button",
-      "id": "reply",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "Add button besides Report button",
-      "id": "report",
-      "type": "boolean",
-      "default": true
-    }
-  ],
+    "id": "preferred",
+    "name": "Preferred place for button",
+    "type": "select",
+    "default": "report",
+    "potentialValues": [{
+        "id": "reply",
+        "name": "Nearby Reply button"
+      },
+      {
+        "id": "report",
+        "name": "Nearby Report button"
+      }
+    ]
+  }],
   "tags": ["community", "beta"],
   "enabledByDefault": false
 }
