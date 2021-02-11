@@ -1,7 +1,9 @@
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  const img = document.createElement('img');
+  const isMonitorThread = (thread) => !!thread.updateMonitor;
+
+  const img = document.createElement("img");
   img.className = "pause-btn";
   img.src = addon.self.dir + "/pause.svg";
   img.draggable = false;
@@ -10,6 +12,7 @@ export default async function ({ addon, global, console, msg }) {
 
   let paused = false;
   let pauseTime;
+  let oldThreadStatus = new WeakMap();
 
   const setPaused = (_paused) => {
     paused = _paused;
@@ -19,6 +22,14 @@ export default async function ({ addon, global, console, msg }) {
       vm.runtime.audioEngine.audioContext.suspend();
       vm.runtime.ioDevices.clock.pause();
       img.src = addon.self.dir + "/play.svg";
+
+      oldThreadStatus = new WeakMap();
+      for (const thread of vm.runtime.threads) {
+        if (!isMonitorThread(thread)) {
+          oldThreadStatus.set(thread, thread.status);
+          thread.status = /* STATUS_PROMISE_WAIT */ 1;
+        }
+      }
     } else {
       vm.runtime.audioEngine.audioContext.resume();
       vm.runtime.ioDevices.clock.resume();
@@ -30,16 +41,11 @@ export default async function ({ addon, global, console, msg }) {
         if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
           stackFrame.executionContext.timer.startTime += dt;
         }
+        if (oldThreadStatus.has(thread)) {
+          thread.status = oldThreadStatus.get(thread);
+        }
       }
     }
-  };
-
-  const originalStep = vm.runtime._step;
-  vm.runtime._step = function() {
-    if (paused) {
-      return;
-    }
-    return originalStep.call(this);
   };
 
   const originalStepToProcedure = vm.runtime.sequencer.stepToProcedure;
