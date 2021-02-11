@@ -23,12 +23,7 @@ export default async function ({ addon, global, console, msg }) {
       img.src = addon.self.dir + "/play.svg";
 
       for (const thread of vm.runtime.threads) {
-        if (
-          !thread.updateMonitor &&
-          thread.status !== /* STATUS_DONE */ 4 &&
-          !thread.isKilled &&
-          !pausedThreadState.has(thread)
-        ) {
+        if (!thread.updateMonitor && !pausedThreadState.has(thread)) {
           pausedThreadState.set(thread, {
             pauseTime: vm.runtime.currentMSecs,
             status: thread.status,
