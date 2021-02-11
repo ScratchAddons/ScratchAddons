@@ -261,6 +261,12 @@
       "name": "Link hover color",
       "type": "color",
       "default": "#4280d7"
+    },
+    {
+      "id": "forumsHeader",
+      "name": "Forum Banner Color",
+      "type": "color",
+      "default": "#0fbd8c"
     }
   ],
   "l10n": true

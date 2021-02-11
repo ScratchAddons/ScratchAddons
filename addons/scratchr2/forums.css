@@ -23,7 +23,7 @@
   padding-bottom: 8px;
   border: none;
   border-radius: 0;
-  background: #0fbd8c;
+  background: var(--scratchr2-forumsHeader);
   color: #fff;
 }
 #brdheader > .box-head {
