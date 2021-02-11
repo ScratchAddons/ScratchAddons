@@ -38,10 +38,10 @@ export default async function ({ addon, global, console, msg }) {
       const dt = Date.now() - pauseTime;
       for (const thread of vm.runtime.threads) {
         const stackFrame = thread.peekStackFrame();
-        if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
-          stackFrame.executionContext.timer.startTime += dt;
-        }
         if (oldThreadStatus.has(thread)) {
+          if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
+            stackFrame.executionContext.timer.startTime += dt;
+          }
           thread.status = oldThreadStatus.get(thread);
         }
       }
@@ -57,10 +57,10 @@ export default async function ({ addon, global, console, msg }) {
     return originalStepToProcedure.call(this, thread, proccode);
   };
 
-  const oldFlag = vm.runtime.greenFlag;
+  const originalGreenFlag = vm.runtime.greenFlag;
   vm.runtime.greenFlag = function () {
     setPaused(false);
-    return oldFlag.call(this);
+    return originalGreenFlag.call(this);
   };
 
   while (true) {
