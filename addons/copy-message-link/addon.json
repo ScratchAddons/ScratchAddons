@@ -16,6 +16,11 @@
       "runAtComplete": false
     }
   ],
+  "info": [{
+    "type": "notice",
+    "text": "Preferred button place will be ignored if it is not possible to place it button there.",
+    "id": "notice"
+  }],
   "settings": [{
     "id": "preferred",
     "name": "Preferred place for button",
