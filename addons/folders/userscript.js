@@ -122,7 +122,7 @@ export default async function ({ addon, global, console, msg }) {
     const result = [];
     for (const target of vm.runtime.targets) {
       const folder = getFolderFromName(target.getName());
-      if (typeof folder === 'string') {
+      if (typeof folder === "string") {
         if (!folders[folder]) {
           folders[folder] = [];
           result.push(folders[folder]);
