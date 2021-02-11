@@ -1,71 +1,64 @@
 export default async function ({ addon, global, console, msg }) {
-  console.log("pause enabled");
-
   const vm = addon.tab.traps.vm;
 
-  var playing = true;
-  var threads = [];
+  const img = document.createElement('img');
+  img.className = "pause-btn";
+  img.src = addon.self.dir + "/pause.svg";
+  img.draggable = false;
+  img.title = msg("pause");
+  img.addEventListener("click", () => setPaused(!paused));
 
-  const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;
+  let paused = false;
+  let pauseTime;
 
-  vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
-    if (proccode.startsWith("sa-pause")) {
-      threads = vm.runtime.threads;
-      vm.runtime.threads.forEach((i) => {
-        i.status = 3;
-      });
-      vm.runtime.threads = [];
+  const setPaused = (_paused) => {
+    paused = _paused;
+
+    if (paused) {
+      pauseTime = vm.runtime.currentMSecs;
       vm.runtime.audioEngine.audioContext.suspend();
       vm.runtime.ioDevices.clock.pause();
-      playing = false;
-      document.querySelector(".pause-btn").src = addon.self.dir + "/play.svg";
+      img.src = addon.self.dir + "/play.svg";
+    } else {
+      vm.runtime.audioEngine.audioContext.resume();
+      vm.runtime.ioDevices.clock.resume();
+      img.src = addon.self.dir + "/pause.svg";
+
+      const dt = Date.now() - pauseTime;
+      for (const thread of vm.runtime.threads) {
+        const stackFrame = thread.peekStackFrame();
+        if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
+          stackFrame.executionContext.timer.startTime += dt;
+        }
+      }
+    }
+  };
+
+  const originalStep = vm.runtime._step;
+  vm.runtime._step = function() {
+    if (paused) {
       return;
     }
-    return oldStepToProcedure.call(this, thread, proccode);
+    return originalStep.call(this);
+  };
+
+  const originalStepToProcedure = vm.runtime.sequencer.stepToProcedure;
+  vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
+    if (proccode.startsWith("sa-pause")) {
+      setPaused(true);
+      return;
+    }
+    return originalStepToProcedure.call(this, thread, proccode);
   };
 
   const oldFlag = vm.runtime.greenFlag;
-
   vm.runtime.greenFlag = function () {
-    vm.runtime.audioEngine.audioContext.resume().then(() => {
-      vm.runtime.ioDevices.clock.resume();
-      img.src = addon.self.dir + "/pause.svg";
-      playing = true;
-      return oldFlag.call(vm.runtime, arguments);
-    });
+    setPaused(false);
+    return oldFlag.call(this);
   };
 
   while (true) {
-    let bar = await addon.tab.waitForElement("[class^='controls_controls-container']", { markAsSeen: true });
-
-    var img = document.createElement("img");
-    img.className = "pause-btn";
-    if (playing) img.src = addon.self.dir + "/pause.svg";
-    if (!playing) img.src = addon.self.dir + "/play.svg";
-    img.draggable = false;
-    img.title = msg("pause");
-
+    await addon.tab.waitForElement("[class^='controls_controls-container']", { markAsSeen: true });
     document.querySelector("[class^='green-flag']").insertAdjacentElement("afterend", img);
-
-    img.addEventListener("click", (e) => {
-      if (!playing) {
-        vm.runtime.audioEngine.audioContext.resume().then(() => {
-          if (vm.runtime.threads.length === 0) vm.runtime.threads = threads;
-          vm.runtime.ioDevices.clock.resume();
-          img.src = addon.self.dir + "/pause.svg";
-        });
-      } else {
-        vm.runtime.audioEngine.audioContext.suspend().then(() => {
-          threads = vm.runtime.threads;
-          vm.runtime.threads = [];
-          vm.runtime.ioDevices.clock.pause();
-          img.src = addon.self.dir + "/play.svg";
-        });
-      }
-      playing = !playing;
-    });
-
-    //TODO: break points in scratch code
-    //eg. when gf clicked, move 10 steps, set sa_Breakpoint = true or something like that, then when that scratch variable is set to true, pause the project
   }
 }
