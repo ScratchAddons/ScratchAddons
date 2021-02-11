@@ -84,6 +84,13 @@ export default async function ({ addon, global, console, msg }) {
     return originalGreenFlag.call(this);
   };
 
+  const originalActivateClickhats = vm.runtime.ioDevices.mouse._activateClickHats;
+  vm.runtime.ioDevices.mouse._activateClickHats = function (target) {
+    if (!paused) {
+      return originalActivateClickhats.call(this, target);
+    }
+  };
+
   while (true) {
     const flag = await addon.tab.waitForElement("[class^='green-flag']", { markAsSeen: true });
     flag.insertAdjacentElement("afterend", img);
