@@ -38,6 +38,8 @@ export default async function ({ addon, global, console, msg }) {
               // Status will be set when the thread is unpaused.
               pauseState.status = status;
             },
+            configurable: true,
+            enumerable: true,
           });
         }
       }
@@ -61,6 +63,9 @@ export default async function ({ addon, global, console, msg }) {
           }
           Object.defineProperty(thread, "status", {
             value: pausedState.status,
+            configurable: true,
+            enumerable: true,
+            writable: true,
           });
         }
       }
