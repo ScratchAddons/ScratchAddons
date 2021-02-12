@@ -3,8 +3,6 @@ export default async function ({ addon, global, console }) {
   var pid = id.match(/\d/g);
   pid = pid.join("");
   addon.tab.addEventListener("urlChange", (e) => {
-    console.log(event.detail.newUrl);
-    console.log(event.detail.newUrl.includes("editor"));
     if (!event.detail.newUrl.includes("editor")) {
       target = document.getElementsByClassName("stage-wrapper_stage-wrapper_2bejr")[0];
       target.style.display = "none";
@@ -17,7 +15,7 @@ export default async function ({ addon, global, console }) {
       document.querySelector(".guiPlayer").appendChild(FPP);
     }
   });
-  if (id.includes("editor")) {
+  if (!id.includes("editor")) {
     let player = await addon.tab.waitForElement(".guiPlayer", { markAsSeen: true });
     var target = document.getElementsByClassName("stage-wrapper_stage-wrapper_2bejr")[0];
     target.style.display = "none";
