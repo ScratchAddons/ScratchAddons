@@ -24,5 +24,9 @@ export default function ({ addon, global, console }) {
     }, 100);
   }
 
-  addon.self.bindListener(addon.tab, "urlChange", () => addon.tab.editorMode === "editor" && inject(Blockly.getMainWorkspace()));
+  addon.self.bindListener(
+    addon.tab,
+    "urlChange",
+    () => addon.tab.editorMode === "editor" && inject(Blockly.getMainWorkspace())
+  );
 }
