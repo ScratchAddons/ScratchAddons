@@ -37,12 +37,6 @@
       "id": "translate",
       "type": "boolean",
       "default": true
-    },
-    {
-      "name": "Makey Makey",
-      "id": "makeymakey",
-      "type": "boolean",
-      "default": true
     }
   ],
   "tags": ["editor"],

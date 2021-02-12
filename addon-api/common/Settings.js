@@ -24,12 +24,6 @@ export default class Settings extends Listenable {
   /**
    * @private
    */
-  get getAll() {
-    return scratchAddons.globalState.addonSettings[this._addonId] || {};
-  }
-  /**
-   * @private
-   */
   get _eventTargetKey() {
     return "settings";
   }
