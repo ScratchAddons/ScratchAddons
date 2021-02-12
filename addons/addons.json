@@ -71,5 +71,6 @@
   "hide-flyout",
   "comments-linebreaks",
   "account-settings-capitalize",
-  "show-bbcode"
+  "show-bbcode",
+  "copy-message-link"
 ]
