@@ -16,7 +16,6 @@
   "dark-www",
 
   "// Other addons:",
-  "copy-message-link",
   "editor-searchable-dropdowns",
   "editor-devtools",
   "forum-search",
@@ -72,5 +71,6 @@
   "hide-flyout",
   "comments-linebreaks",
   "account-settings-capitalize",
-  "show-bbcode"
+  "show-bbcode",
+  "copy-message-link"
 ]
