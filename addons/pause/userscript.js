@@ -54,15 +54,15 @@ export default async function ({ addon, global, console, msg }) {
 
       const now = Date.now();
       for (const thread of vm.runtime.threads) {
-        const pausedState = pausedThreadState.get(thread);
-        if (pausedState) {
+        const pauseState = pausedThreadState.get(thread);
+        if (pauseState) {
           const stackFrame = thread.peekStackFrame();
           if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
-            const dt = now - pausedState.pauseTime;
+            const dt = now - pauseState.pauseTime;
             stackFrame.executionContext.timer.startTime += dt;
           }
           Object.defineProperty(thread, "status", {
-            value: pausedState.status,
+            value: pauseState.status,
             configurable: true,
             enumerable: true,
             writable: true,
