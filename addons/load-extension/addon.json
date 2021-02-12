@@ -1,6 +1,6 @@
 {
-  "name": "Auto-add extensions",
-  "description": "Adds the pen extension automaticly.",
+  "name": "Auto-show editor extensions",
+  "description": "Adds music, pen, video sensing, and other editor extensions automatically to the block category list.",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -27,16 +27,16 @@
       "default": true
     },
     {
-      "name": "Text to Speach",
+      "name": "Text to Speech",
       "id": "text2speech",
       "type": "boolean",
-      "default": true
+      "default": false
     },
     {
       "name": "Translate",
       "id": "translate",
       "type": "boolean",
-      "default": true
+      "default": false
     }
   ],
   "tags": ["editor"],
