@@ -17,6 +17,7 @@ export default async function ({ addon, global, console }) {
       document.querySelector(".guiPlayer").appendChild(FPP);
     }
   });
+  if(id.includes("editor")){
   let player = await addon.tab.waitForElement(".guiPlayer", { markAsSeen: true });
   var target = document.getElementsByClassName("stage-wrapper_stage-wrapper_2bejr")[0];
   target.style.display = "none";
@@ -29,4 +30,5 @@ export default async function ({ addon, global, console }) {
   document.querySelector(".guiPlayer").appendChild(FPP);
   let alerts = await addon.tab.waitForElement(".project-info-alert");
   document.getElementsByClassName("project-info-alert")[0].remove();
+  }
 }
