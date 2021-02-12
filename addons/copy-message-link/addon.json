@@ -26,5 +26,6 @@
     }
   ],
   "tags": ["community", "recommended"],
+  "l10n": true,
   "enabledByDefault": false
 }
