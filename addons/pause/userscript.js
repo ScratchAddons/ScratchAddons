@@ -32,7 +32,7 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       // Immediately emit project stop
-      // Scratch will do this automatically, but it might take a couple frames
+      // Scratch will do this automatically, but there may be a slight delay.
       vm.runtime.emit("PROJECT_RUN_STOP");
     } else {
       vm.runtime.audioEngine.audioContext.resume();
@@ -41,9 +41,9 @@ export default async function ({ addon, global, console, msg }) {
 
       const now = Date.now();
       for (const thread of vm.runtime.threads) {
-        const stackFrame = thread.peekStackFrame();
         const pausedState = pausedThreadState.get(thread);
         if (pausedState) {
+          const stackFrame = thread.peekStackFrame();
           if (stackFrame && stackFrame.executionContext && stackFrame.executionContext.timer) {
             const dt = now - pausedState.pauseTime;
             stackFrame.executionContext.timer.startTime += dt;
@@ -70,11 +70,12 @@ export default async function ({ addon, global, console, msg }) {
     return originalGreenFlag.call(this);
   };
 
-  // Disable edge-activated hats and hats like "when key pressed" while paused
+  // Disable edge-activated hats and hats like "when key pressed" while paused.
   const originalStartHats = vm.runtime.startHats;
   vm.runtime.startHats = function (...args) {
     if (paused) {
       const hat = args[0];
+      // The project can still be edited and the user might manually trigger some events. Let these run.
       if (hat !== "event_whenbroadcastreceived" && hat !== "control_start_as_clone") {
         return [];
       }
@@ -82,7 +83,7 @@ export default async function ({ addon, global, console, msg }) {
     return originalStartHats.apply(this, args);
   };
 
-  // Fix project running/stopped state
+  // Paused threads should not be counted as running when updating GUI state.
   const originalGetMonitorThreadCount = vm.runtime._getMonitorThreadCount;
   vm.runtime._getMonitorThreadCount = function (threads) {
     let count = originalGetMonitorThreadCount.call(this, threads);
