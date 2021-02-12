@@ -23,11 +23,22 @@ export default async function ({ addon, global, console, msg }) {
 
       for (const thread of vm.runtime.threads) {
         if (!thread.updateMonitor && !pausedThreadState.has(thread)) {
-          pausedThreadState.set(thread, {
+          const pauseState = {
             pauseTime: vm.runtime.currentMSecs,
             status: thread.status,
+          };
+          pausedThreadState.set(thread, pauseState);
+          // Make sure that paused threads will always be paused.
+          // Setting thread.status is not enough for blocks like "ask and wait"
+          Object.defineProperty(thread, "status", {
+            get() {
+              return /* STATUS_PROMISE_WAIT */ 1;
+            },
+            set(status) {
+              // Status will be set when the thread is unpaused.
+              pauseState.status = status;
+            },
           });
-          thread.status = /* STATUS_PROMISE_WAIT */ 1;
         }
       }
 
@@ -48,7 +59,9 @@ export default async function ({ addon, global, console, msg }) {
             const dt = now - pausedState.pauseTime;
             stackFrame.executionContext.timer.startTime += dt;
           }
-          thread.status = pausedState.status;
+          Object.defineProperty(thread, "status", {
+            value: pausedState.status,
+          });
         }
       }
       pausedThreadState = new WeakMap();
