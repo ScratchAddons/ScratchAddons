@@ -10,7 +10,6 @@ export default async function ({ addon, global, console, msg }) {
 
   let paused = false;
   let pausedThreadState = new WeakMap();
-  const edgeActivatedHats = new Set();
 
   const setPaused = (_paused) => {
     paused = _paused;
@@ -29,13 +28,6 @@ export default async function ({ addon, global, console, msg }) {
             status: thread.status,
           });
           thread.status = /* STATUS_PROMISE_WAIT */ 1;
-        }
-      }
-
-      for (const hat of Object.keys(vm.runtime._hats)) {
-        if (vm.runtime._hats[hat].edgeActivated) {
-          edgeActivatedHats.add(hat);
-          vm.runtime._hats[hat].edgeActivated = false;
         }
       }
 
@@ -60,12 +52,6 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
       pausedThreadState = new WeakMap();
-
-      for (const hat of Object.keys(vm.runtime._hats)) {
-        if (edgeActivatedHats.has(hat)) {
-          vm.runtime._hats[hat].edgeActivated = true;
-        }
-      }
     }
   };
 
@@ -84,23 +70,16 @@ export default async function ({ addon, global, console, msg }) {
     return originalGreenFlag.call(this);
   };
 
-  const originalActivateClickhats = vm.runtime.ioDevices.mouse._activateClickHats;
-  vm.runtime.ioDevices.mouse._activateClickHats = function (target) {
-    if (!paused) {
-      return originalActivateClickhats.call(this, target);
-    }
-  };
-
-  const originalPostData = vm.runtime.ioDevices.keyboard.postData;
-  vm.runtime.ioDevices.keyboard.postData = function (data) {
+  // Disable edge-activated hats and hats like "when key pressed" while paused
+  const originalStartHats = vm.runtime.startHats;
+  vm.runtime.startHats = function (...args) {
     if (paused) {
-      const originalEmit = this.runtime.emit;
-      this.runtime.emit = () => {}; // no-op
-      const r = originalPostData.call(this, data);
-      this.runtime.emit = originalEmit;
-      return r;
+      const hat = args[0];
+      if (hat !== "event_whenbroadcastreceived" && hat !== "control_start_as_clone") {
+        return [];
+      }
     }
-    return originalPostData.call(this, data);
+    return originalStartHats.apply(this, args);
   };
 
   // Fix project running/stopped state
