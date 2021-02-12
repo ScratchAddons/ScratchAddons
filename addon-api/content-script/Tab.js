@@ -121,7 +121,17 @@ export default class Tab extends Listenable {
    */
   scratchMessage(key) {
     if (this.clientVersion === "scratch-www") {
-      return window._messages[window._locale][key] || key;
+      const locales = [window._locale ? window._locale.toLowerCase() : "en"];
+      if (locales[0].includes("-")) locales.push(locales[0].split("-")[0]);
+      if (locales.includes("pt") && !locales.includes("pt-br")) locales.push("pt-br");
+      if (!locales.includes("en")) locales.push("en");
+      for (const locale of locales) {
+        if (window._messages[locale] && window._messages[locale][key]) {
+          return window._messages[locale][key];
+        }
+      }
+      console.warn("Unknown key: ", key);
+      return "";
     }
     if (this.clientVersion === "scratchr2") {
       return window.django.gettext(key);
