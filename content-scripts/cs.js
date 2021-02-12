@@ -50,6 +50,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     sendResponse(initialUrl);
   } else if (request.themesUpdated) {
     injectUserstylesAndThemes({ themes: request.themesUpdated, isUpdate: true });
+  } else if (request.newAddonState) {
+    if (request.newAddonState.newState) {
+    } else {
+      window.postMessage({ saAddonDisabled: request.newAddonState.addonId}, "*");
+    }
   }
 });
 chrome.runtime.sendMessage("ready");
@@ -77,7 +82,7 @@ function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
       let css = theme.styles[styleUrl];
       // Replace %addon-self-dir% for relative URLs
       css = css.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${theme.addonId}`));
-      if (isUpdate && css.startsWith("/* sa-autoupdate-theme-ignore */")) continue;
+      if (isUpdate && (css.startsWith("/* sa-autoupdate-theme-ignore */") || css.startsWith("/* sa-theme-enable-ignore */"))) continue;
       css += `\n/*# sourceURL=${styleUrl} */`;
       const style = document.createElement("style");
       style.classList.add("scratch-addons-theme");

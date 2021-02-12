@@ -11,6 +11,16 @@ export default class UserscriptAddon extends Addon {
     super(info);
     this.__path = document.getElementById("scratch-addons").getAttribute("data-path");
     this.tab = new Tab(info);
+    this.listeners = [];
+
+    addEventListener("message", (event) => {
+      if (this._addonId == event.data.saAddonDisabled) {
+        for (let {item, event, listener, useCapture} of this.listeners) {
+          item.removeEventListener(event, listener, useCapture);
+        }
+        this.dispatchEvent(new Event('addonDisabled'));
+      }
+    });
   }
 
   /**
@@ -18,5 +28,10 @@ export default class UserscriptAddon extends Addon {
    */
   get _path() {
     return this.__path;
+  }
+
+  bindListener(item, event, listener, useCapture) {
+    item.addEventListener(event, listener, useCapture)
+    this.listeners.push({ item, event, listener, useCapture })
   }
 }
