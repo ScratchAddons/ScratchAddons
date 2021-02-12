@@ -30,9 +30,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
       chrome.tabs.query({}, (tabs) => {
         // Tabs with urls means that ScratchAddons has perms there
-        tabs = tabs.filter(tab => tab.url);
+        tabs = tabs.filter((tab) => tab.url);
         for (let tab of tabs) {
-          chrome.tabs.sendMessage(tab.id, {newAddonState: { addonId, newState }});
+          chrome.tabs.sendMessage(tab.id, { newAddonState: { addonId, newState } });
         }
       });
     } else {
@@ -41,7 +41,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     if (scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest.tags.includes("theme"))
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("themesUpdated"));
-
   } else if (request.changeAddonSettings) {
     const { addonId, newSettings } = request.changeAddonSettings;
     scratchAddons.globalState.addonSettings[addonId] = newSettings;

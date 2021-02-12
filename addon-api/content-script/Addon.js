@@ -15,10 +15,10 @@ export default class UserscriptAddon extends Addon {
 
     addEventListener("message", (event) => {
       if (this._addonId == event.data.saAddonDisabled) {
-        for (let {item, event, listener, useCapture} of this.listeners) {
+        for (let { item, event, listener, useCapture } of this.listeners) {
           item.removeEventListener(event, listener, useCapture);
         }
-        this.dispatchEvent(new Event('addonDisabled'));
+        this.dispatchEvent(new Event("addonDisabled"));
       }
     });
   }
@@ -31,7 +31,7 @@ export default class UserscriptAddon extends Addon {
   }
 
   bindListener(item, event, listener, useCapture) {
-    item.addEventListener(event, listener, useCapture)
-    this.listeners.push({ item, event, listener, useCapture })
+    item.addEventListener(event, listener, useCapture);
+    this.listeners.push({ item, event, listener, useCapture });
   }
 }
