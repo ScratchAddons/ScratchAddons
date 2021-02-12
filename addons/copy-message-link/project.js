@@ -1,33 +1,28 @@
 export default async function ({
   addon,
   global,
-  console
+  console,
+  msg
 }) {
-  await addon.tab.waitForElement("div.comment", {
-    markAsSeen: true
-  });
-  setInterval(() => {
-    document.querySelectorAll('div[id^=comments-]').forEach((elem) => {
-      if (!elem.querySelector(`div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > span:nth-child(1) > span:nth-child(1) > span`)) {
-        let newElem = document.createElement('span');
-        newElem.textContent = ' Copy Link';
-        newElem.style = 'cursor: pointer;';
-        elem.querySelector(`div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > span:nth-child(1) > span:nth-child(1)`).appendChild(newElem);
-        newElem.onclick = (e) => {
-          // console.info(e.target.offsetParent.parentElement.parentElement.id);
-          let newElem2 = document.createElement('textarea');
-          newElem2.value = `${location.href.split('#')[0]}#${e.target.offsetParent.parentElement.parentElement.id}`;
-          document.body.appendChild(newElem2);
-          newElem2.select();
-          document.execCommand('copy');
-          document.body.removeChild(newElem2);
-          e.target.textContent = ' Copied!';
-          setTimeout(() => {
-            e.target.textContent = ' Copy Link';
-          }, 1500);
-        }
-        // newElem.setAttribute('onclick', `navigator.clipboard.writeText(\`\${location.href.split('#')[0]}#\${this.parentElement.parentElement.parentElement.parentElement.id}\`);`);
-      }
+  while(true) {
+    const comment = await addon.tab.waitForElement('div.comment', {
+      markAsSeen: true
     });
-  }, 1000);
+    if (comment.querySelector("form")) continue; // Comment input
+    const newElem = document.createElement('span');
+    newElem.className = 'comment-delete sa-comment-link';
+    newElem.textContent = msg('copyLink');
+    newElem.onclick = () => {
+      let url = `${location.origin}${location.pathname}`;
+      if(url[url.length-1] !== "/") url += '/';
+      navigator.clipboard.writeText(`${url}#${comment.id}`)
+      newElem.textContent = msg('copied');
+      newElem.style.fontWeight = 'bold';
+      setTimeout(() => {
+        newElem.textContent = msg('copyLink');
+        newElem.style.fontWeight = '';
+      }, 5000);
+    }
+    comment.querySelector('div.action-list').prepend(newElem);
+  }
 }

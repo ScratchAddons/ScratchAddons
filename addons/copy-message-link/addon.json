@@ -1,13 +1,13 @@
 {
-  "name": "Copy link button",
-  "description": "Adds \"Copy Link\" button to comments. Button copies link to comments, which you can use to show someone a comment.",
+  "name": "Copy link to comment button",
+  "description": "Adds a \"Copy Link\" button to all Scratch comments, next to the \"Report\" button.",
   "credits": [{
     "name": "Sly-Little-Fox",
     "link": "https://github.com/Sly-Little-Fox/"
   }],
   "userscripts": [{
       "url": "profile.js",
-      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"],
+      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/studios/*/comments"],
       "runAtComplete": false
     },
     {
@@ -16,26 +16,10 @@
       "runAtComplete": false
     }
   ],
-  "info": [{
-    "type": "notice",
-    "text": "Preferred button place will be ignored if it is not possible to place it button there.",
-    "id": "notice"
+  "userstyles": [{
+    "url": "project.css",
+    "matches": ["https://scratch.mit.edu/projects/*"]
   }],
-  "settings": [{
-    "id": "preferred",
-    "name": "Preferred place for button",
-    "type": "select",
-    "default": "report",
-    "potentialValues": [{
-        "id": "reply",
-        "name": "Nearby Reply button"
-      },
-      {
-        "id": "report",
-        "name": "Nearby Report button"
-      }
-    ]
-  }],
-  "tags": ["community", "beta"],
+  "tags": ["community", "recommended"],
   "enabledByDefault": false
 }

@@ -1,44 +1,27 @@
 export default async function ({
   addon,
   global,
-  console
+  console,
+  msg
 }) {
-  await addon.tab.waitForElement("div.comment", {
-    markAsSeen: true
-  });
-  if (addon.settings.get('preferred') === 'reply') {
-    document.querySelectorAll('div.comment').forEach((elem) => {
-      let newElem = document.createElement('a');
-      newElem.className = 'reply';
-      newElem.textContent = 'Copy Link';
-      newElem.onclick = (e) => {
-        let newElem2 = document.createElement('textarea');
-        newElem2.value = `${location.href.split('#')[0]}#${e.target.parentElement.parentElement.parentElement.id}`;
-        document.body.appendChild(newElem2);
-        newElem2.select();
-        document.execCommand('copy');
-        document.body.removeChild(newElem2);
-      }
-      newElem.setAttribute('nohref', 'nohref');
-      document.querySelector(`div#${elem.id} > div.info > div:nth-child(3)`).appendChild(newElem);
+  while(true) {
+    const comment = await addon.tab.waitForElement("div.comment", {
+      markAsSeen: true
     });
-  } else if (addon.settings.get('preferred') === 'report') {
-    document.querySelectorAll('div.comment').forEach((elem) => {
-      let newElem = document.createElement('span');
-      newElem.setAttribute('nohref', '');
-      newElem.className = 'actions report';
-      newElem.style = 'cursor: pointer;';
-      newElem.textContent = 'Copy link';
-      newElem.onclick = (e) => {
-        let newElem2 = document.createElement('textarea');
-        newElem2.value = `${location.href.split('#')[0]}#${e.target.parentElement.parentElement.id}`;
-        document.body.appendChild(newElem2);
-        newElem2.select();
-        document.execCommand('copy');
-        document.body.removeChild(newElem2);
-      }
-      newElem.setAttribute('nohref', 'nohref');
-      document.querySelector(`div#${elem.id} > div.actions-wrap`).appendChild(newElem);
-    });
+    const newElem = document.createElement('span');
+    newElem.className = 'actions report';
+    newElem.textContent = msg('copyLink');
+    newElem.onclick = () => {
+      // For profiles, respect correct username casing in URL
+      let url = location.pathname.split("/")[1] === "users" ? `${location.origin}/users/${Scratch.INIT_DATA.PROFILE.model.id}/` : `${location.origin}${location.pathname}`;
+      navigator.clipboard.writeText(`${url}#${comment.id}`);
+      newElem.textContent = msg('copied');
+      newElem.style.fontWeight = 'bold';
+      setTimeout(() => {
+        newElem.textContent = msg('copyLink');
+        newElem.style.fontWeight = '';
+      }, 5000);
+    }
+    comment.querySelector("div.actions-wrap").appendChild(newElem);
   }
 }
