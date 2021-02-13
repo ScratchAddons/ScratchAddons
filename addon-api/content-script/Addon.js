@@ -15,7 +15,7 @@ export default class UserscriptAddon extends Addon {
     this.disabled = false;
 
     addEventListener("message", (event) => {
-      if (this._addonId == event.data.saAddonDisabled) {
+      if (event.data.saAddonDisabled && this._addonId == event.data.saAddonDisabled) {
         this.disabled = true;
         for (let {item, event, listener, useCapture} of this.listeners) {
           item.removeEventListener(event, listener, useCapture);
