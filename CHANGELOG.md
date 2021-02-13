@@ -13,6 +13,14 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.9.2] - 2021-02-13
+
+- Thumbnails setter addon: warn if the Scratch thumbnail server is down
+- Bug fix: “more links” treating some non-links as links
+- Bug fix: "curator link" sometimes not working
+- Bug fix: popup box for sprite direction partially covered with "display stage on left side" enabled
+- Bug fix: extension muted through context menu showing badge on startup
+
 ## [v1.9.1] - 2021-02-09
 
 - New addon: show BBCode [forums]
@@ -243,6 +251,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.9.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.2
 [v1.9.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.1
 [v1.9.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.0
 [v1.8.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.8.1
