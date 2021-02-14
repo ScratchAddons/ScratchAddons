@@ -72,5 +72,6 @@
   "comments-linebreaks",
   "account-settings-capitalize",
   "show-bbcode",
-  "copy-message-link"
+  "copy-message-link",
+  "load-extensions"
 ]
