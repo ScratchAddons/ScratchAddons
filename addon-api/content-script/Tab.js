@@ -27,7 +27,6 @@ export default class Tab extends Listenable {
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
     this.listeners = [];
-
   }
   /**
    * Loads a script by URL.

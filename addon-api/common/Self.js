@@ -7,7 +7,7 @@ export default class Self extends Listenable {
   constructor(that, info) {
     super();
     this.id = info.id;
-    this.extra = that
+    this.extra = that;
     this.browser = typeof InstallTrigger !== "undefined" ? "firefox" : "chrome";
   }
   get dir() {
