@@ -24,17 +24,17 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.storage.sync.set({
       addonsEnabled: scratchAddons.localState.addonsEnabled,
     });
+    chrome.tabs.query({}, (tabs) => {
+      // Tabs with urls means that ScratchAddons has perms there
+      tabs = tabs.filter((tab) => tab.url);
+      for (let tab of tabs) {
+        chrome.tabs.sendMessage(tab.id, { newAddonState: { addonId, newState } });
+      }
+    });
     if (newState === false) {
       const addonObjs = scratchAddons.addonObjects.filter((addonObj) => addonObj.self.id === addonId);
       if (addonObjs) addonObjs.forEach((addonObj) => addonObj._kill());
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
-      chrome.tabs.query({}, (tabs) => {
-        // Tabs with urls means that ScratchAddons has perms there
-        tabs = tabs.filter((tab) => tab.url);
-        for (let tab of tabs) {
-          chrome.tabs.sendMessage(tab.id, { newAddonState: { addonId, newState } });
-        }
-      });
     } else {
       runPersistentScripts(addonId);
     }

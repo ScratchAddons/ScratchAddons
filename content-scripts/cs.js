@@ -51,11 +51,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request.themesUpdated) {
     injectUserstylesAndThemes({ themes: request.themesUpdated, isUpdate: true });
   } else if (request.newAddonState) {
-    if (request.newAddonState.newState) {
-      // do something here later.
-    } else {
-      postMessage({ saAddonDisabled: request.newAddonState.addonId }, "*");
-    }
+    let addonId = request.newAddonState.addonId;
+    let obj = {};
+    obj[`saAddon${request.newAddonState.newState ? "En" : "Dis"}abled`] = addonId;
+    postMessage(obj, "*");
   }
 });
 chrome.runtime.sendMessage("ready");
@@ -144,7 +143,7 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
       // We need to send themes that might have been injected dynamically
       sendResponse([
         ...new Set([
-          ...addonsWithUserscripts.map((obj) => obj.addonId),
+          ...JSON.parse(template.getAttribute("data-userscripts")).map((obj) => obj.addonId),
           ...Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
             style.getAttribute("data-addon-id")
           ),

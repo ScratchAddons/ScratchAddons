@@ -1,4 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
+  window.test = addon.tab.traps.getBlockly();
   let project = null;
   let paperCanvas = null;
   let expectingImport = false;

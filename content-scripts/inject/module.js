@@ -23,6 +23,7 @@ scratchAddons.eventTargets = {
   auth: [],
   settings: [],
   tab: [],
+  self: [],
 };
 scratchAddons.classNames = { loaded: false };
 

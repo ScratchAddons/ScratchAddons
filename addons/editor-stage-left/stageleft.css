@@ -1,5 +1,3 @@
-/* sa-theme-enable-ignore */
-
 [class*="stage-header_stage-button-icon"] {
   transform: scaleX(-1);
 }
