@@ -10,7 +10,7 @@ export default async function ({ addon, global, console }) {
         target = document.getElementsByClassName("stage-wrapper_stage-wrapper_2bejr")[0];
         target.style.display = "none";
         var FPP = document.createElement("iframe");
-        FPP.src = "https://https://turbowarp.org/" + pid + "/embed";
+        FPP.src = "https://turbowarp.org/" + pid + "/embed";
         FPP.width = 480;
         FPP.height = 392;
         FPP.className = "newPlayer";
