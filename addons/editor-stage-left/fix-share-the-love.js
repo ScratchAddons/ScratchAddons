@@ -1,6 +1,6 @@
 export default function ({ addon, global, console }) {
   let interval, injected;
-  console.log(addon.self);
+
   addon.self.addEventListener("addonDisabled", () => clearInterval(interval));
   addon.self.addEventListener("addonReeabled", () => injected ? 0 : tryInjecting());
 
