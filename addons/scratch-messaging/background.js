@@ -159,13 +159,15 @@ export default async function ({ addon, global, console, setTimeout, setInterval
             1
           );
         }
+        const author = child.querySelector(".name").textContent.trim();
         childrenComments[`${resourceType[0]}_${childId}`] = {
-          author: child.querySelector(".name").textContent.trim(),
+          author: author.replace("*", ""),
           authorId: Number(child.querySelector(".reply").getAttribute("data-commentee-id")),
           content: fixCommentContent(child.querySelector(".content").innerHTML),
           date: child.querySelector(".time").getAttribute("title"),
           children: null,
           childOf: `${resourceType[0]}_${parentId}`,
+          scratchTeam: author.includes("*"),
         };
       }
 
@@ -178,13 +180,15 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       }
 
       if (foundComment) {
+        const parentAuthor = parentComment.querySelector(".name").textContent.trim();
         commentsObj[`${resourceType[0]}_${parentId}`] = {
-          author: parentComment.querySelector(".name").textContent.trim(),
+          author: parentAuthor.replace("*", ""),
           authorId: Number(parentComment.querySelector(".reply").getAttribute("data-commentee-id")),
           content: fixCommentContent(parentComment.querySelector(".content").innerHTML),
           date: parentComment.querySelector(".time").getAttribute("title"),
           children: Object.keys(childrenComments),
           childOf: null,
+          scratchTeam: parentAuthor.includes("*"),
         };
         for (const childCommentId of Object.keys(childrenComments)) {
           commentsObj[childCommentId] = childrenComments[childCommentId];
