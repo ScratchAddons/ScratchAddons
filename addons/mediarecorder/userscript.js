@@ -1,6 +1,15 @@
 import downloadBlob from "../../libraries/download-blob.js";
 
 export default async ({ addon, console, msg }) => {
+  let recordElem;
+  let isRecording = false;
+  let isWaitingForFlag = false;
+  let waitingForFlagFunc = null;
+  let abortController = null;
+  let stopSignFunc = null;
+  let recordBuffer = [];
+  let recorder;
+  let timeout;
   while (true) {
     const elem = await addon.tab.waitForElement('div[class*="menu-bar_file-group"] > div:last-child:not(.sa-record)', {
       markAsSeen: true,
@@ -177,19 +186,6 @@ export default async ({ addon, console, msg }) => {
 
       return optionPromise;
     };
-    const recordElem = Object.assign(document.createElement("div"), {
-      className: "sa-record " + elem.className,
-      textContent: msg("record"),
-      title: msg("added-by"),
-    });
-    let isRecording = false;
-    let isWaitingForFlag = false;
-    let waitingForFlagFunc = null;
-    let abortController = null;
-    let stopSignFunc = null;
-    let recordBuffer = [];
-    let recorder;
-    let timeout;
     const disposeRecorder = () => {
       isRecording = false;
       recordElem.textContent = msg("record");
@@ -302,18 +298,25 @@ export default async ({ addon, console, msg }) => {
       }
       recorder.start(1000);
     };
-    recordElem.addEventListener("click", async () => {
-      if (isRecording) {
-        stopRecording();
-      } else {
-        const opts = await getOptions();
-        if (!opts) {
-          console.log("Canceled");
-          return;
+    if (!recordElem) {
+      recordElem = Object.assign(document.createElement("div"), {
+        className: "sa-record " + elem.className,
+        textContent: msg("record"),
+        title: msg("added-by"),
+      });
+      recordElem.addEventListener("click", async () => {
+        if (isRecording) {
+          stopRecording();
+        } else {
+          const opts = await getOptions();
+          if (!opts) {
+            console.log("Canceled");
+            return;
+          }
+          startRecording(opts);
         }
-        startRecording(opts);
-      }
-    });
+      });
+    }
     elem.parentElement.appendChild(recordElem);
   }
 };
