@@ -13,6 +13,10 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.9.3] - 2021-02-15
+
+Fixes bug that would make the extension crash if browser language set to Spanish.
+
 ## [v1.9.2] - 2021-02-13
 
 - Thumbnails setter addon: warn if the Scratch thumbnail server is down
@@ -251,6 +255,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.9.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.3
 [v1.9.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.2
 [v1.9.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.1
 [v1.9.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.0
