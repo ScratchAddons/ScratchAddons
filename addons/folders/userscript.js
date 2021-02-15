@@ -468,14 +468,20 @@ export default async function ({ addon, global, console, msg }) {
       container.appendChild(
         createMenuItem(
           msg("create-folder"),
-          () => {
-            setFolder(data.realName);
-          },
+          () => setFolder(data.realName),
           true
         )
       );
 
       const currentFolder = data.inFolder;
+      if (typeof currentFolder === "string") {
+        container.appendChild(
+          createMenuItem(
+            "remove from folder",
+            () => setFolder(null)
+          )
+        );  
+      }
       for (const folder of getAllFolders(component)) {
         if (folder !== currentFolder) {
           container.appendChild(
@@ -483,9 +489,7 @@ export default async function ({ addon, global, console, msg }) {
               msg("add-to-folder", {
                 folder,
               }),
-              () => {
-                setFolder(folder);
-              }
+              () => setFolder(folder)
             )
           );
         }
