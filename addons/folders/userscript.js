@@ -164,6 +164,8 @@ export default async function ({ addon, global, console, msg }) {
           image.setAttribute("href", item.asset.encodeDataURI());
         } else if (item.costume && item.costume.asset) {
           image.setAttribute("href", item.costume.asset.encodeDataURI());
+        } else if (item.url) {
+          return openFolderAsset.encodeDataURI();
         }
         svg.appendChild(image);
       }
