@@ -393,7 +393,7 @@ export default async function ({ addon, global, console, msg }) {
     const getAllFolders = (component) => {
       const result = new Set();
       let items;
-      if (component.props.id) {
+      if (component.props.dragType === "SPRITE") {
         items = currentSpriteItems;
       } else {
         items = currentAssetItems;
@@ -430,15 +430,13 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       const setFolder = (folder) => {
-        if (component.props.id) {
+        if (component.props.dragType === "SPRITE") {
           const target = vm.runtime.getTargetById(component.props.id);
           const targets = vm.runtime.targets.filter((i) => i !== target);
 
           let insertAt = targets.length;
-          let found = false;
           for (let i = 0; i < targets.length; i++) {
             if (getFolderFromName(targets[i].getName()) === folder) {
-              found = true;
               insertAt = i;
               break;
             }
@@ -447,6 +445,23 @@ export default async function ({ addon, global, console, msg }) {
           targets.splice(insertAt, 0, target);
           vm.runtime.targets = targets;
           vm.renameSprite(component.props.id, setFolderOfName(target.getName(), folder));
+        } else if (component.props.dragType === "COSTUME") {
+          const data = getItemData(component.props);
+          const index = data.realIndex;
+          const asset = vm.editingTarget.sprite.costumes[index];
+          const assets = vm.editingTarget.sprite.costumes.filter((i) => i !== asset);
+
+          let insertAt = assets.length;
+          for (let i = 0; i < assets.length; i++) {
+            if (getFolderFromName(assets[i].name) === folder) {
+              insertAt = i;
+              break;
+            }
+          }
+
+          assets.splice(insertAt, 0, asset);
+          vm.editingTarget.sprite.costumes = assets;
+          vm.renameCostume(vm.editingTarget.sprite.costumes.indexOf(asset), setFolderOfName(asset.name, folder));
         }
       };
 
