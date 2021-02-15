@@ -2,7 +2,7 @@ name: Unittest
 on:
   workflow_dispatch:
 jobs:
-  devtools:
+  unittest:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'ScratchAddons'
     steps:
