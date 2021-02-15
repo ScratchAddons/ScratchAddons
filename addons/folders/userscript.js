@@ -319,20 +319,14 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     SortableHOC.prototype.componentDidUpdate = function (prevProps, prevState) {
-      // When the selected sprite has changed, open its folder.
+      // When the selected item has changed, open its folder.
       if (type === TYPE_SPRITES) {
         if (prevProps.selectedId !== this.props.selectedId) {
-          const oldTarget = vm.runtime.getTargetById(prevProps.selectedId);
           const newTarget = vm.runtime.getTargetById(this.props.selectedId);
           currentSpriteFolder = getFolderFromName(newTarget.getName());
-          if (
-            oldTarget &&
-            newTarget &&
-            newTarget.isSprite() // ignore switching to stage
-          ) {
-            const oldFolder = getFolderFromName(oldTarget.getName());
+          if (newTarget && newTarget.isSprite()) {
             const newFolder = getFolderFromName(newTarget.getName());
-            if (oldFolder !== newFolder && !this.state.folders.includes(newFolder)) {
+            if (typeof newFolder === "string" && !this.state.folders.includes(newFolder)) {
               this.setState((prevState) => ({
                 folders: [...prevState.folders, newFolder],
               }));
