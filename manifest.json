@@ -20,7 +20,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": ["https://scratch.mit.edu/*", "https://lab.scratch.mit.edu/*"],
       "run_at": "document_start",
       "js": ["content-scripts/cs.js"],
       "all_frames": true
