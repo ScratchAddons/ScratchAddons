@@ -293,6 +293,7 @@ const vue = (window.vue = new Vue({
       const matchesSearch =
         this.searchInput === "" ||
         addonManifest.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        addonManifest._addonId.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         addonManifest.description.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         (addonManifest.credits &&
           addonManifest.credits
