@@ -1,0 +1,6 @@
+{
+  "name": "Rename Discussion Forums",
+  "description": "Change &quot;Discuss Scratch&quot; into &quot;Scratch Discussion Forums&quot;.",
+  "tags": ["forums"],
+  "enabledByDefault": true
+}
