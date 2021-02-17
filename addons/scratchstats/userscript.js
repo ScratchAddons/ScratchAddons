@@ -68,7 +68,7 @@ export default async function ({ addon, msg, console }) {
       const canvasContainer = document.createElement("div");
       stats.appendChild(canvasContainer);
       canvasContainer.style.position = "relative";
-      canvasContainer.style.height = "600px";
+      canvasContainer.style.height = "400px";
       const canvas = document.createElement("canvas");
       canvasContainer.appendChild(canvas);
       const chart = new Chart(canvas, {
