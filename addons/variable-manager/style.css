@@ -7,11 +7,11 @@
   opacity: 0.5;
 }
 
-.sa-var-manager.freeze > * > * > * > * > input:focus {
+.sa-var-manager.freeze input:focus {
   opacity: 1 !important;
 }
 
-.sa-var-manager.freeze > * > * > * > * > textarea:focus {
+.sa-var-manager.freeze textarea:focus {
   opacity: 1 !important;
   resize: vertical;
 }
