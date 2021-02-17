@@ -94,17 +94,6 @@ export default async function ({ addon, global, console, msg }) {
             let globals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getTargetForStage().variables)))
 
             let variables = []
-            locals.forEach(i => {
-              i.varType = 'local'
-              i.targetID = vm.runtime.getEditingTarget().id
-              variables.push(i)
-            })
-
-            globals.forEach(i => {
-              i.varType = 'global'
-              i.targetID = vm.runtime.getTargetForStage().id
-              variables.push(i)
-            })
 
             while (localList.hasChildNodes()) { // alternative to innerHTML = ""
               localList.removeChild(localList.firstChild);
@@ -113,6 +102,27 @@ export default async function ({ addon, global, console, msg }) {
             while (globalList.hasChildNodes()) { // alternative to innerHTML = ""
               globalList.removeChild(globalList.firstChild);
             }
+
+            if (!vm.runtime.getEditingTarget().isStage) { // the stage can't have local variables
+              locals.forEach(i => {
+                i.varType = 'local'
+                i.targetID = vm.runtime.getEditingTarget().id
+                variables.push(i)
+              })
+            }
+
+            globals.forEach(i => {
+              i.varType = 'global'
+              i.targetID = vm.runtime.getTargetForStage().id
+              variables.push(i)
+            })
+
+            
+            localHeading.style.display = 'block'
+            globalHeading.style.display = 'block'
+
+            if(variables.filter(v=> v.varType == 'local' ).length == 0) localHeading.style.display = 'none'
+            if(variables.filter(v=> v.varType == 'global' ).length == 0) globalHeading.style.display = 'none'
 
             variables.forEach(i => {
               let row = document.createElement('tr')
@@ -124,8 +134,8 @@ export default async function ({ addon, global, console, msg }) {
               let input = document.createElement('input')
               input.value = i.value
 
-              input.addEventListener('keyup', ({key}) => {
-                if (key === "Enter"){
+              input.addEventListener('keyup', ({ key }) => {
+                if (key === "Enter") {
                   vm.setVariableValue(i.targetID, i.id, input.value)
                   input.blur()
                 }
