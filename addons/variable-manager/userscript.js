@@ -91,12 +91,13 @@ export default async function ({ addon, global, console, msg }) {
       function reloadList() {
         if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
           if (!preventUpdate) {
-            let locals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getEditingTarget().variables)))
-            let globals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getTargetForStage().variables)))
+            let locals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getEditingTarget().variables)));
+            let globals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getTargetForStage().variables)));
 
-            let variables = []
+            let variables = [];
 
-            while (localList.hasChildNodes()) { // alternative to innerHTML = ""
+            while (localList.hasChildNodes()) {
+              // alternative to innerHTML = ""
               localList.removeChild(localList.firstChild);
             }
 
@@ -105,41 +106,41 @@ export default async function ({ addon, global, console, msg }) {
               globalList.removeChild(globalList.firstChild);
             }
 
-            if (!vm.runtime.getEditingTarget().isStage) { // the stage can't have local variables
-              locals.forEach(i => {
-                i.varType = 'local'
-                i.targetID = vm.runtime.getEditingTarget().id
-                variables.push(i)
-              })
+            if (!vm.runtime.getEditingTarget().isStage) {
+              // the stage can't have local variables
+              locals.forEach((i) => {
+                i.varType = "local";
+                i.targetID = vm.runtime.getEditingTarget().id;
+                variables.push(i);
+              });
             }
 
-            globals.forEach(i => {
-              i.varType = 'global'
-              i.targetID = vm.runtime.getTargetForStage().id
-              variables.push(i)
-            })
+            globals.forEach((i) => {
+              i.varType = "global";
+              i.targetID = vm.runtime.getTargetForStage().id;
+              variables.push(i);
+            });
 
-            
-            localHeading.style.display = 'block'
-            globalHeading.style.display = 'block'
+            localHeading.style.display = "block";
+            globalHeading.style.display = "block";
 
-            if(variables.filter(v=> v.varType == 'local' ).length == 0) localHeading.style.display = 'none'
-            if(variables.filter(v=> v.varType == 'global' ).length == 0) globalHeading.style.display = 'none'
+            if (variables.filter((v) => v.varType == "local").length == 0) localHeading.style.display = "none";
+            if (variables.filter((v) => v.varType == "global").length == 0) globalHeading.style.display = "none";
 
-            variables.forEach(i => {
-              let row = document.createElement('tr')
-              let label = document.createElement('td')
-              label.innerText = i.name
+            variables.forEach((i) => {
+              let row = document.createElement("tr");
+              let label = document.createElement("td");
+              label.innerText = i.name;
 
               let value = document.createElement("td");
               value.className = "sa-var-manager-value";
               let input = document.createElement("input");
               input.value = i.value;
 
-              input.addEventListener('keyup', ({ key }) => {
+              input.addEventListener("keyup", ({ key }) => {
                 if (key === "Enter") {
-                  vm.setVariableValue(i.targetID, i.id, input.value)
-                  input.blur()
+                  vm.setVariableValue(i.targetID, i.id, input.value);
+                  input.blur();
                 }
               });
 
