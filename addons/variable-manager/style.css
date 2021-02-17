@@ -1,0 +1,38 @@
+.sa-var-manager {
+    display: block;
+    padding: 8px;
+}
+
+.sa-var-manager.freeze > *{
+    opacity: 0.5;
+}
+
+.sa-var-manager-heading {
+    display: block;
+    font-weight: bold;
+    font-size: large;
+}
+
+.sa-var-manager-value{
+    width: 25%;
+}
+
+.sa-var-manager-value > input{
+    width: 100%;
+    height: 100%;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+/* tr:nth-child(even) {
+    background-color: #dddddd;
+} */

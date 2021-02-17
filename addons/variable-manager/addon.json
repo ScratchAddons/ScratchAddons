@@ -1,0 +1,25 @@
+{
+    "name": "Variable manager",
+    "description": "Allows you to manage variables todo.",
+    "credits": [
+      {
+        "name": "Jeffalo"
+      }
+    ],
+    "userscripts": [
+      {
+        "url": "userscript.js",
+        "matches": ["https://scratch.mit.edu/projects/*"]
+      }
+    ],
+    "userstyles": [
+      {
+        "url": "style.css",
+        "matches": ["https://scratch.mit.edu/projects/*"]
+      }
+    ],
+    "tags": ["editor"],
+    "enabledByDefault": false,
+    "l10n": true
+  }
+  
