@@ -1,7 +1,12 @@
 {
   "name": "Rename Discussion Forums",
   "description": "Change &quot;Discuss Scratch&quot; into &quot;Scratch Discussion Forums&quot;.",
-  "persistent_scripts": ["background.js"],
+  "userscripts": [
+    {
+      "url": "background.js",
+      "matches": ["https://scratch.mit.edu/discuss*"]
+    }
+  ]
   "tags": ["forums"],
   "enabledByDefault": true
 }
