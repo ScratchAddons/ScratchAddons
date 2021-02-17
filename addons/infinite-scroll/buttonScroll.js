@@ -16,7 +16,7 @@ export default async function ({ addon, global, console }) {
   if (window.location.pathname.split("/").length === 5 && addon.settings.get("studioScroll"))
     commentLoader(addon, "content", "#comments > div:nth-child(2) > ul > div");
   if (window.location.pathname.split("/").length === 4 && addon.settings.get("profileCommentScroll"))
-    commentLoader(addon, "content", "#comments > div:nth-child(3) > ul > div");
+    commentLoader(addon, "content", "[data-control=load-more]");
   if (window.location.pathname.split("/").length === 4 && addon.settings.get("projectScroll"))
     commentLoader(
       addon,
