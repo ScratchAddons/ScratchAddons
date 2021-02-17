@@ -1,6 +1,6 @@
 .sa-var-manager {
-    display: block;
-    padding: 8px;
+  display: block;
+  padding: 8px;
 }
 
 .sa-var-manager.freeze > * > * > * > * > *{
@@ -12,9 +12,9 @@
 }
 
 .sa-var-manager-heading {
-    display: block;
-    font-weight: bold;
-    font-size: large;
+  display: block;
+  font-weight: bold;
+  font-size: large;
 }
 
 .sa-var-manager-value{
@@ -30,8 +30,8 @@
 }
 
 table {
-    border-collapse: collapse;
-    width: 100%;
+  border-collapse: collapse;
+  width: 100%;
 }
 
 td, th {
