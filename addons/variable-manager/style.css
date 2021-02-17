@@ -11,9 +11,9 @@
   opacity: 1 !important;
 }
 
-.sa-var-manager.freeze > * > * > * > * > textarea:focus{
-    opacity: 1 !important;
-    resize: vertical;
+.sa-var-manager.freeze > * > * > * > * > textarea:focus {
+  opacity: 1 !important;
+  resize: vertical;
 }
 
 .sa-var-manager-heading {
@@ -34,12 +34,12 @@
   height: 100%;
 }
 
-.sa-var-manager-value > textarea{
-    border: none;
-    padding: 8px;
-    width: 100%;
-    height: 100%;
-    resize: none;
+.sa-var-manager-value > textarea {
+  border: none;
+  padding: 8px;
+  width: 100%;
+  height: 100%;
+  resize: none;
 }
 
 table {

@@ -11,10 +11,10 @@ export default async function ({ addon, global, console, msg }) {
     });
     if (tabs) {
       let soundTab = tabs.children[2];
-      let contentArea = document.querySelector('.'+addon.tab.scratchClass('gui_tabs'));
+      let contentArea = document.querySelector("." + addon.tab.scratchClass("gui_tabs"));
 
       let manager = document.createElement("div");
-      manager.classList.add(addon.tab.scratchClass('asset-panel_wrapper'),"sa-var-manager")
+      manager.classList.add(addon.tab.scratchClass("asset-panel_wrapper"), "sa-var-manager");
       manager.id = "var-manager";
 
       let localVars = document.createElement("div");
@@ -38,10 +38,13 @@ export default async function ({ addon, global, console, msg }) {
 
       let varTab = document.createElement("li");
 
-      varTab.classList.add(addon.tab.scratchClass('react-tabs_react-tabs__tab'), addon.tab.scratchClass('gui_tab'))
+      varTab.classList.add(addon.tab.scratchClass("react-tabs_react-tabs__tab"), addon.tab.scratchClass("gui_tab"));
       varTab.id = "react-tabs-7";
       if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
-        varTab.classList.add(addon.tab.scratchClass('react-tabs_react-tabs__tab--selected'), addon.tab.scratchClass('gui_is-selected'));
+        varTab.classList.add(
+          addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
+          addon.tab.scratchClass("gui_is-selected")
+        );
       }
       let varTabIcon = document.createElement("img");
       varTabIcon.draggable = false;
@@ -55,7 +58,10 @@ export default async function ({ addon, global, console, msg }) {
 
       varTab.addEventListener("click", (e) => {
         addon.tab.redux.dispatch({ type: "scratch-gui/navigation/ACTIVATE_TAB", activeTabIndex: 3 });
-        varTab.classList.add(addon.tab.scratchClass('react-tabs_react-tabs__tab--selected'), addon.tab.scratchClass('gui_is-selected'));
+        varTab.classList.add(
+          addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
+          addon.tab.scratchClass("gui_is-selected")
+        );
 
         // add the content
         if (!document.querySelector("#var-manager")) contentArea.insertAdjacentElement("beforeend", manager);
@@ -69,7 +75,10 @@ export default async function ({ addon, global, console, msg }) {
           if (detail.action.activeTabIndex !== 3) {
             // is it a different tab than tab 3? if so
             // remove the active class
-            varTab.classList.remove(addon.tab.scratchClass('react-tabs_react-tabs__tab--selected'), addon.tab.scratchClass('gui_is-selected'));
+            varTab.classList.remove(
+              addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
+              addon.tab.scratchClass("gui_is-selected")
+            );
 
             // remove the content
             if (document.querySelector("#var-manager")) document.querySelector("#var-manager").remove();
@@ -134,25 +143,25 @@ export default async function ({ addon, global, console, msg }) {
 
               let value = document.createElement("td");
               value.className = "sa-var-manager-value";
-              
-              if(i.type == '') var input = document.createElement("input"); // scratch does not give a type if its not a list
-              if(i.type == 'list') var input = document.createElement("textarea");
 
-              if(i.type == 'list'){
-                input.value = i.value.join('\n');
+              if (i.type == "") var input = document.createElement("input"); // scratch does not give a type if its not a list
+              if (i.type == "list") var input = document.createElement("textarea");
+
+              if (i.type == "list") {
+                input.value = i.value.join("\n");
               } else {
                 input.value = i.value;
               }
 
-              input.addEventListener('keydown', (e) => {
+              input.addEventListener("keydown", (e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault()
-                  if(i.type == 'list'){
-                    vm.setVariableValue(i.targetID, i.id, input.value.split('\n'))
+                  e.preventDefault();
+                  if (i.type == "list") {
+                    vm.setVariableValue(i.targetID, i.id, input.value.split("\n"));
                   } else {
-                    vm.setVariableValue(i.targetID, i.id, input.value)
+                    vm.setVariableValue(i.targetID, i.id, input.value);
                   }
-                  input.blur()
+                  input.blur();
                 }
               });
 
