@@ -68,7 +68,6 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
     if (!addonManifest) continue;
     const permissionsRequired = addonManifest.permissions || [];
     const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
-    console.log(addonId, permissionsRequired, browserPermissionsRequired);
     if (addonValue.enabled && browserPermissionsRequired.length) {
       pendingPermissions[addonId] = browserPermissionsRequired;
     } else {
@@ -87,7 +86,6 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
       const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
         permissions: Object.values(pendingPermissions).flat(),
       });
-      console.log(pendingPermissions, granted);
       Object.keys(pendingPermissions).forEach((addonId) => {
         addonsEnabled[addonId] = granted;
       });
@@ -109,7 +107,6 @@ Vue.directive("click-outside", {
   bind() {
     let self = this;
     this.event = function (event) {
-      console.log("emitting event");
       self.vm.$emit(self.expression, event);
     };
     this.el.addEventListener("click", this.stopProp);
@@ -117,7 +114,6 @@ Vue.directive("click-outside", {
   },
 
   unbind() {
-    console.log("unbind");
     this.el.removeEventListener("click", this.stopProp);
     document.body.removeEventListener("click", this.event);
   },
@@ -311,7 +307,7 @@ const vue = (window.vue = new Vue({
     toggleAddonRequest(addon) {
       const toggle = () => {
         // Prevents selecting text when the shift key is being help down
-        event.preventDefault();
+        event ? event.preventDefault() : 0;
 
         const newState = !addon._enabled;
         addon._enabled = newState;
@@ -321,7 +317,7 @@ const vue = (window.vue = new Vue({
           !addon._expanded &&
           (addon.info || []).every((item) => item.type !== "warning")
             ? false
-            : event.shiftKey
+            : (event ? event.shiftKey : false)
             ? false
             : newState;
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
@@ -344,7 +340,6 @@ const vue = (window.vue = new Vue({
               },
               (granted) => {
                 if (granted) {
-                  console.log("Permissions granted!");
                   toggle();
                 }
               }
@@ -370,7 +365,6 @@ const vue = (window.vue = new Vue({
           chrome.runtime.sendMessage({
             changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
           });
-          console.log("Updated", this.addonSettings[addon._addonId]);
         }
       }, wait);
     },
@@ -379,7 +373,6 @@ const vue = (window.vue = new Vue({
         for (const property of Object.keys(preset.values)) {
           this.updateOption(property, preset.values[property], addon);
         }
-        console.log(`Loaded preset ${preset.id} for ${addon.id}`);
       }
     },
     loadDefaults(addon) {
@@ -387,7 +380,6 @@ const vue = (window.vue = new Vue({
         for (const property of addon.settings) {
           this.updateOption(property.id, property.default, addon);
         }
-        console.log(`Loaded default values for ${addon.id}`);
       }
     },
     textParse(text, addon) {
@@ -427,7 +419,6 @@ const vue = (window.vue = new Vue({
       inputElem.addEventListener(
         "change",
         async (e) => {
-          console.log(e);
           const file = inputElem.files[0];
           if (!file) {
             inputElem.remove();
@@ -477,7 +468,6 @@ const vue = (window.vue = new Vue({
               let lastManifest;
               for (const manifest of this.manifests) {
                 if (!res.includes(manifest._addonId)) {
-                  console.log(manifest);
                   Vue.set(lastManifest, "_marginBottom", true);
                   break;
                 }
@@ -510,7 +500,6 @@ const vue = (window.vue = new Vue({
   },
   events: {
     modalClickOutside: function (e) {
-      console.log(this.isOpen);
       if (this.isOpen && this.canCloseOutside && e.isTrusted) {
         this.isOpen = false;
       }
