@@ -308,7 +308,7 @@ const vue = (window.vue = new Vue({
     stopPropagation(e) {
       e.stopPropagation();
     },
-    toggleAddonRequest(addon) {
+    toggleAddonRequest(addon, event) {
       const toggle = () => {
         // Prevents selecting text when the shift key is being help down
         event.preventDefault();
