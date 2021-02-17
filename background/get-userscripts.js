@@ -13,6 +13,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 function getL10NURLs() {
   const langCode = scratchAddons.globalState.auth.scratchLang.toLowerCase();
   const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
+  if (langCode === "pt") {
+    urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
+  }
   if (langCode.includes("-")) {
     urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
   }
@@ -43,7 +46,7 @@ async function getContentScriptInfo(url) {
           runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
         });
     }
-    if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts, traps: manifest.traps });
+    if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
     if (manifest.tags.includes("theme")) {
       const styleUrls = [];

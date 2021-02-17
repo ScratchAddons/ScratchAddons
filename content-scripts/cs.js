@@ -229,7 +229,7 @@ const showBanner = () => {
   });
   const notifImage = Object.assign(document.createElement("img"), {
     alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/data-cat-tweaks.png"),
+    src: chrome.runtime.getURL("/images/cs/project-lovers.png"),
     style: "height: 150px; border-radius: 5px",
   });
   const notifText = Object.assign(document.createElement("div"), {

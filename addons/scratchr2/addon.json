@@ -24,6 +24,10 @@
   ],
   "userstyles": [
     {
+      "url": "set-default-var-value.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    },
+    {
       "url": "scratchr2.css",
       "matches": [
         "https://scratch.mit.edu/discuss/*",

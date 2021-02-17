@@ -3,9 +3,8 @@
   "moment": "MIT",
   "text-field-edit": "MIT",
   "scratchblocks": "MIT",
-  "linkify": "MIT",
   "scratch-blocks": "Apache-2.0",
-  "intl-messageformat": "BSD3c",
+  "intl-messageformat": "BSD-3-Clause",
   "vue": "MIT",
   "tinycolor2": "MIT",
   "chartjs": "MIT"

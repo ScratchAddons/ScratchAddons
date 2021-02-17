@@ -1,11 +1,11 @@
 html,
-body,
+html > body:not(.sa-body-editor),
 #pagewrapper {
   background: #202020;
   color: #fff;
   text-shadow: none;
 }
-label {
+html > body:not(.sa-body-editor) label {
   color: #fff;
 }
 a.black,
@@ -13,9 +13,9 @@ a.black:visited,
 input.link.black {
   color: #fff;
 }
-input,
-textarea,
-select,
+html > body:not(.sa-body-editor) input,
+html > body:not(.sa-body-editor) textarea,
+html > body:not(.sa-body-editor) select,
 .editable.write,
 .editable:hover {
   background-color: #282828;
@@ -26,7 +26,7 @@ textarea {
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
 .button,
-button,
+html > body:not(.sa-body-editor) button,
 .button:hover,
 button:hover,
 .button.grey,
@@ -65,10 +65,10 @@ button.grey:hover {
 .thumb img {
   border-color: #606060;
 }
-h1,
-h2,
-h3,
-h4 {
+html > body:not(.sa-body-editor) h1,
+html > body:not(.sa-body-editor) h2,
+html > body:not(.sa-body-editor) h3,
+html > body:not(.sa-body-editor) h4 {
   color: inherit;
 }
 .ui-widget-content {
@@ -100,6 +100,14 @@ h4 {
 }
 #topnav form.search .glass {
   border-right: none;
+  background: url("https://scratch.mit.edu/images/nav-search-glass.png") no-repeat center center;
+  background-size: 14px 14px;
+}
+#topnav form.search input[type="text"] {
+  background: rgba(0, 0, 0, 0.1);
+}
+#topnav form.search input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.75);
 }
 #topnav ul.account-nav .logged-in-user .dropdown-menu {
   border: 1px solid rgba(0, 0, 0, 0.1);

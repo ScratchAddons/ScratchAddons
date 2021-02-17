@@ -1,29 +1,33 @@
 /* sa-autoupdate-theme-ignore */
 
-.stage-header_stage-button-icon_3zzFK {
+[class*="stage-header_stage-button-icon"] {
   transform: scaleX(-1);
 }
-.target-pane_target-pane_3S5E6 {
+[class*="target-pane_target-pane"] {
   -webkit-flex-direction: row-reverse;
   -ms-flex-direction: row-reverse;
   flex-direction: row-reverse;
 }
-[dir="ltr"] .target-pane_stage-selector-wrapper_qekSW {
+[dir="ltr"] [class*="target-pane_stage-selector-wrapper"] {
   margin-left: 0;
   margin-right: calc(0.5rem / 2);
 }
-.sprite-selector_sprite-selector_2KgCX {
+[class*="sprite-selector_sprite-selector"] {
   margin-left: calc(0.5rem / 2);
   margin-right: 0;
 }
-.gui_flex-wrapper_uXHkj {
+[class*="gui_flex-wrapper"] {
   -webkit-flex-direction: row-reverse;
   -ms-flex-direction: row-reverse;
   flex-direction: row-reverse;
   overflow-x: hidden;
 }
 
-[dir="ltr"] .backpack_backpack-header_6ltCS {
+[dir="ltr"] [class*="backpack_backpack-header"] {
   border-top-right-radius: 0rem;
   border-top-left-radius: 0.5rem;
+}
+
+.Popover {
+  z-index: 40;
 }

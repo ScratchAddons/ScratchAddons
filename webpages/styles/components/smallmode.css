@@ -1,0 +1,18 @@
+.categories-block.smallMode {
+  border-radius: 0px 0px 10px 10px;
+  margin-left: 10px;
+  z-index: 10;
+  position: absolute;
+  max-height: calc(100vh - 60px);
+  box-sizing: border-box;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.toggle {
+  cursor: pointer;
+  margin-right: 10px;
+}
+.search-box.smallMode {
+  overflow-y: hidden;
+}

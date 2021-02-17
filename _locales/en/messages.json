@@ -195,25 +195,25 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-    "message": "$1: $2, with options to separate lists and local variables into their own sections. Go to $3 to enable it."
+    "message": "$1: $2 in Scratch Messaging by hovering the love/favorite count. Studio promotion messages are now supported in both Scratch Messaging and Scratch Notifier."
   },
   "newFeature": {
     "message": "New feature"
   },
   "hexColorPicker": {
-    "message": "data category tweaks"
+    "message": "see who loved and favorited your projects"
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2": {
-    "message": "Other new features: import and export extension settings, customize popup tabs, toggle addons directly from the extension popup, fixed various bugs, and improved performance."
+    "message": "The \"Auto-hide block palette\" addon now has a \"category hover\" mode. \"Record project video\" can now include your microphone's sound input."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
   "dataTweaksAlt": {
-    "message": "Screenshot of the Scratch Editor with a \"lists\" block category, and variables split into global and local sections."
+    "message": "Screenshot of the new Scratch Messaging feature."
   },
   "new": {
     "message": "New!"
@@ -259,5 +259,25 @@
   },
   "skipOpenFullSettings": {
     "message": "Cancel"
+  },
+  "extensionStoreDescription1": {
+    "message": "➖ scratch.mit.edu features ➖\n- Messaging: click the extension icon to get a summary of your messages.\n- Cloud games: see who's playing multiplayer games.\n- Notifier: get browser notifications when you get new messages.\n- Navigation bar customization: re-add the “discuss” button.\n- Make 2.0-styled pages look like 3.0.\n- Website and editor dark modes.\n- And more!"
+  },
+  "extensionStoreDescription2": {
+    "message": "➖ Project editor features ➖\n- Developer tools: adds a find box and new menu options to the editor.\n- 60FPS player mode.\n- Pause button.\n- Onion skinning.\n- Auto-hide block palette.\n- Display stage on left side.\n- And more!"
+  },
+  "extensionStoreDescription3": {
+    "message": "Keep in mind, all features are togglable! To enable or disable them, go to the settings page by clicking this extension’s icon under “extensions” in the top-right corner of your browser, and then click the gear icon."
+  },
+  "extensionStoreDescription4": {
+    "message": "No usernames or passwords are stored, and you are required to be signed into your Scratch account in your browser for some features to work.",
+    "description": "NOTE: please only mention \"Scratch\" once on this string, do not repeat this word."
+  },
+  "extensionStoreDescription5": {
+    "message": "This extension is open source software licensed under GPL v3.\nTo contribute or check the source code: https://github.com/ScratchAddons\nFor more information, go to: ScratchAddons.com"
+  },
+  "extensionStoreDescription6": {
+    "message": "This project is not affiliated, associated, or in any way officially connected with the Scratch website, Team, Foundation, or any of its affiliates.",
+    "description": "NOTE: please only mention \"Scratch\" once on this string, do not repeat this word."
   }
 }

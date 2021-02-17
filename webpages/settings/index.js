@@ -1,7 +1,15 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["data-category-tweaks-v2", "mute-project"];
+const NEW_ADDONS = ["hide-flyout", "mediarecorder"];
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
+let grantedOptionalPermissions = [];
+const updateGrantedPermissions = () =>
+  chrome.permissions.getAll(({ permissions }) => {
+    grantedOptionalPermissions = permissions.filter((p) => browserLevelPermissions.includes(p));
+  });
+updateGrantedPermissions();
+chrome.permissions.onAdded.addListener(updateGrantedPermissions);
+chrome.permissions.onRemoved.addListener(updateGrantedPermissions);
 
 //theme switching
 const lightThemeLink = document.createElement("link");
@@ -285,6 +293,7 @@ const vue = (window.vue = new Vue({
       const matchesSearch =
         this.searchInput === "" ||
         addonManifest.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        addonManifest._addonId.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         addonManifest.description.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         (addonManifest.credits &&
           addonManifest.credits
@@ -301,10 +310,20 @@ const vue = (window.vue = new Vue({
     },
     toggleAddonRequest(addon) {
       const toggle = () => {
+        // Prevents selecting text when the shift key is being help down
+        event.preventDefault();
+
         const newState = !addon._enabled;
         addon._enabled = newState;
-        // Do not extend when enabling in popup mode
-        addon._expanded = document.body.classList.contains("iframe") && !addon._expanded ? false : newState;
+        // Do not extend when enabling in popup mode, unless addon has warnings
+        addon._expanded =
+          document.body.classList.contains("iframe") &&
+          !addon._expanded &&
+          (addon.info || []).every((item) => item.type !== "warning")
+            ? false
+            : event.shiftKey
+            ? false
+            : newState;
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
 
         if (document.body.classList.contains("iframe")) setTimeout(() => this.popupOrderAddonsEnabledFirst(), 500);
@@ -312,31 +331,25 @@ const vue = (window.vue = new Vue({
 
       const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
       if (!addon._enabled && requiredPermissions.length) {
-        chrome.permissions.contains(
-          {
-            permissions: requiredPermissions,
-          },
-          (result) => {
-            if (result === false) {
-              if (document.body.classList.contains("iframe")) {
-                this.addonToEnable = addon;
-                document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
-                this.showPopupModal = true;
-              } else
-                chrome.permissions.request(
-                  {
-                    permissions: requiredPermissions,
-                  },
-                  (granted) => {
-                    if (granted) {
-                      console.log("Permissions granted!");
-                      toggle();
-                    }
-                  }
-                );
-            } else toggle();
-          }
-        );
+        const result = requiredPermissions.every((p) => grantedOptionalPermissions.includes(p));
+        if (result === false) {
+          if (document.body.classList.contains("iframe")) {
+            this.addonToEnable = addon;
+            document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
+            this.showPopupModal = true;
+          } else
+            chrome.permissions.request(
+              {
+                permissions: requiredPermissions,
+              },
+              (granted) => {
+                if (granted) {
+                  console.log("Permissions granted!");
+                  toggle();
+                }
+              }
+            );
+        } else toggle();
       } else toggle();
     },
     updateOption(id, newValue, addon) {
@@ -445,7 +458,7 @@ const vue = (window.vue = new Vue({
         chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
           if (!tabs[0].id) return;
           chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
-            // Just so we don't get any errors in the console if we don't get any responce from a non scratch tab.
+            // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
             chrome.runtime.lastError;
             if (res && res.length) {
               this.popupOpenedOnScratchTab = true;

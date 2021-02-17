@@ -1,73 +1,66 @@
 export default async function ({ addon, global, console, msg }) {
   console.log("clones counter enabled");
 
-  const vm = addon.tab.traps.onceValues.vm;
-
-  vm.runtime.__cloneCounter = vm.runtime._cloneCounter;
-
-  Object.defineProperty(vm.runtime, "_cloneCounter", {
-    get: function () {
-      return this.__cloneCounter;
-    },
-    set: function (v) {
-      doCloneChecks(v);
-      this.__cloneCounter = v;
-    },
-  });
+  const vm = addon.tab.traps.vm;
 
   hideInSmallStageMode({ addon });
 
-  var countContainerContainer = document.createElement("div");
-  var countContainer = document.createElement("div");
-  var count = document.createElement("span");
-  var icon = document.createElement("img");
+  let countContainerContainer = document.createElement("div");
+  let countContainer = document.createElement("div");
+  let count = document.createElement("span");
+  let icon = document.createElement("span");
 
   countContainerContainer.className = "clone-container-container";
   countContainer.className = "clone-container";
+  count.className = "clone-count";
   icon.className = "clone-icon";
 
   countContainerContainer.appendChild(icon);
   countContainerContainer.appendChild(countContainer);
   countContainer.appendChild(count);
 
-  function doCloneChecks(v) {
-    if (v <= 0) {
-      countContainerContainer.style.display = "none";
-    } else {
-      countContainerContainer.style.display = "";
-    }
+  let lastChecked = 0;
 
-    if (v === 300) {
-      count.style.color = "#ff6680";
-      icon.src = addon.self.dir + "/300cats.svg";
-    } else {
-      count.style.color = "";
-      icon.src = addon.self.dir + "/cat.svg";
-    }
-    count.innerText = msg("clones", { cloneCount: v });
+  const cache = Array(301)
+    .fill()
+    .map((_, i) => msg("clones", { cloneCount: i }));
+
+  function doCloneChecks() {
+    const v = vm.runtime._cloneCounter;
+    // performance
+    if (v === lastChecked) return false;
+    countContainerContainer.dataset.count = lastChecked = v;
+    count.dataset.str = cache[v] || "";
+    return true;
   }
 
-  while (true) {
-    let bar = await addon.tab.waitForElement("[class^='controls_controls-container']", { markAsSeen: true });
-
-    if (addon.tab.editorMode === "editor") {
-      doCloneChecks(vm.runtime._cloneCounter);
-
-      icon.src = addon.self.dir + "/cat.svg";
-
-      bar.appendChild(countContainerContainer);
+  const check = () => {
+    if (doCloneChecks() && addon.tab.editorMode === "editor") {
+      if (!countContainerContainer.isConnected) {
+        const elem = document.querySelector("[class^='controls_controls-container']");
+        elem.appendChild(countContainerContainer);
+      }
     }
-  }
+  };
+  vm.runtime.on("targetWasRemoved", (t) => {
+    // Fix bug with inaccurate clone counter
+    if (t.isOriginal) vm.runtime.changeCloneCounter(1);
+  });
+  const oldStep = vm.runtime.constructor.prototype._step;
+  vm.runtime.constructor.prototype._step = function (...args) {
+    check();
+    return oldStep.call(this, ...args);
+  };
 }
 
 async function hideInSmallStageMode({ addon }) {
   while (true) {
-    await addon.tab.waitForElement(".stage-header_stage-size-toggle-group_17LtK", { markAsSeen: true });
+    await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group']", { markAsSeen: true });
 
-    document.querySelector(".stage-header_stage-button-first_y_CLF").addEventListener("click", () => {
+    document.querySelector("[class*='stage-header_stage-button-first']").addEventListener("click", () => {
       document.querySelector(".clone-container-container").style.display = "none";
     });
-    document.querySelector(".stage-header_stage-button-last_eeKZ4").addEventListener("click", () => {
+    document.querySelector("[class*='stage-header_stage-button-last']").addEventListener("click", () => {
       document.querySelector(".clone-container-container").style.display = "";
     });
   }

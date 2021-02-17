@@ -65,7 +65,6 @@
         <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
           <img src="../../images/icons/translate.svg" />
           <span>{{ msg("translate") }}</span>
-          <div class="badge purple tooltip" style="cursor: pointer">{{ msg("new") }}</div>
         </div>
         <div class="category category-small" @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
@@ -164,7 +163,7 @@
               </div>
               <div class="badge purple" v-if="addon._tags.new">{{ msg("new") }}</div>
               <div class="badge darkgreen" v-if="addon._tags.forEditor">{{ msg("forEditor") }}</div>
-              <div class="badge red tooltip" v-if="addon._tags.beta">
+              <div class="badge red tooltip beta-badge" v-if="addon._tags.beta">
                 {{ msg("beta") }}
                 <div class="tooltiptext">{{ msg("betaTooltip") }}</div>
               </div>
@@ -327,8 +326,7 @@
           <div class="setting-body">
             <div class="addon-topbar">
               <span class="addon-name"
-                ><img src="../../images/icons/theme.svg" style="vertical-align: middle; margin-right: 5px" /> {{
-                msg("scratchAddonsTheme") }}
+                ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
               </span>
             </div>
             <div class="setting-settings">
@@ -351,11 +349,7 @@
           <div class="setting-body">
             <div class="addon-topbar">
               <span class="addon-name"
-                ><img
-                  src="../../images/icons/import-export.svg"
-                  style="vertical-align: middle; margin-right: 5px"
-                  :class="{'dark': theme === false}"
-                />
+                ><img src="../../images/icons/import-export.svg" class="icon-type" :class="{'dark': theme === false}" />
                 {{ msg("exportAndImportSettings") }}
               </span>
             </div>
@@ -363,14 +357,12 @@
               <span class="settings-description">{{ msg("exportAndImportSettingsDescription") }}</span>
               <span class="settings-description">{{ msg("useBrowserSync") }}</span>
               <div class="setting-setting">
-                <div class="setting-setting">
-                  <div class="filter-selector">
-                    <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
-                  </div>
-                  <div class="filter-selector">
-                    <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
-                    <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
-                  </div>
+                <div class="filter-selector">
+                  <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
+                </div>
+                <div class="filter-selector">
+                  <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
+                  <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
                 </div>
               </div>
             </div>

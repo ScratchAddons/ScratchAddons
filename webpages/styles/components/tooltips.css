@@ -1,0 +1,64 @@
+.tooltip {
+  position: relative;
+  /* making the .tooltip span a container for the tooltip text */
+  border-bottom: 1px dashed #000;
+  /* little indicater to indicate it's hoverable */
+  cursor: default;
+}
+
+.tooltiptext {
+  /* here's the magic */
+  position: absolute;
+  /* vertically center */
+  top: 50%;
+  transform: translateY(-50%);
+  /* Bring it on top of other tags */
+  z-index: 10;
+  /* move to right */
+  left: 95%;
+  margin-left: 15px;
+  /* and add a small left margin */
+  /* basic styles */
+  width: 200px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #000;
+  color: #fff;
+  text-align: center;
+  visibility: hidden;
+
+  box-shadow: 0px 0px 16px 10px #3b3b3b52;
+}
+.tooltiptext.tooltiptextleft {
+  left: auto;
+  top: -3px;
+  right: 95%;
+  margin-left: 0;
+  margin-right: 4px;
+  transform: none;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%; /* To the left of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+  white-space: normal;
+}
+.tooltip .tooltiptext.tooltiptextleft::after {
+  right: auto;
+  top: 15px;
+  left: 100%;
+  border-color: transparent transparent transparent black;
+}
+
+.tooltiptext:hover .tooltiptext:after {
+  visibility: visible;
+}

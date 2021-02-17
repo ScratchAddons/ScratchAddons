@@ -3,7 +3,7 @@ export default async function ({ addon, global, console }) {
 
   let pos = null;
 
-  const vm = addon.tab.traps.onceValues.vm;
+  const vm = addon.tab.traps.vm;
 
   vm.runtime.ioDevices.mouse.__scratchX = vm.runtime.ioDevices.mouse._scratchX;
   vm.runtime.ioDevices.mouse.__scratchY = vm.runtime.ioDevices.mouse._scratchY;
@@ -38,7 +38,7 @@ export default async function ({ addon, global, console }) {
   hideInSmallStageMode({ addon });
 
   while (true) {
-    let bar = await addon.tab.waitForElement(".controls_controls-container_2xinB", { markAsSeen: true });
+    let bar = await addon.tab.waitForElement('[class*="controls_controls-container"]', { markAsSeen: true });
 
     if (addon.tab.editorMode === "editor") {
       // my attempt at detecting if they're in the editor?
@@ -61,12 +61,12 @@ export default async function ({ addon, global, console }) {
 
 async function hideInSmallStageMode({ addon }) {
   while (true) {
-    await addon.tab.waitForElement(".stage-header_stage-size-toggle-group_17LtK", { markAsSeen: true });
+    await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group']", { markAsSeen: true });
 
-    document.querySelector(".stage-header_stage-button-first_y_CLF").addEventListener("click", () => {
+    document.querySelector("[class*='stage-header_stage-button-first']").addEventListener("click", () => {
       document.querySelector(".pos-container-container").style.display = "none";
     });
-    document.querySelector(".stage-header_stage-button-last_eeKZ4").addEventListener("click", () => {
+    document.querySelector("[class*='stage-header_stage-button-last']").addEventListener("click", () => {
       document.querySelector(".pos-container-container").style.display = "";
     });
   }

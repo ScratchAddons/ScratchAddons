@@ -11,6 +11,9 @@
   "credits": [
     {
       "name": "Jeffalo"
+    },
+    {
+      "name": "GarboMuffin"
     }
   ],
   "userscripts": [
@@ -25,7 +28,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor", "beta"],
+  "tags": ["editor", "recommended"],
   "enabledByDefault": false,
   "l10n": true
 }

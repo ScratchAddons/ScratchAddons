@@ -1,6 +1,6 @@
 {
   "editor-devtools/help-title": "Scratch 3 Developer Tools",
-  "editor-devtools/version": "Version {version} - Released {date} {ndash} by {url}",
+  "editor-devtools/version": "Version {version} - Released {date} {ndash} by {url} and Scratch Addons contributors & translators",
   "editor-devtools/changes024": "Changes in 0.2.3 - 0.2.4",
   "editor-devtools/ctrl-space": "Ctrl + Space or Middle Click",
   "editor-devtools/ctrl-space-desc": "Experimental Feature - This pops up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code to make use of it right there.",
@@ -51,8 +51,5 @@
   "editor-devtools/variables": "variables",
   "editor-devtools/insert": "Insert",
   "editor-devtools/start-typing": "Start Typing...",
-  "editor-devtools/show-senders": "Show senders",
-  "editor-devtools/show-receivers": "Show receivers",
-  "editor-devtools/show-broadcast": "Show Broadcast Senders/Receivers",
-  "editor-devtools/show-broadcast-desc": "Right-click a broadcast block, then click \"Show senders\" or \"Show receivers\". Sprites with the block will get highlighted."
+  "editor-devtools/extension-description-not-for-addon": "Scratch 3 Developer Tools to enhance your Scratch Editing Experience on https://scratch.mit.edu"
 }

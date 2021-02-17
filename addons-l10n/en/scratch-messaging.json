@@ -33,5 +33,7 @@
   "scratch-messaging/show-more": "Show more messages",
   "scratch-messaging/mark-as-read": "Mark messages as read",
   "scratch-messaging/marked-as-read": "Marked as read",
-  "scratch-messaging/open-messages": "Open messages page"
+  "scratch-messaging/open-messages": "Open messages page",
+  "scratch-messaging/studio-promotions": "Studio promotions",
+  "scratch-messaging/studio-promotion": "{actor} promoted you to manager for the studio {title}"
 }
