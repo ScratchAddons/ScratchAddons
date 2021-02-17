@@ -2,7 +2,8 @@
   width: 100%;
 }
 #profile-data,
-#content > .slider-carousel-container {
+#content > .slider-carousel-container,
+.sa-stats {
   width: 942px;
   margin-left: auto;
   margin-right: auto;
@@ -98,7 +99,7 @@
 .activity-stream .actor a {
   color: #575e75 !important;
 }
-#content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404) {
+#content > .box:not(#profile-data):not(.slider-carousel-container):not(.sa-stats):not(#page-404) {
   border-radius: 0;
   border: none;
   background: rgba(77, 151, 255, 0.1);
@@ -106,17 +107,17 @@
   padding-bottom: 16px;
   margin-bottom: 0;
 }
-#content > .box:not(#profile-data):not(.slider-carousel-container) .box-head,
-#content > .box:not(#profile-data):not(.slider-carousel-container) .box-content {
+#content > .box:not(#profile-data):not(.slider-carousel-container):not(.sa-stats) .box-head,
+#content > .box:not(#profile-data):not(.slider-carousel-container):not(.sa-stats) .box-content {
   border: none;
   background: transparent;
   width: 942px;
   margin: auto;
 }
-#content > .box:not(#profile-data):not(.slider-carousel-container) .box-head {
+#content > .box:not(#profile-data):not(.slider-carousel-container):not(.sa-stats) .box-head {
   padding: 16px 0;
 }
-#content > .box:not(#profile-data):not(.slider-carousel-container) .box-head h4 {
+#content > .box:not(#profile-data):not(.slider-carousel-container):not(.sa-stats) .box-head h4 {
   font-size: 20px;
   line-height: 1.7em;
 }

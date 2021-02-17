@@ -7,5 +7,6 @@
   "scratch-blocks": "Apache-2.0",
   "intl-messageformat": "BSD3c",
   "vue": "MIT",
-  "tinycolor2": "MIT"
+  "tinycolor2": "MIT",
+  "chartjs": "MIT"
 }
