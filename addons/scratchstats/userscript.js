@@ -10,7 +10,7 @@ function createItem(number, label) {
   return item;
 }
 
-export default async function({ addon, msg, console }) {
+export default async function ({ addon, msg, console }) {
   const username = location.pathname.split("/")[2];
   if (!username) return;
   const content = document.querySelector("#content");
@@ -36,7 +36,7 @@ export default async function({ addon, msg, console }) {
   stats.className = "box-content";
   stats.innerText = msg("loading");
 
-  fetch(`https://scratchdb.lefty.one/v2/user/info/${username}`).then(async function(response) {
+  fetch(`https://scratchdb.lefty.one/v2/user/info/${username}`).then(async function (response) {
     stats.removeChild(stats.firstChild); // remove loading message
     const followRow = document.createElement("div");
     stats.appendChild(followRow);
@@ -48,19 +48,21 @@ export default async function({ addon, msg, console }) {
     followRow.appendChild(createItem(data.statistics.followers, msg("followers")));
     followRow.appendChild(createItem(`#${data.statistics.ranks.followers}`, msg("most-followed-global")));
     followRow.appendChild(createItem(`#${data.statistics.ranks.country.followers}`, msg("most-followed-location")));
-    ranksRow.appendChild(createItem(
-      `#${data.statistics.ranks.loves} (#${data.statistics.ranks.country.loves})`,
-      msg("most-loves")
-    ));
-    ranksRow.appendChild(createItem(
-      `#${data.statistics.ranks.favorites} (#${data.statistics.ranks.country.favorites})`,
-      msg("most-favorites")
-    ));
-    ranksRow.appendChild(createItem(
-      `#${data.statistics.ranks.views} (#${data.statistics.ranks.country.views})`,
-      msg("most-views")
-    ));
-    fetch(`https://scratchdb.lefty.one/v2/user/history/followers/${data.sys_id}/?range=999`).then(async function(response) {
+    ranksRow.appendChild(
+      createItem(`#${data.statistics.ranks.loves} (#${data.statistics.ranks.country.loves})`, msg("most-loves"))
+    );
+    ranksRow.appendChild(
+      createItem(
+        `#${data.statistics.ranks.favorites} (#${data.statistics.ranks.country.favorites})`,
+        msg("most-favorites")
+      )
+    );
+    ranksRow.appendChild(
+      createItem(`#${data.statistics.ranks.views} (#${data.statistics.ranks.country.views})`, msg("most-views"))
+    );
+    fetch(`https://scratchdb.lefty.one/v2/user/history/followers/${data.sys_id}/?range=999`).then(async function (
+      response
+    ) {
       const historyData = (await response.json()).history;
       await addon.tab.loadScript(addon.self.lib + "/Chart.min.js");
       const canvasContainer = document.createElement("div");
@@ -72,35 +74,41 @@ export default async function({ addon, msg, console }) {
       const chart = new Chart(canvas, {
         type: "scatter",
         data: {
-          datasets: [{
-            label: msg("followers-label"),
-            data: historyData.map(item => {return {x: Date.parse(item.date), y: item.value};}),
-            fill: false,
-            showLine: true,
-            borderColor: "#4d97ff",
-            lineTension: 0
-          }]
+          datasets: [
+            {
+              label: msg("followers-label"),
+              data: historyData.map((item) => {
+                return { x: Date.parse(item.date), y: item.value };
+              }),
+              fill: false,
+              showLine: true,
+              borderColor: "#4d97ff",
+              lineTension: 0,
+            },
+          ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           title: {
             display: true,
-            text: msg("followers-title")
+            text: msg("followers-title"),
           },
           scales: {
-            xAxes: [{
-              ticks: {
-                callback: x => new Date(x).toDateString()
-              }
-            }]
+            xAxes: [
+              {
+                ticks: {
+                  callback: (x) => new Date(x).toDateString(),
+                },
+              },
+            ],
           },
           tooltips: {
             callbacks: {
-              label: item => `${new Date(parseInt(item.label)).toDateString()}: ${item.value}`
-            }
-          }
-        }
+              label: (item) => `${new Date(parseInt(item.label)).toDateString()}: ${item.value}`,
+            },
+          },
+        },
       });
     });
   });
