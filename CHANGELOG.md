@@ -15,29 +15,89 @@ automatically create a PR on the website to synchronize the changes!
 
 <!--
 
-Here's the simple format. Other types such as "Removed" can be added later.
+TODO LIST:
+
+- Changed entries on "Fixed" section into "Fix ..." sentence form (v1.4.0 - latest)
+- Complete missing changelog (v1.4.0)
+- Adjust apple's changelog format into the current format (v1.9.2 - v1.9.3)
+
+-->
+
+<!-- sa-changelog-start -->
+
+## [v1.9.3] - 2021-02-15
+
+***TODO***
+
+Fixes bug that would make the extension crash if browser language set to Spanish.
+
+## [v1.9.2] - 2021-02-13
+
+***TODO***
+
+Bugfixes
+
+    #1540 more-links linkifies invalid URLs. (prio-3)
+    #1541 Mute status is not loaded. (prio-3)
+    #1543 Language codes with uppercase letters don't load. (prio-4)
+    #1549 editor-stage-left partially hides the direction picker. (prio-4)
+    #1551 animated-thumb alerts that the thumbnail is too big, when in fact the server is down. (prio-3)
+    #1560 curator-link crashes on default locale. (prio-2)
+    #1567 comments-linebreaks leaves empty lines on replies to ST members' comments. (prio-4)
+    #1569 Scratch Addons still cannot be launched on non-English configuration. (prio-1)
+
+## [v1.9.1] - 2021-02-09
+
+NOTE: All updates from [v1.9.0] are pushed on this version.
+
+### Fixed
+
+- Extension crashing on non-English configuration (#1529)
+
+## [v1.9.0] - 2021-02-08 [YANKED]
+
+NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extension crash if browser language not set to English. All updates are included on [v1.9.1].
 
 ### Added
 
 #### Addons
 
-#### Extension and Addon API
+- New addon: Fix capitalization of Account Settings (#1413)
+- New addon: Show BBCode (#1411)
+- Auto-hide block palette: "hover in category" (#1419)
+- Mute project player: Icon for muted projects (#1412)
+- Record project video: Record mic option (#1492)
+- Scratch Messaging: Support for manager promotion notifications (#1471)
+- Scratch Notifier: Support for manager promotion notifications (#1471)
 
 ### Changed
 
 #### Addons
 
+- Developer tools: Improve UI (#1433)
+- Scratch Messaging: Show usernames of lovers and favers (#1474)
+
 #### Extension and Addon API
+
+- Ignore shift-click on settings toggle (#1484)
 
 ### Fixed
 
 #### Addons
 
+- Clone counter: Addon blocks main thread (#1473)
+- Developer tools: Middle click feature does not list all broadcast block options (#1390)
+- Developer tools: Dropdown is not sorted (#1390)
+- Developer tools: Wrong color for lists (#1390)
+- Developer tools: Invalid blocks sometimes added (#1498)
+- Linebreaks in comments: Space after asterisk for ST member replies (#1461)
+- Linebreaks in comments: Linebreaks not preserved in some cases (#1461)
+- Thumbnails setter: Addon silently fails when thumbnail server errors (#1522)
+- Website dark mode: Addon does not apply to post editing pages (#1481)
+
 #### Extension and Addon API
 
--->
-
-<!-- sa-changelog-start -->
+- Inconsistent padding in More Settings (#1418)
 
 ## [v1.8.1] - 2021-01-29
 
@@ -315,11 +375,13 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 
 ## [v1.4.0] - 2020-11-29
 
+***TODO***
+
 ## [v1.3.3] - 2020-11-24
 
 ### Changed
 
-- Moves libraries to the `libraries` folder (998781b)
+- Move libraries to the `libraries` folder (998781b)
 
 ## [v1.3.2] - 2020-11-24
 
@@ -499,6 +561,10 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.9.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.3
+[v1.9.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.2
+[v1.9.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.1
+[v1.9.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.0
 [v1.8.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.8.1
 [v1.8.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.8.0
 [v1.7.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.7.1
@@ -520,3 +586,27 @@ Initial release.
 [v1.0.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.0.0
 
 <!-- sa-changelog-end -->
+
+<!--
+
+Here's the simple format. Other types such as "Removed" can be added later.
+
+### Added
+
+#### Addons
+
+#### Extension and Addon API
+
+### Changed
+
+#### Addons
+
+#### Extension and Addon API
+
+### Fixed
+
+#### Addons
+
+#### Extension and Addon API
+
+-->
