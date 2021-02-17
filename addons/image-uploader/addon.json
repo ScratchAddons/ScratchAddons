@@ -10,10 +10,7 @@
     {
       "url": "userscript.js",
       "matches": [
-        "https://scratch.mit.edu/discuss/topic/*",
-        "https://scratch.mit.edu/discuss/settings/*",
-        "https://scratch.mit.edu/discuss/post/*/edit",
-        "https://scratch.mit.edu/discuss/*/new"
+        "https://scratch.mit.edu/discuss/*"
       ]
     }
   ],
