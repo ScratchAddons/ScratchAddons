@@ -17,7 +17,7 @@ export default async function ({ addon, msg, console }) {
   const commentBox = document.querySelector("#content > .box:not(#profile-data):not(.slider-carousel-container)");
   const statsBox = document.createElement("div");
   content.insertBefore(statsBox, commentBox);
-  statsBox.className = "box sa-stats";
+  statsBox.className = "box sa-stats slider-carousel-container";
   const statsHeader = document.createElement("div");
   statsBox.appendChild(statsHeader);
   statsHeader.className = "box-head";
