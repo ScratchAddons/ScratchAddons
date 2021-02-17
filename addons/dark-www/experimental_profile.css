@@ -37,9 +37,3 @@
   background-color: #252c37;
   box-shadow: 0 -25px 20px -10px #000;
 }
-.jqui-modal.ui-widget {
-  background: #000;
-}
-.jqui-modal .ui-dialog-content {
-  color: white;
-}
