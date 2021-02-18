@@ -30,7 +30,7 @@ export default async function ({ addon, msg, console }) {
   statsMoreLink.href = "https://scratchstats.com/" + username;
   const statsMoreIcon = document.createElement("img");
   statsMoreLink.insertBefore(statsMoreIcon, statsMoreLink.firstChild);
-  statsMoreIcon.src = "https://scratchstats.com/images/icon.png";
+  statsMoreIcon.src = addon.self.dir + "/scratchstats.png";
   const stats = document.createElement("div");
   statsBox.appendChild(stats);
   stats.className = "box-content";
