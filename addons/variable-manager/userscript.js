@@ -118,7 +118,7 @@ export default async function ({ addon, global, console, msg }) {
             if (!vm.runtime.getEditingTarget().isStage) {
               // the stage can't have local variables, so by doing this we hide the local variable list and there are no duplicates
               locals.forEach((i) => {
-                if (i.type == '' || i.type == 'list') {
+                if (i.type == "" || i.type == "list") {
                   i.varType = "local";
                   i.targetID = vm.runtime.getEditingTarget().id;
                   variables.push(i);
@@ -127,7 +127,7 @@ export default async function ({ addon, global, console, msg }) {
             }
 
             globals.forEach((i) => {
-              if (i.type == '' || i.type == 'list') {
+              if (i.type == "" || i.type == "list") {
                 i.varType = "global";
                 i.targetID = vm.runtime.getTargetForStage().id;
                 variables.push(i);
@@ -149,8 +149,8 @@ export default async function ({ addon, global, console, msg }) {
               value.className = "sa-var-manager-value";
 
               function inputResize() {
-                input.style.height = 'auto';
-                input.style.height = (input.scrollHeight) + 'px';
+                input.style.height = "auto";
+                input.style.height = input.scrollHeight + "px";
               }
 
               if (i.type == "") var input = document.createElement("input"); // scratch does not give a type if its not a list
@@ -159,7 +159,7 @@ export default async function ({ addon, global, console, msg }) {
               if (i.type == "list") {
                 input.value = i.value.join("\n");
 
-                input.setAttribute('style', 'height:' + (input.scrollHeight) + 'px;overflow-y:hidden;');
+                input.setAttribute("style", "height:" + input.scrollHeight + "px;overflow-y:hidden;");
                 input.addEventListener("input", inputResize, false);
               } else {
                 input.value = i.value;
@@ -193,7 +193,7 @@ export default async function ({ addon, global, console, msg }) {
               if (i.varType == "local") localList.appendChild(row);
               if (i.varType == "global") globalList.appendChild(row);
 
-              if (i.type == 'list') inputResize()
+              if (i.type == "list") inputResize();
             });
           }
         }
