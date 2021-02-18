@@ -1,6 +1,6 @@
 .sa-var-manager {
   display: block;
-  padding: 8px;
+  padding: 18px;
 }
 
 .sa-var-manager.freeze > * > * > * > * > * {
@@ -13,7 +13,6 @@
 
 .sa-var-manager.freeze textarea:focus {
   opacity: 1 !important;
-  resize: vertical;
 }
 
 .sa-var-manager-heading {
@@ -43,6 +42,7 @@
 }
 
 table {
+  border-radius: 5px;
   border-collapse: collapse;
   width: 100%;
 }

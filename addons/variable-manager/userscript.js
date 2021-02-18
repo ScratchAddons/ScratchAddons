@@ -116,18 +116,22 @@ export default async function ({ addon, global, console, msg }) {
             }
 
             if (!vm.runtime.getEditingTarget().isStage) {
-              // the stage can't have local variables
+              // the stage can't have local variables, so by doing this we hide the local variable list and there are no duplicates
               locals.forEach((i) => {
-                i.varType = "local";
-                i.targetID = vm.runtime.getEditingTarget().id;
-                variables.push(i);
+                if (i.type == '' || i.type == 'list') {
+                  i.varType = "local";
+                  i.targetID = vm.runtime.getEditingTarget().id;
+                  variables.push(i);
+                }
               });
             }
 
             globals.forEach((i) => {
-              i.varType = "global";
-              i.targetID = vm.runtime.getTargetForStage().id;
-              variables.push(i);
+              if (i.type == '' || i.type == 'list') {
+                i.varType = "global";
+                i.targetID = vm.runtime.getTargetForStage().id;
+                variables.push(i);
+              }
             });
 
             localHeading.style.display = "block";
@@ -144,11 +148,19 @@ export default async function ({ addon, global, console, msg }) {
               let value = document.createElement("td");
               value.className = "sa-var-manager-value";
 
+              function inputResize() {
+                input.style.height = 'auto';
+                input.style.height = (input.scrollHeight) + 'px';
+              }
+
               if (i.type == "") var input = document.createElement("input"); // scratch does not give a type if its not a list
               if (i.type == "list") var input = document.createElement("textarea");
 
               if (i.type == "list") {
                 input.value = i.value.join("\n");
+
+                input.setAttribute('style', 'height:' + (input.scrollHeight) + 'px;overflow-y:hidden;');
+                input.addEventListener("input", inputResize, false);
               } else {
                 input.value = i.value;
               }
@@ -180,6 +192,8 @@ export default async function ({ addon, global, console, msg }) {
               row.appendChild(value);
               if (i.varType == "local") localList.appendChild(row);
               if (i.varType == "global") globalList.appendChild(row);
+
+              if (i.type == 'list') inputResize()
             });
           }
         }
