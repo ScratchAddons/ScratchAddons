@@ -113,6 +113,19 @@ html > body:not(.sa-body-editor) h4 {
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-clip: border-box;
 }
+.jqui-modal,
+.jqui-modal.ui-corner-all {
+  background: #282828;
+}
+.modal-header,
+.jqui-modal .ui-dialog-titlebar.ui-widget-header {
+  background: #4d97ff;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+.ui-widget-content a {
+  color: #4d97ff;
+}
 #featured-project-modal .project.thumb {
   background: #282828;
 }
@@ -126,8 +139,4 @@ tbody#logs * {
 
 #search-input {
   background-color: #fff;
-}
-
-.ui-dialog-content {
-  color: black;
 }

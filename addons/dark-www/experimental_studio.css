@@ -4,7 +4,7 @@
 }
 #tabs {
   height: 30px;
-  background: #282828;
+  background: var(--scratchr2-dark-boxbg, transparent);
 }
 #tabs li {
   border: none;
