@@ -1,3 +1,9 @@
+function checkVisible(elm) { // https://stackoverflow.com/a/5354536
+  var rect = elm.getBoundingClientRect();
+  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+  return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+}
+
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
   window.vm = vm; // for debugging if i forget to commehnt this out plz yel at me thanks
@@ -91,7 +97,7 @@ export default async function ({ addon, global, console, msg }) {
       const oldStep = vm.runtime.constructor.prototype._step;
 
       vm.runtime.constructor.prototype._step = function (...args) {
-        reloadList();
+        quickReload();
         return oldStep.call(this, ...args);
       };
 
@@ -100,6 +106,7 @@ export default async function ({ addon, global, console, msg }) {
       function reloadList() {
         if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
           if (!preventUpdate) {
+            console.log('full list reload')
             let locals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getEditingTarget().variables)));
             let globals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getTargetForStage().variables)));
 
@@ -156,6 +163,8 @@ export default async function ({ addon, global, console, msg }) {
               if (i.type == "") var input = document.createElement("input"); // scratch does not give a type if its not a list
               if (i.type == "list") var input = document.createElement("textarea");
 
+              input.setAttribute('data-var-id', i.id)
+
               if (i.type == "list") {
                 input.value = i.value.join("\n");
 
@@ -195,6 +204,43 @@ export default async function ({ addon, global, console, msg }) {
 
               if (i.type == "list") inputResize();
             });
+          }
+        }
+      }
+      let oldLocals = []
+      let oldGlobals = []
+      function quickReload() { // this is a lot faster than rerendering the whole list. we know that the actual variables haven't changed so just update the values
+        if (!preventUpdate && addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
+          let locals = Object.values(vm.runtime.getEditingTarget().variables)
+          let globals = Object.values(vm.runtime.getTargetForStage().variables)
+          if (locals !== oldLocals && globals !== oldGlobals) {
+            oldLocals = locals
+            oldGlobals = globals
+            for (var i = 0; i < locals.length; i++) {
+              let input = document.querySelector(`[data-var-id*="${locals[i].id}"]`)
+              if (input) {
+                if (checkVisible(input)) { // no need to update the value if you can't see it
+                  if (locals[i].type == "list") {
+                    if (input.value !== locals[i].value.join("\n")) input.value = locals[i].value.join("\n");
+                  } else {
+                    if (input.value !== locals[i].value) input.value = locals[i].value;
+                  }
+                }
+              }
+            }
+
+            for (var i = 0; i < globals.length; i++) {
+              let input = document.querySelector(`[data-var-id*="${globals[i].id}"]`)
+              if (input) {
+                if (checkVisible(input)) { // no need to update the value if you can't see it
+                  if (globals[i].type == "list") {
+                    if (input.value !== globals[i].value.join("\n")) input.value = globals[i].value.join("\n");
+                  } else {
+                    if (input.value !== globals[i].value) input.value = globals[i].value;
+                  }
+                }
+              }
+            }
           }
         }
       }
