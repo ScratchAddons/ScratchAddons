@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console }) {
   // TODO: Switch completely to Blockly?
   // Well anyway future self, here you go: https://github.com/LLK/scratch-blocks/compare/hotfix/totally-normal-2020
-  const inject = async () => (await addon.tab.traps.getBlockly()).BlockSvg.START_HAT_HEIGHT = 31;
+  const inject = async () => ((await addon.tab.traps.getBlockly()).BlockSvg.START_HAT_HEIGHT = 31);
   if (addon.tab.editorMode === "editor") {
     const interval = setInterval(() => {
       if (Blockly.getMainWorkspace()) {
