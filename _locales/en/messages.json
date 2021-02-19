@@ -195,25 +195,25 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-    "message": "$1: $2 in Scratch Messaging by hovering the love/favorite count. Studio promotion messages are now supported in both Scratch Messaging and Scratch Notifier."
+    "message": "$1: $2 addon, which adds a \"copy link\" button to comments, so that you can easily link to them. Go to $3 to enable it."
   },
   "newFeature": {
     "message": "New feature"
   },
   "hexColorPicker": {
-    "message": "see who loved and favorited your projects"
+    "message": "\"copy link to comment button\""
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2": {
-    "message": "The \"Auto-hide block palette\" addon now has a \"category hover\" mode. \"Record project video\" can now include your microphone's sound input."
+    "message": "The \"pause button\" addon was improved and is now out of beta. Many dark mode bugs have been fixed."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
   "dataTweaksAlt": {
-    "message": "Screenshot of the new Scratch Messaging feature."
+    "message": "Screenshot of the new \"copy link to comment\" feature."
   },
   "new": {
     "message": "New!"
