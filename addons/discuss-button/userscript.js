@@ -1,5 +1,6 @@
 export default async function ({ addon, global, console }) {
   if (!addon.tab.clientVersion) return;
+  if (document.querySelector(".mod-conference")) return;
 
   const link = document.createElement("li");
   link.className = "link discuss";
