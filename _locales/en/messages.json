@@ -195,7 +195,7 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-  "message": "$1: $2 addon, which adds a \"copy link\" button to comments, so that you can easily link to them. Go to $3 to enable it."
+    "message": "$1: $2 addon, which adds a \"copy link\" button to comments, so that you can easily link to them. Go to $3 to enable it."
   },
   "newFeature": {
     "message": "New feature"
