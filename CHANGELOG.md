@@ -6,45 +6,43 @@ All notable changes to this project will be documented in this file.
 
 <!-- 
 
-NOTE: 
+# NOTE:
 
 Updates on the changelog entry in between the start and stop tags will 
 automatically create a PR on the website to synchronize the changes!
 
--->
-
-<!--
-
-TODO LIST:
+# TODO LIST:
 
 - Changed entries on "Fixed" section into "Fix ..." sentence form (v1.4.0 - latest)
 - Complete missing changelog (v1.4.0)
-- Adjust apple's changelog format into the current format (v1.9.2 - v1.9.3)
-
+- 
 -->
 
 <!-- sa-changelog-start -->
 
 ## [v1.9.3] - 2021-02-15
 
-***TODO***
+### Fixed
 
-Fixes bug that would make the extension crash if browser language set to Spanish.
+- Extension crashing on browsers with Spanish language (#1529)
 
 ## [v1.9.2] - 2021-02-13
 
-***TODO***
+### Fixed
 
-Bugfixes
+#### Addons
 
-    #1540 more-links linkifies invalid URLs. (prio-3)
-    #1541 Mute status is not loaded. (prio-3)
-    #1543 Language codes with uppercase letters don't load. (prio-4)
-    #1549 editor-stage-left partially hides the direction picker. (prio-4)
-    #1551 animated-thumb alerts that the thumbnail is too big, when in fact the server is down. (prio-3)
-    #1560 curator-link crashes on default locale. (prio-2)
-    #1567 comments-linebreaks leaves empty lines on replies to ST members' comments. (prio-4)
-    #1569 Scratch Addons still cannot be launched on non-English configuration. (prio-1)
+- Curator link: Addon crashes on default locale (#1560)
+- Display stage on left side: Direction picker partially hidden (#1549)
+- Linebreaks in comments: Empty lines left on replies to ST members' comments (#1567)
+- More links: Numbers and hyphens in non-IDN TLDs treated as links due to faulty regex (#1540)
+- Thumbnails setter: Addons warns thumbnail is too big when the server is down (#1551)
+
+#### Extension and Addon API
+
+- Muted extension shows badge on refresh (#1541)
+- Language codes with uppercase letters don't load (#1543)
+- Extension still crashing on browsers with languages other than Englsh (#1569)
 
 ## [v1.9.1] - 2021-02-09
 
@@ -52,7 +50,7 @@ NOTE: All updates from [v1.9.0] are pushed on this version.
 
 ### Fixed
 
-- Extension crashing on non-English configuration (#1529)
+- Extension crashing on browsers with languages other than Englsh (#1529)
 
 ## [v1.9.0] - 2021-02-08 [YANKED]
 
