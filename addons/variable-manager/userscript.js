@@ -72,7 +72,7 @@ export default async function ({ addon, global, console, msg }) {
 
       // add the content
       if (!document.querySelector("#var-manager")) contentArea.insertAdjacentElement("beforeend", manager);
-      reloadList();
+      fullReload();
     });
 
     soundTab.insertAdjacentElement("afterend", varTab);
@@ -93,8 +93,8 @@ export default async function ({ addon, global, console, msg }) {
       }
     });
 
-    vm.runtime.on("PROJECT_LOADED", async () => reloadList());
-    vm.runtime.on("TOOLBOX_EXTENSIONS_NEED_UPDATE", async () => reloadList());
+    vm.runtime.on("PROJECT_LOADED", () => fullReload());
+    vm.runtime.on("TOOLBOX_EXTENSIONS_NEED_UPDATE", () => fullReload());
     const oldStep = vm.runtime.constructor.prototype._step;
 
     vm.runtime.constructor.prototype._step = function (...args) {
@@ -104,7 +104,7 @@ export default async function ({ addon, global, console, msg }) {
 
     let preventUpdate = false;
 
-    function reloadList() {
+    function fullReload() {
       if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 3 || preventUpdate) return;
       console.log("full list reload");
       let locals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getEditingTarget().variables)));
