@@ -13,6 +13,16 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.10.0] - 2021-02-22
+
+- New addon: copy link to comment button [recommended]
+- New addon: auto-show editor extensions
+- Enhanced pause button addon: bug fixes and improvements
+- Website and editor dark modes bug fixes
+- Bug fix: addons with permission requirements not getting enabled the first time after permissions granted
+- Scratch Messaging: fix bug caused by asterisk after Scratch Team usernames
+- Record project video: fix bugs when leaving the editor during recording
+
 ## [v1.9.3] - 2021-02-15
 
 Fixes bug that would make the extension crash if browser language set to Spanish.
@@ -255,6 +265,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.10.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.10.0
 [v1.9.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.3
 [v1.9.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.2
 [v1.9.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.1
