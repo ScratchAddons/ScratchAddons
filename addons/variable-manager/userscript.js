@@ -107,8 +107,8 @@ export default async function ({ addon, global, console, msg }) {
     function fullReload() {
       if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 3 || preventUpdate) return;
       console.log("full list reload");
-      let locals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getEditingTarget().variables)));
-      let globals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getTargetForStage().variables)));
+      let locals = Object.values(vm.runtime.getEditingTarget().variables);
+      let globals = Object.values(vm.runtime.getTargetForStage().variables);
 
       let variables = [];
 
