@@ -105,55 +105,29 @@ export default async function ({ addon, global, console, msg }) {
 
     let preventUpdate = false;
 
-    function fullReload() {
-      if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 3 || preventUpdate) return;
-      console.log("full list reload");
-      let locals = Object.values(vm.runtime.getEditingTarget().variables);
-      let globals = Object.values(vm.runtime.getTargetForStage().variables);
-
-      let variables = [];
-
-      while (localList.hasChildNodes()) {
-        // alternative to innerHTML = ""
-        localList.removeChild(localList.firstChild);
+    class Variable {
+      constructor (scratchVariable) {
+        this.scratchVariable = scratchVariable;
+        this.buildDOM();
       }
 
-      while (globalList.hasChildNodes()) {
-        // alternative to innerHTML = ""
-        globalList.removeChild(globalList.firstChild);
-      }
-
-      if (!vm.runtime.getEditingTarget().isStage) {
-        // the stage can't have local variables, so by doing this we hide the local variable list and there are no duplicates
-        locals.forEach((i) => {
-          if (i.type == "" || i.type == "list") {
-            i.varType = "local";
-            i.targetID = vm.runtime.getEditingTarget().id;
-            variables.push(i);
-          }
-        });
-      }
-
-      globals.forEach((i) => {
-        if (i.type == "" || i.type == "list") {
-          i.varType = "global";
-          i.targetID = vm.runtime.getTargetForStage().id;
-          variables.push(i);
+      updateValue () {
+        // TODO do not update if no change
+        // TODO check visibility
+        if (this.scratchVariable.type == "list") {
+          this.input.value = this.scratchVariable.value.join("\n");
+        } else {
+          this.input.value = this.scratchVariable.value;
         }
-      });
+      }
 
-      localHeading.style.display = "block";
-      globalHeading.style.display = "block";
+      buildDOM () {
+        const row = document.createElement("tr");
+        this.row = row;
+        const label = document.createElement("td");
+        label.innerText = this.scratchVariable.name;
 
-      if (variables.filter((v) => v.varType == "local").length == 0) localHeading.style.display = "none";
-      if (variables.filter((v) => v.varType == "global").length == 0) globalHeading.style.display = "none";
-
-      variables.forEach((i) => {
-        let row = document.createElement("tr");
-        let label = document.createElement("td");
-        label.innerText = i.name;
-
-        let value = document.createElement("td");
+        const value = document.createElement("td");
         value.className = "sa-var-manager-value";
 
         function inputResize() {
@@ -161,27 +135,27 @@ export default async function ({ addon, global, console, msg }) {
           input.style.height = input.scrollHeight + "px";
         }
 
-        if (i.type == "") var input = document.createElement("input"); // scratch does not give a type if its not a list
-        if (i.type == "list") var input = document.createElement("textarea");
-
-        input.setAttribute("data-var-id", i.id);
-
-        if (i.type == "list") {
-          input.value = i.value.join("\n");
-
-          input.setAttribute("style", "height:" + input.scrollHeight + "px;overflow-y:hidden;");
-          input.addEventListener("input", inputResize, false);
+        let input;
+        if (this.scratchVariable.type === 'list') {
+          input = document.createElement("textarea");
         } else {
-          input.value = i.value;
+          input = document.createElement("input");
+        }
+        this.input = input;
+
+        this.updateValue();
+        if (this.scratchVariable.type === 'list') {
+          this.input.setAttribute("style", "height:" + this.input.scrollHeight + "px;overflow-y:hidden;");
+          this.input.addEventListener("input", inputResize, false);
         }
 
         input.addEventListener("keydown", (e) => {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             if (i.type == "list") {
-              vm.setVariableValue(i.targetID, i.id, input.value.split("\n"));
+              vm.setVariableValue(this.scratchVariable.targetID, this.scratchVariable.id, input.value.split("\n"));
             } else {
-              vm.setVariableValue(i.targetID, i.id, input.value);
+              vm.setVariableValue(this.scratchVariable.targetID, this.scratchVariable.id, input.value);
             }
             input.blur();
           }
@@ -200,43 +174,45 @@ export default async function ({ addon, global, console, msg }) {
         value.appendChild(input);
         row.appendChild(label);
         row.appendChild(value);
-        if (i.varType == "local") localList.appendChild(row);
-        if (i.varType == "global") globalList.appendChild(row);
+      }
+    }
 
-        if (i.type == "list") inputResize();
-      });
+    let localVariables = [];
+    let globalVariables = [];
+
+    function fullReload() {
+      if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 3 || preventUpdate) return;
+      console.log("full list reload");
+
+      localVariables = Object.values(vm.runtime.getEditingTarget().variables).map(i => new Variable(i));
+      globalVariables = Object.values(vm.runtime.getTargetForStage().variables).map(i => new Variable(i));
+
+      localHeading.style.display = localVariables.length === 0 ? 'none' : '';
+      globalHeading.style.display = globalVariables.length === 0 ? 'none' : '';
+
+      while (localList.firstChild) {
+        localList.removeChild(localList.firstChild);
+      }
+      while (globalList.firstChild) {
+        globalList.removeChild(globalList.firstChild);
+      }
+
+      for (const variable of localVariables) {
+        localList.appendChild(variable.row);
+      }
+      for (const variable of globalVariables) {
+        globalList.appendChild(variable.row);
+      }
     }
 
     function quickReload() {
       if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 3 || preventUpdate) return;
-      let locals = Object.values(vm.runtime.getEditingTarget().variables);
-      let globals = Object.values(vm.runtime.getTargetForStage().variables);
-      for (var i = 0; i < locals.length; i++) {
-        let input = document.querySelector(`[data-var-id*="${locals[i].id}"]`);
-        if (input) {
-          if (checkVisible(input)) {
-            // no need to update the value if you can't see it
-            if (locals[i].type == "list") {
-              if (input.value !== locals[i].value.join("\n")) input.value = locals[i].value.join("\n");
-            } else {
-              if (input.value !== locals[i].value) input.value = locals[i].value;
-            }
-          }
-        }
 
-        for (var i = 0; i < globals.length; i++) {
-          let input = document.querySelector(`[data-var-id*="${globals[i].id}"]`);
-          if (input) {
-            if (checkVisible(input)) {
-              // no need to update the value if you can't see it
-              if (globals[i].type == "list") {
-                if (input.value !== globals[i].value.join("\n")) input.value = globals[i].value.join("\n");
-              } else {
-                if (input.value !== globals[i].value) input.value = globals[i].value;
-              }
-            }
-          }
-        }
+      for (const variable of localVariables) {
+        variable.updateValue();
+      }
+      for (const variable of globalVariables) {
+        variable.updateValue();
       }
     }
   }
