@@ -105,143 +105,138 @@ export default async function ({ addon, global, console, msg }) {
     let preventUpdate = false;
 
     function reloadList() {
-      if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
-        if (!preventUpdate) {
-          console.log("full list reload");
-          let locals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getEditingTarget().variables)));
-          let globals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getTargetForStage().variables)));
+      if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 3 || preventUpdate) return;
+      console.log("full list reload");
+      let locals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getEditingTarget().variables)));
+      let globals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getTargetForStage().variables)));
 
-          let variables = [];
+      let variables = [];
 
-          while (localList.hasChildNodes()) {
-            // alternative to innerHTML = ""
-            localList.removeChild(localList.firstChild);
-          }
-
-          while (globalList.hasChildNodes()) {
-            // alternative to innerHTML = ""
-            globalList.removeChild(globalList.firstChild);
-          }
-
-          if (!vm.runtime.getEditingTarget().isStage) {
-            // the stage can't have local variables, so by doing this we hide the local variable list and there are no duplicates
-            locals.forEach((i) => {
-              if (i.type == "" || i.type == "list") {
-                i.varType = "local";
-                i.targetID = vm.runtime.getEditingTarget().id;
-                variables.push(i);
-              }
-            });
-          }
-
-          globals.forEach((i) => {
-            if (i.type == "" || i.type == "list") {
-              i.varType = "global";
-              i.targetID = vm.runtime.getTargetForStage().id;
-              variables.push(i);
-            }
-          });
-
-          localHeading.style.display = "block";
-          globalHeading.style.display = "block";
-
-          if (variables.filter((v) => v.varType == "local").length == 0) localHeading.style.display = "none";
-          if (variables.filter((v) => v.varType == "global").length == 0) globalHeading.style.display = "none";
-
-          variables.forEach((i) => {
-            let row = document.createElement("tr");
-            let label = document.createElement("td");
-            label.innerText = i.name;
-
-            let value = document.createElement("td");
-            value.className = "sa-var-manager-value";
-
-            function inputResize() {
-              input.style.height = "auto";
-              input.style.height = input.scrollHeight + "px";
-            }
-
-            if (i.type == "") var input = document.createElement("input"); // scratch does not give a type if its not a list
-            if (i.type == "list") var input = document.createElement("textarea");
-
-            input.setAttribute("data-var-id", i.id);
-
-            if (i.type == "list") {
-              input.value = i.value.join("\n");
-
-              input.setAttribute("style", "height:" + input.scrollHeight + "px;overflow-y:hidden;");
-              input.addEventListener("input", inputResize, false);
-            } else {
-              input.value = i.value;
-            }
-
-            input.addEventListener("keydown", (e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                if (i.type == "list") {
-                  vm.setVariableValue(i.targetID, i.id, input.value.split("\n"));
-                } else {
-                  vm.setVariableValue(i.targetID, i.id, input.value);
-                }
-                input.blur();
-              }
-            });
-
-            input.addEventListener("focus", (e) => {
-              preventUpdate = true;
-              manager.classList.add("freeze");
-            });
-
-            input.addEventListener("blur", (e) => {
-              preventUpdate = false;
-              manager.classList.remove("freeze");
-            });
-
-            value.appendChild(input);
-            row.appendChild(label);
-            row.appendChild(value);
-            if (i.varType == "local") localList.appendChild(row);
-            if (i.varType == "global") globalList.appendChild(row);
-
-            if (i.type == "list") inputResize();
-          });
-        }
+      while (localList.hasChildNodes()) {
+        // alternative to innerHTML = ""
+        localList.removeChild(localList.firstChild);
       }
+
+      while (globalList.hasChildNodes()) {
+        // alternative to innerHTML = ""
+        globalList.removeChild(globalList.firstChild);
+      }
+
+      if (!vm.runtime.getEditingTarget().isStage) {
+        // the stage can't have local variables, so by doing this we hide the local variable list and there are no duplicates
+        locals.forEach((i) => {
+          if (i.type == "" || i.type == "list") {
+            i.varType = "local";
+            i.targetID = vm.runtime.getEditingTarget().id;
+            variables.push(i);
+          }
+        });
+      }
+
+      globals.forEach((i) => {
+        if (i.type == "" || i.type == "list") {
+          i.varType = "global";
+          i.targetID = vm.runtime.getTargetForStage().id;
+          variables.push(i);
+        }
+      });
+
+      localHeading.style.display = "block";
+      globalHeading.style.display = "block";
+
+      if (variables.filter((v) => v.varType == "local").length == 0) localHeading.style.display = "none";
+      if (variables.filter((v) => v.varType == "global").length == 0) globalHeading.style.display = "none";
+
+      variables.forEach((i) => {
+        let row = document.createElement("tr");
+        let label = document.createElement("td");
+        label.innerText = i.name;
+
+        let value = document.createElement("td");
+        value.className = "sa-var-manager-value";
+
+        function inputResize() {
+          input.style.height = "auto";
+          input.style.height = input.scrollHeight + "px";
+        }
+
+        if (i.type == "") var input = document.createElement("input"); // scratch does not give a type if its not a list
+        if (i.type == "list") var input = document.createElement("textarea");
+
+        input.setAttribute("data-var-id", i.id);
+
+        if (i.type == "list") {
+          input.value = i.value.join("\n");
+
+          input.setAttribute("style", "height:" + input.scrollHeight + "px;overflow-y:hidden;");
+          input.addEventListener("input", inputResize, false);
+        } else {
+          input.value = i.value;
+        }
+
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            if (i.type == "list") {
+              vm.setVariableValue(i.targetID, i.id, input.value.split("\n"));
+            } else {
+              vm.setVariableValue(i.targetID, i.id, input.value);
+            }
+            input.blur();
+          }
+        });
+
+        input.addEventListener("focus", (e) => {
+          preventUpdate = true;
+          manager.classList.add("freeze");
+        });
+
+        input.addEventListener("blur", (e) => {
+          preventUpdate = false;
+          manager.classList.remove("freeze");
+        });
+
+        value.appendChild(input);
+        row.appendChild(label);
+        row.appendChild(value);
+        if (i.varType == "local") localList.appendChild(row);
+        if (i.varType == "global") globalList.appendChild(row);
+
+        if (i.type == "list") inputResize();
+      });
     }
     let oldLocals = [];
     let oldGlobals = [];
     function quickReload() {
-      // this is a lot faster than rerendering the whole list. we know that the actual variables haven't changed so just update the values
-      if (!preventUpdate && addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
-        let locals = Object.values(vm.runtime.getEditingTarget().variables);
-        let globals = Object.values(vm.runtime.getTargetForStage().variables);
-        if (locals !== oldLocals && globals !== oldGlobals) {
-          oldLocals = locals;
-          oldGlobals = globals;
-          for (var i = 0; i < locals.length; i++) {
-            let input = document.querySelector(`[data-var-id*="${locals[i].id}"]`);
-            if (input) {
-              if (checkVisible(input)) {
-                // no need to update the value if you can't see it
-                if (locals[i].type == "list") {
-                  if (input.value !== locals[i].value.join("\n")) input.value = locals[i].value.join("\n");
-                } else {
-                  if (input.value !== locals[i].value) input.value = locals[i].value;
-                }
+      if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 3 || preventUpdate) return;
+      let locals = Object.values(vm.runtime.getEditingTarget().variables);
+      let globals = Object.values(vm.runtime.getTargetForStage().variables);
+      if (locals !== oldLocals && globals !== oldGlobals) {
+        oldLocals = locals;
+        oldGlobals = globals;
+        for (var i = 0; i < locals.length; i++) {
+          let input = document.querySelector(`[data-var-id*="${locals[i].id}"]`);
+          if (input) {
+            if (checkVisible(input)) {
+              // no need to update the value if you can't see it
+              if (locals[i].type == "list") {
+                if (input.value !== locals[i].value.join("\n")) input.value = locals[i].value.join("\n");
+              } else {
+                if (input.value !== locals[i].value) input.value = locals[i].value;
               }
             }
           }
+        }
 
-          for (var i = 0; i < globals.length; i++) {
-            let input = document.querySelector(`[data-var-id*="${globals[i].id}"]`);
-            if (input) {
-              if (checkVisible(input)) {
-                // no need to update the value if you can't see it
-                if (globals[i].type == "list") {
-                  if (input.value !== globals[i].value.join("\n")) input.value = globals[i].value.join("\n");
-                } else {
-                  if (input.value !== globals[i].value) input.value = globals[i].value;
-                }
+        for (var i = 0; i < globals.length; i++) {
+          let input = document.querySelector(`[data-var-id*="${globals[i].id}"]`);
+          if (input) {
+            if (checkVisible(input)) {
+              // no need to update the value if you can't see it
+              if (globals[i].type == "list") {
+                if (input.value !== globals[i].value.join("\n")) input.value = globals[i].value.join("\n");
+              } else {
+                if (input.value !== globals[i].value) input.value = globals[i].value;
               }
             }
           }
