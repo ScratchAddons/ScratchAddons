@@ -205,25 +205,20 @@ export default async function ({ addon, global, console, msg }) {
         if (i.type == "list") inputResize();
       });
     }
-    let oldLocals = [];
-    let oldGlobals = [];
+
     function quickReload() {
       if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 3 || preventUpdate) return;
       let locals = Object.values(vm.runtime.getEditingTarget().variables);
       let globals = Object.values(vm.runtime.getTargetForStage().variables);
-      if (locals !== oldLocals && globals !== oldGlobals) {
-        oldLocals = locals;
-        oldGlobals = globals;
-        for (var i = 0; i < locals.length; i++) {
-          let input = document.querySelector(`[data-var-id*="${locals[i].id}"]`);
-          if (input) {
-            if (checkVisible(input)) {
-              // no need to update the value if you can't see it
-              if (locals[i].type == "list") {
-                if (input.value !== locals[i].value.join("\n")) input.value = locals[i].value.join("\n");
-              } else {
-                if (input.value !== locals[i].value) input.value = locals[i].value;
-              }
+      for (var i = 0; i < locals.length; i++) {
+        let input = document.querySelector(`[data-var-id*="${locals[i].id}"]`);
+        if (input) {
+          if (checkVisible(input)) {
+            // no need to update the value if you can't see it
+            if (locals[i].type == "list") {
+              if (input.value !== locals[i].value.join("\n")) input.value = locals[i].value.join("\n");
+            } else {
+              if (input.value !== locals[i].value) input.value = locals[i].value;
             }
           }
         }
