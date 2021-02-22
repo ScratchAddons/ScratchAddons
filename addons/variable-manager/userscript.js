@@ -106,8 +106,9 @@ export default async function ({ addon, global, console, msg }) {
     let preventUpdate = false;
 
     class Variable {
-      constructor (scratchVariable) {
+      constructor (scratchVariable, target) {
         this.scratchVariable = scratchVariable;
+        this.target = target;
         this.buildDOM();
       }
 
@@ -152,10 +153,10 @@ export default async function ({ addon, global, console, msg }) {
         input.addEventListener("keydown", (e) => {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            if (i.type == "list") {
-              vm.setVariableValue(this.scratchVariable.targetID, this.scratchVariable.id, input.value.split("\n"));
+            if (this.scratchVariable.type == "list") {
+              vm.setVariableValue(this.target.id, this.scratchVariable.id, input.value.split("\n"));
             } else {
-              vm.setVariableValue(this.scratchVariable.targetID, this.scratchVariable.id, input.value);
+              vm.setVariableValue(this.target.id, this.scratchVariable.id, input.value);
             }
             input.blur();
           }
@@ -184,8 +185,10 @@ export default async function ({ addon, global, console, msg }) {
       if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 3 || preventUpdate) return;
       console.log("full list reload");
 
-      localVariables = Object.values(vm.runtime.getEditingTarget().variables).map(i => new Variable(i));
-      globalVariables = Object.values(vm.runtime.getTargetForStage().variables).map(i => new Variable(i));
+      const editingTarget = vm.runtime.getEditingTarget();
+      const stage = vm.runtime.getTargetForStage();
+      localVariables = Object.values(editingTarget.variables).map(i => new Variable(i, editingTarget));
+      globalVariables = Object.values(stage.variables).map(i => new Variable(i, stage));
 
       localHeading.style.display = localVariables.length === 0 ? 'none' : '';
       globalHeading.style.display = globalVariables.length === 0 ? 'none' : '';
