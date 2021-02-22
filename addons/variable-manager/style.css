@@ -1,6 +1,9 @@
 .sa-var-manager {
   display: block;
   padding: 18px;
+  /* weird hack to fix scrolling??? */
+  height: 50px;
+  overflow-y: auto;
 }
 
 .sa-var-manager.freeze > * > * > * > * > * {
