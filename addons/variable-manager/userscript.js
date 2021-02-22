@@ -28,7 +28,7 @@ export default async function ({ addon, global, console, msg }) {
     let localHeading = document.createElement("span");
     let localList = document.createElement("table");
     localHeading.className = "sa-var-manager-heading";
-    localHeading.innerText = "variables for this sprite"; // TODO: msg()
+    localHeading.innerText = msg("for-this-sprite");
     localVars.appendChild(localHeading);
     localVars.appendChild(localList);
 
@@ -36,7 +36,7 @@ export default async function ({ addon, global, console, msg }) {
     let globalHeading = document.createElement("span");
     let globalList = document.createElement("table");
     globalHeading.className = "sa-var-manager-heading";
-    globalHeading.innerText = "variables for all sprites"; // TODO: msg()
+    globalHeading.innerText = msg("for-all-sprites");
     globalVars.appendChild(globalHeading);
     globalVars.appendChild(globalList);
 
