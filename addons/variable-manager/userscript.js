@@ -95,11 +95,12 @@ export default async function ({ addon, global, console, msg }) {
 
     vm.runtime.on("PROJECT_LOADED", () => fullReload());
     vm.runtime.on("TOOLBOX_EXTENSIONS_NEED_UPDATE", () => fullReload());
-    const oldStep = vm.runtime.constructor.prototype._step;
 
+    const oldStep = vm.runtime.constructor.prototype._step;
     vm.runtime.constructor.prototype._step = function (...args) {
+      const ret = oldStep.call(this, ...args);
       quickReload();
-      return oldStep.call(this, ...args);
+      return ret;
     };
 
     let preventUpdate = false;
