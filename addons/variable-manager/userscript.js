@@ -16,232 +16,231 @@ export default async function ({ addon, global, console, msg }) {
     let tabs = await addon.tab.waitForElement("[class^='react-tabs_react-tabs__tab-list']", {
       markAsSeen: true,
     });
-    if (tabs) {
-      let soundTab = tabs.children[2];
-      let contentArea = document.querySelector("." + addon.tab.scratchClass("gui_tabs"));
 
-      let manager = document.createElement("div");
-      manager.classList.add(addon.tab.scratchClass("asset-panel_wrapper"), "sa-var-manager");
-      manager.id = "var-manager";
+    let soundTab = tabs.children[2];
+    let contentArea = document.querySelector("." + addon.tab.scratchClass("gui_tabs"));
 
-      let localVars = document.createElement("div");
-      let localHeading = document.createElement("span");
-      let localList = document.createElement("table");
-      localHeading.className = "sa-var-manager-heading";
-      localHeading.innerText = "variables for this sprite"; // TODO: msg()
-      localVars.appendChild(localHeading);
-      localVars.appendChild(localList);
+    let manager = document.createElement("div");
+    manager.classList.add(addon.tab.scratchClass("asset-panel_wrapper"), "sa-var-manager");
+    manager.id = "var-manager";
 
-      let globalVars = document.createElement("div");
-      let globalHeading = document.createElement("span");
-      let globalList = document.createElement("table");
-      globalHeading.className = "sa-var-manager-heading";
-      globalHeading.innerText = "variables for all sprites"; // TODO: msg()
-      globalVars.appendChild(globalHeading);
-      globalVars.appendChild(globalList);
+    let localVars = document.createElement("div");
+    let localHeading = document.createElement("span");
+    let localList = document.createElement("table");
+    localHeading.className = "sa-var-manager-heading";
+    localHeading.innerText = "variables for this sprite"; // TODO: msg()
+    localVars.appendChild(localHeading);
+    localVars.appendChild(localList);
 
-      manager.appendChild(localVars);
-      manager.appendChild(globalVars);
+    let globalVars = document.createElement("div");
+    let globalHeading = document.createElement("span");
+    let globalList = document.createElement("table");
+    globalHeading.className = "sa-var-manager-heading";
+    globalHeading.innerText = "variables for all sprites"; // TODO: msg()
+    globalVars.appendChild(globalHeading);
+    globalVars.appendChild(globalList);
 
-      let varTab = document.createElement("li");
+    manager.appendChild(localVars);
+    manager.appendChild(globalVars);
 
-      varTab.classList.add(addon.tab.scratchClass("react-tabs_react-tabs__tab"), addon.tab.scratchClass("gui_tab"));
-      varTab.id = "react-tabs-7";
-      if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
-        varTab.classList.add(
-          addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
-          addon.tab.scratchClass("gui_is-selected")
-        );
-      }
-      let varTabIcon = document.createElement("img");
-      varTabIcon.draggable = false;
-      varTabIcon.src = addon.self.dir + "/icon.svg";
+    let varTab = document.createElement("li");
 
-      let varTabText = document.createElement("span");
-      varTabText.innerText = "Variables";
+    varTab.classList.add(addon.tab.scratchClass("react-tabs_react-tabs__tab"), addon.tab.scratchClass("gui_tab"));
+    varTab.id = "react-tabs-7";
+    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
+      varTab.classList.add(
+        addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
+        addon.tab.scratchClass("gui_is-selected")
+      );
+    }
+    let varTabIcon = document.createElement("img");
+    varTabIcon.draggable = false;
+    varTabIcon.src = addon.self.dir + "/icon.svg";
 
-      varTab.appendChild(varTabIcon);
-      varTab.appendChild(varTabText);
+    let varTabText = document.createElement("span");
+    varTabText.innerText = "Variables";
 
-      varTab.addEventListener("click", (e) => {
-        addon.tab.redux.dispatch({ type: "scratch-gui/navigation/ACTIVATE_TAB", activeTabIndex: 3 });
-        varTab.classList.add(
-          addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
-          addon.tab.scratchClass("gui_is-selected")
-        );
+    varTab.appendChild(varTabIcon);
+    varTab.appendChild(varTabText);
 
-        // add the content
-        if (!document.querySelector("#var-manager")) contentArea.insertAdjacentElement("beforeend", manager);
-        reloadList();
-      });
+    varTab.addEventListener("click", (e) => {
+      addon.tab.redux.dispatch({ type: "scratch-gui/navigation/ACTIVATE_TAB", activeTabIndex: 3 });
+      varTab.classList.add(
+        addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
+        addon.tab.scratchClass("gui_is-selected")
+      );
 
-      soundTab.insertAdjacentElement("afterend", varTab);
+      // add the content
+      if (!document.querySelector("#var-manager")) contentArea.insertAdjacentElement("beforeend", manager);
+      reloadList();
+    });
 
-      addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
-        if (detail.action.type == "scratch-gui/navigation/ACTIVATE_TAB") {
-          if (detail.action.activeTabIndex !== 3) {
-            // is it a different tab than tab 3? if so
-            // remove the active class
-            varTab.classList.remove(
-              addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
-              addon.tab.scratchClass("gui_is-selected")
-            );
+    soundTab.insertAdjacentElement("afterend", varTab);
 
-            // remove the content
-            if (document.querySelector("#var-manager")) document.querySelector("#var-manager").remove();
-          }
+    addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+      if (detail.action.type == "scratch-gui/navigation/ACTIVATE_TAB") {
+        if (detail.action.activeTabIndex !== 3) {
+          // is it a different tab than tab 3? if so
+          // remove the active class
+          varTab.classList.remove(
+            addon.tab.scratchClass("react-tabs_react-tabs__tab--selected"),
+            addon.tab.scratchClass("gui_is-selected")
+          );
+
+          // remove the content
+          if (document.querySelector("#var-manager")) document.querySelector("#var-manager").remove();
         }
-      });
+      }
+    });
 
-      vm.runtime.on("PROJECT_LOADED", async () => reloadList());
-      vm.runtime.on("TOOLBOX_EXTENSIONS_NEED_UPDATE", async () => reloadList());
-      const oldStep = vm.runtime.constructor.prototype._step;
+    vm.runtime.on("PROJECT_LOADED", async () => reloadList());
+    vm.runtime.on("TOOLBOX_EXTENSIONS_NEED_UPDATE", async () => reloadList());
+    const oldStep = vm.runtime.constructor.prototype._step;
 
-      vm.runtime.constructor.prototype._step = function (...args) {
-        quickReload();
-        return oldStep.call(this, ...args);
-      };
+    vm.runtime.constructor.prototype._step = function (...args) {
+      quickReload();
+      return oldStep.call(this, ...args);
+    };
 
-      let preventUpdate = false;
+    let preventUpdate = false;
 
-      function reloadList() {
-        if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
-          if (!preventUpdate) {
-            console.log("full list reload");
-            let locals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getEditingTarget().variables)));
-            let globals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getTargetForStage().variables)));
+    function reloadList() {
+      if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
+        if (!preventUpdate) {
+          console.log("full list reload");
+          let locals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getEditingTarget().variables)));
+          let globals = JSON.parse(JSON.stringify(Object.values(vm.runtime.getTargetForStage().variables)));
 
-            let variables = [];
+          let variables = [];
 
-            while (localList.hasChildNodes()) {
-              // alternative to innerHTML = ""
-              localList.removeChild(localList.firstChild);
-            }
+          while (localList.hasChildNodes()) {
+            // alternative to innerHTML = ""
+            localList.removeChild(localList.firstChild);
+          }
 
-            while (globalList.hasChildNodes()) {
-              // alternative to innerHTML = ""
-              globalList.removeChild(globalList.firstChild);
-            }
+          while (globalList.hasChildNodes()) {
+            // alternative to innerHTML = ""
+            globalList.removeChild(globalList.firstChild);
+          }
 
-            if (!vm.runtime.getEditingTarget().isStage) {
-              // the stage can't have local variables, so by doing this we hide the local variable list and there are no duplicates
-              locals.forEach((i) => {
-                if (i.type == "" || i.type == "list") {
-                  i.varType = "local";
-                  i.targetID = vm.runtime.getEditingTarget().id;
-                  variables.push(i);
-                }
-              });
-            }
-
-            globals.forEach((i) => {
+          if (!vm.runtime.getEditingTarget().isStage) {
+            // the stage can't have local variables, so by doing this we hide the local variable list and there are no duplicates
+            locals.forEach((i) => {
               if (i.type == "" || i.type == "list") {
-                i.varType = "global";
-                i.targetID = vm.runtime.getTargetForStage().id;
+                i.varType = "local";
+                i.targetID = vm.runtime.getEditingTarget().id;
                 variables.push(i);
               }
             });
-
-            localHeading.style.display = "block";
-            globalHeading.style.display = "block";
-
-            if (variables.filter((v) => v.varType == "local").length == 0) localHeading.style.display = "none";
-            if (variables.filter((v) => v.varType == "global").length == 0) globalHeading.style.display = "none";
-
-            variables.forEach((i) => {
-              let row = document.createElement("tr");
-              let label = document.createElement("td");
-              label.innerText = i.name;
-
-              let value = document.createElement("td");
-              value.className = "sa-var-manager-value";
-
-              function inputResize() {
-                input.style.height = "auto";
-                input.style.height = input.scrollHeight + "px";
-              }
-
-              if (i.type == "") var input = document.createElement("input"); // scratch does not give a type if its not a list
-              if (i.type == "list") var input = document.createElement("textarea");
-
-              input.setAttribute("data-var-id", i.id);
-
-              if (i.type == "list") {
-                input.value = i.value.join("\n");
-
-                input.setAttribute("style", "height:" + input.scrollHeight + "px;overflow-y:hidden;");
-                input.addEventListener("input", inputResize, false);
-              } else {
-                input.value = i.value;
-              }
-
-              input.addEventListener("keydown", (e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  if (i.type == "list") {
-                    vm.setVariableValue(i.targetID, i.id, input.value.split("\n"));
-                  } else {
-                    vm.setVariableValue(i.targetID, i.id, input.value);
-                  }
-                  input.blur();
-                }
-              });
-
-              input.addEventListener("focus", (e) => {
-                preventUpdate = true;
-                manager.classList.add("freeze");
-              });
-
-              input.addEventListener("blur", (e) => {
-                preventUpdate = false;
-                manager.classList.remove("freeze");
-              });
-
-              value.appendChild(input);
-              row.appendChild(label);
-              row.appendChild(value);
-              if (i.varType == "local") localList.appendChild(row);
-              if (i.varType == "global") globalList.appendChild(row);
-
-              if (i.type == "list") inputResize();
-            });
           }
+
+          globals.forEach((i) => {
+            if (i.type == "" || i.type == "list") {
+              i.varType = "global";
+              i.targetID = vm.runtime.getTargetForStage().id;
+              variables.push(i);
+            }
+          });
+
+          localHeading.style.display = "block";
+          globalHeading.style.display = "block";
+
+          if (variables.filter((v) => v.varType == "local").length == 0) localHeading.style.display = "none";
+          if (variables.filter((v) => v.varType == "global").length == 0) globalHeading.style.display = "none";
+
+          variables.forEach((i) => {
+            let row = document.createElement("tr");
+            let label = document.createElement("td");
+            label.innerText = i.name;
+
+            let value = document.createElement("td");
+            value.className = "sa-var-manager-value";
+
+            function inputResize() {
+              input.style.height = "auto";
+              input.style.height = input.scrollHeight + "px";
+            }
+
+            if (i.type == "") var input = document.createElement("input"); // scratch does not give a type if its not a list
+            if (i.type == "list") var input = document.createElement("textarea");
+
+            input.setAttribute("data-var-id", i.id);
+
+            if (i.type == "list") {
+              input.value = i.value.join("\n");
+
+              input.setAttribute("style", "height:" + input.scrollHeight + "px;overflow-y:hidden;");
+              input.addEventListener("input", inputResize, false);
+            } else {
+              input.value = i.value;
+            }
+
+            input.addEventListener("keydown", (e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                if (i.type == "list") {
+                  vm.setVariableValue(i.targetID, i.id, input.value.split("\n"));
+                } else {
+                  vm.setVariableValue(i.targetID, i.id, input.value);
+                }
+                input.blur();
+              }
+            });
+
+            input.addEventListener("focus", (e) => {
+              preventUpdate = true;
+              manager.classList.add("freeze");
+            });
+
+            input.addEventListener("blur", (e) => {
+              preventUpdate = false;
+              manager.classList.remove("freeze");
+            });
+
+            value.appendChild(input);
+            row.appendChild(label);
+            row.appendChild(value);
+            if (i.varType == "local") localList.appendChild(row);
+            if (i.varType == "global") globalList.appendChild(row);
+
+            if (i.type == "list") inputResize();
+          });
         }
       }
-      let oldLocals = [];
-      let oldGlobals = [];
-      function quickReload() {
-        // this is a lot faster than rerendering the whole list. we know that the actual variables haven't changed so just update the values
-        if (!preventUpdate && addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
-          let locals = Object.values(vm.runtime.getEditingTarget().variables);
-          let globals = Object.values(vm.runtime.getTargetForStage().variables);
-          if (locals !== oldLocals && globals !== oldGlobals) {
-            oldLocals = locals;
-            oldGlobals = globals;
-            for (var i = 0; i < locals.length; i++) {
-              let input = document.querySelector(`[data-var-id*="${locals[i].id}"]`);
-              if (input) {
-                if (checkVisible(input)) {
-                  // no need to update the value if you can't see it
-                  if (locals[i].type == "list") {
-                    if (input.value !== locals[i].value.join("\n")) input.value = locals[i].value.join("\n");
-                  } else {
-                    if (input.value !== locals[i].value) input.value = locals[i].value;
-                  }
+    }
+    let oldLocals = [];
+    let oldGlobals = [];
+    function quickReload() {
+      // this is a lot faster than rerendering the whole list. we know that the actual variables haven't changed so just update the values
+      if (!preventUpdate && addon.tab.redux.state.scratchGui.editorTab.activeTabIndex == 3) {
+        let locals = Object.values(vm.runtime.getEditingTarget().variables);
+        let globals = Object.values(vm.runtime.getTargetForStage().variables);
+        if (locals !== oldLocals && globals !== oldGlobals) {
+          oldLocals = locals;
+          oldGlobals = globals;
+          for (var i = 0; i < locals.length; i++) {
+            let input = document.querySelector(`[data-var-id*="${locals[i].id}"]`);
+            if (input) {
+              if (checkVisible(input)) {
+                // no need to update the value if you can't see it
+                if (locals[i].type == "list") {
+                  if (input.value !== locals[i].value.join("\n")) input.value = locals[i].value.join("\n");
+                } else {
+                  if (input.value !== locals[i].value) input.value = locals[i].value;
                 }
               }
             }
+          }
 
-            for (var i = 0; i < globals.length; i++) {
-              let input = document.querySelector(`[data-var-id*="${globals[i].id}"]`);
-              if (input) {
-                if (checkVisible(input)) {
-                  // no need to update the value if you can't see it
-                  if (globals[i].type == "list") {
-                    if (input.value !== globals[i].value.join("\n")) input.value = globals[i].value.join("\n");
-                  } else {
-                    if (input.value !== globals[i].value) input.value = globals[i].value;
-                  }
+          for (var i = 0; i < globals.length; i++) {
+            let input = document.querySelector(`[data-var-id*="${globals[i].id}"]`);
+            if (input) {
+              if (checkVisible(input)) {
+                // no need to update the value if you can't see it
+                if (globals[i].type == "list") {
+                  if (input.value !== globals[i].value.join("\n")) input.value = globals[i].value.join("\n");
+                } else {
+                  if (input.value !== globals[i].value) input.value = globals[i].value;
                 }
               }
             }
