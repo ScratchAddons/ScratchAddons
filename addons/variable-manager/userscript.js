@@ -1,16 +1,7 @@
-function checkVisible(elm) {
-  // https://stackoverflow.com/a/5354536
-  var rect = elm.getBoundingClientRect();
-  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-  return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
-}
-
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
   window.vm = vm; // for debugging if i forget to commehnt this out plz yel at me thanks
 
-  /*   let globals = vm.runtime.getTargetForStage().variables
-    let local = vm.runtime.getEditingTarget().variables */
   addon.tab.redux.initialize();
   while (true) {
     let tabs = await addon.tab.waitForElement("[class^='react-tabs_react-tabs__tab-list']", {
