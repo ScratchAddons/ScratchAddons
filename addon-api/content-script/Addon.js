@@ -13,6 +13,7 @@ export default class UserscriptAddon extends Addon {
     this.__path = document.getElementById("scratch-addons").getAttribute("data-path");
     this.tab = new Tab(info);
     this.self.disabled = false;
+    this.self.late = info.late;
 
     addEventListener("message", (event) => {
       // let addons = JSON.parse(document.querySelector("#scratch-addons").getAttribute("data-userscripts"));

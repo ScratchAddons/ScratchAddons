@@ -113,13 +113,14 @@ function setCssVariables(addonSettings) {
   }
 }
 
-function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, userstyleUrls, themes }) {
+function onHeadAvailable({ globalState, l10njson, allAddons, addonsWithUserscripts, userstyleUrls, themes }) {
   setCssVariables(globalState.addonSettings);
   injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate: false });
 
   const template = document.createElement("template");
   template.id = "scratch-addons";
   template.setAttribute("data-path", chrome.runtime.getURL(""));
+  template.setAttribute("data-alladdons", JSON.stringify(allAddons));
   template.setAttribute("data-userscripts", JSON.stringify(addonsWithUserscripts));
   template.setAttribute("data-global-state", JSON.stringify(globalState));
   template.setAttribute("data-l10njson", JSON.stringify(l10njson));

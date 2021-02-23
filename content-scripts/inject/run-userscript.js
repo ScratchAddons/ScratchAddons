@@ -1,7 +1,10 @@
 import Addon from "../../addon-api/content-script/Addon.js";
+const ranAddons = [];
 
-export default async function runAddonUserscripts({ addonId, scripts, traps }) {
-  const addonObj = new Addon({ id: addonId, traps });
+export default async function runAddonUserscripts({ addonId, scripts, traps }, { late = false } = {}) {
+  if (ranAddons.includes(addonId)) return;
+  ranAddons.push(addonId);
+  const addonObj = new Addon({ id: addonId, traps, late });
   const globalObj = Object.create(null);
   for (const scriptInfo of scripts) {
     const { url: scriptPath, runAtComplete } = scriptInfo;
@@ -29,7 +32,7 @@ export default async function runAddonUserscripts({ addonId, scripts, traps }) {
           scratchAddons.l10n.escaped(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders),
       });
     };
-    if (runAtComplete && document.readyState !== "complete") {
+    if (!late && runAtComplete && document.readyState !== "complete") {
       console.log(`Waiting for onload: ${addonId}`);
       window.addEventListener("load", () => loadUserscript(), { once: true });
     } else {

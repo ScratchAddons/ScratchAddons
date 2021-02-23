@@ -14,7 +14,8 @@ const getL10NURLs = () => {
   return returnValue;
 };
 
-const addons = JSON.parse(template.getAttribute("data-userscripts"));
+let addons = JSON.parse(template.getAttribute("data-userscripts"));
+const allAddons = JSON.parse(template.getAttribute("data-alladdons"));
 
 window.scratchAddons = {};
 scratchAddons.globalState = getGlobalState();
@@ -110,6 +111,23 @@ observer.observe(template, { attributes: true });
 for (const addon of addons) {
   if (addon.scripts.length) runAddonUserscripts(addon);
 }
+addEventListener("message", (event) => {
+  // Reset variable in the case that a new addon has been enabled/disabled.
+  addons = JSON.parse(template.getAttribute("data-userscripts"));
+  let addonEnabled = event.data.saAddonEnabled;
+  let addonDisabled = event.data.saAddonDisabled;
+  if (addonEnabled && !addons.find(a => a.addonId == addonEnabled)) {
+    let addon = allAddons.find(a => a.addonId == addonEnabled);
+    runAddonUserscripts(addon, { late: true });
+    addons.push(addon);
+    template.setAttribute("data-userscripts", JSON.stringify(addons));
+  }
+  if (addonDisabled) {
+    let addon = allAddons.find(a => a.addonId == addonDisabled);
+    addons.splice(addons.findIndex(a => a.addonId == addon.addonId), 1);
+    template.setAttribute("data-userscripts", JSON.stringify(addons));
+  }
+});
 
 function loadClasses() {
   scratchAddons.classNames.arr = [
