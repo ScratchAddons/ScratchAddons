@@ -60,8 +60,8 @@ export default async function ({ addon, global, console, msg }) {
       this.buildDOM();
     }
 
-    updateValue () {
-      if (!this.visible) return;
+    updateValue (force) {
+      if (!this.visible && !force) return;
       let newValue;
       if (this.scratchVariable.type == "list") {
         newValue = this.scratchVariable.value.join("\n");
@@ -111,7 +111,7 @@ export default async function ({ addon, global, console, msg }) {
       }
       this.input = input;
 
-      this.updateValue();
+      this.updateValue(true);
       if (this.scratchVariable.type === 'list') {
         this.input.addEventListener("input", () => this.resizeInputIfList(), false);
       }
