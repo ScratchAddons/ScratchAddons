@@ -50,12 +50,15 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     updateValue () {
-      // TODO do not update if no change
       // TODO check visibility
+      let newValue;
       if (this.scratchVariable.type == "list") {
-        this.input.value = this.scratchVariable.value.join("\n");
+        newValue = this.scratchVariable.value.join("\n");
       } else {
-        this.input.value = this.scratchVariable.value;
+        newValue = this.scratchVariable.value;
+      }
+      if (newValue !== this.input.value) {
+        this.input.value = newValue;
       }
     }
 
