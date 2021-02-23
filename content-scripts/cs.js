@@ -52,11 +52,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     injectUserstylesAndThemes({ themes: request.themesUpdated, isUpdate: true });
   } else if (request.newAddonState) {
     let addonId = request.newAddonState.addonId;
-    if (request.newAddonState.newState)
-      postMessage({ saAddonEnabled: addonId }, "*");
-    else
-      postMessage({ saAddonDisabled: addonId }, "*");
-
+    if (request.newAddonState.newState) postMessage({ saAddonEnabled: addonId }, "*");
+    else postMessage({ saAddonDisabled: addonId }, "*");
   }
 });
 chrome.runtime.sendMessage("ready");
