@@ -57,7 +57,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     } else {
       postMessage({ saAddonDisabled: addonId }, "*");
     }
-
   }
 });
 chrome.runtime.sendMessage("ready");
