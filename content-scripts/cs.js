@@ -239,8 +239,8 @@ const showBanner = () => {
   });
   const notifImage = Object.assign(document.createElement("img"), {
     alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/project-lovers.png"),
-    style: "height: 150px; border-radius: 5px",
+    src: chrome.runtime.getURL("/images/cs/copy-comment-link.png"),
+    style: "height: 120px; border-radius: 5px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -292,7 +292,14 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2"),
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo2", DOLLARS)).replace(
+      "$1",
+      Object.assign(document.createElement("a"), {
+        href: "https://scratchaddons.com/translate",
+        target: "_blank",
+        textContent: chrome.i18n.getMessage("helpTranslateScratchAddons"),
+      }).outerHTML
+    ),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
