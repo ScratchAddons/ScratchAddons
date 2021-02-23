@@ -4,5 +4,6 @@
   "folders/create-folder": "create folder",
   "folders/add-to-folder": "add to folder: {folder}",
   "folders/rename-folder": "rename folder",
+  "folders/remove-folder": "remove folder",
   "folders/new-name": "New name:"
 }

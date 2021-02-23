@@ -433,39 +433,60 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
 
-        const rename = () => {
-          const newName = prompt(msg("new-name"), data.folder);
-          if (newName !== null) {
-            if (component.props.dragType === "SPRITE") {
-              for (const target of vm.runtime.targets) {
-                if (target.isOriginal) {
-                  if (getFolderFromName(target.getName()) === data.folder) {
-                    vm.renameSprite(target.id, setFolderOfName(target.getName(), newName));
-                  }
+        const renameItems = (newName) => {
+          if (component.props.dragType === "SPRITE") {
+            for (const target of vm.runtime.targets) {
+              if (target.isOriginal) {
+                if (getFolderFromName(target.getName()) === data.folder) {
+                  vm.renameSprite(target.id, setFolderOfName(target.getName(), newName));
                 }
               }
-            } else if (component.props.dragType === "COSTUME") {
-              for (let i = 0; i < vm.editingTarget.sprite.costumes.length; i++) {
-                const costume = vm.editingTarget.sprite.costumes[i];
-                if (getFolderFromName(costume.name) === data.folder) {
-                  vm.renameCostume(i, setFolderOfName(costume.name, newName));
-                }
+            }
+          } else if (component.props.dragType === "COSTUME") {
+            for (let i = 0; i < vm.editingTarget.sprite.costumes.length; i++) {
+              const costume = vm.editingTarget.sprite.costumes[i];
+              if (getFolderFromName(costume.name) === data.folder) {
+                vm.renameCostume(i, setFolderOfName(costume.name, newName));
               }
-            } else if (component.props.dragType === "SOUND") {
-              for (let i = 0; i < vm.editingTarget.sprite.sounds.length; i++) {
-                const sound = vm.editingTarget.sprite.sounds[i];
-                if (getFolderFromName(sound.name) === data.folder) {
-                  vm.renameSound(i, setFolderOfName(sound.name, newName));
-                }
+            }
+          } else if (component.props.dragType === "SOUND") {
+            for (let i = 0; i < vm.editingTarget.sprite.sounds.length; i++) {
+              const sound = vm.editingTarget.sprite.sounds[i];
+              if (getFolderFromName(sound.name) === data.folder) {
+                vm.renameSound(i, setFolderOfName(sound.name, newName));
               }
             }
           }
         };
 
+        const renameFolder = () => {
+          let newName = prompt(msg("new-name"));
+          // Prompt cancelled, do not rename
+          if (newName === null) {
+            return;
+          }
+          // TODO check folder does not already exist?
+          // Empty name will remove the folder
+          if (!newName) {
+            newName = null;
+          }
+          renameItems(newName);
+        };
+
+        const removeFolder = () => {
+          renameItems(null);
+        };
+
         container.appendChild(
           createMenuItem(
             msg("rename-folder"),
-            rename
+            renameFolder
+          )
+        );
+        container.appendChild(
+          createMenuItem(
+            msg("remove-folder"),
+            removeFolder
           )
         );
       } else {
@@ -474,7 +495,7 @@ export default async function ({ addon, global, console, msg }) {
             const target = vm.runtime.getTargetById(component.props.id);
             const targets = vm.runtime.targets.filter((i) => i !== target);
   
-            let insertAt = targets.length;
+            let insertAt = vm.runtime.targets.indexOf(target);
             for (let i = 0; i < targets.length; i++) {
               if (getFolderFromName(targets[i].getName()) === folder) {
                 insertAt = i;
@@ -491,7 +512,7 @@ export default async function ({ addon, global, console, msg }) {
             const asset = vm.editingTarget.sprite.costumes[index];
             const assets = vm.editingTarget.sprite.costumes.filter((i) => i !== asset);
   
-            let insertAt = assets.length;
+            let insertAt = index;
             for (let i = 0; i < assets.length; i++) {
               if (getFolderFromName(assets[i].name) === folder) {
                 insertAt = i;
@@ -508,7 +529,7 @@ export default async function ({ addon, global, console, msg }) {
             const asset = vm.editingTarget.sprite.sounds[index];
             const assets = vm.editingTarget.sprite.sounds.filter((i) => i !== asset);
   
-            let insertAt = assets.length;
+            let insertAt = index;
             for (let i = 0; i < assets.length; i++) {
               if (getFolderFromName(assets[i].name) === folder) {
                 insertAt = i;
