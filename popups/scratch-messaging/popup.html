@@ -16,7 +16,8 @@
         class="comment"
         :class="{'child-comment': !isParent, 'unread': unread, 'comment-me' : thisComment.author === username}"
       >
-        <a class="comment-author" @click="openProfile(thisComment.author)">{{ thisComment.author }}</a>
+        <a class="comment-author" @click="openProfile(thisComment.author)">{{ thisComment.author }}</a>{{
+        thisComment.scratchTeam ? "*" : "" }}
         <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
           · {{ commentTimeAgo }}&nbsp;&nbsp;
           <img
