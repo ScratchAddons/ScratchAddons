@@ -426,88 +426,133 @@ export default async function ({ addon, global, console, msg }) {
         menu.appendChild(container);
       }
 
-      const setFolder = (folder) => {
-        if (component.props.dragType === "SPRITE") {
-          const target = vm.runtime.getTargetById(component.props.id);
-          const targets = vm.runtime.targets.filter((i) => i !== target);
-
-          let insertAt = targets.length;
-          for (let i = 0; i < targets.length; i++) {
-            if (getFolderFromName(targets[i].getName()) === folder) {
-              insertAt = i;
-              break;
-            }
+      if (typeof data.folder === 'string') {
+        for (const child of menu.children) {
+          if (child !== container) {
+            child.style.display = 'none';
           }
-
-          targets.splice(insertAt, 0, target);
-          vm.runtime.targets = targets;
-          vm.renameSprite(component.props.id, setFolderOfName(target.getName(), folder));
-        } else if (component.props.dragType === "COSTUME") {
-          const data = getItemData(component.props);
-          const index = data.realIndex;
-          const asset = vm.editingTarget.sprite.costumes[index];
-          const assets = vm.editingTarget.sprite.costumes.filter((i) => i !== asset);
-
-          let insertAt = assets.length;
-          for (let i = 0; i < assets.length; i++) {
-            if (getFolderFromName(assets[i].name) === folder) {
-              insertAt = i;
-              break;
-            }
-          }
-
-          assets.splice(insertAt, 0, asset);
-          vm.editingTarget.sprite.costumes = assets;
-          vm.renameCostume(vm.editingTarget.sprite.costumes.indexOf(asset), setFolderOfName(asset.name, folder));
-        } else if (component.props.dragType === "SOUND") {
-          const data = getItemData(component.props);
-          const index = data.realIndex;
-          const asset = vm.editingTarget.sprite.sounds[index];
-          const assets = vm.editingTarget.sprite.sounds.filter((i) => i !== asset);
-
-          let insertAt = assets.length;
-          for (let i = 0; i < assets.length; i++) {
-            if (getFolderFromName(assets[i].name) === folder) {
-              insertAt = i;
-              break;
-            }
-          }
-
-          assets.splice(insertAt, 0, asset);
-          vm.editingTarget.sprite.sounds = assets;
-          vm.renameSound(vm.editingTarget.sprite.sounds.indexOf(asset), setFolderOfName(asset.name, folder));
         }
-      };
 
-      container.appendChild(
-        createMenuItem(
-          msg("create-folder"),
-          () => setFolder(data.realName),
-          true
-        )
-      );
+        const rename = () => {
+          const newName = prompt(msg("new-name"), data.folder);
+          if (newName !== null) {
+            if (component.props.dragType === "SPRITE") {
+              for (const target of vm.runtime.targets) {
+                if (target.isOriginal) {
+                  if (getFolderFromName(target.getName()) === data.folder) {
+                    vm.renameSprite(target.id, setFolderOfName(target.getName(), newName));
+                  }
+                }
+              }
+            } else if (component.props.dragType === "COSTUME") {
+              for (let i = 0; i < vm.editingTarget.sprite.costumes.length; i++) {
+                const costume = vm.editingTarget.sprite.costumes[i];
+                if (getFolderFromName(costume.name) === data.folder) {
+                  vm.renameCostume(i, setFolderOfName(costume.name, newName));
+                }
+              }
+            } else if (component.props.dragType === "SOUND") {
+              for (let i = 0; i < vm.editingTarget.sprite.sounds.length; i++) {
+                const sound = vm.editingTarget.sprite.sounds[i];
+                if (getFolderFromName(sound.name) === data.folder) {
+                  vm.renameSound(i, setFolderOfName(sound.name, newName));
+                }
+              }
+            }
+          }
+        };
 
-      const currentFolder = data.inFolder;
-      if (typeof currentFolder === "string") {
         container.appendChild(
           createMenuItem(
-            "remove from folder",
-            () => setFolder(null)
+            msg("rename-folder"),
+            rename
           )
-        );  
-      }
-      for (const folder of getAllFolders(component)) {
-        if (folder !== currentFolder) {
+        );
+      } else {
+        const setFolder = (folder) => {
+          if (component.props.dragType === "SPRITE") {
+            const target = vm.runtime.getTargetById(component.props.id);
+            const targets = vm.runtime.targets.filter((i) => i !== target);
+  
+            let insertAt = targets.length;
+            for (let i = 0; i < targets.length; i++) {
+              if (getFolderFromName(targets[i].getName()) === folder) {
+                insertAt = i;
+                break;
+              }
+            }
+  
+            targets.splice(insertAt, 0, target);
+            vm.runtime.targets = targets;
+            vm.renameSprite(component.props.id, setFolderOfName(target.getName(), folder));
+          } else if (component.props.dragType === "COSTUME") {
+            const data = getItemData(component.props);
+            const index = data.realIndex;
+            const asset = vm.editingTarget.sprite.costumes[index];
+            const assets = vm.editingTarget.sprite.costumes.filter((i) => i !== asset);
+  
+            let insertAt = assets.length;
+            for (let i = 0; i < assets.length; i++) {
+              if (getFolderFromName(assets[i].name) === folder) {
+                insertAt = i;
+                break;
+              }
+            }
+  
+            assets.splice(insertAt, 0, asset);
+            vm.editingTarget.sprite.costumes = assets;
+            vm.renameCostume(vm.editingTarget.sprite.costumes.indexOf(asset), setFolderOfName(asset.name, folder));
+          } else if (component.props.dragType === "SOUND") {
+            const data = getItemData(component.props);
+            const index = data.realIndex;
+            const asset = vm.editingTarget.sprite.sounds[index];
+            const assets = vm.editingTarget.sprite.sounds.filter((i) => i !== asset);
+  
+            let insertAt = assets.length;
+            for (let i = 0; i < assets.length; i++) {
+              if (getFolderFromName(assets[i].name) === folder) {
+                insertAt = i;
+                break;
+              }
+            }
+  
+            assets.splice(insertAt, 0, asset);
+            vm.editingTarget.sprite.sounds = assets;
+            vm.renameSound(vm.editingTarget.sprite.sounds.indexOf(asset), setFolderOfName(asset.name, folder));
+          }
+        };
+  
+        container.appendChild(
+          createMenuItem(
+            msg("create-folder"),
+            () => setFolder(data.realName),
+            true
+          )
+        );
+  
+        const currentFolder = data.inFolder;
+        if (typeof currentFolder === "string") {
           container.appendChild(
             createMenuItem(
-              msg("add-to-folder", {
-                folder,
-              }),
-              () => setFolder(folder)
+              "remove from folder",
+              () => setFolder(null)
             )
-          );
+          );  
+        }
+        for (const folder of getAllFolders(component)) {
+          if (folder !== currentFolder) {
+            container.appendChild(
+              createMenuItem(
+                msg("add-to-folder", {
+                  folder,
+                }),
+                () => setFolder(folder)
+              )
+            );
+          }
         }
       }
+
     };
 
     const toggleFolder = (component, folder) => {
@@ -581,10 +626,6 @@ export default async function ({ addon, global, console, msg }) {
           } else {
             this.props.details = msg("closed-folder");
           }
-          this.props.onDeleteButtonClick = null;
-          this.props.onDuplicateButtonClick = null;
-          this.props.onExportButtonClick = null;
-          this.props.onDeleteButtonClick = null;
           this.props.selected = false;
           this.props.number = null;
           this.props.className += ` ${getFolderColorClass(itemData.folder)}`;
@@ -746,7 +787,7 @@ export default async function ({ addon, global, console, msg }) {
       const originalCostumes = this.sprite.costumes;
 
       const getVMAssetFromGUIItem = (item, costumeList=costumes) => {
-        return costumeList.find((c) => c.name === item.name);
+        return costumeList.find((c) => c.asset === item.asset);
       };
 
       const targetItem = currentAssetItems[costumeIndex];

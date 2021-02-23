@@ -2,5 +2,7 @@
   "folders/open-folder": "Opened",
   "folders/closed-folder": "Folder",
   "folders/create-folder": "create folder",
-  "folders/add-to-folder": "add to folder: {folder}"
+  "folders/add-to-folder": "add to folder: {folder}",
+  "folders/rename-folder": "rename folder",
+  "folders/new-name": "New name:"
 }
