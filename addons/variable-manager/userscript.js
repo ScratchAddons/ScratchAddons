@@ -92,16 +92,21 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     buildDOM () {
+      const id = `sa-variable-manager-${this.scratchVariable.id}`;
+
       const row = document.createElement("tr");
       this.row = row;
-      const label = document.createElement("td");
-      label.innerText = this.scratchVariable.name;
+      const labelCell = document.createElement("td");
+      const label = document.createElement('label');
+      label.textContent = this.scratchVariable.name;
+      label.htmlFor = id;
+      labelCell.appendChild(label);
 
       rowToVariableMap.set(row, this);
       observer.observe(row);
 
-      const value = document.createElement("td");
-      value.className = "sa-var-manager-value";
+      const valueCell = document.createElement("td");
+      valueCell.className = "sa-var-manager-value";
 
       let input;
       if (this.scratchVariable.type === 'list') {
@@ -109,6 +114,7 @@ export default async function ({ addon, global, console, msg }) {
       } else {
         input = document.createElement("input");
       }
+      input.id = id;
       this.input = input;
 
       this.updateValue(true);
@@ -138,9 +144,9 @@ export default async function ({ addon, global, console, msg }) {
         manager.classList.remove("freeze");
       });
 
-      value.appendChild(input);
-      row.appendChild(label);
-      row.appendChild(value);
+      valueCell.appendChild(input);
+      row.appendChild(labelCell);
+      row.appendChild(valueCell);
     }
   }
 
