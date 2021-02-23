@@ -192,6 +192,11 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
+  function cleanup() {
+    localVariables = [];
+    globalVariables = [];
+  }
+
   varTab.addEventListener("click", (e) => {
     addon.tab.redux.dispatch({ type: "scratch-gui/navigation/ACTIVATE_TAB", activeTabIndex: 3 });
   });
@@ -212,6 +217,7 @@ export default async function ({ addon, global, console, msg }) {
           addon.tab.scratchClass("gui_is-selected")
         );
         manager.remove();
+        cleanup();
       }
     }
   });
