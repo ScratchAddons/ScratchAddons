@@ -43,24 +43,27 @@ export default async function ({ addon, global, console, msg }) {
   varTab.appendChild(varTabText);
 
   const rowToVariableMap = new WeakMap();
-  const observer = new IntersectionObserver((changes) => {
-    for (const change of changes) {
-      const variable = rowToVariableMap.get(change.target);
-      variable.setVisible(change.isIntersecting);
+  const observer = new IntersectionObserver(
+    (changes) => {
+      for (const change of changes) {
+        const variable = rowToVariableMap.get(change.target);
+        variable.setVisible(change.isIntersecting);
+      }
+    },
+    {
+      rootMargin: "100px",
     }
-  }, {
-    rootMargin: '100px'
-  });
+  );
 
   class WrappedVariable {
-    constructor (scratchVariable, target) {
+    constructor(scratchVariable, target) {
       this.scratchVariable = scratchVariable;
       this.target = target;
       this.visible = false;
       this.buildDOM();
     }
 
-    updateValue (force) {
+    updateValue(force) {
       if (!this.visible && !force) return;
       let newValue;
       if (this.scratchVariable.type == "list") {
@@ -73,7 +76,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
 
-    resizeInputIfList () {
+    resizeInputIfList() {
       if (this.scratchVariable.type === "list") {
         this.input.style.height = "auto";
         const height = Math.min(1000, this.input.scrollHeight);
@@ -83,7 +86,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
 
-    setVisible (visible) {
+    setVisible(visible) {
       if (this.visible === visible) return;
       this.visible = visible;
       if (visible) {
@@ -91,13 +94,13 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
 
-    buildDOM () {
+    buildDOM() {
       const id = `sa-variable-manager-${this.scratchVariable.id}`;
 
       const row = document.createElement("tr");
       this.row = row;
       const labelCell = document.createElement("td");
-      const label = document.createElement('label');
+      const label = document.createElement("label");
       label.textContent = this.scratchVariable.name;
       label.htmlFor = id;
       labelCell.appendChild(label);
@@ -109,7 +112,7 @@ export default async function ({ addon, global, console, msg }) {
       valueCell.className = "sa-var-manager-value";
 
       let input;
-      if (this.scratchVariable.type === 'list') {
+      if (this.scratchVariable.type === "list") {
         input = document.createElement("textarea");
       } else {
         input = document.createElement("input");
@@ -118,7 +121,7 @@ export default async function ({ addon, global, console, msg }) {
       this.input = input;
 
       this.updateValue(true);
-      if (this.scratchVariable.type === 'list') {
+      if (this.scratchVariable.type === "list") {
         this.input.addEventListener("input", () => this.resizeInputIfList(), false);
       }
 
@@ -155,11 +158,11 @@ export default async function ({ addon, global, console, msg }) {
 
     const editingTarget = vm.runtime.getEditingTarget();
     const stage = vm.runtime.getTargetForStage();
-    localVariables = Object.values(editingTarget.variables).map(i => new WrappedVariable(i, editingTarget));
-    globalVariables = Object.values(stage.variables).map(i => new WrappedVariable(i, stage));
+    localVariables = Object.values(editingTarget.variables).map((i) => new WrappedVariable(i, editingTarget));
+    globalVariables = Object.values(stage.variables).map((i) => new WrappedVariable(i, stage));
 
-    localHeading.style.display = localVariables.length === 0 ? 'none' : '';
-    globalHeading.style.display = globalVariables.length === 0 ? 'none' : '';
+    localHeading.style.display = localVariables.length === 0 ? "none" : "";
+    globalHeading.style.display = globalVariables.length === 0 ? "none" : "";
 
     while (localList.firstChild) {
       localList.removeChild(localList.firstChild);
