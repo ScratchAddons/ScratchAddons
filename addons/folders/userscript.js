@@ -92,6 +92,7 @@ export default async function ({ addon, global, console, msg }) {
   const getFolderColorClass = (folderName) => {
     // Based on java's String.hashCode
     // https://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/src/share/classes/java/lang/String.java#l1452
+    // TODO: better color generation
     const hashCode = (str) => {
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
@@ -165,6 +166,7 @@ export default async function ({ addon, global, console, msg }) {
         } else if (item.costume && item.costume.asset) {
           image.setAttribute("href", item.costume.asset.encodeDataURI());
         } else if (item.url) {
+          // TODO: better icon for sound folders
           return openFolderAsset.encodeDataURI();
         }
         svg.appendChild(image);
@@ -270,7 +272,6 @@ export default async function ({ addon, global, console, msg }) {
               break;
             }
             folderItems.push(processedItem.newItem);
-            processedItem.itemData.realName = getNameWithoutFolder(processedItem.itemData.realName);
             if (isOpen) {
               items.push(processedItem.newItem);
             }
@@ -458,6 +459,23 @@ export default async function ({ addon, global, console, msg }) {
           assets.splice(insertAt, 0, asset);
           vm.editingTarget.sprite.costumes = assets;
           vm.renameCostume(vm.editingTarget.sprite.costumes.indexOf(asset), setFolderOfName(asset.name, folder));
+        } else if (component.props.dragType === "SOUND") {
+          const data = getItemData(component.props);
+          const index = data.realIndex;
+          const asset = vm.editingTarget.sprite.sounds[index];
+          const assets = vm.editingTarget.sprite.sounds.filter((i) => i !== asset);
+
+          let insertAt = assets.length;
+          for (let i = 0; i < assets.length; i++) {
+            if (getFolderFromName(assets[i].name) === folder) {
+              insertAt = i;
+              break;
+            }
+          }
+
+          assets.splice(insertAt, 0, asset);
+          vm.editingTarget.sprite.sounds = assets;
+          vm.renameSound(vm.editingTarget.sprite.sounds.indexOf(asset), setFolderOfName(asset.name, folder));
         }
       };
 
@@ -550,7 +568,7 @@ export default async function ({ addon, global, console, msg }) {
         };
 
         if (typeof itemData.realName === "string") {
-          this.props.name = itemData.realName;
+          this.props.name = getNameWithoutFolder(itemData.realName);
         }
         if (typeof this.props.number === "number" && typeof itemData.realIndex === "number") {
           // Convert 0-indexed to 1-indexed
@@ -728,7 +746,7 @@ export default async function ({ addon, global, console, msg }) {
       const originalCostumes = this.sprite.costumes;
 
       const getVMAssetFromGUIItem = (item, costumeList=costumes) => {
-        return costumeList.find((c) => c.asset === item.asset);
+        return costumeList.find((c) => c.name === item.name);
       };
 
       const targetItem = currentAssetItems[costumeIndex];
@@ -815,6 +833,111 @@ export default async function ({ addon, global, console, msg }) {
       if (typeof targetItemData.folder !== "string" && targetItemData.inFolder !== newFolder) {
         for (const asset of reorderingAssets) {
           this.renameCostume(costumes.indexOf(asset), setFolderOfName(asset.name, newFolder));
+        }
+      }
+
+      return true;
+    };
+
+    vm.runtime.targets[0].constructor.prototype.reorderSound = function (costumeIndex, newIndex) {
+      costumeIndex = clamp(costumeIndex, 0, currentAssetItems.length);
+      newIndex = clamp(newIndex, 0, currentAssetItems.length);
+      if (costumeIndex === newIndex) {
+        return false;
+      }
+
+      let costumes = this.sprite.sounds;
+      const originalCostumes = this.sprite.sounds;
+
+      const getVMAssetFromGUIItem = (item, costumeList=costumes) => {
+        const itemData = getItemData(item);
+        return costumeList.find((c) => c.name === itemData.realName);
+      };
+
+      const targetItem = currentAssetItems[costumeIndex];
+      const itemAtNewIndex = currentAssetItems[newIndex];
+      const targetItemData = getItemData(targetItem);
+      const itemAtNewIndexData = getItemData(itemAtNewIndex);
+
+      if (!targetItemData || !itemAtNewIndexData) {
+        console.warn("should never happen");
+        return false;
+      }
+
+      const reorderingItems = typeof targetItemData.folder === "string" ? targetItem.items : [targetItem];
+      const reorderingAssets = reorderingItems.map((i) => getVMAssetFromGUIItem(i)).filter((i) => i);
+      if (typeof itemAtNewIndexData.realIndex === 'number') {
+        const newTarget = getVMAssetFromGUIItem(itemAtNewIndex);
+        if (!newTarget || reorderingAssets.includes(newTarget)) {
+          // Dragging folder into itself or target doesn't exist. Ignore.
+          return false;
+        }
+      }
+
+      let newFolder = null;
+
+      costumes = costumes.filter((i) => !reorderingAssets.includes(i));
+
+      let realNewIndex;
+      if (newIndex === 0) {
+        realNewIndex = 0;
+      } else if (newIndex === currentAssetItems.length) {
+        realNewIndex = costumes.length;
+      } else if (typeof itemAtNewIndexData.realIndex === 'number') {
+        newFolder = typeof itemAtNewIndexData.inFolder === "string" ? itemAtNewIndexData.inFolder : null;
+        let newAsset = getVMAssetFromGUIItem(itemAtNewIndex);
+        if (!newAsset) {
+          console.warn("should never happen");
+          return false;
+        }
+        realNewIndex = costumes.indexOf(newAsset);
+        if (newIndex > costumeIndex) {
+          realNewIndex++;
+        }
+      } else if (typeof itemAtNewIndexData.folder === "string") {
+        let item;
+        let offset = 0;
+        if (typeof targetItemData.inFolder === "string" && targetItemData.inFolder === itemAtNewIndexData.folder) {
+          // If an item in a folder is dropped onto its folder icon, move it out of the folder.
+          item = itemAtNewIndex.items[0];
+        } else if (!itemAtNewIndexData.folderOpen && newIndex > costumeIndex) {
+          item = itemAtNewIndex.items[itemAtNewIndex.items.length - 1];
+          offset = 1;
+        } else if (!itemAtNewIndexData.folderOpen && newIndex < costumeIndex) {
+          item = itemAtNewIndex.items[0];
+        } else {
+          item = itemAtNewIndex.items[0];
+          newFolder = itemAtNewIndexData.folder;
+        }
+        let newAsset = getVMAssetFromGUIItem(item);
+        if (newAsset) {
+          realNewIndex = costumes.indexOf(newAsset) + offset;
+        } else {
+          // Edge case: Dragging the first item of a list on top of the folder item
+          newAsset = getVMAssetFromGUIItem(item, originalCostumes);
+          if (!newAsset) {
+            console.warn("should never happen");
+            return false;
+          }
+          realNewIndex = originalCostumes.indexOf(newAsset) + offset;
+        }
+      } else {
+        console.warn("should never happen");
+        return false;
+      }
+
+      if (realNewIndex < 0 || realNewIndex > costumes.length) {
+        console.warn("should never happen");
+        return false;
+      }
+
+      costumes.splice(realNewIndex, 0, ...reorderingAssets);
+      this.sprite.sounds = costumes;
+
+      // If the folder has changed, update sprite names to match.
+      if (typeof targetItemData.folder !== "string" && targetItemData.inFolder !== newFolder) {
+        for (const asset of reorderingAssets) {
+          this.renameSound(costumes.indexOf(asset), setFolderOfName(asset.name, newFolder));
         }
       }
 
