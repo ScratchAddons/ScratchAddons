@@ -1,9 +1,6 @@
 import Addon from "../../addon-api/content-script/Addon.js";
-const ranAddons = [];
 
 export default async function runAddonUserscripts({ addonId, scripts, traps }, { late = false } = {}) {
-  if (ranAddons.includes(addonId)) return;
-  ranAddons.push(addonId);
   const addonObj = new Addon({ id: addonId, traps, late });
   const globalObj = Object.create(null);
   for (const scriptInfo of scripts) {

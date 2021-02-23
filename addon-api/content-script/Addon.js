@@ -22,7 +22,7 @@ export default class UserscriptAddon extends Addon {
 
       if (event.data.saAddonDisabled && this._addonId == event.data.saAddonDisabled) {
         this.self.disabled = true;
-        for (let { item, event, listener, useCapture } of this.tab.listeners) {
+        for (let { item, event, listener, useCapture } of this.tab._listeners) {
           item.removeEventListener(event, listener, useCapture);
         }
         this.self.dispatchEvent(new Event("addonDisabled"));

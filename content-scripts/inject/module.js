@@ -16,6 +16,7 @@ const getL10NURLs = () => {
 
 let addons = JSON.parse(template.getAttribute("data-userscripts"));
 const allAddons = JSON.parse(template.getAttribute("data-alladdons"));
+const ranAddons = [];
 
 window.scratchAddons = {};
 scratchAddons.globalState = getGlobalState();
@@ -110,6 +111,7 @@ observer.observe(template, { attributes: true });
 
 for (const addon of addons) {
   if (addon.scripts.length) runAddonUserscripts(addon);
+  ranAddons.push(addon.addonId);
 }
 addEventListener("message", (event) => {
   // Reset variable in the case that a new addon has been enabled/disabled.
@@ -118,9 +120,11 @@ addEventListener("message", (event) => {
   let addonDisabled = event.data.saAddonDisabled;
   if (addonEnabled && !addons.find((a) => a.addonId == addonEnabled)) {
     let addon = allAddons.find((a) => a.addonId == addonEnabled);
-    runAddonUserscripts(addon, { late: true });
     addons.push(addon);
     template.setAttribute("data-userscripts", JSON.stringify(addons));
+    if (ranAddons.includes(addonEnabled)) return;
+    ranAddons.push(addonEnabled);
+    runAddonUserscripts(addon, { late: true });
   }
   if (addonDisabled) {
     let addon = allAddons.find((a) => a.addonId == addonDisabled);

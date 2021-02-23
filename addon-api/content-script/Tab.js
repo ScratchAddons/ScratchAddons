@@ -198,6 +198,6 @@ export default class Tab extends Listenable {
 
   bindListener(item, event, listener, useCapture) {
     item.addEventListener(event, listener, useCapture);
-    this.listeners.push({ item, event, listener, useCapture });
+    this._listeners.push({ item, event, listener, useCapture });
   }
 }
