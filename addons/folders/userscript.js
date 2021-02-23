@@ -426,10 +426,10 @@ export default async function ({ addon, global, console, msg }) {
         menu.appendChild(container);
       }
 
-      if (typeof data.folder === 'string') {
+      if (typeof data.folder === "string") {
         for (const child of menu.children) {
           if (child !== container) {
-            child.style.display = 'none';
+            child.style.display = "none";
           }
         }
 
@@ -477,24 +477,14 @@ export default async function ({ addon, global, console, msg }) {
           renameItems(null);
         };
 
-        container.appendChild(
-          createMenuItem(
-            msg("rename-folder"),
-            renameFolder
-          )
-        );
-        container.appendChild(
-          createMenuItem(
-            msg("remove-folder"),
-            removeFolder
-          )
-        );
+        container.appendChild(createMenuItem(msg("rename-folder"), renameFolder));
+        container.appendChild(createMenuItem(msg("remove-folder"), removeFolder));
       } else {
         const setFolder = (folder) => {
           if (component.props.dragType === "SPRITE") {
             const target = vm.runtime.getTargetById(component.props.id);
             const targets = vm.runtime.targets.filter((i) => i !== target);
-  
+
             let insertAt = vm.runtime.targets.indexOf(target);
             for (let i = 0; i < targets.length; i++) {
               if (getFolderFromName(targets[i].getName()) === folder) {
@@ -502,7 +492,7 @@ export default async function ({ addon, global, console, msg }) {
                 break;
               }
             }
-  
+
             targets.splice(insertAt, 0, target);
             vm.runtime.targets = targets;
             vm.renameSprite(component.props.id, setFolderOfName(target.getName(), folder));
@@ -511,7 +501,7 @@ export default async function ({ addon, global, console, msg }) {
             const index = data.realIndex;
             const asset = vm.editingTarget.sprite.costumes[index];
             const assets = vm.editingTarget.sprite.costumes.filter((i) => i !== asset);
-  
+
             let insertAt = index;
             for (let i = 0; i < assets.length; i++) {
               if (getFolderFromName(assets[i].name) === folder) {
@@ -519,7 +509,7 @@ export default async function ({ addon, global, console, msg }) {
                 break;
               }
             }
-  
+
             assets.splice(insertAt, 0, asset);
             vm.editingTarget.sprite.costumes = assets;
             vm.renameCostume(vm.editingTarget.sprite.costumes.indexOf(asset), setFolderOfName(asset.name, folder));
@@ -528,7 +518,7 @@ export default async function ({ addon, global, console, msg }) {
             const index = data.realIndex;
             const asset = vm.editingTarget.sprite.sounds[index];
             const assets = vm.editingTarget.sprite.sounds.filter((i) => i !== asset);
-  
+
             let insertAt = index;
             for (let i = 0; i < assets.length; i++) {
               if (getFolderFromName(assets[i].name) === folder) {
@@ -536,29 +526,18 @@ export default async function ({ addon, global, console, msg }) {
                 break;
               }
             }
-  
+
             assets.splice(insertAt, 0, asset);
             vm.editingTarget.sprite.sounds = assets;
             vm.renameSound(vm.editingTarget.sprite.sounds.indexOf(asset), setFolderOfName(asset.name, folder));
           }
         };
-  
-        container.appendChild(
-          createMenuItem(
-            msg("create-folder"),
-            () => setFolder(data.realName),
-            true
-          )
-        );
-  
+
+        container.appendChild(createMenuItem(msg("create-folder"), () => setFolder(data.realName), true));
+
         const currentFolder = data.inFolder;
         if (typeof currentFolder === "string") {
-          container.appendChild(
-            createMenuItem(
-              "remove from folder",
-              () => setFolder(null)
-            )
-          );  
+          container.appendChild(createMenuItem("remove from folder", () => setFolder(null)));
         }
         for (const folder of getAllFolders(component)) {
           if (folder !== currentFolder) {
@@ -573,7 +552,6 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
       }
-
     };
 
     const toggleFolder = (component, folder) => {
@@ -807,7 +785,7 @@ export default async function ({ addon, global, console, msg }) {
       let costumes = this.sprite.costumes;
       const originalCostumes = this.sprite.costumes;
 
-      const getVMAssetFromGUIItem = (item, costumeList=costumes) => {
+      const getVMAssetFromGUIItem = (item, costumeList = costumes) => {
         return costumeList.find((c) => c.asset === item.asset);
       };
 
@@ -823,7 +801,7 @@ export default async function ({ addon, global, console, msg }) {
 
       const reorderingItems = typeof targetItemData.folder === "string" ? targetItem.items : [targetItem];
       const reorderingAssets = reorderingItems.map((i) => getVMAssetFromGUIItem(i)).filter((i) => i);
-      if (typeof itemAtNewIndexData.realIndex === 'number') {
+      if (typeof itemAtNewIndexData.realIndex === "number") {
         const newTarget = getVMAssetFromGUIItem(itemAtNewIndex);
         if (!newTarget || reorderingAssets.includes(newTarget)) {
           // Dragging folder into itself or target doesn't exist. Ignore.
@@ -840,7 +818,7 @@ export default async function ({ addon, global, console, msg }) {
         realNewIndex = 0;
       } else if (newIndex === currentAssetItems.length) {
         realNewIndex = costumes.length;
-      } else if (typeof itemAtNewIndexData.realIndex === 'number') {
+      } else if (typeof itemAtNewIndexData.realIndex === "number") {
         newFolder = typeof itemAtNewIndexData.inFolder === "string" ? itemAtNewIndexData.inFolder : null;
         let newAsset = getVMAssetFromGUIItem(itemAtNewIndex);
         if (!newAsset) {
@@ -911,7 +889,7 @@ export default async function ({ addon, global, console, msg }) {
       let costumes = this.sprite.sounds;
       const originalCostumes = this.sprite.sounds;
 
-      const getVMAssetFromGUIItem = (item, costumeList=costumes) => {
+      const getVMAssetFromGUIItem = (item, costumeList = costumes) => {
         const itemData = getItemData(item);
         return costumeList.find((c) => c.name === itemData.realName);
       };
@@ -928,7 +906,7 @@ export default async function ({ addon, global, console, msg }) {
 
       const reorderingItems = typeof targetItemData.folder === "string" ? targetItem.items : [targetItem];
       const reorderingAssets = reorderingItems.map((i) => getVMAssetFromGUIItem(i)).filter((i) => i);
-      if (typeof itemAtNewIndexData.realIndex === 'number') {
+      if (typeof itemAtNewIndexData.realIndex === "number") {
         const newTarget = getVMAssetFromGUIItem(itemAtNewIndex);
         if (!newTarget || reorderingAssets.includes(newTarget)) {
           // Dragging folder into itself or target doesn't exist. Ignore.
@@ -945,7 +923,7 @@ export default async function ({ addon, global, console, msg }) {
         realNewIndex = 0;
       } else if (newIndex === currentAssetItems.length) {
         realNewIndex = costumes.length;
-      } else if (typeof itemAtNewIndexData.realIndex === 'number') {
+      } else if (typeof itemAtNewIndexData.realIndex === "number") {
         newFolder = typeof itemAtNewIndexData.inFolder === "string" ? itemAtNewIndexData.inFolder : null;
         let newAsset = getVMAssetFromGUIItem(itemAtNewIndex);
         if (!newAsset) {
