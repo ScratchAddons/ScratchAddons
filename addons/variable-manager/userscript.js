@@ -37,7 +37,7 @@ export default async function ({ addon, global, console, msg }) {
   varTabIcon.src = addon.self.dir + "/icon.svg";
 
   const varTabText = document.createElement("span");
-  varTabText.innerText = "Variables";
+  varTabText.innerText = msg("variables");
 
   varTab.appendChild(varTabIcon);
   varTab.appendChild(varTabText);
