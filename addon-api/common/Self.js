@@ -4,18 +4,18 @@ import Listenable from "./Listenable.js";
  * @extends Listenable
  */
 export default class Self extends Listenable {
-  constructor(that, info) {
+  constructor(addonObj, info) {
     super();
     this.id = info.id;
-    this.extra = that;
+    this._addonObj = addonObj;
     this.browser = typeof InstallTrigger !== "undefined" ? "firefox" : "chrome";
   }
   get dir() {
-    return `${this.extra._path}addons/${this.id}`;
+    return `${this._addonObj._path}addons/${this.id}`;
   }
 
   get lib() {
-    return `${this.extra._path}libraries`;
+    return `${this._addonObj._path}libraries`;
   }
 
   /**
