@@ -45,7 +45,7 @@ async function getContentScriptInfo(url) {
           runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
         });
     }
-    data.allAddons.push({ addonId, scripts: userscripts })
+    data.allAddons.push({ addonId, scripts: userscripts });
     if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
 
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });

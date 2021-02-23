@@ -116,15 +116,18 @@ addEventListener("message", (event) => {
   addons = JSON.parse(template.getAttribute("data-userscripts"));
   let addonEnabled = event.data.saAddonEnabled;
   let addonDisabled = event.data.saAddonDisabled;
-  if (addonEnabled && !addons.find(a => a.addonId == addonEnabled)) {
-    let addon = allAddons.find(a => a.addonId == addonEnabled);
+  if (addonEnabled && !addons.find((a) => a.addonId == addonEnabled)) {
+    let addon = allAddons.find((a) => a.addonId == addonEnabled);
     runAddonUserscripts(addon, { late: true });
     addons.push(addon);
     template.setAttribute("data-userscripts", JSON.stringify(addons));
   }
   if (addonDisabled) {
-    let addon = allAddons.find(a => a.addonId == addonDisabled);
-    addons.splice(addons.findIndex(a => a.addonId == addon.addonId), 1);
+    let addon = allAddons.find((a) => a.addonId == addonDisabled);
+    addons.splice(
+      addons.findIndex((a) => a.addonId == addon.addonId),
+      1
+    );
     template.setAttribute("data-userscripts", JSON.stringify(addons));
   }
 });
