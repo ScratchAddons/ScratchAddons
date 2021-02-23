@@ -20,6 +20,45 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.10.0] - 2021-02-22
+
+### Added
+
+#### Addons
+
+- Auto-show editor extensions (#1568)
+- Copy link to comment button (#1502)
+
+### Changed
+
+#### Extension and Addon API
+
+- Addons can be searched using ID (#1597)
+
+### Fixed
+
+#### Addons
+
+- Cat blocks: Extra space not added in block palette (#1623)
+- Developer tools: Highlighting conflicts with editor-theme3 (#1563)
+- Editor dark mode: Monitor names made invisible (#1606)
+- Forums image uploader: Addon tries to run on pages without post form (#1608)
+- Infinite scrolling: Incompability with scratchr2 (#1602)
+- Pause button: Stack timer blocks incorrectly paused (#1555)
+- Pause button: Edge-activated blocks with obscured shadows incorrectly paused (#1555)
+- Pause button: Addon not resuming old threads if the user starts a new thread while paused (#1555)
+- Pause button: "when sprite clicked" and "when key pressed' events should not be fired when paused (#1555)
+- Pause button: Addon breaks when sa-pause block is executed when paused (#1555)
+- Record project video: Addon breaks when the user exits editor view (#1571)
+- Scratch Messaging: Asterisks added to links to ST members (#1585)
+- Website dark mode: Addon does not make crash screen dark (#1570)
+- Website dark mode: Studio follower counts made invisible (#1583)
+- Website dark mode: Addon does not make popups dark (#1612)
+
+#### Extension and Addon API
+
+- Addons with permission requirements cannot be enabled for the first time (#1616)
+
 ## [v1.9.3] - 2021-02-15
 
 ### Fixed
@@ -606,5 +645,14 @@ Here's the simple format. Other types such as "Removed" can be added later.
 #### Addons
 
 #### Extension and Addon API
+
+-->
+
+<!--
+
+# RegEx for @apple502j's changelog
+
+Find      : `    (#\d+) (.+)\.? \(prio-\d\)`
+Replace   : `- $2 ($1)`
 
 -->
