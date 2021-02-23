@@ -42,15 +42,26 @@ export default async function ({ addon, global, console, msg }) {
   varTab.appendChild(varTabIcon);
   varTab.appendChild(varTabText);
 
+  const rowToVariableMap = new WeakMap();
+  const observer = new IntersectionObserver((changes) => {
+    for (const change of changes) {
+      const variable = rowToVariableMap.get(change.target);
+      variable.setVisible(change.isIntersecting);
+    }
+  }, {
+    rootMargin: '100px'
+  });
+
   class WrappedVariable {
     constructor (scratchVariable, target) {
       this.scratchVariable = scratchVariable;
       this.target = target;
+      this.visible = false;
       this.buildDOM();
     }
 
     updateValue () {
-      // TODO check visibility
+      if (!this.visible) return;
       let newValue;
       if (this.scratchVariable.type == "list") {
         newValue = this.scratchVariable.value.join("\n");
@@ -72,11 +83,22 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
 
+    setVisible (visible) {
+      if (this.visible === visible) return;
+      this.visible = visible;
+      if (visible) {
+        this.updateValue();
+      }
+    }
+
     buildDOM () {
       const row = document.createElement("tr");
       this.row = row;
       const label = document.createElement("td");
       label.innerText = this.scratchVariable.name;
+
+      rowToVariableMap.set(row, this);
+      observer.observe(row);
 
       const value = document.createElement("td");
       value.className = "sa-var-manager-value";
