@@ -48,7 +48,7 @@ import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
     },
     async created() {
       document.title = l10n.get("cloud-games/popup-title");
-      const res = await fetch("https://api.scratch.mit.edu/studios/539952/projects/?limit=40");
+      const res = await fetch("https://api.scratch.mit.edu/studios/28943839/projects/?limit=40");
       const projects = await res.json();
       this.projects = projects
         .map((project) => ({ title: project.title, id: project.id, amt: 0, users: [], extended: true }))
