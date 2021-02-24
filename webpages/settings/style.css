@@ -818,3 +818,13 @@ input[type="color"]::-webkit-color-swatch {
   background-repeat: no-repeat;
   width: max-content;
 }
+color-picker {
+    position: absolute;
+    left: 10px;
+    top:20px;
+    z-index:10;
+}
+
+button.setting-input.color {
+    position: relative;
+}

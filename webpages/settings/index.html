@@ -9,14 +9,39 @@
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
+    <script src="../../libraries/color-picker.js" type="module" defer></script>
+    <template id="picker-component">
+      <div v-click-outside="isOpen = false">
+      <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting)">      <color-picker
+        class="setting-input color"
+        -:disabled="!addon._enabled"
+        :value="value"
+        id="picker"
+        v-show="isOpen"
+        v-click-outside="isOpen = false"
+        v-el:pickr
+      ></color-picker>
+</button>
+      </div>
+    </template>
     <script src="index.js" type="module"></script>
   </head>
   <body style="display: none" v-show="loaded">
     <div class="navbar">
-      <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
+      <img
+        :src="switchPath"
+        class="toggle"
+        @click="sidebarToggle()"
+        v-show="smallMode"
+        alt="Logo"
+      />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1>{{ msg("settings") }}</h1>
-      <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themePath" />
+      <img
+        @click="setTheme(!theme)"
+        class="theme-switch"
+        v-bind:src="themePath"
+      />
     </div>
     <div class="main">
       <div
@@ -25,19 +50,35 @@
         v-show="categoryOpen"
         :class="{smallMode: smallMode === true}"
       >
-        <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
+        <div
+          class="category"
+          :class="{sel: selectedTab === 'all'}"
+          @click="selectedTab = 'all'"
+        >
           <img src="../../images/icons/list.svg" />
           <span>{{ msg("all") }}</span>
         </div>
-        <div class="category" :class="{sel: selectedTab === 'editor'}" @click="selectedTab = 'editor'">
+        <div
+          class="category"
+          :class="{sel: selectedTab === 'editor'}"
+          @click="selectedTab = 'editor'"
+        >
           <img src="../../images/icons/puzzle.svg" />
           <span>{{ msg("editorFeatures") }}</span>
         </div>
-        <div class="category" :class="{sel: selectedTab === 'community'}" @click="selectedTab = 'community'">
+        <div
+          class="category"
+          :class="{sel: selectedTab === 'community'}"
+          @click="selectedTab = 'community'"
+        >
           <img src="../../images/icons/web.svg" />
           <span>{{ msg("websiteFeatures") }}</span>
         </div>
-        <div class="category" :class="{sel: selectedTab === 'theme'}" @click="selectedTab = 'theme'">
+        <div
+          class="category"
+          :class="{sel: selectedTab === 'theme'}"
+          @click="selectedTab = 'theme'"
+        >
           <img src="../../images/icons/brush.svg" />
           <span>{{ msg("themes") }}</span>
         </div>
@@ -58,11 +99,18 @@
           <img src="../../images/icons/users.svg" />
           <span>{{ msg("credits") }}</span>
         </div>
-        <div class="category category-small" @click="openReview()" style="display: none">
+        <div
+          class="category category-small"
+          @click="openReview()"
+          style="display: none"
+        >
           <img src="../../images/icons/star.svg" />
           <span>{{ msg("review") }}</span>
         </div>
-        <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
+        <div
+          class="category category-small"
+          @click="openPage('https://scratchaddons.com/translate')"
+        >
           <img src="../../images/icons/translate.svg" />
           <span>{{ msg("translate") }}</span>
         </div>
@@ -70,7 +118,11 @@
           <img src="../../images/icons/comment.svg" />
           <span>{{ msg("feedback") }}</span>
         </div>
-        <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
+        <div
+          class="category"
+          style="cursor: pointer; margin-top: 12px; margin-bottom: 12px"
+          @click="modalToggle()"
+        >
           <img src="../../images/icons/wrench.svg" />
           <span>{{ msg("moreSettings") }}</span>
         </div>
@@ -81,13 +133,21 @@
         style="display: block !important"
         @click="sidebarToggle()"
       >
-        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === false}" />
+        <img
+          src="../../images/icons/left-arrow.svg"
+          :class="{flipped: categoryOpen === false}"
+        />
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div class="search-box" :class="{smallMode: smallMode === true}">
-          <input type="text" id="searchBox" placeholder="{{ msg('search') }}" v-model="searchInput" />
+          <input
+            type="text"
+            id="searchBox"
+            placeholder="{{ msg('search') }}"
+            v-model="searchInput"
+          />
           <button
             v-show="searchInput === ''"
             style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey')"
@@ -105,7 +165,11 @@
           <div class="filter-selector">
             <span class="filter-text">{{ msg("filter") }} </span>
             <div class="filter-options">
-              <div class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">
+              <div
+                class="filter-option"
+                :class="{'sel': selectedTag === null}"
+                @click="selectedTag = null"
+              >
                 {{ msg("all") }}
               </div>
               <div
@@ -129,7 +193,10 @@
         </div>
 
         <div class="addons-container">
-          <div id="running-page" v-show="popupOpenedOnScratchTab && searchInput === ''">
+          <div
+            id="running-page"
+            v-show="popupOpenedOnScratchTab && searchInput === ''"
+          >
             {{ msg("runningOnThisPage") }}
           </div>
           <div
@@ -141,38 +208,71 @@
             :id="'addon-' + addon._addonId"
           >
             <div class="addon-topbar">
-              <div class="clickeable-area" @click="addon._expanded = !addon._expanded">
+              <div
+                class="clickeable-area"
+                @click="addon._expanded = !addon._expanded"
+              >
                 <div class="btn-dropdown">
-                  <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': addon._expanded}" />
+                  <img
+                    src="../../images/icons/expand.svg"
+                    alt="v"
+                    :class="{'reverted': addon._expanded}"
+                  />
                 </div>
                 <div class="addon-name">
-                  <img v-if="addon._category === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
-                  <img v-if="addon._category === 'community'" src="../../images/icons/web.svg" class="icon-type" />
-                  <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
+                  <img
+                    v-if="addon._category === 'editor'"
+                    src="../../images/icons/puzzle.svg"
+                    class="icon-type"
+                  />
+                  <img
+                    v-if="addon._category === 'community'"
+                    src="../../images/icons/web.svg"
+                    class="icon-type"
+                  />
+                  <img
+                    v-if="addon._category === 'theme'"
+                    src="../../images/icons/brush.svg"
+                    class="icon-type"
+                  />
                   <img
                     v-if="addon._category === 'easterEgg'"
                     src="../../images/icons/egg-easter.svg"
                     class="icon-type"
                   />
-                  <img v-if="addon._category === 'popup'" src="../../images/icons/popup.svg" class="icon-type" />
+                  <img
+                    v-if="addon._category === 'popup'"
+                    src="../../images/icons/popup.svg"
+                    class="icon-type"
+                  />
                   <span @click="devShowAddonIds">{{ addon.name }}</span>
                 </div>
               </div>
               <div class="badge blue tooltip" v-if="addon._tags.recommended">
-                {{ msg("recommended") }}<span class="tooltiptext">{{ msg("recommendedTooltip") }}</span>
+                {{ msg("recommended") }}<span class="tooltiptext"
+                  >{{ msg("recommendedTooltip") }}</span
+                >
               </div>
-              <div class="badge purple" v-if="addon._tags.new">{{ msg("new") }}</div>
-              <div class="badge darkgreen" v-if="addon._tags.forEditor">{{ msg("forEditor") }}</div>
+              <div class="badge purple" v-if="addon._tags.new">
+                {{ msg("new") }}
+              </div>
+              <div class="badge darkgreen" v-if="addon._tags.forEditor">
+                {{ msg("forEditor") }}
+              </div>
               <div class="badge red tooltip beta-badge" v-if="addon._tags.beta">
                 {{ msg("beta") }}
                 <div class="tooltiptext">{{ msg("betaTooltip") }}</div>
               </div>
-              <div class="badge yellow" v-if="addon._tags.forWebsite">{{ msg("forWebsite") }}</div>
+              <div class="badge yellow" v-if="addon._tags.forWebsite">
+                {{ msg("forWebsite") }}
+              </div>
               <div class="badge green tooltip" v-if="addon._tags.forums">
                 {{ msg("forums") }}
                 <div class="tooltiptext">{{ msg("forumsTooltip") }}</div>
               </div>
-              <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
+              <div class="addon-description" v-show="!addon._expanded">
+                {{ addon.description }}
+              </div>
               <div class="addon-check">
                 <div
                   v-show="addon._expanded"
@@ -191,12 +291,22 @@
               </div>
             </div>
             <div class="addon-settings" v-show="addon._expanded">
-              <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
+              <div class="addon-description-full" v-show="addon._expanded">
+                {{ addon.description }}
+              </div>
               <div id="info" v-for="info of addon.info">
-                <div class="addon-warn" v-if="info.type == 'warning'" v-show="addon._expanded">
+                <div
+                  class="addon-warn"
+                  v-if="info.type == 'warning'"
+                  v-show="addon._expanded"
+                >
                   <img src="../../images/icons/warning.svg" />{{ info.text }}
                 </div>
-                <div class="addon-notice" v-if="info.type == 'notice'" v-show="addon._expanded">
+                <div
+                  class="addon-notice"
+                  v-if="info.type == 'notice'"
+                  v-show="addon._expanded"
+                >
                   <img src="../../images/icons/notice.svg" />{{ info.text }}
                 </div>
               </div>
@@ -204,19 +314,35 @@
                 <span>{{ msg("creditTo") }}</span>
                 <span v-for="credit of addon.credits">
                   <span v-if="credit.link">
-                    <a href="{{ credit.link }}" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a>
+                    <a
+                      href="{{ credit.link }}"
+                      rel="noreferrer noopener"
+                      target="_blank"
+                      >{{ credit.name }}</a
+                    >
                   </span>
                   <span v-else="credit.link">{{ credit.name }}</span>
                 </span>
               </div>
-              <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
-                <a target="_blank" href="./licenses.html?libraries={{ addon.libraries.join(',') }}"
+              <div
+                class="addon-license"
+                v-if="addon.libraries && addon.libraries.length"
+              >
+                <a
+                  target="_blank"
+                  href="./licenses.html?libraries={{ addon.libraries.join(',') }}"
                   >{{ msg("viewLicenses") }}</a
                 >
               </div>
-              <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
+              <div
+                class="settings-column"
+                v-bind:class="[!addon._enabled ? 'disabled' : '']"
+              >
                 <div class="addon-setting" v-for="setting of addon.settings">
-                  <div class="setting-label" v-html="textParse(setting.name, addon)"></div>
+                  <div
+                    class="setting-label"
+                    v-html="textParse(setting.name, addon)"
+                  ></div>
                   <input
                     type="checkbox"
                     class="setting-input check"
@@ -271,15 +397,15 @@
                     :data-setting-id="setting.id"
                     spellcheck="false"
                   />
-                  <input
-                    type="color"
-                    class="setting-input color"
-                    v-model="addonSettings[addon._addonId][setting.id]"
-                    @input="updateSettings(addon, {wait: 250, settingId: setting.id})"
-                    :disabled="!addon._enabled"
-                    v-if="setting.type === 'color'"
-                    :placeholder="setting.default"
-                  />
+
+                  <picker
+                  v-if="setting.type === 'color'"
+                  :value="setting.default"
+                  :setting="setting"
+                  :addon="addon"
+                  @picked="changeColor($event,addon,setting)"
+                  ></picker>
+
                   <button
                     type="clear-button"
                     class="large-button clear-button"
@@ -301,7 +427,11 @@
                   </div>
                 </div>
               </div>
-              <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
+              <div
+                class="presets-column"
+                v-if="addon.presets"
+                v-bind:class="[!addon._enabled ? 'disabled' : '']"
+              >
                 <div class="setting-label">{{ msg("presets") }}</div>
                 <div class="addon-setting" v-for="preset of addon.presets">
                   <button
@@ -323,26 +453,42 @@
     <div v-show="isOpen" class="modal" @click="closesidebar()">
       <div class="modal-content" v-click-outside="modalClickOutside">
         <div>
-          <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" />
+          <img
+            @click="modalToggle()"
+            class="close"
+            alt="Logo"
+            src="../../images/icons/close.svg"
+          />
           <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
         </div>
         <div class="settings-block">
           <div class="setting-body">
             <div class="addon-topbar">
               <span class="addon-name"
-                ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
+                ><img src="../../images/icons/theme.svg" class="icon-type" /> {{
+                msg("scratchAddonsTheme") }}
               </span>
             </div>
             <div class="setting-settings">
-              <span class="settings-description">{{ msg("scratchAddonsThemeDescription") }}</span>
+              <span class="settings-description"
+                >{{ msg("scratchAddonsThemeDescription") }}</span
+              >
               <div class="setting-setting">
                 <div class="filter-selector">
                   <div class="filter-text">{{ msg("theme") }}</div>
                   <div class="filter-options">
-                    <div class="filter-option" :class="{'sel': theme === true}" @click="setTheme(true)">
+                    <div
+                      class="filter-option"
+                      :class="{'sel': theme === true}"
+                      @click="setTheme(true)"
+                    >
                       {{ msg("light") }}
                     </div>
-                    <div class="filter-option" :class="{'sel': theme === false}" @click="setTheme(false)">
+                    <div
+                      class="filter-option"
+                      :class="{'sel': theme === false}"
+                      @click="setTheme(false)"
+                    >
                       {{ msg("dark") }}
                     </div>
                   </div>
@@ -353,20 +499,34 @@
           <div class="setting-body">
             <div class="addon-topbar">
               <span class="addon-name"
-                ><img src="../../images/icons/import-export.svg" class="icon-type" :class="{'dark': theme === false}" />
+                ><img
+                  src="../../images/icons/import-export.svg"
+                  class="icon-type"
+                  :class="{'dark': theme === false}"
+                />
                 {{ msg("exportAndImportSettings") }}
               </span>
             </div>
             <div class="setting-settings">
-              <span class="settings-description">{{ msg("exportAndImportSettingsDescription") }}</span>
-              <span class="settings-description">{{ msg("useBrowserSync") }}</span>
+              <span class="settings-description"
+                >{{ msg("exportAndImportSettingsDescription") }}</span
+              >
+              <span class="settings-description"
+                >{{ msg("useBrowserSync") }}</span
+              >
               <div class="setting-setting">
                 <div class="filter-selector">
-                  <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
+                  <button class="large-button" @click="exportSettings()">
+                    {{ msg("export") }}
+                  </button>
                 </div>
                 <div class="filter-selector">
-                  <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
-                  <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
+                  <button class="large-button" @click="importSettings()">
+                    {{ msg("import") }}
+                  </button>
+                  <button class="large-button hidden-button" id="confirmImport">
+                    {{ msg("confirmImport") }}
+                  </button>
                 </div>
               </div>
             </div>
@@ -384,16 +544,27 @@
             >
           </p>
           <p>
-            <a href="./licenses.html?libraries=intl-messageformat,vue" target="_blank">{{ msg("libraryCredits") }}</a>
+            <a
+              href="./licenses.html?libraries=intl-messageformat,vue"
+              target="_blank"
+              >{{ msg("libraryCredits") }}</a
+            >
           </p>
         </div>
       </div>
     </div>
     <div class="popup" v-show="showPopupModal" style="display: none">
-      <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
+      <div class="label">
+        {{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name :
+        "") }}
+      </div>
       <div>
-        <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
-        <button class="large-button" @click="hidePopup()">{{ msg("skipOpenFullSettings") }}</button>
+        <button class="large-button" @click="openFullSettings()">
+          {{ msg("openFullSettings") }}
+        </button>
+        <button class="large-button" @click="hidePopup()">
+          {{ msg("skipOpenFullSettings") }}
+        </button>
       </div>
     </div>
   </body>
