@@ -10,6 +10,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     document.querySelector("#markItUpId_signature > div > div.markItUpHeader > ul");
 
   var textBox = document.querySelector("#id_body") || document.querySelector("#id_signature");
+  if (!textBox) return;
 
   //input  hidden)
   var uploadInput = document.createElement("input");

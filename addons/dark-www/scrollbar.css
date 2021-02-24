@@ -1,0 +1,12 @@
+::-webkit-scrollbar {
+  background: #333;
+}
+::-webkit-scrollbar-thumb {
+  background: #606060;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #808080;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

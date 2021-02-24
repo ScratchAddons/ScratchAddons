@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["hide-flyout", "mediarecorder"];
+const NEW_ADDONS = ["copy-message-link", "pause"];
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];
@@ -293,6 +293,7 @@ const vue = (window.vue = new Vue({
       const matchesSearch =
         this.searchInput === "" ||
         addonManifest.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        addonManifest._addonId.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         addonManifest.description.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         (addonManifest.credits &&
           addonManifest.credits
@@ -307,7 +308,7 @@ const vue = (window.vue = new Vue({
     stopPropagation(e) {
       e.stopPropagation();
     },
-    toggleAddonRequest(addon) {
+    toggleAddonRequest(addon, event) {
       const toggle = () => {
         // Prevents selecting text when the shift key is being help down
         event.preventDefault();
