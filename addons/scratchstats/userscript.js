@@ -45,20 +45,20 @@ export default async function ({ addon, msg, console }) {
     stats.appendChild(ranksRow);
     ranksRow.className = "sa-stats-row";
     const data = await response.json();
-    followRow.appendChild(createItem(data.statistics.followers, msg("followers")));
-    followRow.appendChild(createItem(`#${data.statistics.ranks.followers}`, msg("most-followed-global")));
-    followRow.appendChild(createItem(`#${data.statistics.ranks.country.followers}`, msg("most-followed-location")));
+    followRow.appendChild(createItem(data.statistics.followers.toLocaleString(), msg("followers")));
+    followRow.appendChild(createItem(`#${data.statistics.ranks.followers.toLocaleString()}`, msg("most-followed-global")));
+    followRow.appendChild(createItem(`#${data.statistics.ranks.country.followers.toLocaleString()}`, msg("most-followed-location")));
     ranksRow.appendChild(
-      createItem(`#${data.statistics.ranks.loves} (#${data.statistics.ranks.country.loves})`, msg("most-loves"))
+      createItem(`#${data.statistics.ranks.loves.toLocaleString()} (#${data.statistics.ranks.country.loves})`, msg("most-loves"))
     );
     ranksRow.appendChild(
       createItem(
-        `#${data.statistics.ranks.favorites} (#${data.statistics.ranks.country.favorites})`,
+        `#${data.statistics.ranks.favorites.toLocaleString()} (#${data.statistics.ranks.country.favorites.toLocaleString()})`,
         msg("most-favorites")
       )
     );
     ranksRow.appendChild(
-      createItem(`#${data.statistics.ranks.views} (#${data.statistics.ranks.country.views})`, msg("most-views"))
+      createItem(`#${data.statistics.ranks.views.toLocaleString()} (#${data.statistics.ranks.country.views.toLocaleString()})`, msg("most-views"))
     );
     fetch(`https://scratchdb.lefty.one/v2/user/history/followers/${data.sys_id}/?range=999`).then(async function (
       response
