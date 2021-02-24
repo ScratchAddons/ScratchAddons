@@ -1,0 +1,20 @@
+{
+  "name": "Profile statistics",
+  "description": "Shows statistics from ScratchDB on profile pages.",
+  "tags": ["community"],
+  "credits": [{ "name": "Maximouse" }],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*/"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/users/*/"]
+    }
+  ],
+  "libraries": ["chartjs"],
+  "l10n": true
+}

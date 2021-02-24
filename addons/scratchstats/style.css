@@ -1,0 +1,28 @@
+.sa-stats > .box-head a {
+  float: right;
+}
+.sa-stats > .box-head a img {
+  height: 20px;
+  margin-right: 8px;
+  vertical-align: bottom;
+}
+.sa-stats > .box-content {
+  padding: 20px;
+}
+.sa-stats-row {
+  display: flex;
+  justify-content: center;
+}
+.sa-stats-row {
+  margin-bottom: 16px;
+}
+.sa-stats-row > * {
+  padding: 0 40px;
+  text-align: center;
+}
+.sa-stats-number {
+  padding-bottom: 8px;
+  font-size: 32px;
+  font-weight: bold;
+  line-height: normal;
+}
