@@ -11,12 +11,7 @@
   </head>
 
   <body style="display: none" v-show="true">
-    <div
-      v-show="projects.length === 0 || projects.length !== projectsChecked"
-      style="text-align: center; font-size: 0.9rem; padding-top: 1rem; font-weight: bold"
-    >
-      {{ loadingMsg }}
-    </div>
+    <div class="loading" v-show="projects.length === 0 || projects.length !== projectsChecked">{{ loadingMsg }}</div>
     <div v-show="loaded">
       <div class="games" v-for="project of projectsSorted">
         <div class="title">
