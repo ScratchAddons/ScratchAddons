@@ -13,22 +13,24 @@
     <script src="../../libraries/color-picker.js" type="module" defer></script>
     <template id="picker-component">
       <div v-click-outside="isOpen = false" v-el:btn :key="value">
-        
-      <button  :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting)">
-</button>
-     <color-picker
-        class=""
-        :value="value"
-        id="picker"
-        v-show="isOpen"
-        v-click-outside="isOpen = false"
-        v-el:pickr
-      ></color-picker>
+        <button
+          :style="{'background-color': color }"
+          class="setting-input color"
+          @click="toggle(addon,setting)"
+        ></button>
+        <color-picker
+          class=""
+          :value="value"
+          id="picker"
+          v-show="isOpen"
+          v-click-outside="isOpen = false"
+          v-el:pickr
+        ></color-picker>
       </div>
     </template>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded" >
+  <body style="display: none" v-show="loaded">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
