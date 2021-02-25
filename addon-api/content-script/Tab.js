@@ -26,7 +26,6 @@ export default class Tab extends Listenable {
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
-    this._listeners = [];
   }
   /**
    * Loads a script by URL.
@@ -194,10 +193,5 @@ export default class Tab extends Listenable {
     // Sanitize just in case
     res = res.replace(/"/g, "");
     return res;
-  }
-
-  bindListener(item, event, listener, useCapture) {
-    item.addEventListener(event, listener, useCapture);
-    this._listeners.push({ item, event, listener, useCapture });
   }
 }

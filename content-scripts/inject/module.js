@@ -14,7 +14,7 @@ const getL10NURLs = () => {
   return returnValue;
 };
 
-let addons = JSON.parse(template.getAttribute("data-userscripts"));
+const addons = JSON.parse(template.getAttribute("data-userscripts"));
 
 window.scratchAddons = {};
 scratchAddons.globalState = getGlobalState();
