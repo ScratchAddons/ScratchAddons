@@ -820,12 +820,11 @@ input[type="color"]::-webkit-color-swatch {
   width: max-content;
 }
 color-picker {
-    z-index:2;
-
+  z-index: 2;
 }
 
 button.setting-input.color {
-    position: relative;
-    height: 32px;
-    width: 75px;
+  position: relative;
+  height: 32px;
+  width: 75px;
 }
