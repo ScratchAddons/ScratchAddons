@@ -135,15 +135,16 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
     } else if (typeof request.setMsgCount !== "undefined") {
       template.setAttribute("data-msgcount", request.setMsgCount);
     } else if (request === "getRunningAddons") {
-        const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
-        const activeThemes = Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
-        style.getAttribute("data-addon-id"));
-        const inactiveThemes = [...sessionEnabledThemes].filter(addonId => !activeThemes.includes(addonId));
-        sendResponse({
-          userscripts,
-          activeThemes,
-          inactiveThemes
-        });
+      const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
+      const activeThemes = Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
+        style.getAttribute("data-addon-id")
+      );
+      const inactiveThemes = [...sessionEnabledThemes].filter((addonId) => !activeThemes.includes(addonId));
+      sendResponse({
+        userscripts,
+        activeThemes,
+        inactiveThemes,
+      });
     }
   });
 
