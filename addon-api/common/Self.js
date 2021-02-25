@@ -11,8 +11,8 @@ export default class Self extends Listenable {
     this._addonObj = addonObj;
     this.browser = typeof InstallTrigger !== "undefined" ? "firefox" : "chrome";
     this.disabled = false;
-    this.addEventListener("disabled", () => this.disabled = true);
-    this.addEventListener("reenabled", () => this.disabled = false);
+    this.addEventListener("disabled", () => (this.disabled = true));
+    this.addEventListener("reenabled", () => (this.disabled = false));
   }
   get dir() {
     return `${this._addonObj._path}addons/${this.id}`;

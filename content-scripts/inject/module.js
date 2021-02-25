@@ -100,10 +100,10 @@ const observer = new MutationObserver((mutationsList) => {
         if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(attrVal.name));
       } else {
         // Global events, like auth change
-          scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
-            eventTarget.dispatchEvent(new CustomEvent(attrVal.name))
-          );
-        }
+        scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
+          eventTarget.dispatchEvent(new CustomEvent(attrVal.name))
+        );
+      }
       removeAttr();
     }
   }

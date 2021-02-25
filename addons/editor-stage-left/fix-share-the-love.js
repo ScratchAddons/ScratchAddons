@@ -2,7 +2,7 @@ export default function ({ addon, global, console }) {
   let interval, injected;
 
   addon.self.addEventListener("disabled", () => clearInterval(interval));
-  addon.self.addEventListener("reenabled", () => (!injected && tryInjecting()));
+  addon.self.addEventListener("reenabled", () => !injected && tryInjecting());
 
   // TODO: this makes the function work normally when the addon is disabled,
   // but "share the love" stays broken for a while after disabling/reenabling.
