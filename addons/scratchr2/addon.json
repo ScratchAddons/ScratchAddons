@@ -22,6 +22,7 @@
       "runAtComplete": false
     }
   ],
+  "dynamicUserscriptDisable": true,
   "userstyles": [
     {
       "url": "set-default-var-value.css",
