@@ -124,7 +124,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         .catch((err) => sendResponse(err));
       return true;
     }
-  }
+  };
   chrome.runtime.onMessage.addListener(messageListener);
   addon.self.addEventListener("disabled", () => {
     chrome.runtime.onMessage.removeListener(messageListener);
