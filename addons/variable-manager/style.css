@@ -24,6 +24,10 @@
   font-size: large;
 }
 
+.sa-var-manager-name {
+  word-break: break-word;
+}
+
 .sa-var-manager-value {
   width: 75%;
   padding: 0;
@@ -45,14 +49,13 @@
   resize: none;
 }
 
-table {
+.sa-var-manager table {
   border-radius: 5px;
   border-collapse: collapse;
   width: 100%;
 }
 
-td,
-th {
+.sa-var-manager td,th {
   border: 1px solid #dddddd;
   text-align: left;
   padding-left: 8px;
