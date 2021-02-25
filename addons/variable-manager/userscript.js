@@ -100,7 +100,7 @@ export default async function ({ addon, global, console, msg }) {
       const row = document.createElement("tr");
       this.row = row;
       const labelCell = document.createElement("td");
-      labelCell.className = "sa-var-manager-name"
+      labelCell.className = "sa-var-manager-name";
 
       const label = document.createElement("label");
       label.textContent = this.scratchVariable.name;
