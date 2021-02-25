@@ -50,10 +50,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     sendResponse(initialUrl);
   } else if (request.themesUpdated) {
     injectUserstylesAndThemes({ themes: request.themesUpdated, isUpdate: true });
-  } else if (request.newAddonState) {
-    let addonId = request.newAddonState.addonId;
-    if (request.newAddonState.newState) postMessage({ saAddonEnabled: addonId }, "*");
-    else postMessage({ saAddonDisabled: addonId }, "*");
   }
 });
 chrome.runtime.sendMessage("ready");
@@ -81,11 +77,7 @@ function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
       let css = theme.styles[styleUrl];
       // Replace %addon-self-dir% for relative URLs
       css = css.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${theme.addonId}`));
-      if (
-        isUpdate &&
-        (css.startsWith("/* sa-autoupdate-theme-ignore */") || css.startsWith("/* sa-theme-enable-ignore */"))
-      )
-        continue;
+      if (isUpdate && css.startsWith("/* sa-autoupdate-theme-ignore */")) continue;
       css += `\n/*# sourceURL=${styleUrl} */`;
       const style = document.createElement("style");
       style.classList.add("scratch-addons-theme");
@@ -112,14 +104,13 @@ function setCssVariables(addonSettings) {
   }
 }
 
-function onHeadAvailable({ globalState, l10njson, allAddons, addonsWithUserscripts, userstyleUrls, themes }) {
+function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, userstyleUrls, themes }) {
   setCssVariables(globalState.addonSettings);
   injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate: false });
 
   const template = document.createElement("template");
   template.id = "scratch-addons";
   template.setAttribute("data-path", chrome.runtime.getURL(""));
-  template.setAttribute("data-alladdons", JSON.stringify(allAddons));
   template.setAttribute("data-userscripts", JSON.stringify(addonsWithUserscripts));
   template.setAttribute("data-global-state", JSON.stringify(globalState));
   template.setAttribute("data-l10njson", JSON.stringify(l10njson));
@@ -141,6 +132,7 @@ function onHeadAvailable({ globalState, l10njson, allAddons, addonsWithUserscrip
       template.setAttribute("data-msgcount", request.setMsgCount);
     } else if (request === "getRunningAddons") {
       // We need to send themes that might have been injected dynamically
+      // TODO: As well as not sending running addons that consider themselves disabled
       sendResponse([
         ...new Set([
           ...JSON.parse(template.getAttribute("data-userscripts")).map((obj) => obj.addonId),

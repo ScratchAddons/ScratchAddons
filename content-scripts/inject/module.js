@@ -15,8 +15,6 @@ const getL10NURLs = () => {
 };
 
 let addons = JSON.parse(template.getAttribute("data-userscripts"));
-const allAddons = JSON.parse(template.getAttribute("data-alladdons"));
-const ranAddons = [];
 
 window.scratchAddons = {};
 scratchAddons.globalState = getGlobalState();
@@ -95,14 +93,17 @@ const observer = new MutationObserver((mutationsList) => {
       removeAttr();
     } else if (attrType === "data-fire-event") {
       if (attrVal.addonId) {
-        const settingsEventTarget = scratchAddons.eventTargets.settings.find(
+        // Addon specific events, like settings change and self disabled
+        const eventTarget = scratchAddons.eventTargets[attrVal.target].find(
           (eventTarget) => eventTarget._addonId === attrVal.addonId
         );
-        if (settingsEventTarget) settingsEventTarget.dispatchEvent(new CustomEvent("change"));
-      } else
-        scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
-          eventTarget.dispatchEvent(new CustomEvent(attrVal.name))
-        );
+        if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(attrVal.name));
+      } else {
+        // Global events, like auth change
+          scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
+            eventTarget.dispatchEvent(new CustomEvent(attrVal.name))
+          );
+        }
       removeAttr();
     }
   }
@@ -111,30 +112,7 @@ observer.observe(template, { attributes: true });
 
 for (const addon of addons) {
   if (addon.scripts.length) runAddonUserscripts(addon);
-  ranAddons.push(addon.addonId);
 }
-addEventListener("message", (event) => {
-  // Reset variable in the case that a new addon has been enabled/disabled.
-  addons = JSON.parse(template.getAttribute("data-userscripts"));
-  let addonEnabled = event.data.saAddonEnabled;
-  let addonDisabled = event.data.saAddonDisabled;
-  if (addonEnabled && !addons.find((a) => a.addonId == addonEnabled)) {
-    let addon = allAddons.find((a) => a.addonId == addonEnabled);
-    addons.push(addon);
-    template.setAttribute("data-userscripts", JSON.stringify(addons));
-    if (ranAddons.includes(addonEnabled)) return;
-    ranAddons.push(addonEnabled);
-    runAddonUserscripts(addon, { late: true });
-  }
-  if (addonDisabled) {
-    let addon = allAddons.find((a) => a.addonId == addonDisabled);
-    addons.splice(
-      addons.findIndex((a) => a.addonId == addon.addonId),
-      1
-    );
-    template.setAttribute("data-userscripts", JSON.stringify(addons));
-  }
-});
 
 function loadClasses() {
   scratchAddons.classNames.arr = [

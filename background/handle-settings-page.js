@@ -24,13 +24,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.storage.sync.set({
       addonsEnabled: scratchAddons.localState.addonsEnabled,
     });
-    chrome.tabs.query({}, (tabs) => {
-      // Tabs with urls means that ScratchAddons has perms there
-      tabs = tabs.filter((tab) => tab.url);
-      for (let tab of tabs) {
-        chrome.tabs.sendMessage(tab.id, { newAddonState: { addonId, newState } });
-      }
-    });
+
+    // Fire disabled event for userscripts
+    chrome.tabs.query({}, (tabs) =>
+      tabs.forEach(
+        (tab) =>
+          (tab.url || (!tab.url && typeof browser !== "undefined")) &&
+          chrome.tabs.sendMessage(tab.id, {
+            fireEvent: {
+              target: "self",
+              name: newState ? "reenabled" : "disabled",
+              addonId,
+            },
+          })
+      )
+    );
+    
     if (newState === false) {
       const addonObjs = scratchAddons.addonObjects.filter((addonObj) => addonObj.self.id === addonId);
       if (addonObjs) addonObjs.forEach((addonObj) => addonObj._kill());

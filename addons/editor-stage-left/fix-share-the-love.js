@@ -1,9 +1,13 @@
 export default function ({ addon, global, console }) {
   let interval, injected;
 
-  addon.self.addEventListener("addonDisabled", () => clearInterval(interval));
-  addon.self.addEventListener("addonReeabled", () => (injected ? 0 : tryInjecting()));
+  addon.self.addEventListener("disabled", () => clearInterval(interval));
+  addon.self.addEventListener("reenabled", () => (!injected && tryInjecting()));
 
+  // TODO: this makes the function work normally when the addon is disabled,
+  // but "share the love" stays broken for a while after disabling/reenabling.
+  // We should consider not providing no-refresh-disable for an addon, or
+  // somehow force Blockly to call this function again.
   const inject = (workspace) => {
     injected = true;
     const originalGetClientRect = workspace.toolbox_.getClientRect;

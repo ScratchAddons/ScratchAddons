@@ -32,11 +32,11 @@ async function getContentScriptInfo(url) {
     addonsWithUserscripts: [],
     userstyleUrls: [],
     themes: [],
-    allAddons: [],
   };
   const fetchThemeStylesPromises = [];
 
   for (const { addonId, manifest } of scratchAddons.manifests) {
+    if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
     const userscripts = [];
     for (const script of manifest.userscripts || []) {
       if (userscriptMatches({ url }, script, addonId))
@@ -45,8 +45,6 @@ async function getContentScriptInfo(url) {
           runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
         });
     }
-    data.allAddons.push({ addonId, scripts: userscripts });
-    if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
 
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
