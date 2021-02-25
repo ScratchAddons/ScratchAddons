@@ -1,8 +1,12 @@
+@import url("../styles/components/tooltips.css");
+@import url("../styles/colors.css");
 html {
   width: 400px;
+  background-color: #2a2a2a; /* Avoid iframe src change flash */
 }
 
 body {
+  height: var(--height, 599px);
   margin: 0;
   font-family: "Sora", sans-serif;
   color: white;
@@ -30,7 +34,7 @@ body {
 .popup-name img {
   vertical-align: middle;
   filter: brightness(10);
-  height: 14px;
+  height: 18px;
 }
 .popup-title {
   padding: 0 5px;
@@ -88,13 +92,13 @@ body {
 .popup-name.sel {
   background-color: #ff7b26;
 }
-#other-popups a {
-  cursor: pointer;
+.popout > .popout-img {
+  height: 10px;
 }
 
 iframe {
   width: 400px;
-  height: 468px;
+  height: calc(var(--height, 599px) - 107px);
   overflow-x: hidden;
   overflow-y: auto;
   border: none;
@@ -108,4 +112,27 @@ iframe {
   text-decoration: none;
   opacity: 0.75;
   font-size: 0.7rem;
+}
+
+#no-tabs {
+  width: 400px;
+  height: calc(var(--height, 599px) - 107px);
+  background-color: #222;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}
+#no-tabs > div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  flex-direction: column;
+}
+#no-tabs-title {
+  font-size: 16px;
+  margin-top: auto;
+}
+#no-tabs-description {
+  margin-bottom: auto;
 }

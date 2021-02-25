@@ -20,26 +20,26 @@ function cleanPost(post) {
   return readableDom.documentElement.innerHTML;
 }
 
-function triggerNewSearch(searchContent, query, sort) {
+function triggerNewSearch(searchContent, query, sort, msg) {
   searchContent.style.display = "block";
   while (searchContent.firstChild) {
     searchContent.removeChild(searchContent.firstChild);
   }
   currentQuery = query;
-  appendSearch(searchContent, query, 0, sort);
+  appendSearch(searchContent, query, 0, sort, msg);
 }
 
-function appendSearch(box, query, page, term) {
+function appendSearch(box, query, page, term, msg) {
   if (page * 50 > hits) return 0;
   isCurrentlyProcessing = true;
-  let loading = document.createTextNode("Loading...");
+  let loading = document.createTextNode(msg("loading"));
   currentPage = page;
   box.appendChild(loading);
   window
     .fetch(`https://scratchdb.lefty.one/v2/forum/search?q=${encodeURIComponent(query)}&page=${page}&o=${term}`)
     .catch((err) => {
       box.removeChild(box.lastChild);
-      box.appendChild(document.createTextNode("Error loading from ScratchDB!"));
+      box.appendChild(document.createTextNode(msg("error")));
     })
     .then((res) => res.json())
     .then((data) => {
@@ -47,7 +47,7 @@ function appendSearch(box, query, page, term) {
       if (hits === 0) {
         //there were no hits
         box.removeChild(box.lastChild);
-        box.appendChild(document.createTextNode("Your search returned no results"));
+        box.appendChild(document.createTextNode(msg("none")));
 
         return;
       }
@@ -83,7 +83,8 @@ function appendSearch(box, query, page, term) {
 
         let boxTime = document.createElement("span");
         boxTime.classList = "conr";
-        boxTime.appendChild(document.createTextNode(new Date(post.time.posted).toLocaleString("en-US")));
+        const localizedPostDate = scratchAddons.l10n.datetime(new Date(post.time.posted));
+        boxTime.appendChild(document.createTextNode(localizedPostDate));
         boxHead.appendChild(boxTime);
 
         // post content
@@ -98,7 +99,7 @@ function appendSearch(box, query, page, term) {
         let postLeftDl = document.createElement("dl");
         postLeft.appendChild(postLeftDl);
 
-        postLeftDl.appendChild(createTextBox("Username:", "black username", 1));
+        postLeftDl.appendChild(createTextBox(msg("username"), "black username", 1));
         let userLink = document.createElement("a"); // this one is an `a` and not a `span`, so it isnt in the createTextBox function
         userLink.setAttribute("href", `https://scratch.mit.edu/users/${post.username}`);
         userLink.appendChild(document.createTextNode(post.username));
@@ -107,15 +108,16 @@ function appendSearch(box, query, page, term) {
         postLeftDl.appendChild(document.createElement("br"));
         postLeftDl.appendChild(document.createElement("br"));
 
-        if (locationQuery != "") {
+        if (locationQuery !== "") {
           let userPostButton = document.createElement("a");
-          userPostButton.appendChild(document.createTextNode("User Posts Here"));
+          userPostButton.appendChild(document.createTextNode(msg("posts-here")));
           userPostButton.addEventListener("click", () => {
             document.getElementById("forum-search-input").value = `+username:"${post.username}" ${locationQuery}`;
             triggerNewSearch(
               document.getElementById("forum-search-list"),
               document.getElementById("forum-search-input").value,
-              document.getElementById("forum-search-dropdown").value
+              document.getElementById("forum-search-dropdown").value,
+              msg
             );
           });
           postLeftDl.appendChild(userPostButton);
@@ -124,13 +126,14 @@ function appendSearch(box, query, page, term) {
         }
 
         let userGlobalButton = document.createElement("a");
-        userGlobalButton.appendChild(document.createTextNode("User Posts Site-wide"));
+        userGlobalButton.appendChild(document.createTextNode(msg("posts-sitewide")));
         userGlobalButton.addEventListener("click", () => {
           document.getElementById("forum-search-input").value = `+username:"${post.username}"`;
           triggerNewSearch(
             document.getElementById("forum-search-list"),
             document.getElementById("forum-search-input").value,
-            document.getElementById("forum-search-dropdown").value
+            document.getElementById("forum-search-dropdown").value,
+            msg
           );
         });
         postLeftDl.appendChild(userGlobalButton);
@@ -138,11 +141,13 @@ function appendSearch(box, query, page, term) {
         postLeftDl.appendChild(document.createElement("br"));
         postLeftDl.appendChild(document.createElement("br"));
 
-        postLeftDl.appendChild(createTextBox("First Checked:", "black username", 1));
-        postLeftDl.appendChild(createTextBox(new Date(post.time.first_checked).toLocaleString("en-US"), "", 2));
+        postLeftDl.appendChild(createTextBox(msg("first-checked"), "black username", 1));
+        postLeftDl.appendChild(createTextBox(scratchAddons.l10n.datetime(new Date(post.time.first_checked)), "", 2));
 
-        postLeftDl.appendChild(createTextBox("Last Checked:", "black username", 1));
-        postLeftDl.appendChild(createTextBox(new Date(post.time.html_last_checked).toLocaleString("en-US"), "", 2));
+        postLeftDl.appendChild(createTextBox(msg("last-checked"), "black username", 1));
+        postLeftDl.appendChild(
+          createTextBox(scratchAddons.l10n.datetime(new Date(post.time.html_last_checked)), "", 2)
+        );
 
         let postRight = document.createElement("div");
         postRight.classList = "postright";
@@ -157,14 +162,17 @@ function appendSearch(box, query, page, term) {
         postHTML.insertAdjacentHTML("beforeend", cleanPost(post.content.html));
         postMsg.appendChild(postHTML);
 
-        if (post.editor != null) {
+        if (post.editor) {
           let postEdit = document.createElement("p");
           postEdit.classList = "postedit";
           let postEditMessage = document.createElement("em");
           postEditMessage.classList = "posteditmessage";
           postEditMessage.appendChild(
             document.createTextNode(
-              `Last edited by ${post.editor} (${new Date(post.time.edited).toLocaleString("en-US")})`
+              msg("last-edited-by", {
+                username: post.editor,
+                datetime: scratchAddons.l10n.datetime(new Date(post.time.edited)),
+              })
             )
           );
           postEdit.appendChild(postEditMessage);
@@ -182,30 +190,33 @@ function appendSearch(box, query, page, term) {
     });
 }
 
-export default async function ({ addon, global, console }) {
-  await addon.tab.loadScript("https://scratchblocks.github.io/js/scratchblocks-v3.5-min.js");
+export default async function ({ addon, global, console, msg }) {
+  await addon.tab.loadScript(addon.self.lib + "/scratchblocks-v3.5-min.js");
   // create the search bar
   let search = document.createElement("form");
+  search.id = "forum-search-form";
   let searchBar = document.createElement("input");
   searchBar.id = "forum-search-input";
   searchBar.setAttribute("type", "text");
   let pathSplit = window.location.pathname.split("/");
-  let searchPlaceholder = "Search posts on the entire Scratch Forums";
+  let searchPlaceholder = msg("placeholder");
   switch (pathSplit.length) {
-    case 5:
+    case 5: {
       let topicTitle = document
         .getElementsByClassName("linkst")[0]
         .getElementsByTagName("li")[2]
         .innerText.substring(2)
         .trim();
       locationQuery = ` +topic:${pathSplit[3]}`;
-      searchPlaceholder = `Search posts in "${topicTitle}"`;
+      searchPlaceholder = msg("search-topic", { topic: topicTitle });
       break;
-    case 4:
+    }
+    case 4: {
       let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].innerHTML;
       locationQuery = ` +category:"${category}"`;
-      searchPlaceholder = `Search posts in "${category}"`;
+      searchPlaceholder = msg("search-cat", { cat: category });
       break;
+    }
   }
   searchBar.setAttribute("placeholder", searchPlaceholder);
   search.appendChild(searchBar);
@@ -216,7 +227,7 @@ export default async function ({ addon, global, console }) {
   for (let type of types) {
     let dropdownOption = document.createElement("option");
     dropdownOption.value = type;
-    dropdownOption.appendChild(document.createTextNode(type));
+    dropdownOption.appendChild(document.createTextNode(msg(type)));
     searchDropdown.appendChild(dropdownOption);
   }
   search.appendChild(searchDropdown);
@@ -226,7 +237,7 @@ export default async function ({ addon, global, console }) {
     let et = e.target;
     if (et.scrollHeight - et.scrollTop === et.clientHeight) {
       if (!isCurrentlyProcessing) {
-        appendSearch(searchContent, currentQuery, currentPage + 1, currentSort);
+        appendSearch(searchContent, currentQuery, currentPage + 1, currentSort, msg);
       }
     }
   });
@@ -240,13 +251,13 @@ export default async function ({ addon, global, console }) {
   navIndex.after(search);
 
   search.addEventListener("submit", (e) => {
-    triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value);
+    triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value, msg);
     e.preventDefault();
   });
 
   searchDropdown.addEventListener("change", (e) => {
-    if (searchBar.value != "") {
-      triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value);
+    if (searchBar.value !== "") {
+      triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value, msg);
     }
   });
 }

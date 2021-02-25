@@ -1,2 +1,10 @@
 libraries/*
 *.md
+
+addons-l10n/*/*.json
+!addons-l10n/en/*.json
+
+_locales/*/messages.json
+!_locales/en/messages.json
+
+.github/*

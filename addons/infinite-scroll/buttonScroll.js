@@ -13,16 +13,16 @@ async function commentLoader(addon, heightControl, selector) {
 }
 
 export default async function ({ addon, global, console }) {
-  if (window.location.pathname.split("/").length == 5 && addon.settings.get("studioScroll"))
+  if (window.location.pathname.split("/").length === 5 && addon.settings.get("studioScroll"))
     commentLoader(addon, "content", "#comments > div:nth-child(2) > ul > div");
-  if (window.location.pathname.split("/").length == 4 && addon.settings.get("profileCommentScroll"))
-    commentLoader(addon, "content", "#comments > div:nth-child(3) > ul > div");
-  if (window.location.pathname.split("/").length == 4 && addon.settings.get("projectScroll"))
+  if (window.location.pathname.split("/").length === 4 && addon.settings.get("profileCommentScroll"))
+    commentLoader(addon, "content", "[data-control=load-more]");
+  if (window.location.pathname.split("/").length === 4 && addon.settings.get("projectScroll"))
     commentLoader(
       addon,
       "view",
       "#view > div > div.project-lower-container > div > div > div.comments-container > div.flex-row.comments-list > button"
     );
-  if (window.location.pathname.split("/").length == 3 && addon.settings.get("messageScroll"))
+  if (window.location.pathname.split("/").length === 3 && addon.settings.get("messageScroll"))
     commentLoader(addon, "view", "#view > div > div.messages-details.inner > section.messages-social > button");
 }

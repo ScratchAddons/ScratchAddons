@@ -1,0 +1,38 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/master/1/1.6.json",
+  "name": "Curator link",
+  "description": "Creates a clickable link for the curator of the front page.",
+  "credits": [
+    {
+      "name": "Hans5958",
+      "link": "https://github.com/Hans5958/userscripts/blob/master/Scratch/Curator%20Links.user.js"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "script.js",
+      "matches": ["https://scratch.mit.edu/"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/"],
+      "settingMatch": {
+        "id": "styleAsNormalText",
+        "value": true
+      }
+    }
+  ],
+  "settings": [
+    {
+      "id": "styleAsNormalText",
+      "name": "Style as normal text",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": false,
+  "l10n": true
+}

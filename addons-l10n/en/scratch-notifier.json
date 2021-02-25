@@ -1,0 +1,22 @@
+{
+  "scratch-notifier/notif-own-project": "{actor} commented on your project \"{title}\"",
+  "scratch-notifier/notif-project-reply": "{actor} replied to you on project \"{title}\"",
+  "scratch-notifier/notif-own-project-reply": "{actor} replied to {commentee} on project \"{title}\"",
+  "scratch-notifier/notif-profile": "{actor} commented on your profile",
+  "scratch-notifier/notif-own-profile-reply": "{actor} replied to you on your profile",
+  "scratch-notifier/notif-own-profile-reply-other": "{actor} replied to {commentee} on your profile",
+  "scratch-notifier/notif-profile-reply": "{actor} replied on {title}'s profile",
+  "scratch-notifier/notif-studio-reply": "{actor} replied in studio \"{title}\"",
+  "scratch-notifier/notif-comment": "New Scratch comment",
+  "scratch-notifier/notif-forum": "There are new posts in the forum thread \"{title}\"",
+  "scratch-notifier/notif-love": "{actor} loved your project \"{title}\"",
+  "scratch-notifier/notif-fav": "{actor} favorited your project \"{title}\"",
+  "scratch-notifier/notif-follow": "{actor} is now following you",
+  "scratch-notifier/notif-invite": "{actor} invited you to curate the studio \"{title}\"",
+  "scratch-notifier/notif-remix": "{actor} remixed your project \"{parent_title}\" as \"{title}\"",
+  "scratch-notifier/notif-studio": "There was new activity in studio \"{title}\" today",
+  "scratch-notifier/notif-generic": "New Scratch message",
+  "scratch-notifier/open": "Open messages page",
+  "scratch-notifier/clear": "Mark all as read",
+  "scratch-notifier/notif-promotion": "{actor} promoted you to manager for the studio \"{title}\""
+}

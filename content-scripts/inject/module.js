@@ -1,4 +1,5 @@
 import runAddonUserscripts from "./run-userscript.js";
+import Localization from "./l10n.js";
 
 const template = document.getElementById("scratch-addons");
 const getGlobalState = () => {
@@ -7,13 +8,23 @@ const getGlobalState = () => {
   return returnValue;
 };
 
+const getL10NURLs = () => {
+  const returnValue = JSON.parse(template.getAttribute("data-l10njson"));
+  template.removeAttribute("data-l10njson");
+  return returnValue;
+};
+
+const addons = JSON.parse(template.getAttribute("data-userscripts"));
+
 window.scratchAddons = {};
 scratchAddons.globalState = getGlobalState();
+scratchAddons.l10n = new Localization(getL10NURLs());
 scratchAddons.eventTargets = {
   auth: [],
   settings: [],
   tab: [],
 };
+scratchAddons.classNames = { loaded: false };
 
 const pendingPromises = {};
 pendingPromises.msgCount = [];
@@ -27,6 +38,16 @@ scratchAddons.methods.getMsgCount = () => {
   return promise;
 };
 
+function bodyIsEditorClassCheck() {
+  const pathname = location.pathname.toLowerCase();
+  const split = pathname.split("/").filter(Boolean);
+  if (!split[0] || split[0] !== "projects") return;
+  if (split.includes("editor") || split.includes("fullscreen")) document.body.classList.add("sa-body-editor");
+  else document.body.classList.remove("sa-body-editor");
+}
+if (!document.body) document.addEventListener("DOMContentLoaded", bodyIsEditorClassCheck);
+else bodyIsEditorClassCheck();
+
 const originalReplaceState = history.replaceState;
 history.replaceState = function () {
   const oldUrl = location.href;
@@ -35,6 +56,19 @@ history.replaceState = function () {
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
+  bodyIsEditorClassCheck();
+  return returnValue;
+};
+
+const originalPushState = history.pushState;
+history.pushState = function () {
+  const oldUrl = location.href;
+  const newUrl = new URL(arguments[2], document.baseURI).href;
+  const returnValue = originalPushState.apply(history, arguments);
+  for (const eventTarget of scratchAddons.eventTargets.tab) {
+    eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
+  }
+  bodyIsEditorClassCheck();
   return returnValue;
 };
 
@@ -72,6 +106,63 @@ const observer = new MutationObserver((mutationsList) => {
 });
 observer.observe(template, { attributes: true });
 
-for (const addon of JSON.parse(template.getAttribute("data-userscripts"))) {
+for (const addon of addons) {
   if (addon.scripts.length) runAddonUserscripts(addon);
+}
+
+function loadClasses() {
+  scratchAddons.classNames.arr = [
+    ...new Set(
+      [...document.styleSheets]
+        .filter(
+          (styleSheet) =>
+            !(
+              styleSheet.ownerNode.textContent.startsWith(
+                "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library."
+              ) &&
+              (styleSheet.ownerNode.textContent.includes("input_input-form") ||
+                styleSheet.ownerNode.textContent.includes("label_input-group_"))
+            )
+        )
+        .map((e) => {
+          try {
+            return [...e.cssRules];
+          } catch (e) {
+            return [];
+          }
+        })
+        .flat()
+        .map((e) => e.selectorText)
+        .filter((e) => e)
+        .map((e) => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g))
+        .filter((e) => e)
+        .flat()
+    ),
+  ];
+  scratchAddons.classNames.loaded = true;
+  document.querySelectorAll("[class*='scratchAddonsScratchClass/']").forEach((el) => {
+    [...el.classList]
+      .filter((className) => className.startsWith("scratchAddonsScratchClass"))
+      .map((className) => className.substring(className.indexOf("/") + 1))
+      .forEach((classNameToFind) =>
+        el.classList.replace(
+          `scratchAddonsScratchClass/${classNameToFind}`,
+          scratchAddons.classNames.arr.find(
+            (className) =>
+              className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
+          ) || `scratchAddonsScratchClass/${classNameToFind}`
+        )
+      );
+  });
+}
+
+if (document.querySelector("title")) loadClasses();
+else {
+  const stylesObserver = new MutationObserver((mutationsList) => {
+    if (document.querySelector("title")) {
+      stylesObserver.disconnect();
+      loadClasses();
+    }
+  });
+  stylesObserver.observe(document.head, { childList: true });
 }

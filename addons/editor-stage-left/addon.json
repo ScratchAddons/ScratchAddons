@@ -1,7 +1,13 @@
 {
   "name": "Display stage on left side",
   "description": "Moves the stage to the left side of the editor.",
-  "notice": "Make sure to refresh the editor after enabling/disabling.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Refresh the editor after enabling/disabling this theme.",
+      "id": "refresheditor"
+    }
+  ],
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"
@@ -19,7 +25,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "traps": true,
   "tags": ["editor", "theme"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }

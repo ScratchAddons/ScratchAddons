@@ -2,16 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Scratch Addons - Cloud games</title>
+    <title></title>
+    <script src="../../webpages/set-lang.js" defer></script>
     <link rel="stylesheet" href="popup.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
-    <script src="./popup.js" defer></script>
+    <script src="./popup.js" type="module"></script>
   </head>
 
   <body style="display: none" v-show="loaded">
     <div class="games" v-for="project of projectsSorted">
-      <div class="title" @click="false && project.extended = !project.extended;">
+      <div class="title">
         <a class="project-name" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
           >{{ project.title }}</a
         >
@@ -19,9 +20,11 @@
       </div>
       <div class="project-details" v-show="true || project.amt > 0 && project.extended">
         <div class="username-list">
-          <a v-for="user of project.users">{{ user }}</a>
+          <a v-for="user of project.users" :href="'https://scratch.mit.edu/users/' + user" target="_blank"
+            >{{ user }}</a
+          >
         </div>
-        <div class="username-list" v-show="project.amt === 0">No users currently playing</div>
+        <div class="username-list" v-show="project.amt === 0">{{ messages.noUsersMsg }}</div>
       </div>
     </div>
   </body>

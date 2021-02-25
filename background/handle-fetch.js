@@ -1,6 +1,6 @@
 const extraInfoSpec = ["blocking", "requestHeaders"];
 const extraInfoSpec2 = ["blocking", "responseHeaders"];
-if (chrome.webRequest.OnBeforeSendHeadersOptions.hasOwnProperty("EXTRA_HEADERS")) {
+if (Object.prototype.hasOwnProperty.call(chrome.webRequest.OnBeforeSendHeadersOptions, "EXTRA_HEADERS")) {
   extraInfoSpec.push("extraHeaders");
   extraInfoSpec2.push("extraHeaders");
 }
@@ -20,14 +20,12 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     )
       return;
 
-    let useFetchHeaderIndex = null;
-    let interceptRequest = false || optionRequestIds.includes(details.requestId);
-    if (!interceptRequest) {
-      for (const i in details.requestHeaders) {
+    let interceptRequest = optionRequestIds.includes(details.requestId);
+    if (!interceptRequest && details.requestHeaders) {
+      for (let i = 0; i < details.requestHeaders.length; i++) {
         const headerName = details.requestHeaders[i].name;
         if (headerName === "X-ScratchAddons-Uses-Fetch") {
           interceptRequest = true;
-          useFetchHeaderIndex = i;
         }
       }
     }
@@ -62,8 +60,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 
 chrome.webRequest.onHeadersReceived.addListener(
   function (details) {
-    if (details.method === "OPTIONS") {
-      for (const i in details.responseHeaders) {
+    if (details.method === "OPTIONS" && details.responseHeaders) {
+      for (let i = 0; i < details.responseHeaders.length; i++) {
         const headerName = details.responseHeaders[i].name;
         if (headerName === "access-control-allow-headers") {
           details.responseHeaders[i].value += ", x-scratchaddons-uses-fetch";

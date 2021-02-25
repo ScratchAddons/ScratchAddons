@@ -1,0 +1,43 @@
+.button,
+button,
+.button:hover,
+button:hover,
+.button.grey,
+button.grey,
+.button[data-control="load-more"]:hover,
+.ui-widget button.ui-state-default,
+.button:not(.grey) a,
+.button:not(.grey) a:hover,
+.button:not(.grey) a:visited,
+#topnav form.search input[type="text"],
+.modal-header,
+.jqui-modal .ui-dialog-titlebar.ui-widget-header,
+.modal-header label,
+#topnav ul.site-nav li a,
+#topnav ul.account-nav > li > span,
+#topnav ul.account-nav > li.join-scratch > a,
+#topnav ul.account-nav ul.user-nav li a,
+#topnav li.logout.divider input,
+.djangobb .new_topic,
+.follow-topic .follow-button:hover {
+  color: rgb(
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 87)),
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 94)),
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 117))
+  );
+}
+#topnav form.search input[type="text"]::placeholder {
+  color: rgba(
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 87)),
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 94)),
+    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 117)),
+    0.75
+  );
+}
+#topnav form.search .glass,
+#topnav ul.account-nav .messages .messages-icon::before,
+#topnav ul.account-nav .my-stuff .mystuff-icon,
+#topnav .dropdown .caret,
+.button:not(.grey) .icon-sm {
+  filter: brightness(calc(1 - var(--scratchr2-primaryColor-isLight) * (1 - 0.4)));
+}

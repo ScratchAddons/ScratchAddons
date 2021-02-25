@@ -2,7 +2,7 @@ html {
   font-size: 12px;
   height: 100%;
   scrollbar-width: thin;
-  scrollbar-color: #ff7b26 rgba(0, 0, 0, 0);
+  scrollbar-color: grey none;
   color: #dddddd;
 }
 
@@ -10,17 +10,9 @@ body {
   margin: 0 auto;
   font-family: "Sora", sans-serif;
   width: auto;
-  height: 500px;
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: #222;
-}
-
-body::-webkit-scrollbar {
-  width: 10px;
-}
-body::-webkit-scrollbar-thumb {
-  background-color: #ff7b26;
 }
 
 a {
@@ -79,7 +71,7 @@ a:hover {
   border-radius: 4px;
   border: 1px solid #333;
   background: #2a2a2a;
-  margin: 6px;
+  margin: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
@@ -90,4 +82,21 @@ a:hover {
 .small-icon {
   height: 14px;
   vertical-align: text-bottom;
+}
+/*scrollbar*/
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* hide track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 4px;
 }

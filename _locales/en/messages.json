@@ -1,0 +1,283 @@
+{
+  "extensionName": {
+    "message": "Scratch Addons"
+  },
+  "extensionDescription": {
+    "message": "Scratch Addons provides new features and themes for the scratch.mit.edu website and project editor."
+  },
+  "messaging": {
+    "message": "Messaging"
+  },
+  "games": {
+    "message": "Games"
+  },
+  "openInNewTab": {
+    "message": "Open in new browser tab"
+  },
+  "changelog": {
+    "message": "View changelog"
+  },
+  "15min": {
+    "message": "For 15 minutes"
+  },
+  "1hour": {
+    "message": "For 1 hour"
+  },
+  "8hours": {
+    "message": "For 8 hours"
+  },
+  "24hours": {
+    "message": "For 24 hours"
+  },
+  "untilEnabled": {
+    "message": "Until I turn it back on"
+  },
+  "muteFor": {
+    "message": "Mute"
+  },
+  "unmute": {
+    "message": "Unmute"
+  },
+  "recommended": {
+    "message": "Recommended"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "forums": {
+    "message": "Forums"
+  },
+  "forEditor": {
+    "message": "For editor"
+  },
+  "forWebsite": {
+    "message": "For website"
+  },
+  "confirmPreset": {
+    "message": "Are you sure you want to load this preset?"
+  },
+  "confirmReset": {
+    "message": "Are you sure you want to reset this addon to default settings?"
+  },
+  "settingsTitle": {
+    "message": "Settings - Scratch Addons"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "all": {
+    "message": "All"
+  },
+  "editorFeatures": {
+    "message": "Scratch Editor Features"
+  },
+  "websiteFeatures": {
+    "message": "Scratch Website Features"
+  },
+  "themes": {
+    "message": "Themes"
+  },
+  "popupFeatures": {
+    "message": "Extension Popup Features"
+  },
+  "theme": {
+    "message": "Theme:"
+  },
+  "credits": {
+    "message": "Credits"
+  },
+  "review": {
+    "message": "Review"
+  },
+  "feedback": {
+    "message": "Send Feedback"
+  },
+  "moreSettings": {
+    "message": "More Settings"
+  },
+  "filter": {
+    "message": "Filter:"
+  },
+  "resetToDefault": {
+    "message": "Reset to default settings"
+  },
+  "creditTo": {
+    "message": "Credit to:"
+  },
+  "viewLicenses": {
+    "message": "View library licenses"
+  },
+  "reset": {
+    "message": "Reset"
+  },
+  "presets": {
+    "message": "Presets"
+  },
+  "scratchAddonsTheme": {
+    "message": "Scratch Addons theme"
+  },
+  "scratchAddonsThemeDescription": {
+    "message": "This allows you to switch between light and dark themes for this settings page, and the extension's popup."
+  },
+  "light": {
+    "message": "Light"
+  },
+  "dark": {
+    "message": "Dark"
+  },
+  "licensesTitle": {
+    "message": "Licenses - Scratch Addons"
+  },
+  "licenses": {
+    "message": "Licenses"
+  },
+  "licensesForLibrary": {
+    "message": "Licenses for library $1"
+  },
+  "libraryCredits": {
+    "message": "View licenses of used libraries"
+  },
+  "recommendedTooltip": {
+    "message": "This is recommended by Scratch Addons. Try it out!"
+  },
+  "betaTooltip": {
+    "message": "Keep in mind that this addon might have bugs."
+  },
+  "forumsTooltip": {
+    "message": "This addon applies to Scratch's Discussion Forums."
+  },
+  "reportItHere": {
+    "message": "report it here"
+  },
+  "forumWarning": {
+    "message": "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
+  },
+  "forumWarningGeneral": {
+    "message": "Message from Scratch Addons extension: Scratch policy forbids discussion about browser extensions, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found bugs, please $1."
+  },
+  "search": {
+    "message": "Search"
+  },
+  "permissionsTitle": {
+    "message": "Permissions - Scratch Addons"
+  },
+  "permissions": {
+    "message": "Permissions"
+  },
+  "enablePermissionsTitle": {
+    "message": "Please enable site access"
+  },
+  "enablePermissionsDescription": {
+    "message": "Scratch Addons needs site access permission to work."
+  },
+  "enableButton": {
+    "message": "Enable"
+  },
+  "enableButtonDescription": {
+    "message": "Click the button to enable."
+  },
+  "permissionsScreenAlt": {
+    "message": "Screenshot of a dialog to enable site access"
+  },
+  "clickAllowDescription": {
+    "message": "Click \"Allow\". Scratch Addons will reload and the addons will start working correctly again"
+  },
+  "permissionsDenied": {
+    "message": "Site access could not be enabled. Try again."
+  },
+  "translate": {
+    "message": "Help Translate"
+  },
+  "extensionUpdate": {
+    "message": "Scratch Addons extension update"
+  },
+  "extensionHasUpdated": {
+    "message": "Scratch Addons has updated to v$1"
+  },
+  "extensionUpdateInfo1": {
+    "message": "$1: $2 addon, which adds a \"copy link\" button to comments, so that you can easily link to them. Go to $3 to enable it."
+  },
+  "newFeature": {
+    "message": "New feature"
+  },
+  "hexColorPicker": {
+    "message": "\"copy link to comment button\""
+  },
+  "scratchAddonsSettings": {
+    "message": "Scratch Addons settings"
+  },
+  "extensionUpdateInfo2": {
+    "message": "The \"pause button\" addon was improved and is now out of beta. Many dark mode bugs have been fixed."
+  },
+  "notAffiliated": {
+    "message": "Scratch Addons is not affiliated with Scratch."
+  },
+  "dataTweaksAlt": {
+    "message": "Screenshot of the new \"copy link to comment\" feature."
+  },
+  "new": {
+    "message": "New!"
+  },
+  "exportAndImportSettings": {
+    "message": "Export and Import Settings"
+  },
+  "exportAndImportSettingsDescription": {
+    "message": "Export settings as a JSON file for use on other computers."
+  },
+  "useBrowserSync": {
+    "message": "You can also enable your browser's built-in sync options to automatically synchronize the settings between devices."
+  },
+  "export": {
+    "message": "Export Settings"
+  },
+  "import": {
+    "message": "Import Settings"
+  },
+  "fileNotSelected": {
+    "message": "Please select a settings file."
+  },
+  "importSuccess": {
+    "message": "Settings have been imported successfully. Scratch Addons will reload."
+  },
+  "importFailed": {
+    "message": "The settings file is invalid. Please try again."
+  },
+  "confirmImport": {
+    "message": "Confirm"
+  },
+  "quickSettings": {
+    "message": "Addons"
+  },
+  "runningOnThisPage": {
+    "message": "Addons currently running on this tab:"
+  },
+  "settingsPagePermission": {
+    "message": "To enable the \"$1\" addon, go to the full screen settings page."
+  },
+  "openFullSettings": {
+    "message": "Open full screen settings"
+  },
+  "skipOpenFullSettings": {
+    "message": "Cancel"
+  },
+  "extensionStoreDescription1": {
+    "message": "➖ scratch.mit.edu features ➖\n- Messaging: click the extension icon to get a summary of your messages.\n- Cloud games: see who's playing multiplayer games.\n- Notifier: get browser notifications when you get new messages.\n- Navigation bar customization: re-add the “discuss” button.\n- Make 2.0-styled pages look like 3.0.\n- Website and editor dark modes.\n- And more!"
+  },
+  "extensionStoreDescription2": {
+    "message": "➖ Project editor features ➖\n- Developer tools: adds a find box and new menu options to the editor.\n- 60FPS player mode.\n- Pause button.\n- Onion skinning.\n- Auto-hide block palette.\n- Display stage on left side.\n- And more!"
+  },
+  "extensionStoreDescription3": {
+    "message": "Keep in mind, all features are togglable! To enable or disable them, go to the settings page by clicking this extension’s icon under “extensions” in the top-right corner of your browser, and then click the gear icon."
+  },
+  "extensionStoreDescription4": {
+    "message": "No usernames or passwords are stored, and you are required to be signed into your Scratch account in your browser for some features to work.",
+    "description": "NOTE: please only mention \"Scratch\" once on this string, do not repeat this word."
+  },
+  "extensionStoreDescription5": {
+    "message": "This extension is open source software licensed under GPL v3.\nTo contribute or check the source code: https://github.com/ScratchAddons\nFor more information, go to: ScratchAddons.com"
+  },
+  "extensionStoreDescription6": {
+    "message": "This project is not affiliated, associated, or in any way officially connected with the Scratch website, Team, Foundation, or any of its affiliates.",
+    "description": "NOTE: please only mention \"Scratch\" once on this string, do not repeat this word."
+  }
+}

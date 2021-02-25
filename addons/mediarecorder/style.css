@@ -1,0 +1,36 @@
+.mediaRecorderPopup {
+  box-sizing: border-box;
+  width: 700px;
+  max-height: min(800px, 80vh);
+  max-width: 85%;
+  margin-top: 20vh;
+  overflow-y: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mediaRecorderPopupContent {
+  background-color: white;
+  padding: 1.5rem 2.25rem;
+}
+
+.mediaRecorderPopup p {
+  font-size: 1rem;
+  margin: 1rem auto;
+}
+
+.mediaRecorderPopup p :last-child {
+  margin-left: 1rem;
+}
+
+#recordOptionSecondsInput {
+  width: 6rem;
+}
+
+.mediaRecorderPopupButtons {
+  margin-top: 1.5rem;
+}
+
+.mediaRecorderPopupButtons button {
+  margin-left: 0.5rem;
+}

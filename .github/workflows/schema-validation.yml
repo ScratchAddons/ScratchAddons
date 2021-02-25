@@ -2,43 +2,43 @@ name: Schema validation
 
 on:
   push:
-    branches:
-      - master
     paths:
       - addons/*/addon.json
   pull_request:
-    branches:
-      - master
     paths:
       - addons/*/addon.json
+  workflow_dispatch:
 
 jobs:
   sv:
     name: Validation
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'ScratchAddons'
+    # if: ! (github.event_name == 'schedule' && github.repository_owner == 'ScratchAddons')
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Find changed files
+      - name: Find changed files (push, PR)
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
         id: changed
         uses: Hans5958/changed-files@master
         with:
           pattern: '^addons\/.*\/addon.json$'
           repo-token: ${{ github.token }}
 
-      - name: Write changed files
-        uses: DamianReeves/write-file-action@v1.0
+      - name: Validate .json with schema (changed)
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        uses: Hans5958/validate-json-action@master
         with:
-          path: changes.txt
-          contents: |
+          schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json
+          jsons: |
             ${{ steps.changed.outputs.files_created }}
             ${{ steps.changed.outputs.files_updated }}
 
-      - name: Validate .json with schema
+      - name: Validate .json with schema (all)
+        if: "! (github.event_name == 'push' || github.event_name == 'pull_request')"
         uses: Hans5958/validate-json-action@master
         with:
-          schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/master/1/1.2.json
-          jsons: changes.txt
+          schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json
+          jsons: addons/*/addon.json

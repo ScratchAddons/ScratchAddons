@@ -1,0 +1,4 @@
+:root {
+  --scratchr2-dropdown-image: url(%addon-self-dir%/assets/caret.svg);
+  --scratchr2-dark-boxbg: #282828;
+}

@@ -5,3 +5,11 @@
 ul.activity-stream div {
   width: 90%;
 }
+
+.load-more-wibd {
+  outline: none;
+}
+
+.load-more-wibd-container {
+  text-align: center;
+}

@@ -7,6 +7,9 @@
     },
     {
       "name": "NitroCipher/ZenithRogue"
+    },
+    {
+      "name": "notificationsounds.com (Scratch Addons ping)"
     }
   ],
   "permissions": ["notifications"],
@@ -17,6 +20,26 @@
       "id": "mark_as_read_when_clicked",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Notification sound",
+      "id": "notification_sound",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "silent",
+          "name": "Silent"
+        },
+        {
+          "id": "system-default",
+          "name": "System default"
+        },
+        {
+          "id": "addons-ping",
+          "name": "Scratch Addons ping"
+        }
+      ],
+      "default": "system-default"
     },
     {
       "name": "@comment.svg Notify profile comments & replies",
@@ -71,8 +94,15 @@
       "id": "remixproject_notifications",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "@adminusers.svg Notify studio promotions",
+      "id": "becomeownerstudio_notifications",
+      "type": "boolean",
+      "default": true
     }
   ],
   "tags": ["community", "recommended"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }

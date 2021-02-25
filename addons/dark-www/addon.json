@@ -4,31 +4,175 @@
   "tags": ["community", "theme"],
   "credits": [
     {
-      "name": "Maximouse (TBD name)",
-      "link": "TODO:"
-    },
+      "name": "Maximouse (Experimental Dark)",
+      "link": "https://github.com/mxmou/customize-scratch"
+    }
+  ],
+  "userscripts": [
     {
-      "name": "Ucrash (Dark WWW)",
-      "link": "https://github.com/gducrash"
+      "url": "experimental_forums_preview.js",
+      "matches": [
+        "https://scratch.mit.edu/discuss/topic/*",
+        "https://scratch.mit.edu/discuss/post/*/edit/",
+        "https://scratch.mit.edu/discuss/settings/*/"
+      ]
     }
   ],
   "userstyles": [
     {
-      "url": "dark-www.css",
+      "url": "scrollbar.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    },
+    {
+      "url": "experimental_scratchr2.css",
       "matches": ["https://scratch.mit.edu/*"],
       "settingMatch": {
         "id": "selectedMode",
-        "value": "Dark WWW"
+        "value": "experimental-dark"
       }
+    },
+    {
+      "url": "experimental_scratchwww.css",
+      "matches": [
+        "https://scratch.mit.edu/",
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor/",
+        "https://scratch.mit.edu/projects/*/fullscreen/",
+        "https://scratch.mit.edu/explore/*",
+        "https://scratch.mit.edu/search/*",
+        "https://scratch.mit.edu/ideas/",
+        "https://scratch.mit.edu/about/",
+        "https://scratch.mit.edu/messages/",
+        "https://scratch.mit.edu/parents/",
+        "https://scratch.mit.edu/educators/",
+        "https://scratch.mit.edu/developers/",
+        "https://scratch.mit.edu/credits/",
+        "https://scratch.mit.edu/community_guidelines/",
+        "https://scratch.mit.edu/info/faq/",
+        "https://scratch.mit.edu/download/",
+        "https://scratch.mit.edu/contact-us/",
+        "https://scratch.mit.edu/terms_of_use/",
+        "https://scratch.mit.edu/privacy_policy/",
+        "https://scratch.mit.edu/DMCA/",
+        "https://scratch.mit.edu/conference/",
+        "https://scratch.mit.edu/scratch_1.4",
+        "https://scratch.mit.edu/sec",
+        "https://scratch.mit.edu/research",
+        "https://scratch.mit.edu/conference/*",
+        "https://scratch.mit.edu/annual-report",
+        "https://scratch.mit.edu/camp",
+        "https://scratch.mit.edu/join",
+        "https://scratch.mit.edu/starter-projects",
+        "https://scratch.mit.edu/classes/complete_registration",
+        "https://scratch.mit.edu/educators/faq",
+        "https://scratch.mit.edu/educators/register",
+        "https://scratch.mit.edu/educators/waiting",
+        "https://scratch.mit.edu/wedo",
+        "https://scratch.mit.edu/wedo-legacy",
+        "https://scratch.mit.edu/ev3",
+        "https://scratch.mit.edu/microbit",
+        "https://scratch.mit.edu/vernier",
+        "https://scratch.mit.edu/boost"
+      ],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
+      "url": "experimental_forums.css",
+      "matches": ["https://scratch.mit.edu/discuss/*"],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
+      "url": "experimental_profile.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/classes/*"],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
+      "url": "experimental_studio.css",
+      "matches": ["https://scratch.mit.edu/studios/*"],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
+      "url": "experimental_scratchr2_comments.css",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
+      "url": "experimental_mystuff.css",
+      "matches": ["https://scratch.mit.edu/mystuff/"],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
+      "url": "experimental_settings.css",
+      "matches": [
+        "https://scratch.mit.edu/accounts/settings/",
+        "https://scratch.mit.edu/accounts/password_change/",
+        "https://scratch.mit.edu/accounts/email_change/"
+      ],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
+      "url": "experimental_statistics.css",
+      "matches": ["https://scratch.mit.edu/statistics/"],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
+      "url": "experimental_quotes.css",
+      "matches": ["https://scratch.mit.edu/info/quotes/"],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
+      "url": "experimental_contact.css",
+      "matches": ["https://scratch.mit.edu/contact-us/"],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
+      "url": "pygments.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
   ],
   "settings": [
     {
-      "name": "Dark mode version (TODO: add mxmou's styling and set as default)",
+      "name": "Dark mode version",
       "id": "selectedMode",
       "type": "select",
-      "potentialValues": ["Dark WWW"],
-      "default": "Dark WWW"
+      "potentialValues": [
+        {
+          "id": "experimental-dark",
+          "name": "Experimental Dark"
+        }
+      ],
+      "default": "experimental-dark"
     }
-  ]
+  ],
+  "l10n": true
 }

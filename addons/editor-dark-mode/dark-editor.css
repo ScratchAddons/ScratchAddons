@@ -184,16 +184,16 @@ body {
   fill: hsla(215, 60%, 40%, 1) !important;
 }
 
-input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword) {
+input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword):not(.monitor_list-input_3kw5o) {
   background: #444;
   color: #fff !important;
 }
 
-input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword)::placeholder {
+input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword):not(.monitor_list-input_3kw5o)::placeholder {
   color: #ddd;
 }
 
-input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword):focus {
+input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="password"]):not([name="password"]):not([name="passwordConfirm"]):not(#showPassword):not(.monitor_list-input_3kw5o):focus {
   box-shadow: 0 0 0 0.25rem hsla(215, 100%, 55%, 0.45) !important;
 }
 
@@ -205,7 +205,7 @@ input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="pass
 /** Menu bar **/
 
 [class^="gui_menu-bar"],
-[class^="modal_header"] {
+[class^="modal_header"]:not([class^="modal_header-item"]) {
   background-color: hsla(215, 20%, 35%, 1);
 }
 
@@ -298,4 +298,8 @@ input:not([name="title"]):not([name="q"]):not([name="username"]):not([type="pass
 }
 .blocklyZoom > image {
   opacity: 1;
+}
+
+.stage-wrapper_full-screen_2hjMb {
+  background-color: #222 !important;
 }

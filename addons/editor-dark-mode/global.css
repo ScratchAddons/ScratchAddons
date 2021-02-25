@@ -1,21 +1,24 @@
-input.s3devInp {
-  background-color: #6d6d6d;
-}
-input.s3devInp::placeholder {
-  color: #ddd;
-}
-.s3devInp:hover {
-  background-color: #979797;
-}
-div.s3devDDOut.vis ul.s3devDD {
-  background-color: #6d6d6d;
+.s3devLabel > span:first-child {
+  color: white;
 }
 div.s3devDDOut.vis {
-  background-color: #6d6d6d;
+  background-color: #151515;
 }
-.u-dropdown-searchbar {
-  background-color: #979797 !important;
+.u-dropdown-searchbar,
+.u-dropdown-searchbar:focus {
+  background-color: #202020;
+  color: white;
 }
 .u-dropdown-searchbar:focus {
   box-shadow: none !important;
+}
+
+.s3devDD > li.boolean::before {
+  border-top: 9px solid #151515;
+  border-bottom: 10px solid #151515;
+}
+
+.s3devDD > li.boolean::after {
+  border-top: 9px solid #151515;
+  border-bottom: 10px solid #151515;
 }

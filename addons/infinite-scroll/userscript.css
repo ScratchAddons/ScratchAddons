@@ -1,5 +1,10 @@
 body {
-  padding-bottom: 38px;
+  /* scratch-www */
+  padding-bottom: 45px;
+}
+#content {
+  /* scratchr2 */
+  padding-bottom: 45px;
 }
 
 /*
@@ -7,11 +12,17 @@ body {
 */
 #footer {
   position: fixed;
+  top: initial;
   bottom: 0;
   width: 100%;
-  height: 38px;
+  height: 46px;
+  padding: 0;
+  z-index: 20;
   transition-duration: 0.5s;
 }
+#footer .container {
+  padding-top: 20px;
+}
 #footer:hover {
-  height: 220px;
+  height: 300px;
 }

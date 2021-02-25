@@ -1,9 +1,20 @@
 {
   "name": "Customizable block colors",
   "description": "Edit block colors for each category in the editor.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Refresh the editor after enabling/disabling this theme.",
+      "id": "refresheditor"
+    }
+  ],
   "credits": [
     {
       "name": "NitroCipher/ZenithRogue"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
   "userscripts": [
@@ -80,13 +91,12 @@
       "default": "#FF6680"
     },
     {
-      "name": "Pen",
+      "name": "extensions",
       "id": "Pen-color",
       "type": "color",
       "default": "#0FBD8C"
     }
   ],
-  "traps": true,
   "tags": ["editor", "theme"],
   "enabledByDefault": false,
   "presets": [
@@ -118,5 +128,6 @@
         "Pen-color": "#0e9a6c"
       }
     }
-  ]
+  ],
+  "l10n": true
 }

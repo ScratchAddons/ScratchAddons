@@ -1,87 +1,61 @@
-export default class Trap extends EventTarget {
-  constructor() {
+import Listenable from "../common/Listenable.js";
+
+/**
+ * Manages object trapping.
+ * @extends Listenable
+ */
+export default class Trap extends Listenable {
+  constructor(tab) {
     super();
-  }
-  /**
-   * @type {object.<string, *>} mapping for the Once objects trapped.
-   */
-  get onceValues() {
-    return __scratchAddonsTraps._onceMap;
-  }
-  /**
-   * @type {symbol} Symbol for accessing props of trapped objects.
-   */
-  get numOnce() {
-    return __scratchAddonsTraps._trapNumOnce;
-  }
-  /**
-   * @type {symbol} Symbol for accessing props of trapped objects.
-   */
-  get numMany() {
-    return __scratchAddonsTraps._trapNumMany;
+    this._react_internal_key = undefined;
+    this._isWWW = tab.clientVersion === "scratch-www";
+    this._getEditorMode = () => this._isWWW && tab.editorMode;
+    this._waitForElement = (q) => tab.waitForElement(q, { markAsSeen: true });
+
+    this._cache = Object.create(null);
   }
 
   /**
-   * Adds listener for Once objects trapped.
-   * @param {string} trapName Trap name to listen to. Can be '*' for any.
-   * @param {function} fn callback passed to addEventListener.
+   * scratch-vm instance.
+   * @throws when on non-project page.
+   * @type {object}
    */
-  addOnceListener(trapName, fn) {
-    const eventName = trapName === "*" ? "trapready" : `ready.${trapName}`;
-    if (!__scratchAddonsTraps._targetOnce) throw new Error("Event target not initialized");
-    __scratchAddonsTraps._targetOnce.addEventListener(eventName, fn);
+  get vm() {
+    if (!this._getEditorMode()) throw new Error("Cannot access vm on non-project page");
+    return __scratchAddonsTraps._onceMap.vm;
   }
 
   /**
-   * Removes listener for Once objects trapped.
-   * @param {string} trapName Trap name to listen to. Can be '*' for any.
-   * @param {function} fn callback passed to removeEventListener.
+   * @private
    */
-  removeOnceListener(trapName, fn) {
-    const eventName = trapName === "*" ? "trapready" : `ready.${trapName}`;
-    if (!__scratchAddonsTraps._targetOnce) throw new Error("Event target not initialized");
-    __scratchAddonsTraps._targetOnce.removeEventListener(eventName, fn);
+  get REACT_INTERNAL_PREFIX() {
+    return "__reactInternalInstance$";
   }
 
   /**
-   * Adds listener for Many objects trapped.
-   * @param {string} trapName Trap name to listen to. Can be '*' for any.
-   * @param {function} fn callback passed to addEventListener.
+   * Gets Blockly instance actually used by Scratch.
+   * This is different from window.Blockly.
+   * @async
+   * @throws when on non-project page.
+   * @returns {Promise<object>}
    */
-  addManyListener(trapName, fn) {
-    const eventName = trapName === "*" ? "trapready" : `ready.${trapName}`;
-    if (!__scratchAddonsTraps._targetMany) throw new Error("Event target not initialized");
-    __scratchAddonsTraps._targetMany.addEventListener(eventName, fn);
-  }
-
-  /**
-   * Removes listener for Many objects trapped.
-   * @param {string} trapName Trap name to listen to. Can be '*' for any.
-   * @param {function} fn callback passed to removeEventListener.
-   */
-  removeManyListener(trapName, fn) {
-    const eventName = trapName === "*" ? "trapready" : `ready.${trapName}`;
-    if (!__scratchAddonsTraps._targetMany) throw new Error("Event target not initialized");
-    __scratchAddonsTraps._targetMany.removeEventListener(eventName, fn);
-  }
-
-  /**
-   * Adds listener for prototype functions trapped.
-   * @param {string} trapName Trap name to listen to. Can be '*' for any.
-   * @param {function} fn callback passed to addEventListener.
-   */
-  addPrototypeListener(trapName, fn) {
-    const eventName = trapName === "*" ? "prototypecalled" : `prototype.${trapName}`;
-    __scratchAddonsTraps.addEventListener(eventName, fn);
-  }
-
-  /**
-   * Removes listener for prototype functions trapped.
-   * @param {string} trapName Trap name to listen to. Can be '*' for any.
-   * @param {function} fn callback passed to removeEventListener.
-   */
-  removePrototypeListener(trapName, fn) {
-    const eventName = trapName === "*" ? "prototypecalled" : `prototype.${trapName}`;
-    __scratchAddonsTraps.removeEventListener(eventName, fn);
+  async getBlockly() {
+    if (this._cache.Blockly) return this._cache.Blockly;
+    const editorMode = this._getEditorMode();
+    if (!editorMode || editorMode === "embed") throw new Error("Cannot access Blockly on this page");
+    const BLOCKS_CLASS = '[class^="gui_blocks-wrapper"]';
+    let elem = document.querySelector(BLOCKS_CLASS);
+    if (!elem) {
+      elem = await this._waitForElement(BLOCKS_CLASS);
+    }
+    if (!this._react_internal_key) {
+      this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
+    }
+    const internal = elem[this._react_internal_key];
+    let childable = internal;
+    /* eslint-disable no-empty */
+    while (((childable = childable.child), !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) {}
+    /* eslint-enable no-empty */
+    return (this._cache.Blockly = childable.stateNode.ScratchBlocks);
   }
 }
