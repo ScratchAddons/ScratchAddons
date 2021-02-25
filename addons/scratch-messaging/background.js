@@ -4,6 +4,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   let lastDateTime;
   let data;
   let pendingAuthChange = false;
+  let addonEnabled = true;
   const commentLocationPrefixes = {
     0: "p", // Projects
     1: "u", // Users
@@ -28,8 +29,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
 
   async function routine() {
     await runCheckMessagesAfter({ checkOld: true }, 0);
-    // Can't use while(true) because addon might get disabled
-    while (addon.self) {
+    while (addonEnabled) {
       if (pendingAuthChange) {
         pendingAuthChange = false;
         resetData();
@@ -101,14 +101,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     data.ready = true;
   }
 
-  chrome.runtime.onMessage.addListener(function thisFunction(request, sender, sendResponse) {
-    // If this addon has been killed, addon.self will throw
-    try {
-      addon.self;
-    } catch (err) {
-      chrome.runtime.onMessage.removeListener(thisFunction);
-      return;
-    }
+  const messageListener = (request, sender, sendResponse) => {
     if (!request.scratchMessaging) return;
     const popupRequest = request.scratchMessaging;
     if (popupRequest === "getData")
@@ -131,6 +124,11 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         .catch((err) => sendResponse(err));
       return true;
     }
+  }
+  chrome.runtime.onMessage.addListener(messageListener);
+  addon.self.addEventListener("disabled", () => {
+    chrome.runtime.onMessage.removeListener(messageListener);
+    addonEnabled = false;
   });
 
   async function retrieveComments(resourceType, resourceId, commentIds, page = 1, commentsObj = {}) {

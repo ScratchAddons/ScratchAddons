@@ -41,8 +41,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     );
 
     if (newState === false) {
+      // TODO: can there be many addon objects for the same addon?
       const addonObjs = scratchAddons.addonObjects.filter((addonObj) => addonObj.self.id === addonId);
-      if (addonObjs) addonObjs.forEach((addonObj) => addonObj._kill());
+      if (addonObjs) addonObjs.forEach((addonObj) => {
+        addonObj.self.dispatchEvent(new CustomEvent("disabled"));
+        addonObj._kill();
+      });
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
     } else {
       runPersistentScripts(addonId);
