@@ -32,11 +32,12 @@ export default function ({ addon, global, console }) {
       }, 100);
     }
 
-    addon.tab.bindListener(
-      addon.tab,
-      "urlChange",
-      () => addon.tab.editorMode === "editor" && inject(Blockly.getMainWorkspace())
-    );
+    addon.tab.addEventListener("urlChange", () => {
+      if (addon.tab.editorMode === "editor") {
+        // Inject even if addon is disabled, will pollute but not change function return value
+        inject(Blockly.getMainWorkspace());
+      }
+    });
   }
   tryInjecting();
 }
