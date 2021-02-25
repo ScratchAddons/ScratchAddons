@@ -1,6 +1,6 @@
 {
   "name": "Variable manager",
-  "description": "Adds a tab next to sounds in the editor for easily updating variables and lists.",
+  "description": "Adds a tab next to \"sounds\" in the editor for easily updating variables and lists.",
   "credits": [
     {
       "name": "Jeffalo"
