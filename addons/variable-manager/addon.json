@@ -1,9 +1,12 @@
 {
   "name": "Variable manager",
-  "description": "Allows you to manage variables todo.",
+  "description": "Adds a tab next to sounds in the editor for easily updating variables and lists.",
   "credits": [
     {
       "name": "Jeffalo"
+    },
+    {
+      "name": "GarboMuffin"
     }
   ],
   "userscripts": [
