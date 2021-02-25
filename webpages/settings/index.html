@@ -9,11 +9,15 @@
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
+        <script src="../../libraries/popper.js" defer></script>
     <script src="../../libraries/color-picker.js" type="module" defer></script>
     <template id="picker-component">
-      <div v-click-outside="isOpen = false">
-      <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting)">      <color-picker
-        class="setting-input color"
+      <div   :key="value">
+        
+      <button v-el:btn :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting)">
+</button>
+     <color-picker
+        class=""
         -:disabled="!addon._enabled"
         :value="value"
         id="picker"
@@ -21,12 +25,11 @@
         v-click-outside="isOpen = false"
         v-el:pickr
       ></color-picker>
-</button>
       </div>
     </template>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded">
+  <body style="display: none" v-show="loaded" @click="toggle">
     <div class="navbar">
       <img
         :src="switchPath"
@@ -400,7 +403,7 @@
 
                   <picker
                   v-if="setting.type === 'color'"
-                  :value="setting.default"
+                  :value="addonSettings[addon._addonId][setting.id] || setting.default"
                   :setting="setting"
                   :addon="addon"
                   @picked="changeColor($event,addon,setting)"

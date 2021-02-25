@@ -26,6 +26,7 @@ body {
   padding: 0 20px;
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
   user-select: none;
+  z-index: 10;
 }
 
 h1 {
@@ -819,12 +820,12 @@ input[type="color"]::-webkit-color-swatch {
   width: max-content;
 }
 color-picker {
-    position: absolute;
-    left: 10px;
-    top:20px;
-    z-index:10;
+    z-index:2;
+
 }
 
 button.setting-input.color {
     position: relative;
+    height: 32px;
+    width: 75px;
 }

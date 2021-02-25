@@ -1,28 +1,58 @@
 import downloadBlob from "../../libraries/download-blob.js";
 const NEW_ADDONS = ["copy-message-link", "pause"];
 
-Vue.config.ignoredElements = ["color-picker"];
 const ColorInput = Vue.extend({
-  props: ['value','addon','setting'],
+  props: ["value", "addon", "setting"],
   template: document.querySelector("template#picker-component").innerHTML,
   data() {
     return {
       isOpen: false,
-      color: ''
+      color: this.value,
     };
   },
-  methods: {
-    toggle(addon,setting) {
-      this.isOpen = !this.isOpen;
-      this.$parent.addonSettings[addon._addonId][setting.id] = '#' + this.$els.pickr.hex8
-      this.$parent.updateSettings(addon, {wait: 250, settingId: setting.id})
-      this.color = this.$els.pickr.hex8
+  ready(){
+    const element = document.querySelector('.addons-block');
 
-      console.log('Picked: ' + this.$els.pickr.hex8)
+  Popper.createPopper(this.$els.btn, this.$els.pickr, {
+    placement: 'bottom-start',
+    modifiers: [
+    {
+      name: 'preventOverflow',
+      options: {
+        mainAxis: false, // true by default
+      },
+    },
+    {
+      name: 'flip',
+      options: {
+        //rootBoundary: 'document',
+        //boundary: element
+      },
+    },
+
+]
+  });
+
+  },
+  methods: {
+    toggle(addon, setting) {
+      this.isOpen = !this.isOpen;
+      this.$parent.addonSettings[addon._addonId][setting.id] =
+        "#" + this.$els.pickr.hex8;
+      this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
+      this.color = "#" + this.$els.pickr.hex8;
+
+      console.log("Picked: " + this.$els.pickr.hex8);
+    },
+  },
+  watch: {
+    value() {
+      this.color = this.value;
+      console.log(this.value)
     }
   }
 });
-  Vue.component("picker", ColorInput);
+Vue.component("picker", ColorInput);
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];
@@ -267,10 +297,10 @@ const vue = (window.vue = new Vue({
     },
   },
   methods: {
-    changeColor($event, addon,setting) {
-      console.log($event)
-      this.addonSettings[addon._addonId][setting.id] = $event
-      this.updateSettings(addon, {wait: 250, settingId: setting.id})
+    changeColor($event, addon, setting) {
+      console.log($event);
+      this.addonSettings[addon._addonId][setting.id] = $event;
+      this.updateSettings(addon, { wait: 250, settingId: setting.id });
     },
     closesidebar: function () {
       if (this.categoryOpen && this.smallMode) {
@@ -325,9 +355,6 @@ const vue = (window.vue = new Vue({
     },
     clearSearch() {
       this.searchInput = "";
-    },
-    test() {
-      this.$els.test.innerHTML = "";
     },
     setTheme(mode) {
       chrome.storage.sync.get(["globalTheme"], function (r) {
