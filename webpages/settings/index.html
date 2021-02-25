@@ -12,13 +12,12 @@
         <script src="../../libraries/popper.js" defer></script>
     <script src="../../libraries/color-picker.js" type="module" defer></script>
     <template id="picker-component">
-      <div   :key="value">
+      <div v-click-outside="isOpen = false" v-el:btn :key="value">
         
-      <button v-el:btn :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting)">
+      <button  :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting)">
 </button>
      <color-picker
         class=""
-        -:disabled="!addon._enabled"
         :value="value"
         id="picker"
         v-show="isOpen"
@@ -29,7 +28,7 @@
     </template>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded" @click="toggle">
+  <body style="display: none" v-show="loaded" >
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />

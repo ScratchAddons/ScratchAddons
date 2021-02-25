@@ -11,7 +11,6 @@ const ColorInput = Vue.extend({
     };
   },
   ready(){
-    const element = document.querySelector('.addons-block');
 
   Popper.createPopper(this.$els.btn, this.$els.pickr, {
     placement: 'bottom-start',
@@ -19,14 +18,7 @@ const ColorInput = Vue.extend({
     {
       name: 'preventOverflow',
       options: {
-        mainAxis: false, // true by default
-      },
-    },
-    {
-      name: 'flip',
-      options: {
-        //rootBoundary: 'document',
-        //boundary: element
+        mainAxis: true, // true by default
       },
     },
 
@@ -50,13 +42,17 @@ const ColorInput = Vue.extend({
       this.color = this.value;
       console.log(this.value)
     }
+  }
 });
 Vue.component("picker", ColorInput);
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
   chrome.permissions.getAll(({ permissions }) => {
-    grantedOptionalPermissions = permissions.filter((p) => browserLevelPermissions.includes(p));
+    let grantedOptionalPermissions = permissions.filter((p) => browserLevelPermissions.includes(p));
   });
+let grantedOptionalPermissions = [];
+const updateGrantedPermissions = () =>
+
 updateGrantedPermissions();
 chrome.permissions.onAdded.addListener(updateGrantedPermissions);
 chrome.permissions.onRemoved.addListener(updateGrantedPermissions);
