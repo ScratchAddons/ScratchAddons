@@ -1,5 +1,6 @@
 import Auth from "./Auth.js";
 import Account from "./Account.js";
+import Self from "./Self.js";
 import fetch from "./fetch.js";
 import Settings from "../common/Settings.js";
 
@@ -17,20 +18,7 @@ import Settings from "../common/Settings.js";
  */
 export default class Addon {
   constructor(info) {
-    this.self = {
-      id: info.id,
-      browser: typeof InstallTrigger !== "undefined" ? "firefox" : "chrome",
-    };
-    Object.defineProperties(this.self, {
-      dir: {
-        enumerable: true,
-        get: () => `${this._path}addons/${info.id}`,
-      },
-      lib: {
-        enumerable: true,
-        get: () => `${this._path}libraries`,
-      },
-    });
+    this.self = new Self(this, info);
     this.auth = new Auth(this);
     this.account = new Account();
     this.fetch = fetch;

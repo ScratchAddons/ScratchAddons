@@ -61,6 +61,9 @@ window.addEventListener("load", () => {
   }
 });
 
+// Store all themes that were enabled this session
+const sessionEnabledThemes = new Set();
+
 function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
   document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
     if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
@@ -73,6 +76,7 @@ function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
     else document.documentElement.appendChild(link);
   }
   for (const theme of themes) {
+    sessionEnabledThemes.add(theme.addonId);
     for (const styleUrl of theme.styleUrls) {
       let css = theme.styles[styleUrl];
       // Replace %addon-self-dir% for relative URLs
@@ -131,15 +135,16 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
     } else if (typeof request.setMsgCount !== "undefined") {
       template.setAttribute("data-msgcount", request.setMsgCount);
     } else if (request === "getRunningAddons") {
-      // We need to send themes that might have been injected dynamically
-      sendResponse([
-        ...new Set([
-          ...addonsWithUserscripts.map((obj) => obj.addonId),
-          ...Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
-            style.getAttribute("data-addon-id")
-          ),
-        ]),
-      ]);
+      const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
+      const activeThemes = Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
+        style.getAttribute("data-addon-id")
+      );
+      const inactiveThemes = [...sessionEnabledThemes].filter((addonId) => !activeThemes.includes(addonId));
+      sendResponse({
+        userscripts,
+        activeThemes,
+        inactiveThemes,
+      });
     }
   });
 

@@ -129,9 +129,7 @@
         </div>
 
         <div class="addons-container">
-          <div id="running-page" v-show="popupOpenedOnScratchTab && searchInput === ''">
-            {{ msg("runningOnThisPage") }}
-          </div>
+          <div id="running-page" v-show="addonsRunningOnTab && searchInput === ''">{{ msg("runningOnThisPage") }}</div>
           <div
             class="addon-body"
             :class="{ 'addon-body-margin-bottom': addon._marginBottom && searchInput === '' }"
