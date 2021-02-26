@@ -117,10 +117,19 @@ export default async function ({ addon, global, console, msg }) {
   let folderColorStylesheet = null;
   const folderColors = Object.create(null);
   const getFolderColorClass = (folderName) => {
-    // Based on java's String.hashCode
-    // https://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/src/share/classes/java/lang/String.java#l1452
-    // TODO: better color generation
+    const mulberry32 = (a) => {
+      // https://stackoverflow.com/a/47593316
+      return function () {
+        var t = (a += 0x6d2b79f5);
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    };
+
     const hashCode = (str) => {
+      // Based on Java's String.hashCode
+      // https://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/src/share/classes/java/lang/String.java#l1452
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
         hash = 31 * hash + str.charCodeAt(i);
@@ -129,14 +138,17 @@ export default async function ({ addon, global, console, msg }) {
       return hash;
     };
 
+    const random = (str) => {
+      const seed = hashCode(str);
+      return mulberry32(seed)();
+    };
+
     if (!folderColors[folderName]) {
       if (!folderColorStylesheet) {
         folderColorStylesheet = document.createElement("style");
         document.head.appendChild(folderColorStylesheet);
       }
-      // Every folder needs a random-ish color, but it should also stay consistent between visits.
-      const hash = hashCode(folderName);
-      const color = `hsla(${((hash & 0xff) / 0xff) * 360}deg, 100%, 85%, 0.5)`;
+      const color = `hsla(${random(folderName) * 360}deg, 100%, 85%, 0.5)`;
       const id = Object.keys(folderColors).length;
       const className = `sa-folders-color-${id}`;
       folderColors[folderName] = className;
@@ -225,7 +237,7 @@ export default async function ({ addon, global, console, msg }) {
         };
         const newItem = {
           name: itemData,
-          details: item.details
+          details: item.details,
         };
 
         if (type === TYPE_SPRITES) {
