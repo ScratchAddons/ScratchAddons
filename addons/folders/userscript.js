@@ -56,6 +56,19 @@ export default async function ({ addon, global, console, msg }) {
     return basename;
   };
 
+  const untilInEditor = () => {
+    if (addon.tab.editorMode === "editor") return;
+    return new Promise((resolve, reject) => {
+      const handler = () => {
+        if (addon.tab.editorMode === "editor") {
+          resolve();
+          addon.tab.removeEventListener("urlChange", handler);
+        }
+      };
+      addon.tab.addEventListener("urlChange", handler);
+    });
+  };
+
   const getSortableHOCFromElement = (el) => {
     const nearestSpriteSelector = el.closest("[class*='sprite-selector_sprite-selector']");
     if (nearestSpriteSelector) {
@@ -641,6 +654,8 @@ export default async function ({ addon, global, console, msg }) {
       return originalRender.call(this);
     };
   };
+
+  await untilInEditor();
 
   // Sprite list
   {
