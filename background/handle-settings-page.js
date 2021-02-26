@@ -26,6 +26,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     });
 
     // Fire disabled event for userscripts
+    // TODO: this might not be an addon being reenabled. We should consider this
+    // in case we want to provide userscripts with a way to run after the page
+    // has loaded, dynamically.
     chrome.tabs.query({}, (tabs) =>
       tabs.forEach(
         (tab) =>
