@@ -1,3 +1,9 @@
+// TODO
+// More safety checks
+// Ask for name when folder is created
+// Remove code duplication in assets/sounds?
+// Document how this works
+
 export default async function ({ addon, global, console, msg }) {
   const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
 
@@ -82,6 +88,18 @@ export default async function ({ addon, global, console, msg }) {
     return Math.min(Math.max(n, min), max);
   };
 
+  /**
+   * @typedef {Object} ItemData
+   * @property {string} realName
+   * @property {number} realIndex
+   * @property {string} inFolder
+   * @property {string} folder
+   * @property {boolean} folderOpen
+   */
+
+  /**
+   * @returns {ItemData|null}
+   */
   const getItemData = (item) => {
     if (item && item.name && typeof item.name === "object") {
       return item.name;
