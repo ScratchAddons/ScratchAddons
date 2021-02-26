@@ -92,16 +92,18 @@ const observer = new MutationObserver((mutationsList) => {
       pendingPromises.msgCount = [];
       removeAttr();
     } else if (attrType === "data-fire-event") {
+      console.log(attrVal);
       if (attrVal.addonId) {
         // Addon specific events, like settings change and self disabled
         const eventTarget = scratchAddons.eventTargets[attrVal.target].find(
           (eventTarget) => eventTarget._addonId === attrVal.addonId
         );
-        if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(attrVal.name));
+        if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(attrVal.name, { detail: attrVal.data || {} }));
       } else {
         // Global events, like auth change
-        scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
-          eventTarget.dispatchEvent(new CustomEvent(attrVal.name))
+        const eventTarget = scratchAddons.eventTargets[attrVal.target].filter(attrVal.filter || (() => true));
+        eventTarget.forEach((eventTarget) =>
+          eventTarget.dispatchEvent(new CustomEvent(attrVal.name, { detail: attrVal.data || {} }))
         );
       }
       removeAttr();

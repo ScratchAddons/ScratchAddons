@@ -1,4 +1,5 @@
 export default async function ({ addon, global, console }) {
+  addon.self.sendMessage({"special data": "uhhhhhh"}, { scope: "addon" })
   let gloabal_fps = 30;
   const vm = addon.tab.traps.vm;
   let altPressesCount = 0;

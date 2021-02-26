@@ -13,7 +13,26 @@ export default class Self extends Listenable {
     this.disabled = false;
     this.addEventListener("disabled", () => (this.disabled = true));
     this.addEventListener("reenabled", () => (this.disabled = false));
+    console.log(this.id, "has seen this!");
+    // this.addEventListener("message", (event) => {
+    //   console.log("WHOW CRAZY MAN", event);
+    // });
   }
+  sendMessage(msg, data = {}) {
+    const { scope } = data;
+    const sending = {
+      target: "self",
+      name: "message",
+      data: { msg, scope },
+      filter: (addon) => console.log(addon)
+    }
+    this._template.setAttribute(`data-fire-event__${Date.now()}`, JSON.stringify(sending));
+  }
+
+  get _template() {
+    return document.querySelector("#scratch-addons");
+  }
+
   get dir() {
     return `${this._addonObj._path}addons/${this.id}`;
   }
