@@ -3,12 +3,12 @@ export default function ({ addon, global, console }) {
 
   addon.self.addEventListener("disabled", () => {
     clearInterval(interval);
-    // Timeout may be removed if we can guarantee disabled event is fired after style update
+    // Timeout may be removed if we can guarantee disabled event is fired after style update, issue #1672
     setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), 1000);
   });
   addon.self.addEventListener("reenabled", () => {
     if (!injected) tryInjecting();
-    // Timeout may be removed if we can guarantee disabled event is fired after style update
+    // Timeout may be removed if we can guarantee disabled event is fired after style update, issue #1672
     setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), 1000);
   });
 
