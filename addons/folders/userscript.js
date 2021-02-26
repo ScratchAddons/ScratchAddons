@@ -1,6 +1,5 @@
 // TODO
 // More safety checks
-// Ask for name when folder is created
 // Remove code duplication in assets/sounds?
 // Document how this works
 
@@ -489,7 +488,7 @@ export default async function ({ addon, global, console, msg }) {
         };
 
         const renameFolder = () => {
-          let newName = prompt(msg("new-name"));
+          let newName = prompt(msg("rename-folder-prompt"));
           // Prompt cancelled, do not rename
           if (newName === null) {
             return;
@@ -562,7 +561,15 @@ export default async function ({ addon, global, console, msg }) {
           }
         };
 
-        container.appendChild(createMenuItem(msg("create-folder"), () => setFolder(data.realName), true));
+        const createFolder = () => {
+          const name = prompt(msg("name-prompt"), data.realName);
+          if (name === null) {
+            return;
+          }
+          setFolder(name);
+        };
+
+        container.appendChild(createMenuItem(msg("create-folder"), createFolder, true));
 
         const currentFolder = data.inFolder;
         if (typeof currentFolder === "string") {
