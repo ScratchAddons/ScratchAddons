@@ -1,0 +1,20 @@
+{
+  "$schema": "http://raw.githubusercontent.com/ScratchAddons/manifest-schema/master/1/1.6.json",
+  "name": "55 more WIWO characters",
+  "description": "Allows you to type 55 more characters in your What I'm Working On.",
+  "credits": [
+    {
+      "name": "RedGuy7",
+      "link": "http://paul-s-reid.com/web-dev/other.php"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*"]
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": false,
+  "l10n": true
+}
