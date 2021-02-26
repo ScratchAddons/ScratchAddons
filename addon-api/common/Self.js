@@ -24,8 +24,8 @@ export default class Self extends Listenable {
       target: "self",
       name: "message",
       data: { msg, scope },
-      filter: (addon) => console.log(addon)
-    }
+      filter: (addon) => console.log(addon),
+    };
     this._template.setAttribute(`data-fire-event__${Date.now()}`, JSON.stringify(sending));
   }
 
