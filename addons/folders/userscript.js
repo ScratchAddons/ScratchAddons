@@ -1,8 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
   const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-  const ID_PREFIX = "sa_";
-  const ID_FOLDER_PREFIX = `${ID_PREFIX}folder_folder_`;
-  const ID_BACK = `${ID_PREFIX}folder_back`;
 
   const SVG_NS = "http://www.w3.org/2000/svg";
 
