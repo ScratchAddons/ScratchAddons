@@ -12,7 +12,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "dynamicUserscriptDisable": true,
+  "dynamicDisable": true,
   "userstyles": [
     {
       "url": "stageleft.css",
