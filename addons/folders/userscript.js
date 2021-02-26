@@ -226,6 +226,7 @@ export default async function ({ addon, global, console, msg }) {
         };
         const newItem = {
           name: itemData,
+          details: item.details
         };
 
         if (type === TYPE_SPRITES) {
