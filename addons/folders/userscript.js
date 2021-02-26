@@ -793,6 +793,11 @@ export default async function ({ addon, global, console, msg }) {
         return false;
       }
 
+      if (typeof targetItemData.folder === "string" && newFolder !== null) {
+        // Cannot drag a folder into another folder
+        return;
+      }
+
       if (realNewIndex < 0 || realNewIndex > targets.length) {
         console.warn("should never happen");
         return false;
@@ -899,6 +904,11 @@ export default async function ({ addon, global, console, msg }) {
         return false;
       }
 
+      if (typeof targetItemData.folder === "string" && newFolder !== null) {
+        // Cannot drag a folder into another folder
+        return;
+      }
+
       if (realNewIndex < 0 || realNewIndex > costumes.length) {
         console.warn("should never happen");
         return false;
@@ -1002,6 +1012,11 @@ export default async function ({ addon, global, console, msg }) {
       } else {
         console.warn("should never happen");
         return false;
+      }
+
+      if (typeof targetItemData.folder === "string" && newFolder !== null) {
+        // Cannot drag a folder into another folder
+        return;
       }
 
       if (realNewIndex < 0 || realNewIndex > costumes.length) {
