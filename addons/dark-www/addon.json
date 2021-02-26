@@ -11,10 +11,18 @@
   "userscripts": [
     {
       "url": "experimental_forums_preview.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/settings/*/"]
+      "matches": [
+        "https://scratch.mit.edu/discuss/topic/*",
+        "https://scratch.mit.edu/discuss/post/*/edit/",
+        "https://scratch.mit.edu/discuss/settings/*/"
+      ]
     }
   ],
   "userstyles": [
+    {
+      "url": "scrollbar.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    },
     {
       "url": "experimental_scratchr2.css",
       "matches": ["https://scratch.mit.edu/*"],

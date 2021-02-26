@@ -121,7 +121,17 @@ export default class Tab extends Listenable {
    */
   scratchMessage(key) {
     if (this.clientVersion === "scratch-www") {
-      return window._messages[window._locale][key] || key;
+      const locales = [window._locale ? window._locale.toLowerCase() : "en"];
+      if (locales[0].includes("-")) locales.push(locales[0].split("-")[0]);
+      if (locales.includes("pt") && !locales.includes("pt-br")) locales.push("pt-br");
+      if (!locales.includes("en")) locales.push("en");
+      for (const locale of locales) {
+        if (window._messages[locale] && window._messages[locale][key]) {
+          return window._messages[locale][key];
+        }
+      }
+      console.warn("Unknown key: ", key);
+      return "";
     }
     if (this.clientVersion === "scratchr2") {
       return window.django.gettext(key);
@@ -149,5 +159,39 @@ export default class Tab extends Listenable {
     const workerURL = URL.createObjectURL(blob);
     const worker = new Worker(workerURL);
     return new Promise((resolve) => worker.addEventListener("message", () => resolve(worker), { once: true }));
+  }
+
+  /**
+   * Gets the hashed class name for a Scratch stylesheet class name.
+   * @param {...*} args Unhashed class names.
+   * @param {object} opts - options.
+   * @param {String[]|String} opts.others - Non-Scratch class or classes to merge.
+   * @returns {string} Hashed class names.
+   */
+  scratchClass(...args) {
+    let res = "";
+    args
+      .filter((arg) => typeof arg === "string")
+      .forEach((classNameToFind) => {
+        if (scratchAddons.classNames.loaded) {
+          res +=
+            scratchAddons.classNames.arr.find(
+              (className) =>
+                className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
+            ) || "";
+        } else {
+          res += `scratchAddonsScratchClass/${classNameToFind}`;
+        }
+        res += " ";
+      });
+    if (typeof args[args.length - 1] === "object") {
+      const options = args[args.length - 1];
+      const classNames = Array.isArray(options.others) ? options.others : [options.others];
+      classNames.forEach((string) => (res += string + " "));
+    }
+    res = res.slice(0, -1);
+    // Sanitize just in case
+    res = res.replace(/"/g, "");
+    return res;
   }
 }

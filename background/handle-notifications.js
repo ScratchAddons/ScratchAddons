@@ -24,6 +24,7 @@ const periods = [
 chrome.storage.local.get("muted", (obj) => {
   if (obj.muted) contextMenuMuted();
   else contextMenuUnmuted();
+  scratchAddons.muted = obj.muted;
 });
 
 chrome.contextMenus.removeAll();

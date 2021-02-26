@@ -23,46 +23,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
     }
   });
 
-  const usedMessages = [
-    "scratch-messaging/send-error",
-    "scratch-messaging/deleting",
-    "scratch-messaging/delete-error",
-    "scratch-messaging/deleted",
-    "scratch-messaging/popup-title",
-    "scratch-messaging/open-new-tab",
-    "scratch-messaging/delete",
-    "scratch-messaging/delete-confirm",
-    "scratch-messaging/reply",
-    "scratch-messaging/posting",
-    "scratch-messaging/post",
-    "scratch-messaging/cancel",
-    "scratch-messaging/chars-left",
-    "scratch-messaging/follows",
-    "scratch-messaging/studio-invites",
-    "scratch-messaging/curate-invite",
-    "scratch-messaging/forum",
-    "scratch-messaging/forum-new-post",
-    "scratch-messaging/studio-activity",
-    "scratch-messaging/new-activity",
-    "scratch-messaging/remixes",
-    "scratch-messaging/remix-as",
-    "scratch-messaging/your-profile",
-    "scratch-messaging/others-profile",
-    "scratch-messaging/studio",
-    "scratch-messaging/loading",
-    "scratch-messaging/logged-out",
-    "scratch-messaging/disabled",
-    "scratch-messaging/settings",
-    "scratch-messaging/loading-comments",
-    "scratch-messaging/reload",
-    "scratch-messaging/no-unread",
-    "scratch-messaging/show-more",
-    "scratch-messaging/mark-as-read",
-    "scratch-messaging/marked-as-read",
-    "scratch-messaging/open-messages",
-  ];
-
-  await l10n.loadMessages(usedMessages);
+  await l10n.loadByAddonId("scratch-messaging");
 
   let dateNow = Date.now();
 
@@ -226,6 +187,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
 
       follows: [],
       studioInvites: [],
+      studioPromotions: [],
       forumActivity: [],
       studioActivity: [],
       remixes: [],
@@ -237,6 +199,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       messageTypeExtended: {
         follows: false,
         studioInvites: false,
+        studioPromotions: false,
         forumActivity: false,
         studioActivity: false,
         remixes: false,
@@ -258,6 +221,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         markAsReadMsg: l10n.get("scratch-messaging/mark-as-read"),
         markedAsReadMsg: l10n.get("scratch-messaging/marked-as-read"),
         openMessagesMsg: l10n.get("scratch-messaging/open-messages"),
+        studioPromotionsMsg: l10n.get("scratch-messaging/studio-promotions"),
       },
     },
     watch: {
@@ -266,6 +230,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         this.commentsProgress = 0;
         this.follows = [];
         this.studioInvites = [];
+        this.studioPromotions = [];
         this.forumActivity = [];
         this.studioActivity = [];
         this.remixes = [];
@@ -357,8 +322,9 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
           title,
           unreadComments: 0,
           commentChains: [],
-          loves: 0,
-          favorites: 0,
+          loveCount: 0,
+          favoriteCount: 0,
+          loversAndFavers: [],
           loadedComments: false,
         };
         this.projects.push(obj);
@@ -454,6 +420,12 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
               studioId: message.gallery_id,
               studioTitle: message.title,
             });
+          } else if (message.type === "becomeownerstudio") {
+            this.studioPromotions.push({
+              actor: message.actor_username,
+              studioId: message.gallery_id,
+              studioTitle: message.gallery_title,
+            });
           } else if (message.type === "forumpost") {
             // We only want one message per forum topic
             if (!this.forumActivity.find((obj) => obj.topicId === message.topic_id)) {
@@ -478,9 +450,17 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
               });
             }
           } else if (message.type === "loveproject") {
-            this.getProjectObject(message.project_id, message.title).loves++;
+            const projectObject = this.getProjectObject(message.project_id, message.title);
+            projectObject.loveCount++;
+            const findLover = projectObject.loversAndFavers.find((obj) => obj.username === message.actor_username);
+            if (findLover) findLover.loved = true;
+            else projectObject.loversAndFavers.push({ username: message.actor_username, loved: true, faved: false });
           } else if (message.type === "favoriteproject") {
-            this.getProjectObject(message.project_id, message.project_title).favorites++;
+            const projectObject = this.getProjectObject(message.project_id, message.project_title);
+            projectObject.favoriteCount++;
+            const findFaver = projectObject.loversAndFavers.find((obj) => obj.username === message.actor_username);
+            if (findFaver) findFaver.faved = true;
+            else projectObject.loversAndFavers.push({ username: message.actor_username, loved: false, faved: true });
           } else if (message.type === "addcomment") {
             const resourceId = message.comment_type === 1 ? message.comment_obj_title : message.comment_obj_id;
             let location = commentLocations[message.comment_type].find((obj) => obj.resourceId === resourceId);
@@ -541,6 +521,18 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         >${escapeHTML(invite.studioTitle)}</a>`;
         return l10n.escaped("scratch-messaging/curate-invite", { actor, title });
       },
+      studioPromotionHTML(promotion) {
+        const actor = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/users/${promotion.actor}/"
+        >${promotion.actor}</a>`;
+        const title = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/studios/${promotion.studioId}/curators/"
+            style="text-decoration: underline"
+        >${escapeHTML(promotion.studioTitle)}</a>`;
+        return l10n.escaped("scratch-messaging/studio-promotion", { actor, title });
+      },
       forumHTML(forumTopic) {
         const title = `<a target="_blank"
             rel="noopener noreferrer"
@@ -578,6 +570,26 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       },
       studioText(title) {
         return l10n.get("scratch-messaging/studio", { title });
+      },
+      projectLoversAndFavers(project) {
+        // First lovers&favers, then favers-only, then lovers only. Lower is better
+        const priorityOf = (obj) => (obj.loved && obj.faved ? 0 : obj.faved ? 1 : 2);
+        let str = "";
+        const arr = project.loversAndFavers.slice(0, 20).sort((a, b) => {
+          const priorityA = priorityOf(a);
+          const priorityB = priorityOf(b);
+          if (priorityA > priorityB) return 1;
+          else if (priorityB > priorityA) return -1;
+          else return 0;
+        });
+        arr.forEach((obj, i) => {
+          if (obj.loved) str += `<img class="small-icon colored" src="../../images/icons/heart.svg">`;
+          if (obj.faved) str += `<img class="small-icon colored" src="../../images/icons/star.svg">`;
+          str += " ";
+          str += `<a href="https://scratch.mit.edu/users/${obj.username}/">${obj.username}</a>`;
+          if (i !== arr.length - 1) str += "<br>";
+        });
+        return str;
       },
     },
   });

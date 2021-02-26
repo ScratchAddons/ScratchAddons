@@ -643,11 +643,7 @@ export default class DevTools {
         continue;
       }
 
-      // blocks._blocks is not iterable, have to do it using an 'in'
-      for (const id in blocks._blocks) {
-        if (!blocks._blocks.hasOwnProperty(id)) {
-          continue;
-        }
+      for (const id of Object.keys(blocks._blocks)) {
         const block = blocks._blocks[id];
         // To find event broadcaster blocks, we look for the nested "event_broadcast_menu" blocks first that match the event name
         if (block.opcode === "event_broadcast_menu" && block.fields.BROADCAST_OPTION.value === name) {
@@ -991,6 +987,7 @@ export default class DevTools {
       if (sel.length === 0) {
         this.navigateFilter(1);
       }
+      // noinspection JSUnresolvedFunction
       document.activeElement.blur();
       e.preventDefault();
       return;
@@ -1002,6 +999,7 @@ export default class DevTools {
         this.findInp.value = ""; // Clear search first, then close on second press
         this.inputChange(e);
       } else {
+        // noinspection JSUnresolvedFunction
         document.activeElement.blur();
       }
       e.preventDefault();
@@ -1365,11 +1363,15 @@ export default class DevTools {
           contextMenu.insertAdjacentHTML(
             "beforeend",
             `
-                            <div class="react-contextmenu-item context-menu_menu-item_3cioN s3devSTT" role="menuitem"
+                            <div class="${this.addon.tab.scratchClass("context-menu_menu-item", {
+                              others: ["react-contextmenu-item", "s3devSTT"],
+                            })}" role="menuitem"
                                 tabindex="-1" aria-disabled="false" style="border-top: 1px solid hsla(0, 0%, 0%, 0.15);"><span>${this.m(
                                   "top"
                                 )}</span></div>
-                            <div class="react-contextmenu-item context-menu_menu-item_3cioN s3devSTT" role="menuitem"
+                            <div class="${this.addon.tab.scratchClass("context-menu_menu-item", {
+                              others: ["react-contextmenu-item", "s3devSTT"],
+                            })}" role="menuitem"
                                 tabindex="-1" aria-disabled="false"><span>${this.m("bottom")}</span></div>
                         `
           );
@@ -1636,9 +1638,9 @@ export default class DevTools {
                     <span style="display:none;">${this.m("insert")} </span>
                     <span id=s3devInsert class="s3devWrap">
                         <div id='s3devIDDOut' class="s3devDDOut">
-                            <input id='s3devIInp' class="s3devInp input_input-form_l9eYg" type='search' placeholder='${this.m(
-                              "start-typing"
-                            )}' autocomplete='off'>
+                            <input id='s3devIInp' class="${this.addon.tab.scratchClass("input_input-form", {
+                              others: "s3devInp",
+                            })}" type='search' placeholder='${this.m("start-typing")}' autocomplete='off'>
                             <ul id='s3devIDD' class="s3devDD"></ul>
                         </div>
                     </span>
@@ -1896,7 +1898,13 @@ export default class DevTools {
     if (picklist) {
       for (const item of picklist) {
         let code = item[1];
-        if (code === "DELETE_VARIABLE_ID" || code === "RENAME_VARIABLE_ID") {
+        if (
+          typeof code !== "string" || // Audio Record is a function!
+          code === "DELETE_VARIABLE_ID" ||
+          code === "RENAME_VARIABLE_ID" ||
+          code === "NEW_BROADCAST_MESSAGE_ID" ||
+          code === "NEW_BROADCAST_MESSAGE_ID"
+        ) {
           continue; // Skip these
         }
         options.push({
@@ -2032,8 +2040,12 @@ export default class DevTools {
     if (option.option) {
       // We need to tweak the dropdown in this xml...
       let field = option.dom.querySelector("field[name=" + option.pickField + "]");
-      field.innerText = option.option[0];
-      field.setAttribute("id", option.option[1] + "-" + option.option[0]);
+      if (field.getAttribute("id")) {
+        field.innerText = option.option[0];
+        field.setAttribute("id", option.option[1] + "-" + option.option[0]);
+      } else {
+        field.innerText = option.option[1]; // griffpatch - oops! option.option[1] not 0?
+      }
     }
 
     x.appendChild(option.dom);
@@ -2161,6 +2173,7 @@ export default class DevTools {
     this.costTabBody = document.querySelector("div[aria-labelledby=" + this.costTab.id + "]");
 
     if (!document.getElementById("s3devFind")) {
+      // noinspection JSUnresolvedVariable
       root.insertAdjacentHTML(
         "beforeend",
         `
@@ -2173,9 +2186,9 @@ export default class DevTools {
         } </span>
                         <span id=s3devFind class="s3devWrap">
                             <div id='s3devDDOut' class="s3devDDOut">
-                                <input id='s3devInp' class="s3devInp input_input-form_l9eYg" type='search' placeholder='${this.m(
-                                  "find-placeholder"
-                                )}' autocomplete='off'>
+                                <input id='s3devInp' class="${this.addon.tab.scratchClass("input_input-form", {
+                                  others: "s3devInp",
+                                })}" type='search' placeholder='${this.m("find-placeholder")}' autocomplete='off'>
                                 <ul id='s3devDD' class="s3devDD"></ul>
                             </div>
                         </span>

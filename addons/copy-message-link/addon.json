@@ -1,0 +1,31 @@
+{
+  "name": "Copy link to comment button",
+  "description": "Adds a \"Copy Link\" button to all Scratch comments, next to the \"Report\" button.",
+  "credits": [
+    {
+      "name": "Sly-Little-Fox",
+      "link": "https://github.com/Sly-Little-Fox/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "profile.js",
+      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/studios/*/comments"],
+      "runAtComplete": false
+    },
+    {
+      "url": "project.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "project.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["community", "recommended"],
+  "l10n": true,
+  "enabledByDefault": false
+}

@@ -652,3 +652,8 @@ img.tips-icon {
 .tips-divider {
   border-top-color: #000;
 }
+
+.crash-container {
+  border: 1px solid #000;
+  background-color: #2d2d2d;
+}
