@@ -936,7 +936,7 @@ export default async function ({ addon, global, console, msg }) {
         return;
       }
 
-      if (realNewIndex < 0 || realNewIndex > assets.length) {
+      if (realNewIndex < (zeroIndexed ? 0 : 1) || realNewIndex > assets.length) {
         console.warn("should never happen");
         return false;
       }
