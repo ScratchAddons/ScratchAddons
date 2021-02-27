@@ -1,6 +1,5 @@
 // TODO
 // More safety checks
-// Remove code duplication in assets/sounds?
 // Document how this works
 
 export default async function ({ addon, global, console, msg }) {
@@ -720,7 +719,7 @@ export default async function ({ addon, global, console, msg }) {
       });
     };
 
-    vm.reorderTarget = function (targetIndex, newIndex) {
+    vm.constructor.prototype.reorderTarget = function (targetIndex, newIndex) {
       targetIndex = clamp(targetIndex, 0, currentSpriteItems.length);
       newIndex = clamp(newIndex, 0, currentSpriteItems.length);
       if (targetIndex === newIndex) {
@@ -832,124 +831,15 @@ export default async function ({ addon, global, console, msg }) {
       return true;
     };
 
-    vm.runtime.targets[0].constructor.prototype.reorderCostume = function (costumeIndex, newIndex) {
+    const abstractReorderAsset = function ({getAll, set, rename}, costumeIndex, newIndex) {
       costumeIndex = clamp(costumeIndex, 0, currentAssetItems.length);
       newIndex = clamp(newIndex, 0, currentAssetItems.length);
       if (costumeIndex === newIndex) {
         return false;
       }
 
-      let costumes = this.sprite.costumes;
-      const originalCostumes = this.sprite.costumes;
-
-      const getVMAssetFromGUIItem = (item, costumeList = costumes) => {
-        return costumeList.find((c) => c.asset === item.asset);
-      };
-
-      const targetItem = currentAssetItems[costumeIndex];
-      const itemAtNewIndex = currentAssetItems[newIndex];
-      const targetItemData = getItemData(targetItem);
-      const itemAtNewIndexData = getItemData(itemAtNewIndex);
-
-      if (!targetItemData || !itemAtNewIndexData) {
-        console.warn("should never happen");
-        return false;
-      }
-
-      const reorderingItems = typeof targetItemData.folder === "string" ? targetItem.items : [targetItem];
-      const reorderingAssets = reorderingItems.map((i) => getVMAssetFromGUIItem(i)).filter((i) => i);
-      if (typeof itemAtNewIndexData.realIndex === "number") {
-        const newTarget = getVMAssetFromGUIItem(itemAtNewIndex);
-        if (!newTarget || reorderingAssets.includes(newTarget)) {
-          // Dragging folder into itself or target doesn't exist. Ignore.
-          return false;
-        }
-      }
-
-      let newFolder = null;
-
-      costumes = costumes.filter((i) => !reorderingAssets.includes(i));
-
-      let realNewIndex;
-      if (newIndex === 0) {
-        realNewIndex = 0;
-      } else if (newIndex === currentAssetItems.length) {
-        realNewIndex = costumes.length;
-      } else if (typeof itemAtNewIndexData.realIndex === "number") {
-        newFolder = typeof itemAtNewIndexData.inFolder === "string" ? itemAtNewIndexData.inFolder : null;
-        let newAsset = getVMAssetFromGUIItem(itemAtNewIndex);
-        if (!newAsset) {
-          console.warn("should never happen");
-          return false;
-        }
-        realNewIndex = costumes.indexOf(newAsset);
-        if (newIndex > costumeIndex) {
-          realNewIndex++;
-        }
-      } else if (typeof itemAtNewIndexData.folder === "string") {
-        let item;
-        let offset = 0;
-        if (typeof targetItemData.inFolder === "string" && targetItemData.inFolder === itemAtNewIndexData.folder) {
-          // If an item in a folder is dropped onto its folder icon, move it out of the folder.
-          item = itemAtNewIndex.items[0];
-        } else if (!itemAtNewIndexData.folderOpen && newIndex > costumeIndex) {
-          item = itemAtNewIndex.items[itemAtNewIndex.items.length - 1];
-          offset = 1;
-        } else if (!itemAtNewIndexData.folderOpen && newIndex < costumeIndex) {
-          item = itemAtNewIndex.items[0];
-        } else {
-          item = itemAtNewIndex.items[0];
-          newFolder = itemAtNewIndexData.folder;
-        }
-        let newAsset = getVMAssetFromGUIItem(item);
-        if (newAsset) {
-          realNewIndex = costumes.indexOf(newAsset) + offset;
-        } else {
-          // Edge case: Dragging the first item of a list on top of the folder item
-          newAsset = getVMAssetFromGUIItem(item, originalCostumes);
-          if (!newAsset) {
-            console.warn("should never happen");
-            return false;
-          }
-          realNewIndex = originalCostumes.indexOf(newAsset) + offset;
-        }
-      } else {
-        console.warn("should never happen");
-        return false;
-      }
-
-      if (typeof targetItemData.folder === "string" && newFolder !== null) {
-        // Cannot drag a folder into another folder
-        return;
-      }
-
-      if (realNewIndex < 0 || realNewIndex > costumes.length) {
-        console.warn("should never happen");
-        return false;
-      }
-
-      costumes.splice(realNewIndex, 0, ...reorderingAssets);
-      this.sprite.costumes = costumes;
-
-      // If the folder has changed, update sprite names to match.
-      if (typeof targetItemData.folder !== "string" && targetItemData.inFolder !== newFolder) {
-        for (const asset of reorderingAssets) {
-          this.renameCostume(costumes.indexOf(asset), setFolderOfName(asset.name, newFolder));
-        }
-      }
-
-      return true;
-    };
-
-    vm.runtime.targets[0].constructor.prototype.reorderSound = function (costumeIndex, newIndex) {
-      costumeIndex = clamp(costumeIndex, 0, currentAssetItems.length);
-      newIndex = clamp(newIndex, 0, currentAssetItems.length);
-      if (costumeIndex === newIndex) {
-        return false;
-      }
-
-      let costumes = this.sprite.sounds;
-      const originalCostumes = this.sprite.sounds;
+      let costumes = getAll();
+      const originalCostumes = getAll();
 
       const getVMAssetFromGUIItem = (item, costumeList = costumes) => {
         const itemData = getItemData(item);
@@ -983,7 +873,7 @@ export default async function ({ addon, global, console, msg }) {
       let realNewIndex;
       if (newIndex === 0) {
         realNewIndex = 0;
-      } else if (newIndex === currentAssetItems.length) {
+      } else if (newIndex === currentAssetItems.length - 1) {
         realNewIndex = costumes.length;
       } else if (typeof itemAtNewIndexData.realIndex === "number") {
         newFolder = typeof itemAtNewIndexData.inFolder === "string" ? itemAtNewIndexData.inFolder : null;
@@ -1039,16 +929,44 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       costumes.splice(realNewIndex, 0, ...reorderingAssets);
-      this.sprite.sounds = costumes;
+      set(costumes);
 
       // If the folder has changed, update sprite names to match.
       if (typeof targetItemData.folder !== "string" && targetItemData.inFolder !== newFolder) {
         for (const asset of reorderingAssets) {
-          this.renameSound(costumes.indexOf(asset), setFolderOfName(asset.name, newFolder));
+          rename(costumes.indexOf(asset), setFolderOfName(asset.name, newFolder));
         }
       }
 
       return true;
+    };
+
+    vm.runtime.targets[0].constructor.prototype.reorderCostume = function (costumeIndex, newIndex) {
+      return abstractReorderAsset({
+        getAll: () => {
+          return this.sprite.costumes;
+        },
+        set: (assets) => {
+          this.sprite.costumes = assets;
+        },
+        rename: (index, name) => {
+          this.renameCostume(index, name)
+        }
+      }, costumeIndex, newIndex);
+    };
+
+    vm.runtime.targets[0].constructor.prototype.reorderSound = function (soundIndex, newIndex) {
+      return abstractReorderAsset({
+        getAll: () => {
+          return this.sprite.sounds;
+        },
+        set: (assets) => {
+          this.sprite.sounds = assets;
+        },
+        rename: (index, name) => {
+          this.renameSound(index, name)
+        }
+      }, soundIndex, newIndex);
     };
   }
 
