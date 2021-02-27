@@ -454,8 +454,8 @@ export default async function ({ addon, global, console, msg }) {
           const backpack = document.querySelector("[class*='backpack_backpack-list-inner']");
           if (backpack) {
             const backpackRect = backpack.getBoundingClientRect();
-            const {x, y} = this.props.dragInfo.currentOffset;
-            const {top, left, bottom, right} = backpackRect;
+            const { x, y } = this.props.dragInfo.currentOffset;
+            const { top, left, bottom, right } = backpackRect;
             if (x >= left && x <= right && y >= top && y <= bottom) {
               this.props.dragInfo.dragType = "sa_invalid";
             }
@@ -668,7 +668,7 @@ export default async function ({ addon, global, console, msg }) {
 
     const isFolderOpen = (component, folder) => {
       const sortableHOCInstance = getSortableHOCFromElement(component.ref);
-      const folders = sortableHOCInstance.state && sortableHOCInstance.state.folders || [];
+      const folders = (sortableHOCInstance.state && sortableHOCInstance.state.folders) || [];
       return folders.includes(folder);
     };
 
@@ -683,8 +683,8 @@ export default async function ({ addon, global, console, msg }) {
           };
         }
         return {
-          folders
-        }
+          folders,
+        };
       });
     };
 
