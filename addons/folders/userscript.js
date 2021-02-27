@@ -371,7 +371,7 @@ export default async function ({ addon, global, console, msg }) {
 
     const getSelectedItem = (sortable) => {
       if (type === TYPE_SPRITES) {
-        const selectedItem = sortable.props.items.find(i => i.id === sortable.props.selectedId);
+        const selectedItem = sortable.props.items.find((i) => i.id === sortable.props.selectedId);
         return selectedItem;
       } else if (type === TYPE_ASSETS) {
         const selectedItem = sortable.props.items[sortable.props.selectedItemIndex];
@@ -400,7 +400,7 @@ export default async function ({ addon, global, console, msg }) {
     SortableHOC.prototype.componentDidMount = function () {
       // Do part of componentDidUpdate on mount as well
       const selectedItem = getSelectedItem(this);
-      if (selectedItem) {        
+      if (selectedItem) {
         const folder = getFolderFromName(selectedItem.name);
         if (type === TYPE_SPRITES) {
           currentSpriteFolder = folder;
@@ -413,7 +413,11 @@ export default async function ({ addon, global, console, msg }) {
 
     SortableHOC.prototype.componentDidUpdate = function (prevProps, prevState) {
       // When the selected item has changed, open its folder.
-      if (this.props.selectedId !== prevProps.selectedId || this.props.selectedItemIndex !== prevProps.selectedItemIndex) {
+      if (
+        this.props.selectedId !== prevProps.selectedId ||
+        this.props.selectedItemIndex !== prevProps.selectedItemIndex ||
+        this.props.items !== prevProps.items
+      ) {
         const selectedItem = getSelectedItem(this);
         if (selectedItem) {
           const folder = getFolderFromName(selectedItem.name);
@@ -438,7 +442,7 @@ export default async function ({ addon, global, console, msg }) {
       const originalProps = this.props;
       this.props = {
         ...this.props,
-        ...processItems((this.state && this.state.folders) || [], this.props)
+        ...processItems((this.state && this.state.folders) || [], this.props),
       };
       if (type === TYPE_SPRITES) {
         currentSpriteItems = this.props.items;
@@ -677,9 +681,27 @@ export default async function ({ addon, global, console, msg }) {
       });
     };
 
-    const originalSpriteSelectorItemHandleClick = SpriteSelectorItem.prototype.handleClick;
-    SpriteSelectorItem.prototype.handleClick = function (e) {
-      if (!this.noClick) {
+    for (const method of ['handleDelete', 'handleDuplicate', 'handleExport']) {
+      const original = SpriteSelectorItem.prototype[method];
+      SpriteSelectorItem.prototype[method] = function (...args) {
+        if (typeof this.props.id === 'number') {
+          const itemData = getItemData(this.props);
+          if (itemData) {
+            const originalId = this.props.id;
+            this.props.id = itemData.realIndex;
+            const ret = original.call(this, ...args);
+            this.props.id = originalId;
+            return ret;
+          }
+        }
+        return original.call(this, ...args);
+      };
+    }
+
+    const originalHandleClick = SpriteSelectorItem.prototype.handleClick;
+    SpriteSelectorItem.prototype.handleClick = function (...args) {
+      const e = args[0];
+      if (e && !this.noClick) {
         const itemData = getItemData(this.props);
         if (itemData) {
           if (typeof itemData.folder === "string") {
@@ -696,7 +718,7 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
       }
-      return originalSpriteSelectorItemHandleClick.call(this, e);
+      return originalHandleClick.call(this, ...args);
     };
 
     const originalSetRef = SpriteSelectorItem.prototype.setRef;
