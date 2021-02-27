@@ -776,23 +776,30 @@ export default async function ({ addon, global, console, msg }) {
       } else if (typeof itemAtNewIndexData.folder === "string") {
         let item;
         let offset = 0;
-        if (typeof targetItemData.inFolder === "string" && targetItemData.inFolder === itemAtNewIndexData.folder) {
-          // If an item in a folder is dropped onto its folder icon, move it out of the folder.
+        if (newIndex < costumeIndex) {
+          // A B [C D E] F G
+          //    ^----------*
+          // A B C [D] E F G
+          //      ^--------*
           item = itemAtNewIndex.items[0];
-        } else if (!itemAtNewIndexData.folderOpen && newIndex > costumeIndex) {
-          item = itemAtNewIndex.items[itemAtNewIndex.items.length - 1];
-          offset = 1;
-        } else if (!itemAtNewIndexData.folderOpen && newIndex < costumeIndex) {
-          item = itemAtNewIndex.items[0];
-        } else {
+        } else if (itemAtNewIndexData.folderOpen) {
+          // A B [C D E] F G
+          //   *---^
           item = itemAtNewIndex.items[0];
           newFolder = itemAtNewIndexData.folder;
+        } else {
+          // A B [C] D E F G
+          //   *----^
+          item = itemAtNewIndex.items[itemAtNewIndexData.length - 1];
+          offset = 1;
         }
         let newAsset = getVMItemFromGUIItem(item, costumes);
         if (newAsset) {
           realNewIndex = costumes.indexOf(newAsset) + offset;
         } else {
           // Edge case: Dragging the first item of a list on top of the folder item
+          // A B [C D E] F G
+          //    ^---*
           newAsset = getVMItemFromGUIItem(item, originalCostumes);
           if (!newAsset) {
             console.warn("should never happen");
@@ -842,8 +849,8 @@ export default async function ({ addon, global, console, msg }) {
           rename: (item, name) => {
             this.renameSprite(item.id, name);
           },
-          getVMItemFromGUIItem: (item, costumes) => {
-            return this.runtime.getTargetById(item.id);
+          getVMItemFromGUIItem: (item, targets) => {
+            return targets.find((i) => i.id === item.id);
           },
           guiItems: currentSpriteItems,
           zeroIndexed: false,
