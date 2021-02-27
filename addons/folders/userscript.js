@@ -835,7 +835,7 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     const abstractReorder = (
-      { guiItems, getAll, set, rename, getVMItemFromGUIItem, zeroIndexed },
+      { guiItems, getAll, set, rename, getVMItemFromGUIItem, zeroIndexed, end },
       costumeIndex,
       newIndex
     ) => {
@@ -948,6 +948,8 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
+      end();
+
       return true;
     };
 
@@ -966,6 +968,10 @@ export default async function ({ addon, global, console, msg }) {
           },
           getVMItemFromGUIItem: (item, targets) => {
             return targets.find((i) => i.id === item.id);
+          },
+          end: () => {
+            // Emit a workspace update to update blocks if a sprite was renamed
+            this.emitWorkspaceUpdate();
           },
           guiItems: currentSpriteItems,
           zeroIndexed: false,
@@ -991,6 +997,7 @@ export default async function ({ addon, global, console, msg }) {
             const itemData = getItemData(item);
             return costumes.find((c) => c.name === itemData.realName);
           },
+          end() {},
           guiItems: currentAssetItems,
           zeroIndexed: true,
         },
@@ -1015,6 +1022,7 @@ export default async function ({ addon, global, console, msg }) {
             const itemData = getItemData(item);
             return sounds.find((c) => c.name === itemData.realName);
           },
+          end() {},
           guiItems: currentAssetItems,
           zeroIndexed: true,
         },
