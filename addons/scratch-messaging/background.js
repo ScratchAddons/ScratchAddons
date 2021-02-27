@@ -230,8 +230,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     return new Promise((resolve) => {
       // For some weird reason, this only works with XHR in Chrome...
       const xhr = new XMLHttpRequest();
-      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/`, true);
-      xhr.setRequestHeader("X-ScratchAddons-Uses-Fetch", "true");
+      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/?sareferer`, true);
+      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
+      xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
 
       xhr.onload = function () {
         if (xhr.status === 200) {
@@ -253,8 +254,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   function deleteComment({ resourceType, resourceId, commentId }) {
     return new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
-      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/`, true);
-      xhr.setRequestHeader("X-ScratchAddons-Uses-Fetch", "true");
+      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/?sareferer`, true);
+      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
+      xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
 
       xhr.onload = function () {
         if (xhr.status === 200) {
