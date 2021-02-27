@@ -23,6 +23,7 @@ scratchAddons.eventTargets = {
   auth: [],
   settings: [],
   tab: [],
+  self: [],
 };
 scratchAddons.classNames = { loaded: false };
 
@@ -92,14 +93,17 @@ const observer = new MutationObserver((mutationsList) => {
       removeAttr();
     } else if (attrType === "data-fire-event") {
       if (attrVal.addonId) {
-        const settingsEventTarget = scratchAddons.eventTargets.settings.find(
+        // Addon specific events, like settings change and self disabled
+        const eventTarget = scratchAddons.eventTargets[attrVal.target].find(
           (eventTarget) => eventTarget._addonId === attrVal.addonId
         );
-        if (settingsEventTarget) settingsEventTarget.dispatchEvent(new CustomEvent("change"));
-      } else
+        if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(attrVal.name));
+      } else {
+        // Global events, like auth change
         scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
           eventTarget.dispatchEvent(new CustomEvent(attrVal.name))
         );
+      }
       removeAttr();
     }
   }
