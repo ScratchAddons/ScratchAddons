@@ -1,6 +1,6 @@
 export default async function ({ msg }) {
   const status = $('textarea[name="status"]');
-  const left = $($("#status-chars-left").parent()[0]);
+  const left = $("#status-chars-left").parent();
 
   // remove scratch's event listeners
   status.off("input");
