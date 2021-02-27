@@ -177,24 +177,36 @@ export default async function ({ addon, global, console, msg }) {
     return folderColors[folderName];
   };
 
-  const fixTargetOrder = () => {
+  const fixOrderOfItemsInFolders = (items) => {
     const folders = Object.create(null);
     const result = [];
-    for (const target of vm.runtime.targets) {
-      const folder = getFolderFromName(target.getName());
+    for (const item of items) {
+      const name = item.getName ? item.getName() : item.name;
+      const folder = getFolderFromName(name);
       if (typeof folder === "string") {
         if (!folders[folder]) {
           folders[folder] = [];
           result.push(folders[folder]);
         }
-        folders[folder].push(target);
+        folders[folder].push(item);
       } else {
-        result.push(target);
+        result.push(item);
       }
     }
-    const newTargetList = result.flat();
-    vm.runtime.targets = newTargetList;
+    return result.flat();
+  };
+
+  const fixTargetOrder = () => {
+    vm.runtime.targets = fixOrderOfItemsInFolders(vm.runtime.targets);
     vm.emitTargetsUpdate();
+  };
+
+  const fixCostumeOrder = () => {
+    vm.editingTarget.sprite.costumes = fixOrderOfItemsInFolders(vm.editingTarget.sprite.costumes);
+  };
+
+  const fixSoundOrder = () => {
+    vm.editingTarget.sprite.sounds = fixOrderOfItemsInFolders(vm.editingTarget.sprite.sounds);
   };
 
   const patchSortableHOC = (SortableHOC, type) => {
@@ -501,6 +513,7 @@ export default async function ({ addon, global, console, msg }) {
                 }
               }
             }
+            fixTargetOrder();
           } else if (component.props.dragType === "COSTUME") {
             for (let i = 0; i < vm.editingTarget.sprite.costumes.length; i++) {
               const costume = vm.editingTarget.sprite.costumes[i];
@@ -508,6 +521,7 @@ export default async function ({ addon, global, console, msg }) {
                 vm.renameCostume(i, setFolderOfName(costume.name, newName));
               }
             }
+            fixCostumeOrder();
           } else if (component.props.dragType === "SOUND") {
             for (let i = 0; i < vm.editingTarget.sprite.sounds.length; i++) {
               const sound = vm.editingTarget.sprite.sounds[i];
@@ -515,6 +529,7 @@ export default async function ({ addon, global, console, msg }) {
                 vm.renameSound(i, setFolderOfName(sound.name, newName));
               }
             }
+            fixSoundOrder();
           }
         };
 
@@ -524,7 +539,6 @@ export default async function ({ addon, global, console, msg }) {
           if (newName === null) {
             return;
           }
-          // TODO check folder does not already exist?
           // Empty name will remove the folder
           if (!newName) {
             newName = null;
