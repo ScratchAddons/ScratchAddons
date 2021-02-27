@@ -423,8 +423,7 @@ export default async function ({ addon, global, console, msg }) {
       // When the selected item has changed, open its folder.
       if (
         this.props.selectedId !== prevProps.selectedId ||
-        this.props.selectedItemIndex !== prevProps.selectedItemIndex ||
-        this.props.items !== prevProps.items
+        this.props.selectedItemIndex !== prevProps.selectedItemIndex
       ) {
         const selectedItem = getSelectedItem(this);
         if (selectedItem) {
