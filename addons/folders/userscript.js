@@ -41,7 +41,7 @@ export default async function ({ addon, global, console, msg }) {
    */
   const getFolderFromName = (name) => {
     const idx = name.indexOf(DIVIDER);
-    if (idx === -1) {
+    if (idx === -1 || idx === 0) {
       return null;
     }
     return name.substr(0, idx);
@@ -53,7 +53,7 @@ export default async function ({ addon, global, console, msg }) {
    */
   const getNameWithoutFolder = (name) => {
     const idx = name.indexOf(DIVIDER);
-    if (idx === -1) {
+    if (idx === -1 || idx === 0) {
       return name;
     }
     return name.substr(idx + DIVIDER.length);
