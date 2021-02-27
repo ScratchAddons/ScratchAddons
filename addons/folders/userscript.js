@@ -28,6 +28,8 @@ export default async function ({ addon, global, console, msg }) {
   let reactInternalKey;
 
   let currentSpriteFolder;
+  let currentAssetFolder;
+
   let currentSpriteItems;
   let currentAssetItems;
 
@@ -367,17 +369,27 @@ export default async function ({ addon, global, console, msg }) {
       return result;
     };
 
-    SortableHOC.prototype.saInitialSetup = function () {
-      let folders = [];
+    const getSelectedItem = (sortable) => {
       if (type === TYPE_SPRITES) {
-        const selectedItem = this.props.items.find(i => i.id === this.props.selectedId);
-        if (selectedItem && !selectedItem.isStage) {
-          folders.push(getFolderFromName(selectedItem.name));
-        }
+        const selectedItem = sortable.props.items.find(i => i.id === sortable.props.selectedId);
+        return selectedItem;
       } else if (type === TYPE_ASSETS) {
-        const selectedItem = this.props.items[this.props.selectedItemIndex];
-        if (selectedItem) {
-          folders.push(getFolderFromName(selectedItem.name));
+        const selectedItem = sortable.props.items[sortable.props.selectedItemIndex];
+        return selectedItem;
+      }
+      return null;
+    };
+
+    SortableHOC.prototype.saInitialSetup = function () {
+      const folders = [];
+      const selectedItem = getSelectedItem(this);
+      if (selectedItem && !selectedItem.isStage) {
+        const folder = getFolderFromName(selectedItem.name);
+        folders.push(folder);
+        if (type === TYPE_SPRITES) {
+          currentSpriteFolder = folder;
+        } else if (type === TYPE_ASSETS) {
+          currentAssetFolder = folder;
         }
       }
       this.setState({
@@ -386,24 +398,31 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     SortableHOC.prototype.componentDidMount = function () {
-      if (type === TYPE_SPRITES) {
-        const selectedTarget = vm.runtime.getTargetById(this.props.selectedId);
-        if (selectedTarget) {
-          currentSpriteFolder = getFolderFromName(selectedTarget.getName());
-        } else {
-          currentSpriteFolder = null;
+      // Do part of componentDidUpdate on mount as well
+      const selectedItem = getSelectedItem(this);
+      if (selectedItem) {        
+        const folder = getFolderFromName(selectedItem.name);
+        if (type === TYPE_SPRITES) {
+          currentSpriteFolder = folder;
+        } else if (type === TYPE_ASSETS) {
+          currentAssetFolder = folder;
         }
       }
+      this.saInitialSetup();
     };
 
     SortableHOC.prototype.componentDidUpdate = function (prevProps, prevState) {
       // When the selected item has changed, open its folder.
-      if (type === TYPE_SPRITES) {
-        if (prevProps.selectedId !== this.props.selectedId) {
-          const newTarget = vm.runtime.getTargetById(this.props.selectedId);
-          currentSpriteFolder = getFolderFromName(newTarget.getName());
-          if (newTarget && newTarget.isSprite()) {
-            const newFolder = getFolderFromName(newTarget.getName());
+      if (this.props.selectedId !== prevProps.selectedId || this.props.selectedItemIndex !== prevProps.selectedItemIndex) {
+        const selectedItem = getSelectedItem(this);
+        if (selectedItem) {
+          const folder = getFolderFromName(selectedItem.name);
+          if (type === TYPE_SPRITES) {
+            currentSpriteFolder = folder;
+          } else if (type === TYPE_ASSETS) {
+            currentAssetFolder = folder;
+          }
+          if (!selectedItem.isStage) {
             if (typeof newFolder === "string" && !this.state.folders.includes(newFolder)) {
               this.setState((prevState) => ({
                 folders: [...prevState.folders, newFolder],
@@ -416,15 +435,18 @@ export default async function ({ addon, global, console, msg }) {
 
     const originalSortableHOCRender = SortableHOC.prototype.render;
     SortableHOC.prototype.render = function () {
-      const originalItems = this.props.items;
-      Object.assign(this.props, processItems((this.state && this.state.folders) || [], this.props));
+      const originalProps = this.props;
+      this.props = {
+        ...this.props,
+        ...processItems((this.state && this.state.folders) || [], this.props)
+      };
       if (type === TYPE_SPRITES) {
         currentSpriteItems = this.props.items;
       } else if (type === TYPE_ASSETS) {
         currentAssetItems = this.props.items;
       }
       const result = originalSortableHOCRender.call(this);
-      this.props.items = originalItems;
+      this.props = originalProps;
       return result;
     };
   };
@@ -741,27 +763,56 @@ export default async function ({ addon, global, console, msg }) {
     sortableHOCInstance.saInitialSetup();
 
     const originalInstallTargets = vm.installTargets;
-    vm.installTargets = function (targets, extensions, wholeProject) {
-      // TODO: do something like this on costumes and sounds as well
-      // Update the names to be in the folder.
-      if (currentSpriteFolder) {
-        for (const target of targets) {
-          if (target.sprite) {
-            target.sprite.name = setFolderOfName(target.sprite.name, currentSpriteFolder);
+    vm.installTargets = function (...args) {
+      if (currentSpriteFolder !== null) {
+        const targets = args[0];
+        if (Array.isArray(targets)) {
+          for (const target of targets) {
+            if (target.sprite) {
+              target.sprite.name = setFolderOfName(target.sprite.name, currentSpriteFolder);
+            }
           }
         }
       }
-      const result = originalInstallTargets.call(this, targets, extensions, wholeProject);
-      return result.then(() => {
+      return originalInstallTargets.call(this, ...args).then((r) => {
         fixTargetOrder();
+        return r;
       });
     };
 
-    const abstractReorder = function (
+    const originalAddCostume = vm.addCostume;
+    vm.addCostume = function (...args) {
+      if (currentAssetFolder !== null) {
+        const costume = args[1];
+        if (costume) {
+          costume.name = setFolderOfName(costume.name, currentAssetFolder);
+        }
+      }
+      return originalAddCostume.call(this, ...args).then((r) => {
+        fixCostumeOrder();
+        return r;
+      });
+    };
+
+    const originalAddSound = vm.addSound;
+    vm.addSound = function (...args) {
+      if (currentAssetFolder !== null) {
+        const sound = args[0];
+        if (sound) {
+          sound.name = setFolderOfName(sound.name, currentAssetFolder);
+        }
+      }
+      return originalAddSound.call(this, ...args).then((r) => {
+        fixSoundOrder();
+        return r;
+      });
+    };
+
+    const abstractReorder = (
       { guiItems, getAll, set, rename, getVMItemFromGUIItem, zeroIndexed },
       costumeIndex,
       newIndex
-    ) {
+    ) => {
       costumeIndex = clamp(costumeIndex, 0, guiItems.length);
       newIndex = clamp(newIndex, 0, guiItems.length);
       if (costumeIndex === newIndex) {
