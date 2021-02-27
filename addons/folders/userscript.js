@@ -559,6 +559,7 @@ export default async function ({ addon, global, console, msg }) {
                 }
               }
             }
+            vm.emitWorkspaceUpdate();
             fixTargetOrder();
           } else if (component.props.dragType === "COSTUME") {
             for (let i = 0; i < vm.editingTarget.sprite.costumes.length; i++) {
@@ -615,6 +616,7 @@ export default async function ({ addon, global, console, msg }) {
             targets.splice(insertAt, 0, target);
             vm.runtime.targets = targets;
             vm.renameSprite(component.props.id, setFolderOfName(target.getName(), folder));
+            vm.emitWorkspaceUpdate();
           } else if (component.props.dragType === "COSTUME") {
             const data = getItemData(component.props);
             const index = data.realIndex;
