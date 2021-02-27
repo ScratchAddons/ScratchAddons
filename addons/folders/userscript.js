@@ -33,12 +33,14 @@ export default async function ({ addon, global, console, msg }) {
   let currentSpriteItems;
   let currentAssetItems;
 
+  const DIVIDER = "//";
+
   /**
    * getFolderFromName("B") === null
-   * getFolderFromName("A/b") === "A"
+   * getFolderFromName("A//b") === "A"
    */
   const getFolderFromName = (name) => {
-    const idx = name.indexOf("/");
+    const idx = name.indexOf(DIVIDER);
     if (idx === -1) {
       return null;
     }
@@ -47,26 +49,26 @@ export default async function ({ addon, global, console, msg }) {
 
   /**
    * getNameWithoutFolder("B") === "B"
-   * getNameWithoutFolder("A/b") === "b"
+   * getNameWithoutFolder("A//b") === "b"
    */
   const getNameWithoutFolder = (name) => {
-    const idx = name.indexOf("/");
+    const idx = name.indexOf(DIVIDER);
     if (idx === -1) {
       return name;
     }
-    return name.substr(idx + 1);
+    return name.substr(idx + DIVIDER.length);
   };
 
   /**
-   * setFolderOfName("B", "y") === "y/B"
-   * setFolderOfName("c/B", "y") === "y/B"
+   * setFolderOfName("B", "y") === "y//B"
+   * setFolderOfName("c//B", "y") === "y//B"
    * setFolderOfName("B", null) === "B"
-   * setFolderOfName("c/B", null) === "B"
+   * setFolderOfName("c//B", null) === "B"
    */
   const setFolderOfName = (name, folder) => {
     const basename = getNameWithoutFolder(name);
     if (folder) {
-      return `${folder}/${basename}`;
+      return `${folder}${DIVIDER}${basename}`;
     }
     return basename;
   };
