@@ -749,19 +749,7 @@ export default async function ({ addon, global, console, msg }) {
     };
   };
 
-  await untilInEditor();
-
-  // Sprite list
-  {
-    const spriteSelectorItemElement = await addon.tab.waitForElement("[class*='sprite-selector_sprite-wrapper']");
-    vm = addon.tab.traps.vm;
-    reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
-    const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
-    const spriteSelectorItemInstance = spriteSelectorItemElement[reactInternalKey].child.child.child.stateNode;
-    patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
-    patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
-    sortableHOCInstance.saInitialSetup();
-
+  const patchVM = () => {
     const originalInstallTargets = vm.installTargets;
     vm.installTargets = function (...args) {
       if (currentSpriteFolder !== null) {
@@ -996,6 +984,21 @@ export default async function ({ addon, global, console, msg }) {
         newIndex
       );
     };
+  };
+
+  await untilInEditor();
+
+  // Sprite list
+  {
+    const spriteSelectorItemElement = await addon.tab.waitForElement("[class*='sprite-selector_sprite-wrapper']");
+    vm = addon.tab.traps.vm;
+    reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
+    const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
+    const spriteSelectorItemInstance = spriteSelectorItemElement[reactInternalKey].child.child.child.stateNode;
+    patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
+    patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
+    sortableHOCInstance.saInitialSetup();
+    patchVM();
   }
 
   // Costume and sound list
