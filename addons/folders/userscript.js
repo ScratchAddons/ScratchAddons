@@ -794,7 +794,8 @@ export default async function ({ addon, global, console, msg }) {
     vm.installTargets = function (...args) {
       if (currentSpriteFolder !== null) {
         const targets = args[0];
-        if (Array.isArray(targets)) {
+        const wholeProject = args[2];
+        if (Array.isArray(targets) && !wholeProject) {
           for (const target of targets) {
             if (target.sprite) {
               target.sprite.name = setFolderOfName(target.sprite.name, currentSpriteFolder);
