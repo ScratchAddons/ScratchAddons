@@ -557,11 +557,7 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       if (typeof data.folder === "string") {
-        for (const child of menu.children) {
-          if (child !== container) {
-            child.style.display = "none";
-          }
-        }
+        menu.setAttribute("sa-folders-context-type", "folder");
 
         const renameItems = (newName) => {
           const isOpen = isFolderOpen(component, data.folder);
@@ -618,6 +614,8 @@ export default async function ({ addon, global, console, msg }) {
         container.appendChild(createMenuItem(msg("rename-folder"), renameFolder));
         container.appendChild(createMenuItem(msg("remove-folder"), removeFolder));
       } else {
+        menu.setAttribute("sa-folders-context-type", "asset");
+
         const setFolder = (folder) => {
           if (component.props.dragType === "SPRITE") {
             const target = vm.runtime.getTargetById(component.props.id);

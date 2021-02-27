@@ -6,3 +6,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+[sa-folders-context-type="folder"] > :not(.sa-folders-contextmenu-container) {
+  display: none;
+}
