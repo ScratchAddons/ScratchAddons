@@ -429,9 +429,9 @@ export default async function ({ addon, global, console, msg }) {
             currentAssetFolder = folder;
           }
           if (!selectedItem.isStage) {
-            if (typeof newFolder === "string" && !this.state.folders.includes(newFolder)) {
+            if (typeof folder === "string" && !this.state.folders.includes(folder)) {
               this.setState((prevState) => ({
-                folders: [...prevState.folders, newFolder],
+                folders: [...prevState.folders, folder],
               }));
             }
           }
