@@ -564,6 +564,11 @@ export default async function ({ addon, global, console, msg }) {
         }
 
         const renameItems = (newName) => {
+          const isOpen = isFolderOpen(component, data.folder);
+          setFolderOpen(component, data.folder, false);
+          if (isOpen && typeof newName === "string") {
+            setFolderOpen(component, newName, true);
+          }
           if (component.props.dragType === "SPRITE") {
             for (const target of vm.runtime.targets) {
               if (target.isOriginal) {
@@ -594,7 +599,7 @@ export default async function ({ addon, global, console, msg }) {
         };
 
         const renameFolder = () => {
-          let newName = prompt(msg("rename-folder-prompt"));
+          let newName = prompt(msg("rename-folder-prompt"), data.folder);
           // Prompt cancelled, do not rename
           if (newName === null) {
             return;
@@ -635,7 +640,7 @@ export default async function ({ addon, global, console, msg }) {
         };
 
         const createFolder = () => {
-          const name = prompt(msg("name-prompt"), data.realName);
+          const name = prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
           if (name === null) {
             return;
           }
@@ -663,18 +668,24 @@ export default async function ({ addon, global, console, msg }) {
       }
     };
 
-    const toggleFolder = (component, folder) => {
+    const isFolderOpen = (component, folder) => {
+      const sortableHOCInstance = getSortableHOCFromElement(component.ref);
+      const folders = sortableHOCInstance.state && sortableHOCInstance.state.folders || [];
+      return folders.includes(folder);
+    };
+
+    const setFolderOpen = (component, folder, open) => {
       const sortableHOCInstance = getSortableHOCFromElement(component.ref);
       sortableHOCInstance.setState((prevState) => {
-        const existingFolders = (prevState && prevState.folders) || [];
-        if (existingFolders.includes(folder)) {
+        let folders = (prevState && prevState.folders) || [];
+        folders = folders.filter((i) => i !== folder);
+        if (open) {
           return {
-            folders: existingFolders.filter((i) => i !== folder),
+            folders: [...folders, folder],
           };
-        } else {
-          return {
-            folders: [...existingFolders, folder],
-          };
+        }
+        return {
+          folders
         }
       });
     };
@@ -704,7 +715,7 @@ export default async function ({ addon, global, console, msg }) {
         if (itemData) {
           if (typeof itemData.folder === "string") {
             e.preventDefault();
-            toggleFolder(this, itemData.folder);
+            setFolderOpen(this, itemData.folder, !isFolderOpen(this, itemData.folder));
             return;
           }
           if (typeof this.props.number === "number" && typeof itemData.realIndex === "number") {
