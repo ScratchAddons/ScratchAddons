@@ -178,11 +178,13 @@ export default async function ({ addon, global, console, msg }) {
         folderColorStylesheet = document.createElement("style");
         document.head.appendChild(folderColorStylesheet);
       }
-      const color = `hsla(${random(folderName) * 360}deg, 100%, 85%, 0.5)`;
+      const hue = random(folderName) * 360;
+      const color = `hsla(${hue}deg, 100%, 85%, 0.5)`;
       const id = Object.keys(folderColors).length;
       const className = `sa-folders-color-${id}`;
       folderColors[folderName] = className;
-      folderColorStylesheet.textContent += `.${className} { background-color: ${color} !important; }\n`;
+      folderColorStylesheet.textContent += `.${className} { background-color: ${color} !important; }`;
+      folderColorStylesheet.textContent += `.${className}[class*="sprite-selector_raised"] { background-color: hsla(${hue}deg, 100%, 77%, 1) !important; }`;
     }
     return folderColors[folderName];
   };
@@ -928,7 +930,7 @@ export default async function ({ addon, global, console, msg }) {
       assets.splice(realNewIndex, 0, ...reorderingAssets);
       set(assets);
 
-      // If the folder has changed, update sprite names to match.
+      // If the folder has changed, update item names to match.
       if (typeof targetItemData.folder !== "string" && targetItemData.inFolder !== newFolder) {
         for (const asset of reorderingAssets) {
           const name = asset.getName ? asset.getName() : asset.name;
