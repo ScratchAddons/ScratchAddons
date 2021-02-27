@@ -598,6 +598,7 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.10.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.10.0
 [v1.9.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.3
 [v1.9.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.2
 [v1.9.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.1
