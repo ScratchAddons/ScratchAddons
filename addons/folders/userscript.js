@@ -1,8 +1,20 @@
-// TODO
-// More safety checks
-// Document how this works
-
 export default async function ({ addon, global, console, msg }) {
+  // The basic premise of how this addon works is relative simple.
+  // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:
+  // <SelectorHOC>
+  //   <SpriteSelectorItem />
+  //   <SpriteSelectorItem />
+  //   <SpriteSelectorItem />
+  //   <SpriteSelectorItem />
+  //   ...
+  // </SelectorHOC>
+  // It's obviously more complicated than that, but there are two important parts:
+  // SelectorHOC - We override this to change which items are displayed
+  // SpriteSelectorItem - We override this to change how items are displayed.
+  //    Folders are just items rendered differently
+  // These two components communicate through the `name` property of the items.
+  // We touch some things on the VM to make dragging items work properly.
+
   const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
 
   const SVG_NS = "http://www.w3.org/2000/svg";
@@ -790,7 +802,7 @@ export default async function ({ addon, global, console, msg }) {
         } else {
           // A B [C] D E F G
           //   *----^
-          item = itemAtNewIndex.items[itemAtNewIndexData.length - 1];
+          item = itemAtNewIndex.items[itemAtNewIndex.items.length - 1];
           offset = 1;
         }
         let newAsset = getVMItemFromGUIItem(item, costumes);
