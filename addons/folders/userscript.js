@@ -369,11 +369,15 @@ export default async function ({ addon, global, console, msg }) {
 
     SortableHOC.prototype.saInitialSetup = function () {
       let folders = [];
-      // TODO: do this for assets as well
       if (type === TYPE_SPRITES) {
-        const target = vm.runtime.getTargetById(this.props.selectedId);
-        if (target && target.sprite && target.isSprite()) {
-          folders = [getFolderFromName(target.getName())];
+        const selectedItem = this.props.items.find(i => i.id === this.props.selectedId);
+        if (selectedItem && !selectedItem.isStage) {
+          folders.push(getFolderFromName(selectedItem.name));
+        }
+      } else if (type === TYPE_ASSETS) {
+        const selectedItem = this.props.items[this.props.selectedItemIndex];
+        if (selectedItem) {
+          folders.push(getFolderFromName(selectedItem.name));
         }
       }
       this.setState({
