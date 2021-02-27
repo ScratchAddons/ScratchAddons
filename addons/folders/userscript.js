@@ -164,7 +164,13 @@ export default async function ({ addon, global, console, msg }) {
 
     const random = (str) => {
       const seed = hashCode(str);
-      return mulberry32(seed)();
+      const rng = mulberry32(seed);
+      // Run RNG a few times to get more random numbers, otherwise similar seeds tend to give somewhat similar results
+      rng();
+      rng();
+      rng();
+      rng();
+      return rng();
     };
 
     if (!folderColors[folderName]) {
