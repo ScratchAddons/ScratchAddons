@@ -839,19 +839,19 @@ export default async function ({ addon, global, console, msg }) {
 
     const abstractReorder = (
       { guiItems, getAll, set, rename, getVMItemFromGUIItem, zeroIndexed, end },
-      costumeIndex,
+      itemIndex,
       newIndex
     ) => {
-      costumeIndex = clamp(costumeIndex, 0, guiItems.length);
+      itemIndex = clamp(itemIndex, 0, guiItems.length);
       newIndex = clamp(newIndex, 0, guiItems.length);
-      if (costumeIndex === newIndex) {
+      if (itemIndex === newIndex) {
         return false;
       }
 
-      let costumes = getAll();
-      const originalCostumes = getAll();
+      let assets = getAll();
+      const originalAssets = getAll();
 
-      const targetItem = guiItems[costumeIndex - (zeroIndexed ? 0 : 1)];
+      const targetItem = guiItems[itemIndex - (zeroIndexed ? 0 : 1)];
       const itemAtNewIndex = guiItems[newIndex - (zeroIndexed ? 0 : 1)];
       const targetItemData = getItemData(targetItem);
       const itemAtNewIndexData = getItemData(itemAtNewIndex);
@@ -862,9 +862,9 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       const reorderingItems = typeof targetItemData.folder === "string" ? targetItem.items : [targetItem];
-      const reorderingAssets = reorderingItems.map((i) => getVMItemFromGUIItem(i, costumes)).filter((i) => i);
+      const reorderingAssets = reorderingItems.map((i) => getVMItemFromGUIItem(i, assets)).filter((i) => i);
       if (typeof itemAtNewIndexData.realIndex === "number") {
-        const newTarget = getVMItemFromGUIItem(itemAtNewIndex, costumes);
+        const newTarget = getVMItemFromGUIItem(itemAtNewIndex, assets);
         if (!newTarget || reorderingAssets.includes(newTarget)) {
           // Dragging folder into itself or target doesn't exist. Ignore.
           return false;
@@ -873,28 +873,28 @@ export default async function ({ addon, global, console, msg }) {
 
       let newFolder = null;
 
-      costumes = costumes.filter((i) => !reorderingAssets.includes(i));
+      assets = assets.filter((i) => !reorderingAssets.includes(i));
 
       let realNewIndex;
       if (newIndex === (zeroIndexed ? 0 : 1)) {
         realNewIndex = zeroIndexed ? 0 : 1;
       } else if (newIndex === guiItems.length - (zeroIndexed ? 1 : 0)) {
-        realNewIndex = costumes.length;
+        realNewIndex = assets.length;
       } else if (typeof itemAtNewIndexData.realIndex === "number") {
         newFolder = typeof itemAtNewIndexData.inFolder === "string" ? itemAtNewIndexData.inFolder : null;
-        let newAsset = getVMItemFromGUIItem(itemAtNewIndex, costumes);
+        let newAsset = getVMItemFromGUIItem(itemAtNewIndex, assets);
         if (!newAsset) {
           console.warn("should never happen");
           return false;
         }
-        realNewIndex = costumes.indexOf(newAsset);
-        if (newIndex > costumeIndex) {
+        realNewIndex = assets.indexOf(newAsset);
+        if (newIndex > itemIndex) {
           realNewIndex++;
         }
       } else if (typeof itemAtNewIndexData.folder === "string") {
         let item;
         let offset = 0;
-        if (newIndex < costumeIndex) {
+        if (newIndex < itemIndex) {
           // A B [C D E] F G
           //    ^----------*
           // A B C [D] E F G
@@ -911,19 +911,19 @@ export default async function ({ addon, global, console, msg }) {
           item = itemAtNewIndex.items[itemAtNewIndex.items.length - 1];
           offset = 1;
         }
-        let newAsset = getVMItemFromGUIItem(item, costumes);
+        let newAsset = getVMItemFromGUIItem(item, assets);
         if (newAsset) {
-          realNewIndex = costumes.indexOf(newAsset) + offset;
+          realNewIndex = assets.indexOf(newAsset) + offset;
         } else {
           // Edge case: Dragging the first item of a list on top of the folder item
           // A B [C D E] F G
           //    ^---*
-          newAsset = getVMItemFromGUIItem(item, originalCostumes);
+          newAsset = getVMItemFromGUIItem(item, originalAssets);
           if (!newAsset) {
             console.warn("should never happen");
             return false;
           }
-          realNewIndex = originalCostumes.indexOf(newAsset) + offset;
+          realNewIndex = originalAssets.indexOf(newAsset) + offset;
         }
       } else {
         console.warn("should never happen");
@@ -935,13 +935,13 @@ export default async function ({ addon, global, console, msg }) {
         return;
       }
 
-      if (realNewIndex < 0 || realNewIndex > costumes.length) {
+      if (realNewIndex < 0 || realNewIndex > assets.length) {
         console.warn("should never happen");
         return false;
       }
 
-      costumes.splice(realNewIndex, 0, ...reorderingAssets);
-      set(costumes);
+      assets.splice(realNewIndex, 0, ...reorderingAssets);
+      set(assets);
 
       // If the folder has changed, update sprite names to match.
       if (typeof targetItemData.folder !== "string" && targetItemData.inFolder !== newFolder) {
