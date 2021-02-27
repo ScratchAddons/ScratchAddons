@@ -19,13 +19,6 @@ export default async function ({ addon, global, console, msg }) {
 
   const SVG_NS = "http://www.w3.org/2000/svg";
 
-  const SA_DRAG_TYPE_SPRITE = "sa_SPRITE";
-  const DRAG_TYPE_SPRITE = "SPRITE";
-  const SA_DRAG_TYPE_COSTUME = "sa_COSTUME";
-  const DRAG_TYPE_COSTUME = "COSTUME";
-  const SA_DRAG_TYPE_SOUND = "sa_SOUND";
-  const DRAG_TYPE_SOUND = "SOUND";
-
   const TYPE_SPRITES = 1;
   const TYPE_ASSETS = 2;
 
@@ -444,6 +437,19 @@ export default async function ({ addon, global, console, msg }) {
       }
     };
 
+    const originalComponentWillReceiveProps = SortableHOC.prototype.componentWillReceiveProps;
+    SortableHOC.prototype.componentWillReceiveProps = function (...args) {
+      const newProps = args[0];
+      // If a folder item is dropped somewhere other than inside this SortableHOC,
+      // change the type to something invalid to avoid a crash.
+      if (newProps && !newProps.dragInfo.dragging && this.props.dragInfo.dragging) {
+        if (this.getMouseOverIndex() === null && this.props.dragInfo.payload === undefined) {
+          this.props.dragInfo.dragType = "sa_invalid";
+        }
+      }
+      return originalComponentWillReceiveProps.call(this, ...args);
+    };
+
     const originalSortableHOCRender = SortableHOC.prototype.render;
     SortableHOC.prototype.render = function () {
       const originalProps = this.props;
@@ -451,11 +457,6 @@ export default async function ({ addon, global, console, msg }) {
         ...this.props,
         ...processItems((this.state && this.state.folders) || [], this.props),
       };
-
-      // See changes in sprite selector.
-      if (this.props.dragType === SA_DRAG_TYPE_SPRITE) this.props.dragType = DRAG_TYPE_SPRITE;
-      if (this.props.dragType === SA_DRAG_TYPE_COSTUME) this.props.dragType = DRAG_TYPE_COSTUME;
-      if (this.props.dragType === SA_DRAG_TYPE_SOUND) this.props.dragType = DRAG_TYPE_SOUND;
 
       if (type === TYPE_SPRITES) {
         currentSpriteItems = this.props.items;
@@ -732,18 +733,6 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
       return originalHandleClick.call(this, ...args);
-    };
-
-    // Do not let people attempt to backpack folders.
-    const originalHandleDrag = SpriteSelectorItem.prototype.handleDrag;
-    SpriteSelectorItem.prototype.handleDrag = function (...args) {
-      const itemData = getItemData(this.props);
-      if (itemData && typeof itemData.folder === "string") {
-        if (this.props.dragType === DRAG_TYPE_SPRITE) this.props.dragType = SA_DRAG_TYPE_SPRITE;
-        if (this.props.dragType === DRAG_TYPE_COSTUME) this.props.dragType = SA_DRAG_TYPE_COSTUME;
-        if (this.props.dragType === DRAG_TYPE_SOUND) this.props.dragType = SA_DRAG_DRAG_TYPE_SOUND;
-      }
-      return originalHandleDrag.call(this, ...args);
     };
 
     const originalSetRef = SpriteSelectorItem.prototype.setRef;
