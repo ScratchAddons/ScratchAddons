@@ -442,11 +442,18 @@ export default async function ({ addon, global, console, msg }) {
     const originalComponentWillReceiveProps = SortableHOC.prototype.componentWillReceiveProps;
     SortableHOC.prototype.componentWillReceiveProps = function (...args) {
       const newProps = args[0];
-      // If a folder item is dropped somewhere other than inside this SortableHOC,
-      // change the type to something invalid to avoid a crash.
+      // If a folder item is dropped in the backpack, change the type to something invalid to avoid a crash.
       if (newProps && !newProps.dragInfo.dragging && this.props.dragInfo.dragging) {
-        if (this.getMouseOverIndex() === null && this.props.dragInfo.payload === undefined) {
-          this.props.dragInfo.dragType = "sa_invalid";
+        if (this.props.dragInfo.payload === undefined) {
+          const backpack = document.querySelector("[class*='backpack_backpack-list-inner']");
+          if (backpack) {
+            const backpackRect = backpack.getBoundingClientRect();
+            const {x, y} = this.props.dragInfo.currentOffset;
+            const {top, left, bottom, right} = backpackRect;
+            if (x >= left && x <= right && y >= top && y <= bottom) {
+              this.props.dragInfo.dragType = "sa_invalid";
+            }
+          }
         }
       }
       return originalComponentWillReceiveProps.call(this, ...args);
