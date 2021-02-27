@@ -544,16 +544,13 @@ export default async function ({ addon, global, console, msg }) {
         return;
       }
 
-      let container = menu.querySelector(".sa-folders-contextmenu-container");
-      if (container) {
-        while (container.firstChild) {
-          container.removeChild(container.firstChild);
-        }
-      } else {
-        container = document.createElement("div");
-        container.className = "sa-folders-contextmenu-container";
-        menu.appendChild(container);
+      const oldContainer = menu.querySelector(".sa-folders-contextmenu-container");
+      if (oldContainer) {
+        oldContainer.remove();
       }
+      const container = document.createElement("div");
+      container.className = "sa-folders-contextmenu-container";
+      menu.appendChild(container);
 
       if (typeof data.folder === "string") {
         menu.setAttribute("sa-folders-context-type", "folder");
