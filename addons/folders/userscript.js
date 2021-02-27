@@ -719,7 +719,11 @@ export default async function ({ addon, global, console, msg }) {
       });
     };
 
-    const abstractReorder = function ({guiItems, getAll, set, rename, getVMItemFromGUIItem, zeroIndexed}, costumeIndex, newIndex) {
+    const abstractReorder = function (
+      { guiItems, getAll, set, rename, getVMItemFromGUIItem, zeroIndexed },
+      costumeIndex,
+      newIndex
+    ) {
       costumeIndex = clamp(costumeIndex, 0, guiItems.length);
       newIndex = clamp(newIndex, 0, guiItems.length);
       if (costumeIndex === newIndex) {
@@ -755,7 +759,7 @@ export default async function ({ addon, global, console, msg }) {
 
       let realNewIndex;
       if (newIndex === (zeroIndexed ? 0 : 1)) {
-        realNewIndex = (zeroIndexed ? 0 : 1);
+        realNewIndex = zeroIndexed ? 0 : 1;
       } else if (newIndex === guiItems.length - (zeroIndexed ? 1 : 0)) {
         realNewIndex = costumes.length;
       } else if (typeof itemAtNewIndexData.realIndex === "number") {
@@ -826,63 +830,75 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     vm.constructor.prototype.reorderTarget = function (targetIndex, newIndex) {
-      return abstractReorder({
-        getAll: () => {
-          return this.runtime.targets;
+      return abstractReorder(
+        {
+          getAll: () => {
+            return this.runtime.targets;
+          },
+          set: (targets) => {
+            this.runtime.targets = targets;
+            this.emitTargetsUpdate();
+          },
+          rename: (item, name) => {
+            this.renameSprite(item.id, name);
+          },
+          getVMItemFromGUIItem: (item, costumes) => {
+            return this.runtime.getTargetById(item.id);
+          },
+          guiItems: currentSpriteItems,
+          zeroIndexed: false,
         },
-        set: (targets) => {
-          this.runtime.targets = targets;
-          this.emitTargetsUpdate();
-        },
-        rename: (item, name) => {
-          this.renameSprite(item.id, name)
-        },
-        getVMItemFromGUIItem: (item, costumes) => {
-          return this.runtime.getTargetById(item.id);
-        },
-        guiItems: currentSpriteItems,
-        zeroIndexed: false
-      }, targetIndex, newIndex);
+        targetIndex,
+        newIndex
+      );
     };
 
     vm.runtime.targets[0].constructor.prototype.reorderCostume = function (costumeIndex, newIndex) {
-      return abstractReorder({
-        getAll: () => {
-          return this.sprite.costumes;
+      return abstractReorder(
+        {
+          getAll: () => {
+            return this.sprite.costumes;
+          },
+          set: (assets) => {
+            this.sprite.costumes = assets;
+          },
+          rename: (item, name) => {
+            this.renameCostume(this.sprite.costumes.indexOf(item), name);
+          },
+          getVMItemFromGUIItem: (item, costumes) => {
+            const itemData = getItemData(item);
+            return costumes.find((c) => c.name === itemData.realName);
+          },
+          guiItems: currentAssetItems,
+          zeroIndexed: true,
         },
-        set: (assets) => {
-          this.sprite.costumes = assets;
-        },
-        rename: (item, name) => {
-          this.renameCostume(this.sprite.costumes.indexOf(item), name)
-        },
-        getVMItemFromGUIItem: (item, costumes) => {
-          const itemData = getItemData(item);
-          return costumes.find((c) => c.name === itemData.realName);
-        },
-        guiItems: currentAssetItems,
-        zeroIndexed: true
-      }, costumeIndex, newIndex);
+        costumeIndex,
+        newIndex
+      );
     };
 
     vm.runtime.targets[0].constructor.prototype.reorderSound = function (soundIndex, newIndex) {
-      return abstractReorder({
-        getAll: () => {
-          return this.sprite.sounds;
+      return abstractReorder(
+        {
+          getAll: () => {
+            return this.sprite.sounds;
+          },
+          set: (assets) => {
+            this.sprite.sounds = assets;
+          },
+          rename: (item, name) => {
+            this.renameSound(this.sprite.sounds.indexOf(item), name);
+          },
+          getVMItemFromGUIItem: (item, sounds) => {
+            const itemData = getItemData(item);
+            return sounds.find((c) => c.name === itemData.realName);
+          },
+          guiItems: currentAssetItems,
+          zeroIndexed: true,
         },
-        set: (assets) => {
-          this.sprite.sounds = assets;
-        },
-        rename: (item, name) => {
-          this.renameSound(this.sprite.sounds.indexOf(item), name)
-        },
-        getVMItemFromGUIItem: (item, sounds) => {
-          const itemData = getItemData(item);
-          return sounds.find((c) => c.name === itemData.realName);
-        },
-        guiItems: currentAssetItems,
-        zeroIndexed: true
-      }, soundIndex, newIndex);
+        soundIndex,
+        newIndex
+      );
     };
   }
 
