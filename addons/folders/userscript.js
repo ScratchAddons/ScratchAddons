@@ -607,7 +607,8 @@ export default async function ({ addon, global, console, msg }) {
 
             let insertAt = vm.runtime.targets.indexOf(target);
             for (let i = 0; i < targets.length; i++) {
-              if (getFolderFromName(targets[i].getName()) === folder) {
+              const target = targets[i];
+              if (!target.isStage && getFolderFromName(target.getName()) === folder) {
                 insertAt = i;
                 break;
               }
