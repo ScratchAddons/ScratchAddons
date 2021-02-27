@@ -694,10 +694,10 @@ export default async function ({ addon, global, console, msg }) {
       });
     };
 
-    for (const method of ['handleDelete', 'handleDuplicate', 'handleExport']) {
+    for (const method of ["handleDelete", "handleDuplicate", "handleExport"]) {
       const original = SpriteSelectorItem.prototype[method];
       SpriteSelectorItem.prototype[method] = function (...args) {
-        if (typeof this.props.id === 'number') {
+        if (typeof this.props.id === "number") {
           const itemData = getItemData(this.props);
           if (itemData) {
             const originalId = this.props.id;
@@ -738,7 +738,7 @@ export default async function ({ addon, global, console, msg }) {
     const originalHandleDrag = SpriteSelectorItem.prototype.handleDrag;
     SpriteSelectorItem.prototype.handleDrag = function (...args) {
       const itemData = getItemData(this.props);
-      if (itemData && typeof itemData.folder === 'string') {
+      if (itemData && typeof itemData.folder === "string") {
         if (this.props.dragType === DRAG_TYPE_SPRITE) this.props.dragType = SA_DRAG_TYPE_SPRITE;
         if (this.props.dragType === DRAG_TYPE_COSTUME) this.props.dragType = SA_DRAG_TYPE_COSTUME;
         if (this.props.dragType === DRAG_TYPE_SOUND) this.props.dragType = SA_DRAG_DRAG_TYPE_SOUND;
