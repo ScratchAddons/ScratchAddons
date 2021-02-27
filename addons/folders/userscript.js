@@ -610,55 +610,21 @@ export default async function ({ addon, global, console, msg }) {
         const setFolder = (folder) => {
           if (component.props.dragType === "SPRITE") {
             const target = vm.runtime.getTargetById(component.props.id);
-            const targets = vm.runtime.targets.filter((i) => i !== target);
-
-            let insertAt = vm.runtime.targets.indexOf(target);
-            for (let i = 0; i < targets.length; i++) {
-              const target = targets[i];
-              if (!target.isStage && getFolderFromName(target.getName()) === folder) {
-                insertAt = i;
-                break;
-              }
-            }
-
-            targets.splice(insertAt, 0, target);
-            vm.runtime.targets = targets;
             vm.renameSprite(component.props.id, setFolderOfName(target.getName(), folder));
+            fixTargetOrder();
             vm.emitWorkspaceUpdate();
           } else if (component.props.dragType === "COSTUME") {
             const data = getItemData(component.props);
             const index = data.realIndex;
             const asset = vm.editingTarget.sprite.costumes[index];
-            const assets = vm.editingTarget.sprite.costumes.filter((i) => i !== asset);
-
-            let insertAt = index;
-            for (let i = 0; i < assets.length; i++) {
-              if (getFolderFromName(assets[i].name) === folder) {
-                insertAt = i;
-                break;
-              }
-            }
-
-            assets.splice(insertAt, 0, asset);
-            vm.editingTarget.sprite.costumes = assets;
             vm.renameCostume(vm.editingTarget.sprite.costumes.indexOf(asset), setFolderOfName(asset.name, folder));
+            fixCostumeOrder();
           } else if (component.props.dragType === "SOUND") {
             const data = getItemData(component.props);
             const index = data.realIndex;
             const asset = vm.editingTarget.sprite.sounds[index];
-            const assets = vm.editingTarget.sprite.sounds.filter((i) => i !== asset);
-
-            let insertAt = index;
-            for (let i = 0; i < assets.length; i++) {
-              if (getFolderFromName(assets[i].name) === folder) {
-                insertAt = i;
-                break;
-              }
-            }
-
-            assets.splice(insertAt, 0, asset);
-            vm.editingTarget.sprite.sounds = assets;
             vm.renameSound(vm.editingTarget.sprite.sounds.indexOf(asset), setFolderOfName(asset.name, folder));
+            fixSoundOrder();
           }
         };
 
