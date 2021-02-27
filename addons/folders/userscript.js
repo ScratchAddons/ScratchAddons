@@ -19,6 +19,13 @@ export default async function ({ addon, global, console, msg }) {
 
   const SVG_NS = "http://www.w3.org/2000/svg";
 
+  const SA_DRAG_TYPE_SPRITE = "sa_SPRITE";
+  const DRAG_TYPE_SPRITE = "SPRITE";
+  const SA_DRAG_TYPE_COSTUME = "sa_COSTUME";
+  const DRAG_TYPE_COSTUME = "COSTUME";
+  const SA_DRAG_TYPE_SOUND = "sa_SOUND";
+  const DRAG_TYPE_SOUND = "SOUND";
+
   const TYPE_SPRITES = 1;
   const TYPE_ASSETS = 2;
 
@@ -269,8 +276,8 @@ export default async function ({ addon, global, console, msg }) {
           inFolder: itemFolderName,
         };
         const newItem = {
+          ...item,
           name: itemData,
-          details: item.details,
         };
 
         if (type === TYPE_SPRITES) {
@@ -444,6 +451,12 @@ export default async function ({ addon, global, console, msg }) {
         ...this.props,
         ...processItems((this.state && this.state.folders) || [], this.props),
       };
+
+      // See changes in sprite selector.
+      if (this.props.dragType === SA_DRAG_TYPE_SPRITE) this.props.dragType = DRAG_TYPE_SPRITE;
+      if (this.props.dragType === SA_DRAG_TYPE_COSTUME) this.props.dragType = DRAG_TYPE_COSTUME;
+      if (this.props.dragType === SA_DRAG_TYPE_SOUND) this.props.dragType = DRAG_TYPE_SOUND;
+
       if (type === TYPE_SPRITES) {
         currentSpriteItems = this.props.items;
       } else if (type === TYPE_ASSETS) {
@@ -719,6 +732,18 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
       return originalHandleClick.call(this, ...args);
+    };
+
+    // Do not let people attempt to backpack folders.
+    const originalHandleDrag = SpriteSelectorItem.prototype.handleDrag;
+    SpriteSelectorItem.prototype.handleDrag = function (...args) {
+      const itemData = getItemData(this.props);
+      if (itemData && typeof itemData.folder === 'string') {
+        if (this.props.dragType === DRAG_TYPE_SPRITE) this.props.dragType = SA_DRAG_TYPE_SPRITE;
+        if (this.props.dragType === DRAG_TYPE_COSTUME) this.props.dragType = SA_DRAG_TYPE_COSTUME;
+        if (this.props.dragType === DRAG_TYPE_SOUND) this.props.dragType = SA_DRAG_DRAG_TYPE_SOUND;
+      }
+      return originalHandleDrag.call(this, ...args);
     };
 
     const originalSetRef = SpriteSelectorItem.prototype.setRef;
