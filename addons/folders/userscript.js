@@ -783,6 +783,8 @@ export default async function ({ addon, global, console, msg }) {
           offset = 1;
         } else if (!itemAtNewIndexData.folderOpen && newIndex < targetIndex) {
           item = itemAtNewIndex.items[0];
+        } else if (itemAtNewIndexData.folderOpen && newIndex < targetIndex) {
+          item = itemAtNewIndex.items[0];
         } else {
           item = itemAtNewIndex.items[0];
           newFolder = itemAtNewIndexData.folder;
