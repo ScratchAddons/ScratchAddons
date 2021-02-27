@@ -422,19 +422,18 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     SortableHOC.prototype.componentDidUpdate = function (prevProps, prevState) {
-      // When the selected item has changed, open its folder.
-      if (
-        this.props.selectedId !== prevProps.selectedId ||
-        this.props.selectedItemIndex !== prevProps.selectedItemIndex
-      ) {
-        const selectedItem = getSelectedItem(this);
-        if (selectedItem) {
-          const folder = getFolderFromName(selectedItem.name);
-          if (type === TYPE_SPRITES) {
-            currentSpriteFolder = folder;
-          } else if (type === TYPE_ASSETS) {
-            currentAssetFolder = folder;
-          }
+      const selectedItem = getSelectedItem(this);
+      if (selectedItem) {
+        const folder = getFolderFromName(selectedItem.name);
+        if (type === TYPE_SPRITES) {
+          currentSpriteFolder = folder;
+        } else if (type === TYPE_ASSETS) {
+          currentAssetFolder = folder;
+        }
+        if (
+          this.props.selectedId !== prevProps.selectedId ||
+          this.props.selectedItemIndex !== prevProps.selectedItemIndex
+        ) {
           if (!selectedItem.isStage) {
             if (typeof folder === "string" && !this.state.folders.includes(folder)) {
               this.setState((prevState) => ({
