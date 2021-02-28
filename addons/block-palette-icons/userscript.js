@@ -6,7 +6,6 @@ export default async function ({ addon, global, console }) {
 	  });
 	  console.log("Debug for block pallete icons: block pallete loaded.");
 	  //Load iconify from their CDN.
-	  await addon.tab.loadScript(addon.self.lib + "/iconify.min.js");
 	  console.log("Debug for block pallete icons: iconify loaded");
 	  do_da_icons();
   
