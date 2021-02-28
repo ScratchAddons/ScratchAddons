@@ -42,7 +42,7 @@
 
 .sa-var-manager-value {
   width: 75%;
-  padding: 0;
+  padding: 0 !important;
 }
 
 .sa-var-manager-value > input {
