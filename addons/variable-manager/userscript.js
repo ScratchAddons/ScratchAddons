@@ -62,7 +62,6 @@ export default async function ({ addon, global, console, msg }) {
     // used to hide the headings if there are no variables
     let filteredLocals = localVariables.filter((v) => v.row.style.display !== "none");
     let filteredGlobals = globalVariables.filter((v) => v.row.style.display !== "none");
-    console.log(filteredLocals, localVariables);
     localHeading.style.display = filteredLocals.length === 0 ? "none" : "";
     globalHeading.style.display = filteredGlobals.length === 0 ? "none" : "";
   }
