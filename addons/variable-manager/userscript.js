@@ -179,7 +179,7 @@ export default async function ({ addon, global, console, msg }) {
       row.appendChild(labelCell);
       row.appendChild(valueCell);
 
-      this.handleSearch(searchBox.value)
+      this.handleSearch(searchBox.value);
     }
   }
 
