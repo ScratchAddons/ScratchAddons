@@ -65,7 +65,8 @@
   width: 100%;
 }
 
-.sa-var-manager td,th {
+.sa-var-manager td,
+th {
   border: 1px solid #dddddd;
   text-align: left;
   padding-left: 8px;
