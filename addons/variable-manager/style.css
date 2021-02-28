@@ -6,6 +6,16 @@
   overflow-y: auto;
 }
 
+.sa-var-manager-searchbox {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  padding-right: 5%; /* for the text to not overlap the image */
+  border-radius: 4px;
+  background-repeat: no-repeat;
+  background-size: 18px 18px;
+  background-position: 95% center;
+}
+
 .sa-var-manager.freeze > * > * > * > * > * {
   opacity: 0.5;
 }

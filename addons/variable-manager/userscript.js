@@ -9,6 +9,22 @@ export default async function ({ addon, global, console, msg }) {
   const manager = document.createElement("div");
   manager.classList.add(addon.tab.scratchClass("asset-panel_wrapper"), "sa-var-manager");
 
+  const searchBox = document.createElement('input')
+  searchBox.placeholder = 'search' // todo translation stuff
+  searchBox.style.backgroundImage = `url("${addon.self.dir}/search.svg")` // sad way of doing it but i dont think i can acess addon.self.dir inside of the css but this works so whatever
+  searchBox.className = 'sa-var-manager-searchbox'
+
+  searchBox.addEventListener('input', (e) => {
+    for (const variable of localVariables) {
+      variable.handleSearch(searchBox.value);
+    }
+    for (const variable of globalVariables) {
+      variable.handleSearch(searchBox.value);
+    }
+  })
+
+  manager.appendChild(searchBox)
+
   const localVars = document.createElement("div");
   const localHeading = document.createElement("span");
   const localList = document.createElement("table");
@@ -73,6 +89,16 @@ export default async function ({ addon, global, console, msg }) {
       }
       if (newValue !== this.input.value) {
         this.input.value = newValue;
+      }
+    }
+
+    handleSearch(search){
+      // this doesn't check if this.visible is true or whatever. maybe that would improve performance while typing into the search box but it's probably fine™
+      if(this.scratchVariable.name.toLowerCase().includes(search.toLowerCase()) || search == ''){ // fuzzy searches are lame we are too cool for fuzzy searches (& i doubt they're even the right thing to use here, this should work fine enough)
+        this.row.style.display = '' // make the row normal
+        this.updateValue(true) // force it to update because its hidden and it wouldnt be able to otherwise
+      } else {
+        this.row.style.display = 'none' // set the entire row as hidden
       }
     }
 
