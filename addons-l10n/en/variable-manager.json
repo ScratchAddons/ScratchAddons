@@ -2,5 +2,7 @@
   "variable-manager/for-this-sprite": "variables for this sprite",
   "variable-manager/for-all-sprites": "variables for all sprites",
   "variable-manager/variables": "Variables",
-  "variable-manager/search": "Search"
+  "variable-manager/search": "Search",
+  "variable-manager/feedback": "Send feedback",
+  "variable-manager/feedback-description": "Thanks for using the variable manager addon, we're intrested in what you think about it!"
 }

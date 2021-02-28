@@ -10,6 +10,7 @@
   border: 1px solid #dddddd;
   background: none;
   background-image: url("search.svg");
+  margin-bottom: 4px;
   padding: 8px;
   padding-right: 5%; /* for the text to not overlap the image */
   border-radius: 4px;
@@ -17,6 +18,34 @@
   background-size: 18px 18px;
   background-position: 95% center;
 }
+
+/* begin feedback stuff (remove when out of beta)*/
+.sa-var-manager-feedback {
+  float: right;
+}
+
+.sa-var-manager-feedback-description {
+  color: gray;
+  font-style: italic;
+}
+
+.sa-var-manager-feedback-button {
+  display: inline-block;
+  margin-left: 4px;
+  margin-right: 4px;
+  background-color: #ff7b26;
+  padding: 4px;
+  border-radius: 4px;
+  color: white !important;
+  transition: 250ms;
+}
+
+.sa-var-manager-feedback-button:hover {
+  color: white !important;
+  opacity: 0.75;
+}
+
+/* end feedback stuff */
 
 .sa-var-manager.freeze > * > * > * > * > * {
   opacity: 0.5;
