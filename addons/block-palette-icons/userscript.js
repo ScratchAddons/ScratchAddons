@@ -36,8 +36,8 @@ export default async function ({ addon, global, console }) {
         transform: "translate(-50%, -50%)",
         position: "absolute",
         width: "17px",
-        height: "17px"
-      })
+        height: "17px",
+      });
       item.appendChild(k);
     });
   }
