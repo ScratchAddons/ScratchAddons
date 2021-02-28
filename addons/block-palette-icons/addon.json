@@ -8,5 +8,6 @@
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/projects/*/editor"]
     }
-  ]
+  ],
+  "l10n": true
 }
