@@ -9,7 +9,7 @@
 .sa-var-manager-searchbox {
   border: 1px solid #dddddd;
   background: none;
-  background-image: url('search.svg');
+  background-image: url("search.svg");
   padding: 8px;
   padding-right: 5%; /* for the text to not overlap the image */
   border-radius: 4px;
