@@ -1,7 +1,6 @@
 import Auth from "./Auth.js";
 import Account from "./Account.js";
 import Self from "./Self.js";
-import fetch from "./fetch.js";
 import Settings from "../common/Settings.js";
 
 /**
@@ -13,7 +12,6 @@ import Settings from "../common/Settings.js";
  * @property {string} self.browser - the browser used.
  * @property {Auth} auth
  * @property {Account} account
- * @property {function} fetch - fetches resource from Scratch API with authentication.
  * @property {Settings} settings
  */
 export default class Addon {
@@ -21,7 +19,6 @@ export default class Addon {
     this.self = new Self(this, info);
     this.auth = new Auth(this);
     this.account = new Account();
-    this.fetch = fetch;
     this.settings = new Settings(this);
   }
 
