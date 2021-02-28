@@ -8,6 +8,7 @@
 
 .sa-var-manager-searchbox {
   border: 1px solid #dddddd;
+  background: none;
   padding: 8px;
   padding-right: 5%; /* for the text to not overlap the image */
   border-radius: 4px;
@@ -44,6 +45,7 @@
 }
 
 .sa-var-manager-value > input {
+  background: none;
   border: none;
   padding: 8px;
   width: 100%;
@@ -51,6 +53,7 @@
 }
 
 .sa-var-manager-value > textarea {
+  background: none;
   border: none;
   padding: 8px;
   width: 100%;
