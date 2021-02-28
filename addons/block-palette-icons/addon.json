@@ -1,7 +1,7 @@
 {
     "name": "Block Pallette Icons",
     "description": "Adds icons to the block palette.",
-    "tags": ["editor", "recommended"],
+    "tags": ["editor"],
     "enabledByDefault": false,
     "userscripts": [
         {
