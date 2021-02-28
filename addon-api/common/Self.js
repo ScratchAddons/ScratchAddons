@@ -16,12 +16,12 @@ export default class Self extends Listenable {
     this.addEventListener("message", (event) => {
       const data = {
         UserscriptAddon: "user",
-        BackgroundScriptAddon: "persistent"
-      }
+        BackgroundScriptAddon: "persistent",
+      };
       if ((event.detail.scope || []).includes(data[this._addonObj.constructor.name])) {
         for (const func of this._msgFunctions) {
           func.call(this, event.detail.msg);
-        }        
+        }
       }
     });
     this._msgFunctions = [];
@@ -32,11 +32,13 @@ export default class Self extends Listenable {
       target: "self",
       name: "message",
       addonId,
-      data: { msg, scope }
+      data: { msg, scope },
     };
-    if (this._template) { // CS
+    if (this._template) {
+      // CS
       this._template.setAttribute(`data-fire-event__${Date.now()}`, JSON.stringify(sending));
-    } else { // PS
+    } else {
+      // PS
       chrome.tabs.query({}, (tabs) =>
         tabs.forEach(
           (tab) =>
@@ -46,7 +48,7 @@ export default class Self extends Listenable {
                 target: "self",
                 name: "message",
                 addonId,
-                data: { msg, scope }
+                data: { msg, scope },
               },
             })
         )
