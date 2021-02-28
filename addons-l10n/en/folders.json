@@ -5,6 +5,7 @@
   "folders/add-to-folder": "add to folder: {folder}",
   "folders/rename-folder": "rename folder",
   "folders/remove-folder": "remove folder",
+  "folders/remove-from-folder": "remove from folder",
   "folders/rename-folder-prompt": "Rename folder to:",
   "folders/name-prompt": "Name of folder:"
 }

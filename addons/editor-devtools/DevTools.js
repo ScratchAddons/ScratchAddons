@@ -1396,7 +1396,7 @@ export default class DevTools {
             if (isBackground) {
               let nodes = blocklyContextMenu.children;
               for (const node of nodes) {
-                if (node.textContent === "Clean up Blocks") {
+                if (node.textContent === this.m("clean-plus")) {
                   node.remove();
                 }
               }

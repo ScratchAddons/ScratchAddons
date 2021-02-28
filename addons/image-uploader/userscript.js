@@ -177,11 +177,11 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         );
         progresselement.remove();
       } else {
-        alert("error from scratch while uploading image");
+        alert(msg("upload-error"));
         progresselement.remove();
       }
     } catch (error) {
-      alert(error);
+      alert(msg("upload-error"));
       console.log(error);
       progresselement.remove();
     }

@@ -646,7 +646,7 @@ export default async function ({ addon, global, console, msg }) {
 
         const currentFolder = data.inFolder;
         if (typeof currentFolder === "string") {
-          container.appendChild(createMenuItem("remove from folder", () => setFolder(null)));
+          container.appendChild(createMenuItem(msg("remove-from-folder"), () => setFolder(null)));
         }
         for (const folder of getAllFolders(component)) {
           if (folder !== currentFolder) {
