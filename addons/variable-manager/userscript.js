@@ -10,7 +10,7 @@ export default async function ({ addon, global, console, msg }) {
   manager.classList.add(addon.tab.scratchClass("asset-panel_wrapper"), "sa-var-manager");
 
   const searchBox = document.createElement("input");
-  searchBox.placeholder = "search"; // todo translation stuff
+  searchBox.placeholder = msg('search');
   searchBox.style.backgroundImage = `url("${addon.self.dir}/search.svg")`; // sad way of doing it but i dont think i can acess addon.self.dir inside of the css but this works so whatever
   searchBox.className = "sa-var-manager-searchbox";
 
