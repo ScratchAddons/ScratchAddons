@@ -26,7 +26,7 @@ export default async function ({ addon, global, console }) {
       //Position it relative so that absolute positioning will be relative to the bubble.
       item.style.position = "relative";
       let k = document.createElement("img");
-      k.src = `./icons/${icons[i]}.svg`;
+      k.src = `${addon.self.dir}/icons/${icons[i]}.svg`;
       k.setAttribute("style", "top: 15%; color: white; left: 15%; position: absolute; font-size: 17px");
       item.appendChild(k);
     });
