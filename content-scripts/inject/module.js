@@ -92,7 +92,6 @@ const observer = new MutationObserver((mutationsList) => {
       pendingPromises.msgCount = [];
       removeAttr();
     } else if (attrType === "data-fire-event") {
-      console.log(attrVal);
       if (attrVal.addonId) {
         // Addon specific events, like settings change and self disabled
         const eventTarget = scratchAddons.eventTargets[attrVal.target].find(
