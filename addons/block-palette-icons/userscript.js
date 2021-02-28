@@ -27,7 +27,7 @@ export default async function ({ addon, global, console }) {
       item.style.position = "relative";
       let k = document.createElement("img");
       k.src = `${addon.self.dir}/icons/${icons[i]}.svg`;
-      k.setAttribute("style", "top: 15%; color: white; left: 15%; position: absolute; font-size: 17px");
+      k.setAttribute("style", "filter: brightness(50000%); top: 50%; color: white; left: 50%; transform: translate(-50%, -50%); position: absolute; width: 17px; height: 17px;");
       item.appendChild(k);
     });
   }
