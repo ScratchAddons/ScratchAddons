@@ -1,6 +1,4 @@
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.waitForElement("title") // this is a sketchy hack to get addon.tab.scratchClass to work properly. waits until all classes are there.
-
   const vm = addon.tab.traps.vm;
 
   let contentArea;
