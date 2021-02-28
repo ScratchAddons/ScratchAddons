@@ -26,16 +26,13 @@ export default async function ({ addon, global, console }) {
         item.style.padding = "11px";
         //Position it relative so that absolute positioning will be relative to the bubble.
         item.style.position = "relative";
-        item.appendChild(add(icons[i]));
+        let k = document.createElement("img");
+        k.src = `./icons/${icons[i]}.svg`;
+		k.setAttribute("style", "top: 15%; color: white; left: 15%; position: absolute; font-size: 17px");
+		item.appendChild(k);
       });
     } catch (e) {
       console.error("Debug for block pallete icons: Error: " + e.stack);
-    }
-    function add(icon) {
-      let k = document.createElement("img");
-      k.src = `./icons/${icon}.svg`;
-      k.setAttribute("style", "top: 15%; color: white; left: 15%; position: absolute; font-size: 17px");
-      return k;
     }
   }
 }
