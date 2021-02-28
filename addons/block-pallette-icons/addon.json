@@ -1,0 +1,12 @@
+{
+    "name": "Block Pallette Icons",
+    "description": "Adds icons to the block palette.",
+    "tags": ["editor", "recommended"],
+    "enabledByDefault": false,
+    "userscripts": [
+        {
+            "url": "userscript.js", 
+            "matches": ["https://scratch.mit.edu/projects/*/editor"]
+        }
+    ]
+}
