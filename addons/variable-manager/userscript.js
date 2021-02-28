@@ -179,6 +179,8 @@ export default async function ({ addon, global, console, msg }) {
       valueCell.appendChild(input);
       row.appendChild(labelCell);
       row.appendChild(valueCell);
+
+      this.handleSearch(searchBox.value)
     }
   }
 
