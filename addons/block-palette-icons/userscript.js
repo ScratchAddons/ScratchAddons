@@ -38,7 +38,7 @@ export default async function ({ addon, global, console }) {
           item.style.padding = "11px";
           //Position it relative so that absolute positioning will be relative to the bubble.
 		  item.style.position = "relative";
-		  add(icons[i]);
+		  item.appendChild(add(icons[i]));
         });
       } catch (e) {
         console.error("Debug for block pallete icons: Error: " + e.stack);
@@ -47,7 +47,8 @@ export default async function ({ addon, global, console }) {
         let k = document.createElement("span");
         k.classList.add("iconify");
         k.setAttribute("style", "top: 15%; color: white; left: 15%; position: absolute; font-size: 17px");
-        k.setAttribute("data-icon", icon);
+		k.setAttribute("data-icon", icon);
+		return k
       }
     }
   }
