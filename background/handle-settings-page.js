@@ -24,9 +24,33 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.storage.sync.set({
       addonsEnabled: scratchAddons.localState.addonsEnabled,
     });
+
+    // Fire disabled event for userscripts
+    // TODO: this might not be an addon being reenabled. We should consider this
+    // in case we want to provide userscripts with a way to run after the page
+    // has loaded, dynamically.
+    chrome.tabs.query({}, (tabs) =>
+      tabs.forEach(
+        (tab) =>
+          (tab.url || (!tab.url && typeof browser !== "undefined")) &&
+          chrome.tabs.sendMessage(tab.id, {
+            fireEvent: {
+              target: "self",
+              name: newState ? "reenabled" : "disabled",
+              addonId,
+            },
+          })
+      )
+    );
+
     if (newState === false) {
+      // TODO: can there be many addon objects for the same addon?
       const addonObjs = scratchAddons.addonObjects.filter((addonObj) => addonObj.self.id === addonId);
-      if (addonObjs) addonObjs.forEach((addonObj) => addonObj._kill());
+      if (addonObjs)
+        addonObjs.forEach((addonObj) => {
+          addonObj.self.dispatchEvent(new CustomEvent("disabled"));
+          addonObj._kill();
+        });
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
     } else {
       runPersistentScripts(addonId);

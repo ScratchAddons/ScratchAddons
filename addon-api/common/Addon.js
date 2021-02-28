@@ -1,6 +1,6 @@
 import Auth from "./Auth.js";
 import Account from "./Account.js";
-import fetch from "./fetch.js";
+import Self from "./Self.js";
 import Settings from "../common/Settings.js";
 
 /**
@@ -12,28 +12,13 @@ import Settings from "../common/Settings.js";
  * @property {string} self.browser - the browser used.
  * @property {Auth} auth
  * @property {Account} account
- * @property {function} fetch - fetches resource from Scratch API with authentication.
  * @property {Settings} settings
  */
 export default class Addon {
   constructor(info) {
-    this.self = {
-      id: info.id,
-      browser: typeof InstallTrigger !== "undefined" ? "firefox" : "chrome",
-    };
-    Object.defineProperties(this.self, {
-      dir: {
-        enumerable: true,
-        get: () => `${this._path}addons/${info.id}`,
-      },
-      lib: {
-        enumerable: true,
-        get: () => `${this._path}libraries`,
-      },
-    });
+    this.self = new Self(this, info);
     this.auth = new Auth(this);
     this.account = new Account();
-    this.fetch = fetch;
     this.settings = new Settings(this);
   }
 

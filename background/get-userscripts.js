@@ -111,7 +111,7 @@ chrome.webRequest.onBeforeRequest.addListener(
       chrome.runtime.onMessage.removeListener(info.messageListener);
     }
 
-    const data = await getContentScriptInfo(request.url, request.tabId);
+    const data = await getContentScriptInfo(request.url);
 
     const removeInterval = (mapKey, intervalId, listener) => {
       clearInterval(intervalId);
