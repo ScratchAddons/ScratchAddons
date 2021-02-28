@@ -30,7 +30,7 @@ chrome.storage.local.get("muted", (obj) => {
 chrome.contextMenus.removeAll();
 let currentMenuItem = null;
 
-chrome.contextMenus.onClicked.addListener(({parentMenuItemId, menuItemId}) => {
+chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
   if (parentMenuItemId === "mute") {
     const mins = Number(menuItemId.split("_")[1]);
     contextMenuMuted();
