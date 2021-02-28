@@ -11,7 +11,6 @@ export default async function ({ addon, global, console, msg }) {
 
   const searchBox = document.createElement("input");
   searchBox.placeholder = msg("search");
-  searchBox.style.backgroundImage = `url("${addon.self.dir}/search.svg")`; // sad way of doing it but i dont think i can acess addon.self.dir inside of the css but this works so whatever
   searchBox.className = "sa-var-manager-searchbox";
 
   searchBox.addEventListener("input", (e) => {
