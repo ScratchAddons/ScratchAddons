@@ -19,6 +19,7 @@ export default async function ({ addon, global, console }) {
       "variables_icon",
       "block_icon",
     ];
+    if (document.querySelector(".scratchCategoryId-lists")) icons.splice(8, 0, "list_icon");
     //For each .scratchCategoryItemBubble add an icon
     document.querySelectorAll(".scratchCategoryItemBubble").forEach((item, i) => {
       //Make the padding a little bigger to fit the icons.
