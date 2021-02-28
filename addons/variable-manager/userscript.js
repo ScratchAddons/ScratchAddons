@@ -189,7 +189,7 @@ export default async function ({ addon, global, console, msg }) {
 
     const editingTarget = vm.runtime.getEditingTarget();
     const stage = vm.runtime.getTargetForStage();
-    localVariables = Object.values(editingTarget.variables).map((i) => new WrappedVariable(i, editingTarget));
+    localVariables = editingTarget.isStage ? [] : Object.values(editingTarget.variables).map((i) => new WrappedVariable(i, editingTarget));
     globalVariables = Object.values(stage.variables).map((i) => new WrappedVariable(i, stage));
 
     localHeading.style.display = localVariables.length === 0 ? "none" : "";
