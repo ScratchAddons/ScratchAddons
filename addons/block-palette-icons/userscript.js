@@ -10,13 +10,13 @@ export default async function ({ addon, global, console }) {
      */
     let icons = [
       "motion_icon",
-      "eye_icon",
-      "speaker_icon",
-      "warning_icon",
-      "switch_icon",
-      "layers_icon",
-      "function_icon",
-      "number_icon",
+      "looks_icon",
+      "sound_icon",
+      "events_icon",
+      "control_icon",
+      "sensing_icon",
+      "operators_icon",
+      "variables_icon",
       "block_icon",
     ];
     //For each .scratchCategoryItemBubble add an icon
