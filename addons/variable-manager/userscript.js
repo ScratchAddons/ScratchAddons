@@ -20,6 +20,7 @@ export default async function ({ addon, global, console, msg }) {
     for (const variable of globalVariables) {
       variable.handleSearch(searchBox.value);
     }
+    updateHeadingVisibility()
   });
 
   manager.appendChild(searchBox);
@@ -56,6 +57,16 @@ export default async function ({ addon, global, console, msg }) {
 
   varTab.appendChild(varTabIcon);
   varTab.appendChild(varTabText);
+
+
+  function updateHeadingVisibility(){ // used to hide the headings if there are no variables
+    let filteredLocals = localVariables.filter(v=>v.row.style.display !== 'none')
+    let filteredGlobals = globalVariables.filter(v=>v.row.style.display !== 'none')
+    console.log(filteredLocals, localVariables)
+    localHeading.style.display = filteredLocals.length === 0 ? "none" : "";
+    globalHeading.style.display = filteredGlobals.length === 0 ? "none" : "";
+  }
+
 
   const rowToVariableMap = new WeakMap();
   const observer = new IntersectionObserver(
@@ -193,8 +204,7 @@ export default async function ({ addon, global, console, msg }) {
       : Object.values(editingTarget.variables).map((i) => new WrappedVariable(i, editingTarget));
     globalVariables = Object.values(stage.variables).map((i) => new WrappedVariable(i, stage));
 
-    localHeading.style.display = localVariables.length === 0 ? "none" : "";
-    globalHeading.style.display = globalVariables.length === 0 ? "none" : "";
+    updateHeadingVisibility()
 
     while (localList.firstChild) {
       localList.removeChild(localList.firstChild);
