@@ -10,7 +10,6 @@
   "editor-stage-left",
   "editor-theme3",
   "a11y",
-  "block-palette-icons",
 
   "// For website:",
   "scratchr2",
@@ -77,5 +76,6 @@
   "copy-message-link",
   "load-extensions",
   "scratchstats",
-  "folders"
+  "folders",
+  "block-palette-icons"
 ]
