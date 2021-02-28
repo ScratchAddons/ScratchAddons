@@ -9,7 +9,7 @@
     },
     {
       "type": "warning",
-      "text": "Your project may be marked as NFE (not for everyone) by the Scratch Team if the thumbnail is animated. NFE projects aren't able to get into the front page, the explore page, or search results.",
+      "text": "Your project may be marked as NFE (not for everyone) by the Scratch Team if the thumbnail is animated. NFE projects aren't able to get into the front page, the explore page, or search results. This is because animated GIFs can lag the page.",
       "id": "animatednfe"
     }
   ],
