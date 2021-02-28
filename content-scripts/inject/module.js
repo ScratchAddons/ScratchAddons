@@ -101,8 +101,7 @@ const observer = new MutationObserver((mutationsList) => {
         if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(attrVal.name, { detail: attrVal.data || {} }));
       } else {
         // Global events, like auth change
-        const eventTarget = scratchAddons.eventTargets[attrVal.target].filter(attrVal.filter || (() => true));
-        eventTarget.forEach((eventTarget) =>
+        scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
           eventTarget.dispatchEvent(new CustomEvent(attrVal.name, { detail: attrVal.data || {} }))
         );
       }

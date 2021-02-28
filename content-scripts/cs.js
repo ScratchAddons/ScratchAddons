@@ -179,6 +179,11 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
           }
         );
       }
+      if (attrType === "data-fire-event") {
+        if (attrVal.name === "message") {
+          chrome.runtime.sendMessage({ messageFromUS: attrVal });
+        }
+      }
     }
   });
   observer.observe(template, { attributes: true });

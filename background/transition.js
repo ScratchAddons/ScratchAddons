@@ -19,3 +19,12 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 if (chrome.runtime.getManifest().version_name.includes("-prerelease") === false) {
   chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");
 }
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.messageFromUS) {
+    const attrVal = request.messageFromUS;
+    scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) => {
+      eventTarget.dispatchEvent(new CustomEvent(attrVal.name, { detail: attrVal.data || {} }));
+    });
+  }
+});

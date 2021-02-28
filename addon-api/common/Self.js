@@ -13,20 +13,48 @@ export default class Self extends Listenable {
     this.disabled = false;
     this.addEventListener("disabled", () => (this.disabled = true));
     this.addEventListener("reenabled", () => (this.disabled = false));
-    console.log(this.id, "has seen this!");
-    // this.addEventListener("message", (event) => {
-    //   console.log("WHOW CRAZY MAN", event);
-    // });
+    this.addEventListener("message", (event) => {
+      const data = {
+        UserscriptAddon: "user",
+        BackgroundScriptAddon: "persistent"
+      }
+      if ((event.detail.scope || []).includes(data[this._addonObj.constructor.name])) {
+        for (const func of this._msgFunctions) {
+          func.call(this, event.detail.msg);
+        }        
+      }
+    });
+    this._msgFunctions = [];
   }
   sendMessage(msg, data = {}) {
-    const { scope } = data;
+    const { addonId, scope } = data;
     const sending = {
       target: "self",
       name: "message",
-      data: { msg, scope },
-      filter: (addon) => console.log(addon),
+      addonId,
+      data: { msg, scope }
     };
-    this._template.setAttribute(`data-fire-event__${Date.now()}`, JSON.stringify(sending));
+    if (this._template) { // CS
+      this._template.setAttribute(`data-fire-event__${Date.now()}`, JSON.stringify(sending));
+    } else { // PS
+      chrome.tabs.query({}, (tabs) =>
+        tabs.forEach(
+          (tab) =>
+            (tab.url || (!tab.url && typeof browser !== "undefined")) &&
+            chrome.tabs.sendMessage(tab.id, {
+              fireEvent: {
+                target: "self",
+                name: "message",
+                addonId,
+                data: { msg, scope }
+              },
+            })
+        )
+      );
+    }
+  }
+  onMessage(func) {
+    this._msgFunctions.push(func);
   }
 
   get _template() {
