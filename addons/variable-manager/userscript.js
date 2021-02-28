@@ -265,7 +265,7 @@ export default async function ({ addon, global, console, msg }) {
       markAsSeen: true,
     });
 
-    contentArea = document.querySelector("." + addon.tab.scratchClass("gui_tabs"));
+    contentArea = document.querySelector("[class^=gui_tabs]");
     const soundTab = tabs.children[2];
     soundTab.insertAdjacentElement("afterend", varTab);
   }
