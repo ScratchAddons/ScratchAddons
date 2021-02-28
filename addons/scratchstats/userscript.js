@@ -81,7 +81,7 @@ export default async function ({ addon, msg, console }) {
       canvasContainer.style.height = "400px";
       const canvas = document.createElement("canvas");
       canvasContainer.appendChild(canvas);
-      const chart = new Chart(canvas, {
+      new Chart(canvas, {
         type: "scatter",
         data: {
           datasets: [

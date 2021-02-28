@@ -347,7 +347,7 @@ const showBanner = () => {
 
 const handleBanner = async () => {
   const currentVersion = chrome.runtime.getManifest().version;
-  const [major, minor, patch] = currentVersion.split(".");
+  const [major, minor, _] = currentVersion.split(".");
   const currentVersionMajorMinor = `${major}.${minor}`;
   // Making this configurable in the future?
   // Using local because browser extensions may not be updated at the same time across browsers
