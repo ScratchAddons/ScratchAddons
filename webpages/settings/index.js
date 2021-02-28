@@ -366,7 +366,7 @@ const vue = (window.vue = new Vue({
     updateSettings(addon, { wait = 0, settingId = null } = {}) {
       const value = settingId && this.addonSettings[addon._addonId][settingId];
       setTimeout(() => {
-        if (!settingId || (settingId && this.addonSettings[addon._addonId][settingId] === value)) {
+        if (!settingId || this.addonSettings[addon._addonId][settingId] === value) {
           chrome.runtime.sendMessage({
             changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
           });

@@ -1383,7 +1383,6 @@ export default class DevTools {
       if (blockSvg || isBackground) {
         let dataId = blockSvg && blockSvg.getAttribute("data-id");
         if (dataId || isBackground) {
-          let devTools = this;
           setTimeout(() => {
             // Is there a popup menu to hi-jack?
             let widget = document.querySelector("div.blocklyWidgetDiv");
