@@ -2,5 +2,6 @@
   "image-uploader/load-error": "There was an error reading the file.",
   "image-uploader/upload-image": "Upload Image",
   "image-uploader/upload": "Upload",
-  "image-uploader/uploading": "Uploading..."
+  "image-uploader/uploading": "Uploading...",
+  "image-uploader/upload-error": "Image could not be uploaded."
 }
