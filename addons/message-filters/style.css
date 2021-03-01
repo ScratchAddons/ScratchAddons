@@ -1,12 +1,34 @@
 .checkboxes {
-    box-sizing: border-box; padding: 2vw; width: 100%; background: #05f2; display: block; margin: 0 auto; border-radius: 5px; border: 1px solid #05f5; width: 100%; margin-top: 10px;
+  box-sizing: border-box;
+  padding: 2vw;
+  width: 100%;
+  background: #05f2;
+  display: block;
+  margin: 0 auto;
+  border-radius: 5px;
+  border: 1px solid #05f5;
+  width: 100%;
+  margin-top: 10px;
 }
 .checkboxes input {
-    margin-right: 3px;  margin-right: .5vmax;
+  margin-right: 3px;
+  margin-right: 0.5vmax;
 }
 .input_container {
-    padding: 5px; width: 49%; display: inline-block; text-align: left; width: 20vmax; display: inline-block; padding: 10px; border-radius: 5px; transition-duration: .3s; transition-property: background-color; cursor: pointer; overflow: hidden; height: 50%; 
+  padding: 5px;
+  width: 49%;
+  display: inline-block;
+  text-align: left;
+  width: 20vmax;
+  display: inline-block;
+  padding: 10px;
+  border-radius: 5px;
+  transition-duration: 0.3s;
+  transition-property: background-color;
+  cursor: pointer;
+  overflow: hidden;
+  height: 50%;
 }
 .input_container:hover {
-    background: #05f4;
+  background: #05f4;
 }
