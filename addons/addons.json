@@ -14,7 +14,6 @@
   "// For website:",
   "scratchr2",
   "dark-www",
-  "message-filters",
 
   "// Other addons:",
   "editor-searchable-dropdowns",
@@ -77,5 +76,6 @@
   "copy-message-link",
   "load-extensions",
   "scratchstats",
-  "folders"
+  "folders",
+  "message-filters"
 ]
