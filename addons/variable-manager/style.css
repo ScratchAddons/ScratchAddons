@@ -54,7 +54,7 @@
   padding: 4px;
   border-radius: 4px;
   color: white !important;
-  transition: 250ms;
+  transition: opacity linear 250ms;
 }
 
 .sa-var-manager-feedback-button:hover {
@@ -64,7 +64,7 @@
 
 /* end feedback stuff */
 
-.sa-var-manager.freeze > * > * > * > * > * {
+.sa-var-manager.freeze .sa-var-manager-value *,.sa-var-manager.freeze .sa-var-manager-name {
   opacity: 0.5;
 }
 
@@ -80,6 +80,8 @@
   display: block;
   font-weight: bold;
   font-size: large;
+  margin-top: 6px;
+  margin-bottom: 6px;
 }
 
 .sa-var-manager-name {
