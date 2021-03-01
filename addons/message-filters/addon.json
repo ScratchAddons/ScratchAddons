@@ -1,0 +1,20 @@
+{
+    "name": "Message filtering",
+    "description": "Enables the ability to finely filter messages on the messages page through checkboxes.",
+    "credits": [
+      {
+        "name": "--Explosion--",
+        "link": "https://github.com/explosion-scratch"
+      }
+    ],
+    "userscripts": [
+      {
+        "url": "userscript.js",
+        "matches": ["https://scratch.mit.edu/messages"]
+      }
+    ],
+    "tags": ["community"],
+    "enabledByDefault": false,
+    "l10n": true
+  }
+  
