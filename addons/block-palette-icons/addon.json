@@ -6,7 +6,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*/editor"]
+      "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
   "l10n": true
