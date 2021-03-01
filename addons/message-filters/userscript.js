@@ -60,7 +60,7 @@ export default async function({addon,global,console}) {
           let message = messages[i];
           let classes = message.classList;
           for (let j = 0; j < classes.length; j++) {
-              if (active.includes(classes[j]) || active == []) {
+              if (active.includes(classes[j]) || active.length === 0) {
                   count++;
                   message.style.display = "list-item";
               } else {
@@ -68,7 +68,7 @@ export default async function({addon,global,console}) {
               }
           }
       }
-      if (count < 40 && active !== []) {
+      if (count < 40 && active.length > 0) {
           document.querySelector(".messages-social-loadmore").click();
       }
       localStorage.setItem("message_preferences", JSON.stringify(active));
