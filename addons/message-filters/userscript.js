@@ -24,7 +24,7 @@ export default async function ({ addon, global, console }) {
     let inp_container = document.createElement("div");
     inp_container.classList.add("input_container");
     let inp = document.createElement("input");
-    inp.setAttribute("type", "checkbox");
+    inp.type = "checkbox";
     inp.checked = true;
     inp.id = String.fromCharCode(97 + i);
     inp.setAttribute("data-for", filter[keys[i]]);
