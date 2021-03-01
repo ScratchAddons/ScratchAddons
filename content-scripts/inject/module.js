@@ -144,19 +144,28 @@ function loadClasses() {
     ),
   ];
   scratchAddons.classNames.loaded = true;
-  document.querySelectorAll("[class*='scratchAddonsScratchClass/']").forEach((el) => {
-    [...el.classList]
-      .filter((className) => className.startsWith("scratchAddonsScratchClass"))
-      .map((className) => className.substring(className.indexOf("/") + 1))
-      .forEach((classNameToFind) =>
-        el.classList.replace(
-          `scratchAddonsScratchClass/${classNameToFind}`,
-          scratchAddons.classNames.arr.find(
-            (className) =>
-              className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
-          ) || `scratchAddonsScratchClass/${classNameToFind}`
-        )
-      );
+
+  const fixPlaceHolderClasses = () =>
+    document.querySelectorAll("[class*='scratchAddonsScratchClass/']").forEach((el) => {
+      [...el.classList]
+        .filter((className) => className.startsWith("scratchAddonsScratchClass"))
+        .map((className) => className.substring(className.indexOf("/") + 1))
+        .forEach((classNameToFind) =>
+          el.classList.replace(
+            `scratchAddonsScratchClass/${classNameToFind}`,
+            scratchAddons.classNames.arr.find(
+              (className) =>
+                className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
+            ) || `scratchAddonsScratchClass/${classNameToFind}`
+          )
+        );
+    });
+
+  fixPlaceHolderClasses();
+  new MutationObserver(() => fixPlaceHolderClasses()).observe(document.documentElement, {
+    attributes: false,
+    childList: true,
+    subtree: true,
   });
 }
 
