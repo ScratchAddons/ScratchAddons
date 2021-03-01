@@ -64,7 +64,8 @@
 
 /* end feedback stuff */
 
-.sa-var-manager.freeze .sa-var-manager-value *,.sa-var-manager.freeze .sa-var-manager-name {
+.sa-var-manager.freeze .sa-var-manager-value *,
+.sa-var-manager.freeze .sa-var-manager-name {
   opacity: 0.5;
 }
 
