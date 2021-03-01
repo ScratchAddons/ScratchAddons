@@ -66,7 +66,7 @@ export default async function ({ addon, global, console }) {
       }
     }
     if (count < 40 && active.length > 0 && Date.now() - lastTime > 50) {
-        lastTime = Date.now();
+      lastTime = Date.now();
       document.querySelector(".messages-social-loadmore").click();
     }
     localStorage.setItem("message_preferences", JSON.stringify(active));
