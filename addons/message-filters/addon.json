@@ -1,19 +1,26 @@
 {
-    "name": "Message filtering",
-    "description": "Enables the ability to finely filter messages on the messages page through checkboxes.",
-    "credits": [
-      {
-        "name": "--Explosion--",
-        "link": "https://github.com/explosion-scratch"
-      }
-    ],
-    "userscripts": [
-      {
-        "url": "userscript.js",
-        "matches": ["https://scratch.mit.edu/*"]
-      }
-    ],
-    "tags": [],
-    "enabledByDefault": false
-  }
-  
+  "name": "Message filtering",
+  "description": "Enables the ability to finely filter messages on the messages page through checkboxes.",
+  "credits": [
+    {
+      "name": "--Explosion--",
+      "link": "https://github.com/explosion-scratch"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": [
+        "https://scratch.mit.edu/messages"
+      ]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/messages"]
+    }
+  ],
+  "tags": [],
+  "enabledByDefault": false
+}
