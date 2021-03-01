@@ -2,7 +2,7 @@ export default async function({addon,global,console}) {
   let list = await addon.tab.waitForElement(".messages-social-list", {
       markAsSeen: true,
   });
-  console.log("Messages loaded");
+  document.querySelector(".select").remove();
   let filter = {
       "studio activity": "mod-studio-activity",
       comments: "mod-comment-message",
@@ -17,7 +17,6 @@ export default async function({addon,global,console}) {
   let checkboxes = document.createElement("div");
   checkboxes.classList.add("checkboxes");
   let heading = document.createElement("h4");
-  console.log("Initiated");
   heading.appendChild(document.createTextNode("I would like to see notifications from:"));
   checkboxes.appendChild(heading);
   let keys = Object.keys(filter);
