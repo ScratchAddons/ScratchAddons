@@ -13,7 +13,7 @@
         "matches": ["https://scratch.mit.edu/messages"]
       }
     ],
-    "tags": ["community"],
+    "tags": ["website", "community"],
     "enabledByDefault": false,
     "l10n": true
   }
