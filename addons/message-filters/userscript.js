@@ -13,6 +13,7 @@ export default async function ({ addon, global, console }) {
     "studio invites": "mod-curator-invite",
     "forum activity": "mod-forum-activity",
   };
+  let lastTime = 100;
   let active = Object.keys(filter).map((i) => filter[i]);
   let checkboxes = document.createElement("div");
   checkboxes.classList.add("checkboxes");
@@ -64,7 +65,8 @@ export default async function ({ addon, global, console }) {
         }
       }
     }
-    if (count < 40 && active.length > 0) {
+    if (count < 40 && active.length > 0 && Date.now() - lastTime > 50) {
+        lastTime = Date.now();
       document.querySelector(".messages-social-loadmore").click();
     }
     localStorage.setItem("message_preferences", JSON.stringify(active));
