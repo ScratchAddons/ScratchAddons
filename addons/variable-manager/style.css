@@ -1,3 +1,20 @@
+/* Change z-indexes to allow more than 3 tabs */
+.gui_tab_27Unf.gui_is-selected_sHAiu {
+  z-index: 10;
+}
+.gui_tab_27Unf:nth-of-type(1) {
+  z-index: 9;
+}
+.gui_tab_27Unf:nth-of-type(2) {
+  z-index: 8;
+}
+.gui_tab_27Unf:nth-of-type(3) {
+  z-index: 7;
+}
+.gui_tab_27Unf:nth-of-type(4) {
+  z-index: 6;
+}
+
 .sa-var-manager {
   display: block;
   padding: 18px;
