@@ -1,8 +1,4 @@
-export default function({
-  addon,
-  global,
-  console
-}) {
+export default function({addon,global,console}) {
   await addon.tab.waitForElement(".messages-social-title", {
       markAsSeen: true,
   });
