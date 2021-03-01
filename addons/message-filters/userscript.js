@@ -28,7 +28,7 @@ export default async function ({ addon, global, console }) {
     inp.checked = true;
     inp.id = String.fromCharCode(97 + i);
     inp.setAttribute("data-for", filter[keys[i]]);
-    setInterval(() => {
+    inp.onchange = () => {
       if (inp.checked) {
         if (!active.includes(inp.getAttribute("data-for"))) active.push(inp.getAttribute("data-for"));
       } else {
@@ -39,7 +39,8 @@ export default async function ({ addon, global, console }) {
           }
         }
       }
-    }, 50);
+      update();
+    };
     inp_container.appendChild(inp);
     let label = document.createElement("label");
     label.classList.add("input_label");
@@ -48,7 +49,7 @@ export default async function ({ addon, global, console }) {
     inp_container.appendChild(label);
     checkboxes.appendChild(inp_container);
   }
-  setInterval(() => {
+  function update() {
     let messages = document.querySelectorAll(".social-message");
     let count = 0;
     for (let i = 0; i < messages.length; i++) {
@@ -67,6 +68,12 @@ export default async function ({ addon, global, console }) {
       document.querySelector(".messages-social-loadmore").click();
     }
     localStorage.setItem("message_preferences", JSON.stringify(active));
-  }, 50);
+  }
   document.querySelector(".messages-social-title").appendChild(checkboxes);
+  while (true){
+    await addon.tab.waitForElement(".social-message", {
+        markAsSeen: true,
+      });
+      update();
+  }
 }
