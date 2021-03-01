@@ -70,10 +70,10 @@ export default async function ({ addon, global, console }) {
     localStorage.setItem("message_preferences", JSON.stringify(active));
   }
   document.querySelector(".messages-social-title").appendChild(checkboxes);
-  while (true){
+  while (true) {
     await addon.tab.waitForElement(".social-message", {
-        markAsSeen: true,
-      });
-      update();
+      markAsSeen: true,
+    });
+    update();
   }
 }
