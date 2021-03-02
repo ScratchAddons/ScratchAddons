@@ -1,24 +1,24 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   let list = await addon.tab.waitForElement(".messages-social-list", {
     markAsSeen: true,
   });
   document.querySelector(".select").remove();
   let filter = {
-    "studio activity": "mod-studio-activity",
-    comments: "mod-comment-message",
-    favorites: "mod-love-favorite",
-    loves: "mod-love-project",
-    remixes: "mod-remix-project",
-    follows: "mod-follow-user",
-    "studio invites": "mod-curator-invite",
-    "forum activity": "mod-forum-activity",
+    [msg("studio")]: "mod-studio-activity",
+    [msg("comment")]: "mod-comment-message",
+    [msg("favorite")]: "mod-love-favorite",
+    [msg("love")]: "mod-love-project",
+    [msg("remix")]: "mod-remix-project",
+    [msg("follow")]: "mod-follow-user",
+    [msg("invite")]: "mod-curator-invite",
+    [msg("forum")]: "mod-forum-activity",
   };
   let lastTime = 100;
   let active = Object.keys(filter).map((i) => filter[i]);
   let checkboxes = document.createElement("div");
   checkboxes.classList.add("checkboxes");
   let heading = document.createElement("h4");
-  heading.appendChild(document.createTextNode("I would like to see notifications from:"));
+  heading.appendChild(document.createTextNode(msg("notifications")));
   checkboxes.appendChild(heading);
   let keys = Object.keys(filter);
   for (let i = 0; i < keys.length; i++) {
