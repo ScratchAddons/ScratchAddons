@@ -71,13 +71,13 @@ export default async function ({ addon, global, console, msg }) {
   }
   document.querySelector(".messages-social-title").appendChild(checkboxes);
   while (true) {
-      if (count < 40){
-          console.log("Loading more messages...");
-          document.querySelector(".messages-social-loadmore").click();
-          await addon.tab.waitForElement(".social-message", {
-              markAsSeen: true,
-            });
-      }
+    if (count < 40) {
+      console.log("Loading more messages...");
+      document.querySelector(".messages-social-loadmore").click();
+      await addon.tab.waitForElement(".social-message", {
+        markAsSeen: true,
+      });
+    }
     await addon.tab.waitForElement(".social-message", {
       markAsSeen: true,
     });
