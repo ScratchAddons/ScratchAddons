@@ -14,7 +14,7 @@ export default async function ({ addon, global, console, msg }) {
     [msg("forum")]: "mod-forum-activity",
   };
   let lastTime = 100;
-  let active = Object.keys(filter).map((i) => filter[i]);
+  let active = localStorage.getItem("message_preferences") || Object.keys(filter).map((i) => filter[i]);
   let checkboxes = document.createElement("div");
   checkboxes.classList.add("checkboxes");
   let heading = document.createElement("h4");
