@@ -3,7 +3,7 @@ export default async function ({ addon, global, console, msg }) {
     markAsSeen: true,
   });
   document.querySelector(".select").remove();
-  let filter = {
+  const filter = {
     [msg("studio")]: "mod-studio-activity",
     [msg("comment")]: "mod-comment-message",
     [msg("favorite")]: "mod-love-favorite",
