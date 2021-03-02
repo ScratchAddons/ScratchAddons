@@ -9,5 +9,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "l10n": true
+  "l10n": true,
+  "credits": [{ "name": "--Explosion--", "link": "https://github.com/explosion-scratch" }]
 }
