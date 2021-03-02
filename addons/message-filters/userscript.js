@@ -13,8 +13,8 @@ export default async function ({ addon, global, console, msg }) {
     [msg("invite")]: "mod-curator-invite",
     [msg("forum")]: "mod-forum-activity",
   };
-  let lastTime = 100;
-  let active = localStorage.getItem("message_preferences") || Object.keys(filter).map((i) => filter[i]);
+  let lastTime = 1000;
+  let active = JSON.parse(localStorage.getItem("message_preferences")) || Object.keys(filter).map((i) => filter[i]);
   let checkboxes = document.createElement("div");
   checkboxes.classList.add("checkboxes");
   let heading = document.createElement("h4");
@@ -26,7 +26,7 @@ export default async function ({ addon, global, console, msg }) {
     inp_container.classList.add("input_container");
     let inp = document.createElement("input");
     inp.type = "checkbox";
-    inp.checked = true;
+    inp.checked = active.includes(filter[keys[i]]);
     inp.id = String.fromCharCode(97 + i);
     inp.setAttribute("data-for", filter[keys[i]]);
     inp.onchange = () => {
@@ -50,9 +50,10 @@ export default async function ({ addon, global, console, msg }) {
     inp_container.appendChild(label);
     checkboxes.appendChild(inp_container);
   }
+  let count = 0;
   function update() {
+    count = 0;
     let messages = document.querySelectorAll(".social-message");
-    let count = 0;
     for (let i = 0; i < messages.length; i++) {
       let message = messages[i];
       let classes = message.classList;
@@ -65,19 +66,18 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
     }
-    if (
-      count < 40 &&
-      active.length > 0 &&
-      Date.now() - lastTime > 50 &&
-      document.documentElement.scrollHeight - window.scrollY < 100
-    ) {
-      lastTime = Date.now();
-      document.querySelector(".messages-social-loadmore").click();
-    }
     localStorage.setItem("message_preferences", JSON.stringify(active));
+    console.log(`${count} messages showing.`);
   }
   document.querySelector(".messages-social-title").appendChild(checkboxes);
   while (true) {
+      if (count < 40){
+          console.log("Loading more messages...");
+          document.querySelector(".messages-social-loadmore").click();
+          await addon.tab.waitForElement(".social-message", {
+              markAsSeen: true,
+            });
+      }
     await addon.tab.waitForElement(".social-message", {
       markAsSeen: true,
     });
