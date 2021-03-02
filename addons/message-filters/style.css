@@ -1,3 +1,4 @@
+/* Style the main checkboxes container. */
 .checkboxes {
   box-sizing: border-box;
   padding: 2vw;
@@ -9,13 +10,16 @@
   width: 100%;
   margin-top: 10px;
 }
+/* Style the header and give it even padding so that maximouse will not cringe. */
 .checkboxes h4 {
   padding: 5px;
   padding-left: 10px;
 }
+/* Add some margin to the checkbox. */
 .checkboxes input {
   margin-right: 0.5vmax;
 }
+/* Display the input container */
 .input_container {
   text-align: left;
   width: 20vmax;
@@ -28,6 +32,11 @@
   overflow: hidden;
   height: 50%;
 }
+/* Nice hover transition. */
 .input_container:hover {
   background: #05f4;
+}
+/* So that we can click */
+.checkboxes .input_container label {
+  width: 100%;
 }
