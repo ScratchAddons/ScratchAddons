@@ -1,8 +1,9 @@
 export default async function ({ addon, global, console, msg }) {
-  let list = await addon.tab.waitForElement(".messages-social-list", {
+  await addon.tab.waitForElement(".select", { markAsSeen: true });
+  document.querySelector(".select").remove();
+  await addon.tab.waitForElement(".messages-social-list", {
     markAsSeen: true,
   });
-  document.querySelector(".select").remove();
   const filter = {
     [msg("studio")]: "mod-studio-activity",
     [msg("comment")]: "mod-comment-message",
