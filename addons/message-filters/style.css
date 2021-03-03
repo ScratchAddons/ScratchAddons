@@ -40,3 +40,27 @@
 .checkboxes .input_container label {
   width: 100%;
 }
+@media (min-width: 1300px){
+  .checkboxes {
+    position: fixed;
+    left: 0;
+    width: 15vw;
+    top: 50%;
+    transform: translate(0, -50%);
+    backdrop-filter: contrast(20%) blur(10px);
+    box-shadow: 0 0 4px #0f84;
+    color: white;
+  }
+  .checkboxes h4 {
+    color: white;
+  }
+  .checkboxes .input_container {
+    width: 100%;
+  }
+  .checkboxes label {
+    /* border: 1px solid red; */
+    width: 80%;
+    display: inline-block;
+    cursor: pointer;
+  }
+  }
