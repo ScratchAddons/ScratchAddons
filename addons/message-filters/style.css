@@ -40,7 +40,7 @@
 .checkboxes .input_container label {
   width: 100%;
 }
-@media (min-width: 1300px){
+@media (min-width: 1300px) {
   .checkboxes {
     position: fixed;
     left: 0;
@@ -63,4 +63,4 @@
     display: inline-block;
     cursor: pointer;
   }
-  }
+}
