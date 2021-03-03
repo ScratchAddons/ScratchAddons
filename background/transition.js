@@ -1,6 +1,6 @@
 chrome.runtime.onInstalled.addListener(async (details) => {
   const currentVersion = chrome.runtime.getManifest().version;
-  const [major, minor, patch] = currentVersion.split(".");
+  const [major, minor, _] = currentVersion.split(".");
   if (details.previousVersion && details.previousVersion.startsWith("0")) {
     chrome.tabs.create({ url: "https://scratchaddons.com/scratch-messaging-transition" });
   } else if (

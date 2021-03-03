@@ -1,6 +1,13 @@
 {
-  "name": "60FPS player mode",
+  "name": "Alt+GreenFlag 60FPS player mode",
   "description": "Alt+Click the green flag to toggle 60FPS.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Projects will run twice at fast at 60FPS, because they typically run at 30FPS.",
+      "id": "projectRunsFasterNotice"
+    }
+  ],
   "credits": [
     {
       "name": "Jeffalo",
@@ -19,10 +26,11 @@
   ],
   "settings": [
     {
-      "name": "FPS",
+      "name": "Alt+GreenFlag FPS",
       "id": "framerate",
       "type": "integer",
-      "min": 1,
+      "min": 31,
+      "max": 240,
       "default": 60
     }
   ],

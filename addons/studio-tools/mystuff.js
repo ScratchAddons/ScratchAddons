@@ -8,11 +8,11 @@ export default async function ({ addon, global, console, msg }) {
       leaveButton.setAttribute("data-id", item.parentElement.querySelector(".title a").href.match(/[0-9]+/g));
       leaveButton.addEventListener("click", async function (e) {
         if (confirm(msg("leave-confirm"))) {
-          await addon.fetch(
+          await fetch(
             `https://scratch.mit.edu/site-api/users/curators-in/${leaveButton.getAttribute(
               "data-id"
             )}/remove/?usernames=${Scratch.INIT_DATA.LOGGED_IN_USER.model.username}`,
-            { method: "PUT" }
+            { method: "PUT", headers: { "x-csrftoken": addon.auth.csrfToken, "x-requested-with": "XMLHttpRequest" } }
           );
           window.location.reload();
         }

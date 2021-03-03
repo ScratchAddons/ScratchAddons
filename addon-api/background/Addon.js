@@ -16,7 +16,7 @@ import Badge from "./Badge.js";
 export default class BackgroundScriptAddon extends Addon {
   constructor(info) {
     super(info);
-    const { id, permissions } = info;
+    const { permissions } = info;
     this._timeouts = [];
     this._intervals = [];
     this.self.restart = () => this._restart();

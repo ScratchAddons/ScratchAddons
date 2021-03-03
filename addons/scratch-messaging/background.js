@@ -5,11 +5,6 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   let data;
   let pendingAuthChange = false;
   let addonEnabled = true;
-  const commentLocationPrefixes = {
-    0: "p", // Projects
-    1: "u", // Users
-    2: "g", // Studios (galleries)
-  };
 
   const getDefaultData = () => ({
     messages: [],
@@ -159,7 +154,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         }
         const author = child.querySelector(".name").textContent.trim();
         childrenComments[`${resourceType[0]}_${childId}`] = {
-          author: author.replace("*", ""),
+          author: author.replace(/\*/g, ""),
           authorId: Number(child.querySelector(".reply").getAttribute("data-commentee-id")),
           content: fixCommentContent(child.querySelector(".content").innerHTML),
           date: child.querySelector(".time").getAttribute("title"),
@@ -180,7 +175,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       if (foundComment) {
         const parentAuthor = parentComment.querySelector(".name").textContent.trim();
         commentsObj[`${resourceType[0]}_${parentId}`] = {
-          author: parentAuthor.replace("*", ""),
+          author: parentAuthor.replace(/\*/g, ""),
           authorId: Number(parentComment.querySelector(".reply").getAttribute("data-commentee-id")),
           content: fixCommentContent(parentComment.querySelector(".content").innerHTML),
           date: parentComment.querySelector(".time").getAttribute("title"),
@@ -230,8 +225,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     return new Promise((resolve) => {
       // For some weird reason, this only works with XHR in Chrome...
       const xhr = new XMLHttpRequest();
-      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/`, true);
-      xhr.setRequestHeader("X-ScratchAddons-Uses-Fetch", "true");
+      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/?sareferer`, true);
+      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
+      xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
 
       xhr.onload = function () {
         if (xhr.status === 200) {
@@ -253,8 +249,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   function deleteComment({ resourceType, resourceId, commentId }) {
     return new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
-      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/`, true);
-      xhr.setRequestHeader("X-ScratchAddons-Uses-Fetch", "true");
+      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/?sareferer`, true);
+      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
+      xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
 
       xhr.onload = function () {
         if (xhr.status === 200) {
