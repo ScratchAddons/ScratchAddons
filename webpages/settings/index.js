@@ -53,7 +53,7 @@ const serializeSettings = async () => {
       settings: storedSettings.addonSettings[addonId] || {},
     };
   }
-  return JSON.stringify(serialized);
+  return JSON.stringify(serialized, null, '\t');
 };
 
 const deserializeSettings = async (str, manifests, confirmElem) => {
