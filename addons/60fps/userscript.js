@@ -21,7 +21,7 @@ export default async function ({ addon, global, console }) {
         e.cancelBubble = true;
         e.preventDefault();
         mode = !mode;
-        if (mode) setFPS(addon.settings.get("framerate"));
+        if (mode) setFPS(Math.min(240, Math.max(31, addon.settings.get("framerate") | 31)));
         else setFPS(30);
         button.style.filter = mode ? "hue-rotate(90deg)" : "";
       }
@@ -37,7 +37,7 @@ export default async function ({ addon, global, console }) {
     };
     addon.settings.addEventListener("change", function () {
       if (vm.runtime._steppingInterval) {
-        setFPS(addon.settings.get("framerate"));
+        setFPS(Math.min(240, Math.max(31, addon.settings.get("framerate") | 31)));
       }
     });
     vm.runtime.start = function () {

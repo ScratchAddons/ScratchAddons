@@ -38,13 +38,13 @@ export default async function ({ addon, global, console }) {
       if (addon.settings.get("toggle") === "hover") document.body.appendChild(lockDisplay);
 
       function getSpeedValue() {
-        let data = {
+        let data = Object.assign(Object.create(null), {
           none: "0",
           short: "0.25",
           default: "0.5",
           long: "1",
-        };
-        return data[addon.settings.get("speed")];
+        });
+        return data[addon.settings.get("speed")] || data.default;
       }
 
       function onmouseenter(speed = {}) {
