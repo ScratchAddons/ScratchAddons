@@ -65,7 +65,10 @@ export default async function ({ addon, msg }) {
   };
 
   const loadTurboWarp = () => {
-    iframeElement.setAttribute("src", `https://turbowarp.org/embed.html${autoPlay ? "?autoplay" : ""}#${Number(projectId)}`);
+    iframeElement.setAttribute(
+      "src",
+      `https://turbowarp.org/embed.html${autoPlay ? "?autoplay" : ""}#${Number(projectId)}`
+    );
     wrapperElement.dataset.player = "turbowarp";
     if (!showMenu) iframeElement.setAttribute("height", "260");
   };
@@ -74,7 +77,9 @@ export default async function ({ addon, msg }) {
     wrapperElement.dataset.player = "forkphorus";
     iframeElement.setAttribute(
       "src",
-      `https://forkphorus.github.io/embed.html?id=${encodeURIComponent(projectId)}&auto-start=${encodeURIComponent(autoPlay)}&ui=${encodeURIComponent(showMenu)}`
+      `https://forkphorus.github.io/embed.html?id=${encodeURIComponent(projectId)}&auto-start=${encodeURIComponent(
+        autoPlay
+      )}&ui=${encodeURIComponent(showMenu)}`
     );
   };
 
