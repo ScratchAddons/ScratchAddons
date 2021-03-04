@@ -90,6 +90,7 @@ html > body:not(.sa-body-editor) h4 {
 }
 #footer {
   background-color: #333;
+  border-color: #606060; /* for infinite scrolling fixed footer */
   box-shadow: none;
 }
 #footer ul.footer-col li h4 {

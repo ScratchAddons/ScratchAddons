@@ -109,6 +109,7 @@ body:not(.sa-body-editor) .modal-content,
 }
 .box,
 .box .box-header,
+#footer, /* for infinite scrolling fixed footer */
 .textarea,
 .news li:nth-child(even),
 .thumbnail .thumbnail-image img,
