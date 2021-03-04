@@ -16,7 +16,7 @@ body {
   bottom: 0;
   width: 100%;
   border-top: 1px solid #b3b3b3;
-  height: 10px;
+  height: 32px;
   padding: 0;
   z-index: 20;
   transition-duration: 0.5s;
