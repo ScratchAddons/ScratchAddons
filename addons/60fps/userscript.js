@@ -3,6 +3,7 @@ export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
   let altPressesCount = 0;
   let altPressedRecently = false;
+  const getFPS = () => Math.min(240, Math.max(31, addon.settings.get("framerate"))) || 31;
   window.addEventListener("keydown", (event) => {
     if (event.key === "Alt") {
       altPressesCount++;
@@ -21,7 +22,7 @@ export default async function ({ addon, global, console }) {
         e.cancelBubble = true;
         e.preventDefault();
         mode = !mode;
-        if (mode) setFPS(Math.min(240, Math.max(31, addon.settings.get("framerate") | 31)));
+        if (mode) setFPS(getFPS());
         else setFPS(30);
         button.style.filter = mode ? "hue-rotate(90deg)" : "";
       }
@@ -37,7 +38,7 @@ export default async function ({ addon, global, console }) {
     };
     addon.settings.addEventListener("change", function () {
       if (vm.runtime._steppingInterval) {
-        setFPS(Math.min(240, Math.max(31, addon.settings.get("framerate") | 31)));
+        setFPS(getFPS());
       }
     });
     vm.runtime.start = function () {
