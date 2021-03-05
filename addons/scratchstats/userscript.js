@@ -14,7 +14,8 @@ export default async function ({ addon, msg, console }) {
   const username = location.pathname.split("/")[2];
   if (!username) return;
   const content = document.querySelector("#content");
-  const commentBox = document.querySelector("#content > .box:not(#profile-data):not(.slider-carousel-container)");
+  const commentBox = document.querySelector("#content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404)");
+  if (!commentBox) return;
   const statsBox = document.createElement("div");
   content.insertBefore(statsBox, commentBox);
   statsBox.className = "box sa-stats slider-carousel-container";
