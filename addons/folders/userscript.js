@@ -227,6 +227,36 @@ export default async function ({ addon, global, console, msg }) {
     vm.editingTarget.sprite.sounds = fixOrderOfItemsInFolders(vm.editingTarget.sprite.sounds);
   };
 
+  const verifySortableHOC = (sortableHOCInstance) => {
+    const SortableHOC = sortableHOCInstance.constructor;
+    if (
+      Array.isArray(sortableHOCInstance.props.items) &&
+      (typeof sortableHOCInstance.props.selectedId === 'string' || typeof sortableHOCInstance.props.selectedItemIndex === 'number') &&
+      typeof SortableHOC.prototype.componentDidMount === 'undefined' &&
+      typeof SortableHOC.prototype.componentDidUpdate === 'undefined' &&
+      typeof SortableHOC.prototype.componentWillReceiveProps === 'function' &&
+      typeof SortableHOC.prototype.handleAddSortable === 'function' &&
+      typeof SortableHOC.prototype.handleRemoveSortable === 'function' &&
+      typeof SortableHOC.prototype.setRef === 'function'
+    ) return;
+    throw new Error('Can not comprehend SortableHOC');
+  };
+
+  const verifySpriteSelectorItem = (spriteSelectorItemInstance) => {
+    const SpriteSelectorItem = spriteSelectorItemInstance.constructor;
+    if (
+      typeof spriteSelectorItemInstance.props.asset === 'object' &&
+      typeof spriteSelectorItemInstance.props.name === 'string' &&
+      typeof spriteSelectorItemInstance.props.dragType === 'string' &&
+      typeof SpriteSelectorItem.prototype.handleClick === 'function' &&
+      typeof SpriteSelectorItem.prototype.setRef === 'function' &&
+      typeof SpriteSelectorItem.prototype.handleDelete === 'function' &&
+      typeof SpriteSelectorItem.prototype.handleDuplicate === 'function' &&
+      typeof SpriteSelectorItem.prototype.handleExport === 'function'
+    ) return;
+    throw new Error('Can not comprehend SpriteSelectorItem');
+  };
+
   const patchSortableHOC = (SortableHOC, type) => {
     // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
 
@@ -1036,6 +1066,8 @@ export default async function ({ addon, global, console, msg }) {
     reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
     const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
     const spriteSelectorItemInstance = spriteSelectorItemElement[reactInternalKey].child.child.child.stateNode;
+    verifySortableHOC(sortableHOCInstance);
+    verifySpriteSelectorItem(spriteSelectorItemInstance);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
     patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
     sortableHOCInstance.saInitialSetup();
@@ -1046,6 +1078,7 @@ export default async function ({ addon, global, console, msg }) {
   {
     const selectorListItem = await addon.tab.waitForElement("[class*='selector_list-item']");
     const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
+    verifySortableHOC(sortableHOCInstance);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
     sortableHOCInstance.saInitialSetup();
   }
