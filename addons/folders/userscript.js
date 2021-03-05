@@ -211,20 +211,37 @@ export default async function ({ addon, global, console, msg }) {
         result.push(item);
       }
     }
-    return result.flat();
+    const flatResult = result.flat();
+    for (let i = 0; i < items.length; i++) {
+      if (result[i] !== items[i]) {
+        return {items: flatResult, changed: true};
+      }
+    }
+    return {items: flatResult, changed: false};
   };
 
   const fixTargetOrder = () => {
-    vm.runtime.targets = fixOrderOfItemsInFolders(vm.runtime.targets);
-    vm.emitTargetsUpdate();
+    const {items, changed} = fixOrderOfItemsInFolders(vm.runtime.targets);
+    if (changed) {
+      vm.runtime.targets = items;
+      vm.emitTargetsUpdate();
+    }
   };
 
   const fixCostumeOrder = () => {
-    vm.editingTarget.sprite.costumes = fixOrderOfItemsInFolders(vm.editingTarget.sprite.costumes);
+    const {items, changed} = fixOrderOfItemsInFolders(vm.editingTarget.sprite.costumes);
+    if (changed) {
+      vm.editingTarget.sprite.costumes = items;
+      vm.emitTargetsUpdate();
+    }
   };
 
   const fixSoundOrder = () => {
-    vm.editingTarget.sprite.sounds = fixOrderOfItemsInFolders(vm.editingTarget.sprite.sounds);
+    const {items, changed} = fixOrderOfItemsInFolders(vm.editingTarget.sprite.sounds);
+    if (changed) {
+      vm.editingTarget.sprite.sounds = items;
+      vm.emitTargetsUpdate();
+    }
   };
 
   const verifySortableHOC = (sortableHOCInstance) => {
