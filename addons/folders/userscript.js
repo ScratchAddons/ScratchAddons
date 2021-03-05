@@ -491,10 +491,11 @@ export default async function ({ addon, global, console, msg }) {
       const selectedItem = getSelectedItem(this);
       if (selectedItem) {
         const folder = getFolderFromName(selectedItem.name);
+        const currentFolder = this.state.folders.includes(folder) ? folder : null;
         if (type === TYPE_SPRITES) {
-          currentSpriteFolder = folder;
+          currentSpriteFolder = currentFolder;
         } else if (type === TYPE_ASSETS) {
-          currentAssetFolder = folder;
+          currentAssetFolder = currentFolder;
         }
         let selectedItemChanged;
         if (this.props.selectedId) {
