@@ -257,6 +257,19 @@ export default async function ({ addon, global, console, msg }) {
     throw new Error('Can not comprehend SpriteSelectorItem');
   };
 
+  const verifyVM = (vm) => {
+    const target = vm.runtime.targets[0];
+    if (
+      typeof vm.installTargets === 'function' &&
+      typeof vm.addCostume === 'function' &&
+      typeof vm.addSound === 'function' &&
+      typeof vm.reorderTarget === 'function' &&
+      typeof target.reorderCostume === 'function' &&
+      typeof target.reorderSound === 'function'
+    ) return;
+    throw new Error('Can not comprehend VM');
+  };
+
   const patchSortableHOC = (SortableHOC, type) => {
     // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
 
@@ -1068,6 +1081,7 @@ export default async function ({ addon, global, console, msg }) {
     const spriteSelectorItemInstance = spriteSelectorItemElement[reactInternalKey].child.child.child.stateNode;
     verifySortableHOC(sortableHOCInstance);
     verifySpriteSelectorItem(spriteSelectorItemInstance);
+    verifyVM(vm);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_SPRITES);
     patchSpriteSelectorItem(spriteSelectorItemInstance.constructor);
     sortableHOCInstance.saInitialSetup();
