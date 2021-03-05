@@ -496,10 +496,17 @@ export default async function ({ addon, global, console, msg }) {
         } else if (type === TYPE_ASSETS) {
           currentAssetFolder = folder;
         }
-        if (
-          this.props.selectedId !== prevProps.selectedId ||
-          this.props.selectedItemIndex !== prevProps.selectedItemIndex
-        ) {
+        let selectedItemChanged;
+        if (this.props.selectedId) {
+          selectedItemChanged = this.props.selectedId !== prevProps.selectedId;
+        } else {
+          selectedItemChanged = (
+            this.props.items[this.props.selectedItemIndex] &&
+            prevProps.items[prevProps.selectedItemIndex] &&
+            this.props.items[this.props.selectedItemIndex].name !== prevProps.items[prevProps.selectedItemIndex].name
+          );
+        }
+        if (selectedItemChanged) {
           if (!selectedItem.isStage) {
             if (typeof folder === "string" && !this.state.folders.includes(folder)) {
               this.setState((prevState) => ({
