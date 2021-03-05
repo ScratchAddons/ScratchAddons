@@ -73,6 +73,12 @@ export default async function ({ addon, global, console, msg }) {
     return basename;
   };
 
+  const RESERVED_NAMES = ["_mouse_", "_stage_", "_edge_", "_myself_", "_random_"];
+  const ensureNotReserved = (name) => {
+    if (RESERVED_NAMES) return `${name}2`;
+    return name;
+  };
+
   const untilInEditor = () => {
     if (addon.tab.editorMode === "editor") return;
     return new Promise((resolve, reject) => {
@@ -566,7 +572,7 @@ export default async function ({ addon, global, console, msg }) {
             for (const target of vm.runtime.targets) {
               if (target.isOriginal) {
                 if (getFolderFromName(target.getName()) === data.folder) {
-                  vm.renameSprite(target.id, setFolderOfName(target.getName(), newName));
+                  vm.renameSprite(target.id, ensureNotReserved(setFolderOfName(target.getName(), newName)));
                 }
               }
             }
@@ -616,7 +622,7 @@ export default async function ({ addon, global, console, msg }) {
         const setFolder = (folder) => {
           if (component.props.dragType === "SPRITE") {
             const target = vm.runtime.getTargetById(component.props.id);
-            vm.renameSprite(component.props.id, setFolderOfName(target.getName(), folder));
+            vm.renameSprite(component.props.id, ensureNotReserved(setFolderOfName(target.getName(), folder)));
             fixTargetOrder();
             vm.emitWorkspaceUpdate();
           } else if (component.props.dragType === "COSTUME") {
@@ -953,7 +959,7 @@ export default async function ({ addon, global, console, msg }) {
             this.emitTargetsUpdate();
           },
           rename: (item, name) => {
-            this.renameSprite(item.id, name);
+            this.renameSprite(item.id, ensureNotReserved(name));
           },
           getVMItemFromGUIItem: (item, targets) => {
             return targets.find((i) => i.id === item.id);
