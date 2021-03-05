@@ -24,7 +24,7 @@
       "name": "Video Sensing",
       "id": "videoSensing",
       "type": "boolean",
-      "default": true
+      "default": false
     },
     {
       "name": "Text to Speech",
