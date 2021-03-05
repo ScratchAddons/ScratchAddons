@@ -71,8 +71,12 @@
   "hide-flyout",
   "comments-linebreaks",
   "account-settings-capitalize",
+  "longer-wiwo",
   "show-bbcode",
   "copy-message-link",
   "load-extensions",
-  "scratchstats"
+  "variable-manager",
+  "scratchstats",
+  "folders",
+  "block-palette-icons"
 ]

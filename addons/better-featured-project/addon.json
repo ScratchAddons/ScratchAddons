@@ -19,5 +19,6 @@
       "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
-  "tags": ["community"]
+  "tags": ["community"],
+  "l10n": true
 }

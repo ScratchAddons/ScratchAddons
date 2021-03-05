@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["copy-message-link", "pause"];
+const NEW_ADDONS = ["folders", "variable-manager", "scratchstats"];
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];
@@ -142,7 +142,7 @@ const vue = (window.vue = new Vue({
     selectedTag: null,
     searchInput: "",
     addonSettings: {},
-    popupOpenedOnScratchTab: false,
+    addonsRunningOnTab: false,
     addonToEnable: null,
     showPopupModal: false,
     isIframe: window.parent !== window,
@@ -366,7 +366,7 @@ const vue = (window.vue = new Vue({
     updateSettings(addon, { wait = 0, settingId = null } = {}) {
       const value = settingId && this.addonSettings[addon._addonId][settingId];
       setTimeout(() => {
-        if (!settingId || (settingId && this.addonSettings[addon._addonId][settingId] === value)) {
+        if (!settingId || this.addonSettings[addon._addonId][settingId] === value) {
           chrome.runtime.sendMessage({
             changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
           });
@@ -460,31 +460,56 @@ const vue = (window.vue = new Vue({
           chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
             // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
             chrome.runtime.lastError;
-            if (res && res.length) {
-              this.popupOpenedOnScratchTab = true;
-              this.manifests.sort((a, b) =>
-                res.includes(a._addonId) && res.includes(b._addonId)
-                  ? a.name.localeCompare(b.name)
-                  : res.includes(a._addonId)
-                  ? -1
-                  : res.includes(b._addonId)
-                  ? 1
-                  : 0
+
+            const addonsCurrentlyOnTab = !res
+              ? []
+              : [...new Set([...res.userscripts, ...res.activeThemes])].filter((runningAddonId) => {
+                  // Consider addons with "dynamicUserscriptDisable": true
+                  // If those are running on the page, their "is running on this tab"
+                  // status should be the same as their "is enabled" status
+                  const manifest = this.manifests.find((manifest) => manifest._addonId === runningAddonId);
+                  if (manifest.dynamicDisable && !manifest._enabled) return false;
+                  return true;
+                });
+            // Addons/themes that were previously enabled on the tab (but not anymore)
+            // should go above enabled addons that are not currently running on the tab
+            // so that it's easier to find them, even if the popup was closed.
+            // Disabling then reenabling an addon is likely something common
+            // so hopefully this saves some seconds of our users' lives :P
+            const addonsPreviouslyOnTab = !res
+              ? []
+              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.inactiveThemes])].filter(
+                  (runningAddonId) => !addonsCurrentlyOnTab.includes(runningAddonId)
+                );
+
+            this.addonsRunningOnTab = Boolean(addonsCurrentlyOnTab.length);
+
+            this.manifests.sort((a, b) =>
+              addonsCurrentlyOnTab.includes(a._addonId) && addonsCurrentlyOnTab.includes(b._addonId)
+                ? a.name.localeCompare(b.name)
+                : addonsCurrentlyOnTab.includes(a._addonId)
+                ? -1
+                : addonsCurrentlyOnTab.includes(b._addonId)
+                ? 1
+                : addonsPreviouslyOnTab.includes(a._addonId) && addonsPreviouslyOnTab.includes(b._addonId)
+                ? a.name.localeCompare(b.name)
+                : addonsPreviouslyOnTab.includes(a._addonId)
+                ? -1
+                : addonsPreviouslyOnTab.includes(b._addonId)
+                ? 1
+                : 0
+            );
+
+            const currentMarginBottomAddon = this.manifests.find((manifest) => manifest._marginBottom === true);
+            if (currentMarginBottomAddon) Vue.set(currentMarginBottomAddon, "_marginBottom", false);
+            if (addonsCurrentlyOnTab.length) {
+              // Find first addon not currently running on tab
+              const firstNonRunningAddonIndex = this.manifests.findIndex(
+                (manifest) => !addonsCurrentlyOnTab.includes(manifest._addonId)
               );
-              // Find last currently running addon to add bottom margin
-              const currentMarginBottomAddon = this.manifests.find((manifest) => manifest._marginBottom === true);
-              if (currentMarginBottomAddon) Vue.set(currentMarginBottomAddon, "_marginBottom", false);
-              let lastManifest;
-              for (const manifest of this.manifests) {
-                if (!res.includes(manifest._addonId)) {
-                  console.log(manifest);
-                  Vue.set(lastManifest, "_marginBottom", true);
-                  break;
-                }
-                lastManifest = manifest;
-              }
-              resolve();
-            } else resolve();
+              Vue.set(this.manifests[firstNonRunningAddonIndex - 1], "_marginBottom", true);
+            }
+            resolve();
           });
         });
       });

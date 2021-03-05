@@ -26,6 +26,13 @@ a:hover {
   text-decoration: underline;
 }
 
+.loading {
+  text-align: center;
+  font-size: 0.9rem;
+  padding-top: 1rem;
+  font-weight: bold;
+}
+
 .title {
   top: 0;
   z-index: 999;
