@@ -73,6 +73,10 @@ export default async function ({ addon, global, console, msg }) {
     return basename;
   };
 
+  const isValidFolderName = (name) => {
+    return !name.includes(DIVIDER);
+  };
+
   const RESERVED_NAMES = ["_mouse_", "_stage_", "_edge_", "_myself_", "_random_"];
   const ensureNotReserved = (name) => {
     if (RESERVED_NAMES) return `${name}2`;
@@ -671,6 +675,10 @@ export default async function ({ addon, global, console, msg }) {
           if (newName === null) {
             return;
           }
+          if (!isValidFolderName(newName)) {
+            alert(msg("name-not-allowed"));
+            return;
+          }
           // Empty name will remove the folder
           if (!newName) {
             newName = null;
@@ -711,6 +719,10 @@ export default async function ({ addon, global, console, msg }) {
         const createFolder = () => {
           const name = prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
           if (name === null) {
+            return;
+          }
+          if (!isValidFolderName(name)) {
+            alert(msg("name-not-allowed"));
             return;
           }
           setFolder(name);
