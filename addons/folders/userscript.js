@@ -218,14 +218,14 @@ export default async function ({ addon, global, console, msg }) {
     const flatResult = result.flat();
     for (let i = 0; i < items.length; i++) {
       if (result[i] !== items[i]) {
-        return {items: flatResult, changed: true};
+        return { items: flatResult, changed: true };
       }
     }
-    return {items: flatResult, changed: false};
+    return { items: flatResult, changed: false };
   };
 
   const fixTargetOrder = () => {
-    const {items, changed} = fixOrderOfItemsInFolders(vm.runtime.targets);
+    const { items, changed } = fixOrderOfItemsInFolders(vm.runtime.targets);
     if (changed) {
       vm.runtime.targets = items;
       vm.emitTargetsUpdate();
@@ -233,7 +233,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const fixCostumeOrder = () => {
-    const {items, changed} = fixOrderOfItemsInFolders(vm.editingTarget.sprite.costumes);
+    const { items, changed } = fixOrderOfItemsInFolders(vm.editingTarget.sprite.costumes);
     if (changed) {
       vm.editingTarget.sprite.costumes = items;
       vm.emitTargetsUpdate();
@@ -241,7 +241,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const fixSoundOrder = () => {
-    const {items, changed} = fixOrderOfItemsInFolders(vm.editingTarget.sprite.sounds);
+    const { items, changed } = fixOrderOfItemsInFolders(vm.editingTarget.sprite.sounds);
     if (changed) {
       vm.editingTarget.sprite.sounds = items;
       vm.emitTargetsUpdate();
@@ -252,43 +252,47 @@ export default async function ({ addon, global, console, msg }) {
     const SortableHOC = sortableHOCInstance.constructor;
     if (
       Array.isArray(sortableHOCInstance.props.items) &&
-      (typeof sortableHOCInstance.props.selectedId === 'string' || typeof sortableHOCInstance.props.selectedItemIndex === 'number') &&
-      typeof SortableHOC.prototype.componentDidMount === 'undefined' &&
-      typeof SortableHOC.prototype.componentDidUpdate === 'undefined' &&
-      typeof SortableHOC.prototype.componentWillReceiveProps === 'function' &&
-      typeof SortableHOC.prototype.handleAddSortable === 'function' &&
-      typeof SortableHOC.prototype.handleRemoveSortable === 'function' &&
-      typeof SortableHOC.prototype.setRef === 'function'
-    ) return;
-    throw new Error('Can not comprehend SortableHOC');
+      (typeof sortableHOCInstance.props.selectedId === "string" ||
+        typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
+      typeof SortableHOC.prototype.componentDidMount === "undefined" &&
+      typeof SortableHOC.prototype.componentDidUpdate === "undefined" &&
+      typeof SortableHOC.prototype.componentWillReceiveProps === "function" &&
+      typeof SortableHOC.prototype.handleAddSortable === "function" &&
+      typeof SortableHOC.prototype.handleRemoveSortable === "function" &&
+      typeof SortableHOC.prototype.setRef === "function"
+    )
+      return;
+    throw new Error("Can not comprehend SortableHOC");
   };
 
   const verifySpriteSelectorItem = (spriteSelectorItemInstance) => {
     const SpriteSelectorItem = spriteSelectorItemInstance.constructor;
     if (
-      typeof spriteSelectorItemInstance.props.asset === 'object' &&
-      typeof spriteSelectorItemInstance.props.name === 'string' &&
-      typeof spriteSelectorItemInstance.props.dragType === 'string' &&
-      typeof SpriteSelectorItem.prototype.handleClick === 'function' &&
-      typeof SpriteSelectorItem.prototype.setRef === 'function' &&
-      typeof SpriteSelectorItem.prototype.handleDelete === 'function' &&
-      typeof SpriteSelectorItem.prototype.handleDuplicate === 'function' &&
-      typeof SpriteSelectorItem.prototype.handleExport === 'function'
-    ) return;
-    throw new Error('Can not comprehend SpriteSelectorItem');
+      typeof spriteSelectorItemInstance.props.asset === "object" &&
+      typeof spriteSelectorItemInstance.props.name === "string" &&
+      typeof spriteSelectorItemInstance.props.dragType === "string" &&
+      typeof SpriteSelectorItem.prototype.handleClick === "function" &&
+      typeof SpriteSelectorItem.prototype.setRef === "function" &&
+      typeof SpriteSelectorItem.prototype.handleDelete === "function" &&
+      typeof SpriteSelectorItem.prototype.handleDuplicate === "function" &&
+      typeof SpriteSelectorItem.prototype.handleExport === "function"
+    )
+      return;
+    throw new Error("Can not comprehend SpriteSelectorItem");
   };
 
   const verifyVM = (vm) => {
     const target = vm.runtime.targets[0];
     if (
-      typeof vm.installTargets === 'function' &&
-      typeof vm.addCostume === 'function' &&
-      typeof vm.addSound === 'function' &&
-      typeof vm.reorderTarget === 'function' &&
-      typeof target.reorderCostume === 'function' &&
-      typeof target.reorderSound === 'function'
-    ) return;
-    throw new Error('Can not comprehend VM');
+      typeof vm.installTargets === "function" &&
+      typeof vm.addCostume === "function" &&
+      typeof vm.addSound === "function" &&
+      typeof vm.reorderTarget === "function" &&
+      typeof target.reorderCostume === "function" &&
+      typeof target.reorderSound === "function"
+    )
+      return;
+    throw new Error("Can not comprehend VM");
   };
 
   const patchSortableHOC = (SortableHOC, type) => {
@@ -505,11 +509,10 @@ export default async function ({ addon, global, console, msg }) {
         if (this.props.selectedId) {
           selectedItemChanged = this.props.selectedId !== prevProps.selectedId;
         } else {
-          selectedItemChanged = (
+          selectedItemChanged =
             this.props.items[this.props.selectedItemIndex] &&
             prevProps.items[prevProps.selectedItemIndex] &&
-            this.props.items[this.props.selectedItemIndex].name !== prevProps.items[prevProps.selectedItemIndex].name
-          );
+            this.props.items[this.props.selectedItemIndex].name !== prevProps.items[prevProps.selectedItemIndex].name;
         }
         if (selectedItemChanged) {
           if (!selectedItem.isStage) {
