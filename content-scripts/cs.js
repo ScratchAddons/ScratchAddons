@@ -223,7 +223,7 @@ const showBanner = () => {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 600px;
+    width: 700px;
     max-height: 270px;
     display: flex;
     align-items: center;
@@ -239,8 +239,8 @@ const showBanner = () => {
   });
   const notifImage = Object.assign(document.createElement("img"), {
     alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/copy-comment-link.png"),
-    style: "height: 120px; border-radius: 5px",
+    src: chrome.runtime.getURL("/images/cs/folders.png"),
+    style: "height: 175px; border-radius: 5px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",

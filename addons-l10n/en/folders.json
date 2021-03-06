@@ -7,5 +7,6 @@
   "folders/remove-folder": "remove folder",
   "folders/remove-from-folder": "remove from folder",
   "folders/rename-folder-prompt": "Rename folder to:",
-  "folders/name-prompt": "Name of folder:"
+  "folders/name-prompt": "Name of folder:",
+  "folders/name-not-allowed": "Invalid folder name"
 }

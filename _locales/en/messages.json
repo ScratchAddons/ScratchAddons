@@ -195,19 +195,19 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-    "message": "$1: $2 addon, which adds a \"copy link\" button to comments, so that you can easily link to them. Go to $3 to enable it."
+    "message": "$1: $2 addon, which adds folders to sprite lists, as well as costume and sound lists. Go to $3 to enable it."
   },
   "newFeature": {
     "message": "New feature"
   },
   "hexColorPicker": {
-    "message": "\"copy link to comment button\""
+    "message": "\"sprite folders\""
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2": {
-    "message": "The \"pause button\" addon was improved and is now out of beta. Many dark mode bugs have been fixed."
+    "message": "Other featured new addons of this update are \"variable manager\" (adds a tab next to the editor for easily updating variables and lists) and \"profile statistics\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."

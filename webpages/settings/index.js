@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["copy-message-link", "pause"];
+const NEW_ADDONS = ["folders", "variable-manager", "scratchstats"];
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];
