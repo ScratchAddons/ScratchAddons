@@ -202,36 +202,34 @@ export default class Tab extends Listenable {
    */
   async createBlockContextMenu(
     callback,
-    { workspace = false, allblocks = false, flyout = false, catagories = [], beforeAppend } = {}
+    { workspace = false, blocks = false, flyout = false } = {}
   ) {
-    if (this.editorMode === "editor") {
-      inject(await this.traps.getBlockly());
-    }
+    let injected = false;
+    if (this.editorMode === "editor") inject(await this.traps.getBlockly());
     this.addEventListener(
       "urlChange",
       async () => this.editorMode === "editor" && inject(await this.traps.getBlockly())
     );
 
     function inject(Blockly) {
+      if (injected) return;
+      injected = true;
       let oldShow = Blockly.ContextMenu.show;
       Blockly.ContextMenu.show = function (event, items, something) {
         const blockElt = event.target.closest(".blocklyDraggable");
         let block;
         if (blockElt) block = Blockly.getMainWorkspace().getBlockById(blockElt.getAttribute("data-id"));
-        const checkIfAppend = () => !beforeAppend || (beforeAppend && beforeAppend(event, block));
         let injectMenu = false;
-        if (workspace && event.target.className.baseVal == "blocklyMainBackground" && checkIfAppend()) {
+        if (workspace && event.target.className.baseVal == "blocklyMainBackground") {
           injectMenu = true;
         }
-        if (
-          block &&
-          (allblocks || catagories.includes(block.category_)) &&
-          (flyout || (!flyout && !event.target.closest(".blocklyFlyout"))) &&
-          checkIfAppend()
-        ) {
+        if (block && blocks && !event.target.closest(".blocklyFlyout")) {
           injectMenu = true;
         }
-        if (injectMenu) items = callback(items);
+        if (block && flyout && event.target.closest(".blocklyFlyout")) {
+          injectMenu = true;
+        }
+        if (injectMenu) items = callback(items, block);
         oldShow.call(this, event, items, something);
       };
     }
