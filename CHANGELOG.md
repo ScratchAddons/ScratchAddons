@@ -13,6 +13,18 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.11.0] - 2021-03-08
+
+- New addon: folders [beta]
+- New addon: variable manager [beta]
+- New addon: profile statistics
+- New addon: higher character limit in "What I'm Working On"
+- New addon: hlock pallette category icons
+- Cloud games addon: add loading indicator
+- Infinite scrolling addon: bug fixes
+- Bug fix: “more links” treating some links as if they weren't
+- Bug fix: "block switching" only letting users type numbers when converting "change variable by" to "set variable to"
+
 ## [v1.10.0] - 2021-02-22
 
 - New addon: copy link to comment button [recommended]
@@ -265,6 +277,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.11.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.0
 [v1.10.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.10.0
 [v1.9.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.3
 [v1.9.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.2
