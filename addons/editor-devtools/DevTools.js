@@ -1534,11 +1534,19 @@ export default class DevTools {
                 document.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
                 if (next || blockOnly === 2) {
                   setTimeout(() => {
+                    /* previously was:
                     if (next) {
                       wksp.undo(); // undo the unplug above...
                     }
                     if (blockOnly === 2) {
-                      wksp.undo()
+                      let block = wksp.getBlockById(dataId);
+                      UndoGroup.startUndoGroup(wksp);
+                      block.dispose(true);
+                      UndoGroup.endUndoGroup(wksp);
+                    }
+                    now: */
+                    wksp.undo()
+                    if (blockOnly === 2) {
                       let block = wksp.getBlockById(dataId);
                       UndoGroup.startUndoGroup(wksp);
                       block.dispose(true);
