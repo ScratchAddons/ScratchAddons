@@ -220,12 +220,18 @@ export default class Tab extends Listenable {
           // When right clicking on the boundaries of a block in the flyout,
           // the click event can happen on a background rectangle and not on the actual block for some reason.
           // In this case, the block group should immediately follow the rect.
-          if (target.tagName === "rect") {
+          if (target.tagName === "rect" && !target.classList.contains("blocklyMainBackground")) {
             target = target.nextSibling;
             block = target && target.closest("[data-id]");
           }
+          if (block) {
+            block = Blockly.getMainWorkspace().getBlockById(block.dataset.id);
+            // Keep jumping to the parent block until we find a non-shadow block.
+            while (block && block.isShadow()) {
+              block = block.getParent();
+            }
+          }
         }
-        block = Blockly.getMainWorkspace().getBlockById(block.dataset.id);
         let injectMenu = false;
         if (workspace && event.target.className.baseVal == "blocklyMainBackground") {
           injectMenu = true;
