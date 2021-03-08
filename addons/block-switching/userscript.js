@@ -667,24 +667,27 @@ export default async function ({ addon, global, console, msg }) {
     }, 0);
   };
 
-  addon.tab.createBlockContextMenu((items, block) => {
-    if (addon.settings.get("border")) {
-      addBorderToContextMenuItem = items.length;
-    }
-
-    const switches = blockSwitches[block.type];
-    switches.forEach((opcodeData, i) => {
-      const isNoop = opcodeData.opcode === "noop";
-      if (isNoop && !addon.settings.get("noop")) {
-        return;
+  addon.tab.createBlockContextMenu(
+    (items, block) => {
+      if (addon.settings.get("border")) {
+        addBorderToContextMenuItem = items.length;
       }
-      items.push({
-        enabled: true,
-        text: msg(isNoop ? block.type : opcodeData.opcode),
-        callback: menuCallbackFactory(block, opcodeData),
-        separator: i == 0
+
+      const switches = blockSwitches[block.type];
+      switches.forEach((opcodeData, i) => {
+        const isNoop = opcodeData.opcode === "noop";
+        if (isNoop && !addon.settings.get("noop")) {
+          return;
+        }
+        items.push({
+          enabled: true,
+          text: msg(isNoop ? block.type : opcodeData.opcode),
+          callback: menuCallbackFactory(block, opcodeData),
+          separator: i == 0,
+        });
       });
-    });
-    return items;
-  }, { blocks: true });
+      return items;
+    },
+    { blocks: true }
+  );
 }
