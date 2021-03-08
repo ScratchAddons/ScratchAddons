@@ -200,7 +200,7 @@ export default class Tab extends Listenable {
    * @param {function} callback Changes items in menu.
    * @param {object} opts - options.
    */
-  async createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false } = {}) {
+  async createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, separator = false } = {}) {
     let injected = false;
     if (this.editorMode === "editor") inject(await this.traps.getBlockly());
     this.addEventListener(
@@ -224,14 +224,15 @@ export default class Tab extends Listenable {
             target = target.nextSibling;
             block = target && target.closest("[data-id]");
           }
-          if (block) {
-            block = Blockly.getMainWorkspace().getBlockById(block.dataset.id);
-            // Keep jumping to the parent block until we find a non-shadow block.
-            while (block && block.isShadow()) {
-              block = block.getParent();
-            }
+        }
+        if (block) {
+          block = Blockly.getMainWorkspace().getBlockById(block.dataset.id);
+          // Keep jumping to the parent block until we find a non-shadow block.
+          while (block && block.isShadow()) {
+            block = block.getParent();
           }
         }
+
         let injectMenu = false;
         if (workspace && event.target.className.baseVal == "blocklyMainBackground") {
           injectMenu = true;
@@ -244,6 +245,13 @@ export default class Tab extends Listenable {
         }
         if (injectMenu) items = callback(items, block);
         oldShow.call(this, event, items, something);
+        items.forEach((item, i) => {
+          if (item.separator) {
+            const itemElt = document.querySelector(".blocklyContextMenu").children[i];
+            itemElt.style.paddingTop = "2px";
+            itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+          }
+        });
       };
     }
   }
