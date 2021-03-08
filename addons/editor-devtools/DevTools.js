@@ -1538,6 +1538,7 @@ export default class DevTools {
                       wksp.undo(); // undo the unplug above...
                     }
                     if (blockOnly === 2) {
+                      wksp.undo()
                       let block = wksp.getBlockById(dataId);
                       UndoGroup.startUndoGroup(wksp);
                       block.dispose(true);
