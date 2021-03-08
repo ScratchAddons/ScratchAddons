@@ -78,5 +78,6 @@
   "variable-manager",
   "scratchstats",
   "folders",
-  "block-palette-icons"
+  "block-palette-icons",
+  "custom-block-size"
 ]
