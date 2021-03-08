@@ -64,16 +64,19 @@ window.addEventListener("load", () => {
 // Store all themes that were enabled this session
 const sessionEnabledThemes = new Set();
 
-function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
+function injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate }) {
   document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
     if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
   });
-  for (const userstyleUrl of userstyleUrls || []) {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = userstyleUrl;
-    if (document.body) document.documentElement.insertBefore(link, document.body);
-    else document.documentElement.appendChild(link);
+  const userstyles = addonsWithUserstyles.map(addon => addon.styles);
+  for (const addon of userstyles || []) {
+    for (const userstyle of addon) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = userstyle.url;
+      if (document.body) document.documentElement.insertBefore(link, document.body);
+      else document.documentElement.appendChild(link);
+    }
   }
   for (const theme of themes) {
     sessionEnabledThemes.add(theme.addonId);
@@ -108,9 +111,9 @@ function setCssVariables(addonSettings) {
   }
 }
 
-function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, userstyleUrls, themes }) {
+function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles, themes }) {
   setCssVariables(globalState.addonSettings);
-  injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate: false });
+  injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
 
   const template = document.createElement("template");
   template.id = "scratch-addons";
@@ -136,12 +139,14 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
       template.setAttribute("data-msgcount", request.setMsgCount);
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
+      const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
       const activeThemes = Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
         style.getAttribute("data-addon-id")
       );
       const inactiveThemes = [...sessionEnabledThemes].filter((addonId) => !activeThemes.includes(addonId));
       sendResponse({
         userscripts,
+        userstyles,
         activeThemes,
         inactiveThemes,
       });
