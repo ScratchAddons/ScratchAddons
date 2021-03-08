@@ -71,7 +71,7 @@ async function getContentScriptInfo(url) {
       for (const style of manifest.userstyles || []) {
         if (userscriptMatches({ url }, style, addonId))
           userstyles.push({
-            url: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`)
+            url: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`),
           });
       }
       if (userstyles.length) data.addonsWithUserstyles.push({ addonId, styles: userstyles });
