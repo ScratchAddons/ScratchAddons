@@ -19,7 +19,7 @@ automatically create a PR on the website to synchronize the changes!
 - New addon: variable manager [beta]
 - New addon: profile statistics
 - New addon: higher character limit in "What I'm Working On"
-- New addon: hlock pallette category icons
+- New addon: block pallette category icons
 - Cloud games addon: add loading indicator
 - Infinite scrolling addon: bug fixes
 - Bug fix: “more links” treating some links as if they weren't
