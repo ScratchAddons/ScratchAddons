@@ -213,9 +213,19 @@ export default class Tab extends Listenable {
       injected = true;
       let oldShow = Blockly.ContextMenu.show;
       Blockly.ContextMenu.show = function (event, items, something) {
-        const blockElt = event.target.closest(".blocklyDraggable");
-        let block;
-        if (blockElt) block = Blockly.getMainWorkspace().getBlockById(blockElt.getAttribute("data-id"));
+        let target = event.target;
+        let block = target.closest("[data-id]");
+        if (!block) {
+          // Thank you @GarboMuffin for this code:
+          // When right clicking on the boundaries of a block in the flyout,
+          // the click event can happen on a background rectangle and not on the actual block for some reason.
+          // In this case, the block group should immediately follow the rect.
+          if (target.tagName === "rect") {
+            target = target.nextSibling;
+            block = target && target.closest("[data-id]");
+          }
+        }
+        block = Blockly.getMainWorkspace().getBlockById(block.dataset.id);
         let injectMenu = false;
         if (workspace && event.target.className.baseVal == "blocklyMainBackground") {
           injectMenu = true;
