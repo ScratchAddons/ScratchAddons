@@ -202,7 +202,7 @@ export default class Tab extends Listenable {
    */
   async createBlockContextMenu(
     callback,
-    { workspace = false, blocks = false, flyout = false, separator = false } = {}
+    { workspace = false, blocks = false, flyout = false } = {}
   ) {
     let injected = false;
     if (this.editorMode === "editor") inject(await this.traps.getBlockly());
