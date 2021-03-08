@@ -667,108 +667,24 @@ export default async function ({ addon, global, console, msg }) {
     }, 0);
   };
 
-  const customContextMenuHandler = function (options) {
+  addon.tab.createBlockContextMenu((items, block) => {
     if (addon.settings.get("border")) {
-      addBorderToContextMenuItem = options.length;
+      addBorderToContextMenuItem = items.length;
     }
 
-    if (this._originalCustomContextMenu) {
-      this._originalCustomContextMenu.call(this, options);
-    }
-
-    const switches = blockSwitches[this.type];
-    for (const opcodeData of switches) {
+    const switches = blockSwitches[block.type];
+    switches.forEach((opcodeData, i) => {
       const isNoop = opcodeData.opcode === "noop";
       if (isNoop && !addon.settings.get("noop")) {
-        continue;
+        return;
       }
-      const translationOpcode = isNoop ? this.type : opcodeData.opcode;
-      const translation = msg(translationOpcode);
-      options.push({
+      items.push({
         enabled: true,
-        text: translation,
-        callback: menuCallbackFactory(this, opcodeData),
+        text: msg(isNoop ? block.type : opcodeData.opcode),
+        callback: menuCallbackFactory(block, opcodeData),
+        separator: i == 0
       });
-    }
-  };
-
-  const injectCustomContextMenu = (block) => {
-    const type = block.type;
-    if (!Object.prototype.hasOwnProperty.call(blockSwitches, type)) {
-      return;
-    }
-
-    if (block._customContextMenuInjected) {
-      return;
-    }
-    block._customContextMenuInjected = true;
-
-    if (block.customContextMenu) {
-      block._originalCustomContextMenu = block.customContextMenu;
-    }
-
-    block.customContextMenu = customContextMenuHandler;
-  };
-
-  const changeListener = (change) => {
-    if (change.type !== "create") {
-      return;
-    }
-
-    for (const id of change.ids) {
-      const block = Blockly.getMainWorkspace().getBlockById(id);
-      if (!block) continue;
-      injectCustomContextMenu(block);
-    }
-  };
-
-  const mutationObserverCallback = (mutations) => {
-    for (const mutation of mutations) {
-      for (const node of mutation.addedNodes) {
-        if (node.classList.contains("blocklyContextMenu")) {
-          if (addBorderToContextMenuItem === -1) {
-            continue;
-          }
-          const children = node.children;
-          const item = children[addBorderToContextMenuItem];
-          if (item) {
-            item.style.paddingTop = "2px";
-            item.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
-          }
-          addBorderToContextMenuItem = -1;
-        }
-      }
-    }
-  };
-
-  const inject = () => {
-    const workspace = Blockly.getMainWorkspace();
-    if (workspace._blockswitchingInjected) {
-      return;
-    }
-    mutationObserver.observe(document.querySelector(".blocklyWidgetDiv"), {
-      childList: true,
     });
-    workspace._blockswitchingInjected = true;
-    workspace.getAllBlocks().forEach(injectCustomContextMenu);
-    workspace.addChangeListener(changeListener);
-    const languageSelector = document.querySelector('[class^="language-selector_language-select"]');
-    if (languageSelector) {
-      languageSelector.addEventListener("change", () => {
-        setTimeout(inject);
-      });
-    }
-  };
-
-  const mutationObserver = new MutationObserver(mutationObserverCallback);
-
-  if (addon.tab.editorMode === "editor") {
-    const interval = setInterval(() => {
-      if (Blockly.getMainWorkspace()) {
-        inject();
-        clearInterval(interval);
-      }
-    }, 100);
-  }
-  addon.tab.addEventListener("urlChange", () => addon.tab.editorMode === "editor" && inject());
+    return items;
+  }, { blocks: true });
 }
