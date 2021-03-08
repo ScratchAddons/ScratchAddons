@@ -68,7 +68,7 @@ function injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate }) {
   document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
     if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
   });
-  const userstyles = addonsWithUserstyles.map(addon => addon.styles);
+  const userstyles = addonsWithUserstyles.map((addon) => addon.styles);
   for (const addon of userstyles || []) {
     for (const userstyle of addon) {
       const link = document.createElement("link");
