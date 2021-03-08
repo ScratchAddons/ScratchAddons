@@ -200,10 +200,7 @@ export default class Tab extends Listenable {
    * @param {function} callback Changes items in menu.
    * @param {object} opts - options.
    */
-  async createBlockContextMenu(
-    callback,
-    { workspace = false, blocks = false, flyout = false } = {}
-  ) {
+  async createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false } = {}) {
     let injected = false;
     if (this.editorMode === "editor") inject(await this.traps.getBlockly());
     this.addEventListener(
