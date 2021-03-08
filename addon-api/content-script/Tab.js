@@ -200,11 +200,17 @@ export default class Tab extends Listenable {
    * @param {function} callback Changes items in menu.
    * @param {object} opts - options.
    */
-  async createBlockContextMenu(callback, { workspace = false, allblocks = false, flyout = false, catagories = [], beforeAppend } = {}) {
+  async createBlockContextMenu(
+    callback,
+    { workspace = false, allblocks = false, flyout = false, catagories = [], beforeAppend } = {}
+  ) {
     if (this.editorMode === "editor") {
       inject(await this.traps.getBlockly());
     }
-    this.addEventListener("urlChange", async () => this.editorMode === "editor" && inject(await this.traps.getBlockly()));
+    this.addEventListener(
+      "urlChange",
+      async () => this.editorMode === "editor" && inject(await this.traps.getBlockly())
+    );
 
     function inject(Blockly) {
       let oldShow = Blockly.ContextMenu.show;
@@ -212,17 +218,22 @@ export default class Tab extends Listenable {
         const blockElt = event.target.closest(".blocklyDraggable");
         let block;
         if (blockElt) block = Blockly.getMainWorkspace().getBlockById(blockElt.getAttribute("data-id"));
-        const checkIfAppend = () => (!beforeAppend || (beforeAppend && beforeAppend(event, block)));
+        const checkIfAppend = () => !beforeAppend || (beforeAppend && beforeAppend(event, block));
         let injectMenu = false;
         if (workspace && event.target.className.baseVal == "blocklyMainBackground" && checkIfAppend()) {
           injectMenu = true;
         }
-        if (block && (allblocks || catagories.includes(block.category_)) && (flyout || (!flyout && !event.target.closest(".blocklyFlyout"))) && checkIfAppend()) {
+        if (
+          block &&
+          (allblocks || catagories.includes(block.category_)) &&
+          (flyout || (!flyout && !event.target.closest(".blocklyFlyout"))) &&
+          checkIfAppend()
+        ) {
           injectMenu = true;
         }
         if (injectMenu) items = callback(items);
-        oldShow.call(this, event, items, something)
-      }
+        oldShow.call(this, event, items, something);
+      };
     }
   }
 }
