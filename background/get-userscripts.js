@@ -30,7 +30,7 @@ async function getContentScriptInfo(url) {
     l10njson: getL10NURLs(),
     globalState: {},
     addonsWithUserscripts: [],
-    userstyleUrls: [],
+    addonsWithUserstyles: [],
     themes: [],
   };
   const fetchThemeStylesPromises = [];
@@ -67,10 +67,14 @@ async function getContentScriptInfo(url) {
         }
       }
     } else {
+      const userstyles = [];
       for (const style of manifest.userstyles || []) {
         if (userscriptMatches({ url }, style, addonId))
-          data.userstyleUrls.push(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
+          userstyles.push({
+            url: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`)
+          });
       }
+      if (userstyles.length) data.addonsWithUserstyles.push({ addonId, styles: userstyles });
     }
   }
 
