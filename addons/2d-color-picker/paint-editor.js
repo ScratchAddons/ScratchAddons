@@ -58,7 +58,7 @@ export default async ({ addon, console, msg }) => {
     h.s = 1;
     h.v = 1;
     return tinycolor(h).toHex();
-  }
+  };
 
   // le loop
   while (true) {
@@ -72,13 +72,20 @@ export default async ({ addon, console, msg }) => {
         let c = getColor(element);
         let chsv = tinycolor(c).toHsv();
         updateHandleFinal(chsv.s, chsv.v);
-        saColorPicker.style.background = '#' + convertToGeneralColor(getColor(element));
+        saColorPicker.style.background = "#" + convertToGeneralColor(getColor(element));
       });
     }
 
     // redux stuff
     addon.tab.redux.initialize();
-    addon.tab.redux.addEventListener("statechanged", (e) => (e.detail.action.type == "scratch-paint/fill-style/CHANGE_FILL_COLOR" || e.detail.action.type == "scratch-paint/fill-style/CHANGE_FILL_COLOR_2" || e.detail.action.type == "scratch-paint/stroke-style/CHANGE_STROKE_COLOR" || e.detail.action.type == "scratch-paint/stroke-style/CHANGE_STROKE_COLOR_2") ? updateColor() : 0)
+    addon.tab.redux.addEventListener("statechanged", (e) =>
+      e.detail.action.type == "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
+      e.detail.action.type == "scratch-paint/fill-style/CHANGE_FILL_COLOR_2" ||
+      e.detail.action.type == "scratch-paint/stroke-style/CHANGE_STROKE_COLOR" ||
+      e.detail.action.type == "scratch-paint/stroke-style/CHANGE_STROKE_COLOR_2"
+        ? updateColor()
+        : 0
+    );
     if (addon.tab.redux && typeof prevEventHandler === "function") {
       addon.tab.redux.removeEventListener("statechanged", prevEventHandler);
       prevEventHandler = null;
@@ -91,24 +98,24 @@ export default async ({ addon, console, msg }) => {
     // create the color picker element and all it's child elements
     const saColorPicker = document.createElement("div");
     saColorPicker.className = "sa-2dcolor-picker";
-    saColorPicker.style.background = '#' +  convertToGeneralColor(defaultColor || "ff0000");
+    saColorPicker.style.background = "#" + convertToGeneralColor(defaultColor || "ff0000");
 
     const saColorPickerImage = Object.assign(document.createElement("img"), {
       className: "sa-2dcolor-picker-image",
-      src: addon.self.dir + '/assets/sv-gr.png',
-      draggable: false
+      src: addon.self.dir + "/assets/sv-gr.png",
+      draggable: false,
     });
     const saColorPickerHandle = Object.assign(document.createElement("div"), {
       className: "slider_handle_3f0xk",
     });
-    saColorPickerHandle.style.pointerEvents = 'none';
+    saColorPickerHandle.style.pointerEvents = "none";
 
     // create the label
     const saColorLabel = document.createElement("div");
     saColorLabel.className = "color-picker_row-header_173LQ sa-2dcolor-label";
     const saColorLabelName = document.createElement("span");
     saColorLabelName.className = "color-picker_label-name_17igY sa-2dcolor-label-name";
-    saColorLabelName.innerText = 'Shade';
+    saColorLabelName.innerText = "Shade";
     const saColorLabelVal = document.createElement("span");
     saColorLabelVal.className = "color-picker_label-readout_9vjb2 sa-2dcolor-label-val";
     saColorLabel.appendChild(saColorLabelName);
@@ -117,34 +124,34 @@ export default async ({ addon, console, msg }) => {
     function updateHandle(e, keyPressed, originalPos) {
       let cx = Math.min(Math.max(e.clientX - saColorPicker.getBoundingClientRect().x, 0), 150);
       let cy = Math.min(Math.max(e.clientY - saColorPicker.getBoundingClientRect().y, 0), 150);
-      if(keyPressed == 16) {
-        if(Math.abs(cx - originalPos.x) > Math.abs(cy - originalPos.y)) cy = originalPos.y;
+      if (keyPressed == 16) {
+        if (Math.abs(cx - originalPos.x) > Math.abs(cy - originalPos.y)) cy = originalPos.y;
         else cx = originalPos.x;
       }
-      saColorPickerHandle.style.left = cx-8 + 'px';
-      saColorPickerHandle.style.top = cy-8 + 'px';
-      saColorLabelVal.innerText = `${Math.round(cx/150*100)}, ${100 - Math.round(cy/150*100)}`;
+      saColorPickerHandle.style.left = cx - 8 + "px";
+      saColorPickerHandle.style.top = cy - 8 + "px";
+      saColorLabelVal.innerText = `${Math.round((cx / 150) * 100)}, ${100 - Math.round((cy / 150) * 100)}`;
     }
 
     function updateHandleFinal(s, v) {
-      saColorPickerHandle.style.left = s*150 - 8 + 'px';
-      saColorPickerHandle.style.top = (1-v)*150 - 8 + 'px';
-      saColorLabelVal.innerText = `${Math.round(s*100)}, ${Math.round(v*100)}`;
+      saColorPickerHandle.style.left = s * 150 - 8 + "px";
+      saColorPickerHandle.style.top = (1 - v) * 150 - 8 + "px";
+      saColorLabelVal.innerText = `${Math.round(s * 100)}, ${Math.round(v * 100)}`;
     }
 
     function updateFinal(e, keyPressed, originalPos) {
       rateLimiter.limit(() => {
         let ox = Math.min(Math.max(e.clientX - saColorPicker.getBoundingClientRect().x, 0), 150);
         let oy = Math.min(Math.max(e.clientY - saColorPicker.getBoundingClientRect().y, 0), 150);
-        if(keyPressed == 16) {
-          if(Math.abs(ox - originalPos.x) > Math.abs(oy - originalPos.y)) oy = originalPos.y;
+        if (keyPressed == 16) {
+          if (Math.abs(ox - originalPos.x) > Math.abs(oy - originalPos.y)) oy = originalPos.y;
           else ox = originalPos.x;
         }
 
         let color = tinycolor(getColor(element)).toHsv();
         let s = ox / 150;
-        let v = 1 - (oy / 150);
-        let newColor = tinycolor({h: color.h, s: s, v: v}).toHex();
+        let v = 1 - oy / 150;
+        let newColor = tinycolor({ h: color.h, s: s, v: v }).toHex();
         setColor(newColor, element);
         updateHandleFinal(s, v);
       });
@@ -155,32 +162,30 @@ export default async ({ addon, console, msg }) => {
       window.onkeyup = null;
     }
 
-    if(defaultColor) {
+    if (defaultColor) {
       let defaultHexColor = tinycolor(defaultColor).toHsv();
       updateHandleFinal(defaultHexColor.s, defaultHexColor.v);
-    }
-    else updateHandleFinal(1, 1);
+    } else updateHandleFinal(1, 1);
 
-    saColorPicker.addEventListener("pointerdown", e => {
+    saColorPicker.addEventListener("pointerdown", (e) => {
       updateHandle(e);
       let originalPos = {
         x: parseFloat(saColorPickerHandle.style.left),
-        y: parseFloat(saColorPickerHandle.style.top)
-      }
+        y: parseFloat(saColorPickerHandle.style.top),
+      };
 
       let keyPressed = -1;
-      window.onkeydown = e => keyPressed = e.keyCode;
-      window.onkeyup = () => keyPressed = -1;
+      window.onkeydown = (e) => (keyPressed = e.keyCode);
+      window.onkeyup = () => (keyPressed = -1);
 
       window.onpointermove = (e) => {
         updateHandle(e, keyPressed, originalPos);
         return false;
-      }
+      };
 
       window.onpointerup = (e) => {
         updateFinal(e, keyPressed, originalPos);
-      }
-      
+      };
     });
     prevEventHandler = ({ detail }) => {
       if (detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
@@ -193,12 +198,13 @@ export default async ({ addon, console, msg }) => {
     saColorPicker.appendChild(saColorPickerImage);
     saColorPicker.appendChild(saColorPickerHandle);
     let e = element;
-    if(element.parentElement.querySelector('.sa-color-picker')) e = element.parentElement.querySelector('.sa-color-picker');
+    if (element.parentElement.querySelector(".sa-color-picker"))
+      e = element.parentElement.querySelector(".sa-color-picker");
     element.parentElement.insertBefore(saColorLabel, e);
     element.parentElement.insertBefore(saColorPicker, e);
 
     //hide sat and bright sliders
-    saColorPicker.parentElement.children[2].style.display = 'none';
-    saColorPicker.parentElement.children[3].style.display = 'none';
+    saColorPicker.parentElement.children[2].style.display = "none";
+    saColorPicker.parentElement.children[3].style.display = "none";
   }
 };

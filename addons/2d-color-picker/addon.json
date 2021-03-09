@@ -1,7 +1,7 @@
 {
   "name": "2D Color Picker",
   "description": "Replaces saturation and brightness sliders with a 2d color picker",
-  "tags": ["editor"],
+  "tags": ["editor", "beta"],
   "credits": [
     {
       "name": "Ucrash",
