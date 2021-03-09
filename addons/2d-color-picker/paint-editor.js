@@ -112,12 +112,14 @@ export default async ({ addon, console, msg }) => {
 
     // create the label
     const saColorLabel = document.createElement("div");
-    saColorLabel.className = addon.tab.scratchClass('color-picker_row-header', { others: 'sa-2dcolor-label' });
+    saColorLabel.className = addon.tab.scratchClass("color-picker_row-header", { others: "sa-2dcolor-label" });
     const saColorLabelName = document.createElement("span");
-    saColorLabelName.className = addon.tab.scratchClass('color-picker_label-name', { others: 'sa-2dcolor-label-name' });
-    saColorLabelName.innerText = "Shade";
+    saColorLabelName.className = addon.tab.scratchClass("color-picker_label-name", { others: "sa-2dcolor-label-name" });
+    saColorLabelName.innerText = msg("shade");
     const saColorLabelVal = document.createElement("span");
-    saColorLabelVal.className = addon.tab.scratchClass('color-picker_label-readout', { others: 'sa-2dcolor-label-val' });
+    saColorLabelVal.className = addon.tab.scratchClass("color-picker_label-readout", {
+      others: "sa-2dcolor-label-val",
+    });
     saColorLabel.appendChild(saColorLabelName);
     saColorLabel.appendChild(saColorLabelVal);
 
