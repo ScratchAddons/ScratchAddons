@@ -672,9 +672,8 @@ export default async function ({ addon, global, console, msg }) {
       const switches = blockSwitches[block.type];
       switches.forEach((opcodeData, i) => {
         const isNoop = opcodeData.opcode === "noop";
-        if (isNoop && !addon.settings.get("noop"))
-          return;
-        
+        if (isNoop && !addon.settings.get("noop")) return;
+
         items.push({
           enabled: true,
           text: msg(isNoop ? block.type : opcodeData.opcode),
