@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Changed entries on "Fixed" section into "Fix ..." sentence form (v1.4.0 - latest)
 - Verify changelog contents (v1.4.0 - latest)
 - Complete missing changelog (v1.4.0, v1.2.0)
+- Add new languages on localization (v1.4.1 - latest)
 
 -->
 
