@@ -1,6 +1,6 @@
 {
   "name": "2D color picker",
-  "description": "Replaces saturation and brightness sliders with a 2d color picker.",
+  "description": "Replaces saturation and brightness sliders with a 2d color picker. You can also hold Shift to only change the values on one axis.",
   "tags": ["editor", "beta"],
   "credits": [
     {
