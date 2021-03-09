@@ -14,11 +14,56 @@ automatically create a PR on the website to synchronize the changes!
 # TODO LIST:
 
 - Changed entries on "Fixed" section into "Fix ..." sentence form (v1.4.0 - latest)
-- Complete missing changelog (v1.4.0)
+- Complete missing changelog (v1.4.0, v1.2.0)
 - 
 -->
 
 <!-- sa-changelog-start -->
+
+## [v1.11.0] - 2021-03-08
+
+### Added
+
+#### Addons
+
+- Block pallette category icons (#1689)
+- Cloud games (#1497)
+- Higher character limit in "What I'm Working On" (#1674)
+- Profile statistics (#1614)
+- Variable manager (#1615)
+- Cloud games: Add loading indicator (#1667)
+- Forums image uploader: Add more strings to localize (#1688)
+
+#### Extension and Addon API
+
+### Changed
+
+#### Addons
+
+- Alt+GreenFlag 60FPS player mode: Change name from "60FPS player mode" for clarity (#1684)
+
+#### Extension and Addon API
+
+### Fixed
+
+#### Addons
+
+- Auto-show editor extensions: Video Sensing is being loaded by default, causing lag (#1738)
+- Block switching: Input type of variable blocks is not updating (#1731)
+- Cat blocks: Addon not localized due to falsy value on manifest (#1722)
+- Forums image uploader: Add more strings to translate (#1688)
+- Infinite scrolling: Addon does not run on pages without trailing slash (#1712)
+- Infinite scrolling: Addon makes links to project comment point to unintended part of page (#1712)
+- More links: URLs with percent signs not linking (#1698)
+- Profile page banner: Addon not localized due to falsy value on manifest (#1722)
+- Semicolon glitch: Addon not localized due to falsy value on manifest (#1722)
+- Website dark mode: Incompatibility with Infinite scrolling (#1725)
+
+#### Extension and Addon API
+
+- License page cannot be scrolled (#1666)
+- Incorrect styles are applied to addons that load too early (#1690)
+
 
 ## [v1.10.0] - 2021-02-22
 
@@ -507,6 +552,8 @@ NOTE: All updates from [v1.2.0] are pushed on this version.
 
 NOTE: v1.2.0 is only released on Firefox due to an issue with perfomance warnings not showing. All updates are included on [v1.2.1].
 
+***TODO***
+
 ## [v1.1.1] - 2020-10-11
 
 NOTE: All updates from [v1.1.0] are pushed on this version.
@@ -598,6 +645,7 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.11.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.0
 [v1.10.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.10.0
 [v1.9.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.3
 [v1.9.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.2
