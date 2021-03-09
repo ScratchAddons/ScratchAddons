@@ -1,0 +1,26 @@
+{
+  "name": "2D Color Picker",
+  "description": "Replaces saturation and brightness sliders with a 2d color picker",
+  "tags": ["editor"],
+  "credits": [
+    {
+      "name": "Ucrash",
+      "link": "https://github.com/gducrash"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "libraries": ["tinycolor2"],
+  "enabledByDefault": false,
+  "l10n": true
+}
