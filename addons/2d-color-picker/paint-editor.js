@@ -124,8 +124,18 @@ export default async ({ addon, console, msg }) => {
     saColorLabel.appendChild(saColorLabelVal);
 
     let keyPressed = -1;
+    let originalPos = { x: 0, y: 0 };
     window.addEventListener("keydown", (e) => (keyPressed = e.keyCode));
     window.addEventListener("keyup", () => (keyPressed = -1));
+
+    let mousemovefunc = function (e) {
+      updateHandle(e, keyPressed, originalPos);
+      return false;
+    };
+
+    let mouseupfunc = function (e) {
+      updateFinal(e, keyPressed, originalPos);
+    };
 
     function updateHandle(e, keyPressed, originalPos) {
       let cx = Math.min(Math.max(e.clientX - saColorPicker.getBoundingClientRect().x, 0), 150);
@@ -162,10 +172,8 @@ export default async ({ addon, console, msg }) => {
         updateHandleFinal(s, v);
       });
 
-      window.onpointermove = null;
-      window.onpointerup = null;
-      window.onkeydown = null;
-      window.onkeyup = null;
+      window.removeEventListener("pointermove", mousemovefunc);
+      window.removeEventListener("pointerup", mouseupfunc);
     }
 
     if (defaultColor) {
@@ -175,19 +183,13 @@ export default async ({ addon, console, msg }) => {
 
     saColorPicker.addEventListener("pointerdown", (e) => {
       updateHandle(e);
-      let originalPos = {
+      originalPos = {
         x: parseFloat(saColorPickerHandle.style.left),
         y: parseFloat(saColorPickerHandle.style.top),
       };
 
-      window.onpointermove = (e) => {
-        updateHandle(e, keyPressed, originalPos);
-        return false;
-      };
-
-      window.onpointerup = (e) => {
-        updateFinal(e, keyPressed, originalPos);
-      };
+      window.addEventListener("pointermove", mousemovefunc);
+      window.addEventListener("pointerup", mouseupfunc);
     });
     prevEventHandler = ({ detail }) => {
       if (detail.action.type === "scratch-paint/color-index/CHANGE_COLOR_INDEX") {
