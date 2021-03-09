@@ -62,7 +62,6 @@
   "my-ocular",
   "better-featured-project",
   "mediarecorder",
-  "2d-color-picker",
   "color-picker",
   "onion-skinning",
   "better-quoter",
@@ -79,5 +78,6 @@
   "variable-manager",
   "scratchstats",
   "folders",
-  "block-palette-icons"
+  "block-palette-icons",
+  "2d-color-picker"
 ]
