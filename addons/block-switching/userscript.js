@@ -669,7 +669,7 @@ export default async function ({ addon, global, console, msg }) {
 
   addon.tab.createBlockContextMenu(
     (items, block) => {
-      const switches = blockSwitches[block.type];
+      const switches = blockSwitches[block.type] || [];
       switches.forEach((opcodeData, i) => {
         const isNoop = opcodeData.opcode === "noop";
         if (isNoop && !addon.settings.get("noop")) return;
