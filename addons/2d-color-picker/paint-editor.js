@@ -123,6 +123,10 @@ export default async ({ addon, console, msg }) => {
     saColorLabel.appendChild(saColorLabelName);
     saColorLabel.appendChild(saColorLabelVal);
 
+    let keyPressed = -1;
+    window.addEventListener("keydown", (e) => (keyPressed = e.keyCode));
+    window.addEventListener("keyup", () => (keyPressed = -1));
+
     function updateHandle(e, keyPressed, originalPos) {
       let cx = Math.min(Math.max(e.clientX - saColorPicker.getBoundingClientRect().x, 0), 150);
       let cy = Math.min(Math.max(e.clientY - saColorPicker.getBoundingClientRect().y, 0), 150);
@@ -175,10 +179,6 @@ export default async ({ addon, console, msg }) => {
         x: parseFloat(saColorPickerHandle.style.left),
         y: parseFloat(saColorPickerHandle.style.top),
       };
-
-      let keyPressed = -1;
-      window.onkeydown = (e) => (keyPressed = e.keyCode);
-      window.onkeyup = () => (keyPressed = -1);
 
       window.onpointermove = (e) => {
         updateHandle(e, keyPressed, originalPos);
