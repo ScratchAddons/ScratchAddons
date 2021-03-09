@@ -1,0 +1,26 @@
+{
+    "name": "Custom Fonts",
+    "description": "Change the fonts on Scratch! Uses google's WebFont loader. Only fonts avaliable on google fonts (and from google) can be used. Find the font you like then paste the name into the box!",
+    "tags": ["theme"],
+    "credits": [
+        {
+            "name": "ErrorGamer2000",
+            "link": "https://github.com/ErrorGamer2000"
+        }
+    ],
+    "userscripts": [
+        {
+            "url": "userscript.js",
+            "matches": ["https://scratch.mit.edu/*"],
+            "runAtComplete": true
+        }
+    ],
+    "settings": [
+        {
+            "name": "Font Family",
+            "id": "fontFamily",
+            "type": "string",
+            "default": "Roboto"
+        }
+    ]
+}
