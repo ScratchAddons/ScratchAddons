@@ -6,19 +6,23 @@ All notable changes to this project will be documented in this file.
 
 <!-- 
 
-# NOTE:
+# Note:
 
-Updates on the changelog entry in between the start and stop tags will 
-automatically create a PR on the website to synchronize the changes!
+- Every changes related to the addon are required to be added, except meta changes such as README, CI, etc.
+- Use the compare feature to know the difference between each version. (eq. https://github.com/ScratchAddons/ScratchAddons/compare/v1.10.0...v1.11.0).
+- Verify the content of the PR/commit. Write it differently if needed.
+- Seperate each addon if changes are across multiple addon.
+- Use the name of the addon based on the latest commit on the version. (https://scratchaddons.com/addons)
+- If a version is yanked, keep the changes below the yanked version. DO NOT MERGE it to the next version.
+- Check the bottom of this file for resources.
 
-# TODO LIST:
+# TODO list:
 
 - Changed entries on "Fixed" section into "Fix ..." sentence form (v1.4.0 - latest)
+- Verify changelog contents (v1.4.0 - latest)
 - Complete missing changelog (v1.4.0, v1.2.0)
-- 
--->
 
-<!-- sa-changelog-start -->
+-->
 
 ## [v1.11.0] - 2021-03-08
 
@@ -34,8 +38,6 @@ automatically create a PR on the website to synchronize the changes!
 - Cloud games: Add loading indicator (#1667)
 - Forums image uploader: Add more strings to localize (#1688)
 
-#### Extension and Addon API
-
 ### Changed
 
 #### Addons
@@ -43,6 +45,8 @@ automatically create a PR on the website to synchronize the changes!
 - Alt+GreenFlag 60FPS player mode: Change name from "60FPS player mode" for clarity (#1684)
 
 #### Extension and Addon API
+
+- Use HTTPS link to the contributor page (#1688)
 
 ### Fixed
 
@@ -64,6 +68,12 @@ automatically create a PR on the website to synchronize the changes!
 - License page cannot be scrolled (#1666)
 - Incorrect styles are applied to addons that load too early (#1690)
 
+### Removed
+
+#### Extension and Addon API
+
+- Some dead code (#1688)
+- `Addon.fetch` code (#1688)
 
 ## [v1.10.0] - 2021-02-22
 
@@ -671,9 +681,9 @@ Initial release.
 [v1.1.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.1.0
 [v1.0.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.0.0
 
-<!-- sa-changelog-end -->
-
 <!--
+
+# Heading format
 
 Here's the simple format. Other types such as "Removed" can be added later.
 
@@ -694,10 +704,6 @@ Here's the simple format. Other types such as "Removed" can be added later.
 #### Addons
 
 #### Extension and Addon API
-
--->
-
-<!--
 
 # RegEx for @apple502j's changelog
 
