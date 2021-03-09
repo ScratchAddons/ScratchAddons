@@ -21,6 +21,18 @@
             "id": "fontFamily",
             "type": "string",
             "default": "Roboto"
+        },
+        {
+            "name": "Bold",
+            "id": "bold",
+            "type": "boolean",
+            "default": false
+        },
+        {
+            "name": "Italic",
+            "id": "italic",
+            "type": "boolean",
+            "default": false
         }
     ]
 }
