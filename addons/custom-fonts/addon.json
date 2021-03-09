@@ -1,6 +1,6 @@
 {
     "name": "Custom Fonts",
-    "description": "Change the fonts on Scratch! Uses google's WebFont loader. Only fonts avaliable on google fonts (and from google) can be used. Find the font you like then paste the name into the box!",
+    "description": "Customize the font. Pick any font from https://fonts.google.com/ and type it below.",
     "tags": ["theme", "beta"],
     "credits": [
         {
