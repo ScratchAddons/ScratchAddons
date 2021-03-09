@@ -669,21 +669,17 @@ export default async function ({ addon, global, console, msg }) {
 
   addon.tab.createBlockContextMenu(
     (items, block) => {
-      if (addon.settings.get("border")) {
-        addBorderToContextMenuItem = items.length;
-      }
-
       const switches = blockSwitches[block.type];
       switches.forEach((opcodeData, i) => {
         const isNoop = opcodeData.opcode === "noop";
-        if (isNoop && !addon.settings.get("noop")) {
+        if (isNoop && !addon.settings.get("noop"))
           return;
-        }
+        
         items.push({
           enabled: true,
           text: msg(isNoop ? block.type : opcodeData.opcode),
           callback: menuCallbackFactory(block, opcodeData),
-          separator: i == 0,
+          separator: addon.settings.get("border") && i == 0,
         });
       });
       return items;
