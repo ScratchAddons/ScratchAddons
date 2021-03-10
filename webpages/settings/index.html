@@ -12,7 +12,7 @@
     <script src="../../libraries/color-picker.js" type="module" defer></script>
     <template id="picker-component">
       <div v-el:btn class="color-container" :key="value">
-        <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting)">
+        <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting,true)">
           <color-picker
             class=""
             :value="value"
