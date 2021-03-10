@@ -851,3 +851,8 @@ button.setting-input.color {
     border-radius: 4px;
     background-color: white;
 }
+color-picker {
+            --color-picker-background-color: #222!important;
+          --color-picker-color: #fff!important;
+
+}

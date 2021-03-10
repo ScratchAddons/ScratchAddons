@@ -11,17 +11,7 @@ const ColorInput = Vue.extend({
     };
   },
   ready() {
-    /*Popper.createPopper(this.$els.btn, this.$els.pickr, {
-      placement: "bottom-start",
-      modifiers: [
-        {
-          name: "preventOverflow",
-          options: {
-            mainAxis: true, // true by default
-          },
-        },
-      ],
-    });*/
+    
   },
   methods: {
     toggle(addon, setting) {
@@ -29,7 +19,7 @@ const ColorInput = Vue.extend({
       this.$parent.addonSettings[addon._addonId][setting.id] = "#" + this.$els.pickr.hex8;
       this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
       this.color = "#" + this.$els.pickr.hex8;
-
+      
       console.log("Picked: " + this.$els.pickr.hex8);
     },
   },
