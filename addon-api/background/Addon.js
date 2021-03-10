@@ -16,7 +16,7 @@ import Badge from "./Badge.js";
 export default class BackgroundScriptAddon extends Addon {
   constructor(info) {
     super(info);
-    const { id, permissions } = info;
+    const { permissions } = info;
     this._timeouts = [];
     this._intervals = [];
     this.self.restart = () => this._restart();
@@ -28,6 +28,7 @@ export default class BackgroundScriptAddon extends Addon {
   _kill() {
     this.auth.dispose();
     this.settings.dispose();
+    this.self.dispose();
     if (this.notifications) this.notifications.dispose();
     this._timeouts.forEach((timeoutId) => clearTimeout(timeoutId));
     this._intervals.forEach((intervalId) => clearInterval(intervalId));

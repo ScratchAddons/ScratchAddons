@@ -2,9 +2,6 @@ import textFieldEdit from "./text-field-edit.js"; //used for editing the forum t
 export default async function ({ addon, global, console, msg, safeMsg }) {
   await addon.tab.loadScript(addon.self.lib + "/md5.min.js");
 
-  var projectUpload = false;
-  //console.log("use project thumbnails: " + projectUpload); //commented out because spammy in console
-
   var toolbar =
     document.querySelector("#markItUpId_body > div > div.markItUpHeader > ul") ||
     document.querySelector("#markItUpId_signature > div > div.markItUpHeader > ul");
@@ -35,7 +32,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   inputButtonContainer.appendChild(inputButton);
 
   //add it
-  if (toolbar && textBox) {
+  if (toolbar) {
     //make sure that i can type here and that there's a textbox
     document.querySelector(".markItUpButton5").insertAdjacentElement("afterend", inputButtonContainer);
     document.body.appendChild(uploadInput);
@@ -180,11 +177,11 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         );
         progresselement.remove();
       } else {
-        alert("error from scratch while uploading image");
+        alert(msg("upload-error"));
         progresselement.remove();
       }
     } catch (error) {
-      alert(error);
+      alert(msg("upload-error"));
       console.log(error);
       progresselement.remove();
     }
