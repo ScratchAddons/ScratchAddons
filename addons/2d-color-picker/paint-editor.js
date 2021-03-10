@@ -128,6 +128,9 @@ export default async ({ addon, console, msg }) => {
     window.addEventListener("keydown", (e) => (keyPressed = e.keyCode));
     window.addEventListener("keyup", () => (keyPressed = -1));
 
+    let origHue = 0;
+    let el = null;
+
     let mousemovefunc = function (e) {
       updateHandle(e, keyPressed, originalPos);
       return false;
@@ -147,6 +150,17 @@ export default async ({ addon, console, msg }) => {
       saColorPickerHandle.style.left = cx - 8 + "px";
       saColorPickerHandle.style.top = cy - 8 + "px";
       saColorLabelVal.innerText = `${Math.round((cx / 150) * 100)}, ${100 - Math.round((cy / 150) * 100)}`;
+
+      //update color in real-time (i only bothered to do that for solid colors)
+      if (
+        (!addon.tab.redux.state.scratchPaint.fillMode.gradientType ||
+          addon.tab.redux.state.scratchPaint.fillMode.gradientType == "SOLID") &&
+        el
+      ) {
+        let c = tinycolor({ h: origHue, s: cx / 150, v: 1 - cy / 150 }).toHex();
+        if (c.startsWith("#")) el.style.background = c;
+        else el.style.background = "#" + c;
+      }
     }
 
     function updateHandleFinal(s, v) {
@@ -182,11 +196,29 @@ export default async ({ addon, console, msg }) => {
     } else updateHandleFinal(1, 1);
 
     saColorPicker.addEventListener("pointerdown", (e) => {
-      updateHandle(e);
       originalPos = {
-        x: parseFloat(saColorPickerHandle.style.left),
-        y: parseFloat(saColorPickerHandle.style.top),
+        x: parseFloat(saColorPickerHandle.style.left) + 8,
+        y: parseFloat(saColorPickerHandle.style.top) + 8,
       };
+
+      let fillOrStroke;
+      const state = addon.tab.redux.state;
+      if (state.scratchPaint.modals.fillColor) {
+        fillOrStroke = "fill";
+      } else if (state.scratchPaint.modals.strokeColor) {
+        fillOrStroke = "stroke";
+      } else {
+        fillOrStroke = "wh";
+      }
+
+      el = null;
+      if (fillOrStroke == "fill")
+        el = document.getElementsByClassName(addon.tab.scratchClass("color-button_color-button-swatch"))[0];
+      else if (fillOrStroke == "stroke")
+        el = document.getElementsByClassName(addon.tab.scratchClass("color-button_color-button-swatch"))[1];
+      if (el) origHue = tinycolor(el.style.background).toHsv().h;
+
+      updateHandle(e);
 
       window.addEventListener("pointermove", mousemovefunc);
       window.addEventListener("pointerup", mouseupfunc);
