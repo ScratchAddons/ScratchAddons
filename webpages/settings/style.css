@@ -826,9 +826,9 @@ input[type="color"]::-webkit-color-swatch {
 color-picker {
   z-index: 2;
   filter: drop-shadow(black 2px 4px 6px);
-    position: absolute;
-    top: 30px;
-    left: 0;
+  position: absolute;
+  top: 30px;
+  left: 0;
 }
 
 button.setting-input.color {
