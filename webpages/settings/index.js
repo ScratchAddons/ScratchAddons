@@ -10,16 +10,14 @@ const ColorInput = Vue.extend({
       color: this.value,
     };
   },
-  ready() {
-    
-  },
+  ready() {},
   methods: {
     toggle(addon, setting) {
       this.isOpen = !this.isOpen;
       this.$parent.addonSettings[addon._addonId][setting.id] = "#" + this.$els.pickr.hex8;
       this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
       this.color = "#" + this.$els.pickr.hex8;
-      
+
       console.log("Picked: " + this.$els.pickr.hex8);
     },
   },

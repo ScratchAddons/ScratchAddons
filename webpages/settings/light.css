@@ -171,7 +171,6 @@ img :not(.navbar, .icon-type) {
   background-image: url(../../images/icons/settings-black.svg);
 }
 color-picker#picker {
-            --color-picker-background-color: #fff!important;
-          --color-picker-color: #222!important;
-
+  --color-picker-background-color: #fff !important;
+  --color-picker-color: #222 !important;
 }
