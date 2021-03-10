@@ -18,7 +18,7 @@ export default class DevTools {
     this.utils = new Utils(addon);
     this.domHelpers = new DomHelpers(addon);
     this.multi = new Multi(this.utils);
-    this.showBroadcastSingleton = new ShowBroadcast(addon)
+    this.showBroadcastSingleton = new ShowBroadcast(addon);
 
     this._helpHTML = helpHTML;
     this.find = null;
@@ -48,57 +48,61 @@ export default class DevTools {
           text: this.m("clean-plus"),
           callback: () => {
             this.doCleanUp();
+            },
+            separator: true,
           },
-          separator: true
-        }, {
-          enabled: true,
-          text: this.m("paste"),
-          callback: () => {
-            let wksp = this.utils.getWorkspace();
+          {
+            enabled: true,
+            text: this.m("paste"),
+            callback: () => {
+              let wksp = this.utils.getWorkspace();
 
-            let ids = this.getTopBlockIDs();
+              let ids = this.getTopBlockIDs();
 
-            document.dispatchEvent(
-              new KeyboardEvent("keydown", {
-                keyCode: 86,
-                ctrlKey: true,
-                griff: true,
-              })
-            );
+              document.dispatchEvent(
+                new KeyboardEvent("keydown", {
+                  keyCode: 86,
+                  ctrlKey: true,
+                  griff: true,
+                })
+              );
 
-            setTimeout(() => {
-              this.beginDragOfNewBlocksNotInIDs(ids);
-            }, 10);
+              setTimeout(() => {
+                this.beginDragOfNewBlocksNotInIDs(ids);
+              }, 10);
+            },
           }
-        });
+        );
         return items;
       },
       { workspace: true }
     );
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
-        items.push({
-          enabled: true,
-          text: this.m("copy-all"),
-          callback: () => {
-            this.eventCopyClick(block)
+        items.push(
+          {
+            enabled: true,
+            text: this.m("copy-all"),
+            callback: () => {
+              this.eventCopyClick(block);
+            },
+            separator: true,
           },
-          separator: true
-        },
-        {
-          enabled: true,
-          text: this.m("copy-block"),
-          callback: () => {
-            this.eventCopyClick(block, 1)
+          {
+            enabled: true,
+            text: this.m("copy-block"),
+            callback: () => {
+              this.eventCopyClick(block, 1);
+            },
+          },
+          {
+            enabled: true,
+            text: this.m("cut-block"),
+            callback: () => {
+              this.eventCopyClick(block, 2);
+            },
           }
-        },
-        {
-          enabled: true,
-          text: this.m("cut-block"),
-          callback: () => {
-            this.eventCopyClick(block, 2)
-          }
-        });
+        );
         const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
         if (BROADCAST_BLOCKS.includes(block.type)) {
           // Show Broadcast
@@ -111,7 +115,7 @@ export default class DevTools {
                 callback: () => {
                   this.showBroadcastSingleton[`show${showKey}`](broadcastId);
                 },
-                separator: i == 0
+                separator: i == 0,
               });
             });
           }
@@ -126,7 +130,7 @@ export default class DevTools {
           this.selVarID = block.getVars()[0];
           items.push({
             enabled: true,
-            text: this.m("swap", {var: block.getCategory() === "data" ? this.m("variables") : this.m("lists")}),
+            text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
             callback: () => {
               let wksp = this.utils.getWorkspace();
               let v = wksp.getVariableById(this.selVarID);
@@ -135,7 +139,7 @@ export default class DevTools {
                 this.doReplaceVariable(this.selVarID, varName, v.type);
               }
             },
-            separator: true
+            separator: true,
           });
         }
         return items;
