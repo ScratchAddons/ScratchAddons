@@ -11,7 +11,7 @@
     <script src="../../libraries/vue.js" defer></script>
     <script src="../../libraries/color-picker.js" type="module" defer></script>
     <template id="picker-component">
-      <div v-click-outside="isOpen = false" v-el:btn :key="value">
+      <div v-click-outside="isOpen = false" v-el:btn class="color-container" :key="value">
         <button
           :style="{'background-color': color }"
           class="setting-input color"
