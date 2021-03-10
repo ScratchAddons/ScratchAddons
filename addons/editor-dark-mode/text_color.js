@@ -5,15 +5,9 @@ function textColor(varName, hex, black, white, threshold) {
   threshold = threshold !== undefined ? threshold : 170;
   if (r * 0.299 + g * 0.587 + b * 0.114 > threshold) {
     // https://stackoverflow.com/a/3943023
-    document.documentElement.style.setProperty(
-      `--editorDarkMode-${varName}`,
-      black !== undefined ? black : "#575e75"
-    );
+    document.documentElement.style.setProperty(`--editorDarkMode-${varName}`, black !== undefined ? black : "#575e75");
   } else {
-    document.documentElement.style.setProperty(
-      `--editorDarkMode-${varName}`,
-      white !== undefined ? white : "#ffffff"
-    );
+    document.documentElement.style.setProperty(`--editorDarkMode-${varName}`, white !== undefined ? white : "#ffffff");
   }
 }
 
@@ -36,7 +30,7 @@ function testAll(settings) {
     "input",
     "categoryMenu",
     "categoryMenuSelection",
-    "palette"
+    "palette",
   ]) {
     textColor(`${setting}-text`, settings.get(setting));
   }
@@ -70,7 +64,7 @@ function testAll(settings) {
       transparentBlack: "rgba(0, 0, 0, 0.15)",
       transparentWhite: "rgba(255, 255, 255, 0.05)",
       gray: "#444444",
-      black: "#111111"
+      black: "#111111",
     }[settings.get("border")]
   );
 }

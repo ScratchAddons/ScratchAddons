@@ -1363,12 +1363,14 @@ export default class DevTools {
           contextMenu.insertAdjacentHTML(
             "beforeend",
             `
-                            <div class="${this.addon.tab.scratchClass("context-menu_menu-item", "context-menu_menu-item-bordered", {
-                              others: ["react-contextmenu-item", "s3devSTT"],
-                            })}" role="menuitem"
-                                tabindex="-1" aria-disabled="false"><span>${this.m(
-                                  "top"
-                                )}</span></div>
+                            <div class="${this.addon.tab.scratchClass(
+                              "context-menu_menu-item",
+                              "context-menu_menu-item-bordered",
+                              {
+                                others: ["react-contextmenu-item", "s3devSTT"],
+                              }
+                            )}" role="menuitem"
+                                tabindex="-1" aria-disabled="false"><span>${this.m("top")}</span></div>
                             <div class="${this.addon.tab.scratchClass("context-menu_menu-item", {
                               others: ["react-contextmenu-item", "s3devSTT"],
                             })}" role="menuitem"
