@@ -667,6 +667,7 @@ export default async function ({ addon, global, console, msg }) {
     }, 0);
   };
 
+  const Blockly = await addon.tab.traps.getBlockly();
   addon.tab.createBlockContextMenu(
     (items, block) => {
       const switches = blockSwitches[block.type] || [];
@@ -681,6 +682,10 @@ export default async function ({ addon, global, console, msg }) {
           separator: addon.settings.get("border") && i == 0,
         });
       });
+      if (block.type == "data_variable" && block.category_ == "data") {
+        const delBlockIndex = items.findIndex((item) => item.text === Blockly.Msg.DELETE_BLOCK);
+        items[delBlockIndex + 1].separator = addon.settings.get("border");
+      }
       return items;
     },
     { blocks: true }
