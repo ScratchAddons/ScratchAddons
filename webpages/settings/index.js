@@ -11,7 +11,7 @@ const ColorInput = Vue.extend({
     };
   },
   ready() {
-    Popper.createPopper(this.$els.btn, this.$els.pickr, {
+    /*Popper.createPopper(this.$els.btn, this.$els.pickr, {
       placement: "bottom-start",
       modifiers: [
         {
@@ -21,7 +21,7 @@ const ColorInput = Vue.extend({
           },
         },
       ],
-    });
+    });*/
   },
   methods: {
     toggle(addon, setting) {

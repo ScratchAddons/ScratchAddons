@@ -17,8 +17,7 @@
           :style="{'background-color': color }"
           class="setting-input color"
           @click="toggle(addon,setting)"
-        ></button>
-        <color-picker
+        >        <color-picker
           class=""
           :value="value"
           id="picker"
@@ -26,6 +25,7 @@
           v-click-outside="isOpen = false"
           v-el:pickr
         ></color-picker>
+</button>
       </div>
     </template>
     <script src="index.js" type="module"></script>

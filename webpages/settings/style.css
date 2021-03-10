@@ -63,6 +63,7 @@ h1 {
   padding: 10px 20px;
   scrollbar-width: thin;
   scrollbar-color: grey none;
+  height: 100vh;
 }
 
 .addon-body {
@@ -694,6 +695,9 @@ input[type="color"]::-webkit-color-swatch {
     width: auto;
     min-width: 10px;
   }
+  color-picker {
+    translate-x: transform(-50%);
+  }
 }
 .categories-shrink {
   text-align: right;
@@ -821,6 +825,10 @@ input[type="color"]::-webkit-color-swatch {
 }
 color-picker {
   z-index: 2;
+  filter: drop-shadow(black 2px 4px 6px);
+    position: absolute;
+    top: 30px;
+    left: 0;
 }
 
 button.setting-input.color {
