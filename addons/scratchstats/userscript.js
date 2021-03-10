@@ -123,6 +123,6 @@ export default async function ({ addon, msg, console }) {
           },
         },
       });
-    });
-  });
+    }).catch(() => stats.innerText = msg("err"));
+  }).catch(() => stats.innerText = msg("err"));
 }
