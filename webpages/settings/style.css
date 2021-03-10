@@ -837,21 +837,14 @@ button.setting-input.color {
   width: 75px;
 }
 .color-container {
-background: linear-gradient(
-45deg
-, #777 25%, transparent 25%), linear-gradient(
--45deg
-, #777 25%, transparent 25%), linear-gradient(
-45deg
-, transparent 75%, #777 75%), linear-gradient(
--45deg
-, transparent 75%, #777 75%);
-    background-size: 6px 6px;
-    background-position: 0 0, 0 3px, 3px -3px, -3px 0px;    border-radius: 4px;
-    background-color: white;
+  background: linear-gradient(45deg, #777 25%, transparent 25%), linear-gradient(-45deg, #777 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
+  background-size: 6px 6px;
+  background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
+  border-radius: 4px;
+  background-color: white;
 }
 color-picker {
-            --color-picker-background-color: #222!important;
-          --color-picker-color: #fff!important;
-
+  --color-picker-background-color: #222 !important;
+  --color-picker-color: #fff !important;
 }

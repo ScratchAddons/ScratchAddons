@@ -3,7 +3,6 @@ const NEW_ADDONS = ["copy-message-link", "pause"];
 Vue.directive("click-outside", {
   priority: 700,
   bind() {
-    
     let self = this;
     this.event = function (event) {
       console.log("emitting event");
@@ -32,19 +31,15 @@ const ColorInput = Vue.extend({
       color: this.value,
     };
   },
-  ready() {
-    
-  },
+  ready() {},
   methods: {
-    toggle(addon, setting,value = !this.isOpen) {
+    toggle(addon, setting, value = !this.isOpen) {
       this.isOpen = value;
       this.color = "#" + this.$els.pickr.hex8;
-      if (this.value !== this.color)  {
-      
-      this.$parent.addonSettings[addon._addonId][setting.id] = "#" + this.$els.pickr.hex8;
-      this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
+      if (this.value !== this.color) {
+        this.$parent.addonSettings[addon._addonId][setting.id] = "#" + this.$els.pickr.hex8;
+        this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
       }
-      
     },
   },
   watch: {
@@ -160,7 +155,6 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
   return resolveOnConfirmPromise;
 };
 
-
 const vue = (window.vue = new Vue({
   el: "body",
   data: {
@@ -259,10 +253,10 @@ const vue = (window.vue = new Vue({
   },
   methods: {
     closePickers() {
-      console.log('closing')
+      console.log("closing");
       for (let child of this.$children) {
-        child.toggle(child.addon, child.setting,false)
-        }
+        child.toggle(child.addon, child.setting, false);
+      }
     },
     closesidebar: function () {
       if (this.categoryOpen && this.smallMode) {
