@@ -1,7 +1,7 @@
 {
   "name": "Custom block size",
   "description": "Adjust the extra space applied around text on Scratch blocks.",
-  "tags": ["editor"],
+  "tags": ["editor", "beta"],
   "credits": [
     {
       "name": "SheepTester",
@@ -14,6 +14,13 @@
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
+  ],
+  "info": [
+  {
+    "type": "notice",
+    "text": "Setting the padding size to a smaller value may decrease usability.",
+    "id": "usabilityNotice"
+  }
   ],
   "settings": [
     {
