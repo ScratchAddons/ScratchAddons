@@ -12,19 +12,16 @@
     <script src="../../libraries/color-picker.js" type="module" defer></script>
     <template id="picker-component">
       <div v-click-outside="isOpen = false" v-el:btn class="color-container" :key="value">
-        <button
-          :style="{'background-color': color }"
-          class="setting-input color"
-          @click="toggle(addon,setting)"
-        >        <color-picker
-          class=""
-          :value="value"
-          id="picker"
-          v-show="isOpen"
-          v-click-outside="isOpen = false"
-          v-el:pickr
-        ></color-picker>
-</button>
+        <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting)">
+          <color-picker
+            class=""
+            :value="value"
+            id="picker"
+            v-show="isOpen"
+            v-click-outside="isOpen = false"
+            v-el:pickr
+          ></color-picker>
+        </button>
       </div>
     </template>
     <script src="index.js" type="module"></script>
