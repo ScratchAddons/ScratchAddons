@@ -61,9 +61,9 @@ function testAll(settings) {
   transparentVariant("primary-transparent20", settings.get("primary"), "0.2");
   transparentVariant("primary-transparent15", settings.get("primary"), "0.15");
   transparentVariant("primary-overlay", settings.get("primary"), "0.9");
+  transparentVariant("accent-opacity0", settings.get("accent"), "0");
   transparentVariant("input-transparent50", settings.get("input"), "0.5");
   transparentVariant("input-transparent25", settings.get("input"), "0.25");
-  transparentVariant("accent-opacity0", settings.get("accent"), "0");
   document.documentElement.style.setProperty(
     "--editorDarkMode-border-color",
     {

@@ -1,26 +1,41 @@
 /* Default CSS variable values */
 /* Assumes dark background colors until the userscript runs */
 :root {
-  --page-text: white;
-  --page-tabHoverFilter: grayscale(100%);
-  --primary-text: white;
-  --primary-filter: none;
-  --primary-filter2: brightness(0) invert(1);
-  --secondary-filter: none;
-  --menuBar-text: white;
-  --menuBar-transparentText: rgba(255, 255, 255, 0.25);
-  --menuBar-dimText: rgba(255, 255, 255, 0.75);
-  --menuBar-filter: none;
-  --menuBar-border: rgba(0, 0, 0, 0.15);
-  --tab-text: rgba(255, 255, 255, 0.75);
-  --selector-text: white;
-  --selector2-text: white;
-  --selectorSelection-text: white;
-  --accent-text: white;
-  --input-text: white;
-  --categoryMenu-text: white;
-  --categoryMenuSelection-text: white;
-  --palette-text: white;
+  --editorDarkMode-page-text: white;
+  --editorDarkMode-page-tabHoverFilter: grayscale(100%);
+  --editorDarkMode-primary-text: white;
+  --editorDarkMode-primary-filter: none;
+  --editorDarkMode-primary-filter2: brightness(0) invert(1);
+  --editorDarkMode-primary-transparent35: rgba(77, 151, 255, 0.35);
+  --editorDarkMode-primary-transparent25: rgba(77, 151, 255, 0.25);
+  --editorDarkMode-primary-transparent20: rgba(77, 151, 255, 0.2);
+  --editorDarkMode-primary-transparent15: rgba(77, 151, 255, 0.15);
+  --editorDarkMode-primary-overlay: rgba(77, 151, 255, 0.9);
+  --editorDarkMode-secondary-filter: none;
+  --editorDarkMode-menuBar-text: white;
+  --editorDarkMode-menuBar-transparentText: rgba(255, 255, 255, 0.25);
+  --editorDarkMode-menuBar-dimText: rgba(255, 255, 255, 0.75);
+  --editorDarkMode-menuBar-filter: none;
+  --editorDarkMode-menuBar-border: rgba(0, 0, 0, 0.15);
+  --editorDarkMode-tab-text: rgba(255, 255, 255, 0.75);
+  --editorDarkMode-selector-text: white;
+  --editorDarkMode-selector2-text: white;
+  --editorDarkMode-selector2-filter: brightness(0) invert(1);
+  --editorDarkMode-selectorSelection-text: white;
+  --editorDarkMode-accent-text: white;
+  --editorDarkMode-accent-filter: brightness(0) invert(1);
+  --editorDarkMode-accent-desaturateFilter: brightness(0) invert(1);
+  --editorDarkMode-input-text: white;
+  --editorDarkMode-input-transparentText: rgba(255, 255, 255, 0.4);
+  --editorDarkMode-input-filter: brightness(0) invert(1);
+  --editorDarkMode-input-codeZoomFilter: invert(1);
+  --editorDarkMode-input-transparent50: rgba(255, 255, 255, 0.5);
+  --editorDarkMode-input-transparent25: rgba(255, 255, 255, 0.25);
+  --editorDarkMode-workspace-dots: #444;
+  --editorDarkMode-categoryMenu-text: white;
+  --editorDarkMode-categoryMenuSelection-text: white;
+  --editorDarkMode-palette-text: white;
+  --editorDarkMode-accent-opacity0: rgba(255, 255, 255, 0);
 }
 
 /* Page background */
@@ -35,9 +50,12 @@
 }
 .s3devLabel > span:first-child,
 .backpack_status-message_3kt5s,
-.monitor_label_ci1ok,
-.monitor_list-index_7tKdl {
+.monitor_list-index_7tKdl
+{
   color: var(--editorDarkMode-page-text);
+}
+.monitor_label_ci1ok {
+  color: var(--editorDarkMode-page-text) !important;
 }
 .gui_tab_27Unf:not(.gui_is-selected_sHAiu):hover img {
   filter: var(--editorDarkMode-page-tabHoverFilter);
@@ -533,7 +551,4 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 }
 .blocklyWidgetDiv .goog-menuitem-highlight {
   border-color: transparent !important;
-}
-.monitor_label_ci1ok {
-  color: #fff !important;
 }
