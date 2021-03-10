@@ -11,7 +11,7 @@
     <script src="../../libraries/vue.js" defer></script>
     <script src="../../libraries/color-picker.js" type="module" defer></script>
     <template id="picker-component">
-      <div v-click-outside="isOpen = false" v-el:btn class="color-container" :key="value">
+      <div v-el:btn class="color-container" :key="value">
         <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting)">
           <color-picker
             class=""
@@ -143,7 +143,7 @@
           </div>
         </div>
 
-        <div class="addons-container">
+        <div class="addons-container" @click="closePickers">
           <div id="running-page" v-show="popupOpenedOnScratchTab && searchInput === ''">
             {{ msg("runningOnThisPage") }}
           </div>
@@ -292,7 +292,7 @@
                     :value="addonSettings[addon._addonId][setting.id] || setting.default"
                     :setting="setting"
                     :addon="addon"
-                    @picked="changeColor($event,addon,setting)"
+                    
                   ></picker>
 
                   <button
