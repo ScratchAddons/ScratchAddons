@@ -837,18 +837,17 @@ button.setting-input.color {
   width: 75px;
 }
 .color-container {
-  background-image: linear-gradient(
+background: linear-gradient(
 45deg
-, #808080 25%, transparent 25%), linear-gradient(
+, #777 25%, transparent 25%), linear-gradient(
 -45deg
-, #808080 25%, transparent 25%), linear-gradient(
+, #777 25%, transparent 25%), linear-gradient(
 45deg
-, transparent 75%, #808080 75%), linear-gradient(
+, transparent 75%, #777 75%), linear-gradient(
 -45deg
-, transparent 75%, #808080 75%);
-    background-size: 10px 10px;
-    background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-    border-radius: 4px;
+, transparent 75%, #777 75%);
+    background-size: 6px 6px;
+    background-position: 0 0, 0 3px, 3px -3px, -3px 0px;    border-radius: 4px;
     background-color: white;
 }
 color-picker {
