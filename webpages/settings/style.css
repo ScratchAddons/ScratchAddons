@@ -836,7 +836,9 @@ button.setting-input.color {
   position: relative;
   height: 32px;
   width: 75px;
+  border-radius: 4px 0px 0px 4px;
 }
+
 .color-container {
   background: linear-gradient(45deg, #777 25%, transparent 25%), linear-gradient(-45deg, #777 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
