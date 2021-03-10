@@ -14,10 +14,10 @@ export default async function ({ addon, global, console }) {
         e.preventDefault();
         muted = !muted;
         if (muted) {
-          vm.editingTarget.blocks.runtime.audioEngine.audioContext.suspend();
+          vm.runtime.audioEngine.inputNode.gain.value = 0;
           icon.style.display = "block";
         } else {
-          vm.editingTarget.blocks.runtime.audioEngine.audioContext.resume();
+          vm.runtime.audioEngine.inputNode.gain.value = 1;
           icon.style.display = "none";
         }
       }
