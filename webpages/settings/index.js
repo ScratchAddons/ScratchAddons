@@ -51,7 +51,11 @@ const ColorInput = Vue.extend({
   watch: {
     value() {
       this.color = this.value;
+      this.$els.pickr._valueChanged();
     },
+    isOpen() {
+      this.$els.pickr._valueChanged();
+    }
   },
 });
 Vue.component("picker", ColorInput);
