@@ -1,7 +1,7 @@
 {
-  "name": "Custom block size",
-  "description": "Adjust the extra space applied around text on Scratch blocks.",
-  "tags": ["editor", "beta"],
+  "name": "Custom block shape",
+  "description": "Adjust the padding and corner radius of Scratch blocks.",
+  "tags": ["editor", "theme", "beta"],
   "credits": [
     {
       "name": "SheepTester",
@@ -28,11 +28,20 @@
   ],
   "settings": [
     {
-      "name": "Padding size (%)",
+      "name": "Padding size (50-100%)",
       "id": "paddingSize",
       "type": "integer",
       "min": 50,
-      "default": 100
+      "default": 100,
+      "max": 100
+    },
+    {
+      "name": "Corner size (0-100%)",
+      "id": "cornerSize",
+      "type": "integer",
+      "min": 0,
+      "default": 100,
+      "max": 100
     }
   ],
   "l10n": true

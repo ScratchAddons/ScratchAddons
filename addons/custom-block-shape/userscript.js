@@ -20,6 +20,7 @@ export default async function ({ addon, global, console }) {
 
     function applyChanges () {
       multiplier = addon.settings.get("paddingSize") / 100
+      BlockSvg.SEP_SPACE_Y = 2 * GRID_UNIT * multiplier
       BlockSvg.MIN_BLOCK_X = 16 * GRID_UNIT * multiplier
       BlockSvg.MIN_BLOCK_X_OUTPUT = 12 * GRID_UNIT * multiplier
       BlockSvg.MIN_BLOCK_X_SHADOW_OUTPUT = 10 * GRID_UNIT * multiplier
@@ -31,25 +32,25 @@ export default async function ({ addon, global, console }) {
       BlockSvg.MIN_STATEMENT_INPUT_HEIGHT = 6 * GRID_UNIT * multiplier
       BlockSvg.NOTCH_WIDTH = 8 * GRID_UNIT * multiplier
       BlockSvg.NOTCH_HEIGHT = 2 * GRID_UNIT * multiplier
-      BlockSvg.NOTCH_START_PADDING = 3 * GRID_UNIT
-      BlockSvg.CORNER_RADIUS = 1 * GRID_UNIT //* multiplier
+      BlockSvg.NOTCH_START_PADDING = 3 * GRID_UNIT //* multiplier
+      BlockSvg.CORNER_RADIUS = 1 * GRID_UNIT * addon.settings.get("cornerSize") / 100
       BlockSvg.ICON_SEPARATOR_HEIGHT = 10 * GRID_UNIT * multiplier
       BlockSvg.NOTCH_PATH_LEFT = (
         'c 2,0 3,1 4,2 ' +
-        'l 4,4 ' +
-        'c 1,1 2,2 4,2 ' +
-        'h 12' +
+        'l ' + 4 * multiplier + ',' + 4 * multiplier +
+        ' c 1,1 2,2 4,2 ' +
+        'h ' + 24 * (multiplier - 0.5) +
         ' c 2,0 3,-1 4,-2 ' +
-        'l 4,-4 ' +
+        'l ' + 4 * multiplier + ',' + -4 * multiplier +
         'c 1,-1 2,-2 4,-2'
       )
       BlockSvg.NOTCH_PATH_RIGHT = (
         'c -2,0 -3,1 -4,2 ' +
-        'l -4,4 ' +
+        'l ' + -4 * multiplier + ',' + 4 * multiplier +
         'c -1,1 -2,2 -4,2 ' +
-        'h -12' +
+        'h ' + -24 * (multiplier - 0.5) +
         ' c -2,0 -3,-1 -4,-2 ' +
-        'l -4,-4 ' +
+        'l ' + -4 * multiplier + ',' + -4 * multiplier +
         'c -1,-1 -2,-2 -4,-2'
       )
       BlockSvg.INPUT_SHAPE_HEXAGONAL =
@@ -75,7 +76,7 @@ export default async function ({ addon, global, console }) {
       BlockSvg.INPUT_SHAPE_ROUND_WIDTH = 12 * GRID_UNIT * multiplier
       BlockSvg.INPUT_SHAPE_HEIGHT = 8 * GRID_UNIT * multiplier
       BlockSvg.FIELD_HEIGHT = 8 * GRID_UNIT * multiplier // NOTE: Determines string input heights
-      BlockSvg.FIELD_WIDTH = 6 * GRID_UNIT * multiplier
+      BlockSvg.FIELD_WIDTH = 0 * GRID_UNIT * multiplier
       BlockSvg.FIELD_DEFAULT_CORNER_RADIUS = 4 * GRID_UNIT * multiplier
       BlockSvg.EDITABLE_FIELD_PADDING = 1.5 * GRID_UNIT * multiplier
       BlockSvg.BOX_FIELD_PADDING = 2 * GRID_UNIT * multiplier
