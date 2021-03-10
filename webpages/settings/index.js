@@ -57,11 +57,12 @@ const ColorInput = Vue.extend({
 Vue.component("picker", ColorInput);
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
-chrome.permissions.getAll(({ permissions }) => {
-  let grantedOptionalPermissions = permissions.filter((p) => browserLevelPermissions.includes(p));
-});
 let grantedOptionalPermissions = [];
-const updateGrantedPermissions = () => updateGrantedPermissions();
+const updateGrantedPermissions = () =>
+  chrome.permissions.getAll(({ permissions }) => {
+    grantedOptionalPermissions = permissions.filter((p) => browserLevelPermissions.includes(p));
+  });
+updateGrantedPermissions();
 chrome.permissions.onAdded.addListener(updateGrantedPermissions);
 chrome.permissions.onRemoved.addListener(updateGrantedPermissions);
 
