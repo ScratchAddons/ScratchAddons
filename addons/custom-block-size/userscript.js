@@ -1,14 +1,3 @@
-// ==UserScript==
-// @name         Thinner Scratch blocks
-// @namespace    https://sheeptester.github.io/
-// @version      0.1
-// @description  Make the Scratch blocks thinner
-// @author       SheepTester
-// @match        *://*.github.io/scratch-gui/*
-// @include      *://scratch.mit.edu/projects/*
-// @grant        none
-// ==/UserScript==
-
 export default async function ({ addon, global, console }) {
   (function (Blockly) {
     'use strict'
@@ -17,7 +6,9 @@ export default async function ({ addon, global, console }) {
     const BlockSvg = Blockly.getMainWorkspace().newBlock().constructor
 
     var { GRID_UNIT } = BlockSvg
-    GRID_UNIT *= addon.settings.get("paddingSize") / 20
+
+    //The actual sizing is increased from the setting because this addon was originally intended for smaller blocks only
+    GRID_UNIT *= addon.settings.get("paddingSize") * 1.75 / 100
 
     function forceUpdateBlocks (workspace) {
       workspace.getAllBlocks()
