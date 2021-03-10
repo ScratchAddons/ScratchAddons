@@ -254,10 +254,14 @@ const vue = (window.vue = new Vue({
   },
   methods: {
     closePickers() {
-      console.log("closing");
+      /*
       for (let child of this.$children) {
+        console.log(child.isOpen)
+        if (child.isOpen) {
         child.toggle(child.addon, child.setting, false);
+        }
       }
+      */
     },
     closesidebar: function () {
       if (this.categoryOpen && this.smallMode) {
