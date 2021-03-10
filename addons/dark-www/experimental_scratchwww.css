@@ -1,4 +1,4 @@
-html > body:not(.sa-body-editor):not(.monitor_monitor-container_2J9gl),
+html > body:not(.sa-body-editor),
 body:not(.sa-body-editor) h1,
 body:not(.sa-body-editor) h2,
 body:not(.sa-body-editor) h3,
@@ -22,10 +22,6 @@ a.social-messages-profile-link,
 body:not(.sa-body-editor) .join-flow-title,
 .initiatives-section .initiatives-tools .subsection-tag.collaborator {
   color: #fff;
-}
-.monitor_label_ci1ok {
-  /* For some strange reason, variable names inherit their color from the body, unlike list title names */
-  color: #575e75;
 }
 #view,
 .outer #projectBox,
@@ -185,10 +181,6 @@ body:not(.sa-body-editor) .select select option,
 }
 .emoji[src$="waffle.png"] {
   content: url(%addon-self-dir%/assets/waffle.png);
-}
-
-[class^="loader_background"] {
-  background-color: #252525;
 }
 
 .project-info-alert {

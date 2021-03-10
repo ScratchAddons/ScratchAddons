@@ -1,0 +1,14 @@
+.scratchCommentRect {
+  fill: #322d01;
+}
+.scratchCommentBody,
+.scratchCommentTextarea {
+  background-color: #4c4401;
+}
+.scratchCommentTextarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.scratchCommentText {
+  fill: #fff;
+  color: #fff;
+}
