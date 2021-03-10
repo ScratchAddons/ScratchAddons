@@ -2281,7 +2281,7 @@ const parts = new WeakMap();
  *     container. Render options must *not* change between renders to the same
  *     container, as those changes will not effect previously rendered DOM.
  */
-const render = (result, container, options) => {
+const render$1 = (result, container, options) => {
     let part = parts.get(container);
     if (part === undefined) {
         removeNodes(container, container.firstChild);
@@ -2586,7 +2586,7 @@ const prepareTemplateStyles = (scopeName, renderedDOM, template) => {
  * non-shorthand names (for example `border` and `border-width`) is not
  * supported.
  */
-const render$1 = (result, container, options) => {
+const render = (result, container, options) => {
     if (!options || typeof options !== 'object' || !options.scopeName) {
         throw new Error('The `scopeName` option is required.');
     }
@@ -2600,7 +2600,7 @@ const render$1 = (result, container, options) => {
     // On first scope render, render into a fragment; this cannot be a single
     // fragment that is reused since nested renders can occur synchronously.
     const renderContainer = firstScopeRender ? document.createDocumentFragment() : container;
-    render(result, renderContainer, Object.assign({ templateFactory: shadyTemplateFactory(scopeName) }, options));
+    render$1(result, renderContainer, Object.assign({ templateFactory: shadyTemplateFactory(scopeName) }, options));
     // When performing first scope render,
     // (1) We've rendered into a fragment so that there's a chance to
     // `prepareTemplateStyles` before sub-elements hit the DOM
@@ -3009,7 +3009,7 @@ class HTMLInputElement extends Properties(HTMLElement) {
   render() {
     if(this.__elementFocused===true) return;
     window.requestAnimationFrame(() => {
-      render$1(this.template, this.shadowRoot, {eventContext: this, scopeName: this.localName});
+      render(this.template, this.shadowRoot, {eventContext: this, scopeName: this.localName});
     });
   }
 
@@ -3477,7 +3477,7 @@ class ColorPicker extends PropertiesChangedHandler(PropertiesChangedCallback(Pro
    */
   propertyChangedCallback(propNames, oldValues, newValues) {
     super.propertyChangedCallback(propNames, oldValues, newValues);
-    render$1(this.template, this.shadowRoot, {eventContext: this, scopeName: this.localName});
+    render(this.template, this.shadowRoot, {eventContext: this, scopeName: this.localName});
   }
 
   static get propertiesChangedHandlers() {
@@ -3648,6 +3648,7 @@ class ColorPicker extends PropertiesChangedHandler(PropertiesChangedCallback(Pro
 
         option {
           color: #222;
+          background: var(--color-picker-background-color);
         }
 
         input:hover, select:hover, input:focus, select:focus {

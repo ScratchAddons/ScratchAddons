@@ -286,13 +286,23 @@
                   />
 
                   <picker
-                    v-if="setting.type === 'color'"
+                    v-if="setting.type === 'color' && setting.allowTransparency"
                     :value="addonSettings[addon._addonId][setting.id] || setting.default"
                     :setting="setting"
                     :addon="addon"
                     @click=""
                     v-click-outside="closePickers"
                   ></picker>
+                  <input
+                    type="color"
+                    class="setting-input color"
+                    v-model="addonSettings[addon._addonId][setting.id]"
+                    @input="updateSettings(addon, {wait: 250, settingId: setting.id})"
+                    :disabled="!addon._enabled"
+                    v-if="setting.type === 'color' && !setting.allowTransparency"
+                    :placeholder="setting.default"
+                  />
+
 
                   <button
                     type="clear-button"

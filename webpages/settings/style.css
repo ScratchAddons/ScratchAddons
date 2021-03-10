@@ -835,7 +835,7 @@ color-picker {
 button.setting-input.color {
   position: relative;
   height: 32px;
-  width: 75px;
+  width: 100px;
   border-radius: 4px 0px 0px 4px;
 }
 
