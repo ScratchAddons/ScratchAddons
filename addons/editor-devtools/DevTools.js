@@ -43,11 +43,14 @@ export default class DevTools {
       (items, block) => {
         const oldCleanUpIndex = items.findIndex((item) => item.text === Blockly.Msg.CLEAN_UP);
         items.splice(oldCleanUpIndex, 1);
-        items.splice(oldCleanUpIndex, 0, {
-          enabled: true,
-          text: this.m("clean-plus"),
-          callback: () => {
-            this.doCleanUp();
+        items.splice(
+          oldCleanUpIndex,
+          0,
+          {
+            enabled: true,
+            text: this.m("clean-plus"),
+            callback: () => {
+              this.doCleanUp();
             },
             separator: true,
           },
