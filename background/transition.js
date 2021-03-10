@@ -8,10 +8,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     chrome.runtime.getManifest().version_name.includes("-prerelease") === false
   ) {
     chrome.tabs.create({ url: "https://scratchaddons.com/welcome" });
-  } else if (
-    details.previousVersion &&
-    /^1\.1[01]\.0/g.test(details.previousVersion)
-  ) {
+  } else if (details.previousVersion && /^1\.1[01]\.0/g.test(details.previousVersion)) {
     scratchAddons.localEvents.addEventListener("ready", () => {
       const loadExtension = scratchAddons.globalState.addonSettings["load-extensions"];
       if (!loadExtension || !loadExtension.videoSensing) return;
