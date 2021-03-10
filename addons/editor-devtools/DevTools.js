@@ -41,8 +41,9 @@ export default class DevTools {
     const Blockly = await this.addon.tab.traps.getBlockly();
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
-        items.splice(items.findIndex((item) => item.text === Blockly.Msg.CLEAN_UP), 1);
-        items.push({
+        const oldCleanUpIndex = items.findIndex((item) => item.text === Blockly.Msg.CLEAN_UP);
+        items.splice(oldCleanUpIndex, 1);
+        items.splice(oldCleanUpIndex, 0, {
           enabled: true,
           text: this.m("clean-plus"),
           callback: () => {
