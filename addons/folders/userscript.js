@@ -74,7 +74,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const isValidFolderName = (name) => {
-    return !name.includes(DIVIDER);
+    return !name.includes(DIVIDER) && !name.endsWith("/");
   };
 
   const RESERVED_NAMES = ["_mouse_", "_stage_", "_edge_", "_myself_", "_random_"];
