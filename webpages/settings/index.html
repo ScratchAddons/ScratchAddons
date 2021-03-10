@@ -143,7 +143,7 @@
           </div>
         </div>
 
-        <div class="addons-container" @click="closePickers">
+        <div class="addons-container" >
           <div id="running-page" v-show="addonsRunningOnTab && searchInput === ''">{{ msg("runningOnThisPage") }}</div>
           <div
             class="addon-body"
@@ -291,6 +291,7 @@
                     :setting="setting"
                     :addon="addon"
                     @click=""
+                    v-click-outside="closePickers"
                   ></picker>
 
                   <button

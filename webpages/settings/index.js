@@ -30,6 +30,7 @@ const ColorInput = Vue.extend({
     return {
       isOpen: false,
       color: this.value,
+      canCloseOutside: false,
     };
   },
   ready() {},
@@ -40,8 +41,15 @@ const ColorInput = Vue.extend({
       if (this.value !== this.color) {
         this.$parent.addonSettings[addon._addonId][setting.id] = "#" + this.$els.pickr.hex8;
         this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
+
       }
+                    this.canCloseOutside = false;
+      setTimeout(() => {
+        this.canCloseOutside = true;
+      }, 100);
+
     },
+    
   },
   watch: {
     value() {
@@ -252,17 +260,8 @@ const vue = (window.vue = new Vue({
       return chrome.runtime.getManifest().version_name;
     },
   },
+  
   methods: {
-    closePickers() {
-      /*
-      for (let child of this.$children) {
-        console.log(child.isOpen)
-        if (child.isOpen) {
-        child.toggle(child.addon, child.setting, false);
-        }
-      }
-      */
-    },
     closesidebar: function () {
       if (this.categoryOpen && this.smallMode) {
         vue.sidebarToggle();
@@ -585,7 +584,16 @@ const vue = (window.vue = new Vue({
         this.isOpen = false;
       }
     },
+    closePickers(e) {
+      for (let child of this.$children) {
+        if (child.isOpen && child.canCloseOutside && e.isTrusted) {
+        child.toggle(child.addon, child.setting, false);
+        }
+      }
+    },
+
   },
+  
   watch: {
     selectedTab() {
       this.selectedTag = null;
