@@ -106,7 +106,7 @@ export default async ({ addon, console, msg }) => {
       draggable: false,
     });
     const saColorPickerHandle = Object.assign(document.createElement("div"), {
-      className: "slider_handle_3f0xk",
+      className: addon.tab.scratchClass("slider_handle"),
     });
     saColorPickerHandle.style.pointerEvents = "none";
 
