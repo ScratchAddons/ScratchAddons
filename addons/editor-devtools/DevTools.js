@@ -643,11 +643,7 @@ export default class DevTools {
         continue;
       }
 
-      // blocks._blocks is not iterable, have to do it using an 'in'
-      for (const id in blocks._blocks) {
-        if (!blocks._blocks.hasOwnProperty(id)) {
-          continue;
-        }
+      for (const id of Object.keys(blocks._blocks)) {
         const block = blocks._blocks[id];
         // To find event broadcaster blocks, we look for the nested "event_broadcast_menu" blocks first that match the event name
         if (block.opcode === "event_broadcast_menu" && block.fields.BROADCAST_OPTION.value === name) {
@@ -991,6 +987,7 @@ export default class DevTools {
       if (sel.length === 0) {
         this.navigateFilter(1);
       }
+      // noinspection JSUnresolvedFunction
       document.activeElement.blur();
       e.preventDefault();
       return;
@@ -1002,6 +999,7 @@ export default class DevTools {
         this.findInp.value = ""; // Clear search first, then close on second press
         this.inputChange(e);
       } else {
+        // noinspection JSUnresolvedFunction
         document.activeElement.blur();
       }
       e.preventDefault();
@@ -1385,7 +1383,6 @@ export default class DevTools {
       if (blockSvg || isBackground) {
         let dataId = blockSvg && blockSvg.getAttribute("data-id");
         if (dataId || isBackground) {
-          let devTools = this;
           setTimeout(() => {
             // Is there a popup menu to hi-jack?
             let widget = document.querySelector("div.blocklyWidgetDiv");
@@ -1399,7 +1396,7 @@ export default class DevTools {
             if (isBackground) {
               let nodes = blocklyContextMenu.children;
               for (const node of nodes) {
-                if (node.textContent === "Clean up Blocks") {
+                if (node.textContent === this.m("clean-plus")) {
                   node.remove();
                 }
               }
@@ -1900,7 +1897,13 @@ export default class DevTools {
     if (picklist) {
       for (const item of picklist) {
         let code = item[1];
-        if (code === "DELETE_VARIABLE_ID" || code === "RENAME_VARIABLE_ID") {
+        if (
+          typeof code !== "string" || // Audio Record is a function!
+          code === "DELETE_VARIABLE_ID" ||
+          code === "RENAME_VARIABLE_ID" ||
+          code === "NEW_BROADCAST_MESSAGE_ID" ||
+          code === "NEW_BROADCAST_MESSAGE_ID"
+        ) {
           continue; // Skip these
         }
         options.push({
@@ -2036,8 +2039,12 @@ export default class DevTools {
     if (option.option) {
       // We need to tweak the dropdown in this xml...
       let field = option.dom.querySelector("field[name=" + option.pickField + "]");
-      field.innerText = option.option[0];
-      field.setAttribute("id", option.option[1] + "-" + option.option[0]);
+      if (field.getAttribute("id")) {
+        field.innerText = option.option[0];
+        field.setAttribute("id", option.option[1] + "-" + option.option[0]);
+      } else {
+        field.innerText = option.option[1]; // griffpatch - oops! option.option[1] not 0?
+      }
     }
 
     x.appendChild(option.dom);
@@ -2165,6 +2172,7 @@ export default class DevTools {
     this.costTabBody = document.querySelector("div[aria-labelledby=" + this.costTab.id + "]");
 
     if (!document.getElementById("s3devFind")) {
+      // noinspection JSUnresolvedVariable
       root.insertAdjacentHTML(
         "beforeend",
         `

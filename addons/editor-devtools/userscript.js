@@ -8,7 +8,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   }
 
   // 0-indexed 6 = July
-  const releaseDate = new Date(2021, 1, 8);
+  const releaseDate = new Date(2021, 1, 22);
   const releaseDateLocalized = new Intl.DateTimeFormat(msg.locale).format(releaseDate);
 
   const helpHTML = `
@@ -28,22 +28,17 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 </div>
 <div id="s3devHelpContent">
 <p>${m("version", {
-    version: "1.9.0",
+    version: "1.10.0",
     date: releaseDateLocalized,
     ndash: "&ndash;",
     url: '<a target="_blank" rel="noreferrer noopener" href="https://www.youtube.com/griffpatch">Griffpatch</a>',
   })}</p>
-<hr />
-<h2><strong>${m("changes024")}</strong></h2>
-<p><strong>${m("ctrl-space")}</strong> &ndash; ${m("ctrl-space-desc")}</p>
-<p><strong>${m("fixes")}</strong> &ndash; ${m("fixes-desc")}</p>
 <hr />
 <h2><strong>${m("code-tab-features")}</strong></h2>
 <p><strong>${m("interactive-find-bar")}</strong> - ${m("interactive-find-bar-desc")}</p>
 <p><strong>${m("improved-tidy-up")}</strong> &ndash; ${m("improved-tidy-up-desc")}</p>
 <p><strong>${m("copy-to-clipboard")}</strong> &ndash; ${m("copy-to-clipboard-desc")}</p>
 <p><strong>${m("paste-from-clipboard")}</strong> &ndash; ${m("paste-from-clipboard-desc")}</p>
-<p><strong>${m("show-broadcast")}</strong> &ndash; ${m("show-broadcast-desc")}</p>
 <p><strong>${m("swap-variable")}</strong> &ndash; ${m("swap-variable-desc")}</p>
 <p><strong>${m("middleclick")}</strong> &ndash; ${m("middleclick-desc")}</p>
 <p><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-desc")}</p>

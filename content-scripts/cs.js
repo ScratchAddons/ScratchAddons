@@ -61,18 +61,25 @@ window.addEventListener("load", () => {
   }
 });
 
-function injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate }) {
+// Store all themes that were enabled this session
+const sessionEnabledThemes = new Set();
+
+function injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate }) {
   document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
     if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
   });
-  for (const userstyleUrl of userstyleUrls || []) {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = userstyleUrl;
-    if (document.body) document.documentElement.insertBefore(link, document.body);
-    else document.documentElement.appendChild(link);
+  const userstyles = addonsWithUserstyles.map((addon) => addon.styles);
+  for (const addon of userstyles || []) {
+    for (const userstyle of addon) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = userstyle.url;
+      if (document.body) document.documentElement.insertBefore(link, document.body);
+      else document.documentElement.appendChild(link);
+    }
   }
   for (const theme of themes) {
+    sessionEnabledThemes.add(theme.addonId);
     for (const styleUrl of theme.styleUrls) {
       let css = theme.styles[styleUrl];
       // Replace %addon-self-dir% for relative URLs
@@ -104,9 +111,9 @@ function setCssVariables(addonSettings) {
   }
 }
 
-function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, userstyleUrls, themes }) {
+function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles, themes }) {
   setCssVariables(globalState.addonSettings);
-  injectUserstylesAndThemes({ userstyleUrls, themes, isUpdate: false });
+  injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
 
   const template = document.createElement("template");
   template.id = "scratch-addons";
@@ -131,15 +138,18 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, usersty
     } else if (typeof request.setMsgCount !== "undefined") {
       template.setAttribute("data-msgcount", request.setMsgCount);
     } else if (request === "getRunningAddons") {
-      // We need to send themes that might have been injected dynamically
-      sendResponse([
-        ...new Set([
-          ...addonsWithUserscripts.map((obj) => obj.addonId),
-          ...Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
-            style.getAttribute("data-addon-id")
-          ),
-        ]),
-      ]);
+      const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
+      const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
+      const activeThemes = Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
+        style.getAttribute("data-addon-id")
+      );
+      const inactiveThemes = [...sessionEnabledThemes].filter((addonId) => !activeThemes.includes(addonId));
+      sendResponse({
+        userscripts,
+        userstyles,
+        activeThemes,
+        inactiveThemes,
+      });
     }
   });
 
@@ -213,7 +223,7 @@ const showBanner = () => {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 600px;
+    width: 700px;
     max-height: 270px;
     display: flex;
     align-items: center;
@@ -229,8 +239,8 @@ const showBanner = () => {
   });
   const notifImage = Object.assign(document.createElement("img"), {
     alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/auto-hide-palette.gif"),
-    style: "height: 150px; border-radius: 5px",
+    src: chrome.runtime.getURL("/images/cs/folders.png"),
+    style: "height: 175px; border-radius: 5px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -282,7 +292,14 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2"),
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo2", DOLLARS)).replace(
+      "$1",
+      Object.assign(document.createElement("a"), {
+        href: "https://scratchaddons.com/translate",
+        target: "_blank",
+        textContent: chrome.i18n.getMessage("helpTranslateScratchAddons"),
+      }).outerHTML
+    ),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -335,7 +352,7 @@ const showBanner = () => {
 
 const handleBanner = async () => {
   const currentVersion = chrome.runtime.getManifest().version;
-  const [major, minor, patch] = currentVersion.split(".");
+  const [major, minor, _] = currentVersion.split(".");
   const currentVersionMajorMinor = `${major}.${minor}`;
   // Making this configurable in the future?
   // Using local because browser extensions may not be updated at the same time across browsers

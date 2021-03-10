@@ -1,3 +1,5 @@
+@import url("../../webpages/styles/components/tooltips.css");
+
 html {
   font-size: 12px;
   height: 100%;
@@ -125,7 +127,7 @@ button {
   max-width: 75%;
 }
 .float-right {
-  margin-left: 4px;
+  margin-left: 6px;
   white-space: nowrap;
   font-size: 12px;
 }
@@ -262,7 +264,7 @@ button {
 
 #bottom-bar {
   position: fixed;
-  z-index: 999;
+  z-index: 10000;
   bottom: 0;
   left: 0;
   right: 0;

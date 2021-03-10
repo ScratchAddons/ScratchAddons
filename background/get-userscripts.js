@@ -13,6 +13,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 function getL10NURLs() {
   const langCode = scratchAddons.globalState.auth.scratchLang.toLowerCase();
   const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
+  if (langCode === "pt") {
+    urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
+  }
   if (langCode.includes("-")) {
     urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
   }
@@ -27,7 +30,7 @@ async function getContentScriptInfo(url) {
     l10njson: getL10NURLs(),
     globalState: {},
     addonsWithUserscripts: [],
-    userstyleUrls: [],
+    addonsWithUserstyles: [],
     themes: [],
   };
   const fetchThemeStylesPromises = [];
@@ -64,10 +67,14 @@ async function getContentScriptInfo(url) {
         }
       }
     } else {
+      const userstyles = [];
       for (const style of manifest.userstyles || []) {
         if (userscriptMatches({ url }, style, addonId))
-          data.userstyleUrls.push(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
+          userstyles.push({
+            url: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`),
+          });
       }
+      if (userstyles.length) data.addonsWithUserstyles.push({ addonId, styles: userstyles });
     }
   }
 
@@ -108,7 +115,7 @@ chrome.webRequest.onBeforeRequest.addListener(
       chrome.runtime.onMessage.removeListener(info.messageListener);
     }
 
-    const data = await getContentScriptInfo(request.url, request.tabId);
+    const data = await getContentScriptInfo(request.url);
 
     const removeInterval = (mapKey, intervalId, listener) => {
       clearInterval(intervalId);

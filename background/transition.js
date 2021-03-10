@@ -1,6 +1,6 @@
 chrome.runtime.onInstalled.addListener(async (details) => {
   const currentVersion = chrome.runtime.getManifest().version;
-  const [major, minor, patch] = currentVersion.split(".");
+  const [major, minor, _] = currentVersion.split(".");
   if (details.previousVersion && details.previousVersion.startsWith("0")) {
     chrome.tabs.create({ url: "https://scratchaddons.com/scratch-messaging-transition" });
   } else if (
@@ -8,6 +8,15 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     chrome.runtime.getManifest().version_name.includes("-prerelease") === false
   ) {
     chrome.tabs.create({ url: "https://scratchaddons.com/welcome" });
+  } else if (details.previousVersion && /^1\.1[01]\.0/g.test(details.previousVersion)) {
+    scratchAddons.localEvents.addEventListener("ready", () => {
+      const loadExtension = scratchAddons.globalState.addonSettings["load-extensions"];
+      if (!loadExtension || !loadExtension.videoSensing) return;
+      loadExtension.videoSensing = false;
+      chrome.storage.sync.set({
+        addonSettings: scratchAddons.globalState.addonSettings,
+      });
+    });
   }
 
   if (details.reason === "install") {

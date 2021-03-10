@@ -24,10 +24,22 @@ const periods = [
 chrome.storage.local.get("muted", (obj) => {
   if (obj.muted) contextMenuMuted();
   else contextMenuUnmuted();
+  scratchAddons.muted = obj.muted;
 });
 
 chrome.contextMenus.removeAll();
 let currentMenuItem = null;
+
+chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
+  if (parentMenuItemId === "mute") {
+    const mins = Number(menuItemId.split("_")[1]);
+    contextMenuMuted();
+    muteForMins(mins);
+  } else if (menuItemId === "unmute") {
+    contextMenuUnmuted();
+    unmute();
+  }
+});
 
 function contextMenuUnmuted() {
   if (currentMenuItem === "unmute") chrome.contextMenus.remove("unmute");
@@ -39,13 +51,10 @@ function contextMenuUnmuted() {
   });
   for (const period of periods) {
     chrome.contextMenus.create({
+      id: `mute_${period.mins}`,
       title: period.name,
       parentId: "mute",
       contexts: ["browser_action"],
-      onclick: () => {
-        contextMenuMuted();
-        muteForMins(period.mins);
-      },
     });
   }
   chrome.browserAction.setIcon({
@@ -63,10 +72,6 @@ function contextMenuMuted() {
     id: "unmute",
     title: chrome.i18n.getMessage("unmute"),
     contexts: ["browser_action"],
-    onclick: () => {
-      contextMenuUnmuted();
-      unmute();
-    },
   });
   chrome.browserAction.setIcon({
     path: {

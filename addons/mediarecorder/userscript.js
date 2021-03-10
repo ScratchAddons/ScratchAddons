@@ -1,6 +1,15 @@
 import downloadBlob from "../../libraries/download-blob.js";
 
 export default async ({ addon, console, msg }) => {
+  let recordElem;
+  let isRecording = false;
+  let isWaitingForFlag = false;
+  let waitingForFlagFunc = null;
+  let abortController = null;
+  let stopSignFunc = null;
+  let recordBuffer = [];
+  let recorder;
+  let timeout;
   while (true) {
     const elem = await addon.tab.waitForElement('div[class*="menu-bar_file-group"] > div:last-child:not(.sa-record)', {
       markAsSeen: true,
@@ -67,6 +76,21 @@ export default async ({ addon, console, msg }) => {
       recordOptionAudio.appendChild(recordOptionAudioInput);
       recordOptionAudio.appendChild(recordOptionAudioLabel);
       recordOptionInner.appendChild(recordOptionAudio);
+
+      // Mic
+      const recordOptionMic = document.createElement("p");
+      const recordOptionMicInput = Object.assign(document.createElement("input"), {
+        type: "checkbox",
+        defaultChecked: false,
+        id: "recordOptionMicInput",
+      });
+      const recordOptionMicLabel = Object.assign(document.createElement("label"), {
+        htmlFor: "recordOptionMicInput",
+        textContent: msg("record-mic"),
+      });
+      recordOptionMic.appendChild(recordOptionMicInput);
+      recordOptionMic.appendChild(recordOptionMicLabel);
+      recordOptionInner.appendChild(recordOptionMic);
 
       // Green flag
       const recordOptionFlag = document.createElement("p");
@@ -147,6 +171,7 @@ export default async ({ addon, console, msg }) => {
           handleOptionClose({
             secs: Number(recordOptionSecondsInput.value),
             audioEnabled: recordOptionAudioInput.checked,
+            micEnabled: recordOptionMicInput.checked,
             waitUntilFlag: recordOptionFlagInput.checked,
             useStopSign: !recordOptionStopInput.disabled && recordOptionStopInput.checked,
           }),
@@ -161,19 +186,6 @@ export default async ({ addon, console, msg }) => {
 
       return optionPromise;
     };
-    const recordElem = Object.assign(document.createElement("div"), {
-      className: "sa-record " + elem.className,
-      textContent: msg("record"),
-      title: msg("added-by"),
-    });
-    let isRecording = false;
-    let isWaitingForFlag = false;
-    let waitingForFlagFunc = null;
-    let abortController = null;
-    let stopSignFunc = null;
-    let recordBuffer = [];
-    let recorder;
-    let timeout;
     const disposeRecorder = () => {
       isRecording = false;
       recordElem.textContent = msg("record");
@@ -217,6 +229,16 @@ export default async ({ addon, console, msg }) => {
       recordBuffer = [];
       isRecording = true;
       const vm = addon.tab.traps.vm;
+      let micStream;
+      if (opts.micEnabled) {
+        // Show permission dialog before green flag is clicked
+        try {
+          micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        } catch (e) {
+          if (e.name !== "NotAllowedError" && e.name !== "NotFoundError") throw e;
+          opts.micEnabled = false;
+        }
+      }
       if (opts.waitUntilFlag) {
         isWaitingForFlag = true;
         Object.assign(recordElem, {
@@ -242,13 +264,24 @@ export default async ({ addon, console, msg }) => {
       recordElem.textContent = msg("stop");
       isWaitingForFlag = false;
       waitingForFlagFunc = abortController = null;
-      const stream = vm.runtime.renderer.canvas.captureStream();
+      const stream = new MediaStream();
+      const videoStream = vm.runtime.renderer.canvas.captureStream();
+      stream.addTrack(videoStream.getVideoTracks()[0]);
+
+      const ctx = new AudioContext();
+      const dest = ctx.createMediaStreamDestination();
       if (opts.audioEnabled) {
         const mediaStreamDestination = vm.runtime.audioEngine.audioContext.createMediaStreamDestination();
         vm.runtime.audioEngine.inputNode.connect(mediaStreamDestination);
-        for (const track of mediaStreamDestination.stream.getAudioTracks()) {
-          stream.addTrack(track);
-        }
+        const audioSource = ctx.createMediaStreamSource(mediaStreamDestination.stream);
+        audioSource.connect(dest);
+      }
+      if (opts.micEnabled) {
+        const micSource = ctx.createMediaStreamSource(micStream);
+        micSource.connect(dest);
+      }
+      if (opts.audioEnabled || opts.micEnabled) {
+        stream.addTrack(dest.stream.getAudioTracks()[0]);
       }
       recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
       recorder.ondataavailable = (e) => {
@@ -265,18 +298,25 @@ export default async ({ addon, console, msg }) => {
       }
       recorder.start(1000);
     };
-    recordElem.addEventListener("click", async () => {
-      if (isRecording) {
-        stopRecording();
-      } else {
-        const opts = await getOptions();
-        if (!opts) {
-          console.log("Canceled");
-          return;
+    if (!recordElem) {
+      recordElem = Object.assign(document.createElement("div"), {
+        className: "sa-record " + elem.className,
+        textContent: msg("record"),
+        title: msg("added-by"),
+      });
+      recordElem.addEventListener("click", async () => {
+        if (isRecording) {
+          stopRecording();
+        } else {
+          const opts = await getOptions();
+          if (!opts) {
+            console.log("Canceled");
+            return;
+          }
+          startRecording(opts);
         }
-        startRecording(opts);
-      }
-    });
+      });
+    }
     elem.parentElement.appendChild(recordElem);
   }
 };

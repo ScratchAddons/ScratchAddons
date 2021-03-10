@@ -1,5 +1,6 @@
 export default async function ({ addon, global, console }) {
   if (!addon.tab.clientVersion) return;
+  if (document.location.pathname.startsWith("/conference")) return;
 
   const link = document.createElement("li");
   link.className = "link discuss";

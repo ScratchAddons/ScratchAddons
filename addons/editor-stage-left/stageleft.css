@@ -1,4 +1,7 @@
 /* sa-autoupdate-theme-ignore */
+/* Userscript handles whether this style should be enabled until dynamicEnable is a thing */
+/* If we didn't add autoupdate-ignore, loading the editor with the addon disabled, then
+   enabling it, would inject the CSS but of course not the JS */
 
 [class*="stage-header_stage-button-icon"] {
   transform: scaleX(-1);
@@ -26,4 +29,8 @@
 [dir="ltr"] [class*="backpack_backpack-header"] {
   border-top-right-radius: 0rem;
   border-top-left-radius: 0.5rem;
+}
+
+.Popover {
+  z-index: 40;
 }

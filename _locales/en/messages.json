@@ -195,25 +195,25 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-    "message": "$1: $2, which hides the block palette if not hovered or clicked. Go to $3 to enable it."
+    "message": "$1: $2 addon, which adds folders to sprite lists, as well as costume and sound lists. Go to $3 to enable it."
   },
   "newFeature": {
     "message": "New feature"
   },
   "hexColorPicker": {
-    "message": "auto-hide block palette"
+    "message": "\"sprite folders\""
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2": {
-    "message": "The \"record project video\" feature which previously only recorded video, can now record up to 5 minutes of project video and audio."
+    "message": "Other featured new addons of this update are \"variable manager\" (adds a tab next to the editor for easily updating variables and lists) and \"profile statistics\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
   "dataTweaksAlt": {
-    "message": "Video showcasing the \"auto-hide block palette\" feature."
+    "message": "Screenshot of the new \"copy link to comment\" feature."
   },
   "new": {
     "message": "New!"

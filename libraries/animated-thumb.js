@@ -1,7 +1,7 @@
 export default class ThumbSetter {
-    constructor (messages, projectId) {
+    constructor (messagesFn, projectId) {
         this._input = null;
-        this.messages = messages;
+        this.msg = messagesFn;
         this.projectId = projectId || location.pathname.replace(/\D/g,'');
     }
 
@@ -40,7 +40,7 @@ export default class ThumbSetter {
 
     async upload (file) {
         try {
-            await fetch(
+            const resp = await fetch(
                 `https://scratch.mit.edu/internalapi/project/thumbnail/${this.projectId}/set/`,
                 {
                     method: "POST",
@@ -51,11 +51,27 @@ export default class ThumbSetter {
                     }
                 }
             );
+            if (!resp.ok) {
+              const err = new Error(`Server responded with: ${resp.status}`);
+              err.status = resp.status;
+              throw err;
+            }
         } catch (e) {
-            console.error("Error while uploading a thumbnail:", e);
-            alert(this.messages.error);
-            throw e;
+            console.error("Error while uploading a thumbnail:", e.message);
+            switch (e.status) {
+              case 413:
+                alert(this.msg("thumb-error-413"));
+                break;
+              case 500:
+              case 503:
+                alert(this.msg("thumb-error-503"));
+                break;
+              default: 
+                alert(this.msg("thumb-error"));
+                throw e;
+            }
+            return;
         }
-        alert(this.messages.success);
+        alert(this.msg("thumb-success"));
     }
 }
