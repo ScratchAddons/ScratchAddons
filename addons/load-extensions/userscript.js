@@ -11,7 +11,9 @@ export default async function ({ addon, global, console }) {
         // - the "videoSensing" setting (in the settings page) was enabled
         // - they have not already added any video sensing blocks to the project.
         // The following code will just disable the video. It can reenable it at any time with blocks.
-        vm.runtime.ioDevices.video.disableVideo();
+        vm.runtime.on("PROJECT_LOADED", (e) => {
+          vm.runtime.ioDevices.video.disableVideo();
+        });
       }
     }
   }
