@@ -123,6 +123,6 @@ export default async function ({ addon, msg, console }) {
           },
         },
       });
-    }).catch(() => stats.innerText = msg("err"));
-  }).catch(() => stats.innerText = msg("err"));
+    }).catch(() => stats.appendChild(document.createTextNode(msg("err")))); // appended so basic stats are still there, it's just the chart that's gone
+  }).catch(() => stats.innerText = msg("err")); // innerText to remove loading message
 }
