@@ -1,7 +1,7 @@
 import Addon from "../../addon-api/content-script/Addon.js";
 
 export default async function runAddonUserscripts({ addonId, scripts, traps }) {
-  console.log("userscript",chrome)
+  console.log("userscript", chrome);
   const addonObj = new Addon({ id: addonId, traps });
   const globalObj = Object.create(null);
   for (const scriptInfo of scripts) {
