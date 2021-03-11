@@ -86,9 +86,9 @@ export default async function ({ addon, global, console }) {
         "," +
         -4 * GRID_UNIT * multiplier +
         " l " +
-        4 * GRID_UNIT * multiplier+
+        4 * GRID_UNIT * multiplier +
         "," +
-        -4 * GRID_UNIT * multiplier+
+        -4 * GRID_UNIT * multiplier +
         " z";
       BlockSvg.INPUT_SHAPE_HEXAGONAL_WIDTH = 12 * GRID_UNIT * multiplier;
       BlockSvg.INPUT_SHAPE_ROUND =
