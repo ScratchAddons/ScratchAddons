@@ -15,7 +15,7 @@ export default class Storage extends Listenable {
    * @returns {*} stored string.
    */
   get(storedID) {
-    return scratchAddons.globalState.addonStorage[this._addonId] ?. [storedID];
+    return scratchAddons.globalState.addonStorage[this._addonId]?.[storedID];
     // ?. reuturns null if the previous value is null, otherwise it will continue evaluating as if it wasn't there. if the next charecter is not a [, then it adds a dot.
     //like this: object?.key would be treated as object.key if object was not null. object?.["key"] would be object["key"] if object was not null.)
   }
@@ -28,7 +28,7 @@ export default class Storage extends Listenable {
   set(storedID, value) {
     chrome.runtime.sendMessage("npijjahcnpemcijdgoioaclneonckman", {
       addonStorageID: this._addonId + "/" + storedID,
-      addonStorageValue: value
+      addonStorageValue: value,
     });
   }
   /**

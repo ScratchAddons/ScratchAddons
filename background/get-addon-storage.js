@@ -1,17 +1,15 @@
 updateAddonStorage();
 
-chrome.runtime.onMessageExternal.addListener(
-  (request) => {
-    console.log(request)
-    if (request.addonStorageID !== null) {
-      chrome.storage.sync.set({
-        name: request.addonStorageID,
-        value: request.addonStorageValue,
-      });
-      updateAddonStorage();
-    }
+chrome.runtime.onMessageExternal.addListener((request) => {
+  console.log(request);
+  if (request.addonStorageID !== null) {
+    chrome.storage.sync.set({
+      name: request.addonStorageID,
+      value: request.addonStorageValue,
+    });
+    updateAddonStorage();
   }
-);
+});
 
 async function updateAddonStorage() {
   var storage = new Promise((resolve) => {
