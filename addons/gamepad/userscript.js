@@ -3,14 +3,14 @@ import GamepadLib from "./gamepadlib.js";
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  const buttonContainer = document.createElement('div');
+  const buttonContainer = document.createElement("div");
   buttonContainer.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
-  const buttonContent = document.createElement('div');
+  const buttonContent = document.createElement("div");
   buttonContent.className = addon.tab.scratchClass("button_content");
-  const buttonImage = document.createElement('img');
+  const buttonImage = document.createElement("img");
   buttonImage.className = addon.tab.scratchClass("stage-header_stage-button-icon");
   buttonImage.draggable = false;
-  buttonImage.src = addon.self.dir + '/gamepad.svg';
+  buttonImage.src = addon.self.dir + "/gamepad.svg";
   buttonContent.appendChild(buttonImage);
   buttonContainer.appendChild(buttonContent);
   buttonContainer.addEventListener("click", () => {
