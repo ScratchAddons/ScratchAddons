@@ -22,7 +22,7 @@ chrome.runtime.onMessageExternal.addListener((request) => {
     if (request.addonStorageID.indexOf("/") === 0) {
       delete scratchAddons.globalState.addonStorage[key[0]][key[1]];
       chrome.storage.sync.remove({
-        name: request.addonStorageID
+        name: request.addonStorageID,
       });
     }
     chrome.storage.sync.set({
@@ -33,7 +33,7 @@ chrome.runtime.onMessageExternal.addListener((request) => {
       scratchAddons.globalState.addonStorage[key[0]] ?? (scratchAddons.globalState.addonStorage[key[0]] = {});
       scratchAddons.globalState.addonStorage[key[0]][key[1]] = request.addonStorageValue;
     } else {
-      throw new Error("Scratch Addons exception: key must contain no /, excluding the stored ID and addon ID joiner")
+      throw new Error("Scratch Addons exception: key must contain no /, excluding the stored ID and addon ID joiner");
     }
   }
 });
