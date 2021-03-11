@@ -21,5 +21,5 @@ export default async function ({ msg }) {
     left.hide();
   });
 
-  status[0].maxLength = 255; // disallow more than 255 chars
+  status[0]?.maxLength = 255; // disallow more than 255 chars
 }
