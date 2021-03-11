@@ -33,7 +33,6 @@ export default async function ({ addon, global, console }) {
       BlockSvg.NOTCH_WIDTH = 8 * GRID_UNIT * multiplier
       BlockSvg.NOTCH_HEIGHT = 2 * GRID_UNIT * multiplier
       BlockSvg.NOTCH_START_PADDING = 3 * GRID_UNIT //* multiplier
-      BlockSvg.CORNER_RADIUS = 1 * GRID_UNIT * addon.settings.get("cornerSize") / 100
       BlockSvg.ICON_SEPARATOR_HEIGHT = 10 * GRID_UNIT * multiplier
       BlockSvg.NOTCH_PATH_LEFT = (
         'c 2,0 3,1 4,2 ' +
@@ -45,6 +44,7 @@ export default async function ({ addon, global, console }) {
         'c 1,-1 2,-2 4,-2'
       )
       BlockSvg.NOTCH_PATH_RIGHT = (
+        'h ' + -4 * ((addon.settings.get("cornerSize") / 100) - 1) +
         'c -2,0 -3,1 -4,2 ' +
         'l ' + -4 * multiplier + ',' + 4 * multiplier +
         'c -1,1 -2,2 -4,2 ' +
@@ -87,6 +87,44 @@ export default async function ({ addon, global, console }) {
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][0] = 5 * GRID_UNIT * multiplier
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][2] = 5 * GRID_UNIT * multiplier
       BlockSvg.SHAPE_IN_SHAPE_PADDING[1][3] = 5 * GRID_UNIT * multiplier
+
+      //Corner setting
+      BlockSvg.CORNER_RADIUS = 1 * GRID_UNIT * addon.settings.get("cornerSize") / 100
+
+      BlockSvg.TOP_LEFT_CORNER =
+      'A ' + BlockSvg.CORNER_RADIUS + ',' +
+      BlockSvg.CORNER_RADIUS + ' 0 0,1 ' +
+      BlockSvg.CORNER_RADIUS + ',0';
+
+      BlockSvg.TOP_RIGHT_CORNER =
+      'a ' + BlockSvg.CORNER_RADIUS + ',' +
+      BlockSvg.CORNER_RADIUS + ' 0 0,1 ' +
+      BlockSvg.CORNER_RADIUS + ',' +
+      BlockSvg.CORNER_RADIUS;
+
+      BlockSvg.BOTTOM_RIGHT_CORNER =
+      ' a ' + BlockSvg.CORNER_RADIUS + ',' +
+      BlockSvg.CORNER_RADIUS + ' 0 0,1 -' +
+      BlockSvg.CORNER_RADIUS + ',' +
+      BlockSvg.CORNER_RADIUS;
+
+      BlockSvg.BOTTOM_LEFT_CORNER =
+      'a ' + BlockSvg.CORNER_RADIUS + ',' +
+      BlockSvg.CORNER_RADIUS + ' 0 0,1 -' +
+      BlockSvg.CORNER_RADIUS + ',-' +
+      BlockSvg.CORNER_RADIUS;
+
+      BlockSvg.INNER_TOP_LEFT_CORNER =
+      ' a ' + BlockSvg.CORNER_RADIUS + ',' +
+      BlockSvg.CORNER_RADIUS + ' 0 0,0 -' +
+      BlockSvg.CORNER_RADIUS + ',' +
+      BlockSvg.CORNER_RADIUS;
+
+      BlockSvg.INNER_BOTTOM_LEFT_CORNER =
+      'a ' + BlockSvg.CORNER_RADIUS + ',' +
+      BlockSvg.CORNER_RADIUS + ' 0 0,0 ' +
+      BlockSvg.CORNER_RADIUS + ',' +
+      BlockSvg.CORNER_RADIUS;
     }
 
     function applyAndUpdate() {

@@ -36,12 +36,12 @@
       "max": 100
     },
     {
-      "name": "Corner size (0-100%)",
+      "name": "Corner size (0-300%)",
       "id": "cornerSize",
       "type": "integer",
       "min": 0,
       "default": 100,
-      "max": 100
+      "max": 300
     }
   ],
   "l10n": true
