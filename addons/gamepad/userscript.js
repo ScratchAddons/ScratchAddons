@@ -3,6 +3,50 @@ import GamepadLib from "./gamepadlib.js";
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
+  const buttonContainer = document.createElement('div');
+  buttonContainer.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
+  const buttonContent = document.createElement('div');
+  buttonContent.className = addon.tab.scratchClass("button_content");
+  const buttonImage = document.createElement('img');
+  buttonImage.className = addon.tab.scratchClass("stage-header_stage-button-icon");
+  buttonImage.draggable = false;
+  buttonImage.src = addon.self.dir + '/gamepad.svg';
+  buttonContent.appendChild(buttonImage);
+  buttonContainer.appendChild(buttonContent);
+  buttonContainer.addEventListener("click", () => {
+    const editor = gamepad.editor();
+    const editorEl = editor.generateEditor();
+
+    const close = () => {
+      modalOverlay.remove();
+      document.body.removeEventListener("click", handleClickOutside, true);
+    };
+    const handleClickOutside = (e) => {
+      if (!modalContentContainer.contains(e.target)) {
+        close();
+      }
+    };
+    document.body.addEventListener("click", handleClickOutside, true);
+
+    const modalOverlay = document.createElement("div");
+    modalOverlay.className = addon.tab.scratchClass("modal_modal-overlay");
+    const modalContentContainer = document.createElement("div");
+    modalContentContainer.className = addon.tab.scratchClass("modal_modal-content", { others: "sa-gamepad-popup" });
+    const modalHeaderContainer = document.createElement("div");
+    modalHeaderContainer.className = addon.tab.scratchClass("modal_header");
+    const modalHeaderText = document.createElement("div");
+    modalHeaderText.className = addon.tab.scratchClass("modal_header-item", "modal_header-item-title");
+    modalHeaderText.textContent = msg("settings");
+    const modalContent = document.createElement("div");
+    modalContent.className = "sa-gamepad-popup-content";
+    modalContent.appendChild(editorEl);
+    modalHeaderContainer.appendChild(modalHeaderText);
+    modalContentContainer.appendChild(modalHeaderContainer);
+    modalContentContainer.appendChild(modalContent);
+    modalOverlay.appendChild(modalContentContainer);
+    document.body.appendChild(modalOverlay);
+  });
+
   const virtualCursorContainer = document.createElement("div");
   virtualCursorContainer.hidden = true;
   const virtualCursorImageContainer = document.createElement("div");
@@ -93,5 +137,8 @@ export default async function ({ addon, global, console, msg }) {
       markAsSeen: true,
     });
     stage.appendChild(virtualCursorContainer);
+
+    const header = document.querySelector('[class*="stage-header_stage-size-row"]');
+    header.insertBefore(buttonContainer, header.firstChild);
   }
 }
