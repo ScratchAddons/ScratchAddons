@@ -20,11 +20,11 @@
     }
   ],
   "info": [
-  {
-    "type": "notice",
-    "text": "Setting the padding size to a smaller value may decrease usability.",
-    "id": "usabilityNotice"
-  }
+    {
+      "type": "notice",
+      "text": "Setting the padding size to a smaller value may decrease usability.",
+      "id": "usabilityNotice"
+    }
   ],
   "settings": [
     {
