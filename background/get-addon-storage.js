@@ -22,7 +22,7 @@ chrome.runtime.onMessageExternal.addListener((request) => {
       name: request.addonStorageID,
       value: request.addonStorageValue,
     });
-    var key = request.addonStorageID.split("/")
+    var key = request.addonStorageID.split("/");
     if (key.length == 2) {
       scratchAddons.globalState.addonStorage[key[0]] ?? (scratchAddons.globalState.addonStorage[key[0]] = {});
       scratchAddons.globalState.addonStorage[key[0]][key[1]] = request.addonStorageValue;
