@@ -1,0 +1,24 @@
+{
+  "name": "Controller Support",
+  "description": "TODO",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["beta"],
+  "enabledByDefault": false,
+  "l10n": true
+}

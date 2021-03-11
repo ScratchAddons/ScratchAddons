@@ -1,0 +1,16 @@
+.sa-gamepad-cursor-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  user-select: none;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.sa-gamepad-cursor-image {
+  display: block;
+  transform: translate(-50%, -50%);
+  image-rendering: optimizeSpeed;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}

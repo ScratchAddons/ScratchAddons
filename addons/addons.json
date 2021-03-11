@@ -70,6 +70,7 @@
   "initialise-sprite-position",
   "custom-zoom",
   "blocks2image",
+  "gamepad",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
