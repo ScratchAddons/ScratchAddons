@@ -8,7 +8,6 @@ export default class Storage extends Listenable {
   constructor(addonObject) {
     super();
     this._addonId = addonObject.self.id;
-    console.log("storage", chrome);
   }
   /**
    * Gets a stored string.
@@ -16,7 +15,7 @@ export default class Storage extends Listenable {
    * @returns {*} stored string.
    */
   get(storedID) {
-    return scratchAddons.globalState.addonStorage[this._addonId]?.[storedID];
+    return scratchAddons.globalState.addonStorage[this._addonId] ?. [storedID];
     // ?. reuturns null if the previous value is null, otherwise it will continue evaluating as if it wasn't there. if the next charecter is not a [, then it adds a dot.
     //like this: object?.key would be treated as object.key if object was not null. object?.["key"] would be object["key"] if object was not null.)
   }
@@ -27,9 +26,9 @@ export default class Storage extends Listenable {
    * @returns {null}.
    */
   set(storedID, value) {
-    chrome.storage.sync.set({
-      name: this._addonId + "/" + storedID,
-      value: value,
+    chrome.runtime.sendMessage("npijjahcnpemcijdgoioaclneonckman", {
+      addonStorageID: this._addonId + "/" + storedID,
+      addonStorageValue: value
     });
   }
   /**

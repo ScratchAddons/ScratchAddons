@@ -18,7 +18,6 @@ import Storage from "../common/Storage.js";
  */
 export default class Addon {
   constructor(info) {
-    console.log("addon", chrome);
     this.self = new Self(this, info);
     this.auth = new Auth(this);
     this.account = new Account();

@@ -1,7 +1,19 @@
-chrome.storage.onChanged.addListener(update);
-update();
+updateAddonStorage();
 
-async function update() {
+chrome.runtime.onMessageExternal.addListener(
+  (request) => {
+    console.log(request)
+    if (request.addonStorageID !== null) {
+      chrome.storage.sync.set({
+        name: request.addonStorageID,
+        value: request.addonStorageValue,
+      });
+      updateAddonStorage();
+    }
+  }
+);
+
+async function updateAddonStorage() {
   var storage = new Promise((resolve) => {
     chrome.storage.sync.get((result) => {
       resolve(result);
@@ -13,7 +25,8 @@ async function update() {
   for (let i = 0; i < Object.keys(storage).length; i++) {
     key = Object.keys(storage)[i].split("/");
     if (key.length == 2) {
-      addonStorage[key[0]] = addonStorage[key[0]] ?? {}; // ?? returns the preceeding value if it is not null and the following value if it is. so in this case if addonStorage[key[0]] is null, it will retun an empty object, otherwise the value of addonStorage[key[0]]
+      addonStorage[key[0]] = addonStorage[key[0]] ?? {};
+      // ?? returns the preceeding value if it is not null and the following value if it is. so in this case if addonStorage[key[0]] is null, it will retun an empty object, otherwise the value of addonStorage[key[0]]
       addonStorage[key[0]][key[1]] = Object.values(storage)[i];
     }
   }
