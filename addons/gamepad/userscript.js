@@ -131,9 +131,8 @@ export default async function ({ addon, global, console, msg }) {
   gamepad.addEventListener("mouseup", handleGamepadMouseUp);
   gamepad.addEventListener("mousemove", handleGamepadMouseMove);
 
-  const stageClass = addon.tab.scratchClass("stage_stage");
   while (true) {
-    const stage = await addon.tab.waitForElement(`.${stageClass}`, {
+    const stage = await addon.tab.waitForElement("[class^='stage_stage_']", {
       markAsSeen: true,
     });
     stage.appendChild(virtualCursorContainer);

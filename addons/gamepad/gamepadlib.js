@@ -543,6 +543,10 @@ class GamepadEditor {
   }
 
   onGamepadsChange() {
+    this.updateAllContent();
+  }
+
+  updateAllContent() {
     this.updateDropdown();
     this.updateContent();
   }
@@ -550,7 +554,13 @@ class GamepadEditor {
   updateDropdown() {
     removeAllChildren(this.selector);
 
-    for (const [id, gamepadData] of this.gamepadLib.gamepads.entries()) {
+    const gamepads = Array.from(this.gamepadLib.gamepads.entries());
+    if (gamepads.length === 0) {
+      this.selector.hidden = true;
+      return;
+    }
+    this.selector.hidden = false;
+    for (const [id, gamepadData] of gamepads) {
       const option = document.createElement("option");
       option.textContent = id;
       option.value = id;
@@ -623,15 +633,17 @@ class GamepadEditor {
     const selectedId = this.selector.value;
     if (!selectedId) {
       const message = document.createElement("div");
-      message.textContent = "No controllers.";
-      return message;
+      message.textContent = "No controllers detected. Try plugging one in and pressing a button on it.";
+      this.gamepadContainer.appendChild(message);
+      return;
     }
 
     const gamepadData = this.gamepadLib.gamepads.get(selectedId);
     if (!gamepadData) {
       const message = document.createElement("div");
-      message.textContent = `Cannot find controllers: ${selectedId}`;
-      return message;
+      message.textContent = `Cannot find controller: ${selectedId}`;
+      this.gamepadContainer.appendChild(message);
+      return;
     }
 
     const buttonMappings = gamepadData.buttonMappings;
@@ -664,9 +676,7 @@ class GamepadEditor {
   }
 
   generateEditor() {
-    this.updateDropdown();
-    this.updateContent();
-
+    this.updateAllContent();
     return this.root;
   }
 }
