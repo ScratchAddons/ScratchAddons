@@ -22,6 +22,7 @@ scratchAddons.l10n = new Localization(getL10NURLs());
 scratchAddons.eventTargets = {
   auth: [],
   settings: [],
+  storage: [],
   tab: [],
   self: [],
 };

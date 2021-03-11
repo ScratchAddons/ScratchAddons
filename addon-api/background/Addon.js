@@ -28,6 +28,7 @@ export default class BackgroundScriptAddon extends Addon {
   _kill() {
     this.auth.dispose();
     this.settings.dispose();
+    this.storage.dispose();
     this.self.dispose();
     if (this.notifications) this.notifications.dispose();
     this._timeouts.forEach((timeoutId) => clearTimeout(timeoutId));

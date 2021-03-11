@@ -2,6 +2,7 @@ import Auth from "./Auth.js";
 import Account from "./Account.js";
 import Self from "./Self.js";
 import Settings from "../common/Settings.js";
+import Storage from "../common/Storage.js";
 
 /**
  * An addon.
@@ -13,13 +14,16 @@ import Settings from "../common/Settings.js";
  * @property {Auth} auth
  * @property {Account} account
  * @property {Settings} settings
+ * @property {Storage} storage
  */
 export default class Addon {
   constructor(info) {
+    console.log("addon",chrome)
     this.self = new Self(this, info);
     this.auth = new Auth(this);
     this.account = new Account();
     this.settings = new Settings(this);
+    this.storage = new Storage(this);
   }
 
   /**
