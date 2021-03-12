@@ -1,4 +1,4 @@
-import ShowBroadcast from "./show-broadcast.js";
+// import ShowBroadcast from "./show-broadcast.js";
 import Utils from "./blockly/Utils.js";
 import DomHelpers from "./DomHelpers.js";
 import BlockInstance from "./BlockInstance.js";
@@ -18,7 +18,7 @@ export default class DevTools {
     this.utils = new Utils(addon);
     this.domHelpers = new DomHelpers(addon);
     this.multi = new Multi(this.utils);
-    this.showBroadcastSingleton = new ShowBroadcast(addon);
+    // this.showBroadcastSingleton = new ShowBroadcast(addon);
 
     this._helpHTML = helpHTML;
     this.find = null;
@@ -36,12 +36,12 @@ export default class DevTools {
     this.mouseXY = { x: 0, y: 0 };
   }
 
-  async init() {
+  init() {
     setTimeout(() => this.initInner(), 500);
     this.addContextMenus();
   }
 
-  addContextMenus() {
+  async addContextMenus() {
     const Blockly = await this.addon.tab.traps.getBlockly();
 this.addon.tab.createBlockContextMenu(
   (items, block) => {

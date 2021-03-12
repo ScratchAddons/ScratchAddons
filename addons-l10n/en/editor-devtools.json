@@ -32,8 +32,6 @@
   "editor-devtools/unused-var": "{count, plural, one {Griffpatch: I found 1 unused local variable. Shall I delete it for you? Here it is:\n} other {Griffpatch: I found # unused local variables. Shall I delete them for you? Here they are:\n} }",
   "editor-devtools/searching-in": "Searching in {name}",
   "editor-devtools/var-not-exist": "That variable does not exist...",
-  "editor-devtools/show-senders": "Show Senders",
-  "editor-devtools/show-receivers": "Show Receivers",
   "editor-devtools/find": "Find",
   "editor-devtools/find-placeholder": "Find (Ctrl+F)",
   "editor-devtools/deep": "Deep",
