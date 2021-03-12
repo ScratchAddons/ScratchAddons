@@ -38,117 +38,121 @@ export default class DevTools {
 
   async init() {
     setTimeout(() => this.initInner(), 500);
+    this.addContextMenus();
+  }
+
+  addContextMenus() {
     const Blockly = await this.addon.tab.traps.getBlockly();
-    this.addon.tab.createBlockContextMenu(
-      (items, block) => {
-        const oldCleanUpIndex = items.findIndex((item) => item.text === Blockly.Msg.CLEAN_UP);
-        items.splice(oldCleanUpIndex, 1);
-        items.splice(
-          oldCleanUpIndex,
-          0,
-          {
-            enabled: true,
-            text: this.m("clean-plus"),
-            callback: () => {
-              this.doCleanUp();
-            },
-            separator: true,
-          },
-          {
-            enabled: true,
-            text: this.m("paste"),
-            callback: () => {
-              let wksp = this.utils.getWorkspace();
-
-              let ids = this.getTopBlockIDs();
-
-              document.dispatchEvent(
-                new KeyboardEvent("keydown", {
-                  keyCode: 86,
-                  ctrlKey: true,
-                  griff: true,
-                })
-              );
-
-              setTimeout(() => {
-                this.beginDragOfNewBlocksNotInIDs(ids);
-              }, 10);
-            },
-          }
-        );
-        return items;
+this.addon.tab.createBlockContextMenu(
+  (items, block) => {
+    const oldCleanUpIndex = items.findIndex((item) => item.text === Blockly.Msg.CLEAN_UP);
+    items.splice(oldCleanUpIndex, 1);
+    items.splice(
+      oldCleanUpIndex,
+      0,
+      {
+        enabled: true,
+        text: this.m("clean-plus"),
+        callback: () => {
+          this.doCleanUp();
+        },
+        separator: true,
       },
-      { workspace: true }
+      {
+        enabled: true,
+        text: this.m("paste"),
+        callback: () => {
+          let wksp = this.utils.getWorkspace();
+
+          let ids = this.getTopBlockIDs();
+
+          document.dispatchEvent(
+            new KeyboardEvent("keydown", {
+              keyCode: 86,
+              ctrlKey: true,
+              griff: true,
+            })
+          );
+
+          setTimeout(() => {
+            this.beginDragOfNewBlocksNotInIDs(ids);
+          }, 10);
+        },
+      }
     );
-    this.addon.tab.createBlockContextMenu(
-      (items, block) => {
-        if (block.getCategory() === "data" || block.getCategory() === "data-lists") {
-          this.selVarID = block.getVars()[0];
-          items.push({
-            enabled: true,
-            text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
-            callback: () => {
-              let wksp = this.utils.getWorkspace();
-              let v = wksp.getVariableById(this.selVarID);
-              let varName = window.prompt(this.msg("replace", { name: v.name }));
-              if (varName) {
-                this.doReplaceVariable(this.selVarID, varName, v.type);
-              }
-            },
-            separator: false,
-          });
-        }
-        return items;
-      },
-      { blocks: true, flyout: true }
-    );
-    this.addon.tab.createBlockContextMenu(
-      (items, block) => {
-        items.push(
-          {
-            enabled: true,
-            text: this.m("copy-all"),
-            callback: () => {
-              this.eventCopyClick(block);
-            },
-            separator: true,
-          },
-          {
-            enabled: true,
-            text: this.m("copy-block"),
-            callback: () => {
-              this.eventCopyClick(block, 1);
-            },
-          },
-          {
-            enabled: true,
-            text: this.m("cut-block"),
-            callback: () => {
-              this.eventCopyClick(block, 2);
-            },
+    return items;
+  },
+  { workspace: true }
+);
+this.addon.tab.createBlockContextMenu(
+  (items, block) => {
+    if (block.getCategory() === "data" || block.getCategory() === "data-lists") {
+      this.selVarID = block.getVars()[0];
+      items.push({
+        enabled: true,
+        text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
+        callback: () => {
+          let wksp = this.utils.getWorkspace();
+          let v = wksp.getVariableById(this.selVarID);
+          let varName = window.prompt(this.msg("replace", { name: v.name }));
+          if (varName) {
+            this.doReplaceVariable(this.selVarID, varName, v.type);
           }
-        );
-        const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
-        if (BROADCAST_BLOCKS.includes(block.type)) {
-          // Show Broadcast
-          const broadcastId = this.showBroadcastSingleton.getAssociatedBroadcastId(block.id);
-          if (broadcastId) {
-            ["Senders", "Receivers"].forEach((showKey, i) => {
-              items.push({
-                enabled: true,
-                text: this.msg(`show-${showKey}`.toLowerCase()),
-                callback: () => {
-                  this.showBroadcastSingleton[`show${showKey}`](broadcastId);
-                },
-                separator: i == 0,
-              });
-            });
-          }
-        }
-        return items;
+        },
+        separator: false,
+      });
+    }
+    return items;
+  },
+  { blocks: true, flyout: true }
+);
+this.addon.tab.createBlockContextMenu(
+  (items, block) => {
+    items.push(
+      {
+        enabled: true,
+        text: this.m("copy-all"),
+        callback: () => {
+          this.eventCopyClick(block);
+        },
+        separator: true,
       },
-      { blocks: true }
+      {
+        enabled: true,
+        text: this.m("copy-block"),
+        callback: () => {
+          this.eventCopyClick(block, 1);
+        },
+      },
+      {
+        enabled: true,
+        text: this.m("cut-block"),
+        callback: () => {
+          this.eventCopyClick(block, 2);
+        },
+      }
     );
+    // const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
+    // if (BROADCAST_BLOCKS.includes(block.type)) {
+    //   // Show Broadcast
+    //   const broadcastId = this.showBroadcastSingleton.getAssociatedBroadcastId(block.id);
+    //   if (broadcastId) {
+    //     ["Senders", "Receivers"].forEach((showKey, i) => {
+    //       items.push({
+    //         enabled: true,
+    //         text: this.msg(`show-${showKey}`.toLowerCase()),
+    //         callback: () => {
+    //           this.showBroadcastSingleton[`show${showKey}`](broadcastId);
+    //         },
+    //         separator: i == 0,
+    //       });
+    //     });
+    //   }
+    // }
+    return items;
+  },
+  { blocks: true }
+);
   }
 
   isScriptEditor() {
