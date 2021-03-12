@@ -1,0 +1,9 @@
+@import url("../styles/colors.css");
+@import url("../styles/components/tooltips.css");
+@import url("../styles/components/badges.css");
+@import url("../styles/components/categories.css");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans&display=swap");
+
+body {
+  font-family: "DM Sans", sans-serif;
+}
