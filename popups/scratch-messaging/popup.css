@@ -2,16 +2,7 @@
 
 @import url("../../webpages/styles/components/popup.css");
 
-a {
-  cursor: pointer;
-  text-decoration: none;
-}
-a[href] {
-  color: #1aa0d8;
-}
-a:hover {
-  text-decoration: underline;
-}
+
 
 button {
   color: #fff;
