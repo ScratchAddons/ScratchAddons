@@ -35,7 +35,7 @@ class StateProxy {
     const oldValue = target[key];
     target[key] = value;
     messageForAllTabs({
-      newGlobalState: _globalState
+      newGlobalState: _globalState,
     });
 
     if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
@@ -66,8 +66,8 @@ function stateChange(parentObjectPath, key, value) {
     messageForAllTabs({
       fireEvent: {
         target: "auth",
-        name: "change"
-      }
+        name: "change",
+      },
     });
   } else if (objectPathArr[0] === "addonSettings") {
     // Send event to persistent script and userscripts, if they exist.

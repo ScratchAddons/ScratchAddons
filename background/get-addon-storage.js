@@ -17,14 +17,17 @@ scratchAddons.globalState.addonStorage.local = init(await storage);
 
 // get from cookies
 storage = new Promise((resolve) => {
-  chrome.cookies.getAll({
-    url: 'https://scratch.mit.edu'
-  }, (result) => {
-    resolve(result);
-  });
+  chrome.cookies.getAll(
+    {
+      url: "https://scratch.mit.edu",
+    },
+    (result) => {
+      resolve(result);
+    }
+  );
 });
 storage = await storage;
-scratchAddons.globalState.addonStorage.cookie = init(Object.fromEntries(storage.map(c => [c.name, c.value])));
+scratchAddons.globalState.addonStorage.cookie = init(Object.fromEntries(storage.map((c) => [c.name, c.value])));
 
 // Setting values
 chrome.runtime.onMessageExternal.addListener(async (request) => {
@@ -33,14 +36,18 @@ chrome.runtime.onMessageExternal.addListener(async (request) => {
     if (key.length == 2) {
       // the stuff that matters: set the value
       await new Promise((resolve) => {
-        chrome.storage[request.addonStorageMode].set({
-          name: request.addonStorageID,
-          value: request.addonStorageValue,
-        }, (result) => {
-          resolve(result);
-        }); // set it in chrome.storage
+        chrome.storage[request.addonStorageMode].set(
+          {
+            name: request.addonStorageID,
+            value: request.addonStorageValue,
+          },
+          (result) => {
+            resolve(result);
+          }
+        ); // set it in chrome.storage
       });
-      scratchAddons.globalState.addonStorage[request.addonStorageMode][key[0]] ?? (scratchAddons.globalState.addonStorage[request.addonStorageMode][key[0]] = {}); // just in case the addon has not had any other stored values before
+      scratchAddons.globalState.addonStorage[request.addonStorageMode][key[0]] ??
+        (scratchAddons.globalState.addonStorage[request.addonStorageMode][key[0]] = {}); // just in case the addon has not had any other stored values before
       scratchAddons.globalState.addonStorage[request.addonStorageMode][key[0]][key[1]] = request.addonStorageValue; // set in scratchAddons.globalStagte.addonStorage
     } else {
       throw new Error("Scratch Addons exception: key must contain no /, excluding the stored ID and addon ID joiner");
@@ -49,7 +56,6 @@ chrome.runtime.onMessageExternal.addListener(async (request) => {
     throw new Error("Scratch Addons exception: No key specified");
   }
 });
-
 
 function init(storage) {
   // turn storage from an object to an array of arrays
@@ -62,5 +68,5 @@ function init(storage) {
       addonStorage[key[0]][key[1]] = Object.values(storage)[i];
     }
   }
-  return addonStorage
+  return addonStorage;
 }
