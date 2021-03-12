@@ -1,4 +1,5 @@
 export default async function ({ addon, console }) {
-  addon.storage.set("idddd", "valueneww");
-  console.log(addon.storage.get("idddd"));
+  window.addon = addon;
+  await addon.storage.set("ddd", "valneww", "sync");
+  console.log(addon.storage.get("ddd", "sync"));
 }

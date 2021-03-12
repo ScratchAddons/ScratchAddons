@@ -12,7 +12,11 @@ const _globalState = {
     scratchLang: null,
   },
   addonSettings: {},
-  addonStorage: {},
+  addonStorage: {
+    sync: {},
+    local: {},
+    cookie: {},
+  },
 };
 
 class StateProxy {
@@ -30,7 +34,9 @@ class StateProxy {
   set(target, key, value) {
     const oldValue = target[key];
     target[key] = value;
-    messageForAllTabs({ newGlobalState: _globalState });
+    messageForAllTabs({
+      newGlobalState: _globalState
+    });
 
     if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
       stateChange(this.name, key, value);
@@ -57,7 +63,12 @@ function stateChange(parentObjectPath, key, value) {
   console.log(`%c${objectPath}`, "font-weight: bold;", "is now: ", objectPathArr[0] === "auth" ? "[redacted]" : value);
   if (objectPathArr[0] === "auth" && key !== "scratchLang") {
     scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
-    messageForAllTabs({ fireEvent: { target: "auth", name: "change" } });
+    messageForAllTabs({
+      fireEvent: {
+        target: "auth",
+        name: "change"
+      }
+    });
   } else if (objectPathArr[0] === "addonSettings") {
     // Send event to persistent script and userscripts, if they exist.
     const settingsEventTarget = scratchAddons.eventTargets.settings.find(
