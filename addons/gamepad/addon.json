@@ -16,6 +16,10 @@
     {
       "url": "style.css",
       "matches": ["https://scratch.mit.edu/projects/*"]
+    },
+    {
+      "url": "gamepadlib.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
   "tags": ["beta"],

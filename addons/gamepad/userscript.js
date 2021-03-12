@@ -3,6 +3,14 @@ import GamepadLib from "./gamepadlib.js";
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
+  // Wait for the project to finish loading
+  await new Promise((resolve, reject) => {
+    if (vm.editingTarget) return resolve();
+    vm.runtime.once("PROJECT_LOADED", resolve);
+  });
+
+  const renderer = vm.runtime.renderer;
+
   const buttonContainer = document.createElement("div");
   buttonContainer.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
   const buttonContent = document.createElement("div");
@@ -121,10 +129,10 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const gamepad = new GamepadLib();
-  gamepad.virtualCursor.maxX = 240;
-  gamepad.virtualCursor.minX = -240;
-  gamepad.virtualCursor.maxY = 180;
-  gamepad.virtualCursor.minY = -180;
+  gamepad.virtualCursor.maxX = renderer._xRight;
+  gamepad.virtualCursor.minX = renderer._xLeft;
+  gamepad.virtualCursor.maxY = renderer._yTop;
+  gamepad.virtualCursor.minY = renderer._yBottom;
   gamepad.addEventListener("keydown", handleGamepadButtonDown);
   gamepad.addEventListener("keyup", handleGamepadButtonUp);
   gamepad.addEventListener("mousedown", handleGamepadMouseDown);

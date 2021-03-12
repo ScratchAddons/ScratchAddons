@@ -1,3 +1,6 @@
+// Scratch-specific
+const console = _realConsole;
+
 const OFF = 0;
 const LOW = 1;
 const HIGH = 2;
@@ -419,15 +422,15 @@ class GamepadLib extends EventTarget {
 
   update(time) {
     if (this.currentTime === null) {
-      this.deltaTime = 60 / 1000;
+      this.deltaTime = 60 / 1000; // doesn't matter what this is, it's just the first frame
     } else {
       this.deltaTime = time - this.currentTime;
     }
     this.currentTime = time;
 
     this.animationFrame = requestAnimationFrame(this.update);
-    const gamepads = navigator.getGamepads();
 
+    const gamepads = navigator.getGamepads();
     for (const gamepad of gamepads) {
       if (gamepad === null) {
         continue;
@@ -448,6 +451,10 @@ class GamepadLib extends EventTarget {
         const mapping = data.axesMappings[i];
         this.updateButton(axis, mapping);
       }
+    }
+
+    if (this._editor) {
+      this._editor.update(gamepads);
     }
 
     if (this.virtualCursor.modified) {
@@ -488,12 +495,18 @@ class GamepadEditor {
     /** @type {GamepadLib} */
     this.gamepadLib = gamepadLib;
 
-    this.root = document.createElement("div");
-    this.selector = document.createElement("select");
-    this.gamepadContainer = document.createElement("div");
+    this.root = Object.assign(document.createElement("div"), {
+      className: 'gamepadlib-root'
+    });
+    this.selector = Object.assign(document.createElement("select"), {
+      className: 'gamepadlib-selector'
+    });
+    this.content = Object.assign(document.createElement("div"), {
+      className: 'gamepadlib-content'
+    });
 
     this.root.appendChild(this.selector);
-    this.root.appendChild(this.gamepadContainer);
+    this.root.appendChild(this.content);
 
     this.onSelectorChange = this.onSelectorChange.bind(this);
     this.onGamepadsChange = this.onGamepadsChange.bind(this);
@@ -501,6 +514,9 @@ class GamepadEditor {
     this.selector.onchange = this.onSelectorChange;
     this.gamepadLib.addEventListener("gamepadconnected", this.onGamepadsChange);
     this.gamepadLib.addEventListener("gamepaddisconnected", this.onGamepadsChange);
+
+    this.buttonIdToElement = new Map();
+    this.axisIdToElement = new Map();
 
     this.keys = [
       "none",
@@ -536,6 +552,8 @@ class GamepadEditor {
       "Y",
       "Z",
     ];
+
+    this.msg = (id, opts) => v;
   }
 
   onSelectorChange() {
@@ -576,14 +594,16 @@ class GamepadEditor {
   }
 
   createKeySelector() {
-    const select = document.createElement("select");
-    for (const key of this.keys) {
-      const option = document.createElement("option");
-      option.textContent = key;
-      option.value = key;
-      select.appendChild(option);
-    }
-    return select;
+    const el = document.createElement("input");
+    return el;
+    // const select = document.createElement("select");
+    // for (const key of this.keys) {
+    //   const option = document.createElement("option");
+    //   option.textContent = key;
+    //   option.value = key;
+    //   select.appendChild(option);
+    // }
+    // return select;
   }
 
   createOptionForMapping(buttonType, mappingList, index) {
@@ -609,12 +629,12 @@ class GamepadEditor {
     container.appendChild(typeSelector);
 
     if (mappingType === "key") {
-      const highSelector = this.createKeySelector();
+      const highSelector = this.createKeySelector(mapping.high);
       highSelector.value = mapping.high;
       container.appendChild(highSelector);
 
       if (buttonType === AXIS) {
-        const lowSelector = this.createKeySelector();
+        const lowSelector = this.createKeySelector(mapping.low);
         lowSelector.value = mapping.low;
         container.appendChild(lowSelector);
       }
@@ -628,13 +648,13 @@ class GamepadEditor {
   }
 
   updateContent() {
-    removeAllChildren(this.gamepadContainer);
+    removeAllChildren(this.content);
 
     const selectedId = this.selector.value;
     if (!selectedId) {
       const message = document.createElement("div");
       message.textContent = "No controllers detected. Try plugging one in and pressing a button on it.";
-      this.gamepadContainer.appendChild(message);
+      this.content.appendChild(message);
       return;
     }
 
@@ -642,10 +662,20 @@ class GamepadEditor {
     if (!gamepadData) {
       const message = document.createElement("div");
       message.textContent = `Cannot find controller: ${selectedId}`;
-      this.gamepadContainer.appendChild(message);
+      this.content.appendChild(message);
       return;
     }
 
+    this.buttonIdToElement.clear();
+    this.axisIdToElement.clear();
+
+    const buttonMappingsContainer = Object.assign(document.createElement("div"), {
+      className: 'gamepadlib-section'
+    });
+    buttonMappingsContainer.appendChild(Object.assign(document.createElement("div"), {
+      textContent: 'Buttons',
+      className: 'gamepadlib-section-title'
+    }));
     const buttonMappings = gamepadData.buttonMappings;
     for (let i = 0; i < buttonMappings.length; i++) {
       const container = document.createElement("div");
@@ -657,9 +687,16 @@ class GamepadEditor {
 
       container.appendChild(label);
       container.appendChild(options);
-      this.gamepadContainer.appendChild(container);
+      buttonMappingsContainer.appendChild(container);
+      this.buttonIdToElement.set(i, container);
     }
 
+    const axesMappingsContainer = Object.assign(document.createElement("div"), {
+      className: 'gamepadlib-section'
+    });
+    axesMappingsContainer.appendChild(Object.assign(document.createElement("div"), {
+      textContent: 'Axes'
+    }));
     const axesMappings = gamepadData.axesMappings;
     for (let i = 0; i < axesMappings.length; i++) {
       const container = document.createElement("div");
@@ -671,7 +708,32 @@ class GamepadEditor {
 
       container.appendChild(label);
       container.appendChild(options);
-      this.gamepadContainer.appendChild(container);
+      axesMappingsContainer.appendChild(container);
+      this.axisIdToElement.set(i, container);
+    }
+
+    this.content.appendChild(buttonMappingsContainer);
+    this.content.appendChild(axesMappingsContainer);
+  }
+
+  update(gamepads) {
+    const selectedId = this.selector.value;
+    if (!selectedId) {
+      return;
+    }
+    const gamepad = gamepads[this.selector.selectedIndex];
+    if (!gamepad) {
+      return;
+    }
+    for (let i = 0; i < gamepad.buttons.length; i++) {
+      const element = this.buttonIdToElement.get(i);
+      if (element) {
+        const button = gamepad.buttons[i];
+        const value = button.value;
+        if (value !== element.dataset.value) {
+          element.dataset.value = value;
+        }
+      }
     }
   }
 

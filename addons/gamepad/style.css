@@ -2,14 +2,16 @@
   box-sizing: border-box;
   width: 700px;
   max-height: min(800px, 80vh);
+  height: 100%;
   max-width: 85%;
-  overflow-y: auto;
   margin-left: auto;
   margin-right: auto;
 }
 .sa-gamepad-popup-content {
   background-color: white;
   padding: 1.5rem 2.25rem;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .sa-gamepad-cursor-container {
