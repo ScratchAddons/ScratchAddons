@@ -7,6 +7,7 @@ export default async function ({ addon, global, console }) {
 
     const { GRID_UNIT } = BlockSvg;
     var multiplier = 1;
+    var notchSize = 1;
 
     function forceUpdateBlocks(workspace) {
       workspace.getAllBlocks().forEach((b) => b.render());
@@ -19,6 +20,7 @@ export default async function ({ addon, global, console }) {
 
     function applyChanges() {
       multiplier = addon.settings.get("paddingSize") / 100;
+      notchSize = addon.settings.get("notchSize") / 100;
       BlockSvg.SEP_SPACE_Y = 2 * GRID_UNIT * multiplier;
       BlockSvg.MIN_BLOCK_X = 16 * GRID_UNIT * multiplier;
       BlockSvg.MIN_BLOCK_X_OUTPUT = 12 * GRID_UNIT * multiplier;
@@ -30,41 +32,41 @@ export default async function ({ addon, global, console }) {
       BlockSvg.MIN_BLOCK_Y_REPORTER = 10 * GRID_UNIT * multiplier;
       BlockSvg.MIN_STATEMENT_INPUT_HEIGHT = 6 * GRID_UNIT * multiplier;
       BlockSvg.NOTCH_WIDTH = 8 * GRID_UNIT * multiplier;
-      BlockSvg.NOTCH_HEIGHT = 2 * GRID_UNIT * multiplier;
+      BlockSvg.NOTCH_HEIGHT = 2 * GRID_UNIT * multiplier * notchSize;
       BlockSvg.NOTCH_START_PADDING = 3 * GRID_UNIT; //* multiplier
       BlockSvg.ICON_SEPARATOR_HEIGHT = 10 * GRID_UNIT * multiplier;
       BlockSvg.NOTCH_PATH_LEFT =
-        "c 2,0 3,1 4,2 " +
-        "l " +
-        4 * multiplier +
+        "c 2,0 3," + 1 * notchSize + " 4," + 2 * notchSize +
+        " l " +
+        4 * multiplier * notchSize +
         "," +
-        4 * multiplier +
-        " c 1,1 2,2 4,2 " +
-        "h " +
+        4 * multiplier * notchSize +
+        " c 1," + 1 * notchSize + " 2," + 2 * notchSize + " 4," + 2 * notchSize + 
+        " h " +
         24 * (multiplier - 0.5) +
-        " c 2,0 3,-1 4,-2 " +
-        "l " +
-        4 * multiplier +
+        " c 2,0 3,-" + 1 * notchSize + " 4,-" + 2 * notchSize + 
+        " l " +
+        4 * multiplier * notchSize +
         "," +
-        -4 * multiplier +
-        "c 1,-1 2,-2 4,-2";
+        -4 * multiplier * notchSize +
+        "c 1,-" + 1 * notchSize + " 2,-" + 2 * notchSize + " 4,-" + 2 * notchSize;
       BlockSvg.NOTCH_PATH_RIGHT =
         "h " +
-        -4 * (addon.settings.get("cornerSize") / 100 - 1) +
-        "c -2,0 -3,1 -4,2 " +
-        "l " +
-        -4 * multiplier +
+        ((-4 * (addon.settings.get("cornerSize") / 100 - 1)) - 5 * (1 - notchSize)) +
+        "c -2,0 -3," + 1 * notchSize + " -4," + 2 * notchSize +
+        " l " +
+        -4 * multiplier * notchSize +
         "," +
-        4 * multiplier +
-        "c -1,1 -2,2 -4,2 " +
-        "h " +
+        4 * multiplier * notchSize +
+        " c -1," + 1 * notchSize + " -2," + 2 * notchSize + " -4," + 2 * notchSize + 
+        " h " +
         -24 * (multiplier - 0.5) +
-        " c -2,0 -3,-1 -4,-2 " +
-        "l " +
-        -4 * multiplier +
+        " c -2,0 -3,-" + 1 * notchSize + " -4,-" + 2 * notchSize + 
+        " l " +
+        -4 * multiplier * notchSize +
         "," +
-        -4 * multiplier +
-        "c -1,-1 -2,-2 -4,-2";
+        -4 * multiplier * notchSize +
+        "c -1,-" + 1 * notchSize + " -2,-" + 2 * notchSize + " -4,-" + 2 * notchSize;
       BlockSvg.INPUT_SHAPE_HEXAGONAL =
         "M " +
         4 * GRID_UNIT * multiplier +

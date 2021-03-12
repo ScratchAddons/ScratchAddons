@@ -42,6 +42,14 @@
       "min": 0,
       "default": 100,
       "max": 300
+    },
+    {
+      "name": "Notch height (0-150%)",
+      "id": "notchSize",
+      "type": "integer",
+      "min": 0,
+      "default": 100,
+      "max": 200
     }
   ],
   "l10n": true
