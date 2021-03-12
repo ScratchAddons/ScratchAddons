@@ -6,7 +6,24 @@
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
     <script src="../set-lang.js" defer></script>
+    <style>
+      /*
+       * Imports are here to attempt to speed up load. Also, it means licenses.html loads fewer unused styles, and this file doesn't get licenses.html's styles! In order of when it will be noticed/needed on the page
+      */
+      @import url("../styles/colors.css");
+      @import url("../styles/components/addon.css");
+      @import url("../styles/components/badges.css");
+      @import url("../styles/components/filter.css");
+      @import url("../styles/components/categories.css");
+      @import url("../styles/components/search.css");
+      @import url("../styles/components/tooltips.css");
+      @import url("../styles/components/smallmode.css");
+      /* Modals are needed last */
+      @import url("../styles/components/modal.css");
+    </style>
+    
     <link rel="stylesheet" href="style.css" />
+    
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
     <script src="index.js" type="module"></script>
