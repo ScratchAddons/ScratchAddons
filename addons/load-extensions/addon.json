@@ -21,12 +21,6 @@
       "default": true
     },
     {
-      "name": "Video Sensing",
-      "id": "videoSensing",
-      "type": "boolean",
-      "default": false
-    },
-    {
       "name": "Text to Speech",
       "id": "text2speech",
       "type": "boolean",

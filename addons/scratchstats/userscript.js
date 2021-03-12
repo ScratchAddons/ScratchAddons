@@ -99,6 +99,64 @@ export default async function ({ addon, msg, console }) {
                   lineTension: 0,
                 },
               ],
+  fetch(`https://scratchdb.lefty.one/v3/user/info/${username}`).then(async function (response) {
+    stats.removeChild(stats.firstChild); // remove loading message
+    const followRow = document.createElement("div");
+    stats.appendChild(followRow);
+    followRow.className = "sa-stats-row";
+    const ranksRow = document.createElement("div");
+    stats.appendChild(ranksRow);
+    ranksRow.className = "sa-stats-row";
+    const data = await response.json();
+    followRow.appendChild(createItem(data.statistics.followers.toLocaleString(), msg("followers")));
+    followRow.appendChild(
+      createItem(`#${data.statistics.ranks.followers.toLocaleString()}`, msg("most-followed-global"))
+    );
+    followRow.appendChild(
+      createItem(`#${data.statistics.ranks.country.followers.toLocaleString()}`, msg("most-followed-location"))
+    );
+    ranksRow.appendChild(
+      createItem(
+        `#${data.statistics.ranks.loves.toLocaleString()} (#${data.statistics.ranks.country.loves})`,
+        msg("most-loves")
+      )
+    );
+    ranksRow.appendChild(
+      createItem(
+        `#${data.statistics.ranks.favorites.toLocaleString()} (#${data.statistics.ranks.country.favorites.toLocaleString()})`,
+        msg("most-favorites")
+      )
+    );
+    ranksRow.appendChild(
+      createItem(
+        `#${data.statistics.ranks.views.toLocaleString()} (#${data.statistics.ranks.country.views.toLocaleString()})`,
+        msg("most-views")
+      )
+    );
+    fetch(`https://scratchdb.lefty.one/v2/user/history/followers/${data.sys_id}/?range=999`).then(async function (
+      response
+    ) {
+      const historyData = (await response.json()).history;
+      await addon.tab.loadScript(addon.self.lib + "/Chart.min.js");
+      const canvasContainer = document.createElement("div");
+      stats.appendChild(canvasContainer);
+      canvasContainer.style.position = "relative";
+      canvasContainer.style.height = "400px";
+      const canvas = document.createElement("canvas");
+      canvasContainer.appendChild(canvas);
+      new Chart(canvas, {
+        type: "scatter",
+        data: {
+          datasets: [
+            {
+              label: msg("followers-label"),
+              data: historyData.map((item) => {
+                return { x: Date.parse(item.date), y: item.value };
+              }),
+              fill: false,
+              showLine: true,
+              borderColor: "#4d97ff",
+              lineTension: 0,
             },
             options: {
               responsive: true,
