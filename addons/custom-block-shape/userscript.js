@@ -170,10 +170,9 @@ export default async function ({ addon, global, console }) {
           // Bump positioning to the right for a box-type drop-down.
           this.arrowX_ += BlockSvg.BOX_FIELD_PADDING;
         }
-        this.arrow_.setAttribute('transform',
-            'translate(' + this.arrowX_ + ',' + this.arrowY_ + ')');
+        this.arrow_.setAttribute("transform", "translate(" + this.arrowX_ + "," + this.arrowY_ + ")");
         return originalDropdownObject.call(this);
-      }
+      };
 
       //Corner setting
       BlockSvg.CORNER_RADIUS = (1 * GRID_UNIT * addon.settings.get("cornerSize")) / 100;
