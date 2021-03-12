@@ -11,7 +11,7 @@ export default async function ({ addon, global, console }) {
         let follownum = response.substring(find, find + 200).match(/\(([^)]+)\)/)[1];
         let boxHeads = document.querySelectorAll(".box-head");
         for (let i = 1; i < boxHeads.length - 1; i++) {
-          if (boxHeads[i].querySelector("a[href^=\"/\"]")) {
+          if (boxHeads[i].querySelector('a[href^="/"]')) {
             let viewAll = new URL(boxHeads[i].querySelector("a").href).pathname;
             let link = viewAll.toLowerCase().split("/users/" + username.toLowerCase() + "/")[1];
             if (link.toLowerCase() === details[j].toLowerCase() + "/") {
