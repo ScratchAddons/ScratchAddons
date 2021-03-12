@@ -31,6 +31,6 @@
     }
   ],
   "tags": ["community", "forums"],
-  "enabledByDefault": false,
+  "enabledByDefault": true,
   "l10n": true
 }
