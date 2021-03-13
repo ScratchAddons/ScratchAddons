@@ -5,7 +5,7 @@ body {
 .blocklySvg {
   background-color: #444;
 }
-[id^=blocklyGridPattern] line {
+[id^="blocklyGridPattern"] line {
   stroke: none !important;
 }
 .blocklyFlyoutBackground {

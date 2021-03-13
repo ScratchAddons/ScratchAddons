@@ -17,7 +17,7 @@
 .blocklySvg {
   background: var(--secondary-bg);
 }
-[id^=blocklyGridPattern] line {
+[id^="blocklyGridPattern"] line {
   stroke: none !important;
 }
 .context-menu_context-menu_2SJM-,
