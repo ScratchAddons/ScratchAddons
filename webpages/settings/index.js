@@ -9,14 +9,14 @@ Vue.directive("click-outside", {
       console.log("emitting event");
       self.vm.$emit(self.expression, event);
     };
-    this.el.addEventListener("click", this.stopProp);
-    document.body.addEventListener("click", this.event);
+    this.el.addEventListener("mousedown", this.stopProp);
+    document.body.addEventListener("mousedown", this.event);
   },
 
   unbind() {
     console.log("unbind");
-    this.el.removeEventListener("click", this.stopProp);
-    document.body.removeEventListener("click", this.event);
+    this.el.removeEventListener("mousedown", this.stopProp);
+    document.body.removeEventListener("mousedown", this.event);
   },
   stopProp(event) {
     event.stopPropagation();
