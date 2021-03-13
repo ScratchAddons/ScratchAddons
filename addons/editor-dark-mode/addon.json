@@ -76,7 +76,7 @@
       "name": "Page background",
       "id": "page",
       "type": "color",
-      "default": "#e5f0ff"
+      "default": "#111111"
     },
     {
       "name": "Highlight color",
@@ -88,85 +88,85 @@
       "name": "Menu bar background",
       "id": "menuBar",
       "type": "color",
-      "default": "#4d97ff"
+      "default": "#202020"
     },
     {
       "name": "Active tab background",
       "id": "activeTab",
       "type": "color",
-      "default": "#ffffff"
+      "default": "#202020"
     },
     {
       "name": "Inactive tab background",
       "id": "tab",
       "type": "color",
-      "default": "#d9e3f2"
+      "default": "#151515"
     },
     {
       "name": "Sprite list background",
       "id": "selector",
       "type": "color",
-      "default": "#e9f1fc"
+      "default": "#202020"
     },
     {
       "name": "Asset list background",
       "id": "selector2",
       "type": "color",
-      "default": "#d9e3f2"
+      "default": "#202020"
     },
     {
       "name": "Selected list item background",
       "id": "selectorSelection",
       "type": "color",
-      "default": "#ffffff"
+      "default": "#111111"
     },
     {
       "name": "Accent background",
       "id": "accent",
       "type": "color",
-      "default": "#ffffff"
+      "default": "#151515"
     },
     {
       "name": "Input background",
       "id": "input",
       "type": "color",
-      "default": "#ffffff"
+      "default": "#202020"
     },
     {
       "name": "Workspace background",
       "id": "workspace",
       "type": "color",
-      "default": "#f9f9f9"
+      "default": "#151515"
     },
     {
       "name": "Block category menu background",
       "id": "categoryMenu",
       "type": "color",
-      "default": "#ffffff"
+      "default": "#202020"
     },
     {
       "name": "Block palette background",
       "id": "palette",
       "type": "color",
-      "default": "#f9f9f9"
+      "default": "#202020"
     },
     {
       "name": "Full screen background",
       "id": "fullscreen",
       "type": "color",
-      "default": "#ffffff"
+      "default": "#000000"
     },
     {
       "name": "Full screen header background",
       "id": "stageHeader",
       "type": "color",
-      "default": "#e8edf1"
+      "default": "#000000"
     },
     {
       "name": "Border color",
       "id": "border",
       "type": "select",
-      "default": "transparentBlack",
+      "default": "transparentWhite",
       "potentialValues": [
         {
           "id": "transparentBlack",
@@ -190,7 +190,7 @@
       "name": "Show workspace dots",
       "id": "dots",
       "type": "boolean",
-      "default": true
+      "default": false
     },
     {
       "name": "Text shadow on blocks",
@@ -202,7 +202,7 @@
       "name": "Dark comments",
       "id": "darkComments",
       "type": "boolean",
-      "default": false
+      "default": true
     }
   ],
   "presets": [
@@ -308,6 +308,32 @@
         "textShadow": false,
         "dots": true,
         "darkComments": true
+      }
+    },
+    {
+      "name": "Scratch's default colors",
+      "id": "scratch",
+      "description": "The colors normally used by Scratch.",
+      "values": {
+        "page": "#e5f0ff",
+        "primary": "#4d97ff",
+        "menuBar": "#4d97ff",
+        "activeTab": "#ffffff",
+        "tab": "#d9e3f2",
+        "selector": "#e9f1fc",
+        "selector2": "#d9e3f2",
+        "selectorSelection": "#ffffff",
+        "accent": "#ffffff",
+        "input": "#ffffff",
+        "workspace": "#f9f9f9",
+        "categoryMenu": "#ffffff",
+        "palette": "#f9f9f9",
+        "fullscreen": "#ffffff",
+        "stageHeader": "#e8edf1",
+        "border": "transparentBlack",
+        "textShadow": false,
+        "dots": true,
+        "darkComments": false
       }
     }
   ],
