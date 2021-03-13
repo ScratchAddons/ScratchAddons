@@ -49,7 +49,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request === "getInitialUrl") {
     sendResponse(initialUrl);
   } else if (request.themesUpdated) {
-    injectUserstylesAndThemes({ themes: request.themesUpdated, isUpdate: true });
+    injectUserstylesAndThemes({
+      themes: request.themesUpdated,
+      isUpdate: true,
+      addonsWithUserstyles: request.addonsWithUserstyles,
+    });
   }
 });
 chrome.runtime.sendMessage("ready");
