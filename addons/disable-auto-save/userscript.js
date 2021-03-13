@@ -7,17 +7,21 @@ export default async ({ addon, console, msg }) => {
   });
   while (true) {
     const btn = await addon.tab.waitForElement('[class*="community-button_community-button_"]', { markAsSeen: true });
-    btn.addEventListener("click", e => {
-      // Don't show if it's on someone else's project page,
-      // or if there are no changes.
-      if (
-        addon.tab.redux.state.scratchGui.projectChanged &&
-        document.querySelector('[class*="project-title-input_title-field_"]') &&
-        !confirm(msg("save-and-leave"))
-      ) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    }, { capture: true });
+    btn.addEventListener(
+      "click",
+      (e) => {
+        // Don't show if it's on someone else's project page,
+        // or if there are no changes.
+        if (
+          addon.tab.redux.state.scratchGui.projectChanged &&
+          document.querySelector('[class*="project-title-input_title-field_"]') &&
+          !confirm(msg("save-and-leave"))
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      },
+      { capture: true }
+    );
   }
 };
