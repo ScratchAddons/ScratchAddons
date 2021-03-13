@@ -11,7 +11,7 @@ function setCSSVar(name, value) {
 }
 
 function textColor(varName, hex, black, white, threshold) {
-  const {r, g, b} = parseHex(hex);
+  const { r, g, b } = parseHex(hex);
   threshold = threshold !== undefined ? threshold : 170;
   if (r * 0.299 + g * 0.587 + b * 0.114 > threshold) {
     // https://stackoverflow.com/a/3943023
@@ -22,21 +22,21 @@ function textColor(varName, hex, black, white, threshold) {
 }
 
 function transparentVariant(varName, hex, opacity) {
-  const {r, g, b} = parseHex(hex);
+  const { r, g, b } = parseHex(hex);
   setCSSVar(varName, `rgba(${r}, ${g}, ${b}, ${opacity})`);
 }
 
 function lightDarkVariant(varName, hex, threshold, cr, cg, cb, lr, lg, lb) {
-  const {r, g, b} = parseHex(hex);
+  const { r, g, b } = parseHex(hex);
   if (lr === undefined) lr = cr;
   if (lg === undefined) lg = cg;
   if (lb === undefined) lb = cb;
   textColor(
     varName,
     hex,
-    `rgb(${cr*r}, ${cg*g}, ${cb*b})`,
-    `rgb(${(1 - lr)*255 + lr*r}, ${(1 - lg)*255 + lg*g}, ${(1 - lb)*255 + lb*b})`,
-	threshold,
+    `rgb(${cr * r}, ${cg * g}, ${cb * b})`,
+    `rgb(${(1 - lr) * 255 + lr * r}, ${(1 - lg) * 255 + lg * g}, ${(1 - lb) * 255 + lb * b})`,
+    threshold
   );
 }
 
@@ -70,7 +70,12 @@ function testAll(settings) {
   textColor("input-transparentText", settings.get("input"), "rgba(87, 94, 117, 0.6)", "rgba(255, 255, 255, 0.4)");
   textColor("input-filter", settings.get("input"), "none", "brightness(0) invert(1)");
   textColor("input-codeZoomFilter", settings.get("input"), "none", "invert(1) hue-rotate(180deg)");
-  textColor("categoryMenu-selection", settings.get("categoryMenu"), "rgba(87, 124, 155, 0.13)", "rgba(255, 255, 255, 0.05)");
+  textColor(
+    "categoryMenu-selection",
+    settings.get("categoryMenu"),
+    "rgba(87, 124, 155, 0.13)",
+    "rgba(255, 255, 255, 0.05)"
+  );
   transparentVariant("primary-transparent35", settings.get("primary"), "0.35");
   transparentVariant("primary-transparent25", settings.get("primary"), "0.25");
   transparentVariant("primary-transparent20", settings.get("primary"), "0.2");

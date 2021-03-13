@@ -212,7 +212,7 @@
       "description": "A dark theme based on a userscript by infinitytec",
       "values": {
         "page": "#111111",
-		"primary": "#4d97ff",
+        "primary": "#4d97ff",
         "menuBar": "#202020",
         "activeTab": "#202020",
         "tab": "#151515",
@@ -238,7 +238,7 @@
       "description": "A dark blue theme based on a userscript by infinitytec",
       "values": {
         "page": "#051638",
-		"primary": "#4d97ff",
+        "primary": "#4d97ff",
         "menuBar": "#2f4066",
         "activeTab": "#2f4066",
         "tab": "#273552",
@@ -264,7 +264,7 @@
       "description": "A dark theme based on a userstyle by _nix",
       "values": {
         "page": "#2e2e2e",
-		"primary": "#47566b",
+        "primary": "#47566b",
         "menuBar": "#47566b",
         "activeTab": "#555555",
         "tab": "#444444",
@@ -290,7 +290,7 @@
       "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
       "values": {
         "page": "#001533",
-		"primary": "#4d97ff",
+        "primary": "#4d97ff",
         "menuBar": "#4d97ff",
         "activeTab": "#282828",
         "tab": "#192f4d",
