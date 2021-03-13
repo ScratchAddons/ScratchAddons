@@ -14,7 +14,8 @@ const getL10NURLs = () => {
   return returnValue;
 };
 
-const addons = JSON.parse(template.getAttribute("data-userscripts"));
+const userscriptAddons = JSON.parse(template.getAttribute("data-userscripts"));
+const allAddons = JSON.parse(template.getAttribute("data-addons"));
 
 window.scratchAddons = {};
 scratchAddons.globalState = getGlobalState();
@@ -97,7 +98,20 @@ const observer = new MutationObserver((mutationsList) => {
         const eventTarget = scratchAddons.eventTargets[attrVal.target].find(
           (eventTarget) => eventTarget._addonId === attrVal.addonId
         );
-        if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(attrVal.name));
+        let eventName = attrVal.name;
+        if (eventTarget) { // Event Target already exsists, therefore running on the page...
+          eventName = eventName === "enable" ? "reenable" : eventName;
+          // TODO: Remove Addon from data-userscripts
+          eventTarget.dispatchEvent(new CustomEvent(eventName));
+        }
+        else { // Event Target was naver created; Was Enabled "late"...
+          const addonData = allAddons.find(addon => addon.addonId === attrVal.addonId);
+          const userscripts = JSON.parse(template.getAttribute("data-userscripts"));
+          userscripts.push(addonData);
+          template.setAttribute("data-userscripts", JSON.stringify(userscripts));
+          addonData.enabledLate = true;
+          runAddonUserscripts(addonData);
+        }
       } else {
         // Global events, like auth change
         scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
@@ -110,7 +124,7 @@ const observer = new MutationObserver((mutationsList) => {
 });
 observer.observe(template, { attributes: true });
 
-for (const addon of addons) {
+for (const addon of userscriptAddons) {
   if (addon.scripts.length) runAddonUserscripts(addon);
 }
 

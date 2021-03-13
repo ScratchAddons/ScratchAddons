@@ -13,6 +13,7 @@
     }
   ],
   "dynamicDisable": true,
+  "dynamicEnable": true,
   "userstyles": [
     {
       "url": "stageleft.css",

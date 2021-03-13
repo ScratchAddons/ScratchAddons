@@ -49,7 +49,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request === "getInitialUrl") {
     sendResponse(initialUrl);
   } else if (request.themesUpdated) {
-    injectUserstylesAndThemes({ themes: request.themesUpdated, isUpdate: true });
+    injectUserstylesAndThemes({ ...request.themesUpdated, isUpdate: true });
   }
 });
 chrome.runtime.sendMessage("ready");
@@ -111,13 +111,14 @@ function setCssVariables(addonSettings) {
   }
 }
 
-function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles, themes }) {
+function onHeadAvailable({ globalState, l10njson, allAddons, addonsWithUserscripts, addonsWithUserstyles, themes }) {
   setCssVariables(globalState.addonSettings);
   injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
 
   const template = document.createElement("template");
   template.id = "scratch-addons";
   template.setAttribute("data-path", chrome.runtime.getURL(""));
+  template.setAttribute("data-addons", JSON.stringify(allAddons));
   template.setAttribute("data-userscripts", JSON.stringify(addonsWithUserscripts));
   template.setAttribute("data-global-state", JSON.stringify(globalState));
   template.setAttribute("data-l10njson", JSON.stringify(l10njson));
@@ -138,7 +139,7 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, addonsW
     } else if (typeof request.setMsgCount !== "undefined") {
       template.setAttribute("data-msgcount", request.setMsgCount);
     } else if (request === "getRunningAddons") {
-      const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
+      const userscripts = JSON.parse(template.getAttribute("data-userscripts")).map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
       const activeThemes = Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
         style.getAttribute("data-addon-id")

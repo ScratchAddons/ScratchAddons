@@ -25,10 +25,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       addonsEnabled: scratchAddons.localState.addonsEnabled,
     });
 
-    // Fire disabled event for userscripts
-    // TODO: this might not be an addon being reenabled. We should consider this
-    // in case we want to provide userscripts with a way to run after the page
-    // has loaded, dynamically.
     chrome.tabs.query({}, (tabs) =>
       tabs.forEach(
         (tab) =>
@@ -36,7 +32,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           chrome.tabs.sendMessage(tab.id, {
             fireEvent: {
               target: "self",
-              name: newState ? "reenabled" : "disabled",
+              name: newState ? "enabled" : "disabled",
               addonId,
             },
           })

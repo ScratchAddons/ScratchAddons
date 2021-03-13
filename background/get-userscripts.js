@@ -29,6 +29,7 @@ async function getContentScriptInfo(url) {
     url,
     l10njson: getL10NURLs(),
     globalState: {},
+    allAddons: [],
     addonsWithUserscripts: [],
     addonsWithUserstyles: [],
     themes: [],
@@ -36,8 +37,6 @@ async function getContentScriptInfo(url) {
   const fetchThemeStylesPromises = [];
 
   for (const { addonId, manifest } of scratchAddons.manifests) {
-    if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
-
     const userscripts = [];
     for (const script of manifest.userscripts || []) {
       if (userscriptMatches({ url }, script, addonId))
@@ -46,6 +45,8 @@ async function getContentScriptInfo(url) {
           runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
         });
     }
+    if (userscripts.length) data.allAddons.push({ addonId, scripts: userscripts });
+    if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
     if (manifest.tags.includes("theme")) {
@@ -174,7 +175,7 @@ scratchAddons.localEvents.addEventListener("themesUpdated", () => {
           if (res) {
             chrome.tabs.sendMessage(
               tab.id,
-              { themesUpdated: (await getContentScriptInfo(res)).themes },
+              { themesUpdated: await getContentScriptInfo(res) },
               { frameId: 0 }
             );
           }
