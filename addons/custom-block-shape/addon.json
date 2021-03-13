@@ -28,12 +28,12 @@
   ],
   "settings": [
     {
-      "name": "Padding size (50-100%)",
+      "name": "Padding size (50-200%)",
       "id": "paddingSize",
       "type": "integer",
       "min": 50,
       "default": 100,
-      "max": 100
+      "max": 200
     },
     {
       "name": "Corner size (0-300%)",
