@@ -1,21 +1,43 @@
+function parseHex(hex) {
+  return {
+    r: parseInt(hex.substring(1, 3), 16),
+    g: parseInt(hex.substring(3, 5), 16),
+    b: parseInt(hex.substring(5, 7), 16),
+  };
+}
+
+function setCSSVar(name, value) {
+  document.documentElement.style.setProperty(`--editorDarkMode-${name}`, value);
+}
+
 function textColor(varName, hex, black, white, threshold) {
-  const r = parseInt(hex.substring(1, 3), 16);
-  const g = parseInt(hex.substring(3, 5), 16);
-  const b = parseInt(hex.substring(5, 7), 16);
+  const {r, g, b} = parseHex(hex);
   threshold = threshold !== undefined ? threshold : 170;
   if (r * 0.299 + g * 0.587 + b * 0.114 > threshold) {
     // https://stackoverflow.com/a/3943023
-    document.documentElement.style.setProperty(`--editorDarkMode-${varName}`, black !== undefined ? black : "#575e75");
+    setCSSVar(varName, black !== undefined ? black : "#575e75");
   } else {
-    document.documentElement.style.setProperty(`--editorDarkMode-${varName}`, white !== undefined ? white : "#ffffff");
+    setCSSVar(varName, white !== undefined ? white : "#ffffff");
   }
 }
 
 function transparentVariant(varName, hex, opacity) {
-  const r = parseInt(hex.substring(1, 3), 16);
-  const g = parseInt(hex.substring(3, 5), 16);
-  const b = parseInt(hex.substring(5, 7), 16);
-  document.documentElement.style.setProperty(`--editorDarkMode-${varName}`, `rgba(${r}, ${g}, ${b}, ${opacity})`);
+  const {r, g, b} = parseHex(hex);
+  setCSSVar(varName, `rgba(${r}, ${g}, ${b}, ${opacity})`);
+}
+
+function lightDarkVariant(varName, hex, threshold, cr, cg, cb, lr, lg, lb) {
+  const {r, g, b} = parseHex(hex);
+  if (lr === undefined) lr = cr;
+  if (lg === undefined) lg = cg;
+  if (lb === undefined) lb = cb;
+  textColor(
+    varName,
+    hex,
+    `rgb(${cr*r}, ${cg*g}, ${cb*b})`,
+    `rgb(${(1 - lr)*255 + lr*r}, ${(1 - lg)*255 + lg*g}, ${(1 - lb)*255 + lb*b})`,
+	threshold,
+  );
 }
 
 function testAll(settings) {
@@ -57,6 +79,8 @@ function testAll(settings) {
   transparentVariant("accent-opacity0", settings.get("accent"), "0");
   transparentVariant("input-transparent50", settings.get("input"), "0.5");
   transparentVariant("input-transparent25", settings.get("input"), "0.25");
+  lightDarkVariant("primary-variant", settings.get("primary"), 60, 0.67, 0.76, 0.8);
+  lightDarkVariant("workspace-scrollbar", settings.get("workspace"), 170, 0.83, 0.83, 0.83, 0.87, 0.87, 0.87);
   document.documentElement.style.setProperty(
     "--editorDarkMode-border-color",
     {

@@ -79,16 +79,10 @@
       "default": "#e5f0ff"
     },
     {
-      "name": "Primary color",
+      "name": "Highlight color",
       "id": "primary",
       "type": "color",
       "default": "#4d97ff"
-    },
-    {
-      "name": "Secondary color",
-      "id": "secondary",
-      "type": "color",
-      "default": "#3373cc"
     },
     {
       "name": "Menu bar background",
@@ -143,12 +137,6 @@
       "id": "workspace",
       "type": "color",
       "default": "#f9f9f9"
-    },
-    {
-      "name": "Workspace scrollbar color",
-      "id": "workspaceScrollbar",
-      "type": "color",
-      "default": "#cecdce"
     },
     {
       "name": "Block category menu background",
@@ -224,6 +212,7 @@
       "description": "A dark theme based on a userscript by infinitytec",
       "values": {
         "page": "#111111",
+		"primary": "#4d97ff",
         "menuBar": "#202020",
         "activeTab": "#202020",
         "tab": "#151515",
@@ -233,7 +222,6 @@
         "accent": "#151515",
         "input": "#202020",
         "workspace": "#151515",
-        "workspaceScrollbar": "#3e3e3e",
         "categoryMenu": "#202020",
         "palette": "#202020",
         "fullscreen": "#000000",
@@ -250,6 +238,7 @@
       "description": "A dark blue theme based on a userscript by infinitytec",
       "values": {
         "page": "#051638",
+		"primary": "#4d97ff",
         "menuBar": "#2f4066",
         "activeTab": "#2f4066",
         "tab": "#273552",
@@ -259,7 +248,6 @@
         "accent": "#273552",
         "input": "#2f4066",
         "workspace": "#273552",
-        "workspaceScrollbar": "#4b597a",
         "categoryMenu": "#2f4066",
         "palette": "#2f4066",
         "fullscreen": "#051638",
@@ -276,6 +264,7 @@
       "description": "A dark theme based on a userstyle by _nix",
       "values": {
         "page": "#2e2e2e",
+		"primary": "#47566b",
         "menuBar": "#47566b",
         "activeTab": "#555555",
         "tab": "#444444",
@@ -285,7 +274,6 @@
         "accent": "#333333",
         "input": "#444444",
         "workspace": "#444444",
-        "workspaceScrollbar": "#555555",
         "categoryMenu": "#333333",
         "palette": "#222222",
         "fullscreen": "#222222",
@@ -302,6 +290,7 @@
       "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
       "values": {
         "page": "#001533",
+		"primary": "#4d97ff",
         "menuBar": "#4d97ff",
         "activeTab": "#282828",
         "tab": "#192f4d",
@@ -311,7 +300,6 @@
         "accent": "#282828",
         "input": "#282828",
         "workspace": "#282828",
-        "workspaceScrollbar": "#444444",
         "categoryMenu": "#282828",
         "palette": "#333333",
         "fullscreen": "#282828",
