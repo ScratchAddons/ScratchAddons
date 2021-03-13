@@ -24,12 +24,13 @@
     </style>
 
     <link rel="stylesheet" href="style.css" />
+    <link rel="preload" href="light.css" as="style"/>
 
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded">
+  <body style="display: none" v-show="loaded" :class="{light: theme}">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />

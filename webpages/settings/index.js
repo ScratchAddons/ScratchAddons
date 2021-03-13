@@ -130,7 +130,7 @@ const vue = (window.vue = new Vue({
   el: "body",
   data: {
     smallMode: false,
-    theme: "",
+    theme: false,
     themePath: "",
     switchPath: "../../images/icons/switch.svg",
     isOpen: false,
