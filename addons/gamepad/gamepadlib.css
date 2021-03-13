@@ -1,3 +1,100 @@
-.gamepadlib-section-title {
+/* .gamepadlib-section-title {
   font-weight: bold;
+} */
+
+.gamepadlib-section {
+  /* position: relative;
+  width: 500px;
+  height: 300px;
+
+  --right-buttons-x: 450px;
+  --right-buttons-y: 150px;
+
+  --dpad-x: 50px;
+  --dpad-y: 150px;
+
+  --left-bumper-x: 50px;
+  --left-bumper-y: 50px;
+
+  --right-bumper-x: 450px;
+  --right-bumper-y: 50px; */
+}
+
+.gamepadlib-content {
+  /* display: flex;
+  justify-content: center; */
+}
+
+/* .gamepadlib-mapping {
+  position: absolute;
+}
+.gamepadlib-mapping[data-id="0"] {
+  left: calc(var(--right-buttons-x) - 0px);
+  top: calc(var(--right-buttons-y) - 30px);
+}
+.gamepadlib-mapping[data-id="1"] {
+  left: calc(var(--right-buttons-x) + 30px);
+  top: calc(var(--right-buttons-y) - 0px);
+}
+.gamepadlib-mapping[data-id="2"] {
+  left: calc(var(--right-buttons-x) - 30px);
+  top: calc(var(--right-buttons-y) - 0px);
+}
+.gamepadlib-mapping[data-id="3"] {
+  left: calc(var(--right-buttons-x) - 0px);
+  top: calc(var(--right-buttons-y) + 30px);
+}
+.gamepadlib-mapping[data-id="4"] {
+  left: calc(var(--left-bumper-x));
+  top: calc(var(--left-bumper-y) - 0px);
+}
+.gamepadlib-mapping[data-id="5"] {
+  left: calc(var(--right-bumper-x));
+  top: calc(var(--right-bumper-y) - 0px);
+}
+.gamepadlib-mapping[data-id="6"] {
+  left: calc(var(--left-bumper-x));
+  top: calc(var(--left-bumper-y) - 30px);
+}
+.gamepadlib-mapping[data-id="7"] {
+  left: calc(var(--right-bumper-x));
+  top: calc(var(--right-bumper-y) - 30px);
+}
+.gamepadlib-mapping[data-id="13"] {
+  left: calc(var(--dpad-x) - 0px);
+  top: calc(var(--dpad-y) - 30px);
+}
+.gamepadlib-mapping[data-id="15"] {
+  left: calc(var(--dpad-x) + 30px);
+  top: calc(var(--dpad-y) - 0px);
+}
+.gamepadlib-mapping[data-id="14"] {
+  left: calc(var(--dpad-x) - 30px);
+  top: calc(var(--dpad-y) - 0px);
+}
+.gamepadlib-mapping[data-id="12"] {
+  left: calc(var(--dpad-x) - 0px);
+  top: calc(var(--dpad-y) + 30px);
+} */
+
+.gamepadlib-mapping[data-value="1"] .gamepadlib-keyinput {
+  background: yellow;
+}
+
+/* .gamepadlib-mapping-label {
+  width: 100px;
+  text-align: center;
+} */
+
+.gamepadlib-keyinput {
+  text-align: center;
+  width: 75px;
+  height: 25px;
+  border-radius: 0;
+  border: 1px solid black;
+  background: white;
+  color: black;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
