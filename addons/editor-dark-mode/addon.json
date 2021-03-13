@@ -58,19 +58,6 @@
       }
     },
     {
-      "url": "hide_dots.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
-      "settingMatch": {
-        "id": "dots",
-        "value": false
-      }
-    },
-    {
       "url": "dark_comments.css",
       "matches": [
         "https://scratch.mit.edu/projects/*/",

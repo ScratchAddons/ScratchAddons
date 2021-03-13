@@ -28,10 +28,10 @@
   --editorDarkMode-input-text: white;
   --editorDarkMode-input-transparentText: rgba(255, 255, 255, 0.4);
   --editorDarkMode-input-filter: brightness(0) invert(1);
-  --editorDarkMode-input-codeZoomFilter: invert(1);
+  --editorDarkMode-input-codeZoomFilter: invert(1) hue-rotate(180deg);
   --editorDarkMode-input-transparent50: rgba(255, 255, 255, 0.5);
   --editorDarkMode-input-transparent25: rgba(255, 255, 255, 0.25);
-  --editorDarkMode-workspace-dots: #444;
+  --editorDarkMode-workspace-dots: rgba(255, 255, 255, 0.13);
   --editorDarkMode-categoryMenu-text: white;
   --editorDarkMode-categoryMenuSelection-text: white;
   --editorDarkMode-palette-text: white;

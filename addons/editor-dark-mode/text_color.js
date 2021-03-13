@@ -48,8 +48,7 @@ function testAll(settings) {
   textColor("accent-desaturateFilter", settings.get("accent"), "saturate(0)", "brightness(0) invert(1)");
   textColor("input-transparentText", settings.get("input"), "rgba(67, 94, 117, 0.6)", "rgba(255, 255, 255, 0.4)");
   textColor("input-filter", settings.get("input"), "none", "brightness(0) invert(1)");
-  textColor("input-codeZoomFilter", settings.get("input"), "none", "invert(1)");
-  textColor("workspace-dots", settings.get("workspace"), "#ddd", "#444");
+  textColor("input-codeZoomFilter", settings.get("input"), "none", "invert(1) hue-rotate(180deg)");
   transparentVariant("primary-transparent35", settings.get("primary"), "0.35");
   transparentVariant("primary-transparent25", settings.get("primary"), "0.25");
   transparentVariant("primary-transparent20", settings.get("primary"), "0.2");
@@ -67,6 +66,11 @@ function testAll(settings) {
       black: "#111111",
     }[settings.get("border")]
   );
+  if (settings.get("dots")) {
+    textColor("workspace-dots", settings.get("workspace"), "rgba(0, 0, 0, 0.13)", "rgba(255, 255, 255, 0.13)");
+  } else {
+    document.documentElement.style.setProperty("--editorDarkMode-workspace-dots", "none");
+  }
 }
 
 export default async function ({ addon, console }) {
