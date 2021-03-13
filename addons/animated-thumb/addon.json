@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Turn on \"Prevent thumbnail from being overwritten\" if you don't want to reset thumbnail every time you save.",
+      "text": "Turn on \"Don't set thumbnails automatically\" if you don't want to reset thumbnail every time you save.",
       "id": "nooverwite"
     },
     {
@@ -45,7 +45,7 @@
   ],
   "settings": [
     {
-      "name": "Prevent thumbnail from being overwritten",
+      "name": "Don't set thumbnails automatically",
       "type": "boolean",
       "default": false,
       "id": "persistentThumb"
