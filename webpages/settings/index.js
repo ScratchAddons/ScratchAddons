@@ -33,7 +33,18 @@ const ColorInput = Vue.extend({
       canCloseOutside: false,
     };
   },
-  ready() {},
+  ready() {
+    self = this
+    this.$els.pickr.addEventListener('change', (e) => {
+      self.color = "#" + e.detail.value;
+      if (self.value !== self.color) {
+        self.$parent.addonSettings[self.addon._addonId][self.setting.id] = "#" + self.$els.pickr.hex8;
+        self.$parent.updateSettings(self.addon, { wait: 250, settingId: self.setting.id });
+      }
+})
+
+
+  },
   methods: {
     toggle(addon, setting, value = !this.isOpen) {
       this.isOpen = value;
