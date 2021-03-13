@@ -135,10 +135,7 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
     }
     addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
   }
-  if (handleConfirmClicked)
-    confirmElem.removeEventListener("click", handleConfirmClicked, {
-      once: true,
-    });
+  if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
   let resolvePromise = null;
   const resolveOnConfirmPromise = new Promise((resolve) => {
     resolvePromise = resolve;
@@ -365,9 +362,7 @@ const vue = (window.vue = new Vue({
             : event.shiftKey
             ? false
             : newState;
-        chrome.runtime.sendMessage({
-          changeEnabledState: { addonId: addon._addonId, newState },
-        });
+        chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
 
         if (document.body.classList.contains("iframe")) setTimeout(() => this.popupOrderAddonsEnabledFirst(), 500);
       };
@@ -411,10 +406,7 @@ const vue = (window.vue = new Vue({
       setTimeout(() => {
         if (!settingId || this.addonSettings[addon._addonId][settingId] === value) {
           chrome.runtime.sendMessage({
-            changeAddonSettings: {
-              addonId: addon._addonId,
-              newSettings: this.addonSettings[addon._addonId],
-            },
+            changeAddonSettings: { addonId: addon._addonId, newSettings: this.addonSettings[addon._addonId] },
           });
           console.log("Updated", this.addonSettings[addon._addonId]);
         }
