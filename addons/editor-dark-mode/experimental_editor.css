@@ -36,6 +36,7 @@
   --editorDarkMode-categoryMenu-selection: rgba(255, 255, 255, 0.05);
   --editorDarkMode-palette-text: white;
   --editorDarkMode-accent-opacity0: rgba(255, 255, 255, 0);
+  --editorDarkMode-border-color: rgba(255, 255, 255, 0.05);
 }
 
 /* Page background */
