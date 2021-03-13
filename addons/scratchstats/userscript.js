@@ -39,7 +39,7 @@ export default async function ({ addon, msg, console }) {
   stats.className = "box-content";
   stats.innerText = msg("loading");
 
-  fetch(`https://scratchdb.lefty.one/v2/user/info/${username}`).then(async function (response) {
+  fetch(`https://scratchdb.lefty.one/v3/user/info/${username}`).then(async function (response) {
     stats.removeChild(stats.firstChild); // remove loading message
     const followRow = document.createElement("div");
     stats.appendChild(followRow);
