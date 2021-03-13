@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Turn on \"Prevent thumbnail from being overwritten\" if you don't want to reset thumbnail every time you save.",
+      "text": "\"Don't set thumbnails automatically\" makes sure thumbnails will not be saved unless you use Set Thumbnail button. New projects will have Scratch Cat thumbnails until they are set manually.",
       "id": "nooverwite"
     },
     {
@@ -45,7 +45,7 @@
   ],
   "settings": [
     {
-      "name": "Prevent thumbnail from being overwritten",
+      "name": "Don't set thumbnails automatically",
       "type": "boolean",
       "default": false,
       "id": "persistentThumb"
