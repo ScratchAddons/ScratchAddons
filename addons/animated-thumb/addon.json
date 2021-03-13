@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Turn on \"Don't set thumbnails automatically\" if you don't want to reset thumbnail every time you save.",
+      "text": "\"Don't set thumbnails automatically\" makes sure thumbnails will not be saved unless you use Set Thumbnail button. New projects will have Scratch Cat thumbnails until they are set manually.",
       "id": "nooverwite"
     },
     {
