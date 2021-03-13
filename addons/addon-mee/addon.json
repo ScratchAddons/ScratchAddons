@@ -1,12 +1,10 @@
 {
   "name": "Fix capitalization of Account Settings",
   "description": "Changes \"Account settings\" in the account menu to \"Account Settings\".",
-  "userscripts": [
-    {
-      "url": "style.js",
-      "matches": ["https://scratch.mit.edu/*"]
-    }
+  "persistentScripts": [
+    "style.js"
   ],
   "tags": ["easterEgg"],
-  "l10n": true
+  "l10n": true,
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json"
 }
