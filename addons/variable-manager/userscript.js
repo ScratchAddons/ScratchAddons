@@ -37,7 +37,7 @@ export default async function ({ addon, global, console, msg }) {
   const feedbackButton = document.createElement("a");
   feedbackButton.className = "sa-var-manager-feedback-button";
   feedbackButton.innerText = msg("feedback");
-  feedbackButton.href = "https://scratchaddons.com/feedback?version=variable-manager";
+  feedbackButton.href = "https://scratchaddons.com/feedback?version=1.11.1+variable-manager";
   feedbackButton.target = "_blank";
   feedbackButton.rel = "noopener noreferrer";
 
