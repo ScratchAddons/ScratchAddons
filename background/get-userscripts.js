@@ -173,11 +173,7 @@ scratchAddons.localEvents.addEventListener("themesUpdated", () => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
           if (res) {
-            chrome.tabs.sendMessage(
-              tab.id,
-              { themesUpdated: await getContentScriptInfo(res) },
-              { frameId: 0 }
-            );
+            chrome.tabs.sendMessage(tab.id, { themesUpdated: await getContentScriptInfo(res) }, { frameId: 0 });
           }
         });
       }

@@ -99,13 +99,14 @@ const observer = new MutationObserver((mutationsList) => {
           (eventTarget) => eventTarget._addonId === attrVal.addonId
         );
         let eventName = attrVal.name;
-        if (eventTarget) { // Event Target already exsists, therefore running on the page...
+        if (eventTarget) {
+          // Event Target already exsists, therefore running on the page...
           eventName = eventName === "enable" ? "reenable" : eventName;
           // TODO: Remove Addon from data-userscripts
           eventTarget.dispatchEvent(new CustomEvent(eventName));
-        }
-        else { // Event Target was naver created; Was Enabled "late"...
-          const addonData = allAddons.find(addon => addon.addonId === attrVal.addonId);
+        } else {
+          // Event Target was naver created; Was Enabled "late"...
+          const addonData = allAddons.find((addon) => addon.addonId === attrVal.addonId);
           const userscripts = JSON.parse(template.getAttribute("data-userscripts"));
           userscripts.push(addonData);
           template.setAttribute("data-userscripts", JSON.stringify(userscripts));
