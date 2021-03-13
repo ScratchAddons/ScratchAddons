@@ -29,7 +29,6 @@ function testAll(settings) {
     "accent",
     "input",
     "categoryMenu",
-    "categoryMenuSelection",
     "palette",
   ]) {
     textColor(`${setting}-text`, settings.get(setting));
@@ -38,17 +37,18 @@ function testAll(settings) {
   textColor("primary-filter", settings.get("primary"), "brightness(0.4)", "none");
   textColor("primary-filter2", settings.get("primary"), "none", "brightness(0) invert(1)");
   textColor("secondary-filter", settings.get("secondary"), "brightness(0.4)", "none");
-  textColor("menuBar-transparentText", settings.get("menuBar"), "rgba(67, 94, 177, 0.25)", "rgba(255, 255, 255, 0.25)");
-  textColor("menuBar-dimText", settings.get("menuBar"), "rgba(67, 94, 177, 0.75)", "rgba(255, 255, 255, 0.75)");
+  textColor("menuBar-transparentText", settings.get("menuBar"), "rgba(87, 94, 177, 0.25)", "rgba(255, 255, 255, 0.25)");
+  textColor("menuBar-dimText", settings.get("menuBar"), "rgba(87, 94, 177, 0.75)", "rgba(255, 255, 255, 0.75)");
   textColor("menuBar-filter", settings.get("menuBar"), "brightness(0.4)", "none");
   textColor("menuBar-border", settings.get("menuBar"), "rgba(0, 0, 0, 0.15)", "rgba(255, 255, 255, 0.15)", 60);
   textColor("tab-text", settings.get("tab"), "rgba(87, 94, 117, 0.75)", "rgba(255, 255, 255, 0.75)");
   textColor("selector2-filter", settings.get("selector2"), "none", "brightness(0) invert(1)");
   textColor("accent-filter", settings.get("accent"), "none", "brightness(0) invert(1)");
   textColor("accent-desaturateFilter", settings.get("accent"), "saturate(0)", "brightness(0) invert(1)");
-  textColor("input-transparentText", settings.get("input"), "rgba(67, 94, 117, 0.6)", "rgba(255, 255, 255, 0.4)");
+  textColor("input-transparentText", settings.get("input"), "rgba(87, 94, 117, 0.6)", "rgba(255, 255, 255, 0.4)");
   textColor("input-filter", settings.get("input"), "none", "brightness(0) invert(1)");
   textColor("input-codeZoomFilter", settings.get("input"), "none", "invert(1) hue-rotate(180deg)");
+  textColor("categoryMenu-selection", settings.get("categoryMenu"), "rgba(87, 124, 155, 0.13)", "rgba(255, 255, 255, 0.05)");
   transparentVariant("primary-transparent35", settings.get("primary"), "0.35");
   transparentVariant("primary-transparent25", settings.get("primary"), "0.25");
   transparentVariant("primary-transparent20", settings.get("primary"), "0.2");

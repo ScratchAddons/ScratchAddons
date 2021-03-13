@@ -157,12 +157,6 @@
       "default": "#ffffff"
     },
     {
-      "name": "Selected category background",
-      "id": "categoryMenuSelection",
-      "type": "color",
-      "default": "#e9eef2"
-    },
-    {
       "name": "Block palette background",
       "id": "palette",
       "type": "color",
@@ -241,7 +235,6 @@
         "workspace": "#151515",
         "workspaceScrollbar": "#3e3e3e",
         "categoryMenu": "#202020",
-        "categoryMenuSelection": "#3e3e3e",
         "palette": "#202020",
         "fullscreen": "#000000",
         "stageHeader": "#000000",
@@ -268,7 +261,6 @@
         "workspace": "#273552",
         "workspaceScrollbar": "#4b597a",
         "categoryMenu": "#2f4066",
-        "categoryMenuSelection": "#4b597a",
         "palette": "#2f4066",
         "fullscreen": "#051638",
         "stageHeader": "#051638",
@@ -295,7 +287,6 @@
         "workspace": "#444444",
         "workspaceScrollbar": "#555555",
         "categoryMenu": "#333333",
-        "categoryMenuSelection": "#444444",
         "palette": "#222222",
         "fullscreen": "#222222",
         "stageHeader": "#222222",
@@ -322,7 +313,6 @@
         "workspace": "#282828",
         "workspaceScrollbar": "#444444",
         "categoryMenu": "#282828",
-        "categoryMenuSelection": "#333333",
         "palette": "#333333",
         "fullscreen": "#282828",
         "stageHeader": "#333333",

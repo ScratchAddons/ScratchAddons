@@ -33,7 +33,7 @@
   --editorDarkMode-input-transparent25: rgba(255, 255, 255, 0.25);
   --editorDarkMode-workspace-dots: rgba(255, 255, 255, 0.13);
   --editorDarkMode-categoryMenu-text: white;
-  --editorDarkMode-categoryMenuSelection-text: white;
+  --editorDarkMode-categoryMenu-selection: rgba(255, 255, 255, 0.05);
   --editorDarkMode-palette-text: white;
   --editorDarkMode-accent-opacity0: rgba(255, 255, 255, 0);
 }
@@ -321,11 +321,9 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
   background: var(--editorDarkMode-categoryMenu);
   color: var(--editorDarkMode-categoryMenu-text);
 }
-
-/* Selected category background */
 .scratchCategoryMenuItem.categorySelected {
-  background-color: var(--editorDarkMode-categoryMenuSelection);
-  color: var(--editorDarkMode-categoryMenuSelection-text);
+  background-color: var(--editorDarkMode-categoryMenu-selection);
+  color: var(--editorDarkMode-categoryMenu-text);
 }
 
 /* Block palette background */
