@@ -20,6 +20,8 @@
             v-show="isOpen"
             v-click-outside="isOpen = false"
             v-el:pickr
+            :formats="formats"
+            :no_alpha="no_alpha"
           ></color-picker>
         </button>
       </div>
@@ -293,16 +295,15 @@
                     @click=""
                     v-click-outside="closePickers"
                   ></picker>
-                  <input
-                    type="color"
-                    class="setting-input color"
-                    v-model="addonSettings[addon._addonId][setting.id]"
-                    @input="updateSettings(addon, {wait: 250, settingId: setting.id})"
-                    :disabled="!addon._enabled"
+                  <picker
                     v-if="setting.type === 'color' && !setting.allowTransparency"
-                    :placeholder="setting.default"
-                  />
-
+                    :value="addonSettings[addon._addonId][setting.id] || setting.default"
+                    :setting="setting"
+                    :addon="addon"
+                    @click=""
+                    no_alpha="true"
+                    v-click-outside="closePickers"
+                  ></picker>
                   <button
                     type="clear-button"
                     class="large-button clear-button"

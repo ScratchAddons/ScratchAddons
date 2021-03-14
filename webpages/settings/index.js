@@ -24,17 +24,24 @@ Vue.directive("click-outside", {
 });
 
 const ColorInput = Vue.extend({
-  props: ["value", "addon", "setting"],
+  props: ["value", "addon", "setting","no_alpha"],
   template: document.querySelector("template#picker-component").innerHTML,
   data() {
     return {
       isOpen: false,
       color: this.value,
       canCloseOutside: false,
+      formats: '',
     };
   },
   ready() {
     self = this
+    if (this.no_alpha === "true") {
+      this.formats = 'hex,rgb,hsv,hsl'
+    } else {
+      this.formats = 'hex,hex8,rgb,hsv,hsl'
+    }
+    console.log(this.no_alpha)
     this.$els.pickr.addEventListener('change', (e) => {
       self.color = "#" + e.detail.value;
       if (self.value !== self.color) {
