@@ -11,7 +11,7 @@ import Storage from "./Storage.js";
  * @property {string} self.dir - the directory the addon is stored in.
  * @property {string} self.browser - the browser used.
  * @property {function} self.restart - restarts the addon.
- * @property {Storage} storage
+ * @property {Storage} [storage]
  * @property {Notifications} [notifications]
  * @property {Badge} [badge]
  */
