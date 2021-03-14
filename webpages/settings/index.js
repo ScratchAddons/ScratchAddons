@@ -32,6 +32,7 @@ const ColorInput = Vue.extend({
       color: this.value,
       canCloseOutside: false,
       formats: "",
+      opening: false,
     };
   },
   ready() {
@@ -41,17 +42,25 @@ const ColorInput = Vue.extend({
     } else {
       this.formats = "hex,hex8,rgb,hsv,hsl";
     }
-    this.$els.pickr.addEventListener("change", (e) => {
-      that.color = "#" + e.detail.value;
-      if (that.value !== that.color) {
-        that.$parent.addonSettings[that.addon._addonId][that.setting.id] = "#" + that.$els.pickr.hex8;
-        that.$parent.updateSettings(that.addon, { wait: 250, settingId: that.setting.id });
+    this.$els.pickr.addEventListener('change', (e) => {
+      this.color = "#" + e.detail.value;
+      if (this.value !== this.color) {
+        this.$parent.addonSettings[this.addon._addonId][this.setting.id] = "#" + this.$els.pickr.hex8;
+        this.$parent.updateSettings(this.addon, { wait: 250, settingId: this.setting.id });
       }
     });
   },
   methods: {
     toggle(addon, setting, value = !this.isOpen) {
       this.isOpen = value;
+      this.opening = true
+      for (let child of this.$root.$children) {
+        if (child.isOpen && child.canCloseOutside && child.color && !child.opening) {
+          child.toggle(child.addon, child.setting, false);
+        }
+      }
+      this.opening = false
+
       this.color = "#" + this.$els.pickr.hex8;
       if (this.value !== this.color) {
         this.$parent.addonSettings[addon._addonId][setting.id] = "#" + this.$els.pickr.hex8;
@@ -595,7 +604,7 @@ const vue = (window.vue = new Vue({
     },
     closePickers(e) {
       for (let child of this.$children) {
-        if (child.isOpen && child.canCloseOutside && e.isTrusted) {
+        if (child.isOpen && child.canCloseOutside && e.isTrusted && child.color) {
           child.toggle(child.addon, child.setting, false);
         }
       }
