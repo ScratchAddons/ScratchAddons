@@ -8,5 +8,5 @@
   "vue": "MIT",
   "tinycolor2": "MIT",
   "chartjs": "MIT",
-  "color-picker-element": "MIT"
+  "color-picker-web-component": "MIT"
 }

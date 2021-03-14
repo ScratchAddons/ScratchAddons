@@ -6,7 +6,6 @@ Vue.directive("click-outside", {
   bind() {
     let self = this;
     this.event = function (event) {
-      console.log("emitting event");
       self.vm.$emit(self.expression, event);
     };
     this.el.addEventListener("mousedown", this.stopProp);
@@ -14,7 +13,6 @@ Vue.directive("click-outside", {
   },
 
   unbind() {
-    console.log("unbind");
     this.el.removeEventListener("mousedown", this.stopProp);
     document.body.removeEventListener("mousedown", this.event);
   },
@@ -36,13 +34,12 @@ const ColorInput = Vue.extend({
     };
   },
   ready() {
-    let that = this;
     if (this.no_alpha === "true") {
       this.formats = "hex,rgb,hsv,hsl";
     } else {
       this.formats = "hex,hex8,rgb,hsv,hsl";
     }
-    this.$els.pickr.addEventListener('change', (e) => {
+    this.$els.pickr.addEventListener('input', (e) => {
       this.color = "#" + e.detail.value;
       if (this.value !== this.color) {
         this.$parent.addonSettings[this.addon._addonId][this.setting.id] = "#" + this.$els.pickr.hex8;
@@ -69,7 +66,7 @@ const ColorInput = Vue.extend({
       this.canCloseOutside = false;
       setTimeout(() => {
         this.canCloseOutside = true;
-      }, 100);
+      }, 0);
     },
   },
   watch: {
