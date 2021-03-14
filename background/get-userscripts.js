@@ -79,7 +79,8 @@ async function getContentScriptInfo(url) {
       // Be sure values are true and false so readable in DOM.
       dynamicEnable = !!dynamicEnable;
       dynamicDisable = !!dynamicDisable;
-      if (userstyles.length) data.addonsWithUserstyles.push({ addonId, styles: userstyles, dynamicEnable, dynamicDisable });
+      if (userstyles.length)
+        data.addonsWithUserstyles.push({ addonId, styles: userstyles, dynamicEnable, dynamicDisable });
     }
   }
 

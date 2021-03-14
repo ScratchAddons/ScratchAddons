@@ -68,22 +68,21 @@ function injectUserstylesAndThemes({ addonsWithUserstyles = [], themes, isUpdate
   const userstyleElts = [...document.querySelectorAll(".scratch-addons-userstyle")];
   userstyleElts.forEach((style) => {
     // Not in the enabled addons with userstyles? Must have been disabled.
-    if (!addonsWithUserstyles.find(a => a.addonId == style.dataset.addonId)) {
+    if (!addonsWithUserstyles.find((a) => a.addonId == style.dataset.addonId)) {
       // Can be dynamicly disabled?
-      if (style.dataset.dynamicdisable == "true")
-        style.remove();
+      if (style.dataset.dynamicdisable == "true") style.remove();
     }
   });
 
   for (const addon of addonsWithUserstyles || []) {
     for (const userstyle of addon.styles) {
       // Addon doesn't find any injected userstyles meaning it wants to dynamicly be enabled.
-      if (!userstyleElts.find(style => style.dataset.addonId === addon.addonId) && isUpdate) {
+      if (!userstyleElts.find((style) => style.dataset.addonId === addon.addonId) && isUpdate) {
         // If it can't be, do not inject the userstyles.
         if (!addon.dynamicEnable) continue;
       }
       // If userstyle already injected
-      if (userstyleElts.find(style => style.href === userstyle.url)) continue;
+      if (userstyleElts.find((style) => style.href === userstyle.url)) continue;
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.classList.add("scratch-addons-userstyle");
