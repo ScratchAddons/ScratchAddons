@@ -35,7 +35,7 @@ const ColorInput = Vue.extend({
     };
   },
   ready() {
-    self = this
+    let that = this
     if (this.no_alpha === "true") {
       this.formats = 'hex,rgb,hsv,hsl'
     } else {
@@ -43,10 +43,10 @@ const ColorInput = Vue.extend({
     }
     console.log(this.no_alpha)
     this.$els.pickr.addEventListener('change', (e) => {
-      self.color = "#" + e.detail.value;
-      if (self.value !== self.color) {
-        self.$parent.addonSettings[self.addon._addonId][self.setting.id] = "#" + self.$els.pickr.hex8;
-        self.$parent.updateSettings(self.addon, { wait: 250, settingId: self.setting.id });
+      that.color = "#" + e.detail.value;
+      if (that.value !== that.color) {
+        that.$parent.addonSettings[that.addon._addonId][that.setting.id] = "#" + that.$els.pickr.hex8;
+        that.$parent.updateSettings(that.addon, { wait: 250, settingId: that.setting.id });
       }
     });
   },
