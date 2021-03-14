@@ -70,8 +70,7 @@ function injectUserstylesAndThemes({ addonsWithUserstyles = [], themes, isUpdate
   });
   document.querySelectorAll(".scratch-addons-userstyle").forEach((style) => {
     // Not in the enabled addons with userstyles? Must have been disabled.
-    if (!addonsWithUserstyles.find(a => a.addonId == style.dataset.addonId))
-      style.remove();
+    if (!addonsWithUserstyles.find((a) => a.addonId == style.dataset.addonId)) style.remove();
   });
 
   for (const addon of addonsWithUserstyles || []) {
@@ -143,8 +142,7 @@ function onHeadAvailable({ globalState, l10njson, allAddons, addonsWithUserscrip
     } else if (request.fireEvent) {
       let allowMessage = true;
       // Disallowing the message if a new addon is enabled but can't be dynamicly enabled.
-      if (request.fireEvent.name === "enabled" && !request.fireEvent.dynamicEnable)
-        allowMessage = false;
+      if (request.fireEvent.name === "enabled" && !request.fireEvent.dynamicEnable) allowMessage = false;
 
       if (allowMessage) {
         const eventDetails = JSON.stringify(request.fireEvent);

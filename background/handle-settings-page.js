@@ -25,7 +25,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       addonsEnabled: scratchAddons.localState.addonsEnabled,
     });
 
-    const { dynamicEnable, dynamicDisable } = scratchAddons.manifests.find(m => m.addonId === addonId).manifest;
+    const { dynamicEnable, dynamicDisable } = scratchAddons.manifests.find((m) => m.addonId === addonId).manifest;
 
     chrome.tabs.query({}, (tabs) =>
       tabs.forEach(
@@ -37,7 +37,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
               name: newState ? "enabled" : "disabled",
               addonId,
               dynamicEnable,
-              dynamicDisable
+              dynamicDisable,
             },
           })
       )
