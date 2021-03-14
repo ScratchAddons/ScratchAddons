@@ -48,8 +48,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
   } else if (request === "getInitialUrl") {
     sendResponse(initialUrl);
-  } else if (request.themesUpdated) {
-    injectUserstylesAndThemes({ ...request.themesUpdated, isUpdate: true });
+  } else if (request.addonsUpdated) {
+    injectUserstylesAndThemes({ ...request.addonsUpdated, isUpdate: true });
   }
 });
 chrome.runtime.sendMessage("ready");
@@ -68,11 +68,18 @@ function injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate }) {
   document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
     if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
   });
-  const userstyles = addonsWithUserstyles.map((addon) => addon.styles);
-  for (const addon of userstyles || []) {
-    for (const userstyle of addon) {
+  document.querySelectorAll(".scratch-addons-userstyle").forEach((style) => {
+    // Not in the enabled addons with userstyles? Must have been disabled.
+    if (!addonsWithUserstyles.find(a => a.addonId == style.dataset.addonId))
+      style.remove();
+  });
+
+  for (const addon of addonsWithUserstyles || []) {
+    for (const userstyle of addon.styles) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
+      link.classList.add("scratch-addons-userstyle");
+      link.dataset.addonId = addon.addonId;
       link.href = userstyle.url;
       if (document.body) document.documentElement.insertBefore(link, document.body);
       else document.documentElement.appendChild(link);
@@ -134,8 +141,15 @@ function onHeadAvailable({ globalState, l10njson, allAddons, addonsWithUserscrip
       template.setAttribute("data-global-state", JSON.stringify(request.newGlobalState));
       setCssVariables(request.newGlobalState.addonSettings);
     } else if (request.fireEvent) {
-      const eventDetails = JSON.stringify(request.fireEvent);
-      template.setAttribute(`data-fire-event__${Date.now()}`, eventDetails);
+      let allowMessage = true;
+      // Disallowing the message if a new addon is enabled but can't be dynamicly enabled.
+      if (request.fireEvent.name === "enabled" && !request.fireEvent.dynamicEnable)
+        allowMessage = false;
+
+      if (allowMessage) {
+        const eventDetails = JSON.stringify(request.fireEvent);
+        template.setAttribute(`data-fire-event__${Date.now()}`, eventDetails);
+      }
     } else if (typeof request.setMsgCount !== "undefined") {
       template.setAttribute("data-msgcount", request.setMsgCount);
     } else if (request === "getRunningAddons") {

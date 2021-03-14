@@ -25,6 +25,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       addonsEnabled: scratchAddons.localState.addonsEnabled,
     });
 
+    const { dynamicEnable, dynamicDisable } = scratchAddons.manifests.find(m => m.addonId === addonId).manifest;
+
     chrome.tabs.query({}, (tabs) =>
       tabs.forEach(
         (tab) =>
@@ -34,6 +36,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
               target: "self",
               name: newState ? "enabled" : "disabled",
               addonId,
+              dynamicEnable,
+              dynamicDisable
             },
           })
       )
@@ -52,8 +56,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       runPersistentScripts(addonId);
     }
 
-    if (scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest.tags.includes("theme"))
-      scratchAddons.localEvents.dispatchEvent(new CustomEvent("themesUpdated"));
+    scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonsUpdated"));
   } else if (request.changeAddonSettings) {
     const { addonId, newSettings } = request.changeAddonSettings;
     scratchAddons.globalState.addonSettings[addonId] = newSettings;
@@ -61,7 +64,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       addonSettings: scratchAddons.globalState.addonSettings,
     });
 
-    if (scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest.tags.includes("theme"))
-      scratchAddons.localEvents.dispatchEvent(new CustomEvent("themesUpdated"));
+    scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonsUpdated"));
   }
 });

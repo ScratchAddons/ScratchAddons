@@ -166,14 +166,14 @@ chrome.webRequest.onBeforeRequest.addListener(
   }
 );
 
-scratchAddons.localEvents.addEventListener("themesUpdated", () => {
+scratchAddons.localEvents.addEventListener("addonsUpdated", () => {
   // Only non-frames are updated
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
           if (res) {
-            chrome.tabs.sendMessage(tab.id, { themesUpdated: await getContentScriptInfo(res) }, { frameId: 0 });
+            chrome.tabs.sendMessage(tab.id, { addonsUpdated: await getContentScriptInfo(res) }, { frameId: 0 });
           }
         });
       }

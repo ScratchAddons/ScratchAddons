@@ -562,6 +562,8 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
       : "editor";
     // Exception:
     if (addonId === "msg-count-badge") manifest._category = "popup";
+    // Hardcoding "editor-stage-left" to have theme category until more updates for #1672
+    if (addonId === "editor-stage-left") manifest._category = "theme";
     manifest._enabled = addonsEnabled[addonId];
     manifest._addonId = addonId;
     manifest._expanded = document.body.classList.contains("iframe") ? false : manifest._enabled;
