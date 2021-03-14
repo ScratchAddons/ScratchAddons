@@ -1,11 +1,11 @@
-import Storage from "../common/Storage.js"
+import Storage from "../common/Storage.js";
 /**
  * Manages storage.
  * @extends Storage
  */
 export default class usStorage extends Storage {
-  constructor (addonObject) {
-    super(addonObject)
+  constructor(addonObject) {
+    super(addonObject);
   }
   /**
    * Stores a string.
@@ -20,16 +20,16 @@ export default class usStorage extends Storage {
    */
   async set(storedID, value, mode) {
     if (typeof storedID !== "string") {
-      throw new Error("Scratch Addons exception: stored ID must be a string")
+      throw new Error("Scratch Addons exception: stored ID must be a string");
     }
     if (storedID.length == 0) {
-      throw new Error("Scratch Addons exception: stored ID is empty")
+      throw new Error("Scratch Addons exception: stored ID is empty");
     }
     if (storedID.indexOf("/") > -1) {
-      throw new Error("Scratch Addons exception: stored ID can not have /s")
+      throw new Error("Scratch Addons exception: stored ID can not have /s");
     }
     if (!["sync", "local", "cookie"].includes(mode)) {
-      throw new Error("Scratch Addons exception: mode must be one of: sync, local, or cookie")
+      throw new Error("Scratch Addons exception: mode must be one of: sync, local, or cookie");
     }
     return await new Promise((resolve) => {
       chrome.runtime.sendMessage(
@@ -38,14 +38,15 @@ export default class usStorage extends Storage {
           addonStorageID: this._addonId + "/" + storedID,
           addonStorageValue: value,
           addonStorageMode: mode,
-        }, resolve
-      )
-    })
+        },
+        resolve
+      );
+    });
   }
   /**
    * @private
    */
   get _eventTargetKey() {
-    return "storage"
+    return "storage";
   }
 }

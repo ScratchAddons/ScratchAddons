@@ -1,9 +1,7 @@
 {
   "name": "Fix capitalization of Account Settings",
   "description": "Changes \"Account settings\" in the account menu to \"Account Settings\".",
-  "persistentScripts": [
-    "style.js"
-  ],
+  "persistentScripts": ["style.js"],
   "tags": ["easterEgg"],
   "l10n": true,
   "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json"
