@@ -69,6 +69,19 @@
         "id": "darkComments",
         "value": true
       }
+    },
+    {
+      "url": "scrollbar.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "settingMatch": {
+        "id": "darkScrollbars",
+        "value": true
+      }
     }
   ],
   "settings": [
@@ -203,6 +216,12 @@
       "id": "darkComments",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Dark scrollbars",
+      "id": "darkScrollbars",
+      "type": "boolean",
+      "default": true
     }
   ],
   "presets": [
@@ -229,7 +248,8 @@
         "border": "transparentWhite",
         "textShadow": false,
         "dots": false,
-        "darkComments": true
+        "darkComments": true,
+        "darkScrollbars": true
       }
     },
     {
@@ -255,7 +275,8 @@
         "border": "transparentBlack",
         "textShadow": false,
         "dots": false,
-        "darkComments": true
+        "darkComments": true,
+        "darkScrollbars": true
       }
     },
     {
@@ -281,7 +302,8 @@
         "border": "black",
         "textShadow": true,
         "dots": false,
-        "darkComments": true
+        "darkComments": true,
+        "darkScrollbars": true
       }
     },
     {
@@ -307,7 +329,8 @@
         "border": "gray",
         "textShadow": false,
         "dots": true,
-        "darkComments": true
+        "darkComments": true,
+        "darkScrollbars": true
       }
     },
     {
@@ -333,7 +356,8 @@
         "border": "transparentBlack",
         "textShadow": false,
         "dots": true,
-        "darkComments": false
+        "darkComments": false,
+        "darkScrollbars": false
       }
     }
   ],
