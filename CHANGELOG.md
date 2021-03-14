@@ -13,6 +13,22 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.11.1] - 2021-03-14
+
+- Bug fix: scrollbar not working in editor with some editor dark modes
+- Bug fix: "variable manager" listing broadcast messages as variables
+- Bug fix: "developer tools" not removing vanilla "Clean up Blocks" button
+- Bug fix: "addons" popup tab sometimes not listing some addons under "currently running on this tab"
+- Bug fix: "onion skinning" and "sprite folders" not working properly together
+- Bug fix: "show exact count" and "profile statistics" not working properly together
+- "Disable auto-save" addon: allow saving with Ctrl+S and File>Save.
+- "Website dark mode" addon: change scrollbar color on hover
+- "Mute project player" addon: fix bugs
+- "Sprite folders" addon: fix bugs
+- "Forum search" addon: migrate to ScratchDB v3 for faster results
+- "Thumbnails setter" addon: clarify what its only setting does when enabled
+- "Auto-show editor extensions": remove option to auto-show video sensing, which turns on the camera
+
 ## [v1.11.0] - 2021-03-08
 
 - New addon: folders [beta]
@@ -277,6 +293,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.11.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.1
 [v1.11.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.0
 [v1.10.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.10.0
 [v1.9.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.3
