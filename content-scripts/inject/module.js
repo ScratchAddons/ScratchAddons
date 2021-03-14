@@ -104,7 +104,7 @@ const observer = new MutationObserver((mutationsList) => {
           eventName = eventName === "enable" ? "reenable" : eventName;
           // TODO: Remove Addon from data-userscripts
           eventTarget.dispatchEvent(new CustomEvent(eventName));
-        } else {
+        } else if (eventName === "enable") {
           // Event Target was naver created; Was Enabled "late"...
           const addonData = allAddons.find((addon) => addon.addonId === attrVal.addonId);
           const userscripts = JSON.parse(template.getAttribute("data-userscripts"));

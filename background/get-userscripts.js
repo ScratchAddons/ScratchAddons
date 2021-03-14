@@ -45,7 +45,7 @@ async function getContentScriptInfo(url) {
           runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
         });
     }
-    if (userscripts.length) data.allAddons.push({ addonId, scripts: userscripts });
+    data.allAddons.push({ addonId, scripts: userscripts });
     if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
@@ -75,7 +75,11 @@ async function getContentScriptInfo(url) {
             url: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`),
           });
       }
-      if (userstyles.length) data.addonsWithUserstyles.push({ addonId, styles: userstyles });
+      let { dynamicEnable, dynamicDisable } = manifest;
+      // Be sure values are true and false so readable in DOM.
+      dynamicEnable = !!dynamicEnable;
+      dynamicDisable = !!dynamicDisable;
+      if (userstyles.length) data.addonsWithUserstyles.push({ addonId, styles: userstyles, dynamicEnable, dynamicDisable });
     }
   }
 

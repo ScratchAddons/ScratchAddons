@@ -65,20 +65,31 @@ window.addEventListener("load", () => {
 const sessionEnabledThemes = new Set();
 
 function injectUserstylesAndThemes({ addonsWithUserstyles = [], themes, isUpdate }) {
-  document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
-    if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
-  });
-  document.querySelectorAll(".scratch-addons-userstyle").forEach((style) => {
+  const userstyleElts = [...document.querySelectorAll(".scratch-addons-userstyle")];
+  userstyleElts.forEach((style) => {
     // Not in the enabled addons with userstyles? Must have been disabled.
-    if (!addonsWithUserstyles.find((a) => a.addonId == style.dataset.addonId)) style.remove();
+    if (!addonsWithUserstyles.find(a => a.addonId == style.dataset.addonId)) {
+      // Can be dynamicly disabled?
+      if (style.dataset.dynamicdisable == "true")
+        style.remove();
+    }
   });
 
   for (const addon of addonsWithUserstyles || []) {
     for (const userstyle of addon.styles) {
+      // Addon doesn't find any injected userstyles meaning it wants to dynamicly be enabled.
+      if (!userstyleElts.find(style => style.dataset.addonId === addon.addonId) && isUpdate) {
+        // If it can't be, do not inject the userstyles.
+        if (!addon.dynamicEnable) continue;
+      }
+      // If userstyle already injected
+      if (userstyleElts.find(style => style.href === userstyle.url)) continue;
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.classList.add("scratch-addons-userstyle");
       link.dataset.addonId = addon.addonId;
+      link.dataset.dynamicenable = addon.dynamicEnable;
+      link.dataset.dynamicdisable = addon.dynamicDisable;
       link.href = userstyle.url;
       if (document.body) document.documentElement.insertBefore(link, document.body);
       else document.documentElement.appendChild(link);
