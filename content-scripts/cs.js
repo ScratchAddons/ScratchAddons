@@ -64,7 +64,7 @@ window.addEventListener("load", () => {
 // Store all themes that were enabled this session
 const sessionEnabledThemes = new Set();
 
-function injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate }) {
+function injectUserstylesAndThemes({ addonsWithUserstyles = [], themes, isUpdate }) {
   document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
     if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
   });
