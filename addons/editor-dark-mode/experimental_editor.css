@@ -430,6 +430,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
   border-color: var(--editorDarkMode-primary);
   box-shadow: 0 0 0 4px var(--editorDarkMode-primary-transparent35);
 }
+.action-menu_main-button_3ccfy:hover,
 .camera-modal_main-button_1G6x1:not(:disabled):hover {
   box-shadow: 0 0 0 6px var(--editorDarkMode-primary-transparent35);
 }
