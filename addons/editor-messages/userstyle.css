@@ -1,19 +1,19 @@
 .sa-editormessages {
   display: block;
   position: relative;
-  background: url(https://scratch.mit.edu/images/nav-notifications.png) no-repeat center center;
-  background-size: 37.5%;
-  padding: 0 0.75rem;
   width: 1.7rem;
-  height: 100%;
-  color: white;
-  font-size: 0.85rem;
-  font-weight: bold;
-  text-decoration: none;
 }
 
-.sa-editormessages:hover {
-  background-color: hsla(0, 0%, 0%, 0.15);
+.sa-editormessages::before {
+  /* Icon is in a pseudo-element so dark mode can apply a filter to it
+  without affecting the message count */
+  content: "";
+  display: block;
+  position: absolute;
+  width: 1.7rem;
+  height: 100%;
+  background: url(https://scratch.mit.edu/images/nav-notifications.png) no-repeat center center;
+  background-size: 65.9%;
 }
 
 .sa-editormessages-count {

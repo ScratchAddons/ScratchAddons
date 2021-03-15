@@ -98,6 +98,7 @@
 .menu-bar_help-icon_3Xtrt,
 .community-button_community-button-icon_1IFvv,
 .menu-bar_mystuff-icon_3DtcD,
+.sa-editormessages::before,
 .account-nav_user-info_2We7v .account-nav_dropdown-caret-position_295CX img,
 .loader_background_2DPrW img {
   filter: var(--editorDarkMode-menuBar-filter);
@@ -118,6 +119,12 @@
 }
 .modal_header_1h7ps .close-button_large_2oadS:hover {
   box-shadow: 0 0 0 4px var(--editorDarkMode-menuBar-border);
+}
+.menu-bar_menu-bar-item_oLDa-.menu-bar_active_2Lfqh,
+.menu-bar_menu-bar-item_oLDa-.menu-bar_hoverable_c6WFB:hover,
+.menu_menu-item_3EwYA.menu_active_ebXO6,
+.menu_menu-item_3EwYA:hover {
+  background-color: var(--editorDarkMode-menuBar-border);
 }
 
 /* Active tab background */
