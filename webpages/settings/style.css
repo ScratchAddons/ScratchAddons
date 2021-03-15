@@ -647,52 +647,52 @@ input[type="color"]::-webkit-color-swatch {
   border-radius: 4px;
 }
 
-body.iframe  .badge:not(.beta-badge) {
-    display: none !important;
-  }
-body.iframe  .tooltiptext {
-    display: none;
-  }
-body.iframe  .addon-description {
-    display: none;
-  }
- body.iframe .filter-selector {
-    display: none;
-  }
-body.iframe  .search-box {
-    padding: 0 16px 0 16px;
-  }
-body.iframe  .navbar {
-    display: none;
-  }
-body.iframe  .main {
-    /* No calc -60px because there's no navbar */
-    height: 100%;
-  }
-body.iframe  .setting-label {
-    flex: 2;
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-body.iframe  .addons-container {
-    padding: 0px;
-    overflow-y: visible;
-  }
-body.iframe  .addons-block {
-    /* Always show scroll bar to avoid viewport width changing */
-    overflow-y: scroll;
-  }
-body.iframe  .filter-options {
-    flex-wrap: wrap;
-  }
-body.iframe  .filter-option {
-    flex-grow: 1;
-    text-align: center;
-  }
-body.iframe  .search-box input {
-    width: auto;
-    min-width: 10px;
-  }
+body.iframe .badge:not(.beta-badge) {
+  display: none !important;
+}
+body.iframe .tooltiptext {
+  display: none;
+}
+body.iframe .addon-description {
+  display: none;
+}
+body.iframe .filter-selector {
+  display: none;
+}
+body.iframe .search-box {
+  padding: 0 16px 0 16px;
+}
+body.iframe .navbar {
+  display: none;
+}
+body.iframe .main {
+  /* No calc -60px because there's no navbar */
+  height: 100%;
+}
+body.iframe .setting-label {
+  flex: 2;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+body.iframe .addons-container {
+  padding: 0px;
+  overflow-y: visible;
+}
+body.iframe .addons-block {
+  /* Always show scroll bar to avoid viewport width changing */
+  overflow-y: scroll;
+}
+body.iframe .filter-options {
+  flex-wrap: wrap;
+}
+body.iframe .filter-option {
+  flex-grow: 1;
+  text-align: center;
+}
+body.iframe .search-box input {
+  width: auto;
+  min-width: 10px;
+}
 
 .categories-shrink {
   text-align: right;
