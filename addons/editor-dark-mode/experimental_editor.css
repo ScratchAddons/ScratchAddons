@@ -36,6 +36,8 @@
   --editorDarkMode-categoryMenu-text: white;
   --editorDarkMode-categoryMenu-selection: rgba(255, 255, 255, 0.05);
   --editorDarkMode-palette-text: white;
+  --editorDarkMode-palette-filter: brightness(0) invert(1);
+  --editorDarkMode-palette-scrollbar: #333333;
   --editorDarkMode-accent-opacity0: rgba(255, 255, 255, 0);
   --editorDarkMode-border-color: rgba(255, 255, 255, 0.05);
 }
@@ -327,7 +329,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 [id^="blocklyGridPattern"] line {
   stroke: var(--editorDarkMode-workspace-dots);
 }
-.blocklyScrollbarHandle {
+.blocklyMainWorkspaceScrollbar .blocklyScrollbarHandle {
   fill: var(--editorDarkMode-workspace-scrollbar);
 }
 
@@ -349,6 +351,9 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .blocklyFlyoutLabelText,
 .blocklyFlyoutButton .blocklyText {
   fill: var(--editorDarkMode-palette-text);
+}
+.blocklyFlyoutScrollbar .blocklyScrollbarHandle {
+  fill: var(--editorDarkMode-palette-scrollbar);
 }
 .sa-lock-image {
   filter: var(--editorDarkMode-palette-filter);

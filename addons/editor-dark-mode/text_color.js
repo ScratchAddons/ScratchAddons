@@ -86,6 +86,7 @@ function testAll(settings) {
   transparentVariant("input-transparent25", settings.get("input"), "0.25");
   lightDarkVariant("primary-variant", settings.get("primary"), 60, 0.67, 0.76, 0.8);
   lightDarkVariant("workspace-scrollbar", settings.get("workspace"), 170, 0.83, 0.83, 0.83, 0.87, 0.87, 0.87);
+  lightDarkVariant("palette-scrollbar", settings.get("palette"), 170, 0.83, 0.83, 0.83, 0.92, 0.92, 0.92);
   document.documentElement.style.setProperty(
     "--editorDarkMode-border-color",
     {
