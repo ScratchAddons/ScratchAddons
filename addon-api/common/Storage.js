@@ -64,10 +64,10 @@ export default class Storage extends Listenable {
     } else {
       // content script has no access to chrome apis, ask background page to set for us
       return await promisify(chrome.runtime.sendMessage)(this._extentionId, {
-          addonStorageID: this._addonId + "/" + storedID,
-          addonStorageValue: value,
-          addonStorageMode: mode,
-        });
+        addonStorageID: this._addonId + "/" + storedID,
+        addonStorageValue: value,
+        addonStorageMode: mode,
+      });
     }
   }
   /**
