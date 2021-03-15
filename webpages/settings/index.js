@@ -34,6 +34,7 @@ const ColorInput = Vue.extend({
     };
   },
   ready() {
+    this.no_alpha = `${this.no_alpha}`
     if (this.no_alpha === "true") {
       this.formats = "hex,rgb,hsv,hsl";
     } else {

@@ -286,22 +286,13 @@
                     :data-setting-id="setting.id"
                     spellcheck="false"
                   />
-
                   <picker
-                    v-if="setting.type === 'color' && setting.allowTransparency"
+                    v-if="setting.type === 'color'"
                     :value="addonSettings[addon._addonId][setting.id] || setting.default"
                     :setting="setting"
                     :addon="addon"
                     @click=""
-                    v-click-outside="closePickers"
-                  ></picker>
-                  <picker
-                    v-if="setting.type === 'color' && !setting.allowTransparency"
-                    :value="addonSettings[addon._addonId][setting.id] || setting.default"
-                    :setting="setting"
-                    :addon="addon"
-                    @click=""
-                    no_alpha="true"
+                    :no_alpha="!setting.allowTransparency"
                     v-click-outside="closePickers"
                   ></picker>
                   <button
