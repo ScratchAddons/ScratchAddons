@@ -68,7 +68,7 @@ function testAll(settings) {
   textColor("accent-desaturateFilter", settings.get("accent"), "saturate(0)", "brightness(0) invert(1)");
   textColor("input-transparentText", settings.get("input"), "rgba(87, 94, 117, 0.6)", "rgba(255, 255, 255, 0.4)");
   textColor("input-filter", settings.get("input"), "none", "brightness(0) invert(1)");
-  textColor("input-codeZoomFilter", settings.get("input"), "none", "invert(1) hue-rotate(180deg)");
+  textColor("workspace-codeZoomFilter", settings.get("workspace"), "none", "invert(1) hue-rotate(180deg)");
   textColor(
     "categoryMenu-selection",
     settings.get("categoryMenu"),

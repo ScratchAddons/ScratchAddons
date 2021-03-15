@@ -28,7 +28,7 @@
   --editorDarkMode-input-text: white;
   --editorDarkMode-input-transparentText: rgba(255, 255, 255, 0.4);
   --editorDarkMode-input-filter: brightness(0) invert(1);
-  --editorDarkMode-input-codeZoomFilter: invert(1) hue-rotate(180deg);
+  --editorDarkMode-workspace-codeZoomFilter: invert(1) hue-rotate(180deg);
   --editorDarkMode-input-transparent50: rgba(255, 255, 255, 0.5);
   --editorDarkMode-input-transparent25: rgba(255, 255, 255, 0.25);
   --editorDarkMode-workspace-dots: rgba(255, 255, 255, 0.13);
@@ -304,7 +304,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
   filter: var(--editorDarkMode-input-filter);
 }
 .blocklyZoom > image {
-  filter: var(--editorDarkMode-input-codeZoomFilter);
+  filter: var(--editorDarkMode-workspace-codeZoomFilter);
 }
 .input_input-form_l9eYg::placeholder,
 .input_input-form_1Y0wX::placeholder {
