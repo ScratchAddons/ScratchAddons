@@ -25,6 +25,49 @@ All notable changes to this project will be documented in this file.
 
 -->
 
+## [v1.11.1] - 2021-03-14
+
+### Changed
+
+#### Addons
+
+- Thumbnails setter: Rename setting "Prevent thumbnail from being overwritten" to "Don't set thumbnails automatically" to avoid (#1851)
+
+#### Extension and Addon API
+
+- Move Portuguese localization to Portuguese Brazil (#1778)
+- Update localization strings
+
+### Fixed
+
+#### Addons
+
+- Block palette category icons: Typo in addon name (#1786)
+- Developer tools: "Clean up blocks" choice not removed from context menu (#1852)
+- Disable auto-save: Revamp addon to fix manual saving (#1741, #1850)
+- Editor dark mode: Scrolling not working on code area (#1849)
+- Forum search: Extremely slow performance (#1826)
+- Higher character limit in "What I'm Working On": Errors on other people's profiles (#1815)
+- Mute project player: Mute audio engine instead of suspending so sound blocks won't stuck (#1803)
+- Mute project player: Mute icon disappearing when entering/leaving editor while muted (#1803)
+- Onion skinning: Incompability with "Folders" addon (#1784)
+- Show exact count: Incompability with "Profile statistics" addon (#1827)
+- Sprite folders: Empty-name sprites inside folders not handled properly (#1812)
+- Variable manager: Broadcasts appearing (#1770)
+- Variable manager: Typo (#1786)
+- Website dark mode: Scrollbars don't change color on hover (#1767)
+
+#### Extension and Addon API
+
+- Userstyle-only addons not listed as running (#1753)
+
+### Removed
+
+#### Addons
+
+- Auto-show editor extensions: Video sensing option (#1799)
+- Variable manager: Feedback button (#1847)
+
 ## [v1.11.0] - 2021-03-08
 
 ### Added
@@ -68,6 +111,7 @@ All notable changes to this project will be documented in this file.
 
 - License page cannot be scrolled (#1666)
 - Incorrect styles are applied to addons that load too early (#1690)
+- Update localization strings
 
 ### Removed
 
@@ -90,6 +134,7 @@ All notable changes to this project will be documented in this file.
 #### Extension and Addon API
 
 - Addons can be searched using ID (#1597)
+- Update localization strings
 
 ### Fixed
 
@@ -122,6 +167,12 @@ All notable changes to this project will be documented in this file.
 - Extension crashing on browsers with Spanish language (#1529)
 
 ## [v1.9.2] - 2021-02-13
+
+### Changed
+
+#### Extension and Addon API
+
+- Update localization strings
 
 ### Fixed
 
@@ -157,7 +208,7 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 
 - New addon: Fix capitalization of Account Settings (#1413)
 - New addon: Show BBCode (#1411)
-- Auto-hide block palette: "hover in category" (#1419)
+- Auto-hide block palette: "Hover in category" setting (#1419)
 - Mute project player: Icon for muted projects (#1412)
 - Record project video: Record mic option (#1492)
 - Scratch Messaging: Support for manager promotion notifications (#1471)
@@ -173,6 +224,7 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 #### Extension and Addon API
 
 - Ignore shift-click on settings toggle (#1484)
+- Update localization strings
 
 ### Fixed
 
@@ -198,6 +250,7 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 
 - Make some classes not use hardcoded hashes (#1403)
 - Fix unused vars and return values
+- Update localization strings
 
 ### Fixed
 
@@ -241,6 +294,7 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 - Use SPDX indentifier in licenses (#1344)
 - Add web worker support on userscripts (#1345)
 - Bump intl-messageformat (#1348)
+- Update localization strings
 
 ### Fixed
 
@@ -306,6 +360,7 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 #### Extension and Addon API
 
 - Messaging related addons no longer go to the top (#1242)
+- Update localization strings
 
 ### Fixed
 
@@ -354,7 +409,6 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 - Tooltips are misaligned (#1252)
 - Site access screen opens on Firefox (#1258)
 
-
 ## [v1.6.1] - 2020-12-27
 
 NOTE: All updates from [v1.6.0] are pushed on this version.
@@ -385,13 +439,20 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 #### Extension and Addon API
 
 - Changing color settings may cause memory leak (#1062)
+- Update localization strings
 
 ## [v1.5.1] - 2020-12-15
 
 ### Fixed
 
-- Comment loading screen is not dark when using dark-www (#1019)
-- Onion-skinning groups images unintentionally (#1037)
+- Website dark mode: Comment loading screen is not dark (#1019)
+- Onion skinning: Images got grouped unintentionally (#1037)
+
+### Changed
+
+#### Extension and Addon API
+
+- Update localization strings
 
 ## [v1.5.0] - 2020-12-13
 
@@ -401,15 +462,15 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 
 - Onion skinning (#879)
 - Profile page banner (#895)
+- Show full areas: Support loading more in What's Happening (#899)
+- Thumbnails setter: A way to disable thumbnail overwriting (#964)
+- Block switching: More blocks support (#979)
+- Developer tools: Show broadcast senders and receivers (#980)
 
 #### Extension and Addon API
 
-- Show full areas supports loading more in What's Happening (#899)
 - Warning when posting on Japanese forum (#944)
 - Warning when site access is off (#950)
-- A way to disable thumbnail overwriting (#964)
-- Block switching supports more blocks (#979)
-- New devtools feature for showing broadcast senders and receivers (#980)
 - Button to open translation page (#1002)
 - Notification for updates (#1016)
 - "New" tag for addons (#1016)
@@ -419,7 +480,7 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 #### Extension and Addon API
 
 - Load addons inside frames (#897)
-- Localization updates
+- Update localization strings
 
 ### Fixed
 
@@ -656,6 +717,7 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.12.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.0
 [v1.11.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.0
 [v1.10.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.10.0
 [v1.9.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.9.3
@@ -708,7 +770,7 @@ Here's the simple format. Other types such as "Removed" can be added later.
 
 # RegEx for @apple502j's changelog
 
-Find      : `    (#\d+) (.+)\.? \(prio-\d\)`
-Replace   : `- $2 ($1)`
+Find      : `    (#\d+) (.+)\. \(prio-\d\)`
+Replace   : `- $2 \($1\)`
 
 -->
