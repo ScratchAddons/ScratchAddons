@@ -58,7 +58,6 @@ function testAll(settings) {
   textColor("page-tabHoverFilter", settings.get("page"), "grayscale(100%)", "brightness(0) invert(1)");
   textColor("primary-filter", settings.get("primary"), "brightness(0.4)", "none");
   textColor("primary-filter2", settings.get("primary"), "none", "brightness(0) invert(1)");
-  textColor("secondary-filter", settings.get("secondary"), "brightness(0.4)", "none");
   textColor("menuBar-transparentText", settings.get("menuBar"), "rgba(87, 94, 177, 0.25)", "rgba(255, 255, 255, 0.25)");
   textColor("menuBar-dimText", settings.get("menuBar"), "rgba(87, 94, 177, 0.75)", "rgba(255, 255, 255, 0.75)");
   textColor("menuBar-filter", settings.get("menuBar"), "brightness(0.4)", "none");
