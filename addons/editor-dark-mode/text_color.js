@@ -65,7 +65,7 @@ function testAll(settings) {
   textColor("tab-text", settings.get("tab"), "rgba(87, 94, 117, 0.75)", "rgba(255, 255, 255, 0.75)");
   textColor("selector2-filter", settings.get("selector2"), "none", "brightness(0) invert(1)");
   textColor("accent-filter", settings.get("accent"), "none", "brightness(0) invert(1)");
-  textColor("accent-desaturateFilter", settings.get("accent"), "saturate(0)", "brightness(0) invert(1)");
+  textColor("accent-desaturateFilter", settings.get("accent"), "saturate(0)", "brightness(0) invert(1) opacity(0.7)");
   textColor("input-transparentText", settings.get("input"), "rgba(87, 94, 117, 0.6)", "rgba(255, 255, 255, 0.4)");
   textColor("input-filter", settings.get("input"), "none", "brightness(0) invert(1)");
   textColor("workspace-codeZoomFilter", settings.get("workspace"), "none", "invert(1) hue-rotate(180deg)");
