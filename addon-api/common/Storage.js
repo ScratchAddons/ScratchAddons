@@ -1,9 +1,11 @@
-import Storage from "../common/Storage.js";
+import Listenable from "./Listenable.js";
+import { promisify, setStorage } from "../../background/handle-storage.js";
+
 /**
  * Manages storage.
- * @extends Storage
+ * @extends Listenable
  */
-export default class usStorage extends Storage {
+export default class Storage extends Listenable {
   constructor(addonObject) {
     super();
     this._addonId = addonObject.self.id;
@@ -53,24 +55,19 @@ export default class usStorage extends Storage {
       throw new Error("Scratch Addons exception: mode must be one of: sync, local, or cookie");
     }
     if (chrome.storage) {
-      import { setStorage } from "../../background/get-addon-storage.js";
+      // persitant script has access to chrome apis, set directly
       return await setStorage({
         addonStorageID: this._addonId + "/" + storedID,
         addonStorageValue: value,
         addonStorageMode: mode,
       });
     } else {
-      return await new Promise((resolve) => {
-        chrome.runtime.sendMessage(
-          this._extentionId,
-          {
-            addonStorageID: this._addonId + "/" + storedID,
-            addonStorageValue: value,
-            addonStorageMode: mode,
-          },
-          resolve
-        );
-      });
+      // content script has no access to chrome apis, ask background page to set for us
+      return await promisify(chrome.runtime.sendMessage)(this._extentionId, {
+          addonStorageID: this._addonId + "/" + storedID,
+          addonStorageValue: value,
+          addonStorageMode: mode,
+        });
     }
   }
   /**

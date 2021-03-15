@@ -1,11 +1,9 @@
 import Addon from "../common/Addon.js";
 import Tab from "./Tab.js";
-import Storage from "./Storage.js";
 
 /**
  * An addon that loads as a userscript.
  * @extends Addon
- * @property {Storage} storage
  * @property {Tab} tab
  */
 export default class UserscriptAddon extends Addon {

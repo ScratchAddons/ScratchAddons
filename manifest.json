@@ -56,10 +56,11 @@
     "addons/*",
     "libraries/*",
     "addons-l10n/*/*.json",
-    "images/cs/*"
+    "images/cs/*",
+    "background/handle-storage.js"
   ],
   "externally_connectable": {
-    "matches": ["*://scratch.mit.edu/*"]
+    "matches": ["https://scratch.mit.edu/*"]
   },
   "browser_specific_settings": {
     "gecko": {

@@ -1,7 +1,6 @@
 import Addon from "../common/Addon.js";
 import Notifications from "./Notifications.js";
 import Badge from "./Badge.js";
-import Storage from "./Storage.js";
 
 /**
  * An addon that loads as a background script.
@@ -11,7 +10,6 @@ import Storage from "./Storage.js";
  * @property {string} self.dir - the directory the addon is stored in.
  * @property {string} self.browser - the browser used.
  * @property {function} self.restart - restarts the addon.
- * @property {Storage} [storage]
  * @property {Notifications} [notifications]
  * @property {Badge} [badge]
  */

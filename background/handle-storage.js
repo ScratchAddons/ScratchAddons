@@ -1,4 +1,4 @@
-const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
+export const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
 const storageGet = async (mode) => {
   return await promisify(chrome.storage[mode].get.bind(chrome.storage[mode]))(null);
 };
@@ -23,21 +23,22 @@ const cookieSet = async (name, value) => {
     value: value,
   });
 };
-// Initialize scratchAddons.globalState.addonStorage from chrome.storage
-// get from chrome.storage.sync
-scratchAddons.globalState.addonStorage.sync = init(await storageGet("sync"));
+if (typeof scratchAddons !== "undefined") {
+  // Initialize scratchAddons.globalState.addonStorage from chrome.storage
+  // get from chrome.storage.sync
+  scratchAddons.globalState.addonStorage.sync = init(await storageGet("sync"));
 
-// get from chrome.storage.local
-scratchAddons.globalState.addonStorage.local = init(await storageGet("local"));
+  // get from chrome.storage.local
+  scratchAddons.globalState.addonStorage.local = init(await storageGet("local"));
 
-// get from cookies
-scratchAddons.globalState.addonStorage.cookie = init(await cookieGet());
+  // get from cookies
+  scratchAddons.globalState.addonStorage.cookie = init(await cookieGet());
 
-// Setting values
-chrome.runtime.onMessageExternal.addListener(async (request, _, sendResponse) => {
-  sendResponse(await setStorage(request, sendResponse));
-});
-
+  // Setting values
+  chrome.runtime.onMessageExternal.addListener(async (request, _, sendResponse) => {
+    sendResponse(await setStorage(request, sendResponse));
+  });
+}
 export async function setStorage(request) {
   // the stuff that matters: set the value
   // it needs to be here because the event handler does not have access to chrome.storage in userscripts
