@@ -57,7 +57,7 @@
     "libraries/*",
     "addons-l10n/*/*.json",
     "images/cs/*",
-    "background/handle-storage.js"
+    "/background/handle-storage.js"
   ],
   "externally_connectable": {
     "matches": ["https://scratch.mit.edu/*"]
