@@ -390,7 +390,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .green-flag_green-flag_1kiAo:hover,
 .stop-all_stop-all_1Y8P9:hover,
 .pause-btn:hover,
-.icon-button_container_278u5:active,
+.icon-button_container_278u5:not(.tool-select-base_is-selected_3x4kL):active,
 .camera-modal_camera-feed-container_-La7q,
 .record-modal_waveform-container__ay3Q {
   background-color: var(--editorDarkMode-primary-transparent15);
