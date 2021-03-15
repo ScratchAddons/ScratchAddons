@@ -343,6 +343,9 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .blocklyFlyoutButton .blocklyText {
   fill: var(--editorDarkMode-palette-text);
 }
+.sa-lock-image {
+  filter: var(--editorDarkMode-palette-filter);
+}
 
 /* Full screen background */
 .stage-wrapper_stage-wrapper_2bejr.stage-wrapper_full-screen_2hjMb {
@@ -490,6 +493,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .color-button_color-button-swatch_37evk,
 .color-button_color-button-arrow_2NxGY,
 .color-picker_divider_3a3qR,
+.color-picker_swatch_1IYWN,
 [dir="ltr"] .fixed-tools_mod-dashed-border_1XeDm,
 [dir="ltr"] .paint-editor_mod-dashed-border_1TL5q,
 [dir="ltr"] .mode-tools_mod-dashed-border_T8CR_,
@@ -500,6 +504,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .sound-editor_button_1_6Li,
 [dir="ltr"] .sound-editor_button-group_SFPoV .sound-editor_button_1_6Li:first-of-type,
 [dir="ltr"] .sound-editor_input-group_2hWiH,
+.sa-var-manager td,
 .context-menu_context-menu_2SJM-,
 .context-menu_menu-item-bordered_29CJG,
 .blocklyWidgetDiv .goog-menu,

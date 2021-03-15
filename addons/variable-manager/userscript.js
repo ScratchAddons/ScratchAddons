@@ -11,7 +11,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const searchBox = document.createElement("input");
   searchBox.placeholder = msg("search");
-  searchBox.className = "sa-var-manager-searchbox";
+  searchBox.className = addon.tab.scratchClass("input_input-form", {others: "sa-var-manager-searchbox"});
 
   searchBox.addEventListener("input", (e) => {
     for (const variable of localVariables) {

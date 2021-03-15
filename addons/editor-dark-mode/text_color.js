@@ -75,6 +75,7 @@ function testAll(settings) {
     "rgba(87, 124, 155, 0.13)",
     "rgba(255, 255, 255, 0.05)"
   );
+  textColor("palette-filter", settings.get("palette"), "none", "brightness(0) invert(1)");
   transparentVariant("primary-transparent35", settings.get("primary"), "0.35");
   transparentVariant("primary-transparent25", settings.get("primary"), "0.25");
   transparentVariant("primary-transparent20", settings.get("primary"), "0.2");
