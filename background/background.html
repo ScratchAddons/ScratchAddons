@@ -1,15 +1,12 @@
 <head>
   <meta charset="UTF-8" />
 
-  <!-- Declare scratchAddons object, create global and local state -->
-  <script src="declare-scratchaddons-object.js" type="module"></script>
-
-  <!-- Transition between versions -->
+  <!-- Transition from Scratch Messaging Extension -->
   <script src="transition.js" type="module"></script>
 
-  <!-- Load storage into memory -->
-  <script src="handle-storage.js" type="module"></script>
-
+  <!-- Declare scratchAddons object, create global and local state -->
+  <script src="declare-scratchaddons-object.js" type="module"></script>
+  
   <!-- Load manifests into memory -->
   <script src="load-addon-manifests.js" type="module"></script>
 
@@ -17,6 +14,7 @@
   <script src="get-addon-settings.js" type="module"></script>
 
   <!-- Load handlers. Some expose methods through scratchAddons.methods -->
+  <script src="handle-storage.js" type="module"></script>
   <script src="handle-fetch.js" type="module"></script>
   <script src="handle-cookie.js" type="module"></script>
   <script src="handle-auth.js" type="module"></script>

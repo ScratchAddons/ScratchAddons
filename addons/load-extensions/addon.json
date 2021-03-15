@@ -1,6 +1,6 @@
 {
   "name": "Auto-show editor extensions",
-  "description": "Adds music, pen, video sensing, and other editor extensions automatically to the block category list.",
+  "description": "Adds music, pen, and other editor extensions automatically to the block category list.",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -19,12 +19,6 @@
       "id": "pen",
       "type": "boolean",
       "default": true
-    },
-    {
-      "name": "Video Sensing",
-      "id": "videoSensing",
-      "type": "boolean",
-      "default": false
     },
     {
       "name": "Text to Speech",
