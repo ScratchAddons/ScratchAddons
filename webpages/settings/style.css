@@ -647,54 +647,53 @@ input[type="color"]::-webkit-color-swatch {
   border-radius: 4px;
 }
 
-@media only screen and (max-width: 540px) {
-  .badge:not(.beta-badge) {
+body.iframe  .badge:not(.beta-badge) {
     display: none !important;
   }
-  .tooltiptext {
+body.iframe  .tooltiptext {
     display: none;
   }
-  .addon-description {
+body.iframe  .addon-description {
     display: none;
   }
-  .filter-selector {
+ body.iframe .filter-selector {
     display: none;
   }
-  .search-box {
+body.iframe  .search-box {
     padding: 0 16px 0 16px;
   }
-  .navbar {
+body.iframe  .navbar {
     display: none;
   }
-  .main {
+body.iframe  .main {
     /* No calc -60px because there's no navbar */
     height: 100%;
   }
-  .setting-label {
+body.iframe  .setting-label {
     flex: 2;
     margin-top: 5px;
     margin-bottom: 5px;
   }
-  .addons-container {
+body.iframe  .addons-container {
     padding: 0px;
     overflow-y: visible;
   }
-  .addons-block {
+body.iframe  .addons-block {
     /* Always show scroll bar to avoid viewport width changing */
     overflow-y: scroll;
   }
-  .filter-options {
+body.iframe  .filter-options {
     flex-wrap: wrap;
   }
-  .filter-option {
+body.iframe  .filter-option {
     flex-grow: 1;
     text-align: center;
   }
-  .search-box input {
+body.iframe  .search-box input {
     width: auto;
     min-width: 10px;
   }
-}
+
 .categories-shrink {
   text-align: right;
   bottom: 0;
