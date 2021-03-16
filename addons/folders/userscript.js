@@ -916,7 +916,7 @@ export default async function ({ addon, global, console, msg }) {
     RenderedTarget.prototype.addCostume = function (...args) {
       if (currentAssetFolder !== null) {
         const costume = args[0];
-        if (costume) {
+        if (costume && typeof getFolderFromName(costume.name) !== 'string') {
           costume.name = setFolderOfName(costume.name, currentAssetFolder);
         }
       }
@@ -929,7 +929,7 @@ export default async function ({ addon, global, console, msg }) {
     RenderedTarget.prototype.addSound = function (...args) {
       if (currentAssetFolder !== null) {
         const sound = args[0];
-        if (sound) {
+        if (sound && typeof getFolderFromName(sound.name) !== 'string') {
           sound.name = setFolderOfName(sound.name, currentAssetFolder);
         }
       }
