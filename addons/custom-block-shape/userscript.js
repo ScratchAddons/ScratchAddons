@@ -19,8 +19,8 @@ export default async function ({ addon, global, console }) {
       forceUpdateBlocks(workspace);
       forceUpdateBlocks(workspace.getFlyout().workspace_);
       vm.emitWorkspaceUpdate();
-      let toolbox = workspace.getToolbox().flyout_.workspace_
-      Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(toolbox), toolbox)
+      let toolbox = workspace.getToolbox().flyout_.workspace_;
+      Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(toolbox), toolbox);
     }
 
     function applyChanges() {
@@ -222,11 +222,16 @@ export default async function ({ addon, global, console }) {
         BlockSvg.CORNER_RADIUS;
 
       BlockSvg.TOP_RIGHT_CORNER_DEFINE_HAT =
-        'a ' + BlockSvg.DEFINE_HAT_CORNER_RADIUS + ',' +
-        BlockSvg.DEFINE_HAT_CORNER_RADIUS + ' 0 0,1 ' +
-        BlockSvg.DEFINE_HAT_CORNER_RADIUS + ',' +
-        BlockSvg.DEFINE_HAT_CORNER_RADIUS
-        + ' v ' + (1 * GRID_UNIT - BlockSvg.CORNER_RADIUS);
+        "a " +
+        BlockSvg.DEFINE_HAT_CORNER_RADIUS +
+        "," +
+        BlockSvg.DEFINE_HAT_CORNER_RADIUS +
+        " 0 0,1 " +
+        BlockSvg.DEFINE_HAT_CORNER_RADIUS +
+        "," +
+        BlockSvg.DEFINE_HAT_CORNER_RADIUS +
+        " v " +
+        (1 * GRID_UNIT - BlockSvg.CORNER_RADIUS);
 
       //BlockSvg.STATEMENT_INPUT_INNER_SPACE = (2 * GRID_UNIT) - GRID_UNIT * (cornerSize);
     }
