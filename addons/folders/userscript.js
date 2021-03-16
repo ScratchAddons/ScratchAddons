@@ -288,13 +288,11 @@ export default async function ({ addon, global, console, msg }) {
     const target = vm.runtime.targets[0];
     if (
       typeof vm.installTargets === "function" &&
-      typeof vm.addCostume === "function" &&
-      typeof vm.addSound === "function" &&
       typeof vm.reorderTarget === "function" &&
-      typeof vm.shareCostumeToTarget ===  "function" &&
-      typeof vm.shareSoundToTarget ===  "function" &&
       typeof target.reorderCostume === "function" &&
-      typeof target.reorderSound === "function"
+      typeof target.reorderSound === "function" &&
+      typeof target.addCostume === "function" &&
+      typeof target.addSound === "function"
     )
       return;
     throw new Error("Can not comprehend VM");
@@ -893,6 +891,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const patchVM = () => {
+    const RenderedTarget = vm.runtime.targets[0].constructor;
+
     const originalInstallTargets = vm.installTargets;
     vm.installTargets = function (...args) {
       if (currentSpriteFolder !== null) {
@@ -912,58 +912,30 @@ export default async function ({ addon, global, console, msg }) {
       });
     };
 
-    const originalAddCostume = vm.addCostume;
-    vm.addCostume = function (...args) {
+    const originalAddCostume = RenderedTarget.prototype.addCostume;
+    RenderedTarget.prototype.addCostume = function (...args) {
       if (currentAssetFolder !== null) {
-        const costume = args[1];
+        const costume = args[0];
         if (costume) {
           costume.name = setFolderOfName(costume.name, currentAssetFolder);
         }
       }
-      return originalAddCostume.call(this, ...args).then((r) => {
-        fixCostumeOrder();
-        return r;
-      });
+      const r = originalAddCostume.call(this, ...args);
+      fixCostumeOrder(this);
+      return r;
     };
 
-    const originalAddSound = vm.addSound;
-    vm.addSound = function (...args) {
+    const originalAddSound = RenderedTarget.prototype.addSound;
+    RenderedTarget.prototype.addSound = function (...args) {
       if (currentAssetFolder !== null) {
         const sound = args[0];
         if (sound) {
           sound.name = setFolderOfName(sound.name, currentAssetFolder);
         }
       }
-      return originalAddSound.call(this, ...args).then((r) => {
-        fixSoundOrder();
-        return r;
-      });
-    };
-
-    const originalShareCostumeToTarget = vm.shareCostumeToTarget;
-    vm.shareCostumeToTarget = function (...args) {
-      return originalShareCostumeToTarget.call(this, ...args)
-        .then((r) => {
-          const targetId = args[1];
-          const target = this.runtime.getTargetById(targetId);
-          if (target) {
-            fixCostumeOrder(target);
-          }
-          return r;
-        });
-    };
-
-    const originalShareSoundToTarget = vm.shareSoundToTarget;
-    vm.shareSoundToTarget = function (...args) {
-      return originalShareSoundToTarget.call(this, ...args)
-        .then((r) => {
-          const targetId = args[1];
-          const target = this.runtime.getTargetById(targetId);
-          if (target) {
-            fixSoundOrder(target);
-          }
-          return r;
-        });
+      const r = originalAddSound.call(this, ...args);
+      fixSoundOrder(this);
+      return r;
     };
 
     const abstractReorder = (
@@ -1113,7 +1085,7 @@ export default async function ({ addon, global, console, msg }) {
       );
     };
 
-    vm.runtime.targets[0].constructor.prototype.reorderCostume = function (costumeIndex, newIndex) {
+    RenderedTarget.prototype.reorderCostume = function (costumeIndex, newIndex) {
       return abstractReorder(
         {
           getAll: () => {
@@ -1138,7 +1110,7 @@ export default async function ({ addon, global, console, msg }) {
       );
     };
 
-    vm.runtime.targets[0].constructor.prototype.reorderSound = function (soundIndex, newIndex) {
+    RenderedTarget.prototype.reorderSound = function (soundIndex, newIndex) {
       return abstractReorder(
         {
           getAll: () => {
