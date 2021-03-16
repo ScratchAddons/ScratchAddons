@@ -218,11 +218,16 @@ export default async function ({ addon, global, console }) {
         BlockSvg.CORNER_RADIUS;
 
       BlockSvg.TOP_RIGHT_CORNER_DEFINE_HAT =
-        'a ' + BlockSvg.DEFINE_HAT_CORNER_RADIUS + ',' +
-        BlockSvg.DEFINE_HAT_CORNER_RADIUS + ' 0 0,1 ' +
-        BlockSvg.DEFINE_HAT_CORNER_RADIUS + ',' +
-        BlockSvg.DEFINE_HAT_CORNER_RADIUS
-        + ' v ' + (1 * GRID_UNIT - BlockSvg.CORNER_RADIUS);
+        "a " +
+        BlockSvg.DEFINE_HAT_CORNER_RADIUS +
+        "," +
+        BlockSvg.DEFINE_HAT_CORNER_RADIUS +
+        " 0 0,1 " +
+        BlockSvg.DEFINE_HAT_CORNER_RADIUS +
+        "," +
+        BlockSvg.DEFINE_HAT_CORNER_RADIUS +
+        " v " +
+        (1 * GRID_UNIT - BlockSvg.CORNER_RADIUS);
     }
 
     function applyAndUpdate() {
