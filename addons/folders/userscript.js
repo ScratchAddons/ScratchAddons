@@ -805,15 +805,11 @@ export default async function ({ addon, global, console, msg }) {
           const realIndex = itemData.realIndex;
           if (originalIndex !== realIndex) {
             const currentOffset = addon.tab.redux.state.scratchGui.assetDrag.currentOffset;
-            const sortableHOC = getSortableHOCFromElement(this.ref);
-            if (currentOffset && sortableHOC) {
-              const { x, y } = currentOffset;
-              const { top, left, bottom, right } = sortableHOC.containerBox;
-              if (!(x >= left && x <= right && y >= top && y <= bottom)) {
-                this.props.index = realIndex;
-                this.handleDrag(currentOffset);
-                this.props.index = originalIndex;
-              }
+            const sortableHOCInstance = getSortableHOCFromElement(this.ref);
+            if (currentOffset && sortableHOCInstance && sortableHOCInstance.getMouseOverIndex() === null) {
+              this.props.index = realIndex;
+              this.handleDrag(currentOffset);
+              this.props.index = originalIndex;
             }
           }
         }
