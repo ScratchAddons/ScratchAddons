@@ -232,18 +232,18 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  const fixCostumeOrder = () => {
-    const { items, changed } = fixOrderOfItemsInFolders(vm.editingTarget.sprite.costumes);
+  const fixCostumeOrder = (target=vm.editingTarget) => {
+    const { items, changed } = fixOrderOfItemsInFolders(target.sprite.costumes);
     if (changed) {
-      vm.editingTarget.sprite.costumes = items;
+      target.sprite.costumes = items;
       vm.emitTargetsUpdate();
     }
   };
 
-  const fixSoundOrder = () => {
-    const { items, changed } = fixOrderOfItemsInFolders(vm.editingTarget.sprite.sounds);
+  const fixSoundOrder = (target=vm.editingTarget) => {
+    const { items, changed } = fixOrderOfItemsInFolders(target.sprite.sounds);
     if (changed) {
-      vm.editingTarget.sprite.sounds = items;
+      target.sprite.sounds = items;
       vm.emitTargetsUpdate();
     }
   };
@@ -291,6 +291,8 @@ export default async function ({ addon, global, console, msg }) {
       typeof vm.addCostume === "function" &&
       typeof vm.addSound === "function" &&
       typeof vm.reorderTarget === "function" &&
+      typeof vm.shareCostumeToTarget ===  "function" &&
+      typeof vm.shareSoundToTarget ===  "function" &&
       typeof target.reorderCostume === "function" &&
       typeof target.reorderSound === "function"
     )
@@ -936,6 +938,32 @@ export default async function ({ addon, global, console, msg }) {
         fixSoundOrder();
         return r;
       });
+    };
+
+    const originalShareCostumeToTarget = vm.shareCostumeToTarget;
+    vm.shareCostumeToTarget = function (...args) {
+      return originalShareCostumeToTarget.call(this, ...args)
+        .then((r) => {
+          const targetId = args[1];
+          const target = this.runtime.getTargetById(targetId);
+          if (target) {
+            fixCostumeOrder(target);
+          }
+          return r;
+        });
+    };
+
+    const originalShareSoundToTarget = vm.shareSoundToTarget;
+    vm.shareSoundToTarget = function (...args) {
+      return originalShareSoundToTarget.call(this, ...args)
+        .then((r) => {
+          const targetId = args[1];
+          const target = this.runtime.getTargetById(targetId);
+          if (target) {
+            fixSoundOrder(target);
+          }
+          return r;
+        });
     };
 
     const abstractReorder = (
