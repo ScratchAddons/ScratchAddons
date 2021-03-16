@@ -233,7 +233,7 @@ export default async function ({ addon, global, console }) {
         " v " +
         (1 * GRID_UNIT - BlockSvg.CORNER_RADIUS);
 
-      BlockSvg.STATEMENT_INPUT_INNER_SPACE = (2.8 * GRID_UNIT) - 0.9 * GRID_UNIT * cornerSize;
+      BlockSvg.STATEMENT_INPUT_INNER_SPACE = 2.8 * GRID_UNIT - 0.9 * GRID_UNIT * cornerSize;
     }
 
     function applyAndUpdate() {
