@@ -8,6 +8,7 @@ export default async function ({ addon, global, console }) {
     var vm = addon.tab.traps.vm;
 
     const { GRID_UNIT } = BlockSvg;
+    var cornerSize = 1;
     var notchSize = 1;
 
     function forceUpdateBlocks(workspace) {
@@ -18,10 +19,13 @@ export default async function ({ addon, global, console }) {
       forceUpdateBlocks(workspace);
       forceUpdateBlocks(workspace.getFlyout().workspace_);
       vm.emitWorkspaceUpdate();
+      let toolbox = workspace.getToolbox().flyout_.workspace_
+      Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(toolbox), toolbox)
     }
 
     function applyChanges() {
       multiplier = addon.settings.get("paddingSize") / 100;
+      cornerSize = addon.settings.get("cornerSize") / 100;
       notchSize = addon.settings.get("notchSize") / 100;
       BlockSvg.SEP_SPACE_Y = 2 * GRID_UNIT * multiplier;
       BlockSvg.MIN_BLOCK_X = 16 * GRID_UNIT * multiplier;
@@ -70,7 +74,7 @@ export default async function ({ addon, global, console }) {
         2 * notchSize;
       BlockSvg.NOTCH_PATH_RIGHT =
         "h " +
-        (-4 * (addon.settings.get("cornerSize") / 100 - 1) - 5 * (1 - notchSize)) +
+        (-4 * (cornerSize - 1) - 5 * (1 - notchSize)) +
         "c -2,0 -3," +
         1 * notchSize +
         " -4," +
@@ -223,6 +227,8 @@ export default async function ({ addon, global, console }) {
         BlockSvg.DEFINE_HAT_CORNER_RADIUS + ',' +
         BlockSvg.DEFINE_HAT_CORNER_RADIUS
         + ' v ' + (1 * GRID_UNIT - BlockSvg.CORNER_RADIUS);
+
+      //BlockSvg.STATEMENT_INPUT_INNER_SPACE = (2 * GRID_UNIT) - GRID_UNIT * (cornerSize);
     }
 
     function applyAndUpdate() {
