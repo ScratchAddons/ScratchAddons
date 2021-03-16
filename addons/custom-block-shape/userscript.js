@@ -5,6 +5,7 @@ export default async function ({ addon, global, console }) {
   (function (Blockly) {
     const workspace = Blockly.getMainWorkspace();
     const BlockSvg = Blockly.getMainWorkspace().newBlock().constructor;
+    var vm = addon.tab.traps.vm;
 
     const { GRID_UNIT } = BlockSvg;
     var notchSize = 1;
@@ -16,6 +17,7 @@ export default async function ({ addon, global, console }) {
     function updateAllBlocks() {
       forceUpdateBlocks(workspace);
       forceUpdateBlocks(workspace.getFlyout().workspace_);
+      vm.emitWorkspaceUpdate();
     }
 
     function applyChanges() {
