@@ -18,9 +18,11 @@ export default async function ({ addon, global, console }) {
     function updateAllBlocks() {
       forceUpdateBlocks(workspace);
       forceUpdateBlocks(workspace.getFlyout().workspace_);
-      vm.emitWorkspaceUpdate();
-      let toolbox = workspace.getToolbox().flyout_.workspace_;
-      Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(toolbox), toolbox);
+      if (vm.editingTarget) {
+        vm.emitWorkspaceUpdate();
+        workspace.getToolbox().flyout_.workspace_.clear();
+        workspace.getToolbox().refreshSelection();
+      }
     }
 
     function applyChanges() {
