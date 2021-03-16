@@ -254,6 +254,7 @@ export default async function ({ addon, global, console, msg }) {
       Array.isArray(sortableHOCInstance.props.items) &&
       (typeof sortableHOCInstance.props.selectedId === "string" ||
         typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
+      typeof sortableHOCInstance.containerBox !== "undefined" &&
       typeof SortableHOC.prototype.componentDidMount === "undefined" &&
       typeof SortableHOC.prototype.componentDidUpdate === "undefined" &&
       typeof SortableHOC.prototype.componentWillReceiveProps === "function" &&
@@ -273,6 +274,8 @@ export default async function ({ addon, global, console, msg }) {
       typeof spriteSelectorItemInstance.props.dragType === "string" &&
       typeof SpriteSelectorItem.prototype.handleClick === "function" &&
       typeof SpriteSelectorItem.prototype.setRef === "function" &&
+      typeof SpriteSelectorItem.prototype.handleDrag === "function" &&
+      typeof SpriteSelectorItem.prototype.handleDragEnd === "function" &&
       typeof SpriteSelectorItem.prototype.handleDelete === "function" &&
       typeof SpriteSelectorItem.prototype.handleDuplicate === "function" &&
       typeof SpriteSelectorItem.prototype.handleExport === "function"
@@ -790,6 +793,33 @@ export default async function ({ addon, global, console, msg }) {
         return original.call(this, ...args);
       };
     }
+
+    const originalHandleDragEnd = SpriteSelectorItem.prototype.handleDragEnd;
+    SpriteSelectorItem.prototype.handleDragEnd = function (...args) {
+      const itemData = getItemData(this.props);
+      if (itemData) {
+        if (typeof itemData.realIndex === "number" && this.props.dragging) {
+          // If the item is being dragged onto another group (eg. costume list -> sprite list)
+          // then we fake a drag event to make the `index` be the real index
+          const originalIndex = this.props.index;
+          const realIndex = itemData.realIndex;
+          if (originalIndex !== realIndex) {
+            const currentOffset = addon.tab.redux.state.scratchGui.assetDrag.currentOffset;
+            const sortableHOC = getSortableHOCFromElement(this.ref);
+            if (currentOffset && sortableHOC) {
+              const { x, y } = currentOffset;
+              const { top, left, bottom, right } = sortableHOC.containerBox;
+              if (!(x >= left && x <= right && y >= top && y <= bottom)) {
+                this.props.index = realIndex;
+                this.handleDrag(currentOffset);
+                this.props.index = originalIndex;
+              }
+            }
+          }
+        }
+      }
+      return originalHandleDragEnd.call(this, ...args);
+    };
 
     const originalHandleClick = SpriteSelectorItem.prototype.handleClick;
     SpriteSelectorItem.prototype.handleClick = function (...args) {
