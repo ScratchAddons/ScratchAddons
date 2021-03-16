@@ -3,8 +3,6 @@ export default async function ({ addon, global, console }) {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
 
   (function (Blockly) {
-    "use strict";
-
     const workspace = Blockly.getMainWorkspace();
     const BlockSvg = Blockly.getMainWorkspace().newBlock().constructor;
 

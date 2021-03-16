@@ -21,8 +21,8 @@
   ],
   "info": [
     {
-      "type": "notice",
-      "text": "Setting the padding size to a smaller value may decrease usability.",
+      "type": "warning",
+      "text": "Decreasing the padding size is only visible to you, so when your projects are viewed by other users, your scripts may overlap.",
       "id": "usabilityNotice"
     }
   ],
@@ -49,9 +49,60 @@
       "type": "integer",
       "min": 0,
       "default": 100,
-      "max": 200
+      "max": 150
     }
   ],
-  "traps": true,
+  "presets": [
+    {
+      "name": "3.0 Blocks",	
+      "id": "default3",	
+      "description": "The regular appearance of Scratch 3.0 blocks",	
+      "values": {	
+        "paddingSize": 100,
+        "cornerSize": 100,
+        "notchSize": 100
+      }
+    },
+    {
+      "name": "2.0 Blocks",	
+      "id": "default2",	
+      "description": "An appearance similar to Scratch 2.0 blocks",	
+      "values": {	
+        "paddingSize": 70,
+        "cornerSize": 150,
+        "notchSize": 75
+      }
+    },
+    {
+      "name": "3.0 Flat",	
+      "id": "flat3",	
+      "description": "Scratch 3.0 blocks with notches and corners removed",	
+      "values": {	
+        "paddingSize": 100,
+        "cornerSize": 0,
+        "notchSize": 0
+      }
+    },
+    {
+      "name": "2.0 Flat",	
+      "id": "flat2",	
+      "description": "Scratch 2.0 blocks with notches and corners removed",	
+      "values": {	
+        "paddingSize": 70,
+        "cornerSize": 0,
+        "notchSize": 0
+      }
+    },
+    {
+      "name": "Bigger",	
+      "id": "bigger",	
+      "description": "Improves usability by enlarging block features.",	
+      "values": {	
+        "paddingSize": 200,
+        "cornerSize": 300,
+        "notchSize": 100
+      }
+    }
+  ],
   "l10n": true
 }
