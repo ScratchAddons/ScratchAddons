@@ -232,7 +232,7 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  const fixCostumeOrder = (target=vm.editingTarget) => {
+  const fixCostumeOrder = (target = vm.editingTarget) => {
     const { items, changed } = fixOrderOfItemsInFolders(target.sprite.costumes);
     if (changed) {
       target.sprite.costumes = items;
@@ -240,7 +240,7 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  const fixSoundOrder = (target=vm.editingTarget) => {
+  const fixSoundOrder = (target = vm.editingTarget) => {
     const { items, changed } = fixOrderOfItemsInFolders(target.sprite.sounds);
     if (changed) {
       target.sprite.sounds = items;
@@ -916,7 +916,7 @@ export default async function ({ addon, global, console, msg }) {
     RenderedTarget.prototype.addCostume = function (...args) {
       if (currentAssetFolder !== null) {
         const costume = args[0];
-        if (costume && typeof getFolderFromName(costume.name) !== 'string') {
+        if (costume && typeof getFolderFromName(costume.name) !== "string") {
           costume.name = setFolderOfName(costume.name, currentAssetFolder);
         }
       }
@@ -929,7 +929,7 @@ export default async function ({ addon, global, console, msg }) {
     RenderedTarget.prototype.addSound = function (...args) {
       if (currentAssetFolder !== null) {
         const sound = args[0];
-        if (sound && typeof getFolderFromName(sound.name) !== 'string') {
+        if (sound && typeof getFolderFromName(sound.name) !== "string") {
           sound.name = setFolderOfName(sound.name, currentAssetFolder);
         }
       }
