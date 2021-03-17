@@ -1,4 +1,4 @@
-let wrap, vm, addon, safeMsg, msg;
+let wrap, vm, addon, safeMsg, msg, console;
 let a11yObjects = {};
 let getTabNav = function getTabNav() {
   return false;
