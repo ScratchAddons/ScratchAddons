@@ -13,6 +13,11 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.11.2] - 2021-03-17
+
+- "Sprite folders" addon: fix editor crashing when trying to drag and drop a sound within a folder to another sprite.
+- "Profile statistics" addon: add missing thousand separator comma to "most loved by country" statistic.
+
 ## [v1.11.1] - 2021-03-14
 
 - Bug fix: scrollbar not working in editor with some editor dark modes
@@ -293,6 +298,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.11.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.2
 [v1.11.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.1
 [v1.11.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.0
 [v1.10.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.10.0
