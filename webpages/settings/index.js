@@ -34,13 +34,13 @@ const ColorInput = Vue.extend({
     };
   },
   ready() {
-    this.no_alpha = `${this.no_alpha}`
+    this.no_alpha = `${this.no_alpha}`;
     if (this.no_alpha === "true") {
       this.formats = "hex,rgb,hsv,hsl";
     } else {
       this.formats = "hex,hex8,rgb,hsv,hsl";
     }
-    this.$els.pickr.addEventListener('input', (e) => {
+    this.$els.pickr.addEventListener("input", (e) => {
       this.color = "#" + e.detail.value;
       if (this.value !== this.color) {
         this.$parent.addonSettings[this.addon._addonId][this.setting.id] = "#" + this.$els.pickr.hex8;
@@ -51,13 +51,13 @@ const ColorInput = Vue.extend({
   methods: {
     toggle(addon, setting, value = !this.isOpen) {
       this.isOpen = value;
-      this.opening = true
+      this.opening = true;
       for (let child of this.$root.$children) {
         if (child.isOpen && child.canCloseOutside && child.color && !child.opening) {
           child.toggle(child.addon, child.setting, false);
         }
       }
-      this.opening = false
+      this.opening = false;
 
       this.color = "#" + this.$els.pickr.hex8;
       if (this.value !== this.color) {
