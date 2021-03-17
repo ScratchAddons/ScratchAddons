@@ -96,16 +96,6 @@
         "cornerSize": 0,
         "notchSize": 0
       }
-    },
-    {
-      "name": "Bigger",
-      "id": "bigger",
-      "description": "Improves usability by enlarging block features.",
-      "values": {
-        "paddingSize": 200,
-        "cornerSize": 300,
-        "notchSize": 100
-      }
     }
   ],
   "l10n": true
