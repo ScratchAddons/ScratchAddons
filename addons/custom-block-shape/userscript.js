@@ -11,13 +11,7 @@ export default async function ({ addon, global, console }) {
     var cornerSize = 1;
     var notchSize = 1;
 
-    function forceUpdateBlocks(workspace) {
-      workspace.getAllBlocks().forEach((b) => b.render());
-    }
-
     function updateAllBlocks() {
-      forceUpdateBlocks(workspace);
-      forceUpdateBlocks(workspace.getFlyout().workspace_);
       if (vm.editingTarget) {
         vm.emitWorkspaceUpdate();
         workspace.getToolbox().flyout_.workspace_.clear();
