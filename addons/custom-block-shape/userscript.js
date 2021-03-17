@@ -3,8 +3,7 @@ export default async function ({ addon, global, console }) {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
 
   (function (Blockly) {
-    const workspace = Blockly.getMainWorkspace();
-    const BlockSvg = Blockly.getMainWorkspace().newBlock().constructor;
+    const BlockSvg = BlocklyInstance.BlockSvg;
     var vm = addon.tab.traps.vm;
 
     const { GRID_UNIT } = BlockSvg;
@@ -14,8 +13,8 @@ export default async function ({ addon, global, console }) {
     function updateAllBlocks() {
       if (vm.editingTarget) {
         vm.emitWorkspaceUpdate();
-        workspace.getToolbox().flyout_.workspace_.clear();
-        workspace.getToolbox().refreshSelection();
+        Blockly.getMainWorkspace().getToolbox().flyout_.workspace_.clear();
+        Blockly.getMainWorkspace().getToolbox().refreshSelection();
       }
     }
 
