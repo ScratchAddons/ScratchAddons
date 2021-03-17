@@ -171,6 +171,8 @@ export default async function ({ addon, global, console }) {
       //Corner setting
       BlockSvg.CORNER_RADIUS = (1 * GRID_UNIT * addon.settings.get("cornerSize")) / 100;
 
+      BlockSvg.TOP_LEFT_CORNER_START = 'm 0,' + BlockSvg.CORNER_RADIUS;
+
       BlockSvg.TOP_LEFT_CORNER =
         "A " + BlockSvg.CORNER_RADIUS + "," + BlockSvg.CORNER_RADIUS + " 0 0,1 " + BlockSvg.CORNER_RADIUS + ",0";
 
