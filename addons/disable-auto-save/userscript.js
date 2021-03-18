@@ -1,51 +1,27 @@
-export default async ({ addon, console }) => {
-  var manualPress = false;
-  // shamelessly stolen from animated-thumb/persistent-thumb.js
-  const xhrOpen = XMLHttpRequest.prototype.open;
-  XMLHttpRequest.prototype.open = function (method, path, ...args) {
-    if (method === "put" && String(path).startsWith("https://projects.scratch.mit.edu/")) {
-      if (!manualPress) method = "OPTIONS";
-    }
-    return xhrOpen.call(this, method, path, ...args);
-  };
-  //initial adding of the observers and refreshing
-  addMutationListeners();
-  addon.tab.addEventListener("urlChange", function (event) {
-    addMutationListeners();
+export default async ({ addon, console, msg }) => {
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+    if (detail.action.type !== "timeout/SET_AUTOSAVE_TIMEOUT_ID") return;
+    clearTimeout(detail.next.scratchGui.timeout.autoSaveTimeoutId);
+    console.log("Pending autosave prevented.");
   });
-
-  async function addMutationListeners() {
-    //add a function to the "Save Now" button to disable request interception if it was a manual save
-    var saveContainer = await addon.tab.waitForElement("[class^='menu-bar_account-info-group']");
-    saveContainer = saveContainer.childNodes[0];
-    const saveObserver = new MutationObserver(function (mutations) {
-      if (saveContainer.childNodes[0]) {
-        if (saveContainer.childNodes[0].className.startsWith("save-status_save-now")) {
-          manualPress = false;
-          saveContainer.childNodes[0].addEventListener("click", function () {
-            manualPress = true;
-          });
+  while (true) {
+    const btn = await addon.tab.waitForElement('[class*="community-button_community-button_"]', { markAsSeen: true });
+    btn.addEventListener(
+      "click",
+      (e) => {
+        // Don't show if it's on someone else's project page,
+        // or if there are no changes.
+        if (
+          addon.tab.redux.state.scratchGui.projectChanged &&
+          document.querySelector('[class*="project-title-input_title-field_"]') &&
+          !confirm(msg("save-and-leave"))
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
         }
-      }
-    });
-    saveObserver.observe(saveContainer, { childList: true });
-    var alertContainer = await addon.tab.waitForElement("[class^='alerts_alerts-inner-container']");
-    //edgecase: exit editor and enter editor
-    if (addon.tab.editorMode === "editor" && alertContainer.childNodes[0] !== undefined) {
-      alertContainer.childNodes[0].style.visibility = "hidden";
-    }
-    //hide the "can't save" warnings scratch gives us (don't worry, there won't be any zombie warnings :P)
-    const alertObserver = new MutationObserver(function (mutations) {
-      if (alertContainer.childNodes[0]) {
-        if (manualPress) {
-          alertContainer.childNodes[0].style.visibility = "";
-          alertContainer.childNodes[0].childNodes[1].childNodes[0].addEventListener("click", function () {
-            manualPress = true;
-          });
-          manualPress = false;
-        } else alertContainer.childNodes[0].style.visibility = "hidden";
-      }
-    });
-    alertObserver.observe(alertContainer, { childList: true });
+      },
+      { capture: true }
+    );
   }
 };

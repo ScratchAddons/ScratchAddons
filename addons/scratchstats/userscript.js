@@ -14,7 +14,10 @@ export default async function ({ addon, msg, console }) {
   const username = location.pathname.split("/")[2];
   if (!username) return;
   const content = document.querySelector("#content");
-  const commentBox = document.querySelector("#content > .box:not(#profile-data):not(.slider-carousel-container)");
+  const commentBox = document.querySelector(
+    "#content > .box:not(#profile-data):not(.slider-carousel-container):not(#page-404)"
+  );
+  if (!commentBox) return;
   const statsBox = document.createElement("div");
   content.insertBefore(statsBox, commentBox);
   statsBox.className = "box sa-stats slider-carousel-container";
@@ -36,7 +39,7 @@ export default async function ({ addon, msg, console }) {
   stats.className = "box-content";
   stats.innerText = msg("loading");
 
-  fetch(`https://scratchdb.lefty.one/v2/user/info/${username}`).then(async function (response) {
+  fetch(`https://scratchdb.lefty.one/v3/user/info/${username}`).then(async function (response) {
     stats.removeChild(stats.firstChild); // remove loading message
     const followRow = document.createElement("div");
     stats.appendChild(followRow);
@@ -54,7 +57,7 @@ export default async function ({ addon, msg, console }) {
     );
     ranksRow.appendChild(
       createItem(
-        `#${data.statistics.ranks.loves.toLocaleString()} (#${data.statistics.ranks.country.loves})`,
+        `#${data.statistics.ranks.loves.toLocaleString()} (#${data.statistics.ranks.country.loves.toLocaleString()})`,
         msg("most-loves")
       )
     );
