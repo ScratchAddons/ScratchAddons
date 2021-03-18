@@ -25,6 +25,15 @@ All notable changes to this project will be documented in this file.
 
 -->
 
+## [v1.11.2] - 2021-03-17
+
+### Fixed
+
+#### Addons
+
+- Sprite folders: Editor crashing when trying to drag and drop a sound within a folder to another sprite (#1893)
+- Profile statistics: Missing thousand separator comma on "most loved by country" statistic (#1894)
+
 ## [v1.11.1] - 2021-03-14
 
 ### Changed
@@ -164,6 +173,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+#### Extension and Addon API
+
 - Extension crashing on browsers with Spanish language (#1529)
 
 ## [v1.9.2] - 2021-02-13
@@ -195,6 +206,8 @@ All notable changes to this project will be documented in this file.
 NOTE: All updates from [v1.9.0] are pushed on this version.
 
 ### Fixed
+
+#### Extension and Addon API
 
 - Extension crashing on browsers with languages other than Englsh (#1529)
 
@@ -331,6 +344,8 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 
 ### Fixed
 
+#### Addons
+
 - Website dark mode: Certain elements of the Scratch editor affected
 
 ## [v1.7.0] - 2021-01-10
@@ -423,12 +438,20 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 
 ### Added
 
+#### Extension and Addon API
+
 #### Addons
 
 - Color picker (#1061)
 - Record project video (#1083)
 - Show my-ocular status: Support profile pages (#1026)
 - Studio manager tools: Add a way to leave studios from My Stuff (#1041)
+
+### Changed
+
+#### Extension and Addon API
+
+- Update localization strings
 
 ### Fixed
 
@@ -439,7 +462,6 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 #### Extension and Addon API
 
 - Changing color settings may cause memory leak (#1062)
-- Update localization strings
 
 ## [v1.5.1] - 2020-12-15
 
@@ -522,6 +544,8 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 
 ### Fixed
 
+#### Addons
+
 - Forum search: Fix crashes (#901)
 - Messages in editor: Typo in addon description (#903)
 - Sprite and script count: Script count was inaccurate (#904)
@@ -535,17 +559,23 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 
 ### Changed
 
+#### Extension and Addon API
+
 - Move libraries to the `libraries` folder (998781b)
 
 ## [v1.3.2] - 2020-11-24
 
 ### Fixed
 
+#### Addons
+
 - More links: Fix security issue due to faulty regular expression (GHSA-6qfq-px3r-xj4p, #827)
 
 ## [v1.3.1] - 2020-11-09
 
 ### Fixed
+
+#### Addons
 
 - Live featured project: Disable addon by default (#684)
 
@@ -618,6 +648,8 @@ NOTE: All updates from [v1.2.0] are pushed on this version.
 
 ### Fixed
 
+#### Extension and Addon API
+
 - Fix addon warning not showing (#571)
 
 ## [v1.2.0] - 2020-10-27 [YANKED]
@@ -631,6 +663,8 @@ NOTE: v1.2.0 is only released on Firefox due to an issue with perfomance warning
 NOTE: All updates from [v1.1.0] are pushed on this version.
 
 ### Fixed
+
+#### Extension and Addon API
 
 - Use webRequest instead of webNavigation (#457)
 
@@ -717,6 +751,7 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.11.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.2
 [v1.11.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.1
 [v1.11.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.0
 [v1.10.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.10.0
