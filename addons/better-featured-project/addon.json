@@ -22,7 +22,7 @@
   "settings": [
     {
       "id": "blur",
-      "name": "Blur",
+      "name": "Banner blur",
       "type": "integer",
       "min": 0,
       "max": 5,
