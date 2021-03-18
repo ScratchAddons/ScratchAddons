@@ -1,12 +1,12 @@
 body {
   background-color: black;
 }
-.blocklyMainBackground {
-  fill: #444 !important;
-}
 /**.blocklyBlockCanvas { filter: brightness(0.9) saturate(0) !important; }**/
 .blocklySvg {
-  background-color: #222 !important;
+  background-color: #444;
+}
+[id^="blocklyGridPattern"] line {
+  stroke: none !important;
 }
 .blocklyFlyoutBackground {
   fill: #222 !important;
