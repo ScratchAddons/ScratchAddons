@@ -1,6 +1,86 @@
 import downloadBlob from "../../libraries/download-blob.js";
 const NEW_ADDONS = ["folders", "variable-manager", "scratchstats"];
 
+Vue.directive("click-outside", {
+  priority: 700,
+  bind() {
+    let self = this;
+    this.event = function (event) {
+      self.vm.$emit(self.expression, event);
+    };
+    this.el.addEventListener("mousedown", this.stopProp);
+    document.body.addEventListener("mousedown", this.event);
+  },
+
+  unbind() {
+    this.el.removeEventListener("mousedown", this.stopProp);
+    document.body.removeEventListener("mousedown", this.event);
+  },
+  stopProp(event) {
+    event.stopPropagation();
+  },
+});
+
+const ColorInput = Vue.extend({
+  props: ["value", "addon", "setting", "no_alpha"],
+  template: document.querySelector("template#picker-component").innerHTML,
+  data() {
+    return {
+      isOpen: false,
+      color: this.value,
+      canCloseOutside: false,
+      formats: "",
+      opening: false,
+    };
+  },
+  ready() {
+    if (this.no_alpha) {
+      this.formats = "hex,rgb,hsv,hsl";
+    } else {
+      this.formats = "hex,hex8,rgb,hsv,hsl";
+    }
+    this.$els.pickr.addEventListener("input", (e) => {
+      this.color = "#" + e.detail.value;
+      if (this.value !== this.color) {
+        this.$parent.addonSettings[this.addon._addonId][this.setting.id] = "#" + this.$els.pickr.hex8;
+        this.$parent.updateSettings(this.addon, { wait: 250, settingId: this.setting.id });
+      }
+    });
+  },
+  methods: {
+    toggle(addon, setting, value = !this.isOpen) {
+      this.isOpen = value;
+      this.opening = true;
+      for (let child of this.$root.$children) {
+        if (child.isOpen && child.canCloseOutside && child.color && !child.opening) {
+          child.toggle(child.addon, child.setting, false);
+        }
+      }
+      this.opening = false;
+
+      this.color = "#" + this.$els.pickr.hex8;
+      if (this.value !== this.color) {
+        this.$parent.addonSettings[addon._addonId][setting.id] = "#" + this.$els.pickr.hex8;
+        this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
+      }
+      this.canCloseOutside = false;
+      setTimeout(() => {
+        this.canCloseOutside = true;
+      }, 0);
+    },
+  },
+  watch: {
+    value() {
+      this.color = this.value;
+      this.$els.pickr._valueChanged();
+    },
+    isOpen() {
+      this.$els.pickr._valueChanged();
+    },
+  },
+});
+Vue.component("picker", ColorInput);
+
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];
 const updateGrantedPermissions = () =>
@@ -104,28 +184,6 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
   return resolveOnConfirmPromise;
 };
 
-Vue.directive("click-outside", {
-  priority: 700,
-  bind() {
-    let self = this;
-    this.event = function (event) {
-      console.log("emitting event");
-      self.vm.$emit(self.expression, event);
-    };
-    this.el.addEventListener("click", this.stopProp);
-    document.body.addEventListener("click", this.event);
-  },
-
-  unbind() {
-    console.log("unbind");
-    this.el.removeEventListener("click", this.stopProp);
-    document.body.removeEventListener("click", this.event);
-  },
-  stopProp(event) {
-    event.stopPropagation();
-  },
-});
-
 const vue = (window.vue = new Vue({
   el: "body",
   data: {
@@ -222,6 +280,7 @@ const vue = (window.vue = new Vue({
       return chrome.runtime.getManifest().version_name;
     },
   },
+
   methods: {
     closesidebar: function () {
       if (this.categoryOpen && this.smallMode) {
@@ -540,7 +599,15 @@ const vue = (window.vue = new Vue({
         this.isOpen = false;
       }
     },
+    closePickers(e) {
+      for (let child of this.$children) {
+        if (child.isOpen && child.canCloseOutside && e.isTrusted && child.color) {
+          child.toggle(child.addon, child.setting, false);
+        }
+      }
+    },
   },
+
   watch: {
     selectedTab() {
       this.selectedTag = null;
