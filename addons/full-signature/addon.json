@@ -25,7 +25,7 @@
       "default": true
     },
     {
-      "name": "Show scroll for Scratchblocks",
+      "name": "Show scroll for forum Scratchblocks",
       "id": "blocks",
       "type": "boolean",
       "default": true
