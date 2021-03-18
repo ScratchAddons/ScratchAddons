@@ -36,7 +36,7 @@ function appendSearch(box, query, page, term, msg) {
   currentPage = page;
   box.appendChild(loading);
   window
-    .fetch(`https://scratchdb.lefty.one/v2/forum/search?q=${encodeURIComponent(query)}&page=${page}&o=${term}`)
+    .fetch(`https://scratchdb.lefty.one/v3/forum/search?q=${encodeURIComponent(query)}&page=${page}&o=${term}`)
     .catch((err) => {
       box.removeChild(box.lastChild);
       box.appendChild(document.createTextNode(msg("error")));

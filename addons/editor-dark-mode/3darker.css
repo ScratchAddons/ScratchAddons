@@ -11,12 +11,14 @@
 .project-title-input_title-field_en5Gd:focus {
   background: var(--accent);
 }
-.gui_body-wrapper_-N0sA,
-.blocklySvg {
+.gui_body-wrapper_-N0sA {
   background: var(--main-bg);
 }
-.blocklyMainBackground {
-  fill: var(--secondary-bg) !important;
+.blocklySvg {
+  background: var(--secondary-bg);
+}
+[id^="blocklyGridPattern"] line {
+  stroke: none !important;
 }
 .context-menu_context-menu_2SJM-,
 .blocklyWidgetDiv .goog-menu,
