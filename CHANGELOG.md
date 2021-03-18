@@ -18,9 +18,9 @@ All notable changes to this project will be documented in this file.
 
 # TODO list:
 
-- Changed entries on "Fixed" section into "Fix ..." sentence form (v1.4.0 - latest)
-- Verify changelog contents (v1.4.0 - latest)
-- Complete missing changelog (v1.4.0, v1.2.0)
+- Changed entries on "Fixed" section into "Fix ..." sentence form (v1.4.1 - latest)
+- Verify changelog contents (v1.4.1 - latest)
+- Complete missing changelog (v1.2.0)
 - Add new languages on localization (v1.4.1 - latest)
 
 -->
@@ -285,9 +285,9 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 - Better forum quoter: Include BBCode (#1230)
 - Cat blocks: Add blinking (#1310)
 - Data category tweaks: Move reporters under operations section (#1300)
-- Record project video: Support sound recording (#1321)
+- Record project video: Support for sound recording (#1321)
 - Record project video: Improve UI and add options (#1347)
-- Show full areas: Support signature settings (#1251)
+- Show full areas: Support for signature settings (#1251)
 
 #### Extension and Addon API
 
@@ -359,7 +359,9 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 - Data category tweaks (v2) (#1097)
 - Mute project player (#1217)
 - Semicolon glitch (#507)
+- Scratch 2.0 → 3.0: Support for more pages (#1259)
 - Sprite and script count: Block counter (#1121)
+- Website dark mode: Support for more pages (#1259)
 
 #### Extension and Addon API
 
@@ -404,11 +406,9 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 - Website dark mode: Post preview does not affected (#1160)
 - Website dark mode: Syntax highlighting in forums does not affected (#1160)
 - Scratch 2.0 → 3.0: Color on usernames in Messages page affected (#1189)
-- Scratch 2.0 → 3.0: Some pages are not supported (#1259)
 - Scratch Messaging: Remove double escaping on tags (#1172)
 - Scratch Notifier: Addon crashes when receiving crafted message (#1172)
 - Scratch Notifier: Tags in project titles to emojis converted (#1172)
-- Website dark mode: Some pages are not supported (#1259)
 
 #### Extension and Addon API
 
@@ -444,7 +444,7 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 
 - Color picker (#1061)
 - Record project video (#1083)
-- Show my-ocular status: Support profile pages (#1026)
+- Show my-ocular status: Support for profile pages (#1026)
 - Studio manager tools: Add a way to leave studios from My Stuff (#1041)
 
 ### Changed
@@ -484,10 +484,12 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 
 - Onion skinning (#879)
 - Profile page banner (#895)
-- Show full areas: Support loading more in What's Happening (#899)
-- Thumbnails setter: A way to disable thumbnail overwriting (#964)
-- Block switching: More blocks support (#979)
+- Block switching: Support for more blocks (#979)
 - Developer tools: Show broadcast senders and receivers (#980)
+- Scratch 2.0 → 3.0: Support for /news (#941)
+- Show full areas: Support for loading more in What's Happening (#899)
+- Thumbnails setter: A way to disable thumbnail overwriting (#964)
+- Website dark mode: Support for /news (#941)
 
 #### Extension and Addon API
 
@@ -514,7 +516,6 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 - Customizable block colors: Custom colors do not apply to extension blocks in non-English environment (#956)
 - Customized quotes & code blocks on forums: Addon categorized as editor addon (#989)
 - Mouse position: Addon crashes in project view (#954)
-- Scratch 2.0 → 3.0: /news is not supported (#941)
 - Scratch Messaging: "Show More" button is partially hidden (#929)
 - Scratch Messaging: Addon links to curators page for activity messages (#969)
 - Scratch Messaging: Follower name links uses onClick (#969)
@@ -522,7 +523,6 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 - Studio manager tools: Buttons don't have text when hovered (#994)
 - Studio manager tools: Buttons don't have text when hovered (#994)
 - Website dark mode: Project comments are unreadable with dark mode (#928)
-- Website dark mode: /news is not supported (#941)
 - Website dark mode: Some pages are not listed in dark mode list (#949)
 - Website dark mode: Addon still loads on editors (#960)
 - Website dark mode: Addon does not make cloudmonitor rows dark (#960)
@@ -553,7 +553,91 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 
 ## [v1.4.0] - 2020-11-29
 
-***TODO***
+### Added
+
+#### Addons
+
+- Block switching (#768)
+- Confirm actions (#797)
+- Curator link (#725)
+- Customized quotes & code blocks on forums (#694)
+- Feature unshared projects (#757)
+- Fix "Load more" scrolling in search results (#729)
+- Fix broken SVG uploads (#748)
+- Messages in editor (#607)
+- Project notes tabs (#794)
+- Show my-ocular status (#848)
+- Sprite and script count (#732)
+- Live featured project: Add option to disable alternative player (#707)
+- Scratch Notifier: Studio activity url (#806)
+- Website dark mode: Experimental Dark theme (#699)
+- Website dark mode: Re-enable website dark mode (#699)
+- Scratch 2.0 → 3.0: Support for more pages (#775)
+- Scratch 2.0 → 3.0: Radius for change button on profile images (#832)
+- Scratch 2.0 → 3.0: Smooth project borders (#851)
+
+#### Extension and Addon API
+
+- Localization (#753, #812, #823, #842, #867, #856, #854, #861)
+- Support for %addon-self-dir% in themes CSS (#795)
+- Setting warning and notice icons (#791)
+- "key" property on manifest (#793)
+- Source URL to theme CSS (#849)
+- `CTRL + LEFT CLICK` addon name to show IDs instead of names (#874)
+
+### Changed
+
+#### Addons
+
+- Display stage on left side: Add radius to backpack (#808)
+- Forums image uploader: Clean up code (#829)
+- Last edit tooltip: Show actual date instead of day (#734)
+- Search profile: Add search profile username validator (#800)
+- Show exact count: Faster, Better Forum User Count (#758)
+- Forum search: Use better styling on the search bar (#668)
+
+#### Extension and Addon API
+
+- Make theme userstyles ordered (#704)
+- Remove unnecessary word "theme" from the extension theme (#724)
+- Update forum icon (#710)
+- Make settings responsive (#828)
+- Make licenses opening in new tab (#880)
+
+### Fixed
+
+#### Addons
+
+- Clone counter: Fix negative clone count due to comparison error (#801)
+- Developer tools: Fix white corners in predicate block when middle clicking (#781)
+- Infinite scrolling: Fix fixed footer on annual report (#706)
+- Infinite scrolling: Fix fixed footer showing behind projects (#735)
+- Live featured project: Fix styling of forkphorus player (#707)
+- More links: Fix addon not working properly by adding waitForElement for project pages (#433)
+- Project notes tabs: Fix addon for remixes (#857)
+- Project progress bar: Fix bug where progress bar broken on some languages (#711)
+- Project progress bar: Fix some occasional style desyncs (#711)
+- Project progress bar: Fix progress bar on updating assets (#711)
+- Show exact count: Fix forum count showing just a number (#733)
+- Show full areas: Fix capitalization on "Load more" (#722)
+- Show full areas: Fix load more bug (#756)
+- Thumbnails setter: Fix addon category to editor (#752)
+- Website dark mode: Work around #701 (#699)
+- Website dark mode: Fix minor CSS bug (#699)
+
+#### Extension and Addon API
+
+- Override checkbox style with custom style to fix Edge checkbox style (#787)
+- Add missing favicon on the web pages (#723)
+- Fix performance when dragging blocks in the editor (#747)
+- Fix check for missing props (#870)
+- Fix fallback for manifest l10n (#871)
+
+### Removed
+
+#### Addons
+
+- Website dark mode: Remove Dark WWW theme (#876)
 
 ## [v1.3.3] - 2020-11-24
 
