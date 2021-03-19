@@ -79,10 +79,10 @@ export default async ({ addon, console, msg }) => {
     // redux stuff
     addon.tab.redux.initialize();
     addon.tab.redux.addEventListener("statechanged", (e) =>
-      e.detail.action.type == "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
-      e.detail.action.type == "scratch-paint/fill-style/CHANGE_FILL_COLOR_2" ||
-      e.detail.action.type == "scratch-paint/stroke-style/CHANGE_STROKE_COLOR" ||
-      e.detail.action.type == "scratch-paint/stroke-style/CHANGE_STROKE_COLOR_2"
+      e.detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR" ||
+      e.detail.action.type === "scratch-paint/fill-style/CHANGE_FILL_COLOR_2" ||
+      e.detail.action.type === "scratch-paint/stroke-style/CHANGE_STROKE_COLOR" ||
+      e.detail.action.type === "scratch-paint/stroke-style/CHANGE_STROKE_COLOR_2"
         ? updateColor()
         : 0
     );
@@ -143,7 +143,7 @@ export default async ({ addon, console, msg }) => {
     function updateHandle(e, keyPressed, originalPos) {
       let cx = Math.min(Math.max(e.clientX - saColorPicker.getBoundingClientRect().x, 0), 150);
       let cy = Math.min(Math.max(e.clientY - saColorPicker.getBoundingClientRect().y, 0), 150);
-      if (keyPressed == 16) {
+      if (keyPressed === 16) {
         if (Math.abs(cx - originalPos.x) > Math.abs(cy - originalPos.y)) cy = originalPos.y;
         else cx = originalPos.x;
       }
@@ -154,7 +154,7 @@ export default async ({ addon, console, msg }) => {
       //update color in real-time (i only bothered to do that for solid colors)
       if (
         (!addon.tab.redux.state.scratchPaint.fillMode.gradientType ||
-          addon.tab.redux.state.scratchPaint.fillMode.gradientType == "SOLID") &&
+          addon.tab.redux.state.scratchPaint.fillMode.gradientType === "SOLID") &&
         el
       ) {
         let c = tinycolor({ h: origHue, s: cx / 150, v: 1 - cy / 150 }).toHex();
@@ -173,7 +173,7 @@ export default async ({ addon, console, msg }) => {
       rateLimiter.limit(() => {
         let ox = Math.min(Math.max(e.clientX - saColorPicker.getBoundingClientRect().x, 0), 150);
         let oy = Math.min(Math.max(e.clientY - saColorPicker.getBoundingClientRect().y, 0), 150);
-        if (keyPressed == 16) {
+        if (keyPressed === 16) {
           if (Math.abs(ox - originalPos.x) > Math.abs(oy - originalPos.y)) oy = originalPos.y;
           else ox = originalPos.x;
         }
@@ -212,9 +212,9 @@ export default async ({ addon, console, msg }) => {
       }
 
       el = null;
-      if (fillOrStroke == "fill")
+      if (fillOrStroke === "fill")
         el = document.getElementsByClassName(addon.tab.scratchClass("color-button_color-button-swatch"))[0];
-      else if (fillOrStroke == "stroke")
+      else if (fillOrStroke === "stroke")
         el = document.getElementsByClassName(addon.tab.scratchClass("color-button_color-button-swatch"))[1];
       if (el) origHue = tinycolor(el.style.background).toHsv().h;
 
