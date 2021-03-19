@@ -36,7 +36,7 @@ export default async function ({ addon, global, console }) {
         }
       }
     };
-    button.addEventListener("click", clickListener(e));
-    button.addEventListener("contextmenu", (e) => clickListener(e));
+    button.addEventListener("click", clickListener);
+    button.addEventListener("contextmenu", clickListener);
   }
 }
