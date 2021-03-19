@@ -7,7 +7,7 @@ export default async function ({ addon, global, console }) {
   let ctrlPressesCount = 0;
   let ctrlPressedRecently = false;
 
-    window.addEventListener("keydown", (event) => {
+  window.addEventListener("keydown", (event) => {
     if (event.ctrlKey) {
       ctrlPressesCount++;
       const pressCount = ctrlPressesCount;
@@ -23,8 +23,7 @@ export default async function ({ addon, global, console }) {
     let container = button.parentElement;
     container.appendChild(icon);
     const clickListener = (e) => {
-     if (ctrlPressedRecently) {
-
+      if (ctrlPressedRecently) {
         e.cancelBubble = true;
         e.preventDefault();
         muted = !muted;
@@ -35,9 +34,8 @@ export default async function ({ addon, global, console }) {
           vm.runtime.audioEngine.inputNode.gain.value = 1;
           icon.style.display = "none";
         }
-      
-     }
-    }
+      }
+    };
     button.addEventListener("click", clickListener(e));
     button.addEventListener("contextmenu", (e) => clickListener(e));
   }
