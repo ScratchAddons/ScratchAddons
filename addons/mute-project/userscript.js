@@ -9,7 +9,7 @@ export default async function ({ addon, global, console }) {
     let container = button.parentElement;
     container.appendChild(icon);
     button.addEventListener("click", (e) => {
-      if (e.ctrlKey || e.metaKey) {
+      if (e.ctrlKey) {
         e.cancelBubble = true;
         e.preventDefault();
         muted = !muted;
