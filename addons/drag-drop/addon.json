@@ -1,6 +1,6 @@
 {
-  "name": "Drag and drop files to upload",
-  "description": "TODO lol",
+  "name": "Drag and drop files",
+  "description": "Lets you drag files from your file explorer into the sprites pane or costume list.",
   "credits": [
     {
       "name": "Sheep_maker"

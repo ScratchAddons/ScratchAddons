@@ -1,14 +1,33 @@
 export default async function ({ addon, global, console }) {
-  window.addon = addon
+  async function droppable(dropAreaProm, fileInputProm) {
+    const dropArea = await dropAreaProm;
+    const fileInput = await fileInputProm;
 
-  const spriteSelector = await addon.tab.waitForElement('div[class*="sprite-selector_scroll-wrapper"]');
-  const spriteUpload = await addon.tab.waitForElement('input[class*="action-menu_file-input"]');
-  spriteSelector.addEventListener('drop', e => {
-    spriteUpload.files = e.dataTransfer.files;
-    spriteUpload.dispatchEvent(new Event('change', { bubbles: true }));
-    e.preventDefault();
-  });
-  spriteSelector.addEventListener('dragover', e => {
-    e.preventDefault();
-  });
+    dropArea.addEventListener("drop", (e) => {
+      fileInput.files = e.dataTransfer.files;
+      fileInput.dispatchEvent(new Event("change", { bubbles: true }));
+      e.preventDefault();
+    });
+    dropArea.addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+  }
+
+  droppable(
+    addon.tab.waitForElement('div[class*="sprite-selector_sprite-selector"]'),
+    addon.tab.waitForElement('div[class*="sprite-selector_sprite-selector"] input[class*="action-menu_file-input"]')
+  );
+  droppable(
+    addon.tab.waitForElement('div[class*="stage-selector_stage-selector"]'),
+    addon.tab.waitForElement('div[class*="stage-selector_stage-selector"] input[class*="action-menu_file-input"]')
+  );
+
+  while (true) {
+    await droppable(
+      addon.tab.waitForElement('div[class*="selector_wrapper"]', { markAsSeen: true }),
+      addon.tab.waitForElement('div[class*="selector_wrapper"] input[class*="action-menu_file-input"]', {
+        markAsSeen: true,
+      })
+    );
+  }
 }
