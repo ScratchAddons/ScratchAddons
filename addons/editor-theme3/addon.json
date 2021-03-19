@@ -34,67 +34,78 @@
       "name": "motion",
       "id": "motion-color",
       "type": "color",
-      "default": "#4C97FF"
+      "default": "#4C97FF",
+      "allowTransparency": true
     },
     {
       "name": "looks",
       "id": "looks-color",
       "type": "color",
-      "default": "#9966FF"
+      "default": "#9966FF",
+      "allowTransparency": true
     },
     {
       "name": "sounds",
       "id": "sounds-color",
       "type": "color",
-      "default": "#CF63CF"
+      "default": "#CF63CF",
+      "allowTransparency": true
     },
     {
       "name": "events",
       "id": "events-color",
       "type": "color",
-      "default": "#FFBF00"
+      "default": "#FFBF00",
+      "allowTransparency": true
     },
     {
       "name": "control",
       "id": "control-color",
       "type": "color",
-      "default": "#FFAB19"
+      "default": "#FFAB19",
+      "allowTransparency": true
     },
     {
       "name": "sensing",
       "id": "sensing-color",
       "type": "color",
-      "default": "#5CB1D6"
+      "default": "#5CB1D6",
+      "allowTransparency": true
     },
     {
       "name": "operators",
       "id": "operators-color",
       "type": "color",
-      "default": "#59C059"
+      "default": "#59C059",
+      "allowTransparency": true
     },
     {
       "name": "variables",
       "id": "data-color",
       "type": "color",
-      "default": "#FF8C1A"
+      "default": "#FF8C1A",
+      "allowTransparency": true
     },
     {
       "name": "lists",
       "id": "data-lists-color",
       "type": "color",
-      "default": "#FF661A"
+      "default": "#FF661A",
+      "allowTransparency": true
     },
     {
       "name": "custom",
       "id": "custom-color",
       "type": "color",
-      "default": "#FF6680"
+      "default": "#FF6680",
+      "allowTransparency": true
     },
     {
       "name": "extensions",
       "id": "Pen-color",
       "type": "color",
-      "default": "#0FBD8C"
+      "default": "#0FBD8C",
+      "allowTransparency": true
     }
   ],
   "tags": ["editor", "theme"],
