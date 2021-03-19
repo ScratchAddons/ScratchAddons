@@ -12,6 +12,12 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor", "theme"],
+  "userstyles": [
+    {
+      "url": "dragged-over.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
   "enabledByDefault": false
 }
