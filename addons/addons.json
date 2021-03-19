@@ -75,8 +75,11 @@
   "show-bbcode",
   "copy-message-link",
   "load-extensions",
+  "variable-manager",
   "scratchstats",
   "folders",
   "message-filters",
   "block-palette-icons"
+  "custom-block-shape",
+  "2d-color-picker"
 ]
