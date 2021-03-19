@@ -1,0 +1,17 @@
+{
+  "name": "Drag and drop files to upload",
+  "description": "TODO lol",
+  "credits": [
+    {
+      "name": "Sheep_maker"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor", "theme"],
+  "enabledByDefault": false
+}
