@@ -17,6 +17,25 @@ if (pathArr[0] === "scratch-addons-extension") {
 }
 if (path === "discuss/3/topic/add/") {
   window.addEventListener("load", () => forumWarning("forumWarning"));
+  let uaElemModified = false;
+  const modifyUAElem = () => {
+    if (uaElemModified) return;
+    const uaElem = document.getElementById("simple-user-agent");
+    if (uaElem) {
+      uaElem.textContent = uaElem.textContent.replace("/", "and");
+      return (uaElemModified = true);
+    }
+  };
+  if (!modifyUAElem()) {
+    new MutationObserver((mutationsList, observer) => {
+      if (modifyUAElem()) {
+        observer.disconnect();
+      }
+    }).observe(document.documentElement, {
+      subtree: true,
+      childList: true,
+    });
+  }
 } else if (path.startsWith("discuss/topic/")) {
   window.addEventListener("load", () => {
     if (document.querySelector('div.linkst > ul > li > a[href="/discuss/18/"]')) {
