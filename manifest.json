@@ -22,7 +22,7 @@
     {
       "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
-      "js": ["content-scripts/cs.js"],
+      "js": ["libraries/comlink.js", "content-scripts/cs.js"],
       "all_frames": true
     },
     {

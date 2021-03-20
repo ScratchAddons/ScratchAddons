@@ -1,11 +1,10 @@
+const o = chrome.tabs.sendMessage; // TODO: remove
+chrome.tabs.sendMessage = function() {
+  console.trace();
+  return o.apply(chrome.tabs, arguments);
+}
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request === "sendContentScriptInfo") {
-    chrome.tabs.sendMessage(sender.tab.id, "getInitialUrl", { frameId: sender.tab.frameId }, async (res) => {
-      if (res) {
-        chrome.tabs.sendMessage(sender.tab.id, { contentScriptInfo: await getContentScriptInfo(res) });
-      }
-    });
-  }
   if (request === "openSettingsOnThisTab")
     chrome.tabs.update(sender.tab.id, { url: chrome.runtime.getURL("webpages/settings/index.html") });
 });
@@ -84,86 +83,39 @@ async function getContentScriptInfo(url) {
   return data;
 }
 
-// Key: string tabId+','+frameId, value: object { intervalId, messageListener }
-const intervalsMap = new Map();
-window.intervalsMap = intervalsMap;
-// In order to send information as soon as possible, data is sent in 3 ways:
-// - Sending the data every 100ms
-// - Sending the data straight away to that tab - won't work most times
-// - Wait until the content script sends "ready" and and then send the data
+function createCsIdentity({ tabId, frameId, url }) {
+  // String that should uniquely identify a tab/iframe in the csInfoCache map
+  return `${tabId}/${frameId}@${url}`;
+}
+
+const csInfoCache = new Map();
+
 chrome.webRequest.onBeforeRequest.addListener(
   async (request) => {
-    if (request.type === "sub_frame") {
-      // Make sure this iframe is inside scratch.mit.edu, to avoid creating an interval.
-      // If the iframe is 3rd party, we'll never get any messages or responses.
-      try {
-        await new Promise((resolve, reject) => {
-          // Message the main frame of the tab, if we get a response, it's scratch.mit.edu
-          chrome.tabs.sendMessage(request.tabId, "getInitialUrl", { frameId: 0 }, (res) => {
-            if (res) resolve();
-          });
-          setTimeout(reject, 500);
-        });
-      } catch {
-        return;
-      }
-    }
-    if (intervalsMap.has(`${request.tabId},${request.frameId}`)) {
-      // This might happen with a redirect, we don't want to keep sending or listening for old data on the tab
-      const info = intervalsMap.get(`${request.tabId},${request.frameId}`);
-      clearInterval(info.intervalId);
-      chrome.runtime.onMessage.removeListener(info.messageListener);
-    }
+    const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
+    // TODO: what if identity is taken?
+    csInfoCache.set(identity, null);
 
-    const data = await getContentScriptInfo(request.url);
+    csInfoCache.set(identity, await getContentScriptInfo(request.url));
+    console.log(csInfoCache, identity);
 
-    const removeInterval = (mapKey, intervalId, listener) => {
-      clearInterval(intervalId);
-      chrome.runtime.onMessage.removeListener(listener);
-      if (intervalsMap.has(mapKey) && intervalsMap.get(mapKey).intervalId === intervalId) intervalsMap.delete(mapKey);
-    };
-
-    let messageListener;
-
-    let timesSent = 0;
-    const interval = setInterval(() => {
-      chrome.tabs.sendMessage(request.tabId, { contentScriptInfo: data }, { frameId: request.frameId }, (res) => {
-        if (res) removeInterval(`${request.tabId},${request.frameId}`, interval, messageListener);
-      });
-      timesSent++;
-      if (timesSent === 300) removeInterval(`${request.tabId},${request.frameId}`, interval, messageListener);
-    }, 100);
-
-    messageListener = (request, sender, sendResponse) => {
-      if (
-        request === "ready" &&
-        sender.tab.id === request.tabId &&
-        sender.tab.frameId === requestAnimationFrame.frameId
-      ) {
-        chrome.tabs.sendMessage(
-          request.tabId,
-          { contentScriptInfo: data },
-          { frameId: request.frameId },
-          (res) => res && removeInterval(request.tabId, interval, messageListener)
-        );
-      }
-    };
-    chrome.runtime.onMessage.addListener(messageListener);
-
-    intervalsMap.set(`${request.tabId},${request.frameId}`, { intervalId: interval, messageListener });
-
-    chrome.tabs.sendMessage(
-      request.tabId,
-      { contentScriptInfo: data },
-      { frameId: request.frameId },
-      (res) => res && removeInterval(request.tabId, interval, messageListener)
-    );
+    // TODO: remove from cache
   },
   {
     urls: ["https://scratch.mit.edu/*"],
     types: ["main_frame", "sub_frame"],
   }
 );
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (!request.contentScriptReady) return;
+  // TODO: what if it's not in the cache already? test on startup. localState ready might even be false
+  console.log("contentScriptReady");
+  const identity = createCsIdentity({ tabId: sender.tab.id, frameId: sender.frameId, url: request.contentScriptReady.url });
+  const info = csInfoCache.get(identity);
+  sendResponse(info);
+  csInfoCache.delete(identity);
+});
 
 scratchAddons.localEvents.addEventListener("themesUpdated", () => {
   // Only non-frames are updated
