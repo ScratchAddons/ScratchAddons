@@ -54,12 +54,12 @@ const page = {
   setMsgCount(count) {
     pendingPromises.msgCount.forEach((promiseResolver) => promiseResolver(count));
     pendingPromises.msgCount = [];
-  }
+  },
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
 
 function onDataReady() {
-debugger;
+  debugger;
   const addons = page.addonsWithUserscripts;
 
   scratchAddons.l10n = new Localization(page.l10njson);
@@ -81,7 +81,7 @@ debugger;
   };
   scratchAddons.methods.copyImage = async (dataURL) => {
     return _cs_.copyImage(dataURL);
-  }
+  };
 
   const runUserscripts = () => {
     for (const addon of addons) {
@@ -102,7 +102,6 @@ debugger;
     });
     observer.observe(document.documentElement, { subtree: true, childList: true });
   }
-
 }
 
 function bodyIsEditorClassCheck() {

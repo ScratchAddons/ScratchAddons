@@ -1,9 +1,9 @@
-window.onmessage = e => {
+window.onmessage = (e) => {
   if (e.data.wappalyzer) return;
-  console.log(e)
+  console.log(e);
 }; // TODO: remove
 
-chrome.runtime.sendMessage({ contentScriptReady: { url: location.href }}, res => {
+chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res) => {
   // TODO: firefox if(res)
   console.log("received response!", res);
   onInfoAvailable(res);
@@ -32,7 +32,7 @@ const comlinkIframe3 = comlinkIframe1.cloneNode();
 comlinkIframe3.id = "scratchaddons-iframe-3";
 const comlinkIframe4 = comlinkIframe1.cloneNode();
 comlinkIframe4.id = "scratchaddons-iframe-4";
-comlinkIframesDiv.appendChild(comlinkIframe1,);
+comlinkIframesDiv.appendChild(comlinkIframe1);
 comlinkIframesDiv.appendChild(comlinkIframe2);
 comlinkIframesDiv.appendChild(comlinkIframe3);
 comlinkIframesDiv.appendChild(comlinkIframe4);
@@ -54,7 +54,7 @@ const cs = {
         }
       );
     });
-  }
+  },
 };
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
 
@@ -67,7 +67,7 @@ moduleScript.type = "module";
 moduleScript.src = chrome.runtime.getURL("content-scripts/inject/module.js");
 
 (async () => {
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     moduleScript.addEventListener("load", resolve);
   });
   _page_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe3.contentWindow, comlinkIframe4.contentWindow));
@@ -158,7 +158,7 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
   injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
 
   if (!_page_) {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       // We're registering this load event after the load event that
       // sets _page_, so we can guarantee _page_ exists now
       moduleScript.addEventListener("load", resolve);

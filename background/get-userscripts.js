@@ -1,8 +1,8 @@
 const o = chrome.tabs.sendMessage; // TODO: remove
-chrome.tabs.sendMessage = function() {
+chrome.tabs.sendMessage = function () {
   console.trace();
   return o.apply(chrome.tabs, arguments);
-}
+};
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request === "openSettingsOnThisTab")
@@ -111,7 +111,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (!request.contentScriptReady) return;
   // TODO: what if it's not in the cache already? test on startup. localState ready might even be false
   console.log("contentScriptReady");
-  const identity = createCsIdentity({ tabId: sender.tab.id, frameId: sender.frameId, url: request.contentScriptReady.url });
+  const identity = createCsIdentity({
+    tabId: sender.tab.id,
+    frameId: sender.frameId,
+    url: request.contentScriptReady.url,
+  });
   const info = csInfoCache.get(identity);
   sendResponse(info);
   csInfoCache.delete(identity);
