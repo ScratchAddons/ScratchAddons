@@ -1,0 +1,40 @@
+{
+  "name": "Dango rain on profiles",
+  "description": "Profiles that include \"dango\" on their \"About Me\" section will have dangos raining on the sides of the screen!",
+  "info": [
+    {
+      "type": "notice",
+      "text": "If you disable this addon, you will only be able to find it if you enter the konami code.",
+      "id": "konamicode"
+    }
+  ],
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Rain even when not April Fools Day",
+      "id": "force",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/users/*"]
+    }
+  ],
+  "tags": ["easterEgg"],
+  "enabledByDefault": true,
+  "l10n": true
+}
