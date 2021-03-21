@@ -32,6 +32,7 @@
   content: "";
   height: 50px;
   width: 50px;
+  /* Twemoji by Twitter Inc, licensed under CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/ */
   background: url("./dango.svg");
   pointer-events: none;
   position: absolute;
