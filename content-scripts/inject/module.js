@@ -51,7 +51,7 @@ const page = {
       );
     }
   },
-  setMsgCount({count}) {
+  setMsgCount({ count }) {
     pendingPromises.msgCount.forEach((promiseResolver) => promiseResolver(count));
     pendingPromises.msgCount = [];
   },
