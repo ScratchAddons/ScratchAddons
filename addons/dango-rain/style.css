@@ -29,7 +29,7 @@
   font-size: 3em;
   font-family: Arial, sans-serif;
   text-shadow: 0 0 5px #000;
-  content: '';
+  content: "";
   height: 50px;
   width: 50px;
   background: url("./dango.svg");
@@ -50,16 +50,17 @@
 
 @keyframes dangos-fall {
   0% {
-    top: -10%
+    top: -10%;
   }
 
   100% {
-    top: 100%
+    top: 100%;
   }
 }
 
 @keyframes dangos-shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
 
@@ -79,7 +80,8 @@
 }
 
 @keyframes dangos-shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
 

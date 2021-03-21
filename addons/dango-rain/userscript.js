@@ -40,7 +40,7 @@ const checkForDango = (text) => {
 const setEltWidth = (elt) => {
   if (!elt) return;
   let sideWidth = (document.body.clientWidth - document.querySelector("#profile-data").clientWidth) / 2;
-  sideWidth = (sideWidth - 25);
+  sideWidth = sideWidth - 25;
   elt.style.width = sideWidth + "px";
   let old = vissiableDangos;
   vissiableDangos = sideWidth > 0;
@@ -88,7 +88,7 @@ export default async function ({ addon, global, console, msg }) {
   const normalSpan = document.createElement("span");
   normalSpan.innerText = `\n${msg("happyAprilFools")}\n${msg("howToGet")}\n${msg("howToStop")}`;
   noticeText.appendChild(normalSpan);
-  
+
   const now = new Date().getTime() / 1000;
   const runDangos = addon.settings.get("force") || (now < 1617364800 && now > 1617192000);
   if (!runDangos) return;
