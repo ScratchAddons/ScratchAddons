@@ -362,13 +362,13 @@ const vue = (window.vue = new Vue({
       const matchesEasterEgg = addonManifest.tags.includes("easterEgg")
         ? this.selectedTab === "easterEgg" || addonManifest._enabled
         : true;
-      
+
       // April fools
       if (addonManifest._addonId === "dango-rain") {
         const now = new Date().getTime() / 1000;
-        if (this.selectedTab === "easterEgg") {}
-        else if (now < 1617364800 && now > 1617192000) {}
-        else return false;
+        if (this.selectedTab === "easterEgg") {
+        } else if (now < 1617364800 && now > 1617192000) {
+        } else return false;
       }
 
       return matchesTag && matchesSearch && matchesEasterEgg;
