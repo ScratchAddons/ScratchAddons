@@ -44,7 +44,7 @@ const checkForDango = (text) => {
 const setEltWidth = (elt) => {
   if (!elt) return;
   let sideWidth = (document.body.clientWidth - document.querySelector("#profile-data").clientWidth) / 2;
-  sideWidth = ((sideWidth - 25) | 0);
+  sideWidth = (sideWidth - 25) | 0;
   elt.style.width = sideWidth + "px";
   let old = vissiableDangos;
   vissiableDangos = sideWidth > 0;
