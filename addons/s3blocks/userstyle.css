@@ -1,10 +1,10 @@
 .scratchblocks {
-	transform: scale(0.675, 0.675);
-	transform-origin: top left;
+  transform: scale(0.675, 0.675);
+  transform-origin: top left;
 }
 
 .markItUp .scratchblocks-button ul a {
-	padding: 0;
-	height: auto;
-	margin: 0 0 -12px;
+  padding: 0;
+  height: auto;
+  margin: 0 0 -12px;
 }
