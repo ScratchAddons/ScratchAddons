@@ -1,9 +1,3 @@
-const o = chrome.tabs.sendMessage; // TODO: remove
-chrome.tabs.sendMessage = function () {
-  console.trace();
-  return o.apply(chrome.tabs, arguments);
-};
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request === "openSettingsOnThisTab")
     chrome.tabs.update(sender.tab.id, { url: chrome.runtime.getURL("webpages/settings/index.html") });
