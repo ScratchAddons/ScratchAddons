@@ -1,8 +1,3 @@
-window.onmessage = (e) => {
-  if (e.data.wappalyzer) return;
-  console.log(e);
-}; // TODO: remove
-
 chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res) => {
   // TODO: firefox if(res)
   console.log("received response!", res);
