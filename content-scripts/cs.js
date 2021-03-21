@@ -22,7 +22,7 @@ if (path === "discuss/3/topic/add/") {
     if (uaElemModified) return;
     const uaElem = document.getElementById("simple-user-agent");
     if (uaElem) {
-      uaElem.textContent = uaElem.textContent.replace("/", "and");
+      uaElem.textContent = uaElem.textContent.replace("My browser", "My web browser");
       return (uaElemModified = true);
     }
   };
