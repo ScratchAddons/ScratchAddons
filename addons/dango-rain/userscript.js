@@ -1,4 +1,8 @@
-let dangorain = false, dangoContainerLeft, dangoContainerRight, vissiableDangos, noticeTimeout;
+let dangorain = false,
+  dangoContainerLeft,
+  dangoContainerRight,
+  vissiableDangos,
+  noticeTimeout;
 const div = () => document.createElement("div");
 const noticeText = div();
 noticeText.className = "sa-dango-notice";
@@ -16,18 +20,18 @@ const checkForDango = (text) => {
       dangoContainerRight?.remove();
       noticeText?.remove();
     }
-    dangorain = false
+    dangorain = false;
     return;
-  };
+  }
   if (dangorain) return;
   dangorain = true;
   dangoContainerLeft = div();
-  dangoContainerLeft.className = "sa-dangos-left"
+  dangoContainerLeft.className = "sa-dangos-left";
   for (let i = 0; i < 40; i++) {
     const dango = div();
     dango.className = "sa-dango";
-    dango.style.left = (i % 10) * 10 + "%"
-    dango.style.animationDelay = `${Math.random() * 8}s, ${Math.random() * 8}s`
+    dango.style.left = (i % 10) * 10 + "%";
+    dango.style.animationDelay = `${Math.random() * 8}s, ${Math.random() * 8}s`;
     dangoContainerLeft.append(dango);
   }
   setEltWidth(dangoContainerLeft);
@@ -36,11 +40,11 @@ const checkForDango = (text) => {
   dangoContainerRight.className = "sa-dangos-right";
 
   document.querySelector("#content").append(dangoContainerLeft, dangoContainerRight, noticeText);
-}
+};
 const setEltWidth = (elt) => {
   if (!elt) return;
   let sideWidth = (document.body.clientWidth - document.querySelector("#profile-data").clientWidth) / 2;
-  sideWidth = ((sideWidth - 25 | 0) % 2 == 0) * sideWidth;
+  sideWidth = (((sideWidth - 25) | 0) % 2 == 0) * sideWidth;
   elt.style.width = sideWidth + "px";
   let old = vissiableDangos;
   vissiableDangos = sideWidth > 0;
@@ -57,15 +61,15 @@ const setEltWidth = (elt) => {
       noticeText?.remove();
     }, 1000);
   }
-}
-addEventListener('resize', () => {
+};
+addEventListener("resize", () => {
   setEltWidth(dangoContainerLeft);
   setEltWidth(dangoContainerRight);
 });
 
 export default async function ({ addon, global, console }) {
   const now = new Date().getTime();
-  const runDangos = addon.settings.get("force") || now < 1617364800 && now > 1617192000;
+  const runDangos = addon.settings.get("force") || (now < 1617364800 && now > 1617192000);
   if (!runDangos) return;
   while (true) {
     const bio = await addon.tab.waitForElement('.overview, [name="bio"]', { markAsSeen: true });
