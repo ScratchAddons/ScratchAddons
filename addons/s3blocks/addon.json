@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "3.0 [scratchblocks]",
+  "description": "TODO",
+  "credits": [
+    {
+      "name": "RedGuy12",
+      "link": "https://paul-s-reid.com/coding"
+    },
+    {
+      "name": "NitroCipher/ZenithRogue",
+      "link": "https://github.com/s3blocks/s3blocks/"
+    }
+  ],
+  "libraries": ["scratchblocks"],
+  "tags": ["beta", "theme", "forums"],
+  "persistentScripts": ["background.js"],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*/"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*/"]
+    }
+  ],
+  "l10n": true
+}

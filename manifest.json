@@ -42,6 +42,7 @@
     "https://scratch.mit.edu/*",
     "https://api.scratch.mit.edu/*",
     "https://clouddata.scratch.mit.edu/*",
+    "https://cdn.scratch.mit.edu/*",
     "cookies",
     "webRequest",
     "webRequestBlocking",
