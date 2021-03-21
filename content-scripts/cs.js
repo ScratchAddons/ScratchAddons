@@ -176,9 +176,8 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       setCssVariables(request.newGlobalState.addonSettings);
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
-    } else if (typeof request.setMsgCount !== "undefined") {
+    } else if (request.setMsgCount) {
       _page_.setMsgCount(request.setMsgCount);
-      // TODO: this is ugly
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
