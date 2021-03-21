@@ -25,7 +25,7 @@ const page = {
   },
 
   l10njson: null, // Only set once
-  addonsWithUserscripts: null, // Onlu set once
+  addonsWithUserscripts: null, // Only set once
 
   _dataReady: false,
   get dataReady() {
