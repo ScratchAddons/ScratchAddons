@@ -6,11 +6,6 @@ let dangorain = false,
 const div = () => document.createElement("div");
 const noticeText = div();
 noticeText.className = "sa-dango-notice";
-// TODO: localize
-noticeText.innerText = `The dangos filled on this page are visible because this user had the word "dango" in their "About Me"WIWO section of their profile.
-If you would like to do the same to your profile, just include "dango" in there too!
-You can always disable this addon on the settings page!
-Happy April Fools Day from the ScratchAddon developers!`;
 
 const checkForDango = (text) => {
   text = text.value || text.textContent;
@@ -27,7 +22,7 @@ const checkForDango = (text) => {
   dangorain = true;
   dangoContainerLeft = div();
   dangoContainerLeft.className = "sa-dangos-left";
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 20; i++) {
     const dango = div();
     dango.className = "sa-dango";
     dango.style.left = (i % 10) * 10 + "%";
@@ -39,18 +34,19 @@ const checkForDango = (text) => {
   dangoContainerRight = dangoContainerLeft.cloneNode(true);
   dangoContainerRight.className = "sa-dangos-right";
 
-  document.querySelector("#content").append(dangoContainerLeft, dangoContainerRight, noticeText);
+  document.querySelector("#content").append(dangoContainerLeft, dangoContainerRight);
+  if (!localStorage.getItem("scratchAddonsAprilFoolsModal2021")) document.querySelector("#content").append(noticeText);
 };
 const setEltWidth = (elt) => {
   if (!elt) return;
   let sideWidth = (document.body.clientWidth - document.querySelector("#profile-data").clientWidth) / 2;
-  sideWidth = (sideWidth - 25) | 0;
+  sideWidth = (sideWidth - 25);
   elt.style.width = sideWidth + "px";
   let old = vissiableDangos;
   vissiableDangos = sideWidth > 0;
   if (vissiableDangos) {
     clearTimeout(noticeTimeout);
-    if (!old) {
+    if (!old && !localStorage.getItem("scratchAddonsAprilFoolsModal2021")) {
       document.querySelector("#content").append(noticeText);
     }
   } else {
@@ -67,7 +63,32 @@ addEventListener("resize", () => {
   setEltWidth(dangoContainerRight);
 });
 
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
+  const notifClose = Object.assign(document.createElement("span"), {
+    style: `
+    float: right;
+    cursor:pointer;
+    background-color: #ffffff26;
+    line-height: 10px;
+    width: 10px;
+    text-align: center;
+    padding:5px;
+    border-radius: 50%;`,
+    textContent: "x",
+  });
+  notifClose.onclick = () => {
+    noticeText.style.display = "none";
+    localStorage.setItem("scratchAddonsAprilFoolsModal2021", "true");
+  };
+  noticeText.appendChild(notifClose);
+  const boldSpan = document.createElement("span");
+  boldSpan.innerText = msg("addedBy");
+  boldSpan.style.fontWeight = "bold";
+  noticeText.appendChild(boldSpan);
+  const normalSpan = document.createElement("span");
+  normalSpan.innerText = `\n${msg("happyAprilFools")}\n${msg("howToGet")}\n${msg("howToStop")}`;
+  noticeText.appendChild(normalSpan);
+  
   const now = new Date().getTime() / 1000;
   const runDangos = addon.settings.get("force") || (now < 1617364800 && now > 1617192000);
   if (!runDangos) return;

@@ -19,6 +19,9 @@
   left: 20px;
   border-radius: 10px;
   padding: 5px;
+  width: 500px;
+  color: white;
+  text-shadow: none;
 }
 
 .sa-dango {
@@ -57,11 +60,11 @@
 
 @keyframes dangos-shake {
   0%, 100% {
-    transform: translateX(0)::before;
+    transform: translateX(0);
   }
 
   50% {
-    transform: translateX(80px)::before;
+    transform: translateX(80px);
   }
 }
 
@@ -77,10 +80,10 @@
 
 @keyframes dangos-shake {
   0%, 100% {
-    transform: translateX(0)::before
+    transform: translateX(0);
   }
 
   50% {
-    transform: translateX(80px)::before
+    transform: translateX(80px);
   }
 }
