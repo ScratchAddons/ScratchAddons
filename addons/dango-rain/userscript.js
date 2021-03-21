@@ -68,7 +68,7 @@ addEventListener("resize", () => {
 });
 
 export default async function ({ addon, global, console }) {
-  const now = new Date().getTime();
+  const now = new Date().getTime() / 1000;
   const runDangos = addon.settings.get("force") || (now < 1617364800 && now > 1617192000);
   if (!runDangos) return;
   while (true) {
