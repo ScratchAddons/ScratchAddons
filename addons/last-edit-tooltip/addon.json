@@ -1,19 +1,43 @@
 {
-  "name": "Last edit tooltip",
-  "description": "Hover over a project's share date for information on when it was last edited.",
+  "name": "Last created/edited tooltip",
+  "description": "Hover over a project's share date for information on when it was last edited and created.",
   "credits": [
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr"
     }
   ],
   "userscripts": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "url": "userscript-24.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "settingMatch": {
+        "id": "12hrclock",
+        "value": false
+      }
+    },
+    {
+      "url": "userscript-12.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "settingMatch": {
+        "id": "12hrclock",
+        "value": true
+      }
     }
   ],
   "tags": ["community"],
+  "settings": [
+    {
+      "name": "Use 12-hour clock",
+      "id": "12hrclock",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "enabledByDefault": false,
   "l10n": true
 }
