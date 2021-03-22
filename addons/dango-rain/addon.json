@@ -1,17 +1,25 @@
 {
-  "name": "Dango rain on profiles",
-  "description": "Profiles that include \"dango\" on their \"About Me\" section will have dangos raining on the sides of the screen!",
+  "name": "Dango rain on profiles (April Fools Day)",
+  "description": "Users that include the word \"dango\" on their \"About Me\" will have dango emojis raining on the sides of their profile.",
   "info": [
     {
       "type": "notice",
-      "text": "If you disable this addon, you will only be able to find it if you enter the konami code.",
-      "id": "konamicode"
+      "text": "Only Scratch Addons users with this enabled will see the dango rain.",
+      "id": "OnlyScratchAddonsUsers"
     }
   ],
   "credits": [
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "World_Languages",
+      "link": "https://scratch.mit.edu/users/World_Languages"
+    },
+    {
+      "name": "griffpatch",
+      "link": "https://scratch.mit.edu/users/griffpatch"
     }
   ],
   "settings": [
