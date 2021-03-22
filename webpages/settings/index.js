@@ -173,7 +173,7 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
       });
     }
     await syncSet({
-      globalTheme: !!obj.core?.lightTheme,
+      globalTheme: !!obj.core.lightTheme,
       addonsEnabled,
       addonSettings,
     });
