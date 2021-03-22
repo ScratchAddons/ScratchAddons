@@ -8,7 +8,6 @@ const noticeText = div();
 noticeText.className = "sa-dango-notice";
 
 const checkForDango = (text) => {
-  text = text.value || text.textContent;
   if (!text.toLowerCase().includes("dango")) {
     if (dangorain && dangoContainerLeft) {
       dangoContainerLeft?.remove();
@@ -92,9 +91,22 @@ export default async function ({ addon, global, console, msg }) {
   const now = new Date().getTime() / 1000;
   const runDangos = addon.settings.get("force") || (now < 1617364800 && now > 1617192000);
   if (!runDangos) return;
-  while (true) {
-    const bio = await addon.tab.waitForElement('.overview, [name="bio"]', { markAsSeen: true });
-    checkForDango(bio);
-    bio.oninput = () => checkForDango(bio);
+
+  const getAboutMeAndWiwo = () => {
+    if (document.querySelector("textarea[name=bio]")) {
+      // Own profile
+      return `${document.querySelector("textarea[name=bio]").value}/${
+        document.querySelector("textarea[name=status]").value
+      }`;
+    } else {
+      const ps = document.querySelectorAll("p.overview");
+      return `${ps[0].textContent}/${ps[1].textContent}`;
+    }
+  };
+
+  checkForDango(getAboutMeAndWiwo());
+  if (document.querySelector("textarea[name=bio]")) {
+    document.querySelector("textarea[name=bio]").addEventListener("input", () => checkForDango(getAboutMeAndWiwo()));
+    document.querySelector("textarea[name=status]").addEventListener("input", () => checkForDango(getAboutMeAndWiwo()));
   }
 }
