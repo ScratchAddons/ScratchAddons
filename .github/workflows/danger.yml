@@ -15,6 +15,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.1.5
+    - run: npm install danger-plugin-prettier
     - name: Danger JS Action
       uses: danger/danger-js@9.1.8
       env:
