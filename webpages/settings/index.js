@@ -367,7 +367,11 @@ const vue = (window.vue = new Vue({
       if (addonManifest._addonId === "dango-rain") {
         const now = new Date().getTime() / 1000;
         if (this.selectedTab === "easterEgg") {
+          // Work normally
+          return matchesTag && matchesSearch && matchesEasterEgg;
         } else if (now < 1617364800 && now > 1617192000) {
+          // Show even if disabled, avoid poof if disabled
+          return matchesTag && matchesSearch;
         } else return false;
       }
 
