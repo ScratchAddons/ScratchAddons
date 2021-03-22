@@ -25,11 +25,6 @@
 }
 
 .sa-dango {
-  color: #fff;
-  font-size: 3em;
-  font-family: Arial, sans-serif;
-  text-shadow: 0 0 5px #000;
-  content: "";
   height: 50px;
   width: 50px;
   /* Twemoji by Twitter Inc, licensed under CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/ */
