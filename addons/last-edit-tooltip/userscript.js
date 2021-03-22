@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
-  const settings = new Settings()
+  const settings = new Settings();
   fetch("https://api.scratch.mit.edu" + document.location.pathname)
     .then(function (response) {
       return response.json();
@@ -14,9 +14,26 @@ export default async function ({ addon, global, console, msg }) {
           if (settings.get("12hrclock")) {
             let hourType = hour >= 12 ? "pm" : "am";
             hour = hour % 12 || 12;
-            element.setAttribute("title", msg("modified", { date: scratchAddons.l10n.date(dateMod) }) + msg("shared", {date: scratchAddons.l10n.date(dateCreated), hour: hour, minute: dateCreated.getMinutes(), hourType: hourType}))
+            element.setAttribute(
+              "title",
+              msg("modified", { date: scratchAddons.l10n.date(dateMod) }) +
+                msg("shared", {
+                  date: scratchAddons.l10n.date(dateCreated),
+                  hour: hour,
+                  minute: dateCreated.getMinutes(),
+                  hourType: hourType,
+                })
+            );
           } else {
-            element.setAttribute("title", msg("modified", { date: scratchAddons.l10n.date(dateMod) }) + msg("shared24", {date: scratchAddons.l10n.date(dateCreated), hour: hour, minute: dateCreated.getMinutes()}))
+            element.setAttribute(
+              "title",
+              msg("modified", { date: scratchAddons.l10n.date(dateMod) }) +
+                msg("shared24", {
+                  date: scratchAddons.l10n.date(dateCreated),
+                  hour: hour,
+                  minute: dateCreated.getMinutes(),
+                })
+            );
           }
         }
       }
