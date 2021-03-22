@@ -24,7 +24,7 @@ if (badFiles > 0) {
 }
 if (!danger.github.pr.title.includes("Translation update:")) {
   const modifiedMD = danger.git.modified_files.join("- ");
-  message("Changed Files in this PR: \n - " + modifiedMD);
+  message(`This PR has ${danger.github.pr.additions} additions and ${danger.github.pr.deletions} deletions.`);
   const modifiedLibFiles = modified.filter((p) => p.includes("libraries/"));
 
   if (modifiedLibFiles.includes("libraries/")) {
