@@ -1,6 +1,6 @@
 import { message, danger, warn } from "danger";
-import prettier from "prettier";
-
+import "prettier";
+prettier.check()
 const modified = danger.git.modified_files;
 if (!danger.github.pr.title.includes("Translation update:")) {
   const modifiedMD = danger.git.modified_files.join("- ");
