@@ -1,4 +1,7 @@
 export default async function ({ addon, global, console }) {
+  const now = new Date().getTime() / 1000;
+  // April fools
+  if (now < 1617364800 && now > 1617192000) return;
   // TODO: Switch completely to Blockly?
   // Well anyway future self, here you go: https://github.com/LLK/scratch-blocks/compare/hotfix/totally-normal-2020
   const inject = async () => ((await addon.tab.traps.getBlockly()).BlockSvg.START_HAT_HEIGHT = 31);
