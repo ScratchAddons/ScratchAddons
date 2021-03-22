@@ -32,7 +32,7 @@
   "tags": ["community"],
   "settings": [
     {
-      "name": "Use 12-hour clock",
+      "name": "Use 12-hour format",
       "id": "12hrclock",
       "type": "boolean",
       "default": false
