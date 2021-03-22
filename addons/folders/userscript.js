@@ -109,6 +109,12 @@ export default async function ({ addon, global, console, msg }) {
     throw new Error("cannot find SortableHOC");
   };
 
+  const getBackpackFromElement = (el) => {
+    const gui = el.closest('[class*="gui_editor-wrapper"]');
+    if (!gui) throw new Error('cannot find Backpack');
+    return gui[reactInternalKey].child.sibling.child.stateNode;
+  };
+
   const clamp = (n, min, max) => {
     return Math.min(Math.max(n, min), max);
   };
@@ -258,7 +264,6 @@ export default async function ({ addon, global, console, msg }) {
       typeof sortableHOCInstance.containerBox !== "undefined" &&
       typeof SortableHOC.prototype.componentDidMount === "undefined" &&
       typeof SortableHOC.prototype.componentDidUpdate === "undefined" &&
-      typeof SortableHOC.prototype.componentWillReceiveProps === "function" &&
       typeof SortableHOC.prototype.handleAddSortable === "function" &&
       typeof SortableHOC.prototype.handleRemoveSortable === "function" &&
       typeof SortableHOC.prototype.setRef === "function"
@@ -297,6 +302,14 @@ export default async function ({ addon, global, console, msg }) {
     )
       return;
     throw new Error("Can not comprehend VM");
+  };
+  
+  const verifyBackpack = (backpackInstance) => {
+    const Backpack = backpackInstance.constructor;
+    if (typeof Backpack.prototype.handleDrop === 'function') {
+      return;
+    }
+    throw new Error("Can not comprehend Backpack");
   };
 
   const patchSortableHOC = (SortableHOC, type) => {
@@ -528,26 +541,6 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
       }
-    };
-
-    const originalComponentWillReceiveProps = SortableHOC.prototype.componentWillReceiveProps;
-    SortableHOC.prototype.componentWillReceiveProps = function (...args) {
-      const newProps = args[0];
-      // If a folder item is dropped in the backpack, change the type to something invalid to avoid a crash.
-      if (newProps && !newProps.dragInfo.dragging && this.props.dragInfo.dragging) {
-        if (this.props.dragInfo.payload === undefined) {
-          const backpack = document.querySelector("[class*='backpack_backpack-list-inner']");
-          if (backpack) {
-            const backpackRect = backpack.getBoundingClientRect();
-            const { x, y } = this.props.dragInfo.currentOffset;
-            const { top, left, bottom, right } = backpackRect;
-            if (x >= left && x <= right && y >= top && y <= bottom) {
-              this.props.dragInfo.dragType = "sa_invalid";
-            }
-          }
-        }
-      }
-      return originalComponentWillReceiveProps.call(this, ...args);
     };
 
     const originalSortableHOCRender = SortableHOC.prototype.render;
@@ -1137,6 +1130,21 @@ export default async function ({ addon, global, console, msg }) {
     };
   };
 
+  const patchBackpack = (backpackInstance) => {
+    const Backpack = backpackInstance.constructor;
+    const originalHandleDrop = Backpack.prototype.handleDrop;
+    Backpack.prototype.handleDrop = function (...args) {
+      // Backpack will crash the editor if a dragInfo with an undefined payload (happens when dragging a folder) is dropped
+      // We want to prevent that
+      const dragInfo = args[0];
+      if (dragInfo && Object.hasOwnProperty.call(dragInfo, 'payload') && typeof dragInfo.payload === 'undefined') {
+        return;
+      }
+      return originalHandleDrop.call(this, ...args);
+    };
+    backpackInstance.handleDrop = Backpack.prototype.handleDrop.bind(backpackInstance);
+  };
+
   await untilInEditor();
 
   // Sprite list
@@ -1154,6 +1162,14 @@ export default async function ({ addon, global, console, msg }) {
     sortableHOCInstance.saInitialSetup();
     patchVM();
   }
+
+  // Backpack
+  (async () => {
+    const backpackContainer = await addon.tab.waitForElement("[class*='backpack_backpack-list-inner']");
+    const backpackInstance = getBackpackFromElement(backpackContainer);
+    verifyBackpack(backpackInstance);
+    patchBackpack(backpackInstance);
+  })();
 
   // Costume and sound list
   {
