@@ -8,7 +8,9 @@ export default async function ({ addon, global, console, msg }) {
         const element = await addon.tab.waitForElement(".share-date", { markAsSeen: true });
         if (text.history) {
           let dateMod = new Date(text.history.modified);
-          element.setAttribute("title", msg("modified", { date: scratchAddons.l10n.date(dateMod) }));
+          let dateCreated = new Date(text.history.shared);
+          
+          element.setAttribute("title", msg("modified", { date: scratchAddons.l10n.date(dateMod) }) + msg("shared24", { date: scratchAddons.l10n.date(dateCreated), hour: dateCreated.getHours(), minute: dateCreated.getMinutes()}));
         }
       }
     });
