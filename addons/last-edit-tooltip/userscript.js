@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
-  const settings = new Settings();
+  const settings = addon.settings;
   fetch("https://api.scratch.mit.edu" + document.location.pathname)
     .then(function (response) {
       return response.json();
