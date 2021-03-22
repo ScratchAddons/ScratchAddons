@@ -376,7 +376,7 @@ const vue = (window.vue = new Vue({
           // If it's April Fools Day, show even if disabled
           return matchesTag && matchesSearch;
         } else if (addonManifest._wasEverEnabled && this._dangoForceWasEverTrue) {
-          // If it's not April Fools Day but dangos are forced, show. 
+          // If it's not April Fools Day but dangos are forced, show.
           // Using this._dangoForceWasEverTrue to avoid addon poofing
           // if setting was enabled on load and it's then disabled
           return matchesTag && matchesSearch;
