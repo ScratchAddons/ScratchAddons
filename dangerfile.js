@@ -1,5 +1,5 @@
 import { message, danger, warn } from "danger";
-import "prettier";
+import prettier from "prettier";
 prettier.check();
 const modified = danger.git.modified_files;
 if (!danger.github.pr.title.includes("Translation update:")) {
