@@ -7,7 +7,7 @@ const modifiedLibFiles = modified
   .filter(p => includes(p, 'libraries/'))
 
 if (modifiedLibFiles) {
-  if (!modifiedLibFiles.includes("CREDITS.md") || !modifiedLibFiles.includes("license-info.json") {
+  if (!modifiedLibFiles.includes("CREDITS.md") || !modifiedLibFiles.includes("license-info.json")) {
         warn(
     "There are library changes, but you didn't change CREDITS.md or license-info.json. Do they need changing?",
       ); 
