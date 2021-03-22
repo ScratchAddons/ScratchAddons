@@ -1,4 +1,7 @@
 import { message, danger, warn } from "danger";
+import prettier from 'danger-plugin-prettier'
+
+
 const modified = danger.git.modified_files;
 if (!danger.github.pr.title.includes("Translation update:")) {
   const modifiedMD = danger.git.modified_files.join("- ");
@@ -14,3 +17,4 @@ if (!danger.github.pr.title.includes("Translation update:")) {
     }
   }
 }
+prettier()
