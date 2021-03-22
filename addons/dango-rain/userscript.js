@@ -1,7 +1,7 @@
 let dangorain = false,
   dangoContainerLeft,
   dangoContainerRight,
-  vissiableDangos,
+  visibleDangos,
   noticeTimeout;
 const div = () => document.createElement("div");
 const noticeText = div();
@@ -42,9 +42,9 @@ const setEltWidth = (elt) => {
   let sideWidth = (document.body.clientWidth - document.querySelector("#profile-data").clientWidth) / 2;
   sideWidth = sideWidth - 25;
   elt.style.width = sideWidth + "px";
-  let old = vissiableDangos;
-  vissiableDangos = sideWidth > 0;
-  if (vissiableDangos) {
+  let old = visibleDangos;
+  visibleDangos = sideWidth > 0;
+  if (visibleDangos) {
     clearTimeout(noticeTimeout);
     if (!old && !localStorage.getItem("scratchAddonsAprilFoolsModal2021")) {
       document.querySelector("#content").append(noticeText);
