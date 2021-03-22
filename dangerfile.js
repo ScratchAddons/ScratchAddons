@@ -2,7 +2,7 @@ import { message, danger, warn } from "danger";
 const prettier = require('prettier')
 const fs = require('fs')
 var path = require("path");
-
+message("Thanks for PRing! Someone will be along to check it shortly!");
 const modified = danger.git.modified_files;
 let badFiles = 0;
 for (var file of modified) {
