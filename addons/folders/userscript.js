@@ -74,7 +74,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const isValidFolderName = (name) => {
-    return !name.includes(DIVIDER);
+    return !name.includes(DIVIDER) && !name.endsWith("/");
   };
 
   const RESERVED_NAMES = ["_mouse_", "_stage_", "_edge_", "_myself_", "_random_"];
@@ -233,18 +233,18 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  const fixCostumeOrder = () => {
-    const { items, changed } = fixOrderOfItemsInFolders(vm.editingTarget.sprite.costumes);
+  const fixCostumeOrder = (target = vm.editingTarget) => {
+    const { items, changed } = fixOrderOfItemsInFolders(target.sprite.costumes);
     if (changed) {
-      vm.editingTarget.sprite.costumes = items;
+      target.sprite.costumes = items;
       vm.emitTargetsUpdate();
     }
   };
 
-  const fixSoundOrder = () => {
-    const { items, changed } = fixOrderOfItemsInFolders(vm.editingTarget.sprite.sounds);
+  const fixSoundOrder = (target = vm.editingTarget) => {
+    const { items, changed } = fixOrderOfItemsInFolders(target.sprite.sounds);
     if (changed) {
-      vm.editingTarget.sprite.sounds = items;
+      target.sprite.sounds = items;
       vm.emitTargetsUpdate();
     }
   };
@@ -255,6 +255,7 @@ export default async function ({ addon, global, console, msg }) {
       Array.isArray(sortableHOCInstance.props.items) &&
       (typeof sortableHOCInstance.props.selectedId === "string" ||
         typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
+      typeof sortableHOCInstance.containerBox !== "undefined" &&
       typeof SortableHOC.prototype.componentDidMount === "undefined" &&
       typeof SortableHOC.prototype.componentDidUpdate === "undefined" &&
       typeof SortableHOC.prototype.componentWillReceiveProps === "function" &&
@@ -274,6 +275,8 @@ export default async function ({ addon, global, console, msg }) {
       typeof spriteSelectorItemInstance.props.dragType === "string" &&
       typeof SpriteSelectorItem.prototype.handleClick === "function" &&
       typeof SpriteSelectorItem.prototype.setRef === "function" &&
+      typeof SpriteSelectorItem.prototype.handleDrag === "function" &&
+      typeof SpriteSelectorItem.prototype.handleDragEnd === "function" &&
       typeof SpriteSelectorItem.prototype.handleDelete === "function" &&
       typeof SpriteSelectorItem.prototype.handleDuplicate === "function" &&
       typeof SpriteSelectorItem.prototype.handleExport === "function"
@@ -286,11 +289,11 @@ export default async function ({ addon, global, console, msg }) {
     const target = vm.runtime.targets[0];
     if (
       typeof vm.installTargets === "function" &&
-      typeof vm.addCostume === "function" &&
-      typeof vm.addSound === "function" &&
       typeof vm.reorderTarget === "function" &&
       typeof target.reorderCostume === "function" &&
-      typeof target.reorderSound === "function"
+      typeof target.reorderSound === "function" &&
+      typeof target.addCostume === "function" &&
+      typeof target.addSound === "function"
     )
       return;
     throw new Error("Can not comprehend VM");
@@ -792,6 +795,29 @@ export default async function ({ addon, global, console, msg }) {
       };
     }
 
+    const originalHandleDragEnd = SpriteSelectorItem.prototype.handleDragEnd;
+    SpriteSelectorItem.prototype.handleDragEnd = function (...args) {
+      const itemData = getItemData(this.props);
+      if (itemData) {
+        if (typeof itemData.realIndex === "number" && this.props.dragging) {
+          // If the item is being dragged onto another group (eg. costume list -> sprite list)
+          // then we fake a drag event to make the `index` be the real index
+          const originalIndex = this.props.index;
+          const realIndex = itemData.realIndex;
+          if (originalIndex !== realIndex) {
+            const currentOffset = addon.tab.redux.state.scratchGui.assetDrag.currentOffset;
+            const sortableHOCInstance = getSortableHOCFromElement(this.ref);
+            if (currentOffset && sortableHOCInstance && sortableHOCInstance.getMouseOverIndex() === null) {
+              this.props.index = realIndex;
+              this.handleDrag(currentOffset);
+              this.props.index = originalIndex;
+            }
+          }
+        }
+      }
+      return originalHandleDragEnd.call(this, ...args);
+    };
+
     const originalHandleClick = SpriteSelectorItem.prototype.handleClick;
     SpriteSelectorItem.prototype.handleClick = function (...args) {
       const e = args[0];
@@ -866,6 +892,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const patchVM = () => {
+    const RenderedTarget = vm.runtime.targets[0].constructor;
+
     const originalInstallTargets = vm.installTargets;
     vm.installTargets = function (...args) {
       if (currentSpriteFolder !== null) {
@@ -885,32 +913,30 @@ export default async function ({ addon, global, console, msg }) {
       });
     };
 
-    const originalAddCostume = vm.addCostume;
-    vm.addCostume = function (...args) {
+    const originalAddCostume = RenderedTarget.prototype.addCostume;
+    RenderedTarget.prototype.addCostume = function (...args) {
       if (currentAssetFolder !== null) {
-        const costume = args[1];
-        if (costume) {
+        const costume = args[0];
+        if (costume && typeof getFolderFromName(costume.name) !== "string") {
           costume.name = setFolderOfName(costume.name, currentAssetFolder);
         }
       }
-      return originalAddCostume.call(this, ...args).then((r) => {
-        fixCostumeOrder();
-        return r;
-      });
+      const r = originalAddCostume.call(this, ...args);
+      fixCostumeOrder(this);
+      return r;
     };
 
-    const originalAddSound = vm.addSound;
-    vm.addSound = function (...args) {
+    const originalAddSound = RenderedTarget.prototype.addSound;
+    RenderedTarget.prototype.addSound = function (...args) {
       if (currentAssetFolder !== null) {
         const sound = args[0];
-        if (sound) {
+        if (sound && typeof getFolderFromName(sound.name) !== "string") {
           sound.name = setFolderOfName(sound.name, currentAssetFolder);
         }
       }
-      return originalAddSound.call(this, ...args).then((r) => {
-        fixSoundOrder();
-        return r;
-      });
+      const r = originalAddSound.call(this, ...args);
+      fixSoundOrder(this);
+      return r;
     };
 
     const abstractReorder = (
@@ -1060,7 +1086,7 @@ export default async function ({ addon, global, console, msg }) {
       );
     };
 
-    vm.runtime.targets[0].constructor.prototype.reorderCostume = function (costumeIndex, newIndex) {
+    RenderedTarget.prototype.reorderCostume = function (costumeIndex, newIndex) {
       return abstractReorder(
         {
           getAll: () => {
@@ -1085,7 +1111,7 @@ export default async function ({ addon, global, console, msg }) {
       );
     };
 
-    vm.runtime.targets[0].constructor.prototype.reorderSound = function (soundIndex, newIndex) {
+    RenderedTarget.prototype.reorderSound = function (soundIndex, newIndex) {
       return abstractReorder(
         {
           getAll: () => {
