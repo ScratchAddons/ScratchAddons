@@ -13,20 +13,8 @@
   ],
   "userscripts": [
     {
-      "url": "userscript-24.js",
+      "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/projects/*"],
-      "settingMatch": {
-        "id": "12hrclock",
-        "value": false
-      }
-    },
-    {
-      "url": "userscript-12.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
-      "settingMatch": {
-        "id": "12hrclock",
-        "value": true
-      }
     }
   ],
   "tags": ["community"],
