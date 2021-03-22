@@ -33,13 +33,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/users/*"]
+      "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/users/*"]
+      "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
   "tags": ["easterEgg"],
