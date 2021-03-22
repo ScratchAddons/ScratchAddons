@@ -3,7 +3,7 @@ const modified = danger.git.modified_files;
 
 const modifiedMD = danger.git.modified_files.join("- ");
 message("Changed Files in this PR: \n - " + modifiedMD);
-const modifiedLibFiles = modified.filter((p) => includes(p, "libraries/"));
+const modifiedLibFiles = modified.filter((p) => p.includes("libraries/"));
 
 if (modifiedLibFiles) {
   if (!modifiedLibFiles.includes("CREDITS.md") || !modifiedLibFiles.includes("license-info.json")) {
