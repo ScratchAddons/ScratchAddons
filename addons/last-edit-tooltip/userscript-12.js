@@ -9,12 +9,21 @@ export default async function ({ addon, global, console, msg }) {
         if (text.history) {
           let dateMod = new Date(text.history.modified);
           let dateCreated = new Date(text.history.shared);
-          
+
           // Find the 12-hour clock.
           let hour = dateCreated.getHours();
-          let hourType = hour >= 12 ? 'pm' : 'am';
-          hour = (hour % 12) || 12;
-          element.setAttribute("title", msg("modified", { date: scratchAddons.l10n.date(dateMod) }) + msg("shared", { date: scratchAddons.l10n.date(dateCreated), hour: hour, minute: dateCreated.getMinutes(), hourType: hourType}));
+          let hourType = hour >= 12 ? "pm" : "am";
+          hour = hour % 12 || 12;
+          element.setAttribute(
+            "title",
+            msg("modified", { date: scratchAddons.l10n.date(dateMod) }) +
+              msg("shared", {
+                date: scratchAddons.l10n.date(dateCreated),
+                hour: hour,
+                minute: dateCreated.getMinutes(),
+                hourType: hourType,
+              })
+          );
         }
       }
     });

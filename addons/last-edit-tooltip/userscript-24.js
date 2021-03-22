@@ -9,8 +9,16 @@ export default async function ({ addon, global, console, msg }) {
         if (text.history) {
           let dateMod = new Date(text.history.modified);
           let dateCreated = new Date(text.history.shared);
-          
-          element.setAttribute("title", msg("modified", { date: scratchAddons.l10n.date(dateMod) }) + msg("shared24", { date: scratchAddons.l10n.date(dateCreated), hour: dateCreated.getHours(), minute: dateCreated.getMinutes()}));
+
+          element.setAttribute(
+            "title",
+            msg("modified", { date: scratchAddons.l10n.date(dateMod) }) +
+              msg("shared24", {
+                date: scratchAddons.l10n.date(dateCreated),
+                hour: dateCreated.getHours(),
+                minute: dateCreated.getMinutes(),
+              })
+          );
         }
       }
     });
