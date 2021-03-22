@@ -9,7 +9,7 @@ noticeText.className = "sa-dango-notice";
 
 const checkForDango = (text) => {
   text = text.value || text.textContent;
-  if (!text.includes("dango")) {
+  if (!text.toLowerCase().includes("dango")) {
     if (dangorain && dangoContainerLeft) {
       dangoContainerLeft?.remove();
       dangoContainerRight?.remove();
