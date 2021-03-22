@@ -6,7 +6,10 @@ if (!danger.github.pr.title.includes("Translation update:")) {
   const modifiedLibFiles = modified.filter((p) => p.includes("libraries/"));
 
   if (modifiedLibFiles) {
-    if (!modifiedLibFiles.includes("CREDITS.md") || !modifiedLibFiles.includes("license-info.json") && modifiedLibFiles.includes("licenses/")) {
+    if (
+      !modifiedLibFiles.includes("CREDITS.md") ||
+      (!modifiedLibFiles.includes("license-info.json") && modifiedLibFiles.includes("licenses/"))
+    ) {
       warn("There are library changes, but you didn't change CREDITS.md or license-info.json. Do they need changing?");
     }
   }
