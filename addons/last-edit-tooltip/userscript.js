@@ -1,41 +1,31 @@
 export default async function ({ addon, global, console, msg }) {
-  const settings = addon.settings;
-  fetch("https://api.scratch.mit.edu" + document.location.pathname)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(async function (text) {
-      while (true) {
-        const element = await addon.tab.waitForElement(".share-date", { markAsSeen: true });
-        if (text.history) {
-          let dateMod = new Date(text.history.modified);
-          let dateCreated = new Date(text.history.shared);
-          let hour = dateCreated.getHours();
-          if (settings.get("12hrclock")) {
-            let hourType = hour >= 12 ? "pm" : "am";
-            hour = hour % 12 || 12;
-            element.setAttribute(
-              "title",
-              msg("modified", { date: scratchAddons.l10n.date(dateMod) }) +
-                msg("shared", {
-                  date: scratchAddons.l10n.date(dateCreated),
-                  hour: hour,
-                  minute: dateCreated.getMinutes(),
-                  hourType: hourType,
-                })
-            );
-          } else {
-            element.setAttribute(
-              "title",
-              msg("modified", { date: scratchAddons.l10n.date(dateMod) }) +
-                msg("shared24", {
-                  date: scratchAddons.l10n.date(dateCreated),
-                  hour: hour,
-                  minute: dateCreated.getMinutes(),
-                })
-            );
-          }
-        }
-      }
-    });
+  while (true) {
+    const element = await addon.tab.waitForElement(".share-date", { markAsSeen: true });
+    const data = await (await fetch("https://api.scratch.mit.edu" + document.location.pathname)).json();
+
+    if (!data.history) return;
+
+    let dateMod = scratchAddons.l10n.date(new Date(data.history.modified));
+    let dateCreated = new Date(data.history.shared);
+    let hour = dateCreated.getHours();
+    let minute = (dateCreated.getMinutes() + "").padStart(2, "0");
+    let dataTitle =
+      msg("modified", { date: dateMod }) +
+      msg("shared24", {
+        date: scratchAddons.l10n.date(dateCreated),
+        hour,
+        minute,
+      });
+    if (addon.settings.get("12hrclock"))
+      dataTitle =
+        msg("modified", { date: dateMod }) +
+        msg("shared", {
+          date: scratchAddons.l10n.date(dateCreated),
+          hour: hour % 12 || 12,
+          minute,
+          hourType: hour > 11 ? "pm" : "am",
+        });
+
+    element.setAttribute("title", dataTitle);
+  }
 }
