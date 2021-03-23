@@ -1,10 +1,11 @@
-import { message, danger, warn } from "danger";
+import { message, danger, warn, markdown } from "danger";
 const prettier = require("prettier");
 const fs = require("fs");
 var path = require("path");
-message("Thanks for PRing! Someone will be along to check it shortly!");
+message(danger.github.utils.fileLinks(['/libraries']))
+//message("Thanks for PRing! Someone will be along to check it shortly!");
 const modified = danger.git.modified_files;
-let badFiles = 0;
+let badFiles = [];
 for (var file of modified) {
   resolved = path.resolve(file);
   let readFile = fs.readFileSync(resolved, { encoding: "utf8", flag: "r" });
@@ -15,9 +16,9 @@ for (var file of modified) {
   const filePath = path.basename(file, extname);
   if (extname == ".svg") return;
   let check = prettier.check(readFile, { filepath: filePath + extname });
-  if (!check) badFiles++;
+  if (!check) badFiles.push('`' + file + '`');
 }
-if (badFiles > 0) {
+if (badFiles.length > 0) {
   warn(
     `${badFiles} need to be formatted with Prettier. To enable it, go to https://github.com/<yourusername>/ScratchAddons/actions and enable it.`
   );
