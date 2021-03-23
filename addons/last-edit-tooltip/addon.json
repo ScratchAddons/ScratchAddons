@@ -1,6 +1,6 @@
 {
-  "name": "Last created/edited tooltip",
-  "description": "Hover over a project's share date for information on when it was last edited and created.",
+  "name": "Last shared/edited tooltip",
+  "description": "Hover over a project's share date for information on when it was last edited and shared.",
   "credits": [
     {
       "name": "TheColaber",
