@@ -308,7 +308,7 @@ export default async function ({ addon, global, console, msg }) {
     const Backpack = backpackInstance.constructor;
     if (
       typeof Backpack.prototype.handleDrop === "function" &&
-      typeof Backpack.prototype.componentDidMount === "function"
+      typeof Backpack.prototype.componentDidUpdate === "undefined"
     ) {
       return;
     }
