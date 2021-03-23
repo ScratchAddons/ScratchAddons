@@ -32,8 +32,8 @@ if (badFiles.length > 0) {
   );
   markdown(`
 ### Files that need to be prettified
-  - ${badFiles.join('\n- ')}
-`)
+  - ${badFiles.join("\n- ")}
+`);
 }
 if (!pr.title.includes("Translation update:")) {
   const modifiedLibFiles = modified.filter((p) => p.includes("libraries/"));
