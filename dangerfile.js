@@ -1,8 +1,13 @@
 import { message, danger, warn, markdown } from "danger";
 const prettier = require("prettier");
 const fs = require("fs");
+let pr = danger.github.pr
+if (pr.body.length === 0) {
+  fail("Please add a description to your PR.")
+}
+
 var path = require("path");
-if (danger.github.pr.author_association == "FIRST_TIME_CONTRIBUTOR") {
+if (pr.author_association == "FIRST_TIME_CONTRIBUTOR") {
   message(
     "Since this is your first contribution, here are some links while you wait for a review.\n[Our contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/CONTRIBUTING.md)"
   );
@@ -28,9 +33,9 @@ if (badFiles.length > 0) {
     )} need to be formatted with Prettier. To enable it, go to https://github.com/<yourusername>/ScratchAddons/actions and enable it.`
   );
 }
-if (!danger.github.pr.title.includes("Translation update:")) {
+if (!pr.title.includes("Translation update:")) {
   const modifiedMD = danger.git.modified_files.join("- ");
-  message(`This PR has ${danger.github.pr.additions} additions and ${danger.github.pr.deletions} deletions.`);
+  message(`This PR has ${pr.additions} additions and ${pr.deletions} deletions.`);
   const modifiedLibFiles = modified.filter((p) => p.includes("libraries/"));
 
   if (modifiedLibFiles.includes("libraries/")) {
