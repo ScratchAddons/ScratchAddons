@@ -9,7 +9,7 @@ if (pr.body.length === 0) {
 var path = require("path");
 if (pr.author_association == "FIRST_TIME_CONTRIBUTOR") {
   message(
-    "Since this is your first contribution, here are some links while you wait for a review.\n[Our contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/CONTRIBUTING.md)"
+    "Hello, this is your first contribution. If you want, you can check out other issues and PRs to get up to date on our standards."
   );
 }
 const modified = danger.git.modified_files;
@@ -28,10 +28,12 @@ for (var file of modified) {
 }
 if (badFiles.length > 0) {
   warn(
-    `${danger.github.utils.fileLinks(
-      badfiles
-    )} need to be formatted with Prettier. To enable it, go to https://github.com/<yourusername>/ScratchAddons/actions and enable it.`
+    `${badFiles.length} need to be formatted with Prettier. Please format your code using Prettier, or go [here](https://github.com/${pr.user}/ScratchAddons/actions) to enable formatting automation.`
   );
+  markdown(`
+### Files that need to be prettified
+  - ${badFiles.join('\n- ')
+`)
 }
 if (!pr.title.includes("Translation update:")) {
   const modifiedMD = danger.git.modified_files.join("- ");
