@@ -13,7 +13,9 @@ export default async function ({ addon, global, console }) {
     } else removeInterval();
   });
 
-  document.body.insertAdjacentHTML("beforeend", `
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `
 <svg>
   <filter id="blueStackGlow" height="160%" width="180%" y="-30%" x="-40%">
     <feGaussianBlur in="SourceGraphic" stdDeviation="4">
@@ -34,19 +36,17 @@ export default async function ({ addon, global, console }) {
     </feComposite>
   </filter>
 </svg>
-`);
+`
+  );
 
   function addInterval() {
     const interval = setInterval(() => {
-      Array.prototype.forEach.call(
-        document.querySelectorAll("path[style*='filter' i]"),
-        (e) => (e.style.filter = "")
-      );
+      Array.prototype.forEach.call(document.querySelectorAll("path[style*='filter' i]"), (e) => (e.style.filter = ""));
       virtualMachine.runtime.threads.forEach((thread) => {
         thread.stack.forEach((e) => {
           let blockId = thread.target.blocks.getBlock(e).id;
           let block = Blockly.getMainWorkspace().getBlockById(blockId);
-          let childblock = thread.stack.find(i => {
+          let childblock = thread.stack.find((i) => {
             let b = block;
             while (b.childBlocks_.length) {
               b = b.childBlocks_[b.childBlocks_.length - 1];
