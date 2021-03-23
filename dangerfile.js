@@ -46,6 +46,5 @@ if (!pr.title.includes("Translation update:")) {
       warn("There are library changes, but you didn't change CREDITS.md or license-info.json. Do they need changing?");
     }
   }
-  markdown(`If something looks wrong, please ping one of our members to check.`)
-
+  markdown(`If something looks wrong, please ping one of our members to check.`);
 }
