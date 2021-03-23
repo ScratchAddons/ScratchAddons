@@ -99,7 +99,7 @@ chrome.webRequest.onBeforeRequest.addListener(
       // Another content script with same identity took our
       // place in the csInfoCache map while the promise resolved
       return;
-    };
+    }
     csInfoCache.set(identity, { loading: false, info, timestamp: Date.now() });
     scratchAddons.localEvents.dispatchEvent(new CustomEvent("csInfoCacheUpdated"));
   },
@@ -114,7 +114,7 @@ chrome.webRequest.onBeforeRequest.addListener(
 // will redirect to /studios/104/ (with a slash)
 // If a cache entry is too old, remove it
 chrome.alarms.create("cleanCsInfoCache", { periodInMinutes: 1 });
-chrome.alarms.onAlarm.addListener(alarm => {
+chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "cleanCsInfoCache") {
     csInfoCache.forEach((obj, key) => {
       if (!obj.loading) {
@@ -153,17 +153,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         csInfoCache.delete(identity);
       }
     } else {
-      getContentScriptInfo(request.contentScriptReady.url).then(info => {
+      getContentScriptInfo(request.contentScriptReady.url).then((info) => {
         sendResponse(info);
       });
       return true;
     }
   } else {
     // Wait until manifests, addon.auth and addon.settings are ready
-    scratchAddons.localEvents.addEventListener("ready", async () => {
-      const info = await getContentScriptInfo(request.contentScriptReady.url);
-      sendResponse(info);
-    }, { once: true });
+    scratchAddons.localEvents.addEventListener(
+      "ready",
+      async () => {
+        const info = await getContentScriptInfo(request.contentScriptReady.url);
+        sendResponse(info);
+      },
+      { once: true }
+    );
     return true;
   }
 });
