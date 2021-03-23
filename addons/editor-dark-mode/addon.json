@@ -178,26 +178,9 @@
     {
       "name": "Border color",
       "id": "border",
-      "type": "select",
-      "default": "transparentWhite",
-      "potentialValues": [
-        {
-          "id": "transparentBlack",
-          "name": "Transparent black"
-        },
-        {
-          "id": "transparentWhite",
-          "name": "Transparent white"
-        },
-        {
-          "id": "gray",
-          "name": "Gray"
-        },
-        {
-          "id": "black",
-          "name": "Black"
-        }
-      ]
+      "type": "color",
+      "default": "#ffffff0d",
+      "allowTransparency": true
     },
     {
       "name": "Show workspace dots",
@@ -245,7 +228,7 @@
         "palette": "#202020",
         "fullscreen": "#000000",
         "stageHeader": "#000000",
-        "border": "transparentWhite",
+        "border": "#ffffff0d",
         "textShadow": false,
         "dots": false,
         "darkComments": true,
@@ -272,7 +255,7 @@
         "palette": "#2f4066",
         "fullscreen": "#051638",
         "stageHeader": "#051638",
-        "border": "transparentBlack",
+        "border": "#00000026",
         "textShadow": false,
         "dots": false,
         "darkComments": true,
@@ -299,7 +282,7 @@
         "palette": "#222222",
         "fullscreen": "#222222",
         "stageHeader": "#222222",
-        "border": "black",
+        "border": "#111111",
         "textShadow": true,
         "dots": false,
         "darkComments": true,
@@ -326,7 +309,7 @@
         "palette": "#333333",
         "fullscreen": "#282828",
         "stageHeader": "#333333",
-        "border": "gray",
+        "border": "#444444",
         "textShadow": false,
         "dots": true,
         "darkComments": true,
@@ -353,7 +336,7 @@
         "palette": "#f9f9f9",
         "fullscreen": "#ffffff",
         "stageHeader": "#e8edf1",
-        "border": "transparentBlack",
+        "border": "#00000026",
         "textShadow": false,
         "dots": true,
         "darkComments": false,

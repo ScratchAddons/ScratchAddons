@@ -39,7 +39,6 @@
   --editorDarkMode-palette-filter: brightness(0) invert(1);
   --editorDarkMode-palette-scrollbar: #333333;
   --editorDarkMode-accent-opacity0: rgba(255, 255, 255, 0);
-  --editorDarkMode-border-color: rgba(255, 255, 255, 0.05);
 }
 
 /* Page background */
@@ -535,18 +534,18 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .camera-modal_camera-feed-container_-La7q,
 .record-modal_waveform-container__ay3Q,
 .record-modal_button-row_1hdGe button {
-  border-color: var(--editorDarkMode-border-color);
+  border-color: var(--editorDarkMode-border);
 }
 .blocklyWidgetDiv .goog-menuitem,
 .blocklyDropDownDiv[style*="background-color: rgb(255, 255, 255)"] {
-  border-color: var(--editorDarkMode-border-color) !important;
+  border-color: var(--editorDarkMode-border) !important;
 }
 .blocklyFlyoutButtonBackground,
 .custom-procedures_workspace_1d2uW .blocklyMainBackground,
 .blocklyFlyoutCheckbox,
 .Popover-tipShape,
 .sa-onion-settings-polygon {
-  stroke: var(--editorDarkMode-border-color);
+  stroke: var(--editorDarkMode-border);
 }
 
 /* Miscellaneous styles */

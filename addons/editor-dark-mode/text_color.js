@@ -87,15 +87,6 @@ function testAll(settings) {
   lightDarkVariant("primary-variant", settings.get("primary"), 60, 0.67, 0.76, 0.8);
   lightDarkVariant("workspace-scrollbar", settings.get("workspace"), 170, 0.83, 0.83, 0.83, 0.87, 0.87, 0.87);
   lightDarkVariant("palette-scrollbar", settings.get("palette"), 170, 0.83, 0.83, 0.83, 0.92, 0.92, 0.92);
-  document.documentElement.style.setProperty(
-    "--editorDarkMode-border-color",
-    {
-      transparentBlack: "rgba(0, 0, 0, 0.15)",
-      transparentWhite: "rgba(255, 255, 255, 0.05)",
-      gray: "#444444",
-      black: "#111111",
-    }[settings.get("border")]
-  );
   if (settings.get("dots")) {
     textColor("workspace-dots", settings.get("workspace"), "rgba(0, 0, 0, 0.13)", "rgba(255, 255, 255, 0.13)");
   } else {
