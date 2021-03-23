@@ -1,7 +1,5 @@
 chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res) => {
-  // TODO: firefox if(res)
-  console.log("received response!", res);
-  onInfoAvailable(res);
+  if (res) onInfoAvailable(res);
 });
 
 try {
