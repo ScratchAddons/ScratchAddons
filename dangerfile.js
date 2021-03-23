@@ -1,9 +1,9 @@
 import { message, danger, warn, markdown } from "danger";
 const prettier = require("prettier");
 const fs = require("fs");
-let pr = danger.github.pr
+let pr = danger.github.pr;
 if (pr.body.length === 0) {
-  fail("Please add a description to your PR.")
+  fail("Please add a description to your PR.");
 }
 
 var path = require("path");
