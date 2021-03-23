@@ -87,9 +87,9 @@ function onDataReady() {
     }
   };
 
-  // We guarantee document.head won't throw in userscripts
-  // TODO: preload locals and files *before* head is available,
-  // but run addons after <head> is added.
+  // Note: we currently load userscripts and locales after head loaded
+  // We could do that before head loaded just fine, as long as we don't
+  // actually *run* the addons before document.head is defined.
   if (document.head) runUserscripts();
   else {
     const observer = new MutationObserver(() => {
