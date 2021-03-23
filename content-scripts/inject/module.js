@@ -194,11 +194,10 @@ function loadClasses() {
 if (document.querySelector("title")) loadClasses();
 else {
   const stylesObserver = new MutationObserver((mutationsList) => {
-    console.log(mutationsList); // TODO: test
     if (document.querySelector("title")) {
       stylesObserver.disconnect();
       loadClasses();
     }
   });
-  stylesObserver.observe(document.documentElement, { childList: true });
+  stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
 }
