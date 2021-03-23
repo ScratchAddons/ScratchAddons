@@ -2,7 +2,7 @@ import { message, danger, warn, markdown } from "danger";
 const prettier = require("prettier");
 const fs = require("fs");
 let pr = danger.github.pr;
-markdown('#### Danger PR Checks')
+markdown("#### Danger PR Checks");
 if (pr.body.length === 0) {
   fail("Please add a description to your PR.");
 }
