@@ -111,7 +111,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const getBackpackFromElement = (el) => {
     const gui = el.closest('[class*="gui_editor-wrapper"]');
-    if (!gui) throw new Error('cannot find Backpack');
+    if (!gui) throw new Error("cannot find Backpack");
     return gui[reactInternalKey].child.sibling.child.stateNode;
   };
 
@@ -303,12 +303,12 @@ export default async function ({ addon, global, console, msg }) {
       return;
     throw new Error("Can not comprehend VM");
   };
-  
+
   const verifyBackpack = (backpackInstance) => {
     const Backpack = backpackInstance.constructor;
     if (
-      typeof Backpack.prototype.handleDrop === 'function' &&
-      typeof Backpack.prototype.componentDidMount === 'function'
+      typeof Backpack.prototype.handleDrop === "function" &&
+      typeof Backpack.prototype.componentDidMount === "function"
     ) {
       return;
     }
@@ -437,16 +437,17 @@ export default async function ({ addon, global, console, msg }) {
             folderItem.costume = {
               asset: folderAsset,
             };
+            // For sprite items, `id` is used as the drag payload and toString is used as a React key
             folderItem.id = {
               sa_folder_items: folderItems,
               toString() {
                 return `&__${folderName}`;
-              }
+              },
             };
           } else {
             folderItem.asset = folderAsset;
             folderItem.dragPayload = {
-              sa_folder_items: folderItems
+              sa_folder_items: folderItems,
             };
           }
           items.push(folderItem);
@@ -1152,19 +1153,19 @@ export default async function ({ addon, global, console, msg }) {
         let type;
         if (item.dragPayload) {
           if (item.costumeURL) {
-            type = 'SOUND';
+            type = "SOUND";
           } else {
-            type = 'COSTUME';
+            type = "COSTUME";
           }
           payload = item.dragPayload;
         } else if (item.id) {
-          type = 'SPRITE';
+          type = "SPRITE";
           payload = item.id;
         }
         if (type && payload) {
           originalHandleDrop.call(this, {
             dragType: type,
-            payload: payload
+            payload: payload,
           });
         }
       }
@@ -1182,7 +1183,7 @@ export default async function ({ addon, global, console, msg }) {
       const dragInfo = args[0];
       const folderItems = dragInfo && dragInfo.payload && dragInfo.payload.sa_folder_items;
       if (Array.isArray(folderItems)) {
-        if (confirm(msg('confirm-backpack-folder'))) {
+        if (confirm(msg("confirm-backpack-folder"))) {
           this.sa_queuedItems = folderItems;
           this.sa_loadNextItem();
         }
