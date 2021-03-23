@@ -74,9 +74,9 @@ export default async function ({ addon, msg, console }) {
           msg("most-views")
         )
       );
-      fetch(`https://scratchdb.lefty.one/v2/user/history/followers/${data.sys_id}/?range=999`)
+      fetch(`https://scratchdb.lefty.one/v3/user/graph/${username}/followers?range=365&segment=7`)
         .then(async function (response) {
-          const historyData = (await response.json()).history;
+          const historyData = (await response.json());
           await addon.tab.loadScript(addon.self.lib + "/Chart.min.js");
           const canvasContainer = document.createElement("div");
           stats.appendChild(canvasContainer);
