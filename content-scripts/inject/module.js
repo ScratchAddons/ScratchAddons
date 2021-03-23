@@ -71,8 +71,7 @@ function onDataReady() {
 
   scratchAddons.methods = {};
   scratchAddons.methods.getMsgCount = () => {
-    // TODO: not sure why we do this (pending promises arr), just transitioning to comlink for now
-    _cs_.requestMsgCount();
+    if (!pendingPromises.msgCount.length) _cs_.requestMsgCount();
     let promiseResolver;
     const promise = new Promise((resolve) => (promiseResolver = resolve));
     pendingPromises.msgCount.push(promiseResolver);
