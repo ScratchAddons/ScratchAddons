@@ -32,12 +32,10 @@ if (badFiles.length > 0) {
   );
   markdown(`
 ### Files that need to be prettified
-  - ${badFiles.join('\n- ')
+  - ${badFiles.join('\n- ')}
 `)
 }
 if (!pr.title.includes("Translation update:")) {
-  const modifiedMD = danger.git.modified_files.join("- ");
-  message(`This PR has ${pr.additions} additions and ${pr.deletions} deletions.`);
   const modifiedLibFiles = modified.filter((p) => p.includes("libraries/"));
 
   if (modifiedLibFiles.includes("libraries/")) {
