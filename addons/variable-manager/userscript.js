@@ -166,11 +166,11 @@ export default async function ({ addon, global, console, msg }) {
         e.preventDefault();
         Blockly.getMainWorkspace().renameVariableById(this.scratchVariable.id, label.value);
         label.blur();
-      }
+      };
       label.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) onLabelOut(e);
       });
-      label.addEventListener("focusout", onLabelOut)
+      label.addEventListener("focusout", onLabelOut);
 
       label.addEventListener("focus", (e) => {
         preventUpdate = true;
@@ -211,12 +211,12 @@ export default async function ({ addon, global, console, msg }) {
           vm.setVariableValue(this.target.id, this.scratchVariable.id, input.value);
         }
         input.blur();
-      }
+      };
 
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) onInputOut(e);
       });
-      input.addEventListener("focusout", onInputOut)
+      input.addEventListener("focusout", onInputOut);
 
       input.addEventListener("focus", (e) => {
         preventUpdate = true;
