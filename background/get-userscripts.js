@@ -84,16 +84,24 @@ function createCsIdentity({ tabId, frameId, url }) {
 
 const csInfoCache = new Map();
 
+// Using this event to preload contentScriptInfo ASAP, since onBeforeRequest
+// obviously happens before the content script has a chance to send us a message.
+// However, SA should work just fine even if this event does not trigger
+// (example: on browser startup, with a Scratch page opening on startup).
 chrome.webRequest.onBeforeRequest.addListener(
   async (request) => {
+    if (!scratchAddons.localState.allReady) return;
     const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
-    // TODO: what if identity is taken?
-    csInfoCache.set(identity, null);
-
-    csInfoCache.set(identity, await getContentScriptInfo(request.url));
-    console.log(csInfoCache, identity);
-
-    // TODO: remove from cache
+    const loadingObj = { loading: true };
+    csInfoCache.set(identity, loadingObj);
+    const info = await getContentScriptInfo(request.url);
+    if (csInfoCache.get(identity) !== loadingObj) {
+      // Another content script with same identity took our
+      // place in the csInfoCache map while the promise resolved
+      return;
+    };
+    csInfoCache.set(identity, { loading: false, info, timestamp: Date.now() });
+    scratchAddons.localEvents.dispatchEvent(new CustomEvent("csInfoCacheUpdated"));
   },
   {
     urls: ["https://scratch.mit.edu/*"],
@@ -101,18 +109,63 @@ chrome.webRequest.onBeforeRequest.addListener(
   }
 );
 
+// It is not uncommon to cache objects that will never be used
+// Example: going to https://scratch.mit.edu/studios/104 (no slash after 104)
+// will redirect to /studios/104/ (with a slash)
+// If a cache entry is too old, remove it
+chrome.alarms.create("cleanCsInfoCache", { periodInMinutes: 1 });
+chrome.alarms.onAlarm.addListener(alarm => {
+  if (alarm.name === "cleanCsInfoCache") {
+    csInfoCache.forEach((obj, key) => {
+      if (!obj.loading) {
+        const currentTimestamp = Date.now();
+        const objTimestamp = obj.timestamp;
+        if (currentTimestamp - objTimestamp > 45000) {
+          csInfoCache.delete(key);
+        }
+      }
+    });
+  }
+});
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (!request.contentScriptReady) return;
-  // TODO: what if it's not in the cache already? test on startup. localState ready might even be false
-  console.log("contentScriptReady");
-  const identity = createCsIdentity({
-    tabId: sender.tab.id,
-    frameId: sender.frameId,
-    url: request.contentScriptReady.url,
-  });
-  const info = csInfoCache.get(identity);
-  sendResponse(info);
-  csInfoCache.delete(identity);
+  if (scratchAddons.localState.allReady) {
+    const identity = createCsIdentity({
+      tabId: sender.tab.id,
+      frameId: sender.frameId,
+      url: request.contentScriptReady.url,
+    });
+    const getCacheEntry = () => csInfoCache.get(identity);
+    let cacheEntry = getCacheEntry();
+    if (cacheEntry) {
+      if (cacheEntry.loading) {
+        scratchAddons.localEvents.addEventListener("csInfoCacheUpdated", function thisFunction() {
+          cacheEntry = getCacheEntry();
+          if (!cacheEntry.loading) {
+            sendResponse(cacheEntry.info);
+            csInfoCache.delete(identity);
+            scratchAddons.localEvents.removeEventListener("csInfoCacheUpdated", thisFunction);
+          }
+        });
+      } else {
+        sendResponse(cacheEntry.info);
+        csInfoCache.delete(identity);
+      }
+    } else {
+      getContentScriptInfo(request.contentScriptReady.url).then(info => {
+        sendResponse(info);
+      });
+      return true;
+    }
+  } else {
+    // Wait until manifests, addon.auth and addon.settings are ready
+    scratchAddons.localEvents.addEventListener("ready", async () => {
+      const info = await getContentScriptInfo(request.contentScriptReady.url);
+      sendResponse(info);
+    }, { once: true });
+    return true;
+  }
 });
 
 scratchAddons.localEvents.addEventListener("themesUpdated", () => {
