@@ -3,7 +3,9 @@ const prettier = require("prettier");
 const fs = require("fs");
 var path = require("path");
 if (danger.github.pr.author_association == "FIRST_TIME_CONTRIBUTOR") {
-  message("Since this is your first contribution, here are some links while you wait for a review.\n[Our contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/CONTRIBUTING.md)")
+  message(
+    "Since this is your first contribution, here are some links while you wait for a review.\n[Our contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/CONTRIBUTING.md)"
+  );
 }
 const modified = danger.git.modified_files;
 let badFiles = [];
@@ -21,7 +23,9 @@ for (var file of modified) {
 }
 if (badFiles.length > 0) {
   warn(
-    `${danger.github.utils.fileLinks(badfiles)} need to be formatted with Prettier. To enable it, go to https://github.com/<yourusername>/ScratchAddons/actions and enable it.`
+    `${danger.github.utils.fileLinks(
+      badfiles
+    )} need to be formatted with Prettier. To enable it, go to https://github.com/<yourusername>/ScratchAddons/actions and enable it.`
   );
 }
 if (!danger.github.pr.title.includes("Translation update:")) {
