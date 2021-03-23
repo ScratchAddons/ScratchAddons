@@ -2,7 +2,7 @@ import { message, danger, warn, markdown } from "danger";
 const prettier = require("prettier");
 const fs = require("fs");
 var path = require("path");
-message(danger.github.utils.fileLinks(['/libraries']))
+message(danger.github.utils.fileLinks(["/libraries"]));
 //message("Thanks for PRing! Someone will be along to check it shortly!");
 const modified = danger.git.modified_files;
 let badFiles = [];
@@ -16,7 +16,7 @@ for (var file of modified) {
   const filePath = path.basename(file, extname);
   if (extname == ".svg") return;
   let check = prettier.check(readFile, { filepath: filePath + extname });
-  if (!check) badFiles.push('`' + file + '`');
+  if (!check) badFiles.push("`" + file + "`");
 }
 if (badFiles.length > 0) {
   warn(
