@@ -14,16 +14,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Setup Node.js environment
       uses: actions/setup-node@v2.1.5
-    - name: Generate token
-      uses: tibdex/github-app-token@v1
-      id: generate-token
-      with:
-        app_id: ${{ secrets.BOT_APP_ID }}
-        private_key: ${{ secrets.BOT_PRIVATE_KEY }}
     - run: npm install prettier
     - name: Danger JS Action
       uses: danger/danger-js@9.1.8
       env:
         DANGER_DISABLE_TRANSPILATION: "true"
-        DANGER_GITHUB_API_TOKEN: ${{ steps.generate-token.outputs.token }}
+        DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
