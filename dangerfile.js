@@ -3,6 +3,7 @@ const prettier = require("prettier");
 const fs = require("fs");
 let pr = danger.github.pr;
 markdown("#### Danger PR Checks");
+// PRs should have at least a sentance of description
 if (pr.body.length === 0) {
   fail("Please add a description to your PR.");
 }
@@ -14,12 +15,12 @@ if (pr.author_association == "FIRST_TIME_CONTRIBUTOR") {
   );
 }
 const modified = danger.git.modified_files;
+// Check all files for Prettier
 let badFiles = [];
 for (var file of modified) {
   resolved = path.resolve(file);
   let readFile = fs.readFileSync(resolved, { encoding: "utf8", flag: "r" });
   let info = prettier.getFileInfo.sync(resolved);
-  console.log(resolved);
   if (info.ignored) return;
   const extname = path.extname(file);
   const filePath = path.basename(file, extname);
