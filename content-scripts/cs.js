@@ -146,9 +146,17 @@ function setCssVariables(addonSettings) {
 
 async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles, themes }) {
   setCssVariables(globalState.addonSettings);
-  // TODO: we previously made sure <head> was available before injecting
-  // userstyles and themes. Now we don't. Is this a problem?
-  injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
+  // Just in case, make sure the <head> loaded before injecting styles
+  if (document.head) injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
+  else {
+    const observer = new MutationObserver(() => {
+      if (document.head) {
+        injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.documentElement, { subtree: true, childList: true });
+  }
 
   if (!_page_) {
     await new Promise((resolve) => {
