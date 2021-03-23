@@ -306,7 +306,10 @@ export default async function ({ addon, global, console, msg }) {
   
   const verifyBackpack = (backpackInstance) => {
     const Backpack = backpackInstance.constructor;
-    if (typeof Backpack.prototype.handleDrop === 'function') {
+    if (
+      typeof Backpack.prototype.handleDrop === 'function' &&
+      typeof Backpack.prototype.componentDidMount === 'function'
+    ) {
       return;
     }
     throw new Error("Can not comprehend Backpack");
@@ -434,8 +437,17 @@ export default async function ({ addon, global, console, msg }) {
             folderItem.costume = {
               asset: folderAsset,
             };
+            folderItem.id = {
+              sa_folder_items: folderItems,
+              toString() {
+                return `&__${folderName}`;
+              }
+            };
           } else {
             folderItem.asset = folderAsset;
+            folderItem.dragPayload = {
+              sa_folder_items: folderItems
+            };
           }
           items.push(folderItem);
 
@@ -1132,12 +1144,48 @@ export default async function ({ addon, global, console, msg }) {
 
   const patchBackpack = (backpackInstance) => {
     const Backpack = backpackInstance.constructor;
+    Backpack.prototype.sa_loadNextItem = function () {
+      if (!this.sa_queuedItems) return;
+      const item = this.sa_queuedItems.pop();
+      if (item) {
+        let payload;
+        let type;
+        if (item.dragPayload) {
+          if (item.costumeURL) {
+            type = 'SOUND';
+          } else {
+            type = 'COSTUME';
+          }
+          payload = item.dragPayload;
+        } else if (item.id) {
+          type = 'SPRITE';
+          payload = item.id;
+        }
+        if (type && payload) {
+          originalHandleDrop.call(this, {
+            dragType: type,
+            payload: payload
+          });
+        }
+      }
+    };
+
+    Backpack.prototype.componentDidUpdate = function (prevProps, prevState) {
+      if (!this.state.loading && prevState.loading && !this.state.error) {
+        this.sa_loadNextItem();
+      }
+    };
+
     const originalHandleDrop = Backpack.prototype.handleDrop;
     Backpack.prototype.handleDrop = function (...args) {
-      // Backpack will crash the editor if a dragInfo with an undefined payload (happens when dragging a folder) is dropped
-      // We want to prevent that
+      // When a folder is dropped into the backpack, upload all the items in the folder.
       const dragInfo = args[0];
-      if (dragInfo && Object.hasOwnProperty.call(dragInfo, 'payload') && typeof dragInfo.payload === 'undefined') {
+      const folderItems = dragInfo && dragInfo.payload && dragInfo.payload.sa_folder_items;
+      if (Array.isArray(folderItems)) {
+        if (confirm(msg('confirm-backpack-folder'))) {
+          this.sa_queuedItems = folderItems;
+          this.sa_loadNextItem();
+        }
         return;
       }
       return originalHandleDrop.call(this, ...args);
