@@ -664,7 +664,7 @@ class GamepadEditor {
     const handleSecondClick = (e) => {
       if (input.contains(e.target)) {
         e.preventDefault();
-        mapping.type = "click";
+        mapping.type = "mousedown";
       }
       resetToNormalState();
       document.addEventListener("mouseup", resetToNormalState, {once: true});

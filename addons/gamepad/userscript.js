@@ -11,6 +11,8 @@ export default async function ({ addon, global, console, msg }) {
 
   const renderer = vm.runtime.renderer;
 
+  const buttonGroup = document.createElement("div");
+  buttonGroup.className = addon.tab.scratchClass("stage-header_stage-size-toggle-group");
   const buttonContainer = document.createElement("div");
   buttonContainer.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
   const buttonContent = document.createElement("div");
@@ -21,6 +23,7 @@ export default async function ({ addon, global, console, msg }) {
   buttonImage.src = addon.self.dir + "/gamepad.svg";
   buttonContent.appendChild(buttonImage);
   buttonContainer.appendChild(buttonContent);
+  buttonGroup.appendChild(buttonContainer);
   buttonContainer.addEventListener("click", () => {
     const editor = gamepad.editor();
     const editorEl = editor.generateEditor();
@@ -146,6 +149,6 @@ export default async function ({ addon, global, console, msg }) {
     stage.appendChild(virtualCursorContainer);
 
     const header = document.querySelector('[class*="stage-header_stage-size-row"]');
-    header.insertBefore(buttonContainer, header.firstChild);
+    header.insertBefore(buttonGroup, header.firstChild);
   }
 }

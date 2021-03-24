@@ -77,14 +77,18 @@
   top: calc(var(--dpad-y) + 30px);
 } */
 
+.gamepadlib-mapping {
+  display: flex;
+}
+
+.gamepadlib-mapping-label {
+  width: 100px;
+  text-align: center;
+}
+
 .gamepadlib-mapping[data-value="1"] .gamepadlib-keyinput {
   background: yellow;
 }
-
-/* .gamepadlib-mapping-label {
-  width: 100px;
-  text-align: center;
-} */
 
 .gamepadlib-keyinput {
   text-align: center;
