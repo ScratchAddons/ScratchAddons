@@ -38,7 +38,12 @@ const page = {
   },
 
   fireEvent(info) {
+    console.log(info);
     if (info.addonId) {
+      if (info.name === "enableAddon") {
+        runAddonUserscripts({ ...info, enabledLate: true });
+        return;
+      }
       // Addon specific events, like settings change and self disabled
       const eventTarget = scratchAddons.eventTargets[info.target].find(
         (eventTarget) => eventTarget._addonId === info.addonId

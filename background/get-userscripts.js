@@ -17,6 +17,45 @@ function getL10NURLs() {
   return urls;
 }
 
+function getAddonData({ addonId, manifest, url }) {
+  const userscripts = [];
+  for (const script of manifest.userscripts || []) {
+    if (userscriptMatches({ url }, script, addonId))
+      userscripts.push({
+        url: script.url,
+        runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
+      });
+  }
+  const userstyles = [];
+  for (const style of manifest.userstyles || []) {
+    if (userscriptMatches({ url }, style, addonId))
+      userstyles.push({
+        url: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`),
+      });
+  }
+  return { userscripts, userstyles };
+}
+scratchAddons.localEvents.addEventListener("addonEnabled", ({ detail }) => {
+  const { addonId, manifest } = detail;
+  chrome.tabs.query({}, (tabs) =>
+    tabs.forEach((tab) => {
+      if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
+          if (res) {
+            console.log(manifest, addonId);
+            const { userscripts, userstyles } = getAddonData({ addonId, url: res, manifest });
+
+            chrome.tabs.sendMessage(
+              tab.id,
+              { dyanmicAddonEnabled: { scripts: userscripts, userstyles, addonId } },
+              { frameId: 0 }
+            );
+          }
+        });
+      }
+    })
+  );
+});
 async function getContentScriptInfo(url) {
   const data = {
     url,
@@ -31,14 +70,7 @@ async function getContentScriptInfo(url) {
   for (const { addonId, manifest } of scratchAddons.manifests) {
     if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
 
-    const userscripts = [];
-    for (const script of manifest.userscripts || []) {
-      if (userscriptMatches({ url }, script, addonId))
-        userscripts.push({
-          url: script.url,
-          runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
-        });
-    }
+    const { userscripts, userstyles } = getAddonData({ addonId, manifest, url });
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
     if (manifest.tags.includes("theme")) {
@@ -60,13 +92,6 @@ async function getContentScriptInfo(url) {
         }
       }
     } else {
-      const userstyles = [];
-      for (const style of manifest.userstyles || []) {
-        if (userscriptMatches({ url }, style, addonId))
-          userstyles.push({
-            url: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`),
-          });
-      }
       if (userstyles.length) data.addonsWithUserstyles.push({ addonId, styles: userstyles });
     }
   }
@@ -170,25 +195,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     );
     return true;
   }
-});
-
-scratchAddons.localEvents.addEventListener("themesUpdated", () => {
-  // Only non-frames are updated
-  chrome.tabs.query({}, (tabs) =>
-    tabs.forEach((tab) => {
-      if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
-          if (res) {
-            chrome.tabs.sendMessage(
-              tab.id,
-              { themesUpdated: (await getContentScriptInfo(res)).themes },
-              { frameId: 0 }
-            );
-          }
-        });
-      }
-    })
-  );
 });
 
 function userscriptMatches(data, scriptOrStyle, addonId) {

@@ -89,13 +89,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request === "getInitialUrl") {
     sendResponse(initialUrl);
-  } else if (request.themesUpdated) {
-    injectUserstylesAndThemes({ themes: request.themesUpdated, isUpdate: true });
   }
 });
 
 // Store all themes that were enabled this session
 const sessionEnabledThemes = new Set();
+
+function addStyle(addon) {
+  console.log(addon);
+  for (const userstyle of addon) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = userstyle.url;
+    if (document.body) document.documentElement.insertBefore(link, document.body);
+    else document.documentElement.appendChild(link);
+  }
+}
 
 function injectUserstylesAndThemes({ addonsWithUserstyles = [], themes, isUpdate }) {
   document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
@@ -103,13 +112,7 @@ function injectUserstylesAndThemes({ addonsWithUserstyles = [], themes, isUpdate
   });
   const userstyles = addonsWithUserstyles.map((addon) => addon.styles);
   for (const addon of userstyles || []) {
-    for (const userstyle of addon) {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = userstyle.url;
-      if (document.body) document.documentElement.insertBefore(link, document.body);
-      else document.documentElement.appendChild(link);
-    }
+    addStyle(addon);
   }
   for (const theme of themes) {
     sessionEnabledThemes.add(theme.addonId);
@@ -177,6 +180,15 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       setCssVariables(request.newGlobalState.addonSettings);
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
+    } else if (request.dyanmicAddonEnabled) {
+      const { scripts, userstyles, addonId } = request.dyanmicAddonEnabled;
+      if (!addonsWithUserscripts.find((a) => a.addonId === addonId)) {
+        // Addon was not injected in page yet
+        addStyle(userstyles);
+        _page_.fireEvent({ name: "enableAddon", addonId, scripts });
+        console.log(addonsWithUserscripts);
+        addonsWithUserscripts.push({ addonId, scripts });
+      }
     } else if (request.setMsgCount) {
       _page_.setMsgCount(request.setMsgCount);
     } else if (request === "getRunningAddons") {

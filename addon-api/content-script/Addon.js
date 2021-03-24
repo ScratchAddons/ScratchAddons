@@ -13,6 +13,7 @@ export default class UserscriptAddon extends Addon {
     this.__path = `${new URL(import.meta.url).origin}/`;
     this.tab = new Tab(info);
     this.self.disabled = false;
+    this.self.enabledLate = info.enabledLate;
   }
 
   /**

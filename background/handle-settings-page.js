@@ -24,24 +24,29 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.storage.sync.set({
       addonsEnabled: scratchAddons.localState.addonsEnabled,
     });
-
+    const manifest = scratchAddons.manifests.find((a) => a.addonId === addonId).manifest;
+    const { dynamicEnable, dynamicDisable } = manifest;
     // Fire disabled event for userscripts
-    // TODO: this might not be an addon being reenabled. We should consider this
-    // in case we want to provide userscripts with a way to run after the page
-    // has loaded, dynamically.
-    chrome.tabs.query({}, (tabs) =>
-      tabs.forEach(
-        (tab) =>
-          (tab.url || (!tab.url && typeof browser !== "undefined")) &&
-          chrome.tabs.sendMessage(tab.id, {
-            fireEvent: {
-              target: "self",
-              name: newState ? "reenabled" : "disabled",
-              addonId,
-            },
-          })
-      )
-    );
+    if (dynamicEnable && newState)
+      scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonEnabled", { detail: { addonId, manifest } }));
+    // TODO: Deal with "addonDisable" event in get-userscripts.js
+    if (dynamicDisable && !newState)
+      scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonDisable", { detail: { addonId, manifest } }));
+    // chrome.tabs.query({}, (tabs) =>
+    //   tabs.forEach(
+    //     (tab) =>
+    //       (tab.url || (!tab.url && typeof browser !== "undefined")) &&
+    //       chrome.tabs.sendMessage(tab.id, {
+    //         fireEvent: {
+    //           target: "self",
+    //           name: newState ? "enable" : "disabled",
+    //           addonId,
+    //           dynamicEnable,
+    //           dynamicDisable,
+    //         },
+    //       })
+    //   )
+    // );
 
     if (newState === false) {
       // TODO: can there be many addon objects for the same addon?
@@ -55,17 +60,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     } else {
       runPersistentScripts(addonId);
     }
-
-    if (scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest.tags.includes("theme"))
-      scratchAddons.localEvents.dispatchEvent(new CustomEvent("themesUpdated"));
   } else if (request.changeAddonSettings) {
     const { addonId, newSettings } = request.changeAddonSettings;
     scratchAddons.globalState.addonSettings[addonId] = newSettings;
     chrome.storage.sync.set({
       addonSettings: scratchAddons.globalState.addonSettings,
     });
-
-    if (scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest.tags.includes("theme"))
-      scratchAddons.localEvents.dispatchEvent(new CustomEvent("themesUpdated"));
+    // TODO: something idk
   }
 });
