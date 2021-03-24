@@ -146,7 +146,15 @@ export default async function ({ addon, global, console }) {
         4 * GRID_UNIT +
         " 0 0 1 0 " +
         8 * GRID_UNIT +
-      " h " + -4 * GRID_UNIT + " a " + 4 * GRID_UNIT + " " + 4 * GRID_UNIT + " 0 0 1 0 -" + 8 * GRID_UNIT + " z";
+        " h " +
+        -4 * GRID_UNIT +
+        " a " +
+        4 * GRID_UNIT +
+        " " +
+        4 * GRID_UNIT +
+        " 0 0 1 0 -" +
+        8 * GRID_UNIT +
+        " z";
       BlockSvg.INPUT_SHAPE_ROUND_WIDTH = 12 * GRID_UNIT * multiplier;
       BlockSvg.INPUT_SHAPE_HEIGHT = 8 * GRID_UNIT * multiplier;
       BlockSvg.FIELD_HEIGHT = 8 * GRID_UNIT * multiplier; // NOTE: Determines string input heights
