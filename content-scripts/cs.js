@@ -1,12 +1,12 @@
-chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res) => {
-  if (res) onInfoAvailable(res);
-});
-
 try {
   if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
 } catch {
   throw "Scratch Addons: not first party iframe";
 }
+
+chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res) => {
+  if (res) onInfoAvailable(res);
+});
 
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
