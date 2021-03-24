@@ -19,7 +19,7 @@ const page = {
     return this._globalState;
   },
   set globalState(val) {
-    this._globalState = scratchAddons.globalState = val;    
+    this._globalState = scratchAddons.globalState = val;
   },
 
   l10njson: null, // Only set once
