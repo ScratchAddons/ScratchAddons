@@ -17,24 +17,6 @@ function getL10NURLs() {
   return urls;
 }
 
-function getAddonData({ addonId, manifest, url }) {
-  const userscripts = [];
-  for (const script of manifest.userscripts || []) {
-    if (userscriptMatches({ url }, script, addonId))
-      userscripts.push({
-        url: script.url,
-        runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
-      });
-  }
-  const userstyles = [];
-  for (const style of manifest.userstyles || []) {
-    if (userscriptMatches({ url }, style, addonId))
-      userstyles.push({
-        url: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`),
-      });
-  }
-  return { userscripts, userstyles };
-}
 scratchAddons.localEvents.addEventListener("addonEnabled", ({ detail }) => {
   const { addonId, manifest } = detail;
   chrome.tabs.query({}, (tabs) =>
@@ -69,6 +51,31 @@ scratchAddons.localEvents.addEventListener("addonDisable", ({ detail }) => {
     })
   );
 });
+
+function getAddonData({ addonId, manifest, url }) {
+  const userscripts = [];
+  for (const script of manifest.userscripts || []) {
+    if (userscriptMatches({ url }, script, addonId))
+      userscripts.push({
+        url: script.url,
+        runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
+      });
+  }
+  const userstyles = [];
+  for (const style of manifest.userstyles || []) {
+    if (userscriptMatches({ url }, style, addonId))
+      if (manifest.injectAsStyleElt) {
+        // TODO: take code down below here.
+      } else {
+        userstyles.push({
+          url: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`),
+        });
+      }
+  }
+
+  return { userscripts, userstyles };
+}
+
 async function getContentScriptInfo(url) {
   const data = {
     url,
