@@ -96,22 +96,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 const sessionEnabledThemes = new Set();
 
 function addStyle(addon) {
-  console.log(addon);
-  for (const userstyle of addon) {
+  for (const userstyle of addon.styles) {
     const link = document.createElement("link");
     link.rel = "stylesheet";
+    link.setAttribute("data-addon-id", addon.addonId);
     link.href = userstyle.url;
     if (document.body) document.documentElement.insertBefore(link, document.body);
     else document.documentElement.appendChild(link);
   }
 }
-function removeStyle() {
-  // TODO:
+function removeStyle(addonId) {
+  document.querySelector(`[data-addon-id='${addonId}']`).remove();
 }
 
 function injectUserstylesAndThemes({ addonsWithUserstyles = [], themes }) {
-  const userstyles = addonsWithUserstyles.map((addon) => addon.styles);
-  for (const addon of userstyles || []) {
+  for (const addon of addonsWithUserstyles || []) {
     addStyle(addon);
   }
   for (const theme of themes) {
@@ -147,6 +146,7 @@ function setCssVariables(addonSettings) {
 }
 
 async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles, themes }) {
+  const pageLoadedAddons = addonsWithUserscripts;
   setCssVariables(globalState.addonSettings);
   // Just in case, make sure the <head> loaded before injecting styles
   if (document.head) injectUserstylesAndThemes({ addonsWithUserstyles, themes });
@@ -179,24 +179,24 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       setCssVariables(request.newGlobalState.addonSettings);
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
-    } else if (request.dyanmicAddonEnabled) {
-      const { scripts, userstyles, addonId } = request.dyanmicAddonEnabled;
-      addStyle(userstyles);
-      if (addonsWithUserscripts.find((a) => a.addonId === addonId)) {
+    } else if (request.dynamicAddonEnabled) {
+      const { scripts, userstyles, addonId } = request.dynamicAddonEnabled;
+      addStyle({ styles: userstyles, addonId });
+      if (pageLoadedAddons.find((a) => a.addonId === addonId)) {
         // Addon was reenabled
-        _page_.fireEvent({ name: "reenableAddon", addonId });
+        _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
       } else {
         // Addon was not injected in page yet
-        _page_.fireEvent({ name: "enableAddon", addonId, scripts });
+        _page_.fireEvent({ name: "enable", addonId, scripts });
       }
       addonsWithUserscripts.push({ addonId, scripts });
-    } else if (request.dyanmicAddonDisable) {
-      const { addonId } = request.dyanmicAddonEnabled;
+      pageLoadedAddons.push({ addonId, scripts });
+    } else if (request.dynamicAddonDisable) {
+      const { addonId } = request.dynamicAddonDisable;
       const addonIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
       addonsWithUserscripts.splice(addonIndex, 1);
-      // TODO: remove userstyles
-      // removeStyle()
-      _page_.fireEvent({ name: "disableAddon", addonId });
+      removeStyle(addonId);
+      _page_.fireEvent({ name: "disabled", addonId, target: "self" });
     } else if (request.setMsgCount) {
       _page_.setMsgCount(request.setMsgCount);
     } else if (request === "getRunningAddons") {

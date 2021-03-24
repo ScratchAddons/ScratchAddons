@@ -38,9 +38,8 @@ const page = {
   },
 
   fireEvent(info) {
-    console.log(info);
     if (info.addonId) {
-      if (info.name === "enableAddon") {
+      if (info.name === "enable") {
         runAddonUserscripts({ ...info, enabledLate: true });
         return;
       }
