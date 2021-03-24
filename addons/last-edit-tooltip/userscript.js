@@ -1,7 +1,10 @@
 export default async function ({ addon, global, console, msg }) {
+  const data = await (
+    await fetch("https://api.scratch.mit.edu" + location.pathname.match(/\/projects\/[0-9]+/g)[0])
+  ).json();
+
   while (true) {
     const element = await addon.tab.waitForElement(".share-date", { markAsSeen: true });
-    const data = await (await fetch("https://api.scratch.mit.edu" + document.location.pathname)).json();
 
     if (!data.history) return;
 
