@@ -1,3 +1,7 @@
+chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res) => {
+  if (res) onInfoAvailable(res);
+});
+
 try {
   if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
 } catch {
@@ -7,6 +11,62 @@ try {
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
 const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
+
+let _page_ = null;
+
+const comlinkIframesDiv = document.createElement("div");
+comlinkIframesDiv.id = "scratchaddons-iframes";
+const comlinkIframe1 = document.createElement("iframe");
+comlinkIframe1.id = "scratchaddons-iframe-1";
+comlinkIframe1.style.display = "none";
+const comlinkIframe2 = comlinkIframe1.cloneNode();
+comlinkIframe2.id = "scratchaddons-iframe-2";
+const comlinkIframe3 = comlinkIframe1.cloneNode();
+comlinkIframe3.id = "scratchaddons-iframe-3";
+const comlinkIframe4 = comlinkIframe1.cloneNode();
+comlinkIframe4.id = "scratchaddons-iframe-4";
+comlinkIframesDiv.appendChild(comlinkIframe1);
+comlinkIframesDiv.appendChild(comlinkIframe2);
+comlinkIframesDiv.appendChild(comlinkIframe3);
+comlinkIframesDiv.appendChild(comlinkIframe4);
+document.documentElement.appendChild(comlinkIframesDiv);
+
+const cs = {
+  requestMsgCount() {
+    chrome.runtime.sendMessage("getMsgCount");
+  },
+  copyImage(dataURL) {
+    // Firefox only
+    return new Promise((resolve, reject) => {
+      browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
+        (res) => {
+          resolve();
+        },
+        (res) => {
+          reject(res.toString());
+        }
+      );
+    });
+  },
+};
+Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
+
+const pageComlinkScript = document.createElement("script");
+pageComlinkScript.src = chrome.runtime.getURL("libraries/comlink.js");
+document.documentElement.appendChild(pageComlinkScript);
+
+const moduleScript = document.createElement("script");
+moduleScript.type = "module";
+moduleScript.src = chrome.runtime.getURL("content-scripts/inject/module.js");
+
+(async () => {
+  await new Promise((resolve) => {
+    moduleScript.addEventListener("load", resolve);
+  });
+  _page_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe3.contentWindow, comlinkIframe4.contentWindow));
+})();
+
+document.documentElement.appendChild(moduleScript);
 
 let initialUrl = location.href;
 let path = new URL(initialUrl).pathname.substring(1);
@@ -25,39 +85,12 @@ if (path === "discuss/3/topic/add/") {
   });
 }
 
-let receivedContentScriptInfo = false;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
-  if (request.contentScriptInfo) {
-    // The request wasn't for this exact URL, might happen sometimes
-    if (request.contentScriptInfo.url !== initialUrl) return;
-    // Only run once - updates go through themesUpdated
-    if (receivedContentScriptInfo) return;
-    receivedContentScriptInfo = true;
-    sendResponse("OK");
-
-    if (document.head) onHeadAvailable(request.contentScriptInfo);
-    else {
-      const observer = new MutationObserver(() => {
-        if (document.head) {
-          onHeadAvailable(request.contentScriptInfo);
-          observer.disconnect();
-        }
-      });
-      observer.observe(document.documentElement, { subtree: true, childList: true });
-    }
-  } else if (request === "getInitialUrl") {
+  if (request === "getInitialUrl") {
     sendResponse(initialUrl);
   } else if (request.themesUpdated) {
     injectUserstylesAndThemes({ themes: request.themesUpdated, isUpdate: true });
-  }
-});
-chrome.runtime.sendMessage("ready");
-window.addEventListener("load", () => {
-  if (!receivedContentScriptInfo) {
-    // This might happen sometimes, the background page might not
-    // have seen this tab loading, for example, at startup.
-    chrome.runtime.sendMessage("sendContentScriptInfo");
   }
 });
 
@@ -111,32 +144,41 @@ function setCssVariables(addonSettings) {
   }
 }
 
-function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles, themes }) {
+async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles, themes }) {
   setCssVariables(globalState.addonSettings);
-  injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
+  // Just in case, make sure the <head> loaded before injecting styles
+  if (document.head) injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
+  else {
+    const observer = new MutationObserver(() => {
+      if (document.head) {
+        injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.documentElement, { subtree: true, childList: true });
+  }
 
-  const template = document.createElement("template");
-  template.id = "scratch-addons";
-  template.setAttribute("data-path", chrome.runtime.getURL(""));
-  template.setAttribute("data-userscripts", JSON.stringify(addonsWithUserscripts));
-  template.setAttribute("data-global-state", JSON.stringify(globalState));
-  template.setAttribute("data-l10njson", JSON.stringify(l10njson));
-  document.head.appendChild(template);
+  if (!_page_) {
+    await new Promise((resolve) => {
+      // We're registering this load event after the load event that
+      // sets _page_, so we can guarantee _page_ exists now
+      moduleScript.addEventListener("load", resolve);
+    });
+  }
 
-  const script = document.createElement("script");
-  script.type = "module";
-  script.src = chrome.runtime.getURL("content-scripts/inject/module.js");
-  document.head.appendChild(script);
+  _page_.globalState = globalState;
+  _page_.l10njson = l10njson;
+  _page_.addonsWithUserscripts = addonsWithUserscripts;
+  _page_.dataReady = true;
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.newGlobalState) {
-      template.setAttribute("data-global-state", JSON.stringify(request.newGlobalState));
+      _page_.globalState = request.newGlobalState;
       setCssVariables(request.newGlobalState.addonSettings);
     } else if (request.fireEvent) {
-      const eventDetails = JSON.stringify(request.fireEvent);
-      template.setAttribute(`data-fire-event__${Date.now()}`, eventDetails);
-    } else if (typeof request.setMsgCount !== "undefined") {
-      template.setAttribute("data-msgcount", request.setMsgCount);
+      _page_.fireEvent(request.fireEvent);
+    } else if (request.setMsgCount) {
+      _page_.setMsgCount(request.setMsgCount);
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
@@ -152,41 +194,6 @@ function onHeadAvailable({ globalState, l10njson, addonsWithUserscripts, addonsW
       });
     }
   });
-
-  const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-      const attr = mutation.attributeName;
-      const attrType = attr.substring(0, attr.indexOf("__"));
-      const attrRawVal = template.getAttribute(attr);
-      let attrVal;
-      try {
-        attrVal = JSON.parse(attrRawVal);
-      } catch (err) {
-        attrVal = attrRawVal;
-      }
-      if (attrVal === null) return;
-      console.log("[Attribute update]", attr + ":", attrVal);
-      const removeAttr = () => template.removeAttribute(attr);
-      if (attrType === "data-request-msgcount") {
-        chrome.runtime.sendMessage("getMsgCount");
-        removeAttr();
-      }
-      if (attr === "data-clipboard-image" && typeof browser !== "undefined") {
-        const dataURL = attrVal;
-        removeAttr();
-        browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
-          (res) => {
-            template.setAttribute("data-clipboard", "success");
-          },
-          (res) => {
-            console.error("Error inside clipboard: ", res);
-            template.setAttribute("data-clipboard", res.toString());
-          }
-        );
-      }
-    }
-  });
-  observer.observe(template, { attributes: true });
 }
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
