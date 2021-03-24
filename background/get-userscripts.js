@@ -42,7 +42,6 @@ scratchAddons.localEvents.addEventListener("addonEnabled", ({ detail }) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
           if (res) {
-            console.log(manifest, addonId);
             const { userscripts, userstyles } = getAddonData({ addonId, url: res, manifest });
 
             chrome.tabs.sendMessage(
@@ -50,6 +49,20 @@ scratchAddons.localEvents.addEventListener("addonEnabled", ({ detail }) => {
               { dyanmicAddonEnabled: { scripts: userscripts, userstyles, addonId } },
               { frameId: 0 }
             );
+          }
+        });
+      }
+    })
+  );
+});
+scratchAddons.localEvents.addEventListener("addonDisable", ({ detail }) => {
+  const { addonId, manifest } = detail;
+  chrome.tabs.query({}, (tabs) =>
+    tabs.forEach((tab) => {
+      if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
+          if (res) {
+            chrome.tabs.sendMessage(tab.id, { dyanmicAddonDisable: { addonId } }, { frameId: 0 });
           }
         });
       }

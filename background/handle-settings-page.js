@@ -29,24 +29,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     // Fire disabled event for userscripts
     if (dynamicEnable && newState)
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonEnabled", { detail: { addonId, manifest } }));
-    // TODO: Deal with "addonDisable" event in get-userscripts.js
     if (dynamicDisable && !newState)
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonDisable", { detail: { addonId, manifest } }));
-    // chrome.tabs.query({}, (tabs) =>
-    //   tabs.forEach(
-    //     (tab) =>
-    //       (tab.url || (!tab.url && typeof browser !== "undefined")) &&
-    //       chrome.tabs.sendMessage(tab.id, {
-    //         fireEvent: {
-    //           target: "self",
-    //           name: newState ? "enable" : "disabled",
-    //           addonId,
-    //           dynamicEnable,
-    //           dynamicDisable,
-    //         },
-    //       })
-    //   )
-    // );
 
     if (newState === false) {
       // TODO: can there be many addon objects for the same addon?
