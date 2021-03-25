@@ -85,8 +85,8 @@ export default async function ({ addon, global, console, msg }) {
   };
   const virtualCursorSetPosition = (x, y) => {
     virtualCursorSetVisible(true);
-    const stageX = (width / 2) + x;
-    const stageY = (height / 2) - y;
+    const stageX = width / 2 + x;
+    const stageY = height / 2 - y;
     virtualCursorImageContainer.style.transform = `translate(${stageX}px, ${stageY}px)`;
   };
 
@@ -129,9 +129,9 @@ export default async function ({ addon, global, console, msg }) {
     virtualCursorSetPosition(x, y);
     vm.postIOData("mouse", {
       canvasWidth: width,
-      x: x + (width / 2),
+      x: x + width / 2,
       canvasHeight: height,
-      y: (height / 2) - y,
+      y: height / 2 - y,
     });
   };
 
@@ -148,10 +148,10 @@ export default async function ({ addon, global, console, msg }) {
   gamepad.addEventListener("mousedown", handleGamepadMouseDown);
   gamepad.addEventListener("mouseup", handleGamepadMouseUp);
   gamepad.addEventListener("mousemove", handleGamepadMouseMove);
-  
+
   while (true) {
     const stageHeaderWrapper = await addon.tab.waitForElement('[class*="stage-header_stage-menu-wrapper"]', {
-      markAsSeen: true
+      markAsSeen: true,
     });
     stageHeaderWrapper.insertBefore(spacer, stageHeaderWrapper.lastChild);
 
