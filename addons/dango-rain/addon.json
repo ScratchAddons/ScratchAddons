@@ -1,0 +1,48 @@
+{
+  "name": "Dango rain on profiles (April Fools Day)",
+  "description": "Users that include the word \"dango\" on their \"About Me\" will have dango emojis raining on the sides of their profile.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Only Scratch Addons users with this enabled will see the dango rain.",
+      "id": "OnlyScratchAddonsUsers"
+    }
+  ],
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "World_Languages",
+      "link": "https://scratch.mit.edu/users/World_Languages"
+    },
+    {
+      "name": "griffpatch",
+      "link": "https://scratch.mit.edu/users/griffpatch"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Rain even when not April Fools Day",
+      "id": "force",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/users/*/"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/users/*/"]
+    }
+  ],
+  "tags": ["easterEgg"],
+  "enabledByDefault": true,
+  "l10n": true
+}
