@@ -34,6 +34,7 @@ export default async function ({ addon, global, console, msg }) {
     const close = () => {
       modalOverlay.remove();
       document.body.removeEventListener("click", handleClickOutside, true);
+      editor.hide();
     };
     const handleClickOutside = (e) => {
       if (!modalContentContainer.contains(e.target)) {
@@ -43,7 +44,7 @@ export default async function ({ addon, global, console, msg }) {
     document.body.addEventListener("click", handleClickOutside, true);
 
     const modalOverlay = document.createElement("div");
-    modalOverlay.className = addon.tab.scratchClass("modal_modal-overlay");
+    modalOverlay.className = addon.tab.scratchClass("modal_modal-overlay", { others: "sa-gamepad-popup-outer" });
     const modalContentContainer = document.createElement("div");
     modalContentContainer.className = addon.tab.scratchClass("modal_modal-content", { others: "sa-gamepad-popup" });
     const modalHeaderContainer = document.createElement("div");

@@ -29,7 +29,10 @@
 .gamepadlib-mapping[data-value="1"] .gamepadlib-keyinput {
   background: yellow;
 }
-.gamepadlib-keyinput[data-type="none"] {
+.gamepadlib-keyinput[data-accepting-input="true"] {
+  background: #d6fff9;
+}
+.gamepadlib-keyinput[data-type="none"]:not([data-accepting-input="true"]) {
   color: #aaa;
   font-style: italic;
 }

@@ -518,6 +518,8 @@ class GamepadEditor {
     this.buttonIdToElement = new Map();
     this.axisIdToElement = new Map();
 
+    this.hidden = false;
+
     this.msg = (id, opts) => v;
   }
 
@@ -597,6 +599,7 @@ class GamepadEditor {
         changedMapping();
       } else {
         input.value = "...";
+        input.dataset.acceptingInput = true;
         isAcceptingInput = true;
       }
     };
@@ -619,6 +622,7 @@ class GamepadEditor {
     };
 
     const handleBlur = () => {
+      input.dataset.acceptingInput = false;
       if (isAcceptingInput) {
         isAcceptingInput = false;
         update();
@@ -635,6 +639,10 @@ class GamepadEditor {
 
   updateContent() {
     removeAllChildren(this.content);
+
+    if (this.hidden) {
+      return;
+    }
 
     const selectedId = this.selector.value;
     if (!selectedId) {
@@ -701,6 +709,9 @@ class GamepadEditor {
   }
 
   update(gamepads) {
+    if (this.hidden) {
+      return;
+    }
     const selectedId = this.selector.value;
     if (!selectedId) {
       return;
@@ -721,7 +732,13 @@ class GamepadEditor {
     }
   }
 
+  hide() {
+    this.hidden = true;
+    this.updateContent();
+  }
+
   generateEditor() {
+    this.hidden = false;
     this.updateAllContent();
     return this.root;
   }
