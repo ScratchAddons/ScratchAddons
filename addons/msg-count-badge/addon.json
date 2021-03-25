@@ -5,5 +5,13 @@
   "permissions": ["badge"],
   "tags": ["community", "recommended"],
   "enabledByDefault": true,
-  "l10n": true
+  "l10n": true,
+  "settings": [
+    {
+      "name": "Badge color",
+      "id": "color",
+      "type": "color",
+      "default": "#008000"
+    }
+  ]
 }
