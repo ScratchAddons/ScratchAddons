@@ -1,3 +1,9 @@
+.sa-gamepad-spacer {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+
 .sa-gamepad-popup {
   box-sizing: border-box;
   width: 700px;

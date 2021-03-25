@@ -11,6 +11,8 @@ export default async function ({ addon, global, console, msg }) {
 
   const renderer = vm.runtime.renderer;
 
+  const spacer = document.createElement("div");
+  spacer.className = "sa-gamepad-spacer";
   const buttonGroup = document.createElement("div");
   buttonGroup.className = addon.tab.scratchClass("stage-header_stage-size-toggle-group");
   const buttonContainer = document.createElement("div");
@@ -24,6 +26,7 @@ export default async function ({ addon, global, console, msg }) {
   buttonContent.appendChild(buttonImage);
   buttonContainer.appendChild(buttonContent);
   buttonGroup.appendChild(buttonContainer);
+  spacer.appendChild(buttonGroup);
   buttonContainer.addEventListener("click", () => {
     const editor = gamepad.editor();
     const editorEl = editor.generateEditor();
@@ -144,14 +147,14 @@ export default async function ({ addon, global, console, msg }) {
   gamepad.addEventListener("mousedown", handleGamepadMouseDown);
   gamepad.addEventListener("mouseup", handleGamepadMouseUp);
   gamepad.addEventListener("mousemove", handleGamepadMouseMove);
-
+  
   while (true) {
-    const stage = await addon.tab.waitForElement("[class^='stage_stage_']", {
-      markAsSeen: true,
+    const stageHeaderWrapper = await addon.tab.waitForElement('[class*="stage-header_stage-menu-wrapper"]', {
+      markAsSeen: true
     });
-    stage.appendChild(virtualCursorContainer);
+    stageHeaderWrapper.insertBefore(spacer, stageHeaderWrapper.lastChild);
 
-    const header = document.querySelector('[class*="stage-header_stage-size-row"]');
-    header.insertBefore(buttonGroup, header.firstChild);
+    const stage = document.querySelector("[class^='stage_stage_']");
+    stage.appendChild(virtualCursorContainer);
   }
 }
