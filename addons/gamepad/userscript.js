@@ -81,8 +81,8 @@ export default async function ({ addon, global, console, msg }) {
   };
   const virtualCursorSetPosition = (x, y) => {
     virtualCursorSetVisible(true);
-    const stageX = 240 + x;
-    const stageY = 180 - y;
+    const stageX = (width / 2) + x;
+    const stageY = (height / 2) - y;
     virtualCursorImageContainer.style.transform = `translate(${stageX}px, ${stageY}px)`;
   };
 
@@ -108,9 +108,9 @@ export default async function ({ addon, global, console, msg }) {
     virtualCursorSetDown(true);
     vm.postIOData("mouse", {
       isDown: true,
-      canvasWidth: 480,
-      x: vm.runtime.ioDevices.mouse._clientX,
-      canvasHeight: 360,
+      canvasWidth: width,
+      x: Math.max(0, Math.min(width, vm.runtime.ioDevices.mouse._clientX)),
+      canvasHeight: height,
       y: vm.runtime.ioDevices.mouse._clientY,
     });
   };
@@ -124,12 +124,15 @@ export default async function ({ addon, global, console, msg }) {
     const { x, y } = e.detail;
     virtualCursorSetPosition(x, y);
     vm.postIOData("mouse", {
-      canvasWidth: 480,
-      x: x + 240,
-      canvasHeight: 380,
-      y: 180 - y,
+      canvasWidth: width,
+      x: x + (width / 2),
+      canvasHeight: height,
+      y: (height / 2) - y,
     });
   };
+
+  const width = renderer._xRight - renderer._xLeft;
+  const height = renderer._yTop - renderer._yBottom;
 
   const gamepad = new GamepadLib();
   gamepad.virtualCursor.maxX = renderer._xRight;
