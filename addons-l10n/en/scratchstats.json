@@ -9,5 +9,6 @@
   "scratchstats/most-favorites": "most favorites",
   "scratchstats/most-views": "most views",
   "scratchstats/followers-label": "Followers",
+  "scratchstats/err": "Statistics could not be loaded.",
   "scratchstats/followers-title": "Followers over time"
 }

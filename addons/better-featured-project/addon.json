@@ -19,6 +19,16 @@
       "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
+  "settings": [
+    {
+      "id": "blur",
+      "name": "Banner blur",
+      "type": "integer",
+      "min": 0,
+      "max": 5,
+      "default": 0
+    }
+  ],
   "tags": ["community"],
   "l10n": true
 }

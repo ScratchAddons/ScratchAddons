@@ -1356,7 +1356,7 @@ export default class DevTools {
       }
     } else if (e.button === 2) {
       // Right click...
-      let spriteSelector = e.target.closest("div[class*='sprite-selector-item_sprite-selector-item']");
+      let spriteSelector = e.target.closest("#react-tabs-3 div[class*='sprite-selector-item_sprite-selector-item']");
       if (spriteSelector) {
         let contextMenu = spriteSelector.getElementsByTagName("nav")[0];
         if (!contextMenu.querySelector("div.s3devSTT")) {
@@ -1383,7 +1383,7 @@ export default class DevTools {
       if (blockSvg || isBackground) {
         let dataId = blockSvg && blockSvg.getAttribute("data-id");
         if (dataId || isBackground) {
-          setTimeout(() => {
+          setTimeout(async () => {
             // Is there a popup menu to hi-jack?
             let widget = document.querySelector("div.blocklyWidgetDiv");
             if (!widget) {
@@ -1395,9 +1395,11 @@ export default class DevTools {
             }
             if (isBackground) {
               let nodes = blocklyContextMenu.children;
+              const realBlockly = await this.addon.tab.traps.getBlockly();
               for (const node of nodes) {
-                if (node.textContent === this.m("clean-plus")) {
+                if (node.textContent === realBlockly.Msg.CLEAN_UP) {
                   node.remove();
+                  break;
                 }
               }
               blocklyContextMenu.insertAdjacentHTML(

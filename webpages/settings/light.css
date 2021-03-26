@@ -171,3 +171,7 @@ img :not(.navbar, .icon-type) {
 #popup-more-settings > button {
   filter: brightness(0);
 }
+color-picker#picker {
+  --color-picker-background-color: #fff !important;
+  --color-picker-color: #222 !important;
+}
