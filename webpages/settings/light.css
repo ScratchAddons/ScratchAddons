@@ -1,4 +1,5 @@
-:root {
+
+  :root {
   --accent-1: #f7f7f7;
   --accent-2: #f7f7f7;
   --accent-3: #ecebeb;
@@ -168,5 +169,5 @@ img :not(.navbar, .icon-type) {
 }
 
 #popup-more-settings > button {
-  background-image: url(../../images/icons/settings-black.svg);
+  filter: brightness(0);
 }
