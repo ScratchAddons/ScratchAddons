@@ -92,7 +92,7 @@ chrome.permissions.onAdded.addListener(updateGrantedPermissions);
 chrome.permissions.onRemoved.addListener(updateGrantedPermissions);
 
 //theme switching
-const lightThemeLink = document.createElement("link")
+const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
 chrome.storage.sync.get(["globalTheme"], function (r) {

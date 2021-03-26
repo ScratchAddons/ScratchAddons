@@ -1,5 +1,4 @@
-
-  :root {
+:root {
   --accent-1: #f7f7f7;
   --accent-2: #f7f7f7;
   --accent-3: #ecebeb;
@@ -170,6 +169,10 @@ img :not(.navbar, .icon-type) {
 
 #popup-more-settings > button {
   filter: brightness(0);
+}
+color-picker#picker {
+  --color-picker-background-color: #fff !important;
+  --color-picker-color: #222 !important;
 }
 color-picker#picker {
   --color-picker-background-color: #fff !important;
