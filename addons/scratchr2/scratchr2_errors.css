@@ -4,6 +4,7 @@
   border-radius: 0;
   border: none;
   background: transparent;
+  box-shadow: none;
 }
 #page-500 {
   width: 100%;
