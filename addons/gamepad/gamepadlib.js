@@ -52,7 +52,7 @@ const defaultAxesMappings = {
       high: "ArrowDown",
       low: "ArrowUp",
       deadZone: 0.5,
-    }
+    },
   ],
   cursor: [
     {
@@ -76,11 +76,11 @@ const defaultAxesMappings = {
       low: "+y",
       sensitivity: 0.6,
       deadZone: 0.2,
-    }
+    },
   ],
   none: {
-    type: "none"
-  }
+    type: "none",
+  },
 };
 
 const transformAndCopyMapping = (mapping) => {
@@ -288,7 +288,7 @@ class GamepadData {
         defaultAxesMappings.cursor[1],
       ];
     }
-    return this.gamepad.axes.map(i => ({type: "none"}));
+    return this.gamepad.axes.map((i) => ({ type: "none" }));
   }
 }
 
@@ -657,24 +657,30 @@ class GamepadEditor {
     selector.readOnly = true;
     selector.className = "gamepadlib-axis-mapping";
 
-    selector.appendChild(Object.assign(document.createElement("option"), {
-      textContent: 'None',
-      value: 'none'
-    }));
-    selector.appendChild(Object.assign(document.createElement("option"), {
-      textContent: 'Arrow Keys',
-      value: 'arrows'
-    }));
-    selector.appendChild(Object.assign(document.createElement("option"), {
-      textContent: 'Cursor',
-      value: 'cursor'
-    }));
+    selector.appendChild(
+      Object.assign(document.createElement("option"), {
+        textContent: "None",
+        value: "none",
+      })
+    );
+    selector.appendChild(
+      Object.assign(document.createElement("option"), {
+        textContent: "Arrow Keys",
+        value: "arrows",
+      })
+    );
+    selector.appendChild(
+      Object.assign(document.createElement("option"), {
+        textContent: "Cursor",
+        value: "cursor",
+      })
+    );
 
-    selector.addEventListener('change', () => {
-      if (selector.value === 'arrows') {
+    selector.addEventListener("change", () => {
+      if (selector.value === "arrows") {
         mappingList[index] = defaultAxesMappings.arrows[0];
         mappingList[index + 1] = defaultAxesMappings.arrows[1];
-      } else if (selector.value === 'cursor') {
+      } else if (selector.value === "cursor") {
         mappingList[index] = defaultAxesMappings.cursor[0];
         mappingList[index + 1] = defaultAxesMappings.cursor[1];
       } else {
@@ -721,8 +727,8 @@ class GamepadEditor {
     this.buttonIdToElement.clear();
     this.axisIdToElement.clear();
 
-    const mappingsContainer = document.createElement('div');
-    mappingsContainer.className = 'gamepadlib-content-buttons';
+    const mappingsContainer = document.createElement("div");
+    mappingsContainer.className = "gamepadlib-content-buttons";
     const buttonMappings = gamepadData.buttonMappings;
     for (let i = 0; i < buttonMappings.length; i++) {
       const container = document.createElement("div");
@@ -740,8 +746,8 @@ class GamepadEditor {
       this.buttonIdToElement.set(i, container);
     }
 
-    const axesContainer = document.createElement('div');
-    axesContainer.className = 'gamepadlib-content-axes';
+    const axesContainer = document.createElement("div");
+    axesContainer.className = "gamepadlib-content-axes";
     const axesMappings = gamepadData.axesMappings;
     for (let i = 0; i < axesMappings.length; i += 2) {
       const container = document.createElement("div");
