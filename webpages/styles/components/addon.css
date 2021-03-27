@@ -43,7 +43,7 @@
 }
 .addon-name {
   margin-left: 15px;
-  font-weight: 300;
+  font-weight: 400;
   height: 100%;
   display: flex;
   align-items: center;
@@ -135,14 +135,6 @@
 
 .presets-column > .setting-label {
   margin-left: 10px;
-}
-.addon-setting {
-  margin: 10px;
-  margin-right: 20px;
-  min-height: 35px;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
 }
 .addon-check {
   margin-left: auto;
