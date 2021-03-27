@@ -491,7 +491,6 @@ class GamepadLib extends EventTarget {
 
   editor() {
     if (!this._editor) {
-      // eslint-disable-next-line no-use-before-define
       this._editor = new GamepadEditor(this);
     }
     return this._editor;
