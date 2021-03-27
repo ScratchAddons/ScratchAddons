@@ -83,151 +83,6 @@ const defaultAxesMappings = {
   }
 };
 
-const defaultMappings = {
-  buttons: [
-    {
-      /*
-      Button 0
-      Xbox: A
-      SNES-like: B
-      */
-      type: "key",
-      high: " ",
-    },
-    {
-      /*
-      Button 1
-      Xbox: B
-      SNES-like: A
-      */
-      type: "none",
-    },
-    {
-      /*
-      Button 2
-      Xbox: X
-      SNES-like: Y
-      */
-      type: "key",
-      high: "E",
-    },
-    {
-      /*
-      Button 3
-      Xbox: Y
-      SNES-like: X
-      */
-      type: "key",
-      high: "E",
-    },
-    {
-      /*
-      Button 4
-      Xbox: LB
-      SNES-like: Left trigger
-      */
-      type: "mousedown",
-    },
-    {
-      /*
-      Button 5
-      Xbox: RB
-      */
-      type: "mousedown",
-    },
-    {
-      /*
-      Button 6
-      Xbox: LT
-      */
-      type: "mousedown",
-    },
-    {
-      /*
-      Button 7
-      Xbox: RT
-      SNES-like: Right trigger
-      */
-      type: "mousedown",
-    },
-    {
-      /*
-      Button 8
-      Xbox: Change view
-      SNES-like: Select
-      */
-      type: "none",
-    },
-    {
-      /*
-      Button 9
-      Xbox: Menu
-      SNES-like: Start
-      */
-      type: "key",
-      high: "P",
-    },
-    {
-      /*
-      Button 10
-      Xbox: Left analog press
-      */
-      type: "none",
-    },
-    {
-      /*
-      Button 11
-      Xbox: Right analog press
-      */
-      type: "none",
-    },
-    {
-      /*
-      Button 12
-      Xbox: D-pad up
-      */
-      type: "key",
-      high: "ArrowUp",
-    },
-    {
-      /*
-      Button 13
-      Xbox: D-pad down
-      */
-      type: "key",
-      high: "ArrowDown",
-    },
-    {
-      /*
-      Button 14
-      Xbox: D-pad left
-      */
-      type: "key",
-      high: "ArrowLeft",
-    },
-    {
-      /*
-      Button 15
-      Xbox: D-pad right
-      */
-      type: "key",
-      high: "ArrowRight",
-    },
-    {
-      /*
-      Button 16
-      */
-      type: "none",
-    },
-  ],
-  axes: [
-    defaultAxesMappings.arrows[0],
-    defaultAxesMappings.arrows[1],
-    defaultAxesMappings.cursor[0],
-    defaultAxesMappings.cursor[1],
-  ],
-};
-
 const transformAndCopyMapping = (mapping) => {
   const copy = Object.assign({}, mapping);
   if (copy.type === "key") {
@@ -270,25 +125,170 @@ const transformAndCopyMapping = (mapping) => {
 class GamepadData {
   /** @param {Gamepad} gamepad Source Gamepad */
   constructor(gamepad) {
+    this.gamepad = gamepad;
     this.id = gamepad.id;
+    this.buttonMappings = this.getDefaultButtonMappings().map(transformAndCopyMapping);
+    this.axesMappings = this.getDefaultAxisMappings().map(transformAndCopyMapping);
+  }
 
-    this.buttonMappings = defaultMappings.buttons.map((i) => transformAndCopyMapping(i));
-    this.axesMappings = defaultMappings.axes.map((i) => transformAndCopyMapping(i));
-
-    // If the controller has more or less axes or buttons than the defaults, create some no-op mapping or remove some.
-    while (this.buttonMappings.length < gamepad.buttons.length) {
-      this.buttonMappings.push({
+  getDefaultButtonMappings() {
+    const buttons = [
+      {
+        /*
+        Button 0
+        Xbox: A
+        SNES-like: B
+        */
+        type: "key",
+        high: " ",
+      },
+      {
+        /*
+        Button 1
+        Xbox: B
+        SNES-like: A
+        */
+        type: "none",
+      },
+      {
+        /*
+        Button 2
+        Xbox: X
+        SNES-like: Y
+        */
+        type: "key",
+        high: "E",
+      },
+      {
+        /*
+        Button 3
+        Xbox: Y
+        SNES-like: X
+        */
+        type: "key",
+        high: "E",
+      },
+      {
+        /*
+        Button 4
+        Xbox: LB
+        SNES-like: Left trigger
+        */
+        type: "mousedown",
+      },
+      {
+        /*
+        Button 5
+        Xbox: RB
+        */
+        type: "mousedown",
+      },
+      {
+        /*
+        Button 6
+        Xbox: LT
+        */
+        type: "mousedown",
+      },
+      {
+        /*
+        Button 7
+        Xbox: RT
+        SNES-like: Right trigger
+        */
+        type: "mousedown",
+      },
+      {
+        /*
+        Button 8
+        Xbox: Change view
+        SNES-like: Select
+        */
+        type: "none",
+      },
+      {
+        /*
+        Button 9
+        Xbox: Menu
+        SNES-like: Start
+        */
+        type: "key",
+        high: "P",
+      },
+      {
+        /*
+        Button 10
+        Xbox: Left analog press
+        */
+        type: "none",
+      },
+      {
+        /*
+        Button 11
+        Xbox: Right analog press
+        */
+        type: "none",
+      },
+      {
+        /*
+        Button 12
+        Xbox: D-pad up
+        */
+        type: "key",
+        high: "ArrowUp",
+      },
+      {
+        /*
+        Button 13
+        Xbox: D-pad down
+        */
+        type: "key",
+        high: "ArrowDown",
+      },
+      {
+        /*
+        Button 14
+        Xbox: D-pad left
+        */
+        type: "key",
+        high: "ArrowLeft",
+      },
+      {
+        /*
+        Button 15
+        Xbox: D-pad right
+        */
+        type: "key",
+        high: "ArrowRight",
+      },
+      {
+        /*
+        Button 16
+        */
+        type: "none",
+      },
+    ];
+    while (buttons.length < this.gamepad.buttons.length) {
+      buttons.push({
         type: "none",
       });
     }
-    this.buttonMappings.length = gamepad.buttons.length;
+    buttons.length = this.gamepad.buttons.length;
+    return buttons;
+  }
 
-    while (this.axesMappings.length < gamepad.axes.length) {
-      this.axesMappings.push({
-        type: "none",
-      });
+  getDefaultAxisMappings() {
+    // Only return default axis mappings when there are 4 axes, like an xbox controller
+    // Some controllers with 2 axes will make the dpad update buttons and axes, which could result in conflicts that we want to avoid by default.
+    if (this.gamepad.axes.length === 4) {
+      return [
+        defaultAxesMappings.arrows[0],
+        defaultAxesMappings.arrows[1],
+        defaultAxesMappings.cursor[0],
+        defaultAxesMappings.cursor[1],
+      ];
     }
-    this.axesMappings.length = gamepad.axes.length;
+    return this.gamepad.axes.map(i => ({type: "none"}));
   }
 }
 
