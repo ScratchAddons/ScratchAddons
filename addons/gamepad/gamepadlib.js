@@ -29,6 +29,60 @@ low: "+y"/"-y"/"+x"/"-x" defines what happens when an axis reads low
 +y increases y, -y decreases y, +x increases x, -x decreases x.
 */
 
+const defaultAxesMappings = {
+  arrows: [
+    {
+      /*
+      Axis 0
+      Xbox: Left analog stick left(-)/right(+)
+      SNES-like: D-pad left(-1)/right(+1)
+      */
+      type: "key",
+      high: "ArrowRight",
+      low: "ArrowLeft",
+      deadZone: 0.5,
+    },
+    {
+      /*
+      Axis 1
+      Xbox: Left analog stick up(-)/down(+)
+      SNES-like: D-pad up(-1)/down(+1)
+      */
+      type: "key",
+      high: "ArrowDown",
+      low: "ArrowUp",
+      deadZone: 0.5,
+    }
+  ],
+  cursor: [
+    {
+      /*
+      Axis 2
+      Xbox: Right analog stick left(-)/right(+)
+      */
+      type: "virtual_cursor",
+      high: "+x",
+      low: "-x",
+      sensitivity: 0.6,
+      deadZone: 0.2,
+    },
+    {
+      /*
+      Axis 3
+      Xbox: Right analog stick up(-)/down(+)
+      */
+      type: "virtual_cursor",
+      high: "-y",
+      low: "+y",
+      sensitivity: 0.6,
+      deadZone: 0.2,
+    }
+  ],
+  none: {
+    type: "none"
+  }
+};
+
 const defaultMappings = {
   buttons: [
     {
@@ -167,50 +221,10 @@ const defaultMappings = {
     },
   ],
   axes: [
-    {
-      /*
-      Axis 0
-      Xbox: Left analog stick left(-)/right(+)
-      SNES-like: D-pad left(-1)/right(+1)
-      */
-      type: "key",
-      high: "ArrowRight",
-      low: "ArrowLeft",
-      deadZone: 0.5,
-    },
-    {
-      /*
-      Axis 1
-      Xbox: Left analog stick up(-)/down(+)
-      SNES-like: D-pad up(-1)/down(+1)
-      */
-      type: "key",
-      high: "ArrowDown",
-      low: "ArrowUp",
-      deadZone: 0.5,
-    },
-    {
-      /*
-      Axis 2
-      Xbox: Right analog stick left(-)/right(+)
-      */
-      type: "virtual_cursor",
-      high: "+x",
-      low: "-x",
-      sensitivity: 0.6,
-      deadZone: 0.2,
-    },
-    {
-      /*
-      Axis 3
-      Xbox: Right analog stick up(-)/down(+)
-      */
-      type: "virtual_cursor",
-      high: "-y",
-      low: "+y",
-      sensitivity: 0.6,
-      deadZone: 0.2,
-    },
+    defaultAxesMappings.arrows[0],
+    defaultAxesMappings.arrows[1],
+    defaultAxesMappings.cursor[0],
+    defaultAxesMappings.cursor[1],
   ],
 };
 
@@ -563,13 +577,13 @@ class GamepadEditor {
   }
 
   createButtonMapping(mappingList, index) {
-    const mapping = mappingList[index];
     const input = document.createElement("input");
     input.readOnly = true;
     input.className = "gamepadlib-keyinput";
     input.dataset.index = index;
 
     const update = () => {
+      const mapping = mappingList[index];
       input.dataset.type = mapping.type;
       if (mapping.type === "none") {
         input.value = "(none)";
@@ -595,6 +609,7 @@ class GamepadEditor {
     const handleClick = (e) => {
       e.preventDefault();
       if (isAcceptingInput) {
+        const mapping = mappingList[index];
         mapping.type = "mousedown";
         changedMapping();
       } else {
@@ -611,6 +626,7 @@ class GamepadEditor {
         if (["Alt", "Shift", "Control"].includes(key)) {
           return;
         }
+        const mapping = mappingList[index];
         if (key.length === 1 || ["ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft"].includes(key)) {
           mapping.type = "key";
           mapping.high = key;
@@ -635,6 +651,49 @@ class GamepadEditor {
     update();
 
     return input;
+  }
+
+  createAxisMapping(mappingList, index) {
+    const selector = document.createElement("select");
+    selector.readOnly = true;
+    selector.className = "gamepadlib-axis-mapping";
+
+    selector.appendChild(Object.assign(document.createElement("option"), {
+      textContent: 'None',
+      value: 'none'
+    }));
+    selector.appendChild(Object.assign(document.createElement("option"), {
+      textContent: 'Arrow Keys',
+      value: 'arrows'
+    }));
+    selector.appendChild(Object.assign(document.createElement("option"), {
+      textContent: 'Cursor',
+      value: 'cursor'
+    }));
+
+    selector.addEventListener('change', () => {
+      if (selector.value === 'arrows') {
+        mappingList[index] = defaultAxesMappings.arrows[0];
+        mappingList[index + 1] = defaultAxesMappings.arrows[1];
+      } else if (selector.value === 'cursor') {
+        mappingList[index] = defaultAxesMappings.cursor[0];
+        mappingList[index + 1] = defaultAxesMappings.cursor[1];
+      } else {
+        mappingList[index] = defaultAxesMappings.none;
+        mappingList[index + 1] = defaultAxesMappings.none;
+      }
+    });
+
+    const mapping = mappingList[index];
+    if (mapping.type === "key") {
+      selector.value = "arrows";
+    } else if (mapping.type === "virtual_cursor") {
+      selector.value = "cursor";
+    } else {
+      selector.value = "none";
+    }
+
+    return selector;
   }
 
   updateContent() {
@@ -663,9 +722,8 @@ class GamepadEditor {
     this.buttonIdToElement.clear();
     this.axisIdToElement.clear();
 
-    const buttonMappingsContainer = Object.assign(document.createElement("div"), {
-      className: "gamepadlib-section",
-    });
+    const mappingsContainer = document.createElement('div');
+    mappingsContainer.className = 'gamepadlib-content-buttons';
     const buttonMappings = gamepadData.buttonMappings;
     for (let i = 0; i < buttonMappings.length; i++) {
       const container = document.createElement("div");
@@ -679,33 +737,32 @@ class GamepadEditor {
       options.appendChild(this.createButtonMapping(buttonMappings, i));
       container.appendChild(label);
       container.appendChild(options);
-      buttonMappingsContainer.appendChild(container);
+      mappingsContainer.appendChild(container);
       this.buttonIdToElement.set(i, container);
     }
 
-    // const axesMappingsContainer = Object.assign(document.createElement("div"), {
-    //   className: 'gamepadlib-section'
-    // });
-    // axesMappingsContainer.appendChild(Object.assign(document.createElement("div"), {
-    //   textContent: 'Axes'
-    // }));
-    // const axesMappings = gamepadData.axesMappings;
-    // for (let i = 0; i < axesMappings.length; i++) {
-    //   const container = document.createElement("div");
-    //   const label = document.createElement("div");
-    //   const options = document.createElement("div");
+    const axesContainer = document.createElement('div');
+    axesContainer.className = 'gamepadlib-content-axes';
+    const axesMappings = gamepadData.axesMappings;
+    for (let i = 0; i < axesMappings.length; i += 2) {
+      const container = document.createElement("div");
+      container.className = "gamepadlib-axis";
+      const label = document.createElement("div");
+      label.textContent = `Axes ${i} & ${i + 1}`;
+      const circle = document.createElement("div");
+      circle.className = "gamepadlib-axis-circle";
+      const dot = document.createElement("div");
+      dot.className = "gamepadlib-axis-dot";
+      circle.appendChild(dot);
+      container.appendChild(label);
+      container.appendChild(circle);
+      container.appendChild(this.createAxisMapping(axesMappings, i));
+      axesContainer.appendChild(container);
+      this.axisIdToElement.set(i, dot);
+    }
 
-    //   label.textContent = `Axis ${i}`;
-    //   options.appendChild(this.createOptionForMapping(AXIS, axesMappings, i));
-
-    //   container.appendChild(label);
-    //   container.appendChild(options);
-    //   axesMappingsContainer.appendChild(container);
-    //   this.axisIdToElement.set(i, container);
-    // }
-
-    this.content.appendChild(buttonMappingsContainer);
-    // this.content.appendChild(axesMappingsContainer);
+    this.content.appendChild(mappingsContainer);
+    this.content.appendChild(axesContainer);
   }
 
   update(gamepads) {
@@ -724,10 +781,18 @@ class GamepadEditor {
       const element = this.buttonIdToElement.get(i);
       if (element) {
         const button = gamepad.buttons[i];
-        const value = button.value;
+        const value = button.value.toString();
         if (value !== element.dataset.value) {
           element.dataset.value = value;
         }
+      }
+    }
+    for (let i = 0; i < gamepad.axes.length; i += 2) {
+      const element = this.axisIdToElement.get(i);
+      if (element) {
+        const x = gamepad.axes[i];
+        const y = gamepad.axes[i + 1] || 0;
+        element.style.transform = `translate(-50%, -50%) translate(${x * 50}px, ${y * 50}px)`;
       }
     }
   }

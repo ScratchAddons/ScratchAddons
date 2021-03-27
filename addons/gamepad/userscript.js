@@ -10,6 +10,8 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   const renderer = vm.runtime.renderer;
+  const width = renderer._xRight - renderer._xLeft;
+  const height = renderer._yTop - renderer._yBottom;
 
   const spacer = document.createElement("div");
   spacer.className = "sa-gamepad-spacer";
@@ -134,9 +136,6 @@ export default async function ({ addon, global, console, msg }) {
       y: height / 2 - y,
     });
   };
-
-  const width = renderer._xRight - renderer._xLeft;
-  const height = renderer._yTop - renderer._yBottom;
 
   const gamepad = new GamepadLib();
   gamepad.virtualCursor.maxX = renderer._xRight;
