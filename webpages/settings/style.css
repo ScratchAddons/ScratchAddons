@@ -90,12 +90,10 @@ h1 {
   opacity: 50%;
 }
 
-
 .inline-icon {
   height: 16px;
   vertical-align: bottom;
 }
-
 
 .large-button {
   color: var(--accent-5);
@@ -133,7 +131,6 @@ h1 {
 .reverted {
   transform: rotate(180deg);
 }
-
 
 .small-button {
   margin-left: 10px;
