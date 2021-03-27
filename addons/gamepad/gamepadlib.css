@@ -46,7 +46,8 @@
 }
 
 .gamepadlib-axis {
-  margin-bottom: 3px;
+  margin-bottom: 8px;
+  text-align: center;
 }
 .gamepadlib-axis-circle {
   position: relative;
