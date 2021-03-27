@@ -51,8 +51,8 @@
 }
 .gamepadlib-axis-circle {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border: 1px solid black;
   overflow: hidden;
 }
@@ -64,4 +64,7 @@
   width: 8px;
   height: 8px;
   transform: translate(-50%, -50%);
+}
+.gamepadlib-axis-mapping {
+  width: 100%;
 }

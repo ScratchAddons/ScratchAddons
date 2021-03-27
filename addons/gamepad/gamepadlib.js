@@ -791,7 +791,8 @@ class GamepadEditor {
       if (element) {
         const x = gamepad.axes[i];
         const y = gamepad.axes[i + 1] || 0;
-        element.style.transform = `translate(-50%, -50%) translate(${x * 50}px, ${y * 50}px)`;
+        const size = 150 / 2;
+        element.style.transform = `translate(-50%, -50%) translate(${x * size}px, ${y * size}px)`;
       }
     }
   }
