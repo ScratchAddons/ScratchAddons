@@ -80,6 +80,8 @@ export default async function ({ addon, global, console, msg }) {
     modalContentContainer.appendChild(modalContent);
     modalOverlay.appendChild(modalContentContainer);
     document.body.appendChild(modalOverlay);
+
+    editor.focus();
   });
 
   const virtualCursorContainer = document.createElement("div");

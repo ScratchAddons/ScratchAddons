@@ -549,6 +549,7 @@ class GamepadEditor {
   updateAllContent() {
     this.updateDropdown();
     this.updateContent();
+    this.focus();
   }
 
   updateDropdown() {
@@ -621,8 +622,8 @@ class GamepadEditor {
     };
 
     const handleKeyDown = (e) => {
-      e.preventDefault();
       if (isAcceptingInput) {
+        e.preventDefault();
         const key = e.key;
         if (["Alt", "Shift", "Control"].includes(key)) {
           return;
@@ -635,6 +636,9 @@ class GamepadEditor {
           mapping.type = "none";
         }
         changedMapping();
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        e.target.click();
       }
     };
 
@@ -809,6 +813,12 @@ class GamepadEditor {
   hide() {
     this.hidden = true;
     this.updateContent();
+  }
+
+  focus() {
+    if (this.selector.value) {
+      this.selector.focus();
+    }
   }
 
   generateEditor() {
