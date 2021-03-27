@@ -533,7 +533,8 @@ class GamepadEditor {
 
     this.hidden = false;
 
-    this.msg = (id, opts) => v;
+    // should be overridden later
+    this.msg = (id, opts) => id;
   }
 
   onSelectorChange() {
@@ -567,11 +568,11 @@ class GamepadEditor {
   }
 
   keyToString(key) {
-    if (key === " ") return "Space";
-    if (key === "ArrowUp") return "Up";
-    if (key === "ArrowDown") return "Down";
-    if (key === "ArrowLeft") return "Left";
-    if (key === "ArrowRight") return "Right";
+    if (key === " ") return this.msg("key-space");
+    if (key === "ArrowUp") return this.msg("key-up");
+    if (key === "ArrowDown") return this.msg("key-down");
+    if (key === "ArrowLeft") return this.msg("key-left");
+    if (key === "ArrowRight") return this.msg("key-right");
     return key.toUpperCase();
   }
 
@@ -585,11 +586,11 @@ class GamepadEditor {
       const mapping = mappingList[index];
       input.dataset.type = mapping.type;
       if (mapping.type === "none") {
-        input.value = "(none)";
+        input.value = this.msg("key-none");
       } else if (mapping.type === "key") {
         input.value = this.keyToString(mapping.high);
       } else if (mapping.type === "mousedown") {
-        input.value = "Click";
+        input.value = this.msg("key-click");
       } else {
         // should never happen
         input.value = `??? ${mapping.type}`;
@@ -659,19 +660,19 @@ class GamepadEditor {
 
     selector.appendChild(
       Object.assign(document.createElement("option"), {
-        textContent: "None",
+        textContent: this.msg("axis-none"),
         value: "none",
       })
     );
     selector.appendChild(
       Object.assign(document.createElement("option"), {
-        textContent: "Arrow Keys",
+        textContent: this.msg("axis-arrows"),
         value: "arrows",
       })
     );
     selector.appendChild(
       Object.assign(document.createElement("option"), {
-        textContent: "Cursor",
+        textContent: this.msg("axis-cursor"),
         value: "cursor",
       })
     );
@@ -711,13 +712,14 @@ class GamepadEditor {
     const selectedId = this.selector.value;
     if (!selectedId) {
       const message = document.createElement("div");
-      message.textContent = "No controllers detected. Try plugging one in and pressing a button on it.";
+      message.textContent = this.msg("no-controllers");
       this.content.appendChild(message);
       return;
     }
 
     const gamepadData = this.gamepadLib.gamepads.get(selectedId);
     if (!gamepadData) {
+      // Users should never be able to see this
       const message = document.createElement("div");
       message.textContent = `Cannot find controller: ${selectedId}`;
       this.content.appendChild(message);
@@ -736,7 +738,7 @@ class GamepadEditor {
       container.dataset.id = i;
       const label = document.createElement("div");
       label.className = "gamepadlib-mapping-label";
-      label.textContent = `Button ${i}`;
+      label.textContent = this.msg("button-n", { n: i });
       const options = document.createElement("div");
       options.className = "gamepadlib-mapping-options";
       options.appendChild(this.createButtonMapping(buttonMappings, i));
@@ -753,7 +755,7 @@ class GamepadEditor {
       const container = document.createElement("div");
       container.className = "gamepadlib-axis";
       const label = document.createElement("div");
-      label.textContent = `Axes ${i} & ${i + 1}`;
+      label.textContent = this.msg("axes-a-b", { a: i, b: i + 1 });
       const circle = document.createElement("div");
       circle.className = "gamepadlib-axis-circle";
       const dot = document.createElement("div");

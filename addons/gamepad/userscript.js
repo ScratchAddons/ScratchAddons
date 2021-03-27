@@ -31,6 +31,7 @@ export default async function ({ addon, global, console, msg }) {
   spacer.appendChild(buttonGroup);
   buttonContainer.addEventListener("click", () => {
     const editor = gamepad.editor();
+    editor.msg = msg;
     const editorEl = editor.generateEditor();
 
     const close = () => {
