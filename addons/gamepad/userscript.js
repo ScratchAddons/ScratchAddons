@@ -138,6 +138,7 @@ export default async function ({ addon, global, console, msg }) {
     });
   };
 
+  GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
   gamepad.virtualCursor.maxX = renderer._xRight;
   gamepad.virtualCursor.minX = renderer._xLeft;

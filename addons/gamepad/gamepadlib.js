@@ -1,5 +1,4 @@
-// Scratch-specific
-const console = _realConsole;
+let console = window.console;
 
 const OFF = 0;
 const LOW = 1;
@@ -496,6 +495,8 @@ class GamepadLib extends EventTarget {
     return this._editor;
   }
 }
+
+GamepadLib.setConsole = (n) => console = n;
 
 const removeAllChildren = (el) => {
   while (el.firstChild) {
