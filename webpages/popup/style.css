@@ -98,7 +98,6 @@ iframe {
   width: 400px;
   height: calc(var(--height, 599px) - 107px);
   overflow-x: hidden;
-  overflow-y: auto;
   border: none;
   overflow-y: scroll;
   background-color: #222;

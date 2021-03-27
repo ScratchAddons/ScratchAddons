@@ -113,13 +113,6 @@
 .addon-warn img {
   filter: brightness(0) invert(1);
 }
-.addon-name {
-  margin-left: 15px;
-  font-weight: 400;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
 .sh .addon-settings {
   display: flex;
 }

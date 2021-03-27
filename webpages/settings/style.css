@@ -389,6 +389,8 @@ color-picker {
   position: absolute;
   top: 30px;
   left: 0;
+  --color-picker-background-color: #222 !important;
+  --color-picker-color: #fff !important;
 }
 
 button.setting-input.color {
@@ -405,8 +407,4 @@ button.setting-input.color {
   background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
   border-radius: 4px;
   background-color: white;
-}
-color-picker {
-  --color-picker-background-color: #222 !important;
-  --color-picker-color: #fff !important;
 }
