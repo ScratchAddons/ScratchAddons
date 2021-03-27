@@ -1,5 +1,5 @@
 {
-  "name": "Controller Support",
+  "name": "Controller/Gamepad Support",
   "description": "TODO",
   "credits": [
     {
@@ -22,7 +22,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["beta"],
+  "tags": [],
   "enabledByDefault": false,
   "l10n": true
 }
