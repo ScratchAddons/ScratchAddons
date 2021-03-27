@@ -50,15 +50,32 @@ export default async function ({ addon, global, console, msg }) {
     modalOverlay.className = addon.tab.scratchClass("modal_modal-overlay", { others: "sa-gamepad-popup-outer" });
     const modalContentContainer = document.createElement("div");
     modalContentContainer.className = addon.tab.scratchClass("modal_modal-content", { others: "sa-gamepad-popup" });
+
     const modalHeaderContainer = document.createElement("div");
     modalHeaderContainer.className = addon.tab.scratchClass("modal_header");
     const modalHeaderText = document.createElement("div");
     modalHeaderText.className = addon.tab.scratchClass("modal_header-item", "modal_header-item-title");
     modalHeaderText.textContent = msg("settings");
+    modalHeaderContainer.appendChild(modalHeaderText);
+
+    const closeContainer = document.createElement("div");
+    closeContainer.className = addon.tab.scratchClass("modal_header-item", "modal_header-item-close");
+    const closeButton = document.createElement("div");
+    closeButton.className = addon.tab.scratchClass("close-button_close-button", "close-button_large");
+    closeButton.tabIndex = "0";
+    closeButton.setAttribute("role", "button");
+    const closeImage = document.createElement("img");
+    closeImage.className = addon.tab.scratchClass("close-button_close-icon");
+    closeImage.src = "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg";
+    closeButton.appendChild(closeImage);
+    closeContainer.appendChild(closeButton);
+    modalHeaderContainer.appendChild(closeContainer);
+    closeButton.addEventListener("click", close);
+
     const modalContent = document.createElement("div");
     modalContent.className = "sa-gamepad-popup-content";
     modalContent.appendChild(editorEl);
-    modalHeaderContainer.appendChild(modalHeaderText);
+
     modalContentContainer.appendChild(modalHeaderContainer);
     modalContentContainer.appendChild(modalContent);
     modalOverlay.appendChild(modalContentContainer);

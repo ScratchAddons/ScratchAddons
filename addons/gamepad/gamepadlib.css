@@ -6,6 +6,7 @@
 .gamepadlib-content {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .gamepadlib-content-buttons {
   padding-right: 10px;

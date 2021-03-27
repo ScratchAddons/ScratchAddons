@@ -496,7 +496,7 @@ class GamepadLib extends EventTarget {
   }
 }
 
-GamepadLib.setConsole = (n) => console = n;
+GamepadLib.setConsole = (n) => (console = n);
 
 const removeAllChildren = (el) => {
   while (el.firstChild) {
