@@ -22,7 +22,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": [],
+  "tags": ["beta"],
   "enabledByDefault": false,
   "l10n": true
 }
