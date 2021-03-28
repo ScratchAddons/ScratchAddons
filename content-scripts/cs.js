@@ -1,12 +1,12 @@
-chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res) => {
-  if (res) onInfoAvailable(res);
-});
-
 try {
   if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
 } catch {
   throw "Scratch Addons: not first party iframe";
 }
+
+chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res) => {
+  if (res) onInfoAvailable(res);
+});
 
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
@@ -266,7 +266,7 @@ const showBanner = () => {
   });
   const notifImage = Object.assign(document.createElement("img"), {
     alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/folders.png"),
+    src: chrome.runtime.getURL("/images/cs/draganddrop.gif"),
     style: "height: 175px; border-radius: 5px",
   });
   const notifText = Object.assign(document.createElement("div"), {

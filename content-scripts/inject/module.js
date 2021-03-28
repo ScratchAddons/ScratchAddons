@@ -19,9 +19,7 @@ const page = {
     return this._globalState;
   },
   set globalState(val) {
-    const set = (this._globalState = val);
-    scratchAddons.globalState = val;
-    return set;
+    this._globalState = scratchAddons.globalState = val;
   },
 
   l10njson: null, // Only set once
@@ -32,9 +30,8 @@ const page = {
     return this._dataReady;
   },
   set dataReady(val) {
-    const set = (this._dataReady = val);
+    this._dataReady = val;
     onDataReady(); // Assume set to true
-    return set;
   },
 
   fireEvent(info) {
