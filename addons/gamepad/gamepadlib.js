@@ -121,6 +121,9 @@ const transformAndCopyMapping = (mapping) => {
   return copy;
 };
 
+const buttonHtmlId = (n) => `gamepadlib-button-${n}`;
+const axisHtmlId = (n) => `gamepadlib-axis-${n}`;
+
 class GamepadData {
   /** @param {Gamepad} gamepad Source Gamepad */
   constructor(gamepad) {
@@ -583,6 +586,7 @@ class GamepadEditor {
     input.readOnly = true;
     input.className = "gamepadlib-keyinput";
     input.dataset.index = index;
+    input.id = buttonHtmlId(index);
 
     const update = () => {
       const mapping = mappingList[index];
@@ -662,6 +666,7 @@ class GamepadEditor {
     const selector = document.createElement("select");
     selector.readOnly = true;
     selector.className = "gamepadlib-axis-mapping";
+    selector.id = axisHtmlId(index);
 
     selector.appendChild(
       Object.assign(document.createElement("option"), {
@@ -741,9 +746,10 @@ class GamepadEditor {
       const container = document.createElement("div");
       container.className = "gamepadlib-mapping";
       container.dataset.id = i;
-      const label = document.createElement("div");
+      const label = document.createElement("label");
       label.className = "gamepadlib-mapping-label";
       label.textContent = this.msg("button-n", { n: i });
+      label.htmlFor = buttonHtmlId(i);
       const options = document.createElement("div");
       options.className = "gamepadlib-mapping-options";
       options.appendChild(this.createButtonMapping(buttonMappings, i));
@@ -759,8 +765,9 @@ class GamepadEditor {
     for (let i = 0; i < axesMappings.length; i += 2) {
       const container = document.createElement("div");
       container.className = "gamepadlib-axis";
-      const label = document.createElement("div");
+      const label = document.createElement("label");
       label.textContent = this.msg("axes-a-b", { a: i, b: i + 1 });
+      label.htmlFor = axisHtmlId(i);
       const circle = document.createElement("div");
       circle.className = "gamepadlib-axis-circle";
       const dot = document.createElement("div");
