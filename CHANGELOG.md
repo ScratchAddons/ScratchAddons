@@ -13,6 +13,20 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.12.0] - 2021-03-28
+
+- New addon: drag and drop files [recommended]
+- New addon: custom block shape (with presets to get blocks that look like 2.0)
+- New addon: 2D color picker
+- New color picker in settings page that allows to set transparency % for some settings
+- "Profile page banner" addon: banner is now higher resolution, new "banner blur" setting
+- "Sprite folders" addon: now allows saving folders to backpack
+- "Variable manager" addon: now allows changing variable names
+- New setting on "show full areas" addon: show scroll for forums Scratchblocks
+- "Developer tools" addon: fix send to top/bottom buttons showing on all items, instead of just costumes
+-  "Mute project player" addon: fix Ctrl+GreenFlag not working in MacOS
+- "Auto-hide block pallete" addon: fix closing animation sometimes not working
+
 ## [v1.11.2] - 2021-03-17
 
 - "Sprite folders" addon: fix editor crashing when trying to drag and drop a sound within a folder to another sprite.
@@ -298,6 +312,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.12.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.0
 [v1.11.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.2
 [v1.11.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.1
 [v1.11.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.0
