@@ -633,7 +633,7 @@ class GamepadEditor {
         if (key.length === 1 || ["ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft"].includes(key)) {
           mapping.type = "key";
           mapping.high = key;
-        } else {
+        } else if (key !== "Escape") {
           mapping.type = "none";
         }
         changedMapping();
