@@ -4,9 +4,6 @@ const OFF = 0;
 const LOW = 1;
 const HIGH = 2;
 
-const BUTTON = 10;
-const AXIS = 11;
-
 /*
 Mapping types:
 
