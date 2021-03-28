@@ -1,6 +1,6 @@
 {
   "name": "Controller/Gamepad Support",
-  "description": "TODO",
+  "description": "Interact with projects using a controller/gamepad.",
   "credits": [
     {
       "name": "GarboMuffin"
