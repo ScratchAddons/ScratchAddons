@@ -1,0 +1,1 @@
+document.getElementsByClassName("flex-row action-buttons").innerHTML='<a href="https://api.whatsapp.com/send?text=Hi%20, I have made a project on Scratch which I want to share with you.Link: "Insert link here". "><button class="button action-button share-button" onclick="share()" id="share_with"><span>Share</span></button></a>'; 

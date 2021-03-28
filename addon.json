@@ -1,0 +1,15 @@
+{
+    "name": "Share Button",
+    "description": "Provides a button with when clicked allows you to choose from a few websites and share a pre-framed message of your Scratch Project. Will be updated soon, but it can currently only supprot whatsapp",
+    "userstyles": [
+      {
+        "url": "button.css",
+        "matches": ["https://scratch.mit.edu/projects/*"]
+      }
+    ]
+,
+      "persistent_scripts": ["background.js"],
+      "tags": ["community"],
+      "enabled_by_default": true
+
+}

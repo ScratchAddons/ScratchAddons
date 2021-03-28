@@ -1,0 +1,11 @@
+#share_with{
+    margin: 0 0 0 .5rem;
+    border-radius: 19px;
+    background-color: #4d97ff;
+    padding: 0 .75rem;
+    height: 2rem;
+    text-decoration: none;
+    line-height: .875rem;
+    font-size: .75rem;
+    font-weight: bold;
+}
