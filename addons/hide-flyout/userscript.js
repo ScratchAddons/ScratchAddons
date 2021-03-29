@@ -25,13 +25,10 @@ export default async function ({ addon, global, console }) {
       };
 
       function positionElements() {
-        let addition = flyOut.classList.contains("sa-flyoutClose") ? 260 : 0;
         placeHolderDiv.style.height = `${flyOut.getBoundingClientRect().height - 20}px`;
         placeHolderDiv.style.width = `${flyOut.getBoundingClientRect().width}px`;
-        placeHolderDiv.style.left = `${flyOut.getBoundingClientRect().left + addition}px`;
         placeHolderDiv.style.top = `${flyOut.getBoundingClientRect().top}px`;
         lockDisplay.style.top = `${flyOut.getBoundingClientRect().top}px`;
-        lockDisplay.style.left = `${flyOut.getBoundingClientRect().right - 32 + addition}px`;
       }
 
       // Only append if we don't have "categoryclick" on
