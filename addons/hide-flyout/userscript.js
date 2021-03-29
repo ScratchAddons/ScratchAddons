@@ -55,14 +55,22 @@ export default async function ({ addon, global, console }) {
       while (true) {
         let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
         category.onclick = (e) => {
-          if (toggle && selectedCategory === category && toggleSetting === "category")
-            onmouseleave(), (selectedCategory = category);
-          else if (!toggle) onmouseenter(), (selectedCategory = category);
-          else return (selectedCategory = category);
+          if (toggle && selectedCategory === category && toggleSetting === "category") {
+            onmouseleave();
+            selectedCategory = category;
+          } else if (!toggle) {
+            onmouseenter();
+            selectedCategory = category;
+          } else {
+            selectedCategory = category;
+            return;
+          }
           if (toggleSetting === "category") toggle = !toggle;
         };
-        if (toggleSetting === "cathover")
-          (category.onmouseover = onmouseenter), (flyOut.onmouseleave = onmouseleave);
+        if (toggleSetting === "cathover") {
+          category.onmouseover = onmouseenter;
+          flyOut.onmouseleave = onmouseleave;
+        }
       }
     })();
   }
@@ -119,8 +127,10 @@ export default async function ({ addon, global, console }) {
 
     // position elements which closes flyout on load
     positionElements();
-    if (toggleSetting === "hover")
-      (placeHolderDiv.onmouseenter = onmouseenter), (blocklySvg.onmouseenter = onmouseleave);
+    if (toggleSetting === "hover") {
+      placeHolderDiv.onmouseenter = onmouseenter;
+      blocklySvg.onmouseenter = onmouseleave;
+    }
 
     if (toggleSetting === "cathover") onmouseleave(null, 0);
   }
