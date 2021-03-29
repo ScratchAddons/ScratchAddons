@@ -1,6 +1,6 @@
 {
   "name": "Drag and drop files",
-  "description": "Lets you drag files from your file explorer into the sprites pane or costume list.",
+  "description": "Lets you drag images and sounds from your file explorer into the sprites pane or costume/sound list.",
   "credits": [
     {
       "name": "Sheep_maker"
@@ -18,7 +18,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "recommended"],
   "enabledByDefault": false,
   "l10n": true
 }

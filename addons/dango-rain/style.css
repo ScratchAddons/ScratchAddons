@@ -1,0 +1,87 @@
+.sa-dangos-left {
+  height: 100%;
+  position: fixed;
+  top: 0;
+  /* left -50 so if screen is small, dangos can hide offscreen. */
+  left: -50px;
+}
+.sa-dangos-right {
+  height: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+.sa-dango-notice {
+  bottom: 20px;
+  position: fixed;
+  z-index: 999;
+  background: #000;
+  left: 20px;
+  border-radius: 10px;
+  padding: 5px;
+  width: 500px;
+  color: white;
+  text-shadow: none;
+}
+
+.sa-dango {
+  height: 50px;
+  width: 50px;
+  /* Twemoji by Twitter Inc, licensed under CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/ */
+  background: url("./dango.svg");
+  pointer-events: none;
+  position: absolute;
+  top: -10%;
+  z-index: 9999;
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  cursor: default;
+  animation-name: dangos-fall, dangos-shake;
+  animation-duration: 5s, 3s;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-play-state: running, running;
+}
+
+@keyframes dangos-fall {
+  0% {
+    top: -10%;
+  }
+
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes dangos-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(80px);
+  }
+}
+
+@keyframes dangos-fall {
+  0% {
+    top: -10%;
+  }
+
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes dangos-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(80px);
+  }
+}
