@@ -25,6 +25,47 @@ All notable changes to this project will be documented in this file.
 
 -->
 
+## [v1.12.0] - 2021-03-28
+
+### Added
+
+#### Addons
+
+- 2D color picker (#1768)
+- Custom block shape (#1773)
+- Dango rain on profiles (April Fools Day) (#1931)
+- Drag and drop files (#1916)
+- Profile page banner: Blur setting (#1889)
+- Profile statistics: Message when ScratchDB is down (#1830)
+- Scratch Messaging: Zaglo protection (#1912)
+- Show full areas: Support for scratchblocks scroll (#1831)
+- Sprite folders: Folder backpacking (#1947)
+- Variable manager: Variable renaming (#1951)
+
+#### Extension and Addon API
+
+- Transparency on settings page color picker (#1781)
+
+### Changed
+
+#### Addons
+
+- Profile page banner: Use higher resolution (#1889)
+
+#### Extension and Addon API
+
+- Update localization strings
+
+### Fixed
+
+#### Addons
+
+- Auto-hide block palette: Broken animation (#1980)
+- Developer tools: Inconsistent capitalization on context menu (#1919)
+- Developer tools: "Send to top" button being added on unintended places (#1919)
+- Mute project player: Can't mute on macOS (#1925)
+- Profile statistics: Old API being used for follower history (#1955)
+
 ## [v1.11.2] - 2021-03-17
 
 ### Fixed
@@ -40,7 +81,7 @@ All notable changes to this project will be documented in this file.
 
 #### Addons
 
-- Thumbnails setter: Rename setting "Prevent thumbnail from being overwritten" to "Don't set thumbnails automatically" to avoid (#1851)
+- Thumbnails setter: Rename setting "Prevent thumbnail from being overwritten" to "Don't set thumbnails automatically" to avoid confusion (#1851)
 
 #### Extension and Addon API
 
@@ -835,6 +876,7 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.12.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.0
 [v1.11.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.2
 [v1.11.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.1
 [v1.11.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.0
