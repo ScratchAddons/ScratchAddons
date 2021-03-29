@@ -46,10 +46,41 @@ export default async function ({ addon, global, console }) {
     setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
   }
 
-  let startedCategoryLoop = false;
-  function startCategoryLoop() {
-    if ((toggleSetting === "category" || toggleSetting === "cathover") && !startedCategoryLoop) {
-      startedCategoryLoop = true;
+  let didOneTimeSetup = false;
+  function doOneTimeSetup() {
+    if (didOneTimeSetup) {
+      return;
+    }
+    didOneTimeSetup = true;
+    addon.tab.redux.initialize();
+    addon.tab.redux.addEventListener("statechanged", (e) => {
+      switch (e.detail.action.type) {
+        // Event casted when switch to small or normal size stage or when screen size changed.
+        case "scratch-gui/StageSize/SET_STAGE_SIZE":
+        case "scratch-gui/workspace-metrics/UPDATE_METRICS":
+          positionElements();
+          break;
+  
+        // Event casted when you switch between tabs
+        case "scratch-gui/navigation/ACTIVATE_TAB":
+          // always 0, 1, 2
+          lockDisplay.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
+          placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
+          if (e.detail.action.activeTabIndex === 0) {
+            onmouseenter(0);
+            positionElements();
+            toggle = true;
+          }
+          break;
+        // Event casted when you switch between tabs
+        case "scratch-gui/mode/SET_PLAYER":
+          // always true or false
+          lockDisplay.style.display = e.detail.action.isPlayerOnly ? "none" : "block";
+          placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
+          break;
+      }
+    });  
+    if (toggleSetting === "category" || toggleSetting === "cathover") {
       (async () => {
         while (true) {
           let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
@@ -74,35 +105,6 @@ export default async function ({ addon, global, console }) {
       })();
     }
   }
-
-  addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", (e) => {
-    switch (e.detail.action.type) {
-      // Event casted when switch to small or normal size stage or when screen size changed.
-      case "scratch-gui/StageSize/SET_STAGE_SIZE":
-      case "scratch-gui/workspace-metrics/UPDATE_METRICS":
-        positionElements();
-        break;
-
-      // Event casted when you switch between tabs
-      case "scratch-gui/navigation/ACTIVATE_TAB":
-        // always 0, 1, 2
-        lockDisplay.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
-        placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
-        if (e.detail.action.activeTabIndex === 0) {
-          onmouseenter(0);
-          positionElements();
-          toggle = true;
-        }
-        break;
-      // Event casted when you switch between tabs
-      case "scratch-gui/mode/SET_PLAYER":
-        // always true or false
-        lockDisplay.style.display = e.detail.action.isPlayerOnly ? "none" : "block";
-        placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
-        break;
-    }
-  });
 
   while (true) {
     flyOut = await addon.tab.waitForElement(".blocklyFlyout", { markAsSeen: true });
@@ -137,6 +139,6 @@ export default async function ({ addon, global, console }) {
 
     if (toggleSetting === "cathover") onmouseleave(null, 0);
 
-    startCategoryLoop();
+    doOneTimeSetup();
   }
 }
