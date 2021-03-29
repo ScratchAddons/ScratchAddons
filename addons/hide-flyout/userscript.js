@@ -48,7 +48,7 @@ export default async function ({ addon, global, console }) {
 
   let startedCategoryLoop = false;
   function startCategoryLoop() {
-    if (toggleSetting === "category" || (toggleSetting === "cathover" && !startedCategoryLoop)) {
+    if ((toggleSetting === "category" || toggleSetting === "cathover") && !startedCategoryLoop) {
       startedCategoryLoop = true;
       (async () => {
         while (true) {
