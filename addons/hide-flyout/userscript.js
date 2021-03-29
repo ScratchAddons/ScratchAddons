@@ -60,7 +60,7 @@ export default async function ({ addon, global, console }) {
         case "scratch-gui/workspace-metrics/UPDATE_METRICS":
           positionElements();
           break;
-  
+
         // Event casted when you switch between tabs
         case "scratch-gui/navigation/ACTIVATE_TAB":
           // always 0, 1, 2
@@ -79,7 +79,7 @@ export default async function ({ addon, global, console }) {
           placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
           break;
       }
-    });  
+    });
     if (toggleSetting === "category" || toggleSetting === "cathover") {
       (async () => {
         while (true) {
