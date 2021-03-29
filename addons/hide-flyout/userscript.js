@@ -46,29 +46,33 @@ export default async function ({ addon, global, console }) {
     setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
   }
 
-  if (toggleSetting === "category" || toggleSetting === "cathover") {
-    (async () => {
-      while (true) {
-        let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
-        category.onclick = (e) => {
-          if (toggle && selectedCategory === category && toggleSetting === "category") {
-            onmouseleave();
-            selectedCategory = category;
-          } else if (!toggle) {
-            onmouseenter();
-            selectedCategory = category;
-          } else {
-            selectedCategory = category;
-            return;
+  let startedCategoryLoop = false;
+  function startCategoryLoop() {
+    if (toggleSetting === "category" || toggleSetting === "cathover" && !startedCategoryLoop) {
+      startedCategoryLoop = true;
+      (async () => {
+        while (true) {
+          let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
+          category.onclick = () => {
+            if (toggle && selectedCategory === category && toggleSetting === "category") {
+              onmouseleave();
+              selectedCategory = category;
+            } else if (!toggle) {
+              onmouseenter();
+              selectedCategory = category;
+            } else {
+              selectedCategory = category;
+              return;
+            }
+            if (toggleSetting === "category") toggle = !toggle;
+          };
+          if (toggleSetting === "cathover") {
+            category.onmouseover = onmouseenter;
+            flyOut.onmouseleave = onmouseleave;
           }
-          if (toggleSetting === "category") toggle = !toggle;
-        };
-        if (toggleSetting === "cathover") {
-          category.onmouseover = onmouseenter;
-          flyOut.onmouseleave = onmouseleave;
         }
-      }
-    })();
+      })();
+    }  
   }
 
   addon.tab.redux.initialize();
@@ -132,5 +136,7 @@ export default async function ({ addon, global, console }) {
     }
 
     if (toggleSetting === "cathover") onmouseleave(null, 0);
+
+    startCategoryLoop();
   }
 }
