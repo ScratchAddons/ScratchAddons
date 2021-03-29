@@ -24,7 +24,7 @@ export default async function ({ addon, global, console }) {
       const fileInput = await addon.tab.waitForElement(fileInputSelector, {
         markAsSeen: true,
       });
-      droppable(dropArea, files => {
+      droppable(dropArea, (files) => {
         fileInput.files = files;
         fileInput.dispatchEvent(new Event("change", { bubbles: true }));
       });
@@ -52,12 +52,12 @@ export default async function ({ addon, global, console }) {
   async function listWatchersDroppable() {
     while (true) {
       const listMonitor = await addon.tab.waitForElement('div[class*="monitor_list-monitor"]', { markAsSeen: true });
-      droppable(listMonitor, async files => {
+      droppable(listMonitor, async (files) => {
         // Simulate a right click on the list monitor
-        listMonitor.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
+        listMonitor.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
         // Get the right click menu that opened (monitor context menus are
         // children of <body>)
-        const contextMenu = await addon.tab.waitForElement('body > .react-contextmenu.react-contextmenu--visible');
+        const contextMenu = await addon.tab.waitForElement("body > .react-contextmenu.react-contextmenu--visible");
         // Override DOM methods to import the text file directly
         // See: https://github.com/LLK/scratch-gui/blob/develop/src/lib/import-csv.js#L21-L22
         const appendChild = document.body.appendChild;
@@ -69,7 +69,7 @@ export default async function ({ addon, global, console }) {
           fileInput.click = () => {};
           // Insert files from the drop event into the file input
           fileInput.files = files;
-          fileInput.dispatchEvent(new Event('change'));
+          fileInput.dispatchEvent(new Event("change"));
         };
         // Simulate clicking on the "Import" option
         contextMenu.children[0].click();
