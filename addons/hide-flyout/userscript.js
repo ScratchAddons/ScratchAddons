@@ -1,13 +1,12 @@
 export default async function ({ addon, global, console }) {
   let placeHolderDiv = null;
   let lockDisplay = null;
+  let flyOut = null;
+  let scrollBar = null;
   let toggle = true;
   let selectedCategory = null;
   let toggleSetting = addon.settings.get("toggle");
   let flyoutLock = false;
-
-  let flyOut;
-  let scrollBar;
 
   function positionElements() {
     placeHolderDiv.style.height = `${flyOut.getBoundingClientRect().height - 20}px`;
@@ -36,10 +35,7 @@ export default async function ({ addon, global, console }) {
   }
   function onmouseleave(e, speed = getSpeedValue()) {
     // If we go behind the flyout or the user has locked it, let's return
-    if (
-      (toggleSetting !== "cathover" && e && e.clientX <= scrollBar.getBoundingClientRect().left) ||
-      flyoutLock
-    )
+    if ((toggleSetting !== "cathover" && e && e.clientX <= scrollBar.getBoundingClientRect().left) || flyoutLock)
       return;
     flyOut.classList.add("sa-flyoutClose");
     flyOut.style.transitionDuration = `${speed}s`;
@@ -89,8 +85,11 @@ export default async function ({ addon, global, console }) {
         // always 0, 1, 2
         lockDisplay.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
         placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
-        if (e.detail.action.activeTabIndex === 0)
-          onmouseenter(0), positionElements(), (toggle = true);
+        if (e.detail.action.activeTabIndex === 0) {
+          onmouseenter(0);
+          positionElements();
+          toggle = true;
+        }
         break;
       // Event casted when you switch between tabs
       case "scratch-gui/mode/SET_PLAYER":
