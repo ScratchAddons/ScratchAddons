@@ -47,7 +47,8 @@
     "webRequestBlocking",
     "storage",
     "contextMenus",
-    "alarms"
+    "alarms",
+    "identity"
   ],
   "optional_permissions": ["notifications", "clipboardWrite"],
   "web_accessible_resources": [
