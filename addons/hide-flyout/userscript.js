@@ -8,12 +8,6 @@ export default async function ({ addon, global, console }) {
   let toggleSetting = addon.settings.get("toggle");
   let flyoutLock = false;
 
-  function positionElements() {
-    placeHolderDiv.style.height = `${flyOut.getBoundingClientRect().height - 20}px`;
-    placeHolderDiv.style.width = `${flyOut.getBoundingClientRect().width}px`;
-    placeHolderDiv.style.top = `${flyOut.getBoundingClientRect().top}px`;
-    lockDisplay.style.top = `${flyOut.getBoundingClientRect().top}px`;
-  }
   function getSpeedValue() {
     let data = {
       none: "0",
@@ -55,12 +49,6 @@ export default async function ({ addon, global, console }) {
     addon.tab.redux.initialize();
     addon.tab.redux.addEventListener("statechanged", (e) => {
       switch (e.detail.action.type) {
-        // Event casted when switch to small or normal size stage or when screen size changed.
-        case "scratch-gui/StageSize/SET_STAGE_SIZE":
-        case "scratch-gui/workspace-metrics/UPDATE_METRICS":
-          positionElements();
-          break;
-
         // Event casted when you switch between tabs
         case "scratch-gui/navigation/ACTIVATE_TAB":
           // always 0, 1, 2
@@ -68,7 +56,6 @@ export default async function ({ addon, global, console }) {
           placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
           if (e.detail.action.activeTabIndex === 0) {
             onmouseenter(0);
-            positionElements();
             toggle = true;
           }
           break;
@@ -110,11 +97,12 @@ export default async function ({ addon, global, console }) {
     flyOut = await addon.tab.waitForElement(".blocklyFlyout", { markAsSeen: true });
     let blocklySvg = await addon.tab.waitForElement(".blocklySvg", { markAsSeen: true });
     scrollBar = document.querySelector(".blocklyFlyoutScrollbar");
+    const tabs = document.querySelector('[class^="gui_tabs"]');
 
     // Placeholder Div
     if (placeHolderDiv) placeHolderDiv.remove();
     placeHolderDiv = document.createElement("div");
-    if (toggleSetting === "hover") document.body.appendChild(placeHolderDiv);
+    if (toggleSetting === "hover") tabs.appendChild(placeHolderDiv);
     placeHolderDiv.className = "sa-flyout-placeHolder";
 
     // Lock Img
@@ -128,10 +116,8 @@ export default async function ({ addon, global, console }) {
     };
 
     // Only append if we don't have "categoryclick" on
-    if (toggleSetting === "hover") document.body.appendChild(lockDisplay);
+    if (toggleSetting === "hover") tabs.appendChild(lockDisplay);
 
-    // position elements which closes flyout on load
-    positionElements();
     if (toggleSetting === "hover") {
       placeHolderDiv.onmouseenter = onmouseenter;
       blocklySvg.onmouseenter = onmouseleave;
