@@ -17,7 +17,7 @@ export default async function ({ addon, global, console }) {
       // Lock Img
       if (lockDisplay) lockDisplay.remove();
       lockDisplay = document.createElement("img");
-      lockDisplay.src = addon.self.dir + "/unlock.svg";
+      lockDisplay.src = addon.self.dir + `/${flyoutLock ? "" : "un"}lock.svg`;
       lockDisplay.className = "sa-lock-image";
       lockDisplay.onclick = () => {
         flyoutLock = !flyoutLock;
