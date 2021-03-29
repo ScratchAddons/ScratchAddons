@@ -21,13 +21,13 @@
 
 Scratch Addons is a WebExtension (supports both Chrome and Firefox). Scratch Addons' mission is to combine all existing Scratch extensions, userscripts and userstyles into a single easy-to-access place, while still letting users choose which ones to enable.
 
-### What's actually an "addon"?
+### What is an "addon"?
 
-An addon is similar to an extension or a userscript, but they use special APIs provided by the Scratch Addons extension. These APIs allow addons to run scripts on a Scratch page (userscripts), run scripts on the background (persistent scripts), or apply styles to the Scratch website (userstyles).
+An addon is similar to an extension or a [userscript](https://en.wikipedia.org/wiki/Userscript), but they use special APIs provided by the Scratch Addons extension. These APIs allow addons to run scripts on a Scratch page (userscripts), run scripts on the background (persistent scripts), or apply styles to the Scratch website (userstyles).
 
 Userscripts and persistent scripts can use the `addon.*` JavaScript APIs, which allow them to obtain Scratch-related information (for example, get the current logged in user) and also use extension APIs (like sending notifications).
 
-Converting an already existing extension/userscript into an addon, or writing your own, is very easy. [Check out the guide](https://github.com/ScratchAddons/ScratchAddons/wiki/Creating-an-addon).
+To convert an already existing extension/userscript into an addon, or writing your own, is very easy. [Check out the guide](https://github.com/ScratchAddons/ScratchAddons/wiki/Creating-an-addon).
 
 ### If everything is an addon, then what does Scratch Addons do?
 
@@ -46,6 +46,7 @@ Scratch Addons by itself is just an addon loader. Its main tasks are:
 Other extensions (and even forks of Scratch) can also provide their users with most addons from Scratch Addons, as long as a compatibility layer for `addon.*` and other parts of the addon loader is present. Notable examples are the [Scratch 3 Developer Tools extension](https://github.com/ScratchAddons/DevtoolsExtension) and the [TurboWarp](https://github.com/TurboWarp/scratch-gui/tree/develop/src/addons) editor. These also inherit translations from the Scratch Addons project.
 
 ## Install
+Installation of ScratchAddons is simple, you can install from an extension store for your browser, or you can download and install it from the source to get the latest (unreleased) updates.
 
 ### From extension stores
 
@@ -63,7 +64,7 @@ No build is required. You may download the source code by doing one of these ste
 2. Download the zipball of the current state of the repository [here](https://github.com/ScratchAddons/ScratchAddons/archive/master.zip).
 3. Download one of the builds on [the releases page](https://github.com/ScratchAddons/ScratchAddons/releases). (.zip recommended)
 
-After downloading the extension to your computer, just load it by following these steps.
+After downloading the repository to your computer, load it into your browser as follows:
 
 - Google Chrome
   1. Open `chrome://extensions` to open the Extension Management page by typing it into your address bar.
