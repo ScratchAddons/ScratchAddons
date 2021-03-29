@@ -1,6 +1,7 @@
 export default async function ({ addon, global, console }) {
   var placeHolderDiv = null,
     lockDisplay = null,
+    toggleSetting = addon.settings.get("toggle"),
     flyoutLock = false;
   while (true) {
     let flyOut = await addon.tab.waitForElement(".blocklyFlyout", { markAsSeen: true });
@@ -11,7 +12,7 @@ export default async function ({ addon, global, console }) {
       // Placeholder Div
       if (placeHolderDiv) placeHolderDiv.remove();
       placeHolderDiv = document.createElement("div");
-      if (addon.settings.get("toggle") === "hover") document.body.appendChild(placeHolderDiv);
+      if (toggleSetting === "hover") document.body.appendChild(placeHolderDiv);
       placeHolderDiv.className = "sa-flyout-placeHolder";
 
       // Lock Img
@@ -32,7 +33,7 @@ export default async function ({ addon, global, console }) {
       }
 
       // Only append if we don't have "categoryclick" on
-      if (addon.settings.get("toggle") === "hover") document.body.appendChild(lockDisplay);
+      if (toggleSetting === "hover") document.body.appendChild(lockDisplay);
 
       function getSpeedValue() {
         let data = {
@@ -57,7 +58,7 @@ export default async function ({ addon, global, console }) {
       function onmouseleave(e, speed = getSpeedValue()) {
         // If we go behind the flyout or the user has locked it, let's return
         if (
-          (addon.settings.get("toggle") !== "cathover" && e && e.clientX <= scrollBar.getBoundingClientRect().left) ||
+          (toggleSetting !== "cathover" && e && e.clientX <= scrollBar.getBoundingClientRect().left) ||
           flyoutLock
         )
           return;
@@ -75,7 +76,7 @@ export default async function ({ addon, global, console }) {
       let toggle = true,
         selectedCat = null,
         justStart = true;
-      if (addon.settings.get("toggle") === "hover")
+      if (toggleSetting === "hover")
         (placeHolderDiv.onmouseenter = onmouseenter), (blocklySvg.onmouseenter = onmouseleave);
 
       addon.tab.redux.initialize();
@@ -104,18 +105,18 @@ export default async function ({ addon, global, console }) {
         }
       });
 
-      if (addon.settings.get("toggle") === "cathover") onmouseleave(null, 0);
+      if (toggleSetting === "cathover") onmouseleave(null, 0);
 
       while (true) {
         let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
         category.onclick = (e) => {
-          if (toggle && selectedCat === category && addon.settings.get("toggle") === "category")
+          if (toggle && selectedCat === category && toggleSetting === "category")
             onmouseleave(), (selectedCat = category), (justStart = false);
           else if (!toggle) onmouseenter(), (selectedCat = category), (justStart = false);
           else return (selectedCat = category), (justStart = false);
-          if (addon.settings.get("toggle") === "category") toggle = !toggle;
+          if (toggleSetting === "category") toggle = !toggle;
         };
-        if (addon.settings.get("toggle") === "cathover")
+        if (toggleSetting === "cathover")
           (category.onmouseover = onmouseenter), (flyOut.onmouseleave = onmouseleave);
       }
     })();
