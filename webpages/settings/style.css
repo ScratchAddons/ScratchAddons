@@ -193,56 +193,51 @@ h1 {
   border-radius: 4px;
 }
 
-@media only screen and (max-width: 540px) {
-  .badge:not(.beta-badge) {
-    display: none !important;
-  }
-  .tooltiptext {
-    display: none;
-  }
-  .addon-description {
-    display: none;
-  }
-  .filter-selector {
-    display: none;
-  }
-  .search-box {
-    padding: 0 16px 0 16px;
-  }
-  .navbar {
-    display: none;
-  }
-  .main {
-    /* No calc -60px because there's no navbar */
-    height: 100%;
-  }
-  .setting-label {
-    flex: 2;
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-  .addons-container {
-    padding: 0px;
-    overflow-y: visible;
-  }
-  .addons-block {
-    /* Always show scroll bar to avoid viewport width changing */
-    overflow-y: scroll;
-  }
-  .filter-options {
-    flex-wrap: wrap;
-  }
-  .filter-option {
-    flex-grow: 1;
-    text-align: center;
-  }
-  .search-box input {
-    width: auto;
-    min-width: 10px;
-  }
-  color-picker {
-    translate-x: transform(-50%);
-  }
+body.iframe .badge:not(.beta-badge) {
+  display: none !important;
+}
+body.iframe .tooltiptext {
+  display: none;
+}
+body.iframe .addon-description {
+  display: none;
+}
+body.iframe .filter-selector {
+  display: none;
+}
+body.iframe .search-box {
+  padding: 0 16px 0 16px;
+}
+body.iframe .navbar {
+  display: none;
+}
+body.iframe .main {
+  /* No calc -60px because there's no navbar */
+  height: 100%;
+}
+body.iframe .setting-label {
+  flex: 2;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+body.iframe .addons-container {
+  padding: 0px;
+  overflow-y: visible;
+}
+body.iframe .addons-block {
+  /* Always show scroll bar to avoid viewport width changing */
+  overflow-y: scroll;
+}
+body.iframe .filter-options {
+  flex-wrap: wrap;
+}
+body.iframe .filter-option {
+  flex-grow: 1;
+  text-align: center;
+}
+body.iframe .search-box input {
+  width: auto;
+  min-width: 10px;
 }
 .categories-shrink {
   text-align: right;
