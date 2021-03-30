@@ -45,6 +45,14 @@
       "type": "integer",
       "min": 50,
       "default": 100,
+      "max": 250
+    },
+    {
+      "name": "Zoom Speed (1-150%)",
+      "id": "zoomSpeed",
+      "type": "integer",
+      "min": 50,
+      "default": 100,
       "max": 150
     },
     {
