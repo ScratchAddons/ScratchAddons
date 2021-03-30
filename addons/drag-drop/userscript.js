@@ -24,7 +24,7 @@ export default async function ({ addon, global, console }) {
       const fileInput = await addon.tab.waitForElement(fileInputSelector, {
         markAsSeen: true,
       });
-      droppable(dropArea, files => {
+      droppable(dropArea, (files) => {
         fileInput.files = files;
         fileInput.dispatchEvent(new Event("change", { bubbles: true }));
       });
@@ -49,15 +49,26 @@ export default async function ({ addon, global, console }) {
     'div[class*="selector_wrapper"] input[class*="action-menu_file-input"]'
   );
 
-  async function listWatchersDroppable() {
+  async function listMonitorsDroppable() {
     while (true) {
       const listMonitor = await addon.tab.waitForElement('div[class*="monitor_list-monitor"]', { markAsSeen: true });
-      droppable(listMonitor, async files => {
-        // Simulate a right click on the list monitor
-        listMonitor.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
-        // Get the right click menu that opened (monitor context menus are
-        // children of <body>)
-        const contextMenu = await addon.tab.waitForElement('body > .react-contextmenu.react-contextmenu--visible');
+      // Get the monitor's context menu ID from the list name
+      // https://github.com/LLK/scratch-gui/blob/develop/src/components/monitor/monitor.jsx#L37
+      const contextMenuId = `monitor-${listMonitor.querySelector('div[class*="monitor_list-header"]').textContent}`;
+      droppable(listMonitor, async (files) => {
+        // Force react-contextmenu's context menu to open using their global
+        // events:
+        // https://github.com/vkbansal/react-contextmenu/blob/v2.9.4/src/ContextMenuTrigger.js#L114-L119
+        // https://github.com/vkbansal/react-contextmenu/blob/v2.9.4/src/actions.js#L27-L29
+        window.dispatchEvent(
+          new CustomEvent("REACT_CONTEXTMENU_SHOW", {
+            detail: {
+              id: contextMenuId,
+              position: { x: 0, y: 0 },
+            },
+          })
+        );
+        const contextMenu = await addon.tab.waitForElement("body > .react-contextmenu.react-contextmenu--visible");
         // Override DOM methods to import the text file directly
         // See: https://github.com/LLK/scratch-gui/blob/develop/src/lib/import-csv.js#L21-L22
         const appendChild = document.body.appendChild;
@@ -69,13 +80,16 @@ export default async function ({ addon, global, console }) {
           fileInput.click = () => {};
           // Insert files from the drop event into the file input
           fileInput.files = files;
-          fileInput.dispatchEvent(new Event('change'));
+          fileInput.dispatchEvent(new Event("change"));
+          // Sometimes the menu stays open, so force it closed.
+          window.requestAnimationFrame(() => {
+            window.dispatchEvent(new CustomEvent("REACT_CONTEXTMENU_HIDE"));
+          });
         };
         // Simulate clicking on the "Import" option
         contextMenu.children[0].click();
       });
     }
   }
-
-  listWatchersDroppable();
+  listMonitorsDroppable();
 }
