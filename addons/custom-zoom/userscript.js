@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-    function setZoom(e) {
+    async function setZoom(e) {
         //Function to set the custom zoom parameters
         if (!window.Blockly) {
             //Fallback to prevent errors, if Blockly is not defined a temporary object is created
@@ -16,6 +16,7 @@ export default async function ({ addon, global, console }) {
         }
         if (e.detail.newUrl.includes("/editor")) {
             //Set the zoom parameters
+            await Blockly.getMainWorkspace;
             Blockly.getMainWorkspace().options.zoomOptions.maxScale = addon.settings.get("maxZoom") / 100;
             Blockly.getMainWorkspace().options.zoomOptions.minScale = addon.settings.get("minZoom") / 100;
             Blockly.getMainWorkspace().options.zoomOptions.startScale = addon.settings.get("startZoom") / 100;
