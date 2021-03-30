@@ -166,10 +166,10 @@ button {
 }
 .comment-content {
   word-break: break-word;
+  clip-path: inset(0 0 0 0); /* keep zalgo in this box */
 }
 .comment-content-text {
   margin-right: 10px;
-  overflow: hidden; /* Avoid zalgo */
 }
 .comment-content-text:after {
   /* So that empty comments take up a line */

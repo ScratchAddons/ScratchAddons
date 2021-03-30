@@ -7,5 +7,7 @@
   "intl-messageformat": "BSD-3-Clause",
   "vue": "MIT",
   "tinycolor2": "MIT",
-  "chartjs": "MIT"
+  "chartjs": "MIT",
+  "color-picker-web-component": "MIT",
+  "comlink": "Apache-2.0"
 }

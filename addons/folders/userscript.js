@@ -74,7 +74,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const isValidFolderName = (name) => {
-    return !name.includes(DIVIDER);
+    return !name.includes(DIVIDER) && !name.endsWith("/");
   };
 
   const RESERVED_NAMES = ["_mouse_", "_stage_", "_edge_", "_myself_", "_random_"];
@@ -107,6 +107,12 @@ export default async function ({ addon, global, console, msg }) {
       return nearestAssetPanelWrapper[reactInternalKey].child.child.stateNode;
     }
     throw new Error("cannot find SortableHOC");
+  };
+
+  const getBackpackFromElement = (el) => {
+    const gui = el.closest('[class*="gui_editor-wrapper"]');
+    if (!gui) throw new Error("cannot find Backpack");
+    return gui[reactInternalKey].child.sibling.child.stateNode;
   };
 
   const clamp = (n, min, max) => {
@@ -233,18 +239,18 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  const fixCostumeOrder = () => {
-    const { items, changed } = fixOrderOfItemsInFolders(vm.editingTarget.sprite.costumes);
+  const fixCostumeOrder = (target = vm.editingTarget) => {
+    const { items, changed } = fixOrderOfItemsInFolders(target.sprite.costumes);
     if (changed) {
-      vm.editingTarget.sprite.costumes = items;
+      target.sprite.costumes = items;
       vm.emitTargetsUpdate();
     }
   };
 
-  const fixSoundOrder = () => {
-    const { items, changed } = fixOrderOfItemsInFolders(vm.editingTarget.sprite.sounds);
+  const fixSoundOrder = (target = vm.editingTarget) => {
+    const { items, changed } = fixOrderOfItemsInFolders(target.sprite.sounds);
     if (changed) {
-      vm.editingTarget.sprite.sounds = items;
+      target.sprite.sounds = items;
       vm.emitTargetsUpdate();
     }
   };
@@ -255,9 +261,9 @@ export default async function ({ addon, global, console, msg }) {
       Array.isArray(sortableHOCInstance.props.items) &&
       (typeof sortableHOCInstance.props.selectedId === "string" ||
         typeof sortableHOCInstance.props.selectedItemIndex === "number") &&
+      typeof sortableHOCInstance.containerBox !== "undefined" &&
       typeof SortableHOC.prototype.componentDidMount === "undefined" &&
       typeof SortableHOC.prototype.componentDidUpdate === "undefined" &&
-      typeof SortableHOC.prototype.componentWillReceiveProps === "function" &&
       typeof SortableHOC.prototype.handleAddSortable === "function" &&
       typeof SortableHOC.prototype.handleRemoveSortable === "function" &&
       typeof SortableHOC.prototype.setRef === "function"
@@ -274,6 +280,8 @@ export default async function ({ addon, global, console, msg }) {
       typeof spriteSelectorItemInstance.props.dragType === "string" &&
       typeof SpriteSelectorItem.prototype.handleClick === "function" &&
       typeof SpriteSelectorItem.prototype.setRef === "function" &&
+      typeof SpriteSelectorItem.prototype.handleDrag === "function" &&
+      typeof SpriteSelectorItem.prototype.handleDragEnd === "function" &&
       typeof SpriteSelectorItem.prototype.handleDelete === "function" &&
       typeof SpriteSelectorItem.prototype.handleDuplicate === "function" &&
       typeof SpriteSelectorItem.prototype.handleExport === "function"
@@ -286,14 +294,25 @@ export default async function ({ addon, global, console, msg }) {
     const target = vm.runtime.targets[0];
     if (
       typeof vm.installTargets === "function" &&
-      typeof vm.addCostume === "function" &&
-      typeof vm.addSound === "function" &&
       typeof vm.reorderTarget === "function" &&
       typeof target.reorderCostume === "function" &&
-      typeof target.reorderSound === "function"
+      typeof target.reorderSound === "function" &&
+      typeof target.addCostume === "function" &&
+      typeof target.addSound === "function"
     )
       return;
     throw new Error("Can not comprehend VM");
+  };
+
+  const verifyBackpack = (backpackInstance) => {
+    const Backpack = backpackInstance.constructor;
+    if (
+      typeof Backpack.prototype.handleDrop === "function" &&
+      typeof Backpack.prototype.componentDidUpdate === "undefined"
+    ) {
+      return;
+    }
+    throw new Error("Can not comprehend Backpack");
   };
 
   const patchSortableHOC = (SortableHOC, type) => {
@@ -418,8 +437,18 @@ export default async function ({ addon, global, console, msg }) {
             folderItem.costume = {
               asset: folderAsset,
             };
+            // For sprite items, `id` is used as the drag payload and toString is used as a React key
+            folderItem.id = {
+              sa_folder_items: folderItems,
+              toString() {
+                return `&__${folderName}`;
+              },
+            };
           } else {
             folderItem.asset = folderAsset;
+            folderItem.dragPayload = {
+              sa_folder_items: folderItems,
+            };
           }
           items.push(folderItem);
 
@@ -525,26 +554,6 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
       }
-    };
-
-    const originalComponentWillReceiveProps = SortableHOC.prototype.componentWillReceiveProps;
-    SortableHOC.prototype.componentWillReceiveProps = function (...args) {
-      const newProps = args[0];
-      // If a folder item is dropped in the backpack, change the type to something invalid to avoid a crash.
-      if (newProps && !newProps.dragInfo.dragging && this.props.dragInfo.dragging) {
-        if (this.props.dragInfo.payload === undefined) {
-          const backpack = document.querySelector("[class*='backpack_backpack-list-inner']");
-          if (backpack) {
-            const backpackRect = backpack.getBoundingClientRect();
-            const { x, y } = this.props.dragInfo.currentOffset;
-            const { top, left, bottom, right } = backpackRect;
-            if (x >= left && x <= right && y >= top && y <= bottom) {
-              this.props.dragInfo.dragType = "sa_invalid";
-            }
-          }
-        }
-      }
-      return originalComponentWillReceiveProps.call(this, ...args);
     };
 
     const originalSortableHOCRender = SortableHOC.prototype.render;
@@ -792,6 +801,29 @@ export default async function ({ addon, global, console, msg }) {
       };
     }
 
+    const originalHandleDragEnd = SpriteSelectorItem.prototype.handleDragEnd;
+    SpriteSelectorItem.prototype.handleDragEnd = function (...args) {
+      const itemData = getItemData(this.props);
+      if (itemData) {
+        if (typeof itemData.realIndex === "number" && this.props.dragging) {
+          // If the item is being dragged onto another group (eg. costume list -> sprite list)
+          // then we fake a drag event to make the `index` be the real index
+          const originalIndex = this.props.index;
+          const realIndex = itemData.realIndex;
+          if (originalIndex !== realIndex) {
+            const currentOffset = addon.tab.redux.state.scratchGui.assetDrag.currentOffset;
+            const sortableHOCInstance = getSortableHOCFromElement(this.ref);
+            if (currentOffset && sortableHOCInstance && sortableHOCInstance.getMouseOverIndex() === null) {
+              this.props.index = realIndex;
+              this.handleDrag(currentOffset);
+              this.props.index = originalIndex;
+            }
+          }
+        }
+      }
+      return originalHandleDragEnd.call(this, ...args);
+    };
+
     const originalHandleClick = SpriteSelectorItem.prototype.handleClick;
     SpriteSelectorItem.prototype.handleClick = function (...args) {
       const e = args[0];
@@ -866,6 +898,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const patchVM = () => {
+    const RenderedTarget = vm.runtime.targets[0].constructor;
+
     const originalInstallTargets = vm.installTargets;
     vm.installTargets = function (...args) {
       if (currentSpriteFolder !== null) {
@@ -885,32 +919,30 @@ export default async function ({ addon, global, console, msg }) {
       });
     };
 
-    const originalAddCostume = vm.addCostume;
-    vm.addCostume = function (...args) {
+    const originalAddCostume = RenderedTarget.prototype.addCostume;
+    RenderedTarget.prototype.addCostume = function (...args) {
       if (currentAssetFolder !== null) {
-        const costume = args[1];
-        if (costume) {
+        const costume = args[0];
+        if (costume && typeof getFolderFromName(costume.name) !== "string") {
           costume.name = setFolderOfName(costume.name, currentAssetFolder);
         }
       }
-      return originalAddCostume.call(this, ...args).then((r) => {
-        fixCostumeOrder();
-        return r;
-      });
+      const r = originalAddCostume.call(this, ...args);
+      fixCostumeOrder(this);
+      return r;
     };
 
-    const originalAddSound = vm.addSound;
-    vm.addSound = function (...args) {
+    const originalAddSound = RenderedTarget.prototype.addSound;
+    RenderedTarget.prototype.addSound = function (...args) {
       if (currentAssetFolder !== null) {
         const sound = args[0];
-        if (sound) {
+        if (sound && typeof getFolderFromName(sound.name) !== "string") {
           sound.name = setFolderOfName(sound.name, currentAssetFolder);
         }
       }
-      return originalAddSound.call(this, ...args).then((r) => {
-        fixSoundOrder();
-        return r;
-      });
+      const r = originalAddSound.call(this, ...args);
+      fixSoundOrder(this);
+      return r;
     };
 
     const abstractReorder = (
@@ -1060,7 +1092,7 @@ export default async function ({ addon, global, console, msg }) {
       );
     };
 
-    vm.runtime.targets[0].constructor.prototype.reorderCostume = function (costumeIndex, newIndex) {
+    RenderedTarget.prototype.reorderCostume = function (costumeIndex, newIndex) {
       return abstractReorder(
         {
           getAll: () => {
@@ -1085,7 +1117,7 @@ export default async function ({ addon, global, console, msg }) {
       );
     };
 
-    vm.runtime.targets[0].constructor.prototype.reorderSound = function (soundIndex, newIndex) {
+    RenderedTarget.prototype.reorderSound = function (soundIndex, newIndex) {
       return abstractReorder(
         {
           getAll: () => {
@@ -1111,6 +1143,57 @@ export default async function ({ addon, global, console, msg }) {
     };
   };
 
+  const patchBackpack = (backpackInstance) => {
+    const Backpack = backpackInstance.constructor;
+    Backpack.prototype.sa_loadNextItem = function () {
+      if (!this.sa_queuedItems) return;
+      const item = this.sa_queuedItems.pop();
+      if (item) {
+        let payload;
+        let type;
+        if (item.dragPayload) {
+          if (item.costumeURL) {
+            type = "SOUND";
+          } else {
+            type = "COSTUME";
+          }
+          payload = item.dragPayload;
+        } else if (item.id) {
+          type = "SPRITE";
+          payload = item.id;
+        }
+        if (type && payload) {
+          originalHandleDrop.call(this, {
+            dragType: type,
+            payload: payload,
+          });
+        }
+      }
+    };
+
+    Backpack.prototype.componentDidUpdate = function (prevProps, prevState) {
+      if (!this.state.loading && prevState.loading && !this.state.error) {
+        this.sa_loadNextItem();
+      }
+    };
+
+    const originalHandleDrop = Backpack.prototype.handleDrop;
+    Backpack.prototype.handleDrop = function (...args) {
+      // When a folder is dropped into the backpack, upload all the items in the folder.
+      const dragInfo = args[0];
+      const folderItems = dragInfo && dragInfo.payload && dragInfo.payload.sa_folder_items;
+      if (Array.isArray(folderItems)) {
+        if (confirm(msg("confirm-backpack-folder"))) {
+          this.sa_queuedItems = folderItems;
+          this.sa_loadNextItem();
+        }
+        return;
+      }
+      return originalHandleDrop.call(this, ...args);
+    };
+    backpackInstance.handleDrop = Backpack.prototype.handleDrop.bind(backpackInstance);
+  };
+
   await untilInEditor();
 
   // Sprite list
@@ -1128,6 +1211,14 @@ export default async function ({ addon, global, console, msg }) {
     sortableHOCInstance.saInitialSetup();
     patchVM();
   }
+
+  // Backpack
+  (async () => {
+    const backpackContainer = await addon.tab.waitForElement("[class*='backpack_backpack-list-inner']");
+    const backpackInstance = getBackpackFromElement(backpackContainer);
+    verifyBackpack(backpackInstance);
+    patchBackpack(backpackInstance);
+  })();
 
   // Costume and sound list
   {
