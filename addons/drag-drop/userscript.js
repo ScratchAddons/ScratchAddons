@@ -90,8 +90,13 @@ export default async function ({ addon, global, console }) {
           fileInput.files = files;
           fileInput.dispatchEvent(new Event("change"));
           // Sometimes the menu stays open, so force it closed.
+          contextMenu.style.display = "none";
           window.requestAnimationFrame(() => {
-            window.dispatchEvent(new CustomEvent("REACT_CONTEXTMENU_HIDE"));
+            window.requestAnimationFrame(() => {
+              contextMenu.style.display = null;
+              contextMenu.style.opacity = 0;
+              contextMenu.style.pointerEvents = "none";
+            });
           });
         };
         // Simulate clicking on the "Import" option
@@ -111,14 +116,18 @@ export default async function ({ addon, global, console }) {
         { markAsSeen: true }
       );
       droppable(answerField, async (files) => {
-        const text = (await Promise.all(Array.from(files, (file) => file.text()))).join(" ").replace(/\r?\n|\r/g, " ");
+        const text = (await Promise.all(Array.from(files, (file) => file.text())))
+          .join("")
+          // Match pasting behaviour: remove all newline characters at the end
+          .replace(/[\r\n]+$/, "")
+          .replace(/\r?\n|\r/g, " ");
+        const selectionStart = answerField.selectionStart;
         nativeInputValueSetter.call(
           answerField,
-          answerField.value.slice(0, answerField.selectionStart) +
-            text +
-            answerField.value.slice(answerField.selectionEnd)
+          answerField.value.slice(0, selectionStart) + text + answerField.value.slice(answerField.selectionEnd)
         );
         answerField.dispatchEvent(new Event("change", { bubbles: true }));
+        answerField.setSelectionRange(selectionStart, selectionStart + text.length);
       });
     }
   }
