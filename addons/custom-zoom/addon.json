@@ -60,6 +60,30 @@
       "id": "autohide",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Animation Duration",
+      "id": "speed",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "none",
+          "name": "None"
+        },
+        {
+          "id": "short",
+          "name": "Short"
+        },
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "long",
+          "name": "Long"
+        }
+      ],
+      "default": "default"
     }
   ],
   "l10n": true
