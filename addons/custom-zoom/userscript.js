@@ -21,7 +21,35 @@ export default async function ({ addon, global, console }) {
       Blockly.getMainWorkspace().options.zoomOptions.startScale = addon.settings.get("startZoom") / 100;
       Blockly.getMainWorkspace().options.zoomOptions.scaleSpeed = 1.2 * (addon.settings.get("zoomSpeed") / 100);
     }
+    if (!defaultTranslate) {
+      if (!Blockly.getMainWorkspace().zoomControls_) return
+      defaultTranslate = Blockly.getMainWorkspace().zoomControls_.attributes.transform.value
+    }
+    if (!defaultRect) {
+      if (!Blockly.getMainWorkspace().zoomControls_) return
+      defaultRect = Blockly.getMainWorkspace().zoomControls_.svgGroup_.getBoundingClientRect()
+    }
   }
-  setZoom({ detail: { newUrl: window.location.href } })
-  addon.tab.addEventListener("urlChange", setZoom)
+  function hideShow(inArea = false, speed = "default") {
+    let speeds = {
+      none: "0",
+      short: "0.25",
+      default: "0.5",
+      long: "1"
+    };
+    if (!window.Blockly) return
+    let controls = Blockly.getMainWorkspace().zoomControls_.svgGroup_;
+    controls.style.transition = `${speeds[speed]}s ease-in-out`;
+    if (inArea) {
+      controls.attributes.transform.value = "translate(600,475)"
+    } else {
+      controls.attributes.transform.value = defaultTranslate || ""
+    }
+  }
+  function onMouseMove(e) {
+    
+  }
+  let defaultTranslate, defaultRect;
+  setZoom({ detail: { newUrl: window.location.href } });
+  addon.tab.addEventListener("urlChange", setZoom);
 }
