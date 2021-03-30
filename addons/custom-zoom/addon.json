@@ -1,0 +1,52 @@
+{
+  "name": "Custom editor zoom",
+  "description": "Adjust the minimum, maximum, and start zoom in the project editor.",
+  "tags": ["editor", "theme"],
+  "credits": [
+    {
+      "name": "ErrorGamer2000",
+      "link": "https://scratch.mit.edu/users/ErrorGamer2000/"
+    }
+  ],
+  "enabledByDefault": false,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "info": [
+    {
+      "type": "warning",
+      "text": "Making the blocks very small may injure your eyes. Be careful to avoid straining your eyes while using this addon.",
+      "id": "sizeWarning"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Maximum Zoom (100-200%)",
+      "id": "paddingSize",
+      "type": "integer",
+      "min": 50,
+      "default": 100,
+      "max": 200
+    },
+    {
+      "name": "Minimum Zoom (1-100%)",
+      "id": "cornerSize",
+      "type": "integer",
+      "min": 1,
+      "default": 100,
+      "max": 100
+    },
+    {
+      "name": "Start Zoom (1-250%)",
+      "id": "notchSize",
+      "type": "integer",
+      "min": 50,
+      "default": 100,
+      "max": 150
+    }
+  ],
+  "l10n": true
+}
