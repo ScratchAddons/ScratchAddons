@@ -25,7 +25,7 @@
   "settings": [
     {
       "name": "Maximum Zoom (100-200%)",
-      "id": "paddingSize",
+      "id": "maxZoom",
       "type": "integer",
       "min": 50,
       "default": 100,
@@ -33,7 +33,7 @@
     },
     {
       "name": "Minimum Zoom (1-100%)",
-      "id": "cornerSize",
+      "id": "minZoom",
       "type": "integer",
       "min": 1,
       "default": 100,
@@ -41,11 +41,17 @@
     },
     {
       "name": "Start Zoom (1-250%)",
-      "id": "notchSize",
+      "id": "startZoom",
       "type": "integer",
       "min": 50,
       "default": 100,
       "max": 150
+    },
+    {
+      "name": "Autohide Zoom Controls",
+      "id": "autohide",
+      "type": "boolean",
+      "default": false
     }
   ],
   "l10n": true
