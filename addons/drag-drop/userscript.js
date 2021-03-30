@@ -5,11 +5,19 @@ export default async function ({ addon, global, console }) {
   function droppable(dropArea, onDrop) {
     dropArea.classList.add(DRAG_AREA_CLASS);
     dropArea.addEventListener("drop", (e) => {
-      onDrop(e.dataTransfer.files);
+      if (e.dataTransfer.types.includes("Files")) {
+        if (e.dataTransfer.files.length > 0) {
+          onDrop(e.dataTransfer.files);
+        }
+        e.preventDefault();
+      }
       dropArea.classList.remove(DRAG_OVER_CLASS);
-      e.preventDefault();
     });
     dropArea.addEventListener("dragover", (e) => {
+      // Ignore dragged text, for example
+      if (!e.dataTransfer.types.includes("Files")) {
+        return;
+      }
       dropArea.classList.add(DRAG_OVER_CLASS);
       e.preventDefault();
     });
@@ -92,4 +100,27 @@ export default async function ({ addon, global, console }) {
     }
   }
   listMonitorsDroppable();
+
+  // For setting .value and letting React know about it
+  // https://stackoverflow.com/a/60378508
+  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+  async function askAnswerDroppable() {
+    while (true) {
+      const answerField = await addon.tab.waitForElement(
+        'div[class*="question_question-input"] > input[class*="input_input-form_l9eYg"]',
+        { markAsSeen: true }
+      );
+      droppable(answerField, async (files) => {
+        const text = (await Promise.all(Array.from(files, (file) => file.text()))).join(" ").replace(/\r?\n|\r/g, " ");
+        nativeInputValueSetter.call(
+          answerField,
+          answerField.value.slice(0, answerField.selectionStart) +
+            text +
+            answerField.value.slice(answerField.selectionEnd)
+        );
+        answerField.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+    }
+  }
+  askAnswerDroppable();
 }
