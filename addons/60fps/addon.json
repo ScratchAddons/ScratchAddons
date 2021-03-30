@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Projects will run twice at fast at 60FPS, because they typically run at 30FPS.",
+      "text": "Projects will run twice as fast at 60FPS, because they typically run at 30FPS.",
       "id": "projectRunsFasterNotice"
     }
   ],
