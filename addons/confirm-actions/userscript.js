@@ -1,13 +1,13 @@
 export default async function ({ addon, console, msg }) {
-  if (addon.settings.get("projectsharing"))
-    actionAlert("[class*='share-button_share-button'], .banner-button", msg("share"));
-  if (addon.settings.get("followinguser")) actionAlert("#profile-data .follow-button", msg("follow"));
-  if (addon.settings.get("joiningstudio")) actionAlert("a.accept", msg("joinstudio"));
-  async function actionAlert(queryButton, res) {
+  actionAlert("projectsharing", "[class*='share-button_share-button'], .banner-button", msg("share"));
+  actionAlert("followinguser", "#profile-data .follow-button", msg("follow"));
+  actionAlert("joiningstudio", "a.accept", msg("joinstudio"));
+  async function actionAlert(setting, queryButton, res) {
     while (true) {
       let button = await addon.tab.waitForElement(queryButton, { markAsSeen: true });
       let canAction = false;
       button.addEventListener("click", function (e) {
+        if (addon.self.disabled || !addon.settings.get(setting)) return;
         if (!canAction) {
           e.cancelBubble = true;
           e.preventDefault();

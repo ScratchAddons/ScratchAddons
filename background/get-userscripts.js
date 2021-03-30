@@ -25,6 +25,7 @@ scratchAddons.localEvents.addEventListener("addonEnabled", ({ detail }) => {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
           if (res) {
             const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
+
             console.log(userscripts, userstyles);
             chrome.tabs.sendMessage(
               tab.id,
@@ -34,7 +35,7 @@ scratchAddons.localEvents.addEventListener("addonEnabled", ({ detail }) => {
                   userstyles,
                   addonId,
                   injectAsStyleElt: manifest.injectAsStyleElt,
-                  index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId)
+                  index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
                 },
               },
               { frameId: 0 }
@@ -61,7 +62,7 @@ scratchAddons.localEvents.addEventListener("addonDisable", ({ detail }) => {
 });
 
 async function getAddonData({ addonId, manifest, url }) {
-  const fetchInlineStylesPromises = [];
+  const promices = [];
 
   const userscripts = [];
   for (const script of manifest.userscripts || []) {
@@ -75,7 +76,7 @@ async function getAddonData({ addonId, manifest, url }) {
   for (const style of manifest.userstyles || []) {
     if (userscriptMatches({ url }, style, addonId))
       if (manifest.injectAsStyleElt) {
-        fetchInlineStylesPromises.push(
+        promices.push(
           fetch(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`))
             .then((res) => res.text())
             .then((text) => {
@@ -86,9 +87,9 @@ async function getAddonData({ addonId, manifest, url }) {
         userstyles.push(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
       }
   }
-  await Promise.all(fetchInlineStylesPromises);
+  await Promise.all(promices);
 
-  return { userscripts, userstyles };
+  return { userscripts, userstyles, promices };
 }
 
 async function getContentScriptInfo(url) {
@@ -99,15 +100,20 @@ async function getContentScriptInfo(url) {
     addonsWithUserscripts: [],
     addonsWithUserstyles: [],
   };
-  scratchAddons.manifests.forEach(({ addonId, manifest }, i) => {
+  for (let i = 0; i < scratchAddons.manifests.length; i++) {
+    const { addonId, manifest } = scratchAddons.manifests[i];
     if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
-
     const { userscripts, userstyles } = await getAddonData({ addonId, manifest, url });
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
     if (userstyles.length)
-      data.addonsWithUserstyles.push({ addonId, styles: userstyles, injectAsStyleElt: manifest.injectAsStyleElt, index: i });
-  });
+      data.addonsWithUserstyles.push({
+        addonId,
+        styles: userstyles,
+        injectAsStyleElt: manifest.injectAsStyleElt,
+        index: i,
+      });
+  }
 
   data.globalState = scratchAddons.globalState._target;
 

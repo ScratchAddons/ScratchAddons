@@ -108,22 +108,15 @@ function addStyle(addon) {
       style.setAttribute("data-addon-id", addon.addonId);
       style.setAttribute("data-addon-index", addon.index);
       style.textContent = userstyle;
-      const allStyles = document.querySelectorAll(".scratch-addons-style");
-      if (allStyles.length) {
-        const styleToAppend = null;
-        for (const style of allStyles) {
-          console.log(addon.index, style.dataset.addonIndex);
-        }
-        if (document.body) document.documentElement.insertBefore(style, document.body);
-        else document.documentElement.appendChild(style);
-      } else {
-        if (document.body) document.documentElement.insertBefore(style, document.body);
-        else document.documentElement.appendChild(style);
-      }
+
+      if (document.body) document.documentElement.insertBefore(style, document.body);
+      else document.documentElement.appendChild(style);
     } else {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.setAttribute("data-addon-id", addon.addonId);
+      link.classList.add("scratch-addons-style");
+
       link.href = userstyle;
       if (document.body) document.documentElement.insertBefore(link, document.body);
       else document.documentElement.appendChild(link);
@@ -135,6 +128,7 @@ function removeAddonStyles(addonId) {
 }
 
 function injectUserstylesAndThemes(addonsWithUserstyles) {
+  console.log(addonsWithUserstyles);
   for (const addon of addonsWithUserstyles || []) {
     addStyle(addon);
   }
@@ -190,8 +184,9 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
     } else if (request.dynamicAddonEnabled) {
-      const { scripts, userstyles, addonId, injectAsStyleElt } = request.dynamicAddonEnabled;
-      addStyle({ styles: userstyles, addonId, injectAsStyleElt });
+      const { scripts, userstyles, addonId, injectAsStyleElt, index } = request.dynamicAddonEnabled;
+      // TODO: simply adding the style won't cut it. Use the "index" variable to insert it or remove all and readd properly
+      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
       if (pageLoadedAddons.find((a) => a.addonId === addonId)) {
         // Addon was reenabled
         _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
