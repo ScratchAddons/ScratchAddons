@@ -24,11 +24,19 @@ scratchAddons.localEvents.addEventListener("addonEnabled", ({ detail }) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
           if (res) {
-            const { userscripts, userstyles } = getAddonData({ addonId, url: res, manifest });
-
+            const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
+            console.log(userscripts, userstyles);
             chrome.tabs.sendMessage(
               tab.id,
-              { dynamicAddonEnabled: { scripts: userscripts, userstyles, addonId } },
+              {
+                dynamicAddonEnabled: {
+                  scripts: userscripts,
+                  userstyles,
+                  addonId,
+                  injectAsStyleElt: manifest.injectAsStyleElt,
+                  index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId)
+                },
+              },
               { frameId: 0 }
             );
           }
@@ -52,7 +60,9 @@ scratchAddons.localEvents.addEventListener("addonDisable", ({ detail }) => {
   );
 });
 
-function getAddonData({ addonId, manifest, url }) {
+async function getAddonData({ addonId, manifest, url }) {
+  const fetchInlineStylesPromises = [];
+
   const userscripts = [];
   for (const script of manifest.userscripts || []) {
     if (userscriptMatches({ url }, script, addonId))
@@ -65,13 +75,18 @@ function getAddonData({ addonId, manifest, url }) {
   for (const style of manifest.userstyles || []) {
     if (userscriptMatches({ url }, style, addonId))
       if (manifest.injectAsStyleElt) {
-        // TODO: take code down below here.
+        fetchInlineStylesPromises.push(
+          fetch(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`))
+            .then((res) => res.text())
+            .then((text) => {
+              userstyles.push(text);
+            })
+        );
       } else {
-        userstyles.push({
-          url: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`),
-        });
+        userstyles.push(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
       }
   }
+  await Promise.all(fetchInlineStylesPromises);
 
   return { userscripts, userstyles };
 }
@@ -83,40 +98,17 @@ async function getContentScriptInfo(url) {
     globalState: {},
     addonsWithUserscripts: [],
     addonsWithUserstyles: [],
-    themes: [],
   };
-  const fetchThemeStylesPromises = [];
-
-  for (const { addonId, manifest } of scratchAddons.manifests) {
+  scratchAddons.manifests.forEach(({ addonId, manifest }, i) => {
     if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
 
-    const { userscripts, userstyles } = getAddonData({ addonId, manifest, url });
+    const { userscripts, userstyles } = await getAddonData({ addonId, manifest, url });
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
-    if (manifest.tags.includes("theme")) {
-      const styleUrls = [];
-      for (const style of manifest.userstyles || []) {
-        if (userscriptMatches({ url }, style, addonId)) styleUrls.push(style.url);
-      }
-      if (styleUrls.length) {
-        const styles = {};
-        data.themes.push({ addonId, styleUrls, styles });
-        for (const styleUrl of styleUrls) {
-          fetchThemeStylesPromises.push(
-            fetch(chrome.runtime.getURL(`/addons/${addonId}/${styleUrl}`))
-              .then((res) => res.text())
-              .then((text) => {
-                styles[styleUrl] = text;
-              })
-          );
-        }
-      }
-    } else {
-      if (userstyles.length) data.addonsWithUserstyles.push({ addonId, styles: userstyles });
-    }
-  }
+    if (userstyles.length)
+      data.addonsWithUserstyles.push({ addonId, styles: userstyles, injectAsStyleElt: manifest.injectAsStyleElt, index: i });
+  });
 
-  await Promise.all(fetchThemeStylesPromises);
   data.globalState = scratchAddons.globalState._target;
 
   return data;

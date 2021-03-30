@@ -15,6 +15,9 @@
       "link": "https://github.com/mxmou/customize-scratch"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
   "userstyles": [
     {
       "url": "dark-editor.css",

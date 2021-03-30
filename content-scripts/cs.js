@@ -96,37 +96,47 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 const sessionEnabledThemes = new Set();
 
 function addStyle(addon) {
-  for (const userstyle of addon.styles) {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.setAttribute("data-addon-id", addon.addonId);
-    link.href = userstyle.url;
-    if (document.body) document.documentElement.insertBefore(link, document.body);
-    else document.documentElement.appendChild(link);
+  for (let userstyle of addon.styles) {
+    if (addon.injectAsStyleElt) {
+      sessionEnabledThemes.add(addon.addonId);
+
+      // Replace %addon-self-dir% for relative URLs
+      userstyle = userstyle.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${addon.addonId}`));
+      //userstyle += `\n/*# sourceURL=${styleUrl} */`;
+      const style = document.createElement("style");
+      style.classList.add("scratch-addons-style");
+      style.setAttribute("data-addon-id", addon.addonId);
+      style.setAttribute("data-addon-index", addon.index);
+      style.textContent = userstyle;
+      const allStyles = document.querySelectorAll(".scratch-addons-style");
+      if (allStyles.length) {
+        const styleToAppend = null;
+        for (const style of allStyles) {
+          console.log(addon.index, style.dataset.addonIndex);
+        }
+        if (document.body) document.documentElement.insertBefore(style, document.body);
+        else document.documentElement.appendChild(style);
+      } else {
+        if (document.body) document.documentElement.insertBefore(style, document.body);
+        else document.documentElement.appendChild(style);
+      }
+    } else {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.setAttribute("data-addon-id", addon.addonId);
+      link.href = userstyle;
+      if (document.body) document.documentElement.insertBefore(link, document.body);
+      else document.documentElement.appendChild(link);
+    }
   }
 }
-function removeStyle(addonId) {
-  document.querySelector(`[data-addon-id='${addonId}']`).remove();
+function removeAddonStyles(addonId) {
+  document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => style.remove());
 }
 
-function injectUserstylesAndThemes({ addonsWithUserstyles = [], themes }) {
+function injectUserstylesAndThemes(addonsWithUserstyles) {
   for (const addon of addonsWithUserstyles || []) {
     addStyle(addon);
-  }
-  for (const theme of themes) {
-    sessionEnabledThemes.add(theme.addonId);
-    for (const styleUrl of theme.styleUrls) {
-      let css = theme.styles[styleUrl];
-      // Replace %addon-self-dir% for relative URLs
-      css = css.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${theme.addonId}`));
-      css += `\n/*# sourceURL=${styleUrl} */`;
-      const style = document.createElement("style");
-      style.classList.add("scratch-addons-theme");
-      style.setAttribute("data-addon-id", theme.addonId);
-      style.textContent = css;
-      if (document.body) document.documentElement.insertBefore(style, document.body);
-      else document.documentElement.appendChild(style);
-    }
   }
 }
 
@@ -145,15 +155,15 @@ function setCssVariables(addonSettings) {
   }
 }
 
-async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles, themes }) {
+async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
   const pageLoadedAddons = addonsWithUserscripts;
   setCssVariables(globalState.addonSettings);
   // Just in case, make sure the <head> loaded before injecting styles
-  if (document.head) injectUserstylesAndThemes({ addonsWithUserstyles, themes });
+  if (document.head) injectUserstylesAndThemes(addonsWithUserstyles);
   else {
     const observer = new MutationObserver(() => {
       if (document.head) {
-        injectUserstylesAndThemes({ addonsWithUserstyles, themes });
+        injectUserstylesAndThemes(addonsWithUserstyles);
         observer.disconnect();
       }
     });
@@ -180,8 +190,8 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
     } else if (request.dynamicAddonEnabled) {
-      const { scripts, userstyles, addonId } = request.dynamicAddonEnabled;
-      addStyle({ styles: userstyles, addonId });
+      const { scripts, userstyles, addonId, injectAsStyleElt } = request.dynamicAddonEnabled;
+      addStyle({ styles: userstyles, addonId, injectAsStyleElt });
       if (pageLoadedAddons.find((a) => a.addonId === addonId)) {
         // Addon was reenabled
         _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
@@ -195,7 +205,7 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       const { addonId } = request.dynamicAddonDisable;
       const addonIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
       addonsWithUserscripts.splice(addonIndex, 1);
-      removeStyle(addonId);
+      removeAddonStyles(addonId);
       _page_.fireEvent({ name: "disabled", addonId, target: "self" });
     } else if (request.setMsgCount) {
       _page_.setMsgCount(request.setMsgCount);
