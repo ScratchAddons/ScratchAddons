@@ -1,39 +1,30 @@
 export default async function ({ addon, global, console }) {
     function setZoom(e) {
         //Function to set the custom zoom parameters
-        if (!window.Blockly) {
-            //Fallback to prevent errors, if Blockly is not defined a temporary object is created
-            ///Use var instead of let to allow the variable to be used outside of this code block
-            var Blockly = {
-                getMainWorkspace: function () {
-                    return {
-                        options: {
-                            zoomOptions: {},
-                        },
-                    }; //Return fake options object
-                },
-            };
-        }
+        console.log("setting zoom", !!global.Blockly)
+        if (!global.Blockly) return
         if (e.detail.newUrl.includes("/editor")) {
             //Set the zoom parameters
-            if (!Blockly) return;
-            Blockly.getMainWorkspace().options.zoomOptions.maxScale = addon.settings.get("maxZoom") / 100;
-            Blockly.getMainWorkspace().options.zoomOptions.minScale = addon.settings.get("minZoom") / 100;
-            Blockly.getMainWorkspace().options.zoomOptions.startScale = addon.settings.get("startZoom") / 100;
-            Blockly.getMainWorkspace().options.zoomOptions.scaleSpeed = 1.2 * (addon.settings.get("zoomSpeed") / 100);
+            global.Blockly.getMainWorkspace().options.zoomOptions.maxScale = addon.settings.get("maxZoom") / 100;
+            global.Blockly.getMainWorkspace().options.zoomOptions.minScale = addon.settings.get("minZoom") / 100;
+            global.Blockly.getMainWorkspace().options.zoomOptions.startScale = addon.settings.get("startZoom") / 100;
+            global.Blockly.getMainWorkspace().options.zoomOptions.scaleSpeed = 1.2 * (addon.settings.get("zoomSpeed") / 100);
         }
         if (!defaultTranslate) {
-            if (!Blockly.getMainWorkspace().zoomControls_) return;
+            if (!global.Blockly.getMainWorkspace().zoomControls_) return;
             defaultTranslate = Blockly.getMainWorkspace().zoomControls_.attributes.transform.value;
+            console.log(defaultTranslate)
         }
         if (!defaultRect) {
-            if (!Blockly.getMainWorkspace().zoomControls_) return;
-            defaultRect = Blockly.getMainWorkspace().zoomControls_.svgGroup_.getBoundingClientRect();
+            if (!global.Blockly.getMainWorkspace().zoomControls_) return;
+            defaultRect = global.Blockly.getMainWorkspace().zoomControls_.svgGroup_.getBoundingClientRect();
+            console.log(defaultRect)
         }
         try {
             document.removeEventListener("mousemove", onMouseMove);
         } catch {}
         if (e.detail.newUrl.includes("/editor")) document.addEventListener("mousemove", onMouseMove);
+        console.log(onMouseMove)
     }
     function hideShow(inArea = false, speed = "default") {
         let speeds = {
@@ -42,8 +33,9 @@ export default async function ({ addon, global, console }) {
             default: "0.5",
             long: "1",
         };
-        if (!window.Blockly) return;
-        let controls = Blockly.getMainWorkspace().zoomControls_.svgGroup_;
+        console.log(Blockly.getMainWorkspace().zoomControls_)
+        if (!global.Blockly) return;
+        let controls = global.getMainWorkspace().zoomControls_.svgGroup_;
         controls.style.transition = `${speeds[speed]}s ease-in-out`;
         if (inArea) {
             controls.attributes.transform.value = "translate(600,475)";
@@ -55,6 +47,10 @@ export default async function ({ addon, global, console }) {
         setZoom({ detail: { newUrl: window.location.href } });
         hideShow(e.x >= defaultRext.left && e.x <= defaultRext.right && e.y >= defaultRext.top && e.y <= defaultRext.bottom, addon.settings.get("speed"));
     }
+    await addon.tab.waitForElement(".blocklyZoom")
+    await window.Blockly;
+    global.Blockly = window.Blockly;
+    console.log(global.Blockly)
     let defaultTranslate, defaultRect;
     setZoom({ detail: { newUrl: window.location.href } });
     addon.tab.addEventListener("urlChange", setZoom);
