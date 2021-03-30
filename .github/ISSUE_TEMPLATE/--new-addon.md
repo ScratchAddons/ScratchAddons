@@ -2,7 +2,7 @@
 name: "➕ New addon"
 about: Suggest a new addon
 title: ''
-labels: 'type: enhancement, new addon, scope: addon'
+labels: 'type: enhancement, scope: new addon'
 assignees: ''
 
 ---
