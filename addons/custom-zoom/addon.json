@@ -40,7 +40,7 @@
       "max": 100
     },
     {
-      "name": "〓   Button Zoom  (1-500%)",
+      "name": "〓   Button Zoom (1-500%)",
       "id": "startZoom",
       "type": "integer",
       "min": 50,
