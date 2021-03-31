@@ -101,5 +101,5 @@ export default async function ({ addon, global, console }) {
   addon.tab.addEventListener("urlChange", setZoom);
   addon.tab.settings.addEventListener("change", function () {
     setZoom({ detail: { newUrl: window.location.href } });
-  })
+  });
 }
