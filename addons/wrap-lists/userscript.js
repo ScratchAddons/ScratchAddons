@@ -5,6 +5,13 @@ export default async function ({ addon, global, console }) {
       updateListItems();
     }
   });
+  while (true) {
+    const list = await addon.tab.waitForElement(".ReactVirtualized__Grid__innerScrollContainer", {
+      markAsSeen: true,
+    });
+    updateListItems();
+    new MutationObserver(updateListItems).observe(list, { attributes: true, attributeFilter: ["style"] });
+  }
 }
 function updateListItems() {
   for (const list of document.querySelectorAll(".ReactVirtualized__Grid__innerScrollContainer")) {
@@ -12,7 +19,8 @@ function updateListItems() {
     list.style.maxHeight = "fit-content";
     list.style.overflowY = "auto";
 
-    let prevHeight = (totalHeight = 0);
+    let prevHeight = 0;
+    let totalHeight = 0;
     for (const row of list.querySelectorAll("[class*='monitor_list-row']")) {
       row.style.height = "fit-content";
       row.style.top = totalHeight + prevHeight + "px";
@@ -22,7 +30,6 @@ function updateListItems() {
     }
   }
   for (const value of document.querySelectorAll("[class*='monitor_value-inner']")) {
-    value.style.height = "fit-content";
     value.style.wordBreak = "break-all";
     value.style.whiteSpace = "normal";
   }
