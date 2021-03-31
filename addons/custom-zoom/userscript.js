@@ -94,7 +94,7 @@ export default async function ({ addon, global, console }) {
   }
 
   await addon.tab.waitForElement(".blocklyZoom"); //Wait for controls
-  await window.Blockly; //Wait for Blockly
+  await addon.tab.traps.getBlockly(); //Wait for Blockly
   global.Blockly = window.Blockly;
   let defaultTranslate, defaultRect;
   setZoom({ detail: { newUrl: window.location.href } });
