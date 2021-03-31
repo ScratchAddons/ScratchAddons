@@ -1,6 +1,6 @@
 {
-  "name": "Custom editor zoom",
-  "description": "Adjust the minimum, maximum, and start zoom in the project editor.",
+  "name": "Custom Zoom Settings",
+  "description": "Adjust the minimum, maximum, speed, and start size of the zoom in the project editor, and autohide the controls.",
   "tags": ["editor", "theme"],
   "credits": [
     {
@@ -24,19 +24,19 @@
   ],
   "settings": [
     {
-      "name": "Maximum Zoom (100-1000%)",
+      "name": "Maximum Zoom (100-500%)",
       "id": "maxZoom",
       "type": "integer",
       "min": 50,
-      "default": 100,
-      "max": 1000
+      "default": 300,
+      "max": 500
     },
     {
       "name": "Minimum Zoom (1-100%)",
       "id": "minZoom",
       "type": "integer",
       "min": 1,
-      "default": 100,
+      "default": 30,
       "max": 100
     },
     {
@@ -44,7 +44,7 @@
       "id": "startZoom",
       "type": "integer",
       "min": 50,
-      "default": 100,
+      "default": 68,
       "max": 500
     },
     {
@@ -58,6 +58,12 @@
     {
       "name": "Autohide Zoom Controls",
       "id": "autohide",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Fix Zoom Control Height",
+      "id": "fixheight",
       "type": "boolean",
       "default": false
     },
