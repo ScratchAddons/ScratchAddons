@@ -1,16 +1,14 @@
 .box .box-content {
   background: #282828;
-  color: #575e75;
 }
 text {
-  color: white;
-  fill: currentColor;
+  fill: white;
 }
 .nvtooltip {
   background: #000;
   color: #fff;
 }
 .nvtooltip h3 {
-  background: #000;
+  background: #282828;
   color: #fff;
 }
