@@ -12,3 +12,6 @@ text {
   background: #282828;
   color: #fff;
 }
+line {
+  stroke: #606060 !important;
+}
