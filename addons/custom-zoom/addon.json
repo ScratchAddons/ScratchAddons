@@ -61,7 +61,7 @@
       "default": false
     },
     {
-      "name": "Animation Duration",
+      "name": "Animation duration",
       "id": "speed",
       "type": "select",
       "potentialValues": [
