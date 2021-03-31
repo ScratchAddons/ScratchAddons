@@ -1,5 +1,16 @@
 .box .box-content {
-  /* Charts don't look well on dark background */
-  background: #fff;
+  background: #282828;
   color: #575e75;
+}
+text {
+  color: white;
+  fill: currentColor;
+}
+.nvtooltip {
+  background: #000;
+  color: #fff;
+}
+.nvtooltip h3 {
+  background: #000;
+  color: #fff;
 }
