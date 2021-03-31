@@ -85,5 +85,5 @@
       "default": "default"
     }
   ],
-  "l10n": false
+  "l10n": true
 }
