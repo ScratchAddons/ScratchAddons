@@ -15,13 +15,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "info": [
-    {
-      "type": "warning",
-      "text": "Making the blocks very small may injure your eyes. Be careful to avoid straining your eyes while using this addon.",
-      "id": "sizeWarning"
-    }
-  ],
   "settings": [
     {
       "name": "Maximum Zoom (100-500%)",
