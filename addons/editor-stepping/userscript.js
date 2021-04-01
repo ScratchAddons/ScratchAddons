@@ -1,16 +1,7 @@
 export default async function ({ addon, global, console }) {
-  let removeInterval = () => {};
-  if (addon.tab.editorMode === "editor") {
-    removeInterval = addInterval();
-  }
+  const vm = addon.tab.traps.vm;
 
-  addon.tab.addEventListener("urlChange", () => {
-    if (addon.tab.editorMode === "editor") {
-      removeInterval();
-      addInterval();
-    } else removeInterval();
-  });
-
+  // Insert this amazing filter
   document.body.insertAdjacentHTML(
     "beforeend",
     `
@@ -36,27 +27,29 @@ export default async function ({ addon, global, console }) {
 </svg>
 `
   );
-
-  function addInterval() {
-    const interval = setInterval(() => {
-      document.querySelectorAll("g[style*='filter']").forEach((e) => (e.style.filter = ""));
-      addon.tab.traps.vm.runtime.threads.forEach((thread) => {
-        thread.stack.forEach((e) => {
-          let blockId = thread.target.blocks.getBlock(e).id;
-          let block = Blockly.getMainWorkspace().getBlockById(blockId);
-          let childblock = thread.stack.find((i) => {
-            let b = block;
-            while (b.childBlocks_.length) {
-              b = b.childBlocks_[b.childBlocks_.length - 1];
-              if (i === b.id) return true;
-            }
-          });
-          if (!childblock && block && block.svgPath_) {
-            block.svgPath_.style.filter = "url(#blueStackGlow)";
+  // Wait for Blockly, as it tends to not be ready sometimes...
+  await addon.tab.traps.getBlockly();
+  const oldStep = vm.runtime._step;
+  vm.runtime._step = function () {
+    document.querySelectorAll("g[style*='filter']").forEach((e) => (e.style.filter = ""));
+    vm.runtime.threads.forEach((thread) => {
+      if (thread.target.blocks.forceNoGlow) return;
+      thread.stack.forEach((e) => {
+        let blockId = thread.target.blocks.getBlock(e).id;
+        let block = Blockly.getMainWorkspace().getBlockById(blockId);
+        let childblock = thread.stack.find((i) => {
+          let b = block;
+          if (!block) return;
+          while (b.childBlocks_.length) {
+            b = b.childBlocks_[b.childBlocks_.length - 1];
+            if (i === b.id) return true;
           }
         });
+        if (!childblock && block && block.svgPath_) {
+          block.svgPath_.style.filter = "url(#blueStackGlow)";
+        }
       });
-    }, 500);
-    return () => clearInterval(interval);
-  }
+    });
+    oldStep.call(this);
+  };
 }
