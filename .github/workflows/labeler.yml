@@ -1,12 +1,19 @@
-name: Labeler
+name: Label PR using Labeler
 on:
-- pull_request_target
+  pull_request:
 
 jobs:
-  pr-labeler:
-    name: Label pull requests
+  label:
+    name: Label
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/labeler@main
+    - name: Generate token
+      uses: tibdex/github-app-token@v1
+      id: generate-token
       with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        app_id: ${{ secrets.BOT_APP_ID }}
+        private_key: ${{ secrets.BOT_PRIVATE_KEY }}
+    - name: Label pull request
+      uses: srvaroa/labeler@master
+      with:
+        GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}

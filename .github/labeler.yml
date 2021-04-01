@@ -1,22 +1,32 @@
-scope:\ addon api:
-  - addons/**
+version: 1
+labels:
 
-scope:\ ci:
-  - .github/workflows/*
+- label: "scope: addon"
+  files: 
+    - addons/**
 
-scope:\ extension workings:
-  - background/**
-  - content-scripts/**
+- label: "scope: core"
+  files: 
+    - background/**
+    - content-scripts/**
 
-scope:\ l10n:
-  - _locales/**
-  - addons-l10n/**
+- label: "scope: l10n"
+  files: 
+    - _locales/**
+    - addons-l10n/**
 
-scope:\ webpages:
-  - addons/**
+- label: "scope: webpages"
+  files: 
+    - popups/**
+    - webpages/**
 
-scope:\ meta:
-  - ".github/**"
-  - "!.github/workflows/*"
-  - "*"
-  - "!*/**"
+- label: "scope: meta"
+  files: 
+    - ".github/**"
+    - "!.github/workflows/*"
+    - "*"
+    - "!*/**"
+
+- label: "scope: ci"
+  files: 
+    - .github/workflows/*
