@@ -10,6 +10,12 @@
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
     <script src="permissions.js" defer></script>
+    <style>
+      /*
+       * Imports are here to attempt to speed up load. Also, it means licenses.html loads fewer unused styles, and this file doesn't get licenses.html's styles! In order of when it will be noticed/needed on the page
+      */
+      @import url("../styles/colors.css");
+    </style>
   </head>
   <body class="permissions">
     <div class="navbar">
