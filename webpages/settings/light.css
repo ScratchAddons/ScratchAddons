@@ -168,7 +168,7 @@ img :not(.navbar, .icon-type) {
 }
 
 #popup-more-settings > button {
-  background-image: url(../../images/icons/settings-black.svg);
+  filter: brightness(0);
 }
 color-picker#picker {
   --color-picker-background-color: #fff !important;
