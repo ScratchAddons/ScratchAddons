@@ -1,17 +1,31 @@
-.box .box-content {
-  background: #282828;
+.stats li.data {
+  background-image: url("%addon-self-dir%/assets/meow.png");
+  background-size: 20px 15px;
 }
-text {
+.nvd3 text,
+#country_chart text {
   fill: white;
 }
-.nvtooltip {
-  background: #000;
-  color: #fff;
-}
-.nvtooltip h3 {
+.nvtooltip,
+.nvtooltip h3,
+.info-tooltip {
   background: #282828;
+  border-color: #606060;
   color: #fff;
 }
-line {
-  stroke: #606060 !important;
+.nvd3 .nv-axis path {
+  stroke: #fff;
+}
+.nvd3 .nv-axis line {
+  stroke: #606060;
+}
+.nvd3 line.nv-guideline {
+  stroke: #808080;
+}
+/* Radio buttons: */
+.nvd3 [style*="fill: rgb(68, 68, 68)"] {
+  fill: white !important;
+}
+.nvd3 [style*="stroke: rgb(68, 68, 68)"] {
+  stroke: white !important;
 }
