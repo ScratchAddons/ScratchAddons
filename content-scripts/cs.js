@@ -4,8 +4,6 @@ try {
   throw "Scratch Addons: not first party iframe";
 }
 
-console.log(chrome);
-
 chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res) => {
   if (res) onInfoAvailable(res);
 });

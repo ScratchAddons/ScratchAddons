@@ -1,6 +1,6 @@
 {
-  "name": "Wrap Lists",
-  "description": "todo.",
+  "name": "Wrap List Items",
+  "description": "Instead list items ending with \"...\" when there are too many characters, they will get wrapped, and all the characters will be visible.",
   "credits": [
     {
       "name": "TheColaber",
