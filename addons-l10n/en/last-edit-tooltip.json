@@ -1,5 +1,4 @@
 {
-  "last-edit-tooltip/modified": "Modified: {date}, ",
-  "last-edit-tooltip/shared": "Shared: {date} at {hour}:{minute}{hourType}",
-  "last-edit-tooltip/shared24": "Shared: {date} at {hour}:{minute}"
+  "last-edit-tooltip/modified": "Modified: {date}",
+  "last-edit-tooltip/shared": "Shared: {date}"
 }

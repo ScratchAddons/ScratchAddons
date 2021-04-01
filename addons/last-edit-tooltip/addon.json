@@ -1,6 +1,6 @@
 {
-  "name": "Last shared/edited tooltip",
-  "description": "Hover over a project's share date for information on when it was last edited and shared.",
+  "name": "Shared/edited dates tooltip",
+  "description": "Hover over a project's share date for information on when exactly it was shared and last edited.",
   "credits": [
     {
       "name": "TheColaber",
@@ -18,14 +18,6 @@
     }
   ],
   "tags": ["community"],
-  "settings": [
-    {
-      "name": "Use 12-hour format",
-      "id": "12hrclock",
-      "type": "boolean",
-      "default": false
-    }
-  ],
   "enabledByDefault": false,
   "l10n": true
 }

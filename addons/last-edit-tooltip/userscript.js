@@ -8,27 +8,17 @@ export default async function ({ addon, global, console, msg }) {
 
     if (!data.history) return;
 
-    let dateMod = scratchAddons.l10n.date(new Date(data.history.modified));
-    let dateCreated = new Date(data.history.shared);
-    let hour = dateCreated.getHours();
-    let minute = (dateCreated.getMinutes() + "").padStart(2, "0");
-    let dataTitle =
-      msg("modified", { date: dateMod }) +
-      msg("shared24", {
-        date: scratchAddons.l10n.date(dateCreated),
-        hour,
-        minute,
-      });
-    if (addon.settings.get("12hrclock"))
-      dataTitle =
-        msg("modified", { date: dateMod }) +
-        msg("shared", {
-          date: scratchAddons.l10n.date(dateCreated),
-          hour: hour % 12 || 12,
-          minute,
-          hourType: hour > 11 ? "pm" : "am",
-        });
-
+    // Using this instead of scratchAddons.l10n.locales
+    // to avoid confusion between DD/MM/YYYY and MM/DD/YYYY.
+    // This will use AM/PM for all English users, even en-GB
+    const dateFormatterWithMonthName = new Intl.DateTimeFormat(msg.locale, {
+      timeStyle: "short",
+      dateStyle: "medium",
+    });
+    let dateMod = data.history.modified ? dateFormatterWithMonthName.format(new Date(data.history.modified)) : "?";
+    let dateShared = data.history.shared ? dateFormatterWithMonthName.format(new Date(data.history.shared)) : "?";
+    let dataTitle = `${msg("shared", { date: dateShared })}
+${msg("modified", { date: dateMod })}`;
     element.setAttribute("title", dataTitle);
   }
 }
