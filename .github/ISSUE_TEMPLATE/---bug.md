@@ -1,39 +1,53 @@
 ---
 name: "\U0001F41B Bug"
-about: Report a bug
+about: 'Report a bug'
 title: ''
 labels: 'type: bug, status: needs triage'
 assignees: ''
-
 ---
 
-**Describe the bug**
+<!--
 
-<!-- A clear and concise description of what the bug is. -->
+READ BEFORE CREATING A BUG ISSUE!
 
-**To Reproduce**
+- Avoid creating duplicates! Search through Issues and Discussions before creating one.
+- Try to include detailed information. It could save a lot of time and help us fix issues swiftly.
+- Make sure you use the latest version of Scratch Addons.
 
-<!-- Steps to reproduce the behavior: -->
+-->
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+### Description
 
-**Expected behavior**
+<!-- Include a clear and concise description of what the bug is. -->
 
-<!-- A clear and concise description of what you expected to happen. -->
+### Repoduction steps
 
-**Screenshots**
+<!-- Provide an unambiguous set of steps to reproduce this bug, and/or a link to a live example. -->
+
+1. 
+2. 
+3. 
+
+### Expected behaviour
+
+<!-- Include a description of what should happen. -->
+
+### Actual behaviour
+
+<!-- Include a description of what actually happened. -->
+
+### Screenshot
 
 <!-- If applicable, add screenshots to help explain your problem. -->
 
-**Device (please complete the following information):**
+### Enviroment
 
-- OS: [e.g. iOS]
-- Browser [e.g. chrome, safari]
-- Version [e.g. 22]
+<!-- Include information related to your enviroment/device. -->
 
-**Additional context**
+- Browser: <!-- e.g. Chrome 89 -->
+- Scratch Addons version: <!-- e.g. 1.10.0, for pre-releases, include hash if possible -->
+- Operating system: <!-- e.g. Windows -->
 
-<!-- Add any other context about the problem here. -->
+### Additional context
+
+<!-- Add any other information/context about the problem here. -->
