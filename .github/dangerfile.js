@@ -2,6 +2,8 @@ import { message, danger, warn, markdown } from "danger";
 const prettier = require("prettier");
 const fs = require("fs");
 let pr = danger.github.pr;
+if (!pr.title.includes("Translation update:")) {
+
 markdown("#### Danger PR Checks");
 // PRs should have at least a sentance of description
 if (pr.body.length === 0) {
@@ -37,7 +39,6 @@ if (badFiles.length > 0) {
   - ${badFiles.join("\n- ")}
 `);
 }
-if (!pr.title.includes("Translation update:")) {
   const modifiedLibFiles = modified.filter((p) => p.includes("libraries/"));
 
   if (modifiedLibFiles.includes("libraries/")) {
