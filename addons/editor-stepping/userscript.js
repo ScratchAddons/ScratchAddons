@@ -1,6 +1,4 @@
 export default async function ({ addon, global, console }) {
-  const virtualMachine = addon.tab.traps.vm;
-
   let removeInterval = () => {};
   if (addon.tab.editorMode === "editor") {
     removeInterval = addInterval();
@@ -31,7 +29,7 @@ export default async function ({ addon, global, console }) {
 
     <feComposite in="outColor" in2="outBlur" operator="in" result="outGlow">
     </feComposite>
-    
+
     <feComposite in="SourceGraphic" in2="outGlow" operator="over">
     </feComposite>
   </filter>
@@ -41,8 +39,8 @@ export default async function ({ addon, global, console }) {
 
   function addInterval() {
     const interval = setInterval(() => {
-      Array.prototype.forEach.call(document.querySelectorAll("path[style*='filter' i]"), (e) => (e.style.filter = ""));
-      virtualMachine.runtime.threads.forEach((thread) => {
+      document.querySelectorAll("g[style*='filter']").forEach((e) => (e.style.filter = ""));
+      addon.tab.traps.vm.runtime.threads.forEach((thread) => {
         thread.stack.forEach((e) => {
           let blockId = thread.target.blocks.getBlock(e).id;
           let block = Blockly.getMainWorkspace().getBlockById(blockId);
