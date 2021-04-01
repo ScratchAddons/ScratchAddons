@@ -14,6 +14,11 @@ export default async function ({ addon, global, console }) {
   }
 }
 function updateListItems() {
+  for (const value of document.querySelectorAll("[class*='monitor_value-inner']")) {
+    value.style.height = "fit-content";
+    value.style.wordBreak = "break-all";
+    value.style.whiteSpace = "normal";
+  }
   for (const list of document.querySelectorAll(".ReactVirtualized__Grid__innerScrollContainer")) {
     list.style.height = "100%";
     list.style.maxHeight = "fit-content";
@@ -28,9 +33,5 @@ function updateListItems() {
       totalHeight += prevHeight;
       prevHeight = row.clientHeight;
     }
-  }
-  for (const value of document.querySelectorAll("[class*='monitor_value-inner']")) {
-    value.style.wordBreak = "break-all";
-    value.style.whiteSpace = "normal";
   }
 }
