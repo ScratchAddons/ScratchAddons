@@ -366,6 +366,13 @@ export default async function ({ addon, global, console, msg }) {
 
     const processItems = (openFolders, props) => {
       const processItem = (item) => {
+        if (item.sa_cachedItem) {
+          return {
+            newItem: item.sa_cachedItem,
+            itemData: item.sa_cachedItem.name
+          };
+        }
+
         const itemFolderName = getFolderFromName(item.name);
         const itemData = {
           realName: item.name,
@@ -386,6 +393,8 @@ export default async function ({ addon, global, console, msg }) {
             newItem.url = item.url;
           }
         }
+
+        item.sa_cachedItem = newItem;
 
         return {
           newItem,
