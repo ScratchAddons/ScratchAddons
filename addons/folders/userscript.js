@@ -514,26 +514,21 @@ export default async function ({ addon, global, console, msg }) {
                   return createFolderPreview(folderItems);
                 },
               };
-              if (type === TYPE_SPRITES) {
-                folderAsset = {
-                  asset: folderAsset,
-                };
-              }
               folderAssetCache.set(uniqueId, folderAsset);
             }
           }
 
           if (type === TYPE_SPRITES) {
-            folderItem.costume = folderAsset;
+            if (!folderItem.costume) folderItem.costume = {};
+            folderItem.costume.asset = folderAsset;
             // For sprite items, `id` is used as the drag payload and toString is used as a React key
             if (!folderItem.id) folderItem.id = {};
             folderItem.id.sa_folder_items = folderItems;
             folderItem.id.toString = () => `&__${folderName}`;
           } else {
             folderItem.asset = folderAsset;
-            folderItem.dragPayload = {
-              sa_folder_items: folderItems,
-            };
+            if (!folderItem.dragPayload) folderItem.dragPayload =  {};
+            folderItem.dragPayload.sa_folder_items = folderItems;
           }
 
           items.push(folderItem);
