@@ -318,6 +318,8 @@ export default async function ({ addon, global, console, msg }) {
   const patchSortableHOC = (SortableHOC, type) => {
     // SortableHOC should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/lib/sortable-hoc.jsx#L8
 
+    const folderItemCache = new Map();
+
     const PREVIEW_SIZE = 80;
     const PREVIEW_POSITIONS = [
       // x, y
@@ -350,16 +352,16 @@ export default async function ({ addon, global, console, msg }) {
       return "data:image/svg+xml;," + new XMLSerializer().serializeToString(svg);
     };
 
-    const getFolderPreviewAssetId = (items) => {
-      let id = "sa_folder_preview||";
-      for (let i = 0; i < Math.min(PREVIEW_POSITIONS.length, items.length); i++) {
+    const getFolderUniqueId = (items) => {
+      let id = "sa_folder&&";
+      for (let i = 0; i < items.length; i++) {
         const item = items[i];
         if (item.asset) {
           id += item.asset.assetId;
         } else if (item.costume && item.costume.asset) {
           id += item.costume.asset.assetId;
         }
-        id += "||";
+        id += "&&";
       }
       return id;
     };
@@ -369,8 +371,12 @@ export default async function ({ addon, global, console, msg }) {
         if (item.sa_cachedItem) {
           return {
             newItem: item.sa_cachedItem,
-            itemData: item.sa_cachedItem.name
+            itemData: item.sa_cachedItem.name,
           };
+        }
+
+        if (folderItemCache.size > 0) {
+          folderItemCache.clear();
         }
 
         const itemFolderName = getFolderFromName(item.name);
@@ -422,55 +428,14 @@ export default async function ({ addon, global, console, msg }) {
           }
         } else {
           const isOpen = openFolders.indexOf(folderName) !== -1;
-          const folderData = {
-            folder: folderName,
-            folderOpen: isOpen,
-          };
           const folderItems = [];
-          const folderItem = {
-            items: folderItems,
-            name: folderData,
-          };
-          const folderAsset = isOpen
-            ? openFolderAsset
-            : {
-                // We don't know these when the folder item is created
-                get assetId() {
-                  return getFolderPreviewAssetId(folderItem.items);
-                },
-                encodeDataURI() {
-                  return createFolderPreview(folderItem.items);
-                },
-              };
-          if (type === TYPE_SPRITES) {
-            folderItem.costume = {
-              asset: folderAsset,
-            };
-            // For sprite items, `id` is used as the drag payload and toString is used as a React key
-            folderItem.id = {
-              sa_folder_items: folderItems,
-              toString() {
-                return `&__${folderName}`;
-              },
-            };
-          } else {
-            folderItem.asset = folderAsset;
-            folderItem.dragPayload = {
-              sa_folder_items: folderItems,
-            };
-          }
-          items.push(folderItem);
-
           while (i < props.items.length) {
-            const newItem = props.items[i];
-            const processedItem = processItem(newItem);
-            if (getFolderFromName(newItem.name) !== folderName) {
+            const childItem = props.items[i];
+            const processedItem = processItem(childItem);
+            if (getFolderFromName(childItem.name) !== folderName) {
               break;
             }
             folderItems.push(processedItem.newItem);
-            if (isOpen) {
-              items.push(processedItem.newItem);
-            }
             if (type === TYPE_ASSETS) {
               const isSelected = props.selectedItemIndex === i;
               if (isSelected) {
@@ -484,6 +449,53 @@ export default async function ({ addon, global, console, msg }) {
             i++;
           }
           i--;
+
+          const uniqueId = `${isOpen}||${i}}||${getFolderUniqueId(folderItems)}`;
+          let folderItem = folderItemCache.get(uniqueId);
+          if (!folderItem) {
+            const folderData = {
+              folder: folderName,
+              folderOpen: isOpen,
+            };
+            folderItem = {
+              items: folderItems,
+              name: folderData,
+            };
+            const preview = createFolderPreview(folderItems);
+            const folderAsset = isOpen
+              ? openFolderAsset
+              : {
+                  assetId: uniqueId,
+                  encodeDataURI() {
+                    return preview;
+                  },
+                };
+            if (type === TYPE_SPRITES) {
+              folderItem.costume = {
+                asset: folderAsset,
+              };
+              // For sprite items, `id` is used as the drag payload and toString is used as a React key
+              folderItem.id = {
+                sa_folder_items: folderItems,
+                toString() {
+                  return `&__${folderName}`;
+                },
+              };
+            } else {
+              folderItem.asset = folderAsset;
+              folderItem.dragPayload = {
+                sa_folder_items: folderItems,
+              };
+            }
+            folderItemCache.set(uniqueId, folderItem);
+          }
+
+          items.push(folderItem);
+          if (isOpen) {
+            for (const item of folderItems) {
+              items.push(item);
+            }
+          }
         }
 
         i++;
@@ -504,6 +516,7 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     SortableHOC.prototype.saInitialSetup = function () {
+      folderItemCache.clear();
       const folders = [];
       const selectedItem = getSelectedItem(this);
       if (selectedItem && !selectedItem.isStage) {
