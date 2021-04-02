@@ -1,10 +1,14 @@
 {
-  "name": "Last edit tooltip",
-  "description": "Hover over a project's share date for information on when it was last edited.",
+  "name": "Shared/edited dates tooltip",
+  "description": "Hover over a project's share date for information on when exactly it was shared and last edited.",
   "credits": [
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr"
     }
   ],
   "userscripts": [

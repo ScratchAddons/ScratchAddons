@@ -5,7 +5,6 @@ import dataURLToBlob from "../../libraries/data-url-to-blob.js";
 import getWorkerScript from "./worker.js";
 
 const DATA_PNG = "data:image/png;base64,";
-const template = document.getElementById("scratch-addons");
 
 /**
  * APIs specific to userscripts.
@@ -104,12 +103,8 @@ export default class Tab extends Listenable {
       return navigator.clipboard.write(items);
     } else {
       // Firefox needs Content Script
-      template.setAttribute("data-clipboard-image", dataURL);
-      return this.waitForElement("[data-clipboard]").then((el) => {
-        const attr = el.dataset.clipboard;
-        el.removeAttribute("data-clipboard");
-        if (attr === "success") return Promise.resolve();
-        return Promise.reject(new Error(`Error inside clipboard handler: ${attr}`));
+      return scratchAddons.methods.copyImage(dataURL).catch((err) => {
+        return Promise.reject(new Error(`Error inside clipboard handler: ${err}`));
       });
     }
   }

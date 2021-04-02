@@ -1,43 +1,103 @@
 import runAddonUserscripts from "./run-userscript.js";
 import Localization from "./l10n.js";
 
-const template = document.getElementById("scratch-addons");
-const getGlobalState = () => {
-  const returnValue = JSON.parse(template.getAttribute("data-global-state"));
-  template.removeAttribute("data-global-state");
-  return returnValue;
-};
-
-const getL10NURLs = () => {
-  const returnValue = JSON.parse(template.getAttribute("data-l10njson"));
-  template.removeAttribute("data-l10njson");
-  return returnValue;
-};
-
-const addons = JSON.parse(template.getAttribute("data-userscripts"));
-
 window.scratchAddons = {};
-scratchAddons.globalState = getGlobalState();
-scratchAddons.l10n = new Localization(getL10NURLs());
-scratchAddons.eventTargets = {
-  auth: [],
-  settings: [],
-  tab: [],
-  self: [],
-};
 scratchAddons.classNames = { loaded: false };
 
 const pendingPromises = {};
 pendingPromises.msgCount = [];
 
-scratchAddons.methods = {};
-scratchAddons.methods.getMsgCount = () => {
-  template.setAttribute(`data-request-msgcount__${Date.now()}`, "");
-  let promiseResolver;
-  const promise = new Promise((resolve) => (promiseResolver = resolve));
-  pendingPromises.msgCount.push(promiseResolver);
-  return promise;
+const comlinkIframe1 = document.getElementById("scratchaddons-iframe-1");
+const comlinkIframe2 = document.getElementById("scratchaddons-iframe-2");
+const comlinkIframe3 = document.getElementById("scratchaddons-iframe-3");
+const comlinkIframe4 = document.getElementById("scratchaddons-iframe-4");
+const _cs_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe2.contentWindow, comlinkIframe1.contentWindow));
+
+const page = {
+  _globalState: null,
+  get globalState() {
+    return this._globalState;
+  },
+  set globalState(val) {
+    this._globalState = scratchAddons.globalState = val;
+  },
+
+  l10njson: null, // Only set once
+  addonsWithUserscripts: null, // Only set once
+
+  _dataReady: false,
+  get dataReady() {
+    return this._dataReady;
+  },
+  set dataReady(val) {
+    this._dataReady = val;
+    onDataReady(); // Assume set to true
+  },
+
+  fireEvent(info) {
+    if (info.addonId) {
+      // Addon specific events, like settings change and self disabled
+      const eventTarget = scratchAddons.eventTargets[info.target].find(
+        (eventTarget) => eventTarget._addonId === info.addonId
+      );
+      if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(info.name));
+    } else {
+      // Global events, like auth change
+      scratchAddons.eventTargets[info.target].forEach((eventTarget) =>
+        eventTarget.dispatchEvent(new CustomEvent(info.name))
+      );
+    }
+  },
+  setMsgCount({ count }) {
+    pendingPromises.msgCount.forEach((promiseResolver) => promiseResolver(count));
+    pendingPromises.msgCount = [];
+  },
 };
+Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
+
+function onDataReady() {
+  const addons = page.addonsWithUserscripts;
+
+  scratchAddons.l10n = new Localization(page.l10njson);
+  scratchAddons.eventTargets = {
+    auth: [],
+    settings: [],
+    tab: [],
+    self: [],
+  };
+
+  scratchAddons.methods = {};
+  scratchAddons.methods.getMsgCount = () => {
+    if (!pendingPromises.msgCount.length) _cs_.requestMsgCount();
+    let promiseResolver;
+    const promise = new Promise((resolve) => (promiseResolver = resolve));
+    pendingPromises.msgCount.push(promiseResolver);
+    return promise;
+  };
+  scratchAddons.methods.copyImage = async (dataURL) => {
+    return _cs_.copyImage(dataURL);
+  };
+
+  const runUserscripts = () => {
+    for (const addon of addons) {
+      if (addon.scripts.length) runAddonUserscripts(addon);
+    }
+  };
+
+  // Note: we currently load userscripts and locales after head loaded
+  // We could do that before head loaded just fine, as long as we don't
+  // actually *run* the addons before document.head is defined.
+  if (document.head) runUserscripts();
+  else {
+    const observer = new MutationObserver(() => {
+      if (document.head) {
+        runUserscripts();
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.documentElement, { subtree: true, childList: true });
+  }
+}
 
 function bodyIsEditorClassCheck() {
   const pathname = location.pathname.toLowerCase();
@@ -72,47 +132,6 @@ history.pushState = function () {
   bodyIsEditorClassCheck();
   return returnValue;
 };
-
-const observer = new MutationObserver((mutationsList) => {
-  for (const mutation of mutationsList) {
-    const attr = mutation.attributeName;
-    const attrType = attr.substring(0, attr.indexOf("__"));
-    const attrRawVal = template.getAttribute(attr);
-    let attrVal;
-    try {
-      attrVal = JSON.parse(attrRawVal);
-    } catch (err) {
-      attrVal = attrRawVal;
-    }
-    if (attrVal === null) return;
-    const removeAttr = () => template.removeAttribute(attr);
-    if (attr === "data-global-state") scratchAddons.globalState = getGlobalState();
-    else if (attr === "data-msgcount") {
-      pendingPromises.msgCount.forEach((promiseResolver) => promiseResolver(attrVal));
-      pendingPromises.msgCount = [];
-      removeAttr();
-    } else if (attrType === "data-fire-event") {
-      if (attrVal.addonId) {
-        // Addon specific events, like settings change and self disabled
-        const eventTarget = scratchAddons.eventTargets[attrVal.target].find(
-          (eventTarget) => eventTarget._addonId === attrVal.addonId
-        );
-        if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(attrVal.name));
-      } else {
-        // Global events, like auth change
-        scratchAddons.eventTargets[attrVal.target].forEach((eventTarget) =>
-          eventTarget.dispatchEvent(new CustomEvent(attrVal.name))
-        );
-      }
-      removeAttr();
-    }
-  }
-});
-observer.observe(template, { attributes: true });
-
-for (const addon of addons) {
-  if (addon.scripts.length) runAddonUserscripts(addon);
-}
 
 function loadClasses() {
   scratchAddons.classNames.arr = [
@@ -177,5 +196,5 @@ else {
       loadClasses();
     }
   });
-  stylesObserver.observe(document.head, { childList: true });
+  stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
 }

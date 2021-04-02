@@ -1,3 +1,4 @@
 {
-  "last-edit-tooltip/modified": "Modified: {date}"
+  "last-edit-tooltip/modified": "Modified: {date}",
+  "last-edit-tooltip/shared": "Shared: {date}"
 }
