@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["folders", "variable-manager", "scratchstats"];
+const NEW_ADDONS = ["drag-drop", "custom-block-shape"];
 
 Vue.directive("click-outside", {
   priority: 700,
@@ -188,7 +188,7 @@ const vue = (window.vue = new Vue({
   el: "body",
   data: {
     smallMode: false,
-    theme: "",
+    theme: false,
     themePath: "",
     switchPath: "../../images/icons/switch.svg",
     isOpen: false,

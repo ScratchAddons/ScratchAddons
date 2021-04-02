@@ -8,7 +8,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   }
 
   // 0-indexed 6 = July
-  const releaseDate = new Date(2021, 1, 22);
+  const releaseDate = new Date(2021, 2, 28);
   const releaseDateLocalized = new Intl.DateTimeFormat(msg.locale).format(releaseDate);
 
   const helpHTML = `
@@ -28,7 +28,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 </div>
 <div id="s3devHelpContent">
 <p>${m("version", {
-    version: "1.10.0",
+    version: "1.12.0",
     date: releaseDateLocalized,
     ndash: "&ndash;",
     url: '<a target="_blank" rel="noreferrer noopener" href="https://www.youtube.com/griffpatch">Griffpatch</a>',

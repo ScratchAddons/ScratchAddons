@@ -195,19 +195,19 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-    "message": "$1: $2 addon, which adds folders to sprite lists, as well as costume and sound lists. Go to $3 to enable it."
+    "message": "$1: $2 addon, which lets you drag images and sounds from your file explorer into the sprites pane or costume/sound list. Go to $3 to enable it."
   },
   "newFeature": {
     "message": "New feature"
   },
   "hexColorPicker": {
-    "message": "\"sprite folders\""
+    "message": "\"Drag and drop files\""
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2": {
-    "message": "Other featured new addons of this update are \"variable manager\" (adds a tab next to the editor for easily updating variables and lists) and \"profile statistics\"."
+    "message": "Another featured new addon of this update is \"custom block shape\", which lets you adjust the padding, corner radius, and notch height of Scratch blocks."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
