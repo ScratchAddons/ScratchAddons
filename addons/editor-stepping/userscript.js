@@ -31,7 +31,7 @@ export default async function ({ addon, global, console }) {
   await addon.tab.traps.getBlockly();
   const oldStep = vm.runtime._step;
   vm.runtime._step = function () {
-    document.querySelectorAll("g[style*='filter']").forEach((e) => (e.style.filter = ""));
+    document.querySelectorAll("g[style*='filter'], path[style*='filter']").forEach((e) => (e.style.filter = ""));
     vm.runtime.threads.forEach((thread) => {
       if (thread.target.blocks.forceNoGlow) return;
       thread.stack.forEach((e) => {
