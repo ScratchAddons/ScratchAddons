@@ -13,6 +13,9 @@ a.black:visited,
 input.link.black {
   color: #fff;
 }
+span.small-text {
+  color: rgba(255, 255, 255, 0.4);
+}
 html > body:not(.sa-body-editor) input,
 html > body:not(.sa-body-editor) textarea,
 html > body:not(.sa-body-editor) select,
@@ -23,7 +26,7 @@ html > body:not(.sa-body-editor) select,
 }
 input,
 textarea {
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid #606060;
 }
 .button,
 html > body:not(.sa-body-editor) button,

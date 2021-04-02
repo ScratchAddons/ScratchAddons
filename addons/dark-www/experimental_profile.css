@@ -9,6 +9,18 @@
 .header-text .profile-details .group {
   border-color: #fff;
 }
+.editable-empty {
+  background-color: transparent;
+  border-color: #606060;
+}
+.editable-empty [data-content="prompt"],
+.activity-stream .time,
+.slider-carousel .thumb span.owner {
+  color: rgba(255, 255, 255, 0.4);
+}
+.editable textarea {
+  border-radius: 0;
+}
 #profile-box .player,
 #profile-box .doing,
 #profile-data .footer,
