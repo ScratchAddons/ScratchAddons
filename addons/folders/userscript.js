@@ -440,6 +440,7 @@ export default async function ({ addon, global, console, msg }) {
       folderItemCache.start();
       folderAssetCache.start();
 
+      const folderOccurences = new Map();
       const items = [];
       const result = {
         items,
@@ -482,7 +483,9 @@ export default async function ({ addon, global, console, msg }) {
           }
           i--;
 
-          const uniqueId = `${i}||${getUniqueIdOfFolderItems(folderItems)}`;
+          const occurence = folderOccurences.get(folderName) || 0;
+          folderOccurences.set(folderName, occurence + 1);
+          const uniqueId = `${occurence}//${folderName}||${getUniqueIdOfFolderItems(folderItems)}`;
           const itemUniqueId = `${isOpen}${uniqueId}`;
           const assetUniqueId = uniqueId;
 
