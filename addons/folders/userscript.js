@@ -416,7 +416,6 @@ export default async function ({ addon, global, console, msg }) {
           newItem = itemCache.get(itemId);
           itemData = newItem.name;
         } else {
-          console.log("Item cache miss", itemId);
           itemData = {
             toString() {
               return `_${item.name}`;
@@ -499,7 +498,6 @@ export default async function ({ addon, global, console, msg }) {
             folderItem = folderItemCache.get(itemUniqueId);
             folderData = folderItem.name;
           } else {
-            console.log("Folder cache miss", itemUniqueId);
             folderItem = {
               // Can be used as a react key
               toString() {
@@ -522,7 +520,6 @@ export default async function ({ addon, global, console, msg }) {
             if (folderAssetCache.has(assetUniqueId)) {
               folderAsset = folderAssetCache.get(assetUniqueId);
             } else {
-              console.log("Folder asset cache miss", assetUniqueId);
               folderAsset = {
                 assetId: assetUniqueId,
                 encodeDataURI() {
