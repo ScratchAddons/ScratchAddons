@@ -483,16 +483,19 @@ export default async function ({ addon, global, console, msg }) {
           i--;
 
           const uniqueId = `${i}||${getUniqueIdOfFolderItems(folderItems)}`;
+          const itemUniqueId = `${isOpen}${uniqueId}`;
+          const assetUniqueId = uniqueId;
+
           let folderItem;
           let folderData;
-          if (folderItemCache.has(uniqueId)) {
-            folderItem = folderItemCache.get(uniqueId);
+          if (folderItemCache.has(itemUniqueId)) {
+            folderItem = folderItemCache.get(itemUniqueId);
             folderData = folderItem.name;
           } else {
-            console.log("Folder cache miss", uniqueId);
+            console.log("Folder cache miss", itemUniqueId);
             folderItem = {};
             folderData = {};
-            folderItemCache.set(uniqueId, folderItem);
+            folderItemCache.set(itemUniqueId, folderItem);
           }
 
           folderData.folder = folderName;
@@ -504,17 +507,17 @@ export default async function ({ addon, global, console, msg }) {
           if (isOpen) {
             folderAsset = openFolderAsset;
           } else {
-            if (folderAssetCache.has(uniqueId)) {
-              folderAsset = folderAssetCache.get(uniqueId);
+            if (folderAssetCache.has(assetUniqueId)) {
+              folderAsset = folderAssetCache.get(assetUniqueId);
             } else {
-              console.log("Folder asset cache miss", uniqueId);
+              console.log("Folder asset cache miss", assetUniqueId);
               folderAsset = {
-                assetId: uniqueId,
+                assetId: assetUniqueId,
                 encodeDataURI() {
                   return createFolderPreview(folderItems);
                 },
               };
-              folderAssetCache.set(uniqueId, folderAsset);
+              folderAssetCache.set(assetUniqueId, folderAsset);
             }
           }
 
