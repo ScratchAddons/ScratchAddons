@@ -5,7 +5,7 @@ lightThemeLink.setAttribute("href", "light.css");
 const vue = new Vue({
   el: "body",
   data: {
-    screenshotPath: "../../images/screenshots/permissions-dark.png",
+    screenshotPath: "/images/screenshots/permissions-dark.png",
   },
   methods: {
     msg(message, ...param) {
@@ -19,7 +19,7 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   if (r.globalTheme) rr = r.globalTheme;
   if (rr) {
     document.head.appendChild(lightThemeLink);
-    vue.theme = "../../images/screenshots/permissions-light.png";
+    vue.theme = "/images/screenshots/permissions-light.png";
   }
 });
 

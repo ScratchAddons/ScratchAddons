@@ -1,5 +1,5 @@
-import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
-import RateLimiter from "../../libraries/rate-limiter.js";
+import { normalizeHex, getHexRegex } from "/libraries/normalize-color.js";
+import RateLimiter from "/libraries/rate-limiter.js";
 
 export default async ({ addon, console, msg }) => {
   let prevEventHandler;

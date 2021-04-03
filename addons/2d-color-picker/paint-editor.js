@@ -1,8 +1,8 @@
 // this script was happily stolen from the color-picker addon, developed by Richie Bendall and apple502j
 
 // import required libraries
-import { normalizeHex } from "../../libraries/normalize-color.js";
-import RateLimiter from "../../libraries/rate-limiter.js";
+import { normalizeHex } from "/libraries/normalize-color.js";
+import RateLimiter from "/libraries/rate-limiter.js";
 
 export default async ({ addon, console, msg }) => {
   let prevEventHandler;

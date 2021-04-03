@@ -1,4 +1,4 @@
-import downloadBlob from "../../libraries/download-blob.js";
+import downloadBlob from "/libraries/download-blob.js";
 const NEW_ADDONS = ["drag-drop", "custom-block-shape"];
 
 Vue.directive("click-outside", {
@@ -101,10 +101,10 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   if (rr) {
     document.head.appendChild(lightThemeLink);
     vue.theme = true;
-    vue.themePath = "../../images/icons/moon.svg";
+    vue.themePath = "/images/icons/moon.svg";
   } else {
     vue.theme = false;
-    vue.themePath = "../../images/icons/theme.svg";
+    vue.themePath = "/images/icons/theme.svg";
   }
 });
 
@@ -190,7 +190,7 @@ const vue = (window.vue = new Vue({
     smallMode: false,
     theme: false,
     themePath: "",
-    switchPath: "../../images/icons/switch.svg",
+    switchPath: "/images/icons/switch.svg",
     isOpen: false,
     canCloseOutside: false,
     categoryOpen: true,
@@ -304,9 +304,9 @@ const vue = (window.vue = new Vue({
     sidebarToggle: function () {
       this.categoryOpen = !this.categoryOpen;
       if (this.categoryOpen) {
-        vue.switchPath = "../../images/icons/close.svg";
+        vue.switchPath = "/images/icons/close.svg";
       } else {
-        vue.switchPath = "../../images/icons/switch.svg";
+        vue.switchPath = "/images/icons/switch.svg";
       }
     },
     msg(message, ...params) {
@@ -338,11 +338,11 @@ const vue = (window.vue = new Vue({
           if (rr && r.globalTheme !== rr) {
             document.head.appendChild(lightThemeLink);
             vue.theme = true;
-            vue.themePath = "../../images/icons/moon.svg";
+            vue.themePath = "/images/icons/moon.svg";
           } else if (r.globalTheme !== rr) {
             document.head.removeChild(lightThemeLink);
             vue.theme = false;
-            vue.themePath = "../../images/icons/theme.svg";
+            vue.themePath = "/images/icons/theme.svg";
           }
         });
       });
@@ -477,10 +477,10 @@ const vue = (window.vue = new Vue({
           return icon.slice(1);
         }
         if (icon[0] === "@") {
-          return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
+          return `<img class="inline-icon" src="/images/icons/${icon.split("@")[1]}"/>`;
         }
         if (icon[0] === "#") {
-          return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
+          return `<img class="inline-icon" src="/addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
         }
       });
     },
@@ -746,11 +746,11 @@ function resize() {
   if (window.innerWidth < 1000) {
     vue.smallMode = true;
     vue.categoryOpen = false;
-    vue.switchPath = "../../images/icons/switch.svg";
+    vue.switchPath = "/images/icons/switch.svg";
   } else if (vue.smallMode !== false) {
     vue.smallMode = false;
     vue.categoryOpen = true;
-    vue.switchPath = "../../images/icons/close.svg";
+    vue.switchPath = "/images/icons/close.svg";
   }
 }
 window.onresize = resize;

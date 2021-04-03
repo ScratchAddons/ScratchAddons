@@ -308,7 +308,7 @@ body.iframe .search-box input {
 }
 
 #popup-more-settings > button {
-  background: url(../../images/icons/settings.svg);
+  background: url(/images/icons/settings.svg);
   background-position: 8px 8px;
   background-repeat: no-repeat;
   width: max-content;

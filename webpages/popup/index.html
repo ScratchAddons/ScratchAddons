@@ -8,15 +8,15 @@
       @import url("../styles/colors.css");
     </style>
     <link rel="stylesheet" href="style.css" />
-    <link href="../../libraries/Sora.css" rel="stylesheet" />
-    <script src="../../libraries/vue.js" defer></script>
+    <link href="/libraries/Sora.css" rel="stylesheet" />
+    <script src="/libraries/vue.js" defer></script>
     <script src="./index.js" defer></script>
     <link rel="preload" href="light.css" as="style" />
   </head>
   <body>
     <div id="header">
       <div id="title">
-        <img src="../../images/icon.svg" id="logo" alt="Logo" />
+        <img src="/images/icon.svg" id="logo" alt="Logo" />
         <!-- Hide template HTML until Vue loads -->
         <span id="title-text" style="display: none" v-show="true">{{ msg("extensionName") }}</span>
         <span
@@ -32,7 +32,7 @@
         >
       </div>
       <div id="settings" @click="openSettingsPage()">
-        <img src="../../images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}" />
+        <img src="/images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}" />
       </div>
     </div>
     <div id="popups">
@@ -49,11 +49,11 @@
             <a
               v-if="popup.fullscreen"
               class="popout"
-              href="../../popups/{{ popup._addonId }}/popup.html"
+              href="/popups/{{ popup._addonId }}/popup.html"
               target="_blank"
               @click="closePopup()"
             >
-              <img src="../../images/icons/popout.svg" class="popout-img" title="{{ msg('openInNewTab') }}" />
+              <img src="/images/icons/popout.svg" class="popout-img" title="{{ msg('openInNewTab') }}" />
             </a>
           </div>
         </div>

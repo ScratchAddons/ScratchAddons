@@ -48,7 +48,7 @@ const vue = new Vue({
       }
     },
     iframeSrc(addonId) {
-      return vue.popups.find((addon) => addon._addonId === addonId).url || `../../popups/${addonId}/popup.html`;
+      return vue.popups.find((addon) => addon._addonId === addonId).url || `/popups/${addonId}/popup.html`;
     },
   },
 });
@@ -66,8 +66,8 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     .map(({ addonId, manifest }) => (manifest.popup._addonId = addonId) && manifest.popup);
   popupObjects.push({
     name: chrome.i18n.getMessage("quickSettings"),
-    icon: "../../images/icons/wrench.svg",
-    url: "../../webpages/settings/index.html",
+    icon: "/images/icons/wrench.svg",
+    url: "/webpages/settings/index.html",
     _addonId: "__settings__",
   });
   vue.popups = popupObjects;

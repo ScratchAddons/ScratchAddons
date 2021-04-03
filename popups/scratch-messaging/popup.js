@@ -1,5 +1,5 @@
-import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
-import { escapeHTML } from "../../libraries/autoescaper.js";
+import WebsiteLocalizationProvider from "/libraries/website-l10n.js";
+import { escapeHTML } from "/libraries/autoescaper.js";
 
 (async () => {
   if (window.parent === window) {
@@ -583,8 +583,8 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
           else return 0;
         });
         arr.forEach((obj, i) => {
-          if (obj.loved) str += `<img class="small-icon colored" src="../../images/icons/heart.svg">`;
-          if (obj.faved) str += `<img class="small-icon colored" src="../../images/icons/star.svg">`;
+          if (obj.loved) str += `<img class="small-icon colored" src="/images/icons/heart.svg">`;
+          if (obj.faved) str += `<img class="small-icon colored" src="/images/icons/star.svg">`;
           str += " ";
           str += `<a href="https://scratch.mit.edu/users/${obj.username}/">${obj.username}</a>`;
           if (i !== arr.length - 1) str += "<br>";

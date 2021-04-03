@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
-    <link rel="icon" href="../../images/icon.png" />
+    <link rel="icon" href="/images/icon.png" />
     <script src="../set-lang.js" defer></script>
     <style>
       /*
@@ -28,9 +28,9 @@
 
     <link rel="stylesheet" href="style.css" />
 
-    <link href="../../libraries/Sora.css" rel="stylesheet" />
-    <script src="../../libraries/vue.js" defer></script>
-    <script src="../../libraries/color-picker.js" type="module" defer></script>
+    <link href="/libraries/Sora.css" rel="stylesheet" />
+    <script src="/libraries/vue.js" defer></script>
+    <script src="/libraries/color-picker.js" type="module" defer></script>
     <template id="picker-component">
       <div class="color-container" :key="value">
         <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting,true)">
@@ -52,7 +52,7 @@
   <body style="display: none" v-show="loaded" :class="{light: theme}">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
-      <img src="../../images/icon.svg" class="logo" alt="Logo" />
+      <img src="/images/icon.svg" class="logo" alt="Logo" />
       <h1>{{ msg("settings") }}</h1>
       <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themePath" />
     </div>
@@ -64,19 +64,19 @@
         :class="{smallMode: smallMode === true}"
       >
         <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
-          <img src="../../images/icons/list.svg" />
+          <img src="/images/icons/list.svg" />
           <span>{{ msg("all") }}</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'editor'}" @click="selectedTab = 'editor'">
-          <img src="../../images/icons/puzzle.svg" />
+          <img src="/images/icons/puzzle.svg" />
           <span>{{ msg("editorFeatures") }}</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'community'}" @click="selectedTab = 'community'">
-          <img src="../../images/icons/web.svg" />
+          <img src="/images/icons/web.svg" />
           <span>{{ msg("websiteFeatures") }}</span>
         </div>
         <div class="category" :class="{sel: selectedTab === 'theme'}" @click="selectedTab = 'theme'">
-          <img src="../../images/icons/brush.svg" />
+          <img src="/images/icons/brush.svg" />
           <span>{{ msg("themes") }}</span>
         </div>
         <div
@@ -85,7 +85,7 @@
           @click="selectedTab = 'popup'"
           style="margin-bottom: 12px"
         >
-          <img src="../../images/icons/popup.svg" />
+          <img src="/images/icons/popup.svg" />
           <span>{{ msg("popupFeatures") }}</span>
         </div>
         <div
@@ -93,23 +93,23 @@
           style="margin-top: auto"
           @click="openPage('https://scratchaddons.com/contributors')"
         >
-          <img src="../../images/icons/users.svg" />
+          <img src="/images/icons/users.svg" />
           <span>{{ msg("credits") }}</span>
         </div>
         <div class="category category-small" @click="openReview()" style="display: none">
-          <img src="../../images/icons/star.svg" />
+          <img src="/images/icons/star.svg" />
           <span>{{ msg("review") }}</span>
         </div>
         <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
-          <img src="../../images/icons/translate.svg" />
+          <img src="/images/icons/translate.svg" />
           <span>{{ msg("translate") }}</span>
         </div>
         <div class="category category-small" @click="openFeedback()">
-          <img src="../../images/icons/comment.svg" />
+          <img src="/images/icons/comment.svg" />
           <span>{{ msg("feedback") }}</span>
         </div>
         <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
-          <img src="../../images/icons/wrench.svg" />
+          <img src="/images/icons/wrench.svg" />
           <span>{{ msg("moreSettings") }}</span>
         </div>
       </div>
@@ -119,7 +119,7 @@
         style="display: block !important"
         @click="sidebarToggle()"
       >
-        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === false}" />
+        <img src="/images/icons/left-arrow.svg" :class="{flipped: categoryOpen === false}" />
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
@@ -179,18 +179,18 @@
             <div class="addon-topbar">
               <div class="clickeable-area" @click="addon._expanded = !addon._expanded">
                 <div class="btn-dropdown">
-                  <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': addon._expanded}" />
+                  <img src="/images/icons/expand.svg" alt="v" :class="{'reverted': addon._expanded}" />
                 </div>
                 <div class="addon-name">
-                  <img v-if="addon._category === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
-                  <img v-if="addon._category === 'community'" src="../../images/icons/web.svg" class="icon-type" />
-                  <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
+                  <img v-if="addon._category === 'editor'" src="/images/icons/puzzle.svg" class="icon-type" />
+                  <img v-if="addon._category === 'community'" src="/images/icons/web.svg" class="icon-type" />
+                  <img v-if="addon._category === 'theme'" src="/images/icons/brush.svg" class="icon-type" />
                   <img
                     v-if="addon._category === 'easterEgg'"
-                    src="../../images/icons/egg-easter.svg"
+                    src="/images/icons/egg-easter.svg"
                     class="icon-type"
                   />
-                  <img v-if="addon._category === 'popup'" src="../../images/icons/popup.svg" class="icon-type" />
+                  <img v-if="addon._category === 'popup'" src="/images/icons/popup.svg" class="icon-type" />
                   <span @click="devShowAddonIds">{{ addon.name }}</span>
                 </div>
               </div>
@@ -217,7 +217,7 @@
                   title="{{ msg('resetToDefault') }}"
                   @click="loadDefaults(addon)"
                 >
-                  <img src="../../images/icons/undo.svg" class="icon-type" />
+                  <img src="/images/icons/undo.svg" class="icon-type" />
                 </div>
                 <div
                   class="switch"
@@ -230,10 +230,10 @@
               <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
               <div id="info" v-for="info of addon.info">
                 <div class="addon-warn" v-if="info.type == 'warning'" v-show="addon._expanded">
-                  <img src="../../images/icons/warning.svg" />{{ info.text }}
+                  <img src="/images/icons/warning.svg" />{{ info.text }}
                 </div>
                 <div class="addon-notice" v-if="info.type == 'notice'" v-show="addon._expanded">
-                  <img src="../../images/icons/notice.svg" />{{ info.text }}
+                  <img src="/images/icons/notice.svg" />{{ info.text }}
                 </div>
               </div>
               <div class="addon-credits" v-if="addon.credits">
@@ -359,14 +359,14 @@
     <div v-show="isOpen" class="modal" @click="closesidebar()">
       <div class="modal-content" v-click-outside="modalClickOutside">
         <div>
-          <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" />
+          <img @click="modalToggle()" class="close" alt="Logo" src="/images/icons/close.svg" />
           <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
         </div>
         <div class="settings-block">
           <div class="setting-body">
             <div class="addon-topbar">
               <span class="addon-name"
-                ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
+                ><img src="/images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
               </span>
             </div>
             <div class="setting-settings">
@@ -389,7 +389,7 @@
           <div class="setting-body">
             <div class="addon-topbar">
               <span class="addon-name"
-                ><img src="../../images/icons/import-export.svg" class="icon-type" :class="{'dark': theme === false}" />
+                ><img src="/images/icons/import-export.svg" class="icon-type" :class="{'dark': theme === false}" />
                 {{ msg("exportAndImportSettings") }}
               </span>
             </div>

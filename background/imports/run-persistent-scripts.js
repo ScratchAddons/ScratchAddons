@@ -1,4 +1,4 @@
-import Addon from "../../addon-api/background/Addon.js";
+import Addon from "/addon-api/background/Addon.js";
 
 export default async function runPersistentScripts(addonId) {
   const manifest = scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest;

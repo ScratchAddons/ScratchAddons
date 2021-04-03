@@ -1,4 +1,4 @@
-import downloadBlob from "../../libraries/download-blob.js";
+import downloadBlob from "/libraries/download-blob.js";
 
 export default async ({ addon, console, msg }) => {
   let recordElem;

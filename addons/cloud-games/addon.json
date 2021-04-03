@@ -10,7 +10,7 @@
     }
   ],
   "popup": {
-    "icon": "../../images/icons/cloud.svg",
+    "icon": "/images/icons/cloud.svg",
     "name": "Games"
   },
   "tags": ["community", "recommended"],

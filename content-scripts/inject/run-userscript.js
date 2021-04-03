@@ -1,4 +1,4 @@
-import Addon from "../../addon-api/content-script/Addon.js";
+import Addon from "/addon-api/content-script/Addon.js";
 
 export default async function runAddonUserscripts({ addonId, scripts, traps }) {
   const addonObj = new Addon({ id: addonId, traps });
