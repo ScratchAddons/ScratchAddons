@@ -489,9 +489,9 @@ export default async function ({ addon, global, console, msg }) {
 
           const occurence = folderOccurences.get(folderName) || 0;
           folderOccurences.set(folderName, occurence + 1);
-          const uniqueId = `${occurence}//${folderName}||${getUniqueIdOfFolderItems(folderItems)}`;
-          const itemUniqueId = `${isOpen}${uniqueId}`;
-          const assetUniqueId = uniqueId;
+          const baseUniqueId = getUniqueIdOfFolderItems(folderItems);
+          const itemUniqueId = `${isOpen}&${occurence}&${folderName}&${baseUniqueId}&`;
+          const assetUniqueId = baseUniqueId;
 
           let folderItem;
           let folderData;
