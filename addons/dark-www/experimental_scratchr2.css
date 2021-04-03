@@ -19,6 +19,8 @@ span.small-text {
 html > body:not(.sa-body-editor) input,
 html > body:not(.sa-body-editor) textarea,
 html > body:not(.sa-body-editor) select,
+.editable-empty,
+.editable.read,
 .editable.write,
 .editable:hover {
   background-color: #282828;
@@ -27,6 +29,9 @@ html > body:not(.sa-body-editor) select,
 input,
 textarea {
   border: 2px solid #606060;
+}
+.editable-empty [data-content="prompt"] {
+  color: rgba(255, 255, 255, 0.4);
 }
 .button,
 html > body:not(.sa-body-editor) button,
