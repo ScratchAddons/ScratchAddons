@@ -417,7 +417,11 @@ export default async function ({ addon, global, console, msg }) {
           itemData = newItem.name;
         } else {
           console.log("Item cache miss", itemId);
-          itemData = {};
+          itemData = {
+            toString() {
+              return `_${item.name}`;
+            },
+          };
           newItem = {};
           itemCache.set(itemId, newItem);
         }
@@ -496,7 +500,12 @@ export default async function ({ addon, global, console, msg }) {
             folderData = folderItem.name;
           } else {
             console.log("Folder cache miss", itemUniqueId);
-            folderItem = {};
+            folderItem = {
+              // Can be used as a react key
+              toString() {
+                return itemUniqueId;
+              },
+            };
             folderData = {};
             folderItemCache.set(itemUniqueId, folderItem);
           }
@@ -865,10 +874,13 @@ export default async function ({ addon, global, console, msg }) {
         if (typeof this.props.id === "number") {
           const itemData = getItemData(this.props);
           if (itemData) {
-            const originalId = this.props.id;
-            this.props.id = itemData.realIndex;
+            const originalProps = this.props;
+            this.props = {
+              ...originalProps,
+              id: itemData.realIndex,
+            };
             const ret = original.call(this, ...args);
-            this.props.id = originalId;
+            this.props = originalProps;
             return ret;
           }
         }
