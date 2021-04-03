@@ -23,9 +23,7 @@
           <a class="project-name" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
             >{{ project.title }}</a
           >
-          <span class="float-right"
-            ><img class="small-icon" src="/images/icons/users.svg" /> {{ project.amt }}</span
-          >
+          <span class="float-right"><img class="small-icon" src="/images/icons/users.svg" /> {{ project.amt }}</span>
         </div>
         <div class="project-details" v-show="true || project.amt > 0 && project.extended">
           <div class="username-list">

@@ -110,11 +110,7 @@
           @click="messageTypeExtended.studioPromotions = !messageTypeExtended.studioPromotions"
         >
           <div class="btn-dropdown">
-            <img
-              src="/images/icons/expand.svg"
-              alt="v"
-              :class="{'reverted': messageTypeExtended.studioPromotions}"
-            />
+            <img src="/images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.studioPromotions}" />
           </div>
           <span class="message-type-title-text">{{ uiMessages.studioPromotionsMsg }}</span>
           <span class="float-right"
@@ -133,11 +129,7 @@
           @click="messageTypeExtended.forumActivity = !messageTypeExtended.forumActivity"
         >
           <div class="btn-dropdown">
-            <img
-              src="/../images/icons/expand.svg"
-              alt="v"
-              :class="{'reverted': messageTypeExtended.forumActivity}"
-            />
+            <img src="/../images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.forumActivity}" />
           </div>
           <span class="message-type-title-text">{{ uiMessages.forumMsg }}</span>
           <span class="float-right"
@@ -156,11 +148,7 @@
           @click="messageTypeExtended.studioActivity = !messageTypeExtended.studioActivity"
         >
           <div class="btn-dropdown">
-            <img
-              src="/images/icons/expand.svg"
-              alt="v"
-              :class="{'reverted': messageTypeExtended.studioActivity}"
-            />
+            <img src="/images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.studioActivity}" />
           </div>
           <span class="message-type-title-text">{{ uiMessages.studioActivityMsg }}</span>
           <span class="float-right"
@@ -182,9 +170,7 @@
             <img src="/images/icons/expand.svg" alt="v" :class="{'reverted': messageTypeExtended.remixes}" />
           </div>
           <span class="message-type-title-text">{{ uiMessages.remixesMsg }}</span>
-          <span class="float-right"
-            ><img class="small-icon" src="/images/icons/remix.svg" /> {{ remixes.length }}</span
-          >
+          <span class="float-right"><img class="small-icon" src="/images/icons/remix.svg" /> {{ remixes.length }}</span>
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.remixes">
           <div v-for="remix of remixes" class="thread-list">{{{ remixHTML(remix) }}}</div>
