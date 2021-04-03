@@ -1033,7 +1033,7 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     const abstractReorder = (
-      { guiItems, getAll, set, rename, getVMItemFromGUIItem, zeroIndexed, end },
+      { guiItems, getAll, set, rename, getVMItemFromGUIItem, zeroIndexed, onFolderChanged },
       itemIndex,
       newIndex
     ) => {
@@ -1144,9 +1144,10 @@ export default async function ({ addon, global, console, msg }) {
           const name = asset.getName ? asset.getName() : asset.name;
           rename(asset, setFolderOfName(name, newFolder));
         }
+        if (onFolderChanged) {
+          onFolderChanged();
+        }
       }
-
-      end();
 
       return true;
     };
@@ -1167,8 +1168,7 @@ export default async function ({ addon, global, console, msg }) {
           getVMItemFromGUIItem: (item, targets) => {
             return targets.find((i) => i.id === item.id);
           },
-          end: () => {
-            // Emit a workspace update to update blocks if a sprite was renamed
+          onFolderChanged: () => {
             this.emitWorkspaceUpdate();
           },
           guiItems: currentSpriteItems,
@@ -1195,7 +1195,6 @@ export default async function ({ addon, global, console, msg }) {
             const itemData = getItemData(item);
             return costumes.find((c) => c.name === itemData.realName);
           },
-          end() {},
           guiItems: currentAssetItems,
           zeroIndexed: true,
         },
@@ -1220,7 +1219,6 @@ export default async function ({ addon, global, console, msg }) {
             const itemData = getItemData(item);
             return sounds.find((c) => c.name === itemData.realName);
           },
-          end() {},
           guiItems: currentAssetItems,
           zeroIndexed: true,
         },
