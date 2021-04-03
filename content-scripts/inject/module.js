@@ -77,7 +77,7 @@ class SharedObserver {
       }
     });
   }
-  
+
   /**
    * Watches an element.
    * @param {object} opts - options
@@ -94,10 +94,12 @@ class SharedObserver {
         attributes: true,
       });
     }
-    return new Promise((resolve) => this.pending.add({
-      resolve,
-      ...opts,
-    }));
+    return new Promise((resolve) =>
+      this.pending.add({
+        resolve,
+        ...opts,
+      })
+    );
   }
 }
 
@@ -123,7 +125,7 @@ function onDataReady() {
   scratchAddons.methods.copyImage = async (dataURL) => {
     return _cs_.copyImage(dataURL);
   };
-  
+
   scratchAddons.sharedObserver = new SharedObserver();
 
   const runUserscripts = () => {
