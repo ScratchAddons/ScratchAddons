@@ -533,7 +533,7 @@ export default async function ({ addon, global, console, msg }) {
             folderItem.id.toString = () => `&__${occurence}_${folderName}`;
           } else {
             folderItem.asset = folderAsset;
-            if (!folderItem.dragPayload) folderItem.dragPayload =  {};
+            if (!folderItem.dragPayload) folderItem.dragPayload = {};
             folderItem.dragPayload.sa_folder_items = folderItems;
           }
 
