@@ -51,8 +51,8 @@ const ColorInput = Vue.extend({
     toggle(addon, setting, value = !this.isOpen) {
       this.isOpen = value;
       this.opening = true;
-      this.$root.closePickers({isTrusted: true}, this);
-      this.$root.closeResetDropdowns({isTrusted: true}); // close other dropdowns
+      this.$root.closePickers({ isTrusted: true }, this);
+      this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
       this.opening = false;
 
       this.color = "#" + this.$els.pickr.hex8;
@@ -90,8 +90,8 @@ const ResetDropdown = Vue.extend({
   methods: {
     toggle() {
       this.isOpen = !this.isOpen;
-      this.$root.closePickers({isTrusted: true});
-      this.$root.closeResetDropdowns({isTrusted: true}, this); // close other dropdowns
+      this.$root.closePickers({ isTrusted: true });
+      this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
     },
     resetToDefault() {
       this.$parent.addonSettings[this.addon._addonId][this.setting.id] = this.setting.default;
@@ -100,7 +100,7 @@ const ResetDropdown = Vue.extend({
     resetToPreset(preset) {
       this.$parent.addonSettings[this.addon._addonId][this.setting.id] = preset.values[this.setting.id];
       this.toggle();
-    }
+    },
   },
 });
 Vue.component("reset-dropdown", ResetDropdown);
@@ -479,8 +479,9 @@ const vue = (window.vue = new Vue({
       }, wait);
     },
     showResetDropdown(addon, setting) {
-      return addon.presets && addon.presets.some(
-        (preset) => setting.id in preset.values && preset.values[setting.id] !== setting.default
+      return (
+        addon.presets &&
+        addon.presets.some((preset) => setting.id in preset.values && preset.values[setting.id] !== setting.default)
       );
     },
     loadPreset(preset, addon) {
