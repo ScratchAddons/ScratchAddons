@@ -63,7 +63,7 @@
 }
 .setting-dropdown ul {
   position: absolute;
-  top: 100%;
+  top: calc(100% - 1px);
   right: 0;
   margin: 0;
   padding: 6px 0;
