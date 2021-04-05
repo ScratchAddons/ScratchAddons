@@ -4,18 +4,12 @@
   "userscripts": [
     {
       "url": "asap.js",
-      "matches": [
-        "https://scratch.mit.edu/discuss/topic/*",
-        "https://scratch.mit.edu/discuss/*/topic/add/"
-      ],
+      "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/*/topic/add/"],
       "runAtComplete": false
     },
     {
       "url": "userscript.js",
-      "matches": [
-        "https://scratch.mit.edu/discuss/topic/*",
-        "https://scratch.mit.edu/discuss/*/topic/add/"
-      ]
+      "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/*/topic/add/"]
     }
   ],
   "tags": ["community", "forums"],

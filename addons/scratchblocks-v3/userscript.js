@@ -1,16 +1,16 @@
 export default async ({ addon, global }) => {
   await global.onrender;
   window.scratchblocks = {};
-  
+
   // Language code detection
   const forumElem = document.querySelector(".linkst ul li:nth-child(2) a");
   if (!forumElem) return;
   const forumId = /\d+/.exec(forumElem.href)[0];
   if (!forumId) return;
-  
+
   await addon.tab.loadScript(addon.self.lib + "/scratchblocks-v3.5-min.js");
   await addon.tab.loadScript(addon.self.lib + "/translations-all-v3.5.js");
-  
+
   const forumIdToLang = {
     13: "de",
     14: "es",
@@ -43,4 +43,4 @@ export default async ({ addon, global }) => {
     style: "scratch3",
     languages: lang,
   });
-}
+};
