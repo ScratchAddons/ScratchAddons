@@ -42,5 +42,4 @@ export default async function ({ addon }) {
     },
     ["blocking"]
   );
-
-  }  
+}

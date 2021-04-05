@@ -8,13 +8,13 @@
 
 // TODO (function($){
 
-  function capitalise(text) {
-    return text[0].toUpperCase() + text.slice(1);
+function capitalise(text) {
+  return text[0].toUpperCase() + text.slice(1);
 }
 
 var scratchblocksMenu;
-mySettings.markupSet.forEach(function(item) {
-    if (item.name === 'Scratchblocks') scratchblocksMenu = item;
+mySettings.markupSet.forEach(function (item) {
+  if (item.name === "Scratchblocks") scratchblocksMenu = item;
 });
 
 var code = scratchblocks._currentLanguages.slice().pop();
@@ -25,7 +25,6 @@ function palette(name) {
 }
 
 var blocks = [
-
   ["forward:", 10],
   ["turnRight:", 15],
   ["turnLeft:", 15],
@@ -88,7 +87,7 @@ var blocks = [
   ["changeVolumeBy:", -10],
   ["setVolumeTo:", 100],
   ["volume"],
-  
+
   ["playDrum", 1, 0.25],
   ["rest:elapsed:from:", 0.25],
   "",
@@ -165,7 +164,7 @@ var blocks = [
   "",
   ["timeAndDate", "minute"],
   ["timestamp"],
-  
+
   ["getUserName"],
   ["senseVideoMotion", "motion", "Stage"],
   ["setVideoState", "on"],
@@ -218,16 +217,15 @@ var blocks = [
   "",
   ["showList:", "list"],
   ["hideList:", "list"],
-
 ];
 
 var foo = "";
-var el = document.createElement('div');
+var el = document.createElement("div");
 
 var currentCategory = null;
 var currentSubMenu = null;
 
-blocks.forEach(function(array) {
+blocks.forEach(function (array) {
   if (array === "") {
     foo += "\n";
     return;
@@ -235,7 +233,7 @@ blocks.forEach(function(array) {
 
   var block = scratchblocks.Block.fromJSON(language, array);
 
-  for (var i=0; i<block.children.length; i++) {
+  for (var i = 0; i < block.children.length; i++) {
     var child = block.children[i];
     if (child.isInput && !child.isColor) {
       block.children[i] = new scratchblocks.Input(child.shape, "...");
@@ -249,21 +247,20 @@ blocks.forEach(function(array) {
 
   var category = block.info.category;
   if (currentCategory != category) {
-    foo += '\n// ' + category + '\n\n';
+    foo += "\n// " + category + "\n\n";
     currentCategory = category;
-    currentSubMenu = {name: palette(category) + ' :: ' + category,
-      dropMenu: []};
+    currentSubMenu = { name: palette(category) + " :: " + category, dropMenu: [] };
     scratchblocksMenu.dropMenu.push(currentSubMenu);
   }
 
   var output = block.stringify();
 
   var offset = 0;
-  var splitIndex = output.indexOf('...');
+  var splitIndex = output.indexOf("...");
   if (splitIndex !== -1) {
     offset = 3;
   } else {
-    splitIndex = output.indexOf('\n');
+    splitIndex = output.indexOf("\n");
     if (splitIndex !== -1) {
       splitIndex++;
     }
@@ -271,7 +268,7 @@ blocks.forEach(function(array) {
   output = output.replace(/\n/g, "\n\n");
 
   var display = output;
-  if (block.info.selector === 'computeFunction:of:') {
+  if (block.info.selector === "computeFunction:of:") {
     display = "([... v] of (9) :: operators)";
   }
   el.textContent = display;
@@ -286,135 +283,159 @@ blocks.forEach(function(array) {
     currentSubMenu.dropMenu.push({
       name: el.innerHTML,
       openWith: output.slice(0, splitIndex),
-      closeWith: output.slice(splitIndex + offset)
+      closeWith: output.slice(splitIndex + offset),
     });
-    foo += output.slice(0, splitIndex) + output.slice(splitIndex + offset) + '\n';
+    foo += output.slice(0, splitIndex) + output.slice(splitIndex + offset) + "\n";
   }
 });
 
 scratchblocksMenu.dropMenu.push({
-    name: palette('More Blocks') + ' :: custom',
-    dropMenu: [
-        {name: language.define, openWith: language.define + ' '},
-        {name: '(input :: custom-arg)', openWith: '(', closeWith: ')'},
-    ],
+  name: palette("More Blocks") + " :: custom",
+  dropMenu: [
+    { name: language.define, openWith: language.define + " " },
+    { name: "(input :: custom-arg)", openWith: "(", closeWith: ")" },
+  ],
 });
 
-mySettings.beforeInsert = function(h) {
-    h.originalSelection = h.selection;
+mySettings.beforeInsert = function (h) {
+  h.originalSelection = h.selection;
 };
 
-mySettings.afterInsert = function(h) {
-    if (!(h.hasOwnProperty('openWith') || h.hasOwnProperty('replaceWith'))
-        || $.inArray(h.name, [
-            'Bold', 'Italic', 'Underline', 'Stroke', 'Picture', 'Link',
-            'Size', 'Big', 'Small', 'Bulleted list', 'Numeric list',
-            'List item', 'Quotes', 'Smiles', 'Smile', 'Neutral', 'Sad',
-            'Big smile', 'Yikes', 'Wink', 'Hmm', 'Tongue', 'Lol', 'Mad',
-            'Roll', 'Cool', 'Clean', 'Preview',
-            'Paste browser / operating system versions']) > -1) {
-        return;
-    }
+mySettings.afterInsert = function (h) {
+  if (
+    !(h.hasOwnProperty("openWith") || h.hasOwnProperty("replaceWith")) ||
+    $.inArray(h.name, [
+      "Bold",
+      "Italic",
+      "Underline",
+      "Stroke",
+      "Picture",
+      "Link",
+      "Size",
+      "Big",
+      "Small",
+      "Bulleted list",
+      "Numeric list",
+      "List item",
+      "Quotes",
+      "Smiles",
+      "Smile",
+      "Neutral",
+      "Sad",
+      "Big smile",
+      "Yikes",
+      "Wink",
+      "Hmm",
+      "Tongue",
+      "Lol",
+      "Mad",
+      "Roll",
+      "Cool",
+      "Clean",
+      "Preview",
+      "Paste browser / operating system versions",
+    ]) > -1
+  ) {
+    return;
+  }
 
+  var contents = $(h.textarea).attr("value"),
+    cursor,
+    originalCursor,
+    lineStartCursor,
+    OPEN_BRACKETS = "<([",
+    CLOSE_BRACKETS = "])>";
 
-    var contents = $(h.textarea).attr('value'),
-        cursor,
-        originalCursor,
-        lineStartCursor,
-        OPEN_BRACKETS = "<([",
-        CLOSE_BRACKETS = "])>";
+  if ("selectionStart" in h.textarea) {
+    cursor = h.textarea.selectionStart;
+  } else if ("selection" in document) {
+    h.textarea.focus();
+    var sel = document.selection.createRange();
+    var selLength = document.selection.createRange().text.length;
+    sel.moveStart("character", -h.textarea.value.length);
+    cursor = sel.text.length - selLength;
+  }
+  originalCursor = cursor;
 
+  // Are we inserting inside a line?
+  if (h.caretPosition > 0 && contents.charAt(h.caretPosition - 1) !== "\n") {
+    var inserted = h.replaceWith || h.openWith + (h.closeWith || "");
+    var open = h.replaceWith || h.openWith;
 
-    if('selectionStart' in h.textarea) {
-        cursor = h.textarea.selectionStart;
-    } else if('selection' in document) {
-        h.textarea.focus();
-        var sel = document.selection.createRange();
-        var selLength = document.selection.createRange().text.length;
-        sel.moveStart('character', -h.textarea.value.length);
-        cursor = sel.text.length - selLength;
-    }
-    originalCursor = cursor;
+    if (h.originalSelection) {
+      // Consume surrounding brackets.
+      var testIndex = h.caretPosition,
+        endIndex = testIndex + inserted.length + h.originalSelection.length;
+      var charBefore = contents.charAt(testIndex - 1),
+        charAfter = contents.charAt(endIndex);
+      if (OPEN_BRACKETS.indexOf(charBefore) > -1 && CLOSE_BRACKETS.indexOf(charAfter) > -1) {
+        contents =
+          contents.slice(0, testIndex - 1) + contents.slice(testIndex, endIndex) + contents.slice(endIndex + 1);
+        originalCursor -= 1;
+      }
+    } else {
+      contents = contents.slice(0, h.caretPosition) + contents.slice(h.caretPosition + inserted.length);
 
-    // Are we inserting inside a line?
-    if (h.caretPosition > 0 && contents.charAt(h.caretPosition - 1) !== "\n") {
-        var inserted = h.replaceWith || (h.openWith + (h.closeWith || ""));
-        var open = h.replaceWith || h.openWith;
+      if (contents.charAt(h.caretPosition) === "\n" && !contents.charAt(h.caretPosition - 1) === "\n") {
+        // At end of line. Insert newline
+        contents = contents.slice(0, h.caretPosition) + "\n" + inserted + contents.slice(h.caretPosition);
+        h.caretPosition += 1;
+        originalCursor += 1;
+      } else {
+        // Inside line. Remove block and add on a new line.
+        if (OPEN_BRACKETS.indexOf(inserted.charAt(0)) === -1) {
+          // stack block
+          // Look for newline
+          var eol = h.caretPosition;
+          while (contents.charAt(eol) !== "\n" && eol <= contents.length) {
+            eol += 1;
+          }
 
-        if (h.originalSelection) {
-            // Consume surrounding brackets.
-            var testIndex = h.caretPosition,
-                endIndex = testIndex + inserted.length + h.originalSelection.length;
-            var charBefore = contents.charAt(testIndex - 1),
-                charAfter = contents.charAt(endIndex);
-            if (OPEN_BRACKETS.indexOf(charBefore) > -1 && CLOSE_BRACKETS.indexOf(charAfter) > -1) {
-                contents = (contents.slice(0, testIndex - 1) +
-                            contents.slice(testIndex, endIndex) +
-                            contents.slice(endIndex + 1));
-                originalCursor -= 1;
-            }
+          contents = contents.slice(0, eol) + "\n" + inserted + contents.slice(eol);
+          originalCursor = eol + open.length + 1;
         } else {
-            contents = contents.slice(0, h.caretPosition) + contents.slice(h.caretPosition + inserted.length);
+          // reporter block
+          // Consume surrounding brackets.
+          var testIndex = h.caretPosition;
+          var charBefore = contents.charAt(testIndex - 1),
+            charAfter = contents.charAt(testIndex);
+          if (OPEN_BRACKETS.indexOf(charBefore) > -1 && CLOSE_BRACKETS.indexOf(charAfter) > -1) {
+            contents = contents.slice(0, testIndex - 1) + contents.slice(testIndex + 1);
+            testIndex -= 1;
+            originalCursor -= 1;
+          }
 
-            if (contents.charAt(h.caretPosition) === "\n" && !contents.charAt(h.caretPosition - 1) === "\n") {
-                // At end of line. Insert newline
-                contents = contents.slice(0, h.caretPosition) + '\n' + inserted + contents.slice(h.caretPosition);
-                h.caretPosition += 1;
-                originalCursor += 1;
-            } else {
-                // Inside line. Remove block and add on a new line.
-                if (OPEN_BRACKETS.indexOf(inserted.charAt(0)) === -1) { // stack block
-                    // Look for newline
-                    var eol = h.caretPosition;
-                    while (contents.charAt(eol) !== "\n" && eol <= contents.length) {
-                        eol += 1;
-                    }
-
-                    contents = contents.slice(0, eol) + '\n' + inserted + contents.slice(eol);
-                    originalCursor = eol + open.length + 1;
-
-                } else { // reporter block
-                    // Consume surrounding brackets.
-                    var testIndex = h.caretPosition;
-                    var charBefore = contents.charAt(testIndex - 1),
-                        charAfter = contents.charAt(testIndex);
-                    if (OPEN_BRACKETS.indexOf(charBefore) > -1 && CLOSE_BRACKETS.indexOf(charAfter) > -1) {
-                        contents = contents.slice(0, testIndex - 1) + contents.slice(testIndex + 1);
-                        testIndex -= 1;
-                        originalCursor -= 1;
-                    }
-
-                    contents = contents.slice(0, testIndex) + inserted + contents.slice(testIndex);
-                }
-            }
+          contents = contents.slice(0, testIndex) + inserted + contents.slice(testIndex);
         }
+      }
     }
+  }
 
-    // Look for scratchblocks tag
-    cursor -= 15;
-    while (!/\[\/?scratchblocks\]/.test(contents.slice(cursor, originalCursor)) && cursor >= 0) {
-        cursor -= 1;
-    }
+  // Look for scratchblocks tag
+  cursor -= 15;
+  while (!/\[\/?scratchblocks\]/.test(contents.slice(cursor, originalCursor)) && cursor >= 0) {
+    cursor -= 1;
+  }
 
-    // Insert scratchblocks tag if needed
-    if (!/\[scratchblocks\]/.test(contents.slice(cursor, originalCursor))) {
-        contents = contents.slice(0, h.caretPosition) + '[scratchblocks]\n' + contents.slice(h.caretPosition);
-        contents += '\n[/scratchblocks]';
-        originalCursor += 16;
-    }
+  // Insert scratchblocks tag if needed
+  if (!/\[scratchblocks\]/.test(contents.slice(cursor, originalCursor))) {
+    contents = contents.slice(0, h.caretPosition) + "[scratchblocks]\n" + contents.slice(h.caretPosition);
+    contents += "\n[/scratchblocks]";
+    originalCursor += 16;
+  }
 
-    $(h.textarea).attr('value', contents);
+  $(h.textarea).attr("value", contents);
 
-    if (h.textarea.setSelectionRange) {
-        h.textarea.focus();
-        h.textarea.setSelectionRange(originalCursor, originalCursor);
-    } else if (h.textarea.createTextRange) {
-        var range = h.textarea.createTextRange();
-        range.collapse(true);
-        range.moveEnd('character', originalCursor);
-        range.moveStart('character', originalCursor);
-        range.select();
-    }
+  if (h.textarea.setSelectionRange) {
+    h.textarea.focus();
+    h.textarea.setSelectionRange(originalCursor, originalCursor);
+  } else if (h.textarea.createTextRange) {
+    var range = h.textarea.createTextRange();
+    range.collapse(true);
+    range.moveEnd("character", originalCursor);
+    range.moveStart("character", originalCursor);
+    range.select();
+  }
 };
 
-console.log('Menu here!')
+console.log("Menu here!");
