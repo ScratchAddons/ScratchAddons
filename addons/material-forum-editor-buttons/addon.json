@@ -9,14 +9,14 @@
   ],
   "tags": ["community", "forums", "theme", "beta", "recommended"],
   "credits": [
-  {
-    "name": "A-E-",
-    "link": "https://github.com/easrng/material-scratch-forum-editor-buttons"
-  },
-  {
-    "name": "Secret-chest (Port)",
-    "link": "https://github.com/Secret-chest"
-  }
+    {
+      "name": "A-E-",
+      "link": "https://github.com/easrng/material-scratch-forum-editor-buttons"
+    },
+    {
+      "name": "Secret-chest (Port)",
+      "link": "https://github.com/Secret-chest"
+    }
   ],
   "enabledByDefault": false
 }
