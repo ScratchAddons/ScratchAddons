@@ -16,30 +16,36 @@ export default async function ({ addon, global, console }) {
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", { markAsSeen: true });
     let mode = false;
+    const changeMode = (_mode = !mode) => {
+      mode = _mode;
+      if (mode) setFPS(addon.settings.get("framerate"));
+      else setFPS(30);
+      button.style.filter = mode ? "hue-rotate(90deg)" : "";
+    };
     const flagListener = (e) => {
-      if (altPressedRecently) {
+      if (altPressedRecently && !addon.self.disabled) {
         e.cancelBubble = true;
         e.preventDefault();
-        mode = !mode;
-        if (mode) setFPS(addon.settings.get("framerate"));
-        else setFPS(30);
-        button.style.filter = mode ? "hue-rotate(90deg)" : "";
+        changeMode();
       }
     };
     button.addEventListener("click", (e) => flagListener(e));
     button.addEventListener("contextmenu", (e) => flagListener(e));
 
     const setFPS = (fps) => {
-      gloabal_fps = fps;
+      gloabal_fps = addon.self.disabled ? 30 : fps;
+      console.log(gloabal_fps);
+
       clearInterval(vm.runtime._steppingInterval);
       vm.runtime._steppingInterval = null;
       vm.runtime.start();
     };
-    addon.settings.addEventListener("change", function () {
+    addon.settings.addEventListener("change", () => {
       if (vm.runtime._steppingInterval) {
         setFPS(addon.settings.get("framerate"));
       }
     });
+    addon.self.addEventListener("disabled", () => changeMode(false));
     vm.runtime.start = function () {
       if (this._steppingInterval) return;
       let interval = 1000 / gloabal_fps;
