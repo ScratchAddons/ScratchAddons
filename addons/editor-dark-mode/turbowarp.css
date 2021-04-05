@@ -122,13 +122,16 @@ input[placeholder="Project title here"] {
   border: none;
 }
 
-[class^="sprite-selector_sprite-wrapper"] > [class*="sprite-selector_sprite"][class*="sprite-selector-item_is-selected"] {
+[class^="sprite-selector_sprite-wrapper"]
+  > [class*="sprite-selector_sprite"][class*="sprite-selector-item_is-selected"] {
   border: 2px solid #ff4d4d;
   box-shadow: 0px 0px 0px 4px #ff4d4d59;
   background: #111 !important;
 }
 
-[class^="sprite-selector_sprite-wrapper"] > [class*="sprite-selector_sprite"][class*="sprite-selector-item_is-selected"] > [class*="sprite-selector-item_sprite-info"] {
+[class^="sprite-selector_sprite-wrapper"]
+  > [class*="sprite-selector_sprite"][class*="sprite-selector-item_is-selected"]
+  > [class*="sprite-selector-item_sprite-info"] {
   background-color: #ff4d4d !important;
   border: none !important;
   border-radius: 0.4rem;
@@ -139,11 +142,16 @@ input[placeholder="Project title here"] {
   transform: translateY(1px);
 }
 
-[class^="sprite-selector_sprite-wrapper"] > [class*="sprite-selector_sprite"][class*="sprite-selector-item_is-selected"] > [aria-label="Delete"] {
+[class^="sprite-selector_sprite-wrapper"]
+  > [class*="sprite-selector_sprite"][class*="sprite-selector-item_is-selected"]
+  > [aria-label="Delete"] {
   filter: hue-rotate(135deg) saturate(200%);
 }
 
-[class^="sprite-selector_sprite-wrapper"] > [class*="sprite-selector_sprite"][class*="sprite-selector-item_is-selected"] > [class*="sprite-selector-item_sprite-info"] > * {
+[class^="sprite-selector_sprite-wrapper"]
+  > [class*="sprite-selector_sprite"][class*="sprite-selector-item_is-selected"]
+  > [class*="sprite-selector-item_sprite-info"]
+  > * {
   background: #0000;
 }
 
@@ -175,15 +183,27 @@ input[placeholder="Project title here"] {
   background: #c33;
 }
 
-[class^="action-menu_menu-container"] > [class^="action-menu_more-buttons-outer"] > [class^="action-menu_more-buttons"] > div > button {
+[class^="action-menu_menu-container"]
+  > [class^="action-menu_more-buttons-outer"]
+  > [class^="action-menu_more-buttons"]
+  > div
+  > button {
   background: #c33;
 }
 
-[class^="action-menu_menu-container"] > [class^="action-menu_more-buttons-outer"] > [class^="action-menu_more-buttons"] > div > div::after {
+[class^="action-menu_menu-container"]
+  > [class^="action-menu_more-buttons-outer"]
+  > [class^="action-menu_more-buttons"]
+  > div
+  > div::after {
   background-color: #f2735a !important;
 }
 
-[class^="action-menu_menu-container"] > [class^="action-menu_more-buttons-outer"] > [class^="action-menu_more-buttons"] > div > div {
+[class^="action-menu_menu-container"]
+  > [class^="action-menu_more-buttons-outer"]
+  > [class^="action-menu_more-buttons"]
+  > div
+  > div {
   background-color: #f2735a !important;
 }
 
@@ -204,7 +224,11 @@ input[placeholder="Project title here"] {
   color: #eee;
 }
 
-[class^="stage-header_stage-size-toggle-group"] > div > [class^="button_outlined-button"] > [class^="button_content"] > img {
+[class^="stage-header_stage-size-toggle-group"]
+  > div
+  > [class^="button_outlined-button"]
+  > [class^="button_content"]
+  > img {
   filter: hue-rotate(135deg) saturate(200%);
 }
 
@@ -338,7 +362,7 @@ input[placeholder="Project title here"] {
 }
 
 [class*="sprite-selector-item_sprite-selector-item"]:hover {
-  border-color: #ff4d4d
+  border-color: #ff4d4d;
 }
 
 [class^="menu-bar_help-icon"] {
@@ -366,7 +390,6 @@ input[placeholder="Project title here"] {
 [class^="slider_handle"] {
   background-color: #eee;
 }
-
 
 /*Other*/
 
@@ -450,11 +473,13 @@ input[placeholder="Project title here"]:focus {
   background: #111 !important;
 }
 
-[class*="sprite-selector-item_is-selected"][class*="sprite-selector-item_sprite-selector-item"] > [aria-label="Delete"] {
+[class*="sprite-selector-item_is-selected"][class*="sprite-selector-item_sprite-selector-item"]
+  > [aria-label="Delete"] {
   filter: hue-rotate(135deg) saturate(200%);
 }
 
-[class*="sprite-selector-item_is-selected"][class*="sprite-selector-item_sprite-selector-item"] > [class*="sprite-selector-item_sprite-info"] {
+[class*="sprite-selector-item_is-selected"][class*="sprite-selector-item_sprite-selector-item"]
+  > [class*="sprite-selector-item_sprite-info"] {
   background-color: #ff4d4d !important;
   border: none !important;
   border-radius: 0.4rem;
@@ -498,11 +523,11 @@ td[class*="sa-var-manager"] {
 }
 
 [class^="paint-editor_button-group-button-icon"] {
-  	filter: brightness(1.7);
+  filter: brightness(1.7);
 }
 
 [title="Onion Skinning Settings"] > img {
-  	filter: invert(1);
+  filter: invert(1);
 }
 
 [class*="paint-editor_bitmap-button"] {
@@ -511,7 +536,7 @@ td[class*="sa-var-manager"] {
 
 [class*="dropdown_dropdown"] {
   color: #ff4d4d;
-  border-color: #2e2e2e
+  border-color: #2e2e2e;
 }
 
 [class*="dropdown_dropdown"] > img {
@@ -531,7 +556,7 @@ td[class*="sa-var-manager"] {
 }
 
 [class*="mode-tools_mode-tools-icon"] {
-  	filter: brightness(1.7);
+  filter: brightness(1.7);
 }
 
 [class^="selector_list-area"] {
