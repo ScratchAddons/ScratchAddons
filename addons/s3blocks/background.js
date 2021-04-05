@@ -7,8 +7,8 @@ export default async function ({ addon }) {
     },
     {
       urls: [
-        "https://cdn.scratch.mit.edu/scratchr2/static/__0013507cb4feac8f99604c00dcc247bb__//djangobb_forum/scratchblocks/scratchblocks.js",
-        addon.self.lib + "/scratchblocks-v3.5-min.js",
+        "https://cdn.scratch.mit.edu/scratchr2/static/__98026e28996cc956930d5d5214f32de3__//djangobb_forum/scratchblocks/scratchblocks.js",
+        addon.self.dir + "/scratchblocks-v3.5-min.js",
       ],
       types: ["script"],
     },
@@ -22,7 +22,7 @@ export default async function ({ addon }) {
     },
     {
       urls: [
-        "https://cdn.scratch.mit.edu/scratchr2/static/__0013507cb4feac8f99604c00dcc247bb__//djangobb_forum/scratchblocks/menu.js",
+        "https://cdn.scratch.mit.edu/scratchr2/static/__98026e28996cc956930d5d5214f32de3__//djangobb_forum/scratchblocks/menu.js",
       ],
       types: ["script"],
     },
@@ -36,10 +36,11 @@ export default async function ({ addon }) {
     },
     {
       urls: [
-        "https://cdn.scratch.mit.edu/scratchr2/static/__0013507cb4feac8f99604c00dcc247bb__//djangobb_forum/scratchblocks/translations.j",
+        "https://cdn.scratch.mit.edu/scratchr2/static/__98026e28996cc956930d5d5214f32de3__//djangobb_forum/scratchblocks/translations.js",
       ],
       types: ["script"],
     },
     ["blocking"]
   );
-}
+
+  }  

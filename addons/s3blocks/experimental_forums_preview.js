@@ -8,7 +8,7 @@ export default async function ({ addon }) {
           if (
             node.tagName === "script" &&
             node.href ==
-              "//cdn.scratch.mit.edu/scratchr2/static/__0013507cb4feac8f99604c00dcc247bb__//djangobb_forum/scratchblocks/scratchblocks.js"
+              "//cdn.scratch.mit.edu/scratchr2/static/__98026e28996cc956930d5d5214f32de3__//djangobb_forum/scratchblocks/scratchblocks.js"
           ) {
             // if scratchblocks loaded
             const style = document.createElement("link");
