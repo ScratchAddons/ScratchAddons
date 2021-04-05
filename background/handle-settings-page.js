@@ -24,12 +24,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.storage.sync.set({
       addonsEnabled: scratchAddons.localState.addonsEnabled,
     });
-    const manifest = scratchAddons.manifests.find((a) => a.addonId === addonId).manifest;
+    const manifest = scratchAddons.manifests.find((addon) => addon.addonId === addonId).manifest;
     const { dynamicEnable, dynamicDisable } = manifest;
     // Fire disabled event for userscripts
-    if (dynamicEnable && newState)
+    if (dynamicEnable && newState === true)
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonEnabled", { detail: { addonId, manifest } }));
-    if (dynamicDisable && !newState)
+    if (dynamicDisable && newState === false)
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonDisable", { detail: { addonId, manifest } }));
 
     if (newState === false) {

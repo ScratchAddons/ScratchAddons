@@ -1,4 +1,5 @@
 export default async function ({ addon, console, msg }) {
+  console.log("RAN ..............");
   actionAlert("projectsharing", "[class*='share-button_share-button'], .banner-button", msg("share"));
   actionAlert("followinguser", "#profile-data .follow-button", msg("follow"));
   actionAlert("joiningstudio", "a.accept", msg("joinstudio"));

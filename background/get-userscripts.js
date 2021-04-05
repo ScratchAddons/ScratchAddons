@@ -22,24 +22,25 @@ scratchAddons.localEvents.addEventListener("addonEnabled", ({ detail }) => {
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
+        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
           if (res) {
-            const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
-
-            console.log(userscripts, userstyles);
-            chrome.tabs.sendMessage(
-              tab.id,
-              {
-                dynamicAddonEnabled: {
-                  scripts: userscripts,
-                  userstyles,
-                  addonId,
-                  injectAsStyleElt: manifest.injectAsStyleElt,
-                  index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+            (async () => {
+              const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
+              console.log(userscripts, userstyles);
+              chrome.tabs.sendMessage(
+                tab.id,
+                {
+                  dynamicAddonEnabled: {
+                    scripts: userscripts,
+                    userstyles,
+                    addonId,
+                    injectAsStyleElt: !!manifest.injectAsStyleElt,
+                    index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                  },
                 },
-              },
-              { frameId: 0 }
-            );
+                { frameId: 0 }
+              );
+            })();
           }
         });
       }
@@ -51,7 +52,7 @@ scratchAddons.localEvents.addEventListener("addonDisable", ({ detail }) => {
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
+        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
           if (res) {
             chrome.tabs.sendMessage(tab.id, { dynamicAddonDisable: { addonId } }, { frameId: 0 });
           }
@@ -62,7 +63,7 @@ scratchAddons.localEvents.addEventListener("addonDisable", ({ detail }) => {
 });
 
 async function getAddonData({ addonId, manifest, url }) {
-  const promices = [];
+  const promises = [];
 
   const userscripts = [];
   for (const script of manifest.userscripts || []) {
@@ -76,7 +77,7 @@ async function getAddonData({ addonId, manifest, url }) {
   for (const style of manifest.userstyles || []) {
     if (userscriptMatches({ url }, style, addonId))
       if (manifest.injectAsStyleElt) {
-        promices.push(
+        promises.push(
           fetch(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`))
             .then((res) => res.text())
             .then((text) => {
@@ -87,9 +88,9 @@ async function getAddonData({ addonId, manifest, url }) {
         userstyles.push(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
       }
   }
-  await Promise.all(promices);
+  await Promise.all(promises);
 
-  return { userscripts, userstyles, promices };
+  return { userscripts, userstyles };
 }
 
 async function getContentScriptInfo(url) {
@@ -100,9 +101,8 @@ async function getContentScriptInfo(url) {
     addonsWithUserscripts: [],
     addonsWithUserstyles: [],
   };
-  for (let i = 0; i < scratchAddons.manifests.length; i++) {
-    const { addonId, manifest } = scratchAddons.manifests[i];
-    if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
+  scratchAddons.manifests.forEach(async ({ addonId, manifest }, i) => {
+    if (!scratchAddons.localState.addonsEnabled[addonId]) return;
     const { userscripts, userstyles } = await getAddonData({ addonId, manifest, url });
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
@@ -113,7 +113,7 @@ async function getContentScriptInfo(url) {
         injectAsStyleElt: manifest.injectAsStyleElt,
         index: i,
       });
-  }
+  });
 
   data.globalState = scratchAddons.globalState._target;
 

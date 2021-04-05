@@ -169,7 +169,8 @@ function setCssVariables(addonSettings) {
 }
 
 async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
-  const pageLoadedAddons = addonsWithUserscripts;
+  // In order for the "pageLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and pase
+  const pageLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   setCssVariables(globalState.addonSettings);
   // Just in case, make sure the <head> loaded before injecting styles
   if (document.head) injectUserstylesAndThemes(addonsWithUserstyles);
@@ -206,12 +207,12 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       const { scripts, userstyles, addonId, injectAsStyleElt, index } = request.dynamicAddonEnabled;
       // TODO: simply adding the style won't cut it. Use the "index" variable to insert it or remove all and readd properly
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
-      if (pageLoadedAddons.find((a) => a.addonId === addonId)) {
+      if (pageLoadedAddons.find((addon) => addon.addonId === addonId)) {
         // Addon was reenabled
         _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
       } else {
         // Addon was not injected in page yet
-        _page_.fireEvent({ name: "enable", addonId, scripts });
+        _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
       }
       addonsWithUserscripts.push({ addonId, scripts });
       pageLoadedAddons.push({ addonId, scripts });
