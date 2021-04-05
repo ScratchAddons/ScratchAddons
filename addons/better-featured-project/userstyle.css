@@ -1,17 +1,33 @@
-#profile-data .box-head {
-  padding-top: 250px !important;
-  padding-bottom: 20px !important;
-  background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.5)), var(--featured-thumb) !important;
-  background-size: cover !important;
-  background-position: center !important;
+.box#profile-data .box-head {
+  padding-top: 250px;
+  padding-bottom: 20px;
   text-shadow: rgba(0, 0, 0, 0.5) 0 0 10px;
   border: none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  border-top-left-radius: 10px !important;
-  border-top-right-radius: 10px !important;
-  padding-left: 20px !important;
-  padding-right: 20px !important;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+#profile-data .box-head::before {
+  /* The background is a pseudo-element so filters can be applied to it
+  without affecting the text. */
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.5)), var(--featured-thumb);
+  background-size: cover;
+  background-position: center;
+  filter: blur(calc(1px * var(--betterFeaturedProject-blur)));
+}
+#profile-data .box-head .header-text {
+  position: relative;
+  z-index: 1;
 }
 #profile-data .box-head h2,
 #profile-data .box-head h3 {
@@ -33,9 +49,10 @@
   top: auto !important;
   bottom: 26px !important;
   right: 20px !important;
+  z-index: 1;
 }
 #better-featured-project-name {
-  color: white !important;
+  color: white;
   position: absolute;
   top: 30px;
   left: 30px;

@@ -8,5 +8,6 @@
   "folders/remove-from-folder": "remove from folder",
   "folders/rename-folder-prompt": "Rename folder to:",
   "folders/name-prompt": "Name of folder:",
-  "folders/name-not-allowed": "Invalid folder name"
+  "folders/name-not-allowed": "Invalid folder name",
+  "folders/confirm-backpack-folder": "Save entire folder to backpack?"
 }

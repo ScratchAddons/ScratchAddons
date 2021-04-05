@@ -78,6 +78,10 @@
   "variable-manager",
   "scratchstats",
   "folders",
-  "s3blocks",
-  "block-palette-icons"
+  "block-palette-icons",
+  "custom-block-shape",
+  "2d-color-picker",
+  "drag-drop",
+  "dango-rain",
+  "s3blocks"
 ]

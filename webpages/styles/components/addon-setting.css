@@ -1,0 +1,55 @@
+.addon-setting {
+  margin: 10px;
+  margin-right: 20px;
+  min-height: 35px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.setting-input {
+  color: var(--accent-5);
+  background: var(--accent-2);
+  border: 1px solid #000;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: 0.25s ease;
+  transition-property: box-shadow border;
+}
+.setting-input:focus {
+  outline: none;
+  border-color: var(--brand-orange);
+  box-shadow: 0 0 0 3px #ff7d265d;
+}
+
+.setting-input.check {
+  height: 20px;
+  width: 20px;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: white;
+  background-size: 20px 20px;
+  background-position: center center;
+}
+
+.setting-input.check:checked {
+  background-color: #175ef8;
+  background-image: url(/images/icons/check.svg);
+}
+
+.setting-input.check:hover:not(:focus) {
+  border-color: #0e44b8;
+}
+
+.setting-input.number {
+  border-radius: 20px;
+}
+.setting-label {
+  width: 200px;
+  text-transform: uppercase;
+  color: var(--accent-4);
+  font-weight: 600;
+  font-size: 12px;
+  margin-right: 10px;
+}

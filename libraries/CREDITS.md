@@ -8,5 +8,8 @@ Third-party libraries included are:
 - [intl-messageformat 9.4.7](https://unpkg.com/intl-messageformat@9.4.7/intl-messageformat.umd.min.js) (MIT)
 - [tinycolor2 1.4.2](https://raw.githubusercontent.com/bgrins/TinyColor/1.4.2/dist/tinycolor-min.js) (MIT)
 - [Chart.js 2.9.4](https://unpkg.com/chart.js@2.9.4/dist/Chart.min.js) (MIT)
+- [color-picker-web-component 1.0.17](https://unpkg.com/color-picker-web-component@1.0.17/dist/color-picker-esm.js) (MIT)
+- [comlink 4.3.0](https://unpkg.com/comlink@4.3.0/dist/umd/comlink.js) (Apache-2.0)
+
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).

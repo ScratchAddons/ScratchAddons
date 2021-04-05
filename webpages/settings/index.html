@@ -1,17 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="preload" href="light.css" as="style" />
+    <link rel="preload" href="style.css" as="style" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
     <script src="../set-lang.js" defer></script>
+    <style>
+      /*
+       * Imports are here to attempt to speed up load. Also, it means licenses.html loads fewer unused styles, and this file doesn't get licenses.html's styles! In order of when it will be noticed/needed on the page
+      */
+      @import url("../styles/colors.css");
+      @import url("../styles/components/addon.css");
+      @import url("../styles/components/addon-setting.css");
+      @import url("../styles/components/badges.css");
+      @import url("../styles/components/filter.css");
+      @import url("../styles/components/categories.css");
+      @import url("../styles/components/search.css");
+      @import url("../styles/components/tooltips.css");
+      @import url("../styles/components/smallmode.css");
+      /* Modals and popups are needed last */
+      @import url("../styles/components/modal.css");
+      @import url("../styles/components/enablepopup.css");
+    </style>
+
     <link rel="stylesheet" href="style.css" />
+
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
+    <script src="../../libraries/color-picker.js" type="module" defer></script>
+    <template id="picker-component">
+      <div class="color-container" :key="value">
+        <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting,true)">
+          <color-picker
+            class=""
+            :value="value"
+            id="picker"
+            v-show="isOpen"
+            v-click-outside="isOpen = false"
+            v-el:pickr
+            :formats="formats"
+            :no_alpha="no_alpha"
+          ></color-picker>
+        </button>
+      </div>
+    </template>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded">
+  <body style="display: none" v-show="loaded" :class="{light: theme}">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
@@ -269,15 +307,15 @@
                     :data-setting-id="setting.id"
                     spellcheck="false"
                   />
-                  <input
-                    type="color"
-                    class="setting-input color"
-                    v-model="addonSettings[addon._addonId][setting.id]"
-                    @input="updateSettings(addon, {wait: 250, settingId: setting.id})"
-                    :disabled="!addon._enabled"
+                  <picker
                     v-if="setting.type === 'color'"
-                    :placeholder="setting.default"
-                  />
+                    :value="addonSettings[addon._addonId][setting.id] || setting.default"
+                    :setting="setting"
+                    :addon="addon"
+                    @click=""
+                    :no_alpha="!setting.allowTransparency"
+                    v-click-outside="closePickers"
+                  ></picker>
                   <button
                     type="clear-button"
                     class="large-button clear-button"
@@ -382,7 +420,11 @@
             >
           </p>
           <p>
-            <a href="./licenses.html?libraries=intl-messageformat,vue" target="_blank">{{ msg("libraryCredits") }}</a>
+            <a
+              href="./licenses.html?libraries=intl-messageformat,vue,color-picker-web-component,comlink"
+              target="_blank"
+              >{{ msg("libraryCredits") }}</a
+            >
           </p>
         </div>
       </div>

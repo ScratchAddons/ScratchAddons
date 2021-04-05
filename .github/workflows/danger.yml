@@ -1,0 +1,26 @@
+name: Danger Checks
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.1.5
+    - run: npm install prettier
+    - name: Danger JS Action
+      uses: danger/danger-js@10.6.3
+      with: 
+        args: "--dangerfile .github/dangerfile.js"
+      env:
+        DANGER_DISABLE_TRANSPILATION: "true"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+

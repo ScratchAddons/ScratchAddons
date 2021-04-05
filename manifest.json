@@ -2,8 +2,8 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "1.11.1",
-  "version_name": "1.11.1",
+  "version": "1.13.0",
+  "version_name": "1.13.0-prerelease",
   "default_locale": "en",
   "background": {
     "page": "background/background.html"
@@ -22,7 +22,7 @@
     {
       "matches": ["https://scratch.mit.edu/*"],
       "run_at": "document_start",
-      "js": ["content-scripts/cs.js"],
+      "js": ["libraries/comlink.js", "content-scripts/cs.js"],
       "all_frames": true
     },
     {
