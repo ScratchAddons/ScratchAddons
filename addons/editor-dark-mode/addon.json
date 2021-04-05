@@ -319,7 +319,7 @@
     {
       "name": "Scratch's default colors",
       "id": "scratch",
-      "description": "The colors normally used by Scratch.",
+      "description": "The colors normally used by Scratch",
       "values": {
         "page": "#e5f0ff",
         "primary": "#4d97ff",
