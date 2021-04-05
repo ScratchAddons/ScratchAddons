@@ -1,0 +1,12 @@
+{
+  "name": "Material forum editor buttons",
+  "description": "Changes the forum editor icons from tiny 16x16 bitmaps to SVG Google Material Icons.",
+  "userstyles": [
+    {
+      "url": "icons.css",
+      "matches": ["https://scratch.mit.edu/discuss/*"]
+    }
+  ],
+  "tags": ["community", "forums", "theme", "beta", "recommended"],
+  "enabled_by_default": false
+}
