@@ -10,16 +10,16 @@
   ],
   "credits": [
     {
+      "name": "Maximouse (addon, \"Experimental\" Dark)",
+      "link": "https://github.com/mxmou/customize-scratch"
+    },
+    {
       "name": "infinitytec (3.Dark, 3.Darker)",
       "link": "https://github.com/infinitytec"
     },
     {
       "name": "_nix (Dark editor)",
       "link": "https://github.com/towerofnix"
-    },
-    {
-      "name": "Maximouse (\"Experimental\" Dark)",
-      "link": "https://github.com/mxmou/customize-scratch"
     }
   ],
   "userscripts": [
