@@ -26,7 +26,6 @@ scratchAddons.localEvents.addEventListener("addonEnabled", ({ detail }) => {
           if (res) {
             (async () => {
               const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
-              console.log(userscripts, userstyles);
               chrome.tabs.sendMessage(
                 tab.id,
                 {

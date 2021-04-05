@@ -34,7 +34,7 @@ const page = {
     onDataReady(); // Assume set to true
   },
 
-  runAddonUserscripts, // Get's called by cs.js when addon enabled late
+  runAddonUserscripts, // Gets called by cs.js when addon enabled late
 
   fireEvent(info) {
     if (info.addonId) {

@@ -1,16 +1,11 @@
 export default function ({ addon, global, console }) {
-  console.log("Addon enabled");
   let interval, injected;
 
   addon.self.addEventListener("disabled", () => {
-    console.log("Addon Disabled");
-
     clearInterval(interval);
     Blockly.getMainWorkspace().recordCachedAreas();
   });
   addon.self.addEventListener("reenabled", () => {
-    console.log("Addon Reabled");
-
     if (!injected) tryInjecting();
     Blockly.getMainWorkspace().recordCachedAreas();
   });

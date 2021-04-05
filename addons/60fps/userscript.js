@@ -34,7 +34,6 @@ export default async function ({ addon, global, console }) {
 
     const setFPS = (fps) => {
       gloabal_fps = addon.self.disabled ? 30 : fps;
-      console.log(gloabal_fps);
 
       clearInterval(vm.runtime._steppingInterval);
       vm.runtime._steppingInterval = null;

@@ -147,7 +147,6 @@ function removeAddonStyles(addonId) {
 }
 
 function injectUserstylesAndThemes(addonsWithUserstyles) {
-  console.log(addonsWithUserstyles);
   for (const addon of addonsWithUserstyles || []) {
     addStyle(addon);
   }
