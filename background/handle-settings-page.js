@@ -50,6 +50,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     chrome.storage.sync.set({
       addonSettings: scratchAddons.globalState.addonSettings,
     });
+
+    const manifest = scratchAddons.manifests.find((addon) => addon.addonId === addonId).manifest;
+    const { updateUserstylesOnSettingsChange } = manifest;
+    if (updateUserstylesOnSettingsChange)
+      scratchAddons.localEvents.dispatchEvent(
+        new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest } })
+      );
     // TODO: something idk
   }
 });

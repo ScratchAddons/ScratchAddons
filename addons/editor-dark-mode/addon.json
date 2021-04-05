@@ -18,6 +18,7 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
+  "updateUserstylesOnSettingsChange": true,
   "userstyles": [
     {
       "url": "dark-editor.css",

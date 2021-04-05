@@ -222,6 +222,9 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       addonsWithUserscripts.splice(addonIndex, 1);
       removeAddonStyles(addonId);
       _page_.fireEvent({ name: "disabled", addonId, target: "self" });
+    } else if (request.updateUserstylesSettingsChange) {
+      const { addonId } = request.updateUserstylesSettingsChange;
+      // TODO: Reinject addon userstyles
     } else if (request.setMsgCount) {
       _page_.setMsgCount(request.setMsgCount);
     } else if (request === "getRunningAddons") {

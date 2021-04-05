@@ -61,6 +61,20 @@ scratchAddons.localEvents.addEventListener("addonDisable", ({ detail }) => {
     })
   );
 });
+scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ detail }) => {
+  const { addonId, manifest } = detail;
+  chrome.tabs.query({}, (tabs) =>
+    tabs.forEach((tab) => {
+      if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
+          if (res) {
+            chrome.tabs.sendMessage(tab.id, { updateUserstylesSettingsChange: { addonId } }, { frameId: 0 });
+          }
+        });
+      }
+    })
+  );
+});
 
 async function getAddonData({ addonId, manifest, url }) {
   const promises = [];
