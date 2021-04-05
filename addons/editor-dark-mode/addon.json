@@ -13,6 +13,10 @@
     {
       "name": "Maximouse (Experimental Dark)",
       "link": "https://github.com/mxmou/customize-scratch"
+    },
+    {
+      "name": "ErrorGamer2000 (Experimental Dark)",
+      "link": "https://scratch.mit.edu/users/ErrorGamer2000"
     }
   ],
   "userstyles": [
@@ -66,6 +70,19 @@
       "settingMatch": {
         "id": "selectedMode",
         "value": "experimental-dark"
+      }
+    },
+    {
+      "url": "turbowarp.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "turbowarp"
       }
     },
     {
