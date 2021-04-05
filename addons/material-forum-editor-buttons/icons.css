@@ -1,147 +1,159 @@
 .markItUp .markItUpButton1 a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_bold/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_bold/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 .markItUp .markItUpButton2 a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_italic/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_italic/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 .markItUp .markItUpButton3 a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_underlined/v5/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_underlined/v5/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 
 .markItUp .markItUpButton4 a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/strikethrough_s/v6/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/strikethrough_s/v6/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 
 .markItUp .markItUpButton5 a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/insert_photo/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/insert_photo/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 .markItUp .markItUpButton6 a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/insert_link/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/insert_link/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 
 .markItUp .markItUpButton7 a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_size/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_size/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 .markItUp .markItUpButton8 a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_list_bulleted/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_list_bulleted/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 .markItUp .markItUpButton9 a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_list_numbered/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_list_numbered/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 .markItUp .markItUpButton10 a {
-    background-image: url("https://gist.githubusercontent.com/easrng/4f63ce27f1970632528143430698db89/raw/f20856e9c4ab9ea176207f4980556c3fa4ec87b4/listitem.svg") !important;
-    background-size: 20px;
+  background-image: url("https://gist.githubusercontent.com/easrng/4f63ce27f1970632528143430698db89/raw/f20856e9c4ab9ea176207f4980556c3fa4ec87b4/listitem.svg") !important;
+  background-size: 20px;
 }
 
 .markItUp .markItUpButton11 a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_quote/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/format_quote/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 .markItUp .markItUpButton12 > a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/insert_emoticon/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/insert_emoticon/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 .markItUp .browser-os-button a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/computer/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/computer/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 .markItUp .clean a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/code/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/code/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 .markItUp .preview a {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/done/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/done/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
-#ibbBtn, #uploadButton {
-    background-image: url("https://fonts.gstatic.com/s/i/materialicons/cloud_upload/v4/24px.svg?download=true") !important;
-    background-size: 20px;
+#ibbBtn,
+#uploadButton {
+  background-image: url("https://fonts.gstatic.com/s/i/materialicons/cloud_upload/v4/24px.svg?download=true") !important;
+  background-size: 20px;
 }
 .markItUpHeader ul .markItUpDropMenu:before {
-    content: url("https://fonts.gstatic.com/s/i/materialicons/expand_more/v4/24px.svg?download=true");
-    width: 24px;
-    position: absolute;
-    right: -16px;
-    overflow: visible;
-    transform: scale(0.6);
-    top: -1px;
+  content: url("https://fonts.gstatic.com/s/i/materialicons/expand_more/v4/24px.svg?download=true");
+  width: 24px;
+  position: absolute;
+  right: -16px;
+  overflow: visible;
+  transform: scale(0.6);
+  top: -1px;
 }
 .markItUpHeader ul .markItUpDropMenu {
-    background: transparent;
+  background: transparent;
 }
 .markItUp .markItUpButton12-1 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/smile.png"] {
-    background-image: url("https://easrng.github.io/scratch-emoji-assets/smile.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/smile.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/smile.svg");
 }
 .markItUp .markItUpButton12-2 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/neutral.png"] {
-    background-image: url("https://easrng.github.io/scratch-emoji-assets/neutral.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/neutral.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/neutral.svg");
 }
 .markItUp .markItUpButton12-3 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/sad.png"] {
-    background-image: url("https://easrng.github.io/scratch-emoji-assets/sad.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/sad.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/sad.svg");
 }
 
 .markItUp .markItUpButton12-4 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/big_smile.png"] {
-background-image: url("https://easrng.github.io/scratch-emoji-assets/big_smile.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/big_smile.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/big_smile.svg");
 }
 
 .markItUp .markItUpButton12-5 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/yikes.png"] {
-    background-image: url("https://easrng.github.io/scratch-emoji-assets/yikes.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/yikes.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/yikes.svg");
 }
 
 .markItUp .markItUpButton12-6 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/wink.png"] {
-    background-image: url("https://easrng.github.io/scratch-emoji-assets/wink.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/wink.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/wink.svg");
 }
 
 .markItUp .markItUpButton12-7 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/hmm.png"] {
-    background-image: url("https://easrng.github.io/scratch-emoji-assets/hmm.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/hmm.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/hmm.svg");
 }
 
 .markItUp .markItUpButton12-8 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/tongue.png"] {
-    background-image: url("https://easrng.github.io/scratch-emoji-assets/tongue.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/tongue.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/tongue.svg");
 }
 
 .markItUp .markItUpButton12-9 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/lol.png"] {
-    background-image: url("https://easrng.github.io/scratch-emoji-assets/lol.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/lol.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/lol.svg");
 }
 
 .markItUp .markItUpButton12-10 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/mad.png"] {
-    background-image: url("https://easrng.github.io/scratch-emoji-assets/mad.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/mad.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/mad.svg");
 }
 
 .markItUp .markItUpButton12-11 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/roll.png"] {
-    background-image: url("https://easrng.github.io/scratch-emoji-assets/roll.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/roll.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/roll.svg");
 }
 
 .markItUp .markItUpButton12-12 a,
-[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/cool.png"] {
-    background-image: url("https://easrng.github.io/scratch-emoji-assets/cool.svg");
+[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/cool.png"]
+{
+  background-image: url("https://easrng.github.io/scratch-emoji-assets/cool.svg");
 }
 
-img[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/"] {
-    object-position: 999999px 999999px;
-    margin-bottom: -3px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
+img[src*="//cdn.scratch.mit.edu/scratchr2/static/"][src*="djangobb_forum/img/smilies/"]
+{
+  object-position: 999999px 999999px;
+  margin-bottom: -3px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
-
-
