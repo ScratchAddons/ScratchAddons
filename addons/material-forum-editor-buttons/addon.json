@@ -8,5 +8,14 @@
     }
   ],
   "tags": ["community", "forums", "theme", "beta", "recommended"],
+  "credits": [
+  {
+    "name": "easrng",
+    "link": "https://github.com/easrng/material-scratch-forum-editor-buttons"
+  },
+  {
+    "name": "Secret-chest"
+    "link": "https://github.com/Secret-chest"
+  ],
   "enabled_by_default": false
 }
