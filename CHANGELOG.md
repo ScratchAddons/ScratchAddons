@@ -25,6 +25,28 @@ All notable changes to this project will be documented in this file.
 
 -->
 
+## [v1.12.1] - 2021-04-01
+
+### Changed
+
+#### Extension and Addon API
+
+- Update localization strings
+
+### Fixed
+
+#### Addons
+
+- 2D color picker: Addon breaks on Firefox (#2004)
+- Alt+GreenFlag 60FPS player mode: Typo at notice (#2021)
+- Auto-hide block palette:1 Lock icon placed at the wrong place (#2011)
+- Auto-hide block palette:2 Re-entering the editor if category click mode is used breaks addon. (#2011)
+- Auto-hide block palette:3 Wrong lock icon shown after re-entering the editor (#2011)
+- Auto-hide block palette:4 Changing "toggle on" setting while in use crashes addon (#2011)
+- Profile page banner: Addon breaks follow button and changes featured projects (#2014)
+- Profile statistics: Incorrect chart (#2016)
+- Sprite folders: Dragging a folder into empty backpack crashes addon (#2036)
+
 ## [v1.12.0] - 2021-03-28
 
 ### Added
@@ -876,6 +898,7 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.12.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.1
 [v1.12.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.0
 [v1.11.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.2
 [v1.11.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.1
