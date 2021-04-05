@@ -1,0 +1,13 @@
+.licenses {
+  height: 100%;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.licenses-block {
+  padding: 2rem;
+}
+
+.licenses-body pre {
+  white-space: pre-wrap;
+}
