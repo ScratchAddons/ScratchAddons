@@ -38,6 +38,12 @@ const page = {
 
   fireEvent(info) {
     if (info.addonId) {
+      const showElts = document.querySelectorAll(`[data-hide-if-disabled="${info.addonId}"]`);
+      showElts.forEach((elt, i) => {
+        if (info.name === "disabled") elt.style.display = "none";
+        if (info.name === "reenabled") elt.style.display = "";
+      });
+
       // Addon specific events, like settings change and self disabled
       const eventTarget = scratchAddons.eventTargets[info.target].find(
         (eventTarget) => eventTarget._addonId === info.addonId
