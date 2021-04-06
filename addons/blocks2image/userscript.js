@@ -1,20 +1,83 @@
+const buttonItem = [
+    'export selected to SVG',
+    'export all to SVG',
+    'export selected to PNG',
+    'export all to PNG'
+]
+
 export default async function ({ addon, global, console, msg }) {
+    function eventMouseDown(e) {
+        if (e.button === 2) {
+            let blockSvg = e.target.closest("[data-id]");
+            let isBackground = !blockSvg && e.target.closest("svg.blocklySvg");
+            if (blockSvg || isBackground) {
+                let dataId = blockSvg && blockSvg.getAttribute("data-id");
+                if (dataId || isBackground) {
+                    setTimeout(async () => {
+                        let widget = document.querySelector("div.blocklyWidgetDiv");
+                        if (!widget) {
+                            return;
+                        }
+                        let blocklyContextMenu = widget.querySelector("div.blocklyContextMenu");
+                        if (!blocklyContextMenu) {
+                            return;
+                        }
+                        if (isBackground) {
+                            blocklyContextMenu.insertAdjacentHTML(
+                                "beforeend",
+                                `
+                                ${buttonItem
+                                    .map((item, index) => `
+                                        <div id="blocks2imgCommand${index + 1}" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
+                                            <div class="goog-menuitem-content" style="user-select: none;">${item}</div>
+                                        </div>
+                                    `)
+                                    .join('')
+                                }
+                                `
+                            );
+                        }
+
+                        if (blocklyContextMenu.children.length < 15) {
+                            blocklyContextMenu.style.maxHeight = "none";
+                            widget.style.height = blocklyContextMenu.getBoundingClientRect().height + 12 + "px";
+                            blocklyContextMenu.style.maxHeight = "";
+                        }
+
+                        function hidePopups() {
+                            const currentWorkspace = Blockly.getMainWorkspace()
+                            const element = currentWorkspace.getToolbox().HtmlDiv;
+                            element.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: element, bubbles: true }));
+                            element.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: element, bubbles: true }));
+                        }
+
+                        for (let item of buttonItem) {
+                            document.getElementById(`blocks2imgCommand${buttonItem.indexOf(item) + 1}`).onclick = () =>{
+                                hidePopups()
+                                exportBlock({ command: 'export' + (buttonItem.indexOf(item) + 1) })
+                            }
+                        }
+                    }, 1);
+                }
+            }
+        }
+    }
+
     while (true) {
         let nav = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
             markAsSeen: true,
         });
-
+        let blocklyWorkspace = await addon.tab.waitForElement("g.blocklyWorkspace", {
+            markAsSeen: true,
+        });
         if (!document.querySelector("[class^='author-info_username-line']")) {
-            const buttonItem = [
-                'export selected to SVG',
-                'export all to SVG',
-                'export selected to PNG',
-                'export all to PNG'
-            ]
+            blocklyWorkspace.addEventListener('mousedown', (e) => eventMouseDown(e))
+
+            /* use context menu instead of
 
             let exportBtn = document.createElement("div");
             exportBtn.classList.add(addon.tab.scratchClass("menu-bar_menu-bar-item"));
-            exportBtn.title = "Blocks2Img";
+            exportBtn.title = "Blocks2Image";
             let thumbinner = document.createElement("span");
             thumbinner.setAttribute(
                 "class",
@@ -82,6 +145,8 @@ export default async function ({ addon, global, console, msg }) {
                 ulWrapper.style.display = "block"
                 document.addEventListener('click', clickOutSide);
             })
+            
+            */
         }
     }
 }
@@ -118,8 +183,8 @@ function exportBlock(request, sender, sendMessage) {
     svg.setAttribute('version', '1.1')
 
     let style = document.createElement('style')
-    style.innerHTML =
-        `
+    style.textContent =
+`
 .blocklyText {
     fill: #fff;
     font-family: "Helvetica Neue", Helvetica, sans-serif;
@@ -138,18 +203,18 @@ function exportBlock(request, sender, sendMessage) {
     } else {
         svg = allBlocks(svg, style, isExportPNG)
     }
-    // 处理 nbsp 空格
+    // resolve nbsp whitespace
     let texts = Array.from(svg.getElementsByTagName('text'))
     texts.forEach(text => {
         text.innerHTML = text.innerHTML.replace(/&nbsp;/g, ' ')
     })
-    // 处理image 路径
+    // resolve image path
     let images = Array.from(svg.getElementsByTagName('image'))
     let scratchURL = window.location.origin
 
     images.forEach(item => {
         let builtinSvgData = blocksMedia.get(item.getAttribute('xlink:href').substring(item.getAttribute('xlink:href').lastIndexOf('/') + 1))
-        if (builtinSvgData) {   // 替换插件预置的svg数据（官方）
+        if (builtinSvgData) {   // replace svg file path (offical) to inline svg
             item.setAttribute('xlink:href', builtinSvgData)
         } else if (item.getAttribute('xlink:href').indexOf('/static/') === 0) {    // 替换为第三方 链接形式
             item.setAttribute('xlink:href', scratchURL + item.getAttribute('xlink:href').slice(0))
@@ -172,7 +237,7 @@ function selectedBlocks(svg, style, isExportPNG) {
     let svgchild = document.querySelector('svg.blocklySvg g.blocklySelected')
     if (!svgchild) {
         alert('Click on the blocks you want to export!')
-        throw new Error('Click on the blocks you want to export!')
+        throw new Error('Can not found selected blocks')
     }
     svgchild = svgchild.cloneNode(true)
     let dataShapes = svgchild.getAttribute('data-shapes')
@@ -185,9 +250,13 @@ function selectedBlocks(svg, style, isExportPNG) {
 function allBlocks(svg, style, isExportPNG) {
     let svgchild = document.querySelector('svg.blocklySvg g.blocklyBlockCanvas')
     svgchild = svgchild.cloneNode(true)
-
+   
     let xArr = []
     let yArr = []
+    if (!svgchild?.childNodes?.length) {
+        alert('Add blocks to workspace!')
+        throw new Error('Workspace is empty')    
+    }
     svgchild.childNodes.forEach(g => {
         let x = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[1] || 0
         let y = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[2] || 0
@@ -253,5 +322,6 @@ function exportPNG(svg) {
         link.download = `block_${timestamp}.png`;
         link.href = dataURL
         link.click();
+        iframe.remove()
     }
 }
