@@ -55,7 +55,7 @@ const page = {
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
 
-function onDataReady() {
+async function onDataReady() {
   const addons = page.addonsWithUserscripts;
 
   scratchAddons.l10n = new Localization(page.l10njson);
@@ -96,6 +96,18 @@ function onDataReady() {
       }
     });
     observer.observe(document.documentElement, { subtree: true, childList: true });
+  }
+
+  const exampleTab = scratchAddons.eventTargets.tab[0];
+  if (exampleTab) {
+    if (exampleTab.editorMode === "editor") inject(await exampleTab.traps.getBlockly());
+    exampleTab.addEventListener(
+      "urlChange",
+      async () => exampleTab.editorMode === "editor" && inject(await exampleTab.traps.getBlockly())
+    );
+  } else {
+    // To be done when userscripts can be dynamicly ran
+    // Will invlove a promice most likely...
   }
 }
 
@@ -197,4 +209,63 @@ else {
     }
   });
   stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
+}
+
+let injected = false;
+function inject(Blockly) {
+  if (injected) return;
+  injected = true;
+  let oldShow = Blockly.ContextMenu.show;
+  Blockly.ContextMenu.show = function (event, items, something) {
+    let target = event.target;
+    let block = target.closest("[data-id]");
+    if (!block) {
+      // Thank you @GarboMuffin for this code:
+      // When right clicking on the boundaries of a block in the flyout,
+      // the click event can happen on a background rectangle and not on the actual block for some reason.
+      // In this case, the block group should immediately follow the rect.
+      if (target.tagName === "rect" && !target.classList.contains("blocklyMainBackground")) {
+        target = target.nextSibling;
+        block = target && target.closest("[data-id]");
+      }
+    }
+    if (block) {
+      block = Blockly.getMainWorkspace().getBlockById(block.dataset.id);
+      // Keep jumping to the parent block until we find a non-shadow block.
+      while (block && block.isShadow()) {
+        block = block.getParent();
+      }
+    }
+
+    let allItems = [];
+    scratchAddons.eventTargets.tab
+      .map((eventTarget) => eventTarget._blockContextMenu)
+      .filter((menuItems) => menuItems.length)
+      .forEach((menuItems) => (allItems = [...allItems, ...menuItems]));
+
+    for (const { extra, callback } of allItems) {
+      const { workspace, blocks, flyout } = extra;
+      let injectMenu = false;
+      if (workspace && event.target.className.baseVal == "blocklyMainBackground") {
+        injectMenu = true;
+      }
+      if (block && blocks && !event.target.closest(".blocklyFlyout")) {
+        injectMenu = true;
+      }
+      if (block && flyout && event.target.closest(".blocklyFlyout")) {
+        injectMenu = true;
+      }
+      if (injectMenu) items = callback(items, block);
+    }
+
+    oldShow.call(this, event, items, something);
+    items.forEach((item, i) => {
+      console.log(item);
+      if (item.separator) {
+        const itemElt = document.querySelector(".blocklyContextMenu").children[i];
+        itemElt.style.paddingTop = "2px";
+        itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+      }
+    });
+  };
 }

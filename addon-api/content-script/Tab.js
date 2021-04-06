@@ -25,6 +25,8 @@ export default class Tab extends Listenable {
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+
+    this._blockContextMenu = [];
   }
   /**
    * Loads a script by URL.
@@ -196,58 +198,6 @@ export default class Tab extends Listenable {
    * @param {object} opts - options.
    */
   async createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false } = {}) {
-    let injected = false;
-    if (this.editorMode === "editor") inject(await this.traps.getBlockly());
-    this.addEventListener(
-      "urlChange",
-      async () => this.editorMode === "editor" && inject(await this.traps.getBlockly())
-    );
-
-    function inject(Blockly) {
-      if (injected) return;
-      injected = true;
-      let oldShow = Blockly.ContextMenu.show;
-      Blockly.ContextMenu.show = function (event, items, something) {
-        let target = event.target;
-        let block = target.closest("[data-id]");
-        if (!block) {
-          // Thank you @GarboMuffin for this code:
-          // When right clicking on the boundaries of a block in the flyout,
-          // the click event can happen on a background rectangle and not on the actual block for some reason.
-          // In this case, the block group should immediately follow the rect.
-          if (target.tagName === "rect" && !target.classList.contains("blocklyMainBackground")) {
-            target = target.nextSibling;
-            block = target && target.closest("[data-id]");
-          }
-        }
-        if (block) {
-          block = Blockly.getMainWorkspace().getBlockById(block.dataset.id);
-          // Keep jumping to the parent block until we find a non-shadow block.
-          while (block && block.isShadow()) {
-            block = block.getParent();
-          }
-        }
-
-        let injectMenu = false;
-        if (workspace && event.target.className.baseVal == "blocklyMainBackground") {
-          injectMenu = true;
-        }
-        if (block && blocks && !event.target.closest(".blocklyFlyout")) {
-          injectMenu = true;
-        }
-        if (block && flyout && event.target.closest(".blocklyFlyout")) {
-          injectMenu = true;
-        }
-        if (injectMenu) items = callback(items, block);
-        oldShow.call(this, event, items, something);
-        items.forEach((item, i) => {
-          if (item.separator) {
-            const itemElt = document.querySelector(".blocklyContextMenu").children[i];
-            itemElt.style.paddingTop = "2px";
-            itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
-          }
-        });
-      };
-    }
+    this._blockContextMenu.push({ callback, extra: { workspace, blocks, flyout } });
   }
 }
