@@ -6,6 +6,14 @@
       "name": "griffpatch"
     }
   ],
+  "settings": [
+    {
+      "name": "Remove original clean up menu item",
+      "id": "removeCleanUp",
+      "type": "boolean",
+      "default": true
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
