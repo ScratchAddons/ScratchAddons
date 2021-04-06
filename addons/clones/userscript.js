@@ -6,6 +6,9 @@ export default async function ({ addon, global, console, msg }) {
   hideInSmallStageMode({ addon });
 
   let countContainerContainer = document.createElement("div");
+
+  countContainerContainer.setAttribute("data-hide-if-disabled", addon.self.id);
+
   let countContainer = document.createElement("div");
   let count = document.createElement("span");
   let icon = document.createElement("span");
