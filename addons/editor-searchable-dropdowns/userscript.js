@@ -14,6 +14,8 @@ export default async function ({ addon, global, console }) {
     blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
 
     const searchBar = document.createElement("input");
+    searchBar.setAttribute("data-hide-if-disabled", addon.self.id);
+
     searchBar.type = "text";
     searchBar.addEventListener("input", handleInputEvent);
     searchBar.addEventListener("keydown", handleKeyDownEvent);

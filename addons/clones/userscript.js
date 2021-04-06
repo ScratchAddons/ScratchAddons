@@ -1,6 +1,4 @@
 export default async function ({ addon, global, console, msg }) {
-  console.log("clones counter enabled");
-
   const vm = addon.tab.traps.vm;
 
   hideInSmallStageMode({ addon });
