@@ -1,6 +1,6 @@
 {
-    "name": "Blocks2image",
-    "description": "export blocks to svg/png image",
+    "name": "Blocks2Image",
+    "description": "Export blocks to svg/png image",
     "tags": [
         "editor",
         "beta"
