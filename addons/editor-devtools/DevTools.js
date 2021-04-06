@@ -1396,7 +1396,7 @@ export default class DevTools {
             if (isBackground) {
               let nodes = blocklyContextMenu.children;
               const realBlockly = await this.addon.tab.traps.getBlockly();
-              if (typeof addon.settings === undefined || addon.settings.get("removeCleanUp")) {
+              if (typeof this.addon.settings === undefined || this.addon.settings.get("removeCleanUp")) {
                 for (const node of nodes) {
                   if (node.textContent === realBlockly.Msg.CLEAN_UP) {
                     node.remove();
