@@ -86,15 +86,15 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   });
 
   textBox.addEventListener("dragenter", () => {
-    textBox.style.backgroundColor = "lightgrey";
+    textBox.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
   });
 
   textBox.addEventListener("dragleave", () => {
-    textBox.style.backgroundColor = "white";
+    textBox.style.backgroundColor = "transparent";
   });
 
   textBox.addEventListener("dragend", () => {
-    textBox.style.backgroundColor = "white";
+    textBox.style.backgroundColor = "transparent";
   });
 
   textBox.addEventListener("drop", (e) => {

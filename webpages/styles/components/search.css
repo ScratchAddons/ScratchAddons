@@ -1,0 +1,77 @@
+.search-box {
+  min-height: 60px;
+  background: var(--accent-1);
+  display: flex;
+  align-items: center;
+  padding: 10px 30px;
+  user-select: none;
+}
+
+.search-box input {
+  background: #111;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px 0 0 4px;
+  color: var(--accent-5);
+  width: 150px;
+  height: 16px;
+}
+.search-box input:focus {
+  outline: none;
+}
+.search-box input::placeholder {
+  color: #777;
+}
+
+.search-box > button {
+  background: #111;
+  /* Background URL set by Vue */
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 36px;
+  width: 45px;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  outline: none;
+  cursor: pointer;
+}
+
+.search-box .badge {
+  cursor: default;
+  border-bottom: none;
+}
+.search-box .badge .selected-badge {
+  cursor: default;
+  border-bottom: none;
+}
+
+.switch {
+  display: block;
+  background: #111;
+  width: 40px;
+  height: 20px;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.switch::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: var(--accent-4);
+  border-radius: 5px;
+  top: 5px;
+  left: 5px;
+  transition: all 0.25s ease;
+}
+
+.switch[state="on"] {
+  background: var(--brand-orange);
+}
+.switch[state="on"]::before {
+  background: #fff;
+  left: 25px;
+}
