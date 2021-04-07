@@ -546,7 +546,7 @@ export default async function ({ addon, global, console, msg }) {
             // For sprite items, `id` is used as the drag payload and toString is used as a React key
             if (!folderItem.id) folderItem.id = {};
             folderItem.id.sa_folder_items = folderItems;
-            folderItem.id.toString = () => `&__${occurence}_${folderName}`;
+            folderItem.id.toString = () => reactKey;
           } else {
             folderItem.asset = folderAsset;
             if (!folderItem.dragPayload) folderItem.dragPayload = {};
