@@ -1,11 +1,12 @@
 const buttonItem = [
-    'export selected to SVG',
-    'export all to SVG',
-    'export selected to PNG',
-    'export all to PNG'
+    'Export selected to SVG',
+    'Export all to SVG',
+    'Export selected to PNG',
+    'Export all to PNG'
 ]
 
 export default async function ({ addon, global, console, msg }) {
+
     function eventMouseDown(e) {
         if (e.button === 2) {
             let blockSvg = e.target.closest("[data-id]");
@@ -28,7 +29,7 @@ export default async function ({ addon, global, console, msg }) {
                                 `
                                 ${buttonItem
                                     .map((item, index) => `
-                                        <div id="blocks2imgCommand${index + 1}" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
+                                        <div id="blocks2imgCommand${index + 1}" class="goog-menuitem blocks2img" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
                                             <div class="goog-menuitem-content" style="user-select: none;">${item}</div>
                                         </div>
                                     `)
@@ -52,7 +53,7 @@ export default async function ({ addon, global, console, msg }) {
                         }
 
                         for (let item of buttonItem) {
-                            document.getElementById(`blocks2imgCommand${buttonItem.indexOf(item) + 1}`).onclick = () =>{
+                            document.getElementById(`blocks2imgCommand${buttonItem.indexOf(item) + 1}`).onclick = () => {
                                 hidePopups()
                                 exportBlock({ command: 'export' + (buttonItem.indexOf(item) + 1) })
                             }
@@ -71,6 +72,7 @@ export default async function ({ addon, global, console, msg }) {
             markAsSeen: true,
         });
         if (!document.querySelector("[class^='author-info_username-line']")) {
+            // insert contextmenu
             blocklyWorkspace.addEventListener('mousedown', (e) => eventMouseDown(e))
 
             /* use context menu instead of
@@ -145,7 +147,7 @@ export default async function ({ addon, global, console, msg }) {
                 ulWrapper.style.display = "block"
                 document.addEventListener('click', clickOutSide);
             })
-            
+
             */
         }
     }
@@ -184,7 +186,7 @@ function exportBlock(request, sender, sendMessage) {
 
     let style = document.createElement('style')
     style.textContent =
-`
+        `
 .blocklyText {
     fill: #fff;
     font-family: "Helvetica Neue", Helvetica, sans-serif;
@@ -216,7 +218,7 @@ function exportBlock(request, sender, sendMessage) {
         let builtinSvgData = blocksMedia.get(item.getAttribute('xlink:href').substring(item.getAttribute('xlink:href').lastIndexOf('/') + 1))
         if (builtinSvgData) {   // replace svg file path (offical) to inline svg
             item.setAttribute('xlink:href', builtinSvgData)
-        } else if (item.getAttribute('xlink:href').indexOf('/static/') === 0) {    // 替换为第三方 链接形式
+        } else if (item.getAttribute('xlink:href').indexOf('/static/') === 0) {    // replace link path for third party website
             item.setAttribute('xlink:href', scratchURL + item.getAttribute('xlink:href').slice(0))
         } else if (item.getAttribute('xlink:href').indexOf('./static/') === 0) {
             item.setAttribute('xlink:href', scratchURL + item.getAttribute('xlink:href').slice(1))
@@ -250,12 +252,12 @@ function selectedBlocks(svg, style, isExportPNG) {
 function allBlocks(svg, style, isExportPNG) {
     let svgchild = document.querySelector('svg.blocklySvg g.blocklyBlockCanvas')
     svgchild = svgchild.cloneNode(true)
-   
+
     let xArr = []
     let yArr = []
     if (!svgchild?.childNodes?.length) {
         alert('Add blocks to workspace!')
-        throw new Error('Workspace is empty')    
+        throw new Error('Workspace is empty')
     }
     svgchild.childNodes.forEach(g => {
         let x = g.getAttribute('transform').match(/translate\((.*?),(.*?)\)/)[1] || 0

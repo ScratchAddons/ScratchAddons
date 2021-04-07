@@ -19,5 +19,13 @@
             ]
         }
     ],
+    "userstyles": [
+        {
+            "url": "userscript.css",
+            "matches": [
+                "https://scratch.mit.edu/projects/*"
+            ]
+        }
+    ],
     "enabledByDefault": false
 }
