@@ -200,8 +200,8 @@ export default async function ({ addon, global, console, msg }) {
       const id = Object.keys(folderColors).length;
       const className = `sa-folders-color-${id}`;
       folderColors[folderName] = className;
-      folderColorStylesheet.textContent += `.${className} { background-color: ${color} !important; }`;
-      folderColorStylesheet.textContent += `.${className}[class*="sprite-selector_raised"] { background-color: hsla(${hue}deg, 100%, 77%, 1) !important; }`;
+      folderColorStylesheet.textContent += `.${className}{background-color:${color} !important;}`;
+      folderColorStylesheet.textContent += `.${className}[class*="sprite-selector_raised"]:not([class*="sa-folder-folder"]){background-color:hsla(${hue}deg, 100%, 77%, 1) !important;}`;
     }
     return folderColors[folderName];
   };
@@ -976,7 +976,7 @@ export default async function ({ addon, global, console, msg }) {
           }
           this.props.selected = false;
           this.props.number = null;
-          this.props.className += ` ${getFolderColorClass(itemData.folder)}`;
+          this.props.className += ` ${getFolderColorClass(itemData.folder)} sa-folder-folder`;
         }
         if (typeof itemData.inFolder === "string") {
           this.props.className += ` ${getFolderColorClass(itemData.inFolder)}`;
