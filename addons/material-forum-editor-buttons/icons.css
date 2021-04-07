@@ -50,6 +50,10 @@
   background-image: url("https://fonts.gstatic.com/s/i/materialicons/insert_emoticon/v4/24px.svg?download=true") !important;
   background-size: 20px;
 }
+.markItUpButton .markItUpButton14 .scratchblocks-button {
+  background-image: url("scratchblocks.svg");
+  background-size: 20px;
+}
 .markItUp .browser-os-button a {
   background-image: url("https://fonts.gstatic.com/s/i/materialicons/computer/v4/24px.svg?download=true") !important;
   background-size: 20px;
