@@ -394,12 +394,14 @@ export default async function ({ addon, global, console, msg }) {
 
     const getUniqueIdOfFolderItems = (items) => {
       let id = "sa_folder&&";
-      for (let i = 0; i < items.length; i++) {
+      for (let i = 0; i < Math.min(PREVIEW_POSITIONS.length, items.length); i++) {
         const item = items[i];
         if (item.asset) {
           id += item.asset.assetId;
         } else if (item.costume && item.costume.asset) {
           id += item.costume.asset.assetId;
+        } else if (item.url) {
+          id += item.url;
         }
         id += "&&";
       }
