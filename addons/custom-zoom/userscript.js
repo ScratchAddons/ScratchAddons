@@ -1,104 +1,72 @@
 export default async function ({ addon, global, console }) {
-  async function setZoom() {
-    //Function to set the custom zoom parameters
-    if (!Blockly) return;
+  let controlsRect;
+  let previousIsHovered = false;
+  const speeds = {
+    none: "0s",
+    short: "0.25s",
+    default: "0.5s",
+    long: "1s",
+  };
 
-    if (addon.tab.editorMode === "editor") {
-      //Set the zoom parameters
-      Blockly.getMainWorkspace().options.zoomOptions.maxScale = addon.settings.get("maxZoom") / 100;
-      Blockly.getMainWorkspace().options.zoomOptions.minScale = addon.settings.get("minZoom") / 100;
-      Blockly.getMainWorkspace().options.zoomOptions.startScale = addon.settings.get("startZoom") / 100;
-      Blockly.getMainWorkspace().options.zoomOptions.scaleSpeed = 1.2 * (addon.settings.get("zoomSpeed") / 100);
-    }
+  const customZoomAreaElement = document.createElement("div");
+  customZoomAreaElement.className = "sa-custom-zoom-area";
 
-    if (!defaultTranslate) {
-      //If the default position is not saved, save it
-      defaultTranslate = Blockly.getMainWorkspace().zoomControls_.svgGroup_.attributes.transform.value;
-      if (addon.settings.get("fixheight")) {
-        let y = defaultTranslate.substring(defaultTranslate.indexOf(",") + 1, defaultTranslate.length - 1);
-        defaultTranslate = defaultTranslate.replace(y + ")", `${y - 35})`);
-      }
-      Blockly.getMainWorkspace().zoomControls_.svgGroup_.attributes.transform.value = defaultTranslate;
-    }
+  function update() {
+    document.removeEventListener("mousemove", onMouseMove);
 
-    if (!defaultRect) {
-      //If the origional position of the zoom controls is not saved, save it
-      Blockly.getMainWorkspace().zoomControls_.svgGroup_.style.transition = `0s ease-in-out`;
-      defaultRect = Blockly.getMainWorkspace().zoomControls_.svgGroup_.getBoundingClientRect();
-    }
+    if (addon.tab.editorMode !== "editor") return;
 
-    try {
-      document.removeEventListener("mousemove", onMouseMove); //Remove the mousemove listener, if it exists
-    } catch {}
+    Blockly.getMainWorkspace().options.zoomOptions.maxScale = addon.settings.get("maxZoom") / 100;
+    Blockly.getMainWorkspace().options.zoomOptions.minScale = addon.settings.get("minZoom") / 100;
+    Blockly.getMainWorkspace().options.zoomOptions.startScale = addon.settings.get("startZoom") / 100;
+    Blockly.getMainWorkspace().options.zoomOptions.scaleSpeed = 1.2 * (addon.settings.get("zoomSpeed") / 100);
 
-    if (addon.tab.editorMode === "editor") document.addEventListener("mousemove", onMouseMove); //If in the editor, add the mousemove listener
-  }
-
-  function hideShow(inArea = false, speed = "default") {
-    //Function to hide/show the zoom controls
-    let speeds = {
-      none: "0",
-      short: "0.25",
-      default: "0.5",
-      long: "1",
-    };
-
-    if (!addon.settings.get("autohide")) return;
-
-    if (!Blockly) return;
-    //Get the svg element of the controls
-    let controls = Blockly.getMainWorkspace().zoomControls_.svgGroup_;
-
-    controls.style.transition = `${speeds[speed]}s ease-in-out`; //Set the animation speed
-
-    if (!inArea) {
-      //Mouse is not hovering where the controls normally are
-      let val = defaultTranslate;
-      let x = val.substring(val.indexOf("(") + 1, val.indexOf(","));
-      let y = val.substring(val.indexOf(","));
-      x = Number(x) + 80;
-      let translateCode = "translate(" + x.toString() + y;
-
-      controls.attributes.transform.value = translateCode;
-    } else {
-      controls.attributes.transform.value = defaultTranslate || "";
+    const svgGroup = getZoomControls();
+    const autohide = addon.settings.get("autohide");
+    if (svgGroup) svgGroup.classList.toggle("sa-custom-zoom-hidden", autohide);
+    if (autohide) {
+      const injectionDiv = document.querySelector(".injectionDiv");
+      injectionDiv.appendChild(customZoomAreaElement);
+      updateRect();
+      document.addEventListener("mousemove", onMouseMove);
     }
   }
+
+  function getZoomControls() {
+    const zoomControls = Blockly.getMainWorkspace().zoomControls_;
+    if (zoomControls) return zoomControls.svgGroup_;
+    return null;
+  }
+
   function onMouseMove(e) {
-    //Function for mousemove listener
-    let val = defaultTranslate;
-    let x = val.substring(val.indexOf("(") + 1, val.indexOf(","));
-    let y = val.substring(val.indexOf(","));
-    x = Number(x) + 80;
-    let translateCode = "translate(" + x.toString() + y;
-    let ctrlTrnsfrm = Blockly.getMainWorkspace().zoomControls_.svgGroup_.attributes.transform;
-
-    if (ctrlTrnsfrm.value !== defaultTranslate && ctrlTrnsfrm.value !== translateCode) {
-      let controls = Blockly.getMainWorkspace().zoomControls_.svgGroup_;
-      controls.style.transition = `0s ease-in-out`;
-      //Window has been resized and the gui has automatically updated the control position
-      //We now need to update our default values
-      val = ctrlTrnsfrm.value;
-      x = val.substring(val.indexOf("(") + 1, val.indexOf(","));
-      y = val.substring(val.indexOf(","));
-      x = Number(x) + 80;
-      defaultTranslate = controls.attributes.transform.value;
-      controls.attributes.transform.value = defaultTranslate;
-      setTimeout(function () {
-        defaultRect = Blockly.getMainWorkspace().zoomControls_.svgGroup_.getBoundingClientRect();
-      }, 0);
+    const isHovered =
+      e.x > controlsRect.left && e.x < controlsRect.right && e.y > controlsRect.top && e.y < controlsRect.bottom;
+    if (isHovered !== previousIsHovered) {
+      previousIsHovered = isHovered;
+      const svgGroup = getZoomControls();
+      if (svgGroup) {
+        svgGroup.style.setProperty("--sa-custom-zoom-speed", speeds[addon.settings.get("speed")]);
+        svgGroup.classList.toggle("sa-custom-zoom-hidden", !isHovered);
+      }
     }
-
-    setZoom();
-    hideShow(e.x >= defaultRect.left && e.y >= defaultRect.top, addon.settings.get("speed"));
   }
 
-  await addon.tab.waitForElement(".blocklyZoom"); //Wait for controls
-  await addon.tab.traps.getBlockly(); //Wait for Blockly
-  let defaultTranslate, defaultRect;
-  setZoom();
-  addon.tab.addEventListener("urlChange", setZoom);
-  addon.tab.settings.addEventListener("change", function () {
-    setZoom();
-  });
+  function updateRect() {
+    controlsRect = customZoomAreaElement.getBoundingClientRect();
+  }
+
+  function onResize() {
+    if (addon.tab.editorMode === "editor" && addon.settings.get("autohide")) {
+      updateRect();
+    }
+  }
+
+  await addon.tab.waitForElement(".blocklyZoom");
+  if (document.querySelector('[class^="backpack_backpack-container"]')) {
+    window.dispatchEvent(new Event("resize"));
+  }
+  update();
+  addon.tab.addEventListener("urlChange", update);
+  addon.settings.addEventListener("change", update);
+  window.addEventListener("resize", onResize);
 }
