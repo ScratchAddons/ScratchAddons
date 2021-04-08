@@ -273,7 +273,6 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .record-modal_button-row_1hdGe button,
 .Popover-body,
 .sa-onion-settings,
-.blocklyHtmlInput,
 .u-dropdown-searchbar:focus {
   background-color: var(--editorDarkMode-input);
   color: var(--editorDarkMode-input-text);
@@ -292,15 +291,11 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 }
 .Popover-tipShape,
 .sa-onion-settings-polygon,
-.blocklyFlyoutCheckbox,
-.blocklyPath[fill="#FFFFFF"] /* block inputs */ {
+.blocklyFlyoutCheckbox {
   fill: var(--editorDarkMode-input);
 }
 .blocklyBlockCanvas g:not(.checked) .blocklyFlyoutCheckboxPath {
   stroke: var(--editorDarkMode-input);
-}
-.blocklyEditableText > text {
-  fill: var(--editorDarkMode-input-text);
 }
 .blocklyDropDownDiv[style*="background-color: rgb(255, 255, 255)"] {
   /* scratch-blocks color picker */
