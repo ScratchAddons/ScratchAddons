@@ -1,9 +1,9 @@
 export default async function ({ addon, global, console }) {
-  async function setZoom(e) {
+  async function setZoom() {
     //Function to set the custom zoom parameters
     if (!Blockly) return;
 
-    if (e.detail.newUrl.includes("/editor")) {
+    if (addon.tab.editorMode === "editor") {
       //Set the zoom parameters
       Blockly.getMainWorkspace().options.zoomOptions.maxScale = addon.settings.get("maxZoom") / 100;
       Blockly.getMainWorkspace().options.zoomOptions.minScale = addon.settings.get("minZoom") / 100;
@@ -31,7 +31,7 @@ export default async function ({ addon, global, console }) {
       document.removeEventListener("mousemove", onMouseMove); //Remove the mousemove listener, if it exists
     } catch {}
 
-    if (e.detail.newUrl.includes("/editor")) document.addEventListener("mousemove", onMouseMove); //If in the editor, add the mousemove listener
+    if (addon.tab.editorMode === "editor") document.addEventListener("mousemove", onMouseMove); //If in the editor, add the mousemove listener
   }
 
   function hideShow(inArea = false, speed = "default") {
@@ -89,16 +89,16 @@ export default async function ({ addon, global, console }) {
       }, 0);
     }
 
-    setZoom({ detail: { newUrl: window.location.href } });
+    setZoom();
     hideShow(e.x >= defaultRect.left && e.y >= defaultRect.top, addon.settings.get("speed"));
   }
 
   await addon.tab.waitForElement(".blocklyZoom"); //Wait for controls
   await addon.tab.traps.getBlockly(); //Wait for Blockly
   let defaultTranslate, defaultRect;
-  setZoom({ detail: { newUrl: window.location.href } });
+  setZoom();
   addon.tab.addEventListener("urlChange", setZoom);
   addon.tab.settings.addEventListener("change", function () {
-    setZoom({ detail: { newUrl: window.location.href } });
+    setZoom();
   });
 }
