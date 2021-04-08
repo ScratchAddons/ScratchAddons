@@ -1,6 +1,6 @@
 {
-  "name": "Blocks2Image",
-  "description": "Right click workspace to export blocks to svg/png image",
+  "name": "Save blocks as image",
+  "description": "Right click the editor workspace to export blocks as SVG/PNG images.",
   "tags": ["editor", "beta"],
   "credits": [
     {
@@ -14,11 +14,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "userstyles": [
-    {
-      "url": "userscript.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
-    }
-  ],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }
