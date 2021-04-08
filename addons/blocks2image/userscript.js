@@ -73,19 +73,6 @@ export default async function ({ addon, global, console, msg }) {
     }
 }
 
-const isClosest = (target, selector) => {
-    let isExist = false;
-    while (target && target !== document) {
-        const match = target === selector;
-        if (match) {
-            isExist = true;
-            break;
-        }
-        target = target.parentNode;
-    }
-    return isExist;
-};
-
 function exportBlock(request, sender, sendMessage) {
     console.log(request)
     let isExportPNG = request.command === 'export3' || request.command === 'export4'
