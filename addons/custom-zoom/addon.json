@@ -15,12 +15,18 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
   "settings": [
     {
-      "name": "Maximum Zoom (100-500%)",
+      "name": "Maximum Zoom (50-500%)",
       "id": "maxZoom",
       "type": "integer",
-      "min": 50,
+      "min": 100,
       "default": 300,
       "max": 500
     },
@@ -33,7 +39,7 @@
       "max": 100
     },
     {
-      "name": "Start Zoom (1-500%)",
+      "name": "Start Zoom (50-500%)",
       "id": "startZoom",
       "type": "integer",
       "min": 50,
@@ -41,7 +47,7 @@
       "max": 500
     },
     {
-      "name": "Zoom Speed (1-200%)",
+      "name": "Zoom Speed (50-200%)",
       "id": "zoomSpeed",
       "type": "integer",
       "min": 50,
@@ -51,12 +57,6 @@
     {
       "name": "Autohide Zoom Controls",
       "id": "autohide",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "Fix Zoom Control Height",
-      "id": "fixheight",
       "type": "boolean",
       "default": false
     },
