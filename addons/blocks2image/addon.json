@@ -1,31 +1,24 @@
 {
-    "name": "Blocks2Image",
-    "description": "Right click workspace to export blocks to svg/png image",
-    "tags": [
-        "editor",
-        "beta"
-    ],
-    "credits": [
-        {
-            "name": "summerscar",
-            "link": "https://github.com/summerscar"
-        }
-    ],
-    "userscripts": [
-        {
-            "url": "userscript.js",
-            "matches": [
-                "https://scratch.mit.edu/projects/*"
-            ]
-        }
-    ],
-    "userstyles": [
-        {
-            "url": "userscript.css",
-            "matches": [
-                "https://scratch.mit.edu/projects/*"
-            ]
-        }
-    ],
-    "enabledByDefault": false
+  "name": "Blocks2Image",
+  "description": "Right click workspace to export blocks to svg/png image",
+  "tags": ["editor", "beta"],
+  "credits": [
+    {
+      "name": "summerscar",
+      "link": "https://github.com/summerscar"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userscript.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "enabledByDefault": false
 }
