@@ -1,6 +1,6 @@
 {
-  "name": "Wrap List Items",
-  "description": "Instead list items ending with \"...\" when there are too many characters, they will get wrapped, and all the characters will be visible.",
+  "name": "Wrap text of list items",
+  "description": "Instead of list items ending with \"...\" when there are too many characters, they will be wrapped onto the next line, and all the characters will be visible.",
   "credits": [
     {
       "name": "TheColaber",
