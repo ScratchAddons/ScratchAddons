@@ -1244,7 +1244,7 @@ export default async function ({ addon, global, console, msg }) {
         let payload;
         let type;
         if (item.dragPayload) {
-          if (item.costumeURL) {
+          if (item.url) {
             type = "SOUND";
           } else {
             type = "COSTUME";
