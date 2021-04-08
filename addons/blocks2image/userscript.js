@@ -1,11 +1,10 @@
-const buttonItem = [
-    'Export selected to SVG',
-    'Export all to SVG',
-    'Export selected to PNG',
-    'Export all to PNG'
-]
-
 export default async function ({ addon, global, console, msg }) {
+    const buttonItem = [
+        msg('export_selected_to_SVG'),
+        msg('export_all_to_SVG'),
+        msg('export_selected_to_PNG'),
+        msg('export_all_to_PNG')
+    ]
 
     function eventMouseDown(e) {
         if (e.button === 2) {
@@ -24,19 +23,25 @@ export default async function ({ addon, global, console, msg }) {
                             return;
                         }
                         if (isBackground) {
-                            blocklyContextMenu.insertAdjacentHTML(
-                                "beforeend",
-                                `
-                                ${buttonItem
-                                    .map((item, index) => `
-                                        <div id="blocks2imgCommand${index + 1}" class="goog-menuitem blocks2img" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
-                                            <div class="goog-menuitem-content" style="user-select: none;">${item}</div>
-                                        </div>
-                                    `)
-                                    .join('')
+                            buttonItem.forEach((item, index) => {
+                                const wrapperItem = document.createElement('div')
+                                wrapperItem.id = `blocks2imgCommand${index + 1}`
+                                wrapperItem.classList.add('goog-menuitem', 'blocks2img')
+                                wrapperItem.style.userSelect = 'none'
+                                if (index === 0) {
+                                    wrapperItem.style.borderTop = '1px solid hsla(0, 0%, 0%, 0.15)'
                                 }
-                                `
-                            );
+                                const menuItem = document.createElement('div')
+                                menuItem.classList.add('goog-menuitem-content')
+                                menuItem.style.userSelect = 'user-select: none'
+                                menuItem.textContent = item
+                                wrapperItem.append(menuItem)
+                                wrapperItem.onclick = () => {
+                                    hidePopups()
+                                    exportBlock({ command: 'export' + (index + 1) })
+                                }
+                                blocklyContextMenu.append(wrapperItem)
+                            })
                         }
 
                         if (blocklyContextMenu.children.length < 15) {
@@ -51,13 +56,6 @@ export default async function ({ addon, global, console, msg }) {
                             element.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: element, bubbles: true }));
                             element.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: element, bubbles: true }));
                         }
-
-                        for (let item of buttonItem) {
-                            document.getElementById(`blocks2imgCommand${buttonItem.indexOf(item) + 1}`).onclick = () => {
-                                hidePopups()
-                                exportBlock({ command: 'export' + (buttonItem.indexOf(item) + 1) })
-                            }
-                        }
                     }, 1);
                 }
             }
@@ -65,90 +63,12 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     while (true) {
-        let nav = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
-            markAsSeen: true,
-        });
         let blocklyWorkspace = await addon.tab.waitForElement("g.blocklyWorkspace", {
             markAsSeen: true,
         });
         if (!document.querySelector("[class^='author-info_username-line']")) {
             // insert contextmenu
             blocklyWorkspace.addEventListener('mousedown', (e) => eventMouseDown(e))
-
-            /* use context menu instead of
-
-            let exportBtn = document.createElement("div");
-            exportBtn.classList.add(addon.tab.scratchClass("menu-bar_menu-bar-item"));
-            exportBtn.title = "Blocks2Image";
-            let thumbinner = document.createElement("span");
-            thumbinner.setAttribute(
-                "class",
-                addon.tab.scratchClass(
-                    "button_outlined-button",
-                    "menu-bar_menu-bar-button",
-                    "community-button_community-button"
-                )
-            );
-            thumbinner.setAttribute("role", "button");
-            exportBtn.append(thumbinner);
-            let thumbcontent = document.createElement("div");
-            exportBtn.classList.add(addon.tab.scratchClass("button_content"));
-            thumbinner.append(thumbcontent);
-            let thumbspan = document.createElement("span");
-            thumbspan.innerText = "Blocks2Img";
-            thumbcontent.append(thumbspan);
-
-            const ulWrapper = document.createElement('div')
-            ulWrapper.style.display = 'none'
-            ulWrapper.setAttribute(
-                "class",
-                addon.tab.scratchClass(
-                    "menu-bar_menu-bar-menu"
-                )
-            );
-            const ul = document.createElement('ul')
-            ul.setAttribute(
-                "class",
-                addon.tab.scratchClass(
-                    "menu_menu",
-                    'menu_right'
-                )
-            );
-            for (let item of buttonItem) {
-                const li = document.createElement('li')
-                li.setAttribute(
-                    "class",
-                    addon.tab.scratchClass(
-                        "menu_menu-item",
-                        "menu_hoverable",
-                        "menu_menu-section"
-                    )
-                );
-                li.onclick = () => exportBlock({ command: 'export' + (buttonItem.indexOf(item) + 1) })
-
-                const span = document.createElement('span')
-                span.innerText = item;
-                li.append(span)
-                ul.append(li)
-            }
-            ulWrapper.append(ul)
-            exportBtn.append(ulWrapper)
-            nav.append(exportBtn);
-
-            const clickOutSide = (e) => {
-                const outerClicked = !isClosest(e.target, ulWrapper);
-                if (outerClicked) {
-                    ulWrapper.style.display = "none"
-                    document.removeEventListener('click', clickOutSide)
-                }
-            }
-            exportBtn.addEventListener('click', (e) => {
-                e.stopPropagation()
-                ulWrapper.style.display = "block"
-                document.addEventListener('click', clickOutSide);
-            })
-
-            */
         }
     }
 }
@@ -290,9 +210,6 @@ function exportData(text) {
 }
 
 function exportPNG(svg) {
-    // let widthAndHeight = prompt('PNG width/height (px):', '600/600')
-    // let width = widthAndHeight.split('/')[0]
-    // let height = widthAndHeight.split('/')[1]
     const div = document.createElement('div')
     div.appendChild(svg)
 
