@@ -9,6 +9,10 @@
 .header-text .profile-details .group {
   border-color: #fff;
 }
+.activity-stream .time,
+.slider-carousel .thumb span.owner {
+  color: rgba(255, 255, 255, 0.4);
+}
 #profile-box .player,
 #profile-box .doing,
 #profile-data .footer,
