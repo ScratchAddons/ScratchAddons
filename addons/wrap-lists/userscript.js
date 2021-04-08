@@ -14,12 +14,9 @@ export default async function ({ addon, global, console }) {
   }
 }
 function updateListItems() {
-  for (const value of document.querySelectorAll("[class*='monitor_value-inner']")) {
-    value.style.height = "fit-content";
-    value.style.wordBreak = "break-all";
-    value.style.whiteSpace = "normal";
-  }
   for (const list of document.querySelectorAll(".ReactVirtualized__Grid__innerScrollContainer")) {
+    // The addon breaks when these are ported to a userstyle.
+    // Maybe because JS is faster than CSS.
     list.style.height = "100%";
     list.style.maxHeight = "fit-content";
     list.style.overflowY = "auto";
