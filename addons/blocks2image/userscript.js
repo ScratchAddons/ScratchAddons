@@ -73,7 +73,7 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     function exportBlock(request, sender, sendMessage) {
-        console.log(request)
+        // console.log(request)
         let isExportPNG = request.command === 'export3' || request.command === 'export4'
         // blocks-media as base64 for svg inline image
         let blocksMedia = new Map()
