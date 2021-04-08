@@ -1,7 +1,7 @@
 {
-  "name": "Custom workspace zoom settings",
+  "name": "Custom scripts workspace zoom settings",
   "description": "Adjust the minimum, maximum, speed, and start size of the zoom in the project code editor, and autohide the controls.",
-  "tags": ["editor", "theme"],
+  "tags": ["editor", "beta"],
   "credits": [
     {
       "name": "ErrorGamer2000",
@@ -61,7 +61,7 @@
       "default": false
     },
     {
-      "name": "Animation duration",
+      "name": "Autohide Animation duration",
       "id": "speed",
       "type": "select",
       "potentialValues": [
