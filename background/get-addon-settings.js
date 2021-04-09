@@ -27,12 +27,14 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             };
 
             const previousMode = settings.selectedMode;
-            usePreset({
-              "3-darker": "3darker",
-              "3-dark": "3dark",
-              "dark-editor": "darkEditor",
-              "experimental-dark": "experimentalDark",
-            }[previousMode] || /* Something went wrong, use 3.Darker */ "3darker");
+            usePreset(
+              {
+                "3-darker": "3darker",
+                "3-dark": "3dark",
+                "dark-editor": "darkEditor",
+                "experimental-dark": "experimentalDark",
+              }[previousMode] || /* Something went wrong, use 3.Darker */ "3darker"
+            );
 
             addonSettings[addonId] = settings;
             madeAnyChanges = true;
