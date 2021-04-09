@@ -1,28 +1,7 @@
-export default async function ({ addon, global, console }) {
-  var stylesheet = `path.blocklyBlockBackground[fill="#FF6680"],
-    path.blocklyBlockBackground[fill="#5CB1D6"],
-    path.blocklyBlockBackground[fill="#FFBF00"],
-    g[data-category] > path.blocklyBlockBackground {
-      stroke: #0003;
-    }
-    g[data-argument-type="dropdown"] > path,
-    g[data-argument-type="dropdown"] > rect,
-    g[data-argument-type="variable"] > rect,
-    g[data-argument-type="variable"] > path,
-    g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > path,
-    path[data-argument-type="boolean"] {
-      stroke: #0003;
-      fill: #0001;
-    }
-    g[data-argument-type*="text"] > path,
-    g > line {
-      stroke: #0002;
-    }
-    .scratchCategoryItemBubble {
-      border-color: #0003 !important;
-    }
-	`;
+import { textColor } from "../../libraries/text_color.js";
 
+function updateSettings(addon, initialStylesheet) {
+  var stylesheet = "";
   var categories = {
     motion: {
       color: "#4C97FF",
@@ -80,7 +59,11 @@ export default async function ({ addon, global, console }) {
     if (prop === "custom") {
       stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
 				fill: var(--editorTheme3-${prop}Color) !important;
-        	}`;
+      }
+      path.blocklyBlockBackground[fill="#FF6680"] ~ .blocklyText,
+      path.blocklyBlockBackground[fill="#FF4D6A"] ~ .blocklyText {
+        fill: ${textColor(addon.settings.get(prop + "-color"))};
+          }`;
     }
     if (prop === "sensing") {
       stylesheet += `path.blocklyBlockBackground[fill="#5CB1D6"] {
@@ -104,6 +87,13 @@ export default async function ({ addon, global, console }) {
         }`;
     }
   }
+  document.documentElement.style.setProperty("--editorTheme3-inputColor-text", textColor(addon.settings.get("input-color")));
 
-  document.querySelector(".scratch-addons-theme[data-addon-id='editor-theme3']").textContent += stylesheet;
+  document.querySelector(".scratch-addons-theme[data-addon-id='editor-theme3']").textContent = initialStylesheet + stylesheet;
+}
+
+export default async function ({ addon, global, console }) {
+  const initialStylesheet = document.querySelector(".scratch-addons-theme[data-addon-id='editor-theme3']").textContent;
+  updateSettings(addon, initialStylesheet);
+  addon.settings.addEventListener("change", () => {updateSettings(addon, initialStylesheet)});
 }

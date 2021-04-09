@@ -95,10 +95,12 @@ const ResetDropdown = Vue.extend({
     },
     resetToDefault() {
       this.$parent.addonSettings[this.addon._addonId][this.setting.id] = this.setting.default;
+      this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
       this.toggle();
     },
     resetToPreset(preset) {
       this.$parent.addonSettings[this.addon._addonId][this.setting.id] = preset.values[this.setting.id];
+      this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
       this.toggle();
     },
   },
@@ -481,7 +483,7 @@ const vue = (window.vue = new Vue({
     showResetDropdown(addon, setting) {
       return (
         addon.presets &&
-        addon.presets.some((preset) => setting.id in preset.values && preset.values[setting.id] !== setting.default)
+        addon.presets.some((preset) => setting.id in preset.values && preset.values[setting.id].toLowerCase() !== setting.default.toLowerCase())
       );
     },
     loadPreset(preset, addon) {
