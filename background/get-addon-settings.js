@@ -22,19 +22,17 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
                 }
                 const presetValue = manifest.presets.find((preset) => preset.id === presetId).values[option.id];
                 if (presetValue !== undefined) settings[option.id] = presetValue;
-                else settings[option.id] = option.default; // TODO: make sure this is this what we want
+                else settings[option.id] = option.default;
               }
             };
 
             const previousMode = settings.selectedMode;
-            if (previousMode === "3-darker") usePreset("3darker");
-            else if (previousMode === "3-dark") usePreset("3dark");
-            else if (previousMode === "dark-editor") usePreset("darkEditor");
-            else if (previousMode === "experimental-dark") usePreset("experimentalDark");
-            else {
-              // Something went wrong, use 3.Darker
-              usePreset("3darker");
-            }
+            usePreset({
+              "3-darker": "3darker",
+              "3-dark": "3dark",
+              "dark-editor": "darkEditor",
+              "experimental-dark": "experimentalDark",
+            }[previousMode] || /* Something went wrong, use 3.Darker */ "3darker");
 
             addonSettings[addonId] = settings;
             madeAnyChanges = true;
