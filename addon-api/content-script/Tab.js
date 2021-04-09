@@ -197,7 +197,7 @@ export default class Tab extends Listenable {
    * @param {function} callback Changes items in menu.
    * @param {object} opts - options.
    */
-  async createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false } = {}) {
+  createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false } = {}) {
     this._blockContextMenu.push({ callback, extra: { workspace, blocks, flyout } });
   }
 }
