@@ -543,8 +543,8 @@ const vue = (window.vue = new Vue({
 
             const addonsCurrentlyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.userstyles])].filter((runningAddonId) => {
-                  // Consider addons with "dynamicUserscriptDisable": true
+              : [...new Set([...res.userscripts, ...res.userstyles])].filter((runningAddonId) => {
+                  // Consider addons with "dynamicDisable": true
                   // If those are running on the page, their "is running on this tab"
                   // status should be the same as their "is enabled" status
                   const manifest = this.manifests.find((manifest) => manifest._addonId === runningAddonId);
@@ -558,7 +558,7 @@ const vue = (window.vue = new Vue({
             // so hopefully this saves some seconds of our users' lives :P
             const addonsPreviouslyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.inactiveThemes])].filter(
+              : [...new Set([...res.userscripts, ...res.userstyles])].filter(
                   (runningAddonId) => !addonsCurrentlyOnTab.includes(runningAddonId)
                 );
 

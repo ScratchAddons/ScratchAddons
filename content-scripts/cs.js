@@ -234,12 +234,18 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
         // Addon was not injected in page yet
         _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
       }
+
       addonsWithUserscripts.push({ addonId, scripts });
+      addonsWithUserstyles.push({ styles: userstyles, addonId, injectAsStyleElt, index });
       pageLoadedAddons.push({ addonId, scripts });
     } else if (request.dynamicAddonDisable) {
       const { addonId } = request.dynamicAddonDisable;
-      const addonIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
+
+      let addonIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
       addonsWithUserscripts.splice(addonIndex, 1);
+      addonIndex = addonsWithUserstyles.findIndex((a) => a.addonId === addonId);
+      addonsWithUserstyles.splice(addonIndex, 1);
+
       removeAddonStyles(addonId);
       _page_.fireEvent({ name: "disabled", addonId, target: "self" });
     } else if (request.updateUserstylesSettingsChange) {
@@ -254,16 +260,7 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
-      const activeThemes = Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
-        style.getAttribute("data-addon-id")
-      );
-      const inactiveThemes = [...sessionEnabledThemes].filter((addonId) => !activeThemes.includes(addonId));
-      sendResponse({
-        userscripts,
-        userstyles,
-        activeThemes,
-        inactiveThemes,
-      });
+      sendResponse({ userscripts, userstyles });
     }
   });
 }
