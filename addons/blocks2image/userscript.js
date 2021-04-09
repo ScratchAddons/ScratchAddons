@@ -31,11 +31,11 @@ export default async function ({ addon, global, console, msg }) {
                 wrapperItem.onmouseleave = () => wrapperItem.classList.remove("goog-menuitem-highlight");
                 wrapperItem.style.userSelect = "none";
                 if (index === 0) {
-                    wrapperItem.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
-                    // resolve borderTop style conflict with goog-menuitem-highlight class
-                    wrapperItem.style.borderBottom = "1px solid transparent";
-                    wrapperItem.style.paddingTop = "4px";
-                    wrapperItem.style.paddingBottom = "3px";
+                  wrapperItem.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+                  // resolve borderTop style conflict with goog-menuitem-highlight class
+                  wrapperItem.style.borderBottom = "1px solid transparent";
+                  wrapperItem.style.paddingTop = "4px";
+                  wrapperItem.style.paddingBottom = "3px";
                 }
                 const menuItem = document.createElement("div");
                 menuItem.classList.add("goog-menuitem-content");
