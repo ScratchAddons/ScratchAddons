@@ -111,15 +111,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-// Store all themes that were enabled this session
-const sessionEnabledThemes = new Set();
-
 function addStyle(addon) {
   const addonStyles = [...document.querySelectorAll(`[data-addon-id='${addon.addonId}']`)];
   for (let userstyle of addon.styles) {
     if (addon.injectAsStyleElt) {
-      sessionEnabledThemes.add(addon.addonId);
-
       // Replace %addon-self-dir% for relative URLs
       userstyle = userstyle.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${addon.addonId}`));
       //userstyle += `\n/*# sourceURL=${styleUrl} */`;
@@ -165,7 +160,7 @@ function removeAddonStyles(addonId) {
   document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => (style.disabled = true));
 }
 
-function injectUserstylesAndThemes(addonsWithUserstyles) {
+function injectUserstyles(addonsWithUserstyles) {
   for (const addon of addonsWithUserstyles || []) {
     addStyle(addon);
   }
@@ -191,11 +186,11 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
   const pageLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   setCssVariables(globalState.addonSettings);
   // Just in case, make sure the <head> loaded before injecting styles
-  if (document.head) injectUserstylesAndThemes(addonsWithUserstyles);
+  if (document.head) injectUserstyles(addonsWithUserstyles);
   else {
     const observer = new MutationObserver(() => {
       if (document.head) {
-        injectUserstylesAndThemes(addonsWithUserstyles);
+        injectUserstyles(addonsWithUserstyles);
         observer.disconnect();
       }
     });

@@ -551,7 +551,7 @@ const vue = (window.vue = new Vue({
                   if (manifest.dynamicDisable && !manifest._enabled) return false;
                   return true;
                 });
-            // Addons/themes that were previously enabled on the tab (but not anymore)
+            // Addons that were previously enabled on the tab (but not anymore)
             // should go above enabled addons that are not currently running on the tab
             // so that it's easier to find them, even if the popup was closed.
             // Disabling then reenabling an addon is likely something common
