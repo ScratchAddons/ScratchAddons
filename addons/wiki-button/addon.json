@@ -1,0 +1,40 @@
+{
+  "name": "Wiki button",
+  "description": "Adds the wiki button to the navbar.",
+  "credits": [
+    {
+      "name": "Maximouse"
+    },
+    {
+      "name": "World_Languages"
+    },
+	{
+	"name": "8bitjake",
+      "link": "https://scratch.mit.edu/users/8bitjake"
+	  }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "Remove \"about\" button",
+      "id": "removeAboutBtn",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Wiki button name",
+      "id": "buttonName",
+      "type": "string",
+      "default": "Wiki"
+    }
+  ],
+  "tags": ["community", "wiki"],
+  "enabledByDefault": true,
+  "l10n": true
+}
