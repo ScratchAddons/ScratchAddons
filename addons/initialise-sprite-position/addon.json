@@ -38,6 +38,6 @@
     }
   ],
   "tags": ["editor"],
-  "enabledByDefault": true,
+  "enabledByDefault": false,
   "l10n": true
 }
