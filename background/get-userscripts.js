@@ -105,6 +105,10 @@ async function getAddonData({ addonId, manifest, url }) {
           fetch(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`))
             .then((res) => res.text())
             .then((text) => {
+              // Replace %addon-self-dir% for relative URLs
+              text = text.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${addonId}`));
+              // Provide source url
+              text += `\n/*# sourceURL=${style.url} */`;
               userstyles.push(text);
             })
         );

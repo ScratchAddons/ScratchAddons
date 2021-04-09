@@ -115,10 +115,6 @@ function addStyle(addon) {
   const addonStyles = [...document.querySelectorAll(`[data-addon-id='${addon.addonId}']`)];
   for (let userstyle of addon.styles) {
     if (addon.injectAsStyleElt) {
-      // Replace %addon-self-dir% for relative URLs
-      userstyle = userstyle.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${addon.addonId}`));
-      //userstyle += `\n/*# sourceURL=${styleUrl} */`;
-
       // If an exsiting style is already appended, just enable it instead...
       const existingFile = addonStyles.find((style) => style.textContent === userstyle);
       if (existingFile) {
