@@ -51,11 +51,7 @@ scratchAddons.localEvents.addEventListener("addonDisable", ({ detail }) => {
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
-          if (res) {
-            chrome.tabs.sendMessage(tab.id, { dynamicAddonDisable: { addonId } }, { frameId: 0 });
-          }
-        });
+        chrome.tabs.sendMessage(tab.id, { dynamicAddonDisable: { addonId } }, { frameId: 0 });
       }
     })
   );
@@ -67,7 +63,22 @@ scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ 
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
           if (res) {
-            chrome.tabs.sendMessage(tab.id, { updateUserstylesSettingsChange: { addonId } }, { frameId: 0 });
+            (async () => {
+              const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
+              chrome.tabs.sendMessage(
+                tab.id,
+                {
+                  updateUserstylesSettingsChange: {
+                    scripts: userscripts,
+                    userstyles,
+                    addonId,
+                    injectAsStyleElt: !!manifest.injectAsStyleElt,
+                    index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                  },
+                },
+                { frameId: 0 }
+              );
+            })();
           }
         });
       }

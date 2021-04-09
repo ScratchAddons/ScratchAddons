@@ -115,6 +115,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 const sessionEnabledThemes = new Set();
 
 function addStyle(addon) {
+  const addonStyles = [...document.querySelectorAll(`[data-addon-id='${addon.addonId}']`)];
   for (let userstyle of addon.styles) {
     if (addon.injectAsStyleElt) {
       sessionEnabledThemes.add(addon.addonId);
@@ -122,6 +123,14 @@ function addStyle(addon) {
       // Replace %addon-self-dir% for relative URLs
       userstyle = userstyle.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${addon.addonId}`));
       //userstyle += `\n/*# sourceURL=${styleUrl} */`;
+
+      // If an exsiting style is already appended, just enable it instead...
+      const existingFile = addonStyles.find((style) => style.textContent === userstyle);
+      if (existingFile) {
+        existingFile.disabled = false;
+        continue;
+      }
+
       const style = document.createElement("style");
       style.classList.add("scratch-addons-style");
       style.setAttribute("data-addon-id", addon.addonId);
@@ -131,6 +140,13 @@ function addStyle(addon) {
       if (document.body) document.documentElement.insertBefore(style, document.body);
       else document.documentElement.appendChild(style);
     } else {
+      // If an exsiting style is already appended, just enable it instead...
+      const existingFile = addonStyles.find((style) => style.href === userstyle);
+      if (existingFile) {
+        existingFile.disabled = false;
+        continue;
+      }
+
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.setAttribute("data-addon-id", addon.addonId);
@@ -143,7 +159,10 @@ function addStyle(addon) {
   }
 }
 function removeAddonStyles(addonId) {
-  document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => style.remove());
+  // Instead of actually removing the style/link element, we just disable it.
+  // That way, if the addon needs to be reenabled, it can just enable that style/link element instead of readding it.
+  // This helps with load times for link elements.
+  document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => (style.disabled = true));
 }
 
 function injectUserstylesAndThemes(addonsWithUserstyles) {
@@ -204,7 +223,9 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       _page_.fireEvent(request.fireEvent);
     } else if (request.dynamicAddonEnabled) {
       const { scripts, userstyles, addonId, injectAsStyleElt, index } = request.dynamicAddonEnabled;
-      // TODO: simply adding the style won't cut it. Use the "index" variable to insert it or remove all and readd properly
+      // TODO: simply adding the style won't cut it.
+      // Use the "index" variable to insert it or remove all and readd properly.
+      // But we also don't want to readd all... then "get-userscripts.js" will have to fetch a lot of data again.
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
       if (pageLoadedAddons.find((addon) => addon.addonId === addonId)) {
         // Addon was reenabled
@@ -222,8 +243,12 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       removeAddonStyles(addonId);
       _page_.fireEvent({ name: "disabled", addonId, target: "self" });
     } else if (request.updateUserstylesSettingsChange) {
-      const { addonId } = request.updateUserstylesSettingsChange;
-      // TODO: Reinject addon userstyles
+      const { scripts, userstyles, addonId, injectAsStyleElt, index } = request.updateUserstylesSettingsChange;
+      // Removing the addon styles and readding them works since the background
+      // will send a different array for the new valid userstyles.
+      // Try looking for the "userscriptMatches" function.
+      removeAddonStyles(addonId);
+      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
     } else if (request.setMsgCount) {
       _page_.setMsgCount(request.setMsgCount);
     } else if (request === "getRunningAddons") {
