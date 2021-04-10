@@ -29,5 +29,5 @@
     }
   ],
   "tags": ["community", "recommended"],
-  "enabledByDefault": true
+  "enabledByDefault": false
 }
