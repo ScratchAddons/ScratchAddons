@@ -148,8 +148,8 @@
       }
     },
     {
-      "url": "experimental_contact.css",
-      "matches": ["https://scratch.mit.edu/contact-us/"],
+      "url": "experimental_project_embed.css",
+      "matches": ["https://scratch.mit.edu/projects/*/embed"],
       "settingMatch": {
         "id": "selectedMode",
         "value": "experimental-dark"
