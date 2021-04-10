@@ -37,6 +37,13 @@
       "default": false
     }
   ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "When uploading .sprite2 and.sprite3 files, the speite will be sent to theposition specified in the file.",
+      "id": "file_upload"
+    }
+  ],
   "tags": ["editor"],
   "enabledByDefault": false,
   "l10n": true
