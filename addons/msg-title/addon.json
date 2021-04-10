@@ -4,7 +4,7 @@
   "credits": [
     {
       "name": "8bitjake",
-	  "link": "https://scratch.mit.edu/users/8bitjake"
+      "link": "https://scratch.mit.edu/users/8bitjake"
     }
   ],
   "userscripts": [
@@ -13,11 +13,11 @@
       "matches": ["https://scratch.mit.edu/*"],
       "runAtComplete": true
     },
-	{
-	"url": "favicon.js",
-	"matches": ["https://scratch.mit.edu/*"],
-	"settingsMatch": {"id": "msgIcon", "value": true},
-	"runAtComplete": true
+    {
+      "url": "favicon.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "settingsMatch": { "id": "msgIcon", "value": true },
+      "runAtComplete": true
     }
   ],
   "settings": [
