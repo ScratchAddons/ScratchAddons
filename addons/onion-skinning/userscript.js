@@ -1,4 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
+  const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
+  let reactInternalKey;
+
   let paper = null;
   let paperCenter;
   const storedOnionLayers = [];
@@ -446,9 +449,9 @@ export default async function ({ addon, global, console, msg }) {
     toggleButton.dataset.enabled = settings.enabled;
   };
 
-  const untilInEditor = () => {
+  const untilInPaintEditor = async () => {
     if (addon.tab.editorMode !== "editor") {
-      return new Promise((resolve, reject) => {
+      await new Promise((resolve) => {
         const handler = () => {
           if (addon.tab.editorMode === "editor") {
             resolve();
@@ -458,6 +461,70 @@ export default async function ({ addon, global, console, msg }) {
         addon.tab.addEventListener("urlChange", handler);
       });
     }
+    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 1) {
+      addon.tab.redux.initialize();
+      await new Promise((resolve) => {
+        const handler = ({detail}) => {
+          if (detail.action.type === 'scratch-gui/navigation/ACTIVATE_TAB' && detail.action.activeTabIndex === 1) {
+            resolve();
+            addon.tab.redux.removeEventListener("statechanged", handler);
+          }
+        };
+        addon.tab.redux.addEventListener("statechanged", handler);
+      })
+    }
+  };
+
+  const untilNotInPaintEditor = async () => {
+    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 1) {
+      addon.tab.redux.initialize();
+      await new Promise((resolve) => {
+        const handler = ({detail}) => {
+          if (
+            (detail.action.type === 'scratch-gui/navigation/ACTIVATE_TAB' && detail.action.activeTabIndex !== 1) ||
+            (detail.action.type === 'scratch-gui/mode/SET_PLAYER' && detail.action.isPlayerOnly)
+          ) {
+            resolve();
+            addon.tab.redux.removeEventListener("statechanged", handler);
+          }
+        };
+        addon.tab.redux.addEventListener("statechanged", handler);
+      })
+    }
+  };
+
+  const getPaper = () => {
+    // We can access paper through .tool on tools, for example:
+    // https://github.com/LLK/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
+    // It happens that paper's Tool objects contain a reference to the entirety of paper's scope.
+    const modeSelector = document.querySelector("[class*='paint-editor_mode-selector']");
+    if (!reactInternalKey) {
+      reactInternalKey = Object.keys(modeSelector).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
+    }
+    const internalState = modeSelector[reactInternalKey].child;
+
+    // .tool or .blob.tool only exists on the selected tool
+    let toolState = internalState;
+    let tool;
+    while (toolState) {
+      const toolInstance = toolState.child.stateNode;
+      if (toolInstance.tool) {
+        tool = toolInstance.tool;
+        break;
+      }
+      if (toolInstance.blob && toolInstance.blob.tool) {
+        tool = toolInstance.blob.tool;
+        break;
+      }
+      toolState = toolState.sibling;
+    }
+
+    if (tool) {
+      const paperScope = tool._scope;
+      return paperScope;
+    }
+
+    throw new Error('cannot find paper :(');
   };
 
   const accessScratchInternals = () => {
@@ -465,22 +532,7 @@ export default async function ({ addon, global, console, msg }) {
       return;
     }
 
-    const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-
-    // We can access paper through .tool on tools, for example:
-    // https://github.com/LLK/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
-    // It happens that paper's Tool objects contain a reference to the entirety of paper's scope.
-    const modeSelector = document.querySelector("[class*='paint-editor_mode-selector']");
-    const reactInternalKey = Object.keys(modeSelector).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
-    const internalState = modeSelector[reactInternalKey].child;
-
-    // .tool only exists on the selected tool
-    let toolState = internalState;
-    let tool;
-    while (!(tool = toolState.child.stateNode.tool)) {
-      toolState = toolState.sibling;
-    }
-    const paperScope = tool._scope;
+    const paperScope = getPaper();
 
     const paintEditorCanvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
     const paperCanvas = paintEditorCanvasContainer[reactInternalKey].child.child.child.stateNode;
@@ -715,6 +767,8 @@ export default async function ({ addon, global, console, msg }) {
   const controlsLoop = async () => {
     let hasRunOnce = false;
     while (true) {
+      await untilInPaintEditor();
+
       const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
         markAsSeen: true,
         reduxCondition: (state) =>
@@ -756,9 +810,10 @@ export default async function ({ addon, global, console, msg }) {
       if (settings.enabled) {
         updateOnionLayers();
       }
+
+      await untilNotInPaintEditor();
     }
   };
 
-  await untilInEditor();
   controlsLoop();
 }
