@@ -25,7 +25,7 @@ export default async function ({ addon, global, console }) {
       let k = document.createElement("img");
       k.src = `${addon.self.dir}/icons/${icons[i]}.svg`;
       k.id = "sa-category-icon";
-      k.setAttribute("data-hide-if-disabled", addon.self.id);
+      addon.tab.displayNoneWhileDisabled(k);
 
       item.appendChild(k);
     });

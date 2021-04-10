@@ -189,4 +189,8 @@ export default class Tab extends Listenable {
     res = res.replace(/"/g, "");
     return res;
   }
+
+  displayNoneWhileDisabled(el) {
+    el.setAttribute("data-sa-hide-if-disabled", addon.self.id);
+  }
 }

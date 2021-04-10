@@ -7,7 +7,7 @@ export default async function ({ addon, global, console, msg }) {
   img.draggable = false;
   img.title = msg("pause");
   img.addEventListener("click", () => setPaused(!paused));
-  img.setAttribute("data-hide-if-disabled", addon.self.id);
+  addon.tab.displayNoneWhileDisabled(img);
 
   let paused = false;
   let pausedThreadState = new WeakMap();

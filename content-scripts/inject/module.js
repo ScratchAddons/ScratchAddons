@@ -38,7 +38,7 @@ const page = {
 
   fireEvent(info) {
     if (info.addonId) {
-      const showElts = document.querySelectorAll(`[data-hide-if-disabled="${info.addonId}"]`);
+      const showElts = document.querySelectorAll(`[data-sa-hide-if-disabled="${info.addonId}"]`);
       showElts.forEach((elt, i) => {
         if (info.name === "disabled") elt.style.display = "none";
         if (info.name === "reenabled") elt.style.display = "";

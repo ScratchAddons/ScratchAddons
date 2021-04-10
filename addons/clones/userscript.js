@@ -5,7 +5,7 @@ export default async function ({ addon, global, console, msg }) {
 
   let countContainerContainer = document.createElement("div");
 
-  countContainerContainer.setAttribute("data-hide-if-disabled", addon.self.id);
+  addon.tab.displayNoneWhileDisabled(countContainerContainer);
 
   let countContainer = document.createElement("div");
   let count = document.createElement("span");

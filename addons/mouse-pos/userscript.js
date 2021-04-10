@@ -41,7 +41,7 @@ export default async function ({ addon, global, console }) {
     if (addon.tab.editorMode === "editor") {
       // my attempt at detecting if they're in the editor?
       var posContainerContainer = document.createElement("div");
-      posContainerContainer.setAttribute("data-hide-if-disabled", addon.self.id);
+      addon.tab.displayNoneWhileDisabled(posContainerContainer);
 
       var posContainer = document.createElement("div");
       pos = document.createElement("span");
