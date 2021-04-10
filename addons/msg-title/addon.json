@@ -1,3 +1,4 @@
+  
 {
   "name": "Message count in page title",
   "description": "Show your message count in the Scratch page's title.",
@@ -18,14 +19,6 @@
       "matches": ["https://scratch.mit.edu/*"],
       "settingsMatch": { "id": "msgIcon", "value": true },
       "runAtComplete": true
-    }
-  ],
-  "settings": [
-    {
-      "name": "Change icon when messages are recieved",
-      "id": "msgIcon",
-      "type": "boolean",
-      "default": true
     }
   ],
   "tags": ["community", "recommended"],
