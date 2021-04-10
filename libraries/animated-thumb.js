@@ -32,7 +32,7 @@ export default class ThumbSetter {
             this._input = null;
         }
     }
-    
+
     getCSRFToken () {
         const tokens = /scratchcsrftoken=([\w]+)/.exec(document.cookie);
         return tokens[1];
@@ -66,7 +66,7 @@ export default class ThumbSetter {
               case 503:
                 alert(this.msg("thumb-error-503"));
                 break;
-              default: 
+              default:
                 alert(this.msg("thumb-error"));
                 throw e;
             }
