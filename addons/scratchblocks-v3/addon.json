@@ -1,6 +1,6 @@
 {
-  "name": "Scratchblocks 3.0 in forums",
-  "description": "Use new version of scratchblocks in the forums.",
+  "name": "Scratchblocks 3.0 on forums",
+  "description": "Use the newest version of Scratchblocks on the forums.",
   "userscripts": [
     {
       "url": "asap.js",
