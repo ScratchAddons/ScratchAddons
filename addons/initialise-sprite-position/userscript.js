@@ -5,7 +5,7 @@ export default async function ({ addon }) {
     let spriteObj,
       stringify = true;
     alert(typeof input);
-    if (typeof input === "object") [spriteObj,stringify] = [input, false];
+    if (typeof input === "object") [spriteObj, stringify] = [input, false];
     else spriteObj = JSON.parse(input);
     let isEmpty = spriteObj.costumes?.[0]?.baseLayerMD5 === "cd21514d0531fdffb22204e0ec5ed84a.svg";
     alert("moo");
