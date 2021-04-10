@@ -464,14 +464,14 @@ export default async function ({ addon, global, console, msg }) {
     if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 1) {
       addon.tab.redux.initialize();
       await new Promise((resolve) => {
-        const handler = ({detail}) => {
-          if (detail.action.type === 'scratch-gui/navigation/ACTIVATE_TAB' && detail.action.activeTabIndex === 1) {
+        const handler = ({ detail }) => {
+          if (detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB" && detail.action.activeTabIndex === 1) {
             resolve();
             addon.tab.redux.removeEventListener("statechanged", handler);
           }
         };
         addon.tab.redux.addEventListener("statechanged", handler);
-      })
+      });
     }
   };
 
@@ -479,17 +479,17 @@ export default async function ({ addon, global, console, msg }) {
     if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 1) {
       addon.tab.redux.initialize();
       await new Promise((resolve) => {
-        const handler = ({detail}) => {
+        const handler = ({ detail }) => {
           if (
-            (detail.action.type === 'scratch-gui/navigation/ACTIVATE_TAB' && detail.action.activeTabIndex !== 1) ||
-            (detail.action.type === 'scratch-gui/mode/SET_PLAYER' && detail.action.isPlayerOnly)
+            (detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB" && detail.action.activeTabIndex !== 1) ||
+            (detail.action.type === "scratch-gui/mode/SET_PLAYER" && detail.action.isPlayerOnly)
           ) {
             resolve();
             addon.tab.redux.removeEventListener("statechanged", handler);
           }
         };
         addon.tab.redux.addEventListener("statechanged", handler);
-      })
+      });
     }
   };
 
@@ -524,7 +524,7 @@ export default async function ({ addon, global, console, msg }) {
       return paperScope;
     }
 
-    throw new Error('cannot find paper :(');
+    throw new Error("cannot find paper :(");
   };
 
   const accessScratchInternals = () => {
