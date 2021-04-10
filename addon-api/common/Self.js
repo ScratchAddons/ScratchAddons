@@ -45,6 +45,5 @@ export default class Self extends Listenable {
   /**
    * Restarts this addon. Only applicable to background scripts.
    */
-  restart () {
-  }
+  restart() {}
 }
