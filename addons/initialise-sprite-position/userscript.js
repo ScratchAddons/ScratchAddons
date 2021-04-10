@@ -1,13 +1,15 @@
 export default async function ({ addon }) {
   let vm = addon.tab.traps.vm;
   let oldAddSprite = vm.constructor.prototype.addSprite;
-  
   vm.constructor.prototype.addSprite = function (input) {
-    let spriteObj;
-    spriteObj = JSON.parse(input);
-    let isEmpty = spriteObj.costumes[0].baseLayerMD5 === "cd21514d0531fdffb22204e0ec5ed84a.svg";
-      
-    if (isEmpty || !addon.settings.get("library")) {
+    let spriteObj,
+      stringify = true;
+    alert(typeof input);
+    if (typeof input === "object") [spriteObj,stringify] = [input, false];
+    else spriteObj = JSON.parse(input);
+    let isEmpty = spriteObj.costumes?.[0]?.baseLayerMD5 === "cd21514d0531fdffb22204e0ec5ed84a.svg";
+    alert("moo");
+    if (isEmpty || !spriteObj.tags || !addon.settings.get("library")) {
       if (spriteObj.scratchX) {
         spriteObj.scratchX = +addon.settings.get("x");
         spriteObj.scratchY = +addon.settings.get("y");
@@ -17,6 +19,6 @@ export default async function ({ addon }) {
         spriteObj.y = +addon.settings.get("y");
       }
     }
-    oldAddSprite.call(this, JSON.stringify(spriteObj));
+    return oldAddSprite.call(this, stringify ? JSON.stringify(spriteObj) : spriteObj);
   };
 }
