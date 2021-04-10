@@ -2,10 +2,10 @@ export default async function ({ addon, global, console }) {
   const DRAG_AREA_CLASS = "sa-drag-area";
   const DRAG_OVER_CLASS = "sa-dragged-over";
 
-  function droppable(dropArea, onDrop) {
+  function droppable(dropArea, onDrop, allowDrop = () => true) {
     dropArea.classList.add(DRAG_AREA_CLASS);
     dropArea.addEventListener("drop", (e) => {
-      if (e.dataTransfer.types.includes("Files")) {
+      if (e.dataTransfer.types.includes("Files") && allowDrop()) {
         if (e.dataTransfer.files.length > 0) {
           onDrop(e.dataTransfer.files);
         }
@@ -15,7 +15,7 @@ export default async function ({ addon, global, console }) {
     });
     dropArea.addEventListener("dragover", (e) => {
       // Ignore dragged text, for example
-      if (!e.dataTransfer.types.includes("Files")) {
+      if (!e.dataTransfer.types.includes("Files") || !allowDrop()) {
         return;
       }
       dropArea.classList.add(DRAG_OVER_CLASS);
@@ -60,47 +60,46 @@ export default async function ({ addon, global, console }) {
   async function listMonitorsDroppable() {
     while (true) {
       const listMonitor = await addon.tab.waitForElement('div[class*="monitor_list-monitor"]', { markAsSeen: true });
-      // Get the monitor's context menu ID from the list name
-      // https://github.com/LLK/scratch-gui/blob/develop/src/components/monitor/monitor.jsx#L37
-      const contextMenuId = `monitor-${listMonitor.querySelector('div[class*="monitor_list-header"]').textContent}`;
-      droppable(listMonitor, async (files) => {
-        // Force react-contextmenu's context menu to open using their global
-        // events:
-        // https://github.com/vkbansal/react-contextmenu/blob/v2.9.4/src/ContextMenuTrigger.js#L114-L119
-        // https://github.com/vkbansal/react-contextmenu/blob/v2.9.4/src/actions.js#L27-L29
-        window.dispatchEvent(
-          new CustomEvent("REACT_CONTEXTMENU_SHOW", {
-            detail: {
-              id: contextMenuId,
-              position: { x: 0, y: 0 },
-            },
-          })
-        );
+      droppable(listMonitor, async files => {
+        // Simulate a right click on the list monitor
+        listMonitor.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
+        // Get the right click menu that opened (monitor context menus are
+        // children of <body>)
         const contextMenu = await addon.tab.waitForElement("body > .react-contextmenu.react-contextmenu--visible");
+        // Sometimes the menu flashes open, so force hide it.
+        contextMenu.style.display = "none";
         // Override DOM methods to import the text file directly
         // See: https://github.com/LLK/scratch-gui/blob/develop/src/lib/import-csv.js#L21-L22
         const appendChild = document.body.appendChild;
         document.body.appendChild = (fileInput) => {
           // Restore appendChild to <body>
           document.body.appendChild = appendChild;
-          document.body.appendChild(fileInput);
-          // Prevent Scratch from opening the file input dialog
-          fileInput.click = () => {};
-          // Insert files from the drop event into the file input
-          fileInput.files = files;
-          fileInput.dispatchEvent(new Event("change"));
-          // Sometimes the menu stays open, so force it closed.
-          contextMenu.style.display = "none";
-          window.requestAnimationFrame(() => {
+          if (fileInput instanceof HTMLInputElement) {
+            document.body.appendChild(fileInput);
+            // Prevent Scratch from opening the file input dialog
+            fileInput.click = () => {};
+            // Insert files from the drop event into the file input
+            fileInput.files = files;
+            fileInput.dispatchEvent(new Event("change"));
             window.requestAnimationFrame(() => {
-              contextMenu.style.display = null;
-              contextMenu.style.opacity = 0;
-              contextMenu.style.pointerEvents = "none";
+              window.requestAnimationFrame(() => {
+                contextMenu.style.display = null;
+                contextMenu.style.opacity = 0;
+                contextMenu.style.pointerEvents = "none";
+              });
             });
-          });
+          } else {
+            // The next call for `appendChild` SHOULD be the file input, but if
+            // it's not, then make `appendChild` behave as normal.
+            console.error("File input was not immediately given to appendChild upon clicking \"Import\"!");
+            return appendChild(fileInput);
+          }
         };
         // Simulate clicking on the "Import" option
         contextMenu.children[0].click();
+      }, () => {
+        // Don't show drop indicator if in fullscreen/player mode
+        return !listMonitor.closest('div[class*="stage_full-screen"], .guiPlayer')
       });
     }
   }
