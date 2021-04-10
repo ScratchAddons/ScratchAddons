@@ -84,5 +84,6 @@
   "drag-drop",
   "dango-rain",
   "wrap-lists",
-  "wiki-button"
+//  "wiki-button",
+  "msg-title"
 ]
