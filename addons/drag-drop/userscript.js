@@ -60,12 +60,21 @@ export default async function ({ addon, global, console }) {
   async function listMonitorsDroppable() {
     while (true) {
       const listMonitor = await addon.tab.waitForElement('div[class*="monitor_list-monitor"]', { markAsSeen: true });
-      droppable(listMonitor, async files => {
+      const canDrop = () => {
+        // Don't show drop indicator if in fullscreen/player mode
+        return !listMonitor.closest('div[class*="stage_full-screen"], .guiPlayer');
+      };
+      const handleDrop = async (files) => {
+        const contextMenuBefore = document.querySelector("body > .react-contextmenu.react-contextmenu--visible");
         // Simulate a right click on the list monitor
-        listMonitor.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
+        listMonitor.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
         // Get the right click menu that opened (monitor context menus are
         // children of <body>)
-        const contextMenu = await addon.tab.waitForElement("body > .react-contextmenu.react-contextmenu--visible");
+        const contextMenuAfter = document.querySelector("body > .react-contextmenu.react-contextmenu--visible");
+        // `contextMenuAfter` is only null if the context menu was already open
+        // for the list monitor, in which case we can use the context menu from
+        // before the simulated right click
+        const contextMenu = contextMenuAfter === null ? contextMenuBefore : contextMenuAfter;
         // Sometimes the menu flashes open, so force hide it.
         contextMenu.style.display = "none";
         // Override DOM methods to import the text file directly
@@ -91,16 +100,14 @@ export default async function ({ addon, global, console }) {
           } else {
             // The next call for `appendChild` SHOULD be the file input, but if
             // it's not, then make `appendChild` behave as normal.
-            console.error("File input was not immediately given to appendChild upon clicking \"Import\"!");
+            console.error('File input was not immediately given to appendChild upon clicking "Import"!');
             return appendChild(fileInput);
           }
         };
         // Simulate clicking on the "Import" option
         contextMenu.children[0].click();
-      }, () => {
-        // Don't show drop indicator if in fullscreen/player mode
-        return !listMonitor.closest('div[class*="stage_full-screen"], .guiPlayer')
-      });
+      };
+      droppable(listMonitor, handleDrop, canDrop);
     }
   }
   listMonitorsDroppable();
