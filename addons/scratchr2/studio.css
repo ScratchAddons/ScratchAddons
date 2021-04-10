@@ -9,6 +9,7 @@
   transform: translateX(-50%) /* Center horizontally */;
   width: 942px;
   padding: 0;
+  overflow: visible;
 }
 .box .box-head h2 {
   font-size: 28px;
