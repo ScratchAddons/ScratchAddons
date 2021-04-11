@@ -8,7 +8,10 @@ function lightDarkVariant(varName, hex, threshold, cr, cg, cb, lr, lg, lb) {
   if (lr === undefined) lr = cr;
   if (lg === undefined) lg = cg;
   if (lb === undefined) lb = cb;
-  setCSSVar(varName, textColor(hex, multiply(hex, { r: cr, g: cg, b: cb }), brighten(hex, { r: lr, g: lg, b: lb }), threshold));
+  setCSSVar(
+    varName,
+    textColor(hex, multiply(hex, { r: cr, g: cg, b: cb }), brighten(hex, { r: lr, g: lg, b: lb }), threshold)
+  );
 }
 
 function testAll(settings) {
