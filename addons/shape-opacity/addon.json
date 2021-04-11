@@ -1,0 +1,18 @@
+{
+  "name": "Costume Editor Shape Opacity",
+  "description": "Select a shape in the costume editor and a new input will apear to change the shape's opacity.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
+  "l10n": true
+}
