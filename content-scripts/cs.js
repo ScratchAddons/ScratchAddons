@@ -112,13 +112,25 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function addStyle(addon) {
-  const addonStyles = [...document.querySelectorAll(`[data-addon-id='${addon.addonId}']`)];
+  const allStyles = [...document.querySelectorAll(".scratch-addons-style")];
+  const addonStyles = allStyles.filter(el => el.getAttribute("data-addon-id") === addon.addonId);
+
+  const appendByIndex = (el, index) => {
+    // Append a style element in the correct place preserving order
+    const nextElement = allStyles.find(el => Number(el.getAttribute("data-addon-index") > index));
+    if (nextElement) document.documentElement.insertBefore(el, nextElement);
+    else {
+      if (document.body) document.documentElement.insertBefore(el, document.body);
+      else document.documentElement.appendChild(el);
+    }
+  };
+
   for (let userstyle of addon.styles) {
     if (addon.injectAsStyleElt) {
-      // If an exsiting style is already appended, just enable it instead...
-      const existingFile = addonStyles.find((style) => style.textContent === userstyle);
-      if (existingFile) {
-        existingFile.disabled = false;
+      // If an existing style is already appended, just enable it instead
+      const existingEl = addonStyles.find((style) => style.textContent === userstyle);
+      if (existingEl) {
+        existingEl.disabled = false;
         continue;
       }
 
@@ -127,25 +139,21 @@ function addStyle(addon) {
       style.setAttribute("data-addon-id", addon.addonId);
       style.setAttribute("data-addon-index", addon.index);
       style.textContent = userstyle;
-
-      if (document.body) document.documentElement.insertBefore(style, document.body);
-      else document.documentElement.appendChild(style);
+      appendByIndex(style, addon.index);
     } else {
-      // If an exsiting style is already appended, just enable it instead...
-      const existingFile = addonStyles.find((style) => style.href === userstyle);
-      if (existingFile) {
-        existingFile.disabled = false;
+      const existingEl = addonStyles.find((style) => style.href === userstyle);
+      if (existingEl) {
+        existingEl.disabled = false;
         continue;
       }
 
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.setAttribute("data-addon-id", addon.addonId);
+      link.setAttribute("data-addon-index", addon.index);
       link.classList.add("scratch-addons-style");
-
       link.href = userstyle;
-      if (document.body) document.documentElement.insertBefore(link, document.body);
-      else document.documentElement.appendChild(link);
+      appendByIndex(link, addon.index);
     }
   }
 }
