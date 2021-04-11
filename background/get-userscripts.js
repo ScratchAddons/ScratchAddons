@@ -101,6 +101,9 @@ async function getAddonData({ addonId, manifest, url }) {
   for (const style of manifest.userstyles || []) {
     if (userscriptMatches({ url }, style, addonId))
       if (manifest.injectAsStyleElt) {
+        // Reserve index in array to avoid race conditions (#700)
+        const arrLength = userstyles.push(null);
+        const indexToUse = arrLength - 1;
         promises.push(
           fetch(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`))
             .then((res) => res.text())
@@ -109,7 +112,7 @@ async function getAddonData({ addonId, manifest, url }) {
               text = text.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${addonId}`));
               // Provide source url
               text += `\n/*# sourceURL=${style.url} */`;
-              userstyles.push(text);
+              userstyles[indexToUse] = text;
             })
         );
       } else {
