@@ -178,8 +178,8 @@ function setCssVariables(addonSettings) {
 }
 
 async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
-  // In order for the "pageLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and pase
-  const pageLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
+  // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and pase
+  const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   setCssVariables(globalState.addonSettings);
   // Just in case, make sure the <head> loaded before injecting styles
   if (document.head) injectUserstyles(addonsWithUserstyles);
@@ -218,7 +218,7 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       // Use the "index" variable to insert it or remove all and readd properly.
       // But we also don't want to readd all... then "get-userscripts.js" will have to fetch a lot of data again.
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
-      if (pageLoadedAddons.find((addon) => addon.addonId === addonId)) {
+      if (everLoadedAddons.find((addon) => addon.addonId === addonId)) {
         // Addon was reenabled
         _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
       } else {
@@ -228,7 +228,7 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
 
       addonsWithUserscripts.push({ addonId, scripts });
       addonsWithUserstyles.push({ styles: userstyles, addonId, injectAsStyleElt, index });
-      pageLoadedAddons.push({ addonId, scripts });
+      everLoadedAddons.push({ addonId, scripts });
     } else if (request.dynamicAddonDisable) {
       const { addonId } = request.dynamicAddonDisable;
 
