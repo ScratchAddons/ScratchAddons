@@ -1,5 +1,4 @@
 export default async function ({ addon, global, console, msg }) {
-  const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
   let reactInternalKey;
 
   let paper = null;
@@ -494,6 +493,8 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const getPaper = () => {
+    const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
+
     // We can access paper through .tool on tools, for example:
     // https://github.com/LLK/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
     // It happens that paper's Tool objects contain a reference to the entirety of paper's scope.
