@@ -113,11 +113,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 function addStyle(addon) {
   const allStyles = [...document.querySelectorAll(".scratch-addons-style")];
-  const addonStyles = allStyles.filter(el => el.getAttribute("data-addon-id") === addon.addonId);
+  const addonStyles = allStyles.filter((el) => el.getAttribute("data-addon-id") === addon.addonId);
 
   const appendByIndex = (el, index) => {
     // Append a style element in the correct place preserving order
-    const nextElement = allStyles.find(el => Number(el.getAttribute("data-addon-index") > index));
+    const nextElement = allStyles.find((el) => Number(el.getAttribute("data-addon-index") > index));
     if (nextElement) document.documentElement.insertBefore(el, nextElement);
     else {
       if (document.body) document.documentElement.insertBefore(el, document.body);
