@@ -16,7 +16,7 @@ export default async function ({ addon, msg }) {
   iframeElement.setAttribute("frameborder", "0");
   iframeElement.setAttribute("allowfullscreen", "");
   iframeElement.setAttribute("scrolling", "no");
-  
+
   const wrapperElement = document.createElement("div");
   wrapperElement.id = "lfp-embed";
 
