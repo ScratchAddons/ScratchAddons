@@ -28,9 +28,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const { dynamicEnable, dynamicDisable } = manifest;
     // Fire disabled event for userscripts
     if (dynamicEnable && newState === true)
-      scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonEnabled", { detail: { addonId, manifest } }));
+      scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonDynamicEnable", { detail: { addonId, manifest } }));
     if (dynamicDisable && newState === false)
-      scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonDisable", { detail: { addonId, manifest } }));
+      scratchAddons.localEvents.dispatchEvent(
+        new CustomEvent("addonDynamicDisable", { detail: { addonId, manifest } })
+      );
 
     if (newState === false) {
       // TODO: can there be many addon objects for the same addon?
@@ -57,6 +59,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       scratchAddons.localEvents.dispatchEvent(
         new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest } })
       );
-    // TODO: something idk
   }
 });

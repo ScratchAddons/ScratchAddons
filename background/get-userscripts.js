@@ -17,7 +17,7 @@ function getL10NURLs() {
   return urls;
 }
 
-scratchAddons.localEvents.addEventListener("addonEnabled", ({ detail }) => {
+scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) => {
   const { addonId, manifest } = detail;
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
@@ -46,8 +46,8 @@ scratchAddons.localEvents.addEventListener("addonEnabled", ({ detail }) => {
     })
   );
 });
-scratchAddons.localEvents.addEventListener("addonDisable", ({ detail }) => {
-  const { addonId, manifest } = detail;
+scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) => {
+  const { addonId } = detail;
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
