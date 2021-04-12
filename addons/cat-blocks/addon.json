@@ -15,5 +15,6 @@
   ],
   "tags": ["easterEgg"],
   "enabledByDefault": false,
+  "libraries": ["scratch-blocks"],
   "l10n": true
 }
