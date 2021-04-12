@@ -186,8 +186,9 @@ function setCssVariables(addonSettings) {
 }
 
 async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
-  // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and pase
+  // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
+  const disabledDynamicAddons = [];
   setCssVariables(globalState.addonSettings);
   // Just in case, make sure the <head> loaded before injecting styles
   if (document.head) injectUserstyles(addonsWithUserstyles);
@@ -236,6 +237,7 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       everLoadedAddons.push({ addonId, scripts });
     } else if (request.dynamicAddonDisable) {
       const { addonId } = request.dynamicAddonDisable;
+      disabledDynamicAddons.push(addonId);
 
       let addonIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
       addonsWithUserscripts.splice(addonIndex, 1);
@@ -256,7 +258,7 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
-      sendResponse({ userscripts, userstyles });
+      sendResponse({ userscripts, userstyles, disabledDynamicAddons });
     }
   });
 }

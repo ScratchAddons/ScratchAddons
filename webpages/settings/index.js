@@ -558,7 +558,7 @@ const vue = (window.vue = new Vue({
             // so hopefully this saves some seconds of our users' lives :P
             const addonsPreviouslyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.userstyles])].filter(
+              : [...new Set([...res.userscripts, ...res.userstyles, ...res.disabledDynamicAddons])].filter(
                   (runningAddonId) => !addonsCurrentlyOnTab.includes(runningAddonId)
                 );
 
