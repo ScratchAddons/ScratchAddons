@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  let gloabal_fps = 30;
+  let global_fps = 30;
   const vm = addon.tab.traps.vm;
   let altPressesCount = 0;
   let altPressedRecently = false;
@@ -33,7 +33,7 @@ export default async function ({ addon, global, console }) {
     button.addEventListener("contextmenu", (e) => flagListener(e));
 
     const setFPS = (fps) => {
-      gloabal_fps = addon.self.disabled ? 30 : fps;
+      global_fps = addon.self.disabled ? 30 : fps;
 
       clearInterval(vm.runtime._steppingInterval);
       vm.runtime._steppingInterval = null;
@@ -47,7 +47,7 @@ export default async function ({ addon, global, console }) {
     addon.self.addEventListener("disabled", () => changeMode(false));
     vm.runtime.start = function () {
       if (this._steppingInterval) return;
-      let interval = 1000 / gloabal_fps;
+      let interval = 1000 / global_fps;
       this.currentStepTime = interval;
       this._steppingInterval = setInterval(() => {
         this._step();

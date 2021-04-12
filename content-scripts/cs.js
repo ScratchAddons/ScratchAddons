@@ -222,9 +222,6 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       _page_.fireEvent(request.fireEvent);
     } else if (request.dynamicAddonEnabled) {
       const { scripts, userstyles, addonId, injectAsStyleElt, index } = request.dynamicAddonEnabled;
-      // TODO: simply adding the style won't cut it.
-      // Use the "index" variable to insert it or remove all and readd properly.
-      // But we also don't want to readd all... then "get-userscripts.js" will have to fetch a lot of data again.
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
       if (everLoadedAddons.find((addon) => addon.addonId === addonId)) {
         // Addon was reenabled
