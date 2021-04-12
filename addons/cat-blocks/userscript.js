@@ -333,4 +333,17 @@ export default async function ({ addon, global, console }) {
     return block;
   };
   Object.setPrototypeOf(Blockly.BlockSvg, originalBlockSvg);
+
+  if (addon.tab.traps.vm.editingTarget) {
+    const workspace = Blockly.getMainWorkspace();
+    if (workspace) {
+      const flyout = workspace.getFlyout();
+      if (flyout) {
+        const flyoutWorkspace = flyout.getWorkspace();
+        Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
+        workspace.getToolbox().refreshSelection();
+        workspace.toolboxRefreshEnabled_ = true;
+      }
+    }
+  }
 }
