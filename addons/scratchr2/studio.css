@@ -42,9 +42,6 @@
 #gallery-cover-image {
   width: 226px;
 }
-#description .viewport {
-  margin-right: 0;
-}
 #gallery > .col-12 > .box {
   border-radius: 0;
   border-color: transparent;
