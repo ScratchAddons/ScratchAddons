@@ -128,7 +128,7 @@ function addStyle(addon) {
   for (let userstyle of addon.styles) {
     if (addon.injectAsStyleElt) {
       // If an existing style is already appended, just enable it instead
-      const existingEl = addonStyles.find((style) => style.textContent.startsWith(userstyle));
+      const existingEl = addonStyles.find((style) => style.textContent === userstyle);
       if (existingEl) {
         existingEl.disabled = false;
         continue;
