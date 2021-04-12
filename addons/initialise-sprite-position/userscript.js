@@ -4,11 +4,9 @@ export default async function ({ addon }) {
   vm.constructor.prototype.addSprite = function (input) {
     let spriteObj,
       stringify = true;
-    alert(typeof input);
     if (typeof input === "object") [spriteObj, stringify] = [input, false];
     else spriteObj = JSON.parse(input);
     let isEmpty = spriteObj.costumes?.[0]?.baseLayerMD5 === "cd21514d0531fdffb22204e0ec5ed84a.svg";
-    alert("moo");
     if (isEmpty || !spriteObj.tags || !addon.settings.get("library")) {
       if (spriteObj.scratchX) {
         spriteObj.scratchX = +addon.settings.get("x");
