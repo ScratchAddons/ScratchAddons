@@ -135,9 +135,9 @@ async function getContentScriptInfo(url) {
   };
   scratchAddons.manifests.forEach(async ({ addonId, manifest }, i) => {
     if (!scratchAddons.localState.addonsEnabled[addonId]) return;
-    const promice = getAddonData({ addonId, manifest, url });
-    data.promises.push(promice);
-    const { userscripts, userstyles } = await promice;
+    const promise = getAddonData({ addonId, manifest, url });
+    data.promises.push(promise);
+    const { userscripts, userstyles } = await promise;
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
     if (userstyles.length)
