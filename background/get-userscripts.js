@@ -131,10 +131,13 @@ async function getContentScriptInfo(url) {
     globalState: {},
     addonsWithUserscripts: [],
     addonsWithUserstyles: [],
+    promises: [],
   };
   scratchAddons.manifests.forEach(async ({ addonId, manifest }, i) => {
     if (!scratchAddons.localState.addonsEnabled[addonId]) return;
-    const { userscripts, userstyles } = await getAddonData({ addonId, manifest, url });
+    const promice = getAddonData({ addonId, manifest, url });
+    data.promises.push(promice);
+    const { userscripts, userstyles } = await promice;
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
     if (userstyles.length)
@@ -146,6 +149,7 @@ async function getContentScriptInfo(url) {
       });
   });
 
+  await Promise.all(data.promises);
   data.globalState = scratchAddons.globalState._target;
 
   return data;
