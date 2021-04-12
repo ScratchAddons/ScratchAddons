@@ -40,3 +40,7 @@
   background: #282828;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
+.media-info-item.date,
+.media-item-content .media-stats .stat {
+  color: rgba(255, 255, 255, 0.4);
+}

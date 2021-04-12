@@ -54,22 +54,10 @@ export default class Tab extends Listenable {
       if (markAsSeen) this._waitForElementSet.add(element);
       return Promise.resolve(element);
     }
-    return new Promise((resolve) =>
-      new MutationObserver((mutationsList, observer) => {
-        const elements = document.querySelectorAll(selector);
-        for (const element of elements) {
-          if (this._waitForElementSet.has(element)) continue;
-          observer.disconnect();
-          resolve(element);
-          if (markAsSeen) this._waitForElementSet.add(element);
-          break;
-        }
-      }).observe(document.documentElement, {
-        attributes: false,
-        childList: true,
-        subtree: true,
-      })
-    );
+    return scratchAddons.sharedObserver.watch({
+      query: selector,
+      seen: markAsSeen ? this._waitForElementSet : null,
+    });
   }
   /**
    * editor mode (or null for non-editors).
