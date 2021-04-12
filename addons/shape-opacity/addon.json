@@ -1,5 +1,5 @@
 {
-  "name": "Costume Editor Shape Opacity",
+  "name": "Costume editor shape opacity",
   "description": "Select a shape in the costume editor and a new input will appear to change the shape's opacity.",
   "credits": [
     {
