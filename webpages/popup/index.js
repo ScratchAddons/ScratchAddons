@@ -51,8 +51,6 @@ const vue = new Vue({
       }
     },
     iframeSrc(addonId) {
-      // Problem here
-      if (addonId !== this.currentPopup._addonId) return;
       return vue.popups.find((addon) => addon._addonId === addonId).url || `../../popups/${addonId}/popup.html`;
     },
   },
@@ -79,27 +77,6 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   });
   vue.popups = popupObjects;
   vue.setPopup(vue.popups[0]);
-});
-
-// Dynamic Popups
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.changeEnabledState) {
-    const { addonId, newState } = request.changeEnabledState;
-    const { manifest } = vue.manifests.find((addon) => addon.addonId === addonId);
-    if (!manifest.popup) return;
-    if (newState === true) {
-      vue.popups.push({ ...manifest.popup, _addonId: addonId });
-      vue.popups = vue.popups.sort(
-        ({ _addonId: addonIdB }, { _addonId: addonIdA }) =>
-          vue.TAB_ORDER.indexOf(addonIdB) - vue.TAB_ORDER.indexOf(addonIdA)
-      );
-    } else {
-      let removeIndex = vue.popups.findIndex((popup) => popup._addonId === addonId);
-      vue.popups.splice(removeIndex, 1);
-      removeIndex = vue.popupsWithIframes.findIndex((popup) => popup._addonId === addonId);
-      if (removeIndex !== -1) vue.popupsWithIframes.splice(removeIndex, 1);
-    }
-  }
 });
 
 chrome.runtime.sendMessage("checkPermissions");
