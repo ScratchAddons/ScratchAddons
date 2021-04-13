@@ -1229,12 +1229,15 @@ export default class DevTools {
   }
 
   /**
-   * Initiates a drag event for all block stacks expect those in the set of ids.
+   * Initiates a drag event for all block stacks except those in the set of ids.
    * But why? - Because we know all the ids of the existing stacks before we paste / duplicate - so we can find the
    * new stack by excluding all the known ones.
    * @param ids Set of previously known ids
    */
   beginDragOfNewBlocksNotInIDs(ids) {
+    if (typeof this.addon.settings !== undefined && !this.addon.settings.get("enablePasteBlocksAtMouse")) {
+      return;
+    }
     let wksp = this.utils.getWorkspace();
     let topBlocks = wksp.getTopBlocks();
     for (const block of topBlocks) {
@@ -1297,6 +1300,9 @@ export default class DevTools {
       if (document.activeElement.tagName === "INPUT") {
         return;
       }
+      if (typeof this.addon.settings !== undefined || !this.addon.settings.get("enableCtrlLeftRightNav")) {
+        return;
+      }
       if (this.isScriptEditor()) {
         this.utils.navigationHistory.goBack();
       } else if (this.isCostumeEditor()) {
@@ -1310,6 +1316,9 @@ export default class DevTools {
     if (e.keyCode === 39 && ctrlKey) {
       // Ctrl + Right Arrow Key
       if (document.activeElement.tagName === "INPUT") {
+        return;
+      }
+      if (typeof this.addon.settings !== undefined || !this.addon.settings.get("enableCtrlLeftRightNav")) {
         return;
       }
       if (this.isScriptEditor()) {
@@ -1394,27 +1403,33 @@ export default class DevTools {
               return;
             }
             if (isBackground) {
+              let cleanupPlus =
+                typeof this.addon.settings === undefined || this.addon.settings.get("enableCleanUpPlus");
+
               let nodes = blocklyContextMenu.children;
               const realBlockly = await this.addon.tab.traps.getBlockly();
-              for (const node of nodes) {
-                if (node.textContent === realBlockly.Msg.CLEAN_UP) {
-                  node.remove();
-                  break;
+              if (cleanupPlus) {
+                for (const node of nodes) {
+                  if (node.textContent === realBlockly.Msg.CLEAN_UP) {
+                    node.remove();
+                    break;
+                  }
                 }
               }
-              blocklyContextMenu.insertAdjacentHTML(
-                "beforeend",
-                `
-                            <div id="s3devCleanUp" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
-                                <div class="goog-menuitem-content" style="user-select: none;">${this.m(
-                                  "clean-plus"
-                                )}</div>
-                            </div>
-                            <div id="s3devPaste" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
-                                <div class="goog-menuitem-content" style="user-select: none;">${this.m("paste")}</div>
-                            </div>
-                            `
-              );
+              let html = cleanupPlus
+                ? `
+                  <div id="s3devCleanUp" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
+                      <div class="goog-menuitem-content" style="user-select: none;">${this.m("clean-plus")}</div>
+                  </div>
+              `
+                : "";
+
+              html += `
+                  <div id="s3devPaste" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
+                      <div class="goog-menuitem-content" style="user-select: none;">${this.m("paste")}</div>
+                  </div>
+              `;
+              blocklyContextMenu.insertAdjacentHTML("beforeend", html);
             } else {
               let wksp = this.utils.getWorkspace();
               let block = wksp.getBlockById(dataId);
@@ -1453,22 +1468,16 @@ export default class DevTools {
                 blocklyContextMenu.insertAdjacentHTML(
                   "beforeend",
                   `
-                                    <div id="s3devCopy" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
-                                        <div class="goog-menuitem-content" style="user-select: none;">${this.m(
-                                          "copy-all"
-                                        )}</div>
-                                    </div>
-                                    <div id="s3devCopyBlock" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
-                                        <div class="goog-menuitem-content" style="user-select: none;">${this.m(
-                                          "copy-block"
-                                        )}</div>
-                                    </div>
-                                    <div id="s3devCutBlock" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
-                                        <div class="goog-menuitem-content" style="user-select: none;">${this.m(
-                                          "cut-block"
-                                        )}</div>
-                                    </div>
-                                `
+                    <div id="s3devCopy" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
+                        <div class="goog-menuitem-content" style="user-select: none;">${this.m("copy-all")}</div>
+                    </div>
+                    <div id="s3devCopyBlock" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
+                        <div class="goog-menuitem-content" style="user-select: none;">${this.m("copy-block")}</div>
+                    </div>
+                    <div id="s3devCutBlock" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
+                        <div class="goog-menuitem-content" style="user-select: none;">${this.m("cut-block")}</div>
+                    </div>
+                  `
                 );
               }
 
@@ -1477,12 +1486,12 @@ export default class DevTools {
                 blocklyContextMenu.insertAdjacentHTML(
                   "beforeend",
                   `
-                                <div id="s3devReplaceAllVars" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
-                                    <div class="goog-menuitem-content" style="user-select: none;">${this.m("swap", {
-                                      var: block.getCategory() === "data" ? this.m("variables") : this.m("lists"),
-                                    })}</div>
-                                </div>
-                                `
+                        <div id="s3devReplaceAllVars" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
+                            <div class="goog-menuitem-content" style="user-select: none;">${this.m("swap", {
+                              var: block.getCategory() === "data" ? this.m("variables") : this.m("lists"),
+                            })}</div>
+                        </div>
+                  `
                 );
                 this.selVarID = block.getVars()[0];
               }
@@ -1622,6 +1631,10 @@ export default class DevTools {
       return;
     }
 
+    if (typeof this.addon.settings !== undefined && !this.addon.settings.get("enableBlockInjector")) {
+      return;
+    }
+
     e.cancelBubble = true;
     e.preventDefault();
 
@@ -1678,6 +1691,10 @@ export default class DevTools {
         this.blockCursor = null; // Clear the cursor if using the mouse
         this.middleClickWorkspace(e);
       }
+      return;
+    }
+
+    if (typeof this.addon.settings !== undefined && !this.addon.settings.get("enableMiddleClickFinder")) {
       return;
     }
 

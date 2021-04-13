@@ -1,9 +1,50 @@
 {
   "name": "Developer tools",
   "description": "Adds a find box and new menu options to the editor: copy/paste blocks, better tidy up, go to custom block definition, and more!",
+  "info": [
+    {
+      "type": "notice",
+      "text": "\"Ctrl+Space\" to bring up the add block by name popup. \"Ctrl+F\" to Find scripts. \"Ctrl+Left/Right\" navigate find history",
+      "id": "shortcuts"
+    }
+  ],
   "credits": [
     {
       "name": "griffpatch"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Enhance clean up blocks",
+      "id": "enableCleanUpPlus",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Paste blocks at mouse cursor",
+      "id": "enablePasteBlocksAtMouse",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Middle mouse click variable, custom block or event to navigate",
+      "id": "enableMiddleClickFinder",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "not-settings-yet": [
+    {
+      "name": "Ctrl+Space Add block by name popup",
+      "id": "enableBlockInjector",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Ctrl+Left or Right navigate find history",
+      "id": "enableCtrlLeftRightNav",
+      "type": "boolean",
+      "default": true
     }
   ],
   "userscripts": [
