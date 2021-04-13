@@ -90,7 +90,7 @@ export default async function ({ addon, global, console, msg }) {
   virtualCursorImageContainer.className = "sa-gamepad-cursor-container";
   const virtualCursorImage = document.createElement("img");
   virtualCursorImage.className = "sa-gamepad-cursor-image";
-  virtualCursorImage.src = addon.self.dir + "/inactive.png";
+  virtualCursorImage.src = addon.self.dir + "/cursor.png";
   virtualCursorImageContainer.appendChild(virtualCursorImage);
   virtualCursorContainer.appendChild(virtualCursorImageContainer);
 
@@ -99,11 +99,7 @@ export default async function ({ addon, global, console, msg }) {
   };
   const virtualCursorSetDown = (down) => {
     virtualCursorSetVisible(true);
-    if (down) {
-      virtualCursorImage.src = addon.self.dir + "/active.png";
-    } else {
-      virtualCursorImage.src = addon.self.dir + "/inactive.png";
-    }
+    virtualCursorImage.classList.toggle('sa-gamepad-cursor-down', down);
   };
   const virtualCursorSetPosition = (x, y) => {
     virtualCursorSetVisible(true);

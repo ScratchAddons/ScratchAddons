@@ -45,3 +45,6 @@
   image-rendering: crisp-edges;
   image-rendering: pixelated;
 }
+.sa-gamepad-cursor-down {
+  filter: invert(100%);
+}
