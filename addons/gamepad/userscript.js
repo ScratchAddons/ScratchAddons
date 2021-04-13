@@ -99,7 +99,7 @@ export default async function ({ addon, global, console, msg }) {
   };
   const virtualCursorSetDown = (down) => {
     virtualCursorSetVisible(true);
-    virtualCursorImage.classList.toggle('sa-gamepad-cursor-down', down);
+    virtualCursorImage.classList.toggle("sa-gamepad-cursor-down", down);
   };
   const virtualCursorSetPosition = (x, y) => {
     virtualCursorSetVisible(true);
