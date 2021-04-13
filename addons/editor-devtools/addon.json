@@ -33,20 +33,6 @@
       "default": true
     }
   ],
-  "not-settings-yet": [
-    {
-      "name": "Ctrl+Space Add block by name popup",
-      "id": "enableBlockInjector",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Ctrl+Left or Right navigate find history",
-      "id": "enableCtrlLeftRightNav",
-      "type": "boolean",
-      "default": true
-    }
-  ],
   "userscripts": [
     {
       "url": "userscript.js",
