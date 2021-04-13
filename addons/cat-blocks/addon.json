@@ -13,6 +13,13 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "info": [
+    {
+      "type": "warning",
+      "text": "The \"Watch mouse cursor\" option may impact performance when the editor is open.",
+      "id": "watch"
+    }
+  ],
   "settings": [
     {
       "id": "watch",
