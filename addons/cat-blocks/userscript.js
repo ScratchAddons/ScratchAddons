@@ -334,13 +334,6 @@ export default async function ({ addon, global, console }) {
     this.svgPathBody_.tooltip = this;
   };
 
-  const originalNewBlock = Blockly.WorkspaceSvg.prototype.newBlock;
-  Blockly.WorkspaceSvg.prototype.newBlock = function (...args) {
-    const block = originalNewBlock.call(this, ...args);
-    block.sa_catBlockConstructor();
-    return block;
-  };
-
   const workspace = Blockly.getMainWorkspace();
   if (workspace) {
     const vm = addon.tab.traps.vm;
