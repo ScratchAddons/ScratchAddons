@@ -325,8 +325,8 @@ export default async function ({ addon, global, console }) {
     block.svgGroup_.svgPath = block.svgPath_;
     block.svgPath_.svgFace = block.svgFace_;
     block.svgPath_.svgBody = block.svgPathBody_;
-    block.lastCallTime = 0;
-    block.CALL_FREQUENCY_MS = 60;
+    // block.lastCallTime = 0;
+    // block.CALL_FREQUENCY_MS = 60;
 
     block.svgPathBody_.tooltip = block;
 
@@ -343,6 +343,7 @@ export default async function ({ addon, global, console }) {
         Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
         workspace.getToolbox().refreshSelection();
         workspace.toolboxRefreshEnabled_ = true;
+        // TODO we have to refresh everything :(
       }
     }
   }
