@@ -41,7 +41,7 @@
   "editor-devtools/replace": "Griffpatch: Switch all {name} in this sprite for the variable named:",
   "editor-devtools/top": "send to top",
   "editor-devtools/bottom": "send to bottom",
-  "editor-devtools/clean-plus": "Clean Up Blocks +",
+  "editor-devtools/clean-plus": "Clean up Blocks +",
   "editor-devtools/paste": "Paste",
   "editor-devtools/copy-all": "Copy All",
   "editor-devtools/copy-block": "Copy Block",
