@@ -1,5 +1,4 @@
 /**
- * @license
  * Based on https://github.com/LLK/scratch-blocks/compare/hotfix/totally-normal-2021 (Apache 2.0)
  * It has been modified to work properly in our environment and unused functionality has been removed.
  */
