@@ -369,22 +369,25 @@ export default class DevTools {
   /**
    * A much nicer way of laying out the blocks into columns
    */
-  doCleanUp(e) {
+  doCleanUp(e, dataId) {
     let workspace = this.utils.getWorkspace();
     if (e) {
       e.cancelBubble = true;
       e.preventDefault();
       this.hidePopups(workspace);
-      setTimeout(() => this.doCleanUp(), 0);
+      setTimeout(() => this.doCleanUp(undefined, dataId), 0);
       return;
     }
+
+    let makeSpaceForBlock = dataId && workspace.getBlockById(dataId);
+    makeSpaceForBlock = makeSpaceForBlock && makeSpaceForBlock.getRootBlock();
 
     UndoGroup.startUndoGroup(workspace);
 
     let result = this.getOrderedTopBlockColumns(true);
     let columns = result.cols;
     let orphanCount = result.orphans.blocks.length;
-    if (orphanCount > 0) {
+    if (orphanCount > 0 && !dataId) {
       let message = this.msg("orphaned", {
         count: orphanCount,
       });
@@ -406,15 +409,17 @@ export default class DevTools {
       let maxWidth = 0;
 
       for (const block of column.blocks) {
+        let extraWidth = block === makeSpaceForBlock ? 380 : 0;
+        let extraHeight = block === makeSpaceForBlock ? 480 : 72;
         let xy = block.getRelativeToSurfaceXY();
         if (cursorX - xy.x !== 0 || cursorY - xy.y !== 0) {
           block.moveBy(cursorX - xy.x, cursorY - xy.y);
         }
         let heightWidth = block.getHeightWidth();
-        cursorY += heightWidth.height + 72;
+        cursorY += heightWidth.height + extraHeight;
 
         let maxWidthWithComments = maxWidths[block.id] || 0;
-        maxWidth = Math.max(maxWidth, Math.max(heightWidth.width, maxWidthWithComments));
+        maxWidth = Math.max(maxWidth, Math.max(heightWidth.width + extraWidth, maxWidthWithComments));
       }
 
       cursorX += maxWidth + 96;
@@ -446,7 +451,7 @@ export default class DevTools {
         }
       }
 
-      if (unusedLocals.length > 0) {
+      if (unusedLocals.length > 0 && !dataId) {
         const unusedCount = unusedLocals.length;
         let message = this.msg("unused-var", {
           count: unusedCount,
@@ -1468,6 +1473,9 @@ export default class DevTools {
                 blocklyContextMenu.insertAdjacentHTML(
                   "beforeend",
                   `
+                    <div id="s3devMakeSpace" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
+                        <div class="goog-menuitem-content" style="user-select: none;">${this.m("make-space")}</div>
+                    </div>
                     <div id="s3devCopy" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
                         <div class="goog-menuitem-content" style="user-select: none;">${this.m("copy-all")}</div>
                     </div>
@@ -1506,6 +1514,10 @@ export default class DevTools {
             let copyDiv = blocklyContextMenu.querySelector("div#s3devCleanUp");
             if (copyDiv) {
               copyDiv.addEventListener("click", (...e) => this.doCleanUp(...e));
+            }
+            copyDiv = blocklyContextMenu.querySelector("div#s3devMakeSpace");
+            if (copyDiv) {
+              copyDiv.addEventListener("click", (e) => this.doCleanUp(e, dataId));
             }
             copyDiv = blocklyContextMenu.querySelector("div#s3devCopy");
             if (copyDiv) {
