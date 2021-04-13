@@ -13,6 +13,14 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "settings": [
+    {
+      "id": "watch",
+      "name": "Watch mouse cursor",
+      "default": false,
+      "type": "boolean"
+    }
+  ],
   "tags": ["easterEgg"],
   "enabledByDefault": false,
   "libraries": ["scratch-blocks"],
