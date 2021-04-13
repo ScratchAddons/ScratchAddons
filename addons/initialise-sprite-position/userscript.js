@@ -9,12 +9,12 @@ export default async function ({ addon }) {
     let isEmpty = spriteObj.costumes?.[0]?.baseLayerMD5 === "cd21514d0531fdffb22204e0ec5ed84a.svg";
     if (isEmpty || !spriteObj.tags || !addon.settings.get("library")) {
       if (spriteObj.scratchX) {
-        spriteObj.scratchX = +addon.settings.get("x");
-        spriteObj.scratchY = +addon.settings.get("y");
+        spriteObj.scratchX = addon.settings.get("x");
+        spriteObj.scratchY = addon.settings.get("y");
       }
       if (spriteObj.x) {
-        spriteObj.x = +addon.settings.get("x");
-        spriteObj.y = +addon.settings.get("y");
+        spriteObj.x = addon.settings.get("x");
+        spriteObj.y = addon.settings.get("y");
       }
     }
     return oldAddSprite.call(this, stringify ? JSON.stringify(spriteObj) : spriteObj);
