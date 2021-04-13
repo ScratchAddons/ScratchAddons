@@ -266,6 +266,9 @@ export default async function ({ addon, global, console }) {
   for (const key of ["renderDraw_", "highlightForReplacement", "updateColour"]) {
     const original = Blockly.BlockSvg.prototype[key];
     Blockly.BlockSvg.prototype[key] = function (...args) {
+      if (!this.svgFace_) {
+        this.sa_catBlockConstructor();
+      }
       const oldPath = this.svgPath_;
       this.svgPath_ = this.svgPathBody_;
       const r = original.call(this, ...args);
@@ -276,6 +279,9 @@ export default async function ({ addon, global, console }) {
 
   const originalRenderDraw = Blockly.BlockSvg.prototype.renderDraw_;
   Blockly.BlockSvg.prototype.renderDraw_ = function (...args) {
+    if (!this.svgFace_) {
+      this.sa_catBlockConstructor();
+    }
     if (!this.outputConnection && !this.previousConnection) {
       this.initCatStuff();
     }
@@ -314,37 +320,39 @@ export default async function ({ addon, global, console }) {
   //   return originalSetGlowStack.call(this, isGlowingStack);
   // };
 
-  const originalBlockSvg = Blockly.BlockSvg;
-  Blockly.BlockSvg = function (...args) {
-    const block = new originalBlockSvg(...args);
+  Blockly.BlockSvg.prototype.sa_catBlockConstructor = function () {
+    this.svgPathBody_ = this.svgPath_;
+    this.svgPath_ = Blockly.utils.createSvgElement("g", {}, this.svgGroup_);
 
-    block.svgPathBody_ = block.svgPath_;
-    block.svgPath_ = Blockly.utils.createSvgElement("g", {}, block.svgGroup_);
+    this.svgFace_ = Blockly.utils.createSvgElement("g", {}, this.svgPath_);
+    this.svgGroup_.svgPath = this.svgPath_;
+    this.svgPath_.svgFace = this.svgFace_;
+    this.svgPath_.svgBody = this.svgPathBody_;
+    // this.lastCallTime = 0;
+    // this.CALL_FREQUENCY_MS = 60;
 
-    block.svgFace_ = Blockly.utils.createSvgElement("g", {}, block.svgPath_);
-    block.svgGroup_.svgPath = block.svgPath_;
-    block.svgPath_.svgFace = block.svgFace_;
-    block.svgPath_.svgBody = block.svgPathBody_;
-    // block.lastCallTime = 0;
-    // block.CALL_FREQUENCY_MS = 60;
+    this.svgPathBody_.tooltip = this;
+  };
 
-    block.svgPathBody_.tooltip = block;
-
+  const originalNewBlock = Blockly.WorkspaceSvg.prototype.newBlock;
+  Blockly.WorkspaceSvg.prototype.newBlock = function (...args) {
+    const block = originalNewBlock.call(this, ...args);
+    block.sa_catBlockConstructor();
     return block;
   };
-  Object.setPrototypeOf(Blockly.BlockSvg, originalBlockSvg);
 
-  if (addon.tab.traps.vm.editingTarget) {
-    const workspace = Blockly.getMainWorkspace();
-    if (workspace) {
-      const flyout = workspace.getFlyout();
-      if (flyout) {
-        const flyoutWorkspace = flyout.getWorkspace();
-        Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
-        workspace.getToolbox().refreshSelection();
-        workspace.toolboxRefreshEnabled_ = true;
-        // TODO we have to refresh everything :(
-      }
+  const workspace = Blockly.getMainWorkspace();
+  if (workspace) {
+    const vm = addon.tab.traps.vm;
+    if (vm.editingTarget) {
+      vm.emitWorkspaceUpdate();
+    }
+    const flyout = workspace.getFlyout();
+    if (flyout) {
+      const flyoutWorkspace = flyout.getWorkspace();
+      Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
+      workspace.getToolbox().refreshSelection();
+      workspace.toolboxRefreshEnabled_ = true;
     }
   }
 }
