@@ -3,7 +3,7 @@ import GamepadLib from "./gamepadlib.js";
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  // Wait for the project to finish loading
+  // Wait for the project to finish loading. Renderer might not be fully available until this happens.
   await new Promise((resolve, reject) => {
     if (vm.editingTarget) return resolve();
     vm.runtime.once("PROJECT_LOADED", resolve);
