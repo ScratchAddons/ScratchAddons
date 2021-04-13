@@ -66,7 +66,7 @@ export default async function ({ addon, global, console, msg }) {
     closeButton.setAttribute("role", "button");
     const closeImage = document.createElement("img");
     closeImage.className = addon.tab.scratchClass("close-button_close-icon");
-    closeImage.src = "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg";
+    closeImage.src = addon.self.dir + "/close.svg";
     closeButton.appendChild(closeImage);
     closeContainer.appendChild(closeButton);
     modalHeaderContainer.appendChild(closeContainer);
