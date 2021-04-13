@@ -1,5 +1,5 @@
 {
-  "name": "Controller/Gamepad Support",
+  "name": "Gamepad support",
   "description": "Interact with projects using a controller/gamepad.",
   "credits": [
     {
