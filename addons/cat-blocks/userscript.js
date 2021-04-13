@@ -179,18 +179,19 @@ export default async function ({ addon, global, console }) {
         that.svgPath_.svgBody.setAttribute("d", bodyPath);
       }, 50);
     });
-    this.windowListener = function(event) {
+    this.windowListener = function (event) {
       var time = Date.now();
       if (time < that.lastCallTime + that.CALL_FREQUENCY_MS) return;
       that.lastCallTime = time;
       if (!that.shouldWatchMouse()) return;
 
       // mouse watching
-      if (that.workspace) { // not disposed
+      if (that.workspace) {
+        // not disposed
         var xy = that.getCatFacePosition();
         var mouseLocation = {
           x: event.x / that.workspace.scale,
-          y: event.y / that.workspace.scale
+          y: event.y / that.workspace.scale,
         };
 
         var dx = mouseLocation.x - xy.x;
@@ -206,14 +207,14 @@ export default async function ({ addon, global, console }) {
         // Equation for radius of ellipse at theta for axes with length a and b
         var a = 2;
         var b = 5;
-        var r = a * b / Math.sqrt(Math.pow(b * Math.cos(theta), 2) + Math.pow(a * Math.sin(theta), 2));
+        var r = (a * b) / Math.sqrt(Math.pow(b * Math.cos(theta), 2) + Math.pow(a * Math.sin(theta), 2));
 
         // Convert polar coordinate back to x, y coordinate
-        dx = (r * scaleFactor) * Math.sin(theta);
-        dy = (r * scaleFactor) * Math.cos(theta);
+        dx = r * scaleFactor * Math.sin(theta);
+        dy = r * scaleFactor * Math.cos(theta);
 
         if (that.RTL) dx -= 87; // Translate face over
-        that.svgFace_.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+        that.svgFace_.style.transform = "translate(" + dx + "px, " + dy + "px)";
       }
     };
     if (this.RTL) {
@@ -221,14 +222,14 @@ export default async function ({ addon, global, console }) {
       this.svgFace_.style.transform = "translate(-87px, 0px)";
     }
     if (this.shouldWatchMouse()) {
-      document.addEventListener('mousemove', this.windowListener);
+      document.addEventListener("mousemove", this.windowListener);
     }
   };
 
-  Blockly.BlockSvg.prototype.getCatFacePosition = function() {
+  Blockly.BlockSvg.prototype.getCatFacePosition = function () {
     // getBoundingClientRect is not performant
     //var offset = that.workspace.getParentSvg().getBoundingClientRect();
-    var offset = {x:0, y:92};
+    var offset = { x: 0, y: 92 };
 
     offset.x += 120; // scratchCategoryMenu width
 
@@ -256,7 +257,7 @@ export default async function ({ addon, global, console }) {
     return xy;
   };
 
-  Blockly.BlockSvg.prototype.shouldWatchMouse = function() {
+  Blockly.BlockSvg.prototype.shouldWatchMouse = function () {
     if (!shouldWatchMouseCursor) return false;
     // if (window.vmLoadHigh || !window.CAT_CHASE_MOUSE) return false;
     var xy = this.getCatFacePosition();
@@ -299,7 +300,7 @@ export default async function ({ addon, global, console }) {
     clearTimeout(this.blinkFn);
     clearTimeout(this.earFn);
     clearTimeout(this.ear2Fn);
-    document.removeEventListener('mousemove', this.windowListener);
+    document.removeEventListener("mousemove", this.windowListener);
     return originalDispose.call(this, ...args);
   };
 
@@ -307,17 +308,17 @@ export default async function ({ addon, global, console }) {
   Blockly.BlockSvg.prototype.setGlowStack = function (isGlowingStack) {
     if (isGlowingStack) {
       // For performance, don't follow the mouse when the stack is glowing
-      document.removeEventListener('mousemove', this.windowListener);
+      document.removeEventListener("mousemove", this.windowListener);
       if (this.workspace && this.svgFace_.style) {
         // reset face direction
         if (this.RTL) {
-          this.svgFace_.style.transform = 'translate(-87px, 0px)';
+          this.svgFace_.style.transform = "translate(-87px, 0px)";
         } else {
-          this.svgFace_.style.transform = '';
+          this.svgFace_.style.transform = "";
         }
       }
     } else {
-      document.addEventListener('mousemove', this.windowListener);
+      document.addEventListener("mousemove", this.windowListener);
     }
     return originalSetGlowStack.call(this, isGlowingStack);
   };
