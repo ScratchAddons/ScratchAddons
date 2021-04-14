@@ -1,4 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
+  let workspace;
   const img = document.createElement("img");
   img.className = `debug-btn ${addon.tab.scratchClass("button_outlined-button")}`;
   img.src = addon.self.dir + "/debug.svg";
@@ -23,6 +24,17 @@ export default async function ({ addon, global, console, msg }) {
     div.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
     logs.appendChild(div);
     console.log(thread.stackFrames[0].params.text);
+
+    const blockInputs = thread.blockContainer._cache.inputs[thread.topBlock];
+    const inputBlock = workspace.getBlockById(Object.values(blockInputs)[0].block);
+    if (inputBlock.type === "data_variable") {
+      let varBlock;
+      for (const variable of workspace.getAllVariables()) {
+        const block = workspace.getVariableUsesById(variable.id_).find((vari) => vari.id === inputBlock.id);
+        if (block) varBlock = variable;
+      }
+      div.innerText = varBlock.name + ": " + div.innerText;
+    }
   };
   const addConsole = () => {
     document.querySelector("body").insertAdjacentHTML(
@@ -84,7 +96,7 @@ export default async function ({ addon, global, console, msg }) {
     }
     injected = true;
 
-    const workspace = Blockly.getMainWorkspace();
+    workspace = Blockly.getMainWorkspace();
     if (!workspace) throw new Error("expected workspace");
 
     let BlockSvg = Object.values(Blockly.getMainWorkspace().getFlyout().checkboxes_)[0].block.constructor;
