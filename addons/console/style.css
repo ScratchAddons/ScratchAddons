@@ -63,6 +63,7 @@
   border-top-left-radius: revert;
   padding: revert;
   cursor: text;
+  align-items: center;
 }
 .logs {
   overflow-y: scroll;
@@ -70,4 +71,12 @@
   cursor: default;
   border-radius: 0;
   padding: 0;
+}
+
+.console-variable {
+  background: #ff8c1a;
+  padding: 4px;
+  border-radius: 10px;
+  color: white;
+  margin-right: 5px;
 }

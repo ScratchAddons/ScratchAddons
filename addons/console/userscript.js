@@ -104,7 +104,10 @@ export default async function ({ addon, global, console, msg }) {
         const block = workspace.getVariableUsesById(variable.id_).find((vari) => vari.id === inputBlock.id);
         if (block) varBlock = variable;
       }
-      div.innerText = varBlock.name + ": " + div.innerText;
+      const varSpan = document.createElement("span");
+      varSpan.innerText = varBlock.name;
+      varSpan.className = "console-variable";
+      div.prepend(varSpan);
     }
     let link = document.createElement('a')
     link.innerText = 'Go to'
