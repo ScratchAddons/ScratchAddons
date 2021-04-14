@@ -1,0 +1,12 @@
+{
+  "name": "Studio Invite Button",
+  "description": "Adds a button to add comment authors to a studio.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/studios/*"]
+    }
+  ],
+  "tags": ["community"],
+  "enabled_by_default": false
+}
