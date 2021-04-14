@@ -1,4 +1,7 @@
 export default async function ({ addon, global, console }) {
+  // TODO: test whether e.altKey is true in chromebooks when alt+clicking.
+  // If so, no timeout needed, similar to mute-project addon.
+
   let global_fps = 30;
   const vm = addon.tab.traps.vm;
   let altPressesCount = 0;
@@ -10,7 +13,7 @@ export default async function ({ addon, global, console }) {
       altPressedRecently = true;
       setTimeout(() => {
         if (pressCount === altPressesCount) altPressedRecently = false;
-      }, 2500);
+      }, 250);
     }
   });
   while (true) {
