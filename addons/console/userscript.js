@@ -18,19 +18,19 @@ export default async function ({ addon, global, console, msg }) {
   let debug;
   const addItem = (thread) => {
     let logs = document.querySelector(".debug > .logs");
-    let div = document.createElement('div')
-    div.innerText = thread.stackFrames[0].params.text
-    div.classList = `log ${addon.tab.scratchClass('sprite-info_sprite-info')}`
-    logs.appendChild(div)
+    let div = document.createElement("div");
+    div.innerText = thread.stackFrames[0].params.text;
+    div.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
+    logs.appendChild(div);
     console.log(thread.stackFrames[0].params.text);
   };
   const addConsole = () => {
     document.querySelector("body").insertAdjacentHTML(
       "afterbegin",
       `
-    <div class="debug ${addon.tab.scratchClass('card_card')} ">
-    <h1 class="${addon.tab.scratchClass('card_header-buttons')}">Debugger</h1>
-    <div class="${addon.tab.scratchClass('sprite-info_sprite-info')} logs">
+    <div class="debug ${addon.tab.scratchClass("card_card")} ">
+    <h1 class="${addon.tab.scratchClass("card_header-buttons")}">Debugger</h1>
+    <div class="${addon.tab.scratchClass("sprite-info_sprite-info")} logs">
     </div>
     </div>
     `

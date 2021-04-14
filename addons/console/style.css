@@ -1,72 +1,72 @@
 .debug-btn {
-    width: 2rem;
-    height: 2rem;
-    padding: 0.375rem;
-    border-radius: 0.25rem;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    user-drag: none;
-    cursor: pointer;
-  }
-  
-  .debug-btn:hover {
-    background-color: hsla(215, 100%, 65%, 0.15);
-  }
-  .debug {
-    display: none;
-  }
-  .debug {
-    position: absolute;
-    z-index: 1000;
-    background-color: #f1f1f1;
-    border: 1px solid #d3d3d3;
-    min-height: 25rem;
-    min-width: 25rem;
-    max-height: 25rem;
-  }
-  
-  .debug h1 {
-    padding: 10px;
-    cursor: move;
-    z-index: 10;
-    color: #fff;
-  }
-  .log {
-      --message-border-color: rgb(240 240 240);
-      --warning-border-color: hsl(50deg 100% 88%);
-      --error-border-color: hsl(0deg 100% 92%);
-      --error-text-color: red;
-      --monospace-font-size: 12px;
-      --monospace-font-family: consolas, lucida console, courier new, monospace;
-      --source-code-font-size: 12px;
-      --source-code-font-family: consolas, lucida console, courier new, monospace;
-      font-family: var(--monospace-font-family);
-      font-size: var(--monospace-font-size) !important;
-      word-wrap: break-word;
-      user-select: text;
-      box-sizing: border-box;
-      min-width: 0;
-      min-height: 0;
-      display: flex;
-      border-top: 1px solid var(--message-border-color);
-      border-bottom: 1px solid transparent;
-      background: white;
-      word-wrap: break-word;
-      white-space: pre-wrap;
-      flex: auto;
-      line-height: 1.2;
-      padding-left: 10px;
-      border-top-right-radius: revert;
-      border-top-left-radius: revert;
-      padding: revert;
-      cursor: text;
-  }
-  .logs {
-      overflow-y: scroll;
-      height: 25rem;
-      cursor: default;
-      border-radius: 0;
-      padding: 0;
-  }
+  width: 2rem;
+  height: 2rem;
+  padding: 0.375rem;
+  border-radius: 0.25rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  user-drag: none;
+  cursor: pointer;
+}
+
+.debug-btn:hover {
+  background-color: hsla(215, 100%, 65%, 0.15);
+}
+.debug {
+  display: none;
+}
+.debug {
+  position: absolute;
+  z-index: 1000;
+  background-color: #f1f1f1;
+  border: 1px solid #d3d3d3;
+  min-height: 25rem;
+  min-width: 25rem;
+  max-height: 25rem;
+}
+
+.debug h1 {
+  padding: 10px;
+  cursor: move;
+  z-index: 10;
+  color: #fff;
+}
+.log {
+  --message-border-color: rgb(240 240 240);
+  --warning-border-color: hsl(50deg 100% 88%);
+  --error-border-color: hsl(0deg 100% 92%);
+  --error-text-color: red;
+  --monospace-font-size: 12px;
+  --monospace-font-family: consolas, lucida console, courier new, monospace;
+  --source-code-font-size: 12px;
+  --source-code-font-family: consolas, lucida console, courier new, monospace;
+  font-family: var(--monospace-font-family);
+  font-size: var(--monospace-font-size) !important;
+  word-wrap: break-word;
+  user-select: text;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  border-top: 1px solid var(--message-border-color);
+  border-bottom: 1px solid transparent;
+  background: white;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  flex: auto;
+  line-height: 1.2;
+  padding-left: 10px;
+  border-top-right-radius: revert;
+  border-top-left-radius: revert;
+  padding: revert;
+  cursor: text;
+}
+.logs {
+  overflow-y: scroll;
+  height: 25rem;
+  cursor: default;
+  border-radius: 0;
+  padding: 0;
+}
