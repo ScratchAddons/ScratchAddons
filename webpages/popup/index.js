@@ -57,17 +57,15 @@ const vue = new Vue({
 });
 
 chrome.runtime.sendMessage("getSettingsInfo", (res) => {
-  vue.manifests = res.manifests;
+  // If order unspecified, addon goes first. All new popups should be added here.
+  const TAB_ORDER = ["scratch-messaging", "cloud-games"];
   const popupObjects = Object.keys(res.addonsEnabled)
     .filter((addonId) => res.addonsEnabled[addonId] === true)
     .map((addonId) => res.manifests.find((addon) => addon.addonId === addonId))
     // Note an enabled addon might not exist anymore!
     .filter((findManifest) => findManifest !== undefined)
     .filter(({ manifest }) => manifest.popup)
-    .sort(
-      ({ addonId: addonIdB }, { addonId: addonIdA }) =>
-        vue.TAB_ORDER.indexOf(addonIdB) - vue.TAB_ORDER.indexOf(addonIdA)
-    )
+    .sort(({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA))
     .map(({ addonId, manifest }) => (manifest.popup._addonId = addonId) && manifest.popup);
   popupObjects.push({
     name: chrome.i18n.getMessage("quickSettings"),
