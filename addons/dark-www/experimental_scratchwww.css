@@ -1,4 +1,4 @@
-html > body:not(.sa-body-editor):not(.monitor_monitor-container_2J9gl),
+html > body:not(.sa-body-editor),
 body:not(.sa-body-editor) h1,
 body:not(.sa-body-editor) h2,
 body:not(.sa-body-editor) h3,
@@ -22,10 +22,6 @@ a.social-messages-profile-link,
 body:not(.sa-body-editor) .join-flow-title,
 .initiatives-section .initiatives-tools .subsection-tag.collaborator {
   color: #fff;
-}
-.monitor_label_ci1ok {
-  /* For some strange reason, variable names inherit their color from the body, unlike list title names */
-  color: #575e75;
 }
 #view,
 .outer #projectBox,
@@ -54,7 +50,8 @@ body:not(.sa-body-editor) .gender-radio-row,
 .project-remixes::before,
 .project-views::before,
 img.tips-icon,
-.tabs li:not(.active) .tab-icon {
+.tabs li:not(.active) .tab-icon,
+body:not(.sa-body-editor) .stage-header_stage-button-icon_3zzFK {
   filter: brightness(0) invert(1);
 }
 .project-loves.loved::before,
@@ -89,7 +86,8 @@ body:not(.sa-body-editor) .modal-content,
 .milestones-section .milestone-box,
 .supporters-section .comment-text,
 .card,
-.extension-landing .project-card {
+.extension-landing .project-card,
+body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
   background: #282828;
 }
 .comment-text::after {
@@ -137,7 +135,9 @@ input[type="checkbox"].formik-checkbox,
 .information-page .info-outer nav,
 .conf2020-panel,
 .extension-landing hr,
-.extension-landing .project-card {
+.extension-landing .project-card,
+body:not(.sa-body-editor) .stage_stage_1fD7k,
+body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
   border-color: #606060;
 }
 .box .box-header {
@@ -191,10 +191,8 @@ body:not(.sa-body-editor) .select select option,
   content: url(%addon-self-dir%/assets/waffle.png);
 }
 
-[class^="loader_background"] {
-  background-color: #252525;
-}
-
-.project-info-alert {
+.project-info-alert,
+.monitor_label_ci1ok, /* for some strange reason, variable names inherit their color from the body, unlike list title names */
+.monitor_list-empty_1UKsB {
   color: #575e75;
 }
