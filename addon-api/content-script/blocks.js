@@ -145,8 +145,8 @@ export async function init(tab) {
   inited = true;
   let getEditorMode = () => tab.clientVersion === "scratch-www" && tab.editorMode;
   if (!getEditorMode()) return;
-  // Only good in editor.
   vm = tab.traps.vm;
+  if (!vm) vm = await new Promise((cb) => __scratchAddonsTraps.addEventListener("gotvm", () => cb(tab.traps.vm)));
   async function mainloop() {
     let cache = {};
     while (true) {
@@ -175,11 +175,11 @@ export async function init(tab) {
     let blockData = customBlocks.find((block) => proccode.trim() == block.id);
     if (blockData && blockData.handler) {
       let f = thread.peekStackFrame();
-      let args = [];
+      let args = {};
       for (let arg in f.params) {
-        args[blockData.args.indexOf(arg)] = f.params[arg];
+        args[arg] = f.params[arg];
       }
-      blockData.handler(...args, thread.target.id);
+      blockData.handler(args, thread.target.id);
     }
     return oldStepToProcedure.call(this, thread, proccode);
   };

@@ -113,11 +113,11 @@ export default async function (o) {
   vm = addon.tab.traps.vm;
   ensureWrap();
   renderLoop();
-  addon.tab.addBlock("set sprite aria role to %s", ["role"], (role, target) => {
+  addon.tab.addBlock("set sprite aria role to %s", ["role"], ({ role }, target) => {
     a11yObjects[target] = a11yObjects[target] || {};
     a11yObjects[target].role = role;
   });
-  addon.tab.addBlock("set sprite label to %s", ["label"], (role, target) => {
+  addon.tab.addBlock("set sprite label to %s", ["label"], ({ label }, target) => {
     a11yObjects[target] = a11yObjects[target] || {};
     a11yObjects[target].label = label;
   });
