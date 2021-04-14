@@ -9,7 +9,7 @@ let customBlocks = [];
 let toolbox = [];
 let inited = false;
 
-export function addBlock(id, args, handler) {
+export function addBlock(id, args, handler, hide) {
   if (!customBlocks.find((e) => e.id == id)) {
     customBlocks.push({
       id,
@@ -18,9 +18,14 @@ export function addBlock(id, args, handler) {
       tertiaryColor: color.tertiaryColor,
       args,
       handler,
+      hide: !!hide,
     });
     Blockly.getMainWorkspace().getToolbox().refreshSelection();
   }
+}
+
+export function removeBlock(id) {
+  customBlocks = customBlocks.filter((e) => e.id != id);
 }
 
 let injected;
@@ -83,7 +88,8 @@ const injectWorkspace = () => {
         ...new DOMParser()
           .parseFromString(
             `<top>` +
-              customBlocks
+              (customBlocks
+                .filter((e) => !e.hide)
                 .map(
                   (e) =>
                     `<block type="procedures_call" gap="16"><mutation generateshadows="true" proccode="${xesc(
@@ -94,8 +100,8 @@ const injectWorkspace = () => {
                       JSON.stringify(e.args.map((e) => ""))
                     )}" warp="false"></mutation></block>`
                 )
-                .join("") +
-              `<label text=" " showStatusButton="null" /></top>`, // label fixes errors when there are no blocks
+                .join("") || '<label text="No addons have added blocks." showStatusButton="null" />') +
+              `</top>`,
             "text/xml"
           )
           .querySelectorAll("block, label"),

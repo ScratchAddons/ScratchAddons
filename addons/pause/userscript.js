@@ -72,10 +72,11 @@ export default async function ({ addon, global, console, msg }) {
       pausedThreadState = new WeakMap();
     }
   };
-
-  addon.tab.addBlock("sa-pause", [], (role, target) => {
+  function pauseBlock(role, target) {
     setPaused(true);
-  });
+  }
+  addon.tab.addBlock("sa-pause", [], pauseBlock, true);
+  addon.tab.addBlock("breakpoint", [], pauseBlock);
 
   const originalGreenFlag = vm.runtime.greenFlag;
   vm.runtime.greenFlag = function () {

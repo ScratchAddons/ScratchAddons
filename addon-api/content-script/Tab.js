@@ -29,7 +29,10 @@ export default class Tab extends Listenable {
     blocks.init(this);
   }
   addBlock(...a) {
-    blocks.addBlock(...a);
+    return blocks.addBlock(...a);
+  }
+  removeBlock(...a) {
+    return blocks.removeBlock(...a);
   }
   /**
    * Loads a script by URL.
