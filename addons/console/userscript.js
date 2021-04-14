@@ -85,13 +85,16 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
   const addItem = (thread) => {
+    for (let frame of thread.stackFrames) {
+      if (!frame.isLoop) {
     let logs = document.querySelector(".debug > .logs");
     let div = document.createElement("div");
-    div.innerText = thread.stackFrames[0].params.text;
+    console.log(thread.stackFrames)
+    console.log(thread.topBlock)
+    div.innerText = frame.params.text;
     div.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
-    div.onclick = () => goToBlock(thread.topBlock);
     logs.appendChild(div);
-    console.log(thread.stackFrames[0].params.text);
+    console.log(frame.params.text);
 
     const blockInputs = thread.blockContainer._cache.inputs[thread.topBlock];
     const inputBlock = workspace.getBlockById(Object.values(blockInputs)[0].block);
@@ -103,6 +106,13 @@ export default async function ({ addon, global, console, msg }) {
       }
       div.innerText = varBlock.name + ": " + div.innerText;
     }
+    let link = document.createElement('a')
+    link.innerText = 'Go to'
+    
+    link.addEventListener("click", () => goToBlock(thread.topBlock));
+    div.appendChild(link)
+  }
+  }
   };
   const addConsole = () => {
     document.querySelector("body").insertAdjacentHTML(
