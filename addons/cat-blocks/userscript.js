@@ -179,49 +179,49 @@ export default async function ({ addon, global, console }) {
         that.svgPath_.svgBody.setAttribute("d", bodyPath);
       }, 50);
     });
-    this.windowListener = function (event) {
-      var time = Date.now();
-      if (time < that.lastCallTime + that.CALL_FREQUENCY_MS) return;
-      that.lastCallTime = time;
-      if (!that.shouldWatchMouse()) return;
-
-      // mouse watching
-      if (that.workspace) {
-        // not disposed
-        var xy = that.getCatFacePosition();
-        var mouseLocation = {
-          x: event.x / that.workspace.scale,
-          y: event.y / that.workspace.scale,
-        };
-
-        var dx = mouseLocation.x - xy.x;
-        var dy = mouseLocation.y - xy.y;
-        var theta = Math.atan2(dx, dy);
-
-        // Map the vector from the cat face to the mouse location to a much shorter
-        // vector in the same direction, which will be the translation vector for
-        // the cat face
-        var delta = Math.sqrt(dx * dx + dy * dy);
-        var scaleFactor = delta / (delta + 1);
-
-        // Equation for radius of ellipse at theta for axes with length a and b
-        var a = 2;
-        var b = 5;
-        var r = (a * b) / Math.sqrt(Math.pow(b * Math.cos(theta), 2) + Math.pow(a * Math.sin(theta), 2));
-
-        // Convert polar coordinate back to x, y coordinate
-        dx = r * scaleFactor * Math.sin(theta);
-        dy = r * scaleFactor * Math.cos(theta);
-
-        if (that.RTL) dx -= 87; // Translate face over
-        that.svgFace_.style.transform = "translate(" + dx + "px, " + dy + "px)";
-      }
-    };
     if (this.RTL) {
       // Set to the correct initial position
       this.svgFace_.style.transform = "translate(-87px, 0px)";
     }
     if (this.shouldWatchMouse()) {
+      this.windowListener = function (event) {
+        var time = Date.now();
+        if (time < that.lastCallTime + that.CALL_FREQUENCY_MS) return;
+        that.lastCallTime = time;
+        if (!that.shouldWatchMouse()) return;
+  
+        // mouse watching
+        if (that.workspace) {
+          // not disposed
+          var xy = that.getCatFacePosition();
+          var mouseLocation = {
+            x: event.x / that.workspace.scale,
+            y: event.y / that.workspace.scale,
+          };
+  
+          var dx = mouseLocation.x - xy.x;
+          var dy = mouseLocation.y - xy.y;
+          var theta = Math.atan2(dx, dy);
+  
+          // Map the vector from the cat face to the mouse location to a much shorter
+          // vector in the same direction, which will be the translation vector for
+          // the cat face
+          var delta = Math.sqrt(dx * dx + dy * dy);
+          var scaleFactor = delta / (delta + 1);
+  
+          // Equation for radius of ellipse at theta for axes with length a and b
+          var a = 2;
+          var b = 5;
+          var r = (a * b) / Math.sqrt(Math.pow(b * Math.cos(theta), 2) + Math.pow(a * Math.sin(theta), 2));
+  
+          // Convert polar coordinate back to x, y coordinate
+          dx = r * scaleFactor * Math.sin(theta);
+          dy = r * scaleFactor * Math.cos(theta);
+  
+          if (that.RTL) dx -= 87; // Translate face over
+          that.svgFace_.style.transform = "translate(" + dx + "px, " + dy + "px)";
+        }
+      };  
       document.addEventListener("mousemove", this.windowListener);
     }
   };
@@ -305,25 +305,29 @@ export default async function ({ addon, global, console }) {
     clearTimeout(this.blinkFn);
     clearTimeout(this.earFn);
     clearTimeout(this.ear2Fn);
-    document.removeEventListener("mousemove", this.windowListener);
+    if (this.windowListener) {
+      document.removeEventListener("mousemove", this.windowListener);
+    }
     return originalDispose.call(this, ...args);
   };
 
   const originalSetGlowStack = Blockly.BlockSvg.prototype.setGlowStack;
   Blockly.BlockSvg.prototype.setGlowStack = function (isGlowingStack) {
-    if (isGlowingStack) {
-      // For performance, don't follow the mouse when the stack is glowing
-      document.removeEventListener("mousemove", this.windowListener);
-      if (this.workspace && this.svgFace_.style) {
-        // reset face direction
-        if (this.RTL) {
-          this.svgFace_.style.transform = "translate(-87px, 0px)";
-        } else {
-          this.svgFace_.style.transform = "";
+    if (this.windowListener) {
+      if (isGlowingStack) {
+        // For performance, don't follow the mouse when the stack is glowing
+        document.removeEventListener("mousemove", this.windowListener);
+        if (this.workspace && this.svgFace_.style) {
+          // reset face direction
+          if (this.RTL) {
+            this.svgFace_.style.transform = "translate(-87px, 0px)";
+          } else {
+            this.svgFace_.style.transform = "";
+          }
         }
+      } else {
+        document.addEventListener("mousemove", this.windowListener);
       }
-    } else {
-      document.addEventListener("mousemove", this.windowListener);
     }
     return originalSetGlowStack.call(this, isGlowingStack);
   };
