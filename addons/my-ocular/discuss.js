@@ -16,6 +16,16 @@ export default async function ({ addon, global, console, msg }) {
     let left = i.querySelector(".postleft").children[0];
     let footer = i.querySelector(".postfootright").children[0];
 
+    let viewOnOcularContainer = document.createElement('li')
+    let viewOnOcular = document.createElement('a')
+    viewOnOcular.innerText = '🔍'
+    viewOnOcular.title = msg('view-on-ocular')
+    viewOnOcular.href = `https://ocular.jeffalo.net/post/${postID}`
+    viewOnOcularContainer.appendChild(document.createTextNode('| '))
+    viewOnOcularContainer.appendChild(viewOnOcular)
+    viewOnOcularContainer.appendChild(document.createTextNode(' |'))
+    footer.insertAdjacentElement('afterbegin', viewOnOcularContainer)
+
     const { userStatus, color } = await fetchStatus(username);
 
     if (addon.auth.isLoggedIn) {
@@ -66,18 +76,13 @@ export default async function ({ addon, global, console, msg }) {
 
       let dot = document.createElement("span");
       dot.title = msg("status-hover");
-      dot.style.height = "10px";
-      dot.style.width = "10px";
-      dot.style.marginLeft = "5px";
-      dot.style.backgroundColor = "#bbb"; //default incase bad
-      dot.style.borderRadius = "50%";
-      dot.style.display = "inline-block";
+      dot.className = 'my-ocular-dot'
 
       dot.style.backgroundColor = color;
 
       left.appendChild(br);
       left.appendChild(status);
-      left.appendChild(dot);
+      if(color) left.appendChild(dot);
     }
   });
 
