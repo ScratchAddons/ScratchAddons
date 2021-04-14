@@ -1,4 +1,8 @@
 export default async function ({ addon, global, console }) {
+  // TODO: Unlike the ST, we don't have chromebooks to use.
+  // pls donate at worldxlanguages@gmail.com paypal.
+  // Test the system that mute-project uses.
+
   let gloabal_fps = 30;
   const vm = addon.tab.traps.vm;
   let altPressesCount = 0;
