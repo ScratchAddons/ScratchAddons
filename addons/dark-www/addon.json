@@ -168,7 +168,7 @@
       "potentialValues": [
         {
           "id": "experimental-dark",
-          "name": "Experimental Dark"
+          "name": "\"Experimental\" Dark"
         }
       ],
       "default": "experimental-dark"
