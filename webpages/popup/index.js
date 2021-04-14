@@ -24,6 +24,9 @@ const vue = new Vue({
     currentPopup: null,
     popupsWithIframes: [],
     version: chrome.runtime.getManifest().version,
+    manifests: [],
+    // If order unspecified, addon goes first. All new popups should be added here.
+    TAB_ORDER: ["scratch-messaging", "cloud-games", "__settings__"],
   },
   methods: {
     msg(message, ...params) {
