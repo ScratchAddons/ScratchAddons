@@ -163,8 +163,12 @@ export default async function ({ addon, global, console, msg }) {
       label.htmlFor = id;
       const onLabelOut = (e) => {
         e.preventDefault();
-        if (label.value !== this.scratchVariable.name) {
-          Blockly.getMainWorkspace().renameVariableById(this.scratchVariable.id, label.value);
+        const workspace = Blockly.getMainWorkspace();
+        const existingVariableWithNewName = workspace.getVariable(label.value, this.scratchVariable.type);
+        if (existingVariableWithNewName) {
+          label.value = this.scratchVariable.name;
+        } else {
+          workspace.renameVariableById(this.scratchVariable.id, label.value);
         }
         label.blur();
       };
