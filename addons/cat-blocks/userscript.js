@@ -1,6 +1,6 @@
 /**
  * Based on https://github.com/LLK/scratch-blocks/compare/hotfix/totally-normal-2021 (Apache 2.0)
- * It has been modified to work properly in our environment and unused functionality has been removed.
+ * It has been modified to work properly in our environment and fix some bugs.
  */
 
 export default async function ({ addon, global, console }) {
@@ -235,8 +235,6 @@ export default async function ({ addon, global, console }) {
     }
     var offset = {x: workspacePositionRect.x, y: workspacePositionRect.y};
 
-    offset.x += 61; // scratchCategoryMenu width
-
     if (!this.isInFlyout && this.workspace.getFlyout()) {
       offset.x += this.workspace.getFlyout().getWidth();
     }
@@ -254,6 +252,8 @@ export default async function ({ addon, global, console }) {
     // distance to center of face
     xy.x -= 43.5;
     xy.y -= 4;
+    // flyout category offset
+    xy.x += 60;
     if (this.RTL) {
       // We've been calculating from the right edge. Convert x to from left edge.
       xy.x = screen.width - xy.x;
@@ -265,8 +265,9 @@ export default async function ({ addon, global, console }) {
     if (!shouldWatchMouseCursor) return false;
     // if (window.vmLoadHigh || !window.CAT_CHASE_MOUSE) return false;
     var xy = this.getCatFacePosition();
-    var blockXOnScreen = xy.x > 0 && xy.x < screen.width / this.workspace.scale;
-    var blockYOnScreen = xy.y > 0 && xy.y < screen.height / this.workspace.scale;
+    const MARGIN = 50;
+    var blockXOnScreen = xy.x > -MARGIN && xy.x - MARGIN < screen.width / this.workspace.scale;
+    var blockYOnScreen = xy.y > -MARGIN && xy.y - MARGIN < screen.height / this.workspace.scale;
     return this.startHat_ && !this.isGlowingStack_ && blockXOnScreen && blockYOnScreen;
   };
 
