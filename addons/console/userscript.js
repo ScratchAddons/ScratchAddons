@@ -1,6 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
   const img = document.createElement("img");
-  img.className = `debug-btn ${addon.tab.scratchClass('button_outlined-button')}`;
+  img.className = `debug-btn ${addon.tab.scratchClass("button_outlined-button")}`;
   img.src = addon.self.dir + "/debug.svg";
   img.draggable = false;
   img.title = msg("debug");
