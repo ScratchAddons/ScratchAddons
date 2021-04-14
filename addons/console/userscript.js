@@ -87,35 +87,35 @@ export default async function ({ addon, global, console, msg }) {
   const addItem = (thread) => {
     for (let frame of thread.stackFrames) {
       if (!frame.isLoop) {
-    let logs = document.querySelector(".debug > .logs");
-    let div = document.createElement("div");
-    console.log(thread.stackFrames)
-    console.log(thread.topBlock)
-    div.innerText = frame.params.text;
-    div.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
-    logs.appendChild(div);
-    console.log(frame.params.text);
+        let logs = document.querySelector(".debug > .logs");
+        let div = document.createElement("div");
+        console.log(thread.stackFrames);
+        console.log(thread.topBlock);
+        div.innerText = frame.params.text;
+        div.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
+        logs.appendChild(div);
+        console.log(frame.params.text);
 
-    const blockInputs = thread.blockContainer._cache.inputs[thread.topBlock];
-    const inputBlock = workspace.getBlockById(Object.values(blockInputs)[0].block);
-    if (inputBlock.type === "data_variable") {
-      let varBlock;
-      for (const variable of workspace.getAllVariables()) {
-        const block = workspace.getVariableUsesById(variable.id_).find((vari) => vari.id === inputBlock.id);
-        if (block) varBlock = variable;
+        const blockInputs = thread.blockContainer._cache.inputs[thread.topBlock];
+        const inputBlock = workspace.getBlockById(Object.values(blockInputs)[0].block);
+        if (inputBlock.type === "data_variable") {
+          let varBlock;
+          for (const variable of workspace.getAllVariables()) {
+            const block = workspace.getVariableUsesById(variable.id_).find((vari) => vari.id === inputBlock.id);
+            if (block) varBlock = variable;
+          }
+          const varSpan = document.createElement("span");
+          varSpan.innerText = varBlock.name;
+          varSpan.className = "console-variable";
+          div.prepend(varSpan);
+        }
+        let link = document.createElement("a");
+        link.innerText = "Go to";
+
+        link.addEventListener("click", () => goToBlock(thread.topBlock));
+        div.appendChild(link);
       }
-      const varSpan = document.createElement("span");
-      varSpan.innerText = varBlock.name;
-      varSpan.className = "console-variable";
-      div.prepend(varSpan);
     }
-    let link = document.createElement('a')
-    link.innerText = 'Go to'
-    
-    link.addEventListener("click", () => goToBlock(thread.topBlock));
-    div.appendChild(link)
-  }
-  }
   };
   const addConsole = () => {
     document.querySelector("body").insertAdjacentHTML(
