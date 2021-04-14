@@ -1,0 +1,31 @@
+{
+  "name": "Console",
+  "description": "Adds blocks to log data to a Scratch console.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Protip: remove logs once you're done debugging",
+      "id": "logprotip"
+    }
+  ],
+  "credits": [
+    {
+      "name": "GrahamSH"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor", "recommended"],
+  "enabledByDefault": false,
+  "l10n": true
+}
