@@ -21,6 +21,7 @@ export function addBlock(id, args, handler, hide) {
       hide: !!hide,
     });
     Blockly.getMainWorkspace().getToolbox().refreshSelection();
+    vm.emitWorkspaceUpdate();
   }
 }
 
@@ -95,7 +96,7 @@ const injectWorkspace = () => {
                     `<block type="procedures_call" gap="16"><mutation generateshadows="true" proccode="${xesc(
                       e.id
                     )}" argumentids="${xesc(JSON.stringify(e.args.map((e, i) => "arg" + i)))}" argumentnames="${xesc(
-                      JSON.stringify(e.args.map((e) => e))
+                      JSON.stringify(e.args)
                     )}" argumentdefaults="${xesc(
                       JSON.stringify(e.args.map((e) => ""))
                     )}" warp="false"></mutation></block>`
@@ -153,10 +154,13 @@ export async function init(tab) {
       blockTargets.forEach((e) => {
         for (let i of [...Object.values(e._blocks)].filter((e) => e.opcode == "procedures_call")) {
           if (cache[i.id]) continue;
-          const names = JSON.parse(i.mutation.argumentnames || "[]");
-          const ids = JSON.parse(i.mutation.argumentids || "[]");
-          const defaults = JSON.parse(i.mutation.argumentdefaults || "[]");
-          cache[i.mutation.proccode] = [names, ids, defaults];
+          let block = customBlocks.find((e) => i.mutation.proccode.trim() == e.id);
+          if (block) {
+            const names = block.args;
+            const ids = block.args.map((e, i) => "arg" + i);
+            const defaults = block.args.map((e) => []);
+            cache[i.mutation.proccode] = [names, ids, defaults];
+          }
         }
       });
       blockTargets.forEach((e) => {
@@ -169,8 +173,14 @@ export async function init(tab) {
   const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;
   vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
     let blockData = customBlocks.find((block) => proccode.trim() == block.id);
-    if (blockData && blockData.handler)
-      blockData.handler(...Object.values(thread.stackFrames[0].params), thread.target.id);
+    if (blockData && blockData.handler) {
+      let f = thread.peekStackFrame();
+      let args = [];
+      for (let arg in f.params) {
+        args[blockData.args.indexOf(arg)] = f.params[arg];
+      }
+      blockData.handler(...args, thread.target.id);
+    }
     return oldStepToProcedure.call(this, thread, proccode);
   };
   if (getEditorMode() === "editor") {

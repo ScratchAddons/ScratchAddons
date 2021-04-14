@@ -99,8 +99,8 @@ export default async function (o) {
   async function renderLoop() {
     while (true) {
       cleanUp();
-      for (let e of Object.entries(a11yObjects)) {
-        updateAria(vm.runtime.targets.filter((a) => a.id === e[0])[0]);
+      for (let e in a11yObjects) {
+        updateAria(vm.runtime.targets.find((a) => a.id === e));
       }
       await new Promise((cb) => requestAnimationFrame((_) => cb()));
     }
