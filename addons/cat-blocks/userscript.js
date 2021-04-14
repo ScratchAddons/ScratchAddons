@@ -226,12 +226,16 @@ export default async function ({ addon, global, console }) {
     }
   };
 
+  let workspacePositionRect = null;
   Blockly.BlockSvg.prototype.getCatFacePosition = function () {
     // getBoundingClientRect is not performant
     //var offset = that.workspace.getParentSvg().getBoundingClientRect();
-    var offset = { x: 0, y: 92 };
+    if (!workspacePositionRect) {
+      workspacePositionRect = this.workspace.getParentSvg().getBoundingClientRect();
+    }
+    var offset = {x: workspacePositionRect.x, y: workspacePositionRect.y};
 
-    offset.x += 120; // scratchCategoryMenu width
+    offset.x += 61; // scratchCategoryMenu width
 
     if (!this.isInFlyout && this.workspace.getFlyout()) {
       offset.x += this.workspace.getFlyout().getWidth();
