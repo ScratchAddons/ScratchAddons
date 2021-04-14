@@ -27,6 +27,7 @@ export default async function ({ addon, global, console }) {
       //Position it relative so that absolute positioning will be relative to the bubble.
       item.style.position = "relative";
       let k = document.createElement("img");
+      k.draggable = false;
       k.src = `${addon.self.dir}/icons/${icons[i]}.svg`;
       Object.assign(k.style, {
         filter: "brightness(50000%)",
