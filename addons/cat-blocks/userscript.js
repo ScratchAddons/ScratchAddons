@@ -233,7 +233,7 @@ export default async function ({ addon, global, console }) {
     if (!workspacePositionRect) {
       workspacePositionRect = this.workspace.getParentSvg().getBoundingClientRect();
     }
-    var offset = {x: workspacePositionRect.x, y: workspacePositionRect.y};
+    var offset = { x: workspacePositionRect.x, y: workspacePositionRect.y };
 
     if (!this.isInFlyout && this.workspace.getFlyout()) {
       offset.x += this.workspace.getFlyout().getWidth();
