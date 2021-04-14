@@ -1,6 +1,6 @@
 {
-  "name": "Show my-ocular status",
-  "description": "Shows ocular statuses and favorite colours. Uses my-ocular.jeffalo.net to obtain status data. Statuses are moderated and filtered.",
+  "name": "Show ocular data",
+  "description": "Shows ocular statuses and reactions. Uses my-ocular.jeffalo.net to obtain data.",
   "credits": [
     {
       "name": "Jeffalo"
@@ -20,6 +20,16 @@
       "matches": ["https://scratch.mit.edu/users/*/"],
       "settingMatch": {
         "id": "profile",
+        "value": true
+      }
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "discuss.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "settingMatch": {
+        "id": "discuss",
         "value": true
       }
     }
