@@ -73,14 +73,9 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  const originalStepToProcedure = vm.runtime.sequencer.stepToProcedure;
-  vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
-    if (proccode.startsWith("sa-pause")) {
-      setPaused(true);
-      return;
-    }
-    return originalStepToProcedure.call(this, thread, proccode);
-  };
+  addon.tab.addBlock("sa-pause", [], (role, target) => {
+    setPaused(true);
+  });
 
   const originalGreenFlag = vm.runtime.greenFlag;
   vm.runtime.greenFlag = function () {
