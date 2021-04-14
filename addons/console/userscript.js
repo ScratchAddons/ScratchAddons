@@ -89,12 +89,9 @@ export default async function ({ addon, global, console, msg }) {
       if (!frame.isLoop) {
         let logs = document.querySelector(".debug > .logs");
         let div = document.createElement("div");
-        console.log(thread.stackFrames);
-        console.log(thread.topBlock);
         div.innerText = frame.params.text;
         div.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
         logs.appendChild(div);
-        console.log(frame.params.text);
 
         const blockInputs = thread.blockContainer._cache.inputs[thread.topBlock];
         const inputBlock = workspace.getBlockById(Object.values(blockInputs)[0].block);
@@ -231,7 +228,12 @@ export default async function ({ addon, global, console, msg }) {
       const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;
       vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
         if (proccode.trim().toLowerCase() === "log %s") {
-          addItem(thread);
+          for (var blockId of thread.stack) {
+            const block = workspace.getBlockById(blockId);
+            if (block?.procCode_ === "log %s") {
+              console.log(block);
+            }
+          }
         }
         return oldStepToProcedure.call(this, thread, proccode.text);
       };
