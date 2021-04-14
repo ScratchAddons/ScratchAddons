@@ -96,7 +96,7 @@ export default async function ({ addon, global, console, msg }) {
     logs.appendChild(div);
     console.log(frame.params.text);
 
-    const blockInputs = thread.blockContainer._cache.inputs[thread.topBlock];
+    /*const blockInputs = thread.blockContainer._cache.inputs[thread.topBlock];
     const inputBlock = workspace.getBlockById(Object.values(blockInputs)[0].block);
     if (inputBlock.type === "data_variable") {
       let varBlock;
@@ -108,7 +108,7 @@ export default async function ({ addon, global, console, msg }) {
       varSpan.innerText = varBlock.name;
       varSpan.className = "console-variable";
       div.prepend(varSpan);
-    }
+    }*/
     let link = document.createElement('a')
     link.innerText = 'Go to'
     
