@@ -1,6 +1,6 @@
 export default async function ({ addon, global, console }) {
-  // TODO: Test the system that mute-project uses.
-  // Unlike the ST, we don't have chromebooks to use.
+  // TODO: test whether e.altKey is true in chromebooks when alt+clicking.
+  // If so, no timeout needed, similar to mute-project addon.
 
   let gloabal_fps = 30;
   const vm = addon.tab.traps.vm;
