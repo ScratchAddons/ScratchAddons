@@ -1240,7 +1240,7 @@ export default class DevTools {
    * @param ids Set of previously known ids
    */
   beginDragOfNewBlocksNotInIDs(ids) {
-    if (typeof this.addon.settings !== undefined && !this.addon.settings.get("enablePasteBlocksAtMouse")) {
+    if (!this.addon.settings.get("enablePasteBlocksAtMouse")) {
       return;
     }
     let wksp = this.utils.getWorkspace();
@@ -1305,9 +1305,9 @@ export default class DevTools {
       if (document.activeElement.tagName === "INPUT") {
         return;
       }
-      if (typeof this.addon.settings !== undefined || !this.addon.settings.get("enableCtrlLeftRightNav")) {
-        return;
-      }
+      // todo: if (!this.addon.settings.get("enableCtrlLeftRightNav")) {
+      //         return;
+      //       }
       if (this.isScriptEditor()) {
         this.utils.navigationHistory.goBack();
       } else if (this.isCostumeEditor()) {
@@ -1323,9 +1323,9 @@ export default class DevTools {
       if (document.activeElement.tagName === "INPUT") {
         return;
       }
-      if (typeof this.addon.settings !== undefined || !this.addon.settings.get("enableCtrlLeftRightNav")) {
-        return;
-      }
+      // todo: if (!this.addon.settings.get("enableCtrlLeftRightNav")) {
+      //         return;
+      //       }
       if (this.isScriptEditor()) {
         this.utils.navigationHistory.goForward();
       } else if (this.isCostumeEditor()) {
@@ -1408,8 +1408,7 @@ export default class DevTools {
               return;
             }
             if (isBackground) {
-              let cleanupPlus =
-                typeof this.addon.settings === undefined || this.addon.settings.get("enableCleanUpPlus");
+              let cleanupPlus = this.addon.settings.get("enableCleanUpPlus");
 
               let nodes = blocklyContextMenu.children;
               const realBlockly = await this.addon.tab.traps.getBlockly();
@@ -1643,9 +1642,9 @@ export default class DevTools {
       return;
     }
 
-    if (typeof this.addon.settings !== undefined && !this.addon.settings.get("enableBlockInjector")) {
-      return;
-    }
+    // todo: if (!this.addon.settings.get("enableBlockInjector")) {
+    //         return;
+    //       }
 
     e.cancelBubble = true;
     e.preventDefault();
@@ -1706,7 +1705,7 @@ export default class DevTools {
       return;
     }
 
-    if (typeof this.addon.settings !== undefined && !this.addon.settings.get("enableMiddleClickFinder")) {
+    if (!this.addon.settings.get("enableMiddleClickFinder")) {
       return;
     }
 
