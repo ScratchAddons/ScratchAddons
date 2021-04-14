@@ -1,14 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
   let posts = document.querySelectorAll(".blockpost");
 
-  let ocularReactionColor = getComputedStyle(document.querySelector(".blockpost").querySelector(".box"))
-    .backgroundColor; // match post header
-  document.documentElement.style.setProperty("--ocular-reaction-color", ocularReactionColor); // match post header
-
-  let ocularReactionBGColor = getComputedStyle(document.querySelector(".blockpost").querySelector(".postleft"))
-    .backgroundColor; // match post header
-  document.documentElement.style.setProperty("--ocular-reaction-bg-color", ocularReactionBGColor); // match post header
-
   posts.forEach(async (i) => {
     let username = i.querySelector(".username").innerText;
     let postID = i.id.split("p")[1];
