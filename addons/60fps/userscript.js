@@ -10,7 +10,7 @@ export default async function ({ addon, global, console }) {
       altPressedRecently = true;
       setTimeout(() => {
         if (pressCount === altPressesCount) altPressedRecently = false;
-      }, 2500);
+      }, 250);
     }
   });
   while (true) {
