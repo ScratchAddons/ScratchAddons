@@ -1,0 +1,48 @@
+.scratchCategoryItemBubble {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 17px 17px;
+  height: 22px;
+  width: 22px;
+}
+
+.scratchCategoryId-motion .scratchCategoryItemBubble {
+  background-image: url(chrome-extension://npijjahcnpemcijdgoioaclneonckman/addons/block-palette-icons/icons/motion_icon.svg);
+}
+
+.scratchCategoryId-looks .scratchCategoryItemBubble {
+  background-image: url(chrome-extension://npijjahcnpemcijdgoioaclneonckman/addons/block-palette-icons/icons/looks_icon.svg);
+}
+
+.scratchCategoryId-sound .scratchCategoryItemBubble {
+  background-image: url(chrome-extension://npijjahcnpemcijdgoioaclneonckman/addons/block-palette-icons/icons/sound_icon.svg);
+}
+
+.scratchCategoryId-events .scratchCategoryItemBubble {
+  background-image: url(chrome-extension://npijjahcnpemcijdgoioaclneonckman/addons/block-palette-icons/icons/events_icon.svg);
+}
+
+.scratchCategoryId-control .scratchCategoryItemBubble {
+  background-image: url(chrome-extension://npijjahcnpemcijdgoioaclneonckman/addons/block-palette-icons/icons/control_icon.svg);
+}
+
+.scratchCategoryId-sensing .scratchCategoryItemBubble {
+  background-image: url(chrome-extension://npijjahcnpemcijdgoioaclneonckman/addons/block-palette-icons/icons/sensing_icon.svg);
+}
+
+.scratchCategoryId-operators .scratchCategoryItemBubble {
+  background-image: url(chrome-extension://npijjahcnpemcijdgoioaclneonckman/addons/block-palette-icons/icons/operators_icon.svg);
+}
+
+.scratchCategoryId-variables .scratchCategoryItemBubble {
+  background-image: url(chrome-extension://npijjahcnpemcijdgoioaclneonckman/addons/block-palette-icons/icons/variables_icon.svg);
+}
+
+.scratchCategoryId-lists .scratchCategoryItemBubble {
+  background-image: url(chrome-extension://npijjahcnpemcijdgoioaclneonckman/addons/block-palette-icons/icons/list_icon.svg);
+}
+
+.scratchCategoryId-myBlocks .scratchCategoryItemBubble {
+  background-image: url(chrome-extension://npijjahcnpemcijdgoioaclneonckman/addons/block-palette-icons/icons/block_icon.svg);
+}
+
