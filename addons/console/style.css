@@ -9,6 +9,7 @@
   user-select: none;
   user-drag: none;
   cursor: pointer;
+  filter: saturate(0);
 }
 
 .debug-btn:hover {

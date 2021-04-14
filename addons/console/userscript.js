@@ -1,6 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
   const img = document.createElement("img");
-  img.className = "debug-btn";
+  img.className = `debug-btn ${addon.tab.scratchClass('button_outlined-button')}`;
   img.src = addon.self.dir + "/debug.svg";
   img.draggable = false;
   img.title = msg("debug");
@@ -177,8 +177,8 @@ export default async function ({ addon, global, console, msg }) {
 
   while (true) {
     injectWorkspace();
-    const flag = await addon.tab.waitForElement("[class^='green-flag']", { markAsSeen: true });
-    flag.insertAdjacentElement("afterend", img);
+    const button = await addon.tab.waitForElement("[class^='stage-header_stage-size-row']", { markAsSeen: true });
+    button.insertAdjacentElement("afterBegin", img);
 
     while (true) {
       vm.runtime.targets.forEach(
