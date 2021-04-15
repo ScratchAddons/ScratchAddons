@@ -111,9 +111,13 @@ export default async function ({ addon, global, console, msg }) {
       "afterbegin",
       `
     <div class="debug ${addon.tab.scratchClass("card_card")} ">
-    <h1 class="${addon.tab.scratchClass("card_header-buttons")}">Debugger</h1>
-    <div class="${addon.tab.scratchClass("sprite-info_sprite-info")} logs">
-    </div>
+      <h1 class="${addon.tab.scratchClass("card_header-buttons")}">Debugger</h1>
+      <div class="${addon.tab.scratchClass("sprite-info_sprite-info")} logs">
+        <div class="close-button_close-button_lOp2G close-button_large_2oadS close-button">
+          <img class="close-button_close-icon_HBCuO" src="/static/assets/cb666b99d3528f91b52f985dfb102afa.svg">
+        </div>
+
+      </div>
     </div>
     `
     );
@@ -154,6 +158,12 @@ export default async function ({ addon, global, console, msg }) {
       document.onmouseup = null;
       document.onmousemove = null;
     }
+
+    document.querySelector(".close-button").onmousedown = () => {
+      document.querySelectorAll(".log").forEach((log, i) => {
+        log.remove();
+      });
+    };
   };
   addConsole();
   const toggleConsole = (show = !showingConsole) => {

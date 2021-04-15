@@ -33,6 +33,8 @@
   cursor: move;
   z-index: 10;
   color: #fff;
+  width: calc(100% - 20px);
+  font-size: 20px;
 }
 .log {
   --message-border-color: rgb(240 240 240);
