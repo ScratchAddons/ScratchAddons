@@ -1,5 +1,4 @@
 {
-    "debugger/pause": "Pause",
-    "debugger/debug": "Debug"
+  "debugger/pause": "Pause",
+  "debugger/debug": "Debug"
 }
-  

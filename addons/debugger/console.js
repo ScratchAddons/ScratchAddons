@@ -10,11 +10,11 @@ export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
   addon.tab.addBlock("log %s", ["content"], ({ content }, targetId, blockId) => {
     workspace = Blockly.getMainWorkspace();
-    addItem(content, targetId, blockId, 'log');
+    addItem(content, targetId, blockId, "log");
   });
   addon.tab.addBlock("warn %s", ["content"], ({ content }, targetId, blockId) => {
     workspace = Blockly.getMainWorkspace();
-    addItem(content, targetId, blockId, 'warn');
+    addItem(content, targetId, blockId, "warn");
   });
   let injected;
   let debug;
