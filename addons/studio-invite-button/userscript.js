@@ -18,8 +18,8 @@ export default async function ({ addon, global, console }) {
       }
     );
   }
-  addon.tab.waitForElement('#description').then((description) => {
-  // checks if the user is a manager and the URL is correct
+  addon.tab.waitForElement("#description").then((description) => {
+    // checks if the user is a manager and the URL is correct
     if (description.classList.contains("editable") && urlRegex.test(window.location.href)) {
       Array.from(document.getElementsByClassName("comment")).forEach((comment) => {
         const inviteButton = document.createElement("span"); // create the button
