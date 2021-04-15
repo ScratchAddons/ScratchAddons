@@ -8,9 +8,9 @@ export default async function ({ addon, global, console, msg }) {
   img.addEventListener("click", () => showConsole());
 
   const vm = addon.tab.traps.vm;
-  addon.tab.addBlock("log %s", ["content"], ({ content }, target) => {
-    console.log(content, target);
-    addItem(content);
+  addon.tab.addBlock("log %s", ["content"], ({ content }, targetId, blockId) => {
+    workspace = Blockly.getMainWorkspace();
+    addItem(content, blockId);
   });
 
   let injected;
@@ -55,55 +55,57 @@ export default async function ({ addon, global, console, msg }) {
 
       // workspace.hideChaff(),
       workspace.scrollbar.set(sx, sy);
-
-      // Flashing
-      const myFlash = { block: null, timerID: null, colour: null };
-      if (myFlash.timerID > 0) {
-        clearTimeout(myFlash.timerID);
-        myFlash.block.setColour(myFlash.colour);
-      }
-
-      let count = 4;
-      let flashOn = true;
-      myFlash.colour = block.getColour();
-      myFlash.block = block;
-
-      function _flash() {
-        myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
-        flashOn = !flashOn;
-        count--;
-        if (count > 0) {
-          myFlash.timerID = setTimeout(_flash, 200);
-        } else {
-          myFlash.timerID = 0;
-        }
-      }
-
-      _flash();
     }
+    // Flashing
+    const myFlash = { block: null, timerID: null, colour: null };
+    if (myFlash.timerID > 0) {
+      clearTimeout(myFlash.timerID);
+      myFlash.block.setColour(myFlash.colour);
+    }
+
+    let count = 4;
+    let flashOn = true;
+    myFlash.colour = block.getColour();
+    myFlash.block = block;
+
+    function _flash() {
+      myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
+      flashOn = !flashOn;
+      count--;
+      if (count > 0) {
+        myFlash.timerID = setTimeout(_flash, 200);
+      } else {
+        myFlash.timerID = 0;
+      }
+    }
+
+    _flash();
   };
-  const addItem = (content) => {
+  const addItem = (content, blockId) => {
     let logs = document.querySelector(".debug > .logs");
     let div = document.createElement("div");
     div.innerText = content;
     div.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
     logs.appendChild(div);
 
-    // if (inputBlock.type === "data_variable") {
-    //   let varBlock;
-    //   for (const variable of workspace.getAllVariables()) {
-    //     const block = workspace.getVariableUsesById(variable.id_).find((vari) => vari.id === inputBlock.id);
-    //     if (block) varBlock = variable;
-    //   }
-    //   const varSpan = document.createElement("span");
-    //   varSpan.innerText = varBlock.name;
-    //   varSpan.className = "console-variable";
-    //   div.prepend(varSpan);
-    // }
+    const block = workspace.getBlockById(blockId);
+    const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
+    console.log(inputBlock);
+    if (inputBlock.type === "data_variable") {
+      let varBlock;
+      for (const variable of workspace.getAllVariables()) {
+        const block = workspace.getVariableUsesById(variable.id_).find((vari) => vari.id === inputBlock.id);
+        if (block) varBlock = variable;
+      }
+      const varSpan = document.createElement("span");
+      varSpan.innerText = varBlock.name;
+      varSpan.className = "console-variable";
+      div.prepend(varSpan);
+    }
     let link = document.createElement("a");
     link.innerText = "Go to";
 
-    // link.addEventListener("click", () => goToBlock(thread.topBlock));
+    link.addEventListener("click", () => goToBlock(blockId));
     div.appendChild(link);
   };
   const addConsole = () => {

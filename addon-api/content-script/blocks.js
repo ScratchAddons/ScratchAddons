@@ -25,7 +25,7 @@ export function addBlock(id, args, handler, hide) {
       w = Blockly.getMainWorkspace();
     } catch (e) {}
     if (w) w.getToolbox().refreshSelection();
-    if (vm) vm.emitWorkspaceUpdate();
+    if (vm && vm.runtime.targets.length > 0) vm.emitWorkspaceUpdate();
   }
 }
 

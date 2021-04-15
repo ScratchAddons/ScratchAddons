@@ -58,12 +58,11 @@
   white-space: pre-wrap;
   flex: auto;
   line-height: 1.2;
-  padding-left: 10px;
   border-top-right-radius: revert;
   border-top-left-radius: revert;
-  padding: revert;
   cursor: text;
   align-items: center;
+  padding: 2px;
 }
 .logs {
   overflow-y: scroll;
