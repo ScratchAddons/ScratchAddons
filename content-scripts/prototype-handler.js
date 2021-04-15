@@ -14,6 +14,7 @@ function injectPrototype() {
       Object.prototype.hasOwnProperty.call(args[0], "runtime")
     ) {
       onceMap.vm = args[0];
+      window.__scratchAddonsTraps.dispatchEvent(new Event("gotvm"));
       // After finding the VM, return to previous Function.prototype.bind
       Function.prototype.bind = oldBind;
       return oldBind.apply(this, args);

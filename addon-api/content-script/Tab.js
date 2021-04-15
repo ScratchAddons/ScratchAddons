@@ -3,6 +3,7 @@ import ReduxHandler from "./ReduxHandler.js";
 import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/data-url-to-blob.js";
 import getWorkerScript from "./worker.js";
+import * as blocks from "./blocks.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
@@ -25,6 +26,13 @@ export default class Tab extends Listenable {
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+    blocks.init(this);
+  }
+  addBlock(...a) {
+    return blocks.addBlock(...a);
+  }
+  removeBlock(...a) {
+    return blocks.removeBlock(...a);
   }
   /**
    * Loads a script by URL.

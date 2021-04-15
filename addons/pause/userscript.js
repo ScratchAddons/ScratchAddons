@@ -72,15 +72,11 @@ export default async function ({ addon, global, console, msg }) {
       pausedThreadState = new WeakMap();
     }
   };
-
-  const originalStepToProcedure = vm.runtime.sequencer.stepToProcedure;
-  vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
-    if (proccode.startsWith("sa-pause")) {
-      setPaused(true);
-      return;
-    }
-    return originalStepToProcedure.call(this, thread, proccode);
-  };
+  function pauseBlock(role, target) {
+    setPaused(true);
+  }
+  addon.tab.addBlock("sa-pause", [], pauseBlock, true);
+  addon.tab.addBlock("breakpoint", [], pauseBlock);
 
   const originalGreenFlag = vm.runtime.greenFlag;
   vm.runtime.greenFlag = function () {
