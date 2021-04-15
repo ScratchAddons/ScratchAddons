@@ -108,43 +108,65 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request === "getInitialUrl") {
     sendResponse(initialUrl);
-  } else if (request.themesUpdated) {
-    injectUserstylesAndThemes({ themes: request.themesUpdated, isUpdate: true });
   }
 });
 
-// Store all themes that were enabled this session
-const sessionEnabledThemes = new Set();
+function addStyle(addon) {
+  const allStyles = [...document.querySelectorAll(".scratch-addons-style")];
+  const addonStyles = allStyles.filter((el) => el.getAttribute("data-addon-id") === addon.addonId);
 
-function injectUserstylesAndThemes({ addonsWithUserstyles = [], themes, isUpdate }) {
-  document.querySelectorAll(".scratch-addons-theme").forEach((style) => {
-    if (!style.textContent.startsWith("/* sa-autoupdate-theme-ignore */")) style.remove();
-  });
-  const userstyles = addonsWithUserstyles.map((addon) => addon.styles);
-  for (const addon of userstyles || []) {
-    for (const userstyle of addon) {
+  const appendByIndex = (el, index) => {
+    // Append a style element in the correct place preserving order
+    const nextElement = allStyles.find((el) => Number(el.getAttribute("data-addon-index") > index));
+    if (nextElement) document.documentElement.insertBefore(el, nextElement);
+    else {
+      if (document.body) document.documentElement.insertBefore(el, document.body);
+      else document.documentElement.appendChild(el);
+    }
+  };
+
+  for (let userstyle of addon.styles) {
+    if (addon.injectAsStyleElt) {
+      // If an existing style is already appended, just enable it instead
+      const existingEl = addonStyles.find((style) => style.textContent === userstyle);
+      if (existingEl) {
+        existingEl.disabled = false;
+        continue;
+      }
+
+      const style = document.createElement("style");
+      style.classList.add("scratch-addons-style");
+      style.setAttribute("data-addon-id", addon.addonId);
+      style.setAttribute("data-addon-index", addon.index);
+      style.textContent = userstyle;
+      appendByIndex(style, addon.index);
+    } else {
+      const existingEl = addonStyles.find((style) => style.href === userstyle);
+      if (existingEl) {
+        existingEl.disabled = false;
+        continue;
+      }
+
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = userstyle.url;
-      if (document.body) document.documentElement.insertBefore(link, document.body);
-      else document.documentElement.appendChild(link);
+      link.setAttribute("data-addon-id", addon.addonId);
+      link.setAttribute("data-addon-index", addon.index);
+      link.classList.add("scratch-addons-style");
+      link.href = userstyle;
+      appendByIndex(link, addon.index);
     }
   }
-  for (const theme of themes) {
-    sessionEnabledThemes.add(theme.addonId);
-    for (const styleUrl of theme.styleUrls) {
-      let css = theme.styles[styleUrl];
-      // Replace %addon-self-dir% for relative URLs
-      css = css.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${theme.addonId}`));
-      if (isUpdate && css.startsWith("/* sa-autoupdate-theme-ignore */")) continue;
-      css += `\n/*# sourceURL=${styleUrl} */`;
-      const style = document.createElement("style");
-      style.classList.add("scratch-addons-theme");
-      style.setAttribute("data-addon-id", theme.addonId);
-      style.textContent = css;
-      if (document.body) document.documentElement.insertBefore(style, document.body);
-      else document.documentElement.appendChild(style);
-    }
+}
+function removeAddonStyles(addonId) {
+  // Instead of actually removing the style/link element, we just disable it.
+  // That way, if the addon needs to be reenabled, it can just enable that style/link element instead of readding it.
+  // This helps with load times for link elements.
+  document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => (style.disabled = true));
+}
+
+function injectUserstyles(addonsWithUserstyles) {
+  for (const addon of addonsWithUserstyles || []) {
+    addStyle(addon);
   }
 }
 
@@ -163,14 +185,17 @@ function setCssVariables(addonSettings) {
   }
 }
 
-async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles, themes }) {
+async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
+  // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
+  const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
+  const disabledDynamicAddons = [];
   setCssVariables(globalState.addonSettings);
   // Just in case, make sure the <head> loaded before injecting styles
-  if (document.head) injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
+  if (document.head) injectUserstyles(addonsWithUserstyles);
   else {
     const observer = new MutationObserver(() => {
       if (document.head) {
-        injectUserstylesAndThemes({ addonsWithUserstyles, themes, isUpdate: false });
+        injectUserstyles(addonsWithUserstyles);
         observer.disconnect();
       }
     });
@@ -196,21 +221,44 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       setCssVariables(request.newGlobalState.addonSettings);
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
+    } else if (request.dynamicAddonEnabled) {
+      const { scripts, userstyles, addonId, injectAsStyleElt, index } = request.dynamicAddonEnabled;
+      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
+      if (everLoadedAddons.find((addon) => addon.addonId === addonId)) {
+        // Addon was reenabled
+        _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
+      } else {
+        // Addon was not injected in page yet
+        _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
+      }
+
+      addonsWithUserscripts.push({ addonId, scripts });
+      addonsWithUserstyles.push({ styles: userstyles, addonId, injectAsStyleElt, index });
+      everLoadedAddons.push({ addonId, scripts });
+    } else if (request.dynamicAddonDisable) {
+      const { addonId } = request.dynamicAddonDisable;
+      disabledDynamicAddons.push(addonId);
+
+      let addonIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
+      addonsWithUserscripts.splice(addonIndex, 1);
+      addonIndex = addonsWithUserstyles.findIndex((a) => a.addonId === addonId);
+      addonsWithUserstyles.splice(addonIndex, 1);
+
+      removeAddonStyles(addonId);
+      _page_.fireEvent({ name: "disabled", addonId, target: "self" });
+    } else if (request.updateUserstylesSettingsChange) {
+      const { scripts, userstyles, addonId, injectAsStyleElt, index } = request.updateUserstylesSettingsChange;
+      // Removing the addon styles and readding them works since the background
+      // will send a different array for the new valid userstyles.
+      // Try looking for the "userscriptMatches" function.
+      removeAddonStyles(addonId);
+      addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
     } else if (request.setMsgCount) {
       _page_.setMsgCount(request.setMsgCount);
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
-      const activeThemes = Array.from(document.querySelectorAll(".scratch-addons-theme")).map((style) =>
-        style.getAttribute("data-addon-id")
-      );
-      const inactiveThemes = [...sessionEnabledThemes].filter((addonId) => !activeThemes.includes(addonId));
-      sendResponse({
-        userscripts,
-        userstyles,
-        activeThemes,
-        inactiveThemes,
-      });
+      sendResponse({ userscripts, userstyles, disabledDynamicAddons });
     }
   });
 }

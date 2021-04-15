@@ -34,8 +34,21 @@ const page = {
     onDataReady(); // Assume set to true
   },
 
+  runAddonUserscripts, // Gets called by cs.js when addon enabled late
+
   fireEvent(info) {
     if (info.addonId) {
+      if (info.name === "disabled") {
+        document.documentElement.style.setProperty(
+          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`,
+          "none"
+        );
+      } else if (info.name === "reenabled") {
+        document.documentElement.style.removeProperty(
+          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`
+        );
+      }
+
       // Addon specific events, like settings change and self disabled
       const eventTarget = scratchAddons.eventTargets[info.target].find(
         (eventTarget) => eventTarget._addonId === info.addonId
