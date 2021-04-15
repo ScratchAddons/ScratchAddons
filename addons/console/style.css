@@ -1,3 +1,4 @@
+/* Console */
 .debug-btn {
   width: 2rem;
   height: 2rem;
@@ -90,4 +91,22 @@
   margin-left: 4px;
   flex: auto;
   margin-right: 4px;
+}
+
+/* Pause */
+.pause-btn {
+  width: 2rem;
+  height: 2rem;
+  padding: 0.375rem;
+  border-radius: 0.25rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  user-drag: none;
+  cursor: pointer;
+}
+
+.pause-btn:hover {
+  background-color: hsla(215, 100%, 65%, 0.15);
 }

@@ -11,12 +11,33 @@
   "credits": [
     {
       "name": "GrahamSH"
+    },
+    {
+      "name": "TheColaber"
+    },
+    {
+      "name": "jeffalo"
+    },
+    {
+      "name": "eaic"
     }
   ],
   "userscripts": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "url": "console.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "settingsMatch": {
+        "id": "console",
+        "value": true
+      }
+    },
+    {
+      "url": "pause.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "settingsMatch": {
+        "id": "pause",
+        "value": true
+      }
     }
   ],
   "userstyles": [
@@ -25,7 +46,21 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "settings": [
+    {
+      "name": "Console",
+      "id": "console",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Pause Button",
+      "id": "pause",
+      "type": "boolean",
+      "default": true
+    }
+  ],
   "tags": ["editor", "recommended"],
-  "enabledByDefault": false,
+  "enabledByDefault": true,
   "l10n": true
 }
