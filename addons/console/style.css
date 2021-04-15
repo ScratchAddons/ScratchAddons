@@ -69,11 +69,11 @@
 }
 .logs {
   overflow-y: scroll;
-  height: 25rem;
   cursor: default;
   border-radius: 0;
   padding: 0;
-  height: 23rem;
+  width: 100%;
+  flex: 1;
 }
 
 .console-variable {

@@ -10,7 +10,7 @@ export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
   addon.tab.addBlock("log %s", ["content"], ({ content }, targetId, blockId) => {
     workspace = Blockly.getMainWorkspace();
-    addItem(content, blockId);
+    addItem(content, targetId, blockId);
   });
 
   let injected;
@@ -81,30 +81,38 @@ export default async function ({ addon, global, console, msg }) {
 
     _flash();
   };
-  const addItem = (content, blockId) => {
-    let logs = document.querySelector(".debug > .logs");
-    let div = document.createElement("div");
-    div.innerText = content;
-    div.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
-    logs.appendChild(div);
+  const addItem = (content, targetId, blockId) => {
+    const logs = document.querySelector(".debug > .logs");
+    const wrapper = document.createElement("div");
+    const span = (text, cl = "") => {
+      let s = document.createElement("span");
+      s.innerHTML = text;
+      s.className = cl;
+      return s;
+    };
+    const targetName = vm.runtime.targets.find((t) => t.id === targetId).getName();
+    wrapper.append(span(targetName + ":&nbsp;"));
+    wrapper.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
+    logs.appendChild(wrapper);
 
     const block = workspace.getBlockById(blockId);
     const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
     if (inputBlock.type !== "text") {
-      console.log(inputBlock);
       if (inputBlock.inputList.filter((i) => i.name).length === 0) {
         const inputSpan = document.createElement("span");
         inputSpan.innerHTML = inputBlock.svgPath_.parentElement.querySelector("text").innerHTML;
         inputSpan.className = "console-variable";
         inputSpan.style.background = getComputedStyle(inputBlock.svgPath_).fill;
-        div.prepend(inputSpan);
+        wrapper.append(inputSpan);
       }
     }
+    wrapper.append(span(content));
+
     let link = document.createElement("a");
     link.innerText = "Go to";
 
     link.addEventListener("click", () => goToBlock(blockId));
-    div.appendChild(link);
+    wrapper.appendChild(link);
   };
   const addConsole = () => {
     document.querySelector("body").insertAdjacentHTML(
@@ -169,7 +177,7 @@ export default async function ({ addon, global, console, msg }) {
   const toggleConsole = (show = !showingConsole) => {
     let debug = document.querySelector(".debug");
     if (show) {
-      debug.style.display = "block";
+      debug.style.display = "flex";
     } else {
       debug.style.display = "";
     }
