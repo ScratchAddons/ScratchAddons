@@ -68,10 +68,9 @@
   padding: 2px;
 }
 .warn {
-    border-color: --warning-border-color!important;
-    color: hsl(39deg 100% 18%)!important;
-    background-color: hsl(50deg 100% 95%)!important;
-
+  border-color: --warning-border-color !important;
+  color: hsl(39deg 100% 18%) !important;
+  background-color: hsl(50deg 100% 95%) !important;
 }
 .logs {
   overflow-y: scroll;
