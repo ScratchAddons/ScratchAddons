@@ -21,7 +21,7 @@ export default async function ({ addon, console, msg }) {
   addon.tab.waitForElement("#description").then((description) => {
     // checks if the user is a manager and the URL is correct
     if (description.classList.contains("editable") && urlRegex.test(window.location.href)) {
-      Array.from(document.getElementsByClassName("comment")).forEach((comment) => {
+      document.querySelector(".comment").forEach((comment) => {
         const inviteButton = document.createElement("span"); // create the button
         inviteButton.innerText = msg("Invite");
         inviteButton.classList.add("actions", "report");
