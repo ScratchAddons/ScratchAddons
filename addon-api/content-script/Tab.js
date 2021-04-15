@@ -178,7 +178,9 @@ export default class Tab extends Listenable {
     return res;
   }
 
-  displayNoneWhileDisabled(el) {
-    el.setAttribute("data-sa-hide-if-disabled", this._addonId);
+  displayNoneWhileDisabled(el, { display = "" } = {}) {
+    el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayAttr${
+      display ? ", " : ""
+    }${display})`;
   }
 }

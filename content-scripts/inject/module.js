@@ -38,11 +38,16 @@ const page = {
 
   fireEvent(info) {
     if (info.addonId) {
-      const showElts = document.querySelectorAll(`[data-sa-hide-if-disabled="${info.addonId}"]`);
-      showElts.forEach((elt, i) => {
-        if (info.name === "disabled") elt.style.display = "none";
-        if (info.name === "reenabled") elt.style.display = "";
-      });
+      if (info.name === "disabled") {
+        document.documentElement.style.setProperty(
+          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayAttr`,
+          "none"
+        );
+      } else if (info.name === "reenabled") {
+        document.documentElement.style.removeProperty(
+          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayAttr`
+        );
+      }
 
       // Addon specific events, like settings change and self disabled
       const eventTarget = scratchAddons.eventTargets[info.target].find(

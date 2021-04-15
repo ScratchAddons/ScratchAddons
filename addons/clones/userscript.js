@@ -5,7 +5,7 @@ export default async function ({ addon, global, console, msg }) {
 
   let countContainerContainer = document.createElement("div");
 
-  addon.tab.displayNoneWhileDisabled(countContainerContainer);
+  addon.tab.displayNoneWhileDisabled(countContainerContainer, { display: "flex" });
 
   let countContainer = document.createElement("div");
   let count = document.createElement("span");
