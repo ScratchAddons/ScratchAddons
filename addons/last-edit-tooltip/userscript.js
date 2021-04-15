@@ -1,7 +1,9 @@
 export default async function ({ addon, global, console, msg }) {
-  const data = await (
-    await fetch("https://api.scratch.mit.edu" + location.pathname.match(/\/projects\/[0-9]+/g)[0])
-  ).json();
+  const path = location.pathname.match(/\/projects\/[0-9]+/g);
+  // Return if there is no project id... for example, if the user visits
+  // scratch.mit.edu/projects/editor/?tutorial=getStarted
+  if (!path.length) return;
+  const data = await (await fetch("https://api.scratch.mit.edu" + path[0])).json();
 
   while (true) {
     const element = await addon.tab.waitForElement(".share-date", { markAsSeen: true });

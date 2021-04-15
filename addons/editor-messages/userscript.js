@@ -1,4 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
+  let msgInterval;
   const messages = document.createElement("a");
   messages.href = "/messages/";
   messages.title = msg("messages");
@@ -17,23 +18,14 @@ export default async function ({ addon, global, console, msg }) {
       messageCount.setAttribute("style", "");
     }
   };
-  if (addon.tab.editorMode === "editor") {
-    setMessages();
-    setInterval(setMessages, 5000);
-  } else {
-    addon.tab.addEventListener("urlChange", function thisFunction() {
-      if (addon.tab.editorMode === "editor") {
-        setMessages();
-        setInterval(setMessages, 5000);
-        addon.tab.removeEventListener("urlChange", thisFunction);
-      }
-    });
-  }
 
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_account-info-group'] > [href^='/my']", {
       markAsSeen: true,
     });
     document.querySelector("[class^='menu-bar_account-info-group']").insertBefore(messages, nav);
+    setMessages();
+    clearInterval(msgInterval);
+    msgInterval = setInterval(setMessages, 5000);
   }
 }
