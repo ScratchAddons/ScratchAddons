@@ -40,12 +40,12 @@ const page = {
     if (info.addonId) {
       if (info.name === "disabled") {
         document.documentElement.style.setProperty(
-          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayAttr`,
+          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`,
           "none"
         );
       } else if (info.name === "reenabled") {
         document.documentElement.style.removeProperty(
-          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayAttr`
+          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`
         );
       }
 
