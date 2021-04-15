@@ -20,8 +20,12 @@ export function addBlock(id, args, handler, hide) {
       handler,
       hide: !!hide,
     });
-    Blockly.getMainWorkspace().getToolbox().refreshSelection();
-    vm.emitWorkspaceUpdate();
+    let w;
+    try {
+      w = Blockly.getMainWorkspace();
+    } catch (e) {}
+    if (w) w.getToolbox().refreshSelection();
+    if (vm) vm.emitWorkspaceUpdate();
   }
 }
 
@@ -91,16 +95,20 @@ const injectWorkspace = () => {
             `<top>` +
               (customBlocks
                 .filter((e) => !e.hide)
-                .map(
-                  (e) =>
-                    `<block type="procedures_call" gap="16"><mutation generateshadows="true" proccode="${xesc(
+                .map((e) => {
+                  try {
+                    return `<block type="procedures_call" gap="16"><mutation generateshadows="true" proccode="${xesc(
                       e.id
                     )}" argumentids="${xesc(JSON.stringify(e.args.map((e, i) => "arg" + i)))}" argumentnames="${xesc(
                       JSON.stringify(e.args)
                     )}" argumentdefaults="${xesc(
                       JSON.stringify(e.args.map((e) => ""))
-                    )}" warp="false"></mutation></block>`
-                )
+                    )}" warp="false"></mutation></block>`;
+                  } catch (e) {
+                    console.error("Issue making block from", e);
+                    return "";
+                  }
+                })
                 .join("") ||
                 `<label text="${xesc(
                   scratchAddons.l10n.get("noAddedBlocks", null, "No addons have added blocks.")
@@ -182,7 +190,7 @@ export async function init(tab) {
       for (let arg in f.params) {
         args[arg] = f.params[arg];
       }
-      blockData.handler(args, thread.target.id);
+      blockData.handler(args, thread.target.id, thread.stack[thread.stack.length - 1]);
     }
     return oldStepToProcedure.call(this, thread, proccode);
   };
