@@ -18,7 +18,7 @@ function inviteToStudio(user) {
 if (document.getElementById('description').classList.contains('editable') && urlRegex.test(window.location.href)) {
   Array.from(document.getElementsByClassName('comment')).forEach((comment) => {
     const inviteButton = document.createElement('span'); // create the button
-    inviteButton.innerHTML = 'Invite';
+    inviteButton.innerText = 'Invite';
     inviteButton.classList.add('actions');
     inviteButton.style.visibility = 'hidden';
     inviteButton.style.color = 'rgb(157, 157, 157)';
@@ -44,7 +44,7 @@ if (document.getElementById('description').classList.contains('editable') && url
           inviteButton.innerHTML = 'Whoops, something went wrong';
         }
         comment.querySelector('.reply').click();
-        inviteButton.innerHTML = inviteButton.innerHTML.bold();
+        inviteButton.style.fontWeight = 'bold';
         inviteButton.removeEventListener('click', listener);
         inviteButton.classList.remove('actions'); // after it's clicked it can't be clicked again
       });
