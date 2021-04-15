@@ -101,7 +101,10 @@ const injectWorkspace = () => {
                       JSON.stringify(e.args.map((e) => ""))
                     )}" warp="false"></mutation></block>`
                 )
-                .join("") || `<label text="${xesc(scratchAddons.l10n.get("noAddedBlocks",null,"No addons have added blocks."))}" showStatusButton="null" />`) +
+                .join("") ||
+                `<label text="${xesc(
+                  scratchAddons.l10n.get("noAddedBlocks", null, "No addons have added blocks.")
+                )}" showStatusButton="null" />`) +
               `</top>`,
             "text/xml"
           )
@@ -122,7 +125,7 @@ const injectWorkspace = () => {
       id: "sa-blocks",
       xml: `
           <category
-            name="${xesc(scratchAddons.l10n.get("extensionName",null,"Scratch Addons"))}"
+            name="${xesc(scratchAddons.l10n.get("extensionName", null, "Scratch Addons"))}"
             id="sa-blocks"
             colour="#ff7b26"
             secondaryColour="#ff7b26"
