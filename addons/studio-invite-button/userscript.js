@@ -1,11 +1,9 @@
 export default async function ({ addon, console, msg }) {
-  // RegExp to test for a valid url and get the studio id
-  const urlRegex = /^https?:\/\/scratch\.mit\.edu\/studios\/(\d+)\/comments($|\/)/;
   // invites a user to the studio
   function inviteToStudio(user) {
     return fetch(
       `https://scratch.mit.edu/site-api/users/curators-in/${
-        urlRegex.exec(window.location.href)[1]
+        location.pathname.split("/")[2]
       }/invite_curator/?usernames=${user}`,
       {
         headers: {
@@ -20,7 +18,7 @@ export default async function ({ addon, console, msg }) {
   }
   addon.tab.waitForElement("#description").then(async (description) => {
     // checks if the user is a manager and the URL is correct
-    if (description.classList.contains("editable") && urlRegex.test(window.location.href)) {
+    if (description.classList.contains("editable")) {
       for (;;) {
         const comment = await addon.tab.waitForElement(".comment", { markAsSeen: true });
         const inviteButton = document.createElement("span"); // create the button
