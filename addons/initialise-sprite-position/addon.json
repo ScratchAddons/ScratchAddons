@@ -1,6 +1,6 @@
 {
-  "name": "Initialise sprite position",
-  "description": "Moves sprites to a specified position when they are created.",
+  "name": "Change new sprite default position",
+  "description": "Moves sprites to a specified x/y position when they are created.",
   "credits": [
     {
       "name": "pufferfish101007",
@@ -35,13 +35,6 @@
       "name": "Randomize the position of library sprites",
       "type": "boolean",
       "default": false
-    }
-  ],
-  "info": [
-    {
-      "type": "notice",
-      "text": "When uploading .sprite2 and.sprite3 files, the speite will be sent to theposition specified in the file.",
-      "id": "file_upload"
     }
   ],
   "tags": ["editor"],
