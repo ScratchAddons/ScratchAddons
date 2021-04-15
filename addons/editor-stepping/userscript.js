@@ -39,12 +39,11 @@ export default async function ({ addon, global, console }) {
         let block = Blockly.getMainWorkspace().getBlockById(blockId);
         let childblock = thread.stack.find((i) => {
           let b = block;
-          if (!block) return false;
+          if (!block) return;
           while (b.childBlocks_.length) {
             b = b.childBlocks_[b.childBlocks_.length - 1];
             if (i === b.id) return true;
           }
-          return false;
         });
         if (!childblock && block && block.svgPath_) {
           block.svgPath_.style.filter = "url(#blueStackGlow)";
