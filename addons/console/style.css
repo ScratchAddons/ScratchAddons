@@ -81,12 +81,12 @@
   margin-right: 5px;
 }
 .log a {
-    color: gray;
-    text-decoration: underline;
-    float: right;
-    text-align: right;
-    max-width: 100%;
-    margin-left: 4px;
-    flex: auto;
-    margin-right: 4px;
+  color: gray;
+  text-decoration: underline;
+  float: right;
+  text-align: right;
+  max-width: 100%;
+  margin-left: 4px;
+  flex: auto;
+  margin-right: 4px;
 }
