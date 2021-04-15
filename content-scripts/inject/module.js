@@ -95,7 +95,7 @@ class SharedObserver {
    * Watches an element.
    * @param {object} opts - options
    * @param {string} opts.query - query.
-   * @param {WeakSet=} opts.seen - a WeakSet that tracks whether an element has alreay been seen.
+   * @param {WeakSet=} opts.seen - a WeakSet that tracks whether an element has already been seen.
    * @returns {Promise<Node>} Promise that is resolved with modified element.
    */
   watch(opts) {

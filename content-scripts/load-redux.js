@@ -34,9 +34,6 @@ function injectRedux() {
     }
   }
 
-  if (typeof ReDucks === "undefined") {
-    return console.warn("Redux could not be loaded - but why?");
-  }
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ = function (...args) {
     const scratchAddonsRedux = window.__scratchAddonsRedux;
     const reduxTarget = (scratchAddonsRedux.target = new EventTarget());

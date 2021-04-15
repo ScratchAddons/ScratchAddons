@@ -1,7 +1,7 @@
 //When the page loads add the icons.
 export default async function ({ addon, global, console }) {
   while (true) {
-    const tabs = await addon.tab.waitForElement(".scratchCategoryMenu", {
+    await addon.tab.waitForElement(".scratchCategoryMenu", {
       markAsSeen: true,
     });
 
