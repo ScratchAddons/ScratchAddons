@@ -18,10 +18,11 @@ export default async function ({ addon, console, msg }) {
       }
     );
   }
-  addon.tab.waitForElement("#description").then((description) => {
+  addon.tab.waitForElement("#description").then(async (description) => {
     // checks if the user is a manager and the URL is correct
     if (description.classList.contains("editable") && urlRegex.test(window.location.href)) {
-      document.querySelectorAll(".comment").forEach((comment) => {
+      for(;;) {
+        const comment = await addon.tab.waitForElement(".comment", { markAsSeen: true });
         const inviteButton = document.createElement("span"); // create the button
         inviteButton.innerText = msg("Invite");
         inviteButton.classList.add("actions", "report");
@@ -52,7 +53,7 @@ export default async function ({ addon, console, msg }) {
               inviteButton.classList.remove("actions"); // after it's clicked it can't be clicked again
             });
         });
-      });
+        }
     }
   });
 }
