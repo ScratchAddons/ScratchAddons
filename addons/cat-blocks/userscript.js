@@ -189,7 +189,7 @@ export default async function ({ addon, global, console }) {
         if (time < that.lastCallTime + that.CALL_FREQUENCY_MS) return;
         that.lastCallTime = time;
         if (!that.shouldWatchMouse()) return;
-  
+
         // mouse watching
         if (that.workspace) {
           // not disposed
@@ -198,30 +198,30 @@ export default async function ({ addon, global, console }) {
             x: event.x / that.workspace.scale,
             y: event.y / that.workspace.scale,
           };
-  
+
           var dx = mouseLocation.x - xy.x;
           var dy = mouseLocation.y - xy.y;
           var theta = Math.atan2(dx, dy);
-  
+
           // Map the vector from the cat face to the mouse location to a much shorter
           // vector in the same direction, which will be the translation vector for
           // the cat face
           var delta = Math.sqrt(dx * dx + dy * dy);
           var scaleFactor = delta / (delta + 1);
-  
+
           // Equation for radius of ellipse at theta for axes with length a and b
           var a = 2;
           var b = 5;
           var r = (a * b) / Math.sqrt(Math.pow(b * Math.cos(theta), 2) + Math.pow(a * Math.sin(theta), 2));
-  
+
           // Convert polar coordinate back to x, y coordinate
           dx = r * scaleFactor * Math.sin(theta);
           dy = r * scaleFactor * Math.cos(theta);
-  
+
           if (that.RTL) dx -= 87; // Translate face over
           that.svgFace_.style.transform = "translate(" + dx + "px, " + dy + "px)";
         }
-      };  
+      };
       document.addEventListener("mousemove", this.windowListener);
     }
   };
