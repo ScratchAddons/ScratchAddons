@@ -14,7 +14,6 @@ export default async function ({ addon, global, console }) {
     blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
 
     const searchBar = document.createElement("input");
-    addon.tab.displayNoneWhileDisabled(searchBar);
 
     searchBar.type = "text";
     searchBar.addEventListener("input", handleInputEvent);
