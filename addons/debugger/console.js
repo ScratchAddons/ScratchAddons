@@ -17,7 +17,6 @@ export default async function ({ addon, global, console, msg }) {
     addItem(content, targetId, blockId, "warn");
   });
   let injected;
-  let debug;
   const goToBlock = (blockId) => {
     const offsetX = 32,
       offsetY = 32;
@@ -36,14 +35,10 @@ export default async function ({ addon, global, console, msg }) {
       rPos = root.getRelativeToSurfaceXY(), // Align with the left of the block 'stack'
       eSiz = block.getHeightWidth(),
       scale = workspace.scale,
-      // x = (ePos.x + (workspace.RTL ? -1 : 1) * eSiz.width / 2) * scale,
       x = rPos.x * scale,
       y = ePos.y * scale,
       xx = block.width + x, // Turns out they have their x & y stored locally, and they are the actual size rather than scaled or including children...
       yy = block.height + y,
-      // xx = eSiz.width * scale + x,
-      // yy = eSiz.height * scale + y,
-
       s = workspace.getMetrics();
     if (
       x < s.viewLeft + offsetX - 4 ||
@@ -51,12 +46,9 @@ export default async function ({ addon, global, console, msg }) {
       y < s.viewTop + offsetY - 4 ||
       yy > s.viewTop + s.viewHeight
     ) {
-      // sx = s.contentLeft + s.viewWidth / 2 - x,
       let sx = x - s.contentLeft - offsetX,
-        // sy = s.contentTop - y + Math.max(Math.min(32, 32 * scale), (s.viewHeight - yh) / 2);
         sy = y - s.contentTop - offsetY;
 
-      // workspace.hideChaff(),
       workspace.scrollbar.set(sx, sy);
     }
     // Flashing
@@ -84,20 +76,82 @@ export default async function ({ addon, global, console, msg }) {
 
     _flash();
   };
+
+  const consoleWrapper = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_card", { others: "debug" }),
+  });
+  const consoleTitle = Object.assign(document.createElement("h1"), {
+    className: addon.tab.scratchClass("card_header-buttons"),
+    innerText: msg("console"),
+  });
+  const consoleList = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("sprite-info_sprite-info", { others: "logs" }),
+  });
+  const closeButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("close-button_close-button", "close-button_large", { others: "close-button" }),
+  });
+  const closeImg = Object.assign(document.createElement("img"), {
+    className: addon.tab.scratchClass("close-button_close-icon"),
+    src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
+  });
+
+  consoleWrapper.append(consoleTitle, consoleList);
+  consoleList.append(closeButton);
+  closeButton.append(closeImg);
+  document.body.append(consoleWrapper);
+
+  var pos1 = 0,
+    pos2 = 0,
+    pos3 = 0,
+    pos4 = 0;
+  consoleTitle.onmousedown = dragMouseDown;
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    consoleWrapper.style.top = consoleWrapper.offsetTop - pos2 + "px";
+    consoleWrapper.style.left = consoleWrapper.offsetLeft - pos1 + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+
+  closeButton.onmousedown = () => {
+    document.querySelectorAll(".log").forEach((log, i) => log.remove());
+  };
   const addItem = (content, targetId, blockId, type) => {
-    const logs = document.querySelector(".debug > .logs");
     const wrapper = document.createElement("div");
     const span = (text, cl = "") => {
       let s = document.createElement("span");
-      s.innerHTML = text;
+      s.innerText = text;
       s.className = cl;
       return s;
     };
     const targetName = vm.runtime.targets.find((t) => t.id === targetId).getName();
-    const scrolledDown = logs.scrollTop === logs.scrollHeight - logs.clientHeight;
+    const scrolledDown = consoleList.scrollTop === consoleList.scrollHeight - consoleList.clientHeight;
     wrapper.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
     if (type === "warn") wrapper.classList += " warn";
-    logs.appendChild(wrapper);
+    consoleList.appendChild(wrapper);
 
     const block = workspace.getBlockById(blockId);
     const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
@@ -119,72 +173,12 @@ export default async function ({ addon, global, console, msg }) {
     wrapper.appendChild(link);
     if (scrolledDown) logs.scrollTop = logs.scrollHeight - logs.clientHeight;
   };
-  const addConsole = () => {
-    document.querySelector("body").insertAdjacentHTML(
-      "afterbegin",
-      `
-    <div class="debug ${addon.tab.scratchClass("card_card")} ">
-      <h1 class="${addon.tab.scratchClass("card_header-buttons")}">Debugger</h1>
-      <div class="${addon.tab.scratchClass("sprite-info_sprite-info")} logs">
-        <div class="close-button_close-button_lOp2G close-button_large_2oadS close-button">
-          <img class="close-button_close-icon_HBCuO" src="/static/assets/cb666b99d3528f91b52f985dfb102afa.svg">
-        </div>
 
-      </div>
-    </div>
-    `
-    );
-    let debug = document.querySelector(".debug");
-
-    var pos1 = 0,
-      pos2 = 0,
-      pos3 = 0,
-      pos4 = 0;
-    document.querySelector(".debug h1").onmousedown = dragMouseDown;
-
-    function dragMouseDown(e) {
-      e = e || window.event;
-      e.preventDefault();
-      // get the mouse cursor position at startup:
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      document.onmouseup = closeDragElement;
-      // call a function whenever the cursor moves:
-      document.onmousemove = elementDrag;
-    }
-
-    function elementDrag(e) {
-      e = e || window.event;
-      e.preventDefault();
-      // calculate the new cursor position:
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      // set the element's new position:
-      debug.style.top = debug.offsetTop - pos2 + "px";
-      debug.style.left = debug.offsetLeft - pos1 + "px";
-    }
-
-    function closeDragElement() {
-      // stop moving when mouse button is released:
-      document.onmouseup = null;
-      document.onmousemove = null;
-    }
-
-    document.querySelector(".close-button").onmousedown = () => {
-      document.querySelectorAll(".log").forEach((log, i) => {
-        log.remove();
-      });
-    };
-  };
-  addConsole();
   const toggleConsole = (show = !showingConsole) => {
-    let debug = document.querySelector(".debug");
     if (show) {
-      debug.style.display = "flex";
+      consoleWrapper.style.display = "flex";
     } else {
-      debug.style.display = "";
+      consoleWrapper.style.display = "";
     }
     showingConsole = show;
   };
