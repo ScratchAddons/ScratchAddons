@@ -29,16 +29,23 @@ export default async function ({ addon, global, console }) {
   );
   // Wait for Blockly, as it tends to not be ready sometimes...
   await addon.tab.traps.getBlockly();
+  const elementsWithFilter = new Set();
   const oldStep = vm.runtime.constructor.prototype._step;
   vm.runtime.constructor.prototype._step = function (...args) {
+    oldStep.call(this, ...args);
+    for (const el of elementsWithFilter) {
+      el.style.filter = "";
+    }
+    elementsWithFilter.clear();
     document.querySelectorAll("g[style*='filter'], path[style*='filter']").forEach((e) => (e.style.filter = ""));
     if (!addon.self.disabled) {
       vm.runtime.threads.forEach((thread) => {
         if (thread.target.blocks.forceNoGlow) return;
-        thread.stack.forEach((e) => {
-          let blockId = thread.target.blocks.getBlock(e)?.id;
-          if (!blockId) return;
+        thread.stack.forEach((blockId) => {
           let block = Blockly.getMainWorkspace().getBlockById(blockId);
+          if (!block) {
+            return;
+          }
           let childblock = thread.stack.find((i) => {
             let b = block;
             if (!block) return;
@@ -47,12 +54,13 @@ export default async function ({ addon, global, console }) {
               if (i === b.id) return true;
             }
           });
-          if (!childblock && block && block.svgPath_) {
-            block.svgPath_.style.filter = "url(#blueStackGlow)";
+          if (!childblock && block.svgPath_) {
+            const svgPath = block.svgPath_;
+            svgPath.style.filter = "url(#blueStackGlow)";
+            elementsWithFilter.add(svgPath);
           }
         });
       });
     }
-    oldStep.call(this, ...args);
   };
 }
