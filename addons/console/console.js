@@ -96,7 +96,7 @@ export default async function ({ addon, global, console, msg }) {
     const targetName = vm.runtime.targets.find((t) => t.id === targetId).getName();
     const scrolledDown = logs.scrollTop === logs.scrollHeight - logs.clientHeight;
     wrapper.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
-    if (type === 'warn') wrapper.classList += ' warn'
+    if (type === "warn") wrapper.classList += " warn";
     logs.appendChild(wrapper);
 
     const block = workspace.getBlockById(blockId);
