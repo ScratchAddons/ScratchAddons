@@ -24,17 +24,11 @@ export default async function ({ addon, console, msg }) {
       Array.from(document.getElementsByClassName("comment")).forEach((comment) => {
         const inviteButton = document.createElement("span"); // create the button
         inviteButton.innerText = msg("Invite");
-        inviteButton.classList.add("actions");
+        inviteButton.classList.add("actions", "report");
         inviteButton.style.visibility = "hidden";
         inviteButton.style.color = "rgb(157, 157, 157)";
 
         comment.querySelector(".actions-wrap").appendChild(inviteButton);
-        comment.addEventListener("mouseover", () => {
-          inviteButton.style.visibility = "visible"; // should only be visible when the mouse is hovering over the comment
-        });
-        comment.addEventListener("mouseout", () => {
-          inviteButton.style.visibility = "hidden";
-        });
         const listener = inviteButton.addEventListener("click", () => {
           inviteToStudio(comment.querySelector(".name").textContent.trim())
             .then((resp) => resp.text())
