@@ -91,6 +91,7 @@ export default async function ({ addon, global, console, msg }) {
       return s;
     };
     const targetName = vm.runtime.targets.find((t) => t.id === targetId).getName();
+    const scrolledDown = logs.scrollTop === logs.scrollHeight - logs.clientHeight;
     wrapper.append(span(targetName + ":&nbsp;"));
     wrapper.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
     logs.appendChild(wrapper);
@@ -113,6 +114,7 @@ export default async function ({ addon, global, console, msg }) {
 
     link.addEventListener("click", () => goToBlock(blockId));
     wrapper.appendChild(link);
+    if (scrolledDown) logs.scrollTop = logs.scrollHeight - logs.clientHeight;
   };
   const addConsole = () => {
     document.querySelector("body").insertAdjacentHTML(
