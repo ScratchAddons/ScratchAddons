@@ -81,7 +81,7 @@ export default async function ({ addon, global, console, msg }) {
 
     _flash();
   };
-  const addItem = (content, targetId, blockId) => {
+  const addItem = (content, targetId, blockId, type) => {
     const logs = document.querySelector(".debug > .logs");
     const wrapper = document.createElement("div");
     const span = (text, cl = "") => {
@@ -94,6 +94,7 @@ export default async function ({ addon, global, console, msg }) {
     const scrolledDown = logs.scrollTop === logs.scrollHeight - logs.clientHeight;
     wrapper.append(span(targetName + ":&nbsp;"));
     wrapper.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
+    if (type === 'warn') wrapper.classList += ' warn'
     logs.appendChild(wrapper);
 
     const block = workspace.getBlockById(blockId);

@@ -67,6 +67,12 @@
   align-items: center;
   padding: 2px;
 }
+.warn {
+    border-color: --warning-border-color;
+    color: hsl(39deg 100% 18%);
+    background-color: hsl(50deg 100% 95%);
+
+}
 .logs {
   overflow-y: scroll;
   cursor: default;
