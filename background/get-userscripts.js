@@ -17,6 +17,113 @@ function getL10NURLs() {
   return urls;
 }
 
+scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) => {
+  const { addonId, manifest } = detail;
+  chrome.tabs.query({}, (tabs) =>
+    tabs.forEach((tab) => {
+      if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
+          if (res) {
+            (async () => {
+              const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
+              chrome.tabs.sendMessage(
+                tab.id,
+                {
+                  dynamicAddonEnabled: {
+                    scripts: userscripts,
+                    userstyles,
+                    addonId,
+                    injectAsStyleElt: !!manifest.injectAsStyleElt,
+                    index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                  },
+                },
+                { frameId: 0 }
+              );
+            })();
+          }
+        });
+      }
+    })
+  );
+});
+scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) => {
+  const { addonId } = detail;
+  chrome.tabs.query({}, (tabs) =>
+    tabs.forEach((tab) => {
+      if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+        chrome.tabs.sendMessage(tab.id, { dynamicAddonDisable: { addonId } }, { frameId: 0 });
+      }
+    })
+  );
+});
+scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ detail }) => {
+  const { addonId, manifest } = detail;
+  chrome.tabs.query({}, (tabs) =>
+    tabs.forEach((tab) => {
+      if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
+          if (res) {
+            (async () => {
+              const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
+              chrome.tabs.sendMessage(
+                tab.id,
+                {
+                  updateUserstylesSettingsChange: {
+                    scripts: userscripts,
+                    userstyles,
+                    addonId,
+                    injectAsStyleElt: !!manifest.injectAsStyleElt,
+                    index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                  },
+                },
+                { frameId: 0 }
+              );
+            })();
+          }
+        });
+      }
+    })
+  );
+});
+
+async function getAddonData({ addonId, manifest, url }) {
+  const promises = [];
+
+  const userscripts = [];
+  for (const script of manifest.userscripts || []) {
+    if (userscriptMatches({ url }, script, addonId))
+      userscripts.push({
+        url: script.url,
+        runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
+      });
+  }
+  const userstyles = [];
+  for (const style of manifest.userstyles || []) {
+    if (userscriptMatches({ url }, style, addonId))
+      if (manifest.injectAsStyleElt) {
+        // Reserve index in array to avoid race conditions (#700)
+        const arrLength = userstyles.push(null);
+        const indexToUse = arrLength - 1;
+        promises.push(
+          fetch(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`))
+            .then((res) => res.text())
+            .then((text) => {
+              // Replace %addon-self-dir% for relative URLs
+              text = text.replace(/\%addon-self-dir\%/g, chrome.runtime.getURL(`addons/${addonId}`));
+              // Provide source url
+              text += `\n/*# sourceURL=${style.url} */`;
+              userstyles[indexToUse] = text;
+            })
+        );
+      } else {
+        userstyles.push(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
+      }
+  }
+  await Promise.all(promises);
+
+  return { userscripts, userstyles };
+}
+
 async function getContentScriptInfo(url) {
   const data = {
     url,
@@ -24,54 +131,25 @@ async function getContentScriptInfo(url) {
     globalState: {},
     addonsWithUserscripts: [],
     addonsWithUserstyles: [],
-    themes: [],
   };
-  const fetchThemeStylesPromises = [];
-
-  for (const { addonId, manifest } of scratchAddons.manifests) {
-    if (!scratchAddons.localState.addonsEnabled[addonId]) continue;
-
-    const userscripts = [];
-    for (const script of manifest.userscripts || []) {
-      if (userscriptMatches({ url }, script, addonId))
-        userscripts.push({
-          url: script.url,
-          runAtComplete: typeof script.runAtComplete === "boolean" ? script.runAtComplete : true,
-        });
-    }
+  const promises = [];
+  scratchAddons.manifests.forEach(async ({ addonId, manifest }, i) => {
+    if (!scratchAddons.localState.addonsEnabled[addonId]) return;
+    const promise = getAddonData({ addonId, manifest, url });
+    promises.push(promise);
+    const { userscripts, userstyles } = await promise;
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
-    if (manifest.tags.includes("theme")) {
-      const styleUrls = [];
-      for (const style of manifest.userstyles || []) {
-        if (userscriptMatches({ url }, style, addonId)) styleUrls.push(style.url);
-      }
-      if (styleUrls.length) {
-        const styles = {};
-        data.themes.push({ addonId, styleUrls, styles });
-        for (const styleUrl of styleUrls) {
-          fetchThemeStylesPromises.push(
-            fetch(chrome.runtime.getURL(`/addons/${addonId}/${styleUrl}`))
-              .then((res) => res.text())
-              .then((text) => {
-                styles[styleUrl] = text;
-              })
-          );
-        }
-      }
-    } else {
-      const userstyles = [];
-      for (const style of manifest.userstyles || []) {
-        if (userscriptMatches({ url }, style, addonId))
-          userstyles.push({
-            url: chrome.runtime.getURL(`/addons/${addonId}/${style.url}`),
-          });
-      }
-      if (userstyles.length) data.addonsWithUserstyles.push({ addonId, styles: userstyles });
-    }
-  }
+    if (userstyles.length)
+      data.addonsWithUserstyles.push({
+        addonId,
+        styles: userstyles,
+        injectAsStyleElt: manifest.injectAsStyleElt,
+        index: i,
+      });
+  });
 
-  await Promise.all(fetchThemeStylesPromises);
+  await Promise.all(promises);
   data.globalState = scratchAddons.globalState._target;
 
   return data;
@@ -170,25 +248,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     );
     return true;
   }
-});
-
-scratchAddons.localEvents.addEventListener("themesUpdated", () => {
-  // Only non-frames are updated
-  chrome.tabs.query({}, (tabs) =>
-    tabs.forEach((tab) => {
-      if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, async (res) => {
-          if (res) {
-            chrome.tabs.sendMessage(
-              tab.id,
-              { themesUpdated: (await getContentScriptInfo(res)).themes },
-              { frameId: 0 }
-            );
-          }
-        });
-      }
-    })
-  );
 });
 
 function userscriptMatches(data, scriptOrStyle, addonId) {
