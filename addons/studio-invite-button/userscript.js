@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, console, msg }) {
   // RegExp to test for a valid url and get the studio id
   const urlRegex = /^https?:\/\/scratch\.mit\.edu\/studios\/(\d+)\/comments($|\/)/;
   // invites a user to the studio
@@ -23,7 +23,7 @@ export default async function ({ addon, global, console }) {
     if (description.classList.contains("editable") && urlRegex.test(window.location.href)) {
       Array.from(document.getElementsByClassName("comment")).forEach((comment) => {
         const inviteButton = document.createElement("span"); // create the button
-        inviteButton.innerText = "Invite";
+        inviteButton.innerText = msg("Invite");
         inviteButton.classList.add("actions");
         inviteButton.style.visibility = "hidden";
         inviteButton.style.color = "rgb(157, 157, 157)";
@@ -43,14 +43,14 @@ export default async function ({ addon, global, console }) {
                 const parsed = JSON.parse(resp);
                 // handle the different possible responses
                 if (parsed.status === "success") {
-                  inviteButton.innerText = "Invited!";
+                  inviteButton.innerText = msg("invited");
                 } else if (parsed.message.endsWith("is already a curator of this studio")) {
-                  inviteButton.innerText = "This user is already a curator";
+                  inviteButton.innerText = msg("alreadyCurator");
                 } else {
                   throw Error(0);
                 }
               } catch (err) {
-                inviteButton.innerText = "Whoops, something went wrong";
+                inviteButton.innerText = msg("whoops");
               }
               comment.querySelector(".reply").click();
               inviteButton.style.fontWeight = "bold";
