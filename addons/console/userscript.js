@@ -1,11 +1,11 @@
 export default async function ({ addon, global, console, msg }) {
-  let workspace;
+  let workspace, showingConsole;
   const img = document.createElement("img");
   img.className = `debug-btn ${addon.tab.scratchClass("button_outlined-button")}`;
   img.src = addon.self.dir + "/debug.svg";
   img.draggable = false;
   img.title = msg("debug");
-  img.addEventListener("click", () => showConsole());
+  img.addEventListener("click", () => toggleConsole());
 
   const vm = addon.tab.traps.vm;
   addon.tab.addBlock("log %s", ["content"], ({ content }, targetId, blockId) => {
@@ -90,17 +90,15 @@ export default async function ({ addon, global, console, msg }) {
 
     const block = workspace.getBlockById(blockId);
     const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
-    console.log(inputBlock);
-    if (inputBlock.type === "data_variable") {
-      let varBlock;
-      for (const variable of workspace.getAllVariables()) {
-        const block = workspace.getVariableUsesById(variable.id_).find((vari) => vari.id === inputBlock.id);
-        if (block) varBlock = variable;
+    if (inputBlock.type !== "text") {
+      console.log(inputBlock);
+      if (inputBlock.inputList.filter((i) => i.name).length === 0) {
+        const inputSpan = document.createElement("span");
+        inputSpan.innerHTML = inputBlock.svgPath_.parentElement.querySelector("text").innerHTML;
+        inputSpan.className = "console-variable";
+        inputSpan.style.background = getComputedStyle(inputBlock.svgPath_).fill;
+        div.prepend(inputSpan);
       }
-      const varSpan = document.createElement("span");
-      varSpan.innerText = varBlock.name;
-      varSpan.className = "console-variable";
-      div.prepend(varSpan);
     }
     let link = document.createElement("a");
     link.innerText = "Go to";
@@ -158,9 +156,14 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
   addConsole();
-  const showConsole = () => {
+  const toggleConsole = (show = !showingConsole) => {
     let debug = document.querySelector(".debug");
-    debug.style.display = "block";
+    if (show) {
+      debug.style.display = "block";
+    } else {
+      debug.style.display = "";
+    }
+    showingConsole = show;
   };
 
   while (true) {
