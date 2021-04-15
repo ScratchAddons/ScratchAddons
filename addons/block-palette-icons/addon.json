@@ -1,6 +1,6 @@
 {
   "name": "Block palette category icons",
-  "description": "Adds icons inside the colored circles that nomally identify block categories.",
+  "description": "Adds icons inside the colored circles that normally identify block categories.",
   "tags": ["editor", "theme"],
   "enabledByDefault": false,
   "userstyles": [
