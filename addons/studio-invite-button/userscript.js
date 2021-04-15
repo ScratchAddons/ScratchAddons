@@ -28,7 +28,7 @@ export default async function ({ addon, console, msg }) {
         inviteButton.style.color = "rgb(157, 157, 157)";
 
         comment.querySelector(".actions-wrap").appendChild(inviteButton);
-        inviteButton.addEventListener("click", function listener () {
+        inviteButton.addEventListener("click", function listener() {
           inviteToStudio(comment.querySelector(".name").textContent.trim())
             .then((resp) => resp.text())
             .then((resp) => {
