@@ -26,7 +26,7 @@
     {
       "url": "console.js",
       "matches": ["https://scratch.mit.edu/projects/*"],
-      "settingsMatch": {
+      "settingMatch": {
         "id": "console",
         "value": true
       }
@@ -34,7 +34,7 @@
     {
       "url": "pause.js",
       "matches": ["https://scratch.mit.edu/projects/*"],
-      "settingsMatch": {
+      "settingMatch": {
         "id": "pause",
         "value": true
       }
