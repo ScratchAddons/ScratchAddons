@@ -92,7 +92,6 @@ export default async function ({ addon, global, console, msg }) {
     };
     const targetName = vm.runtime.targets.find((t) => t.id === targetId).getName();
     const scrolledDown = logs.scrollTop === logs.scrollHeight - logs.clientHeight;
-    wrapper.append(span(targetName + ":&nbsp;"));
     wrapper.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
     if (type === 'warn') wrapper.classList += ' warn'
     logs.appendChild(wrapper);
@@ -111,7 +110,7 @@ export default async function ({ addon, global, console, msg }) {
     wrapper.append(span(content));
 
     let link = document.createElement("a");
-    link.innerText = "Go to";
+    link.innerText = targetName;
 
     link.addEventListener("click", () => goToBlock(blockId));
     wrapper.appendChild(link);
