@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "\"Ctrl+Space\" to bring up the add block by name popup. \"Ctrl+F\" to Find scripts. \"Ctrl+Left/Right\" navigate find history",
+      "text": "Press \"Ctrl+F\" to focus the find box, \"Ctrl+Space\" to bring up the \"add block by name\" popup, \"Ctrl+Left/Right\" to navigate find history.",
       "id": "shortcuts"
     }
   ],
@@ -15,7 +15,7 @@
   ],
   "settings": [
     {
-      "name": "Enhance clean up blocks",
+      "name": "Enhance \"Clean up Blocks\"",
       "id": "enableCleanUpPlus",
       "type": "boolean",
       "default": true
@@ -27,7 +27,7 @@
       "default": true
     },
     {
-      "name": "Middle mouse click variable, custom block or event to navigate",
+      "name": "Middle mouse click variables, custom blocks or events to navigate",
       "id": "enableMiddleClickFinder",
       "type": "boolean",
       "default": true
