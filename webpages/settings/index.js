@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["drag-drop", "custom-block-shape"];
+const NEW_ADDONS = ["custom-zoom", "wrap-lists", "initialise-sprite-position"];
 
 Vue.directive("click-outside", {
   priority: 700,
