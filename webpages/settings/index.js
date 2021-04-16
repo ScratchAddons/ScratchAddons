@@ -31,9 +31,11 @@ const ColorInput = Vue.extend({
       canCloseOutside: false,
       formats: "",
       opening: false,
+      loadColorPicker: false, // #2090 tempfix
     };
   },
   ready() {
+    if (!this.loadColorPicker) return;
     if (this.no_alpha) {
       this.formats = "hex,rgb,hsv,hsl";
     } else {
@@ -49,6 +51,7 @@ const ColorInput = Vue.extend({
   },
   methods: {
     toggle(addon, setting, value = !this.isOpen) {
+      if (!this.loadColorPicker) return;
       this.isOpen = value;
       this.opening = true;
       this.$root.closePickers({ isTrusted: true }, this);
@@ -73,6 +76,9 @@ const ColorInput = Vue.extend({
     },
     isOpen() {
       this.$els.pickr._valueChanged();
+    },
+    loadColorPicker() {
+      this.$options.ready[0]();
     },
   },
 });

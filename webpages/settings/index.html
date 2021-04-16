@@ -32,17 +32,19 @@
     <script src="../../libraries/vue.js" defer></script>
     <script src="../../libraries/color-picker.js" type="module" defer></script>
     <template id="picker-component">
-      <div class="color-container" :key="value">
+      <div class="color-container" :key="value" @click="loadColorPicker = true" @mouseover="loadColorPicker = true">
         <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting,true)">
-          <color-picker
-            class=""
-            :value="value"
-            id="picker"
-            v-show="isOpen"
-            v-el:pickr
-            :formats="formats"
-            :no_alpha="no_alpha"
-          ></color-picker>
+          <template v-if="loadColorPicker">
+            <color-picker
+              class=""
+              :value="value"
+              id="picker"
+              v-show="isOpen"
+              v-el:pickr
+              :formats="formats"
+              :no_alpha="no_alpha"
+            ></color-picker>
+          </template>
         </button>
       </div>
     </template>
