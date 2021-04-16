@@ -41,17 +41,17 @@ export default async function ({ addon, global, console }) {
       vm.runtime.threads.forEach((thread) => {
         if (thread.target.blocks.forceNoGlow) return;
         thread.stack.forEach((blockId) => {
-          let block = Blockly.getMainWorkspace().getBlockById(blockId);
+          const block = Blockly.getMainWorkspace().getBlockById(blockId);
           if (!block) {
             return;
           }
-          let childblock = thread.stack.find((i) => {
+          const childblock = thread.stack.find((i) => {
             let b = block;
-            if (!block) return;
             while (b.childBlocks_.length) {
               b = b.childBlocks_[b.childBlocks_.length - 1];
               if (i === b.id) return true;
             }
+            return false;
           });
           if (!childblock && block.svgPath_) {
             const svgPath = block.svgPath_;
