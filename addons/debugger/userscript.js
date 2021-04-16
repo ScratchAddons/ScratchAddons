@@ -100,13 +100,12 @@ export default async function ({ addon, global, console, msg }) {
     src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
   });
   const closeText = Object.assign(document.createElement("span"), {
-    innerText: 'Clear',
-    
+    innerText: "Clear",
   });
-  
-  consoleTitle.append(consoleText,buttons)
-  buttons.append(closeButton)
-  closeButton.append(closeImg,closeText)
+
+  consoleTitle.append(consoleText, buttons);
+  buttons.append(closeButton);
+  closeButton.append(closeImg, closeText);
   consoleWrapper.append(consoleTitle, consoleList);
   document.body.append(consoleWrapper);
 
