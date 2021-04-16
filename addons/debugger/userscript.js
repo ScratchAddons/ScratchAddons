@@ -80,24 +80,34 @@ export default async function ({ addon, global, console, msg }) {
   const consoleWrapper = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_card", { others: "debug" }),
   });
-  const consoleTitle = Object.assign(document.createElement("h1"), {
+  const consoleTitle = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_header-buttons"),
+  });
+  const consoleText = Object.assign(document.createElement("h1"), {
     innerText: msg("console"),
   });
   const consoleList = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("sprite-info_sprite-info", { others: "logs" }),
   });
+  const buttons = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_header-buttons-right"),
+  });
   const closeButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("close-button_close-button", "close-button_large", { others: "close-button" }),
+    className: addon.tab.scratchClass("card_remove-button"),
   });
   const closeImg = Object.assign(document.createElement("img"), {
     className: addon.tab.scratchClass("close-button_close-icon"),
     src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
   });
-
+  const closeText = Object.assign(document.createElement("span"), {
+    innerText: 'Clear',
+    
+  });
+  
+  consoleTitle.append(consoleText,buttons)
+  buttons.append(closeButton)
+  closeButton.append(closeImg,closeText)
   consoleWrapper.append(consoleTitle, consoleList);
-  consoleList.append(closeButton);
-  closeButton.append(closeImg);
   document.body.append(consoleWrapper);
 
   let pos1 = 0,
