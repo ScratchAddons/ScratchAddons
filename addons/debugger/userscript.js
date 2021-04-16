@@ -100,7 +100,7 @@ export default async function ({ addon, global, console, msg }) {
     src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
   });
   const closeText = Object.assign(document.createElement("span"), {
-    innerText: 'Clear',
+    innerText: "Clear",
   });
   const exportButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_remove-button"),
@@ -110,13 +110,13 @@ export default async function ({ addon, global, console, msg }) {
     src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
   });
   const exportText = Object.assign(document.createElement("span"), {
-    innerText: 'Export',
+    innerText: "Export",
   });
-  
-  consoleTitle.append(consoleText,buttons)
-  buttons.append(exportButton,closeButton)
-  closeButton.append(closeImg,closeText)
-  exportButton.append(exportImg,exportText)
+
+  consoleTitle.append(consoleText, buttons);
+  buttons.append(exportButton, closeButton);
+  closeButton.append(closeImg, closeText);
+  exportButton.append(exportImg, exportText);
   consoleWrapper.append(consoleTitle, consoleList);
   document.body.append(consoleWrapper);
 
@@ -157,7 +157,7 @@ export default async function ({ addon, global, console, msg }) {
     document.querySelectorAll(".log").forEach((log, i) => log.remove());
   });
   exportButton.addEventListener("mousedown", () => {
-    console.log('Exporting')
+    console.log("Exporting");
   });
   const addItem = (content, targetId, blockId, type) => {
     const wrapper = document.createElement("div");
@@ -175,7 +175,7 @@ export default async function ({ addon, global, console, msg }) {
 
     const block = workspace.getBlockById(blockId);
     const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
-    console.log(inputBlock.type)
+    console.log(inputBlock.type);
     if (inputBlock.type != "text") {
       if (inputBlock.inputList.filter((i) => i.name).length === 0) {
         const inputSpan = document.createElement("span");
