@@ -73,7 +73,11 @@ let path = new URL(initialUrl).pathname.substring(1);
 if (path[path.length - 1] !== "/") path += "/";
 const pathArr = path.split("/");
 if (pathArr[0] === "scratch-addons-extension") {
-  if (pathArr[1] === "settings") chrome.runtime.sendMessage("openSettingsOnThisTab");
+  if (pathArr[1] === "settings") {
+    let url = chrome.runtime.getURL("webpages/settings/index.html");
+    if (location.hash) url += location.hash;
+    chrome.runtime.sendMessage({ replaceTabWithUrl: url });
+  }
 }
 if (path === "discuss/3/topic/add/") {
   window.addEventListener("load", () => forumWarning("forumWarning"));
@@ -311,10 +315,11 @@ const showBanner = () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
+  // v1.14.0 TODO in line 365
   const notifImage = Object.assign(document.createElement("img"), {
-    alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/draganddrop.gif"),
-    style: "height: 175px; border-radius: 5px",
+    // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
+    src: chrome.runtime.getURL("/images/cs/icon.svg"),
+    style: "height: 150px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -354,10 +359,11 @@ const showBanner = () => {
       (_, i) =>
         [
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
-          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("hexColorPicker") })
+          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeatureName") })
             .outerHTML,
           Object.assign(document.createElement("a"), {
-            href: "https://scratch.mit.edu/scratch-addons-extension/settings",
+            // TODO: remove `#addon-editor-dark-mode` next release
+            href: "https://scratch.mit.edu/scratch-addons-extension/settings#addon-editor-dark-mode",
             target: "_blank",
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
