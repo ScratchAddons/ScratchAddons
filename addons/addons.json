@@ -1,21 +1,4 @@
 [
-  "// Note: these themes need this exact order to work properly,",
-  "// because the first in the list gets their CSS injected first,",
-  "// and so on, and we want some themes to override others.",
-  "// UPDATE v1.1.0: themes are now always injected after non-theme",
-  "// userstyles, so only themes should be listed here.",
-  "// For editor:",
-  "editor-dark-mode",
-  "editor-colored-context-menus",
-  "editor-stage-left",
-  "editor-theme3",
-  "a11y",
-
-  "// For website:",
-  "scratchr2",
-  "dark-www",
-
-  "// Other addons:",
   "editor-searchable-dropdowns",
   "editor-devtools",
   "forum-search",
@@ -83,7 +66,22 @@
   "2d-color-picker",
   "drag-drop",
   "dango-rain",
+  "wrap-lists",
+  "initialise-sprite-position",
   "custom-zoom",
   "wrap-lists",
-  "blocks2image"
+  "blocks2image",
+
+  "// NEW ADDONS ABOVE THIS ↑↑",
+  "// Note: these themes need this exact order to work properly,",
+  "// because the first in the list gets their CSS injected first,",
+  "// and so on, and we want some themes to override others.",
+  "editor-dark-mode",
+  "editor-colored-context-menus",
+  "editor-stage-left",
+  "editor-theme3",
+  "a11y",
+  "// For website:",
+  "scratchr2",
+  "dark-www"
 ]

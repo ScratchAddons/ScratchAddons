@@ -1,5 +1,5 @@
 export default async function ({ addon, console }) {
-  await addon.tab.waitForElement(".youtube-player");
-  document.querySelector(".youtube-player").setAttribute("allowfullscreen", true);
-  document.querySelector(".youtube-player").src += ""; // reload video
+  const player = await addon.tab.waitForElement(".youtube-player");
+  player.setAttribute("allowfullscreen", true);
+  player.src += ""; // reload video
 }
