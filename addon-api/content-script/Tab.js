@@ -44,19 +44,23 @@ export default class Tab extends Listenable {
    * @param {string} selector - argument passed to querySelector.
    * @param {object} opts - options.
    * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
+   * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
    * @returns {Promise<Element>} - element found.
    */
   waitForElement(selector, opts = {}) {
     const markAsSeen = !!opts.markAsSeen;
-    const firstQuery = document.querySelectorAll(selector);
-    for (const element of firstQuery) {
-      if (this._waitForElementSet.has(element)) continue;
-      if (markAsSeen) this._waitForElementSet.add(element);
-      return Promise.resolve(element);
+    if (!opts.condition || opts.condition()) {
+      const firstQuery = document.querySelectorAll(selector);
+      for (const element of firstQuery) {
+        if (this._waitForElementSet.has(element)) continue;
+        if (markAsSeen) this._waitForElementSet.add(element);
+        return Promise.resolve(element);
+      }
     }
     return scratchAddons.sharedObserver.watch({
       query: selector,
       seen: markAsSeen ? this._waitForElementSet : null,
+      condition: opts.condition,
     });
   }
   /**
