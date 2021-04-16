@@ -37,7 +37,6 @@ export default async function ({ addon, global, console }) {
       el.style.filter = "";
     }
     elementsWithFilter.clear();
-    document.querySelectorAll("g[style*='filter'], path[style*='filter']").forEach((e) => (e.style.filter = ""));
     if (!addon.self.disabled) {
       vm.runtime.threads.forEach((thread) => {
         if (thread.target.blocks.forceNoGlow) return;
