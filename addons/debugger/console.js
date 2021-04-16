@@ -185,6 +185,10 @@ export default async function ({ addon, global, console, msg }) {
 
   while (true) {
     const button = await addon.tab.waitForElement("[class^='stage-header_stage-size-row']", { markAsSeen: true });
+    if (addon.tab.editorMode == "editor") {
     button.insertAdjacentElement("afterBegin", img);
+    } else {
+      toggleConsole(false)
+    }
   }
 }
