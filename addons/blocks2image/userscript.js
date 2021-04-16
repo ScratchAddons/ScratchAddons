@@ -1,85 +1,77 @@
 export default async function ({ addon, global, console, msg }) {
-  const buttonItem = [
-    msg("export_selected_to_SVG"),
-    msg("export_all_to_SVG"),
-    msg("export_selected_to_PNG"),
-    msg("export_all_to_PNG"),
-  ];
+  let style = document.createElement("style");
+  style.textContent = `
+  .blocklyText {
+      fill: #fff;
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 12pt;
+      font-weight: 500;
+  }
+  .blocklyNonEditableText>text, .blocklyEditableText>text {
+      fill: #575E75;
+  }
+  .blocklyDropdownText {
+      fill: #fff !important;
+  }
+  `;
+  let exSVG = document.createElement("svg");
+  exSVG.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  exSVG.setAttribute("xmlns:html", "http://www.w3.org/1999/xhtml");
+  exSVG.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+  exSVG.setAttribute("version", "1.1");
 
-  function eventMouseDown(e) {
-    if (e.button === 2) {
-      let blockSvg = e.target.closest("[data-id]");
-      let isBackground = !blockSvg && e.target.closest("svg.blocklySvg");
-      if (blockSvg || isBackground) {
-        let dataId = blockSvg && blockSvg.getAttribute("data-id");
-        if (dataId || isBackground) {
-          setTimeout(async () => {
-            let widget = document.querySelector("div.blocklyWidgetDiv");
-            if (!widget) {
-              return;
-            }
-            let blocklyContextMenu = widget.querySelector("div.blocklyContextMenu");
-            if (!blocklyContextMenu) {
-              return;
-            }
-            if (isBackground) {
-              buttonItem.forEach((item, index) => {
-                const wrapperItem = document.createElement("div");
-                wrapperItem.id = `blocks2imgCommand${index + 1}`;
-                wrapperItem.classList.add("goog-menuitem", "blocks2img");
-                wrapperItem.onmouseenter = () => wrapperItem.classList.add("goog-menuitem-highlight");
-                wrapperItem.onmouseleave = () => wrapperItem.classList.remove("goog-menuitem-highlight");
-                wrapperItem.style.userSelect = "none";
-                if (index === 0) {
-                  wrapperItem.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
-                  // resolve borderTop style conflict with goog-menuitem-highlight class
-                  wrapperItem.style.borderBottom = "1px solid transparent";
-                  wrapperItem.style.paddingTop = "4px";
-                  wrapperItem.style.paddingBottom = "3px";
-                }
-                const menuItem = document.createElement("div");
-                menuItem.classList.add("goog-menuitem-content");
-                menuItem.style.userSelect = "user-select: none";
-                menuItem.textContent = item;
-                wrapperItem.append(menuItem);
-                wrapperItem.onclick = () => {
-                  hidePopups();
-                  exportBlock({ command: "export" + (index + 1) });
-                };
-                blocklyContextMenu.append(wrapperItem);
-              });
-            }
-
-            if (blocklyContextMenu.children.length < 15) {
-              blocklyContextMenu.style.maxHeight = "none";
-              widget.style.height = blocklyContextMenu.getBoundingClientRect().height + 12 + "px";
-              blocklyContextMenu.style.maxHeight = "";
-            }
-
-            function hidePopups() {
-              const currentWorkspace = Blockly.getMainWorkspace();
-              const element = currentWorkspace.getToolbox().HtmlDiv;
-              element.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: element, bubbles: true }));
-              element.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: element, bubbles: true }));
-            }
-          }, 1);
+  addon.tab.createBlockContextMenu(
+    (items, block) => {
+      items.push(
+        {
+          enabled: true,
+          text: msg("export_all_to_SVG"),
+          callback: () => {
+            exportBlock(false);
+          },
+          separator: true,
+        },
+        {
+          enabled: true,
+          text: msg("export_all_to_PNG"),
+          callback: () => {
+            exportBlock(true);
+          },
+          separator: false,
         }
-      }
-    }
-  }
+      );
+      return items;
+    },
+    { workspace: true }
+  );
+  addon.tab.createBlockContextMenu(
+    (items, block) => {
+      items.push(
+        {
+          enabled: true,
+          text: msg("export_selected_to_SVG"),
+          callback: () => {
+            exportBlock(false, block);
+          },
+          separator: true,
+        },
+        {
+          enabled: true,
+          text: msg("export_selected_to_PNG"),
+          callback: () => {
+            exportBlock(true, block);
+          },
+          separator: false,
+        }
+      );
+      return items;
+    },
+    { blocks: true }
+  );
 
-  while (true) {
-    let blocklyWorkspace = await addon.tab.waitForElement("g.blocklyWorkspace", {
-      markAsSeen: true,
-    });
+  function exportBlock(isExportPNG, block) {
+    let svg = exSVG.cloneNode();
 
-    // insert contextmenu
-    blocklyWorkspace.addEventListener("mousedown", (e) => eventMouseDown(e));
-  }
-
-  function exportBlock(request, sender, sendMessage) {
-    // console.log(request)
-    let isExportPNG = request.command === "export3" || request.command === "export4";
     // blocks-media as base64 for svg inline image
     let blocksMedia = new Map();
     blocksMedia.set(
@@ -103,31 +95,10 @@ export default async function ({ addon, global, console, msg }) {
       "data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaGVpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLWFycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuNDEsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTDAuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNzFDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMCwxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNzlhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYzAuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMzdBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4="
     );
 
-    let svg = document.createElement("svg");
-    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    svg.setAttribute("xmlns:html", "http://www.w3.org/1999/xhtml");
-    svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    svg.setAttribute("version", "1.1");
-
-    let style = document.createElement("style");
-    style.textContent = `
-    .blocklyText {
-        fill: #fff;
-        font-family: "Helvetica Neue", Helvetica, sans-serif;
-        font-size: 12pt;
-        font-weight: 500;
-    }
-    .blocklyNonEditableText>text, .blocklyEditableText>text {
-        fill: #575E75;
-    }
-    .blocklyDropdownText {
-        fill: #fff !important;
-    }
-    `;
-    if (request.command === "export1" || request.command === "export3") {
-      svg = selectedBlocks(svg, style, isExportPNG);
+    if (block) {
+      svg = selectedBlocks(isExportPNG, block);
     } else {
-      svg = allBlocks(svg, style, isExportPNG);
+      svg = allBlocks(isExportPNG);
     }
     // resolve nbsp whitespace
     let texts = Array.from(svg.getElementsByTagName("text"));
@@ -156,19 +127,17 @@ export default async function ({ addon, global, console, msg }) {
     });
     let tmp = document.createElement("div");
     tmp.appendChild(svg);
-    if (request.command === "export1" || request.command === "export2") {
+    if (!isExportPNG) {
       exportData(tmp.innerHTML);
     } else {
       exportPNG(svg);
     }
   }
 
-  function selectedBlocks(svg, style, isExportPNG) {
-    let svgchild = document.querySelector("svg.blocklySvg g.blocklySelected");
-    if (!svgchild) {
-      alert(msg("error_blocks_unselected"));
-      throw new Error("Can not found selected blocks");
-    }
+  function selectedBlocks(isExportPNG, block) {
+    let svg = exSVG.cloneNode();
+
+    let svgchild = block.svgGroup_;
     svgchild = svgchild.cloneNode(true);
     let dataShapes = svgchild.getAttribute("data-shapes");
     svgchild.setAttribute(
@@ -180,7 +149,9 @@ export default async function ({ addon, global, console, msg }) {
     return svg;
   }
 
-  function allBlocks(svg, style, isExportPNG) {
+  function allBlocks(isExportPNG) {
+    let svg = exSVG.cloneNode();
+
     let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
     svgchild = svgchild.cloneNode(true);
 
