@@ -45,6 +45,7 @@ export default class Tab extends Listenable {
    * @param {object} opts - options.
    * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
    * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
+   * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
    * @returns {Promise<Element>} - element found.
    */
   waitForElement(selector, opts = {}) {
@@ -57,11 +58,36 @@ export default class Tab extends Listenable {
         return Promise.resolve(element);
       }
     }
-    return scratchAddons.sharedObserver.watch({
+    let { condition } = opts;
+    let listener;
+    if (opts.reduxEvents) {
+      if (this.clientVersion !== "scratch-www") throw new Error("reduxEvents require scratch-www");
+      const oldCondition = condition;
+      let satisfied = false;
+      condition = () => {
+        if (oldCondition && !oldCondition()) return false;
+        return satisfied;
+      };
+      listener = ({ detail }) => {
+        if (opts.reduxEvents.includes(detail.action.type)) {
+          satisfied = true;
+        }
+      };
+      this.redux.initialize();
+      this.redux.addEventListener("statechanged", listener);
+    }
+    const promise = scratchAddons.sharedObserver.watch({
       query: selector,
       seen: markAsSeen ? this._waitForElementSet : null,
-      condition: opts.condition,
+      condition,
     });
+    if (listener) {
+      promise.then((match) => {
+        this.redux.removeEventListener("statechanged", listener);
+        return match;
+      });
+    }
+    return promise;
   }
   /**
    * editor mode (or null for non-editors).
