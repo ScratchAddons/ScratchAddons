@@ -115,7 +115,7 @@ export default class DevTools {
             enabled: true,
             text: this.m("make-space"),
             callback: () => {
-              this.eventCopyClick(block);
+              this.doCleanUp(block);
             },
             separator: true,
           },
@@ -488,17 +488,16 @@ export default class DevTools {
   /**
    * A much nicer way of laying out the blocks into columns
    */
-  doCleanUp(e, dataId) {
+  doCleanUp(block) {
     let workspace = this.utils.getWorkspace();
-    let makeSpaceForBlock = dataId && workspace.getBlockById(dataId);
-    makeSpaceForBlock = makeSpaceForBlock && makeSpaceForBlock.getRootBlock();
+    let makeSpaceForBlock = block && block.getRootBlock();
 
     UndoGroup.startUndoGroup(workspace);
 
     let result = this.getOrderedTopBlockColumns(true);
     let columns = result.cols;
     let orphanCount = result.orphans.blocks.length;
-    if (orphanCount > 0 && !dataId) {
+    if (orphanCount > 0 && !block) {
       let message = this.msg("orphaned", {
         count: orphanCount,
       });
