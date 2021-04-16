@@ -162,6 +162,14 @@ img :not(.navbar, .icon-type) {
   border: 1px solid #cfcfcf;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+.setting-dropdown.open .clear-button,
+.setting-dropdown li:hover {
+  background: #aaaaaa;
+}
+.setting-dropdown ul,
+.setting-dropdown .reset-preview span {
+  border-color: #acacac;
+}
 
 #running-page {
   background-color: #ffffff;

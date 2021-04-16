@@ -27,7 +27,7 @@ const _linkify = (child) => {
  * Linkify an element which uses either <br> or whitespace: pre-line to add linebreaks,
  * such as "About Me" or project descriptions.
  * @param {Element} elem - element to linkify to.
- */ 
+ */
 export const linkifyTextNode = (elem) => {
   for (const child of elem.childNodes) {
     _linkify(child);
@@ -37,7 +37,7 @@ export const linkifyTextNode = (elem) => {
 /**
  * Linkify an element which uses tags around text, such as studio descriptions or project comments.
  * @param {Element} elem element to linkify to.
- */ 
+ */
 export const linkifyTag = (elem, tagClass) => {
   for (const tag of elem.children) {
     if (tagClass && !(elem instanceof tagClass)) continue;

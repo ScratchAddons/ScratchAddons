@@ -2,7 +2,9 @@ export default async function ({ addon, global, console, msg }) {
   const messages = document.createElement("a");
   messages.href = "/messages/";
   messages.title = msg("messages");
-  messages.classList.add("sa-editormessages");
+  messages.className = addon.tab.scratchClass("menu-bar_menu-bar-item", "menu-bar_hoverable", {
+    others: "sa-editormessages",
+  });
   let messageCount = document.createElement("span");
   messageCount.classList.add("sa-editormessages-count");
   messages.appendChild(messageCount);
