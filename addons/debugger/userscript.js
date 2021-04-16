@@ -100,7 +100,7 @@ export default async function ({ addon, global, console, msg }) {
   closeButton.append(closeImg);
   document.body.append(consoleWrapper);
 
-  var pos1 = 0,
+  let pos1 = 0,
     pos2 = 0,
     pos3 = 0,
     pos4 = 0;
@@ -108,11 +108,9 @@ export default async function ({ addon, global, console, msg }) {
 
   function dragMouseDown(e) {
     e.preventDefault();
-    // get the mouse cursor position at startup:
     pos3 = e.clientX;
     pos4 = e.clientY;
     document.addEventListener("mouseup", closeDragElement);
-    // call a function whenever the cursor moves:
     document.addEventListener("mousemove", elementDrag);
   }
 
@@ -123,9 +121,10 @@ export default async function ({ addon, global, console, msg }) {
     pos2 = pos4 - e.clientY;
     pos3 = e.clientX;
     pos4 = e.clientY;
+
     // set the element's new position:
-    consoleWrapper.style.top = consoleWrapper.offsetTop - pos2 + "px";
-    consoleWrapper.style.left = consoleWrapper.offsetLeft - pos1 + "px";
+    consoleWrapper.style.top = `${consoleWrapper.offsetTop - pos2}px`;
+    consoleWrapper.style.left = `${consoleWrapper.offsetLeft - pos1}px`;
   }
 
   function closeDragElement() {
@@ -134,9 +133,9 @@ export default async function ({ addon, global, console, msg }) {
     document.removeEventListener("mousemove", elementDrag);
   }
 
-  closeButton.onmousedown = () => {
+  closeButton.addEventListener("mousedown", () => {
     document.querySelectorAll(".log").forEach((log, i) => log.remove());
-  };
+  });
   const addItem = (content, targetId, blockId, type) => {
     const wrapper = document.createElement("div");
     const span = (text, cl = "") => {
