@@ -23,7 +23,7 @@ export default async function ({ addon, global, console, msg }) {
     const block = workspace.getBlockById(blockId);
     if (!block) return;
 
-    // Copied from devtools. If it's code get's improved for this function, bring those changes here too.
+    // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
     let root = block.getRootBlock();
 
     let base = block;
@@ -104,21 +104,20 @@ export default async function ({ addon, global, console, msg }) {
     pos2 = 0,
     pos3 = 0,
     pos4 = 0;
-  consoleTitle.onmousedown = dragMouseDown;
+  consoleTitle.addEventListener("mousedown", dragMouseDown);
 
   function dragMouseDown(e) {
-    e = e || window.event;
     e.preventDefault();
     // get the mouse cursor position at startup:
     pos3 = e.clientX;
     pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
+    document.addEventListener("mouseup", closeDragElement);
     // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
+    document.addEventListener("mousemove", elementDrag);
   }
 
   function elementDrag(e) {
-    e = e || window.event;
+    e = e || windw.event;
     e.preventDefault();
     // calculate the new cursor position:
     pos1 = pos3 - e.clientX;
@@ -132,8 +131,8 @@ export default async function ({ addon, global, console, msg }) {
 
   function closeDragElement() {
     // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
+    document.removeEventListener("mouseup", closeDragElement);
+    document.removeEventListener("mousemove", elementDrag);
   }
 
   closeButton.onmousedown = () => {
@@ -185,6 +184,10 @@ export default async function ({ addon, global, console, msg }) {
 
   while (true) {
     const button = await addon.tab.waitForElement("[class^='stage-header_stage-size-row']", { markAsSeen: true });
-    button.insertAdjacentElement("afterBegin", img);
+    if (addon.tab.editorMode == "editor") {
+      button.insertAdjacentElement("afterBegin", img);
+    } else {
+      toggleConsole(false);
+    }
   }
 }
