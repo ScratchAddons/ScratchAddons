@@ -15,11 +15,11 @@
       @import url("../styles/colors.css");
       @import url("../styles/components/addon.css");
       @import url("../styles/components/addon-setting.css");
-      @import url("../styles/components/badges.css");
+      @import url("../styles/components/tooltips.css");
+      @import url("../styles/components/badges.css"); /* needs to override tooltips.css */
       @import url("../styles/components/filter.css");
       @import url("../styles/components/categories.css");
       @import url("../styles/components/search.css");
-      @import url("../styles/components/tooltips.css");
       @import url("../styles/components/smallmode.css");
       /* Modals and popups are needed last */
       @import url("../styles/components/modal.css");
@@ -39,12 +39,34 @@
             :value="value"
             id="picker"
             v-show="isOpen"
-            v-click-outside="isOpen = false"
             v-el:pickr
             :formats="formats"
             :no_alpha="no_alpha"
           ></color-picker>
         </button>
+      </div>
+    </template>
+    <template id="reset-dropdown-component">
+      <div :class="{'setting-dropdown': true, open: isOpen}">
+        <button type="button" class="large-button clear-button" :disabled="!addon._enabled" @click="toggle">
+          <span>{{ label }}</span>
+          <img src="../../images/icons/expand.svg" class="icon-type" />
+        </button>
+        <ul>
+          <li @click="resetToDefault">
+            <span class="reset-preview"><span :style="{backgroundColor: setting.default}"></span></span>
+            <span>{{ defaultLabel }}</span>
+          </li>
+          <template v-for="preset in addon.presets">
+            <li
+              v-if="preset.values.hasOwnProperty(setting.id) && preset.values[setting.id] != setting.default"
+              @click="resetToPreset(preset)"
+            >
+              <span class="reset-preview"><span :style="{backgroundColor: preset.values[setting.id]}"></span></span>
+              <span>{{ preset.name }}</span>
+            </li>
+          </template>
+        </ul>
       </div>
     </template>
     <script src="index.js" type="module"></script>
@@ -307,24 +329,34 @@
                     :data-setting-id="setting.id"
                     spellcheck="false"
                   />
-                  <picker
-                    v-if="setting.type === 'color'"
-                    :value="addonSettings[addon._addonId][setting.id] || setting.default"
-                    :setting="setting"
-                    :addon="addon"
-                    @click=""
-                    :no_alpha="!setting.allowTransparency"
-                    v-click-outside="closePickers"
-                  ></picker>
-                  <button
-                    type="clear-button"
-                    class="large-button clear-button"
-                    :disabled="!addon._enabled"
-                    v-if="setting.type === 'color'"
-                    @click="updateOption(setting.id, setting.default, addon)"
-                  >
-                    {{ msg("reset") }}
-                  </button>
+                  <template v-if="setting.type === 'color'">
+                    <picker
+                      :value="addonSettings[addon._addonId][setting.id] || setting.default"
+                      :setting="setting"
+                      :addon="addon"
+                      @click=""
+                      :no_alpha="!setting.allowTransparency"
+                      v-click-outside="closePickers"
+                    ></picker>
+                    <reset-dropdown
+                      v-if="showResetDropdown(addon, setting)"
+                      :setting="setting"
+                      :addon="addon"
+                      :label="msg('reset')"
+                      :default-label="msg('default')"
+                      v-click-outside="closeResetDropdowns"
+                    ></reset-dropdown>
+                    <button
+                      v-else
+                      type="button"
+                      class="large-button clear-button"
+                      :disabled="!addon._enabled"
+                      @click="updateOption(setting.id, setting.default, addon)"
+                    >
+                      <span>{{ msg("reset") }}</span>
+                      <img src="../../images/icons/undo.svg" class="icon-type" />
+                    </button>
+                  </template>
                   <div class="filter-options" v-if="setting.type === 'select'">
                     <div
                       class="filter-option"

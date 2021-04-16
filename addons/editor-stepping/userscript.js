@@ -5,7 +5,7 @@ export default async function ({ addon, global, console }) {
   document.body.insertAdjacentHTML(
     "beforeend",
     `
-<svg>
+<svg style="position: fixed; top: -999999%;">
   <filter id="blueStackGlow" height="160%" width="180%" y="-30%" x="-40%">
     <feGaussianBlur in="SourceGraphic" stdDeviation="4">
     </feGaussianBlur>
@@ -29,27 +29,30 @@ export default async function ({ addon, global, console }) {
   );
   // Wait for Blockly, as it tends to not be ready sometimes...
   await addon.tab.traps.getBlockly();
-  const oldStep = vm.runtime._step;
-  vm.runtime._step = function () {
+  const oldStep = vm.runtime.constructor.prototype._step;
+  vm.runtime.constructor.prototype._step = function (...args) {
     document.querySelectorAll("g[style*='filter'], path[style*='filter']").forEach((e) => (e.style.filter = ""));
-    vm.runtime.threads.forEach((thread) => {
-      if (thread.target.blocks.forceNoGlow) return;
-      thread.stack.forEach((e) => {
-        let blockId = thread.target.blocks.getBlock(e).id;
-        let block = Blockly.getMainWorkspace().getBlockById(blockId);
-        let childblock = thread.stack.find((i) => {
-          let b = block;
-          if (!block) return;
-          while (b.childBlocks_.length) {
-            b = b.childBlocks_[b.childBlocks_.length - 1];
-            if (i === b.id) return true;
+    if (!addon.self.disabled) {
+      vm.runtime.threads.forEach((thread) => {
+        if (thread.target.blocks.forceNoGlow) return;
+        thread.stack.forEach((e) => {
+          let blockId = thread.target.blocks.getBlock(e)?.id;
+          if (!blockId) return;
+          let block = Blockly.getMainWorkspace().getBlockById(blockId);
+          let childblock = thread.stack.find((i) => {
+            let b = block;
+            if (!block) return;
+            while (b.childBlocks_.length) {
+              b = b.childBlocks_[b.childBlocks_.length - 1];
+              if (i === b.id) return true;
+            }
+          });
+          if (!childblock && block && block.svgPath_) {
+            block.svgPath_.style.filter = "url(#blueStackGlow)";
           }
         });
-        if (!childblock && block && block.svgPath_) {
-          block.svgPath_.style.filter = "url(#blueStackGlow)";
-        }
       });
-    });
-    oldStep.call(this);
+    }
+    oldStep.call(this, ...args);
   };
 }

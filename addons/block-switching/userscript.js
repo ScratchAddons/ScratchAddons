@@ -670,21 +670,23 @@ export default async function ({ addon, global, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
   addon.tab.createBlockContextMenu(
     (items, block) => {
-      const switches = blockSwitches[block.type] || [];
-      switches.forEach((opcodeData, i) => {
-        const isNoop = opcodeData.opcode === "noop";
-        if (isNoop && !addon.settings.get("noop")) return;
+      if (addon.self.disabled) {
+        const switches = blockSwitches[block.type] || [];
+        switches.forEach((opcodeData, i) => {
+          const isNoop = opcodeData.opcode === "noop";
+          if (isNoop && !addon.settings.get("noop")) return;
 
-        items.push({
-          enabled: true,
-          text: msg(isNoop ? block.type : opcodeData.opcode),
-          callback: menuCallbackFactory(block, opcodeData),
-          separator: addon.settings.get("border") && i == 0,
+          items.push({
+            enabled: true,
+            text: msg(isNoop ? block.type : opcodeData.opcode),
+            callback: menuCallbackFactory(block, opcodeData),
+            separator: addon.settings.get("border") && i == 0,
+          });
         });
-      });
-      if (block.type == "data_variable" && block.category_ == "data") {
-        const delBlockIndex = items.findIndex((item) => item.text === Blockly.Msg.DELETE_BLOCK);
-        items[delBlockIndex + 1].separator = addon.settings.get("border");
+        if (block.type == "data_variable" && block.category_ == "data") {
+          const delBlockIndex = items.findIndex((item) => item.text === Blockly.Msg.DELETE_BLOCK);
+          items[delBlockIndex + 1].separator = addon.settings.get("border");
+        }
       }
       return items;
     },

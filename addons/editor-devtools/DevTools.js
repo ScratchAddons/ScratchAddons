@@ -45,41 +45,43 @@ export default class DevTools {
     const Blockly = await this.addon.tab.traps.getBlockly();
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
+        let cleanupPlus = this.addon.settings.get("enableCleanUpPlus");
         const oldCleanUpIndex = items.findIndex((item) => item.text === Blockly.Msg.CLEAN_UP);
-        items.splice(oldCleanUpIndex, 1);
-        items.splice(
-          oldCleanUpIndex,
-          0,
-          {
+        if (cleanupPlus) items.splice(oldCleanUpIndex, 1);
+
+        const contextMenuItems = [];
+        if (cleanupPlus) {
+          contextMenuItems.push({
             enabled: true,
             text: this.m("clean-plus"),
             callback: () => {
               this.doCleanUp();
             },
             separator: true,
+          });
+        }
+        contextMenuItems.push({
+          enabled: true,
+          text: this.m("paste"),
+          callback: () => {
+            let wksp = this.utils.getWorkspace();
+
+            let ids = this.getTopBlockIDs();
+
+            document.dispatchEvent(
+              new KeyboardEvent("keydown", {
+                keyCode: 86,
+                ctrlKey: true,
+                griff: true,
+              })
+            );
+
+            setTimeout(() => {
+              this.beginDragOfNewBlocksNotInIDs(ids);
+            }, 10);
           },
-          {
-            enabled: true,
-            text: this.m("paste"),
-            callback: () => {
-              let wksp = this.utils.getWorkspace();
-
-              let ids = this.getTopBlockIDs();
-
-              document.dispatchEvent(
-                new KeyboardEvent("keydown", {
-                  keyCode: 86,
-                  ctrlKey: true,
-                  griff: true,
-                })
-              );
-
-              setTimeout(() => {
-                this.beginDragOfNewBlocksNotInIDs(ids);
-              }, 10);
-            },
-          }
-        );
+        });
+        items.splice(oldCleanUpIndex, 0, ...contextMenuItems);
         return items;
       },
       { workspace: true }
@@ -109,6 +111,14 @@ export default class DevTools {
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
         items.push(
+          {
+            enabled: true,
+            text: this.m("make-space"),
+            callback: () => {
+              this.eventCopyClick(block);
+            },
+            separator: true,
+          },
           {
             enabled: true,
             text: this.m("copy-all"),
@@ -478,15 +488,17 @@ export default class DevTools {
   /**
    * A much nicer way of laying out the blocks into columns
    */
-  doCleanUp() {
+  doCleanUp(e, dataId) {
     let workspace = this.utils.getWorkspace();
+    let makeSpaceForBlock = dataId && workspace.getBlockById(dataId);
+    makeSpaceForBlock = makeSpaceForBlock && makeSpaceForBlock.getRootBlock();
 
     UndoGroup.startUndoGroup(workspace);
 
     let result = this.getOrderedTopBlockColumns(true);
     let columns = result.cols;
     let orphanCount = result.orphans.blocks.length;
-    if (orphanCount > 0) {
+    if (orphanCount > 0 && !dataId) {
       let message = this.msg("orphaned", {
         count: orphanCount,
       });
@@ -508,15 +520,17 @@ export default class DevTools {
       let maxWidth = 0;
 
       for (const block of column.blocks) {
+        let extraWidth = block === makeSpaceForBlock ? 380 : 0;
+        let extraHeight = block === makeSpaceForBlock ? 480 : 72;
         let xy = block.getRelativeToSurfaceXY();
         if (cursorX - xy.x !== 0 || cursorY - xy.y !== 0) {
           block.moveBy(cursorX - xy.x, cursorY - xy.y);
         }
         let heightWidth = block.getHeightWidth();
-        cursorY += heightWidth.height + 72;
+        cursorY += heightWidth.height + extraHeight;
 
         let maxWidthWithComments = maxWidths[block.id] || 0;
-        maxWidth = Math.max(maxWidth, Math.max(heightWidth.width, maxWidthWithComments));
+        maxWidth = Math.max(maxWidth, Math.max(heightWidth.width + extraWidth, maxWidthWithComments));
       }
 
       cursorX += maxWidth + 96;
@@ -548,7 +562,7 @@ export default class DevTools {
         }
       }
 
-      if (unusedLocals.length > 0) {
+      if (unusedLocals.length > 0 && !dataId) {
         const unusedCount = unusedLocals.length;
         let message = this.msg("unused-var", {
           count: unusedCount,
@@ -1299,12 +1313,15 @@ export default class DevTools {
   }
 
   /**
-   * Initiates a drag event for all block stacks expect those in the set of ids.
+   * Initiates a drag event for all block stacks except those in the set of ids.
    * But why? - Because we know all the ids of the existing stacks before we paste / duplicate - so we can find the
    * new stack by excluding all the known ones.
    * @param ids Set of previously known ids
    */
   beginDragOfNewBlocksNotInIDs(ids) {
+    if (!this.addon.settings.get("enablePasteBlocksAtMouse")) {
+      return;
+    }
     let wksp = this.utils.getWorkspace();
     let topBlocks = wksp.getTopBlocks();
     for (const block of topBlocks) {
@@ -1367,6 +1384,9 @@ export default class DevTools {
       if (document.activeElement.tagName === "INPUT") {
         return;
       }
+      // todo: if (!this.addon.settings.get("enableCtrlLeftRightNav")) {
+      //         return;
+      //       }
       if (this.isScriptEditor()) {
         this.utils.navigationHistory.goBack();
       } else if (this.isCostumeEditor()) {
@@ -1382,6 +1402,9 @@ export default class DevTools {
       if (document.activeElement.tagName === "INPUT") {
         return;
       }
+      // todo: if (!this.addon.settings.get("enableCtrlLeftRightNav")) {
+      //         return;
+      //       }
       if (this.isScriptEditor()) {
         this.utils.navigationHistory.goForward();
       } else if (this.isCostumeEditor()) {
@@ -1460,12 +1483,14 @@ export default class DevTools {
           contextMenu.insertAdjacentHTML(
             "beforeend",
             `
-                            <div class="${this.addon.tab.scratchClass("context-menu_menu-item", {
-                              others: ["react-contextmenu-item", "s3devSTT"],
-                            })}" role="menuitem"
-                                tabindex="-1" aria-disabled="false" style="border-top: 1px solid hsla(0, 0%, 0%, 0.15);"><span>${this.m(
-                                  "top"
-                                )}</span></div>
+                            <div class="${this.addon.tab.scratchClass(
+                              "context-menu_menu-item",
+                              "context-menu_menu-item-bordered",
+                              {
+                                others: ["react-contextmenu-item", "s3devSTT"],
+                              }
+                            )}" role="menuitem"
+                                tabindex="-1" aria-disabled="false"><span>${this.m("top")}</span></div>
                             <div class="${this.addon.tab.scratchClass("context-menu_menu-item", {
                               others: ["react-contextmenu-item", "s3devSTT"],
                             })}" role="menuitem"
@@ -1521,6 +1546,10 @@ export default class DevTools {
     if (!this.isScriptEditor()) {
       return;
     }
+
+    // todo: if (!this.addon.settings.get("enableBlockInjector")) {
+    //         return;
+    //       }
 
     e.cancelBubble = true;
     e.preventDefault();
@@ -1578,6 +1607,10 @@ export default class DevTools {
         this.blockCursor = null; // Clear the cursor if using the mouse
         this.middleClickWorkspace(e);
       }
+      return;
+    }
+
+    if (!this.addon.settings.get("enableMiddleClickFinder")) {
       return;
     }
 
