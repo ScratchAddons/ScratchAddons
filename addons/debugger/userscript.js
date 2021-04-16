@@ -117,7 +117,6 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function elementDrag(e) {
-    e = e || windw.event;
     e.preventDefault();
     // calculate the new cursor position:
     pos1 = pos3 - e.clientX;
