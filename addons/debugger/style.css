@@ -71,6 +71,11 @@
   color: hsl(39deg 100% 18%) !important;
   background-color: hsl(50deg 100% 95%) !important;
 }
+.error {
+  border-color: --error-border-color !important;
+  color: --error-text-color !important;
+  background-color: hsl(0deg 100% 95%) !important;
+}
 .logs {
   overflow-y: scroll;
   cursor: default;

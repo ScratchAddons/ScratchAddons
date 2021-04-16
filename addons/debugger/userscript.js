@@ -16,6 +16,10 @@ export default async function ({ addon, global, console, msg }) {
     workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "warn");
   });
+  addon.tab.addBlock("error %s", ["content"], ({ content }, targetId, blockId) => {
+    workspace = Blockly.getMainWorkspace();
+    addItem(content, targetId, blockId, "error");
+  });
   let injected;
   const goToBlock = (blockId) => {
     const offsetX = 32,
@@ -171,6 +175,7 @@ export default async function ({ addon, global, console, msg }) {
     const scrolledDown = consoleList.scrollTop === consoleList.scrollHeight - consoleList.clientHeight;
     wrapper.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
     if (type === "warn") wrapper.classList += " warn";
+    if (type === "error") wrapper.classList += " error";
     consoleList.appendChild(wrapper);
 
     const block = workspace.getBlockById(blockId);
