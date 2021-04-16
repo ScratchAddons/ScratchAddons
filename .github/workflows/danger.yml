@@ -17,10 +17,8 @@ jobs:
     - run: npm install prettier
     - name: Danger JS Action
       uses: danger/danger-js@10.6.3
-      with: 
+      with:
         args: "--dangerfile .github/dangerfile.js"
       env:
         DANGER_DISABLE_TRANSPILATION: "true"
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
-

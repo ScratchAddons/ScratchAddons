@@ -589,22 +589,22 @@ const vue = (window.vue = new Vue({
 
             const addonsCurrentlyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.userstyles])].filter((runningAddonId) => {
-                  // Consider addons with "dynamicUserscriptDisable": true
+              : [...new Set([...res.userscripts, ...res.userstyles])].filter((runningAddonId) => {
+                  // Consider addons with "dynamicDisable": true
                   // If those are running on the page, their "is running on this tab"
                   // status should be the same as their "is enabled" status
                   const manifest = this.manifests.find((manifest) => manifest._addonId === runningAddonId);
                   if (manifest.dynamicDisable && !manifest._enabled) return false;
                   return true;
                 });
-            // Addons/themes that were previously enabled on the tab (but not anymore)
+            // Addons that were previously enabled on the tab (but not anymore)
             // should go above enabled addons that are not currently running on the tab
             // so that it's easier to find them, even if the popup was closed.
             // Disabling then reenabling an addon is likely something common
             // so hopefully this saves some seconds of our users' lives :P
             const addonsPreviouslyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.inactiveThemes])].filter(
+              : [...new Set([...res.userscripts, ...res.userstyles, ...res.disabledDynamicAddons])].filter(
                   (runningAddonId) => !addonsCurrentlyOnTab.includes(runningAddonId)
                 );
 
