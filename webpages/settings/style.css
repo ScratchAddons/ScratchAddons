@@ -99,7 +99,7 @@ h1 {
   color: var(--accent-5);
   background: var(--accent-2);
   border: 1px solid #000;
-  padding: 8px 12px;
+  padding: 6px 12px;
   border-radius: 4px;
   transition: 0.25s ease;
   outline: none;
@@ -115,6 +115,13 @@ h1 {
 .clear-button {
   border-radius: 0 4px 4px 0px;
   border-left: none !important;
+}
+.clear-button span {
+  vertical-align: middle;
+}
+.clear-button .icon-type {
+  margin-left: 8px;
+  margin-right: 0;
 }
 
 .clear-settings {
@@ -335,6 +342,6 @@ button.setting-input.color {
     linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);
   background-size: 6px 6px;
   background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
-  border-radius: 4px;
+  border-radius: 5px;
   background-color: white;
 }

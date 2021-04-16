@@ -51,11 +51,8 @@ const ColorInput = Vue.extend({
     toggle(addon, setting, value = !this.isOpen) {
       this.isOpen = value;
       this.opening = true;
-      for (let child of this.$root.$children) {
-        if (child.isOpen && child.canCloseOutside && child.color && !child.opening) {
-          child.toggle(child.addon, child.setting, false);
-        }
-      }
+      this.$root.closePickers({ isTrusted: true }, this);
+      this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
       this.opening = false;
 
       this.color = "#" + this.$els.pickr.hex8;
@@ -80,6 +77,35 @@ const ColorInput = Vue.extend({
   },
 });
 Vue.component("picker", ColorInput);
+
+const ResetDropdown = Vue.extend({
+  props: ["addon", "setting", "label", "defaultLabel"],
+  template: document.querySelector("template#reset-dropdown-component").innerHTML,
+  data() {
+    return {
+      isResetDropdown: true,
+      isOpen: false,
+    };
+  },
+  methods: {
+    toggle() {
+      this.isOpen = !this.isOpen;
+      this.$root.closePickers({ isTrusted: true });
+      this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
+    },
+    resetToDefault() {
+      this.$parent.addonSettings[this.addon._addonId][this.setting.id] = this.setting.default;
+      this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
+      this.toggle();
+    },
+    resetToPreset(preset) {
+      this.$parent.addonSettings[this.addon._addonId][this.setting.id] = preset.values[this.setting.id];
+      this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
+      this.toggle();
+    },
+  },
+});
+Vue.component("reset-dropdown", ResetDropdown);
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];
@@ -454,6 +480,12 @@ const vue = (window.vue = new Vue({
         }
       }, wait);
     },
+    showResetDropdown(addon, setting) {
+      return (
+        addon.presets &&
+        addon.presets.some((preset) => setting.id in preset.values && preset.values[setting.id] !== setting.default)
+      );
+    },
     loadPreset(preset, addon) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
         for (const property of Object.keys(preset.values)) {
@@ -468,6 +500,20 @@ const vue = (window.vue = new Vue({
           this.updateOption(property.id, property.default, addon);
         }
         console.log(`Loaded default values for ${addon.id}`);
+      }
+    },
+    closePickers(e, leaveOpen) {
+      for (let child of this.$children) {
+        if (child.isOpen && child.canCloseOutside && e.isTrusted && child.color && child !== leaveOpen) {
+          child.toggle(child.addon, child.setting, false);
+        }
+      }
+    },
+    closeResetDropdowns(e, leaveOpen) {
+      for (let child of this.$children) {
+        if (child.isResetDropdown && e.isTrusted && child !== leaveOpen) {
+          child.isOpen = false;
+        }
       }
     },
     textParse(text, addon) {
@@ -543,22 +589,22 @@ const vue = (window.vue = new Vue({
 
             const addonsCurrentlyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.userstyles])].filter((runningAddonId) => {
-                  // Consider addons with "dynamicUserscriptDisable": true
+              : [...new Set([...res.userscripts, ...res.userstyles])].filter((runningAddonId) => {
+                  // Consider addons with "dynamicDisable": true
                   // If those are running on the page, their "is running on this tab"
                   // status should be the same as their "is enabled" status
                   const manifest = this.manifests.find((manifest) => manifest._addonId === runningAddonId);
                   if (manifest.dynamicDisable && !manifest._enabled) return false;
                   return true;
                 });
-            // Addons/themes that were previously enabled on the tab (but not anymore)
+            // Addons that were previously enabled on the tab (but not anymore)
             // should go above enabled addons that are not currently running on the tab
             // so that it's easier to find them, even if the popup was closed.
             // Disabling then reenabling an addon is likely something common
             // so hopefully this saves some seconds of our users' lives :P
             const addonsPreviouslyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.inactiveThemes])].filter(
+              : [...new Set([...res.userscripts, ...res.userstyles, ...res.disabledDynamicAddons])].filter(
                   (runningAddonId) => !addonsCurrentlyOnTab.includes(runningAddonId)
                 );
 
@@ -621,11 +667,10 @@ const vue = (window.vue = new Vue({
       }
     },
     closePickers(e) {
-      for (let child of this.$children) {
-        if (child.isOpen && child.canCloseOutside && e.isTrusted && child.color) {
-          child.toggle(child.addon, child.setting, false);
-        }
-      }
+      this.closePickers(e);
+    },
+    closeResetDropdowns(e) {
+      this.closeResetDropdowns(e);
     },
   },
 

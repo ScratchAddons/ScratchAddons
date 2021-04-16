@@ -110,6 +110,9 @@
   "reset": {
     "message": "Reset"
   },
+  "default": {
+    "message": "Default"
+  },
   "presets": {
     "message": "Presets"
   },
