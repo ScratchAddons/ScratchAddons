@@ -22,14 +22,6 @@
       "link": "https://scratch.mit.edu/users/griffpatch"
     }
   ],
-  "settings": [
-    {
-      "name": "Rain even when not April Fools Day",
-      "id": "force",
-      "type": "boolean",
-      "default": false
-    }
-  ],
   "userscripts": [
     {
       "url": "userscript.js",
@@ -43,6 +35,6 @@
     }
   ],
   "tags": ["easterEgg"],
-  "enabledByDefault": true,
+  "enabledByDefault": false,
   "l10n": true
 }

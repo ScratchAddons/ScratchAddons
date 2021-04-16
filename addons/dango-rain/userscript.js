@@ -62,7 +62,7 @@ addEventListener("resize", () => {
   setEltWidth(dangoContainerRight);
 });
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ msg }) {
   const notifClose = Object.assign(document.createElement("span"), {
     style: `
     float: right;
@@ -87,10 +87,6 @@ export default async function ({ addon, global, console, msg }) {
   const normalSpan = document.createElement("span");
   normalSpan.innerText = `\n${msg("happyAprilFools")}\n${msg("howToGet")}\n${msg("howToStop")}`;
   noticeText.appendChild(normalSpan);
-
-  const now = new Date().getTime() / 1000;
-  const runDangos = addon.settings.get("force") || (now < 1617364800 && now > 1617192000);
-  if (!runDangos) return;
 
   const getAboutMeAndWiwo = () => {
     if (document.querySelector("textarea[name=bio]")) {

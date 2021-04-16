@@ -3,8 +3,17 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
     let madeAnyChanges = false;
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
-      const settings = addonSettings[addonId] || {};
+      let settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
+      if (addonId === "dango-rain" && JSON.stringify(settings) !== "{}") {
+        if (settings.force === false) {
+          addonsEnabled[addonId] = false;
+          console.log("Disabled dango-rain");
+        }
+        settings = {}; // remove settings
+        madeAnyChanges = true;
+        madeChangesToAddon = true;
+      }
       if (manifest.settings) {
         if (addonId === "editor-dark-mode") {
           // Transition v1.12.0 modes to v1.13.0 presets
