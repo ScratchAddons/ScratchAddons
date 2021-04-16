@@ -3,14 +3,14 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
     let madeAnyChanges = false;
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
-      let settings = addonSettings[addonId] || {};
+      const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
-      if (addonId === "dango-rain" && JSON.stringify(settings) !== "{}") {
+      if (addonId === "dango-rain" && typeof settings.force !== "undefined") {
         if (settings.force === false) {
           addonsEnabled[addonId] = false;
           console.log("Disabled dango-rain");
         }
-        settings = {}; // remove settings
+        settings.force = undefined; // remove settings
         madeAnyChanges = true;
         madeChangesToAddon = true;
       }
