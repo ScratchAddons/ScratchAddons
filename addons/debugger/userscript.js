@@ -101,12 +101,22 @@ export default async function ({ addon, global, console, msg }) {
   });
   const closeText = Object.assign(document.createElement("span"), {
     innerText: 'Clear',
-    
+  });
+  const exportButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_remove-button"),
+  });
+  const exportImg = Object.assign(document.createElement("img"), {
+    className: addon.tab.scratchClass("close-button_close-icon"),
+    src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
+  });
+  const exportText = Object.assign(document.createElement("span"), {
+    innerText: 'Export',
   });
   
   consoleTitle.append(consoleText,buttons)
-  buttons.append(closeButton)
+  buttons.append(exportButton,closeButton)
   closeButton.append(closeImg,closeText)
+  exportButton.append(exportImg,exportText)
   consoleWrapper.append(consoleTitle, consoleList);
   document.body.append(consoleWrapper);
 
@@ -146,6 +156,9 @@ export default async function ({ addon, global, console, msg }) {
   closeButton.addEventListener("mousedown", () => {
     document.querySelectorAll(".log").forEach((log, i) => log.remove());
   });
+  exportButton.addEventListener("mousedown", () => {
+    console.log('Exporting')
+  });
   const addItem = (content, targetId, blockId, type) => {
     const wrapper = document.createElement("div");
     const span = (text, cl = "") => {
@@ -162,7 +175,8 @@ export default async function ({ addon, global, console, msg }) {
 
     const block = workspace.getBlockById(blockId);
     const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
-    if (inputBlock.type !== "text") {
+    console.log(inputBlock.type)
+    if (inputBlock.type != "text") {
       if (inputBlock.inputList.filter((i) => i.name).length === 0) {
         const inputSpan = document.createElement("span");
         inputSpan.innerHTML = inputBlock.svgPath_.parentElement.querySelector("text").innerHTML;
@@ -178,7 +192,7 @@ export default async function ({ addon, global, console, msg }) {
 
     link.addEventListener("click", () => goToBlock(blockId));
     wrapper.appendChild(link);
-    if (scrolledDown) logs.scrollTop = logs.scrollHeight - logs.clientHeight;
+    if (scrolledDown) consoleList.scrollTop = consoleList.scrollHeight - consoleList.clientHeight;
   };
 
   const toggleConsole = (show = !showingConsole) => {
