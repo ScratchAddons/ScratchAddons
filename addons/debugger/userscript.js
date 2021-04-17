@@ -186,6 +186,7 @@ export default async function ({ addon, global, console, msg }) {
   });
   let logs = [];
   const addItem = (content, targetId, blockId, type) => {
+    workspace = Blockly.getMainWorkspace();
     const wrapper = document.createElement("div");
     const span = (text, cl = "") => {
       let s = document.createElement("span");
@@ -202,7 +203,6 @@ export default async function ({ addon, global, console, msg }) {
 
     const block = workspace.getBlockById(blockId);
     const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
-    console.log(inputBlock.type);
     if (inputBlock.type != "text") {
       if (inputBlock.inputList.filter((i) => i.name).length === 0) {
         const inputSpan = document.createElement("span");
@@ -218,7 +218,6 @@ export default async function ({ addon, global, console, msg }) {
       .replace("${type}", type)
       .replace("${content}", content);
     logs.push(string);
-    console.log(content);
     wrapper.append(span(content));
 
     let link = document.createElement("a");
