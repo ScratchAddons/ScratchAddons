@@ -14,7 +14,10 @@ export default async function ({ addon, global, console }) {
       button.style.filter = mode ? "hue-rotate(90deg)" : "";
     };
     const flagListener = (e) => {
-      if (e.altKey && !addon.self.disabled) {
+      if (addon.self.disabled) return;
+      const isAltClick = e.type === "click" && e.altKey;
+      const isChromebookAltClick = navigator.userAgent.includes("CrOS") && e.type === "contextmenu";
+      if (isAltClick || isChromebookAltClick) {
         e.cancelBubble = true;
         e.preventDefault();
         changeMode();
