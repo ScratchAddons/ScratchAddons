@@ -161,7 +161,7 @@ export default async function ({ addon, global, console, msg }) {
   closeButton.addEventListener("click", () => {
     document.querySelectorAll(".log").forEach((log, i) => log.remove());
     closeDragElement();
-    logs = []
+    logs = [];
   });
   closeButton.addEventListener("mouseup", () => {
     closeDragElement();
@@ -218,7 +218,7 @@ export default async function ({ addon, global, console, msg }) {
       .replace("${type}", type)
       .replace("${content}", content);
     logs.push(string);
-    console.log(content)
+    console.log(content);
     wrapper.append(span(content));
 
     let link = document.createElement("a");
