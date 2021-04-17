@@ -403,24 +403,6 @@ const vue = (window.vue = new Vue({
         ? this.selectedTab === "easterEgg" || addonManifest._wasEverEnabled
         : true;
 
-      // April fools
-      if (!this._dangoForceWasEverTrue) this._dangoForceWasEverTrue = this.addonSettings["dango-rain"].force;
-      if (addonManifest._addonId === "dango-rain") {
-        const now = new Date().getTime() / 1000;
-        if (this.selectedTab === "easterEgg") {
-          // Work normally
-          return matchesTag && matchesSearch && matchesEasterEgg;
-        } else if (now < 1617364800 && now > 1617192000) {
-          // If it's April Fools Day, show even if disabled
-          return matchesTag && matchesSearch;
-        } else if (addonManifest._wasEverEnabled && this._dangoForceWasEverTrue) {
-          // If it's not April Fools Day but dangos are forced, show.
-          // Using this._dangoForceWasEverTrue to avoid addon poofing
-          // if setting was enabled on load and it's then disabled
-          return matchesTag && matchesSearch;
-        } else return false;
-      }
-
       return matchesTag && matchesSearch && matchesEasterEgg;
     },
     stopPropagation(e) {
