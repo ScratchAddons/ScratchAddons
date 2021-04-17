@@ -9,12 +9,15 @@ export default async function ({ addon, global, console, msg }) {
 
   const vm = addon.tab.traps.vm;
   addon.tab.addBlock("log %s", ["content"], ({ content }, targetId, blockId) => {
+    workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "log");
   });
   addon.tab.addBlock("warn %s", ["content"], ({ content }, targetId, blockId) => {
+    workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "warn");
   });
   addon.tab.addBlock("error %s", ["content"], ({ content }, targetId, blockId) => {
+    workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "error");
   });
   let injected;
@@ -158,6 +161,7 @@ export default async function ({ addon, global, console, msg }) {
   closeButton.addEventListener("click", () => {
     document.querySelectorAll(".log").forEach((log, i) => log.remove());
     closeDragElement();
+    logs = []
   });
   closeButton.addEventListener("mouseup", () => {
     closeDragElement();
@@ -214,6 +218,7 @@ export default async function ({ addon, global, console, msg }) {
       .replace("${type}", type)
       .replace("${content}", content);
     logs.push(string);
+    console.log(content)
     wrapper.append(span(content));
 
     let link = document.createElement("a");
