@@ -5,15 +5,6 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
     for (const { manifest, addonId } of scratchAddons.manifests) {
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
-      if (addonId === "dango-rain" && typeof settings.force !== "undefined") {
-        if (settings.force === false) {
-          addonsEnabled[addonId] = false;
-          console.log("Disabled dango-rain");
-        }
-        settings.force = undefined; // remove settings
-        madeAnyChanges = true;
-        madeChangesToAddon = true;
-      }
       if (manifest.settings) {
         if (addonId === "editor-dark-mode") {
           // Transition v1.12.0 modes to v1.13.0 presets
@@ -76,8 +67,20 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         console.log(`Changed settings for addon ${addonId}`);
         addonSettings[addonId] = settings;
       }
+
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
+      else if (addonId === "dango-rain") {
+        if (typeof settings.force !== "undefined") {
+          if (settings.force === false) {
+            addonsEnabled[addonId] = false;
+            console.log("Disabled dango-rain because force was disabled");
+          }
+          delete settings.force; // Remove setting so that this only happens once
+          madeAnyChanges = true;
+        }
+      }
     }
+    
     if (madeAnyChanges) chrome.storage.sync.set({ addonSettings, addonsEnabled });
     scratchAddons.globalState.addonSettings = addonSettings;
     scratchAddons.localState.addonsEnabled = addonsEnabled;
