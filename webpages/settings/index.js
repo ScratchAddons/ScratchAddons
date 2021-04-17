@@ -49,6 +49,11 @@ const ColorInput = Vue.extend({
       }
     });
   },
+  computed: {
+    noAlphaString() {
+      return String(this.no_alpha);
+    }
+  },
   methods: {
     toggle(addon, setting, value = !this.isOpen) {
       if (!this.loadColorPicker) return;
@@ -79,7 +84,7 @@ const ColorInput = Vue.extend({
       this.$els.pickr?._valueChanged();
     },
     loadColorPicker() {
-      this.$options.ready[0]();
+      this.$options.ready[0].call(this);
     },
   },
 });
