@@ -9,15 +9,12 @@ export default async function ({ addon, global, console, msg }) {
 
   const vm = addon.tab.traps.vm;
   addon.tab.addBlock("log %s", ["content"], ({ content }, targetId, blockId) => {
-    workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "log");
   });
   addon.tab.addBlock("warn %s", ["content"], ({ content }, targetId, blockId) => {
-    workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "warn");
   });
   addon.tab.addBlock("error %s", ["content"], ({ content }, targetId, blockId) => {
-    workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "error");
   });
   let injected;
@@ -98,6 +95,7 @@ export default async function ({ addon, global, console, msg }) {
   });
   const closeButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_remove-button"),
+    draggable: false,
   });
   const closeImg = Object.assign(document.createElement("img"), {
     className: addon.tab.scratchClass("close-button_close-icon"),
@@ -107,11 +105,11 @@ export default async function ({ addon, global, console, msg }) {
     innerText: "Clear",
   });
   const exportButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_remove-button"),
+    className: addon.tab.scratchClass("card_shrink-expand-button"),
+    draggable: false,
   });
   const exportImg = Object.assign(document.createElement("img"), {
-    className: addon.tab.scratchClass("close-button_close-icon"),
-    src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
+    src: "/svgs/extensions/download-white.svg",
   });
   const exportText = Object.assign(document.createElement("span"), {
     innerText: "Export",
@@ -157,12 +155,32 @@ export default async function ({ addon, global, console, msg }) {
     document.removeEventListener("mousemove", elementDrag);
   }
 
-  closeButton.addEventListener("mousedown", () => {
+  closeButton.addEventListener("click", () => {
     document.querySelectorAll(".log").forEach((log, i) => log.remove());
+    closeDragElement()
   });
-  exportButton.addEventListener("mousedown", () => {
-    console.log("Exporting");
+  closeButton.addEventListener("mouseup", () => {
+    closeDragElement()
   });
+  let download = (filename, text) => {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  }
+
+  exportButton.addEventListener("click", () => {
+    closeDragElement()
+    let file = logs.join('\n')
+    download('logs.txt', file)
+  });
+  let logs = []
   const addItem = (content, targetId, blockId, type) => {
     const wrapper = document.createElement("div");
     const span = (text, cl = "") => {
@@ -190,6 +208,7 @@ export default async function ({ addon, global, console, msg }) {
         wrapper.append(inputSpan);
       }
     }
+    logs.push(`${targetName}: ${content} (${type})`)
     wrapper.append(span(content));
 
     let link = document.createElement("a");
