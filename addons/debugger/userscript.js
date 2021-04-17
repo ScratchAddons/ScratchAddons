@@ -157,30 +157,30 @@ export default async function ({ addon, global, console, msg }) {
 
   closeButton.addEventListener("click", () => {
     document.querySelectorAll(".log").forEach((log, i) => log.remove());
-    closeDragElement()
+    closeDragElement();
   });
   closeButton.addEventListener("mouseup", () => {
-    closeDragElement()
+    closeDragElement();
   });
   let download = (filename, text) => {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename);
+    var element = document.createElement("a");
+    element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
+    element.setAttribute("download", filename);
 
-    element.style.display = 'none';
+    element.style.display = "none";
     document.body.appendChild(element);
 
     element.click();
 
     document.body.removeChild(element);
-  }
+  };
 
   exportButton.addEventListener("click", () => {
-    closeDragElement()
-    let file = logs.join('\n')
-    download('logs.txt', file)
+    closeDragElement();
+    let file = logs.join("\n");
+    download("logs.txt", file);
   });
-  let logs = []
+  let logs = [];
   const addItem = (content, targetId, blockId, type) => {
     const wrapper = document.createElement("div");
     const span = (text, cl = "") => {
@@ -208,8 +208,12 @@ export default async function ({ addon, global, console, msg }) {
         wrapper.append(inputSpan);
       }
     }
-    let string = addon.settings.get('exportFormat').replace('${sprite}',targetName).replace('${type}',type).replace('${content}',content)
-    logs.push(string)
+    let string = addon.settings
+      .get("exportFormat")
+      .replace("${sprite}", targetName)
+      .replace("${type}", type)
+      .replace("${content}", content);
+    logs.push(string);
     wrapper.append(span(content));
 
     let link = document.createElement("a");

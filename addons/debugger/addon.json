@@ -12,7 +12,6 @@
       "text": "When creating a log format, you can use the ${sprite}, ${content} (what the log says) and ${type} (log, warn, or error) variables. Each log is on it's own line. ",
       "id": "logformatmsg"
     }
-
   ],
   "credits": [
     {
@@ -41,7 +40,6 @@
       "type": "string",
       "default": "${sprite}: ${content} (${type})"
     }
-
   ],
   "tags": ["editor", "recommended"],
   "enabledByDefault": false,
