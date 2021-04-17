@@ -25,7 +25,7 @@ export default class LocalizationProvider extends EventTarget {
           dateStyle: "short"
       });
   }
-  
+
   _generateCache (messages) {
       messages = messages || this.messages;
       this._cache_locale = messages._locale || this.locale;
@@ -34,7 +34,7 @@ export default class LocalizationProvider extends EventTarget {
           this._cache[message] = new MessageFormat(messages[message], this._cache_locale);
       }
   }
-  
+
   _get (key, placeholders, messageHandler, fallback) {
       // Use cache if raw message is requested, and cache is up-to-date
       if (
@@ -56,7 +56,7 @@ export default class LocalizationProvider extends EventTarget {
   get(key, placeholders = {}, fallback = "") {
     return this._get(key, placeholders, null, fallback);
   }
-  
+
   escaped(key, placeholders = {}, fallback = "") {
     return this._get(key, placeholders, message => escapeHTML(message), fallback);
   }
@@ -68,11 +68,11 @@ export default class LocalizationProvider extends EventTarget {
   get localeName() {
     return this.messages._locale_name || "English";
   }
-  
+
   date (dateObj) {
       return this._date.format(dateObj);
   }
-  
+
   datetime (dateObj) {
       return this._datetime.format(dateObj);
   }
