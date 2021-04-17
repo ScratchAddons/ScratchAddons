@@ -66,6 +66,7 @@ All notable changes to this project will be documented in this file.
 
 #### Extension and Addon API
 
+- `allowTransparency` property on manifest (#1781)
 - Transparency on settings page color picker (#1781)
 
 ### Changed
@@ -644,7 +645,7 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 - Localization (#753, #812, #823, #842, #867, #856, #854, #861)
 - Support for %addon-self-dir% in themes CSS (#795)
 - Setting warning and notice icons (#791)
-- "key" property on manifest (#793)
+- `key` property on manifest (#793)
 - Source URL to theme CSS (#849)
 - `CTRL + LEFT CLICK` addon name to show IDs instead of names (#874)
 
