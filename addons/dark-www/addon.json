@@ -8,6 +8,9 @@
       "link": "https://github.com/mxmou/customize-scratch"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
   "userscripts": [
     {
       "url": "experimental_forums_preview.js",
@@ -148,8 +151,8 @@
       }
     },
     {
-      "url": "experimental_contact.css",
-      "matches": ["https://scratch.mit.edu/contact-us/"],
+      "url": "experimental_project_embed.css",
+      "matches": ["https://scratch.mit.edu/projects/*/embed"],
       "settingMatch": {
         "id": "selectedMode",
         "value": "experimental-dark"
@@ -168,7 +171,7 @@
       "potentialValues": [
         {
           "id": "experimental-dark",
-          "name": "Experimental Dark"
+          "name": "\"Experimental\" Dark"
         }
       ],
       "default": "experimental-dark"

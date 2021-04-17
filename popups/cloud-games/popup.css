@@ -1,31 +1,3 @@
-html {
-  font-size: 12px;
-  height: 100%;
-  scrollbar-width: thin;
-  scrollbar-color: grey none;
-  color: #dddddd;
-}
-
-body {
-  margin: 0 auto;
-  font-family: "Sora", sans-serif;
-  width: auto;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  background-color: #222;
-}
-
-a {
-  cursor: pointer;
-  text-decoration: none;
-}
-a[href] {
-  color: #1aa0d8;
-}
-a:hover {
-  text-decoration: underline;
-}
-
 .loading {
   text-align: center;
   font-size: 0.9rem;

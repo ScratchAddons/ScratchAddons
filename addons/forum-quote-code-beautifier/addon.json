@@ -18,6 +18,9 @@
       "allowTransparency": true
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
   "userstyles": [
     {
       "url": "main.css",
