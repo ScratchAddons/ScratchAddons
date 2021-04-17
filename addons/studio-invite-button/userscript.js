@@ -19,7 +19,7 @@ export default async function ({ addon, console, msg }) {
   addon.tab.waitForElement("#description").then(async (description) => {
     // checks if the user is a manager and the URL is correct
     if (description.classList.contains("editable")) {
-      for (;;) {
+      while (true) {
         const comment = await addon.tab.waitForElement(".comment", { markAsSeen: true });
         const inviteButton = document.createElement("span"); // create the button
         inviteButton.innerText = msg("Invite");
