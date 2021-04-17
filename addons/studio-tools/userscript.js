@@ -58,7 +58,9 @@ export default async function ({ addon, global, console, msg }) {
     leaveSpan.textContent = msg("leave");
     leaveButton.appendChild(leaveSpan);
     leaveButton.addEventListener("click", () => {
-      if (Scratch.INIT_DATA.GALLERY.model.is_owner) {
+      // Note: `Scratch.INIT_DATA.GALLERY.model.is_owner` returns
+      // whether the user is a *manager*, not _the_ owner
+      if (addon.auth.username === Scratch.INIT_DATA.GALLERY.model.owner) {
         alert(msg("owner-error"));
       } else {
         const confirmation = confirm(msg("leave-confirm"));
