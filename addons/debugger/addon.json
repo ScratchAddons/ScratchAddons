@@ -6,7 +6,13 @@
       "type": "notice",
       "text": "Protip: remove logs once you're done debugging",
       "id": "logprotip"
+    },
+    {
+      "type": "notice",
+      "text": "When creating a log format, you can use the ${sprite}, ${content} (what the log says) and ${type} (log, warn, or error) variables. Each log is on it's own line. ",
+      "id": "logformatmsg"
     }
+
   ],
   "credits": [
     {
@@ -27,6 +33,15 @@
       "url": "style.css",
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
+  ],
+  "settings": [
+    {
+      "name": "Export format",
+      "id": "exportFormat",
+      "type": "string",
+      "default": "${sprite}: ${content} (${type})"
+    }
+
   ],
   "tags": ["editor", "recommended"],
   "enabledByDefault": false,

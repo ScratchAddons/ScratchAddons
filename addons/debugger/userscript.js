@@ -208,7 +208,8 @@ export default async function ({ addon, global, console, msg }) {
         wrapper.append(inputSpan);
       }
     }
-    logs.push(`${targetName}: ${content} (${type})`)
+    let string = addon.settings.get('exportFormat').replace('${sprite}',targetName).replace('${type}',type).replace('${content}',content)
+    logs.push(string)
     wrapper.append(span(content));
 
     let link = document.createElement("a");
