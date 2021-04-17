@@ -72,10 +72,11 @@ const ColorInput = Vue.extend({
   watch: {
     value() {
       this.color = this.value;
-      this.$els.pickr._valueChanged();
+      // ?. is #2090 tempfix, 4 lines below as well
+      this.$els.pickr?._valueChanged();
     },
     isOpen() {
-      this.$els.pickr._valueChanged();
+      this.$els.pickr?._valueChanged();
     },
     loadColorPicker() {
       this.$options.ready[0]();
