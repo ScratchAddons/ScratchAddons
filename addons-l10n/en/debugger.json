@@ -1,6 +1,6 @@
 {
   "debugger/console": "Console",
   "debugger/debug": "Debug",
-
-  "debugger/pause": "Pause"
+  "debugger/export": "Export",
+  "debugger/clear": "Clear"
 }

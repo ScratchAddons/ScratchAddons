@@ -102,7 +102,7 @@ export default async function ({ addon, global, console, msg }) {
     src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
   });
   const closeText = Object.assign(document.createElement("span"), {
-    innerText: "Clear",
+    innerText: msg("clear"),
   });
   const exportButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_shrink-expand-button"),
@@ -112,7 +112,7 @@ export default async function ({ addon, global, console, msg }) {
     src: "/svgs/extensions/download-white.svg",
   });
   const exportText = Object.assign(document.createElement("span"), {
-    innerText: "Export",
+    innerText: msg("export"),
   });
 
   consoleTitle.append(consoleText, buttons);
