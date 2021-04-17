@@ -34,7 +34,7 @@ const checkForDango = (text) => {
   dangoContainerRight.className = "sa-dangos-right";
 
   document.querySelector("#content").append(dangoContainerLeft, dangoContainerRight);
-  if (!localStorage.getItem("scratchAddonsAprilFoolsModal2021")) document.querySelector("#content").append(noticeText);
+  // if (!localStorage.getItem("scratchAddonsAprilFoolsModal2021")) document.querySelector("#content").append(noticeText);
 };
 const setEltWidth = (elt) => {
   if (!elt) return;
@@ -45,9 +45,9 @@ const setEltWidth = (elt) => {
   visibleDangos = sideWidth > 0;
   if (visibleDangos) {
     clearTimeout(noticeTimeout);
-    if (!old && !localStorage.getItem("scratchAddonsAprilFoolsModal2021")) {
+    /* if (!old && !localStorage.getItem("scratchAddonsAprilFoolsModal2021")) {
       document.querySelector("#content").append(noticeText);
-    }
+    } */
   } else {
     // Window resizing is very weird on some devices...
     // Some devices might make the notice text "flicker".
@@ -81,11 +81,11 @@ export default async function ({ msg }) {
   };
   noticeText.appendChild(notifClose);
   const boldSpan = document.createElement("span");
-  boldSpan.innerText = msg("addedBy");
+  boldSpan.innerText = ""; // msg("addedBy");
   boldSpan.style.fontWeight = "bold";
   noticeText.appendChild(boldSpan);
   const normalSpan = document.createElement("span");
-  normalSpan.innerText = `\n${msg("happyAprilFools")}\n${msg("howToGet")}\n${msg("howToStop")}`;
+  normalSpan.innerText = ""; // `\n${msg("happyAprilFools")}\n${msg("howToGet")}\n${msg("howToStop")}`;
   noticeText.appendChild(normalSpan);
 
   const getAboutMeAndWiwo = () => {
