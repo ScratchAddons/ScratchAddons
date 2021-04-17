@@ -1,5 +1,5 @@
 {
-  "debugger/console": "Console",
+  "debugger/console": "Logs",
   "debugger/debug": "Debug",
   "debugger/export": "Export",
   "debugger/clear": "Clear"

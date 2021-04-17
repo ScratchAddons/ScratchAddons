@@ -1,6 +1,6 @@
 {
-  "name": "Console",
-  "description": "Adds blocks to log data to a Scratch console.",
+  "name": "Logs",
+  "description": "Adds blocks to log data to a log in Scratch.",
   "info": [
     {
       "type": "notice",
