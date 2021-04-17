@@ -7,6 +7,9 @@
       "name": "Maximouse"
     }
   ],
+  "injectAsStyleElt": true,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userstyles": [
     {
       "url": "userstyle.css",

@@ -1,7 +1,11 @@
 {
-  "name": "Editor dark mode",
-  "description": "Dark mode for the Scratch 3.0 project editor. Multiple options by different authors available.",
+  "name": "Editor dark mode and customizable colors",
+  "description": "Customize colors used by the project editor. Multiple dark themes by different authors available. If you don't need dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it.",
   "credits": [
+    {
+      "name": "Maximouse (addon, \"Experimental\" Dark)",
+      "link": "https://github.com/mxmou/customize-scratch"
+    },
     {
       "name": "infinitytec (3.Dark, 3.Darker)",
       "link": "https://github.com/infinitytec"
@@ -9,52 +13,25 @@
     {
       "name": "_nix (Dark editor)",
       "link": "https://github.com/towerofnix"
-    },
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "updateUserstylesOnSettingsChange": true,
+  "userscripts": [
     {
-      "name": "Maximouse (Experimental Dark)",
-      "link": "https://github.com/mxmou/customize-scratch"
+      "url": "text_color.js",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "runAtComplete": false
     }
   ],
   "userstyles": [
-    {
-      "url": "dark-editor.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "dark-editor"
-      }
-    },
-    {
-      "url": "3dark.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "3-dark"
-      }
-    },
-    {
-      "url": "3darker.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "3-darker"
-      }
-    },
     {
       "url": "experimental_editor.css",
       "matches": [
@@ -62,15 +39,7 @@
         "https://scratch.mit.edu/projects/*/editor",
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
-      ],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
-    },
-    {
-      "url": "global.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      ]
     },
     {
       "url": "text-shadow.css",
@@ -84,38 +53,292 @@
         "id": "textShadow",
         "value": true
       }
+    },
+    {
+      "url": "dark_comments.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "settingMatch": {
+        "id": "darkComments",
+        "value": true
+      }
+    },
+    {
+      "url": "scrollbar.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "settingMatch": {
+        "id": "darkScrollbars",
+        "value": true
+      }
     }
   ],
   "settings": [
     {
-      "name": "Dark mode version",
-      "id": "selectedMode",
-      "type": "select",
-      "potentialValues": [
-        {
-          "id": "3-darker",
-          "name": "3.Darker"
-        },
-        {
-          "id": "3-dark",
-          "name": "3.Dark"
-        },
-        {
-          "id": "dark-editor",
-          "name": "Dark Editor"
-        },
-        {
-          "id": "experimental-dark",
-          "name": "Experimental Dark"
-        }
-      ],
-      "default": "3-darker"
+      "name": "Page background",
+      "id": "page",
+      "type": "color",
+      "default": "#111111"
+    },
+    {
+      "name": "Highlight color",
+      "id": "primary",
+      "type": "color",
+      "default": "#4d97ff"
+    },
+    {
+      "name": "Menu bar background",
+      "id": "menuBar",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Active tab background",
+      "id": "activeTab",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Inactive tab background",
+      "id": "tab",
+      "type": "color",
+      "default": "#151515"
+    },
+    {
+      "name": "Sprite list background",
+      "id": "selector",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Asset list background",
+      "id": "selector2",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Selected list item background",
+      "id": "selectorSelection",
+      "type": "color",
+      "default": "#111111"
+    },
+    {
+      "name": "Accent background",
+      "id": "accent",
+      "type": "color",
+      "default": "#151515"
+    },
+    {
+      "name": "Input background",
+      "id": "input",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Workspace background",
+      "id": "workspace",
+      "type": "color",
+      "default": "#151515"
+    },
+    {
+      "name": "Block category menu background",
+      "id": "categoryMenu",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Block palette background",
+      "id": "palette",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Full screen background",
+      "id": "fullscreen",
+      "type": "color",
+      "default": "#000000"
+    },
+    {
+      "name": "Full screen header background",
+      "id": "stageHeader",
+      "type": "color",
+      "default": "#000000"
+    },
+    {
+      "name": "Border color",
+      "id": "border",
+      "type": "color",
+      "default": "#ffffff0d",
+      "allowTransparency": true
+    },
+    {
+      "name": "Show workspace dots",
+      "id": "dots",
+      "type": "boolean",
+      "default": false
     },
     {
       "name": "Text shadow on blocks",
       "id": "textShadow",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Dark comments",
+      "id": "darkComments",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Dark scrollbars",
+      "id": "darkScrollbars",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "3.Darker",
+      "id": "3darker",
+      "description": "A dark theme based on a userscript by infinitytec",
+      "values": {
+        "page": "#111111",
+        "primary": "#4d97ff",
+        "menuBar": "#202020",
+        "activeTab": "#202020",
+        "tab": "#151515",
+        "selector": "#202020",
+        "selector2": "#202020",
+        "selectorSelection": "#111111",
+        "accent": "#151515",
+        "input": "#202020",
+        "workspace": "#151515",
+        "categoryMenu": "#202020",
+        "palette": "#202020",
+        "fullscreen": "#000000",
+        "stageHeader": "#000000",
+        "border": "#ffffff0d",
+        "textShadow": false,
+        "dots": false,
+        "darkComments": true,
+        "darkScrollbars": true
+      }
+    },
+    {
+      "name": "3.Dark",
+      "id": "3dark",
+      "description": "A dark blue theme based on a userscript by infinitytec",
+      "values": {
+        "page": "#051638",
+        "primary": "#4d97ff",
+        "menuBar": "#2f4066",
+        "activeTab": "#2f4066",
+        "tab": "#273552",
+        "selector": "#2f4066",
+        "selector2": "#2f4066",
+        "selectorSelection": "#051638",
+        "accent": "#273552",
+        "input": "#2f4066",
+        "workspace": "#273552",
+        "categoryMenu": "#2f4066",
+        "palette": "#2f4066",
+        "fullscreen": "#051638",
+        "stageHeader": "#051638",
+        "border": "#00000026",
+        "textShadow": false,
+        "dots": false,
+        "darkComments": true,
+        "darkScrollbars": true
+      }
+    },
+    {
+      "name": "Dark Editor",
+      "id": "darkEditor",
+      "description": "A dark theme based on a userstyle by _nix",
+      "values": {
+        "page": "#2e2e2e",
+        "primary": "#47566b",
+        "menuBar": "#47566b",
+        "activeTab": "#555555",
+        "tab": "#444444",
+        "selector": "#333333",
+        "selector2": "#333333",
+        "selectorSelection": "#3a3a3a",
+        "accent": "#333333",
+        "input": "#444444",
+        "workspace": "#444444",
+        "categoryMenu": "#333333",
+        "palette": "#222222",
+        "fullscreen": "#222222",
+        "stageHeader": "#222222",
+        "border": "#111111",
+        "textShadow": true,
+        "dots": false,
+        "darkComments": true,
+        "darkScrollbars": true
+      }
+    },
+    {
+      "name": "\"Experimental\" Dark",
+      "id": "experimentalDark",
+      "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
+      "values": {
+        "page": "#001533",
+        "primary": "#4d97ff",
+        "menuBar": "#4d97ff",
+        "activeTab": "#282828",
+        "tab": "#192f4d",
+        "selector": "#030b16",
+        "selector2": "#192f4d",
+        "selectorSelection": "#282828",
+        "accent": "#282828",
+        "input": "#282828",
+        "workspace": "#282828",
+        "categoryMenu": "#282828",
+        "palette": "#333333",
+        "fullscreen": "#282828",
+        "stageHeader": "#333333",
+        "border": "#444444",
+        "textShadow": false,
+        "dots": true,
+        "darkComments": true,
+        "darkScrollbars": true
+      }
+    },
+    {
+      "name": "Scratch's default colors",
+      "id": "scratch",
+      "description": "The colors normally used by Scratch",
+      "values": {
+        "page": "#e5f0ff",
+        "primary": "#4d97ff",
+        "menuBar": "#4d97ff",
+        "activeTab": "#ffffff",
+        "tab": "#d9e3f2",
+        "selector": "#e9f1fc",
+        "selector2": "#d9e3f2",
+        "selectorSelection": "#ffffff",
+        "accent": "#ffffff",
+        "input": "#ffffff",
+        "workspace": "#f9f9f9",
+        "categoryMenu": "#ffffff",
+        "palette": "#f9f9f9",
+        "fullscreen": "#ffffff",
+        "stageHeader": "#e8edf1",
+        "border": "#00000026",
+        "textShadow": false,
+        "dots": true,
+        "darkComments": false,
+        "darkScrollbars": false
+      }
     }
   ],
   "tags": ["editor", "theme"],

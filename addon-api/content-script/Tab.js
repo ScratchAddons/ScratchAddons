@@ -177,4 +177,10 @@ export default class Tab extends Listenable {
     res = res.replace(/"/g, "");
     return res;
   }
+
+  displayNoneWhileDisabled(el, { display = "" } = {}) {
+    el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
+      g[1].toUpperCase()
+    )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
+  }
 }

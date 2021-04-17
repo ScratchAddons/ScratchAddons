@@ -3,6 +3,8 @@
   "description": "Adds icons inside the colored circles that identify block categories.",
   "tags": ["editor", "theme"],
   "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userstyles": [
     {
       "url": "userstyle.css",
