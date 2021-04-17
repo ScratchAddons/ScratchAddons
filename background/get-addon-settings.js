@@ -63,21 +63,24 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
           }
         }
       }
-      if (madeChangesToAddon) {
-        console.log(`Changed settings for addon ${addonId}`);
-        addonSettings[addonId] = settings;
-      }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
       else if (addonId === "dango-rain") {
         if (typeof settings.force !== "undefined") {
           if (settings.force === false) {
+            // Note: addon might be disabled already, but we don't care
             addonsEnabled[addonId] = false;
             console.log("Disabled dango-rain because force was disabled");
           }
           delete settings.force; // Remove setting so that this only happens once
+          madeChangesToAddon = true;
           madeAnyChanges = true;
         }
+      }
+
+      if (madeChangesToAddon) {
+        console.log(`Changed settings for addon ${addonId}`);
+        addonSettings[addonId] = settings; // In case settings variable was a newly created object
       }
     }
 
