@@ -52,7 +52,7 @@ const ColorInput = Vue.extend({
   computed: {
     noAlphaString() {
       return String(this.no_alpha);
-    }
+    },
   },
   methods: {
     toggle(addon, setting, value = !this.isOpen) {
