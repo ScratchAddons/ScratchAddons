@@ -118,9 +118,9 @@ function updateSettings(addon, newStyle) {
         }`;
       }
     } else {
-      let background = {colorOnWhite: "#fff", colorOnBlack: "#282828"}[textMode];
-      let inputShadow = {colorOnWhite: "#00000026", colorOnBlack: "#fff3"}[textMode];
-      let secondary = multiply(addon.settings.get(prop + "-color"), {a: 0.15});
+      let background = { colorOnWhite: "#fff", colorOnBlack: "#282828" }[textMode];
+      let inputShadow = { colorOnWhite: "#00000026", colorOnBlack: "#fff3" }[textMode];
+      let secondary = multiply(addon.settings.get(prop + "-color"), { a: 0.15 });
       stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground,
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > rect,
       g[data-category="${prop}"] > g[data-argument-type="variable"] > rect {
@@ -163,7 +163,7 @@ function updateSettings(addon, newStyle) {
       }
       #s3devIDD > li.${prop}:not(.boolean) {
         border: 1px solid var(--editorTheme3-${settingName}Color);
-      }`
+      }`;
       if (prop === "custom") {
         stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
           fill: ${background};
@@ -268,8 +268,11 @@ function updateSettings(addon, newStyle) {
       }
     }
   }
-  
-  document.documentElement.style.setProperty("--editorTheme3-inputColor-text", textColor(addon.settings.get("input-color")));
+
+  document.documentElement.style.setProperty(
+    "--editorTheme3-inputColor-text",
+    textColor(addon.settings.get("input-color"))
+  );
   newStyle.textContent = stylesheet;
 }
 
@@ -277,7 +280,9 @@ export default async function ({ addon, global, console }) {
   const otherStyle = document.querySelector(`[data-addon-id='${addon.self.id}']`);
   const newStyle = document.createElement("style");
   updateSettings(addon, newStyle);
-  addon.settings.addEventListener("change", () => {updateSettings(addon, newStyle)});
+  addon.settings.addEventListener("change", () => {
+    updateSettings(addon, newStyle);
+  });
   newStyle.className = "scratch-addons-style";
   newStyle.setAttribute("data-addon-id", addon.self.id);
 
@@ -286,5 +291,5 @@ export default async function ({ addon, global, console }) {
   document.documentElement.appendChild(newStyle);
 
   addon.self.addEventListener("disabled", () => (newStyle.media = "not all"));
-  addon.self.addEventListener("reenabled", () => (newStyle.removeAttribute("media")));
+  addon.self.addEventListener("reenabled", () => newStyle.removeAttribute("media"));
 }
