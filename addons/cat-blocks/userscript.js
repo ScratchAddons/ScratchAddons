@@ -322,7 +322,6 @@ export default async function ({ addon, global, console }) {
     this.catPath_ = Blockly.utils.createSvgElement("g", {}, this.svgGroup_);
 
     this.svgFace_ = Blockly.utils.createSvgElement("g", {}, this.catPath_);
-    this.svgGroup_.svgPath = this.catPath_;
     this.catPath_.svgFace = this.svgFace_;
     this.catPath_.svgBody = this.svgPath_;
     this.lastCallTime = 0;
