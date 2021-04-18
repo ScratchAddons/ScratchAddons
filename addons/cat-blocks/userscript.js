@@ -173,7 +173,6 @@ export default async function ({ addon, global, console }) {
       that.ear2Fn = setTimeout(function () {
         that.catPath_.ear2.setAttribute("fill-opacity", "");
         var bodyPath = that.catPath_.svgBody.getAttribute("d");
-        var bodyPath = that.catPath_.svgBody.getAttribute("d");
         bodyPath = bodyPath.replace(LEFT_EAR_DOWN, LEFT_EAR_UP);
         bodyPath = bodyPath.replace(DEFINE_HAT_LEFT_EAR_DOWN, DEFINE_HAT_LEFT_EAR_UP);
         that.catPath_.svgBody.setAttribute("d", bodyPath);
