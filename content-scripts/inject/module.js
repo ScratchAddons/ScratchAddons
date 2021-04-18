@@ -323,7 +323,6 @@ function inject(Blockly) {
 
     oldShow.call(this, event, items, something);
     items.forEach((item, i) => {
-      console.log(item);
       if (item.separator) {
         const itemElt = document.querySelector(".blocklyContextMenu").children[i];
         itemElt.style.paddingTop = "2px";
