@@ -108,10 +108,34 @@
       "allowTransparency": true
     },
     {
-      "name": "block inputs",
+      "name": "Block inputs",
       "id": "input-color",
       "type": "color",
       "default": "#FFFFFF"
+    },
+    {
+      "name": "Text color",
+      "id": "text",
+      "type": "select",
+      "default": "white",
+      "potentialValues": [
+        {
+          "id": "white",
+          "name": "White"
+        },
+        {
+          "id": "black",
+          "name": "Black"
+        },
+        {
+          "id": "colorOnWhite",
+          "name": "Colored on white background"
+        },
+        {
+          "id": "colorOnBlack",
+          "name": "Colored on black background"
+        }
+      ]
     }
   ],
   "tags": ["editor", "theme"],
@@ -143,7 +167,8 @@
         "data-lists-color": "#cc5b22",
         "custom-color": "#632d99",
         "Pen-color": "#0e9a6c",
-        "input-color": "#ffffff"
+        "input-color": "#ffffff",
+        "text": "white"
       }
     },
     {
@@ -162,7 +187,17 @@
         "data-lists-color": "#993300",
         "custom-color": "#99004d",
         "Pen-color": "#064734",
-        "input-color": "#202020"
+        "input-color": "#202020",
+        "text": "white"
+      }
+    },
+    {
+      "name": "Black",
+      "id": "black",
+      "description": "Makes block backgrounds black",
+      "values": {
+        "input-color": "#202020",
+        "text": "colorOnBlack"
       }
     }
   ],
