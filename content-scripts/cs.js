@@ -463,7 +463,7 @@ if (isProfile || isStudioComments || isProject) {
     const regex = / scratch[ ]?add[ ]?ons/;
     // Trim like scratchr2
     const trimmedValue = " " + value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-    const limitedValue = trimmedValue.replace(/[^a-zA-Z /]+/g, "");
+    const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
     return regex.test(limitedValue);
   };
   const extensionPolicyLink = document.createElement("a");
