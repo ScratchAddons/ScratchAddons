@@ -41,7 +41,6 @@ const setEltWidth = (elt) => {
   let sideWidth = (document.body.clientWidth - document.querySelector("#profile-data").clientWidth) / 2;
   sideWidth = sideWidth - 25;
   elt.style.width = sideWidth + "px";
-  let old = visibleDangos;
   visibleDangos = sideWidth > 0;
   if (visibleDangos) {
     clearTimeout(noticeTimeout);
