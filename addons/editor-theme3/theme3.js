@@ -270,7 +270,7 @@ function updateSettings(addon, newStyle) {
   }
   
   document.documentElement.style.setProperty("--editorTheme3-inputColor-text", textColor(addon.settings.get("input-color")));
-  document.querySelector(".scratch-addons-theme[data-addon-id='editor-theme3']").textContent = stylesheet;
+  newStyle.textContent = stylesheet;
 }
 
 export default async function ({ addon, global, console }) {
@@ -280,10 +280,11 @@ export default async function ({ addon, global, console }) {
   addon.settings.addEventListener("change", () => {updateSettings(addon, newStyle)});
   newStyle.className = "scratch-addons-style";
   newStyle.setAttribute("data-addon-id", addon.self.id);
-  newStyle.setAttribute("data-addon-index", otherStyle.getAttribute("data-addon-index"));
 
-  document.documentElement.insertBefore(newStyle, otherStyle.nextSibling);
+  // append after body to make sure that it overrides otherStyle
+  await addon.tab.waitForElement("body");
+  document.documentElement.appendChild(newStyle);
 
-  // Look for reenable event to enable the style. cs.js cannot handle an appended style.
-  addon.self.addEventListener("reenabled", () => (newStyle.disabled = false));
+  addon.self.addEventListener("disabled", () => (newStyle.media = "not all"));
+  addon.self.addEventListener("reenabled", () => (newStyle.removeAttribute("media")));
 }
