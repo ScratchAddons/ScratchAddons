@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["drag-drop", "custom-block-shape"];
+const NEW_ADDONS = ["custom-zoom", "wrap-lists", "initialise-sprite-position"];
 
 Vue.directive("click-outside", {
   priority: 700,
@@ -31,9 +31,11 @@ const ColorInput = Vue.extend({
       canCloseOutside: false,
       formats: "",
       opening: false,
+      loadColorPicker: false, // #2090 tempfix
     };
   },
   ready() {
+    if (!this.loadColorPicker) return;
     if (this.no_alpha) {
       this.formats = "hex,rgb,hsv,hsl";
     } else {
@@ -47,8 +49,14 @@ const ColorInput = Vue.extend({
       }
     });
   },
+  computed: {
+    noAlphaString() {
+      return String(this.no_alpha);
+    },
+  },
   methods: {
     toggle(addon, setting, value = !this.isOpen) {
+      if (!this.loadColorPicker) return;
       this.isOpen = value;
       this.opening = true;
       this.$root.closePickers({ isTrusted: true }, this);
@@ -69,10 +77,14 @@ const ColorInput = Vue.extend({
   watch: {
     value() {
       this.color = this.value;
-      this.$els.pickr._valueChanged();
+      // ?. is #2090 tempfix, 4 lines below as well
+      this.$els.pickr?._valueChanged();
     },
     isOpen() {
-      this.$els.pickr._valueChanged();
+      this.$els.pickr?._valueChanged();
+    },
+    loadColorPicker() {
+      this.$options.ready[0].call(this);
     },
   },
 });
@@ -391,24 +403,6 @@ const vue = (window.vue = new Vue({
         ? this.selectedTab === "easterEgg" || addonManifest._wasEverEnabled
         : true;
 
-      // April fools
-      if (!this._dangoForceWasEverTrue) this._dangoForceWasEverTrue = this.addonSettings["dango-rain"].force;
-      if (addonManifest._addonId === "dango-rain") {
-        const now = new Date().getTime() / 1000;
-        if (this.selectedTab === "easterEgg") {
-          // Work normally
-          return matchesTag && matchesSearch && matchesEasterEgg;
-        } else if (now < 1617364800 && now > 1617192000) {
-          // If it's April Fools Day, show even if disabled
-          return matchesTag && matchesSearch;
-        } else if (addonManifest._wasEverEnabled && this._dangoForceWasEverTrue) {
-          // If it's not April Fools Day but dangos are forced, show.
-          // Using this._dangoForceWasEverTrue to avoid addon poofing
-          // if setting was enabled on load and it's then disabled
-          return matchesTag && matchesSearch;
-        } else return false;
-      }
-
       return matchesTag && matchesSearch && matchesEasterEgg;
     },
     stopPropagation(e) {
@@ -483,7 +477,7 @@ const vue = (window.vue = new Vue({
     showResetDropdown(addon, setting) {
       return (
         addon.presets &&
-        addon.presets.some((preset) => setting.id in preset.values && preset.values[setting.id].toLowerCase() !== setting.default.toLowerCase())
+        addon.presets.some((preset) => setting.id in preset.values && preset.values[setting.id] !== setting.default)
       );
     },
     loadPreset(preset, addon) {
@@ -589,22 +583,22 @@ const vue = (window.vue = new Vue({
 
             const addonsCurrentlyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.userstyles])].filter((runningAddonId) => {
-                  // Consider addons with "dynamicUserscriptDisable": true
+              : [...new Set([...res.userscripts, ...res.userstyles])].filter((runningAddonId) => {
+                  // Consider addons with "dynamicDisable": true
                   // If those are running on the page, their "is running on this tab"
                   // status should be the same as their "is enabled" status
                   const manifest = this.manifests.find((manifest) => manifest._addonId === runningAddonId);
                   if (manifest.dynamicDisable && !manifest._enabled) return false;
                   return true;
                 });
-            // Addons/themes that were previously enabled on the tab (but not anymore)
+            // Addons that were previously enabled on the tab (but not anymore)
             // should go above enabled addons that are not currently running on the tab
             // so that it's easier to find them, even if the popup was closed.
             // Disabling then reenabling an addon is likely something common
             // so hopefully this saves some seconds of our users' lives :P
             const addonsPreviouslyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.inactiveThemes])].filter(
+              : [...new Set([...res.userscripts, ...res.userstyles, ...res.disabledDynamicAddons])].filter(
                   (runningAddonId) => !addonsCurrentlyOnTab.includes(runningAddonId)
                 );
 

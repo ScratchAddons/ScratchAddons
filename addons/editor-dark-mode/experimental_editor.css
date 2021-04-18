@@ -56,8 +56,9 @@
 .monitor_list-index_7tKdl {
   color: var(--editorDarkMode-page-text);
 }
-.monitor_label_ci1ok {
-  color: var(--editorDarkMode-page-text) !important;
+.monitor_label_ci1ok,
+.monitor_list-empty_1UKsB {
+  color: var(--editorDarkMode-page-text) !important; /* override website dark mode */
 }
 .gui_tab_27Unf:not(.gui_is-selected_sHAiu):hover img {
   filter: var(--editorDarkMode-page-tabHoverFilter);
@@ -171,7 +172,7 @@
 
 /* Accent background */
 .backpack_backpack-header_6ltCS,
-.stage-header_stage-button_hkl9B,
+.sa-body-editor .stage-header_stage-button_hkl9B,
 .sprite-info_sprite-info_3EyZh,
 .stage-selector_stage-selector_3oWOr,
 .stage-selector_header_2GVr1,
@@ -228,7 +229,7 @@ div.s3devDDOut.vis,
   border-top: 9px solid var(--editorDarkMode-accent);
   border-bottom: 10px solid var(--editorDarkMode-accent);
 }
-.stage-header_stage-button-icon_3zzFK,
+.sa-body-editor .stage-header_stage-button-icon_3zzFK,
 .sprite-info_icon-wrapper_3Wbqq:not(.sprite-info_radio_v-fgn),
 img.tool-select-base_tool-select-icon_tJ-rr,
 .paint-editor_button-group-button-icon_10kVn,
@@ -239,14 +240,15 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
   filter: var(--editorDarkMode-selector2-filter) drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.15)) !important;
 }
-.stage-header_stage-size-toggle-group_17LtK
+.sa-body-editor
+  .stage-header_stage-size-toggle-group_17LtK
   .stage-header_stage-button_hkl9B:not(.stage-header_stage-button-toggled-off_AJ8yG)
   .stage-header_stage-button-icon_3zzFK,
-.stage-header_stage-button-toggled-off_AJ8yG,
+.sa-body-editor .stage-header_stage-button-toggled-off_AJ8yG,
 .sprite-info_radio_v-fgn:not(.sprite-info_is-active_ewF6e) {
   filter: none;
 }
-.stage-header_stage-button-toggled-off_AJ8yG .stage-header_stage-button-icon_3zzFK,
+.sa-body-editor .stage-header_stage-button-toggled-off_AJ8yG .stage-header_stage-button-icon_3zzFK,
 .sprite-info_radio_v-fgn:not(.sprite-info_is-active_ewF6e) img {
   filter: var(--editorDarkMode-accent-desaturateFilter);
 }
@@ -481,8 +483,8 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .blocks_blocks_C530M .blocklyToolboxDiv,
 .backpack_backpack-header_6ltCS,
 .backpack_backpack-list_MOp5X,
-.stage_stage_1fD7k,
-.stage-header_stage-button_hkl9B,
+.sa-body-editor .stage_stage_1fD7k,
+.sa-body-editor .stage-header_stage-button_hkl9B,
 .sprite-selector_sprite-selector_2KgCX,
 .input_input-form_l9eYg,
 .input_input-form_1Y0wX,

@@ -1,7 +1,7 @@
 import { textColor, multiply } from "../../libraries/text_color.js";
 
-function updateSettings(addon, initialStylesheet) {
-  var stylesheet = initialStylesheet;
+function updateSettings(addon, newStyle) {
+  var stylesheet = "";
   const textMode = addon.settings.get("text");
   if (textMode == "black") {
     stylesheet += `
@@ -274,7 +274,16 @@ function updateSettings(addon, initialStylesheet) {
 }
 
 export default async function ({ addon, global, console }) {
-  const initialStylesheet = document.querySelector(".scratch-addons-theme[data-addon-id='editor-theme3']").textContent;
-  updateSettings(addon, initialStylesheet);
-  addon.settings.addEventListener("change", () => {updateSettings(addon, initialStylesheet)});
+  const otherStyle = document.querySelector(`[data-addon-id='${addon.self.id}']`);
+  const newStyle = document.createElement("style");
+  updateSettings(addon, newStyle);
+  addon.settings.addEventListener("change", () => {updateSettings(addon, newStyle)});
+  newStyle.className = "scratch-addons-style";
+  newStyle.setAttribute("data-addon-id", addon.self.id);
+  newStyle.setAttribute("data-addon-index", otherStyle.getAttribute("data-addon-index"));
+
+  document.documentElement.insertBefore(newStyle, otherStyle.nextSibling);
+
+  // Look for reenable event to enable the style. cs.js cannot handle an appended style.
+  addon.self.addEventListener("reenabled", () => (newStyle.disabled = false));
 }
