@@ -104,7 +104,6 @@ class SharedObserver {
       this.observer.observe(document.documentElement, {
         subtree: true,
         childList: true,
-        attributes: true,
       });
     }
     return new Promise((resolve) =>
