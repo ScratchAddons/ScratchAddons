@@ -143,7 +143,7 @@ export default async function ({ addon, global, console, msg }) {
         item.getAttribute("xlink:href").substring(item.getAttribute("xlink:href").lastIndexOf("/") + 1)
       );
       if (builtinSvgData) {
-        // replace svg file path (offical) to inline svg
+        // replace svg file path (official) to inline svg
         item.setAttribute("xlink:href", builtinSvgData);
       } else if (item.getAttribute("xlink:href").indexOf("/static/") === 0) {
         // replace link path for third party website
