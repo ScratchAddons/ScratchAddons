@@ -1,11 +1,12 @@
 export default async function ({ addon, global, console, msg }) {
-  console.log("clones counter enabled");
-
   const vm = addon.tab.traps.vm;
 
   hideInSmallStageMode({ addon });
 
   let countContainerContainer = document.createElement("div");
+
+  addon.tab.displayNoneWhileDisabled(countContainerContainer, { display: "flex" });
+
   let countContainer = document.createElement("div");
   let count = document.createElement("span");
   let icon = document.createElement("span");

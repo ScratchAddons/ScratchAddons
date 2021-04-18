@@ -1,7 +1,11 @@
 import Listenable from "./Listenable.js";
 
 /**
+ * Represents information about the addon.
  * @extends Listenable
+ * @property {string} id the addon's ID.
+ * @property {string} browser the browser.
+ * @property {boolean} disabled whether the addon is disabled or not.
  */
 export default class Self extends Listenable {
   constructor(addonObj, info) {
@@ -14,10 +18,19 @@ export default class Self extends Listenable {
     this.addEventListener("disabled", () => (this.disabled = true));
     this.addEventListener("reenabled", () => (this.disabled = false));
   }
+
+  /**
+   * path to the addon's directory.
+   * @type {string}
+   */
   get dir() {
     return `${this._addonObj._path}addons/${this.id}`;
   }
 
+  /**
+   * path to libraries directory.
+   * @type {string}
+   */
   get lib() {
     return `${this._addonObj._path}libraries`;
   }
@@ -28,4 +41,9 @@ export default class Self extends Listenable {
   get _eventTargetKey() {
     return "self";
   }
+
+  /**
+   * Restarts this addon. Only applicable to background scripts.
+   */
+  restart() {}
 }
