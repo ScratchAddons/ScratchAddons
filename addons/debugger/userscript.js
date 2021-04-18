@@ -8,15 +8,15 @@ export default async function ({ addon, global, console, msg }) {
   img.addEventListener("click", () => toggleConsole());
 
   const vm = addon.tab.traps.vm;
-  addon.tab.addBlock("log %s", ["content"], ({ content }, targetId, blockId) => {
+  addon.tab.addBlock("sa-log %s", ["content"], ({ content }, targetId, blockId) => {
     workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "log");
   });
-  addon.tab.addBlock("warn %s", ["content"], ({ content }, targetId, blockId) => {
+  addon.tab.addBlock("sa-warn %s", ["content"], ({ content }, targetId, blockId) => {
     workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "warn");
   });
-  addon.tab.addBlock("error %s", ["content"], ({ content }, targetId, blockId) => {
+  addon.tab.addBlock("sa-error %s", ["content"], ({ content }, targetId, blockId) => {
     workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "error");
   });
@@ -128,7 +128,9 @@ export default async function ({ addon, global, console, msg }) {
   let pos1 = 0,
     pos2 = 0,
     pos3 = 0,
-    pos4 = 0;
+    pos4 = 0,
+    maxX,
+    maxY;
   consoleTitle.addEventListener("mousedown", dragMouseDown);
 
   function dragMouseDown(e) {
@@ -141,15 +143,20 @@ export default async function ({ addon, global, console, msg }) {
 
   function elementDrag(e) {
     e.preventDefault();
+    var winW = document.documentElement.clientWidth || document.body.clientWidth,
+      winH = document.documentElement.clientHeight || document.body.clientHeight;
+    (maxX = winW - consoleWrapper.offsetWidth - 1), (maxY = winH - consoleWrapper.offsetHeight - 1);
     // calculate the new cursor position:
     pos1 = pos3 - e.clientX;
     pos2 = pos4 - e.clientY;
     pos3 = e.clientX;
     pos4 = e.clientY;
-
-    // set the element's new position:
-    consoleWrapper.style.top = `${consoleWrapper.offsetTop - pos2}px`;
-    consoleWrapper.style.left = `${consoleWrapper.offsetLeft - pos1}px`;
+    if (consoleWrapper.offsetTop - pos2 <= maxY && consoleWrapper.offsetTop - pos2 >= 0) {
+      consoleWrapper.style.top = consoleWrapper.offsetTop - pos2 + "px";
+    }
+    if (consoleWrapper.offsetLeft - pos1 <= maxX && consoleWrapper.offsetLeft - pos1 >= 0) {
+      consoleWrapper.style.left = consoleWrapper.offsetLeft - pos1 + "px";
+    }
   }
 
   function closeDragElement() {

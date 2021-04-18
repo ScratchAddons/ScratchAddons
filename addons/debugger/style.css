@@ -65,6 +65,7 @@
   cursor: text;
   align-items: center;
   padding: 2px;
+  content-visibility: auto;
 }
 .warn {
   border-color: var(--warning-border-color) !important;
