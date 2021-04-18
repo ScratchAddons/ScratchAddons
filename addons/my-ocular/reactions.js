@@ -5,7 +5,7 @@ export default async function ({ addon, global, console, msg }) {
     let postID = i.id.split("p")[1];
 
     let footer = i.querySelector(".postfootright").children[0];
-    
+
     let viewOnOcularContainer = document.createElement("li");
     let viewOnOcular = document.createElement("a");
     viewOnOcular.innerText = "🔍";
@@ -55,7 +55,7 @@ export default async function ({ addon, global, console, msg }) {
 
       makeReactionList();
     }
-  })
+  });
 
   async function fetchReactions(id) {
     return new Promise(async (resolve, reject) => {
