@@ -453,3 +453,76 @@ if (document.readyState !== "loading") {
 } else {
   window.addEventListener("DOMContentLoaded", handleBanner, { once: true });
 }
+
+const isProfile = pathArr[0] === "users" && pathArr[2] === "";
+const isStudioComments = pathArr[0] === "studios" && pathArr[2] === "comments";
+const isProject = pathArr[0] === "projects";
+
+if (isProfile || isStudioComments || isProject) {
+  const shouldCaptureComment = (value) => {
+    const regex = / scratch[ ]?add[ ]?ons/;
+    // Trim like scratchr2
+    const trimmedValue = " " + value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+    const limitedValue = trimmedValue.replace(/[^a-zA-Z /]+/g, "");
+    return regex.test(limitedValue);
+  };
+  const extensionPolicyLink = document.createElement("a");
+  extensionPolicyLink.href = "https://scratch.mit.edu/discuss/topic/284272/";
+  extensionPolicyLink.target = "_blank";
+  extensionPolicyLink.innerText = chrome.i18n.getMessage("captureCommentPolicy");
+  Object.assign(extensionPolicyLink.style, {
+    textDecoration: "underline",
+    color: "white",
+  });
+  const errorMsgHtml = escapeHTML(chrome.i18n.getMessage("captureCommentError", DOLLARS)).replace(
+    "$1",
+    extensionPolicyLink.outerHTML
+  );
+  const sendAnywayMsg = chrome.i18n.getMessage("captureCommentPostAnyway");
+  const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
+
+  if (isProfile || isStudioComments) {
+    window.addEventListener(
+      "click",
+      (e) => {
+        if (
+          e.path[1] &&
+          e.path[1] !== document &&
+          e.path[1].getAttribute("data-control") === "post" &&
+          e.path[1].hasAttribute("data-commentee-id")
+        ) {
+          const form = e.path[3];
+          if (form.tagName !== "FORM") return;
+          if (form.hasAttribute("data-sa-send-anyway")) {
+            form.removeAttribute("data-sa-send-anyway");
+            return;
+          }
+          const textarea = form.querySelector("textarea[name=content]");
+          if (!textarea) return;
+          if (shouldCaptureComment(textarea.value)) {
+            e.stopPropagation();
+            e.preventDefault(); // Avoid location.hash being set to null
+
+            form.querySelector("[data-control=error] .text").innerHTML = errorMsgHtml + " ";
+            const sendAnyway = document.createElement("a");
+            sendAnyway.onclick = () => {
+              const res = confirm(confirmMsg);
+              if (res) {
+                form.setAttribute("data-sa-send-anyway", "");
+                form.querySelector("[data-control=post]").click();
+              }
+            };
+            sendAnyway.textContent = sendAnywayMsg;
+            Object.assign(sendAnyway.style, {
+              textDecoration: "underline",
+              color: "white",
+            });
+            form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
+            form.querySelector(".control-group").classList.add("error");
+          }
+        }
+      },
+      { capture: true }
+    );
+  }
+}
