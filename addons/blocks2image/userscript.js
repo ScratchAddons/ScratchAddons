@@ -45,9 +45,10 @@ export default async function ({ addon, global, console, msg }) {
 
   addon.tab.createBlockContextMenu(
     (items, block) => {
+      let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
       items.push(
         {
-          enabled: true,
+          enabled: !!svgchild?.childNodes?.length,
           text: msg("export_all_to_SVG"),
           callback: () => {
             exportBlock(false);
@@ -55,7 +56,7 @@ export default async function ({ addon, global, console, msg }) {
           separator: true,
         },
         {
-          enabled: true,
+          enabled: !!svgchild?.childNodes?.length,
           text: msg("export_all_to_PNG"),
           callback: () => {
             exportBlock(true);
@@ -154,10 +155,7 @@ export default async function ({ addon, global, console, msg }) {
 
     let xArr = [];
     let yArr = [];
-    if (!svgchild?.childNodes?.length) {
-      alert(msg("error_blocks_not_added"));
-      return;
-    }
+
     svgchild.childNodes.forEach((g) => {
       let x = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[1] || 0;
       let y = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[2] || 0;
