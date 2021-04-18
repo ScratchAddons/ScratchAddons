@@ -10,7 +10,7 @@
   "editor-devtools/interactive-find-bar": "Interactive Find Bar (Ctrl + F)",
   "editor-devtools/interactive-find-bar-desc": "Quickly find and jump to any Custom Block, Variable, Event, or Hat block defined in a sprite by clicking on the new find bar located to the right of the Code, Costumes and Sound tabs. Begin typing to filter down the list. Use the up and down arrow keys to switch between the possible entries, and the left and right arrows to cycle between al found instances of that block.",
   "editor-devtools/improved-tidy-up": "Improved Code Tidy Up",
-  "editor-devtools/improved-tidy-up-desc": "Right click on the scripts window to pop up the menu and the Clean up Blocks option will have been replaced by a Clean up Blocks + option. Set this to tidy your scripts and it will preserve your scripts columns as well as attempt to align the comments and remove all those orphaned variables, etc. You'll like this a lot I guarantee!",
+  "editor-devtools/improved-tidy-up-desc": "Right click on the scripts window to pop up the menu and the Clean up Blocks option will have been replaced by a Clean up Blocks + option. Se this to tidy your scripts and it will preserve your scripts columns as well as attempt to align the comments and remove all those orphaned variables, etc. You'll like this a lot I guarantee!",
   "editor-devtools/help-new": "★New★",
   "editor-devtools/help-make-space": "Make Space",
   "editor-devtools/help-make-space-desc": "Make extra space around a script by right clicking on the code stack and choosing \"Make Space\".",
