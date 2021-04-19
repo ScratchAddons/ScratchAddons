@@ -13,7 +13,7 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
-## [v1.13.0] - 2021-04-19
+## [v1.13.0] - 2021-04-20
 
 - New addon: custom scripts area zoom settings
 - New addon: change new sprite default position
