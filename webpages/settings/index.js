@@ -737,6 +737,10 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     if (hash) {
       window.location.hash = "";
       window.location.hash = hash;
+      // For v1.13.0, TODO: remove in v1.14.0
+      if (hash === "#addon-editor-dark-mode" && vue.manifests.find(m => m._addonId === "editor-dark-mode")._enabled === true) {
+        vue.manifests.find(m => m._addonId === "editor-dark-mode")._expanded = true;
+      }
     }
   }, 0);
 });
