@@ -251,7 +251,7 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       removeAddonStyles(addonId);
       _page_.fireEvent({ name: "disabled", addonId, target: "self" });
     } else if (request.updateUserstylesSettingsChange) {
-      const { scripts, userstyles, addonId, injectAsStyleElt, index } = request.updateUserstylesSettingsChange;
+      const { userstyles, addonId, injectAsStyleElt, index } = request.updateUserstylesSettingsChange;
       // Removing the addon styles and readding them works since the background
       // will send a different array for the new valid userstyles.
       // Try looking for the "userscriptMatches" function.
