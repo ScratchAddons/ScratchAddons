@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["custom-zoom", "initialise-sprite-position"];
+const NEW_ADDONS = ["editor-dark-mode", "custom-zoom", "initialise-sprite-position"];
 
 Vue.directive("click-outside", {
   priority: 700,
@@ -692,6 +692,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     manifest._enabled = addonsEnabled[addonId];
     manifest._addonId = addonId;
     manifest._expanded = document.body.classList.contains("iframe") ? false : manifest._enabled;
+    if (NEW_ADDONS.includes(addonId)) manifest._expanded = false;
     manifest._tags = {};
     manifest._tags.recommended = manifest.tags.includes("recommended");
     manifest._tags.beta = manifest.tags.includes("beta");
@@ -736,6 +737,13 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     if (hash) {
       window.location.hash = "";
       window.location.hash = hash;
+      // For v1.13.0, TODO: remove in v1.14.0
+      if (
+        hash === "#addon-editor-dark-mode" &&
+        vue.manifests.find((m) => m._addonId === "editor-dark-mode")._enabled === true
+      ) {
+        vue.manifests.find((m) => m._addonId === "editor-dark-mode")._expanded = true;
+      }
     }
   }, 0);
 });
