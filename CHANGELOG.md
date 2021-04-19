@@ -13,6 +13,24 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.13.0] - 2021-04-19
+
+- New addon: custom scripts area zoom settings
+- New addon: change new sprite default position
+- New addon: save blocks as image
+- Enhanced loading speed of Scratch Addons settings page
+- "Editor dark mode" is now customizable, its previously available modes are now presets
+- "Last edit tooltip" is now "shared/edited dates tooltip", shows full datetimes for shared and last edited
+- "Highlight currently executing blocks" addon: better highlighting and running block detection
+- "Developer tools" addon: some of its features are now toggleable in the settings page
+- "Drag and drop files" addon: support drag and dropping text files into lists and "ask and wait" answer fields
+- "Alt+GreenFlag 60FPS player mode" & "mute project player" addons: improve Alt+GreenFlag and Ctrl+GreenFlag detection
+- "Website dark mode" addon: make Scratch's statistics page graphs and embedded projects dark, bug fixes
+- Bug fix: crash when opening editor from My Stuff on Firefox
+- Bug fix: "studio manager tools" not allowing non-owner managers to leave studios
+- Bug fix: "sprite folders" not backpacking sound folders properly
+- Bug fix: "variable manager" not loading when reentering the editor
+
 ## [v1.12.1] - 2021-04-01
 
 - Bug fix: follow button unclickable with "profile page banner" enabled
@@ -320,6 +338,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.13.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.13.0
 [v1.12.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.1
 [v1.12.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.0
 [v1.11.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.2
