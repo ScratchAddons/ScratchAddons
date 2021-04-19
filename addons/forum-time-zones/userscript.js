@@ -1,14 +1,12 @@
 export default async function ({ addon, _global, _console }) {
-  const forum_topic_id = parseInt(
-    location.pathname.split("/")[3]
-  );
+  const forum_topic_id = parseInt(location.pathname.split("/")[3]);
   const locale = addon.auth.scratchLang;
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const localCurrentTimeRepr = new Date(new Date().toLocaleString("en-US", { timeZone }));
   const relativeFormatter = new Intl.RelativeTimeFormat(locale, {
     localeMatcher: "best fit",
     numeric: "auto",
-    style: "long"
+    style: "long",
   });
   const capitalize = (str) => str[0].toUpperCase() + str.slice(1);
   const formatter = (time) => {
@@ -30,7 +28,7 @@ export default async function ({ addon, _global, _console }) {
       }
       default: {
         const datePart = localTimeRepr.toLocaleDateString(locale, {
-          dateStyle: "long"
+          dateStyle: "long",
         });
         return `${datePart} ${timePart}`;
       }
