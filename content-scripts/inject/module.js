@@ -3,6 +3,12 @@ import Localization from "./l10n.js";
 
 window.scratchAddons = {};
 scratchAddons.classNames = { loaded: false };
+scratchAddons.eventTargets = {
+  auth: [],
+  settings: [],
+  tab: [],
+  self: [],
+};
 
 const pendingPromises = {};
 pendingPromises.msgCount = [];
@@ -104,7 +110,6 @@ class SharedObserver {
       this.observer.observe(document.documentElement, {
         subtree: true,
         childList: true,
-        attributes: true,
       });
     }
     return new Promise((resolve) =>
@@ -120,12 +125,6 @@ async function onDataReady() {
   const addons = page.addonsWithUserscripts;
 
   scratchAddons.l10n = new Localization(page.l10njson);
-  scratchAddons.eventTargets = {
-    auth: [],
-    settings: [],
-    tab: [],
-    self: [],
-  };
 
   scratchAddons.methods = {};
   scratchAddons.methods.getMsgCount = () => {

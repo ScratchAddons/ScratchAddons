@@ -1,5 +1,8 @@
 (async function () {
   const folderNames = await (await fetch("/addons/addons.json")).json();
+  folderNames.forEach((addonId, i) => {
+    if (folderNames.lastIndexOf(addonId) !== i) throw "Duplicated value in /addons/addons.json";
+  });
   await scratchAddons.l10n.load(folderNames);
   const useDefault = scratchAddons.l10n.locale.startsWith("en");
   for (const folderName of folderNames) {

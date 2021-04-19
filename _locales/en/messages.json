@@ -198,25 +198,22 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-    "message": "$1: $2 addon, which lets you drag images and sounds from your file explorer into the sprites pane or costume/sound list. Go to $3 to enable it."
+    "message": "$1: $2 was remade and is now deeply customizable. Go to $3 to change specific colors, toggle dark comments and scollbars, and more!"
   },
   "newFeature": {
     "message": "New feature"
   },
-  "hexColorPicker": {
-    "message": "\"Drag and drop files\""
+  "newFeatureName": {
+    "message": "\"editor dark mode\""
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2": {
-    "message": "Another featured new addon of this update is \"custom block shape\", which lets you adjust the padding, corner radius, and notch height of Scratch blocks."
+    "message": "Featured new addons this update are \"custom scripts area zoom settings\", \"wrap text of list items\" and \"change new sprite default position\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
-  },
-  "dataTweaksAlt": {
-    "message": "Screenshot of the new \"copy link to comment\" feature."
   },
   "new": {
     "message": "New!"
