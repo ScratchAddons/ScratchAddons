@@ -8,7 +8,7 @@ export default async function ({ addon, global, console, msg }) {
 
     let viewOnOcularContainer = document.createElement("li");
     let viewOnOcular = document.createElement("a");
-    viewOnOcular.innerText = "🔍";
+    viewOnOcular.innerText = `🔍 ocular`;
     viewOnOcular.title = msg("view-on-ocular");
     viewOnOcular.href = `https://ocular.jeffalo.net/post/${postID}`;
     viewOnOcularContainer.appendChild(document.createTextNode("| "));
