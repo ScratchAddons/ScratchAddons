@@ -8,8 +8,7 @@
       "runAtComplete": false
     }
   ],
-  "tags": ["forums", "community", "beta"],
+  "tags": ["forums", "community"],
   "enabledByDefault": false,
-  "libraries": ["moment"],
   "l10n": true
 }
