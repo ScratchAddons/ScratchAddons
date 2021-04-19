@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["custom-zoom", "wrap-lists", "initialise-sprite-position"];
+const NEW_ADDONS = ["editor-dark-mode", "custom-zoom", "wrap-lists", "initialise-sprite-position"];
 
 Vue.directive("click-outside", {
   priority: 700,
@@ -692,6 +692,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     manifest._enabled = addonsEnabled[addonId];
     manifest._addonId = addonId;
     manifest._expanded = document.body.classList.contains("iframe") ? false : manifest._enabled;
+    if (NEW_ADDONS.includes(addonId)) manifest._expanded = false;
     manifest._tags = {};
     manifest._tags.recommended = manifest.tags.includes("recommended");
     manifest._tags.beta = manifest.tags.includes("beta");
