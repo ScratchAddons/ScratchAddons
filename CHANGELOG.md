@@ -11,19 +11,98 @@ All notable changes to this project will be documented in this file.
 - Every changes related to the addon are required to be added, except meta changes such as README, CI, etc.
 - Use the compare feature to know the difference between each version. (eq. https://github.com/ScratchAddons/ScratchAddons/compare/v1.10.0...v1.11.0).
 - Verify the content of the PR/commit. Write it differently if needed.
-- Seperate each addon if changes are across multiple addon.
+- Seperate each addon if changes are across multiple addons.
 - Use the name of the addon based on the latest commit on the version. (https://scratchaddons.com/addons)
 - If a version is yanked, keep the changes below the yanked version. DO NOT MERGE it to the next version.
 - Check the bottom of this file for resources.
+- Avoid including priority of a change. (for now)
+- Addon-specific changes should be started with the addon name, followed by a colon, and then the change.
+- Additions and removals changes should be written as a noun phrase. Others are sentences.
 
 # TODO list:
 
-- Changed entries on "Fixed" section into "Fix ..." sentence form (v1.4.1 - latest)
+- Changed entries on "Fixed" section into "Fix ..." sentence form (noun phrase) (v1.4.1 - v1.13.0)
 - Verify changelog contents (v1.4.1 - latest)
 - Complete missing changelog (v1.2.0)
 - Add new languages on localization (v1.4.1 - latest)
 
 -->
+
+## [v1.13.0] - 2021-04-20
+
+### Added
+
+#### Addons
+
+- Change new sprite default position (#2116)
+- Custom scripts area zoom settings (#2034)
+- Save blocks as image (#2087)
+- Developer tools: Ability to disable certain features (#2146)
+- Drag and drop files: Support for dropping text files (#2013)
+- Last edit tooltip: Tooltip for shared date (#1940)
+- Website dark mode: Support for "become a scratcher" notice (#2167)
+- Website dark mode: Support for embedded projects (#2042)
+- Website dark mode: Support for profile text placeholders (#2051)
+- Website dark mode: Support for statistics (#2037)
+
+#### Extension and Addon API
+
+- User agent modifying (#1920)
+- Ability to enable addons without refreshing (#1961)
+	- `addon.self.enabledLate` property
+	- `disabled` event
+	- `reenabled` event
+	- `dynamicEnable` manifest property
+	- `injectAsStyleElt` manifest property
+	- `updateUserstylesOnSettingsChange` manifest property
+	- `data-sa-hide-if-disabled` attribute
+
+### Changed
+
+#### Addons
+
+- Developer tools: Enable by default (#2146)
+- Developer tools: Set color for event blocks, ignoring "Customizable block colors" addon (#2146)
+- Editor dark mode and customizable colors: Change name from "Editor dark mode" (#1805)
+- Editor dark mode and customizable colors: Use presets (#1805)
+- Highlight currently executing blocks: Improve highlighting (#1956)
+- Highlight currently executing blocks: Improve performance by not calling querySelectorAll 30 times per second (#2178)
+
+#### Extension and Addon API
+
+- Move sourceURL and %addon-self-dir% to be evaluated in the background page (#1961)
+- Speed up loading of settings page (#2191)
+- Stringify integer settings (#2142)
+- Update localization strings
+
+### Fixed
+
+#### Addons
+
+- Alt+GreenFlag 60FPS player mode: Fix alt key being detected when it is not pressing on ChromeOS (#2184)
+- Cat blocks: Fix ears not showing in Firefox (#2145)
+- Cat blocks: Fix incompatibiity with other addons (#2210)
+- Cat blocks: Fix texts overflowing the hat blocks (#2147)
+- Forums image uploader: Fix incompatibility with "Website dark mode" addon (#2056)
+- Highlight currently executing blocks: Step VM before displaying running scripts to fix 1 frame lag (#2178)
+- Live featured project: Disable scrollbar (#2118)
+- Mute project player: Fix control key detection (#2098)
+- Scratch 2.0 → 3.0: Scrollbars on studio descriptions got disabled (#2137)
+- Sprite folders: Fix improper handling backpacking of sound folders (#2103)
+- Studio manager tools: Fix addon not allowing managers to leave studios (#2199)
+- Variable manager: Fix addon not handle renaming variables to have duplicates (#2160)
+- Variable manager: Fix addon not load when re-entering the editor (#2160)
+- Website dark mode: Fix incorrect border color (#2051)
+
+#### Extension and Addon API
+
+- Fix crash when opening editor from My Stuff on Firefox (#2209)
+
+### Removed
+
+#### Extension and Addon API
+
+- `/* sa-autoupdate-theme-ignore */` (#1961)
 
 ## [v1.12.1] - 2021-04-01
 
@@ -217,7 +296,7 @@ All notable changes to this project will be documented in this file.
 - Developer tools: Highlighting conflicts with editor-theme3 (#1563)
 - Editor dark mode: Monitor names made invisible (#1606)
 - Forums image uploader: Addon tries to run on pages without post form (#1608)
-- Infinite scrolling: Incompability with scratchr2 (#1602)
+- Infinite scrolling: Incompability with "Scratch 2.0 → 3.0" addon (#1602)
 - Pause button: Stack timer blocks incorrectly paused (#1555)
 - Pause button: Edge-activated blocks with obscured shadows incorrectly paused (#1555)
 - Pause button: Addon not resuming old threads if the user starts a new thread while paused (#1555)
@@ -384,9 +463,9 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 - More links: Addon blocks main thread (#1345)
 - Scratch 2.0 → 3.0: Remix tree button color affected (#1275)
 - Semicolon glitch: Semicolon has wrong color (#1297)
-- Website dark mode: 1Emojis have white background (#1276)
-- Website dark mode: 2Search bar made unreadable (#1360)
-- Website dark mode: 3Message count made unreadable (#1365)
+- Website dark mode: Emojis have white background (#1276)
+- Website dark mode: Search bar made unreadable (#1360)
+- Website dark mode: Message count made unreadable (#1365)
 
 #### Extension and Addon API
 
@@ -426,6 +505,8 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 - Scratch 2.0 → 3.0: Support for more pages (#1259)
 - Sprite and script count: Block counter (#1121)
 - Website dark mode: Support for more pages (#1259)
+- Website dark mode: Support for post preview (#1160)
+- Website dark mode: Support for syntax highlighting (#1160)
 
 #### Extension and Addon API
 
@@ -467,8 +548,6 @@ NOTE: v1.9.0 is only released on Firefox due to a bug that would make the extens
 - Project notes tabs: Description has a typo (#1190)
 - Website dark mode: Studio thumbnail border does not affected (#1160)
 - Website dark mode: Compatibility with other addons (#1160)
-- Website dark mode: Post preview does not affected (#1160)
-- Website dark mode: Syntax highlighting in forums does not affected (#1160)
 - Scratch 2.0 → 3.0: Color on usernames in Messages page affected (#1189)
 - Scratch Messaging: Remove double escaping on tags (#1172)
 - Scratch Notifier: Addon crashes when receiving crafted message (#1172)
@@ -553,6 +632,7 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 - Scratch 2.0 → 3.0: Support for /news (#941)
 - Show full areas: Support for loading more in What's Happening (#899)
 - Thumbnails setter: A way to disable thumbnail overwriting (#964)
+- Website dark mode: Support for loading screen (#995)
 - Website dark mode: Support for /news (#941)
 
 #### Extension and Addon API
@@ -593,7 +673,6 @@ NOTE: v1.6.0 is only released on Firefox due to a special requirement by the Chr
 - Website dark mode: Addon changes variable monitor color (#981)
 - Website dark mode: Addon styles in-editor Join Flow (#981)
 - Website dark mode: Addon styles list row backgrounds when focused (#981)
-- Website dark mode: Addon does not apply to loading screen (#995)
 - Website dark mode: Addon makes search input dark (#995)
 - Website dark mode: Addon makes project warnings unreadable (#995)
 - Some addons overflow in small stage (#930)
@@ -899,6 +978,7 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.13.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.13.0
 [v1.12.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.1
 [v1.12.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.0
 [v1.11.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.11.2
