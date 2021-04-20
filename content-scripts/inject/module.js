@@ -1,4 +1,4 @@
-import Addon from "../../addon-api/content-script/Addon.js";
+import Tab from "../../addon-api/content-script/Tab.js";
 import runAddonUserscripts from "./run-userscript.js";
 import Localization from "./l10n.js";
 
@@ -161,8 +161,7 @@ async function onDataReady() {
     observer.observe(document.documentElement, { subtree: true, childList: true });
   }
 
-  const exampleAddon = new Addon({});
-  const exampleTab = exampleAddon.tab;
+  const exampleTab = new Tab({});
   if (exampleAddon.editorMode === "editor") inject(await exampleTab.traps.getBlockly());
   exampleTab.addEventListener(
     "urlChange",
