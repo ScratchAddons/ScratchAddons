@@ -71,9 +71,108 @@
         </ul>
       </div>
     </template>
+    <template id="addon-setting-component">
+      <div class="addon-setting">
+        <div class="setting-label" v-html="textParse(setting.name, addon)"></div>
+        <input
+          type="checkbox"
+          class="setting-input check"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @change="updateSettings(addon)"
+          :disabled="!addon._enabled"
+          v-if="setting.type === 'boolean'"
+        />
+        <input
+          type="number"
+          class="setting-input number"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @change="checkValidity(addon, setting) || updateSettings(addon)"
+          :disabled="!addon._enabled"
+          v-if="setting.type === 'positive_integer'"
+          min="0"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+          number
+        />
+        <input
+          type="number"
+          class="setting-input number"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @change="checkValidity(addon, setting) || updateSettings(addon)"
+          :disabled="!addon._enabled"
+          v-if="setting.type === 'integer'"
+          :min="setting.min"
+          :max="setting.max"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+          number
+        />
+        <input
+          type="text"
+          class="setting-input string"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @input="updateSettings(addon)"
+          :disabled="!addon._enabled"
+          v-if="setting.type === 'string'"
+          :placeholder="setting.default"
+          maxlength="100"
+        />
+        <input
+          type="text"
+          class="setting-input key"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @input="updateSettings(addon)"
+          :disabled="!addon._enabled"
+          v-if="setting.type === 'key'"
+          :placeholder="setting.default"
+          maxlength="100"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+          spellcheck="false"
+        />
+        <template v-if="setting.type === 'color'">
+          <picker
+            :value="addonSettings[addon._addonId][setting.id] || setting.default"
+            :setting="setting"
+            :addon="addon"
+            @click=""
+            :no_alpha="!setting.allowTransparency"
+            v-click-outside="closePickers"
+          ></picker>
+          <reset-dropdown
+            v-if="showResetDropdown(addon, setting)"
+            :setting="setting"
+            :addon="addon"
+            :label="msg('reset')"
+            :default-label="msg('default')"
+            v-click-outside="closeResetDropdowns"
+          ></reset-dropdown>
+          <button
+            v-else
+            type="button"
+            class="large-button clear-button"
+            :disabled="!addon._enabled"
+            @click="updateOption(setting.id, setting.default, addon)"
+          >
+            <span>{{ msg("reset") }}</span>
+            <img src="../../images/icons/undo.svg" class="icon-type" />
+          </button>
+        </template>
+        <div class="filter-options" v-if="setting.type === 'select'">
+          <div
+            class="filter-option"
+            v-for="option of setting.potentialValues"
+            :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
+            @click="updateOption(setting.id, option.id, addon);"
+          >
+            {{ option.name }}
+          </div>
+        </div>
+      </div>
+    </template>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded" :class="{light: theme}">
+  <body style="display: none;" v-show="loaded" :class="{light: theme}">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
@@ -107,20 +206,20 @@
           class="category"
           :class="{sel: selectedTab === 'popup'}"
           @click="selectedTab = 'popup'"
-          style="margin-bottom: 12px"
+          style="margin-bottom: 12px;"
         >
           <img src="../../images/icons/popup.svg" />
           <span>{{ msg("popupFeatures") }}</span>
         </div>
         <div
           class="category category-small"
-          style="margin-top: auto"
+          style="margin-top: auto;"
           @click="openPage('https://scratchaddons.com/contributors')"
         >
           <img src="../../images/icons/users.svg" />
           <span>{{ msg("credits") }}</span>
         </div>
-        <div class="category category-small" @click="openReview()" style="display: none">
+        <div class="category category-small" @click="openReview()" style="display: none;">
           <img src="../../images/icons/star.svg" />
           <span>{{ msg("review") }}</span>
         </div>
@@ -132,7 +231,7 @@
           <img src="../../images/icons/comment.svg" />
           <span>{{ msg("feedback") }}</span>
         </div>
-        <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
+        <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px;" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
           <span>{{ msg("moreSettings") }}</span>
         </div>
@@ -140,7 +239,7 @@
       <div
         v-show="smallMode === false"
         class="categories-shrink"
-        style="display: block !important"
+        style="display: block !important;"
         @click="sidebarToggle()"
       >
         <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === false}" />
@@ -152,11 +251,11 @@
           <input type="text" id="searchBox" placeholder="{{ msg('search') }}" v-model="searchInput" />
           <button
             v-show="searchInput === ''"
-            style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey')"
+            style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey');"
           ></button>
           <button
             v-else
-            style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey')"
+            style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey');"
             @click="clearSearch()"
           ></button>
           <div id="popup-more-settings" v-show="isIframe">
@@ -275,103 +374,12 @@
                 >
               </div>
               <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
-                <div class="addon-setting" v-for="setting of addon.settings">
-                  <div class="setting-label" v-html="textParse(setting.name, addon)"></div>
-                  <input
-                    type="checkbox"
-                    class="setting-input check"
-                    v-model="addonSettings[addon._addonId][setting.id]"
-                    @change="updateSettings(addon)"
-                    :disabled="!addon._enabled"
-                    v-if="setting.type === 'boolean'"
-                  />
-                  <input
-                    type="number"
-                    class="setting-input number"
-                    v-model="addonSettings[addon._addonId][setting.id]"
-                    @change="checkValidity(addon, setting) || updateSettings(addon)"
-                    :disabled="!addon._enabled"
-                    v-if="setting.type === 'positive_integer'"
-                    min="0"
-                    :data-addon-id="addon._addonId"
-                    :data-setting-id="setting.id"
-                    number
-                  />
-                  <input
-                    type="number"
-                    class="setting-input number"
-                    v-model="addonSettings[addon._addonId][setting.id]"
-                    @change="checkValidity(addon, setting) || updateSettings(addon)"
-                    :disabled="!addon._enabled"
-                    v-if="setting.type === 'integer'"
-                    :min="setting.min"
-                    :max="setting.max"
-                    :data-addon-id="addon._addonId"
-                    :data-setting-id="setting.id"
-                    number
-                  />
-                  <input
-                    type="text"
-                    class="setting-input string"
-                    v-model="addonSettings[addon._addonId][setting.id]"
-                    @input="updateSettings(addon)"
-                    :disabled="!addon._enabled"
-                    v-if="setting.type === 'string'"
-                    :placeholder="setting.default"
-                    maxlength="100"
-                  />
-                  <input
-                    type="text"
-                    class="setting-input key"
-                    v-model="addonSettings[addon._addonId][setting.id]"
-                    @input="updateSettings(addon)"
-                    :disabled="!addon._enabled"
-                    v-if="setting.type === 'key'"
-                    :placeholder="setting.default"
-                    maxlength="100"
-                    :data-addon-id="addon._addonId"
-                    :data-setting-id="setting.id"
-                    spellcheck="false"
-                  />
-                  <template v-if="setting.type === 'color'">
-                    <picker
-                      :value="addonSettings[addon._addonId][setting.id] || setting.default"
-                      :setting="setting"
-                      :addon="addon"
-                      @click=""
-                      :no_alpha="!setting.allowTransparency"
-                      v-click-outside="closePickers"
-                    ></picker>
-                    <reset-dropdown
-                      v-if="showResetDropdown(addon, setting)"
-                      :setting="setting"
-                      :addon="addon"
-                      :label="msg('reset')"
-                      :default-label="msg('default')"
-                      v-click-outside="closeResetDropdowns"
-                    ></reset-dropdown>
-                    <button
-                      v-else
-                      type="button"
-                      class="large-button clear-button"
-                      :disabled="!addon._enabled"
-                      @click="updateOption(setting.id, setting.default, addon)"
-                    >
-                      <span>{{ msg("reset") }}</span>
-                      <img src="../../images/icons/undo.svg" class="icon-type" />
-                    </button>
-                  </template>
-                  <div class="filter-options" v-if="setting.type === 'select'">
-                    <div
-                      class="filter-option"
-                      v-for="option of setting.potentialValues"
-                      :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
-                      @click="updateOption(setting.id, option.id, addon);"
-                    >
-                      {{ option.name }}
-                    </div>
-                  </div>
-                </div>
+                <addon-setting
+                  v-for="setting of addon.settings"
+                  :addon="addon"
+                  :setting="setting"
+                  :addon-settings="addonSettings"
+                ></addon-setting>
               </div>
               <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
                 <div class="setting-label">{{ msg("presets") }}</div>
@@ -465,7 +473,7 @@
         </div>
       </div>
     </div>
-    <div class="popup" v-show="showPopupModal" style="display: none">
+    <div class="popup" v-show="showPopupModal" style="display: none;">
       <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
       <div>
         <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>

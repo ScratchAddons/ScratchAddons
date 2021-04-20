@@ -119,6 +119,62 @@ const ResetDropdown = Vue.extend({
 });
 Vue.component("reset-dropdown", ResetDropdown);
 
+const AddonSetting = Vue.extend({
+  props: ["addon", "setting", "addon-settings"],
+  template: document.querySelector("template#addon-setting-component").innerHTML,
+  data() {
+    return {};
+  },
+  methods: {
+    textParse(text, addon) {
+      const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
+      return text.replace(regex, (icon) => {
+        if (icon[0] === "\\") {
+          return icon.slice(1);
+        }
+        if (icon[0] === "@") {
+          return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
+        }
+        if (icon[0] === "#") {
+          return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
+        }
+      });
+    },
+    showResetDropdown(addon, setting) {
+      return (
+        addon.presets &&
+        addon.presets.some((preset) => setting.id in preset.values && preset.values[setting.id] !== setting.default)
+      );
+    },
+    checkValidity(addon, setting) {
+      // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
+      let input = document.querySelector(
+        `input[type='number'][data-addon-id='${addon._addonId}'][data-setting-id='${setting.id}']`
+      );
+      this.addonSettings[addon._addonId][setting.id] = input.validity.valid ? input.value : setting.default;
+    },
+    msg(...params) {
+      this.$root.msg(...params);
+    },
+    updateSettings(...params) {
+      this.$root.updateSettings(...params);
+    },
+    updateOption(...params) {
+      this.$root.updateOption(...params);
+    },
+  },
+  events: {
+    closePickers(...params) {
+      console.log("test");
+      this.$root.closePickers(...params);
+    },
+    closeResetDropdowns(...params) {
+      this.$root.closeResetDropdowns(...params);
+    },
+  },
+});
+Vue.component("addon-setting", AddonSetting);
+
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];
 const updateGrantedPermissions = () =>
@@ -456,13 +512,6 @@ const vue = (window.vue = new Vue({
       this.addonSettings[addon._addonId][id] = newValue;
       this.updateSettings(addon);
     },
-    checkValidity(addon, setting) {
-      // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
-      let input = document.querySelector(
-        `input[type='number'][data-addon-id='${addon._addonId}'][data-setting-id='${setting.id}']`
-      );
-      this.addonSettings[addon._addonId][setting.id] = input.validity.valid ? input.value : setting.default;
-    },
     updateSettings(addon, { wait = 0, settingId = null } = {}) {
       const value = settingId && this.addonSettings[addon._addonId][settingId];
       setTimeout(() => {
@@ -473,12 +522,6 @@ const vue = (window.vue = new Vue({
           console.log("Updated", this.addonSettings[addon._addonId]);
         }
       }, wait);
-    },
-    showResetDropdown(addon, setting) {
-      return (
-        addon.presets &&
-        addon.presets.some((preset) => setting.id in preset.values && preset.values[setting.id] !== setting.default)
-      );
     },
     loadPreset(preset, addon) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
@@ -497,32 +540,22 @@ const vue = (window.vue = new Vue({
       }
     },
     closePickers(e, leaveOpen) {
-      for (let child of this.$children) {
-        if (child.isOpen && child.canCloseOutside && e.isTrusted && child.color && child !== leaveOpen) {
-          child.toggle(child.addon, child.setting, false);
+      for (let setting of this.$children) {
+        for (var child of setting.$children) {
+          if (child.isOpen && child.canCloseOutside && e.isTrusted && child.color && child !== leaveOpen) {
+            child.toggle(child.addon, child.setting, false);
+          }
         }
       }
     },
     closeResetDropdowns(e, leaveOpen) {
-      for (let child of this.$children) {
-        if (child.isResetDropdown && e.isTrusted && child !== leaveOpen) {
-          child.isOpen = false;
+      for (let setting of this.$children) {
+        for (var child of setting.$children) {
+          if (child.isResetDropdown && e.isTrusted && child !== leaveOpen) {
+            child.isOpen = false;
+          }
         }
       }
-    },
-    textParse(text, addon) {
-      const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
-      return text.replace(regex, (icon) => {
-        if (icon[0] === "\\") {
-          return icon.slice(1);
-        }
-        if (icon[0] === "@") {
-          return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
-        }
-        if (icon[0] === "#") {
-          return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
-        }
-      });
     },
     devShowAddonIds(event) {
       if (!this.versionName.endsWith("-prerelease") || this.shownAddonIds || !event.ctrlKey) return;
