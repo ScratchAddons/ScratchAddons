@@ -1,3 +1,4 @@
+import Addon from "../../addon-api/content-script/Addon.js";
 import runAddonUserscripts from "./run-userscript.js";
 import Localization from "./l10n.js";
 
@@ -160,17 +161,13 @@ async function onDataReady() {
     observer.observe(document.documentElement, { subtree: true, childList: true });
   }
 
-  const exampleTab = scratchAddons.eventTargets.tab[0];
-  if (exampleTab) {
-    if (exampleTab.editorMode === "editor") inject(await exampleTab.traps.getBlockly());
-    exampleTab.addEventListener(
-      "urlChange",
-      async () => exampleTab.editorMode === "editor" && inject(await exampleTab.traps.getBlockly())
-    );
-  } else {
-    // To be done when userscripts can be dynamicly ran
-    // Will invlove a promice most likely...
-  }
+  const exampleAddon = new Addon({});
+  const exampleTab = exampleAddon.tab;
+  if (exampleAddon.editorMode === "editor") inject(await exampleTab.traps.getBlockly());
+  exampleTab.addEventListener(
+    "urlChange",
+    async () => exampleTab.editorMode === "editor" && inject(await exampleTab.traps.getBlockly())
+  );
 }
 
 function bodyIsEditorClassCheck() {
