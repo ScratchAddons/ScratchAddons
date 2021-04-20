@@ -70,7 +70,7 @@ All notable changes to this project will be documented in this file.
 
 #### Extension and Addon API
 
-- Move sourceURL and %addon-self-dir% to be evaluated in the background page (#1961)
+- Move `sourceURL` and `%addon-self-dir%` to be evaluated in the background page (#1961)
 - Speed up loading of settings page (#2191)
 - Stringify integer settings (#2142)
 - Update localization strings
