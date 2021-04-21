@@ -162,7 +162,7 @@ async function onDataReady() {
   }
 
   const exampleTab = new Tab({});
-  if (exampleAddon.editorMode === "editor") inject(await exampleTab.traps.getBlockly());
+  if (exampleTab.editorMode === "editor") inject(await exampleTab.traps.getBlockly());
   exampleTab.addEventListener(
     "urlChange",
     async () => exampleTab.editorMode === "editor" && inject(await exampleTab.traps.getBlockly())
