@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["drag-drop", "custom-block-shape"];
+const NEW_ADDONS = ["editor-dark-mode", "custom-zoom", "initialise-sprite-position"];
 
 Vue.directive("click-outside", {
   priority: 700,
@@ -31,9 +31,11 @@ const ColorInput = Vue.extend({
       canCloseOutside: false,
       formats: "",
       opening: false,
+      loadColorPicker: false, // #2090 tempfix
     };
   },
   ready() {
+    if (!this.loadColorPicker) return;
     if (this.no_alpha) {
       this.formats = "hex,rgb,hsv,hsl";
     } else {
@@ -47,15 +49,18 @@ const ColorInput = Vue.extend({
       }
     });
   },
+  computed: {
+    noAlphaString() {
+      return String(this.no_alpha);
+    },
+  },
   methods: {
     toggle(addon, setting, value = !this.isOpen) {
+      if (!this.loadColorPicker) return;
       this.isOpen = value;
       this.opening = true;
-      for (let child of this.$root.$children) {
-        if (child.isOpen && child.canCloseOutside && child.color && !child.opening) {
-          child.toggle(child.addon, child.setting, false);
-        }
-      }
+      this.$root.closePickers({ isTrusted: true }, this);
+      this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
       this.opening = false;
 
       this.color = "#" + this.$els.pickr.hex8;
@@ -72,14 +77,47 @@ const ColorInput = Vue.extend({
   watch: {
     value() {
       this.color = this.value;
-      this.$els.pickr._valueChanged();
+      // ?. is #2090 tempfix, 4 lines below as well
+      this.$els.pickr?._valueChanged();
     },
     isOpen() {
-      this.$els.pickr._valueChanged();
+      this.$els.pickr?._valueChanged();
+    },
+    loadColorPicker() {
+      this.$options.ready[0].call(this);
     },
   },
 });
 Vue.component("picker", ColorInput);
+
+const ResetDropdown = Vue.extend({
+  props: ["addon", "setting", "label", "defaultLabel"],
+  template: document.querySelector("template#reset-dropdown-component").innerHTML,
+  data() {
+    return {
+      isResetDropdown: true,
+      isOpen: false,
+    };
+  },
+  methods: {
+    toggle() {
+      this.isOpen = !this.isOpen;
+      this.$root.closePickers({ isTrusted: true });
+      this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
+    },
+    resetToDefault() {
+      this.$parent.addonSettings[this.addon._addonId][this.setting.id] = this.setting.default;
+      this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
+      this.toggle();
+    },
+    resetToPreset(preset) {
+      this.$parent.addonSettings[this.addon._addonId][this.setting.id] = preset.values[this.setting.id];
+      this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
+      this.toggle();
+    },
+  },
+});
+Vue.component("reset-dropdown", ResetDropdown);
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];
@@ -365,24 +403,6 @@ const vue = (window.vue = new Vue({
         ? this.selectedTab === "easterEgg" || addonManifest._wasEverEnabled
         : true;
 
-      // April fools
-      if (!this._dangoForceWasEverTrue) this._dangoForceWasEverTrue = this.addonSettings["dango-rain"].force;
-      if (addonManifest._addonId === "dango-rain") {
-        const now = new Date().getTime() / 1000;
-        if (this.selectedTab === "easterEgg") {
-          // Work normally
-          return matchesTag && matchesSearch && matchesEasterEgg;
-        } else if (now < 1617364800 && now > 1617192000) {
-          // If it's April Fools Day, show even if disabled
-          return matchesTag && matchesSearch;
-        } else if (addonManifest._wasEverEnabled && this._dangoForceWasEverTrue) {
-          // If it's not April Fools Day but dangos are forced, show.
-          // Using this._dangoForceWasEverTrue to avoid addon poofing
-          // if setting was enabled on load and it's then disabled
-          return matchesTag && matchesSearch;
-        } else return false;
-      }
-
       return matchesTag && matchesSearch && matchesEasterEgg;
     },
     stopPropagation(e) {
@@ -454,6 +474,12 @@ const vue = (window.vue = new Vue({
         }
       }, wait);
     },
+    showResetDropdown(addon, setting) {
+      return (
+        addon.presets &&
+        addon.presets.some((preset) => setting.id in preset.values && preset.values[setting.id] !== setting.default)
+      );
+    },
     loadPreset(preset, addon) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
         for (const property of Object.keys(preset.values)) {
@@ -468,6 +494,20 @@ const vue = (window.vue = new Vue({
           this.updateOption(property.id, property.default, addon);
         }
         console.log(`Loaded default values for ${addon.id}`);
+      }
+    },
+    closePickers(e, leaveOpen) {
+      for (let child of this.$children) {
+        if (child.isOpen && child.canCloseOutside && e.isTrusted && child.color && child !== leaveOpen) {
+          child.toggle(child.addon, child.setting, false);
+        }
+      }
+    },
+    closeResetDropdowns(e, leaveOpen) {
+      for (let child of this.$children) {
+        if (child.isResetDropdown && e.isTrusted && child !== leaveOpen) {
+          child.isOpen = false;
+        }
       }
     },
     textParse(text, addon) {
@@ -543,22 +583,22 @@ const vue = (window.vue = new Vue({
 
             const addonsCurrentlyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.userstyles])].filter((runningAddonId) => {
-                  // Consider addons with "dynamicUserscriptDisable": true
+              : [...new Set([...res.userscripts, ...res.userstyles])].filter((runningAddonId) => {
+                  // Consider addons with "dynamicDisable": true
                   // If those are running on the page, their "is running on this tab"
                   // status should be the same as their "is enabled" status
                   const manifest = this.manifests.find((manifest) => manifest._addonId === runningAddonId);
                   if (manifest.dynamicDisable && !manifest._enabled) return false;
                   return true;
                 });
-            // Addons/themes that were previously enabled on the tab (but not anymore)
+            // Addons that were previously enabled on the tab (but not anymore)
             // should go above enabled addons that are not currently running on the tab
             // so that it's easier to find them, even if the popup was closed.
             // Disabling then reenabling an addon is likely something common
             // so hopefully this saves some seconds of our users' lives :P
             const addonsPreviouslyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.inactiveThemes])].filter(
+              : [...new Set([...res.userscripts, ...res.userstyles, ...res.disabledDynamicAddons])].filter(
                   (runningAddonId) => !addonsCurrentlyOnTab.includes(runningAddonId)
                 );
 
@@ -621,11 +661,10 @@ const vue = (window.vue = new Vue({
       }
     },
     closePickers(e) {
-      for (let child of this.$children) {
-        if (child.isOpen && child.canCloseOutside && e.isTrusted && child.color) {
-          child.toggle(child.addon, child.setting, false);
-        }
-      }
+      this.closePickers(e);
+    },
+    closeResetDropdowns(e) {
+      this.closeResetDropdowns(e);
     },
   },
 
@@ -653,6 +692,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     manifest._enabled = addonsEnabled[addonId];
     manifest._addonId = addonId;
     manifest._expanded = document.body.classList.contains("iframe") ? false : manifest._enabled;
+    if (NEW_ADDONS.includes(addonId)) manifest._expanded = false;
     manifest._tags = {};
     manifest._tags.recommended = manifest.tags.includes("recommended");
     manifest._tags.beta = manifest.tags.includes("beta");
@@ -697,6 +737,13 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     if (hash) {
       window.location.hash = "";
       window.location.hash = hash;
+      // For v1.13.0, TODO: remove in v1.14.0
+      if (
+        hash === "#addon-editor-dark-mode" &&
+        vue.manifests.find((m) => m._addonId === "editor-dark-mode")._enabled === true
+      ) {
+        vue.manifests.find((m) => m._addonId === "editor-dark-mode")._expanded = true;
+      }
     }
   }, 0);
 });
