@@ -45,20 +45,13 @@
 .gui_body-wrapper_-N0sA,
 .gui_tab_27Unf:not(.gui_is-selected_sHAiu):hover,
 .backpack_backpack-item_hwqzQ > div,
-.monitor_monitor-container_2J9gl,
-.custom-procedures_workspace_1d2uW .blocklySvg,
-.monitor_list-body_2OFZ6 {
+.custom-procedures_workspace_1d2uW .blocklySvg {
   background-color: var(--editorDarkMode-page);
   color: var(--editorDarkMode-page-text);
 }
 .s3devLabel > span:first-child,
-.backpack_status-message_3kt5s,
-.monitor_list-index_7tKdl {
+.backpack_status-message_3kt5s {
   color: var(--editorDarkMode-page-text);
-}
-.monitor_label_ci1ok,
-.monitor_list-empty_1UKsB {
-  color: var(--editorDarkMode-page-text) !important; /* override website dark mode */
 }
 .gui_tab_27Unf:not(.gui_is-selected_sHAiu):hover img {
   filter: var(--editorDarkMode-page-tabHoverFilter);
@@ -188,9 +181,6 @@ div.s3devDDOut.vis,
 .mediaRecorderPopupContent,
 .mediaRecorderPopupContent p,
 .slider-prompt_body_2ZkXL,
-.monitor_list-header_-cp0o,
-.monitor_list-footer_2HyG8,
-.question_question-container_OuJwy,
 .camera-modal_body_3GKi0,
 .record-modal_body_2VO4l {
   background-color: var(--editorDarkMode-accent);
@@ -316,6 +306,12 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 }
 .blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-content {
   color: var(--editorDarkMode-input-transparentText) !important;
+}
+.question_question-input_1oAB7 .input_input-form_l9eYg {
+  /* Don't affect ask prompt */
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #575e75;
 }
 
 /* Workspace background */
@@ -527,8 +523,6 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .slider-prompt_min-input_1IxXX,
 .slider-prompt_max-input_1Nwbv,
 .slider-prompt_button-row_32aCX button,
-.monitor_list-header_-cp0o,
-.question_question-container_OuJwy,
 .camera-modal_camera-feed-container_-La7q,
 .record-modal_waveform-container__ay3Q,
 .record-modal_button-row_1hdGe button {
