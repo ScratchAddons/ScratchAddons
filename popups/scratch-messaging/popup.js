@@ -61,6 +61,22 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         window.open(url);
       },
       postComment() {
+        const shouldCaptureComment = (value) => {
+          // From content-scripts/cs.js
+          const regex = / scratch[ ]?add[ ]?ons/;
+          // Trim like scratchr2
+          const trimmedValue = " " + value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+          const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
+          return regex.test(limitedValue);
+        };
+        if (shouldCaptureComment(this.replyBoxValue)) {
+          alert(
+            chrome.i18n
+              .getMessage("captureCommentError", ["$1"])
+              .replace("$1", chrome.i18n.getMessage("captureCommentPolicy"))
+          );
+          return;
+        }
         this.postingComment = true;
         const parent_pseudo_id = this.isParent ? this.commentId : this.thisComment.childOf;
         const parent_id = Number(parent_pseudo_id.substring(2));

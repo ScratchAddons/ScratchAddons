@@ -178,6 +178,7 @@ history.replaceState = function () {
   const oldUrl = location.href;
   const newUrl = new URL(arguments[2], document.baseURI).href;
   const returnValue = originalReplaceState.apply(history, arguments);
+  _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
@@ -190,6 +191,7 @@ history.pushState = function () {
   const oldUrl = location.href;
   const newUrl = new URL(arguments[2], document.baseURI).href;
   const returnValue = originalPushState.apply(history, arguments);
+  _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
