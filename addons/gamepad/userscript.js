@@ -133,7 +133,7 @@ export default async function ({ addon, global, console, msg }) {
       canvasWidth: width,
       x: Math.max(0, Math.min(width, vm.runtime.ioDevices.mouse._clientX)),
       canvasHeight: height,
-      y: vm.runtime.ioDevices.mouse._clientY,
+      y: Math.max(0, Math.min(height, vm.runtime.ioDevices.mouse._clientY)),
     });
   };
   const handleGamepadMouseUp = () => {
