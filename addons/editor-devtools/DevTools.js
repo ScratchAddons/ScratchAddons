@@ -1426,7 +1426,9 @@ export default class DevTools {
                 ? `
                   <div
                     id="s3devCleanUp"
-                    class="goog-menuitem s3dev-mi ${document.querySelector(".gui").dir === "rtl" ? "goog-menuitem-rtl" : ""}"
+                    class="goog-menuitem s3dev-mi ${
+                      document.querySelector(".gui").dir === "rtl" ? "goog-menuitem-rtl" : ""
+                    }"
                     role="menuitem"
                     style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);"
                   >
@@ -1438,7 +1440,9 @@ export default class DevTools {
               html += `
                   <div
                     id="s3devPaste" 
-                    class="goog-menuitem s3dev-mi ${document.querySelector(".gui").dir === "rtl" ? "goog-menuitem-rtl" : ""}"
+                    class="goog-menuitem s3dev-mi ${
+                      document.querySelector(".gui").dir === "rtl" ? "goog-menuitem-rtl" : ""
+                    }"
                     role="menuitem"
                     style="user-select: none;"
                   >

@@ -34,7 +34,8 @@
         <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
           >{{ deleteStep === 0 ? messages.deleteMsg : messages.deleteConfirmMsg }}
         </a>
-        <bdo dir="ltr"> <!-- prevents LTR comments from being messed up in RTL layout - not ideal, but consistent with Scratch -->
+        <bdo dir="ltr">
+          <!-- prevents LTR comments from being messed up in RTL layout - not ideal, but consistent with Scratch -->
           <div class="comment-content" :class="{'comment-self' : thisComment.author === username}">
             <span class="comment-content-text">{{{ thisComment.content }}}</span>
             <a
@@ -283,11 +284,7 @@
         <div class="message-type-title" :style="{zIndex: 9999 - i}">
           <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
           <span class="float-right">
-            <div
-              class="tooltip"
-              v-if="project.loveCount || project.favoriteCount"
-              style="display: inline-block"
-            >
+            <div class="tooltip" v-if="project.loveCount || project.favoriteCount" style="display: inline-block">
               <span class="tooltip-indicator">
                 <span v-show="project.loveCount"
                   ><img class="small-icon colored" src="../../images/icons/heart.svg" /> {{project.loveCount}}</span
