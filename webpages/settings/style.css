@@ -36,7 +36,7 @@ h1 {
 
 .logo {
   height: 30px;
-  margin-right: 20px;
+  margin-__MSG_@@bidi_end_edge__: 20px;
 }
 
 .main {
@@ -83,7 +83,7 @@ h1 {
   height: 16px;
   vertical-align: middle;
   filter: invert(0) brightness(10);
-  margin-right: 8px;
+  margin-__MSG_@@bidi_end_edge__: 8px;
 }
 
 .disabled {
@@ -113,26 +113,18 @@ h1 {
 }
 
 .clear-button {
-  border-radius: 0 4px 4px 0px;
-  border-left: none !important;
+  border-top-__MSG_@@bidi_start_edge__-radius: 0;
+  border-bottom-__MSG_@@bidi_start_edge__-radius: 0;
+  border-top-__MSG_@@bidi_end_edge__-radius: 4px;
+  border-bottom-__MSG_@@bidi_end_edge__-radius: 4px;
+  border-__MSG_@@bidi_start_edge__: none !important;
 }
 .clear-button span {
   vertical-align: middle;
 }
 .clear-button .icon-type {
-  margin-left: 8px;
-  margin-right: 0;
-}
-
-.clear-settings {
-  display: flex;
-  align-items: center;
-  padding: 0 0px 0px 8px;
-  border-radius: 4px;
-  margin-right: 8px;
-}
-.clear-settings:hover {
-  background: rgba(255, 255, 255, 0.05);
+  margin-__MSG_@@bidi_start_edge__: 8px;
+  margin-__MSG_@@bidi_end_edge__: 0;
 }
 
 .reverted {
@@ -155,8 +147,8 @@ h1 {
 
 .theme-switch {
   height: 25px;
-  float: right;
-  right: 25px;
+  float: __MSG_@@bidi_end_edge__;
+  __MSG_@@bidi_end_edge__: 25px;
   position: fixed;
   cursor: pointer;
 }
@@ -213,7 +205,7 @@ body.iframe .filter-selector {
   display: none;
 }
 body.iframe .search-box {
-  padding: 0 16px 0 16px;
+  padding: 0 10px;
 }
 body.iframe .navbar {
   display: none;
@@ -243,8 +235,8 @@ body.iframe .filter-option {
   text-align: center;
 }
 body.iframe .search-box input {
-  width: auto;
-  min-width: 10px;
+  width: 10px;
+  flex-grow: 1;
 }
 .categories-shrink {
   text-align: right;
@@ -311,15 +303,22 @@ body.iframe .search-box input {
 }
 
 #popup-more-settings {
-  margin-left: 12px;
+  margin-__MSG_@@bidi_start_edge__: 12px;
 }
 
 #popup-more-settings > button {
-  background: url(../../images/icons/settings.svg);
-  background-position: 8px 8px;
+  height: 36px;
+  padding: 9px;
+  padding-__MSG_@@bidi_start_edge__: 32px;
+  background-image: url(../../images/icons/settings.svg);
+  background-position: 8px 9px;
   background-repeat: no-repeat;
   width: max-content;
 }
+[dir="rtl"] #popup-more-settings > button {
+  background-position: calc(100% - 8px) 9px;
+}
+
 color-picker {
   z-index: 2;
   filter: drop-shadow(black 2px 4px 6px);
@@ -334,7 +333,10 @@ button.setting-input.color {
   position: relative;
   height: 32px;
   width: 100px;
-  border-radius: 4px 0px 0px 4px;
+  border-top-__MSG_@@bidi_start_edge__-radius: 4px;
+  border-bottom-__MSG_@@bidi_start_edge__-radius: 4px;
+  border-top-__MSG_@@bidi_end_edge__-radius: 0;
+  border-bottom-__MSG_@@bidi_end_edge__-radius: 0;
 }
 
 .color-container {

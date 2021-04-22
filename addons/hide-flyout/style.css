@@ -1,19 +1,28 @@
 .blocklyFlyout,
 .blocklyFlyoutScrollbar,
 .sa-lock-image {
-  transition-property: transform;
+  transition-property: transform, margin;
 }
 
-.blocklyFlyout.sa-flyoutClose {
+.gui[dir="ltr"] .blocklyFlyout.sa-flyoutClose {
   transform: translateX(-200px) !important;
 }
 
-.blocklyFlyoutScrollbar.sa-flyoutClose {
+.gui[dir="ltr"] .blocklyFlyoutScrollbar.sa-flyoutClose {
   transform: translateX(35px) !important;
+}
+
+.gui[dir="rtl"] .blocklyFlyout.sa-flyoutClose,
+.gui[dir="rtl"] .blocklyFlyoutScrollbar.sa-flyoutClose {
+  margin-left: 260px;
 }
 
 .sa-lock-image.sa-flyoutClose {
   transform: translateX(-260px);
+}
+
+[dir="rtl"] .sa-lock-image.sa-flyoutClose {
+  transform: translateX(260px);
 }
 
 .sa-flyout-placeHolder {
@@ -24,6 +33,11 @@
   width: 251px;
 }
 
+[dir="rtl"] .sa-flyout-placeHolder {
+  left: auto;
+  right: 61px;
+}
+
 .sa-lock-image {
   position: absolute;
   z-index: 20;
@@ -31,6 +45,11 @@
   cursor: pointer;
   top: 46px;
   left: 280px;
+}
+
+[dir="rtl"] .sa-lock-image {
+  left: auto;
+  right: 280px;
 }
 
 .injectionDiv {

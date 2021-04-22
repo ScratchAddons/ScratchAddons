@@ -1,24 +1,22 @@
 .tooltip {
   position: relative;
   /* making the .tooltip span a container for the tooltip text */
-  border-bottom: 1px dashed #000;
-  /* little indicater to indicate it's hoverable */
   cursor: default;
 }
 
+.tooltip-indicator {
+  border-bottom: 1px dashed #000;
+  /* little indicator to indicate it's hoverable */
+}
+
 .tooltiptext {
-  /* here's the magic */
   position: absolute;
-  /* vertically center */
   top: 50%;
   transform: translateY(-50%);
   /* Bring it on top of other tags */
   z-index: 10;
-  /* move to right */
-  left: 95%;
-  margin-left: 15px;
-  /* and add a small left margin */
-  /* basic styles */
+  __MSG_@@bidi_start_edge__: 100%;
+  margin-__MSG_@@bidi_start_edge__: 10px; /* distance from parent */
   width: 200px;
   padding: 10px;
   border-radius: 10px;
@@ -30,33 +28,32 @@
   box-shadow: 0px 0px 16px 10px #3b3b3b52;
 }
 .tooltiptext.tooltiptextleft {
-  left: auto;
+  __MSG_@@bidi_start_edge__: auto;
   top: -3px;
-  right: 95%;
-  margin-left: 0;
-  margin-right: 4px;
   transform: none;
+  __MSG_@@bidi_end_edge__: 100%;
+  margin-__MSG_@@bidi_start_edge__: 0;
 }
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
 .tooltip .tooltiptext::after {
-  content: " ";
+  content: "";
   position: absolute;
   top: 50%;
-  right: 100%; /* To the left of the tooltip */
+  __MSG_@@bidi_end_edge__: 100%; /* To the left of the tooltip */
   margin-top: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent black transparent transparent;
+  border: 5px solid transparent;
+  border-__MSG_@@bidi_end_edge__-color: black;
   white-space: normal;
 }
 .tooltip .tooltiptext.tooltiptextleft::after {
-  right: auto;
+  __MSG_@@bidi_end_edge__: auto;
   top: 15px;
-  left: 100%;
-  border-color: transparent transparent transparent black;
+  __MSG_@@bidi_start_edge__: 100%;
+  border-__MSG_@@bidi_end_edge__-color: transparent;
+  border-__MSG_@@bidi_start_edge__-color: black;
 }
 
 .tooltiptext:hover .tooltiptext:after {

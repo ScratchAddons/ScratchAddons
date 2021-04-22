@@ -15,11 +15,11 @@
       @import url("../styles/colors.css");
       @import url("../styles/components/addon.css");
       @import url("../styles/components/addon-setting.css");
-      @import url("../styles/components/tooltips.css");
-      @import url("../styles/components/badges.css"); /* needs to override tooltips.css */
+      @import url("../styles/components/badges.css");
       @import url("../styles/components/filter.css");
       @import url("../styles/components/categories.css");
       @import url("../styles/components/search.css");
+      @import url("../styles/components/tooltips.css");
       @import url("../styles/components/smallmode.css");
       /* Modals and popups are needed last */
       @import url("../styles/components/modal.css");
@@ -43,6 +43,7 @@
               v-el:pickr
               :formats="formats"
               :no_alpha="noAlphaString"
+              dir="ltr"
             ></color-picker>
           </template>
         </button>
@@ -73,7 +74,7 @@
     </template>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded" :class="{light: theme}">
+  <body style="display: none" v-show="loaded" :class="{light: theme}" :dir="direction()">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
@@ -143,7 +144,7 @@
         style="display: block !important"
         @click="sidebarToggle()"
       >
-        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === false}" />
+        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === (direction() === 'rtl')}" />
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
@@ -161,7 +162,7 @@
           ></button>
           <div id="popup-more-settings" v-show="isIframe">
             <button @click="openFullSettings()" class="large-button">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ msg("moreSettings") }}
+              {{ msg("moreSettings") }}
             </button>
           </div>
           <div class="filter-selector">
@@ -375,7 +376,7 @@
               </div>
               <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
                 <div class="setting-label">{{ msg("presets") }}</div>
-                <div class="addon-setting" v-for="preset of addon.presets">
+                <div class="addon-preset" v-for="preset of addon.presets">
                   <button
                     type="preset-button"
                     class="large-button"

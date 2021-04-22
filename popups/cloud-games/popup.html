@@ -15,7 +15,7 @@
     <script src="./popup.js" type="module"></script>
   </head>
 
-  <body style="display: none" v-show="true">
+  <body style="display: none" v-show="true" :dir="direction()">
     <div class="loading" v-show="projects.length === 0 || projects.length !== projectsChecked">{{ loadingMsg }}</div>
     <div v-show="loaded">
       <div class="games" v-for="project of projectsSorted">

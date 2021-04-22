@@ -350,6 +350,9 @@ const vue = (window.vue = new Vue({
     msg(message, ...params) {
       return chrome.i18n.getMessage(message, ...params);
     },
+    direction() {
+      return chrome.i18n.getMessage("@@bidi_dir");
+    },
     openReview() {
       if (typeof browser !== "undefined") {
         window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);

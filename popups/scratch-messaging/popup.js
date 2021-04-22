@@ -281,6 +281,10 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
       })();
     },
     methods: {
+      direction() {
+        return chrome.i18n.getMessage("@@bidi_dir");
+      },
+
       getData() {
         return new Promise((resolve) => {
           const timeout = setTimeout(() => {

@@ -39,12 +39,11 @@ body {
 }
 #logo {
   height: 30px;
-  margin-right: 20px;
+  margin-__MSG_@@bidi_end_edge__: 20px;
   vertical-align: middle;
 }
 #settings {
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 0 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -92,6 +91,9 @@ body {
 }
 .popout > .popout-img {
   height: 10px;
+}
+[dir="rtl"] .popout > .popout-img {
+  transform: scaleX(-1);
 }
 
 iframe {
