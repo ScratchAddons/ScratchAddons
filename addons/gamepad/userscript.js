@@ -92,8 +92,17 @@ export default async function ({ addon, global, console, msg }) {
   virtualCursorImage.src = addon.self.dir + "/cursor.png";
   virtualCursorContainer.appendChild(virtualCursorImage);
 
+  let hideCursorTimeout;
+
   const virtualCursorSetVisible = (visible) => {
     virtualCursorContainer.hidden = !visible;
+    clearTimeout(hideCursorTimeout);
+    if (visible) {
+      hideCursorTimeout = setTimeout(virtualCursorHide, 8000);
+    }
+  };
+  const virtualCursorHide = () => {
+    virtualCursorSetVisible(false);
   };
   const virtualCursorSetDown = (down) => {
     virtualCursorSetVisible(true);
