@@ -80,6 +80,7 @@ class SharedObserver {
     this.pending = new Set();
     this.observer = new MutationObserver((mutation, observer) => {
       for (const item of this.pending) {
+        if (item.condition && !item.condition()) continue;
         for (const match of document.querySelectorAll(item.query)) {
           if (item.seen) {
             if (item.seen.has(match)) continue;
@@ -102,6 +103,7 @@ class SharedObserver {
    * @param {object} opts - options
    * @param {string} opts.query - query.
    * @param {WeakSet=} opts.seen - a WeakSet that tracks whether an element has already been seen.
+   * @param {function=} opts.condition - a function that returns whether to resolve the selector or not.
    * @returns {Promise<Node>} Promise that is resolved with modified element.
    */
   watch(opts) {
