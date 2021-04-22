@@ -198,7 +198,8 @@ const AddonBody = Vue.extend({
             : newState;
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
 
-        if (document.body.classList.contains("iframe")) setTimeout(() => this.popupOrderAddonsEnabledFirst(), 500);
+        if (document.body.classList.contains("iframe"))
+          setTimeout(() => this.$root.popupOrderAddonsEnabledFirst(), 500);
       };
 
       const requiredPermissions = (this.addon.permissions || []).filter((value) =>
