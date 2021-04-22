@@ -1290,7 +1290,13 @@ export default async function ({ addon, global, console, msg }) {
 
   // Sprite list
   {
-    const spriteSelectorItemElement = await addon.tab.waitForElement("[class*='sprite-selector_sprite-wrapper']");
+    const spriteSelectorItemElement = await addon.tab.waitForElement("[class^='sprite-selector_sprite-wrapper']", {
+      condition: () =>
+        // We can run before redux state is ready
+        addon.tab.redux.state &&
+        addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 0 &&
+        !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    });
     vm = addon.tab.traps.vm;
     reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
     const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
@@ -1306,7 +1312,9 @@ export default async function ({ addon, global, console, msg }) {
 
   // Backpack
   (async () => {
-    const backpackContainer = await addon.tab.waitForElement("[class*='backpack_backpack-list_']");
+    const backpackContainer = await addon.tab.waitForElement("[class^='backpack_backpack-list_']", {
+      condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    });
     const backpackInstance = getBackpackFromElement(backpackContainer);
     verifyBackpack(backpackInstance);
     patchBackpack(backpackInstance);
@@ -1314,7 +1322,11 @@ export default async function ({ addon, global, console, msg }) {
 
   // Costume and sound list
   {
-    const selectorListItem = await addon.tab.waitForElement("[class*='selector_list-item']");
+    const selectorListItem = await addon.tab.waitForElement("[class*='selector_list-item']", {
+      condition: () =>
+        addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0 &&
+        !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    });
     const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
     verifySortableHOC(sortableHOCInstance);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
