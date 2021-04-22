@@ -86,13 +86,11 @@ export default async function ({ addon, global, console, msg }) {
 
   const virtualCursorContainer = document.createElement("div");
   virtualCursorContainer.hidden = true;
-  const virtualCursorImageContainer = document.createElement("div");
-  virtualCursorImageContainer.className = "sa-gamepad-cursor-container";
+  virtualCursorContainer.className = "sa-gamepad-cursor";
   const virtualCursorImage = document.createElement("img");
   virtualCursorImage.className = "sa-gamepad-cursor-image";
   virtualCursorImage.src = addon.self.dir + "/cursor.png";
-  virtualCursorImageContainer.appendChild(virtualCursorImage);
-  virtualCursorContainer.appendChild(virtualCursorImageContainer);
+  virtualCursorContainer.appendChild(virtualCursorImage);
 
   const virtualCursorSetVisible = (visible) => {
     virtualCursorContainer.hidden = !visible;
@@ -105,7 +103,7 @@ export default async function ({ addon, global, console, msg }) {
     virtualCursorSetVisible(true);
     const stageX = width / 2 + x;
     const stageY = height / 2 - y;
-    virtualCursorImageContainer.style.transform = `translate(${stageX}px, ${stageY}px)`;
+    virtualCursorContainer.style.transform = `translate(${stageX / width * 100}%, ${stageY / height * 100}%)`;
   };
 
   document.addEventListener("mousemove", () => {
