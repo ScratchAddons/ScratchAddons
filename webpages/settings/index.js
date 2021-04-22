@@ -119,7 +119,7 @@ const ResetDropdown = Vue.extend({
 });
 Vue.component("reset-dropdown", ResetDropdown);
 const AddonBody = Vue.extend({
-  props: ["addon"],
+  props: ["addon", "category"],
   template: document.querySelector("template#addon-body-component").innerHTML,
   data() {
     return {};
@@ -153,6 +153,16 @@ const AddonBody = Vue.extend({
         : true;
 
       return matchesTag && matchesSearch && matchesEasterEgg;
+    },
+    addonMatchesCategory() {
+      const hasTags = this.category.tagMatch && !this.category.tagMatch.some((tag) => !this.addon.tags.includes(tag));
+      const hasNotTags =
+        this.category.noTagMatch && !this.category.noTagMatch.some((tag) => this.addon.tags.includes(tag));
+      const matchesEnabled = this.category.enabledAddon === this.addon._enabled;
+      if (this.category.name === "Other Addons") {
+        console.log(hasTags, matchesEnabled, hasNotTags);
+      }
+      return hasTags || matchesEnabled || hasNotTags;
     },
   },
   methods: {
@@ -510,6 +520,30 @@ const vue = (window.vue = new Vue({
         color: "purple",
       },
     ],
+    addonCategories: [
+      {
+        name: "New Addons!",
+        tagMatch: ["new"],
+      },
+      {
+        name: "Enabled Addons",
+        enabledAddon: true,
+      },
+      {
+        name: "Recommended Addons",
+        tagMatch: ["recommended"],
+      },
+      {
+        name: "Other Addons",
+        enabledAddon: false,
+        //noTagMatch: ["recommended", "beta"],
+      },
+      {
+        name: "Beta Addons",
+        enabledAddon: false,
+        tagMatch: ["beta"],
+      },
+    ],
   },
   computed: {
     tagsToShow() {
@@ -788,27 +822,27 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     }
   }
   // Sort: enabled first, then recommended disabled, then other disabled addons. All alphabetically.
-  manifests.sort((a, b) => {
-    if (a.manifest._enabled === true && b.manifest._enabled === true)
-      return a.manifest.name.localeCompare(b.manifest.name);
-    else if (a.manifest._enabled === true && b.manifest._enabled === false) return -1;
-    else if (a.manifest._enabled === false && b.manifest._enabled === false) {
-      if (a.manifest.tags.includes("recommended") && b.manifest.tags.includes("recommended")) return -1;
-      else if (a.manifest.tags.includes("recommended") && b.manifest.tags.includes("recommended")) return 1;
-      else return a.manifest.name.localeCompare(b.manifest.name);
-    } else return 1;
-  });
+  // manifests.sort((a, b) => {
+  //   if (a.manifest._enabled === true && b.manifest._enabled === true)
+  //     return a.manifest.name.localeCompare(b.manifest.name);
+  //   else if (a.manifest._enabled === true && b.manifest._enabled === false) return -1;
+  //   else if (a.manifest._enabled === false && b.manifest._enabled === false) {
+  //     if (a.manifest.tags.includes("recommended") && b.manifest.tags.includes("recommended")) return -1;
+  //     else if (a.manifest.tags.includes("recommended") && b.manifest.tags.includes("recommended")) return 1;
+  //     else return a.manifest.name.localeCompare(b.manifest.name);
+  //   } else return 1;
+  // });
   if (!document.body.classList.contains("iframe")) {
     // New addons should always go first no matter what
-    manifests.sort((a, b) =>
-      NEW_ADDONS.includes(a.addonId) && NEW_ADDONS.includes(b.addonId)
-        ? NEW_ADDONS.indexOf(a.addonId) - NEW_ADDONS.indexOf(b.addonId)
-        : NEW_ADDONS.includes(a.addonId)
-        ? -1
-        : NEW_ADDONS.includes(b.addonId)
-        ? 1
-        : 0
-    );
+    // manifests.sort((a, b) =>
+    //   NEW_ADDONS.includes(a.addonId) && NEW_ADDONS.includes(b.addonId)
+    //     ? NEW_ADDONS.indexOf(a.addonId) - NEW_ADDONS.indexOf(b.addonId)
+    //     : NEW_ADDONS.includes(a.addonId)
+    //     ? -1
+    //     : NEW_ADDONS.includes(b.addonId)
+    //     ? 1
+    //     : 0
+    // );
     vue.manifests = manifests.map(({ manifest }) => manifest);
   } else {
     vue.manifests = manifests.map(({ manifest }) => manifest);

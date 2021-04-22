@@ -172,6 +172,7 @@
     </template>
     <template id="addon-body-component">
       <div
+        v-if="addonMatchesCategory"
         class="addon-body"
         :class="{ 'addon-body-margin-bottom': addon._marginBottom && searchInput === '' }"
         v-show="addonMatchesFilters && (selectedTab === 'all' || addon._category === selectedTab)"
@@ -395,7 +396,13 @@
 
         <div class="addons-container">
           <div id="running-page" v-show="addonsRunningOnTab && searchInput === ''">{{ msg("runningOnThisPage") }}</div>
-          <addon-body v-for="addon of manifests" :addon="addon"></addon-body>
+          <div class="addon-categories" v-for="category of addonCategories">
+            <div class="category-header"></div>
+            <details open>
+              <summary>{{ category.name }}</summary>
+              <addon-body v-for="addon of manifests" :addon="addon" :category="category"></addon-body>
+            </details>
+          </div>
         </div>
       </div>
     </div>
