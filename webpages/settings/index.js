@@ -155,14 +155,16 @@ const AddonBody = Vue.extend({
       return matchesTag && matchesSearch && matchesEasterEgg;
     },
     addonMatchesCategory() {
-      const hasTags = this.category.tagMatch && !this.category.tagMatch.some((tag) => !this.addon.tags.includes(tag));
-      const hasNotTags =
-        this.category.noTagMatch && !this.category.noTagMatch.some((tag) => this.addon.tags.includes(tag));
-      const matchesEnabled = this.category.enabledAddon === this.addon._enabled;
-      if (this.category.name === "Other Addons") {
-        console.log(hasTags, matchesEnabled, hasNotTags);
+      console.log(this.addon._addonId, "just ran!");
+      const matchesEnabled =
+        this.category.enabledAddon === undefined || this.category.enabledAddon === this.addon._enabled;
+      if (this.category.tagMatch) {
+        return matchesEnabled && !this.category.tagMatch.some((tag) => !this.addon.tags.includes(tag));
       }
-      return hasTags || matchesEnabled || hasNotTags;
+      if (this.category.noTagMatch) {
+        return matchesEnabled && !this.category.noTagMatch.some((tag) => this.addon.tags.includes(tag));
+      }
+      return matchesEnabled;
     },
   },
   methods: {
@@ -536,11 +538,10 @@ const vue = (window.vue = new Vue({
       {
         name: "Other Addons",
         enabledAddon: false,
-        //noTagMatch: ["recommended", "beta"],
+        noTagMatch: ["recommended", "beta"],
       },
       {
         name: "Beta Addons",
-        enabledAddon: false,
         tagMatch: ["beta"],
       },
     ],
