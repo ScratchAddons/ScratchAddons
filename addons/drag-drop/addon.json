@@ -1,6 +1,6 @@
 {
   "name": "Drag and drop files",
-  "description": "Lets you drag image, sound, and text files from your file explorer into the sprites pane, costume/sound list, ask and wait prompt, and list panes.",
+  "description": "Lets you drag images and sounds from your file explorer into the sprites pane or costume/sound list. You can also drag and drop text files into lists and \"ask and wait\" prompts.",
   "credits": [
     {
       "name": "Sheep_maker"
