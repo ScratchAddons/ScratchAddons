@@ -325,7 +325,7 @@ const vue = (window.vue = new Vue({
         vue.sidebarToggle();
       }
       if (this.isOpen) {
-        this.modalToggle;
+        void this.modalToggle;
       }
     },
 
@@ -579,7 +579,7 @@ const vue = (window.vue = new Vue({
           if (!tabs[0].id) return;
           chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
             // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
-            chrome.runtime.lastError;
+            void chrome.runtime.lastError;
 
             const addonsCurrentlyOnTab = !res
               ? []
