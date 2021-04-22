@@ -234,6 +234,25 @@ const AddonBody = Vue.extend({
 });
 Vue.component("addon-body", AddonBody);
 
+const AddonTag = Vue.extend({
+  props: ["tag"],
+  template: document.querySelector("template#addon-tag-component").innerHTML,
+  data() {
+    return {};
+  },
+  computed: {
+    tagInfo() {
+      return this.$root.tags.find((tag) => tag.matchName === this.tag);
+    },
+  },
+  methods: {
+    msg(...params) {
+      return this.$root.msg(...params);
+    },
+  },
+});
+Vue.component("addon-tag", AddonTag);
+
 const AddonSetting = Vue.extend({
   props: ["addon", "setting", "addon-settings"],
   template: document.querySelector("template#addon-setting-component").innerHTML,
@@ -420,7 +439,8 @@ const vue = (window.vue = new Vue({
     isIframe: window.parent !== window,
     tags: [
       {
-        name: chrome.i18n.getMessage("recommended"),
+        name: "recommended",
+        tooltipText: "recommendedTooltip",
         matchType: "tag",
         matchName: "recommended",
         color: "blue",
@@ -433,7 +453,8 @@ const vue = (window.vue = new Vue({
         },
       },
       {
-        name: chrome.i18n.getMessage("beta"),
+        name: "beta",
+        tooltipText: "betaTooltip",
         matchType: "tag",
         matchName: "beta",
         color: "red",
@@ -446,7 +467,8 @@ const vue = (window.vue = new Vue({
         },
       },
       {
-        name: chrome.i18n.getMessage("forums"),
+        name: "forums",
+        tooltipText: "forumsTooltip",
         matchType: "tag",
         matchName: "forums",
         color: "green",
@@ -458,7 +480,7 @@ const vue = (window.vue = new Vue({
         },
       },
       {
-        name: chrome.i18n.getMessage("forEditor"),
+        name: "forEditor",
         matchType: "tag",
         matchName: "editor",
         color: "darkgreen",
@@ -470,7 +492,7 @@ const vue = (window.vue = new Vue({
         },
       },
       {
-        name: chrome.i18n.getMessage("forWebsite"),
+        name: "forWebsite",
         matchType: "tag",
         matchName: "community",
         color: "yellow",
@@ -481,11 +503,17 @@ const vue = (window.vue = new Vue({
           theme: true,
         },
       },
+      {
+        name: "new",
+        matchType: "tag",
+        matchName: "new",
+        color: "purple",
+      },
     ],
   },
   computed: {
     tagsToShow() {
-      return this.tags.filter((tag) => tag.tabShow[this.selectedTab]);
+      return this.tags.filter((tag) => tag.tabShow?.[this.selectedTab]);
     },
     version() {
       return chrome.runtime.getManifest().version;
@@ -754,14 +782,10 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     manifest._enabled = addonsEnabled[addonId];
     manifest._addonId = addonId;
     manifest._expanded = document.body.classList.contains("iframe") ? false : manifest._enabled;
-    if (NEW_ADDONS.includes(addonId)) manifest._expanded = false;
-    manifest._tags = {};
-    manifest._tags.recommended = manifest.tags.includes("recommended");
-    manifest._tags.beta = manifest.tags.includes("beta");
-    manifest._tags.forums = manifest.tags.includes("forums");
-    manifest._tags.forEditor = manifest.tags.includes("theme") && manifest.tags.includes("editor");
-    manifest._tags.forWebsite = manifest.tags.includes("theme") && manifest.tags.includes("community");
-    manifest._tags.new = NEW_ADDONS.includes(addonId);
+    if (NEW_ADDONS.includes(addonId)) {
+      manifest._expanded = false;
+      manifest.tags.push("new");
+    }
   }
   // Sort: enabled first, then recommended disabled, then other disabled addons. All alphabetically.
   manifests.sort((a, b) => {
@@ -769,8 +793,8 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
       return a.manifest.name.localeCompare(b.manifest.name);
     else if (a.manifest._enabled === true && b.manifest._enabled === false) return -1;
     else if (a.manifest._enabled === false && b.manifest._enabled === false) {
-      if (a.manifest._tags.recommended === true && b.manifest._tags.recommended === false) return -1;
-      else if (a.manifest._tags.recommended === false && b.manifest._tags.recommended === true) return 1;
+      if (a.manifest.tags.includes("recommended") && b.manifest.tags.includes("recommended")) return -1;
+      else if (a.manifest.tags.includes("recommended") && b.manifest.tags.includes("recommended")) return 1;
       else return a.manifest.name.localeCompare(b.manifest.name);
     } else return 1;
   });
