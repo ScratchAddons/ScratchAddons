@@ -14,7 +14,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+      "matches": ["forums_topic"]
     }
   ],
   "tags": ["forums", "community"],

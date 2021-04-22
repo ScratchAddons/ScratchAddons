@@ -46,7 +46,7 @@
   "userscripts": [
     {
       "url": "working.js",
-      "matches": ["https://scratch.mit.edu/users/*"],
+      "matches": ["profiles"],
       "settingMatch": {
         "id": "whatworkingon",
         "value": true
@@ -65,7 +65,7 @@
   "userstyles": [
     {
       "url": "signature.css",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/settings/*"],
+      "matches": ["forums_topic", "https://scratch.mit.edu/discuss/settings/*"],
       "settingMatch": {
         "id": "signature",
         "value": true

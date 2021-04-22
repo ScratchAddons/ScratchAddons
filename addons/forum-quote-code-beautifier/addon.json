@@ -24,7 +24,7 @@
   "userstyles": [
     {
       "url": "main.css",
-      "matches": ["https://scratch.mit.edu/discuss/*"]
+      "matches": ["forums"]
     }
   ],
   "tags": ["forums", "theme"],

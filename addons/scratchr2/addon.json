@@ -28,9 +28,9 @@
       "matches": [
         "https://scratch.mit.edu/discuss/*",
         "https://scratch.mit.edu/mystuff/",
-        "https://scratch.mit.edu/users/*",
+        "profiles",
         "https://scratch.mit.edu/classes/*",
-        "https://scratch.mit.edu/studios/*",
+        "studios",
         "https://scratch.mit.edu/projects/*/remixes/",
         "https://scratch.mit.edu/projects/*/studios/",
         "https://scratch.mit.edu/projects/*/remixtree/",
@@ -52,9 +52,9 @@
       "matches": [
         "https://scratch.mit.edu/discuss/*",
         "https://scratch.mit.edu/mystuff/",
-        "https://scratch.mit.edu/users/*",
+        "profiles",
         "https://scratch.mit.edu/classes/*",
-        "https://scratch.mit.edu/studios/*",
+        "studios",
         "https://scratch.mit.edu/projects/*/remixes/",
         "https://scratch.mit.edu/projects/*/studios/",
         "https://scratch.mit.edu/projects/*/remixtree/",
@@ -127,7 +127,7 @@
     },
     {
       "url": "profile.css",
-      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/classes/*/"]
+      "matches": ["profiles", "https://scratch.mit.edu/classes/*/"]
     },
     {
       "url": "studio.css",
@@ -135,7 +135,7 @@
     },
     {
       "url": "scratchr2_comments.css",
-      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/studios/*"]
+      "matches": ["profiles", "studios"]
     },
     {
       "url": "remixtree.css",
@@ -159,16 +159,16 @@
     },
     {
       "url": "experimental_dark_compatibility.css",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["all"]
     },
     {
       "url": "lightprimary_compatibility.css",
       "matches": [
-        "https://scratch.mit.edu/discuss/*",
+        "discuss",
         "https://scratch.mit.edu/mystuff/",
-        "https://scratch.mit.edu/users/*",
+        "profiles",
         "https://scratch.mit.edu/classes/*",
-        "https://scratch.mit.edu/studios/*",
+        "studios",
         "https://scratch.mit.edu/projects/*/remixes/",
         "https://scratch.mit.edu/projects/*/studios/",
         "https://scratch.mit.edu/projects/*/remixtree/",

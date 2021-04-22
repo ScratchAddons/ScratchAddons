@@ -37,7 +37,7 @@
   "userscripts": [
     {
       "url": "user.js",
-      "matches": ["https://scratch.mit.edu/users/*/"],
+      "matches": ["profiles"],
       "settingMatch": {
         "id": "user",
         "value": true
@@ -45,7 +45,7 @@
     },
     {
       "url": "studio.js",
-      "matches": ["https://scratch.mit.edu/studios/*"],
+      "matches": ["studios"],
       "settingMatch": {
         "id": "studio",
         "value": true
@@ -53,7 +53,7 @@
     },
     {
       "url": "forum.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "matches": ["forum_topic"],
       "settingMatch": {
         "id": "forumuser",
         "value": true

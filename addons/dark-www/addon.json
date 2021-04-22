@@ -15,7 +15,7 @@
     {
       "url": "experimental_forums_preview.js",
       "matches": [
-        "https://scratch.mit.edu/discuss/topic/*",
+        "forums_topic",
         "https://scratch.mit.edu/discuss/post/*/edit/",
         "https://scratch.mit.edu/discuss/settings/*/"
       ]
@@ -24,11 +24,11 @@
   "userstyles": [
     {
       "url": "scrollbar.css",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["all"]
     },
     {
       "url": "experimental_scratchr2.css",
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": ["all"],
       "settingMatch": {
         "id": "selectedMode",
         "value": "experimental-dark"
@@ -37,10 +37,8 @@
     {
       "url": "experimental_scratchwww.css",
       "matches": [
+        "projects",
         "https://scratch.mit.edu/",
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor/",
-        "https://scratch.mit.edu/projects/*/fullscreen/",
         "https://scratch.mit.edu/explore/*",
         "https://scratch.mit.edu/search/*",
         "https://scratch.mit.edu/ideas/",
@@ -84,7 +82,7 @@
     },
     {
       "url": "experimental_forums.css",
-      "matches": ["https://scratch.mit.edu/discuss/*"],
+      "matches": ["forums"],
       "settingMatch": {
         "id": "selectedMode",
         "value": "experimental-dark"
@@ -92,7 +90,7 @@
     },
     {
       "url": "experimental_profile.css",
-      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/classes/*"],
+      "matches": ["profiles", "https://scratch.mit.edu/classes/*"],
       "settingMatch": {
         "id": "selectedMode",
         "value": "experimental-dark"
@@ -100,7 +98,7 @@
     },
     {
       "url": "experimental_studio.css",
-      "matches": ["https://scratch.mit.edu/studios/*"],
+      "matches": ["studios"],
       "settingMatch": {
         "id": "selectedMode",
         "value": "experimental-dark"
@@ -108,7 +106,7 @@
     },
     {
       "url": "experimental_scratchr2_comments.css",
-      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"],
+      "matches": ["profiles", "studios"],
       "settingMatch": {
         "id": "selectedMode",
         "value": "experimental-dark"
@@ -160,7 +158,7 @@
     },
     {
       "url": "pygments.css",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+      "matches": ["forums_topic"]
     }
   ],
   "settings": [

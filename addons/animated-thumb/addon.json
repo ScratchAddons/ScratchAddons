@@ -25,11 +25,11 @@
   ],
   "userscripts": [
     {
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["projects"],
       "url": "userscript.js"
     },
     {
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["projects"],
       "url": "persistent-thumb.js",
       "settingMatch": {
         "id": "persistentThumb",
@@ -40,7 +40,7 @@
   "userstyles": [
     {
       "url": "userscript.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "settings": [

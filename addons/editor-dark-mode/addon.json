@@ -22,12 +22,7 @@
   "userscripts": [
     {
       "url": "text_color.js",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "runAtComplete": false
     }
   ],

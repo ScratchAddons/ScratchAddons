@@ -13,11 +13,7 @@
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*",
-        "https://scratch.mit.edu/users/*/",
-        "https://scratch.mit.edu/studios/*/comments"
-      ]
+      "matches": ["projects", "profiles", "studio_comments"]
     }
   ],
   "enabledByDefault": true,

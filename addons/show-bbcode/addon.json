@@ -10,7 +10,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+      "matches": ["forums_topic"]
     }
   ],
   "l10n": true

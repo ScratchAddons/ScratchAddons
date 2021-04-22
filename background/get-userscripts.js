@@ -262,6 +262,29 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
 }
 
 function urlMatchesPattern(pattern, url) {
+  switch (pattern) {
+    case "all":
+      pattern = "https://scratch.mit.edu/*";
+      break;
+    case "projects":
+      pattern = "https://scratch.mit.edu/projects/*";
+      break;
+    case "profiles":
+      pattern = "https://scratch.mit.edu/users/*/";
+      break;
+    case "studio":
+      pattern = "https://scratch.mit.edu/studios/*";
+      break;
+    case "forums":
+      pattern = "https://scratch.mit.edu/studios/*";
+      break;
+    case "forums_topic":
+      pattern = "https://scratch.mit.edu/discuss/topic/*";
+      break;
+    case "studio_comments":
+      pattern = "https://scratch.mit.edu/studios/*/comments";
+      break;
+  }
   const patternUrl = new URL(pattern);
   const urlUrl = new URL(url);
   // We assume both URLs start with https://scratch.mit.edu

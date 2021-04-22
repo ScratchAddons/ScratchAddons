@@ -11,14 +11,14 @@
   "userscripts": [
     {
       "url": "main.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["projects"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "button.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "settings": [
