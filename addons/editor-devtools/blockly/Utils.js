@@ -88,7 +88,6 @@ export default class Utils {
       y = ePos.y * scale,
       xx = block.width + x, // Turns out they have their x & y stored locally, and they are the actual size rather than scaled or including children...
       yy = block.height + y,
-
       s = workspace.getMetrics();
     if (
       x < s.viewLeft + this.offsetX - 4 ||
