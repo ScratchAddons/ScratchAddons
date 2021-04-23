@@ -36,7 +36,7 @@ h1 {
 
 .logo {
   height: 30px;
-  margin-__MSG_@@bidi_end_edge__: 20px;
+  margin-inline-end: 20px;
 }
 
 .main {
@@ -83,7 +83,7 @@ h1 {
   height: 16px;
   vertical-align: middle;
   filter: invert(0) brightness(10);
-  margin-__MSG_@@bidi_end_edge__: 8px;
+  margin-inline-end: 8px;
 }
 
 .disabled {
@@ -113,18 +113,19 @@ h1 {
 }
 
 .clear-button {
-  border-top-__MSG_@@bidi_start_edge__-radius: 0;
-  border-bottom-__MSG_@@bidi_start_edge__-radius: 0;
-  border-top-__MSG_@@bidi_end_edge__-radius: 4px;
-  border-bottom-__MSG_@@bidi_end_edge__-radius: 4px;
-  border-__MSG_@@bidi_start_edge__: none !important;
+  border-start-radius: 0;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  border-start-end-radius: 4px;
+  border-end-end-radius: 4px;
+  border-inline-start: none !important;
 }
 .clear-button span {
   vertical-align: middle;
 }
 .clear-button .icon-type {
-  margin-__MSG_@@bidi_start_edge__: 8px;
-  margin-__MSG_@@bidi_end_edge__: 0;
+  margin-inline-start: 8px;
+  margin-inline-end: 0;
 }
 
 .reverted {
@@ -147,8 +148,7 @@ h1 {
 
 .theme-switch {
   height: 25px;
-  float: __MSG_@@bidi_end_edge__;
-  __MSG_@@bidi_end_edge__: 25px;
+  inset-inline-end: 25px;
   position: fixed;
   cursor: pointer;
 }
@@ -303,13 +303,13 @@ body.iframe .search-box input {
 }
 
 #popup-more-settings {
-  margin-__MSG_@@bidi_start_edge__: 12px;
+  margin-inline-start: 12px;
 }
 
 #popup-more-settings > button {
   height: 36px;
   padding: 9px;
-  padding-__MSG_@@bidi_start_edge__: 32px;
+  padding-inline-start: 32px;
   background-image: url(../../images/icons/settings.svg);
   background-position: 8px 9px;
   background-repeat: no-repeat;
@@ -333,10 +333,10 @@ button.setting-input.color {
   position: relative;
   height: 32px;
   width: 100px;
-  border-top-__MSG_@@bidi_start_edge__-radius: 4px;
-  border-bottom-__MSG_@@bidi_start_edge__-radius: 4px;
-  border-top-__MSG_@@bidi_end_edge__-radius: 0;
-  border-bottom-__MSG_@@bidi_end_edge__-radius: 0;
+  border-start-start-radius: 4px;
+  border-end-start-radius: 4px;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
 }
 
 .color-container {

@@ -15,8 +15,8 @@
   transform: translateY(-50%);
   /* Bring it on top of other tags */
   z-index: 10;
-  __MSG_@@bidi_start_edge__: 100%;
-  margin-__MSG_@@bidi_start_edge__: 10px; /* distance from parent */
+  inset-inline-start: 100%;
+  margin-inline-start: 10px; /* distance from parent */
   width: 200px;
   padding: 10px;
   border-radius: 10px;
@@ -28,11 +28,11 @@
   box-shadow: 0px 0px 16px 10px #3b3b3b52;
 }
 .tooltiptext.tooltiptextleft {
-  __MSG_@@bidi_start_edge__: auto;
+  inset-inline-start: auto;
+  inset-inline-end: 100%;
   top: -3px;
   transform: none;
-  __MSG_@@bidi_end_edge__: 100%;
-  margin-__MSG_@@bidi_start_edge__: 0;
+  margin-inline-start: 0;
 }
 
 .tooltip:hover .tooltiptext {
@@ -42,18 +42,18 @@
   content: "";
   position: absolute;
   top: 50%;
-  __MSG_@@bidi_end_edge__: 100%; /* To the left of the tooltip */
+  inset-inline-end: 100%; /* To the left of the tooltip */
   margin-top: -5px;
   border: 5px solid transparent;
-  border-__MSG_@@bidi_end_edge__-color: black;
+  border-inline-end-color: black;
   white-space: normal;
 }
 .tooltip .tooltiptext.tooltiptextleft::after {
-  __MSG_@@bidi_end_edge__: auto;
+  inset-inline-end: auto;
+  inset-inline-start: 100%;
   top: 15px;
-  __MSG_@@bidi_start_edge__: 100%;
-  border-__MSG_@@bidi_end_edge__-color: transparent;
-  border-__MSG_@@bidi_start_edge__-color: black;
+  border-inline-end-color: transparent;
+  border-inline-start-color: black;
 }
 
 .tooltiptext:hover .tooltiptext:after {

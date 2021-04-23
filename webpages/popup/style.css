@@ -39,7 +39,7 @@ body {
 }
 #logo {
   height: 30px;
-  margin-__MSG_@@bidi_end_edge__: 20px;
+  margin-inline-end: 20px;
   vertical-align: middle;
 }
 #settings {

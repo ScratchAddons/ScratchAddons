@@ -1,6 +1,6 @@
 .addon-setting {
   margin: 10px;
-  margin-__MSG_@@bidi_end_edge__: 20px;
+  margin-inline-end: 20px;
   min-height: 35px;
   display: flex;
   align-items: center;
@@ -52,26 +52,26 @@
   color: var(--accent-4);
   font-weight: 600;
   font-size: 12px;
-  margin-__MSG_@@bidi_end_edge__: 10px;
+  margin-inline-end: 10px;
 }
 
 .setting-dropdown {
   position: relative;
 }
 .setting-dropdown.open .clear-button {
-  border-bottom-__MSG_@@bidi_end_edge__-radius: 0;
+  border-end-end-radius: 0;
   background: #151515;
 }
 .setting-dropdown ul {
   position: absolute;
   top: calc(100% - 1px);
-  __MSG_@@bidi_end_edge__: 0;
+  inset-inline-end: 0;
   margin: 0;
   padding: 6px 0;
   display: none;
   z-index: 3;
   border-radius: 4px;
-  border-top-__MSG_@@bidi_end_edge__-radius: 0;
+  border-start-end-radius: 0;
   background: var(--accent-2);
   color: var(--accent-5);
   border: 1px solid #000;
@@ -83,7 +83,7 @@
   padding: 6px 12px;
   list-style: none;
   white-space: nowrap;
-  text-align: __MSG_@@bidi_start_edge__;
+  text-align: start;
   transition: 0.25s ease;
   user-select: none;
 }
@@ -97,7 +97,7 @@
   display: inline-block;
   width: 18px;
   height: 18px;
-  margin-__MSG_@@bidi_end_edge__: 8px;
+  margin-inline-end: 8px;
   border-radius: 5px;
   background: linear-gradient(45deg, #777 25%, transparent 25%), linear-gradient(-45deg, #777 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, #777 75%), linear-gradient(-45deg, transparent 75%, #777 75%);

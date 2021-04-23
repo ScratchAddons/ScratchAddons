@@ -43,13 +43,13 @@
 }
 .modal .large-button {
   display: block;
-  margin-__MSG_@@bidi_end_edge__: 10px;
+  margin-inline-end: 10px;
 }
 .modal .filter-selector {
   margin: 0;
 }
 .modal .addon-name {
-  margin-__MSG_@@bidi_start_edge__: 10px;
+  margin-inline-start: 14px;
 }
 .setting-body {
   margin: 10px 0;
@@ -63,7 +63,7 @@
 }
 .setting-setting {
   margin: 10px 0;
-  margin-__MSG_@@bidi_end_edge__: 20px;
+  margin-inline-end: 20px;
   min-height: 35px;
   display: flex;
   align-items: center;

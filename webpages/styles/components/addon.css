@@ -1,5 +1,5 @@
 .addon-description {
-  margin-__MSG_@@bidi_start_edge__: 10px;
+  margin-inline-start: 10px;
   color: gray;
   width: 35vw;
   overflow: hidden;
@@ -35,14 +35,14 @@
 }
 
 .addon-credits > span {
-  margin-__MSG_@@bidi_end_edge__: 0.5rem;
+  margin-inline-end: 0.5rem;
 }
 
 .addon-credits > span:not(:first-child):not(:last-child)::after {
   content: ",";
 }
 .addon-name {
-  margin-__MSG_@@bidi_start_edge__: 15px;
+  margin-inline-start: 15px;
   font-weight: 400;
   height: 100%;
   display: flex;
@@ -71,9 +71,9 @@
 .clear-settings {
   display: flex;
   align-items: center;
-  padding-__MSG_@@bidi_start_edge__: 8px;
+  padding-inline-start: 8px;
   border-radius: 4px;
-  margin-__MSG_@@bidi_end_edge__: 8px;
+  margin-inline-end: 8px;
 }
 .clear-settings:hover {
   background: rgba(255, 255, 255, 0.05);
@@ -118,7 +118,7 @@
 .addon-notice img,
 .addon-warn img {
   height: 15px;
-  margin-__MSG_@@bidi_end_edge__: 10px;
+  margin-inline-end: 10px;
   flex: 0 0;
 }
 .addon-warn img {
@@ -144,14 +144,14 @@
   margin: 10px 0;
 }
 .presets-column > .setting-label {
-  margin-__MSG_@@bidi_start_edge__: 10px;
+  margin-inline-start: 10px;
 }
 .addon-preset {
-  margin-__MSG_@@bidi_end_edge__: 30px;
+  margin-inline-end: 30px;
 }
 
 .addon-check {
-  margin-__MSG_@@bidi_start_edge__: auto;
+  margin-inline-start: auto;
   padding: 5px 10px;
   display: flex;
 }
@@ -175,7 +175,7 @@
   background: var(--accent-4);
   border-radius: 5px;
   top: 5px;
-  __MSG_@@bidi_start_edge__: 5px;
+  inset-inline-start: 5px;
   transition: all 0.25s ease;
 }
 
@@ -184,5 +184,5 @@
 }
 .switch[state="on"]::before {
   background: #fff;
-  __MSG_@@bidi_start_edge__: 25px;
+  inset-inline-start: 25px;
 }

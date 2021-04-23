@@ -45,5 +45,5 @@
 }
 
 .popup .large-button:not(:last-child) {
-  margin-__MSG_@@bidi_end_edge__: 20px;
+  margin-inline-end: 20px;
 }
