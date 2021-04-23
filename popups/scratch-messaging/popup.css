@@ -38,7 +38,7 @@ button {
   font-size: 12px;
   color: white;
   padding: 6px;
-  padding-__MSG_@@bidi_end_edge__: 8px;
+  padding-inline-end: 8px;
   cursor: default;
   display: flex;
   align-items: center;
@@ -54,7 +54,7 @@ button {
 }
 
 .thread-list {
-  padding: 0px 20px 20px 20px;
+  padding: 0px 16px 20px 16px;
   font-size: 12px;
 }
 
@@ -78,32 +78,32 @@ button {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  margin-__MSG_@@bidi_end_edge__: auto;
-  margin-__MSG_@@bidi_start_edge__: 10px;
+  margin-inline-end: auto;
+  margin-inline-start: 10px;
   max-width: 75%;
 }
 .float-right {
-  margin-__MSG_@@bidi_start_edge__: 6px;
+  margin-inline-start: 6px;
   white-space: nowrap;
   font-size: 12px;
 }
 .float-right > span {
   display: inline-block;
-  margin-__MSG_@@bidi_start_edge__: 6px;
+  margin-inline-start: 6px;
 }
 
 .tooltip {
-  padding-__MSG_@@bidi_start_edge__: 10px;
+  padding-inline-start: 10px;
 }
 
 .username-list {
-  padding: 0px 20px 20px 20px;
+  padding: 0px 16px 20px 16px;
   font-size: 12px;
 }
 
 .username-list > a {
   display: inline-block;
-  margin-__MSG_@@bidi_end_edge__: 10px;
+  margin-inline-end: 10px;
 }
 
 .thread-list:last-child {
@@ -175,7 +175,7 @@ button {
   /*padding-left: 4px;*/
   /*margin-left: 24px;*/
   /*border-top: 1px dashed gray;*/
-  margin-__MSG_@@bidi_start_edge__: 3em;
+  margin-inline-start: 3em;
 }
 .unread {
   /*border-left: 3px solid #0f8bc0;*/
@@ -206,7 +206,7 @@ button {
   color: white;
 }
 .reply-box-buttons {
-  padding-__MSG_@@bidi_end_edge__: 4px;
+  padding-inline-end: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -218,11 +218,11 @@ button {
   font-weight: bold;
   padding: 8px;
   outline: none;
-  margin-__MSG_@@bidi_end_edge__: 4px;
+  margin-inline-end: 4px;
   cursor: pointer;
 }
 .comment-chars {
-  margin-__MSG_@@bidi_start_edge__: auto;
+  margin-inline-start: auto;
   font-weight: normal;
 }
 
