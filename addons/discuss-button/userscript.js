@@ -15,7 +15,7 @@ export default async function ({ addon, global, console }) {
         markAsSeen: true,
         condition: () => {
           if (!addon.tab.redux.state) return false;
-          if (!addon.tab.redux.state.scratchGui) return false;
+          if (!addon.tab.redux.state.scratchGui) return true;
           return addon.tab.redux.state.scratchGui.mode.isPlayerOnly;
         },
       });
