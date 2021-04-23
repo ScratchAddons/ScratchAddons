@@ -238,25 +238,25 @@ const AddonSetting = Vue.extend({
   props: ["addon", "setting", "addon-settings"],
   template: document.querySelector("template#addon-setting-component").innerHTML,
   data() {
-    return {
-      settingsName() {
-        const name = this.setting.name;
-        const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
-        return name.replace(regex, (icon) => {
-          if (icon[0] === "\\") {
-            return icon.slice(1);
-          }
-          if (icon[0] === "@") {
-            return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
-          }
-          if (icon[0] === "#") {
-            return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
-          }
-        });
-      },
-    };
+    return {};
   },
   methods: {
+    settingsName() {
+      const name = this.setting.name;
+      const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
+      return name.replace(regex, (icon) => {
+        if (icon[0] === "\\") {
+          return icon.slice(1);
+        }
+        if (icon[0] === "@") {
+          return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
+        }
+        if (icon[0] === "#") {
+          return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
+        }
+      });
+    },
+
     showResetDropdown() {
       return (
         this.addon.presets &&
