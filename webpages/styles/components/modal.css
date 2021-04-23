@@ -25,7 +25,7 @@
 }
 
 .close {
-  float: __MSG_@@bidi_end_edge__;
+  float: __MSG_ @@bidi_end_edge__;
   cursor: pointer;
 }
 
