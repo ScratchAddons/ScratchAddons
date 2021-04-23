@@ -26,12 +26,13 @@ export default async function ({ addon, global, console }) {
     });
   }
 
-  async function foreverDroppable(dropAreaSelector, fileInputSelector) {
+  async function foreverDroppable(dropAreaSelector, fileInputSelector, waitForElementOptions) {
     while (true) {
-      const dropArea = await addon.tab.waitForElement(dropAreaSelector, { markAsSeen: true });
-      const fileInput = await addon.tab.waitForElement(fileInputSelector, {
+      const dropArea = await addon.tab.waitForElement(dropAreaSelector, {
         markAsSeen: true,
+        ...waitForElementOptions,
       });
+      const fileInput = document.querySelector(fileInputSelector);
       droppable(dropArea, (files) => {
         fileInput.files = files;
         fileInput.dispatchEvent(new Event("change", { bubbles: true }));
@@ -42,19 +43,32 @@ export default async function ({ addon, global, console }) {
   // Sprite selector
   foreverDroppable(
     'div[class*="sprite-selector_sprite-selector"]',
-    'div[class*="sprite-selector_sprite-selector"] input[class*="action-menu_file-input"]'
+    'div[class*="sprite-selector_sprite-selector"] input[class*="action-menu_file-input"]',
+    {
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+      condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    }
   );
 
   // Stage selector
   foreverDroppable(
     'div[class*="stage-selector_stage-selector"]',
-    'div[class*="stage-selector_stage-selector"] input[class*="action-menu_file-input"]'
+    'div[class*="stage-selector_stage-selector"] input[class*="action-menu_file-input"]',
+    {
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+      condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    }
   );
 
   // Costume/sound asset list
   foreverDroppable(
     'div[class*="selector_wrapper"]',
-    'div[class*="selector_wrapper"] input[class*="action-menu_file-input"]'
+    'div[class*="selector_wrapper"] input[class*="action-menu_file-input"]',
+    {
+      condition: () =>
+        addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0 &&
+        !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    }
   );
 
   async function listMonitorsDroppable() {
