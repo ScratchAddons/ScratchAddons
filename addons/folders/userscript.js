@@ -1293,9 +1293,7 @@ export default async function ({ addon, global, console, msg }) {
     const spriteSelectorItemElement = await addon.tab.waitForElement("[class^='sprite-selector_sprite-wrapper']", {
       condition: () =>
         // We can run before redux state is ready
-        addon.tab.redux.state &&
-        addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 0 &&
-        !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+        addon.tab.redux.state && !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
     });
     vm = addon.tab.traps.vm;
     reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
