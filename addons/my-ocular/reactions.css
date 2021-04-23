@@ -1,0 +1,19 @@
+.postfootright {
+  padding-bottom: 4px; /* so that the buttons have some space */
+}
+
+.my-ocular-reaction-button {
+  cursor: pointer;
+  user-select: none;
+  background-color: #f2f2f2;
+  margin: 0 5px;
+  padding: 4px;
+  border-radius: 6px;
+  box-shadow: 0 0 2px #28a5da;
+  opacity: 1;
+  /* transition: opacity .5s; */ /* due to the way the list is rerendered, css transistions wont do anything */
+}
+.my-ocular-reaction-button.selected {
+  color: #fff;
+  background-color: #28a5da;
+}

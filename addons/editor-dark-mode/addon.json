@@ -113,7 +113,7 @@
       "default": "#151515"
     },
     {
-      "name": "Sprite list background",
+      "name": "Sprite pane background",
       "id": "selector",
       "type": "color",
       "default": "#202020"
@@ -125,7 +125,7 @@
       "default": "#202020"
     },
     {
-      "name": "Selected list item background",
+      "name": "Selected sprite/asset background",
       "id": "selectorSelection",
       "type": "color",
       "default": "#111111"

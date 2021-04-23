@@ -260,6 +260,18 @@
   "skipOpenFullSettings": {
     "message": "Cancel"
   },
+  "captureCommentError": {
+    "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."
+  },
+  "captureCommentPolicy": {
+    "message": "Scratch Community's Browser Extension/Userscript Policy"
+  },
+  "captureCommentPostAnyway": {
+    "message": "Post anyway"
+  },
+  "captureCommentConfirm": {
+    "message": "Are you sure you want to post this comment? Scratch will probably mute your account from commenting anywhere on Scratch for at least 5 minutes."
+  },
   "extensionStoreDescription1": {
     "message": "➖ scratch.mit.edu features ➖\n- Messaging: click the extension icon to get a summary of your messages.\n- Cloud games: see who's playing multiplayer games.\n- Notifier: get browser notifications when you get new messages.\n- Navigation bar customization: re-add the “discuss” button.\n- Make 2.0-styled pages look like 3.0.\n- Website and editor dark modes.\n- And more!"
   },
