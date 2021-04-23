@@ -25,7 +25,8 @@
 }
 
 .close {
-  float: __MSG_ @@bidi_end_edge__;
+  /* prettier-ignore */
+  float: __MSG_@@bidi_end_edge__;
   cursor: pointer;
 }
 
