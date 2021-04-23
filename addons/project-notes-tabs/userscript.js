@@ -1,7 +1,10 @@
 export default async function ({ addon, global, console }) {
   async function remixHandler() {
     while (true) {
-      await addon.tab.waitForElement(".remix-credit", { markAsSeen: true });
+      await addon.tab.waitForElement(".remix-credit", {
+        markAsSeen: true,
+        condition: () => addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+      });
       projectNotes.insertBefore(tabs, projectNotes.querySelector(".description-block"));
     }
   }
@@ -10,7 +13,10 @@ export default async function ({ addon, global, console }) {
   let tabs;
 
   while (true) {
-    projectNotes = await addon.tab.waitForElement(".project-notes", { markAsSeen: true });
+    projectNotes = await addon.tab.waitForElement(".project-notes", {
+      markAsSeen: true,
+      condition: () => addon.tab.redux.state && addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    });
 
     const labels = document.querySelectorAll(".project-textlabel");
     const descriptions = document.querySelectorAll(".description-block");
