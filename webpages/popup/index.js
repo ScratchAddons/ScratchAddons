@@ -11,20 +11,18 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 });
 
 function calculatePopupSize() {
-  setTimeout(() => {
-    if (!window.innerWidth || !window.innerHeight) {
-      calculatePopupSize();
-      return;
-    }
-    let width = window.innerWidth;
-    document.documentElement.style.setProperty("--width", `${width}px`);
-    let height = window.innerHeight - 3;
-    document.documentElement.style.setProperty("--height", `${height}px`);
-    document.body.classList.remove("loading");
-  }, 0);
+  if (!window.innerWidth || !window.innerHeight) {
+    setTimeout(calculatePopupSize, 0);
+    return;
+  }
+  let width = window.innerWidth;
+  document.documentElement.style.setProperty("--width", `${width}px`);
+  let height = window.innerHeight - 3;
+  document.documentElement.style.setProperty("--height", `${height}px`);
+  document.body.classList.remove("loading");
 }
 
-window.addEventListener("load", calculatePopupSize);
+window.addEventListener("load", () => setTimeout(calculatePopupSize, 0));
 
 const vue = new Vue({
   el: "body",
