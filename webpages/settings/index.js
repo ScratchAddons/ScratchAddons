@@ -167,8 +167,9 @@ const AddonBody = Vue.extend({
     loadPreset(preset) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
         for (const property of Object.keys(preset.values)) {
-          this.$root.updateOption(property, preset.values[property], this.addon);
+          this.$root.addonSettings[this.addon._addonId][property] = preset.values[property];
         }
+        this.$root.updateSettings(this.addon);
         console.log(`Loaded preset ${preset.id} for ${this.addon.id}`);
       }
     },
