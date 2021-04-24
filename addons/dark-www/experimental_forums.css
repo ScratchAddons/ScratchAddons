@@ -92,3 +92,10 @@
   border-color: #606060 !important;
   background: transparent;
 }
+.my-ocular-reaction-button {
+  background-color: #606060;
+  box-shadow: 0 0 2px #075e46;
+}
+.my-ocular-reaction-button.selected {
+  background-color: #075e46;
+}

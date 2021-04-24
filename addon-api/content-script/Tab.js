@@ -44,20 +44,50 @@ export default class Tab extends Listenable {
    * @param {string} selector - argument passed to querySelector.
    * @param {object} opts - options.
    * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
+   * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
+   * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
    * @returns {Promise<Element>} - element found.
    */
   waitForElement(selector, opts = {}) {
     const markAsSeen = !!opts.markAsSeen;
-    const firstQuery = document.querySelectorAll(selector);
-    for (const element of firstQuery) {
-      if (this._waitForElementSet.has(element)) continue;
-      if (markAsSeen) this._waitForElementSet.add(element);
-      return Promise.resolve(element);
+    if (!opts.condition || opts.condition()) {
+      const firstQuery = document.querySelectorAll(selector);
+      for (const element of firstQuery) {
+        if (this._waitForElementSet.has(element)) continue;
+        if (markAsSeen) this._waitForElementSet.add(element);
+        return Promise.resolve(element);
+      }
     }
-    return scratchAddons.sharedObserver.watch({
+    let { condition } = opts;
+    let listener;
+    if (opts.reduxEvents) {
+      if (this.clientVersion !== "scratch-www") throw new Error("reduxEvents require scratch-www");
+      const oldCondition = condition;
+      let satisfied = false;
+      condition = () => {
+        if (oldCondition && !oldCondition()) return false;
+        return satisfied;
+      };
+      listener = ({ detail }) => {
+        if (opts.reduxEvents.includes(detail.action.type)) {
+          satisfied = true;
+        }
+      };
+      this.redux.initialize();
+      this.redux.addEventListener("statechanged", listener);
+    }
+    const promise = scratchAddons.sharedObserver.watch({
       query: selector,
       seen: markAsSeen ? this._waitForElementSet : null,
+      condition,
     });
+    if (listener) {
+      promise.then((match) => {
+        this.redux.removeEventListener("statechanged", listener);
+        return match;
+      });
+    }
+    return promise;
   }
   /**
    * editor mode (or null for non-editors).

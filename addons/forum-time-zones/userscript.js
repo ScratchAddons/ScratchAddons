@@ -1,11 +1,39 @@
 export default async function ({ addon, _global, _console }) {
-  const { default: moment } = await import(addon.self.lib + "/moment.js");
-
-  moment.locale(addon.auth.scratchLang === "en" ? "en-gb" : addon.auth.scratchLang);
-  const forum_topic_id = parseInt(
-    new URL(document.querySelector("meta[property='og:url']").content).pathname.split("/")[3]
-  );
-  const time_zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const forum_topic_id = parseInt(location.pathname.split("/")[3]);
+  const locale = addon.auth.scratchLang;
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const localCurrentTimeRepr = new Date(new Date().toLocaleString("en-US", { timeZone }));
+  const relativeFormatter = new Intl.RelativeTimeFormat(locale, {
+    localeMatcher: "best fit",
+    numeric: "auto",
+    style: "long",
+  });
+  const capitalize = (str) => str[0].toUpperCase() + str.slice(1);
+  const formatter = (time) => {
+    // This is the correct representation of the given time.
+    const instantTimeRepr = new Date(time);
+    // This represents the time with timezone added/subtracted to the base time.
+    // UTC representation of this is off by the timezone offset.
+    // Temporary solution until browsers implement Temporal.
+    const localTimeRepr = new Date(instantTimeRepr.toLocaleString("en-US", { timeZone }));
+    // Due to daytime saving, diff between two Date is inaccurate unless we both use timezoned Date
+    // Math.min makes sure nobody gets posts from tomorrow
+    const localDateDiff = Math.min(localTimeRepr.getDate() - localCurrentTimeRepr.getDate(), 0);
+    const timePart = localTimeRepr.toLocaleTimeString("en-GB");
+    switch (localDateDiff) {
+      case 0:
+      case -1: {
+        const relativePart = relativeFormatter.format(localDateDiff, "day");
+        return `${capitalize(relativePart)} ${timePart}`;
+      }
+      default: {
+        const datePart = localTimeRepr.toLocaleDateString(locale, {
+          dateStyle: "long",
+        });
+        return `${datePart} ${timePart}`;
+      }
+    }
+  };
   window
     .fetch(`https://scratchdb.lefty.one/v2/forum/topic/${forum_topic_id}`)
     .catch(() => {
@@ -19,9 +47,7 @@ export default async function ({ addon, _global, _console }) {
         .forEach((e) => {
           var p = data.posts.find((x) => x.id === e);
           if (p) {
-            document.querySelector(`#p${e} > .box > .box-head > a`).innerText = moment(
-              new Date(new Date(p.time.posted).toLocaleString("en-US", { timeZone: time_zone })).toISOString()
-            ).calendar();
+            document.querySelector(`#p${e} > .box > .box-head > a`).innerText = formatter(p.time.posted);
           }
         });
     });
