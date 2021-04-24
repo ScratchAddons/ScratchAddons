@@ -285,11 +285,10 @@ export default async function ({ addon, global, console }) {
   });
   newStyle.className = "scratch-addons-style";
   newStyle.setAttribute("data-addon-id", addon.self.id);
+  newStyle.setAttribute("data-addon-index", otherStyle.getAttribute("data-addon-index"));
 
-  // append after body to make sure that it overrides otherStyle
-  await addon.tab.waitForElement("body");
-  document.documentElement.appendChild(newStyle);
+  document.documentElement.insertBefore(newStyle, otherStyle.nextSibling);
 
-  addon.self.addEventListener("disabled", () => (newStyle.media = "not all"));
-  addon.self.addEventListener("reenabled", () => newStyle.removeAttribute("media"));
+  // Look for reenable event to enable the style. cs.js cannot handle an appended style.
+  addon.self.addEventListener("reenabled", () => (newStyle.disabled = false));
 }
