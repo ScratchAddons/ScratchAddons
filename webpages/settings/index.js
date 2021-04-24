@@ -241,7 +241,7 @@ const AddonSetting = Vue.extend({
     return {};
   },
   methods: {
-    settingsName() {
+    settingsName(addon) {
       const name = this.setting.name;
       const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
       return name.replace(regex, (icon) => {
