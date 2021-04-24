@@ -296,8 +296,8 @@ const showBanner = () => {
     display: flex;
     align-items: center;
     padding: 10px;
-    border-radius: 5px;
-    background-color: #0f1b27;
+    border-radius: 10px;
+    background-color: #222;
     color: white;
     z-index: 99999;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -316,21 +316,16 @@ const showBanner = () => {
     style: "margin: 12px;",
   });
   const notifTitle = Object.assign(document.createElement("span"), {
-    style: "font-size: 18px; display: inline-block; margin-bottom: 12px;",
+    style: "font-size: 18px; line-height: 24px; display: inline-block; margin-bottom: 12px;",
     textContent: chrome.i18n.getMessage("extensionUpdate"),
   });
-  const notifClose = Object.assign(document.createElement("span"), {
+  const notifClose = Object.assign(document.createElement("img"), {
     style: `
     float: right;
-    cursor:pointer;
-    background-color: #ffffff26;
-    line-height: 10px;
-    width: 10px;
-    text-align: center;
-    padding:5px;
-    border-radius: 50%;`,
+    cursor: pointer;
+    width: 24px;`,
     title: chrome.i18n.getMessage("close"),
-    textContent: "x",
+    src: chrome.runtime.getURL("../images/cs/close.svg"),
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
@@ -377,8 +372,7 @@ const showBanner = () => {
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/changelog?versionname=${chrome.runtime.getManifest().version}-notif`,
     target: "_blank",
-    textContent: chrome.i18n.getMessage("changelog"),
-    style: "text-transform: capitalize;", // Convert to title case
+    textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}-notif`,
