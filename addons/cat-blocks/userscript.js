@@ -22,7 +22,7 @@ export default async function ({ addon, global, console }) {
     "c1.9,0.9 4.9,5.2 6.8,11.1c2.6,0,5.2,0,7.8,0";
 
   Blockly.BlockSvg.prototype.renderCatFace_ = function () {
-    this.svgPath_.svgFace.setAttribute("fill", "#000000");
+    this.catPath_.svgFace.setAttribute("fill", "#000000");
 
     var closedEye = Blockly.utils.createSvgElement("path", {}, this.svgFace_);
     closedEye.setAttribute(
@@ -32,7 +32,7 @@ export default async function ({ addon, global, console }) {
         "c-0.5,0.1-0.9,0.7-0.7,1.2C24.3-1.4,24.7-1.1,25.2-1.1z"
     );
     closedEye.setAttribute("fill-opacity", "0");
-    this.svgPath_.svgFace.closedEye = closedEye;
+    this.catPath_.svgFace.closedEye = closedEye;
 
     var closedEye2 = Blockly.utils.createSvgElement("path", {}, this.svgFace_);
     closedEye2.setAttribute(
@@ -42,21 +42,21 @@ export default async function ({ addon, global, console }) {
         "c0.5,0.1,0.9,0.7,0.7,1.2C63.2-1.4,62.8-1.1,62.4-1.1z"
     );
     closedEye2.setAttribute("fill-opacity", "0");
-    this.svgPath_.svgFace.closedEye2 = closedEye2;
+    this.catPath_.svgFace.closedEye2 = closedEye2;
 
     var eye = Blockly.utils.createSvgElement("circle", {}, this.svgFace_);
     eye.setAttribute("cx", "59.2");
     eye.setAttribute("cy", "-3.3");
     eye.setAttribute("r", "3.4");
     eye.setAttribute("fill-opacity", "0.6");
-    this.svgPath_.svgFace.eye = eye;
+    this.catPath_.svgFace.eye = eye;
 
     var eye2 = Blockly.utils.createSvgElement("circle", {}, this.svgFace_);
     eye2.setAttribute("cx", "29.1");
     eye2.setAttribute("cy", "-3.3");
     eye2.setAttribute("r", "3.4");
     eye2.setAttribute("fill-opacity", "0.6");
-    this.svgPath_.svgFace.eye2 = eye2;
+    this.catPath_.svgFace.eye2 = eye2;
 
     var mouth = Blockly.utils.createSvgElement("path", {}, this.svgFace_);
     mouth.setAttribute(
@@ -72,21 +72,21 @@ export default async function ({ addon, global, console }) {
     );
     mouth.setAttribute("fill-opacity", "0.6");
 
-    this.svgPath_.ear.setAttribute(
+    this.catPath_.ear.setAttribute(
       "d",
       "M73.1-15.6c1.7-4.2,4.5-9.1,5.8-8.5" +
         "c1.6,0.8,5.4,7.9,5,15.4c0,0.6-0.7,0.7-1.1,0.5c-3-1.6-6.4-2.8-8.6-3.6" +
         "C72.8-12.3,72.4-13.7,73.1-15.6z"
     );
-    this.svgPath_.ear.setAttribute("fill", "#FFD5E6");
+    this.catPath_.ear.setAttribute("fill", "#FFD5E6");
 
-    this.svgPath_.ear2.setAttribute(
+    this.catPath_.ear2.setAttribute(
       "d",
       "M22.4-15.6c-1.7-4.2-4.5-9.1-5.8-8.5" +
         "c-1.6,0.8-5.4,7.9-5,15.4c0,0.6,0.7,0.7,1.1,0.5c3-1.6,6.4-2.8,8.6-3.6" +
         "C22.8-12.3,23.2-13.7,22.4-15.6z"
     );
-    this.svgPath_.ear2.setAttribute("fill", "#FFD5E6");
+    this.catPath_.ear2.setAttribute("fill", "#FFD5E6");
   };
 
   Blockly.BlockSvg.prototype.initCatStuff = function () {
@@ -106,14 +106,14 @@ export default async function ({ addon, global, console }) {
     var DEFINE_HAT_RIGHT_EAR_DOWN = "c0,0 25.6,0 44,0c7.4,-3.2 14.8,-6.8 16.9,-5.8c1.2,0.6 1.6,2.9 1.3,5.8";
 
     var that = this;
-    this.svgPath_.ear = Blockly.utils.createSvgElement("path", {}, this.svgPath_);
-    this.svgPath_.ear2 = Blockly.utils.createSvgElement("path", {}, this.svgPath_);
+    this.catPath_.ear = Blockly.utils.createSvgElement("path", {}, this.catPath_);
+    this.catPath_.ear2 = Blockly.utils.createSvgElement("path", {}, this.catPath_);
     if (this.RTL) {
       // Mirror the ears.
-      this.svgPath_.ear.setAttribute("transform", "scale(-1 1)");
-      this.svgPath_.ear2.setAttribute("transform", "scale(-1 1)");
+      this.catPath_.ear.setAttribute("transform", "scale(-1 1)");
+      this.catPath_.ear2.setAttribute("transform", "scale(-1 1)");
     }
-    this.svgPath_.addEventListener("mouseenter", function (event) {
+    this.catPath_.addEventListener("mouseenter", function (event) {
       clearTimeout(that.blinkFn);
       // blink
       if (event.target.svgFace.eye) {
@@ -134,49 +134,48 @@ export default async function ({ addon, global, console }) {
       }, 100);
     });
 
-    this.svgPath_.ear.addEventListener("mouseenter", function () {
+    this.catPath_.ear.addEventListener("mouseenter", function () {
       clearTimeout(that.earFn);
       clearTimeout(that.ear2Fn);
       // ear flick
-      that.svgPath_.ear.setAttribute("fill-opacity", "0");
-      that.svgPath_.ear2.setAttribute("fill-opacity", "");
-      var bodyPath = that.svgPath_.svgBody.getAttribute("d");
+      that.catPath_.ear.setAttribute("fill-opacity", "0");
+      that.catPath_.ear2.setAttribute("fill-opacity", "");
+      var bodyPath = that.catPath_.svgBody.getAttribute("d");
       bodyPath = bodyPath.replace(RIGHT_EAR_UP, RIGHT_EAR_DOWN);
       bodyPath = bodyPath.replace(DEFINE_HAT_RIGHT_EAR_UP, DEFINE_HAT_RIGHT_EAR_DOWN);
       bodyPath = bodyPath.replace(LEFT_EAR_DOWN, LEFT_EAR_UP);
       bodyPath = bodyPath.replace(DEFINE_HAT_LEFT_EAR_DOWN, DEFINE_HAT_LEFT_EAR_UP);
-      that.svgPath_.svgBody.setAttribute("d", bodyPath);
+      that.catPath_.svgBody.setAttribute("d", bodyPath);
 
       // reset after a short delay
       that.earFn = setTimeout(function () {
-        that.svgPath_.ear.setAttribute("fill-opacity", "");
-        var bodyPath = that.svgPath_.svgBody.getAttribute("d");
+        that.catPath_.ear.setAttribute("fill-opacity", "");
+        var bodyPath = that.catPath_.svgBody.getAttribute("d");
         bodyPath = bodyPath.replace(RIGHT_EAR_DOWN, RIGHT_EAR_UP);
         bodyPath = bodyPath.replace(DEFINE_HAT_RIGHT_EAR_DOWN, DEFINE_HAT_RIGHT_EAR_UP);
-        that.svgPath_.svgBody.setAttribute("d", bodyPath);
+        that.catPath_.svgBody.setAttribute("d", bodyPath);
       }, 50);
     });
-    this.svgPath_.ear2.addEventListener("mouseenter", function () {
+    this.catPath_.ear2.addEventListener("mouseenter", function () {
       clearTimeout(that.earFn);
       clearTimeout(that.ear2Fn);
       // ear flick
-      that.svgPath_.ear2.setAttribute("fill-opacity", "0");
-      that.svgPath_.ear.setAttribute("fill-opacity", "");
-      var bodyPath = that.svgPath_.svgBody.getAttribute("d");
+      that.catPath_.ear2.setAttribute("fill-opacity", "0");
+      that.catPath_.ear.setAttribute("fill-opacity", "");
+      var bodyPath = that.catPath_.svgBody.getAttribute("d");
       bodyPath = bodyPath.replace(LEFT_EAR_UP, LEFT_EAR_DOWN);
       bodyPath = bodyPath.replace(DEFINE_HAT_LEFT_EAR_UP, DEFINE_HAT_LEFT_EAR_DOWN);
       bodyPath = bodyPath.replace(RIGHT_EAR_DOWN, RIGHT_EAR_UP);
       bodyPath = bodyPath.replace(DEFINE_HAT_RIGHT_EAR_DOWN, DEFINE_HAT_RIGHT_EAR_UP);
-      that.svgPath_.svgBody.setAttribute("d", bodyPath);
+      that.catPath_.svgBody.setAttribute("d", bodyPath);
 
       // reset after a short delay
       that.ear2Fn = setTimeout(function () {
-        that.svgPath_.ear2.setAttribute("fill-opacity", "");
-        var bodyPath = that.svgPath_.svgBody.getAttribute("d");
-        var bodyPath = that.svgPath_.svgBody.getAttribute("d");
+        that.catPath_.ear2.setAttribute("fill-opacity", "");
+        var bodyPath = that.catPath_.svgBody.getAttribute("d");
         bodyPath = bodyPath.replace(LEFT_EAR_DOWN, LEFT_EAR_UP);
         bodyPath = bodyPath.replace(DEFINE_HAT_LEFT_EAR_DOWN, DEFINE_HAT_LEFT_EAR_UP);
-        that.svgPath_.svgBody.setAttribute("d", bodyPath);
+        that.catPath_.svgBody.setAttribute("d", bodyPath);
       }, 50);
     });
     if (this.RTL) {
@@ -271,20 +270,6 @@ export default async function ({ addon, global, console }) {
     return this.startHat_ && !this.isGlowingStack_ && blockXOnScreen && blockYOnScreen;
   };
 
-  for (const key of ["renderDraw_", "highlightForReplacement", "updateColour"]) {
-    const original = Blockly.BlockSvg.prototype[key];
-    Blockly.BlockSvg.prototype[key] = function (...args) {
-      if (!this.svgFace_) {
-        this.sa_catBlockConstructor();
-      }
-      const oldPath = this.svgPath_;
-      this.svgPath_ = this.svgPathBody_;
-      const r = original.call(this, ...args);
-      this.svgPath_ = oldPath;
-      return r;
-    };
-  }
-
   const originalRenderDraw = Blockly.BlockSvg.prototype.renderDraw_;
   Blockly.BlockSvg.prototype.renderDraw_ = function (...args) {
     if (!this.svgFace_) {
@@ -333,17 +318,13 @@ export default async function ({ addon, global, console }) {
   };
 
   Blockly.BlockSvg.prototype.sa_catBlockConstructor = function () {
-    this.svgPathBody_ = this.svgPath_;
-    this.svgPath_ = Blockly.utils.createSvgElement("g", {}, this.svgGroup_);
+    this.catPath_ = Blockly.utils.createSvgElement("g", {}, this.svgGroup_);
 
-    this.svgFace_ = Blockly.utils.createSvgElement("g", {}, this.svgPath_);
-    this.svgGroup_.svgPath = this.svgPath_;
-    this.svgPath_.svgFace = this.svgFace_;
-    this.svgPath_.svgBody = this.svgPathBody_;
+    this.svgFace_ = Blockly.utils.createSvgElement("g", {}, this.catPath_);
+    this.catPath_.svgFace = this.svgFace_;
+    this.catPath_.svgBody = this.svgPath_;
     this.lastCallTime = 0;
     this.CALL_FREQUENCY_MS = 60;
-
-    this.svgPathBody_.tooltip = this;
   };
 
   const workspace = Blockly.getMainWorkspace();

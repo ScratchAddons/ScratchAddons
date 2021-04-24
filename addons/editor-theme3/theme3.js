@@ -91,7 +91,7 @@ function updateSettings(addon, newStyle) {
       }`;
       if (prop === "custom") {
         stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
-          fill: var(--editorTheme3-${prop}Color) !important;
+          fill: var(--editorTheme3-${prop}Color);
         }`;
       }
       if (prop === "sensing") {

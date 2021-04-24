@@ -1,6 +1,6 @@
 {
-  "name": "Forums time zone",
-  "description": "Converts the post times to the client's time zone.",
+  "name": "Use local timezone on forums",
+  "description": "Converts the post dates to your time zone. Uses ScratchDB for information.",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -8,8 +8,7 @@
       "runAtComplete": false
     }
   ],
-  "tags": ["forums", "community", "beta"],
+  "tags": ["forums", "community"],
   "enabledByDefault": false,
-  "libraries": ["moment"],
   "l10n": true
 }
