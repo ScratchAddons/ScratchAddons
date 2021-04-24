@@ -150,9 +150,19 @@
       "id": "tweaks",
       "description": "Events, Control, and Custom blocks with 2.0 inspired colors",
       "values": {
+        "motion-color": "#4C97FF",
+        "looks-color": "#9966FF",
+        "sounds-color": "#CF63CF",
         "events-color": "#DE9E2E",
         "control-color": "#FFBF00",
-        "custom-color": "#5f49d8"
+        "sensing-color": "#5CB1D6",
+        "operators-color": "#59C059",
+        "data-color": "#FF8C1A",
+        "data-lists-color": "#FF661A",
+        "custom-color": "#5f49d8",
+        "Pen-color": "#0FBD8C",
+        "input-color": "#FFFFFF",
+        "text": "white"
       }
     },
     {
@@ -200,6 +210,17 @@
       "id": "black",
       "description": "Makes block backgrounds black",
       "values": {
+        "motion-color": "#4C97FF",
+        "looks-color": "#9966FF",
+        "sounds-color": "#CF63CF",
+        "events-color": "#DE9E2E",
+        "control-color": "#FFBF00",
+        "sensing-color": "#5CB1D6",
+        "operators-color": "#59C059",
+        "data-color": "#FF8C1A",
+        "data-lists-color": "#FF661A",
+        "custom-color": "#5f49d8",
+        "Pen-color": "#0FBD8C",
         "input-color": "#202020",
         "text": "colorOnBlack"
       }
