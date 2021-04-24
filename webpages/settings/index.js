@@ -241,7 +241,7 @@ const AddonSetting = Vue.extend({
     return {};
   },
   methods: {
-    settingsName() {
+    settingsName(addon) {
       const name = this.setting.name;
       const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
       return name.replace(regex, (icon) => {
@@ -500,9 +500,6 @@ const vue = (window.vue = new Vue({
       if (this.categoryOpen && this.smallMode) {
         vue.sidebarToggle();
       }
-      if (this.isOpen) {
-        this.modalToggle;
-      }
     },
 
     modalToggle: function () {
@@ -648,7 +645,7 @@ const vue = (window.vue = new Vue({
           if (!tabs[0].id) return;
           chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
             // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
-            chrome.runtime.lastError;
+            void chrome.runtime.lastError;
 
             const addonsCurrentlyOnTab = !res
               ? []

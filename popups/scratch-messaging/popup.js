@@ -166,7 +166,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         });
         const commentTimestamp = new Date(this.thisComment.date).getTime();
         const timeDiffSeconds = (dateNow - commentTimestamp) / 1000;
-        let options = { unit: null, divideBy: null };
+        let options;
         if (timeDiffSeconds < 60) return timeFormatter.format(0, "second");
         else if (timeDiffSeconds < 3600) options = { unit: "minute", divideBy: 60 };
         else if (timeDiffSeconds < 86400) options = { unit: "hour", divideBy: 60 * 60 };
