@@ -11,7 +11,7 @@
   border-radius: 6px;
   box-shadow: 0 0 2px #28a5da;
   opacity: 1;
-  /* transition: opacity .5s; */ /* due to the way the list is rerendered, css transistions wont do anything */
+  /* transition: opacity .5s; */ /* due to the way the list is rerendered, css transitions wont do anything */
 }
 .my-ocular-reaction-button.selected {
   color: #fff;
