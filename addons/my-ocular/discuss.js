@@ -29,9 +29,9 @@ export default async function ({ addon, global, console, msg }) {
   async function fetchStatus(username) {
     const response = await fetch(`https://my-ocular.jeffalo.net/api/user/${username}`);
     const data = await response.json();
-    return ({
+    return {
       userStatus: data.status,
       color: data.color,
-    });
+    };
   }
 }
