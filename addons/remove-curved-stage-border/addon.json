@@ -2,7 +2,8 @@
     "name": "Remove Curved Stage Border",
     "description": "Removes the curved border around the stage, allowing you to see the very corners.",
     "tags": [
-        "editor"
+        "editor",
+        "theme"
     ],
     "credits": [
         {
@@ -15,10 +16,7 @@
         {
             "url": "remove-borders.css",
             "matches": [
-                "https://scratch.mit.edu/projects/*/",
-                "https://scratch.mit.edu/projects/*/editor",
-                "https://scratch.mit.edu/projects/*/fullscreen",
-                "https://scratch.mit.edu/projects/editor"
+                "https://scratch.mit.edu/projects/*"
             ]
         }
     ]
