@@ -20,11 +20,7 @@ button.grey,
 #topnav li.logout.divider input,
 .djangobb .new_topic,
 .follow-topic .follow-button:hover {
-  color: rgb(
-    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 87)),
-    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 94)),
-    calc(255 - var(--scratchr2-primaryColor-isLight) * (255 - 117))
-  );
+  color: var(--scratchr2-textColor);
 }
 #topnav form.search input[type="text"]::placeholder {
   color: rgba(

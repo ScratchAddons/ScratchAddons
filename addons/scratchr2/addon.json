@@ -15,6 +15,17 @@
       "runAtComplete": false
     }
   ],
+  "customCssVariables": [
+    {
+      "name": "textColor",
+      "value": {
+        "type": "textColor",
+        "sourceSettingId": "primaryColor",
+        "black": "rgba(0, 0, 0, 0.5)",
+        "white": "rgba(255, 255, 255)"
+      }
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
