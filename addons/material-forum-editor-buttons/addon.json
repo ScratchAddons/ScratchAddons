@@ -18,5 +18,6 @@
       "link": "https://github.com/Secret-chest"
     }
   ],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }
