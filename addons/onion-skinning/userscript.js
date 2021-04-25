@@ -23,10 +23,10 @@ export default async function ({ addon, global, console, msg }) {
 
   const settings = {
     enabled: addon.settings.get("default"),
-    previous: +addon.settings.get("previous"),
-    next: +addon.settings.get("next"),
-    opacity: +addon.settings.get("opacity"),
-    opacityStep: +addon.settings.get("opacityStep"),
+    previous: addon.settings.get("previous"),
+    next: addon.settings.get("next"),
+    opacity: addon.settings.get("opacity"),
+    opacityStep: addon.settings.get("opacityStep"),
     layering: addon.settings.get("layering"),
     mode: addon.settings.get("mode"),
     beforeTint: parseHexColor(addon.settings.get("beforeTint")),
