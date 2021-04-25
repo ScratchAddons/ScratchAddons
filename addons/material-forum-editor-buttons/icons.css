@@ -68,8 +68,7 @@
   background-image: url(done.svg) !important;
   background-size: 20px;
 }
-#ibbBtn,
-#uploadButton {
+#ibbBtn, #uploadButton {
   background-image: url(uploader.svg) !important;
   background-size: 20px;
 }
