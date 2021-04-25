@@ -1,6 +1,6 @@
 {
-  "name": "Remove Curved Stage Border",
-  "description": "Removes the curved border around the stage, allowing you to see the very corners.",
+  "name": "Remove curved stage border",
+  "description": "Removes the curved border around the stage, allowing you to see the corners.",
   "tags": ["editor", "theme"],
   "credits": [
     {
