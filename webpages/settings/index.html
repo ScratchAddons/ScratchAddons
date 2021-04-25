@@ -172,10 +172,9 @@
     </template>
     <template id="addon-body-component">
       <div
-        v-if="addonMatchesCategory"
         class="addon-body"
         :class="{ 'addon-body-margin-bottom': addon._marginBottom && searchInput === '' }"
-        v-show="addonMatchesFilters && (selectedTab === 'all' || addon._category === selectedTab)"
+        v-show="shouldShow"
         :data-has-margin-bottom="addon._marginBottom"
         :id="'addon-' + addon._addonId"
       >
@@ -208,7 +207,7 @@
             <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest($event)"></div>
           </div>
         </div>
-        <div class="addon-settings" v-show="addon._expanded">
+        <div class="addon-settings" v-if="addon._expanded">
           <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
           <div id="info" v-for="info of addon.info">
             <div class="addon-warn" v-if="info.type == 'warning'" v-show="addon._expanded">
@@ -396,11 +395,16 @@
 
         <div class="addons-container">
           <div id="running-page" v-show="addonsRunningOnTab && searchInput === ''">{{ msg("runningOnThisPage") }}</div>
-          <div class="addon-categories" v-for="category of addonCategories">
-            <div class="category-header"></div>
-            <details open>
-              <summary>{{ category.name }}</summary>
-              <addon-body v-for="addon of manifests" :addon="addon" :category="category"></addon-body>
+          <div class="addon-group" v-for="group of addonGroups" v-show="group.addonIds.length">
+            <details :open="group.expanded" @toggle="group.expanded = $event.target.open">
+              <summary>{{ group.name }} ({{group.addonIds.length}})</summary>
+              <template v-if="group.expanded">
+                <addon-body
+                  v-for="addonId of group.addonIds"
+                  :addon="manifestsById[addonId]"
+                  :group-id="group.id"
+                ></addon-body>
+              </template>
             </details>
           </div>
         </div>

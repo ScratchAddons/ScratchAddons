@@ -119,14 +119,17 @@ const ResetDropdown = Vue.extend({
 });
 Vue.component("reset-dropdown", ResetDropdown);
 const AddonBody = Vue.extend({
-  props: ["addon", "category"],
+  props: ["addon", "groupId"],
   template: document.querySelector("template#addon-body-component").innerHTML,
   data() {
     return {};
   },
   computed: {
-    selectedTab() {
-      return this.$root.selectedTab;
+    shouldShow() {
+      return (
+        this.addonMatchesFilters &&
+        (this.$root.selectedTab === "all" || this.addon._category === this.$root.selectedTab)
+      );
     },
     searchInput() {
       return this.$root.searchInput;
@@ -153,18 +156,6 @@ const AddonBody = Vue.extend({
         : true;
 
       return matchesTag && matchesSearch && matchesEasterEgg;
-    },
-    addonMatchesCategory() {
-      console.log(this.addon._addonId, "just ran!");
-      const matchesEnabled =
-        this.category.enabledAddon === undefined || this.category.enabledAddon === this.addon._enabled;
-      if (this.category.tagMatch) {
-        return matchesEnabled && !this.category.tagMatch.some((tag) => !this.addon.tags.includes(tag));
-      }
-      if (this.category.noTagMatch) {
-        return matchesEnabled && !this.category.noTagMatch.some((tag) => this.addon.tags.includes(tag));
-      }
-      return matchesEnabled;
     },
   },
   methods: {
@@ -441,6 +432,7 @@ const vue = (window.vue = new Vue({
     categoryOpen: true,
     loaded: false,
     manifests: [],
+    manifestsById: {},
     selectedTab: "all",
     selectedTag: null,
     searchInput: "",
@@ -522,27 +514,41 @@ const vue = (window.vue = new Vue({
         color: "purple",
       },
     ],
-    addonCategories: [
+    addonGroups: [
       {
+        id: "new",
         name: "New Addons!",
-        tagMatch: ["new"],
+        addonIds: [],
+        hiddenAddons: 0,
+        expanded: true,
       },
       {
+        id: "enabled",
         name: "Enabled Addons",
-        enabledAddon: true,
+        addonIds: [],
+        hiddenAddons: 0,
+        expanded: true,
       },
       {
+        id: "recommended",
         name: "Recommended Addons",
-        tagMatch: ["recommended"],
+        addonIds: [],
+        hiddenAddons: 0,
+        expanded: true,
       },
       {
+        id: "others",
         name: "Other Addons",
-        enabledAddon: false,
-        noTagMatch: ["recommended", "beta"],
+        addonIds: [],
+        hiddenAddons: 0,
+        expanded: true,
       },
       {
+        id: "hidden",
         name: "Beta Addons",
-        tagMatch: ["beta"],
+        addonIds: [],
+        hiddenAddons: 0,
+        expanded: false,
       },
     ],
   },
@@ -821,6 +827,23 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
       manifest._expanded = false;
       manifest.tags.push("new");
     }
+
+    manifest._groups = [];
+    if (NEW_ADDONS.includes(addonId)) manifest._groups.push("new");
+
+    if (manifest._enabled) manifest._groups.push("enabled");
+    else {
+      // Addon is disabled
+      if (manifest.tags.includes("recommended")) manifest._groups.push("recommended");
+      else if (manifest.tags.includes("beta")) manifest._groups.push("hidden");
+      else manifest._groups.push("others");
+    }
+
+    for (const groupId of manifest._groups) {
+      vue.addonGroups.find((g) => g.id === groupId).addonIds.push(manifest._addonId);
+    }
+
+    Vue.set(vue.manifestsById, manifest._addonId, manifest);
   }
   // Sort: enabled first, then recommended disabled, then other disabled addons. All alphabetically.
   // manifests.sort((a, b) => {
