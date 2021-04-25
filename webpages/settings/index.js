@@ -118,6 +118,29 @@ const ResetDropdown = Vue.extend({
   },
 });
 Vue.component("reset-dropdown", ResetDropdown);
+
+const AddonGroup = Vue.extend({
+  props: ["group"],
+  template: document.querySelector("template#addon-group-component").innerHTML,
+  data() {
+    return {};
+  },
+  computed: {
+    shownCount() {
+      // Recompute when these values change.
+      this.$root.searchInput;
+      this.$root.loaded;
+
+      return this.$children.filter((addon) => addon.shouldShow).length;
+    },
+    manifestsById() {
+      return this.$root.manifestsById;
+    },
+  },
+  methods: {},
+});
+Vue.component("addon-group", AddonGroup);
+
 const AddonBody = Vue.extend({
   props: ["addon", "groupId"],
   template: document.querySelector("template#addon-body-component").innerHTML,
