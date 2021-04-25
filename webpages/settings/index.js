@@ -126,6 +126,10 @@ const AddonGroup = Vue.extend({
     return {};
   },
   computed: {
+    shouldShow() {
+      if (this.group.id === "new" && this.$root.searchInput !== "") return false;
+      return this.shownCount > 0;
+    },
     shownCount() {
       // Recompute when these values change.
       this.$root.searchInput;

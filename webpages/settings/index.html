@@ -275,7 +275,7 @@
       </div>
     </template>
     <template id="addon-group-component">
-      <div class="addon-group" v-show="shownCount > 0">
+      <div class="addon-group" v-show="shouldShow">
         <details :open="group.expanded" @toggle="group.expanded = $event.target.open">
           <summary>{{ group.name }} ({{ shownCount }})</summary>
           <template v-if="group.expanded">
