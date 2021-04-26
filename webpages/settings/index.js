@@ -281,6 +281,9 @@ const AddonTag = Vue.extend({
     tagInfo() {
       return this.$root.tags.find((tag) => tag.matchName === this.tag);
     },
+    shouldShow() {
+      return this.tagInfo && !this.tagInfo.addonTabHide?.[this.$root.selectedTab];
+    },
   },
   methods: {
     msg(...params) {
@@ -528,6 +531,11 @@ const vue = (window.vue = new Vue({
           community: false,
           theme: true,
         },
+        addonTabHide: {
+          all: true,
+          editor: true,
+          community: true,
+        },
       },
       {
         name: "forWebsite",
@@ -539,6 +547,11 @@ const vue = (window.vue = new Vue({
           editor: false,
           community: false,
           theme: true,
+        },
+        addonTabHide: {
+          all: true,
+          editor: true,
+          community: true,
         },
       },
       {
