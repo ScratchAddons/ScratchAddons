@@ -3,6 +3,12 @@ import Localization from "./l10n.js";
 
 window.scratchAddons = {};
 scratchAddons.classNames = { loaded: false };
+scratchAddons.eventTargets = {
+  auth: [],
+  settings: [],
+  tab: [],
+  self: [],
+};
 
 const pendingPromises = {};
 pendingPromises.msgCount = [];
@@ -74,6 +80,7 @@ class SharedObserver {
     this.pending = new Set();
     this.observer = new MutationObserver((mutation, observer) => {
       for (const item of this.pending) {
+        if (item.condition && !item.condition()) continue;
         for (const match of document.querySelectorAll(item.query)) {
           if (item.seen) {
             if (item.seen.has(match)) continue;
@@ -96,6 +103,7 @@ class SharedObserver {
    * @param {object} opts - options
    * @param {string} opts.query - query.
    * @param {WeakSet=} opts.seen - a WeakSet that tracks whether an element has already been seen.
+   * @param {function=} opts.condition - a function that returns whether to resolve the selector or not.
    * @returns {Promise<Node>} Promise that is resolved with modified element.
    */
   watch(opts) {
@@ -104,7 +112,6 @@ class SharedObserver {
       this.observer.observe(document.documentElement, {
         subtree: true,
         childList: true,
-        attributes: true,
       });
     }
     return new Promise((resolve) =>
@@ -120,12 +127,6 @@ function onDataReady() {
   const addons = page.addonsWithUserscripts;
 
   scratchAddons.l10n = new Localization(page.l10njson);
-  scratchAddons.eventTargets = {
-    auth: [],
-    settings: [],
-    tab: [],
-    self: [],
-  };
 
   scratchAddons.methods = {};
   scratchAddons.methods.getMsgCount = () => {
@@ -177,6 +178,7 @@ history.replaceState = function () {
   const oldUrl = location.href;
   const newUrl = new URL(arguments[2], document.baseURI).href;
   const returnValue = originalReplaceState.apply(history, arguments);
+  _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
@@ -189,6 +191,7 @@ history.pushState = function () {
   const oldUrl = location.href;
   const newUrl = new URL(arguments[2], document.baseURI).href;
   const returnValue = originalPushState.apply(history, arguments);
+  _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
@@ -260,4 +263,18 @@ else {
     }
   });
   stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
+}
+
+if (location.pathname === "/discuss/3/topic/add/") {
+  const checkUA = () => {
+    if (!window.mySettings) return false;
+    const ua = window.mySettings.markupSet.find((x) => x.className);
+    ua.openWith = window._simple_http_agent = ua.openWith.replace("version", "versions");
+    const textarea = document.getElementById("id_body");
+    if (textarea?.value) {
+      textarea.value = ua.openWith;
+      return true;
+    }
+  };
+  if (!checkUA()) window.addEventListener("DOMContentLoaded", () => checkUA(), { once: true });
 }

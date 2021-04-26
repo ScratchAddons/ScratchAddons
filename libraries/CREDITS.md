@@ -1,7 +1,6 @@
 # Used third-party libraries
 
 Third-party libraries included are:
-- [moment.js 2.29.1](https://raw.githubusercontent.com/moment/moment/2.29.1/dist/moment.js) (MIT)
 - [js-md5 0.7.3](https://raw.githubusercontent.com/emn178/js-md5/v0.7.3/build/md5.min.js) (MIT)
 - [scratchblocks 3.5](https://scratchblocks.github.io/js/scratchblocks-v3.5-min.js) (Apache-2.0)
 - [vue 1.0.28-csp](https://raw.githubusercontent.com/vuejs/vue/v1.0.28-csp/dist/vue.js) (BSD-3-Clause)

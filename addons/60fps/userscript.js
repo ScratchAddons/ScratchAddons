@@ -4,18 +4,6 @@ export default async function ({ addon, global, console }) {
 
   let global_fps = 30;
   const vm = addon.tab.traps.vm;
-  let altPressesCount = 0;
-  let altPressedRecently = false;
-  window.addEventListener("keydown", (event) => {
-    if (event.key === "Alt") {
-      altPressesCount++;
-      const pressCount = altPressesCount;
-      altPressedRecently = true;
-      setTimeout(() => {
-        if (pressCount === altPressesCount) altPressedRecently = false;
-      }, 250);
-    }
-  });
   while (true) {
     let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", { markAsSeen: true });
     let mode = false;
@@ -26,14 +14,17 @@ export default async function ({ addon, global, console }) {
       button.style.filter = mode ? "hue-rotate(90deg)" : "";
     };
     const flagListener = (e) => {
-      if (altPressedRecently && !addon.self.disabled) {
+      if (addon.self.disabled) return;
+      const isAltClick = e.type === "click" && e.altKey;
+      const isChromebookAltClick = navigator.userAgent.includes("CrOS") && e.type === "contextmenu";
+      if (isAltClick || isChromebookAltClick) {
         e.cancelBubble = true;
         e.preventDefault();
         changeMode();
       }
     };
-    button.addEventListener("click", (e) => flagListener(e));
-    button.addEventListener("contextmenu", (e) => flagListener(e));
+    button.addEventListener("click", flagListener);
+    button.addEventListener("contextmenu", flagListener);
 
     const setFPS = (fps) => {
       global_fps = addon.self.disabled ? 30 : fps;

@@ -1,1 +1,1 @@
-{"forum-time-zones/@name":"Fuso orario nei forum","forum-time-zones/@description":"Converte l'ora del post nel fuso orario dell'utente."}
+{"forum-time-zones/@name":"Usa il fuso orario locale nei forum","forum-time-zones/@description":"Converte le date dei post nel tuo fuso orario. Usa ScratchDB per ricavare le informazioni."}
