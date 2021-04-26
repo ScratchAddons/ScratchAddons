@@ -186,7 +186,7 @@ const AddonBody = Vue.extend({
             .some((author) => author.includes(this.searchInput.toLowerCase())));
       // Show disabled easter egg addons only if category is easterEgg
       const matchesEasterEgg = this.addon.tags.includes("easterEgg")
-        ? this.selectedTab === "easterEgg" || this.addon._wasEverEnabled
+        ? this.$root.selectedTab === "easterEgg" || this.addon._wasEverEnabled
         : true;
 
       return matchesTag && matchesSearch && matchesEasterEgg;
