@@ -128,13 +128,14 @@ const AddonGroup = Vue.extend({
   computed: {
     shouldShow() {
       if (this.group.id === "new" && this.$root.searchInput !== "") return false;
-      console.log(this.$children);
       return this.shownCount > 0;
     },
     shownCount() {
       // Recompute when these values change.
       this.$root.searchInput;
       this.$root.loaded;
+
+      if (!this.everExpanded) return this.group.addonIds.length;
 
       return this.$children.filter((addon) => addon.shouldShow).length;
     },
@@ -171,8 +172,6 @@ const AddonBody = Vue.extend({
       return this.$root.addonSettings;
     },
     addonMatchesFilters() {
-      console.log("addon:", this.$root.selectedTag);
-
       if (!this.addon._wasEverEnabled) this.addon._wasEverEnabled = this.addon._enabled;
 
       const matchesTag = this.$root.selectedTag === null || this.addon.tags.includes(this.$root.selectedTag);

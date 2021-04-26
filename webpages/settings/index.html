@@ -276,7 +276,10 @@
     </template>
     <template id="addon-group-component">
       <div class="addon-group" v-show="shouldShow">
-        <span @click="toggle">{{ group.name }} ({{ shownCount }})</span>
+        <span @click="toggle">
+          <img src="../../images/icons/expand.svg" alt="v" :class="{ 'reverted': group.expanded }" />
+          {{ group.name }} ({{ shownCount }})</span
+        >
         <template v-if="everExpanded">
           <addon-body v-for="addonId of group.addonIds" :addon="manifestsById[addonId]" :group="group"></addon-body>
         </template>

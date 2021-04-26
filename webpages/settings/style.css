@@ -46,6 +46,26 @@ h1 {
   align-items: stretch;
 }
 
+.addon-group > span {
+  display: flex;
+  align-items: center;
+  cursor: default;
+  margin: 0px 25px;
+}
+
+.addon-group > span > img {
+  height: 23px;
+}
+
+.addon-group > span:after {
+  content: "";
+  border-top: 1px solid white;
+  width: 100px;
+  margin-left: 10px;
+  flex: 1;
+  opacity: 0.5;
+}
+
 .addons-block {
   flex-grow: 1;
   flex-shrink: 1;
