@@ -123,11 +123,12 @@ const AddonGroup = Vue.extend({
   props: ["group"],
   template: document.querySelector("template#addon-group-component").innerHTML,
   data() {
-    return {};
+    return { everExpanded: this.group.expanded };
   },
   computed: {
     shouldShow() {
       if (this.group.id === "new" && this.$root.searchInput !== "") return false;
+      console.log(this.$children);
       return this.shownCount > 0;
     },
     shownCount() {
@@ -141,12 +142,17 @@ const AddonGroup = Vue.extend({
       return this.$root.manifestsById;
     },
   },
-  methods: {},
+  methods: {
+    toggle() {
+      this.group.expanded = !this.group.expanded;
+      this.everExpanded = true;
+    },
+  },
 });
 Vue.component("addon-group", AddonGroup);
 
 const AddonBody = Vue.extend({
-  props: ["addon", "groupId"],
+  props: ["addon", "group"],
   template: document.querySelector("template#addon-body-component").innerHTML,
   data() {
     return {};
@@ -165,6 +171,8 @@ const AddonBody = Vue.extend({
       return this.$root.addonSettings;
     },
     addonMatchesFilters() {
+      console.log("addon:", this.$root.selectedTag);
+
       if (!this.addon._wasEverEnabled) this.addon._wasEverEnabled = this.addon._enabled;
 
       const matchesTag = this.$root.selectedTag === null || this.addon.tags.includes(this.$root.selectedTag);
