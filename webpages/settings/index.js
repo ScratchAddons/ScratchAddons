@@ -857,18 +857,24 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
       : manifest.tags.includes("community")
       ? "community"
       : "editor";
+
+    if (manifest.popup) manifest.tags.push("popup");
+
     // Exception:
-    if (addonId === "msg-count-badge") manifest._category = "popup";
+    if (addonId === "msg-count-badge") {
+      manifest._category = "popup";
+      manifest.tags.push("popup");
+    }
     manifest._enabled = addonsEnabled[addonId];
     manifest._addonId = addonId;
     manifest._expanded = document.body.classList.contains("iframe") ? false : manifest._enabled;
+    manifest._groups = [];
+
     if (NEW_ADDONS.includes(addonId)) {
       manifest._expanded = false;
       manifest.tags.push("new");
+      manifest._groups.push("new");
     }
-
-    manifest._groups = [];
-    if (NEW_ADDONS.includes(addonId)) manifest._groups.push("new");
 
     if (manifest._enabled) manifest._groups.push("enabled");
     else {
@@ -879,38 +885,42 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     }
 
     for (const groupId of manifest._groups) {
-      vue.addonGroups.find((g) => g.id === groupId).addonIds.push(manifest._addonId);
+      vue.addonGroups.find((g) => g.id === groupId).addonIds.push(manifest);
     }
 
     Vue.set(vue.manifestsById, manifest._addonId, manifest);
   }
-  // Sort: enabled first, then recommended disabled, then other disabled addons. All alphabetically.
-  // manifests.sort((a, b) => {
-  //   if (a.manifest._enabled === true && b.manifest._enabled === true)
-  //     return a.manifest.name.localeCompare(b.manifest.name);
-  //   else if (a.manifest._enabled === true && b.manifest._enabled === false) return -1;
-  //   else if (a.manifest._enabled === false && b.manifest._enabled === false) {
-  //     if (a.manifest.tags.includes("recommended") && b.manifest.tags.includes("recommended")) return -1;
-  //     else if (a.manifest.tags.includes("recommended") && b.manifest.tags.includes("recommended")) return 1;
-  //     else return a.manifest.name.localeCompare(b.manifest.name);
-  //   } else return 1;
-  // });
-  if (!document.body.classList.contains("iframe")) {
-    // New addons should always go first no matter what
-    // manifests.sort((a, b) =>
-    //   NEW_ADDONS.includes(a.addonId) && NEW_ADDONS.includes(b.addonId)
-    //     ? NEW_ADDONS.indexOf(a.addonId) - NEW_ADDONS.indexOf(b.addonId)
-    //     : NEW_ADDONS.includes(a.addonId)
-    //     ? -1
-    //     : NEW_ADDONS.includes(b.addonId)
-    //     ? 1
-    //     : 0
-    // );
-    vue.manifests = manifests.map(({ manifest }) => manifest);
-  } else {
-    vue.manifests = manifests.map(({ manifest }) => manifest);
-    await vue.popupOrderAddonsEnabledFirst();
-  }
+  vue.manifests = manifests.map(({ manifest }) => manifest);
+
+  vue.addonGroups.forEach((group) => {
+    group.addonIds = group.addonIds
+      .sort((addonA, addonB) => {
+        const checkTag = (tag) => {
+          const hasTag = addonB.tags.includes(tag) - addonA.tags.includes(tag);
+          if (hasTag !== 0) return hasTag;
+          if (addonB.tags.includes(tag)) return addonA.name.localeCompare(addonB.name);
+        };
+
+        /* 1. beta addons */
+        if (checkTag("beta") != null) return checkTag("beta");
+
+        /* 2. editor category addons */
+        if (checkTag("editor") != null) return checkTag("editor");
+
+        /* 3. website category addons */
+        if (checkTag("community") != null) return checkTag("community");
+
+        /* 4. theme addons */
+        if (checkTag("theme") != null) return checkTag("theme");
+
+        /* 5. extension popup addons */
+        if (checkTag("popup") != null) return checkTag("popup");
+      })
+      .map((addon) => addon._addonId);
+  });
+
+  if (document.body.classList.contains("iframe")) await vue.popupOrderAddonsEnabledFirst();
+
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
   setTimeout(handleKeySettings, 0);
