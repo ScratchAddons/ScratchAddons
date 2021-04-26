@@ -55,6 +55,7 @@ h1 {
 
 .addon-group > span > img {
   height: 23px;
+  margin-right: 5px;
 }
 
 .addon-group > span:after {

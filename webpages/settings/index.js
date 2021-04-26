@@ -551,31 +551,31 @@ const vue = (window.vue = new Vue({
     addonGroups: [
       {
         id: "new",
-        name: "New Addons!",
+        name: "New!",
         addonIds: [],
         expanded: true,
       },
       {
         id: "enabled",
-        name: "Enabled Addons",
+        name: "Enabled",
         addonIds: [],
         expanded: true,
       },
       {
         id: "recommended",
-        name: "Recommended Addons",
+        name: "Recommended",
         addonIds: [],
         expanded: true,
       },
       {
         id: "others",
-        name: "Other Addons",
+        name: "Other",
         addonIds: [],
         expanded: true,
       },
       {
         id: "hidden",
-        name: "Beta Addons",
+        name: "Beta",
         addonIds: [],
         expanded: false,
       },
@@ -594,15 +594,6 @@ const vue = (window.vue = new Vue({
   },
 
   methods: {
-    closesidebar: function () {
-      if (this.categoryOpen && this.smallMode) {
-        vue.sidebarToggle();
-      }
-      if (this.isOpen) {
-        this.modalToggle;
-      }
-    },
-
     modalToggle: function () {
       this.isOpen = !this.isOpen;
       if (vue.smallMode) {
@@ -819,6 +810,14 @@ const vue = (window.vue = new Vue({
     },
   },
   events: {
+    closesidebar: function () {
+      if (this.categoryOpen && this.smallMode) {
+        this.sidebarToggle();
+      }
+      if (this.isOpen) {
+        this.modalToggle;
+      }
+    },
     modalClickOutside: function (e) {
       if (this.isOpen && this.canCloseOutside && e.isTrusted) {
         this.isOpen = false;
