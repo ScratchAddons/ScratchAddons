@@ -162,7 +162,7 @@ const AddonBody = Vue.extend({
     shouldShow() {
       return (
         this.addonMatchesFilters &&
-        (this.$root.selectedTab === "all" || this.addon._category === this.$root.selectedTab)
+        (this.$root.selectedCategory === "all" || this.addon._category === this.$root.selectedCategory)
       );
     },
     searchInput() {
@@ -174,7 +174,6 @@ const AddonBody = Vue.extend({
     addonMatchesFilters() {
       if (!this.addon._wasEverEnabled) this.addon._wasEverEnabled = this.addon._enabled;
 
-      const matchesTag = this.$root.selectedTag === null || this.addon.tags.includes(this.$root.selectedTag);
       const matchesSearch =
         this.searchInput === "" ||
         this.addon.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
@@ -186,10 +185,10 @@ const AddonBody = Vue.extend({
             .some((author) => author.includes(this.searchInput.toLowerCase())));
       // Show disabled easter egg addons only if category is easterEgg
       const matchesEasterEgg = this.addon.tags.includes("easterEgg")
-        ? this.$root.selectedTab === "easterEgg" || this.addon._wasEverEnabled
+        ? this.$root.selectedCategory === "easterEgg" || this.addon._wasEverEnabled
         : true;
 
-      return matchesTag && matchesSearch && matchesEasterEgg;
+      return matchesSearch && matchesEasterEgg;
     },
   },
   methods: {
@@ -282,7 +281,7 @@ const AddonTag = Vue.extend({
       return this.$root.tags.find((tag) => tag.matchName === this.tag);
     },
     shouldShow() {
-      return this.tagInfo && !this.tagInfo.addonTabHide?.[this.$root.selectedTab];
+      return this.tagInfo && !this.tagInfo.addonTabHide?.[this.$root.selectedCategory];
     },
   },
   methods: {
@@ -353,6 +352,33 @@ const AddonSetting = Vue.extend({
   },
 });
 Vue.component("addon-setting", AddonSetting);
+
+const CategorySelector = Vue.extend({
+  props: ["category"],
+  template: document.querySelector("template#category-selector-component").innerHTML,
+  data() {
+    return {};
+  },
+  computed: {
+    selectedCategory() {
+      return this.$root.selectedCategory;
+    },
+    selectedCategory() {
+      return this.$root.selectedCategory;
+    },
+  },
+  methods: {
+    msg(...params) {
+      return this.$root.msg(...params);
+    },
+    onClick() {
+      this.$root.selectedCategory = this.category.id;
+      this.$root.sidebarToggle();
+    },
+  },
+  events: {},
+});
+Vue.component("category-selector", CategorySelector);
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];
@@ -470,8 +496,7 @@ const vue = (window.vue = new Vue({
     loaded: false,
     manifests: [],
     manifestsById: {},
-    selectedTab: "all",
-    selectedTag: null,
+    selectedCategory: "all",
     searchInput: "",
     addonSettings: {},
     addonsRunningOnTab: false,
@@ -593,11 +618,36 @@ const vue = (window.vue = new Vue({
         expanded: false,
       },
     ],
+    categories: [
+      {
+        id: "all",
+        icon: "list",
+        name: "all",
+      },
+      {
+        id: "editor",
+        icon: "puzzle",
+        name: "editorFeatures",
+      },
+      {
+        id: "community",
+        icon: "web",
+        name: "websiteFeatures",
+      },
+      {
+        id: "theme",
+        icon: "brush",
+        name: "themes",
+      },
+      {
+        id: "popup",
+        icon: "popup",
+        name: "popupFeatures",
+        marginBottom: true,
+      },
+    ],
   },
   computed: {
-    tagsToShow() {
-      return this.tags.filter((tag) => tag.tabShow?.[this.selectedTab]);
-    },
     version() {
       return chrome.runtime.getManifest().version;
     },
@@ -837,12 +887,6 @@ const vue = (window.vue = new Vue({
       }
     },
   },
-
-  watch: {
-    selectedTab() {
-      this.selectedTag = null;
-    },
-  },
 }));
 
 chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
@@ -1013,7 +1057,7 @@ const KONAMI_CODE = [
 document.addEventListener("keydown", (e) => {
   cursor = e.code === KONAMI_CODE[cursor] ? cursor + 1 : 0;
   if (cursor === KONAMI_CODE.length) {
-    vue.selectedTab = "easterEgg";
+    vue.selectedCategory = "easterEgg";
     setTimeout(() => (vue.searchInput = ""), 0); // Allow konami code in autofocused search bar
   }
 });
