@@ -162,7 +162,7 @@ const AddonBody = Vue.extend({
     shouldShow() {
       return (
         this.addonMatchesFilters &&
-        (this.$root.selectedCategory === "all" || this.addon._category === this.$root.selectedCategory)
+        (this.$root.selectedCategory === "all" || this.addon._category.includes(this.$root.selectedCategory))
       );
     },
     searchInput() {
@@ -281,7 +281,7 @@ const AddonTag = Vue.extend({
       return this.$root.tags.find((tag) => tag.matchName === this.tag);
     },
     shouldShow() {
-      return this.tagInfo && !this.tagInfo.addonTabHide?.[this.$root.selectedCategory];
+      return this.tagInfo && (!this.tagInfo.addonTabShow || this.tagInfo.addonTabShow[this.$root.selectedCategory]);
     },
   },
   methods: {
@@ -363,15 +363,13 @@ const CategorySelector = Vue.extend({
     selectedCategory() {
       return this.$root.selectedCategory;
     },
-    selectedCategory() {
-      return this.$root.selectedCategory;
-    },
   },
   methods: {
     msg(...params) {
       return this.$root.msg(...params);
     },
-    onClick() {
+    onClick(event) {
+      event.stopPropagation();
       this.$root.selectedCategory = this.category.id;
       this.$root.sidebarToggle();
     },
@@ -556,10 +554,8 @@ const vue = (window.vue = new Vue({
           community: false,
           theme: true,
         },
-        addonTabHide: {
-          all: true,
-          editor: true,
-          community: true,
+        addonTabShow: {
+          theme: true,
         },
       },
       {
@@ -573,10 +569,8 @@ const vue = (window.vue = new Vue({
           community: false,
           theme: true,
         },
-        addonTabHide: {
-          all: true,
-          editor: true,
-          community: true,
+        addonTabShow: {
+          theme: true,
         },
       },
       {
@@ -628,6 +622,13 @@ const vue = (window.vue = new Vue({
         id: "editor",
         icon: "puzzle",
         name: "editorFeatures",
+        children: [
+          {
+            id: "costumeeditor",
+            icon: "brush",
+            name: "costumeeditorFeatures",
+          },
+        ],
       },
       {
         id: "community",
@@ -892,21 +893,27 @@ const vue = (window.vue = new Vue({
 chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
-    manifest._category = manifest.popup
-      ? "popup"
-      : manifest.tags.includes("easterEgg")
-      ? "easterEgg"
-      : manifest.tags.includes("theme")
-      ? "theme"
-      : manifest.tags.includes("community")
-      ? "community"
-      : "editor";
+    manifest._category = [
+      manifest.popup
+        ? "popup"
+        : manifest.tags.includes("easterEgg")
+        ? "easterEgg"
+        : manifest.tags.includes("theme")
+        ? "theme"
+        : manifest.tags.includes("community")
+        ? "community"
+        : "editor",
+    ];
+
+    if (manifest.tags.includes("costumeeditor")) {
+      manifest._category.push("costumeeditor");
+    }
 
     if (manifest.popup) manifest.tags.push("popup");
 
     // Exception:
     if (addonId === "msg-count-badge") {
-      manifest._category = "popup";
+      manifest._category = ["popup"];
       manifest.tags.push("popup");
     }
     manifest._enabled = addonsEnabled[addonId];

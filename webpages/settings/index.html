@@ -184,11 +184,15 @@
               <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': addon._expanded}" />
             </div>
             <div class="addon-name">
-              <img v-if="addon._category === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
-              <img v-if="addon._category === 'community'" src="../../images/icons/web.svg" class="icon-type" />
-              <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
-              <img v-if="addon._category === 'easterEgg'" src="../../images/icons/egg-easter.svg" class="icon-type" />
-              <img v-if="addon._category === 'popup'" src="../../images/icons/popup.svg" class="icon-type" />
+              <img v-if="addon._category.includes('editor')" src="../../images/icons/puzzle.svg" class="icon-type" />
+              <img v-if="addon._category.includes('community')" src="../../images/icons/web.svg" class="icon-type" />
+              <img v-if="addon._category.includes('theme')" src="../../images/icons/brush.svg" class="icon-type" />
+              <img
+                v-if="addon._category.includes('easterEgg')"
+                src="../../images/icons/egg-easter.svg"
+                class="icon-type"
+              />
+              <img v-if="addon._category.includes('popup')" src="../../images/icons/popup.svg" class="icon-type" />
               <span @click="devShowAddonIds">{{ addon.name }}</span>
             </div>
           </div>
@@ -289,11 +293,14 @@
       <div
         class="category"
         :class="{sel: category.id === 'all'}"
-        :style="{ marginBottom: category.marginBottom ? '15px' : 0 }"
-        @click="onClick"
+        :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
+        @click="onClick($event)"
       >
         <img :src="'../../images/icons/' + category.icon + '.svg'" />
         <span>{{ msg(category.name) }}</span>
+        <div class="category-children" v-if="category.children">
+          <category-selector v-for="child of category.children" :category="child"></category-selector>
+        </div>
       </div>
     </template>
     <script src="index.js" type="module"></script>
