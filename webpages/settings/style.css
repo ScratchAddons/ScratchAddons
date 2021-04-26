@@ -46,16 +46,26 @@ h1 {
   align-items: stretch;
 }
 
+.addon-group {
+  margin-bottom: 20px;
+}
+
 .addon-group > span {
   display: flex;
   align-items: center;
-  cursor: default;
-  margin: 0px 25px;
+  cursor: pointer;
+  margin: 0px 20px;
 }
 
 .addon-group > span > img {
   height: 23px;
   margin-right: 5px;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.addon-group > span > img:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .addon-group > span:after {
