@@ -46,6 +46,10 @@ h1 {
   align-items: stretch;
 }
 
+.addon-group {
+  margin-bottom: 20px;
+}
+
 .addon-group > span {
   display: flex;
   align-items: center;
