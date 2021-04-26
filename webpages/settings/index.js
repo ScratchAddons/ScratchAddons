@@ -678,26 +678,24 @@ const vue = (window.vue = new Vue({
       }, wait);
     },
     closePickers(e, leaveOpen) {
-      for (let addon of this.$children) {
-        for (let setting of addon.$children) {
-          for (let picker of setting.$children) {
-            if (picker.isOpen && picker.canCloseOutside && e.isTrusted && picker.color && picker !== leaveOpen) {
-              picker.toggle(picker.addon, picker.setting, false);
-            }
-          }
+      (function findPickers(child) {
+        for (const item of child.$children) {
+          findPickers(item);
         }
-      }
+        if (child.isOpen && child.canCloseOutside && e.isTrusted && child.color && child !== leaveOpen) {
+          child.toggle(child.addon, child.setting, false);
+        }
+      })(this);
     },
     closeResetDropdowns(e, leaveOpen) {
-      for (let addon of this.$children) {
-        for (let setting of addon.$children) {
-          for (let resetDropdown of setting.$children) {
-            if (resetDropdown.isResetDropdown && e.isTrusted && resetDropdown !== leaveOpen) {
-              resetDropdown.isOpen = false;
-            }
-          }
+      (function findPickers(child) {
+        for (const item of child.$children) {
+          findPickers(item);
         }
-      }
+        if (child.isResetDropdown && e.isTrusted && child !== leaveOpen) {
+          child.isOpen = false;
+        }
+      })(this);
     },
     exportSettings() {
       serializeSettings().then((serialized) => {
