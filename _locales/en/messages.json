@@ -11,11 +11,11 @@
   "games": {
     "message": "Games"
   },
-  "openInNewTab": {
-    "message": "Open in new browser tab"
-  },
   "changelog": {
     "message": "View changelog"
+  },
+  "notifChangelog": {
+    "message": "View Changelog"
   },
   "15min": {
     "message": "For 15 minutes"
