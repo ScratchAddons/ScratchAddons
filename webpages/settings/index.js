@@ -123,7 +123,7 @@ const AddonGroup = Vue.extend({
   props: ["group"],
   template: document.querySelector("template#addon-group-component").innerHTML,
   data() {
-    return { everExpanded: this.group.expanded };
+    return {};
   },
   computed: {
     shouldShow() {
@@ -135,8 +135,6 @@ const AddonGroup = Vue.extend({
       this.$root.searchInput;
       this.$root.loaded;
 
-      if (!this.everExpanded) return this.group.addonIds.length;
-
       return this.$children.filter((addon) => addon.shouldShow).length;
     },
     manifestsById() {
@@ -146,7 +144,6 @@ const AddonGroup = Vue.extend({
   methods: {
     toggle() {
       this.group.expanded = !this.group.expanded;
-      this.everExpanded = true;
     },
   },
 });
