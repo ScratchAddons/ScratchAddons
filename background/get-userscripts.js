@@ -249,21 +249,59 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+// Pathname patterns. Make sure NOT to set global flag!
+// Don't forget ^ and $
+const WELL_KNOWN_PATTERNS = {
+  projects: /^\/projects\/(?:editor|\d+(?:\/(?:fullscreen|editor))?)\/?$/,
+  projectEmbeds: /^\/projects\/\d+\/embed\/?$/,
+  studios: /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/,
+  studioComments: /^\/studios\/\d+\/comments\/?$/,
+  profiles: /^\/users\/[\w-]+\/?$/,
+  topics: /^\/discuss\/topic\/\d+\/?$/,
+  newPostScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add)\/?$/,
+  editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|settings\/[\w-]+)\/?$/,
+  forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
+};
+
+// regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
+// matchesPattern = "*" | regexPattern | Array<wellKnownName | regexPattern | legacyPattern>
 function userscriptMatches(data, scriptOrStyle, addonId) {
   if (scriptOrStyle.settingMatch) {
     const { id, value } = scriptOrStyle.settingMatch;
     if (scratchAddons.globalState.addonSettings[addonId][id] !== value) return false;
   }
   const url = data.url;
-  for (const match of scriptOrStyle.matches) {
-    if (urlMatchesPattern(match, url)) return true;
+  const parsedURL = new URL(url);
+  const { matches, _scratchDomainImplied } = scriptOrStyle;
+  const parsedPathname = parsedURL.pathname;
+  const parsedOrigin = parsedURL.origin;
+  const originPath = parsedOrigin + parsedPathname;
+  const matchURL = _scratchDomainImplied ? parsedPathname : originPath;
+  const scratchOrigin = "https://scratch.mit.edu";
+  const isScratchOrigin = parsedOrigin === scratchOrigin;
+  // "*" is used for any URL on Scratch origin
+  if (matches === "*") return isScratchOrigin;
+  // matches becomes RegExp if it is a string that starts with ^
+  // See load-addon-manifests.js
+  if (matches instanceof RegExp) {
+    if (_scratchDomainImplied && !isScratchOrigin) return false;
+    return matches.test(matchURL);
+  }
+  for (const match of matches) {
+    if (match instanceof RegExp) {
+      if (match._scratchDomainImplied && !isScratchOrigin) continue;
+      if (match.test(match._scratchDomainImplied ? parsedPathname : originPath)) {
+        return true;
+      }
+    } else if (Object.prototype.hasOwnProperty.call(WELL_KNOWN_PATTERNS, match)) {
+      if (isScratchOrigin && WELL_KNOWN_PATTERNS[match].test(parsedPathname)) return true;
+    } else if (urlMatchesLegacyPattern(match, parsedURL)) return true;
   }
   return false;
 }
 
-function urlMatchesPattern(pattern, url) {
+function urlMatchesLegacyPattern(pattern, urlUrl) {
   const patternUrl = new URL(pattern);
-  const urlUrl = new URL(url);
   // We assume both URLs start with https://scratch.mit.edu
 
   const patternPath = patternUrl.pathname.split("/");
