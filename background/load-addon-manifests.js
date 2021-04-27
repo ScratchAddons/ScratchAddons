@@ -22,13 +22,13 @@
       }
     }
     for (const propName of ["userscripts", "userstyles"]) {
-      for (const injectable of (manifest[propName] || [])) {
+      for (const injectable of manifest[propName] || []) {
         const { matches } = injectable;
         if (typeof matches === "string" && matches.startsWith("^")) {
           injectable._scratchDomainImplied = !matches.startsWith("^https:");
           injectable.matches = new RegExp(matches, "u");
         } else if (Array.isArray(matches)) {
-          for (let i = matches.length; i--;) {
+          for (let i = matches.length; i--; ) {
             const match = matches[i];
             if (typeof match === "string" && match.startsWith("^")) {
               matches[i] = new RegExp(match, "u");
