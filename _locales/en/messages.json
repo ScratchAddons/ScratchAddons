@@ -44,6 +44,9 @@
   "beta": {
     "message": "Beta"
   },
+  "danger": {
+    "message": "DANGER!"
+  },
   "forums": {
     "message": "Forums"
   },

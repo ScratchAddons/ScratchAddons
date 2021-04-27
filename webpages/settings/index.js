@@ -240,6 +240,15 @@ const AddonBody = Vue.extend({
       const requiredPermissions = (this.addon.permissions || []).filter((value) =>
         browserLevelPermissions.includes(value)
       );
+      // NOTE: The following code was added for safety purposes only. Feel free to comment it out at yoru own risk.
+      if (!this.addon._enabled && this.addon.tags.includes("danger")) {
+        while (
+          window.confirm(
+            "DO YOU UNDERSTAND THE CONSEQUENCES BY ENABLING THIS ADDON AND UNDERSTAND ITS FUNCTIONALITY? ENABLING THIS ADDON MAY BE FATAL!!!!"
+          )
+        ) {}
+        return;
+      }
       if (!this.addon._enabled && requiredPermissions.length) {
         const result = requiredPermissions.every((p) => grantedOptionalPermissions.includes(p));
         if (result === false) {
@@ -577,6 +586,12 @@ const vue = (window.vue = new Vue({
         matchType: "tag",
         matchName: "new",
         color: "purple",
+      },
+      {
+        name: "danger",
+        matchType: "tag",
+        matchName: "danger",
+        color: "darkred",
       },
     ],
     addonGroups: [
@@ -928,7 +943,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     else {
       // Addon is disabled
       if (manifest.tags.includes("recommended")) manifest._groups.push("recommended");
-      else if (manifest.tags.includes("beta")) manifest._groups.push("hidden");
+      else if (manifest.tags.includes("beta") || manifest.tags.includes("danger")) manifest._groups.push("hidden");
       else manifest._groups.push("others");
     }
 
@@ -949,19 +964,22 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
           if (addonB.tags.includes(tag)) return addonA.name.localeCompare(addonB.name);
         };
 
-        /* 1. beta addons */
+        /* 1. danger addons */
+        if (checkTag("danger") != null) return checkTag("danger");
+
+        /* 2. beta addons */
         if (checkTag("beta") != null) return checkTag("beta");
 
-        /* 2. editor category addons */
+        /* 3. editor category addons */
         if (checkTag("editor") != null) return checkTag("editor");
 
-        /* 3. website category addons */
+        /* 4. website category addons */
         if (checkTag("community") != null) return checkTag("community");
 
-        /* 4. theme addons */
+        /* 5. theme addons */
         if (checkTag("theme") != null) return checkTag("theme");
 
-        /* 5. extension popup addons */
+        /* 6. extension popup addons */
         if (checkTag("popup") != null) return checkTag("popup");
       })
       .map((addon) => addon._addonId);

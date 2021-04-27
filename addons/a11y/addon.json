@@ -34,7 +34,7 @@
       "default": false
     }
   ],
-  "tags": ["editor", "beta"],
+  "tags": ["editor", "danger"],
   "enabledByDefault": false,
   "l10n": true
 }
