@@ -171,7 +171,7 @@ async function setCssVariables(addonSettings, addonsWithUserstyles) {
   const hyphensToCamelCase = (s) => s.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
   const setVar = (addonId, varName, value) =>
     document.documentElement.style.setProperty(
-      `--${hyphensToCamelCase(addonId)}-${hyphensToCamelCase(varName)}`,
+      `--${hyphensToCamelCase(addonId)}-${varName}`,
       value
     );
 
@@ -182,31 +182,34 @@ async function setCssVariables(addonSettings, addonsWithUserstyles) {
     for (const settingName of Object.keys(addonSettings[addonId])) {
       const value = addonSettings[addonId][settingName];
       if (typeof value === "string" || typeof value === "number") {
-        setVar(addonId, settingName, addonSettings[addonId][settingName]);
+        setVar(addonId, hyphensToCamelCase(settingName), addonSettings[addonId][settingName]);
       }
     }
   }
 
   // Set variables for customCssVariables
+  const getColor = (addonId, obj) => {
+    let hex;
+    switch (obj.type) {
+      case "settingValue":
+        return addonSettings[addonId][obj.settingId];
+      case "textColor":
+        hex = getColor(addonId, obj.source);
+        return textColorLib.textColor(hex, obj.black, obj.white, obj.threshold);
+      case "multiply":
+        hex = getColor(addonId, obj.source);
+        return textColorLib.multiply(hex, obj);
+      case "brighten":
+        hex = getColor(addonId, obj.source);
+        return textColorLib.brighten(hex, obj);
+    }
+  }
+  
   for (const addon of addonsWithUserstyles) {
     const addonId = addon.addonId;
     for (const customVar of addon.cssVariables) {
       const varName = customVar.name;
-      if (customVar.value.type === "textColor") {
-        const hex = addonSettings[addonId][customVar.value.sourceSettingId];
-        const { black, white, threshold } = customVar.value;
-        const result = textColorLib.textColor(hex, black, white, threshold);
-        setVar(addonId, varName, result);
-      } else if (customVar.value.type === "multiply") {
-        const hex = addonSettings[addonId][customVar.value.sourceSettingId];
-        const { r, g, b, a } = customVar.value;
-        const result = textColorLib.multiply(hex, { r, g, b, a });
-        setVar(addonId, varName, result);
-      } else if (customVar.value.type === "brighten") {
-        const hex = addonSettings[addonId][customVar.value.sourceSettingId];
-        const { r, g, b, a } = customVar.value;
-        const result = textColorLib.brighten(hex, { r, g, b, a });
-      }
+      setVar(addonId, varName, getColor(addonId, customVar.value));
     }
   }
 }
