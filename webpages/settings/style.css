@@ -48,9 +48,6 @@ h1 {
 
 .addon-group {
   margin-bottom: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgb(0 0 0 / 25%);
-  padding: 3px;
 }
 
 .addon-group > span {
@@ -63,7 +60,7 @@ h1 {
 .addon-group > span > img {
   height: 23px;
   margin-right: 5px;
-  padding: 7px;
+  padding: 5px;
   border-radius: 4px;
 }
 
@@ -71,6 +68,14 @@ h1 {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
+.addon-group > span:after {
+  content: "";
+  border-top: 1px solid white;
+  width: 100px;
+  margin-left: 10px;
+  flex: 1;
+  opacity: 0.5;
+}
 
 .addons-block {
   flex-grow: 1;
