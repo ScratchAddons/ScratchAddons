@@ -1,4 +1,4 @@
-name: Validate addon manifest with schema
+name: Validate addon manifest
 
 on:
   push:
