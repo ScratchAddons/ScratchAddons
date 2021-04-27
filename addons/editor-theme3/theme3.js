@@ -127,10 +127,12 @@ function updateSettings(addon, newStyle) {
         fill: ${background};
         stroke: var(--editorTheme3-${settingName}Color);
       }
-      g[data-category="${prop}"] .blocklyText {
+      g[data-category="${prop}"] > .blocklyText {
         fill: var(--editorTheme3-${settingName}Color);
       }
-      g[data-category="${prop}"] .blocklyDropdownText {
+      g[data-category="${prop}"] > g[data-argument-type="dropdown"] > .blocklyDropdownText,
+      g[data-category="${prop}"] > g[data-argument-type="variable"] > .blocklyDropdownText,
+      g[data-category="${prop}"] > g[data-argument-type="dropdown"] > g > .blocklyDropdownText {
         fill: var(--editorTheme3-${settingName}Color) !important;
       }
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > path,
@@ -225,6 +227,9 @@ function updateSettings(addon, newStyle) {
         path.blocklyBlockBackground[fill="#FFBF00"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
         }
+        path.blocklyBlockBackground[fill="#FFBF00"] ~ g[data-argument-type="variable"] > g > .blocklyDropdownText {
+          fill: var(--editorTheme3-${prop}Color) !important;
+        }
         g[data-argument-type="dropdown"] > rect[fill="#FFBF00"] ~ .blocklyText,
         g[data-argument-type="dropdown"] > rect[fill="#CC9900"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color) !important;
@@ -244,6 +249,9 @@ function updateSettings(addon, newStyle) {
         } 
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
+        }
+        path.blocklyBlockBackground[fill="#0FBD8C"] ~ g[data-argument-type="dropdown"] > g > .blocklyDropdownText {
+          fill: var(--editorTheme3-${prop}Color) !important;
         }
         g[data-argument-type="dropdown"] > path[fill="#0DA57A"],
         g[data-argument-type="dropdown"] > path[fill="#0B8E69"] {
