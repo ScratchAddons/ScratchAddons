@@ -259,7 +259,7 @@ const WELL_KNOWN_PATTERNS = {
   profiles: /^\/users\/[\w-]+\/?$/,
   topics: /^\/discuss\/topic\/\d+\/?$/,
   newPostScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add)\/?$/,
-  editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|settings\/[\w-]+)\/?$/,
+  editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
   forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
 };
 
