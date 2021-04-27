@@ -179,9 +179,9 @@
         :id="'addon-' + addon._addonId"
       >
         <div class="addon-topbar">
-          <div class="clickeable-area" @click="addon._expanded = !addon._expanded">
+          <div class="clickeable-area" @click="expanded = !expanded">
             <div class="btn-dropdown">
-              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': addon._expanded}" />
+              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" />
             </div>
             <div class="addon-name">
               <img v-if="addon._category.includes('editor')" src="../../images/icons/puzzle.svg" class="icon-type" />
@@ -197,10 +197,10 @@
             </div>
           </div>
           <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
-          <div class="addon-description" v-show="!addon._expanded">{{ addon.description }}</div>
+          <div class="addon-description" v-show="!expanded">{{ addon.description }}</div>
           <div class="addon-check">
             <div
-              v-show="addon._expanded"
+              v-show="expanded"
               v-if="addon.settings"
               class="clear-settings"
               title="{{ msg('resetToDefault') }}"
@@ -211,13 +211,13 @@
             <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest($event)"></div>
           </div>
         </div>
-        <div class="addon-settings" v-if="addon._expanded">
-          <div class="addon-description-full" v-show="addon._expanded">{{ addon.description }}</div>
+        <div class="addon-settings" v-if="expanded">
+          <div class="addon-description-full" v-show="expanded">{{ addon.description }}</div>
           <div id="info" v-for="info of addon.info">
-            <div class="addon-warn" v-if="info.type == 'warning'" v-show="addon._expanded">
+            <div class="addon-warn" v-if="info.type == 'warning'" v-show="expanded">
               <img src="../../images/icons/warning.svg" />{{ info.text }}
             </div>
-            <div class="addon-notice" v-if="info.type == 'notice'" v-show="addon._expanded">
+            <div class="addon-notice" v-if="info.type == 'notice'" v-show="expanded">
               <img src="../../images/icons/notice.svg" />{{ info.text }}
             </div>
           </div>
@@ -303,7 +303,7 @@
     </template>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded" :class="{light: theme}">
+  <body style="display: none;" v-show="loaded" :class="{light: theme}">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
@@ -321,13 +321,13 @@
 
         <div
           class="category category-small"
-          style="margin-top: auto"
+          style="margin-top: auto;"
           @click="openPage('https://scratchaddons.com/contributors')"
         >
           <img src="../../images/icons/users.svg" />
           <span>{{ msg("credits") }}</span>
         </div>
-        <div class="category category-small" @click="openReview()" style="display: none">
+        <div class="category category-small" @click="openReview()" style="display: none;">
           <img src="../../images/icons/star.svg" />
           <span>{{ msg("review") }}</span>
         </div>
@@ -339,7 +339,7 @@
           <img src="../../images/icons/comment.svg" />
           <span>{{ msg("feedback") }}</span>
         </div>
-        <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
+        <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px;" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
           <span>{{ msg("moreSettings") }}</span>
         </div>
@@ -347,7 +347,7 @@
       <div
         v-show="smallMode === false"
         class="categories-shrink"
-        style="display: block !important"
+        style="display: block !important;"
         @click="sidebarToggle()"
       >
         <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === false}" />
@@ -359,11 +359,11 @@
           <input type="text" id="searchBox" placeholder="{{ msg('search') }}" v-model="searchInput" />
           <button
             v-show="searchInput === ''"
-            style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey')"
+            style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey');"
           ></button>
           <button
             v-else
-            style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey')"
+            style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey');"
             @click="clearSearch()"
           ></button>
           <div id="popup-more-settings" v-show="isIframe">
@@ -452,7 +452,7 @@
         </div>
       </div>
     </div>
-    <div class="popup" v-show="showPopupModal" style="display: none">
+    <div class="popup" v-show="showPopupModal" style="display: none;">
       <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
       <div>
         <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>

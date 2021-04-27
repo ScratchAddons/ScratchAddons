@@ -153,7 +153,9 @@ const AddonBody = Vue.extend({
   props: ["addon", "group"],
   template: document.querySelector("template#addon-body-component").innerHTML,
   data() {
-    return {};
+    return {
+      expanded: document.body.classList.contains("iframe") ? false : this.group.id === "enabled",
+    };
   },
   computed: {
     shouldShow() {
@@ -221,9 +223,9 @@ const AddonBody = Vue.extend({
         const newState = !this.addon._enabled;
         this.addon._enabled = newState;
         // Do not extend when enabling in popup mode, unless addon has warnings
-        this.addon._expanded =
+        this.expanded =
           document.body.classList.contains("iframe") &&
-          !this.addon._expanded &&
+          !this.expanded &&
           (this.addon.info || []).every((item) => item.type !== "warning")
             ? false
             : event.shiftKey
@@ -915,11 +917,9 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     }
     manifest._enabled = addonsEnabled[addonId];
     manifest._addonId = addonId;
-    manifest._expanded = document.body.classList.contains("iframe") ? false : manifest._enabled;
     manifest._groups = [];
 
     if (NEW_ADDONS.includes(addonId)) {
-      manifest._expanded = false;
       manifest.tags.push("new");
       manifest._groups.push("new");
     }
@@ -978,13 +978,6 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     if (hash) {
       window.location.hash = "";
       window.location.hash = hash;
-      // For v1.13.0, TODO: remove in v1.14.0
-      if (
-        hash === "#addon-editor-dark-mode" &&
-        vue.manifests.find((m) => m._addonId === "editor-dark-mode")._enabled === true
-      ) {
-        vue.manifests.find((m) => m._addonId === "editor-dark-mode")._expanded = true;
-      }
     }
   }, 0);
 });
