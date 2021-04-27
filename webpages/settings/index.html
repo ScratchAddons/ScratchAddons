@@ -184,11 +184,15 @@
               <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': addon._expanded}" />
             </div>
             <div class="addon-name">
-              <img v-if="addon._category === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
-              <img v-if="addon._category === 'community'" src="../../images/icons/web.svg" class="icon-type" />
-              <img v-if="addon._category === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
-              <img v-if="addon._category === 'easterEgg'" src="../../images/icons/egg-easter.svg" class="icon-type" />
-              <img v-if="addon._category === 'popup'" src="../../images/icons/popup.svg" class="icon-type" />
+              <img v-if="addon._category.includes('editor')" src="../../images/icons/puzzle.svg" class="icon-type" />
+              <img v-if="addon._category.includes('community')" src="../../images/icons/web.svg" class="icon-type" />
+              <img v-if="addon._category.includes('theme')" src="../../images/icons/brush.svg" class="icon-type" />
+              <img
+                v-if="addon._category.includes('easterEgg')"
+                src="../../images/icons/egg-easter.svg"
+                class="icon-type"
+              />
+              <img v-if="addon._category.includes('popup')" src="../../images/icons/popup.svg" class="icon-type" />
               <span @click="devShowAddonIds">{{ addon.name }}</span>
             </div>
           </div>
@@ -285,6 +289,20 @@
         </template>
       </div>
     </template>
+    <template id="category-selector-component">
+      <div
+        class="category"
+        :class="{sel: category.id === 'all'}"
+        :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
+        @click="onClick($event)"
+      >
+        <img :src="'../../images/icons/' + category.icon + '.svg'" />
+        <span>{{ msg(category.name) }}</span>
+        <div class="category-children" v-if="category.children">
+          <category-selector v-for="child of category.children" :category="child"></category-selector>
+        </div>
+      </div>
+    </template>
     <script src="index.js" type="module"></script>
   </head>
   <body style="display: none" v-show="loaded" :class="{light: theme}">
@@ -301,31 +319,8 @@
         v-show="categoryOpen"
         :class="{smallMode: smallMode === true}"
       >
-        <div class="category" :class="{sel: selectedTab === 'all'}" @click="selectedTab = 'all'">
-          <img src="../../images/icons/list.svg" />
-          <span>{{ msg("all") }}</span>
-        </div>
-        <div class="category" :class="{sel: selectedTab === 'editor'}" @click="selectedTab = 'editor'">
-          <img src="../../images/icons/puzzle.svg" />
-          <span>{{ msg("editorFeatures") }}</span>
-        </div>
-        <div class="category" :class="{sel: selectedTab === 'community'}" @click="selectedTab = 'community'">
-          <img src="../../images/icons/web.svg" />
-          <span>{{ msg("websiteFeatures") }}</span>
-        </div>
-        <div class="category" :class="{sel: selectedTab === 'theme'}" @click="selectedTab = 'theme'">
-          <img src="../../images/icons/brush.svg" />
-          <span>{{ msg("themes") }}</span>
-        </div>
-        <div
-          class="category"
-          :class="{sel: selectedTab === 'popup'}"
-          @click="selectedTab = 'popup'"
-          style="margin-bottom: 12px"
-        >
-          <img src="../../images/icons/popup.svg" />
-          <span>{{ msg("popupFeatures") }}</span>
-        </div>
+        <category-selector v-for="category of categories" :category="category"></category-selector>
+
         <div
           class="category category-small"
           style="margin-top: auto"
@@ -377,30 +372,6 @@
             <button @click="openFullSettings()" class="large-button">
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ msg("moreSettings") }}
             </button>
-          </div>
-          <div class="filter-selector">
-            <span class="filter-text">{{ msg("filter") }} </span>
-            <div class="filter-options">
-              <div class="filter-option" :class="{'sel': selectedTag === null}" @click="selectedTag = null">
-                {{ msg("all") }}
-              </div>
-              <div
-                v-for="tag of tagsToShow"
-                class="filter-option"
-                class="badge"
-                :class="{
-                'sel': selectedTag === tag.matchName,
-                'blue': tag.color === 'blue',
-                'yellow': tag.color === 'yellow',
-                'red': tag.color === 'red',
-                'green': tag.color === 'green',
-                'darkgreen': tag.color === 'darkgreen'
-                }"
-                @click="selectedTag === tag.matchName ? (selectedTag = null) : (selectedTag = tag.matchName)"
-              >
-                {{ msg(tag.name) }}
-              </div>
-            </div>
           </div>
         </div>
 

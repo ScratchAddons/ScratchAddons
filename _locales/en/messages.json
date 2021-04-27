@@ -71,6 +71,9 @@
   "editorFeatures": {
     "message": "Scratch Editor Features"
   },
+  "costumeeditorFeatures": {
+    "message": "Custome Editor Features"
+  },
   "websiteFeatures": {
     "message": "Scratch Website Features"
   },
