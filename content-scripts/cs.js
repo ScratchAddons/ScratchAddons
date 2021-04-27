@@ -170,10 +170,7 @@ async function setCssVariables(addonSettings, addonsWithUserstyles) {
   const textColorLib = await textColorLibPromise;
   const hyphensToCamelCase = (s) => s.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
   const setVar = (addonId, varName, value) =>
-    document.documentElement.style.setProperty(
-      `--${hyphensToCamelCase(addonId)}-${varName}`,
-      value
-    );
+    document.documentElement.style.setProperty(`--${hyphensToCamelCase(addonId)}-${varName}`, value);
 
   const addonIds = addonsWithUserstyles.map((obj) => obj.addonId);
 
@@ -203,8 +200,8 @@ async function setCssVariables(addonSettings, addonsWithUserstyles) {
         hex = getColor(addonId, obj.source);
         return textColorLib.brighten(hex, obj);
     }
-  }
-  
+  };
+
   for (const addon of addonsWithUserstyles) {
     const addonId = addon.addonId;
     for (const customVar of addon.cssVariables) {
