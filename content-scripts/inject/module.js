@@ -274,7 +274,7 @@ function inject(Blockly) {
   if (injected) return;
   injected = true;
   let oldShow = Blockly.ContextMenu.show;
-  Blockly.ContextMenu.show = function (event, items, something) {
+  Blockly.ContextMenu.show = function (event, items, rtl) {
     let target = event.target;
     let block = target.closest("[data-id]");
     if (!block) {
@@ -316,7 +316,7 @@ function inject(Blockly) {
       if (injectMenu) items = callback(items, block);
     }
 
-    oldShow.call(this, event, items, something);
+    oldShow.call(this, event, items, rtl);
     items.forEach((item, i) => {
       if (item.separator) {
         const itemElt = document.querySelector(".blocklyContextMenu").children[i];
