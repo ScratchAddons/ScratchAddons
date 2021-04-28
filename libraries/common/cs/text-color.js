@@ -3,7 +3,7 @@ function parseHex(hex) {
     r: parseInt(hex.substring(1, 3), 16),
     g: parseInt(hex.substring(3, 5), 16),
     b: parseInt(hex.substring(5, 7), 16),
-    a: hex.length >= 9 ? parseInt(hex.substring(7, 9), 16)/255 : 1,
+    a: hex.length >= 9 ? parseInt(hex.substring(7, 9), 16) / 255 : 1,
   };
 }
 
@@ -33,5 +33,7 @@ export function brighten(hex, c) {
   if (c.g === undefined) c.g = 1;
   if (c.b === undefined) c.b = 1;
   if (c.a === undefined) c.a = 1;
-  return `rgba(${(1 - c.r) * 255 + c.r * r}, ${(1 - c.g) * 255 + c.g * g}, ${(1 - c.b) * 255 + c.b * b}, ${(1 - c.a) * 255 + c.a * a})`;
+  return `rgba(${(1 - c.r) * 255 + c.r * r}, ${(1 - c.g) * 255 + c.g * g}, ${(1 - c.b) * 255 + c.b * b}, ${
+    (1 - c.a) * 255 + c.a * a
+  })`;
 }
