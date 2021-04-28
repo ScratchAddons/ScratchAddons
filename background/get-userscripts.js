@@ -24,13 +24,14 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
           if (res) {
             (async () => {
-              const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
+              const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
               chrome.tabs.sendMessage(
                 tab.id,
                 {
                   dynamicAddonEnabled: {
                     scripts: userscripts,
                     userstyles,
+                    cssVariables,
                     addonId,
                     injectAsStyleElt: !!manifest.injectAsStyleElt,
                     index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
@@ -63,13 +64,14 @@ scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ 
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
           if (res) {
             (async () => {
-              const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
+              const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
               chrome.tabs.sendMessage(
                 tab.id,
                 {
                   updateUserstylesSettingsChange: {
                     scripts: userscripts,
                     userstyles,
+                    cssVariables,
                     addonId,
                     injectAsStyleElt: !!manifest.injectAsStyleElt,
                     index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
@@ -120,7 +122,7 @@ async function getAddonData({ addonId, manifest, url }) {
   }
   await Promise.all(promises);
 
-  return { userscripts, userstyles };
+  return { userscripts, userstyles, cssVariables: manifest.customCssVariables || [] };
 }
 
 async function getContentScriptInfo(url) {
@@ -136,13 +138,14 @@ async function getContentScriptInfo(url) {
     if (!scratchAddons.localState.addonsEnabled[addonId]) return;
     const promise = getAddonData({ addonId, manifest, url });
     promises.push(promise);
-    const { userscripts, userstyles } = await promise;
+    const { userscripts, userstyles, cssVariables } = await promise;
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
     if (userstyles.length)
       data.addonsWithUserstyles.push({
         addonId,
         styles: userstyles,
+        cssVariables,
         injectAsStyleElt: manifest.injectAsStyleElt,
         index: i,
       });
