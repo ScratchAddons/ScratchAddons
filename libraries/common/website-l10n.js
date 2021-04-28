@@ -4,7 +4,6 @@ export default class WebsiteLocalizationProvider extends LocalizationProvider {
   async loadByAddonId(addonId) {
     const translations = await new Promise((resolve) => chrome.runtime.sendMessage({ l10nAddonId: addonId }, resolve));
     this.messages = Object.assign(translations, this.messages);
-    this._refreshDateTime();
-    this._generateCache(translations);
+    this._reconfigure();
   }
 }

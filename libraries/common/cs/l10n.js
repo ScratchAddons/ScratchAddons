@@ -1,6 +1,5 @@
 import { escapeHTML } from "./autoescaper.js";
-import * as _IntlMessageFormat from "../../thirdparty/cs/intl-messageformat.umd.min.js";
-const MessageFormat = IntlMessageFormat.IntlMessageFormat;
+import {MessageFormatter, findClosingBracket} from "../../thirdparty/cs/icu-message-formatter.es.min.js";
 
 // This library is shared between background and userscript.
 // Subclasses are responsible for implementing methods to load translations.
@@ -9,45 +8,70 @@ export default class LocalizationProvider extends EventTarget {
   constructor() {
     super();
     this.messages = {};
-    this._cache = {};
-    this._cache_locale = "";
-    this._date = new Intl.DateTimeFormat();
-    this._datetime = new Intl.DateTimeFormat([], {
+    this._matchesCache = Object.create(null);
+    this.pluralizer = {
+      plural: (n, matches) => {
+        if (typeof n !== "number") {
+          console.warn("Non-number", n, "passed as parameter for", matches, "falling to 0");
+          n = 0;
+        }
+        let pluralType = this.pluralRules.select(n);
+        if (Object.prototype.hasOwnProperty.call(this._matchesCache, matches)) {
+          const cache = this._matchesCache[matches];
+          if (!Object.prototype.hasOwnProperty.call(cache, pluralType)) {
+            console.warn("Plural type", pluralType, "not handled in", matches, ", falling back to other. \
+This can happen when a string is not translated or is incorrectly translated.");
+            pluralType = "other";
+          }
+          return cache[pluralType].replace(/#/g, n);
+        }
+        let i = -1;
+        const map = Object.create(null);
+        let key = "";
+        while (++i < matches.length) {
+          switch (matches[i]) {
+            case "{": {
+              const newIndex = findClosingBracket(matches, ++i);
+              map[key] = matches.slice(i, newIndex);
+              i = newIndex;
+              key = "";
+              break;
+            }
+            case " ": break;
+            default: {
+              key += matches[i];
+            }
+          }
+        }
+        this._matchesCache[matches] = map;
+        if (!Object.prototype.hasOwnProperty.call(map, pluralType)) {
+          console.warn("Plural type", pluralType, "not handled in", matches, ", falling back to other. \
+This can happen when a string is not translated or is incorrectly translated.");
+          pluralType = "other";
+        }
+        return map[pluralType].replace(/#/g, n);
+      },
+    };
+    this._reconfigure();
+  }
+
+  _reconfigure() {
+    const locale = this.locale;
+    this._date = new Intl.DateTimeFormat(locale);
+    this._datetime = new Intl.DateTimeFormat(locale, {
       timeStyle: "short",
       dateStyle: "short",
     });
-  }
-
-  _refreshDateTime() {
-    this._date = new Intl.DateTimeFormat(this.locale);
-    this._datetime = new Intl.DateTimeFormat(this.locale, {
-      timeStyle: "short",
-      dateStyle: "short",
-    });
-  }
-
-  _generateCache(messages) {
-    messages = messages || this.messages;
-    this._cache_locale = messages._locale || this.locale;
-    for (const message of Object.keys(messages)) {
-      if (message.startsWith("_")) continue;
-      this._cache[message] = new MessageFormat(messages[message], this._cache_locale);
-    }
+    this.pluralRules = new Intl.PluralRules(locale);
+    this.formatter = new MessageFormatter(locale, this.pluralizer);
+    this._matchesCache = Object.create(null);
   }
 
   _get(key, placeholders, messageHandler, fallback) {
-    // Use cache if raw message is requested, and cache is up-to-date
-    if (
-      messageHandler === null &&
-      this.locale === this._cache_locale &&
-      Object.prototype.hasOwnProperty.call(this._cache, key)
-    ) {
-      return this._cache[key].format(placeholders);
-    }
     messageHandler = messageHandler || ((m) => m);
     if (Object.prototype.hasOwnProperty.call(this.messages, key)) {
       const message = messageHandler(this.messages[key]);
-      return new MessageFormat(message, this.locale).format(placeholders);
+      return this.formatter.format(message, placeholders);
     }
     console.warn("Key missing:", key);
     return fallback || key;
