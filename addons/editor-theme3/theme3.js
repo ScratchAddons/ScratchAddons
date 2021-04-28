@@ -3,7 +3,7 @@ import { textColor, multiply } from "../../libraries/text_color.js";
 function updateSettings(addon, newStyle) {
   var stylesheet = "";
   const textMode = addon.settings.get("text");
-  if (textMode == "black") {
+  if (textMode === "black") {
     stylesheet += `
       .blocklyText {
         fill: #575e75;
@@ -72,7 +72,7 @@ function updateSettings(addon, newStyle) {
 
   for (var prop of Object.keys(categories)) {
     var settingName = categories[prop].var ? categories[prop].var : prop;
-    if (textMode == "white" || textMode == "black") {
+    if (textMode === "white" || textMode === "black") {
       stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground {
         fill: var(--editorTheme3-${settingName}Color);
       }
@@ -246,7 +246,7 @@ function updateSettings(addon, newStyle) {
         stylesheet += `g[data-category] /* specificity */ > path.blocklyBlockBackground[fill="#0FBD8C"] {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
-        } 
+        }
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
         }
