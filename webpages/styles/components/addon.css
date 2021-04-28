@@ -1,7 +1,7 @@
 .addon-description {
-  margin-inline-start: 10px;
+  margin-inline: 10px;
   color: gray;
-  width: 35vw;
+  max-width: 35vw;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
