@@ -125,17 +125,13 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   //cool functions below
   function retrieveImageFromClipboardAsBlob(pasteEvent, callback) {
     if (!pasteEvent.clipboardData) {
-      if (typeof callback === "function") {
-        callback(undefined);
-      }
+      callback(undefined);
     }
 
     var items = pasteEvent.clipboardData.items;
 
     if (!items) {
-      if (typeof callback === "function") {
-        callback(undefined);
-      }
+      callback(undefined);
     }
 
     for (var i = 0; i < items.length; i++) {
@@ -144,9 +140,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       // Retrieve image on clipboard as blob
       var blob = items[i].getAsFile();
 
-      if (typeof callback === "function") {
-        callback(blob);
-      }
+      callback(blob);
     }
   }
   async function uploadAssetImage(image, fileType) {
