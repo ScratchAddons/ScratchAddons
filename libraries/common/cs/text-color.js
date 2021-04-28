@@ -17,7 +17,7 @@ function convertToHex(obj) {
   const r = convertComponentToHex(obj.r);
   const g = convertComponentToHex(obj.g);
   const b = convertComponentToHex(obj.b);
-  const a = obj.a !== undefined ? convertComponentToHex(255*obj.a) : "";
+  const a = obj.a !== undefined ? convertComponentToHex(255 * obj.a) : "";
   return `#${r}${g}${b}${a}`;
 }
 
@@ -38,7 +38,7 @@ export function multiply(hex, c) {
   if (c.g === undefined) c.g = 1;
   if (c.b === undefined) c.b = 1;
   if (c.a === undefined) c.a = 1;
-  return convertToHex({r: c.r * r, g: c.g * g, b: c.b * b, a: c.a * a});
+  return convertToHex({ r: c.r * r, g: c.g * g, b: c.b * b, a: c.a * a });
 }
 
 export function brighten(hex, c) {
