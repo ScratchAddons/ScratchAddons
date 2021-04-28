@@ -266,9 +266,9 @@ const WELL_KNOWN_PATTERNS = {
 
 const WELL_KNOWN_MATCHERS = {
   isNotScratchWWW: (match) => {
-    const {projects, projectEmbeds, scratchWWWNoEditor} = WELL_KNOWN_PATTERNS;
+    const { projects, projectEmbeds, scratchWWWNoEditor } = WELL_KNOWN_PATTERNS;
     return !(projects.test(match) || projectEmbeds.test(match) || scratchWWWNoEditor.test(match));
-  }
+  },
 };
 
 // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
