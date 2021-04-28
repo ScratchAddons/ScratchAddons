@@ -176,7 +176,7 @@ async function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for settings
   for (const addonId of addonIds) {
-    for (const settingName of Object.keys(addonSettings[addonId] ?? {})) {
+    for (const settingName of Object.keys(addonSettings[addonId] || {})) {
       const value = addonSettings[addonId][settingName];
       if (typeof value === "string" || typeof value === "number") {
         setVar(addonId, hyphensToCamelCase(settingName), addonSettings[addonId][settingName]);
