@@ -12,13 +12,9 @@ jobs:
           node-version: 14.x
       - name: Install Prettier
         run: npm install --global prettier
-      - name: Check format
-        run: npx prettier --check .
       - name: Format code
-        if: failure()
         run: npx prettier --write .
       - name: Commit changed files
-        if: failure()
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "style: format code"
