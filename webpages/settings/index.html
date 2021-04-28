@@ -33,7 +33,7 @@
     <script src="../../libraries/thirdparty/color-picker.js" type="module" defer></script>
     <template id="picker-component">
       <div class="color-container" :key="value" @click="loadColorPicker = true" @mouseover="loadColorPicker = true">
-        <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting,true)">
+        <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting)">
           <template v-if="loadColorPicker">
             <color-picker
               class=""
