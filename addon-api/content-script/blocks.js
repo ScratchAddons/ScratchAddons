@@ -122,7 +122,7 @@ const injectWorkspace = () => {
     return originalShow.call(this, xml);
   };
 
-  // We use Scratch's extension category mechanism to replace the data category with our own.
+  // We use Scratch's extension category mechanism to create the Scratch Addons category.
   // https://github.com/LLK/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
   // https://github.com/LLK/scratch-gui/blob/2ceab00370ad7bd8ecdf5c490e70fd02152b3e2a/src/lib/make-toolbox-xml.js#L763
   // https://github.com/LLK/scratch-vm/blob/a0c11d6d8664a4f2d55632e70630d09ec6e9ae28/src/engine/runtime.js#L1381
