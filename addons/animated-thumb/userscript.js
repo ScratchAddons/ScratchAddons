@@ -1,4 +1,4 @@
-import ThumbSetter from "../../libraries/animated-thumb.js";
+import ThumbSetter from "../../libraries/common/cs/thumb-setter.js";
 
 export default async function ({ addon, global, console, msg }) {
   while (true) {

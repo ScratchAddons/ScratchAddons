@@ -28,9 +28,9 @@
 
     <link rel="stylesheet" href="style.css" />
 
-    <link href="../../libraries/Sora.css" rel="stylesheet" />
-    <script src="../../libraries/vue.js" defer></script>
-    <script src="../../libraries/color-picker.js" type="module" defer></script>
+    <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
+    <script src="../../libraries/thirdparty/vue.js" defer></script>
+    <script src="../../libraries/thirdparty/color-picker.js" type="module" defer></script>
     <template id="picker-component">
       <div class="color-container" :key="value" @click="loadColorPicker = true" @mouseover="loadColorPicker = true">
         <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting,true)">

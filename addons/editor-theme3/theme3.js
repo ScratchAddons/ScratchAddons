@@ -1,4 +1,4 @@
-import { textColor, multiply } from "../../libraries/text_color.js";
+import { textColor, multiply } from "../../libraries/common/cs/text-color.js";
 
 function updateSettings(addon, newStyle) {
   var stylesheet = "";
@@ -246,7 +246,7 @@ function updateSettings(addon, newStyle) {
         stylesheet += `g[data-category] /* specificity */ > path.blocklyBlockBackground[fill="#0FBD8C"] {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
-        } 
+        }
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
         }

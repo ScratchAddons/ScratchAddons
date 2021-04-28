@@ -1,4 +1,4 @@
-import LocalizationProvider from "../libraries/l10n.js";
+import LocalizationProvider from "../libraries/common/cs/l10n.js";
 
 export default class BackgroundLocalizationProvider extends LocalizationProvider {
   constructor() {

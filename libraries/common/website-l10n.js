@@ -1,4 +1,4 @@
-import LocalizationProvider from "./l10n.js";
+import LocalizationProvider from "./cs/l10n.js";
 
 export default class WebsiteLocalizationProvider extends LocalizationProvider {
     async loadByAddonId (addonId) {

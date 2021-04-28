@@ -1,5 +1,5 @@
 import {escapeHTML} from "./autoescaper.js";
-import * as _IntlMessageFormat from "./intl-messageformat.umd.min.js";
+import * as _IntlMessageFormat from "../../thirdparty/cs/intl-messageformat.umd.min.js";
 const MessageFormat = IntlMessageFormat.IntlMessageFormat;
 
 // This library is shared between background and userscript.
