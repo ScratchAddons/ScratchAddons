@@ -272,7 +272,7 @@ const WELL_KNOWN_MATCHERS = {
 };
 
 // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
-// matchesPattern = "*" | regexPattern | Array<wellKnownName | regexPattern | legacyPattern>
+// matchesPattern = "*" | regexPattern | Array<wellKnownName | wellKnownMatcher | regexPattern | legacyPattern>
 function userscriptMatches(data, scriptOrStyle, addonId) {
   if (scriptOrStyle.settingMatch) {
     const { id, value } = scriptOrStyle.settingMatch;
