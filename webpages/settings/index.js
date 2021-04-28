@@ -1,5 +1,4 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["editor-dark-mode", "custom-zoom", "initialise-sprite-position"];
 
 Vue.directive("click-outside", {
   priority: 700,
@@ -177,7 +176,8 @@ const AddonBody = Vue.extend({
         this.searchInput === "" ||
         this.addon.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         this.addon._addonId.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-        this.addon.description.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        this.addon.description?.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        this.addon.versionadded?.includes(this.searchInput) ||
         (this.addon.credits &&
           this.addon.credits
             .map((obj) => obj.name.toLowerCase())
@@ -934,7 +934,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     manifest._addonId = addonId;
     manifest._groups = [];
 
-    if (NEW_ADDONS.includes(addonId)) {
+    if (manifest.versionadded === vue.version) {
       manifest.tags.push("new");
       manifest._groups.push("new");
     }
