@@ -24,8 +24,8 @@
 .category.sel {
   color: var(--brand-orange);
 }
-.category.parent {
-  padding-left: 40px;
+.category.hasParent {
+  padding: 15px 20px 15px 40px;
 }
 
 .category:hover {

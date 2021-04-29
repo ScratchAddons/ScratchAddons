@@ -290,7 +290,7 @@
         v-show="shouldShow"
         :class="{
           sel: category.id === selectedCategory,
-          parent: category.parent
+          hasParent: category.parent
         }"
         :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
         @click="onClick($event)"

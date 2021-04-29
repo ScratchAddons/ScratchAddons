@@ -259,7 +259,7 @@ body.iframe .setting-label {
   margin-bottom: 5px;
 }
 body.iframe .addons-container {
-  padding: 0px;
+  padding: 10px 0px;
   overflow-y: visible;
 }
 body.iframe .addons-block {

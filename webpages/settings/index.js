@@ -618,7 +618,7 @@ const vue = (window.vue = new Vue({
         id: "forums",
         parent: "community",
         matches: ["forums"],
-        icon: "brush",
+        icon: "forum",
         name: "forums",
       },
       {
