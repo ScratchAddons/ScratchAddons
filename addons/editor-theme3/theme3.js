@@ -3,7 +3,7 @@ import { textColor, multiply } from "../../libraries/text_color.js";
 function updateSettings(addon, newStyle) {
   var stylesheet = "";
   const textMode = addon.settings.get("text");
-  if (textMode == "black") {
+  if (textMode === "black") {
     stylesheet += `
       .blocklyText {
         fill: #575e75;
@@ -72,7 +72,7 @@ function updateSettings(addon, newStyle) {
 
   for (var prop of Object.keys(categories)) {
     var settingName = categories[prop].var ? categories[prop].var : prop;
-    if (textMode == "white" || textMode == "black") {
+    if (textMode === "white" || textMode === "black") {
       stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground {
         fill: var(--editorTheme3-${settingName}Color);
       }
@@ -127,10 +127,12 @@ function updateSettings(addon, newStyle) {
         fill: ${background};
         stroke: var(--editorTheme3-${settingName}Color);
       }
-      g[data-category="${prop}"] .blocklyText {
+      g[data-category="${prop}"] > .blocklyText {
         fill: var(--editorTheme3-${settingName}Color);
       }
-      g[data-category="${prop}"] .blocklyDropdownText {
+      g[data-category="${prop}"] > g[data-argument-type="dropdown"] > .blocklyDropdownText,
+      g[data-category="${prop}"] > g[data-argument-type="variable"] > .blocklyDropdownText,
+      g[data-category="${prop}"] > g[data-argument-type="dropdown"] > g > .blocklyDropdownText {
         fill: var(--editorTheme3-${settingName}Color) !important;
       }
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > path,
@@ -225,6 +227,9 @@ function updateSettings(addon, newStyle) {
         path.blocklyBlockBackground[fill="#FFBF00"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
         }
+        path.blocklyBlockBackground[fill="#FFBF00"] ~ g[data-argument-type="variable"] > g > .blocklyDropdownText {
+          fill: var(--editorTheme3-${prop}Color) !important;
+        }
         g[data-argument-type="dropdown"] > rect[fill="#FFBF00"] ~ .blocklyText,
         g[data-argument-type="dropdown"] > rect[fill="#CC9900"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color) !important;
@@ -241,9 +246,12 @@ function updateSettings(addon, newStyle) {
         stylesheet += `g[data-category] /* specificity */ > path.blocklyBlockBackground[fill="#0FBD8C"] {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
-        } 
+        }
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
+        }
+        path.blocklyBlockBackground[fill="#0FBD8C"] ~ g[data-argument-type="dropdown"] > g > .blocklyDropdownText {
+          fill: var(--editorTheme3-${prop}Color) !important;
         }
         g[data-argument-type="dropdown"] > path[fill="#0DA57A"],
         g[data-argument-type="dropdown"] > path[fill="#0B8E69"] {

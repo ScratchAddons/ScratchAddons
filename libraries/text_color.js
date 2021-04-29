@@ -7,6 +7,20 @@ function parseHex(hex) {
   };
 }
 
+function convertComponentToHex(a) {
+  a = Math.round(a).toString(16);
+  if (a.length === 1) return `0${a}`;
+  return a;
+}
+
+function convertToHex(obj) {
+  const r = convertComponentToHex(obj.r);
+  const g = convertComponentToHex(obj.g);
+  const b = convertComponentToHex(obj.b);
+  const a = obj.a !== undefined ? convertComponentToHex(255*obj.a) : "";
+  return `#${r}${g}${b}${a}`;
+}
+
 export function textColor(hex, black, white, threshold) {
   const { r, g, b } = parseHex(hex);
   threshold = threshold !== undefined ? threshold : 170;
@@ -24,7 +38,7 @@ export function multiply(hex, c) {
   if (c.g === undefined) c.g = 1;
   if (c.b === undefined) c.b = 1;
   if (c.a === undefined) c.a = 1;
-  return `rgba(${c.r * r}, ${c.g * g}, ${c.b * b}, ${c.a * a})`;
+  return convertToHex({r: c.r * r, g: c.g * g, b: c.b * b, a: c.a * a});
 }
 
 export function brighten(hex, c) {
@@ -33,5 +47,10 @@ export function brighten(hex, c) {
   if (c.g === undefined) c.g = 1;
   if (c.b === undefined) c.b = 1;
   if (c.a === undefined) c.a = 1;
-  return `rgba(${(1 - c.r) * 255 + c.r * r}, ${(1 - c.g) * 255 + c.g * g}, ${(1 - c.b) * 255 + c.b * b}, ${(1 - c.a) * 255 + c.a * a})`;
+  return convertToHex({
+    r: (1 - c.r) * 255 + c.r * r,
+    g: (1 - c.g) * 255 + c.g * g,
+    b: (1 - c.b) * 255 + c.b * b,
+    a: (1 - c.a) * 255 + c.a * a,
+  });
 }

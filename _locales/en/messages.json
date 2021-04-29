@@ -11,6 +11,9 @@
   "games": {
     "message": "Games"
   },
+  "openInNewTab": {
+    "message": "Open in new browser tab"
+  },
   "changelog": {
     "message": "View changelog"
   },
