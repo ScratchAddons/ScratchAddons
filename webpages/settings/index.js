@@ -362,7 +362,7 @@ const AddonSetting = Vue.extend({
 Vue.component("addon-setting", AddonSetting);
 
 const CategorySelector = Vue.extend({
-  props: ["category"],
+  props: ["category", "parent"],
   template: document.querySelector("template#category-selector-component").innerHTML,
   data() {
     return {};
@@ -370,6 +370,9 @@ const CategorySelector = Vue.extend({
   computed: {
     selectedCategory() {
       return this.$root.selectedCategory;
+    },
+    shouldShow() {
+      return !this.parent || this.parent === this.selectedCategory || this.selectedCategory === this.category.id;
     },
   },
   methods: {
@@ -379,7 +382,6 @@ const CategorySelector = Vue.extend({
     onClick(event) {
       event.stopPropagation();
       this.$root.selectedCategory = this.category.id;
-      this.$root.sidebarToggle();
     },
   },
   events: {},
