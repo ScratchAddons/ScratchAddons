@@ -287,10 +287,10 @@
     <template id="category-selector-component">
       <div
         class="category"
-        v-show="shouldShow"
         :class="{
           sel: category.id === selectedCategory,
-          hasParent: category.parent
+          hasParent: category.parent,
+          visible: shouldShow,
         }"
         :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
         @click="onClick($event)"

@@ -25,7 +25,16 @@
   color: var(--brand-orange);
 }
 .category.hasParent {
-  padding: 15px 20px 15px 40px;
+  padding-inline: 40px 20px;
+  padding-block: 0;
+  height: 0;
+  box-sizing: border-box;
+  overflow-y: hidden;
+  transition: all 0.2s ease;
+}
+.category.hasParent.visible {
+  padding-block: 15px;
+  height: 48px;
 }
 
 .category:hover {
