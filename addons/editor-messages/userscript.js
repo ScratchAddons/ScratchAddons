@@ -2,7 +2,9 @@ export default async function ({ addon, global, console, msg }) {
   const messages = document.createElement("a");
   messages.href = "/messages/";
   messages.title = msg("messages");
-  messages.classList.add("sa-editormessages");
+  messages.className = addon.tab.scratchClass("menu-bar_menu-bar-item", "menu-bar_hoverable", {
+    others: "sa-editormessages",
+  });
   let messageCount = document.createElement("span");
   messageCount.classList.add("sa-editormessages-count");
   messages.appendChild(messageCount);
@@ -31,6 +33,8 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_account-info-group'] > [href^='/my']", {
       markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+      condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
     });
     document.querySelector("[class^='menu-bar_account-info-group']").insertBefore(messages, nav);
   }

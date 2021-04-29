@@ -1,0 +1,38 @@
+@import url("/libraries/Sora.css");
+html {
+  font-size: 12px;
+  height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: grey none;
+  color: #dddddd;
+}
+html.fullscreen {
+  font-size: 15px;
+}
+
+body {
+  margin: 0 auto;
+  font-family: "Sora", sans-serif;
+  width: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background-color: #222;
+}
+
+body.fullscreen {
+  width: 55%;
+  min-height: calc(100% - 2px);
+  height: auto;
+  border: 1px solid black;
+  box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
+}
+a {
+  cursor: pointer;
+  text-decoration: none;
+}
+a[href] {
+  color: #1aa0d8;
+}
+a:hover {
+  text-decoration: underline;
+}

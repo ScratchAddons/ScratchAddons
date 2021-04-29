@@ -1,15 +1,15 @@
-@import url("../styles/components/tooltips.css");
-@import url("../styles/colors.css");
-html {
-  width: 400px;
-  background-color: #2a2a2a; /* Avoid iframe src change flash */
-}
-
 body {
+  width: var(--width, 400px);
   height: var(--height, 599px);
   margin: 0;
+  background-color: #2a2a2a; /* Avoid iframe src change flash */
   font-family: "Sora", sans-serif;
   color: white;
+}
+body.loading {
+  /* prevent scrollbars from appearing for a moment
+     while calculating popup size on Firefox */
+  overflow: hidden;
 }
 
 #header {
@@ -97,10 +97,9 @@ body {
 }
 
 iframe {
-  width: 400px;
+  width: var(--width, 400px);
   height: calc(var(--height, 599px) - 107px);
   overflow-x: hidden;
-  overflow-y: auto;
   border: none;
   overflow-y: scroll;
   background-color: #222;
@@ -115,7 +114,7 @@ iframe {
 }
 
 #no-tabs {
-  width: 400px;
+  width: var(--width, 400px);
   height: calc(var(--height, 599px) - 107px);
   background-color: #222;
   display: flex;

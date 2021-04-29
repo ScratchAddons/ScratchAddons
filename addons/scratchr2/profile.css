@@ -86,9 +86,11 @@
 #status-readonly,
 #profile-box #bio textarea,
 #profile-box #status textarea {
-  border: 2px solid transparent;
-  box-shadow: none;
   color: #575e75;
+}
+#profile-box #bio textarea,
+#profile-box #status textarea {
+  border-radius: 6px;
 }
 #profile-box .player {
   border-radius: 4px;

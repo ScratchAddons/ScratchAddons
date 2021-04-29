@@ -45,6 +45,7 @@ input,
 textarea {
   box-shadow: none;
   border-radius: 8px;
+  background-color: #fafafa;
   border: 2px solid rgba(0, 0, 0, 0.2);
   resize: none;
 }
@@ -55,6 +56,28 @@ input:focus {
 textarea:focus {
   box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
   border: 2px solid var(--scratchr2-primaryColor);
+}
+.editable-empty,
+.editable.read,
+.editable.write,
+.editable:hover {
+  background-color: #fafafa;
+  border: 2px dashed rgba(77, 151, 255, 0.25) !important;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+.editable.write,
+.editable-empty.write {
+  border-style: solid !important;
+  border-color: #4d97ff !important;
+  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
+}
+.editable textarea,
+.editable-empty textarea,
+.editable input,
+.editable-empty input {
+  border-color: transparent;
+  box-shadow: none;
 }
 .button,
 button,

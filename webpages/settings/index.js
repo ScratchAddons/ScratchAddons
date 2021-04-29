@@ -1,5 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
-const NEW_ADDONS = ["folders", "variable-manager", "scratchstats"];
+const NEW_ADDONS = ["editor-dark-mode", "custom-zoom", "initialise-sprite-position"];
 
 Vue.directive("click-outside", {
   priority: 700,
@@ -31,9 +31,11 @@ const ColorInput = Vue.extend({
       canCloseOutside: false,
       formats: "",
       opening: false,
+      loadColorPicker: false, // #2090 tempfix
     };
   },
   ready() {
+    if (!this.loadColorPicker) return;
     if (this.no_alpha) {
       this.formats = "hex,rgb,hsv,hsl";
     } else {
@@ -47,15 +49,18 @@ const ColorInput = Vue.extend({
       }
     });
   },
+  computed: {
+    noAlphaString() {
+      return String(this.no_alpha);
+    },
+  },
   methods: {
     toggle(addon, setting, value = !this.isOpen) {
+      if (!this.loadColorPicker) return;
       this.isOpen = value;
       this.opening = true;
-      for (let child of this.$root.$children) {
-        if (child.isOpen && child.canCloseOutside && child.color && !child.opening) {
-          child.toggle(child.addon, child.setting, false);
-        }
-      }
+      this.$root.closePickers({ isTrusted: true }, this);
+      this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
       this.opening = false;
 
       this.color = "#" + this.$els.pickr.hex8;
@@ -72,14 +77,223 @@ const ColorInput = Vue.extend({
   watch: {
     value() {
       this.color = this.value;
-      this.$els.pickr._valueChanged();
+      // ?. is #2090 tempfix, 4 lines below as well
+      this.$els.pickr?._valueChanged();
     },
     isOpen() {
-      this.$els.pickr._valueChanged();
+      this.$els.pickr?._valueChanged();
+    },
+    loadColorPicker() {
+      this.$options.ready[0].call(this);
     },
   },
 });
 Vue.component("picker", ColorInput);
+
+const ResetDropdown = Vue.extend({
+  props: ["addon", "setting", "label", "defaultLabel"],
+  template: document.querySelector("template#reset-dropdown-component").innerHTML,
+  data() {
+    return {
+      isResetDropdown: true,
+      isOpen: false,
+    };
+  },
+  methods: {
+    toggle() {
+      this.isOpen = !this.isOpen;
+      this.$root.closePickers({ isTrusted: true });
+      this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
+    },
+    resetToDefault() {
+      this.$parent.addonSettings[this.addon._addonId][this.setting.id] = this.setting.default;
+      this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
+      this.toggle();
+    },
+    resetToPreset(preset) {
+      this.$parent.addonSettings[this.addon._addonId][this.setting.id] = preset.values[this.setting.id];
+      this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
+      this.toggle();
+    },
+  },
+});
+Vue.component("reset-dropdown", ResetDropdown);
+const AddonBody = Vue.extend({
+  props: ["addon"],
+  template: document.querySelector("template#addon-body-component").innerHTML,
+  data() {
+    return {};
+  },
+  computed: {
+    selectedTab() {
+      return this.$root.selectedTab;
+    },
+    searchInput() {
+      return this.$root.searchInput;
+    },
+    addonSettings() {
+      return this.$root.addonSettings;
+    },
+    addonMatchesFilters() {
+      if (!this.addon._wasEverEnabled) this.addon._wasEverEnabled = this.addon._enabled;
+
+      const matchesTag = this.$root.selectedTag === null || this.addon.tags.includes(this.$root.selectedTag);
+      const matchesSearch =
+        this.searchInput === "" ||
+        this.addon.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        this.addon._addonId.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        this.addon.description.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        (this.addon.credits &&
+          this.addon.credits
+            .map((obj) => obj.name.toLowerCase())
+            .some((author) => author.includes(this.searchInput.toLowerCase())));
+      // Show disabled easter egg addons only if category is easterEgg
+      const matchesEasterEgg = this.addon.tags.includes("easterEgg")
+        ? this.selectedTab === "easterEgg" || this.addon._wasEverEnabled
+        : true;
+
+      return matchesTag && matchesSearch && matchesEasterEgg;
+    },
+  },
+  methods: {
+    devShowAddonIds(event) {
+      if (!this.$root.versionName.endsWith("-prerelease") || this.$root.shownAddonIds || !event.ctrlKey) return;
+      event.stopPropagation();
+      this.$root.shownAddonIds = true;
+      this.$root.manifests.forEach((manifest) => {
+        this.addon.name = this.addon._addonId;
+      });
+    },
+    loadPreset(preset) {
+      if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
+        for (const property of Object.keys(preset.values)) {
+          this.$root.updateOption(property, preset.values[property], this.addon);
+        }
+        console.log(`Loaded preset ${preset.id} for ${this.addon.id}`);
+      }
+    },
+    loadDefaults() {
+      if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
+        for (const property of this.addon.settings) {
+          this.$root.updateOption(property.id, property.default, this.addon);
+        }
+        console.log(`Loaded default values for ${this.addon.id}`);
+      }
+    },
+    toggleAddonRequest(event) {
+      const toggle = () => {
+        // Prevents selecting text when the shift key is being help down
+        event.preventDefault();
+
+        const newState = !this.addon._enabled;
+        this.addon._enabled = newState;
+        // Do not extend when enabling in popup mode, unless addon has warnings
+        this.addon._expanded =
+          document.body.classList.contains("iframe") &&
+          !this.addon._expanded &&
+          (this.addon.info || []).every((item) => item.type !== "warning")
+            ? false
+            : event.shiftKey
+            ? false
+            : newState;
+        chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
+
+        if (document.body.classList.contains("iframe"))
+          setTimeout(() => this.$root.popupOrderAddonsEnabledFirst(), 500);
+      };
+
+      const requiredPermissions = (this.addon.permissions || []).filter((value) =>
+        browserLevelPermissions.includes(value)
+      );
+      if (!this.addon._enabled && requiredPermissions.length) {
+        const result = requiredPermissions.every((p) => grantedOptionalPermissions.includes(p));
+        if (result === false) {
+          if (document.body.classList.contains("iframe")) {
+            this.addonToEnable = this.addon;
+            document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
+            this.showPopupModal = true;
+          } else
+            chrome.permissions.request(
+              {
+                permissions: requiredPermissions,
+              },
+              (granted) => {
+                if (granted) {
+                  console.log("Permissions granted!");
+                  toggle();
+                }
+              }
+            );
+        } else toggle();
+      } else toggle();
+    },
+    msg(...params) {
+      return this.$root.msg(...params);
+    },
+  },
+});
+Vue.component("addon-body", AddonBody);
+
+const AddonSetting = Vue.extend({
+  props: ["addon", "setting", "addon-settings"],
+  template: document.querySelector("template#addon-setting-component").innerHTML,
+  data() {
+    return {};
+  },
+  methods: {
+    settingsName(addon) {
+      const name = this.setting.name;
+      const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
+      return name.replace(regex, (icon) => {
+        if (icon[0] === "\\") {
+          return icon.slice(1);
+        }
+        if (icon[0] === "@") {
+          return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
+        }
+        if (icon[0] === "#") {
+          return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
+        }
+      });
+    },
+
+    showResetDropdown() {
+      return (
+        this.addon.presets &&
+        this.addon.presets.some(
+          (preset) => this.setting.id in preset.values && preset.values[this.setting.id] !== this.setting.default
+        )
+      );
+    },
+    checkValidity() {
+      // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
+      let input = document.querySelector(
+        `input[type='number'][data-addon-id='${this.addon._addonId}'][data-setting-id='${this.setting.id}']`
+      );
+      this.addonSettings[this.addon._addonId][this.setting.id] = input.validity.valid
+        ? input.value
+        : this.setting.default;
+    },
+    msg(...params) {
+      return this.$root.msg(...params);
+    },
+    updateSettings() {
+      this.$root.updateSettings(this.addon);
+    },
+    updateOption(newValue) {
+      this.$root.updateOption(this.setting.id, newValue, this.addon);
+    },
+  },
+  events: {
+    closePickers(...params) {
+      return this.$root.closePickers(...params);
+    },
+    closeResetDropdowns(...params) {
+      return this.$root.closeResetDropdowns(...params);
+    },
+  },
+});
+Vue.component("addon-setting", AddonSetting);
 
 const browserLevelPermissions = ["notifications", "clipboardWrite"];
 let grantedOptionalPermissions = [];
@@ -188,7 +402,7 @@ const vue = (window.vue = new Vue({
   el: "body",
   data: {
     smallMode: false,
-    theme: "",
+    theme: false,
     themePath: "",
     switchPath: "../../images/icons/switch.svg",
     isOpen: false,
@@ -286,9 +500,6 @@ const vue = (window.vue = new Vue({
       if (this.categoryOpen && this.smallMode) {
         vue.sidebarToggle();
       }
-      if (this.isOpen) {
-        this.modalToggle;
-      }
     },
 
     modalToggle: function () {
@@ -347,80 +558,12 @@ const vue = (window.vue = new Vue({
         });
       });
     },
-    addonMatchesFilters(addonManifest) {
-      const matchesTag = this.selectedTag === null || addonManifest.tags.includes(this.selectedTag);
-      const matchesSearch =
-        this.searchInput === "" ||
-        addonManifest.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-        addonManifest._addonId.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-        addonManifest.description.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-        (addonManifest.credits &&
-          addonManifest.credits
-            .map((obj) => obj.name.toLowerCase())
-            .some((author) => author.includes(this.searchInput.toLowerCase())));
-      // Show disabled easter egg addons only if category is easterEgg
-      const matchesEasterEgg = addonManifest.tags.includes("easterEgg")
-        ? this.selectedTab === "easterEgg" || addonManifest._enabled
-        : true;
-      return matchesTag && matchesSearch && matchesEasterEgg;
-    },
     stopPropagation(e) {
       e.stopPropagation();
-    },
-    toggleAddonRequest(addon, event) {
-      const toggle = () => {
-        // Prevents selecting text when the shift key is being help down
-        event.preventDefault();
-
-        const newState = !addon._enabled;
-        addon._enabled = newState;
-        // Do not extend when enabling in popup mode, unless addon has warnings
-        addon._expanded =
-          document.body.classList.contains("iframe") &&
-          !addon._expanded &&
-          (addon.info || []).every((item) => item.type !== "warning")
-            ? false
-            : event.shiftKey
-            ? false
-            : newState;
-        chrome.runtime.sendMessage({ changeEnabledState: { addonId: addon._addonId, newState } });
-
-        if (document.body.classList.contains("iframe")) setTimeout(() => this.popupOrderAddonsEnabledFirst(), 500);
-      };
-
-      const requiredPermissions = (addon.permissions || []).filter((value) => browserLevelPermissions.includes(value));
-      if (!addon._enabled && requiredPermissions.length) {
-        const result = requiredPermissions.every((p) => grantedOptionalPermissions.includes(p));
-        if (result === false) {
-          if (document.body.classList.contains("iframe")) {
-            this.addonToEnable = addon;
-            document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
-            this.showPopupModal = true;
-          } else
-            chrome.permissions.request(
-              {
-                permissions: requiredPermissions,
-              },
-              (granted) => {
-                if (granted) {
-                  console.log("Permissions granted!");
-                  toggle();
-                }
-              }
-            );
-        } else toggle();
-      } else toggle();
     },
     updateOption(id, newValue, addon) {
       this.addonSettings[addon._addonId][id] = newValue;
       this.updateSettings(addon);
-    },
-    checkValidity(addon, setting) {
-      // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
-      let input = document.querySelector(
-        `input[type='number'][data-addon-id='${addon._addonId}'][data-setting-id='${setting.id}']`
-      );
-      this.addonSettings[addon._addonId][setting.id] = input.validity.valid ? input.value : setting.default;
     },
     updateSettings(addon, { wait = 0, settingId = null } = {}) {
       const value = settingId && this.addonSettings[addon._addonId][settingId];
@@ -433,43 +576,27 @@ const vue = (window.vue = new Vue({
         }
       }, wait);
     },
-    loadPreset(preset, addon) {
-      if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
-        for (const property of Object.keys(preset.values)) {
-          this.updateOption(property, preset.values[property], addon);
+    closePickers(e, leaveOpen) {
+      for (let addon of this.$children) {
+        for (let setting of addon.$children) {
+          for (let picker of setting.$children) {
+            if (picker.isOpen && picker.canCloseOutside && e.isTrusted && picker.color && picker !== leaveOpen) {
+              picker.toggle(picker.addon, picker.setting, false);
+            }
+          }
         }
-        console.log(`Loaded preset ${preset.id} for ${addon.id}`);
       }
     },
-    loadDefaults(addon) {
-      if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
-        for (const property of addon.settings) {
-          this.updateOption(property.id, property.default, addon);
+    closeResetDropdowns(e, leaveOpen) {
+      for (let addon of this.$children) {
+        for (let setting of addon.$children) {
+          for (let resetDropdown of setting.$children) {
+            if (resetDropdown.isResetDropdown && e.isTrusted && resetDropdown !== leaveOpen) {
+              resetDropdown.isOpen = false;
+            }
+          }
         }
-        console.log(`Loaded default values for ${addon.id}`);
       }
-    },
-    textParse(text, addon) {
-      const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
-      return text.replace(regex, (icon) => {
-        if (icon[0] === "\\") {
-          return icon.slice(1);
-        }
-        if (icon[0] === "@") {
-          return `<img class="inline-icon" src="../../images/icons/${icon.split("@")[1]}"/>`;
-        }
-        if (icon[0] === "#") {
-          return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
-        }
-      });
-    },
-    devShowAddonIds(event) {
-      if (!this.versionName.endsWith("-prerelease") || this.shownAddonIds || !event.ctrlKey) return;
-      event.stopPropagation();
-      this.shownAddonIds = true;
-      this.manifests.forEach((manifest) => {
-        manifest.name = manifest._addonId;
-      });
     },
     exportSettings() {
       serializeSettings().then((serialized) => {
@@ -518,26 +645,26 @@ const vue = (window.vue = new Vue({
           if (!tabs[0].id) return;
           chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
             // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
-            chrome.runtime.lastError;
+            void chrome.runtime.lastError;
 
             const addonsCurrentlyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.userstyles])].filter((runningAddonId) => {
-                  // Consider addons with "dynamicUserscriptDisable": true
+              : [...new Set([...res.userscripts, ...res.userstyles])].filter((runningAddonId) => {
+                  // Consider addons with "dynamicDisable": true
                   // If those are running on the page, their "is running on this tab"
                   // status should be the same as their "is enabled" status
                   const manifest = this.manifests.find((manifest) => manifest._addonId === runningAddonId);
                   if (manifest.dynamicDisable && !manifest._enabled) return false;
                   return true;
                 });
-            // Addons/themes that were previously enabled on the tab (but not anymore)
+            // Addons that were previously enabled on the tab (but not anymore)
             // should go above enabled addons that are not currently running on the tab
             // so that it's easier to find them, even if the popup was closed.
             // Disabling then reenabling an addon is likely something common
             // so hopefully this saves some seconds of our users' lives :P
             const addonsPreviouslyOnTab = !res
               ? []
-              : [...new Set([...res.userscripts, ...res.activeThemes, ...res.inactiveThemes])].filter(
+              : [...new Set([...res.userscripts, ...res.userstyles, ...res.disabledDynamicAddons])].filter(
                   (runningAddonId) => !addonsCurrentlyOnTab.includes(runningAddonId)
                 );
 
@@ -594,16 +721,8 @@ const vue = (window.vue = new Vue({
   },
   events: {
     modalClickOutside: function (e) {
-      console.log(this.isOpen);
       if (this.isOpen && this.canCloseOutside && e.isTrusted) {
         this.isOpen = false;
-      }
-    },
-    closePickers(e) {
-      for (let child of this.$children) {
-        if (child.isOpen && child.canCloseOutside && e.isTrusted && child.color) {
-          child.toggle(child.addon, child.setting, false);
-        }
       }
     },
   },
@@ -632,6 +751,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     manifest._enabled = addonsEnabled[addonId];
     manifest._addonId = addonId;
     manifest._expanded = document.body.classList.contains("iframe") ? false : manifest._enabled;
+    if (NEW_ADDONS.includes(addonId)) manifest._expanded = false;
     manifest._tags = {};
     manifest._tags.recommended = manifest.tags.includes("recommended");
     manifest._tags.beta = manifest.tags.includes("beta");
@@ -676,6 +796,13 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     if (hash) {
       window.location.hash = "";
       window.location.hash = hash;
+      // For v1.13.0, TODO: remove in v1.14.0
+      if (
+        hash === "#addon-editor-dark-mode" &&
+        vue.manifests.find((m) => m._addonId === "editor-dark-mode")._enabled === true
+      ) {
+        vue.manifests.find((m) => m._addonId === "editor-dark-mode")._expanded = true;
+      }
     }
   }, 0);
 });
