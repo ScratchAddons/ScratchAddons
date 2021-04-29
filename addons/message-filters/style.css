@@ -1,5 +1,4 @@
-/* Style the main checkboxes container. */
-.checkboxes {
+.filter-container {
   box-sizing: border-box;
   padding: 2vw;
   background: #05f2;
@@ -10,19 +9,22 @@
   width: 100%;
   margin-top: 10px;
 }
-/* Style the header and give it even padding so that maximouse will not cringe. */
-.checkboxes h4 {
+.filter-container h4 {
   padding: 5px;
   padding-left: 10px;
 }
-/* Add some margin to the checkbox. */
-.checkboxes input {
+.filter-container input {
   margin-right: 0.5vmax;
+  outline: none;
 }
-/* Display the input container */
-.input_container {
+
+.checkboxes {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+.input_label {
   text-align: left;
-  width: 20vmax;
   display: inline-block;
   padding: 10px;
   border-radius: 5px;
@@ -33,34 +35,6 @@
   height: 50%;
 }
 /* Nice hover transition. */
-.input_container:hover {
+.input_label:hover {
   background: #05f4;
-}
-/* So that we can click */
-.checkboxes .input_container label {
-  width: 100%;
-}
-@media (min-width: 1300px) {
-  .checkboxes {
-    position: fixed;
-    left: 0;
-    width: 15vw;
-    top: 50%;
-    transform: translate(0, -50%);
-    backdrop-filter: contrast(20%) blur(10px);
-    box-shadow: 0 0 4px #0f84;
-    color: white;
-  }
-  .checkboxes h4 {
-    color: white;
-  }
-  .checkboxes .input_container {
-    width: 100%;
-  }
-  .checkboxes label {
-    /* border: 1px solid red; */
-    width: 80%;
-    display: inline-block;
-    cursor: pointer;
-  }
 }

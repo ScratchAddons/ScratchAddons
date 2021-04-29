@@ -1,6 +1,13 @@
 {
-  "name": "Message filtering",
-  "description": "Enables the ability to finely filter messages on the messages page through checkboxes.",
+  "name": "Filter messages in messaging page",
+  "description": "Filter messages on the messages page through checkboxes.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "This does not change your message count. This simply allows you to hide certain types of messages in the messaging page.",
+      "id": "norightclick"
+    }
+  ],
   "credits": [
     {
       "name": "--Explosion--",

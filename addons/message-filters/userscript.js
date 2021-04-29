@@ -22,23 +22,28 @@ export default async function ({ addon, global, console, msg }) {
   // The 'active' array holds the list of the classes of the messages that are shown.
   let active = JSON.parse(localStorage.getItem("message_preferences")) || Object.keys(filter).map((i) => filter[i]);
   // Create the checkbox element, which is the container for the message filtering div.
-  let checkboxes = document.createElement("div");
-  // Add a class so I can style it.
-  checkboxes.classList.add("checkboxes");
-  // Create the <h4> element that says (in english) "I would like to see notifications from:"
+  let container = document.createElement("div");
+  container.classList.add("filter-container");
+
   let heading = document.createElement("h4");
   heading.appendChild(document.createTextNode(msg("messages")));
-  // Add it to the container.
-  checkboxes.appendChild(heading);
+
+  container.appendChild(heading);
+
+  let checkboxes = document.createElement("div");
+  checkboxes.classList.add("checkboxes");
+  container.appendChild(checkboxes);
+
   // Get all the keys of the filter object
   let keys = Object.keys(filter);
   for (let i = 0; i < keys.length; i++) {
     // And iterate over them adding a checkbox and label each time.
 
-    // Create the input container div containing the input itself and its respective label.
-    let inp_container = document.createElement("div");
-    inp_container.classList.add("input_container");
-    // Create the checkbox input itself.
+    // Create the label.
+    let label = document.createElement("label");
+    // input_container
+    label.classList.add("input_label");
+
     let inp = document.createElement("input");
     inp.type = "checkbox";
     // Set it depending on whether the active array contains its correlating class. (Since it's fetched from localStorage we don't want to show all the checkboxes checked if the user had previously changed something.)
@@ -66,18 +71,14 @@ export default async function ({ addon, global, console, msg }) {
       update();
     };
     // Add the input to the container
-    inp_container.appendChild(inp);
-    // Create teh label.
-    let label = document.createElement("label");
-    label.classList.add("input_label");
+    label.appendChild(inp);
+
     // Set the label's [for] attribute so that onclick it changes the input.
     label.setAttribute("for", String.fromCharCode(97 + i));
     // Set the label's text to the object key of filter with the 1st letter transformed to upperCase.
-    label.appendChild(document.createTextNode(keys[i].replace(keys[i][0], keys[i][0].toUpperCase())));
-    // Add the label to the input container
-    inp_container.appendChild(label);
-    // Add the input container to the checkboxes div.
-    checkboxes.appendChild(inp_container);
+    label.appendChild(document.createTextNode(keys[i]));
+    // Add the label to the checkboxes div.
+    checkboxes.appendChild(label);
   }
   // The count variable indicates how many messages are showing at the moment.
   let count = 0;
@@ -109,7 +110,7 @@ export default async function ({ addon, global, console, msg }) {
     console.log(`${count} messages showing.`);
   }
   // Add the checkboxes element.
-  document.querySelector(".messages-social-title").appendChild(checkboxes);
+  document.querySelector(".messages-social-title").appendChild(container);
   // Loop waiting for more messages then load more messages and/or display them appropriately.
   while (true) {
     if (count < 40) {
