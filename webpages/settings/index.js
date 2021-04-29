@@ -160,7 +160,7 @@ const AddonBody = Vue.extend({
     shouldShow() {
       return (
         this.addonMatchesFilters &&
-        (this.$root.selectedCategory === "all" || this.addon._category.includes(this.$root.selectedCategory))
+        (this.$root.selectedCategory === "all" || this.addon.tags.includes(this.$root.selectedCategory))
       );
     },
     searchInput() {
@@ -638,18 +638,18 @@ const vue = (window.vue = new Vue({
         id: "editor",
         icon: "puzzle",
         name: "editorFeatures",
-        children: [
-          {
-            id: "costumeeditor",
-            icon: "brush",
-            name: "costumeeditorFeatures",
-          },
-        ],
       },
       {
         id: "community",
         icon: "web",
         name: "websiteFeatures",
+        children: [
+          {
+            id: "forums",
+            icon: "brush",
+            name: "forums",
+          },
+        ],
       },
       {
         id: "theme",
@@ -909,7 +909,7 @@ const vue = (window.vue = new Vue({
 chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
-    manifest._category = [
+    manifest._icon = [
       manifest.popup
         ? "popup"
         : manifest.tags.includes("easterEgg")
@@ -921,15 +921,10 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
         : "editor",
     ];
 
-    if (manifest.tags.includes("costumeeditor")) {
-      manifest._category.push("costumeeditor");
-    }
-
     if (manifest.popup) manifest.tags.push("popup");
 
     // Exception:
     if (addonId === "msg-count-badge") {
-      manifest._category = ["popup"];
       manifest.tags.push("popup");
     }
     manifest._enabled = addonsEnabled[addonId];
