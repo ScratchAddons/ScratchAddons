@@ -11,7 +11,7 @@
       "name": "Badge color",
       "id": "color",
       "type": "color",
-      "default": "#008000"
+      "default": "#8ce68c"
     }
   ]
 }
