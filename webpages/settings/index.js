@@ -158,10 +158,13 @@ const AddonBody = Vue.extend({
   },
   computed: {
     shouldShow() {
-      return (
-        this.addonMatchesFilters &&
-        (this.$root.selectedCategory === "all" || this.addon.tags.includes(this.$root.selectedCategory))
-      );
+      const matches = this.$root.categories.find((category) => category.id === this.$root.selectedCategory).matches;
+      if (!matches) return this.addonMatchesFilters;
+      let notMatch = false;
+      for (var tag of matches) {
+        if (!this.addon.tags.includes(tag)) notMatch = true;
+      }
+      return this.addonMatchesFilters && !notMatch;
     },
     searchInput() {
       return this.$root.searchInput;
@@ -282,11 +285,58 @@ const AddonTag = Vue.extend({
   props: ["tag"],
   template: document.querySelector("template#addon-tag-component").innerHTML,
   data() {
-    return {};
+    return {
+      tags: [
+        {
+          name: "recommended",
+          tooltipText: "recommendedTooltip",
+          matchName: "recommended",
+          color: "blue",
+        },
+        {
+          name: "beta",
+          tooltipText: "betaTooltip",
+          matchName: "beta",
+          color: "red",
+        },
+        {
+          name: "forums",
+          tooltipText: "forumsTooltip",
+          matchName: "forums",
+          color: "green",
+        },
+        {
+          name: "forEditor",
+          matchName: "editor",
+          color: "darkgreen",
+          addonTabShow: {
+            theme: true,
+          },
+        },
+        {
+          name: "forWebsite",
+          matchName: "community",
+          color: "yellow",
+          addonTabShow: {
+            theme: true,
+          },
+        },
+        {
+          name: "new",
+          matchName: "new",
+          color: "purple",
+        },
+        {
+          name: "danger",
+          matchName: "danger",
+          color: "darkred",
+        },
+      ],
+    };
   },
   computed: {
     tagInfo() {
-      return this.$root.tags.find((tag) => tag.matchName === this.tag);
+      return this.tags.find((tag) => tag.matchName === this.tag);
     },
     shouldShow() {
       return this.tagInfo && (!this.tagInfo.addonTabShow || this.tagInfo.addonTabShow[this.$root.selectedCategory]);
@@ -362,7 +412,7 @@ const AddonSetting = Vue.extend({
 Vue.component("addon-setting", AddonSetting);
 
 const CategorySelector = Vue.extend({
-  props: ["category", "parent"],
+  props: ["category"],
   template: document.querySelector("template#category-selector-component").innerHTML,
   data() {
     return {};
@@ -372,7 +422,10 @@ const CategorySelector = Vue.extend({
       return this.$root.selectedCategory;
     },
     shouldShow() {
-      return !this.parent || this.parent === this.selectedCategory || this.selectedCategory === this.category.id;
+      const categoriesWithParent = this.$root.categories
+        .filter((category) => category.parent === this.category.parent)
+        .map((category) => category.id);
+      return !this.category.parent || [this.category.parent, ...categoriesWithParent].includes(this.selectedCategory);
     },
   },
   methods: {
@@ -511,91 +564,6 @@ const vue = (window.vue = new Vue({
     addonToEnable: null,
     showPopupModal: false,
     isIframe: window.parent !== window,
-    tags: [
-      {
-        name: "recommended",
-        tooltipText: "recommendedTooltip",
-        matchType: "tag",
-        matchName: "recommended",
-        color: "blue",
-        tabShow: {
-          all: true,
-          editor: true,
-          community: true,
-          theme: true,
-          popup: true,
-        },
-      },
-      {
-        name: "beta",
-        tooltipText: "betaTooltip",
-        matchType: "tag",
-        matchName: "beta",
-        color: "red",
-        tabShow: {
-          all: true,
-          editor: true,
-          community: true,
-          theme: true,
-          popup: true,
-        },
-      },
-      {
-        name: "forums",
-        tooltipText: "forumsTooltip",
-        matchType: "tag",
-        matchName: "forums",
-        color: "green",
-        tabShow: {
-          all: false,
-          editor: false,
-          community: true,
-          theme: false,
-        },
-      },
-      {
-        name: "forEditor",
-        matchType: "tag",
-        matchName: "editor",
-        color: "darkgreen",
-        tabShow: {
-          all: false,
-          editor: false,
-          community: false,
-          theme: true,
-        },
-        addonTabShow: {
-          theme: true,
-        },
-      },
-      {
-        name: "forWebsite",
-        matchType: "tag",
-        matchName: "community",
-        color: "yellow",
-        tabShow: {
-          all: false,
-          editor: false,
-          community: false,
-          theme: true,
-        },
-        addonTabShow: {
-          theme: true,
-        },
-      },
-      {
-        name: "new",
-        matchType: "tag",
-        matchName: "new",
-        color: "purple",
-      },
-      {
-        name: "danger",
-        matchType: "tag",
-        matchName: "danger",
-        color: "darkred",
-      },
-    ],
     addonGroups: [
       {
         id: "new",
@@ -636,28 +604,46 @@ const vue = (window.vue = new Vue({
       },
       {
         id: "editor",
+        matches: ["editor"],
         icon: "puzzle",
         name: "editorFeatures",
       },
       {
         id: "community",
+        matches: ["community"],
         icon: "web",
         name: "websiteFeatures",
-        children: [
-          {
-            id: "forums",
-            icon: "brush",
-            name: "forums",
-          },
-        ],
+      },
+      {
+        id: "forums",
+        parent: "community",
+        matches: ["forums"],
+        icon: "brush",
+        name: "forums",
       },
       {
         id: "theme",
+        matches: ["theme"],
         icon: "brush",
         name: "themes",
       },
       {
+        id: "forEditor",
+        parent: "theme",
+        matches: ["theme", "editor"],
+        icon: "puzzle",
+        name: "editorFeatures",
+      },
+      {
+        id: "forWebsite",
+        parent: "theme",
+        matches: ["theme", "community"],
+        icon: "web",
+        name: "websiteFeatures",
+      },
+      {
         id: "popup",
+        matches: ["popup"],
         icon: "popup",
         name: "popupFeatures",
         marginBottom: true,
@@ -909,17 +895,15 @@ const vue = (window.vue = new Vue({
 chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
-    manifest._icon = [
-      manifest.popup
-        ? "popup"
-        : manifest.tags.includes("easterEgg")
-        ? "easterEgg"
-        : manifest.tags.includes("theme")
-        ? "theme"
-        : manifest.tags.includes("community")
-        ? "community"
-        : "editor",
-    ];
+    manifest._icon = manifest.popup
+      ? "popup"
+      : manifest.tags.includes("easterEgg")
+      ? "easterEgg"
+      : manifest.tags.includes("theme")
+      ? "theme"
+      : manifest.tags.includes("community")
+      ? "community"
+      : "editor";
 
     if (manifest.popup) manifest.tags.push("popup");
 
