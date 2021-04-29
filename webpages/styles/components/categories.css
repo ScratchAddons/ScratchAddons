@@ -39,8 +39,11 @@
   height: 40px;
   background: var(--brand-orange);
   position: absolute;
-  top: 10px;
+  top: 9px;
   left: 0;
+}
+.category.hasParent::before {
+  height: 30px;
 }
 
 .category img {
