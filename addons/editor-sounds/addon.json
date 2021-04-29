@@ -12,7 +12,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "versionadded": "1.14.0",
+  "versionAdded": "1.14.0",
   "tags": ["editor"],
   "enabledByDefault": false,
   "l10n": true

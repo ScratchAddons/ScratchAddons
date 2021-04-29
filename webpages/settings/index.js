@@ -180,7 +180,7 @@ const AddonBody = Vue.extend({
         this.addon.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         this.addon._addonId.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         this.addon.description?.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-        this.addon.versionadded?.includes(this.searchInput) ||
+        this.addon.versionAdded?.includes(this.searchInput) ||
         (this.addon.credits &&
           this.addon.credits
             .map((obj) => obj.name.toLowerCase())
@@ -609,6 +609,20 @@ const vue = (window.vue = new Vue({
         name: "editorFeatures",
       },
       {
+        id: "codeEditor",
+        parent: "editor",
+        matches: ["codeEditor"],
+        icon: "puzzle",
+        name: "codeEditorFeatures",
+      },
+      {
+        id: "costumeEditor",
+        parent: "editor",
+        matches: ["costumeEditor"],
+        icon: "brush",
+        name: "costumeEditorFeatures",
+      },
+      {
         id: "community",
         matches: ["community"],
         icon: "web",
@@ -916,7 +930,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     manifest._addonId = addonId;
     manifest._groups = [];
 
-    if (manifest.versionadded === vue.version) {
+    if (manifest.versionAdded === vue.version) {
       manifest.tags.push("new");
       manifest._groups.push("new");
     }
