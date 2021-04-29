@@ -876,7 +876,8 @@ const vue = (window.vue = new Vue({
     },
   },
   events: {
-    closesidebar: function () {
+    closesidebar(event) {
+      if (event.target.classList[0] === "toggle") return;
       if (this.categoryOpen && this.smallMode) {
         this.sidebarToggle();
       }
@@ -977,6 +978,14 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     if (hash) {
       window.location.hash = "";
       window.location.hash = hash;
+      if (hash.startsWith("#addon-")) {
+        const groupWithAddon = vue.$children.find(
+          (child) =>
+            child.$options.name === "addon-group" &&
+            child.$children.find((addon) => "#addon-" + addon.addon._addonId === location.hash)
+        );
+        if (groupWithAddon && !groupWithAddon.group.expanded) groupWithAddon.toggle();
+      }
     }
   }, 0);
 });
