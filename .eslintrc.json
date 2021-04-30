@@ -66,6 +66,14 @@
       "rules": {
         "no-eval": 2
       }
+    },
+    {
+      "files": [
+        "content-scripts/*.js"
+      ],
+      "rules": {
+        "no-restricted-syntax": ["error", "ImportExpression"]
+      }
     }
   ]
 }
