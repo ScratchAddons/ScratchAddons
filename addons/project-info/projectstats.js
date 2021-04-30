@@ -18,7 +18,11 @@ export default async function ({ addon, console, msg }) {
 
   const addProjectPageStats = async () => {
     while (true) {
-      const buttons = await addon.tab.waitForElement(".preview .project-buttons", { markAsSeen: true });
+      const buttons = await addon.tab.waitForElement(".preview .project-buttons", {
+        markAsSeen: true,
+        reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+        condition: () => addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+      });
       const container = document.createElement("div");
       container.className = "sa-project-info";
       buttons.insertBefore(container, buttons.firstChild);

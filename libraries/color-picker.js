@@ -30,7 +30,7 @@ const ObservedProperties = (SuperClass) => class extends SuperClass {
 
   static __initProperty(propName) {
     this.constructor.__propertyAccessors[propName] = this.__getPropertyDescriptor(this, propName);
-    Object.defineProperty(this, propName, {
+    Object.defineProperty(this, propName, {      
       set(val) { this.constructor.__setProperty.call(this, propName, val); },
       get() { return this.constructor.__getProperty.call(this, propName); },
     });
@@ -46,7 +46,7 @@ const ObservedProperties = (SuperClass) => class extends SuperClass {
     const customAccessors = this.constructor.__propertyAccessors[propName] || {};
     const oldValue = this[propName];
     if(customAccessors.set) customAccessors.set.call(this, newValue);
-    else this[`#${propName}`] = newValue;
+    else this[`#${propName}`] = newValue;  
     this.constructor.__propertyValueChanged.call(this, propName, oldValue, this[propName]);
   }
   
@@ -1328,7 +1328,7 @@ const createMarker = () => document.createComment('');
  *    * (") then any non-("), or
  *    * (') then any non-(')
  */
-const lastAttributeNameRegex =
+const lastAttributeNameRegex = 
 // eslint-disable-next-line no-control-regex
 /([ \x09\x0a\x0c\x0d])([^\0-\x1F\x7F-\x9F "'>=/]+)([ \x09\x0a\x0c\x0d]*=[ \x09\x0a\x0c\x0d]*(?:[^ \x09\x0a\x0c\x0d"'`<>=]*|"[^"]*|'[^']*))$/;
 
@@ -2360,7 +2360,7 @@ const defaultTemplateProcessor = new DefaultTemplateProcessor();
 // This line will be used in regexes to search for lit-html usage.
 // TODO(justinfagnani): inject version number at build time
 if (typeof window !== 'undefined') {
-    (window['litHtmlVersions'] || (window['litHtmlVersions'] = [])).push('1.3.0');
+    (window['litHtmlVersions'] || (window['litHtmlVersions'] = [])).push('1.4.0');
 }
 /**
  * Interprets a template literal as an HTML template that can efficiently
@@ -2869,7 +2869,7 @@ class HTMLInputElement extends Properties(HTMLElement) {
         DOM: true,
         reflect: true,
         fromAttributeConverter: NumberConverter.fromAttribute,
-        toAttributeConverter: NumberConverter.toAttribute,
+        toAttributeConverter: NumberConverter.toAttribute,        
       },
 
       width: {
@@ -3009,7 +3009,7 @@ class HTMLInputElement extends Properties(HTMLElement) {
   render() {
     if(this.__elementFocused===true) return;
     window.requestAnimationFrame(() => {
-      render(this.template, this.shadowRoot, {eventContext: this, scopeName: this.localName});
+      render(this.template, this.shadowRoot, {eventContext: this, scopeName: this.localName});  
     });
   }
 
@@ -3249,7 +3249,7 @@ class ColorPickerSlider extends PropertyChangedHandler(HTMLInputElement) {
       height: 100%;
       width: 100%;
       background: transparent;
-    `;
+    `;    
   }
 
   constructor() {
@@ -3588,6 +3588,7 @@ class ColorPicker extends PropertiesChangedHandler(PropertiesChangedCallback(Pro
           display: flex;
           flex-direction: column;
           flex: 1;
+          justify-content: center;
           margin-right: 8px;
         }
 
@@ -3595,8 +3596,8 @@ class ColorPicker extends PropertiesChangedHandler(PropertiesChangedCallback(Pro
           position: relative;
         }
 
-        color-picker-slider:nth-child(1) {
-          margin-bottom: 8px;
+        color-picker-slider + color-picker-slider {
+          margin-top: 8px;
         }
 
         color-picker-slider:after {
@@ -3698,6 +3699,7 @@ class ColorPicker extends PropertiesChangedHandler(PropertiesChangedCallback(Pro
         .color-input label, .alpha-input label {
           position: relative;
           display: block;
+          flex-grow: 1;
         }
         
         .color-input label:after, .alpha-input label:after {
@@ -3733,7 +3735,7 @@ class ColorPicker extends PropertiesChangedHandler(PropertiesChangedCallback(Pro
         }
 
         .color-input {
-          flex: 0;
+          flex: 1 0 0;
           display: flex;
           justify-content: flex-start;
         }
@@ -3763,7 +3765,7 @@ class ColorPicker extends PropertiesChangedHandler(PropertiesChangedCallback(Pro
           role="slider"
           aria-label="change saturation and ${this.selectedFormat === 'hsl' ? 'light' : 'value'}"
           aria-valuemin="0"
-          aria-valuemax="0.99"
+          aria-valuemax="1.00"
           aria-orientation="vertical"
           aria-valuetext="saturation ${this.hsv.s.toFixed(2)} ${this.selectedFormat === 'hsl' ? `light ${this.hsl.l.toFixed(2)}` : `value ${this.hsv.v.toFixed(2)}`}"
           @mousedown="${this._handleMousedown}"
@@ -3864,8 +3866,8 @@ class ColorPicker extends PropertiesChangedHandler(PropertiesChangedCallback(Pro
     const {x, y} = this.getBoundingClientRect();
     const pointerX = Math.round(e.clientX - x);
     const pointerY = Math.round(e.clientY - y);
-    const saturation = Math.min(Math.max((pointerX / this._$grid.offsetWidth), 0), 0.99);
-    const value = 0.99 - Math.min(Math.max((pointerY / this._$grid.offsetHeight), 0), 0.99);
+    const saturation = Math.min(Math.max((pointerX / this._$grid.offsetWidth), 0), 1.00);
+    const value = 1.00 - Math.min(Math.max((pointerY / this._$grid.offsetHeight), 0), 1.00);
     
     if(this.selectedFormat === 'hsl') this.value = {...this.color.toHsl(), ...{s: saturation}, ...{l: value}};
     else this.value = {...this.color.toHsv(), ...{s: saturation}, ...{v: value}};
