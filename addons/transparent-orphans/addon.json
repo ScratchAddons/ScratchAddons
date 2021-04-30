@@ -24,5 +24,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"],
       "runAtComplete": true
     }
-  ]
+  ],
+  "l10n": true
 }
