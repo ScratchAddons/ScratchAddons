@@ -1,6 +1,6 @@
 {
   "name": "Transparent orphan blocks",
-  "description": "Makes any blocks that are orphaned (unused with no parent block) transparent.",
+  "description": "Makes any blocks that are \"orphaned\", or without a hat block, transparent.",
   "tags": ["editor", "beta"],
   "credits": [
     {
