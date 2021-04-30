@@ -1,0 +1,8 @@
+#sa-script-collapse {
+  user-select: none;
+  border-top: 1px solid #00000026;
+}
+
+#sa-script-collapse:hover {
+  background-color: #d6e9f8;
+}
