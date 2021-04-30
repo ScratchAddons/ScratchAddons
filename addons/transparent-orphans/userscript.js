@@ -46,7 +46,8 @@ export default async function ({ addon, console }) {
   function onchange(e) {
     if (e.type !== "move" && e.type !== "create") return;
 
-    let orphans = blockly.getMainWorkspace()
+    let orphans = blockly
+      .getMainWorkspace()
       .getTopBlocks()
       .filter((block) => (!!block.previousConnection && !block.previousConnection.targetConnection) || !!block.outputConnection);
     let orphanids = orphans.map((block) => block.id);
