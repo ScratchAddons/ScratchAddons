@@ -21,7 +21,7 @@ function convertToHex(obj) {
   return `#${r}${g}${b}${a}`;
 }
 
-export function textColor(hex, black, white, threshold) {
+function textColor(hex, black, white, threshold) {
   const { r, g, b } = parseHex(hex);
   threshold = threshold !== undefined ? threshold : 170;
   if (r * 0.299 + g * 0.587 + b * 0.114 > threshold) {
@@ -32,7 +32,7 @@ export function textColor(hex, black, white, threshold) {
   }
 }
 
-export function multiply(hex, c) {
+function multiply(hex, c) {
   const { r, g, b, a } = parseHex(hex);
   if (c.r === undefined) c.r = 1;
   if (c.g === undefined) c.g = 1;
@@ -41,7 +41,7 @@ export function multiply(hex, c) {
   return convertToHex({ r: c.r * r, g: c.g * g, b: c.b * b, a: c.a * a });
 }
 
-export function brighten(hex, c) {
+function brighten(hex, c) {
   const { r, g, b, a } = parseHex(hex);
   if (c.r === undefined) c.r = 1;
   if (c.g === undefined) c.g = 1;
@@ -54,3 +54,9 @@ export function brighten(hex, c) {
     a: (1 - c.a) * 255 + c.a * a,
   });
 }
+
+globalThis.__scratchAddonsTextColor = {
+  textColor,
+  multiply,
+  brighten,
+};

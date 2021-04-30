@@ -165,9 +165,8 @@ function injectUserstyles(addonsWithUserstyles) {
   }
 }
 
-const textColorLibPromise = import(chrome.runtime.getURL("libraries/common/cs/text-color.js"));
-async function setCssVariables(addonSettings, addonsWithUserstyles) {
-  const textColorLib = await textColorLibPromise;
+const textColorLib = __scratchAddonsTextColor;
+function setCssVariables(addonSettings, addonsWithUserstyles) {
   const hyphensToCamelCase = (s) => s.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
   const setVar = (addonId, varName, value) =>
     document.documentElement.style.setProperty(`--${hyphensToCamelCase(addonId)}-${varName}`, value);

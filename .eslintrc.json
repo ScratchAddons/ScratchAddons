@@ -12,6 +12,7 @@
     "__scratchAddonsTraps": "writable",
     "__scratchAddonsRedux": "writable",
     "_realConsole": "writable",
+    "__scratchAddonsTextColor": "writable",
 
     // Third Party-defined
     "Vue": "readonly",
