@@ -49,7 +49,10 @@ export default async function ({ addon, console }) {
     let orphans = blockly
       .getMainWorkspace()
       .getTopBlocks()
-      .filter((block) => (!!block.previousConnection && !block.previousConnection.targetConnection) || !!block.outputConnection);
+      .filter(
+        (block) =>
+          (!!block.previousConnection && !block.previousConnection.targetConnection) || !!block.outputConnection
+      );
     let orphanids = orphans.map((block) => block.id);
 
     for (let transparentBlock of transparentBlocks) {
