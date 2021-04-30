@@ -1,0 +1,26 @@
+{
+  "name": "Collapsible scripts",
+  "description": "Enables script collapsing in the editor. ",
+  "tags": ["editor", "beta"],
+  "info": [
+    {
+      "type": "notice",
+      "text": "Other users will not be able to see collapsed scripts.",
+      "id": "notice-no-share"
+    }
+  ],
+  "credits": [
+    {
+      "name": "ErrorGamer2000",
+      "link": "https://scratch.mit.edu/users/ErrorGamer2000/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "runAtComplete": true
+    }
+  ],
+  "l10n": true
+}
