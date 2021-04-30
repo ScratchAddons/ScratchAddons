@@ -28,7 +28,7 @@
       "type": "boolean"
     }
   ],
-  "tags": ["easterEgg"],
+  "tags": ["easterEgg", "editor", "codeEditor"],
   "enabledByDefault": false,
   "libraries": ["scratch-blocks"],
   "l10n": true
