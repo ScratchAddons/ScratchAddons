@@ -10,6 +10,7 @@ export default async function ({ addon, global, console, msg }) {
   messageCount.classList.add("sa-editormessages-count");
   messages.appendChild(messageCount);
   const setMessages = async () => {
+    if (!document.querySelector("[class^='menu-bar_account-info-group']")) return;
     const msgCount = Number(await addon.account.getMsgCount());
     messageCount.innerText = msgCount;
     if (msgCount === 0) {

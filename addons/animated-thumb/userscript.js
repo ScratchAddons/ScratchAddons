@@ -5,28 +5,37 @@ export default async function ({ addon, global, console, msg }) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
       markAsSeen: true,
     });
-    if (!document.querySelectorAll("[class*='project-title-input_title-field']")) return;
-    let setthumb = document.createElement("div");
-    setthumb.classList.add(addon.tab.scratchClass("menu-bar_menu-bar-item"));
-    setthumb.title = msg("added-by");
-    let thumbinner = document.createElement("span");
-    thumbinner.setAttribute(
-      "class",
-      addon.tab.scratchClass("button_outlined-button", "menu-bar_menu-bar-button", "community-button_community-button")
-    );
-    thumbinner.setAttribute("role", "button");
-    setthumb.append(thumbinner);
-    let thumbcontent = document.createElement("div");
-    setthumb.classList.add(addon.tab.scratchClass("button_content"));
-    thumbinner.append(thumbcontent);
-    let thumbspan = document.createElement("span");
-    thumbspan.innerText = msg("set-thumbnail");
-    thumbcontent.append(thumbspan);
-    nav.append(setthumb);
-    setthumb.addEventListener("click", function (e) {
-      const setter = new ThumbSetter((key) => msg(`/${key}`));
-      setter.addFileInput();
-      setter.showInput();
-    });
+    if (!addon.auth.isLoggedIn) {
+      addon.auth.addEventListener("change", () => addon.auth.isLoggedIn && init());
+      return;
+    }
+    (function init() {
+      let setthumb = document.createElement("div");
+      setthumb.classList.add(addon.tab.scratchClass("menu-bar_menu-bar-item"));
+      setthumb.title = msg("added-by");
+      let thumbinner = document.createElement("span");
+      thumbinner.setAttribute(
+        "class",
+        addon.tab.scratchClass(
+          "button_outlined-button",
+          "menu-bar_menu-bar-button",
+          "community-button_community-button"
+        )
+      );
+      thumbinner.setAttribute("role", "button");
+      setthumb.append(thumbinner);
+      let thumbcontent = document.createElement("div");
+      setthumb.classList.add(addon.tab.scratchClass("button_content"));
+      thumbinner.append(thumbcontent);
+      let thumbspan = document.createElement("span");
+      thumbspan.innerText = msg("set-thumbnail");
+      thumbcontent.append(thumbspan);
+      nav.append(setthumb);
+      setthumb.addEventListener("click", function (e) {
+        const setter = new ThumbSetter((key) => msg(`/${key}`));
+        setter.addFileInput();
+        setter.showInput();
+      });
+    })();
   }
 }
