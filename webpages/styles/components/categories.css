@@ -10,6 +10,7 @@
 }
 
 .category {
+  transition: all 0.2s ease;
   padding: 20px 20px;
   position: relative;
   user-select: none;
@@ -28,7 +29,6 @@
   padding-inline: 40px 20px;
   box-sizing: border-box;
   overflow-y: hidden;
-  transition: all 0.2s ease;
   height: 48px;
   padding-block: 5px;
   opacity: 1;
@@ -43,8 +43,9 @@
 .category:hover {
   background: rgba(0, 0, 0, 0.1);
 }
-.category.sel::before {
+.category::before {
   content: "";
+  transition: all 0.2s ease;
   display: block;
   width: 4px;
   border-radius: 0 4px 4px 0;
@@ -53,6 +54,10 @@
   position: absolute;
   top: 9px;
   left: 0;
+  opacity: 0;
+}
+.category.sel::before {
+  opacity: 1;
 }
 .category.hasParent::before {
   height: 30px;
