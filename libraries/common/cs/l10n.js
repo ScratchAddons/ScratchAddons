@@ -1,5 +1,5 @@
 import { escapeHTML } from "./autoescaper.js";
-import {MessageFormatter, findClosingBracket} from "../../thirdparty/cs/icu-message-formatter.es.min.js";
+import { MessageFormatter, findClosingBracket } from "../../thirdparty/cs/icu-message-formatter.es.min.js";
 
 // This library is shared between background and userscript.
 // Subclasses are responsible for implementing methods to load translations.
@@ -19,8 +19,14 @@ export default class LocalizationProvider extends EventTarget {
         if (Object.prototype.hasOwnProperty.call(this._matchesCache, matches)) {
           const cache = this._matchesCache[matches];
           if (!Object.prototype.hasOwnProperty.call(cache, pluralType)) {
-            console.warn("Plural type", pluralType, "not handled in", matches, ", falling back to other. \
-This can happen when a string is not translated or is incorrectly translated.");
+            console.warn(
+              "Plural type",
+              pluralType,
+              "not handled in",
+              matches,
+              ", falling back to other. \
+This can happen when a string is not translated or is incorrectly translated."
+            );
             pluralType = "other";
           }
           return cache[pluralType].replace(/#/g, n);
@@ -37,7 +43,8 @@ This can happen when a string is not translated or is incorrectly translated.");
               key = "";
               break;
             }
-            case " ": break;
+            case " ":
+              break;
             default: {
               key += matches[i];
             }
@@ -45,8 +52,14 @@ This can happen when a string is not translated or is incorrectly translated.");
         }
         this._matchesCache[matches] = map;
         if (!Object.prototype.hasOwnProperty.call(map, pluralType)) {
-          console.warn("Plural type", pluralType, "not handled in", matches, ", falling back to other. \
-This can happen when a string is not translated or is incorrectly translated.");
+          console.warn(
+            "Plural type",
+            pluralType,
+            "not handled in",
+            matches,
+            ", falling back to other. \
+This can happen when a string is not translated or is incorrectly translated."
+          );
           pluralType = "other";
         }
         return map[pluralType].replace(/#/g, n);
