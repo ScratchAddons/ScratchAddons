@@ -86,6 +86,27 @@
   "websiteFeatures": {
     "message": "Scratch Website Features"
   },
+  "forumsFeatures": {
+    "message": "Forums Features"
+  },
+  "profilesFeatures": {
+    "message": "Profile Features"
+  },
+  "commentsFeatures": {
+    "message": "Comment Features"
+  },
+  "projectPlayerFeatures": {
+    "message": "Project Player Features"
+  },
+  "projectPageFeatures": {
+    "message": "Project Page Features"
+  },
+  "editorNavbarFeatures": {
+    "message": "Editor Navbar Features"
+  },
+  "studiosFeatures": {
+    "message": "Studio Features"
+  },
   "themes": {
     "message": "Themes"
   },
