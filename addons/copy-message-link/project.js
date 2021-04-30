@@ -2,6 +2,7 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     const comment = await addon.tab.waitForElement("div.comment", {
       markAsSeen: true,
+      condition: () => addon.tab.redux.state && addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
     });
     if (comment.querySelector("form")) continue; // Comment input
     const newElem = document.createElement("span");
