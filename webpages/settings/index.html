@@ -348,15 +348,8 @@
       <div class="addons-block">
         <div class="search-box" :class="{smallMode: smallMode === true}">
           <input type="text" id="searchBox" placeholder="{{ msg('search') }}" v-model="searchInput" />
-          <button
-            v-show="searchInput === ''"
-            class="search-button"
-          ></button>
-          <button
-            v-else
-            class="search-clear-button"
-            @click="clearSearch()"
-          ></button>
+          <button v-show="searchInput === ''" class="search-button"></button>
+          <button v-else class="search-clear-button" @click="clearSearch()"></button>
           <div id="popup-more-settings" v-show="isIframe">
             <button @click="openFullSettings()" class="large-button">
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ msg("moreSettings") }}
