@@ -10,6 +10,7 @@ Third-party libraries included are:
 - [Chart.js 2.9.4](https://unpkg.com/chart.js@2.9.4/dist/Chart.min.js) (MIT)
 - [color-picker-web-component 1.2.2](https://unpkg.com/color-picker-web-component@1.2.2/dist/color-picker-esm.js) (MIT)
 - [comlink 4.3.0](https://unpkg.com/comlink@4.3.0/dist/umd/comlink.js) (Apache-2.0)
+- [Sora](https://fonts.google.com/specimen/Sora) (OFL)
 
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).
