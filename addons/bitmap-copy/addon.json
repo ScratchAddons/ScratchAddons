@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Context menus are not supported. You must press Ctrl+C while a bitmap image is selected.",
+      "text": "Clicking \"copy\" on context menus is not supported. You must press Ctrl+C while a bitmap image is selected.",
       "id": "norightclick"
     }
   ],

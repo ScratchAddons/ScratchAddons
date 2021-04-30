@@ -1,6 +1,6 @@
 {
   "name": "Save blocks as image",
-  "description": "Add options to export blocks as SVG/PNG images on the editor context menu.",
+  "description": "Add options to export blocks as SVG or PNG images to the editor context menu.",
   "tags": ["editor", "beta"],
   "credits": [
     {
