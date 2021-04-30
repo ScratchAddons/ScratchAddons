@@ -44,32 +44,50 @@ export default class Tab extends Listenable {
    * @param {string} selector - argument passed to querySelector.
    * @param {object} opts - options.
    * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
+   * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
+   * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
    * @returns {Promise<Element>} - element found.
    */
   waitForElement(selector, opts = {}) {
     const markAsSeen = !!opts.markAsSeen;
-    const firstQuery = document.querySelectorAll(selector);
-    for (const element of firstQuery) {
-      if (this._waitForElementSet.has(element)) continue;
-      if (markAsSeen) this._waitForElementSet.add(element);
-      return Promise.resolve(element);
+    if (!opts.condition || opts.condition()) {
+      const firstQuery = document.querySelectorAll(selector);
+      for (const element of firstQuery) {
+        if (this._waitForElementSet.has(element)) continue;
+        if (markAsSeen) this._waitForElementSet.add(element);
+        return Promise.resolve(element);
+      }
     }
-    return new Promise((resolve) =>
-      new MutationObserver((mutationsList, observer) => {
-        const elements = document.querySelectorAll(selector);
-        for (const element of elements) {
-          if (this._waitForElementSet.has(element)) continue;
-          observer.disconnect();
-          resolve(element);
-          if (markAsSeen) this._waitForElementSet.add(element);
-          break;
+    let { condition } = opts;
+    let listener;
+    if (opts.reduxEvents) {
+      if (this.clientVersion !== "scratch-www") throw new Error("reduxEvents require scratch-www");
+      const oldCondition = condition;
+      let satisfied = false;
+      condition = () => {
+        if (oldCondition && !oldCondition()) return false;
+        return satisfied;
+      };
+      listener = ({ detail }) => {
+        if (opts.reduxEvents.includes(detail.action.type)) {
+          satisfied = true;
         }
-      }).observe(document.documentElement, {
-        attributes: false,
-        childList: true,
-        subtree: true,
-      })
-    );
+      };
+      this.redux.initialize();
+      this.redux.addEventListener("statechanged", listener);
+    }
+    const promise = scratchAddons.sharedObserver.watch({
+      query: selector,
+      seen: markAsSeen ? this._waitForElementSet : null,
+      condition,
+    });
+    if (listener) {
+      promise.then((match) => {
+        this.redux.removeEventListener("statechanged", listener);
+        return match;
+      });
+    }
+    return promise;
   }
   /**
    * editor mode (or null for non-editors).
@@ -188,5 +206,11 @@ export default class Tab extends Listenable {
     // Sanitize just in case
     res = res.replace(/"/g, "");
     return res;
+  }
+
+  displayNoneWhileDisabled(el, { display = "" } = {}) {
+    el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
+      g[1].toUpperCase()
+    )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
   }
 }

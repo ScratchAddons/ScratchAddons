@@ -1,0 +1,16 @@
+.sa-body-editor::-webkit-scrollbar,
+.sa-body-editor ::-webkit-scrollbar {
+  background: #333;
+}
+.sa-body-editor::-webkit-scrollbar-thumb,
+.sa-body-editor ::-webkit-scrollbar-thumb {
+  background: #606060;
+}
+.sa-body-editor::-webkit-scrollbar-thumb:hover,
+.sa-body-editor ::-webkit-scrollbar-thumb:hover {
+  background: #808080;
+}
+.sa-body-editor::-webkit-scrollbar-corner,
+.sa-body-editor ::-webkit-scrollbar-corner {
+  background: transparent;
+}

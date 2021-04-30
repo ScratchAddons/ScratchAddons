@@ -3,6 +3,12 @@ import Localization from "./l10n.js";
 
 window.scratchAddons = {};
 scratchAddons.classNames = { loaded: false };
+scratchAddons.eventTargets = {
+  auth: [],
+  settings: [],
+  tab: [],
+  self: [],
+};
 
 const pendingPromises = {};
 pendingPromises.msgCount = [];
@@ -34,8 +40,21 @@ const page = {
     onDataReady(); // Assume set to true
   },
 
+  runAddonUserscripts, // Gets called by cs.js when addon enabled late
+
   fireEvent(info) {
     if (info.addonId) {
+      if (info.name === "disabled") {
+        document.documentElement.style.setProperty(
+          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`,
+          "none"
+        );
+      } else if (info.name === "reenabled") {
+        document.documentElement.style.removeProperty(
+          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`
+        );
+      }
+
       // Addon specific events, like settings change and self disabled
       const eventTarget = scratchAddons.eventTargets[info.target].find(
         (eventTarget) => eventTarget._addonId === info.addonId
@@ -55,16 +74,59 @@ const page = {
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
 
+class SharedObserver {
+  constructor() {
+    this.inactive = true;
+    this.pending = new Set();
+    this.observer = new MutationObserver((mutation, observer) => {
+      for (const item of this.pending) {
+        if (item.condition && !item.condition()) continue;
+        for (const match of document.querySelectorAll(item.query)) {
+          if (item.seen) {
+            if (item.seen.has(match)) continue;
+            item.seen.add(match);
+          }
+          this.pending.delete(item);
+          item.resolve(match);
+          break;
+        }
+      }
+      if (this.pending.size === 0) {
+        this.inactive = true;
+        this.observer.disconnect();
+      }
+    });
+  }
+
+  /**
+   * Watches an element.
+   * @param {object} opts - options
+   * @param {string} opts.query - query.
+   * @param {WeakSet=} opts.seen - a WeakSet that tracks whether an element has already been seen.
+   * @param {function=} opts.condition - a function that returns whether to resolve the selector or not.
+   * @returns {Promise<Node>} Promise that is resolved with modified element.
+   */
+  watch(opts) {
+    if (this.inactive) {
+      this.inactive = false;
+      this.observer.observe(document.documentElement, {
+        subtree: true,
+        childList: true,
+      });
+    }
+    return new Promise((resolve) =>
+      this.pending.add({
+        resolve,
+        ...opts,
+      })
+    );
+  }
+}
+
 function onDataReady() {
   const addons = page.addonsWithUserscripts;
 
   scratchAddons.l10n = new Localization(page.l10njson);
-  scratchAddons.eventTargets = {
-    auth: [],
-    settings: [],
-    tab: [],
-    self: [],
-  };
 
   scratchAddons.methods = {};
   scratchAddons.methods.getMsgCount = () => {
@@ -77,6 +139,8 @@ function onDataReady() {
   scratchAddons.methods.copyImage = async (dataURL) => {
     return _cs_.copyImage(dataURL);
   };
+
+  scratchAddons.sharedObserver = new SharedObserver();
 
   const runUserscripts = () => {
     for (const addon of addons) {
@@ -114,6 +178,7 @@ history.replaceState = function () {
   const oldUrl = location.href;
   const newUrl = new URL(arguments[2], document.baseURI).href;
   const returnValue = originalReplaceState.apply(history, arguments);
+  _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
@@ -126,6 +191,7 @@ history.pushState = function () {
   const oldUrl = location.href;
   const newUrl = new URL(arguments[2], document.baseURI).href;
   const returnValue = originalPushState.apply(history, arguments);
+  _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
@@ -197,4 +263,18 @@ else {
     }
   });
   stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
+}
+
+if (location.pathname === "/discuss/3/topic/add/") {
+  const checkUA = () => {
+    if (!window.mySettings) return false;
+    const ua = window.mySettings.markupSet.find((x) => x.className);
+    ua.openWith = window._simple_http_agent = ua.openWith.replace("version", "versions");
+    const textarea = document.getElementById("id_body");
+    if (textarea?.value) {
+      textarea.value = ua.openWith;
+      return true;
+    }
+  };
+  if (!checkUA()) window.addEventListener("DOMContentLoaded", () => checkUA(), { once: true });
 }
