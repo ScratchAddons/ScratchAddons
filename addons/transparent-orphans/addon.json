@@ -10,7 +10,7 @@
   ],
   "settings": [
     {
-      "name": "Transparency",
+      "name": "Transparency (%)",
       "id": "transparency",
       "type": "integer",
       "min": 0,
