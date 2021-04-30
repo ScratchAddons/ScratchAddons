@@ -68,9 +68,7 @@
       }
     },
     {
-      "files": [
-        "content-scripts/*.js"
-      ],
+      "files": ["content-scripts/*.js"],
       "rules": {
         "no-restricted-syntax": ["error", "ImportExpression"]
       }
