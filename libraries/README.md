@@ -12,5 +12,4 @@ Third-party libraries included are:
 - [comlink 4.3.0](https://unpkg.com/comlink@4.3.0/dist/umd/comlink.js) (Apache-2.0)
 - [Sora](https://fonts.google.com/specimen/Sora) (OFL)
 
-
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).
