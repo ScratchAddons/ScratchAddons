@@ -1,0 +1,22 @@
+{
+  "name": "Transparent orphan blocks",
+  "description": "Makes any blocks that are orphaned (unused with no parent block) transparent.",
+  "tags": ["editor"],
+  "settings": [
+    {
+      "name": "Transparency",
+      "id": "transparency",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 50
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "runAtComplete": true
+    }
+  ]
+}
