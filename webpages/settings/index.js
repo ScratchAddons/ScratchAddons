@@ -167,17 +167,19 @@ const AddonBody = Vue.extend({
     loadPreset(preset) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
         for (const property of Object.keys(preset.values)) {
-          this.$root.updateOption(property, preset.values[property], this.addon);
+          this.$root.addonSettings[this.addon._addonId][property] = preset.values[property];
         }
-        console.log(`Loaded preset ${preset.id} for ${this.addon.id}`);
+        this.$root.updateSettings(this.addon);
+        console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
       }
     },
     loadDefaults() {
       if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
         for (const property of this.addon.settings) {
-          this.$root.updateOption(property.id, property.default, this.addon);
+          this.$root.addonSettings[this.addon._addonId][property.id] = property.default;
         }
-        console.log(`Loaded default values for ${this.addon.id}`);
+        this.$root.updateSettings(this.addon);
+        console.log(`Loaded default values for ${this.addon._addonId}`);
       }
     },
     toggleAddonRequest(event) {
