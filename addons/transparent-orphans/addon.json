@@ -1,7 +1,13 @@
 {
   "name": "Transparent orphan blocks",
   "description": "Makes any blocks that are orphaned (unused with no parent block) transparent.",
-  "tags": ["editor"],
+  "tags": ["editor", "beta"],
+  "credits": [
+    {
+      "name": "ErrorGamer2000",
+      "link": "https://scratch.mit.edu/users/ErrorGamer2000/"
+    }
+  ],
   "settings": [
     {
       "name": "Transparency",
