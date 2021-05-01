@@ -985,39 +985,33 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     }
 
     for (const groupId of manifest._groups) {
-      vue.addonGroups.find((g) => g.id === groupId).addonIds.push(manifest);
+      vue.addonGroups.find((g) => g.id === groupId).addonIds.push(manifest._addonId);
     }
 
     Vue.set(vue.manifestsById, manifest._addonId, manifest);
   }
   vue.manifests = manifests.map(({ manifest }) => manifest);
 
+  const checkTag = (tagOrTags, manifestA, manifestB) => {
+    const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
+    const aHasTag = tags.every((tag) => manifestA.tags.includes(tag));
+    const bHasTag = tags.every((tag) => manifestB.tags.includes(tag));
+    if (aHasTag ^ bHasTag) {
+      // If only one has the tag
+      return bHasTag - aHasTag;
+    } else if (aHasTag && bHasTag) return manifestA.name.localeCompare(manifestB.name);
+    else return null;
+  };
+  const order = [["danger, beta"], "editor", "community", "popup"];
+
   vue.addonGroups.forEach((group) => {
     group.addonIds = group.addonIds
-      .sort((addonA, addonB) => {
-        const checkTag = (tag) => {
-          const hasTag = addonB.tags.includes(tag) - addonA.tags.includes(tag);
-          if (hasTag !== 0) return hasTag;
-          if (addonB.tags.includes(tag)) return addonA.name.localeCompare(addonB.name);
-        };
-
-        /* 1. danger addons */
-        if (checkTag("danger") != null) return checkTag("danger");
-
-        /* 2. beta addons */
-        if (checkTag("beta") != null) return checkTag("beta");
-
-        /* 3. editor category addons */
-        if (checkTag("editor") != null) return checkTag("editor");
-
-        /* 4. website category addons */
-        if (checkTag("community") != null) return checkTag("community");
-
-        /* 5. theme addons */
-        if (checkTag("theme") != null) return checkTag("theme");
-
-        /* 6. extension popup addons */
-        if (checkTag("popup") != null) return checkTag("popup");
+      .map((id) => vue.manifestsById[id])
+      .sort((manifestA, manifestB) => {
+        for (const tag of order) {
+          const val = checkTag(tag, manifestA, manifestB);
+          if (val !== null) return val;
+        }
       })
       .map((addon) => addon._addonId);
   });
