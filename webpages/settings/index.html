@@ -171,7 +171,7 @@
       </div>
     </template>
     <template id="addon-body-component">
-      <div class="addon-body" v-show="shouldShow && group.expanded" :id="'addon-' + addon._addonId">
+      <div class="addon-body" v-show="shouldShow && groupExpanded" :id="'addon-' + addon._addonId">
         <div class="addon-topbar">
           <div class="clickeable-area" @click="expanded = !expanded">
             <div class="btn-dropdown">
@@ -275,7 +275,12 @@
           <img src="../../images/icons/expand.svg" alt="v" :class="{ 'reverted': group.expanded }" />
           {{ group.name }} ({{ shownCount }})</span
         >
-        <addon-body v-for="addonId of group.addonIds" :addon="manifestsById[addonId]" :group="group"></addon-body>
+        <addon-body
+          v-for="addonId of group.addonIds"
+          :addon="manifestsById[addonId]"
+          :group-id="group.id"
+          :group-expanded="group.expanded"
+        ></addon-body>
       </div>
     </template>
     <template id="category-selector-component">
@@ -361,7 +366,12 @@
         </div>
 
         <div class="addons-container">
-          <div id="running-page" v-show="addonsRunningOnTab && searchInput === ''">{{ msg("runningOnThisPage") }}</div>
+          <addon-body
+            v-for="addon of manifests"
+            :addon="addon"
+            group-id="search"
+            :group-expanded="searchInput !== ''"
+          ></addon-body>
           <addon-group v-for="group of addonGroups" :group="group"></addon-group>
         </div>
       </div>

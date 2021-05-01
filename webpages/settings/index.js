@@ -156,12 +156,12 @@ const AddonGroup = Vue.extend({
 Vue.component("addon-group", AddonGroup);
 
 const AddonBody = Vue.extend({
-  props: ["addon", "group"],
+  props: ["addon", "groupId", "groupExpanded"],
   template: document.querySelector("template#addon-body-component").innerHTML,
   data() {
     return {
-      expanded: isIframe ? false : this.group.id === "enabled",
-    };
+      expanded: isIframe ? false : this.groupId === "enabled",
+    }
   },
   computed: {
     shouldShow() {
@@ -177,6 +177,7 @@ const AddonBody = Vue.extend({
       return this.$root.addonSettings;
     },
     addonMatchesFilters() {
+      if (this.groupId !== "search" && this.searchInput !== "") return false;
       if (!this.addon._wasEverEnabled) this.addon._wasEverEnabled = this.addon._enabled;
 
       const matchesSearch =
@@ -916,7 +917,6 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
   let iframeData;
   if (isIframe) {
     iframeData = await getRunningAddons(manifests, addonsEnabled);
-    console.log(iframeData);
   }
   for (const { manifest, addonId } of manifests) {
     manifest._categories = [];
