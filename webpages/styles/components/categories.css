@@ -28,7 +28,6 @@
 .category.hasParent {
   padding-inline: 40px 20px;
   box-sizing: border-box;
-  overflow-y: hidden;
   height: 48px;
   padding-block: 5px;
   opacity: 1;
