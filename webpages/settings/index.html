@@ -375,8 +375,8 @@
           <!-- Search pseudogroup -->
           <!-- Must be below real groups to make index.html/#addon-addonid work -->
           <addon-body
-            v-for="addon of manifests"
-            :addon="addon"
+            v-for="addonId of searchAddonOrder"
+            :addon="manifestsById[addonId]"
             group-id="search"
             :group-expanded="searchInput !== ''"
           ></addon-body>

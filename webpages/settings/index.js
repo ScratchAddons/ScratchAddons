@@ -586,7 +586,7 @@ const addonGroups = [
     fullscreenShow: true,
   },
   {
-    id: "hidden",
+    id: "beta",
     name: chrome.i18n.getMessage("beta"),
     addonIds: [],
     expanded: false,
@@ -608,6 +608,7 @@ const vue = (window.vue = new Vue({
     loaded: false,
     manifests: [],
     manifestsById: {},
+    searchAddonOrder: [],
     selectedCategory: "all",
     searchInput: "",
     addonSettings: {},
@@ -994,7 +995,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     else {
       // Addon is disabled
       if (manifest.tags.includes("recommended")) manifest._groups.push("recommended");
-      else if (manifest.tags.includes("beta") || manifest.tags.includes("danger")) manifest._groups.push("hidden");
+      else if (manifest.tags.includes("beta") || manifest.tags.includes("danger")) manifest._groups.push("beta");
       else manifest._groups.push("others");
     }
 
@@ -1030,6 +1031,13 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
       })
       .map((addon) => addon._addonId);
   });
+
+  // Define order when searching. Temporal until we
+  // can sort by relevance depending on the query
+  vue.searchAddonOrder = manifests.sort((a, b) => {
+    if (a.manifest._enabled ^ b.manifest._enabled) return b.manifest._enabled - a.manifest._enabled;
+    else return a.manifest.name.localeCompare(b.manifest.name);
+  }).map(obj => obj.addonId);
 
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
