@@ -78,7 +78,7 @@ export default async function ({ addon, msg, console }) {
         .then(async function (response) {
           const historyData = await response.json();
           historyData.pop();
-          await addon.tab.loadScript(addon.self.lib + "/Chart.min.js");
+          await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/Chart.min.js");
           const canvasContainer = document.createElement("div");
           stats.appendChild(canvasContainer);
           canvasContainer.style.position = "relative";

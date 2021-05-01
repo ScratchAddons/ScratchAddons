@@ -24,8 +24,7 @@
 }
 
 .search-box > button {
-  background: #111;
-  /* Background URL set by Vue */
+  background-color: #111;
   background-repeat: no-repeat;
   background-position: center;
   height: 36px;
@@ -34,6 +33,14 @@
   border-radius: 0 4px 4px 0;
   outline: none;
   cursor: pointer;
+}
+
+.search-button {
+  background-image: url(/images/icons/search.svg);
+}
+
+.search-clear-button {
+  background-image: url(/images/icons/x.svg);
 }
 
 .search-box .badge {

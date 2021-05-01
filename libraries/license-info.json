@@ -3,10 +3,11 @@
   "text-field-edit": "MIT",
   "scratchblocks": "MIT",
   "scratch-blocks": "Apache-2.0",
-  "intl-messageformat": "BSD-3-Clause",
+  "icu-message-formatter": "Apache-2.0",
   "vue": "MIT",
   "tinycolor2": "MIT",
   "chartjs": "MIT",
   "color-picker-web-component": "MIT",
-  "comlink": "Apache-2.0"
+  "comlink": "Apache-2.0",
+  "Sora": "OFL"
 }
