@@ -268,9 +268,9 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
       disabledDynamicAddons.push(addonId);
 
       let addonIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
-      addonsWithUserscripts.splice(addonIndex, 1);
+      if (addonIndex !== -1) addonsWithUserscripts.splice(addonIndex, 1);
       addonIndex = addonsWithUserstyles.findIndex((a) => a.addonId === addonId);
-      addonsWithUserstyles.splice(addonIndex, 1);
+      if (addonIndex !== -1) addonsWithUserstyles.splice(addonIndex, 1);
 
       removeAddonStyles(addonId);
       _page_.fireEvent({ name: "disabled", addonId, target: "self" });
