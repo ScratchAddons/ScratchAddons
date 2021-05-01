@@ -28,12 +28,12 @@
 
     <link rel="stylesheet" href="style.css" />
 
-    <link href="../../libraries/Sora.css" rel="stylesheet" />
-    <script src="../../libraries/vue.js" defer></script>
-    <script src="../../libraries/color-picker.js" type="module" defer></script>
+    <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
+    <script src="../../libraries/thirdparty/vue.js" defer></script>
+    <script src="../../libraries/thirdparty/color-picker.js" type="module" defer></script>
     <template id="picker-component">
       <div class="color-container" :key="value" @click="loadColorPicker = true" @mouseover="loadColorPicker = true">
-        <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting,true)">
+        <button :style="{'background-color': color }" class="setting-input color" @click="toggle(addon,setting)">
           <template v-if="loadColorPicker">
             <color-picker
               class=""
@@ -61,7 +61,7 @@
           </li>
           <template v-for="preset in addon.presets">
             <li
-              v-if="preset.values.hasOwnProperty(setting.id) && preset.values[setting.id] != setting.default"
+              v-if="preset.values.hasOwnProperty(setting.id) && preset.values[setting.id].toLowerCase() != setting.default.toLowerCase()"
               @click="resetToPreset(preset)"
             >
               <span class="reset-preview"><span :style="{backgroundColor: preset.values[setting.id]}"></span></span>
@@ -73,7 +73,7 @@
     </template>
     <template id="addon-setting-component">
       <div class="addon-setting">
-        <div class="setting-label" v-html="settingsName()"></div>
+        <div class="setting-label" v-html="settingsName(addon)"></div>
         <input
           type="checkbox"
           class="setting-input check"
@@ -348,15 +348,8 @@
       <div class="addons-block">
         <div class="search-box" :class="{smallMode: smallMode === true}">
           <input type="text" id="searchBox" placeholder="{{ msg('search') }}" v-model="searchInput" />
-          <button
-            v-show="searchInput === ''"
-            style="background-image: url('https://api.iconify.design/uil:search.svg?color=grey')"
-          ></button>
-          <button
-            v-else
-            style="background-image: url('https://api.iconify.design/bi:x.svg?color=grey')"
-            @click="clearSearch()"
-          ></button>
+          <button v-show="searchInput === ''" class="search-button"></button>
+          <button v-else class="search-clear-button" @click="clearSearch()"></button>
           <div id="popup-more-settings" v-show="isIframe">
             <button @click="openFullSettings()" class="large-button">
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ msg("moreSettings") }}
@@ -459,7 +452,7 @@
           </p>
           <p>
             <a
-              href="./licenses.html?libraries=intl-messageformat,vue,color-picker-web-component,comlink"
+              href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora"
               target="_blank"
               >{{ msg("libraryCredits") }}</a
             >

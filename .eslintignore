@@ -2,4 +2,4 @@ node_modules/*
 _locales/*
 .github/*
 addons-l10n/*
-libraries/*
+libraries/thirdparty/*

@@ -70,6 +70,7 @@
   "custom-zoom",
   "blocks2image",
   "editor-sounds",
+  "gamepad",
   "remove-curved-stage-border",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
@@ -80,7 +81,6 @@
   "editor-colored-context-menus",
   "editor-stage-left",
   "editor-theme3",
-  "a11y",
   "// For website:",
   "scratchr2",
   "dark-www"

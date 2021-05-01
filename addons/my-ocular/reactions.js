@@ -27,7 +27,7 @@ export default async function ({ addon, global, console, msg }) {
           reactionButton.innerText = `${reaction.emoji} ${reaction.reactions.length}`;
 
           reactionButton.className = "my-ocular-reaction-button";
-          if (reaction.reactions.find((r) => r.user == addon.auth.username)) {
+          if (reaction.reactions.find((r) => r.user === addon.auth.username)) {
             reactionButton.classList.add("selected");
           }
 
@@ -58,10 +58,7 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   async function fetchReactions(id) {
-    return new Promise(async (resolve, reject) => {
-      let response = await fetch(`https://my-ocular.jeffalo.net/api/reactions/${id}`);
-      let data = await response.json();
-      resolve(data);
-    });
+    const response = await fetch(`https://my-ocular.jeffalo.net/api/reactions/${id}`);
+    return response.json();
   }
 }

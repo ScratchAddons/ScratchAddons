@@ -17,6 +17,9 @@
   "changelog": {
     "message": "View changelog"
   },
+  "notifChangelog": {
+    "message": "View Changelog"
+  },
   "15min": {
     "message": "For 15 minutes"
   },

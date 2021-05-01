@@ -1,4 +1,4 @@
-import downloadBlob from "../../libraries/download-blob.js";
+import downloadBlob from "../../libraries/common/cs/download-blob.js";
 const NEW_ADDONS = ["editor-dark-mode", "custom-zoom", "initialise-sprite-position"];
 
 Vue.directive("click-outside", {
@@ -167,17 +167,19 @@ const AddonBody = Vue.extend({
     loadPreset(preset) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
         for (const property of Object.keys(preset.values)) {
-          this.$root.updateOption(property, preset.values[property], this.addon);
+          this.$root.addonSettings[this.addon._addonId][property] = preset.values[property];
         }
-        console.log(`Loaded preset ${preset.id} for ${this.addon.id}`);
+        this.$root.updateSettings(this.addon);
+        console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
       }
     },
     loadDefaults() {
       if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
         for (const property of this.addon.settings) {
-          this.$root.updateOption(property.id, property.default, this.addon);
+          this.$root.addonSettings[this.addon._addonId][property.id] = property.default;
         }
-        console.log(`Loaded default values for ${this.addon.id}`);
+        this.$root.updateSettings(this.addon);
+        console.log(`Loaded default values for ${this.addon._addonId}`);
       }
     },
     toggleAddonRequest(event) {
@@ -241,7 +243,7 @@ const AddonSetting = Vue.extend({
     return {};
   },
   methods: {
-    settingsName() {
+    settingsName(addon) {
       const name = this.setting.name;
       const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
       return name.replace(regex, (icon) => {
@@ -500,9 +502,6 @@ const vue = (window.vue = new Vue({
       if (this.categoryOpen && this.smallMode) {
         vue.sidebarToggle();
       }
-      if (this.isOpen) {
-        this.modalToggle;
-      }
     },
 
     modalToggle: function () {
@@ -648,7 +647,7 @@ const vue = (window.vue = new Vue({
           if (!tabs[0].id) return;
           chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
             // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
-            chrome.runtime.lastError;
+            void chrome.runtime.lastError;
 
             const addonsCurrentlyOnTab = !res
               ? []
