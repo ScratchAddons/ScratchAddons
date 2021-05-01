@@ -78,37 +78,37 @@
     "message": "Scratch Editor Features"
   },
   "costumeEditorFeatures": {
-    "message": "Costume Editor Features"
+    "message": "Costume Editor"
   },
   "codeEditorFeatures": {
-    "message": "Code Editor Features"
+    "message": "Scripts Editor"
   },
   "websiteFeatures": {
     "message": "Scratch Website Features"
   },
-  "forumsFeatures": {
-    "message": "Forums Features"
-  },
   "profilesFeatures": {
-    "message": "Profile Features"
+    "message": "Profiles"
   },
   "commentsFeatures": {
-    "message": "Comment Features"
+    "message": "Comments"
   },
   "projectPlayerFeatures": {
-    "message": "Project Player Features"
+    "message": "Project Player"
   },
   "projectPageFeatures": {
-    "message": "Project Page Features"
+    "message": "Project Pages"
   },
-  "editorNavbarFeatures": {
-    "message": "Editor Navbar Features"
-  },
-  "studiosFeatures": {
-    "message": "Studio Features"
+  "others": {
+    "message": "Others"
   },
   "themes": {
     "message": "Themes"
+  },
+  "editorThemes": {
+    "message": "Editor Themes"
+  },
+  "websiteThemes": {
+    "message": "Website Themes"
   },
   "popupFeatures": {
     "message": "Extension Popup Features"

@@ -158,13 +158,10 @@ const AddonBody = Vue.extend({
   },
   computed: {
     shouldShow() {
-      const matches = this.$root.categories.find((category) => category.id === this.$root.selectedCategory).matches;
-      if (!matches) return this.addonMatchesFilters;
-      let notMatch = false;
-      for (var tag of matches) {
-        if (!this.addon.tags.includes(tag)) notMatch = true;
-      }
-      return this.addonMatchesFilters && !notMatch;
+      const matches =
+        this.$root.selectedCategory === "all" || this.addon._categories.includes(this.$root.selectedCategory);
+      if (matches) return this.addonMatchesFilters;
+      else return false;
     },
     searchInput() {
       return this.$root.searchInput;
@@ -428,15 +425,11 @@ const CategorySelector = Vue.extend({
     },
   },
   methods: {
-    msg(...params) {
-      return this.$root.msg(...params);
-    },
     onClick(event) {
       event.stopPropagation();
       this.$root.selectedCategory = this.category.id;
     },
   },
-  events: {},
 });
 Vue.component("category-selector", CategorySelector);
 
@@ -599,108 +592,87 @@ const vue = (window.vue = new Vue({
       {
         id: "all",
         icon: "list",
-        name: "all",
+        name: chrome.i18n.getMessage("all"),
       },
       {
         id: "editor",
-        matches: ["editor"],
         icon: "puzzle",
-        name: "editorFeatures",
+        name: chrome.i18n.getMessage("editorFeatures"),
       },
       {
         id: "codeEditor",
         parent: "editor",
-        matches: ["codeEditor"],
         icon: "puzzle",
-        name: "codeEditorFeatures",
+        name: chrome.i18n.getMessage("codeEditorFeatures"),
       },
       {
         id: "costumeEditor",
         parent: "editor",
-        matches: ["costumeEditor"],
         icon: "brush",
-        name: "costumeEditorFeatures",
+        name: chrome.i18n.getMessage("costumeEditorFeatures"),
       },
       {
         id: "projectPlayer",
         parent: "editor",
-        matches: ["projectPlayer"],
         icon: "player",
-        name: "projectPlayerFeatures",
+        name: chrome.i18n.getMessage("projectPlayerFeatures"),
       },
       {
-        id: "projectPage",
+        id: "editorOthers",
         parent: "editor",
-        matches: ["projectPage"],
-        icon: "player",
-        name: "projectPageFeatures",
-      },
-      {
-        id: "editorNavbar",
-        parent: "editor",
-        matches: ["editorNavbar"],
         icon: "dots",
-        name: "editorNavbarFeatures",
+        name: chrome.i18n.getMessage("others"),
       },
       {
         id: "community",
-        matches: ["community"],
         icon: "web",
-        name: "websiteFeatures",
+        name: chrome.i18n.getMessage("websiteFeatures"),
+      },
+      {
+        id: "projectPage",
+        parent: "community",
+        icon: "studio",
+        name: chrome.i18n.getMessage("projectPageFeatures"),
       },
       {
         id: "profiles",
         parent: "community",
-        matches: ["profiles"],
         icon: "users",
-        name: "profilesFeatures",
-      },
-      {
-        id: "studios",
-        parent: "community",
-        matches: ["studios"],
-        icon: "studio",
-        name: "studiosFeatures",
+        name: chrome.i18n.getMessage("profilesFeatures"),
       },
       {
         id: "forums",
         parent: "community",
-        matches: ["forums"],
         icon: "forum",
-        name: "forumsFeatures",
+        name: chrome.i18n.getMessage("forums"),
       },
       {
-        id: "comments",
+        id: "communityOthers",
         parent: "community",
-        matches: ["comments"],
-        icon: "comment",
-        name: "commentsFeatures",
+        icon: "dots",
+        name: chrome.i18n.getMessage("others"),
       },
       {
         id: "theme",
-        matches: ["theme"],
         icon: "brush",
-        name: "themes",
+        name: chrome.i18n.getMessage("themes"),
       },
       {
-        id: "forEditor",
+        id: "themesForEditor",
         parent: "theme",
-        matches: ["theme", "editor"],
         icon: "puzzle",
-        name: "editorFeatures",
+        name: chrome.i18n.getMessage("editorThemes"),
       },
       {
-        id: "forWebsite",
+        id: "themesForWebsite",
         parent: "theme",
-        matches: ["theme", "community"],
         icon: "web",
-        name: "websiteFeatures",
+        name: chrome.i18n.getMessage("websiteThemes"),
       },
       {
         id: "popup",
-        matches: ["popup"],
         icon: "popup",
-        name: "popupFeatures",
+        name: chrome.i18n.getMessage("popupFeatures"),
         marginBottom: true,
       },
     ],
@@ -951,7 +923,8 @@ const vue = (window.vue = new Vue({
 chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
   vue.addonSettings = addonSettings;
   for (const { manifest, addonId } of manifests) {
-    manifest._icon = manifest.popup
+    manifest._categories = [];
+    manifest._categories[0] = manifest.popup
       ? "popup"
       : manifest.tags.includes("easterEgg")
       ? "easterEgg"
@@ -961,7 +934,41 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
       ? "community"
       : "editor";
 
-    if (manifest.popup) manifest.tags.push("popup");
+    const addCategoryIfTag = (arr) => {
+      let count = 0;
+      for (const objOrString of arr) {
+        const tagName = typeof objOrString === "object" ? objOrString.tag : objOrString;
+        const categoryName = typeof objOrString === "object" ? objOrString.category : tagName;
+        if (manifest.tags.includes(tagName)) {
+          manifest._categories.push(categoryName);
+          count++;
+        }
+      }
+      return count;
+    };
+    if (manifest._categories[0] === "theme") {
+      // All themes should have either "editor" or "community" tag
+      addCategoryIfTag([
+        {
+          tag: "editor",
+          category: "themesForEditor",
+        },
+      ]) ||
+        addCategoryIfTag([
+          {
+            tag: "community",
+            category: "themesForWebsite",
+          },
+        ]);
+    } else if (manifest._categories[0] === "editor") {
+      const addedCategories = addCategoryIfTag(["codeEditor", "customeEditor", "projectPlayer"]);
+      if (addedCategories === 0) manifest._categories.push("editorOthers");
+    } else if (manifest._categories[0] === "community") {
+      const addedCategories = addCategoryIfTag(["profiles", "projectPage", "forums"]);
+      if (addedCategories === 0) manifest._categories.push("communityOthers");
+    }
+
+    manifest._icon = manifest._categories[0];
 
     // Exception:
     if (addonId === "msg-count-badge") {
