@@ -1022,6 +1022,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
           const val = checkTag(tag, manifestA, manifestB);
           if (val !== null) return val;
         }
+        return 0; // just to suppress linter
       })
       .map((addon) => addon._addonId);
   });
