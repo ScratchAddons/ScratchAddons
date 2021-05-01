@@ -3,6 +3,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
     let madeAnyChanges = false;
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
+      // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
       if (manifest.settings) {
@@ -36,7 +37,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               }[previousMode] || /* Something went wrong, use 3.Darker */ "3darker"
             );
 
-            addonSettings[addonId] = settings;
+            addonSettings[addonId] = settings; // Note: IIRC this line doesn't actually do anything
             madeAnyChanges = true;
             console.log("Migrated editor-dark-mode to presets");
             // Skip following code, continue with next addon
@@ -63,12 +64,27 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
           }
         }
       }
+
+      if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
+      else if (addonId === "dango-rain") {
+        if (typeof settings.force !== "undefined") {
+          if (settings.force === false) {
+            // Note: addon might be disabled already, but we don't care
+            addonsEnabled[addonId] = false;
+            console.log("Disabled dango-rain because force was disabled");
+          }
+          delete settings.force; // Remove setting so that this only happens once
+          madeChangesToAddon = true;
+          madeAnyChanges = true;
+        }
+      }
+
       if (madeChangesToAddon) {
         console.log(`Changed settings for addon ${addonId}`);
-        addonSettings[addonId] = settings;
+        addonSettings[addonId] = settings; // In case settings variable was a newly created object
       }
-      if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
     }
+
     if (madeAnyChanges) chrome.storage.sync.set({ addonSettings, addonsEnabled });
     scratchAddons.globalState.addonSettings = addonSettings;
     scratchAddons.localState.addonsEnabled = addonsEnabled;
