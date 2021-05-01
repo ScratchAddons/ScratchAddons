@@ -15,7 +15,7 @@
     "fullscreen": true
   },
   "persistentScripts": ["background.js"],
-  "tags": ["recommended"],
+  "tags": ["community", "recommended"],
   "enabledByDefault": true,
   "l10n": true
 }

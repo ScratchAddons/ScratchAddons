@@ -20,7 +20,6 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "versionAdded": "1.12.0",
   "libraries": ["tinycolor2"],
   "enabledByDefault": false,
   "l10n": true
