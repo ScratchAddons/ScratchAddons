@@ -202,12 +202,12 @@
           </div>
         </div>
         <div class="addon-settings" v-if="expanded">
-          <div class="addon-description-full" v-show="expanded">{{ addon.description }}</div>
+          <div class="addon-description-full">{{ addon.description }}</div>
           <div id="info" v-for="info of addon.info">
-            <div class="addon-warn" v-if="info.type == 'warning'" v-show="expanded">
+            <div class="addon-warn" v-if="info.type == 'warning'">
               <img src="../../images/icons/warning.svg" />{{ info.text }}
             </div>
-            <div class="addon-notice" v-if="info.type == 'notice'" v-show="expanded">
+            <div class="addon-notice" v-if="info.type == 'notice'">
               <img src="../../images/icons/notice.svg" />{{ info.text }}
             </div>
           </div>
