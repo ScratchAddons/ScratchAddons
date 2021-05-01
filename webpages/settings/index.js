@@ -1005,15 +1005,15 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
 
   const checkTag = (tagOrTags, manifestA, manifestB) => {
     const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
-    const aHasTag = tags.every((tag) => manifestA.tags.includes(tag));
-    const bHasTag = tags.every((tag) => manifestB.tags.includes(tag));
+    const aHasTag = tags.some((tag) => manifestA.tags.includes(tag));
+    const bHasTag = tags.some((tag) => manifestB.tags.includes(tag));
     if (aHasTag ^ bHasTag) {
       // If only one has the tag
       return bHasTag - aHasTag;
     } else if (aHasTag && bHasTag) return manifestA.name.localeCompare(manifestB.name);
     else return null;
   };
-  const order = [["danger, beta"], "editor", "community", "popup"];
+  const order = [["danger", "beta"], "editor", "community", "popup"];
 
   vue.addonGroups.forEach((group) => {
     group.addonIds = group.addonIds
