@@ -377,7 +377,7 @@
             :group-expanded="searchInput !== ''"
           ></addon-body>
           <div id="iframe-fullscreen-suggestion" v-if="isIframe" v-show="searchInput === ''">
-            <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span><br />
+            <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
             <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
           </div>
         </div>
