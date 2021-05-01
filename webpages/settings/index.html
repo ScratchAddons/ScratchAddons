@@ -36,7 +36,7 @@
         <button
           :style="{'background-color': color }"
           class="setting-input color"
-          :class="{'action-disabled': !addon.enabled }"
+          :class="{'action-disabled': !addon._enabled }"
           @click="toggle(addon,setting)"
         >
           <template v-if="loadColorPicker">
