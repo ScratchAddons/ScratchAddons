@@ -71,6 +71,7 @@
   "blocks2image",
   "editor-sounds",
   "gamepad",
+  "remove-curved-stage-border",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
