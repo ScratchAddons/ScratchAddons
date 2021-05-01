@@ -292,6 +292,7 @@ const AddonTag = Vue.extend({
           tooltipText: "betaTooltip",
           matchName: "beta",
           color: "red",
+          iframeAlwaysShow: true
         },
         {
           name: "forums",
@@ -325,15 +326,18 @@ const AddonTag = Vue.extend({
           tooltipText: "dangerTooltip",
           matchName: "danger",
           color: "darkred",
+          iframeAlwaysShow: true
         },
       ],
     };
   },
   computed: {
     tagInfo() {
+      // Might return undefined, tag might not exist
       return this.tags.find((tag) => tag.matchName === this.tag);
     },
     shouldShow() {
+      if (isIframe) return this.tagInfo && this.tagInfo.iframeAlwaysShow;
       return this.tagInfo && (!this.tagInfo.addonTabShow || this.tagInfo.addonTabShow[this.$root.selectedCategory]);
     },
     tagName() {

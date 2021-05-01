@@ -231,9 +231,6 @@ h1 {
   border-radius: 4px;
 }
 
-body.iframe .badge:not(.beta-badge) {
-  display: none !important;
-}
 body.iframe .tooltiptext {
   display: none;
 }
