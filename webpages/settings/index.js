@@ -161,7 +161,7 @@ const AddonBody = Vue.extend({
   data() {
     return {
       expanded: isIframe ? false : this.groupId === "enabled",
-    }
+    };
   },
   computed: {
     shouldShow() {
@@ -292,7 +292,7 @@ const AddonTag = Vue.extend({
           tooltipText: "betaTooltip",
           matchName: "beta",
           color: "red",
-          iframeAlwaysShow: true
+          iframeAlwaysShow: true,
         },
         {
           name: "forums",
@@ -326,7 +326,7 @@ const AddonTag = Vue.extend({
           tooltipText: "dangerTooltip",
           matchName: "danger",
           color: "darkred",
-          iframeAlwaysShow: true
+          iframeAlwaysShow: true,
         },
       ],
     };
@@ -714,7 +714,7 @@ const vue = (window.vue = new Vue({
     },
     addonAmt() {
       return `${Math.floor(this.manifests.length / 5) * 5}+`;
-    }
+    },
   },
 
   methods: {
