@@ -195,12 +195,9 @@ const AddonBody = Vue.extend({
   },
   methods: {
     devShowAddonIds(event) {
-      if (!this.$root.versionName.endsWith("-prerelease") || this.$root.shownAddonIds || !event.ctrlKey) return;
+      if (!this.$root.versionName.endsWith("-prerelease") || !event.ctrlKey) return;
       event.stopPropagation();
-      this.$root.shownAddonIds = true;
-      this.$root.manifests.forEach((manifest) => {
-        this.addon.name = this.addon._addonId;
-      });
+      Vue.set(this.addon, "_displayedAddonId", this.addon._addonId);
     },
     loadPreset(preset) {
       if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {

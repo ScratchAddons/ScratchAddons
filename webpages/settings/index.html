@@ -189,7 +189,7 @@
               <img v-if="addon._icon === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
               <img v-if="addon._icon === 'easterEgg'" src="../../images/icons/egg-easter.svg" class="icon-type" />
               <img v-if="addon._icon === 'popup'" src="../../images/icons/popup.svg" class="icon-type" />
-              <span @click="devShowAddonIds">{{ addon.name }}</span>
+              <span @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
             </div>
           </div>
           <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
