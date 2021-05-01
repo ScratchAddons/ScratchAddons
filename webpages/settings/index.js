@@ -137,9 +137,8 @@ const AddonGroup = Vue.extend({
       return this.shownCount > 0;
     },
     shownCount() {
-      // Recompute when these values change.
-      this.$root.searchInput;
-      this.$root.loaded;
+      // Recompute after root loaded
+      void this.$root.loaded;
 
       return this.$children.filter((addon) => addon.shouldShow).length;
     },
