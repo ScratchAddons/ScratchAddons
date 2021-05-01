@@ -61,7 +61,7 @@ export default async function ({ addon, console }) {
 
         if (!block) continue;
 
-        block.svgGroup_.querySelectorAll("text").forEach(text => text.style.opacity = 1);
+        block.svgGroup_.querySelectorAll("text").forEach((text) => (text.style.opacity = 1));
 
         setTransparency(block, 1);
       }
@@ -74,7 +74,9 @@ export default async function ({ addon, console }) {
 
       setTransparency(orphan, addon.settings.get("transparency") / 100);
 
-      orphan.svgGroup_.querySelectorAll("text").forEach(text => text.style.opacity = addon.settings.get("transparency") / 100);
+      orphan.svgGroup_
+        .querySelectorAll("text")
+        .forEach((text) => (text.style.opacity = addon.settings.get("transparency") / 100));
     }
   }
 
