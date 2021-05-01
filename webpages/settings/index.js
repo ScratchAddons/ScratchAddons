@@ -1,5 +1,12 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 
+let isIframe = false;
+if (window.parent !== window) {
+  // We're in a popup!
+  document.body.classList.add("iframe");
+  isIframe = true;
+}
+
 Vue.directive("click-outside", {
   priority: 700,
   bind() {
@@ -153,7 +160,7 @@ const AddonBody = Vue.extend({
   template: document.querySelector("template#addon-body-component").innerHTML,
   data() {
     return {
-      expanded: document.body.classList.contains("iframe") ? false : this.group.id === "enabled",
+      expanded: isIframe ? false : this.group.id === "enabled",
     };
   },
   computed: {
@@ -223,35 +230,25 @@ const AddonBody = Vue.extend({
         this.addon._enabled = newState;
         // Do not extend when enabling in popup mode, unless addon has warnings
         this.expanded =
-          document.body.classList.contains("iframe") &&
-          !this.expanded &&
-          (this.addon.info || []).every((item) => item.type !== "warning")
+          isIframe && !this.expanded && (this.addon.info || []).every((item) => item.type !== "warning")
             ? false
             : event.shiftKey
             ? false
             : newState;
         chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
-
-        if (document.body.classList.contains("iframe"))
-          setTimeout(() => this.$root.popupOrderAddonsEnabledFirst(), 500);
       };
 
       const requiredPermissions = (this.addon.permissions || []).filter((value) =>
         browserLevelPermissions.includes(value)
       );
-      // NOTE: The following code was added for safety purposes only. Feel free to comment it out at yoru own risk.
       if (!this.addon._enabled && this.addon.tags.includes("danger")) {
-        while (
-          window.confirm(
-            "DO YOU UNDERSTAND THE CONSEQUENCES BY ENABLING THIS ADDON AND UNDERSTAND ITS FUNCTIONALITY? ENABLING THIS ADDON MAY BE FATAL!!!!"
-          )
-        ) {}
-        return;
+        const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
+        if (!confirmation) return;
       }
       if (!this.addon._enabled && requiredPermissions.length) {
         const result = requiredPermissions.every((p) => grantedOptionalPermissions.includes(p));
         if (result === false) {
-          if (document.body.classList.contains("iframe")) {
+          if (isIframe) {
             this.addonToEnable = this.addon;
             document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
             this.showPopupModal = true;
@@ -324,6 +321,7 @@ const AddonTag = Vue.extend({
         },
         {
           name: "danger",
+          tooltipText: "dangerTooltip",
           matchName: "danger",
           color: "darkred",
         },
@@ -461,11 +459,6 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
-if (window.parent !== window) {
-  // We're in a popup!
-  document.body.classList.add("iframe");
-}
-
 const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
 
 let handleConfirmClicked = null;
@@ -537,6 +530,67 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
   return resolveOnConfirmPromise;
 };
 
+const addonGroups = [
+  // Only popup:
+  {
+    id: "runningOnTab",
+    name: chrome.i18n.getMessage("runningOnThisPage"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: true,
+    fullscreenShow: false,
+  },
+  {
+    id: "recentlyUsed",
+    name: chrome.i18n.getMessage("recentlyUsed"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: true,
+    fullscreenShow: false,
+  },
+
+  {
+    id: "new",
+    name: chrome.i18n.getMessage("new"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+  {
+    id: "enabled",
+    name: chrome.i18n.getMessage("enabled"),
+    addonIds: [],
+    expanded: isIframe ? false : true,
+    iframeShow: true,
+    fullscreenShow: true,
+  },
+  {
+    id: "recommended",
+    name: chrome.i18n.getMessage("recommended"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+  {
+    id: "others",
+    name: chrome.i18n.getMessage("others"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+  {
+    id: "hidden",
+    name: chrome.i18n.getMessage("beta"),
+    addonIds: [],
+    expanded: false,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+];
+
 const vue = (window.vue = new Vue({
   el: "body",
   data: {
@@ -553,42 +607,10 @@ const vue = (window.vue = new Vue({
     selectedCategory: "all",
     searchInput: "",
     addonSettings: {},
-    addonsRunningOnTab: false,
     addonToEnable: null,
     showPopupModal: false,
-    isIframe: window.parent !== window,
-    addonGroups: [
-      {
-        id: "new",
-        name: "New!",
-        addonIds: [],
-        expanded: true,
-      },
-      {
-        id: "enabled",
-        name: "Enabled",
-        addonIds: [],
-        expanded: true,
-      },
-      {
-        id: "recommended",
-        name: "Recommended",
-        addonIds: [],
-        expanded: true,
-      },
-      {
-        id: "others",
-        name: "Other",
-        addonIds: [],
-        expanded: true,
-      },
-      {
-        id: "hidden",
-        name: "Beta",
-        addonIds: [],
-        expanded: false,
-      },
-    ],
+    isIframe,
+    addonGroups: addonGroups.filter((g) => (isIframe ? g.iframeShow : g.fullscreenShow)),
     categories: [
       {
         id: "all",
@@ -823,67 +845,6 @@ const vue = (window.vue = new Vue({
       document.body.appendChild(inputElem);
       inputElem.click();
     },
-    popupOrderAddonsEnabledFirst() {
-      return new Promise((resolve) => {
-        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-          if (!tabs[0].id) return;
-          chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
-            // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
-            void chrome.runtime.lastError;
-
-            const addonsCurrentlyOnTab = !res
-              ? []
-              : [...new Set([...res.userscripts, ...res.userstyles])].filter((runningAddonId) => {
-                  // Consider addons with "dynamicDisable": true
-                  // If those are running on the page, their "is running on this tab"
-                  // status should be the same as their "is enabled" status
-                  const manifest = this.manifests.find((manifest) => manifest._addonId === runningAddonId);
-                  if (manifest.dynamicDisable && !manifest._enabled) return false;
-                  return true;
-                });
-            // Addons that were previously enabled on the tab (but not anymore)
-            // should go above enabled addons that are not currently running on the tab
-            // so that it's easier to find them, even if the popup was closed.
-            // Disabling then reenabling an addon is likely something common
-            // so hopefully this saves some seconds of our users' lives :P
-            const addonsPreviouslyOnTab = !res
-              ? []
-              : [...new Set([...res.userscripts, ...res.userstyles, ...res.disabledDynamicAddons])].filter(
-                  (runningAddonId) => !addonsCurrentlyOnTab.includes(runningAddonId)
-                );
-
-            this.addonsRunningOnTab = Boolean(addonsCurrentlyOnTab.length);
-
-            this.manifests.sort((a, b) =>
-              addonsCurrentlyOnTab.includes(a._addonId) && addonsCurrentlyOnTab.includes(b._addonId)
-                ? a.name.localeCompare(b.name)
-                : addonsCurrentlyOnTab.includes(a._addonId)
-                ? -1
-                : addonsCurrentlyOnTab.includes(b._addonId)
-                ? 1
-                : addonsPreviouslyOnTab.includes(a._addonId) && addonsPreviouslyOnTab.includes(b._addonId)
-                ? a.name.localeCompare(b.name)
-                : addonsPreviouslyOnTab.includes(a._addonId)
-                ? -1
-                : addonsPreviouslyOnTab.includes(b._addonId)
-                ? 1
-                : 0
-            );
-
-            const currentMarginBottomAddon = this.manifests.find((manifest) => manifest._marginBottom === true);
-            if (currentMarginBottomAddon) Vue.set(currentMarginBottomAddon, "_marginBottom", false);
-            if (addonsCurrentlyOnTab.length) {
-              // Find first addon not currently running on tab
-              const firstNonRunningAddonIndex = this.manifests.findIndex(
-                (manifest) => !addonsCurrentlyOnTab.includes(manifest._addonId)
-              );
-              Vue.set(this.manifests[firstNonRunningAddonIndex - 1], "_marginBottom", true);
-            }
-            resolve();
-          });
-        });
-      });
-    },
     openFullSettings() {
       window.open(
         `${chrome.runtime.getURL("webpages/settings/index.html")}#addon-${
@@ -921,8 +882,42 @@ const vue = (window.vue = new Vue({
   },
 }));
 
+const getRunningAddons = (manifests, addonsEnabled) => {
+  return new Promise((resolve) => {
+    chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+      if (!tabs[0].id) return;
+      chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
+        // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
+        void chrome.runtime.lastError;
+
+        const addonsCurrentlyOnTab = !res
+          ? []
+          : [...new Set([...res.userscripts, ...res.userstyles])].filter((runningAddonId) => {
+              // Consider addons with "dynamicDisable": true
+              // If those are running on the page, their "is running on this tab"
+              // status should be the same as their "is enabled" status
+              const manifest = manifests.find(({ addonId }) => addonId === runningAddonId);
+              // if (manifest.dynamicDisable && !addonsEnabled[runningAddonId]) return false;
+              return true;
+            });
+        const addonsPreviouslyOnTab = !res
+          ? []
+          : [...new Set([...res.userscripts, ...res.userstyles, ...res.disabledDynamicAddons])].filter(
+              (runningAddonId) => !addonsCurrentlyOnTab.includes(runningAddonId)
+            );
+        resolve({ addonsCurrentlyOnTab, addonsPreviouslyOnTab });
+      });
+    });
+  });
+};
+
 chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
   vue.addonSettings = addonSettings;
+  let iframeData;
+  if (isIframe) {
+    iframeData = await getRunningAddons(manifests, addonsEnabled);
+    console.log(iframeData);
+  }
   for (const { manifest, addonId } of manifests) {
     manifest._categories = [];
     manifest._categories[0] = manifest.popup
@@ -984,6 +979,10 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
       manifest._groups.push("new");
     }
 
+    // Iframe only
+    if (iframeData?.addonsCurrentlyOnTab.includes(addonId)) manifest._groups.push("runningOnTab");
+    else if (iframeData?.addonsPreviouslyOnTab.includes(addonId)) manifest._groups.push("recentlyUsed");
+
     if (manifest._enabled) manifest._groups.push("enabled");
     else {
       // Addon is disabled
@@ -993,7 +992,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     }
 
     for (const groupId of manifest._groups) {
-      vue.addonGroups.find((g) => g.id === groupId).addonIds.push(manifest._addonId);
+      vue.addonGroups.find((g) => g.id === groupId)?.addonIds.push(manifest._addonId);
     }
 
     Vue.set(vue.manifestsById, manifest._addonId, manifest);
@@ -1023,8 +1022,6 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
       })
       .map((addon) => addon._addonId);
   });
-
-  if (document.body.classList.contains("iframe")) await vue.popupOrderAddonsEnabledFirst();
 
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
@@ -1125,21 +1122,3 @@ document.addEventListener("keydown", (e) => {
 });
 
 chrome.runtime.sendMessage("checkPermissions");
-
-function isElementAboveViewport(el) {
-  const rect = el.getBoundingClientRect();
-  const elemBottom = rect.bottom;
-  return elemBottom >= 0;
-}
-
-if (document.body.classList.contains("iframe")) {
-  document.querySelector(".addons-block").addEventListener(
-    "scroll",
-    () => {
-      const el = document.querySelector(".addon-body[data-has-margin-bottom]");
-      if (!el) return;
-      document.querySelector("#running-page").style.opacity = isElementAboveViewport(el) ? 1 : 0;
-    },
-    { passive: true }
-  );
-}

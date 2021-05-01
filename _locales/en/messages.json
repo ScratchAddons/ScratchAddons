@@ -48,7 +48,10 @@
     "message": "Beta"
   },
   "danger": {
-    "message": "DANGER!"
+    "message": "Dangerous"
+  },
+  "dangerWarning": {
+    "message": "Are you sure you want to enable the \"$1\" addon?"
   },
   "forums": {
     "message": "Forums"
@@ -176,6 +179,9 @@
   "recommendedTooltip": {
     "message": "This is recommended by Scratch Addons. Try it out!"
   },
+  "dangerTooltip": {
+    "message": "Use with caution. Make sure to understand what this addon does before enabling."
+  },
   "betaTooltip": {
     "message": "Keep in mind that this addon might have bugs."
   },
@@ -251,6 +257,9 @@
   "new": {
     "message": "New!"
   },
+  "enabled": {
+    "message": "Enabled"
+  },
   "exportAndImportSettings": {
     "message": "Export and Import Settings"
   },
@@ -282,7 +291,10 @@
     "message": "Addons"
   },
   "runningOnThisPage": {
-    "message": "Addons currently running on this tab:"
+    "message": "Addons on this tab"
+  },
+  "recentlyUsed": {
+    "message": "Recently used"
   },
   "settingsPagePermission": {
     "message": "To enable the \"$1\" addon, go to the full screen settings page."

@@ -171,13 +171,7 @@
       </div>
     </template>
     <template id="addon-body-component">
-      <div
-        class="addon-body"
-        :class="{ 'addon-body-margin-bottom': addon._marginBottom && searchInput === '' }"
-        v-show="shouldShow && group.expanded"
-        :data-has-margin-bottom="addon._marginBottom"
-        :id="'addon-' + addon._addonId"
-      >
+      <div class="addon-body" v-show="shouldShow && group.expanded" :id="'addon-' + addon._addonId">
         <div class="addon-topbar">
           <div class="clickeable-area" @click="expanded = !expanded">
             <div class="btn-dropdown">
