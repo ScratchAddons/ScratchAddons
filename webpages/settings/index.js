@@ -708,6 +708,9 @@ const vue = (window.vue = new Vue({
     versionName() {
       return chrome.runtime.getManifest().version_name;
     },
+    addonAmt() {
+      return `${Math.floor(this.manifests.length / 5) * 5}+`;
+    }
   },
 
   methods: {

@@ -376,3 +376,24 @@ button.setting-input.color {
   border-radius: 5px;
   background-color: white;
 }
+
+#iframe-fullscreen-suggestion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 100px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 50%);
+  padding: 20px 0 20px 0;
+  margin: 0 20px 0 20px;
+}
+#iframe-fullscreen-suggestion > span {
+  width: 100%;
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
