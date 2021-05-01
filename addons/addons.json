@@ -70,8 +70,9 @@
   "custom-zoom",
   "blocks2image",
   "editor-sounds",
+  "gamepad",
   "debugger",
-
+  
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
   "// because the first in the list gets their CSS injected first,",
@@ -80,7 +81,6 @@
   "editor-colored-context-menus",
   "editor-stage-left",
   "editor-theme3",
-  "a11y",
   "// For website:",
   "scratchr2",
   "dark-www"

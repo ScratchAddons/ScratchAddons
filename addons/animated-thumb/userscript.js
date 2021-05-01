@@ -1,9 +1,11 @@
-import ThumbSetter from "../../libraries/animated-thumb.js";
+import ThumbSetter from "../../libraries/common/cs/thumb-setter.js";
 
 export default async function ({ addon, global, console, msg }) {
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
       markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+      condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
     });
     if (!document.querySelector("[class^='author-info_username-line']")) {
       let setthumb = document.createElement("div");

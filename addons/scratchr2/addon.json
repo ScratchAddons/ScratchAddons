@@ -8,21 +8,48 @@
       "link": "https://github.com/mxmou/customize-scratch#scratch-30-look-for-old-parts-of-the-website"
     }
   ],
-  "userscripts": [
+  "customCssVariables": [
     {
-      "url": "lightprimary.js",
-      "matches": ["https://scratch.mit.edu/*"],
-      "runAtComplete": false
+      "name": "primaryColor-text",
+      "value": {
+        "type": "textColor",
+        "black": "#575e75",
+        "white": "#ffffff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primaryColor"
+        }
+      }
+    },
+    {
+      "name": "primaryColor-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "#575e75b0",
+        "white": "#ffffffb0",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primaryColor"
+        }
+      }
+    },
+    {
+      "name": "primaryColor-filter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primaryColor"
+        }
+      }
     }
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "userstyles": [
-    {
-      "url": "set-default-var-value.css",
-      "matches": ["https://scratch.mit.edu/*"]
-    },
     {
       "url": "scratchr2.css",
       "matches": [

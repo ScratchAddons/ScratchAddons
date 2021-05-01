@@ -13,6 +13,7 @@ const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
 
 let _page_ = null;
+let globalState = null;
 
 const comlinkIframesDiv = document.createElement("div");
 comlinkIframesDiv.id = "scratchaddons-iframes";
@@ -61,7 +62,7 @@ const cs = {
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
 
 const pageComlinkScript = document.createElement("script");
-pageComlinkScript.src = chrome.runtime.getURL("libraries/comlink.js");
+pageComlinkScript.src = chrome.runtime.getURL("libraries/thirdparty/cs/comlink.js");
 document.documentElement.appendChild(pageComlinkScript);
 
 const moduleScript = document.createElement("script");
@@ -164,26 +165,57 @@ function injectUserstyles(addonsWithUserstyles) {
   }
 }
 
-function setCssVariables(addonSettings) {
-  for (const addonId of Object.keys(addonSettings)) {
-    for (const settingName of Object.keys(addonSettings[addonId])) {
+const textColorLib = __scratchAddonsTextColor;
+function setCssVariables(addonSettings, addonsWithUserstyles) {
+  const hyphensToCamelCase = (s) => s.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+  const setVar = (addonId, varName, value) =>
+    document.documentElement.style.setProperty(`--${hyphensToCamelCase(addonId)}-${varName}`, value);
+
+  const addonIds = addonsWithUserstyles.map((obj) => obj.addonId);
+
+  // Set variables for settings
+  for (const addonId of addonIds) {
+    for (const settingName of Object.keys(addonSettings[addonId] || {})) {
       const value = addonSettings[addonId][settingName];
-      if (typeof value === "string" || typeof value === "number")
-        document.documentElement.style.setProperty(
-          `--${addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-${settingName.replace(/-([a-z])/g, (g) =>
-            g[1].toUpperCase()
-          )}`,
-          addonSettings[addonId][settingName]
-        );
+      if (typeof value === "string" || typeof value === "number") {
+        setVar(addonId, hyphensToCamelCase(settingName), addonSettings[addonId][settingName]);
+      }
+    }
+  }
+
+  // Set variables for customCssVariables
+  const getColor = (addonId, obj) => {
+    let hex;
+    switch (obj.type) {
+      case "settingValue":
+        return addonSettings[addonId][obj.settingId];
+      case "textColor":
+        hex = getColor(addonId, obj.source);
+        return textColorLib.textColor(hex, obj.black, obj.white, obj.threshold);
+      case "multiply":
+        hex = getColor(addonId, obj.source);
+        return textColorLib.multiply(hex, obj);
+      case "brighten":
+        hex = getColor(addonId, obj.source);
+        return textColorLib.brighten(hex, obj);
+    }
+  };
+
+  for (const addon of addonsWithUserstyles) {
+    const addonId = addon.addonId;
+    for (const customVar of addon.cssVariables) {
+      const varName = customVar.name;
+      setVar(addonId, varName, getColor(addonId, customVar.value));
     }
   }
 }
 
-async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
+async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
   // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   const disabledDynamicAddons = [];
-  setCssVariables(globalState.addonSettings);
+  globalState = globalStateMsg;
+  setCssVariables(globalState.addonSettings, addonsWithUserstyles);
   // Just in case, make sure the <head> loaded before injecting styles
   if (document.head) injectUserstyles(addonsWithUserstyles);
   else {
@@ -212,11 +244,12 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.newGlobalState) {
       _page_.globalState = request.newGlobalState;
-      setCssVariables(request.newGlobalState.addonSettings);
+      globalState = request.newGlobalState;
+      setCssVariables(request.newGlobalState.addonSettings, addonsWithUserstyles);
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
     } else if (request.dynamicAddonEnabled) {
-      const { scripts, userstyles, addonId, injectAsStyleElt, index } = request.dynamicAddonEnabled;
+      const { scripts, userstyles, cssVariables, addonId, injectAsStyleElt, index } = request.dynamicAddonEnabled;
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
       if (everLoadedAddons.find((addon) => addon.addonId === addonId)) {
         // Addon was reenabled
@@ -227,7 +260,8 @@ async function onInfoAvailable({ globalState, l10njson, addonsWithUserscripts, a
       }
 
       addonsWithUserscripts.push({ addonId, scripts });
-      addonsWithUserstyles.push({ styles: userstyles, addonId, injectAsStyleElt, index });
+      addonsWithUserstyles.push({ styles: userstyles, cssVariables, addonId, injectAsStyleElt, index });
+      setCssVariables(globalState.addonSettings, addonsWithUserstyles);
       everLoadedAddons.push({ addonId, scripts });
     } else if (request.dynamicAddonDisable) {
       const { addonId } = request.dynamicAddonDisable;
