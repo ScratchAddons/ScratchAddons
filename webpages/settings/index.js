@@ -1034,10 +1034,12 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
 
   // Define order when searching. Temporal until we
   // can sort by relevance depending on the query
-  vue.searchAddonOrder = manifests.sort((a, b) => {
-    if (a.manifest._enabled ^ b.manifest._enabled) return b.manifest._enabled - a.manifest._enabled;
-    else return a.manifest.name.localeCompare(b.manifest.name);
-  }).map(obj => obj.addonId);
+  vue.searchAddonOrder = manifests
+    .sort((a, b) => {
+      if (a.manifest._enabled ^ b.manifest._enabled) return b.manifest._enabled - a.manifest._enabled;
+      else return a.manifest.name.localeCompare(b.manifest.name);
+    })
+    .map((obj) => obj.addonId);
 
   vue.loaded = true;
   setTimeout(() => document.getElementById("searchBox").focus(), 0);
