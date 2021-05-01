@@ -538,16 +538,16 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
 const addonGroups = [
   // Only popup:
   {
-    id: "runningOnTab",
-    name: chrome.i18n.getMessage("runningOnThisPage"),
+    id: "recentlyUsed",
+    name: chrome.i18n.getMessage("recentlyUsed"),
     addonIds: [],
     expanded: true,
     iframeShow: true,
     fullscreenShow: false,
   },
   {
-    id: "recentlyUsed",
-    name: chrome.i18n.getMessage("recentlyUsed"),
+    id: "runningOnTab",
+    name: chrome.i18n.getMessage("runningOnThisPage"),
     addonIds: [],
     expanded: true,
     iframeShow: true,
