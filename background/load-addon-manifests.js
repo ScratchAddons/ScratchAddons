@@ -1,5 +1,4 @@
 (async function () {
-  const TAG_ORDER = ["recommended", "new", "editor", "beta", "community", "forums"];
   const folderNames = await (await fetch("/addons/addons.json")).json();
   folderNames.forEach((addonId, i) => {
     if (folderNames.lastIndexOf(addonId) !== i) throw "Duplicated value in /addons/addons.json";
@@ -88,9 +87,6 @@
           break;
       }
     }
-
-    manifest.tags.sort((a, b) => TAG_ORDER.indexOf(b) - TAG_ORDER.indexOf(a));
-
     scratchAddons.manifests.push({ addonId: folderName, manifest });
   }
   scratchAddons.localState.ready.manifests = true;
