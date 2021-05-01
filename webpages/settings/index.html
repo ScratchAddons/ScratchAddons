@@ -366,13 +366,16 @@
         </div>
 
         <div class="addons-container">
+          <addon-group v-for="group of addonGroups" :group="group"></addon-group>
+
+          <!-- Search pseudogroup -->
+          <!-- Must be below real groups to make index.html/#addon-addonid work -->
           <addon-body
             v-for="addon of manifests"
             :addon="addon"
             group-id="search"
             :group-expanded="searchInput !== ''"
           ></addon-body>
-          <addon-group v-for="group of addonGroups" :group="group"></addon-group>
         </div>
       </div>
     </div>

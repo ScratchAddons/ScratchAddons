@@ -250,9 +250,9 @@ const AddonBody = Vue.extend({
         const result = requiredPermissions.every((p) => grantedOptionalPermissions.includes(p));
         if (result === false) {
           if (isIframe) {
-            this.addonToEnable = this.addon;
+            this.$root.addonToEnable = this.addon;
             document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
-            this.showPopupModal = true;
+            this.$root.showPopupModal = true;
           } else
             chrome.permissions.request(
               {
