@@ -565,7 +565,7 @@ const addonGroups = [
     id: "enabled",
     name: chrome.i18n.getMessage("enabled"),
     addonIds: [],
-    expanded: isIframe ? false : true,
+    expanded: true,
     iframeShow: true,
     fullscreenShow: true,
   },
@@ -897,22 +897,8 @@ const getRunningAddons = (manifests, addonsEnabled) => {
       chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
         // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
         void chrome.runtime.lastError;
-
-        const addonsCurrentlyOnTab = !res
-          ? []
-          : [...new Set([...res.userscripts, ...res.userstyles])].filter((runningAddonId) => {
-              // Consider addons with "dynamicDisable": true
-              // If those are running on the page, their "is running on this tab"
-              // status should be the same as their "is enabled" status
-              const manifest = manifests.find(({ addonId }) => addonId === runningAddonId);
-              // if (manifest.dynamicDisable && !addonsEnabled[runningAddonId]) return false;
-              return true;
-            });
-        const addonsPreviouslyOnTab = !res
-          ? []
-          : [...new Set([...res.userscripts, ...res.userstyles, ...res.disabledDynamicAddons])].filter(
-              (runningAddonId) => !addonsCurrentlyOnTab.includes(runningAddonId)
-            );
+        const addonsCurrentlyOnTab = res ? [...res.userscripts, ...res.userstyles] : [];
+        const addonsPreviouslyOnTab = res ? res.disabledDynamicAddons : [];
         resolve({ addonsCurrentlyOnTab, addonsPreviouslyOnTab });
       });
     });

@@ -383,11 +383,10 @@ button.setting-input.color {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  margin-bottom: 100px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgb(0 0 0 / 50%);
   padding: 20px 0 20px 0;
-  margin: 0 20px 0 20px;
+  margin: 20px 20px 20px 20px;
 }
 #iframe-fullscreen-suggestion > span {
   width: 100%;
