@@ -337,10 +337,11 @@ const AddonTag = Vue.extend({
     shouldShow() {
       return this.tagInfo && (!this.tagInfo.addonTabShow || this.tagInfo.addonTabShow[this.$root.selectedCategory]);
     },
-  },
-  methods: {
-    msg(...params) {
-      return this.$root.msg(...params);
+    tagName() {
+      return chrome.i18n.getMessage(this.tagInfo.name);
+    },
+    tagTooltip() {
+      return chrome.i18n.getMessage(this.tagInfo.tooltipText);
     },
   },
 });

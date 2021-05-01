@@ -271,8 +271,8 @@
         'purple': tagInfo.color === 'purple'
         }"
       >
-        {{ msg(tagInfo.name) }}
-        <span v-if="tagInfo.tooltipText" class="tooltiptext">{{ msg(tagInfo.tooltipText) }}</span>
+        {{ tagName }}
+        <span v-if="tagInfo.tooltipText" class="tooltiptext">{{ tagTooltip }}</span>
       </div>
     </template>
     <template id="addon-group-component">
