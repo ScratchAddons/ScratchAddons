@@ -1,4 +1,4 @@
-import downloadBlob from "../../libraries/download-blob.js";
+import downloadBlob from "../../libraries/common/cs/download-blob.js";
 const NEW_ADDONS = ["editor-dark-mode", "custom-zoom", "initialise-sprite-position"];
 
 Vue.directive("click-outside", {

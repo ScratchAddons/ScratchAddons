@@ -1,4 +1,4 @@
-import LocalizationProvider from "../libraries/l10n.js";
+import LocalizationProvider from "../libraries/common/cs/l10n.js";
 
 export default class BackgroundLocalizationProvider extends LocalizationProvider {
   constructor() {
@@ -31,8 +31,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
         this.messages = Object.assign(messages, this.messages);
       }
     }
-    this._generateCache();
-    this._refreshDateTime();
+    this._reconfigure();
     this.loaded = this.loaded.concat(addonIds);
   }
 }

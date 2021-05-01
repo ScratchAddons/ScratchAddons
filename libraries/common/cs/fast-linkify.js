@@ -32,7 +32,7 @@ export const linkifyTextNode = (elem) => {
   for (const child of elem.childNodes) {
     _linkify(child);
   }
-}
+};
 
 /**
  * Linkify an element which uses tags around text, such as studio descriptions or project comments.
@@ -45,4 +45,4 @@ export const linkifyTag = (elem, tagClass) => {
       _linkify(child);
     }
   }
-}
+};
