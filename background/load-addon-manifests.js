@@ -1,5 +1,5 @@
 (async function () {
-  const TAG_ORDER = ["recommended", "new", "forEditor", "beta", "forWebsite", "forums"];
+  const TAG_ORDER = ["recommended", "new", "editor", "beta", "community", "forums"];
   const folderNames = await (await fetch("/addons/addons.json")).json();
   folderNames.forEach((addonId, i) => {
     if (folderNames.lastIndexOf(addonId) !== i) throw "Duplicated value in /addons/addons.json";
