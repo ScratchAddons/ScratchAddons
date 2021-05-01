@@ -274,66 +274,66 @@ const AddonBody = Vue.extend({
 });
 Vue.component("addon-body", AddonBody);
 
+// Tags in order
+const tags = [
+  {
+    name: "danger",
+    tooltipText: "dangerTooltip",
+    matchName: "danger",
+    color: "darkred",
+    iframeAlwaysShow: true,
+  },
+  {
+    name: "recommended",
+    tooltipText: "recommendedTooltip",
+    matchName: "recommended",
+    color: "blue",
+  },
+  {
+    name: "new",
+    matchName: "new",
+    color: "purple",
+  },
+  {
+    name: "beta",
+    tooltipText: "betaTooltip",
+    matchName: "beta",
+    color: "red",
+    iframeAlwaysShow: true,
+  },
+  {
+    name: "forums",
+    tooltipText: "forumsTooltip",
+    matchName: "forums",
+    color: "green",
+  },
+  {
+    name: "forEditor",
+    matchName: "editor",
+    color: "darkgreen",
+    addonTabShow: {
+      theme: true,
+    },
+  },
+  {
+    name: "forWebsite",
+    matchName: "community",
+    color: "yellow",
+    addonTabShow: {
+      theme: true,
+    },
+  },
+];
 const AddonTag = Vue.extend({
   props: ["tag"],
   template: document.querySelector("template#addon-tag-component").innerHTML,
   data() {
-    return {
-      tags: [
-        {
-          name: "recommended",
-          tooltipText: "recommendedTooltip",
-          matchName: "recommended",
-          color: "blue",
-        },
-        {
-          name: "beta",
-          tooltipText: "betaTooltip",
-          matchName: "beta",
-          color: "red",
-          iframeAlwaysShow: true,
-        },
-        {
-          name: "forums",
-          tooltipText: "forumsTooltip",
-          matchName: "forums",
-          color: "green",
-        },
-        {
-          name: "forEditor",
-          matchName: "editor",
-          color: "darkgreen",
-          addonTabShow: {
-            theme: true,
-          },
-        },
-        {
-          name: "forWebsite",
-          matchName: "community",
-          color: "yellow",
-          addonTabShow: {
-            theme: true,
-          },
-        },
-        {
-          name: "new",
-          matchName: "new",
-          color: "purple",
-        },
-        {
-          name: "danger",
-          tooltipText: "dangerTooltip",
-          matchName: "danger",
-          color: "darkred",
-          iframeAlwaysShow: true,
-        },
-      ],
-    };
+    return {};
   },
   computed: {
     tagInfo() {
       // Might return undefined, tag might not exist
-      return this.tags.find((tag) => tag.matchName === this.tag);
+      return tags.find((tag) => tag.matchName === this.tag);
     },
     shouldShow() {
       if (isIframe) return this.tagInfo && this.tagInfo.iframeAlwaysShow;
@@ -981,6 +981,10 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
       manifest.tags.push("new");
       manifest._groups.push("new");
     }
+
+    // Sort tags to preserve consistent order
+    const order = tags.map((obj) => obj.matchName);
+    manifest.tags.sort((b, a) => order.indexOf(b) - order.indexOf(a));
 
     // Iframe only
     if (iframeData?.addonsCurrentlyOnTab.includes(addonId)) manifest._groups.push("runningOnTab");
