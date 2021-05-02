@@ -1288,9 +1288,33 @@ export default async function ({ addon, global, console, msg }) {
 
   await untilInEditor();
 
+  // Backpack
+  {
+    const clickListener = (e) => {
+      if (!e.target.closest('[class*="backpack_backpack-header_"]')) {
+        return;
+      }
+      setTimeout(() => {
+        const backpackContainer = document.querySelector("[class^='backpack_backpack-list_']");
+        if (!backpackContainer) {
+          return;
+        }
+        document.removeEventListener("click", clickListener);
+        const backpackInstance = getBackpackFromElement(backpackContainer);
+        verifyBackpack(backpackInstance);
+        patchBackpack(backpackInstance);
+      });
+    };
+    document.addEventListener("click", clickListener, true);
+  }
+
   // Sprite list
   {
-    const spriteSelectorItemElement = await addon.tab.waitForElement("[class*='sprite-selector_sprite-wrapper']");
+    const spriteSelectorItemElement = await addon.tab.waitForElement("[class^='sprite-selector_sprite-wrapper']", {
+      condition: () =>
+        // We can run before redux state is ready
+        addon.tab.redux.state && !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    });
     vm = addon.tab.traps.vm;
     reactInternalKey = Object.keys(spriteSelectorItemElement).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
     const sortableHOCInstance = getSortableHOCFromElement(spriteSelectorItemElement);
@@ -1304,17 +1328,13 @@ export default async function ({ addon, global, console, msg }) {
     patchVM();
   }
 
-  // Backpack
-  (async () => {
-    const backpackContainer = await addon.tab.waitForElement("[class*='backpack_backpack-list_']");
-    const backpackInstance = getBackpackFromElement(backpackContainer);
-    verifyBackpack(backpackInstance);
-    patchBackpack(backpackInstance);
-  })();
-
   // Costume and sound list
   {
-    const selectorListItem = await addon.tab.waitForElement("[class*='selector_list-item']");
+    const selectorListItem = await addon.tab.waitForElement("[class*='selector_list-item']", {
+      condition: () =>
+        addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0 &&
+        !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    });
     const sortableHOCInstance = getSortableHOCFromElement(selectorListItem);
     verifySortableHOC(sortableHOCInstance);
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);

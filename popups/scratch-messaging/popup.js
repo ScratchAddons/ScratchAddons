@@ -1,5 +1,5 @@
-import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
-import { escapeHTML } from "../../libraries/autoescaper.js";
+import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js";
+import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
 (async () => {
   if (window.parent === window) {
@@ -61,6 +61,22 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         window.open(url);
       },
       postComment() {
+        const shouldCaptureComment = (value) => {
+          // From content-scripts/cs.js
+          const regex = / scratch[ ]?add[ ]?ons/;
+          // Trim like scratchr2
+          const trimmedValue = " " + value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+          const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
+          return regex.test(limitedValue);
+        };
+        if (shouldCaptureComment(this.replyBoxValue)) {
+          alert(
+            chrome.i18n
+              .getMessage("captureCommentError", ["$1"])
+              .replace("$1", chrome.i18n.getMessage("captureCommentPolicy"))
+          );
+          return;
+        }
         this.postingComment = true;
         const parent_pseudo_id = this.isParent ? this.commentId : this.thisComment.childOf;
         const parent_id = Number(parent_pseudo_id.substring(2));
@@ -150,7 +166,7 @@ import { escapeHTML } from "../../libraries/autoescaper.js";
         });
         const commentTimestamp = new Date(this.thisComment.date).getTime();
         const timeDiffSeconds = (dateNow - commentTimestamp) / 1000;
-        let options = { unit: null, divideBy: null };
+        let options;
         if (timeDiffSeconds < 60) return timeFormatter.format(0, "second");
         else if (timeDiffSeconds < 3600) options = { unit: "minute", divideBy: 60 };
         else if (timeDiffSeconds < 86400) options = { unit: "hour", divideBy: 60 * 60 };

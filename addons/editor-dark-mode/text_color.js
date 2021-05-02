@@ -1,4 +1,4 @@
-import { textColor, multiply, brighten } from "../../libraries/text_color.js";
+import { textColor, multiply, brighten } from "../../libraries/common/cs/text-color.esm.js";
 
 function setCSSVar(name, value) {
   document.documentElement.style.setProperty(`--editorDarkMode-${name}`, value);

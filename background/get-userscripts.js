@@ -24,20 +24,23 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
           if (res) {
             (async () => {
-              const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
-              chrome.tabs.sendMessage(
-                tab.id,
-                {
-                  dynamicAddonEnabled: {
-                    scripts: userscripts,
-                    userstyles,
-                    addonId,
-                    injectAsStyleElt: !!manifest.injectAsStyleElt,
-                    index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+              const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
+              if (userscripts.length || userstyles.length) {
+                chrome.tabs.sendMessage(
+                  tab.id,
+                  {
+                    dynamicAddonEnabled: {
+                      scripts: userscripts,
+                      userstyles,
+                      cssVariables,
+                      addonId,
+                      injectAsStyleElt: !!manifest.injectAsStyleElt,
+                      index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                    },
                   },
-                },
-                { frameId: 0 }
-              );
+                  { frameId: 0 }
+                );
+              }
             })();
           }
         });
@@ -63,13 +66,14 @@ scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ 
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
           if (res) {
             (async () => {
-              const { userscripts, userstyles } = await getAddonData({ addonId, url: res, manifest });
+              const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
               chrome.tabs.sendMessage(
                 tab.id,
                 {
                   updateUserstylesSettingsChange: {
                     scripts: userscripts,
                     userstyles,
+                    cssVariables,
                     addonId,
                     injectAsStyleElt: !!manifest.injectAsStyleElt,
                     index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
@@ -120,7 +124,7 @@ async function getAddonData({ addonId, manifest, url }) {
   }
   await Promise.all(promises);
 
-  return { userscripts, userstyles };
+  return { userscripts, userstyles, cssVariables: manifest.customCssVariables || [] };
 }
 
 async function getContentScriptInfo(url) {
@@ -136,13 +140,14 @@ async function getContentScriptInfo(url) {
     if (!scratchAddons.localState.addonsEnabled[addonId]) return;
     const promise = getAddonData({ addonId, manifest, url });
     promises.push(promise);
-    const { userscripts, userstyles } = await promise;
+    const { userscripts, userstyles, cssVariables } = await promise;
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
     if (userstyles.length)
       data.addonsWithUserstyles.push({
         addonId,
         styles: userstyles,
+        cssVariables,
         injectAsStyleElt: manifest.injectAsStyleElt,
         index: i,
       });
@@ -249,21 +254,69 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+// Pathname patterns. Make sure NOT to set global flag!
+// Don't forget ^ and $
+const WELL_KNOWN_PATTERNS = {
+  projects: /^\/projects\/(?:editor|\d+(?:\/(?:fullscreen|editor))?)\/?$/,
+  projectEmbeds: /^\/projects\/\d+\/embed\/?$/,
+  studios: /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/,
+  studioComments: /^\/studios\/\d+\/comments\/?$/,
+  profiles: /^\/users\/[\w-]+\/?$/,
+  topics: /^\/discuss\/topic\/\d+\/?$/,
+  newPostScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add)\/?$/,
+  editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
+  forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
+  scratchWWWNoProject: /^\/(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|dmca|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|sec|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost)\/?$/,
+};
+
+const WELL_KNOWN_MATCHERS = {
+  isNotScratchWWW: (match) => {
+    const { projects, projectEmbeds, scratchWWWNoProject } = WELL_KNOWN_PATTERNS;
+    return !(projects.test(match) || projectEmbeds.test(match) || scratchWWWNoProject.test(match));
+  },
+};
+
+// regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
+// matchesPattern = "*" | regexPattern | Array<wellKnownName | wellKnownMatcher | regexPattern | legacyPattern>
 function userscriptMatches(data, scriptOrStyle, addonId) {
   if (scriptOrStyle.settingMatch) {
     const { id, value } = scriptOrStyle.settingMatch;
     if (scratchAddons.globalState.addonSettings[addonId][id] !== value) return false;
   }
   const url = data.url;
-  for (const match of scriptOrStyle.matches) {
-    if (urlMatchesPattern(match, url)) return true;
+  const parsedURL = new URL(url);
+  const { matches, _scratchDomainImplied } = scriptOrStyle;
+  const parsedPathname = parsedURL.pathname;
+  const parsedOrigin = parsedURL.origin;
+  const originPath = parsedOrigin + parsedPathname;
+  const matchURL = _scratchDomainImplied ? parsedPathname : originPath;
+  const scratchOrigin = "https://scratch.mit.edu";
+  const isScratchOrigin = parsedOrigin === scratchOrigin;
+  // "*" is used for any URL on Scratch origin
+  if (matches === "*") return isScratchOrigin;
+  // matches becomes RegExp if it is a string that starts with ^
+  // See load-addon-manifests.js
+  if (matches instanceof RegExp) {
+    if (_scratchDomainImplied && !isScratchOrigin) return false;
+    return matches.test(matchURL);
+  }
+  for (const match of matches) {
+    if (match instanceof RegExp) {
+      if (match._scratchDomainImplied && !isScratchOrigin) continue;
+      if (match.test(match._scratchDomainImplied ? parsedPathname : originPath)) {
+        return true;
+      }
+    } else if (Object.prototype.hasOwnProperty.call(WELL_KNOWN_PATTERNS, match)) {
+      if (isScratchOrigin && WELL_KNOWN_PATTERNS[match].test(parsedPathname)) return true;
+    } else if (Object.prototype.hasOwnProperty.call(WELL_KNOWN_MATCHERS, match)) {
+      if (isScratchOrigin && WELL_KNOWN_MATCHERS[match](parsedPathname)) return true;
+    } else if (urlMatchesLegacyPattern(match, parsedURL)) return true;
   }
   return false;
 }
 
-function urlMatchesPattern(pattern, url) {
+function urlMatchesLegacyPattern(pattern, urlUrl) {
   const patternUrl = new URL(pattern);
-  const urlUrl = new URL(url);
   // We assume both URLs start with https://scratch.mit.edu
 
   const patternPath = patternUrl.pathname.split("/");

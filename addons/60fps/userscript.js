@@ -5,7 +5,10 @@ export default async function ({ addon, global, console }) {
   let global_fps = 30;
   const vm = addon.tab.traps.vm;
   while (true) {
-    let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", { markAsSeen: true });
+    let button = await addon.tab.waitForElement("[class^='green-flag_green-flag']", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+    });
     let mode = false;
     const changeMode = (_mode = !mode) => {
       mode = _mode;

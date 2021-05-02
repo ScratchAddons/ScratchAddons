@@ -18,6 +18,6 @@
       "runAtComplete": false
     }
   ],
-  "tags": ["community"],
+  "tags": ["community", "comments"],
   "l10n": true
 }

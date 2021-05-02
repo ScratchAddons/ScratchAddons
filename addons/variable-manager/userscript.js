@@ -24,28 +24,6 @@ export default async function ({ addon, global, console, msg }) {
 
   manager.appendChild(searchBox);
 
-  /* begin feedback button stuff (remove when out of beta)
-
-  const feedbackWrapper = document.createElement("span");
-  feedbackWrapper.className = "sa-var-manager-feedback";
-
-  const feedbackDesc = document.createElement("span");
-  feedbackDesc.className = "sa-var-manager-feedback-description";
-  feedbackDesc.innerText = msg("feedback-description");
-
-  const feedbackButton = document.createElement("a");
-  feedbackButton.className = "sa-var-manager-feedback-button";
-  feedbackButton.innerText = msg("feedback");
-  feedbackButton.href = "https://scratchaddons.com/feedback?version=variable-manager";
-  feedbackButton.target = "_blank";
-  feedbackButton.rel = "noopener noreferrer";
-
-  feedbackWrapper.appendChild(feedbackDesc);
-  feedbackWrapper.appendChild(feedbackButton);
-  manager.appendChild(feedbackWrapper);
-
-  // end feedback button stuff */
-
   const localVars = document.createElement("div");
   const localHeading = document.createElement("span");
   const localList = document.createElement("table");
@@ -338,6 +316,8 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     const tabs = await addon.tab.waitForElement("[class^='react-tabs_react-tabs__tab-list']", {
       markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+      condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
     });
     const soundTab = tabs.children[2];
     soundTab.insertAdjacentElement("afterend", varTab);
