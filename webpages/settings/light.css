@@ -133,7 +133,7 @@ img :not(.navbar, .icon-type) {
   background: #efefef;
   border: 1px solid #acacac;
 }
-.large-button:hover {
+.large-button:hover:not([disabled]) {
   background: #aaaaaa;
 }
 
