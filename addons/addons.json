@@ -1,5 +1,4 @@
 [
-  "material-forum-editor-buttons",
   "editor-searchable-dropdowns",
   "editor-devtools",
   "forum-search",
@@ -71,6 +70,7 @@
   "custom-zoom",
   "blocks2image",
   "editor-sounds",
+  "material-forum-editor-buttons",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
