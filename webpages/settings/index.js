@@ -225,7 +225,7 @@ const AddonBody = Vue.extend({
     },
     toggleAddonRequest(event) {
       const toggle = () => {
-        // Prevents selecting text when the shift key is being help down
+        // Prevents selecting text when the shift key is being held down
         event.preventDefault();
 
         const newState = !this.addon._enabled;
