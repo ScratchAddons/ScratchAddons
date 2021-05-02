@@ -54,6 +54,17 @@ const ColorInput = Vue.extend({
         this.$parent.updateSettings(this.addon, { wait: 250, settingId: this.setting.id });
       }
     });
+    this.$root.$on("close-pickers", (except) => {
+      if (this.isOpen && this !== except) {
+        const addon = this.$parent.addon;
+        const setting = this.$parent.setting;
+        this.toggle(addon, setting, false, {
+          // I trust callers
+          callCloseDropdowns: false,
+          callClosePickers: false
+        });
+      }
+    });
   },
   computed: {
     noAlphaString() {
@@ -61,12 +72,17 @@ const ColorInput = Vue.extend({
     },
   },
   methods: {
-    toggle(addon, setting, value = !this.isOpen) {
+    toggle(addon, setting, value = !this.isOpen, {
+      callCloseDropdowns = true,
+      callClosePickers = true
+    } = {}) {
       if (!this.loadColorPicker) return;
       this.isOpen = value;
       this.opening = true;
-      this.$root.closePickers({ isTrusted: true }, this);
-      this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
+      if (callClosePickers) this.$root.closePickers({ isTrusted: true }, this, {
+        callCloseDropdowns: false
+      });
+      if (callCloseDropdowns) this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
       this.opening = false;
 
       this.color = "#" + this.$els.pickr.hex8;
@@ -105,10 +121,19 @@ const ResetDropdown = Vue.extend({
       isOpen: false,
     };
   },
+  ready() {
+    this.$root.$on("close-reset-dropdowns", (except) => {
+      if (this.isOpen && this !== except) {
+        this.isOpen = false;
+      }
+    });
+  },
   methods: {
     toggle() {
       this.isOpen = !this.isOpen;
-      this.$root.closePickers({ isTrusted: true });
+      this.$root.closePickers({ isTrusted: true }, null, {
+        callCloseDropdowns: false
+      });
       this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
     },
     resetToDefault() {
@@ -792,25 +817,14 @@ const vue = (window.vue = new Vue({
         }
       }, wait);
     },
-    closePickers(e, leaveOpen) {
-      (function findPickers(child) {
-        for (const item of child.$children) {
-          findPickers(item);
-        }
-        if (child.isOpen && child.canCloseOutside && e.isTrusted && child.color && child !== leaveOpen) {
-          child.toggle(child.addon, child.setting, false);
-        }
-      })(this);
+    closePickers(e, leaveOpen, {
+      callCloseDropdowns = true
+    } = {}) {
+      this.$emit("close-pickers", leaveOpen);
+      if (callCloseDropdowns) this.closeResetDropdowns();
     },
     closeResetDropdowns(e, leaveOpen) {
-      (function findPickers(child) {
-        for (const item of child.$children) {
-          findPickers(item);
-        }
-        if (child.isResetDropdown && e.isTrusted && child !== leaveOpen) {
-          child.isOpen = false;
-        }
-      })(this);
+      this.$emit("close-reset-dropdowns", leaveOpen);
     },
     exportSettings() {
       serializeSettings().then((serialized) => {
