@@ -4,7 +4,7 @@
   "userstyles": [
     {
       "url": "icons.css",
-      "matches": ["https://scratch.mit.edu/discuss/*"]
+      "matches": ["editingScreens"]
     }
   ],
   "tags": ["community", "forums", "theme"],
