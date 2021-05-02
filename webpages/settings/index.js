@@ -186,7 +186,6 @@ const AddonBody = Vue.extend({
         this.addon.name.toLowerCase().includes(search) ||
         this.addon._addonId.toLowerCase().includes(search) ||
         this.addon.description.toLowerCase().includes(search) ||
-        this.addon.versionAdded?.includes(this.searchInput) ||
         (this.addon.credits &&
           this.addon.credits.map((obj) => obj.name.toLowerCase()).some((author) => author.includes(search)));
       // Show disabled easter egg addons only if category is easterEgg
@@ -630,13 +629,13 @@ const vue = (window.vue = new Vue({
       {
         id: "codeEditor",
         parent: "editor",
-        icon: "puzzle",
+        icon: "code",
         name: chrome.i18n.getMessage("codeEditorFeatures"),
       },
       {
         id: "costumeEditor",
         parent: "editor",
-        icon: "brush",
+        icon: "brush2",
         name: chrome.i18n.getMessage("costumeEditorFeatures"),
       },
       {
@@ -659,7 +658,7 @@ const vue = (window.vue = new Vue({
       {
         id: "projectPage",
         parent: "community",
-        icon: "studio",
+        icon: "projectpage",
         name: chrome.i18n.getMessage("projectPageFeatures"),
       },
       {
