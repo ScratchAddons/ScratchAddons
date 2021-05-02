@@ -28,8 +28,7 @@
 .category.hasParent {
   padding-inline: 40px 20px;
   box-sizing: border-box;
-  height: 48px;
-  padding-block: 5px;
+  padding-block: 10px;
   opacity: 1;
 }
 .category.expand-enter,
@@ -58,7 +57,7 @@
   opacity: 1;
 }
 .category.hasParent::before {
-  height: 30px;
+  height: 25px;
 }
 
 .category img {
