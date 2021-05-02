@@ -1,7 +1,8 @@
 {
   "name": "Remove curved stage border",
   "description": "Removes the curved border around the stage, allowing you to see the corners.",
-  "tags": ["editor", "theme"],
+  "tags": ["editor", "theme", "projectPlayer"],
+  "versionAdded": "1.14.0",
   "credits": [
     {
       "name": "Tacodude7729",

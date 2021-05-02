@@ -19,18 +19,6 @@
   ],
   "settings": [
     {
-      "name": "Show scroll for forum signatures",
-      "id": "signature",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Show scroll for forum Scratchblocks",
-      "id": "blocks",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Show scroll for \"What I've been doing\"",
       "id": "whatworkingon",
       "type": "boolean",
@@ -39,6 +27,18 @@
     {
       "name": "Show scroll for \"What's Happening?\"",
       "id": "whathappen",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show scroll for forum signatures",
+      "id": "signature",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show scroll for forum Scratchblocks",
+      "id": "blocks",
       "type": "boolean",
       "default": true
     }
@@ -96,7 +96,7 @@
       }
     }
   ],
-  "tags": ["community", "forums", "recommended"],
+  "tags": ["community", "forums", "recommended", "profiles"],
   "enabledByDefault": true,
   "l10n": true
 }

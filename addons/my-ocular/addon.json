@@ -70,7 +70,7 @@
       "default": true
     }
   ],
-  "tags": ["forums", "community"],
+  "tags": ["forums", "profiles", "community"],
   "enabledByDefault": false,
   "l10n": true
 }

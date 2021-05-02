@@ -920,16 +920,15 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
   }
   for (const { manifest, addonId } of manifests) {
     manifest._categories = [];
-    manifest._categories[0] =
-      manifest.popup || addonId === "msg-count-badge" // Exception
-        ? "popup"
-        : manifest.tags.includes("easterEgg")
-        ? "easterEgg"
-        : manifest.tags.includes("theme")
-        ? "theme"
-        : manifest.tags.includes("community")
-        ? "community"
-        : "editor";
+    manifest._categories[0] = manifest.tags.includes("popup")
+      ? "popup"
+      : manifest.tags.includes("easterEgg")
+      ? "easterEgg"
+      : manifest.tags.includes("theme")
+      ? "theme"
+      : manifest.tags.includes("community")
+      ? "community"
+      : "editor";
 
     const addCategoryIfTag = (arr) => {
       let count = 0;
