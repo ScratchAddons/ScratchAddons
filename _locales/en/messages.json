@@ -234,7 +234,7 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-    "message": "Some new addons this update are \"gamepad support\", \"cat blocks\", \"editor sound effects\" and \"remove curved stage border\". Go to $1 to enable them."
+    "message": "Some new addons of this update are \"gamepad support\", \"cat blocks\", \"editor sound effects\" and \"remove curved stage border\". Go to $1 to enable them."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
