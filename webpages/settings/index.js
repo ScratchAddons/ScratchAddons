@@ -974,9 +974,13 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
     manifest._addonId = addonId;
     manifest._groups = [];
 
-    if (manifest.versionAdded === vue.version) {
-      manifest.tags.push("new");
-      manifest._groups.push("new");
+    if (manifest.versionAdded) {
+      const [extMajor, extMinor, _] = vue.version.split(".");
+      const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
+      if (extMajor === addonMajor && extMinor === addonMinor) {
+        manifest.tags.push("new");
+        manifest._groups.push("new");
+      }
     }
 
     // Sort tags to preserve consistent order
