@@ -61,7 +61,7 @@ const ColorInput = Vue.extend({
         this.toggle(addon, setting, false, {
           // I trust callers
           callCloseDropdowns: false,
-          callClosePickers: false
+          callClosePickers: false,
         });
       }
     });
@@ -72,16 +72,14 @@ const ColorInput = Vue.extend({
     },
   },
   methods: {
-    toggle(addon, setting, value = !this.isOpen, {
-      callCloseDropdowns = true,
-      callClosePickers = true
-    } = {}) {
+    toggle(addon, setting, value = !this.isOpen, { callCloseDropdowns = true, callClosePickers = true } = {}) {
       if (!this.loadColorPicker) return;
       this.isOpen = value;
       this.opening = true;
-      if (callClosePickers) this.$root.closePickers({ isTrusted: true }, this, {
-        callCloseDropdowns: false
-      });
+      if (callClosePickers)
+        this.$root.closePickers({ isTrusted: true }, this, {
+          callCloseDropdowns: false,
+        });
       if (callCloseDropdowns) this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
       this.opening = false;
 
@@ -132,7 +130,7 @@ const ResetDropdown = Vue.extend({
     toggle() {
       this.isOpen = !this.isOpen;
       this.$root.closePickers({ isTrusted: true }, null, {
-        callCloseDropdowns: false
+        callCloseDropdowns: false,
       });
       this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
     },
@@ -816,9 +814,7 @@ const vue = (window.vue = new Vue({
         }
       }, wait);
     },
-    closePickers(e, leaveOpen, {
-      callCloseDropdowns = true
-    } = {}) {
+    closePickers(e, leaveOpen, { callCloseDropdowns = true } = {}) {
       this.$emit("close-pickers", leaveOpen);
       if (callCloseDropdowns) this.closeResetDropdowns();
     },
