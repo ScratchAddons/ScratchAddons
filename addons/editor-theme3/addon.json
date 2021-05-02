@@ -142,7 +142,7 @@
       ]
     }
   ],
-  "tags": ["editor", "theme"],
+  "tags": ["editor", "theme", "codeEditor", "recommended"],
   "enabledByDefault": false,
   "presets": [
     {
