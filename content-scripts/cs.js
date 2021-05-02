@@ -342,7 +342,7 @@ const showBanner = () => {
   // v1.14.0 TODO in line 365
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/icon.svg"),
+    src: chrome.runtime.getURL("/images/cs/catblocks.png"),
     style: "height: 150px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
@@ -377,12 +377,13 @@ const showBanner = () => {
       /\$(\d+)/g,
       (_, i) =>
         [
+          /*
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeatureName") })
-            .outerHTML,
+            .outerHTML, 
+          */
           Object.assign(document.createElement("a"), {
-            // TODO: remove `#addon-editor-dark-mode` next release
-            href: "https://scratch.mit.edu/scratch-addons-extension/settings#addon-editor-dark-mode",
+            href: "https://scratch.mit.edu/scratch-addons-extension/settings",
             target: "_blank",
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
