@@ -92,9 +92,6 @@
   "profilesFeatures": {
     "message": "Profiles"
   },
-  "commentsFeatures": {
-    "message": "Comments"
-  },
   "projectPlayerFeatures": {
     "message": "Project Player"
   },
@@ -258,7 +255,8 @@
     "message": "New!"
   },
   "enabled": {
-    "message": "Enabled"
+    "message": "Enabled",
+    "description": "Used as a category name for enabled addons"
   },
   "exportAndImportSettings": {
     "message": "Export and Import Settings"
@@ -294,7 +292,8 @@
     "message": "Addons on this tab"
   },
   "recentlyUsed": {
-    "message": "Recently used"
+    "message": "Recently used",
+    "description": "Used as a category name for recently used addons"
   },
   "settingsPagePermission": {
     "message": "To enable the \"$1\" addon, go to the full screen settings page."
