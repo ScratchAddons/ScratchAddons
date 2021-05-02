@@ -884,7 +884,7 @@ const vue = (window.vue = new Vue({
   },
   events: {
     closesidebar(event) {
-      if (event.target.classList[0] === "toggle") return;
+      if (event?.target.classList[0] === "toggle") return;
       if (this.categoryOpen && this.smallMode) {
         this.sidebarToggle();
       }
