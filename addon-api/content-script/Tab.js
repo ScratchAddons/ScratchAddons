@@ -1,7 +1,7 @@
 import Trap from "./Trap.js";
 import ReduxHandler from "./ReduxHandler.js";
 import Listenable from "../common/Listenable.js";
-import dataURLToBlob from "../../libraries/data-url-to-blob.js";
+import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import getWorkerScript from "./worker.js";
 
 const DATA_PNG = "data:image/png;base64,";
