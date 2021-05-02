@@ -1,6 +1,7 @@
 body {
   width: var(--width, 400px);
   height: var(--height, 599px);
+  overflow: hidden;
   margin: 0;
   background-color: #2a2a2a; /* Avoid iframe src change flash */
   font-family: "Sora", sans-serif;
