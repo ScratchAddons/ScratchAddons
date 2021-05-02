@@ -741,6 +741,7 @@ const vue = (window.vue = new Vue({
 
   methods: {
     modalToggle: function () {
+      this.closePickers();
       this.isOpen = !this.isOpen;
       if (vue.smallMode) {
         vue.sidebarToggle();
