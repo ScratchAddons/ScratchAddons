@@ -878,9 +878,6 @@ const vue = (window.vue = new Vue({
       if (this.categoryOpen && this.smallMode) {
         this.sidebarToggle();
       }
-      if (this.isOpen) {
-        this.modalToggle;
-      }
     },
     modalClickOutside: function (e) {
       if (this.isOpen && this.canCloseOutside && e.isTrusted) {
