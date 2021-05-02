@@ -964,6 +964,10 @@ chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled,
       if (addedCategories === 0) manifest._categories.push("communityOthers");
     }
 
+    // Exception: show cat-blocks after konami code, even tho
+    // it's categorized as an editor addon, not as easterEgg
+    if (addonId === "cat-blocks") manifest._categories.push("easterEgg");
+
     manifest._icon = manifest._categories[0];
 
     manifest._enabled = addonsEnabled[addonId];
