@@ -96,7 +96,7 @@
       }
     }
   ],
-  "tags": ["community", "forums", "recommended"],
+  "tags": ["community", "forums", "recommended", "profiles"],
   "enabledByDefault": true,
   "l10n": true
 }

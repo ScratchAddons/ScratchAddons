@@ -61,7 +61,7 @@
       "runAtComplete": false
     }
   ],
-  "tags": ["community", "recommended"],
+  "tags": ["community", "recommended", "profiles", "studios"],
   "enabledByDefault": false,
   "l10n": true
 }

@@ -18,7 +18,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor", "editorNavbar"],
+  "tags": ["editor", "editorNavbar", "recommended"],
   "enabledByDefault": false,
   "l10n": true
 }
