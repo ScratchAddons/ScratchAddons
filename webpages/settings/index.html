@@ -316,7 +316,7 @@
       <div
         class="categories-block"
         v-click-outside="closesidebar"
-        v-show="categoryOpen"
+        v-show="categoryOpen && !isIframe"
         :class="{smallMode: smallMode === true}"
       >
         <div class="selected-category-orange"></div>
@@ -348,7 +348,7 @@
         </div>
       </div>
       <div
-        v-show="smallMode === false"
+        v-show="!isIframe && smallMode === false"
         class="categories-shrink"
         style="display: block !important"
         @click="sidebarToggle()"
