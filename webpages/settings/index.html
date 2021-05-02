@@ -194,7 +194,7 @@
           <div class="addon-description" v-show="!expanded">{{ addon.description }}</div>
           <div class="addon-check">
             <div
-              v-show="expanded"
+              v-show="expanded && addon._enabled"
               v-if="addon.settings"
               class="clear-settings"
               title="{{ msg('resetToDefault') }}"
