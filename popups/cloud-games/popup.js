@@ -35,9 +35,6 @@ import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
       },
     },
     methods: {
-      direction() {
-        return chrome.i18n.getMessage("@@bidi_dir");
-      },
       setCloudDataForProject(projectObject, i) {
         return new Promise((resolve) => {
           setTimeout(async () => {

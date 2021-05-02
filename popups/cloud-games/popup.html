@@ -8,14 +8,14 @@
     <style>
       @import url("../../webpages/styles/components/popup.css");
     </style>
-    <script src="../../webpages/set-lang.js" defer></script>
+    <script src="../../webpages/set-lang.js" type="module"></script>
     <link rel="stylesheet" href="popup.css" />
     <link href="../../libraries/Sora.css" rel="stylesheet" />
     <script src="../../libraries/vue.js" defer></script>
     <script src="./popup.js" type="module"></script>
   </head>
 
-  <body style="display: none" v-show="true" :dir="direction()">
+  <body style="display: none" v-show="true">
     <div class="loading" v-show="projects.length === 0 || projects.length !== projectsChecked">{{ loadingMsg }}</div>
     <div v-show="loaded">
       <div class="games" v-for="project of projectsSorted">

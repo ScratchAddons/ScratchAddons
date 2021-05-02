@@ -18,9 +18,6 @@ const vue = new Vue({
     msg(message, ...param) {
       return chrome.i18n.getMessage(message, ...param);
     },
-    direction() {
-      return chrome.i18n.getMessage("@@bidi_dir");
-    },
   },
 });
 

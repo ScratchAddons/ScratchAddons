@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title></title>
-    <script src="../../webpages/set-lang.js" defer></script>
+    <script src="../../webpages/set-lang.js" type="module"></script>
     <link rel="stylesheet" href="popup.css" />
     <script src="../../libraries/vue.js" defer></script>
     <link rel="preload" href="light.css" as="style" />
@@ -64,7 +64,7 @@
     </template>
   </head>
 
-  <body style="display: none" v-show="mounted" :dir="direction()">
+  <body style="display: none" v-show="mounted">
     <div v-show="!error">
       <!-- Follows -->
       <div class="message-type" v-show="follows.length">

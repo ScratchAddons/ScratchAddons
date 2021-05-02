@@ -1,4 +1,5 @@
 import downloadBlob from "../../libraries/download-blob.js";
+import getDirection from "../rtl-list.js";
 const NEW_ADDONS = ["editor-dark-mode", "custom-zoom", "initialise-sprite-position"];
 
 Vue.directive("click-outside", {
@@ -524,7 +525,7 @@ const vue = (window.vue = new Vue({
       return chrome.i18n.getMessage(message, ...params);
     },
     direction() {
-      return chrome.i18n.getMessage("@@bidi_dir");
+      return getDirection(chrome.i18n.getUILanguage());
     },
     openReview() {
       if (typeof browser !== "undefined") {

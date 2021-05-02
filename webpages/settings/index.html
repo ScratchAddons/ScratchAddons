@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
-    <script src="../set-lang.js" defer></script>
+    <script src="../set-lang.js" type="module"></script>
     <style>
       /*
        * Imports are here to attempt to speed up load. Also, it means licenses.html loads fewer unused styles, and this file doesn't get licenses.html's styles! In order of when it will be noticed/needed on the page
@@ -272,7 +272,7 @@
     </template>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded" :class="{light: theme}" :dir="direction()">
+  <body style="display: none" v-show="loaded" :class="{light: theme}">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
