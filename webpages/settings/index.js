@@ -183,7 +183,7 @@ const AddonBody = Vue.extend({
         this.searchInput === "" ||
         this.addon.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         this.addon._addonId.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-        this.addon.description?.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        this.addon.description.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         this.addon.versionAdded?.includes(this.searchInput) ||
         (this.addon.credits &&
           this.addon.credits
