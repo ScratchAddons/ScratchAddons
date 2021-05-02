@@ -8,5 +8,5 @@ const rtlList = [
 
 export default function getDirection(languageCode) {
   const shortId = languageCode.split("-")[0];
-  return (rtlList.includes(languageCode) || rtlList.includes(shortId)) ? "rtl" : "ltr";
+  return rtlList.includes(languageCode) || rtlList.includes(shortId) ? "rtl" : "ltr";
 }
