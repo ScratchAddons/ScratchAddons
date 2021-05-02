@@ -10,6 +10,7 @@
 }
 
 .category {
+  transition: all 0.2s ease;
   padding: 20px 20px;
   position: relative;
   user-select: none;
@@ -24,19 +25,39 @@
 .category.sel {
   color: var(--brand-orange);
 }
+.category.hasParent {
+  padding-inline: 40px 20px;
+  box-sizing: border-box;
+  padding-block: 10px;
+  opacity: 1;
+}
+.category.expand-enter,
+.category.expand-leave {
+  padding-block: 0;
+  height: 0;
+  opacity: 0;
+}
+
 .category:hover {
   background: rgba(0, 0, 0, 0.1);
 }
-.category.sel::before {
+.category::before {
   content: "";
+  transition: all 0.2s ease;
   display: block;
   width: 4px;
   border-radius: 0 4px 4px 0;
   height: 40px;
   background: var(--brand-orange);
   position: absolute;
-  top: 10px;
   left: 0;
+  opacity: 0;
+}
+.category.sel::before {
+  opacity: 1;
+}
+.category.hasParent::before {
+  height: 25px;
 }
 
 .category img {
