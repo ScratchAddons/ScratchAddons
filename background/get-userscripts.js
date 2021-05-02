@@ -25,20 +25,22 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
           if (res) {
             (async () => {
               const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
-              chrome.tabs.sendMessage(
-                tab.id,
-                {
-                  dynamicAddonEnabled: {
-                    scripts: userscripts,
-                    userstyles,
-                    cssVariables,
-                    addonId,
-                    injectAsStyleElt: !!manifest.injectAsStyleElt,
-                    index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+              if (userscripts.length || userstyles.length) {
+                chrome.tabs.sendMessage(
+                  tab.id,
+                  {
+                    dynamicAddonEnabled: {
+                      scripts: userscripts,
+                      userstyles,
+                      cssVariables,
+                      addonId,
+                      injectAsStyleElt: !!manifest.injectAsStyleElt,
+                      index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                    },
                   },
-                },
-                { frameId: 0 }
-              );
+                  { frameId: 0 }
+                );
+              }
             })();
           }
         });

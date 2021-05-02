@@ -26,6 +26,10 @@
   background: #fd662b;
   border-color: #d84a12;
 }
+.badge.darkred {
+  background: #fd2b2b;
+  border-color: #d81212;
+}
 .badge.darkgreen {
   background: #00b1a8;
   border-color: #047773;
