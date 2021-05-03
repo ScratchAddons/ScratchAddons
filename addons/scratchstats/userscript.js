@@ -124,9 +124,9 @@ export default async function ({ addon, msg, console }) {
                   {
                     ticks: {
                       stepSize,
-                    }
-                  }
-                ]
+                    },
+                  },
+                ],
               },
               tooltips: {
                 callbacks: {
