@@ -85,6 +85,10 @@ export default async function ({ addon, msg, console }) {
           canvasContainer.style.height = "400px";
           const canvas = document.createElement("canvas");
           canvasContainer.appendChild(canvas);
+          const stepAvg = historyData.reduce((acc, cur) => acc + cur.value / historyData.length, 0);
+          const stepLog = Math.log10(stepAvg);
+          const stepSize = Math.pow(10, Math.max(Math.round(stepLog) - 1, 1));
+          console.log(stepLog, stepSize);
           new Chart(canvas, {
             type: "scatter",
             data: {
@@ -116,6 +120,13 @@ export default async function ({ addon, msg, console }) {
                     },
                   },
                 ],
+                yAxes: [
+                  {
+                    ticks: {
+                      stepSize,
+                    }
+                  }
+                ]
               },
               tooltips: {
                 callbacks: {
