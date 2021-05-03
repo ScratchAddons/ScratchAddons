@@ -12,7 +12,7 @@
   "editor-devtools/help-make-space": "Make Space",
   "editor-devtools/help-make-space-desc": "Make extra space around a script by right clicking on the code stack and choosing \"Make Space\".",
   "editor-devtools/copy-to-clipboard": "Copy to Clipboard",
-  "editor-devtools/copy-to-clipboard-desc": "Right click a block and 3 new options are available to Copy All, Copy Block, and Cut Block. The Copy All will copy to the clipboard everything including and below the block you clicked on. Copy block will only copy the current block and its contents, but nothing below. And cut block will copy it and remove it from the workspace.",
+  "editor-devtools/copy-to-clipboard-desc": "Right click a block and 3 new options are available to Copy All, Copy Block, and Cut Block. The Copy All will copy to the clipboard everything including and below the block you clicked on. Copy block will only copy the current block and its contents, but nothing below. Cut block will copy it and remove it from the workspace.",
   "editor-devtools/paste-from-clipboard": "Paste from Clipboard",
   "editor-devtools/paste-from-clipboard-desc": "Pastes from the clipboard, but importantly pastes it where your mouse cursor is so you can then place it (rather than placing it where you copied it from like the current scratch implementation).",
   "editor-devtools/swap-variable": "Swap Variable in Sprite",
