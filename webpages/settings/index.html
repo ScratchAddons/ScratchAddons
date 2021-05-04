@@ -37,7 +37,7 @@
           :style="{'background-color': color }"
           class="setting-input color"
           :class="{'action-disabled': !addon._enabled }"
-          @click="toggle(addon,setting)"
+          @click="toggle(addon, setting, true)"
         >
           <template v-if="loadColorPicker">
             <color-picker
@@ -139,7 +139,6 @@
             :value="addonSettings[addon._addonId][setting.id] || setting.default"
             :setting="setting"
             :addon="addon"
-            @click=""
             :no_alpha="!setting.allowTransparency"
             v-click-outside="closePickers"
           ></picker>
