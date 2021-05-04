@@ -414,8 +414,9 @@ const AddonSetting = Vue.extend({
     msg(...params) {
       return this.$root.msg(...params);
     },
-    updateSettings() {
-      this.$root.updateSettings(this.addon);
+    updateSettings(...params) {
+      if (!params[0]) params[0] = this.addon;
+      this.$root.updateSettings(...params);
     },
     updateOption(newValue) {
       this.$root.updateOption(this.setting.id, newValue, this.addon);
