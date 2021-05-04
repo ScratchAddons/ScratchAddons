@@ -1,4 +1,4 @@
-import { textColor, multiply } from "../../libraries/text_color.js";
+import { textColor, multiply } from "../../libraries/common/cs/text-color.esm.js";
 
 function updateSettings(addon, newStyle) {
   var stylesheet = "";

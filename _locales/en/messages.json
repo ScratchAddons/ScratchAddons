@@ -47,6 +47,12 @@
   "beta": {
     "message": "Beta"
   },
+  "danger": {
+    "message": "Dangerous"
+  },
+  "dangerWarning": {
+    "message": "Are you sure you want to enable the \"$1\" addon?"
+  },
   "forums": {
     "message": "Forums"
   },
@@ -74,11 +80,35 @@
   "editorFeatures": {
     "message": "Scratch Editor Features"
   },
+  "costumeEditorFeatures": {
+    "message": "Costume Editor"
+  },
+  "codeEditorFeatures": {
+    "message": "Code Editor"
+  },
   "websiteFeatures": {
     "message": "Scratch Website Features"
   },
+  "profilesFeatures": {
+    "message": "Profiles"
+  },
+  "projectPlayerFeatures": {
+    "message": "Project Player"
+  },
+  "projectPageFeatures": {
+    "message": "Project Pages"
+  },
+  "others": {
+    "message": "Others"
+  },
   "themes": {
     "message": "Themes"
+  },
+  "editorThemes": {
+    "message": "Editor Themes"
+  },
+  "websiteThemes": {
+    "message": "Website Themes"
   },
   "popupFeatures": {
     "message": "Extension Popup Features"
@@ -146,6 +176,9 @@
   "recommendedTooltip": {
     "message": "This is recommended by Scratch Addons. Try it out!"
   },
+  "dangerTooltip": {
+    "message": "Use with caution. Make sure to understand what this addon does before enabling."
+  },
   "betaTooltip": {
     "message": "Keep in mind that this addon might have bugs."
   },
@@ -201,25 +234,23 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-    "message": "$1: $2 was remade and is now deeply customizable. Go to $3 to change specific colors, toggle dark comments and scollbars, and more!"
-  },
-  "newFeature": {
-    "message": "New feature"
-  },
-  "newFeatureName": {
-    "message": "\"editor dark mode\""
+    "message": "Some new addons of this update are \"gamepad support\", \"cat blocks\", \"editor sound effects\" and \"remove curved stage border\". Go to $1 to enable them."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2": {
-    "message": "Featured new addons this update are \"custom scripts area zoom settings\" and \"change new sprite default position\"."
+    "message": "This update also ships a more organized Scratch Addons settings page, as well as performance improvements when using addons in the project editor."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
   "new": {
     "message": "New!"
+  },
+  "enabled": {
+    "message": "Enabled",
+    "description": "Used as a category name for enabled addons"
   },
   "exportAndImportSettings": {
     "message": "Export and Import Settings"
@@ -252,7 +283,11 @@
     "message": "Addons"
   },
   "runningOnThisPage": {
-    "message": "Addons currently running on this tab:"
+    "message": "Addons on this tab"
+  },
+  "recentlyUsed": {
+    "message": "Recently used",
+    "description": "Used as a category name for recently used addons"
   },
   "settingsPagePermission": {
     "message": "To enable the \"$1\" addon, go to the full screen settings page."
@@ -262,6 +297,10 @@
   },
   "skipOpenFullSettings": {
     "message": "Cancel"
+  },
+  "exploreAllAddons": {
+    "message": "Explore all $1 addons:",
+    "description": "Placeholder is a number. Example: explore all 80+ addons"
   },
   "captureCommentError": {
     "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."
