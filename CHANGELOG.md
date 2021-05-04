@@ -13,6 +13,23 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.14.0] - 2021-05-05
+
+- New addon: gamepad support
+- New addon: editor sound effects
+- New addon: remove curved stage border
+- New addon: better forums post editor buttons
+- Customizable block colors: new "dark" and "black" presets, new "block input" and "text color" settings
+- Scratch Addons settings page now has subcategories. Click in a main category (like "Scratch Editor Features") to explore its subcategories: code editor, costume editor, project player, others
+- Scratch Addons settings page now splits the addon list into collapsible groups, for easier browsing: new, enabled, recommended, others, beta
+- Enhanced performance of project editor addons, specially when dragging blocks or browsing the workspace
+- You are now warned before commenting "Scratch Addons" on the Scratch community website, to prevent your account from getting muted
+- "Editor dark mode" addon: does not affect anything above the stage anymore (variable monitors, ask inputs, etc.)
+- "Show ocular.jeffalo.net statuses and post reactions" (formerly "show my-ocular status") now adds reaction buttons for posts on the forums
+- The "project screen reader support" addon was removed
+- Bug fix: "editor devtools" and "customizable block colors" not working well together
+- Bug fix: "custom scripts area zoom settings" zooming the wrong way if zoom speed is below 83%
+
 ## [v1.13.0] - 2021-04-20
 
 - New addon: custom scripts area zoom settings
@@ -338,6 +355,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.14.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.0
 [v1.13.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.13.0
 [v1.12.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.1
 [v1.12.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.0
