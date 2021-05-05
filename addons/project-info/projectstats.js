@@ -20,7 +20,11 @@ export default async function ({ addon, console, msg }) {
     while (true) {
       const buttons = await addon.tab.waitForElement(".preview .project-buttons", {
         markAsSeen: true,
-        reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+        ],
         condition: () => addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
       });
       const container = document.createElement("div");
