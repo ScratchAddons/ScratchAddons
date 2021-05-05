@@ -10,7 +10,7 @@ export default async function ({ addon, console, safeMsg: m }) {
     id: null,
     eventList: [],
   };
-  
+
   addon.tab.createBlockContextMenu(
     (items, block) => {
       if (block.startHat_ || block.type == "procedures_call" || block.outputShape_) return; //Collapsing for these are broke...
@@ -27,12 +27,13 @@ export default async function ({ addon, console, safeMsg: m }) {
               cache.splice(cache.indexOf(block.id), 1);
             }
           }
-        }
+        },
       });
-    }, {
+    },
+    {
       workspace: false,
       blocks: true,
-      flyout: false
+      flyout: false,
     }
   );
 
