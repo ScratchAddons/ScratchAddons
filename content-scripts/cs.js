@@ -4,14 +4,15 @@ try {
   throw "Scratch Addons: not first party iframe";
 }
 
+let pseudoUrl; // Fake URL to use if response code isn't 2xx
 const onResponse = (res) => {
   if (res) {
     console.log("[Message from background]", res);
     if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") onInfoAvailable(res);
     else {
-      const newUrl = `https://scratch.mit.edu/${res.httpStatusCode}/`;
-      console.log(`Status code was not 2xx, replacing URL to ${newUrl}`);
-      chrome.runtime.sendMessage({ contentScriptReady: { url: newUrl } }, onResponse);
+      pseudoUrl = `https://scratch.mit.edu/${res.httpStatusCode}/`;
+      console.log(`Status code was not 2xx, replacing URL to ${pseudoUrl}`);
+      chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
     }
   }
 };
@@ -111,7 +112,7 @@ if (path === "discuss/3/topic/add/") {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request === "getInitialUrl") {
-    sendResponse(initialUrl);
+    sendResponse(pseudoUrl || initialUrl);
   }
 });
 
