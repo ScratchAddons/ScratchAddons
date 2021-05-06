@@ -1,0 +1,12 @@
+{
+  "name": "Comment Scroll",
+  "description": "Makes comments scrollable, thus reducing the overall height of the page.",
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/users/*/comments","https://scratch.mit.edu/studios/*/comments"]
+    }
+  ],
+  "tags": ["comments"],
+  "enabled_by_default": false
+}
