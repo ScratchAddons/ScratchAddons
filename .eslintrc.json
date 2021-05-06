@@ -12,10 +12,10 @@
     "__scratchAddonsTraps": "writable",
     "__scratchAddonsRedux": "writable",
     "_realConsole": "writable",
+    "__scratchAddonsTextColor": "writable",
 
     // Third Party-defined
     "Vue": "readonly",
-    "IntlMessageFormat": "readonly",
     "md5": "readonly",
     "scratchblocks": "readonly",
     "tinycolor": "readonly",
@@ -43,7 +43,6 @@
     "no-implied-eval": 2,
     "no-new-wrappers": 2,
     "no-proto": 2,
-    "no-warning-comments": 1,
     "no-unused-vars": 0,
     "no-useless-escape": 0,
     "no-inner-declarations": 0,
@@ -56,6 +55,8 @@
         "addons/*/background.js",
         "background/**/*.js",
         "content-scripts/*.js",
+        "libraries/common/*.js",
+        "libraries/thirdparty/*.js",
         "popups/**/*.js",
         "webpages/**/*.js"
       ],
@@ -64,6 +65,12 @@
       },
       "rules": {
         "no-eval": 2
+      }
+    },
+    {
+      "files": ["content-scripts/*.js"],
+      "rules": {
+        "no-restricted-syntax": ["error", "ImportExpression"]
       }
     }
   ]

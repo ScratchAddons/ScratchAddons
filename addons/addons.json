@@ -71,6 +71,9 @@
   "custom-zoom",
   "blocks2image",
   "editor-sounds",
+  "material-forum-editor-buttons",
+  "gamepad",
+  "remove-curved-stage-border",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

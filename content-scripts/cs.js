@@ -62,7 +62,7 @@ const cs = {
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
 
 const pageComlinkScript = document.createElement("script");
-pageComlinkScript.src = chrome.runtime.getURL("libraries/comlink.js");
+pageComlinkScript.src = chrome.runtime.getURL("libraries/thirdparty/cs/comlink.js");
 document.documentElement.appendChild(pageComlinkScript);
 
 const moduleScript = document.createElement("script");
@@ -165,9 +165,8 @@ function injectUserstyles(addonsWithUserstyles) {
   }
 }
 
-const textColorLibPromise = import(chrome.runtime.getURL("libraries/text_color.js"));
-async function setCssVariables(addonSettings, addonsWithUserstyles) {
-  const textColorLib = await textColorLibPromise;
+const textColorLib = __scratchAddonsTextColor;
+function setCssVariables(addonSettings, addonsWithUserstyles) {
   const hyphensToCamelCase = (s) => s.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
   const setVar = (addonId, varName, value) =>
     document.documentElement.style.setProperty(`--${hyphensToCamelCase(addonId)}-${varName}`, value);
@@ -269,9 +268,9 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
       disabledDynamicAddons.push(addonId);
 
       let addonIndex = addonsWithUserscripts.findIndex((a) => a.addonId === addonId);
-      addonsWithUserscripts.splice(addonIndex, 1);
+      if (addonIndex !== -1) addonsWithUserscripts.splice(addonIndex, 1);
       addonIndex = addonsWithUserstyles.findIndex((a) => a.addonId === addonId);
-      addonsWithUserstyles.splice(addonIndex, 1);
+      if (addonIndex !== -1) addonsWithUserstyles.splice(addonIndex, 1);
 
       removeAddonStyles(addonId);
       _page_.fireEvent({ name: "disabled", addonId, target: "self" });
@@ -343,7 +342,7 @@ const showBanner = () => {
   // v1.14.0 TODO in line 365
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/icon.svg"),
+    src: chrome.runtime.getURL("/images/cs/catblocks.png"),
     style: "height: 150px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
@@ -378,12 +377,13 @@ const showBanner = () => {
       /\$(\d+)/g,
       (_, i) =>
         [
+          /*
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeatureName") })
-            .outerHTML,
+            .outerHTML, 
+          */
           Object.assign(document.createElement("a"), {
-            // TODO: remove `#addon-editor-dark-mode` next release
-            href: "https://scratch.mit.edu/scratch-addons-extension/settings#addon-editor-dark-mode",
+            href: "https://scratch.mit.edu/scratch-addons-extension/settings",
             target: "_blank",
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,

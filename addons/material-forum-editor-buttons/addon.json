@@ -1,0 +1,26 @@
+{
+  "name": "Better forums post editor buttons",
+  "description": "Changes the forums post editor UI icons from tiny 16x16 bitmaps to SVG material icons.",
+  "userstyles": [
+    {
+      "url": "icons.css",
+      "matches": ["editingScreens"]
+    }
+  ],
+  "tags": ["community", "forums", "theme"],
+  "versionAdded": "1.14.0",
+  "credits": [
+    {
+      "name": "A-E-",
+      "link": "https://github.com/easrng/material-scratch-forum-editor-buttons"
+    },
+    {
+      "name": "Secret-chest (Port)",
+      "link": "https://github.com/Secret-chest"
+    }
+  ],
+  "enabledByDefault": false,
+  "l10n": true,
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

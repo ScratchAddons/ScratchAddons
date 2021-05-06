@@ -38,7 +38,7 @@
   background-image: url(/images/icons/check.svg);
 }
 
-.setting-input.check:hover:not(:focus) {
+.setting-input.check:hover:not(:focus):not([disabled]) {
   border-color: #0e44b8;
 }
 

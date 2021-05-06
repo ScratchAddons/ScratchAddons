@@ -8,7 +8,7 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     const element = await addon.tab.waitForElement(".share-date", {
       markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       condition: () => addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
     });
 
