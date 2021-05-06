@@ -58,13 +58,22 @@ export default class Tab extends Listenable {
         return Promise.resolve(element);
       }
     }
-    let { condition } = opts;
+    const { reduxCondition, condition } = opts;
     let listener;
+    let combinedCondition = () => {
+      if (condition && !condition()) return false;
+      if (this.redux.state) {
+        if (reduxCondition && !reduxCondition(this.redux.state)) return false;
+      }
+      // NOTE: this may reach sooner than expected, if redux state is not available
+      // because of timing issues. However this is just an optimization! It's fine
+      // if it runs a little earlier. Just don't error out.
+      return true;
+    };
     if (opts.reduxEvents) {
-      if (this.clientVersion !== "scratch-www") throw new Error("reduxEvents require scratch-www");
-      const oldCondition = condition;
+      const oldCondition = combinedCondition;
       let satisfied = false;
-      condition = () => {
+      combinedCondition = () => {
         if (oldCondition && !oldCondition()) return false;
         return satisfied;
       };
@@ -79,7 +88,7 @@ export default class Tab extends Listenable {
     const promise = scratchAddons.sharedObserver.watch({
       query: selector,
       seen: markAsSeen ? this._waitForElementSet : null,
-      condition,
+      condition: combinedCondition,
     });
     if (listener) {
       promise.then((match) => {

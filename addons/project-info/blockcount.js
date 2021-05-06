@@ -26,7 +26,7 @@ export default async function ({ addon, console, msg }) {
             "fontsLoaded/SET_FONTS_LOADED",
             "scratch-gui/locales/SELECT_LOCALE",
           ],
-          condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+          reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
         });
         let display = topBar.appendChild(document.createElement("span"));
         display.style.order = 1;
