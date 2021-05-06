@@ -1,12 +1,12 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 /* Components for Vue */
-import ColorInputComponent from "../components/color-picker.js"
-import ResetDropdownComponent from "../components/reset-dropdown.js"
-import AddonGroupComponent from "../components/addon-group.js"
-import AddonSettingComponent from "../components/addon-setting.js"
-import AddonBodyComponent from "../components/addon-body.js"
-import CategorySelectorComponent from "../components/category-selector.js"
-import AddonTagComponent from "../components/addon-tag.js"
+import ColorInputComponent from "../components/color-picker.js";
+import ResetDropdownComponent from "../components/reset-dropdown.js";
+import AddonGroupComponent from "../components/addon-group.js";
+import AddonSettingComponent from "../components/addon-setting.js";
+import AddonBodyComponent from "../components/addon-body.js";
+import CategorySelectorComponent from "../components/category-selector.js";
+import AddonTagComponent from "../components/addon-tag.js";
 
 let isIframe = false;
 if (window.parent !== window) {
