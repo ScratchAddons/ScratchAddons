@@ -4,9 +4,18 @@ try {
   throw "Scratch Addons: not first party iframe";
 }
 
-chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res) => {
-  if (res) onInfoAvailable(res);
-});
+const onResponse = (res) => {
+  if (res) {
+    console.log("[Message from background]", res);
+    if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") onInfoAvailable(res);
+    else {
+      const newUrl = `https://scratch.mit.edu/${res.httpStatusCode}/`;
+      console.log(`Status code was not 2xx, replacing URL to ${newUrl}`);
+      chrome.runtime.sendMessage({ contentScriptReady: { url: newUrl } }, onResponse);
+    }
+  }
+};
+chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse);
 
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
