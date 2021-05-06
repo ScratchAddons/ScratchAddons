@@ -1,6 +1,6 @@
 export default {
   props: ["category"],
-  template: document.querySelector("template#category-selector-component").innerHTML,
+  template: await (await fetch("category-selector.html")).text(),
   data() {
     return {};
   },

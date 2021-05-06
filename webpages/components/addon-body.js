@@ -1,6 +1,6 @@
 export default {
   props: ["addon", "groupId", "groupExpanded"],
-  template: document.querySelector("template#addon-body-component").innerHTML,
+  template: await (await fetch("addon-body.html")).text(),
   data() {
     return {
       expanded: isIframe ? false : this.groupId === "enabled",
