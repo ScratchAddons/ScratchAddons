@@ -45,7 +45,10 @@ export default class Tab extends Listenable {
    * @param {object} opts - options.
    * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
    * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
+   * @param {function=} opts.reduxCondition - A function that returns whether to resolve the selector or not.
+   * Use this as an optimization and do not rely on the behavior.
    * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
+   * Use this as an optimization and do not rely on the behavior.
    * @returns {Promise<Element>} - element found.
    */
   waitForElement(selector, opts = {}) {
