@@ -19,7 +19,7 @@
 
 ## About
 
-Scratch Addons is a WebExtension (supports both Chrome and Firefox). Scratch Addons' mission is to combine all existing Scratch extensions, userscripts and userstyles into a single easy-to-access place, while still letting users choose which ones to enable.
+Scratch Addons is a browser extension that supports both Chrome and Firefox. Scratch Addons' mission is to combine all existing Scratch extensions, userscripts and userstyles into a single easy-to-access place, while still letting users choose which ones to enable.
 
 ### What's actually an "addon"?
 
@@ -68,7 +68,7 @@ After downloading the extension to your computer, just load it by following thes
 - Google Chrome
   1. Open `chrome://extensions` to open the Extension Management page by typing it into your address bar.
   2. Enable Developer Mode by clicking the toggle switch next to Developer mode.
-  3. Click the `Load unpacked` button on the top and select the extension directory which has the `manifest.json` file in it. 
+  3. Click the `Load unpacked` button at the bar and select the extension directory which has the `manifest.json` file in it. 
 
 - Mozilla Firefox
   1. Open `about:debugging` to open the add-ons page by typing it into your address bar.
@@ -83,4 +83,4 @@ If you found a bug, or want to suggest new features, please use the [issues tab]
 
 Scratch Addons is licensed under the terms of the [GNU General Public License v3.0](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE).
 
-Other third-party libraries used are listed on https://github.com/ScratchAddons/ScratchAddons/blob/master/libraries/CREDITS.md.
+Other third-party libraries used are listed [here](https://github.com/ScratchAddons/ScratchAddons/blob/master/libraries/CREDITS.md).
