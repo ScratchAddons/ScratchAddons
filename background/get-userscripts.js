@@ -221,7 +221,7 @@ chrome.webRequest.onResponseStarted.addListener(
   },
   {
     urls: ["https://scratch.mit.edu/*"],
-    types: ["main_frame", "sub_frame"],
+    types: ["main_frame"],
   }
 );
 
