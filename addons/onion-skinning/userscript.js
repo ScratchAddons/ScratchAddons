@@ -724,8 +724,7 @@ export default async function ({ addon, global, console, msg }) {
       const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
         markAsSeen: true,
         reduxCondition: (state) =>
-          state.scratchGui.editorTab.activeTabIndex === 1 &&
-          !state.scratchGui.mode.isPlayerOnly,
+          state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
       const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
       const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
