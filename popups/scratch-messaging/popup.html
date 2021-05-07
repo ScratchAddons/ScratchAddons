@@ -48,10 +48,10 @@
         <div class="reply-box-comment" v-show="replying">
           <textarea class="reply-textarea" maxlength="500" v-model="replyBoxValue"></textarea>
           <div class="reply-box-buttons">
-            <button @click="!postingComment && postComment()" style="background-color: #4d97ff;">
+            <button @click="!postingComment && postComment()" style="background-color: #4d97ff">
               {{ postingComment ? messages.postingMsg : messages.postMsg }}
             </button>
-            <button @click="replying = false" style="background-color: gray;" v-show="!postingComment">
+            <button @click="replying = false" style="background-color: gray" v-show="!postingComment">
               {{ messages.cancelMsg }}
             </button>
             <span class="comment-chars"> {{ replyBoxLeftMsg }}</span>
@@ -61,7 +61,7 @@
     </template>
   </head>
 
-  <body style="display: none;" v-show="mounted">
+  <body style="display: none" v-show="mounted">
     <div v-show="!error">
       <!-- Scratch Team Messages -->
       <div class="message-type" v-show="stMessages.length">
@@ -307,7 +307,7 @@
             <div
               class="tooltip"
               v-if="project.loveCount || project.favoriteCount"
-              style="display: inline-block; padding-left: 6px; padding-right: 6px;"
+              style="display: inline-block; padding-left: 6px; padding-right: 6px"
             >
               <span v-show="project.loveCount"
                 ><img class="small-icon colored" src="../../images/icons/heart.svg" /> {{project.loveCount}}</span
@@ -351,7 +351,7 @@
     </div>
 
     <!-- Show errors, loading, etc. -->
-    <div style="text-align: center; font-size: 0.9rem; padding-bottom: 3.5rem; font-weight: bold;">
+    <div style="text-align: center; font-size: 0.9rem; padding-bottom: 3.5rem; font-weight: bold">
       <br />
       <span v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</span>
       <span v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</span>
@@ -370,7 +370,7 @@
     <!-- Bottom bar-->
     <div id="bottom-bar" v-show="messagesReady">
       <a @click="markAsRead()" v-show="!markedAsRead">{{ uiMessages.markAsReadMsg }}</a>
-      <span v-show="markedAsRead" style="font-weight: bold;"
+      <span v-show="markedAsRead" style="font-weight: bold"
         ><img class="small-icon" src="../../images/icons/read.svg" /> {{ uiMessages.markedAsReadMsg }}</span
       >&nbsp;&nbsp;|&nbsp;&nbsp;
       <a href="https://scratch.mit.edu/messages" id="open-messages"
