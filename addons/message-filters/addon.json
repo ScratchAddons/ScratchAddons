@@ -1,10 +1,10 @@
 {
-  "name": "Filter messages in messaging page",
-  "description": "Filter messages on the messages page through checkboxes.",
+  "name": "Filter messages on Scratch's messages page",
+  "description": "Lets you select what types of messages to hide or show on Scratch's messages page.",
   "info": [
     {
       "type": "notice",
-      "text": "This does not change your message count. This simply allows you to hide certain types of messages in the messaging page.",
+      "text": "This does not change your message count. This simply lets you hide certain types of messages on Scratch's messages page.",
       "id": "nomessagecount"
     }
   ],
