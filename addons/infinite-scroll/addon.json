@@ -73,7 +73,7 @@
       }
     }
   ],
-  "tags": ["community", "beta"],
+  "tags": ["community"],
   "enabledByDefault": false,
   "l10n": true
 }

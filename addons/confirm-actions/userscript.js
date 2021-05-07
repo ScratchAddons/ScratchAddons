@@ -1,22 +1,25 @@
 export default async function ({ addon, console, msg }) {
-  actionAlert("projectsharing", "[class*='share-button_share-button'], .banner-button", msg("share"));
-  actionAlert("followinguser", "#profile-data .follow-button", msg("follow"));
-  actionAlert("joiningstudio", "a.accept", msg("joinstudio"));
-  async function actionAlert(setting, queryButton, res) {
-    while (true) {
-      let button = await addon.tab.waitForElement(queryButton, { markAsSeen: true });
-      let canAction = false;
-      button.addEventListener("click", function (e) {
-        if (addon.self.disabled || !addon.settings.get(setting)) return;
-        if (!canAction) {
-          e.cancelBubble = true;
+  document.addEventListener(
+    "click",
+    (e) => {
+      let cancelMessage = null;
+      if (
+        addon.settings.get("projectsharing") &&
+        e.target.closest("[class*='share-button_share-button'], .banner-button")
+      ) {
+        cancelMessage = msg("share");
+      } else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
+        cancelMessage = msg("follow");
+      } else if (addon.settings.get("joiningstudio") && e.target.closest("a.accept")) {
+        cancelMessage = msg("joinstudio");
+      }
+      if (cancelMessage !== null) {
+        if (!confirm(cancelMessage)) {
           e.preventDefault();
-          if (confirm(res)) {
-            canAction = true;
-            button.click();
-          }
-        } else canAction = false;
-      });
-    }
-  }
+          e.stopPropagation();
+        }
+      }
+    },
+    true
+  );
 }

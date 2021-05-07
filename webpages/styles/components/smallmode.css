@@ -6,8 +6,6 @@
   max-height: calc(100vh - 60px);
   box-sizing: border-box;
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
-  overflow: scroll;
-  overflow-x: hidden;
 }
 .toggle {
   cursor: pointer;

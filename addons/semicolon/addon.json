@@ -19,7 +19,7 @@
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
-  "tags": ["easterEgg"],
+  "tags": ["community", "easterEgg"],
   "enabledByDefault": false,
   "l10n": true
 }

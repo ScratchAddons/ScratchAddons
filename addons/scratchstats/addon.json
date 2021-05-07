@@ -1,7 +1,7 @@
 {
   "name": "Profile statistics",
   "description": "Shows statistics from ScratchDB on profile pages.",
-  "tags": ["community"],
+  "tags": ["community", "profiles"],
   "credits": [{ "name": "Maximouse" }],
   "userscripts": [
     {

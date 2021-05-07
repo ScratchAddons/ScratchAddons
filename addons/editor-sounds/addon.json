@@ -12,7 +12,8 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.14.0",
   "enabledByDefault": false,
   "l10n": true
 }
