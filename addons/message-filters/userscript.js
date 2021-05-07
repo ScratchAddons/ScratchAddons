@@ -20,7 +20,9 @@ export default async function ({ addon, global, console, msg }) {
   };
   // Declare the active array, and either get it from localStorage or set it to every class in filter.
   // The 'active' array holds the list of the classes of the messages that are shown.
-  let active = JSON.parse(localStorage.getItem("scratchAddonsMessageFiltersSettings")) || Object.keys(filter).map((i) => filter[i]);
+  let active =
+    JSON.parse(localStorage.getItem("scratchAddonsMessageFiltersSettings")) ||
+    Object.keys(filter).map((i) => filter[i]);
   // Create the checkbox element, which is the container for the message filtering div.
   let container = document.createElement("div");
   container.classList.add("filter-container");
