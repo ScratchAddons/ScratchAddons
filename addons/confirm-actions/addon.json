@@ -5,6 +5,10 @@
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "9gr (Trash button)",
+      "link": "https://scratch.mit.edu/users/9gr"
     }
   ],
   "dynamicEnable": true,
@@ -32,6 +36,12 @@
     {
       "name": "Confirm joining studios",
       "id": "joiningstudio",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Confirm deleting projects",
+      "id": "trashingproject",
       "type": "boolean",
       "default": false
     }
