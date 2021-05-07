@@ -12,6 +12,8 @@ export default async function ({ addon, console, msg }) {
         cancelMessage = msg("follow");
       } else if (addon.settings.get("joiningstudio") && e.target.closest("a.accept")) {
         cancelMessage = msg("joinstudio");
+      } else if (addon.settings.get("trashingproject") && e.target.closest(".media-trash") {
+        cancelMessage = msg("trashproject")
       }
       if (cancelMessage !== null) {
         if (!confirm(cancelMessage)) {
