@@ -93,6 +93,16 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       }
     }
     lastDateTime = new Date(checkedMessages[0].datetime_created).getTime();
+
+    const stMessages = await (
+      await fetch(`https://api.scratch.mit.edu/users/${addon.auth.username}/messages/admin`, {
+        headers: {
+          "x-token": addon.auth.xToken,
+        },
+      })
+    ).json();
+    data.stMessages = stMessages;
+
     data.ready = true;
   }
 
@@ -118,6 +128,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         .then((res) => sendResponse(res))
         .catch((err) => sendResponse(err));
       return true;
+    } else if (popupRequest.dismissAlert) {
+      dismissAlert(popupRequest.dismissAlert);
     }
   };
   chrome.runtime.onMessage.addListener(messageListener);
@@ -260,6 +272,19 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       };
 
       xhr.send(JSON.stringify({ id: String(commentId) }));
+    });
+  }
+
+  function dismissAlert(alertId) {
+    // TODO: Untested
+    fetch("https://scratch.mit.edu/site-api/messages/messages-delete/", {
+      headers: {
+        "content-type": "application/json",
+        "x-csrftoken": addon.auth.csrfToken,
+        "x-requested-with": "XMLHttpRequest",
+      },
+      body: JSON.stringify({ alertType: "notification", alertId }),
+      method: "POST",
     });
   }
 }
