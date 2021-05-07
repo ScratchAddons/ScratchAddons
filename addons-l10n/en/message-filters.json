@@ -1,5 +1,5 @@
 {
-  "message-filters/messages": "I would like to see messages from:",
+  "message-filters/messages": "Show messages from:",
   "message-filters/studio": "Studio activity",
   "message-filters/comment": "Comments",
   "message-filters/favorite": "Favorites",
