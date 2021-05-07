@@ -5,11 +5,6 @@ import Badge from "./Badge.js";
 /**
  * An addon that loads as a background script.
  * @extends Addon
- * @property {object} self - the addon's metadata.
- * @property {string} self.id - the addon's ID.
- * @property {string} self.dir - the directory the addon is stored in.
- * @property {string} self.browser - the browser used.
- * @property {function} self.restart - restarts the addon.
  * @property {Notifications} [notifications]
  * @property {Badge} [badge]
  */

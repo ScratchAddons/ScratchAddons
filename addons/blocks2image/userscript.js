@@ -68,14 +68,15 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  while (true) {
-    let blocklyWorkspace = await addon.tab.waitForElement("g.blocklyWorkspace", {
-      markAsSeen: true,
-    });
-
-    // insert contextmenu
-    blocklyWorkspace.addEventListener("mousedown", (e) => eventMouseDown(e));
-  }
+  document.addEventListener(
+    "mousedown",
+    (e) => {
+      if (e.target.closest("g.blocklyWorkspace")) {
+        eventMouseDown(e);
+      }
+    },
+    true
+  );
 
   function exportBlock(request, sender, sendMessage) {
     // console.log(request)
@@ -143,7 +144,7 @@ export default async function ({ addon, global, console, msg }) {
         item.getAttribute("xlink:href").substring(item.getAttribute("xlink:href").lastIndexOf("/") + 1)
       );
       if (builtinSvgData) {
-        // replace svg file path (offical) to inline svg
+        // replace svg file path (official) to inline svg
         item.setAttribute("xlink:href", builtinSvgData);
       } else if (item.getAttribute("xlink:href").indexOf("/static/") === 0) {
         // replace link path for third party website

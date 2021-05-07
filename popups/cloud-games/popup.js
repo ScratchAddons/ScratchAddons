@@ -1,4 +1,4 @@
-import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
+import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js";
 
 (async () => {
   const l10n = new WebsiteLocalizationProvider();
@@ -18,7 +18,7 @@ import WebsiteLocalizationProvider from "../../libraries/website-l10n.js";
 
   await l10n.loadByAddonId("cloud-games");
 
-  const vue = new Vue({
+  window.vue = new Vue({
     el: "body",
     data: {
       projects: [],

@@ -34,20 +34,19 @@ const checkForDango = (text) => {
   dangoContainerRight.className = "sa-dangos-right";
 
   document.querySelector("#content").append(dangoContainerLeft, dangoContainerRight);
-  if (!localStorage.getItem("scratchAddonsAprilFoolsModal2021")) document.querySelector("#content").append(noticeText);
+  // if (!localStorage.getItem("scratchAddonsAprilFoolsModal2021")) document.querySelector("#content").append(noticeText);
 };
 const setEltWidth = (elt) => {
   if (!elt) return;
   let sideWidth = (document.body.clientWidth - document.querySelector("#profile-data").clientWidth) / 2;
   sideWidth = sideWidth - 25;
   elt.style.width = sideWidth + "px";
-  let old = visibleDangos;
   visibleDangos = sideWidth > 0;
   if (visibleDangos) {
     clearTimeout(noticeTimeout);
-    if (!old && !localStorage.getItem("scratchAddonsAprilFoolsModal2021")) {
+    /* if (!old && !localStorage.getItem("scratchAddonsAprilFoolsModal2021")) {
       document.querySelector("#content").append(noticeText);
-    }
+    } */
   } else {
     // Window resizing is very weird on some devices...
     // Some devices might make the notice text "flicker".
@@ -81,16 +80,12 @@ export default async function ({ addon, global, console, msg }) {
   };
   noticeText.appendChild(notifClose);
   const boldSpan = document.createElement("span");
-  boldSpan.innerText = msg("addedBy");
+  boldSpan.innerText = ""; // msg("addedBy");
   boldSpan.style.fontWeight = "bold";
   noticeText.appendChild(boldSpan);
   const normalSpan = document.createElement("span");
-  normalSpan.innerText = `\n${msg("happyAprilFools")}\n${msg("howToGet")}\n${msg("howToStop")}`;
+  normalSpan.innerText = ""; // `\n${msg("happyAprilFools")}\n${msg("howToGet")}\n${msg("howToStop")}`;
   noticeText.appendChild(normalSpan);
-
-  const now = new Date().getTime() / 1000;
-  const runDangos = addon.settings.get("force") || (now < 1617364800 && now > 1617192000);
-  if (!runDangos) return;
 
   const getAboutMeAndWiwo = () => {
     if (document.querySelector("textarea[name=bio]")) {

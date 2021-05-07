@@ -1,8 +1,8 @@
 // this script was happily stolen from the color-picker addon, developed by Richie Bendall and apple502j
 
 // import required libraries
-import { normalizeHex } from "../../libraries/normalize-color.js";
-import RateLimiter from "../../libraries/rate-limiter.js";
+import { normalizeHex } from "../../libraries/common/cs/normalize-color.js";
+import RateLimiter from "../../libraries/common/cs/rate-limiter.js";
 
 export default async ({ addon, console, msg }) => {
   let prevEventHandler;
@@ -18,7 +18,6 @@ export default async ({ addon, console, msg }) => {
     } else if (state.scratchPaint.modals.strokeColor) {
       fillOrStroke = "stroke";
     } else {
-      fillOrStroke = "wh";
       return;
     }
     const colorType = state.scratchPaint.fillMode.colorIndex;
@@ -63,7 +62,12 @@ export default async ({ addon, console, msg }) => {
   // le loop
   while (true) {
     // wait for color dialog box appearance
-    const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', { markAsSeen: true });
+    const element = await addon.tab.waitForElement('div[class*="color-picker_swatch-row"]', {
+      markAsSeen: true,
+      condition: () =>
+        addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 1 &&
+        !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    });
     rateLimiter.abort(false);
 
     // update the bg color of the picker

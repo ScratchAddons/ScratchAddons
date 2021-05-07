@@ -7,10 +7,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     return;
   }
 
-  // 0-indexed 6 = July
-  const releaseDate = new Date(2021, 2, 28);
-  const releaseDateLocalized = new Intl.DateTimeFormat(msg.locale).format(releaseDate);
-
   const helpHTML = `
 <div id="s3devHelpPop" class="${addon.tab.scratchClass("modal_modal-overlay")}">
 <div class="${addon.tab.scratchClass("modal_modal-content")}">
@@ -27,16 +23,15 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   </div>
 </div>
 <div id="s3devHelpContent">
-<p>${m("version", {
-    version: "1.12.0",
-    date: releaseDateLocalized,
+<p>${m("help-title")} ${m("help-by", {
     ndash: "&ndash;",
     url: '<a target="_blank" rel="noreferrer noopener" href="https://www.youtube.com/griffpatch">Griffpatch</a>',
   })}</p>
 <hr />
 <h2><strong>${m("code-tab-features")}</strong></h2>
-<p><strong>${m("interactive-find-bar")}</strong> - ${m("interactive-find-bar-desc")}</p>
+<p><strong>${m("interactive-find-bar")}</strong> &ndash; ${m("interactive-find-bar-desc")}</p>
 <p><strong>${m("improved-tidy-up")}</strong> &ndash; ${m("improved-tidy-up-desc")}</p>
+<p><strong>${m("help-make-space")} ${m("help-new")}</strong> &ndash; ${m("help-make-space-desc")}</p>
 <p><strong>${m("copy-to-clipboard")}</strong> &ndash; ${m("copy-to-clipboard-desc")}</p>
 <p><strong>${m("paste-from-clipboard")}</strong> &ndash; ${m("paste-from-clipboard-desc")}</p>
 <p><strong>${m("swap-variable")}</strong> &ndash; ${m("swap-variable-desc")}</p>
@@ -46,7 +41,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 <hr />
 <h2><strong>${m("costume-tab-features")}</strong></h2>
 <p><strong>${m("find-bar")}</strong> &ndash; ${m("find-bar-costume-desc")}</p>
-<p><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-desc")}</p>
+<p><strong>${m("ctrl-lr")}</strong> &ndash; ${m("ctrl-lr-costume-desc")}</p>
 <p><strong>${m("send-top-bottom")}</strong> &ndash; ${m("send-top-bottom-desc")}</p>
 <hr />
 <p>${m(

@@ -62,7 +62,7 @@
       ]
     }
   ],
-  "tags": ["community"],
+  "tags": ["community", "profiles"],
   "enabledByDefault": false,
   "l10n": true
 }

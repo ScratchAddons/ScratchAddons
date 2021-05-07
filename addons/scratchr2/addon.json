@@ -1,13 +1,6 @@
 {
   "name": "Scratch 2.0 \u2192 3.0",
   "description": "Makes Scratch 2.0-styled pages look like Scratch 3.0.",
-  "info": [
-    {
-      "type": "notice",
-      "id": "refresh",
-      "text": "If text in the navigation bar is hard to read after changing the primary color, reload the page and it will adjust automatically."
-    }
-  ],
   "tags": ["community", "theme", "recommended"],
   "credits": [
     {
@@ -15,19 +8,48 @@
       "link": "https://github.com/mxmou/customize-scratch#scratch-30-look-for-old-parts-of-the-website"
     }
   ],
-  "userscripts": [
+  "customCssVariables": [
     {
-      "url": "lightprimary.js",
-      "matches": ["https://scratch.mit.edu/*"],
-      "runAtComplete": false
+      "name": "primaryColor-text",
+      "value": {
+        "type": "textColor",
+        "black": "#575e75",
+        "white": "#ffffff",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primaryColor"
+        }
+      }
+    },
+    {
+      "name": "primaryColor-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "#575e75b0",
+        "white": "#ffffffb0",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primaryColor"
+        }
+      }
+    },
+    {
+      "name": "primaryColor-filter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primaryColor"
+        }
+      }
     }
   ],
+  "dynamicEnable": true,
   "dynamicDisable": true,
+  "injectAsStyleElt": true,
   "userstyles": [
-    {
-      "url": "set-default-var-value.css",
-      "matches": ["https://scratch.mit.edu/*"]
-    },
     {
       "url": "scratchr2.css",
       "matches": [
@@ -47,6 +69,7 @@
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
         "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/503/",
         "https://scratch.mit.edu/login",
         "https://scratch.mit.edu/login_retry",
         "https://scratch.mit.edu/news"
@@ -71,6 +94,7 @@
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
         "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/503/",
         "https://scratch.mit.edu/news"
       ]
     },
@@ -185,6 +209,7 @@
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
         "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/503/",
         "https://scratch.mit.edu/login",
         "https://scratch.mit.edu/login_retry",
         "https://scratch.mit.edu/news"

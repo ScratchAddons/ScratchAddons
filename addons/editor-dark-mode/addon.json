@@ -1,13 +1,6 @@
 {
   "name": "Editor dark mode and customizable colors",
   "description": "Customize colors used by the project editor. Multiple dark themes by different authors available. If you don't need dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it.",
-  "info": [
-    {
-      "type": "notice",
-      "id": "refresh",
-      "text": "If any colors are incorrect or if text is hard to read, reload the page."
-    }
-  ],
   "credits": [
     {
       "name": "Maximouse (addon, \"Experimental\" Dark)",
@@ -22,6 +15,10 @@
       "link": "https://github.com/towerofnix"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {
       "url": "text_color.js",
@@ -116,7 +113,7 @@
       "default": "#151515"
     },
     {
-      "name": "Sprite list background",
+      "name": "Sprite pane background",
       "id": "selector",
       "type": "color",
       "default": "#202020"
@@ -128,7 +125,7 @@
       "default": "#202020"
     },
     {
-      "name": "Selected list item background",
+      "name": "Selected sprite/asset background",
       "id": "selectorSelection",
       "type": "color",
       "default": "#111111"
@@ -344,7 +341,7 @@
       }
     }
   ],
-  "tags": ["editor", "theme"],
+  "tags": ["editor", "theme", "recommended"],
   "enabledByDefault": false,
   "l10n": true
 }

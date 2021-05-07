@@ -1,7 +1,7 @@
 {
   "name": "Better emojis",
   "description": "Replaces the cat emojis in Scratch comments with improved vector designs.",
-  "tags": ["community"],
+  "tags": ["community", "comments"],
   "credits": [
     {
       "name": "getbent",
