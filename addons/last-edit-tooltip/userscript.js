@@ -9,7 +9,7 @@ export default async function ({ addon, global, console, msg }) {
     const element = await addon.tab.waitForElement(".share-date", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
-      condition: () => addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
 
     // Using this instead of scratchAddons.l10n.locales
