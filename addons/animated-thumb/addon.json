@@ -51,7 +51,7 @@
       "id": "persistentThumb"
     }
   ],
-  "tags": ["editor", "recommended"],
+  "tags": ["editor", "editorMenuBar", "recommended"],
   "enabledByDefault": true,
   "l10n": true
 }

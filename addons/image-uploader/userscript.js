@@ -1,6 +1,6 @@
-import textFieldEdit from "./text-field-edit.js"; //used for editing the forum text box without messing with the edit history
+import { insert } from "../../libraries/thirdparty/cs/text-field-edit.js";
 export default async function ({ addon, global, console, msg, safeMsg }) {
-  await addon.tab.loadScript(addon.self.lib + "/md5.min.js");
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/md5.min.js");
 
   var toolbar =
     document.querySelector("#markItUpId_body > div > div.markItUpHeader > ul") ||
@@ -86,15 +86,15 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   });
 
   textBox.addEventListener("dragenter", () => {
-    textBox.style.backgroundColor = "lightgrey";
+    textBox.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
   });
 
   textBox.addEventListener("dragleave", () => {
-    textBox.style.backgroundColor = "white";
+    textBox.style.backgroundColor = "transparent";
   });
 
   textBox.addEventListener("dragend", () => {
-    textBox.style.backgroundColor = "white";
+    textBox.style.backgroundColor = "transparent";
   });
 
   textBox.addEventListener("drop", (e) => {
@@ -125,17 +125,13 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   //cool functions below
   function retrieveImageFromClipboardAsBlob(pasteEvent, callback) {
     if (!pasteEvent.clipboardData) {
-      if (typeof callback === "function") {
-        callback(undefined);
-      }
+      callback(undefined);
     }
 
     var items = pasteEvent.clipboardData.items;
 
     if (!items) {
-      if (typeof callback === "function") {
-        callback(undefined);
-      }
+      callback(undefined);
     }
 
     for (var i = 0; i < items.length; i++) {
@@ -144,9 +140,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       // Retrieve image on clipboard as blob
       var blob = items[i].getAsFile();
 
-      if (typeof callback === "function") {
-        callback(blob);
-      }
+      callback(blob);
     }
   }
   async function uploadAssetImage(image, fileType) {
@@ -171,10 +165,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       var data = await res.json();
 
       if (data.status === "ok") {
-        textFieldEdit.insert(
-          textBox,
-          `[img]https://assets.scratch.mit.edu/get_image/.%2E/${data["content-name"]}[/img]`
-        );
+        insert(textBox, `[img]https://assets.scratch.mit.edu/get_image/.%2E/${data["content-name"]}[/img]`);
         progresselement.remove();
       } else {
         alert(msg("upload-error"));

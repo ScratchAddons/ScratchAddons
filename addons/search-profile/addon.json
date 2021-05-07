@@ -9,7 +9,7 @@
     }
   ],
   "credits": [{ "name": "Geotale" }, { "name": "pufferfish101007" }],
-  "tags": ["community"],
+  "tags": ["community", "recommended", "profiles"],
   "enabledByDefault": false,
   "l10n": true
 }

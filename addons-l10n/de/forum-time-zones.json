@@ -1,1 +1,1 @@
-{"forum-time-zones/@name":"Zeitzonen in Foren","forum-time-zones/@description":"Konvertiert die Sendzeiten zu der Zeitzone des Benutzers."}
+{"forum-time-zones/@name":"Lokale Zeitzone in Foren verwenden","forum-time-zones/@description":"Wandelt die Sendezeiten in deine Zeitzone um. Verwendet ScratchDB für Informationen."}

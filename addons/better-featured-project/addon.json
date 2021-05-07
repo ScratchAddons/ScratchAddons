@@ -29,6 +29,6 @@
       "default": 0
     }
   ],
-  "tags": ["community"],
+  "tags": ["community", "recommended", "profiles"],
   "l10n": true
 }

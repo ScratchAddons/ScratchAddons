@@ -31,7 +31,7 @@
       "name": "Exact count for forum user",
       "id": "forumuser",
       "type": "boolean",
-      "default": true
+      "default": false
     }
   ],
   "userscripts": [
@@ -61,7 +61,7 @@
       "runAtComplete": false
     }
   ],
-  "tags": ["community", "recommended"],
+  "tags": ["community", "recommended", "profiles", "forums", "studios"],
   "enabledByDefault": false,
   "l10n": true
 }

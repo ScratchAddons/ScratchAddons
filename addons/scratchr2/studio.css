@@ -9,6 +9,7 @@
   transform: translateX(-50%) /* Center horizontally */;
   width: 942px;
   padding: 0;
+  overflow: visible;
 }
 .box .box-head h2 {
   font-size: 28px;
@@ -40,9 +41,6 @@
 }
 #gallery-cover-image {
   width: 226px;
-}
-#description .viewport {
-  margin-right: 0;
 }
 #gallery > .col-12 > .box {
   border-radius: 0;

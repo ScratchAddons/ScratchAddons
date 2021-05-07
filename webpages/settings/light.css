@@ -104,7 +104,9 @@ img :not(.navbar, .icon-type) {
 .icon-type,
 .btn-dropdown img,
 .categories-shrink img,
-.category img {
+.category img,
+.addon-group > span > img,
+.addon-group > span:after {
   filter: invert(1) brightness(0);
 }
 .btn-dropdown:hover {
@@ -131,7 +133,7 @@ img :not(.navbar, .icon-type) {
   background: #efefef;
   border: 1px solid #acacac;
 }
-.large-button:hover {
+.large-button:hover:not([disabled]) {
   background: #aaaaaa;
 }
 
@@ -162,13 +164,21 @@ img :not(.navbar, .icon-type) {
   border: 1px solid #cfcfcf;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+.setting-dropdown.open .clear-button,
+.setting-dropdown li:hover {
+  background: #aaaaaa;
+}
+.setting-dropdown ul,
+.setting-dropdown .reset-preview span {
+  border-color: #acacac;
+}
 
 #running-page {
   background-color: #ffffff;
 }
 
 #popup-more-settings > button {
-  background-image: url(../../images/icons/settings-black.svg);
+  filter: brightness(0);
 }
 color-picker#picker {
   --color-picker-background-color: #fff !important;

@@ -1,5 +1,5 @@
-import { normalizeHex, getHexRegex } from "../../libraries/normalize-color.js";
-import RateLimiter from "../../libraries/rate-limiter.js";
+import { normalizeHex, getHexRegex } from "../../libraries/common/cs/normalize-color.js";
+import RateLimiter from "../../libraries/common/cs/rate-limiter.js";
 
 export default async ({ addon, console, msg }) => {
   // 250-ms rate limit
@@ -42,10 +42,9 @@ export default async ({ addon, console, msg }) => {
     document.body.classList.add("sa-hide-eye-dropper-background");
     element.click();
   };
-  while (true) {
-    const element = await addon.tab.waitForElement("button.scratchEyedropper", { markAsSeen: true });
+  const addColorPicker = () => {
+    const element = document.querySelector("button.scratchEyedropper");
     rateLimiter.abort(false);
-    if (addon.tab.editorMode !== "editor") continue;
     addon.tab.redux.initialize();
     const defaultColor = getColor(element);
     const saColorPicker = Object.assign(document.createElement("div"), {
@@ -57,7 +56,9 @@ export default async ({ addon, console, msg }) => {
       value: defaultColor || "#000000",
     });
     const saColorPickerText = Object.assign(document.createElement("input"), {
-      className: "sa-color-picker-text sa-color-picker-code-text",
+      className: addon.tab.scratchClass("input_input-form", {
+        others: "sa-color-picker-text sa-color-picker-code-text",
+      }),
       type: "text",
       pattern: "^#?([0-9a-fA-F]{3}){1,2}$",
       placeholder: msg("hex"),
@@ -74,5 +75,12 @@ export default async ({ addon, console, msg }) => {
     saColorPicker.appendChild(saColorPickerColor);
     saColorPicker.appendChild(saColorPickerText);
     element.parentElement.insertBefore(saColorPicker, element);
-  }
+  };
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
+  const originalShowEditor = ScratchBlocks.FieldColourSlider.prototype.showEditor_;
+  ScratchBlocks.FieldColourSlider.prototype.showEditor_ = function (...args) {
+    const r = originalShowEditor.call(this, ...args);
+    addColorPicker();
+    return r;
+  };
 };
