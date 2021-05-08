@@ -293,44 +293,24 @@ function inject(Blockly) {
   injected = true;
   let oldShow = Blockly.ContextMenu.show;
   Blockly.ContextMenu.show = function (event, items, rtl) {
-    let target = event.target;
-    let block = target.closest("[data-id]");
-    if (!block) {
-      // Thank you @GarboMuffin for this code:
-      // When right clicking on the boundaries of a block in the flyout,
-      // the click event can happen on a background rectangle and not on the actual block for some reason.
-      // In this case, the block group should immediately follow the rect.
-      if (target.tagName === "rect" && !target.classList.contains("blocklyMainBackground")) {
-        target = target.nextSibling;
-        block = target && target.closest("[data-id]");
-      }
-    }
-    if (block) {
-      block = Blockly.getMainWorkspace().getBlockById(block.dataset.id);
-      // Keep jumping to the parent block until we find a non-shadow block.
-      while (block && block.isShadow()) {
-        block = block.getParent();
-      }
-    }
+    const gesture = Blockly.mainWorkspace.currentGesture_;
+    const block = gesture.targetBlock_;
 
     let allItems = [];
-    scratchAddons.eventTargets.tab
-      .map((eventTarget) => eventTarget._blockContextMenu)
-      .filter((menuItems) => menuItems.length)
-      .forEach((menuItems) => (allItems = [...allItems, ...menuItems]));
+    scratchAddons.eventTargets.tab.forEach((eventTarget) => {
+      allItems.push(...eventTarget._blockContextMenu);
+    });
 
-    for (const { extra, callback } of allItems) {
-      const { workspace, blocks, flyout } = extra;
-      let injectMenu = false;
-      if (workspace && event.target.className.baseVal == "blocklyMainBackground") {
-        injectMenu = true;
-      }
-      if (block && blocks && !event.target.closest(".blocklyFlyout")) {
-        injectMenu = true;
-      }
-      if (block && flyout && event.target.closest(".blocklyFlyout")) {
-        injectMenu = true;
-      }
+    for (const { callback, workspace, blocks, flyout, comments } of allItems) {
+      let injectMenu =
+        // Workspace
+        (workspace && !block && !gesture.flyout_ && !gesture.startBubble_) ||
+        // Block in workspace
+        (blocks && block && !gesture.flyout_) ||
+        // Block in flyout
+        (flyout && gesture.flyout_) ||
+        // Comments
+        (comments && gesture.startBubble_);
       if (injectMenu) items = callback(items, block);
     }
 

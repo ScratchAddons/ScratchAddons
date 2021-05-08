@@ -25,7 +25,6 @@ export default class Tab extends Listenable {
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
-
     this._blockContextMenu = [];
   }
   /**
@@ -221,7 +220,7 @@ export default class Tab extends Listenable {
    * @param {function} callback Changes items in menu.
    * @param {object} opts - options.
    */
-  createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false } = {}) {
-    this._blockContextMenu.push({ callback, extra: { workspace, blocks, flyout } });
+  createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, comments = false } = {}) {
+    this._blockContextMenu.push({ callback, workspace, blocks, flyout, comments });
   }
 }
