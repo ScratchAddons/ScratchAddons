@@ -216,9 +216,9 @@ export default class Tab extends Listenable {
   }
 
   /**
-   * Creates a item in the editor context menu.
-   * @param {function} callback Changes items in menu.
-   * @param {object} opts - options.
+   * Creates an item in the editor Blockly context menu.
+   * @param {function} callback Returns new menu items.
+   * @param {object} conditions - Show context menu when one of these conditions meet.
    */
   createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, comments = false } = {}) {
     this._blockContextMenu.push({ callback, workspace, blocks, flyout, comments });
