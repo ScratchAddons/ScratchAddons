@@ -11,7 +11,7 @@ export default (filenames) =>
       const jsPromise = import(jsUrl);
       return fetch(htmlUrl)
         .then((resp) => resp.text())
-        .then((text) => new DOMParser().parseFromString(text, "text/html").querySelector("textarea").innerHTML)
+        .then((text) => new DOMParser().parseFromString(text, "text/html").querySelector("template").innerHTML)
         .then((template) => jsPromise.then((esm) => esm.default({ template })));
     })
   );
