@@ -5,7 +5,7 @@ export default async function ({ addon, console, msg }) {
       let cancelMessage = null;
       if (
         addon.settings.get("projectsharing") &&
-        e.target.closest("[class*='share-button_share-button'], .banner-button")
+        e.target.closest("[class*='share-button_share-button']:not([class*='is-shared']), .banner-button")
       ) {
         cancelMessage = msg("share");
       } else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
