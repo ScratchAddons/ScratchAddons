@@ -24,11 +24,7 @@
 
     // Scratch-defined
     "Scratch": "readonly",
-    "Blockly": "readonly",
-
-    // Non-standard API
-    "Clipboard": "readonly",
-    "ClipboardItem": "readonly"
+    "Blockly": "readonly"
   },
   "extends": "eslint:recommended",
   "rules": {

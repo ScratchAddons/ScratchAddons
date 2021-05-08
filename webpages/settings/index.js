@@ -459,7 +459,7 @@ const CategorySelector = Vue.extend({
 });
 Vue.component("category-selector", CategorySelector);
 
-const browserLevelPermissions = ["notifications", "clipboardWrite"];
+const browserLevelPermissions = ["notifications"];
 let grantedOptionalPermissions = [];
 const updateGrantedPermissions = () =>
   chrome.permissions.getAll(({ permissions }) => {

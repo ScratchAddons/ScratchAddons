@@ -1,7 +1,6 @@
 import Trap from "./Trap.js";
 import ReduxHandler from "./ReduxHandler.js";
 import Listenable from "../common/Listenable.js";
-import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import getWorkerScript from "./worker.js";
 
 const DATA_PNG = "data:image/png;base64,";
@@ -113,30 +112,6 @@ export default class Tab extends Listenable {
     if (split.includes("fullscreen")) return "fullscreen";
     if (split.includes("embed")) return "embed";
     return "projectpage";
-  }
-
-  /**
-   * Copies an PNG image.
-   * @param {string} dataURL - data url of the png image
-   * @returns {Promise}
-   */
-  copyImage(dataURL) {
-    if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError("Expected PNG data URL"));
-    if (typeof Clipboard.prototype.write === "function") {
-      // Chrome
-      const blob = dataURLToBlob(dataURL);
-      const items = [
-        new ClipboardItem({
-          "image/png": blob,
-        }),
-      ];
-      return navigator.clipboard.write(items);
-    } else {
-      // Firefox needs Content Script
-      return scratchAddons.methods.copyImage(dataURL).catch((err) => {
-        return Promise.reject(new Error(`Error inside clipboard handler: ${err}`));
-      });
-    }
   }
 
   /**

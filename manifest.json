@@ -49,7 +49,7 @@
     "contextMenus",
     "alarms"
   ],
-  "optional_permissions": ["notifications", "clipboardWrite"],
+  "optional_permissions": ["notifications"],
   "web_accessible_resources": [
     "content-scripts/inject/*",
     "addon-api/*",

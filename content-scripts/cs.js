@@ -55,19 +55,6 @@ const cs = {
   requestMsgCount() {
     chrome.runtime.sendMessage("getMsgCount");
   },
-  copyImage(dataURL) {
-    // Firefox only
-    return new Promise((resolve, reject) => {
-      browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
-        (res) => {
-          resolve();
-        },
-        (res) => {
-          reject(res.toString());
-        }
-      );
-    });
-  },
 };
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
 
@@ -390,7 +377,7 @@ const showBanner = () => {
           /*
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeatureName") })
-            .outerHTML, 
+            .outerHTML,
           */
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings",
