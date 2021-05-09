@@ -13,7 +13,7 @@ export default async function ({ addon, console, msg }) {
       } else if (addon.settings.get("joiningstudio") && e.target.closest("a.accept")) {
         cancelMessage = msg("joinstudio");
       } else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
-        cancelMessage = msg("closetopic")
+        cancelMessage = msg("closetopic");
       }
       if (cancelMessage !== null) {
         if (!confirm(cancelMessage)) {
