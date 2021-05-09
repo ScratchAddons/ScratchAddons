@@ -34,9 +34,15 @@
       "id": "joiningstudio",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Confirm closing topics",
+      "id": "closingtopic",
+      "type": "boolean",
+      "default": false
     }
   ],
-  "tags": ["community", "recommended", "studios"],
+  "tags": ["community", "recommended", "studios", "forums"],
   "enabledByDefault": false,
   "l10n": true
 }
