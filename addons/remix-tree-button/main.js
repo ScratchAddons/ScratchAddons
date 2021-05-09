@@ -4,6 +4,7 @@ export default async function ({ addon, global, console, msg }) {
     if (document.querySelector("#scratchAddonsRemixTreeBtn")) return;
     if (addon.tab.editorMode === "projectpage") {
       addon.tab.waitForElement(".flex-row.subactions").then(() => {
+        if (!document.querySelector(".copy-link-button")) return;
         const subactions = document.querySelector(".flex-row.subactions").querySelector(".action-buttons");
 
         const remixtree = document.createElement("button");

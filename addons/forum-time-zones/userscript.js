@@ -18,7 +18,7 @@ export default async function ({ addon, _global, _console }) {
     const localTimeRepr = new Date(instantTimeRepr.toLocaleString("en-US", { timeZone }));
     // Due to daytime saving, diff between two Date is inaccurate unless we both use timezoned Date
     // Math.min makes sure nobody gets posts from tomorrow
-    const localDateDiff = Math.min(localTimeRepr.getDate() - localCurrentTimeRepr.getDate(), 0);
+    const localDateDiff = Math.min(Math.floor(localTimeRepr / 8.64e7) - Math.floor(localCurrentTimeRepr / 8.64e7), 0);
     const timePart = localTimeRepr.toLocaleTimeString("en-GB");
     switch (localDateDiff) {
       case 0:

@@ -1,5 +1,6 @@
-.postfootright {
-  padding-bottom: 4px; /* so that the buttons have some space */
+.postfootright ul {
+  line-height: 28px; /* so that the buttons have some space */
+  padding-top: 5px;
 }
 
 .my-ocular-reaction-button {
@@ -8,6 +9,8 @@
   background-color: #f2f2f2;
   margin: 0 5px;
   padding: 4px;
+  display: inline-block; /* don't wrap in the middle of a reaction */
+  line-height: normal;
   border-radius: 6px;
   box-shadow: 0 0 2px #28a5da;
   opacity: 1;

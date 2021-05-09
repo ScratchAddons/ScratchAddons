@@ -130,6 +130,7 @@ async function getAddonData({ addonId, manifest, url }) {
 async function getContentScriptInfo(url) {
   const data = {
     url,
+    httpStatusCode: null, // Set by webRequest onResponseStarted listener
     l10njson: getL10NURLs(),
     globalState: {},
     addonsWithUserscripts: [],
@@ -209,6 +210,20 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     });
   }
 });
+
+chrome.webRequest.onResponseStarted.addListener(
+  (request) => {
+    const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
+    const cacheEntry = csInfoCache.get(identity);
+    if (cacheEntry && cacheEntry.loading === false) {
+      cacheEntry.info.httpStatusCode = request.statusCode;
+    }
+  },
+  {
+    urls: ["https://scratch.mit.edu/*"],
+    types: ["main_frame"],
+  }
+);
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (!request.contentScriptReady) return;
