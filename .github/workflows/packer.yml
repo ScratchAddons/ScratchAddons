@@ -2,7 +2,7 @@ name: Pack extensions
 on:
   workflow_dispatch:
 jobs:
-  transifex:
+  pack:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
