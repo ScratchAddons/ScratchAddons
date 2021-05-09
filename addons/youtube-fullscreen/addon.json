@@ -14,7 +14,8 @@
       "runAtComplete": false
     }
   ],
-  "tags": ["community", "forums", "recommended"],
+  "dynamicEnable": true,
+  "tags": ["community", "forums"],
   "enabledByDefault": false,
   "l10n": true
 }

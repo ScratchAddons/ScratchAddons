@@ -1,11 +1,10 @@
 import Trap from "./Trap.js";
 import ReduxHandler from "./ReduxHandler.js";
 import Listenable from "../common/Listenable.js";
-import dataURLToBlob from "../../libraries/data-url-to-blob.js";
+import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import getWorkerScript from "./worker.js";
 
 const DATA_PNG = "data:image/png;base64,";
-const template = document.getElementById("scratch-addons");
 
 /**
  * APIs specific to userscripts.
@@ -45,32 +44,62 @@ export default class Tab extends Listenable {
    * @param {string} selector - argument passed to querySelector.
    * @param {object} opts - options.
    * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
+   * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
+   * @param {function=} opts.reduxCondition - A function that returns whether to resolve the selector or not.
+   * Use this as an optimization and do not rely on the behavior.
+   * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
+   * Use this as an optimization and do not rely on the behavior.
    * @returns {Promise<Element>} - element found.
    */
   waitForElement(selector, opts = {}) {
     const markAsSeen = !!opts.markAsSeen;
-    const firstQuery = document.querySelectorAll(selector);
-    for (const element of firstQuery) {
-      if (this._waitForElementSet.has(element)) continue;
-      if (markAsSeen) this._waitForElementSet.add(element);
-      return Promise.resolve(element);
+    if (!opts.condition || opts.condition()) {
+      const firstQuery = document.querySelectorAll(selector);
+      for (const element of firstQuery) {
+        if (this._waitForElementSet.has(element)) continue;
+        if (markAsSeen) this._waitForElementSet.add(element);
+        return Promise.resolve(element);
+      }
     }
-    return new Promise((resolve) =>
-      new MutationObserver((mutationsList, observer) => {
-        const elements = document.querySelectorAll(selector);
-        for (const element of elements) {
-          if (this._waitForElementSet.has(element)) continue;
-          observer.disconnect();
-          resolve(element);
-          if (markAsSeen) this._waitForElementSet.add(element);
-          break;
+    const { reduxCondition, condition } = opts;
+    let listener;
+    let combinedCondition = () => {
+      if (condition && !condition()) return false;
+      if (this.redux.state) {
+        if (reduxCondition && !reduxCondition(this.redux.state)) return false;
+      }
+      // NOTE: this may reach sooner than expected, if redux state is not available
+      // because of timing issues. However this is just an optimization! It's fine
+      // if it runs a little earlier. Just don't error out.
+      return true;
+    };
+    if (opts.reduxEvents) {
+      const oldCondition = combinedCondition;
+      let satisfied = false;
+      combinedCondition = () => {
+        if (oldCondition && !oldCondition()) return false;
+        return satisfied;
+      };
+      listener = ({ detail }) => {
+        if (opts.reduxEvents.includes(detail.action.type)) {
+          satisfied = true;
         }
-      }).observe(document.documentElement, {
-        attributes: false,
-        childList: true,
-        subtree: true,
-      })
-    );
+      };
+      this.redux.initialize();
+      this.redux.addEventListener("statechanged", listener);
+    }
+    const promise = scratchAddons.sharedObserver.watch({
+      query: selector,
+      seen: markAsSeen ? this._waitForElementSet : null,
+      condition: combinedCondition,
+    });
+    if (listener) {
+      promise.then((match) => {
+        this.redux.removeEventListener("statechanged", listener);
+        return match;
+      });
+    }
+    return promise;
   }
   /**
    * editor mode (or null for non-editors).
@@ -104,12 +133,8 @@ export default class Tab extends Listenable {
       return navigator.clipboard.write(items);
     } else {
       // Firefox needs Content Script
-      template.setAttribute("data-clipboard-image", dataURL);
-      return this.waitForElement("[data-clipboard]").then((el) => {
-        const attr = el.dataset.clipboard;
-        el.removeAttribute("data-clipboard");
-        if (attr === "success") return Promise.resolve();
-        return Promise.reject(new Error(`Error inside clipboard handler: ${attr}`));
+      return scratchAddons.methods.copyImage(dataURL).catch((err) => {
+        return Promise.reject(new Error(`Error inside clipboard handler: ${err}`));
       });
     }
   }
@@ -193,5 +218,11 @@ export default class Tab extends Listenable {
     // Sanitize just in case
     res = res.replace(/"/g, "");
     return res;
+  }
+
+  displayNoneWhileDisabled(el, { display = "" } = {}) {
+    el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
+      g[1].toUpperCase()
+    )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
   }
 }

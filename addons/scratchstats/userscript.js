@@ -74,16 +74,20 @@ export default async function ({ addon, msg, console }) {
           msg("most-views")
         )
       );
-      fetch(`https://scratchdb.lefty.one/v2/user/history/followers/${data.sys_id}/?range=999`)
+      fetch(`https://scratchdb.lefty.one/v3/user/graph/${username}/followers?range=364&segment=6`)
         .then(async function (response) {
-          const historyData = (await response.json()).history;
-          await addon.tab.loadScript(addon.self.lib + "/Chart.min.js");
+          const historyData = await response.json();
+          historyData.pop();
+          await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/Chart.min.js");
           const canvasContainer = document.createElement("div");
           stats.appendChild(canvasContainer);
           canvasContainer.style.position = "relative";
           canvasContainer.style.height = "400px";
           const canvas = document.createElement("canvas");
           canvasContainer.appendChild(canvas);
+          const stepAvg = historyData.reduce((acc, cur) => acc + cur.value / historyData.length, 0);
+          const stepLog = Math.log10(stepAvg);
+          const stepSize = Math.pow(10, Math.max(Math.round(stepLog) - 1, 1));
           new Chart(canvas, {
             type: "scatter",
             data: {
@@ -112,6 +116,13 @@ export default async function ({ addon, msg, console }) {
                   {
                     ticks: {
                       callback: (x) => new Date(x).toDateString(),
+                    },
+                  },
+                ],
+                yAxes: [
+                  {
+                    ticks: {
+                      stepSize,
                     },
                   },
                 ],

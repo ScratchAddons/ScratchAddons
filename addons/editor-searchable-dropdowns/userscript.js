@@ -14,6 +14,8 @@ export default async function ({ addon, global, console }) {
     blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
 
     const searchBar = document.createElement("input");
+    addon.tab.displayNoneWhileDisabled(searchBar);
+
     searchBar.type = "text";
     searchBar.addEventListener("input", handleInputEvent);
     searchBar.addEventListener("keydown", handleKeyDownEvent);
@@ -171,7 +173,9 @@ export default async function ({ addon, global, console }) {
   }
 
   function findBlocklyDropDownDiv() {
-    return addon.tab.waitForElement(".blocklyDropDownDiv").then(() => document.querySelector(".blocklyDropDownDiv"));
+    return addon.tab.waitForElement(".blocklyDropDownDiv", {
+      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 0 && !state.scratchGui.mode.isPlayerOnly,
+    });
   }
 
   blocklyDropDownDiv = await findBlocklyDropDownDiv();
