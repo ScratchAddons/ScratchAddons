@@ -1,0 +1,25 @@
+name: Pack extensions
+on:
+  workflow_dispatch:
+jobs:
+  transifex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - name: Pack extensions for Firefox
+        uses: ScratchAddons/packer-script@main
+        with:
+          ENVIRONMENT: firefox
+      - name: Pack extensions for Chrome
+        uses: ScratchAddons/packer-script@main
+        with:
+          ENVIRONMENT: chrome
+      - name: Upload packed extensions
+        uses: actions/upload-artifact@v2
+        with:
+          name: Packed Extensions
+          path: .dist/*.zip
