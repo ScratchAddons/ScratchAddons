@@ -12,14 +12,21 @@ jobs:
           node-version: 14.x
       - name: Pack extensions for Firefox
         uses: ScratchAddons/packer-script@main
+        id: firefox
         env:
           ENVIRONMENT: firefox
-      - name: Pack extensions for Chrome
-        uses: ScratchAddons/packer-script@main
-        env:
-          ENVIRONMENT: chrome
-      - name: Upload packed extensions
+      - name: Upload packed extensions for Firefox
         uses: actions/upload-artifact@v2
         with:
-          name: Packed Extensions (zip)
-          path: .dist/*.zip
+          name: ${{ steps.firefox.outputs.filename }}
+          path: .dist/extracted/*
+      - name: Pack extensions for Chrome
+        uses: ScratchAddons/packer-script@main
+        id: chrome
+        env:
+          ENVIRONMENT: chrome
+      - name: Upload packed extensions for Chrome
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.chrome.outputs.filename }}
+          path: .dist/extracted/*
