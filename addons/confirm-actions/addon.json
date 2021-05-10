@@ -36,7 +36,7 @@
       "default": false
     },
     {
-      "name": "Confirm closing topics",
+      "name": "Confirm closing forum topics",
       "id": "closingtopic",
       "type": "boolean",
       "default": false
