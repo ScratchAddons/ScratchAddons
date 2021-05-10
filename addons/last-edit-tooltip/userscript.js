@@ -1,6 +1,8 @@
 export default async function ({ addon, global, console, msg }) {
+  const headers = new Headers();
+  if (addon.auth.xToken) headers.set("X-Token", addon.auth.xToken);
   const data = await (
-    await fetch("https://api.scratch.mit.edu" + location.pathname.match(/\/projects\/[0-9]+/g)[0])
+    await fetch("https://api.scratch.mit.edu" + location.pathname.match(/\/projects\/[0-9]+/g)[0], { headers })
   ).json();
 
   if (!data.history) return;
