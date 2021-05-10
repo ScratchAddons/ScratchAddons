@@ -83,4 +83,4 @@ If you found a bug, or want to suggest new features, please use the [issues tab]
 
 Scratch Addons is licensed under the terms of the [GNU General Public License v3.0](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE).
 
-Other third-party libraries used are listed on [/libraries/README.md](https://github.com/ScratchAddons/ScratchAddons/tree/master/libraries#readme).
+Other third-party libraries used are listed on https://github.com/ScratchAddons/ScratchAddons/blob/master/libraries/CREDITS.md.

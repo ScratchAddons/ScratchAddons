@@ -1,11 +1,7 @@
 function injectRedux() {
   window.__scratchAddonsRedux = {};
   if (typeof window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ !== "undefined") {
-    return console.warn(
-      "Redux feature is disabled due to conflict. \
-Some addons will not work. Uninstall other browser extensions to \
-fix this warning."
-    );
+    return console.warn("Redux feature is disabled due to conflict.");
   }
 
   // ReDucks: Redux ducktyped
@@ -24,18 +20,17 @@ fix this warning."
     }
 
     static applyMiddleware(...middlewares) {
-      return (createStore) =>
-        (...createStoreArgs) => {
-          const store = createStore(...createStoreArgs);
-          let { dispatch } = store;
-          const api = {
-            getState: store.getState,
-            dispatch: (action) => dispatch(action),
-          };
-          const initialized = middlewares.map((middleware) => middleware(api));
-          dispatch = ReDucks.compose(...initialized)(store.dispatch);
-          return Object.assign({}, store, { dispatch });
+      return (createStore) => (...createStoreArgs) => {
+        const store = createStore(...createStoreArgs);
+        let { dispatch } = store;
+        const api = {
+          getState: store.getState,
+          dispatch: (action) => dispatch(action),
         };
+        const initialized = middlewares.map((middleware) => middleware(api));
+        dispatch = ReDucks.compose(...initialized)(store.dispatch);
+        return Object.assign({}, store, { dispatch });
+      };
     }
   }
 
