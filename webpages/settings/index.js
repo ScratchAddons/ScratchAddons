@@ -459,7 +459,8 @@ const CategorySelector = Vue.extend({
 });
 Vue.component("category-selector", CategorySelector);
 
-const browserLevelPermissions = ["notifications", "clipboardWrite"];
+const browserLevelPermissions = ["notifications"];
+if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
 let grantedOptionalPermissions = [];
 const updateGrantedPermissions = () =>
   chrome.permissions.getAll(({ permissions }) => {
@@ -486,7 +487,10 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
-const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
+const promisify =
+  (callbackFn) =>
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
 
 let handleConfirmClicked = null;
 
