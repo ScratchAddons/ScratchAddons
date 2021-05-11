@@ -1830,7 +1830,7 @@ export default class DevTools {
 
     let options = [];
 
-    let t = Blockly.getMainWorkspace().getToolbox();
+    let t = this.utils.getWorkspace().getToolbox();
 
     let blocks = t.flyout_.getWorkspace().getTopBlocks();
     // 107 blocks, not in order... but we can sort by y value or description right :)
