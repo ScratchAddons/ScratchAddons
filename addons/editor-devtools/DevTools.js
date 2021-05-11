@@ -1255,9 +1255,13 @@ export default class DevTools {
     }
   }
 
-  eventMouseMove(e) {
+  updateMousePosition(e) {
     this.mouseXY.x = e.clientX;
     this.mouseXY.y = e.clientY;
+  }
+
+  eventMouseMove(e) {
+    this.updateMousePosition(e);
   }
 
   eventKeyDown(e) {
@@ -1351,6 +1355,8 @@ export default class DevTools {
   }
 
   eventMouseDown(e) {
+    this.updateMousePosition(e);
+
     if (this.ddOut && this.ddOut.classList.contains("vis") && !e.target.closest("#s3devDDOut")) {
       // If we click outside the dropdown, then instigate the hide code...
       this.hideDropDown();
@@ -1640,6 +1646,8 @@ export default class DevTools {
   }
 
   eventMouseUp(e) {
+    this.updateMousePosition(e);
+
     if (e.button === 1 && e.target.closest("svg.blocklySvg")) {
       // On Linux systems, middle click is often treated as a paste.
       // We do not want this as we assign our own functionality to middle mouse.
