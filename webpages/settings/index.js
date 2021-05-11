@@ -487,7 +487,10 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
-const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
+const promisify =
+  (callbackFn) =>
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
 
 let handleConfirmClicked = null;
 
