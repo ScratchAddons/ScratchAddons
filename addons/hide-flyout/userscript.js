@@ -3,7 +3,7 @@ export default async function ({ addon, global, console }) {
   let lockDisplay = null;
   let flyOut = null;
   let scrollBar = null;
-  let toggle = false;
+  let toggle = true;
   let selectedCategory = null;
   let toggleSetting = addon.settings.get("toggle");
   let flyoutLock = false;
@@ -29,17 +29,7 @@ export default async function ({ addon, global, console }) {
   }
   function onmouseleave(e, speed = getSpeedValue()) {
     // If we go behind the flyout or the user has locked it, let's return
-    if (
-      (toggleSetting !== "cathover" &&
-        e &&
-        e.clientX <= scrollBar.getBoundingClientRect().left &&
-        document.querySelector(".gui").dir === "ltr") ||
-      (toggleSetting !== "cathover" &&
-        e &&
-        e.clientX >= scrollBar.getBoundingClientRect().right &&
-        document.querySelector(".gui").dir === "rtl") ||
-      flyoutLock
-    )
+    if ((toggleSetting !== "cathover" && e && e.clientX <= scrollBar.getBoundingClientRect().left) || flyoutLock)
       return;
     flyOut.classList.add("sa-flyoutClose");
     flyOut.style.transitionDuration = `${speed}s`;
@@ -48,10 +38,6 @@ export default async function ({ addon, global, console }) {
     lockDisplay.classList.add("sa-flyoutClose");
     lockDisplay.style.transitionDuration = `${speed}s`;
     setTimeout(() => Blockly.getMainWorkspace().recordCachedAreas(), speed * 1000);
-    if (toggleSetting === "category") {
-      for (let category of document.querySelectorAll(".scratchCategoryMenuItem.categorySelected"))
-        category.classList.remove("categorySelected");
-    }
   }
 
   let didOneTimeSetup = false;
@@ -69,8 +55,8 @@ export default async function ({ addon, global, console }) {
           lockDisplay.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
           placeHolderDiv.style.display = e.detail.action.activeTabIndex === 0 ? "block" : "none";
           if (e.detail.action.activeTabIndex === 0) {
-            onmouseleave(null, 0);
-            toggle = false;
+            onmouseenter(0);
+            toggle = true;
           }
           break;
         // Event casted when you switch between tabs
@@ -81,7 +67,7 @@ export default async function ({ addon, global, console }) {
           break;
       }
     });
-    if (toggleSetting === "category") {
+    if (toggleSetting === "category" || toggleSetting === "cathover") {
       (async () => {
         while (true) {
           let category = await addon.tab.waitForElement(".scratchCategoryMenuItem", { markAsSeen: true });
@@ -98,6 +84,10 @@ export default async function ({ addon, global, console }) {
             }
             if (toggleSetting === "category") toggle = !toggle;
           };
+          if (toggleSetting === "cathover") {
+            category.onmouseover = onmouseenter;
+            flyOut.onmouseleave = onmouseleave;
+          }
         }
       })();
     }
@@ -132,21 +122,12 @@ export default async function ({ addon, global, console }) {
     // Only append if we don't have "categoryclick" on
     if (toggleSetting === "hover") tabs.appendChild(lockDisplay);
 
-    let blocklyDiv = await addon.tab.waitForElement(".injectionDiv");
-
     if (toggleSetting === "hover") {
       placeHolderDiv.onmouseenter = onmouseenter;
       blocklySvg.onmouseenter = onmouseleave;
     }
 
-    if (toggleSetting === "cathover") {
-      let categoryMenu = await addon.tab.waitForElement(".blocklyToolboxDiv");
-      categoryMenu.onmouseenter = onmouseenter;
-      blocklySvg.onmouseenter = onmouseleave;
-      blocklyDiv.onmouseleave = onmouseleave;
-    }
-
-    onmouseleave(null, 0);
+    if (toggleSetting === "cathover") onmouseleave(null, 0);
 
     doOneTimeSetup();
   }
