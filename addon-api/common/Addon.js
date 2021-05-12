@@ -5,11 +5,7 @@ import Settings from "../common/Settings.js";
 
 /**
  * An addon.
- * @property {object} self - the addon's metadata.
- * @property {string} self.id - the addon's ID.
- * @property {string} self.dir - the directory the addon is stored in.
- * @property {string} self.lib - the directory libraries are stored in.
- * @property {string} self.browser - the browser used.
+ * @property {Self} self
  * @property {Auth} auth
  * @property {Account} account
  * @property {Settings} settings

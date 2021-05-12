@@ -11,7 +11,13 @@ export default async function ({ addon, global, console }) {
 
   if (addon.tab.clientVersion === "scratch-www") {
     while (true) {
-      const el = await addon.tab.waitForElement("div#navigation div.inner ul:not(.production)", { markAsSeen: true });
+      const el = await addon.tab.waitForElement("div#navigation div.inner ul:not(.production)", {
+        markAsSeen: true,
+        reduxCondition: (state) => {
+          if (!state.scratchGui) return true;
+          return state.scratchGui.mode.isPlayerOnly;
+        },
+      });
       if (addon.settings.get("removeIdeasBtn")) el.getElementsByTagName("li")[3].remove();
       el.insertBefore(link, el.getElementsByTagName("li")[3]);
     }

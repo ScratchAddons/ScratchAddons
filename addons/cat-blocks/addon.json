@@ -5,6 +5,9 @@
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "GarboMuffin"
     }
   ],
   "userscripts": [
@@ -13,7 +16,24 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["easterEgg"],
+  "info": [
+    {
+      "type": "warning",
+      "text": "The \"Watch mouse cursor\" option may impact performance when the editor is open.",
+      "id": "watch"
+    }
+  ],
+  "settings": [
+    {
+      "id": "watch",
+      "name": "Watch mouse cursor",
+      "default": false,
+      "type": "boolean"
+    }
+  ],
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.14.0",
   "enabledByDefault": false,
+  "libraries": ["scratch-blocks"],
   "l10n": true
 }

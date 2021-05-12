@@ -18,12 +18,15 @@
       "allowTransparency": true
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
   "userstyles": [
     {
       "url": "main.css",
       "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
-  "tags": ["forums", "theme"],
+  "tags": ["community", "forums", "theme"],
   "l10n": true
 }
