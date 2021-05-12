@@ -1,7 +1,6 @@
 {
   "name": "Fix unexpected script running",
   "description": "Fixes a bug in the Scratch editor that unexpectedly runs scripts when placing pasted or duplicated blocks inside of them.",
-  "tags": ["editor", "codeEditor", "beta"],
   "credits": [
     {
       "name": "lisa_wolfgang",
@@ -12,18 +11,12 @@
       "link": "https://github.com/apple502j"
     }
   ],
-  "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/projects/*"]
-    }
-  ],
-  "info": [
-    {
-      "type": "notice",
-      "text": "Reload the editor after enabling/disabling this addon.",
-      "id": "reloadNotice"
     }
   ],
   "settings": [
@@ -34,5 +27,7 @@
       "default": false
     }
   ],
+  "tags": ["editor", "codeEditor", "beta"],
+  "enabledByDefault": false,
   "l10n": true
 }
