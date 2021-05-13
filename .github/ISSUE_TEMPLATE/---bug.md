@@ -40,7 +40,7 @@ Return to the last page: https://github.com/ScratchAddons/ScratchAddons/issues/n
 
 <!-- Include a description of what actually happened. -->
 
-### Screenshot
+### Screenshots
 
 <!-- If applicable, add screenshots to help explain your problem. -->
 
