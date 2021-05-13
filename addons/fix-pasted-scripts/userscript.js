@@ -1,20 +1,43 @@
-// This addon works by modifying scratch-blocks to not react to clicking scripts.
+// This addon works by modifying the VM to not react to clicking scripts.
 
 export default async function ({ addon, global, console }) {
-  const BlocklyInstance = await addon.tab.traps.getBlockly();
-  const originalObject = BlocklyInstance.BlockSvg.prototype.onMouseDown_;
-  var fullDisable = addon.settings.get("fullDisable");
+  const vm = addon.tab.traps.vm;
 
-  BlocklyInstance.BlockSvg.prototype.onMouseDown_ = function (e) {
-    if (!addon.self.disabled && (fullDisable || (this.workspace && this.workspace.isDragging()))) {
-      return
+  const originalBlocklyListen = vm.editingTarget.blocks.constructor.prototype.blocklyListen;
+  var enabled = true;
+  var runMode = addon.settings.get("runMode");
+  var wasJustDragged = false;
+  var duplicateBehavior = false;
+
+  const newBlocklyListen = function (e) {
+    // Checks if the Blockly event is a script being clicked
+    if (e.element === "stackclick" && enabled) {
+      // Completely disable all script clicking if the addon setting is enabled
+      if (runMode == 'fullDisable' || (runMode == 'ctrl' && !e.ctrlKey)) {
+        return;
+        // Checks if the script was duplicated/pasted -- if so, disable the response (running the script) for this event
+      } else if (!(wasJustDragged && duplicateBehavior)) {
+        originalBlocklyListen.call(this, e);
+      }
+      wasJustDragged = false;
+      duplicateBehavior = false;
     } else {
-      return originalObject.call(this, e);
+      // Checks for the dragging event and logs it
+      if (e.type === "endDrag") {
+        wasJustDragged = true;
+        duplicateBehavior = false;
+      } else if (e.element === "selected" && e.type === "ui") {
+        duplicateBehavior = true;
+      }
+      originalBlocklyListen.call(this, e);
     }
   };
 
+  // Overwrite the old functions with our new ones
+  vm.editingTarget.blocks.constructor.prototype.blocklyListen = newBlocklyListen;
+
   // When the setting is toggled, update the variable that contains it
   addon.settings.addEventListener("change", function () {
-    fullDisable = addon.settings.get("fullDisable");
+    runMode = addon.settings.get("runMode");
   });
 }
