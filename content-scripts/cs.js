@@ -20,10 +20,7 @@ chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onRes
 
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
-const promisify =
-  (callbackFn) =>
-  (...args) =>
-    new Promise((resolve) => callbackFn(...args, resolve));
+const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
 
 let _page_ = null;
 let globalState = null;
@@ -70,6 +67,17 @@ const cs = {
         }
       );
     });
+  },
+  getAddonStorage(addonId) {
+    return new Promise((resolve, reject) => chrome.runtime.sendMessage({ getAddonStorage: { addonId } }, resolve));
+  },
+  setAddonStorage(addonId, storageDiff) {
+    return new Promise((resolve, reject) =>
+      chrome.runtime.sendMessage({ setAddonStorage: { addonId, storageDiff } }, resolve)
+    );
+  },
+  clearAddonStorage(addonId) {
+    return new Promise((resolve, reject) => chrome.runtime.sendMessage({ clearAddonStorage: { addonId } }, resolve));
   },
 };
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
@@ -393,7 +401,7 @@ const showBanner = () => {
           /*
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeatureName") })
-            .outerHTML, 
+            .outerHTML,
           */
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings",

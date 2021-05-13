@@ -8,6 +8,7 @@ scratchAddons.eventTargets = {
   settings: [],
   tab: [],
   self: [],
+  storage: [],
 };
 
 const pendingPromises = {};
@@ -138,6 +139,15 @@ function onDataReady() {
   };
   scratchAddons.methods.copyImage = async (dataURL) => {
     return _cs_.copyImage(dataURL);
+  };
+  scratchAddons.methods.getAddonStorage = (addonId) => {
+    return _cs_.getAddonStorage(addonId);
+  };
+  scratchAddons.methods.setAddonStorage = (addonId, storageDiff) => {
+    return _cs_.setAddonStorage(addonId, storageDiff);
+  };
+  scratchAddons.methods.clearAddonStorage = (addonId) => {
+    return _cs_.clearAddonStorage(addonId);
   };
 
   scratchAddons.sharedObserver = new SharedObserver();
