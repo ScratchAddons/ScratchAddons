@@ -514,7 +514,8 @@ if (isProfile || isStudioComments || isProject) {
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
   window.addEventListener("load", () => {
-    if (isProfile || isStudioComments) {
+    const isScratchWww = Boolean(document.querySelector("meta[name='format-detection']"));
+    if (isProfile || (isStudioComments && !isScratchWww)) {
       window.addEventListener(
         "click",
         (e) => {
@@ -558,7 +559,7 @@ if (isProfile || isStudioComments || isProject) {
         },
         { capture: true }
       );
-    } else if (isProject) {
+    } else if (isProject || (isStudioComments && isScratchWww)) {
       // For projects, we want to be careful not to hurt performance.
       // Let's capture the event in the comments container instead
       // of the whole window. There will be a new comment container
@@ -650,7 +651,7 @@ if (isProfile || isStudioComments || isProject) {
         );
 
       const check = async () => {
-        if (getEditorMode() === "projectpage") {
+        if (isStudioComments || getEditorMode() === "projectpage") {
           await waitForContainer();
           addListener();
         } else {
@@ -658,7 +659,7 @@ if (isProfile || isStudioComments || isProject) {
         }
       };
       check();
-      csUrlObserver.addEventListener("change", (e) => check());
+      if (isProject) csUrlObserver.addEventListener("change", (e) => check());
     }
   });
 }
