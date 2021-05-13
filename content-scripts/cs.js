@@ -513,6 +513,7 @@ if (isProfile || isStudioComments || isProject) {
   const sendAnywayMsg = chrome.i18n.getMessage("captureCommentPostAnyway");
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
+  window.addEventListener("load", () => {
   if (isProfile || isStudioComments) {
     window.addEventListener(
       "click",
@@ -656,7 +657,8 @@ if (isProfile || isStudioComments || isProject) {
         observer?.disconnect();
       }
     };
-    window.addEventListener("load", check);
+    check();
     csUrlObserver.addEventListener("change", (e) => check());
   }
+  });
 }
