@@ -187,7 +187,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     scratchAddons.localEvents.dispatchEvent(new CustomEvent("csInfoCacheUpdated"));
   },
   {
-    urls: ["https://scratch.mit.edu/*"],
+    urls: ["https://scratch.mit.edu/*","http://localhost:8333/*"],
     types: ["main_frame", "sub_frame"],
   }
 );
@@ -220,7 +220,7 @@ chrome.webRequest.onResponseStarted.addListener(
     }
   },
   {
-    urls: ["https://scratch.mit.edu/*"],
+    urls: ["https://scratch.mit.edu/*","http://localhost:8333/*"],
     types: ["main_frame"],
   }
 );
@@ -307,7 +307,7 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
   const originPath = parsedOrigin + parsedPathname;
   const matchURL = _scratchDomainImplied ? parsedPathname : originPath;
   const scratchOrigin = "https://scratch.mit.edu";
-  const isScratchOrigin = parsedOrigin === scratchOrigin;
+  const isScratchOrigin = true || parsedOrigin === scratchOrigin;
   // "*" is used for any URL on Scratch origin
   if (matches === "*") return isScratchOrigin;
   // matches becomes RegExp if it is a string that starts with ^
@@ -346,6 +346,7 @@ function urlMatchesLegacyPattern(pattern, urlUrl) {
     // shift() removes the first item of an array, and returns it
     const patternItem = patternPath.shift();
     const urlItem = urlPath.shift();
+    if (patternItem === "studios_www" && urlItem === "studios-playground") continue;
     if (patternItem !== urlItem && patternItem !== "*") return false;
   }
   return true;

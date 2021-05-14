@@ -1,7 +1,7 @@
 try {
-  if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
+  //if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
 } catch {
-  throw "Scratch Addons: not first party iframe";
+  //throw "Scratch Addons: not first party iframe";
 }
 
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
@@ -76,11 +76,16 @@ Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkI
 
 const pageComlinkScript = document.createElement("script");
 pageComlinkScript.src = chrome.runtime.getURL("libraries/thirdparty/cs/comlink.js");
-document.documentElement.appendChild(pageComlinkScript);
+
+
+pageComlinkScript.onload = () => {
 
 const moduleScript = document.createElement("script");
 moduleScript.type = "module";
 moduleScript.src = chrome.runtime.getURL("content-scripts/inject/module.js");
+};
+
+document.documentElement.appendChild(pageComlinkScript);
 
 (async () => {
   await new Promise((resolve) => {

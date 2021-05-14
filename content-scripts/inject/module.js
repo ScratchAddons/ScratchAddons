@@ -17,7 +17,7 @@ const comlinkIframe1 = document.getElementById("scratchaddons-iframe-1");
 const comlinkIframe2 = document.getElementById("scratchaddons-iframe-2");
 const comlinkIframe3 = document.getElementById("scratchaddons-iframe-3");
 const comlinkIframe4 = document.getElementById("scratchaddons-iframe-4");
-const _cs_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe2.contentWindow, comlinkIframe1.contentWindow));
+const _cs_ = window.Comlink.wrap(Comlink.windowEndpoint(comlinkIframe2.contentWindow, comlinkIframe1.contentWindow));
 
 const page = {
   _globalState: null,
