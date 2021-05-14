@@ -77,13 +77,10 @@ Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkI
 const pageComlinkScript = document.createElement("script");
 pageComlinkScript.src = chrome.runtime.getURL("libraries/thirdparty/cs/comlink.js");
 
-
-pageComlinkScript.onload = () => {
-
 const moduleScript = document.createElement("script");
 moduleScript.type = "module";
 moduleScript.src = chrome.runtime.getURL("content-scripts/inject/module.js");
-};
+
 
 document.documentElement.appendChild(pageComlinkScript);
 
