@@ -25,7 +25,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     }
   },
   {
-    urls: ["https://scratch.mit.edu/*", "https://api.scratch.mit.edu/*", "https://clouddata.scratch.mit.edu/*","http://localhost:8333/*"],
+    urls: ["https://scratch.mit.edu/*", "https://api.scratch.mit.edu/*", "https://clouddata.scratch.mit.edu/*"],
     types: ["xmlhttprequest"],
   },
   extraInfoSpec
