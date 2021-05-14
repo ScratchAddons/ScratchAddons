@@ -228,7 +228,10 @@ function waitForDocumentHead() {
   else {
     return new Promise((resolve) => {
       const observer = new MutationObserver(() => {
-        if (document.head) resolve();
+        if (document.head) {
+          resolve();
+          observer.disconnect();
+        }
       });
       observer.observe(document.documentElement, { subtree: true, childList: true });
     });
