@@ -592,6 +592,7 @@ if (isProfile || isStudio || isProject) {
         document.querySelector(".comments-container, .studio-compose-container").addEventListener(
           "click",
           (e) => {
+            console.log(e);
             const path = e.composedPath();
             // When clicking the post button, e.path[0] might
             // be <span>Post</span> or the <button /> element
@@ -652,7 +653,10 @@ if (isProfile || isStudio || isProject) {
         );
 
       const check = async () => {
-        if (isStudio || getEditorMode() === "projectpage") {
+        if (
+          (isStudio && location.pathname.split("/")[3] === "comments") ||
+          (isProject && getEditorMode() === "projectpage")
+        ) {
           await waitForContainer();
           addListener();
         } else {
