@@ -15,7 +15,7 @@ async function commentLoader(addon, heightControl, selector, isNewStudioComment)
 }
 
 export default async function ({ addon, global, console }) {
-  if (window.location.pathname.split("/")[1].startsWith("studios") && addon.settings.get("studioScroll")) {
+  if (window.location.pathname.split("/")[1] === "studios" && addon.settings.get("studioScroll")) {
     if (addon.tab.clientVersion === "scratchr2") {
       commentLoader(addon, "#content", "#comments > div:nth-child(2) > ul > div");
     } else {
