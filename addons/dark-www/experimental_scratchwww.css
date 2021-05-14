@@ -24,7 +24,8 @@ body:not(.sa-body-editor) .join-flow-title,
 .initiatives-section .initiatives-tools .subsection-tag.collaborator {
   color: #fff;
 }
-.studio-page {
+.studio-page,
+.user-projects-modal .user-projects-modal-content {
   background: #252c37;
 }
 #view,
