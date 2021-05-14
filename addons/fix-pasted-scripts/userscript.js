@@ -10,12 +10,12 @@ export default async function ({ addon, global, console }) {
 
   // Necessary for the CTRL + click option to work
   var ctrlKeyPressed = false;
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener("keydown", function (e) {
     if (e.ctrlKey) {
       ctrlKeyPressed = true;
     }
   });
-  document.addEventListener('keyup', function(e) {
+  document.addEventListener("keyup", function (e) {
     if (!e.ctrlKey) {
       ctrlKeyPressed = false;
     }
@@ -26,11 +26,11 @@ export default async function ({ addon, global, console }) {
     // Checks if the Blockly event is a script being clicked
     if (!addon.self.disabled && e.element === "stackclick" && enabled) {
       // Completely disable all script clicking if the addon setting is enabled
-      if (runMode == 'fullDisable' || (runMode == 'ctrl' && !ctrlKeyPressed)) {
+      if (runMode == "fullDisable" || (runMode == "ctrl" && !ctrlKeyPressed)) {
         return;
-      // Checks if the script was duplicated/pasted -- if so, disable the response (running the script) for this event
-      // If CTRL + click mode is on, and the user is holding CTRL, the script running is intentional, and the check can be bypassed
-      } else if (!(wasJustDragged && duplicateBehavior) || (runMode == 'ctrl' && ctrlKeyPressed)) {
+        // Checks if the script was duplicated/pasted -- if so, disable the response (running the script) for this event
+        // If CTRL + click mode is on, and the user is holding CTRL, the script running is intentional, and the check can be bypassed
+      } else if (!(wasJustDragged && duplicateBehavior) || (runMode == "ctrl" && ctrlKeyPressed)) {
         originalBlocklyListen.call(this, e);
       }
       wasJustDragged = false;
@@ -52,5 +52,4 @@ export default async function ({ addon, global, console }) {
 
   // Overwrite the old functions with our new ones
   vm.editingTarget.blocks.constructor.prototype.blocklyListen = newBlocklyListen;
-
 }
