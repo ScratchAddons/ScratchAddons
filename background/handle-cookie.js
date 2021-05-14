@@ -14,18 +14,3 @@ chrome.webRequest.onHeadersReceived.addListener(
   },
   specs
 );
-
-chrome.webRequest.onHeadersReceived.addListener(
-  (details) => ({
-    responseHeaders: details.responseHeaders.map((header) =>
-      header.name.toLowerCase() === "set-cookie"
-        ? { ...header, value: header.value?.replace("Domain=.scratch.mit.edu; ", "") }
-        : header
-    ),
-  }),
-  {
-    urls: ["http://localhost/*"],
-    types: ["xmlhttprequest", "main_frame", "image", "sub_frame"],
-  },
-  specs
-);
