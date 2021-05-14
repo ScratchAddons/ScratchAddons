@@ -5,7 +5,6 @@ export default async function ({ addon, global, console }) {
 
   const originalBlocklyListen = vm.editingTarget.blocks.constructor.prototype.blocklyListen;
   var enabled = true;
-  var runMode = addon.settings.get("runMode");
   var wasJustDragged = false;
   var duplicateBehavior = false;
 
@@ -23,6 +22,7 @@ export default async function ({ addon, global, console }) {
   });
 
   const newBlocklyListen = function (e) {
+    var runMode = addon.settings.get("runMode");
     // Checks if the Blockly event is a script being clicked
     if (!addon.self.disabled && e.element === "stackclick" && enabled) {
       // Completely disable all script clicking if the addon setting is enabled
@@ -53,8 +53,4 @@ export default async function ({ addon, global, console }) {
   // Overwrite the old functions with our new ones
   vm.editingTarget.blocks.constructor.prototype.blocklyListen = newBlocklyListen;
 
-  // When the setting is toggled, update the variable that contains it
-  addon.settings.addEventListener("change", function () {
-    runMode = addon.settings.get("runMode");
-  });
 }
