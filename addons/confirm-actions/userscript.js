@@ -10,7 +10,7 @@ export default async function ({ addon, console, msg }) {
         cancelMessage = msg("share");
       } else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
         cancelMessage = msg("follow");
-      } else if (addon.settings.get("joiningstudio") && e.target.closest("a.accept")) {
+      } else if (addon.settings.get("joiningstudio") && (e.target.closest("a.accept") || e.target.textContent === addon.tab.scratchMessage("studio.curatorAcceptInvite"))) {
         cancelMessage = msg("joinstudio");
       }
       if (cancelMessage !== null) {
