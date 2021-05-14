@@ -3,7 +3,9 @@ a:visited,
 .button.white,
 .news li h4,
 .intro-banner .intro-button,
-.comment .comment-body .comment-bottom-row .comment-reply {
+.comment .comment-body .comment-bottom-row .comment-reply,
+.studio-adder-section h3,
+.studio-project-tile .studio-project-title {
   color: var(--scratchr2-linkColor);
 }
 a:hover,
@@ -19,13 +21,13 @@ a:hover,
 .title-banner.mod-messages,
 .download .download-header,
 .os-chooser .button.active,
+.studio-tab-nav .active > li,
 .step .step-number-row .step-number,
 .title-banner.mod-blue-bg,
 .title-banner.mod-conference,
 #footer .inner .media li,
 .wedo .top-banner {
   background-color: var(--scratchr2-primaryColor);
-  color: #fff;
 }
 .banner-button {
   background-color: #ffab1a;

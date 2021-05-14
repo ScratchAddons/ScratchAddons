@@ -17,6 +17,7 @@
 .download .download-header,
 .download .download-header .download-info .download-copy .download-title,
 .os-chooser .button.active,
+.studio-tab-nav .active > li,
 .step .step-number-row .step-number,
 .title-banner.mod-blue-bg .title-banner-h1,
 .title-banner.mod-conference h1,
@@ -59,7 +60,8 @@
   background-size: 50%;
 }
 .preview .remix-button,
-.os-chooser .button:not(.active) {
+.os-chooser .button:not(.active),
+.compose-comment .compose-bottom-row .compose-cancel {
   color: #fff;
 }
 .os-chooser .button:not(.active) img {
