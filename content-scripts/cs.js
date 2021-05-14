@@ -487,10 +487,11 @@ if (document.readyState !== "loading") {
 }
 
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
-const isStudioComments = pathArr[0] === "studios" && pathArr[2] === "comments";
+const isStudio = pathArr[0] === "studios";
+const r2IsStudioComments = isStudio && pathArr[2] === "comments";
 const isProject = pathArr[0] === "projects";
 
-if (isProfile || isStudioComments || isProject) {
+if (isProfile || isStudio || isProject) {
   const shouldCaptureComment = (value) => {
     const regex = / scratch[ ]?add[ ]?ons/;
     // Trim like scratchr2
@@ -515,7 +516,7 @@ if (isProfile || isStudioComments || isProject) {
 
   window.addEventListener("load", () => {
     const isScratchWww = Boolean(document.querySelector("meta[name='format-detection']"));
-    if (isProfile || (isStudioComments && !isScratchWww)) {
+    if (isProfile || (r2IsStudioComments && !isScratchWww)) {
       window.addEventListener(
         "click",
         (e) => {
@@ -559,17 +560,17 @@ if (isProfile || isStudioComments || isProject) {
         },
         { capture: true }
       );
-    } else if (isProject || (isStudioComments && isScratchWww)) {
+    } else if (isProject || (isStudio && isScratchWww)) {
       // For projects, we want to be careful not to hurt performance.
       // Let's capture the event in the comments container instead
       // of the whole window. There will be a new comment container
       // each time the user goes inside the project then outside.
       let observer;
       const waitForContainer = () => {
-        if (document.querySelector(".comments-container")) return Promise.resolve();
+        if (document.querySelector(".comments-container, .studio-compose-container")) return Promise.resolve();
         return new Promise((resolve) => {
           observer = new MutationObserver((mutationsList) => {
-            if (document.querySelector(".comments-container")) {
+            if (document.querySelector(".comments-container, .studio-compose-container")) {
               resolve();
               observer.disconnect();
             }
@@ -588,7 +589,7 @@ if (isProfile || isStudioComments || isProject) {
         return "projectpage";
       };
       const addListener = () =>
-        document.querySelector(".comments-container").addEventListener(
+        document.querySelector(".comments-container, .studio-compose-container").addEventListener(
           "click",
           (e) => {
             const path = e.composedPath();
@@ -651,7 +652,7 @@ if (isProfile || isStudioComments || isProject) {
         );
 
       const check = async () => {
-        if (isStudioComments || getEditorMode() === "projectpage") {
+        if (isStudio || getEditorMode() === "projectpage") {
           await waitForContainer();
           addListener();
         } else {
@@ -659,7 +660,7 @@ if (isProfile || isStudioComments || isProject) {
         }
       };
       check();
-      if (isProject) csUrlObserver.addEventListener("change", (e) => check());
+      csUrlObserver.addEventListener("change", (e) => check());
     }
   });
 }
