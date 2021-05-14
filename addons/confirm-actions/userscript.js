@@ -13,7 +13,7 @@ export default async function ({ addon, console, msg }) {
       } else if (
         addon.settings.get("joiningstudio") &&
         (e.target.closest("a.accept") ||
-          e.target.textContent === addon.tab.scratchMessage("studio.curatorAcceptInvite"))
+          (e.target.textContent && e.target.textContent === addon.tab.scratchMessage("studio.curatorAcceptInvite")))
       ) {
         cancelMessage = msg("joinstudio");
       }
