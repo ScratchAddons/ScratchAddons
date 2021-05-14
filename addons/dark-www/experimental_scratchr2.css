@@ -126,9 +126,9 @@ html > body:not(.sa-body-editor) h4 {
 .jqui-modal.ui-corner-all {
   background: #282828;
 }
-.modal-header,
+.modal .modal-header,
 .jqui-modal .ui-dialog-titlebar.ui-widget-header {
-  background: #4d97ff;
+  background: var(--scratchr2-primaryColor, #4d97ff);
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
 }

@@ -223,24 +223,40 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
   }
 }
 
+function waitForDocumentHead() {
+  if (document.head) return Promise.resolve();
+  else {
+    return new Promise((resolve) => {
+      const observer = new MutationObserver(() => {
+        if (document.head) {
+          resolve();
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.documentElement, { subtree: true, childList: true });
+    });
+  }
+}
+
 async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
+  const isStudio = /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/.test(location.pathname);
+  if (isStudio && !pseudoUrl) {
+    await waitForDocumentHead();
+    if (document.querySelector("meta[name='format-detection']")) {
+      // scratch-www studio
+      pseudoUrl = location.href.replace("/studios/", "/studios_www/");
+      chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
+      return;
+    }
+  }
+
   // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   const disabledDynamicAddons = [];
   globalState = globalStateMsg;
   setCssVariables(globalState.addonSettings, addonsWithUserstyles);
   // Just in case, make sure the <head> loaded before injecting styles
-  if (document.head) injectUserstyles(addonsWithUserstyles);
-  else {
-    const observer = new MutationObserver(() => {
-      if (document.head) {
-        injectUserstyles(addonsWithUserstyles);
-        observer.disconnect();
-      }
-    });
-    observer.observe(document.documentElement, { subtree: true, childList: true });
-  }
-
+  waitForDocumentHead().then(() => injectUserstyles(addonsWithUserstyles));
   if (!_page_) {
     await new Promise((resolve) => {
       // We're registering this load event after the load event that
