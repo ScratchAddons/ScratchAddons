@@ -654,6 +654,8 @@ if (isProfile || isStudio || isProject) {
 
       const check = async () => {
         if (
+          // Note: do not use pathArr here below! pathArr is calculated
+          // on load, pathname can change dynamically with replaceState
           (isStudio && location.pathname.split("/")[3] === "comments") ||
           (isProject && getEditorMode() === "projectpage")
         ) {
