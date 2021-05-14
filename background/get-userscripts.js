@@ -187,7 +187,7 @@ chrome.webRequest.onBeforeRequest.addListener(
     scratchAddons.localEvents.dispatchEvent(new CustomEvent("csInfoCacheUpdated"));
   },
   {
-    urls: ["https://scratch.mit.edu/*","http://localhost:8333/*"],
+    urls: ["https://scratch.mit.edu/*", "http://localhost:8333/*"],
     types: ["main_frame", "sub_frame"],
   }
 );
@@ -220,7 +220,7 @@ chrome.webRequest.onResponseStarted.addListener(
     }
   },
   {
-    urls: ["https://scratch.mit.edu/*","http://localhost:8333/*"],
+    urls: ["https://scratch.mit.edu/*", "http://localhost:8333/*"],
     types: ["main_frame"],
   }
 );
@@ -281,8 +281,7 @@ const WELL_KNOWN_PATTERNS = {
   newPostScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add)\/?$/,
   editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
   forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
-  scratchWWWNoProject:
-    /^\/(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|dmca|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|sec|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost)\/?$/,
+  scratchWWWNoProject: /^\/(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|dmca|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|sec|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost)\/?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {

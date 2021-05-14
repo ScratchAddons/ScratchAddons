@@ -3,7 +3,8 @@ if (Object.prototype.hasOwnProperty.call(chrome.webRequest.OnBeforeSendHeadersOp
   extraInfoSpec.push("extraHeaders");
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
-  function (details) {/*
+  function (details) {
+    /*
     if (details.originUrl) {
       // Firefox
       const origin = new URL(details.originUrl).origin;
@@ -23,7 +24,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         requestHeaders: details.requestHeaders,
       };
     }
-    if (details.originUrl.includes("localhost") ) {
+    if (details.originUrl.includes("localhost")) {
       details.requestHeaders.push({
         name: "Referer",
         value: "https://scratch.mit.edu/",
@@ -31,9 +32,9 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
 
       details.requestHeaders.push({
         name: "Host",
-        value: details.url.startsWith("http://localhost/") ? "scratch.mit.edu" : (new URL(details.url)).host,
+        value: details.url.startsWith("http://localhost/") ? "scratch.mit.edu" : new URL(details.url).host,
       });
-      details.requestHeaders = details.requestHeaders.filter(i => i.name.toLowerCase() !== "origin");
+      details.requestHeaders = details.requestHeaders.filter((i) => i.name.toLowerCase() !== "origin");
       details.requestHeaders.push({
         name: "Origin",
         value: "https://scratch.mit.edu",
@@ -44,7 +45,12 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     }
   },
   {
-    urls: ["https://scratch.mit.edu/*", "https://api.scratch.mit.edu/*", "https://clouddata.scratch.mit.edu/*","http://localhost/*"],
+    urls: [
+      "https://scratch.mit.edu/*",
+      "https://api.scratch.mit.edu/*",
+      "https://clouddata.scratch.mit.edu/*",
+      "http://localhost/*",
+    ],
     types: ["xmlhttprequest"],
   },
   extraInfoSpec
