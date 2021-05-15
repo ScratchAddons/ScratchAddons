@@ -13,6 +13,13 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.14.3] - 2021-05-15
+
+- Adapt addons to the upcoming Scratch 3.0 studio pages update on Scratch website
+- "Scratch Messaging" addon: enhanced comment finding of new replies to old comment chains
+- Bug fix: "website dark mode" making "ask and wait" questions by stage unreadable
+- Bug fix: "cloud games" addon using orange icon for user count instead of white icon
+
 ## [v1.14.2] - 2021-05-09
 
 - "Scratch 2.0 → 3.0" addon: all 404 error pages are now converted to 3.0 style
@@ -365,6 +372,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.14.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.3
 [v1.14.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.2
 [v1.14.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.1
 [v1.14.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.0
