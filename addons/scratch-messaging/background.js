@@ -108,7 +108,10 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       const { resourceType, resourceId, commentIds } = popupRequest.retrieveComments;
       retrieveComments(resourceType, resourceId, commentIds)
         .then((comments) => sendResponse(comments))
-        .catch((err) => sendResponse(err));
+        .catch((err) => {
+          console.error(err);
+          sendResponse(err);
+        });
       return true;
     } else if (popupRequest === "markAsRead") {
       addon.account.clearMessages();
@@ -127,6 +130,104 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   });
 
   async function retrieveComments(resourceType, resourceId, commentIds, page = 1, commentsObj = {}) {
+    if (resourceType === "project" || resourceType === "gallery") {
+      let projectAuthor;
+      if (resourceType === "project") {
+        const projectRes = await fetch(`https://api.scratch.mit.edu/projects/${resourceId}`);
+        if (!projectRes.ok) return commentsObj; // empty
+        const projectJson = await projectRes.json();
+        projectAuthor = projectJson.author.username;
+      }
+
+      const getCommentUrl = (commId) =>
+        resourceType === "project"
+          ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}`
+          : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}`;
+      const getRepliesUrl = (commId, offset) =>
+        resourceType === "project"
+          ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`
+          : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`;
+
+      for (const commentId of commentIds) {
+        if (commentsObj[`${resourceType[0]}_${commentId}`]) continue;
+
+        const res = await fetch(getCommentUrl(commentId));
+
+        if (!res.ok) continue;
+        const json = await res.json();
+
+        const parentId = json.parent_id || commentId;
+        const childrenComments = {};
+
+        let parentComment;
+
+        if (json.parent_id) {
+          const resParent = await fetch(getCommentUrl(parentId));
+          if (!resParent.ok) continue;
+          const jsonParent = await resParent.json();
+          parentComment = jsonParent;
+        } else {
+          parentComment = json;
+        }
+
+        // If originally requested comment was not a parent comment, we do not use
+        // "json" variable at all. We'll get info for the same comment when fetching
+        // all of the parent's child comments anyway
+        // Note: we need to check replies for all parent comments, reply_count doesn't work properly
+
+        const getReplies = async (offset) => {
+          const repliesRes = await fetch(getRepliesUrl(parentId, offset));
+          if (!repliesRes.ok) return [];
+          const repliesJson = await repliesRes.json();
+          return repliesJson;
+        };
+
+        const replies = [];
+        let lastRepliesLength = 40;
+        let offset = 0;
+        while (lastRepliesLength === 40) {
+          const newReplies = await getReplies(offset);
+          newReplies.forEach((c) => replies.push(c));
+          lastRepliesLength = newReplies.length;
+          offset += 40;
+        }
+
+        if (json.parent_id && replies.length === 0) {
+          // Something went wrong, we didn't get the replies
+          continue;
+        }
+
+        for (const reply of replies) {
+          const commenteeReply = replies.find((c) => c.author.id === reply.commentee_id);
+          const replyingTo = commenteeReply ? commenteeReply.author.username : parentComment.author.username;
+          const mention = `<a href=\"https://scratch.mit.edu/users/${replyingTo}\">@${replyingTo}</a>`;
+          childrenComments[`${resourceType[0]}_${reply.id}`] = {
+            author: reply.author.username,
+            authorId: reply.author.id,
+            content: `${mention} ${fixCommentContent(reply.content)}`,
+            date: reply.datetime_created,
+            children: null,
+            childOf: `${resourceType[0]}_${parentId}`,
+            scratchTeam: reply.author.scratchteam,
+          };
+        }
+        for (const childCommentId of Object.keys(childrenComments)) {
+          commentsObj[childCommentId] = childrenComments[childCommentId];
+        }
+
+        commentsObj[`${resourceType[0]}_${parentId}`] = {
+          author: parentComment.author.username,
+          authorId: parentComment.author.id,
+          content: fixCommentContent(parentComment.content),
+          date: parentComment.datetime_created,
+          children: Object.keys(childrenComments),
+          childOf: null,
+          scratchTeam: parentComment.author.scratchteam,
+        };
+      }
+      return commentsObj;
+    }
+
     const res = await fetch(
       `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}&nocache=${Date.now()}`
     );
