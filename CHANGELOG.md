@@ -19,6 +19,7 @@ automatically create a PR on the website to synchronize the changes!
 - "Scratch Messaging" addon: enhanced comment finding of new replies to old comment chains
 - Bug fix: "website dark mode" making "ask and wait" questions by stage unreadable
 - Bug fix: "cloud games" addon using orange icon for user count instead of white icon
+- Bug fix: warn before commenting “Scratch Addons” on the Scratch community website not working on Firefox
 
 ## [v1.14.2] - 2021-05-09
 
