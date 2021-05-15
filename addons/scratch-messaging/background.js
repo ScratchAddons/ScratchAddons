@@ -155,7 +155,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
 
         if (!res.ok) continue;
         const json = await res.json();
-
+        // This is sometimes null for deleted comments
+        if (json === null) continue;
         const parentId = json.parent_id || commentId;
         const childrenComments = {};
 
