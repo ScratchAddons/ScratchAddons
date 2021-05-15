@@ -15,7 +15,7 @@ automatically create a PR on the website to synchronize the changes!
 
 ## [v1.14.2] - 2021-05-09
 
-- "Scratch 2.0→3.0" addon: all 404 error pages are now converted to 3.0 style
+- "Scratch 2.0 → 3.0" addon: all 404 error pages are now converted to 3.0 style
 - Bug fix: own unshared projects returning 404 error
 - Bug fix: some addons not working if conflicting extensions also installed
 
