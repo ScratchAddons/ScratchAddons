@@ -337,6 +337,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       });
       if (res.ok) {
         const json = await res.json();
+        if (json.rejected) return { error: json.rejected };
         const mention = `<a href=\"https://scratch.mit.edu/users/${commenteeUsername}\">@${commenteeUsername}</a>`;
         return {
           commentId: json.id,
