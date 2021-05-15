@@ -322,36 +322,32 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     return value;
   }
 
-  function sendComment({ resourceType, resourceId, content, parent_id, commentee_id, commenteeUsername }) {
-    return new Promise(async (resolve) => {
-      if (resourceType === "project" || resourceType === "gallery") {
-        const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
-        const res = await fetch(
-          `https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}?sareferer`,
-          {
-            headers: {
-              "content-type": "application/json",
-              "x-csrftoken": addon.auth.csrfToken,
-              "x-token": addon.auth.xToken,
-            },
-            body: JSON.stringify({ content, parent_id, commentee_id }),
-            method: "POST",
-          }
-        );
-        if (res.ok) {
-          const json = await res.json();
-          const mention = `<a href=\"https://scratch.mit.edu/users/${commenteeUsername}\">@${commenteeUsername}</a>`;
-          resolve({
-            commentId: json.id,
-            username: addon.auth.username,
-            userId: addon.auth.userId,
-            content: `${mention} ${fixCommentContent(json.content)}`,
-          });
-        } else {
-          resolve({ error: res.status });
-        }
-        return;
+  async function sendComment({ resourceType, resourceId, content, parent_id, commentee_id, commenteeUsername }) {
+    if (resourceType === "project" || resourceType === "gallery") {
+      const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
+      const res = await fetch(`https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}?sareferer`, {
+        headers: {
+          "content-type": "application/json",
+          "x-csrftoken": addon.auth.csrfToken,
+          "x-token": addon.auth.xToken,
+        },
+        body: JSON.stringify({ content, parent_id, commentee_id }),
+        method: "POST",
+      });
+      if (res.ok) {
+        const json = await res.json();
+        const mention = `<a href=\"https://scratch.mit.edu/users/${commenteeUsername}\">@${commenteeUsername}</a>`;
+        return {
+          commentId: json.id,
+          username: addon.auth.username,
+          userId: addon.auth.userId,
+          content: `${mention} ${fixCommentContent(json.content)}`,
+        };
+      } else {
+        return { error: res.status };
       }
+    }
+    return new Promise((resolve) => {
       // For some weird reason, this only works with XHR in Chrome...
       const xhr = new XMLHttpRequest();
       xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/?sareferer`, true);
@@ -375,25 +371,24 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     });
   }
 
-  function deleteComment({ resourceType, resourceId, commentId }) {
-    return new Promise(async (resolve) => {
-      if (resourceType === "project" || resourceType === "gallery") {
-        const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
-        const res = await fetch(
-          `https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}/comment/${commentId}?sareferer`,
-          {
-            headers: {
-              "content-type": "application/json",
-              "x-csrftoken": addon.auth.csrfToken,
-              "x-token": addon.auth.xToken,
-            },
-            method: "DELETE",
-          }
-        );
-        if (res.ok) resolve(200);
-        else resolve({ error: res.status });
-        return;
-      }
+  async function deleteComment({ resourceType, resourceId, commentId }) {
+    if (resourceType === "project" || resourceType === "gallery") {
+      const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
+      const res = await fetch(
+        `https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}/comment/${commentId}?sareferer`,
+        {
+          headers: {
+            "content-type": "application/json",
+            "x-csrftoken": addon.auth.csrfToken,
+            "x-token": addon.auth.xToken,
+          },
+          method: "DELETE",
+        }
+      );
+      if (res.ok) return 200;
+      else return { error: res.status };
+    }
+    return new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
       xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/?sareferer`, true);
       xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
