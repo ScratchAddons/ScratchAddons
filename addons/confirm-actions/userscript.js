@@ -11,6 +11,7 @@ export default async function ({ addon, console, msg }) {
       } else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
         cancelMessage = msg("follow");
       } else if (
+        /^\/studios\/\d+\/curators/g.test(location.pathname) &&
         addon.settings.get("joiningstudio") &&
         (e.target.closest("a.accept") ||
           (e.target.textContent && e.target.textContent === addon.tab.scratchMessage("studio.curatorAcceptInvite")))
