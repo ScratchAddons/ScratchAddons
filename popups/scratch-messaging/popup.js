@@ -89,6 +89,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
                 content: this.replyBoxValue,
                 parent_id,
                 commentee_id: this.thisComment.authorId,
+                commenteeUsername: this.thisComment.author,
               },
             },
           },
