@@ -24,18 +24,17 @@ fix this warning."
     }
 
     static applyMiddleware(...middlewares) {
-      return (createStore) =>
-        (...createStoreArgs) => {
-          const store = createStore(...createStoreArgs);
-          let { dispatch } = store;
-          const api = {
-            getState: store.getState,
-            dispatch: (action) => dispatch(action),
-          };
-          const initialized = middlewares.map((middleware) => middleware(api));
-          dispatch = ReDucks.compose(...initialized)(store.dispatch);
-          return Object.assign({}, store, { dispatch });
+      return (createStore) => (...createStoreArgs) => {
+        const store = createStore(...createStoreArgs);
+        let { dispatch } = store;
+        const api = {
+          getState: store.getState,
+          dispatch: (action) => dispatch(action),
         };
+        const initialized = middlewares.map((middleware) => middleware(api));
+        dispatch = ReDucks.compose(...initialized)(store.dispatch);
+        return Object.assign({}, store, { dispatch });
+      };
     }
   }
 
