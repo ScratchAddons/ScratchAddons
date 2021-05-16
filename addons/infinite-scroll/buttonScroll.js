@@ -1,7 +1,13 @@
 async function commentLoader(addon, heightControl, selector, isNewStudioComment) {
   let func;
   while (true) {
-    const el = await addon.tab.waitForElement(selector, { markAsSeen: true });
+    const el = await addon.tab.waitForElement(selector, {
+      markAsSeen: true,
+      reduxCondition: (state) => {
+        if (!state.scratchGui) return true;
+        return state.scratchGui.mode.isPlayerOnly;
+      },
+    });
     if (func) window.removeEventListener("scroll", func, { passive: true });
     el.style.display = "none";
     func = () => {
@@ -35,10 +41,13 @@ export default async function ({ addon, global, console }) {
     if (location.hash.startsWith("#comments-")) {
       // Wait until user clicks "see all comments"
       // Note: we ignore the cases where the comment can't be found (e.g. /projects/x/#comments-0)
-      const el = await addon.tab.waitForElement(
-        "#view > div > div.project-lower-container > div > div > div.comments-container > div.flex-row.comments-list > button"
-      );
-      el.addEventListener("click", () => run(), { once: true });
+      const listener = (e) => {
+        if (e.target.closest("div.comments-container > div.flex-row.comments-list > button")) {
+          document.removeEventListener("click", listener, true);
+          run();
+        }
+      };
+      document.addEventListener("click", listener, true);
     } else run();
   }
   if (window.location.pathname.split("/")[1] === "messages" && addon.settings.get("messageScroll"))
