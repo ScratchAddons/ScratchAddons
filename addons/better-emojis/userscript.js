@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  const findEmojis = () => {
+  const updateEmojis = () => {
     if (addon.tab.clientVersion === "scratch-www") {
       if (addon.tab.redux?.state?.scratchGui && !addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
         return;
@@ -16,7 +16,8 @@ export default async function ({ addon, global, console }) {
     }
   };
 
-  const obs = new MutationObserver(findEmojis);
+  updateEmojis();
+  const obs = new MutationObserver(updateEmojis);
   obs.observe(document.body, {
     childList: true,
     subtree: true,
