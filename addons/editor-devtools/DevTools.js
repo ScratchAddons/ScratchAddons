@@ -2056,12 +2056,10 @@ export default class DevTools {
    * @param e
    */
   dropDownFloatClick(e) {
-    if (e.target.closest("input")) {
-      return;
-    }
-
     e.cancelBubble = true;
-    e.preventDefault();
+    if (!e.target.closest("input")) {
+      e.preventDefault();
+    }
 
     let wksp = this.utils.getWorkspace();
 
