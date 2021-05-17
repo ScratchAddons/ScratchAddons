@@ -1145,4 +1145,3 @@ document.addEventListener("keydown", (e) => {
 });
 
 chrome.runtime.sendMessage("checkPermissions");
-chrome.runtime.sendMessage("checkIfUnsupported");

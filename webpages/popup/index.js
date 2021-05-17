@@ -82,4 +82,3 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
 });
 
 chrome.runtime.sendMessage("checkPermissions");
-chrome.runtime.sendMessage("checkIfUnsupported");
