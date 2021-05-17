@@ -13,13 +13,13 @@ jobs:
       - name: Generate token
         uses: tibdex/github-app-token@v1
         id: generate-token
-        if: ( github.repository_owner == 'ScratchAddons' ) && secrets.BOT_APP_ID
+        if: ${{ ( github.repository_owner == 'ScratchAddons' ) && secrets.BOT_APP_ID }}
         with:
           app_id: ${{ secrets.BOT_APP_ID }}
           private_key: ${{ secrets.BOT_PRIVATE_KEY }}
           
       - name: Prettify code (ScratchAddons)
-        if: ( github.repository_owner == 'ScratchAddons' ) && secrets.BOT_APP_ID
+        if: steps.generate-token.conclusion == success
         uses: creyD/prettier_action@v3.1
         with:
           prettier_options: --write .
@@ -28,7 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
           
       - name: Prettify code (outside ScratchAddons)
-        if: ( github.repository_owner != 'ScratchAddons' ) || ! secrets.BOT_APP_ID
+        if: steps.generate-token.conclusion == skipped
         uses: creyD/prettier_action@v3.1
         with:
           prettier_options: --write .
