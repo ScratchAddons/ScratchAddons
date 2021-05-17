@@ -11,7 +11,7 @@ export default (env, manifest) => {
   switch (env) {
     case "chrome": {
       delete manifest.browser_specific_settings;
-      manifest.incognito = "split";
+      // manifest.incognito = "split";
       manifest.optional_permissions = manifest.optional_permissions.filter(
         (permission) => permission !== "clipboardWrite"
       );

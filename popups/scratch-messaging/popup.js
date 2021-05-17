@@ -89,6 +89,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
                 content: this.replyBoxValue,
                 parent_id,
                 commentee_id: this.thisComment.authorId,
+                commenteeUsername: this.thisComment.author,
               },
             },
           },
@@ -401,16 +402,21 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
               for (const commentId of Object.keys(comments)) {
                 const commentObject = comments[commentId];
                 Vue.set(this.comments, commentId, commentObject);
-                const chainId = commentObject.childOf || commentId;
-                const resourceGetFunction =
-                  resourceType === "project"
-                    ? "getProjectObject"
-                    : resourceType === "user"
-                    ? "getProfileObject"
-                    : "getStudioObject";
-                const resourceObject = this[resourceGetFunction](resourceId);
-                if (!resourceObject.commentChains.includes(chainId)) resourceObject.commentChains.push(chainId);
               }
+
+              // Preserve chronological sort when using JSON API
+              const parentComments = Object.entries(comments).filter((c) => c[1].childOf === null);
+              const sortedParentComments = parentComments.sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
+              const sortedIds = sortedParentComments.map((arr) => arr[0]);
+              const resourceGetFunction =
+                resourceType === "project"
+                  ? "getProjectObject"
+                  : resourceType === "user"
+                  ? "getProfileObject"
+                  : "getStudioObject";
+              const resourceObject = this[resourceGetFunction](resourceId);
+              for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
+
               elementObject.loadedComments = true;
               resolve();
             }
