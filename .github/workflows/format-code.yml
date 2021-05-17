@@ -28,7 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
           
       - name: Prettify code (outside ScratchAddons)
-        if: ! (github.repository_owner == 'ScratchAddons')
+        if: github.repository_owner != 'ScratchAddons'
         uses: creyD/prettier_action@v3.1
         with:
           prettier_options: --write .
