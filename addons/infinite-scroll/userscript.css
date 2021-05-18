@@ -23,3 +23,7 @@ body, /* scratch-www */
 #footer:hover {
   height: 300px;
 }
+
+.page > #view {
+  margin-bottom: 0;
+}

@@ -21,8 +21,12 @@ export default async function ({ addon, console, msg }) {
       while (true) {
         const topBar = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
           markAsSeen: true,
-          reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
-          condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+          reduxEvents: [
+            "scratch-gui/mode/SET_PLAYER",
+            "fontsLoaded/SET_FONTS_LOADED",
+            "scratch-gui/locales/SELECT_LOCALE",
+          ],
+          reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
         });
         let display = topBar.appendChild(document.createElement("span"));
         display.style.order = 1;

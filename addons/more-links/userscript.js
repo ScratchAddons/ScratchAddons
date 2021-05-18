@@ -26,6 +26,7 @@ export default async function ({ addon, console }) {
       break;
 
     case "studios":
+      if (addon.tab.clientVersion === "scratch-www") break;
       linkifyTag(document.querySelector("#description.read-only .overview"));
       break;
   }
