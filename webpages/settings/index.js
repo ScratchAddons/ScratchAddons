@@ -459,6 +459,25 @@ const CategorySelector = Vue.extend({
 });
 Vue.component("category-selector", CategorySelector);
 
+const Icon = Vue.extend({
+  data() {
+    return {
+      icon: ''
+    }
+  },
+  props: ["iconname","className"],
+  template: document.querySelector("template#icon-component").innerHTML,
+  async ready() {
+    if(!window.iconCache) window.iconCache = Object.create(null)
+    if (window.iconCache[this.iconname]) {this.icon = window.iconCache[this.iconname]
+    } else {
+     let text = await (await (await fetch(`/images/icons/${this.iconname}.svg`))).text()
+     window.iconCache[this.iconname] = text
+     this.icon = text
+    }
+  }
+})
+Vue.component('icon', Icon)
 const browserLevelPermissions = ["notifications"];
 if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
 let grantedOptionalPermissions = [];

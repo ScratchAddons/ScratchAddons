@@ -302,10 +302,14 @@
         <span>{{ category.name }}</span>
       </div>
     </template>
+    <template id="icon-component">
+      <div :class="className" v-html="icon"></div>
+    </template>
     <script src="index.js" type="module"></script>
   </head>
   <body style="display: none" v-show="loaded" :class="{light: theme}">
     <div class="navbar">
+      <icon iconname="brush"></icon>
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1>{{ msg("settings") }}</h1>
