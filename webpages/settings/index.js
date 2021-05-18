@@ -787,8 +787,7 @@ const vue = (window.vue = new Vue({
     },
     setTheme(mode) {
       chrome.storage.sync.get(["globalTheme"], function (r) {
-        let rr = true; //true = light, false = dark
-        rr = mode;
+        let rr = mode;
         chrome.storage.sync.set({ globalTheme: rr }, function () {
           if (rr && r.globalTheme !== rr) {
             document.head.appendChild(lightThemeLink);
