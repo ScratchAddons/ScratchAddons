@@ -25,19 +25,6 @@ export default class Trap extends Listenable {
     return __scratchAddonsTraps._onceMap.vm;
   }
 
-  get eventListeners() {
-    return __scratchAddonsTraps.listeners;
-  }
-
-  getListenersForElement(selectorOrElement) {
-    return this.eventListeners.filter(function (listener) {
-      if (typeof selectorOrElement === "string") {
-        return listener.element === document.querySelector(selectorOrElement);
-      }
-      return listener.element === selectorOrElement;
-    });
-  }
-
   /**
    * @private
    */
