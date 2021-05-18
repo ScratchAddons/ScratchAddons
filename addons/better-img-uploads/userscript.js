@@ -1,19 +1,21 @@
 export default async function ({ addon, console }) {
-  let enabled = true;
+  let enabled = true; //Addon is enabled
+  
   addon.self.addEventListener("disabled", () => (enabled = false));
   addon.self.addEventListener("reenabled", () => console.log((enabled = true)));
+  
   while (true) {
-    let ignore = false;
+    let ignore = false; //Have files already been changed?
 
     let input = await addon.tab.waitForElement('input[type="file"][accept*=".svg"]', {
       markAsSeen: true,
-    });
+    }); //Wait for the next image file input
 
     input.addEventListener(
       "change",
       (e) => {
         if (!enabled) return;
-        if (!ignore) (ignore = true) && onchange(e);
+        if (!ignore) (ignore = true) && onchange(e); //Files have not been changed yet...
         else ignore = false;
       },
       true
@@ -21,32 +23,32 @@ export default async function ({ addon, console }) {
   }
 
   async function onchange(e) {
-    e.stopPropagation();
+    e.stopPropagation(); //Prevent Scratch from seeing the event so that we can process the images first
 
     let el = e.target;
     let files = Array.from(el.files);
     let processed = new Array();
 
     for (let file of files) {
-      let blob = await new Promise((resolve) => {
+      if (file.type.includes("svg")) { //The file is already a svg, we should not change it...
+        processed.push(file);
+        continue;
+      }
+      
+      let blob = await new Promise((resolve) => { //Get the Blob data url for the image so that we can add it to the svg
         let reader = new FileReader();
         reader.addEventListener("load", () => resolve(reader.result));
         reader.readAsDataURL(file);
       });
-
-      if (file.type.includes("svg")) {
-        processed.push(file);
-        continue;
-      }
-
-      let i = new Image();
+      
+      let i = new Image(); //New image to get the image's size
       i.src = blob;
       await new Promise((resolve) => {
         i.onload = resolve;
       });
-
+      
       processed.push(
-        new File(
+        new File( //Create the svg file
           [
             `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${i.width},${i.height}" width="${i.width}" height="${i.height}">
         <g transform="translate(0,0)">
@@ -81,16 +83,16 @@ export default async function ({ addon, console }) {
       );
     }
 
-    el.files = arrayToFileList(processed);
+    el.files = arrayToFileList(processed); //Convert processed image array to a FileList, which is not constructible.
 
-    el.dispatchEvent(e);
+    el.dispatchEvent(e); //Start the event over again, but allow scratch to receive it this time.
   }
 
   function arrayToFileList(arr) {
-    let filelist = new ClipboardEvent("").clipboardData || new DataTransfer();
+    let filelist = new ClipboardEvent("").clipboardData || new DataTransfer(); //This "creates" a FileList that we can add files to
     for (let file of arr) {
       filelist.items.add(file);
     }
-    return filelist.files;
+    return filelist.files; //Completed FileList
   }
 }
