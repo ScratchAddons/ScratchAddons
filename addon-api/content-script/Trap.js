@@ -24,6 +24,19 @@ export default class Trap extends Listenable {
     if (!this._getEditorMode()) throw new Error("Cannot access vm on non-project page");
     return __scratchAddonsTraps._onceMap.vm;
   }
+  
+  get eventListeners() {
+    return __scratchAddonsTraps.listeners;
+  }
+  
+  getListenersForElement(selectorOrElement) {
+    return this.eventListeners.filter(function (listener) {
+      if (typeof selectorOrElement === "string") {
+        return listener.element === document.querySelector(selectorOrElement);
+      }
+      return listener.element === selectorOrElement;
+    });
+  }
 
   /**
    * @private
