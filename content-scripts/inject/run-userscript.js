@@ -6,7 +6,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
   for (const scriptInfo of scripts) {
     const { url: scriptPath, runAtComplete } = scriptInfo;
     const scriptUrl = `${new URL(import.meta.url).origin}/addons/${addonId}/${scriptPath}`;
-    console.log(
+    console.debug(
       `%cDebug addons/${addonId}/${scriptPath}: ${scriptUrl}, runAtComplete: ${runAtComplete}`,
       "color:red; font-weight: bold; font-size: 1.2em;"
     );
