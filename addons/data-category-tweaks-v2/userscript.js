@@ -175,13 +175,10 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     return result;
   };
 
-  // // If editingTarget is set, the editor has already drawn and we have to tell it to redraw.
-  // if (vm.editingTarget) {
-  //   const workspace = Blockly.getMainWorkspace();
-  //   if (workspace) {
-  //     workspace.refreshToolboxSelection_();
-  //   }
-  // }
+  // If editingTarget is set, the editor has already rendered and we have to tell it to rerender.
+  if (vm.editingTarget) {
+    vm.emitWorkspaceUpdate();
+  }
 
   addon.settings.addEventListener("change", (e) => {
     // When the separate list category option changes, we need to do a workspace update.
