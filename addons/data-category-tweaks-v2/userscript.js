@@ -6,8 +6,8 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
   const vm = addon.tab.traps.vm;
 
-  // This needs to be stored in a separate variable updated in getBlocksXML
-  // because addon.settings and actual workspace state do not necessarily match.
+  // Used in setting change handler. Updated in getBlocksXML.
+  // (Yes this is weird but it's how it was originally and I'm too scared to change it)
   let hasSeparateListCategory = false;
 
   const separateVariablesByType = (toolboxXML) => {
