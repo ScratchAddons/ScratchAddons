@@ -1,9 +1,9 @@
 export default async function ({ addon, console }) {
   let enabled = true; //Addon is enabled
-  
+
   addon.self.addEventListener("disabled", () => (enabled = false));
   addon.self.addEventListener("reenabled", () => console.log((enabled = true)));
-  
+
   while (true) {
     let ignore = false; //Have files already been changed?
 
@@ -15,7 +15,8 @@ export default async function ({ addon, console }) {
       "change",
       (e) => {
         if (!enabled) return;
-        if (!ignore) (ignore = true) && onchange(e); //Files have not been changed yet...
+        if (!ignore) (ignore = true) && onchange(e);
+        //Files have not been changed yet...
         else ignore = false;
       },
       true
@@ -30,23 +31,25 @@ export default async function ({ addon, console }) {
     let processed = new Array();
 
     for (let file of files) {
-      if (file.type.includes("svg")) { //The file is already a svg, we should not change it...
+      if (file.type.includes("svg")) {
+        //The file is already a svg, we should not change it...
         processed.push(file);
         continue;
       }
-      
-      let blob = await new Promise((resolve) => { //Get the Blob data url for the image so that we can add it to the svg
+
+      let blob = await new Promise((resolve) => {
+        //Get the Blob data url for the image so that we can add it to the svg
         let reader = new FileReader();
         reader.addEventListener("load", () => resolve(reader.result));
         reader.readAsDataURL(file);
       });
-      
+
       let i = new Image(); //New image to get the image's size
       i.src = blob;
       await new Promise((resolve) => {
         i.onload = resolve;
       });
-      
+
       processed.push(
         new File( //Create the svg file
           [
