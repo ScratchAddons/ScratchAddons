@@ -225,4 +225,17 @@ export default class Tab extends Listenable {
       g[1].toUpperCase()
     )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
   }
+
+  get eventListeners() {
+    return scratchAddons.eventListeners;
+  }
+
+  getListenersForElement(selectorOrElement) {
+    return this.eventListeners.filter(function (listener) {
+      if (typeof selectorOrElement === "string") {
+        return listener.element === document.querySelector(selectorOrElement);
+      }
+      return listener.element === selectorOrElement;
+    });
+  }
 }
