@@ -302,7 +302,9 @@ if (location.pathname === "/discuss/3/topic/add/") {
           (listener) =>
             listener.event === args[0] &&
             listener.callback === args[1] &&
-            (typeof args[2] === "object" && typeof listener.options === "object" ? JSON.stringify(args[2]) === JSON.stringify(listener.options) : args[2] === listener.options) &&
+            (typeof args[2] === "object" && typeof listener.options === "object"
+              ? JSON.stringify(args[2]) === JSON.stringify(listener.options)
+              : args[2] === listener.options) &&
             this === listener.element
         )[0]
       ),
