@@ -1255,9 +1255,13 @@ export default class DevTools {
     }
   }
 
-  eventMouseMove(e) {
+  updateMousePosition(e) {
     this.mouseXY.x = e.clientX;
     this.mouseXY.y = e.clientY;
+  }
+
+  eventMouseMove(e) {
+    this.updateMousePosition(e);
   }
 
   eventKeyDown(e) {
@@ -1351,6 +1355,8 @@ export default class DevTools {
   }
 
   eventMouseDown(e) {
+    this.updateMousePosition(e);
+
     if (this.ddOut && this.ddOut.classList.contains("vis") && !e.target.closest("#s3devDDOut")) {
       // If we click outside the dropdown, then instigate the hide code...
       this.hideDropDown();
@@ -1639,6 +1645,16 @@ export default class DevTools {
     }
   }
 
+  eventMouseUp(e) {
+    this.updateMousePosition(e);
+
+    if (e.button === 1 && e.target.closest("svg.blocklySvg")) {
+      // On Linux systems, middle click is often treated as a paste.
+      // We do not want this as we assign our own functionality to middle mouse.
+      e.preventDefault();
+    }
+  }
+
   middleClickWorkspace(e) {
     if (!this.isScriptEditor()) {
       return;
@@ -1814,7 +1830,7 @@ export default class DevTools {
 
     let options = [];
 
-    let t = Blockly.getMainWorkspace().getToolbox();
+    let t = this.utils.getWorkspace().getToolbox();
 
     let blocks = t.flyout_.getWorkspace().getTopBlocks();
     // 107 blocks, not in order... but we can sort by y value or description right :)
@@ -2041,7 +2057,9 @@ export default class DevTools {
    */
   dropDownFloatClick(e) {
     e.cancelBubble = true;
-    e.preventDefault();
+    if (!e.target.closest("input")) {
+      e.preventDefault();
+    }
 
     let wksp = this.utils.getWorkspace();
 
@@ -2261,6 +2279,7 @@ export default class DevTools {
 
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);
     this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true); // true to capture all mouse downs 'before' the dom events handle them
+    this.domHelpers.bindOnce(document, "mouseup", (...e) => this.eventMouseUp(...e), true);
     // bindOnce(document.getElementById("s3devDeep"), "click", deepSearch);
     // bindOnce(document.getElementById('s3devCleanUp'),'click', clickCleanUp);
     // bindOnce(document.getElementById("s3devInject"), "click", clickInject);

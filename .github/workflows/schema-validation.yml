@@ -1,4 +1,4 @@
-name: Schema validation
+name: Validate addon manifest
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   sv:
-    name: Validation
+    name: Validate
     runs-on: ubuntu-latest
     # if: ! (github.event_name == 'schedule' && github.repository_owner == 'ScratchAddons')
 

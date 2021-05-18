@@ -12,6 +12,7 @@
       "matches": [
         "https://scratch.mit.edu/projects/*",
         "https://scratch.mit.edu/studios/*",
+        "https://scratch.mit.edu/studios_www/*",
         "https://scratch.mit.edu/users/*"
       ]
     }

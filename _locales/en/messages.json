@@ -92,9 +92,6 @@
   "profilesFeatures": {
     "message": "Profiles"
   },
-  "commentsFeatures": {
-    "message": "Comments"
-  },
   "projectPlayerFeatures": {
     "message": "Project Player"
   },
@@ -237,19 +234,13 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-    "message": "$1: $2 was remade and is now deeply customizable. Go to $3 to change specific colors, toggle dark comments and scollbars, and more!"
-  },
-  "newFeature": {
-    "message": "New feature"
-  },
-  "newFeatureName": {
-    "message": "\"editor dark mode\""
+    "message": "Some new addons of this update are \"gamepad support\", \"cat blocks\", \"editor sound effects\" and \"remove curved stage border\". Go to $1 to enable them."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2": {
-    "message": "Featured new addons this update are \"custom scripts area zoom settings\" and \"change new sprite default position\"."
+    "message": "This update also ships a more organized Scratch Addons settings page, as well as performance improvements when using addons in the project editor."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
@@ -258,7 +249,8 @@
     "message": "New!"
   },
   "enabled": {
-    "message": "Enabled"
+    "message": "Enabled",
+    "description": "Used as a category name for enabled addons"
   },
   "exportAndImportSettings": {
     "message": "Export and Import Settings"
@@ -294,7 +286,8 @@
     "message": "Addons on this tab"
   },
   "recentlyUsed": {
-    "message": "Recently used"
+    "message": "Recently used",
+    "description": "Used as a category name for recently used addons"
   },
   "settingsPagePermission": {
     "message": "To enable the \"$1\" addon, go to the full screen settings page."

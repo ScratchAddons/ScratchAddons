@@ -69,6 +69,7 @@
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
         "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/503/",
         "https://scratch.mit.edu/login",
         "https://scratch.mit.edu/login_retry",
         "https://scratch.mit.edu/news"
@@ -93,6 +94,7 @@
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
         "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/503/",
         "https://scratch.mit.edu/news"
       ]
     },
@@ -103,6 +105,7 @@
         "https://scratch.mit.edu/projects/*/",
         "https://scratch.mit.edu/projects/*/editor/",
         "https://scratch.mit.edu/projects/*/fullscreen/",
+        "https://scratch.mit.edu/studios_www/*",
         "https://scratch.mit.edu/explore/*",
         "https://scratch.mit.edu/search/*",
         "https://scratch.mit.edu/ideas/",
@@ -207,6 +210,7 @@
         "https://scratch.mit.edu/403/",
         "https://scratch.mit.edu/404/",
         "https://scratch.mit.edu/500/",
+        "https://scratch.mit.edu/503/",
         "https://scratch.mit.edu/login",
         "https://scratch.mit.edu/login_retry",
         "https://scratch.mit.edu/news"
