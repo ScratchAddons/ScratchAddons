@@ -414,8 +414,9 @@ const AddonSetting = Vue.extend({
     msg(...params) {
       return this.$root.msg(...params);
     },
-    updateSettings() {
-      this.$root.updateSettings(this.addon);
+    updateSettings(...params) {
+      if (!params[0]) params[0] = this.addon;
+      this.$root.updateSettings(...params);
     },
     updateOption(newValue) {
       this.$root.updateOption(this.setting.id, newValue, this.addon);
@@ -458,7 +459,8 @@ const CategorySelector = Vue.extend({
 });
 Vue.component("category-selector", CategorySelector);
 
-const browserLevelPermissions = ["notifications", "clipboardWrite"];
+const browserLevelPermissions = ["notifications"];
+if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
 let grantedOptionalPermissions = [];
 const updateGrantedPermissions = () =>
   chrome.permissions.getAll(({ permissions }) => {
@@ -485,7 +487,10 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
-const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
+const promisify =
+  (callbackFn) =>
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
 
 let handleConfirmClicked = null;
 

@@ -1,19 +1,17 @@
+html,
+body {
+  overflow: hidden;
+}
 body {
   width: var(--width, 400px);
   height: var(--height, 599px);
   margin: 0;
-  background-color: #2a2a2a; /* Avoid iframe src change flash */
+  background-color: var(--brand-orange); /* Firefox popup arrow */
   font-family: "Sora", sans-serif;
   color: white;
 }
-body.loading {
-  /* prevent scrollbars from appearing for a moment
-     while calculating popup size on Firefox */
-  overflow: hidden;
-}
 
 #header {
-  background-color: #ff7b26;
   display: flex;
   height: 60px;
 }
@@ -58,6 +56,8 @@ body.loading {
 
 #popups {
   background-color: #222;
+  width: 100%;
+  height: calc(100% - 60px);
 }
 
 #popup-bar {
@@ -97,8 +97,8 @@ body.loading {
 }
 
 iframe {
-  width: var(--width, 400px);
-  height: calc(var(--height, 599px) - 107px);
+  width: 100%;
+  height: calc(100% - 45px);
   overflow-x: hidden;
   border: none;
   overflow-y: scroll;
@@ -111,27 +111,4 @@ iframe {
   text-decoration: none;
   opacity: 0.75;
   font-size: 0.7rem;
-}
-
-#no-tabs {
-  width: var(--width, 400px);
-  height: calc(var(--height, 599px) - 107px);
-  background-color: #222;
-  display: flex;
-  align-items: center;
-  justify-items: center;
-}
-#no-tabs > div {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-items: center;
-  flex-direction: column;
-}
-#no-tabs-title {
-  font-size: 16px;
-  margin-top: auto;
-}
-#no-tabs-description {
-  margin-bottom: auto;
 }
