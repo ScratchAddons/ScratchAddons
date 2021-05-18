@@ -278,3 +278,37 @@ if (location.pathname === "/discuss/3/topic/add/") {
   };
   if (!checkUA()) window.addEventListener("DOMContentLoaded", () => checkUA(), { once: true });
 }
+
+(function injectListenerTrap() {
+  const listeners = (scratchAddons.eventListeners = new Array());
+
+  const oldAddListener = Element.prototype.addEventListener;
+  Element.prototype.addEventListener = function (...args) {
+    listeners.push({
+      event: args[0],
+      callback: args[1],
+      options: args[2],
+      element: this,
+    });
+
+    oldAddListener.bind(this)(...args);
+  };
+
+  const oldRemoveListener = Element.prototype.removeEventListener;
+  Element.prototype.removeEventListener = function (...args) {
+    listeners.splice(
+      listeners.indexOf(
+        listeners.filter(
+          (listener) =>
+            listener.event === args[0] &&
+            listener.callback === args[1] &&
+            (typeof args[2] === "object" && typeof listener.options === "object" ? JSON.stringify(args[2]) === JSON.stringify(listener.options) : args[2] === listener.options) &&
+            this === listener.element
+        )[0]
+      ),
+      1
+    );
+
+    oldRemoveListener.bind(this)(...args);
+  };
+})();
