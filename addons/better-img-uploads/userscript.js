@@ -1,19 +1,23 @@
 export default async function ({ addon, console }) {
   let enabled = true;
-  addon.self.addEventListener("disabled", () => enabled = false);
-  addon.self.addEventListener("reenabled", () => console.log(enabled = true));
+  addon.self.addEventListener("disabled", () => (enabled = false));
+  addon.self.addEventListener("reenabled", () => console.log((enabled = true)));
   while (true) {
     let ignore = false;
 
     let input = await addon.tab.waitForElement('input[type="file"][accept*=".svg"]', {
-      markAsSeen: true
+      markAsSeen: true,
     });
 
-    input.addEventListener("change", e => {
-      if (!enabled) return;
-      if (!ignore) (ignore = true) && onchange(e);
-      else ignore = false;
-    }, true);
+    input.addEventListener(
+      "change",
+      (e) => {
+        if (!enabled) return;
+        if (!ignore) (ignore = true) && onchange(e);
+        else ignore = false;
+      },
+      true
+    );
   }
 
   async function onchange(e) {
@@ -24,7 +28,7 @@ export default async function ({ addon, console }) {
     let processed = new Array();
 
     for (let file of files) {
-      let blob = await new Promise(resolve => {
+      let blob = await new Promise((resolve) => {
         let reader = new FileReader();
         reader.addEventListener("load", () => resolve(reader.result));
         reader.readAsDataURL(file);
@@ -37,11 +41,14 @@ export default async function ({ addon, console }) {
 
       let i = new Image();
       i.src = blob;
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         i.onload = resolve;
       });
 
-      processed.push(new File([`<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${i.width},${i.height}" width="${i.width}" height="${i.height}">
+      processed.push(
+        new File(
+          [
+            `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${i.width},${i.height}" width="${i.width}" height="${i.height}">
         <g transform="translate(0,0)">
           <g
               data-paper-data='{"isPaintingLayer":true}'
@@ -64,9 +71,14 @@ export default async function ({ addon, console }) {
             />
           </g>
         </g>
-      </svg>`], `${file.name.replace(/(.*)\..*/, "$1")}.svg`, {
-        type: "image/svg+xml"
-      }));
+      </svg>`,
+          ],
+          `${file.name.replace(/(.*)\..*/, "$1")}.svg`,
+          {
+            type: "image/svg+xml",
+          }
+        )
+      );
     }
 
     el.files = arrayToFileList(processed);
