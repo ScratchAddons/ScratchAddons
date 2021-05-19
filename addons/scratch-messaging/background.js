@@ -119,6 +119,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       retrieveComments(resourceType, resourceId, commentIds)
         .then((comments) => sendResponse(comments))
         .catch((err) => {
+          // TODO: are these errors recognized by popup?
+          // (Check for other catches below as well)
           console.error(err);
           sendResponse(err);
         });
