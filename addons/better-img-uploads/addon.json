@@ -18,5 +18,5 @@
   ],
   "dynamicDisable": true,
   "dynamicEnable": true,
-  "l10n": false
+  "l10n": true
 }
