@@ -137,6 +137,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       dismissAlert(popupRequest.dismissAlert)
         .then((res) => sendResponse(res))
         .catch((err) => sendResponse(err));
+      return true;
     }
   };
   chrome.runtime.onMessage.addListener(messageListener);
