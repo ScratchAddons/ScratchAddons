@@ -36,13 +36,19 @@
       "default": false
     },
     {
+      "name": "Confirm closing forum topics",
+      "id": "closingtopic",
+      "type": "boolean",
+      "default": false
+    }
+    {
       "name": "Confirm deleting projects",
       "id": "deletingproject",
       "type": "boolean",
       "default": false
     }
   ],
-  "tags": ["community", "recommended", "studios"],
+  "tags": ["community", "recommended"],
   "enabledByDefault": false,
   "l10n": true
 }

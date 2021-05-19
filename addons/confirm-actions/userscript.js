@@ -5,7 +5,7 @@ export default async function ({ addon, console, msg }) {
       let cancelMessage = null;
       if (
         addon.settings.get("projectsharing") &&
-        e.target.closest("[class*='share-button_share-button'], .banner-button")
+        e.target.closest("[class*='share-button_share-button']:not([class*='is-shared']), .banner-button")
       ) {
         cancelMessage = msg("share");
       } else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
@@ -17,8 +17,10 @@ export default async function ({ addon, console, msg }) {
           (e.target.textContent && e.target.textContent === addon.tab.scratchMessage("studio.curatorAcceptInvite")))
       ) {
         cancelMessage = msg("joinstudio");
+      } else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
+        cancelMessage = msg("closetopic");
       } else if (addon.settings.get("deletingproject") && e.target.closest(".media-trash")) {
-        cancelMessage = msg("trashproject")
+        cancelMessage = msg("trashproject");
       }
       if (cancelMessage !== null) {
         if (!confirm(cancelMessage)) {

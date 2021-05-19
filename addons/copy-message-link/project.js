@@ -2,6 +2,10 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     const comment = await addon.tab.waitForElement("div.comment", {
       markAsSeen: true,
+      reduxCondition: (state) => {
+        if (!state.scratchGui) return true;
+        return state.scratchGui.mode.isPlayerOnly;
+      },
     });
     if (comment.querySelector("form")) continue; // Comment input
     const newElem = document.createElement("span");

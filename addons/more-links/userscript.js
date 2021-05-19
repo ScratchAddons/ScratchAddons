@@ -11,7 +11,13 @@ export default async function ({ addon, console }) {
     case "projects":
       (async () => {
         while (true) {
-          let element = await addon.tab.waitForElement(".project-description", { markAsSeen: true });
+          let element = await addon.tab.waitForElement(".project-description", {
+            markAsSeen: true,
+            reduxCondition: (state) => {
+              if (!state.scratchGui) return true;
+              return state.scratchGui.mode.isPlayerOnly;
+            },
+          });
           // Need to convert #[numbers] to solve conflict between tags and external Scratch player links.
           document.querySelectorAll(".project-description a").forEach((element) => {
             if (/^#\d+$/.test(element.textContent) && element.previousSibling instanceof Text) {
@@ -40,7 +46,13 @@ export default async function ({ addon, console }) {
       }
     } else {
       while (true) {
-        let comment = await addon.tab.waitForElement("span.comment-content", { markAsSeen: true });
+        let comment = await addon.tab.waitForElement("span.comment-content", {
+          markAsSeen: true,
+          reduxCondition: (state) => {
+            if (!state.scratchGui) return true;
+            return state.scratchGui.mode.isPlayerOnly;
+          },
+        });
         // scratch-www comment is <span>-based.
         linkifyTag(comment, HTMLSpanElement);
       }
