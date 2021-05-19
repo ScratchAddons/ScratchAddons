@@ -94,14 +94,13 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     }
     lastDateTime = new Date(checkedMessages[0].datetime_created).getTime();
 
-    const stMessages = await (
+    data.stMessages = await (
       await fetch(`https://api.scratch.mit.edu/users/${addon.auth.username}/messages/admin`, {
         headers: {
           "x-token": addon.auth.xToken,
         },
       })
     ).json();
-    data.stMessages = stMessages;
 
     data.ready = true;
   }
