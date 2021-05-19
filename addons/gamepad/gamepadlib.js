@@ -694,7 +694,7 @@ class GamepadEditor {
     selector.appendChild(
       Object.assign(document.createElement("option"), {
         textContent: "WASD",
-        value: "wasd"
+        value: "wasd",
       })
     );
     selector.appendChild(
