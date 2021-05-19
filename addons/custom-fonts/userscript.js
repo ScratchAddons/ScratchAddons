@@ -1,6 +1,7 @@
 export default async function ({ addon, console }) {
   await addon.tab.loadScript(`${addon.self.lib}/thirdparty/cs/webfont.js`);
-
+  
+  //Easily expandible method of declaring options
   const options = [
     ["navfnt", "nav"],
     ["blockfnt", "blocks"],
@@ -14,19 +15,21 @@ export default async function ({ addon, console }) {
 
   let styles = [];
 
+  //Disable the addon
   function disable() {
     enabled = false;
     styles = styles.map(function (style) {
-      let temp = style.cloneNode(true);
+      let temp = style.cloneNode(true); //Duplicate the style before it is deleted
       style.remove();
       return temp;
     });
   }
 
+  //Enable the addon
   function enable() {
     enabled = true;
     styles = styles.map(function (style) {
-      return document.head.appendChild(style);
+      return document.head.appendChild(style); //Add the style
     });
   }
 
@@ -34,7 +37,7 @@ export default async function ({ addon, console }) {
 
   addon.self.addEventListener("reenabled", enable);
 
-  let templates = {
+  let templates = { //Css templates for the different options
     nav: '#navigation, [class*="menu-bar_menu-bar"], #topnav { %1 }',
     blocks: ".blocklyText, .blocklyHtmlInput, .scratchCommentBody, .scratchCommentText, .scratchblocks text  { %1 }",
     header: ".box-header, .box-head, form *, .tabs-index * { %1 }",
@@ -44,18 +47,21 @@ export default async function ({ addon, console }) {
     footer: "#footer * { %1 }",
   };
 
+  //Default letter width to use when calculating the spacing needed
   let defSpacing = getWidth();
 
+  //Load the fonts
   load(true);
 
+  //Reload the fonts after a change
   addon.settings.addEventListener("change", () => load());
 
   async function load(init = false) {
-    let fonts = options.map(([id, nme]) => addon.settings.get(id).trim());
+    let fonts = options.map(([id, nme]) => addon.settings.get(id).trim()); //Get all of the fonts
 
-    let needsLoad = fonts.filter((fnt) => !document.fonts.check(`12px ${fnt}`) && fnt.toLowerCase() !== "helvetica");
+    let needsLoad = fonts.filter((fnt) => !document.fonts.check(`12px ${fnt}`) && fnt.toLowerCase() !== "helvetica"); //The are the fonts that are not yet loaded on the website
 
-    if (needsLoad.length > 0) {
+    if (needsLoad.length > 0) { //Shouldn't load the fonts if the list is empty!
       await new Promise(function (resolve) {
         WebFont.load({
           google: {
@@ -69,7 +75,7 @@ export default async function ({ addon, console }) {
 
     for (let [id, nme] of options) {
       let s = nme === "blocks" ? await calcSpacing(addon.settings.get(id).trim()) : 0;
-      if (init) {
+      if (init) { //This is the first time the addon has been run, we need to populate the list
         addStyle(
           createStyle(
             styleFromTemplate(templates[nme], `font-family: ${addon.settings.get(id)}; letter-spacing: ${s}px;`),
@@ -85,7 +91,7 @@ export default async function ({ addon, console }) {
     }
   }
 
-  function styleFromTemplate(template, ...args) {
+  function styleFromTemplate(template, ...args) { //Easy method of replacement
     let matches = template.match(/\%([0-9]+)/g);
     matches.forEach((m) => {
       template = template.replace(m, args[m.replace("%", "") - 1]);
