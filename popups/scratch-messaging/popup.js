@@ -214,7 +214,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
       // For UI
       messageTypeExtended: {
-        stMessages: true,
+        stMessages: false,
         follows: false,
         studioInvites: false,
         studioPromotions: false,
@@ -330,11 +330,16 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         this.markedAsRead = true;
       },
       dismissAlert(id) {
-        chrome.runtime.sendMessage({ scratchMessaging: { dismissAlert: id } });
-        this.stMessages.splice(
-          this.stMessages.findIndex((alert) => alert.id === id),
-          1
-        );
+        const confirmation = confirm(l10n.get("scratch-messaging/stMessagesConfirm"));
+        if (!confirmation) return;
+        chrome.runtime.sendMessage({ scratchMessaging: { dismissAlert: id } }, (res) => {
+          if (res && !res.error) {
+            this.stMessages.splice(
+              this.stMessages.findIndex((alert) => alert.id === id),
+              1
+            );
+          }
+        });
       },
       reloadPage() {
         location.reload();

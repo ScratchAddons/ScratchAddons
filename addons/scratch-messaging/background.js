@@ -118,6 +118,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       const { resourceType, resourceId, commentIds } = popupRequest.retrieveComments;
       retrieveComments(resourceType, resourceId, commentIds)
         .then((comments) => sendResponse(comments))
+        // TODO: are these errors recognized by popup?
+        // (Check for other catches below as well)
         .catch((err) => sendResponse(err));
       return true;
     } else if (popupRequest === "markAsRead") {
@@ -129,7 +131,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         .catch((err) => sendResponse(err));
       return true;
     } else if (popupRequest.dismissAlert) {
-      dismissAlert(popupRequest.dismissAlert);
+      dismissAlert(popupRequest.dismissAlert)
+        .then((res) => sendResponse(res))
+        .catch((err) => sendResponse(err));
     }
   };
   chrome.runtime.onMessage.addListener(messageListener);
@@ -275,9 +279,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     });
   }
 
-  function dismissAlert(alertId) {
-    // TODO: Untested
-    fetch("https://scratch.mit.edu/site-api/messages/messages-delete/", {
+  async function dismissAlert(alertId) {
+    const res = await fetch("https://scratch.mit.edu/site-api/messages/messages-delete/?sareferer", {
       headers: {
         "content-type": "application/json",
         "x-csrftoken": addon.auth.csrfToken,
@@ -286,5 +289,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       body: JSON.stringify({ alertType: "notification", alertId }),
       method: "POST",
     });
+    if (!res.ok) return { error: res.status };
+    return { success: true };
   }
 }
