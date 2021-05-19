@@ -1,7 +1,7 @@
 {
   "name": "Customizable fonts",
   "description": "Customize the fonts for every part of scratch, including the blocks! Choose a font from fonts.google.com and enter it into the box.",
-  "tags": ["editor", "theme", "beta"],
+  "tags": ["theme", "beta", "editor"],
   "credits": [
     {
       "name": "ErrorGamer2000",
@@ -11,8 +11,7 @@
   "info": [
     {
       "type": "warning",
-      "text": "Letters in wider fonts will be bunched together. Try not to use excessively large fonts.",
-      "id": "font-width-warn"
+      "text": "Letters in wider fonts will be bunched together. Try not to use excessively large fonts."
     }
   ],
   "enabledByDefault": false,
@@ -53,6 +52,12 @@
     {
       "name": "Header Font",
       "id": "headfnt",
+      "type": "string",
+      "default": "Helvetica"
+    },
+    {
+      "name": "Footer Font",
+      "id": "footerfnt",
       "type": "string",
       "default": "Helvetica"
     }
