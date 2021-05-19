@@ -42,7 +42,7 @@
       "default": false
     }
   ],
-  "tags": ["community", "recommended", "studios", "forums"],
+  "tags": ["community", "recommended"],
   "enabledByDefault": false,
   "l10n": true
 }
