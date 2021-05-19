@@ -23,7 +23,7 @@ export default async function ({ addon, console }) {
         //Files have not been changed yet...
         else ignore = false;
       },
-      {capture: true}
+      { capture: true }
     );
   }
 
