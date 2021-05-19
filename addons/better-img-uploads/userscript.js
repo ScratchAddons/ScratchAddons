@@ -51,14 +51,14 @@ export default async function ({ addon, console }) {
       await new Promise((resolve) => {
         i.onload = resolve;
       });
-      
+
       if (i.width <= 480 && i.height <= 360) {
         processed.push(file);
         continue;
       }
-      
+
       let dim = [i.width, i.height];
-      
+
       if (dim[0] / dim[1] === 480 / 360) {
         dim[0] = 480;
         dim[1] = 360;
