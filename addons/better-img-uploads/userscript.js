@@ -90,7 +90,7 @@ export default async function ({ addon, console }) {
 
     el.files = arrayToFileList(processed); //Convert processed image array to a FileList, which is not constructible.
 
-    el.dispatchEvent(e); //Start the event over again, but allow scratch to receive it this time.
+    el.dispatchEvent(new e.constructor(e.type, e)); //Start a new, duplicate, event, but allow scratch to receive it this time.
   }
 
   function arrayToFileList(arr) {
