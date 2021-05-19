@@ -15,17 +15,19 @@ export default async function ({ addon, console }) {
       "change",
       (e) => {
         if (!enabled) return;
-        if (!ignore) (ignore = true) && onchange(e);
+        if (!ignore) {
+          e.stopPropagation(); //Prevent Scratch from seeing the event so that we can process the images first
+          ignore = true;
+          onchange(e);
+        }
         //Files have not been changed yet...
         else ignore = false;
       },
-      true
+      {capture: true}
     );
   }
 
   async function onchange(e) {
-    e.stopPropagation(); //Prevent Scratch from seeing the event so that we can process the images first
-
     let el = e.target;
     let files = Array.from(el.files);
     let processed = new Array();
