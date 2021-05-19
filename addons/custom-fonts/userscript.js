@@ -136,11 +136,7 @@ export default async function ({ addon, console }) {
     });
     let spacing = getWidth();
     let diff = spacing - defSpacing;
-    console.log(document.fonts.check(`12px ${font}`));
-    //styl.remove();
-    if (diff > 0) {
-      return -diff * 1.25;
-    }
-    return -diff * 1;
+    styl.remove();
+    return -diff
   }
 }
