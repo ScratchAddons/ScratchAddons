@@ -1,12 +1,10 @@
-// This addon works by modifying the VM to not react to clicking scripts.
+// This addon works by modifying the VM and Blockly to not react to clicking scripts.
 
 export default async function ({ addon, global, console }) {
-  const vm = addon.tab.traps.vm;
-
-  const originalBlocklyListen = vm.editingTarget.blocks.constructor.prototype.blocklyListen;
-  var enabled = true;
-  var wasJustDragged = false;
-  var duplicateBehavior = false;
+  const vm = await addon.tab.traps.vm;
+  const originalBlocklyListen = await vm.editingTarget.blocks.constructor.prototype.blocklyListen;
+  const BlocklyInstance = await addon.tab.traps.getBlockly();
+  const originalObject = await BlocklyInstance.BlockSvg.prototype.onMouseDown_;
 
   // Necessary for the CTRL + click option to work
   var ctrlKeyPressed = false;
@@ -21,35 +19,24 @@ export default async function ({ addon, global, console }) {
     }
   });
 
+  // Fixes the duplicate/pasting bug, no matter the setting (@GarboMuffin's implementation)
+  BlocklyInstance.BlockSvg.prototype.onMouseDown_ = function (e) {
+    if (this.workspace && this.workspace.isDragging()) {
+      return
+    } else {
+      return originalObject.call(this, e);
+    }
+  }
+
+  // Limits all script running, based on setting
   const newBlocklyListen = function (e) {
     var runMode = addon.settings.get("runMode");
-    // Checks if the Blockly event is a script being clicked
-    if (!addon.self.disabled && e.element === "stackclick" && enabled) {
-      // Completely disable all script clicking if the addon setting is enabled
-      if (runMode == "fullDisable" || (runMode == "ctrl" && !ctrlKeyPressed)) {
-        return;
-        // Checks if the script was duplicated/pasted -- if so, disable the response (running the script) for this event
-        // If CTRL + click mode is on, and the user is holding CTRL, the script running is intentional, and the check can be bypassed
-      } else if (!(wasJustDragged && duplicateBehavior) || (runMode == "ctrl" && ctrlKeyPressed)) {
-        originalBlocklyListen.call(this, e);
-      }
-      wasJustDragged = false;
-      duplicateBehavior = false;
+    if (!addon.self.disabled && e.element === "stackclick" && (runMode == "fullDisable" || (runMode == "ctrl" && !ctrlKeyPressed))) {
+      return;
     } else {
-      // Checks for the dragging event and logs it
-      if (e.type === "endDrag") {
-        wasJustDragged = true;
-        duplicateBehavior = false;
-      } else if (e.element === "selected" && e.type === "ui") {
-        duplicateBehavior = true;
-      } else if (e.type === "delete") {
-        wasJustDragged = false;
-        duplicateBehavior = false;
-      }
       originalBlocklyListen.call(this, e);
     }
   };
-
-  // Overwrite the old functions with our new ones
   vm.editingTarget.blocks.constructor.prototype.blocklyListen = newBlocklyListen;
+
 }

@@ -1,10 +1,14 @@
 {
   "name": "Adjust script run behavior",
-  "description": "Only run scripts on direct click, on CTRL + click, or never.",
+  "description": "Only run scripts on direct click, on CTRL + click, or never. (Fixes the duplicating bug)",
   "credits": [
     {
       "name": "lisa_wolfgang",
       "link": "https://github.com/lisa-wolfgang"
+    },
+    {
+      "name": "GarboMuffin",
+      "link": "https://github.com/GarboMuffin"
     },
     {
       "name": "apple502j",
