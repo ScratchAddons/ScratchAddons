@@ -8,7 +8,7 @@
       "link": "https://scratch.mit.edu/users/ErrorGamer2000/"
     }
   ],
-  "enabledByDefault": true,
+  "enabledByDefault": false,
   "userscripts": [
     {
       "url": "userscript.js",
