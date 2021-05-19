@@ -94,7 +94,7 @@ export default async function ({ addon, console }) {
   }
 
   function arrayToFileList(arr) {
-    let filelist = new ClipboardEvent("").clipboardData || new DataTransfer(); //This "creates" a FileList that we can add files to
+    let filelist = new DataTransfer(); //This "creates" a FileList that we can add files to
     for (let file of arr) {
       filelist.items.add(file);
     }
