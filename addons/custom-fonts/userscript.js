@@ -1,6 +1,6 @@
 export default async function ({ addon, console }) {
   await addon.tab.loadScript(`${addon.self.lib}/thirdparty/cs/webfont.js`);
-  
+
   //Easily expandible method of declaring options
   const options = [
     ["navfnt", "nav"],
@@ -37,7 +37,8 @@ export default async function ({ addon, console }) {
 
   addon.self.addEventListener("reenabled", enable);
 
-  let templates = { //Css templates for the different options
+  let templates = {
+    //Css templates for the different options
     nav: '#navigation, [class*="menu-bar_menu-bar"], #topnav { %1 }',
     blocks: ".blocklyText, .blocklyHtmlInput, .scratchCommentBody, .scratchCommentText, .scratchblocks text  { %1 }",
     header: ".box-header, .box-head, form *, .tabs-index * { %1 }",
@@ -61,7 +62,8 @@ export default async function ({ addon, console }) {
 
     let needsLoad = fonts.filter((fnt) => !document.fonts.check(`12px ${fnt}`) && fnt.toLowerCase() !== "helvetica"); //The are the fonts that are not yet loaded on the website
 
-    if (needsLoad.length > 0) { //Shouldn't load the fonts if the list is empty!
+    if (needsLoad.length > 0) {
+      //Shouldn't load the fonts if the list is empty!
       await new Promise(function (resolve) {
         WebFont.load({
           google: {
@@ -75,7 +77,8 @@ export default async function ({ addon, console }) {
 
     for (let [id, nme] of options) {
       let s = nme === "blocks" ? await calcSpacing(addon.settings.get(id).trim()) : 0;
-      if (init) { //This is the first time the addon has been run, we need to populate the list
+      if (init) {
+        //This is the first time the addon has been run, we need to populate the list
         addStyle(
           createStyle(
             styleFromTemplate(templates[nme], `font-family: ${addon.settings.get(id)}; letter-spacing: ${s}px;`),
@@ -91,7 +94,8 @@ export default async function ({ addon, console }) {
     }
   }
 
-  function styleFromTemplate(template, ...args) { //Easy method of replacement
+  function styleFromTemplate(template, ...args) {
+    //Easy method of replacement
     let matches = template.match(/\%([0-9]+)/g);
     matches.forEach((m) => {
       template = template.replace(m, args[m.replace("%", "") - 1]);
