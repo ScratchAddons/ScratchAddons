@@ -22,21 +22,24 @@ export default async function ({ addon, global, console }) {
   // Fixes the duplicate/pasting bug, no matter the setting (@GarboMuffin's implementation)
   BlocklyInstance.BlockSvg.prototype.onMouseDown_ = function (e) {
     if (this.workspace && this.workspace.isDragging()) {
-      return
+      return;
     } else {
       return originalObject.call(this, e);
     }
-  }
+  };
 
   // Limits all script running, based on setting
   const newBlocklyListen = function (e) {
     var runMode = addon.settings.get("runMode");
-    if (!addon.self.disabled && e.element === "stackclick" && (runMode == "fullDisable" || (runMode == "ctrl" && !ctrlKeyPressed))) {
+    if (
+      !addon.self.disabled &&
+      e.element === "stackclick" &&
+      (runMode == "fullDisable" || (runMode == "ctrl" && !ctrlKeyPressed))
+    ) {
       return;
     } else {
       originalBlocklyListen.call(this, e);
     }
   };
   vm.editingTarget.blocks.constructor.prototype.blocklyListen = newBlocklyListen;
-
 }
