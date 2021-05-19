@@ -9,6 +9,7 @@
 #navigation .dropdown a:visited,
 #navigation .dropdown a:active,
 .button,
+.modal-title,
 .intro-banner .intro-header,
 .intro-banner .intro-container,
 .title-banner.mod-messages,
@@ -17,6 +18,8 @@
 .download .download-header,
 .download .download-header .download-info .download-copy .download-title,
 .os-chooser .button.active,
+.studio-tab-nav .active > li,
+.user-projects-modal .user-projects-modal-nav li.active,
 .step .step-number-row .step-number,
 .title-banner.mod-blue-bg .title-banner-h1,
 .title-banner.mod-conference h1,
@@ -33,6 +36,7 @@
 #navigation .mystuff > a,
 .account-nav .user-info::after,
 .button img,
+.modal-content-close-img,
 .preview .see-inside-button:before,
 .subactions .action-buttons .action-button:not(.remixtree-button):before,
 .download .download-requirements span img,
@@ -59,7 +63,8 @@
   background-size: 50%;
 }
 .preview .remix-button,
-.os-chooser .button:not(.active) {
+.os-chooser .button:not(.active),
+.compose-comment .compose-bottom-row .compose-cancel {
   color: #fff;
 }
 .os-chooser .button:not(.active) img {
