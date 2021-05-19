@@ -1,7 +1,7 @@
 {
   "name": "Customizable fonts",
   "description": "Customize the fonts for every part of scratch, including the blocks! Choose a font from fonts.google.com and enter it into the box.",
-  "tags": ["theme", "beta"],
+  "tags": ["editor", "theme", "beta"],
   "credits": [
     {
       "name": "ErrorGamer2000",
