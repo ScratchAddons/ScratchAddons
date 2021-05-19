@@ -11,7 +11,8 @@
   "info": [
     {
       "type": "warning",
-      "text": "Letters in wider fonts will be bunched together. Try not to use excessively large fonts."
+      "text": "Letters in wider fonts will be bunched together. Try not to use excessively large fonts.",
+      "id": "font-width-warn"
     }
   ],
   "enabledByDefault": false,
