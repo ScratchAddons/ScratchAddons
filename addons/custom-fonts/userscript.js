@@ -137,6 +137,6 @@ export default async function ({ addon, console }) {
     let spacing = getWidth();
     let diff = spacing - defSpacing;
     styl.remove();
-    return -diff
+    return -diff;
   }
 }
