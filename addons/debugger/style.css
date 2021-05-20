@@ -78,7 +78,6 @@
   background-color: hsl(0deg 100% 95%) !important;
 }
 .logs {
-  cursor: default;
   border-radius: 0;
   padding: 0;
 }
@@ -88,6 +87,7 @@
   overflow: auto;
   flex: 1;
   width: 100%
+  cursor: default;
 }
 .console-variable {
   padding: 4px;
