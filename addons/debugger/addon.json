@@ -41,7 +41,8 @@
       "default": "${sprite}: ${content} (${type})"
     }
   ],
-  "tags": ["editor", "recommended"],
+  "tags": ["editor", "recommended","beta"],
   "enabledByDefault": false,
+  "versionAdded": "1.15.0",
   "l10n": true
 }
