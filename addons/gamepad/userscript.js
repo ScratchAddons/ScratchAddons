@@ -114,7 +114,9 @@ export default async function ({ addon, global, console, msg }) {
   virtualCursorImage.className = "sa-gamepad-cursor-image";
   virtualCursorImage.src = addon.self.dir + "/cursor.png";
   virtualCursorContainer.appendChild(virtualCursorImage);
-  addon.tab.displayNoneWhileDisabled(virtualCursorContainer);
+  addon.self.addEventListener("disabled", () => {
+    virtualCursorContainer.hidden = true;
+  });
 
   let hideCursorTimeout;
 
