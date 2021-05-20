@@ -15,6 +15,7 @@
       "link": "https://github.com/apple502j"
     }
   ],
+  "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [
     {
