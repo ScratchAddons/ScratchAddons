@@ -1,6 +1,6 @@
 {
-  "name": "Adjust script run behavior",
-  "description": "Only run scripts on direct click, on CTRL + click, or never. (Fixes the duplicating bug)",
+  "name": "Do not automatically run duplicated blocks",
+  "description": "Fixes a bug in the Scratch editor, where duplicating a block and attaching it to a stack causes the stack to run.",
   "credits": [
     {
       "name": "lisa_wolfgang",
@@ -15,12 +15,11 @@
       "link": "https://github.com/apple502j"
     }
   ],
-  "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "settings": [
@@ -35,17 +34,14 @@
         },
         {
           "id": "ctrl",
-          "name": "On CTRL + click"
-        },
-        {
-          "id": "fullDisable",
-          "name": "Never"
+          "name": "On Ctrl + click"
         }
       ],
       "default": "default"
     }
   ],
-  "tags": ["editor", "codeEditor"],
+  "tags": ["editor", "recommended", "codeEditor"],
+  "versionAdded": "1.15.0",
   "enabledByDefault": false,
   "l10n": true
 }
