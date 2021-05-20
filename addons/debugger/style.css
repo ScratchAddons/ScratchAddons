@@ -66,6 +66,7 @@
   align-items: center;
   padding: 2px;
   content-visibility: auto;
+  contain-intrinsic-size: 1.2rem;
 }
 .warn {
   border-color: var(--warning-border-color) !important;
