@@ -1,0 +1,6 @@
+.blocklySvg > .blocklyWorkspace > .blocklyBlockCanvas > .blocklyDraggable:not([data-shapes*="hat"]) {
+  opacity: calc(1 - var(--transparentOrphans-transparency) / 100);
+}
+.blocklyWsDragSurface > .blocklyBlockCanvas > .blocklyDraggable:not([data-shapes*="hat"]) {
+  opacity: calc(1 - var(--transparentOrphans-transparency) / 100);
+}
