@@ -1,11 +1,17 @@
 {
   "name": "Transparent orphan blocks",
-  "description": "Makes any blocks that are \"orphaned\", or without a hat block, transparent.",
-  "tags": ["editor", "beta"],
+  "description": "Makes block stacks without a hat block at the top of them transparent.",
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.15.0",
+  "dynamicDisable": true,
+  "dynamicEnable": true,
   "credits": [
     {
       "name": "ErrorGamer2000",
       "link": "https://scratch.mit.edu/users/ErrorGamer2000/"
+    },
+    {
+      "name": "GarboMuffin"
     }
   ],
   "settings": [
@@ -18,10 +24,10 @@
       "default": 50
     }
   ],
-  "userscripts": [
+  "userstyles": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "url": "userstyle.css",
+      "matches": ["projects"],
       "runAtComplete": true
     }
   ],
