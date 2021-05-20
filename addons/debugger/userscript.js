@@ -66,7 +66,7 @@ export default async function ({ addon, global, console, msg }) {
   buttons.append(exportButton, closeButton);
   closeButton.append(closeImg, closeText);
   exportButton.append(exportImg, exportText);
-  extraContainer.append(consoleList)
+  extraContainer.append(consoleList);
   consoleWrapper.append(consoleTitle, extraContainer);
   document.body.append(consoleWrapper);
   window.goToBlock = (blockId) => {

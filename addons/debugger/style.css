@@ -83,10 +83,10 @@
   padding: 0;
 }
 .extra-log-container {
-  display: flex; 
+  display: flex;
   flex-direction: column-reverse;
-  overflow:auto; 
-  flex:1;
+  overflow: auto;
+  flex: 1;
 }
 .console-variable {
   padding: 4px;
