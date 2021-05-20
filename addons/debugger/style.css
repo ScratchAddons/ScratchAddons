@@ -87,6 +87,7 @@
   flex-direction: column-reverse;
   overflow: auto;
   flex: 1;
+  width: 100%
 }
 .console-variable {
   padding: 4px;
