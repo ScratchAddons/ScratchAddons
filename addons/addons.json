@@ -70,9 +70,11 @@
   "custom-zoom",
   "blocks2image",
   "editor-sounds",
+  "transparent-orphans",
   "material-forum-editor-buttons",
   "gamepad",
   "remove-curved-stage-border",
+  "fix-pasted-scripts",
   "better-img-uploads",
 
   "// NEW ADDONS ABOVE THIS ↑↑",

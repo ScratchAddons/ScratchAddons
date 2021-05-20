@@ -17,6 +17,8 @@ export default async function ({ addon, console, msg }) {
           (e.target.textContent && e.target.textContent === addon.tab.scratchMessage("studio.curatorAcceptInvite")))
       ) {
         cancelMessage = msg("joinstudio");
+      } else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
+        cancelMessage = msg("closetopic");
       }
       if (cancelMessage !== null) {
         if (!confirm(cancelMessage)) {

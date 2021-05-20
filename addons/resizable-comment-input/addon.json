@@ -10,6 +10,7 @@
   "injectAsStyleElt": true,
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "versionAdded": "1.3.0",
   "userstyles": [
     {
       "url": "userstyle.css",

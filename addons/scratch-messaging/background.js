@@ -93,6 +93,15 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       }
     }
     lastDateTime = new Date(checkedMessages[0].datetime_created).getTime();
+
+    data.stMessages = await (
+      await fetch(`https://api.scratch.mit.edu/users/${addon.auth.username}/messages/admin`, {
+        headers: {
+          "x-token": addon.auth.xToken,
+        },
+      })
+    ).json();
+
     data.ready = true;
   }
 
@@ -109,6 +118,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       retrieveComments(resourceType, resourceId, commentIds)
         .then((comments) => sendResponse(comments))
         .catch((err) => {
+          // TODO: are these errors recognized by popup?
+          // (Check for other catches below as well)
           console.error(err);
           sendResponse(err);
         });
@@ -118,6 +129,11 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     } else if (popupRequest.deleteComment) {
       const { resourceType, resourceId, commentId } = popupRequest.deleteComment;
       deleteComment({ resourceType, resourceId, commentId })
+        .then((res) => sendResponse(res))
+        .catch((err) => sendResponse(err));
+      return true;
+    } else if (popupRequest.dismissAlert) {
+      dismissAlert(popupRequest.dismissAlert)
         .then((res) => sendResponse(res))
         .catch((err) => sendResponse(err));
       return true;
@@ -404,5 +420,19 @@ export default async function ({ addon, global, console, setTimeout, setInterval
 
       xhr.send(JSON.stringify({ id: String(commentId) }));
     });
+  }
+
+  async function dismissAlert(alertId) {
+    const res = await fetch("https://scratch.mit.edu/site-api/messages/messages-delete/?sareferer", {
+      headers: {
+        "content-type": "application/json",
+        "x-csrftoken": addon.auth.csrfToken,
+        "x-requested-with": "XMLHttpRequest",
+      },
+      body: JSON.stringify({ alertType: "notification", alertId }),
+      method: "POST",
+    });
+    if (!res.ok) return { error: res.status };
+    return { success: true };
   }
 }
