@@ -28,9 +28,9 @@ Return to the last page: https://github.com/ScratchAddons/ScratchAddons/issues/n
 
 <!-- Provide an unambiguous set of steps to reproduce this bug, and/or a link to a live example. -->
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ### Expected behaviour
 
@@ -44,9 +44,9 @@ Return to the last page: https://github.com/ScratchAddons/ScratchAddons/issues/n
 
 <!-- If applicable, add screenshots to help explain your problem. -->
 
-### Enviroment
+### Environment
 
-<!-- Include information related to your enviroment/device. -->
+<!-- Include information related to your environment/device. -->
 
 - Browser: <!-- e.g. Chrome 89 -->
 - Scratch Addons version: <!-- e.g. 1.10.0, for pre-releases, include hash if possible -->
