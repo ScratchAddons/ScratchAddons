@@ -9,6 +9,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "versionAdded": "1.4.0",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -32,6 +33,12 @@
     {
       "name": "Confirm joining studios",
       "id": "joiningstudio",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Confirm closing forum topics",
+      "id": "closingtopic",
       "type": "boolean",
       "default": false
     }

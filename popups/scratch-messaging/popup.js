@@ -89,6 +89,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
                 content: this.replyBoxValue,
                 parent_id,
                 commentee_id: this.thisComment.authorId,
+                commenteeUsername: this.thisComment.author,
               },
             },
           },
@@ -187,6 +188,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
     data: {
       mounted: true, // Always true
 
+      stMessages: [],
       messages: [],
       comments: {},
       error: null,
@@ -213,6 +215,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
       // For UI
       messageTypeExtended: {
+        stMessages: false,
         follows: false,
         studioInvites: false,
         studioPromotions: false,
@@ -222,6 +225,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
       },
 
       uiMessages: {
+        stMessagesMsg: l10n.get("scratch-messaging/stMessages"),
         followsMsg: l10n.get("scratch-messaging/follows"),
         studioInvitesMsg: l10n.get("scratch-messaging/studio-invites"),
         forumMsg: l10n.get("scratch-messaging/forum"),
@@ -232,6 +236,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         loggedOutMsg: l10n.get("scratch-messaging/logged-out"),
         loadingCommentsMsg: l10n.get("scratch-messaging/loading-comments"),
         reloadMsg: l10n.get("scratch-messaging/reload"),
+        dismissMsg: l10n.get("scratch-messaging/dismiss"),
         noUnreadMsg: l10n.get("scratch-messaging/no-unread"),
         showMoreMsg: l10n.get("scratch-messaging/show-more"),
         markAsReadMsg: l10n.get("scratch-messaging/mark-as-read"),
@@ -306,6 +311,10 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
           chrome.runtime.sendMessage({ scratchMessaging: "getData" }, (res) => {
             if (res) {
               clearTimeout(timeout);
+              this.stMessages = res.stMessages.map((alert) => ({
+                ...alert,
+                datetime_created: new Date(alert.datetime_created).toDateString(),
+              }));
               this.messages = res.messages;
               this.msgCount = res.lastMsgCount;
               this.username = res.username;
@@ -320,6 +329,18 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
       markAsRead() {
         chrome.runtime.sendMessage({ scratchMessaging: "markAsRead" });
         this.markedAsRead = true;
+      },
+      dismissAlert(id) {
+        const confirmation = confirm(l10n.get("scratch-messaging/stMessagesConfirm"));
+        if (!confirmation) return;
+        chrome.runtime.sendMessage({ scratchMessaging: { dismissAlert: id } }, (res) => {
+          if (res && !res.error) {
+            this.stMessages.splice(
+              this.stMessages.findIndex((alert) => alert.id === id),
+              1
+            );
+          }
+        });
       },
       reloadPage() {
         location.reload();
@@ -401,16 +422,21 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
               for (const commentId of Object.keys(comments)) {
                 const commentObject = comments[commentId];
                 Vue.set(this.comments, commentId, commentObject);
-                const chainId = commentObject.childOf || commentId;
-                const resourceGetFunction =
-                  resourceType === "project"
-                    ? "getProjectObject"
-                    : resourceType === "user"
-                    ? "getProfileObject"
-                    : "getStudioObject";
-                const resourceObject = this[resourceGetFunction](resourceId);
-                if (!resourceObject.commentChains.includes(chainId)) resourceObject.commentChains.push(chainId);
               }
+
+              // Preserve chronological sort when using JSON API
+              const parentComments = Object.entries(comments).filter((c) => c[1].childOf === null);
+              const sortedParentComments = parentComments.sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
+              const sortedIds = sortedParentComments.map((arr) => arr[0]);
+              const resourceGetFunction =
+                resourceType === "project"
+                  ? "getProjectObject"
+                  : resourceType === "user"
+                  ? "getProfileObject"
+                  : "getStudioObject";
+              const resourceObject = this[resourceGetFunction](resourceId);
+              for (const sortedId of sortedIds) resourceObject.commentChains.push(sortedId);
+
               elementObject.loadedComments = true;
               resolve();
             }
@@ -424,8 +450,9 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
           1: [], // Profiles
           2: [], // Studios
         };
+        let realMsgCount = this.msgCount - this.stMessages.length;
         const messagesToCheck =
-          this.msgCount > 40 ? this.messages.length : showAll ? this.messages.length : this.msgCount;
+          realMsgCount > 40 ? this.messages.length : showAll ? this.messages.length : realMsgCount;
         this.showingMessagesAmt = messagesToCheck;
         for (const message of this.messages.slice(0, messagesToCheck)) {
           if (message.type === "followuser") {

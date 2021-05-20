@@ -34,7 +34,8 @@
       "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
-  "tags": ["easterEgg"],
+  "versionAdded": "1.12.0",
+  "tags": ["easterEgg", "community", "profiles"],
   "enabledByDefault": false,
   "l10n": true
 }

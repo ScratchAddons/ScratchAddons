@@ -14,7 +14,8 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor", "recommended"],
+  "versionAdded": "1.0.0",
+  "tags": ["editor", "costumeEditor"],
   "permissions": ["clipboardWrite"],
   "enabledByDefault": false,
   "l10n": true

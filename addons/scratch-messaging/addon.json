@@ -14,8 +14,9 @@
     "name": "Messaging",
     "fullscreen": true
   },
+  "versionAdded": "1.0.0",
   "persistentScripts": ["background.js"],
-  "tags": ["community", "recommended"],
+  "tags": ["popup", "recommended"],
   "enabledByDefault": true,
   "l10n": true
 }

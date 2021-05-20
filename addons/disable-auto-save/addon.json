@@ -20,7 +20,8 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor"],
+  "versionAdded": "1.8.0",
+  "tags": ["editor", "editorMenuBar", "danger"],
   "enabledByDefault": false,
   "l10n": true
 }

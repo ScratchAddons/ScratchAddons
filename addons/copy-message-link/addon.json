@@ -15,17 +15,18 @@
     },
     {
       "url": "project.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios_www/*"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "project.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios_www/*"]
     }
   ],
-  "tags": ["community", "recommended"],
+  "versionAdded": "1.10.0",
+  "tags": ["community", "comments", "recommended"],
   "l10n": true,
   "enabledByDefault": false
 }

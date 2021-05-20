@@ -8,6 +8,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "versionAdded": "1.2.0",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -20,7 +21,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "projectPlayer"],
   "enabledByDefault": false,
   "l10n": true
 }

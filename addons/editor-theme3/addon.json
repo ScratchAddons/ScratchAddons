@@ -20,7 +20,7 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
-
+  "versionAdded": "1.2.0",
   "userscripts": [
     {
       "url": "theme3.js",
@@ -142,7 +142,7 @@
       ]
     }
   ],
-  "tags": ["editor", "theme"],
+  "tags": ["editor", "theme", "codeEditor", "recommended"],
   "enabledByDefault": false,
   "presets": [
     {

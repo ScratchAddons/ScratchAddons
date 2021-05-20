@@ -8,13 +8,14 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "versionAdded": "1.4.0",
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
-  "tags": ["editor", "recommended"],
+  "tags": ["editor", "codeEditor", "recommended"],
   "settings": [
     {
       "name": "Show option to change block to self",
