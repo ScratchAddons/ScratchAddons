@@ -9,6 +9,25 @@ export default async function ({ addon, global, console, msg }) {
     vm.runtime.once("PROJECT_LOADED", resolve);
   });
 
+  GamepadLib.setConsole(console);
+  const gamepad = new GamepadLib();
+
+  if (addon.settings.get("hide")) {
+    await new Promise((resolve) => {
+      const end = () => {
+        addon.settings.removeEventListener("change", listener);
+        resolve();
+      };
+      const listener = () => {
+        if (!addon.settings.get("hide")) {
+          end();
+        }
+      };
+      gamepad.gamepadConnected().then(end);
+      addon.settings.addEventListener("change", listener);
+    });
+  }
+
   const renderer = vm.runtime.renderer;
   const width = renderer._xRight - renderer._xLeft;
   const height = renderer._yTop - renderer._yBottom;
@@ -186,8 +205,6 @@ export default async function ({ addon, global, console, msg }) {
     postMouseData({});
   };
 
-  GamepadLib.setConsole(console);
-  const gamepad = new GamepadLib();
   gamepad.virtualCursor.maxX = renderer._xRight;
   gamepad.virtualCursor.minX = renderer._xLeft;
   gamepad.virtualCursor.maxY = renderer._yTop;
