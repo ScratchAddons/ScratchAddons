@@ -25,9 +25,10 @@ export default async function ({ addon, console, safeMsg: m }) {
   //The class name for the menu
   let c = addon.tab.scratchClass("action-menu_more-buttons");
 
-  while (true) { //Catch all upload menus as they are created
+  while (true) {
+    //Catch all upload menus as they are created
     let menu = await addon.tab.waitForElement(`.${c}`, { markAsSeen: true });
-    let button = menu.parentElement.previousElementSibling.previousElementSibling;//The base button that the popup menu is from
+    let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
     let id = button.ariaLabel.replaceAll(" ", "_");
 
@@ -82,7 +83,8 @@ export default async function ({ addon, console, safeMsg: m }) {
 
       let dim = { width: i.width, height: i.height };
 
-      if (mode === "fit") { //Make sure the image fits completely in the stage
+      if (mode === "fit") {
+        //Make sure the image fits completely in the stage
         if (dim.width / dim.height === 480 / 360) {
           dim.width = 480;
           dim.height = 360;
@@ -93,7 +95,8 @@ export default async function ({ addon, console, safeMsg: m }) {
           dim.height = (dim.height / dim.width) * 480;
           dim.width = 480;
         }
-      } else if (mode === "fill") { //Fill the stage with the image
+      } else if (mode === "fill") {
+        //Fill the stage with the image
         dim.height = (dim.height / dim.width) * 480;
         dim.width = 480;
         if (dim.height < 360) {
@@ -146,7 +149,8 @@ export default async function ({ addon, console, safeMsg: m }) {
     el.dispatchEvent(new e.constructor(e.type, e)); //Start a new, duplicate, event, but allow scratch to receive it this time.
   }
 
-  function FileList(arr = []) { //File list constructor. Does not need the `new` keyword, but it is easier to read
+  function FileList(arr = []) {
+    //File list constructor. Does not need the `new` keyword, but it is easier to read
     let filelist = new DataTransfer(); //This "creates" a FileList that we can add files to
     for (let file of arr) {
       filelist.items.add(file);
