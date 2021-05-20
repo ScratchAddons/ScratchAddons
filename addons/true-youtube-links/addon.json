@@ -13,6 +13,7 @@
       "runAtComplete": false
     }
   ],
+  "versionAdded": "1.0.0",
   "tags": ["community", "forums"],
   "enabledByDefault": false,
   "l10n": true

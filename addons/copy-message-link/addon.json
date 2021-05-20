@@ -25,6 +25,7 @@
       "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios_www/*"]
     }
   ],
+  "versionAdded": "1.10.0",
   "tags": ["community", "comments", "recommended"],
   "l10n": true,
   "enabledByDefault": false

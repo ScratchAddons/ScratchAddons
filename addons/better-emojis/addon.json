@@ -15,5 +15,6 @@
     }
   ],
   "enabledByDefault": false,
+  "versionAdded": "1.1.0",
   "l10n": true
 }
