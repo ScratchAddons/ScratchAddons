@@ -31,6 +31,9 @@ export default async function ({ addon, global, console, msg }) {
   const consoleText = Object.assign(document.createElement("h1"), {
     innerText: msg("console"),
   });
+  const extraContainer = Object.assign(document.createElement("div"), {
+    className: `extra-log-container`,
+  });
   const consoleList = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("sprite-info_sprite-info", { others: "logs" }),
   });
@@ -63,7 +66,8 @@ export default async function ({ addon, global, console, msg }) {
   buttons.append(exportButton, closeButton);
   closeButton.append(closeImg, closeText);
   exportButton.append(exportImg, exportText);
-  consoleWrapper.append(consoleTitle, consoleList);
+  extraContainer.append(consoleList)
+  consoleWrapper.append(consoleTitle, extraContainer);
   document.body.append(consoleWrapper);
   window.goToBlock = (blockId) => {
     const offsetX = 32,
@@ -202,11 +206,10 @@ export default async function ({ addon, global, console, msg }) {
       return s;
     };
     const targetName = vm.runtime.targets.find((t) => t.id === targetId).getName();
-    const scrolledDown = consoleList.scrollTop === consoleList.scrollHeight - consoleList.clientHeight;
     wrapper.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
     if (type === "warn") wrapper.classList += " warn";
     if (type === "error") wrapper.classList += " error";
-    consoleList.appendChild(wrapper);
+    consoleList.append(wrapper);
 
     const block = workspace.getBlockById(blockId);
     const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
@@ -234,7 +237,6 @@ export default async function ({ addon, global, console, msg }) {
     console.log(blockId);
 
     wrapper.appendChild(link);
-    if (scrolledDown) consoleList.scrollTop = consoleList.scrollHeight - consoleList.clientHeight;
   };
   const toggleConsole = (show = !showingConsole) => {
     if (show) {

@@ -78,14 +78,16 @@
   background-color: hsl(0deg 100% 95%) !important;
 }
 .logs {
-  overflow-y: scroll;
   cursor: default;
   border-radius: 0;
   padding: 0;
-  width: 100%;
-  flex: 1;
 }
-
+.extra-log-container {
+  display: flex; 
+  flex-direction: column-reverse;
+  overflow:auto; 
+  flex:1;
+}
 .console-variable {
   padding: 4px;
   border-radius: 10px;
