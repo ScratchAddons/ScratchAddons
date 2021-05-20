@@ -27,8 +27,7 @@
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["projects"],
-      "runAtComplete": true
+      "matches": ["projects"]
     }
   ],
   "l10n": true
