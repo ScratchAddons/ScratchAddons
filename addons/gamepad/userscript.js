@@ -35,6 +35,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const spacer = document.createElement("div");
   spacer.className = "sa-gamepad-spacer";
+  addon.tab.displayNoneWhileDisabled(spacer, { display: "flex" });
   const buttonGroup = document.createElement("div");
   buttonGroup.className = addon.tab.scratchClass("stage-header_stage-size-toggle-group");
   const buttonContainer = document.createElement("div");
@@ -57,6 +58,7 @@ export default async function ({ addon, global, console, msg }) {
     const close = () => {
       modalOverlay.remove();
       document.body.removeEventListener("click", handleClickOutside, true);
+      addon.self.removeEventListener("disabled", close);
       editor.hide();
     };
     const handleClickOutside = (e) => {
@@ -65,6 +67,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     };
     document.body.addEventListener("click", handleClickOutside, true);
+    addon.self.addEventListener("disabled", close);
 
     const modalOverlay = document.createElement("div");
     modalOverlay.className = addon.tab.scratchClass("modal_modal-overlay", { others: "sa-gamepad-popup-outer" });
@@ -111,6 +114,7 @@ export default async function ({ addon, global, console, msg }) {
   virtualCursorImage.className = "sa-gamepad-cursor-image";
   virtualCursorImage.src = addon.self.dir + "/cursor.png";
   virtualCursorContainer.appendChild(virtualCursorImage);
+  addon.tab.displayNoneWhileDisabled(virtualCursorContainer);
 
   let hideCursorTimeout;
 
@@ -173,6 +177,7 @@ export default async function ({ addon, global, console, msg }) {
     });
   };
   const handleGamepadButtonDown = (e) => {
+    if (addon.self.disabled) return;
     const key = e.detail;
     vm.postIOData("keyboard", {
       key: key,
@@ -180,6 +185,7 @@ export default async function ({ addon, global, console, msg }) {
     });
   };
   const handleGamepadButtonUp = (e) => {
+    if (addon.self.disabled) return;
     const key = e.detail;
     vm.postIOData("keyboard", {
       key: key,
@@ -187,18 +193,21 @@ export default async function ({ addon, global, console, msg }) {
     });
   };
   const handleGamepadMouseDown = () => {
+    if (addon.self.disabled) return;
     virtualCursorSetDown(true);
     postMouseData({
       isDown: true,
     });
   };
   const handleGamepadMouseUp = () => {
+    if (addon.self.disabled) return;
     virtualCursorSetDown(false);
     postMouseData({
       isDown: false,
     });
   };
   const handleGamepadMouseMove = (e) => {
+    if (addon.self.disabled) return;
     virtualX = e.detail.x;
     virtualY = e.detail.y;
     virtualCursorSetPosition(virtualX, virtualY);
