@@ -329,7 +329,10 @@ if (window.parent !== window) {
   document.body.classList.add("iframe");
 }
 
-const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
+const promisify =
+  (callbackFn) =>
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
 
 let handleConfirmClicked = null;
 
