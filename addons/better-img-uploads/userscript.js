@@ -1,16 +1,25 @@
 export default async function ({ addon, console, safeMsg: m }) {
-
   let mode = addon.settings.get("fitting");
 
-  addon.settings.addEventListener("change", () => {mode = addon.settings.get("fitting")})
+  addon.settings.addEventListener("change", () => {
+    mode = addon.settings.get("fitting");
+  });
 
   let html = (id, right) => `<div id="${id}">
-  <button aria-label="Upload Costume" class="${addon.tab.scratchClass("action-menu_button")} ${addon.tab.scratchClass("action-menu_more-button")}"" data-for="sa-${id}-HD Upload" data-tip="${m("upload")}" currentitem="false">
-    <img class="${addon.tab.scratchClass("action-menu_more-icon")} sa-better-img-uploader" draggable="false" src="${addon.self.dir + "/icon.svg"}" height="10", width="10">
-     <input accept=".svg, .png, .bmp, .jpg, .jpeg, .gif" class="${addon.tab.scratchClass("action-menu_file-input")}" multiple="" type="file">
+  <button aria-label="Upload Costume" class="${addon.tab.scratchClass("action-menu_button")} ${addon.tab.scratchClass(
+    "action-menu_more-button"
+  )}"" data-for="sa-${id}-HD Upload" data-tip="${m("upload")}" currentitem="false">
+    <img class="${addon.tab.scratchClass("action-menu_more-icon")} sa-better-img-uploader" draggable="false" src="${
+    addon.self.dir + "/icon.svg"
+  }" height="10", width="10">
+     <input accept=".svg, .png, .bmp, .jpg, .jpeg, .gif" class="${addon.tab.scratchClass(
+       "action-menu_file-input"
+     )}" multiple="" type="file">
   </button>
-  <div class="__react_component_tooltip place-${right ? "left" : "right"} type-dark ${addon.tab.scratchClass("action-menu_tooltip")}" id="sa-${id}-HD Upload" data-id="tooltip" >${m("upload")}</div>
-</div>`
+  <div class="__react_component_tooltip place-${right ? "left" : "right"} type-dark ${addon.tab.scratchClass(
+    "action-menu_tooltip"
+  )}" id="sa-${id}-HD Upload" data-id="tooltip" >${m("upload")}</div>
+</div>`;
 
   let c = addon.tab.scratchClass("action-menu_more-buttons");
 
@@ -22,7 +31,9 @@ export default async function ({ addon, console, safeMsg: m }) {
 
     if (id === "Choose_a_Sound") continue;
 
-    let isRight = button.parentElement.classList.contains(addon.tab.scratchClass("sprite-selector_add-button")) || button.parentElement.classList.contains(addon.tab.scratchClass("stage-selector_add-button"))
+    let isRight =
+      button.parentElement.classList.contains(addon.tab.scratchClass("sprite-selector_add-button")) ||
+      button.parentElement.classList.contains(addon.tab.scratchClass("stage-selector_add-button"));
 
     if (isRight) {
       id += "_right";
@@ -34,11 +45,11 @@ export default async function ({ addon, console, safeMsg: m }) {
     menuItem.querySelector("button").addEventListener("click", (e) => {
       menuItem.querySelector("button > input").files = new FileList();
       menuItem.querySelector("button > input").click();
-    })
+    });
 
     menuItem.querySelector("button > input").addEventListener("change", (e) => {
       onchange(e, id);
-    })
+    });
   }
 
   async function onchange(e, id) {
@@ -66,11 +77,11 @@ export default async function ({ addon, console, safeMsg: m }) {
       await new Promise((resolve) => {
         i.onload = resolve;
       });
-      
+
       let dim = { width: i.width, height: i.height };
 
       console.log(mode);
-      
+
       if (mode === "fit") {
         if (dim.width / dim.height === 480 / 360) {
           dim.width = 480;
