@@ -30,7 +30,7 @@ export default async function ({ addon, console, safeMsg: m }) {
     let menu = await addon.tab.waitForElement(`.${c}`, { markAsSeen: true });
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
-    let id = button.ariaLabel.replaceAll(" ", "_");
+    let id = button.getAttribute("aria-label").replaceAll(" ", "_");
 
     if (id === "Choose_a_Sound") continue; //Don't want it in the sounds tab!
 
