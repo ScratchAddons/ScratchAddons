@@ -23,24 +23,6 @@
       "matches": ["projects"]
     }
   ],
-  "settings": [
-    {
-      "name": "Only run scripts...",
-      "id": "runMode",
-      "type": "select",
-      "potentialValues": [
-        {
-          "id": "default",
-          "name": "On direct click"
-        },
-        {
-          "id": "ctrl",
-          "name": "On Ctrl + click"
-        }
-      ],
-      "default": "default"
-    }
-  ],
   "tags": ["editor", "recommended", "codeEditor"],
   "versionAdded": "1.15.0",
   "enabledByDefault": false,
