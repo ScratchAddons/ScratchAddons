@@ -1,33 +1,48 @@
-export default async function ({ addon, console }) {
-  let enabled = true; //Addon is enabled
+export default async function ({ addon, console, safeMsg: m }) {
 
-  addon.self.addEventListener("disabled", () => (enabled = false));
-  addon.self.addEventListener("reenabled", () => console.log((enabled = true)));
+  let mode = addon.settings.get("fitting");
+
+  addon.settings.addEventListener("change", () => {mode = addon.settings.get("fitting")})
+
+  let html = (id, right) => `<div id="${id}">
+  <button aria-label="Upload Costume" class="${addon.tab.scratchClass("action-menu_button")} ${addon.tab.scratchClass("action-menu_more-button")}"" data-for="sa-${id}-HD Upload" data-tip="${m("upload")}" currentitem="false">
+    <img class="${addon.tab.scratchClass("action-menu_more-icon")} sa-better-img-uploader" draggable="false" src="${addon.self.dir + "/icon.svg"}" height="10", width="10">
+     <input accept=".svg, .png, .bmp, .jpg, .jpeg, .gif" class="${addon.tab.scratchClass("action-menu_file-input")}" multiple="" type="file">
+  </button>
+  <div class="__react_component_tooltip place-${right ? "left" : "right"} type-dark ${addon.tab.scratchClass("action-menu_tooltip")}" id="sa-${id}-HD Upload" data-id="tooltip" >${m("upload")}</div>
+</div>`
+
+  let c = addon.tab.scratchClass("action-menu_more-buttons");
 
   while (true) {
-    let ignore = false; //Have files already been changed?
+    let menu = await addon.tab.waitForElement(`.${c}`, { markAsSeen: true });
+    let button = menu.parentElement.previousElementSibling.previousElementSibling;
 
-    let input = await addon.tab.waitForElement('input[type="file"][accept*=".svg"]', {
-      markAsSeen: true,
-    }); //Wait for the next image file input
+    let id = button.ariaLabel.replaceAll(" ", "_");
 
-    input.addEventListener(
-      "change",
-      (e) => {
-        if (!enabled) return;
-        if (!ignore) {
-          e.stopPropagation(); //Prevent Scratch from seeing the event so that we can process the images first
-          ignore = true;
-          onchange(e);
-        }
-        //Files have not been changed yet...
-        else ignore = false;
-      },
-      { capture: true }
-    );
+    if (id === "Choose_a_Sound") continue;
+
+    let isRight = button.parentElement.classList.contains(addon.tab.scratchClass("sprite-selector_add-button")) || button.parentElement.classList.contains(addon.tab.scratchClass("stage-selector_add-button"))
+
+    if (isRight) {
+      id += "_right";
+    }
+
+    menu.insertAdjacentHTML("afterbegin", html(id, isRight));
+    let menuItem = document.getElementById(id);
+
+    menuItem.querySelector("button").addEventListener("click", (e) => {
+      menuItem.querySelector("button > input").files = new FileList();
+      menuItem.querySelector("button > input").click();
+    })
+
+    menuItem.querySelector("button > input").addEventListener("change", (e) => {
+      onchange(e, id);
+    })
   }
 
-  async function onchange(e) {
+  async function onchange(e, id) {
+    let iD = id;
     let el = e.target;
     let files = Array.from(el.files);
     let processed = new Array();
@@ -51,23 +66,33 @@ export default async function ({ addon, console }) {
       await new Promise((resolve) => {
         i.onload = resolve;
       });
-
-      if (i.width <= 480 && i.height <= 360) {
-        processed.push(file);
-        continue;
-      }
-
+      
       let dim = { width: i.width, height: i.height };
 
-      if (dim.width / dim.height === 480 / 360) {
-        dim.width = 480;
-        dim.height = 360;
-      } else if ((dim.width / dim.height) * 360 <= 360) {
-        dim.width = (dim.width / dim.height) * 360;
-        dim.height = 360;
-      } else {
+      console.log(mode);
+      
+      if (mode === "fit") {
+        if (dim.width / dim.height === 480 / 360) {
+          dim.width = 480;
+          dim.height = 360;
+        } else if ((dim.width / dim.height) * 360 <= 360) {
+          dim.width = (dim.width / dim.height) * 360;
+          dim.height = 360;
+        } else {
+          dim.height = (dim.height / dim.width) * 480;
+          dim.width = 480;
+        }
+      } else if (mode === "fill") {
         dim.height = (dim.height / dim.width) * 480;
         dim.width = 480;
+        if (dim.height < 360) {
+          dim.width = (dim.width / dim.height) * 360;
+          dim.height = 360;
+        }
+        if (dim.width < 480) {
+          dim.height = (dim.height / dim.width) * 480;
+          dim.width = 480;
+        }
       }
 
       processed.push(
@@ -105,12 +130,12 @@ export default async function ({ addon, console }) {
       );
     }
 
-    el.files = arrayToFileList(processed); //Convert processed image array to a FileList, which is not constructible.
+    (el = document.getElementById(iD).nextElementSibling.querySelector("input")).files = new FileList(processed); //Convert processed image array to a FileList, which is not constructible.
 
     el.dispatchEvent(new e.constructor(e.type, e)); //Start a new, duplicate, event, but allow scratch to receive it this time.
   }
 
-  function arrayToFileList(arr) {
+  function FileList(arr = []) {
     let filelist = new DataTransfer(); //This "creates" a FileList that we can add files to
     for (let file of arr) {
       filelist.items.add(file);
