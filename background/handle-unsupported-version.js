@@ -12,8 +12,8 @@ const checkIfUnsupported = () => {
 if (checkIfUnsupported()) {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request === "checkIfUnsupported") {
-      if (sender.tab) chrome.tabs.update(sender.tab.id, { url: "https://scratchaddons.com/unsupported" });
-      else chrome.tabs.create({ url: "https://scratchaddons.com/unsupported" });
+      if (sender.tab) chrome.tabs.update(sender.tab.id, { url: "https://scratchaddons.com/unsupported-browser" });
+      else chrome.tabs.create({ url: "https://scratchaddons.com/unsupported-browser" });
     }
   });
 }
