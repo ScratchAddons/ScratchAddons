@@ -11,6 +11,7 @@
   "info": [
     {
       "type": "warning",
+      "id": "bunchwarn",
       "text": "Letters in wider fonts will be bunched together. Try not to use excessively large fonts."
     }
   ],
