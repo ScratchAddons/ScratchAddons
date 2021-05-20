@@ -8,7 +8,7 @@
       "link": "https://scratch.mit.edu/users/ErrorGamer2000/"
     }
   ],
-  "enabledByDefault": false,
+  "enabledByDefault": true,
   "userscripts": [
     {
       "url": "userscript.js",
@@ -16,7 +16,33 @@
       "runAtComplete": true
     }
   ],
-  "dynamicDisable": true,
-  "dynamicEnable": true,
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Image Fitting",
+      "id": "fitting",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "full",
+          "name": "Full Size"
+        },
+        {
+          "id": "fill",
+          "name": "Fill Screen"
+        },
+        {
+          "id": "fit",
+          "name": "Fit to Screen"
+        }
+      ],
+      "default": "fit"
+    }
+  ],
   "l10n": true
 }
