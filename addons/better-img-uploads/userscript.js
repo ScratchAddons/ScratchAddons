@@ -51,29 +51,29 @@ export default async function ({ addon, console }) {
       await new Promise((resolve) => {
         i.onload = resolve;
       });
-
+      
       if (i.width <= 480 && i.height <= 360) {
         processed.push(file);
         continue;
       }
+      
+      let dim = { width: i.width, height: i.height };
 
-      let dim = [i.width, i.height];
-
-      if (dim[0] / dim[1] === 480 / 360) {
-        dim[0] = 480;
-        dim[1] = 360;
-      } else if ((dim[0] / dim[1]) * 360 > 480) {
-        dim[1] = (dim[0] / 480) * 360;
-        dim[0] = 480;
+      if (dim.width / dim.height === 480 / 360) {
+        dim.width = 480;
+        dim.height = 360;
+      } else if ((dim.width / dim.height) * 360 <= 360) {
+        dim.width = (dim.width / dim.height) * 360;
+        dim.height = 360;
       } else {
-        dim[0] = (dim[1] / 360) * 480;
-        dim[1] = 360;
+        dim.height = (dim.height / dim.width) * 480;
+        dim.width = 480;
       }
 
       processed.push(
         new File( //Create the svg file
           [
-            `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${dim[0]},${dim[1]}" width="${dim[0]}" height="${dim[1]}">
+            `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${dim.width},${dim.height}" width="${dim.width}" height="${dim.height}">
         <g transform="translate(0,0)">
           <g
               data-paper-data='{"isPaintingLayer":true}'
@@ -89,8 +89,8 @@ export default async function ({ addon, console }) {
               style="mix-blend-mode: normal;"
           >
             <image
-                width="${dim[0]}"
-                height="${dim[1]}"
+                width="${dim.width}"
+                height="${dim.height}"
                 xlink:href="${blob}"
             />
           </g>
