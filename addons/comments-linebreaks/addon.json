@@ -19,6 +19,7 @@
       "runAtComplete": false
     }
   ],
+  "versionAdded": "1.8.0",
   "tags": ["community", "comments"],
   "l10n": true
 }
