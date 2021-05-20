@@ -5,6 +5,7 @@ export default async function ({ addon, console, safeMsg: m }) {
     mode = addon.settings.get("fitting");
   });
 
+  //Returns html code for an item in the selection lists, complete with tooltip.
   let html = (id, right) => `<div id="${id}">
   <button aria-label="Upload Costume" class="${addon.tab.scratchClass("action-menu_button")} ${addon.tab.scratchClass(
     "action-menu_more-button"
@@ -21,17 +22,18 @@ export default async function ({ addon, console, safeMsg: m }) {
   )}" id="sa-${id}-HD Upload" data-id="tooltip" >${m("upload")}</div>
 </div>`;
 
+  //The class name for the menu
   let c = addon.tab.scratchClass("action-menu_more-buttons");
 
-  while (true) {
+  while (true) { //Catch all upload menus as they are created
     let menu = await addon.tab.waitForElement(`.${c}`, { markAsSeen: true });
-    let button = menu.parentElement.previousElementSibling.previousElementSibling;
+    let button = menu.parentElement.previousElementSibling.previousElementSibling;//The base button that the popup menu is from
 
     let id = button.ariaLabel.replaceAll(" ", "_");
 
-    if (id === "Choose_a_Sound") continue;
+    if (id === "Choose_a_Sound") continue; //Don't want it in the sounds tab!
 
-    let isRight =
+    let isRight = //Is it on the right side of the screen?
       button.parentElement.classList.contains(addon.tab.scratchClass("sprite-selector_add-button")) ||
       button.parentElement.classList.contains(addon.tab.scratchClass("stage-selector_add-button"));
 
@@ -43,7 +45,7 @@ export default async function ({ addon, console, safeMsg: m }) {
     let menuItem = document.getElementById(id);
 
     menuItem.querySelector("button").addEventListener("click", (e) => {
-      menuItem.querySelector("button > input").files = new FileList();
+      menuItem.querySelector("button > input").files = new FileList(); //Empty the input to make sure the change event fires even if the same file was uploaded.
       menuItem.querySelector("button > input").click();
     });
 
@@ -53,7 +55,7 @@ export default async function ({ addon, console, safeMsg: m }) {
   }
 
   async function onchange(e, id) {
-    let iD = id;
+    let iD = id; //Save the id, not sure if this is really necessary?
     let el = e.target;
     let files = Array.from(el.files);
     let processed = new Array();
@@ -80,9 +82,7 @@ export default async function ({ addon, console, safeMsg: m }) {
 
       let dim = { width: i.width, height: i.height };
 
-      console.log(mode);
-
-      if (mode === "fit") {
+      if (mode === "fit") { //Make sure the image fits completely in the stage
         if (dim.width / dim.height === 480 / 360) {
           dim.width = 480;
           dim.height = 360;
@@ -93,7 +93,7 @@ export default async function ({ addon, console, safeMsg: m }) {
           dim.height = (dim.height / dim.width) * 480;
           dim.width = 480;
         }
-      } else if (mode === "fill") {
+      } else if (mode === "fill") { //Fill the stage with the image
         dim.height = (dim.height / dim.width) * 480;
         dim.width = 480;
         if (dim.height < 360) {
@@ -104,7 +104,7 @@ export default async function ({ addon, console, safeMsg: m }) {
           dim.height = (dim.height / dim.width) * 480;
           dim.width = 480;
         }
-      }
+      } //Otherwise just leave the image the same size
 
       processed.push(
         new File( //Create the svg file
@@ -141,12 +141,12 @@ export default async function ({ addon, console, safeMsg: m }) {
       );
     }
 
-    (el = document.getElementById(iD).nextElementSibling.querySelector("input")).files = new FileList(processed); //Convert processed image array to a FileList, which is not constructible.
+    (el = document.getElementById(iD).nextElementSibling.querySelector("input")).files = new FileList(processed); //Convert processed image array to a FileList, which is not normally constructible.
 
     el.dispatchEvent(new e.constructor(e.type, e)); //Start a new, duplicate, event, but allow scratch to receive it this time.
   }
 
-  function FileList(arr = []) {
+  function FileList(arr = []) { //File list constructor. Does not need the `new` keyword, but it is easier to read
     let filelist = new DataTransfer(); //This "creates" a FileList that we can add files to
     for (let file of arr) {
       filelist.items.add(file);
