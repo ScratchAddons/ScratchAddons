@@ -34,11 +34,11 @@
         },
         {
           "id": "fill",
-          "name": "Fill Screen"
+          "name": "Fill Stage"
         },
         {
           "id": "fit",
-          "name": "Fit to Screen"
+          "name": "Fit to Stage"
         }
       ],
       "default": "fit"
