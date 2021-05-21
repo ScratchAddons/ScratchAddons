@@ -49,6 +49,7 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
+  "versionAdded": "1.1.0",
   "userstyles": [
     {
       "url": "scratchr2.css",

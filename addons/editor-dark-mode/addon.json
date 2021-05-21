@@ -18,6 +18,7 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
+  "versionAdded": "1.0.0",
   "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {

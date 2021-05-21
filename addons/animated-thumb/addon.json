@@ -52,6 +52,7 @@
     }
   ],
   "tags": ["editor", "editorMenuBar", "recommended"],
+  "versionAdded": "1.3.0",
   "enabledByDefault": true,
   "l10n": true
 }
