@@ -29,7 +29,7 @@
   ],
   "settings": [
     {
-      "name": "Image Fitting",
+      "name": "Image sizing",
       "id": "fitting",
       "type": "select",
       "potentialValues": [
