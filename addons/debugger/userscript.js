@@ -233,7 +233,8 @@ export default async function ({ addon, global, console, msg }) {
       s.className = cl;
       return s;
     };
-    const scrolledDown = wrapper.scrollTop === wrapper.scrollHeight - wrapper.clientHeight;
+
+    const scrolledDown = extraContainer.scrollTop + 5 > extraContainer.scrollHeight - extraContainer.clientHeight;
 
     const targetName = vm.runtime.targets.find((t) => t.id === targetId).getName();
     wrapper.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
@@ -267,7 +268,7 @@ export default async function ({ addon, global, console, msg }) {
 
     wrapper.appendChild(link);
 
-    if (scrolledDown) wrapper.scrollTop = wrapper.scrollHeight - wrapper.clientHeight;
+    if (scrolledDown) extraContainer.scrollTop = extraContainer.scrollHeight;
   };
   const toggleConsole = (show = !showingConsole) => {
     if (show) {
