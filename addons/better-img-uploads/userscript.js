@@ -125,7 +125,7 @@ export default async function ({ addon, console, safeMsg: m }) {
         new File( //Create the svg file
           [
             `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${dim.width},${dim.height}" width="${dim.width}" height="${dim.height}">
-        <g transform="translate(0,0)">
+        <g transform="translate(0,0.5)">
           <g
               data-paper-data='{"isPaintingLayer":true}'
               fill="none"
