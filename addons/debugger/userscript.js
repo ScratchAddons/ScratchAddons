@@ -255,9 +255,9 @@ export default async function ({ addon, global, console, msg }) {
     }
     let string = addon.settings
       .get("exportFormat")
-      .replace("${sprite}", targetName)
-      .replace("${type}", type)
-      .replace("${content}", content);
+      .replace("{sprite}", targetName)
+      .replace("{type}", type)
+      .replace("{content}", content);
     logs.push(string);
     wrapper.append(span(content));
 

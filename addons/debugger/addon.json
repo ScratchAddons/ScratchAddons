@@ -38,7 +38,7 @@
       "name": "Export format",
       "id": "exportFormat",
       "type": "string",
-      "default": "${sprite}: ${content} (${type})"
+      "default": "{sprite}: {content} ({type})"
     }
   ],
   "tags": ["editor", "recommended", "beta"],
