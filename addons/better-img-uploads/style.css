@@ -3,23 +3,14 @@
 }
 
 [data-for="sa-Choose_a_Sprite_right-HD Upload"] + .__react_component_tooltip {
-  right: 156.413px !important;
   left: auto;
-  top: auto;
-  bottom: 200px !important;
 }
 
 [data-for="sa-Choose_a_Backdrop_right-HD Upload"] + .__react_component_tooltip {
-  right: 73.2625px !important;
   left: auto;
-  top: auto;
-  bottom: 200px !important;
 }
 
 [data-for="sa-Choose_a_Costume-HD Upload"] + .__react_component_tooltip,
 [data-for="sa-Choose_a_Backdrop-HD Upload"] + .__react_component_tooltip {
-  left: 94px !important;
   right: auto;
-  top: auto;
-  bottom: 237px !important;
 }
