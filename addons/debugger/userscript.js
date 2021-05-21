@@ -237,9 +237,8 @@ export default async function ({ addon, global, console, msg }) {
     const scrolledDown = extraContainer.scrollTop + 5 > extraContainer.scrollHeight - extraContainer.clientHeight;
 
     const targetName = vm.runtime.targets.find((t) => t.id === targetId).getName();
-    wrapper.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
-    if (type === "warn") wrapper.classList += " warn";
-    if (type === "error") wrapper.classList += " error";
+    wrapper.className = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
+    wrapper.classList.add(type);
     consoleList.append(wrapper);
 
     const block = workspace.getBlockById(blockId);
@@ -247,7 +246,7 @@ export default async function ({ addon, global, console, msg }) {
     if (inputBlock.type != "text") {
       if (inputBlock.inputList.filter((i) => i.name).length === 0) {
         const inputSpan = document.createElement("span");
-        inputSpan.innerHTML = inputBlock.svgPath_.parentElement.querySelector("text").innerHTML;
+        inputSpan.innerText = inputBlock.toString();
         inputSpan.className = "console-variable";
         inputSpan.style.background = getComputedStyle(inputBlock.svgPath_).fill;
         wrapper.append(inputSpan);
@@ -271,11 +270,7 @@ export default async function ({ addon, global, console, msg }) {
     if (scrolledDown) extraContainer.scrollTop = extraContainer.scrollHeight;
   };
   const toggleConsole = (show = !showingConsole) => {
-    if (show) {
-      consoleWrapper.style.display = "flex";
-    } else {
-      consoleWrapper.style.display = "";
-    }
+    consoleWrapper.style.display = show ? "flex" : "";
     showingConsole = show;
   };
 
