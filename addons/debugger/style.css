@@ -1,20 +1,9 @@
-.debug-btn {
-  width: 2rem;
-  height: 2rem;
-  padding: 0.375rem;
-  border-radius: 0.25rem;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  user-drag: none;
-  cursor: pointer;
-  filter: saturate(0);
+.sa-debugger-spacer {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
 }
 
-.debug-btn:hover {
-  background-color: hsla(215, 100%, 65%, 0.15);
-}
 .debug {
   display: none;
 }
@@ -84,7 +73,7 @@
 }
 .extra-log-container {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   overflow: auto;
   flex: 1;
   cursor: default;

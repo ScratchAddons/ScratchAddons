@@ -1,11 +1,23 @@
 export default async function ({ addon, global, console, msg }) {
   let workspace, showingConsole;
-  const img = document.createElement("img");
-  img.className = `debug-btn ${addon.tab.scratchClass("button_outlined-button")}`;
-  img.src = addon.self.dir + "/debug.svg";
-  img.draggable = false;
-  img.title = msg("debug");
-  img.addEventListener("click", () => toggleConsole());
+
+  const spacer = document.createElement("div");
+  spacer.className = "sa-debugger-spacer";
+  const buttonGroup = document.createElement("div");
+  buttonGroup.className = addon.tab.scratchClass("stage-header_stage-size-toggle-group");
+  const buttonContainer = document.createElement("div");
+  buttonContainer.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
+  const buttonContent = document.createElement("div");
+  buttonContent.className = addon.tab.scratchClass("button_content");
+  const buttonImage = document.createElement("img");
+  buttonImage.className = addon.tab.scratchClass("stage-header_stage-button-icon");
+  buttonImage.draggable = false;
+  buttonImage.src = addon.self.dir + "/debug.svg";
+  buttonContent.appendChild(buttonImage);
+  buttonContainer.appendChild(buttonContent);
+  buttonGroup.appendChild(buttonContainer);
+  spacer.appendChild(buttonGroup);
+  buttonContainer.addEventListener("click", () => toggleConsole(true));
 
   const vm = addon.tab.traps.vm;
   addon.tab.addBlock("sa-log %s", ["content"], ({ content }, targetId, blockId) => {
@@ -40,17 +52,7 @@ export default async function ({ addon, global, console, msg }) {
   const buttons = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_header-buttons-right"),
   });
-  const closeButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_remove-button"),
-    draggable: false,
-  });
-  const closeImg = Object.assign(document.createElement("img"), {
-    className: addon.tab.scratchClass("close-button_close-icon"),
-    src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
-  });
-  const closeText = Object.assign(document.createElement("span"), {
-    innerText: msg("clear"),
-  });
+
   const exportButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_shrink-expand-button"),
     draggable: false,
@@ -62,14 +64,38 @@ export default async function ({ addon, global, console, msg }) {
     innerText: msg("export"),
   });
 
+  const trashButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_shrink-expand-button"),
+    draggable: false,
+  });
+  const trashImg = Object.assign(document.createElement("img"), {
+    src: "/static/assets/a5787bb7364d8131ed49a8f53037d7f4.svg",
+  });
+  const trashText = Object.assign(document.createElement("span"), {
+    innerText: msg("clear"),
+  });
+
+  const closeButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_remove-button"),
+    draggable: false,
+  });
+  const closeImg = Object.assign(document.createElement("img"), {
+    className: addon.tab.scratchClass("close-button_close-icon"),
+    src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
+  });
+  const closeText = Object.assign(document.createElement("span"), {
+    innerText: "Close",
+  });
+
   consoleTitle.append(consoleText, buttons);
-  buttons.append(exportButton, closeButton);
+  buttons.append(exportButton, trashButton, closeButton);
+  trashButton.append(trashImg, trashText);
   closeButton.append(closeImg, closeText);
   exportButton.append(exportImg, exportText);
   extraContainer.append(consoleList);
   consoleWrapper.append(consoleTitle, extraContainer);
   document.body.append(consoleWrapper);
-  window.goToBlock = (blockId) => {
+  const goToBlock = (blockId) => {
     const offsetX = 32,
       offsetY = 32;
     const block = workspace.getBlockById(blockId);
@@ -169,14 +195,16 @@ export default async function ({ addon, global, console, msg }) {
     document.removeEventListener("mousemove", elementDrag);
   }
 
-  closeButton.addEventListener("click", () => {
+  trashButton.addEventListener("click", () => {
     document.querySelectorAll(".log").forEach((log, i) => log.remove());
     closeDragElement();
     logs = [];
   });
-  closeButton.addEventListener("mouseup", () => {
+  trashButton.addEventListener("mouseup", () => {
     closeDragElement();
   });
+  closeButton.addEventListener("click", () => toggleConsole(false));
+  closeButton.addEventListener("mouseup", () => closeDragElement());
   let download = (filename, text) => {
     var element = document.createElement("a");
     element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
@@ -205,6 +233,8 @@ export default async function ({ addon, global, console, msg }) {
       s.className = cl;
       return s;
     };
+    const scrolledDown = wrapper.scrollTop === wrapper.scrollHeight - wrapper.clientHeight;
+
     const targetName = vm.runtime.targets.find((t) => t.id === targetId).getName();
     wrapper.classList = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
     if (type === "warn") wrapper.classList += " warn";
@@ -233,10 +263,11 @@ export default async function ({ addon, global, console, msg }) {
     let link = document.createElement("a");
     link.innerText = targetName;
     link.className = "logLink";
-    link.setAttribute("onclick", `goToBlock('${blockId}')`);
-    console.log(blockId);
+    link.onclick = () => goToBlock(blockId);
 
     wrapper.appendChild(link);
+
+    if (scrolledDown) wrapper.scrollTop = wrapper.scrollHeight - wrapper.clientHeight;
   };
   const toggleConsole = (show = !showingConsole) => {
     if (show) {
@@ -248,9 +279,12 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   while (true) {
-    const button = await addon.tab.waitForElement("[class^='stage-header_stage-size-row']", { markAsSeen: true });
+    const stageHeaderWrapper = await addon.tab.waitForElement('[class*="stage-header_stage-menu-wrapper"]', {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+    });
     if (addon.tab.editorMode == "editor") {
-      button.insertAdjacentElement("afterBegin", img);
+      stageHeaderWrapper.insertBefore(spacer, stageHeaderWrapper.lastChild);
     } else {
       toggleConsole(false);
     }
