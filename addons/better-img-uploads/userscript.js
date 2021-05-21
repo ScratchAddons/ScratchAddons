@@ -19,7 +19,7 @@ export default async function ({ addon, console, safeMsg: m }) {
   </button>
   <div class="__react_component_tooltip place-${right ? "left" : "right"} type-dark ${addon.tab.scratchClass(
     "action-menu_tooltip"
-  )}" id="sa-${id}-HD Upload" data-id="tooltip" >${m("upload")}</div>
+  )} sa-better-img-uploads-tooltip" id="sa-${id}-HD Upload" data-id="tooltip" >${m("upload")}</div>
 </div>`;
 
   //The class name for the menu
@@ -30,7 +30,7 @@ export default async function ({ addon, console, safeMsg: m }) {
     let menu = await addon.tab.waitForElement(`.${c}`, { markAsSeen: true });
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
-    let id = button.getAttribute("aria-label").replaceAll(" ", "_");
+    let id = button.getAttribute("aria-label").replace(/\s+/g, "_");
 
     if (id === "Choose_a_Sound") continue; //Don't want it in the sounds tab!
 
@@ -53,6 +53,15 @@ export default async function ({ addon, console, safeMsg: m }) {
     menuItem.querySelector("button > input").addEventListener("change", (e) => {
       onchange(e, id);
     });
+    
+    let observer = new MutationObserver(() => doresize(id, menu, menuItem, isRight));
+    
+    observer.observe(menu, { attributes: true, subtree: true })
+    
+    function doresize(id, menu, menuItem, isRight) {
+      let rect = menuItem.getBoundingClientRect();
+      menuItem.querySelector(`.sa-better-img-uploads-tooltip`).style.top =  (rect.top + 2) + "px";
+    }
   }
 
   async function onchange(e, id) {
