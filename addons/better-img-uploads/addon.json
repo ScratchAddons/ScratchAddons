@@ -43,7 +43,7 @@
         },
         {
           "id": "fit",
-          "name": "Fit to Stage"
+          "name": "Shrink to fit stage"
         }
       ],
       "default": "fit"
