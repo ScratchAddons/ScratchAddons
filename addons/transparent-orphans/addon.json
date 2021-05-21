@@ -1,6 +1,6 @@
 {
-  "name": "Transparent orphan blocks",
-  "description": "Makes block stacks without a hat block at the top of them transparent.",
+  "name": "Block transparency",
+  "description": "Adjust the transparency for stacks without a hat block, dragged blocks, and all blocks in general.",
   "tags": ["editor", "codeEditor"],
   "versionAdded": "1.15.0",
   "dynamicDisable": true,
@@ -16,12 +16,28 @@
   ],
   "settings": [
     {
-      "name": "Transparency (%)",
-      "id": "transparency",
+      "name": "Block transparency (%)",
+      "id": "block",
       "type": "integer",
       "min": 0,
       "max": 100,
-      "default": 50
+      "default": 0
+    },
+    {
+      "name": "Orphaned transparency (%)",
+      "id": "orphan",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 0
+    },
+    {
+      "name": "Dragged transparency (%)",
+      "id": "dragged",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 0
     }
   ],
   "userstyles": [
