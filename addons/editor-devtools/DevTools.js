@@ -52,14 +52,13 @@ export default class DevTools {
         oldCleanUpFunc.call(this);
       }
     };
+    if (this.addon.settings.get("enableCleanUpPlus")) Blockly.Msg.CLEAN_UP = this.m("clean-plus");
+    this.addon.settings.addEventListener("change", () => {
+      if (this.addon.settings.get("enableCleanUpPlus")) Blockly.Msg.CLEAN_UP = this.m("clean-plus");
+    });
 
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
-        if (this.addon.settings.get("enableCleanUpPlus")) {
-          const oldCleanUp = items.find((item) => item.text === Blockly.Msg.CLEAN_UP);
-          oldCleanUp.text = this.m("clean-plus");
-        }
-
         items.push({
           enabled: Blockly.clipboardXml_,
           text: this.m("paste"),
