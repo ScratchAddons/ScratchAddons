@@ -53,14 +53,14 @@ export default async function ({ addon, console, safeMsg: m }) {
     menuItem.querySelector("button > input").addEventListener("change", (e) => {
       onchange(e, id);
     });
-    
+
     let observer = new MutationObserver(() => doresize(id, menu, menuItem, isRight));
-    
-    observer.observe(menu, { attributes: true, subtree: true })
-    
+
+    observer.observe(menu, { attributes: true, subtree: true });
+
     function doresize(id, menu, menuItem, isRight) {
       let rect = menuItem.getBoundingClientRect();
-      menuItem.querySelector(`.sa-better-img-uploads-tooltip`).style.top =  (rect.top + 2) + "px";
+      menuItem.querySelector(`.sa-better-img-uploads-tooltip`).style.top = rect.top + 2 + "px";
     }
   }
 
