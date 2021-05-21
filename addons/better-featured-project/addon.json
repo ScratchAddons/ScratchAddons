@@ -29,6 +29,7 @@
       "default": 0
     }
   ],
+  "versionAdded": "1.5.0",
   "tags": ["community", "recommended", "profiles"],
   "l10n": true
 }

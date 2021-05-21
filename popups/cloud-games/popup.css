@@ -61,6 +61,7 @@
 .small-icon {
   height: 14px;
   vertical-align: text-bottom;
+  filter: brightness(10);
 }
 /*scrollbar*/
 

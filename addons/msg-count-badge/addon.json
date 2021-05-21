@@ -5,5 +5,37 @@
   "permissions": ["badge"],
   "tags": ["popup", "recommended"],
   "enabledByDefault": true,
-  "l10n": true
+  "versionAdded": "1.0.0",
+  "l10n": true,
+  "settings": [
+    {
+      "name": "Badge color",
+      "id": "color",
+      "type": "color",
+      "default": "#008000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Old light green",
+      "id": "oldLightGreen",
+      "values": {
+        "color": "#8ce68c"
+      }
+    },
+    {
+      "name": "Blue",
+      "id": "blue",
+      "values": {
+        "color": "#175ef8"
+      }
+    },
+    {
+      "name": "Black",
+      "id": "black",
+      "values": {
+        "color": "#000000"
+      }
+    }
+  ]
 }

@@ -27,6 +27,5 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: Changelog Update
-          repo: ScratchAddons/website
+          repo: ScratchAddons/website-v2
           token: ${{ steps.generate-token.outputs.token }}
-          ref: refs/heads/master
