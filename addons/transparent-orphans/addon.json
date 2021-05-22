@@ -1,0 +1,34 @@
+{
+  "name": "Transparent orphan blocks",
+  "description": "Makes block stacks without a hat block at the top of them transparent.",
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.15.0",
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "credits": [
+    {
+      "name": "ErrorGamer2000",
+      "link": "https://scratch.mit.edu/users/ErrorGamer2000/"
+    },
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Transparency (%)",
+      "id": "transparency",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "default": 50
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "l10n": true
+}

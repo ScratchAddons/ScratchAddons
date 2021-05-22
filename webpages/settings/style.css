@@ -8,7 +8,7 @@ body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
-  color: white;
+  color: var(--accent-5);
   font-size: 12px;
 }
 
