@@ -6,7 +6,7 @@ export default async function ({ addon, global, console }) {
   });
   const originalBlocklyListen = vm.editingTarget.blocks.constructor.prototype.blocklyListen;
 
-  // Necessary to detect the CTRL key
+  // Necessary to detect the CTRL/CMD key
   var ctrlKeyPressed = false;
   document.addEventListener("keydown", function (e) {
     if (e.ctrlKey) {
@@ -15,6 +15,16 @@ export default async function ({ addon, global, console }) {
   });
   document.addEventListener("keyup", function (e) {
     if (!e.ctrlKey) {
+      ctrlKeyPressed = false;
+    }
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.metaKey) {
+      ctrlKeyPressed = true;
+    }
+  });
+  document.addEventListener("keyup", function (e) {
+    if (!e.metaKey) {
       ctrlKeyPressed = false;
     }
   });
@@ -28,4 +38,5 @@ export default async function ({ addon, global, console }) {
     }
   };
   vm.editingTarget.blocks.constructor.prototype.blocklyListen = newBlocklyListen;
+
 }

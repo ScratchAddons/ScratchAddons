@@ -6,6 +6,11 @@
       "type": "notice",
       "text": "If you just want to fix the bug where placing a duplicated block into a script runs the script, you should enable \"Do not automatically run duplicated blocks\" instead.",
       "id": "redirectToDuplicateFix"
+    },
+    {
+      "type": "notice",
+      "text": "If you're on macOS, use the Cmd key instead of the Ctrl key.",
+      "id": "macContextDisabled"
     }
   ],
   "credits": [
