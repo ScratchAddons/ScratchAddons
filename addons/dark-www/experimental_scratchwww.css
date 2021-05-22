@@ -14,6 +14,7 @@ a.social-messages-profile-link,
 .thumbnail .thumbnail-favorites,
 .thumbnail .thumbnail-remixes,
 .thumbnail .thumbnail-views,
+.studio-project-tile .studio-project-username,
 #footer,
 #donor,
 .subactions .share-date,
@@ -22,6 +23,10 @@ a.social-messages-profile-link,
 body:not(.sa-body-editor) .join-flow-title,
 .initiatives-section .initiatives-tools .subsection-tag.collaborator {
   color: #fff;
+}
+.studio-page,
+.user-projects-modal .user-projects-modal-content {
+  background: #252c37;
 }
 #view,
 .outer #projectBox,
@@ -77,6 +82,8 @@ body:not(.sa-body-editor) .button.white,
 .os-chooser,
 body:not(.sa-body-editor) .modal-content,
 .grid .thumbnail,
+.studio-project-tile,
+.studio-activity .studio-messages-list,
 .ttt-tile,
 .about .body,
 .messages-social-list,
@@ -112,6 +119,11 @@ body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
 .box .box-header,
 #footer, /* for infinite scrolling fixed footer */
 .textarea,
+.studio-adder-section input,
+.studio-adder-section .studio-adder-vertical-divider,
+.studio-tab-nav,
+.studio-project-tile,
+.studio-activity .studio-messages-list,
 .news li:nth-child(even),
 .thumbnail .thumbnail-image img,
 .outer .sort-controls,
@@ -146,6 +158,7 @@ body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
 .inplace-input,
 .inplace-textarea,
 .textarea,
+.studio-adder-section input,
 .modal {
   background: #282828;
   color: #fff;

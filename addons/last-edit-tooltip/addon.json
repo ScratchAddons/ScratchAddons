@@ -17,6 +17,7 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "versionAdded": "1.2.0",
   "tags": ["community", "projectPage"],
   "enabledByDefault": false,
   "l10n": true

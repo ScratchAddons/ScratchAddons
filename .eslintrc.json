@@ -46,7 +46,14 @@
     "no-unused-vars": 0,
     "no-useless-escape": 0,
     "no-inner-declarations": 0,
-    "no-constant-condition": [2, { "checkLoops": false }]
+    "no-constant-condition": [2, { "checkLoops": false }],
+    "no-restricted-syntax": [
+      2,
+      {
+        "selector": "MemberExpression[property.type=Identifier][property.name=path]:matches([object.name=e],[object.name=ev],[object.name=event])",
+        "message": "Event.path is incompatible with Firefox, use Event.composedPath()"
+      }
+    ]
   },
   "overrides": [
     {
@@ -70,7 +77,17 @@
     {
       "files": ["content-scripts/*.js"],
       "rules": {
-        "no-restricted-syntax": ["error", "ImportExpression"]
+        "no-restricted-syntax": [
+          "error",
+          {
+            "selector": "ImportExpression",
+            "message": "import() in content script is unsupported in Firefox, declare directly in manifest.json"
+          },
+          {
+            "selector": "MemberExpression[property.type=Identifier][property.name=path]:matches([object.name=e],[object.name=ev],[object.name=event])",
+            "message": "Event.path does not exist in Firefox, use Event.composedPath()"
+          }
+        ]
       }
     }
   ]

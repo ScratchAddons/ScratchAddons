@@ -96,6 +96,7 @@
       }
     }
   ],
+  "versionAdded": "1.0.0",
   "tags": ["community", "forums", "recommended", "profiles"],
   "enabledByDefault": true,
   "l10n": true
