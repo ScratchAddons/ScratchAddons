@@ -42,8 +42,8 @@
       "default": false
     }
     {
-      "name": "Confirm deleting projects",
-      "id": "deletingproject",
+      "name": "Confirm unsharing projects in My Stuff",
+      "id": "unsharingproject",
       "type": "boolean",
       "default": false
     }
