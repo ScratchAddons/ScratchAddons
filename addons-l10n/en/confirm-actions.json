@@ -3,5 +3,5 @@
   "confirm-actions/follow": "Scratch Addons:\nAre you sure you want to follow/unfollow this user?",
   "confirm-actions/joinstudio": "Scratch Addons:\nAre you sure you would like to join this studio?",
   "confirm-actions/closetopic": "Scratch Addons:\nAre you sure you want to close this topic?",
-  "confirm-actions/trashproject": "Scratch Addons:\nAre you sure you want to delete this project?"
+  "confirm-actions/unshareproject": "Scratch Addons:\nAre you sure you want to unshare this project?"
 }
