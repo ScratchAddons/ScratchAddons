@@ -1,4 +1,5 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
+import getDirection from "../rtl-list.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -766,6 +767,9 @@ const vue = (window.vue = new Vue({
     },
     msg(message, ...params) {
       return chrome.i18n.getMessage(message, ...params);
+    },
+    direction() {
+      return getDirection(chrome.i18n.getUILanguage());
     },
     openReview() {
       if (typeof browser !== "undefined") {

@@ -53,6 +53,10 @@
   left: 0;
   opacity: 0;
 }
+[dir="rtl"] .category::before {
+  right: 0;
+  border-radius: 4px 0 0 4px;
+}
 .category.sel::before {
   opacity: 1;
 }
@@ -68,5 +72,5 @@
   filter: brightness(1);
 }
 .category span {
-  margin-left: 15px;
+  margin-inline-start: 15px;
 }

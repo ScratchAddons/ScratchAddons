@@ -1,7 +1,7 @@
 .addon-description {
-  margin-left: 10px;
+  margin-inline: 10px;
   color: gray;
-  width: 35vw;
+  max-width: 35vw;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -35,14 +35,14 @@
 }
 
 .addon-credits > span {
-  margin-right: 0.5rem;
+  margin-inline-end: 0.5rem;
 }
 
 .addon-credits > span:not(:first-child):not(:last-child)::after {
   content: ",";
 }
 .addon-name {
-  margin-left: 15px;
+  margin-inline-start: 15px;
   font-weight: 400;
   height: 100%;
   display: flex;
@@ -50,7 +50,7 @@
 }
 .addon-topbar {
   height: 50px;
-  padding: 0 10px;
+  padding: 0 5px;
   display: flex;
   align-items: center;
 }
@@ -66,6 +66,17 @@
 }
 .addon-body.addon-body-margin-bottom {
   margin-bottom: 50px;
+}
+
+.clear-settings {
+  display: flex;
+  align-items: center;
+  padding-inline-start: 8px;
+  border-radius: 4px;
+  margin-inline-end: 8px;
+}
+.clear-settings:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .setting-body img.dark {
@@ -107,7 +118,7 @@
 .addon-notice img,
 .addon-warn img {
   height: 15px;
-  margin-right: 10px;
+  margin-inline-end: 10px;
   flex: 0 0;
 }
 .addon-warn img {
@@ -117,27 +128,68 @@
   display: flex;
 }
 .addon-settings {
-  padding: 0 20px;
-}
-
-.presets-column {
-  align-items: center;
+  padding: 0 15px;
 }
 
 .presets-column,
 .settings-column {
   width: 100%;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 10px 0;
   display: flex;
   flex-wrap: wrap;
 }
 
-.presets-column > .setting-label {
-  margin-left: 10px;
+.presets-column {
+  align-items: center;
+  margin: 10px 0;
 }
+.presets-column > .setting-label {
+  margin-inline-start: 10px;
+}
+.addon-preset {
+  margin-inline-end: 30px;
+}
+
 .addon-check {
-  margin-left: auto;
-  padding: 5px;
+  margin-inline-start: auto;
+  padding: 5px 10px;
   display: flex;
+}
+
+.switch {
+  display: block;
+  background: #111;
+  width: 40px;
+  height: 20px;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.switch::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: var(--accent-4);
+  border-radius: 5px;
+  top: 5px;
+  left: 5px;
+  transition: all 0.25s ease;
+}
+
+.switch[state="on"] {
+  background: var(--brand-orange);
+}
+.switch[state="on"]::before {
+  background: #fff;
+  left: 25px;
+}
+
+[dir="rtl"] .switch::before {
+  left: 25px;
+}
+[dir="rtl"] .switch[state="on"]::before {
+  left: 5px;
 }

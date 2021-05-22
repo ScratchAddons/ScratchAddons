@@ -28,6 +28,9 @@
   float: right;
   cursor: pointer;
 }
+[dir="rtl"] .close {
+  float: left;
+}
 
 .footer {
   text-align: center;
@@ -43,11 +46,11 @@
 }
 .modal .large-button {
   display: block;
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 .modal .filter-selector {
   margin: 0;
 }
 .modal .addon-name {
-  margin-left: 10px;
+  margin-inline-start: 14px;
 }

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
-    <script src="../set-lang.js" defer></script>
+    <script src="../set-lang.js" type="module"></script>
     <script src="../check-unsupported.js" defer></script>
     <style>
       /*
@@ -16,11 +16,11 @@
       @import url("../styles/colors.css");
       @import url("../styles/components/addon.css");
       @import url("../styles/components/addon-setting.css");
-      @import url("../styles/components/tooltips.css");
-      @import url("../styles/components/badges.css"); /* needs to override tooltips.css */
+      @import url("../styles/components/badges.css");
       @import url("../styles/components/filter.css");
       @import url("../styles/components/categories.css");
       @import url("../styles/components/search.css");
+      @import url("../styles/components/tooltips.css");
       @import url("../styles/components/smallmode.css");
       /* Modals and popups are needed last */
       @import url("../styles/components/modal.css");
@@ -48,6 +48,7 @@
               v-el:pickr
               :formats="formats"
               :no_alpha="noAlphaString"
+              dir="ltr"
             ></color-picker>
           </template>
         </button>
@@ -191,7 +192,7 @@
             </div>
           </div>
           <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
-          <div class="addon-description" v-show="!expanded">{{ addon.description }}</div>
+          <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
           <div class="addon-check">
             <div
               v-show="expanded && addon._enabled"
@@ -353,7 +354,7 @@
         style="display: block !important"
         @click="sidebarToggle()"
       >
-        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === false}" />
+        <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === (direction() === 'rtl')}" />
       </div>
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
@@ -363,9 +364,7 @@
           <button v-show="searchInput === ''" class="search-button"></button>
           <button v-else class="search-clear-button" @click="clearSearch()"></button>
           <div id="popup-more-settings" v-show="isIframe">
-            <button @click="openFullSettings()" class="large-button">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ msg("moreSettings") }}
-            </button>
+            <button @click="openFullSettings()" class="large-button">{{ msg("moreSettings") }}</button>
           </div>
         </div>
 

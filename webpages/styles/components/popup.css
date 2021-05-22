@@ -3,7 +3,7 @@ html {
   font-size: 12px;
   height: 100%;
   scrollbar-width: thin;
-  scrollbar-color: grey none;
+  scrollbar-color: grey transparent;
   color: #dddddd;
 }
 html.fullscreen {
@@ -15,7 +15,6 @@ body {
   font-family: "Sora", sans-serif;
   width: auto;
   overflow-x: hidden;
-  overflow-y: scroll;
   background-color: #222;
 }
 
