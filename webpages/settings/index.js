@@ -1,7 +1,8 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import getDirection from "../rtl-list.js";
 import loadVueComponent from "../../libraries/common/load-vue-components.js";
-import tags from "./tags.js";
+import tags from "./data/tags.js";
+import addonGroups from "./data/addon-groups.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -142,67 +143,6 @@ if (window.parent !== window) {
     confirmElem.addEventListener("click", handleConfirmClicked, { once: true });
     return resolveOnConfirmPromise;
   };
-
-  const addonGroups = [
-    // Only popup:
-    {
-      id: "recentlyUsed",
-      name: chrome.i18n.getMessage("recentlyUsed"),
-      addonIds: [],
-      expanded: true,
-      iframeShow: true,
-      fullscreenShow: false,
-    },
-    {
-      id: "runningOnTab",
-      name: chrome.i18n.getMessage("runningOnThisPage"),
-      addonIds: [],
-      expanded: true,
-      iframeShow: true,
-      fullscreenShow: false,
-    },
-
-    {
-      id: "new",
-      name: chrome.i18n.getMessage("new"),
-      addonIds: [],
-      expanded: true,
-      iframeShow: false,
-      fullscreenShow: true,
-    },
-    {
-      id: "enabled",
-      name: chrome.i18n.getMessage("enabled"),
-      addonIds: [],
-      expanded: true,
-      iframeShow: true,
-      fullscreenShow: true,
-    },
-    {
-      id: "recommended",
-      name: chrome.i18n.getMessage("recommended"),
-      addonIds: [],
-      expanded: true,
-      iframeShow: false,
-      fullscreenShow: true,
-    },
-    {
-      id: "others",
-      name: chrome.i18n.getMessage("others"),
-      addonIds: [],
-      expanded: true,
-      iframeShow: false,
-      fullscreenShow: true,
-    },
-    {
-      id: "beta",
-      name: chrome.i18n.getMessage("beta"),
-      addonIds: [],
-      expanded: false,
-      iframeShow: false,
-      fullscreenShow: true,
-    },
-  ];
 
   const vue = (window.vue = new Vue({
     el: "body",

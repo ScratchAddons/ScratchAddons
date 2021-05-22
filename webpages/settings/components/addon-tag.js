@@ -1,4 +1,4 @@
-import tags from "../tags.js";
+import tags from "../data/tags.js";
 
 const isIframe = window.parent !== window;
 
