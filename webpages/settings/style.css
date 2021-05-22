@@ -144,12 +144,11 @@ h1 {
 }
 
 .clear-button {
-  border-start-radius: 0;
-  border-start-start-radius: 0;
-  border-end-start-radius: 0;
-  border-start-end-radius: 4px;
-  border-end-end-radius: 4px;
+  border-radius: 0 4px 4px 0;
   border-inline-start: none !important;
+}
+[dir="rtl"] .clear-button {
+  border-radius: 4px 0 0 4px;
 }
 .clear-button span {
   vertical-align: middle;
@@ -179,9 +178,13 @@ h1 {
 
 .theme-switch {
   height: 25px;
-  inset-inline-end: 25px;
+  right: 25px;
   position: fixed;
   cursor: pointer;
+}
+[dir="rtl"] .theme-switch {
+  right: auto;
+  left: 25px;
 }
 .large-dropdown {
   color: var(--accent-5);
@@ -361,10 +364,10 @@ button.setting-input.color {
   position: relative;
   height: 32px;
   width: 100px;
-  border-start-start-radius: 4px;
-  border-end-start-radius: 4px;
-  border-start-end-radius: 0;
-  border-end-end-radius: 0;
+  border-radius: 4px 0 0 4px;
+}
+[dir="rtl"] button.setting-input.color {
+  border-radius: 0 4px 4px 0;
 }
 
 .color-container {

@@ -161,8 +161,7 @@ button {
   transform: scaleX(-1);
 }
 .delete-btn {
-  /* prettier-ignore */
-  float: __MSG_@@bidi_end_edge__;
+  float: right;
   opacity: 0;
   color: gray;
   font-size: 0.65rem;

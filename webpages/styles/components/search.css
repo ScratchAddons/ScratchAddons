@@ -11,11 +11,13 @@
   background: #111;
   padding: 10px 15px;
   border: none;
-  border-start-start-radius: 4px;
-  border-end-start-radius: 4px;
+  border-radius: 4px 0 0 4px;
   color: var(--accent-5);
   width: 150px;
   height: 16px;
+}
+[dir="rtl"] .search-box input {
+  border-radius: 0 4px 4px 0;
 }
 .search-box input:focus {
   outline: none;
@@ -31,10 +33,12 @@
   height: 36px;
   width: 45px;
   border: none;
-  border-start-end-radius: 4px;
-  border-end-end-radius: 4px;
+  border-radius: 0 4px 4px 0;
   outline: none;
   cursor: pointer;
+}
+[dir="rtl"] .search-box > button {
+  border-radius: 4px 0 0 4px;
 }
 
 .search-button {

@@ -25,9 +25,11 @@
 }
 
 .close {
-  /* prettier-ignore */
-  float: __MSG_@@bidi_end_edge__;
+  float: right;
   cursor: pointer;
+}
+[dir="rtl"] .close {
+  float: left;
 }
 
 .footer {

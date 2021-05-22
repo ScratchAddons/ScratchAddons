@@ -15,7 +15,7 @@
   transform: translateY(-50%);
   /* Bring it on top of other tags */
   z-index: 10;
-  inset-inline-start: 100%;
+  left: 100%;
   margin-inline-start: 10px; /* distance from parent */
   width: 200px;
   padding: 10px;
@@ -27,12 +27,20 @@
 
   box-shadow: 0px 0px 16px 10px #3b3b3b52;
 }
+[dir="rtl"] .tooltiptext {
+  left: auto;
+  right: 100%;
+}
 .tooltiptext.tooltiptextleft {
-  inset-inline-start: auto;
-  inset-inline-end: 100%;
+  left: auto;
+  right: 100%;
   top: -3px;
   transform: none;
   margin-inline-start: 0;
+}
+[dir="rtl"] .tooltiptext.tooltiptextleft {
+  right: auto;
+  left: 100%;
 }
 
 .tooltip:hover .tooltiptext {
@@ -42,18 +50,26 @@
   content: "";
   position: absolute;
   top: 50%;
-  inset-inline-end: 100%; /* To the left of the tooltip */
+  right: 100%; /* To the left of the tooltip */
   margin-top: -5px;
   border: 5px solid transparent;
   border-inline-end-color: black;
   white-space: normal;
 }
+[dir="rtl"] .tooltip .tooltiptext::after {
+  right: auto;
+  left: 100%; /* To the right of the tooltip */
+}
 .tooltip .tooltiptext.tooltiptextleft::after {
-  inset-inline-end: auto;
-  inset-inline-start: 100%;
+  right: auto;
+  left: 100%;
   top: 15px;
   border-inline-end-color: transparent;
   border-inline-start-color: black;
+}
+[dir="rtl"] .tooltip .tooltiptext.tooltiptextleft::after {
+  left: auto;
+  right: 100%;
 }
 
 .tooltiptext:hover .tooltiptext:after {

@@ -175,7 +175,7 @@
   background: var(--accent-4);
   border-radius: 5px;
   top: 5px;
-  inset-inline-start: 5px;
+  left: 5px;
   transition: all 0.25s ease;
 }
 
@@ -184,5 +184,12 @@
 }
 .switch[state="on"]::before {
   background: #fff;
-  inset-inline-start: 25px;
+  left: 25px;
+}
+
+[dir="rtl"] .switch::before {
+  left: 25px;
+}
+[dir="rtl"] .switch[state="on"]::before {
+  left: 5px;
 }

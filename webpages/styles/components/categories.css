@@ -46,14 +46,16 @@
   transition: all 0.2s ease;
   display: block;
   width: 4px;
-  border-start-end-radius: 4px;
-  border-end-end-radius: 4px;
+  border-radius: 0 4px 4px 0;
   height: 40px;
   background: var(--brand-orange);
   position: absolute;
-  inset-inline-start: 0;
   left: 0;
   opacity: 0;
+}
+[dir="rtl"] .category::before {
+  right: 0;
+  border-radius: 4px 0 0 4px;
 }
 .category.sel::before {
   opacity: 1;
