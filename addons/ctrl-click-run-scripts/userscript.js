@@ -28,6 +28,4 @@ export default async function ({ addon, global, console }) {
     }
   };
   vm.editingTarget.blocks.constructor.prototype.blocklyListen = newBlocklyListen;
-
-  if (addon.self.enabledLate) vm.emitWorkspaceUpdate();
 }
