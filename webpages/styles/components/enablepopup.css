@@ -44,6 +44,6 @@
   margin-bottom: 30px;
 }
 
-.popup .large-button {
-  margin-right: 20px;
+.popup .large-button:not(:last-child) {
+  margin-inline-end: 20px;
 }

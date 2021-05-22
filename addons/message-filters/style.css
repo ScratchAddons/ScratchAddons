@@ -1,0 +1,40 @@
+.filter-container {
+  box-sizing: border-box;
+  padding: 2vw;
+  background: #05f2;
+  display: block;
+  margin: 0 auto;
+  border-radius: 5px;
+  border: 1px solid #05f3;
+  width: 100%;
+  margin-top: 10px;
+}
+.filter-container h4 {
+  padding: 5px;
+  padding-left: 10px;
+}
+.filter-container input {
+  margin-right: 0.5vmax;
+  outline: none;
+}
+
+.checkboxes {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+.input_label {
+  text-align: left;
+  display: inline-block;
+  padding: 10px;
+  border-radius: 5px;
+  transition-duration: 0.3s;
+  transition-property: background-color;
+  cursor: pointer;
+  overflow: hidden;
+  height: 50%;
+}
+/* Nice hover transition. */
+.input_label:hover {
+  background: #05f4;
+}
