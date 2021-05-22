@@ -19,8 +19,8 @@ export default async function ({ addon, console, msg }) {
         cancelMessage = msg("joinstudio");
       } else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {
         cancelMessage = msg("closetopic");
-      } else if (addon.settings.get("deletingproject") && e.target.closest(".media-trash")) {
-        cancelMessage = msg("trashproject");
+      } else if (addon.settings.get("deletingproject") && e.target.closest(".unshare")) {
+        cancelMessage = msg("unshareproject");
       }
       if (cancelMessage !== null) {
         if (!confirm(cancelMessage)) {
