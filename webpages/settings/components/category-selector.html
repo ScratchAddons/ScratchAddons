@@ -1,0 +1,16 @@
+<template>
+  <div
+    class="category"
+    :class="{
+        sel: category.id === selectedCategory,
+        hasParent: category.parent,
+      }"
+    v-show="shouldShow"
+    transition="expand"
+    :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
+    @click="onClick($event)"
+  >
+    <img :src="'../../images/icons/' + category.icon + '.svg'" />
+    <span>{{ category.name }}</span>
+  </div>
+</template>
