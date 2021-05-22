@@ -12,6 +12,7 @@
       "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
+  "versionAdded": "1.0.0",
   "tags": ["forums", "community"],
   "enabledByDefault": false,
   "libraries": ["md5", "text-field-edit"],

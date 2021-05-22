@@ -82,7 +82,7 @@ const ColorInput = Vue.extend({
         });
       if (callCloseDropdowns) this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
       this.opening = false;
-
+      this.$els.pickr._valueChanged();
       this.color = "#" + this.$els.pickr.hex8;
       if (this.value !== this.color) {
         this.$parent.addonSettings[addon._addonId][setting.id] = "#" + this.$els.pickr.hex8;
@@ -459,7 +459,8 @@ const CategorySelector = Vue.extend({
 });
 Vue.component("category-selector", CategorySelector);
 
-const browserLevelPermissions = ["notifications", "clipboardWrite"];
+const browserLevelPermissions = ["notifications"];
+if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
 let grantedOptionalPermissions = [];
 const updateGrantedPermissions = () =>
   chrome.permissions.getAll(({ permissions }) => {

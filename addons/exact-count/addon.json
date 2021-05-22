@@ -45,7 +45,7 @@
     },
     {
       "url": "studio.js",
-      "matches": ["https://scratch.mit.edu/studios/*"],
+      "matches": ["https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/studios_www/*"],
       "settingMatch": {
         "id": "studio",
         "value": true
@@ -61,6 +61,7 @@
       "runAtComplete": false
     }
   ],
+  "versionAdded": "1.2.0",
   "tags": ["community", "recommended", "profiles", "forums", "studios"],
   "enabledByDefault": false,
   "l10n": true

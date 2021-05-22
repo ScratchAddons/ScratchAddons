@@ -4,9 +4,19 @@ try {
   throw "Scratch Addons: not first party iframe";
 }
 
-chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res) => {
-  if (res) onInfoAvailable(res);
-});
+let pseudoUrl; // Fake URL to use if response code isn't 2xx
+const onResponse = (res) => {
+  if (res) {
+    console.log("[Message from background]", res);
+    if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") onInfoAvailable(res);
+    else {
+      pseudoUrl = `https://scratch.mit.edu/${res.httpStatusCode}/`;
+      console.log(`Status code was not 2xx, replacing URL to ${pseudoUrl}`);
+      chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
+    }
+  }
+};
+chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse);
 
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
@@ -105,7 +115,7 @@ if (path === "discuss/3/topic/add/") {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request === "getInitialUrl") {
-    sendResponse(initialUrl);
+    sendResponse(pseudoUrl || initialUrl);
   }
 });
 
@@ -213,24 +223,40 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
   }
 }
 
+function waitForDocumentHead() {
+  if (document.head) return Promise.resolve();
+  else {
+    return new Promise((resolve) => {
+      const observer = new MutationObserver(() => {
+        if (document.head) {
+          resolve();
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.documentElement, { subtree: true, childList: true });
+    });
+  }
+}
+
 async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
+  const isStudio = /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/.test(location.pathname);
+  if (isStudio && !pseudoUrl) {
+    await waitForDocumentHead();
+    if (document.querySelector("meta[name='format-detection']")) {
+      // scratch-www studio
+      pseudoUrl = location.href.replace("/studios/", "/studios_www/");
+      chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
+      return;
+    }
+  }
+
   // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   const disabledDynamicAddons = [];
   globalState = globalStateMsg;
   setCssVariables(globalState.addonSettings, addonsWithUserstyles);
   // Just in case, make sure the <head> loaded before injecting styles
-  if (document.head) injectUserstyles(addonsWithUserstyles);
-  else {
-    const observer = new MutationObserver(() => {
-      if (document.head) {
-        injectUserstyles(addonsWithUserstyles);
-        observer.disconnect();
-      }
-    });
-    observer.observe(document.documentElement, { subtree: true, childList: true });
-  }
-
+  waitForDocumentHead().then(() => injectUserstyles(addonsWithUserstyles));
   if (!_page_) {
     await new Promise((resolve) => {
       // We're registering this load event after the load event that
@@ -383,7 +409,7 @@ const showBanner = () => {
           /*
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
           Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeatureName") })
-            .outerHTML, 
+            .outerHTML,
           */
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings",
@@ -477,10 +503,11 @@ if (document.readyState !== "loading") {
 }
 
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
-const isStudioComments = pathArr[0] === "studios" && pathArr[2] === "comments";
+const isStudio = pathArr[0] === "studios";
+const r2IsStudioComments = isStudio && pathArr[2] === "comments";
 const isProject = pathArr[0] === "projects";
 
-if (isProfile || isStudioComments || isProject) {
+if (isProfile || isStudio || isProject) {
   const shouldCaptureComment = (value) => {
     const regex = / scratch[ ]?add[ ]?ons/;
     // Trim like scratchr2
@@ -503,148 +530,159 @@ if (isProfile || isStudioComments || isProject) {
   const sendAnywayMsg = chrome.i18n.getMessage("captureCommentPostAnyway");
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
-  if (isProfile || isStudioComments) {
-    window.addEventListener(
-      "click",
-      (e) => {
-        if (
-          e.path[1] &&
-          e.path[1] !== document &&
-          e.path[1].getAttribute("data-control") === "post" &&
-          e.path[1].hasAttribute("data-commentee-id")
-        ) {
-          const form = e.path[3];
-          if (form.tagName !== "FORM") return;
-          if (form.hasAttribute("data-sa-send-anyway")) {
-            form.removeAttribute("data-sa-send-anyway");
-            return;
-          }
-          const textarea = form.querySelector("textarea[name=content]");
-          if (!textarea) return;
-          if (shouldCaptureComment(textarea.value)) {
-            e.stopPropagation();
-            e.preventDefault(); // Avoid location.hash being set to null
-
-            form.querySelector("[data-control=error] .text").innerHTML = errorMsgHtml + " ";
-            const sendAnyway = document.createElement("a");
-            sendAnyway.onclick = () => {
-              const res = confirm(confirmMsg);
-              if (res) {
-                form.setAttribute("data-sa-send-anyway", "");
-                form.querySelector("[data-control=post]").click();
-              }
-            };
-            sendAnyway.textContent = sendAnywayMsg;
-            Object.assign(sendAnyway.style, {
-              textDecoration: "underline",
-              color: "white",
-            });
-            form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
-            form.querySelector(".control-group").classList.add("error");
-          }
-        }
-      },
-      { capture: true }
-    );
-  } else if (isProject) {
-    // For projects, we want to be careful not to hurt performance.
-    // Let's capture the event in the comments container instead
-    // of the whole window. There will be a new comment container
-    // each time the user goes inside the project then outside.
-    let observer;
-    const waitForContainer = () => {
-      if (document.querySelector(".comments-container")) return Promise.resolve();
-      return new Promise((resolve) => {
-        observer = new MutationObserver((mutationsList) => {
-          if (document.querySelector(".comments-container")) {
-            resolve();
-            observer.disconnect();
-          }
-        });
-        observer.observe(document.documentElement, { childList: true, subtree: true });
-      });
-    };
-    const getEditorMode = () => {
-      // From addon-api/content-script/Tab.js
-      const pathname = location.pathname.toLowerCase();
-      const split = pathname.split("/").filter(Boolean);
-      if (!split[0] || split[0] !== "projects") return null;
-      if (split.includes("editor")) return "editor";
-      if (split.includes("fullscreen")) return "fullscreen";
-      if (split.includes("embed")) return "embed";
-      return "projectpage";
-    };
-    const addListener = () =>
-      document.querySelector(".comments-container").addEventListener(
+  window.addEventListener("load", () => {
+    const isScratchWww = Boolean(document.querySelector("meta[name='format-detection']"));
+    if (isProfile || (r2IsStudioComments && !isScratchWww)) {
+      window.addEventListener(
         "click",
         (e) => {
-          // When clicking the post button, e.path[0] might
-          // be <span>Post</span> or the <button /> element
-          const possiblePostBtn = e.path[0].tagName === "SPAN" ? e.path[1] : e.path[0];
-          if (!possiblePostBtn) return;
-          if (possiblePostBtn.tagName !== "BUTTON") return;
-          if (!possiblePostBtn.classList.contains("compose-post")) return;
-          const form = e.path[0].tagName === "SPAN" ? e.path[3] : e.path[2];
-          // Remove error when about to send comment anyway, if it exists
-          form.parentNode.querySelector(".compose-error-row")?.remove();
-          if (form.hasAttribute("data-sa-send-anyway")) {
-            form.removeAttribute("data-sa-send-anyway");
-            return;
-          }
-          const textarea = form.querySelector("textarea[name=compose-comment]");
-          if (!textarea) return;
-          if (shouldCaptureComment(textarea.value)) {
-            e.stopPropagation();
-            const errorRow = document.createElement("div");
-            errorRow.className = "flex-row compose-error-row";
-            const errorTip = document.createElement("div");
-            errorTip.className = "compose-error-tip";
-            const span = document.createElement("span");
-            span.innerHTML = errorMsgHtml + " ";
-            const sendAnyway = document.createElement("a");
-            sendAnyway.onclick = () => {
-              const res = confirm(confirmMsg);
-              if (res) {
-                form.setAttribute("data-sa-send-anyway", "");
-                possiblePostBtn.click();
-              }
-            };
-            sendAnyway.textContent = sendAnywayMsg;
-            errorTip.appendChild(span);
-            errorTip.appendChild(sendAnyway);
-            errorRow.appendChild(errorTip);
-            form.parentNode.prepend(errorRow);
+          const path = e.composedPath();
+          if (
+            path[1] &&
+            path[1] !== document &&
+            path[1].getAttribute("data-control") === "post" &&
+            path[1].hasAttribute("data-commentee-id")
+          ) {
+            const form = path[3];
+            if (form.tagName !== "FORM") return;
+            if (form.hasAttribute("data-sa-send-anyway")) {
+              form.removeAttribute("data-sa-send-anyway");
+              return;
+            }
+            const textarea = form.querySelector("textarea[name=content]");
+            if (!textarea) return;
+            if (shouldCaptureComment(textarea.value)) {
+              e.stopPropagation();
+              e.preventDefault(); // Avoid location.hash being set to null
 
-            // Hide error after typing like scratch-www does
-            textarea.addEventListener(
-              "input",
-              () => {
-                errorRow.remove();
-              },
-              { once: true }
-            );
-            // Hide error after clicking cancel like scratch-www does
-            form.querySelector(".compose-cancel").addEventListener(
-              "click",
-              () => {
-                errorRow.remove();
-              },
-              { once: true }
-            );
+              form.querySelector("[data-control=error] .text").innerHTML = errorMsgHtml + " ";
+              const sendAnyway = document.createElement("a");
+              sendAnyway.onclick = () => {
+                const res = confirm(confirmMsg);
+                if (res) {
+                  form.setAttribute("data-sa-send-anyway", "");
+                  form.querySelector("[data-control=post]").click();
+                }
+              };
+              sendAnyway.textContent = sendAnywayMsg;
+              Object.assign(sendAnyway.style, {
+                textDecoration: "underline",
+                color: "white",
+              });
+              form.querySelector("[data-control=error] .text").appendChild(sendAnyway);
+              form.querySelector(".control-group").classList.add("error");
+            }
           }
         },
         { capture: true }
       );
+    } else if (isProject || (isStudio && isScratchWww)) {
+      // For projects, we want to be careful not to hurt performance.
+      // Let's capture the event in the comments container instead
+      // of the whole window. There will be a new comment container
+      // each time the user goes inside the project then outside.
+      let observer;
+      const waitForContainer = () => {
+        if (document.querySelector(".comments-container, .studio-compose-container")) return Promise.resolve();
+        return new Promise((resolve) => {
+          observer = new MutationObserver((mutationsList) => {
+            if (document.querySelector(".comments-container, .studio-compose-container")) {
+              resolve();
+              observer.disconnect();
+            }
+          });
+          observer.observe(document.documentElement, { childList: true, subtree: true });
+        });
+      };
+      const getEditorMode = () => {
+        // From addon-api/content-script/Tab.js
+        const pathname = location.pathname.toLowerCase();
+        const split = pathname.split("/").filter(Boolean);
+        if (!split[0] || split[0] !== "projects") return null;
+        if (split.includes("editor")) return "editor";
+        if (split.includes("fullscreen")) return "fullscreen";
+        if (split.includes("embed")) return "embed";
+        return "projectpage";
+      };
+      const addListener = () =>
+        document.querySelector(".comments-container, .studio-compose-container").addEventListener(
+          "click",
+          (e) => {
+            console.log(e);
+            const path = e.composedPath();
+            // When clicking the post button, e.path[0] might
+            // be <span>Post</span> or the <button /> element
+            const possiblePostBtn = path[0].tagName === "SPAN" ? path[1] : path[0];
+            if (!possiblePostBtn) return;
+            if (possiblePostBtn.tagName !== "BUTTON") return;
+            if (!possiblePostBtn.classList.contains("compose-post")) return;
+            const form = path[0].tagName === "SPAN" ? path[3] : path[2];
+            // Remove error when about to send comment anyway, if it exists
+            form.parentNode.querySelector(".compose-error-row")?.remove();
+            if (form.hasAttribute("data-sa-send-anyway")) {
+              form.removeAttribute("data-sa-send-anyway");
+              return;
+            }
+            const textarea = form.querySelector("textarea[name=compose-comment]");
+            if (!textarea) return;
+            if (shouldCaptureComment(textarea.value)) {
+              e.stopPropagation();
+              const errorRow = document.createElement("div");
+              errorRow.className = "flex-row compose-error-row";
+              const errorTip = document.createElement("div");
+              errorTip.className = "compose-error-tip";
+              const span = document.createElement("span");
+              span.innerHTML = errorMsgHtml + " ";
+              const sendAnyway = document.createElement("a");
+              sendAnyway.onclick = () => {
+                const res = confirm(confirmMsg);
+                if (res) {
+                  form.setAttribute("data-sa-send-anyway", "");
+                  possiblePostBtn.click();
+                }
+              };
+              sendAnyway.textContent = sendAnywayMsg;
+              errorTip.appendChild(span);
+              errorTip.appendChild(sendAnyway);
+              errorRow.appendChild(errorTip);
+              form.parentNode.prepend(errorRow);
 
-    const check = async () => {
-      if (getEditorMode() === "projectpage") {
-        await waitForContainer();
-        addListener();
-      } else {
-        observer?.disconnect();
-      }
-    };
-    window.addEventListener("load", check);
-    csUrlObserver.addEventListener("change", (e) => check());
-  }
+              // Hide error after typing like scratch-www does
+              textarea.addEventListener(
+                "input",
+                () => {
+                  errorRow.remove();
+                },
+                { once: true }
+              );
+              // Hide error after clicking cancel like scratch-www does
+              form.querySelector(".compose-cancel").addEventListener(
+                "click",
+                () => {
+                  errorRow.remove();
+                },
+                { once: true }
+              );
+            }
+          },
+          { capture: true }
+        );
+
+      const check = async () => {
+        if (
+          // Note: do not use pathArr here below! pathArr is calculated
+          // on load, pathname can change dynamically with replaceState
+          (isStudio && location.pathname.split("/")[3] === "comments") ||
+          (isProject && getEditorMode() === "projectpage")
+        ) {
+          await waitForContainer();
+          addListener();
+        } else {
+          observer?.disconnect();
+        }
+      };
+      check();
+      csUrlObserver.addEventListener("change", (e) => check());
+    }
+  });
 }

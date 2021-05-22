@@ -1,6 +1,8 @@
 export default async function ({ addon, global, console, msg }) {
+  const headers = new Headers();
+  if (addon.auth.xToken) headers.set("X-Token", addon.auth.xToken);
   const data = await (
-    await fetch("https://api.scratch.mit.edu" + location.pathname.match(/\/projects\/[0-9]+/g)[0])
+    await fetch("https://api.scratch.mit.edu" + location.pathname.match(/\/projects\/[0-9]+/g)[0], { headers })
   ).json();
 
   if (!data.history) return;
@@ -9,7 +11,7 @@ export default async function ({ addon, global, console, msg }) {
     const element = await addon.tab.waitForElement(".share-date", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
-      condition: () => addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
 
     // Using this instead of scratchAddons.l10n.locales
