@@ -1,15 +1,10 @@
 {
   "name": "Ctrl+Click to run scripts",
-  "description": "Only run scripts when you click them while holding the Ctrl key.",
+  "description": "Only run block stacks on click if also holding the Ctrl key.",
   "info": [
     {
       "type": "notice",
-      "text": "If you just want to fix the bug where placing a duplicated block into a script runs the script, you should enable \"Do not automatically run duplicated blocks\" instead.",
-      "id": "redirectToDuplicateFix"
-    },
-    {
-      "type": "notice",
-      "text": "If you're on macOS, use the Cmd key instead of the Ctrl key.",
+      "text": "On macOS, use the Cmd key instead of the Ctrl key.",
       "id": "macContextDisabled"
     }
   ],
