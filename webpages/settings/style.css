@@ -59,6 +59,7 @@ h1 {
 
 .addon-group > span > img {
   height: 23px;
+  width: 23px;
   margin-inline-end: 5px;
   padding: 5px;
   border-radius: 4px;
@@ -112,6 +113,7 @@ h1 {
 
 .icon-type {
   height: 16px;
+  width: 16px;
   vertical-align: middle;
   filter: invert(0) brightness(10);
   margin-inline-end: 8px;
