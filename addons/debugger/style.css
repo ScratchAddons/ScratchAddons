@@ -78,6 +78,7 @@
   flex: 1;
   cursor: default;
   width: 100%;
+  background-color: var(--editorDarkMode-accent); /* Definitely not the right way to do it */
 }
 .console-variable {
   padding: 4px;
