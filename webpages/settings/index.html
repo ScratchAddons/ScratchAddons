@@ -399,16 +399,16 @@
           <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" />
           <h1 class="setting-heading">{{ msg("moreSettings") }}</h1>
         </div>
-        <div class="settings-block">
-          <div class="setting-body">
+        <div class="addon-block settings-block">
+          <div class="addon-body">
             <div class="addon-topbar">
               <span class="addon-name"
                 ><img src="../../images/icons/theme.svg" class="icon-type" /> {{ msg("scratchAddonsTheme") }}
               </span>
             </div>
-            <div class="setting-settings">
-              <span class="settings-description">{{ msg("scratchAddonsThemeDescription") }}</span>
-              <div class="setting-setting">
+            <div class="addon-settings">
+              <span class="addon-description">{{ msg("scratchAddonsThemeDescription") }}</span>
+              <div class="addon-setting">
                 <div class="filter-selector">
                   <div class="filter-text">{{ msg("theme") }}</div>
                   <div class="filter-options">
@@ -423,17 +423,17 @@
               </div>
             </div>
           </div>
-          <div class="setting-body">
+          <div class="addon-body">
             <div class="addon-topbar">
               <span class="addon-name"
                 ><img src="../../images/icons/import-export.svg" class="icon-type" :class="{'dark': theme === false}" />
                 {{ msg("exportAndImportSettings") }}
               </span>
             </div>
-            <div class="setting-settings">
-              <span class="settings-description">{{ msg("exportAndImportSettingsDescription") }}</span>
-              <span class="settings-description">{{ msg("useBrowserSync") }}</span>
-              <div class="setting-setting">
+            <div class="addon-settings">
+              <span class="addon-description">{{ msg("exportAndImportSettingsDescription") }}</span>
+              <span class="addon-description">{{ msg("useBrowserSync") }}</span>
+              <div class="addon-setting">
                 <div class="filter-selector">
                   <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
                 </div>
