@@ -10,7 +10,10 @@ chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, (res)
 
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
-const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
+const promisify =
+  (callbackFn) =>
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
 
 let _page_ = null;
 let globalState = null;
