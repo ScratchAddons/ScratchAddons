@@ -46,55 +46,6 @@ export default async function ({ addon, global, console, msg }) {
   const extraContainer = Object.assign(document.createElement("div"), {
     className: `extra-log-container`,
   });
-  const consoleList = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("sprite-info_sprite-info", { others: "logs" }),
-  });
-  const buttons = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_header-buttons-right"),
-  });
-
-  const exportButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_shrink-expand-button"),
-    draggable: false,
-  });
-  const exportImg = Object.assign(document.createElement("img"), {
-    src: "/svgs/extensions/download-white.svg",
-  });
-  const exportText = Object.assign(document.createElement("span"), {
-    innerText: msg("export"),
-  });
-
-  const trashButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_shrink-expand-button"),
-    draggable: false,
-  });
-  const trashImg = Object.assign(document.createElement("img"), {
-    src: "/static/assets/a5787bb7364d8131ed49a8f53037d7f4.svg",
-  });
-  const trashText = Object.assign(document.createElement("span"), {
-    innerText: msg("clear"),
-  });
-
-  const closeButton = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("card_remove-button"),
-    draggable: false,
-  });
-  const closeImg = Object.assign(document.createElement("img"), {
-    className: addon.tab.scratchClass("close-button_close-icon"),
-    src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
-  });
-  const closeText = Object.assign(document.createElement("span"), {
-    innerText: "Close",
-  });
-
-  consoleTitle.append(consoleText, buttons);
-  buttons.append(exportButton, trashButton, closeButton);
-  trashButton.append(trashImg, trashText);
-  closeButton.append(closeImg, closeText);
-  exportButton.append(exportImg, exportText);
-  extraContainer.append(consoleList);
-  consoleWrapper.append(consoleTitle, extraContainer);
-  document.body.append(consoleWrapper);
   const goToBlock = (blockId) => {
     const offsetX = 32,
       offsetY = 32;
@@ -154,6 +105,59 @@ export default async function ({ addon, global, console, msg }) {
 
     _flash();
   };
+  extraContainer.addEventListener("click", (e) => {
+    const blockId = e.target.dataset.blockId;
+    if (blockId) goToBlock(blockId);
+  });
+  const consoleList = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("sprite-info_sprite-info", { others: "logs" }),
+  });
+  const buttons = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_header-buttons-right"),
+  });
+
+  const exportButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_shrink-expand-button"),
+    draggable: false,
+  });
+  const exportImg = Object.assign(document.createElement("img"), {
+    src: "/svgs/extensions/download-white.svg",
+  });
+  const exportText = Object.assign(document.createElement("span"), {
+    innerText: msg("export"),
+  });
+
+  const trashButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_shrink-expand-button"),
+    draggable: false,
+  });
+  const trashImg = Object.assign(document.createElement("img"), {
+    src: "/static/assets/a5787bb7364d8131ed49a8f53037d7f4.svg",
+  });
+  const trashText = Object.assign(document.createElement("span"), {
+    innerText: msg("clear"),
+  });
+
+  const closeButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_remove-button"),
+    draggable: false,
+  });
+  const closeImg = Object.assign(document.createElement("img"), {
+    className: addon.tab.scratchClass("close-button_close-icon"),
+    src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
+  });
+  const closeText = Object.assign(document.createElement("span"), {
+    innerText: "Close",
+  });
+
+  consoleTitle.append(consoleText, buttons);
+  buttons.append(exportButton, trashButton, closeButton);
+  trashButton.append(trashImg, trashText);
+  closeButton.append(closeImg, closeText);
+  exportButton.append(exportImg, exportText);
+  extraContainer.append(consoleList);
+  consoleWrapper.append(consoleTitle, extraContainer);
+  document.body.append(consoleWrapper);
 
   let pos1 = 0,
     pos2 = 0,
@@ -263,7 +267,7 @@ export default async function ({ addon, global, console, msg }) {
     let link = document.createElement("a");
     link.innerText = targetName;
     link.className = "logLink";
-    link.onclick = () => goToBlock(blockId);
+    link.dataset.blockId = blockId;
 
     wrapper.appendChild(link);
 
