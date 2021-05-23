@@ -35,7 +35,6 @@
   "animated-thumb",
   "live-featured-project",
   "forum-quote-code-beautifier",
-  "fix-uploaded-svgs",
   "project-info",
   "curator-link",
   "confirm-actions",
@@ -75,7 +74,7 @@
   "material-forum-editor-buttons",
   "gamepad",
   "remove-curved-stage-border",
-  "fix-pasted-scripts",
+  "bugfixes",
   "ctrl-click-run-scripts",
 
   "// NEW ADDONS ABOVE THIS ↑↑",

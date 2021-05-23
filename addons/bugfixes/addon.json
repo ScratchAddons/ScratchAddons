@@ -1,0 +1,45 @@
+{
+  "name": "Fix Scratch bugs",
+  "description": "Fixes various unexpected behaviors in Scratch. Highly recommended.",
+  "credits": [
+    {
+      "name": "GarboMuffin",
+      "link": "https://github.com/GarboMuffin"
+    },
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://github.com/lisa-wolfgang"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "fix-pasted-scripts.js",
+      "matches": ["projects"]
+    },
+    {
+      "url": "fix-uploaded-svgs.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "Do not automatically run duplicated blocks",
+      "id": "fix-pasted-scripts",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Fix broken SVG uploads",
+      "id": "fix-uploaded-svgs",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "tags": ["recommended", "editor", "codeEditor", "costumeEditor"],
+  "versionAdded": "1.15.0",
+  "enabledByDefault": true,
+  "l10n": true
+}

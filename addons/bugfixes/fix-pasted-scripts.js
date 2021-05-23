@@ -1,6 +1,6 @@
-// This addon works by modifying the VM and Blockly to not react to clicking scripts.
-
 export default async function ({ addon, global, console }) {
+  // This addon works by modifying the VM and Blockly to not react to clicking scripts.
+
   const vm = addon.tab.traps.vm;
   await new Promise((resolve, reject) => {
     if (vm.editingTarget) return resolve();
@@ -11,7 +11,7 @@ export default async function ({ addon, global, console }) {
 
   // Fixes the duplicate/pasting bug, no matter the setting (@GarboMuffin's implementation)
   BlocklyInstance.BlockSvg.prototype.onMouseDown_ = function (e) {
-    if (!addon.self.disabled && this.workspace && this.workspace.isDragging()) {
+    if (!addon.self.disabled && addon.settings.get("fix-pasted-scripts") && this.workspace && this.workspace.isDragging()) {
       return;
     } else {
       return originalObject.call(this, e);
@@ -19,4 +19,5 @@ export default async function ({ addon, global, console }) {
   };
 
   if (addon.self.enabledLate) vm.emitWorkspaceUpdate();
+
 }

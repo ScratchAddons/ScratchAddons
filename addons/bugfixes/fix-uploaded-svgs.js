@@ -6,7 +6,7 @@ export default async function ({ addon, global, console }) {
     realFileReader[readAsArrayBuffer] = realFileReader.readAsArrayBuffer;
     realFileReader.readAsArrayBuffer = function (file) {
       (async () => {
-        if (file.type === "image/svg+xml") {
+        if (!addon.self.disabled && addon.settings.get("fix-uploaded-svgs") && file.type === "image/svg+xml") {
           try {
             let text = await file.text();
             const xmlParser = new DOMParser();
@@ -37,4 +37,5 @@ export default async function ({ addon, global, console }) {
     };
     return realFileReader;
   };
+
 }
