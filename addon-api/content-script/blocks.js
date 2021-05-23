@@ -62,7 +62,9 @@ export function addBlock(proccode, args, handler, hide) {
 }
 
 export function removeBlock(proccode) {
-  // TODO is this actually used anywhere???
+  customBlocks[proccode] = null;
+  internalBlocksCache[proccode] = null;
+  resetAllCaches();
 }
 
 // TODO escapeHTML is already a thing
