@@ -137,14 +137,18 @@ const injectWorkspace = (ScratchBlocks) => {
 
 let inited = false;
 export async function init(tab) {
-  if (inited) return;
+  if (inited) {
+    return;
+  }
   inited = true;
 
-  let getEditorMode = () => tab.clientVersion === "scratch-www" && tab.editorMode;
-  if (!getEditorMode()) return;
+  if (tab.clientVersion !== "scratch-www") {
+    return;
+  }
 
   vm = tab.traps.vm;
 
+  // Make sure that the block cache always has something for our blocks, otherwise stepToProcedure will not be called
   const Blocks = vm.runtime.monitorBlocks.constructor;
   const originalResetCache = Blocks.prototype.resetCache;
   Blocks.prototype.resetCache = function () {
