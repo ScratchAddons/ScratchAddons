@@ -161,9 +161,7 @@ export async function init(tab) {
   let getEditorMode = () => tab.clientVersion === "scratch-www" && tab.editorMode;
   if (!getEditorMode()) return;
 
-  // TODO no weird hacks
   vm = tab.traps.vm;
-  if (!vm) vm = await new Promise((cb) => __scratchAddonsTraps.addEventListener("gotvm", () => cb(tab.traps.vm)));
 
   const Blocks = vm.runtime.monitorBlocks.constructor;
   const originalResetCache = Blocks.prototype.resetCache;
