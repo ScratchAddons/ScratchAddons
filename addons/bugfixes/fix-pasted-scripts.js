@@ -11,7 +11,12 @@ export default async function ({ addon, global, console }) {
 
   // Fixes the duplicate/pasting bug, no matter the setting (@GarboMuffin's implementation)
   BlocklyInstance.BlockSvg.prototype.onMouseDown_ = function (e) {
-    if (!addon.self.disabled && addon.settings.get("fix-pasted-scripts") && this.workspace && this.workspace.isDragging()) {
+    if (
+      !addon.self.disabled &&
+      addon.settings.get("fix-pasted-scripts") &&
+      this.workspace &&
+      this.workspace.isDragging()
+    ) {
       return;
     } else {
       return originalObject.call(this, e);
@@ -19,5 +24,4 @@ export default async function ({ addon, global, console }) {
   };
 
   if (addon.self.enabledLate) vm.emitWorkspaceUpdate();
-
 }
