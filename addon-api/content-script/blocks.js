@@ -37,6 +37,7 @@ const getNamesIdsDefaults = (blockData) => [
 ];
 
 const resetAllCaches = () => {
+  // We override Blocks.resetCache() further down
   for (const target of vm.runtime.targets) {
     if (target.isOriginal) {
       target.blocks.resetCache();
@@ -159,7 +160,8 @@ export async function init(tab) {
     if (blockData) {
       const stackFrame = thread.peekStackFrame();
       blockData.handler(stackFrame.params, thread);
-      // Don't call old step to procedure. It won't work correctly anyways.
+      // Don't call old stepToProcedure. It won't work correctly.
+      // Something to consider is that this may allow projects to figure out if a user has an addon enabled.
       return;
     }
     return oldStepToProcedure.call(this, thread, proccode);
