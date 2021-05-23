@@ -34,8 +34,6 @@ export function removeBlock(id) {
   customBlocks = customBlocks.filter((e) => e.id != id);
 }
 
-let injected;
-
 // TODO escapeHTML is already a thing
 function xesc(s) {
   return s
@@ -46,17 +44,9 @@ function xesc(s) {
     .replace(/'/g, "&apos;");
 }
 
-const injectWorkspace = () => {
-  if (injected) {
-    return;
-  }
-  injected = true;
-
-  const workspace = Blockly.getMainWorkspace();
-  if (!workspace) throw new Error("expected workspace");
-
-  let BlockSvg = Object.values(Blockly.getMainWorkspace().getFlyout().checkboxes_)[0].block.constructor;
-  let oldUpdateColor = BlockSvg.prototype.updateColour;
+const injectWorkspace = (ScratchBlocks) => {
+  const BlockSvg = ScratchBlocks.BlockSvg;
+  const oldUpdateColor = BlockSvg.prototype.updateColour;
   BlockSvg.prototype.updateColour = function (...a) {
     // TODO shadow blocks should not get colored
     if (this.procCode_) {
@@ -84,44 +74,45 @@ const injectWorkspace = () => {
     return oldUpdateColor.call(this, ...a);
   };
 
-  const flyout = workspace.getFlyout();
-  if (!flyout) throw new Error("expected flyout");
-  if (!vm) throw new Error("expected vm");
+  const categoryHandler = (e) => {
+    // TODO this is ugly
+    return [
+      ...new DOMParser()
+        .parseFromString(
+          `<top>` +
+            (customBlocks
+              .filter((e) => !e.hide)
+              .map((e) => {
+                try {
+                  return `<block type="procedures_call" gap="16"><mutation generateshadows="true" proccode="${xesc(
+                    e.id
+                  )}" argumentids="${xesc(JSON.stringify(e.args.map((e, i) => "arg" + i)))}" argumentnames="${xesc(
+                    JSON.stringify(e.args)
+                  )}" argumentdefaults="${xesc(
+                    JSON.stringify(e.args.map((e) => ""))
+                  )}" warp="false"></mutation></block>`;
+                } catch (e) {
+                  console.error("Issue making block from", e);
+                  return "";
+                }
+              })
+              .join("") ||
+              `<label text="${xesc(
+                scratchAddons.l10n.get("noAddedBlocks", null, "No addons have added blocks.")
+              )}" showStatusButton="null" />`) +
+            `</top>`,
+          "text/xml"
+        )
+        .querySelectorAll("block, label"),
+    ];
+  };
+
+  const Flyout = ScratchBlocks.Flyout;
   // Each time a new workspace is made, these callbacks are reset, so re-register whenever a flyout is shown.
   // https://github.com/LLK/scratch-blocks/blob/61f02e4cac0f963abd93013842fe536ef24a0e98/core/flyout_base.js#L469
-  const originalShow = flyout.constructor.prototype.show;
-  flyout.constructor.prototype.show = function (xml) {
-    this.workspace_.registerToolboxCategoryCallback("SABLOCKS", function (e) {
-      return [
-        ...new DOMParser()
-          .parseFromString(
-            `<top>` +
-              (customBlocks
-                .filter((e) => !e.hide)
-                .map((e) => {
-                  try {
-                    return `<block type="procedures_call" gap="16"><mutation generateshadows="true" proccode="${xesc(
-                      e.id
-                    )}" argumentids="${xesc(JSON.stringify(e.args.map((e, i) => "arg" + i)))}" argumentnames="${xesc(
-                      JSON.stringify(e.args)
-                    )}" argumentdefaults="${xesc(
-                      JSON.stringify(e.args.map((e) => ""))
-                    )}" warp="false"></mutation></block>`;
-                  } catch (e) {
-                    console.error("Issue making block from", e);
-                    return "";
-                  }
-                })
-                .join("") ||
-                `<label text="${xesc(
-                  scratchAddons.l10n.get("noAddedBlocks", null, "No addons have added blocks.")
-                )}" showStatusButton="null" />`) +
-              `</top>`,
-            "text/xml"
-          )
-          .querySelectorAll("block, label"),
-      ];
-    });
+  const originalShow = Flyout.prototype.show;
+  Flyout.prototype.show = function (xml) {
+    this.workspace_.registerToolboxCategoryCallback("SABLOCKS", categoryHandler);
     return originalShow.call(this, xml);
   };
 
@@ -147,10 +138,7 @@ const injectWorkspace = () => {
     return result;
   };
 
-  // TODO this comment is wrong
-  // If editingTarget has not been set yet, we have injected before the editor has loaded and emitWorkspaceUpdate will be called later.
-  // Otherwise, it's possible that the editor has already loaded and updated its toolbox, so force a workspace update.
-  // Workspace updates are slow, so don't do them unless necessary.
+  // Ensure the workspace is up-to-date
   if (vm.editingTarget) {
     vm.emitWorkspaceUpdate();
   }
@@ -208,14 +196,5 @@ export async function init(tab) {
     return oldStepToProcedure.call(this, thread, proccode);
   };
 
-  // TODO getBlockly()
-  if (getEditorMode() === "editor") {
-    const interval = setInterval(() => {
-      if (typeof Blockly === "object" && Blockly.getMainWorkspace()) {
-        injectWorkspace();
-        clearInterval(interval);
-      }
-    }, 100);
-  }
-  tab.addEventListener("urlChange", () => getEditorMode() === "editor" && injectWorkspace());
+  tab.traps.getBlockly().then(injectWorkspace);
 }
