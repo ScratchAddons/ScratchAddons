@@ -72,6 +72,28 @@ export const removeBlock = (proccode) => {
   resetAllCaches();
 };
 
+const generateBlockXML = () => {
+  let xml = "";
+  for (const proccode of Object.keys(customBlocks)) {
+    const blockData = customBlocks[proccode];
+    if (blockData.hide) continue;
+    const [names, ids, defaults] = getNamesIdsDefaults(blockData);
+    xml +=
+      '<block type="procedures_call" gap="16"><mutation generateshadows="true" warp="false"' +
+      ` proccode="${escapeHTML(proccode)}"` +
+      ` argumentnames="${escapeHTML(JSON.stringify(names))}"` +
+      ` argumentids="${escapeHTML(JSON.stringify(ids))}"` +
+      ` argumentdefaults="${escapeHTML(JSON.stringify(defaults))}"` +
+      "></mutation></block>";
+  }
+  if (xml.length === 0) {
+    // TODO test
+    const message = scratchAddons.l10n.get("noAddedBlocks", null, "No addons have added blocks.");
+    return `<label text="${escapeHTML(message)} showStatusButton="null" />`;
+  }
+  return xml;
+};
+
 const injectWorkspace = (ScratchBlocks) => {
   const BlockSvg = ScratchBlocks.BlockSvg;
   const oldUpdateColour = BlockSvg.prototype.updateColour;
@@ -85,42 +107,6 @@ const injectWorkspace = (ScratchBlocks) => {
     return oldUpdateColour.call(this, ...args);
   };
 
-  const categoryHandler = (e) => {
-    // TODO we really don't need to be a dynamic category...
-    let xml = "";
-    for (const proccode of Object.keys(customBlocks)) {
-      const blockData = customBlocks[proccode];
-      if (blockData.hide) continue;
-      const [names, ids, defaults] = getNamesIdsDefaults(blockData);
-      xml +=
-        '<block type="procedures_call" gap="16"><mutation generateshadows="true" warp="false"' +
-        ` proccode="${escapeHTML(proccode)}"` +
-        ` argumentnames="${escapeHTML(JSON.stringify(names))}"` +
-        ` argumentids="${escapeHTML(JSON.stringify(ids))}"` +
-        ` argumentdefaults="${escapeHTML(JSON.stringify(defaults))}"` +
-        "></mutation></block>";
-    }
-    if (xml.length === 0) {
-      // TODO test
-      xml = `<label text="${escapeHTML(
-        scratchAddons.l10n.get("noAddedBlocks", null, "No addons have added blocks.")
-      )} showStatusButton="null" />`;
-    }
-
-    return Array.from(
-      new DOMParser().parseFromString(`<top>${xml}</top>`, "text/xml").querySelectorAll("block, label")
-    );
-  };
-
-  // Each time a new workspace is made, these callbacks are reset, so re-register whenever a flyout is shown.
-  // https://github.com/LLK/scratch-blocks/blob/61f02e4cac0f963abd93013842fe536ef24a0e98/core/flyout_base.js#L469
-  const Flyout = ScratchBlocks.Flyout;
-  const originalShow = Flyout.prototype.show;
-  Flyout.prototype.show = function (xml) {
-    this.workspace_.registerToolboxCategoryCallback("SABLOCKS", categoryHandler);
-    return originalShow.call(this, xml);
-  };
-
   // We use Scratch's extension category mechanism to create the Scratch Addons category.
   // https://github.com/LLK/scratch-gui/blob/ddd2fa06f2afa140a46ec03be91796ded861e65c/src/containers/blocks.jsx#L344
   // https://github.com/LLK/scratch-gui/blob/2ceab00370ad7bd8ecdf5c490e70fd02152b3e2a/src/lib/make-toolbox-xml.js#L763
@@ -130,15 +116,14 @@ const injectWorkspace = (ScratchBlocks) => {
     const result = originalGetBlocksXML.call(this, target);
     result.unshift({
       id: "sa-blocks",
-      xml: `
-          <category
-            name="${escapeHTML(scratchAddons.l10n.get("extensionName", null, "Scratch Addons"))}"
-            id="sa-blocks"
-            colour="#ff7b26"
-            secondaryColour="#ff7b26"
-            iconURI="${ICON}"
-            custom="SABLOCKS">
-          </category>`,
+      xml:
+        "<category" +
+        ` name="${escapeHTML(scratchAddons.l10n.get("extensionName", null, "Scratch Addons"))}"` +
+        ' id="sa-blocks"' +
+        ' colour="#ff7b26"' +
+        ' secondaryColour="#ff7b26"' +
+        ` iconURI="${ICON}"` +
+        `>${generateBlockXML()}</category>`,
     });
     return result;
   };
