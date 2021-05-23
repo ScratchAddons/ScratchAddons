@@ -5,9 +5,19 @@ try {
 }
 
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
+
+let receivedResponse = false;
+const onMessageBackgroundReady = (request, sender, sendResponse) => {
+  if (request === "backgroundListenerReady" && !receivedResponse) {
+    chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse);
+  }
+};
+chrome.runtime.onMessage.addListener(onMessageBackgroundReady);
 const onResponse = (res) => {
   if (res) {
     console.log("[Message from background]", res);
+    chrome.runtime.onMessage.removeListener(onMessageBackgroundReady);
+    receivedResponse = true;
     if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") onInfoAvailable(res);
     else {
       pseudoUrl = `https://scratch.mit.edu/${res.httpStatusCode}/`;
