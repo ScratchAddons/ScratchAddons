@@ -19,7 +19,6 @@ const ICON =
 
 let vm;
 const customBlocks = {};
-const internalBlocksCache = {};
 
 const getCustomBlock = (proccode) => {
   if (!Object.prototype.hasOwnProperty.call(customBlocks, proccode)) {
@@ -36,15 +35,6 @@ const getNamesIdsDefaults = (blockData) => [
   blockData.args.map(() => ""),
 ];
 
-const resetAllCaches = () => {
-  for (const target of vm.runtime.targets) {
-    if (target.isOriginal) {
-      target.blocks.resetCache();
-    }
-  }
-  vm.runtime.flyoutBlocks.resetCache();
-};
-
 export const addBlock = (proccode, args, handler, hide) => {
   if (getCustomBlock(proccode)) {
     return;
@@ -59,17 +49,13 @@ export const addBlock = (proccode, args, handler, hide) => {
     hide: !!hide,
   };
   customBlocks[proccode] = blockData;
-  internalBlocksCache[proccode] = getNamesIdsDefaults(blockData);
   if (vm.editingTarget) {
     vm.emitWorkspaceUpdate();
   }
-  resetAllCaches();
 };
 
 export const removeBlock = (proccode) => {
   customBlocks[proccode] = null;
-  internalBlocksCache[proccode] = null;
-  resetAllCaches();
 };
 
 const generateBlockXML = () => {
@@ -144,10 +130,18 @@ export async function init(tab) {
   vm = tab.traps.vm;
 
   const Blocks = vm.runtime.monitorBlocks.constructor;
-  const originalResetCache = Blocks.prototype.resetCache;
-  Blocks.prototype.resetCache = function () {
-    originalResetCache.call(this);
-    Object.assign(this._cache.procedureParamNames, internalBlocksCache);
+  const oldGetProcedureParamNamesIdsAndDefaults = Blocks.prototype.getProcedureParamNamesIdsAndDefaults;
+  Blocks.prototype.getProcedureParamNamesIdsAndDefaults = function (name) {
+    const result = oldGetProcedureParamNamesIdsAndDefaults.call(this, name);
+    if (!result) {
+      const blockData = getCustomBlock(name);
+      if (blockData) {
+        const namesIdsDefaults = getNamesIdsDefaults(blockData);
+        this._cache.procedureParamNames[name] = namesIdsDefaults;
+        return namesIdsDefaults;
+      }
+    }
+    return result;
   };
 
   const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;
