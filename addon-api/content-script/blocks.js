@@ -60,13 +60,9 @@ export const addBlock = (proccode, args, handler, hide) => {
   };
   customBlocks[proccode] = blockData;
   internalBlocksCache[proccode] = getNamesIdsDefaults(blockData);
-  let w;
-  try {
-    w = Blockly.getMainWorkspace();
-  } catch (e) {}
-  if (w) w.getToolbox().refreshSelection();
-  // TODO !!vm.editingTarget
-  if (vm && vm.runtime.targets.length > 0) vm.emitWorkspaceUpdate();
+  if (vm.editingTarget) {
+    vm.emitWorkspaceUpdate();
+  }
   resetAllCaches();
 };
 
