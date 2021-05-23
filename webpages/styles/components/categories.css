@@ -10,15 +10,13 @@
 }
 
 .category {
+  transition: all 0.2s ease;
   padding: 20px 20px;
   position: relative;
   user-select: none;
   cursor: pointer;
   display: flex;
   align-items: center;
-}
-.category.transition {
-  transition: all 0.2s ease;
 }
 .category.category-small {
   padding: 15px 20px 15px 20px;
@@ -45,6 +43,7 @@
 }
 .category::before {
   content: "";
+  transition: all 0.2s ease;
   display: block;
   width: 4px;
   border-radius: 0 4px 4px 0;
@@ -53,9 +52,6 @@
   position: absolute;
   left: 0;
   opacity: 0;
-}
-.category.transition::before {
-  transition: all 0.2s ease;
 }
 [dir="rtl"] .category::before {
   right: 0;

@@ -15,9 +15,6 @@ export default async function ({ template }) {
           .map((category) => category.id);
         return !this.category.parent || [this.category.parent, ...categoriesWithParent].includes(this.selectedCategory);
       },
-      loaded() {
-        return this.$root.loaded;
-      },
     },
     methods: {
       onClick(event) {
