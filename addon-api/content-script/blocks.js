@@ -13,7 +13,6 @@ const customBlocks = {};
 const internalBlocksCache = {};
 
 const getCustomBlock = (proccode) => {
-  proccode = proccode.trim();
   if (!Object.prototype.hasOwnProperty.call(customBlocks, proccode)) {
     return;
   }
@@ -32,7 +31,6 @@ const resetAllCaches = () => {
 };
 
 export function addBlock(proccode, args, handler, hide) {
-  proccode = proccode.trim();
   if (getCustomBlock(proccode)) {
     return;
   }
