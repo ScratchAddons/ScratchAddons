@@ -268,6 +268,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 });
+// In case a tab messaged us before we registered the event above,
+// we notify them they can resend the contentScriptInfo message
+chrome.tabs.query({}, (tabs) =>
+  tabs.forEach((tab) => {
+    if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+      chrome.tabs.sendMessage(tab.id, "backgroundListenerReady");
+    }
+  })
+);
 
 // Pathname patterns. Make sure NOT to set global flag!
 // Don't forget ^ and $

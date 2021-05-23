@@ -6,16 +6,18 @@ try {
 
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
 
-let tries = 0;
-const onResponse = (res) => {
-  if (!res) {
-    // chrome.runtime.onMessage listener might not be available yet
-    tries++;
-    if (tries > 60) return; // Up to ~15 seconds waiting
-    setTimeout(() => chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse), 250);
+let receivedResponse = false;
+const onMessageBackgroundReady = (request, sender, sendResponse) => {
+  if (request === "backgroundListenerReady" && !receivedResponse) {
+    chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse);
   }
+};
+chrome.runtime.onMessage.addListener(onMessageBackgroundReady);
+const onResponse = (res) => {
   if (res) {
     console.log("[Message from background]", res);
+    chrome.runtime.onMessage.removeListener(onMessageBackgroundReady);
+    receivedResponse = true;
     if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") onInfoAvailable(res);
     else {
       pseudoUrl = `https://scratch.mit.edu/${res.httpStatusCode}/`;
