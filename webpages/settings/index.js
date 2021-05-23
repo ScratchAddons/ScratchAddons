@@ -174,6 +174,7 @@ chrome.storage.sync.get(["globalTheme"], function ( { globalTheme = false }) {
       addonGroups: addonGroups.filter((g) => (isIframe ? g.iframeShow : g.fullscreenShow)),
       categories,
       searchMsg: this.msg("search"),
+      browserLevelPermissions,
       } },
     computed: {
       version() {

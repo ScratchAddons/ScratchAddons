@@ -85,7 +85,7 @@ export default async function ({ template }) {
         };
 
         const requiredPermissions = (this.addon.permissions || []).filter((value) =>
-          browserLevelPermissions.includes(value)
+          this.$root.browserLevelPermissions.includes(value)
         );
         if (!this.addon._enabled && this.addon.tags.includes("danger")) {
           const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
