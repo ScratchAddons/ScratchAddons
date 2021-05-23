@@ -253,8 +253,10 @@ export default async function ({ addon, global, console, msg }) {
         const inputBlockFill = getComputedStyle(inputBlock.svgPath_).fill;
         const inputBlockStroke = getComputedStyle(inputBlock.svgPath_).stroke;
         // for compatibility with custom block colors
-        const inputBlockColor = inputBlockFill == "rgb(40, 40, 40)" || inputBlockFill == "rgb(255, 255, 255)"
-          ? inputBlockStroke : inputBlockFill;
+        const inputBlockColor =
+          inputBlockFill == "rgb(40, 40, 40)" || inputBlockFill == "rgb(255, 255, 255)"
+            ? inputBlockStroke
+            : inputBlockFill;
         inputSpan.innerText = inputBlock.toString();
         inputSpan.className = "console-variable";
         inputSpan.style.background = inputBlockColor;
