@@ -1,7 +1,6 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
 const color = {
-  // TODO this has horrible text contrast
   color: "#43cfca",
   secondaryColor: "#3aa8a4",
   tertiaryColor: "#3aa8a4",

@@ -29,8 +29,6 @@ export default async function ({ addon, global, console, msg }) {
     workspace = Blockly.getMainWorkspace();
     addItem(content, thread, "error");
   });
-  // TODO injected is unused
-  let injected;
 
   const consoleWrapper = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_card", { others: "debug" }),
@@ -45,7 +43,6 @@ export default async function ({ addon, global, console, msg }) {
     className: `extra-log-container`,
   });
 
-  // TODO extract devtools logic into library?
   const goToBlock = (blockId) => {
     const offsetX = 32,
       offsetY = 32;
@@ -62,8 +59,6 @@ export default async function ({ addon, global, console, msg }) {
 
     let ePos = base.getRelativeToSurfaceXY(), // Align with the top of the block
       rPos = root.getRelativeToSurfaceXY(), // Align with the left of the block 'stack'
-      // TODO eSiz is unused
-      eSiz = block.getHeightWidth(),
       scale = workspace.scale,
       x = rPos.x * scale,
       y = ePos.y * scale,
@@ -81,12 +76,10 @@ export default async function ({ addon, global, console, msg }) {
 
       workspace.scrollbar.set(sx, sy);
     }
-    // TODO extract devtools logic into library?
     // Flashing
     const myFlash = { block: null, timerID: null, colour: null };
     if (myFlash.timerID > 0) {
       clearTimeout(myFlash.timerID);
-      // TODO port devtools fixes
       myFlash.block.setColour(myFlash.colour);
     }
 
@@ -96,7 +89,6 @@ export default async function ({ addon, global, console, msg }) {
     myFlash.block = block;
 
     function _flash() {
-      // TODO port devtools fixes
       myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
       flashOn = !flashOn;
       count--;
@@ -151,7 +143,6 @@ export default async function ({ addon, global, console, msg }) {
     src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
   });
   const closeText = Object.assign(document.createElement("span"), {
-    // TODO l10n
     innerText: "Close",
   });
 
