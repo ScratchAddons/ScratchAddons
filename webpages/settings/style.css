@@ -336,23 +336,6 @@ body.iframe .search-box input {
   z-index: 999;
 }
 
-#popup-more-settings {
-  margin-inline-start: 12px;
-}
-
-#popup-more-settings > button {
-  height: 36px;
-  padding: 9px;
-  padding-inline-start: 32px;
-  background-image: url(../../images/icons/settings.svg);
-  background-position: 8px 9px;
-  background-repeat: no-repeat;
-  width: max-content;
-}
-[dir="rtl"] #popup-more-settings > button {
-  background-position: calc(100% - 8px) 9px;
-}
-
 color-picker {
   z-index: 2;
   filter: drop-shadow(black 2px 4px 6px);

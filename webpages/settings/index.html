@@ -171,9 +171,6 @@
           <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" />
           <button v-show="searchInput === ''" class="search-button"></button>
           <button style="display: none" v-else class="search-clear-button" @click="clearSearch()"></button>
-          <div id="popup-more-settings" v-show="isIframe" style="display: none" v-show="true">
-            <button @click="openFullSettings()" class="large-button">{{ msg("moreSettings") }}</button>
-          </div>
         </div>
 
         <div class="addons-container" style="display: none" v-show="loaded">
