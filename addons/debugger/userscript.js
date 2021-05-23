@@ -29,6 +29,7 @@ export default async function ({ addon, global, console, msg }) {
     workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "error");
   });
+  // TODO unused
   let injected;
 
   const consoleWrapper = Object.assign(document.createElement("div"), {
@@ -43,6 +44,8 @@ export default async function ({ addon, global, console, msg }) {
   const extraContainer = Object.assign(document.createElement("div"), {
     className: `extra-log-container`,
   });
+
+  // TODO extract devtools logic into library?
   const goToBlock = (blockId) => {
     const offsetX = 32,
       offsetY = 32;
@@ -77,10 +80,12 @@ export default async function ({ addon, global, console, msg }) {
 
       workspace.scrollbar.set(sx, sy);
     }
+    // TODO extract devtools logic into library?
     // Flashing
     const myFlash = { block: null, timerID: null, colour: null };
     if (myFlash.timerID > 0) {
       clearTimeout(myFlash.timerID);
+      // TODO port devtools fixes
       myFlash.block.setColour(myFlash.colour);
     }
 
@@ -90,6 +95,7 @@ export default async function ({ addon, global, console, msg }) {
     myFlash.block = block;
 
     function _flash() {
+      // TODO port devtools fixes
       myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
       flashOn = !flashOn;
       count--;
@@ -144,6 +150,7 @@ export default async function ({ addon, global, console, msg }) {
     src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
   });
   const closeText = Object.assign(document.createElement("span"), {
+    // TODO l10n
     innerText: "Close",
   });
 

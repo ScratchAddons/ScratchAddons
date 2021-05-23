@@ -1,4 +1,5 @@
 const color = {
+  // TODO horrible text contrast
   color: "#43cfca",
   secondaryColor: "#3aa8a4",
   tertiaryColor: "#3aa8a4",
@@ -36,6 +37,7 @@ export function removeBlock(id) {
 
 let injected;
 
+// TODO escapeHTML is already a thing
 function xesc(s) {
   return s
     .replace(/&/g, "&amp;")
@@ -57,6 +59,7 @@ const injectWorkspace = () => {
   let BlockSvg = Object.values(Blockly.getMainWorkspace().getFlyout().checkboxes_)[0].block.constructor;
   let oldUpdateColor = BlockSvg.prototype.updateColour;
   BlockSvg.prototype.updateColour = function (...a) {
+    // TODO shadow blocks should not get colored
     if (this.procCode_) {
       let p = this.procCode_;
       let block = customBlocks.find((e) => e.id == p.trim());
@@ -145,6 +148,7 @@ const injectWorkspace = () => {
     return result;
   };
 
+  // TODO this comment is wrong
   // If editingTarget has not been set yet, we have injected before the editor has loaded and emitWorkspaceUpdate will be called later.
   // Otherwise, it's possible that the editor has already loaded and updated its toolbox, so force a workspace update.
   // Workspace updates are slow, so don't do them unless necessary.
@@ -157,8 +161,10 @@ export async function init(tab) {
   inited = true;
   let getEditorMode = () => tab.clientVersion === "scratch-www" && tab.editorMode;
   if (!getEditorMode()) return;
+  // TODO no weird hacks
   vm = tab.traps.vm;
   if (!vm) vm = await new Promise((cb) => __scratchAddonsTraps.addEventListener("gotvm", () => cb(tab.traps.vm)));
+  // TODO no rAF
   async function mainloop() {
     let cache = {};
     while (true) {
@@ -187,6 +193,7 @@ export async function init(tab) {
     let blockData = customBlocks.find((block) => proccode.trim() == block.id);
     if (blockData && blockData.handler) {
       let f = thread.peekStackFrame();
+      // TODO: why shallow clone args?
       let args = {};
       for (let arg in f.params) {
         args[arg] = f.params[arg];
@@ -195,6 +202,7 @@ export async function init(tab) {
     }
     return oldStepToProcedure.call(this, thread, proccode);
   };
+  // TODO getBlockly()
   if (getEditorMode() === "editor") {
     const interval = setInterval(() => {
       if (typeof Blockly === "object" && Blockly.getMainWorkspace()) {
