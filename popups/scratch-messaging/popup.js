@@ -99,36 +99,24 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             if (res.error) {
               const errorCode =
                 {
-                  isEmpty: "comment-error-empty",
+                  isEmpty: "scratch-messaging/comment-error-empty",
                   // Two errors can be raised for rate limit;
                   // isFlood is the actual error, 429 is the status code
-                  isFlood: "comment-error-ratelimit",
-                  429: "comment-error-ratelimit",
-                  isBad: "comment-error-filterbot-generic",
-                  hasChatSite: "comment-error-filterbot-chat",
-                  isSpam: "comment-error-filterbot-spam",
-                  isDisallowed: "comment-error-disabled",
-                  isIPMuted: "comment-error-ip",
-                  isTooLong: "comment-error-toolong",
-                  isNotPermitted: "comment-error-unverified",
-                  500: "comment-error-down",
-                  503: "comment-error-down",
+                  // ratelimit error will be unnecessary when #2505 is implemented
+                  isFlood: "scratch-messaging/comment-error-ratelimit",
+                  429: "scratch-messaging/comment-error-ratelimit",
+                  isBad: "scratch-messaging/comment-error-filterbot-generic",
+                  hasChatSite: "scratch-messaging/comment-error-filterbot-chat",
+                  isSpam: "scratch-messaging/comment-error-filterbot-spam",
+                  // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
+                  500: "scratch-messaging/comment-error-down",
+                  503: "scratch-messaging/comment-error-down",
                 }[res.error] || "scratch-messaging/send-error";
-              let errorMsg = l10n.msg(errorCode, {
-                appealId: res.appealId,
-                commentType: l10n.msg("comment-type-" + this.resourceType),
-                email: "appeals@scratch.mit.edu",
-              });
+              let errorMsg = l10n.get(errorCode);
               if (res.muteStatus) {
-                const cause = res.muteStatus.currentMessageType;
-                const causeCode =
-                  {
-                    pii: "comment-mute-pii",
-                    unconstructive: "comment-mute-unconstructive",
-                    vulgarity: "comment-mute-vulgarity",
-                    spam: "comment-mute-spam",
-                  }[cause] || "comment-mute-general";
-                errorMsg = l10n.msg(causeCode) + " " + l10n.msg("comment-mute");
+                errorMsg = l10n.get("scratch-messaging/comment-mute", {
+                  mins: res.muteStatus.muteExpiresAt ? Math.ceil(res.muteStatus.muteExpiresAt / 60) : "?",
+                });
               }
               alert(errorMsg);
             } else {
