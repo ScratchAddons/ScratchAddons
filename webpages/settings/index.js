@@ -177,7 +177,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         categories,
         searchMsg: this.msg("search"),
         browserLevelPermissions,
-        grantedOptionalPermissions
+        grantedOptionalPermissions,
       };
     },
     computed: {
