@@ -8,7 +8,6 @@ const ICON = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
 
 let vm;
 let customBlocks = [];
-let toolbox = [];
 let inited = false;
 
 export function addBlock(id, args, handler, hide) {
