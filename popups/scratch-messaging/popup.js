@@ -96,8 +96,42 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
           (res) => {
             this.postingComment = false;
             dateNow = Date.now();
-            if (res.error) alert(l10n.get("scratch-messaging/send-error"));
-            else {
+            if (res.error) {
+              const errorCode =
+                {
+                  isEmpty: "comment-error-empty",
+                  // Two errors can be raised for rate limit;
+                  // isFlood is the actual error, 429 is the status code
+                  isFlood: "comment-error-ratelimit",
+                  429: "comment-error-ratelimit",
+                  isBad: "comment-error-filterbot-generic",
+                  hasChatSite: "comment-error-filterbot-chat",
+                  isSpam: "comment-error-filterbot-spam",
+                  isDisallowed: "comment-error-disabled",
+                  isIPMuted: "comment-error-ip",
+                  isTooLong: "comment-error-toolong",
+                  isNotPermitted: "comment-error-unverified",
+                  500: "comment-error-down",
+                  503: "comment-error-down",
+                }[res.error] || "scratch-messaging/send-error";
+              let errorMsg = l10n.msg(errorCode, {
+                appealId: res.appealId,
+                commentType: l10n.msg("comment-type-" + this.resourceType),
+                email: "appeals@scratch.mit.edu",
+              });
+              if (res.muteStatus) {
+                const cause = res.muteStatus.currentMessageType;
+                const causeCode =
+                  {
+                    pii: "comment-mute-pii",
+                    unconstructive: "comment-mute-unconstructive",
+                    vulgarity: "comment-mute-vulgarity",
+                    spam: "comment-mute-spam",
+                  }[cause] || "comment-mute-general";
+                errorMsg = l10n.msg(causeCode) + " " + l10n.msg("comment-mute");
+              }
+              alert(errorMsg);
+            } else {
               this.replying = false;
               const newCommentPseudoId = `${this.resourceType[0]}_${res.commentId}`;
               Vue.set(this.commentsObj, newCommentPseudoId, {
