@@ -354,6 +354,10 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         if (this.searchLoaded) this.searchInput = newValue;
       },
     },
+    ready() {
+      // Needed in Firefox and slower Chrome - autofocus is weird
+      document.getElementById("searchBox")?.focus();
+    },
   });
 
   const getRunningAddons = (manifests, addonsEnabled) => {
