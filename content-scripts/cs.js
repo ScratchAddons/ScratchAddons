@@ -378,10 +378,9 @@ const showBanner = () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
-  // v1.14.0 TODO in line 365
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/catblocks.png"),
+    src: chrome.runtime.getURL("/images/cs/icon.svg"),
     style: "height: 150px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
@@ -434,9 +433,9 @@ const showBanner = () => {
     innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo2", DOLLARS)).replace(
       "$1",
       Object.assign(document.createElement("a"), {
-        href: "https://scratchaddons.com/translate",
+        href: "https://scratch.mit.edu/scratch-addons-extension/settings#addon-msg-count-badge",
         target: "_blank",
-        textContent: chrome.i18n.getMessage("helpTranslateScratchAddons"),
+        textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
       }).outerHTML
     ),
   });
