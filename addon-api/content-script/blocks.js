@@ -159,6 +159,8 @@ export async function init(tab) {
     if (blockData) {
       const stackFrame = thread.peekStackFrame();
       blockData.handler(stackFrame.params, thread.target.id, thread.stack[thread.stack.length - 1]);
+      // Don't call old step to procedure. It won't work correctly anyways.
+      return;
     }
     return oldStepToProcedure.call(this, thread, proccode);
   };
