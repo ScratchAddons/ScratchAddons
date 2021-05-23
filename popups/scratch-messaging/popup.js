@@ -326,14 +326,9 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
     methods: {
       getData() {
         return new Promise((resolve) => {
-          const timeout = setTimeout(() => {
-            this.error = "addonDisabled";
-            resolve(undefined);
-          }, 500);
           chrome.runtime.sendMessage({ scratchMessaging: "getData" }, (res) => {
             if (res) {
-              clearTimeout(timeout);
-              this.stMessages = res.stMessages.map((alert) => ({
+              this.stMessages = (res.stMessages || []).map((alert) => ({
                 ...alert,
                 datetime_created: new Date(alert.datetime_created).toDateString(),
               }));
