@@ -1,10 +1,8 @@
 export default async function ({ addon, global, console, msg }) {
   let workspace, showingConsole;
 
-  const spacer = document.createElement("div");
-  spacer.className = "sa-debugger-spacer";
-  const buttonGroup = document.createElement("div");
-  buttonGroup.className = addon.tab.scratchClass("stage-header_stage-size-toggle-group");
+  const container = document.createElement("div");
+  container.className = "sa-debugger-container";
   const buttonContainer = document.createElement("div");
   buttonContainer.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
   const buttonContent = document.createElement("div");
@@ -15,8 +13,7 @@ export default async function ({ addon, global, console, msg }) {
   buttonImage.src = addon.self.dir + "/debug.svg";
   buttonContent.appendChild(buttonImage);
   buttonContainer.appendChild(buttonContent);
-  buttonGroup.appendChild(buttonContainer);
-  spacer.appendChild(buttonGroup);
+  container.appendChild(buttonContainer);
   buttonContainer.addEventListener("click", () => toggleConsole(true));
 
   const vm = addon.tab.traps.vm;
@@ -284,12 +281,12 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   while (true) {
-    const stageHeaderWrapper = await addon.tab.waitForElement('[class*="stage-header_stage-menu-wrapper"]', {
+    const stageHeaderSizeControls = await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
     if (addon.tab.editorMode == "editor") {
-      stageHeaderWrapper.insertBefore(spacer, stageHeaderWrapper.lastChild);
+      stageHeaderSizeControls.insertBefore(container, stageHeaderSizeControls.firstChild);
     } else {
       toggleConsole(false);
     }

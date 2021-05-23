@@ -1,7 +1,5 @@
-.sa-gamepad-spacer {
-  display: flex;
-  width: 100%;
-  justify-content: flex-end;
+.sa-gamepad-container {
+  margin-right: 0.2rem;
 }
 
 .sa-gamepad-popup-outer {

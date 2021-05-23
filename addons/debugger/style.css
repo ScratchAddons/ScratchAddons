@@ -1,7 +1,5 @@
-.sa-debugger-spacer {
-  display: flex;
-  width: 100%;
-  justify-content: flex-end;
+.sa-debugger-container {
+  margin-right: 0.2rem;
 }
 
 .debug {
