@@ -162,11 +162,13 @@ chrome.storage.sync.get(["globalTheme"], function ( { globalTheme = false }) {
       canCloseOutside: false,
       categoryOpen: true,
       loaded: false,
+      searchLoaded: false,
       manifests: [],
       manifestsById: {},
       searchAddonOrder: [],
       selectedCategory: "all",
       searchInput: "",
+      searchInputReal: "",
       addonSettings: {},
       addonToEnable: null,
       showPopupModal: false,
@@ -230,7 +232,7 @@ chrome.storage.sync.get(["globalTheme"], function ( { globalTheme = false }) {
         window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version_name}`);
       },
       clearSearch() {
-        this.searchInput = "";
+        this.searchInputReal = "";
       },
       setTheme(mode) {
         chrome.storage.sync.get(["globalTheme"], function (r) {
@@ -346,6 +348,11 @@ chrome.storage.sync.get(["globalTheme"], function ( { globalTheme = false }) {
         }
       },
     },
+    watch: {
+      searchInputReal(newValue) {
+        if (this.searchLoaded) this.searchInput = newValue;
+      }
+    }
   });
 
   const getRunningAddons = (manifests, addonsEnabled) => {
@@ -494,6 +501,18 @@ chrome.storage.sync.get(["globalTheme"], function ( { globalTheme = false }) {
 
     vue.loaded = true;
     if (isIframe) setTimeout(() => document.getElementById("searchBox").focus(), 0);
+    let i = 0;
+    document.getElementById("searchBox").addEventListener("input", function thisFunction() {
+      i++;
+      let thisI = i;
+      setTimeout(() => {
+        if (i === thisI) {
+          vue.searchLoaded = true;
+          vue.searchInput = vue.searchInputReal;
+          document.getElementById("searchBox").removeEventListener("input", thisFunction);
+        }
+      }, 350);
+    });
     setTimeout(handleKeySettings, 0);
     setTimeout(() => {
       // Set hash again after loading addons, to force scroll to addon
@@ -549,7 +568,7 @@ chrome.storage.sync.get(["globalTheme"], function ( { globalTheme = false }) {
       document.querySelector("#searchBox").focus();
     } else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
       e.preventDefault();
-      vue.searchInput = "";
+      vue.searchInputReal = "";
     }
   });
 
@@ -586,7 +605,7 @@ chrome.storage.sync.get(["globalTheme"], function ( { globalTheme = false }) {
     cursor = e.code === KONAMI_CODE[cursor] ? cursor + 1 : 0;
     if (cursor === KONAMI_CODE.length) {
       vue.selectedCategory = "easterEgg";
-      setTimeout(() => (vue.searchInput = ""), 0); // Allow konami code in autofocused search bar
+      setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
     }
   });
 

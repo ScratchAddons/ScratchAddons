@@ -161,7 +161,7 @@
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div class="search-box" :class="{smallMode: smallMode === true}">
-          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInput" autofocus />
+          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
           <button style="display: none" v-else class="search-clear-button" @click="clearSearch()"></button>
           <div id="popup-more-settings" v-show="isIframe" style="display: none" v-show="true">
@@ -184,12 +184,14 @@
 
           <!-- Search pseudogroup -->
           <!-- Must be below real groups to make index.html/#addon-addonid work -->
-          <addon-body
-            v-for="addonId of searchAddonOrder"
-            :addon="manifestsById[addonId]"
-            group-id="search"
-            :group-expanded="searchInput !== ''"
-          ></addon-body>
+          <template v-if="searchLoaded">
+            <addon-body
+              v-for="addonId of searchAddonOrder"
+              :addon="manifestsById[addonId]"
+              group-id="search"
+              :group-expanded="searchInput !== ''"
+            ></addon-body>
+          </template>
         </div>
       </div>
     </div>
