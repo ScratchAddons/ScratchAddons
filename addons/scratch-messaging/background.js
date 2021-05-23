@@ -383,9 +383,9 @@ export default async function ({ addon, global, console, setTimeout, setInterval
             const comment = dom.querySelector(".comment ");
             const error = dom.querySelector("script#error-data");
             if (comment) {
-            const commentId = Number(comment.getAttribute("data-comment-id"));
-            const content = fixCommentContent(dom.querySelector(".content").innerHTML);
-            resolve({ commentId, username: addon.auth.username, userId: addon.auth.userId, content });
+              const commentId = Number(comment.getAttribute("data-comment-id"));
+              const content = fixCommentContent(dom.querySelector(".content").innerHTML);
+              resolve({ commentId, username: addon.auth.username, userId: addon.auth.userId, content });
             } else if (error) {
               const json = JSON.parse(error.textContent);
               resolve({
