@@ -74,7 +74,7 @@ export default async function ({ addon, global, console, msg }) {
       pausedThreadState = new WeakMap();
     }
   };
-  function pauseBlock(role, target) {
+  function pauseBlock() {
     setPaused(true);
   }
   addon.tab.addBlock("sa-pause", [], pauseBlock, true);

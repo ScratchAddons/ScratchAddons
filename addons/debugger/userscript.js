@@ -17,19 +17,18 @@ export default async function ({ addon, global, console, msg }) {
   buttonContainer.addEventListener("click", () => toggleConsole(true));
 
   const vm = addon.tab.traps.vm;
-  addon.tab.addBlock("sa-log %s", ["content"], ({ content }, targetId, blockId) => {
+  addon.tab.addBlock("sa-log %s", ["content"], ({ content }, thread) => {
     workspace = Blockly.getMainWorkspace();
-    addItem(content, targetId, blockId, "log");
+    addItem(content, thread, "log");
   });
-  addon.tab.addBlock("sa-warn %s", ["content"], ({ content }, targetId, blockId) => {
+  addon.tab.addBlock("sa-warn %s", ["content"], ({ content }, thread) => {
     workspace = Blockly.getMainWorkspace();
-    addItem(content, targetId, blockId, "warn");
+    addItem(content, thread, "warn");
   });
-  addon.tab.addBlock("sa-error %s", ["content"], ({ content }, targetId, blockId) => {
+  addon.tab.addBlock("sa-error %s", ["content"], ({ content }, thread) => {
     workspace = Blockly.getMainWorkspace();
-    addItem(content, targetId, blockId, "error");
+    addItem(content, thread, "error");
   });
-  let injected;
 
   const consoleWrapper = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_card", { others: "debug" }),
@@ -43,6 +42,7 @@ export default async function ({ addon, global, console, msg }) {
   const extraContainer = Object.assign(document.createElement("div"), {
     className: `extra-log-container`,
   });
+
   const goToBlock = (blockId) => {
     const offsetX = 32,
       offsetY = 32;
@@ -59,7 +59,6 @@ export default async function ({ addon, global, console, msg }) {
 
     let ePos = base.getRelativeToSurfaceXY(), // Align with the top of the block
       rPos = root.getRelativeToSurfaceXY(), // Align with the left of the block 'stack'
-      eSiz = block.getHeightWidth(),
       scale = workspace.scale,
       x = rPos.x * scale,
       y = ePos.y * scale,
@@ -225,7 +224,7 @@ export default async function ({ addon, global, console, msg }) {
     download("logs.txt", file);
   });
   let logs = [];
-  const addItem = (content, targetId, blockId, type) => {
+  const addItem = (content, thread, type) => {
     workspace = Blockly.getMainWorkspace();
     const wrapper = document.createElement("div");
     const span = (text, cl = "") => {
@@ -237,11 +236,12 @@ export default async function ({ addon, global, console, msg }) {
 
     const scrolledDown = extraContainer.scrollTop + 5 > extraContainer.scrollHeight - extraContainer.clientHeight;
 
-    const targetName = vm.runtime.targets.find((t) => t.id === targetId).getName();
+    const targetName = thread.target.getName();
     wrapper.className = "log";
     wrapper.classList.add(type);
     consoleList.append(wrapper);
 
+    const blockId = thread.peekStack();
     const block = workspace.getBlockById(blockId);
     const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
     if (inputBlock.type != "text") {

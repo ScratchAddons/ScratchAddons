@@ -26,9 +26,9 @@ export default class Tab extends Listenable {
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
-    blocks.init(this);
   }
   addBlock(...a) {
+    blocks.init(this);
     return blocks.addBlock(...a);
   }
   removeBlock(...a) {
