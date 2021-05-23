@@ -87,9 +87,8 @@ const generateBlockXML = () => {
       "></mutation></block>";
   }
   if (xml.length === 0) {
-    // TODO test
     const message = scratchAddons.l10n.get("noAddedBlocks", null, "No addons have added blocks.");
-    return `<label text="${escapeHTML(message)} showStatusButton="null" />`;
+    return `<label text="${escapeHTML(message)}" showStatusButton="null" />`;
   }
   return xml;
 };
