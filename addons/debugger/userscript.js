@@ -110,7 +110,7 @@ export default async function ({ addon, global, console, msg }) {
     if (blockId) goToBlock(blockId);
   });
   const consoleList = Object.assign(document.createElement("div"), {
-    className: addon.tab.scratchClass("sprite-info_sprite-info", { others: "logs" }),
+    className: "logs",
   });
   const buttons = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_header-buttons-right"),
@@ -241,7 +241,7 @@ export default async function ({ addon, global, console, msg }) {
     const scrolledDown = extraContainer.scrollTop + 5 > extraContainer.scrollHeight - extraContainer.clientHeight;
 
     const targetName = vm.runtime.targets.find((t) => t.id === targetId).getName();
-    wrapper.className = `log ${addon.tab.scratchClass("sprite-info_sprite-info")}`;
+    wrapper.className = "log";
     wrapper.classList.add(type);
     consoleList.append(wrapper);
 
@@ -250,9 +250,14 @@ export default async function ({ addon, global, console, msg }) {
     if (inputBlock.type != "text") {
       if (inputBlock.inputList.filter((i) => i.name).length === 0) {
         const inputSpan = document.createElement("span");
+        const inputBlockFill = getComputedStyle(inputBlock.svgPath_).fill;
+        const inputBlockStroke = getComputedStyle(inputBlock.svgPath_).stroke;
+        // for compatibility with custom block colors
+        const inputBlockColor = inputBlockFill == "rgb(40, 40, 40)" || inputBlockFill == "rgb(255, 255, 255)"
+          ? inputBlockStroke : inputBlockFill;
         inputSpan.innerText = inputBlock.toString();
         inputSpan.className = "console-variable";
-        inputSpan.style.background = getComputedStyle(inputBlock.svgPath_).fill;
+        inputSpan.style.background = inputBlockColor;
         wrapper.append(inputSpan);
       }
     }

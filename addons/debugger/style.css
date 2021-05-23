@@ -10,8 +10,7 @@
 .debug {
   position: absolute;
   z-index: 1000;
-  background-color: #f1f1f1;
-  border: 1px solid #d3d3d3;
+  background-color: white;
   min-height: 25rem;
   min-width: 25rem;
   max-height: 25rem;
@@ -26,7 +25,7 @@
   font-size: 20px;
 }
 .log {
-  --message-border-color: rgb(240 240 240);
+  --message-border-color: rgba(0, 0, 0, 0.15);
   --warning-border-color: hsl(50deg 100% 88%);
   --error-border-color: hsl(0deg 100% 92%);
   --error-text-color: red;
@@ -43,8 +42,7 @@
   min-height: 0;
   display: flex;
   border-top: 1px solid var(--message-border-color);
-  border-bottom: 1px solid transparent;
-  background: white;
+  border-bottom: 1px solid var(--message-border-color);
   word-wrap: break-word;
   white-space: pre-wrap;
   flex: auto;
@@ -58,14 +56,19 @@
   contain-intrinsic-size: 1.2rem;
 }
 .warn {
-  border-color: var(--warning-border-color) !important;
-  color: hsl(39deg 100% 18%) !important;
-  background-color: hsl(50deg 100% 95%) !important;
+  border-color: var(--warning-border-color);
+  color: hsl(39deg 100% 18%);
+  background-color: hsl(50deg 100% 95%);
 }
 .error {
-  border-color: var(--error-border-color) !important;
-  color: var(--error-text-color) !important;
-  background-color: hsl(0deg 100% 95%) !important;
+  border-color: var(--error-border-color);
+  color: var(--error-text-color);
+  background-color: hsl(0deg 100% 95%);
+}
+.log:not(.warn):not(.error) + .log:not(.warn):not(.error),
+.warn + .warn,
+.error + .error {
+  border-top-color: transparent;
 }
 .logs {
   border-radius: 0;
@@ -78,7 +81,6 @@
   flex: 1;
   cursor: default;
   width: 100%;
-  background-color: var(--editorDarkMode-accent); /* Definitely not the right way to do it */
 }
 .console-variable {
   padding: 4px;
@@ -86,13 +88,20 @@
   color: white;
   margin-right: 5px;
 }
+.log > span {
+  flex-grow: 1;
+}
 .log a {
-  color: gray;
+  color: inherit;
+  opacity: 0.5;
   text-decoration: underline;
   float: right;
   text-align: right;
   max-width: 100%;
   margin-left: 4px;
-  flex: auto;
   margin-right: 4px;
+}
+.log a:hover {
+  color: #4d97ff;
+  opacity: 1;
 }
