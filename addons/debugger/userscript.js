@@ -29,7 +29,7 @@ export default async function ({ addon, global, console, msg }) {
     workspace = Blockly.getMainWorkspace();
     addItem(content, targetId, blockId, "error");
   });
-  // TODO unused
+  // TODO injected is unused
   let injected;
 
   const consoleWrapper = Object.assign(document.createElement("div"), {
@@ -62,6 +62,7 @@ export default async function ({ addon, global, console, msg }) {
 
     let ePos = base.getRelativeToSurfaceXY(), // Align with the top of the block
       rPos = root.getRelativeToSurfaceXY(), // Align with the left of the block 'stack'
+      // TODO eSiz is unused
       eSiz = block.getHeightWidth(),
       scale = workspace.scale,
       x = rPos.x * scale,
