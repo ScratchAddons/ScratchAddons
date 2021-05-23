@@ -1,3 +1,5 @@
+import {escapeHTML} from "../../libraries/common/cs/autoescaper.js";
+
 const color = {
   // TODO horrible text contrast
   color: "#43cfca",
@@ -67,16 +69,6 @@ export const removeBlock = (proccode) => {
   resetAllCaches();
 }
 
-// TODO escapeHTML is already a thing
-const xesc = (s) => {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
-
 const injectWorkspace = (ScratchBlocks) => {
   const BlockSvg = ScratchBlocks.BlockSvg;
   const oldUpdateColour = BlockSvg.prototype.updateColour;
@@ -100,11 +92,11 @@ const injectWorkspace = (ScratchBlocks) => {
               .filter((e) => !e.hide)
               .map((e) => {
                 try {
-                  return `<block type="procedures_call" gap="16"><mutation generateshadows="true" proccode="${xesc(
+                  return `<block type="procedures_call" gap="16"><mutation generateshadows="true" proccode="${escapeHTML(
                     e.id
-                  )}" argumentids="${xesc(
+                  )}" argumentids="${escapeHTML(
                     JSON.stringify(e.args.map((_, i) => getArgumentId(i)))
-                  )}" argumentnames="${xesc(JSON.stringify(e.args))}" argumentdefaults="${xesc(
+                  )}" argumentnames="${escapeHTML(JSON.stringify(e.args))}" argumentdefaults="${escapeHTML(
                     JSON.stringify(e.args.map((e) => ""))
                   )}" warp="false"></mutation></block>`;
                 } catch (e) {
@@ -113,7 +105,7 @@ const injectWorkspace = (ScratchBlocks) => {
                 }
               })
               .join("") ||
-              `<label text="${xesc(
+              `<label text="${escapeHTML(
                 scratchAddons.l10n.get("noAddedBlocks", null, "No addons have added blocks.")
               )}" showStatusButton="null" />`) +
             `</top>`,
@@ -143,7 +135,7 @@ const injectWorkspace = (ScratchBlocks) => {
       id: "sa-blocks",
       xml: `
           <category
-            name="${xesc(scratchAddons.l10n.get("extensionName", null, "Scratch Addons"))}"
+            name="${escapeHTML(scratchAddons.l10n.get("extensionName", null, "Scratch Addons"))}"
             id="sa-blocks"
             colour="#ff7b26"
             secondaryColour="#ff7b26"
