@@ -92,7 +92,7 @@ export default async function ({ template }) {
           if (!confirmation) return;
         }
         if (!this.addon._enabled && requiredPermissions.length) {
-          const result = requiredPermissions.every((p) => grantedOptionalPermissions.includes(p));
+          const result = requiredPermissions.every((p) => this.$root.grantedOptionalPermissions.includes(p));
           if (result === false) {
             if (isIframe) {
               this.$root.addonToEnable = this.addon;
