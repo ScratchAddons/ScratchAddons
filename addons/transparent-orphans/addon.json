@@ -1,6 +1,6 @@
 {
   "name": "Block transparency",
-  "description": "Adjust the transparency for all blocks in general, orphaned blocks (those without a hat block at the top) and blocks that are being dragged.",
+  "description": "Adjust the transparency for blocks in the editor, with separate options for orphaned blocks (those without a hat block at the top) and blocks that are being dragged.",
   "tags": ["editor", "codeEditor"],
   "versionAdded": "1.15.0",
   "dynamicDisable": true,
