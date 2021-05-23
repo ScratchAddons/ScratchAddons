@@ -160,5 +160,6 @@ export async function init(tab) {
     return oldStepToProcedure.call(this, thread, proccode);
   };
 
-  tab.traps.getBlockly().then(injectWorkspace);
+  const ScratchBlocks = await tab.traps.getBlockly();
+  injectWorkspace(ScratchBlocks);
 }
