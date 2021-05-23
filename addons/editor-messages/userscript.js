@@ -1,5 +1,4 @@
 export default async function ({ addon, global, console, msg }) {
-  let msgInterval;
   const messages = document.createElement("a");
   messages.href = "/messages/";
   messages.title = msg("messages");
@@ -10,7 +9,6 @@ export default async function ({ addon, global, console, msg }) {
   messageCount.classList.add("sa-editormessages-count");
   messages.appendChild(messageCount);
   const setMessages = async () => {
-    if (!document.querySelector("[class^='menu-bar_account-info-group']")) return;
     const msgCount = Number(await addon.account.getMsgCount());
     messageCount.innerText = msgCount;
     if (msgCount === 0) {
@@ -19,6 +17,18 @@ export default async function ({ addon, global, console, msg }) {
       messageCount.setAttribute("style", "");
     }
   };
+  if (addon.tab.editorMode === "editor") {
+    setMessages();
+    setInterval(setMessages, 5000);
+  } else {
+    addon.tab.addEventListener("urlChange", function thisFunction() {
+      if (addon.tab.editorMode === "editor") {
+        setMessages();
+        setInterval(setMessages, 5000);
+        addon.tab.removeEventListener("urlChange", thisFunction);
+      }
+    });
+  }
 
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_account-info-group'] > [href^='/my']", {
@@ -27,8 +37,5 @@ export default async function ({ addon, global, console, msg }) {
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     document.querySelector("[class^='menu-bar_account-info-group']").insertBefore(messages, nav);
-    setMessages();
-    clearInterval(msgInterval);
-    msgInterval = setInterval(setMessages, 5000);
   }
 }
