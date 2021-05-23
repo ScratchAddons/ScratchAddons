@@ -17,7 +17,7 @@ export default async function ({ template }) {
       },
       loaded() {
         return this.$root.loaded;
-      }
+      },
     },
     methods: {
       onClick(event) {
