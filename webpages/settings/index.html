@@ -109,7 +109,14 @@
   </head>
   <body style="display: none" v-show="isIframe && loaded || !isIframe" :class="{light: theme}">
     <div class="navbar">
-      <img style="display: none" :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
+      <img
+        style="display: none"
+        :src="switchPath"
+        class="toggle"
+        @click="sidebarToggle()"
+        v-show="smallMode"
+        alt="Logo"
+      />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
       <h1 style="display: none" v-show="true">{{ msg("settings") }}</h1>
       <img style="display: none" v-show="true" @click="setTheme(!theme)" class="theme-switch" :src="themePath" />

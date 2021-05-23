@@ -19,16 +19,15 @@ let initialThemePath;
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
-chrome.storage.sync.get(["globalTheme"], function ( { globalTheme = false }) {
+chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   if (globalTheme === true) {
     document.head.appendChild(lightThemeLink);
   }
-  const themePath = globalTheme ? "../../images/icons/moon.svg" : initialThemePath = "../../images/icons/theme.svg";
+  const themePath = globalTheme ? "../../images/icons/moon.svg" : (initialThemePath = "../../images/icons/theme.svg");
   if (vue) {
     vue.theme = globalTheme;
     vue.themePath = themePath;
-  }
-  else {
+  } else {
     initialTheme = globalTheme;
     initialThemePath = themePath;
   }
@@ -153,31 +152,33 @@ chrome.storage.sync.get(["globalTheme"], function ( { globalTheme = false }) {
 
   vue = window.vue = new Vue({
     el: "body",
-    data() { return {
-      smallMode: false,
-      theme: initialTheme ?? false,
-      themePath: initialThemePath ?? "",
-      switchPath: "../../images/icons/switch.svg",
-      isOpen: false,
-      canCloseOutside: false,
-      categoryOpen: true,
-      loaded: false,
-      searchLoaded: false,
-      manifests: [],
-      manifestsById: {},
-      searchAddonOrder: [],
-      selectedCategory: "all",
-      searchInput: "",
-      searchInputReal: "",
-      addonSettings: {},
-      addonToEnable: null,
-      showPopupModal: false,
-      isIframe,
-      addonGroups: addonGroups.filter((g) => (isIframe ? g.iframeShow : g.fullscreenShow)),
-      categories,
-      searchMsg: this.msg("search"),
-      browserLevelPermissions,
-      } },
+    data() {
+      return {
+        smallMode: false,
+        theme: initialTheme ?? false,
+        themePath: initialThemePath ?? "",
+        switchPath: "../../images/icons/switch.svg",
+        isOpen: false,
+        canCloseOutside: false,
+        categoryOpen: true,
+        loaded: false,
+        searchLoaded: false,
+        manifests: [],
+        manifestsById: {},
+        searchAddonOrder: [],
+        selectedCategory: "all",
+        searchInput: "",
+        searchInputReal: "",
+        addonSettings: {},
+        addonToEnable: null,
+        showPopupModal: false,
+        isIframe,
+        addonGroups: addonGroups.filter((g) => (isIframe ? g.iframeShow : g.fullscreenShow)),
+        categories,
+        searchMsg: this.msg("search"),
+        browserLevelPermissions,
+      };
+    },
     computed: {
       version() {
         return chrome.runtime.getManifest().version;
@@ -351,8 +352,8 @@ chrome.storage.sync.get(["globalTheme"], function ( { globalTheme = false }) {
     watch: {
       searchInputReal(newValue) {
         if (this.searchLoaded) this.searchInput = newValue;
-      }
-    }
+      },
+    },
   });
 
   const getRunningAddons = (manifests, addonsEnabled) => {
