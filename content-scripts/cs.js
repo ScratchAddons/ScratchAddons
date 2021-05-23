@@ -5,7 +5,15 @@ try {
 }
 
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
+
+let tries = 0;
 const onResponse = (res) => {
+  if (!res) {
+    // chrome.runtime.onMessage listener might not be available yet
+    tries++;
+    if (tries > 60) return; // Up to ~15 seconds waiting
+    setTimeout(() => chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse), 250);
+  }
   if (res) {
     console.log("[Message from background]", res);
     if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") onInfoAvailable(res);
