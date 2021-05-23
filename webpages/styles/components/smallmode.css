@@ -9,6 +9,8 @@
 }
 .toggle {
   cursor: pointer;
+  width: 24px;
+  height: 24px;
   margin-inline-end: 10px;
 }
 .search-box.smallMode {

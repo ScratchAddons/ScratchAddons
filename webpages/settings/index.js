@@ -12,6 +12,29 @@ if (window.parent !== window) {
   isIframe = true;
 }
 
+let vue;
+
+let initialTheme;
+let initialThemePath;
+const lightThemeLink = document.createElement("link");
+lightThemeLink.setAttribute("rel", "stylesheet");
+lightThemeLink.setAttribute("href", "light.css");
+chrome.storage.sync.get(["globalTheme"], function ( { globalTheme = false }) {
+  if (globalTheme === true) {
+    document.head.appendChild(lightThemeLink);
+  }
+  const themePath = globalTheme ? "../../images/icons/moon.svg" : initialThemePath = "../../images/icons/theme.svg";
+  if (vue) {
+    vue.theme = globalTheme;
+    vue.themePath = themePath;
+  }
+  else {
+    initialTheme = globalTheme;
+    initialThemePath = themePath;
+  }
+  if (!isIframe) document.body.style.display = "";
+});
+
 (async () => {
   await loadVueComponent([
     "webpages/settings/components/picker-component",
@@ -53,23 +76,6 @@ if (window.parent !== window) {
   updateGrantedPermissions();
   chrome.permissions.onAdded.addListener(updateGrantedPermissions);
   chrome.permissions.onRemoved.addListener(updateGrantedPermissions);
-
-  //theme switching
-  const lightThemeLink = document.createElement("link");
-  lightThemeLink.setAttribute("rel", "stylesheet");
-  lightThemeLink.setAttribute("href", "light.css");
-  chrome.storage.sync.get(["globalTheme"], function (r) {
-    let rr = false; //true = light, false = dark
-    if (r.globalTheme) rr = r.globalTheme;
-    if (rr) {
-      document.head.appendChild(lightThemeLink);
-      vue.theme = true;
-      vue.themePath = "../../images/icons/moon.svg";
-    } else {
-      vue.theme = false;
-      vue.themePath = "../../images/icons/theme.svg";
-    }
-  });
 
   const promisify =
     (callbackFn) =>
@@ -145,12 +151,12 @@ if (window.parent !== window) {
     return resolveOnConfirmPromise;
   };
 
-  const vue = (window.vue = new Vue({
+  vue = window.vue = new Vue({
     el: "body",
-    data: {
+    data() { return {
       smallMode: false,
-      theme: false,
-      themePath: "",
+      theme: initialTheme ?? false,
+      themePath: initialThemePath ?? "",
       switchPath: "../../images/icons/switch.svg",
       isOpen: false,
       canCloseOutside: false,
@@ -167,7 +173,8 @@ if (window.parent !== window) {
       isIframe,
       addonGroups: addonGroups.filter((g) => (isIframe ? g.iframeShow : g.fullscreenShow)),
       categories,
-    },
+      searchMsg: this.msg("search"),
+      } },
     computed: {
       version() {
         return chrome.runtime.getManifest().version;
@@ -338,7 +345,7 @@ if (window.parent !== window) {
         }
       },
     },
-  }));
+  });
 
   const getRunningAddons = (manifests, addonsEnabled) => {
     return new Promise((resolve) => {
@@ -485,7 +492,7 @@ if (window.parent !== window) {
       .map((obj) => obj.addonId);
 
     vue.loaded = true;
-    setTimeout(() => document.getElementById("searchBox").focus(), 0);
+    if (isIframe) setTimeout(() => document.getElementById("searchBox").focus(), 0);
     setTimeout(handleKeySettings, 0);
     setTimeout(() => {
       // Set hash again after loading addons, to force scroll to addon

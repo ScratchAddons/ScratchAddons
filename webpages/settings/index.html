@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
 
@@ -49,6 +49,20 @@
     <link rel="modulepreload" href="data/addon-groups.js" />
     <link rel="modulepreload" href="data/categories.js" />
 
+    <!-- Preload images -->
+    <link rel="preload" href="../../images/icons/switch.svg" as="image" />
+    <link rel="preload" href="../../images/icon.svg" as="image" />
+    <link rel="preload" href="../../images/icons/list.svg" as="image" />
+    <link rel="preload" href="../../images/icons/puzzle.svg" as="image" />
+    <link rel="preload" href="../../images/icons/web.svg" as="image" />
+    <link rel="preload" href="../../images/icons/brush.svg" as="image" />
+    <link rel="preload" href="../../images/icons/popup.svg" as="image" />
+    <link rel="preload" href="../../images/icons/users.svg" as="image" />
+    <link rel="preload" href="../../images/icons/translate.svg" as="image" />
+    <link rel="preload" href="../../images/icons/comment.svg" as="image" />
+    <link rel="preload" href="../../images/icons/wrench.svg" as="image" />
+    <link rel="preload" href="../../images/icons/search.svg" as="image" />
+
     <!-- Preload components -->
     <link rel="preload" href="components/picker-component.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/picker-component.js" />
@@ -93,12 +107,12 @@
     <script src="../../libraries/thirdparty/color-picker.js" type="module"></script>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded" :class="{light: theme}">
+  <body style="display: none" v-show="isIframe && loaded || !isIframe" :class="{light: theme}">
     <div class="navbar">
-      <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
+      <img style="display: none" :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
-      <h1>{{ msg("settings") }}</h1>
-      <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themePath" />
+      <h1 style="display: none" v-show="true">{{ msg("settings") }}</h1>
+      <img style="display: none" v-show="true" @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
     </div>
     <div class="main">
       <div
@@ -116,23 +130,23 @@
           @click="openPage('https://scratchaddons.com/contributors')"
         >
           <img src="../../images/icons/users.svg" />
-          <span>{{ msg("credits") }}</span>
+          <span style="display: none" v-show="true">{{ msg("credits") }}</span>
         </div>
         <div class="category category-small" @click="openReview()" style="display: none">
           <img src="../../images/icons/star.svg" />
-          <span>{{ msg("review") }}</span>
+          <span style="display: none" v-show="true">{{ msg("review") }}</span>
         </div>
         <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
           <img src="../../images/icons/translate.svg" />
-          <span>{{ msg("translate") }}</span>
+          <span style="display: none" v-show="true">{{ msg("translate") }}</span>
         </div>
         <div class="category category-small" @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
-          <span>{{ msg("feedback") }}</span>
+          <span style="display: none" v-show="true">{{ msg("feedback") }}</span>
         </div>
         <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
-          <span>{{ msg("moreSettings") }}</span>
+          <span style="display: none" v-show="true">{{ msg("moreSettings") }}</span>
         </div>
       </div>
       <div
@@ -147,15 +161,15 @@
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div class="search-box" :class="{smallMode: smallMode === true}">
-          <input type="text" id="searchBox" placeholder="{{ msg('search') }}" v-model="searchInput" />
+          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInput" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
-          <button v-else class="search-clear-button" @click="clearSearch()"></button>
-          <div id="popup-more-settings" v-show="isIframe">
+          <button style="display: none" v-else class="search-clear-button" @click="clearSearch()"></button>
+          <div id="popup-more-settings" v-show="isIframe" style="display: none" v-show="true">
             <button @click="openFullSettings()" class="large-button">{{ msg("moreSettings") }}</button>
           </div>
         </div>
 
-        <div class="addons-container">
+        <div class="addons-container" style="display: none" v-show="loaded">
           <template v-for="group of addonGroups">
             <div
               id="iframe-fullscreen-suggestion"
@@ -179,7 +193,7 @@
         </div>
       </div>
     </div>
-    <div v-show="isOpen" class="modal">
+    <div style="display: none" v-show="isOpen" class="modal">
       <div class="modal-content" v-click-outside="modalClickOutside">
         <div>
           <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" />
