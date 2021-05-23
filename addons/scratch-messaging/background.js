@@ -356,7 +356,6 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         if (json.rejected)
           return {
             error: json.rejected,
-            appealId: json.appealId || null,
             muteStatus: json.status?.mute_status || null,
           };
         const mention = `<a href=\"https://scratch.mit.edu/users/${commenteeUsername}\">@${commenteeUsername}</a>`;
@@ -381,9 +380,19 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         if (xhr.status === 200) {
           try {
             const dom = new DOMParser().parseFromString(xhr.responseText, "text/html");
-            const commentId = Number(dom.querySelector(".comment ").getAttribute("data-comment-id"));
+            const comment = dom.querySelector(".comment ");
+            const error = dom.querySelector("script#error-data");
+            if (comment) {
+            const commentId = Number(comment.getAttribute("data-comment-id"));
             const content = fixCommentContent(dom.querySelector(".content").innerHTML);
             resolve({ commentId, username: addon.auth.username, userId: addon.auth.userId, content });
+            } else if (error) {
+              const json = JSON.parse(error.textContent);
+              resolve({
+                error: json.error,
+                muteStatus: json.status?.mute_status || null,
+              });
+            } else resolve({ error: 200 }); // Shouldn't ever happen, just in case
           } catch (err) {
             resolve({ error: err });
           }

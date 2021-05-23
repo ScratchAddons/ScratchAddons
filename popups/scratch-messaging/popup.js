@@ -115,7 +115,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
               let errorMsg = l10n.get(errorCode);
               if (res.muteStatus) {
                 errorMsg = l10n.get("scratch-messaging/comment-mute", {
-                  mins: res.muteStatus.muteExpiresAt ? Math.ceil(res.muteStatus.muteExpiresAt / 60) : "?",
+                  mins: Math.max(Math.ceil((res.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
                 });
               }
               alert(errorMsg);
