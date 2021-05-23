@@ -181,11 +181,7 @@ export async function init(tab) {
     const blockData = getCustomBlock(proccode);
     if (blockData) {
       const stackFrame = thread.peekStackFrame();
-      const args = {};
-      for (const arg in stackFrame.params) {
-        args[arg] = stackFrame.params[arg];
-      }
-      blockData.handler(args, thread.target.id, thread.stack[thread.stack.length - 1]);
+      blockData.handler(stackFrame.params, thread.target.id, thread.stack[thread.stack.length - 1]);
     }
     return oldStepToProcedure.call(this, thread, proccode);
   };
