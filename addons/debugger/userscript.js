@@ -245,7 +245,7 @@ export default async function ({ addon, global, console, msg }) {
 
     const scrolledDown = extraContainer.scrollTop + 5 > extraContainer.scrollHeight - extraContainer.clientHeight;
 
-    const targetName = vm.runtime.targets.find((t) => t.id === thread.target.id).getName();
+    const targetName = thread.target.getName();
     wrapper.className = "log";
     wrapper.classList.add(type);
     consoleList.append(wrapper);
