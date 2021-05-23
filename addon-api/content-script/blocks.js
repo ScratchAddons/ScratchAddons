@@ -9,7 +9,6 @@ const ICON = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
 
 let vm;
 let customBlocks = [];
-let inited = false;
 
 export function addBlock(id, args, handler, hide) {
   if (!customBlocks.find((e) => e.id == id)) {
@@ -156,14 +155,19 @@ const injectWorkspace = () => {
     vm.emitWorkspaceUpdate();
   }
 };
+
+let inited = false;
 export async function init(tab) {
   if (inited) return;
   inited = true;
+
   let getEditorMode = () => tab.clientVersion === "scratch-www" && tab.editorMode;
   if (!getEditorMode()) return;
+
   // TODO no weird hacks
   vm = tab.traps.vm;
   if (!vm) vm = await new Promise((cb) => __scratchAddonsTraps.addEventListener("gotvm", () => cb(tab.traps.vm)));
+
   // TODO no rAF
   async function mainloop() {
     let cache = {};
@@ -188,6 +192,7 @@ export async function init(tab) {
     }
   }
   mainloop();
+
   const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;
   vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
     let blockData = customBlocks.find((block) => proccode.trim() == block.id);
@@ -202,6 +207,7 @@ export async function init(tab) {
     }
     return oldStepToProcedure.call(this, thread, proccode);
   };
+
   // TODO getBlockly()
   if (getEditorMode() === "editor") {
     const interval = setInterval(() => {
