@@ -36,7 +36,7 @@ const resetAllCaches = () => {
   vm.runtime.flyoutBlocks.resetCache();
 };
 
-export function addBlock(proccode, args, handler, hide) {
+export const addBlock = (proccode, args, handler, hide) => {
   if (getCustomBlock(proccode)) {
     return;
   }
@@ -61,14 +61,14 @@ export function addBlock(proccode, args, handler, hide) {
   resetAllCaches();
 }
 
-export function removeBlock(proccode) {
+export const removeBlock = (proccode) => {
   customBlocks[proccode] = null;
   internalBlocksCache[proccode] = null;
   resetAllCaches();
 }
 
 // TODO escapeHTML is already a thing
-function xesc(s) {
+const xesc = (s) => {
   return s
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
