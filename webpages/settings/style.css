@@ -12,6 +12,10 @@ body {
   font-size: 12px;
 }
 
+[v-cloak] {
+  display: none;
+}
+
 .navbar {
   height: 60px;
   background: var(--brand-orange);

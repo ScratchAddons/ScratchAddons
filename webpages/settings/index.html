@@ -107,19 +107,19 @@
     <script src="../../libraries/thirdparty/color-picker.js" type="module"></script>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="isIframe && loaded || !isIframe" :class="{light: theme}">
+  <body v-cloak v-show="isIframe && loaded || !isIframe" :class="{light: theme}">
     <div class="navbar">
       <img
-        style="display: none"
         :src="switchPath"
         class="toggle"
         @click="sidebarToggle()"
+        v-cloak
         v-show="smallMode"
         alt="Logo"
       />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
-      <h1 style="display: none" v-show="true">{{ msg("settings") }}</h1>
-      <img style="display: none" v-show="true" @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
+      <h1 v-cloak>{{ msg("settings") }}</h1>
+      <img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
     </div>
     <div class="main">
       <div
@@ -137,23 +137,23 @@
           @click="openPage('https://scratchaddons.com/contributors')"
         >
           <img src="../../images/icons/users.svg" />
-          <span style="display: none" v-show="true">{{ msg("credits") }}</span>
+          <span v-cloak>{{ msg("credits") }}</span>
         </div>
         <div class="category category-small" @click="openReview()" style="display: none">
           <img src="../../images/icons/star.svg" />
-          <span style="display: none" v-show="true">{{ msg("review") }}</span>
+          <span v-cloak>{{ msg("review") }}</span>
         </div>
         <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
           <img src="../../images/icons/translate.svg" />
-          <span style="display: none" v-show="true">{{ msg("translate") }}</span>
+          <span v-cloak>{{ msg("translate") }}</span>
         </div>
         <div class="category category-small" @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
-          <span style="display: none" v-show="true">{{ msg("feedback") }}</span>
+          <span v-cloak>{{ msg("feedback") }}</span>
         </div>
         <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
-          <span style="display: none" v-show="true">{{ msg("moreSettings") }}</span>
+          <span v-cloak>{{ msg("moreSettings") }}</span>
         </div>
       </div>
       <div
@@ -170,10 +170,10 @@
         <div class="search-box" :class="{smallMode: smallMode === true}">
           <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" />
           <button v-show="searchInput === ''" class="search-button"></button>
-          <button style="display: none" v-else class="search-clear-button" @click="clearSearch()"></button>
+          <button v-cloak v-else class="search-clear-button" @click="clearSearch()"></button>
         </div>
 
-        <div class="addons-container" style="display: none" v-show="loaded">
+        <div class="addons-container" v-cloak v-show="loaded">
           <template v-for="group of addonGroups">
             <div
               id="iframe-fullscreen-suggestion"
@@ -199,7 +199,7 @@
         </div>
       </div>
     </div>
-    <div style="display: none" v-show="isOpen" class="modal">
+    <div v-cloak v-show="isOpen" class="modal">
       <div class="modal-content" v-click-outside="modalClickOutside">
         <div>
           <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" />
@@ -272,7 +272,7 @@
         </div>
       </div>
     </div>
-    <div class="popup" v-show="showPopupModal" style="display: none">
+    <div class="popup" v-cloak v-show="showPopupModal">
       <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
       <div>
         <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
