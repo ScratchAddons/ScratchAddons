@@ -625,6 +625,9 @@ if (isProfile || isStudio || isProject) {
             if (possiblePostBtn.tagName !== "BUTTON") return;
             if (!possiblePostBtn.classList.contains("compose-post")) return;
             const form = path[0].tagName === "SPAN" ? path[3] : path[2];
+            if (!form) return;
+            if (form.tagName !== "FORM") return;
+            if (!form.classList.contains("full-width-form")) return;
             // Remove error when about to send comment anyway, if it exists
             form.parentNode.querySelector(".sa-compose-error-row")?.remove();
             if (form.hasAttribute("data-sa-send-anyway")) {
