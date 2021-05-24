@@ -8,7 +8,7 @@ body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
-  color: white;
+  color: var(--accent-5);
   font-size: 12px;
 }
 
@@ -36,7 +36,7 @@ h1 {
 
 .logo {
   height: 30px;
-  margin-right: 20px;
+  margin-inline-end: 20px;
 }
 
 .main {
@@ -54,12 +54,12 @@ h1 {
   display: flex;
   align-items: center;
   cursor: pointer;
-  margin: 0px 20px;
+  margin: 0px 16px;
 }
 
 .addon-group > span > img {
   height: 23px;
-  margin-right: 5px;
+  margin-inline-end: 5px;
   padding: 5px;
   border-radius: 4px;
 }
@@ -72,7 +72,7 @@ h1 {
   content: "";
   border-top: 1px solid white;
   width: 100px;
-  margin-left: 10px;
+  margin-inline: 10px;
   flex: 1;
   opacity: 0.5;
 }
@@ -114,7 +114,7 @@ h1 {
   height: 16px;
   vertical-align: middle;
   filter: invert(0) brightness(10);
-  margin-right: 8px;
+  margin-inline-end: 8px;
 }
 
 .disabled {
@@ -144,30 +144,22 @@ h1 {
 }
 
 .clear-button {
-  border-radius: 0 4px 4px 0px;
-  border-left: none !important;
+  border-radius: 0 4px 4px 0;
+  border-inline-start: none !important;
+}
+[dir="rtl"] .clear-button {
+  border-radius: 4px 0 0 4px;
 }
 .clear-button span {
   vertical-align: middle;
 }
 .clear-button .icon-type {
-  margin-left: 8px;
-  margin-right: 0;
-}
-
-.clear-settings {
-  display: flex;
-  align-items: center;
-  padding: 0 0px 0px 8px;
-  border-radius: 4px;
-  margin-right: 8px;
-}
-.clear-settings:hover {
-  background: rgba(255, 255, 255, 0.05);
+  margin-inline-start: 8px;
+  margin-inline-end: 0;
 }
 
 .reverted {
-  transform: rotate(180deg);
+  transform: scaleY(-1);
 }
 
 .small-button {
@@ -186,10 +178,13 @@ h1 {
 
 .theme-switch {
   height: 25px;
-  float: right;
   right: 25px;
   position: fixed;
   cursor: pointer;
+}
+[dir="rtl"] .theme-switch {
+  right: auto;
+  left: 25px;
 }
 .large-dropdown {
   color: var(--accent-5);
@@ -241,7 +236,7 @@ body.iframe .filter-selector {
   display: none;
 }
 body.iframe .search-box {
-  padding: 0 16px 0 16px;
+  padding: 0 10px;
 }
 body.iframe .navbar {
   display: none;
@@ -271,8 +266,8 @@ body.iframe .filter-option {
   text-align: center;
 }
 body.iframe .search-box input {
-  width: auto;
-  min-width: 10px;
+  width: 10px;
+  flex-grow: 1;
 }
 .categories-shrink {
   text-align: right;
@@ -339,15 +334,22 @@ body.iframe .search-box input {
 }
 
 #popup-more-settings {
-  margin-left: 12px;
+  margin-inline-start: 12px;
 }
 
 #popup-more-settings > button {
-  background: url(../../images/icons/settings.svg);
-  background-position: 8px 8px;
+  height: 36px;
+  padding: 9px;
+  padding-inline-start: 32px;
+  background-image: url(../../images/icons/settings.svg);
+  background-position: 8px 9px;
   background-repeat: no-repeat;
   width: max-content;
 }
+[dir="rtl"] #popup-more-settings > button {
+  background-position: calc(100% - 8px) 9px;
+}
+
 color-picker {
   z-index: 2;
   filter: drop-shadow(black 2px 4px 6px);
@@ -362,7 +364,10 @@ button.setting-input.color {
   position: relative;
   height: 32px;
   width: 100px;
-  border-radius: 4px 0px 0px 4px;
+  border-radius: 4px 0 0 4px;
+}
+[dir="rtl"] button.setting-input.color {
+  border-radius: 0 4px 4px 0;
 }
 
 .color-container {

@@ -1576,7 +1576,7 @@ export default class DevTools {
     document.body.insertAdjacentHTML(
       "beforeend",
       `
-            <div id="s3devFloatingBar">
+            <div id="s3devFloatingBar" dir="${document.querySelector(".gui").dir}">
                 <label class='title s3devLabel' id=s3devInsertLabel>
                     <span style="display:none;">${this.m("insert")} </span>
                     <span id=s3devInsert class="s3devWrap">

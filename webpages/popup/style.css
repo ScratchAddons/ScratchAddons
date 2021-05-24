@@ -5,6 +5,7 @@ body {
 body {
   width: var(--width, 400px);
   height: var(--height, 599px);
+  overflow: hidden;
   margin: 0;
   background-color: var(--brand-orange); /* Firefox popup arrow */
   font-family: "Sora", sans-serif;
@@ -39,12 +40,11 @@ body {
 }
 #logo {
   height: 30px;
-  margin-right: 20px;
+  margin-inline-end: 20px;
   vertical-align: middle;
 }
 #settings {
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 0 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -94,6 +94,9 @@ body {
 }
 .popout > .popout-img {
   height: 10px;
+}
+[dir="rtl"] .popout > .popout-img {
+  transform: scaleX(-1);
 }
 
 iframe {

@@ -7,7 +7,7 @@ export default async function ({ addon, global, console, msg }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
-    if (!document.querySelector("[class^='author-info_username-line']")) {
+    if (document.querySelector("[class*='project-title-input_title-field']")) {
       let setthumb = document.createElement("div");
       setthumb.classList.add(addon.tab.scratchClass("menu-bar_menu-bar-item"));
       setthumb.title = msg("added-by");
