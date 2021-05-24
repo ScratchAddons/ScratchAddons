@@ -1,11 +1,11 @@
 html,
-html > body:not(.sa-body-editor),
+body,
 #pagewrapper {
   background: #202020;
   color: #fff;
   text-shadow: none;
 }
-html > body:not(.sa-body-editor) label {
+label {
   color: #fff;
 }
 a.black,
@@ -16,9 +16,9 @@ input.link.black {
 span.small-text {
   color: rgba(255, 255, 255, 0.4);
 }
-html > body:not(.sa-body-editor) input,
-html > body:not(.sa-body-editor) textarea,
-html > body:not(.sa-body-editor) select,
+input,
+textarea,
+select,
 .editable-empty,
 .editable.read,
 .editable.write,
@@ -34,7 +34,7 @@ textarea {
   color: rgba(255, 255, 255, 0.4);
 }
 .button,
-html > body:not(.sa-body-editor) button,
+button,
 .button:hover,
 button:hover,
 .button.grey,
@@ -73,10 +73,10 @@ button.grey:hover {
 .thumb img {
   border-color: #606060;
 }
-html > body:not(.sa-body-editor) h1,
-html > body:not(.sa-body-editor) h2,
-html > body:not(.sa-body-editor) h3,
-html > body:not(.sa-body-editor) h4 {
+h1,
+h2,
+h3,
+h4 {
   color: inherit;
 }
 .ui-widget-content {

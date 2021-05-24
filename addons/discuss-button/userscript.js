@@ -11,7 +11,7 @@ export default async function ({ addon, global, console }) {
 
   if (addon.tab.clientVersion === "scratch-www") {
     while (true) {
-      const el = await addon.tab.waitForElement("div#navigation div.inner ul:not(.production)", {
+      const el = await addon.tab.waitForElement("div#navigation div.inner ul:not(.dropdown)", {
         markAsSeen: true,
         reduxCondition: (state) => {
           if (!state.scratchGui) return true;
