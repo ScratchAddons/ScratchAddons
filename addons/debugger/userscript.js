@@ -143,7 +143,7 @@ export default async function ({ addon, global, console, msg }) {
     src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
   });
   const closeText = Object.assign(document.createElement("span"), {
-    innerText: "Close",
+    innerText: msg("close"),
   });
 
   consoleTitle.append(consoleText, buttons);
