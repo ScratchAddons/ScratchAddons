@@ -1,13 +1,13 @@
-#navigation #navigation .dropdown,
-#navigation .dropdown.with-arrow::before,
+.dropdown,
+.dropdown.with-arrow::before,
 #navigation .link > a,
 #navigation .logo-a-title,
 #navigation .inner > ul > li.search .input[type="text"],
 #navigation .account-nav .user-info,
 .login,
-#navigation .dropdown a:link,
-#navigation .dropdown a:visited,
-#navigation .dropdown a:active,
+.dropdown a:link,
+.dropdown a:visited,
+.dropdown a:active,
 .button,
 .modal-title,
 .intro-banner .intro-header,
@@ -19,7 +19,8 @@
 .download .download-header .download-info .download-copy .download-title,
 .os-chooser .button.active,
 .studio-tab-nav .active > li,
-.user-projects-modal .user-projects-modal-nav li.active,
+.user-projects-modal .user-projects-modal-nav button.active,
+.overflow-menu-container .overflow-menu-dropdown li button,
 .step .step-number-row .step-number,
 .title-banner.mod-blue-bg .title-banner-h1,
 .title-banner.mod-conference h1,
@@ -41,6 +42,7 @@
 .subactions .action-buttons .action-button:not(.remixtree-button):before,
 .download .download-requirements span img,
 .os-chooser .button.active img,
+.overflow-menu-container .overflow-menu-dropdown li button > img,
 #footer .inner .media li img {
   filter: var(--scratchr2-primaryColor-filter);
 }
@@ -64,9 +66,11 @@
 }
 .preview .remix-button,
 .os-chooser .button:not(.active),
-.compose-comment .compose-bottom-row .compose-cancel {
+.compose-comment .compose-bottom-row .compose-cancel,
+.studio-report-modal .studio-report-title {
   color: #fff;
 }
-.os-chooser .button:not(.active) img {
+.os-chooser .button:not(.active) img,
+.studio-report-modal .modal-content-close-img {
   filter: none;
 }

@@ -6,10 +6,6 @@
   --accent-5: #222;
 }
 
-body {
-  color: #222;
-}
-
 .search-box {
   background: #fcfcfc;
 }
@@ -17,7 +13,6 @@ body {
 .search-box input,
 .search-box button {
   background-color: #f0f0f0;
-  color: #222;
 }
 
 .filter-options {
@@ -83,7 +78,7 @@ body {
 }
 
 .addon-description {
-  color: #000;
+  color: #a1a1a1;
 }
 
 .addon-description-full,
@@ -123,15 +118,13 @@ img :not(.navbar, .icon-type) {
 }
 
 .setting-input {
-  color: #000;
-  background: #efefef;
-  border: 1px solid #acacac;
+  border-color: #acacac;
 }
 
 .large-button {
   color: #000;
   background: #efefef;
-  border: 1px solid #acacac;
+  border-color: #acacac;
 }
 .large-button:hover:not([disabled]) {
   background: #aaaaaa;
@@ -146,7 +139,6 @@ img :not(.navbar, .icon-type) {
 }
 
 .switch {
-  display: block;
   background: #888;
 }
 .switch::before {
@@ -159,14 +151,9 @@ img :not(.navbar, .icon-type) {
   filter: invert(1);
 }
 
-.setting-body {
-  background: #f7f7f7;
-  border: 1px solid #cfcfcf;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
 .setting-dropdown.open .clear-button,
 .setting-dropdown li:hover {
-  background: #aaaaaa;
+  background: #aaa;
 }
 .setting-dropdown ul,
 .setting-dropdown .reset-preview span {
@@ -174,7 +161,7 @@ img :not(.navbar, .icon-type) {
 }
 
 #running-page {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
 #popup-more-settings > button {

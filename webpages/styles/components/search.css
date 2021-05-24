@@ -16,6 +16,9 @@
   width: 150px;
   height: 16px;
 }
+[dir="rtl"] .search-box input {
+  border-radius: 0 4px 4px 0;
+}
 .search-box input:focus {
   outline: none;
 }
@@ -34,6 +37,9 @@
   outline: none;
   cursor: pointer;
 }
+[dir="rtl"] .search-box > button {
+  border-radius: 4px 0 0 4px;
+}
 
 .search-button {
   background-image: url(/images/icons/search.svg);
@@ -50,35 +56,4 @@
 .search-box .badge .selected-badge {
   cursor: default;
   border-bottom: none;
-}
-
-.switch {
-  display: block;
-  background: #111;
-  width: 40px;
-  height: 20px;
-  border-radius: 10px;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.switch::before {
-  content: "";
-  position: absolute;
-  display: block;
-  width: 10px;
-  height: 10px;
-  background: var(--accent-4);
-  border-radius: 5px;
-  top: 5px;
-  left: 5px;
-  transition: all 0.25s ease;
-}
-
-.switch[state="on"] {
-  background: var(--brand-orange);
-}
-.switch[state="on"]::before {
-  background: #fff;
-  left: 25px;
 }

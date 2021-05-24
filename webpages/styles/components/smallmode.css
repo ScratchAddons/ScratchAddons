@@ -1,6 +1,6 @@
 .categories-block.smallMode {
   border-radius: 0px 0px 10px 10px;
-  margin-left: 10px;
+  margin-inline-start: 10px;
   z-index: 10;
   position: absolute;
   max-height: calc(100vh - 60px);
@@ -9,7 +9,7 @@
 }
 .toggle {
   cursor: pointer;
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 .search-box.smallMode {
   overflow-y: hidden;
