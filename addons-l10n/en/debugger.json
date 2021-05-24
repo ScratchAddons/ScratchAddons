@@ -2,5 +2,6 @@
   "debugger/console": "Logs",
   "debugger/debug": "Debug",
   "debugger/export": "Export",
-  "debugger/clear": "Clear"
+  "debugger/clear": "Clear",
+  "debugger/close": "Close"
 }
