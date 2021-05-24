@@ -627,7 +627,7 @@ if (isProfile || isStudio || isProject) {
             if (!possiblePostBtn.classList.contains("compose-post")) return;
             const form = path[0].tagName === "SPAN" ? path[3] : path[2];
             // Remove error when about to send comment anyway, if it exists
-            form.parentNode.querySelector(".compose-error-row")?.remove();
+            form.parentNode.querySelector(".sa-compose-error-row")?.remove();
             if (form.hasAttribute("data-sa-send-anyway")) {
               form.removeAttribute("data-sa-send-anyway");
               return;
@@ -637,7 +637,7 @@ if (isProfile || isStudio || isProject) {
             if (shouldCaptureComment(textarea.value)) {
               e.stopPropagation();
               const errorRow = document.createElement("div");
-              errorRow.className = "flex-row compose-error-row";
+              errorRow.className = "flex-row compose-error-row sa-compose-error-row";
               const errorTip = document.createElement("div");
               errorTip.className = "compose-error-tip";
               const span = document.createElement("span");
