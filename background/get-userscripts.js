@@ -239,7 +239,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (cacheEntry.loading) {
         scratchAddons.localEvents.addEventListener("csInfoCacheUpdated", function thisFunction() {
           cacheEntry = getCacheEntry();
-          if (!cacheEntry.loading) {
+          if (!cacheEntry) {
+            scratchAddons.localEvents.removeEventListener("csInfoCacheUpdated", thisFunction);
+          } else if (!cacheEntry.loading) {
             sendResponse(cacheEntry.info);
             csInfoCache.delete(identity);
             scratchAddons.localEvents.removeEventListener("csInfoCacheUpdated", thisFunction);
@@ -268,6 +270,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 });
+// In case a tab messaged us before we registered the event above,
+// we notify them they can resend the contentScriptInfo message
+chrome.tabs.query({}, (tabs) =>
+  tabs.forEach((tab) => {
+    if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+      chrome.tabs.sendMessage(tab.id, "backgroundListenerReady");
+    }
+  })
+);
 
 // Pathname patterns. Make sure NOT to set global flag!
 // Don't forget ^ and $

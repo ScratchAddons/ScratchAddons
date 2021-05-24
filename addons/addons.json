@@ -61,6 +61,7 @@
   "variable-manager",
   "scratchstats",
   "folders",
+  "message-filters",
   "block-palette-icons",
   "custom-block-shape",
   "2d-color-picker",
@@ -76,6 +77,7 @@
   "remove-curved-stage-border",
   "fix-pasted-scripts",
   "better-img-uploads",
+  "ctrl-click-run-scripts",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

@@ -38,5 +38,13 @@
   "scratch-messaging/marked-as-read": "Marked as read",
   "scratch-messaging/open-messages": "Open messages page",
   "scratch-messaging/studio-promotions": "Studio promotions",
-  "scratch-messaging/studio-promotion": "{actor} promoted you to manager for the studio {title}"
+  "scratch-messaging/studio-promotion": "{actor} promoted you to manager for the studio {title}",
+  "scratch-messaging/comment-error-empty": "You can't post an empty comment.",
+  "scratch-messaging/comment-error-ratelimit": "You are posting too quickly. Please wait longer between posts.",
+  "scratch-messaging/comment-error-filterbot-generic": "Scratch's filterbot blocked your comment for violating the Community Guidelines.",
+  "scratch-messaging/comment-error-filterbot-chat": "Scratch's filterbot blocked your comment for mentioning chat websites or social media.",
+  "scratch-messaging/comment-error-filterbot-spam": "Scratch's filterbot blocked your comment for spamming.",
+  "scratch-messaging/comment-error-down": "Scratch server is having a problem. Please try again later.",
+  "scratch-messaging/comment-mute": "You are muted because Scratch's filterbot considered your last comment to violate the Community Guidelines.",
+  "scratch-messaging/comment-cannot-post-for": "{mins, plural, one {You cannot post comments for 1 minute.} other {You cannot post comments for # minutes.}}"
 }

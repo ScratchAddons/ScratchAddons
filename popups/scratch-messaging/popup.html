@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title></title>
-    <script src="../../webpages/set-lang.js" defer></script>
+    <script src="../../webpages/set-lang.js" type="module"></script>
     <link rel="stylesheet" href="popup.css" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
     <link rel="preload" href="light.css" as="style" />
@@ -34,17 +34,20 @@
         <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
           >{{ deleteStep === 0 ? messages.deleteMsg : messages.deleteConfirmMsg }}
         </a>
-        <div class="comment-content" :class="{'comment-self' : thisComment.author === username}">
-          <span class="comment-content-text">{{{ thisComment.content }}}</span>
-          <a
-            class="reply-button-comment"
-            @click="replying = true"
-            :class="{'replying': replying}"
-            :style="{'visibility': replying ? 'hidden' : 'visible'}"
-            v-show="!deleted"
-            >{{ messages.replyMsg }}</a
-          >
-        </div>
+        <bdo dir="ltr">
+          <!-- prevents LTR comments from being messed up in RTL layout - not ideal, but consistent with Scratch -->
+          <div class="comment-content" :class="{'comment-self' : thisComment.author === username}">
+            <span class="comment-content-text">{{{ thisComment.content }}}</span>
+            <a
+              class="reply-button-comment"
+              @click="replying = true"
+              :class="{'replying': replying}"
+              :style="{'visibility': replying ? 'hidden' : 'visible'}"
+              v-show="!deleted"
+              >{{ messages.replyMsg }}</a
+            >
+          </div>
+        </bdo>
         <div class="reply-box-comment" v-show="replying">
           <textarea class="reply-textarea" maxlength="500" v-model="replyBoxValue"></textarea>
           <div class="reply-box-buttons">
@@ -304,17 +307,15 @@
         <div class="message-type-title" :style="{zIndex: 9999 - i}">
           <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
           <span class="float-right">
-            <div
-              class="tooltip"
-              v-if="project.loveCount || project.favoriteCount"
-              style="display: inline-block; padding-left: 6px; padding-right: 6px"
-            >
-              <span v-show="project.loveCount"
-                ><img class="small-icon colored" src="../../images/icons/heart.svg" /> {{project.loveCount}}</span
-              >
-              <span v-show="project.favoriteCount"
-                ><img class="small-icon colored" src="../../images/icons/star.svg" /> {{project.favoriteCount}}</span
-              >
+            <div class="tooltip" v-if="project.loveCount || project.favoriteCount" style="display: inline-block">
+              <span class="tooltip-indicator">
+                <span v-show="project.loveCount"
+                  ><img class="small-icon colored" src="../../images/icons/heart.svg" /> {{project.loveCount}}</span
+                >
+                <span v-show="project.favoriteCount"
+                  ><img class="small-icon colored" src="../../images/icons/star.svg" /> {{project.favoriteCount}}</span
+                >
+              </span>
               <span class="tooltiptext tooltiptextleft" v-html="projectLoversAndFavers(project)"></span>
             </div>
             <span v-show="project.unreadComments"
