@@ -9,7 +9,7 @@ export default async function ({ addon, console, safeMsg: m }) {
   let html = (id, right) => `<div id="${id}">
   <button aria-label="Upload Costume" class="${addon.tab.scratchClass("action-menu_button")} ${addon.tab.scratchClass(
     "action-menu_more-button"
-  )}"" data-for="sa-${id}-HD Upload" data-tip="${m("upload")}" currentitem="false">
+  )} sa-better-img-uploads-btn" data-for="sa-${id}-HD Upload" data-tip="${m("upload")}" currentitem="false">
     <img class="${addon.tab.scratchClass("action-menu_more-icon")} sa-better-img-uploader" draggable="false" src="${
     addon.self.dir + "/icon.svg"
   }" height="10", width="10">
