@@ -617,7 +617,6 @@ if (isProfile || isStudio || isProject) {
         document.querySelector(".comments-container, .studio-compose-container").addEventListener(
           "click",
           (e) => {
-            console.log(e);
             const path = e.composedPath();
             // When clicking the post button, e.path[0] might
             // be <span>Post</span> or the <button /> element
@@ -626,8 +625,11 @@ if (isProfile || isStudio || isProject) {
             if (possiblePostBtn.tagName !== "BUTTON") return;
             if (!possiblePostBtn.classList.contains("compose-post")) return;
             const form = path[0].tagName === "SPAN" ? path[3] : path[2];
+            if (!form) return;
+            if (form.tagName !== "FORM") return;
+            if (!form.classList.contains("full-width-form")) return;
             // Remove error when about to send comment anyway, if it exists
-            form.parentNode.querySelector(".compose-error-row")?.remove();
+            form.parentNode.querySelector(".sa-compose-error-row")?.remove();
             if (form.hasAttribute("data-sa-send-anyway")) {
               form.removeAttribute("data-sa-send-anyway");
               return;
@@ -637,7 +639,7 @@ if (isProfile || isStudio || isProject) {
             if (shouldCaptureComment(textarea.value)) {
               e.stopPropagation();
               const errorRow = document.createElement("div");
-              errorRow.className = "flex-row compose-error-row";
+              errorRow.className = "flex-row compose-error-row sa-compose-error-row";
               const errorTip = document.createElement("div");
               errorTip.className = "compose-error-tip";
               const span = document.createElement("span");
