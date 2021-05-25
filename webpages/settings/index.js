@@ -73,8 +73,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       grantedOptionalPermissions = permissions.filter((p) => browserLevelPermissions.includes(p));
     });
   updateGrantedPermissions();
-  chrome.permissions.onAdded.addListener(updateGrantedPermissions);
-  chrome.permissions.onRemoved.addListener(updateGrantedPermissions);
+  chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
+  chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 
   const promisify =
     (callbackFn) =>
