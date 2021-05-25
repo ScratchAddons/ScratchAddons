@@ -11,7 +11,12 @@ export default (filenames) =>
       const jsPromise = import(jsUrl);
       return fetch(htmlUrl)
         .then((resp) => resp.text())
-        .then((text) => new DOMParser().parseFromString(text, "text/html").querySelector("template").innerHTML)
+        .then((text) => {
+          let parsed = new DOMParser().parseFromString(text, "text/html");
+          let style = parsed.querySelector("style");
+          if (style) document.head.append(style);
+          return parse.querySelector("template").innerHTML)
+          })
         .then((template) => jsPromise.then((esm) => esm.default({ template })));
     })
   );
