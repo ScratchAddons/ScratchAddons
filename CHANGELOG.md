@@ -13,6 +13,25 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.15.0] - 2021-05-25
+
+- New addon: do not automatically run duplicated blocks [recommended]
+- New addon: block transparency
+- New addon: Ctrl+Click to run scripts
+- New addon: filter messages on Scratch's messages page
+- "Message count in extension icon" addon: change default color, make it customizable
+- Enhanced loading speed of settings page
+- Enhanced RTL support for editor addons
+- Scratch Addons is ready to support RTL in the extension settings page and popup. If you're native in Arabic or Hebrew, please [help translate](https://scratchaddons.com/translate)
+- "Scratch Messaging" addon: support showing messages from the Scratch Team
+- "Confirm actions" addon: support confirming closing forum topics
+- "Gamepad support" addon: add setting to hide icon when no controllers detected, add WASD option to joysticks, bug fixes
+- Adapt addons to the upcoming Scratch 3.0 studio pages update on Scratch website
+- Notify extension users if the running browser version is unsupported by Scratch Addons
+- Bug fix: project page crashing when posting empty comment twice in a row
+- "Data category tweaks" addon: bug fixes
+- "Developer tools" addon: bug fixes
+
 ## [v1.14.3] - 2021-05-15
 
 - Adapt addons to the upcoming Scratch 3.0 studio pages update on Scratch website
@@ -373,6 +392,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.15.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.15.0
 [v1.14.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.3
 [v1.14.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.2
 [v1.14.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.1
