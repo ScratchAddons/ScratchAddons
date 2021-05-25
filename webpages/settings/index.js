@@ -468,8 +468,8 @@ const updateGrantedPermissions = () =>
     grantedOptionalPermissions = permissions.filter((p) => browserLevelPermissions.includes(p));
   });
 updateGrantedPermissions();
-chrome.permissions.onAdded.addListener(updateGrantedPermissions);
-chrome.permissions.onRemoved.addListener(updateGrantedPermissions);
+chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
+chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 
 //theme switching
 const lightThemeLink = document.createElement("link");
