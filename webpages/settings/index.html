@@ -1,14 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
+    <meta charset="UTF-8" />
+
+    <!-- Preload styles-->
     <link rel="preload" href="light.css" as="style" />
     <link rel="preload" href="style.css" as="style" />
-    <meta charset="UTF-8" />
+
+    <!-- Preload font-->
+    <link rel="preload" href="../../libraries/thirdparty/Sora.css" as="style" />
+    <link
+      rel="preload"
+      href="../../libraries/thirdparty/Sora/latin-ext.400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../../libraries/thirdparty/Sora/latin-ext.600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../../libraries/thirdparty/Sora/latin.400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../../libraries/thirdparty/Sora/latin.600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
+
+    <!-- Preload index.js imports -->
+    <link rel="modulepreload" href="../../libraries/common/cs/download-blob.js"">
+    <link rel="modulepreload" href="../rtl-list.js" />
+    <link rel="modulepreload" href="../../libraries/common/load-vue-components.js" />
+    <link rel="modulepreload" href="data/tags.js" />
+    <link rel="modulepreload" href="data/addon-groups.js" />
+    <link rel="modulepreload" href="data/categories.js" />
+
+    <!-- Preload images -->
+    <link rel="preload" href="../../images/icons/switch.svg" as="image" />
+    <link rel="preload" href="../../images/icon.svg" as="image" />
+    <link rel="preload" href="../../images/icons/list.svg" as="image" />
+    <link rel="preload" href="../../images/icons/puzzle.svg" as="image" />
+    <link rel="preload" href="../../images/icons/web.svg" as="image" />
+    <link rel="preload" href="../../images/icons/brush.svg" as="image" />
+    <link rel="preload" href="../../images/icons/popup.svg" as="image" />
+    <link rel="preload" href="../../images/icons/users.svg" as="image" />
+    <link rel="preload" href="../../images/icons/translate.svg" as="image" />
+    <link rel="preload" href="../../images/icons/comment.svg" as="image" />
+    <link rel="preload" href="../../images/icons/wrench.svg" as="image" />
+    <link rel="preload" href="../../images/icons/search.svg" as="image" />
+
+    <!-- Preload components -->
+    <link rel="preload" href="components/picker-component.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/picker-component.js" />
+    <link rel="preload" href="components/reset-dropdown.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/reset-dropdown.js" />
+    <link rel="preload" href="components/addon-setting.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/addon-setting.js" />
+    <link rel="preload" href="components/addon-tag.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/addon-tag.js" />
+    <link rel="preload" href="components/addon-group.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/addon-group.js" />
+    <link rel="preload" href="components/addon-body.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/addon-body.js" />
+    <link rel="preload" href="components/category-selector.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/category-selector.js" />
+
     <script src="../set-lang.js" type="module"></script>
     <script src="../check-unsupported.js" defer></script>
+
     <style>
       /*
        * Imports are here to attempt to speed up load. Also, it means licenses.html loads fewer unused styles, and this file doesn't get licenses.html's styles! In order of when it will be noticed/needed on the page
@@ -31,287 +104,15 @@
 
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
-    <script src="../../libraries/thirdparty/color-picker.js" type="module" defer></script>
-    <template id="picker-component">
-      <div class="color-container" :key="value" @click="loadColorPicker = true" @mouseover="loadColorPicker = true">
-        <button
-          :style="{'background-color': color }"
-          class="setting-input color"
-          :class="{'action-disabled': !addon._enabled }"
-          @click="toggle(addon, setting, true)"
-        >
-          <template v-if="loadColorPicker">
-            <color-picker
-              :value="value"
-              id="picker"
-              v-show="isOpen"
-              v-el:pickr
-              :formats="formats"
-              :no_alpha="noAlphaString"
-              dir="ltr"
-            ></color-picker>
-          </template>
-        </button>
-      </div>
-    </template>
-    <template id="reset-dropdown-component">
-      <div :class="{'setting-dropdown': true, open: isOpen}">
-        <button type="button" class="large-button clear-button" :disabled="!addon._enabled" @click="toggle">
-          <span>{{ label }}</span>
-          <img src="../../images/icons/expand.svg" class="icon-type" />
-        </button>
-        <ul>
-          <li @click="resetToDefault">
-            <span class="reset-preview"><span :style="{backgroundColor: setting.default}"></span></span>
-            <span>{{ defaultLabel }}</span>
-          </li>
-          <template v-for="preset in addon.presets">
-            <li
-              v-if="preset.values.hasOwnProperty(setting.id) && preset.values[setting.id].toLowerCase() != setting.default.toLowerCase()"
-              @click="resetToPreset(preset)"
-            >
-              <span class="reset-preview"><span :style="{backgroundColor: preset.values[setting.id]}"></span></span>
-              <span>{{ preset.name }}</span>
-            </li>
-          </template>
-        </ul>
-      </div>
-    </template>
-    <template id="addon-setting-component">
-      <div class="addon-setting">
-        <div class="setting-label" v-html="settingsName(addon)"></div>
-        <input
-          type="checkbox"
-          class="setting-input check"
-          v-model="addonSettings[addon._addonId][setting.id]"
-          @change="updateSettings()"
-          :disabled="!addon._enabled"
-          v-if="setting.type === 'boolean'"
-        />
-        <input
-          type="number"
-          class="setting-input number"
-          v-model="addonSettings[addon._addonId][setting.id]"
-          @change="checkValidity() || updateSettings()"
-          :disabled="!addon._enabled"
-          v-if="setting.type === 'positive_integer'"
-          min="0"
-          :data-addon-id="addon._addonId"
-          :data-setting-id="setting.id"
-          number
-        />
-        <input
-          type="number"
-          class="setting-input number"
-          v-model="addonSettings[addon._addonId][setting.id]"
-          @change="checkValidity() || updateSettings()"
-          :disabled="!addon._enabled"
-          v-if="setting.type === 'integer'"
-          :min="setting.min"
-          :max="setting.max"
-          :data-addon-id="addon._addonId"
-          :data-setting-id="setting.id"
-          number
-        />
-        <input
-          type="text"
-          class="setting-input string"
-          v-model="addonSettings[addon._addonId][setting.id]"
-          @input="updateSettings()"
-          :disabled="!addon._enabled"
-          v-if="setting.type === 'string'"
-          :placeholder="setting.default"
-          maxlength="100"
-        />
-        <input
-          type="text"
-          class="setting-input key"
-          v-model="addonSettings[addon._addonId][setting.id]"
-          @input="updateSettings()"
-          :disabled="!addon._enabled"
-          v-if="setting.type === 'key'"
-          :placeholder="setting.default"
-          maxlength="100"
-          :data-addon-id="addon._addonId"
-          :data-setting-id="setting.id"
-          spellcheck="false"
-        />
-        <template v-if="setting.type === 'color'">
-          <picker
-            :value="addonSettings[addon._addonId][setting.id] || setting.default"
-            :setting="setting"
-            :addon="addon"
-            :no_alpha="!setting.allowTransparency"
-            v-click-outside="closePickers"
-          ></picker>
-          <reset-dropdown
-            v-if="showResetDropdown()"
-            :setting="setting"
-            :addon="addon"
-            :label="msg('reset')"
-            :default-label="msg('default')"
-            v-click-outside="closeResetDropdowns"
-          ></reset-dropdown>
-          <button
-            v-else
-            type="button"
-            class="large-button clear-button"
-            :disabled="!addon._enabled"
-            @click="updateOption(setting.default)"
-          >
-            <span>{{ msg("reset") }}</span>
-            <img src="../../images/icons/undo.svg" class="icon-type" />
-          </button>
-        </template>
-        <div class="filter-options" v-if="setting.type === 'select'">
-          <div
-            class="filter-option"
-            v-for="option of setting.potentialValues"
-            :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
-            @click="updateOption(option.id);"
-          >
-            {{ option.name }}
-          </div>
-        </div>
-      </div>
-    </template>
-    <template id="addon-body-component">
-      <div class="addon-body" v-show="shouldShow && groupExpanded" :id="'addon-' + addon._addonId">
-        <div class="addon-topbar">
-          <div class="clickeable-area" @click="expanded = !expanded">
-            <div class="btn-dropdown">
-              <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" />
-            </div>
-            <div class="addon-name">
-              <img v-if="addon._icon === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
-              <img v-if="addon._icon === 'community'" src="../../images/icons/web.svg" class="icon-type" />
-              <img v-if="addon._icon === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
-              <img v-if="addon._icon === 'easterEgg'" src="../../images/icons/egg-easter.svg" class="icon-type" />
-              <img v-if="addon._icon === 'popup'" src="../../images/icons/popup.svg" class="icon-type" />
-              <span @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
-            </div>
-          </div>
-          <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
-          <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
-          <div class="addon-check">
-            <div
-              v-show="expanded && addon._enabled"
-              v-if="addon.settings"
-              class="clear-settings"
-              title="{{ msg('resetToDefault') }}"
-              @click="loadDefaults"
-            >
-              <img src="../../images/icons/undo.svg" class="icon-type" />
-            </div>
-            <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest($event)"></div>
-          </div>
-        </div>
-        <div class="addon-settings" v-if="expanded">
-          <div class="addon-description-full">{{ addon.description }}</div>
-          <div id="info" v-for="info of addon.info">
-            <div class="addon-warn" v-if="info.type == 'warning'">
-              <img src="../../images/icons/warning.svg" />{{ info.text }}
-            </div>
-            <div class="addon-notice" v-if="info.type == 'notice'">
-              <img src="../../images/icons/notice.svg" />{{ info.text }}
-            </div>
-          </div>
-          <div class="addon-credits" v-if="addon.credits">
-            <span>{{ msg("creditTo") }}</span>
-            <span v-for="credit of addon.credits">
-              <span v-if="credit.link">
-                <a href="{{ credit.link }}" rel="noreferrer noopener" target="_blank">{{ credit.name }}</a>
-              </span>
-              <span v-else="credit.link">{{ credit.name }}</span>
-            </span>
-          </div>
-          <div class="addon-license" v-if="addon.libraries && addon.libraries.length">
-            <a target="_blank" href="./licenses.html?libraries={{ addon.libraries.join(',') }}"
-              >{{ msg("viewLicenses") }}</a
-            >
-          </div>
-          <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
-            <addon-setting
-              v-for="setting of addon.settings"
-              :addon="addon"
-              :setting="setting"
-              :addon-settings="addonSettings"
-            ></addon-setting>
-          </div>
-          <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
-            <div class="setting-label">{{ msg("presets") }}</div>
-            <div class="addon-setting" v-for="preset of addon.presets">
-              <button
-                type="preset-button"
-                class="large-button"
-                :disabled="!addon._enabled"
-                @click="loadPreset(preset)"
-                :title="preset.description"
-              >
-                {{preset.name}}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-    <template id="addon-tag-component">
-      <div
-        class="badge"
-        v-if="shouldShow"
-        :class="{
-        'tooltip': tagInfo.tooltipText,
-        'blue': tagInfo.color === 'blue',
-        'yellow': tagInfo.color === 'yellow',
-        'red': tagInfo.color === 'red',
-        'darkred': tagInfo.color === 'darkred',
-        'green': tagInfo.color === 'green',
-        'darkgreen': tagInfo.color === 'darkgreen',
-        'purple': tagInfo.color === 'purple'
-        }"
-      >
-        {{ tagName }}
-        <span v-if="tagInfo.tooltipText" class="tooltiptext">{{ tagTooltip }}</span>
-      </div>
-    </template>
-    <template id="addon-group-component">
-      <div class="addon-group" v-show="shouldShow">
-        <span @click="toggle">
-          <img src="../../images/icons/expand.svg" alt="v" :class="{ 'reverted': group.expanded }" />
-          {{ group.name }} ({{ shownCount }})</span
-        >
-        <addon-body
-          v-for="addonId of group.addonIds"
-          :addon="manifestsById[addonId]"
-          :group-id="group.id"
-          :group-expanded="group.expanded"
-        ></addon-body>
-      </div>
-    </template>
-    <template id="category-selector-component">
-      <div
-        class="category"
-        :class="{
-          sel: category.id === selectedCategory,
-          hasParent: category.parent,
-        }"
-        v-show="shouldShow"
-        transition="expand"
-        :style="{ marginBottom: category.marginBottom ? '12px' : 0 }"
-        @click="onClick($event)"
-      >
-        <img :src="'../../images/icons/' + category.icon + '.svg'" />
-        <span>{{ category.name }}</span>
-      </div>
-    </template>
+    <script src="../../libraries/thirdparty/color-picker.js" type="module"></script>
     <script src="index.js" type="module"></script>
   </head>
-  <body style="display: none" v-show="loaded" :class="{light: theme}">
+  <body v-cloak v-show="isIframe && loaded || !isIframe" :class="{light: theme}">
     <div class="navbar">
-      <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-show="smallMode" alt="Logo" />
+      <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
-      <h1>{{ msg("settings") }}</h1>
-      <img @click="setTheme(!theme)" class="theme-switch" v-bind:src="themePath" />
+      <h1 v-cloak>{{ msg("settings") }}</h1>
+      <img v-cloak @click="setTheme(!theme)" class="theme-switch" :src="themePath" />
     </div>
     <div class="main">
       <div
@@ -329,23 +130,23 @@
           @click="openPage('https://scratchaddons.com/contributors')"
         >
           <img src="../../images/icons/users.svg" />
-          <span>{{ msg("credits") }}</span>
+          <span v-cloak>{{ msg("credits") }}</span>
         </div>
         <div class="category category-small" @click="openReview()" style="display: none">
           <img src="../../images/icons/star.svg" />
-          <span>{{ msg("review") }}</span>
+          <span v-cloak>{{ msg("review") }}</span>
         </div>
         <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
           <img src="../../images/icons/translate.svg" />
-          <span>{{ msg("translate") }}</span>
+          <span v-cloak>{{ msg("translate") }}</span>
         </div>
         <div class="category category-small" @click="openFeedback()">
           <img src="../../images/icons/comment.svg" />
-          <span>{{ msg("feedback") }}</span>
+          <span v-cloak>{{ msg("feedback") }}</span>
         </div>
         <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
-          <span>{{ msg("moreSettings") }}</span>
+          <span v-cloak>{{ msg("moreSettings") }}</span>
         </div>
       </div>
       <div
@@ -360,15 +161,12 @@
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div class="search-box" :class="{smallMode: smallMode === true}">
-          <input type="text" id="searchBox" placeholder="{{ msg('search') }}" v-model="searchInput" />
+          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" />
           <button v-show="searchInput === ''" class="search-button"></button>
-          <button v-else class="search-clear-button" @click="clearSearch()"></button>
-          <div id="popup-more-settings" v-show="isIframe">
-            <button @click="openFullSettings()" class="large-button">{{ msg("moreSettings") }}</button>
-          </div>
+          <button v-cloak v-else class="search-clear-button" @click="clearSearch()"></button>
         </div>
 
-        <div class="addons-container">
+        <div class="addons-container" v-cloak v-show="loaded">
           <template v-for="group of addonGroups">
             <div
               id="iframe-fullscreen-suggestion"
@@ -383,16 +181,18 @@
 
           <!-- Search pseudogroup -->
           <!-- Must be below real groups to make index.html/#addon-addonid work -->
-          <addon-body
-            v-for="addonId of searchAddonOrder"
-            :addon="manifestsById[addonId]"
-            group-id="search"
-            :group-expanded="searchInput !== ''"
-          ></addon-body>
+          <template v-if="searchLoaded">
+            <addon-body
+              v-for="addonId of searchAddonOrder"
+              :addon="manifestsById[addonId]"
+              group-id="search"
+              :group-expanded="searchInput !== ''"
+            ></addon-body>
+          </template>
         </div>
       </div>
     </div>
-    <div v-show="isOpen" class="modal">
+    <div v-cloak v-show="isOpen" class="modal">
       <div class="modal-content" v-click-outside="modalClickOutside">
         <div>
           <img @click="modalToggle()" class="close" alt="Logo" src="../../images/icons/close.svg" />
@@ -465,7 +265,7 @@
         </div>
       </div>
     </div>
-    <div class="popup" v-show="showPopupModal" style="display: none">
+    <div class="popup" v-cloak v-show="showPopupModal">
       <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
       <div>
         <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>

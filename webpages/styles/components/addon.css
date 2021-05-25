@@ -98,6 +98,7 @@
 
 .btn-dropdown img {
   height: 23px;
+  width: 23px;
 }
 
 .clickeable-area {
@@ -118,8 +119,8 @@
 .addon-notice img,
 .addon-warn img {
   height: 15px;
+  width: 15px;
   margin-inline-end: 10px;
-  flex: 0 0;
 }
 .addon-warn img {
   filter: brightness(0) invert(1);

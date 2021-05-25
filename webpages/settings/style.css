@@ -12,6 +12,10 @@ body {
   font-size: 12px;
 }
 
+[v-cloak] {
+  display: none;
+}
+
 .navbar {
   height: 60px;
   background: var(--brand-orange);
@@ -36,6 +40,7 @@ h1 {
 
 .logo {
   height: 30px;
+  width: 30px;
   margin-inline-end: 20px;
 }
 
@@ -59,6 +64,7 @@ h1 {
 
 .addon-group > span > img {
   height: 23px;
+  width: 23px;
   margin-inline-end: 5px;
   padding: 5px;
   border-radius: 4px;
@@ -112,6 +118,7 @@ h1 {
 
 .icon-type {
   height: 16px;
+  width: 16px;
   vertical-align: middle;
   filter: invert(0) brightness(10);
   margin-inline-end: 8px;
@@ -331,23 +338,6 @@ body.iframe .search-box input {
   top: 0;
   background-color: var(--accent-2);
   z-index: 999;
-}
-
-#popup-more-settings {
-  margin-inline-start: 12px;
-}
-
-#popup-more-settings > button {
-  height: 36px;
-  padding: 9px;
-  padding-inline-start: 32px;
-  background-image: url(../../images/icons/settings.svg);
-  background-position: 8px 9px;
-  background-repeat: no-repeat;
-  width: max-content;
-}
-[dir="rtl"] #popup-more-settings > button {
-  background-position: calc(100% - 8px) 9px;
 }
 
 color-picker {
