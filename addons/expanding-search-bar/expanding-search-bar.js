@@ -3,11 +3,14 @@ export default async function ({ addon, global, console }) {
 	
 	var exsearch_searchBar; //The search bar element
 	
+	//Wait for the search bar to load (we get the header links as we hide/show them, no need to worry about that)
+	//Also we set the search bar value here too
+	exsearch_searchBar = await addon.tab.waitForElement(addon.tab.clientVersion=="scratch-www"?"#frc-q-1088":"#search-input", {});
+	
 	///Events
 	if (addon.tab.clientVersion == "scratch-www") { //We're on scratch-www
 		
 		//Elements
-		exsearch_searchBar = document.getElementById("frc-q-1088"); //The scratch-www search input
 		var exsearch_links; //Header links
 
 		//Functions
@@ -37,7 +40,6 @@ export default async function ({ addon, global, console }) {
 		
 		//Elements
 		var exsearch_siteNav; //The site navigation buttons
-		exsearch_searchBar = document.getElementById("search-input"); //The search bar
 		exsearch_siteNav   = document.getElementsByClassName("site-nav")[0]; //The header buttons
 		
 		//Functions

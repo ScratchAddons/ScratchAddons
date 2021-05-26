@@ -12,7 +12,7 @@
     {
       "url": "expanding-search-bar.js",
       "matches": ["https://scratch.mit.edu/*"],
-	  "runAtComplete": true
+	  "runAtComplete": false
     }
   ],
   "versionAdded": "1.16.0",
