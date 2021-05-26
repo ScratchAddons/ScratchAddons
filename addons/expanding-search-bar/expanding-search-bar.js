@@ -1,32 +1,16 @@
 export default async function ({ addon, global, console }) {
-
-	///scratch-www checking
-	var exsearch_isWWW; //True if scratch-www, false if not
-	if (document.getElementsByClassName("site-nav")[0]) {
-		exsearch_isWWW = false;
-	} else {
-		exsearch_isWWW = true;
-	}
 	
+	if (addon.tab.clientVersion == null) return; //if neither www or r2, exit
 	
-	///"""Constants"""
 	var exsearch_searchBar; //The search bar element
-	if (exsearch_isWWW) {
-		//scratch-www constants
-		exsearch_searchBar = document.getElementById("frc-q-1088"); //The scratch-www search bar
-	} else {
-		//scratchr2 constants
-		var exsearch_siteNav; //The site navigation buttons
-		exsearch_searchBar = document.getElementById("search-input"); //The search bar
-		exsearch_siteNav   = document.getElementsByClassName("site-nav")[0]; //The header buttons
-	}
-
+	
 	///Events
-	//check scratchr2
-	if (exsearch_isWWW) { //We're on scratch-www
+	if (addon.tab.clientVersion == "scratch-www") { //We're on scratch-www
 		
-		var exsearch_links;
-		
+		//Elements
+		exsearch_searchBar = document.getElementById("frc-q-1088"); //The scratch-www search bar
+		var exsearch_links; //Header links
+
 		//Functions
 		function exsearch_getLinks() { //Gets all header links
 			let e = document.getElementsByClassName("link")[0]; //The first link
@@ -58,6 +42,12 @@ export default async function ({ addon, global, console }) {
 		exsearch_searchBar.addEventListener("focusout", exsearch_clickOut);
 		
 	} else { //We're on scratchr2
+		
+		//Elements
+		var exsearch_siteNav; //The site navigation buttons
+		exsearch_searchBar = document.getElementById("search-input"); //The search bar
+		exsearch_siteNav   = document.getElementsByClassName("site-nav")[0]; //The header buttons
+		
 		//Functions
 		function exsearch_clickIn() { //Clicking into the search bar
 			exsearch_siteNav.style.display = "none"; //Hide the site navigation
