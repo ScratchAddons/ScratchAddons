@@ -8,19 +8,12 @@ export default async function ({ addon, global, console }) {
 	if (addon.tab.clientVersion == "scratch-www") { //We're on scratch-www
 		
 		//Elements
-		exsearch_searchBar = document.getElementById("frc-q-1088"); //The scratch-www search bar
+		exsearch_searchBar = document.getElementById("frc-q-1088"); //The scratch-www search input
 		var exsearch_links; //Header links
 
 		//Functions
 		function exsearch_getLinks() { //Gets all header links
-			let e = document.getElementsByClassName("link")[0]; //The first link
-			let list = []; //The list
-			
-			while (e.classList.contains("link")) { //Repeat until the element is NOT a link
-				list.push(e); //Add
-				e = e.nextSibling; //Next 
-			}
-			return list;
+			return document.querySelectorAll(".link:not(.search ~ *)") //All .links before .search
 		}
 		
 		function exsearch_clickIn() { //Clicking into the search bar
