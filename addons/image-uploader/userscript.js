@@ -231,8 +231,7 @@ export default async function ({ addon, global, console }) {
       },
       referrer: "https://scratch.mit.edu/projects/editor/",
       referrerPolicy: "no-referrer-when-downgrade",
-      body:
-        '{"targets":[{"isStage":true,"name":"Stage","variables":{"`jEk@4|i[#Fk?(8x)AV.-my variable":["my variable",0]},"lists":{},"broadcasts":{},"blocks":{},"comments":{},"currentCostume":0,"costumes":[{"assetId":"77582e3881becdac32ffd151dbb31f14","name":"backdrop1","bitmapResolution":1,"md5ext":"77582e3881becdac32ffd151dbb31f14.svg","dataFormat":"svg","rotationCenterX":381.96246447447436,"rotationCenterY":351.7889839939939}],"sounds":[],"volume":100,"layerOrder":0,"tempo":60,"videoTransparency":50,"videoState":"on","textToSpeechLanguage":null}],"monitors":[],"extensions":[],"meta":{"semver":"3.0.0","vm":"0.2.0-prerelease.20200720182258","agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"}}',
+      body: '{"targets":[{"isStage":true,"name":"Stage","variables":{"`jEk@4|i[#Fk?(8x)AV.-my variable":["my variable",0]},"lists":{},"broadcasts":{},"blocks":{},"comments":{},"currentCostume":0,"costumes":[{"assetId":"77582e3881becdac32ffd151dbb31f14","name":"backdrop1","bitmapResolution":1,"md5ext":"77582e3881becdac32ffd151dbb31f14.svg","dataFormat":"svg","rotationCenterX":381.96246447447436,"rotationCenterY":351.7889839939939}],"sounds":[],"volume":100,"layerOrder":0,"tempo":60,"videoTransparency":50,"videoState":"on","textToSpeechLanguage":null}],"monitors":[],"extensions":[],"meta":{"semver":"3.0.0","vm":"0.2.0-prerelease.20200720182258","agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"}}',
       method: "POST",
       mode: "cors",
       credentials: "include",
