@@ -1,0 +1,22 @@
+{
+  "name": "Expanding search bar",
+  "description": "Expands the website search bar when you click on it.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/cst1229"
+    }
+  ],
+
+  "userscripts": [
+    {
+      "url": "expanding-search-bar.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "versionAdded": "",
+  "tags": ["community"],
+  "enabledByDefault": false,
+  "runAtComplete": true,
+  "l10n": true
+}
