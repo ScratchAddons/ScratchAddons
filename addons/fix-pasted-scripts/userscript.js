@@ -7,15 +7,26 @@ export default async function ({ addon, global, console }) {
     vm.runtime.once("PROJECT_LOADED", resolve);
   });
   const BlocklyInstance = await addon.tab.traps.getBlockly();
-  const originalObject = BlocklyInstance.BlockSvg.prototype.onMouseDown_;
+  const originalBlockMouseDown = BlocklyInstance.BlockSvg.prototype.onMouseDown_;
+  const originalFieldMouseDown = BlocklyInstance.Field.prototype.onMouseDown_;
 
   // Fixes the duplicate/pasting bug, no matter the setting (@GarboMuffin's implementation)
   BlocklyInstance.BlockSvg.prototype.onMouseDown_ = function (e) {
     if (!addon.self.disabled && this.workspace && this.workspace.isDragging()) {
       return;
-    } else {
-      return originalObject.call(this, e);
     }
+    return originalBlockMouseDown.call(this, e);
+  };
+  BlocklyInstance.Field.prototype.onMouseDown_ = function (e) {
+    if (
+      !addon.self.disabled &&
+      this.sourceBlock_ &&
+      this.sourceBlock_.workspace &&
+      this.sourceBlock_.workspace.isDragging()
+    ) {
+      return;
+    }
+    return originalFieldMouseDown.call(this, e);
   };
 
   if (addon.self.enabledLate) vm.emitWorkspaceUpdate();
