@@ -78,3 +78,201 @@
     </div>
   </div>
 </template>
+<style>
+  .addon-description {
+    margin-inline: 10px;
+    color: gray;
+    max-width: 35vw;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .addon-warn {
+    color: white;
+    padding: 10px;
+    background: rgba(255, 38, 103, 0.2);
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+  }
+  .addon-description-full,
+  .addon-credits {
+    width: 100%;
+    white-space: normal;
+    color: #dddddd;
+  }
+
+  .addon-credits,
+  .addon-license {
+    margin-top: 4px;
+    font-size: 0.9em;
+  }
+  .addon-credits a,
+  .addon-license a {
+    color: #6d9bff;
+  }
+
+  .addon-credits > span {
+    margin-inline-end: 0.5rem;
+  }
+
+  .addon-credits > span:not(:first-child):not(:last-child)::after {
+    content: ",";
+  }
+  .addon-name {
+    margin-inline-start: 15px;
+    font-weight: 400;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .addon-topbar {
+    height: 50px;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+  }
+  .addon-body {
+    margin: 10px;
+    background: var(--accent-1);
+    border: 1px solid var(--accent-3);
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  }
+  .addon-body:target {
+    animation: addonBlink 2s 1;
+  }
+  .addon-body.addon-body-margin-bottom {
+    margin-bottom: 50px;
+  }
+
+  .clear-settings {
+    display: flex;
+    align-items: center;
+    padding-inline-start: 8px;
+    border-radius: 4px;
+    margin-inline-end: 8px;
+  }
+  .clear-settings:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .setting-body img.dark {
+    filter: invert(0) brightness(10);
+  }
+  .btn-dropdown {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 4px;
+  }
+  .btn-dropdown:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .sh .btn-dropdown {
+    transform: rotate(180deg);
+  }
+
+  .btn-dropdown img {
+    height: 23px;
+    width: 23px;
+  }
+
+  .clickeable-area {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  .addon-notice {
+    color: black;
+    padding: 10px;
+    background: rgb(255 235 59 / 0.7);
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+  }
+  .addon-notice img,
+  .addon-warn img {
+    height: 15px;
+    width: 15px;
+    margin-inline-end: 10px;
+  }
+  .addon-warn img {
+    filter: brightness(0) invert(1);
+  }
+  .sh .addon-settings {
+    display: flex;
+  }
+  .addon-settings {
+    padding: 0 15px;
+  }
+
+  .presets-column,
+  .settings-column {
+    width: 100%;
+    margin: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .presets-column {
+    align-items: center;
+    margin: 10px 0;
+  }
+  .presets-column > .setting-label {
+    margin-inline-start: 10px;
+  }
+  .addon-preset {
+    margin-inline-end: 30px;
+  }
+
+  .addon-check {
+    margin-inline-start: auto;
+    padding: 5px 10px;
+    display: flex;
+  }
+
+  .switch {
+    display: block;
+    background: #111;
+    width: 40px;
+    height: 20px;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .switch::before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: var(--accent-4);
+    border-radius: 5px;
+    top: 5px;
+    left: 5px;
+    transition: all 0.25s ease;
+  }
+
+  .switch[state="on"] {
+    background: var(--brand-orange);
+  }
+  .switch[state="on"]::before {
+    background: #fff;
+    left: 25px;
+  }
+
+  [dir="rtl"] .switch::before {
+    left: 25px;
+  }
+  [dir="rtl"] .switch[state="on"]::before {
+    left: 5px;
+  }
+</style>
