@@ -28,6 +28,196 @@ All notable changes to this project will be documented in this file.
 
 -->
 
+## [v1.15.0] - 2021-05-25
+
+### Added
+
+#### Addons
+
+- Filter messages on Scratch's messages page (#1704)
+- Block transparency (#2332)
+- Do not automatically run duplicated blocks (#2470)
+- Ctrl+Click to run scripts (#2555)
+- Confirm actions: Support for confirming closing topics (#2455)
+- Gamepad support: Support for WASD key mapping (#2541)
+- Gamepad support: Allow setting buttons to be hidden when disconnected (#2541)
+- Message count on extension icon: Allow changing the badge color (#2430)
+- More links: Support for linkifying migrated studio descriptions (#2560)
+- Scratch 2.0 → 3.0: Support for migrated studios (#2584)
+- Scratch Messaging: Support for messages from Scratch Team (#2431)
+- Scratch Messaging: Explanation to why a comment could not be posted (#2569)
+- Website dark mode: Support for migrated studios (#2584)
+
+#### Extension and Addon API
+
+- RTL support (#2263)
+
+### Fixed
+
+#### Addons
+
+- Thumbnails setter: Fix addon running when logged out (#2174)
+- Shared/edited dates tooltip: Fix addon erroring when logged out (#2174)
+- Better forums post editor buttons: Fix addon causes forum emojis to disappear (#2437)
+- Confirm actions: Fix addon triggering when clicking "Shared" on shared projects (#2441)
+- Developer tools: Fix find bar not working with cross-sprite broadcasts (#2474)
+- Developer tools: Fix addon triggering "paste" action when it shouldn't in Linux (#2474)
+- Developer tools: Fix palette showing at the wrong place (#2474)
+- Developer tools: Fix addon not showing palette after using custom block modal (#2474)
+- Developer tools: Fix addon not allowing palette text input to be interacted with mouse (#2474)
+- Data category tweaks: Use Blocky to fix addon not working sometimes (#2528)
+- Gamepad support mouse: Fix virtual mouse cursor bugs on high DPI/retina displays (#2541)
+- True forums YouTube links: degrades performance on all Scratch pages (#2547)
+- Studio manager tools: Fix incompatibility with "Website dark mod"e when styling buttons for migrated studios (#2584)
+- Studio manager tools: Fix addon duplicating tabs in migrated studios (#2589)
+
+#### Extension and Addon API
+
+- Color picker in settings causes lag (#2370)
+- Scratch Addons silently breaks when using old browsers (#2518)
+- Addon descriptions on settings have wrong color on light mode (#2556)
+- Settings page take too long to load (#2567)
+- Scratch Addons does not run on startup-loaded tabs (#2574)
+- Failure to post a project comment crashes the page (#2592)
+- Color picker opacity slider and input in settings are always hidden (#2597)
+- Settings page cause crashes in older Firefox (#2605)
+
+## [v1.14.3] - 2021-05-15
+
+### Added
+
+#### Addons
+
+- Support for new studio page 
+	- Scratch 2.0 → 3.0 (#2485)
+	- Website dark mode (#2485)
+	- Show exact count (#2492)
+	- Infinite scrolling (#2493)
+	- Studio manager tools (#2493)
+	- Linebreaks in comments (#2493)
+	- Confirm actions (#2493)
+	- Copy link to comment button (#2493)
+	- More links (#2493)
+	- Resizable comment input (#2496)
+
+#### Extension and Addon API
+
+- Support of new studio comments in mute prevention code (#2486)
+
+### Changed
+
+#### Addons
+
+- Switch Scratch Messaging to use new APIs (#2501)
+
+### Fixed
+
+#### Addons
+
+- Cloud games: Fix user icon being white (#2461)
+- Disallow and remove use of Event.path to avoid errors when clicking on profile pages in Firefox (#2477)
+
+### Removed
+
+#### Extension and Addon APIs
+
+- Remove unfinished translations (#2472)
+
+## [v1.14.2] - 2021-05-09
+
+### Fixed
+
+#### Addons
+
+- Remix tree button: Fix button getting added on project pages to unshared projects (#2436)
+- Shared/edited dates tooltip: Fix addon causes unshared projects to not load (#2454)
+- Show ocular.jeffalo.net statuses and post reactions: Fix reactions not styled properly (#2408)
+- Show ocular.jeffalo.net statuses and post reactions: Change reference of "my-ocular" to "ocular" (#2428)
+- Make addons run on error pages (#2416)
+
+#### Extension and Addon API
+
+- Fix arrow above the popup on Firefox that is black regardless of the theme setting (#2405)
+- Fix some addons crashing when Redux is unavailable (#2420)
+
+## [v1.14.1] - 2021-05-05
+
+### Fixed
+
+#### Addons
+
+- Fix reduxEvents regressions that causes some addons not running (#2385)
+
+## [v1.14.0] - 2021-05-05
+
+### Added
+
+#### Addons
+
+- Better forums post editor buttons (#2081)
+- Editor sound effects (#2254)
+- Gamepad support (#2149)
+- Remove curved stage border (#2286)
+- Customizable block colors: Dark presets (#2207)
+- More tags to addons (#2326)
+
+#### Extension and Addon API
+
+- Prevent users from commenting "Scratch Addons" (#2212)
+- Addon groups and subcategories (#2260)
+
+### Changed
+
+#### Addons
+
+- Cat blocks: Show as normal addons (#2251)
+- Customizable block colors: Change setting names to avoid confusion (#2241)
+- Drag and drop files: Mention new features on description (#2234)
+- Editor dark mode: Change setting names to avoid confusion (#2241)
+- Show exact count: Do not ping external servers on default setting (#2326)
+- Show ocular.jeffalo.net statuses and post reactions: Change addon name from "Show my-ocular status" (#2163)
+- Reduce addon operations on DOM changes (#2268)
+
+#### Extension and Addon API
+
+- Update all settings at once when loading presets (#2278)
+
+### Fixed
+
+#### Addons
+
+- Custom scripts area zoom settings: Fix addon miscalculates zoom (#2309)
+- Customizable block colors: Affect block dropdown borders (#2207)
+- Customizable block colors: Fix incompatibility with Developer tools (#2207)
+- Customizable block colors: Fix addon affects stage monitors and ask prompts (#2241)
+- Developer tools: Fix incompatibility with Customizable block colors (#2148)
+- Developer tools: Fix typos on help message (#2259)
+- Developer tools: Fix addon uses wrong message in help (#2259)
+- Developer tools: Fix addon not follow capitalization rules (#2280)
+- Display stage on left side: rounds the corners (#2245)
+- Editor dark mode: Fix addon affects stage monitors and ask prompts (#2241)
+- Use local timezone: Fix addon does not translate "yesterday" and "today" on forums (#2214)
+
+#### Extension and Addon API
+
+- Fix themes show "for editor" tags in "All" mode on settings page (#2260)
+- Fix color pickers of disabled addons' settings can be opened (#2260)
+- Fix reset button showing on disabled addons' settings (#2260)
+- Fix disabled buttons changing style when hovered (#2260)
+- Fix popup incorrectly sized in Firefox when opened from overflow menu (#2274)
+- Fix "View Changelog" in update notification incorrectly capitalized in some languages (#2279)
+- Fix color pickers in settings can't be closed by clicking (#2315)
+- Fix color pickers in settings cap brightness at 99% (#2323)
+- Fix bug when isabling an addon without userscripts causes other addons to appear as disabled (#2340)
+- Fix bug when enabling an addon causes the addon to appear as running on all pages (#2341)
+
+### Removed
+
+#### Addons
+
+- Project screen reader support (#2282)
+- Developer tools: Remove referrence to griffpatch (#2259)
+
 ## [v1.13.0] - 2021-04-20
 
 ### Added
@@ -39,7 +229,7 @@ All notable changes to this project will be documented in this file.
 - Save blocks as image (#2087)
 - Developer tools: Ability to disable certain features (#2146)
 - Drag and drop files: Support for dropping text files (#2013)
-- Last edit tooltip: Tooltip for shared date (#1940)
+- Shared/edited dates tooltip: Tooltip for shared date (#1940)
 - Website dark mode: Support for "become a scratcher" notice (#2167)
 - Website dark mode: Support for embedded projects (#2042)
 - Website dark mode: Support for profile text placeholders (#2051)
@@ -61,12 +251,14 @@ All notable changes to this project will be documented in this file.
 
 #### Addons
 
+
 - Developer tools: Enable by default (#2146)
 - Developer tools: Set color for event blocks, ignoring "Customizable block colors" addon (#2146)
 - Editor dark mode and customizable colors: Change name from "Editor dark mode" (#1805)
 - Editor dark mode and customizable colors: Use presets (#1805)
 - Highlight currently executing blocks: Improve highlighting (#1956)
 - Highlight currently executing blocks: Improve performance by not calling querySelectorAll 30 times per second (#2178)
+- Shared/edited dates tooltip: Rename addon from "Shared/edited dates tooltip" (#1940)
 
 #### Extension and Addon API
 
@@ -978,6 +1170,11 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.15.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.15.0
+[v1.14.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.3
+[v1.14.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.2
+[v1.14.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.1
+[v1.14.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.0
 [v1.13.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.13.0
 [v1.12.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.1
 [v1.12.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.12.0
