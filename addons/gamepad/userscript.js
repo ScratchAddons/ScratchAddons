@@ -4,13 +4,47 @@ export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
   // Wait for the project to finish loading. Renderer might not be fully available until this happens.
-  await new Promise((resolve, reject) => {
+  await new Promise((resolve) => {
     if (vm.editingTarget) return resolve();
     vm.runtime.once("PROJECT_LOADED", resolve);
   });
 
+  const scratchToKeyToKey = (key) => {
+    switch (key) {
+      case "right arrow":
+        return "ArrowRight";
+      case "up arrow":
+        return "ArrowUp";
+      case "left arrow":
+        return "ArrowLeft";
+      case "down arrow":
+        return "ArrowDown";
+      case "enter":
+        return "Enter";
+      case "space":
+        return " ";
+    }
+    return key.toLowerCase().charAt(0);
+  };
+  const getKeysUsedByProject = () => {
+    const allBlocks = [vm.runtime.getTargetForStage(), ...vm.runtime.targets]
+      .filter((i) => i.isOriginal)
+      .map((i) => i.blocks);
+    const result = new Set();
+    for (const blocks of allBlocks) {
+      for (const block of Object.values(blocks._blocks)) {
+        if (block.opcode === "event_whenkeypressed" || block.opcode === "sensing_keyoptions") {
+          const key = block.fields.KEY_OPTION.value;
+          result.add(scratchToKeyToKey(key));
+        }
+      }
+    }
+    return result;
+  };
+
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
+  gamepad.setUsedKeys(getKeysUsedByProject());
 
   if (addon.settings.get("hide")) {
     await new Promise((resolve) => {
@@ -225,6 +259,44 @@ export default async function ({ addon, global, console, msg }) {
   gamepad.addEventListener("mousedown", handleGamepadMouseDown);
   gamepad.addEventListener("mouseup", handleGamepadMouseUp);
   gamepad.addEventListener("mousemove", handleGamepadMouseMove);
+
+  // const GAMEPAD_CONFIG_MAGIC = " // _gamepad_";
+
+  // const findMappingComment = () => {
+  //   const target = vm.runtime.getTargetForStage();
+  //   const comments = target.comments;
+  //   for (const comment of Object.values(comments)) {
+  //     if (comment.text.includes(GAMEPAD_CONFIG_MAGIC)) {
+  //       return comment;
+  //     }
+  //   }
+  //   return null;
+  // };
+  // const parseMappingComment = () => {
+  //   const comment = findMappingComment();
+  //   if (!comment) {
+  //     return;
+  //   }
+  //   const lineWithMagic = comment.text.split('\n').find(i => i.endsWith(GAMEPAD_CONFIG_MAGIC));
+  //   if (!lineWithMagic) {
+  //     console.warn('Gamepad comment does not contain valid line');
+  //     return;
+  //   }
+  //   const jsonText = lineWithMagic.substr(0, lineWithMagic.length - GAMEPAD_CONFIG_MAGIC.length);
+  //   let parsed;
+  //   try {
+  //     parsed = ExtendedJSON.parse(jsonText);
+  //     if (!parsed || typeof parsed !== 'object') {
+  //       throw new Error('Invalid object');
+  //     }
+  //   } catch (e) {
+  //     console.warn('Gamepad comment has invalid JSON', e);
+  //     return;
+  //   }
+  //   console.log(parsed);
+  // };
+  // const storeMappings = () => {
+  // };
 
   while (true) {
     const stageHeaderWrapper = await addon.tab.waitForElement('[class*="stage-header_stage-menu-wrapper"]', {
