@@ -42,9 +42,53 @@ export default async function ({ addon, global, console, msg }) {
     return result;
   };
 
+  const GAMEPAD_CONFIG_MAGIC = " // _gamepad_";
+  const findOptionsComment = () => {
+    const target = vm.runtime.getTargetForStage();
+    const comments = target.comments;
+    for (const comment of Object.values(comments)) {
+      if (comment.text.includes(GAMEPAD_CONFIG_MAGIC)) {
+        return comment;
+      }
+    }
+    return null;
+  };
+  const parseOptionsComment = () => {
+    const comment = findOptionsComment();
+    if (!comment) {
+      return;
+    }
+    const lineWithMagic = comment.text.split('\n').find(i => i.endsWith(GAMEPAD_CONFIG_MAGIC));
+    if (!lineWithMagic) {
+      console.warn('Gamepad comment does not contain valid line');
+      return;
+    }
+    const jsonText = lineWithMagic.substr(0, lineWithMagic.length - GAMEPAD_CONFIG_MAGIC.length);
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonText);
+      if (!parsed || typeof parsed !== 'object') {
+        throw new Error('Invalid object');
+      }
+      if (!Array.isArray(parsed.buttons) || !Array.isArray(parsed.axes)) {
+        throw new Error('Missing data');
+      }
+    } catch (e) {
+      console.warn('Gamepad comment has invalid JSON', e);
+      return null;
+    }
+    return parsed;
+  };
+
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
-  gamepad.setUsedKeys(getKeysUsedByProject());
+  
+  const parsedOptions = parseOptionsComment();
+  if (parsedOptions) {
+    gamepad.hints.importedSettings = parsedOptions;
+  } else {
+    gamepad.hints.usedKeys = getKeysUsedByProject();
+  }
 
   if (addon.settings.get("hide")) {
     await new Promise((resolve) => {
@@ -84,9 +128,34 @@ export default async function ({ addon, global, console, msg }) {
   buttonContainer.appendChild(buttonContent);
   buttonGroup.appendChild(buttonContainer);
   spacer.appendChild(buttonGroup);
+  let editor;
+  const storeMappings = () => {
+    const exported = editor.export();
+    if (!exported) {
+      console.warn("Could not export gamepad settings");
+      return;
+    }
+    // TODO: translate
+    const text = `Placeholder text 123 todo figure out what to put here\n${JSON.stringify(exported)}${GAMEPAD_CONFIG_MAGIC}`;
+    const existingComment = findOptionsComment();
+    if (existingComment) {
+      existingComment.text = text;
+    } else {
+      const target = vm.runtime.getTargetForStage();
+      // TODO uid()?
+      target.createComment(Math.random() + '', null, text, 50, 50, 350, 150, false);
+    }
+    vm.runtime.emitProjectChanged();
+    if (vm.editingTarget === vm.runtime.getTargetForStage) {
+      vm.emitWorkspaceUpdate();
+    }
+  };
   buttonContainer.addEventListener("click", () => {
-    const editor = gamepad.editor();
-    editor.msg = msg;
+    if (!editor) {
+      editor = gamepad.editor();
+      editor.msg = msg;
+      editor.addEventListener("change", storeMappings);
+    }
     const editorEl = editor.generateEditor();
 
     const close = () => {
@@ -259,44 +328,6 @@ export default async function ({ addon, global, console, msg }) {
   gamepad.addEventListener("mousedown", handleGamepadMouseDown);
   gamepad.addEventListener("mouseup", handleGamepadMouseUp);
   gamepad.addEventListener("mousemove", handleGamepadMouseMove);
-
-  // const GAMEPAD_CONFIG_MAGIC = " // _gamepad_";
-
-  // const findMappingComment = () => {
-  //   const target = vm.runtime.getTargetForStage();
-  //   const comments = target.comments;
-  //   for (const comment of Object.values(comments)) {
-  //     if (comment.text.includes(GAMEPAD_CONFIG_MAGIC)) {
-  //       return comment;
-  //     }
-  //   }
-  //   return null;
-  // };
-  // const parseMappingComment = () => {
-  //   const comment = findMappingComment();
-  //   if (!comment) {
-  //     return;
-  //   }
-  //   const lineWithMagic = comment.text.split('\n').find(i => i.endsWith(GAMEPAD_CONFIG_MAGIC));
-  //   if (!lineWithMagic) {
-  //     console.warn('Gamepad comment does not contain valid line');
-  //     return;
-  //   }
-  //   const jsonText = lineWithMagic.substr(0, lineWithMagic.length - GAMEPAD_CONFIG_MAGIC.length);
-  //   let parsed;
-  //   try {
-  //     parsed = ExtendedJSON.parse(jsonText);
-  //     if (!parsed || typeof parsed !== 'object') {
-  //       throw new Error('Invalid object');
-  //     }
-  //   } catch (e) {
-  //     console.warn('Gamepad comment has invalid JSON', e);
-  //     return;
-  //   }
-  //   console.log(parsed);
-  // };
-  // const storeMappings = () => {
-  // };
 
   while (true) {
     const stageHeaderWrapper = await addon.tab.waitForElement('[class*="stage-header_stage-menu-wrapper"]', {

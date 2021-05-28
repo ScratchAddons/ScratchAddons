@@ -131,6 +131,11 @@ const transformAndCopyMapping = (mapping) => {
   }
   return copy;
 };
+const prepareMappingForExport = (mapping) => {
+  const copy = Object.assign({}, mapping);
+  delete copy._state;
+  return copy;
+};
 
 const getMovementConfiguration = (usedKeys) => ({
   usesArrows:
@@ -153,243 +158,259 @@ class GamepadData {
   }
 
   getDefaultButtonMappings() {
-    const usedKeys = this.gamepadLib.usedKeys;
-    const alreadyUsedKeys = new Set();
-    const { usesArrows, usesWASD } = getMovementConfiguration(usedKeys);
-    const ACTIONS_KEYS = [
-      // Some common keys for common actions
-      " ",
-      "Enter",
-      "e",
-      "r",
-      "q",
-      "f",
-      "z",
-      "x",
-      "c",
-      // If none of those exist, just fall back to using any key.
-      ...Array.from(usedKeys).filter((i) => i.length === 1),
-    ];
-    const PAUSE_KEYS = ["p"];
-
-    const findKey = (keys, def = "none") => {
-      for (const key of keys) {
-        if (usedKeys.has(key) && !alreadyUsedKeys.has(key)) {
-          return reserveKey(key);
+    let buttons;
+    if (this.gamepadLib.hints.importedSettings) {
+      buttons = this.gamepadLib.hints.importedSettings.buttons;
+    } else {
+      const usedKeys = this.gamepadLib.hints.usedKeys;
+      const alreadyUsedKeys = new Set();
+      const { usesArrows, usesWASD } = getMovementConfiguration(usedKeys);
+      const ACTIONS_KEYS = [
+        // Some common keys for common actions
+        " ",
+        "Enter",
+        "e",
+        "r",
+        "q",
+        "f",
+        "z",
+        "x",
+        "c",
+        // If none of those exist, just fall back to using any key.
+        ...Array.from(usedKeys).filter((i) => i.length === 1),
+      ];
+      const PAUSE_KEYS = ["p"];
+  
+      const findKey = (keys, def = "none") => {
+        for (const key of keys) {
+          if (usedKeys.has(key) && !alreadyUsedKeys.has(key)) {
+            return reserveKey(key);
+          }
         }
-      }
-      return def;
-    };
-    const reserveKey = (key) => {
-      alreadyUsedKeys.add(key);
-      return key;
-    };
-    const getAction1 = () => {
-      if (usesArrows) {
-        // Up arrow and space probably do the same thing.
-        reserveKey(" ");
-        return "ArrowUp";
-      }
-      if (usesWASD) {
-        reserveKey(" ");
-        return reserveKey("w");
-      }
-      return findKey(ACTIONS_KEYS);
-    };
-    const getAction2 = () => {
-      return findKey(ACTIONS_KEYS);
-    };
-    const getAction3 = () => {
-      return findKey(ACTIONS_KEYS);
-    };
-    const getAction4 = () => {
-      return findKey(ACTIONS_KEYS);
-    };
-    const getPauseKey = () => {
-      return findKey(PAUSE_KEYS);
-    };
-    const getUp = () => {
-      if (usesArrows || !usesWASD) return "ArrowUp";
-      return "w";
-    };
-    const getDown = () => {
-      if (usesArrows || !usesWASD) return "ArrowDown";
-      return "s";
-    };
-    const getRight = () => {
-      if (usesArrows || !usesWASD) return "ArrowRight";
-      return "d";
-    };
-    const getLeft = () => {
-      if (usesArrows || !usesWASD) return "ArrowLeft";
-      return "a";
-    };
-    const buttons = [
-      {
-        /*
-        Button 0
-        Xbox: A
-        SNES-like: B
-        */
-        type: "key",
-        high: getAction1(),
-      },
-      {
-        /*
-        Button 1
-        Xbox: B
-        SNES-like: A
-        */
-        type: "key",
-        high: getAction2(),
-      },
-      {
-        /*
-        Button 2
-        Xbox: X
-        SNES-like: Y
-        */
-        type: "key",
-        high: getAction3(),
-      },
-      {
-        /*
-        Button 3
-        Xbox: Y
-        SNES-like: X
-        */
-        type: "key",
-        high: getAction4(),
-      },
-      {
-        /*
-        Button 4
-        Xbox: LB
-        SNES-like: Left trigger
-        */
-        type: "mousedown",
-      },
-      {
-        /*
-        Button 5
-        Xbox: RB
-        */
-        type: "mousedown",
-      },
-      {
-        /*
-        Button 6
-        Xbox: LT
-        */
-        type: "mousedown",
-      },
-      {
-        /*
-        Button 7
-        Xbox: RT
-        SNES-like: Right trigger
-        */
-        type: "mousedown",
-      },
-      {
-        /*
-        Button 8
-        Xbox: Change view
-        SNES-like: Select
-        */
-        type: "none",
-      },
-      {
-        /*
-        Button 9
-        Xbox: Menu
-        SNES-like: Start
-        */
-        type: "key",
-        high: getPauseKey(),
-      },
-      {
-        /*
-        Button 10
-        Xbox: Left analog press
-        */
-        type: "none",
-      },
-      {
-        /*
-        Button 11
-        Xbox: Right analog press
-        */
-        type: "none",
-      },
-      {
-        /*
-        Button 12
-        Xbox: D-pad up
-        */
-        type: "key",
-        high: getUp(),
-      },
-      {
-        /*
-        Button 13
-        Xbox: D-pad down
-        */
-        type: "key",
-        high: getDown(),
-      },
-      {
-        /*
-        Button 14
-        Xbox: D-pad left
-        */
-        type: "key",
-        high: getLeft(),
-      },
-      {
-        /*
-        Button 15
-        Xbox: D-pad right
-        */
-        type: "key",
-        high: getRight(),
-      },
-    ];
+        return def;
+      };
+      const reserveKey = (key) => {
+        alreadyUsedKeys.add(key);
+        return key;
+      };
+      const getAction1 = () => {
+        if (usesArrows) {
+          // Up arrow and space probably do the same thing.
+          reserveKey(" ");
+          return "ArrowUp";
+        }
+        if (usesWASD) {
+          reserveKey(" ");
+          return reserveKey("w");
+        }
+        return findKey(ACTIONS_KEYS);
+      };
+      const getAction2 = () => {
+        return findKey(ACTIONS_KEYS);
+      };
+      const getAction3 = () => {
+        return findKey(ACTIONS_KEYS);
+      };
+      const getAction4 = () => {
+        return findKey(ACTIONS_KEYS);
+      };
+      const getPauseKey = () => {
+        return findKey(PAUSE_KEYS);
+      };
+      const getUp = () => {
+        if (usesArrows || !usesWASD) return "ArrowUp";
+        return "w";
+      };
+      const getDown = () => {
+        if (usesArrows || !usesWASD) return "ArrowDown";
+        return "s";
+      };
+      const getRight = () => {
+        if (usesArrows || !usesWASD) return "ArrowRight";
+        return "d";
+      };
+      const getLeft = () => {
+        if (usesArrows || !usesWASD) return "ArrowLeft";
+        return "a";
+      };
+
+      buttons = [
+        {
+          /*
+          Button 0
+          Xbox: A
+          SNES-like: B
+          */
+          type: "key",
+          high: getAction1(),
+        },
+        {
+          /*
+          Button 1
+          Xbox: B
+          SNES-like: A
+          */
+          type: "key",
+          high: getAction2(),
+        },
+        {
+          /*
+          Button 2
+          Xbox: X
+          SNES-like: Y
+          */
+          type: "key",
+          high: getAction3(),
+        },
+        {
+          /*
+          Button 3
+          Xbox: Y
+          SNES-like: X
+          */
+          type: "key",
+          high: getAction4(),
+        },
+        {
+          /*
+          Button 4
+          Xbox: LB
+          SNES-like: Left trigger
+          */
+          type: "mousedown",
+        },
+        {
+          /*
+          Button 5
+          Xbox: RB
+          */
+          type: "mousedown",
+        },
+        {
+          /*
+          Button 6
+          Xbox: LT
+          */
+          type: "mousedown",
+        },
+        {
+          /*
+          Button 7
+          Xbox: RT
+          SNES-like: Right trigger
+          */
+          type: "mousedown",
+        },
+        {
+          /*
+          Button 8
+          Xbox: Change view
+          SNES-like: Select
+          */
+          type: "none",
+        },
+        {
+          /*
+          Button 9
+          Xbox: Menu
+          SNES-like: Start
+          */
+          type: "key",
+          high: getPauseKey(),
+        },
+        {
+          /*
+          Button 10
+          Xbox: Left analog press
+          */
+          type: "none",
+        },
+        {
+          /*
+          Button 11
+          Xbox: Right analog press
+          */
+          type: "none",
+        },
+        {
+          /*
+          Button 12
+          Xbox: D-pad up
+          */
+          type: "key",
+          high: getUp(),
+        },
+        {
+          /*
+          Button 13
+          Xbox: D-pad down
+          */
+          type: "key",
+          high: getDown(),
+        },
+        {
+          /*
+          Button 14
+          Xbox: D-pad left
+          */
+          type: "key",
+          high: getLeft(),
+        },
+        {
+          /*
+          Button 15
+          Xbox: D-pad right
+          */
+          type: "key",
+          high: getRight(),
+        },
+      ];
+      for (const button of buttons) {
+        if (button.high === "none") {
+          button.type = "none";
+        }
+      }  
+    }
     while (buttons.length < this.gamepad.buttons.length) {
       buttons.push({
         type: "none",
       });
-    }
-    for (const button of buttons) {
-      if (button.high === "none") {
-        button.type = "none";
-      }
     }
     buttons.length = this.gamepad.buttons.length;
     return buttons;
   }
 
   getDefaultAxisMappings() {
-    // Only return default axis mappings when there are 4 axes, like an xbox controller
-    // Some controllers with 2 axes will make the dpad update buttons and axes, which could result in conflicts that we want to avoid by default.
-    if (this.gamepad.axes.length === 4) {
-      const { usesArrows, usesWASD } = getMovementConfiguration(this.gamepadLib.usedKeys);
-      const axis = [];
-      if (usesArrows) {
-        axis.push(defaultAxesMappings.arrows[0]);
-        axis.push(defaultAxesMappings.arrows[1]);
-      } else if (usesWASD) {
-        axis.push(defaultAxesMappings.wasd[0]);
-        axis.push(defaultAxesMappings.wasd[1]);
-      } else {
-        axis.push(defaultAxesMappings.cursor[0]);
-        axis.push(defaultAxesMappings.cursor[1]);
+    let axes = [];
+    if (this.gamepadLib.hints.importedSettings) {
+      axes = this.gamepadLib.hints.importedSettings.axes;
+    } else {
+      // Only return default axis mappings when there are 4 axes, like an xbox controller
+      // Some controllers with 2 axes will make the dpad update buttons and axes, which could result in conflicts that we want to avoid by default.
+      if (this.gamepad.axes.length === 4) {
+        const usedKeys = this.gamepadLib.hints.usedKeys;
+        const { usesArrows, usesWASD } = getMovementConfiguration(usedKeys);
+        if (usesArrows) {
+          axes.push(defaultAxesMappings.arrows[0]);
+          axes.push(defaultAxesMappings.arrows[1]);
+        } else if (usesWASD) {
+          axes.push(defaultAxesMappings.wasd[0]);
+          axes.push(defaultAxesMappings.wasd[1]);
+        } else {
+          axes.push(defaultAxesMappings.cursor[0]);
+          axes.push(defaultAxesMappings.cursor[1]);
+        }
+        axes.push(defaultAxesMappings.cursor[0]);
+        axes.push(defaultAxesMappings.cursor[1]);
       }
-      axis.push(defaultAxesMappings.cursor[0]);
-      axis.push(defaultAxesMappings.cursor[1]);
-      return axis;
     }
-    return this.gamepad.axes.map(() => ({ type: "none" }));
+    while (axes.length < this.gamepad.axes.length) {
+      axes.push({
+        type: "none",
+      });
+    }
+    axes.length = this.gamepad.axes.length;
+    return axes;
   }
 }
 
@@ -422,7 +443,10 @@ class GamepadLib extends EventTarget {
 
     this.connectCallbacks = [];
 
-    this.usedKeys = new Set();
+    this.hints = {
+      usedKeys: new Set(),
+      importedSettings: null
+    };
 
     this.addEventHandlers();
   }
@@ -605,10 +629,6 @@ class GamepadLib extends EventTarget {
       }
       this.dispatchMouseMove(this.virtualCursor.x, this.virtualCursor.y);
     }
-  }
-
-  setUsedKeys(keys) {
-    this.usedKeys = keys;
   }
 
   editor() {
@@ -954,6 +974,21 @@ class GamepadEditor extends EventTarget {
         element.style.transform = `translate(-50%, -50%) translate(${x * size}px, ${y * size}px)`;
       }
     }
+  }
+
+  export() {
+    const selectedId = this.selector.value;
+    if (!selectedId) {
+      return null;
+    }
+    const gamepadData = this.gamepadLib.gamepads.get(selectedId);
+    if (!gamepadData) {
+      return null;
+    }
+    return {
+      axes: gamepadData.axesMappings.map(prepareMappingForExport),
+      buttons: gamepadData.buttonMappings.map(prepareMappingForExport)
+    };
   }
 
   changed() {
