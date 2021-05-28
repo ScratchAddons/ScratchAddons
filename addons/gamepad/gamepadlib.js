@@ -128,6 +128,7 @@ const transformAndCopyMapping = (mapping) => {
     // no-op
   } else {
     console.warn("unknown mapping type", copy.type);
+    return {type: "none"};
   }
   return copy;
 };
