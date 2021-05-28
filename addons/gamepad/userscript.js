@@ -209,6 +209,13 @@ export default async function ({ addon, global, console, msg }) {
 
     editor.focus();
   });
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("[class*='stage-header_stage-button-first']")) {
+      document.body.classList.add("sa-gamepad-small");
+    } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
+      document.body.classList.remove("sa-gamepad-small");
+    }
+  }, { capture: true });
 
   const virtualCursorContainer = document.createElement("div");
   virtualCursorContainer.hidden = true;

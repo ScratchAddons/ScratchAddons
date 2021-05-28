@@ -49,3 +49,7 @@
 .sa-gamepad-cursor-down {
   filter: invert(100%);
 }
+
+.sa-gamepad-small .sa-gamepad-spacer {
+  display: none !important;
+}
