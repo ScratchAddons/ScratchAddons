@@ -33,7 +33,16 @@ export default async function ({ addon, global, console }) {
     },
   });
 
-  hideInSmallStageMode({ addon });
+  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
+    document.body.classList.add("sa-mouse-pos-small");
+  }
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("[class*='stage-header_stage-button-first']")) {
+      document.body.classList.add("sa-mouse-pos-small");
+    } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
+      document.body.classList.remove("sa-mouse-pos-small");
+    }
+  }, { capture: true });
 
   while (true) {
     let bar = await addon.tab.waitForElement('[class*="controls_controls-container"]', {
@@ -59,21 +68,5 @@ export default async function ({ addon, global, console }) {
 
       showUpdatedValue();
     }
-  }
-}
-
-async function hideInSmallStageMode({ addon }) {
-  while (true) {
-    await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group']", {
-      markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
-    });
-
-    document.querySelector("[class*='stage-header_stage-button-first']").addEventListener("click", () => {
-      document.querySelector(".pos-container-container").style.display = "none";
-    });
-    document.querySelector("[class*='stage-header_stage-button-last']").addEventListener("click", () => {
-      document.querySelector(".pos-container-container").style.display = "";
-    });
   }
 }
