@@ -134,6 +134,7 @@ const transformAndCopyMapping = (mapping) => {
 const prepareMappingForExport = (mapping) => {
   const copy = Object.assign({}, mapping);
   delete copy._state;
+  delete copy._isDown;
   return copy;
 };
 
