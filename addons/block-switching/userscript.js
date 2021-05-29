@@ -670,7 +670,7 @@ export default async function ({ addon, global, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
   addon.tab.createBlockContextMenu(
     (items, block) => {
-      if (addon.self.disabled) {
+      if (!addon.self.disabled) {
         const switches = blockSwitches[block.type] || [];
         switches.forEach((opcodeData, i) => {
           const isNoop = opcodeData.opcode === "noop";
