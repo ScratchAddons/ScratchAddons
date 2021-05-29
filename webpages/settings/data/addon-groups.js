@@ -1,0 +1,60 @@
+export default [
+  // Only popup:
+  {
+    id: "recentlyUsed",
+    name: chrome.i18n.getMessage("recentlyUsed"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: true,
+    fullscreenShow: false,
+  },
+  {
+    id: "runningOnTab",
+    name: chrome.i18n.getMessage("runningOnThisPage"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: true,
+    fullscreenShow: false,
+  },
+
+  {
+    id: "new",
+    name: chrome.i18n.getMessage("new"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+  {
+    id: "enabled",
+    name: chrome.i18n.getMessage("enabled"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: true,
+    fullscreenShow: true,
+  },
+  {
+    id: "recommended",
+    name: chrome.i18n.getMessage("recommended"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+  {
+    id: "others",
+    name: chrome.i18n.getMessage("others"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+  {
+    id: "beta",
+    name: chrome.i18n.getMessage("beta"),
+    addonIds: [],
+    expanded: false,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+];
