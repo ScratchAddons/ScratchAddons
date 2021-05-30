@@ -276,10 +276,12 @@ export default async function ({ addon, global, console, msg }) {
     wrapper.appendChild(link);
 
     if (scrolledDown) extraContainer.scrollTop = extraContainer.scrollHeight;
+    if (!showingConsole) buttonImage.src = addon.self.dir + "/debug-unread.svg";
   };
   const toggleConsole = (show = !showingConsole) => {
     consoleWrapper.style.display = show ? "flex" : "";
     showingConsole = show;
+    if(show) buttonImage.src = addon.self.dir + "/debug.svg";
   };
 
   while (true) {
