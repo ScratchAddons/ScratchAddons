@@ -281,7 +281,7 @@ export default async function ({ addon, global, console, msg }) {
   const toggleConsole = (show = !showingConsole) => {
     consoleWrapper.style.display = show ? "flex" : "";
     showingConsole = show;
-    if(show) buttonImage.src = addon.self.dir + "/debug.svg";
+    if (show) buttonImage.src = addon.self.dir + "/debug.svg";
   };
 
   while (true) {
