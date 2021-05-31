@@ -183,8 +183,23 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     },
     computed: {
       addonList() {
-        // Search not considered
-        return this.addonListObjs.slice().sort((b, a) => b.naturalIndex - a.naturalIndex);
+        if (!this.searchInput) {
+          this.addonListObjs.forEach((obj) => (obj.visible = true));
+          return this.addonListObjs.sort((b, a) => b.naturalIndex - a.naturalIndex);
+        }
+
+        const matchesSearch = (manifest) =>
+          manifest.name.toLowerCase().includes(this.searchInput) ||
+          manifest._addonId.toLowerCase().includes(this.searchInput) ||
+          manifest.description.toLowerCase().includes(this.searchInput) ||
+          (manifest.credits &&
+            manifest.credits.map((obj) => obj.name.toLowerCase()).some((author) => author.includes(this.searchInput)));
+
+        // Order for this array matters
+        const results = this.addonListObjs
+          .filter((addon) => matchesSearch(addon.manifest));
+        for (const obj of this.addonListObjs) obj.visible = results.includes(obj);
+        return this.addonListObjs.sort((a, b) => results.indexOf(b) - results.indexOf(a));
       },
       version() {
         return chrome.runtime.getManifest().version;
@@ -357,8 +372,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     },
     watch: {
       searchInputReal(newValue) {
-        if (this.searchLoaded) this.searchInput = newValue;
-      },
+        this.searchInput = newValue;
+      }
     },
     ready() {
       // Needed in Firefox and slower Chrome - autofocus is weird
@@ -527,18 +542,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
     vue.loaded = true;
     if (isIframe) setTimeout(() => document.getElementById("searchBox").focus(), 0);
-    let i = 0;
-    document.getElementById("searchBox").addEventListener("input", function thisFunction() {
-      i++;
-      let thisI = i;
-      setTimeout(() => {
-        if (i === thisI) {
-          vue.searchLoaded = true;
-          vue.searchInput = vue.searchInputReal;
-          document.getElementById("searchBox").removeEventListener("input", thisFunction);
-        }
-      }, 350);
-    });
     setTimeout(handleKeySettings, 0);
     setTimeout(() => {
       // Set hash again after loading addons, to force scroll to addon

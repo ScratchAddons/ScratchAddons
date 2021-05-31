@@ -176,20 +176,11 @@
             </div> -->
             <addon-group-header v-if="addon.headerAbove" :group="addon.group"></addon-group-header>
             <addon-body
+              :visible="addon.visible"
+              v-show="addon.visible && addon.group.expanded"
               :addon="addon.manifest"
               :group-id="addon.group.id"
               :group-expanded="addon.group.expanded"
-            ></addon-body>
-          </template>
-
-          <!-- Search pseudogroup -->
-          <!-- Must be below real groups to make index.html/#addon-addonid work -->
-          <template v-if="searchLoaded">
-            <addon-body
-              v-for="addonId of searchAddonOrder"
-              :addon="manifestsById[addonId]"
-              group-id="search"
-              :group-expanded="searchInput !== ''"
             ></addon-body>
           </template>
         </div>

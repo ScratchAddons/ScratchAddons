@@ -2,7 +2,7 @@ const isIframe = window.parent !== window;
 
 export default async function ({ template }) {
   const AddonBody = Vue.extend({
-    props: ["addon", "groupId", "groupExpanded"],
+    props: ["addon", "groupId", "groupExpanded", "visible"],
     template,
     data() {
       return {
@@ -23,24 +23,10 @@ export default async function ({ template }) {
         return this.$root.addonSettings;
       },
       addonMatchesFilters() {
-        if (this.groupId !== "search" && this.searchInput !== "") return false;
-        if (!this.addon._wasEverEnabled) this.addon._wasEverEnabled = this.addon._enabled;
-
-        const search = this.searchInput.toLowerCase();
-
-        const matchesSearch =
-          this.searchInput === "" ||
-          this.addon.name.toLowerCase().includes(search) ||
-          this.addon._addonId.toLowerCase().includes(search) ||
-          this.addon.description.toLowerCase().includes(search) ||
-          (this.addon.credits &&
-            this.addon.credits.map((obj) => obj.name.toLowerCase()).some((author) => author.includes(search)));
-        // Show disabled easter egg addons only if category is easterEgg
         const matchesEasterEgg = this.addon.tags.includes("easterEgg")
-          ? this.$root.selectedCategory === "easterEgg" || this.addon._wasEverEnabled
-          : true;
-
-        return matchesSearch && matchesEasterEgg;
+        ? this.$root.selectedCategory === "easterEgg" || this.addon._wasEverEnabled
+        : true;
+        return this.visible && matchesEasterEgg;
       },
     },
     methods: {
