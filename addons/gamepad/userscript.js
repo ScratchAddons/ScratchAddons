@@ -135,10 +135,7 @@ export default async function ({ addon, global, console, msg }) {
       console.warn("Could not export gamepad settings");
       return;
     }
-    // TODO: translate
-    const text = `Placeholder text 123 todo figure out what to put here\n${JSON.stringify(
-      exported
-    )}${GAMEPAD_CONFIG_MAGIC}`;
+    const text = `${msg("config-header")}\n${JSON.stringify(exported)}${GAMEPAD_CONFIG_MAGIC}`;
     const existingComment = findOptionsComment();
     if (existingComment) {
       existingComment.text = text;
