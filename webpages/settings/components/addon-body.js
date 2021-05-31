@@ -2,7 +2,7 @@ const isIframe = window.parent !== window;
 
 export default async function ({ template }) {
   const AddonBody = Vue.extend({
-    props: ["addon", "groupId", "groupExpanded"],
+    props: ["addon", "groupId", "groupExpanded", "visible"],
     template,
     data() {
       return {

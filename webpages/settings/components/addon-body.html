@@ -1,5 +1,5 @@
 <template>
-  <div class="addon-body" :id="'addon-' + addon._addonId">
+  <div class="addon-body" v-show="visible && groupExpanded" :id="'addon-' + addon._addonId">
     <div class="addon-topbar">
       <div class="clickeable-area" @click="expanded = !expanded">
         <div class="btn-dropdown">
