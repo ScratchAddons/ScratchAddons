@@ -72,8 +72,8 @@
     <link rel="modulepreload" href="components/addon-setting.js" />
     <link rel="preload" href="components/addon-tag.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/addon-tag.js" />
-    <link rel="preload" href="components/addon-group.html" as="fetch" crossorigin />
-    <link rel="modulepreload" href="components/addon-group.js" />
+    <link rel="preload" href="components/addon-group-header.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/addon-group-header.js" />
     <link rel="preload" href="components/addon-body.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/addon-body.js" />
     <link rel="preload" href="components/category-selector.html" as="fetch" crossorigin />
@@ -174,7 +174,7 @@
               <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
               <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
             </div>
-            <addon-group :group="group"></addon-group>
+            <addon-group-header :group="group"></addon-group-header>
           </template>
 
           <!-- Search pseudogroup -->

@@ -40,7 +40,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     "webpages/settings/components/reset-dropdown",
     "webpages/settings/components/addon-setting",
     "webpages/settings/components/addon-tag",
-    "webpages/settings/components/addon-group",
+    "webpages/settings/components/addon-group-header",
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
   ]);
