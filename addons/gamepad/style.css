@@ -53,3 +53,7 @@
 .sa-gamepad-small .sa-gamepad-spacer {
   display: none !important;
 }
+
+.sa-gamepad-cursor-visible [class^="stage_stage_"] {
+  cursor: none;
+}

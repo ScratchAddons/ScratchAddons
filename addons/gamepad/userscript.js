@@ -238,6 +238,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const virtualCursorSetVisible = (visible) => {
     virtualCursorContainer.hidden = !visible;
+    document.body.classList.toggle('sa-gamepad-cursor-visible', visible);
     clearTimeout(hideCursorTimeout);
     if (visible) {
       hideCursorTimeout = setTimeout(virtualCursorHide, 8000);
