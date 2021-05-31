@@ -203,10 +203,10 @@ class GamepadData {
         return key;
       };
       const getPrimaryAction = () => {
-        if (usesArrows) {
+        if (usesArrows && usedKeys.has("ArrowUp")) {
           return "ArrowUp";
         }
-        if (usesWASD) {
+        if (usesWASD && usedKeys.has("w")) {
           return "w";
         }
         return findKey(possibleActionKeys);
