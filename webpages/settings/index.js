@@ -195,7 +195,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
             manifest.credits.map((obj) => obj.name.toLowerCase()).some((author) => author.includes(this.searchInput)));
 
         // Order for this array matters
-        const results = this.addonListObjs.filter((addon, i) => !addon.duplicate && matchesSearch(addon.manifest));
+        const results = this.addonListObjs
+          .filter((addon, i) => !addon.duplicate && matchesSearch(addon.manifest))
+          .sort((a, b) => b.naturalIndex - a.naturalIndex);
         for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
         return this.addonListObjs.sort((a, b) => results.indexOf(b) - results.indexOf(a));
       },
