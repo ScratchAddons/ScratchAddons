@@ -374,6 +374,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         this.searchInput = newValue;
       },
       selectedCategory(newValue) {
+        // TODO: easter eggs show, avoid easter egg poofing
         this.addonListObjs.forEach(
           (obj) => (obj.matchesCategory = newValue === "all" || obj.manifest._categories.includes(newValue))
         );

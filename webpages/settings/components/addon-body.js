@@ -2,7 +2,7 @@ const isIframe = window.parent !== window;
 
 export default async function ({ template }) {
   const AddonBody = Vue.extend({
-    props: ["addon", "groupId", "groupExpanded", "visible"],
+    props: ["addon", "groupId", "groupExpanded"],
     template,
     data() {
       return {
@@ -10,20 +10,11 @@ export default async function ({ template }) {
       };
     },
     computed: {
-      shouldShow() {
-        return this.addonMatchesFilters;
-      },
       searchInput() {
         return this.$root.searchInput;
       },
       addonSettings() {
         return this.$root.addonSettings;
-      },
-      addonMatchesFilters() {
-        const matchesEasterEgg = this.addon.tags.includes("easterEgg")
-        ? this.$root.selectedCategory === "easterEgg" || this.addon._wasEverEnabled
-        : true;
-        return this.visible && matchesEasterEgg && (this.$root.searchInput === "" ? this.groupExpanded : true);
       },
     },
     methods: {
