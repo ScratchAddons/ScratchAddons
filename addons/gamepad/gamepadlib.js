@@ -128,7 +128,7 @@ const transformAndCopyMapping = (mapping) => {
     // no-op
   } else {
     console.warn("unknown mapping type", copy.type);
-    return {type: "none"};
+    return { type: "none" };
   }
   return copy;
 };
@@ -167,8 +167,13 @@ class GamepadData {
       const usedKeys = this.gamepadLib.hints.usedKeys;
       const alreadyUsedKeys = new Set();
       const { usesArrows, usesWASD } = getMovementConfiguration(usedKeys);
-      const ACTIONS_KEYS = [
-        // Some common keys for common actions
+      if (usesWASD) {
+        alreadyUsedKeys.add("w");
+        alreadyUsedKeys.add("a");
+        alreadyUsedKeys.add("s");
+        alreadyUsedKeys.add("d");
+      }
+      const possibleActionKeys = [
         " ",
         "Enter",
         "e",
@@ -178,11 +183,10 @@ class GamepadData {
         "z",
         "x",
         "c",
-        // If none of those exist, just fall back to using any key.
         ...Array.from(usedKeys).filter((i) => i.length === 1),
       ];
-      const PAUSE_KEYS = ["p"];
-  
+      const possiblePauseKeys = ["p"];
+
       const findKey = (keys, def = "none") => {
         for (const key of keys) {
           if (usedKeys.has(key) && !alreadyUsedKeys.has(key)) {
@@ -205,19 +209,19 @@ class GamepadData {
           reserveKey(" ");
           return reserveKey("w");
         }
-        return findKey(ACTIONS_KEYS);
+        return findKey(possibleActionKeys);
       };
       const getAction2 = () => {
-        return findKey(ACTIONS_KEYS);
+        return findKey(possibleActionKeys);
       };
       const getAction3 = () => {
-        return findKey(ACTIONS_KEYS);
+        return findKey(possibleActionKeys);
       };
       const getAction4 = () => {
-        return findKey(ACTIONS_KEYS);
+        return findKey(possibleActionKeys);
       };
       const getPauseKey = () => {
-        return findKey(PAUSE_KEYS);
+        return findKey(possiblePauseKeys);
       };
       const getUp = () => {
         if (usesArrows || !usesWASD) return "ArrowUp";
@@ -371,7 +375,7 @@ class GamepadData {
         if (button.high === "none") {
           button.type = "none";
         }
-      }  
+      }
     }
     while (buttons.length < this.gamepad.buttons.length) {
       buttons.push({
@@ -447,7 +451,7 @@ class GamepadLib extends EventTarget {
 
     this.hints = {
       usedKeys: new Set(),
-      importedSettings: null
+      importedSettings: null,
     };
 
     this.addEventHandlers();
@@ -989,7 +993,7 @@ class GamepadEditor extends EventTarget {
     }
     return {
       axes: gamepadData.axesMappings.map(prepareMappingForExport),
-      buttons: gamepadData.buttonMappings.map(prepareMappingForExport)
+      buttons: gamepadData.buttonMappings.map(prepareMappingForExport),
     };
   }
 

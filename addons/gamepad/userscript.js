@@ -58,23 +58,23 @@ export default async function ({ addon, global, console, msg }) {
     if (!comment) {
       return;
     }
-    const lineWithMagic = comment.text.split('\n').find(i => i.endsWith(GAMEPAD_CONFIG_MAGIC));
+    const lineWithMagic = comment.text.split("\n").find((i) => i.endsWith(GAMEPAD_CONFIG_MAGIC));
     if (!lineWithMagic) {
-      console.warn('Gamepad comment does not contain valid line');
+      console.warn("Gamepad comment does not contain valid line");
       return;
     }
     const jsonText = lineWithMagic.substr(0, lineWithMagic.length - GAMEPAD_CONFIG_MAGIC.length);
     let parsed;
     try {
       parsed = JSON.parse(jsonText);
-      if (!parsed || typeof parsed !== 'object') {
-        throw new Error('Invalid object');
+      if (!parsed || typeof parsed !== "object") {
+        throw new Error("Invalid object");
       }
       if (!Array.isArray(parsed.buttons) || !Array.isArray(parsed.axes)) {
-        throw new Error('Missing data');
+        throw new Error("Missing data");
       }
     } catch (e) {
-      console.warn('Gamepad comment has invalid JSON', e);
+      console.warn("Gamepad comment has invalid JSON", e);
       return null;
     }
     return parsed;
@@ -82,7 +82,7 @@ export default async function ({ addon, global, console, msg }) {
 
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
-  
+
   const parsedOptions = parseOptionsComment();
   if (parsedOptions) {
     gamepad.hints.importedSettings = parsedOptions;
@@ -136,14 +136,16 @@ export default async function ({ addon, global, console, msg }) {
       return;
     }
     // TODO: translate
-    const text = `Placeholder text 123 todo figure out what to put here\n${JSON.stringify(exported)}${GAMEPAD_CONFIG_MAGIC}`;
+    const text = `Placeholder text 123 todo figure out what to put here\n${JSON.stringify(
+      exported
+    )}${GAMEPAD_CONFIG_MAGIC}`;
     const existingComment = findOptionsComment();
     if (existingComment) {
       existingComment.text = text;
     } else {
       const target = vm.runtime.getTargetForStage();
       // TODO uid()?
-      target.createComment(Math.random() + '', null, text, 50, 50, 350, 150, false);
+      target.createComment(Math.random() + "", null, text, 50, 50, 350, 150, false);
     }
     vm.runtime.emitProjectChanged();
     if (vm.editingTarget === vm.runtime.getTargetForStage) {
@@ -209,13 +211,17 @@ export default async function ({ addon, global, console, msg }) {
 
     editor.focus();
   });
-  document.addEventListener("click", (e) => {
-    if (e.target.closest("[class*='stage-header_stage-button-first']")) {
-      document.body.classList.add("sa-gamepad-small");
-    } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
-      document.body.classList.remove("sa-gamepad-small");
-    }
-  }, { capture: true });
+  document.addEventListener(
+    "click",
+    (e) => {
+      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
+        document.body.classList.add("sa-gamepad-small");
+      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
+        document.body.classList.remove("sa-gamepad-small");
+      }
+    },
+    { capture: true }
+  );
 
   const virtualCursorContainer = document.createElement("div");
   virtualCursorContainer.hidden = true;
