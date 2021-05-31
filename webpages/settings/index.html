@@ -176,7 +176,7 @@
             </div> -->
             <addon-group-header v-if="addon.headerAbove" :group="addon.group"></addon-group-header>
             <addon-body
-              :visible="addon.visible && addon.matchesCategory"
+              :visible="addon.matchesSearch && addon.matchesCategory"
               :addon="addon.manifest"
               :group-id="addon.group.id"
               :group-expanded="addon.group.expanded"

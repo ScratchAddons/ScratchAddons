@@ -184,7 +184,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     computed: {
       addonList() {
         if (!this.searchInput) {
-          this.addonListObjs.forEach((obj) => (obj.visible = true));
+          this.addonListObjs.forEach((obj) => (obj.matchesSearch = true));
           return this.addonListObjs.sort((b, a) => b.naturalIndex - a.naturalIndex);
         }
 
@@ -197,7 +197,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
         // Order for this array matters
         const results = this.addonListObjs.filter((addon, i) => !addon.duplicate && matchesSearch(addon.manifest));
-        for (const obj of this.addonListObjs) obj.visible = results.includes(obj);
+        for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
         return this.addonListObjs.sort((a, b) => results.indexOf(b) - results.indexOf(a));
       },
       version() {
@@ -535,7 +535,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         const obj = {};
         obj.manifest = vue.manifestsById[addonId];
         obj.group = group;
-        obj.visible = true;
+        obj.matchesSearch = true;
         obj.matchesCategory = true;
         obj.naturalIndex = naturalIndex;
         obj.headerAbove = groupIndex === 0;
