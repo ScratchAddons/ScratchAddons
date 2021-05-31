@@ -563,10 +563,11 @@ class GamepadLib extends EventTarget {
 
   update(time) {
     if (this.currentTime === null) {
-      this.deltaTime = 60 / 1000; // doesn't matter what this is, it's just the first frame
+      this.deltaTime = 0; // doesn't matter what this is, it's just the first frame
     } else {
       this.deltaTime = time - this.currentTime;
     }
+    this.deltaTime = Math.max(Math.min(this.deltaTime, 1000), 0);
     this.currentTime = time;
 
     this.animationFrame = requestAnimationFrame(this.update);
