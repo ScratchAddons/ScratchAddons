@@ -150,8 +150,21 @@ export default async function ({ addon, global, console, msg }) {
       existingComment.text = text;
     } else {
       const target = vm.runtime.getTargetForStage();
-      // TODO uid()?
-      target.createComment(Math.random() + "", null, text, 50, 50, 350, 150, false);
+      target.createComment(
+        // comment ID, just has to be a random string
+        Math.random() + "",
+        // block ID
+        null,
+        // text
+        text,
+        // x, y, width, height
+        50,
+        50,
+        350,
+        150,
+        // minimized
+        false
+      );
     }
     vm.runtime.emitProjectChanged();
     if (vm.editingTarget === vm.runtime.getTargetForStage()) {
