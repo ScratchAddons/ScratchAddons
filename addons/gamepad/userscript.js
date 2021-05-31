@@ -148,7 +148,7 @@ export default async function ({ addon, global, console, msg }) {
       target.createComment(Math.random() + "", null, text, 50, 50, 350, 150, false);
     }
     vm.runtime.emitProjectChanged();
-    if (vm.editingTarget === vm.runtime.getTargetForStage) {
+    if (vm.editingTarget === vm.runtime.getTargetForStage()) {
       vm.emitWorkspaceUpdate();
     }
   };
@@ -204,7 +204,7 @@ export default async function ({ addon, global, console, msg }) {
     modalContent.className = "sa-gamepad-popup-content";
     if (GamepadLib.browserHasBrokenGamepadAPI()) {
       const warning = document.createElement("div");
-      warning.textContent = msg("browser-support")
+      warning.textContent = msg("browser-support");
       warning.className = "sa-gamepad-browser-support-warning";
       modalContent.appendChild(warning);
     }
@@ -244,7 +244,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const virtualCursorSetVisible = (visible) => {
     virtualCursorContainer.hidden = !visible;
-    document.body.classList.toggle('sa-gamepad-cursor-visible', visible);
+    document.body.classList.toggle("sa-gamepad-cursor-visible", visible);
     clearTimeout(hideCursorTimeout);
     if (visible) {
       hideCursorTimeout = setTimeout(virtualCursorHide, 8000);
