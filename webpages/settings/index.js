@@ -165,7 +165,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         searchLoaded: false,
         manifests: [],
         manifestsById: {},
-        searchAddonOrder: [],
         selectedCategory: "all",
         searchInput: "",
         searchInputReal: "",
@@ -520,15 +519,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         })
         .map((addon) => addon._addonId);
     });
-
-    // Define order when searching. Temporal until we
-    // can sort by relevance depending on the query
-    vue.searchAddonOrder = manifests
-      .sort((a, b) => {
-        if (a.manifest._enabled ^ b.manifest._enabled) return b.manifest._enabled - a.manifest._enabled;
-        else return a.manifest.name.localeCompare(b.manifest.name);
-      })
-      .map((obj) => obj.addonId);
 
     let naturalIndex = 0; // Index when not searching
     for (const group of vue.addonGroups) {
