@@ -11,12 +11,9 @@ export default async function ({ template }) {
         return this.shownCount > 0;
       },
       shownCount() {
-        return 1; // temp
-
-        // Recompute after root loaded
-        void this.$root.loaded;
-
-        return this.$children.filter((addon) => addon.shouldShow).length;
+        return this.$root.addonListObjs.filter(
+          (addon) => addon.group === this.group && addon.matchesSearch && addon.matchesCategory
+        ).length;
       },
       manifestsById() {
         return this.$root.manifestsById;
