@@ -7,7 +7,7 @@ export default async function ({ template }) {
     },
     computed: {
       shouldShow() {
-        if (this.group.id === "new" && this.$root.searchInput !== "") return false;
+        if (this.$root.searchInput !== "") return false;
         return this.shownCount > 0;
       },
       shownCount() {
