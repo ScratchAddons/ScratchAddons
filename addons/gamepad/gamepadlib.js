@@ -94,6 +94,10 @@ const defaultAxesMappings = {
 };
 
 const transformAndCopyMapping = (mapping) => {
+  if (typeof mapping !== 'object' || !mapping) {
+    console.warn("invalid mapping", mapping);
+    return { type: "none" };
+  }
   const copy = Object.assign({}, mapping);
   if (copy.type === "key") {
     copy._state = OFF;
