@@ -34,6 +34,10 @@ export default async function ({ addon, global, console, msg }) {
     for (const blocks of allBlocks) {
       for (const block of Object.values(blocks._blocks)) {
         if (block.opcode === "event_whenkeypressed" || block.opcode === "sensing_keyoptions") {
+          // For blocks like "key (my variable) pressed?", the sensing_keyoptions still exists but has a null parent.
+          if (block.opcode === "sensing_keyoptions" && !block.parent) {
+            continue;
+          }
           const key = block.fields.KEY_OPTION.value;
           result.add(scratchToKeyToKey(key));
         }
