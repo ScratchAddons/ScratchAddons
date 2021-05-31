@@ -87,12 +87,17 @@ export default async function ({ addon, global, console, msg }) {
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
 
-  const parsedOptions = parseOptionsComment();
-  if (parsedOptions) {
-    gamepad.hints.importedSettings = parsedOptions;
-  } else {
-    gamepad.hints.usedKeys = getKeysUsedByProject();
-  }
+  gamepad.getHintsLazily = () => {
+    const parsedOptions = parseOptionsComment();
+    if (parsedOptions) {
+      return {
+        importedSettings: parsedOptions
+      };
+    }
+    return {
+      usedKeys: getKeysUsedByProject()
+    };
+  };
 
   if (addon.settings.get("hide")) {
     await new Promise((resolve) => {

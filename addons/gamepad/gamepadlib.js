@@ -437,6 +437,7 @@ class GamepadLib extends EventTarget {
     this.hints = {
       usedKeys: new Set(),
       importedSettings: null,
+      generated: false,
     };
 
     this.addEventHandlers();
@@ -461,7 +462,18 @@ class GamepadLib extends EventTarget {
     });
   }
 
+  ensureHintsGenerated() {
+    if (this.hints.generated) {
+      return;
+    }
+    if (this.getHintsLazily) {
+      Object.assign(this.hints, this.getHintsLazily());
+    }
+    this.hints.generated = true;
+  }
+
   handleConnect(e) {
+    this.ensureHintsGenerated();
     for (const callback of this.connectCallbacks) {
       callback();
     }
