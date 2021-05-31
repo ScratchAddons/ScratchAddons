@@ -202,6 +202,12 @@ export default async function ({ addon, global, console, msg }) {
 
     const modalContent = document.createElement("div");
     modalContent.className = "sa-gamepad-popup-content";
+    if (GamepadLib.browserHasBrokenGamepadAPI()) {
+      const warning = document.createElement("div");
+      warning.textContent = msg("browser-support")
+      warning.className = "sa-gamepad-browser-support-warning";
+      modalContent.appendChild(warning);
+    }
     modalContent.appendChild(editorEl);
 
     modalContentContainer.appendChild(modalHeaderContainer);

@@ -57,3 +57,8 @@
 .sa-gamepad-cursor-visible [class^="stage_stage_"] {
   cursor: none;
 }
+
+.sa-gamepad-browser-support-warning {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
