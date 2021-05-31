@@ -91,11 +91,11 @@ export default async function ({ addon, global, console, msg }) {
     const parsedOptions = parseOptionsComment();
     if (parsedOptions) {
       return {
-        importedSettings: parsedOptions
+        importedSettings: parsedOptions,
       };
     }
     return {
-      usedKeys: getKeysUsedByProject()
+      usedKeys: getKeysUsedByProject(),
     };
   };
 
