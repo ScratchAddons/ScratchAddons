@@ -177,7 +177,6 @@
             <addon-group-header v-if="addon.headerAbove" :group="addon.group"></addon-group-header>
             <addon-body
               :visible="addon.visible"
-              v-show="addon.visible && addon.group.expanded"
               :addon="addon.manifest"
               :group-id="addon.group.id"
               :group-expanded="addon.group.expanded"

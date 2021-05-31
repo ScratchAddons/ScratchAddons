@@ -26,7 +26,7 @@ export default async function ({ template }) {
         const matchesEasterEgg = this.addon.tags.includes("easterEgg")
         ? this.$root.selectedCategory === "easterEgg" || this.addon._wasEverEnabled
         : true;
-        return this.visible && matchesEasterEgg;
+        return this.visible && matchesEasterEgg && (this.$root.searchInput === "" ? this.groupExpanded : true);
       },
     },
     methods: {
