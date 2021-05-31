@@ -196,8 +196,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
             manifest.credits.map((obj) => obj.name.toLowerCase()).some((author) => author.includes(this.searchInput)));
 
         // Order for this array matters
-        const results = this.addonListObjs
-          .filter((addon) => matchesSearch(addon.manifest));
+        const results = this.addonListObjs.filter((addon, i) => !addon.duplicate && matchesSearch(addon.manifest));
         for (const obj of this.addonListObjs) obj.visible = results.includes(obj);
         return this.addonListObjs.sort((a, b) => results.indexOf(b) - results.indexOf(a));
       },
@@ -373,7 +372,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     watch: {
       searchInputReal(newValue) {
         this.searchInput = newValue;
-      }
+      },
     },
     ready() {
       // Needed in Firefox and slower Chrome - autofocus is weird
@@ -535,6 +534,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         obj.naturalIndex = naturalIndex;
         obj.headerAbove = groupIndex === 0;
         obj.footerBelow = groupIndex === group.addonIds.length - 1;
+        obj.duplicate = Boolean(vue.addonListObjs.find((addon) => addon.manifest._addonId === addonId));
         vue.addonListObjs.push(obj);
         naturalIndex++;
       });
