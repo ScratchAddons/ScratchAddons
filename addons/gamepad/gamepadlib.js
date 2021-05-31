@@ -714,6 +714,7 @@ class GamepadEditor extends EventTarget {
     const input = document.createElement("input");
     input.readOnly = true;
     input.className = "gamepadlib-keyinput";
+    input.title = this.msg("keyinput-title");
     input.dataset.index = index;
     input.id = buttonHtmlId(index);
 
