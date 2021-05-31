@@ -178,9 +178,14 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         searchMsg: this.msg("search"),
         browserLevelPermissions,
         grantedOptionalPermissions,
+        addonListObjs: [],
       };
     },
     computed: {
+      addonList() {
+        // Search not considered
+        return this.addonListObjs.slice().sort((b, a) => b.naturalIndex - a.naturalIndex);
+      },
       version() {
         return chrome.runtime.getManifest().version;
       },
@@ -504,6 +509,21 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         else return a.manifest.name.localeCompare(b.manifest.name);
       })
       .map((obj) => obj.addonId);
+
+    let naturalIndex = 0; // Index when not searching
+    for (const group of vue.addonGroups) {
+      group.addonIds.forEach((addonId, groupIndex) => {
+        const obj = {};
+        obj.manifest = vue.manifestsById[addonId];
+        obj.group = group;
+        obj.visible = true;
+        obj.naturalIndex = naturalIndex;
+        obj.headerAbove = groupIndex === 0;
+        obj.footerBelow = groupIndex === group.addonIds.length - 1;
+        vue.addonListObjs.push(obj);
+        naturalIndex++;
+      });
+    }
 
     vue.loaded = true;
     if (isIframe) setTimeout(() => document.getElementById("searchBox").focus(), 0);
