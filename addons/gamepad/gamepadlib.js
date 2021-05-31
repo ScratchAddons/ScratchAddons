@@ -138,6 +138,12 @@ const prepareMappingForExport = (mapping) => {
   delete copy._isDown;
   return copy;
 };
+const prepareAxisMappingForExport = prepareMappingForExport;
+const prepareButtonMappingForExport = (mapping) => {
+  const copy = prepareMappingForExport(mapping);
+  delete copy.deadZone;
+  return copy;
+};
 
 const getMovementConfiguration = (usedKeys) => ({
   usesArrows:
@@ -980,8 +986,8 @@ class GamepadEditor extends EventTarget {
       return null;
     }
     return {
-      axes: gamepadData.axesMappings.map(prepareMappingForExport),
-      buttons: gamepadData.buttonMappings.map(prepareMappingForExport),
+      axes: gamepadData.axesMappings.map(prepareAxisMappingForExport),
+      buttons: gamepadData.buttonMappings.map(prepareButtonMappingForExport),
     };
   }
 
