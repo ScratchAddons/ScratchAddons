@@ -11,6 +11,8 @@ export default async function ({ template }) {
         return this.shownCount > 0;
       },
       shownCount() {
+        return 1; // temp
+
         // Recompute after root loaded
         void this.$root.loaded;
 
