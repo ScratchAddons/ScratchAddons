@@ -373,6 +373,11 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       searchInputReal(newValue) {
         this.searchInput = newValue;
       },
+      selectedCategory(newValue) {
+        this.addonListObjs.forEach(
+          (obj) => (obj.matchesCategory = newValue === "all" || obj.manifest._categories.includes(newValue))
+        );
+      },
     },
     ready() {
       // Needed in Firefox and slower Chrome - autofocus is weird
@@ -531,6 +536,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         obj.manifest = vue.manifestsById[addonId];
         obj.group = group;
         obj.visible = true;
+        obj.matchesCategory = true;
         obj.naturalIndex = naturalIndex;
         obj.headerAbove = groupIndex === 0;
         obj.footerBelow = groupIndex === group.addonIds.length - 1;

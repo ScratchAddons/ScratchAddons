@@ -11,10 +11,7 @@ export default async function ({ template }) {
     },
     computed: {
       shouldShow() {
-        const matches =
-          this.$root.selectedCategory === "all" || this.addon._categories.includes(this.$root.selectedCategory);
-        if (matches) return this.addonMatchesFilters;
-        else return false;
+        return this.addonMatchesFilters;
       },
       searchInput() {
         return this.$root.searchInput;
