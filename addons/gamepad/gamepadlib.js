@@ -173,19 +173,22 @@ class GamepadData {
         alreadyUsedKeys.add("s");
         alreadyUsedKeys.add("d");
       }
+      const possiblePauseKeys = [
+        // Restart keys, pause keys, other potentially dangerous keys
+        "p",
+        "q",
+        "r",
+      ];
       const possibleActionKeys = [
         " ",
         "Enter",
         "e",
-        "r",
-        "q",
         "f",
         "z",
         "x",
         "c",
-        ...Array.from(usedKeys).filter((i) => i.length === 1),
+        ...Array.from(usedKeys).filter((i) => i.length === 1 && !possiblePauseKeys.includes(i)),
       ];
-      const possiblePauseKeys = ["p"];
 
       const findKey = (keys, def = "none") => {
         for (const key of keys) {
@@ -199,25 +202,16 @@ class GamepadData {
         alreadyUsedKeys.add(key);
         return key;
       };
-      const getAction1 = () => {
+      const getPrimaryAction = () => {
         if (usesArrows) {
-          // Up arrow and space probably do the same thing.
-          reserveKey(" ");
           return "ArrowUp";
         }
         if (usesWASD) {
-          reserveKey(" ");
-          return reserveKey("w");
+          return "w";
         }
         return findKey(possibleActionKeys);
       };
-      const getAction2 = () => {
-        return findKey(possibleActionKeys);
-      };
-      const getAction3 = () => {
-        return findKey(possibleActionKeys);
-      };
-      const getAction4 = () => {
+      const getSecondaryAction = () => {
         return findKey(possibleActionKeys);
       };
       const getPauseKey = () => {
@@ -240,137 +234,122 @@ class GamepadData {
         return "a";
       };
 
-      buttons = [
-        {
-          /*
-          Button 0
-          Xbox: A
-          SNES-like: B
-          */
-          type: "key",
-          high: getAction1(),
-        },
-        {
-          /*
-          Button 1
-          Xbox: B
-          SNES-like: A
-          */
-          type: "key",
-          high: getAction2(),
-        },
-        {
-          /*
-          Button 2
-          Xbox: X
-          SNES-like: Y
-          */
-          type: "key",
-          high: getAction3(),
-        },
-        {
-          /*
-          Button 3
-          Xbox: Y
-          SNES-like: X
-          */
-          type: "key",
-          high: getAction4(),
-        },
-        {
-          /*
-          Button 4
-          Xbox: LB
-          SNES-like: Left trigger
-          */
-          type: "mousedown",
-        },
-        {
-          /*
-          Button 5
-          Xbox: RB
-          */
-          type: "mousedown",
-        },
-        {
-          /*
-          Button 6
-          Xbox: LT
-          */
-          type: "mousedown",
-        },
-        {
-          /*
-          Button 7
-          Xbox: RT
-          SNES-like: Right trigger
-          */
-          type: "mousedown",
-        },
-        {
-          /*
-          Button 8
-          Xbox: Change view
-          SNES-like: Select
-          */
-          type: "none",
-        },
-        {
-          /*
-          Button 9
-          Xbox: Menu
-          SNES-like: Start
-          */
-          type: "key",
-          high: getPauseKey(),
-        },
-        {
-          /*
-          Button 10
-          Xbox: Left analog press
-          */
-          type: "none",
-        },
-        {
-          /*
-          Button 11
-          Xbox: Right analog press
-          */
-          type: "none",
-        },
-        {
-          /*
-          Button 12
-          Xbox: D-pad up
-          */
-          type: "key",
-          high: getUp(),
-        },
-        {
-          /*
-          Button 13
-          Xbox: D-pad down
-          */
-          type: "key",
-          high: getDown(),
-        },
-        {
-          /*
-          Button 14
-          Xbox: D-pad left
-          */
-          type: "key",
-          high: getLeft(),
-        },
-        {
-          /*
-          Button 15
-          Xbox: D-pad right
-          */
-          type: "key",
-          high: getRight(),
-        },
-      ];
+      // Set indices "manually" because we don't necessarily want to evaluate them in order.
+      buttons = [];
+      buttons[0] = {
+        /*
+        Xbox: A
+        SNES-like: B
+        */
+        type: "key",
+        high: getPrimaryAction(),
+      };
+      buttons[1] = {
+        /*
+        Xbox: B
+        SNES-like: A
+        */
+        type: "key",
+        high: getSecondaryAction(),
+      };
+      buttons[2] = {
+        /*
+        Xbox: X
+        SNES-like: Y
+        */
+        type: "key",
+        high: getSecondaryAction(),
+      };
+      buttons[3] = {
+        /*
+        Xbox: Y
+        SNES-like: X
+        */
+        type: "key",
+        high: getSecondaryAction(),
+      };
+      buttons[4] = {
+        /*
+        Xbox: LB
+        SNES-like: Left trigger
+        */
+        type: "mousedown",
+      };
+      buttons[5] = {
+        /*
+        Xbox: RB
+        */
+        type: "mousedown",
+      };
+      buttons[6] = {
+        /*
+        Xbox: LT
+        */
+        type: "mousedown",
+      };
+      buttons[7] = {
+        /*
+        Xbox: RT
+        SNES-like: Right trigger
+        */
+        type: "mousedown",
+      };
+      buttons[9] = {
+        /*
+        Xbox: Menu
+        SNES-like: Start
+        */
+        type: "key",
+        high: getPauseKey(),
+      };
+      buttons[8] = {
+        /*
+        Xbox: Change view
+        SNES-like: Select
+        */
+        type: "key",
+        high: getPauseKey(),
+      };
+      buttons[10] = {
+        /*
+        Xbox: Left analog press
+        */
+        type: "none",
+      };
+      buttons[11] = {
+        /*
+        Xbox: Right analog press
+        */
+        type: "none",
+      };
+      buttons[12] = {
+        /*
+        Xbox: D-pad up
+        */
+        type: "key",
+        high: getUp(),
+      };
+      buttons[13] = {
+        /*
+        Xbox: D-pad down
+        */
+        type: "key",
+        high: getDown(),
+      };
+      buttons[14] = {
+        /*
+        Xbox: D-pad left
+        */
+        type: "key",
+        high: getLeft(),
+      };
+      buttons[15] = {
+        /*
+        Xbox: D-pad right
+        */
+        type: "key",
+        high: getRight(),
+      };
       for (const button of buttons) {
         if (button.high === "none") {
           button.type = "none";
