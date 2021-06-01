@@ -208,19 +208,26 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for customCssVariables
   const getColor = (addonId, obj) => {
+    if (typeof obj === "string" || obj === undefined) return obj;
     let hex;
     switch (obj.type) {
       case "settingValue":
         return addonSettings[addonId][obj.settingId];
       case "textColor":
         hex = getColor(addonId, obj.source);
-        return textColorLib.textColor(hex, obj.black, obj.white, obj.threshold);
+        let black = getColor(addonId, obj.black);
+        let white = getColor(addonId, obj.white);
+        return textColorLib.textColor(hex, black, white, obj.threshold);
       case "multiply":
         hex = getColor(addonId, obj.source);
         return textColorLib.multiply(hex, obj);
       case "brighten":
         hex = getColor(addonId, obj.source);
         return textColorLib.brighten(hex, obj);
+      case "alphaBlend":
+        let opaqueHex = getColor(addonId, obj.opaqueSource);
+        let transparentHex = getColor(addonId, obj.transparentSource);
+        return textColorLib.alphaBlend(opaqueHex, transparentHex);
     }
   };
 
