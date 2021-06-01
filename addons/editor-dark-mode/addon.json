@@ -550,8 +550,8 @@
         "white": {
           "type": "brighten",
           "source": {
-          "type": "alphaBlend",
-          "opaqueSource": {
+            "type": "alphaBlend",
+            "opaqueSource": {
               "type": "settingValue",
               "settingId": "workspace"
             },
