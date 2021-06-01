@@ -4,6 +4,7 @@ import loadVueComponent from "../../libraries/common/load-vue-components.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
+import exampleManifest from "./data/example-manifest.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -177,7 +178,17 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         searchMsg: this.msg("search"),
         browserLevelPermissions,
         grantedOptionalPermissions,
-        addonListObjs: [],
+        addonListObjs: Array(25)
+          .fill("")
+          .map((s, i) => ({
+            group: addonGroups[0],
+            manifest: JSON.parse(JSON.stringify(exampleManifest)),
+            matchesCategory: true,
+            naturalIndex: i,
+            headerAbove: false,
+            footerBelow: false,
+            duplicate: false,
+          })),
       };
     },
     computed: {
@@ -525,7 +536,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     let naturalIndex = 0; // Index when not searching
     for (const group of vue.addonGroups) {
       group.addonIds.forEach((addonId, groupIndex) => {
-        const obj = {};
+        const cachedObj = vue.addonListObjs.find((o) => o.manifest._addonId === "example");
+        const obj = cachedObj || {};
         obj.manifest = vue.manifestsById[addonId];
         obj.group = group;
         obj.matchesSearch = true;
@@ -534,7 +546,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         obj.headerAbove = groupIndex === 0;
         obj.footerBelow = groupIndex === group.addonIds.length - 1;
         obj.duplicate = Boolean(vue.addonListObjs.find((addon) => addon.manifest._addonId === addonId));
-        vue.addonListObjs.push(obj);
+        if (!cachedObj) vue.addonListObjs.push(obj);
         naturalIndex++;
       });
     }

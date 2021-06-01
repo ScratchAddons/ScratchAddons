@@ -48,6 +48,7 @@
     <link rel="modulepreload" href="data/tags.js" />
     <link rel="modulepreload" href="data/addon-groups.js" />
     <link rel="modulepreload" href="data/categories.js" />
+    <link rel="modulepreload" href="data/example-manifest.js" />
 
     <!-- Preload images -->
     <link rel="preload" href="../../images/icons/switch.svg" as="image" />
@@ -164,7 +165,7 @@
           <button v-cloak v-else class="search-clear-button" @click="clearSearch()"></button>
         </div>
 
-        <div class="addons-container" v-cloak v-show="loaded">
+        <div class="addons-container" v-cloak>
           <template v-for="addon of addonList">
             <!-- <div
               id="iframe-fullscreen-suggestion"
