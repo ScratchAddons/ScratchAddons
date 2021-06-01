@@ -165,7 +165,7 @@
           <button v-cloak v-else class="search-clear-button" @click="clearSearch()"></button>
         </div>
 
-        <div class="addons-container" v-cloak>
+        <div class="addons-container"  :class="{placeholder: !loaded}" v-cloak>
           <template v-for="addon of addonList">
             <!-- <div
               id="iframe-fullscreen-suggestion"

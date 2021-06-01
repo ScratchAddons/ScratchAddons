@@ -99,6 +99,10 @@ h1 {
   height: 100vh;
 }
 
+.addons-container.placeholder {
+  padding-top: 43px;
+}
+
 @keyframes addonBlink {
   10% {
     border: 1px solid var(--accent-3);

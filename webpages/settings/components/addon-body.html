@@ -129,12 +129,12 @@
     display: flex;
     align-items: center;
   }
-  .addon-name > span:empty::before {
-    content: ".";
+  .addon-name > span:empty {
     display: inline-block;
     width: 150px;
+    height: 8px;
     background-color: gray;
-    color: gray;
+    border-radius: 3px;
   }
   .addon-topbar {
     height: 50px;

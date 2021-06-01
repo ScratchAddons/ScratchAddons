@@ -10,7 +10,7 @@ export default {
   _categories: ["editor"],
   _icon: "editor",
   _displayedAddonId: "",
-  _enabled: false,
+  _enabled: true,
   _addonId: "example",
   _groups: ["enabled"],
 };
