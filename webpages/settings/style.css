@@ -51,8 +51,8 @@ h1 {
   align-items: stretch;
 }
 
-.addon-group {
-  margin-bottom: 20px;
+.addon-group:not(:first-child) {
+  margin-top: 20px;
 }
 
 .addon-group > span {
@@ -92,7 +92,8 @@ h1 {
 
 .addons-container {
   overflow-y: auto;
-  padding: 10px 20px;
+  padding: 20px;
+  padding-top: 10px;
   scrollbar-width: thin;
   scrollbar-color: grey none;
   height: 100vh;
