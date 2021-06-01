@@ -101,6 +101,7 @@ h1 {
 
 .addons-container.placeholder {
   padding-top: 43px;
+  pointer-events: none;
 }
 
 @keyframes addonBlink {
