@@ -904,10 +904,10 @@ class GamepadEditor extends EventTarget {
       removeAllChildren(circleOverlay);
       if (mappingList[index].type === "key") {
         const buttons = [
-          this.createAxisButtonMapping(mappingList, index, "high"),
-          this.createAxisButtonMapping(mappingList, index, "low"),
-          this.createAxisButtonMapping(mappingList, index + 1, "high"),
           this.createAxisButtonMapping(mappingList, index + 1, "low"),
+          this.createAxisButtonMapping(mappingList, index, "low"),
+          this.createAxisButtonMapping(mappingList, index, "high"),
+          this.createAxisButtonMapping(mappingList, index + 1, "high"),
         ];
         for (const button of buttons) {
           button.addEventListener("mapping-changed", updateDropdownValue);
