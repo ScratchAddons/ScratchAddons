@@ -261,9 +261,15 @@ export default async function ({ addon, global, console, msg }) {
 
   let hideCursorTimeout;
 
+  const hideRealCursor = () => {
+    document.body.classList.add("sa-gamepad-hide-cursor");
+  };
+  const showRealCursor = () => {
+    document.body.classList.remove("sa-gamepad-hide-cursor");
+  };
   const virtualCursorSetVisible = (visible) => {
+    hideRealCursor();
     virtualCursorContainer.hidden = !visible;
-    document.body.classList.toggle("sa-gamepad-cursor-visible", visible);
     clearTimeout(hideCursorTimeout);
     if (visible) {
       hideCursorTimeout = setTimeout(virtualCursorHide, 8000);
@@ -285,6 +291,7 @@ export default async function ({ addon, global, console, msg }) {
 
   document.addEventListener("mousemove", () => {
     virtualCursorSetVisible(false);
+    showRealCursor();
   });
 
   let getCanvasSize;
