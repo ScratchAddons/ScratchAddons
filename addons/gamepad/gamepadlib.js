@@ -773,6 +773,7 @@ class GamepadEditor extends EventTarget {
       isAcceptingInput = false;
       input.blur();
       update();
+      input.dispatchEvent(new CustomEvent("mapping-changed"));
       this.changed();
     };
 
@@ -870,42 +871,51 @@ class GamepadEditor extends EventTarget {
       })
     );
 
-    if (mappingList[index].type === "key") {
-      if (
-        mappingList[index].high === defaultAxesMappings.wasd[0].high &&
-        mappingList[index].low === defaultAxesMappings.wasd[0].low &&
-        mappingList[index + 1].high === defaultAxesMappings.wasd[1].high &&
-        mappingList[index + 1].low === defaultAxesMappings.wasd[1].low
-      ) {
-        selector.value = "wasd";
-      } else if (
-        mappingList[index].high === defaultAxesMappings.arrows[0].high &&
-        mappingList[index].low === defaultAxesMappings.arrows[0].low &&
-        mappingList[index + 1].high === defaultAxesMappings.arrows[1].high &&
-        mappingList[index + 1].low === defaultAxesMappings.arrows[1].low
-      ) {
-        selector.value = "arrows";
+    const updateDropdownValue = () => {
+      if (mappingList[index].type === "key") {
+        if (
+          mappingList[index].high === defaultAxesMappings.wasd[0].high &&
+          mappingList[index].low === defaultAxesMappings.wasd[0].low &&
+          mappingList[index + 1].high === defaultAxesMappings.wasd[1].high &&
+          mappingList[index + 1].low === defaultAxesMappings.wasd[1].low
+        ) {
+          selector.value = "wasd";
+        } else if (
+          mappingList[index].high === defaultAxesMappings.arrows[0].high &&
+          mappingList[index].low === defaultAxesMappings.arrows[0].low &&
+          mappingList[index + 1].high === defaultAxesMappings.arrows[1].high &&
+          mappingList[index + 1].low === defaultAxesMappings.arrows[1].low
+        ) {
+          selector.value = "arrows";
+        } else {
+          selector.value = "custom";
+        }
+      } else if (mappingList[index].type === "virtual_cursor") {
+        selector.value = "cursor";
       } else {
-        selector.value = "custom";
+        selector.value = "none";
       }
-    } else if (mappingList[index].type === "virtual_cursor") {
-      selector.value = "cursor";
-    } else {
-      selector.value = "none";
-    }
+    };
+    updateDropdownValue();
 
     const circleOverlay = document.createElement("div");
     circleOverlay.className = "gamepadlib-axis-circle-overlay";
-    const buildOverlayDOM = () => {
+    const updateOverlay = () => {
       removeAllChildren(circleOverlay);
-      if (selector.value === "custom") {
-        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index, "high"));
-        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index, "low"));
-        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index + 1, "high"));
-        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index + 1, "low"));
+      if (mappingList[index].type === "key") {
+        const buttons = [
+          this.createAxisButtonMapping(mappingList, index, "high"),
+          this.createAxisButtonMapping(mappingList, index, "low"),
+          this.createAxisButtonMapping(mappingList, index + 1, "high"),
+          this.createAxisButtonMapping(mappingList, index + 1, "low"),
+        ];
+        for (const button of buttons) {
+          button.addEventListener("mapping-changed", updateDropdownValue);
+          circleOverlay.appendChild(button);
+        }
       }
     };
-    buildOverlayDOM();
+    updateOverlay();
 
     selector.addEventListener("change", () => {
       if (selector.value === "custom") {
@@ -927,7 +937,7 @@ class GamepadEditor extends EventTarget {
         mappingList[index] = defaultAxesMappings.none;
         mappingList[index + 1] = defaultAxesMappings.none;
       }
-      buildOverlayDOM();
+      updateOverlay();
       this.changed();
     });
 
