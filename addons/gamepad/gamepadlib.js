@@ -650,15 +650,15 @@ class GamepadLib extends EventTarget {
 GamepadLib.browserHasBrokenGamepadAPI = () => {
   // Check that the gamepad API is supported at all
   if (!navigator.getGamepads) {
-    return false;
+    return true;
   }
   // Firefox on Linux has a broken gamepad API implementation that results in strange and sometimes unusable mappings
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1643358
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1643835
   if (navigator.userAgent.includes("Firefox") && navigator.userAgent.includes("Linux")) {
-    return false;
+    return true;
   }
-  return true;
+    return false;
 };
 
 GamepadLib.setConsole = (n) => (console = n);
