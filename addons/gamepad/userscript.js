@@ -182,6 +182,7 @@ export default async function ({ addon, global, console, msg }) {
     const close = () => {
       modalOverlay.remove();
       document.body.removeEventListener("click", handleClickOutside, true);
+      window.removeEventListener("keydown", handleKeyDown);
       addon.self.removeEventListener("disabled", close);
       editor.hide();
     };
@@ -190,7 +191,13 @@ export default async function ({ addon, global, console, msg }) {
         close();
       }
     };
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        close();
+      }
+    }
     document.body.addEventListener("click", handleClickOutside, true);
+    window.addEventListener("keydown", handleKeyDown);
     addon.self.addEventListener("disabled", close);
 
     const modalOverlay = document.createElement("div");
