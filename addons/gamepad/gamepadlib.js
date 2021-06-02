@@ -872,7 +872,7 @@ class GamepadEditor extends EventTarget {
     );
 
     const updateDropdownValue = () => {
-      if (mappingList[index].type === "key") {
+      if (mappingList[index].type === "key" || mappingList[index].type === "mousedown") {
         if (
           mappingList[index].high === defaultAxesMappings.wasd[0].high &&
           mappingList[index].low === defaultAxesMappings.wasd[0].low &&
