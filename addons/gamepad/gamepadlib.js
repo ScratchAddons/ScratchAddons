@@ -658,7 +658,7 @@ GamepadLib.browserHasBrokenGamepadAPI = () => {
   if (navigator.userAgent.includes("Firefox") && navigator.userAgent.includes("Linux")) {
     return true;
   }
-    return false;
+  return false;
 };
 
 GamepadLib.setConsole = (n) => (console = n);
