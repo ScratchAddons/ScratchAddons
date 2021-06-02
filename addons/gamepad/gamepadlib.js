@@ -914,7 +914,7 @@ class GamepadEditor extends EventTarget {
         // If key mappings already exist, leave them as-is
         if (mappingList[index].type !== "key") {
           mappingList[index] = defaultAxesMappings.arrows[0];
-          mappingList[index + 1] = defaultAxesMappings.arrows[1];  
+          mappingList[index + 1] = defaultAxesMappings.arrows[1];
         }
       } else if (selector.value === "arrows") {
         mappingList[index] = defaultAxesMappings.arrows[0];
