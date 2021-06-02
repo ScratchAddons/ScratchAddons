@@ -363,6 +363,7 @@ class GamepadData {
       for (const button of buttons) {
         if (button.high === "none") {
           button.type = "none";
+          delete button.high;
         }
       }
     }
