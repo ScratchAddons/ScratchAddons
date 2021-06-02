@@ -3,7 +3,7 @@ import GamepadLib from "./gamepadlib.js";
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  // Wait for the project to finish loading. Renderer might not be fully available until this happens.
+  // Wait for the project to finish loading. Renderer and scripts will not be fully available until this happens.
   await new Promise((resolve) => {
     if (vm.editingTarget) return resolve();
     vm.runtime.once("PROJECT_LOADED", resolve);
@@ -87,8 +87,8 @@ export default async function ({ addon, global, console, msg }) {
   GamepadLib.setConsole(console);
   const gamepad = new GamepadLib();
 
+  const parsedOptions = parseOptionsComment();
   gamepad.getHintsLazily = () => {
-    const parsedOptions = parseOptionsComment();
     if (parsedOptions) {
       return {
         importedSettings: parsedOptions,
@@ -138,6 +138,13 @@ export default async function ({ addon, global, console, msg }) {
   buttonGroup.appendChild(buttonContainer);
   spacer.appendChild(buttonGroup);
   let editor;
+  let shouldStoreSettingsInProject = false;
+  const didChangeProject = () => {
+    vm.runtime.emitProjectChanged();
+    if (vm.editingTarget === vm.runtime.getTargetForStage()) {
+      vm.emitWorkspaceUpdate();
+    }
+  };
   const storeMappings = () => {
     const exported = editor.export();
     if (!exported) {
@@ -166,18 +173,42 @@ export default async function ({ addon, global, console, msg }) {
         false
       );
     }
-    vm.runtime.emitProjectChanged();
-    if (vm.editingTarget === vm.runtime.getTargetForStage()) {
-      vm.emitWorkspaceUpdate();
+    didChangeProject();
+  };
+  const removeMappings = () => {
+    const comment = findOptionsComment();
+    if (comment) {
+      const target = vm.runtime.getTargetForStage();
+      delete target.comments[comment.id];
+      didChangeProject();
     }
+  };
+  const handleEditorChanged = () => {
+    if (shouldStoreSettingsInProject) {
+      storeMappings();
+    }
+  };
+  const handleStoreSettingsCheckboxChanged = (e) => {
+    shouldStoreSettingsInProject = !!e.target.checked;
+    if (shouldStoreSettingsInProject) {
+      storeMappings();
+    } else {
+      removeMappings();
+    }
+  };
+  const handleEditorControllerChanged = () => {
+    document.body.classList.toggle("sa-gamepad-has-controller", editor.hasControllerSelected());
+    handleEditorChanged();
   };
   buttonContainer.addEventListener("click", () => {
     if (!editor) {
       editor = gamepad.editor();
       editor.msg = msg;
-      editor.addEventListener("change", storeMappings);
+      editor.addEventListener("mapping-changed", handleEditorChanged);
+      editor.addEventListener("gamepad-changed", handleEditorControllerChanged);
     }
     const editorEl = editor.generateEditor();
+    handleEditorControllerChanged();
 
     const close = () => {
       modalOverlay.remove();
@@ -195,7 +226,7 @@ export default async function ({ addon, global, console, msg }) {
       if (e.key === "Escape") {
         close();
       }
-    }
+    };
     document.body.addEventListener("click", handleClickOutside, true);
     window.addEventListener("keydown", handleKeyDown);
     addon.self.addEventListener("disabled", close);
@@ -235,6 +266,16 @@ export default async function ({ addon, global, console, msg }) {
       modalContent.appendChild(warning);
     }
     modalContent.appendChild(editorEl);
+
+    const storeSettingsLabel = document.createElement("label");
+    storeSettingsLabel.className = "sa-gamepad-store-settings";
+    storeSettingsLabel.textContent = msg("store-in-project");
+    const storeSettingsCheckbox = document.createElement("input");
+    storeSettingsCheckbox.type = "checkbox";
+    storeSettingsCheckbox.checked = shouldStoreSettingsInProject;
+    storeSettingsCheckbox.addEventListener("change", handleStoreSettingsCheckboxChanged);
+    storeSettingsLabel.prepend(storeSettingsCheckbox);
+    modalContent.appendChild(storeSettingsLabel);
 
     modalContentContainer.appendChild(modalHeaderContainer);
     modalContentContainer.appendChild(modalContent);

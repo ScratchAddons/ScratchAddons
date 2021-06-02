@@ -62,3 +62,13 @@
   font-weight: bold;
   margin-bottom: 10px;
 }
+
+.sa-gamepad-store-settings {
+  display: none;
+}
+.sa-gamepad-store-settings > input {
+  margin-right: 4px;
+}
+.sa-gamepad-has-controller .sa-gamepad-store-settings {
+  display: block;
+}

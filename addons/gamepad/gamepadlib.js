@@ -708,10 +708,12 @@ class GamepadEditor extends EventTarget {
 
   onSelectorChange() {
     this.updateContent();
+    this.dispatchEvent(new CustomEvent("gamepad-changed"));
   }
 
   onGamepadsChange() {
     this.updateAllContent();
+    this.dispatchEvent(new CustomEvent("gamepad-changed"));
   }
 
   updateAllContent() {
@@ -949,6 +951,10 @@ class GamepadEditor extends EventTarget {
     };
   }
 
+  hasControllerSelected() {
+    return !!this.selector.value;
+  }
+
   updateContent() {
     removeAllChildren(this.content);
 
@@ -1072,7 +1078,7 @@ class GamepadEditor extends EventTarget {
   }
 
   changed() {
-    this.dispatchEvent(new CustomEvent("change"));
+    this.dispatchEvent(new CustomEvent("mapping-changed"));
   }
 
   hide() {
