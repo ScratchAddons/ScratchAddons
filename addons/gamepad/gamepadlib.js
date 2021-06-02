@@ -381,19 +381,17 @@ class GamepadData {
       axes = this.gamepadLib.hints.importedSettings.axes;
     } else {
       // Only return default axis mappings when there are 4 axes, like an xbox controller
-      // Some controllers with 2 axes will make the dpad update buttons and axes, which could result in conflicts that we want to avoid by default.
+      // If there isn't exactly 4, we can't really predict what the axes mean
+      // Some controllers map the dpad to *both* buttons and axes at the same time, which would cause conflicts.
       if (this.gamepad.axes.length === 4) {
         const usedKeys = this.gamepadLib.hints.usedKeys;
         const { usesArrows, usesWASD } = getMovementConfiguration(usedKeys);
-        if (usesArrows) {
+        if (usesArrows || !usesWASD) {
           axes.push(defaultAxesMappings.arrows[0]);
           axes.push(defaultAxesMappings.arrows[1]);
-        } else if (usesWASD) {
+        } else {
           axes.push(defaultAxesMappings.wasd[0]);
           axes.push(defaultAxesMappings.wasd[1]);
-        } else {
-          axes.push(defaultAxesMappings.cursor[0]);
-          axes.push(defaultAxesMappings.cursor[1]);
         }
         axes.push(defaultAxesMappings.cursor[0]);
         axes.push(defaultAxesMappings.cursor[1]);
