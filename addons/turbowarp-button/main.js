@@ -19,10 +19,17 @@ export default async function ({ addon, global, console, msg }) {
         turbo.src = addon.self.dir + "/turbo-ico.svg";
         turbo.title = "Go to TurboWarp";
         turbo.appendChild(turboSpan);
+
+        var tSettings = "";
+//console.log(addon.settings.get("HQPen"));
+
+        if (addon.settings.get("HQPen") == true) {
+          tSettings = "?" + "hqpen";
+        }
         turbo.addEventListener("click", () => {
           window.location.href = `https://turbowarp.org/${
             window.location.href.split("projects")[1].split("/")[1]
-          }`;
+          }` + tSettings;
         });
         if (addon.settings.get("buttonColor")) {
           turbo.style.backgroundColor = addon.settings.get("buttonColor");

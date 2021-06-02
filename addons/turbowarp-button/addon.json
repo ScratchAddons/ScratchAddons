@@ -19,6 +19,18 @@
       "id": "buttonColor",
       "type": "color",
       "default": "#ff4d4d"
+    },
+    {
+      "name": "High Quality Pen",
+      "id": "HQPen",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "credits": [
+    {
+      "name": "Lamignat1",
+      "link": "https://scratch.mit.edu/users/Lamignat1/"
     }
   ],
   "tags": ["community"],
