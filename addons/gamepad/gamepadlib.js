@@ -668,7 +668,7 @@ const removeAllChildren = (el) => {
     el.removeChild(el.firstChild);
   }
 };
-const buttonHtmlId = (n) => `gamepadlib-button-${n}`;
+const buttonHtmlId = (index, property = "high") => `gamepadlib-button-${index}-${property}`;
 const axisHtmlId = (n) => `gamepadlib-axis-${n}`;
 
 class GamepadEditor extends EventTarget {
@@ -753,7 +753,7 @@ class GamepadEditor extends EventTarget {
     input.className = "gamepadlib-keyinput";
     input.title = this.msg("keyinput-title");
     input.dataset.index = index;
-    input.id = buttonHtmlId(index);
+    input.id = buttonHtmlId(index, property);
 
     const update = () => {
       const mapping = mappingList[index];
@@ -832,7 +832,7 @@ class GamepadEditor extends EventTarget {
 
   createAxisButtonMapping(mappingList, index, property, visualIndex) {
     const el = this.createButtonMapping(mappingList, index, property);
-    el.classList.add('gamepadlib-axis-mapper');
+    el.classList.add("gamepadlib-axis-mapper");
     return el;
   }
 
@@ -842,32 +842,33 @@ class GamepadEditor extends EventTarget {
     selector.id = axisHtmlId(index);
     selector.appendChild(
       Object.assign(document.createElement("option"), {
-        textContent: "None",
-        value: "none"
+        textContent: this.msg("axis-none"),
+        value: "none",
       })
     );
     selector.appendChild(
       Object.assign(document.createElement("option"), {
-        textContent: "Cursor",
-        value: "cursor"
+        textContent: this.msg("axis-cursor"),
+        value: "cursor",
       })
     );
     selector.appendChild(
       Object.assign(document.createElement("option"), {
+        // doesn't really make sense to translate
         textContent: "WASD",
-        value: "wasd"
+        value: "wasd",
       })
     );
     selector.appendChild(
       Object.assign(document.createElement("option"), {
-        textContent: "Arrow Keys",
-        value: "arrows"
+        textContent: this.msg("axis-arrows"),
+        value: "arrows",
       })
     );
     selector.appendChild(
       Object.assign(document.createElement("option"), {
-        textContent: "Custom",
-        value: "custom"
+        textContent: this.msg("axis-custom"),
+        value: "custom",
       })
     );
 
@@ -900,16 +901,22 @@ class GamepadEditor extends EventTarget {
     const buildOverlayDOM = () => {
       removeAllChildren(circleOverlay);
       if (selector.value === "custom") {
-        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index, 'high'));
-        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index, 'low'));
-        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index + 1, 'high'));
-        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index + 1, 'low'));
+        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index, "high"));
+        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index, "low"));
+        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index + 1, "high"));
+        circleOverlay.appendChild(this.createAxisButtonMapping(mappingList, index + 1, "low"));
       }
     };
     buildOverlayDOM();
 
     selector.addEventListener("change", () => {
-      if (selector.value === "arrows" || selector.value === "custom") {
+      if (selector.value === "custom") {
+        // If key mappings already exist, leave them as-is
+        if (mappingList[index].type !== "key") {
+          mappingList[index] = defaultAxesMappings.arrows[0];
+          mappingList[index + 1] = defaultAxesMappings.arrows[1];  
+        }
+      } else if (selector.value === "arrows") {
         mappingList[index] = defaultAxesMappings.arrows[0];
         mappingList[index + 1] = defaultAxesMappings.arrows[1];
       } else if (selector.value === "wasd") {
@@ -928,7 +935,7 @@ class GamepadEditor extends EventTarget {
 
     return {
       circleOverlay,
-      selector
+      selector,
     };
   }
 
@@ -990,7 +997,7 @@ class GamepadEditor extends EventTarget {
       label.htmlFor = axisHtmlId(i);
       const circle = document.createElement("div");
       circle.className = "gamepadlib-axis-circle";
-      const {circleOverlay, selector} = this.createAxisMapping(axesMappings, i);
+      const { circleOverlay, selector } = this.createAxisMapping(axesMappings, i);
       circle.appendChild(circleOverlay);
       const dot = document.createElement("div");
       dot.className = "gamepadlib-axis-dot";
