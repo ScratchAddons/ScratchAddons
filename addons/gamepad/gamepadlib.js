@@ -831,6 +831,7 @@ class GamepadEditor extends EventTarget {
 
   createAxisButtonMapping(mappingList, index, property, visualIndex) {
     const el = this.createButtonMapping(mappingList, index, property);
+    el.id += "-axis";
     el.classList.add("gamepadlib-axis-mapper");
     return el;
   }
