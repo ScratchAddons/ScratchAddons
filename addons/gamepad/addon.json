@@ -30,7 +30,7 @@
       "id": "hide"
     }
   ],
-  "tags": ["editor", "recommended"],
+  "tags": ["editor", "projectPlayer", "recommended"],
   "enabledByDefault": false,
   "versionAdded": "1.14.0",
   "dynamicEnable": true,
