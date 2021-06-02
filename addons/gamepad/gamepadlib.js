@@ -921,21 +921,21 @@ class GamepadEditor extends EventTarget {
       if (selector.value === "custom") {
         // If key mappings already exist, leave them as-is
         if (mappingList[index].type !== "key") {
-          mappingList[index] = defaultAxesMappings.arrows[0];
-          mappingList[index + 1] = defaultAxesMappings.arrows[1];
+          mappingList[index] = transformAndCopyMapping(defaultAxesMappings.arrows[0]);
+          mappingList[index + 1] = transformAndCopyMapping(defaultAxesMappings.arrows[1]);
         }
       } else if (selector.value === "arrows") {
-        mappingList[index] = defaultAxesMappings.arrows[0];
-        mappingList[index + 1] = defaultAxesMappings.arrows[1];
+        mappingList[index] = transformAndCopyMapping(defaultAxesMappings.arrows[0]);
+        mappingList[index + 1] = transformAndCopyMapping(defaultAxesMappings.arrows[1]);
       } else if (selector.value === "wasd") {
-        mappingList[index] = defaultAxesMappings.wasd[0];
-        mappingList[index + 1] = defaultAxesMappings.wasd[1];
+        mappingList[index] = transformAndCopyMapping(defaultAxesMappings.wasd[0]);
+        mappingList[index + 1] = transformAndCopyMapping(defaultAxesMappings.wasd[1]);
       } else if (selector.value === "cursor") {
-        mappingList[index] = defaultAxesMappings.cursor[0];
-        mappingList[index + 1] = defaultAxesMappings.cursor[1];
+        mappingList[index] = transformAndCopyMapping(defaultAxesMappings.cursor[0]);
+        mappingList[index + 1] = transformAndCopyMapping(defaultAxesMappings.cursor[1]);
       } else {
-        mappingList[index] = defaultAxesMappings.none;
-        mappingList[index + 1] = defaultAxesMappings.none;
+        mappingList[index] = transformAndCopyMapping(defaultAxesMappings.none);
+        mappingList[index + 1] = transformAndCopyMapping(defaultAxesMappings.none);
       }
       updateOverlay();
       this.changed();
