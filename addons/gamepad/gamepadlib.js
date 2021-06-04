@@ -387,12 +387,15 @@ class GamepadData {
       if (this.gamepad.axes.length === 4) {
         const usedKeys = this.gamepadLib.hints.usedKeys;
         const { usesArrows, usesWASD } = getMovementConfiguration(usedKeys);
-        if (usesArrows || !usesWASD) {
+        if (usesArrows) {
           axes.push(defaultAxesMappings.arrows[0]);
           axes.push(defaultAxesMappings.arrows[1]);
-        } else {
+        } else if (usesWASD) {
           axes.push(defaultAxesMappings.wasd[0]);
           axes.push(defaultAxesMappings.wasd[1]);
+        } else {
+          axes.push(defaultAxesMappings.cursor[0]);
+          axes.push(defaultAxesMappings.cursor[1]);  
         }
         axes.push(defaultAxesMappings.cursor[0]);
         axes.push(defaultAxesMappings.cursor[1]);
