@@ -4,7 +4,7 @@
   "credits": [
     {
       "name": "9gr",
-      "url": "https://scratch.mit.edu/users/9gr"
+      "link": "https://scratch.mit.edu/users/9gr"
     }
   ],
   "userscripts": [
@@ -14,5 +14,6 @@
     }
   ],
   "tags": ["forums"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "l10n": true
 }
