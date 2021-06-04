@@ -1,0 +1,18 @@
+{
+  "name": "Redirect mobile forums to the main forums",
+  "description": "Redirects you from the mobile forums to the main forums",
+  "credits": [
+    {
+      "name": "9gr",
+      "url": "https://scratch.mit.edu/users/9gr"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/discuss/m/*"]
+    }
+  ],
+  "tags": ["forums"],
+  "enabledByDefault": false
+}
