@@ -8,7 +8,7 @@
       "matches": ["https://scratch.mit.edu/users/*"]
     },
     {
-      "url": "rpc.js",
+      "url": "addon.js",
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
