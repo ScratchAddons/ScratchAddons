@@ -14,6 +14,9 @@ export default async function ({ addon, global, console }) {
     global.setOneState = (online, rpc) => {
         // todo: send online and rpc to server
     }
+    global.getOneState = (user) => {
+        // todo: get online and rpc from server
+    }
     while (true) {
         if (rpcon) {
             global.setOneState(true,/* todo: check url and make a string saying playing ... or something */)
