@@ -1,0 +1,6 @@
+{
+  "name": "Forums Auto-Reply",
+  "description": "Lets you use pre-written sentences while foruming.",
+  "tags": ["forums", "sentences"],
+  "enabledByDefault": false
+}
