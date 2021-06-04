@@ -1,0 +1,58 @@
+{
+  "name": "OneState",
+  "description": "isOnline but much better and with rich presense.",
+  "tags": ["community"],
+  "userscripts": [
+    {
+      "url": "user.js",
+      "matches": ["https://scratch.mit.edu/users/*"]
+    },
+    {
+      "url": "rpc.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "user.css",
+      "matches": ["https://scratch.mit.edu/users/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Token",
+      "id": "token_input",
+      "type": "string",
+      "default": "0000000000"
+    },
+    {
+      "name": "Rich Presense?",
+      "id": "rpc",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "credits": [
+    {
+      "name": "William Horning",
+      "link": "https://www.wgyt.tk"
+    }
+  ],
+  "info": [
+    {
+      "type": "warning",
+      "text": "Get a token by going to https://state.onedot.cf/auth .",
+      "id": "get_a_token"
+    },
+    {
+      "type": "info",
+      "text": "See the legal stuff at https://onedot.cf/legal .",
+      "id": "read_legal_stuff"
+    }
+  ],
+  "popup": {
+    "icon": "onestate.png",
+    "name": "Messaging",
+    "fullscreen": true
+  }
+}
