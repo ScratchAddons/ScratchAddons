@@ -4,7 +4,7 @@
     "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
    ],
   "tags": ["forums", "sentences"],
