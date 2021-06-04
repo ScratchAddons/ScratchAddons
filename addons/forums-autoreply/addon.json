@@ -1,6 +1,12 @@
 {
   "name": "Forums Auto-Reply",
   "description": "Lets you use pre-written sentences while foruming.",
+    "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+   ],
   "tags": ["forums", "sentences"],
   "enabledByDefault": false
 }
