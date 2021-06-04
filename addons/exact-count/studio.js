@@ -26,7 +26,7 @@ export default async function ({ addon }) {
   const initialDelta = 100;
   if (addon.tab.clientVersion === "scratch-www") {
     const countElement = await addon.tab.waitForElement(".studio-tab-nav > a:first-child .tab-count");
-    countProjects(apiUrlPrefix, 0, initialDelta, async function (count) {
+    countProjects(apiUrlPrefix, 0, initialDelta, function (count) {
       countElement.innerText = `(${count})`;
     });
   } else {
