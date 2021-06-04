@@ -9,7 +9,7 @@ Third-party libraries included are:
 - [text-field-edit 3.1.0](https://unpkg.com/text-field-edit@3.1.0/index.js)
 - [Chart.js 2.9.4](https://unpkg.com/chart.js@2.9.4/dist/Chart.min.js) (MIT)
 - [color-picker-web-component 1.3.7](https://unpkg.com/color-picker-web-component@1.3.7/dist/color-picker-esm.min.js) (MIT)
-- [comlink 4.3.0](https://unpkg.com/comlink@4.3.0/dist/umd/comlink.js) (Apache-2.0)
+- [comlink 4.3.1](https://unpkg.com/comlink@4.3.1/dist/umd/comlink.js) (Apache-2.0)
 - [Sora](https://fonts.google.com/specimen/Sora) (OFL)
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).
