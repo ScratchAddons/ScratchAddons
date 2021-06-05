@@ -397,7 +397,6 @@ export default async function ({ addon, global, console, msg }) {
     });
   };
   const handleGamepadMouseMove = (e) => {
-    if (addon.self.disabled) return;
     virtualX = e.detail.x;
     virtualY = e.detail.y;
     virtualCursorSetPosition(virtualX, virtualY);
