@@ -134,7 +134,7 @@ const padWithEmptyMappings = (array, length) => {
 
 const getMovementConfiguration = (usedKeys) => ({
   usesArrows:
-    (usedKeys.has("ArrowUp") && usedKeys.has("ArrowDown")) || (usedKeys.has("ArrowRight") && usedKeys.has("ArrowLeft")),
+    usedKeys.has("ArrowUp") || usedKeys.has("ArrowDown") || usedKeys.has("ArrowRight") || usedKeys.has("ArrowLeft"),
   usesWASD: (usedKeys.has("w") && usedKeys.has("s")) || (usedKeys.has("a") && usedKeys.has("d")),
 });
 
