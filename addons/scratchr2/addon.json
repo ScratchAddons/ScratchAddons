@@ -315,6 +315,5 @@
       "type": "color",
       "default": "#4280d7"
     }
-  ],
-  "l10n": true
+  ]
 }
