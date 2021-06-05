@@ -44,6 +44,5 @@
   ],
   "tags": ["community", "studios", "recommended"],
   "versionAdded": "1.2.0",
-  "enabledByDefault": true,
-  "l10n": true
+  "enabledByDefault": true
 }

@@ -28,6 +28,5 @@
   ],
   "tags": ["editor", "codeEditor"],
   "versionAdded": "1.15.0",
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }
