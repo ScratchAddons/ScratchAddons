@@ -47,6 +47,7 @@ export default async function ({ template }) {
           event.preventDefault();
 
           const newState = !this.addon._enabled;
+          this.addon._wasEverEnabled = this.addon._enabled || newState;
           this.addon._enabled = newState;
           // Do not extend when enabling in popup mode, unless addon has warnings
           this.expanded =

@@ -378,10 +378,14 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         }, 150);
       },
       selectedCategory(newValue) {
-        // TODO: easter eggs show, avoid easter egg poofing
-        this.addonListObjs.forEach(
-          (obj) => (obj.matchesCategory = newValue === "all" || obj.manifest._categories.includes(newValue))
-        );
+        this.addonListObjs.forEach((obj) => {
+          const shouldHideAsEasterEgg =
+            obj.manifest._categories[0] === "easterEgg" &&
+            newValue !== "easterEgg" &&
+            obj.manifest._wasEverEnabled === false;
+          obj.matchesCategory =
+            !shouldHideAsEasterEgg && (newValue === "all" || obj.manifest._categories.includes(newValue));
+        });
       },
     },
     ready() {
@@ -484,6 +488,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       manifest._icon = manifest._categories[0];
 
       manifest._enabled = addonsEnabled[addonId];
+      manifest._wasEverEnabled = manifest._enabled;
       manifest._addonId = addonId;
       manifest._groups = [];
 
@@ -556,7 +561,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         obj.manifest = vue.manifestsById[addonId];
         obj.group = group;
         obj.matchesSearch = true;
-        obj.matchesCategory = true;
+        const shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
+        obj.matchesCategory = !shouldHideAsEasterEgg;
         obj.naturalIndex = naturalIndex;
         obj.headerAbove = groupIndex === 0;
         obj.footerBelow = groupIndex === group.addonIds.length - 1;
