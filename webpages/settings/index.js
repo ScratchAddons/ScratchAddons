@@ -542,6 +542,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       group.addonIds.forEach((addonId, groupIndex) => {
         const cachedObj = vue.addonListObjs.find((o) => o.manifest._addonId === "example");
         const obj = cachedObj || {};
+        // Some addons might be twice in the list, such as in "new" and "enabled"
+        // Before setting manifest, check whether this object will be a duplicate.
+        obj.duplicate = Boolean(vue.addonListObjs.find((addon) => addon.manifest._addonId === addonId));
         obj.manifest = vue.manifestsById[addonId];
         obj.group = group;
         obj.matchesSearch = true;
@@ -549,7 +552,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         obj.naturalIndex = naturalIndex;
         obj.headerAbove = groupIndex === 0;
         obj.footerBelow = groupIndex === group.addonIds.length - 1;
-        obj.duplicate = Boolean(vue.addonListObjs.find((addon) => addon.manifest._addonId === addonId));
         if (!cachedObj) vue.addonListObjs.push(obj);
         naturalIndex++;
       });
