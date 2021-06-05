@@ -5,9 +5,10 @@ export default async function ({ addon, global, console }) {
 
   //Wait for the search bar to load (we get the header links as we hide/show them, no need to worry about that)
   //Also we set the search bar value here too
+  while(true) {
   exsearch_searchBar = await addon.tab.waitForElement(
     addon.tab.clientVersion == "scratch-www" ? "#frc-q-1088" : "#search-input",
-    {}
+    {markAsSeen: true}
   );
 
   ///Events
@@ -67,5 +68,6 @@ export default async function ({ addon, global, console }) {
     //Events
     exsearch_searchBar.addEventListener("focusin", exsearch_clickIn);
     exsearch_searchBar.addEventListener("focusout", exsearch_clickOut);
+  }
   }
 }
