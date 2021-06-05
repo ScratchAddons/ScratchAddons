@@ -760,6 +760,7 @@ class GamepadEditor extends EventTarget {
     if (key === "ArrowDown") return this.msg("key-down");
     if (key === "ArrowLeft") return this.msg("key-left");
     if (key === "ArrowRight") return this.msg("key-right");
+    if (key === "Enter") return this.msg("key-enter");
     return key.toUpperCase();
   }
 
@@ -817,7 +818,7 @@ class GamepadEditor extends EventTarget {
           return;
         }
         const mapping = mappingList[index];
-        if (key.length === 1 || ["ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft"].includes(key)) {
+        if (key.length === 1 || ["ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft", "Enter"].includes(key)) {
           mapping.type = "key";
           mapping[property] = key;
         } else if (key !== "Escape") {

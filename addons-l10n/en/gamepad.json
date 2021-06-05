@@ -5,6 +5,7 @@
   "gamepad/key-down": "Down",
   "gamepad/key-left": "Left",
   "gamepad/key-right": "Right",
+  "gamepad/key-enter": "Enter",
   "gamepad/key-none": "(none)",
   "gamepad/key-click": "Click",
   "gamepad/axis-none": "None",
