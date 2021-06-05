@@ -391,19 +391,24 @@ export default async function ({ addon, global, console, msg }) {
       isDown: false,
     });
   };
+  const vmStarted = () => vm.runtime._steppingInterval !== null;
   const handleGamepadMouseDown = () => {
     if (addon.self.disabled) return;
     virtualCursorSetDown(true);
-    postMouseData({
-      isDown: true,
-    });
+    if (vmStarted()) {
+      postMouseData({
+        isDown: true,
+      });
+    }
   };
   const handleGamepadMouseUp = () => {
     if (addon.self.disabled) return;
     virtualCursorSetDown(false);
-    postMouseData({
-      isDown: false,
-    });
+    if (vmStarted()) {
+      postMouseData({
+        isDown: false,
+      });
+    }
   };
   const handleGamepadMouseMove = (e) => {
     if (addon.self.disabled) return;
