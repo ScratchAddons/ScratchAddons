@@ -8,7 +8,13 @@ export default async function ({ addon, global, console }) {
   while (true) {
     exsearch_searchBar = await addon.tab.waitForElement(
       addon.tab.clientVersion === "scratch-www" ? "#frc-q-1088" : "#search-input",
-      { markAsSeen: true }
+      {
+        markAsSeen: true,
+        reduxCondition: (state) => {
+          if (!state.scratchGui) return true;
+          return state.scratchGui.mode.isPlayerOnly;
+        },
+      }
     );
 
     ///Events
