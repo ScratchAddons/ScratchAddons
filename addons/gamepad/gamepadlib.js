@@ -1031,7 +1031,7 @@ class GamepadEditor extends EventTarget {
     if (!selectedId) {
       return;
     }
-    const gamepad = gamepads[this.selector.selectedIndex];
+    const gamepad = Array.from(gamepads).find((i) => i && getGamepadId(i) === this.selector.value);
     if (!gamepad) {
       return;
     }
