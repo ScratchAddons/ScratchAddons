@@ -100,7 +100,6 @@ const transformAndCopyMapping = (mapping) => {
   }
   const copy = Object.assign({}, mapping);
   if (copy.type === "key") {
-    copy._state = OFF;
     if (typeof copy.deadZone === "undefined") {
       copy.deadZone = 0.5;
     }
@@ -111,7 +110,6 @@ const transformAndCopyMapping = (mapping) => {
       copy.low = "";
     }
   } else if (copy.type === "mousedown") {
-    copy._isDown = false;
     if (typeof copy.deadZone === "undefined") {
       copy.deadZone = 0.5;
     }
@@ -136,17 +134,24 @@ const transformAndCopyMapping = (mapping) => {
   }
   return copy;
 };
-const prepareMappingForExport = (mapping) => {
-  const copy = Object.assign({}, mapping);
-  delete copy._state;
-  delete copy._isDown;
-  return copy;
-};
+const prepareMappingForExport = (mapping) => Object.assign({}, mapping);
 const prepareAxisMappingForExport = prepareMappingForExport;
 const prepareButtonMappingForExport = (mapping) => {
   const copy = prepareMappingForExport(mapping);
   delete copy.deadZone;
   return copy;
+};
+
+const padWithEmptyMappings = (array, length) => {
+  // Keep adding empty mappings until the list is full
+  while (array.length < length) {
+    array.push({
+      type: "none",
+    });
+  }
+  // In case the input array is longer than the desired length
+  array.length = length;
+  return array;
 };
 
 const getMovementConfiguration = (usedKeys) => ({
@@ -385,13 +390,7 @@ class GamepadData {
         }
       }
     }
-    while (buttons.length < this.gamepad.buttons.length) {
-      buttons.push({
-        type: "none",
-      });
-    }
-    buttons.length = this.gamepad.buttons.length;
-    return buttons;
+    return padWithEmptyMappings(buttons, this.gamepad.buttons.length);
   }
 
   getDefaultAxisMappings() {
@@ -419,13 +418,7 @@ class GamepadData {
         axes.push(defaultAxesMappings.cursor[1]);
       }
     }
-    while (axes.length < this.gamepad.axes.length) {
-      axes.push({
-        type: "none",
-      });
-    }
-    axes.length = this.gamepad.axes.length;
-    return axes;
+    return padWithEmptyMappings(axes, this.gamepad.axes.length);
   }
 }
 
@@ -463,6 +456,12 @@ class GamepadLib extends EventTarget {
       importedSettings: null,
       generated: false,
     };
+
+    this.keysPressedThisFrame = new Set();
+    this.oldKeysPressed = new Set();
+
+    this.mouseDownThisFrame = false;
+    this.oldMouseDown = false;
 
     this.addEventHandlers();
   }
@@ -549,61 +548,53 @@ class GamepadLib extends EventTarget {
 
   updateButton(value, mapping) {
     if (mapping.type === "key") {
-      let state = OFF;
-      if (value >= mapping.deadZone) state = HIGH;
-      if (value <= -mapping.deadZone) state = LOW;
-
-      const oldState = mapping._state;
-      if (state !== oldState) {
-        const pressKey = state === HIGH ? mapping.high : state === LOW ? mapping.low : null;
-        const unpressKey = oldState === HIGH ? mapping.high : oldState === LOW ? mapping.low : null;
-        if (pressKey) {
-          this.dispatchKey(pressKey, true);
+      if (value >= mapping.deadZone) {
+        if (mapping.high) {
+          this.keysPressedThisFrame.add(mapping.high);
         }
-        if (unpressKey) {
-          this.dispatchKey(unpressKey, false);
+      } else if (value <= -mapping.deadZone) {
+        if (mapping.low) {
+          this.keysPressedThisFrame.add(mapping.low);
         }
-        mapping._state = state;
       }
     }
 
     if (mapping.type === "mousedown") {
       const isDown = Math.abs(value) >= mapping.deadZone;
-      const oldValue = mapping._isDown;
-      if (isDown !== oldValue) {
-        this.dispatchMouseDown(isDown);
-        mapping._isDown = isDown;
+      if (isDown) {
+        this.mouseDownThisFrame = true;
       }
     }
 
     if (mapping.type === "virtual_cursor") {
       const deadZone = mapping.deadZone;
-      let state = OFF;
-      if (value >= deadZone) state = HIGH;
-      if (value <= -deadZone) state = LOW;
-
-      const action = state === HIGH ? mapping.high : state === LOW ? mapping.low : null;
-      const range = 1 - deadZone;
-      // a value just beyond the deadzone should have a multiplier near 0, a value at 1/-1 should have a multiplier of 1
-      const multiplier = (Math.abs(value) - deadZone) / range;
-      const speed = multiplier * multiplier * mapping.sensitivity * this.deltaTime;
-      if (action === "+x") {
-        this.virtualCursor.x += speed;
-        this.virtualCursor.modified = true;
-      } else if (action === "-x") {
-        this.virtualCursor.x -= speed;
-        this.virtualCursor.modified = true;
-      } else if (action === "+y") {
-        this.virtualCursor.y += speed;
-        this.virtualCursor.modified = true;
-      } else if (action === "-y") {
-        this.virtualCursor.y -= speed;
+      let action;
+      if (value >= deadZone) action = mapping.high;
+      if (value <= -deadZone) action = mapping.low;
+      if (action) {
+        // an axis value just beyond the deadzone should have a multiplier near 0, a high value should have a multiplier of 1
+        const multiplier = (Math.abs(value) - deadZone) / (1 - deadZone);
+        const speed = multiplier * multiplier * mapping.sensitivity * this.deltaTime;
+        if (action === "+x") {
+          this.virtualCursor.x += speed;
+        } else if (action === "-x") {
+          this.virtualCursor.x -= speed;
+        } else if (action === "+y") {
+          this.virtualCursor.y += speed;
+        } else if (action === "-y") {
+          this.virtualCursor.y -= speed;
+        }
         this.virtualCursor.modified = true;
       }
     }
   }
 
   update(time) {
+    this.oldKeysPressed = this.keysPressedThisFrame;
+    this.oldMouseDown = this.mouseDownThisFrame;
+    this.keysPressedThisFrame = new Set();
+    this.mouseDownThisFrame = false;
+
     if (this.currentTime === null) {
       this.deltaTime = 0; // doesn't matter what this is, it's just the first frame
     } else {
@@ -641,6 +632,21 @@ class GamepadLib extends EventTarget {
       this._editor.update(gamepads);
     }
 
+    for (const key of this.keysPressedThisFrame) {
+      if (!this.oldKeysPressed.has(key)) {
+        this.dispatchKey(key, true);
+      }
+    }
+    for (const key of this.oldKeysPressed) {
+      if (!this.keysPressedThisFrame.has(key)) {
+        this.dispatchKey(key, false);
+      }
+    }
+    if (this.mouseDownThisFrame && !this.oldMouseDown) {
+      this.dispatchMouseDown(true);
+    } else if (!this.mouseDownThisFrame && this.oldMouseDown) {
+      this.dispatchMouseDown(false);
+    }
     if (this.virtualCursor.modified) {
       this.virtualCursor.modified = false;
       if (this.virtualCursor.x > this.virtualCursor.maxX) {
