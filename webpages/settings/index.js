@@ -178,19 +178,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         searchMsg: this.msg("search"),
         browserLevelPermissions,
         grantedOptionalPermissions,
-        addonListObjs: Array(25)
-          .fill("")
-          .map((s, i) => ({
-            // Need to specify all used properties for reactivity!
-            group: addonGroups[0],
-            manifest: JSON.parse(JSON.stringify(exampleManifest)),
-            matchesSearch: true,
-            matchesCategory: true,
-            naturalIndex: i,
-            headerAbove: false,
-            footerBelow: false,
-            duplicate: false,
-          })),
+        addonListObjs: [],
       };
     },
     computed: {
@@ -399,6 +387,26 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     ready() {
       // Needed in Firefox and slower Chrome - autofocus is weird
       document.getElementById("searchBox")?.focus();
+
+      const exampleAddonListItem = {
+        // Need to specify all used properties for reactivity!
+        group: addonGroups[0],
+        manifest: JSON.parse(JSON.stringify(exampleManifest)),
+        matchesSearch: true,
+        matchesCategory: true,
+        naturalIndex: -1,
+        headerAbove: false,
+        footerBelow: false,
+        duplicate: false,
+      };
+
+      setTimeout(() => {
+        if (!this.loaded) {
+          this.addonListObjs = Array(25)
+            .fill("")
+            .map(() => JSON.parse(JSON.stringify(exampleAddonListItem)));
+        }
+      }, 0);
     },
   });
 
@@ -552,6 +560,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         obj.naturalIndex = naturalIndex;
         obj.headerAbove = groupIndex === 0;
         obj.footerBelow = groupIndex === group.addonIds.length - 1;
+        // Note: when adding new properties here, make sure to also add them to the
+        // exampleAddonListItem object on the vue.ready method, so that it's reactive!
         if (!cachedObj) vue.addonListObjs.push(obj);
         naturalIndex++;
       });
