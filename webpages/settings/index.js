@@ -390,8 +390,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       },
     },
     ready() {
-      // Needed in Firefox and slower Chrome - autofocus is weird
-      document.getElementById("searchBox")?.focus();
+      // Autofocus search bar in iframe mode (fullscreen uses autofocus attribute)
+      if (isIframe) setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
 
       const exampleAddonListItem = {
         // Need to specify all used properties for reactivity!
@@ -577,7 +577,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
 
     vue.loaded = true;
-    if (isIframe) setTimeout(() => document.getElementById("searchBox").focus(), 0);
     setTimeout(handleKeySettings, 0);
     setTimeout(() => {
       // Set hash again after loading addons, to force scroll to addon
