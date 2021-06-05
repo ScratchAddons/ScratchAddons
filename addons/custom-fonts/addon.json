@@ -15,6 +15,7 @@
       "text": "Letters in wider fonts will be bunched together. Try not to use excessively large fonts."
     }
   ],
+  "libraries": ["webfont"],
   "enabledByDefault": false,
   "dynamicEnable": true,
   "dynamicDisable": true,
