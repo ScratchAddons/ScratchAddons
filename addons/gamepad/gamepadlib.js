@@ -413,7 +413,7 @@ class GamepadData {
           axes.push(defaultAxesMappings.wasd[1]);
         } else {
           axes.push(defaultAxesMappings.cursor[0]);
-          axes.push(defaultAxesMappings.cursor[1]);  
+          axes.push(defaultAxesMappings.cursor[1]);
         }
         axes.push(defaultAxesMappings.cursor[0]);
         axes.push(defaultAxesMappings.cursor[1]);
