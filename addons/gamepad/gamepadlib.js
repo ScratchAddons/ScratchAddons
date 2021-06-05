@@ -688,7 +688,7 @@ const removeAllChildren = (el) => {
     el.removeChild(el.firstChild);
   }
 };
-const buttonHtmlId = (index, property = "high") => `gamepadlib-button-${index}-${property}`;
+const buttonHtmlId = (index) => `gamepadlib-button-${index}`;
 const axisHtmlId = (n) => `gamepadlib-axis-${n}`;
 
 class GamepadEditor extends EventTarget {
@@ -775,7 +775,6 @@ class GamepadEditor extends EventTarget {
     input.className = "gamepadlib-keyinput";
     input.title = this.msg("keyinput-title");
     input.dataset.index = index;
-    input.id = buttonHtmlId(index, property);
 
     const update = () => {
       const mapping = mappingList[index];
@@ -853,13 +852,6 @@ class GamepadEditor extends EventTarget {
     return input;
   }
 
-  createAxisButtonMapping(mappingList, index, property, visualIndex) {
-    const el = this.createButtonMapping(mappingList, index, property);
-    el.id += "-axis";
-    el.classList.add("gamepadlib-axis-mapper");
-    return el;
-  }
-
   createAxisMapping(mappingList, index) {
     const selector = document.createElement("select");
     selector.className = "gamepadlib-axis-mapping";
@@ -929,12 +921,13 @@ class GamepadEditor extends EventTarget {
       removeAllChildren(circleOverlay);
       if (mappingList[index].type === "key") {
         const buttons = [
-          this.createAxisButtonMapping(mappingList, index + 1, "low"),
-          this.createAxisButtonMapping(mappingList, index, "low"),
-          this.createAxisButtonMapping(mappingList, index, "high"),
-          this.createAxisButtonMapping(mappingList, index + 1, "high"),
+          this.createButtonMapping(mappingList, index + 1, "low"),
+          this.createButtonMapping(mappingList, index, "low"),
+          this.createButtonMapping(mappingList, index, "high"),
+          this.createButtonMapping(mappingList, index + 1, "high"),
         ];
         for (const button of buttons) {
+          button.classList.add("gamepadlib-axis-mapper");
           button.addEventListener("mapping-changed", updateDropdownValue);
           circleOverlay.appendChild(button);
         }
@@ -1013,10 +1006,13 @@ class GamepadEditor extends EventTarget {
       const label = document.createElement("label");
       label.className = "gamepadlib-mapping-label";
       label.textContent = this.msg("button-n", { n: i });
-      label.htmlFor = buttonHtmlId(i);
+      const id = buttonHtmlId(i);
+      label.htmlFor = id;
       const options = document.createElement("div");
       options.className = "gamepadlib-mapping-options";
-      options.appendChild(this.createButtonMapping(buttonMappings, i));
+      const mappingInput = this.createButtonMapping(buttonMappings, i);
+      mappingInput.id = id;
+      options.appendChild(mappingInput);
       container.appendChild(label);
       container.appendChild(options);
       mappingsContainer.appendChild(container);

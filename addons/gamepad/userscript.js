@@ -9,7 +9,7 @@ export default async function ({ addon, global, console, msg }) {
     vm.runtime.once("PROJECT_LOADED", resolve);
   });
 
-  const scratchToKeyToKey = (key) => {
+  const scratchKeyToKey = (key) => {
     switch (key) {
       case "right arrow":
         return "ArrowRight";
@@ -39,7 +39,7 @@ export default async function ({ addon, global, console, msg }) {
             continue;
           }
           const key = block.fields.KEY_OPTION.value;
-          result.add(scratchToKeyToKey(key));
+          result.add(scratchKeyToKey(key));
         }
       }
     }
@@ -60,22 +60,19 @@ export default async function ({ addon, global, console, msg }) {
   const parseOptionsComment = () => {
     const comment = findOptionsComment();
     if (!comment) {
-      return;
+      return null;
     }
     const lineWithMagic = comment.text.split("\n").find((i) => i.endsWith(GAMEPAD_CONFIG_MAGIC));
     if (!lineWithMagic) {
       console.warn("Gamepad comment does not contain valid line");
-      return;
+      return null;
     }
     const jsonText = lineWithMagic.substr(0, lineWithMagic.length - GAMEPAD_CONFIG_MAGIC.length);
     let parsed;
     try {
       parsed = JSON.parse(jsonText);
-      if (!parsed || typeof parsed !== "object") {
-        throw new Error("Invalid object");
-      }
-      if (!Array.isArray(parsed.buttons) || !Array.isArray(parsed.axes)) {
-        throw new Error("Missing data");
+      if (!parsed || typeof parsed !== "object" || !Array.isArray(parsed.buttons) || !Array.isArray(parsed.axes)) {
+        throw new Error("Invalid data");
       }
     } catch (e) {
       console.warn("Gamepad comment has invalid JSON", e);
