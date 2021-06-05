@@ -21,7 +21,7 @@
   "settings": [
     {
       "name": "Token",
-      "id": "token_input",
+      "id": "token",
       "type": "string",
       "default": "0000000000"
     },
@@ -41,18 +41,18 @@
   "info": [
     {
       "type": "warning",
-      "text": "Get a token by going to https://state.onedot.cf/auth .",
-      "id": "get_a_token"
-    },
-    {
-      "type": "info",
       "text": "See the legal stuff at https://onedot.cf/legal .",
       "id": "read_legal_stuff"
+    },
+    {
+      "type": "warning",
+      "text": "Get a token by going to https://state.onedot.cf/auth .",
+      "id": "get_a_token"
     }
   ],
   "popup": {
-    "icon": "onestate.png",
-    "name": "Messaging",
+    "icon": "../../addons/onestate/onestate.png",
+    "name": "OneState",
     "fullscreen": true
   }
 }

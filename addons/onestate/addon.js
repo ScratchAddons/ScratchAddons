@@ -36,11 +36,9 @@ export default async function ({ addon, global, console }) {
         var data = fetch(`https://state.onedot.cf/api/v1/user/${user}`)
         return await data
     }
-    while (true) {
-        if (rpcon) {
-            global.setOneState(true, ""/* todo: check url and make a string saying playing ... or something */)
-        } else {
-            global.setOneState(true, "")
-        }
+    if (rpcon) {
+        global.setOneState(true, ""/* todo: check url and make a string saying playing ... or something */)
+    } else {
+        global.setOneState(true, "")
     }
 }
