@@ -40,8 +40,13 @@
   ],
   "info": [
     {
-      "type": "warning",
+      "type": "notice",
       "text": "See the legal stuff at https://onedot.cf/legal .",
+      "id": "read_legal_stuff"
+    },
+    {
+      "type": "notice",
+      "text": "RPC only works on the most recently loaded tab at the moment. This may change in the future.",
       "id": "read_legal_stuff"
     },
     {
