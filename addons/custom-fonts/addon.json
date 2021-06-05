@@ -1,6 +1,6 @@
 {
   "name": "Customizable fonts",
-  "description": "Customize the fonts for every part of scratch, including the blocks! Choose a font from fonts.google.com and enter it into the box.",
+  "description": "Customize the font family for different parts of Scratch. Choose a font from fonts.google.com and enter it into one or more of the boxes.",
   "tags": ["theme", "beta", "editor"],
   "credits": [
     {
@@ -10,7 +10,7 @@
   ],
   "info": [
     {
-      "type": "warning",
+      "type": "notice",
       "id": "bunchwarn",
       "text": "Letters in wider fonts will be bunched together. Try not to use excessively large fonts."
     }
@@ -28,19 +28,19 @@
   ],
   "settings": [
     {
-      "name": "Navigation Bar Font",
+      "name": "Navigation bar font",
       "id": "navfnt",
       "type": "string",
       "default": "Helvetica"
     },
     {
-      "name": "Main Font",
+      "name": "Main font",
       "id": "mainfnt",
       "type": "string",
       "default": "Helvetica"
     },
     {
-      "name": "Editor Font",
+      "name": "Editor font",
       "id": "editfnt",
       "type": "string",
       "default": "Helvetica"
@@ -52,17 +52,16 @@
       "default": "Helvetica"
     },
     {
-      "name": "Header Font",
+      "name": "Header font",
       "id": "headfnt",
       "type": "string",
       "default": "Helvetica"
     },
     {
-      "name": "Footer Font",
+      "name": "Footer font",
       "id": "footerfnt",
       "type": "string",
       "default": "Helvetica"
     }
-  ],
-  "l10n": true
+  ]
 }
