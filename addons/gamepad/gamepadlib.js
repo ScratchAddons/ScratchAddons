@@ -201,13 +201,10 @@ class GamepadData {
         ...Array.from(usedKeys).filter((i) => i.length === 1 && !possiblePauseKeys.includes(i)),
       ];
 
-      const reserveKey = (key) => {
-        alreadyUsedKeys.add(key);
-      };
       const findKey = (keys) => {
         for (const key of keys) {
           if (usedKeys.has(key) && !alreadyUsedKeys.has(key)) {
-            reserveKey(key);
+            alreadyUsedKeys.add(key);
             return key;
           }
         }
@@ -222,12 +219,8 @@ class GamepadData {
         }
         return findKey(possibleActionKeys);
       };
-      const getSecondaryAction = () => {
-        return findKey(possibleActionKeys);
-      };
-      const getPauseKey = () => {
-        return findKey(possiblePauseKeys);
-      };
+      const getSecondaryAction = () => findKey(possibleActionKeys);
+      const getPauseKey = () => findKey(possiblePauseKeys);
       const getUp = () => {
         if (usesArrows || !usesWASD) return "ArrowUp";
         return "w";
@@ -249,13 +242,12 @@ class GamepadData {
       let action2 = getSecondaryAction();
       let action3 = getSecondaryAction();
       let action4 = getSecondaryAction();
-      // If there is only one action keys, map all keys to it.
+      // When only 1 or 2 action keys are detected, bind the other buttons to the same things.
       if (action1 && !action2 && !action3 && !action4) {
         action2 = action1;
         action3 = action1;
         action4 = action1;
       }
-      // if there are only two action keys, map the other two to those.
       if (action1 && action2 && !action3 && !action4) {
         action3 = action1;
         action4 = action2;
