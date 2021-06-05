@@ -84,40 +84,42 @@
               const parent = path.slice(0, -1).reduce((obj, prop) => obj[prop], obj);
               const rawValue = path.reduce((obj, prop) => obj[prop], obj);
               switch (type) {
-                  case 0 /* GET */:
+                  case "GET" /* GET */:
                       {
                           returnValue = rawValue;
                       }
                       break;
-                  case 1 /* SET */:
+                  case "SET" /* SET */:
                       {
                           parent[path.slice(-1)[0]] = fromWireValue(ev.data.value);
                           returnValue = true;
                       }
                       break;
-                  case 2 /* APPLY */:
+                  case "APPLY" /* APPLY */:
                       {
                           returnValue = rawValue.apply(parent, argumentList);
                       }
                       break;
-                  case 3 /* CONSTRUCT */:
+                  case "CONSTRUCT" /* CONSTRUCT */:
                       {
                           const value = new rawValue(...argumentList);
                           returnValue = proxy(value);
                       }
                       break;
-                  case 4 /* ENDPOINT */:
+                  case "ENDPOINT" /* ENDPOINT */:
                       {
                           const { port1, port2 } = new MessageChannel();
                           expose(obj, port2);
                           returnValue = transfer(port1, [port1]);
                       }
                       break;
-                  case 5 /* RELEASE */:
+                  case "RELEASE" /* RELEASE */:
                       {
                           returnValue = undefined;
                       }
                       break;
+                  default:
+                      return;
               }
           }
           catch (value) {
@@ -130,7 +132,7 @@
               .then((returnValue) => {
               const [wireValue, transferables] = toWireValue(returnValue);
               ep.postMessage(Object.assign(Object.assign({}, wireValue), { id }), transferables);
-              if (type === 5 /* RELEASE */) {
+              if (type === "RELEASE" /* RELEASE */) {
                   // detach and deactive after sending release response above.
                   ep.removeEventListener("message", callback);
                   closeEndPoint(ep);
@@ -164,7 +166,7 @@
               if (prop === releaseProxy) {
                   return () => {
                       return requestResponseMessage(ep, {
-                          type: 5 /* RELEASE */,
+                          type: "RELEASE" /* RELEASE */,
                           path: path.map((p) => p.toString()),
                       }).then(() => {
                           closeEndPoint(ep);
@@ -177,7 +179,7 @@
                       return { then: () => proxy };
                   }
                   const r = requestResponseMessage(ep, {
-                      type: 0 /* GET */,
+                      type: "GET" /* GET */,
                       path: path.map((p) => p.toString()),
                   }).then(fromWireValue);
                   return r.then.bind(r);
@@ -190,7 +192,7 @@
               // boolean. To show good will, we return true asynchronously ¯\_(ツ)_/¯
               const [value, transferables] = toWireValue(rawValue);
               return requestResponseMessage(ep, {
-                  type: 1 /* SET */,
+                  type: "SET" /* SET */,
                   path: [...path, prop].map((p) => p.toString()),
                   value,
               }, transferables).then(fromWireValue);
@@ -200,7 +202,7 @@
               const last = path[path.length - 1];
               if (last === createEndpoint) {
                   return requestResponseMessage(ep, {
-                      type: 4 /* ENDPOINT */,
+                      type: "ENDPOINT" /* ENDPOINT */,
                   }).then(fromWireValue);
               }
               // We just pretend that `bind()` didn’t happen.
@@ -209,7 +211,7 @@
               }
               const [argumentList, transferables] = processArguments(rawArgumentList);
               return requestResponseMessage(ep, {
-                  type: 2 /* APPLY */,
+                  type: "APPLY" /* APPLY */,
                   path: path.map((p) => p.toString()),
                   argumentList,
               }, transferables).then(fromWireValue);
@@ -218,7 +220,7 @@
               throwIfProxyReleased(isProxyReleased);
               const [argumentList, transferables] = processArguments(rawArgumentList);
               return requestResponseMessage(ep, {
-                  type: 3 /* CONSTRUCT */,
+                  type: "CONSTRUCT" /* CONSTRUCT */,
                   path: path.map((p) => p.toString()),
                   argumentList,
               }, transferables).then(fromWireValue);
@@ -254,7 +256,7 @@
               const [serializedValue, transferables] = handler.serialize(value);
               return [
                   {
-                      type: 3 /* HANDLER */,
+                      type: "HANDLER" /* HANDLER */,
                       name,
                       value: serializedValue,
                   },
@@ -264,7 +266,7 @@
       }
       return [
           {
-              type: 0 /* RAW */,
+              type: "RAW" /* RAW */,
               value,
           },
           transferCache.get(value) || [],
@@ -272,9 +274,9 @@
   }
   function fromWireValue(value) {
       switch (value.type) {
-          case 3 /* HANDLER */:
+          case "HANDLER" /* HANDLER */:
               return transferHandlers.get(value.name).deserialize(value.value);
-          case 0 /* RAW */:
+          case "RAW" /* RAW */:
               return value.value;
       }
   }

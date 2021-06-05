@@ -17,6 +17,5 @@
   "versionAdded": "1.0.0",
   "persistentScripts": ["background.js"],
   "tags": ["popup", "recommended"],
-  "enabledByDefault": true,
-  "l10n": true
+  "enabledByDefault": true
 }
