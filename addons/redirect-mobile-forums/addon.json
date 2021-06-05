@@ -1,6 +1,6 @@
 {
-  "name": "Redirect mobile forums to the main forums",
-  "description": "Redirects you from the mobile forums to the main forums",
+  "name": "Redirect mobile forums to main forums",
+  "description": "Redirects you from /discuss/m/ to /discuss/.",
   "credits": [
     {
       "name": "9gr",
@@ -13,8 +13,7 @@
       "matches": ["https://scratch.mit.edu/discuss/m/*"]
     }
   ],
-  "versionAdded": "",
-  "tags": ["forums"],
-  "enabledByDefault": false,
-  "l10n": true
+  "versionAdded": "1.16.0",
+  "tags": ["community", "forums", "easterEgg"],
+  "enabledByDefault": false
 }
