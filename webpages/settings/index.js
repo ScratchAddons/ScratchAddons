@@ -387,7 +387,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       searchInputReal(newValue) {
         setTimeout(() => {
           if (this.searchInputReal === newValue) this.searchInput = newValue;
-        }, 250);
+        }, 150);
       },
       selectedCategory(newValue) {
         // TODO: easter eggs show, avoid easter egg poofing
