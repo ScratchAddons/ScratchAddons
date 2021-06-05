@@ -22,7 +22,7 @@ export default async function ({ addon, global, console }) {
             retroid: token
         }
         var url = `https://state.onedot.cf/api/v1/user/${user}`
-        return await fetch(url, {
+        var resp = await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
@@ -34,6 +34,7 @@ export default async function ({ addon, global, console }) {
             referrerPolicy: 'no-referrer',
             body: JSON.stringify(data)
         });
+        return await resp.json();
     }
     global.getOneState = async (user) => {
         var data = fetch(`https://state.onedot.cf/api/v1/user/${user}`)
@@ -60,6 +61,8 @@ export default async function ({ addon, global, console }) {
             } else {
                 global.setOneState(true, `Looking at ${document.title}`, path);
             }
+        }else{
+            global.setOneState(true, "", path);
         }
     } else {
         global.setOneState(true, "", "")

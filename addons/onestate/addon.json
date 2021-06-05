@@ -4,12 +4,12 @@
   "tags": ["community"],
   "userscripts": [
     {
-      "url": "user.js",
-      "matches": ["https://scratch.mit.edu/users/*"]
-    },
-    {
       "url": "addon.js",
       "matches": ["https://scratch.mit.edu/*"]
+    },
+    {
+      "url": "user.js",
+      "matches": ["https://scratch.mit.edu/users/*"]
     }
   ],
   "userstyles": [
