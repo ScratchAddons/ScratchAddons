@@ -12,11 +12,11 @@ export default async function ({ template }) {
     computed: {
       addonIconSrc() {
         const map = {
-          "editor": "puzzle",
-          "community": "web",
-          "theme": "brush",
-          "easterEgg": "egg-easter",
-          "popup": "popup"
+          editor: "puzzle",
+          community: "web",
+          theme: "brush",
+          easterEgg: "egg-easter",
+          popup: "popup",
         };
         return `../../images/icons/${map[this.addon._icon]}.svg`;
       },
