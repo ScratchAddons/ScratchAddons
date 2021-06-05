@@ -200,17 +200,17 @@ class GamepadData {
         ...Array.from(usedKeys).filter((i) => i.length === 1 && !possiblePauseKeys.includes(i)),
       ];
 
-      const findKey = (keys, def = "none") => {
-        for (const key of keys) {
-          if (usedKeys.has(key) && !alreadyUsedKeys.has(key)) {
-            return reserveKey(key);
-          }
-        }
-        return def;
-      };
       const reserveKey = (key) => {
         alreadyUsedKeys.add(key);
-        return key;
+      };
+      const findKey = (keys) => {
+        for (const key of keys) {
+          if (usedKeys.has(key) && !alreadyUsedKeys.has(key)) {
+            reserveKey(key);
+            return key;
+          }
+        }
+        return null;
       };
       const getPrimaryAction = () => {
         if (usesArrows && usedKeys.has("ArrowUp")) {
@@ -244,7 +244,23 @@ class GamepadData {
         return "a";
       };
 
-      // Set indices "manually" because we don't necessarily want to evaluate them in order.
+      const action1 = getPrimaryAction();
+      let action2 = getSecondaryAction();
+      let action3 = getSecondaryAction();
+      let action4 = getSecondaryAction();
+      // If there is only one action keys, map all keys to it.
+      if (action1 && !action2 && !action3 && !action4) {
+        action2 = action1;
+        action3 = action1;
+        action4 = action1;
+      }
+      // if there are only two action keys, map the other two to those.
+      if (action1 && action2 && !action3 && !action4) {
+        action3 = action1;
+        action4 = action2;
+      }
+
+      // Set indices "manually" because we don't evaluate them in order.
       buttons = [];
       buttons[0] = {
         /*
@@ -252,7 +268,7 @@ class GamepadData {
         SNES-like: B
         */
         type: "key",
-        high: getPrimaryAction(),
+        high: action1,
       };
       buttons[1] = {
         /*
@@ -260,7 +276,7 @@ class GamepadData {
         SNES-like: A
         */
         type: "key",
-        high: getSecondaryAction(),
+        high: action2,
       };
       buttons[2] = {
         /*
@@ -268,7 +284,7 @@ class GamepadData {
         SNES-like: Y
         */
         type: "key",
-        high: getSecondaryAction(),
+        high: action3,
       };
       buttons[3] = {
         /*
@@ -276,7 +292,7 @@ class GamepadData {
         SNES-like: X
         */
         type: "key",
-        high: getSecondaryAction(),
+        high: action4,
       };
       buttons[4] = {
         /*
@@ -360,8 +376,10 @@ class GamepadData {
         type: "key",
         high: getRight(),
       };
+
+      // Convert null keys to empty mappings
       for (const button of buttons) {
-        if (button.high === "none") {
+        if (button.high === null) {
           button.type = "none";
           delete button.high;
         }
