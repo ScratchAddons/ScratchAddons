@@ -54,10 +54,5 @@
       "text": "Get a token by going to https://state.onedot.cf/auth .",
       "id": "get_a_token"
     }
-  ],
-  "popup": {
-    "icon": "../../addons/onestate/onestate.png",
-    "name": "OneState",
-    "fullscreen": true
-  }
+  ]
 }
