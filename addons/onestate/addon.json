@@ -4,55 +4,14 @@
   "tags": ["community"],
   "userscripts": [
     {
-      "url": "addon.js",
-      "matches": ["https://scratch.mit.edu/*"]
-    },
-    {
       "url": "user.js",
       "matches": ["https://scratch.mit.edu/users/*"]
-    }
-  ],
-  "userstyles": [
-    {
-      "url": "user.css",
-      "matches": ["https://scratch.mit.edu/users/*"]
-    }
-  ],
-  "settings": [
-    {
-      "name": "Token",
-      "id": "token",
-      "type": "string",
-      "default": "0000000000"
-    },
-    {
-      "name": "Rich Presense?",
-      "id": "rpc",
-      "type": "boolean",
-      "default": false
     }
   ],
   "credits": [
     {
       "name": "William Horning",
       "link": "https://www.wgyt.tk"
-    }
-  ],
-  "info": [
-    {
-      "type": "notice",
-      "text": "See the legal stuff at https://onedot.cf/legal .",
-      "id": "read_legal_stuff"
-    },
-    {
-      "type": "notice",
-      "text": "RPC only works on the most recently loaded tab at the moment. This may change in the future.",
-      "id": "read_legal_stuff"
-    },
-    {
-      "type": "warning",
-      "text": "Get a token by going to https://state.onedot.cf/auth .",
-      "id": "get_a_token"
     }
   ]
 }
