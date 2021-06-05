@@ -6,7 +6,6 @@
   "tags": ["popup", "recommended"],
   "enabledByDefault": true,
   "versionAdded": "1.0.0",
-  "l10n": true,
   "settings": [
     {
       "name": "Badge color",

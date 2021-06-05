@@ -16,6 +16,5 @@
       "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
-  "libraries": ["chartjs"],
-  "l10n": true
+  "libraries": ["chartjs"]
 }
