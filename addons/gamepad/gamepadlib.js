@@ -24,22 +24,12 @@ low: "+y"/"-y"/"+x"/"-x" defines what happens when an axis reads low
 const defaultAxesMappings = {
   arrows: [
     {
-      /*
-      Axis 0
-      Xbox: Left analog stick left(-)/right(+)
-      SNES-like: D-pad left(-1)/right(+1)
-      */
       type: "key",
       high: "ArrowRight",
       low: "ArrowLeft",
       deadZone: 0.5,
     },
     {
-      /*
-      Axis 1
-      Xbox: Left analog stick up(-)/down(+)
-      SNES-like: D-pad up(-1)/down(+1)
-      */
       type: "key",
       high: "ArrowDown",
       low: "ArrowUp",
@@ -62,10 +52,6 @@ const defaultAxesMappings = {
   ],
   cursor: [
     {
-      /*
-      Axis 2
-      Xbox: Right analog stick left(-)/right(+)
-      */
       type: "virtual_cursor",
       high: "+x",
       low: "-x",
@@ -73,10 +59,6 @@ const defaultAxesMappings = {
       deadZone: 0.2,
     },
     {
-      /*
-      Axis 3
-      Xbox: Right analog stick up(-)/down(+)
-      */
       type: "virtual_cursor",
       high: "-y",
       low: "+y",
