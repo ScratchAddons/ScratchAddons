@@ -566,6 +566,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         naturalIndex++;
       });
     }
+    // Remove unused remaining cached objects. Can only happen in iframe mode
+    vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
 
     vue.loaded = true;
     if (isIframe) setTimeout(() => document.getElementById("searchBox").focus(), 0);
