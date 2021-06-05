@@ -234,13 +234,13 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1": {
-    "message": "Some new addons of this update are \"gamepad support\", \"cat blocks\", \"editor sound effects\" and \"remove curved stage border\". Go to $1 to enable them."
+    "message": "New addons of this update are \"block transparency\", \"Ctrl+Click to run scripts\", \"do not automatically run duplicated blocks\" and \"filter messages on Scratch's messages page\". Go to $1 to enable them."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
   "extensionUpdateInfo2": {
-    "message": "This update also ships a more organized Scratch Addons settings page, as well as performance improvements when using addons in the project editor."
+    "message": "This update also changed the default color of the Scratch Addons extension badge which displays your unread messages count. Go to $1 to go back to the old green or customize the color yourself."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."

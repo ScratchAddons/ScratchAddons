@@ -8,7 +8,7 @@ export default async ({ addon, console, msg }) => {
 
   const makeAdder = (headerMsg, btnMsg, cb) => {
     const adderSec = document.createElement("div");
-    adderSec.className = "studio-adder-section";
+    adderSec.className = "studio-adder-section sa-studio-tools-adder";
 
     const adderHeader = document.createElement("h3");
     const adderHeaderSpan = document.createElement("span");
@@ -99,6 +99,8 @@ export default async ({ addon, console, msg }) => {
 
       const addTo = document.querySelector(".studio-tabs div:nth-child(2)");
       addTo.prepend(pSec, rSec);
+    } else {
+      Array.prototype.forEach.call(document.getElementsByClassName("sa-studio-tools-adder"), (e) => e.remove());
     }
 
     if (canLeave) {
