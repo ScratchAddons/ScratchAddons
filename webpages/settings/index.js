@@ -181,8 +181,10 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         addonListObjs: Array(25)
           .fill("")
           .map((s, i) => ({
+            // Need to specify all used properties for reactivity!
             group: addonGroups[0],
             manifest: JSON.parse(JSON.stringify(exampleManifest)),
+            matchesSearch: true,
             matchesCategory: true,
             naturalIndex: i,
             headerAbove: false,
