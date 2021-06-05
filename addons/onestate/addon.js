@@ -21,7 +21,8 @@ export default async function ({ addon, global, console }) {
             richpresenseurl: rpcurl,
             retroid: token
         }
-        return await fetch(`https://state.onedot.cf/api/v1/user/${user}`, {
+        var url = `https://state.onedot.cf/api/v1/user/${user}`
+        return await fetch(url, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
