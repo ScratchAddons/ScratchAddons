@@ -9,6 +9,8 @@ export default async function ({ addon, global, console, msg }) {
     vm.runtime.once("PROJECT_LOADED", resolve);
   });
 
+  const vmStarted = () => vm.runtime._steppingInterval !== null;
+
   const scratchKeyToKey = (key) => {
     switch (key) {
       case "right arrow":
@@ -363,6 +365,7 @@ export default async function ({ addon, global, console, msg }) {
   let virtualX = 0;
   let virtualY = 0;
   const postMouseData = (data) => {
+    if (addon.self.disabled || !vmStarted()) return;
     const [rectWidth, rectHeight] = getCanvasSize();
     vm.postIOData("mouse", {
       ...data,
@@ -372,40 +375,26 @@ export default async function ({ addon, global, console, msg }) {
       y: (height / 2 - virtualY) * (rectHeight / height),
     });
   };
-  const handleGamepadButtonDown = (e) => {
-    if (addon.self.disabled) return;
-    const key = e.detail;
+  const postKeyboardData = (key, isDown) => {
+    if (addon.self.disabled || !vmStarted()) return;
     vm.postIOData("keyboard", {
-      key: key,
+      key,
+      isDown
+    });
+  };
+  const handleGamepadButtonDown = (e) => postKeyboardData(e.detail, true);
+  const handleGamepadButtonUp = (e) => postKeyboardData(e.detail, false);
+  const handleGamepadMouseDown = () => {
+    virtualCursorSetDown(true);
+    postMouseData({
       isDown: true,
     });
   };
-  const handleGamepadButtonUp = (e) => {
-    if (addon.self.disabled) return;
-    const key = e.detail;
-    vm.postIOData("keyboard", {
-      key: key,
+  const handleGamepadMouseUp = () => {
+    virtualCursorSetDown(false);
+    postMouseData({
       isDown: false,
     });
-  };
-  const vmStarted = () => vm.runtime._steppingInterval !== null;
-  const handleGamepadMouseDown = () => {
-    if (addon.self.disabled) return;
-    virtualCursorSetDown(true);
-    if (vmStarted()) {
-      postMouseData({
-        isDown: true,
-      });
-    }
-  };
-  const handleGamepadMouseUp = () => {
-    if (addon.self.disabled) return;
-    virtualCursorSetDown(false);
-    if (vmStarted()) {
-      postMouseData({
-        isDown: false,
-      });
-    }
   };
   const handleGamepadMouseMove = (e) => {
     if (addon.self.disabled) return;
