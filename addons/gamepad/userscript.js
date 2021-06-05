@@ -220,7 +220,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     };
     const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
+      if (e.key === "Escape" && !e.target.closest("[data-accepting-input]")) {
         close();
       }
     };
