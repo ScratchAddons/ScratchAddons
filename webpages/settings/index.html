@@ -167,14 +167,14 @@
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
           <template v-for="addon of addonList">
-            <!-- <div
+            <div
               id="iframe-fullscreen-suggestion"
-              v-if="isIframe && group.id === 'enabled'"
+              v-if="isIframe && addon.headerAbove && addon.group.id === 'enabled'"
               v-show="searchInput === ''"
             >
               <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
               <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
-            </div> -->
+            </div>
             <addon-group-header v-if="addon.headerAbove" :group="addon.group"></addon-group-header>
             <addon-body
               :visible="addon.matchesSearch && addon.matchesCategory"
