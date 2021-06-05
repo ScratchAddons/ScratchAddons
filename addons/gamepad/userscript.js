@@ -313,10 +313,10 @@ export default async function ({ addon, global, console, msg }) {
     document.body.classList.remove("sa-gamepad-hide-cursor");
   };
   const virtualCursorSetVisible = (visible) => {
-    hideRealCursor();
     virtualCursorContainer.hidden = !visible;
     clearTimeout(hideCursorTimeout);
     if (visible) {
+      hideRealCursor();
       hideCursorTimeout = setTimeout(virtualCursorHide, 8000);
     }
   };
