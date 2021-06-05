@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console }) {
-  if (addon.tab.clientVersion == null) return; //if neither www or r2, exit
+  if (addon.tab.clientVersion === null) return; //if neither www or r2, exit
 
   var exsearch_searchBar; //The search bar element
 
@@ -7,12 +7,12 @@ export default async function ({ addon, global, console }) {
   //Also we set the search bar value here too
   while (true) {
     exsearch_searchBar = await addon.tab.waitForElement(
-      addon.tab.clientVersion == "scratch-www" ? "#frc-q-1088" : "#search-input",
+      addon.tab.clientVersion === "scratch-www" ? "#frc-q-1088" : "#search-input",
       { markAsSeen: true }
     );
 
     ///Events
-    if (addon.tab.clientVersion == "scratch-www") {
+    if (addon.tab.clientVersion === "scratch-www") {
       //We're on scratch-www
 
       //Elements
