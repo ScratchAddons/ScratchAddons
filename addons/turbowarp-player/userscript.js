@@ -1,5 +1,6 @@
 export default async function ({ addon, console }) {
   let playerToggled = false;
+  let wasEverToggled = false;
   let scratchStage;
   let twIframe = document.createElement("iframe");
   twIframe.style.border = "none";
@@ -22,6 +23,12 @@ export default async function ({ addon, console }) {
         twIframe.style.display = "";
         scratchStage.style.display = "none";
         button.classList.add("scratch");
+        if (!wasEverToggled) {
+          twIframe.src =
+            "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed?username=" + addon.auth.username;
+          scratchStage.parentElement.append(twIframe);
+        }
+        wasEverToggled = true;
       } else {
         twIframe.style.display = "none";
         scratchStage.style.display = "";
@@ -42,11 +49,7 @@ export default async function ({ addon, console }) {
 
     scratchStage = document.querySelector("[class^='stage-wrapper_stage-wrapper']");
 
-    twIframe.src =
-      "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed?username=" + addon.auth.username;
-
-    scratchStage.parentElement.append(twIframe);
-
+    wasEverToggled = false;
     playerToggled = true;
     button.click();
 
