@@ -36,7 +36,6 @@
   "live-featured-project",
   "forum-quote-code-beautifier",
   "fix-uploaded-svgs",
-  "turbowarp-player",
   "project-info",
   "curator-link",
   "confirm-actions",
@@ -78,6 +77,7 @@
   "remove-curved-stage-border",
   "fix-pasted-scripts",
   "ctrl-click-run-scripts",
+  "turbowarp-player",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

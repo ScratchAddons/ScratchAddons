@@ -30,7 +30,13 @@ export default async function ({ addon, console }) {
   };
 
   while (true) {
-    let row = await addon.tab.waitForElement(".project-buttons", { markAsSeen: true });
+    const row = await addon.tab.waitForElement(".preview .project-buttons", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
+    });
+    row.prepend(button);
+
     scratchStage = document.querySelector("[class^='stage-wrapper_stage-wrapper']");
 
     twIframe.src = "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed";
@@ -42,8 +48,6 @@ export default async function ({ addon, console }) {
 
     playerToggled = true;
     button.click();
-
-    row.prepend(button);
 
     if (
       addon.settings.get("auto") &&
