@@ -39,7 +39,8 @@ export default async function ({ addon, console }) {
 
     scratchStage = document.querySelector("[class^='stage-wrapper_stage-wrapper']");
 
-    twIframe.src = "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed";
+    twIframe.src =
+      "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed?username=" + addon.auth.username;
     // TODO: Height and width is weird.
     twIframe.style.width = scratchStage.clientWidth + "px";
     twIframe.style.height = scratchStage.clientHeight + "px";
