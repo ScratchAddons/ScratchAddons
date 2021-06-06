@@ -218,9 +218,15 @@ export default async function ({ addon, global, console, msg }) {
     document.body.removeChild(element);
   };
 
-  exportButton.addEventListener("click", () => {
+  exportButton.addEventListener("click", (e) => {
+    const defaultFormat = "{sprite}: {content} ({type})";
+    const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
     closeDragElement();
-    let file = logs.join("\n");
+    let file = logs
+      .map(({ targetName, type, content }) =>
+        exportFormat.replace("{sprite}", targetName).replace("{type}", type).replace("{content}", content)
+      )
+      .join("\n");
     download("logs.txt", file);
   });
   let logs = [];
@@ -260,12 +266,11 @@ export default async function ({ addon, global, console, msg }) {
         wrapper.append(inputSpan);
       }
     }
-    let string = addon.settings
-      .get("exportFormat")
-      .replace("{sprite}", targetName)
-      .replace("{type}", type)
-      .replace("{content}", content);
-    logs.push(string);
+    logs.push({
+      targetName,
+      type,
+      content,
+    });
     wrapper.append(span(content));
 
     let link = document.createElement("a");
