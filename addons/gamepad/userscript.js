@@ -133,6 +133,7 @@ export default async function ({ addon, global, console, msg }) {
   buttonContent.appendChild(buttonImage);
   buttonContainer.appendChild(buttonContent);
   container.appendChild(buttonContainer);
+
   let editor;
   let shouldStoreSettingsInProject = false;
   const didChangeProject = () => {
@@ -280,6 +281,10 @@ export default async function ({ addon, global, console, msg }) {
 
     editor.focus();
   });
+
+  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
+    document.body.classList.add("sa-gamepad-small");
+  }
   document.addEventListener(
     "click",
     (e) => {
@@ -411,17 +416,27 @@ export default async function ({ addon, global, console, msg }) {
   gamepad.addEventListener("mousemove", handleGamepadMouseMove);
 
   while (true) {
-    const stageHeaderSizeControls = await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
-      markAsSeen: true,
-      reduxCondition: (state) => !state.scratchGui.mode.isFullScreen,
-      reduxEvents: [
-        "scratch-gui/mode/SET_PLAYER",
-        "scratch-gui/mode/SET_FULL_SCREEN",
-        "fontsLoaded/SET_FONTS_LOADED",
-        "scratch-gui/locales/SELECT_LOCALE",
-      ],
-    });
-    stageHeaderSizeControls.insertBefore(container, stageHeaderSizeControls.firstChild);
+    const target = await addon.tab.waitForElement(
+      '[class^="stage-header_stage-size-row"], [class^="stage-header_stage-menu-wrapper"] > [class^="button_outlined-button"]',
+      {
+        markAsSeen: true,
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "scratch-gui/mode/SET_FULL_SCREEN",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+        ],
+      }
+    );
+    container.dataset.editorMode = addon.tab.editorMode;
+    if (target.className.includes("stage-size-row")) {
+      target.insertBefore(container, target.firstChild);
+    } else {
+      const spacer = document.createElement("div");
+      spacer.className = "sa-gamepad-spacer";
+      spacer.appendChild(container);
+      target.parentElement.insertBefore(spacer, target);
+    }
 
     const monitorListScaler = document.querySelector("[class^='monitor-list_monitor-list-scaler']");
     monitorListScaler.appendChild(virtualCursorContainer);

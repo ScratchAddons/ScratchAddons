@@ -1,5 +1,6 @@
-.sa-gamepad-container {
-  margin-right: 0.2rem;
+.gamepadlib-selector {
+  width: 100%;
+  margin-bottom: 3px;
 }
 
 .gamepadlib-content {
