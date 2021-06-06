@@ -33,7 +33,7 @@ export default async function ({ template }) {
       checkValidity() {
         // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
         let input = document.querySelector(
-          `input[type='number'][data-addon-id='${this.addon._addonId}'][data-setting-id='${this.setting.id}']`
+          `input[data-addon-id='${this.addon._addonId}'][data-setting-id='${this.setting.id}']`
         );
         this.addonSettings[this.addon._addonId][this.setting.id] = input.validity.valid
           ? input.value
