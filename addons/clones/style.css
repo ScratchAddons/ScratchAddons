@@ -45,3 +45,7 @@
 .clone-count::after {
   content: attr(data-str);
 }
+
+.sa-clones-small .clone-container-container {
+  display: none !important;
+}
