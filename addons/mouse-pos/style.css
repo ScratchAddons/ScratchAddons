@@ -27,6 +27,6 @@
   content: attr(data-content);
 }
 
-.sa-mouse-pos-small .pos-container {
+.sa-mouse-pos-small .pos-container-container {
   display: none !important;
 }
