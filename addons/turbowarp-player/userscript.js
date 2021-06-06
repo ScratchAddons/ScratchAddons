@@ -39,7 +39,10 @@ export default async function ({ addon, console }) {
     twIframe.style.height = scratchStage.clientHeight + "px";
 
     scratchStage.parentElement.append(twIframe);
-    playerToggled = false;
+
+    playerToggled = true;
+    button.click();
+
     row.prepend(button);
 
     if (
