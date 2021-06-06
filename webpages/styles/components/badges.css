@@ -6,6 +6,7 @@
   font-size: 12px;
   margin-inline-start: 10px;
   border-bottom: 2px solid #111;
+  white-space: nowrap;
 }
 
 .badge.blue {
