@@ -7,6 +7,9 @@ export default async function ({ addon, console }) {
   twIframe.scrolling = "no";
   twIframe.allowtransparency = "true";
   twIframe.allowfullscreen = "true";
+  // The stage is "bouncing" after switching
+  twIframe.style.width = "499px";
+  twIframe.style.height = "416px";
 
   const button = document.createElement("button");
   button.className = "button see-inside-button sa-tw-button";
@@ -41,9 +44,6 @@ export default async function ({ addon, console }) {
 
     twIframe.src =
       "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed?username=" + addon.auth.username;
-    // TODO: Height and width is weird.
-    twIframe.style.width = scratchStage.clientWidth + "px";
-    twIframe.style.height = scratchStage.clientHeight + "px";
 
     scratchStage.parentElement.append(twIframe);
 
