@@ -612,6 +612,11 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           const addonId = hash.substring(7);
           const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
           groupWithAddon.expanded = true;
+          setTimeout(() => {
+            // Only required in Firefox
+            window.location.hash = "";
+            window.location.hash = hash;
+          }, 0);
         }
       }
     }, 0);
