@@ -1,0 +1,13 @@
+.preview .sa-tw-button {
+  padding: 0px 5px 0px 11px;
+  background: #ff4d4d;
+}
+.preview .sa-tw-button.scratch {
+  background: #f8aa36;
+}
+.preview .sa-tw-button:before {
+  background-image: url(icon.svg);
+}
+.preview .sa-tw-button.scratch:before {
+  background-image: url(https://scratch.mit.edu/favicon.ico);
+}

@@ -1,0 +1,55 @@
+{
+  "name": "TurboWarp Player",
+  "description": "Replaces scratch's player with TurboWarp's.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "If using the \"Replace player option\", all addons that change or add things in the project player will not be added. However, TW's features like Alt + Clicking the flag is still possible.",
+      "id": "addonWontWork"
+    }
+  ],
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Button Action",
+      "id": "action",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "player",
+          "name": "Replace player"
+        },
+        {
+          "id": "link",
+          "name": "Open tab"
+        }
+      ],
+      "default": "player"
+    },
+    {
+      "name": "Auto replace when mentioned in project's \"Intructions\" or \"Notes and Credits\"",
+      "id": "auto",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["editor", "projectPage"]
+}
