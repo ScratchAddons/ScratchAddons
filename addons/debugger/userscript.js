@@ -125,7 +125,7 @@ export default async function ({ addon, global, console, msg }) {
     draggable: false,
   });
   const unpauseImg = Object.assign(document.createElement("img"), {
-    src: "/svgs/extensions/download-white.svg", // TODO: suiting play icon
+    src: "/static/assets/b5257afbe4bcf7953029ddb8f18b24fe.svg",
   });
   const unpauseText = Object.assign(document.createElement("span"), {
     innerText: msg("unpause"),

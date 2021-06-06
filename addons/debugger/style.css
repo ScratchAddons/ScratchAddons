@@ -34,6 +34,10 @@
     background-color: rgba(0, 0, 0, 0);
   }
 }
+.sa-debugger-unpause > img {
+  width: 20px;
+  height: 20px;
+}
 
 .log {
   --message-border-color: rgba(0, 0, 0, 0.15);
