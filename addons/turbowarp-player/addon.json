@@ -1,6 +1,6 @@
 {
-  "name": "TurboWarp Player",
-  "description": "Replaces scratch's player with TurboWarp's.",
+  "name": "TurboWarp button on project pages",
+  "description": "Adds a button to visit a project in turbowarp.",
   "info": [
     {
       "type": "notice",
@@ -41,7 +41,7 @@
           "name": "Open tab"
         }
       ],
-      "default": "player"
+      "default": "link"
     },
     {
       "name": "Auto replace when mentioned in project's \"Intructions\" or \"Notes and Credits\"",
