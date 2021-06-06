@@ -134,6 +134,9 @@ export default async function ({ addon, global, console, msg }) {
   buttonContainer.appendChild(buttonContent);
   container.appendChild(buttonContainer);
 
+  const spacer = document.createElement("div");
+  spacer.className = "sa-gamepad-spacer";
+
   let editor;
   let shouldStoreSettingsInProject = false;
   const didChangeProject = () => {
@@ -431,9 +434,8 @@ export default async function ({ addon, global, console, msg }) {
     container.dataset.editorMode = addon.tab.editorMode;
     if (target.className.includes("stage-size-row")) {
       target.insertBefore(container, target.firstChild);
+      spacer.remove();
     } else {
-      const spacer = document.createElement("div");
-      spacer.className = "sa-gamepad-spacer";
       spacer.appendChild(container);
       target.parentElement.insertBefore(spacer, target);
     }
