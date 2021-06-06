@@ -1,11 +1,6 @@
 export default {
   name: "",
   description: "",
-  credits: [
-    {
-      name: "Credit",
-    },
-  ],
   tags: [],
   _categories: ["editor"],
   _icon: "editor",
