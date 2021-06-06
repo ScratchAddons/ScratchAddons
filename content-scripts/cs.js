@@ -14,12 +14,13 @@ const onMessageBackgroundReady = (request, sender, sendResponse) => {
 };
 chrome.runtime.onMessage.addListener(onMessageBackgroundReady);
 const onResponse = (res) => {
-  if (res) {
+  if (res && !receivedResponse) {
     console.log("[Message from background]", res);
     chrome.runtime.onMessage.removeListener(onMessageBackgroundReady);
-    receivedResponse = true;
-    if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") onInfoAvailable(res);
-    else {
+    if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") {
+      onInfoAvailable(res);
+      receivedResponse = true;
+    } else {
       pseudoUrl = `https://scratch.mit.edu/${res.httpStatusCode}/`;
       console.log(`Status code was not 2xx, replacing URL to ${pseudoUrl}`);
       chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
@@ -255,6 +256,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
     if (document.querySelector("meta[name='format-detection']")) {
       // scratch-www studio
       pseudoUrl = location.href.replace("/studios/", "/studios_www/");
+      receivedResponse = false;
       chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
       return;
     }
