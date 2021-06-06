@@ -71,7 +71,7 @@ const defaultAxesMappings = {
 const emptyMapping = () => ({
   type: "key",
   high: null,
-  low: null
+  low: null,
 });
 const transformAndCopyMapping = (mapping) => {
   if (typeof mapping !== "object" || !mapping) {
@@ -725,7 +725,7 @@ class GamepadEditor extends EventTarget {
     return key.toUpperCase();
   }
 
-  createButtonMapping(mappingList, index, {property = "high", allowClick = true} = {}) {
+  createButtonMapping(mappingList, index, { property = "high", allowClick = true } = {}) {
     const input = document.createElement("input");
     input.readOnly = true;
     input.className = "gamepadlib-keyinput";
@@ -893,10 +893,10 @@ class GamepadEditor extends EventTarget {
       removeAllChildren(circleOverlay);
       if (mappingList[index].type === "key") {
         const buttons = [
-          this.createButtonMapping(mappingList, index + 1, {property: "low", allowClick: false }),
-          this.createButtonMapping(mappingList, index, {property: "low", allowClick: false }),
-          this.createButtonMapping(mappingList, index, {property: "high", allowClick: false }),
-          this.createButtonMapping(mappingList, index + 1, {property: "high", allowClick: false }),
+          this.createButtonMapping(mappingList, index + 1, { property: "low", allowClick: false }),
+          this.createButtonMapping(mappingList, index, { property: "low", allowClick: false }),
+          this.createButtonMapping(mappingList, index, { property: "high", allowClick: false }),
+          this.createButtonMapping(mappingList, index + 1, { property: "high", allowClick: false }),
         ];
         for (const button of buttons) {
           button.classList.add("gamepadlib-axis-mapper");
