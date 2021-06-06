@@ -48,6 +48,7 @@
     <link rel="modulepreload" href="data/tags.js" />
     <link rel="modulepreload" href="data/addon-groups.js" />
     <link rel="modulepreload" href="data/categories.js" />
+    <link rel="modulepreload" href="data/example-manifest.js" />
 
     <!-- Preload images -->
     <link rel="preload" href="../../images/icons/switch.svg" as="image" />
@@ -62,6 +63,7 @@
     <link rel="preload" href="../../images/icons/comment.svg" as="image" />
     <link rel="preload" href="../../images/icons/wrench.svg" as="image" />
     <link rel="preload" href="../../images/icons/search.svg" as="image" />
+    <link rel="preload" href="../../images/icons/expand.svg" as="image" />
 
     <!-- Preload components -->
     <link rel="preload" href="components/picker-component.html" as="fetch" crossorigin />
@@ -72,8 +74,8 @@
     <link rel="modulepreload" href="components/addon-setting.js" />
     <link rel="preload" href="components/addon-tag.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/addon-tag.js" />
-    <link rel="preload" href="components/addon-group.html" as="fetch" crossorigin />
-    <link rel="modulepreload" href="components/addon-group.js" />
+    <link rel="preload" href="components/addon-group-header.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/addon-group-header.js" />
     <link rel="preload" href="components/addon-body.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/addon-body.js" />
     <link rel="preload" href="components/category-selector.html" as="fetch" crossorigin />
@@ -105,7 +107,7 @@
     <script src="../../libraries/thirdparty/color-picker.js" type="module"></script>
     <script src="index.js" type="module"></script>
   </head>
-  <body v-cloak v-show="isIframe && loaded || !isIframe" :class="{light: theme}">
+  <body v-cloak :class="{light: theme}">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
@@ -159,32 +161,32 @@
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div class="search-box" :class="{smallMode: smallMode === true}">
-          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" />
+          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
           <button v-cloak v-else class="search-clear-button" @click="clearSearch()"></button>
         </div>
 
-        <div class="addons-container" v-cloak v-show="loaded">
-          <template v-for="group of addonGroups">
+        <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
+          <template v-for="addon of addonList">
             <div
               id="iframe-fullscreen-suggestion"
-              v-if="isIframe && group.id === 'enabled'"
+              v-if="isIframe && addon.headerAbove && addon.group.id === 'enabled'"
               v-show="searchInput === ''"
             >
               <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
               <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
             </div>
-            <addon-group :group="group"></addon-group>
-          </template>
-
-          <!-- Search pseudogroup -->
-          <!-- Must be below real groups to make index.html/#addon-addonid work -->
-          <template v-if="searchLoaded">
+            <addon-group-header
+              v-if="addon.headerAbove"
+              :group="addon.group"
+              :shown-count="groupShownCount(addon.group)"
+              :margin-above="groupMarginAbove(addon.group)"
+            ></addon-group-header>
             <addon-body
-              v-for="addonId of searchAddonOrder"
-              :addon="manifestsById[addonId]"
-              group-id="search"
-              :group-expanded="searchInput !== ''"
+              :visible="addon.matchesSearch && addon.matchesCategory"
+              :addon="addon.manifest"
+              :group-id="addon.group.id"
+              :group-expanded="addon.group.expanded"
             ></addon-body>
           </template>
         </div>

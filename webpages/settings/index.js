@@ -4,6 +4,7 @@ import loadVueComponent from "../../libraries/common/load-vue-components.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
+import exampleManifest from "./data/example-manifest.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -19,6 +20,7 @@ let initialThemePath;
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
+lightThemeLink.setAttribute("data-below-vue-components", "");
 chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   if (globalTheme === true) {
     document.head.appendChild(lightThemeLink);
@@ -40,7 +42,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     "webpages/settings/components/reset-dropdown",
     "webpages/settings/components/addon-setting",
     "webpages/settings/components/addon-tag",
-    "webpages/settings/components/addon-group",
+    "webpages/settings/components/addon-group-header",
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
   ]);
@@ -165,7 +167,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         searchLoaded: false,
         manifests: [],
         manifestsById: {},
-        searchAddonOrder: [],
         selectedCategory: "all",
         searchInput: "",
         searchInputReal: "",
@@ -178,9 +179,32 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         searchMsg: this.msg("search"),
         browserLevelPermissions,
         grantedOptionalPermissions,
+        addonListObjs: [],
       };
     },
     computed: {
+      addonList() {
+        if (!this.searchInput) {
+          this.addonListObjs
+            .filter((obj) => obj.group.id !== "_iframeSearch")
+            .forEach((obj) => (obj.matchesSearch = true));
+          return this.addonListObjs.sort((b, a) => b.naturalIndex - a.naturalIndex);
+        }
+
+        const matchesSearch = (manifest) =>
+          manifest.name.toLowerCase().includes(this.searchInput) ||
+          manifest._addonId.toLowerCase().includes(this.searchInput) ||
+          manifest.description.toLowerCase().includes(this.searchInput) ||
+          (manifest.credits &&
+            manifest.credits.map((obj) => obj.name.toLowerCase()).some((author) => author.includes(this.searchInput)));
+
+        // Order for this array matters
+        const results = this.addonListObjs
+          .filter((addon, i) => !addon.duplicate && matchesSearch(addon.manifest))
+          .sort((a, b) => b.naturalIndex - a.naturalIndex);
+        for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
+        return this.addonListObjs.sort((a, b) => results.indexOf(b) - results.indexOf(a));
+      },
       version() {
         return chrome.runtime.getManifest().version;
       },
@@ -336,6 +360,17 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           { once: true }
         );
       },
+      groupShownCount(group) {
+        if (group.id === "_iframeSearch") return -1;
+        return this.addonListObjs.filter(
+          (addon) => addon.group === group && addon.matchesSearch && addon.matchesCategory
+        ).length;
+      },
+      groupMarginAbove(group) {
+        const i = this.addonGroups.indexOf(group);
+        if (i === 0) return false;
+        else return this.groupShownCount(this.addonGroups[i - 1]) > 0;
+      },
     },
     events: {
       closesidebar(event) {
@@ -352,12 +387,48 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     },
     watch: {
       searchInputReal(newValue) {
-        if (this.searchLoaded) this.searchInput = newValue;
+        if (newValue === "") return (this.searchInput = newValue);
+        setTimeout(() => {
+          if (this.searchInputReal === newValue) this.searchInput = newValue;
+        }, 150);
+      },
+      selectedCategory(newValue) {
+        this.addonListObjs.forEach((obj) => {
+          const shouldHideAsEasterEgg =
+            obj.manifest._categories[0] === "easterEgg" &&
+            newValue !== "easterEgg" &&
+            obj.manifest._wasEverEnabled === false;
+          obj.matchesCategory =
+            !shouldHideAsEasterEgg && (newValue === "all" || obj.manifest._categories.includes(newValue));
+        });
       },
     },
     ready() {
-      // Needed in Firefox and slower Chrome - autofocus is weird
-      document.getElementById("searchBox")?.focus();
+      // Autofocus search bar in iframe mode for both browsers
+      // autofocus attribute only works in Chrome for us, so
+      // we also manually focus on Firefox, even in fullscreen
+      if (isIframe || typeof browser !== "undefined")
+        setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
+
+      const exampleAddonListItem = {
+        // Need to specify all used properties for reactivity!
+        group: addonGroups[0],
+        manifest: JSON.parse(JSON.stringify(exampleManifest)),
+        matchesSearch: true,
+        matchesCategory: true,
+        naturalIndex: -1,
+        headerAbove: false,
+        footerBelow: false,
+        duplicate: false,
+      };
+
+      setTimeout(() => {
+        if (!this.loaded) {
+          this.addonListObjs = Array(25)
+            .fill("")
+            .map(() => JSON.parse(JSON.stringify(exampleAddonListItem)));
+        }
+      }, 0);
     },
   });
 
@@ -435,6 +506,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       manifest._icon = manifest._categories[0];
 
       manifest._enabled = addonsEnabled[addonId];
+      manifest._wasEverEnabled = manifest._enabled;
       manifest._addonId = addonId;
       manifest._groups = [];
 
@@ -496,29 +568,39 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         .map((addon) => addon._addonId);
     });
 
-    // Define order when searching. Temporal until we
-    // can sort by relevance depending on the query
-    vue.searchAddonOrder = manifests
-      .sort((a, b) => {
-        if (a.manifest._enabled ^ b.manifest._enabled) return b.manifest._enabled - a.manifest._enabled;
-        else return a.manifest.name.localeCompare(b.manifest.name);
-      })
-      .map((obj) => obj.addonId);
+    if (isIframe) {
+      const addonsInGroups = [];
+      for (const group of vue.addonGroups) group.addonIds.forEach((addonId) => addonsInGroups.push(addonId));
+      const searchGroup = vue.addonGroups.find((group) => group.id === "_iframeSearch");
+      searchGroup.addonIds = Object.keys(vue.manifestsById).filter((addonId) => addonsInGroups.indexOf(addonId) === -1);
+    }
+
+    let naturalIndex = 0; // Index when not searching
+    for (const group of vue.addonGroups) {
+      group.addonIds.forEach((addonId, groupIndex) => {
+        const cachedObj = vue.addonListObjs.find((o) => o.manifest._addonId === "example");
+        const obj = cachedObj || {};
+        // Some addons might be twice in the list, such as in "new" and "enabled"
+        // Before setting manifest, check whether this object will be a duplicate.
+        obj.duplicate = Boolean(vue.addonListObjs.find((addon) => addon.manifest._addonId === addonId));
+        obj.manifest = vue.manifestsById[addonId];
+        obj.group = group;
+        obj.matchesSearch = false; // Later set to true by vue.addonList if needed
+        const shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
+        obj.matchesCategory = !shouldHideAsEasterEgg;
+        obj.naturalIndex = naturalIndex;
+        obj.headerAbove = groupIndex === 0;
+        obj.footerBelow = groupIndex === group.addonIds.length - 1;
+        // Note: when adding new properties here, make sure to also add them to the
+        // exampleAddonListItem object on the vue.ready method, so that it's reactive!
+        if (!cachedObj) vue.addonListObjs.push(obj);
+        naturalIndex++;
+      });
+    }
+    // Remove unused remaining cached objects. Can only happen in iframe mode
+    vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
 
     vue.loaded = true;
-    if (isIframe) setTimeout(() => document.getElementById("searchBox").focus(), 0);
-    let i = 0;
-    document.getElementById("searchBox").addEventListener("input", function thisFunction() {
-      i++;
-      let thisI = i;
-      setTimeout(() => {
-        if (i === thisI) {
-          vue.searchLoaded = true;
-          vue.searchInput = vue.searchInputReal;
-          document.getElementById("searchBox").removeEventListener("input", thisFunction);
-        }
-      }, 350);
-    });
     setTimeout(handleKeySettings, 0);
     setTimeout(() => {
       // Set hash again after loading addons, to force scroll to addon
@@ -527,12 +609,14 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         window.location.hash = "";
         window.location.hash = hash;
         if (hash.startsWith("#addon-")) {
-          const groupWithAddon = vue.$children.find(
-            (child) =>
-              child.$options.name === "addon-group" &&
-              child.$children.find((addon) => "#addon-" + addon.addon._addonId === location.hash)
-          );
-          if (groupWithAddon && !groupWithAddon.group.expanded) groupWithAddon.toggle();
+          const addonId = hash.substring(7);
+          const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
+          groupWithAddon.expanded = true;
+          setTimeout(() => {
+            // Only required in Firefox
+            window.location.hash = "";
+            window.location.hash = hash;
+          }, 0);
         }
       }
     }, 0);
