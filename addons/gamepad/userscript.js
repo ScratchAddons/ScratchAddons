@@ -33,10 +33,12 @@ export default async function ({ addon, global, console, msg }) {
   const height = renderer._yTop - renderer._yBottom;
   const canvas = renderer.canvas;
 
-  const container = document.createElement("div");
-  container.className = "sa-gamepad-container";
-  addon.tab.displayNoneWhileDisabled(container, { display: "flex" });
-  const buttonContainer = document.createElement("span");
+  const spacer = document.createElement("div");
+  spacer.className = "sa-gamepad-spacer";
+  addon.tab.displayNoneWhileDisabled(spacer, { display: "flex" });
+  const buttonGroup = document.createElement("div");
+  buttonGroup.className = addon.tab.scratchClass("stage-header_stage-size-toggle-group");
+  const buttonContainer = document.createElement("div");
   buttonContainer.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
   const buttonContent = document.createElement("div");
   buttonContent.className = addon.tab.scratchClass("button_content");
@@ -46,7 +48,8 @@ export default async function ({ addon, global, console, msg }) {
   buttonImage.src = addon.self.dir + "/gamepad.svg";
   buttonContent.appendChild(buttonImage);
   buttonContainer.appendChild(buttonContent);
-  container.appendChild(buttonContainer);
+  buttonGroup.appendChild(buttonContainer);
+  spacer.appendChild(buttonGroup);
   buttonContainer.addEventListener("click", () => {
     const editor = gamepad.editor();
     editor.msg = msg;
@@ -224,11 +227,11 @@ export default async function ({ addon, global, console, msg }) {
   gamepad.addEventListener("mousemove", handleGamepadMouseMove);
 
   while (true) {
-    const stageHeaderSizeControls = await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
+    const stageHeaderWrapper = await addon.tab.waitForElement('[class*="stage-header_stage-menu-wrapper"]', {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    stageHeaderSizeControls.insertBefore(container, stageHeaderSizeControls.firstChild);
+    stageHeaderWrapper.insertBefore(spacer, stageHeaderWrapper.lastChild);
 
     const stage = document.querySelector("[class^='stage_stage_']");
     stage.appendChild(virtualCursorContainer);
