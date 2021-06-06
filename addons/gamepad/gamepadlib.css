@@ -41,7 +41,7 @@
 .gamepadlib-keyinput[data-accepting-input="true"] {
   background: #d6fff9;
 }
-.gamepadlib-keyinput[data-type="none"]:not([data-accepting-input="true"]) {
+.gamepadlib-keyinput[data-empty="true"]:not([data-accepting-input="true"]) {
   color: #aaa;
   font-style: italic;
 }

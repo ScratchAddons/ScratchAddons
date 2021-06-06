@@ -66,15 +66,17 @@ const defaultAxesMappings = {
       deadZone: 0.2,
     },
   ],
-  none: {
-    type: "none",
-  },
 };
 
+const emptyMapping = () => ({
+  type: "key",
+  high: null,
+  low: null
+});
 const transformAndCopyMapping = (mapping) => {
   if (typeof mapping !== "object" || !mapping) {
     console.warn("invalid mapping", mapping);
-    return { type: "none" };
+    return emptyMapping();
   }
   const copy = Object.assign({}, mapping);
   if (copy.type === "key") {
@@ -104,11 +106,9 @@ const transformAndCopyMapping = (mapping) => {
     if (typeof copy.deadZone === "undefined") {
       copy.deadZone = 0.5;
     }
-  } else if (copy.type === "none") {
-    // no-op
   } else {
     console.warn("unknown mapping type", copy.type);
-    return { type: "none" };
+    return emptyMapping();
   }
   return copy;
 };
@@ -123,9 +123,7 @@ const prepareButtonMappingForExport = (mapping) => {
 const padWithEmptyMappings = (array, length) => {
   // Keep adding empty mappings until the list is full
   while (array.length < length) {
-    array.push({
-      type: "none",
-    });
+    array.push(emptyMapping());
   }
   // In case the input array is longer than the desired length
   array.length = length;
@@ -311,18 +309,10 @@ class GamepadData {
         type: "key",
         high: getPauseKey(),
       };
-      buttons[10] = {
-        /*
-        Xbox: Left analog press
-        */
-        type: "none",
-      };
-      buttons[11] = {
-        /*
-        Xbox: Right analog press
-        */
-        type: "none",
-      };
+      // Xbox: Left analog press
+      buttons[10] = emptyMapping();
+      // Xbox: Right analog press
+      buttons[11] = emptyMapping();
       buttons[12] = {
         /*
         Xbox: D-pad up
@@ -351,14 +341,6 @@ class GamepadData {
         type: "key",
         high: getRight(),
       };
-
-      // Convert null keys to empty mappings
-      for (const button of buttons) {
-        if (button.high === null) {
-          button.type = "none";
-          delete button.high;
-        }
-      }
     }
     return padWithEmptyMappings(buttons, this.gamepad.buttons.length);
   }
@@ -527,16 +509,12 @@ class GamepadLib extends EventTarget {
           this.keysPressedThisFrame.add(mapping.low);
         }
       }
-    }
-
-    if (mapping.type === "mousedown") {
+    } else if (mapping.type === "mousedown") {
       const isDown = Math.abs(value) >= mapping.deadZone;
       if (isDown) {
         this.mouseDownThisFrame = true;
       }
-    }
-
-    if (mapping.type === "virtual_cursor") {
+    } else if (mapping.type === "virtual_cursor") {
       const deadZone = mapping.deadZone;
       let action;
       if (value >= deadZone) action = mapping.high;
@@ -746,7 +724,7 @@ class GamepadEditor extends EventTarget {
     return key.toUpperCase();
   }
 
-  createButtonMapping(mappingList, index, property = "high") {
+  createButtonMapping(mappingList, index, {property = "high", allowClick = true} = {}) {
     const input = document.createElement("input");
     input.readOnly = true;
     input.className = "gamepadlib-keyinput";
@@ -755,11 +733,14 @@ class GamepadEditor extends EventTarget {
 
     const update = () => {
       const mapping = mappingList[index];
-      input.dataset.type = mapping.type;
-      if (mapping.type === "none") {
-        input.value = this.msg("key-none");
-      } else if (mapping.type === "key") {
-        input.value = this.keyToString(mapping[property]);
+      input.dataset.empty = false;
+      if (mapping.type === "key") {
+        if (mapping[property] === null) {
+          input.value = this.msg("key-none");
+          input.dataset.empty = true;
+        } else {
+          input.value = this.keyToString(mapping[property]);
+        }
       } else if (mapping.type === "mousedown") {
         input.value = this.msg("key-click");
       } else {
@@ -782,9 +763,13 @@ class GamepadEditor extends EventTarget {
     const handleClick = (e) => {
       e.preventDefault();
       if (isAcceptingInput) {
-        const mapping = mappingList[index];
-        mapping.type = "mousedown";
-        changedMapping();
+        if (allowClick) {
+          const mapping = mappingList[index];
+          mapping.type = "mousedown";
+          changedMapping();
+        } else {
+          handleBlur();
+        }
       } else {
         input.value = "...";
         input.dataset.acceptingInput = true;
@@ -804,7 +789,8 @@ class GamepadEditor extends EventTarget {
           mapping.type = "key";
           mapping[property] = key;
         } else if (key !== "Escape") {
-          mapping.type = "none";
+          mapping.type = "key";
+          mapping[property] = null;
         }
         changedMapping();
       } else if (e.key === "Enter") {
@@ -868,6 +854,13 @@ class GamepadEditor extends EventTarget {
     const updateDropdownValue = () => {
       if (mappingList[index].type === "key" || mappingList[index].type === "mousedown") {
         if (
+          mappingList[index].high === null &&
+          mappingList[index].low === null &&
+          mappingList[index + 1].high === null &&
+          mappingList[index + 1].low === null
+        ) {
+          selector.value = "none";
+        } else if (
           mappingList[index].high === defaultAxesMappings.wasd[0].high &&
           mappingList[index].low === defaultAxesMappings.wasd[0].low &&
           mappingList[index + 1].high === defaultAxesMappings.wasd[1].high &&
@@ -887,6 +880,7 @@ class GamepadEditor extends EventTarget {
       } else if (mappingList[index].type === "virtual_cursor") {
         selector.value = "cursor";
       } else {
+        // should never happen
         selector.value = "none";
       }
     };
@@ -898,10 +892,10 @@ class GamepadEditor extends EventTarget {
       removeAllChildren(circleOverlay);
       if (mappingList[index].type === "key") {
         const buttons = [
-          this.createButtonMapping(mappingList, index + 1, "low"),
-          this.createButtonMapping(mappingList, index, "low"),
-          this.createButtonMapping(mappingList, index, "high"),
-          this.createButtonMapping(mappingList, index + 1, "high"),
+          this.createButtonMapping(mappingList, index + 1, {property: "low", allowClick: false }),
+          this.createButtonMapping(mappingList, index, {property: "low", allowClick: false }),
+          this.createButtonMapping(mappingList, index, {property: "high", allowClick: false }),
+          this.createButtonMapping(mappingList, index + 1, {property: "high", allowClick: false }),
         ];
         for (const button of buttons) {
           button.classList.add("gamepadlib-axis-mapper");
@@ -929,8 +923,8 @@ class GamepadEditor extends EventTarget {
         mappingList[index] = transformAndCopyMapping(defaultAxesMappings.cursor[0]);
         mappingList[index + 1] = transformAndCopyMapping(defaultAxesMappings.cursor[1]);
       } else {
-        mappingList[index] = transformAndCopyMapping(defaultAxesMappings.none);
-        mappingList[index + 1] = transformAndCopyMapping(defaultAxesMappings.none);
+        mappingList[index] = transformAndCopyMapping(emptyMapping());
+        mappingList[index + 1] = transformAndCopyMapping(emptyMapping());
       }
       updateOverlay();
       this.changed();
