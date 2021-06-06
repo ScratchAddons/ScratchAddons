@@ -6,7 +6,7 @@ export default async function ({ template }) {
     template,
     data() {
       return {
-        expanded: isIframe ? false : this.groupId === "enabled",
+        expanded: this.setDefaultExpanded(),
       };
     },
     computed: {
@@ -26,8 +26,14 @@ export default async function ({ template }) {
       addonSettings() {
         return this.$root.addonSettings;
       },
+      searchInput() {
+        return this.$root.searchInput;
+      },
     },
     methods: {
+      setDefaultExpanded() {
+        this.expanded = isIframe ? false : this.groupId === "enabled";
+      },
       devShowAddonIds(event) {
         if (!this.$root.versionName.endsWith("-prerelease") || !event.ctrlKey) return;
         event.stopPropagation();
@@ -100,6 +106,16 @@ export default async function ({ template }) {
       },
       msg(...params) {
         return this.$root.msg(...params);
+      },
+    },
+    watch: {
+      groupId(newValue) {
+        // Happens when going from "example" addon to real addon
+        this.setDefaultExpanded();
+      },
+      searchInput(newValue) {
+        if (newValue === "") this.setDefaultExpanded();
+        else this.expanded = false;
       },
     },
   });
