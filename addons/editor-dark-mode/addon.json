@@ -614,6 +614,19 @@
       }
     },
     {
+      "url": "stage.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "settingMatch": {
+        "id": "affectStage",
+        "value": true
+      }
+    },
+    {
       "url": "dark_comments.css",
       "matches": [
         "https://scratch.mit.edu/projects/*/",
@@ -747,6 +760,12 @@
     {
       "name": "Text shadow on blocks",
       "id": "textShadow",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Change the colors of variables, lists, and answer inputs on the stage",
+      "id": "affectStage",
       "type": "boolean",
       "default": false
     },
