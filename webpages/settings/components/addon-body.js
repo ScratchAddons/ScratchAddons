@@ -7,6 +7,7 @@ export default async function ({ template }) {
     data() {
       return {
         expanded: this.getDefaultExpanded(),
+        everExpanded: this.getDefaultExpanded(),
       };
     },
     computed: {
@@ -116,6 +117,9 @@ export default async function ({ template }) {
       searchInput(newValue) {
         if (newValue === "") this.expanded = this.getDefaultExpanded();
         else this.expanded = false;
+      },
+      expanded(newValue) {
+        if (newValue === true) this.everExpanded = true;
       },
     },
   });

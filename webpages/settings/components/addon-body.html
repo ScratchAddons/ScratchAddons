@@ -25,7 +25,7 @@
         <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest($event)"></div>
       </div>
     </div>
-    <div class="addon-settings" v-if="expanded">
+    <div class="addon-settings" v-if="everExpanded" v-show="expanded">
       <div class="addon-description-full">{{ addon.description }}</div>
       <div id="info" v-for="info of addon.info">
         <div class="addon-warn" v-if="info.type == 'warning'">
