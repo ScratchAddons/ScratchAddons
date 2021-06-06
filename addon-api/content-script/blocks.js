@@ -1,7 +1,7 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
 const color = {
-  color: "#43cfca",
+  color: "#29beb8",
   secondaryColor: "#3aa8a4",
   tertiaryColor: "#3aa8a4",
 };
