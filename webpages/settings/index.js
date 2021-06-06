@@ -608,12 +608,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         window.location.hash = "";
         window.location.hash = hash;
         if (hash.startsWith("#addon-")) {
-          const groupWithAddon = vue.$children.find(
-            (child) =>
-              child.$options.name === "addon-group" &&
-              child.$children.find((addon) => "#addon-" + addon.addon._addonId === location.hash)
-          );
-          if (groupWithAddon && !groupWithAddon.group.expanded) groupWithAddon.toggle();
+          const addonId = hash.substring(7);
+          const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
+          groupWithAddon.expanded = true;
         }
       }
     }, 0);
