@@ -333,7 +333,7 @@ export default async function ({ addon, global, console, msg }) {
     virtualCursorSetVisible(true);
     const stageX = width / 2 + x;
     const stageY = height / 2 - y;
-    virtualCursorContainer.style.transform = `translate(${(stageX / width) * 100}%, ${(stageY / height) * 100}%)`;
+    virtualCursorContainer.style.transform = `translate(${stageX}px, ${stageY}px)`;
   };
 
   document.addEventListener("mousemove", () => {
@@ -420,7 +420,7 @@ export default async function ({ addon, global, console, msg }) {
     });
     stageHeaderWrapper.insertBefore(spacer, stageHeaderWrapper.lastChild);
 
-    const stage = document.querySelector("[class^='stage_stage_']");
-    stage.appendChild(virtualCursorContainer);
+    const monitorListScaler = document.querySelector("[class^='monitor-list_monitor-list-scaler']");
+    monitorListScaler.appendChild(virtualCursorContainer);
   }
 }
