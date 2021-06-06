@@ -300,15 +300,12 @@ export default async function ({ addon, global, console, msg }) {
     { capture: true }
   );
 
-  const virtualCursorContainer = document.createElement("div");
-  virtualCursorContainer.hidden = true;
-  virtualCursorContainer.className = "sa-gamepad-cursor";
-  const virtualCursorImage = document.createElement("img");
-  virtualCursorImage.className = "sa-gamepad-cursor-image";
-  virtualCursorImage.src = addon.self.dir + "/cursor.png";
-  virtualCursorContainer.appendChild(virtualCursorImage);
+  const virtualCursorElement = document.createElement("img");
+  virtualCursorElement.hidden = true;
+  virtualCursorElement.className = "sa-gamepad-cursor";
+  virtualCursorElement.src = addon.self.dir + "/cursor.png";
   addon.self.addEventListener("disabled", () => {
-    virtualCursorContainer.hidden = true;
+    virtualCursorElement.hidden = true;
   });
 
   let hideCursorTimeout;
@@ -320,7 +317,7 @@ export default async function ({ addon, global, console, msg }) {
     document.body.classList.remove("sa-gamepad-hide-cursor");
   };
   const virtualCursorSetVisible = (visible) => {
-    virtualCursorContainer.hidden = !visible;
+    virtualCursorElement.hidden = !visible;
     clearTimeout(hideCursorTimeout);
     if (visible) {
       hideRealCursor();
@@ -332,13 +329,14 @@ export default async function ({ addon, global, console, msg }) {
   };
   const virtualCursorSetDown = (down) => {
     virtualCursorSetVisible(true);
-    virtualCursorImage.classList.toggle("sa-gamepad-cursor-down", down);
+    virtualCursorElement.classList.toggle("sa-gamepad-cursor-down", down);
   };
   const virtualCursorSetPosition = (x, y) => {
     virtualCursorSetVisible(true);
-    const stageX = width / 2 + x;
-    const stageY = height / 2 - y;
-    virtualCursorContainer.style.transform = `translate(${stageX}px, ${stageY}px)`;
+    const CURSOR_SIZE = 6;
+    const stageX = (width / 2) + x - (CURSOR_SIZE / 2);
+    const stageY = (height / 2) - y - (CURSOR_SIZE / 2);
+    virtualCursorElement.style.transform = `translate(${stageX}px, ${stageY}px)`;
   };
 
   document.addEventListener("mousemove", () => {
@@ -441,6 +439,6 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     const monitorListScaler = document.querySelector("[class^='monitor-list_monitor-list-scaler']");
-    monitorListScaler.appendChild(virtualCursorContainer);
+    monitorListScaler.appendChild(virtualCursorElement);
   }
 }
