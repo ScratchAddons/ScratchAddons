@@ -3,7 +3,6 @@ import { paused, setPaused, onPauseChanged } from "./module.js";
 export default async function ({ addon, global, console, msg }) {
   const img = document.createElement("img");
   img.className = "pause-btn";
-  img.src = addon.self.dir + "/pause.svg";
   img.draggable = false;
   img.title = msg("pause");
 
@@ -11,6 +10,7 @@ export default async function ({ addon, global, console, msg }) {
   img.addEventListener("click", () => setPaused(!paused));
   addon.tab.displayNoneWhileDisabled(img);
   addon.self.addEventListener("disabled", () => setPaused(false));
+  setSrc();
   onPauseChanged(setSrc);
 
   while (true) {
