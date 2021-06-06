@@ -175,7 +175,7 @@
               <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
               <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
             </div>
-            <addon-group-header v-if="addon.headerAbove" :group="addon.group"></addon-group-header>
+            <addon-group-header v-if="addon.headerAbove" :group="addon.group" :shown-count="groupShownCount(addon.group)" :margin-above="groupMarginAbove(addon.group)"></addon-group-header>
             <addon-body
               :visible="addon.matchesSearch && addon.matchesCategory"
               :addon="addon.manifest"

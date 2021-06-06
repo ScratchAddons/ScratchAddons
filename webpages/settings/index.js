@@ -358,6 +358,16 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           { once: true }
         );
       },
+      groupShownCount(group) {
+        return this.addonListObjs.filter(
+          (addon) => addon.group === group && addon.matchesSearch && addon.matchesCategory
+        ).length;
+      },
+      groupMarginAbove(group) {
+        const i = this.addonGroups.indexOf(group);
+        if (i === 0) return false;
+        else return this.groupShownCount(this.addonGroups[i - 1]) !== 0;
+      },
     },
     events: {
       closesidebar(event) {

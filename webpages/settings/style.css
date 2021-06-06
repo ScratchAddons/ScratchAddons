@@ -51,7 +51,7 @@ h1 {
   align-items: stretch;
 }
 
-.addon-group:not(:first-child) {
+.addon-group.margin-above {
   margin-top: 20px;
 }
 

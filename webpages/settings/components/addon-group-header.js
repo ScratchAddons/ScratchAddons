@@ -1,6 +1,6 @@
 export default async function ({ template }) {
   const AddonGroup = Vue.extend({
-    props: ["group"],
+    props: ["group", "shownCount", "marginAbove"],
     template,
     data() {
       return {};
@@ -9,11 +9,6 @@ export default async function ({ template }) {
       shouldShow() {
         if (this.$root.searchInput !== "") return false;
         return this.shownCount > 0;
-      },
-      shownCount() {
-        return this.$root.addonListObjs.filter(
-          (addon) => addon.group === this.group && addon.matchesSearch && addon.matchesCategory
-        ).length;
       },
       manifestsById() {
         return this.$root.manifestsById;
