@@ -6,7 +6,7 @@ export default async function ({ template }) {
     template,
     data() {
       return {
-        expanded: this.setDefaultExpanded(),
+        expanded: this.getDefaultExpanded(),
       };
     },
     computed: {
@@ -31,8 +31,8 @@ export default async function ({ template }) {
       },
     },
     methods: {
-      setDefaultExpanded() {
-        this.expanded = isIframe ? false : this.groupId === "enabled";
+      getDefaultExpanded() {
+        return isIframe ? false : this.groupId === "enabled";
       },
       devShowAddonIds(event) {
         if (!this.$root.versionName.endsWith("-prerelease") || !event.ctrlKey) return;
@@ -111,10 +111,10 @@ export default async function ({ template }) {
     watch: {
       groupId(newValue) {
         // Happens when going from "example" addon to real addon
-        this.setDefaultExpanded();
+        this.expanded = this.getDefaultExpanded();
       },
       searchInput(newValue) {
-        if (newValue === "") this.setDefaultExpanded();
+        if (newValue === "") this.expanded = this.getDefaultExpanded();
         else this.expanded = false;
       },
     },
