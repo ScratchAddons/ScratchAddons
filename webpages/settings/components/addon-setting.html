@@ -38,13 +38,15 @@
       type="text"
       class="setting-input string"
       v-model="addonSettings[addon._addonId][setting.id]"
-      @input="updateSettings()"
+      @change="checkValidity() || updateSettings()"
       :disabled="!addon._enabled"
       v-if="setting.type === 'string'"
       :placeholder="setting.default"
       :maxlength="setting.max || 100"
       :minlength="setting.min || 0"
       :required="!!setting.min"
+      :data-addon-id="addon._addonId"
+      :data-setting-id="setting.id"
     />
     <input
       type="text"
