@@ -185,7 +185,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     computed: {
       addonList() {
         if (!this.searchInput) {
-          this.addonListObjs.forEach((obj) => (obj.matchesSearch = true));
+          this.addonListObjs
+            .filter((obj) => obj.group.id !== "_iframeSearch")
+            .forEach((obj) => (obj.matchesSearch = true));
           return this.addonListObjs.sort((b, a) => b.naturalIndex - a.naturalIndex);
         }
 
@@ -359,6 +361,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         );
       },
       groupShownCount(group) {
+        if (group.id === "_iframeSearch") return -1;
         return this.addonListObjs.filter(
           (addon) => addon.group === group && addon.matchesSearch && addon.matchesCategory
         ).length;
@@ -366,7 +369,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       groupMarginAbove(group) {
         const i = this.addonGroups.indexOf(group);
         if (i === 0) return false;
-        else return this.groupShownCount(this.addonGroups[i - 1]) !== 0;
+        else return this.groupShownCount(this.addonGroups[i - 1]) > 0;
       },
     },
     events: {
@@ -564,6 +567,13 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         .map((addon) => addon._addonId);
     });
 
+    if (isIframe) {
+      const addonsInGroups = [];
+      for (const group of vue.addonGroups) group.addonIds.forEach((addonId) => addonsInGroups.push(addonId));
+      const searchGroup = vue.addonGroups.find((group) => group.id === "_iframeSearch");
+      searchGroup.addonIds = Object.keys(vue.manifestsById).filter((addonId) => addonsInGroups.indexOf(addonId) === -1);
+    }
+
     let naturalIndex = 0; // Index when not searching
     for (const group of vue.addonGroups) {
       group.addonIds.forEach((addonId, groupIndex) => {
@@ -574,7 +584,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         obj.duplicate = Boolean(vue.addonListObjs.find((addon) => addon.manifest._addonId === addonId));
         obj.manifest = vue.manifestsById[addonId];
         obj.group = group;
-        obj.matchesSearch = true;
+        obj.matchesSearch = false; // Later set to true by vue.addonList if needed
         const shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
         obj.matchesCategory = !shouldHideAsEasterEgg;
         obj.naturalIndex = naturalIndex;
