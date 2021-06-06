@@ -387,6 +387,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     },
     watch: {
       searchInputReal(newValue) {
+        if (newValue === "") return (this.searchInput = newValue);
         setTimeout(() => {
           if (this.searchInputReal === newValue) this.searchInput = newValue;
         }, 150);
