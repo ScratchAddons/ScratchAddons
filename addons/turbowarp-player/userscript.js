@@ -5,8 +5,8 @@ export default async function ({ addon, console }) {
   twIframe.style.border = "none";
   twIframe.style.display = "none";
   twIframe.scrolling = "no";
-  twIframe.allowtransparency = "true";
-  twIframe.allowfullscreen = "true";
+  twIframe.setAttribute("allowtransparency", "true");
+  twIframe.setAttribute("allowfullscreen", "true");
   // The stage is "bouncing" after switching
   twIframe.style.width = "499px";
   twIframe.style.height = "416px";
