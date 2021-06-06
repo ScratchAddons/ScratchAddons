@@ -21,6 +21,7 @@
 .studio-tab-nav .active > li,
 .user-projects-modal .user-projects-modal-nav button.active,
 .overflow-menu-container .overflow-menu-dropdown li button,
+.studio-info .studio-info-footer-report button,
 .step .step-number-row .step-number,
 .title-banner.mod-blue-bg .title-banner-h1,
 .title-banner.mod-conference h1,
@@ -42,9 +43,17 @@
 .subactions .action-buttons .action-button:not(.remixtree-button):before,
 .download .download-requirements span img,
 .os-chooser .button.active img,
+.studio-tab-nav a.active img,
 .overflow-menu-container .overflow-menu-dropdown li button > img,
+.studio-info .studio-info-footer-report button img,
 #footer .inner .media li img {
   filter: var(--scratchr2-primaryColor-filter);
+}
+.studio-info .studio-info-footer-report button:hover {
+  color: var(--scratchr2-activeColor-text);
+}
+.studio-info .studio-info-footer-report button:hover img {
+  filter: var(--scratchr2-activeColor-filter);
 }
 
 #navigation .messages > a {

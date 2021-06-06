@@ -76,6 +76,5 @@
   ],
   "tags": ["community"],
   "versionAdded": "1.2.0",
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

@@ -38,6 +38,5 @@
   ],
   "tags": ["editor", "projectPlayer", "recommended"],
   "versionAdded": "1.1.0",
-  "enabledByDefault": true,
-  "l10n": true
+  "enabledByDefault": true
 }
