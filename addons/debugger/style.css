@@ -22,6 +22,19 @@
   width: calc(100% - 20px);
   font-size: 20px;
 }
+
+.sa-debugger-unpause {
+  animation: unpauseBackground 2s infinite alternate;
+}
+@keyframes unpauseBackground /* Firefox */ {
+  0% {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
 .log {
   --message-border-color: rgba(0, 0, 0, 0.15);
   --warning-border-color: hsl(50deg 100% 88%);

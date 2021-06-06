@@ -1,3 +1,5 @@
+import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
+
 export default async function ({ addon, global, console, msg }) {
   let workspace, showingConsole;
 
@@ -16,7 +18,13 @@ export default async function ({ addon, global, console, msg }) {
   container.appendChild(buttonContainer);
   buttonContainer.addEventListener("click", () => toggleConsole(true));
 
-  const vm = addon.tab.traps.vm;
+  const pause = () => {
+    setPaused(!paused);
+    const pauseAddonButton = document.querySelector(".pause-btn");
+    if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleConsole(true);
+  };
+  addon.tab.addBlock("sa-pause", [], pause, true);
+  addon.tab.addBlock("sa-breakpoint", [], pause);
   addon.tab.addBlock("sa-log %s", ["content"], ({ content }, thread) => {
     workspace = Blockly.getMainWorkspace();
     addItem(content, thread, "log");
@@ -112,6 +120,17 @@ export default async function ({ addon, global, console, msg }) {
     className: addon.tab.scratchClass("card_header-buttons-right"),
   });
 
+  const unpauseButton = Object.assign(document.createElement("div"), {
+    className: addon.tab.scratchClass("card_shrink-expand-button", { others: "sa-debugger-unpause" }),
+    draggable: false,
+  });
+  const unpauseImg = Object.assign(document.createElement("img"), {
+    src: "/svgs/extensions/download-white.svg", // TODO: suiting play icon
+  });
+  const unpauseText = Object.assign(document.createElement("span"), {
+    innerText: msg("unpause"),
+  });
+
   const exportButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_shrink-expand-button"),
     draggable: false,
@@ -147,10 +166,11 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   consoleTitle.append(consoleText, buttons);
-  buttons.append(exportButton, trashButton, closeButton);
+  buttons.append(unpauseButton, exportButton, trashButton, closeButton);
   trashButton.append(trashImg, trashText);
   closeButton.append(closeImg, closeText);
   exportButton.append(exportImg, exportText);
+  unpauseButton.append(unpauseImg, unpauseText);
   extraContainer.append(consoleList);
   consoleWrapper.append(consoleTitle, extraContainer);
   document.body.append(consoleWrapper);
@@ -217,6 +237,10 @@ export default async function ({ addon, global, console, msg }) {
 
     document.body.removeChild(element);
   };
+
+  unpauseButton.addEventListener("click", () => setPaused(false));
+  if (!paused) unpauseButton.style.display = "none";
+  onPauseChanged((newPauseValue) => (unpauseButton.style.display = newPauseValue ? "" : "none"));
 
   exportButton.addEventListener("click", (e) => {
     const defaultFormat = "{sprite}: {content} ({type})";
