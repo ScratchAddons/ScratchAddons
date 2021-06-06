@@ -117,6 +117,7 @@ const prepareAxisMappingForExport = prepareMappingForExport;
 const prepareButtonMappingForExport = (mapping) => {
   const copy = prepareMappingForExport(mapping);
   delete copy.deadZone;
+  delete copy.low;
   return copy;
 };
 
