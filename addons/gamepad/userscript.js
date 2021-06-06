@@ -413,6 +413,7 @@ export default async function ({ addon, global, console, msg }) {
   while (true) {
     const stageHeaderSizeControls = await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
       markAsSeen: true,
+      reduxCondition: (state) => !state.scratchGui.mode.isFullScreen,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "scratch-gui/mode/SET_FULL_SCREEN", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
     stageHeaderSizeControls.insertBefore(container, stageHeaderSizeControls.firstChild);
