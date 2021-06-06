@@ -2,69 +2,69 @@
   <div class="addon-setting">
     <div class="setting-label" v-html="settingsName(addon)"></div>
     <template v-if="setting.type === 'boolean'">
-    <input
-      type="checkbox"
-      class="setting-input check"
-      v-model="addonSettings[addon._addonId][setting.id]"
-      @change="updateSettings()"
-      :disabled="!addon._enabled"
-    />
+      <input
+        type="checkbox"
+        class="setting-input check"
+        v-model="addonSettings[addon._addonId][setting.id]"
+        @change="updateSettings()"
+        :disabled="!addon._enabled"
+      />
     </template>
     <template v-if="setting.type === 'positive_integer'">
-    <input
-      type="number"
-      class="setting-input number"
-      v-model="addonSettings[addon._addonId][setting.id]"
-      @change="checkValidity() || updateSettings()"
-      :disabled="!addon._enabled"
-      min="0"
-      :data-addon-id="addon._addonId"
-      :data-setting-id="setting.id"
-      number
-    />
+      <input
+        type="number"
+        class="setting-input number"
+        v-model="addonSettings[addon._addonId][setting.id]"
+        @change="checkValidity() || updateSettings()"
+        :disabled="!addon._enabled"
+        min="0"
+        :data-addon-id="addon._addonId"
+        :data-setting-id="setting.id"
+        number
+      />
     </template>
     <template v-if="setting.type === 'integer'">
-    <input
-      type="number"
-      class="setting-input number"
-      v-model="addonSettings[addon._addonId][setting.id]"
-      @change="checkValidity() || updateSettings()"
-      :disabled="!addon._enabled"
-      :min="setting.min"
-      :max="setting.max"
-      :data-addon-id="addon._addonId"
-      :data-setting-id="setting.id"
-      number
-    />
+      <input
+        type="number"
+        class="setting-input number"
+        v-model="addonSettings[addon._addonId][setting.id]"
+        @change="checkValidity() || updateSettings()"
+        :disabled="!addon._enabled"
+        :min="setting.min"
+        :max="setting.max"
+        :data-addon-id="addon._addonId"
+        :data-setting-id="setting.id"
+        number
+      />
     </template>
     <template v-if="setting.type === 'string'">
-    <input
-      type="text"
-      class="setting-input string"
-      v-model="addonSettings[addon._addonId][setting.id]"
-      @change="checkValidity() || updateSettings()"
-      :disabled="!addon._enabled"
-      :placeholder="setting.default"
-      :maxlength="setting.max || 100"
-      :minlength="setting.min || 0"
-      :required="!!setting.min"
-      :data-addon-id="addon._addonId"
-      :data-setting-id="setting.id"
-    />
+      <input
+        type="text"
+        class="setting-input string"
+        v-model="addonSettings[addon._addonId][setting.id]"
+        @change="checkValidity() || updateSettings()"
+        :disabled="!addon._enabled"
+        :placeholder="setting.default"
+        :maxlength="setting.max || 100"
+        :minlength="setting.min || 0"
+        :required="!!setting.min"
+        :data-addon-id="addon._addonId"
+        :data-setting-id="setting.id"
+      />
     </template>
     <template v-if="setting.type === 'key'">
-    <input
-      type="text"
-      class="setting-input key"
-      v-model="addonSettings[addon._addonId][setting.id]"
-      @input="updateSettings()"
-      :disabled="!addon._enabled"
-      :placeholder="setting.default"
-      maxlength="100"
-      :data-addon-id="addon._addonId"
-      :data-setting-id="setting.id"
-      spellcheck="false"
-    />
+      <input
+        type="text"
+        class="setting-input key"
+        v-model="addonSettings[addon._addonId][setting.id]"
+        @input="updateSettings()"
+        :disabled="!addon._enabled"
+        :placeholder="setting.default"
+        maxlength="100"
+        :data-addon-id="addon._addonId"
+        :data-setting-id="setting.id"
+        spellcheck="false"
+      />
     </template>
     <template v-if="setting.type === 'color'">
       <picker
@@ -94,16 +94,16 @@
       </button>
     </template>
     <template v-if="setting.type === 'select'">
-    <div class="filter-options">
-      <div
-        class="filter-option"
-        v-for="option of setting.potentialValues"
-        :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
-        @click="updateOption(option.id);"
-      >
-        {{ option.name }}
+      <div class="filter-options">
+        <div
+          class="filter-option"
+          v-for="option of setting.potentialValues"
+          :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
+          @click="updateOption(option.id);"
+        >
+          {{ option.name }}
+        </div>
       </div>
-    </div>
     </template>
   </div>
 </template>
