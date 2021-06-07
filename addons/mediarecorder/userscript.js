@@ -21,6 +21,7 @@ export default async ({ addon, console, msg }) => {
       });
       const recordOptionPopup = Object.assign(document.createElement("div"), {
         className: addon.tab.scratchClass("modal_modal-content", { others: "mediaRecorderPopup" }),
+        dir: addon.tab.direction,
       });
       const recordOptionHeader = Object.assign(document.createElement("div"), {
         className: addon.tab.scratchClass("modal_header"),

@@ -1,7 +1,20 @@
 export default async function ({ addon, global, console, msg }) {
   const vm = addon.tab.traps.vm;
 
-  hideInSmallStageMode({ addon });
+  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
+    document.body.classList.add("sa-clones-small");
+  }
+  document.addEventListener(
+    "click",
+    (e) => {
+      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
+        document.body.classList.add("sa-clones-small");
+      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
+        document.body.classList.remove("sa-clones-small");
+      }
+    },
+    { capture: true }
+  );
 
   let countContainerContainer = document.createElement("div");
 
@@ -49,24 +62,8 @@ export default async function ({ addon, global, console, msg }) {
   });
   const oldStep = vm.runtime.constructor.prototype._step;
   vm.runtime.constructor.prototype._step = function (...args) {
+    const ret = oldStep.call(this, ...args);
     check();
-    return oldStep.call(this, ...args);
+    return ret;
   };
-}
-
-async function hideInSmallStageMode({ addon }) {
-  while (true) {
-    await addon.tab.waitForElement("[class*='stage-header_stage-size-toggle-group']", {
-      markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
-      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-    });
-
-    document.querySelector("[class*='stage-header_stage-button-first']").addEventListener("click", () => {
-      document.querySelector(".clone-container-container").style.display = "none";
-    });
-    document.querySelector("[class*='stage-header_stage-button-last']").addEventListener("click", () => {
-      document.querySelector(".clone-container-container").style.display = "";
-    });
-  }
 }

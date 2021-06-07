@@ -28,6 +28,9 @@
   float: right;
   cursor: pointer;
 }
+[dir="rtl"] .close {
+  float: left;
+}
 
 .footer {
   text-align: center;
@@ -43,36 +46,11 @@
 }
 .modal .large-button {
   display: block;
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 .modal .filter-selector {
   margin: 0;
 }
 .modal .addon-name {
-  margin-left: 10px;
-}
-.setting-body {
-  margin: 10px 0;
-  background: var(--accent-1);
-  border: 1px solid var(--accent-3);
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
-}
-.setting-settings {
-  padding: 0 20px;
-}
-.setting-setting {
-  margin: 10px 0;
-  margin-right: 20px;
-  min-height: 35px;
-  display: flex;
-  align-items: center;
-}
-.setting-description {
-  margin-left: 10px;
-  color: gray;
-  width: 35vw;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  margin-inline-start: 14px;
 }

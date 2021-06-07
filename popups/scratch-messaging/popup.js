@@ -96,8 +96,31 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
           (res) => {
             this.postingComment = false;
             dateNow = Date.now();
-            if (res.error) alert(l10n.get("scratch-messaging/send-error"));
-            else {
+            if (res.error) {
+              const errorCode =
+                {
+                  isEmpty: "scratch-messaging/comment-error-empty",
+                  // Two errors can be raised for rate limit;
+                  // isFlood is the actual error, 429 is the status code
+                  // ratelimit error will be unnecessary when #2505 is implemented
+                  isFlood: "scratch-messaging/comment-error-ratelimit",
+                  429: "scratch-messaging/comment-error-ratelimit",
+                  isBad: "scratch-messaging/comment-error-filterbot-generic",
+                  hasChatSite: "scratch-messaging/comment-error-filterbot-chat",
+                  isSpam: "scratch-messaging/comment-error-filterbot-spam",
+                  // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
+                  500: "scratch-messaging/comment-error-down",
+                  503: "scratch-messaging/comment-error-down",
+                }[res.error] || "scratch-messaging/send-error";
+              let errorMsg = l10n.get(errorCode);
+              if (res.muteStatus) {
+                errorMsg = l10n.get("scratch-messaging/comment-mute") + " ";
+                errorMsg += l10n.get("scratch-messaging/comment-cannot-post-for", {
+                  mins: Math.max(Math.ceil((res.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
+                });
+              }
+              alert(errorMsg);
+            } else {
               this.replying = false;
               const newCommentPseudoId = `${this.resourceType[0]}_${res.commentId}`;
               Vue.set(this.commentsObj, newCommentPseudoId, {
@@ -304,14 +327,9 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
     methods: {
       getData() {
         return new Promise((resolve) => {
-          const timeout = setTimeout(() => {
-            this.error = "addonDisabled";
-            resolve(undefined);
-          }, 500);
           chrome.runtime.sendMessage({ scratchMessaging: "getData" }, (res) => {
             if (res) {
-              clearTimeout(timeout);
-              this.stMessages = res.stMessages.map((alert) => ({
+              this.stMessages = (res.stMessages || []).map((alert) => ({
                 ...alert,
                 datetime_created: new Date(alert.datetime_created).toDateString(),
               }));

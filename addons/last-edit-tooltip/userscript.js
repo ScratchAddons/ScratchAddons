@@ -1,9 +1,12 @@
 export default async function ({ addon, global, console, msg }) {
   const headers = new Headers();
   if (addon.auth.xToken) headers.set("X-Token", addon.auth.xToken);
-  const data = await (
-    await fetch("https://api.scratch.mit.edu" + location.pathname.match(/\/projects\/[0-9]+/g)[0], { headers })
-  ).json();
+
+  const path = location.pathname.match(/\/projects\/[0-9]+/g);
+  // Return if there is no project id... for example, if the user visits
+  // scratch.mit.edu/projects/editor/?tutorial=getStarted
+  if (!path.length) return;
+  const data = await (await fetch("https://api.scratch.mit.edu" + path[0], { headers })).json();
 
   if (!data.history) return;
 

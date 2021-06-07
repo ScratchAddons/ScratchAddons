@@ -1430,14 +1430,24 @@ export default class DevTools {
               }
               let html = cleanupPlus
                 ? `
-                  <div id="s3devCleanUp" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
+                  <div
+                    id="s3devCleanUp"
+                    class="goog-menuitem s3dev-mi ${this.addon.tab.direction === "rtl" ? "goog-menuitem-rtl" : ""}"
+                    role="menuitem"
+                    style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);"
+                  >
                       <div class="goog-menuitem-content" style="user-select: none;">${this.m("clean-plus")}</div>
                   </div>
               `
                 : "";
 
               html += `
-                  <div id="s3devPaste" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
+                  <div
+                    id="s3devPaste" 
+                    class="goog-menuitem s3dev-mi ${this.addon.tab.direction === "rtl" ? "goog-menuitem-rtl" : ""}"
+                    role="menuitem"
+                    style="user-select: none;"
+                  >
                       <div class="goog-menuitem-content" style="user-select: none;">${this.m("paste")}</div>
                   </div>
               `;
@@ -1676,7 +1686,7 @@ export default class DevTools {
     document.body.insertAdjacentHTML(
       "beforeend",
       `
-            <div id="s3devFloatingBar">
+            <div id="s3devFloatingBar" dir="${this.addon.tab.direction}">
                 <label class='title s3devLabel' id=s3devInsertLabel>
                     <span style="display:none;">${this.m("insert")} </span>
                     <span id=s3devInsert class="s3devWrap">

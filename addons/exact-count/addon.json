@@ -63,6 +63,5 @@
   ],
   "versionAdded": "1.2.0",
   "tags": ["community", "recommended", "profiles", "forums", "studios"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

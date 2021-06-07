@@ -36,6 +36,9 @@ const vue = new Vue({
     msg(message, ...params) {
       return chrome.i18n.getMessage(message, ...params);
     },
+    direction() {
+      return chrome.i18n.getMessage("@@bidi_dir");
+    },
     closePopup() {
       setTimeout(() => window.close(), 100);
     },

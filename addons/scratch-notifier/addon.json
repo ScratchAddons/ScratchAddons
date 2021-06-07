@@ -104,6 +104,5 @@
   ],
   "versionAdded": "1.0.0",
   "tags": ["community", "recommended"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

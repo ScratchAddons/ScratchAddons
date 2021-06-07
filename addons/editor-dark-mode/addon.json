@@ -15,23 +15,568 @@
       "link": "https://github.com/towerofnix"
     }
   ],
+  "customCssVariables": [
+    {
+      "name": "page-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 94, 117, 0.75)",
+        "white": "rgba(255, 255, 255, 0.75)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-tabHoverFilter",
+      "value": {
+        "type": "textColor",
+        "black": "grayscale(100%)",
+        "white": "brightness(0) invert(1) opacity(0.75)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "primary-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
+      "name": "primary-filter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
+      "name": "primary-filter2",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
+      "name": "primary-transparent35",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        },
+        "a": 0.35
+      }
+    },
+    {
+      "name": "primary-transparent25",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        },
+        "a": 0.25
+      }
+    },
+    {
+      "name": "primary-transparent20",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        },
+        "a": 0.2
+      }
+    },
+    {
+      "name": "primary-transparent15",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        },
+        "a": 0.15
+      }
+    },
+    {
+      "name": "primary-overlay",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        },
+        "a": 0.9
+      }
+    },
+    {
+      "name": "primary-variant",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "primary"
+          },
+          "r": 0.66,
+          "g": 0.76,
+          "b": 0.8
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "primary"
+          },
+          "r": 0.75,
+          "g": 0.75,
+          "b": 0.75
+        },
+        "threshold": 60
+      }
+    },
+    {
+      "name": "menuBar-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "menuBar"
+        }
+      }
+    },
+    {
+      "name": "menuBar-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 94, 117, 0.25)",
+        "white": "rgba(255, 255, 255, 0.25)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "menuBar"
+        }
+      }
+    },
+    {
+      "name": "menuBar-dimText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 94, 117, 0.75)",
+        "white": "rgba(255, 255, 255, 0.75)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "menuBar"
+        }
+      }
+    },
+    {
+      "name": "menuBar-filter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "menuBar"
+        }
+      }
+    },
+    {
+      "name": "menuBar-border",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
+        "threshold": 60,
+        "source": {
+          "type": "settingValue",
+          "settingId": "menuBar"
+        }
+      }
+    },
+    {
+      "name": "tab-text",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 94, 117, 0.75)",
+        "white": "rgba(255, 255, 255, 0.75)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "tab"
+        }
+      }
+    },
+    {
+      "name": "tab-filter",
+      "value": {
+        "type": "textColor",
+        "black": "grayscale(100%)",
+        "white": "brightness(0) invert(1) opacity(0.75)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "tab"
+        }
+      }
+    },
+    {
+      "name": "selector-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector"
+        }
+      }
+    },
+    {
+      "name": "selector2-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector2"
+        }
+      }
+    },
+    {
+      "name": "selector2-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selector2"
+        }
+      }
+    },
+    {
+      "name": "selectorSelection-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selectorSelection"
+        }
+      }
+    },
+    {
+      "name": "selectorSelection-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "selectorSelection"
+        }
+      }
+    },
+    {
+      "name": "accent-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
+      "name": "accent-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
+      "name": "accent-desaturateFilter",
+      "value": {
+        "type": "textColor",
+        "black": "saturate(0)",
+        "white": "brightness(0) invert(1) opacity(0.7)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
+      "name": "accent-opacity0",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "a": 0
+      }
+    },
+    {
+      "name": "input-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 94, 117, 0.6)",
+        "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-transparent50",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "a": 0.5
+      }
+    },
+    {
+      "name": "input-transparent25",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "a": 0.25
+      }
+    },
+    {
+      "name": "workspace-codeZoomFilter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "invert(1) hue-rotate(180deg)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "workspace"
+        }
+      }
+    },
+    {
+      "name": "workspace-scrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "workspace"
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "workspace"
+          },
+          "r": 0.83,
+          "g": 0.83,
+          "b": 0.83
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "workspace"
+          },
+          "r": 0.87,
+          "g": 0.87,
+          "b": 0.87
+        },
+        "threshold": 110
+      }
+    },
+    {
+      "name": "workspace-dots",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.13)",
+        "white": "rgba(255, 255, 255, 0.13)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "workspace"
+        }
+      }
+    },
+    {
+      "name": "categoryMenu-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
+      "name": "categoryMenu-selection",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 124, 155, 0.13)",
+        "white": "rgba(255, 255, 255, 0.05)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
+      "name": "palette-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "palette"
+        }
+      }
+    },
+    {
+      "name": "palette-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "palette"
+        }
+      }
+    },
+    {
+      "name": "palette-scrollbar",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "workspace"
+          },
+          "transparentSource": {
+            "type": "multiply",
+            "source": {
+              "type": "settingValue",
+              "settingId": "palette"
+            },
+            "a": 0.8
+          }
+        },
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "alphaBlend",
+            "opaqueSource": {
+              "type": "settingValue",
+              "settingId": "workspace"
+            },
+            "transparentSource": {
+              "type": "multiply",
+              "source": {
+                "type": "settingValue",
+                "settingId": "palette"
+              },
+              "a": 0.8
+            }
+          },
+          "r": 0.83,
+          "g": 0.83,
+          "b": 0.83
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "alphaBlend",
+            "opaqueSource": {
+              "type": "settingValue",
+              "settingId": "workspace"
+            },
+            "transparentSource": {
+              "type": "multiply",
+              "source": {
+                "type": "settingValue",
+                "settingId": "palette"
+              },
+              "a": 0.8
+            }
+          },
+          "r": 0.91,
+          "g": 0.91,
+          "b": 0.91
+        },
+        "threshold": 110
+      }
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.0.0",
   "updateUserstylesOnSettingsChange": true,
-  "userscripts": [
-    {
-      "url": "text_color.js",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
-      "runAtComplete": false
-    }
-  ],
   "userstyles": [
     {
       "url": "experimental_editor.css",
@@ -53,6 +598,19 @@
       "settingMatch": {
         "id": "textShadow",
         "value": true
+      }
+    },
+    {
+      "url": "hide_dots.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "settingMatch": {
+        "id": "dots",
+        "value": false
       }
     },
     {
@@ -343,6 +901,5 @@
     }
   ],
   "tags": ["editor", "theme", "recommended"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }
