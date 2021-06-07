@@ -55,8 +55,19 @@ function brighten(hex, c) {
   });
 }
 
+function alphaBlend(opaqueHex, transparentHex) {
+  const { r: r1, g: g1, b: b1 } = parseHex(opaqueHex);
+  const { r: r2, g: g2, b: b2, a } = parseHex(transparentHex);
+  return convertToHex({
+    r: (1 - a) * r1 + a * r2,
+    g: (1 - a) * g1 + a * g2,
+    b: (1 - a) * b1 + a * b2,
+  });
+}
+
 globalThis.__scratchAddonsTextColor = {
   textColor,
   multiply,
   brighten,
+  alphaBlend,
 };

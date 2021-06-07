@@ -233,4 +233,11 @@ export default class Tab extends Listenable {
       g[1].toUpperCase()
     )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
   }
+
+  get direction() {
+    // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
+    const rtlLocales = ["ar", "ckb", "fa", "he"];
+    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
+    return rtlLocales.includes(lang) ? "rtl" : "ltr";
+  }
 }

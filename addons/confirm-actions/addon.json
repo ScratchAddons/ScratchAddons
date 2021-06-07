@@ -44,6 +44,5 @@
     }
   ],
   "tags": ["community", "recommended"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

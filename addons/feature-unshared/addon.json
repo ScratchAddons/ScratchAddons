@@ -15,6 +15,5 @@
   ],
   "versionAdded": "1.4.0",
   "tags": ["community", "profiles", "beta"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }
