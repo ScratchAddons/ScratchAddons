@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   if (addon.auth.isLoggedIn) {
     const r = await fetch("https://api.magnifier.potatophant.net/api/Reactions");
     const reactions = await r.json();
