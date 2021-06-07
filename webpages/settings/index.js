@@ -194,9 +194,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         }
 
         if (!fuse) return [];
-        const fuseSearch = fuse.search(this.searchInput);
+        const fuseSearch = fuse.search(this.searchInput).sort((a, b) => b.item._enabled - a.item._enabled);
         const results = fuseSearch.map((result) => this.addonListObjs.find((obj) => obj.manifest === result.item));
-        console.log({ fuseSearch, results }); // TODO: remove
         for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
         return this.addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
       },
@@ -444,10 +443,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
     vue.addonSettings = addonSettings;
-    fuse = new Fuse(
-      manifests.map(({ manifest }) => manifest),
-      fuseOptions
-    );
     let iframeData;
     if (isIframe) {
       iframeData = await getRunningAddons(manifests, addonsEnabled);
@@ -541,6 +536,10 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       Vue.set(vue.manifestsById, manifest._addonId, manifest);
     }
     vue.manifests = manifests.map(({ manifest }) => manifest);
+    fuse = new Fuse(
+      manifests.map(({ manifest }) => manifest),
+      fuseOptions
+    );
 
     const checkTag = (tagOrTags, manifestA, manifestB) => {
       const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
