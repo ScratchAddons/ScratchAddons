@@ -1,11 +1,11 @@
 {
-  "name": "Alt+GreenFlag 60FPS player mode",
-  "description": "Alt+Click the green flag to toggle 60FPS.",
+  "name": "Slow motion",
+  "description": "Alt click the green flag to open a context menu of options including slow-motion.",
   "info": [
     {
       "type": "notice",
-      "text": "Projects will run twice as fast at 60FPS, because they typically run at 30FPS.",
-      "id": "projectRunsFasterNotice"
+      "text": "Projects will run twice as slow at 15FPS, because they typically run at 30FPS.",
+      "id": "projectRunsSlowerNotice"
     }
   ],
   "credits": [
@@ -35,12 +35,12 @@
       "name": "Alt+GreenFlag FPS",
       "id": "framerate",
       "type": "integer",
-      "min": 31,
-      "max": 240,
-      "default": 60
+      "min": 14,
+      "max": 29,
+      "default": 15
     }
   ],
   "tags": ["editor", "projectPlayer", "recommended" "beta"],
-  "versionAdded": "1.1.0",
+  "versionAdded": "1.16.0",
   "enabledByDefault": false
 }
