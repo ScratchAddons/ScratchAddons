@@ -1,0 +1,46 @@
+{
+  "name": "Alt+GreenFlag 60FPS player mode",
+  "description": "Alt+Click the green flag to toggle 60FPS.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "Projects will run twice as fast at 60FPS, because they typically run at 30FPS.",
+      "id": "projectRunsFasterNotice"
+    }
+  ],
+  "credits": [
+    {
+      "name": "Jeffalo",
+      "link": "https://scratch.mit.edu/users/Jeffalo"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+    {
+      "name": "Ilikesonic100 (ip banned)",
+      "link": "https://scratch.mit.edu/users/Ilikesonic100"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Alt+GreenFlag FPS",
+      "id": "framerate",
+      "type": "integer",
+      "min": 31,
+      "max": 240,
+      "default": 60
+    }
+  ],
+  "tags": ["editor", "projectPlayer", "recommended" "beta"],
+  "versionAdded": "1.1.0",
+  "enabledByDefault": false
+}
