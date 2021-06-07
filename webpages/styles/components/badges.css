@@ -8,6 +8,9 @@
   border-bottom: 2px solid #111;
   white-space: nowrap;
 }
+.badge .tooltiptext {
+  white-space: normal;
+}
 
 .badge.blue {
   background: #175ef8;
