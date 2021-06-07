@@ -5,6 +5,7 @@ import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
+import fuseOptions from "./data/fuse-options.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -14,6 +15,7 @@ if (window.parent !== window) {
 }
 
 let vue;
+let fuse;
 
 let initialTheme;
 let initialThemePath;
@@ -191,19 +193,12 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           return this.addonListObjs.sort((b, a) => b.naturalIndex - a.naturalIndex);
         }
 
-        const matchesSearch = (manifest) =>
-          manifest.name.toLowerCase().includes(this.searchInput) ||
-          manifest._addonId.toLowerCase().includes(this.searchInput) ||
-          manifest.description.toLowerCase().includes(this.searchInput) ||
-          (manifest.credits &&
-            manifest.credits.map((obj) => obj.name.toLowerCase()).some((author) => author.includes(this.searchInput)));
-
-        // Order for this array matters
-        const results = this.addonListObjs
-          .filter((addon, i) => !addon.duplicate && matchesSearch(addon.manifest))
-          .sort((a, b) => b.naturalIndex - a.naturalIndex);
+        if (!fuse) return [];
+        const fuseSearch = fuse.search(this.searchInput);
+        const results = fuseSearch.map((result) => this.addonListObjs.find((obj) => obj.manifest === result.item));
+        console.log({ fuseSearch, results }); // TODO: remove
         for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
-        return this.addonListObjs.sort((a, b) => results.indexOf(b) - results.indexOf(a));
+        return this.addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
       },
       version() {
         return chrome.runtime.getManifest().version;
@@ -449,6 +444,10 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
     vue.addonSettings = addonSettings;
+    fuse = new Fuse(
+      manifests.map(({ manifest }) => manifest),
+      fuseOptions
+    );
     let iframeData;
     if (isIframe) {
       iframeData = await getRunningAddons(manifests, addonsEnabled);
