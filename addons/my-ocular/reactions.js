@@ -26,7 +26,7 @@ export default async function ({ addon, global, console, msg }) {
       reactionMenuContainer.appendChild(document.createTextNode(" "));
       reactionMenuContainer.appendChild(reactionMenuButton);
       reactionMenuContainer.appendChild(document.createTextNode(" "));
-      
+
       let reactionMenu = document.createElement("span");
       reactionMenu.className = "my-ocular-popup";
       reactionMenuContainer.appendChild(reactionMenu);
@@ -40,7 +40,7 @@ export default async function ({ addon, global, console, msg }) {
       });
       document.body.addEventListener("click", () => reactionMenuContainer.classList.remove("open"));
       reactionMenu.addEventListener("click", (e) => e.stopPropagation()); /* don't close the menu when it's clicked */
-      
+
       let reactionList = document.createElement("li"); // it's a list item, because its inside the postfootright list. so it's basically a nested list
       async function makeReactionList() {
         const reactions = await fetchReactions(postID);
@@ -51,21 +51,27 @@ export default async function ({ addon, global, console, msg }) {
           let reactionButton = reaction.reactions.length !== 0 ? document.createElement("span") : null;
           if (reactionButton) reactionButton.className = "my-ocular-reaction-button";
           if (reactionButton) reactionButton.innerText = `${reaction.emoji} ${reaction.reactions.length}`;
-          
+
           let reactionMenuItem = document.createElement("span");
           reactionMenuItem.className = "my-ocular-reaction-button";
           reactionMenuItem.innerText = reaction.emoji;
-          
+
           if (reaction.reactions.find((r) => r.user === addon.auth.username)) {
             if (reactionButton) reactionButton.classList.add("selected");
             reactionMenuItem.classList.add("selected");
           }
-          
+
           if (reactionButton) {
             let tooltip = document.createElement("span");
             tooltip.className = "my-ocular-popup";
-            if (reaction.reactions.length <= 5) tooltip.innerText = reaction.reactions.map(user => user.user).join(", ");
-            else tooltip.innerText = reaction.reactions.slice(0, 5).map(user => user.user).join(", ") + " and others";
+            if (reaction.reactions.length <= 5)
+              tooltip.innerText = reaction.reactions.map((user) => user.user).join(", ");
+            else
+              tooltip.innerText =
+                reaction.reactions
+                  .slice(0, 5)
+                  .map((user) => user.user)
+                  .join(", ") + " and others";
             reactionButton.appendChild(tooltip);
           }
 
