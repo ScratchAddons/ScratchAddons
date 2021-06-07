@@ -1,0 +1,73 @@
+{
+  "name": "React to comments using magnifier.potatophant.net",
+  "description": "Lets you react to comments and view comment reactions, uses magnifier.potatophant.net",
+  "credits": [
+    {
+      "name": "potatophant"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "scratch-www.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "settingMatch": {
+        "id": "reactions",
+        "value": true
+      }
+    },
+    {
+      "url": "scratchr2.js",
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*/comments"],
+      "settingMatch": {
+        "id": "reactions",
+        "value": true
+      }
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "reactions.css",
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*/comments"],
+      "settingMatch": {
+        "id": "reactions",
+        "value": true
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Show reaction buttons on comments",
+      "id": "reactions",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show \"View on Magnifier\" links for comments",
+      "id": "comment",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show \"View on Magnifier\" links for projects",
+      "id": "project",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show \"View on Magnifier\" links for studios",
+      "id": "studio",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Show \"View on Magnifier\" links for profiles",
+      "id": "profile",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "versionAdded": "1.15.0",
+  "tags": ["comments", "projects", "studios", "profiles", "community"],
+  "enabledByDefault": false,
+  "l10n": true
+}

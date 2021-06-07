@@ -1,0 +1,60 @@
+.visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.1s linear;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.1s, opacity 0.1s linear;
+}
+
+.magnifier-show-reaction-menu-button {
+  cursor: pointer;
+  user-select: none;
+  margin-left: 10px;
+}
+
+.magnifier-reaction-menu {
+  display: inline-block !important;
+  border: none !important;
+  background-color: #323232;
+  margin-left: 0 !important;
+  margin-top: 0.25rem !important;
+}
+
+.magnifier-reaction-list {
+  float: right;
+  /*display: inline-block !important;*/
+  border: none !important;
+  background: none;
+  margin-left: 0 !important;
+  margin-top: 0.25rem !important;
+}
+
+.magnifier-reaction-button {
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  background-color: #ecf0f1;
+  color: black;
+  font-weight: normal !important;
+  border-radius: 0.375rem;
+  padding: 0 0.25rem;
+  margin: 0 !important;
+  margin: 0 0.3125rem !important;
+  transition-duration: 0.1s;
+}
+
+.magnifier-reaction-button:hover {
+  background-color: #bdc3c7;
+}
+
+.magnifier-reaction-button.selected {
+  background-color: #1abc9c;
+}
+
+.magnifier-reaction-button.selected:hover {
+  background-color: #16a085;
+}
