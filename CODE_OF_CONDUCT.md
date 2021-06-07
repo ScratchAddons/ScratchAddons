@@ -30,6 +30,7 @@ Examples of unacceptable behavior by participants include:
   address, without explicit permission
 - Other conduct which could reasonably be considered inappropriate in a
   professional setting
+- Bumping your issue/pull request/discussion
 
 ## Our Responsibilities
 
