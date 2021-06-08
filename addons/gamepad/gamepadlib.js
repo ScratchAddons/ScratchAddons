@@ -633,6 +633,11 @@ GamepadLib.browserHasBrokenGamepadAPI = () => {
   if (navigator.userAgent.includes("Firefox") && navigator.userAgent.includes("Linux")) {
     return true;
   }
+  // Firefox on macOS has other bugs that result in strange and unusable mappings
+  // eg. https://bugzilla.mozilla.org/show_bug.cgi?id=1434408
+  if (navigator.userAgent.includes("Firefox") && navigator.userAgent.includes("Mac OS")) {
+    return true;
+  }
   return false;
 };
 
