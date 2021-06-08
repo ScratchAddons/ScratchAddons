@@ -334,8 +334,8 @@ export default async function ({ addon, global, console, msg }) {
   const virtualCursorSetPosition = (x, y) => {
     virtualCursorSetVisible(true);
     const CURSOR_SIZE = 6;
-    const stageX = (width / 2) + x - (CURSOR_SIZE / 2);
-    const stageY = (height / 2) - y - (CURSOR_SIZE / 2);
+    const stageX = width / 2 + x - CURSOR_SIZE / 2;
+    const stageY = height / 2 - y - CURSOR_SIZE / 2;
     virtualCursorElement.style.transform = `translate(${stageX}px, ${stageY}px)`;
   };
 
