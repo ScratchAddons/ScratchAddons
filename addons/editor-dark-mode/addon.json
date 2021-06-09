@@ -85,6 +85,16 @@
       }
     },
     {
+      "name": "primary-iconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "settingValue",
+          "settingId": "primary"
+        }
+      }
+    },
+    {
       "name": "primary-transparent35",
       "value": {
         "type": "multiply",
@@ -168,6 +178,16 @@
           "b": 0.75
         },
         "threshold": 60
+      }
+    },
+    {
+      "name": "highlightText-iconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "settingValue",
+          "settingId": "highlightText"
+        }
       }
     },
     {
@@ -614,6 +634,19 @@
       }
     },
     {
+      "url": "stage.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "settingMatch": {
+        "id": "affectStage",
+        "value": true
+      }
+    },
+    {
       "url": "dark_comments.css",
       "matches": [
         "https://scratch.mit.edu/projects/*/",
@@ -650,6 +683,12 @@
     {
       "name": "Highlight color",
       "id": "primary",
+      "type": "color",
+      "default": "#4d97ff"
+    },
+    {
+      "name": "Text and icon highlight color",
+      "id": "highlightText",
       "type": "color",
       "default": "#4d97ff"
     },
@@ -751,6 +790,12 @@
       "default": false
     },
     {
+      "name": "Change the colors of variables, lists, and answer inputs on the stage",
+      "id": "affectStage",
+      "type": "boolean",
+      "default": false
+    },
+    {
       "name": "Dark comments",
       "id": "darkComments",
       "type": "boolean",
@@ -771,6 +816,7 @@
       "values": {
         "page": "#111111",
         "primary": "#4d97ff",
+        "highlightText": "#4d97ff",
         "menuBar": "#202020",
         "activeTab": "#202020",
         "tab": "#151515",
@@ -798,6 +844,7 @@
       "values": {
         "page": "#051638",
         "primary": "#4d97ff",
+        "highlightText": "#4d97ff",
         "menuBar": "#2f4066",
         "activeTab": "#2f4066",
         "tab": "#273552",
@@ -825,6 +872,7 @@
       "values": {
         "page": "#2e2e2e",
         "primary": "#47566b",
+        "highlightText": "#4d97ff",
         "menuBar": "#47566b",
         "activeTab": "#555555",
         "tab": "#444444",
@@ -852,6 +900,7 @@
       "values": {
         "page": "#001533",
         "primary": "#4d97ff",
+        "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
         "activeTab": "#282828",
         "tab": "#192f4d",
@@ -879,6 +928,7 @@
       "values": {
         "page": "#e5f0ff",
         "primary": "#4d97ff",
+        "highlightText": "#4d97ff",
         "menuBar": "#4d97ff",
         "activeTab": "#ffffff",
         "tab": "#d9e3f2",

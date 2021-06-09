@@ -229,6 +229,9 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         let opaqueHex = getColor(addonId, obj.opaqueSource);
         let transparentHex = getColor(addonId, obj.transparentSource);
         return textColorLib.alphaBlend(opaqueHex, transparentHex);
+      case "recolorFilter":
+        hex = getColor(addonId, obj.source);
+        return textColorLib.recolorFilter(hex);
     }
   };
 
