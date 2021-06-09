@@ -201,7 +201,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           // Enabled addons at top
           else return b.item._enabled - a.item._enabled;
         });
-        console.log(fuseSearch);
         const results = fuseSearch.map((result) => this.addonListObjs.find((obj) => obj.manifest === result.item));
         for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
         return this.addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
