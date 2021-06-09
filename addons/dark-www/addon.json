@@ -158,6 +158,14 @@
       }
     },
     {
+      "url": "experimental_confirm_email_modal.css",
+      "matches": ["https://scratch.mit.edu/accounts/email_resend_standalone/"],
+      "settingMatch": {
+        "id": "selectedMode",
+        "value": "experimental-dark"
+      }
+    },
+    {
       "url": "experimental_statistics.css",
       "matches": ["https://scratch.mit.edu/statistics/"],
       "settingMatch": {
