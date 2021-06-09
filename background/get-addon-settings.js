@@ -49,12 +49,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
           if (settings[option.id] === undefined) {
             madeChangesToAddon = true;
             madeAnyChanges = true;
-            // Auto-enable linkifying for those who have More Links enabled
-            if (addonId === "scratch-messaging" && addonsEnabled["more-links"] && option.id === "linkify") {
-              settings[option.id] = true;
-            } else {
-              settings[option.id] = option.default;
-            }
+            settings[option.id] = option.default;
           } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number
             if (typeof settings[option.id] !== "number") {

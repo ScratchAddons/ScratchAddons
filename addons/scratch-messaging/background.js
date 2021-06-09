@@ -325,7 +325,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   }
 
   function fixCommentContent(value) {
-    const shouldLinkify = addon.settings.get("linkify");
+    const shouldLinkify = scratchAddons.localState.addonsEnabled["more-links"] === true;
     let node;
     if (value instanceof Node) {
       // profile
