@@ -22,6 +22,11 @@
       "url": "fix-uploaded-svgs.js",
       "matches": ["projects"],
       "runAtComplete": false
+    },
+    {
+      "url": "fix-comments.js",
+      "matches": ["projects"],
+      "runAtComplete": false
     }
   ],
   "settings": [
@@ -34,6 +39,12 @@
     {
       "name": "Fix broken SVG uploads",
       "id": "fix-uploaded-svgs",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Fix editor comment dragging",
+      "id": "fix-comments",
       "type": "boolean",
       "default": true
     }
