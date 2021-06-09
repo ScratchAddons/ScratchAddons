@@ -44,7 +44,7 @@ export default async function ({ addon, global, console, msg }) {
     countContainerContainer.dataset.count = lastChecked = v;
     count.dataset.str = cache[v] || "";
 
-    if (v == 0) countContainerContainer.style.display = "none";
+    if (v === 0) countContainerContainer.style.display = "none";
     else addon.tab.displayNoneWhileDisabled(countContainerContainer, { display: "flex" });
   }
 

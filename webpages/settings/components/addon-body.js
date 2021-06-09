@@ -27,9 +27,6 @@ export default async function ({ template }) {
       addonSettings() {
         return this.$root.addonSettings;
       },
-      searchInput() {
-        return this.$root.searchInput;
-      },
     },
     methods: {
       getDefaultExpanded() {
