@@ -125,7 +125,7 @@ export default async function ({ addon, global, console, msg }) {
     draggable: false,
   });
   const unpauseImg = Object.assign(document.createElement("img"), {
-    src: "/static/assets/b5257afbe4bcf7953029ddb8f18b24fe.svg",
+    src: addon.self.dir + "/play.svg",
   });
   const unpauseText = Object.assign(document.createElement("span"), {
     innerText: msg("unpause"),
@@ -136,7 +136,7 @@ export default async function ({ addon, global, console, msg }) {
     draggable: false,
   });
   const exportImg = Object.assign(document.createElement("img"), {
-    src: "/svgs/extensions/download-white.svg",
+    src: addon.self.dir + "/download-white.svg",
   });
   const exportText = Object.assign(document.createElement("span"), {
     innerText: msg("export"),
@@ -147,7 +147,7 @@ export default async function ({ addon, global, console, msg }) {
     draggable: false,
   });
   const trashImg = Object.assign(document.createElement("img"), {
-    src: "/static/assets/a5787bb7364d8131ed49a8f53037d7f4.svg",
+    src: addon.self.dir + "/delete.svg",
   });
   const trashText = Object.assign(document.createElement("span"), {
     innerText: msg("clear"),
@@ -159,7 +159,7 @@ export default async function ({ addon, global, console, msg }) {
   });
   const closeImg = Object.assign(document.createElement("img"), {
     className: addon.tab.scratchClass("close-button_close-icon"),
-    src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
+    src: addon.self.dir + "/add.svg",
   });
   const closeText = Object.assign(document.createElement("span"), {
     innerText: msg("close"),
