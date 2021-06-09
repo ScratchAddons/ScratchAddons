@@ -1,13 +1,6 @@
 {
   "name": "Debugger",
-  "description": "Adds blocks to log data to a log in Scratch.",
-  "info": [
-    {
-      "type": "notice",
-      "text": "Protip: remove logs once you're done debugging",
-      "id": "logprotip"
-    }
-  ],
+  "description": "Adds a new \"debugger\" block category and a \"logs\" window to the editor. The \"log\", \"warn\" and \"error\" blocks will print the specified message into the logs window. The \"breakpoint\" block will pause the project when executed.",
   "credits": [
     {
       "name": "GrahamSH"
@@ -33,5 +26,5 @@
   ],
   "tags": ["editor", "beta"],
   "enabledByDefault": false,
-  "versionAdded": "1.15.0"
+  "versionAdded": "1.16.0"
 }
