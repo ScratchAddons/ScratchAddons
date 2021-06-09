@@ -1,7 +1,7 @@
 export default async function ({ addon, console }) {
   await addon.tab.loadScript(`${addon.self.lib}/thirdparty/cs/webfont.js`);
 
-  //Easily expandible method of declaring options
+  //Easily expandable method of declaring options
   const options = [
     ["navfnt", "nav"],
     ["blockfnt", "blocks"],
