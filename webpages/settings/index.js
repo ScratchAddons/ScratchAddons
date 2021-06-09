@@ -369,8 +369,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       },
       groupMarginAbove(group) {
         const i = this.addonGroups.indexOf(group);
-        if (i === 0) return false;
-        else return this.groupShownCount(this.addonGroups[i - 1]) > 0;
+        const firstVisibleGroup = this.addonGroups.find((group) => this.groupShownCount(group) > 0);
+        return group !== firstVisibleGroup;
       },
     },
     events: {
