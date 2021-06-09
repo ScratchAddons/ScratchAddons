@@ -332,13 +332,15 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       node = value.cloneNode(true);
     } else {
       // JSON API
-      const fragment = parser.parseFromString(value, "text/html");
+      const fragment = parser.parseFromString(value.trim(), "text/html");
       node = fragment.body;
     }
     for (let i = node.childNodes.length; i--; ) {
       const item = node.childNodes[i];
       item.textContent = item.textContent.replace(/\n/g, "");
-      if (item instanceof HTMLAnchorElement && item.href.startsWith("/")) {
+      if (item instanceof Text && item.textContent === "") {
+        item.remove();
+      } else if (item instanceof HTMLAnchorElement && item.href.startsWith("/")) {
         item.href = "https://scratch.mit.edu" + item.href;
       } else if (item instanceof HTMLImageElement) {
         const splitString = item.src.split("/");

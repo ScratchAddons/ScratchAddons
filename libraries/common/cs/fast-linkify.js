@@ -34,7 +34,7 @@ const _pingify = (child) => {
       elem.href = `https://scratch.mit.edu/users/${word.slice(1)}/`;
       elem.rel = "noreferrer";
       child.parentNode.insertBefore(elem, child);
-    } else {
+    } else if (word) {
       child.parentNode.insertBefore(document.createTextNode(word), child);
     }
   });
