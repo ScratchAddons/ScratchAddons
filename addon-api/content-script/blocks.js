@@ -119,7 +119,7 @@ const injectWorkspace = (ScratchBlocks) => {
       id: "sa-blocks",
       xml:
         "<category" +
-        ` name="${escapeHTML(scratchAddons.l10n.get("extensionName", null, "Scratch Addons"))}"` +
+        ` name="${escapeHTML(scratchAddons.l10n.get("debugger/@name", null, "Debugger"))}"` +
         ' id="sa-blocks"' +
         ' colour="#ff7b26"' +
         ' secondaryColour="#ff7b26"' +
