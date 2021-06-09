@@ -34,7 +34,7 @@ export default async function ({ addon, global, console, msg }) {
         e.stopPropagation();
         reactionMenuContainer.classList.toggle("open");
         for (let otherMenuContainer of document.querySelectorAll(".my-ocular-reaction-menu")) {
-          if (otherMenuContainer == reactionMenuContainer) continue;
+          if (otherMenuContainer === reactionMenuContainer) continue;
           otherMenuContainer.classList.remove("open");
         }
       });
