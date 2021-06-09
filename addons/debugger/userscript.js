@@ -24,16 +24,16 @@ export default async function ({ addon, global, console, msg }) {
     if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleConsole(true);
   };
   addon.tab.addBlock("sa-pause", [], pause, true);
-  addon.tab.addBlock("sa-breakpoint", [], pause);
-  addon.tab.addBlock("sa-log %s", ["content"], ({ content }, thread) => {
+  addon.tab.addBlock("\u200B\u200Bbreakpoint\u200B\u200B", [], pause);
+  addon.tab.addBlock("\u200B\u200Blog\u200B\u200B %s", ["content"], ({ content }, thread) => {
     workspace = Blockly.getMainWorkspace();
     addItem(content, thread, "log");
   });
-  addon.tab.addBlock("sa-warn %s", ["content"], ({ content }, thread) => {
+  addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", ["content"], ({ content }, thread) => {
     workspace = Blockly.getMainWorkspace();
     addItem(content, thread, "warn");
   });
-  addon.tab.addBlock("sa-error %s", ["content"], ({ content }, thread) => {
+  addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", ["content"], ({ content }, thread) => {
     workspace = Blockly.getMainWorkspace();
     addItem(content, thread, "error");
   });
