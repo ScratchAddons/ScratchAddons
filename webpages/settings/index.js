@@ -195,7 +195,13 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         }
 
         if (!fuse) return [];
-        const fuseSearch = fuse.search(this.searchInput).sort((a, b) => b.item._enabled - a.item._enabled);
+        const fuseSearch = fuse.search(this.searchInput).sort((a, b) => {
+          // Sort very good matches at the top no matter what
+          if ((a.score < 0.1) ^ (b.score < 0.1)) return Boolean(b.score < 0.1) - Boolean(b.score < 0.1);
+          // Enabled addons at top
+          else return b.item._enabled - a.item._enabled;
+        });
+        console.log(fuseSearch);
         const results = fuseSearch.map((result) => this.addonListObjs.find((obj) => obj.manifest === result.item));
         for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
         return this.addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
