@@ -36,7 +36,7 @@
       "id": "framerate",
       "type": "integer",
       "min": 31,
-      "max": 240,
+      "max": 250,
       "default": 60
     }
   ],
