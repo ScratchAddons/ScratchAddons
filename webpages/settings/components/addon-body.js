@@ -2,48 +2,36 @@ const isIframe = window.parent !== window;
 
 export default async function ({ template }) {
   const AddonBody = Vue.extend({
-    props: ["addon", "groupId", "groupExpanded"],
+    props: ["addon", "groupId", "groupExpanded", "visible"],
     template,
     data() {
       return {
-        expanded: isIframe ? false : this.groupId === "enabled",
+        expanded: this.getDefaultExpanded(),
+        everExpanded: this.getDefaultExpanded(),
       };
     },
     computed: {
       shouldShow() {
-        const matches =
-          this.$root.selectedCategory === "all" || this.addon._categories.includes(this.$root.selectedCategory);
-        if (matches) return this.addonMatchesFilters;
-        else return false;
+        return this.visible && (this.$root.searchInput === "" ? this.groupExpanded : true);
       },
-      searchInput() {
-        return this.$root.searchInput;
+      addonIconSrc() {
+        const map = {
+          editor: "puzzle",
+          community: "web",
+          theme: "brush",
+          easterEgg: "egg-easter",
+          popup: "popup",
+        };
+        return `../../images/icons/${map[this.addon._icon]}.svg`;
       },
       addonSettings() {
         return this.$root.addonSettings;
       },
-      addonMatchesFilters() {
-        if (this.groupId !== "search" && this.searchInput !== "") return false;
-        if (!this.addon._wasEverEnabled) this.addon._wasEverEnabled = this.addon._enabled;
-
-        const search = this.searchInput.toLowerCase();
-
-        const matchesSearch =
-          this.searchInput === "" ||
-          this.addon.name.toLowerCase().includes(search) ||
-          this.addon._addonId.toLowerCase().includes(search) ||
-          this.addon.description.toLowerCase().includes(search) ||
-          (this.addon.credits &&
-            this.addon.credits.map((obj) => obj.name.toLowerCase()).some((author) => author.includes(search)));
-        // Show disabled easter egg addons only if category is easterEgg
-        const matchesEasterEgg = this.addon.tags.includes("easterEgg")
-          ? this.$root.selectedCategory === "easterEgg" || this.addon._wasEverEnabled
-          : true;
-
-        return matchesSearch && matchesEasterEgg;
-      },
     },
     methods: {
+      getDefaultExpanded() {
+        return isIframe ? false : this.groupId === "enabled";
+      },
       devShowAddonIds(event) {
         if (!this.$root.versionName.endsWith("-prerelease") || !event.ctrlKey) return;
         event.stopPropagation();
@@ -73,6 +61,7 @@ export default async function ({ template }) {
           event.preventDefault();
 
           const newState = !this.addon._enabled;
+          this.addon._wasEverEnabled = this.addon._enabled || newState;
           this.addon._enabled = newState;
           // Do not extend when enabling in popup mode, unless addon has warnings
           this.expanded =
@@ -115,6 +104,19 @@ export default async function ({ template }) {
       },
       msg(...params) {
         return this.$root.msg(...params);
+      },
+    },
+    watch: {
+      groupId(newValue) {
+        // Happens when going from "example" addon to real addon
+        this.expanded = this.getDefaultExpanded();
+      },
+      searchInput(newValue) {
+        if (newValue === "") this.expanded = this.getDefaultExpanded();
+        else this.expanded = false;
+      },
+      expanded(newValue) {
+        if (newValue === true) this.everExpanded = true;
       },
     },
   });

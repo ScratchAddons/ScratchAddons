@@ -9,8 +9,12 @@
     if (folderName.startsWith("//")) continue;
     const manifest = await (await fetch(`/addons/${folderName}/addon.json`)).json();
     if (!useDefault) {
+      manifest._english = {};
       for (const prop of ["name", "description"]) {
-        if (manifest[prop]) manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
+        if (manifest[prop]) {
+          manifest._english[prop] = manifest[prop];
+          manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
+        }
       }
       if (manifest.info) {
         for (const info of manifest.info || []) {

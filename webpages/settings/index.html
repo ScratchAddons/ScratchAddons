@@ -45,9 +45,12 @@
     <link rel="modulepreload" href="../../libraries/common/cs/download-blob.js"">
     <link rel="modulepreload" href="../rtl-list.js" />
     <link rel="modulepreload" href="../../libraries/common/load-vue-components.js" />
+    <link rel="modulepreload" href="../../libraries/thirdparty/fuse.basic.esm.min.js" />
     <link rel="modulepreload" href="data/tags.js" />
     <link rel="modulepreload" href="data/addon-groups.js" />
     <link rel="modulepreload" href="data/categories.js" />
+    <link rel="modulepreload" href="data/example-manifest.js" />
+    <link rel="modulepreload" href="data/fuse-options.js" />
 
     <!-- Preload images -->
     <link rel="preload" href="../../images/icons/switch.svg" as="image" />
@@ -62,6 +65,7 @@
     <link rel="preload" href="../../images/icons/comment.svg" as="image" />
     <link rel="preload" href="../../images/icons/wrench.svg" as="image" />
     <link rel="preload" href="../../images/icons/search.svg" as="image" />
+    <link rel="preload" href="../../images/icons/expand.svg" as="image" />
 
     <!-- Preload components -->
     <link rel="preload" href="components/picker-component.html" as="fetch" crossorigin />
@@ -72,8 +76,8 @@
     <link rel="modulepreload" href="components/addon-setting.js" />
     <link rel="preload" href="components/addon-tag.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/addon-tag.js" />
-    <link rel="preload" href="components/addon-group.html" as="fetch" crossorigin />
-    <link rel="modulepreload" href="components/addon-group.js" />
+    <link rel="preload" href="components/addon-group-header.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/addon-group-header.js" />
     <link rel="preload" href="components/addon-body.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/addon-body.js" />
     <link rel="preload" href="components/category-selector.html" as="fetch" crossorigin />
@@ -105,7 +109,7 @@
     <script src="../../libraries/thirdparty/color-picker.js" type="module"></script>
     <script src="index.js" type="module"></script>
   </head>
-  <body v-cloak v-show="isIframe && loaded || !isIframe" :class="{light: theme}">
+  <body v-cloak :class="{light: theme}">
     <div class="navbar">
       <img :src="switchPath" class="toggle" @click="sidebarToggle()" v-cloak v-show="smallMode" alt="Logo" />
       <img src="../../images/icon.svg" class="logo" alt="Logo" />
@@ -122,26 +126,33 @@
         <div class="selected-category-orange"></div>
         <category-selector v-for="category of categories" :category="category"></category-selector>
 
-        <div
+        <a
           class="category category-small"
           style="margin-top: auto"
-          @click="openPage('https://scratchaddons.com/contributors')"
+          href="https://scratchaddons.com/contributors"
+          target="_blank"
         >
           <img src="../../images/icons/users.svg" />
-          <span v-cloak>{{ msg("credits") }}</span>
-        </div>
-        <div class="category category-small" @click="openReview()" style="display: none">
+          <span v-cloak>{{ msg("credits") }} <img src="../../images/icons/popout.svg" /></span>
+        </a>
+        <!--
+        <div class="category category-small" @click="openReview()">
           <img src="../../images/icons/star.svg" />
           <span v-cloak>{{ msg("review") }}</span>
         </div>
-        <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
+        -->
+        <a class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
           <img src="../../images/icons/translate.svg" />
-          <span v-cloak>{{ msg("translate") }}</span>
-        </div>
-        <div class="category category-small" @click="openFeedback()">
+          <span v-cloak>{{ msg("translate") }} <img src="../../images/icons/popout.svg" /></span>
+        </a>
+        <a
+          class="category category-small"
+          href="https://scratchaddons.com/feedback/?version={{versionName}}"
+          target="_blank"
+        >
           <img src="../../images/icons/comment.svg" />
-          <span v-cloak>{{ msg("feedback") }}</span>
-        </div>
+          <span v-cloak>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
+        </a>
         <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
           <span v-cloak>{{ msg("moreSettings") }}</span>
@@ -159,32 +170,32 @@
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div class="search-box" :class="{smallMode: smallMode === true}">
-          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" />
+          <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
           <button v-cloak v-else class="search-clear-button" @click="clearSearch()"></button>
         </div>
 
-        <div class="addons-container" v-cloak v-show="loaded">
-          <template v-for="group of addonGroups">
+        <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
+          <template v-for="addon of addonList">
             <div
               id="iframe-fullscreen-suggestion"
-              v-if="isIframe && group.id === 'enabled'"
+              v-if="isIframe && addon.headerAbove && addon.group.id === 'enabled'"
               v-show="searchInput === ''"
             >
               <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>
               <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
             </div>
-            <addon-group :group="group"></addon-group>
-          </template>
-
-          <!-- Search pseudogroup -->
-          <!-- Must be below real groups to make index.html/#addon-addonid work -->
-          <template v-if="searchLoaded">
+            <addon-group-header
+              v-if="addon.headerAbove"
+              :group="addon.group"
+              :shown-count="groupShownCount(addon.group)"
+              :margin-above="groupMarginAbove(addon.group)"
+            ></addon-group-header>
             <addon-body
-              v-for="addonId of searchAddonOrder"
-              :addon="manifestsById[addonId]"
-              group-id="search"
-              :group-expanded="searchInput !== ''"
+              :visible="addon.matchesSearch && addon.matchesCategory"
+              :addon="addon.manifest"
+              :group-id="addon.group.id"
+              :group-expanded="addon.group.expanded"
             ></addon-body>
           </template>
         </div>
@@ -204,7 +215,7 @@
               </span>
             </div>
             <div class="addon-settings">
-              <span class="addon-description">{{ msg("scratchAddonsThemeDescription") }}</span>
+              <span class="addon-description-full">{{ msg("scratchAddonsThemeDescription") }}</span>
               <div class="addon-setting">
                 <div class="filter-selector">
                   <div class="filter-text">{{ msg("theme") }}</div>
@@ -228,8 +239,8 @@
               </span>
             </div>
             <div class="addon-settings">
-              <span class="addon-description">{{ msg("exportAndImportSettingsDescription") }}</span>
-              <span class="addon-description">{{ msg("useBrowserSync") }}</span>
+              <span class="addon-description-full">{{ msg("exportAndImportSettingsDescription") }}</span>
+              <span class="addon-description-full">{{ msg("useBrowserSync") }}</span>
               <div class="addon-setting">
                 <div class="filter-selector">
                   <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
@@ -255,7 +266,7 @@
           </p>
           <p>
             <a
-              href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora"
+              href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse"
               target="_blank"
               >{{ msg("libraryCredits") }}</a
             >

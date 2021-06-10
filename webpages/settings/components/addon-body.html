@@ -1,16 +1,12 @@
 <template>
-  <div class="addon-body" v-show="shouldShow && groupExpanded" :id="'addon-' + addon._addonId">
+  <div class="addon-body" v-show="shouldShow" :id="'addon-' + addon._addonId">
     <div class="addon-topbar">
       <div class="clickeable-area" @click="expanded = !expanded">
         <div class="btn-dropdown">
           <img src="../../images/icons/expand.svg" alt="v" :class="{'reverted': expanded}" />
         </div>
         <div class="addon-name">
-          <img v-if="addon._icon === 'editor'" src="../../images/icons/puzzle.svg" class="icon-type" />
-          <img v-if="addon._icon === 'community'" src="../../images/icons/web.svg" class="icon-type" />
-          <img v-if="addon._icon === 'theme'" src="../../images/icons/brush.svg" class="icon-type" />
-          <img v-if="addon._icon === 'easterEgg'" src="../../images/icons/egg-easter.svg" class="icon-type" />
-          <img v-if="addon._icon === 'popup'" src="../../images/icons/popup.svg" class="icon-type" />
+          <img :src="addonIconSrc" class="icon-type" />
           <span @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
         </div>
       </div>
@@ -29,7 +25,7 @@
         <div class="switch" :state="addon._enabled ? 'on' : 'off'" @click="toggleAddonRequest($event)"></div>
       </div>
     </div>
-    <div class="addon-settings" v-if="expanded">
+    <div class="addon-settings" v-if="everExpanded" v-show="expanded">
       <div class="addon-description-full">{{ addon.description }}</div>
       <div id="info" v-for="info of addon.info">
         <div class="addon-warn" v-if="info.type == 'warning'">
@@ -78,14 +74,17 @@
     </div>
   </div>
 </template>
+
 <style>
   .addon-description {
     margin-inline: 10px;
     color: gray;
-    max-width: 35vw;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    width: 0; /* don't include the description
+                 when calculating addon-body size */
+    flex-grow: 1;
   }
 
   .addon-warn {
@@ -128,6 +127,13 @@
     height: 100%;
     display: flex;
     align-items: center;
+  }
+  .addon-name > span:empty {
+    display: inline-block;
+    width: 150px;
+    height: 8px;
+    background-color: gray;
+    border-radius: 3px;
   }
   .addon-topbar {
     height: 50px;

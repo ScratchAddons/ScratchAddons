@@ -1,10 +1,10 @@
 {
   "name": "Website dark mode",
-  "description": "Dark theme for the Scratch website, both for 2.0 and 3.0 pages. Multiple options by different authors available.",
+  "description": "Dark theme for the Scratch website, both for 2.0 and 3.0 pages.",
   "tags": ["community", "theme", "recommended"],
   "credits": [
     {
-      "name": "Maximouse (Experimental Dark)",
+      "name": "Maximouse",
       "link": "https://github.com/mxmou/customize-scratch"
     }
   ],
@@ -50,11 +50,7 @@
         "https://scratch.mit.edu/login",
         "https://scratch.mit.edu/login_retry",
         "https://scratch.mit.edu/news"
-      ],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
+      ]
     },
     {
       "url": "experimental_scratchwww.css",
@@ -99,51 +95,27 @@
         "https://scratch.mit.edu/microbit",
         "https://scratch.mit.edu/vernier",
         "https://scratch.mit.edu/boost"
-      ],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
+      ]
     },
     {
       "url": "experimental_forums.css",
-      "matches": ["https://scratch.mit.edu/discuss/*"],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
+      "matches": ["https://scratch.mit.edu/discuss/*"]
     },
     {
       "url": "experimental_profile.css",
-      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/classes/*"],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/classes/*"]
     },
     {
       "url": "experimental_studio.css",
-      "matches": ["https://scratch.mit.edu/studios/*"],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
+      "matches": ["https://scratch.mit.edu/studios/*"]
     },
     {
       "url": "experimental_scratchr2_comments.css",
-      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
+      "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"]
     },
     {
       "url": "experimental_mystuff.css",
-      "matches": ["https://scratch.mit.edu/mystuff/"],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
+      "matches": ["https://scratch.mit.edu/mystuff/"]
     },
     {
       "url": "experimental_settings.css",
@@ -151,53 +123,27 @@
         "https://scratch.mit.edu/accounts/settings/",
         "https://scratch.mit.edu/accounts/password_change/",
         "https://scratch.mit.edu/accounts/email_change/"
-      ],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
+      ]
+    },
+    {
+      "url": "experimental_confirm_email_modal.css",
+      "matches": ["https://scratch.mit.edu/accounts/email_resend_standalone/"]
     },
     {
       "url": "experimental_statistics.css",
-      "matches": ["https://scratch.mit.edu/statistics/"],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
+      "matches": ["https://scratch.mit.edu/statistics/"]
     },
     {
       "url": "experimental_quotes.css",
-      "matches": ["https://scratch.mit.edu/info/quotes/"],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
+      "matches": ["https://scratch.mit.edu/info/quotes/"]
     },
     {
       "url": "experimental_project_embed.css",
-      "matches": ["https://scratch.mit.edu/projects/*/embed"],
-      "settingMatch": {
-        "id": "selectedMode",
-        "value": "experimental-dark"
-      }
+      "matches": ["https://scratch.mit.edu/projects/*/embed"]
     },
     {
       "url": "pygments.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"]
-    }
-  ],
-  "settings": [
-    {
-      "name": "Dark mode version",
-      "id": "selectedMode",
-      "type": "select",
-      "potentialValues": [
-        {
-          "id": "experimental-dark",
-          "name": "\"Experimental\" Dark"
-        }
-      ],
-      "default": "experimental-dark"
     }
   ]
 }

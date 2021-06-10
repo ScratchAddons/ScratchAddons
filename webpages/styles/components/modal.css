@@ -51,6 +51,10 @@
 .modal .filter-selector {
   margin: 0;
 }
+.modal .addon-body,
+.modal .addon-setting {
+  margin-inline: 0;
+}
 .modal .addon-name {
-  margin-inline-start: 14px;
+  margin-inline-start: 10px;
 }

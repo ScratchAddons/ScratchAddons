@@ -51,8 +51,8 @@ h1 {
   align-items: stretch;
 }
 
-.addon-group {
-  margin-bottom: 20px;
+.addon-group.margin-above {
+  margin-top: 20px;
 }
 
 .addon-group > span {
@@ -92,10 +92,21 @@ h1 {
 
 .addons-container {
   overflow-y: auto;
-  padding: 10px 20px;
+  padding: 20px;
+  padding-top: 10px;
   scrollbar-width: thin;
   scrollbar-color: grey none;
   height: 100vh;
+}
+
+.addons-container.placeholder {
+  pointer-events: none;
+}
+.addons-container.placeholder .addon-body:first-child {
+  /* Doing this instead of padding in .addons-container itself to avoid
+  problems with other CSS that would also set padding on the same element,
+  like the "body.iframe .addons-container" selector below */
+  margin-top: 43px;
 }
 
 @keyframes addonBlink {

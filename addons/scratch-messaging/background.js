@@ -1,10 +1,13 @@
 import commentEmojis from "../scratch-notifier/comment-emojis.js";
+import { linkifyTextNode, pingifyTextNode } from "../../libraries/common/cs/fast-linkify.js";
 
 export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
   let lastDateTime;
   let data;
   let pendingAuthChange = false;
   let addonEnabled = true;
+  // reuse one DOMParser
+  const parser = new DOMParser();
 
   const getDefaultData = () => ({
     messages: [],
@@ -249,7 +252,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}&nocache=${Date.now()}`
     );
     const text = await res.text();
-    const dom = new DOMParser().parseFromString(text, "text/html");
+    const dom = parser.parseFromString(text, "text/html");
     for (const commentChain of dom.querySelectorAll(".top-level-reply:not(.removed)")) {
       if (commentIds.length === 0) {
         // We found all comments we had to look for
@@ -274,7 +277,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         childrenComments[`${resourceType[0]}_${childId}`] = {
           author: author.replace(/\*/g, ""),
           authorId: Number(child.querySelector(".reply").getAttribute("data-commentee-id")),
-          content: fixCommentContent(child.querySelector(".content").innerHTML),
+          content: fixCommentContent(child.querySelector(".content")),
           date: child.querySelector(".time").getAttribute("title"),
           children: null,
           childOf: `${resourceType[0]}_${parentId}`,
@@ -295,7 +298,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         commentsObj[`${resourceType[0]}_${parentId}`] = {
           author: parentAuthor.replace(/\*/g, ""),
           authorId: Number(parentComment.querySelector(".reply").getAttribute("data-commentee-id")),
-          content: fixCommentContent(parentComment.querySelector(".content").innerHTML),
+          content: fixCommentContent(parentComment.querySelector(".content")),
           date: parentComment.querySelector(".time").getAttribute("title"),
           children: Object.keys(childrenComments),
           childOf: null,
@@ -322,21 +325,34 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   }
 
   function fixCommentContent(value) {
-    const matches = value.match(/<img([\w\W]+?)[\/]?>/g);
-    if (matches) {
-      for (const match of matches) {
-        // Replace Scratch emojis with Unicode emojis
-        const src = match.match(/\<img.+src\=(?:\"|\')(.+?)(?:\"|\')(?:.+?)\>/)[1];
-        const splitString = src.split("/");
+    const shouldLinkify = scratchAddons.localState.addonsEnabled["more-links"] === true;
+    let node;
+    if (value instanceof Node) {
+      // profile
+      node = value.cloneNode(true);
+    } else {
+      // JSON API
+      const fragment = parser.parseFromString(value.trim(), "text/html");
+      node = fragment.body;
+    }
+    for (let i = node.childNodes.length; i--; ) {
+      const item = node.childNodes[i];
+      item.textContent = item.textContent.replace(/\n/g, "");
+      if (item instanceof Text && item.textContent === "") {
+        item.remove();
+      } else if (item instanceof HTMLAnchorElement && item.href.startsWith("/")) {
+        item.href = "https://scratch.mit.edu" + item.href;
+      } else if (item instanceof HTMLImageElement) {
+        const splitString = item.src.split("/");
         const imageName = splitString[splitString.length - 1];
-        if (commentEmojis[imageName]) {
-          value = value.replace(match, commentEmojis[imageName]);
-        }
+        if (commentEmojis[imageName]) item.replaceWith(commentEmojis[imageName]);
       }
     }
-    value = value.replace(/\n/g, " ").trim(); // Remove newlines
-    value = value.replace(/<a href="\//g, '<a href="https://scratch.mit.edu/');
-    return value;
+    if (shouldLinkify) {
+      linkifyTextNode(node);
+    }
+    pingifyTextNode(node);
+    return node.innerHTML;
   }
 
   async function sendComment({ resourceType, resourceId, content, parent_id, commentee_id, commenteeUsername }) {
@@ -379,12 +395,12 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       xhr.onload = function () {
         if (xhr.status === 200) {
           try {
-            const dom = new DOMParser().parseFromString(xhr.responseText, "text/html");
+            const dom = parser.parseFromString(xhr.responseText, "text/html");
             const comment = dom.querySelector(".comment ");
             const error = dom.querySelector("script#error-data");
             if (comment) {
               const commentId = Number(comment.getAttribute("data-comment-id"));
-              const content = fixCommentContent(dom.querySelector(".content").innerHTML);
+              const content = fixCommentContent(dom.querySelector(".content"));
               resolve({ commentId, username: addon.auth.username, userId: addon.auth.userId, content });
             } else if (error) {
               const json = JSON.parse(error.textContent);

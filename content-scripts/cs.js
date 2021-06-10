@@ -14,12 +14,13 @@ const onMessageBackgroundReady = (request, sender, sendResponse) => {
 };
 chrome.runtime.onMessage.addListener(onMessageBackgroundReady);
 const onResponse = (res) => {
-  if (res) {
+  if (res && !receivedResponse) {
     console.log("[Message from background]", res);
     chrome.runtime.onMessage.removeListener(onMessageBackgroundReady);
-    receivedResponse = true;
-    if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") onInfoAvailable(res);
-    else {
+    if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") {
+      onInfoAvailable(res);
+      receivedResponse = true;
+    } else {
       pseudoUrl = `https://scratch.mit.edu/${res.httpStatusCode}/`;
       console.log(`Status code was not 2xx, replacing URL to ${pseudoUrl}`);
       chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
@@ -208,19 +209,34 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for customCssVariables
   const getColor = (addonId, obj) => {
+    if (typeof obj === "string" || obj === undefined) return obj;
     let hex;
     switch (obj.type) {
       case "settingValue":
         return addonSettings[addonId][obj.settingId];
-      case "textColor":
+      case "textColor": {
         hex = getColor(addonId, obj.source);
-        return textColorLib.textColor(hex, obj.black, obj.white, obj.threshold);
-      case "multiply":
+        let black = getColor(addonId, obj.black);
+        let white = getColor(addonId, obj.white);
+        return textColorLib.textColor(hex, black, white, obj.threshold);
+      }
+      case "multiply": {
         hex = getColor(addonId, obj.source);
         return textColorLib.multiply(hex, obj);
-      case "brighten":
+      }
+      case "brighten": {
         hex = getColor(addonId, obj.source);
         return textColorLib.brighten(hex, obj);
+      }
+      case "alphaBlend": {
+        let opaqueHex = getColor(addonId, obj.opaqueSource);
+        let transparentHex = getColor(addonId, obj.transparentSource);
+        return textColorLib.alphaBlend(opaqueHex, transparentHex);
+      }
+      case "recolorFilter": {
+        hex = getColor(addonId, obj.source);
+        return textColorLib.recolorFilter(hex);
+      }
     }
   };
 
@@ -255,6 +271,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
     if (document.querySelector("meta[name='format-detection']")) {
       // scratch-www studio
       pseudoUrl = location.href.replace("/studios/", "/studios_www/");
+      receivedResponse = false;
       chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
       return;
     }
