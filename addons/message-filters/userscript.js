@@ -95,14 +95,18 @@ export default async function ({ addon, global, console, msg }) {
       let message = messages[i];
       // Get the classes of that message
       let classes = message.classList;
+      //Assume that the message is hidden, to fix classes that are not included in the filters.
+      message.style.display = "none";
       for (let j = 0; j < classes.length; j++) {
         // For each CLASS of the message test if the active array includes it and display or hide it.
+        //If the active array has nothing show all messages
         if (active.includes(classes[j]) || active.length === 0) {
           // Increment the count variable if the message is showing.
           count++;
           message.style.display = "list-item";
         } else {
-          message.style.display = "none";
+          //Was broken because of this. This hides the current message if the active class is not found in the active filters. This can be worked around by assuming that the message is hidden then showing it when nessecary.
+          //message.style.display = "none";
         }
       }
     }
