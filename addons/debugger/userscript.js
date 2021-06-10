@@ -97,7 +97,7 @@ export default async function ({ addon, global, console, msg }) {
     myFlash.block = block;
 
     function _flash() {
-      myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
+      myFlash.block.svgPath_.style.fill = flashOn ? "#ff7b26" : myFlash.colour;
       flashOn = !flashOn;
       count--;
       if (count > 0) {
