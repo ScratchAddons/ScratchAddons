@@ -1,6 +1,6 @@
 {
   "name": "Alt+GreenFlag 60FPS player mode",
-  "description": "Alt+Click the green flag to toggle 60FPS.",
+  "description": "Alt+Click the green flag to toggle 60FPS, like in TurboWarp.",
   "info": [
     {
       "type": "notice",
@@ -10,7 +10,7 @@
   ],
   "credits": [
     {
-      "name": "Jeffalo",
+      "name": "Jeffalo, also known as JeffaloBob",
       "link": "https://scratch.mit.edu/users/Jeffalo"
     },
     {
@@ -18,7 +18,7 @@
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
     {
-      "name": "GarboMuffin",
+      "name": "GarboMuffin and his Scratch mod, TurboWarp",
       "link": "https://scratch.mit.edu/users/GarboMuffin"
     }
   ],
