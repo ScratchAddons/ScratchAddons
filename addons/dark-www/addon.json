@@ -1,6 +1,6 @@
 {
-  "name": "Website dark mode",
-  "description": "Dark theme for the Scratch website, both for 2.0 and 3.0 pages.",
+  "name": "Main site dark mode",
+  "description": "Dark theme for the Scratch website, for 2.0-styled and 3.0-styled pages.",
   "tags": ["community", "theme", "recommended"],
   "credits": [
     {
