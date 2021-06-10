@@ -103,7 +103,7 @@
   color: white;
   margin-right: 5px;
 }
-.log > span {
+.log > span:not(.console-variable) {
   flex-grow: 1;
 }
 .log a {
@@ -113,8 +113,9 @@
   float: right;
   text-align: right;
   max-width: 100%;
-  margin-left: 4px;
+  padding-left: 4px;
   margin-right: 4px;
+  margin-left: auto;
 }
 .log a:hover {
   color: #4d97ff;
