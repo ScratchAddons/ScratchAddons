@@ -214,21 +214,29 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
     switch (obj.type) {
       case "settingValue":
         return addonSettings[addonId][obj.settingId];
-      case "textColor":
+      case "textColor": {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
         let white = getColor(addonId, obj.white);
         return textColorLib.textColor(hex, black, white, obj.threshold);
-      case "multiply":
+      }
+      case "multiply": {
         hex = getColor(addonId, obj.source);
         return textColorLib.multiply(hex, obj);
-      case "brighten":
+      }
+      case "brighten": {
         hex = getColor(addonId, obj.source);
         return textColorLib.brighten(hex, obj);
-      case "alphaBlend":
+      }
+      case "alphaBlend": {
         let opaqueHex = getColor(addonId, obj.opaqueSource);
         let transparentHex = getColor(addonId, obj.transparentSource);
         return textColorLib.alphaBlend(opaqueHex, transparentHex);
+      }
+      case "recolorFilter": {
+        hex = getColor(addonId, obj.source);
+        return textColorLib.recolorFilter(hex);
+      }
     }
   };
 

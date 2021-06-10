@@ -99,3 +99,14 @@
 .my-ocular-reaction-button.selected {
   background-color: #075e46;
 }
+.my-ocular-popup {
+  background-color: #202020;
+  border-color: #606060;
+  color: white;
+}
+.my-ocular-popup::before {
+  border-top-color: #606060;
+}
+.my-ocular-popup::after {
+  border-top-color: #202020;
+}

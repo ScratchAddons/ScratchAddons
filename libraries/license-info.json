@@ -9,5 +9,6 @@
   "chartjs": "MIT",
   "color-picker-web-component": "MIT",
   "comlink": "Apache-2.0",
-  "Sora": "OFL"
+  "Sora": "OFL",
+  "fuse": "Apache-2.0"
 }

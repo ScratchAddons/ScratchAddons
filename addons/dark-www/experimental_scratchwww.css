@@ -37,6 +37,7 @@ body:not(.sa-body-editor) .join-flow-title,
   background: #252c37;
 }
 #view,
+.crash-container,
 .outer #projectBox,
 .tips-getting-started,
 .tips-activity-guides,
@@ -139,6 +140,7 @@ body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
 .box .box-header,
 #footer, /* for infinite scrolling fixed footer */
 .textarea,
+.crash-container,
 .studio-adder-section .studio-adder-row input,
 .studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
 .studio-tab-nav,

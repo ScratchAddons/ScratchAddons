@@ -23,6 +23,24 @@ const _linkify = (child) => {
   child.remove();
 };
 
+const getPingRegex = () => /^@[\w-]{3,20}$/g;
+
+const _pingify = (child) => {
+  if (!(child instanceof Text)) return;
+  child.nodeValue.split(/(\s)/g).forEach((word) => {
+    if (getPingRegex().test(word)) {
+      const elem = document.createElement("a");
+      elem.textContent = word;
+      elem.href = `https://scratch.mit.edu/users/${word.slice(1)}/`;
+      elem.rel = "noreferrer";
+      child.parentNode.insertBefore(elem, child);
+    } else if (word) {
+      child.parentNode.insertBefore(document.createTextNode(word), child);
+    }
+  });
+  child.remove();
+};
+
 /**
  * Linkify an element which uses either <br> or whitespace: pre-line to add linebreaks,
  * such as "About Me" or project descriptions.
@@ -44,5 +62,16 @@ export const linkifyTag = (elem, tagClass) => {
     for (const child of tag.childNodes) {
       _linkify(child);
     }
+  }
+};
+
+/**
+ * Pingify an element which uses either <br> or whitespace: pre-line to add linebreaks,
+ * such as project comments from the API.
+ * @param {Element} elem - element to pingify to.
+ */
+export const pingifyTextNode = (elem) => {
+  for (const child of elem.childNodes) {
+    _pingify(child);
   }
 };

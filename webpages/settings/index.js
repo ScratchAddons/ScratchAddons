@@ -1,10 +1,12 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import getDirection from "../rtl-list.js";
 import loadVueComponent from "../../libraries/common/load-vue-components.js";
+import Fuse from "../../libraries/thirdparty/fuse.basic.esm.min.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
+import fuseOptions from "./data/fuse-options.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -14,6 +16,7 @@ if (window.parent !== window) {
 }
 
 let vue;
+let fuse;
 
 let initialTheme;
 let initialThemePath;
@@ -191,19 +194,16 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           return this.addonListObjs.sort((b, a) => b.naturalIndex - a.naturalIndex);
         }
 
-        const matchesSearch = (manifest) =>
-          manifest.name.toLowerCase().includes(this.searchInput) ||
-          manifest._addonId.toLowerCase().includes(this.searchInput) ||
-          manifest.description.toLowerCase().includes(this.searchInput) ||
-          (manifest.credits &&
-            manifest.credits.map((obj) => obj.name.toLowerCase()).some((author) => author.includes(this.searchInput)));
-
-        // Order for this array matters
-        const results = this.addonListObjs
-          .filter((addon, i) => !addon.duplicate && matchesSearch(addon.manifest))
-          .sort((a, b) => b.naturalIndex - a.naturalIndex);
+        if (!fuse) return [];
+        const fuseSearch = fuse.search(this.searchInput).sort((a, b) => {
+          // Sort very good matches at the top no matter what
+          if ((a.score < 0.1) ^ (b.score < 0.1)) return Boolean(b.score < 0.1) - Boolean(b.score < 0.1);
+          // Enabled addons at top
+          else return b.item._enabled - a.item._enabled;
+        });
+        const results = fuseSearch.map((result) => this.addonListObjs.find((obj) => obj.manifest === result.item));
         for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
-        return this.addonListObjs.sort((a, b) => results.indexOf(b) - results.indexOf(a));
+        return this.addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
       },
       version() {
         return chrome.runtime.getManifest().version;
@@ -250,12 +250,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
             `https://chrome.google.com/webstore/detail/scratch-addons/fbeffbjdlemaoicjdapfpikkikjoneco/reviews`
           );
         }
-      },
-      openPage(page) {
-        window.open(page);
-      },
-      openFeedback() {
-        window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version_name}`);
       },
       clearSearch() {
         this.searchInputReal = "";
@@ -368,8 +362,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       },
       groupMarginAbove(group) {
         const i = this.addonGroups.indexOf(group);
-        if (i === 0) return false;
-        else return this.groupShownCount(this.addonGroups[i - 1]) > 0;
+        const firstVisibleGroup = this.addonGroups.find((group) => this.groupShownCount(group) > 0);
+        return group !== firstVisibleGroup;
       },
     },
     events: {
@@ -542,6 +536,10 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       Vue.set(vue.manifestsById, manifest._addonId, manifest);
     }
     vue.manifests = manifests.map(({ manifest }) => manifest);
+    fuse = new Fuse(
+      manifests.map(({ manifest }) => manifest),
+      fuseOptions
+    );
 
     const checkTag = (tagOrTags, manifestA, manifestB) => {
       const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];

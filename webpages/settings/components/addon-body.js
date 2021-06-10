@@ -11,6 +11,9 @@ export default async function ({ template }) {
       };
     },
     computed: {
+      shouldShow() {
+        return this.visible && (this.$root.searchInput === "" ? this.groupExpanded : true);
+      },
       addonIconSrc() {
         const map = {
           editor: "puzzle",
@@ -21,14 +24,8 @@ export default async function ({ template }) {
         };
         return `../../images/icons/${map[this.addon._icon]}.svg`;
       },
-      searchInput() {
-        return this.$root.searchInput;
-      },
       addonSettings() {
         return this.$root.addonSettings;
-      },
-      searchInput() {
-        return this.$root.searchInput;
       },
     },
     methods: {
