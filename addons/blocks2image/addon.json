@@ -1,7 +1,7 @@
 {
   "name": "Save blocks as image",
   "description": "Right click the editor workspace to export blocks as SVG/PNG images.",
-  "tags": ["editor", "codeEditor"],
+  "tags": ["editor", "codeEditor" "recommended"],
   "credits": [
     {
       "name": "summerscar",
@@ -15,5 +15,5 @@
     }
   ],
   "versionAdded": "1.13.0",
-  "enabledByDefault": false
+  "enabledByDefault": true
 }
