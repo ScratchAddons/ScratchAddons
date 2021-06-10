@@ -251,12 +251,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           );
         }
       },
-      openPage(page) {
-        window.open(page);
-      },
-      openFeedback() {
-        window.open(`https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version_name}`);
-      },
       clearSearch() {
         this.searchInputReal = "";
       },

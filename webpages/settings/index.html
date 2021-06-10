@@ -126,26 +126,33 @@
         <div class="selected-category-orange"></div>
         <category-selector v-for="category of categories" :category="category"></category-selector>
 
-        <div
+        <a
           class="category category-small"
           style="margin-top: auto"
-          @click="openPage('https://scratchaddons.com/contributors')"
+          href="https://scratchaddons.com/contributors"
+          target="_blank"
         >
           <img src="../../images/icons/users.svg" />
-          <span v-cloak>{{ msg("credits") }}</span>
-        </div>
-        <div class="category category-small" @click="openReview()" style="display: none">
+          <span v-cloak>{{ msg("credits") }} <img src="../../images/icons/popout.svg" /></span>
+        </a>
+        <!--
+        <div class="category category-small" @click="openReview()">
           <img src="../../images/icons/star.svg" />
           <span v-cloak>{{ msg("review") }}</span>
         </div>
-        <div class="category category-small" @click="openPage('https://scratchaddons.com/translate')">
+        -->
+        <a class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
           <img src="../../images/icons/translate.svg" />
-          <span v-cloak>{{ msg("translate") }}</span>
-        </div>
-        <div class="category category-small" @click="openFeedback()">
+          <span v-cloak>{{ msg("translate") }} <img src="../../images/icons/popout.svg" /></span>
+        </a>
+        <a
+          class="category category-small"
+          href="https://scratchaddons.com/feedback/?version={{versionName}}"
+          target="_blank"
+        >
           <img src="../../images/icons/comment.svg" />
-          <span v-cloak>{{ msg("feedback") }}</span>
-        </div>
+          <span v-cloak>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
+        </a>
         <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
           <span v-cloak>{{ msg("moreSettings") }}</span>
