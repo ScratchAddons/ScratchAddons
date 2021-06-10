@@ -107,6 +107,9 @@
 .sprite-selector-item_sprite-info_-I0i_ {
   color: var(--editorDarkMode-selector-text);
 }
+.card_card_3GG7C {
+  border-color: var(--editorDarkMode-selector);
+}
 
 /* Asset list background */
 .selector_wrapper_8_BHs {
@@ -153,7 +156,8 @@ div.s3devDDOut.vis,
 .mediaRecorderPopupContent,
 .mediaRecorderPopupContent p,
 .slider-prompt_body_2ZkXL,
-.record-modal_body_2VO4l {
+.record-modal_body_2VO4l,
+.debug {
   background-color: var(--editorDarkMode-accent);
   color: var(--editorDarkMode-accent-text);
 }
@@ -536,6 +540,9 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .Popover-tipShape,
 .sa-onion-settings-polygon {
   stroke: var(--editorDarkMode-border);
+}
+.log {
+  --message-border-color: var(--editorDarkMode-border);
 }
 
 /* Miscellaneous styles */
