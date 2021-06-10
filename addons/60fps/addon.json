@@ -10,7 +10,7 @@
   ],
   "credits": [
     {
-      "name": "Jeffalo, also known as JeffaloBob",
+      "name": "Jeffalo",
       "link": "https://scratch.mit.edu/users/Jeffalo"
     },
     {
@@ -18,8 +18,12 @@
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
     {
-      "name": "GarboMuffin and his Scratch mod, TurboWarp",
+      "name": "GarboMuffin",
       "link": "https://scratch.mit.edu/users/GarboMuffin"
+    }
+    {
+      "name": "TurboWarp by GarboMuffin",
+      "link": "https://turbowarp.org"
     }
   ],
   "dynamicEnable": true,
