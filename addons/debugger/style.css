@@ -9,9 +9,8 @@
   position: absolute;
   z-index: 1000;
   background-color: white;
-  min-height: 25rem;
-  min-width: 25rem;
-  max-height: 25rem;
+  width: 400px;
+  height: 25rem;
 }
 
 .debug h1 {
