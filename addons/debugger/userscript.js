@@ -275,8 +275,9 @@ export default async function ({ addon, global, console, msg }) {
     if (inputBlock.type !== "text") {
       if (inputBlock.inputList.filter((i) => i.name).length === 0) {
         const inputSpan = document.createElement("span");
-        const inputBlockFill = getComputedStyle(inputBlock.svgPath_).fill;
-        const inputBlockStroke = getComputedStyle(inputBlock.svgPath_).stroke;
+        const svgPathStyle = getComputedStyle(inputBlock.svgPath_);
+        const inputBlockFill = svgPathStyle.fill;
+        const inputBlockStroke = svgPathStyle.stroke;
         // for compatibility with custom block colors
         const inputBlockColor =
           inputBlockFill === "rgb(40, 40, 40)" || inputBlockFill === "rgb(255, 255, 255)"
