@@ -9,5 +9,8 @@
   "debugger/deleted-sprite": "(deleted sprite)",
   "debugger/deleted-sprite-desc": "The sprite is deleted, so you cannot find the source.",
   "debugger/clone-of": "Clone of {spriteName}",
-  "debugger/clone-desc": "This message is logged by a clone."
+  "debugger/clone-desc": "This message is logged by a clone.",
+  "debugger/icon-log": "Log",
+  "debugger/icon-warn": "Warning",
+  "debugger/icon-error": "Error"
 }
