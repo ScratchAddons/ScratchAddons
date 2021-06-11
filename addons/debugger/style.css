@@ -7,7 +7,7 @@
 }
 .debug {
   position: absolute;
-  z-index: 120000;
+  z-index: 99999;
   background-color: white;
   width: 400px;
   height: 25rem;
