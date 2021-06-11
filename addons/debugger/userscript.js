@@ -349,7 +349,6 @@ export default async function ({ addon, global, console, msg }) {
     link.dataset.blockId = blockId;
     link.dataset.targetId = targetId;
     if (!target.isOriginal) {
-      link.title = msg("clone-desc");
       link.dataset.isClone = "true";
     }
 
@@ -369,7 +368,6 @@ export default async function ({ addon, global, console, msg }) {
         logLinkElem.textContent = tInfo.name;
         if (tInfo.isDeleted) {
           logLinkElem.classList.add("deletedTarget");
-          logLinkElem.title = msg("deleted-sprite-desc");
         } else if (logLinkElem.dataset.isClone) {
           logLinkElem.textContent = msg("clone-of", { spriteName: tInfo.name });
         }
