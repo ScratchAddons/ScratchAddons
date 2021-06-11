@@ -10,5 +10,6 @@
   "debugger/clone-of": "Clone of {spriteName}",
   "debugger/icon-log": "Log",
   "debugger/icon-warn": "Warning",
-  "debugger/icon-error": "Error"
+  "debugger/icon-error": "Error",
+  "debugger/export-desc": "Click while holding Shift to customize export format."
 }

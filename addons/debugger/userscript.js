@@ -152,6 +152,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const exportButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_shrink-expand-button"),
+    title: msg("export-desc"),
     draggable: false,
   });
   const exportImg = Object.assign(document.createElement("img"), {
@@ -266,6 +267,7 @@ export default async function ({ addon, global, console, msg }) {
   exportButton.addEventListener("click", (e) => {
     const defaultFormat = "{sprite}: {content} ({type})";
     const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
+    if (!exportFormat) return;
     closeDragElement();
     const targetInfoCache = Object.create(null);
     let file = logs
