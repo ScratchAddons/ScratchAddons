@@ -105,7 +105,7 @@ export default async function ({ addon, global, console, msg }) {
           count++;
           message.style.display = "list-item";
         } else {
-          //Was broken because of this. This hides the current message if the active class is not found in the active filters. This can be worked around by assuming that the message is hidden then showing it when nessecary.
+          //Was broken because of this. This hides the current message if the active class is not found in the active filters. This can be worked around by assuming that the message is hidden then showing it when necessary.
           //message.style.display = "none";
         }
       }
