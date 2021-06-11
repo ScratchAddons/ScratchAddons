@@ -5,5 +5,10 @@
   "debugger/clear": "Clear",
   "debugger/close": "Close",
   "debugger/enter-format": "Enter export format:",
-  "debugger/unpause": "Unpause"
+  "debugger/unpause": "Unpause",
+  "debugger/deleted-sprite": "(deleted sprite)",
+  "debugger/clone-of": "Clone of {spriteName}",
+  "debugger/icon-warn": "Warning",
+  "debugger/icon-error": "Error",
+  "debugger/export-desc": "Click while holding Shift to customize export format."
 }

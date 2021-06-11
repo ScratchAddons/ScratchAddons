@@ -1,7 +1,9 @@
+import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
 
 export default async function ({ addon, global, console, msg }) {
   let workspace, showingConsole;
+  const vm = addon.tab.traps.vm;
 
   const container = document.createElement("div");
   container.className = "sa-debugger-container";
@@ -51,9 +53,18 @@ export default async function ({ addon, global, console, msg }) {
     className: `extra-log-container`,
   });
 
-  const goToBlock = (blockId) => {
+  const goToBlock = (targetId, blockId) => {
     const offsetX = 32,
       offsetY = 32;
+    if (targetId !== vm.editingTarget.id) {
+      // note: this is O(n) so don't call it if unnecessary!
+      if (vm.runtime.getTargetById(targetId)) {
+        vm.setEditingTarget(targetId);
+        // Should not cause recursion
+        setTimeout(() => goToBlock(targetId, blockId), 300);
+      }
+      return;
+    }
     const block = workspace.getBlockById(blockId);
     if (!block) return;
 
@@ -97,6 +108,11 @@ export default async function ({ addon, global, console, msg }) {
     myFlash.block = block;
 
     function _flash() {
+      if (!myFlash.block.svgPath_) {
+        myFlash.timerID = count = 0;
+        flashOn = true;
+        return;
+      }
       myFlash.block.svgPath_.style.fill = flashOn ? "#ffff80" : myFlash.colour;
       flashOn = !flashOn;
       count--;
@@ -110,8 +126,11 @@ export default async function ({ addon, global, console, msg }) {
     _flash();
   };
   extraContainer.addEventListener("click", (e) => {
-    const blockId = e.target.dataset.blockId;
-    if (blockId) goToBlock(blockId);
+    const elem = e.target;
+    if (elem.classList.contains("deletedTarget")) return;
+    const targetId = elem.dataset.targetId;
+    const blockId = elem.dataset.blockId;
+    if (targetId && blockId) goToBlock(targetId, blockId);
   });
   const consoleList = Object.assign(document.createElement("div"), {
     className: "logs",
@@ -133,6 +152,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const exportButton = Object.assign(document.createElement("div"), {
     className: addon.tab.scratchClass("card_shrink-expand-button"),
+    title: msg("export-desc"),
     draggable: false,
   });
   const exportImg = Object.assign(document.createElement("img"), {
@@ -183,6 +203,19 @@ export default async function ({ addon, global, console, msg }) {
     maxY;
   consoleTitle.addEventListener("mousedown", dragMouseDown);
 
+  const getTargetInfo = (id, cache = null) => {
+    if (cache && cache[id]) return cache[id];
+    const target = vm.runtime.getTargetById(id);
+    let item;
+    if (target) {
+      item = { name: target.getName(), isDeleted: false };
+    } else {
+      item = { name: msg("deleted-sprite"), isDeleted: true };
+    }
+    if (cache) cache[id] = item;
+    return item;
+  };
+
   function dragMouseDown(e) {
     e.preventDefault();
     pos3 = e.clientX;
@@ -225,18 +258,7 @@ export default async function ({ addon, global, console, msg }) {
   });
   closeButton.addEventListener("click", () => toggleConsole(false));
   closeButton.addEventListener("mouseup", () => closeDragElement());
-  let download = (filename, text) => {
-    var element = document.createElement("a");
-    element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
-    element.setAttribute("download", filename);
-
-    element.style.display = "none";
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-  };
+  let download = (filename, text) => downloadBlob(filename, new Blob([text], { type: "text/plain" }));
 
   unpauseButton.addEventListener("click", () => setPaused(false));
   if (!paused) unpauseButton.style.display = "none";
@@ -245,10 +267,20 @@ export default async function ({ addon, global, console, msg }) {
   exportButton.addEventListener("click", (e) => {
     const defaultFormat = "{sprite}: {content} ({type})";
     const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
+    if (!exportFormat) return;
     closeDragElement();
+    const targetInfoCache = Object.create(null);
     let file = logs
-      .map(({ targetName, type, content }) =>
-        exportFormat.replace("{sprite}", targetName).replace("{type}", type).replace("{content}", content)
+      .map(({ targetId, type, content }) =>
+        exportFormat.replace(
+          /\{(sprite|type|content)\}/g,
+          (_, match) =>
+            ({
+              sprite: getTargetInfo(targetId, targetInfoCache).name,
+              type,
+              content,
+            }[match])
+        )
       )
       .join("\n");
     download("logs.txt", file);
@@ -266,22 +298,33 @@ export default async function ({ addon, global, console, msg }) {
 
     const scrolledDown = extraContainer.scrollTop + 5 > extraContainer.scrollHeight - extraContainer.clientHeight;
 
-    const targetName = thread.target.getName();
+    const target = thread.target;
+    const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
+    const targetId = parentTarget.id;
     wrapper.className = "log";
     wrapper.classList.add(type);
     consoleList.append(wrapper);
+    if (type !== "log") {
+      const imageURL = addon.self.dir + (type === "error" ? "/error.svg" : "/warning.svg");
+      const icon = document.createElement("img");
+      icon.src = imageURL;
+      icon.alt = icon.title = msg("icon-" + type);
+      icon.className = "logIcon";
+      wrapper.appendChild(icon);
+    }
 
     const blockId = thread.peekStack();
     const block = workspace.getBlockById(blockId);
     const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
-    if (inputBlock.type != "text") {
+    if (inputBlock.type !== "text") {
       if (inputBlock.inputList.filter((i) => i.name).length === 0) {
         const inputSpan = document.createElement("span");
-        const inputBlockFill = getComputedStyle(inputBlock.svgPath_).fill;
-        const inputBlockStroke = getComputedStyle(inputBlock.svgPath_).stroke;
+        const svgPathStyle = getComputedStyle(inputBlock.svgPath_);
+        const inputBlockFill = svgPathStyle.fill;
+        const inputBlockStroke = svgPathStyle.stroke;
         // for compatibility with custom block colors
         const inputBlockColor =
-          inputBlockFill == "rgb(40, 40, 40)" || inputBlockFill == "rgb(255, 255, 255)"
+          inputBlockFill === "rgb(40, 40, 40)" || inputBlockFill === "rgb(255, 255, 255)"
             ? inputBlockStroke
             : inputBlockFill;
         inputSpan.innerText = inputBlock.toString();
@@ -291,16 +334,24 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
     logs.push({
-      targetName,
+      targetId,
       type,
       content,
     });
     wrapper.append(span(content));
 
     let link = document.createElement("a");
-    link.innerText = targetName;
+    link.textContent = target.isOriginal
+      ? target.getName()
+      : msg("clone-of", {
+          spriteName: parentTarget.getName(),
+        });
     link.className = "logLink";
     link.dataset.blockId = blockId;
+    link.dataset.targetId = targetId;
+    if (!target.isOriginal) {
+      link.dataset.isClone = "true";
+    }
 
     wrapper.appendChild(link);
 
@@ -308,9 +359,23 @@ export default async function ({ addon, global, console, msg }) {
     if (!showingConsole) buttonImage.src = addon.self.dir + "/debug-unread.svg";
   };
   const toggleConsole = (show = !showingConsole) => {
+    if (show) {
+      buttonImage.src = addon.self.dir + "/debug.svg";
+      const cacheObj = Object.create(null);
+      for (const logLinkElem of document.getElementsByClassName("logLink")) {
+        const targetId = logLinkElem.dataset.targetId;
+        if (!targetId) return;
+        const tInfo = getTargetInfo(targetId, cacheObj);
+        logLinkElem.textContent = tInfo.name;
+        if (tInfo.isDeleted) {
+          logLinkElem.classList.add("deletedTarget");
+        } else if (logLinkElem.dataset.isClone) {
+          logLinkElem.textContent = msg("clone-of", { spriteName: tInfo.name });
+        }
+      }
+    }
     consoleWrapper.style.display = show ? "flex" : "";
     showingConsole = show;
-    if (show) buttonImage.src = addon.self.dir + "/debug.svg";
   };
 
   while (true) {
@@ -318,7 +383,7 @@ export default async function ({ addon, global, console, msg }) {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    if (addon.tab.editorMode == "editor") {
+    if (addon.tab.editorMode === "editor") {
       stageHeaderSizeControls.insertBefore(container, stageHeaderSizeControls.firstChild);
     } else {
       toggleConsole(false);
