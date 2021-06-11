@@ -305,7 +305,7 @@ export default async function ({ addon, global, console, msg }) {
     wrapper.classList.add(type);
     consoleList.append(wrapper);
     if (type !== "log") {
-      const imageURL = addon.self.dir + (type === "error" ? "/../../images/cs/warning.svg" : "/../../images/cs/notice.svg");
+      const imageURL = addon.self.dir + (type === "error" ? "/error.svg" : "/warning.svg");
       const icon = document.createElement("img");
       icon.src = imageURL;
       icon.alt = icon.title = msg("icon-" + type);
