@@ -1,3 +1,4 @@
+import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
 
 export default async function ({ addon, global, console, msg }) {
@@ -225,18 +226,7 @@ export default async function ({ addon, global, console, msg }) {
   });
   closeButton.addEventListener("click", () => toggleConsole(false));
   closeButton.addEventListener("mouseup", () => closeDragElement());
-  let download = (filename, text) => {
-    var element = document.createElement("a");
-    element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
-    element.setAttribute("download", filename);
-
-    element.style.display = "none";
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-  };
+  let download = (filename, text) => downloadBlob(filename, new Blob([text], { type: "text/plain" }));
 
   unpauseButton.addEventListener("click", () => setPaused(false));
   if (!paused) unpauseButton.style.display = "none";
