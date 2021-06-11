@@ -340,9 +340,11 @@ export default async function ({ addon, global, console, msg }) {
     wrapper.append(span(content));
 
     let link = document.createElement("a");
-    link.textContent = target.isOriginal ? target.getName() : msg("clone-of", {
-      spriteName: parentTarget.getName(),
-    });
+    link.textContent = target.isOriginal
+      ? target.getName()
+      : msg("clone-of", {
+          spriteName: parentTarget.getName(),
+        });
     link.className = "logLink";
     link.dataset.blockId = blockId;
     link.dataset.targetId = targetId;
