@@ -6,5 +6,8 @@
   "debugger/close": "Close",
   "debugger/enter-format": "Enter export format:",
   "debugger/unpause": "Unpause",
-  "debugger/deleted-sprite": "(deleted sprite)"
+  "debugger/deleted-sprite": "(deleted sprite)",
+  "debugger/deleted-sprite-desc": "The sprite is deleted, so you cannot find the source.",
+  "debugger/clone-of": "Clone of {spriteName}",
+  "debugger/clone-desc": "This message is logged by a clone."
 }

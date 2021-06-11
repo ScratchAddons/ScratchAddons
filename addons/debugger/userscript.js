@@ -319,10 +319,16 @@ export default async function ({ addon, global, console, msg }) {
     wrapper.append(span(content));
 
     let link = document.createElement("a");
-    link.innerText = parentTarget.getName();
+    link.textContent = target.isOriginal ? target.getName() : msg("clone-of", {
+      spriteName: parentTarget.getName(),
+    });
     link.className = "logLink";
     link.dataset.blockId = blockId;
     link.dataset.targetId = targetId;
+    if (!target.isOriginal) {
+      link.title = msg("clone-desc");
+      link.dataset.isClone = "true";
+    }
 
     wrapper.appendChild(link);
 
@@ -338,7 +344,12 @@ export default async function ({ addon, global, console, msg }) {
         if (!targetId) return;
         const tInfo = getTargetInfo(targetId, cacheObj);
         logLinkElem.textContent = tInfo.name;
-        if (tInfo.isDeleted) logLinkElem.classList.add("deletedTarget");
+        if (tInfo.isDeleted) {
+          logLinkElem.classList.add("deletedTarget");
+          logLinkElem.title = msg("deleted-sprite-desc");
+        } else if (logLinkElem.dataset.isClone) {
+          logLinkElem.textContent = msg("clone-of", { spriteName: tInfo.name });
+        }
       }
     }
     consoleWrapper.style.display = show ? "flex" : "";
