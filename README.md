@@ -15,7 +15,7 @@
 [![](https://img.shields.io/github/downloads/ScratchAddons/ScratchAddons/total?style=flat-square&logo=github&logoColor=white&label=downloads&color=181717)](https://github.com/ScratchAddons/ScratchAddons/releases)
 [![](https://img.shields.io/badge/discuss-on_github-181717.svg?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/discussions)
 [![](https://img.shields.io/badge/chat-on_discord-7289da.svg?style=flat-square)](https://discord.gg/R5NBqwMjNc)
-[![Join the chat at https://gitter.im/AddonChat/community](https://badges.gitter.im/AddonChat/community.svg)](https://gitter.im/AddonChat/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![](https://img.shields.io/badge/chat-on%20gitter-brightgreen)](https://gitter.im/AddonChat/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)
 ## About
 
