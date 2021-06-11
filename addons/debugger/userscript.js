@@ -53,9 +53,18 @@ export default async function ({ addon, global, console, msg }) {
     className: `extra-log-container`,
   });
 
-  const goToBlock = (blockId) => {
+  const goToBlock = (targetId, blockId) => {
     const offsetX = 32,
       offsetY = 32;
+    if (targetId !== vm.editingTarget.id) {
+      // note: this is O(n) so don't call it if unnecessary!
+      if (vm.runtime.getTargetById(targetId)) {
+        vm.setEditingTarget(targetId);
+        // Should not cause recursion
+        setTimeout(() => goToBlock(targetId, blockId), 300);
+      }
+      return;
+    }
     const block = workspace.getBlockById(blockId);
     if (!block) return;
 
@@ -117,8 +126,11 @@ export default async function ({ addon, global, console, msg }) {
     _flash();
   };
   extraContainer.addEventListener("click", (e) => {
-    const blockId = e.target.dataset.blockId;
-    if (blockId) goToBlock(blockId);
+    const elem = e.target;
+    if (elem.classList.contains("deletedTarget")) return;
+    const targetId = elem.dataset.targetId;
+    const blockId = elem.dataset.blockId;
+    if (targetId && blockId) goToBlock(targetId, blockId);
   });
   const consoleList = Object.assign(document.createElement("div"), {
     className: "logs",
