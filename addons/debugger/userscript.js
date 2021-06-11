@@ -304,15 +304,14 @@ export default async function ({ addon, global, console, msg }) {
     wrapper.className = "log";
     wrapper.classList.add(type);
     consoleList.append(wrapper);
-    let imageURL = addon.self.dir + "/../../images/cs/notice.svg";
-    if (type === "error") {
-      imageURL = addon.self.dir + "/../../images/cs/warning.svg";
+    if (type !== "log") {
+      const imageURL = addon.self.dir + (type === "error" ? "/../../images/cs/warning.svg" : "/../../images/cs/notice.svg");
+      const icon = document.createElement("img");
+      icon.src = imageURL;
+      icon.alt = icon.title = msg("icon-" + type);
+      icon.className = "logIcon";
+      wrapper.appendChild(icon);
     }
-    const icon = document.createElement("img");
-    icon.src = imageURL;
-    icon.alt = icon.title = msg("icon-" + type);
-    icon.className = "logIcon";
-    wrapper.appendChild(icon);
 
     const blockId = thread.peekStack();
     const block = workspace.getBlockById(blockId);
