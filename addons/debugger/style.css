@@ -120,3 +120,7 @@
   color: #4d97ff;
   opacity: 1;
 }
+
+.logLink.deletedTarget {
+  pointer-events: none;
+}

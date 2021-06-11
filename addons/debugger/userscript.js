@@ -3,6 +3,7 @@ import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
 
 export default async function ({ addon, global, console, msg }) {
   let workspace, showingConsole;
+  const vm = addon.tab.traps.vm;
 
   const container = document.createElement("div");
   container.className = "sa-debugger-container";
@@ -189,6 +190,19 @@ export default async function ({ addon, global, console, msg }) {
     maxY;
   consoleTitle.addEventListener("mousedown", dragMouseDown);
 
+  const getTargetInfo = (id, cache = null) => {
+    if (cache && cache[id]) return cache[id];
+    const target = vm.runtime.getTargetById(id);
+    let item;
+    if (target) {
+      item = { name: target.getName(), isDeleted: false };
+    } else {
+      item = { name: msg("deleted-sprite"), isDeleted: true };
+    }
+    if (cache) cache[id] = item;
+    return item;
+  };
+
   function dragMouseDown(e) {
     e.preventDefault();
     pos3 = e.clientX;
@@ -241,13 +255,14 @@ export default async function ({ addon, global, console, msg }) {
     const defaultFormat = "{sprite}: {content} ({type})";
     const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
     closeDragElement();
+    const targetInfoCache = Object.create(null);
     let file = logs
-      .map(({ targetName, type, content }) =>
+      .map(({ targetId, type, content }) =>
         exportFormat.replace(
           /\{(sprite|type|content)\}/g,
           (_, match) =>
             ({
-              sprite: targetName,
+              sprite: getTargetInfo(targetId, targetInfoCache).name,
               type,
               content,
             }[match])
@@ -269,7 +284,7 @@ export default async function ({ addon, global, console, msg }) {
 
     const scrolledDown = extraContainer.scrollTop + 5 > extraContainer.scrollHeight - extraContainer.clientHeight;
 
-    const targetName = thread.target.getName();
+    const targetId = thread.target.id;
     wrapper.className = "log";
     wrapper.classList.add(type);
     consoleList.append(wrapper);
@@ -295,16 +310,17 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
     logs.push({
-      targetName,
+      targetId,
       type,
       content,
     });
     wrapper.append(span(content));
 
     let link = document.createElement("a");
-    link.innerText = targetName;
+    link.innerText = thread.target.getName();
     link.className = "logLink";
     link.dataset.blockId = blockId;
+    link.dataset.targetId = targetId;
 
     wrapper.appendChild(link);
 
@@ -312,9 +328,19 @@ export default async function ({ addon, global, console, msg }) {
     if (!showingConsole) buttonImage.src = addon.self.dir + "/debug-unread.svg";
   };
   const toggleConsole = (show = !showingConsole) => {
+    if (show) {
+      buttonImage.src = addon.self.dir + "/debug.svg";
+      const cacheObj = Object.create(null);
+      for (const logLinkElem of document.getElementsByClassName("logLink")) {
+        const targetId = logLinkElem.dataset.targetId;
+        if (!targetId) return;
+        const tInfo = getTargetInfo(targetId, cacheObj);
+        logLinkElem.textContent = tInfo.name;
+        if (tInfo.isDeleted) logLinkElem.classList.add("deletedTarget");
+      }
+    }
     consoleWrapper.style.display = show ? "flex" : "";
     showingConsole = show;
-    if (show) buttonImage.src = addon.self.dir + "/debug.svg";
   };
 
   while (true) {
