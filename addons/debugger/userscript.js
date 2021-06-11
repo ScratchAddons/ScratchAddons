@@ -238,7 +238,15 @@ export default async function ({ addon, global, console, msg }) {
     closeDragElement();
     let file = logs
       .map(({ targetName, type, content }) =>
-        exportFormat.replace("{sprite}", targetName).replace("{type}", type).replace("{content}", content)
+        exportFormat.replace(
+          /\{(sprite|type|content)\}/g,
+          (_, match) =>
+            ({
+              sprite: targetName,
+              type,
+              content,
+            }[match])
+        )
       )
       .join("\n");
     download("logs.txt", file);
