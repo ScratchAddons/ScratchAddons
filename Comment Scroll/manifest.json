@@ -1,0 +1,12 @@
+{
+    "name": "Comment Scroll",
+    "description": "Makes the profile, studio and project comments scrollable, thus reducing the overall height of the page.",
+    "userstyles": [
+      {
+        "url": "userstyle.css",
+        "matches": ["https://scratch.mit.edu/users/*","https://scratch.mit.edu/projects/*","https://scratch.mit.edu/studios/*"]
+      }    
+    ],
+    "tags": ["comments"],
+    "enabled_by_default": true
+}
