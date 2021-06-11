@@ -428,7 +428,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_16", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -447,14 +447,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo2", DOLLARS)).replace(
-      "$1",
-      Object.assign(document.createElement("a"), {
-        href: "https://scratch.mit.edu/scratch-addons-extension/settings#addon-msg-count-badge",
-        target: "_blank",
-        textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
-      }).outerHTML
-    ),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_16"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
