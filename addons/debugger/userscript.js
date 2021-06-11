@@ -274,14 +274,14 @@ export default async function ({ addon, global, console, msg }) {
     const blockId = thread.peekStack();
     const block = workspace.getBlockById(blockId);
     const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
-    if (inputBlock.type != "text") {
+    if (inputBlock.type !== "text") {
       if (inputBlock.inputList.filter((i) => i.name).length === 0) {
         const inputSpan = document.createElement("span");
         const inputBlockFill = getComputedStyle(inputBlock.svgPath_).fill;
         const inputBlockStroke = getComputedStyle(inputBlock.svgPath_).stroke;
         // for compatibility with custom block colors
         const inputBlockColor =
-          inputBlockFill == "rgb(40, 40, 40)" || inputBlockFill == "rgb(255, 255, 255)"
+          inputBlockFill === "rgb(40, 40, 40)" || inputBlockFill === "rgb(255, 255, 255)"
             ? inputBlockStroke
             : inputBlockFill;
         inputSpan.innerText = inputBlock.toString();
@@ -318,7 +318,7 @@ export default async function ({ addon, global, console, msg }) {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    if (addon.tab.editorMode == "editor") {
+    if (addon.tab.editorMode === "editor") {
       stageHeaderSizeControls.insertBefore(container, stageHeaderSizeControls.firstChild);
     } else {
       toggleConsole(false);
