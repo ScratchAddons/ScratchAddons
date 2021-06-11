@@ -284,7 +284,9 @@ export default async function ({ addon, global, console, msg }) {
 
     const scrolledDown = extraContainer.scrollTop + 5 > extraContainer.scrollHeight - extraContainer.clientHeight;
 
-    const targetId = thread.target.id;
+    const target = thread.target;
+    const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
+    const targetId = parentTarget.id;
     wrapper.className = "log";
     wrapper.classList.add(type);
     consoleList.append(wrapper);
@@ -317,7 +319,7 @@ export default async function ({ addon, global, console, msg }) {
     wrapper.append(span(content));
 
     let link = document.createElement("a");
-    link.innerText = thread.target.getName();
+    link.innerText = parentTarget.getName();
     link.className = "logLink";
     link.dataset.blockId = blockId;
     link.dataset.targetId = targetId;
