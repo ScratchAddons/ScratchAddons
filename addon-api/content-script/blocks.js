@@ -136,7 +136,7 @@ export async function init(tab) {
   }
   inited = true;
 
-  if (tab.clientVersion !== "scratch-www") {
+  if (!tab.editorMode) {
     return;
   }
 
