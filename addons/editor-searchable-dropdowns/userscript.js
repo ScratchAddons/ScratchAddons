@@ -68,10 +68,9 @@ export default async function ({ addon, global, console }) {
     return arrowAtTop;
   };
 
-  const oldDropDownDivHide = Blockly.DropDownDiv.hide;
-  Blockly.DropDownDiv.hide = function () {
-    oldDropDownDivHide.call(this);
-    Blockly.DropDownDiv.content_.style.width = "";
+  const oldDropDownDivClearContent = Blockly.DropDownDiv.clearContent;
+  Blockly.DropDownDiv.clearContent = function () {
+    oldDropDownDivClearContent.call(this);
     Blockly.DropDownDiv.content_.style.height = "";
     blocklyDropdownMenu = null;
   };
