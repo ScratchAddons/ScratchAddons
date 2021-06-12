@@ -447,10 +447,6 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const accessScratchInternals = async () => {
-    if (paper) {
-      return;
-    }
-
     const paperScope = await addon.tab.traps.getPaper();
 
     const paintEditorCanvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
