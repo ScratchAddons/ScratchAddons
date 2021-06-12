@@ -732,6 +732,5 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  accessScratchInternals()
-    .then(controlsLoop);
+  accessScratchInternals().then(controlsLoop);
 }
