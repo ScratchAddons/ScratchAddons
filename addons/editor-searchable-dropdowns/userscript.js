@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   /* The hierarchy is:
   blocklyDropDownDiv (position, background color, etc.) ->
   blocklyDropDownContent (scrollbar) ->
@@ -47,7 +47,7 @@ export default async function ({ addon, global, console }) {
       Blockly.DropDownDiv.hide();
     });
     button.classList.add("u-dropdown-button");
-    button.innerText = "Add";
+    button.innerText = msg("add");
 
     container.append(searchBar);
 
