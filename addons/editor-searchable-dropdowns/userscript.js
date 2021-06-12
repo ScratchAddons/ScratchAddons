@@ -28,28 +28,13 @@ export default async function ({ addon, global, console, msg }) {
     // Lock the width of the dropdown before adding the search bar, as sometimes adding the searchbar changes the width.
     blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
 
-    const container = document.createElement("div");
-    addon.tab.displayNoneWhileDisabled(container, { display: "flex" });
-    container.classList.add("u-dropdown-container");
-
     searchBar = document.createElement("input");
+    addon.tab.displayNoneWhileDisabled(searchBar, { display: "flex" });
 
     searchBar.type = "text";
     searchBar.addEventListener("input", handleInputEvent);
     searchBar.addEventListener("keydown", handleKeyDownEvent);
     searchBar.classList.add("u-dropdown-searchbar");
-
-    const button = document.createElement("button");
-    button.addEventListener("click", () => {
-      if (searchBar.value.length === 0) return;
-      const variable = Blockly.getMainWorkspace().createVariable(searchBar.value, "broadcast_msg");
-      fieldVariable.setValue(variable.getId());
-      Blockly.DropDownDiv.hide();
-    });
-    button.classList.add("u-dropdown-button");
-    button.innerText = msg("add");
-
-    container.append(searchBar);
 
     const selectedBlock = Blockly.selected;
     if (
@@ -57,10 +42,10 @@ export default async function ({ addon, global, console, msg }) {
       (selectedBlock.type === "event_broadcast" ||
         selectedBlock.type === "event_broadcastandwait" ||
         selectedBlock.type === "event_whenbroadcastreceived")
-    )
-      container.append(button);
+    ) {
+    }
 
-    blocklyDropdownMenu.insertBefore(container, blocklyDropdownMenu.firstChild);
+    blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
 
     // Lock the height of the dropdown after adding the search bar.
     blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
@@ -134,7 +119,7 @@ export default async function ({ addon, global, console, msg }) {
       }
       for (const item of items) {
         if (!item.element_.hidden) {
-          selectItem(item, true);
+          selectItem(item.element_, true);
           break;
         }
       }
@@ -175,7 +160,7 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
-      selectItem(items[newIndex], false);
+      selectItem(items[newIndex].element_, false);
     }
   }
 
