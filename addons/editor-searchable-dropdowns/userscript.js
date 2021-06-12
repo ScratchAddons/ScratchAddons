@@ -22,6 +22,7 @@ export default async function ({ addon, global, console }) {
     let blocklyDropDownDiv = Blockly.DropDownDiv.DIV_;
     blocklyDropDownContent = Blockly.DropDownDiv.getContentDiv();
     blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
+    if (!blocklyDropdownMenu) return arrowAtTop;
     blocklyDropdownMenu.focus = () => {}; // no-op focus() so it can't steal it from the search bar
 
     // Lock the width of the dropdown before adding the search bar, as sometimes adding the searchbar changes the width.
