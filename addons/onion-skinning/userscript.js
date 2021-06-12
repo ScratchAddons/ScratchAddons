@@ -446,50 +446,6 @@ export default async function ({ addon, global, console, msg }) {
     toggleButton.dataset.enabled = settings.enabled;
   };
 
-  const untilInPaintEditor = async () => {
-    if (addon.tab.editorMode !== "editor") {
-      await new Promise((resolve) => {
-        const handler = () => {
-          if (addon.tab.editorMode === "editor") {
-            resolve();
-            addon.tab.removeEventListener("urlChange", handler);
-          }
-        };
-        addon.tab.addEventListener("urlChange", handler);
-      });
-    }
-    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 1) {
-      addon.tab.redux.initialize();
-      await new Promise((resolve) => {
-        const handler = ({ detail }) => {
-          if (detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB" && detail.action.activeTabIndex === 1) {
-            resolve();
-            addon.tab.redux.removeEventListener("statechanged", handler);
-          }
-        };
-        addon.tab.redux.addEventListener("statechanged", handler);
-      });
-    }
-  };
-
-  const untilNotInPaintEditor = async () => {
-    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex === 1) {
-      addon.tab.redux.initialize();
-      await new Promise((resolve) => {
-        const handler = ({ detail }) => {
-          if (
-            (detail.action.type === "scratch-gui/navigation/ACTIVATE_TAB" && detail.action.activeTabIndex !== 1) ||
-            (detail.action.type === "scratch-gui/mode/SET_PLAYER" && detail.action.isPlayerOnly)
-          ) {
-            resolve();
-            addon.tab.redux.removeEventListener("statechanged", handler);
-          }
-        };
-        addon.tab.redux.addEventListener("statechanged", handler);
-      });
-    }
-  };
-
   const accessScratchInternals = async () => {
     if (paper) {
       return;
@@ -734,6 +690,7 @@ export default async function ({ addon, global, console, msg }) {
     while (true) {
       const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
         markAsSeen: true,
+        reduxEvents: ["scratch-gui/navigation/ACTIVATE_TAB"],
         reduxCondition: (state) =>
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
@@ -772,8 +729,6 @@ export default async function ({ addon, global, console, msg }) {
       if (settings.enabled) {
         updateOnionLayers();
       }
-
-      await untilNotInPaintEditor();
     }
   };
 
