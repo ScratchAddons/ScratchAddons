@@ -92,6 +92,7 @@ export default class Trap extends Listenable {
     }
     if (tool) {
       const paperScope = tool._scope;
+      this._cache.paper = paperScope;
       return paperScope;
     }
     throw new Error("cannot find paper :(");
