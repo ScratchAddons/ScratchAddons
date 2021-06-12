@@ -1,26 +1,64 @@
 export default async function ({ addon, global, console }) {
-  // The hierarchy is:
-  // blocklyDropDownDiv (position, background color, etc.) -> blocklyDropDownContent (scrollbar) -> blocklyDropdownMenu (items)
+  /* The hierarchy is:
+  blocklyDropDownDiv (position, background color, etc.) ->
+  blocklyDropDownContent (scrollbar) ->
+  blocklyDropdownMenu (items)
+  */
   // The capitalization of dropdown is inconsistent in blockly too.
-  let blocklyDropDownDiv = null;
-  let blocklyDropDownContent = null;
-  let blocklyDropdownMenu = null;
 
-  function createSearchBar(node) {
-    blocklyDropdownMenu = node;
+  const Blockly = await addon.tab.traps.getBlockly();
+
+  let blocklyDropdownMenu = null;
+  let blocklyDropDownContent = null;
+
+  let searchBar = null;
+  let fieldVariable = null;
+
+  const oldDropDownDivShow = Blockly.DropDownDiv.show;
+  Blockly.DropDownDiv.show = function (owner, ...args) {
+    fieldVariable = owner;
+    const arrowAtTop = oldDropDownDivShow.call(this, owner, ...args);
+
+    let blocklyDropDownDiv = Blockly.DropDownDiv.DIV_;
+    blocklyDropDownContent = Blockly.DropDownDiv.getContentDiv();
+    blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
     blocklyDropdownMenu.focus = () => {}; // no-op focus() so it can't steal it from the search bar
 
     // Lock the width of the dropdown before adding the search bar, as sometimes adding the searchbar changes the width.
     blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
 
-    const searchBar = document.createElement("input");
-    addon.tab.displayNoneWhileDisabled(searchBar);
+    const container = document.createElement("div");
+    addon.tab.displayNoneWhileDisabled(container, { display: "flex" });
+    container.classList.add("u-dropdown-container");
+
+    searchBar = document.createElement("input");
 
     searchBar.type = "text";
     searchBar.addEventListener("input", handleInputEvent);
     searchBar.addEventListener("keydown", handleKeyDownEvent);
     searchBar.classList.add("u-dropdown-searchbar");
-    blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
+
+    const button = document.createElement("button");
+    button.addEventListener("click", () => {
+      const variable = Blockly.getMainWorkspace().createVariable(searchBar.value, "broadcast_msg");
+      fieldVariable.setValue(variable.getId());
+      Blockly.DropDownDiv.hide();
+    });
+    button.classList.add("u-dropdown-button");
+    button.innerText = "Add";
+
+    container.append(searchBar);
+
+    const selectedBlock = Blockly.selected;
+    if (
+      selectedBlock &&
+      (selectedBlock.type === "event_broadcast" ||
+        selectedBlock.type === "event_broadcastandwait" ||
+        selectedBlock.type === "event_whenbroadcastreceived")
+    )
+      container.append(button);
+
+    blocklyDropdownMenu.insertBefore(container, blocklyDropdownMenu.firstChild);
 
     // Lock the height of the dropdown after adding the search bar.
     blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
@@ -28,8 +66,8 @@ export default async function ({ addon, global, console }) {
     // Compensate for the scroll bar sometimes making the interface taller by pushing the whole dropdown up.
     const hasScrollBar = blocklyDropDownContent.scrollHeight > blocklyDropDownContent.clientHeight;
     if (!hasScrollBar) {
-      const blocklyDropDownArrow = blocklyDropDownDiv.querySelector(".blocklyDropDownArrow");
-      if (blocklyDropDownArrow.classList.contains("arrowBottom")) {
+      const blocklyDropDownArrow = Blockly.DropDownDiv.arrow_;
+      if (!arrowAtTop) {
         const searchBarHeight = searchBar.offsetHeight;
         blocklyDropDownDiv.style.transform += ` translateY(-${searchBarHeight}px)`;
         blocklyDropDownArrow.style.transform = `translateY(${searchBarHeight}px) ${blocklyDropDownArrow.style.transform}`;
@@ -37,25 +75,21 @@ export default async function ({ addon, global, console }) {
     }
 
     searchBar.focus();
-  }
+  };
 
-  function cleanup() {
+  const oldDropDownDivHide = Blockly.DropDownDiv.hide;
+  Blockly.DropDownDiv.hide = function () {
+    oldDropDownDivHide.call(this);
+    Blockly.DropDownDiv.content_.style.width = "";
+    Blockly.DropDownDiv.content_.style.height = "";
     blocklyDropdownMenu = null;
-    // Reset all the things we changed about the dropdown menu.
-    // This matters because there's other types of dropdowns such as angle selectors where a search bar doesn't make sense.
-    blocklyDropDownContent.style.width = "";
-    blocklyDropDownContent.style.height = "";
-  }
-
-  function closeDropDown() {
-    document.querySelector(".blocklyToolboxDiv").dispatchEvent(new MouseEvent("mousedown"));
-  }
+  };
 
   function selectItem(item, click) {
-    // You can't just use click() or focus() because Blockly uses mousedown and mouseup handlers, not click handlers.
-    item.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: item, bubbles: true }));
-    if (click) {
-      item.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: item, bubbles: true }));
+    console.log(item);
+    if (click) fieldVariable.onItemSelected(null, item);
+    else {
+      // Hover somehow
     }
 
     // Scroll the item into view if it is offscreen.
@@ -76,20 +110,10 @@ export default async function ({ addon, global, console }) {
   function handleInputEvent(event) {
     const value = event.target.value.toLowerCase();
     for (const item of getItems()) {
-      const text = item.textContent.toLowerCase();
+      const text = item.content_.toLowerCase();
       const hidden = !text.includes(value);
-      item.hidden = hidden;
+      item.element_.hidden = hidden;
     }
-  }
-
-  // This returns the Blockly block that is currently selected, or null.
-  function getSelectedBlock() {
-    const selected = document.querySelector(".blocklySelected");
-    if (!selected) {
-      return null;
-    }
-    const block = Blockly.getMainWorkspace().getBlockById(selected.dataset.id);
-    return block;
   }
 
   function handleKeyDownEvent(event) {
@@ -104,7 +128,7 @@ export default async function ({ addon, global, console }) {
         return;
       }
 
-      const selectedBlock = getSelectedBlock();
+      const selectedBlock = Blockly.selected;
       const items = getItems();
       if (event.target.value === "" && selectedBlock) {
         if (
@@ -114,32 +138,32 @@ export default async function ({ addon, global, console }) {
         ) {
           // The top item of these dropdowns is always "New message"
           // When pressing enter on an empty search bar, we close the dropdown instead of making a new broadcast.
-          closeDropDown();
+          Blockly.DropDownDiv.hide();
           return;
         }
       }
       for (const item of items) {
-        if (!item.hidden) {
+        if (!item.element_.hidden) {
           selectItem(item, true);
           break;
         }
       }
       // If there is no top value, just leave the dropdown open.
     } else if (event.key === "Escape") {
-      closeDropDown();
+      Blockly.DropDownDiv.hide();
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       // Reimplement keyboard navigation to account for hidden items.
       event.preventDefault();
       event.stopPropagation();
 
-      const items = getItems().filter((item) => !item.hidden);
+      const items = getItems().filter((item) => !item.element_.hidden);
       if (items.length === 0) {
         return;
       }
 
       let selectedIndex = -1;
       for (let i = 0; i < items.length; i++) {
-        if (items[i].classList.contains("goog-menuitem-highlight")) {
+        if (items[i].element_.classList.contains("goog-menuitem-highlight")) {
           selectedIndex = i;
           break;
         }
@@ -166,42 +190,6 @@ export default async function ({ addon, global, console }) {
   }
 
   function getItems() {
-    if (blocklyDropdownMenu) {
-      return Array.from(blocklyDropdownMenu.children).filter((child) => child.tagName !== "INPUT");
-    }
-    return [];
+    return fieldVariable?.selectedItem.parent_.children_ || [];
   }
-
-  function findBlocklyDropDownDiv() {
-    return addon.tab.waitForElement(".blocklyDropDownDiv", {
-      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 0 && !state.scratchGui.mode.isPlayerOnly,
-    });
-  }
-
-  blocklyDropDownDiv = await findBlocklyDropDownDiv();
-  blocklyDropDownContent = blocklyDropDownDiv.querySelector(".blocklyDropDownContent");
-
-  const observer = new MutationObserver((mutationList) => {
-    for (const mutation of mutationList) {
-      if (mutation.type === "childList") {
-        // Look for a dropdown being created.
-        for (const node of mutation.addedNodes) {
-          if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
-            createSearchBar(node);
-            break;
-          }
-        }
-        // Look for a dropdown being removed.
-        for (const node of mutation.removedNodes) {
-          if (node.classList && node.classList.contains("blocklyDropdownMenu")) {
-            cleanup();
-            break;
-          }
-        }
-      }
-    }
-  });
-  observer.observe(blocklyDropDownContent, {
-    childList: true,
-  });
 }
