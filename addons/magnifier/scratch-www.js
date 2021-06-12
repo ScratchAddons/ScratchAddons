@@ -11,18 +11,20 @@ export default async function ({ addon, global, console, msg }) {
           return state.scratchGui.mode.isPlayerOnly;
         },
       });
-      
-      if (comment.querySelector("form")) continue; // Comment input
 
-      let commentId = comment.id.replace(/\D/g,'');
+      if (comment.querySelector("form")) continue; // comment input
 
-      let bottomRow = comment.querySelector(".comment-bottom-row");
+      let commentId = comment.id.replace(/\D/g,''); // extract commentId from id property of comment
 
-      bottomRow.style.lineHeight = "2rem";
+      let bottomRow = comment.querySelector(".comment-bottom-row"); // selecton bottom row of comment where controls are
+
+      bottomRow.style.lineHeight = "2rem"; // stop scratch annihilating reaction buttons
 
       var reactionMenuVisible = false;
 
-      let showReactionMenuButton = document.createElement("span");
+      let reactionMenuGroup = document.createElement("div"); // reaction stuff
+
+      let showReactionMenuButton = document.createElement("span"); // create button that shows reaction menu
 
       showReactionMenuButton.classList.add("magnifier-show-reaction-menu-button");
 
@@ -33,7 +35,7 @@ export default async function ({ addon, global, console, msg }) {
         setReactionMenuVisibility(!reactionMenuVisible);
       });
 
-      bottomRow.appendChild(showReactionMenuButton);
+      reactionMenuGroup.appendChild(showReactionMenuButton);
 
       let reactionMenu = document.createElement("div");
 
@@ -43,7 +45,7 @@ export default async function ({ addon, global, console, msg }) {
 
       reactionMenu.classList.add("hidden");
 
-      bottomRow.appendChild(reactionMenu);
+      reactionMenuGroup.appendChild(reactionMenu);
 
       window.addEventListener("click", (e) => {
         if (e.target !== showReactionMenuButton) {
@@ -70,7 +72,17 @@ export default async function ({ addon, global, console, msg }) {
 
       reactionList.classList.add("magnifier-reaction-list");
 
-      bottomRow.appendChild(reactionList);
+      reactionMenuGroup.appendChild(reactionList);
+
+      bottomRow.insertBefore(reactionMenuGroup, bottomRow.children[1]);
+
+      let spacer = document.createElement("span");
+
+      spacer.classList.add("spacer");
+
+      bottomRow.insertBefore(spacer, bottomRow.children[2]);
+
+      bottomRow.insertBefore(reactionList, bottomRow.children[3]);
 
       // make list of reactions
       async function makeReactionList() {
@@ -99,7 +111,7 @@ export default async function ({ addon, global, console, msg }) {
           function react(e) {
             e.preventDefault();
             let magnifier = window.open(
-              `https://localhost:4001/react/${commentId}`,
+              `https://magnifier.potatophant.net/react/${commentId}`,
               "Magnifier",
               "width=300,height=300"
             );
@@ -125,6 +137,14 @@ export default async function ({ addon, global, console, msg }) {
           }
           reactionMenu.appendChild(reactionMenuButton);
         });
+
+        let tooltipArrow = document.createElement("div");
+
+        tooltipArrow.classList.add("tooltip-arrow");
+
+        reactionMenu.appendChild(tooltipArrow);
+        
+        reactionMenu.style.marginLeft = `-${reactionMenu.offsetWidth / 2}px`;
       }
 
       makeReactionList();

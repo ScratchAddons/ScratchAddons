@@ -1,13 +1,26 @@
 .visible {
   visibility: visible;
   opacity: 1;
-  transition: opacity 0.1s linear;
+  transition: opacity 0.15s linear;
 }
 
 .hidden {
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s 0.1s, opacity 0.1s linear;
+  transition: visibility 0s 0.15s, opacity 0.15s linear;
+}
+
+.float-right {
+  float: right;
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.comment-bottom-row .comment-reply {
+  align-items: center;
+  margin-left: 10px;
 }
 
 .magnifier-show-reaction-menu-button {
@@ -20,13 +33,34 @@
   display: inline-block !important;
   border: none !important;
   background-color: #323232;
-  margin-left: 0 !important;
   margin-top: 0.25rem !important;
+  background-color: #323232;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 2.5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 50%;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  background-color: #323232;
+  border-width: 5px 5px 0;
+  border-style: solid;
+  /*border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;*/
+  border-top-color: transparent !important;
+  left: calc(50% - 12px);
+  bottom: -5px;
+  margin-top: 0;
+  margin-bottom: 0;
+  z-index: 1;
 }
 
 .magnifier-reaction-list {
-  float: right;
-  /*display: inline-block !important;*/
   border: none !important;
   background: none;
   margin-left: 0 !important;

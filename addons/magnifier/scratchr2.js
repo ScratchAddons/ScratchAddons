@@ -5,10 +5,22 @@ export default async function ({ addon, global, console, msg }) {
 
     let comments = document.querySelectorAll(".comment ");
 
-    comments.forEach(async (i) => {
-      let commentId = i.getAttribute("data-comment-id");
+    while (true) {
+      const comment = await addon.tab.waitForElement("div.comment", {
+        markAsSeen: true,
+        reduxCondition: (state) => {
+          if (!state.scratchGui) return true;
+          return state.scratchGui.mode.isPlayerOnly;
+        },
+      });
+      
+      if (comment.querySelector("form")) continue; // Comment input
 
-      i.querySelector(".info").children[2].style.lineHeight = "2rem";
+      let commentId = comment.getAttribute("data-comment-id");
+
+      let controls = comment.querySelector(".info").children[2];
+
+      controls.style.lineHeight = "2rem";
 
       var reactionMenuVisible = false;
 
@@ -23,7 +35,7 @@ export default async function ({ addon, global, console, msg }) {
         setReactionMenuVisibility(!reactionMenuVisible);
       });
 
-      i.querySelector(".info").children[2].appendChild(showReactionMenuButton);
+      controls.appendChild(showReactionMenuButton);
 
       let reactionMenu = document.createElement("div");
 
@@ -32,9 +44,11 @@ export default async function ({ addon, global, console, msg }) {
       reactionMenu.classList.add("magnifier-reaction-menu");
 
       reactionMenu.classList.add("hidden");
+      
+      reactionMenu.style.marginLeft = `-${reactionMenu.offsetWidth}px`;
 
-      i.querySelector(".info").children[2].appendChild(reactionMenu);
-
+      controls.appendChild(reactionMenu);
+      
       window.addEventListener('click', (e) => {
         if (e.target !== showReactionMenuButton) {
           setReactionMenuVisibility(false);
@@ -59,8 +73,10 @@ export default async function ({ addon, global, console, msg }) {
       reactionList.id = "magnifier-reaction-list";
 
       reactionList.classList.add("magnifier-reaction-list");
+      
+      reactionList.classList.add("float-right");
 
-      i.querySelector(".info").children[2].appendChild(reactionList);
+      comment.querySelector(".info").children[2].appendChild(reactionList);
 
       // make list of reactions
       async function makeReactionList() {
@@ -89,7 +105,7 @@ export default async function ({ addon, global, console, msg }) {
           function react(e) {
             e.preventDefault();
             let magnifier = window.open(
-              `https://localhost:4001/react/${commentId}`,
+              `https://magnifier.potatophant.net/react/${commentId}/${j.name}`,
               "Magnifier",
               "width=300,height=300"
             );
@@ -115,10 +131,18 @@ export default async function ({ addon, global, console, msg }) {
           }
           reactionMenu.appendChild(reactionMenuButton);
         });
+
+        let tooltipArrow = document.createElement("div");
+
+        tooltipArrow.classList.add("tooltip-arrow");
+
+        reactionMenu.appendChild(tooltipArrow);
+
+        reactionMenu.style.marginLeft = `-${reactionMenu.offsetWidth / 2}px`;
       }
 
       makeReactionList();
-    });
+    }
 
     async function fetchReactions(commentId) {
       const response = await fetch(`https://api.magnifier.potatophant.net/api/Comments/${commentId}/reactions`);
