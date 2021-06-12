@@ -77,11 +77,9 @@ export default async function ({ addon, global, console }) {
   };
 
   function selectItem(item, click) {
-    console.log(item);
-    if (click) fieldVariable.onItemSelected(null, item);
-    else {
-      // Hover somehow
-    }
+    // You can't just use click() or focus() because Blockly uses mousedown and mouseup handlers, not click handlers.
+    item.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: item, bubbles: true }));
+    if (click) item.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: item, bubbles: true }));
 
     // Scroll the item into view if it is offscreen.
     const itemTop = item.offsetTop;
