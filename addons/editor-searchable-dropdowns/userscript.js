@@ -40,6 +40,7 @@ export default async function ({ addon, global, console }) {
 
     const button = document.createElement("button");
     button.addEventListener("click", () => {
+      if (searchBar.value.length === 0) return;
       const variable = Blockly.getMainWorkspace().createVariable(searchBar.value, "broadcast_msg");
       fieldVariable.setValue(variable.getId());
       Blockly.DropDownDiv.hide();
