@@ -457,6 +457,8 @@ export default async function ({ addon, global, console, msg }) {
     if (paperScope && paperCanvas) {
       foundPaper(paperScope);
       foundPaperCanvas(paperCanvas);
+    } else {
+      throw new Error("couldn't find everything");
     }
   };
 
