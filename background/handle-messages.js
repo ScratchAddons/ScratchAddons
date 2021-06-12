@@ -47,7 +47,7 @@ async function updateMsgCount() {
       return lastMsgCount;
     }
   } catch (err) {
-    console.error(err);
+    console.error("Error checking message count:", err);
     return null;
   }
 }
