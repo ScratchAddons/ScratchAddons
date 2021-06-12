@@ -462,6 +462,10 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
+  //
+  // Controls below editor
+  //
+
   const settingsChanged = (onlyRelayerNeeded) => {
     if ((settings.previous === 0 && settings.next === 0) || settings.opacity === 0) {
       setEnabled(false);
@@ -499,11 +503,8 @@ export default async function ({ addon, global, console, msg }) {
     return el;
   };
 
-  //
-  // Controls below editor
-  //
-
   const paintEditorControlsContainer = document.createElement("div");
+  addon.tab.displayNoneWhileDisabled(paintEditorControlsContainer, { display: "flex" });
   paintEditorControlsContainer.className = "sa-onion-controls-container";
   paintEditorControlsContainer.dir = "";
 
@@ -682,6 +683,16 @@ export default async function ({ addon, global, console, msg }) {
   settingsTipShape.setAttribute("points", "0,0 7,7, 14,0");
   settingsTip.appendChild(settingsTipShape);
   settingsPage.appendChild(settingsTip);
+
+  let oldEnabled = null
+  addon.self.addEventListener("disabled", () => {
+    setSettingsOpen(false);
+    oldEnabled = settings.enabled;
+    setEnabled(false);
+  });
+  addon.self.addEventListener("reenabled", () => {
+    setEnabled(oldEnabled);
+  });
 
   const controlsLoop = async () => {
     let hasRunOnce = false;
