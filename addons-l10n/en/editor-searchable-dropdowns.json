@@ -1,3 +1,7 @@
 {
-  "editor-searchable-dropdowns/add": "Add"
+  "editor-searchable-dropdowns/createGlobalVariable": "Create global variable \"{name}\"",
+  "editor-searchable-dropdowns/createLocalVariable": "Create local variable \"{name}\"",
+  "editor-searchable-dropdowns/createGlobalList": "Create global list \"{name}\"",
+  "editor-searchable-dropdowns/createLocalList": "Create local list \"{name}\"",
+  "editor-searchable-dropdowns/createBroadcast": "Create broadcast \"{name}\""
 }

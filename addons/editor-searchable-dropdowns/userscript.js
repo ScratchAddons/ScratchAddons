@@ -8,11 +8,11 @@ export default async function ({ addon, global, console, msg }) {
 
   const Blockly = await addon.tab.traps.getBlockly();
 
-  let blocklyDropdownMenu = null;
   let blocklyDropDownContent = null;
 
   let searchBar = null;
   let fieldVariable = null;
+  let fieldDropdown = null;
 
   const oldDropDownDivShow = Blockly.DropDownDiv.show;
   Blockly.DropDownDiv.show = function (owner, ...args) {
@@ -21,10 +21,10 @@ export default async function ({ addon, global, console, msg }) {
 
     let blocklyDropDownDiv = Blockly.DropDownDiv.DIV_;
     blocklyDropDownContent = Blockly.DropDownDiv.getContentDiv();
-    blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
+    let blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
     if (!blocklyDropdownMenu) return arrowAtTop;
-    blocklyDropdownMenu.focus = () => {}; // no-op focus() so it can't steal it from the search bar
 
+    blocklyDropdownMenu.focus = () => {}; // no-op focus() so it can't steal it from the search bar
     // Lock the width of the dropdown before adding the search bar, as sometimes adding the searchbar changes the width.
     blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
 
@@ -35,15 +35,6 @@ export default async function ({ addon, global, console, msg }) {
     searchBar.addEventListener("input", handleInputEvent);
     searchBar.addEventListener("keydown", handleKeyDownEvent);
     searchBar.classList.add("u-dropdown-searchbar");
-
-    const selectedBlock = Blockly.selected;
-    if (
-      selectedBlock &&
-      (selectedBlock.type === "event_broadcast" ||
-        selectedBlock.type === "event_broadcastandwait" ||
-        selectedBlock.type === "event_whenbroadcastreceived")
-    ) {
-    }
 
     blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
 
@@ -59,7 +50,51 @@ export default async function ({ addon, global, console, msg }) {
   Blockly.DropDownDiv.clearContent = function () {
     oldDropDownDivClearContent.call(this);
     Blockly.DropDownDiv.content_.style.height = "";
-    blocklyDropdownMenu = null;
+  };
+
+  const oldFieldDropdownGetOptions = Blockly.FieldDropdown.prototype.getOptions;
+  Blockly.FieldDropdown.prototype.getOptions = function () {
+    fieldDropdown = this;
+    const options = oldFieldDropdownGetOptions.call(this);
+    const block = this.sourceBlock_;
+    if (block) {
+      console.log(block);
+      if (block.category_ === "data") {
+        options.push(getMsg("createGlobalVariable"), getMsg("createLocalVariable"));
+      } else if (block.category_ === "data-lists") {
+        options.push(getMsg("createGlobalList"), getMsg("createLocalList"));
+      } else if (["event_broadcast_menu", "event_whenbroadcastreceived"].includes(block.type)) {
+        options.push(getMsg("createBroadcast"));
+      }
+    }
+    return options;
+  };
+
+  const oldFieldVariableOnItemSelected = Blockly.FieldVariable.prototype.onItemSelected;
+  Blockly.FieldVariable.prototype.onItemSelected = function (menu, menuItem) {
+    var id = menuItem.getValue();
+    if (this.sourceBlock_ && this.sourceBlock_.workspace && searchBar.value.length !== 0) {
+      switch (id) {
+        case "createGlobalVariable":
+          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value).getId());
+          return;
+        case "createLocalVariable":
+          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value, "", null, true).getId());
+          return;
+        case "createGlobalList":
+          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value, "list").getId());
+          return;
+        case "createLocalList":
+          fieldVariable.setValue(
+            Blockly.getMainWorkspace().createVariable(searchBar.value, "list", null, true).getId()
+          );
+          return;
+        case "createBroadcast":
+          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value, "broadcast_msg").getId());
+          return;
+      }
+    }
+    oldFieldVariableOnItemSelected.call(this, menu, menuItem);
   };
 
   function selectItem(item, click) {
@@ -83,6 +118,20 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function handleInputEvent(event) {
+    fieldDropdown.selectedItem.parent_.children_.forEach((item) => {
+      if (
+        [
+          "createGlobalVariable",
+          "createLocalVariable",
+          "createGlobalList",
+          "createLocalList",
+          "createBroadcast",
+        ].includes(item.model_)
+      ) {
+        item.element_.lastChild.lastChild.textContent = item.content_ = getMsg(item.model_)[0];
+      }
+    });
+
     const value = event.target.value.toLowerCase();
     for (const item of getItems()) {
       const text = item.content_.toLowerCase();
@@ -97,7 +146,7 @@ export default async function ({ addon, global, console, msg }) {
       event.stopPropagation();
       event.preventDefault();
 
-      const selectedItem = blocklyDropdownMenu.querySelector(".goog-menuitem-highlight");
+      const selectedItem = document.querySelector(".goog-menuitem-highlight");
       if (selectedItem && !selectedItem.hidden) {
         selectItem(selectedItem, true);
         return;
@@ -166,5 +215,9 @@ export default async function ({ addon, global, console, msg }) {
 
   function getItems() {
     return fieldVariable?.selectedItem.parent_.children_ || [];
+  }
+
+  function getMsg(message) {
+    return [msg(message, { name: searchBar?.value || "" }), message];
   }
 }
