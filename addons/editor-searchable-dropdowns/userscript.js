@@ -64,6 +64,8 @@ export default async function ({ addon, global, console }) {
     blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
 
     searchBar.focus();
+
+    return arrowAtTop;
   };
 
   const oldDropDownDivHide = Blockly.DropDownDiv.hide;
