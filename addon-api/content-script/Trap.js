@@ -58,4 +58,42 @@ export default class Trap extends Listenable {
     /* eslint-enable no-empty */
     return (this._cache.Blockly = childable.stateNode.ScratchBlocks);
   }
+
+  /**
+   * Gets @scratch/paper instance.
+   * @async
+   * @throws when on non-project page or if paper couldn't be found.
+   * @returns {Promise<object>}
+   */
+  async getPaper() {
+    if (this._cache.paper) return this._cache.paper;
+    // We can access paper through .tool on tools, for example:
+    // https://github.com/LLK/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
+    // It happens that paper's Tool objects contain a reference to the entirety of paper's scope.
+    const modeSelector = await this._waitForElement("[class*='paint-editor_mode-selector']"); // TODO condition
+    if (!this._react_internal_key) {
+      this._react_internal_key = Object.keys(modeSelector).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
+    }
+    const internalState = modeSelector[this._react_internal_key].child;
+    // .tool or .blob.tool only exists on the selected tool
+    let toolState = internalState;
+    let tool;
+    while (toolState) {
+      const toolInstance = toolState.child.stateNode;
+      if (toolInstance.tool) {
+        tool = toolInstance.tool;
+        break;
+      }
+      if (toolInstance.blob && toolInstance.blob.tool) {
+        tool = toolInstance.blob.tool;
+        break;
+      }
+      toolState = toolState.sibling;
+    }
+    if (tool) {
+      const paperScope = tool._scope;
+      return paperScope;
+    }
+    throw new Error("cannot find paper :(");
+  }
 }

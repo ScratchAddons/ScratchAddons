@@ -1,8 +1,4 @@
-import getPaper from './get-paper.js';
-
 export default async function ({ addon, global, console, msg }) {
-  let reactInternalKey;
-
   let paper = null;
   let paperCenter;
   const storedOnionLayers = [];
@@ -494,12 +490,12 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  const accessScratchInternals = () => {
+  const accessScratchInternals = async () => {
     if (paper) {
       return;
     }
 
-    const paperScope = getPaper();
+    const paperScope = await addon.tab.traps.getPaper();
 
     const paintEditorCanvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
     const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
@@ -736,14 +732,11 @@ export default async function ({ addon, global, console, msg }) {
   const controlsLoop = async () => {
     let hasRunOnce = false;
     while (true) {
-      await untilInPaintEditor();
-
       const canvasControls = await addon.tab.waitForElement("[class^='paint-editor_canvas-controls']", {
         markAsSeen: true,
         reduxCondition: (state) =>
           state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
       });
-      accessScratchInternals();
       const zoomControlsContainer = canvasControls.querySelector("[class^='paint-editor_zoom-controls']");
       const canvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
 
@@ -784,5 +777,6 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  controlsLoop();
+  accessScratchInternals()
+    .then(controlsLoop);
 }
