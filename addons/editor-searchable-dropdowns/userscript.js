@@ -133,9 +133,9 @@ export default async function ({ addon, global, console, msg }) {
 
     const value = event.target.value.toLowerCase();
     for (const item of getItems()) {
-      const text = item.content_.toLowerCase();
-      const hidden = !text.includes(value);
-      item.element_.hidden = hidden;
+      const text = item.content_;
+      const hidden = !text.toLowerCase().includes(value);
+      item.element_.hidden = text === Blockly.Msg["NEW_BROADCAST_MESSAGE"] && value.length !== 0 ? true : hidden;
     }
   }
 
