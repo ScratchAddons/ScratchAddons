@@ -139,5 +139,27 @@ export default async function ({ addon, global, console, msg }) {
 
     textarea.addEventListener("dragleave", transparentify);
     textarea.addEventListener("dragend", transparentify);
+
+    textarea.addEventListener("drop", (e) => {
+      textarea.style.backgroundColor = "";
+
+      let file = e.dataTransfer.files[0]
+
+      if (!file) return
+      e.preventDefault()
+      e.stopPropagation()
+
+      let reader = new FileReader()
+
+      reader.readAsArrayBuffer(file)
+
+      reader.onloadend = () => {
+        upload(reader.result, textarea)
+      }
+
+      reader.onerror = (err) => {
+        throw err
+      }
+    })
   }
 }
