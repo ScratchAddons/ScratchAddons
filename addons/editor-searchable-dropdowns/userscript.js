@@ -8,6 +8,14 @@ export default async function ({ addon, global, console, msg }) {
 
   const Blockly = await addon.tab.traps.getBlockly();
 
+  const ADDON_ITEMS = [
+    "createGlobalVariable",
+    "createLocalVariable",
+    "createGlobalList",
+    "createLocalList",
+    "createBroadcast",
+  ];
+
   let blocklyDropDownContent = null;
 
   let searchBar = null;
@@ -38,10 +46,14 @@ export default async function ({ addon, global, console, msg }) {
 
     blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
 
+    searchBar.focus();
+
+    for (const item of getItems()) {
+      item.element_.hidden = hideItem(item);
+    }
+
     // Lock the height of the dropdown after adding the search bar.
     blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
-
-    searchBar.focus();
 
     return arrowAtTop;
   };
@@ -118,24 +130,17 @@ export default async function ({ addon, global, console, msg }) {
 
   function handleInputEvent(event) {
     fieldDropdown.selectedItem.parent_.children_.forEach((item) => {
-      if (
-        [
-          "createGlobalVariable",
-          "createLocalVariable",
-          "createGlobalList",
-          "createLocalList",
-          "createBroadcast",
-        ].includes(item.model_)
-      ) {
+      if (ADDON_ITEMS.includes(item.model_)) {
         item.element_.lastChild.lastChild.textContent = item.content_ = getMsg(item.model_)[0];
       }
     });
 
-    const value = event.target.value.toLowerCase();
+    const value = searchBar.value.toLowerCase();
     for (const item of getItems()) {
       const text = item.content_;
       const hidden = !text.toLowerCase().includes(value);
-      item.element_.hidden = text === Blockly.Msg["NEW_BROADCAST_MESSAGE"] && value.length !== 0 ? true : hidden;
+      item.element_.hidden =
+        text === Blockly.Msg["NEW_BROADCAST_MESSAGE"] && value.length !== 0 ? true : hidden || hideItem(item);
     }
   }
 
@@ -153,7 +158,7 @@ export default async function ({ addon, global, console, msg }) {
 
       const selectedBlock = Blockly.selected;
       const items = getItems();
-      if (event.target.value === "" && selectedBlock) {
+      if (searchBar.value === "" && selectedBlock) {
         if (
           selectedBlock.type === "event_broadcast" ||
           selectedBlock.type === "event_broadcastandwait" ||
@@ -218,5 +223,9 @@ export default async function ({ addon, global, console, msg }) {
 
   function getMsg(message) {
     return [msg(message, { name: searchBar?.value || "" }), message];
+  }
+
+  function hideItem(item) {
+    return ADDON_ITEMS.includes(item.model_) && searchBar.value.length === 0;
   }
 }
