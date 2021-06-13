@@ -58,7 +58,6 @@ export default async function ({ addon, global, console, msg }) {
     const options = oldFieldDropdownGetOptions.call(this);
     const block = this.sourceBlock_;
     if (block) {
-      console.log(block);
       if (block.category_ === "data") {
         options.push(getMsg("createGlobalVariable"), getMsg("createLocalVariable"));
       } else if (block.category_ === "data-lists") {
