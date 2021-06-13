@@ -34,7 +34,7 @@ export default async function ({ addon, global, console, msg }) {
       },
       referrer: "https://scratch.mit.edu/mystuff/",
       body: JSON.stringify({
-        "visibility": "delbyusr"
+        visibility: "delbyusr",
       }),
       method: "PUT",
       credentials: "include",
