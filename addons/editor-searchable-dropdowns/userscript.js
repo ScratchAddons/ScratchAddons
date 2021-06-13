@@ -138,9 +138,12 @@ export default async function ({ addon, global, console, msg }) {
     const value = searchBar.value.toLowerCase();
     for (const item of getItems()) {
       const text = item.content_;
-      const hidden = !text.toLowerCase().includes(value);
       item.element_.hidden =
-        text === Blockly.Msg["NEW_BROADCAST_MESSAGE"] && value.length !== 0 ? true : hidden || hideItem(item);
+        // Hide scratch's items when we've typed something in
+        ["RENAME_VARIABLE_ID", "DELETE_VARIABLE_ID", "NEW_BROADCAST_MESSAGE_ID"].includes(item.model_) &&
+        value.length !== 0
+          ? true
+          : !text.toLowerCase().includes(value) || hideItem(item);
     }
   }
 
