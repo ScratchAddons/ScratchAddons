@@ -3,6 +3,8 @@
 import { insert } from "../../libraries/thirdparty/cs/text-field-edit.js";
 
 export default async function ({ addon, global, console, msg }) {
+  if (!addon.tab.clientVersion) return
+
   function retrieveImageFromClipboardAsBlob(event) {
     return new Promise((resolve, reject) => {
       if (!event.clipboardData) {
@@ -60,6 +62,8 @@ export default async function ({ addon, global, console, msg }) {
       credentials: "include",
     });
   }
+
+  
   async function upload(blob, textarea) {
     let token = addon.auth.xToken;
 
@@ -121,14 +125,15 @@ export default async function ({ addon, global, console, msg }) {
 
   var selector = "textarea[name='content']";
 
-  if (addon.tab.version == "scratch-www") selector = "textarea.inplace-textarea";
+  if (addon.tab.clientVersion == "scratch-www") selector = "[name='compose-comment']";
 
-  if (!selector) return;
 
   while (true) {
     let textarea = await addon.tab.waitForElement(selector, {
       markAsSeen: true,
     });
+
+    console.log(textarea)
 
     let input = document.createElement("input"); // We have to do this so we send the image url to the right textbox
     input.type = "file";
