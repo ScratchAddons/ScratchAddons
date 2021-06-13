@@ -143,23 +143,23 @@ export default async function ({ addon, global, console, msg }) {
     textarea.addEventListener("drop", (e) => {
       textarea.style.backgroundColor = "";
 
-      let file = e.dataTransfer.files[0]
+      let file = e.dataTransfer.files[0];
 
-      if (!file) return
-      e.preventDefault()
-      e.stopPropagation()
+      if (!file) return;
+      e.preventDefault();
+      e.stopPropagation();
 
-      let reader = new FileReader()
+      let reader = new FileReader();
 
-      reader.readAsArrayBuffer(file)
+      reader.readAsArrayBuffer(file);
 
       reader.onloadend = () => {
-        upload(reader.result, textarea)
-      }
+        upload(reader.result, textarea);
+      };
 
       reader.onerror = (err) => {
-        throw err
-      }
-    })
+        throw err;
+      };
+    });
   }
 }
