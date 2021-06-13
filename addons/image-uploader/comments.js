@@ -154,6 +154,9 @@ export default async function ({ addon, global, console, msg }) {
     });
 
     textarea.addEventListener("paste", async (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      
       let array = await retrieveImageFromClipboardAsBlob(e);
 
       array.forEach((blob) => {

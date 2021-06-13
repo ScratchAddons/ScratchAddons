@@ -64,8 +64,6 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   textBox.addEventListener("paste", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
     retrieveImageFromClipboardAsBlob(e, (imageBlob) => {
       if (imageBlob) {
         var reader = new FileReader();
