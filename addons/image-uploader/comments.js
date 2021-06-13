@@ -2,29 +2,29 @@
 
 import { insert } from "../../libraries/thirdparty/cs/text-field-edit.js";
 
-export default async function({ addon, global, console, msg }) {
+export default async function ({ addon, global, console, msg }) {
   function retrieveImageFromClipboardAsBlob(event) {
-  return new Promise((resolve, reject) => {
-    if (!event.clipboardData) {
-      return resolve([]);
-    }
+    return new Promise((resolve, reject) => {
+      if (!event.clipboardData) {
+        return resolve([]);
+      }
 
-    let items = event.clipboardData.items;
+      let items = event.clipboardData.items;
 
-    if (items == undefined) return resolve([]);
+      if (items == undefined) return resolve([]);
 
-    let processed = [];
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].type.indexOf("image") == -1) continue;
+      let processed = [];
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf("image") == -1) continue;
 
-      let blob = items[i].getAsFile();
+        let blob = items[i].getAsFile();
 
-      processed.push(blob);
-    }
+        processed.push(blob);
+      }
 
-    resolve(processed);
-  });
-}
+      resolve(processed);
+    });
+  }
   async function deleteProject(projectId) {
     let res = await fetch(`https://scratch.mit.edu/site-api/projects/all/${projectId}/`, {
       headers: {
@@ -38,7 +38,7 @@ export default async function({ addon, global, console, msg }) {
       credentials: "include",
     });
   }
-    async function upload(blob, textarea) {
+  async function upload(blob, textarea) {
     let token = addon.auth.xToken;
 
     let createRes = await fetch(`https://projects.scratch.mit.edu`, {
@@ -88,47 +88,46 @@ export default async function({ addon, global, console, msg }) {
 
     await deleteProject(projectId);
   }
-  if (!addon.auth.isLoggedIn) return
+  if (!addon.auth.isLoggedIn) return;
 
-  var selector = "textarea[name='content']"
+  var selector = "textarea[name='content']";
 
-  if (addon.tab.version == 'scratch-www') selector = "textarea.inplace-textarea"
+  if (addon.tab.version == "scratch-www") selector = "textarea.inplace-textarea";
 
-  if (!selector) return
-
+  if (!selector) return;
 
   while (true) {
     let textarea = await addon.tab.waitForElement(selector, {
-      markAsSeen: true
-    })
+      markAsSeen: true,
+    });
 
-    let input = document.createElement('input') // We have to do this so we send the image url to the right textbox
-    input.type = 'file'
-    input.accept = 'image/*'
-    input.style.display = 'none'
+    let input = document.createElement("input"); // We have to do this so we send the image url to the right textbox
+    input.type = "file";
+    input.accept = "image/*";
+    input.style.display = "none";
 
-    input.addEventListener('change', (e) => {
-      let file = input.files[0]
-      let reader = new FileReader()
+    input.addEventListener("change", (e) => {
+      let file = input.files[0];
+      let reader = new FileReader();
 
-      reader.readAsArrayBuffer(file)
+      reader.readAsArrayBuffer(file);
 
       reader.onloadend = () => {
-        upload(reader.result, textarea)
-      }
+        upload(reader.result, textarea);
+      };
 
       reader.onerror = (err) => {
-        throw err
-      }
-    })
+        throw err;
+      };
+    });
 
-    textarea.addEventListener('paste', async (e) => {
-      let array = await retrieveImageFromClipboardAsBlob(e)
+    textarea.addEventListener("paste", async (e) => {
+      let array = await retrieveImageFromClipboardAsBlob(e);
 
       array.forEach((blob) => {
-        upload(blob, textarea)
-      })
-    })
+        upload(blob, textarea);
+      });
+    });
 
     let transparentify = () => {
       textarea.style.backgroundColor = "transparent";
