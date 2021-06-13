@@ -1,15 +1,23 @@
 {
-  "name": "Forums image uploader",
-  "description": "Integrates image uploading into the forums.",
+  "name": "Image uploader",
+  "description": "Integrates image uploading into the forums and comment boxes.",
   "credits": [
     {
       "name": "Jeffalo"
+    },
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr"
     }
   ],
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/discuss/*"]
+    },
+    {
+      "url": "comments.js",
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/users/*"]
     }
   ],
   "versionAdded": "1.0.0",
