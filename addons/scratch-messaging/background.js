@@ -123,7 +123,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         .catch((err) => {
           // TODO: are these errors recognized by popup?
           // (Check for other catches below as well)
-          console.warn("Comment could not be fethed:", err);
+          console.warn("Comment could not be fetched:", err);
           sendResponse({ failed: true });
         });
       return true;
