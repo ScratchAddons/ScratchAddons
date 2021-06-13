@@ -81,6 +81,10 @@
   color: #a1a1a1;
 }
 
+.addon-name > span:empty {
+  background-color: #a1a1a1;
+}
+
 .addon-description-full,
 .addon-credits {
   color: #111;

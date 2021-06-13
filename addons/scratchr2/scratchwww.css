@@ -15,6 +15,9 @@ a:hover,
 .news li:hover h4 {
   color: var(--scratchr2-activeColor);
 }
+.banner a {
+  color: white;
+}
 .studio-info .studio-info-footer-report button:hover {
   background-color: var(--scratchr2-activeColor);
 }

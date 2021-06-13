@@ -1363,7 +1363,7 @@ export default class DevTools {
 
     let ctrlKey = e.ctrlKey || e.metaKey;
 
-    if (e.key === "f" && ctrlKey) {
+    if (e.key === "f" && ctrlKey && !e.shiftKey) {
       // Ctrl + F (Override default Ctrl+F find)
       this.findInp.focus();
       this.findInp.select();

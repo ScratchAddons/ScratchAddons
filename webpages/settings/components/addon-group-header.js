@@ -1,20 +1,14 @@
 export default async function ({ template }) {
   const AddonGroup = Vue.extend({
-    props: ["group"],
+    props: ["group", "shownCount", "marginAbove"],
     template,
     data() {
       return {};
     },
     computed: {
       shouldShow() {
-        if (this.group.id === "new" && this.$root.searchInput !== "") return false;
+        if (this.$root.searchInput !== "") return false;
         return this.shownCount > 0;
-      },
-      shownCount() {
-        // Recompute after root loaded
-        void this.$root.loaded;
-
-        return this.$children.filter((addon) => addon.shouldShow).length;
       },
       manifestsById() {
         return this.$root.manifestsById;
@@ -26,5 +20,5 @@ export default async function ({ template }) {
       },
     },
   });
-  Vue.component("addon-group", AddonGroup);
+  Vue.component("addon-group-header", AddonGroup);
 }

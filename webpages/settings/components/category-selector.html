@@ -14,6 +14,7 @@
     <span>{{ category.name }}</span>
   </div>
 </template>
+
 <style>
   .category {
     transition: all 0.2s ease;
@@ -26,6 +27,16 @@
   }
   .category.category-small {
     padding: 15px 20px 15px 20px;
+  }
+
+  /* Classes used by index.html */
+  a.category {
+    color: inherit;
+    text-decoration: inherit;
+  }
+  a.category > span > img {
+    height: 10px;
+    vertical-align: middle;
   }
 
   .category.sel {
