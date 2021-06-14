@@ -2,7 +2,12 @@
   "name": "Profile statistics",
   "description": "Shows statistics from ScratchDB on profile pages.",
   "tags": ["community", "profiles"],
-  "credits": [{ "name": "Maximouse" }],
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
   "versionAdded": "1.11.0",
   "userscripts": [
     {
