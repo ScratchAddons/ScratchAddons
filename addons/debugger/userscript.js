@@ -315,22 +315,24 @@ export default async function ({ addon, global, console, msg }) {
 
     const blockId = thread.peekStack();
     const block = workspace.getBlockById(blockId);
-    const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
-    if (inputBlock.type !== "text") {
-      if (inputBlock.inputList.filter((i) => i.name).length === 0) {
-        const inputSpan = document.createElement("span");
-        const svgPathStyle = getComputedStyle(inputBlock.svgPath_);
-        const inputBlockFill = svgPathStyle.fill;
-        const inputBlockStroke = svgPathStyle.stroke;
-        // for compatibility with custom block colors
-        const inputBlockColor =
-          inputBlockFill === "rgb(40, 40, 40)" || inputBlockFill === "rgb(255, 255, 255)"
-            ? inputBlockStroke
-            : inputBlockFill;
-        inputSpan.innerText = inputBlock.toString();
-        inputSpan.className = "console-variable";
-        inputSpan.style.background = inputBlockColor;
-        wrapper.append(inputSpan);
+    if (block) {
+      const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
+      if (inputBlock.type !== "text") {
+        if (inputBlock.inputList.filter((i) => i.name).length === 0) {
+          const inputSpan = document.createElement("span");
+          const svgPathStyle = getComputedStyle(inputBlock.svgPath_);
+          const inputBlockFill = svgPathStyle.fill;
+          const inputBlockStroke = svgPathStyle.stroke;
+          // for compatibility with custom block colors
+          const inputBlockColor =
+            inputBlockFill === "rgb(40, 40, 40)" || inputBlockFill === "rgb(255, 255, 255)"
+              ? inputBlockStroke
+              : inputBlockFill;
+          inputSpan.innerText = inputBlock.toString();
+          inputSpan.className = "console-variable";
+          inputSpan.style.background = inputBlockColor;
+          wrapper.append(inputSpan);
+        }
       }
     }
     logs.push({
