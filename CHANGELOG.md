@@ -13,6 +13,20 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.16.0] - 2021-06-14
+
+- New addon: debugger [beta]
+- New addon: expandable search bar
+- Faster extension settings page, enhanced addon searching algorithm
+- "Feature unshared projects" addon: now more reliable, no longer beta
+- "Gamepad support" addon: new smart mapping generator, project creators can override mappings, individual axis support, allow binding to Enter key
+- "Editor dark mode and customizable colors" addon: new settings "change the colors of variables, lists, and answer inputs on the stage" and "text and icon highlight color"
+- "Scratch Messaging" addon: URLs and username mentions inside comments are now clickable
+- "Show ocular.jeffalo.net statuses and post reactions" addon: better forum post reaction UI
+- Adapt addons to the upcoming Scratch 3.0 studio pages update on Scratch website
+- Bug fix: "filter messages on Scratch's messages page" hiding unread messages
+- Bug fix: "mouse position" and "clone count" not working properly in small stage mode
+
 ## [v1.15.0] - 2021-05-25
 
 - New addon: do not automatically run duplicated blocks [recommended]
@@ -392,6 +406,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.16.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.16.0
 [v1.15.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.15.0
 [v1.14.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.3
 [v1.14.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.2
