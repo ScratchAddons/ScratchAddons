@@ -330,14 +330,18 @@ export default async function ({ addon, global, console, msg }) {
           // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
           let jsonData;
           const fakeBlock = {
-            jsonInit (data) {
+            jsonInit(data) {
               jsonData = data;
-            }
+            },
           };
           const blockConstructor = ScratchBlocks.Blocks[inputBlock.opcode];
           if (blockConstructor) {
-            blockConstructor.init.call(fakeBlock);
-          }  
+            try {
+              blockConstructor.init.call(fakeBlock);
+            } catch (e) {
+              // ignore
+            }
+          }
           if (jsonData && jsonData.message0 && !jsonData.args0) {
             text = jsonData.message0;
             category = jsonData.category;
@@ -348,7 +352,8 @@ export default async function ({ addon, global, console, msg }) {
           inputSpan.textContent = text;
           inputSpan.className = "console-variable";
           inputSpan.dataset.category = category === "list" ? "data-lists" : category;
-          inputSpan.style.backgroundColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category].primary;
+          inputSpan.style.backgroundColor =
+            ScratchBlocks.Colours[category === "list" ? "data_lists" : category].primary;
           wrapper.append(inputSpan);
         }
       }
