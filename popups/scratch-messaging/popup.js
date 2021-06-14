@@ -436,6 +436,13 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
               },
             },
             (comments) => {
+              if (comments?.failed) {
+                // Sometimes incorrect (e.g. server is actually down)
+                // but this works
+                this.error = "loggedOut";
+                resolve();
+                return;
+              }
               if (Object.keys(comments).length === 0) elementObject.unreadComments = 0;
               for (const commentId of Object.keys(comments)) {
                 const commentObject = comments[commentId];

@@ -42,7 +42,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   function runCheckMessagesAfter(args, ms) {
     return new Promise((resolve) => {
       setTimeout(async () => {
-        await checkMessages(args);
+        await checkMessages(args).catch((e) => console.warn("Error checking messages", e));
         resolve();
       }, ms);
     });
@@ -123,8 +123,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         .catch((err) => {
           // TODO: are these errors recognized by popup?
           // (Check for other catches below as well)
-          console.error(err);
-          sendResponse(err);
+          console.warn("Comment could not be fetched:", err);
+          sendResponse({ failed: true });
         });
       return true;
     } else if (popupRequest === "markAsRead") {
