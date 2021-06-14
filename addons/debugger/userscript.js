@@ -2,7 +2,7 @@ import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
 
 export default async function ({ addon, global, console, msg }) {
-  let workspace, showingConsole;
+  let workspace, showingConsole, ScratchBlocks;
   const vm = addon.tab.traps.vm;
 
   const container = document.createElement("div");
@@ -314,23 +314,38 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     const blockId = thread.peekStack();
-    const block = workspace.getBlockById(blockId);
-    if (block) {
-      const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
-      if (inputBlock.type !== "text") {
-        if (inputBlock.inputList.filter((i) => i.name).length === 0) {
+    const block = target.blocks.getBlock(blockId);
+    if (block && ScratchBlocks) {
+      const inputId = Object.values(block.inputs)[0]?.block;
+      const inputBlock = target.blocks.getBlock(inputId);
+      if (inputBlock && inputBlock.opcode !== "text") {
+        let text, category;
+        if (inputBlock.opcode === "data_variable" || inputBlock.opcode === "data_listcontents") {
+          text = Object.values(inputBlock.fields)[0].value;
+          category = inputBlock.opcode === "data_variable" ? "data" : "list";
+        } else {
+          // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
+          let jsonData;
+          const fakeBlock = {
+            jsonInit (data) {
+              jsonData = data;
+            }
+          };
+          const blockConstructor = ScratchBlocks.Blocks[inputBlock.opcode];
+          if (blockConstructor) {
+            blockConstructor.init.call(fakeBlock);
+          }  
+          if (jsonData && jsonData.message0 && !jsonData.args0) {
+            text = jsonData.message0;
+            category = jsonData.category;
+          }
+        }
+        if (text && category) {
           const inputSpan = document.createElement("span");
-          const svgPathStyle = getComputedStyle(inputBlock.svgPath_);
-          const inputBlockFill = svgPathStyle.fill;
-          const inputBlockStroke = svgPathStyle.stroke;
-          // for compatibility with custom block colors
-          const inputBlockColor =
-            inputBlockFill === "rgb(40, 40, 40)" || inputBlockFill === "rgb(255, 255, 255)"
-              ? inputBlockStroke
-              : inputBlockFill;
-          inputSpan.innerText = inputBlock.toString();
+          inputSpan.textContent = text;
           inputSpan.className = "console-variable";
-          inputSpan.style.background = inputBlockColor;
+          inputSpan.dataset.category = category === "list" ? "data-lists" : category;
+          inputSpan.style.backgroundColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category].primary;
           wrapper.append(inputSpan);
         }
       }
@@ -379,6 +394,8 @@ export default async function ({ addon, global, console, msg }) {
     consoleWrapper.style.display = show ? "flex" : "";
     showingConsole = show;
   };
+
+  ScratchBlocks = await addon.tab.traps.getBlockly();
 
   while (true) {
     const stageHeaderSizeControls = await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
