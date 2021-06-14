@@ -68,6 +68,9 @@ export default async function ({ addon, global, console, msg }) {
     const block = workspace.getBlockById(blockId);
     if (!block) return;
 
+    // Don't scroll to blocks in the flyout
+    if (block.workspace !== workspace) return;
+
     // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
     let root = block.getRootBlock();
 
