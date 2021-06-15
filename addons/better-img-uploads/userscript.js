@@ -7,29 +7,19 @@ export default async function ({ addon, console, safeMsg: m }) {
 
   //Returns html code for an item in the selection lists, complete with tooltip.
   let html = (id, right) => `<div id="${id}">
-  <button aria-label="Upload Costume" class="${addon.tab.scratchClass(
-    "action-menu_button"
-  )} ${addon.tab.scratchClass(
+  <button aria-label="Upload Costume" class="${addon.tab.scratchClass("action-menu_button")} ${addon.tab.scratchClass(
     "action-menu_more-button"
-  )} sa-better-img-uploads-btn" data-for="sa-${id}-HD Upload" data-tip="${m(
-    "upload"
-  )}" currentitem="false">
-    <img class="${addon.tab.scratchClass(
-      "action-menu_more-icon"
-    )} sa-better-img-uploader" draggable="false" src="${
+  )} sa-better-img-uploads-btn" data-for="sa-${id}-HD Upload" data-tip="${m("upload")}" currentitem="false">
+    <img class="${addon.tab.scratchClass("action-menu_more-icon")} sa-better-img-uploader" draggable="false" src="${
     addon.self.dir + "/icon.svg"
   }" height="10", width="10">
      <input accept=".svg, .png, .bmp, .jpg, .jpeg, .gif" class="${addon.tab.scratchClass(
        "action-menu_file-input"
      )}" multiple="" type="file">
   </button>
-  <div class="__react_component_tooltip place-${
-    right ? "left" : "right"
-  } type-dark ${addon.tab.scratchClass(
+  <div class="__react_component_tooltip place-${right ? "left" : "right"} type-dark ${addon.tab.scratchClass(
     "action-menu_tooltip"
-  )} sa-better-img-uploads-tooltip" id="sa-${id}-HD Upload" data-id="tooltip" >${m(
-    "upload"
-  )}</div>
+  )} sa-better-img-uploads-tooltip" id="sa-${id}-HD Upload" data-id="tooltip" >${m("upload")}</div>
 </div>`;
 
   //The class name for the menu
@@ -38,20 +28,15 @@ export default async function ({ addon, console, safeMsg: m }) {
   while (true) {
     //Catch all upload menus as they are created
     let menu = await addon.tab.waitForElement(`.${c}`, { markAsSeen: true });
-    let button =
-      menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
+    let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
     let id = button.getAttribute("aria-label").replace(/\s+/g, "_");
 
     if (id === "Choose_a_Sound") continue; //Don't want it in the sounds tab!
 
     let isRight = //Is it on the right side of the screen?
-      button.parentElement.classList.contains(
-        addon.tab.scratchClass("sprite-selector_add-button")
-      ) ||
-      button.parentElement.classList.contains(
-        addon.tab.scratchClass("stage-selector_add-button")
-      );
+      button.parentElement.classList.contains(addon.tab.scratchClass("sprite-selector_add-button")) ||
+      button.parentElement.classList.contains(addon.tab.scratchClass("stage-selector_add-button"));
 
     if (isRight) {
       id += "_right";
@@ -69,19 +54,14 @@ export default async function ({ addon, console, safeMsg: m }) {
       onchange(e, id);
     });
 
-    let observer = new MutationObserver(() =>
-      doresize(id, menu, menuItem, isRight)
-    );
+    let observer = new MutationObserver(() => doresize(id, menu, menuItem, isRight));
 
     observer.observe(menu, { attributes: true, subtree: true });
 
     function doresize(id, menu, menuItem, isRight) {
       let rect = menuItem.getBoundingClientRect();
-      menuItem.querySelector(`.sa-better-img-uploads-tooltip`).style.top =
-        rect.top + 2 + "px";
-      menuItem.querySelector(`.sa-better-img-uploads-tooltip`).style[
-        isRight ? "right" : "left"
-      ] = isRight
+      menuItem.querySelector(`.sa-better-img-uploads-tooltip`).style.top = rect.top + 2 + "px";
+      menuItem.querySelector(`.sa-better-img-uploads-tooltip`).style[isRight ? "right" : "left"] = isRight
         ? window.innerWidth - rect.right + rect.width + 10 + "px"
         : rect.left + rect.width + "px";
     }
@@ -207,11 +187,7 @@ export default async function ({ addon, console, safeMsg: m }) {
       );
     }
 
-    (el = document
-      .getElementById(iD)
-      .nextElementSibling.querySelector("input")).files = new FileList(
-      processed
-    ); //Convert processed image array to a FileList, which is not normally constructible.
+    (el = document.getElementById(iD).nextElementSibling.querySelector("input")).files = new FileList(processed); //Convert processed image array to a FileList, which is not normally constructible.
 
     el.dispatchEvent(new e.constructor(e.type, e)); //Start a new, duplicate, event, but allow scratch to receive it this time.
   }
