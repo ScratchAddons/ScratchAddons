@@ -1,10 +1,10 @@
 {
-  "name": "Alt+GreenFlag 60FPS player mode",
-  "description": "Alt+Click the green flag to toggle 60FPS.",
+  "name": "Alt+GreenFlag custom FPS player mode",
+  "description": "Alt+Click the green flag to toggle custom fps.",
   "info": [
     {
       "type": "notice",
-      "text": "Projects will run twice as fast at 60FPS, because they typically run at 30FPS.",
+      "text": "Projects will either run slower or faster if this addon is enabled",
       "id": "projectRunsFasterNotice"
     }
   ],
@@ -16,6 +16,10 @@
     {
       "name": "TheColaber",
       "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "Shluffy",
+      "link": "https://github.com/shluffy"
     }
   ],
   "dynamicEnable": true,
@@ -31,7 +35,7 @@
       "name": "Alt+GreenFlag FPS",
       "id": "framerate",
       "type": "integer",
-      "min": 31,
+      "min": 1,
       "max": 240,
       "default": 60
     }
