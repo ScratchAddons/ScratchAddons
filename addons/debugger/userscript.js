@@ -198,12 +198,6 @@ export default async function ({ addon, global, console, msg }) {
   consoleWrapper.append(consoleTitle, extraContainer);
   document.body.append(consoleWrapper);
 
-  let pos1 = 0,
-    pos2 = 0,
-    pos3 = 0,
-    pos4 = 0,
-    maxX,
-    maxY;
   consoleTitle.addEventListener("mousedown", dragMouseDown);
 
   const getTargetInfo = (id, cache = null) => {
@@ -219,30 +213,33 @@ export default async function ({ addon, global, console, msg }) {
     return item;
   };
 
+  let offsetX = 0;
+  let offsetY = 0;
+  let lastX = 0;
+  let lastY = 0;
+
   function dragMouseDown(e) {
     e.preventDefault();
-    pos3 = e.clientX;
-    pos4 = e.clientY;
+    offsetX = e.clientX - consoleWrapper.offsetLeft;
+    offsetY = e.clientY - consoleWrapper.offsetTop;
     document.addEventListener("mouseup", closeDragElement);
     document.addEventListener("mousemove", elementDrag);
   }
 
+  function dragConsole(x, y) {
+    lastX = x;
+    lastY = y;
+    const width = document.documentElement.clientWidth || document.body.clientWidth;
+    const height = document.documentElement.clientHeight || document.body.clientHeight;
+    const clampedX = Math.max(0, Math.min(x - offsetX, width - consoleWrapper.offsetWidth));
+    const clampedY = Math.max(0, Math.min(y - offsetY, height - consoleWrapper.offsetHeight));
+    consoleWrapper.style.left = clampedX + "px";
+    consoleWrapper.style.top = clampedY + "px";
+  }
+
   function elementDrag(e) {
     e.preventDefault();
-    var winW = document.documentElement.clientWidth || document.body.clientWidth,
-      winH = document.documentElement.clientHeight || document.body.clientHeight;
-    (maxX = winW - consoleWrapper.offsetWidth - 1), (maxY = winH - consoleWrapper.offsetHeight - 1);
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    if (consoleWrapper.offsetTop - pos2 <= maxY && consoleWrapper.offsetTop - pos2 >= 0) {
-      consoleWrapper.style.top = consoleWrapper.offsetTop - pos2 + "px";
-    }
-    if (consoleWrapper.offsetLeft - pos1 <= maxX && consoleWrapper.offsetLeft - pos1 >= 0) {
-      consoleWrapper.style.left = consoleWrapper.offsetLeft - pos1 + "px";
-    }
+    dragConsole(e.clientX, e.clientY);
   }
 
   function closeDragElement() {
