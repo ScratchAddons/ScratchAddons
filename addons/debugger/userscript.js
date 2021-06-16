@@ -310,6 +310,7 @@ export default async function ({ addon, global, console, msg }) {
     download("logs.txt", file);
   });
   let logs = [];
+  let scrollQueued = false;
   const addItem = (content, thread, type) => {
     const wrapper = document.createElement("div");
     const span = (text, cl = "") => {
@@ -398,8 +399,15 @@ export default async function ({ addon, global, console, msg }) {
 
     wrapper.appendChild(link);
 
-    if (isScrolledToEnd) extraContainer.scrollTop = extraContainer.scrollHeight;
+    if (!scrollQueued && isScrolledToEnd) {
+      scrollQueued = true;
+      queueMicrotask(scrollToEnd);
+    }
     if (!showingConsole) buttonImage.src = addon.self.dir + "/debug-unread.svg";
+  };
+  const scrollToEnd = () => {
+    scrollQueued = false;
+    extraContainer.scrollTop = extraContainer.scrollHeight
   };
   const toggleConsole = (show = !showingConsole) => {
     if (show) {
