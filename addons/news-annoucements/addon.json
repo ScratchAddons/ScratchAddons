@@ -1,7 +1,7 @@
 {
   "name": "Redirect scratch.mit.edu/news to Announcements Forum",
   "description": "Redirects the page scratch.mit.edu/news to the announcemnts forum.",
-  "tags": ["community"],
+  "tags": ["community", "easterEgg"],
   "enabledByDefault": false
   "userscripts" [
     {
