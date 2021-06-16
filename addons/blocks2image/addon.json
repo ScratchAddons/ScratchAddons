@@ -1,6 +1,6 @@
 {
   "name": "Block images",
-  "description": "Right click the code area to export blocks as SVG/PNG images.",
+  "description": "Right click the code area to save blocks as SVG/PNG images.",
   "tags": ["editor", "codeEditor"],
   "credits": [
     {
