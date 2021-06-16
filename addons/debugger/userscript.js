@@ -414,6 +414,8 @@ export default async function ({ addon, global, console, msg }) {
     extraContainer.scrollTop = extraContainer.scrollHeight;
   };
   const toggleConsole = (show = !showingConsole) => {
+    showingConsole = show;
+    consoleWrapper.style.display = show ? "flex" : "";
     if (show) {
       buttonImage.src = addon.self.dir + "/debug.svg";
       const cacheObj = Object.create(null);
@@ -428,9 +430,10 @@ export default async function ({ addon, global, console, msg }) {
           logLinkElem.textContent = msg("clone-of", { spriteName: tInfo.name });
         }
       }
+      if (isScrolledToEnd) {
+        scrollToEnd();
+      }
     }
-    consoleWrapper.style.display = show ? "flex" : "";
-    showingConsole = show;
   };
 
   while (true) {
