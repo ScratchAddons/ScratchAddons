@@ -1,3 +1,3 @@
 export default async function ({ addon, global, console }) {
-  window.location.href = "https://scratch.mit.edu/discuss/5/";
+  window.location.replace("https://scratch.mit.edu/discuss/5/");
 }
