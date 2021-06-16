@@ -403,7 +403,10 @@ export default async function ({ addon, global, console, msg }) {
       scrollQueued = true;
       queueMicrotask(scrollToEnd);
     }
-    if (!showingConsole) buttonImage.src = addon.self.dir + "/debug-unread.svg";
+    if (!showingConsole) {
+      const unreadImage = addon.self.dir + "/debug-unread.svg";
+      if (buttonImage.src !== unreadImage) buttonImage.src = unreadImage;
+    }
   };
   const scrollToEnd = () => {
     scrollQueued = false;
