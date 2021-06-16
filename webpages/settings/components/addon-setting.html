@@ -55,9 +55,11 @@
     <template v-if="setting.type === 'key'">
       <input
         type="text"
-        class="setting-input key"
+        class="setting-input"
         v-model="addonSettings[addon._addonId][setting.id]"
         @input="updateSettings()"
+        @keydown="keySettingKeyDown"
+        @keyup="keySettingKeyUp"
         :disabled="!addon._enabled"
         :placeholder="setting.default"
         maxlength="100"
