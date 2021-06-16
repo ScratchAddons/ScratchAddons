@@ -1,6 +1,6 @@
 {
   "name": "Message filter",
-  "description": "Lets you select what types of messages to hide or show on Scratch's messages page.",
+  "description": "Lets you select a filter for types of messages to hide or show on Scratch's messages page.",
   "info": [
     {
       "type": "notice",
