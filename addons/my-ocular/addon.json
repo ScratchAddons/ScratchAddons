@@ -1,6 +1,6 @@
 {
-  "name": "Show ocular.jeffalo.net statuses and post reactions",
-  "description": "Shows ocular statuses and reactions. Uses jeffalo.net to obtain data.",
+  "name": "ocular.jeffalo.net statuses and reactions",
+  "description": "Shows ocular statuses and post reactions on the forums. Uses jeffalo.net to obtain data.",
   "credits": [
     {
       "name": "Jeffalo"

@@ -1,5 +1,5 @@
 {
-  "name": "Use local timezone on forums",
+  "name": "Local timezone on forums",
   "description": "Converts the post dates to your time zone. Uses ScratchDB for information.",
   "userscripts": [
     {

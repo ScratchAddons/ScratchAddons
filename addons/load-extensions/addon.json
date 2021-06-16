@@ -1,6 +1,6 @@
 {
   "name": "Auto-show editor extensions",
-  "description": "Adds music, pen, and other editor extensions automatically to the block category list.",
+  "description": "Adds music, pen, and other extensions automatically to the block category menu.",
   "userscripts": [
     {
       "url": "userscript.js",
