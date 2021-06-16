@@ -74,8 +74,8 @@ export default async function ({ addon, global, console, msg }) {
     // Make sure the code tab is active
     if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0) {
       addon.tab.redux.dispatch({
-        type: 'scratch-gui/navigation/ACTIVATE_TAB',
-        activeTabIndex: 0
+        type: "scratch-gui/navigation/ACTIVATE_TAB",
+        activeTabIndex: 0,
       });
     }
 
