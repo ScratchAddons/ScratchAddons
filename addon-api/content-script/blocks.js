@@ -165,6 +165,9 @@ export async function init(tab) {
     return oldStepToProcedure.call(this, thread, proccode);
   };
 
+  vm.runtime.once("PROJECT_LOADED", resetAllCaches);
+  resetAllCaches();
+
   const ScratchBlocks = await tab.traps.getBlockly();
   injectWorkspace(ScratchBlocks);
 }
