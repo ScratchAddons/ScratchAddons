@@ -11,7 +11,7 @@ export default async function ({ addon, global, console, msg }) {
     viewOnOcular.innerText = `🔍 ocular`;
     viewOnOcular.title = msg("view-on-ocular");
     viewOnOcular.href = `https://ocular.jeffalo.net/post/${postID}`;
-    viewOnOcularContainer.appendChild(document.createTextNode("| "));
+    viewOnOcularContainer.appendChild(document.createTextNode(" | "));
     viewOnOcularContainer.appendChild(viewOnOcular);
     viewOnOcularContainer.appendChild(document.createTextNode(" |"));
     footer.insertAdjacentElement("afterbegin", viewOnOcularContainer);
@@ -23,9 +23,7 @@ export default async function ({ addon, global, console, msg }) {
       reactionMenuButton.className = "my-ocular-reaction-menu-button";
       reactionMenuButton.innerText = "😀";
       reactionMenuButton.title = msg("add-reaction");
-      reactionMenuContainer.appendChild(document.createTextNode(" "));
       reactionMenuContainer.appendChild(reactionMenuButton);
-      reactionMenuContainer.appendChild(document.createTextNode(" "));
 
       let reactionMenu = document.createElement("span");
       reactionMenu.className = "my-ocular-popup";
@@ -97,7 +95,7 @@ export default async function ({ addon, global, console, msg }) {
           reactionMenu.appendChild(reactionMenuItem);
         });
         if (reactions.some((reaction) => reaction.reactions.length !== 0)) {
-          reactionList.appendChild(document.createTextNode("|"));
+          reactionList.appendChild(document.createTextNode("| "));
         }
       }
       footer.insertAdjacentElement("afterbegin", reactionMenuContainer);
