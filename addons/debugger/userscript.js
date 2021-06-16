@@ -410,7 +410,7 @@ export default async function ({ addon, global, console, msg }) {
   };
   const scrollToEnd = () => {
     scrollQueued = false;
-    extraContainer.scrollTop = extraContainer.scrollHeight
+    extraContainer.scrollTop = extraContainer.scrollHeight;
   };
   const toggleConsole = (show = !showingConsole) => {
     if (show) {
