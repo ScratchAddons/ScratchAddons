@@ -29,6 +29,7 @@
 }
 .my-ocular-reaction-button:hover > .my-ocular-popup {
   display: block;
+  z-index: 1;
 }
 
 .my-ocular-popup {
