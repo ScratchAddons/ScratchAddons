@@ -1,5 +1,5 @@
 {
-  "name": "Action confirmation",
+  "name": "Confirmations",
   "description": "Asks if you're sure when committing actions under your Scratch account, such as sharing projects.",
   "credits": [
     {

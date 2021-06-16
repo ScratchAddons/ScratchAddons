@@ -1,6 +1,6 @@
 {
   "name": "Customizable new sprite position",
-  "description": "Change the default x/y position new sprites are moved to when they are created.",
+  "description": "Change the default x/y position of new sprites.",
   "credits": [
     {
       "name": "pufferfish101007",
