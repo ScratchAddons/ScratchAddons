@@ -242,6 +242,10 @@ export default async function ({ addon, global, console, msg }) {
     dragConsole(e.clientX, e.clientY);
   }
 
+  window.addEventListener('resize', () => {
+    dragConsole(lastX, lastY);
+  });
+
   function closeDragElement() {
     // stop moving when mouse button is released:
     document.removeEventListener("mouseup", closeDragElement);
