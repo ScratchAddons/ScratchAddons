@@ -2,7 +2,7 @@ import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
 
 export default async function ({ addon, global, console, msg }) {
-  let workspace, showingConsole, ScratchBlocks;
+  let showingConsole, ScratchBlocks;
   const vm = addon.tab.traps.vm;
 
   const container = document.createElement("div");
@@ -28,15 +28,12 @@ export default async function ({ addon, global, console, msg }) {
   addon.tab.addBlock("sa-pause", [], pause, true);
   addon.tab.addBlock("\u200B\u200Bbreakpoint\u200B\u200B", [], pause);
   addon.tab.addBlock("\u200B\u200Blog\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    workspace = Blockly.getMainWorkspace();
     addItem(content, thread, "log");
   });
   addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    workspace = Blockly.getMainWorkspace();
     addItem(content, thread, "warn");
   });
   addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    workspace = Blockly.getMainWorkspace();
     addItem(content, thread, "error");
   });
 
@@ -54,6 +51,8 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   const goToBlock = (targetId, blockId) => {
+    const workspace = Blockly.getMainWorkspace();
+
     const offsetX = 32,
       offsetY = 32;
     if (targetId !== vm.editingTarget.id) {
@@ -301,7 +300,6 @@ export default async function ({ addon, global, console, msg }) {
   });
   let logs = [];
   const addItem = (content, thread, type) => {
-    workspace = Blockly.getMainWorkspace();
     const wrapper = document.createElement("div");
     const span = (text, cl = "") => {
       let s = document.createElement("span");
