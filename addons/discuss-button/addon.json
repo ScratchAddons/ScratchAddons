@@ -1,5 +1,5 @@
 {
-  "name": "Discuss button",
+  "name": "Custom navbar items",
   "description": "Adds the discuss button to the navbar.",
   "credits": [
     {
@@ -18,18 +18,27 @@
   ],
   "settings": [
     {
-      "name": "Remove \"ideas\" button",
-      "id": "removeIdeasBtn",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "name": "Discuss button name",
-      "id": "buttonName",
-      "type": "string",
-      "default": "Discuss",
-      "min": 1,
-      "max": 30
+      "name": "Items",
+      "id": "items",
+      "type": "table",
+      "default": [
+        ["Create", "/projects/editor/"],
+        ["Explore", "/explore/projects/all"],
+        ["Ideas", "/ideas"],
+        ["About", "/about"]
+      ],
+      "row": [
+        {
+          "name": "Name",
+          "id": "name",
+          "type": "string"
+        },
+        {
+          "name": "URL",
+          "id": "url",
+          "type": "string"
+        }
+      ]
     }
   ],
   "versionAdded": "1.0.0",

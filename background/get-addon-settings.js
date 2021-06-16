@@ -4,45 +4,26 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
-      const settings = addonSettings[addonId] || {};
+      // const settings = addonSettings[addonId] || {};
+      let settings = {};
       let madeChangesToAddon = false;
       if (manifest.settings) {
-        if (addonId === "editor-dark-mode") {
-          // Transition v1.12.0 modes to v1.13.0 presets
+        if (addonId === "discuss-button" && typeof settings.buttonName !== "undefined") {
+          // Transition v1.16.0 modes to v1.17.0 settings
+          madeChangesToAddon = true;
+          madeAnyChanges = true;
 
-          // If user had a selected mode (AKA was a v1.12.0 user)
-          // but has no "page" color set, do the transition
-          // This will happen on first v1.13.0 run only
-          if (settings.selectedMode && !settings.page) {
-            const usePreset = (presetId) => {
-              for (const option of manifest.settings) {
-                if (option.id === "textShadow" && settings.textShadow !== undefined) {
-                  // Exception: v1.12.0 already had this setting
-                  // and we want to preserve what the user had
-                  continue;
-                }
-                const presetValue = manifest.presets.find((preset) => preset.id === presetId).values[option.id];
-                if (presetValue !== undefined) settings[option.id] = presetValue;
-                else settings[option.id] = option.default;
-              }
-            };
+          let option = manifest.settings.find((option) => option.id === "items");
+          settings.items = option.default;
+          if (settings.removeIdeasBtn) settings.items.splice(2, 1);
+          settings.items.push([settings.buttonName, "/discuss"]);
 
-            const previousMode = settings.selectedMode;
-            usePreset(
-              {
-                "3-darker": "3darker",
-                "3-dark": "3dark",
-                "dark-editor": "darkEditor",
-                "experimental-dark": "experimentalDark",
-              }[previousMode] || /* Something went wrong, use 3.Darker */ "3darker"
-            );
-
-            addonSettings[addonId] = settings; // Note: IIRC this line doesn't actually do anything
-            madeAnyChanges = true;
-            console.log("Migrated editor-dark-mode to presets");
-            // Skip following code, continue with next addon
-            continue;
-          }
+          //todo use other
+          settings.items = settings.items.map((defaultValues) =>
+            defaultValues.map((defaultValue, i) => ({ ...option.row[i], default: defaultValue }))
+          );
+          delete settings.removeIdeasBtn;
+          delete settings.buttonName;
         }
 
         for (const option of manifest.settings) {
@@ -50,6 +31,14 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             madeChangesToAddon = true;
             madeAnyChanges = true;
             settings[option.id] = option.default;
+            if (option.type === "table") {
+              settings[option.id] = settings[option.id].map((defaultValues) => {
+                let info = {};
+                defaultValues.forEach((defaultValue, i) => (info[option.row[i].id] = defaultValue));
+                return info;
+              });
+              console.log(settings);
+            }
           } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number
             if (typeof settings[option.id] !== "number") {
