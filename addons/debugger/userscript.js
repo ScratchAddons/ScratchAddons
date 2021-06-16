@@ -221,15 +221,17 @@ export default async function ({ addon, global, console, msg }) {
     return item;
   };
 
-  let offsetX = 0;
-  let offsetY = 0;
+  let mouseOffsetX = 0;
+  let mouseOffsetY = 0;
   let lastX = 0;
   let lastY = 0;
 
   function dragMouseDown(e) {
     e.preventDefault();
-    offsetX = e.clientX - consoleWrapper.offsetLeft;
-    offsetY = e.clientY - consoleWrapper.offsetTop;
+    mouseOffsetX = e.clientX - consoleWrapper.offsetLeft;
+    mouseOffsetY = e.clientY - consoleWrapper.offsetTop;
+    lastX = e.clientX;
+    lastY = e.clientY;
     document.addEventListener("mouseup", closeDragElement);
     document.addEventListener("mousemove", elementDrag);
   }
@@ -239,8 +241,8 @@ export default async function ({ addon, global, console, msg }) {
     lastY = y;
     const width = document.documentElement.clientWidth || document.body.clientWidth;
     const height = document.documentElement.clientHeight || document.body.clientHeight;
-    const clampedX = Math.max(0, Math.min(x - offsetX, width - consoleWrapper.offsetWidth));
-    const clampedY = Math.max(0, Math.min(y - offsetY, height - consoleWrapper.offsetHeight));
+    const clampedX = Math.max(0, Math.min(x - mouseOffsetX, width - consoleWrapper.offsetWidth));
+    const clampedY = Math.max(0, Math.min(y - mouseOffsetY, height - consoleWrapper.offsetHeight));
     consoleWrapper.style.left = clampedX + "px";
     consoleWrapper.style.top = clampedY + "px";
   }
