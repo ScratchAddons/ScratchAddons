@@ -404,8 +404,6 @@ export default async function ({ addon, global, console, msg }) {
     showingConsole = show;
   };
 
-  ScratchBlocks = await addon.tab.traps.getBlockly();
-
   while (true) {
     const stageHeaderSizeControls = await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
       markAsSeen: true,
@@ -417,6 +415,7 @@ export default async function ({ addon, global, console, msg }) {
       ],
     });
     if (addon.tab.editorMode === "editor") {
+      ScratchBlocks = await addon.tab.traps.getBlockly();
       stageHeaderSizeControls.insertBefore(container, stageHeaderSizeControls.firstChild);
     } else {
       toggleConsole(false);
