@@ -214,7 +214,7 @@ export default async function ({ addon, global, console, msg }) {
       isScrolledToEnd = false;
     }
   });
-  extraContainer.addEventListener("scroll", (e) => {
+  extraContainer.addEventListener("scroll", () => {
     isScrolledToEnd = extraContainer.scrollTop + 5 >= extraContainer.scrollHeight - extraContainer.clientHeight;
   });
 
@@ -276,6 +276,7 @@ export default async function ({ addon, global, console, msg }) {
     document.querySelectorAll(".log").forEach((log, i) => log.remove());
     closeDragElement();
     logs = [];
+    isScrolledToEnd = true;
   });
   trashButton.addEventListener("mouseup", () => {
     closeDragElement();
