@@ -71,6 +71,14 @@ export default async function ({ addon, global, console, msg }) {
     // Don't scroll to blocks in the flyout
     if (block.workspace.isFlyout) return;
 
+    // Make sure the code tab is active
+    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0) {
+      addon.tab.redux.dispatch({
+        type: 'scratch-gui/navigation/ACTIVATE_TAB',
+        activeTabIndex: 0
+      });
+    }
+
     // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
     let root = block.getRootBlock();
 
