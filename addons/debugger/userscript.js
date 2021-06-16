@@ -207,6 +207,17 @@ export default async function ({ addon, global, console, msg }) {
 
   consoleTitle.addEventListener("mousedown", dragMouseDown);
 
+  let isScrolledToEnd = true;
+  extraContainer.addEventListener("wheel", (e) => {
+    // When user scrolls up, stop automatically scrolling down
+    if (e.deltaY < 0) {
+      isScrolledToEnd = false;
+    }
+  });
+  extraContainer.addEventListener("scroll", (e) => {
+    isScrolledToEnd = extraContainer.scrollTop + 5 >= extraContainer.scrollHeight - extraContainer.clientHeight;
+  });
+
   const getTargetInfo = (id, cache = null) => {
     if (cache && cache[id]) return cache[id];
     const target = vm.runtime.getTargetById(id);
@@ -308,8 +319,6 @@ export default async function ({ addon, global, console, msg }) {
       return s;
     };
 
-    const scrolledDown = extraContainer.scrollTop + 5 > extraContainer.scrollHeight - extraContainer.clientHeight;
-
     const target = thread.target;
     const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
     const targetId = parentTarget.id;
@@ -389,7 +398,7 @@ export default async function ({ addon, global, console, msg }) {
 
     wrapper.appendChild(link);
 
-    if (scrolledDown) extraContainer.scrollTop = extraContainer.scrollHeight;
+    if (isScrolledToEnd) extraContainer.scrollTop = extraContainer.scrollHeight;
     if (!showingConsole) buttonImage.src = addon.self.dir + "/debug-unread.svg";
   };
   const toggleConsole = (show = !showingConsole) => {
