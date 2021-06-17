@@ -316,7 +316,12 @@
               !project.unreadComments && commentsReady"
       >
         <div class="message-type-title" :style="{zIndex: 9999 - i}">
-          <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
+          <a
+            class="message-type-title-text"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/projects/{{ project.id }}/"
+          >{{ project.title }}</a>
           <span class="float-right">
             <div class="tooltip" v-if="project.loveCount || project.favoriteCount" style="display: inline-block">
               <span class="tooltip-indicator">
