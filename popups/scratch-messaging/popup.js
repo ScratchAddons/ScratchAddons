@@ -361,7 +361,6 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
       reloadPage() {
         location.reload();
       },
-      openStudio: (studioId, tab = "") => window.open(`https://scratch.mit.edu/studios/${studioId}/${tab}`),
       openUnreadPostsForums: (topicId) => window.open(`https://scratch.mit.edu/discuss/topic/${topicId}/unread/`),
 
       // Objects

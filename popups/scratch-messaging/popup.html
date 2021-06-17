@@ -274,7 +274,12 @@
       <!-- Studios -->
       <div class="message-type" v-for="studio of studios" v-show="studio.unreadComments && studio.loadedComments">
         <div class="message-type-title">
-          <a class="message-type-title-text" @click="openStudio(studio.id)">{{ studioText(studio.title) }}</a>
+          <a
+            class="message-type-title-text"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://scratch.mit.edu/studios/{{ studio.id }}/"
+          >{{ studioText(studio.title) }}</a>
           <span class="float-right">
             <span v-show="studio.unreadComments"
               ><img class="small-icon" src="../../images/icons/comment.svg" /> {{studio.unreadComments}}</span
