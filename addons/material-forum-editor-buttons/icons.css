@@ -73,7 +73,7 @@
   background-image: url(uploader.svg) !important;
   background-size: 20px;
 }
-img[src*="//cdn.scratch.mit.edu/scratchr2/static/"]
+.markItUpButton img[src*="//cdn.scratch.mit.edu/scratchr2/static/"]
 {
   object-position: 999999px 999999px;
   margin-bottom: -3px;
