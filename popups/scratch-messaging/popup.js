@@ -50,7 +50,6 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
       };
     },
     methods: {
-      openProfile: (username) => window.open(`https://scratch.mit.edu/users/${username}/`),
       postComment() {
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
