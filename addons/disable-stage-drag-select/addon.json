@@ -1,0 +1,18 @@
+{
+    "name": "Disable stage drag/select",
+    "description": "Disables dragging or selecting sprites in the stage.",
+    "credits": [
+        {
+          "name": "Chrome_Cat",
+          "link": "https://scratch.mit.edu/users/Chrome_Cat"
+        }
+    ],
+    "userscripts": [
+        {
+          "url": "userscript.js",
+          "matches": ["https://scratch.mit.edu/projects/*"]
+        }
+    ],
+    "tags": ["editor"],
+    "enabledByDefault": false
+}
