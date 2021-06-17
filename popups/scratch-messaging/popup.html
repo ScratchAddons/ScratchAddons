@@ -25,16 +25,12 @@
           rel="noopener noreferrer"
           target="_blank"
           href="https://scratch.mit.edu/users/{{ thisComment.author }}"
-        >{{ thisComment.author }}</a>{{
-        thisComment.scratchTeam ? "*" : "" }}
+          >{{ thisComment.author }}</a
+        >{{ thisComment.scratchTeam ? "*" : "" }}
         <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
           · {{ commentTimeAgo }}&nbsp;&nbsp;
           <a rel="noopener noreferrer" target="_blank" :href="commentURL">
-            <img
-              src="../../images/icons/popout.svg"
-              class="popout-comment"
-              title="{{ messages.openNewTabMsg }}"
-            />
+            <img src="../../images/icons/popout.svg" class="popout-comment" title="{{ messages.openNewTabMsg }}" />
           </a>
         </span>
         <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
@@ -279,7 +275,8 @@
             rel="noopener noreferrer"
             target="_blank"
             href="https://scratch.mit.edu/studios/{{ studio.id }}/"
-          >{{ studioText(studio.title) }}</a>
+            >{{ studioText(studio.title) }}</a
+          >
           <span class="float-right">
             <span v-show="studio.unreadComments"
               ><img class="small-icon" src="../../images/icons/comment.svg" /> {{studio.unreadComments}}</span
@@ -326,7 +323,8 @@
             target="_blank"
             rel="noopener noreferrer"
             href="https://scratch.mit.edu/projects/{{ project.id }}/"
-          >{{ project.title }}</a>
+            >{{ project.title }}</a
+          >
           <span class="float-right">
             <div class="tooltip" v-if="project.loveCount || project.favoriteCount" style="display: inline-block">
               <span class="tooltip-indicator">
