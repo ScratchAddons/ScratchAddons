@@ -273,10 +273,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       stopPropagation(e) {
         e.stopPropagation();
       },
-      updateOption(id, newValue, addon) {
-        this.addonSettings[addon._addonId][id] = newValue;
-        this.updateSettings(addon);
-      },
       updateSettings(addon, { wait = 0, settingId = null } = {}) {
         const value = settingId && this.addonSettings[addon._addonId][settingId];
         setTimeout(() => {
@@ -598,7 +594,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
 
     vue.loaded = true;
-    setTimeout(handleKeySettings, 0);
     setTimeout(() => {
       // Set hash again after loading addons, to force scroll to addon
       let hash = window.location.hash;
@@ -618,36 +613,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       }
     }, 0);
   });
-
-  function handleKeySettings() {
-    let keyInputs = document.querySelectorAll(".key");
-    for (const input of keyInputs) {
-      input.addEventListener("keydown", function (e) {
-        e.preventDefault();
-        e.target.value = e.ctrlKey
-          ? "Ctrl" +
-            (e.shiftKey ? " + Shift" : "") +
-            (e.key === "Control" || e.key === "Shift"
-              ? ""
-              : (e.ctrlKey ? " + " : "") +
-                (e.key.toUpperCase() === e.key
-                  ? e.code.includes("Digit")
-                    ? e.code.substring(5, e.code.length)
-                    : e.key
-                  : e.key.toUpperCase()))
-          : "";
-        vue.updateOption(
-          e.target.getAttribute("data-setting-id"),
-          e.target.value,
-          vue.manifests.find((manifest) => manifest._addonId === e.target.getAttribute("data-addon-id"))
-        );
-      });
-      input.addEventListener("keyup", function (e) {
-        // Ctrl by itself isn't a hotkey
-        if (e.target.value === "Ctrl") e.target.value = "";
-      });
-    }
-  }
 
   window.addEventListener("keydown", function (e) {
     if (e.ctrlKey && e.key === "f") {

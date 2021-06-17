@@ -42,7 +42,7 @@ export default async function ({ addon, global, console, msg }) {
     // performance
     if (v === lastChecked) return;
     countContainerContainer.dataset.count = lastChecked = v;
-    count.dataset.str = cache[v] || "";
+    count.dataset.str = cache[v] || msg("clones", { cloneCount: v });
 
     if (v === 0) countContainerContainer.style.display = "none";
     else addon.tab.displayNoneWhileDisabled(countContainerContainer, { display: "flex" });

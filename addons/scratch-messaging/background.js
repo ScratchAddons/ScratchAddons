@@ -185,6 +185,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           const resParent = await fetch(getCommentUrl(parentId));
           if (!resParent.ok) continue;
           const jsonParent = await resParent.json();
+          // This is sometimes null for deleted comments
+          if (jsonParent === null) continue;
           parentComment = jsonParent;
         } else {
           parentComment = json;
