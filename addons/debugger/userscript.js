@@ -208,15 +208,23 @@ export default async function ({ addon, global, console, msg }) {
   consoleTitle.addEventListener("mousedown", dragMouseDown);
 
   let isScrolledToEnd = true;
-  extraContainer.addEventListener("wheel", (e) => {
-    // When user scrolls up, stop automatically scrolling down
-    if (e.deltaY < 0) {
-      isScrolledToEnd = false;
-    }
-  });
-  extraContainer.addEventListener("scroll", () => {
-    isScrolledToEnd = extraContainer.scrollTop + 5 >= extraContainer.scrollHeight - extraContainer.clientHeight;
-  });
+  extraContainer.addEventListener(
+    "wheel",
+    (e) => {
+      // When user scrolls up, stop automatically scrolling down
+      if (e.deltaY < 0) {
+        isScrolledToEnd = false;
+      }
+    },
+    { passive: true }
+  );
+  extraContainer.addEventListener(
+    "scroll",
+    () => {
+      isScrolledToEnd = extraContainer.scrollTop + 5 >= extraContainer.scrollHeight - extraContainer.clientHeight;
+    },
+    { passive: true }
+  );
 
   const getTargetInfo = (id, cache = null) => {
     if (cache && cache[id]) return cache[id];
