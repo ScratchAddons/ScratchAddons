@@ -51,15 +51,6 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
     },
     methods: {
       openProfile: (username) => window.open(`https://scratch.mit.edu/users/${username}/`),
-      openComment() {
-        const urlPath =
-          this.resourceType === "user" ? "users" : this.resourceType === "gallery" ? "studios" : "projects";
-        const commentPath = this.resourceType === "gallery" ? "comments/" : "";
-        const url = `https://scratch.mit.edu/${urlPath}/${
-          this.resourceId
-        }/${commentPath}#comments-${this.commentId.substring(2)}`;
-        window.open(url);
-      },
       postComment() {
         const shouldCaptureComment = (value) => {
           // From content-scripts/cs.js
@@ -196,6 +187,14 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         else if (timeDiffSeconds < 86400) options = { unit: "hour", divideBy: 60 * 60 };
         else options = { unit: "day", divideBy: 60 * 60 * 24 };
         return timeFormatter.format(-Math.round(timeDiffSeconds / options.divideBy), options.unit);
+      },
+      commentURL() {
+        const urlPath =
+          this.resourceType === "user" ? "users" : this.resourceType === "gallery" ? "studios" : "projects";
+        const commentPath = this.resourceType === "gallery" ? "comments/" : "";
+        return `https://scratch.mit.edu/${urlPath}/${
+          this.resourceId
+        }/${commentPath}#comments-${this.commentId.substring(2)}`;
       },
     },
     watch: {

@@ -24,12 +24,14 @@
         thisComment.scratchTeam ? "*" : "" }}
         <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
           · {{ commentTimeAgo }}&nbsp;&nbsp;
-          <img
-            src="../../images/icons/popout.svg"
-            class="popout-comment"
-            @click="openComment()"
-            title="{{ messages.openNewTabMsg }}"
-          />
+          <a rel="noopener noreferrer" target="_blank" :href="commentURL">
+            <img
+              src="../../images/icons/popout.svg"
+              class="popout-comment"
+              @click="openComment()"
+              title="{{ messages.openNewTabMsg }}"
+            />
+          </a>
         </span>
         <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
           >{{ deleteStep === 0 ? messages.deleteMsg : messages.deleteConfirmMsg }}
