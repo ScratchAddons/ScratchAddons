@@ -14,7 +14,7 @@ const ICON =
 
 let vm;
 const customBlocks = {};
-const internalBlocksCache = {};
+const customBlockParamNamesIdsDefaults = Object.create(null);
 
 const getCustomBlock = (proccode) => {
   if (!Object.prototype.hasOwnProperty.call(customBlocks, proccode)) {
@@ -31,16 +31,6 @@ const getNamesIdsDefaults = (blockData) => [
   blockData.args.map(() => ""),
 ];
 
-const resetAllCaches = () => {
-  // We override Blocks.resetCache() further down
-  for (const target of vm.runtime.targets) {
-    if (target.isOriginal) {
-      target.blocks.resetCache();
-    }
-  }
-  vm.runtime.flyoutBlocks.resetCache();
-};
-
 export const addBlock = (proccode, args, handler, hide) => {
   if (getCustomBlock(proccode)) {
     return;
@@ -55,17 +45,15 @@ export const addBlock = (proccode, args, handler, hide) => {
     hide: !!hide,
   };
   customBlocks[proccode] = blockData;
-  internalBlocksCache[proccode] = getNamesIdsDefaults(blockData);
+  customBlockParamNamesIdsDefaults[proccode] = getNamesIdsDefaults(blockData);
   if (vm.editingTarget) {
     vm.emitWorkspaceUpdate();
   }
-  resetAllCaches();
 };
 
 export const removeBlock = (proccode) => {
   customBlocks[proccode] = null;
-  internalBlocksCache[proccode] = null;
-  resetAllCaches();
+  customBlockParamNamesIdsDefaults[proccode] = null;
 };
 
 const generateBlockXML = () => {
@@ -144,12 +132,12 @@ export async function init(tab) {
 
   vm = tab.traps.vm;
 
-  // Make sure that the block cache always has something for our blocks, otherwise stepToProcedure will not be called
   const Blocks = vm.runtime.monitorBlocks.constructor;
-  const originalResetCache = Blocks.prototype.resetCache;
-  Blocks.prototype.resetCache = function () {
-    originalResetCache.call(this);
-    Object.assign(this._cache.procedureParamNames, internalBlocksCache);
+  // Worth noting that this adds a very slight overhead to every procedure call.
+  // However, it's not significant and is basically unmeasurable.
+  const originalGetProcedureParamNamesIdsAndDefaults = Blocks.prototype.getProcedureParamNamesIdsAndDefaults;
+  Blocks.prototype.getProcedureParamNamesIdsAndDefaults = function getProcedureParamNamesIdsAndDefaultsWrapped(name) {
+    return customBlockParamNamesIdsDefaults[name] || originalGetProcedureParamNamesIdsAndDefaults.call(this, name);
   };
 
   const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;
