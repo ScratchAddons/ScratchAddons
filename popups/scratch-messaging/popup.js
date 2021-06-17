@@ -361,7 +361,6 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
       reloadPage() {
         location.reload();
       },
-      openProfile: (username) => window.open(`https://scratch.mit.edu/users/${username}/`),
       openProject: (projectId) => window.open(`https://scratch.mit.edu/projects/${projectId}/`),
       openStudio: (studioId, tab = "") => window.open(`https://scratch.mit.edu/studios/${studioId}/${tab}`),
       openUnreadPostsForums: (topicId) => window.open(`https://scratch.mit.edu/discuss/topic/${topicId}/unread/`),
