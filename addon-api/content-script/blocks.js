@@ -88,6 +88,7 @@ const injectWorkspace = (ScratchBlocks) => {
         this.colour_ = block.color;
         this.colourSecondary_ = block.secondaryColor;
         this.colourTertiary_ = block.tertiaryColor;
+        this.customContextMenu = null;
       }
     }
     return oldUpdateColour.call(this, ...args);
@@ -135,11 +136,11 @@ const injectWorkspace = (ScratchBlocks) => {
             connection: {
               targetBlock() {
                 return null;
-              }
-            }
-          }
-        }
-      }
+              },
+            },
+          };
+        },
+      };
     }
     return result;
   };
