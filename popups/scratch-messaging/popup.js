@@ -361,7 +361,6 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
       reloadPage() {
         location.reload();
       },
-      openUnreadPostsForums: (topicId) => window.open(`https://scratch.mit.edu/discuss/topic/${topicId}/unread/`),
 
       // Objects
       getProjectObject(projectId, title) {
