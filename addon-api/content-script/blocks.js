@@ -113,6 +113,37 @@ const injectWorkspace = (ScratchBlocks) => {
     return result;
   };
 
+  // Trick Scratch into thinking addon blocks are defined somewhere.
+  // This makes Scratch's "is this procedure used anywhere" check work when addon blocks exist.
+  // getDefineBlock is used in https://github.com/LLK/scratch-blocks/blob/37f12ae3e342480f4d8e7b6ba783c46e29e77988/core/block_dragger.js#L275-L297
+  // and https://github.com/LLK/scratch-blocks/blob/develop/core/procedures.js
+  // Only block_dragger.js should be able to reference addon blocks, but if procedures.js does
+  // somehow, we shim enough of the API that things shouldn't break.
+  const originalGetDefineBlock = ScratchBlocks.Procedures.getDefineBlock;
+  ScratchBlocks.Procedures.getDefineBlock = function (procCode, workspace) {
+    // If an actual definition with this code exists, return that instead of our shim.
+    const result = originalGetDefineBlock.call(this, procCode, workspace);
+    if (result) {
+      return result;
+    }
+    const block = getCustomBlock(procCode);
+    if (block) {
+      return {
+        workspace,
+        getInput() {
+          return {
+            connection: {
+              targetBlock() {
+                return null;
+              }
+            }
+          }
+        }
+      }
+    }
+    return result;
+  };
+
   // Workspace update may be required to make category appear in flyout
   if (vm.editingTarget) {
     vm.emitWorkspaceUpdate();
