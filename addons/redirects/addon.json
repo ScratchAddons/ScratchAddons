@@ -1,0 +1,34 @@
+{
+  "name": "Redirects",
+  "description": "Redirect certain parts of the website.",
+  "credits": [
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "Redirect from the mobile forums to the desktop forums",
+      "type": "boolean",
+      "default": true,
+      "id": "mobileForums"
+    },
+    {
+      "name": "Redirect to the announcements forum from /news",
+      "type": "boolean",
+      "default": false,
+      "id": "news"
+    }
+  ],
+  "versionAdded": "1.16.0",
+  "tags": ["community", "forums", "easterEgg"],
+  "enabledByDefault": false
+}
