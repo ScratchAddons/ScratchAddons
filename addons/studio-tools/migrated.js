@@ -6,7 +6,11 @@ export default async ({ addon, console, msg }) => {
   const canLeave = (isCurator || isManager) && !isOwner;
   const studioId = redux.state.studio.id;
 
-  const makeAdder = (headerMsg, btnMsg, cb) => {
+  const MAX_MANAGERS = 40;
+
+  const makeAdder = (headerMsg, btnMsg, cb, optDisable) => {
+    const disabledMessage = optDisable && optDisable();
+
     const adderSec = document.createElement("div");
     adderSec.className = "studio-adder-section sa-studio-tools-adder";
 
@@ -35,13 +39,20 @@ export default async ({ addon, console, msg }) => {
       cb(inputTag.value.trim());
       inputTag.setAttribute("disabled", false);
     });
+
+    if (disabledMessage) {
+      inputTag.setAttribute("disabled", true);
+      btn.setAttribute("disabled", true);
+      inputTag.title = disabledMessage;
+    }
+
     btn.appendChild(btnSpan);
     adderRow.appendChild(btn);
     adderSec.appendChild(adderRow);
     return adderSec;
   };
 
-  const isOkay = (r) => {
+  const isOkay = (r, optResult) => {
     let err = "";
     if (r.status >= 500) err = "server-down";
     else if (r.status >= 300) err = "unknown-error";
@@ -55,6 +66,12 @@ export default async ({ addon, console, msg }) => {
         err = "401";
         break;
       }
+      case 400: {
+        if (optResult?.message === "too many owners") {
+          err = "too-many-managers";
+          break;
+        }
+      }
     }
     if (err) {
       alert(msg(err));
@@ -67,20 +84,29 @@ export default async ({ addon, console, msg }) => {
     leaveBtn?.remove();
     const tabName = location.pathname.split("/")[3];
     if (isManager && tabName === "curators") {
-      const pSec = makeAdder("promote-new", "promote-btn", async (u) => {
-        if (!/^[\w-]{3,20}$/g.test(u)) return alert(msg("invalid-username"));
-        const r = await fetch(`/site-api/users/curators-in/${studioId}/promote/?usernames=${u}`, {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            "X-CSRFToken": addon.auth.csrfToken,
-          },
-        });
-        if (!isOkay(r)) return;
-        alert(msg("promoted", { username: u }));
-        // we don't bother updating redux ourselves
-        location.reload();
-      });
+      const pSec = makeAdder(
+        "promote-new",
+        "promote-btn",
+        async (u) => {
+          if (!/^[\w-]{3,20}$/g.test(u)) return alert(msg("invalid-username"));
+          const r = await fetch(`/site-api/users/curators-in/${studioId}/promote/?usernames=${u}`, {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+              "X-CSRFToken": addon.auth.csrfToken,
+            },
+          });
+          const result = await r.json();
+          if (!isOkay(r, result)) return;
+          alert(msg("promoted", { username: u }));
+          // we don't bother updating redux ourselves
+          location.reload();
+        },
+        () => {
+          if (redux.state.studio.managers < MAX_MANAGERS) return null;
+          return msg("max-managers-reached", { max: MAX_MANAGERS });
+        }
+      );
 
       const rSec = makeAdder("remove-new", "remove-btn", async (u) => {
         if (!/^[\w-]{3,20}$/g.test(u)) return alert(msg("invalid-username"));
