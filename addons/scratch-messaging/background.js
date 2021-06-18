@@ -342,8 +342,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       item.textContent = item.textContent.replace(/\n/g, "");
       if (item instanceof Text && item.textContent === "") {
         item.remove();
-      } else if (item instanceof HTMLAnchorElement && item.href.startsWith("/")) {
-        item.href = "https://scratch.mit.edu" + item.href;
+      } else if (item instanceof HTMLAnchorElement && item.getAttribute("href").startsWith("/")) {
+        item.href = "https://scratch.mit.edu" + item.getAttribute("href");
       } else if (item instanceof HTMLImageElement) {
         const splitString = item.src.split("/");
         const imageName = splitString[splitString.length - 1];
