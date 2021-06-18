@@ -1,7 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
   let redirects = [
-    { id: "mobileForums", url: ["/discuss/m/*", "/discuss/$1"] },
-    { id: "news", url: ["/news", "/discuss/5"] },
+    { id: "mobileForums", url: ["/discuss/m/*", "/discuss/$1"] }
   ];
 
   let redirect = redirects.find((redirect) => {
