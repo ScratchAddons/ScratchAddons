@@ -18,5 +18,7 @@
   "studio-tools/server-down": "It seems like the Scratch server is down.",
   "studio-tools/unknown-error": "Something went wrong, try again.",
   "studio-tools/promoted": "Promoted {username} to the manager.",
-  "studio-tools/removed": "Removed {username} from the studio."
+  "studio-tools/removed": "Removed {username} from the studio.",
+  "studio-tools/max-managers-reached": "This studio has reached the limit of {max} managers.",
+  "studio-tools/too-many-managers": "You have to remove some managers before promoting."
 }
