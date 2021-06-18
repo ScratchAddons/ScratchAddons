@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   while (true) {
     const comment = await addon.tab.waitForElement("div.comment", {
-      elementCondition: (elem) => !elem.querySelector(".copylink")
+      elementCondition: (elem) => !elem.querySelector(".copylink"),
     });
     const newElem = document.createElement("span");
     newElem.className = "actions report copylink";
