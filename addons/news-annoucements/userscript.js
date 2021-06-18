@@ -1,3 +1,3 @@
-export default function() {
-  window.location.replace("https://scratch.mit.edu/discuss/5")
+export default function () {
+  window.location.replace("https://scratch.mit.edu/discuss/5");
 }
