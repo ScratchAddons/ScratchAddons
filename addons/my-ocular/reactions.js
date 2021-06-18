@@ -19,7 +19,8 @@ export default async function ({ addon, global, console, msg }) {
     if (addon.auth.isLoggedIn) {
       let reactionMenuContainer = document.createElement("li");
       reactionMenuContainer.className = "my-ocular-reaction-menu";
-      let reactionMenuButton = document.createElement("span");
+      let reactionMenuButton = document.createElement("a");
+      reactionMenuButton.href = "";
       reactionMenuButton.className = "my-ocular-reaction-menu-button";
       reactionMenuButton.innerText = "😀";
       reactionMenuButton.title = msg("add-reaction");
@@ -29,6 +30,7 @@ export default async function ({ addon, global, console, msg }) {
       reactionMenu.className = "my-ocular-popup";
       reactionMenuContainer.appendChild(reactionMenu);
       reactionMenuButton.addEventListener("click", (e) => {
+        e.preventDefault();
         e.stopPropagation();
         reactionMenuContainer.classList.toggle("open");
         for (let otherMenuContainer of document.querySelectorAll(".my-ocular-reaction-menu")) {
@@ -40,17 +42,19 @@ export default async function ({ addon, global, console, msg }) {
       reactionMenu.addEventListener("click", (e) => e.stopPropagation()); /* don't close the menu when it's clicked */
 
       let reactionList = document.createElement("li"); // it's a list item, because its inside the postfootright list. so it's basically a nested list
-      async function makeReactionList() {
+      async function makeReactionList(focusedEmoji, isMenuFocused) {
         const reactions = await fetchReactions(postID);
 
         reactionList.innerHTML = "";
         reactionMenu.innerHTML = "";
         reactions.forEach((reaction) => {
-          let reactionButton = reaction.reactions.length !== 0 ? document.createElement("span") : null;
+          let reactionButton = reaction.reactions.length !== 0 ? document.createElement("a") : null;
+          if (reactionButton) reactionButton.href = "";
           if (reactionButton) reactionButton.className = "my-ocular-reaction-button";
           if (reactionButton) reactionButton.innerText = `${reaction.emoji} ${reaction.reactions.length}`;
 
-          let reactionMenuItem = document.createElement("span");
+          let reactionMenuItem = document.createElement("a");
+          reactionMenuItem.href = "";
           reactionMenuItem.className = "my-ocular-reaction-button";
           reactionMenuItem.innerText = reaction.emoji;
 
@@ -73,7 +77,8 @@ export default async function ({ addon, global, console, msg }) {
             reactionButton.appendChild(tooltip);
           }
 
-          function react() {
+          function react(e, fromMenu) {
+            e.preventDefault();
             let ocular = window.open(
               `https://ocular.jeffalo.net/react/${postID}?emoji=${reaction.emoji}`,
               "ocular",
@@ -84,15 +89,17 @@ export default async function ({ addon, global, console, msg }) {
             function checkClosed() {
               if (ocular.closed) {
                 clearInterval(timer);
-                makeReactionList();
+                makeReactionList(reaction.emoji, fromMenu);
               }
             }
           }
-          if (reactionButton) reactionButton.addEventListener("click", react);
-          reactionMenuItem.addEventListener("click", react);
+          if (reactionButton) reactionButton.addEventListener("click", (e) => react(e, false));
+          reactionMenuItem.addEventListener("click", (e) => react(e, true));
 
           if (reactionButton) reactionList.appendChild(reactionButton);
+          if (reactionButton && focusedEmoji === reaction.emoji && !isMenuFocused) reactionButton.focus();
           reactionMenu.appendChild(reactionMenuItem);
+          if (focusedEmoji === reaction.emoji && isMenuFocused) reactionMenuItem.focus();
         });
         if (reactions.some((reaction) => reaction.reactions.length !== 0)) {
           reactionList.appendChild(document.createTextNode("| "));
