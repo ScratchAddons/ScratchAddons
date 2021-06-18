@@ -13,9 +13,9 @@ export default async function ({ addon, global, console, msg }) {
   if (!redirect.url[0].includes("*")) return window.location.replace(`https://scratch.mit.edu${redirect.url[1]}`);
 
   let afterStar = window.location.pathname.substring(redirect.url[0].indexOf("*"));
-  
-  let path = redirect.url[1].replace("$1", afterStar)
-  let url = `https://scratch.mit.edu${path}`
 
-  if (url !== window.location.href) window.location.replace(url)
+  let path = redirect.url[1].replace("$1", afterStar);
+  let url = `https://scratch.mit.edu${path}`;
+
+  if (url !== window.location.href) window.location.replace(url);
 }
