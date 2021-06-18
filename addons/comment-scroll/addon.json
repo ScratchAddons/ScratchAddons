@@ -1,6 +1,6 @@
 {
   "name": "Comment Scroll",
-  "description": "Makes Comments On the scratch website scrollable, which can reduce the height of the page.",
+  "description": "Makes comments on the Scratch website scrollable, which can reduce the height of the page.",
   "credits": [
     {
       "name": "Genius398",
@@ -18,5 +18,5 @@
     }
   ],
   "tags": ["comments", "community"],
-  "enabled_by_default": false
+  "enabledByDefault": false
 }
