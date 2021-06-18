@@ -4,7 +4,6 @@
 }
 
 .my-ocular-reaction-button {
-  cursor: pointer;
   user-select: none;
   background-color: #f2f2f2;
   margin: 0 5px;
@@ -18,6 +17,11 @@
   opacity: 1;
   /* transition: opacity .5s; */ /* due to the way the list is rerendered, css transitions wont do anything */
   position: relative;
+  font-weight: inherit;
+}
+.my-ocular-reaction-button,
+.my-ocular-reaction-button:hover {
+  color: inherit;
 }
 .my-ocular-reaction-button.selected {
   color: #fff;
