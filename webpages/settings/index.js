@@ -188,9 +188,11 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     computed: {
       addonList() {
         if (!this.searchInput) {
-          this.addonListObjs
-            .filter((obj) => obj.group.id !== "_iframeSearch")
-            .forEach((obj) => (obj.matchesSearch = true));
+          this.addonListObjs.forEach((obj) => {
+            // Hide addons from _iframeSearch pseudogroup when not searching (popup)
+            if (obj.group.id === "_iframeSearch") obj.matchesSearch = false;
+            else obj.matchesSearch = true;
+          });
           return this.addonListObjs.sort((b, a) => b.naturalIndex - a.naturalIndex);
         }
 
