@@ -1,7 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
-  let redirects = [
-    { id: "mobileForums", url: ["/discuss/m/*", "/discuss/$1"] }
-  ];
+  let redirects = [{ id: "mobileForums", url: ["/discuss/m/*", "/discuss/$1"] }];
 
   let redirect = redirects.find((redirect) => {
     return addon.settings.get(redirect.id) && new RegExp(redirect.url[0], "g").test(window.location.pathname);
