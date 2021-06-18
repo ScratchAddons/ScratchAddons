@@ -1,9 +1,8 @@
 export default async function ({ addon, global, console, msg }) {
   while (true) {
-    const reportBtn = await addon.tab.waitForElement("span.actions[data-control='report']", {
+    const comment = await addon.tab.waitForElement("div.comment", {
       markAsSeen: true,
     });
-    const comment = reportBtn.closest("div.comment");
     const newElem = document.createElement("span");
     newElem.className = "actions report";
     newElem.textContent = msg("copyLink");
@@ -21,6 +20,6 @@ export default async function ({ addon, global, console, msg }) {
         newElem.style.fontWeight = "";
       }, 5000);
     };
-    reportBtn.after(newElem);
+    comment.querySelector("div.actions-wrap").appendChild(newElem);
   }
 }
