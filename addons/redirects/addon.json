@@ -5,10 +5,6 @@
     {
       "name": "9gr",
       "link": "https://scratch.mit.edu/users/9gr"
-    },
-    {
-      "name": "Shluffy",
-      "link": "https://github.com/Shluffy/"
     }
   ],
   "userscripts": [
@@ -24,12 +20,6 @@
       "type": "boolean",
       "default": true,
       "id": "mobileForums"
-    },
-    {
-      "name": "Redirect to the announcements forum from /news",
-      "type": "boolean",
-      "default": false,
-      "id": "news"
     }
   ],
   "versionAdded": "1.16.0",
