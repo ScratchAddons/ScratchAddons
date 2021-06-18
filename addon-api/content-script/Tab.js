@@ -53,6 +53,7 @@ export default class Tab extends Listenable {
    * @param {object} opts - options.
    * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
    * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
+   * @param {function=} opts.elementCondition - A function that returns whether to resolve the selector or not, given an element.
    * @param {function=} opts.reduxCondition - A function that returns whether to resolve the selector or not.
    * Use this as an optimization and do not rely on the behavior.
    * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
@@ -65,6 +66,7 @@ export default class Tab extends Listenable {
       const firstQuery = document.querySelectorAll(selector);
       for (const element of firstQuery) {
         if (this._waitForElementSet.has(element)) continue;
+        if (opts.elementCondition && !opts.elementCondition(element)) continue;
         if (markAsSeen) this._waitForElementSet.add(element);
         return Promise.resolve(element);
       }
@@ -100,6 +102,7 @@ export default class Tab extends Listenable {
       query: selector,
       seen: markAsSeen ? this._waitForElementSet : null,
       condition: combinedCondition,
+      elementCondition: opts.elementCondition || null,
     });
     if (listener) {
       promise.then((match) => {

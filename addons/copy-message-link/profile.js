@@ -1,11 +1,10 @@
 export default async function ({ addon, global, console, msg }) {
   while (true) {
-    const reportBtn = await addon.tab.waitForElement("span.actions[data-control='report']", {
-      markAsSeen: true,
+    const comment = await addon.tab.waitForElement("div.comment", {
+      elementCondition: (elem) => !elem.querySelector(".copylink")
     });
-    const comment = reportBtn.closest("div.comment");
     const newElem = document.createElement("span");
-    newElem.className = "actions report";
+    newElem.className = "actions report copylink";
     newElem.textContent = msg("copyLink");
     newElem.onclick = () => {
       // For profiles, respect correct username casing in URL
@@ -21,6 +20,6 @@ export default async function ({ addon, global, console, msg }) {
         newElem.style.fontWeight = "";
       }, 5000);
     };
-    reportBtn.after(newElem);
+    comment.querySelector("div.actions-wrap").appendChild(newElem);
   }
 }
