@@ -41,6 +41,7 @@ async function checkSession() {
   }
   const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
   const csrfToken = await getCookieValue("scratchcsrftoken");
+  const isNewStudiosAvailable = json?.flags?.new_studios_launched;
   scratchAddons.globalState.auth = {
     isLoggedIn: Boolean(json.user),
     username: json.user ? json.user.username : null,
@@ -48,5 +49,21 @@ async function checkSession() {
     xToken: json.user ? json.user.token : null,
     csrfToken,
     scratchLang,
+    isNewStudiosAvailable,
   };
+  // TODO: remove in 1.17.0
+  if (isNewStudiosAvailable) {
+    const onManifestsLoaded = () => {
+      scratchAddons.manifests.forEach(({ addonId, manifest }) => {
+        if (addonId !== "studio-tools") return;
+        manifest.tags = manifest.tags.filter((tag) => tag !== "recommended");
+        manifest.tags.push("beta");
+      });
+    };
+    if (scratchAddons.localState.ready.manifests) {
+      onManifestsLoaded();
+    } else {
+      scratchAddons.localEvents.addEventListener("manifestsReady", onManifestsLoaded, { once: true });
+    }
+  }
 }
