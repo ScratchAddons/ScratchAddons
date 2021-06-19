@@ -20,16 +20,18 @@
         class="comment"
         :class="{'child-comment': !isParent, 'unread': unread, 'comment-me' : thisComment.author === username}"
       >
-        <a class="comment-author" @click="openProfile(thisComment.author)">{{ thisComment.author }}</a>{{
-        thisComment.scratchTeam ? "*" : "" }}
+        <a
+          class="comment-author nolink"
+          rel="noopener noreferrer"
+          target="_blank"
+          href="https://scratch.mit.edu/users/{{ thisComment.author }}/"
+          >{{ thisComment.author }}</a
+        >{{ thisComment.scratchTeam ? "*" : "" }}
         <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
           · {{ commentTimeAgo }}&nbsp;&nbsp;
-          <img
-            src="../../images/icons/popout.svg"
-            class="popout-comment"
-            @click="openComment()"
-            title="{{ messages.openNewTabMsg }}"
-          />
+          <a rel="noopener noreferrer" target="_blank" :href="commentURL">
+            <img src="../../images/icons/popout.svg" class="popout-comment" title="{{ messages.openNewTabMsg }}" />
+          </a>
         </span>
         <a @click="deleteComment()" class="delete-btn" :class="{'bold': deleteStep === 1}" v-show="!deleted"
           >{{ deleteStep === 0 ? messages.deleteMsg : messages.deleteConfirmMsg }}
@@ -105,7 +107,7 @@
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.follows">
           <div class="username-list">
-            <a v-for="follower of follows" href="https://scratch.mit.edu/users/{{ follower }}">{{follower}}</a>
+            <a v-for="follower of follows" href="https://scratch.mit.edu/users/{{ follower }}/">{{follower}}</a>
           </div>
         </div>
       </div>
@@ -224,7 +226,12 @@
         v-show="profile.unreadComments && profile.loadedComments"
       >
         <div class="message-type-title">
-          <a class="message-type-title-text" @click="openProfile(profile.username)">
+          <a
+            class="message-type-title-text nolink"
+            rel="noreferrer noopener"
+            target="_blank"
+            href="https://scratch.mit.edu/users/{{ profile.username }}/"
+          >
             <span v-if="profile.username === username">{{ uiMessages.yourProfileMsg }}</span>
             <span v-else>{{ othersProfile(profile.username) }}</span>
           </a>
@@ -263,7 +270,13 @@
       <!-- Studios -->
       <div class="message-type" v-for="studio of studios" v-show="studio.unreadComments && studio.loadedComments">
         <div class="message-type-title">
-          <a class="message-type-title-text" @click="openStudio(studio.id)">{{ studioText(studio.title) }}</a>
+          <a
+            class="message-type-title-text nolink"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://scratch.mit.edu/studios/{{ studio.id }}/"
+            >{{ studioText(studio.title) }}</a
+          >
           <span class="float-right">
             <span v-show="studio.unreadComments"
               ><img class="small-icon" src="../../images/icons/comment.svg" /> {{studio.unreadComments}}</span
@@ -305,7 +318,13 @@
               !project.unreadComments && commentsReady"
       >
         <div class="message-type-title" :style="{zIndex: 9999 - i}">
-          <a class="message-type-title-text" @click="openProject(project.id)">{{ project.title }}</a>
+          <a
+            class="message-type-title-text nolink"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/projects/{{ project.id }}/"
+            >{{ project.title }}</a
+          >
           <span class="float-right">
             <div class="tooltip" v-if="project.loveCount || project.favoriteCount" style="display: inline-block">
               <span class="tooltip-indicator">
