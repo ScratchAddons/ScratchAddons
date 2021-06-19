@@ -76,6 +76,8 @@ export default async function ({ addon, global, console, msg }) {
         type: "scratch-gui/navigation/ACTIVATE_TAB",
         activeTabIndex: 0,
       });
+      setTimeout(() => goToBlock(targetId, blockId), 0);
+      return;
     }
 
     // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
