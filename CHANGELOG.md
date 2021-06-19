@@ -13,6 +13,17 @@ automatically create a PR on the website to synchronize the changes!
 
 <!-- sa-changelog-start -->
 
+## [v1.16.2] - 2021-06-19
+
+- Fix bugs in "debugger" addon
+- Adapt addons to the upcoming Scratch 3.0 studio pages update on Scratch website
+- Scratch Messaging & Scratch Notifier: now support newly added Scratch emojis
+- Bug fix: "Scratch Messaging" asking to log in if a parent comment was deleted
+- Bug fix: "Scratch Messaging" not properly turning username mentions into links
+- Bug fix: "better forums post editor buttons" hiding some posted images
+- Bug fix: "copy link to comment button" breaking after loading more comments in profiles
+- Bug fix: "website dark mode" not properly styling remix tree page
+
 ## [v1.16.1] - 2021-06-15
 
 - Fix bugs in "debugger" addon
@@ -410,6 +421,7 @@ Not released due to a permissions issue. See [v1.1.1].
 
 Initial release.
 
+[v1.16.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.16.2
 [v1.16.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.16.1
 [v1.16.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.16.0
 [v1.15.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.15.0
