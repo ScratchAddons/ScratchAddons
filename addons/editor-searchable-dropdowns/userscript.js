@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   // The hierarchy is:
   // blocklyDropDownDiv (position, background color, etc.) -> blocklyDropDownContent (scrollbar) -> blocklyDropdownMenu (items)
   // The capitalization of dropdown is inconsistent in blockly too.

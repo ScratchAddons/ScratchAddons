@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
   function createBetterProfilePage(featuredThumb, featuredLink, featuredHeading, featuredTitle) {
     document.documentElement.style.setProperty("--featured-thumb", `url("${featuredThumb}")`);
     let boxHead = document.querySelector("#profile-data .box-head");

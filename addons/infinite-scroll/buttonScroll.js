@@ -20,7 +20,7 @@ async function commentLoader(addon, heightControl, selector, isNewStudioComment)
   }
 }
 
-export default async function ({ addon, global, console }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   if (window.location.pathname.split("/")[1] === "studios" && addon.settings.get("studioScroll")) {
     if (addon.tab.clientVersion === "scratchr2") {
       if (window.location.pathname.split("/")[3] === "comments")

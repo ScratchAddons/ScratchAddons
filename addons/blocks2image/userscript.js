@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
   const buttonItem = [
     msg("export_selected_to_SVG"),
     msg("export_all_to_SVG"),

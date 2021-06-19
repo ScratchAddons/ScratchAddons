@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   // TODO: test whether e.altKey is true in chromebooks when alt+clicking.
   // If so, no timeout needed, similar to mute-project addon.
 

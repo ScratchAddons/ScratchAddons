@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
   let project = null;
   let paperCanvas = null;
   let expectingImport = false;

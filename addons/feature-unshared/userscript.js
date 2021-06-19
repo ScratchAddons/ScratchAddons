@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   const xhrOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function (method, url, ...args) {
     if (url && url.startsWith("/site-api/projects/shared/")) {

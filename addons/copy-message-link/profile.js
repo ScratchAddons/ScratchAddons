@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
   let amtOfComments = 0;
   let pass = 0;
   while (true) {

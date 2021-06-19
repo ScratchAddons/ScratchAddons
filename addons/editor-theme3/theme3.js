@@ -288,7 +288,7 @@ function updateSettings(addon, newStyle) {
   newStyle.textContent = stylesheet;
 }
 
-export default async function ({ addon, global, console }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   const otherStyle = document.querySelector(`[data-addon-id='${addon.self.id}']`);
   const newStyle = document.createElement("style");
   updateSettings(addon, newStyle);

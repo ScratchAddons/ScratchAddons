@@ -1,4 +1,4 @@
-export default async ({ console }) => {
+export default /** @param {Addon.Userscript} */ async ({ console }) => {
   // animated-thumb uses fetch to set thumbnails.
   // Therefore all XMLHttpRequest to thumbnail endpoint is ones we need to block.
   const xhrOpen = XMLHttpRequest.prototype.open;

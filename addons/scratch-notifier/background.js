@@ -1,6 +1,7 @@
 import commentEmojis from "./comment-emojis.js";
 
-export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval, msg }) {
+/** @param {Addon.PersistentScript} */
+export default async ({ addon, console, setTimeout, setInterval, clearTimeout, clearInterval, msg }) => {
   let msgCount = null;
   let lastDateTime = null;
   let lastAuthChange; // Used to check if auth changed while waiting for promises to resolve

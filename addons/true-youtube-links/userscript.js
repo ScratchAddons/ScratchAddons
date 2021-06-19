@@ -1,4 +1,4 @@
-﻿export default async function ({ addon, console }) {
+﻿export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   while (true) {
     await addon.tab.waitForElement(
       'a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]',

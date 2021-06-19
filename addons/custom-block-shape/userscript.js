@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
 
   (function (Blockly) {

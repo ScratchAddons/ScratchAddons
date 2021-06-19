@@ -1,6 +1,6 @@
 import ThumbSetter from "../../libraries/common/cs/thumb-setter.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
   while (true) {
     let nav = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
       markAsSeen: true,

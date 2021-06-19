@@ -1,7 +1,8 @@
 import commentEmojis from "../scratch-notifier/comment-emojis.js";
 import { linkifyTextNode, pingifyTextNode } from "../../libraries/common/cs/fast-linkify.js";
 
-export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
+/** @param {Addon.PersistentScript} */
+export default async ({ addon, console, setTimeout, setInterval, clearTimeout, clearInterval }) => {
   let lastDateTime;
   let data;
   let pendingAuthChange = false;

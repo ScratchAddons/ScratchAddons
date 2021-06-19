@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
   const nav = await addon.tab.waitForElement(".sub-nav.tabs");
   //Create elements for tab
   const tab = nav.appendChild(document.createElement("a")),

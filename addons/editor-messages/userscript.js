@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
   const messages = document.createElement("a");
   messages.href = "/messages/";
   messages.title = msg("messages");

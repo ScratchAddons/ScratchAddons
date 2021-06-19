@@ -35,7 +35,7 @@ function viewSource(post, msg) {
   };
 }
 
-export default async function ({ addon, console, msg }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
   while (true) {
     const post = await addon.tab.waitForElement(".blockpost", { markAsSeen: true });
     const actionRow = post.querySelector(".postfootright ul");

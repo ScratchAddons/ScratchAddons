@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
   const headers = new Headers();
   if (addon.auth.xToken) headers.set("X-Token", addon.auth.xToken);
 

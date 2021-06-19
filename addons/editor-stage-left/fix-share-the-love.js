@@ -1,4 +1,4 @@
-export default function ({ addon, global, console }) {
+export default /** @param {Addon.Userscript} */ ({ addon, console }) => {
   let interval, injected;
 
   addon.self.addEventListener("disabled", () => {
