@@ -114,6 +114,10 @@
       "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"]
     },
     {
+      "url": "experimental_remixtree.css",
+      "matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
+    },
+    {
       "url": "experimental_mystuff.css",
       "matches": ["https://scratch.mit.edu/mystuff/"]
     },
