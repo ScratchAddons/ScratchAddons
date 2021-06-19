@@ -126,4 +126,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   };
 
   document.addEventListener("dragover", globalHandleDragOver, true);
-}
+};

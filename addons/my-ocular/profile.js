@@ -35,4 +35,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     container.appendChild(statusSpan);
     container.appendChild(dot);
   }
-}
+};

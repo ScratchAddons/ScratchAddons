@@ -322,4 +322,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     const soundTab = tabs.children[2];
     soundTab.insertAdjacentElement("afterend", varTab);
   }
-}
+};

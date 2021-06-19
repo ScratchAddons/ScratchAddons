@@ -29,4 +29,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
     xmlhttp.open("GET", `https://scratch.mit.edu/users/${username}/${details[j]}/`, true);
     xmlhttp.send();
   }
-}
+};

@@ -37,4 +37,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
       if (dataLoaded > fetched.length) container.remove();
     });
   }
-}
+};

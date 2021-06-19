@@ -8,4 +8,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
     }
     return xhrOpen.call(this, method, url, ...args);
   };
-}
+};

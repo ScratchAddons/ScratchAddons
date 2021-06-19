@@ -12,4 +12,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   };
   ready();
   addon.tab.addEventListener("urlChange", ready);
-}
+};

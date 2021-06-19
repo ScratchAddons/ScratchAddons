@@ -468,4 +468,4 @@ export default async ({ addon, console, setTimeout, setInterval, clearTimeout, c
     if (!res.ok) return { error: res.status };
     return { success: true };
   }
-}
+};

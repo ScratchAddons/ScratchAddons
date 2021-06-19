@@ -55,4 +55,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
 
     selectTab(0);
   }
-}
+};

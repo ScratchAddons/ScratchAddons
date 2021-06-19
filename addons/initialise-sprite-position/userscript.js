@@ -19,4 +19,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon }) => {
     }
     return oldAddSprite.call(this, stringify ? JSON.stringify(spriteObj) : spriteObj);
   };
-}
+};

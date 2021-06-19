@@ -30,4 +30,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
 ${msg("modified", { date: dateMod })}`;
     element.setAttribute("title", dataTitle);
   }
-}
+};

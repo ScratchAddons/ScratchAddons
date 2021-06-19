@@ -21,4 +21,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
     }
   });
   observer.observe(preview.contentDocument, { subtree: true, childList: true });
-}
+};

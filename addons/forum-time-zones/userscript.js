@@ -51,4 +51,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, _global, _consol
           }
         });
     });
-}
+};

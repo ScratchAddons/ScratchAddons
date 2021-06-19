@@ -1,6 +1,6 @@
 export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   document.body.addEventListener("mousedown", handleClick, true);
-}
+};
 
 function handleClick(e) {
   if (e.button !== 2) {

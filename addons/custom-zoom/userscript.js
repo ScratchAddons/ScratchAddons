@@ -71,4 +71,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   addon.tab.addEventListener("urlChange", update);
   addon.settings.addEventListener("change", update);
   window.addEventListener("resize", onResize);
-}
+};

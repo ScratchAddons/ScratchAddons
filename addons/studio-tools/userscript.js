@@ -116,4 +116,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
       .getElementById("tabs-content")
       .insertBefore(actionBarDiv, document.getElementById("tabs-content").firstChild);
   }
-}
+};

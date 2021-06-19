@@ -310,4 +310,4 @@ export default async ({ addon, console, setTimeout, setInterval, clearTimeout, c
     lastAuthChange = Date.now();
     checkCount();
   });
-}
+};

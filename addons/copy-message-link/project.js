@@ -24,4 +24,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     };
     comment.querySelector("div.action-list").prepend(newElem);
   }
-}
+};

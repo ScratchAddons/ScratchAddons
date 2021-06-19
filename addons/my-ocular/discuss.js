@@ -34,4 +34,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
       color: data.color,
     };
   }
-}
+};

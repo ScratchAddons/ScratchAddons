@@ -40,4 +40,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
   // addProjectPageStats either when the project is loaded through the project page or when the user goes from the editor to the project page
   vm.runtime.on("PROJECT_LOADED", async () => addProjectPageStats());
   addon.tab.addEventListener("urlChange", (e) => addProjectPageStats());
-}
+};

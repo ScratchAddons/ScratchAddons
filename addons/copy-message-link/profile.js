@@ -34,4 +34,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     };
     comment.querySelector("div.actions-wrap").appendChild(newElem);
   }
-}
+};

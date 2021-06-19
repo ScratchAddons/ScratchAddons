@@ -18,4 +18,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     span.style.color = "red";
     li.title = msg("invalid-username", { username: user });
   }
-}
+};

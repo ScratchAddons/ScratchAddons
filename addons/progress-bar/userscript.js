@@ -248,4 +248,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     if (useTopBar) return;
     mutationObserver.disconnect();
   }
-}
+};

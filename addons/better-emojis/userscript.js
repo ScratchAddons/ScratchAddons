@@ -79,4 +79,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
         el.src = addon.self.dir + "/images/pizza-cat.svg";
     }
   }
-}
+};

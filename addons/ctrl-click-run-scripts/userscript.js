@@ -38,4 +38,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
     }
   };
   vm.editingTarget.blocks.constructor.prototype.blocklyListen = newBlocklyListen;
-}
+};

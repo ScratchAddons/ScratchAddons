@@ -7,4 +7,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
       addon.tab.traps.vm.extensionManager.loadExtensionIdSync(ext);
     }
   }
-}
+};

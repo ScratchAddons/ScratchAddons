@@ -303,4 +303,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
       triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value, msg);
     }
   });
-}
+};

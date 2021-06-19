@@ -1336,4 +1336,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
     sortableHOCInstance.saInitialSetup();
   }
-}
+};

@@ -303,4 +303,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
 
   // Look for reenable event to enable the style. cs.js cannot handle an appended style.
   addon.self.addEventListener("reenabled", () => (newStyle.disabled = false));
-}
+};

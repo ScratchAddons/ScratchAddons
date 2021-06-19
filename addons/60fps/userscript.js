@@ -52,4 +52,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
       this.emit("RUNTIME_STARTED");
     };
   }
-}
+};

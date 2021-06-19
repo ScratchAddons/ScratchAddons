@@ -776,4 +776,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     }, 100);
   }
   addon.tab.addEventListener("urlChange", () => addon.tab.editorMode === "editor" && inject());
-}
+};

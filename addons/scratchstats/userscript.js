@@ -138,4 +138,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, msg, console }) 
         .catch(() => stats.appendChild(document.createTextNode(msg("err")))); // appended so basic stats are still there, it's just the chart that's gone
     })
     .catch(() => (stats.innerText = msg("err"))); // innerText to remove loading message
-}
+};

@@ -68,4 +68,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
       bar.appendChild(posContainerContainer);
     }
   }
-}
+};

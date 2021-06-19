@@ -55,4 +55,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg, sa
 
   const devTools = new DevTools(addon, msg, m, helpHTML);
   devTools.init();
-}
+};

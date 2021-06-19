@@ -10,4 +10,4 @@ export default async ({ addon, console, setTimeout, setInterval, clearTimeout, c
     addon.badge.color = addon.settings.get("color");
   });
   setInterval(setBadge, 2500);
-}
+};

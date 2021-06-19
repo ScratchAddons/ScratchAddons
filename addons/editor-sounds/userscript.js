@@ -11,4 +11,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
     wksp.options.hasSounds = true;
     return originalInit.call(this, ...args);
   };
-}
+};

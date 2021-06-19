@@ -22,4 +22,4 @@ export default /** @param {Addon.Userscript} */ async ({ msg }) => {
   });
 
   if (status[0]) status[0].maxLength = 255; // disallow more than 255 chars
-}
+};

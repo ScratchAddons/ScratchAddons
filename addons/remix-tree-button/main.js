@@ -35,4 +35,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
   addon.tab.addEventListener("urlChange", () => {
     loadRemixButton();
   });
-}
+};

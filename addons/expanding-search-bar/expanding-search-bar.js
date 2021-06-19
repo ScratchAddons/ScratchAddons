@@ -76,4 +76,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
       exsearch_searchBar.addEventListener("focusout", exsearch_clickOut);
     }
   }
-}
+};

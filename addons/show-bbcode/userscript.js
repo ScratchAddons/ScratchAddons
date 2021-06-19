@@ -56,4 +56,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     sourceButton.setAttribute("data-state", "post");
     sourceButton.addEventListener("click", viewSource(post, msg));
   }
-}
+};

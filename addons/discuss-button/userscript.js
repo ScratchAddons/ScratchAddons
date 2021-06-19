@@ -26,4 +26,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
     if (addon.settings.get("removeIdeasBtn")) el.getElementsByTagName("li")[2].remove();
     el.insertBefore(link, el.getElementsByTagName("li")[2]);
   }
-}
+};

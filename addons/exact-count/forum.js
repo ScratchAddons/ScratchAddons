@@ -9,4 +9,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
         });
     }
   }
-}
+};

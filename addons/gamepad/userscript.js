@@ -441,4 +441,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     const monitorListScaler = document.querySelector("[class^='monitor-list_monitor-list-scaler']");
     monitorListScaler.appendChild(virtualCursorElement);
   }
-}
+};

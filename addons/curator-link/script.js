@@ -15,4 +15,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon }) => {
     "{curatorId}",
     link.outerHTML
   );
-}
+};

@@ -204,4 +204,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   observer.observe(blocklyDropDownContent, {
     childList: true,
   });
-}
+};

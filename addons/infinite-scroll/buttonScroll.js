@@ -52,4 +52,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   }
   if (window.location.pathname.split("/")[1] === "messages" && addon.settings.get("messageScroll"))
     commentLoader(addon, "#view", "#view > div > div.messages-details.inner > section.messages-social > button");
-}
+};

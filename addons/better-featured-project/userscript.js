@@ -68,4 +68,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
   } else if (document.querySelector("#profile-avatar img") !== null) {
     createBetterProfilePage(document.querySelector("#profile-avatar img").src, "", "", "");
   }
-}
+};

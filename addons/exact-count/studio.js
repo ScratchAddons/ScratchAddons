@@ -34,4 +34,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon }) => {
       document.querySelector("[data-count=projects]").innerText = count;
     });
   }
-}
+};

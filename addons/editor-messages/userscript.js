@@ -38,4 +38,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     });
     document.querySelector("[class^='menu-bar_account-info-group']").insertBefore(messages, nav);
   }
-}
+};

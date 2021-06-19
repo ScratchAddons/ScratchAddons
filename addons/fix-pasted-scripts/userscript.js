@@ -26,4 +26,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
   if (vm.editingTarget) {
     vm.emitWorkspaceUpdate();
   }
-}
+};

@@ -104,4 +104,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     document.querySelector("textarea[name=bio]").addEventListener("input", () => checkForDango(getAboutMeAndWiwo()));
     document.querySelector("textarea[name=status]").addEventListener("input", () => checkForDango(getAboutMeAndWiwo()));
   }
-}
+};

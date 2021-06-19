@@ -42,4 +42,4 @@ export default /** @param {Addon.Userscript} */ ({ addon, console }) => {
     });
   }
   tryInjecting();
-}
+};

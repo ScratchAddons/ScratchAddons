@@ -116,4 +116,4 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     const response = await fetch(`https://my-ocular.jeffalo.net/api/reactions/${id}`);
     return response.json();
   }
-}
+};
