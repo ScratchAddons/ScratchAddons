@@ -29,7 +29,7 @@ a {
   cursor: pointer;
   text-decoration: none;
 }
-a[href] {
+a[href]:not(.nolink) {
   color: #1aa0d8;
 }
 a:hover {
