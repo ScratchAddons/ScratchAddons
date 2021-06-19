@@ -257,8 +257,8 @@ export default async function ({ addon, global, console, msg }) {
   function dragConsole(x, y) {
     lastX = x;
     lastY = y;
-    const width = document.documentElement.clientWidth || document.body.clientWidth;
-    const height = document.documentElement.clientHeight || document.body.clientHeight;
+    const width = (document.documentElement.clientWidth || document.body.clientWidth) - 1;
+    const height = (document.documentElement.clientHeight || document.body.clientHeight) - 1;
     const clampedX = Math.max(0, Math.min(x - mouseOffsetX, width - consoleWrapper.offsetWidth));
     const clampedY = Math.max(0, Math.min(y - mouseOffsetY, height - consoleWrapper.offsetHeight));
     consoleWrapper.style.left = clampedX + "px";
