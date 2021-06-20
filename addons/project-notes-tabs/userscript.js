@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
   async function remixHandler() {
     while (true) {
       await addon.tab.waitForElement(".remix-credit", {

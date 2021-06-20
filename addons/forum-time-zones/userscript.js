@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, _global, _console }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, _global, _console }) => {
   const forum_topic_id = parseInt(location.pathname.split("/")[3]);
   const locale = addon.auth.scratchLang;
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;

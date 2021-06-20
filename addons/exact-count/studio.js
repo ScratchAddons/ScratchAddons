@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon }) => {
   function countProjects(url, page, delta, callback) {
     const request = new XMLHttpRequest();
     request.open("GET", url + 40 * page);

@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg }) => {
   const { redux } = addon.tab;
   const isOwner = redux.state.studio.owner === redux.state.session.session?.user?.id;
   const isManager = redux.state.studio.manager || isOwner;

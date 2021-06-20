@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console, msg, safeMsg }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg, safeMsg }) => {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
 
   const SMALL_GAP = 8;

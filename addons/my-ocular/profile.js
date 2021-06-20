@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg }) => {
   var username = document.querySelector("#profile-data > div.box-head > div > h2").innerText;
 
   var container = document.querySelector(".location");

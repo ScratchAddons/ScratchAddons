@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg }) => {
   // The basic premise of how this addon works is relative simple.
   // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:
   // <SelectorHOC>
@@ -35,10 +35,7 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
 
   const DIVIDER = "//";
 
-  /**
-   * getFolderFromName("B") === null
-   * getFolderFromName("A//b") === "A"
-   */
+  /** GetFolderFromName("B") === null getFolderFromName("A//b") === "A" */
   const getFolderFromName = (name) => {
     const idx = name.indexOf(DIVIDER);
     if (idx === -1 || idx === 0) {
@@ -47,10 +44,7 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
     return name.substr(0, idx);
   };
 
-  /**
-   * getNameWithoutFolder("B") === "B"
-   * getNameWithoutFolder("A//b") === "b"
-   */
+  /** GetNameWithoutFolder("B") === "B" getNameWithoutFolder("A//b") === "b" */
   const getNameWithoutFolder = (name) => {
     const idx = name.indexOf(DIVIDER);
     if (idx === -1 || idx === 0) {
@@ -60,10 +54,8 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
   };
 
   /**
-   * setFolderOfName("B", "y") === "y//B"
-   * setFolderOfName("c//B", "y") === "y//B"
-   * setFolderOfName("B", null) === "B"
-   * setFolderOfName("c//B", null) === "B"
+   * SetFolderOfName("B", "y") === "y//B" setFolderOfName("c//B", "y") === "y//B"
+   * setFolderOfName("B", null) === "B" setFolderOfName("c//B", null) === "B"
    */
   const setFolderOfName = (name, folder) => {
     const basename = getNameWithoutFolder(name);
@@ -120,7 +112,6 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
   };
 
   /**
-   * @typedef {Object} ItemData
    * @property {string} realName
    * @property {number} realIndex
    * @property {string} inFolder
@@ -128,9 +119,7 @@ export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) 
    * @property {boolean} folderOpen
    */
 
-  /**
-   * @returns {ItemData|null}
-   */
+  /** @returns {ItemData | null} */
   const getItemData = (item) => {
     if (item && item.name && typeof item.name === "object") {
       return item.name;

@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
   const updateEmojis = () => {
     if (addon.tab.clientVersion === "scratch-www") {
       if (addon.tab.redux?.state?.scratchGui && !addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {

@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg }) => {
   while (true) {
     const comment = await addon.tab.waitForElement("div.comment", {
       markAsSeen: true,

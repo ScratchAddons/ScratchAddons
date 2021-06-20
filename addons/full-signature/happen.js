@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg }) => {
   await addon.tab.waitForElement(".activity-ul li");
   let activityStream = document.querySelectorAll(".activity-ul li");
   if (activityStream.length) {

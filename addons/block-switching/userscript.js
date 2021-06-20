@@ -1,6 +1,6 @@
 import blockToDom from "./blockToDom.js";
 
-export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg }) => {
   await addon.tab.traps.getBlockly();
 
   const blockSwitches = {};

@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon }) => {
   let vm = addon.tab.traps.vm;
   let oldAddSprite = vm.constructor.prototype.addSprite;
   vm.constructor.prototype.addSprite = function (input) {

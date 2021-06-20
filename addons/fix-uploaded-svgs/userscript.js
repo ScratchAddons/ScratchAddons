@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
   const originalFileReader = window.FileReader;
   window.FileReader = function () {
     const realFileReader = new originalFileReader();

@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
   let user1 = window.location.href.substring(30, 100);
   let username = user1.substring(0, user1.indexOf("/"));
   let details = ["projects", "favorites", "studios_following", "studios", "following", "followers"];

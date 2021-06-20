@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
   await addon.tab.traps.getBlockly();
 
   let controlsRect;

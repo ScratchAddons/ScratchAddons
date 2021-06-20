@@ -1,5 +1,13 @@
-/** @param {Addon.PersistentScript} */
-export default async ({ addon, console, setTimeout, setInterval, clearTimeout, clearInterval }) => {
+export default async (
+  /** @type {import("../../types").PersistentScript} */ {
+    addon,
+    console,
+    setTimeout,
+    setInterval,
+    clearTimeout,
+    clearInterval,
+  }
+) => {
   const setBadge = async () => {
     const msgCount = await addon.account.getMsgCount();
     addon.badge.text = msgCount;

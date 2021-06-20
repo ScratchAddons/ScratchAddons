@@ -4,13 +4,13 @@
 import { normalizeHex } from "../../libraries/common/cs/normalize-color.js";
 import RateLimiter from "../../libraries/common/cs/rate-limiter.js";
 
-export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, msg }) => {
   let prevEventHandler;
   // 250-ms rate limit
   const rateLimiter = new RateLimiter(250);
 
   // get the color from scratch
-  const getColor = (element) => {
+  const getColor = () => {
     let fillOrStroke;
     const state = addon.tab.redux.state;
     if (state.scratchPaint.modals.fillColor) {

@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
   const ScratchBlocks = await addon.tab.traps.getBlockly();
   const workspace = Blockly.getMainWorkspace();
   // Add sounds to the current workspace

@@ -11,9 +11,7 @@ export default class DevTools {
     this.addon = addon;
     this.msg = msg;
     this.m = m;
-    /**
-     * @type {VirtualMachine}
-     */
+    /** @type {VirtualMachine} */
     this.vm = addon.tab.traps.vm;
     this.utils = new Utils(addon);
     this.domHelpers = new DomHelpers(addon);
@@ -73,7 +71,8 @@ export default class DevTools {
      * @param cls
      * @param txt
      * @param root
-     * @returns BlockItem
+     *
+     * @returns BlockItem.
      */
     function addBlock(cls, txt, root) {
       let id = root.className;
@@ -93,8 +92,9 @@ export default class DevTools {
   }
 
   /**
-   * Fetch the scratch 3 block list
-   * @returns jsonFetch object
+   * Fetch the scratch 3 block list.
+   *
+   * @returns JsonFetch object.
    */
   getScratchBlocks() {
     // Access Blockly!
@@ -113,7 +113,8 @@ export default class DevTools {
      * @param cls
      * @param txt
      * @param root
-     * @returns BlockItem
+     *
+     * @returns BlockItem.
      */
     function addBlock(cls, txt, root) {
       let id = root.id ? root.id : root.getId ? root.getId() : null;
@@ -269,9 +270,7 @@ export default class DevTools {
     this.dom_removeChildren(this.dd);
 
     let foundLi = null;
-    /**
-     * @type {[BlockItem]}
-     */
+    /** @type {[BlockItem]} */
     const procs = scratchBlocks.procs;
     for (const proc of procs) {
       let li = document.createElement("li");
@@ -343,15 +342,14 @@ export default class DevTools {
   }
 
   /**
-   * A nicely ordered version of the top blocks
+   * A nicely ordered version of the top blocks.
+   *
    * @returns {[Blockly.Block]}
    */
   getTopBlocks() {
     let result = this.getOrderedTopBlockColumns();
     let columns = result.cols;
-    /**
-     * @type {[[Blockly.Block]]}
-     */
+    /** @type {[[Blockly.Block]]} */
     let topBlocks = [];
     for (const col of columns) {
       topBlocks = topBlocks.concat(col.blocks);
@@ -366,9 +364,7 @@ export default class DevTools {
     element.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: element, bubbles: true }));
   }
 
-  /**
-   * A much nicer way of laying out the blocks into columns
-   */
+  /** A much nicer way of laying out the blocks into columns. */
   doCleanUp(e, dataId) {
     let workspace = this.utils.getWorkspace();
     if (e) {
@@ -476,7 +472,9 @@ export default class DevTools {
 
   /**
    * Badly Ophaned - might want to delete these!
+   *
    * @param topBlock
+   *
    * @returns {boolean}
    */
   isBlockAnOrphan(topBlock) {
@@ -484,9 +482,11 @@ export default class DevTools {
   }
 
   /**
-   * Split the top blocks into ordered columns
-   * @param separateOrphans true to keep all orphans separate
-   * @returns {{orphans: {blocks: [Block], x: number, count: number}, cols: [Col]}}
+   * Split the top blocks into ordered columns.
+   *
+   * @param separateOrphans True to keep all orphans separate.
+   *
+   * @returns {{ orphans: { blocks: [Block]; x: number; count: number }; cols: [Col] }}
    */
   getOrderedTopBlockColumns(separateOrphans) {
     let w = this.utils.getWorkspace();
@@ -518,9 +518,7 @@ export default class DevTools {
 
     // Default scratch ordering is horrid... Lets try something more clever.
 
-    /**
-     * @type {Col[]}
-     */
+    /** @type {Col[]} */
     let cols = [];
     const TOLERANCE = 256;
     let orphans = { x: -999999, count: 0, blocks: [] };
@@ -528,9 +526,7 @@ export default class DevTools {
     for (const topBlock of topBlocks) {
       // let r = b.getBoundingRectangle();
       let position = topBlock.getRelativeToSurfaceXY();
-      /**
-       * @type {Col}
-       */
+      /** @type {Col} */
       let bestCol = null;
       let bestError = TOLERANCE;
 
@@ -573,18 +569,20 @@ export default class DevTools {
 
   /**
    * Find all the uses of a named variable.
+   *
    * @param {string} id ID of the variable to find.
-   * @return {!Array.<!Blockly.Block>} Array of block usages.
+   *
+   * @returns {!!Blockly.Block[]} Array of block usages.
    */
   getVariableUsesById(id) {
     let uses = [];
 
     let topBlocks = this.getTopBlocks(true); // todo: Confirm this was the right getTopBlocks?
     for (const topBlock of topBlocks) {
-      /** @type {!Array<!Blockly.Block>} */
+      /** @type {!!Blockly.Block[]} */
       let kids = topBlock.getDescendants();
       for (const block of kids) {
-        /** @type {!Array<!Blockly.VariableModel>} */
+        /** @type {!!Blockly.VariableModel[]} */
         let blockVariables = block.getVarModels();
         if (blockVariables) {
           for (const blockVar of blockVariables) {
@@ -601,8 +599,10 @@ export default class DevTools {
 
   /**
    * Find all the uses of a named procedure.
+   *
    * @param {string} id ID of the variable to find.
-   * @return {!Array.<!Blockly.Block>} Array of block usages.
+   *
+   * @returns {!!Blockly.Block[]} Array of block usages.
    */
   getCallsToProcedureById(id) {
     let w = this.utils.getWorkspace();
@@ -613,7 +613,7 @@ export default class DevTools {
     let uses = [procBlock]; // Definition First, then calls to it
     let topBlocks = this.getTopBlocks(true);
     for (const topBlock of topBlocks) {
-      /** @type {!Array<!Blockly.Block>} */
+      /** @type {!!Blockly.Block[]} */
       let kids = topBlock.getDescendants();
       for (const block of kids) {
         if (block.type === "procedures_call") {
@@ -629,8 +629,10 @@ export default class DevTools {
 
   /**
    * Find all the uses of a named procedure.
-   * @param {string} name name of the variable to find.
-   * @return {!Array.<!Blockly.Block>} Array of block usages.
+   *
+   * @param {string} name Name of the variable to find.
+   *
+   * @returns {!!Blockly.Block[]} Array of block usages.
    */
   getCallsToEventsByName(name) {
     let uses = []; // Definition First, then calls to it
@@ -666,7 +668,8 @@ export default class DevTools {
 
   /**
    * Find all the evern broadcasters.
-   * @return {[{eventName:string, block:Block}]} Array of event names and blocks.
+   *
+   * @returns {[{ eventName: string; block: Block }]} Array of event names and blocks.
    */
   getCallsToEvents() {
     const uses = []; // Definition First, then calls to it
@@ -674,7 +677,7 @@ export default class DevTools {
 
     let topBlocks = this.getTopBlocks(true);
     for (const topBlock of topBlocks) {
-      /** @type {!Array<!Blockly.Block>} */
+      /** @type {!!Blockly.Block[]} */
       let kids = topBlock.getDescendants();
       for (const block of kids) {
         if (block.type === "event_broadcast" || block.type === "event_broadcastandwait") {
@@ -732,9 +735,10 @@ export default class DevTools {
   }
 
   /**
-   * Move a costume to the top or bottom of the list
-   * @param top true for the top, false for the bottom
-   * @param selected optional parameter to pass in the costume div to be moved
+   * Move a costume to the top or bottom of the list.
+   *
+   * @param top True for the top, false for the bottom.
+   * @param selected Optional parameter to pass in the costume div to be moved.
    */
   moveCostumeTo(top, selected) {
     let isSelected = !selected || selected.className.indexOf("sprite-selector-item_is-selected") >= 0;
@@ -760,10 +764,9 @@ export default class DevTools {
   }
 
   /**
-   *
    * @param li
    * @param workspace
-   * @param instanceBlock the instance to be highlighted (or null)
+   * @param instanceBlock The instance to be highlighted (or null)
    */
   clickDropDownRow(li, workspace, instanceBlock) {
     let nav = document.getElementById("s3devMulti");
@@ -879,8 +882,10 @@ export default class DevTools {
 
   /**
    * Based on wksp.centerOnBlock(li.data.labelID);
+   *
    * @param e
-   * @param force if true, the view always moves, otherwise only move if the selected element is not entirely visible
+   * @param force If true, the view always moves, otherwise only move if the selected element is not
+   *   entirely visible.
    */
   centerTop(e, force) {
     this.utils.scrollBlockIntoView(e, force);
@@ -929,8 +934,9 @@ export default class DevTools {
   }
 
   /**
-   * Select previous or next item in the drop down filter list
-   * @param dir direction of navigation: -1=up, 1=down
+   * Select previous or next item in the drop down filter list.
+   *
+   * @param dir Direction of navigation: -1=up, 1=down.
    */
   navigateFilter(dir) {
     let sel = this.dd.getElementsByClassName("sel");
@@ -1065,10 +1071,11 @@ export default class DevTools {
   */
 
   /**
-   * Quick and dirty replace all instances of one variable / list with another variable / list
-   * @param varId original variable name
-   * @param newVarName new variable name
-   * @param type type of variable ("" = variable, anything else is a list?
+   * Quick and dirty replace all instances of one variable / list with another variable / list.
+   *
+   * @param varId Original variable name.
+   * @param newVarName New variable name.
+   * @param type Type of variable ("" = variable, anything else is a list?
    */
   doReplaceVariable(varId, newVarName, type) {
     let wksp = this.utils.getWorkspace();
@@ -1199,9 +1206,12 @@ export default class DevTools {
     */
 
   /**
-   * Click Event Handler - User has clicked the replace variable option - ask for the variable to replace with...
-   * @param e the event
-   * @returns {boolean} cancelled?
+   * Click Event Handler - User has clicked the replace variable option - ask for the variable to
+   * replace with...
+   *
+   * @param e The event.
+   *
+   * @returns {boolean} Cancelled?
    */
   clickReplace(e) {
     let wksp = this.utils.getWorkspace();
@@ -1220,8 +1230,9 @@ export default class DevTools {
   }
 
   /**
-   * Returns a Set of the top blocks in this workspace / sprite
-   * @returns {Set<any>} Set of top blocks
+   * Returns a Set of the top blocks in this workspace / sprite.
+   *
+   * @returns {Set<any>} Set of top blocks.
    */
   getTopBlockIDs() {
     let wksp = this.utils.getWorkspace();
@@ -1234,10 +1245,11 @@ export default class DevTools {
   }
 
   /**
-   * Initiates a drag event for all block stacks except those in the set of ids.
-   * But why? - Because we know all the ids of the existing stacks before we paste / duplicate - so we can find the
-   * new stack by excluding all the known ones.
-   * @param ids Set of previously known ids
+   * Initiates a drag event for all block stacks except those in the set of ids. But why? - Because
+   * we know all the ids of the existing stacks before we paste / duplicate - so we can find the new
+   * stack by excluding all the known ones.
+   *
+   * @param ids Set of previously known ids.
    */
   beginDragOfNewBlocksNotInIDs(ids) {
     if (!this.addon.settings.get("enablePasteBlocksAtMouse")) {
@@ -1901,9 +1913,11 @@ export default class DevTools {
 
   /**
    * Flesh out a blocks description - duplicate up blocks with contained picklists (like list drop downs)
+   *
    * @param block
    * @param options
    * @param doms
+   *
    * @returns {string}
    */
   getBlockText(block, options, doms) {
@@ -2038,9 +2052,11 @@ export default class DevTools {
   }
 
   /**
-   * This is a feature in progress - can we have a virtual cursor that allows the next injected element position be automated
-   * @param block a blockly block
-   * @param typ type
+   * This is a feature in progress - can we have a virtual cursor that allows the next injected
+   * element position be automated.
+   *
+   * @param block A blockly block.
+   * @param typ Type.
    */
   findNextHole(block, typ) {
     /*
@@ -2062,7 +2078,8 @@ export default class DevTools {
   }
 
   /**
-   * Inject the selected block into the script
+   * Inject the selected block into the script.
+   *
    * @param e
    */
   dropDownFloatClick(e) {
@@ -2302,9 +2319,7 @@ class Multi {
     this.idx = 0;
     this.blocks = null;
     this.selID = null;
-    /**
-     * @type {Utils}
-     */
+    /** @type {Utils} */
     this.utils = utils;
   }
 
@@ -2344,17 +2359,14 @@ class Col {
    */
   constructor(x, count, blocks) {
     /**
-     * x position (for ordering)
+     * X position (for ordering)
+     *
      * @type {Number}
      */
     this.x = x;
-    /**
-     * @type {Number}
-     */
+    /** @type {Number} */
     this.count = count;
-    /**
-     * @type {[Blockly.Block]}
-     */
+    /** @type {[Blockly.Block]} */
     this.blocks = blocks;
   }
 }

@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
   if (!addon.tab.clientVersion) return;
   if (document.location.pathname.startsWith("/conference")) return;
 

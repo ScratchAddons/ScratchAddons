@@ -1,5 +1,5 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
-export default /** @param {Addon.Userscript} */ async ({ addon }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon }) => {
   const oldh4 = document.querySelector(".inner:last-of-type h4");
 
   const resp = await fetch("https://api.scratch.mit.edu/proxy/featured");

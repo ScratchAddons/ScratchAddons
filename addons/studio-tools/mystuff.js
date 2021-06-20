@@ -1,4 +1,4 @@
-export default /** @param {Addon.Userscript} */ async ({ addon, console, msg }) => {
+export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg }) => {
   while (true) {
     let item = await addon.tab.waitForElement(".media-stats", { markAsSeen: true });
     if (window.location.hash === "#galleries" && item.childElementCount === 2) {
