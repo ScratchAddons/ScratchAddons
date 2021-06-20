@@ -100,10 +100,12 @@ class SharedObserver {
 
   /**
    * Watches an element.
-   * @param {object} opts - options
-   * @param {string} opts.query - query.
-   * @param {WeakSet=} opts.seen - a WeakSet that tracks whether an element has already been seen.
-   * @param {function=} opts.condition - a function that returns whether to resolve the selector or not.
+   *
+   * @param {object} opts - Options.
+   * @param {string} opts.query - Query.
+   * @param {WeakSet} [opts.seen] - A WeakSet that tracks whether an element has already been seen.
+   * @param {function} [opts.condition] - A function that returns whether to resolve the selector or not.
+   *
    * @returns {Promise<Node>} Promise that is resolved with modified element.
    */
   watch(opts) {

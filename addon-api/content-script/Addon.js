@@ -3,10 +3,11 @@ import Tab from "./Tab.js";
 
 /**
  * An addon that loads as a userscript.
- * @extends Addon
+ *
  * @property {Tab} tab
  */
 export default class UserscriptAddon extends Addon {
+  /** @param {{ id: string; enabledLate: boolean; permissions?: string[] }} info */
   constructor(info) {
     super(info);
     this._addonId = info.id;
@@ -16,9 +17,6 @@ export default class UserscriptAddon extends Addon {
     this.self.enabledLate = info.enabledLate;
   }
 
-  /**
-   * @private
-   */
   get _path() {
     return this.__path;
   }

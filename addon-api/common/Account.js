@@ -1,30 +1,30 @@
 import Listenable from "./Listenable.js";
 
-/**
- * Handles accounts.
- * @extends Listenable
- */
+/** Handles accounts. */
 export default class Account extends Listenable {
   constructor() {
     super();
   }
   /**
    * Fetches message count.
-   * @returns {Promise<number>} - current message count.
+   *
+   * @returns {Promise<number>} - Current message count.
    */
   getMsgCount() {
     return scratchAddons.methods.getMsgCount();
   }
   /**
    * Fetches messages.
-   * @returns {Promise<object[]>} - current messages.
+   *
+   * @param {any[]} args
    */
   getMessages(...args) {
     return scratchAddons.methods.getMessages(...args);
   }
   /**
    * Clears unread messages.
-   * @returns {Promise}
+   *
+   * @returns {Promise<void>}
    */
   clearMessages() {
     return scratchAddons.methods.clearMessages();

@@ -9,12 +9,13 @@ const DATA_PNG = "data:image/png;base64,";
 
 /**
  * APIs specific to userscripts.
- * @extends Listenable
- * @property {?string} clientVersion - version of the renderer (scratch-www, scratchr2, etc)
+ *
+ * @property {string | null} clientVersion - Version of the renderer (scratch-www, scratchr2, etc)
  * @property {Trap} traps
  * @property {ReduxHandler} redux
  */
 export default class Tab extends Listenable {
+  /** @param {{ id: string; enabledLate: boolean; permissions?: string[] }} info */
   constructor(info) {
     super();
     this._addonId = info.id;
@@ -31,13 +32,16 @@ export default class Tab extends Listenable {
     blocks.init(this);
     return blocks.addBlock(...a);
   }
+
   removeBlock(...a) {
     return blocks.removeBlock(...a);
   }
   /**
    * Loads a script by URL.
-   * @param {string} url - script URL.
-   * @returns {Promise}
+   *
+   * @param {string} url - Script URL.
+   *
+   * @returns {Promise<Event>}
    */
   loadScript(url) {
     return new Promise((resolve) => {
@@ -49,20 +53,24 @@ export default class Tab extends Listenable {
   }
   /**
    * Waits until an element renders, then return the element.
-   * @param {string} selector - argument passed to querySelector.
-   * @param {object} opts - options.
-   * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
-   * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
-   * @param {function=} opts.reduxCondition - A function that returns whether to resolve the selector or not.
-   * Use this as an optimization and do not rely on the behavior.
-   * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
-   * Use this as an optimization and do not rely on the behavior.
-   * @returns {Promise<Element>} - element found.
+   *
+   * @param {string} selector - Argument passed to querySelector.
+   * @param {object} opts - Options.
+   * @param {boolean} [opts.markAsSeen] - Whether it should mark resolved elements to be skipped
+   *   next time or not.
+   * @param {function} [opts.condition] - A function that returns whether to resolve the selector or not.
+   * @param {function} [opts.reduxCondition] - A function that returns whether to resolve the
+   *   selector or not. Use this as an optimization and do not rely on the behavior.
+   * @param {string[]} [opts.reduxEvents] - An array of redux events that must be dispatched before
+   *   resolving the selector. Use this as an optimization and do not rely on the behavior.
+   *
+   * @returns {Promise<Element>} - Element found.
    */
   waitForElement(selector, opts = {}) {
     const markAsSeen = !!opts.markAsSeen;
     if (!opts.condition || opts.condition()) {
       const firstQuery = document.querySelectorAll(selector);
+      // @ts-expect-error -- It might not be iterable if it's not found. That's the addons' bug and we can't fix it here.
       for (const element of firstQuery) {
         if (this._waitForElementSet.has(element)) continue;
         if (markAsSeen) this._waitForElementSet.add(element);
@@ -70,6 +78,7 @@ export default class Tab extends Listenable {
       }
     }
     const { reduxCondition, condition } = opts;
+    /** @type {EventListenerOrEventListenerObject | null} */
     let listener;
     let combinedCondition = () => {
       if (condition && !condition()) return false;
@@ -89,7 +98,7 @@ export default class Tab extends Listenable {
         return satisfied;
       };
       listener = ({ detail }) => {
-        if (opts.reduxEvents.includes(detail.action.type)) {
+        if (opts?.reduxEvents?.includes(detail.action.type)) {
           satisfied = true;
         }
       };
@@ -101,8 +110,9 @@ export default class Tab extends Listenable {
       seen: markAsSeen ? this._waitForElementSet : null,
       condition: combinedCondition,
     });
+
     if (listener) {
-      promise.then((match) => {
+      promise.then((/** @type {any} */ match) => {
         this.redux.removeEventListener("statechanged", listener);
         return match;
       });
@@ -110,8 +120,9 @@ export default class Tab extends Listenable {
     return promise;
   }
   /**
-   * editor mode (or null for non-editors).
-   * @type {?string}
+   * Editor mode (or null for non-editors).
+   *
+   * @type {string | null}
    */
   get editorMode() {
     const pathname = location.pathname.toLowerCase();
@@ -125,7 +136,9 @@ export default class Tab extends Listenable {
 
   /**
    * Copies an PNG image.
-   * @param {string} dataURL - data url of the png image
+   *
+   * @param {string} dataURL - Data url of the png image.
+   *
    * @returns {Promise}
    */
   copyImage(dataURL) {
@@ -149,7 +162,9 @@ export default class Tab extends Listenable {
 
   /**
    * Gets translation used by Scratch.
+   *
    * @param {string} key - Translation key.
+   *
    * @returns {string} Translation.
    */
   scratchMessage(key) {
@@ -169,20 +184,21 @@ export default class Tab extends Listenable {
     if (this.clientVersion === "scratchr2") {
       return window.django.gettext(key);
     }
+    return "";
   }
 
-  /**
-   * @private
-   */
+  /** @type {"tab"} */
   get _eventTargetKey() {
     return "tab";
   }
 
   /**
    * Loads a Web Worker.
+   *
    * @async
    * @param {string} url - URL of the worker to load.
-   * @returns {Promise<Worker>} - worker.
+   *
+   * @returns {Promise<Worker>} - Worker.
    */
   async loadWorker(url) {
     const resp = await fetch(url);
@@ -196,9 +212,9 @@ export default class Tab extends Listenable {
 
   /**
    * Gets the hashed class name for a Scratch stylesheet class name.
-   * @param {...*} args Unhashed class names.
-   * @param {object} opts - options.
-   * @param {String[]|String} opts.others - Non-Scratch class or classes to merge.
+   *
+   * @param {...any} args Unhashed class names.
+   *
    * @returns {string} Hashed class names.
    */
   scratchClass(...args) {
@@ -209,7 +225,7 @@ export default class Tab extends Listenable {
         if (scratchAddons.classNames.loaded) {
           res +=
             scratchAddons.classNames.arr.find(
-              (className) =>
+              (/** @type {string} */ className) =>
                 className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
             ) || "";
         } else {
@@ -220,7 +236,7 @@ export default class Tab extends Listenable {
     if (typeof args[args.length - 1] === "object") {
       const options = args[args.length - 1];
       const classNames = Array.isArray(options.others) ? options.others : [options.others];
-      classNames.forEach((string) => (res += string + " "));
+      classNames.forEach((/** @type {string} */ string) => (res += string + " "));
     }
     res = res.slice(0, -1);
     // Sanitize just in case
@@ -228,9 +244,11 @@ export default class Tab extends Listenable {
     return res;
   }
 
+  /** @param {HTMLDivElement} el */
   displayNoneWhileDisabled(el, { display = "" } = {}) {
-    el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
-      g[1].toUpperCase()
+    el.style.display = `var(--${this._addonId.replace(
+      /-([a-z])/g,
+      (g) => `${g[1]?.toUpperCase()}`
     )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
   }
 

@@ -42,9 +42,10 @@ const _pingify = (child) => {
 };
 
 /**
- * Linkify an element which uses either <br> or whitespace: pre-line to add linebreaks,
- * such as "About Me" or project descriptions.
- * @param {Element} elem - element to linkify to.
+ * Linkify an element which uses either <br> or whitespace: pre-line to add linebreaks, such as
+ * "About Me" or project descriptions.
+ *
+ * @param {Element} elem - Element to linkify to.
  */
 export const linkifyTextNode = (elem) => {
   for (const child of elem.childNodes) {
@@ -54,7 +55,8 @@ export const linkifyTextNode = (elem) => {
 
 /**
  * Linkify an element which uses tags around text, such as studio descriptions or project comments.
- * @param {Element} elem element to linkify to.
+ *
+ * @param {Element} elem Element to linkify to.
  */
 export const linkifyTag = (elem, tagClass) => {
   for (const tag of elem.children) {
@@ -66,9 +68,10 @@ export const linkifyTag = (elem, tagClass) => {
 };
 
 /**
- * Pingify an element which uses either <br> or whitespace: pre-line to add linebreaks,
- * such as project comments from the API.
- * @param {Element} elem - element to pingify to.
+ * Pingify an element which uses either <br> or whitespace: pre-line to add linebreaks, such as
+ * project comments from the API.
+ *
+ * @param {Element} elem - Element to pingify to.
  */
 export const pingifyTextNode = (elem) => {
   for (const child of elem.childNodes) {

@@ -1,11 +1,13 @@
 /**
- * @private
+ * @param {import("./Tab").default} tab
+ * @param {string} script
+ * @param {string} url
  */
 export default (tab, script, url) => {
   script = script.replace(/^export default (?:async )?/, "");
   script = script.replace(
     /\) +(?:=>)? +\{/,
-    (match) => `${match}
+    (/** @type {any} */ match) => `${match}
   postMessage("STARTED");
   `
   );

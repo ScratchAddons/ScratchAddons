@@ -1,14 +1,13 @@
 import Listenable from "../common/Listenable.js";
 
-/**
- * Handles notifications.
- * @extends Listenable
- */
+/** Handles notifications. */
 export default class Notifications extends Listenable {
+  /** @param {import("Addon.js").default} addonObject */
   constructor(addonObject) {
     super();
     this._addonId = addonObject.self.id;
 
+    /** @param {string} notifId */
     this._onClicked = (notifId) => {
       if (notifId.startsWith(this._addonId)) {
         this.dispatchEvent(
@@ -20,6 +19,8 @@ export default class Notifications extends Listenable {
         );
       }
     };
+
+    /** @param {string} notifId */
     this._onClosed = (notifId) => {
       if (notifId.startsWith(this._addonId)) {
         this.dispatchEvent(
@@ -31,6 +32,11 @@ export default class Notifications extends Listenable {
         );
       }
     };
+
+    /**
+     * @param {string} notifId
+     * @param {number} buttonIndex
+     */
     this._onButtonClicked = (notifId, buttonIndex) => {
       if (notifId.startsWith(this._addonId)) {
         this.dispatchEvent(
@@ -49,21 +55,16 @@ export default class Notifications extends Listenable {
   }
   /**
    * Creates a notification.
-   * @param {object} opts - options
-   * @param {Array.<{title: string}>=} opts.buttons - buttons to be displayed.
-   * @param {boolean=} opts.silent - whether the notification should play system notification sound or not.
-   * @param {string} opts.type - type of the notification, usually "basic".
-   * @param {string} opts.title - title of the notification.
-   * @param {string} opts.iconUrl - URL of the icon to be displayed.
-   * @param {string} opts.message - message to be displayed.
-   * @returns {Promise}
+   *
+   * @param {chrome.notifications.NotificationOptions} opts - Options.
    */
-  create(opts, callback) {
+  create(opts) {
     if (typeof opts !== "object") {
       throw "ScratchAddons exception: do not specify a notification ID.";
     }
     if (scratchAddons.muted) return Promise.resolve(null);
     const notifId = `${this._addonId}__${Date.now()}`;
+    /** @type {opts} */
     let newOpts;
     if (typeof InstallTrigger !== "undefined") {
       newOpts = JSON.parse(JSON.stringify(opts));
@@ -79,40 +80,54 @@ export default class Notifications extends Listenable {
   }
   /**
    * Updates existing notifications.
-   * @returns {Promise}
+   *
+   * @param {string} notificationId
+   * @param {chrome.notifications.NotificationOptions} options
+   * @param {(wasUpdated: boolean) => void} [callback]
+   *
+   * @returns {Promise<boolean | void>}
    */
-  update(...args) {
+  update(notificationId, options, callback) {
     return new Promise((resolve) => {
-      chrome.notifications.update(...args, (callback) => resolve(callback));
+      chrome.notifications.update(notificationId, options, callback ?? ((callback) => resolve(callback)));
     });
   }
   /**
    * Clears existing notifications.
-   * @returns {Promise}
+   *
+   * @param {string} notificationId
+   * @param {(wasCleared: boolean) => void} [callback]
+   *
+   * @returns {Promise<boolean | void>}
    */
-  clear(...args) {
+  clear(notificationId, callback) {
     return new Promise((resolve) => {
-      chrome.notifications.clear(...args, (callback) => resolve(callback));
+      chrome.notifications.clear(notificationId, callback ?? ((callback) => resolve(callback)));
     });
   }
   /**
    * Gets all notifications from the addon.
-   * @returns {Promise<object[]>} - notifications found.
+   *
+   * @returns {Promise<{ [key: string]: { [key: string]: any } }>} - Notifications found.
    */
   getAll() {
     return new Promise((resolve) => {
-      chrome.notifications.getAll((notifications) => {
-        const notifIds = Object.keys(notifications).filter((notifId) => notifId.startsWith(this._addonId));
-        const obj = {};
-        for (const notifId of notifIds) {
-          obj[notifId] = notifications[notifId];
+      chrome.notifications.getAll(
+        /** @param {{ [key: string]: any }} notifications */ (notifications) => {
+          const notifIds = Object.keys(notifications).filter((notifId) => notifId.startsWith(this._addonId));
+          /** @type {{ [key: string]: { [key: string]: any } }} */
+          const obj = {};
+          for (const notifId of notifIds) {
+            obj[notifId] = notifications[notifId];
+          }
+          resolve(obj);
         }
-        resolve(obj);
-      });
+      );
     });
   }
   /**
    * Whether notifications are muted or not.
+   *
    * @type {boolean}
    */
   get muted() {

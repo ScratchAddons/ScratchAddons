@@ -1,29 +1,29 @@
 import Listenable from "./Listenable.js";
 
-/**
- * Manages settings.
- * @extends Listenable
- */
+/** Manages settings. */
 export default class Settings extends Listenable {
+  /** @param {any} addonObject */
   constructor(addonObject) {
     super();
     this._addonId = addonObject.self.id;
   }
   /**
    * Gets a setting.
+   *
    * @param {string} optionName - ID of the settings.
-   * @throws settings ID is invalid.
-   * @returns {*} setting.
+   *
+   * @returns {any} Setting.
+   * @throws Settings ID is invalid.
    */
   get(optionName) {
+    /** @type {{ [key: string]: string | boolean | number }} */
     const settingsObj = scratchAddons.globalState.addonSettings[this._addonId] || {};
     const value = settingsObj[optionName];
     if (value === undefined) throw "ScratchAddons exception: invalid setting ID";
     else return value;
   }
-  /**
-   * @private
-   */
+
+  /** @type {"settings"} */
   get _eventTargetKey() {
     return "settings";
   }
