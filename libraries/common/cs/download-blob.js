@@ -1,4 +1,9 @@
 // From https://github.com/LLK/scratch-gui/blob/develop/src/lib/download-blob.js
+/**
+ * Downloads a Blob.
+ * @param {string} filename - the filename.
+ * @param {Blob} blob - the blob.
+ */
 export default (filename, blob) => {
   const downloadLink = document.createElement("a");
   document.body.appendChild(downloadLink);
