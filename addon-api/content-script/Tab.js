@@ -27,10 +27,30 @@ export default class Tab extends Listenable {
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
   }
+
+  /**
+   * Handler for the Scratch Addons blocks. This must never throw.
+   * @callback Tab~blocksCallback
+   * @param {object} args - the arguments passed to the block.
+   * @param {Thread} thread - the execution thread for ths block.
+   */
+
+  /**
+   * Adds a Scratch Addons block.
+   * @param {string} proccode - the code displayed to the user.
+   * @param {string[]} args - the block argument names.
+   * @param {Tab~blocksCallback} handler - the handler.
+   * @param {boolean=} hide - whether to hide the block from the block palette.
+   */
   addBlock(...a) {
     blocks.init(this);
     return blocks.addBlock(...a);
   }
+
+  /**
+   * Removes a Scratch Addons block.
+   * @param {string} proccode - the code displayed to the user.
+   */
   removeBlock(...a) {
     return blocks.removeBlock(...a);
   }
@@ -228,12 +248,23 @@ export default class Tab extends Listenable {
     return res;
   }
 
+  /**
+   * Hide the element when the addon is disabled.
+   * Only applicable to addons with dynamicDisable: true.
+   * @param {Element} el - element to hide.
+   * @param {object=} opts - options.
+   * @param {string=} opts.display - the default display mode. If not set, inherited style applies.
+   */
   displayNoneWhileDisabled(el, { display = "" } = {}) {
     el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
       g[1].toUpperCase()
     )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
   }
 
+  /**
+   * the direction (rtl/ltr) of the current locale.
+   * @type {string}
+   */
   get direction() {
     // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
