@@ -31,4 +31,9 @@ declare global {
     } & Script;
   }
   //#endregion
+  interface Window {
+    [key: string]: any;
+  }
+  declare const chrome: chrome;
+  declare const InstallTrigger: undefined; // Technically defined in FF, but I'm not gonna type it
 }
