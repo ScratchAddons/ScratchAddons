@@ -28,7 +28,8 @@
 
     // Non-standard API
     "Clipboard": "readonly",
-    "ClipboardItem": "readonly"
+    "ClipboardItem": "readonly",
+    "chrome": "readonly"
   },
   "extends": "eslint:recommended",
   "rules": {
@@ -90,5 +91,6 @@
         ]
       }
     }
-  ]
+  ],
+  "ignorePatterns": ["node_modules/*", "_locales/*", ".github/*", "addons-l10n/*", "libraries/thirdparty/*"]
 }

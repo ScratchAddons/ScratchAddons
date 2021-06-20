@@ -1,4 +1,9 @@
 {
   "printWidth": 120,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "jsdocDescriptionWithDot": true,
+  "jsdocPrintWidth": 100,
+  "jsdocSeparateReturnsFromParam": true,
+  "jsxBracketSameLine": false,
+  "plugins": ["prettier-plugin-jsdoc"]
 }
