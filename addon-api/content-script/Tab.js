@@ -295,7 +295,7 @@ export default class Tab extends Listenable {
 
       if (until.includes(child)) {
         // This is the first SA element appended to this space
-        // If from = [] then prepend, otherwise append after 
+        // If from = [] then prepend, otherwise append after
         // previous child (likely a "from" element)
         if (i === 0) insertAfter = -1;
         else insertAfter = children[i - 1];
