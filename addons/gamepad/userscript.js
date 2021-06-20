@@ -431,7 +431,7 @@ export default async function ({ addon, global, console, msg }) {
     );
     container.dataset.editorMode = addon.tab.editorMode;
     if (target.className.includes("stage-size-row")) {
-      target.insertBefore(container, target.firstChild);
+      addon.tab.appendToSharedSpace({space: "stageHeader", element: container, order: 0});
       spacer.remove();
     } else {
       spacer.appendChild(container);

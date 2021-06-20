@@ -240,4 +240,95 @@ export default class Tab extends Listenable {
     const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
+
+  appendToSharedSpace({ space, element, order }) {
+    const q = document.querySelector.bind(document);
+    const sharedSpaces = {
+      stageHeader: {
+        // Non-fullscreen stage header only
+        element: () => q("[class^='stage-header_stage-size-row']"),
+        from: () => [],
+        until: () => [
+          // Small/big stage buttons
+          q("[class^='stage-header_stage-size-toggle-group'"),
+          // Full screen icon
+          q("[class^='stage-header_stage-size-row']").lastChild,
+        ],
+      },
+      afterStopButton: {
+        element: () => q("[class^='controls_controls-container']"),
+        from: () => [q("[class^='stop-all_stop-all']")],
+        until: () => [],
+      },
+    };
+
+    const spaceInfo = sharedSpaces[space];
+    const spaceElement = spaceInfo.element();
+    if (!spaceElement) return false;
+    const from = spaceInfo.from();
+    const until = spaceInfo.until();
+
+    element.dataset.saSharedSpaceOrder = order;
+
+    let foundFrom = false;
+    if (from.length === 0) foundFrom = true;
+
+    // insertAfter = element whose nextSibling will be the new element
+    // -1 means append at beginning of space (prepend)
+    // This will stay null if we need to append at the end of space
+    let insertAfter = null;
+
+    const children = Array.from(spaceElement.children);
+    for (let indexString in children) {
+      const child = children[indexString];
+      const i = Number(indexString);
+
+      // Find either element from "from" before doing anything
+      if (!foundFrom) {
+        if (from.includes(child)) {
+          foundFrom = true;
+          // If this is the last child, insertAfter will stay null
+          // and the element will be appended at the end of space
+        }
+        continue;
+      }
+
+      if (until.includes(child)) {
+        // This is the first SA element appended to this space
+        // If from = [] then prepend, otherwise append after 
+        // previous child (likely a "from" element)
+        if (i === 0) insertAfter = -1;
+        else insertAfter = children[i - 1];
+        break;
+      }
+
+      if (child.dataset.saSharedSpaceOrder) {
+        if (Number(child.dataset.saSharedSpaceOrder) > order) {
+          // We found another SA element with higher order number
+          // If from = [] and this is the first child, prepend.
+          // Otherwise, append before this child.
+          if (i === 0) insertAfter = -1;
+          else insertAfter = children[i - 1];
+          break;
+        }
+      }
+    }
+
+    if (!foundFrom) return false;
+    // It doesn't matter if we didn't find an "until"
+
+    if (insertAfter === null) {
+      // This might happen with until = []
+      spaceElement.appendChild(element);
+    } else if (insertAfter === -1) {
+      // This might happen with from = []
+      spaceElement.prepend(element);
+    } else {
+      // Works like insertAfter but using insertBefore API.
+      // nextSibling cannot be null because insertAfter
+      // is always set to children[i-1], so it must exist
+      spaceElement.insertBefore(element, insertAfter.nextSibling);
+    }
+    return true;
+  }
 }
