@@ -9,7 +9,7 @@ import Badge from "./Badge.js";
  * @property {Badge} [badge]
  */
 export default class BackgroundScriptAddon extends Addon {
-  /** @param {{ id: any; enabledLate: any; permissions?: string[] }} info */
+  /** @param {{ id: any; permissions?: string[] }} info */
   constructor(info) {
     super(info);
     const { permissions } = info;
@@ -33,8 +33,8 @@ export default class BackgroundScriptAddon extends Addon {
     this._revokeProxy();
   }
 
-  _restart() { }
-  _revokeProxy() { }
+  _restart() {}
+  _revokeProxy() {}
 
   get _path() {
     return chrome.runtime.getURL("");

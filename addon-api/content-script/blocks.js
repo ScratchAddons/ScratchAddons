@@ -1,16 +1,16 @@
 /**
  * @typedef {{
- *     id: string;
- *     color: string;
- *     secondaryColor: string;
- *     tertiaryColor: string;
- *     args;
- *     handler;
- *     hide: boolean;
- *   }} blockData
+ *   id: string;
+ *   color: string;
+ *   secondaryColor: string;
+ *   tertiaryColor: string;
+ *   args;
+ *   handler;
+ *   hide: boolean;
+ * }} blockData
  */
 
-import {escapeHTML} from "../../libraries/common/cs/autoescaper.js";
+import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
 const color = {
   color: "#29beb8",
@@ -44,10 +44,9 @@ const getCustomBlock = (proccode) => {
 const getArgumentId = (index) => `arg${index}`;
 
 const getNamesIdsDefaults = (
-  /**
-   * @type {blockData}
-  */
-  blockData) => [
+  /** @type {blockData} */
+  blockData
+) => [
   blockData.args,
   blockData.args.map(
     /**
@@ -59,10 +58,14 @@ const getNamesIdsDefaults = (
 ];
 
 /**
- * @param {string} proccode
- * @param {boolean} hide
+ * Adds a Scratch Addons block.
+ *
+ * @param {string} proccode - The code displayed to the user.
+ * @param {string[]} args - The block argument names.
+ * @param {(args: { [key: string]: string | boolean | number }) => any} handler - The handler.
+ * @param {boolean} [hide] - Whether to hide the block from the block palette.
  */
-export const addBlock = (proccode, args, handler, hide) => {
+export const addBlock = (proccode, args, handler, hide = false) => {
   if (getCustomBlock(proccode)) {
     return;
   }
@@ -88,7 +91,7 @@ export const removeBlock = (proccode) => {
 };
 
 const generateBlockXML = () => {
-  let xml = ""
+  let xml = "";
   for (const proccode of Object.keys(customBlocks)) {
     /** @type {blockData} */
     //@ts-expect-error -- It's inpossible for it to be undefined.
@@ -154,9 +157,7 @@ const injectWorkspace = (ScratchBlocks) => {
   // Only block_dragger.js should be able to reference addon blocks, but if procedures.js does
   // somehow, we shim enough of the API that things shouldn't break.
   const originalGetDefineBlock = ScratchBlocks.Procedures.getDefineBlock;
-  /**
-   * @param {PropertyKey} procCode
-   */
+  /** @param {PropertyKey} procCode */
   ScratchBlocks.Procedures.getDefineBlock = function (procCode, workspace) {
     // If an actual definition with this code exists, return that instead of our shim.
     const result = originalGetDefineBlock.call(this, procCode, workspace);
@@ -188,9 +189,7 @@ const injectWorkspace = (ScratchBlocks) => {
 };
 
 let inited = false;
-/**
- * @param {import('./Tab').default} tab
- */
+/** @param {import("./Tab").default} tab */
 export async function init(tab) {
   if (inited) {
     return;
@@ -208,18 +207,13 @@ export async function init(tab) {
   // However, it's not significant and is basically unmeasurable.
   const originalGetProcedureParamNamesIdsAndDefaults = Blocks.prototype.getProcedureParamNamesIdsAndDefaults;
   /** @param {string | number} name */
-  Blocks.prototype.getProcedureParamNamesIdsAndDefaults = function getProcedureParamNamesIdsAndDefaultsWrapped(
-     name
-  ) {
+  Blocks.prototype.getProcedureParamNamesIdsAndDefaults = function getProcedureParamNamesIdsAndDefaultsWrapped(name) {
     return customBlockParamNamesIdsDefaults[name] || originalGetProcedureParamNamesIdsAndDefaults.call(this, name);
   };
 
   const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;
-  /**
-   * @param {PropertyKey} proccode
-   */
-  vm.runtime.sequencer.stepToProcedure = function ( thread,proccode
-  ) {
+  /** @param {PropertyKey} proccode */
+  vm.runtime.sequencer.stepToProcedure = function (thread, proccode) {
     const blockData = getCustomBlock(proccode);
     if (blockData) {
       const stackFrame = thread.peekStackFrame();
