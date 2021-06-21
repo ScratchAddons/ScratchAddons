@@ -260,6 +260,11 @@ export default class Tab extends Listenable {
         from: () => [q("[class^='stop-all_stop-all']")],
         until: () => [],
       },
+      afterCopyLinkButton: {
+        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        from: () => [q(".copy-link-button")],
+        until: () => [],
+      }
     };
 
     const spaceInfo = sharedSpaces[space];
