@@ -28,8 +28,7 @@
 
     // Non-standard API
     "Clipboard": "readonly",
-    "ClipboardItem": "readonly",
-    "chrome": "readonly"
+    "ClipboardItem": "readonly"
   },
   "extends": "eslint:recommended",
   "rules": {

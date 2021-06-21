@@ -1,4 +1,4 @@
-export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, console, msg }) => {
   // The basic premise of how this addon works is relative simple.
   // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:
   // <SelectorHOC>
@@ -35,7 +35,11 @@ export default async (/** @type {import("../../types").Userscript} */ { addon, c
 
   const DIVIDER = "//";
 
-  /** GetFolderFromName("B") === null getFolderFromName("A//b") === "A" */
+  /**
+   * @example
+   *   getFolderFromName("B") === null;
+   *   getFolderFromName("A//b") === "A";
+   */
   const getFolderFromName = (name) => {
     const idx = name.indexOf(DIVIDER);
     if (idx === -1 || idx === 0) {
@@ -44,7 +48,11 @@ export default async (/** @type {import("../../types").Userscript} */ { addon, c
     return name.substr(0, idx);
   };
 
-  /** GetNameWithoutFolder("B") === "B" getNameWithoutFolder("A//b") === "b" */
+  /**
+   * @example
+   *   getNameWithoutFolder("B") === "B";
+   *   getNameWithoutFolder("A//b") === "b";
+   */
   const getNameWithoutFolder = (name) => {
     const idx = name.indexOf(DIVIDER);
     if (idx === -1 || idx === 0) {
@@ -54,8 +62,11 @@ export default async (/** @type {import("../../types").Userscript} */ { addon, c
   };
 
   /**
-   * SetFolderOfName("B", "y") === "y//B" setFolderOfName("c//B", "y") === "y//B"
-   * setFolderOfName("B", null) === "B" setFolderOfName("c//B", null) === "B"
+   * @example
+   *   setFolderOfName("B", "y") === "y//B";
+   *   setFolderOfName("c//B", "y") === "y//B";
+   *   setFolderOfName("B", null) === "B";
+   *   setFolderOfName("c//B", null) === "B";
    */
   const setFolderOfName = (name, folder) => {
     const basename = getNameWithoutFolder(name);

@@ -5,7 +5,7 @@ function createStyle(url) {
   return style;
 }
 
-export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
   const preview = await addon.tab.waitForElement(".markItUpPreviewFrame");
   const observer = new MutationObserver(function (records, observer) {
     for (let record of records) {

@@ -1,4 +1,4 @@
-export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, console, msg }) => {
   let activityStream = document.querySelectorAll(".activity-stream li");
   if (activityStream.length) {
     let container = document.querySelector(".activity-stream").appendChild(document.createElement("div"));

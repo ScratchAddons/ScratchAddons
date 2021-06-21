@@ -1,5 +1,5 @@
 /* global copy_paste */
-export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
   function getSelectionBBCode() {
     var selection = window.getSelection();
     if (selection.rangeCount > 0) {

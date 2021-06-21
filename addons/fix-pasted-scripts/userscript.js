@@ -1,4 +1,4 @@
-export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
   const BlocklyInstance = await addon.tab.traps.getBlockly();
   const originalBlockMouseDown = BlocklyInstance.BlockSvg.prototype.onMouseDown_;
   const originalFieldMouseDown = BlocklyInstance.Field.prototype.onMouseDown_;

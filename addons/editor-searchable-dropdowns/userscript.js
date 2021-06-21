@@ -1,4 +1,4 @@
-export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
   // The hierarchy is:
   // blocklyDropDownDiv (position, background color, etc.) -> blocklyDropDownContent (scrollbar) -> blocklyDropdownMenu (items)
   // The capitalization of dropdown is inconsistent in blockly too.

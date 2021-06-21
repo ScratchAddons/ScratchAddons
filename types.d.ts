@@ -1,6 +1,6 @@
 import type UserscriptAddon from "./addon-api/content-script/Addon.js";
 import type PersistentScriptAddon from "./addon-api/background/Addon.js";
-import type chrome from "./libraries/chrome";
+import type chrome from "./libraries/thirdparty/chrome";
 import type Auth from "./addon-api/common/Auth";
 import type Self from "./addon-api/common/Self";
 import type Settings from "./addon-api/common/Settings";
@@ -13,7 +13,7 @@ type Script = {
   msg: { locale: string };
   safeMsg: () => string | null;
 };
-export interface Message {
+interface Message {
   id: number;
   datetime_created: Date;
   actor_username: string;
@@ -50,9 +50,76 @@ export interface Message {
   parent_title?: string;
 }
 
+//#region scratchAddons APIs
+export interface globalState {
+  addonSettings: {
+    _target?: { [key: string]: { [key: string]: string | boolean | number } };
+    [key: string]: { [key: string]: string | boolean | number };
+  };
+  auth: {
+    _target?: {
+      csrfToken?: string;
+      isLoggedIn: boolean;
+      scratchLang: string;
+      userId?: number;
+      username?: string;
+      xToken?: string;
+    };
+    csrfToken?: string;
+    isLoggedIn: boolean;
+    scratchLang: string;
+    userId?: number;
+    username?: string;
+    xToken?: string;
+  };
+}
+
+interface localState {
+  addonsEnabled: { _target?: { [key: string]: boolean }; [key: string]: boolean };
+  allReady: boolean;
+  badges: {
+    _target?: { [key: string]: { text: string | null; color: string | null } };
+    [key: string]: { text: string | null; color: string | null };
+  };
+  ready: {
+    _target?: {
+      auth: boolean;
+      manifests: boolean;
+      addonSettings: boolean;
+    };
+    auth: boolean;
+    manifests: boolean;
+    addonSettings: boolean;
+  };
+}
+//#endregion
+
 //#region Addon Manifests
+export interface Injectable {
+  matches: Matches;
+  /** Determines whether the addon should be run after the document is complete loading. */
+  runAtComplete?: boolean;
+  /**
+   * You can provide a "settingMatch" object that will result in your userscript/userstyle only running if the specified
+   * setting is set to the specified value.
+   */
+  settingMatch?: SettingMatch;
+  /** The path to the userscript. */
+  url: string;
+
+  _scratchDomainImplied?: boolean;
+}
+
 /** The manifest that describes an addon. */
 export interface AddonManifest {
+  /** The url to the schema. */
+  $schema?: string;
+
+  _english?: {
+    name?: string;
+    description?: string;
+  };
+
   /** An array containing credits to the authors/contributors of the addon. */
   credits?: {
     /** The link relevant to the credit. */
@@ -73,19 +140,15 @@ export interface AddonManifest {
   /** The description of the addons. Any credits and attributions also belong here. */
   description: string;
 
-  /**
-   * Determines whether the addon's scripts should be considered disabled when disabled as the page
-   * is running.
-   */
+  /** Determines whether the addon's scripts should be considered disabled when disabled as the page is running. */
   dynamicDisable?: boolean;
 
   /** Determines whether the addon's scripts should be considered enabled when enabled as the page is running. */
   dynamicEnable?: boolean;
 
   /**
-   * You can provide the "enabledByDefault" property and set it to true. Its default value is false.
-   * Keep in mind, few addons will be enabled by default. If you want your addon to be enabled by
-   * default, please open a discussion issue.
+   * You can provide the "enabledByDefault" property and set it to true. Its default value is false. Keep in mind, few
+   * addons will be enabled by default. If you want your addon to be enabled by default, please open a discussion issue.
    */
   enabledByDefault?: boolean;
 
@@ -111,12 +174,9 @@ export interface AddonManifest {
   name: string;
 
   /** You can specify permissions by providing a "permissions" array. */
-  permissions?: "badge" | "clipboardWrite" | "notifications"[];
+  permissions?: string[];
 
-  /**
-   * You can add persistent scripts by providing a "persistentScripts" array conformed of JS files
-   * (e.g. ["example.js"]).
-   */
+  /** You can add persistent scripts by providing a "persistentScripts" array conformed of JS files (e.g. ["example.js"]). */
   persistentScripts?: string[];
 
   popup?: /** An object for the popup. */ {
@@ -143,9 +203,9 @@ export interface AddonManifest {
   }[];
 
   /**
-   * The "settings" object allow the addon's users to specify settings in Scratch Addons' settings
-   * panel. Inside your persistent scripts and userscripts, you can then access those settings with
-   * the "addon.settings" API. Specify an "settings" property and provide an array of setting objects.
+   * The "settings" object allow the addon's users to specify settings in Scratch Addons' settings panel. Inside your
+   * persistent scripts and userscripts, you can then access those settings with the "addon.settings" API. Specify an
+   * "settings" property and provide an array of setting objects.
    */
   settings?: {
     allowTransparency?: any;
@@ -157,9 +217,15 @@ export interface AddonManifest {
     min?: any;
     /** The name of the setting. */
     name: string;
-    potentialValues?: any;
+    potentialValues?: (
+      | {
+          id: string;
+          name: string;
+        }
+      | string
+    )[];
     /** The type of the setting. */
-    type: /** The type of the setting. */ "boolean" | "color" | "integer" | "positive_integer" | "select" | "string";
+    type: "boolean" | "color" | "integer" | "positive_integer" | "select" | "string";
   }[];
 
   /** Tags which are used for filtering and badges on the Scratch Addons settings page. */
@@ -189,37 +255,17 @@ export interface AddonManifest {
   updateUserstylesOnSettingsChange?: boolean;
 
   /**
-   * You can add userscripts by providing a "userscripts" array. Unlike persistent scripts, this is
-   * an array of objects, not strings. Each object must specify the url to the userscript through
-   * the "url" property, and provide an array of URL matches.
+   * You can add userscripts by providing a "userscripts" array. Unlike persistent scripts, this is an array of objects,
+   * not strings. Each object must specify the url to the userscript through the "url" property, and provide an array of
+   * URL matches.
    */
-  userscripts?: {
-    matches: Matches;
-    /** Determines whether the addon should be run after the document is complete loading. */
-    runAtComplete?: boolean;
-    /**
-     * You can provide a "settingMatch" object that will result in your userscript/userstyle only
-     * running if the specified setting is set to the specified value.
-     */
-    settingMatch?: SettingMatch;
-    /** The path to the userscript. */
-    url: string;
-  }[];
+  userscripts?: Injectable[];
 
   /**
-   * Similarly to userscripts, you can specify a "userstyles" array. Each object must specify the
-   * url to the stylesheet through the "url" property, and provide an array of URL matches.
+   * Similarly to userscripts, you can specify a "userstyles" array. Each object must specify the url to the stylesheet
+   * through the "url" property, and provide an array of URL matches.
    */
-  userstyles?: {
-    matches: Matches;
-    /**
-     * You can provide a "settingMatch" object that will result in your userscript/userstyle only
-     * running if the specified setting is set to the specified value.
-     */
-    settingMatch?: SettingMatch;
-    /** The path to the userstyle. */
-    url: string;
-  }[];
+  userstyles?: Injectable[];
 
   /** The version that introduced the addon. */
   versionAdded?: string;
@@ -273,17 +319,17 @@ type CssManipulator = {
  */
 type SettingValue = boolean | number | string;
 
-type Matches = string[] | string;
+type Matches = (string | RegExp)[] | string | RegExp;
 
 /**
- * You can provide a "settingMatch" object that will result in your userscript/userstyle only
- * running if the specified setting is set to the specified value.
+ * You can provide a "settingMatch" object that will result in your userscript/userstyle only running if the specified
+ * setting is set to the specified value.
  */
 interface SettingMatch {
   /** The identifier of the setting. */
-  id?: string;
+  id: string;
   /** The value of the setting. */
-  value?: SettingValue;
+  value: SettingValue;
 }
 //#endregion
 
@@ -318,26 +364,11 @@ declare global {
     localEvents: EventTarget;
     l10n: BackgroundLocalizationProvider;
     globalState: {
-      addonSettings: { [key: string]: { [key: string]: string | boolean | number } };
-      auth: {
-        csrfToken?: string;
-        isLoggedIn: boolean;
-        scratchLang: string;
-        userId?: number;
-        username?: string;
-        xToken?: string;
-      };
-    };
+      _target?: globalState;
+    } & globalState;
     localState: {
-      addonsEnabled: { [key: string]: boolean };
-      allReady: boolean;
-      badges: { [key: string]: { text?: number; color?: string } };
-      ready: {
-        auth: boolean;
-        manifests: boolean;
-        addonSettings: boolean;
-      };
-    };
+      _target?: localState;
+    } & localState;
     methods: {
       clearMessages: () => Promise<void>;
       getMessages: (opts?: { offset?: number }) => Promise<Message[]>;
@@ -351,12 +382,18 @@ declare global {
   declare const _realConsole: Console;
   declare const __scratchAddonsRedux: {
     target?: EventTarget;
-    dispatch?: (dispatch: any) => any; // I have no idea what this is...@apple502j?
-    state: any; // lol way to much to try to type, even using ai
+    dispatch?: (payload: { type: string; [key: string]: any }) => any; // I have no idea what this is...@apple502j?
+    state: any; // lol way to much to try to type, even using AI
   };
   //#endregion
   interface Window {
     [key: string]: any;
+  }
+  interface RegExp {
+    _scratchDomainImplied?: boolean;
+  }
+  interface Event {
+    detail?: any;
   }
   declare const chrome: chrome;
   declare const InstallTrigger: undefined; // Technically defined in FF, but I'm not gonna type it

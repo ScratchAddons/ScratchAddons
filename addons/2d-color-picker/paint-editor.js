@@ -22,7 +22,7 @@ export default async (/** @type {Addon.Userscript} */ { addon, msg }) => {
     }
     const colorType = state.scratchPaint.fillMode.colorIndex;
     const primaryOrSecondary = ["primary", "secondary"][colorType];
-    const color = state.scratchPaint.color[`${fillOrStroke}Color`][primaryOrSecondary];
+    const color = state.scratchPaint.color[`${fillOrStroke}Color`][`${primaryOrSecondary}`];
     if (color === null || color === "scratch-paint/style-path/mixed") return;
     // This value can be arbitrary - it can be HEX, RGB, etc.
     // Use tinycolor to convert them.

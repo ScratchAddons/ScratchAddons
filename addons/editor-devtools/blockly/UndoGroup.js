@@ -1,6 +1,6 @@
 /**
- * This class is dedicated to maintaining the Undo stack of Blockly It allows us to initiate an undo
- * group such that all subsequent operations are recorded as a single undoable transaction.
+ * This class is dedicated to maintaining the Undo stack of Blockly It allows us to initiate an undo group such that all
+ * subsequent operations are recorded as a single undoable transaction.
  */
 export default class UndoGroup {
   /**

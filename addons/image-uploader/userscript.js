@@ -1,5 +1,5 @@
 import { insert } from "../../libraries/thirdparty/cs/text-field-edit.js";
-export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg, safeMsg }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, console, msg, safeMsg }) => {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/md5.min.js");
 
   var toolbar =

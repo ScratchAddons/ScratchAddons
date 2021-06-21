@@ -1,4 +1,4 @@
-export default async (/** @type {import("../../types").Userscript} */ { addon, console, msg }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, console, msg }) => {
   const buttonItem = [
     msg("export_selected_to_SVG"),
     msg("export_all_to_SVG"),

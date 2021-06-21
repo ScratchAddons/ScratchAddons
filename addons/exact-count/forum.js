@@ -1,4 +1,4 @@
-export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
   while (true) {
     let userbox = await addon.tab.waitForElement(".postleft dl", { markAsSeen: true });
     if (userbox.childNodes[6] && userbox.childNodes[6].nodeValue.includes("+")) {

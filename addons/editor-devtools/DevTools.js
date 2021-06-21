@@ -270,7 +270,6 @@ export default class DevTools {
     this.dom_removeChildren(this.dd);
 
     let foundLi = null;
-    /** @type {[BlockItem]} */
     const procs = scratchBlocks.procs;
     for (const proc of procs) {
       let li = document.createElement("li");
@@ -349,7 +348,6 @@ export default class DevTools {
   getTopBlocks() {
     let result = this.getOrderedTopBlockColumns();
     let columns = result.cols;
-    /** @type {[[Blockly.Block]]} */
     let topBlocks = [];
     for (const col of columns) {
       topBlocks = topBlocks.concat(col.blocks);
@@ -666,11 +664,7 @@ export default class DevTools {
     return uses;
   }
 
-  /**
-   * Find all the evern broadcasters.
-   *
-   * @returns {[{ eventName: string; block: Block }]} Array of event names and blocks.
-   */
+  /** Find all the evern broadcasters. */
   getCallsToEvents() {
     const uses = []; // Definition First, then calls to it
     const found = {};
@@ -884,8 +878,7 @@ export default class DevTools {
    * Based on wksp.centerOnBlock(li.data.labelID);
    *
    * @param e
-   * @param force If true, the view always moves, otherwise only move if the selected element is not
-   *   entirely visible.
+   * @param force If true, the view always moves, otherwise only move if the selected element is not entirely visible.
    */
   centerTop(e, force) {
     this.utils.scrollBlockIntoView(e, force);
@@ -1206,8 +1199,7 @@ export default class DevTools {
     */
 
   /**
-   * Click Event Handler - User has clicked the replace variable option - ask for the variable to
-   * replace with...
+   * Click Event Handler - User has clicked the replace variable option - ask for the variable to replace with...
    *
    * @param e The event.
    *
@@ -1245,9 +1237,8 @@ export default class DevTools {
   }
 
   /**
-   * Initiates a drag event for all block stacks except those in the set of ids. But why? - Because
-   * we know all the ids of the existing stacks before we paste / duplicate - so we can find the new
-   * stack by excluding all the known ones.
+   * Initiates a drag event for all block stacks except those in the set of ids. But why? - Because we know all the ids
+   * of the existing stacks before we paste / duplicate - so we can find the new stack by excluding all the known ones.
    *
    * @param ids Set of previously known ids.
    */
@@ -2052,8 +2043,7 @@ export default class DevTools {
   }
 
   /**
-   * This is a feature in progress - can we have a virtual cursor that allows the next injected
-   * element position be automated.
+   * This is a feature in progress - can we have a virtual cursor that allows the next injected element position be automated.
    *
    * @param block A blockly block.
    * @param typ Type.
@@ -2366,7 +2356,6 @@ class Col {
     this.x = x;
     /** @type {Number} */
     this.count = count;
-    /** @type {[Blockly.Block]} */
     this.blocks = blocks;
   }
 }

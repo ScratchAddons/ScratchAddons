@@ -1,6 +1,6 @@
 import { linkifyTextNode, linkifyTag } from "../../libraries/common/cs/fast-linkify.js";
 
-export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
   const pageType = document.location.pathname.substr(1).split("/")[0];
 
   switch (pageType) {

@@ -1,30 +1,25 @@
 /**
- * This file is imported from https://github.com/LLK/scratch-blocks/ It has been cleaned up and
- * unnecessary functions have been removed. Original license is below.
+ * This file is imported from https://github.com/LLK/scratch-blocks/. It has been cleaned up and unnecessary functions
+ * have been removed. Original license is below.
  *
  * @license Visual Blocks Editor.
  *
  *   Copyright 2012 Google Inc. https://developers.google.com/blockly/
  *
- *   Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- *   in compliance with the License. You may obtain a copy of the License at.
+ *   Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ *   the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0.
  *
- *   http://www.apache.org/licenses/LICENSE-2.0.
- *
- *   Unless required by applicable law or agreed to in writing, software distributed under the License
- *   is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- *   express or implied. See the License for the specific language governing permissions and
- *   limitations under the License.
+ *   Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *   an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *   specific language governing permissions and limitations under the License.
  */
-
-/* eslint-disable */
 
 const INPUT_VALUE = 1;
 const NEXT_STATEMENT = 3;
 const DUMMY_INPUT = 5;
 
 // Partially implements goog.dom.createDom.
-const createDom = function (tagName, /* unused */ _params, children) {
+const createDom = function (tagName, _params, children) {
   const element = document.createElement(tagName);
   if (children !== undefined) {
     if (!Array.isArray(children)) {

@@ -1,4 +1,4 @@
-export default async (/** @type {import("../../types").Userscript} */ { addon, console }) => {
+export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
   if (window.location.pathname.split("/").length === 4) {
     for (let show of document.getElementsByClassName("pagination")) show.style.display = "none";
     let page = 1;

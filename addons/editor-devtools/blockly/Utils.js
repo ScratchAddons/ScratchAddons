@@ -59,8 +59,7 @@ export default class Utils {
    * Based on wksp.centerOnBlock(li.data.labelID);
    *
    * @param blockOrId {Blockly.Block|{id}|BlockInstance} A Blockly Block, a block id, or a BlockInstance.
-   * @param [force] {boolean} if true, the view always moves, otherwise only move if the selected
-   *   element is not entirely visible.
+   * @param [force] {boolean} if true, the view always moves, otherwise only move if the selected element is not entirely visible.
    */
   scrollBlockIntoView(blockOrId, force) {
     let workspace = this.getWorkspace();
