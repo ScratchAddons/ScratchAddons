@@ -241,7 +241,7 @@ export default class Tab extends Listenable {
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
 
-  appendToSharedSpace({ space, element, order }) {
+  appendToSharedSpace({ space, element, order, scope }) {
     const q = document.querySelector.bind(document);
     const sharedSpaces = {
       stageHeader: {
@@ -264,7 +264,12 @@ export default class Tab extends Listenable {
         element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
         from: () => [q(".copy-link-button")],
         until: () => [],
-      }
+      },
+      forumsBeforePostReport: {
+        element: () => scope.querySelector(".postfootright > ul"),
+        from: () => [],
+        until: () => [scope.querySelector(".postfootright > ul > li.postreport")]
+      },
     };
 
     const spaceInfo = sharedSpaces[space];
