@@ -1,6 +1,6 @@
 import type UserscriptAddon from "./addon-api/content-script/Addon.js";
 import type PersistentScriptAddon from "./addon-api/background/Addon.js";
-import type chrome from "./libraries/thirdparty/chrome";
+import type Chrome from "./libraries/thirdparty/chrome";
 import type Auth from "./addon-api/common/Auth";
 import type Self from "./addon-api/common/Self";
 import type Settings from "./addon-api/common/Settings";
@@ -78,8 +78,8 @@ interface localState {
   addonsEnabled: { _target?: { [key: string]: boolean }; [key: string]: boolean };
   allReady: boolean;
   badges: {
-    _target?: { [key: string]: { text: string | null; color: string | null } };
-    [key: string]: { text: string | null; color: string | null };
+    _target?: { [key: string]: { text: string | null; color: string | chrome.browserAction.ColorArray | null } };
+    [key: string]: { text: string | null; color: string | chrome.browserAction.ColorArray | null };
   };
   ready: {
     _target?: {
@@ -354,7 +354,7 @@ declare global {
   //#region scratchAddons APIs
   declare const scratchAddons: {
     muted: boolean;
-    addonObjects: (UserscriptAddon | PersistentScriptAddon)[];
+    addonObjects?: PersistentScriptAddon[];
     eventTargets: {
       auth: Auth[];
       self: Self[];
@@ -371,7 +371,7 @@ declare global {
     } & localState;
     methods: {
       clearMessages: () => Promise<void>;
-      getMessages: (opts?: { offset?: number }) => Promise<Message[]>;
+      getMessages: (opts?: { offset?: number; }) => Promise<Message[]>;
       getMsgCount: () => Promise<number>;
     };
     manifests: {
@@ -382,12 +382,12 @@ declare global {
   declare const _realConsole: Console;
   declare const __scratchAddonsRedux: {
     target?: EventTarget;
-    dispatch?: (payload: { type: string; [key: string]: any }) => any; // I have no idea what this is...@apple502j?
+    dispatch?: (payload: { type: string;[ key: string ]: any; }) => any; // I have no idea what this is...@apple502j?
     state: any; // lol way to much to try to type, even using AI
   };
   //#endregion
   interface Window {
-    [key: string]: any;
+    [ key: string ]: any;
   }
   interface RegExp {
     _scratchDomainImplied?: boolean;
@@ -395,6 +395,15 @@ declare global {
   interface Event {
     detail?: any;
   }
-  declare const chrome: chrome;
+  interface chrome {
+    WebRequest: {
+    WebRequestHeadersDetails:{
+    originUrl ?: string;
+  }
+}
+  }
+  declare const chrome: Chrome;
+
+  declare const browser: Chrome | undefined;
   declare const InstallTrigger: undefined; // Technically defined in FF, but I'm not gonna type it
 }

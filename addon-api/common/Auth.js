@@ -40,7 +40,7 @@ export default class Auth extends Listenable {
   /**
    * CSRF token used in APIs.
    *
-   * @type {string|undefined}
+   * @type {string | undefined}
    */
   get csrfToken() {
     return scratchAddons.globalState.auth.csrfToken;

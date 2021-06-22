@@ -28,7 +28,8 @@ chrome.storage.local.get("muted", (obj) => {
 });
 
 chrome.contextMenus.removeAll();
-let currentMenuItem = null;
+/** @type {string} */
+let currentMenuItem;
 
 chrome.contextMenus.onClicked.addListener(({ parentMenuItemId, menuItemId }) => {
   if (parentMenuItemId === "mute") {
@@ -81,6 +82,10 @@ function contextMenuMuted() {
   });
 }
 
+/**
+ *
+ * @param {number} mins
+ */
 function muteForMins(mins) {
   if (mins !== Infinity) chrome.alarms.create("muted", { delayInMinutes: mins });
   scratchAddons.muted = true;

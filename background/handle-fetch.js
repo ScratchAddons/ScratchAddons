@@ -4,15 +4,16 @@ if (Object.prototype.hasOwnProperty.call(chrome.webRequest.OnBeforeSendHeadersOp
 
 chrome.webRequest.onBeforeSendHeaders.addListener(
   function (details) {
+    details.requestHeaders = details.requestHeaders ?? [];
     if (details.originUrl) {
       // Firefox
       const origin = new URL(details.originUrl).origin;
-      if (origin !== chrome.runtime.getURL("").slice(0, -1)) return;
+      if (origin !== chrome.runtime.getURL("").slice(0, -1)) return {};
     } else if (
       // Chrome
       details.initiator !== chrome.runtime.getURL("").slice(0, -1)
     )
-      return;
+      return {};
 
     if (details.url.endsWith("?sareferer") || details.url.endsWith("&sareferer")) {
       details.requestHeaders.push({
@@ -23,6 +24,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
         requestHeaders: details.requestHeaders,
       };
     }
+    return {};
   },
   {
     urls: ["https://scratch.mit.edu/*", "https://api.scratch.mit.edu/*", "https://clouddata.scratch.mit.edu/*"],

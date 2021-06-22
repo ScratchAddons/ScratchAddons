@@ -30,30 +30,25 @@ export default class Tab extends Listenable {
   }
 
   /**
-   * Handler for the Scratch Addons blocks. This must never throw.
-   * @callback Tab~blocksCallback
-   * @param {object} args - the arguments passed to the block.
-   * @param {Thread} thread - the execution thread for ths block.
-   */
-
-  /**
    * Adds a Scratch Addons block.
-   * @param {string} proccode - the code displayed to the user.
-   * @param {string[]} args - the block argument names.
-   * @param {Tab~blocksCallback} handler - the handler.
-   * @param {boolean=} hide - whether to hide the block from the block palette.
+   *
+   * @param {string} proccode - The code displayed to the user.
+   * @param {string[]} args - The block argument names.
+   * @param {(args: { [key: string]: string | boolean | number }) => any} handler - The handler.
+   * @param {boolean} [hide] - Whether to hide the block from the block palette.
    */
-  addBlock(...a) {
+  addBlock(proccode, args, handler, hide = false) {
     blocks.init(this);
-    return blocks.addBlock(...a);
+    return blocks.addBlock(proccode, args, handler, hide);
   }
 
   /**
    * Removes a Scratch Addons block.
-   * @param {string} proccode - the code displayed to the user.
+   *
+   * @param {string} proccode - The code displayed to the user.
    */
-  removeBlock(...a) {
-    return blocks.removeBlock(...a);
+  removeBlock(proccode) {
+    return blocks.removeBlock(proccode);
   }
   /**
    * Loads a script by URL.
@@ -75,13 +70,12 @@ export default class Tab extends Listenable {
    *
    * @param {string} selector - Argument passed to querySelector.
    * @param {object} opts - Options.
-   * @param {boolean} [opts.markAsSeen] - Whether it should mark resolved elements to be skipped
-   *   next time or not.
+   * @param {boolean} [opts.markAsSeen] - Whether it should mark resolved elements to be skipped next time or not.
    * @param {function} [opts.condition] - A function that returns whether to resolve the selector or not.
-   * @param {function} [opts.reduxCondition] - A function that returns whether to resolve the
-   *   selector or not. Use this as an optimization and do not rely on the behavior.
-   * @param {string[]} [opts.reduxEvents] - An array of redux events that must be dispatched before
-   *   resolving the selector. Use this as an optimization and do not rely on the behavior.
+   * @param {function} [opts.reduxCondition] - A function that returns whether to resolve the selector or not. Use this
+   *   as an optimization and do not rely on the behavior.
+   * @param {string[]} [opts.reduxEvents] - An array of redux events that must be dispatched before resolving the
+   *   selector. Use this as an optimization and do not rely on the behavior.
    *
    * @returns {Promise<Element>} - Element found.
    */
@@ -264,11 +258,11 @@ export default class Tab extends Listenable {
   }
 
   /**
-   * Hide the element when the addon is disabled.
-   * Only applicable to addons with dynamicDisable: true.
-   * @param {Element} el - element to hide.
-   * @param {object=} opts - options.
-   * @param {string=} opts.display - the default display mode. If not set, inherited style applies.
+   * Hide the element when the addon is disabled. Only applicable to addons with dynamicDisable: true.
+   *
+   * @param {Element} el - Element to hide.
+   * @param {object} [opts] - Options.
+   * @param {string} [opts.display] - The default display mode. If not set, inherited style applies.
    */
   displayNoneWhileDisabled(el, { display = "" } = {}) {
     el.style.display = `var(--${this._addonId.replace(
@@ -278,13 +272,14 @@ export default class Tab extends Listenable {
   }
 
   /**
-   * the direction (rtl/ltr) of the current locale.
+   * The direction (rtl/ltr) of the current locale.
+   *
    * @type {string}
    */
   get direction() {
     // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
-    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
+    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0] ?? "en";
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
 }

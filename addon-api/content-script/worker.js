@@ -7,7 +7,7 @@ export default (tab, script, url) => {
   script = script.replace(/^export default (?:async )?/, "");
   script = script.replace(
     /\) +(?:=>)? +\{/,
-    (/** @type {any} */ match) => `${match}
+    (match) => `${match}
   postMessage("STARTED");
   `
   );
@@ -15,12 +15,12 @@ export default (tab, script, url) => {
   (async ${script})({
     addon: {
       self: {
-        id: ${JSON.stringify(tab._addonId)},
-        url: ${JSON.stringify(url)},
-        browser: ${JSON.stringify(typeof InstallTrigger !== "undefined" ? "firefox" : "chrome")},
+        id: ${tab._addonId},
+        url: ${url},
+        browser: ${typeof InstallTrigger !== "undefined" ? "firefox" : "chrome"},
       },
       tab: {
-        clientVersion: ${JSON.stringify(tab.clientVersion)},
+        clientVersion: ${tab.clientVersion},
       },
       console: {
         ...console,

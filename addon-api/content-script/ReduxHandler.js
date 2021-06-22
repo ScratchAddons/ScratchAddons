@@ -1,13 +1,10 @@
 import Listenable from "../common/Listenable.js";
 
-/**
- * Handles Redux state.
- *
- * @property {boolean} initialized Whether the handler is initialized or not.
- */
+/** Handles Redux state. */
 export default class ReduxHandler extends Listenable {
   constructor() {
     super();
+    /** @type {boolean} Whether The handler is initialized or not. */
     this.initialized = false;
     this.initialize();
   }
@@ -36,6 +33,10 @@ export default class ReduxHandler extends Listenable {
   /**
    * Dispatches redux state change.
    *
+   * @param {{
+   *   [key: string]: any;
+   *   type: string;
+   * }} payload
    * @throws When Redux is unavailable.
    */
   dispatch(payload) {

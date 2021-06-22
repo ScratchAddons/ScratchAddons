@@ -12,7 +12,7 @@ import Settings from "../common/Settings.js";
  * @property {Settings} settings
  */
 export default class Addon {
-  /** @param {{ id: any; enabledLate: any; permissions?: string[] }} info */
+  /** @param {{ id: any; enabledLate?: any; permissions?: string[] }} info */
   constructor(info) {
     this.self = new Self(this, info);
     this.auth = new Auth();

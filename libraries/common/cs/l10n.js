@@ -8,6 +8,7 @@ import { MessageFormatter, findClosingBracket } from "../../thirdparty/cs/icu-me
 export default class LocalizationProvider extends EventTarget {
   constructor() {
     super();
+    /** @type {{[key:string]:string}} */
     this.messages = {};
     this._matchesCache = Object.create(null);
     this.pluralizer = {
@@ -71,8 +72,6 @@ This can happen when a string is not translated or is incorrectly translated."
 
   /**
    * Reconfigure the provider with the current locale. Must be called after loading translations.
-   *
-   * @private
    */
   _reconfigure() {
     const locale = this.locale;

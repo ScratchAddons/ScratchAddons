@@ -16,6 +16,12 @@ class StateProxy {
   constructor(name = "scratchAddons.localState") {
     this.name = name;
   }
+  /**
+   * @param {{ [key: string]: any }} target
+   * @param {string} key
+   *
+   * @returns {{ [key: string]: any } | string}
+   */
   get(target, key) {
     if (key === "_target") return target;
     if (typeof target[key] === "object" && target[key] !== null) {
@@ -24,6 +30,12 @@ class StateProxy {
       return target[key];
     }
   }
+
+  /**
+   * @param {{ [key: string]: any }} target
+   * @param {string} key
+   * @param {any} value
+   */
   set(target, key, value) {
     const oldValue = target[key];
     target[key] = value;
@@ -36,6 +48,11 @@ class StateProxy {
   }
 }
 
+/**
+ * @param {string} parentObjectPath
+ * @param {string} key
+ * @param {any} value
+ */
 function stateChange(parentObjectPath, key, value) {
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
@@ -50,4 +67,7 @@ function stateChange(parentObjectPath, key, value) {
   }
 }
 
-export default new Proxy(_localState, new StateProxy());
+/** @type {_localState} */
+// @ts-expect-error -- It doesn't know what properties are on it initially.
+const proxy = new Proxy(_localState, new StateProxy());
+export default proxy;

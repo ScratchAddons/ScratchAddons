@@ -9,7 +9,7 @@ import Listenable from "./Listenable.js";
  */
 export default class Self extends Listenable {
   /**
-   * @param {any} addonObj
+   * @param {import("./Addon").default} addonObj
    * @param {{ id: any; permissions?: string[] }} info
    */
   constructor(addonObj, info) {
@@ -19,7 +19,7 @@ export default class Self extends Listenable {
     this._addonObj = addonObj;
     this.browser = typeof InstallTrigger !== "undefined" ? "firefox" : "chrome";
     this.disabled = false;
-    this .enabledLate=undefined;
+    this.enabledLate = undefined;
     this.addEventListener("disabled", () => (this.disabled = true));
     this.addEventListener("reenabled", () => (this.disabled = false));
   }

@@ -1,10 +1,9 @@
-/**
- * Rate-limit a function.
- */
+/** Rate-limit a function. */
 export default class RateLimiter {
   /**
    * Creates a rate limiter.
-   * @param {number} wait - the wait time before rate limit resets, in millisecons.
+   *
+   * @param {number} wait - The wait time before rate limit resets, in millisecons.
    */
   constructor(wait) {
     this.timeout = null;
@@ -14,7 +13,8 @@ export default class RateLimiter {
 
   /**
    * Aborts the pending rate limit.
-   * @param {boolean=} call - whether to call the rate-limited function. Defaults to true.
+   *
+   * @param {boolean} [call] - Whether to call the rate-limited function. Defaults to true.
    */
   abort(call = true) {
     if (this.timeout) {
@@ -25,9 +25,9 @@ export default class RateLimiter {
   }
 
   /**
-   * Delays the execution of a function until the wait
-   * time has passed since the last call of this function.
-   * @param {function} callback - the callback.
+   * Delays the execution of a function until the wait time has passed since the last call of this function.
+   *
+   * @param {function} callback - The callback.
    */
   limit(callback) {
     this.abort(false);

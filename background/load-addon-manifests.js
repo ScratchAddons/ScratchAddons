@@ -1,20 +1,25 @@
 (async function () {
+  /** @type {string[]} */
   const folderNames = await (await fetch("/addons/addons.json")).json();
   folderNames.forEach((addonId, i) => {
-    if (folderNames.lastIndexOf(addonId) !== i) throw "Duplicated value in /addons/addons.json";
+    if (folderNames.lastIndexOf(addonId) !== i)
+      throw new ReferenceError("`" + addonId + "` is duplicated in ./addons/addons.json");
   });
   await scratchAddons.l10n.load(folderNames);
   const useDefault = scratchAddons.l10n.locale.startsWith("en");
   for (const folderName of folderNames) {
     if (folderName.startsWith("//")) continue;
+    /** @type {import("../types").AddonManifest} */
     const manifest = await (await fetch(`/addons/${folderName}/addon.json`)).json();
     if (!useDefault) {
       manifest._english = {};
-      for (const prop of ["name", "description"]) {
-        if (manifest[prop]) {
-          manifest._english[prop] = manifest[prop];
-          manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
-        }
+      if (manifest.name) {
+        manifest._english.name = manifest.name;
+        manifest.name = scratchAddons.l10n.get(`${folderName}/@name`, {}, manifest.name);
+      }
+      if (manifest.description) {
+        manifest._english.description = manifest.description;
+        manifest.description = scratchAddons.l10n.get(`${folderName}/description`, {}, manifest.description);
       }
       if (manifest.info) {
         for (const info of manifest.info || []) {
@@ -26,7 +31,10 @@
       }
     }
     for (const propName of ["userscripts", "userstyles"]) {
-      for (const injectable of manifest[propName] || []) {
+      /** @type {import("../types").Injectable[]} */
+      //@ts-expect-error -- TS doesn't realize there's a limited set of values for `propName`
+      const injectables = manifest[propName] || [];
+      for (const injectable of injectables) {
         const { matches } = injectable;
         if (typeof matches === "string" && matches.startsWith("^")) {
           injectable._scratchDomainImplied = !matches.startsWith("^https:");
@@ -35,8 +43,9 @@
           for (let i = matches.length; i--; ) {
             const match = matches[i];
             if (typeof match === "string" && match.startsWith("^")) {
-              matches[i] = new RegExp(match, "u");
-              matches[i]._scratchDomainImplied = !match.startsWith("^https:");
+              const regexp = new RegExp(match, "u");
+              regexp._scratchDomainImplied = !match.startsWith("^https:");
+              matches[i] = regexp;
             }
           }
         }
@@ -44,10 +53,15 @@
     }
 
     for (const preset of manifest.presets || []) {
-      for (const prop of ["name", "description"]) {
-        if (preset[prop] && !useDefault) {
-          preset[prop] = scratchAddons.l10n.get(`${folderName}/@preset-${prop}-${preset.id}`, {}, preset[prop]);
-        }
+      if (preset.name && !useDefault) {
+        preset.name = scratchAddons.l10n.get(`${folderName}/@preset-name-${preset.id}`, {}, preset.name);
+      }
+      if (preset.description && !useDefault) {
+        preset.description = scratchAddons.l10n.get(
+          `${folderName}/@preset-description-${preset.id}`,
+          {},
+          preset.description
+        );
       }
     }
     for (const option of manifest.settings || []) {
@@ -71,22 +85,26 @@
       switch (option.type) {
         case "string":
           if (!useDefault) {
-            option.default = scratchAddons.l10n.get(`${folderName}/@settings-default-${option.id}`, {}, option.default);
+            option.default = scratchAddons.l10n.get(
+              `${folderName}/@settings-default-${option.id}`,
+              {},
+              `${option.default}`
+            );
           }
           break;
         case "select":
-          option.potentialValues = option.potentialValues.map((value) => {
-            if (value && value.id) {
-              if (!useDefault) {
-                value.name = scratchAddons.l10n.get(
-                  `${folderName}/@settings-select-${option.id}-${value.id}`,
-                  {},
-                  value.name
-                );
-              }
-              return value;
+          option.potentialValues = option.potentialValues?.map((value) => {
+            if (typeof value === "string") {
+              return { name: value, id: value };
             }
-            return { name: value, id: value };
+            if (!useDefault) {
+              value.name = scratchAddons.l10n.get(
+                `${folderName}/@settings-select-${option.id}-${value.id}`,
+                {},
+                value.name
+              );
+            }
+            return value;
           });
           break;
       }

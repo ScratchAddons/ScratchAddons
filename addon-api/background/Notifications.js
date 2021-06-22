@@ -2,10 +2,10 @@ import Listenable from "../common/Listenable.js";
 
 /** Handles notifications. */
 export default class Notifications extends Listenable {
-  /** @param {import("Addon.js").default} addonObject */
-  constructor(addonObject) {
+  /** @param {import("Addon.js").default} addon */
+  constructor(addon) {
     super();
-    this._addonId = addonObject.self.id;
+    this._addonId = addon.self.id;
 
     /** @param {string} notifId */
     this._onClicked = (notifId) => {
@@ -66,7 +66,7 @@ export default class Notifications extends Listenable {
     const notifId = `${this._addonId}__${Date.now()}`;
     /** @type {opts} */
     let newOpts;
-    if (typeof InstallTrigger !== "undefined") {
+    if (typeof browser !== "undefined") {
       newOpts = JSON.parse(JSON.stringify(opts));
       // On Firefox, remove notification properties that throw.
       delete newOpts.buttons;
