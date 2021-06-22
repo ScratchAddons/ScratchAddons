@@ -40,12 +40,7 @@ export default async function ({ addon, console, msg }) {
     const post = await addon.tab.waitForElement(".blockpost", { markAsSeen: true });
     const actionRow = post.querySelector(".postfootright ul");
     const sourceItem = document.createElement("li");
-    const quoteItem = actionRow.querySelector(".postquote");
-    if (quoteItem) {
-      actionRow.insertBefore(sourceItem, quoteItem);
-    } else {
-      actionRow.appendChild(sourceItem);
-    }
+    addon.tab.appendToSharedSpace({ space: "forumsAfterPostReport", scope: post, element: sourceItem, order: 0 });
     sourceItem.appendChild(document.createTextNode("| "));
     const sourceButton = document.createElement("a");
     sourceItem.appendChild(sourceButton);

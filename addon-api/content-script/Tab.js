@@ -249,9 +249,9 @@ export default class Tab extends Listenable {
         element: () => q("[class^='stage-header_stage-size-row']"),
         from: () => [],
         until: () => [
-          // Small/big stage buttons
+          // Small/big stage buttons (for editor mode)
           q("[class^='stage-header_stage-size-toggle-group'"),
-          // Full screen icon
+          // Full screen icon (for player mode)
           q("[class^='stage-header_stage-size-row']").lastChild,
         ],
       },
@@ -268,7 +268,34 @@ export default class Tab extends Listenable {
       forumsBeforePostReport: {
         element: () => scope.querySelector(".postfootright > ul"),
         from: () => [],
-        until: () => [scope.querySelector(".postfootright > ul > li.postreport")]
+        until: function() {
+          let reportButton = scope.querySelector(".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport");
+          if (!reportButton) {
+            // User is logged out, so there's no report button on the post footer
+            // Create a pseudo post report button as a separator between this space
+            // and the forumsAfterPostReport space.
+            reportButton = Object.assign(document.createElement("li"), {
+              className: "pseudopostreport"
+            });
+            this.element().appendChild(reportButton);
+          }
+          return [reportButton];
+        }
+      },
+      forumsAfterPostReport: {
+        element: () => scope.querySelector(".postfootright > ul"),
+        from: function() {
+          let reportButton = scope.querySelector(".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport");
+          if (!reportButton) {
+            // User is logged out. See comment on forumsBeforePostReport space
+            reportButton = Object.assign(document.createElement("li"), {
+              className: "pseudopostreport"
+            });
+            this.element().appendChild(reportButton);
+          }
+          return [reportButton];
+        },
+        until: () => [scope.querySelector(".postfootright > ul > li.postquote")],
       },
     };
 
