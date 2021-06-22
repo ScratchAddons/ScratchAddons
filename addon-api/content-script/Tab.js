@@ -275,7 +275,8 @@ export default class Tab extends Listenable {
             // Create a pseudo post report button as a separator between this space
             // and the forumsAfterPostReport space.
             reportButton = Object.assign(document.createElement("li"), {
-              className: "pseudopostreport"
+              className: "pseudopostreport",
+              textContent: " 🞄 ",
             });
             this.element().appendChild(reportButton);
           }
@@ -289,7 +290,8 @@ export default class Tab extends Listenable {
           if (!reportButton) {
             // User is logged out. See comment on forumsBeforePostReport space
             reportButton = Object.assign(document.createElement("li"), {
-              className: "pseudopostreport"
+              className: "pseudopostreport",
+              textContent: " 🞄 "
             });
             this.element().appendChild(reportButton);
           }
@@ -353,6 +355,14 @@ export default class Tab extends Listenable {
 
     if (!foundFrom) return false;
     // It doesn't matter if we didn't find an "until"
+
+    // Separators in forum post spaces
+    if (space === "forumsBeforePostReport") {
+      element.appendChild(document.createTextNode(" | "));
+    }
+    else if (space === "forumsAfterPostReport") {
+      element.prepend(document.createTextNode("| "));
+    }
 
     if (insertAfter === null) {
       // This might happen with until = []

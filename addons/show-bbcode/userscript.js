@@ -40,7 +40,6 @@ export default async function ({ addon, console, msg }) {
     const post = await addon.tab.waitForElement(".blockpost", { markAsSeen: true });
     const sourceItem = document.createElement("li");
     addon.tab.appendToSharedSpace({ space: "forumsAfterPostReport", scope: post, element: sourceItem, order: 0 });
-    sourceItem.appendChild(document.createTextNode("| "));
     const sourceButton = document.createElement("a");
     sourceItem.appendChild(sourceButton);
     sourceItem.appendChild(document.createTextNode(" "));

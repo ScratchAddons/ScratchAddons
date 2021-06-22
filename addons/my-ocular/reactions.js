@@ -9,9 +9,7 @@ export default async function ({ addon, global, console, msg }) {
     viewOnOcular.innerText = `🔍 ocular`;
     viewOnOcular.title = msg("view-on-ocular");
     viewOnOcular.href = `https://ocular.jeffalo.net/post/${postID}`;
-    viewOnOcularContainer.appendChild(document.createTextNode(" | "));
     viewOnOcularContainer.appendChild(viewOnOcular);
-    viewOnOcularContainer.appendChild(document.createTextNode(" |"));
     addon.tab.appendToSharedSpace({space: "forumsBeforePostReport", scope: i, element: viewOnOcularContainer, order: 2});
 
     if (addon.auth.isLoggedIn) {
