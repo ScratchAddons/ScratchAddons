@@ -22,12 +22,9 @@ export default async function ({ addon, console, safeMsg: m }) {
   )} sa-better-img-uploads-tooltip" id="sa-${id}-HD Upload" data-id="tooltip" >${m("upload")}</div>
 </div>`;
 
-  //The class name for the menu
-  let c = addon.tab.scratchClass("action-menu_more-buttons");
-
   while (true) {
     //Catch all upload menus as they are created
-    let menu = await addon.tab.waitForElement(`.${c}`, { markAsSeen: true });
+    let menu = await addon.tab.waitForElement('[class^="action-menu_more-buttons"]', { markAsSeen: true });
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
     let id = button.getAttribute("aria-label").replace(/\s+/g, "_");
@@ -113,8 +110,8 @@ export default async function ({ addon, console, safeMsg: m }) {
       } //Otherwise just leave the image the same size
 
       function getResizedWidthHeight(oldWidth, oldHeight) {
-        const STAGE_WIDTH = 480;
-        const STAGE_HEIGHT = 360;
+        const STAGE_WIDTH = 240;
+        const STAGE_HEIGHT = 180;
         const STAGE_RATIO = STAGE_WIDTH / STAGE_HEIGHT;
 
         // If both dimensions are smaller than or equal to corresponding stage dimension,
