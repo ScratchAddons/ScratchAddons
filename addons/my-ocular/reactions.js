@@ -10,7 +10,12 @@ export default async function ({ addon, global, console, msg }) {
     viewOnOcular.title = msg("view-on-ocular");
     viewOnOcular.href = `https://ocular.jeffalo.net/post/${postID}`;
     viewOnOcularContainer.appendChild(viewOnOcular);
-    addon.tab.appendToSharedSpace({space: "forumsBeforePostReport", scope: i, element: viewOnOcularContainer, order: 2});
+    addon.tab.appendToSharedSpace({
+      space: "forumsBeforePostReport",
+      scope: i,
+      element: viewOnOcularContainer,
+      order: 2,
+    });
 
     if (addon.auth.isLoggedIn) {
       let reactionMenuContainer = document.createElement("li");
@@ -101,8 +106,13 @@ export default async function ({ addon, global, console, msg }) {
           reactionList.appendChild(document.createTextNode("| "));
         }
       }
-      addon.tab.appendToSharedSpace({space: "forumsBeforePostReport", scope: i, element: reactionMenuContainer, order: 1});
-      addon.tab.appendToSharedSpace({space: "forumsBeforePostReport", scope: i, element: reactionList, order: 0});
+      addon.tab.appendToSharedSpace({
+        space: "forumsBeforePostReport",
+        scope: i,
+        element: reactionMenuContainer,
+        order: 1,
+      });
+      addon.tab.appendToSharedSpace({ space: "forumsBeforePostReport", scope: i, element: reactionList, order: 0 });
 
       makeReactionList();
     }

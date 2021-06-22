@@ -268,8 +268,10 @@ export default class Tab extends Listenable {
       forumsBeforePostReport: {
         element: () => scope.querySelector(".postfootright > ul"),
         from: () => [],
-        until: function() {
-          let reportButton = scope.querySelector(".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport");
+        until: function () {
+          let reportButton = scope.querySelector(
+            ".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport"
+          );
           if (!reportButton) {
             // User is logged out, so there's no report button on the post footer
             // Create a pseudo post report button as a separator between this space
@@ -281,17 +283,19 @@ export default class Tab extends Listenable {
             this.element().appendChild(reportButton);
           }
           return [reportButton];
-        }
+        },
       },
       forumsAfterPostReport: {
         element: () => scope.querySelector(".postfootright > ul"),
-        from: function() {
-          let reportButton = scope.querySelector(".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport");
+        from: function () {
+          let reportButton = scope.querySelector(
+            ".postfootright > ul > li.postreport, .postfootright > ul > li.pseudopostreport"
+          );
           if (!reportButton) {
             // User is logged out. See comment on forumsBeforePostReport space
             reportButton = Object.assign(document.createElement("li"), {
               className: "pseudopostreport",
-              textContent: " 🞄 "
+              textContent: " 🞄 ",
             });
             this.element().appendChild(reportButton);
           }
@@ -359,8 +363,7 @@ export default class Tab extends Listenable {
     // Separators in forum post spaces
     if (space === "forumsBeforePostReport") {
       element.appendChild(document.createTextNode(" | "));
-    }
-    else if (space === "forumsAfterPostReport") {
+    } else if (space === "forumsAfterPostReport") {
       element.prepend(document.createTextNode("| "));
     }
 

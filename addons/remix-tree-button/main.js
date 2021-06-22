@@ -24,7 +24,7 @@ export default async function ({ addon, global, console, msg }) {
           if (addon.settings.get("buttonColor")) {
             remixtree.style.backgroundColor = addon.settings.get("buttonColor");
           }
-          addon.tab.appendToSharedSpace({space: "afterCopyLinkButton", element: remixtree, order: 0});
+          addon.tab.appendToSharedSpace({ space: "afterCopyLinkButton", element: remixtree, order: 0 });
         });
     }
   }
