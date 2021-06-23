@@ -81,6 +81,10 @@
   color: #a1a1a1;
 }
 
+.addon-name > span:empty {
+  background-color: #a1a1a1;
+}
+
 .addon-description-full,
 .addon-credits {
   color: #111;
@@ -164,9 +168,6 @@ img :not(.navbar, .icon-type) {
   background-color: #fff;
 }
 
-#popup-more-settings > button {
-  filter: brightness(0);
-}
 color-picker#picker {
   --color-picker-background-color: #fff !important;
   --color-picker-color: #222 !important;

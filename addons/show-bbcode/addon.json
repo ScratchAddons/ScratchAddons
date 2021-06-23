@@ -4,7 +4,8 @@
   "tags": ["community", "forums"],
   "credits": [
     {
-      "name": "Maximouse"
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
   "userscripts": [
@@ -13,6 +14,5 @@
       "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
   ],
-  "versionAdded": "1.9.0",
-  "l10n": true
+  "versionAdded": "1.9.0"
 }

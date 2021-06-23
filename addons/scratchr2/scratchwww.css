@@ -6,12 +6,20 @@ a:visited,
 .comment .comment-body .comment-bottom-row .comment-reply,
 .studio-adder-section h3,
 .studio-project-tile .studio-project-title,
-.studio-member-tile .studio-member-name {
+.studio-member-tile .studio-member-name,
+.studio-thumb-edit-button,
+.promote-modal .cancel-button {
   color: var(--scratchr2-linkColor);
 }
 a:hover,
 .news li:hover h4 {
   color: var(--scratchr2-activeColor);
+}
+.banner a {
+  color: white;
+}
+.studio-info .studio-info-footer-report button:hover {
+  background-color: var(--scratchr2-activeColor);
 }
 #navigation,
 .dropdown,
@@ -19,6 +27,7 @@ a:hover,
 .button,
 .addToStudio-modal-header,
 .user-projects-modal .user-projects-modal-title,
+.promote-modal .promote-title,
 .intro-banner .intro-container,
 .subactions .action-buttons .action-button,
 .title-banner.mod-messages,
@@ -26,12 +35,16 @@ a:hover,
 .os-chooser .button.active,
 .studio-tab-nav .active > li,
 .user-projects-modal .user-projects-modal-nav button.active,
+.studio-info .studio-info-footer-report button,
 .step .step-number-row .step-number,
 .title-banner.mod-blue-bg,
 .title-banner.mod-conference,
 #footer .inner .media li,
 .wedo .top-banner {
   background-color: var(--scratchr2-primaryColor);
+}
+.promote-modal .cancel-button {
+  box-shadow: 0 0 0 1px var(--scratchr2-primaryColor);
 }
 .banner-button {
   background-color: #ffab1a;

@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "You can also programmatically pause a project in Scratch (also known as breakpoints) by creating a custom block with name \"sa-pause\" and using that block.",
+      "text": "To programmatically pause a project in Scratch (also known as breakpoints), use the \"breakpoint\" block provided by the \"debugger\" addon.",
       "id": "programpause"
     }
   ],
@@ -32,6 +32,5 @@
     }
   ],
   "tags": ["editor", "projectPlayer", "recommended"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

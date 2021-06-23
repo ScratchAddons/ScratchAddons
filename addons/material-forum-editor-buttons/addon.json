@@ -20,7 +20,6 @@
     }
   ],
   "enabledByDefault": false,
-  "l10n": true,
   "dynamicEnable": true,
   "dynamicDisable": true
 }

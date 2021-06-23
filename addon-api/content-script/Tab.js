@@ -3,6 +3,7 @@ import ReduxHandler from "./ReduxHandler.js";
 import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import getWorkerScript from "./worker.js";
+import * as blocks from "./blocks.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
@@ -25,6 +26,13 @@ export default class Tab extends Listenable {
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+  }
+  addBlock(...a) {
+    blocks.init(this);
+    return blocks.addBlock(...a);
+  }
+  removeBlock(...a) {
+    return blocks.removeBlock(...a);
   }
   /**
    * Loads a script by URL.
@@ -224,5 +232,12 @@ export default class Tab extends Listenable {
     el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
       g[1].toUpperCase()
     )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
+  }
+
+  get direction() {
+    // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
+    const rtlLocales = ["ar", "ckb", "fa", "he"];
+    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
+    return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
 }

@@ -5,6 +5,22 @@ let currentQuery;
 let currentSort = "relevance";
 let locationQuery = "";
 
+const ALLOWED_TAGS = {
+  A: ["href"],
+  BR: [],
+  BLOCKQUOTE: [],
+  DIV: ["class", "style"],
+  IMG: ["src"],
+  LI: [],
+  OL: ["style"],
+  P: ["class"],
+  PRE: ["class"],
+  SPAN: ["class", "style"],
+  UL: [],
+};
+
+class SanitizerFailed extends Error {}
+
 function cleanPost(post) {
   // Thanks Jeffalo
   const dom = new DOMParser();
@@ -17,7 +33,34 @@ function cleanPost(post) {
     segment.innerHTML = segment.innerHTML.replace(/</g, "&lt;");
   }
 
-  return readableDom.documentElement.innerHTML;
+  const recursiveCheck = (elem) => {
+    if (!(elem instanceof Element)) return;
+    const allowed = ALLOWED_TAGS[elem.tagName];
+    if (!allowed) {
+      throw new SanitizerFailed(`forum-search: Warning: Potential XSS attempt found: ${elem.tagName} is not allowed`);
+    }
+    Array.prototype.forEach.call(elem.attributes, (attr) => {
+      if (!allowed.includes(attr.name)) {
+        throw new SanitizerFailed(
+          `forum-search: Warning: Potential XSS attempt found: ${attr.name} is not allowed for ${elem.tagName}`
+        );
+      }
+      if (attr.name === "href" && !(elem.protocol === "https:" || elem.protocol === "http:")) {
+        throw new SanitizerFailed(
+          `forum-search: Warning: Potential XSS attempt found: protocol ${elem.protocol} is not allowed`
+        );
+      }
+    });
+    Array.prototype.forEach.call(elem.children, recursiveCheck);
+  };
+  try {
+    Array.prototype.forEach.call(readableDom.body.children, recursiveCheck);
+  } catch (e) {
+    if (!(e instanceof SanitizerFailed)) throw e;
+    console.warn(e.message);
+    return [document.createTextNode(readableDom.body.innerHTML)];
+  }
+  return readableDom.body.cloneNode(true).childNodes;
 }
 
 function triggerNewSearch(searchContent, query, sort, msg) {
@@ -159,7 +202,7 @@ function appendSearch(box, query, page, term, msg) {
 
         let postHTML = document.createElement("div");
         postHTML.classList = "post_body_html";
-        postHTML.insertAdjacentHTML("beforeend", cleanPost(post.content.html));
+        postHTML.append(...cleanPost(post.content.html));
         postMsg.appendChild(postHTML);
 
         if (post.editor) {
@@ -191,7 +234,7 @@ function appendSearch(box, query, page, term, msg) {
 }
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5-min.js");
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
   // create the search bar
   let search = document.createElement("form");
   search.id = "forum-search-form";

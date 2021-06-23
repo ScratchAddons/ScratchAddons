@@ -30,15 +30,7 @@ See the [ICU messaging format](https://unicode-org.github.io/icu/userguide/forma
 The second argument of the functions accepts an object which will have the placeholder name (case-sensitive) as the key and the value. For example, you can call `msg("press-key", {keyCode: "space"})` or `msg("apple", {count: 100})`.
 
 ## Manifest (addon.json)
-### l10n key
-`l10n` key on `addon.json` determines whether:
-- the translation is ready to be translated on translation services (currently Transifex)
-- `addon.json` keys are localized
-
-If `l10n` is not set (or is false), the addon's messages cannot be translated on translation services, and `addon.json` keys will not be localized. However, this **does not** mean `addons-l10n` is not loaded at all; Userscripts can still load translations if `l10n` is not specified, although that usually only loads English messages because other languages would be unavailable at that point.
-
-### Localized keys
-If `l10n: true` is set, these keys are overridden by the translated ones, if it exists. Here are the keys on addon.json and the message file:
+These keys are overridden by the translated ones, if it exists. Here are the keys on addon.json and the message file:
 - `name` - `addon-id/@name`
 - `description` - `addon-id/@description`
 
@@ -55,7 +47,7 @@ Setting default values can be translated if the `type` is `string`:
 Setting potential values can be translated:
 - `potentialValue.name` - `addon-id/@setting-select-SETTINGID-POTENTIALVALUEID`
 
-Note that in most cases you **only have to set `l10n: true`**, as English messages are fetched from the addon.json, not `addons-l10n/en`.
+Note that in most cases you **do not have to do anything**, as English messages are fetched from the addon.json, not `addons-l10n/en`.
 
 ## Example
 

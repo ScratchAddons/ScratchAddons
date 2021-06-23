@@ -90,6 +90,9 @@ button {
   margin-inline-start: 10px;
   max-width: 75%;
 }
+a.message-type-title-text {
+  color: white;
+}
 .float-right {
   margin-inline-start: 6px;
   white-space: nowrap;
@@ -245,7 +248,7 @@ button {
   font-size: 12px;
   text-align: center;
   box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.1);
-  height: 24px;
+  min-height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;

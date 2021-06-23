@@ -192,7 +192,7 @@
     "message": "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
   },
   "forumWarningGeneral": {
-    "message": "Message from Scratch Addons extension: Scratch policy forbids discussion about browser extensions, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found bugs, please $1."
+    "message": "Message from Scratch Addons extension: Scratch policy forbids discussion about browser extensions, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found a bug, please $1."
   },
   "search": {
     "message": "Search"
@@ -233,14 +233,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1": {
-    "message": "New addons of this update are \"block transparency\", \"Ctrl+Click to run scripts\", \"do not automatically run duplicated blocks\" and \"filter messages on Scratch's messages page\". Go to $1 to enable them."
+  "extensionUpdateInfo1_v1_16": {
+    "message": "New addon: \"debugger\", which brings console logs and breakpoints to Scratch. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2": {
-    "message": "This update also changed the default color of the Scratch Addons extension badge which displays your unread messages count. Go to $1 to go back to the old green or customize the color yourself."
+  "extensionUpdateInfo2_v1_16": {
+    "message": "Another new addon added in this update is \"expandable search bar\", which makes the search bar on the navbar wider when it's focused."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."

@@ -26,6 +26,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true;
 });
 
-chrome.permissions.onRemoved.addListener(() => checkPermissions(() => {}));
+chrome.permissions.onRemoved?.addListener(() => checkPermissions(() => {}));
 
 checkPermissions(() => {});

@@ -1287,7 +1287,7 @@ export default class DevTools {
 
     let ctrlKey = e.ctrlKey || e.metaKey;
 
-    if (e.key === "f" && ctrlKey) {
+    if (e.key === "f" && ctrlKey && !e.shiftKey) {
       // Ctrl + F (Override default Ctrl+F find)
       this.findInp.focus();
       this.findInp.select();
@@ -1432,9 +1432,7 @@ export default class DevTools {
                 ? `
                   <div
                     id="s3devCleanUp"
-                    class="goog-menuitem s3dev-mi ${
-                      document.querySelector(".gui").dir === "rtl" ? "goog-menuitem-rtl" : ""
-                    }"
+                    class="goog-menuitem s3dev-mi ${this.addon.tab.direction === "rtl" ? "goog-menuitem-rtl" : ""}"
                     role="menuitem"
                     style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);"
                   >
@@ -1445,10 +1443,8 @@ export default class DevTools {
 
               html += `
                   <div
-                    id="s3devPaste" 
-                    class="goog-menuitem s3dev-mi ${
-                      document.querySelector(".gui").dir === "rtl" ? "goog-menuitem-rtl" : ""
-                    }"
+                    id="s3devPaste"
+                    class="goog-menuitem s3dev-mi ${this.addon.tab.direction === "rtl" ? "goog-menuitem-rtl" : ""}"
                     role="menuitem"
                     style="user-select: none;"
                   >
@@ -1690,7 +1686,7 @@ export default class DevTools {
     document.body.insertAdjacentHTML(
       "beforeend",
       `
-            <div id="s3devFloatingBar" dir="${document.querySelector(".gui").dir}">
+            <div id="s3devFloatingBar" dir="${this.addon.tab.direction}">
                 <label class='title s3devLabel' id=s3devInsertLabel>
                     <span style="display:none;">${this.m("insert")} </span>
                     <span id=s3devInsert class="s3devWrap">
@@ -2259,7 +2255,7 @@ export default class DevTools {
                         <div ${
                           this.addon.self._isDevtoolsExtension ? "" : 'style="display: none;"'
                         }><a href="#" class="s3devAction" id="s3devHelp"><b>${this.m("help")}</b></a>
-                        <a href="https://www.youtube.com/griffpatch" class="s3devAction" target="_blank" id="s3devHelp">${this.m(
+                        <a href="https://www.youtube.com/griffpatch" class="s3devAction" target="_blank" id="s3devHelp" rel="noreferrer noopener">${this.m(
                           "tutorials"
                         )}</a></div>
                     </label>

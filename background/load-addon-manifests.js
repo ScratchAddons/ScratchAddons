@@ -8,9 +8,13 @@
   for (const folderName of folderNames) {
     if (folderName.startsWith("//")) continue;
     const manifest = await (await fetch(`/addons/${folderName}/addon.json`)).json();
-    if (manifest.l10n && !useDefault) {
+    if (!useDefault) {
+      manifest._english = {};
       for (const prop of ["name", "description"]) {
-        if (manifest[prop]) manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
+        if (manifest[prop]) {
+          manifest._english[prop] = manifest[prop];
+          manifest[prop] = scratchAddons.l10n.get(`${folderName}/@${prop}`, {}, manifest[prop]);
+        }
       }
       if (manifest.info) {
         for (const info of manifest.info || []) {
@@ -41,13 +45,13 @@
 
     for (const preset of manifest.presets || []) {
       for (const prop of ["name", "description"]) {
-        if (manifest.l10n && preset[prop] && !useDefault) {
+        if (preset[prop] && !useDefault) {
           preset[prop] = scratchAddons.l10n.get(`${folderName}/@preset-${prop}-${preset.id}`, {}, preset[prop]);
         }
       }
     }
     for (const option of manifest.settings || []) {
-      if (manifest.l10n && !useDefault) {
+      if (!useDefault) {
         option.name = scratchAddons.l10n.get(
           `${folderName}/@settings-name-${option.id}`,
           {
@@ -66,14 +70,14 @@
       }
       switch (option.type) {
         case "string":
-          if (manifest.l10n && !useDefault) {
+          if (!useDefault) {
             option.default = scratchAddons.l10n.get(`${folderName}/@settings-default-${option.id}`, {}, option.default);
           }
           break;
         case "select":
           option.potentialValues = option.potentialValues.map((value) => {
             if (value && value.id) {
-              if (manifest.l10n && !useDefault) {
+              if (!useDefault) {
                 value.name = scratchAddons.l10n.get(
                   `${folderName}/@settings-select-${option.id}-${value.id}`,
                   {},

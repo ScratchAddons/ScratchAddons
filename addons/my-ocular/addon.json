@@ -72,6 +72,5 @@
   ],
   "versionAdded": "1.4.0",
   "tags": ["forums", "profiles", "community"],
-  "enabledByDefault": false,
-  "l10n": true
+  "enabledByDefault": false
 }

@@ -37,6 +37,7 @@ body:not(.sa-body-editor) .join-flow-title,
   background: #252c37;
 }
 #view,
+.crash-container,
 .outer #projectBox,
 .tips-getting-started,
 .tips-activity-guides,
@@ -68,6 +69,7 @@ body:not(.sa-body-editor) .gender-radio-row,
 img.tips-icon,
 .tabs li:not(.active) .tab-icon,
 .overflow-menu-container .overflow-menu-trigger img,
+.studio-info .studio-info-footer-stats div img,
 body:not(.sa-body-editor) .stage-header_stage-button-icon_3zzFK {
   filter: brightness(0) invert(1);
 }
@@ -107,6 +109,7 @@ body:not(.sa-body-editor) .modal-content,
 .supporters-section .comment-text,
 .card,
 .extension-landing .project-card,
+.promote-modal .cancel-button,
 body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
   background: #282828;
 }
@@ -121,10 +124,15 @@ body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
 .tabs li:hover {
   border-bottom-color: rgba(255, 255, 255, 0.2);
 }
-.outer .categories li {
+.outer .categories li,
+.os-chooser .button,
+.studio-tab-nav li,
+.user-projects-modal .user-projects-modal-nav button {
   background-color: rgba(255, 255, 255, 0.1);
 }
 .outer .categories li:hover,
+.studio-tab-nav li:hover,
+.user-projects-modal .user-projects-modal-nav button:hover,
 .supporters-section .supporters-level hr {
   background-color: rgba(255, 255, 255, 0.2);
 }
@@ -132,6 +140,7 @@ body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
 .box .box-header,
 #footer, /* for infinite scrolling fixed footer */
 .textarea,
+.crash-container,
 .studio-adder-section .studio-adder-row input,
 .studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
 .studio-tab-nav,

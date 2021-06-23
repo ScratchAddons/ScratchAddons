@@ -14,12 +14,13 @@ const onMessageBackgroundReady = (request, sender, sendResponse) => {
 };
 chrome.runtime.onMessage.addListener(onMessageBackgroundReady);
 const onResponse = (res) => {
-  if (res) {
+  if (res && !receivedResponse) {
     console.log("[Message from background]", res);
     chrome.runtime.onMessage.removeListener(onMessageBackgroundReady);
-    receivedResponse = true;
-    if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") onInfoAvailable(res);
-    else {
+    if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") {
+      onInfoAvailable(res);
+      receivedResponse = true;
+    } else {
       pseudoUrl = `https://scratch.mit.edu/${res.httpStatusCode}/`;
       console.log(`Status code was not 2xx, replacing URL to ${pseudoUrl}`);
       chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
@@ -208,19 +209,34 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for customCssVariables
   const getColor = (addonId, obj) => {
+    if (typeof obj === "string" || obj === undefined) return obj;
     let hex;
     switch (obj.type) {
       case "settingValue":
         return addonSettings[addonId][obj.settingId];
-      case "textColor":
+      case "textColor": {
         hex = getColor(addonId, obj.source);
-        return textColorLib.textColor(hex, obj.black, obj.white, obj.threshold);
-      case "multiply":
+        let black = getColor(addonId, obj.black);
+        let white = getColor(addonId, obj.white);
+        return textColorLib.textColor(hex, black, white, obj.threshold);
+      }
+      case "multiply": {
         hex = getColor(addonId, obj.source);
         return textColorLib.multiply(hex, obj);
-      case "brighten":
+      }
+      case "brighten": {
         hex = getColor(addonId, obj.source);
         return textColorLib.brighten(hex, obj);
+      }
+      case "alphaBlend": {
+        let opaqueHex = getColor(addonId, obj.opaqueSource);
+        let transparentHex = getColor(addonId, obj.transparentSource);
+        return textColorLib.alphaBlend(opaqueHex, transparentHex);
+      }
+      case "recolorFilter": {
+        hex = getColor(addonId, obj.source);
+        return textColorLib.recolorFilter(hex);
+      }
     }
   };
 
@@ -255,6 +271,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
     if (document.querySelector("meta[name='format-detection']")) {
       // scratch-www studio
       pseudoUrl = location.href.replace("/studios/", "/studios_www/");
+      receivedResponse = false;
       chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
       return;
     }
@@ -378,10 +395,14 @@ const showBanner = () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
+  const notifImageLink = Object.assign(document.createElement("a"), {
+    href: "https://www.youtube.com/watch?v=hQVAamRCaAU",
+    target: "_blank",
+  });
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/icon.svg"),
-    style: "height: 150px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.png"),
+    style: "height: 100px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -411,7 +432,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_16", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -430,14 +451,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo2", DOLLARS)).replace(
-      "$1",
-      Object.assign(document.createElement("a"), {
-        href: "https://scratch.mit.edu/scratch-addons-extension/settings#addon-msg-count-badge",
-        target: "_blank",
-        textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
-      }).outerHTML
-    ),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_16"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -479,7 +493,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  notifInnerBody.appendChild(notifImage);
+  notifImageLink.appendChild(notifImage);
+
+  notifInnerBody.appendChild(notifImageLink);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);
@@ -496,7 +512,7 @@ const handleBanner = async () => {
   const settings = await promisify(chrome.storage.local.get.bind(chrome.storage.local))(["bannerSettings"]);
   const force = !settings || !settings.bannerSettings;
 
-  if (force || settings.bannerSettings.lastShown !== currentVersionMajorMinor) {
+  if (force || settings.bannerSettings.lastShown !== currentVersionMajorMinor || location.hash === "#sa-update-notif") {
     console.log("Banner shown.");
     await promisify(chrome.storage.local.set.bind(chrome.storage.local))({
       bannerSettings: Object.assign({}, settings.bannerSettings, { lastShown: currentVersionMajorMinor }),
@@ -617,7 +633,6 @@ if (isProfile || isStudio || isProject) {
         document.querySelector(".comments-container, .studio-compose-container").addEventListener(
           "click",
           (e) => {
-            console.log(e);
             const path = e.composedPath();
             // When clicking the post button, e.path[0] might
             // be <span>Post</span> or the <button /> element
@@ -626,8 +641,11 @@ if (isProfile || isStudio || isProject) {
             if (possiblePostBtn.tagName !== "BUTTON") return;
             if (!possiblePostBtn.classList.contains("compose-post")) return;
             const form = path[0].tagName === "SPAN" ? path[3] : path[2];
+            if (!form) return;
+            if (form.tagName !== "FORM") return;
+            if (!form.classList.contains("full-width-form")) return;
             // Remove error when about to send comment anyway, if it exists
-            form.parentNode.querySelector(".compose-error-row")?.remove();
+            form.parentNode.querySelector(".sa-compose-error-row")?.remove();
             if (form.hasAttribute("data-sa-send-anyway")) {
               form.removeAttribute("data-sa-send-anyway");
               return;
@@ -637,7 +655,7 @@ if (isProfile || isStudio || isProject) {
             if (shouldCaptureComment(textarea.value)) {
               e.stopPropagation();
               const errorRow = document.createElement("div");
-              errorRow.className = "flex-row compose-error-row";
+              errorRow.className = "flex-row compose-error-row sa-compose-error-row";
               const errorTip = document.createElement("div");
               errorTip.className = "compose-error-tip";
               const span = document.createElement("span");

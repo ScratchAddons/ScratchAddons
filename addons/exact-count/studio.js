@@ -21,16 +21,17 @@ export default async function ({ addon }) {
     };
     request.send();
   }
-  if (
-    addon.tab.clientVersion === "scratch-www" ||
-    document.querySelector("[data-count=projects]").innerText === "100+"
-  ) {
-    const apiUrlPrefix =
-      "https://api.scratch.mit.edu/studios/" + /[0-9]+/.exec(location.pathname)[0] + "/projects/?limit=40&offset=";
-    countProjects(apiUrlPrefix, 0, 100, function (count) {
-      if (addon.tab.clientVersion === "scratch-www")
-        document.querySelector(".studio-tab-nav span").innerText += ` (${count})`;
-      else document.querySelector("[data-count=projects]").innerText === count;
+  const apiUrlPrefix =
+    "https://api.scratch.mit.edu/studios/" + /[0-9]+/.exec(location.pathname)[0] + "/projects/?limit=40&offset=";
+  const initialDelta = 100;
+  if (addon.tab.clientVersion === "scratch-www") {
+    const countElement = await addon.tab.waitForElement(".studio-tab-nav > a:first-child .tab-count");
+    countProjects(apiUrlPrefix, 0, initialDelta, function (count) {
+      countElement.innerText = `(${count})`;
+    });
+  } else {
+    countProjects(apiUrlPrefix, 0, initialDelta, function (count) {
+      document.querySelector("[data-count=projects]").innerText = count;
     });
   }
 }
