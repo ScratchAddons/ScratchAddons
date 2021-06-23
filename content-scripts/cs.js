@@ -713,3 +713,33 @@ if (isProfile || isStudio || isProject) {
     }
   });
 }
+
+function addonMessageListener(e) {
+  if (!e.data.addonMessage) return;
+
+  const {
+    data: { payload, addonId, fromBackground, response, messageId },
+  } = e;
+
+  if (response) return;
+  if (fromBackground) return;
+
+  function onResponse(res) {
+    window.postMessage({
+      addonMessage: true,
+      response: true,
+      fromBackground: false,
+      messageId,
+      payload: res,
+    });
+  }
+
+  chrome.runtime.sendMessage(
+    {
+      addonMessage: true,
+      addonId,
+      payload,
+    },
+    onResponse
+  );
+}
