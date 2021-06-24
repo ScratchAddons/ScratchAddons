@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, console, msg }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   // The basic premise of how this addon works is relative simple.
   // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:
   // <SelectorHOC>

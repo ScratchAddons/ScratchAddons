@@ -1,8 +1,4 @@
-/**
- * @param {any} dataURL
- *
- * @returns
- */
+/** @param {any} dataURL */
 const dataURLToArrayBuffer = function (dataURL) {
   const byteString = atob(dataURL.split(",")[1]);
   const arrayBuffer = new ArrayBuffer(byteString.length);
@@ -13,22 +9,23 @@ const dataURLToArrayBuffer = function (dataURL) {
   return arrayBuffer;
 };
 
-if(typeof browser !== "undefined"){
-// Firefox
-browser?.runtime?.onMessage?.addListener(
-  /** @param {any} request */ function (request) {
-    if (request.clipboardDataURL && browser && browser.clipboard && browser.clipboard.setImageData) {
-      const arrayBuffer = dataURLToArrayBuffer(request.clipboardDataURL);
-      return browser.clipboard
-        .setImageData(arrayBuffer, "png")
-        .then(() => Promise.resolve("success"))
-        .catch(
-          /** @param {Error} e */ (e) => {
-            console.error(e);
-            Promise.reject(e.toString());
-          }
-        );
+if (typeof browser !== "undefined") {
+  // Firefox
+  browser.runtime.onMessage.addListener(
+    /** @param {any} request */
+    function (request) {
+      if (request.clipboardDataURL && browser && browser.clipboard && browser.clipboard.setImageData) {
+        const arrayBuffer = dataURLToArrayBuffer(request.clipboardDataURL);
+        return browser.clipboard
+          .setImageData(arrayBuffer, "png")
+          .then(() => Promise.resolve("success"))
+          .catch(
+            /** @param {Error} e */ (e) => {
+              console.error(e);
+              Promise.reject(e.toString());
+            }
+          );
+      }
     }
-  }
-);
+  );
 }

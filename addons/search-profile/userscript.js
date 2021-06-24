@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, console, msg }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const nav = await addon.tab.waitForElement(".sub-nav.tabs");
   //Create elements for tab
   const tab = nav.appendChild(document.createElement("a")),

@@ -1,21 +1,22 @@
 import runPersistentScripts from "./imports/run-persistent-scripts.js";
 
 chrome.runtime.onMessage.addListener(function (request, _, sendResponse) {
+  if (!scratchAddons.localState)throw new TypeError("localState is not set")
   // Message used to load popups as well
   if (request === "getSettingsInfo") {
     const sendRes = () =>
       sendResponse({
         manifests: scratchAddons.manifests,
         // Firefox breaks if we send proxies
-        addonsEnabled: scratchAddons.localState._target?.addonsEnabled,
+        addonsEnabled: scratchAddons.localState?._target?.addonsEnabled,
         addonSettings: scratchAddons.globalState._target?.addonSettings,
       });
     // Data might have not loaded yet, or be partial.
     // Only respond when all data is ready
-    if (scratchAddons.localState.allReady) {
+    if (scratchAddons.localState?.allReady) {
       sendRes();
     } else {
-      scratchAddons.localEvents.addEventListener("ready", sendRes);
+      scratchAddons.localEvents?.addEventListener("ready", sendRes);
     }
   } else if (request.changeEnabledState) {
     const { addonId, newState } = request.changeEnabledState;
@@ -23,13 +24,13 @@ chrome.runtime.onMessage.addListener(function (request, _, sendResponse) {
     chrome.storage.sync.set({
       addonsEnabled: scratchAddons.localState.addonsEnabled,
     });
-    const manifest = scratchAddons.manifests.find((addon) => addon.addonId === addonId)?.manifest;
+    const manifest = scratchAddons.manifests?.find((addon) => addon.addonId === addonId)?.manifest;
     const { dynamicEnable, dynamicDisable } = manifest || {};
     // Fire disabled event for userscripts
     if (dynamicEnable && newState === true)
-      scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonDynamicEnable", { detail: { addonId, manifest } }));
+      scratchAddons.localEvents?.dispatchEvent(new CustomEvent("addonDynamicEnable", { detail: { addonId, manifest } }));
     if (dynamicDisable && newState === false)
-      scratchAddons.localEvents.dispatchEvent(
+      scratchAddons.localEvents?.dispatchEvent(
         new CustomEvent("addonDynamicDisable", { detail: { addonId, manifest } })
       );
 
@@ -41,7 +42,7 @@ chrome.runtime.onMessage.addListener(function (request, _, sendResponse) {
           addonObj.self.dispatchEvent(new CustomEvent("disabled"));
           addonObj._kill();
         });
-      scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
+      scratchAddons.localEvents?.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
     } else {
       runPersistentScripts(addonId);
     }
@@ -52,10 +53,10 @@ chrome.runtime.onMessage.addListener(function (request, _, sendResponse) {
       addonSettings: scratchAddons.globalState.addonSettings,
     });
 
-    const manifest = scratchAddons.manifests.find((addon) => addon.addonId === addonId)?.manifest;
-    const { updateUserstylesOnSettingsChange } = manifest||{};
+    const manifest = scratchAddons.manifests?.find((addon) => addon.addonId === addonId)?.manifest;
+    const { updateUserstylesOnSettingsChange } = manifest || {};
     if (updateUserstylesOnSettingsChange)
-      scratchAddons.localEvents.dispatchEvent(
+      scratchAddons.localEvents?.dispatchEvent(
         new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest } })
       );
   }

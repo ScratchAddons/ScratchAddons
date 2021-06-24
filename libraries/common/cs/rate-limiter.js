@@ -19,7 +19,7 @@ export default class RateLimiter {
   abort(call = true) {
     if (this.timeout) {
       clearTimeout(this.timeout);
-      if (call) this.callback();
+      if (call) this.callback?.();
       this.timeout = this.callback = null;
     }
   }

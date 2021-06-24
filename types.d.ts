@@ -1,18 +1,16 @@
 import type UserscriptAddon from "./addon-api/content-script/Addon.js";
 import type PersistentScriptAddon from "./addon-api/background/Addon.js";
-import type Chrome from "./libraries/thirdparty/chrome";
 import type Auth from "./addon-api/common/Auth";
 import type Self from "./addon-api/common/Self";
 import type Settings from "./addon-api/common/Settings";
 import type Tab from "./addon-api/content-script/Tab";
+
 import type BackgroundLocalizationProvider from "./background/l10n";
-type Script = {
-  global: { [key: string]: any };
-  console: Console;
-  msg: () => string | null;
-  msg: { locale: string };
-  safeMsg: () => string | null;
-};
+import type UserscriptLocalizationProvider from "./content-scripts/inject/l10n";
+import type { SharedObserver } from "./content-scripts/inject/module";
+
+import type Chrome from "./libraries/thirdparty/types/chrome";
+import type Comlink from "./libraries/thirdparty/types/comlink";
 interface Message {
   id: number;
   datetime_created: Date;
@@ -49,6 +47,7 @@ interface Message {
   parent_id?: number;
   parent_title?: string;
 }
+export type msg = (key: string, placeholders: { [key: string]: string }) => string | null;
 
 //#region scratchAddons APIs
 export interface globalState {
@@ -92,6 +91,39 @@ interface localState {
     addonSettings: boolean;
   };
 }
+
+export interface cs {
+  /** @privte */
+  _url: string;
+  url: string;
+  requestMsgCount: () => void;
+  copyImage: (dataURL: string) => Promise<void>;
+}
+
+export interface page {
+  /** @private */
+  _globalState: globalState;
+  globalState: globalState & {
+    _target?: globalState | undefined;
+  };
+
+  l10njson: string[];
+  addonsWithUserscripts: {
+    addonId: string;
+    scripts: {
+      url: string;
+      runAtComplete: boolean;
+    }[];
+  }[];
+  /** @private */
+  _dataReady: boolean;
+  dataReady: boolean;
+
+  runAddonUserscripts: (info: { addonId: any; scripts: any; enabledLate?: boolean }) => Promise<void>;
+
+  fireEvent: (info: { name: string; addonId?: string; target: "auth" | "self" | "settings" | "tab" }) => void;
+  setMsgCount: ({ count: number }) => void;
+}
 //#endregion
 
 //#region Addon Manifests
@@ -134,7 +166,7 @@ export interface AddonManifest {
     /** The name of the CSS variable. */
     name: string;
 
-    value: CssManipulator;
+    value: CSSManipulator;
   }[];
 
   /** The description of the addons. Any credits and attributions also belong here. */
@@ -271,7 +303,7 @@ export interface AddonManifest {
   versionAdded?: string;
 }
 
-type CssManipulator = {
+export type CSSManipulator = {
   /** The setting ID to reference. */
   settingId?: string;
 
@@ -279,19 +311,19 @@ type CssManipulator = {
   type?: string;
 
   /** The value for black text. */
-  black?: CssManipulator;
+  black?: CSSManipulator;
 
   /**
    * The source to manipulate.
    *
    * The source that provides the color.
    */
-  source?: CssManipulator;
+  source?: CSSManipulator;
 
   threshold?: number;
 
   /** The value for white text. */
-  white?: CssManipulator;
+  white?: CSSManipulator;
 
   /** The alpha/opacity value of the color. */
   a?: number;
@@ -306,10 +338,10 @@ type CssManipulator = {
   r?: number;
 
   /** The source that provides opaque color. */
-  opaqueSource?: CssManipulator;
+  opaqueSource?: CSSManipulator;
 
   /** The source that provides transparent color. */
-  transparentSource?: CssManipulator;
+  transparentSource?: CSSManipulator;
 };
 
 /**
@@ -335,56 +367,68 @@ interface SettingMatch {
 
 declare global {
   //#region Addon APIs
-  namespace Addon {
+  namespace AddonAPIs {
     export type Userscript = {
+      safeMsg: msg;
       addon: UserscriptAddon;
     } & Script;
 
     export type PersistentScript = {
       addon: PersistentScriptAddon;
 
-      // Borrowed from lib.dom.d.ts
-      setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
-      setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
-      clearInterval(handle?: number): void;
-      clearTimeout(handle?: number): void;
+      // Borrowed from @types/node/globals.d.ts
+      setInterval: (callback: (...args: any[]) => void, ms?: number, ...args: any[]) => NodeJS.Timeout;
+      setTimeout: (callback: (...args: any[]) => void, ms?: number, ...args: any[]) => NodeJS.Timeout;
+      clearInterval: (intervalId: NodeJS.Timeout) => void;
+      clearTimeout: (timeoutId: NodeJS.Timeout) => void;
     } & Script;
   }
+  type Script = {
+    global: { [key: string]: any };
+    console: Console;
+    msg: msg;
+    msg: { locale: string };
+  };
   //#endregion
   //#region scratchAddons APIs
   declare const scratchAddons: {
-    muted: boolean;
+    muted?: boolean;
     addonObjects?: PersistentScriptAddon[];
+    classNames?: { loaded: boolean; arr?: string[] };
     eventTargets: {
       auth: Auth[];
       self: Self[];
       settings: Settings[];
       tab?: Tab[];
     };
-    localEvents: EventTarget;
-    l10n: BackgroundLocalizationProvider;
+    localEvents?: EventTarget;
+    l10n: BackgroundLocalizationProvider | UserscriptLocalizationProvider;
     globalState: {
       _target?: globalState;
     } & globalState;
-    localState: {
+    localState?: {
       _target?: localState;
     } & localState;
     methods: {
-      clearMessages: () => Promise<void>;
-      getMessages: (opts?: { offset?: number; }) => Promise<Message[]>;
-      getMsgCount: () => Promise<number>;
+      clearMessages?: () => Promise<void>;
+      getMessages?: (opts?: { offset?: number }) => Promise<Message[]>;
+      getMsgCount?: () => Promise<number>;
+      copyImage?: (dataUrl: string) => Promise<void>;
     };
-    manifests: {
+    manifests?: {
       addonId: string;
       manifest: AddonManifest;
     }[];
+    sharedObserver?: SharedObserver;
   };
   declare const _realConsole: Console;
   declare const __scratchAddonsRedux: {
     target?: EventTarget;
-    dispatch?: (payload: { type: string;[ key: string ]: any; }) => any; // I have no idea what this is...@apple502j?
+    dispatch?: (payload: { type: string; [key: string]: any }) => any;
     state: any; // lol way to much to try to type, even using AI
   };
+  declare const __scratchAddonsTraps: EventTarget&{_onceMap:{[key: string]: any}};
+  declare const __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: (...args: any[]) => any;
   //#endregion
   interface Window {
     [ key: string ]: any;
@@ -395,15 +439,20 @@ declare global {
   interface Event {
     detail?: any;
   }
-  interface chrome {
-    WebRequest: {
-    WebRequestHeadersDetails:{
-    originUrl ?: string;
+  namespace chrome.webRequest {
+    export var OnBeforeSendHeadersOptions = any;
+    export interface WebRequestHeadersDetails {
+      originUrl?: string;
+    }
   }
-}
+  declare namespace chrome.tabs {
+    export interface Tab {
+      frameId?: number;
+    }
   }
-  declare const chrome: Chrome;
+  declare const chrome: undefined | Chrome;
+  declare const Comlink: undefined | Comlink;
 
-  declare const browser: Chrome | undefined;
+  declare const browser: undefined | Chrome; // Technically not identical to `chrome`, but I'm not gonna type it
   declare const InstallTrigger: undefined; // Technically defined in FF, but I'm not gonna type it
 }

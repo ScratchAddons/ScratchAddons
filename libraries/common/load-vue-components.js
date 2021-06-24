@@ -1,3 +1,4 @@
+/** @type {{ [key: string]: string }} */
 const styles = {};
 
 /**
@@ -5,7 +6,7 @@ const styles = {};
  *
  * @param {string[]} filenames - Filenames of the components, without extensions.
  *
- * @returns {Promise}
+ * @returns {Promise<void>}
  */
 export default (filenames) =>
   Promise.all(
@@ -19,7 +20,7 @@ export default (filenames) =>
           const dom = new DOMParser().parseFromString(text, "text/html");
           const css = dom.querySelector("style")?.textContent;
           if (css) {
-            if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
+            if (chrome.runtime.getManifest().version_name?.includes("-prerelease")) {
               const normalizedCss = css.replace("\n", "").trimEnd();
               const normalizedText = text.replace(/\r/g, "");
               const cssFirstLine = normalizedCss.substring(0, normalizedCss.indexOf("\n"));
@@ -28,12 +29,12 @@ export default (filenames) =>
                 0: "/*",
                 [linesToAdd - 1]: "<style> */",
               }).join("\n");
-              styles[filename] = `${newLines}\n${normalizedCss}/* \n</style> */\n/*# sourceURL=${htmlUrl} */`;
+              styles[filename] = `${newLines}\n${normalizedCss}/*\n</style> */\n/*# sourceURL=${htmlUrl} */`;
             } else {
               styles[filename] = css;
             }
           }
-          return dom.querySelector("template").innerHTML;
+          return dom.querySelector("template")?.innerHTML;
         })
         .then((template) => jsPromise.then((esm) => esm.default({ template })));
     })
@@ -41,9 +42,9 @@ export default (filenames) =>
     filenames.forEach((filename) => {
       if (!styles[filename]) return;
       const style = document.createElement("style");
-      style.textContent = styles[filename];
+      style.textContent = styles[filename] ?? null;
       const [componentName] = filename.split("/").slice(-1);
-      style.setAttribute("data-vue-component", componentName); // For debugging (has no side effects)
+      style.setAttribute("data-vue-component", componentName || ""); // For debugging (has no side effects)
       document.head.insertBefore(style, document.head.querySelector("[data-below-vue-components]"));
     })
   );

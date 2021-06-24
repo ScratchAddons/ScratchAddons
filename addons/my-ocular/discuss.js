@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, console, msg }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   let posts = document.querySelectorAll(".blockpost");
 
   posts.forEach(async (i) => {

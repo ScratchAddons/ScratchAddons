@@ -2,7 +2,7 @@
 export default class Listenable extends EventTarget {
   constructor() {
     super();
-    if (this._eventTargetKey !== null) {
+    if (this._eventTargetKey) {
       scratchAddons.eventTargets[this._eventTargetKey]?.push(this);
     }
   }
@@ -15,7 +15,8 @@ export default class Listenable extends EventTarget {
   /**
    * If the subclass removes stale references using dispose(), this key will be used.
    *
-   * @type {"auth" | "settings" | "self" | "tab" | null}
+   * @type {(("auth" | "settings" | "self" | "tab") & string) | null}
+   * @protected
    */
   get _eventTargetKey() {
     return null;
@@ -24,7 +25,7 @@ export default class Listenable extends EventTarget {
   /** Destructor of this instance. */
   dispose() {
     const key = this._eventTargetKey;
-    if (key === null) return;
+    if (!key) return;
     scratchAddons.eventTargets[key]?.splice(scratchAddons.eventTargets[key]?.findIndex((x) => x === this) ?? 0, 1);
   }
 }

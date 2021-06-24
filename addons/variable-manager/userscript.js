@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, console, msg }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const vm = addon.tab.traps.vm;
 
   let localVariables = [];

@@ -2,7 +2,7 @@ import Addon from "../../addon-api/background/Addon.js";
 
 /** @param {string} addonId */
 export default async function runPersistentScripts(addonId) {
-  const manifest = scratchAddons.manifests.find((obj) => obj.addonId === addonId)?.manifest;
+  const manifest = scratchAddons.manifests?.find((obj) => obj.addonId === addonId)?.manifest;
   const permissions = manifest?.permissions || [];
   if (manifest?.persistentScripts)
     executePersistentScripts({ addonId, permissions, scriptUrls: manifest.persistentScripts });
@@ -13,8 +13,9 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
   const addonObjReal = new Addon({ id: addonId, permissions });
   const addonObjRevocable = Proxy.revocable(addonObjReal, {});
   const addonObj = addonObjRevocable.proxy;
-  scratchAddons.addonObjects.push(addonObjReal);
-  /** @param {NodeJS.Timeout} timeoutId */
+  scratchAddons.addonObjects?.push(addonObjReal);
+
+  /** @type {(timeoutId: NodeJS.Timeout) => void} */
   const clearTimeoutFunc = (timeoutId) => {
     addonObjReal._timeouts.splice(
       addonObjReal._timeouts.findIndex((x) => x === timeoutId),
@@ -23,7 +24,7 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
     return clearTimeout(timeoutId);
   };
 
-  /** @param {NodeJS.Timeout} intervalId */
+  /** @type {(intervalId: NodeJS.Timeout) => void} */
   const clearIntervalFunc = (intervalId) => {
     addonObjReal._intervals.splice(
       addonObjReal._intervals.findIndex((x) => x === intervalId),
@@ -32,33 +33,33 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
     return clearInterval(intervalId);
   };
 
-  /**
-   * @param {() => void} func
-   * @param {number} [interval]
-   */
-  const setTimeoutFunc = function (func, interval) {
-    const timeoutId = setTimeout(function () {
-      func();
-      clearTimeoutFunc(timeoutId);
-    }, interval);
+  /** @type {(callback: (...args: any[]) => void, ms?: number, ...args: any[]) => NodeJS.Timeout} */
+  const setTimeoutFunc = function (callback, ms, ...args) {
+    const timeoutId = setTimeout(
+      function (...args) {
+        callback(...args);
+        clearTimeoutFunc(timeoutId);
+      },
+      ms,
+      ...args
+    );
     addonObjReal._timeouts.push(timeoutId);
     return timeoutId;
   };
-  /**
-   * @param {() => void} func
-   * @param {number} [interval]
-   *
-   * @returns
-   */
-  const setIntervalFunc = function (func, interval) {
-    const intervalId = setInterval(function () {
-      func();
-    }, interval);
+  /** @type {(callback: (...args: any[]) => void, ms?: number, ...args: any[]) => NodeJS.Timeout} */
+  const setIntervalFunc = function (callback, ms, ...args) {
+    const intervalId = setInterval(
+      function (...args) {
+        callback(...args);
+      },
+      ms,
+      ...args
+    );
     addonObjReal._intervals.push(intervalId);
     return intervalId;
   };
   addonObjReal._revokeProxy = () => {
-    scratchAddons.addonObjects.splice(
+    scratchAddons.addonObjects?.splice(
       scratchAddons.addonObjects.findIndex((x) => x === addonObjReal),
       1
     );
@@ -76,13 +77,11 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
       `%cDebug addons/${addonId}/${scriptPath}: ${scriptUrl}`,
       "color:red; font-weight: bold; font-size: 1.2em;"
     );
+    /** @type {{ default: (api: AddonAPIs.PersistentScript) => void }} */
     const module = await import(chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`));
     const log = console.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
     const warn = console.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
-    /**
-     * @param {string} key
-     * @param {{ [key: string]: string }} placeholders
-     */
+    /** @type {import("../../types").msg & { locale: string }} */
     const msg = (key, placeholders) =>
       scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
     msg.locale = scratchAddons.l10n.locale;

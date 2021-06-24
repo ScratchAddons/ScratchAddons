@@ -1,7 +1,7 @@
 import commentEmojis from "./comment-emojis.js";
 
 export default async (
-  /** @type {import("../../types").PersistentScript} */ {
+  /** @type {AddonAPIs.PersistentScript} */ {
     addon,
     console,
     setTimeout,

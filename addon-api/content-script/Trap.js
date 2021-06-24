@@ -5,10 +5,15 @@ export default class Trap extends Listenable {
   /** @param {import("./Tab").default} tab */
   constructor(tab) {
     super();
+    /** @private */
     this._react_internal_key = undefined;
+    /** @private */
     this._isWWW = tab.clientVersion === "scratch-www";
+    /** @private */
     this._getEditorMode = () => this._isWWW && tab.editorMode;
+    /** @private */
     this._waitForElement = (/** @type {any} */ q) => tab.waitForElement(q, { markAsSeen: true });
+    /** @private */
 
     this._cache = Object.create(null);
   }
@@ -40,12 +45,12 @@ export default class Trap extends Listenable {
     const BLOCKS_CLASS = '[class^="gui_blocks-wrapper"]';
     let elem = document.querySelector(BLOCKS_CLASS);
     if (!elem) {
-      elem = await this._waitForElement(BLOCKS_CLASS);
+      elem = await this._waitForElement(BLOCKS_CLASS)??null;
     }
     if (!this._react_internal_key) {
       this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
     }
-    let childable = elem[`${this._react_internal_key}`];
+    let childable = elem?.[`${this._react_internal_key}`];
     /* eslint-disable no-empty */
     while (((childable = childable.child), !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)) {}
     /* eslint-enable no-empty */

@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   const semicolon = document.createElement("p");
   semicolon.textContent = ";";
   semicolon.classList.add("semicolon");

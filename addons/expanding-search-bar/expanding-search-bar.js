@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   if (addon.tab.clientVersion === null) return; //if neither www or r2, exit
 
   var exsearch_searchBar; //The search bar element

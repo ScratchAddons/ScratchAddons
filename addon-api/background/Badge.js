@@ -2,9 +2,13 @@
 export default class Badge {
   /** @param {import("Addon.js").default} addonObject */
   constructor(addonObject) {
+    /** @private */
     this._addonId = addonObject.self.id;
+    /** @private */
     this._text = null;
+    /** @private */
     this._color = null;
+    if (!scratchAddons.localState) throw new TypeError("localState is nor defined")
     scratchAddons.localState.badges[this._addonId] = {
       text: null,
       color: null,

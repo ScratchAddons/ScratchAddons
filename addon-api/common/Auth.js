@@ -4,6 +4,8 @@ import Listenable from "./Listenable.js";
 export default class Auth extends Listenable {
   constructor() {
     super();
+    /** @private */
+    this._addonId = "";
   }
   /**
    * Whether the user is logged in or not.
@@ -54,7 +56,10 @@ export default class Auth extends Listenable {
     return scratchAddons.globalState.auth.scratchLang;
   }
 
-  /** @type {"auth"} */
+  /**
+   * @type {"auth" & string}
+   * @protected
+   */
   get _eventTargetKey() {
     return "auth";
   }

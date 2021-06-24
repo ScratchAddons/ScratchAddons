@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   async function remixHandler() {
     while (true) {
       await addon.tab.waitForElement(".remix-credit", {

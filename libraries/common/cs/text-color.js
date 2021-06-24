@@ -1,3 +1,4 @@
+/** @param {string} hex */
 function parseHex(hex) {
   return {
     r: parseInt(hex.substring(1, 3), 16),
@@ -7,31 +8,42 @@ function parseHex(hex) {
   };
 }
 
-function convertComponentToHex(a) {
-  a = Math.round(a).toString(16);
-  if (a.length === 1) return `0${a}`;
-  return a;
+/** @param {number} number */
+function numberToHex(number) {
+  const rounded = Math.round(number).toString(16);
+  if (rounded.length === 1) return `0${rounded}`;
+  return rounded;
 }
 
+/** @param {{ r: number; g: number; b: number; a?: number }} obj */
 function convertToHex(obj) {
-  const r = convertComponentToHex(obj.r);
-  const g = convertComponentToHex(obj.g);
-  const b = convertComponentToHex(obj.b);
-  const a = obj.a !== undefined ? convertComponentToHex(255 * obj.a) : "";
+  const r = numberToHex(obj.r);
+  const g = numberToHex(obj.g);
+  const b = numberToHex(obj.b);
+  const a = obj.a !== undefined ? numberToHex(255 * obj.a) : "";
   return `#${r}${g}${b}${a}`;
 }
 
-function textColor(hex, black, white, threshold) {
+/**
+ * @param {string} hex
+ * @param {string} [black]
+ * @param {string} [white]
+ * @param {number} [threshold]
+ */
+function textColor(hex, black = "#575e75", white = "#ffffff", threshold = 170) {
   const { r, g, b } = parseHex(hex);
-  threshold = threshold !== undefined ? threshold : 170;
+  // https://stackoverflow.com/a/3943023
   if (r * 0.299 + g * 0.587 + b * 0.114 > threshold) {
-    // https://stackoverflow.com/a/3943023
-    return black !== undefined ? black : "#575e75";
+    return black;
   } else {
-    return white !== undefined ? white : "#ffffff";
+    return white;
   }
 }
 
+/**
+ * @param {string} hex
+ * @param {{ r?: number; g?: number; b?: number; a?: number }} c
+ */
 function multiply(hex, c) {
   const { r, g, b, a } = parseHex(hex);
   if (c.r === undefined) c.r = 1;
@@ -41,6 +53,10 @@ function multiply(hex, c) {
   return convertToHex({ r: c.r * r, g: c.g * g, b: c.b * b, a: c.a * a });
 }
 
+/**
+ * @param {string} hex
+ * @param {{ r?: number; g?: number; b?: number; a?: number }} c
+ */
 function brighten(hex, c) {
   const { r, g, b, a } = parseHex(hex);
   if (c.r === undefined) c.r = 1;
@@ -55,6 +71,10 @@ function brighten(hex, c) {
   });
 }
 
+/**
+ * @param {string} opaqueHex
+ * @param {string} transparentHex
+ */
 function alphaBlend(opaqueHex, transparentHex) {
   const { r: r1, g: g1, b: b1 } = parseHex(opaqueHex);
   const { r: r2, g: g2, b: b2, a } = parseHex(transparentHex);
@@ -65,6 +85,7 @@ function alphaBlend(opaqueHex, transparentHex) {
   });
 }
 
+/** @param {string} hex */
 function recolorFilter(hex) {
   const { r, g, b } = parseHex(hex);
   return `url("data:image/svg+xml,
@@ -79,8 +100,7 @@ function recolorFilter(hex) {
       </filter>
     </svg>#recolor
   ")`
-    .split("\n")
-    .join("");
+    .replace(/\s+/g," ");
 }
 
 globalThis.__scratchAddonsTextColor = {

@@ -1,12 +1,15 @@
 import LocalizationProvider from "../../libraries/common/cs/l10n.js";
 
 export default class UserscriptLocalizationProvider extends LocalizationProvider {
+  /** @param {string[]} urls */
   constructor(urls) {
     super();
+    /** @private */
     this._urls = new Set(urls);
     this.generalLoaded = false;
   }
 
+  /** @param {string} addonId */
   async loadByAddonId(addonId) {
     if (addonId !== "_general" && !this.generalLoaded) {
       await this.loadByAddonId("_general");

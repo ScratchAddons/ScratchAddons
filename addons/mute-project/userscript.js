@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   const vm = addon.tab.traps.vm;
   let muted = false;
   let icon = document.createElement("img");

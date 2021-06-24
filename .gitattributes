@@ -1,6 +1,4 @@
-*.md export-ignore
-LICENSE export-ignore
+**.md export-ignore
 .* export-ignore
-types.d.ts export-ignore
-
-libraries/README.md -export-ignore
+**.d.ts export-ignore
+jsconfig.json export-ignore

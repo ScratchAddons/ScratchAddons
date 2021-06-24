@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, console }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   while (true) {
     let comment = await addon.tab.waitForElement(".comment .content, .comment-content", {
       markAsSeen: true,

@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, msg }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, msg }) => {
   const showMenu = addon.settings.get("showMenu");
   const forceAlternative = addon.settings.get("forceAlternative");
   const alternativePlayer = addon.settings.get("alternativePlayer");

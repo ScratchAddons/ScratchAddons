@@ -1,9 +1,24 @@
-/*
-  Auto-escape input to prevent XSS.
-  Usage: autoescaper`trusted code ${untrusted value}`
-*/
+/** @file Auto-escape Input to prevent XSS. */
 
+/**
+ * Escapes HTML special characters.
+ *
+ * @param {string} str - The string.
+ *
+ * @returns {string} HTML-escaped string.
+ */
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
+/**
+ * Auto-escapes inputs of template strings.
+ *
+ * @example
+ *   autoescaper`trusted code ${untrusted_value}`;
+ *
+ * @param {string[]} strings - The template string.
+ * @param {...string} dangerous - The inputs.
+ *
+ * @returns {string} String with inputs escaped.
+ */
 const autoescaper = (strings, ...dangerous) => {
   let r = "";
   let i = 0;
@@ -14,21 +29,6 @@ const autoescaper = (strings, ...dangerous) => {
   return r;
 };
 
-/**
- * Auto-escapes inputs of template strings.
- *
- * @param {string[]} strings - The template string.
- * @param {...string} dangerous - The inputs.
- *
- * @returns {string} String with inputs escaped.
- */
 export default autoescaper;
 
-/**
- * Escapes HTML special characters.
- *
- * @param {string} str - The string.
- *
- * @returns {string} HTML-escaped string.
- */
 export { escapeHTML };

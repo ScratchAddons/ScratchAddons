@@ -14,8 +14,10 @@ export default class Self extends Listenable {
    */
   constructor(addonObj, info) {
     super();
+    /** @protected */
     this._addonId = info.id; // In order to receive fireEvent messages from background
     this.id = info.id;
+    /** @protected */
     this._addonObj = addonObj;
     this.browser = typeof InstallTrigger !== "undefined" ? "firefox" : "chrome";
     this.disabled = false;
@@ -42,7 +44,10 @@ export default class Self extends Listenable {
     return `${this._addonObj._path}libraries`;
   }
 
-  /** @type {"self"} */
+  /**
+   * @type {"self" & string}
+   * @protected
+   */
   get _eventTargetKey() {
     return "self";
   }

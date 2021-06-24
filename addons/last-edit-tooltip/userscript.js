@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, console, msg }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const headers = new Headers();
   if (addon.auth.xToken) headers.set("X-Token", addon.auth.xToken);
 
@@ -26,8 +26,7 @@ export default async (/** @type {Addon.Userscript} */ { addon, console, msg }) =
     });
     let dateMod = data.history.modified ? dateFormatterWithMonthName.format(new Date(data.history.modified)) : "?";
     let dateShared = data.history.shared ? dateFormatterWithMonthName.format(new Date(data.history.shared)) : "?";
-    let dataTitle = `${msg("shared", { date: dateShared })}
-${msg("modified", { date: dateMod })}`;
+    let dataTitle = `${msg("shared", { date: dateShared })}\n${msg("modified", { date: dateMod })}`;
     element.setAttribute("title", dataTitle);
   }
 };

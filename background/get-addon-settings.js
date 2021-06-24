@@ -1,8 +1,8 @@
-chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {}, addonsEnabled = {} }) => {
+chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({addonSettings = {}, addonsEnabled = {}}) => {
   const func = () => {
     let madeAnyChanges = false;
 
-    for (const { manifest, addonId } of scratchAddons.manifests) {
+    for (const { manifest, addonId } of scratchAddons.manifests||[]) {
       // TODO: we should be using Object.create(null) instead of {}
       /** @type {{ [key: string]: string | number | boolean }} */
       const settings = addonSettings[addonId] || {};
@@ -89,10 +89,11 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
 
     if (madeAnyChanges) chrome.storage.sync.set({ addonSettings, addonsEnabled });
     scratchAddons.globalState.addonSettings = addonSettings;
+    if (!scratchAddons.localState)throw new TypeError("localState is not set")
     scratchAddons.localState.addonsEnabled = addonsEnabled;
     scratchAddons.localState.ready.addonSettings = true;
   };
 
-  if (scratchAddons.localState.ready.manifests) func();
-  else scratchAddons.localEvents.addEventListener("manifestsReady", func);
+  if (scratchAddons.localState?.ready.manifests) func();
+  else scratchAddons.localEvents?.addEventListener("manifestsReady", func);
 });

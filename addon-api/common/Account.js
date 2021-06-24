@@ -10,8 +10,8 @@ export default class Account extends Listenable {
    *
    * @returns {Promise<number>} - Current message count.
    */
-  getMsgCount() {
-    return scratchAddons.methods.getMsgCount();
+  async getMsgCount() {
+    return scratchAddons.methods.getMsgCount?.()||0;
   }
   /**
    * Fetches messages.
@@ -19,14 +19,14 @@ export default class Account extends Listenable {
    * @param {any[]} args
    */
   getMessages(...args) {
-    return scratchAddons.methods.getMessages(...args);
+    return scratchAddons.methods.getMessages?.(...args);
   }
   /**
    * Clears unread messages.
    *
    * @returns {Promise<void>}
    */
-  clearMessages() {
-    return scratchAddons.methods.clearMessages();
+  async clearMessages() {
+    return scratchAddons.methods.clearMessages?.();
   }
 }

@@ -1,5 +1,16 @@
 import Addon from "../../addon-api/content-script/Addon.js";
+import UserscriptLocalizationProvider from "./l10n.js";
 
+/**
+ * @param {{
+ *   addonId: string;
+ *   scripts: {
+ *     url: string;
+ *     runAtComplete: boolean;
+ *   }[];
+ *   enabledLate?: boolean;
+ * }} param0
+ */
 export default async function runAddonUserscripts({ addonId, scripts, enabledLate = false }) {
   const addonObj = new Addon({ id: addonId, enabledLate });
   const globalObj = Object.create(null);
@@ -11,10 +22,12 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
       "color:red; font-weight: bold; font-size: 1.2em;"
     );
     const loadUserscript = async () => {
-      await scratchAddons.l10n.loadByAddonId(addonId);
+      if (scratchAddons.l10n instanceof UserscriptLocalizationProvider) await scratchAddons.l10n.loadByAddonId(addonId);
+      /** @type {{ default: (api: AddonAPIs.Userscript) => void }} */
       const module = await import(scriptUrl);
       const log = _realConsole.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
       const warn = _realConsole.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
+      /** @type {import("../../types").msg & { locale: string }} */
       const msg = (key, placeholders) =>
         scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
       msg.locale = scratchAddons.l10n.locale;

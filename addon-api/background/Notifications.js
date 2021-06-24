@@ -5,9 +5,13 @@ export default class Notifications extends Listenable {
   /** @param {import("Addon.js").default} addon */
   constructor(addon) {
     super();
+    /** @private */
     this._addonId = addon.self.id;
 
-    /** @param {string} notifId */
+    /**
+     * @param {string} notifId
+     * @private
+     */
     this._onClicked = (notifId) => {
       if (notifId.startsWith(this._addonId)) {
         this.dispatchEvent(
@@ -20,7 +24,10 @@ export default class Notifications extends Listenable {
       }
     };
 
-    /** @param {string} notifId */
+    /**
+     * @param {string} notifId
+     * @private
+     */
     this._onClosed = (notifId) => {
       if (notifId.startsWith(this._addonId)) {
         this.dispatchEvent(
@@ -131,7 +138,7 @@ export default class Notifications extends Listenable {
    * @type {boolean}
    */
   get muted() {
-    return scratchAddons.muted;
+    return scratchAddons.muted||false;
   }
   dispose() {
     chrome.notifications.onClicked.removeListener(this._onClicked);

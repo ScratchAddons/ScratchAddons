@@ -26,6 +26,7 @@ export default class Tab extends Listenable {
       : null;
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
+    /** @private */
     this._waitForElementSet = new WeakSet();
   }
 
@@ -77,7 +78,7 @@ export default class Tab extends Listenable {
    * @param {string[]} [opts.reduxEvents] - An array of redux events that must be dispatched before resolving the
    *   selector. Use this as an optimization and do not rely on the behavior.
    *
-   * @returns {Promise<Element>} - Element found.
+   * @returns {Promise<Node> | undefined} - Element found.
    */
   waitForElement(selector, opts = {}) {
     const markAsSeen = !!opts.markAsSeen;
@@ -92,7 +93,7 @@ export default class Tab extends Listenable {
     }
     const { reduxCondition, condition } = opts;
     /** @type {EventListenerOrEventListenerObject | null} */
-    let listener;
+    let listener = null;
     let combinedCondition = () => {
       if (condition && !condition()) return false;
       if (this.redux.state) {
@@ -118,14 +119,14 @@ export default class Tab extends Listenable {
       this.redux.initialize();
       this.redux.addEventListener("statechanged", listener);
     }
-    const promise = scratchAddons.sharedObserver.watch({
+    const promise = scratchAddons.sharedObserver?.watch({
       query: selector,
-      seen: markAsSeen ? this._waitForElementSet : null,
+      seen: markAsSeen ? this._waitForElementSet : undefined,
       condition: combinedCondition,
     });
 
     if (listener) {
-      promise.then((/** @type {any} */ match) => {
+      promise?.then((/** @type {Node} */ match) => {
         this.redux.removeEventListener("statechanged", listener);
         return match;
       });
@@ -152,7 +153,7 @@ export default class Tab extends Listenable {
    *
    * @param {string} dataURL - Data url of the png image.
    *
-   * @returns {Promise}
+   * @returns {Promise<void> | undefined}
    */
   copyImage(dataURL) {
     if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError("Expected PNG data URL"));
@@ -167,7 +168,7 @@ export default class Tab extends Listenable {
       return navigator.clipboard.write(items);
     } else {
       // Firefox needs Content Script
-      return scratchAddons.methods.copyImage(dataURL).catch((err) => {
+      return scratchAddons.methods.copyImage?.(dataURL).catch((err) => {
         return Promise.reject(new Error(`Error inside clipboard handler: ${err}`));
       });
     }
@@ -182,12 +183,12 @@ export default class Tab extends Listenable {
    */
   scratchMessage(key) {
     if (this.clientVersion === "scratch-www") {
-      const locales = [window._locale ? window._locale.toLowerCase() : "en"];
+      const locales = [window._locale?.toLowerCase() || "en"];
       if (locales[0].includes("-")) locales.push(locales[0].split("-")[0]);
       if (locales.includes("pt") && !locales.includes("pt-br")) locales.push("pt-br");
       if (!locales.includes("en")) locales.push("en");
       for (const locale of locales) {
-        if (window._messages[locale] && window._messages[locale][key]) {
+        if (window._messages?.[locale]?.[key]) {
           return window._messages[locale][key];
         }
       }
@@ -200,7 +201,10 @@ export default class Tab extends Listenable {
     return "";
   }
 
-  /** @type {"tab"} */
+  /**
+   * @type {"tab" & string}
+   * @protected
+   */
   get _eventTargetKey() {
     return "tab";
   }
@@ -235,9 +239,9 @@ export default class Tab extends Listenable {
     args
       .filter((arg) => typeof arg === "string")
       .forEach((classNameToFind) => {
-        if (scratchAddons.classNames.loaded) {
+        if (scratchAddons.classNames?.loaded) {
           res +=
-            scratchAddons.classNames.arr.find(
+            scratchAddons.classNames.arr?.find(
               (/** @type {string} */ className) =>
                 className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
             ) || "";

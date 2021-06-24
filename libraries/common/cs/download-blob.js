@@ -1,6 +1,5 @@
-// From https://github.com/LLK/scratch-gui/blob/develop/src/lib/download-blob.js
 /**
- * Downloads a Blob.
+ * Downloads a Blob. From https://github.com/LLK/scratch-gui/blob/develop/src/lib/download-blob.js
  *
  * @param {string} filename - The filename.
  * @param {Blob} blob - The blob.
@@ -31,7 +30,8 @@ export default (filename, blob) => {
     let popup = window.open("", "_blank");
     const reader = new FileReader();
     reader.onloadend = function () {
-      popup.location.href = reader.result;
+      if(!popup) throw new Error("Failed to open popup");
+      popup.location.href = `${reader.result}`;
       popup = null;
     };
     reader.readAsDataURL(blob);

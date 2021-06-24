@@ -89,13 +89,13 @@ function contextMenuMuted() {
 function muteForMins(mins) {
   if (mins !== Infinity) chrome.alarms.create("muted", { delayInMinutes: mins });
   scratchAddons.muted = true;
-  scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
+  scratchAddons.localEvents?.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
   chrome.storage.local.set({ muted: true });
 }
 
 function unmute() {
   scratchAddons.muted = false;
-  scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
+  scratchAddons.localEvents?.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
   chrome.storage.local.set({ muted: false });
 }
 

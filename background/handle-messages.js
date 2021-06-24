@@ -141,7 +141,7 @@ async function requestMessages(options) {
 chrome.runtime.onMessage.addListener(function (request, sender) {
   if (request === "getMsgCount") {
     (async () => {
-      const count = await scratchAddons.methods.getMsgCount();
+      const count = await scratchAddons.methods.getMsgCount?.();
       chrome.tabs.sendMessage(
         Number(sender.tab?.id),
         { setMsgCount: { count } },

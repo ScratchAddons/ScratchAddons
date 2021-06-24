@@ -16,7 +16,7 @@ function getL10NURLs() {
   return urls;
 }
 
-scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) => {
+scratchAddons.localEvents?.addEventListener("addonDynamicEnable", ({ detail }) => {
   const { addonId, manifest } = detail;
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
@@ -35,7 +35,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
                       cssVariables,
                       addonId,
                       injectAsStyleElt: !!manifest.injectAsStyleElt,
-                      index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                      index: scratchAddons.manifests?.findIndex((addon) => addon.addonId === addonId),
                     },
                   },
                   { frameId: 0 }
@@ -48,7 +48,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
     })
   );
 });
-scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) => {
+scratchAddons.localEvents?.addEventListener("addonDynamicDisable", ({ detail }) => {
   const { addonId } = detail;
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
@@ -58,7 +58,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) =
     })
   );
 });
-scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ detail }) => {
+scratchAddons.localEvents?.addEventListener("updateUserstylesSettingsChange", ({ detail }) => {
   const { addonId, manifest } = detail;
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
@@ -76,7 +76,7 @@ scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ 
                     cssVariables,
                     addonId,
                     injectAsStyleElt: !!manifest.injectAsStyleElt,
-                    index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                    index: scratchAddons.manifests?.findIndex((addon) => addon.addonId === addonId),
                   },
                 },
                 { frameId: 0 }
@@ -143,7 +143,7 @@ async function getContentScriptInfo(url) {
      * @type {{
      *   addonId: string;
      *   styles: string[];
-     *   cssVariables: { name: string; value: import("../types").CssManipulator }[];
+     *   cssVariables: { name: string; value: import("../types").CSSManipulator }[];
      *   injectAsStyleElt: boolean;
      *   index: number;
      * }[]}
@@ -151,8 +151,8 @@ async function getContentScriptInfo(url) {
     addonsWithUserstyles: [],
   };
 
-  scratchAddons.manifests.forEach(async ({ addonId, manifest }, i) => {
-    if (!scratchAddons.localState.addonsEnabled[addonId]) return;
+  scratchAddons.manifests?.forEach(async ({ addonId, manifest }, i) => {
+    if (!scratchAddons.localState?.addonsEnabled[addonId]) return;
     const promise = getAddonData({ addonId, manifest, url });
     const { userscripts, userstyles, cssVariables } = await promise;
     if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
@@ -187,7 +187,7 @@ const csInfoCache = new Map();
 chrome.webRequest.onBeforeRequest.addListener(
   //@ts-expect-error -- It doesn't matter if it's async, the response is never used anyway.
   async (request) => {
-    if (!scratchAddons.localState.allReady) return;
+    if (!scratchAddons.localState?.allReady) return;
     const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
     const loadingObj = { loading: true };
     csInfoCache.set(identity, loadingObj);
@@ -198,7 +198,7 @@ chrome.webRequest.onBeforeRequest.addListener(
       return;
     }
     csInfoCache.set(identity, { loading: false, info, timestamp: Date.now() });
-    scratchAddons.localEvents.dispatchEvent(new CustomEvent("csInfoCacheUpdated"));
+    scratchAddons.localEvents?.dispatchEvent(new CustomEvent("csInfoCacheUpdated"));
   },
   {
     urls: ["https://scratch.mit.edu/*"],
@@ -241,7 +241,7 @@ chrome.webRequest.onResponseStarted.addListener(
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (!request.contentScriptReady) return;
-  if (scratchAddons.localState.allReady) {
+  if (scratchAddons.localState?.allReady) {
     const identity = createCsIdentity({
       tabId: Number(sender.tab?.id),
       frameId: Number(sender.frameId),
@@ -251,14 +251,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     let cacheEntry = getCacheEntry();
     if (cacheEntry) {
       if (cacheEntry.loading) {
-        scratchAddons.localEvents.addEventListener("csInfoCacheUpdated", function thisFunction() {
+        scratchAddons.localEvents?.addEventListener("csInfoCacheUpdated", function thisFunction() {
           cacheEntry = getCacheEntry();
           if (!cacheEntry) {
-            scratchAddons.localEvents.removeEventListener("csInfoCacheUpdated", thisFunction);
+            scratchAddons.localEvents?.removeEventListener("csInfoCacheUpdated", thisFunction);
           } else if (!cacheEntry.loading) {
             sendResponse(cacheEntry.info);
             csInfoCache.delete(identity);
-            scratchAddons.localEvents.removeEventListener("csInfoCacheUpdated", thisFunction);
+            scratchAddons.localEvents?.removeEventListener("csInfoCacheUpdated", thisFunction);
           }
         });
       } else {
@@ -272,7 +272,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
   } else {
     // Wait until manifests, addon.auth and addon.settings are ready
-    scratchAddons.localEvents.addEventListener(
+    scratchAddons.localEvents?.addEventListener(
       "ready",
       async () => {
         const info = await getContentScriptInfo(request.contentScriptReady.url);
@@ -305,7 +305,7 @@ const WELL_KNOWN_PATTERNS = {
   editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
   forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
   scratchWWWNoProject:
-    /^\/(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|dmca|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|sec|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost)\/?$/,
+    /^\/(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|dmca|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|sec|starter-projects|classes\/(?:complete_registration|[^/]+\/register\/[^/]+)|signup\/[^/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost)\/?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {

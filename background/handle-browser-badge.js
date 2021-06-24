@@ -1,9 +1,9 @@
-scratchAddons.localEvents.addEventListener("badgeUpdateNeeded", () => {
+scratchAddons.localEvents?.addEventListener("badgeUpdateNeeded", () => {
   // Note: for now, only one addon can use the badge.
   // If you want your addon to use the badge's text
   // or color, please open an issue on GitHub.
   const hardcodedBadgeUser = "msg-count-badge";
-  if (scratchAddons.localState.addonsEnabled[hardcodedBadgeUser] && !scratchAddons.muted) {
+  if (scratchAddons.localState?.addonsEnabled[hardcodedBadgeUser] && !scratchAddons.muted) {
     let text = scratchAddons.localState.badges[hardcodedBadgeUser]?.text;
     if (!text) text = "";
     else if (typeof text === "number") text = String(text);

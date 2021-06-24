@@ -25,7 +25,6 @@
     "useDefineForClassFields": true,
     "noUncheckedIndexedAccess": true
   },
-  "exclude": ["libraries/thirdparty"],
-  "typeAcquisition": { "enable": true },
-  "include": ["./**/*"]
+  "exclude": ["libraries/thirdparty/**/*"],
+  "typeAcquisition": { "enable": true }
 }

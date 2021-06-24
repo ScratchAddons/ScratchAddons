@@ -1,3 +1,5 @@
+import BackgroundLocalizationProvider from "./l10n.js";
+
 (async function () {
   /** @type {string[]} */
   const folderNames = await (await fetch("/addons/addons.json")).json();
@@ -5,7 +7,7 @@
     if (folderNames.lastIndexOf(addonId) !== i)
       throw new ReferenceError("`" + addonId + "` is duplicated in ./addons/addons.json");
   });
-  await scratchAddons.l10n.load(folderNames);
+  if (scratchAddons.l10n instanceof BackgroundLocalizationProvider) await scratchAddons.l10n.load(folderNames);
   const useDefault = scratchAddons.l10n.locale.startsWith("en");
   for (const folderName of folderNames) {
     if (folderName.startsWith("//")) continue;
@@ -109,8 +111,9 @@
           break;
       }
     }
-    scratchAddons.manifests.push({ addonId: folderName, manifest });
+    scratchAddons.manifests?.push({ addonId: folderName, manifest });
   }
+  if (!scratchAddons.localState) throw new TypeError("localState is not set");
   scratchAddons.localState.ready.manifests = true;
-  scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
+  scratchAddons.localEvents?.dispatchEvent(new CustomEvent("manifestsReady"));
 })();

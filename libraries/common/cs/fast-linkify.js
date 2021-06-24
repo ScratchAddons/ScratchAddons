@@ -1,23 +1,29 @@
-// Note: the regex below contains catastrophic backtracking.
-// However, if someone wanted to crash the website, there are many other (and better) ways.
-// Note that the regex is grouped for split() support.
+/**
+ * Note: the regex below contains catastrophic backtracking. However, if someone wanted to crash the website, there are
+ * many other (and better) ways.
+ *
+ * Note that the regex is grouped for split() support.
+ */
 const getURLRegex = () => /((?:https?:\/\/)?(?:[\w-]+\.)+(?:xn--[a-zA-Z\d]+|[a-zA-Z]{2,})(?:\/[^\s"<>\\^`{|}]*)?)/g;
 
+/**
+ * @param {ChildNode} child
+ */
 const _linkify = (child) => {
   if (!(child instanceof Text)) return;
-  child.nodeValue.split(getURLRegex()).forEach((content, i) => {
+  child.nodeValue?.split(getURLRegex()).forEach((content, i) => {
     const isLink = i % 2;
     if (isLink) {
       const elem = document.createElement("a");
       elem.textContent = content;
       if (!/^https?:\/\//g.test(content)) {
-        content = `http://${content}`;
+        content = `https://${content}`;
       }
       elem.href = content;
       elem.rel = "noreferrer";
-      child.parentNode.insertBefore(elem, child);
+      child.parentNode?.insertBefore(elem, child);
     } else {
-      child.parentNode.insertBefore(document.createTextNode(content), child);
+      child.parentNode?.insertBefore(document.createTextNode(content), child);
     }
   });
   child.remove();
@@ -25,17 +31,20 @@ const _linkify = (child) => {
 
 const getPingRegex = () => /^@[\w-]{3,20}$/g;
 
+/**
+ * @param {ChildNode} child
+ */
 const _pingify = (child) => {
   if (!(child instanceof Text)) return;
-  child.nodeValue.split(/(\s)/g).forEach((word) => {
+  child.nodeValue?.split(/(\s)/g).forEach((word) => {
     if (getPingRegex().test(word)) {
       const elem = document.createElement("a");
       elem.textContent = word;
       elem.href = `https://scratch.mit.edu/users/${word.slice(1)}/`;
       elem.rel = "noreferrer";
-      child.parentNode.insertBefore(elem, child);
+      child.parentNode?.insertBefore(elem, child);
     } else if (word) {
-      child.parentNode.insertBefore(document.createTextNode(word), child);
+      child.parentNode?.insertBefore(document.createTextNode(word), child);
     }
   });
   child.remove();
@@ -57,6 +66,7 @@ export const linkifyTextNode = (elem) => {
  * Linkify an element which uses tags around text, such as studio descriptions or project comments.
  *
  * @param {Element} elem Element to linkify to.
+ * @param {HTMLElement} [tagClass]
  */
 export const linkifyTag = (elem, tagClass) => {
   for (const tag of elem.children) {

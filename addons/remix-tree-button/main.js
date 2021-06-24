@@ -1,4 +1,4 @@
-export default async (/** @type {Addon.Userscript} */ { addon, console, msg }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   //define remix tree button elements
   function loadRemixButton() {
     if (document.querySelector("#scratchAddonsRemixTreeBtn")) return;
