@@ -1,7 +1,7 @@
 import runPersistentScripts from "./imports/run-persistent-scripts.js";
 
 chrome.runtime.onMessage.addListener(function (request, _, sendResponse) {
-  if (!scratchAddons.localState)throw new TypeError("localState is not set")
+  if (!scratchAddons.localState) throw new TypeError("localState is not set");
   // Message used to load popups as well
   if (request === "getSettingsInfo") {
     const sendRes = () =>
@@ -28,7 +28,9 @@ chrome.runtime.onMessage.addListener(function (request, _, sendResponse) {
     const { dynamicEnable, dynamicDisable } = manifest || {};
     // Fire disabled event for userscripts
     if (dynamicEnable && newState === true)
-      scratchAddons.localEvents?.dispatchEvent(new CustomEvent("addonDynamicEnable", { detail: { addonId, manifest } }));
+      scratchAddons.localEvents?.dispatchEvent(
+        new CustomEvent("addonDynamicEnable", { detail: { addonId, manifest } })
+      );
     if (dynamicDisable && newState === false)
       scratchAddons.localEvents?.dispatchEvent(
         new CustomEvent("addonDynamicDisable", { detail: { addonId, manifest } })

@@ -20,9 +20,7 @@ export default class Addon {
     this.settings = new Settings(this);
   }
 
-  /**
-   * @type {void | string}
-   */
+  /** @type {void | string} */
   get _path() {
     throw new Error("Subclasses must implement this.");
   }

@@ -1,8 +1,8 @@
-chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({addonSettings = {}, addonsEnabled = {}}) => {
+chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {}, addonsEnabled = {} }) => {
   const func = () => {
     let madeAnyChanges = false;
 
-    for (const { manifest, addonId } of scratchAddons.manifests||[]) {
+    for (const { manifest, addonId } of scratchAddons.manifests || []) {
       // TODO: we should be using Object.create(null) instead of {}
       /** @type {{ [key: string]: string | number | boolean }} */
       const settings = addonSettings[addonId] || {};
@@ -17,7 +17,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({addonSettings = {}
           if (settings.selectedMode && !settings.page) {
             /** @param {string} presetId */
             const usePreset = (presetId) => {
-              for (const option of (manifest.settings || Object.create(null))) {
+              for (const option of manifest.settings || Object.create(null)) {
                 if (option.id === "textShadow" && settings.textShadow !== undefined) {
                   // Exception: v1.12.0 already had this setting
                   // and we want to preserve what the user had
@@ -89,7 +89,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({addonSettings = {}
 
     if (madeAnyChanges) chrome.storage.sync.set({ addonSettings, addonsEnabled });
     scratchAddons.globalState.addonSettings = addonSettings;
-    if (!scratchAddons.localState)throw new TypeError("localState is not set")
+    if (!scratchAddons.localState) throw new TypeError("localState is not defined");
     scratchAddons.localState.addonsEnabled = addonsEnabled;
     scratchAddons.localState.ready.addonSettings = true;
   };

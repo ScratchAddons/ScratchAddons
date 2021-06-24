@@ -6,9 +6,7 @@ const onPermissionsRevoked = () => {
   });
 };
 
-/**
- * @param {(response?: any) => void} sendResponse
- */
+/** @param {(response?: any) => void} sendResponse */
 const checkPermissions = (sendResponse) => {
   chrome.permissions.contains(
     {

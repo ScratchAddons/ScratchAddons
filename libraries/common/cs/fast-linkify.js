@@ -6,9 +6,7 @@
  */
 const getURLRegex = () => /((?:https?:\/\/)?(?:[\w-]+\.)+(?:xn--[a-zA-Z\d]+|[a-zA-Z]{2,})(?:\/[^\s"<>\\^`{|}]*)?)/g;
 
-/**
- * @param {ChildNode} child
- */
+/** @param {ChildNode} child */
 const _linkify = (child) => {
   if (!(child instanceof Text)) return;
   child.nodeValue?.split(getURLRegex()).forEach((content, i) => {
@@ -31,9 +29,7 @@ const _linkify = (child) => {
 
 const getPingRegex = () => /^@[\w-]{3,20}$/g;
 
-/**
- * @param {ChildNode} child
- */
+/** @param {ChildNode} child */
 const _pingify = (child) => {
   if (!(child instanceof Text)) return;
   child.nodeValue?.split(/(\s)/g).forEach((word) => {

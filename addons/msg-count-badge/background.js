@@ -11,5 +11,4 @@ export default async (
     addon.badge.color = addon.settings.get("color");
   });
   setInterval(setBadge, 2500);
-  addon._revokeProxy
 };

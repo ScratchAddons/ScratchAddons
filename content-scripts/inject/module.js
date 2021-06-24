@@ -196,7 +196,7 @@ history.replaceState = function (...args) {
   const newUrl = new URL(`${args[2]}`, document.baseURI).href;
   const returnValue = originalReplaceState.apply(history, args);
   _cs_.url = newUrl;
-  for (const eventTarget of scratchAddons.eventTargets.tab||[]) {
+  for (const eventTarget of scratchAddons.eventTargets.tab || []) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
   bodyIsEditorClassCheck();

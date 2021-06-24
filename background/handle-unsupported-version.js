@@ -1,4 +1,4 @@
-function unsupportedBrowser  () {
+function unsupportedBrowser() {
   const userAgent = /(Firefox|Chrome)\/([0-9.]+)/.exec(navigator.userAgent);
   if (!userAgent || !userAgent[1] || !userAgent[2]) return false;
   const browser = userAgent[1];

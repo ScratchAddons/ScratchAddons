@@ -13,13 +13,9 @@ export default class BackgroundScriptAddon extends Addon {
   constructor(info) {
     super(info);
     const { permissions } = info;
-    /**
-     * @type {NodeJS.Timeout[]}
-     */
+    /** @type {NodeJS.Timeout[]} */
     this._timeouts = [];
-    /**
-     * @type {NodeJS.Timeout[]}
-     */
+    /** @type {NodeJS.Timeout[]} */
     this._intervals = [];
     this.self.restart = () => this._restart();
     if (permissions) {

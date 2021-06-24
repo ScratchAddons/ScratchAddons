@@ -62,12 +62,12 @@ export default class ThumbSetter {
   async upload(file) {
     try {
       const headers = new Headers();
-      headers.set("X-CSRFToken", this.getCSRFToken()||"");
+      headers.set("X-CSRFToken", this.getCSRFToken() || "");
       const resp = await fetch(`https://scratch.mit.edu/internalapi/project/thumbnail/${this.projectId}/set/`, {
         method: "POST",
         body: file,
         credentials: "include",
-        headers
+        headers,
       });
       if (!resp.ok) {
         /** @type {Error & { status?: number }} */

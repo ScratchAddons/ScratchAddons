@@ -1,6 +1,6 @@
 (async function () {
   await checkSession();
-  if (!scratchAddons.localState)throw new TypeError("localState is not set")
+  if (!scratchAddons.localState) throw new TypeError("localState is not set");
   scratchAddons.localState.ready.auth = true;
 })();
 

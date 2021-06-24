@@ -7,7 +7,7 @@ async function getPersistentScripts() {
   const manifests = scratchAddons.manifests?.filter(
     (obj) => scratchAddons.localState?.addonsEnabled[obj.addonId] === true
   );
-  for (const { addonId, manifest } of manifests||[]) {
+  for (const { addonId, manifest } of manifests || []) {
     if (manifest.persistentScripts && manifest.persistentScripts.length) runPersistentScripts(addonId);
   }
 }

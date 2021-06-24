@@ -7,11 +7,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     this.loaded = [];
   }
 
-
-  /**
-   *
-   * @param {string[]} addonIds
-   */
+  /** @param {string[]} addonIds */
   async load(addonIds) {
     addonIds = ["_general", ...addonIds].filter(
       (addonId) => !addonId.startsWith("//") && !this.loaded.includes(addonId)

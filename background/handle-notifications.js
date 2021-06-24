@@ -82,10 +82,7 @@ function contextMenuMuted() {
   });
 }
 
-/**
- *
- * @param {number} mins
- */
+/** @param {number} mins */
 function muteForMins(mins) {
   if (mins !== Infinity) chrome.alarms.create("muted", { delayInMinutes: mins });
   scratchAddons.muted = true;

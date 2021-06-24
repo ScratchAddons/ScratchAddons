@@ -57,7 +57,7 @@ function stateChange(parentObjectPath, key, value) {
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
   console.log(`%c${objectPath}`, "font-weight: bold;", "is now: ", objectPathArr[0] === "auth" ? "[redacted]" : value);
-  if (objectPathArr[0] === "ready" && Object.values(scratchAddons.localState?.ready||{}).every((x) => x === true)) {
+  if (objectPathArr[0] === "ready" && Object.values(scratchAddons.localState?.ready || {}).every((x) => x === true)) {
     console.log("Everything ready!");
     _localState.allReady = true;
     scratchAddons.localEvents?.dispatchEvent(new CustomEvent("ready"));

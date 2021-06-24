@@ -45,7 +45,7 @@ export default class Trap extends Listenable {
     const BLOCKS_CLASS = '[class^="gui_blocks-wrapper"]';
     let elem = document.querySelector(BLOCKS_CLASS);
     if (!elem) {
-      elem = await this._waitForElement(BLOCKS_CLASS)??null;
+      elem = (await this._waitForElement(BLOCKS_CLASS)) ?? null;
     }
     if (!this._react_internal_key) {
       this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));

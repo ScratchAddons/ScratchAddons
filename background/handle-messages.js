@@ -69,11 +69,11 @@ async function updateMsgCount() {
 }
 scratchAddons.methods.clearMessages = async function () {
   const headers = new Headers();
-  headers.set("x-csrftoken", `${scratchAddons.globalState.auth.csrfToken}`)
-  headers.set("x-requested-with", "XMLHttpRequest")
+  headers.set("x-csrftoken", `${scratchAddons.globalState.auth.csrfToken}`);
+  headers.set("x-requested-with", "XMLHttpRequest");
   const res = await fetch("https://scratch.mit.edu/site-api/messages/messages-clear/?sareferer", {
     method: "POST",
-    headers: headers
+    headers,
   });
   if (res.ok) {
     lastCountCheck = Date.now();

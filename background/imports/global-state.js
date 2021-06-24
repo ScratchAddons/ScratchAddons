@@ -59,8 +59,7 @@ function messageForAllTabs(message) {
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach(
       (tab) =>
-        (tab.url || (!tab.url && typeof browser !== "undefined")) &&
-        chrome.tabs.sendMessage(Number(tab.id), message)
+        (tab.url || (!tab.url && typeof browser !== "undefined")) && chrome.tabs.sendMessage(Number(tab.id), message)
     )
   );
 }

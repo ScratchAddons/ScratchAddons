@@ -23,7 +23,7 @@ export default class Settings extends Listenable {
     else return value;
   }
 
-  /** @type {"settings"&string} */
+  /** @type {"settings" & string} */
   get _eventTargetKey() {
     return "settings";
   }

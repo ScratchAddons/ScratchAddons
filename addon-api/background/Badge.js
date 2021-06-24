@@ -8,7 +8,7 @@ export default class Badge {
     this._text = null;
     /** @private */
     this._color = null;
-    if (!scratchAddons.localState) throw new TypeError("localState is nor defined")
+    if (!scratchAddons.localState) throw new TypeError("localState is not defined");
     scratchAddons.localState.badges[this._addonId] = {
       text: null,
       color: null,

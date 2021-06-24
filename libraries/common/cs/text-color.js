@@ -99,8 +99,7 @@ function recolorFilter(hex) {
         '/>
       </filter>
     </svg>#recolor
-  ")`
-    .replace(/\s+/g," ");
+  ")`.replace(/\s+/g, " ");
 }
 
 globalThis.__scratchAddonsTextColor = {

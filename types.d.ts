@@ -427,11 +427,11 @@ declare global {
     dispatch?: (payload: { type: string; [key: string]: any }) => any;
     state: any; // lol way to much to try to type, even using AI
   };
-  declare const __scratchAddonsTraps: EventTarget&{_onceMap:{[key: string]: any}};
+  declare const __scratchAddonsTraps: EventTarget & { _onceMap: { [key: string]: any } };
   declare const __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: (...args: any[]) => any;
   //#endregion
   interface Window {
-    [ key: string ]: any;
+    [key: string]: any;
   }
   interface RegExp {
     _scratchDomainImplied?: boolean;
