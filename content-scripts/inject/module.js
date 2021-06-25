@@ -11,16 +11,21 @@ scratchAddons.eventTargets = {
 };
 
 const pendingPromises = {};
+
+/** @type {(undefined | ((value: any) => void))[]} */
 pendingPromises.msgCount = [];
 
 const comlinkIframe1 = document.getElementById("scratchaddons-iframe-1");
 const comlinkIframe2 = document.getElementById("scratchaddons-iframe-2");
 const comlinkIframe3 = document.getElementById("scratchaddons-iframe-3");
 const comlinkIframe4 = document.getElementById("scratchaddons-iframe-4");
-const _cs_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe2.contentWindow, comlinkIframe1.contentWindow));
 
+/** @type {import("../../types").cs} */
+const _cs_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe2?.contentWindow, comlinkIframe1?.contentWindow));
+
+/** @type {import("../../types").page} */
 const page = {
-  _globalState: null,
+  _globalState: scratchAddons.globalState,
   get globalState() {
     return this._globalState;
   },
@@ -28,8 +33,8 @@ const page = {
     this._globalState = scratchAddons.globalState = val;
   },
 
-  l10njson: null, // Only set once
-  addonsWithUserscripts: null, // Only set once
+  l10njson: [], // Only set once
+  addonsWithUserscripts: [], // Only set once
 
   _dataReady: false,
   get dataReady() {
@@ -46,39 +51,49 @@ const page = {
     if (info.addonId) {
       if (info.name === "disabled") {
         document.documentElement.style.setProperty(
-          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`,
+          `--${info.addonId.replace(/-([a-z])/g, (g) => `${g[1]?.toUpperCase()}`)}-_displayNoneWhileDisabledValue`,
           "none"
         );
       } else if (info.name === "reenabled") {
         document.documentElement.style.removeProperty(
-          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`
+          `--${info.addonId.replace(/-([a-z])/g, (g) => `${g[1]?.toUpperCase()}`)}-_displayNoneWhileDisabledValue`
         );
       }
 
       // Addon specific events, like settings change and self disabled
-      const eventTarget = scratchAddons.eventTargets[info.target].find(
+      const eventTarget = scratchAddons.eventTargets[info.target]?.find(
+        /**
+         * @param {  | import("../../addon-api/common/Auth").default
+         *   | import("../../addon-api/common/Self").default
+         *   | import("../../addon-api/common/Settings").default
+         *   | import("../../addon-api/content-script/Tab").default} eventTarget
+         *
+         * @returns
+         */
         (eventTarget) => eventTarget._addonId === info.addonId
       );
       if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(info.name));
     } else {
       // Global events, like auth change
-      scratchAddons.eventTargets[info.target].forEach((eventTarget) =>
+      scratchAddons.eventTargets[info.target]?.forEach((eventTarget) =>
         eventTarget.dispatchEvent(new CustomEvent(info.name))
       );
     }
   },
+  /** @param {{ count: number }} arg0 */
   setMsgCount({ count }) {
-    pendingPromises.msgCount.forEach((promiseResolver) => promiseResolver(count));
+    pendingPromises.msgCount.forEach((promiseResolver) => promiseResolver?.(count));
     pendingPromises.msgCount = [];
   },
 };
-Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
+Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4?.contentWindow, comlinkIframe3?.contentWindow));
 
-class SharedObserver {
+// Exported only to be refrenced in TS types.
+export class SharedObserver {
   constructor() {
     this.inactive = true;
     this.pending = new Set();
-    this.observer = new MutationObserver((mutation, observer) => {
+    this.observer = new MutationObserver(() => {
       for (const item of this.pending) {
         if (item.condition && !item.condition()) continue;
         for (const match of document.querySelectorAll(item.query)) {
@@ -100,10 +115,12 @@ class SharedObserver {
 
   /**
    * Watches an element.
-   * @param {object} opts - options
-   * @param {string} opts.query - query.
-   * @param {WeakSet=} opts.seen - a WeakSet that tracks whether an element has already been seen.
-   * @param {function=} opts.condition - a function that returns whether to resolve the selector or not.
+   *
+   * @param {object} opts - Options.
+   * @param {string} opts.query - Query.
+   * @param {WeakSet<object>} [opts.seen] - A WeakSet that tracks whether an element has already been seen.
+   * @param {function} [opts.condition] - A function that returns whether to resolve the selector or not.
+   *
    * @returns {Promise<Node>} Promise that is resolved with modified element.
    */
   watch(opts) {
@@ -174,12 +191,12 @@ if (!document.body) document.addEventListener("DOMContentLoaded", bodyIsEditorCl
 else bodyIsEditorClassCheck();
 
 const originalReplaceState = history.replaceState;
-history.replaceState = function () {
+history.replaceState = function (...args) {
   const oldUrl = location.href;
-  const newUrl = new URL(arguments[2], document.baseURI).href;
-  const returnValue = originalReplaceState.apply(history, arguments);
+  const newUrl = new URL(`${args[2]}`, document.baseURI).href;
+  const returnValue = originalReplaceState.apply(history, args);
   _cs_.url = newUrl;
-  for (const eventTarget of scratchAddons.eventTargets.tab) {
+  for (const eventTarget of scratchAddons.eventTargets.tab || []) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
   bodyIsEditorClassCheck();
@@ -187,12 +204,12 @@ history.replaceState = function () {
 };
 
 const originalPushState = history.pushState;
-history.pushState = function () {
+history.pushState = function (...args) {
   const oldUrl = location.href;
-  const newUrl = new URL(arguments[2], document.baseURI).href;
-  const returnValue = originalPushState.apply(history, arguments);
+  const newUrl = new URL(`${args[2]}`, document.baseURI).href;
+  const returnValue = originalPushState.apply(history, args);
   _cs_.url = newUrl;
-  for (const eventTarget of scratchAddons.eventTargets.tab) {
+  for (const eventTarget of scratchAddons.eventTargets.tab || []) {
     eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl, newUrl } }));
   }
   bodyIsEditorClassCheck();
@@ -200,6 +217,7 @@ history.pushState = function () {
 };
 
 function loadClasses() {
+  if (!scratchAddons.classNames) scratchAddons.classNames = { loaded: false };
   scratchAddons.classNames.arr = [
     ...new Set(
       [...document.styleSheets]
@@ -238,7 +256,7 @@ function loadClasses() {
         .forEach((classNameToFind) =>
           el.classList.replace(
             `scratchAddonsScratchClass/${classNameToFind}`,
-            scratchAddons.classNames.arr.find(
+            scratchAddons.classNames?.arr?.find(
               (className) =>
                 className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
             ) || `scratchAddonsScratchClass/${classNameToFind}`
@@ -256,7 +274,7 @@ function loadClasses() {
 
 if (document.querySelector("title")) loadClasses();
 else {
-  const stylesObserver = new MutationObserver((mutationsList) => {
+  const stylesObserver = new MutationObserver(() => {
     if (document.querySelector("title")) {
       stylesObserver.disconnect();
       loadClasses();
@@ -268,13 +286,14 @@ else {
 if (location.pathname === "/discuss/3/topic/add/") {
   const checkUA = () => {
     if (!window.mySettings) return false;
-    const ua = window.mySettings.markupSet.find((x) => x.className);
+    const ua = window.mySettings.markupSet.find(/** @param {Element} x */ (x) => x.className);
     ua.openWith = window._simple_http_agent = ua.openWith.replace("version", "versions");
     const textarea = document.getElementById("id_body");
     if (textarea?.value) {
       textarea.value = ua.openWith;
       return true;
     }
+    return false;
   };
   if (!checkUA()) window.addEventListener("DOMContentLoaded", () => checkUA(), { once: true });
 }

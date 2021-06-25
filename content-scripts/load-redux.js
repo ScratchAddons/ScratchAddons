@@ -2,20 +2,19 @@ function injectRedux() {
   window.__scratchAddonsRedux = {};
   if (typeof window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ !== "undefined") {
     return console.warn(
-      "Redux feature is disabled due to conflict. \
-Some addons will not work. Uninstall other browser extensions to \
-fix this warning."
+      "Redux feature is disabled due to conflict.\nSome addons will not work. Uninstall other browser extensions to fix this warning."
     );
   }
 
   // ReDucks: Redux ducktyped
   // Not actual Redux, but should be compatible
   class ReDucks {
+    /** @param {((...next: any[]) => (action: any) => any)[]} composeArgs */
     static compose(...composeArgs) {
-      if (composeArgs.length === 0) return (...args) => args;
-      return (...args) => {
+      if (composeArgs.length === 0) return (/** @type {any[]} */ ...args) => args;
+      return (/** @type {((...arg0: any[]) => any)[]} */ ...args) => {
         const composeArgsReverse = composeArgs.slice(0).reverse();
-        let result = composeArgsReverse.shift()(...args);
+        let result = composeArgsReverse.shift()?.(...args);
         for (const fn of composeArgsReverse) {
           result = fn(result);
         }
@@ -23,42 +22,57 @@ fix this warning."
       };
     }
 
+    /**
+     * @param {((args: {
+     *   getState: any;
+     *   dispatch: (payload: { type: string; [key: string]: any }) => any;
+     * }) => (next: any) => (action: any) => any)[]} middlewares
+     */
     static applyMiddleware(...middlewares) {
-      return (createStore) =>
-        (...createStoreArgs) => {
+      return (/** @type {(...arg0: any[]) => any} */ createStore) => {
+        /** @param {any[]} createStoreArgs */
+        return (...createStoreArgs) => {
           const store = createStore(...createStoreArgs);
           let { dispatch } = store;
           const api = {
             getState: store.getState,
-            dispatch: (action) => dispatch(action),
+            dispatch,
           };
           const initialized = middlewares.map((middleware) => middleware(api));
           dispatch = ReDucks.compose(...initialized)(store.dispatch);
           return Object.assign({}, store, { dispatch });
         };
+      };
     }
   }
-
+  /** @param {((createStore: (arg0: any) => any) => (...createStoreArgs: any[]) => any)[]} args */
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ = function (...args) {
     const scratchAddonsRedux = window.__scratchAddonsRedux;
     const reduxTarget = (scratchAddonsRedux.target = new EventTarget());
     scratchAddonsRedux.state = {};
     scratchAddonsRedux.dispatch = () => {};
-
+    /**
+     * @type {(args: {
+     *   getState: any;
+     *   dispatch: (payload: { type: string; [key: string]: any }) => any;
+     * }) => (next: any) => (action: any) => any}
+     */
     function middleware({ getState, dispatch }) {
       scratchAddonsRedux.dispatch = dispatch;
       scratchAddonsRedux.state = getState();
-      return (next) => (action) => {
-        const nextReturn = next(action);
-        const ev = new CustomEvent("statechanged", {
-          detail: {
-            prev: scratchAddonsRedux.state,
-            next: (scratchAddonsRedux.state = getState()),
-            action,
-          },
-        });
-        reduxTarget.dispatchEvent(ev);
-        return nextReturn;
+      return (/** @type {(arg0: any) => any} */ next) => {
+        return (/** @type {{ type: string; [key: string]: any }} */ action) => {
+          const nextReturn = next(action);
+          const ev = new CustomEvent("statechanged", {
+            detail: {
+              prev: scratchAddonsRedux.state,
+              next: (scratchAddonsRedux.state = getState()),
+              action,
+            },
+          });
+          reduxTarget.dispatchEvent(ev);
+          return nextReturn;
+        };
       };
     }
     args.splice(1, 0, ReDucks.applyMiddleware(middleware));

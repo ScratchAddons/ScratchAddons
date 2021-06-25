@@ -4,17 +4,34 @@ try {
   throw "Scratch Addons: not first party iframe";
 }
 
+/** @type {string} */
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
 
 let receivedResponse = false;
-const onMessageBackgroundReady = (request, sender, sendResponse) => {
+/** @param {any} request */
+const onMessageBackgroundReady = (request) => {
   if (request === "backgroundListenerReady" && !receivedResponse) {
     chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse);
   }
 };
 chrome.runtime.onMessage.addListener(onMessageBackgroundReady);
 
-/** @param {any} res */
+/**
+ * @param {{
+ *   url: string;
+ *   httpStatusCode?: number;
+ *   l10njson: string[];
+ *   globalState: import("../types").globalState;
+ *   addonsWithUserscripts: { addonId: string; scripts: { url: string; runAtComplete: boolean }[] }[];
+ *   addonsWithUserstyles: {
+ *     addonId: string;
+ *     styles: string[];
+ *     cssVariables: { name: string; value: import("../types").CSSManipulator }[];
+ *     injectAsStyleElt: boolean;
+ *     index: number;
+ *   }[];
+ * }} res
+ */
 const onResponse = (res) => {
   if (res && !receivedResponse) {
     console.log("[Message from background]", res);
@@ -34,12 +51,21 @@ chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onRes
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
 const promisify =
-  (callbackFn) =>
-  (...args) =>
-    new Promise((resolve) => callbackFn(...args, resolve));
+  /**
+   * @param {(...args: any[]) => any} callbackFn
+   *
+   * @returns {(...args: any[]) => Promise<any>}
+   */
 
-let _page_ = null;
-let globalState = null;
+
+    (callbackFn) =>
+    (...args) =>
+      new Promise((resolve) => callbackFn(...args, resolve));
+
+/** @type {import("../types").page} */
+let _page_;
+/** @type {import("../types").globalState} */
+let globalState;
 
 const comlinkIframesDiv = document.createElement("div");
 comlinkIframesDiv.id = "scratchaddons-iframes";
@@ -59,6 +85,8 @@ comlinkIframesDiv.appendChild(comlinkIframe4);
 document.documentElement.appendChild(comlinkIframesDiv);
 
 const csUrlObserver = new EventTarget();
+
+/** @type {import("../types").cs} */
 const cs = {
   _url: location.href, // Updated by module.js on calls to history.replaceState/pushState
   get url() {
@@ -71,14 +99,19 @@ const cs = {
   requestMsgCount() {
     chrome.runtime.sendMessage("getMsgCount");
   },
+  /**
+   * @param {string} dataURL
+   *
+   * @returns {Promise<void>}
+   */
   copyImage(dataURL) {
     // Firefox only
     return new Promise((resolve, reject) => {
       browser.runtime.sendMessage({ clipboardDataURL: dataURL }).then(
-        (res) => {
+        () => {
           resolve();
         },
-        (res) => {
+        /** @param {Error} res */ (res) => {
           reject(res.toString());
         }
       );
@@ -132,10 +165,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+/**
+ * @param {{
+ *   styles: string[];
+ *   addonId: string;
+ *   injectAsStyleElt: boolean;
+ *   index: number;
+ * }} addon
+ */
 function addStyle(addon) {
   const allStyles = [...document.querySelectorAll(".scratch-addons-style")];
   const addonStyles = allStyles.filter((el) => el.getAttribute("data-addon-id") === addon.addonId);
 
+  /**
+   * @param {HTMLStyleElement} el
+   * @param {number} index
+   */
   const appendByIndex = (el, index) => {
     // Append a style element in the correct place preserving order
     const nextElement = allStyles.find((el) => Number(el.getAttribute("data-addon-index") > index));
@@ -158,7 +203,7 @@ function addStyle(addon) {
       const style = document.createElement("style");
       style.classList.add("scratch-addons-style");
       style.setAttribute("data-addon-id", addon.addonId);
-      style.setAttribute("data-addon-index", addon.index);
+      style.setAttribute("data-addon-index", `${addon.index}`);
       style.textContent = userstyle;
       appendByIndex(style, addon.index);
     } else {
@@ -171,13 +216,15 @@ function addStyle(addon) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.setAttribute("data-addon-id", addon.addonId);
-      link.setAttribute("data-addon-index", addon.index);
+      link.setAttribute("data-addon-index", `${addon.index}`);
       link.classList.add("scratch-addons-style");
       link.href = userstyle;
       appendByIndex(link, addon.index);
     }
   }
 }
+
+/** @param {string} addonId */
 function removeAddonStyles(addonId) {
   // Instead of actually removing the style/link element, we just disable it.
   // That way, if the addon needs to be reenabled, it can just enable that style/link element instead of readding it.
@@ -185,6 +232,14 @@ function removeAddonStyles(addonId) {
   document.querySelectorAll(`[data-addon-id='${addonId}']`).forEach((style) => (style.disabled = true));
 }
 
+/**
+ * @param {{
+ *   styles: string[];
+ *   addonId: string;
+ *   injectAsStyleElt: boolean;
+ *   index: number;
+ * }[]} addonsWithUserstyles
+ */
 function injectUserstyles(addonsWithUserstyles) {
   for (const addon of addonsWithUserstyles || []) {
     addStyle(addon);
@@ -192,8 +247,29 @@ function injectUserstyles(addonsWithUserstyles) {
 }
 
 const textColorLib = __scratchAddonsTextColor;
+
+/**
+ * @param {{
+ *   [key: string]: { [key: string]: string | boolean | number };
+ * }} addonSettings
+ * @param {{
+ *   addonId: string;
+ *   styles: string[];
+ *   cssVariables: {
+ *     name: string;
+ *     value: import("../types").CSSManipulator;
+ *   }[];
+ *   injectAsStyleElt: boolean;
+ *   index: number;
+ * }[]} addonsWithUserstyles
+ */
 function setCssVariables(addonSettings, addonsWithUserstyles) {
-  const hyphensToCamelCase = (s) => s.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+  const hyphensToCamelCase = /** @param {string} s */ (s) => s.replace(/-([a-z])/g, (g) => `${g[1]?.toUpperCase()}`);
+  /**
+   * @param {string} addonId
+   * @param {string} varName
+   * @param {string} value
+   */
   const setVar = (addonId, varName, value) =>
     document.documentElement.style.setProperty(`--${hyphensToCamelCase(addonId)}-${varName}`, value);
 
@@ -202,20 +278,27 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
   // Set variables for settings
   for (const addonId of addonIds) {
     for (const settingName of Object.keys(addonSettings[addonId] || {})) {
-      const value = addonSettings[addonId][settingName];
+      const value = addonSettings[addonId]?.[settingName];
       if (typeof value === "string" || typeof value === "number") {
-        setVar(addonId, hyphensToCamelCase(settingName), addonSettings[addonId][settingName]);
+        setVar(addonId, hyphensToCamelCase(settingName), `${addonSettings[addonId]?.[settingName]}`);
       }
     }
   }
 
-  // Set variables for customCssVariables
+  /**
+   * Set variables for customCssVariables.
+   *
+   * @param {string} addonId
+   * @param {import("../types").CSSManipulator | string} [obj]
+   *
+   * @returns {string}
+   */
   const getColor = (addonId, obj) => {
-    if (typeof obj === "string" || obj === undefined) return obj;
+    if (typeof obj === "string" || obj === undefined) return `${obj}`;
     let hex;
     switch (obj.type) {
       case "settingValue":
-        return addonSettings[addonId][obj.settingId];
+        return `${addonSettings[addonId]?.[`${obj.settingId}`]}`;
       case "textColor": {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
@@ -240,6 +323,8 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         return textColorLib.recolorFilter(hex);
       }
     }
+
+    throw new TypeError(obj.type + " is an invalid CSS manipulator type");
   };
 
   for (const addon of addonsWithUserstyles) {
@@ -250,7 +335,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
     }
   }
 }
-
+/** @returns {Promise<void>} */
 function waitForDocumentHead() {
   if (document.head) return Promise.resolve();
   else {
@@ -265,7 +350,22 @@ function waitForDocumentHead() {
     });
   }
 }
-
+/**
+ * @param {{
+ *   url: string;
+ *   httpStatusCode?: number;
+ *   l10njson: string[];
+ *   globalState: import("../types").globalState;
+ *   addonsWithUserscripts: { addonId: string; scripts: { url: string; runAtComplete: boolean }[] }[];
+ *   addonsWithUserstyles: {
+ *     addonId: string;
+ *     styles: string[];
+ *     cssVariables: { name: string; value: import("../types").CSSManipulator }[];
+ *     injectAsStyleElt: boolean;
+ *     index: number;
+ *   }[];
+ * }} arg0
+ */
 async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
   const isStudio = /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/.test(location.pathname);
   if (isStudio && !pseudoUrl) {
@@ -279,8 +379,13 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
     }
   }
 
-  // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
+  /**
+   * In order to NOT pass `addonsWithUserscripts` to `everLoadedAddons` by reference, we stringify and parse.
+   *
+   * @type {addonsWithUserscripts}
+   */
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
+  /** @type {string[]} */
   const disabledDynamicAddons = [];
   globalState = globalStateMsg;
   setCssVariables(globalState.addonSettings, addonsWithUserstyles);
@@ -348,9 +453,10 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
     }
   });
 }
-
+/** @type {(str: string) => string} */
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
+/** @param {string} key */
 function forumWarning(key) {
   let postArea = document.querySelector("form#post > label");
   if (postArea) {
@@ -367,7 +473,7 @@ function forumWarning(key) {
     reportLink.target = "_blank";
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     let text1 = document.createElement("span");
-    text1.innerHTML = escapeHTML(chrome.i18n.getMessage(key, DOLLARS)).replace("$1", reportLink.outerHTML);
+    text1.innerHTML = escapeHTML(chrome.i18n.getMessage(key, [reportLink.outerHTML]));
     addonError.appendChild(text1);
     errorList.appendChild(addonError);
   }
@@ -420,7 +526,7 @@ const showBanner = () => {
     cursor: pointer;
     width: 24px;`,
     title: chrome.i18n.getMessage("close"),
-    src: chrome.runtime.getURL("../images/cs/close.svg"),
+    src: chrome.runtime.getURL("/images/cs/close.svg"),
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
@@ -428,9 +534,7 @@ const showBanner = () => {
 
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
-    textContent: chrome.i18n
-      .getMessage("extensionHasUpdated", DOLLARS)
-      .replace(/\$(\d+)/g, (_, i) => [chrome.runtime.getManifest().version][Number(i) - 1]),
+    textContent: chrome.i18n.getMessage("extensionHasUpdated", [chrome.runtime.getManifest().version]),
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -438,17 +542,16 @@ const showBanner = () => {
       /\$(\d+)/g,
       (_, i) =>
         [
-          /*
-          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
-          Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeatureName") })
-            .outerHTML,
-          */
+          // Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeature") }).outerHTML,
+          // Object.assign(document.createElement("b"), { textContent: chrome.i18n.getMessage("newFeatureName") })
+          //   .outerHTML,
+
           Object.assign(document.createElement("a"), {
             href: "https://scratch.mit.edu/scratch-addons-extension/settings",
             target: "_blank",
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
-        ][Number(i) - 1]
+        ][Number(i) - 1] || ""
     ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
@@ -476,33 +579,32 @@ const showBanner = () => {
   const notifFooterLegal = Object.assign(document.createElement("small"), {
     textContent: chrome.i18n.getMessage("notAffiliated"),
   });
-  notifFooter.appendChild(notifFooterChangelog);
-  notifFooter.appendChild(document.createTextNode(" | "));
-  notifFooter.appendChild(notifFooterFeedback);
-  notifFooter.appendChild(document.createTextNode(" | "));
-  notifFooter.appendChild(notifFooterTranslate);
-  notifFooter.appendChild(makeBr());
-  notifFooter.appendChild(notifFooterLegal);
 
-  notifText.appendChild(notifTitle);
-  notifText.appendChild(notifClose);
-  notifText.appendChild(makeBr());
-  notifText.appendChild(notifInnerText0);
-  notifText.appendChild(makeBr());
-  notifText.appendChild(notifInnerText1);
-  notifText.appendChild(makeBr());
-  notifText.appendChild(notifInnerText2);
-  notifText.appendChild(makeBr());
-  notifText.appendChild(notifFooter);
-
-  notifImageLink.appendChild(notifImage);
-
-  notifInnerBody.appendChild(notifImageLink);
-  notifInnerBody.appendChild(notifText);
-
-  notifOuterBody.appendChild(notifInnerBody);
-
-  document.body.appendChild(notifOuterBody);
+  notifFooter.append(
+    notifFooterChangelog,
+    " | ",
+    notifFooterFeedback,
+    " | ",
+    notifFooterTranslate,
+    makeBr(),
+    notifFooterLegal
+  );
+  notifText.append(
+    notifTitle,
+    notifClose,
+    makeBr(),
+    notifInnerText0,
+    makeBr(),
+    notifInnerText1,
+    makeBr(),
+    notifInnerText2,
+    makeBr(),
+    notifFooter
+  );
+  notifImageLink.append(notifImage);
+  notifInnerBody.append(notifImageLink, notifText);
+  notifOuterBody.append(notifInnerBody);
+  document.body.append(notifOuterBody);
 };
 
 const handleBanner = async () => {
@@ -535,10 +637,11 @@ const r2IsStudioComments = isStudio && pathArr[2] === "comments";
 const isProject = pathArr[0] === "projects";
 
 if (isProfile || isStudio || isProject) {
+  /** @param {string} value */
   const shouldCaptureComment = (value) => {
-    const regex = / scratch[ ]?add[ ]?ons/;
+    const regex = /scratch[-\s]?add?[-\s]?ons?/;
     // Trim like scratchr2
-    const trimmedValue = " " + value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+    const trimmedValue = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
     const limitedValue = trimmedValue.toLowerCase().replace(/[^a-z /]+/g, "");
     return regex.test(limitedValue);
   };
@@ -558,7 +661,7 @@ if (isProfile || isStudio || isProject) {
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
   window.addEventListener("load", () => {
-    const isScratchWww = Boolean(document.querySelector("meta[name='format-detection']"));
+    const isScratchWww = !!document.querySelector("meta[name='format-detection']");
     if (isProfile || (r2IsStudioComments && !isScratchWww)) {
       window.addEventListener(
         "click",
@@ -571,7 +674,7 @@ if (isProfile || isStudio || isProject) {
             path[1].hasAttribute("data-commentee-id")
           ) {
             const form = path[3];
-            if (form.tagName !== "FORM") return;
+            if (form?.tagName !== "FORM") return;
             if (form.hasAttribute("data-sa-send-anyway")) {
               form.removeAttribute("data-sa-send-anyway");
               return;
@@ -581,14 +684,14 @@ if (isProfile || isStudio || isProject) {
             if (shouldCaptureComment(textarea.value)) {
               e.stopPropagation();
               e.preventDefault(); // Avoid location.hash being set to null
-
-              form.querySelector("[data-control=error] .text").innerHTML = errorMsgHtml + " ";
+              if (form.querySelector("[data-control=error] .text"))
+                form.querySelector("[data-control=error] .text").innerHTML = errorMsgHtml + " ";
               const sendAnyway = document.createElement("a");
               sendAnyway.onclick = () => {
                 const res = confirm(confirmMsg);
                 if (res) {
                   form.setAttribute("data-sa-send-anyway", "");
-                  form.querySelector("[data-control=post]").click();
+                  form.querySelector("[data-control=post]")?.click();
                 }
               };
               sendAnyway.textContent = sendAnywayMsg;
@@ -608,11 +711,13 @@ if (isProfile || isStudio || isProject) {
       // Let's capture the event in the comments container instead
       // of the whole window. There will be a new comment container
       // each time the user goes inside the project then outside.
+      /** @type {MutationObserver} */
       let observer;
+      /** @returns {Promise<void>} */
       const waitForContainer = () => {
         if (document.querySelector(".comments-container, .studio-compose-container")) return Promise.resolve();
         return new Promise((resolve) => {
-          observer = new MutationObserver((mutationsList) => {
+          observer = new MutationObserver(() => {
             if (document.querySelector(".comments-container, .studio-compose-container")) {
               resolve();
               observer.disconnect();
@@ -632,17 +737,17 @@ if (isProfile || isStudio || isProject) {
         return "projectpage";
       };
       const addListener = () =>
-        document.querySelector(".comments-container, .studio-compose-container").addEventListener(
+        document.querySelector(".comments-container, .studio-compose-container")?.addEventListener(
           "click",
           (e) => {
             const path = e.composedPath();
             // When clicking the post button, e.path[0] might
             // be <span>Post</span> or the <button /> element
-            const possiblePostBtn = path[0].tagName === "SPAN" ? path[1] : path[0];
+            const possiblePostBtn = path[0]?.tagName === "SPAN" ? path[1] : path[0];
             if (!possiblePostBtn) return;
             if (possiblePostBtn.tagName !== "BUTTON") return;
             if (!possiblePostBtn.classList.contains("compose-post")) return;
-            const form = path[0].tagName === "SPAN" ? path[3] : path[2];
+            const form = path[0]?.tagName === "SPAN" ? path[3] : path[2];
             if (!form) return;
             if (form.tagName !== "FORM") return;
             if (!form.classList.contains("full-width-form")) return;
@@ -711,7 +816,7 @@ if (isProfile || isStudio || isProject) {
         }
       };
       check();
-      csUrlObserver.addEventListener("change", (e) => check());
+      csUrlObserver.addEventListener("change", () => check());
     }
   });
 }
