@@ -16,6 +16,12 @@ class StateProxy {
   constructor(name = "scratchAddons.localState") {
     this.name = name;
   }
+  /**
+   * @param {{ [key: string]: any }} target
+   * @param {string} key
+   *
+   * @returns {{ [key: string]: any } | string}
+   */
   get(target, key) {
     if (key === "_target") return target;
     if (typeof target[key] === "object" && target[key] !== null) {
@@ -24,6 +30,12 @@ class StateProxy {
       return target[key];
     }
   }
+
+  /**
+   * @param {{ [key: string]: any }} target
+   * @param {string} key
+   * @param {any} value
+   */
   set(target, key, value) {
     const oldValue = target[key];
     target[key] = value;
@@ -36,18 +48,26 @@ class StateProxy {
   }
 }
 
+/**
+ * @param {string} parentObjectPath
+ * @param {string} key
+ * @param {any} value
+ */
 function stateChange(parentObjectPath, key, value) {
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
   console.log(`%c${objectPath}`, "font-weight: bold;", "is now: ", objectPathArr[0] === "auth" ? "[redacted]" : value);
-  if (objectPathArr[0] === "ready" && Object.values(scratchAddons.localState.ready).every((x) => x === true)) {
+  if (objectPathArr[0] === "ready" && Object.values(scratchAddons.localState?.ready || {}).every((x) => x === true)) {
     console.log("Everything ready!");
     _localState.allReady = true;
-    scratchAddons.localEvents.dispatchEvent(new CustomEvent("ready"));
+    scratchAddons.localEvents?.dispatchEvent(new CustomEvent("ready"));
   }
   if (objectPathArr[0] === "badges") {
-    scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
+    scratchAddons.localEvents?.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
   }
 }
 
-export default new Proxy(_localState, new StateProxy());
+/** @type {_localState} */
+// @ts-expect-error -- It doesn't know what properties are on it initially.
+const proxy = new Proxy(_localState, new StateProxy());
+export default proxy;

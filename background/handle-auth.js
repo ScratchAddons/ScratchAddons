@@ -1,13 +1,15 @@
 (async function () {
   await checkSession();
+  if (!scratchAddons.localState) throw new TypeError("localState is not set");
   scratchAddons.localState.ready.auth = true;
 })();
 
-chrome.cookies.onChanged.addListener(({ cookie, changeCause }) => {
+chrome.cookies.onChanged.addListener(({ cookie }) => {
   if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken")
     checkSession();
 });
 
+/** @param {string} name */
 function getCookieValue(name) {
   return new Promise((resolve) => {
     chrome.cookies.get(

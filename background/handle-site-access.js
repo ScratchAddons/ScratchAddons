@@ -6,10 +6,11 @@ const onPermissionsRevoked = () => {
   });
 };
 
+/** @param {(response?: any) => void} sendResponse */
 const checkPermissions = (sendResponse) => {
   chrome.permissions.contains(
     {
-      origins: chrome.runtime.getManifest().permissions.filter((url) => url.startsWith("https://")),
+      origins: chrome.runtime.getManifest().permissions?.filter((url) => url.startsWith("https://")),
     },
     (hasPermissions) => {
       if (!hasPermissions) {
@@ -20,7 +21,7 @@ const checkPermissions = (sendResponse) => {
   );
 };
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
   if (request !== "checkPermissions") return;
   checkPermissions(sendResponse);
   return true;

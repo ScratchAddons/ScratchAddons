@@ -2,7 +2,9 @@ import globalStateProxy from "./imports/global-state.js";
 import localStateProxy from "./imports/local-state.js";
 import BackgroundLocalizationProvider from "./l10n.js";
 
-window.scratchAddons = {};
+window.scratchAddons = {
+  muted: false,
+};
 
 // Store addon objects for persistent scripts
 scratchAddons.addonObjects = [];

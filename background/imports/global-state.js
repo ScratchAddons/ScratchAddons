@@ -5,11 +5,11 @@
 const _globalState = {
   auth: {
     isLoggedIn: false,
-    username: null,
-    userId: null,
-    xToken: null,
-    csrfToken: null,
-    scratchLang: null,
+    username: undefined,
+    userId: undefined,
+    xToken: undefined,
+    csrfToken: undefined,
+    scratchLang: "en",
   },
   addonSettings: {},
 };
@@ -18,6 +18,12 @@ class StateProxy {
   constructor(name = "scratchAddons.globalState") {
     this.name = name;
   }
+  /**
+   * @param {{ [key: string]: any }} target
+   * @param {string} key
+   *
+   * @returns {{ [key: string]: any } | string}
+   */
   get(target, key) {
     if (key === "_target") return target;
     if (typeof target[key] === "object" && target[key] !== null) {
@@ -26,6 +32,12 @@ class StateProxy {
       return target[key];
     }
   }
+
+  /**
+   * @param {{ [key: string]: any }} target
+   * @param {string} key
+   * @param {any} value
+   */
   set(target, key, value) {
     const oldValue = target[key];
     target[key] = value;
@@ -39,17 +51,24 @@ class StateProxy {
   }
 }
 
+/** @param {{ [key: string]: any }} message */
 function messageForAllTabs(message) {
   // May log errors to the console in Firefox, where we don't have the permission
   // to read URLs from tabs even if we have content scripts on them.
   // No need to specify frame IDs, because this message should also arrive to iframes.
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach(
-      (tab) => (tab.url || (!tab.url && typeof browser !== "undefined")) && chrome.tabs.sendMessage(tab.id, message)
+      (tab) =>
+        (tab.url || (!tab.url && typeof browser !== "undefined")) && chrome.tabs.sendMessage(Number(tab.id), message)
     )
   );
 }
 
+/**
+ * @param {string} parentObjectPath
+ * @param {string} key
+ * @param {any} value
+ */
 function stateChange(parentObjectPath, key, value) {
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
@@ -73,4 +92,7 @@ function stateChange(parentObjectPath, key, value) {
   }
 }
 
-export default new Proxy(_globalState, new StateProxy());
+/** @type {_globalState} */
+// @ts-expect-error -- It doesn't know what properties are on it initially.
+const proxy = new Proxy(_globalState, new StateProxy());
+export default proxy;

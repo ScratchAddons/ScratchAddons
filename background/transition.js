@@ -5,7 +5,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     chrome.tabs.create({ url: "https://scratchaddons.com/scratch-messaging-transition" });
   } else if (
     details.reason === "install" &&
-    chrome.runtime.getManifest().version_name.includes("-prerelease") === false
+    chrome.runtime.getManifest().version_name?.includes("-prerelease") === false
   ) {
     chrome.tabs.create({ url: "https://scratchaddons.com/welcome" });
   }
@@ -16,6 +16,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     });
   }
 });
-if (chrome.runtime.getManifest().version_name.includes("-prerelease") === false) {
+if (chrome.runtime.getManifest().version_name?.includes("-prerelease") === false) {
   chrome.runtime.setUninstallURL("https://scratchaddons.com/farewell");
 }
