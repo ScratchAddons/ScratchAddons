@@ -120,7 +120,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   /**
-   * @typedef {Object} ItemData
+   * @typedef ItemData
    * @property {string} realName
    * @property {number} realIndex
    * @property {string} inFolder

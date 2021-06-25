@@ -1,5 +1,7 @@
 /**
- * @private
+ * @param {import("./Tab").default} tab
+ * @param {string} script
+ * @param {string} url
  */
 export default (tab, script, url) => {
   script = script.replace(/^export default (?:async )?/, "");
@@ -13,12 +15,12 @@ export default (tab, script, url) => {
   (async ${script})({
     addon: {
       self: {
-        id: ${JSON.stringify(tab._addonId)},
-        url: ${JSON.stringify(url)},
-        browser: ${JSON.stringify(typeof InstallTrigger !== "undefined" ? "firefox" : "chrome")},
+        id: ${tab._addonId},
+        url: ${url},
+        browser: ${typeof InstallTrigger !== "undefined" ? "firefox" : "chrome"},
       },
       tab: {
-        clientVersion: ${JSON.stringify(tab.clientVersion)},
+        clientVersion: ${tab.clientVersion},
       },
       console: {
         ...console,

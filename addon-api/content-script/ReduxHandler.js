@@ -1,20 +1,15 @@
 import Listenable from "../common/Listenable.js";
 
-/**
- * Handles Redux state.
- * @extends Listenable
- * @property {boolean} initialized Whether the handler is initialized or not.
- */
+/** Handles Redux state. */
 export default class ReduxHandler extends Listenable {
   constructor() {
     super();
+    /** @type {boolean} Whether The handler is initialized or not. */
     this.initialized = false;
     this.initialize();
   }
 
-  /**
-   * Initialize the handler. Must be called before adding events.
-   */
+  /** Initialize the handler. Must be called before adding events. */
   initialize() {
     if (!__scratchAddonsRedux.target || this.initialized) return;
     this.initialized = true;
@@ -30,18 +25,19 @@ export default class ReduxHandler extends Listenable {
     });
   }
 
-  /**
-   * Redux state.
-   * @type {object}
-   */
+  /** Redux state. */
   get state() {
     return __scratchAddonsRedux.state;
   }
 
   /**
    * Dispatches redux state change.
-   * @param {object} payload - payload to pass to redux.
-   * @throws when Redux is unavailable.
+   *
+   * @param {{
+   *   [key: string]: any;
+   *   type: string;
+   * }} payload
+   * @throws When Redux is unavailable.
    */
   dispatch(payload) {
     if (!__scratchAddonsRedux.dispatch) throw new Error("Redux is unavailable");

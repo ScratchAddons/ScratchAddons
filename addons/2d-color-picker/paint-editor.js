@@ -9,8 +9,8 @@ export default async ({ addon, console, msg }) => {
   // 250-ms rate limit
   const rateLimiter = new RateLimiter(250);
 
-  // get the color from scratch
-  const getColor = (element) => {
+  /* get the color from scratch*/
+  const getColor = () => {
     let fillOrStroke;
     const state = addon.tab.redux.state;
     if (state.scratchPaint.modals.fillColor) {
@@ -22,10 +22,10 @@ export default async ({ addon, console, msg }) => {
     }
     const colorType = state.scratchPaint.fillMode.colorIndex;
     const primaryOrSecondary = ["primary", "secondary"][colorType];
-    const color = state.scratchPaint.color[`${fillOrStroke}Color`][primaryOrSecondary];
+    /* This value can be arbitrary - it can be HEX, RGB, etc.*/
+    const color = state.scratchPaint.color[`${fillOrStroke}Color`][`${primaryOrSecondary}`];
     if (color === null || color === "scratch-paint/style-path/mixed") return;
-    // This value can be arbitrary - it can be HEX, RGB, etc.
-    // Use tinycolor to convert them.
+    // Convert using tinycolor
     return tinycolor(color).toHex();
   };
 

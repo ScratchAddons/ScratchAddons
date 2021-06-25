@@ -9,12 +9,13 @@ const DATA_PNG = "data:image/png;base64,";
 
 /**
  * APIs specific to userscripts.
- * @extends Listenable
- * @property {?string} clientVersion - version of the renderer (scratch-www, scratchr2, etc)
+ *
+ * @property {string | null} clientVersion - Version of the renderer (scratch-www, scratchr2, etc)
  * @property {Trap} traps
  * @property {ReduxHandler} redux
  */
 export default class Tab extends Listenable {
+  /** @param {{ id: string; enabledLate: boolean; permissions?: string[] }} info */
   constructor(info) {
     super();
     this._addonId = info.id;
@@ -25,19 +26,37 @@ export default class Tab extends Listenable {
       : null;
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
+    /** @private */
     this._waitForElementSet = new WeakSet();
   }
-  addBlock(...a) {
+
+  /**
+   * Adds a Scratch Addons block.
+   *
+   * @param {string} proccode - The code displayed to the user.
+   * @param {string[]} args - The block argument names.
+   * @param {(args: { [key: string]: string | boolean | number }) => any} handler - The handler.
+   * @param {boolean} [hide] - Whether to hide the block from the block palette.
+   */
+  addBlock(proccode, args, handler, hide = false) {
     blocks.init(this);
-    return blocks.addBlock(...a);
+    return blocks.addBlock(proccode, args, handler, hide);
   }
-  removeBlock(...a) {
-    return blocks.removeBlock(...a);
+
+  /**
+   * Removes a Scratch Addons block.
+   *
+   * @param {string} proccode - The code displayed to the user.
+   */
+  removeBlock(proccode) {
+    return blocks.removeBlock(proccode);
   }
   /**
    * Loads a script by URL.
-   * @param {string} url - script URL.
-   * @returns {Promise}
+   *
+   * @param {string} url - Script URL.
+   *
+   * @returns {Promise<Event>}
    */
   loadScript(url) {
     return new Promise((resolve) => {
@@ -49,20 +68,23 @@ export default class Tab extends Listenable {
   }
   /**
    * Waits until an element renders, then return the element.
-   * @param {string} selector - argument passed to querySelector.
-   * @param {object} opts - options.
-   * @param {boolean=} opts.markAsSeen - Whether it should mark resolved elements to be skipped next time or not.
-   * @param {function=} opts.condition - A function that returns whether to resolve the selector or not.
-   * @param {function=} opts.reduxCondition - A function that returns whether to resolve the selector or not.
-   * Use this as an optimization and do not rely on the behavior.
-   * @param {string[]=} opts.reduxEvents - An array of redux events that must be dispatched before resolving the selector.
-   * Use this as an optimization and do not rely on the behavior.
-   * @returns {Promise<Element>} - element found.
+   *
+   * @param {string} selector - Argument passed to querySelector.
+   * @param {object} opts - Options.
+   * @param {boolean} [opts.markAsSeen] - Whether it should mark resolved elements to be skipped next time or not.
+   * @param {function} [opts.condition] - A function that returns whether to resolve the selector or not.
+   * @param {function} [opts.reduxCondition] - A function that returns whether to resolve the selector or not. Use this
+   *   as an optimization and do not rely on the behavior.
+   * @param {string[]} [opts.reduxEvents] - An array of redux events that must be dispatched before resolving the
+   *   selector. Use this as an optimization and do not rely on the behavior.
+   *
+   * @returns {Promise<Node> | undefined} - Element found.
    */
   waitForElement(selector, opts = {}) {
     const markAsSeen = !!opts.markAsSeen;
     if (!opts.condition || opts.condition()) {
       const firstQuery = document.querySelectorAll(selector);
+      // @ts-expect-error -- It might not be iterable if it's not found. That's the addons' bug and we can't fix it here.
       for (const element of firstQuery) {
         if (this._waitForElementSet.has(element)) continue;
         if (markAsSeen) this._waitForElementSet.add(element);
@@ -70,7 +92,8 @@ export default class Tab extends Listenable {
       }
     }
     const { reduxCondition, condition } = opts;
-    let listener;
+    /** @type {EventListenerOrEventListenerObject | null} */
+    let listener = null;
     let combinedCondition = () => {
       if (condition && !condition()) return false;
       if (this.redux.state) {
@@ -89,20 +112,21 @@ export default class Tab extends Listenable {
         return satisfied;
       };
       listener = ({ detail }) => {
-        if (opts.reduxEvents.includes(detail.action.type)) {
+        if (opts?.reduxEvents?.includes(detail.action.type)) {
           satisfied = true;
         }
       };
       this.redux.initialize();
       this.redux.addEventListener("statechanged", listener);
     }
-    const promise = scratchAddons.sharedObserver.watch({
+    const promise = scratchAddons.sharedObserver?.watch({
       query: selector,
-      seen: markAsSeen ? this._waitForElementSet : null,
+      seen: markAsSeen ? this._waitForElementSet : undefined,
       condition: combinedCondition,
     });
+
     if (listener) {
-      promise.then((match) => {
+      promise?.then((/** @type {Node} */ match) => {
         this.redux.removeEventListener("statechanged", listener);
         return match;
       });
@@ -110,8 +134,9 @@ export default class Tab extends Listenable {
     return promise;
   }
   /**
-   * editor mode (or null for non-editors).
-   * @type {?string}
+   * Editor mode (or null for non-editors).
+   *
+   * @type {string | null}
    */
   get editorMode() {
     const pathname = location.pathname.toLowerCase();
@@ -125,8 +150,10 @@ export default class Tab extends Listenable {
 
   /**
    * Copies an PNG image.
-   * @param {string} dataURL - data url of the png image
-   * @returns {Promise}
+   *
+   * @param {string} dataURL - Data url of the png image.
+   *
+   * @returns {Promise<void> | undefined}
    */
   copyImage(dataURL) {
     if (!dataURL.startsWith(DATA_PNG)) return Promise.reject(new TypeError("Expected PNG data URL"));
@@ -141,7 +168,7 @@ export default class Tab extends Listenable {
       return navigator.clipboard.write(items);
     } else {
       // Firefox needs Content Script
-      return scratchAddons.methods.copyImage(dataURL).catch((err) => {
+      return scratchAddons.methods.copyImage?.(dataURL).catch((err) => {
         return Promise.reject(new Error(`Error inside clipboard handler: ${err}`));
       });
     }
@@ -149,17 +176,19 @@ export default class Tab extends Listenable {
 
   /**
    * Gets translation used by Scratch.
+   *
    * @param {string} key - Translation key.
+   *
    * @returns {string} Translation.
    */
   scratchMessage(key) {
     if (this.clientVersion === "scratch-www") {
-      const locales = [window._locale ? window._locale.toLowerCase() : "en"];
+      const locales = [window._locale?.toLowerCase() || "en"];
       if (locales[0].includes("-")) locales.push(locales[0].split("-")[0]);
       if (locales.includes("pt") && !locales.includes("pt-br")) locales.push("pt-br");
       if (!locales.includes("en")) locales.push("en");
       for (const locale of locales) {
-        if (window._messages[locale] && window._messages[locale][key]) {
+        if (window._messages?.[locale]?.[key]) {
           return window._messages[locale][key];
         }
       }
@@ -169,10 +198,12 @@ export default class Tab extends Listenable {
     if (this.clientVersion === "scratchr2") {
       return window.django.gettext(key);
     }
+    return "";
   }
 
   /**
-   * @private
+   * @type {"tab" & string}
+   * @protected
    */
   get _eventTargetKey() {
     return "tab";
@@ -180,9 +211,11 @@ export default class Tab extends Listenable {
 
   /**
    * Loads a Web Worker.
+   *
    * @async
    * @param {string} url - URL of the worker to load.
-   * @returns {Promise<Worker>} - worker.
+   *
+   * @returns {Promise<Worker>} - Worker.
    */
   async loadWorker(url) {
     const resp = await fetch(url);
@@ -196,9 +229,9 @@ export default class Tab extends Listenable {
 
   /**
    * Gets the hashed class name for a Scratch stylesheet class name.
-   * @param {...*} args Unhashed class names.
-   * @param {object} opts - options.
-   * @param {String[]|String} opts.others - Non-Scratch class or classes to merge.
+   *
+   * @param {...any} args Unhashed class names.
+   *
    * @returns {string} Hashed class names.
    */
   scratchClass(...args) {
@@ -206,10 +239,10 @@ export default class Tab extends Listenable {
     args
       .filter((arg) => typeof arg === "string")
       .forEach((classNameToFind) => {
-        if (scratchAddons.classNames.loaded) {
+        if (scratchAddons.classNames?.loaded) {
           res +=
-            scratchAddons.classNames.arr.find(
-              (className) =>
+            scratchAddons.classNames.arr?.find(
+              (/** @type {string} */ className) =>
                 className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
             ) || "";
         } else {
@@ -220,7 +253,7 @@ export default class Tab extends Listenable {
     if (typeof args[args.length - 1] === "object") {
       const options = args[args.length - 1];
       const classNames = Array.isArray(options.others) ? options.others : [options.others];
-      classNames.forEach((string) => (res += string + " "));
+      classNames.forEach((/** @type {string} */ string) => (res += string + " "));
     }
     res = res.slice(0, -1);
     // Sanitize just in case
@@ -228,16 +261,29 @@ export default class Tab extends Listenable {
     return res;
   }
 
+  /**
+   * Hide the element when the addon is disabled. Only applicable to addons with dynamicDisable: true.
+   *
+   * @param {Element} el - Element to hide.
+   * @param {object} [opts] - Options.
+   * @param {string} [opts.display] - The default display mode. If not set, inherited style applies.
+   */
   displayNoneWhileDisabled(el, { display = "" } = {}) {
-    el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
-      g[1].toUpperCase()
+    el.style.display = `var(--${this._addonId.replace(
+      /-([a-z])/g,
+      (g) => `${g[1]?.toUpperCase()}`
     )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
   }
 
+  /**
+   * The direction (rtl/ltr) of the current locale.
+   *
+   * @type {string}
+   */
   get direction() {
     // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
-    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
+    const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0] ?? "en";
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
 }

@@ -13,6 +13,8 @@ const onMessageBackgroundReady = (request, sender, sendResponse) => {
   }
 };
 chrome.runtime.onMessage.addListener(onMessageBackgroundReady);
+
+/** @param {any} res */
 const onResponse = (res) => {
   if (res && !receivedResponse) {
     console.log("[Message from background]", res);

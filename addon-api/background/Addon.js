@@ -4,15 +4,18 @@ import Badge from "./Badge.js";
 
 /**
  * An addon that loads as a background script.
- * @extends Addon
+ *
  * @property {Notifications} [notifications]
  * @property {Badge} [badge]
  */
 export default class BackgroundScriptAddon extends Addon {
+  /** @param {{ id: any; permissions?: string[] }} info */
   constructor(info) {
     super(info);
     const { permissions } = info;
+    /** @type {NodeJS.Timeout[]} */
     this._timeouts = [];
+    /** @type {NodeJS.Timeout[]} */
     this._intervals = [];
     this.self.restart = () => this._restart();
     if (permissions) {
@@ -30,9 +33,10 @@ export default class BackgroundScriptAddon extends Addon {
     this._revokeProxy();
   }
 
-  /**
-   * @private
-   */
+  _restart() {}
+
+  _revokeProxy() {}
+
   get _path() {
     return chrome.runtime.getURL("");
   }
