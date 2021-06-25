@@ -102,7 +102,7 @@ function recolorFilter(hex) {
   ")`.replace(/\s+/g, " ");
 }
 
-globalThis.__scratchAddonsTextColor = {
+window.__scratchAddonsTextColor = {
   textColor,
   multiply,
   brighten,

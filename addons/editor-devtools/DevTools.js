@@ -1632,14 +1632,14 @@ export default class DevTools {
 
         if (!this.canShare && chk.className.indexOf("share-button") >= 0) {
           // Commented for ScratchAddons
-          /*e.cancelBubble = true;
-                      e.preventDefault();
+          // e.cancelBubble = true;
+          // e.preventDefault();
 
-                      if (confirm("Griffpatch: Are you sure you want to share?")) {
-                          // action the share!
-                          canShare = true;
-                          chk.click();
-                      }*/
+          // if (confirm("Griffpatch: Are you sure you want to share?")) {
+          //   // action the share!
+          //   this.canShare = true;
+          //   chk.click();
+          // }
 
           return;
         }

@@ -19,7 +19,7 @@ export default class Settings extends Listenable {
     /** @type {{ [key: string]: string | boolean | number }} */
     const settingsObj = scratchAddons.globalState.addonSettings[this._addonId] || {};
     const value = settingsObj[optionName];
-    if (value === undefined) throw "ScratchAddons exception: invalid setting ID";
+    if (value === undefined) throw "Invalid setting ID";
     else return value;
   }
 

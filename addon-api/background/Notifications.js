@@ -67,7 +67,7 @@ export default class Notifications extends Listenable {
    */
   create(opts) {
     if (typeof opts !== "object") {
-      throw "ScratchAddons exception: do not specify a notification ID.";
+      throw "Do not specify a notification ID.";
     }
     if (scratchAddons.muted) return Promise.resolve(null);
     const notifId = `${this._addonId}__${Date.now()}`;

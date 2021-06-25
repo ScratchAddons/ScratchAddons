@@ -9,8 +9,9 @@ import type BackgroundLocalizationProvider from "./background/l10n";
 import type UserscriptLocalizationProvider from "./content-scripts/inject/l10n";
 import type { SharedObserver } from "./content-scripts/inject/module";
 
-import type Chrome from "./libraries/thirdparty/types/chrome";
-import type Comlink from "./libraries/thirdparty/types/comlink";
+import type Chrome from "./libraries/types/chrome";
+import type Comlink from "./libraries/types/comlink";
+import Vue from "./libraries/types/vue";
 interface Message {
   id: number;
   datetime_created: Date;
@@ -452,6 +453,7 @@ declare global {
   }
   declare const chrome: undefined | Chrome;
   declare const Comlink: undefined | Comlink;
+  declare const Vue: any;
 
   declare const browser: undefined | Chrome; // Technically not identical to `chrome`, but I'm not gonna type it
   declare const InstallTrigger: undefined; // Technically defined in FF, but I'm not gonna type it

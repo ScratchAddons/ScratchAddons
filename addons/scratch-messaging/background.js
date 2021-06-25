@@ -4,19 +4,33 @@ import { linkifyTextNode, pingifyTextNode } from "../../libraries/common/cs/fast
 export default async (
   /** @type {AddonAPIs.PersistentScript} */ { addon, console, setTimeout, setInterval, clearTimeout, clearInterval }
 ) => {
+  const getDefaultData = () => ({
+    messages: [],
+    lastMsgCount: undefined,
+    username: addon.auth.username,
+    ready: false,
+  });
+
+  /** @type {number | null} */
   let lastDateTime;
-  let data;
+  /**
+   * @type {{
+   *   messages: import("../../types").Message[];
+   *   lastMsgCount?: number;
+   *   username?: string;
+   *   ready: boolean;
+   *   stMessages?: {
+   *     id: number;
+   *     datetime_created: Date;
+   *     message: string;
+   *   };
+   * }}
+   */
+  let data = getDefaultData();
   let pendingAuthChange = false;
   let addonEnabled = true;
   // reuse one DOMParser
   const parser = new DOMParser();
-
-  const getDefaultData = () => ({
-    messages: [],
-    lastMsgCount: null,
-    username: addon.auth.username,
-    ready: false,
-  });
 
   addon.auth.addEventListener("change", () => (pendingAuthChange = true));
   resetData();
@@ -41,10 +55,16 @@ export default async (
     }
   }
 
-  function runCheckMessagesAfter(args, ms) {
+  /**
+   * @param {{ checkOld?: boolean }} opts
+   * @param {number} [ms]
+   *
+   * @returns {Promise<void>}
+   */
+  function runCheckMessagesAfter(opts, ms) {
     return new Promise((resolve) => {
       setTimeout(async () => {
-        await checkMessages(args).catch((e) => console.warn("Error checking messages", e));
+        await checkMessages(opts).catch((e) => console.warn("Error checking messages", e));
         resolve();
       }, ms);
     });
@@ -58,15 +78,17 @@ export default async (
     if (data.lastMsgCount === msgCount) return;
     data.lastMsgCount = msgCount;
 
+    /** @type {import("../../types").Message[]} */
     let checkedMessages = [];
     data.ready = false;
 
     if (checkOld) {
       const messagesToCheck = msgCount > 1000 ? 1000 : msgCount < 41 ? 40 : msgCount;
+      /** @type {number[]} */
       const seenMessageIds = [];
       for (let checkedPages = 0; seenMessageIds.length < messagesToCheck; checkedPages++) {
         const messagesPage = await addon.account.getMessages({ offset: checkedPages * 40 });
-        if (messagesPage === null || messagesPage.length === 0) break;
+        if (!messagesPage?.length) break;
         for (const message of messagesPage) {
           // Make sure we don't add the same message twice,
           // it could happen since we request through pages
@@ -79,13 +101,12 @@ export default async (
         if (messagesPage.length !== 40) break;
       }
     } else {
-      checkedMessages = await addon.account.getMessages({ offset: 0 });
+      checkedMessages = (await addon.account.getMessages({ offset: 0 })) || [];
     }
     if (checkedMessages === null) return;
-    if (!checkOld && lastDateTime === null) lastDateTime = new Date(checkedMessages[0].datetime_created).getTime();
-    else {
+    if (!(!checkOld && !lastDateTime)) {
       for (const message of checkedMessages) {
-        if (!checkOld && new Date(message.datetime_created).getTime() <= lastDateTime) break;
+        if (!checkOld && new Date(message.datetime_created).getTime() <= (lastDateTime || 0)) break;
         if (checkOld) data.messages.push(message);
         else data.messages.unshift(message);
       }
@@ -97,19 +118,23 @@ export default async (
         data.messages.length = 1000;
       }
     }
-    lastDateTime = new Date(checkedMessages[0].datetime_created).getTime();
-
+    lastDateTime = new Date(`${checkedMessages[0]?.datetime_created}`).getTime();
+    const headers = new Headers();
+    headers.set("x-token", addon.auth.xToken || "");
     data.stMessages = await (
       await fetch(`https://api.scratch.mit.edu/users/${addon.auth.username}/messages/admin`, {
-        headers: {
-          "x-token": addon.auth.xToken,
-        },
+        headers,
       })
     ).json();
 
     data.ready = true;
   }
 
+  /**
+   * @param {any} request
+   * @param {chrome.runtime.MessageSender} sender
+   * @param {(response?: any) => void} sendResponse
+   */
   const messageListener = (request, sender, sendResponse) => {
     if (!request.scratchMessaging) return;
     const popupRequest = request.scratchMessaging;
@@ -117,7 +142,6 @@ export default async (
       sendResponse(data.ready ? data : { error: addon.auth.isLoggedIn ? "notReady" : "loggedOut" });
     else if (popupRequest.postComment) {
       sendComment(popupRequest.postComment).then((status) => sendResponse(status));
-      return true;
     } else if (popupRequest.retrieveComments) {
       const { resourceType, resourceId, commentIds } = popupRequest.retrieveComments;
       retrieveComments(resourceType, resourceId, commentIds)
@@ -128,7 +152,6 @@ export default async (
           console.warn("Comment could not be fetched:", err);
           sendResponse({ failed: true });
         });
-      return true;
     } else if (popupRequest === "markAsRead") {
       addon.account.clearMessages();
     } else if (popupRequest.deleteComment) {
@@ -136,12 +159,10 @@ export default async (
       deleteComment({ resourceType, resourceId, commentId })
         .then((res) => sendResponse(res))
         .catch((err) => sendResponse(err));
-      return true;
     } else if (popupRequest.dismissAlert) {
       dismissAlert(popupRequest.dismissAlert)
         .then((res) => sendResponse(res))
         .catch((err) => sendResponse(err));
-      return true;
     }
   };
   chrome.runtime.onMessage.addListener(messageListener);
@@ -150,8 +171,14 @@ export default async (
     addonEnabled = false;
   });
 
+  /**
+   * @param {string} resourceType
+   * @param {number} resourceId
+   * @param {number[]} commentIds
+   */
   async function retrieveComments(resourceType, resourceId, commentIds, page = 1, commentsObj = {}) {
     if (resourceType === "project" || resourceType === "gallery") {
+      /** @type {string} */
       let projectAuthor;
       if (resourceType === "project") {
         const projectRes = await fetch(`https://api.scratch.mit.edu/projects/${resourceId}`);
@@ -159,15 +186,19 @@ export default async (
         const projectJson = await projectRes.json();
         projectAuthor = projectJson.author.username;
       }
-
+      /** @param {number} commId */
       const getCommentUrl = (commId) =>
         resourceType === "project"
           ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}`
           : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}`;
+      /**
+       * @param {number} commId
+       * @param {number} offset
+       */
       const getRepliesUrl = (commId, offset) =>
         resourceType === "project"
           ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`
-          : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`;
+          : `${getCommentUrl(commId)}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`;
 
       for (const commentId of commentIds) {
         if (commentsObj[`${resourceType[0]}_${commentId}`]) continue;
@@ -194,11 +225,14 @@ export default async (
           parentComment = json;
         }
 
-        // If originally requested comment was not a parent comment, we do not use
-        // "json" variable at all. We'll get info for the same comment when fetching
-        // all of the parent's child comments anyway
-        // Note: we need to check replies for all parent comments, reply_count doesn't work properly
-
+        /**
+         * If originally requested comment was not a parent comment, we do not use the `json` variable at all. We'll get
+         * info for the same comment when fetching all of the parent's child comments anyway.
+         *
+         * Note: we need to check replies for all parent comments, reply_count doesn't work properly.
+         *
+         * @param {number} offset
+         */
         const getReplies = async (offset) => {
           const repliesRes = await fetch(getRepliesUrl(parentId, offset));
           if (!repliesRes.ok) return [];
@@ -212,6 +246,7 @@ export default async (
         while (lastRepliesLength === 40) {
           const newReplies = await getReplies(offset);
           newReplies.forEach((c) => replies.push(c));
+          console.log(replies)
           lastRepliesLength = newReplies.length;
           offset += 40;
         }
@@ -314,7 +349,7 @@ export default async (
       }
     }
     // We haven't found some comments
-    if (page < 3) return await retrieveComments(resourceType, resourceId, commentIds, ++page, commentsObj);
+    if (page < 3) return retrieveComments(resourceType, resourceId, commentIds, ++page, commentsObj);
     else {
       console.log(
         "Could not find all comments for ",
@@ -456,13 +491,14 @@ export default async (
     });
   }
 
+  /** @param {number} alertId */
   async function dismissAlert(alertId) {
+    const headers = new Headers();
+    headers.set("content-type", "application/json");
+    headers.set("x-csrftoken", addon.auth.csrfToken || "");
+    headers.set("x-requested-with", "XMLHttpRequest");
     const res = await fetch("https://scratch.mit.edu/site-api/messages/messages-delete/?sareferer", {
-      headers: {
-        "content-type": "application/json",
-        "x-csrftoken": addon.auth.csrfToken,
-        "x-requested-with": "XMLHttpRequest",
-      },
+      headers: {},
       body: JSON.stringify({ alertType: "notification", alertId }),
       method: "POST",
     });

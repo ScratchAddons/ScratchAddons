@@ -82,7 +82,7 @@ scratchAddons.methods.clearMessages = async function () {
 };
 
 scratchAddons.methods.getMessages = async function ({ offset = 0 } = {}) {
-  if (offset !== 0) return await requestMessages({ offset });
+  if (offset !== 0) return requestMessages({ offset });
   else {
     const newPromise = new Promise((resolve) => msgsArrayPromises.push(resolve));
     if (!currentlyCheckingMessages)
