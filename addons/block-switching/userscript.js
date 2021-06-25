@@ -1,6 +1,6 @@
 import blockToDom from "./blockToDom.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   await addon.tab.traps.getBlockly();
 
   const blockSwitches = {};
@@ -776,4 +776,4 @@ export default async function ({ addon, global, console, msg }) {
     }, 100);
   }
   addon.tab.addEventListener("urlChange", () => addon.tab.editorMode === "editor" && inject());
-}
+};

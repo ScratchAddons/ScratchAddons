@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const vm = addon.tab.traps.vm;
 
   let localVariables = [];
@@ -322,4 +322,4 @@ export default async function ({ addon, global, console, msg }) {
     const soundTab = tabs.children[2];
     soundTab.insertAdjacentElement("afterend", varTab);
   }
-}
+};

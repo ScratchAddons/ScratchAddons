@@ -1,26 +1,32 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
+  /**
+   * @param {string} featuredThumb
+   * @param {string} featuredLink
+   * @param {string} featuredHeading
+   * @param {string} featuredTitle
+   */
   function createBetterProfilePage(featuredThumb, featuredLink, featuredHeading, featuredTitle) {
     document.documentElement.style.setProperty("--featured-thumb", `url("${featuredThumb}")`);
     let boxHead = document.querySelector("#profile-data .box-head");
     if (featuredLink !== "") {
-      if (document.querySelector(".user-content .player .title a").innerText.replace(/\s/g, "").length > 0) {
-        boxHead.appendChild(document.createElement("div")).setAttribute("id", "better-featured-project-name");
-        document.querySelector("#better-featured-project-name").appendChild(document.createElement("h2"));
-        document.querySelector("#better-featured-project-name").appendChild(document.createElement("h3"));
+      if (document.querySelector(".user-content .player .title a")?.innerText.replace(/\s/g, "").length > 0) {
+        boxHead?.appendChild(document.createElement("div")).setAttribute("id", "better-featured-project-name");
+        document.querySelector("#better-featured-project-name")?.appendChild(document.createElement("h2"));
+        document.querySelector("#better-featured-project-name")?.appendChild(document.createElement("h3"));
         document.querySelector("#better-featured-project-name h2").innerText = featuredHeading;
         document.querySelector("#better-featured-project-name h3").innerText = featuredTitle;
       }
       if (document.querySelector('#featured-project [data-control="edit"]') !== null) {
-        boxHead.appendChild(document.createElement("div")).setAttribute("class", "buttons");
+        boxHead?.appendChild(document.createElement("div")).setAttribute("class", "buttons");
         document
           .querySelector("#profile-data .box-head .buttons")
-          .appendChild(document.createElement("button"))
+          ?.appendChild(document.createElement("button"))
           .setAttribute("id", "better-change-featured-project");
         document.querySelector("#better-change-featured-project").innerText = document.querySelector(
           '#featured-project [data-control="edit"]'
-        ).innerText;
-        document.querySelector("#better-change-featured-project").addEventListener("click", function () {
-          document.querySelector('#featured-project [data-control="edit"]').click();
+        )?.innerText;
+        document.querySelector("#better-change-featured-project")?.addEventListener("click", function () {
+          document.querySelector('#featured-project [data-control="edit"]')?.click();
           let checkFeaturedProjectModalTimes = 0;
           var checkFeaturedProjectModal = setInterval(function () {
             checkFeaturedProjectModalTimes++;
@@ -68,4 +74,4 @@ export default async function ({ addon, global, console, msg }) {
   } else if (document.querySelector("#profile-avatar img") !== null) {
     createBetterProfilePage(document.querySelector("#profile-avatar img").src, "", "", "");
   }
-}
+};

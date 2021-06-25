@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   const vm = addon.tab.traps.vm;
   let muted = false;
   let icon = document.createElement("img");
@@ -29,4 +29,4 @@ export default async function ({ addon, global, console }) {
     button.addEventListener("click", toggleMute);
     button.addEventListener("contextmenu", toggleMute);
   }
-}
+};

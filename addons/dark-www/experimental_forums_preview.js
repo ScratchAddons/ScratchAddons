@@ -5,7 +5,7 @@ function createStyle(url) {
   return style;
 }
 
-export default async function ({ addon, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   const preview = await addon.tab.waitForElement(".markItUpPreviewFrame");
   const observer = new MutationObserver(function (records, observer) {
     for (let record of records) {
@@ -21,4 +21,4 @@ export default async function ({ addon, console }) {
     }
   });
   observer.observe(preview.contentDocument, { subtree: true, childList: true });
-}
+};

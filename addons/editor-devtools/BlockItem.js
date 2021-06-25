@@ -6,16 +6,19 @@ export default class BlockItem {
     this.y = y;
     this.lower = procCode.toLowerCase();
     /**
-     * An Array of block ids
-     * @type {Array.<string>}
+     * An Array of block ids.
+     *
+     * @type {string[]}
      */
     this.clones = null;
     this.eventName = null;
   }
 
   /**
-   * True if the blockID matches a black represented by this BlockItem
+   * True if the blockID matches a black represented by this BlockItem.
+   *
    * @param id
+   *
    * @returns {boolean}
    */
   matchesID(id) {

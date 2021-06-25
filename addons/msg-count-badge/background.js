@@ -1,4 +1,6 @@
-export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
+export default async (
+  /** @type {AddonAPIs.PersistentScript} */ { addon, console, setTimeout, setInterval, clearTimeout, clearInterval }
+) => {
   const setBadge = async () => {
     const msgCount = await addon.account.getMsgCount();
     addon.badge.text = msgCount;
@@ -9,4 +11,4 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     addon.badge.color = addon.settings.get("color");
   });
   setInterval(setBadge, 2500);
-}
+};

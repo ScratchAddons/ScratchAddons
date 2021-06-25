@@ -288,7 +288,7 @@ function updateSettings(addon, newStyle) {
   newStyle.textContent = stylesheet;
 }
 
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   const otherStyle = document.querySelector(`[data-addon-id='${addon.self.id}']`);
   const newStyle = document.createElement("style");
   updateSettings(addon, newStyle);
@@ -303,4 +303,4 @@ export default async function ({ addon, global, console }) {
 
   // Look for reenable event to enable the style. cs.js cannot handle an appended style.
   addon.self.addEventListener("reenabled", () => (newStyle.disabled = false));
-}
+};

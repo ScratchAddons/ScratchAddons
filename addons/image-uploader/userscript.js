@@ -1,5 +1,5 @@
 import { insert } from "../../libraries/thirdparty/cs/text-field-edit.js";
-export default async function ({ addon, global, console, msg, safeMsg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg, safeMsg }) => {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/md5.min.js");
 
   var toolbar =
@@ -177,4 +177,4 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       progresselement.remove();
     }
   }
-}
+};

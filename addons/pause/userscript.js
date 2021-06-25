@@ -1,6 +1,6 @@
 import { paused, setPaused, onPauseChanged } from "./module.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const img = document.createElement("img");
   img.className = "pause-btn";
   img.draggable = false;
@@ -20,4 +20,4 @@ export default async function ({ addon, global, console, msg }) {
     });
     flag.insertAdjacentElement("afterend", img);
   }
-}
+};

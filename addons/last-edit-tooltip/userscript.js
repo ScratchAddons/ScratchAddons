@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const headers = new Headers();
   if (addon.auth.xToken) headers.set("X-Token", addon.auth.xToken);
 
@@ -29,4 +29,4 @@ export default async function ({ addon, global, console, msg }) {
     let dataTitle = `${msg("shared", { date: dateShared })}\n${msg("modified", { date: dateMod })}`;
     element.setAttribute("title", dataTitle);
   }
-}
+};

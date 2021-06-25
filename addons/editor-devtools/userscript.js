@@ -1,6 +1,6 @@
 import DevTools from "./DevTools.js";
 
-export default async function ({ addon, global, console, msg, safeMsg: m }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg, safeMsg: m }) => {
   // noinspection JSUnresolvedVariable
   if (!addon.self._isDevtoolsExtension && window.initGUI) {
     console.log("Extension running, stopping addon");
@@ -55,4 +55,4 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
   const devTools = new DevTools(addon, msg, m, helpHTML);
   devTools.init();
-}
+};

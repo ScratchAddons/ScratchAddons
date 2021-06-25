@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const nav = await addon.tab.waitForElement(".sub-nav.tabs");
   //Create elements for tab
   const tab = nav.appendChild(document.createElement("a")),
@@ -18,4 +18,4 @@ export default async function ({ addon, global, console, msg }) {
     span.style.color = "red";
     li.title = msg("invalid-username", { username: user });
   }
-}
+};

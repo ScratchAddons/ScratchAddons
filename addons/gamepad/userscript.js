@@ -1,6 +1,6 @@
 import GamepadLib from "./gamepadlib.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const vm = addon.tab.traps.vm;
 
   // Wait for the project to finish loading. Renderer and scripts will not be fully available until this happens.
@@ -441,4 +441,4 @@ export default async function ({ addon, global, console, msg }) {
     const monitorListScaler = document.querySelector("[class^='monitor-list_monitor-list-scaler']");
     monitorListScaler.appendChild(virtualCursorElement);
   }
-}
+};

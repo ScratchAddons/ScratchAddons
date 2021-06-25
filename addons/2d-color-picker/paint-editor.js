@@ -4,12 +4,12 @@
 import { normalizeHex } from "../../libraries/common/cs/normalize-color.js";
 import RateLimiter from "../../libraries/common/cs/rate-limiter.js";
 
-export default async ({ addon, console, msg }) => {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, msg }) => {
   let prevEventHandler;
   // 250-ms rate limit
   const rateLimiter = new RateLimiter(250);
 
-  /* get the color from scratch*/
+  // get the color from scratch
   const getColor = () => {
     let fillOrStroke;
     const state = addon.tab.redux.state;
@@ -22,10 +22,10 @@ export default async ({ addon, console, msg }) => {
     }
     const colorType = state.scratchPaint.fillMode.colorIndex;
     const primaryOrSecondary = ["primary", "secondary"][colorType];
-    /* This value can be arbitrary - it can be HEX, RGB, etc.*/
     const color = state.scratchPaint.color[`${fillOrStroke}Color`][`${primaryOrSecondary}`];
     if (color === null || color === "scratch-paint/style-path/mixed") return;
-    // Convert using tinycolor
+    // This value can be arbitrary - it can be HEX, RGB, etc.
+    // Use tinycolor to convert them.
     return tinycolor(color).toHex();
   };
 

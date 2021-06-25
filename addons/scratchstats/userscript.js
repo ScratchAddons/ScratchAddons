@@ -10,7 +10,7 @@ function createItem(number, label) {
   return item;
 }
 
-export default async function ({ addon, msg, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, msg, console }) => {
   const username = location.pathname.split("/")[2];
   if (!username) return;
   const content = document.querySelector("#content");
@@ -138,4 +138,4 @@ export default async function ({ addon, msg, console }) {
         .catch(() => stats.appendChild(document.createTextNode(msg("err")))); // appended so basic stats are still there, it's just the chart that's gone
     })
     .catch(() => (stats.innerText = msg("err"))); // innerText to remove loading message
-}
+};

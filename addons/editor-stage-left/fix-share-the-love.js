@@ -1,4 +1,4 @@
-export default function ({ addon, global, console }) {
+export default /** @param {import("../../types").Injectable} */ ({ addon, console }) => {
   let interval, injected;
 
   addon.self.addEventListener("disabled", () => {
@@ -42,4 +42,4 @@ export default function ({ addon, global, console }) {
     });
   }
   tryInjecting();
-}
+};

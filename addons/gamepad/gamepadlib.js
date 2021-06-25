@@ -141,8 +141,8 @@ const getGamepadId = (gamepad) => `${gamepad.id} (${gamepad.index})`;
 
 class GamepadData {
   /**
-   * @param {Gamepad} gamepad Source Gamepad
-   * @param {GamepadLib} gamepadLib Parent GamepadLib
+   * @param {Gamepad} gamepad Source Gamepad.
+   * @param {GamepadLib} gamepadLib Parent GamepadLib.
    */
   constructor(gamepad, gamepadLib) {
     this.gamepad = gamepad;

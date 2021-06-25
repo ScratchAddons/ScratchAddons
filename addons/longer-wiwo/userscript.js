@@ -1,6 +1,6 @@
 /* global $ */
 // $ is global jQuery instance on scratchr2 pages
-export default async function ({ msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { msg }) => {
   const status = $('textarea[name="status"]');
   const left = $("#status-chars-left").parent();
 
@@ -22,4 +22,4 @@ export default async function ({ msg }) {
   });
 
   if (status[0]) status[0].maxLength = 255; // disallow more than 255 chars
-}
+};

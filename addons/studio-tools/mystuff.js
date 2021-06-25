@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   while (true) {
     let item = await addon.tab.waitForElement(".media-stats", { markAsSeen: true });
     if (window.location.hash === "#galleries" && item.childElementCount === 2) {
@@ -19,4 +19,4 @@ export default async function ({ addon, global, console, msg }) {
       });
     }
   }
-}
+};

@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const vm = addon.tab.traps.vm;
 
   const getBlockCount = () => {
@@ -49,4 +49,4 @@ export default async function ({ addon, console, msg }) {
   };
 
   addLiveBlockCount();
-}
+};

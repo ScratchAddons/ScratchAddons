@@ -1,6 +1,4 @@
-/**
- * A fake XML class to use in place of the real XML for faking things?
- */
+/** A fake XML class to use in place of the real XML for faking things? */
 export default class XML {
   constructor() {
     this.xmlDoc = document.implementation.createDocument(null, "xml");

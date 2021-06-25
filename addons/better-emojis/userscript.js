@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   const updateEmojis = () => {
     if (addon.tab.clientVersion === "scratch-www") {
       if (addon.tab.redux?.state?.scratchGui && !addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
@@ -79,4 +79,4 @@ export default async function ({ addon, global, console }) {
         el.src = addon.self.dir + "/images/pizza-cat.svg";
     }
   }
-}
+};

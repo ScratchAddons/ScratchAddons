@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   const semicolon = document.createElement("p");
   semicolon.textContent = ";";
   semicolon.classList.add("semicolon");
@@ -12,4 +12,4 @@ export default async function ({ addon, global, console }) {
   };
   ready();
   addon.tab.addEventListener("urlChange", ready);
-}
+};

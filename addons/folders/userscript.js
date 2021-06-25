@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   // The basic premise of how this addon works is relative simple.
   // scratch-gui renders the sprite selectors and asset selectors in a hierarchy like this:
   // <SelectorHOC>
@@ -36,8 +36,9 @@ export default async function ({ addon, global, console, msg }) {
   const DIVIDER = "//";
 
   /**
-   * getFolderFromName("B") === null
-   * getFolderFromName("A//b") === "A"
+   * @example
+   *   getFolderFromName("B") === null;
+   *   getFolderFromName("A//b") === "A";
    */
   const getFolderFromName = (name) => {
     const idx = name.indexOf(DIVIDER);
@@ -48,8 +49,9 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   /**
-   * getNameWithoutFolder("B") === "B"
-   * getNameWithoutFolder("A//b") === "b"
+   * @example
+   *   getNameWithoutFolder("B") === "B";
+   *   getNameWithoutFolder("A//b") === "b";
    */
   const getNameWithoutFolder = (name) => {
     const idx = name.indexOf(DIVIDER);
@@ -60,10 +62,11 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   /**
-   * setFolderOfName("B", "y") === "y//B"
-   * setFolderOfName("c//B", "y") === "y//B"
-   * setFolderOfName("B", null) === "B"
-   * setFolderOfName("c//B", null) === "B"
+   * @example
+   *   setFolderOfName("B", "y") === "y//B";
+   *   setFolderOfName("c//B", "y") === "y//B";
+   *   setFolderOfName("B", null) === "B";
+   *   setFolderOfName("c//B", null) === "B";
    */
   const setFolderOfName = (name, folder) => {
     const basename = getNameWithoutFolder(name);
@@ -120,7 +123,6 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   /**
-   * @typedef ItemData
    * @property {string} realName
    * @property {number} realIndex
    * @property {string} inFolder
@@ -128,9 +130,7 @@ export default async function ({ addon, global, console, msg }) {
    * @property {boolean} folderOpen
    */
 
-  /**
-   * @returns {ItemData|null}
-   */
+  /** @returns {ItemData | null} */
   const getItemData = (item) => {
     if (item && item.name && typeof item.name === "object") {
       return item.name;
@@ -1336,4 +1336,4 @@ export default async function ({ addon, global, console, msg }) {
     patchSortableHOC(sortableHOCInstance.constructor, TYPE_ASSETS);
     sortableHOCInstance.saInitialSetup();
   }
-}
+};

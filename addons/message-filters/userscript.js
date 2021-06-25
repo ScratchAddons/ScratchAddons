@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   // Wait for the select element that is the default message filtering select then remove it.
   await addon.tab.waitForElement(".select", { markAsSeen: true });
   document.querySelector(".select").remove();
@@ -122,7 +122,7 @@ export default async function ({ addon, global, console, msg }) {
     if (count < 40) {
       console.log("Loading more messages...");
       // Click the load more button.
-      document.querySelector(".messages-social-loadmore").click();
+      document.querySelector(".messages-social-loadmore")?.click();
       await addon.tab.waitForElement(".social-message", {
         markAsSeen: true,
       });
@@ -132,4 +132,4 @@ export default async function ({ addon, global, console, msg }) {
     });
     update();
   }
-}
+};

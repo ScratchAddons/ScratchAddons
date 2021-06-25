@@ -2,17 +2,17 @@ export default class DomHelpers {
   constructor(addon) {
     this.addon = addon;
     this.vm = addon.tab.traps.vm;
-    /**
-     * @type {eventDetails[]}
-     */
+    /** @type {eventDetails[]} */
     this.events = [];
   }
 
   /**
-   * Simulate a drag and drop programmatically through javascript
+   * Simulate a drag and drop programmatically through javascript.
+   *
    * @param selectorDrag
    * @param selectorDrop
    * @param mouseXY
+   *
    * @returns {boolean}
    */
   triggerDragAndDrop(selectorDrag, selectorDrop, mouseXY) {
@@ -91,9 +91,7 @@ export default class DomHelpers {
   }
 }
 
-/**
- * A record of an event
- */
+/** A record of an event. */
 class eventDetails {
   constructor(dom, event, func, capture) {
     this.dom = dom;

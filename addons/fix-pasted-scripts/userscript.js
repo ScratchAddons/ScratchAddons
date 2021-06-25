@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   const BlocklyInstance = await addon.tab.traps.getBlockly();
   const originalBlockMouseDown = BlocklyInstance.BlockSvg.prototype.onMouseDown_;
   const originalFieldMouseDown = BlocklyInstance.Field.prototype.onMouseDown_;
@@ -26,4 +26,4 @@ export default async function ({ addon, global, console }) {
   if (vm.editingTarget) {
     vm.emitWorkspaceUpdate();
   }
-}
+};

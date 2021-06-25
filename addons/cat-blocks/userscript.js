@@ -1,9 +1,9 @@
-/**
- * Based on https://github.com/LLK/scratch-blocks/compare/hotfix/totally-normal-2021 (Apache 2.0)
+/*
+ * Based on https://github.com/LLK/scratch-blocks/compare/hotfix/totally-normal-2021 (Apache 2.0).
  * It has been modified to work properly in our environment and fix some bugs.
  */
 
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   const Blockly = await addon.tab.traps.getBlockly();
 
   const shouldWatchMouseCursor = addon.settings.get("watch");
@@ -341,4 +341,4 @@ export default async function ({ addon, global, console }) {
       workspace.toolboxRefreshEnabled_ = true;
     }
   }
-}
+};

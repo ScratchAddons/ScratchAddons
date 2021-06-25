@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   let posts = document.querySelectorAll(".blockpost");
 
   posts.forEach(async (i) => {
@@ -34,4 +34,4 @@ export default async function ({ addon, global, console, msg }) {
       color: data.color,
     };
   }
-}
+};

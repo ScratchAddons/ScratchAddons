@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const backbone = new Scratch.Gallery.CuratorList({ gallery_id: Scratch.INIT_DATA.GALLERY.model.id });
 
   const addedByExtension = document.createElement("span");
@@ -116,4 +116,4 @@ export default async function ({ addon, global, console, msg }) {
       .getElementById("tabs-content")
       .insertBefore(actionBarDiv, document.getElementById("tabs-content").firstChild);
   }
-}
+};

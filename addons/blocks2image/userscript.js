@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const buttonItem = [
     msg("export_selected_to_SVG"),
     msg("export_all_to_SVG"),
@@ -262,4 +262,4 @@ export default async function ({ addon, global, console, msg }) {
       iframe.remove();
     };
   }
-}
+};

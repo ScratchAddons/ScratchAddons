@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const useTopBar = addon.settings.get("topbar");
 
   const barOuter = document.createElement("div");
@@ -248,4 +248,4 @@ export default async function ({ addon, global, console, msg }) {
     if (useTopBar) return;
     mutationObserver.disconnect();
   }
-}
+};

@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   const vm = addon.tab.traps.vm;
   await new Promise((resolve, reject) => {
     if (vm.editingTarget) return resolve();
@@ -38,4 +38,4 @@ export default async function ({ addon, global, console }) {
     }
   };
   vm.editingTarget.blocks.constructor.prototype.blocklyListen = newBlocklyListen;
-}
+};

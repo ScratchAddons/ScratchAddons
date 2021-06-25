@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon }) => {
   function countProjects(url, page, delta, callback) {
     const request = new XMLHttpRequest();
     request.open("GET", url + 40 * page);
@@ -34,4 +34,4 @@ export default async function ({ addon }) {
       document.querySelector("[data-count=projects]").innerText = count;
     });
   }
-}
+};

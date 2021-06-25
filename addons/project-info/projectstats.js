@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const vm = addon.tab.traps.vm;
 
   const getBlockCount = () => {
@@ -40,4 +40,4 @@ export default async function ({ addon, console, msg }) {
   // addProjectPageStats either when the project is loaded through the project page or when the user goes from the editor to the project page
   vm.runtime.on("PROJECT_LOADED", async () => addProjectPageStats());
   addon.tab.addEventListener("urlChange", (e) => addProjectPageStats());
-}
+};

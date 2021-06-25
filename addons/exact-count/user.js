@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   let user1 = window.location.href.substring(30, 100);
   let username = user1.substring(0, user1.indexOf("/"));
   let details = ["projects", "favorites", "studios_following", "studios", "following", "followers"];
@@ -29,4 +29,4 @@ export default async function ({ addon, global, console }) {
     xmlhttp.open("GET", `https://scratch.mit.edu/users/${username}/${details[j]}/`, true);
     xmlhttp.send();
   }
-}
+};

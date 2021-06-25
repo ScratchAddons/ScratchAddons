@@ -20,7 +20,7 @@ async function commentLoader(addon, heightControl, selector, isNewStudioComment)
   }
 }
 
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   if (window.location.pathname.split("/")[1] === "studios" && addon.settings.get("studioScroll")) {
     if (addon.tab.clientVersion === "scratchr2") {
       if (window.location.pathname.split("/")[3] === "comments")
@@ -52,4 +52,4 @@ export default async function ({ addon, global, console }) {
   }
   if (window.location.pathname.split("/")[1] === "messages" && addon.settings.get("messageScroll"))
     commentLoader(addon, "#view", "#view > div > div.messages-details.inner > section.messages-social > button");
-}
+};

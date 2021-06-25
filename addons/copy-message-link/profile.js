@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   let amtOfComments = 0;
   let pass = 0;
   while (true) {
@@ -34,4 +34,4 @@ export default async function ({ addon, global, console, msg }) {
     };
     comment.querySelector("div.actions-wrap").appendChild(newElem);
   }
-}
+};

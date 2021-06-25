@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   if (!addon.tab.clientVersion) return;
   if (document.location.pathname.startsWith("/conference")) return;
 
@@ -26,4 +26,4 @@ export default async function ({ addon, global, console }) {
     if (addon.settings.get("removeIdeasBtn")) el.getElementsByTagName("li")[2].remove();
     el.insertBefore(link, el.getElementsByTagName("li")[2]);
   }
-}
+};

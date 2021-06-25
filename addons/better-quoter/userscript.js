@@ -1,8 +1,8 @@
 /* global copy_paste */
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   function getSelectionBBCode() {
     var selection = window.getSelection();
-    if (selection.rangeCount > 0) {
+    if (Number(selection?.rangeCount) > 0) {
       // if something is selected
       let range = selection.getRangeAt(0);
       var clonedSelection = range.cloneContents();
@@ -134,7 +134,7 @@ export default async function ({ addon, global, console }) {
       else quote.textContent = `[quote]\n${quote.textContent}[/quote]\n`;
     }
 
-    return html.textContent;
+    return `${html.textContent}`;
   }
 
   let textarea = document.querySelector(".markItUpEditor");
@@ -160,4 +160,4 @@ export default async function ({ addon, global, console }) {
       textarea.focus();
     });
   }
-}
+};

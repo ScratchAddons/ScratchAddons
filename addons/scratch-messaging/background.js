@@ -4,15 +4,17 @@ import { linkifyTextNode, pingifyTextNode } from "../../libraries/common/cs/fast
 export default async (
   /** @type {AddonAPIs.PersistentScript} */ { addon, console, setTimeout, setInterval, clearTimeout, clearInterval }
 ) => {
+  const getDefaultData = () => ({
+    messages: [],
+    lastMsgCount: undefined,
+    username: addon.auth.username,
+    ready: false,
+  });
+
   /** @type {number | null} */
   let lastDateTime;
-  let pendingAuthChange = false;
-  let addonEnabled = true;
-  /** Reuse one DOMParser */
-  const parser = new DOMParser();
-
   /**
-   * @returns {{
+   * @type {{
    *   messages: import("../../types").Message[];
    *   lastMsgCount?: number;
    *   username?: string;
@@ -24,21 +26,21 @@ export default async (
    *   };
    * }}
    */
-  const getDefaultData = () => ({
-    messages: [],
-    lastMsgCount: undefined,
-    username: addon.auth.username,
-    ready: false,
-  });
   let data = getDefaultData();
+  let pendingAuthChange = false;
+  let addonEnabled = true;
+  // reuse one DOMParser
+  const parser = new DOMParser();
 
   addon.auth.addEventListener("change", () => (pendingAuthChange = true));
   resetData();
   routine();
+
   function resetData() {
     lastDateTime = null;
     data = getDefaultData();
   }
+
   async function routine() {
     await runCheckMessagesAfter({ checkOld: true }, 0);
     while (addonEnabled) {
@@ -52,9 +54,11 @@ export default async (
       }
     }
   }
+
   /**
    * @param {{ checkOld?: boolean }} opts
    * @param {number} [ms]
+   *
    * @returns {Promise<void>}
    */
   function runCheckMessagesAfter(opts, ms) {
@@ -65,8 +69,10 @@ export default async (
       }, ms);
     });
   }
+
   async function checkMessages({ checkOld = false } = {}) {
     if (!addon.auth.isLoggedIn) return;
+
     // Check if message count changed, if not, return
     const msgCount = await addon.account.getMsgCount();
     if (data.lastMsgCount === msgCount) return;
@@ -97,10 +103,10 @@ export default async (
     } else {
       checkedMessages = (await addon.account.getMessages({ offset: 0 })) || [];
     }
-    if (!checkedMessages?.length) return;
+    if (checkedMessages === null) return;
     if (!(!checkOld && !lastDateTime)) {
       for (const message of checkedMessages) {
-        if (!checkOld && new Date(message.datetime_created).getTime() <= lastDateTime) break;
+        if (!checkOld && new Date(message.datetime_created).getTime() <= (lastDateTime || 0)) break;
         if (checkOld) data.messages.push(message);
         else data.messages.unshift(message);
       }
@@ -132,12 +138,10 @@ export default async (
   const messageListener = (request, sender, sendResponse) => {
     if (!request.scratchMessaging) return;
     const popupRequest = request.scratchMessaging;
-    if (popupRequest === "getData") {
+    if (popupRequest === "getData")
       sendResponse(data.ready ? data : { error: addon.auth.isLoggedIn ? "notReady" : "loggedOut" });
-      return true;
-    } else if (popupRequest.postComment) {
+    else if (popupRequest.postComment) {
       sendComment(popupRequest.postComment).then((status) => sendResponse(status));
-      return true;
     } else if (popupRequest.retrieveComments) {
       const { resourceType, resourceId, commentIds } = popupRequest.retrieveComments;
       retrieveComments(resourceType, resourceId, commentIds)
@@ -148,23 +152,18 @@ export default async (
           console.warn("Comment could not be fetched:", err);
           sendResponse({ failed: true });
         });
-      return true;
     } else if (popupRequest === "markAsRead") {
       addon.account.clearMessages();
-      return true;
     } else if (popupRequest.deleteComment) {
       const { resourceType, resourceId, commentId } = popupRequest.deleteComment;
       deleteComment({ resourceType, resourceId, commentId })
         .then((res) => sendResponse(res))
         .catch((err) => sendResponse(err));
-      return true;
     } else if (popupRequest.dismissAlert) {
       dismissAlert(popupRequest.dismissAlert)
         .then((res) => sendResponse(res))
         .catch((err) => sendResponse(err));
-      return true;
     }
-    return false;
   };
   chrome.runtime.onMessage.addListener(messageListener);
   addon.self.addEventListener("disabled", () => {
@@ -180,7 +179,6 @@ export default async (
   async function retrieveComments(resourceType, resourceId, commentIds, page = 1, commentsObj = {}) {
     if (resourceType === "project" || resourceType === "gallery") {
       /** @type {string} */
-
       let projectAuthor;
       if (resourceType === "project") {
         const projectRes = await fetch(`https://api.scratch.mit.edu/projects/${resourceId}`);
@@ -198,21 +196,24 @@ export default async (
        * @param {number} offset
        */
       const getRepliesUrl = (commId, offset) =>
-        getCommentUrl(commId) +
-        (resourceType === "project"
-          ? `/replies?offset=${offset}&limit=40&nocache=${Date.now()}`
-          : `/replies?offset=${offset}&limit=40&nocache=${Date.now()}`);
+        resourceType === "project"
+          ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`
+          : `${getCommentUrl(commId)}/replies?offset=${offset}&limit=40&nocache=${Date.now()}`;
 
       for (const commentId of commentIds) {
         if (commentsObj[`${resourceType[0]}_${commentId}`]) continue;
+
         const res = await fetch(getCommentUrl(commentId));
+
         if (!res.ok) continue;
         const json = await res.json();
         // This is sometimes null for deleted comments
         if (json === null) continue;
         const parentId = json.parent_id || commentId;
         const childrenComments = {};
+
         let parentComment;
+
         if (json.parent_id) {
           const resParent = await fetch(getCommentUrl(parentId));
           if (!resParent.ok) continue;
@@ -238,20 +239,23 @@ export default async (
           const repliesJson = await repliesRes.json();
           return repliesJson;
         };
+
         const replies = [];
         let lastRepliesLength = 40;
         let offset = 0;
         while (lastRepliesLength === 40) {
           const newReplies = await getReplies(offset);
           newReplies.forEach((c) => replies.push(c));
-          console.log(replies);
+          console.log(replies)
           lastRepliesLength = newReplies.length;
           offset += 40;
         }
+
         if (json.parent_id && replies.length === 0) {
           // Something went wrong, we didn't get the replies
           continue;
         }
+
         for (const reply of replies) {
           const commenteeReply = replies.find((c) => c.author.id === reply.commentee_id);
           const replyingTo = commenteeReply ? commenteeReply.author.username : parentComment.author.username;
@@ -269,6 +273,7 @@ export default async (
         for (const childCommentId of Object.keys(childrenComments)) {
           commentsObj[childCommentId] = childrenComments[childCommentId];
         }
+
         commentsObj[`${resourceType[0]}_${parentId}`] = {
           author: parentComment.author.username,
           authorId: parentComment.author.id,
@@ -281,6 +286,7 @@ export default async (
       }
       return commentsObj;
     }
+
     const res = await fetch(
       `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}&nocache=${Date.now()}`
     );
@@ -294,6 +300,7 @@ export default async (
       let foundComment = false;
       const parentComment = commentChain.querySelector("div");
       const parentId = Number(parentComment.getAttribute("data-comment-id"));
+
       const childrenComments = {};
       const children = commentChain.querySelectorAll("li.reply:not(.removed)");
       for (const child of children) {
@@ -316,6 +323,7 @@ export default async (
           scratchTeam: author.includes("*"),
         };
       }
+
       if (commentIds.includes(parentId)) {
         foundComment = true;
         commentIds.splice(
@@ -323,6 +331,7 @@ export default async (
           1
         );
       }
+
       if (foundComment) {
         const parentAuthor = parentComment.querySelector(".name").textContent.trim();
         commentsObj[`${resourceType[0]}_${parentId}`] = {
@@ -353,6 +362,7 @@ export default async (
       return commentsObj;
     }
   }
+
   function fixCommentContent(value) {
     const shouldLinkify = scratchAddons.localState.addonsEnabled["more-links"] === true;
     let node;
@@ -383,6 +393,7 @@ export default async (
     pingifyTextNode(node);
     return node.innerHTML;
   }
+
   async function sendComment({ resourceType, resourceId, content, parent_id, commentee_id, commenteeUsername }) {
     if (resourceType === "project" || resourceType === "gallery") {
       const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
@@ -419,6 +430,7 @@ export default async (
       xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/?sareferer`, true);
       xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
       xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
+
       xhr.onload = function () {
         if (xhr.status === 200) {
           try {
@@ -441,9 +453,11 @@ export default async (
           }
         } else resolve({ error: xhr.status });
       };
+
       xhr.send(JSON.stringify({ content, parent_id, commentee_id }));
     });
   }
+
   async function deleteComment({ resourceType, resourceId, commentId }) {
     if (resourceType === "project" || resourceType === "gallery") {
       const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
@@ -466,14 +480,17 @@ export default async (
       xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/?sareferer`, true);
       xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
       xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
+
       xhr.onload = function () {
         if (xhr.status === 200) {
           resolve(200);
         } else resolve({ error: xhr.status });
       };
+
       xhr.send(JSON.stringify({ id: String(commentId) }));
     });
   }
+
   /** @param {number} alertId */
   async function dismissAlert(alertId) {
     const headers = new Headers();
@@ -481,7 +498,7 @@ export default async (
     headers.set("x-csrftoken", addon.auth.csrfToken || "");
     headers.set("x-requested-with", "XMLHttpRequest");
     const res = await fetch("https://scratch.mit.edu/site-api/messages/messages-delete/?sareferer", {
-      headers,
+      headers: {},
       body: JSON.stringify({ alertType: "notification", alertId }),
       method: "POST",
     });

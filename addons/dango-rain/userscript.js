@@ -61,7 +61,7 @@ addEventListener("resize", () => {
   setEltWidth(dangoContainerRight);
 });
 
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const notifClose = Object.assign(document.createElement("span"), {
     style: `
     float: right;
@@ -104,4 +104,4 @@ export default async function ({ addon, global, console, msg }) {
     document.querySelector("textarea[name=bio]").addEventListener("input", () => checkForDango(getAboutMeAndWiwo()));
     document.querySelector("textarea[name=status]").addEventListener("input", () => checkForDango(getAboutMeAndWiwo()));
   }
-}
+};

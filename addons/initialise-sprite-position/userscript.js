@@ -1,4 +1,4 @@
-export default async function ({ addon }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon }) => {
   let vm = addon.tab.traps.vm;
   let oldAddSprite = vm.constructor.prototype.addSprite;
   vm.constructor.prototype.addSprite = function (input) {
@@ -19,4 +19,4 @@ export default async function ({ addon }) {
     }
     return oldAddSprite.call(this, stringify ? JSON.stringify(spriteObj) : spriteObj);
   };
-}
+};

@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   let posts = document.querySelectorAll(".blockpost");
 
   posts.forEach(async (i) => {
@@ -116,4 +116,4 @@ export default async function ({ addon, global, console, msg }) {
     const response = await fetch(`https://my-ocular.jeffalo.net/api/reactions/${id}`);
     return response.json();
   }
-}
+};

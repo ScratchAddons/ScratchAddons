@@ -1,4 +1,4 @@
-export default async function ({ addon, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   document.addEventListener(
     "click",
     (e) => {
@@ -29,4 +29,4 @@ export default async function ({ addon, console, msg }) {
     },
     true
   );
-}
+};

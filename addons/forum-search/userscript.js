@@ -233,7 +233,7 @@ function appendSearch(box, query, page, term, msg) {
     });
 }
 
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
   // create the search bar
   let search = document.createElement("form");
@@ -303,4 +303,4 @@ export default async function ({ addon, global, console, msg }) {
       triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value, msg);
     }
   });
-}
+};

@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   var BlocklyInstance = await addon.tab.traps.getBlockly();
 
   (function (Blockly) {
@@ -260,4 +260,4 @@ export default async function ({ addon, global, console }) {
 
     applyAndUpdate();
   })(window.Blockly);
-}
+};

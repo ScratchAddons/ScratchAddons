@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   await addon.tab.traps.getBlockly();
 
   let controlsRect;
@@ -71,4 +71,4 @@ export default async function ({ addon, global, console }) {
   addon.tab.addEventListener("urlChange", update);
   addon.settings.addEventListener("change", update);
   window.addEventListener("resize", onResize);
-}
+};

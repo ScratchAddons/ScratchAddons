@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   while (true) {
     const comment = await addon.tab.waitForElement("div.comment", {
       markAsSeen: true,
@@ -24,4 +24,4 @@ export default async function ({ addon, global, console, msg }) {
     };
     comment.querySelector("div.action-list").prepend(newElem);
   }
-}
+};

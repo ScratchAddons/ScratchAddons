@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   let placeHolderDiv = null;
   let lockDisplay = null;
   let flyOut = null;
@@ -134,4 +134,4 @@ export default async function ({ addon, global, console }) {
 
     doOneTimeSetup();
   }
-}
+};

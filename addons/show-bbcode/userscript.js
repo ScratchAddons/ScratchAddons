@@ -35,7 +35,7 @@ function viewSource(post, msg) {
   };
 }
 
-export default async function ({ addon, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   while (true) {
     const post = await addon.tab.waitForElement(".blockpost", { markAsSeen: true });
     const actionRow = post.querySelector(".postfootright ul");
@@ -56,4 +56,4 @@ export default async function ({ addon, console, msg }) {
     sourceButton.setAttribute("data-state", "post");
     sourceButton.addEventListener("click", viewSource(post, msg));
   }
-}
+};

@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const messages = document.createElement("a");
   messages.href = "/messages/";
   messages.title = msg("messages");
@@ -38,4 +38,4 @@ export default async function ({ addon, global, console, msg }) {
     });
     document.querySelector("[class^='menu-bar_account-info-group']").insertBefore(messages, nav);
   }
-}
+};

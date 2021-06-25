@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   async function remixHandler() {
     while (true) {
       await addon.tab.waitForElement(".remix-credit", {
@@ -55,4 +55,4 @@ export default async function ({ addon, global, console }) {
 
     selectTab(0);
   }
-}
+};
