@@ -11,7 +11,7 @@ function injectPrototype() {
   Function.prototype.bind = function (thisArg, ...args) {
     if (Function.prototype.bind === oldBind) {
       // Just in case some code stores the bind function once on startup, then always uses it.
-      return oldBind.apply(this, [thisArg, args]);
+      return oldBind.apply(this, [thisArg, ...args]);
     } else if (
       args[0] &&
       Object.prototype.hasOwnProperty.call(args[0], "editingTarget") &&
@@ -20,9 +20,9 @@ function injectPrototype() {
       onceMap.vm = args[0];
       // After finding the VM, return to previous Function.prototype.bind
       Function.prototype.bind = oldBind;
-      return oldBind.apply(this, [thisArg, args]);
+      return oldBind.apply(this, [thisArg, ...args]);
     } else {
-      return oldBind.apply(this, [thisArg, args]);
+      return oldBind.apply(this, [thisArg, ...args]);
     }
   };
 }

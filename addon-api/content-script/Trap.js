@@ -12,7 +12,7 @@ export default class Trap extends Listenable {
     /** @private */
     this._getEditorMode = () => this._isWWW && tab.editorMode;
     /** @private */
-    this._waitForElement = (/** @type {any} */ q) => tab.waitForElement(q, { markAsSeen: true });
+    this._waitForElement = (/** @type {string} */ q) => tab.waitForElement(q, { markAsSeen: true });
     /** @private */
 
     this._cache = Object.create(null);
