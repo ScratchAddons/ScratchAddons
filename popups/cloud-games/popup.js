@@ -1,29 +1,10 @@
-import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js";
-
-(async () => {
-  const l10n = new WebsiteLocalizationProvider();
-
-  //theme
-  const lightThemeLink = document.createElement("link");
-  lightThemeLink.setAttribute("rel", "stylesheet");
-  lightThemeLink.setAttribute("href", "light.css");
-
-  chrome.storage.sync.get(["globalTheme"], function (r) {
-    let rr = false; //true = light, false = dark
-    if (r.globalTheme) rr = r.globalTheme;
-    if (rr) {
-      document.head.appendChild(lightThemeLink);
-    }
-  });
-
-  await l10n.loadByAddonId("cloud-games");
-
+export default async ({ addon, msg }) => {
   window.vue = new Vue({
     el: "body",
     data: {
       projects: [],
       loaded: false,
-      messages: { noUsersMsg: l10n.get("cloud-games/no-users") },
+      messages: { noUsersMsg: msg("no-users") },
       projectsChecked: 0,
     },
     computed: {
@@ -31,7 +12,7 @@ import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js"
         return this.projects.sort((b, a) => a.amt - b.amt);
       },
       loadingMsg() {
-        return l10n.get("cloud-games/loading", { done: this.projectsChecked, amount: this.projects.length || "?" });
+        return msg("loading", { done: this.projectsChecked, amount: this.projects.length || "?" });
       },
     },
     methods: {
@@ -61,7 +42,7 @@ import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js"
       },
     },
     async created() {
-      document.title = l10n.get("cloud-games/popup-title");
+      document.title = msg("popup-title");
       const res = await fetch("https://api.scratch.mit.edu/studios/539952/projects/?limit=40");
       const projects = await res.json();
       // TODO: add currently opened game to projects array. Sort function should put it on top
@@ -71,4 +52,4 @@ import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js"
       await Promise.all(this.projects.map((project, i) => this.setCloudDataForProject(project, i)));
     },
   });
-})();
+};
