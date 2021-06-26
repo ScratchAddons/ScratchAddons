@@ -1,4 +1,7 @@
 export default async ({ addon, msg }) => {
+  const url = addon.settings.get("url");
+  let studioId = url.match(/\d+/)[0];
+  if (!studioId || isNaN(studioId)) studioId = "539952";
   window.vue = new Vue({
     el: "body",
     data: {
@@ -43,7 +46,7 @@ export default async ({ addon, msg }) => {
     },
     async created() {
       document.title = msg("popup-title");
-      const res = await fetch("https://api.scratch.mit.edu/studios/539952/projects/?limit=40");
+      const res = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/projects/?limit=40`);
       const projects = await res.json();
       // TODO: add currently opened game to projects array. Sort function should put it on top
       this.projects = projects
