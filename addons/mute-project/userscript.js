@@ -3,6 +3,7 @@ export default async function ({ addon, global, console }) {
   let muted = false;
   let icon = document.createElement("img");
   icon.src = "/static/assets/e21225ab4b675bc61eed30cfb510c288.svg";
+  icon.loading = "lazy";
   icon.style.display = "none";
   const toggleMute = (e) => {
     if (e.ctrlKey) {

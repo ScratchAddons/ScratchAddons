@@ -2,7 +2,7 @@ import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
 
 export default async function ({ addon, global, console, msg }) {
-  let workspace, showingConsole;
+  let showingConsole, ScratchBlocks;
   const vm = addon.tab.traps.vm;
 
   const container = document.createElement("div");
@@ -28,15 +28,12 @@ export default async function ({ addon, global, console, msg }) {
   addon.tab.addBlock("sa-pause", [], pause, true);
   addon.tab.addBlock("\u200B\u200Bbreakpoint\u200B\u200B", [], pause);
   addon.tab.addBlock("\u200B\u200Blog\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    workspace = Blockly.getMainWorkspace();
     addItem(content, thread, "log");
   });
   addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    workspace = Blockly.getMainWorkspace();
     addItem(content, thread, "warn");
   });
   addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    workspace = Blockly.getMainWorkspace();
     addItem(content, thread, "error");
   });
 
@@ -54,6 +51,8 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   const goToBlock = (targetId, blockId) => {
+    const workspace = Blockly.getMainWorkspace();
+
     const offsetX = 32,
       offsetY = 32;
     if (targetId !== vm.editingTarget.id) {
@@ -67,6 +66,19 @@ export default async function ({ addon, global, console, msg }) {
     }
     const block = workspace.getBlockById(blockId);
     if (!block) return;
+
+    // Don't scroll to blocks in the flyout
+    if (block.workspace.isFlyout) return;
+
+    // Make sure the code tab is active
+    if (addon.tab.redux.state.scratchGui.editorTab.activeTabIndex !== 0) {
+      addon.tab.redux.dispatch({
+        type: "scratch-gui/navigation/ACTIVATE_TAB",
+        activeTabIndex: 0,
+      });
+      setTimeout(() => goToBlock(targetId, blockId), 0);
+      return;
+    }
 
     // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
     let root = block.getRootBlock();
@@ -195,13 +207,26 @@ export default async function ({ addon, global, console, msg }) {
   consoleWrapper.append(consoleTitle, extraContainer);
   document.body.append(consoleWrapper);
 
-  let pos1 = 0,
-    pos2 = 0,
-    pos3 = 0,
-    pos4 = 0,
-    maxX,
-    maxY;
   consoleTitle.addEventListener("mousedown", dragMouseDown);
+
+  let isScrolledToEnd = true;
+  extraContainer.addEventListener(
+    "wheel",
+    (e) => {
+      // When user scrolls up, stop automatically scrolling down
+      if (e.deltaY < 0) {
+        isScrolledToEnd = false;
+      }
+    },
+    { passive: true }
+  );
+  extraContainer.addEventListener(
+    "scroll",
+    () => {
+      isScrolledToEnd = extraContainer.scrollTop + 5 >= extraContainer.scrollHeight - extraContainer.clientHeight;
+    },
+    { passive: true }
+  );
 
   const getTargetInfo = (id, cache = null) => {
     if (cache && cache[id]) return cache[id];
@@ -216,31 +241,40 @@ export default async function ({ addon, global, console, msg }) {
     return item;
   };
 
+  let mouseOffsetX = 0;
+  let mouseOffsetY = 0;
+  let lastX = 0;
+  let lastY = 0;
+
   function dragMouseDown(e) {
     e.preventDefault();
-    pos3 = e.clientX;
-    pos4 = e.clientY;
+    mouseOffsetX = e.clientX - consoleWrapper.offsetLeft;
+    mouseOffsetY = e.clientY - consoleWrapper.offsetTop;
+    lastX = e.clientX;
+    lastY = e.clientY;
     document.addEventListener("mouseup", closeDragElement);
     document.addEventListener("mousemove", elementDrag);
   }
 
+  function dragConsole(x, y) {
+    lastX = x;
+    lastY = y;
+    const width = (document.documentElement.clientWidth || document.body.clientWidth) - 1;
+    const height = (document.documentElement.clientHeight || document.body.clientHeight) - 1;
+    const clampedX = Math.max(0, Math.min(x - mouseOffsetX, width - consoleWrapper.offsetWidth));
+    const clampedY = Math.max(0, Math.min(y - mouseOffsetY, height - consoleWrapper.offsetHeight));
+    consoleWrapper.style.left = clampedX + "px";
+    consoleWrapper.style.top = clampedY + "px";
+  }
+
   function elementDrag(e) {
     e.preventDefault();
-    var winW = document.documentElement.clientWidth || document.body.clientWidth,
-      winH = document.documentElement.clientHeight || document.body.clientHeight;
-    (maxX = winW - consoleWrapper.offsetWidth - 1), (maxY = winH - consoleWrapper.offsetHeight - 1);
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    if (consoleWrapper.offsetTop - pos2 <= maxY && consoleWrapper.offsetTop - pos2 >= 0) {
-      consoleWrapper.style.top = consoleWrapper.offsetTop - pos2 + "px";
-    }
-    if (consoleWrapper.offsetLeft - pos1 <= maxX && consoleWrapper.offsetLeft - pos1 >= 0) {
-      consoleWrapper.style.left = consoleWrapper.offsetLeft - pos1 + "px";
-    }
+    dragConsole(e.clientX, e.clientY);
   }
+
+  window.addEventListener("resize", () => {
+    dragConsole(lastX, lastY);
+  });
 
   function closeDragElement() {
     // stop moving when mouse button is released:
@@ -252,6 +286,7 @@ export default async function ({ addon, global, console, msg }) {
     document.querySelectorAll(".log").forEach((log, i) => log.remove());
     closeDragElement();
     logs = [];
+    isScrolledToEnd = true;
   });
   trashButton.addEventListener("mouseup", () => {
     closeDragElement();
@@ -286,8 +321,8 @@ export default async function ({ addon, global, console, msg }) {
     download("logs.txt", file);
   });
   let logs = [];
+  let scrollQueued = false;
   const addItem = (content, thread, type) => {
-    workspace = Blockly.getMainWorkspace();
     const wrapper = document.createElement("div");
     const span = (text, cl = "") => {
       let s = document.createElement("span");
@@ -295,8 +330,6 @@ export default async function ({ addon, global, console, msg }) {
       s.className = cl;
       return s;
     };
-
-    const scrolledDown = extraContainer.scrollTop + 5 > extraContainer.scrollHeight - extraContainer.clientHeight;
 
     const target = thread.target;
     const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
@@ -314,23 +347,45 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     const blockId = thread.peekStack();
-    const block = workspace.getBlockById(blockId);
-    const inputBlock = block.getChildren().find((b) => b.parentBlock_.id === blockId);
-    if (inputBlock.type !== "text") {
-      if (inputBlock.inputList.filter((i) => i.name).length === 0) {
-        const inputSpan = document.createElement("span");
-        const svgPathStyle = getComputedStyle(inputBlock.svgPath_);
-        const inputBlockFill = svgPathStyle.fill;
-        const inputBlockStroke = svgPathStyle.stroke;
-        // for compatibility with custom block colors
-        const inputBlockColor =
-          inputBlockFill === "rgb(40, 40, 40)" || inputBlockFill === "rgb(255, 255, 255)"
-            ? inputBlockStroke
-            : inputBlockFill;
-        inputSpan.innerText = inputBlock.toString();
-        inputSpan.className = "console-variable";
-        inputSpan.style.background = inputBlockColor;
-        wrapper.append(inputSpan);
+    const block = target.blocks.getBlock(blockId);
+    if (block && ScratchBlocks) {
+      const inputId = Object.values(block.inputs)[0]?.block;
+      const inputBlock = target.blocks.getBlock(inputId);
+      if (inputBlock && inputBlock.opcode !== "text") {
+        let text, category;
+        if (inputBlock.opcode === "data_variable" || inputBlock.opcode === "data_listcontents") {
+          text = Object.values(inputBlock.fields)[0].value;
+          category = inputBlock.opcode === "data_variable" ? "data" : "list";
+        } else {
+          // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
+          let jsonData;
+          const fakeBlock = {
+            jsonInit(data) {
+              jsonData = data;
+            },
+          };
+          const blockConstructor = ScratchBlocks.Blocks[inputBlock.opcode];
+          if (blockConstructor) {
+            try {
+              blockConstructor.init.call(fakeBlock);
+            } catch (e) {
+              // ignore
+            }
+          }
+          if (jsonData && jsonData.message0 && !jsonData.args0) {
+            text = jsonData.message0;
+            category = jsonData.category;
+          }
+        }
+        if (text && category) {
+          const inputSpan = document.createElement("span");
+          inputSpan.textContent = text;
+          inputSpan.className = "console-variable";
+          inputSpan.dataset.category = category === "list" ? "data-lists" : category;
+          inputSpan.style.backgroundColor =
+            ScratchBlocks.Colours[category === "list" ? "data_lists" : category].primary;
+          wrapper.append(inputSpan);
+        }
       }
     }
     logs.push({
@@ -355,10 +410,22 @@ export default async function ({ addon, global, console, msg }) {
 
     wrapper.appendChild(link);
 
-    if (scrolledDown) extraContainer.scrollTop = extraContainer.scrollHeight;
-    if (!showingConsole) buttonImage.src = addon.self.dir + "/debug-unread.svg";
+    if (!scrollQueued && isScrolledToEnd) {
+      scrollQueued = true;
+      queueMicrotask(scrollToEnd);
+    }
+    if (!showingConsole) {
+      const unreadImage = addon.self.dir + "/debug-unread.svg";
+      if (buttonImage.src !== unreadImage) buttonImage.src = unreadImage;
+    }
+  };
+  const scrollToEnd = () => {
+    scrollQueued = false;
+    extraContainer.scrollTop = extraContainer.scrollHeight;
   };
   const toggleConsole = (show = !showingConsole) => {
+    showingConsole = show;
+    consoleWrapper.style.display = show ? "flex" : "";
     if (show) {
       buttonImage.src = addon.self.dir + "/debug.svg";
       const cacheObj = Object.create(null);
@@ -373,17 +440,24 @@ export default async function ({ addon, global, console, msg }) {
           logLinkElem.textContent = msg("clone-of", { spriteName: tInfo.name });
         }
       }
+      if (isScrolledToEnd) {
+        scrollToEnd();
+      }
     }
-    consoleWrapper.style.display = show ? "flex" : "";
-    showingConsole = show;
   };
 
   while (true) {
     const stageHeaderSizeControls = await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
       markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+      reduxEvents: [
+        "scratch-gui/mode/SET_PLAYER",
+        "scratch-gui/mode/SET_FULL_SCREEN",
+        "fontsLoaded/SET_FONTS_LOADED",
+        "scratch-gui/locales/SELECT_LOCALE",
+      ],
     });
     if (addon.tab.editorMode === "editor") {
+      ScratchBlocks = await addon.tab.traps.getBlockly();
       stageHeaderSizeControls.insertBefore(container, stageHeaderSizeControls.firstChild);
     } else {
       toggleConsole(false);

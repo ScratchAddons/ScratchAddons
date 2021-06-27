@@ -5,7 +5,7 @@
   "credits": [
     {
       "name": "Maximouse",
-      "link": "https://github.com/mxmou/customize-scratch"
+      "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
   "dynamicEnable": true,
@@ -112,6 +112,10 @@
     {
       "url": "experimental_scratchr2_comments.css",
       "matches": ["https://scratch.mit.edu/users/*", "https://scratch.mit.edu/studios/*"]
+    },
+    {
+      "url": "experimental_remixtree.css",
+      "matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
     },
     {
       "url": "experimental_mystuff.css",
