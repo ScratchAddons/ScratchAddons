@@ -1,4 +1,4 @@
-export default async ({ addon, msg }) => {
+export default async ({ addon, msg, safeMsg }) => {
   const url = addon.settings.get("url");
   let studioId = url.match(/\d+/)[0];
   if (!studioId || isNaN(studioId)) studioId = "539952";
@@ -9,6 +9,7 @@ export default async ({ addon, msg }) => {
       loaded: false,
       messages: { noUsersMsg: msg("no-users") },
       projectsChecked: 0,
+      error: null,
     },
     computed: {
       projectsSorted() {
@@ -16,6 +17,9 @@ export default async ({ addon, msg }) => {
       },
       loadingMsg() {
         return msg("loading", { done: this.projectsChecked, amount: this.projects.length || "?" });
+      },
+      errorMessage() {
+        return msg(this.error);
       },
     },
     methods: {
@@ -43,11 +47,39 @@ export default async ({ addon, msg }) => {
           }, i * 125);
         });
       },
+      settingsHTML() {
+        const link = document.createElement("a");
+        link.target = "_blank";
+        link.href = chrome.runtime.getURL("/webpages/settings/index.html#addon-cloud-games");
+        link.textContent = msg("addon-settings");
+        return safeMsg("change-studio", {
+          settings: link.outerHTML,
+        });
+      },
     },
     async created() {
       document.title = msg("popup-title");
-      const res = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/projects/?limit=40`);
+      let res;
+      try {
+        res = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/projects/?limit=40`);
+      } catch (e) {
+        console.warn("Error when fetching studios: ", e);
+        this.error = "server-error";
+        return;
+      }
+      if (res.status >= 500) {
+        this.error = "server-error";
+        return;
+      }
+      if (res.status >= 400) {
+        this.error = "general-error";
+        return;
+      }
       const projects = await res.json();
+      if (projects.length === 0) {
+        this.error = "no-projects";
+        return;
+      }
       // TODO: add currently opened game to projects array. Sort function should put it on top
       this.projects = projects
         .map((project) => ({ title: project.title, id: project.id, amt: 0, users: [], extended: true }))

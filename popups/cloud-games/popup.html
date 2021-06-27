@@ -15,7 +15,11 @@
   </head>
 
   <body style="display: none" v-show="true">
-    <div class="loading" v-show="projects.length === 0 || projects.length !== projectsChecked">{{ loadingMsg }}</div>
+    <div class="loading" v-show="!error && (projects.length === 0 || projects.length !== projectsChecked)">{{ loadingMsg }}</div>
+    <div class="loading" v-show="error">
+      {{ errorMessage }}
+      <span v-if="error !== 'server-error'">{{{ settingsHTML() }}}</span>
+    </div>
     <div v-show="loaded">
       <div class="games" v-for="project of projectsSorted">
         <div class="title">
