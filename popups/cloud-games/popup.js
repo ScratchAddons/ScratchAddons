@@ -1,7 +1,7 @@
 export default async ({ addon, msg, safeMsg }) => {
   const url = addon.settings.get("url");
-  let studioId = url.match(/\d+/)[0];
-  if (!studioId || isNaN(studioId)) studioId = "539952";
+  const studioId = url.match(/\d+/)?.[0];
+  const shouldFailEarly = !studioId || isNaN(studioId);
   window.vue = new Vue({
     el: "body",
     data: {
@@ -9,7 +9,7 @@ export default async ({ addon, msg, safeMsg }) => {
       loaded: false,
       messages: { noUsersMsg: msg("no-users") },
       projectsChecked: 0,
-      error: null,
+      error: shouldFailEarly ? "general-error" : null,
     },
     computed: {
       projectsSorted() {
@@ -59,6 +59,7 @@ export default async ({ addon, msg, safeMsg }) => {
     },
     async created() {
       document.title = msg("popup-title");
+      if (shouldFailEarly) return;
       let res;
       try {
         res = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/projects/?limit=40`);
