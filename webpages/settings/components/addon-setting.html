@@ -2,19 +2,21 @@
   <div class="addon-setting">
     <div class="setting-label" v-html="settingsName(addon)"></div>
     <template v-if="setting.type === 'table'">
-      <div class="addon-setting-table">
-        <div class="addon-setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
-          <div class="addon-setting-table-options">
-            <img class="icon-type" src="../../images/icons/close.svg" @click="deleteTableRow(i)" />
-            <img class="icon-type" src="../../images/icons/drag.svg" />
-          </div>
-          <div class="addon-setting-table-row-settings">
-            <addon-setting
-              v-for="(id, val) of row"
-              :addon="addon"
-              :setting="getTableSetting(id)"
-              :addon-settings="row"
-            ></addon-setting>
+      <div class="setting-table">
+        <div class="setting-table-list" v-sortable>
+          <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
+            <div class="setting-table-options">
+              <img class="icon-type" src="../../images/icons/close.svg" @click="deleteTableRow(i)" />
+              <img class="icon-type handle" src="../../images/icons/drag.svg" />
+            </div>
+            <div class="setting-table-row-settings">
+              <addon-setting
+                v-for="(id, val) of row"
+                :addon="addon"
+                :setting="getTableSetting(id)"
+                :addon-settings="row"
+              ></addon-setting>
+            </div>
           </div>
         </div>
         <img class="icon-type" src="../../images/icons/plus.svg" @click="addTableRow" />
@@ -254,5 +256,27 @@
     box-sizing: border-box;
     border-radius: 4px;
     border: 1px solid #000;
+  }
+
+  .setting-table {
+    display: flex;
+    flex-direction: column;
+  }
+  .setting-table-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .setting-table-row {
+    display: flex;
+    margin: 10px 0px;
+  }
+  .setting-table-row-settings {
+    background: #414141;
+    border-radius: 10px;
+  }
+  .setting-table-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
   }
 </style>

@@ -32,9 +32,7 @@ export default async function ({ template }) {
       },
       checkValidity() {
         // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
-        let input = document.querySelector(
-          `input[data-addon-id='${this.addon._addonId}'][data-setting-id='${this.setting.id}']`
-        );
+        let input = this.$event.target;
         this.addonSettings[this.setting.id] = input.validity.valid ? input.value : this.setting.default;
       },
       keySettingKeyDown(e) {
@@ -112,4 +110,15 @@ export default async function ({ template }) {
     },
   });
   Vue.component("addon-setting", AddonSetting);
+
+  Vue.directive("sortable", function () {
+    const sortable = new window.Sortable(this.el, {
+      handle: ".handle",
+      onUpdate: (event) => {
+        let list = this.vm.addonSettings[this.vm.setting.id];
+        list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
+        this.vm.updateSettings();
+      },
+    });
+  });
 }

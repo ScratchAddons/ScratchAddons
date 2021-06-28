@@ -109,24 +109,6 @@ h1 {
   margin-top: 43px;
 }
 
-.addon-setting-table {
-  display: flex;
-  flex-direction: column;
-}
-.addon-setting-table-row {
-  display: flex;
-  margin: 10px 0px;
-}
-.addon-setting-table-row-settings {
-  background: #414141;
-  border-radius: 10px;
-}
-.addon-setting-table-options {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-}
-
 @keyframes addonBlink {
   10% {
     border: 1px solid var(--accent-3);
@@ -151,6 +133,12 @@ h1 {
   vertical-align: middle;
   filter: invert(0) brightness(10);
   margin-inline-end: 8px;
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .disabled {

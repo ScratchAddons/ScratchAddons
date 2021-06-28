@@ -1,14 +1,6 @@
 {
   "name": "Custom navbar items",
-  "description": "Adds the discuss button to the navbar.",
-  "credits": [
-    {
-      "name": "Maximouse"
-    },
-    {
-      "name": "World_Languages"
-    }
-  ],
+  "description": "Customize the items in the navbar.",
   "userscripts": [
     {
       "url": "userscript.js",
@@ -41,7 +33,7 @@
       ]
     }
   ],
-  "versionAdded": "1.0.0",
-  "tags": ["community", "forums"],
+  "versionAdded": "1.17.0",
+  "tags": ["community"],
   "enabledByDefault": false
 }
