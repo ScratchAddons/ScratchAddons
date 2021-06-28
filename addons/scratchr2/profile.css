@@ -154,3 +154,9 @@
 .portrait [data-control="edit"] {
   border-top-left-radius: 5px;
 }
+
+.box#profile-data .box-head {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
