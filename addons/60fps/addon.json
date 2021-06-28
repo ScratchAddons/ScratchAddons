@@ -4,7 +4,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Projects will run at a different speed when in use. Keep in mind that projects typically run at 30 fps",
+      "text": "Enabling the custom FPS mode changes the project speed. Projects typically run at 30 FPS.",
       "id": "projectRunsFasterNotice"
     }
   ],
