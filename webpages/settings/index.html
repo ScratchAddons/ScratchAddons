@@ -129,7 +129,7 @@
 
         <a
           class="category category-small"
-          style="margin-top: auto"
+          style="margin-top: auto;"
           href="https://scratchaddons.com/contributors"
           target="_blank"
         >
@@ -154,7 +154,7 @@
           <img src="../../images/icons/comment.svg" />
           <span v-cloak>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
         </a>
-        <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
+        <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px;" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
           <span v-cloak>{{ msg("moreSettings") }}</span>
         </div>
@@ -162,7 +162,7 @@
       <div
         v-show="!isIframe && smallMode === false"
         class="categories-shrink"
-        style="display: block !important"
+        style="display: block !important;"
         @click="sidebarToggle()"
       >
         <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === (direction() === 'rtl')}" />
@@ -267,7 +267,7 @@
           </p>
           <p>
             <a
-              href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse"
+              href="./licenses.html?libraries=icu-message-formatter,vue,color-picker-web-component,comlink,Sora,fuse,sortable"
               target="_blank"
               >{{ msg("libraryCredits") }}</a
             >
