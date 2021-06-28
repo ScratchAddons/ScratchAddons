@@ -1,0 +1,8 @@
+<template>
+  <div class="addon-group" v-show="shouldShow" :class="{  'margin-above': marginAbove }">
+    <span @click="toggle">
+      <img src="../../images/icons/expand.svg" alt="v" :class="{ 'reverted': group.expanded }" />
+      {{ group.name }} ({{ shownCount }})</span
+    >
+  </div>
+</template>

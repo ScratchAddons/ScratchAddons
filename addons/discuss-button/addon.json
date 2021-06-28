@@ -27,7 +27,9 @@
       "name": "Discuss button name",
       "id": "buttonName",
       "type": "string",
-      "default": "Discuss"
+      "default": "Discuss",
+      "min": 1,
+      "max": 30
     }
   ],
   "versionAdded": "1.0.0",

@@ -214,21 +214,29 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
     switch (obj.type) {
       case "settingValue":
         return addonSettings[addonId][obj.settingId];
-      case "textColor":
+      case "textColor": {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
         let white = getColor(addonId, obj.white);
         return textColorLib.textColor(hex, black, white, obj.threshold);
-      case "multiply":
+      }
+      case "multiply": {
         hex = getColor(addonId, obj.source);
         return textColorLib.multiply(hex, obj);
-      case "brighten":
+      }
+      case "brighten": {
         hex = getColor(addonId, obj.source);
         return textColorLib.brighten(hex, obj);
-      case "alphaBlend":
+      }
+      case "alphaBlend": {
         let opaqueHex = getColor(addonId, obj.opaqueSource);
         let transparentHex = getColor(addonId, obj.transparentSource);
         return textColorLib.alphaBlend(opaqueHex, transparentHex);
+      }
+      case "recolorFilter": {
+        hex = getColor(addonId, obj.source);
+        return textColorLib.recolorFilter(hex);
+      }
     }
   };
 
@@ -387,10 +395,14 @@ const showBanner = () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
+  const notifImageLink = Object.assign(document.createElement("a"), {
+    href: "https://www.youtube.com/watch?v=hQVAamRCaAU",
+    target: "_blank",
+  });
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/icon.svg"),
-    style: "height: 150px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.png"),
+    style: "height: 100px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -420,7 +432,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_16", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -439,14 +451,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo2", DOLLARS)).replace(
-      "$1",
-      Object.assign(document.createElement("a"), {
-        href: "https://scratch.mit.edu/scratch-addons-extension/settings#addon-msg-count-badge",
-        target: "_blank",
-        textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
-      }).outerHTML
-    ),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_16"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -488,7 +493,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  notifInnerBody.appendChild(notifImage);
+  notifImageLink.appendChild(notifImage);
+
+  notifInnerBody.appendChild(notifImageLink);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);
@@ -505,7 +512,7 @@ const handleBanner = async () => {
   const settings = await promisify(chrome.storage.local.get.bind(chrome.storage.local))(["bannerSettings"]);
   const force = !settings || !settings.bannerSettings;
 
-  if (force || settings.bannerSettings.lastShown !== currentVersionMajorMinor) {
+  if (force || settings.bannerSettings.lastShown !== currentVersionMajorMinor || location.hash === "#sa-update-notif") {
     console.log("Banner shown.");
     await promisify(chrome.storage.local.set.bind(chrome.storage.local))({
       bannerSettings: Object.assign({}, settings.bannerSettings, { lastShown: currentVersionMajorMinor }),

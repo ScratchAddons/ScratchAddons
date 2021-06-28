@@ -65,9 +65,28 @@ function alphaBlend(opaqueHex, transparentHex) {
   });
 }
 
+function recolorFilter(hex) {
+  const { r, g, b } = parseHex(hex);
+  return `url("data:image/svg+xml,
+    <svg xmlns='http://www.w3.org/2000/svg'>
+      <filter id='recolor'>
+        <feColorMatrix values='
+          0 0 0 0 ${r / 255}
+          0 0 0 0 ${g / 255}
+          0 0 0 0 ${b / 255}
+          0 0 0 1 0
+        '/>
+      </filter>
+    </svg>#recolor
+  ")`
+    .split("\n")
+    .join("");
+}
+
 globalThis.__scratchAddonsTextColor = {
   textColor,
   multiply,
   brighten,
   alphaBlend,
+  recolorFilter,
 };

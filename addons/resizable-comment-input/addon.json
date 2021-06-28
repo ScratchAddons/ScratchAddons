@@ -4,7 +4,8 @@
   "tags": ["community", "comments", "recommended", "theme"],
   "credits": [
     {
-      "name": "Maximouse"
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
   "injectAsStyleElt": true,

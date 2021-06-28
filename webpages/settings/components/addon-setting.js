@@ -33,11 +33,31 @@ export default async function ({ template }) {
       checkValidity() {
         // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.
         let input = document.querySelector(
-          `input[type='number'][data-addon-id='${this.addon._addonId}'][data-setting-id='${this.setting.id}']`
+          `input[data-addon-id='${this.addon._addonId}'][data-setting-id='${this.setting.id}']`
         );
         this.addonSettings[this.addon._addonId][this.setting.id] = input.validity.valid
           ? input.value
           : this.setting.default;
+      },
+      keySettingKeyDown(e) {
+        e.preventDefault();
+        e.target.value = e.ctrlKey
+          ? "Ctrl" +
+            (e.shiftKey ? " + Shift" : "") +
+            (e.key === "Control" || e.key === "Shift"
+              ? ""
+              : (e.ctrlKey ? " + " : "") +
+                (e.key.toUpperCase() === e.key
+                  ? e.code.includes("Digit")
+                    ? e.code.substring(5, e.code.length)
+                    : e.key
+                  : e.key.toUpperCase()))
+          : "";
+      },
+      keySettingKeyUp(e) {
+        // Ctrl by itself isn't a hotkey
+        if (e.target.value === "Ctrl") e.target.value = "";
+        this.updateOption(e.target.value);
       },
       msg(...params) {
         return this.$root.msg(...params);
@@ -47,7 +67,8 @@ export default async function ({ template }) {
         this.$root.updateSettings(...params);
       },
       updateOption(newValue) {
-        this.$root.updateOption(this.setting.id, newValue, this.addon);
+        this.addonSettings[this.addon._addonId][this.setting.id] = newValue;
+        this.updateSettings();
       },
     },
     events: {
