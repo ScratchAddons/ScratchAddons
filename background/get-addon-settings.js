@@ -17,10 +17,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
           if (settings.removeIdeasBtn) settings.items.splice(2, 1);
           settings.items.push([settings.buttonName, "/discuss"]);
 
-          //todo use other
-          settings.items = settings.items.map((defaultValues) =>
-            defaultValues.map((defaultValue, i) => ({ ...option.row[i], default: defaultValue }))
-          );
+          settings.items = settings.items.map((item) => ({ name: item[0], url: item[1] }));
           delete settings.removeIdeasBtn;
           delete settings.buttonName;
         }
