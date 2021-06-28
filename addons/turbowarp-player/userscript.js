@@ -3,20 +3,22 @@ export default async function ({ addon, console }) {
   let wasEverToggled = false;
   let scratchStage;
   let twIframe = document.createElement("iframe");
-  twIframe.style.border = "none";
-  twIframe.style.display = "none";
   twIframe.scrolling = "no";
   twIframe.setAttribute("allowtransparency", "true");
   twIframe.setAttribute("allowfullscreen", "true");
-  // The stage is "bouncing" after switching
-  twIframe.style.width = "499px";
-  twIframe.style.height = "416px";
+  twIframe.className = "sa-tw-iframe";
 
   const button = document.createElement("button");
   button.className = "button see-inside-button sa-tw-button";
   button.title = "TurboWarp";
 
-  button.onclick = (event) => {
+  function hideIframe() {
+    twIframe.style.display = "none";
+    scratchStage.style.display = "";
+    button.classList.remove("scratch");
+  }
+
+  button.onclick = function buttonClick() {
     if (addon.settings.get("action") == "player") {
       playerToggled = !playerToggled;
       if (playerToggled) {
@@ -24,16 +26,12 @@ export default async function ({ addon, console }) {
         scratchStage.style.display = "none";
         button.classList.add("scratch");
         if (!wasEverToggled) {
-          twIframe.src =
-            "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed?username=" + addon.auth.username;
+          let username = addon.auth.username ? "?username=" + addon.auth.username : "";
+          twIframe.src = "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed" + username;
           scratchStage.parentElement.append(twIframe);
         }
         wasEverToggled = true;
-      } else {
-        twIframe.style.display = "none";
-        scratchStage.style.display = "";
-        button.classList.remove("scratch");
-      }
+      } else hideIframe();
     } else {
       window.open("//turbowarp.org/" + window.location.pathname.split("/")[2], "_blank");
     }
@@ -42,7 +40,6 @@ export default async function ({ addon, console }) {
   while (true) {
     const row = await addon.tab.waitForElement(".preview .project-buttons", {
       markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
     row.prepend(button);
@@ -50,17 +47,17 @@ export default async function ({ addon, console }) {
     scratchStage = document.querySelector("[class^='stage-wrapper_stage-wrapper']");
 
     wasEverToggled = false;
-    playerToggled = true;
-    button.click();
+    playerToggled = false;
+    hideIframe();
 
     if (
       addon.settings.get("auto") &&
-      addon.settings.get("action") == "player" &&
+      addon.settings.get("action") === "player" &&
       [...document.querySelectorAll(".project-description")]
         .map((e) => e.innerText)
         .join(".")
         .match(/turbo ?warp/gi)
     )
-      button.click();
+      buttonClick();
   }
 }
