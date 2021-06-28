@@ -108,17 +108,18 @@ export default async function ({ template }) {
         return this.$root.closeResetDropdowns(...params);
       },
     },
+    directives: {
+      sortable() {
+        const sortable = new window.Sortable(this.el, {
+          handle: ".handle",
+          onUpdate: (event) => {
+            let list = this.vm.addonSettings[this.vm.setting.id];
+            list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
+            this.vm.updateSettings();
+          },
+        });
+      },
+    },
   });
   Vue.component("addon-setting", AddonSetting);
-
-  Vue.directive("sortable", function () {
-    const sortable = new window.Sortable(this.el, {
-      handle: ".handle",
-      onUpdate: (event) => {
-        let list = this.vm.addonSettings[this.vm.setting.id];
-        list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
-        this.vm.updateSettings();
-      },
-    });
-  });
 }
