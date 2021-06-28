@@ -1,6 +1,6 @@
 {
-  "name": "Currently executing block highlight",
-  "description": "Adds a blue border to the blocks that are currently running in a project.",
+  "name": "Running block border",
+  "description": "Adds a blue highlight to the blocks that are currently being executed in a project.",
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [
