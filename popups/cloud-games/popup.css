@@ -46,6 +46,7 @@
 .username-list > a {
   display: inline-block;
   margin-inline-end: 10px;
+  color: #ccc;
 }
 
 .games {

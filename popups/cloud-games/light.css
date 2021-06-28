@@ -9,11 +9,10 @@ body {
   color: #222;
 }
 
-.title {
-  color: #222;
-}
-
-.title a {
+.loading,
+.title,
+.title a,
+.username-list > a {
   color: #222;
 }
 
