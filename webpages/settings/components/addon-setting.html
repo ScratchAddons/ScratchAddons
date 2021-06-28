@@ -39,8 +39,6 @@
         @change="checkValidity() || updateSettings()"
         :disabled="!addon._enabled"
         min="0"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
         number
       />
     </template>
@@ -53,8 +51,6 @@
         :disabled="!addon._enabled"
         :min="setting.min"
         :max="setting.max"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
         number
       />
     </template>
@@ -69,8 +65,6 @@
         :maxlength="setting.max || 100"
         :minlength="setting.min || 0"
         :required="!!setting.min"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
       />
     </template>
     <template v-if="setting.type === 'key'">
@@ -84,8 +78,6 @@
         :disabled="!addon._enabled"
         :placeholder="setting.default"
         maxlength="100"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
         spellcheck="false"
       />
     </template>
