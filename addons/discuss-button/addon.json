@@ -1,6 +1,6 @@
 {
-  "name": "Custom navbar items",
-  "description": "Customize the items in the navbar.",
+  "name": "Customizable navigation bar",
+  "description": "Choose a list of links to be displayed in the navigation bar.",
   "userscripts": [
     {
       "url": "userscript.js",
