@@ -4,8 +4,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
-      // const settings = addonSettings[addonId] || {};
-      let settings = {};
+      const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
       if (manifest.settings) {
         if (addonId === "discuss-button" && typeof settings.buttonName !== "undefined") {
@@ -55,18 +54,6 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
-      else if (addonId === "dango-rain") {
-        if (typeof settings.force !== "undefined") {
-          if (settings.force === false) {
-            // Note: addon might be disabled already, but we don't care
-            addonsEnabled[addonId] = false;
-            console.log("Disabled dango-rain because force was disabled");
-          }
-          delete settings.force; // Remove setting so that this only happens once
-          madeChangesToAddon = true;
-          madeAnyChanges = true;
-        }
-      }
 
       if (madeChangesToAddon) {
         console.log(`Changed settings for addon ${addonId}`);
