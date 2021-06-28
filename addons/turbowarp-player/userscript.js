@@ -1,6 +1,5 @@
 export default async function ({ addon, console }) {
   let playerToggled = false;
-  let wasEverToggled = false;
   let scratchStage;
   let twIframe = document.createElement("iframe");
   twIframe.scrolling = "no";
@@ -12,8 +11,8 @@ export default async function ({ addon, console }) {
   button.className = "button see-inside-button sa-tw-button";
   button.title = "TurboWarp";
 
-  function hideIframe() {
-    twIframe.style.display = "none";
+  function removeIframe() {
+    twIframe.remove();
     scratchStage.style.display = "";
     button.classList.remove("scratch");
   }
@@ -22,16 +21,14 @@ export default async function ({ addon, console }) {
     if (addon.settings.get("action") == "player") {
       playerToggled = !playerToggled;
       if (playerToggled) {
-        twIframe.style.display = "";
+        let username = addon.auth.username ? "?username=" + addon.auth.username : "";
+        twIframe.src = "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed" + username;
+        scratchStage.parentElement.append(twIframe);
+
         scratchStage.style.display = "none";
         button.classList.add("scratch");
-        if (!wasEverToggled) {
-          let username = addon.auth.username ? "?username=" + addon.auth.username : "";
-          twIframe.src = "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed" + username;
-          scratchStage.parentElement.append(twIframe);
-        }
-        wasEverToggled = true;
-      } else hideIframe();
+        addon.tab.traps.vm.stopAll();
+      } else removeIframe();
     } else {
       window.open("//turbowarp.org/" + window.location.pathname.split("/")[2], "_blank");
     }
@@ -46,9 +43,8 @@ export default async function ({ addon, console }) {
 
     scratchStage = document.querySelector("[class^='stage-wrapper_stage-wrapper']");
 
-    wasEverToggled = false;
     playerToggled = false;
-    hideIframe();
+    removeIframe();
 
     if (
       addon.settings.get("auto") &&
