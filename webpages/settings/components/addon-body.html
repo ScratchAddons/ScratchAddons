@@ -16,7 +16,7 @@
         <div
           v-show="expanded && addon._enabled"
           v-if="addon.settings"
-          class="clear-settings"
+          class="addon-buttons"
           title="{{ msg('resetToDefault') }}"
           @click="loadDefaults"
         >
@@ -155,15 +155,15 @@
     margin-bottom: 50px;
   }
 
-  .clear-settings {
+  .addon-buttons {
     display: flex;
     align-items: center;
     padding-inline-start: 8px;
     border-radius: 4px;
     margin-inline-end: 8px;
   }
-  .clear-settings:hover {
-    background: rgba(255, 255, 255, 0.05);
+  .addon-buttons:hover {
+    background: rgb(133 133 133 / 10%);
   }
 
   .setting-body img.dark {

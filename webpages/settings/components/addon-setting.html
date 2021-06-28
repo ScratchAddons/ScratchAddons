@@ -6,8 +6,12 @@
         <div class="setting-table-list" v-sortable>
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
-              <img class="icon-type" src="../../images/icons/close.svg" @click="deleteTableRow(i)" />
-              <img class="icon-type handle" src="../../images/icons/drag.svg" />
+              <div class="addon-buttons" @click="deleteTableRow(i)">
+                <img class="icon-type" src="../../images/icons/close.svg" />
+              </div>
+              <div class="addon-buttons addon-buttons handle">
+                <img class="icon-type" src="../../images/icons/drag.svg" />
+              </div>
             </div>
             <div class="setting-table-row-settings">
               <addon-setting
@@ -263,7 +267,7 @@
     margin: 10px 0px;
   }
   .setting-table-row-settings {
-    background: #414141;
+    background: #8080800d;
     border-radius: 10px;
   }
   .setting-table-options {
