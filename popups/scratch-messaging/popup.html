@@ -21,10 +21,10 @@
         :class="{'child-comment': !isParent, 'unread': unread, 'comment-me' : thisComment.author === username}"
       >
         <a
-          class="comment-author"
+          class="comment-author nolink"
           rel="noopener noreferrer"
           target="_blank"
-          href="https://scratch.mit.edu/users/{{ thisComment.author }}"
+          href="https://scratch.mit.edu/users/{{ thisComment.author }}/"
           >{{ thisComment.author }}</a
         >{{ thisComment.scratchTeam ? "*" : "" }}
         <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
@@ -107,7 +107,7 @@
         </div>
         <div class="message-type-details" v-show="messageTypeExtended.follows">
           <div class="username-list">
-            <a v-for="follower of follows" href="https://scratch.mit.edu/users/{{ follower }}">{{follower}}</a>
+            <a v-for="follower of follows" href="https://scratch.mit.edu/users/{{ follower }}/">{{follower}}</a>
           </div>
         </div>
       </div>
@@ -227,10 +227,10 @@
       >
         <div class="message-type-title">
           <a
-            class="message-type-title-text"
+            class="message-type-title-text nolink"
             rel="noreferrer noopener"
             target="_blank"
-            href="https://scratch.mit.edu/users/{{ profile.username }}"
+            href="https://scratch.mit.edu/users/{{ profile.username }}/"
           >
             <span v-if="profile.username === username">{{ uiMessages.yourProfileMsg }}</span>
             <span v-else>{{ othersProfile(profile.username) }}</span>
@@ -271,7 +271,7 @@
       <div class="message-type" v-for="studio of studios" v-show="studio.unreadComments && studio.loadedComments">
         <div class="message-type-title">
           <a
-            class="message-type-title-text"
+            class="message-type-title-text nolink"
             rel="noopener noreferrer"
             target="_blank"
             href="https://scratch.mit.edu/studios/{{ studio.id }}/"
@@ -319,7 +319,7 @@
       >
         <div class="message-type-title" :style="{zIndex: 9999 - i}">
           <a
-            class="message-type-title-text"
+            class="message-type-title-text nolink"
             target="_blank"
             rel="noopener noreferrer"
             href="https://scratch.mit.edu/projects/{{ project.id }}/"

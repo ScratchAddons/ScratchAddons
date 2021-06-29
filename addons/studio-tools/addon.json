@@ -42,7 +42,7 @@
       "matches": ["https://scratch.mit.edu/studios_www/*"]
     }
   ],
-  "tags": ["community", "studios", "recommended"],
+  "tags": ["community", "studios", "beta"],
   "versionAdded": "1.2.0",
   "enabledByDefault": true
 }
