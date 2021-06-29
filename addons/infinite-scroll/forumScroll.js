@@ -33,11 +33,11 @@ export default async function ({ addon, global, console }) {
           }
           window
             .fetch(nextPage)
-            .catch((err) => {
+            .catch(err => {
               console.log("Unable to fetch the page!");
             })
-            .then((res) => res.text())
-            .then((data) => {
+            .then(res => res.text())
+            .then(data => {
               let parser = new DOMParser();
               let doc = parser.parseFromString(data, "text/html");
               let table, posts;
