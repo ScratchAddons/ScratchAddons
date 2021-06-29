@@ -2,15 +2,15 @@ export default async function ({ addon, global, console }) {
 
   if (window.location.pathname.split("/").length === 4) {
 
-    let vf = document.getElementById("vf")
+    let vf = document.getElementById("vf");
     let pageSeparator, pageSeparatorTd;
     if (vf) {
-      pageSeparator = document.createElement("tr")
-      pageSeparatorTd = document.createElement("th")
-      pageSeparatorTd.className = "tcl"
-      pageSeparatorTd.scope = "col"
-      pageSeparatorTd.colSpan = 4
-      pageSeparator.appendChild(pageSeparatorTd)  
+      pageSeparator = document.createElement("tr");
+      pageSeparatorTd = document.createElement("th");
+      pageSeparatorTd.className = "tcl";
+      pageSeparatorTd.scope = "col";
+      pageSeparatorTd.colSpan = 4;
+      pageSeparator.appendChild(pageSeparatorTd);
     }
 
     let page = 1;

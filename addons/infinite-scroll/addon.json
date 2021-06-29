@@ -50,7 +50,9 @@
   "userscripts": [
     {
       "url": "forumScroll.js",
-      "matches": ["https://scratch.mit.edu/discuss/*"],
+      "matches": [
+        "https://scratch.mit.edu/discuss/*"
+      ],
       "settingMatch": {
         "id": "forumScroll",
         "value": true
@@ -70,7 +72,9 @@
   "userstyles": [
     {
       "url": "footer.css",
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": [
+        "https://scratch.mit.edu/*"
+      ],
       "settingMatch": {
         "id": "showFooter",
         "value": true
@@ -78,10 +82,14 @@
     },
     {
       "url": "global.css",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": [
+        "https://scratch.mit.edu/*"
+      ]
     }
   ],
-  "tags": ["community"],
+  "tags": [
+    "community"
+  ],
   "versionAdded": "1.2.0",
   "enabledByDefault": false
 }
