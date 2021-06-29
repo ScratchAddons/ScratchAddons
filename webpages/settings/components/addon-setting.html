@@ -23,7 +23,9 @@
             </div>
           </div>
         </div>
-        <img class="icon-type" src="../../images/icons/plus.svg" @click="addTableRow" />
+        <div class="addon-buttons setting-table-add" @click="addTableRow">
+          <img class="icon-type" src="../../images/icons/plus.svg" />
+        </div>
       </div>
     </template>
     <template v-if="setting.type === 'boolean'">
@@ -274,5 +276,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+  }
+  .setting-table-add {
+    width: 24px;
   }
 </style>

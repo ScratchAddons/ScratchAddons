@@ -108,7 +108,8 @@ img :not(.navbar, .icon-type) {
 .addon-group > span:after {
   filter: invert(1) brightness(0);
 }
-.btn-dropdown:hover {
+.btn-dropdown:hover,
+.addon-buttons:hover {
   background: rgba(0, 0, 0, 0.1);
 }
 
