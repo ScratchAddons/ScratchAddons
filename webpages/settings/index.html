@@ -86,13 +86,12 @@
     <script src="../set-lang.js" type="module"></script>
     <script src="../check-unsupported.js" defer></script>
 
-    <link rel="stylesheet" href="style.css" />
-
     <style>
       /*
        * Imports are here to attempt to speed up load. Also, it means licenses.html loads fewer unused styles, and this file doesn't get licenses.html's styles! In order of when it will be noticed/needed on the page
       */
       @import url("../styles/colors.css");
+      @import url("../styles/components/tabbable.css");
       @import url("../styles/components/badges.css");
       @import url("../styles/components/filter.css");
       @import url("../styles/components/categories.css");
@@ -104,6 +103,7 @@
       @import url("../styles/components/enablepopup.css");
     </style>
 
+    <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
     <script src="../../libraries/thirdparty/color-picker.js" type="module"></script>
