@@ -66,12 +66,16 @@
   ],
   "userstyles": [
     {
-      "url": "userscript.css",
+      "url": "footer.css",
       "matches": ["https://scratch.mit.edu/*"],
       "settingMatch": {
         "id": "showFooter",
         "value": true
       }
+    },
+    {
+      "url": "global.css",
+      "matches": ["https://scratch.mit.edu/*"]
     }
   ],
   "tags": ["community"],

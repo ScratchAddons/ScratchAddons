@@ -1,0 +1,7 @@
+.djangobb th.inf-page-sep {
+	border-top: solid #e0e0e0 1px;
+}
+
+.djangobb .pagination {
+	display: none
+}
