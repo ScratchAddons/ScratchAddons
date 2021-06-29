@@ -1,7 +1,5 @@
 export default async function ({ addon, global, console }) {
-
   if (window.location.pathname.split("/").length === 4) {
-
     let vf = document.getElementById("vf");
     let pageSeparator, pageSeparatorTd;
     if (vf) {
@@ -33,19 +31,19 @@ export default async function ({ addon, global, console }) {
           }
           window
             .fetch(nextPage)
-            .catch(err => {
+            .catch((err) => {
               console.log("Unable to fetch the page!");
             })
-            .then(res => res.text())
-            .then(data => {
+            .then((res) => res.text())
+            .then((data) => {
               let parser = new DOMParser();
               let doc = parser.parseFromString(data, "text/html");
               let table, posts;
               if (vf) {
                 table = vf.getElementsByTagName("tbody")[0];
                 posts = doc.getElementById("vf").getElementsByTagName("tr");
-                pageSeparatorTd.textContent = `Page ${page}`
-                table.appendChild(pageSeparator.cloneNode(true))
+                pageSeparatorTd.textContent = `Page ${page}`;
+                table.appendChild(pageSeparator.cloneNode(true));
               } else {
                 table = document.getElementById("djangobbindex");
                 posts = doc.getElementById("djangobbindex").getElementsByClassName("blockpost");
@@ -61,11 +59,9 @@ export default async function ({ addon, global, console }) {
             });
         }
       }
-    }
+    };
 
-    window.addEventListener("scroll", () => update())
-    update()
-
+    window.addEventListener("scroll", () => update());
+    update();
   }
-
 }
