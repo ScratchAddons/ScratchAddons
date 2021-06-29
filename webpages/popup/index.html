@@ -20,11 +20,11 @@
       <div id="title">
         <img src="../../images/icon.svg" id="logo" alt="Logo" />
         <!-- Hide template HTML until Vue loads -->
-        <span id="title-text" style="display: none;" v-show="true">{{ msg("extensionName") }}</span>
+        <span id="title-text" style="display: none" v-show="true">{{ msg("extensionName") }}</span>
         <span
           ><a
             id="version"
-            style="display: none;"
+            style="display: none"
             v-show="true"
             href="#"
             title="{{ msg('changelog') }}"
@@ -39,7 +39,7 @@
     </div>
     <div id="popups">
       <div id="popup-bar">
-        <div id="popup-chooser" style="visibility: hidden;" :style="{ visibility: 'visible' }">
+        <div id="popup-chooser" style="visibility: hidden" :style="{ visibility: 'visible' }">
           <button
             v-for="popup of popups"
             class="tabbable popup-name"
