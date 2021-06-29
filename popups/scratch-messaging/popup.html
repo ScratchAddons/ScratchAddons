@@ -62,14 +62,14 @@
             <button
               class="tabbable large-button"
               @click="!postingComment && postComment()"
-              style="background-color: #4d97ff;"
+              style="background-color: #4d97ff"
             >
               {{ postingComment ? messages.postingMsg : messages.postMsg }}
             </button>
             <button
               class="tabbable large-button"
               @click="replying = false"
-              style="background-color: gray;"
+              style="background-color: gray"
               v-show="!postingComment"
             >
               {{ messages.cancelMsg }}
@@ -81,10 +81,10 @@
     </template>
   </head>
 
-  <body style="display: none;" v-show="mounted">
+  <body style="display: none" v-show="mounted">
     <div v-show="!error">
       <!-- Scratch Team Messages -->
-      <div class="message-type" v-show="stMessages.length" style="border-color: #ff7b26;">
+      <div class="message-type" v-show="stMessages.length" style="border-color: #ff7b26">
         <div
           class="message-type-title hover-reverse"
           @click="messageTypeExtended.stMessages = !messageTypeExtended.stMessages"
@@ -345,7 +345,7 @@
               tabindex="0"
               class="tabbable tooltip"
               v-if="project.loveCount || project.favoriteCount"
-              style="display: inline-block;"
+              style="display: inline-block"
             >
               <span class="tooltip-indicator">
                 <span v-show="project.loveCount"
@@ -410,7 +410,7 @@
     <!-- Bottom bar-->
     <div id="bottom-bar" v-show="messagesReady">
       <a @click="markAsRead()" v-show="!markedAsRead">{{ uiMessages.markAsReadMsg }}</a>
-      <span v-show="markedAsRead" style="font-weight: bold;"
+      <span v-show="markedAsRead" style="font-weight: bold"
         ><img class="small-icon" src="../../images/icons/read.svg" /> {{ uiMessages.markedAsReadMsg }}</span
       >&nbsp;&nbsp;|&nbsp;&nbsp;
       <a href="https://scratch.mit.edu/messages" id="open-messages"
