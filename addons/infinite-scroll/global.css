@@ -1,5 +1,6 @@
-.djangobb th.inf-page-sep {
-	border-top: solid #e0e0e0 1px;
+.djangobb tbody th {
+	border-top-style: solid;
+	border-top-width: 1px;
 }
 
 .djangobb .pagination {

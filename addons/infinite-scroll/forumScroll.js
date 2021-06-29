@@ -1,7 +1,5 @@
 export default async function ({ addon, global, console }) {
 
-  console.log("123")
-
   if (window.location.pathname.split("/").length === 4) {
 
     let vf = document.getElementById("vf")
@@ -9,7 +7,7 @@ export default async function ({ addon, global, console }) {
     if (vf) {
       pageSeparator = document.createElement("tr")
       pageSeparatorTd = document.createElement("th")
-      pageSeparatorTd.className = "tcl inf-page-sep"
+      pageSeparatorTd.className = "tcl"
       pageSeparatorTd.scope = "col"
       pageSeparatorTd.colSpan = 4
       pageSeparator.appendChild(pageSeparatorTd)  
