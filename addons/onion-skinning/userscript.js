@@ -670,7 +670,7 @@ export default async function ({ addon, global, console, msg }) {
   settingsTip.appendChild(settingsTipShape);
   settingsPage.appendChild(settingsTip);
 
-  let oldEnabled = null
+  let oldEnabled = null;
   addon.self.addEventListener("disabled", () => {
     setSettingsOpen(false);
     oldEnabled = settings.enabled;
