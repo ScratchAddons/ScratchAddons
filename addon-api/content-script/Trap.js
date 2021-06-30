@@ -69,7 +69,7 @@ export default class Trap extends Listenable {
   async getPaper() {
     if (this._cache.paper) return this._cache.paper;
     const editorMode = this._getEditorMode();
-    if (!editorMode || editorMode === "embed") throw new Error("Cannot access Blockly on this page");
+    if (!editorMode || editorMode === "embed") throw new Error("Cannot access paper on this page");
     // We can access paper through .tool on tools, for example:
     // https://github.com/LLK/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
     // It happens that paper's Tool objects contain a reference to the entirety of paper's scope.
