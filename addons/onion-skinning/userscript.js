@@ -20,7 +20,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const settings = {
-    enabled: addon.settings.get("default"),
+    enabled: addon.settings.get("default") && !addon.self.disabled,
     previous: +addon.settings.get("previous"),
     next: +addon.settings.get("next"),
     opacity: +addon.settings.get("opacity"),
