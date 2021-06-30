@@ -1,5 +1,11 @@
 export default async function ({ addon, global, console, msg }) {
-  let paper = null;
+  const paper = await addon.tab.traps.getPaper();
+
+  const paintEditorCanvasContainer = await addon.tab.waitForElement("[class^='paint-editor_canvas-container']");
+  const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
+  const reactInternalKey = Object.keys(paintEditorCanvasContainer).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
+  const paperCanvas = paintEditorCanvasContainer[reactInternalKey].child.child.child.stateNode;
+
   let paperCenter;
   const storedOnionLayers = [];
 
@@ -25,11 +31,7 @@ export default async function ({ addon, global, console, msg }) {
     afterTint: parseHexColor(addon.settings.get("afterTint")),
   };
 
-  const getProject = () => paper && paper.project;
-
-  const foundPaper = (_paper) => {
-    paper = _paper;
-
+  const injectPaper = () => {
     const backgroundGuideLayer = paper.project.layers.find((i) => i.data.isBackgroundGuideLayer);
     paperCenter = backgroundGuideLayer.children[0].position;
 
@@ -78,7 +80,7 @@ export default async function ({ addon, global, console, msg }) {
     };
   };
 
-  const foundPaperCanvas = (paperCanvas) => {
+  const injectPaperCanvas = () => {
     let expectingImport = false;
 
     const PaperCanvas = paperCanvas.constructor;
@@ -132,7 +134,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const removeOnionLayers = () => {
-    const project = getProject();
+    const project = paper.project;
     if (!project) {
       return;
     }
@@ -149,7 +151,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const relayerOnionLayers = () => {
-    const project = getProject();
+    const project = paper.project;
     if (!project) {
       return;
     }
@@ -248,7 +250,7 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
-      getProject().importSVG(asset, {
+      paper.project.importSVG(asset, {
         expandShapes: true,
         onLoad: (root) => {
           if (!root) {
@@ -362,7 +364,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const updateOnionLayers = async () => {
-    const project = getProject();
+    const project = paper.project;
     if (!project) {
       return;
     }
@@ -444,22 +446,6 @@ export default async function ({ addon, global, console, msg }) {
       removeOnionLayers();
     }
     toggleButton.dataset.enabled = settings.enabled;
-  };
-
-  const accessScratchInternals = async () => {
-    const paperScope = await addon.tab.traps.getPaper();
-
-    const paintEditorCanvasContainer = document.querySelector("[class^='paint-editor_canvas-container']");
-    const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-    const reactInternalKey = Object.keys(paintEditorCanvasContainer).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
-    const paperCanvas = paintEditorCanvasContainer[reactInternalKey].child.child.child.stateNode;
-
-    if (paperScope && paperCanvas) {
-      foundPaper(paperScope);
-      foundPaperCanvas(paperCanvas);
-    } else {
-      throw new Error("couldn't find everything");
-    }
   };
 
   //
@@ -741,5 +727,7 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  accessScratchInternals().then(controlsLoop);
+  injectPaper();
+  injectPaperCanvas();
+  controlsLoop();
 }
