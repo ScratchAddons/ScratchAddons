@@ -25,16 +25,32 @@ export default async function ({ addon, global, console, msg }) {
     const pauseAddonButton = document.querySelector(".pause-btn");
     if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleConsole(true);
   };
-  addon.tab.addBlock("sa-pause", [], pause, true);
-  addon.tab.addBlock("\u200B\u200Bbreakpoint\u200B\u200B", [], pause);
-  addon.tab.addBlock("\u200B\u200Blog\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    addItem(content, thread, "log");
+  addon.tab.addBlock("sa-pause", {
+    args: [],
+    callback: pause,
+    hidden: true
   });
-  addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    addItem(content, thread, "warn");
+  addon.tab.addBlock("\u200B\u200Bbreakpoint\u200B\u200B", {
+    args: [],
+    callback: pause
   });
-  addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    addItem(content, thread, "error");
+  addon.tab.addBlock("\u200B\u200Blog\u200B\u200B %s", {
+    args: ["content"],
+    callback: ({ content }, thread) => {
+      addItem(content, thread, "log");
+    }
+  });
+  addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", {
+    args: ["content"],
+    callback: ({ content }, thread) => {
+      addItem(content, thread, "warn");
+    }
+  });
+  addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", {
+    args: ["content"],
+    callback: ({ content }, thread) => {
+      addItem(content, thread, "error");
+    }
   });
 
   const consoleWrapper = Object.assign(document.createElement("div"), {

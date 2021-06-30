@@ -31,7 +31,7 @@ const getNamesIdsDefaults = (blockData) => [
   blockData.args.map(() => ""),
 ];
 
-export const addBlock = (proccode, args, handler, hide) => {
+export const addBlock = (proccode, {args, callback, hidden}) => {
   if (getCustomBlock(proccode)) {
     return;
   }
@@ -41,8 +41,8 @@ export const addBlock = (proccode, args, handler, hide) => {
     secondaryColor: color.secondaryColor,
     tertiaryColor: color.tertiaryColor,
     args,
-    handler,
-    hide: !!hide,
+    handler: callback,
+    hide: !!hidden,
   };
   customBlocks[proccode] = blockData;
   customBlockParamNamesIdsDefaults[proccode] = getNamesIdsDefaults(blockData);
