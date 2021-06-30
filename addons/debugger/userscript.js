@@ -27,27 +27,32 @@ export default async function ({ addon, global, console, msg }) {
   };
   addon.tab.addBlock("sa-pause", {
     args: [],
+    displayName: msg('block-sa-pause'),
     callback: pause,
     hidden: true
   });
   addon.tab.addBlock("\u200B\u200Bbreakpoint\u200B\u200B", {
     args: [],
+    displayName: msg('block-breakpoint'),
     callback: pause
   });
   addon.tab.addBlock("\u200B\u200Blog\u200B\u200B %s", {
     args: ["content"],
+    displayName: msg('block-log'),
     callback: ({ content }, thread) => {
       addItem(content, thread, "log");
     }
   });
   addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", {
     args: ["content"],
+    displayName: msg('block-warn'),
     callback: ({ content }, thread) => {
       addItem(content, thread, "warn");
     }
   });
   addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", {
     args: ["content"],
+    displayName: msg('block-error'),
     callback: ({ content }, thread) => {
       addItem(content, thread, "error");
     }
