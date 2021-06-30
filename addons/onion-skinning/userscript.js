@@ -337,8 +337,8 @@ export default async function ({ addon, global, console, msg }) {
         raster.parent = layer;
         raster.guide = true;
         raster.locked = true;
-        const x = width / 2 + (480 - rotationCenterX);
-        const y = height / 2 + (360 - rotationCenterY);
+        const x = width / 2 + (paperCenter.x - rotationCenterX);
+        const y = height / 2 + (paperCenter.y - rotationCenterY);
         raster.position = new paper.Point(x, y);
 
         raster.drawImage(image, 0, 0);
