@@ -411,13 +411,15 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
         if (text && category) {
-          const inputSpan = document.createElement("span");
-          inputSpan.textContent = text;
-          inputSpan.className = "console-variable";
-          inputSpan.dataset.category = category === "list" ? "data-lists" : category;
-          inputSpan.style.backgroundColor =
-            ScratchBlocks.Colours[category === "list" ? "data_lists" : category].primary;
-          wrapper.append(inputSpan);
+          const blocklyColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category];
+          if (blocklyColor) {
+            const inputSpan = document.createElement("span");
+            inputSpan.textContent = text;
+            inputSpan.className = "console-variable";
+            inputSpan.dataset.category = category === "list" ? "data-lists" : category;
+            inputSpan.style.backgroundColor = blocklyColor.primary;
+            wrapper.append(inputSpan);
+          }
         }
       }
     }
