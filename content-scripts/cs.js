@@ -743,3 +743,5 @@ function addonMessageListener(e) {
     onResponse
   );
 }
+
+window.addEventListener("message", addonMessageListener);
