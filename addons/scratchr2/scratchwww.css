@@ -8,8 +8,12 @@ a:visited,
 .studio-project-tile .studio-project-title,
 .studio-member-tile .studio-member-name,
 .studio-thumb-edit-button,
+.studio-manager-count,
 .promote-modal .cancel-button {
   color: var(--scratchr2-linkColor);
+}
+.studio-manager-count {
+  border-color: var(--scratchr2-linkColor);
 }
 a:hover,
 .news li:hover h4 {
@@ -18,6 +22,7 @@ a:hover,
 .banner a {
   color: white;
 }
+.studio-tab-nav a.active.nav_link:hover > li,
 .studio-info .studio-info-footer-report button:hover {
   background-color: var(--scratchr2-activeColor);
 }
