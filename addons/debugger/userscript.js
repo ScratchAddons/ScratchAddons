@@ -27,7 +27,6 @@ export default async function ({ addon, global, console, msg }) {
   };
   addon.tab.addBlock("sa-pause", {
     args: [],
-    displayName: msg("block-sa-pause"),
     callback: pause,
     hidden: true,
   });

@@ -11,7 +11,6 @@
   "debugger/icon-warn": "Warning",
   "debugger/icon-error": "Error",
   "debugger/export-desc": "Click while holding Shift to customize export format.",
-  "debugger/block-sa-pause": "sa-pause",
   "debugger/block-breakpoint": "breakpoint",
   "debugger/block-log": "log %s",
   "debugger/block-warn": "warn %s",
