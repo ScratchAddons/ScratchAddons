@@ -14,8 +14,8 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
 
           let option = manifest.settings.find((option) => option.id === "items");
           settings.items = option.default;
+          settings.items.splice(3, 0, [settings.buttonName, "/discuss"]);
           if (settings.removeIdeasBtn) settings.items.splice(2, 1);
-          settings.items.push([settings.buttonName, "/discuss"]);
 
           settings.items = settings.items.map((item) => ({ name: item[0], url: item[1] }));
           delete settings.removeIdeasBtn;
@@ -28,12 +28,11 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             madeAnyChanges = true;
             settings[option.id] = option.default;
             if (option.type === "table") {
-              settings[option.id] = settings[option.id].map((defaultValues) => {
-                let info = {};
-                defaultValues.forEach((defaultValue, i) => (info[option.row[i].id] = defaultValue));
-                return info;
+              settings[option.id] = settings[option.id].map((items) => {
+                let setting = {};
+                items.forEach((item, i) => (setting[row[i].name] = item));
+                return setting;
               });
-              console.log(settings);
             }
           } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number
