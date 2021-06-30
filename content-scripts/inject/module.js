@@ -199,6 +199,16 @@ history.pushState = function () {
   return returnValue;
 };
 
+// replaceState or pushState will not trigger onpopstate.
+window.addEventListener("popstate", () => {
+  const newUrl = (_cs_.url = location.href);
+  for (const eventTarget of scratchAddons.eventTargets.tab) {
+    // There isn't really a way to get the previous URL from popstate event.
+    eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl: "", newUrl } }));
+  }
+  bodyIsEditorClassCheck();
+});
+
 function loadClasses() {
   scratchAddons.classNames.arr = [
     ...new Set(
