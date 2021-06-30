@@ -490,11 +490,11 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const paintEditorControlsContainer = document.createElement("div");
-  addon.tab.displayNoneWhileDisabled(paintEditorControlsContainer, { display: "flex" });
   paintEditorControlsContainer.className = "sa-onion-controls-container";
   paintEditorControlsContainer.dir = "";
 
   const toggleControlsGroup = createGroup();
+  addon.tab.displayNoneWhileDisabled(toggleControlsGroup, { display: "flex" });
 
   const toggleButton = createButton();
   toggleButton.dataset.enabled = settings.enabled;
