@@ -418,7 +418,7 @@ export default async function ({ addon, global, console, msg }) {
             inputSpan.className = "console-variable";
             const colorCategoryMap = {
               list: "data-lists",
-              more: "custom"
+              more: "custom",
             };
             inputSpan.dataset.category = colorCategoryMap[category] || category;
             inputSpan.style.backgroundColor = blocklyColor.primary;
