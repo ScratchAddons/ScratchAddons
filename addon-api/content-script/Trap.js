@@ -10,8 +10,7 @@ export default class Trap extends Listenable {
     this._react_internal_key = undefined;
     this._isWWW = tab.clientVersion === "scratch-www";
     this._getEditorMode = () => this._isWWW && tab.editorMode;
-    this._waitForElement = (q) => tab.waitForElement(q, { markAsSeen: true });
-
+    this._waitForElement = tab.waitForElement.bind(tab);
     this._cache = Object.create(null);
   }
 
@@ -46,7 +45,9 @@ export default class Trap extends Listenable {
     const BLOCKS_CLASS = '[class^="gui_blocks-wrapper"]';
     let elem = document.querySelector(BLOCKS_CLASS);
     if (!elem) {
-      elem = await this._waitForElement(BLOCKS_CLASS);
+      elem = await this._waitForElement(BLOCKS_CLASS, {
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      });
     }
     if (!this._react_internal_key) {
       this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
@@ -72,7 +73,9 @@ export default class Trap extends Listenable {
     // We can access paper through .tool on tools, for example:
     // https://github.com/LLK/scratch-paint/blob/develop/src/containers/bit-brush-mode.jsx#L60-L62
     // It happens that paper's Tool objects contain a reference to the entirety of paper's scope.
-    const modeSelector = await this._waitForElement("[class*='paint-editor_mode-selector']"); // TODO condition
+    const modeSelector = await this._waitForElement("[class*='paint-editor_mode-selector']", {
+      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
+    });
     if (!this._react_internal_key) {
       this._react_internal_key = Object.keys(modeSelector).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
     }
