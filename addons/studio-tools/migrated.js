@@ -12,7 +12,7 @@ export default async ({ addon, console, msg }) => {
     const disabledMessage = optDisable && optDisable();
 
     const adderSec = document.createElement("div");
-    adderSec.className = "studio-adder-section sa-studio-tools-adder";
+    adderSec.className = "studio-adder-section";
 
     const adderHeader = document.createElement("h3");
     const adderHeaderSpan = document.createElement("span");
@@ -80,11 +80,15 @@ export default async ({ addon, console, msg }) => {
     return true;
   };
   let leaveSection = null;
+  let pSec = null;
+  let rSec = null;
   const render = () => {
     leaveSection?.remove();
+    pSec?.remove();
+    rSec?.remove();
     const tabName = location.pathname.split("/")[3];
     if (isManager && tabName === "curators") {
-      const pSec = makeAdder(
+      pSec = makeAdder(
         "promote-new",
         "promote-btn",
         async (u) => {
@@ -108,7 +112,7 @@ export default async ({ addon, console, msg }) => {
         }
       );
 
-      const rSec = makeAdder("remove-new", "remove-btn", async (u) => {
+      rSec = makeAdder("remove-new", "remove-btn", async (u) => {
         if (!/^[\w-]{3,20}$/g.test(u)) return alert(msg("invalid-username"));
         const r = await fetch(`/site-api/users/curators-in/${studioId}/remove/?usernames=${u}`, {
           method: "PUT",
@@ -125,13 +129,11 @@ export default async ({ addon, console, msg }) => {
 
       const addTo = document.querySelector(".studio-tabs div:nth-child(2)");
       addTo.prepend(pSec, rSec);
-    } else {
-      Array.prototype.forEach.call(document.getElementsByClassName("sa-studio-tools-adder"), (e) => e.remove());
     }
 
     if (canLeave) {
       /*<button class="button x-button studio-follow-button"><span>Follow Studio</span></button>*/
-      let leaveSection = document.createElement("div");
+      leaveSection = document.createElement("div");
       leaveSection.className = "studio-info-section";
       
       let leaveBtn = document.createElement("button");
