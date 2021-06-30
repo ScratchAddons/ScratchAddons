@@ -176,7 +176,7 @@ else bodyIsEditorClassCheck();
 const originalReplaceState = history.replaceState;
 history.replaceState = function () {
   const oldUrl = location.href;
-  const newUrl = new URL(arguments[2], document.baseURI).href;
+  const newUrl = arguments[2] ? new URL(arguments[2], document.baseURI).href : oldUrl;
   const returnValue = originalReplaceState.apply(history, arguments);
   _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
@@ -189,7 +189,7 @@ history.replaceState = function () {
 const originalPushState = history.pushState;
 history.pushState = function () {
   const oldUrl = location.href;
-  const newUrl = new URL(arguments[2], document.baseURI).href;
+  const newUrl = arguments[2] ? new URL(arguments[2], document.baseURI).href : oldUrl;
   const returnValue = originalPushState.apply(history, arguments);
   _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
