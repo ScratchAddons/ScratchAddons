@@ -374,9 +374,20 @@ export default async function ({ addon, global, console, msg }) {
       const inputBlock = target.blocks.getBlock(inputId);
       if (inputBlock && inputBlock.opcode !== "text") {
         let text, category;
-        if (inputBlock.opcode === "data_variable" || inputBlock.opcode === "data_listcontents") {
+        if (
+          inputBlock.opcode === "data_variable" ||
+          inputBlock.opcode === "data_listcontents" ||
+          inputBlock.opcode === "argument_reporter_string_number" ||
+          inputBlock.opcode === "argument_reporter_boolean"
+        ) {
           text = Object.values(inputBlock.fields)[0].value;
-          category = inputBlock.opcode === "data_variable" ? "data" : "list";
+          if (inputBlock.opcode === "data_variable") {
+            category = "data";
+          } else if (inputBlock.opcode === "data_listcontents") {
+            category = "list";
+          } else {
+            category = "more";
+          }
         } else {
           // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
           let jsonData;
@@ -393,6 +404,7 @@ export default async function ({ addon, global, console, msg }) {
               // ignore
             }
           }
+          // If the block has a simple message with no arguments, display it
           if (jsonData && jsonData.message0 && !jsonData.args0) {
             text = jsonData.message0;
             category = jsonData.category;
