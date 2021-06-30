@@ -135,7 +135,7 @@ export default async ({ addon, console, msg }) => {
       /*<button class="button x-button studio-follow-button"><span>Follow Studio</span></button>*/
       leaveSection = document.createElement("div");
       leaveSection.className = "studio-info-section";
-      
+
       let leaveBtn = document.createElement("button");
       leaveBtn.className = "button sa-leave-button";
       leaveBtn.title = msg("added-by");
