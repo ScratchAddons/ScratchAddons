@@ -112,6 +112,7 @@ export default async function ({ template }) {
       sortable() {
         const sortable = new window.Sortable(this.el, {
           handle: ".handle",
+          animation: 300,
           onUpdate: (event) => {
             let list = this.vm.addonSettings[this.vm.setting.id];
             list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
