@@ -28,6 +28,149 @@ All notable changes to this project will be documented in this file.
 
 -->
 
+## [v1.16.3] - 2021-06-20
+
+### Fixed
+
+#### Addons
+
+- Scratch Messaging: Fix link color on light mode (#2843)
+
+## [v1.16.2] - 2021-05-19
+
+### Added
+
+#### Addons
+
+- Scratch Messaging: Support for new emojis (#2828)
+- Scratch Notifier: Support for new emojis (#2828)
+- Show ocular.jeffalo.net statuses and post reactions: Reacting to post using keyboards (#2824)
+- Studio manager tools: Support manager limit (#2817)
+
+### Changed
+
+#### Addons
+
+- Studio manager tools: Mark as beta addon (#2835)
+
+### Fixed
+
+#### Addons
+
+- Better forums post editor buttons: Show posted images (#2812)
+- Copy link to comment button: Fix button disappearing when loading older comments (#2831)
+- Debugger: Fix window cannot be moved when partially hidden (#2804)
+- Debugger: Fix blocks do not run when on a sprite not selected after reload (#2804)
+- Debugger: Fix addon sometimes does not work when going inside the editor (#2804)
+- Debugger: Fix addon when "going to" block not working immediately after leaving editor and returning to editor
+- Debugger: Improve performance of logging items by ~100x  (#2804)
+- Debugger: Fix unread logs icon not appearing reliably when items are being logged (#2804)
+- Debugger: Activate the code tab when going to a block (#2804) 
+- Debugger: Fix bug when custom blocks can't be deleted (#2819)
+- Debugger: Don't show "Edit" when right clicking on an addon block (#2819)
+- Scratch Messaging: Fix broken link by mentions by using raw ref for relative path rewriting (#2816)
+- Scratch Messaging: Fix prompt of users to log in appearing when a comment was deleted (#2806)
+- Scratch Messaging: Make links an actual link instead of using events (#2813)
+- Show ocular.jeffalo.net statuses and post reactions: Move reaction tooltips in front of reaction menu (#2802)
+- Show ocular.jeffalo.net statuses and post reactions: Fix reaction menu not being centered when post has no reactions (#2802)
+- Website dark mode: Fix addon does not make remix tree dark (#2836)
+
+#### Extension and Addon API
+
+- Move `handleKeySettings` to addon-settings component to make the Settings page faster (#2803)
+- Fix bug where disabled addons stay in the search result after clearing search bar in popup settings (#2830)
+
+## [v1.16.1] - 2021-05-15
+
+### Fixed
+
+#### Addons
+
+- Debugger: Fix addon logging empty string if sprite is not focused (#2775)
+- Debugger: Change how the block "previews" are generated to not rely on an actual Blockly block existing (#2775)
+- Debugger: Don't try to scroll a block in a flyout into view (#2775)
+- Debugger: Make the button not disappear when entering and leaving fullscreen (#2775)
+
+## [v1.16.0] - 2021-06-14
+
+### Added
+
+#### Addons
+
+- Debugger (#2161)
+- Expandable search bar (#2619)
+- Redirect mobile forums to main forums (#2667)
+- Editor dark mode and customizable colors: Add settings for darkening monitors (#2699)
+- Editor dark mode and customizable colors: Add boolean setting (#2699)
+- Editor dark mode and customizable colors: Add a setting to change the color of blue text and icons (#2699)
+- Gamepad support: Analyze the project's scripts and try to generate decent mappings by default (#2658)
+- Gamepad support: Allow project creators to set mappings (#2658)
+- Gamepad support: Allow configuring the keys of each axis individually (#2658)
+- Gamepad support: Allow binding button to Enter key (#2658)
+- Scratch 2.0 → 3.0: Support for migrated studio (#2661)
+- Website dark mode: Support for migrated studio (#2661)
+
+#### Extension and Addon API
+
+- Fuzzy searching in Settings page (#2705)
+- Prioritization on some fields searching Settings page (#2705)
+- Icons to external links on Settings page (#2724)
+
+### Changed
+
+#### Addons
+
+- Editor dark mode and customizable colors: Replace the editor dark mode userscript with customCssVariables to set the values (#2651)
+- Editor dark mode and customizable colors: Make the block palette affected by the border color setting (#2651)
+- Editor dark mode and customizable colors: Make inactive tab icons brighter when the background is dark to match the text color (#2651)
+- Gamepad support: Hide Gamepad support config button in small stage mode (#2658)
+- Gamepad support: Hide real mouse cursor when virtual cursor is being used (#2658)
+- Gamepad support: Close settings when escape is pressed (#2658)
+- Scratch Messaging: Linkify mentions and URLs (#2700)
+- Show ocular.jeffalo.net statuses and post reactions: Update reactions UI (#2704)
+
+#### Extension and Addon API
+
+- Optimize the settings page for relevance-ordered search (#2650)
+
+### Fixed
+
+#### Addons
+
+- Clone counter: Fix addon not hiding when dynamically enabled in a small stage editor (#2683)
+- Clone counter: Fix addon not appearing when going inside the editor (#2694)
+- Custom block shape: Fix offsets being added to small reporter blocks (#2623)
+- Developer tools: Ignore Ctrl+Shift+F (#2746)
+- Discuss button: Fix addon not enforcing minimum or maximum label length (#2687)
+- Do not automatically run duplicated blocks: Fix addon not working if a duplicated block is dropped in an input (#2625)
+- Editor dark mode and customizable colors: Make the text on hovered inactive tabs transparent to match Scratch design (#2625)
+- Editor dark mode and customizable colors: Style modal back and close icons correctly (#2651)
+- Editor dark mode and customizable colors: Fix sound icon of the selected sound using `selector2-filter` instead of the correct `selectorSelection-filter` (#2651)
+- Editor dark mode and customizable colors: Make the selection background and handles in the sound editor affected by the highlight color setting (#2699)
+- Editor dark mode and customizable colors: Removes unused camera modal styles (#2699)
+- Feature unshared projects Do not polute XHR.open to make it reliable (#2748)
+- Filter messages on Scratch's messages page: Fix addon hides unread messages (#2733)
+- Forum search: Escape external HTML before insertion (#2684)
+- Gamepad support: Change category to "Project player" instead of "Other" (#2658)
+- Gamepad support: Fix addon not hiding when dynamically enabled in a small stage editor (#2683)
+- Mouse position: Fix addon not hiding when entering a small stage editor (#2683)
+- Mouse position: Fix addon not hiding in small stage editor if Gamepad support is enabled (#2683)
+- Mouse position: Fix addon not hiding when dynamically enabled in a small stage editor (#2683)
+- Scratch Messaging: Apply min-height instead of height to avoid bottom bar being overflow (#2685)
+- Scratch Messaging: Handle errors to avoid addon crashing when Scratch is down (#2759)
+- Show exact count: Fix addon adding project count instead of replacing existing ones (#2661)
+- Website dark mode: Fix unreadable crash messages (#2706)
+- Website dark mode: Fix unreadable email confirmation modal (#2721)
+
+#### Extension and Addon API
+
+- Fix userscripts being executed twice on the same page (#2680)
+- Fix long addon names in settings taking unnecessary space (#2688)
+- Fix wrapping on tag badges in settings (#2688)
+- Do not enforce maximum width for addon descriptions (#2688)
+- Fix text color on More Settings (#2691)
+- Fix grammar on forum warning message (#2723)
+
 ## [v1.15.0] - 2021-05-25
 
 ### Added
@@ -1170,6 +1313,11 @@ NOTE: v1.1.0 is not released due to a permission issue. All updates are included
 
 Initial release.
 
+[v1.16.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.16.3
+[v1.16.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.16.2
+[v1.16.1]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.16.1
+[v1.16.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.16.0
+[v1.15.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.15.0
 [v1.15.0]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.15.0
 [v1.14.3]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.3
 [v1.14.2]: https://github.com/ScratchAddons/ScratchAddons/releases/tag/v1.14.2
