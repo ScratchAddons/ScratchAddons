@@ -1,11 +1,4 @@
 export default async function ({ addon, global, console, msg }) {
-  /* The hierarchy is:
-  blocklyDropDownDiv (position, background color, etc.) ->
-  blocklyDropDownContent (scrollbar) ->
-  blocklyDropdownMenu (items)
-  */
-  // The capitalization of dropdown is inconsistent in blockly too.
-
   const Blockly = await addon.tab.traps.getBlockly();
 
   const ADDON_ITEMS = [
@@ -23,39 +16,41 @@ export default async function ({ addon, global, console, msg }) {
   let fieldDropdown = null;
 
   const oldDropDownDivShow = Blockly.DropDownDiv.show;
-  Blockly.DropDownDiv.show = function (owner, ...args) {
-    fieldVariable = owner;
-    const arrowAtTop = oldDropDownDivShow.call(this, owner, ...args);
+  Blockly.DropDownDiv.show = function (...args) {
+    fieldVariable = args[0];
 
-    let blocklyDropDownDiv = Blockly.DropDownDiv.DIV_;
-    blocklyDropDownContent = Blockly.DropDownDiv.getContentDiv();
-    let blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
-    if (!blocklyDropdownMenu) return arrowAtTop;
+    const blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
+    if (!blocklyDropdownMenu) {
+      return oldDropDownDivShow.call(this, ...args);
+    }
 
     blocklyDropdownMenu.focus = () => {}; // no-op focus() so it can't steal it from the search bar
-    // Lock the width of the dropdown before adding the search bar, as sometimes adding the searchbar changes the width.
-    blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
 
     searchBar = document.createElement("input");
     addon.tab.displayNoneWhileDisabled(searchBar, { display: "flex" });
-
     searchBar.type = "text";
     searchBar.addEventListener("input", handleInputEvent);
     searchBar.addEventListener("keydown", handleKeyDownEvent);
     searchBar.classList.add("u-dropdown-searchbar");
-
     blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
-
-    searchBar.focus();
 
     for (const item of getItems()) {
       item.element_.hidden = hideItem(item);
     }
 
-    // Lock the height of the dropdown after adding the search bar.
+    // Call the original show method after adding everything so that it can perform the correct size calculations
+    const ret = oldDropDownDivShow.call(this, ...args);
+
+    // Lock the size of the dropdown
+    blocklyDropDownContent = Blockly.DropDownDiv.getContentDiv();
+    blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
     blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
 
-    return arrowAtTop;
+    // This is really strange, but if you don't reinsert the search bar into the DOM then focus() doesn't work
+    blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
+    searchBar.focus();
+
+    return ret;
   };
 
   const oldDropDownDivClearContent = Blockly.DropDownDiv.clearContent;
@@ -83,29 +78,41 @@ export default async function ({ addon, global, console, msg }) {
 
   const oldFieldVariableOnItemSelected = Blockly.FieldVariable.prototype.onItemSelected;
   Blockly.FieldVariable.prototype.onItemSelected = function (menu, menuItem) {
-    var id = menuItem.getValue();
-    if (this.sourceBlock_ && this.sourceBlock_.workspace && searchBar.value.length !== 0) {
+    const sourceBlock = this.sourceBlock_;
+    if (sourceBlock && sourceBlock.workspace && searchBar.value.length !== 0) {
+      const workspace = sourceBlock.workspace;
+      const id = menuItem.getValue();
       switch (id) {
-        case "createGlobalVariable":
-          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value).getId());
+        case "createGlobalVariable": {
+          const variable = workspace.createVariable(searchBar.value);
+          // Creating a variable can cause blocks in the flyout to be disposed and recreated
+          // That could cause setValue to throw
+          if (this.sourceBlock_) this.setValue(variable.getId());
           return;
-        case "createLocalVariable":
-          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value, "", null, true).getId());
+        }
+        case "createLocalVariable": {
+          const variable = workspace.createVariable(searchBar.value, "", null, true);
+          if (this.sourceBlock_) this.setValue(variable.getId());
           return;
-        case "createGlobalList":
-          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value, "list").getId());
+        }
+        case "createGlobalList": {
+          const variable = workspace.createVariable(searchBar.value, "list");
+          if (this.sourceBlock_) this.setValue(variable.getId());
           return;
-        case "createLocalList":
-          fieldVariable.setValue(
-            Blockly.getMainWorkspace().createVariable(searchBar.value, "list", null, true).getId()
-          );
+        }
+        case "createLocalList": {
+          const variable = workspace.createVariable(searchBar.value, "list", null, true);
+          if (this.sourceBlock_) this.setValue(variable.getId());
           return;
-        case "createBroadcast":
-          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value, "broadcast_msg").getId());
+        }
+        case "createBroadcast": {
+          const variable = workspace.createVariable(searchBar.value, "broadcast_msg");
+          this.setValue(variable.getId());
           return;
+        }
       }
     }
-    oldFieldVariableOnItemSelected.call(this, menu, menuItem);
+    return oldFieldVariableOnItemSelected.call(this, menu, menuItem);
   };
 
   function selectItem(item, click) {
