@@ -30,7 +30,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             if (option.type === "table") {
               settings[option.id] = settings[option.id].map((items) => {
                 let setting = {};
-                items.forEach((item, i) => (setting[row[i].name] = item));
+                items.forEach((item, i) => (setting[option.row[i].name] = item));
                 return setting;
               });
             }
