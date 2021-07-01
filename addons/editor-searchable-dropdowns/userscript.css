@@ -19,3 +19,6 @@
   background-color: white;
   color: black;
 }
+.blocklyDropDownDiv .goog-menu {
+  overflow-x: hidden;
+}
