@@ -13,7 +13,10 @@ export default async ({ addon, msg, safeMsg }) => {
     },
     computed: {
       projectsSorted() {
-        return this.projects.sort((b, a) => a.amt - b.amt);
+        return this.projects.sort((b, a) => {
+          if (a.amt !== b.amt) return a.amt - b.amt;
+          return a.timestamp - b.timestamp;
+        });
       },
       loadingMsg() {
         return msg("loading", { done: this.projectsChecked, amount: this.projects.length || "?" });
@@ -36,6 +39,7 @@ export default async ({ addon, msg, safeMsg }) => {
               if (dateNow - varChange.timestamp > 60000) break;
               usersSet.add(varChange.user);
             }
+            projectObject.timestamp = json[0]?.timestamp || 0;
             projectObject.amt = usersSet.size;
             projectObject.users = Array.from(usersSet);
             this.projectsChecked++;
