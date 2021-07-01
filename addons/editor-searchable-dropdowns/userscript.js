@@ -82,41 +82,30 @@ export default async function ({ addon, global, console, msg }) {
     const sourceBlock = this.sourceBlock_;
     if (sourceBlock && sourceBlock.workspace && searchBar.value.length !== 0) {
       const workspace = sourceBlock.workspace;
-      const fixSourceBlock = () => {
-        // For flyout blocks, creating a variable can dispose this Block and FieldVariable
-        // So, do some weird trickery to make Scratch think the block still exists (enough to make setValue function)
-        if (sourceBlock.isInFlyout) {
-          this.sourceBlock_ = sourceBlock;
-          this.sourceBlock_.workspace = workspace;
-        }
-      };
       switch (id) {
         case "createGlobalVariable": {
-          const variable = Blockly.getMainWorkspace().createVariable(searchBar.value);
-          fixSourceBlock();
-          this.setValue(variable.getId());
+          const variable = workspace.createVariable(searchBar.value);
+          // Creating a variable can cause blocks in the flyout to be disposed and recreated, which causes setValue to throw
+          if (!sourceBlock.isInFlyout) this.setValue(variable.getId());
           return;
         }
         case "createLocalVariable": {
-          const variable = Blockly.getMainWorkspace().createVariable(searchBar.value, "", null, true);
-          fixSourceBlock();
-          this.setValue(variable.getId());
+          const variable = workspace.createVariable(searchBar.value, "", null, true);
+          if (!sourceBlock.isInFlyout) this.setValue(variable.getId());
           return;
         }
         case "createGlobalList": {
-          const variable = Blockly.getMainWorkspace().createVariable(searchBar.value, "list");
-          fixSourceBlock();
-          this.setValue(variable.getId());
+          const variable = workspace.createVariable(searchBar.value, "list");
+          if (!sourceBlock.isInFlyout) this.setValue(variable.getId());
           return;
         }
         case "createLocalList": {
-          const variable = Blockly.getMainWorkspace().createVariable(searchBar.value, "list", null, true);
-          fixSourceBlock();
-          this.setValue(variable.getId());
+          const variable = workspace.createVariable(searchBar.value, "list", null, true);
+          if (!sourceBlock.isInFlyout) this.setValue(variable.getId());
           return;
         }
         case "createBroadcast": {
-          const variable = Blockly.getMainWorkspace().createVariable(searchBar.value, "broadcast_msg");
+          const variable = workspace.createVariable(searchBar.value, "broadcast_msg");
           this.setValue(variable.getId());
           return;
         }
