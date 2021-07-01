@@ -34,7 +34,7 @@ export default async function ({ addon, global, console }) {
       searchItem.previousSibling.remove();
     }
   }
-  async function init() {
+  function init() {
     removeAllItems();
     let items = addon.settings.get("items");
     items.forEach((item, i) => {
