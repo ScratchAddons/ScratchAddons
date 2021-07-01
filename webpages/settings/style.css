@@ -133,9 +133,6 @@ h1 {
   vertical-align: middle;
   filter: invert(0) brightness(10);
   margin-inline-end: 8px;
-  user-select: none;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
 }
 
 .disabled {
