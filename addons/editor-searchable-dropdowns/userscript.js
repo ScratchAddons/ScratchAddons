@@ -43,7 +43,7 @@ export default async function ({ addon, global, console, msg }) {
 
     // Lock the size of the dropdown
     blocklyDropDownContent = Blockly.DropDownDiv.getContentDiv();
-    blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;        
+    blocklyDropDownContent.style.width = getComputedStyle(blocklyDropDownContent).width;
     blocklyDropDownContent.style.height = getComputedStyle(blocklyDropDownContent).height;
 
     // This is really strange, but if you don't reinsert the search bar into the DOM then focus() doesn't work
