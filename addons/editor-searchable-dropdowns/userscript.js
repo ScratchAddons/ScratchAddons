@@ -78,30 +78,31 @@ export default async function ({ addon, global, console, msg }) {
 
   const oldFieldVariableOnItemSelected = Blockly.FieldVariable.prototype.onItemSelected;
   Blockly.FieldVariable.prototype.onItemSelected = function (menu, menuItem) {
-    const id = menuItem.getValue();
     const sourceBlock = this.sourceBlock_;
     if (sourceBlock && sourceBlock.workspace && searchBar.value.length !== 0) {
       const workspace = sourceBlock.workspace;
+      const id = menuItem.getValue();
       switch (id) {
         case "createGlobalVariable": {
           const variable = workspace.createVariable(searchBar.value);
-          // Creating a variable can cause blocks in the flyout to be disposed and recreated, which causes setValue to throw
-          if (!sourceBlock.isInFlyout) this.setValue(variable.getId());
+          // Creating a variable can cause blocks in the flyout to be disposed and recreated
+          // That could cause setValue to throw
+          if (this.sourceBlock_) this.setValue(variable.getId());
           return;
         }
         case "createLocalVariable": {
           const variable = workspace.createVariable(searchBar.value, "", null, true);
-          if (!sourceBlock.isInFlyout) this.setValue(variable.getId());
+          if (this.sourceBlock_) this.setValue(variable.getId());
           return;
         }
         case "createGlobalList": {
           const variable = workspace.createVariable(searchBar.value, "list");
-          if (!sourceBlock.isInFlyout) this.setValue(variable.getId());
+          if (this.sourceBlock_) this.setValue(variable.getId());
           return;
         }
         case "createLocalList": {
           const variable = workspace.createVariable(searchBar.value, "list", null, true);
-          if (!sourceBlock.isInFlyout) this.setValue(variable.getId());
+          if (this.sourceBlock_) this.setValue(variable.getId());
           return;
         }
         case "createBroadcast": {
