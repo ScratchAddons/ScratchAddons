@@ -1,11 +1,4 @@
 export default async function ({ addon, global, console, msg }) {
-  /* The hierarchy is:
-  blocklyDropDownDiv (position, background color, etc.) ->
-  blocklyDropDownContent (scrollbar) ->
-  blocklyDropdownMenu (items)
-  */
-  // The capitalization of dropdown is inconsistent in blockly too.
-
   const Blockly = await addon.tab.traps.getBlockly();
 
   const ADDON_ITEMS = [
