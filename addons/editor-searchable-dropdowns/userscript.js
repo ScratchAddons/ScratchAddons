@@ -78,29 +78,51 @@ export default async function ({ addon, global, console, msg }) {
 
   const oldFieldVariableOnItemSelected = Blockly.FieldVariable.prototype.onItemSelected;
   Blockly.FieldVariable.prototype.onItemSelected = function (menu, menuItem) {
-    var id = menuItem.getValue();
-    if (this.sourceBlock_ && this.sourceBlock_.workspace && searchBar.value.length !== 0) {
+    const id = menuItem.getValue();
+    const sourceBlock = this.sourceBlock_;
+    if (sourceBlock && sourceBlock.workspace && searchBar.value.length !== 0) {
+      const workspace = sourceBlock.workspace;
+      const fixSourceBlock = () => {
+        // For flyout blocks, creating a variable can dispose this Block and FieldVariable
+        // So, do some weird trickery to make Scratch think the block still exists (enough to make setValue function)
+        if (sourceBlock.isInFlyout) {
+          this.sourceBlock_ = sourceBlock;
+          this.sourceBlock_.workspace = workspace;
+        }
+      };
       switch (id) {
-        case "createGlobalVariable":
-          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value).getId());
+        case "createGlobalVariable": {
+          const variable = Blockly.getMainWorkspace().createVariable(searchBar.value);
+          fixSourceBlock();
+          this.setValue(variable.getId());
           return;
-        case "createLocalVariable":
-          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value, "", null, true).getId());
+        }
+        case "createLocalVariable": {
+          const variable = Blockly.getMainWorkspace().createVariable(searchBar.value, "", null, true);
+          fixSourceBlock();
+          this.setValue(variable.getId());
           return;
-        case "createGlobalList":
-          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value, "list").getId());
+        }
+        case "createGlobalList": {
+          const variable = Blockly.getMainWorkspace().createVariable(searchBar.value, "list");
+          fixSourceBlock();
+          this.setValue(variable.getId());
           return;
-        case "createLocalList":
-          fieldVariable.setValue(
-            Blockly.getMainWorkspace().createVariable(searchBar.value, "list", null, true).getId()
-          );
+        }
+        case "createLocalList": {
+          const variable = Blockly.getMainWorkspace().createVariable(searchBar.value, "list", null, true);
+          fixSourceBlock();
+          this.setValue(variable.getId());
           return;
-        case "createBroadcast":
-          fieldVariable.setValue(Blockly.getMainWorkspace().createVariable(searchBar.value, "broadcast_msg").getId());
+        }
+        case "createBroadcast": {
+          const variable = Blockly.getMainWorkspace().createVariable(searchBar.value, "broadcast_msg");
+          this.setValue(variable.getId());
           return;
+        }
       }
     }
-    oldFieldVariableOnItemSelected.call(this, menu, menuItem);
+    return oldFieldVariableOnItemSelected.call(this, menu, menuItem);
   };
 
   function selectItem(item, click) {
