@@ -31,12 +31,20 @@ scratchAddons.isLightMode = false;
       addonId,
     },
   });
-  console.log(popupData);
   scratchAddons.globalState = {
     auth: popupData.auth,
     addonSettings: popupData.settings,
   };
 
+  /*
+   Popups do not have tab ID, so it is not possible to send messages from
+   background to popup (unless as part of the callback) with the traditional
+   sendMessage API. By creating a port and holding a reference of it on the
+   background script it can send messages. Note that we still use sendMessage
+   to send to background to reduce code duplication.
+
+   Once the background acknowledges the connection, it sends a ping.
+  */
   const port = chrome.runtime.connect(undefined, { name: addonId });
   await new Promise((resolve) => {
     port.onMessage.addListener((value) => {
