@@ -81,7 +81,10 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
   chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 
-  const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
+  const promisify =
+    (callbackFn) =>
+    (...args) =>
+      new Promise((resolve) => callbackFn(...args, resolve));
 
   let handleConfirmClicked = null;
 
