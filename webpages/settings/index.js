@@ -81,10 +81,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
   chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 
-  const promisify =
-    (callbackFn) =>
-    (...args) =>
-      new Promise((resolve) => callbackFn(...args, resolve));
+  const promisify = (callbackFn) => (...args) => new Promise((resolve) => callbackFn(...args, resolve));
 
   let handleConfirmClicked = null;
 
@@ -201,7 +198,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           // Sort very good matches at the top no matter what
           if ((a.score < 0.1) ^ (b.score < 0.1)) return a.score < 0.1 ? -1 : 1;
           // Enabled addons at top
-          else return b.item._enabled - a.item._enabled;
+          else return b.item._wasEnabledBeforeSearch - a.item._wasEnabledBeforeSearch;
         });
         const results = fuseSearch.map((result) => this.addonListObjs.find((obj) => obj.manifest === result.item));
         for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
@@ -378,6 +375,10 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     },
     watch: {
       searchInputReal(newValue) {
+        vue.manifests.forEach((manifest) => {
+          manifest._wasEnabledBeforeSearch = manifest._enabled;
+        });
+
         if (newValue === "") return (this.searchInput = newValue);
         setTimeout(() => {
           if (this.searchInputReal === newValue) this.searchInput = newValue;
@@ -498,6 +499,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
       manifest._enabled = addonsEnabled[addonId];
       manifest._wasEverEnabled = manifest._enabled;
+      manifest._wasEnabledBeforeSearch = manifest._enabled;
       manifest._addonId = addonId;
       manifest._groups = [];
 
