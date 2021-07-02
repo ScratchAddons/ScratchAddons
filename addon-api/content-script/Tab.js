@@ -255,6 +255,11 @@ export default class Tab extends Listenable {
           q("[class^='stage-header_stage-size-row']").lastChild,
         ],
       },
+      afterGreenFlag: {
+        element: () => q("[class^='controls_controls-container']"),
+        from: () => [],
+        until: () => [q("[class^='stop-all_stop-all']")],
+      },
       afterStopButton: {
         element: () => q("[class^='controls_controls-container']"),
         from: () => [q("[class^='stop-all_stop-all']")],
