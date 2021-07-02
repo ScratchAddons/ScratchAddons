@@ -14,5 +14,8 @@
     }
   ],
   "tags": ["editor"],
-  "enabledByDefault": false
+  "enabledByDefault": false,
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "versionAdded": "1.17.0"
 }

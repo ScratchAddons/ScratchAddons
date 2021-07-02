@@ -12,10 +12,7 @@ export default async ({ addon, console }) => {
   // Do not focus sprite after dragging it
   const oldStopDrag = vm.stopDrag;
   vm.stopDrag = function (...args) {
-    if (shiftKeyPressed) {
-      const r = oldStopDrag.call(this, ...args);
-      return r;
-    }
+    if (shiftKeyPressed || addon.self.disabled) return oldStopDrag.call(this, ...args);
     const setEditingTarget = this.setEditingTarget;
     this.setEditingTarget = () => {};
     const r = oldStopDrag.call(this, ...args);
@@ -27,7 +24,7 @@ export default async ({ addon, console }) => {
   const oldGetTargetIdForDrawableId = vm.getTargetIdForDrawableId;
   vm.getTargetIdForDrawableId = function (...args) {
     const targetId = oldGetTargetIdForDrawableId.call(this, ...args);
-    if (shiftKeyPressed) return targetId;
+    if (shiftKeyPressed || addon.self.disabled) return targetId;
     if (targetId !== null) {
       const target = this.runtime.getTargetById(targetId);
       if (target && !target.draggable) {
