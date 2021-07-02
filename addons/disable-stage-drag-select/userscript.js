@@ -1,9 +1,21 @@
 export default async ({ addon, console }) => {
   const vm = addon.tab.traps.vm;
+  let shiftKeyPressed = false;
+
+  document.addEventListener("keydown", (event) => {
+    shiftKeyPressed = event.shiftKey;
+  });
+  document.addEventListener("keyup", (event) => {
+    shiftKeyPressed = event.shiftKey;
+  });
 
   // Do not focus sprite after dragging it
   const oldStopDrag = vm.stopDrag;
   vm.stopDrag = function (...args) {
+    if (shiftKeyPressed) {
+      const r = oldStopDrag.call(this, ...args);
+      return r;
+    }
     const setEditingTarget = this.setEditingTarget;
     this.setEditingTarget = () => {};
     const r = oldStopDrag.call(this, ...args);
@@ -15,6 +27,7 @@ export default async ({ addon, console }) => {
   const oldGetTargetIdForDrawableId = vm.getTargetIdForDrawableId;
   vm.getTargetIdForDrawableId = function (...args) {
     const targetId = oldGetTargetIdForDrawableId.call(this, ...args);
+    if (shiftKeyPressed) return targetId;
     if (targetId !== null) {
       const target = this.runtime.getTargetById(targetId);
       if (target && !target.draggable) {
