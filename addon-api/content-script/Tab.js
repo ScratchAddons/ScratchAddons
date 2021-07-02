@@ -306,8 +306,8 @@ export default class Tab extends Listenable {
       beforeRemixButton: {
         element: () => q(".project-buttons"),
         from: () => [],
-        until: () => [q(".project-buttons > .remix-button")]
-      }
+        until: () => [q(".project-buttons > .remix-button")],
+      },
     };
 
     const spaceInfo = sharedSpaces[space];
