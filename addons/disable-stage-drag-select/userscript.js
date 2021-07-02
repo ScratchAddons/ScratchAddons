@@ -1,21 +1,26 @@
-export default async ({addon}) => {
-    const vm = addon.tab.traps.vm;
-    //var oldFn = vm.setEditingTarget
+export default async ({ addon, console }) => {
+  const vm = addon.tab.traps.vm;
 
-    vm.startDrag = function(x,y){
-        return;
-    }
-    vm.stopDrag = function (targetId) {
-        return;
-    }
+  // Do not focus sprite after dragging it
+  const oldStopDrag = vm.stopDrag;
+  vm.stopDrag = function (...args) {
+    const setEditingTarget = this.setEditingTarget;
+    this.setEditingTarget = () => {};
+    const r = oldStopDrag.call(this, ...args);
+    this.setEditingTarget = setEditingTarget;
+    return r;
+  };
 
-    /*vm.setEditingTarget = function(a){
-        //const rect = document.querySelector("canvas").getBoundingClientRect()
-        const mouse = vm.runtime.ioDevices.mouse;
-        const [x, y] = [mouse._x, mouse._y];
-        
-        if(rect.left<=x<=rect.right && rect.bottom<=y<=rect.top){
-            oldFn.call(this, a);
-        }
-    }*/
+  // Don't let the editor drag sprites that aren't marked as draggable
+  const oldGetTargetIdForDrawableId = vm.getTargetIdForDrawableId;
+  vm.getTargetIdForDrawableId = function (...args) {
+    const targetId = oldGetTargetIdForDrawableId.call(this, ...args);
+    if (targetId !== null) {
+      const target = this.runtime.getTargetById(targetId);
+      if (target && !target.draggable) {
+        return null;
+      }
+    }
+    return targetId;
+  };
 };
