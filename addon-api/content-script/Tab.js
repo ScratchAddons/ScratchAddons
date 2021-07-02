@@ -303,6 +303,11 @@ export default class Tab extends Listenable {
         },
         until: () => [scope.querySelector(".postfootright > ul > li.postquote")],
       },
+      beforeRemixButton: {
+        element: () => q(".project-buttons"),
+        from: () => [],
+        until: () => [q(".project-buttons > .remix-button")]
+      }
     };
 
     const spaceInfo = sharedSpaces[space];
