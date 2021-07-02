@@ -1,18 +1,18 @@
 {
-    "name": "Disable sprite dragging in editor",
-    "description": "Makes dragging sprites in the project player behave exactly as in fullscreen while in the editor.",
-    "credits": [
-        {
-          "name": "Chrome_Cat",
-          "link": "https://scratch.mit.edu/users/Chrome_Cat"
-        }
-    ],
-    "userscripts": [
-        {
-          "url": "userscript.js",
-          "matches": ["https://scratch.mit.edu/projects/*"]
-        }
-    ],
-    "tags": ["editor"],
-    "enabledByDefault": false
+  "name": "Disable sprite dragging in editor",
+  "description": "Makes dragging sprites in the project player behave exactly as in fullscreen while in the editor.",
+  "credits": [
+    {
+      "name": "Chrome_Cat",
+      "link": "https://scratch.mit.edu/users/Chrome_Cat"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": false
 }
