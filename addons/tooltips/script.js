@@ -1,5 +1,5 @@
-import Popper from "../../libraries/popper" 
-import tippy from "../../libraries/tippy"
+import Popper from "../../libraries/thirdparty/popper.js" 
+import tippy from "../../libraries/thirdparty/tippy.js"
 
 export default async function ({ addon, global, console, msg }) {
 

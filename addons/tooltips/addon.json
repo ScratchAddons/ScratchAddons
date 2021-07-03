@@ -13,16 +13,6 @@
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
-  "userstyles": [
-    {
-      "url": "style.css",
-      "matches": ["https://scratch.mit.edu/*"],
-      "settingMatch": {
-        "id": "styleAsNormalText",
-        "value": true
-      }
-    }
-  ],
   "settings": [
     {
       "id": "styleAsNormalText",
@@ -32,5 +22,5 @@
     }
   ],
   "tags": ["community"],
-  "enabledByDefault": false,
+  "enabledByDefault": false
 }
