@@ -12,5 +12,7 @@ Third-party libraries included are:
 - [comlink 4.3.1](https://unpkg.com/comlink@4.3.1/dist/umd/comlink.js) (Apache-2.0)
 - [Sora](https://fonts.google.com/specimen/Sora) (OFL)
 - [Fuse](https://unpkg.com/fuse.js@6.4.6/dist/fuse.basic.esm.min.js) (Apache-2.0)
+- [Popper 1.16.1](https://unpkg.com/popper.js@1.16.1/dist/umd/popper.min.js) (MIT)
+- [Tippy.js 6.3.1](https://unpkg.com/tippy.js@6.3.1/dist/tippy-bundle.umd.min.js) (MIT)
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).
