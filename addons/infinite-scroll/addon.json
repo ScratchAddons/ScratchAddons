@@ -78,7 +78,7 @@
     },
     {
       "url": "discuss.css",
-      "matches": ["https://scratch.mit.edu/discuss/*/"]
+      "matches": ["https://scratch.mit.edu/discuss/*"]
     }
   ],
   "tags": ["community"],
