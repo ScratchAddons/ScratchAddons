@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   if (window.location.pathname.split("/").length === 4) {
     let vf = document.getElementById("vf");
     let pageSeparator, pageSeparatorTd;
@@ -42,7 +42,7 @@ export default async function ({ addon, global, console }) {
               if (vf) {
                 table = vf.getElementsByTagName("tbody")[0];
                 posts = doc.getElementById("vf").getElementsByTagName("tr");
-                pageSeparatorTd.textContent = `Page ${page}`;
+                pageSeparatorTd.textContent = msg("page-num", { page });
                 table.appendChild(pageSeparator.cloneNode(true));
               } else {
                 table = document.getElementById("djangobbindex");
@@ -61,7 +61,7 @@ export default async function ({ addon, global, console }) {
       }
     };
 
-    window.addEventListener("scroll", () => update());
+    window.addEventListener("scroll", () => update(), { passive: true });
     update();
   }
 }
