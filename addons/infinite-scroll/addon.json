@@ -50,7 +50,7 @@
   "userscripts": [
     {
       "url": "forumScroll.js",
-      "matches": ["https://scratch.mit.edu/discuss/*"],
+      "matches": ["https://scratch.mit.edu/discuss/*/"],
       "settingMatch": {
         "id": "forumScroll",
         "value": true
