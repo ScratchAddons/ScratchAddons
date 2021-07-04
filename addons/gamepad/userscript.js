@@ -430,7 +430,7 @@ export default async function ({ addon, global, console, msg }) {
     if (target.className.includes("stage-size-row")) {
       addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 0 });
     } else {
-      addon.tab.appendToSharedSpace({space: "fullscreenStageHeader", element: container, order: 0 });
+      addon.tab.appendToSharedSpace({ space: "fullscreenStageHeader", element: container, order: 0 });
     }
 
     const monitorListScaler = document.querySelector("[class^='monitor-list_monitor-list-scaler']");
