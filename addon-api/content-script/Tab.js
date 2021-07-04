@@ -255,6 +255,21 @@ export default class Tab extends Listenable {
           q("[class^='stage-header_stage-size-row']").lastChild,
         ],
       },
+      fullscreenStageHeader: {
+        // Fullscreen stage header only
+        element: () => q("[class^='stage-header_stage-menu-wrapper']"),
+        from: function () {
+          let emptyDiv = this.element().querySelector(".sa-spacer");
+          if (!emptyDiv) {
+            emptyDiv = document.createElement("div");
+            emptyDiv.style.marginLeft = "auto";
+            emptyDiv.className = "sa-spacer";
+            this.element().insertBefore(emptyDiv, this.element().lastChild);
+          }
+          return [emptyDiv];
+        },
+        until: () => [q("[class^='stage-header_stage-menu-wrapper']").lastChild],
+      },
       afterGreenFlag: {
         element: () => q("[class^='controls_controls-container']"),
         from: () => [],
