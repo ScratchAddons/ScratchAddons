@@ -1,6 +1,6 @@
 {
   "name": "Disable sprite dragging in editor",
-  "description": "Makes dragging sprites in the project player behave exactly as in fullscreen while in the editor.",
+  "description": "Removes the ability to drag sprites around in the stage, except those explicitly set as draggable.",
   "credits": [
     {
       "name": "Chrome_Cat",
