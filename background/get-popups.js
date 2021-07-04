@@ -26,9 +26,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.runtime.onConnect.addListener((port) => {
   if (!port.sender.url?.startsWith(POPUP_PREFIX)) return;
   const addonId = port.name;
-  scratchAddons.popupPorts[addonId] = port;
+  if (!scratchAddons.popupPorts[addonId]) scratchAddons.popupPorts[addonId] = [];
+  scratchAddons.popupPorts[addonId].push(port);
   port.postMessage("ping");
   port.onDisconnect.addListener(() => {
-    delete scratchAddons.popupPorts[port.name];
+    scratchAddons.popupPorts[port.name] = scratchAddons.popupPorts[port.name].filter((port2) => port2 !== port);
   });
 });
