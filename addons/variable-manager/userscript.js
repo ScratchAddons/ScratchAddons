@@ -319,7 +319,6 @@ export default async function ({ addon, global, console, msg }) {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
-    const soundTab = tabs.children[2];
-    soundTab.insertAdjacentElement("afterend", varTab);
+    addon.tab.appendToSharedSpace({ space: "afterSoundTab", element: varTab, order: 3 });
   }
 }

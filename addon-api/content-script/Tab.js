@@ -285,6 +285,11 @@ export default class Tab extends Listenable {
         from: () => [q(".copy-link-button")],
         until: () => [],
       },
+      afterSoundTab: {
+        element: () => q("[class^='react-tabs_react-tabs__tab-list']"),
+        from: () => [q("[class^='react-tabs_react-tabs__tab-list']").children[2]],
+        until: () => [q(".s3devToolBar")],
+      },
       forumsBeforePostReport: {
         element: () => scope.querySelector(".postfootright > ul"),
         from: () => [],
