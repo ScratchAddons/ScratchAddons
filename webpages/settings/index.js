@@ -203,7 +203,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           // Enabled addons at top
           else return b.item._enabled - a.item._enabled;
         });
-        const results = fuseSearch.map((result) => this.addonListObjs.find((obj) => obj.manifest._addonId === result.item._addonId));
+        const results = fuseSearch.map((result) =>
+          this.addonListObjs.find((obj) => obj.manifest._addonId === result.item._addonId)
+        );
         for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
         return this.addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
       },
@@ -548,10 +550,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     }
     vue.manifests = manifests.map(({ manifest }) => manifest);
 
-    fuse = new Fuse(
-      cleanManifests,
-      fuseOptions
-    );
+    fuse = new Fuse(cleanManifests, fuseOptions);
 
     const checkTag = (tagOrTags, manifestA, manifestB) => {
       const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
