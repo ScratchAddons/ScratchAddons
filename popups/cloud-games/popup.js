@@ -22,7 +22,7 @@ export default async ({ addon, msg, safeMsg }) => {
         return msg("loading", { done: this.projectsChecked, amount: this.projects.length || "?" });
       },
       errorMessage() {
-        return msg(this.error);
+        return this.error && msg(this.error);
       },
     },
     methods: {
