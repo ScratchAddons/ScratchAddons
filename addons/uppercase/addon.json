@@ -1,0 +1,22 @@
+{
+  "name": "Uppercase",
+  "description": "It capitalized everything, improving readability",
+  "tags": ["editor", "uppercase", "dsa", "dyslexia"],
+  "enabledByDefault": false,
+  "credits": [
+    {
+      "name": "Mondo Computazionale",
+      "link": "https://scratch.mit.edu/users/MondoScratch/"
+    }, 
+    {
+      "name": "Simone Marx degli Ex Allievi di Don Bosco di Alassio",
+      "link": "https://scratch.mit.edu/users/exallievidonbosco/"
+    }
+  ],  
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ]
+}
