@@ -9,8 +9,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
-      "runAtComplete": false
+      "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
   "userstyles": [
@@ -105,5 +104,7 @@
   ],
   "versionAdded": "1.5.0",
   "tags": ["editor", "costumeEditor", "recommended"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "enabledByDefault": false
 }

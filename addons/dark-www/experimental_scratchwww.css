@@ -8,6 +8,8 @@ p,
 .news li p,
 a.social-messages-profile-link,
 .outer .sort-mode .select select,
+.studio-tab-nav li,
+.user-projects-modal .user-projects-modal-nav button,
 .grid .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .thumbnail-column .thumbnail .thumbnail-info .thumbnail-title .thumbnail-creator a,
 .thumbnail .thumbnail-loves,
@@ -66,6 +68,8 @@ body:not(.sa-body-editor) .gender-radio-row,
 .project-favorites::before,
 .project-remixes::before,
 .project-views::before,
+.comment .comment-top-row .comment-delete::before,
+.comment .comment-top-row .comment-report::before,
 img.tips-icon,
 .tabs li:not(.active) .tab-icon,
 .overflow-menu-container .overflow-menu-trigger img,
@@ -74,7 +78,8 @@ body:not(.sa-body-editor) .stage-header_stage-button-icon_3zzFK {
   filter: brightness(0) invert(1);
 }
 .project-loves.loved::before,
-.project-favorites.favorited::before {
+.project-favorites.favorited::before,
+.studio-tab-nav li img {
   filter: none;
 }
 .comment .comment-body .comment-bottom-row .comment-time {
@@ -94,7 +99,10 @@ body:not(.sa-body-editor) .button.white,
 .tabs li:hover,
 .intro-banner .intro-button,
 .os-chooser,
+.studio-tab-nav li,
+.user-projects-modal .user-projects-modal-nav button,
 body:not(.sa-body-editor) .modal-content,
+.studio-info .studio-image,
 .grid .thumbnail,
 .studio-project-tile,
 .studio-member-tile,
@@ -126,13 +134,10 @@ body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
 }
 .outer .categories li,
 .os-chooser .button,
-.studio-tab-nav li,
-.user-projects-modal .user-projects-modal-nav button {
+.studio-tab-nav a.nav_link:hover > li {
   background-color: rgba(255, 255, 255, 0.1);
 }
 .outer .categories li:hover,
-.studio-tab-nav li:hover,
-.user-projects-modal .user-projects-modal-nav button:hover,
 .supporters-section .supporters-level hr {
   background-color: rgba(255, 255, 255, 0.2);
 }
@@ -140,10 +145,14 @@ body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
 .box .box-header,
 #footer, /* for infinite scrolling fixed footer */
 .textarea,
+.studio-info textarea.studio-title:not(:focus), .studio-info textarea.studio-description:not(:focus),
 .crash-container,
 .studio-adder-section .studio-adder-row input,
 .studio-adder-section .studio-adder-row .studio-adder-vertical-divider,
 .studio-tab-nav,
+.studio-tab-nav a.nav_link:not(.active) > li,
+.studio-info .studio-image,
+.user-projects-modal .user-projects-modal-nav button,
 .studio-project-tile,
 .studio-member-tile,
 .studio-activity .studio-messages-list,
