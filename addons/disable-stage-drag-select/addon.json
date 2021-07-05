@@ -1,5 +1,5 @@
 {
-  "name": "Disable sprite dragging in editor",
+  "name": "Non-draggable sprites in editor",
   "description": "Removes the ability to drag sprites around in the stage, except those explicitly set as draggable.",
   "info": [
     {
