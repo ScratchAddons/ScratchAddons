@@ -1,5 +1,6 @@
 export default async ({ addon, msg, safeMsg }) => {
-  const url = addon.settings.get("url");
+  // TODO: support setting this via settings page
+  const url = "https://scratch.mit.edu/studios/539952/";
   const studioId = url.match(/\d+/)?.[0];
   const shouldFailEarly = !studioId || isNaN(studioId);
   window.vue = new Vue({

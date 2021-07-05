@@ -15,21 +15,6 @@
     "script": "popup.js",
     "html": "popup.html"
   },
-  "settings": [
-    {
-      "name": "Studio URL",
-      "id": "url",
-      "type": "string",
-      "default": "https://scratch.mit.edu/studios/539952/"
-    }
-  ],
-  "info": [
-    {
-      "type": "notice",
-      "text": "To change the projects shown, first create a studio with the projects, and set its URL on the \"Studio URL\" section below.",
-      "id": "change"
-    }
-  ],
   "tags": ["popup", "recommended"],
   "versionAdded": "1.1.0",
   "enabledByDefault": true
