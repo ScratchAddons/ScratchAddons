@@ -44,9 +44,10 @@ export default class Trap extends Listenable {
     const BLOCKS_CLASS = '[class^="gui_blocks-wrapper"]';
     let elem = document.querySelector(BLOCKS_CLASS);
     if (!elem) {
-      elem = await this._waitForElement(BLOCKS_CLASS, {
-        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
-      }) ?? null;
+      elem =
+        (await this._waitForElement(BLOCKS_CLASS, {
+          reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+        })) ?? null;
     }
     if (!this._react_internal_key) {
       this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
@@ -60,9 +61,10 @@ export default class Trap extends Listenable {
 
   /**
    * Gets @scratch/paper instance.
+   *
    * @async
-   * @throws when on non-project page or if paper couldn't be found.
    * @returns {Promise<object>}
+   * @throws When on non-project page or if paper couldn't be found.
    */
   async getPaper() {
     if (this._cache.paper) return this._cache.paper;

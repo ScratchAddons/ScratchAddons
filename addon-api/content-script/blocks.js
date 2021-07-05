@@ -43,17 +43,17 @@ const getCustomBlock = (proccode) => {
 /** @param {string} index */
 const getArgumentId = (index) => `arg${index}`;
 
-const getNamesIdsDefaults = (/** @type {blockData} */blockData) => [
+const getNamesIdsDefaults = (/** @type {blockData} */ blockData) => [
   blockData.args,
   blockData.args.map((_, i) => getArgumentId(i)),
   blockData.args.map(() => ""),
 ];
 
-  /**
+/**
  * Adds a Scratch Addons block.
  *
  * @param {string} proccode - The code displayed to the user.
- * @param {{}} opts - Options
+ * @param {{}} opts - Options.
  * @param {string[]} [opts.args] - The block argument names.
  * @param {(args: { [key: string]: string | boolean | number }) => void} [opts.callback] - The handler.
  * @param {boolean} [opts.hidden] - Whether to hide the block from the block palette.

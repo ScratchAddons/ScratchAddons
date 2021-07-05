@@ -9,9 +9,9 @@ const vue = new Vue({
   },
   methods: {
     /**
-     *
      * @param {string} message
-     * @param  {{[key: string]:string}} placeholders
+     * @param {{ [key: string]: string }} placeholders
+     *
      * @returns
      */
     msg(message, placeholders) {

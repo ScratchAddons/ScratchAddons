@@ -1,4 +1,4 @@
-export default async function (/** @type {AddonAPIs.Userscript} */ { addon, global, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   // This line below will always return the element since it will
   // only run on the category page based on the match.
   let vf = document.getElementById("vf");
@@ -65,4 +65,4 @@ export default async function (/** @type {AddonAPIs.Userscript} */ { addon, glob
 
   window.addEventListener("scroll", () => update(), { passive: true });
   update();
-}
+};

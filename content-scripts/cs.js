@@ -50,9 +50,9 @@ chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onRes
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
 const promisify =
-    (callbackFn) =>
-    (...args) =>
-      new Promise((resolve) => callbackFn(...args, resolve));
+  (callbackFn) =>
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
 
 /** @type {import("../types").page} */
 let _page_;
@@ -543,7 +543,7 @@ const showBanner = () => {
             target: "_blank",
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
-        ][(i) - 1] || ""
+        ][i - 1] || ""
     ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {

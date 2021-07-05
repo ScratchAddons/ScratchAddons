@@ -1,4 +1,4 @@
-export default async function (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) {
+export default async (/** @type {AddonAPIs.Userscript} */ { addon, console, msg }) => {
   const Blockly = await addon.tab.traps.getBlockly();
 
   const ADDON_ITEMS = [
@@ -238,4 +238,4 @@ export default async function (/** @type {AddonAPIs.Userscript} */ { addon, cons
   function hideItem(item) {
     return ADDON_ITEMS.includes(item.model_) && searchBar.value.length === 0;
   }
-}
+};

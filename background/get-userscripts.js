@@ -243,7 +243,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (scratchAddons.localState?.allReady) {
     const identity = createCsIdentity({
       tabId: sender.tab?.id || 0,
-      frameId: (sender.frameId||0),
+      frameId: sender.frameId || 0,
       url: request.contentScriptReady.url,
     });
     const getCacheEntry = () => csInfoCache.get(identity);
