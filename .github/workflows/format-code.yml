@@ -19,6 +19,8 @@ jobs:
           app_id: ${{ secrets.BOT_APP_ID }}
           private_key: ${{ secrets.BOT_PRIVATE_KEY }}
 
+      - run: npm install prettier-plugin-jsdoc -g
+
       - name: Prettify code (ScratchAddons)
         if: steps.generate-token.outcome == 'success'
         uses: creyD/prettier_action@v3.1
