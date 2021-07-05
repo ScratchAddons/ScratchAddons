@@ -1,39 +1,72 @@
-import Popper from "../../libraries/thirdparty/popper.js" 
-import tippy from "../../libraries/thirdparty/tippy.js"
+let regexDict = {
+    project: [
+        /^((https?:)?\/\/scratch.mit.edu)?\/projects\/\d+/,
+    ],
+    studio: [
+        /^((https?:)?\/\/scratch.mit.edu)?\/studios\/\d+/,
+    ],
+    user: [
+        /^((https?:)?\/\/scratch.mit.edu)?\/users\/[a-zA-Z0-9-_]+/,
+    ],
+    forumTopic: [
+        /^((https?:)?\/\/scratch.mit.edu)?\/discuss\/topic\/\d+(?!.+#post-\d)/,
+    ],
+    forumPost: [
+        /^((https?:)?\/\/scratch.mit.edu)?\/discuss\/post\/\d+/,
+        /^((https?:)?\/\/scratch.mit.edu)?\/discuss\/topic\/\d+(.+#post-\d)/
+    ]
+}
 
-export default async function ({ addon, global, console, msg }) {
+let selectorExclusionDict = {
+    user: [
+        ".slider-carousel-control",
+        "[data-control='view-all']"
+    ]
+}
 
-    let tippyGlobalOptions = {
-        content: 'Loading...',
-        allowHTML: true,
-        popperOptions: {
-            strategy: 'fixed',
-            modifiers: [
-                {
-                    name: 'flip',
-                    options: {
-                        fallbackPlacements: ['bottom'],
-                    },
+let tippyGlobalOptions = {
+    content: 'Loading...',
+    theme: 'sa-tooltips',
+    allowHTML: true,
+    popperOptions: {
+        strategy: 'fixed',
+        modifiers: [
+            {
+                name: 'flip',
+                options: {
+                    fallbackPlacements: ['bottom'],
                 },
-                {
-                    name: 'preventOverflow',
-                    options: {
-                        altAxis: true,
-                        tether: false,
-                    },
+            },
+            {
+                name: 'preventOverflow',
+                options: {
+                    altAxis: true,
+                    tether: false,
                 },
-            ],
-        },
-        onCreate(instance) {
-            instance._isFetching = false;
-            instance._src = null;
-            instance._error = null;
-        }
+            },
+        ],
+    },
+    onCreate(instance) {
+        instance._isFetching = false;
+        instance._src = null;
+        instance._error = null;
     }
+    //,
+    // onHidden(instance) {
+    //     instance.destroy()
+    //     currentTarget = ""
+    // }
+}
+
+export default async function ({ addon, console, msg }) {
+
+    /*global tippy*/
+    await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/popper.js")
+    await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/tippy.js")
 
     const triggerTooltip = {
 
-        projects(element) {
+        project(element) {
 
             if (/\d+/.exec(element.href) === null) return
             // if (element.children.length !== 0) return // avoid doing it for links with more inside (eq. project thumbnails)
@@ -41,176 +74,353 @@ export default async function ({ addon, global, console, msg }) {
             // https://api.scratch.mit.edu/projects/
             let tippyOptions = {
                 ...tippyGlobalOptions,
-                onShow(instance) {
-                    if (instance._isFetching || instance._error) {
-                        return;
-                    }
+                async onShow(instance) {
+                    if (instance._isFetching || instance._error) return
                     instance._isFetching = true;
-                    fetch(`https://api.scratch.mit.edu/projects/${id}`).then(response => response.json()).then(data => {
-                        let text1 = document.createElement("span")
-                        text1.textContent = `${data.title}`
-                        text1.style.margin = 0
-                        text1.style.width = "200px"
-                        text1.style.display = "block"
-                        let text2 = document.createElement("span")
-                        text2.textContent = `by ${data.author.username}`
-                        text2.style.width = "200px"
-                        text2.style.display = "block"
-                        let img = document.createElement("img")
-                        img.src = data.image
-                        img.width = 200
-                        img.height = 150
-                        let imgWrapper = document.createElement("div")
-                        let textWrapper = document.createElement("div")
-                        let wrapper = document.createElement("div")
-                        imgWrapper.appendChild(img)
-                        textWrapper.appendChild(text1)
-                        textWrapper.appendChild(text2)
-                        wrapper.appendChild(imgWrapper)
-                        wrapper.appendChild(textWrapper)
-                        instance.setContent(wrapper)
-                    }).catch((error) => {
-                        instance._error = error;
-                        instance.setContent(`Request failed. ${error}`);
-                    })
+
+                    const data = await fetch(`https://api.scratch.mit.edu/projects/${id}`)
+                        .then(response => response.json())
+                        .catch(error => {
+                            instance._error = error;
+                            instance.setContent(`Request failed. ${error}`);
+                            return;
+                        })
+                    
+                    let text1 = document.createElement("div")
+                    let text2 = document.createElement("div")
+                    let img = document.createElement("img")
+                    let imgWrapper = document.createElement("div")
+                    let infoWrapper = document.createElement("div")
+                    let wrapper = document.createElement("div")
+
+                    text1.className = "sa-tooltips-title"
+                    text2.className = "sa-tooltips-author"
+                    img.className = "sa-tooltips-img"
+                    imgWrapper.className = "sa-tooltips-img-wrapper"
+                    infoWrapper.className = "sa-tooltips-info-wrapper"
+                    wrapper.className = "sa-tooltips-wrapper sa-tooltips-project"
+
+                    text1.textContent = `${data.title}`
+                    text2.textContent = `${data.author.username}`
+                    img.src = data.image
+
+                    imgWrapper.appendChild(img)
+                    infoWrapper.appendChild(text1)
+                    infoWrapper.appendChild(text2)
+                    wrapper.appendChild(imgWrapper)
+                    wrapper.appendChild(infoWrapper)
+                    instance.setContent(wrapper)
                 }
             }
 
-            tippy(element, tippyOptions)
+            tippy(element, tippyOptions).show()
 
         },
 
-        studios(element) {
+        studio(element) {
 
-            if (/\d+/.exec(element.href) === null) return
             // if (element.children.length !== 0) return // avoid doing it for links with more inside (eq. studio thumbnails)
             let id = /\d+/.exec(element.href)[0]
             let tippyOptions = {
                 ...tippyGlobalOptions,
-                onShow(instance) {
-                    if (instance._isFetching || instance._error) {
-                        return;
-                    }
+                async onShow(instance) {
+                    if (instance._isFetching || instance._error) return
                     instance._isFetching = true;
-                    fetch(`https://api.scratch.mit.edu/studios/${id}`).then(response => response.json()).then(data => {
-                        let text1 = document.createElement("span")
-                        text1.textContent = `${data.title.trim()}`
-                        text1.style.margin = 0
-                        text1.style.width = "200px"
-                        text1.style.display = "block"
 
-                        let img = document.createElement("img")
-                        img.src = data.image
-                        img.width = 200
-                        img.height = 150
-                        let imgWrapper = document.createElement("div")
-                        let textWrapper = document.createElement("div")
-                        let wrapper = document.createElement("div")
+                    let data = await fetch(`https://api.scratch.mit.edu/studios/${id}`)
+                        .then(response => response.json())
+                        .catch(error => {
+                            instance._error = error;
+                            instance.setContent(`Request failed. ${error}`);
+                            return
+                        })
 
-                        imgWrapper.appendChild(img)
-                        textWrapper.appendChild(text1)
-                        wrapper.appendChild(imgWrapper)
-                        wrapper.appendChild(textWrapper)
-                        instance.setContent(wrapper)
-                    }).catch((error) => {
-                        instance._error = error;
-                        instance.setContent(`Request failed. ${error}`);
-                    })
+                    let text1 = document.createElement("div")
+                    let img = document.createElement("img")
+                    let imgWrapper = document.createElement("div")
+                    let infoWrapper = document.createElement("div")
+                    let wrapper = document.createElement("div")
+
+                    text1.className = "sa-tooltips-title"
+                    img.className = "sa-tooltips-img"
+                    imgWrapper.className = "sa-tooltips-img-wrapper"
+                    infoWrapper.className = "sa-tooltips-info-wrapper"
+                    wrapper.className = "sa-tooltips-wrapper sa-tooltips-studio"
+
+                    text1.textContent = `${data.title.trim()}`
+                    img.src = data.image
+
+                    imgWrapper.appendChild(img)
+                    infoWrapper.appendChild(text1)
+                    wrapper.appendChild(imgWrapper)
+                    wrapper.appendChild(infoWrapper)
+                    instance.setContent(wrapper)
                 }
             }
 
-            tippy(element, tippyOptions) // eslint-disable-line
+            tippy(element, tippyOptions).show()
 
         },
 
-        users(element) {
+        user(element) {
 
-            if (/\/users\/([a-zA-Z0-9-_]+)/.exec(element.href) === null) return
             // if (element.children.length !== 0) return // avoid doing it for links with more inside (eq. user following/followed)
             let id = /\/users\/([a-zA-Z0-9-_]+)/.exec(element.href)[1]
             let tippyOptions = {
                 ...tippyGlobalOptions,
-                onShow(instance) {
-                    if (instance._isFetching || instance._error) {
-                        return;
-                    }
+                async onShow(instance) {
+                    if (instance._isFetching || instance._error) return
                     instance._isFetching = true;
-                    fetch(`https://api.scratch.mit.edu/users/${id}`).then(response => response.json()).then(data => {
-                        let text1 = document.createElement("span")
-                        text1.textContent = `${data.username.trim()}`
-                        text1.style.margin = 0
-                        text1.style.width = "150px"
-                        text1.style.display = "block"
 
-                        let img = document.createElement("img")
-                        img.src = data.profile.images["90x90"].replace("90x90", "150x150")
-                        img.width = 150
-                        img.height = 150
-                        let imgWrapper = document.createElement("div")
-                        let textWrapper = document.createElement("div")
-                        let wrapper = document.createElement("div")
+                    let data = await fetch(`https://api.scratch.mit.edu/users/${id}`)
+                        .then(response => response.json())
+                        .catch(error => {
+                            instance._error = error;
+                            instance.setContent(`Request failed. ${error}`);
+                            return
+                        })
 
-                        imgWrapper.appendChild(img)
-                        textWrapper.appendChild(text1)
-                        wrapper.appendChild(imgWrapper)
-                        wrapper.appendChild(textWrapper)
-                        instance.setContent(wrapper)
-                    }).catch((error) => {
-                        instance._error = error;
-                        instance.setContent(`Request failed. ${error}`);
-                    })
+                    let text1 = document.createElement("div")
+                    let img = document.createElement("img")
+                    let imgWrapper = document.createElement("div")
+                    let infoWrapper = document.createElement("div")
+                    let wrapper = document.createElement("div")
+
+                    text1.className = "sa-tooltips-username"
+                    img.className = "sa-tooltips-img"
+                    imgWrapper.className = "sa-tooltips-img-wrapper"
+                    infoWrapper.className = "sa-tooltips-info-wrapper"
+                    wrapper.className = "sa-tooltips-wrapper sa-tooltips-user"
+
+                    text1.textContent = data.username.trim()
+                    img.src = data.profile.images["90x90"].replace("90x90", "150x150")
+
+                    imgWrapper.appendChild(img)
+                    infoWrapper.appendChild(text1)
+                    wrapper.appendChild(imgWrapper)
+                    wrapper.appendChild(infoWrapper)
+                    instance.setContent(wrapper)
                 }
 
             }
 
-            tippy(element, tippyOptions)
+            tippy(element, tippyOptions).show()
+
+        },
+
+        forumTopic(element) {
+
+            // if (element.children.length !== 0) return // avoid doing it for links with more inside (eq. user following/followed)
+            let id = /\/topic\/(\d+)/.exec(element.href)[1]
+            let tippyOptions = {
+                ...tippyGlobalOptions,
+                async onShow(instance) {
+                    if (instance._isFetching || instance._error) return
+                    instance._isFetching = true;
+
+                    let data = await fetch(`https://scratchdb.lefty.one/v3/forum/topic/info/${id}`)
+                        .then(response => response.json())
+                        .catch(error => {
+                            instance._error = error;
+                            instance.setContent(`Request failed. ${error}`);
+                            return
+                        })
+
+                    if (data.error) {
+                        instance.setContent(`Request failed. ${data.error}`)
+                        console.log(data)
+                        return
+                    }        
+
+                    if (data.deleted) {
+                        instance.setContent("This topic has been deleted. (at least in ScratchDB)")
+                        return
+                    }
+    
+                    let text1 = document.createElement("div")
+                    let text2 = document.createElement("div")
+                    let text3 = document.createElement("div")
+                    let text4 = document.createElement("div")
+                    let infoWrapper = document.createElement("div")
+                    let wrapper = document.createElement("div")
+
+                    text1.className = "sa-tooltips-category"
+                    text2.className = "sa-tooltips-title"
+                    text3.className = "sa-tooltips-post"
+                    text4.className = "sa-tooltips-post-count"
+                    infoWrapper.className = "sa-tooltips-info-wrapper"
+                    wrapper.className = "sa-tooltips-wrapper sa-tooltips-forum-topic"
+
+                    text1.textContent = data.category
+                    text2.textContent = data.title
+                    text4.textContent = msg("post-count", {count: data.post_count})
+
+                    data = await fetch(`https://scratchdb.lefty.one/v3/forum/topic/posts/${id}?o=oldest`)
+                        .then(response => response.json())
+                        .catch(error => false)
+
+                    if (data) text3.textContent = data[0].content.bb.substr(0, 128)
+
+                    infoWrapper.appendChild(text1)
+                    infoWrapper.appendChild(text2)
+                    if (data) infoWrapper.appendChild(text3)
+                    infoWrapper.appendChild(text4)
+                    wrapper.appendChild(infoWrapper)
+                    instance.setContent(wrapper)
+
+                }
+
+            }
+
+            tippy(element, tippyOptions).show()
+
+        },
+
+        forumPost(element) {
+
+            // if (element.children.length !== 0) return // avoid doing it for links with more inside (eq. user following/followed)
+            let id = /post[-\/](\d+)/.exec(element.href)[1]
+            console.log(/post[-\/](\d+)/.exec(element.href))
+            let tippyOptions = {
+                ...tippyGlobalOptions,
+                async onShow(instance) {
+                    if (instance._isFetching || instance._error) return
+                    instance._isFetching = true;
+
+                    let data = await fetch(`https://scratchdb.lefty.one/v3/forum/post/info/${id}`)
+                        .then(response => response.json())
+                        .catch(error => {
+                            instance._error = error;
+                            instance.setContent(`Request failed. ${error}`);
+                            return
+                        })
+
+                    if (data.error) {
+                        instance.setContent(`Request failed. ${data.error}`)
+                        console.log(data)
+                        return
+                    }    
+
+                    if (data.deleted) {
+                        instance.setContent("This post has been deleted. (at least in ScratchDB)")
+                        console.log(data)
+                        return
+                    }
+
+                    let text1 = document.createElement("div")
+                    let text2 = document.createElement("div")
+                    let text3 = document.createElement("div")
+                    let text4 = document.createElement("div")
+                    let infoWrapper = document.createElement("div")
+                    let wrapper = document.createElement("div")
+
+                    text1.className = "sa-tooltips-category"
+                    text2.className = "sa-tooltips-title"
+                    text3.className = "sa-tooltips-author"
+                    text4.className = "sa-tooltips-post"
+                    infoWrapper.className = "sa-tooltips-info-wrapper"
+                    wrapper.className = "sa-tooltips-wrapper sa-tooltips-forum-post"
+
+                    text1.textContent = data.topic.category
+                    text2.textContent = data.topic.title
+                    text3.textContent = data.username + ":"
+                    text4.textContent = data.content.bb.substr(0, 512)
+
+                    infoWrapper.appendChild(text1)
+                    infoWrapper.appendChild(text2)
+                    infoWrapper.appendChild(text3)
+                    infoWrapper.appendChild(text4)
+                    wrapper.appendChild(infoWrapper)
+                    instance.setContent(wrapper)
+
+                }
+
+            }
+
+            tippy(element, tippyOptions).show()
 
         }
+
     }
+
+    let currentTarget
+
+    document.addEventListener("mousemove", ({ clientX: x, clientY: y }) => {
+
+        // const target = document.querySelector("a:hover")
+        const target = document.querySelector("a:hover:not(.sa-tooltips-read)")
+        if (!target || currentTarget === target) return
+        target.classList.add("sa-tooltips-read")
+
+        currentTarget = target
+
+        console.log(target)
+
+        let type = ""
+        for (let regexType of Object.keys(regexDict)) {
+            if (type) break
+            for (let regex of regexDict[regexType]) {
+                if (type) break
+                if (regex.test(target.href)) type = regexType
+            }
+        }
+
+        if (!type) return
+
+        console.log(type)
+
+        if (selectorExclusionDict[type]) {
+            for (let selector of selectorExclusionDict[type]) {
+                if (target.matches(selector)) return
+            }
+        }
+
+        triggerTooltip[type](target)
+    })
+
+}
 
     // This bulk of async is quite inefficient. 
     // If someone knows how to solve this problem better, I would appreciate the help.
 
-    (async () => {
-        while (true) {
-            const element = await addon.tab.waitForElement("a[href^='https://scratch.mit.edu/projects/']", { markAsSeen: true })
-            triggerTooltip.projects(element)
-        }
-    })()
+    // ;(async () => {
+    //     while (true) {
+    //         const element = await addon.tab.waitForElement("a[href^='https://scratch.mit.edu/project/']", { markAsSeen: true })
+    //         triggerTooltip.project(element)
+    //     }
+    // })()
 
-    (async () => {
-        while (true) {
-            const element = await addon.tab.waitForElement("a[href^='/projects/']", { markAsSeen: true })
-            triggerTooltip.projects(element)
-        }
-    })()
+    // ;(async () => {
+    //     while (true) {
+    //         const element = await addon.tab.waitForElement("a[href^='/project/']", { markAsSeen: true })
+    //         triggerTooltip.project(element)
+    //     }
+    // })()
 
-    (async () => {
-        while (true) {
-            const element = await addon.tab.waitForElement("a[href^='https://scratch.mit.edu/studios/']", { markAsSeen: true })
-            triggerTooltip.studios(element)
-        }
-    })()
+    // ;(async () => {
+    //     while (true) {
+    //         const element = await addon.tab.waitForElement("a[href^='https://scratch.mit.edu/studio/']", { markAsSeen: true })
+    //         triggerTooltip.studio(element)
+    //     }
+    // })()
 
-    (async () => {
-        while (true) {
-            const element = await addon.tab.waitForElement("a[href^='/studios/']", { markAsSeen: true })
-            triggerTooltip.studios(element)
-        }
-    })()
+    // ;(async () => {
+    //     while (true) {
+    //         const element = await addon.tab.waitForElement("a[href^='/studio/']", { markAsSeen: true })
+    //         triggerTooltip.studio(element)
+    //     }
+    // })()
 
-    (async () => {
-        while (true) {
-            const element = await addon.tab.waitForElement("a[href^='https://scratch.mit.edu/users/']", { markAsSeen: true })
-            triggerTooltip.users(element)
-        }
-    })()
+    // ;(async () => {
+    //     while (true) {
+    //         const element = await addon.tab.waitForElement("a[href^='https://scratch.mit.edu/user/']", { markAsSeen: true })
+    //         triggerTooltip.user(element)
+    //     }
+    // })()
 
-    (async () => {
-        while (true) {
-            const element = await addon.tab.waitForElement("a[href^='/users/']", { markAsSeen: true })
-            triggerTooltip.users(element)
-        }
-    })()
-
-}
+    // ;(async () => {
+    //     while (true) {
+    //         const element = await addon.tab.waitForElement("a[href^='/user/']", { markAsSeen: true })
+    //         triggerTooltip.user(element)
+    //     }
+    // })()

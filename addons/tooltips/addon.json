@@ -1,7 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "//": "^ Don't forget to remove that before PR!",
   "name": "Tooltips",
-  "description": "Adds tooltips for projects, users, and studios.",
+  "description": "Adds tooltips for projects, users, studios, forum topics, and forum posts. Uses the Scratch API and ScratchDB.",
   "credits": [
     {
       "name": "Hans5958"
@@ -13,14 +14,71 @@
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "base.css",
+      "matches": ["https://scratch.mit.edu/*"]
+    },
+    {
+      "url": "light-scratch3.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "settingMatch": {
+        "id": "theme",
+        "value": "light-scratch3"
+      }
+    },
+    {
+      "url": "dark-scratch3.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "settingMatch": {
+        "id": "theme",
+        "value": "dark-scratch3"
+      }
+    },
+    {
+      "url": "light-scratch2.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "settingMatch": {
+        "id": "theme",
+        "value": "light-scratch2"
+      }
+    },
+    {
+      "url": "dark-scratch2.css",
+      "matches": ["https://scratch.mit.edu/*"],
+      "settingMatch": {
+        "id": "theme",
+        "value": "dark-scratch2"
+      }
+    }
+  ],
   "settings": [
     {
-      "id": "styleAsNormalText",
-      "name": "Style as normal text",
-      "type": "boolean",
-      "default": false
+      "id": "theme",
+      "name": "Theme",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "light-scratch3",
+          "name": "Scratch 3 (light)"
+        },
+        {
+          "id": "dark-scratch3",
+          "name": "Scratch 3 (dark)"
+        },
+        {
+          "id": "light-scratch2",
+          "name": "Scratch 2 (light)"
+        },
+        {
+          "id": "dark-scratch2",
+          "name": "Scratch 2 (dark)"
+        }
+      ],
+      "default": "light-scratch3"
     }
   ],
   "tags": ["community"],
-  "enabledByDefault": false
+  "enabledByDefault": true,
+  "//": "^ Don't forget set enabledByDefault to false!"
 }
