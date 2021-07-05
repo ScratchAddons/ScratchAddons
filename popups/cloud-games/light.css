@@ -11,8 +11,7 @@ body {
 
 .loading,
 .title,
-.title a,
-.username-list > a {
+.title a {
   color: #222;
 }
 
