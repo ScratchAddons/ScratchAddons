@@ -119,10 +119,8 @@ export default class Notifications extends Listenable {
    */
   getAll() {
     return new Promise((resolve) => {
-      chrome.notifications.getAll(
-        /** @param {{ [key: string]: any }} notifications */ (notifications) => {
+      chrome.notifications.getAll( (notifications) => {
           const notifIds = Object.keys(notifications).filter((notifId) => notifId.startsWith(this._addonId));
-          /** @type {{ [key: string]: { [key: string]: any } }} */
           const obj = {};
           for (const notifId of notifIds) {
             obj[notifId] = notifications[notifId];

@@ -1,6 +1,39 @@
 import commentEmojis from "../scratch-notifier/comment-emojis.js";
 import { linkifyTextNode, pingifyTextNode } from "../../libraries/common/cs/fast-linkify.js";
 
+/**
+ * @typedef {{
+ *   id: number;
+ *   parent_id: number;
+ *   commentee_id: number;
+ *   content: string;
+ *   datetime_created: string;
+ *   datetime_modified: string;
+ *   visibility: string;
+ *   author: {
+ *     id: number;
+ *     username: string;
+ *     scratchteam: boolean;
+ *     image: string;
+ *   };
+ *   reply_count: number;
+ * }[]} comments
+ */
+
+/**
+ * @typedef {{
+ *   [key: string]: {
+ *     author: string;
+ *     authorId: number;
+ *     content: string;
+ *     date: string;
+ *     children: string[] | null;
+ *     childOf: string | null;
+ *     scratchTeam: boolean;
+ *   };
+ * }} commentReplies
+ */
+
 export default async (
   /** @type {AddonAPIs.PersistentScript} */ { addon, console, setTimeout, setInterval, clearTimeout, clearInterval }
 ) => {
@@ -15,13 +48,13 @@ export default async (
   let lastDateTime;
   /**
    * @type {{
-   *   messages: import("../../types").Message[];
+   *   messages: any;
    *   lastMsgCount?: number;
    *   username?: string;
    *   ready: boolean;
    *   stMessages?: {
    *     id: number;
-   *     datetime_created: Date;
+   *     datetime_created: string;
    *     message: string;
    *   };
    * }}
@@ -78,7 +111,6 @@ export default async (
     if (data.lastMsgCount === msgCount) return;
     data.lastMsgCount = msgCount;
 
-    /** @type {import("../../types").Message[]} */
     let checkedMessages = [];
     data.ready = false;
 
@@ -138,10 +170,12 @@ export default async (
   const messageListener = (request, sender, sendResponse) => {
     if (!request.scratchMessaging) return;
     const popupRequest = request.scratchMessaging;
-    if (popupRequest === "getData")
+    if (popupRequest === "getData") {
       sendResponse(data.ready ? data : { error: addon.auth.isLoggedIn ? "notReady" : "loggedOut" });
-    else if (popupRequest.postComment) {
+      return true;
+    } else if (popupRequest.postComment) {
       sendComment(popupRequest.postComment).then((status) => sendResponse(status));
+      return true;
     } else if (popupRequest.retrieveComments) {
       const { resourceType, resourceId, commentIds } = popupRequest.retrieveComments;
       retrieveComments(resourceType, resourceId, commentIds)
@@ -152,18 +186,23 @@ export default async (
           console.warn("Comment could not be fetched:", err);
           sendResponse({ failed: true });
         });
+      return true;
     } else if (popupRequest === "markAsRead") {
       addon.account.clearMessages();
+      return true;
     } else if (popupRequest.deleteComment) {
       const { resourceType, resourceId, commentId } = popupRequest.deleteComment;
       deleteComment({ resourceType, resourceId, commentId })
         .then((res) => sendResponse(res))
         .catch((err) => sendResponse(err));
+      return true;
     } else if (popupRequest.dismissAlert) {
       dismissAlert(popupRequest.dismissAlert)
         .then((res) => sendResponse(res))
         .catch((err) => sendResponse(err));
+      return true;
     }
+    return false;
   };
   chrome.runtime.onMessage.addListener(messageListener);
   addon.self.addEventListener("disabled", () => {
@@ -175,6 +214,9 @@ export default async (
    * @param {string} resourceType
    * @param {number} resourceId
    * @param {number[]} commentIds
+   * @param {commentReplies} commentsObj
+   *
+   * @returns {Promise<commentReplies>}
    */
   async function retrieveComments(resourceType, resourceId, commentIds, page = 1, commentsObj = {}) {
     if (resourceType === "project" || resourceType === "gallery") {
@@ -210,6 +252,7 @@ export default async (
         // This is sometimes null for deleted comments
         if (json === null) continue;
         const parentId = json.parent_id || commentId;
+        /** @type {commentReplies} */
         const childrenComments = {};
 
         let parentComment;
@@ -232,21 +275,22 @@ export default async (
          * Note: we need to check replies for all parent comments, reply_count doesn't work properly.
          *
          * @param {number} offset
+         *
+         * @returns {Promise<comments>}
          */
         const getReplies = async (offset) => {
           const repliesRes = await fetch(getRepliesUrl(parentId, offset));
           if (!repliesRes.ok) return [];
-          const repliesJson = await repliesRes.json();
-          return repliesJson;
+          return repliesRes.json();
         };
 
+        /** @type {comments} */
         const replies = [];
         let lastRepliesLength = 40;
         let offset = 0;
         while (lastRepliesLength === 40) {
           const newReplies = await getReplies(offset);
           newReplies.forEach((c) => replies.push(c));
-          console.log(replies)
           lastRepliesLength = newReplies.length;
           offset += 40;
         }
@@ -270,9 +314,13 @@ export default async (
             scratchTeam: reply.author.scratchteam,
           };
         }
-        for (const childCommentId of Object.keys(childrenComments)) {
-          commentsObj[childCommentId] = childrenComments[childCommentId];
+        for (const childCommentId in childrenComments) {
+          if ({}.hasOwnProperty.call(childrenComments, childCommentId)) {
+            commentsObj[childCommentId] = childrenComments[childCommentId];
+          }
         }
+
+        console.log(childrenComments);
 
         commentsObj[`${resourceType[0]}_${parentId}`] = {
           author: parentComment.author.username,
@@ -301,6 +349,7 @@ export default async (
       const parentComment = commentChain.querySelector("div");
       const parentId = Number(parentComment.getAttribute("data-comment-id"));
 
+      /** @type {commentReplies} */
       const childrenComments = {};
       const children = commentChain.querySelectorAll("li.reply:not(.removed)");
       for (const child of children) {
@@ -343,8 +392,10 @@ export default async (
           childOf: null,
           scratchTeam: parentAuthor.includes("*"),
         };
-        for (const childCommentId of Object.keys(childrenComments)) {
-          commentsObj[childCommentId] = childrenComments[childCommentId];
+        for (const childCommentId in childrenComments) {
+          if ({}.hasOwnProperty.call(childrenComments, childCommentId)) {
+            commentsObj[childCommentId] = childrenComments[childCommentId];
+          }
         }
       }
     }
@@ -363,8 +414,9 @@ export default async (
     }
   }
 
+  /** @param {string | Node} value */
   function fixCommentContent(value) {
-    const shouldLinkify = scratchAddons.localState.addonsEnabled["more-links"] === true;
+    const shouldLinkify = scratchAddons.localState?.addonsEnabled["more-links"] === true;
     let node;
     if (value instanceof Node) {
       // profile
@@ -376,14 +428,14 @@ export default async (
     }
     for (let i = node.childNodes.length; i--; ) {
       const item = node.childNodes[i];
-      item.textContent = item.textContent.replace(/\n/g, "");
+      item.textContent = item?.textContent?.replace(/\n/g, "");
       if (item instanceof Text && item.textContent === "") {
         item.remove();
-      } else if (item instanceof HTMLAnchorElement && item.getAttribute("href").startsWith("/")) {
+      } else if (item instanceof HTMLAnchorElement && item.getAttribute("href")?.startsWith("/")) {
         item.href = "https://scratch.mit.edu" + item.getAttribute("href");
       } else if (item instanceof HTMLImageElement) {
         const splitString = item.src.split("/");
-        const imageName = splitString[splitString.length - 1];
+        const imageName = splitString[splitString.length - 1] || "";
         if (commentEmojis[imageName]) item.replaceWith(commentEmojis[imageName]);
       }
     }
@@ -394,15 +446,25 @@ export default async (
     return node.innerHTML;
   }
 
+  /**
+   * @param {{
+   *   resourceType: string;
+   *   resourceId: number;
+   *   content: string;
+   *   parent_id: number;
+   *   commentee_id: number;
+   *   commenteeUsername: string;
+   * }} arg0
+   */
   async function sendComment({ resourceType, resourceId, content, parent_id, commentee_id, commenteeUsername }) {
     if (resourceType === "project" || resourceType === "gallery") {
       const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
+      const headers = new Headers();
+      headers.append("content-type", "application/json");
+      headers.append("x-csrftoken", addon.auth.csrfToken || "");
+      headers.append("x-token", addon.auth.xToken || "");
       const res = await fetch(`https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}?sareferer`, {
-        headers: {
-          "content-type": "application/json",
-          "x-csrftoken": addon.auth.csrfToken,
-          "x-token": addon.auth.xToken,
-        },
+        headers,
         body: JSON.stringify({ content, parent_id, commentee_id }),
         method: "POST",
       });
@@ -428,7 +490,7 @@ export default async (
       // For some weird reason, this only works with XHR in Chrome...
       const xhr = new XMLHttpRequest();
       xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/?sareferer`, true);
-      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
+      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken || "");
       xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
 
       xhr.onload = function () {
@@ -442,7 +504,7 @@ export default async (
               const content = fixCommentContent(dom.querySelector(".content"));
               resolve({ commentId, username: addon.auth.username, userId: addon.auth.userId, content });
             } else if (error) {
-              const json = JSON.parse(error.textContent);
+              const json = JSON.parse(error.textContent || "");
               resolve({
                 error: json.error,
                 muteStatus: json.status?.mute_status || null,
@@ -458,17 +520,18 @@ export default async (
     });
   }
 
+  /** @param {{ resourceType: string; resourceId: number; commentId: number }} arg0 */
   async function deleteComment({ resourceType, resourceId, commentId }) {
     if (resourceType === "project" || resourceType === "gallery") {
       const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
+      const headers = new Headers();
+      headers.append("content-type", "application/json");
+      headers.append("x-csrftoken", addon.auth.csrfToken || "");
+      headers.append("x-token", addon.auth.xToken || "");
       const res = await fetch(
         `https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}/comment/${commentId}?sareferer`,
         {
-          headers: {
-            "content-type": "application/json",
-            "x-csrftoken": addon.auth.csrfToken,
-            "x-token": addon.auth.xToken,
-          },
+          headers,
           method: "DELETE",
         }
       );
@@ -478,7 +541,7 @@ export default async (
     return new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
       xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/?sareferer`, true);
-      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
+      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken || "");
       xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
 
       xhr.onload = function () {

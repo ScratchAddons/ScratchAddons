@@ -1,4 +1,4 @@
-export default /** @param {import("../../types").Injectable} */ ({ addon, console }) => {
+export default (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   let interval, injected;
 
   addon.self.addEventListener("disabled", () => {

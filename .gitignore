@@ -1,3 +1,5 @@
+jsconfig.json
+
 # Files created during packaging
 .manifest.js.bak
 .dist

@@ -2,7 +2,7 @@
 export default async (/** @type {AddonAPIs.Userscript} */ { addon, console }) => {
   function getSelectionBBCode() {
     var selection = window.getSelection();
-    if (Number(selection?.rangeCount) > 0) {
+    if (selection?.rangeCount) {
       // if something is selected
       let range = selection.getRangeAt(0);
       var clonedSelection = range.cloneContents();

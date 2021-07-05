@@ -46,23 +46,14 @@ const getArgumentId = (index) => `arg${index}`;
 const getNamesIdsDefaults = (
   /** @type {blockData} */
   blockData
-) => [
-  blockData.args,
-  blockData.args.map(
-    /**
-     * @param {any} _
-     * @param {number} i
-     */ (_, i) => getArgumentId(`${i}`)
-  ),
-  blockData.args.map(() => ""),
-];
+) => [blockData.args, blockData.args.map((_, i) => getArgumentId(`${i}`)), blockData.args.map(() => "")];
 
 /**
  * Adds a Scratch Addons block.
  *
  * @param {string} proccode - The code displayed to the user.
  * @param {string[]} args - The block argument names.
- * @param {(args: { [key: string]: string | boolean | number }) => any} handler - The handler.
+ * @param {(args: { [key: string]: string | boolean | number }) => void} handler - The handler.
  * @param {boolean} [hide] - Whether to hide the block from the block palette.
  */
 export const addBlock = (proccode, args, handler, hide = false) => {
@@ -94,7 +85,6 @@ const generateBlockXML = () => {
   let xml = "";
   for (const proccode of Object.keys(customBlocks)) {
     /** @type {blockData} */
-    //@ts-expect-error -- It's inpossible for it to be undefined.
     const blockData = customBlocks[proccode];
     if (blockData.hide) continue;
     const [names, ids, defaults] = getNamesIdsDefaults(blockData);

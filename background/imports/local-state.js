@@ -20,7 +20,7 @@ class StateProxy {
    * @param {{ [key: string]: any }} target
    * @param {string} key
    *
-   * @returns {{ [key: string]: any } | string}
+   * @returns {any}
    */
   get(target, key) {
     if (key === "_target") return target;

@@ -8,8 +8,14 @@ const vue = new Vue({
     screenshotPath: "../../images/screenshots/permissions-dark.png",
   },
   methods: {
-    msg(message, ...param) {
-      return chrome.i18n.getMessage(message, ...param);
+    /**
+     *
+     * @param {string} message
+     * @param  {{[key: string]:string}} placeholders
+     * @returns
+     */
+    msg(message, placeholders) {
+      return chrome.i18n.getMessage(message, placeholders);
     },
   },
 });

@@ -1224,7 +1224,7 @@ export default class DevTools {
   /**
    * Returns a Set of the top blocks in this workspace / sprite.
    *
-   * @returns {Set<any>} Set of top blocks.
+   * @returns {Set<string>} Set of top blocks.
    */
   getTopBlockIDs() {
     let wksp = this.utils.getWorkspace();

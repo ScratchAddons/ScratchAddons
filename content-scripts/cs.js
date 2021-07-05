@@ -8,7 +8,6 @@ try {
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
 
 let receivedResponse = false;
-/** @param {any} request */
 const onMessageBackgroundReady = (request) => {
   if (request === "backgroundListenerReady" && !receivedResponse) {
     chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse);
@@ -26,7 +25,7 @@ chrome.runtime.onMessage.addListener(onMessageBackgroundReady);
  *   addonsWithUserstyles: {
  *     addonId: string;
  *     styles: string[];
- *     cssVariables: { name: string; value: import("../types").CSSManipulator }[];
+ *     cssVariables: { name: string; value: any }[];
  *     injectAsStyleElt: boolean;
  *     index: number;
  *   }[];
@@ -51,13 +50,6 @@ chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onRes
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
 const promisify =
-  /**
-   * @param {(...args: any[]) => any} callbackFn
-   *
-   * @returns {(...args: any[]) => Promise<any>}
-   */
-
-
     (callbackFn) =>
     (...args) =>
       new Promise((resolve) => callbackFn(...args, resolve));
@@ -178,7 +170,7 @@ function addStyle(addon) {
   const addonStyles = allStyles.filter((el) => el.getAttribute("data-addon-id") === addon.addonId);
 
   /**
-   * @param {HTMLStyleElement} el
+   * @param {HTMLStyleElement | HTMLLinkElement} el
    * @param {number} index
    */
   const appendByIndex = (el, index) => {
@@ -257,7 +249,7 @@ const textColorLib = __scratchAddonsTextColor;
  *   styles: string[];
  *   cssVariables: {
  *     name: string;
- *     value: import("../types").CSSManipulator;
+ *     value: any;
  *   }[];
  *   injectAsStyleElt: boolean;
  *   index: number;
@@ -289,7 +281,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
    * Set variables for customCssVariables.
    *
    * @param {string} addonId
-   * @param {import("../types").CSSManipulator | string} [obj]
+   * @param {any} [obj]
    *
    * @returns {string}
    */
@@ -360,7 +352,7 @@ function waitForDocumentHead() {
  *   addonsWithUserstyles: {
  *     addonId: string;
  *     styles: string[];
- *     cssVariables: { name: string; value: import("../types").CSSManipulator }[];
+ *     cssVariables: { name: string; value: any }[];
  *     injectAsStyleElt: boolean;
  *     index: number;
  *   }[];
@@ -551,7 +543,7 @@ const showBanner = () => {
             target: "_blank",
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
-        ][Number(i) - 1] || ""
+        ][(i) - 1] || ""
     ),
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {

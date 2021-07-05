@@ -22,7 +22,7 @@ class StateProxy {
    * @param {{ [key: string]: any }} target
    * @param {string} key
    *
-   * @returns {{ [key: string]: any } | string}
+   * @returns {any}
    */
   get(target, key) {
     if (key === "_target") return target;
@@ -59,7 +59,7 @@ function messageForAllTabs(message) {
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach(
       (tab) =>
-        (tab.url || (!tab.url && typeof browser !== "undefined")) && chrome.tabs.sendMessage(Number(tab.id), message)
+        (tab.url || (!tab.url && typeof browser !== "undefined")) && chrome.tabs.sendMessage(tab.id || 0, message)
     )
   );
 }

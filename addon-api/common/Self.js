@@ -14,7 +14,6 @@ export default class Self extends Listenable {
    */
   constructor(addonObj, info) {
     super();
-    /** @protected */
     this._addonId = info.id; // In order to receive fireEvent messages from background
     this.id = info.id;
     /** @protected */

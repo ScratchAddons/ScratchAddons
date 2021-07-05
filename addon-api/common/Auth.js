@@ -4,7 +4,6 @@ import Listenable from "./Listenable.js";
 export default class Auth extends Listenable {
   constructor() {
     super();
-    /** @private */
     this._addonId = "";
   }
   /**

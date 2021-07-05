@@ -11,7 +11,6 @@ import BackgroundLocalizationProvider from "./l10n.js";
   const useDefault = scratchAddons.l10n.locale.startsWith("en");
   for (const folderName of folderNames) {
     if (folderName.startsWith("//")) continue;
-    /** @type {import("../types").AddonManifest} */
     const manifest = await (await fetch(`/addons/${folderName}/addon.json`)).json();
     if (!useDefault) {
       manifest._english = {};
@@ -33,8 +32,6 @@ import BackgroundLocalizationProvider from "./l10n.js";
       }
     }
     for (const propName of ["userscripts", "userstyles"]) {
-      /** @type {import("../types").Injectable[]} */
-      //@ts-expect-error -- TS doesn't realize there's a limited set of values for `propName`
       const injectables = manifest[propName] || [];
       for (const injectable of injectables) {
         const { matches } = injectable;

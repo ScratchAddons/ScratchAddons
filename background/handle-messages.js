@@ -142,11 +142,7 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
   if (request === "getMsgCount") {
     (async () => {
       const count = await scratchAddons.methods.getMsgCount?.();
-      chrome.tabs.sendMessage(
-        Number(sender.tab?.id),
-        { setMsgCount: { count } },
-        { frameId: sender.tab?.frameId ?? 0 }
-      );
+      chrome.tabs.sendMessage(sender.tab?.id || 0, { setMsgCount: { count } }, { frameId: sender.tab?.frameId ?? 0 });
     })();
   }
 });

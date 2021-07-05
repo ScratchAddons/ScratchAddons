@@ -10,8 +10,7 @@ function unsupportedBrowser() {
 if (unsupportedBrowser()) {
   chrome.runtime.onMessage.addListener(function (request, sender) {
     if (request === "checkIfUnsupported") {
-      if (sender.tab)
-        chrome.tabs.update(Number(sender.tab.id), { url: "https://scratchaddons.com/unsupported-browser" });
+      if (sender.tab) chrome.tabs.update(sender.tab.id, { url: "https://scratchaddons.com/unsupported-browser" });
       else chrome.tabs.create({ url: "https://scratchaddons.com/unsupported-browser" });
     }
   });

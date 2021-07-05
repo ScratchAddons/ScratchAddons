@@ -230,7 +230,7 @@ export default class Tab extends Listenable {
   /**
    * Gets the hashed class name for a Scratch stylesheet class name.
    *
-   * @param {...any} args Unhashed class names.
+   * @param {...string} args Unhashed class names.
    *
    * @returns {string} Hashed class names.
    */

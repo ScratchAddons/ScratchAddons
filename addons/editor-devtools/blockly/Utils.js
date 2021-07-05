@@ -9,7 +9,7 @@ export default class Utils {
     /**
      * Scratch Virtual Machine.
      *
-     * @type {null | any}
+     * @type {any}
      */
     this.vm = this.addon.tab.traps.vm;
     // this._myFlash = { block: null, timerID: null, colour: null };

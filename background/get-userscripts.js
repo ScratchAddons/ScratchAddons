@@ -1,5 +1,5 @@
 chrome.runtime.onMessage.addListener(function (request, sender) {
-  if (request.replaceTabWithUrl) chrome.tabs.update(Number(sender.tab?.id), { url: request.replaceTabWithUrl });
+  if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab?.id || 0, { url: request.replaceTabWithUrl });
 });
 
 function getL10NURLs() {
@@ -21,13 +21,13 @@ scratchAddons.localEvents?.addEventListener("addonDynamicEnable", ({ detail }) =
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(Number(tab.id), "getInitialUrl", { frameId: 0 }, (res) => {
+        chrome.tabs.sendMessage(tab.id || 0, "getInitialUrl", { frameId: 0 }, (res) => {
           if (res) {
             (async () => {
               const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
               if (userscripts.length || userstyles.length) {
                 chrome.tabs.sendMessage(
-                  Number(tab.id),
+                  tab.id || 0,
                   {
                     dynamicAddonEnabled: {
                       scripts: userscripts,
@@ -53,7 +53,7 @@ scratchAddons.localEvents?.addEventListener("addonDynamicDisable", ({ detail }) 
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(Number(tab.id), { dynamicAddonDisable: { addonId } }, { frameId: 0 });
+        chrome.tabs.sendMessage(tab.id || 0, { dynamicAddonDisable: { addonId } }, { frameId: 0 });
       }
     })
   );
@@ -63,12 +63,12 @@ scratchAddons.localEvents?.addEventListener("updateUserstylesSettingsChange", ({
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(Number(tab.id), "getInitialUrl", { frameId: 0 }, (res) => {
+        chrome.tabs.sendMessage(tab.id || 0, "getInitialUrl", { frameId: 0 }, (res) => {
           if (res) {
             (async () => {
               const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
               chrome.tabs.sendMessage(
-                Number(tab.id),
+                tab.id || 0,
                 {
                   updateUserstylesSettingsChange: {
                     scripts: userscripts,
@@ -89,7 +89,7 @@ scratchAddons.localEvents?.addEventListener("updateUserstylesSettingsChange", ({
   );
 });
 
-/** @param {{ addonId: string; url: string; manifest: import("../types").AddonManifest }} param0 */
+/** @param {{ addonId: string; url: string; manifest: any }} param0 */
 async function getAddonData({ addonId, manifest, url }) {
   const promises = [];
 
@@ -143,7 +143,7 @@ async function getContentScriptInfo(url) {
      * @type {{
      *   addonId: string;
      *   styles: string[];
-     *   cssVariables: { name: string; value: import("../types").CSSManipulator }[];
+     *   cssVariables: { name: string; value: any }[];
      *   injectAsStyleElt: boolean;
      *   index: number;
      * }[]}
@@ -185,7 +185,6 @@ const csInfoCache = new Map();
 // However, SA should work just fine even if this event does not trigger
 // (example: on browser startup, with a Scratch page opening on startup).
 chrome.webRequest.onBeforeRequest.addListener(
-  //@ts-expect-error -- It doesn't matter if it's async, the response is never used anyway.
   async (request) => {
     if (!scratchAddons.localState?.allReady) return;
     const identity = createCsIdentity({ tabId: request.tabId, frameId: request.frameId, url: request.url });
@@ -243,8 +242,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (!request.contentScriptReady) return;
   if (scratchAddons.localState?.allReady) {
     const identity = createCsIdentity({
-      tabId: Number(sender.tab?.id),
-      frameId: Number(sender.frameId),
+      tabId: sender.tab?.id || 0,
+      frameId: (sender.frameId||0),
       url: request.contentScriptReady.url,
     });
     const getCacheEntry = () => csInfoCache.get(identity);
@@ -287,7 +286,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.tabs.query({}, (tabs) =>
   tabs.forEach((tab) => {
     if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-      chrome.tabs.sendMessage(Number(tab.id), "backgroundListenerReady");
+      chrome.tabs.sendMessage(tab.id || 0, "backgroundListenerReady");
     }
   })
 );
@@ -320,7 +319,7 @@ const WELL_KNOWN_MATCHERS = {
 // matchesPattern = "*" | regexPattern | Array<wellKnownName | wellKnownMatcher | regexPattern | legacyPattern>
 /**
  * @param {{ url: string }} data
- * @param {import("../types").Injectable} scriptOrStyle
+ * @param {any} scriptOrStyle
  * @param {string} addonId
  */
 function userscriptMatches(data, scriptOrStyle, addonId) {
@@ -352,10 +351,8 @@ function userscriptMatches(data, scriptOrStyle, addonId) {
         return true;
       }
     } else if (Object.prototype.hasOwnProperty.call(WELL_KNOWN_PATTERNS, match)) {
-      //@ts-expect-error -- The previous line ensures it is not undefined.
       if (isScratchOrigin && WELL_KNOWN_PATTERNS[match].test(parsedPathname)) return true;
     } else if (Object.prototype.hasOwnProperty.call(WELL_KNOWN_MATCHERS, match)) {
-      //@ts-expect-error -- The previous line ensures it is not undefined.
       if (isScratchOrigin && WELL_KNOWN_MATCHERS[match](parsedPathname)) return true;
     } else if (urlMatchesLegacyPattern(match, parsedURL)) return true;
   }

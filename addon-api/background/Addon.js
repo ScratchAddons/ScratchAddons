@@ -9,7 +9,7 @@ import Badge from "./Badge.js";
  * @property {Badge} [badge]
  */
 export default class BackgroundScriptAddon extends Addon {
-  /** @param {{ id: any; permissions?: string[] }} info */
+  /** @param {{ id: string; permissions?: string[] }} info */
   constructor(info) {
     super(info);
     const { permissions } = info;

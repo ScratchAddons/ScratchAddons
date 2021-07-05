@@ -12,7 +12,6 @@ scratchAddons.eventTargets = {
 
 const pendingPromises = {};
 
-/** @type {(undefined | ((value: any) => void))[]} */
 pendingPromises.msgCount = [];
 
 const comlinkIframe1 = document.getElementById("scratchaddons-iframe-1");
@@ -61,7 +60,7 @@ const page = {
       }
 
       // Addon specific events, like settings change and self disabled
-      const eventTarget = scratchAddons.eventTargets[info.target]?.find(
+      const eventTarget = scratchAddons.eventTargets[info.target].find(
         /**
          * @param {  | import("../../addon-api/common/Auth").default
          *   | import("../../addon-api/common/Self").default

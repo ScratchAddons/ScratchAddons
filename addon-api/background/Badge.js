@@ -34,12 +34,10 @@ export default class Badge {
   set text(val) {
     val = typeof val === "string" || !val ? val : `${val}`;
     this._text = val;
-    //@ts-expect-error -- The constructor ensures it is not undefined.
     scratchAddons.localState.badges[this._addonId].text = val;
   }
   set color(val) {
     this._color = val;
-    //@ts-expect-error -- The constructor ensures it is not undefined.
     scratchAddons.localState.badges[this._addonId].color = val;
   }
 }

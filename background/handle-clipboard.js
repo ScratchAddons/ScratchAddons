@@ -1,6 +1,6 @@
-/** @param {any} dataURL */
+/** @param {string} dataURL */
 const dataURLToArrayBuffer = function (dataURL) {
-  const byteString = atob(dataURL.split(",")[1]);
+  const byteString = atob(dataURL.split(",")[1]||"");
   const arrayBuffer = new ArrayBuffer(byteString.length);
   const uintArray = new Uint8Array(arrayBuffer);
   for (let i = 0; i < byteString.length; i++) {

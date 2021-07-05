@@ -58,7 +58,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               // This setting was stringified, see #2142
               madeChangesToAddon = true;
               madeAnyChanges = true;
-              const number = Number(settings[option.id]);
+              const number = +(settings[option.id]);
               // Checking if NaN just in case
               const newValue = Number.isNaN(number) ? option.default : number;
               settings[option.id] = newValue;
