@@ -69,7 +69,7 @@ export default async function ({ addon, global, console }) {
       }
     );
   if (isStudio && addon.settings.get("studioCuratorScroll"))
-    commentLoader(addon, "#view", "div > .studio-members:nth-child(2) .studio-members-load-more > button", "curators"); // Only scrolling curators for now
+    commentLoader(addon, "#view", "div > .studio-members:last-child .studio-members-load-more > button", "curators"); // Only scrolling curators for now
   if (isStudio && addon.settings.get("studioActivityScroll"))
     commentLoader(addon, "#view", ".studio-activity > div > button", "activity");
 }
