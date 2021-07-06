@@ -265,18 +265,6 @@ function waitForDocumentHead() {
 }
 
 async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
-  const isStudio = /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/.test(location.pathname);
-  if (isStudio && !pseudoUrl) {
-    await waitForDocumentHead();
-    if (document.querySelector("meta[name='format-detection']")) {
-      // scratch-www studio
-      pseudoUrl = location.href.replace("/studios/", "/studios_www/");
-      receivedResponse = false;
-      chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
-      return;
-    }
-  }
-
   // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   const disabledDynamicAddons = [];
