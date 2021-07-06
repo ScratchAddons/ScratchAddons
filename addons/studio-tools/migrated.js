@@ -37,7 +37,7 @@ export default async ({ addon, console, msg }) => {
     btn.addEventListener("click", () => {
       inputTag.setAttribute("disabled", true);
       cb(inputTag.value.trim());
-      inputTag.setAttribute("disabled", false);
+      inputTag.removeAttribute("disabled");
     });
 
     if (disabledMessage) {
