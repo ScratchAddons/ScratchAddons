@@ -98,6 +98,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
                   isBad: "scratch-messaging/comment-error-filterbot-generic",
                   hasChatSite: "scratch-messaging/comment-error-filterbot-chat",
                   isSpam: "scratch-messaging/comment-error-filterbot-spam",
+                  replyLimitReached: "scratch-messaging/comment-error-reply-limit",
                   // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
                   500: "scratch-messaging/comment-error-down",
                   503: "scratch-messaging/comment-error-down",
