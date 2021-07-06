@@ -82,7 +82,6 @@
         "https://scratch.mit.edu/mystuff/",
         "https://scratch.mit.edu/users/*",
         "https://scratch.mit.edu/classes/*",
-        "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/projects/*/remixes/",
         "https://scratch.mit.edu/projects/*/studios/",
         "https://scratch.mit.edu/projects/*/remixtree/",
@@ -107,7 +106,6 @@
         "https://scratch.mit.edu/mystuff/",
         "https://scratch.mit.edu/users/*",
         "https://scratch.mit.edu/classes/*",
-        "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/projects/*/remixes/",
         "https://scratch.mit.edu/projects/*/studios/",
         "https://scratch.mit.edu/projects/*/remixtree/",
@@ -130,7 +128,7 @@
         "https://scratch.mit.edu/projects/*/",
         "https://scratch.mit.edu/projects/*/editor/",
         "https://scratch.mit.edu/projects/*/fullscreen/",
-        "https://scratch.mit.edu/studios_www/*",
+        "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/explore/*",
         "https://scratch.mit.edu/search/*",
         "https://scratch.mit.edu/ideas/",
@@ -185,12 +183,8 @@
       "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/classes/*/"]
     },
     {
-      "url": "studio.css",
-      "matches": ["https://scratch.mit.edu/studios/*"]
-    },
-    {
       "url": "scratchr2_comments.css",
-      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/studios/*"]
+      "matches": ["https://scratch.mit.edu/users/*/"]
     },
     {
       "url": "remixtree.css",
@@ -223,7 +217,6 @@
         "https://scratch.mit.edu/mystuff/",
         "https://scratch.mit.edu/users/*",
         "https://scratch.mit.edu/classes/*",
-        "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/projects/*/remixes/",
         "https://scratch.mit.edu/projects/*/studios/",
         "https://scratch.mit.edu/projects/*/remixtree/",
@@ -248,7 +241,7 @@
         "https://scratch.mit.edu/projects/*/",
         "https://scratch.mit.edu/projects/*/editor/",
         "https://scratch.mit.edu/projects/*/fullscreen/",
-        "https://scratch.mit.edu/studios_www/*",
+        "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/explore/*",
         "https://scratch.mit.edu/search/*",
         "https://scratch.mit.edu/ideas/",

@@ -24,14 +24,8 @@ export default async function ({ addon }) {
   const apiUrlPrefix =
     "https://api.scratch.mit.edu/studios/" + /[0-9]+/.exec(location.pathname)[0] + "/projects/?limit=40&offset=";
   const initialDelta = 100;
-  if (addon.tab.clientVersion === "scratch-www") {
-    const countElement = await addon.tab.waitForElement(".studio-tab-nav > a:first-child .tab-count");
-    countProjects(apiUrlPrefix, 0, initialDelta, function (count) {
-      countElement.innerText = `(${count})`;
-    });
-  } else {
-    countProjects(apiUrlPrefix, 0, initialDelta, function (count) {
-      document.querySelector("[data-count=projects]").innerText = count;
-    });
-  }
+  const countElement = await addon.tab.waitForElement(".studio-tab-nav > a:first-child .tab-count");
+  countProjects(apiUrlPrefix, 0, initialDelta, function (count) {
+    countElement.innerText = `(${count})`;
+  });
 }

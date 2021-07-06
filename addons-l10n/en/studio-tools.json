@@ -1,10 +1,6 @@
 {
-  "studio-tools/ipr": "Invite/promote/remove curators",
-  "studio-tools/promote": "Promote curator",
-  "studio-tools/remove": "Remove curator",
   "studio-tools/promote-new": "Promote Curators",
   "studio-tools/remove-new": "Remove Curators",
-  "studio-tools/leave": "Leave studio",
   "studio-tools/leave-new": "Leave Studio",
   "studio-tools/username": "Username",
   "studio-tools/promote-btn": "Promote",

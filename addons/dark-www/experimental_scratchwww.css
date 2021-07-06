@@ -237,6 +237,7 @@ body:not(.sa-body-editor) .select select option,
 }
 
 .project-info-alert,
+.alert-msg,
 .monitor_label_ci1ok, /* for some strange reason, variable names inherit their color from the body, unlike list title names */
 .monitor_list-empty_1UKsB {
   color: #575e75;
