@@ -76,6 +76,12 @@
         }
       ],
       "default": "light-scratch3"
+    },
+    {
+      "id": "forceAll",
+      "name": "Force tooltips on all possible links",
+      "type": "boolean",
+      "default": false
     }
   ],
   "tags": ["community"],

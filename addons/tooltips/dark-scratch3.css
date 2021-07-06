@@ -1,4 +1,4 @@
-.sa-tooltips-wrapper .sa-tooltips-info-wrapper {
+.tippy-box[data-theme="sa-tooltips"] .tippy-content {
   font-size: 0.923em;
   line-height: 1.2em;
   font-weight: bold;

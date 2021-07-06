@@ -1,3 +1,7 @@
+/* =========================================================
+                         TIPPY BASE
+========================================================== */
+
 .tippy-box[data-animation="fade"][data-state="hidden"] {
   opacity: 0;
 }
@@ -84,43 +88,107 @@
   position: relative;
   padding: 5px 9px;
   z-index: 1;
-  text-shadow: none
+  text-shadow: none;
+}
+
+/* =========================================================
+                     TIPPY LIGHT THEME
+========================================================= */
+
+body[data-sa-tooltips-theme^="light"] .tippy-box[data-theme="sa-tooltips"] {
+  color: #26323d;
+  box-shadow: 0 0 20px 4px rgba(154, 161, 177, 0.15), 0 4px 80px -8px rgba(36, 40, 47, 0.25),
+    0 4px 4px -2px rgba(91, 94, 105, 0.15);
+  background-color: #fff;
+  font-size: inherit
+}
+
+body[data-sa-tooltips-theme^="light"]
+  .tippy-box[data-theme="sa-tooltips"][data-placement^="top"]
+  > .tippy-arrow:before {
+  border-top-color: #fff;
+}
+
+body[data-sa-tooltips-theme^="light"]
+  .tippy-box[data-theme="sa-tooltips"][data-placement^="bottom"]
+  > .tippy-arrow:before {
+  border-bottom-color: #fff;
+}
+
+body[data-sa-tooltips-theme^="light"]
+  .tippy-box[data-theme="sa-tooltips"][data-placement^="left"]
+  > .tippy-arrow:before {
+  border-left-color: #fff;
+}
+
+body[data-sa-tooltips-theme^="light"]
+  .tippy-box[data-theme="sa-tooltips"][data-placement^="right"]
+  > .tippy-arrow:before {
+  border-right-color: #fff;
+}
+
+body[data-sa-tooltips-theme^="light"] .tippy-box[data-theme="sa-tooltips"] > .tippy-backdrop {
+  background-color: #fff;
+}
+
+body[data-sa-tooltips-theme^="light"] .tippy-box[data-theme="sa-tooltips"] > .tippy-svg-arrow {
+  fill: #fff;
+}
+
+/* =========================================================
+                  BASE TOOLTIP STYLESHEET
+========================================================= */
+
+.tippy-box[data-theme="sa-tooltips"] {
+  font-size: var(--sa-tooltips-font-size)
 }
 
 .sa-tooltips-wrapper {
-  margin: 0.25rem
+  margin: 0.25rem;
 }
 
 .sa-tooltips-project .sa-tooltips-title,
 .sa-tooltips-studio .sa-tooltips-title {
-	margin: 0;
-	width: 200px;
-	display: block;
+  margin: 0;
+  width: 200px;
+  display: block;
 }
 
 .sa-tooltips-user .sa-tooltips-username {
   margin: 0;
   width: 150px;
-  display: block
+  display: block;
 }
 
 .sa-tooltips-project .sa-tooltips-author {
-	width: 200px;
-	display: block;
+  width: 200px;
+  display: block;
 }
 
 .sa-tooltips-project .sa-tooltips-img {
-	width: 200px;
-	height: 150px
+  width: 200px;
+  height: 150px;
 }
 
 .sa-tooltips-studio .sa-tooltips-img {
-	width: 200px;
-	height: 117.64px
+  width: 200px;
+  height: 117.64px;
 }
 
 .sa-tooltips-user .sa-tooltips-img {
-	width: 150px;
-	height: 150px
+  width: 150px;
+  height: 150px;
 }
 
+/* =========================================================
+                        MINOR FIXES
+========================================================= */
+
+#comments #comment-user.sa-tooltips-read {
+  float: left;
+  margin-right: 10px;
+}
+
+#comments #comment-user.sa-tooltips-read img.avatar {
+  margin-right: 0;
+}

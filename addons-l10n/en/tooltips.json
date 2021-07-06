@@ -1,0 +1,7 @@
+{
+	"tooltips/post-count": "{count} posts",
+	"tooltips/loading": "Loading...",
+	"tooltips/error-request-failed": "Request failed. {error}",
+	"tooltips/error-scratchdb": "Error encountered on ScratchDB. {error}",
+	"tooltips/error-scratchdb-deleted": "This post has been deleted. (at least in ScratchDB)"
+}

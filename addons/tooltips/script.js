@@ -18,47 +18,71 @@ let regexDict = {
 }
 
 let selectorExclusionDict = {
+    all: [
+        "parent! parent! parent! parent! #navigation",    // Navigation bar on the top of the page
+        ".page",                                          // Links to topic page
+        "parent! parent! parent .linksb",                 // Bottom links on forums
+        "parent! parent! #tabs",                          // Tabs (such as the tab on the studio page) (TODO: CHECK ON 3.0 STUDIO UPDATE)
+        ".thumbnail-image",                               // Thumbnail image (3.0)
+        "parent! .thumbnail-title",                       // Thumbnail text (3.0)
+        "parent! .thumb",                                 // Thumbnail image (2.0)
+    ],
+    project: [
+        "parent! parent! .thumb",                         // Thumbnail text (2.0)
+    ],
+    studio: [
+        "parent! parent! .thumb",                         // Thumbnail text (2.0)
+    ],
     user: [
-        ".slider-carousel-control",
-        "[data-control='view-all']"
+        ".slider-carousel-control",                       // Control keys (next and prev) on user pages
+        "[data-control='view-all']",                      // "View all" buttons
+        "parent! parent! parent! parent! .curators",      // Studio curator image (TODO: CHECK ON 3.0 STUDIO UPDATE)
+        "parent! parent! parent! .curators",              // Studio curator text (TODO: CHECK ON 3.0 STUDIO UPDATE)
+        "parent! parent! .thumb.user",                    // Thumbnail text (2.0)
+    ],
+    forumPost: [
+        "parent! .box-head"
     ]
 }
 
-let tippyGlobalOptions = {
-    content: 'Loading...',
-    theme: 'sa-tooltips',
-    allowHTML: true,
-    popperOptions: {
-        strategy: 'fixed',
-        modifiers: [
-            {
-                name: 'flip',
-                options: {
-                    fallbackPlacements: ['bottom'],
-                },
-            },
-            {
-                name: 'preventOverflow',
-                options: {
-                    altAxis: true,
-                    tether: false,
-                },
-            },
-        ],
-    },
-    onCreate(instance) {
-        instance._isFetching = false;
-        instance._src = null;
-        instance._error = null;
-    }
-    //,
-    // onHidden(instance) {
-    //     instance.destroy()
-    //     currentTarget = ""
-    // }
-}
-
 export default async function ({ addon, console, msg }) {
+
+    let tippyGlobalOptions = {
+        content: msg("loading"),
+        theme: 'sa-tooltips',
+        allowHTML: true,
+        popperOptions: {
+            strategy: 'fixed',
+            modifiers: [
+                {
+                    name: 'flip',
+                    options: {
+                        fallbackPlacements: ['bottom'],
+                    },
+                },
+                {
+                    name: 'preventOverflow',
+                    options: {
+                        altAxis: true,
+                        tether: false,
+                    },
+                },
+            ],
+        },
+        onCreate(instance) {
+            instance._isFetching = false;
+            instance._src = null;
+            instance._error = null;
+        }
+        //,
+        // onHidden(instance) {
+        //     instance.destroy()
+        //     currentTarget = ""
+        // }
+    }
+
+    document.body.dataset.saTooltipsTheme = addon.settings.get("theme")
+    document.body.style.setProperty("--sa-tooltips-font-size", window.getComputedStyle(document.body).getPropertyValue('font-size'))
 
     /*global tippy*/
     await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/popper.js")
@@ -82,7 +106,7 @@ export default async function ({ addon, console, msg }) {
                         .then(response => response.json())
                         .catch(error => {
                             instance._error = error;
-                            instance.setContent(`Request failed. ${error}`);
+                            instance.setContent(msg("error-request-failed", { error }));
                             return;
                         })
                     
@@ -131,7 +155,7 @@ export default async function ({ addon, console, msg }) {
                         .then(response => response.json())
                         .catch(error => {
                             instance._error = error;
-                            instance.setContent(`Request failed. ${error}`);
+                            instance.setContent(msg("error-request-failed", { error }));
                             return
                         })
 
@@ -176,7 +200,7 @@ export default async function ({ addon, console, msg }) {
                         .then(response => response.json())
                         .catch(error => {
                             instance._error = error;
-                            instance.setContent(`Request failed. ${error}`);
+                            instance.setContent(msg("error-request-failed", { error }));
                             return
                         })
 
@@ -222,13 +246,13 @@ export default async function ({ addon, console, msg }) {
                         .then(response => response.json())
                         .catch(error => {
                             instance._error = error;
-                            instance.setContent(`Request failed. ${error}`);
+                            instance.setContent(msg("error-request-failed", { error }));
                             return
                         })
 
                     if (data.error) {
                         instance.setContent(`Request failed. ${data.error}`)
-                        console.log(data)
+                        // console.log(data)
                         return
                     }        
 
@@ -280,7 +304,7 @@ export default async function ({ addon, console, msg }) {
 
             // if (element.children.length !== 0) return // avoid doing it for links with more inside (eq. user following/followed)
             let id = /post[-\/](\d+)/.exec(element.href)[1]
-            console.log(/post[-\/](\d+)/.exec(element.href))
+            // console.log(/post[-\/](\d+)/.exec(element.href))
             let tippyOptions = {
                 ...tippyGlobalOptions,
                 async onShow(instance) {
@@ -291,19 +315,19 @@ export default async function ({ addon, console, msg }) {
                         .then(response => response.json())
                         .catch(error => {
                             instance._error = error;
-                            instance.setContent(`Request failed. ${error}`);
+                            instance.setContent(msg("error-request-failed", { error }));
                             return
                         })
 
                     if (data.error) {
-                        instance.setContent(`Request failed. ${data.error}`)
-                        console.log(data)
+                        instance.setContent(msg("error-scratchdb", { error: data.error }))
+                        // console.log(data)
                         return
                     }    
 
                     if (data.deleted) {
-                        instance.setContent("This post has been deleted. (at least in ScratchDB)")
-                        console.log(data)
+                        instance.setContent(msg("error-scratchdb-deleted"))
+                        // console.log(data)
                         return
                     }
 
@@ -345,7 +369,7 @@ export default async function ({ addon, console, msg }) {
 
     let currentTarget
 
-    document.addEventListener("mousemove", ({ clientX: x, clientY: y }) => {
+    document.addEventListener("mousemove", () => {
 
         // const target = document.querySelector("a:hover")
         const target = document.querySelector("a:hover:not(.sa-tooltips-read)")
@@ -354,7 +378,7 @@ export default async function ({ addon, console, msg }) {
 
         currentTarget = target
 
-        console.log(target)
+        // console.log(target)
 
         let type = ""
         for (let regexType of Object.keys(regexDict)) {
@@ -367,60 +391,25 @@ export default async function ({ addon, console, msg }) {
 
         if (!type) return
 
-        console.log(type)
+        // console.log(type)
 
-        if (selectorExclusionDict[type]) {
-            for (let selector of selectorExclusionDict[type]) {
-                if (target.matches(selector)) return
-            }
+        if (!addon.settings.get("forceAll")) {
+
+            let selectorExclusions = [...selectorExclusionDict.all]
+            if (selectorExclusionDict[type]) selectorExclusions.push(...selectorExclusionDict[type])
+    
+            for (let selector of selectorExclusions) {
+                let elementToCheck = target
+                while (selector.startsWith("parent! ")) {
+                    elementToCheck = elementToCheck.parentElement
+                    selector = selector.slice(8)
+                }
+                if (elementToCheck.matches(selector)) return
+            }    
+
         }
 
         triggerTooltip[type](target)
     })
 
 }
-
-    // This bulk of async is quite inefficient. 
-    // If someone knows how to solve this problem better, I would appreciate the help.
-
-    // ;(async () => {
-    //     while (true) {
-    //         const element = await addon.tab.waitForElement("a[href^='https://scratch.mit.edu/project/']", { markAsSeen: true })
-    //         triggerTooltip.project(element)
-    //     }
-    // })()
-
-    // ;(async () => {
-    //     while (true) {
-    //         const element = await addon.tab.waitForElement("a[href^='/project/']", { markAsSeen: true })
-    //         triggerTooltip.project(element)
-    //     }
-    // })()
-
-    // ;(async () => {
-    //     while (true) {
-    //         const element = await addon.tab.waitForElement("a[href^='https://scratch.mit.edu/studio/']", { markAsSeen: true })
-    //         triggerTooltip.studio(element)
-    //     }
-    // })()
-
-    // ;(async () => {
-    //     while (true) {
-    //         const element = await addon.tab.waitForElement("a[href^='/studio/']", { markAsSeen: true })
-    //         triggerTooltip.studio(element)
-    //     }
-    // })()
-
-    // ;(async () => {
-    //     while (true) {
-    //         const element = await addon.tab.waitForElement("a[href^='https://scratch.mit.edu/user/']", { markAsSeen: true })
-    //         triggerTooltip.user(element)
-    //     }
-    // })()
-
-    // ;(async () => {
-    //     while (true) {
-    //         const element = await addon.tab.waitForElement("a[href^='/user/']", { markAsSeen: true })
-    //         triggerTooltip.user(element)
-    //     }
-    // })()
