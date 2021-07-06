@@ -50,7 +50,7 @@
       "default": true
     },
     {
-      "name": "Studio Activities",
+      "name": "Studio Activity",
       "id": "studioActivityScroll",
       "type": "boolean",
       "default": true
