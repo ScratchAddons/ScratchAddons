@@ -15,15 +15,12 @@ async function commentLoader(addon, heightControl, selector, pathname, { yProvid
     if (func && prevScrollDetector) prevScrollDetector.removeEventListener("scroll", func, { passive: true });
     el.style.display = "none";
     prevScrollDetector = scrollDetecter;
-    console.log(yProvider, scrollDetecter);
     func = () => {
       const threshold = yProvider ? yProvider.scrollTop + yProvider.clientHeight : window.scrollY + window.innerHeight;
-      console.log(threshold, document.querySelector(heightControl).offsetHeight - 500);
       if (typeof pathname === "string" && (window.location.pathname.split("/")[3] || "") !== pathname) return;
       if (threshold >= document.querySelector(heightControl).offsetHeight - 500) {
         if (el) {
           el.click();
-          console.log("clicked", el);
         }
       }
     };
