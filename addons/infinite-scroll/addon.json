@@ -32,6 +32,30 @@
       "default": true
     },
     {
+      "name": "Studio Projects",
+      "id": "studioProjectScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Add to Studio Menu",
+      "id": "studioBrowseProjectScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Studio Curators",
+      "id": "studioCuratorScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Studio Activities",
+      "id": "studioActivityScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Messages",
       "id": "messageScroll",
       "type": "boolean",
