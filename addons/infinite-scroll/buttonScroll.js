@@ -22,12 +22,7 @@ async function commentLoader(addon, heightControl, selector, isNewStudioComment)
 
 export default async function ({ addon, global, console }) {
   if (window.location.pathname.split("/")[1] === "studios" && addon.settings.get("studioScroll")) {
-    if (addon.tab.clientVersion === "scratchr2") {
-      if (window.location.pathname.split("/")[3] === "comments")
-        commentLoader(addon, "#content", "#comments > div:nth-child(2) > ul > div");
-    } else {
-      commentLoader(addon, "#view", ".studio-compose-container > .load-more-button", true);
-    }
+    commentLoader(addon, "#view", ".studio-compose-container > .load-more-button", true);
   }
   if (window.location.pathname.split("/")[1] === "users" && addon.settings.get("profileCommentScroll"))
     commentLoader(addon, "#content", "[data-control=load-more]");
