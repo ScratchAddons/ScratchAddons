@@ -48,11 +48,15 @@
 .sa-tooltips-forum-topic .sa-tooltips-author,
 .sa-tooltips-forum-post .sa-tooltips-author {
   padding-top: 0.5em;
-  border-top: 1px solid #88888888;
+  border-top: 1px solid #8888;
   font-weight: bold;
 }
 
 .sa-tooltips-forum-topic .sa-tooltips-info-wrapper > *,
 .sa-tooltips-forum-post .sa-tooltips-info-wrapper > * {
   margin: 0.5em 0;
+}
+
+.sa-tooltips-project .sa-tooltips-author-img {
+  display: none
 }

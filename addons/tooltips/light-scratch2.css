@@ -56,3 +56,7 @@
 .sa-tooltips-forum-post .sa-tooltips-info-wrapper > * {
   margin: 0.5em 0;
 }
+
+.sa-tooltips-project .sa-tooltips-author-img {
+  display: none
+}

@@ -3,5 +3,10 @@
 	"tooltips/loading": "Loading...",
 	"tooltips/error-request-failed": "Request failed. {error}",
 	"tooltips/error-scratchdb": "Error encountered on ScratchDB. {error}",
-	"tooltips/error-scratchdb-deleted": "This post has been deleted. (at least in ScratchDB)"
+	"tooltips/error-scratchdb-deleted": "The post has been deleted. (at least in ScratchDB)",
+	"tooltips/error-no-project": "The project couldn't be found or is private.",
+	"tooltips/error-no-studio": "The studio couldn't be found.",
+	"tooltips/error-no-user": "The user couldn't be found or is private.",
+	"tooltips/error-no-forum-topic": "The topic couldn't be found.",
+	"tooltips/error-no-forum-post": "The post couldn't be found."
 }

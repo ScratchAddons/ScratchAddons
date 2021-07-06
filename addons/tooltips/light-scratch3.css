@@ -1,6 +1,6 @@
 .tippy-box[data-theme="sa-tooltips"] .tippy-content {
   font-size: 0.923em;
-  line-height: 1.2em;
+  line-height: normal;
   font-weight: bold;
 }
 
@@ -51,4 +51,17 @@
 .sa-tooltips-forum-topic .sa-tooltips-info-wrapper > *,
 .sa-tooltips-forum-post .sa-tooltips-info-wrapper > * {
   margin: 0.5em 0;
+}
+
+.sa-tooltips-img-wrapper {
+  margin-bottom: 0.5em;
+}
+
+.sa-tooltips-project .sa-tooltips-author-img {
+  float: left;
+  margin-bottom: 9999px;
+  margin-right: 0.5em;
+  border-radius: 0.25em;
+  width: 2em;
+  height: 2em;
 }

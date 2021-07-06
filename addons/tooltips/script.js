@@ -109,7 +109,14 @@ export default async function ({ addon, console, msg }) {
                             instance.setContent(msg("error-request-failed", { error }));
                             return;
                         })
+
+                    if (data.code) {
+                        if (data.code === "NotFound") instance.setContent(msg("error-no-project"))
+                        else instance.setContent(msg("error-request-failed", { error: data.code }))
+                        return
+                    }    
                     
+                    let imgInfo = document.createElement("img")
                     let text1 = document.createElement("div")
                     let text2 = document.createElement("div")
                     let img = document.createElement("img")
@@ -117,6 +124,7 @@ export default async function ({ addon, console, msg }) {
                     let infoWrapper = document.createElement("div")
                     let wrapper = document.createElement("div")
 
+                    imgInfo.className = "sa-tooltips-author-img"
                     text1.className = "sa-tooltips-title"
                     text2.className = "sa-tooltips-author"
                     img.className = "sa-tooltips-img"
@@ -124,11 +132,13 @@ export default async function ({ addon, console, msg }) {
                     infoWrapper.className = "sa-tooltips-info-wrapper"
                     wrapper.className = "sa-tooltips-wrapper sa-tooltips-project"
 
-                    text1.textContent = `${data.title}`
-                    text2.textContent = `${data.author.username}`
+                    imgInfo.src = data.author.profile.images["32x32"]
+                    text1.textContent = data.title
+                    text2.textContent = data.author.username
                     img.src = data.image
 
                     imgWrapper.appendChild(img)
+                    infoWrapper.appendChild(imgInfo)
                     infoWrapper.appendChild(text1)
                     infoWrapper.appendChild(text2)
                     wrapper.appendChild(imgWrapper)
@@ -159,6 +169,12 @@ export default async function ({ addon, console, msg }) {
                             return
                         })
 
+                    if (data.code) {
+                        if (data.code === "NotFound") instance.setContent(msg("error-no-studio"))
+                        else instance.setContent(msg("error-request-failed", { error: data.code }))
+                        return
+                    }    
+                        
                     let text1 = document.createElement("div")
                     let img = document.createElement("img")
                     let imgWrapper = document.createElement("div")
@@ -171,7 +187,7 @@ export default async function ({ addon, console, msg }) {
                     infoWrapper.className = "sa-tooltips-info-wrapper"
                     wrapper.className = "sa-tooltips-wrapper sa-tooltips-studio"
 
-                    text1.textContent = `${data.title.trim()}`
+                    text1.textContent = data.title.trim()
                     img.src = data.image
 
                     imgWrapper.appendChild(img)
@@ -203,6 +219,12 @@ export default async function ({ addon, console, msg }) {
                             instance.setContent(msg("error-request-failed", { error }));
                             return
                         })
+
+                    if (data.code) {
+                        if (data.code === "NotFound") instance.setContent(msg("error-no-user"))
+                        else instance.setContent(msg("error-request-failed", { error: data.code }))
+                        return
+                    }
 
                     let text1 = document.createElement("div")
                     let img = document.createElement("img")
@@ -251,13 +273,14 @@ export default async function ({ addon, console, msg }) {
                         })
 
                     if (data.error) {
-                        instance.setContent(`Request failed. ${data.error}`)
+                        if (data.error === "TopicNotFoundError") instance.setContent(msg("error-no-forum-topic"));
+                        instance.setContent(msg("error-scratchdb", { error: data.error }));
                         // console.log(data)
                         return
-                    }        
+                    }
 
                     if (data.deleted) {
-                        instance.setContent("This topic has been deleted. (at least in ScratchDB)")
+                        instance.setContent(msg("error-scratchdb-deleted"))
                         return
                     }
     
@@ -320,11 +343,12 @@ export default async function ({ addon, console, msg }) {
                         })
 
                     if (data.error) {
-                        instance.setContent(msg("error-scratchdb", { error: data.error }))
+                        if (data.error === "post not found") instance.setContent(msg("error-no-forum-post"));
+                        instance.setContent(msg("error-scratchdb", { error: data.error }));
                         // console.log(data)
                         return
-                    }    
-
+                    }        
+    
                     if (data.deleted) {
                         instance.setContent(msg("error-scratchdb-deleted"))
                         // console.log(data)
