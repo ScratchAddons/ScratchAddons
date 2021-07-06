@@ -31,9 +31,12 @@ export default async function ({ addon, console }) {
       })();
       break;
 
-    case "studios":
-      linkifyTextNode(document.querySelector("div.studio-description"));
+    case "studios": {
+      const desc = document.querySelector("div.studio-description");
+      if (!desc) break;
+      linkifyTextNode(desc);
       break;
+    }
   }
 
   (async () => {
