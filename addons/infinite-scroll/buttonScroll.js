@@ -57,19 +57,13 @@ export default async function ({ addon, global, console }) {
   if (window.location.pathname.split("/")[1] === "messages" && addon.settings.get("messageScroll"))
     commentLoader(addon, "#view", "#view > div > div.messages-details.inner > section.messages-social > button");
   if (isStudio && addon.settings.get("studioProjectScroll"))
-    commentLoader(addon, "#view", ".studio-projects-grid .studio-projects-load-more > button", "");
+    commentLoader(addon, "#view", ".studio-projects-grid .studio-grid-load-more > button", "");
   if (isStudio && addon.settings.get("studioBrowseProjectScroll"))
-    commentLoader(
-      addon,
-      ".user-projects-modal-grid",
-      ".user-projects-modal-content > .studio-projects-load-more > button",
-      "",
-      {
-        yProvider: ".user-projects-modal-content",
-      }
-    );
+    commentLoader(addon, ".user-projects-modal-grid", ".user-projects-modal-grid .studio-grid-load-more > button", "", {
+      yProvider: ".user-projects-modal-content",
+    });
   if (isStudio && addon.settings.get("studioCuratorScroll"))
-    commentLoader(addon, "#view", "div > .studio-members:last-child .studio-members-load-more > button", "curators"); // Only scrolling curators for now
+    commentLoader(addon, "#view", "div > .studio-members:last-child .studio-grid-load-more > button", "curators"); // Only scrolling curators for now
   if (isStudio && addon.settings.get("studioActivityScroll"))
-    commentLoader(addon, "#view", ".studio-activity > div > button", "activity");
+    commentLoader(addon, "#view", ".studio-activity .studio-grid-load-more > button", "activity");
 }
