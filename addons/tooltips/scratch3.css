@@ -1,6 +1,40 @@
-.tippy-box[data-theme="sa-tooltips"] .tippy-content {
+.sa-tooltips-wrapper {
+  margin: 0.25rem;
+}
+
+.sa-tooltips-studio .sa-tooltips-title {
+  margin: 0;
+  width: 200px;
+}
+
+.sa-tooltips-user .sa-tooltips-username {
+  margin: 0;
+  width: 150px;
+}
+
+.sa-tooltips-project .sa-tooltips-author,
+.sa-tooltips-project .sa-tooltips-title {
+  width: calc(200px - 3em);
+}
+
+.sa-tooltips-project .sa-tooltips-img {
+  width: 200px;
+  height: 150px;
+}
+
+.sa-tooltips-studio .sa-tooltips-img {
+  width: 200px;
+  height: 117.64px;
+}
+
+.sa-tooltips-user .sa-tooltips-img {
+  width: 150px;
+  height: 150px;
+}
+
+.tippy-box[data-theme^="sa-tooltips"] .tippy-content {
   font-size: 0.923em;
-  line-height: normal;
+  line-height: 1.2em;
   font-weight: bold;
 }
 
@@ -10,6 +44,13 @@
 .sa-tooltips-forum-post .sa-tooltips-category {
   color: #aaa;
   font-size: 0.8462em;
+}
+
+.tippy-box[data-theme="sa-tooltips-light"] .sa-tooltips-project .sa-tooltips-author,
+.tippy-box[data-theme="sa-tooltips-light"] .sa-tooltips-forum-topic .sa-tooltips-category,
+.tippy-box[data-theme="sa-tooltips-light"] .sa-tooltips-forum-topic .sa-tooltips-post-count,
+.tippy-box[data-theme="sa-tooltips-light"] .sa-tooltips-forum-post .sa-tooltips-category {
+  color: #575e75;
 }
 
 .sa-tooltips-forum-topic .sa-tooltips-title,
@@ -57,11 +98,18 @@
   margin-bottom: 0.5em;
 }
 
-.sa-tooltips-project .sa-tooltips-author-img {
-  float: left;
+.sa-tooltips-project .sa-tooltips-info-wrapper {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0px;
+  /* grid-template-columns: repeat(2); */
+}
+
+.sa-tooltips-project .sa-tooltips-info-wrapper > .sa-tooltips-author-img {
+  grid-column: 1;
+  grid-row: 1 / span 100;
   margin-right: 0.5em;
-  margin-bottom: 9999px;
-  border-radius: 4px;
+  border-radius: 0.25em;
   width: 2em;
   height: 2em;
 }

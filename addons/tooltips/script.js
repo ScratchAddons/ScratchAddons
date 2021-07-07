@@ -22,26 +22,27 @@ let selectorExclusionDict = {
         "parent! parent! parent! parent! #navigation",    // Navigation bar on the top of the page
         ".page",                                          // Links to topic page
         "parent! parent! parent .linksb",                 // Bottom links on forums
-        "parent! parent! #tabs",                          // Tabs (such as the tab on the studio page) (TODO: CHECK ON 3.0 STUDIO UPDATE)
         ".thumbnail-image",                               // Thumbnail image (3.0)
         "parent! .thumbnail-title",                       // Thumbnail text (3.0)
         "parent! .thumb",                                 // Thumbnail image (2.0)
+        "[href^='#']"                                     // Links that starts with and hash (don't link to another page)
     ],
     project: [
         "parent! parent! .thumb",                         // Thumbnail text (2.0)
     ],
     studio: [
         "parent! parent! .thumb",                         // Thumbnail text (2.0)
+        "parent! #studio-tab-nav"                         // Tabs (such as the tab on the studio page)
     ],
     user: [
         ".slider-carousel-control",                       // Control keys (next and prev) on user pages
         "[data-control='view-all']",                      // "View all" buttons
-        "parent! parent! parent! parent! .curators",      // Studio curator image (TODO: CHECK ON 3.0 STUDIO UPDATE)
-        "parent! parent! parent! .curators",              // Studio curator text (TODO: CHECK ON 3.0 STUDIO UPDATE)
+        "parent! .studio-member-tile",                    // Studio curator image
+        ".studio-member-name",                            // Studio curator text 
         "parent! parent! .thumb.user",                    // Thumbnail text (2.0)
     ],
     forumPost: [
-        "parent! .box-head"
+        "parent! .box-head"                               // Link on the post date 
     ]
 }
 
@@ -81,8 +82,14 @@ export default async function ({ addon, console, msg }) {
         // }
     }
 
-    document.body.dataset.saTooltipsTheme = addon.settings.get("theme")
-    document.body.style.setProperty("--sa-tooltips-font-size", window.getComputedStyle(document.body).getPropertyValue('font-size'))
+    if (addon.settings.get("color-scheme") !== "auto") {
+        tippyGlobalOptions.theme += `-${addon.settings.get("color-scheme")}`
+    } else {
+        // I believe that there's a better way to check if dark-www is turned on.
+        // Please tell me if there is.
+        if (document.querySelector("[data-addon-id=dark-www]")) tippyGlobalOptions.theme += "-dark"
+        else tippyGlobalOptions.theme += "-light"
+    }
 
     /*global tippy*/
     await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/popper.js")

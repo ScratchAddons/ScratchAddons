@@ -20,35 +20,19 @@
       "matches": ["https://scratch.mit.edu/*"]
     },
     {
-      "url": "light-scratch3.css",
+      "url": "scratch2.css",
       "matches": ["https://scratch.mit.edu/*"],
       "settingMatch": {
         "id": "theme",
-        "value": "light-scratch3"
+        "value": "scratch2"
       }
     },
     {
-      "url": "dark-scratch3.css",
+      "url": "scratch3.css",
       "matches": ["https://scratch.mit.edu/*"],
       "settingMatch": {
         "id": "theme",
-        "value": "dark-scratch3"
-      }
-    },
-    {
-      "url": "light-scratch2.css",
-      "matches": ["https://scratch.mit.edu/*"],
-      "settingMatch": {
-        "id": "theme",
-        "value": "light-scratch2"
-      }
-    },
-    {
-      "url": "dark-scratch2.css",
-      "matches": ["https://scratch.mit.edu/*"],
-      "settingMatch": {
-        "id": "theme",
-        "value": "dark-scratch2"
+        "value": "scratch3"
       }
     }
   ],
@@ -59,23 +43,35 @@
       "type": "select",
       "potentialValues": [
         {
-          "id": "light-scratch3",
-          "name": "Scratch 3 (light)"
+          "id": "scratch3",
+          "name": "Scratch 3"
         },
         {
-          "id": "dark-scratch3",
-          "name": "Scratch 3 (dark)"
-        },
-        {
-          "id": "light-scratch2",
-          "name": "Scratch 2 (light)"
-        },
-        {
-          "id": "dark-scratch2",
-          "name": "Scratch 2 (dark)"
+          "id": "scratch2",
+          "name": "Scratch 2"
         }
       ],
-      "default": "light-scratch3"
+      "default": "scratch3"
+    },
+    {
+      "id": "color-scheme",
+      "name": "Color scheme",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "auto",
+          "name": "Auto"
+        },
+        {
+          "id": "light",
+          "name": "Light"  
+        },
+        {
+          "id": "dark",
+          "name": "Dark"
+        }
+      ],
+      "default": "auto"
     },
     {
       "id": "forceAll",
