@@ -59,15 +59,9 @@ export default async function ({ addon, global, console }) {
   if (isStudio && addon.settings.get("studioProjectScroll"))
     commentLoader(addon, "#view", ".studio-projects-grid .studio-grid-load-more > button", "");
   if (isStudio && addon.settings.get("studioBrowseProjectScroll"))
-    commentLoader(
-      addon,
-      ".user-projects-modal-grid",
-      ".user-projects-modal-grid .studio-grid-load-more > button",
-      "",
-      {
-        yProvider: ".user-projects-modal-content",
-      }
-    );
+    commentLoader(addon, ".user-projects-modal-grid", ".user-projects-modal-grid .studio-grid-load-more > button", "", {
+      yProvider: ".user-projects-modal-content",
+    });
   if (isStudio && addon.settings.get("studioCuratorScroll"))
     commentLoader(addon, "#view", "div > .studio-members:last-child .studio-grid-load-more > button", "curators"); // Only scrolling curators for now
   if (isStudio && addon.settings.get("studioActivityScroll"))
