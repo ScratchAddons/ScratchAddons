@@ -1,1 +1,1 @@
-{"pause/pause":"Pausar","pause/@name":"Botón de pausa","pause/@description":"Agrega un botón de pausa al lado de la bandera verde.","pause/@info-programpause":"Para pausar programáticamente un proyecto, use el bloque \"breakpoint\" provisto por el addon \"depurador\"."}
+{"pause/pause":"Pausar","pause/@name":"Botón de pausa"}
