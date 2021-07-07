@@ -1,0 +1,3 @@
+[class*="stage_full-screen"], [class*="stage_green-flag-overlay-wrapper"] {
+    border-radius: 0rem !important;
+}

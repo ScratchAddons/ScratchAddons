@@ -1,0 +1,11 @@
+[class*="stage-wrapper_stage-canvas-wrapper"], [class*="stage_stage"], [class*="stage-header_stage-menu-wrapper"], canvas {
+    width: calc(100vh * 4/3) !important;
+}
+
+[class*="stage-wrapper_stage-canvas-wrapper"], [class*="stage_stage"], canvas {
+    height: 100vh !important;
+}
+
+[class*="stage-wrapper_full-screen"] {
+    padding: 0rem !important;
+}

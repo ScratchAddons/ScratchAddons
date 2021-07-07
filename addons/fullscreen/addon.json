@@ -1,0 +1,127 @@
+{
+  "name": "Enhanced fullscreen",
+  "description": "Adds several fixes and customization options to the project player's fullscreen mode.",
+  "credits": [
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://github.com/lisa-wolfgang"
+    }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "If you hide the toolbar, you'll need to use your browser's back feature to exit fullscreen mode.",
+      "id": "hideToolbarNotice"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Automatically resize to window",
+      "id": "resizeWindow",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Remove unused scrollbar",
+      "id": "hideOverflow",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Automatically toggle browser fullscreen",
+      "id": "browserFullscreen",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Darken background",
+      "id": "darkenBg",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Remove rounded corners",
+      "id": "removeCorners",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Remove border",
+      "id": "removeBorder",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Hide toolbar",
+      "id": "hideToolbar",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "userstyles": [
+    {
+      "url": "resizeWindow.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "resizeWindow",
+        "value": true
+      }
+    },
+    {
+      "url": "hideOverflow.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "hideOverflow",
+        "value": true
+      }
+    },
+    {
+      "url": "darkenBg.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "darkenBg",
+        "value": true
+      }
+    },
+    {
+      "url": "removeCorners.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "removeCorners",
+        "value": true
+      }
+    },
+    {
+      "url": "removeBorder.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "removeBorder",
+        "value": true
+      }
+    },
+    {
+      "url": "hideToolbar.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "hideToolbar",
+        "value": true
+      }
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "browserFullscreen.js",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "browserFullscreen",
+        "value": true
+      }
+    }
+  ],
+  "tags": ["editor", "projectPlayer"],
+  "versionAdded": "1.17.0",
+  "enabledByDefault": false
+}

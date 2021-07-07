@@ -1,0 +1,3 @@
+[class*="stage-wrapper_full-screen"], [class*="stage-header_stage-header-wrapper-overlay"] {
+    background-color: black !important;
+}
