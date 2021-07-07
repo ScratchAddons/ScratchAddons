@@ -11,17 +11,17 @@
   "userscripts": [
     {
       "url": "script.js",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": "*"
     }
   ],
   "userstyles": [
     {
       "url": "base.css",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": "*"
     },
     {
       "url": "scratch2.css",
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": "*",
       "settingMatch": {
         "id": "theme",
         "value": "scratch2"
@@ -29,10 +29,18 @@
     },
     {
       "url": "scratch3.css",
-      "matches": ["https://scratch.mit.edu/*"],
+      "matches": "*",
       "settingMatch": {
         "id": "theme",
         "value": "scratch3"
+      }
+    },
+    {
+      "url": "extended.css",
+      "matches": "*",
+      "settingMatch": {
+        "id": "theme",
+        "value": "extended"
       }
     }
   ],
@@ -49,6 +57,10 @@
         {
           "id": "scratch2",
           "name": "Scratch 2"
+        },
+        {
+          "id": "extended",
+          "name": "Extended"
         }
       ],
       "default": "scratch3"

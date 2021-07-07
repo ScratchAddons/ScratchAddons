@@ -8,5 +8,12 @@
 	"tooltips/error-no-studio": "The studio couldn't be found.",
 	"tooltips/error-no-user": "The user couldn't be found or is private.",
 	"tooltips/error-no-forum-topic": "The topic couldn't be found.",
-	"tooltips/error-no-forum-post": "The post couldn't be found."
+	"tooltips/error-no-forum-post": "The post couldn't be found.",
+	"tooltips/info-views": "{count, plural, zero {No views} one {1 view} other {# views}}",
+	"tooltips/info-loves": "{count, plural, zero {No loves} one {1 love} other {# loves}}",
+	"tooltips/info-favorites": "{count, plural, zero {No favorites} one {1 favorite} other {# favorites}}",
+	"tooltips/info-remixes": "{count, plural, zero {No remixes} one {1 remix} other {# remixes}}",
+	"tooltips/info-origin": "{status} from {country}",
+	"tooltips/info-followers": "{count, plural, zero {No followers} one {1 follower} other {# followers}}",
+	"tooltips/info-following": "{count, plural, zero {No followers} one {1 follower} other {# followers}}"
 }

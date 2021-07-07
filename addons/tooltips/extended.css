@@ -3,13 +3,13 @@
 }
 
 .sa-tooltips-studio-title {
-  margin: 0;
   width: 200px;
 }
 
-.sa-tooltips-user-name {
-  margin: 0;
-  width: 150px;
+.sa-tooltips-project .sa-tooltips-info-wrapper,
+.sa-tooltips-user .sa-tooltips-info-wrapper,
+.sa-tooltips-studio .sa-tooltips-info-wrapper {
+  width: 200px;
 }
 
 .sa-tooltips-project-author,
@@ -18,7 +18,7 @@
 }
 
 .sa-tooltips-project-img {
-  width: 200px;
+  width: 150px;
 }
 
 .sa-tooltips-studio-img {
@@ -26,7 +26,11 @@
 }
 
 .sa-tooltips-user-img {
-  width: 150px;
+  width: 100px;
+}
+
+.tippy-box[data-theme^="sa-tooltips"] {
+  max-width: none !important;
 }
 
 .tippy-box[data-theme^="sa-tooltips"] .tippy-content {
@@ -84,8 +88,21 @@
   margin: .5em 0;
 }
 
-.sa-tooltips-img-wrapper {
+.sa-tooltips-studio .sa-tooltips-img-wrapper {
   margin-bottom: .5em;
+}
+
+.sa-tooltips-project,
+.sa-tooltips-user {
+  display: grid;
+  grid-auto-flow: column;
+  gap: .25em .5em;
+}
+
+.sa-tooltips-project .sa-tooltips-img-wrapper,
+.sa-tooltips-user .sa-tooltips-img-wrapper {
+  grid-column: 1;
+  grid-row: 1 / span 2;
 }
 
 .sa-tooltips-project .sa-tooltips-info-wrapper {
@@ -93,13 +110,53 @@
   grid-auto-flow: column;
   gap: 0px;
   /* grid-template-columns: repeat(2); */
+  margin-top: auto;
 }
 
 .sa-tooltips-project-author-img {
   grid-column: 1;
-  grid-row: 1 / span 100;
+  grid-row: 1 / span 2;
   margin: auto .5em auto 0;
-  border-radius: calc( ( 1em / 0.923 ) * 0.25 );
-  width: calc( ( 1em / 0.923 ) * 2 );
-  height: calc( ( 1em / 0.923 ) * 2 );
+  border-radius: calc((1em / 0.923) * 0.25);
+  width: calc((1em / 0.923) * 2);
+  height: calc((1em / 0.923) * 2);
+}
+
+.sa-tooltips-user .sa-tooltips-info-wrapper {
+  margin-top: auto;
+}
+
+.sa-tooltips-project .sa-tooltips-info-extended-wrapper {
+  width: 200px;
+  font-size: .8462em;
+  font-weight: normal;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-auto-flow: column;
+  margin-bottom: auto;
+}
+
+.sa-tooltips-user .sa-tooltips-info-extended-wrapper {
+  width: 200px;
+  font-size: .8462em;
+  font-weight: normal;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: auto;
+}
+
+.sa-tooltips-user .sa-tooltips-origin {
+  grid-column: 1 / span 2;
+}
+
+.sa-tooltips-project .sa-tooltips-img-wrapper,
+.sa-tooltips-user .sa-tooltips-img-wrapper {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.sa-tooltips-studio,
+.sa-tooltips-forum-post,
+.sa-tooltips-forum-topic {
+  max-width: calc(350px - 18.5px - .5em);
 }
