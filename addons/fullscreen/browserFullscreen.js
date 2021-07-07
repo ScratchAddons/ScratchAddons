@@ -1,3 +1,1 @@
-export default async function ({ addon, global, console }) {
-  
-}
+export default async function ({ addon, global, console }) {}

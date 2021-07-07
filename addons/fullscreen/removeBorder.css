@@ -1,3 +1,4 @@
-[class*="stage_full-screen"], [class*="stage_green-flag-overlay-wrapper"] {
-    border: 0rem !important;
+[class*="stage_full-screen"],
+[class*="stage_green-flag-overlay-wrapper"] {
+  border: 0rem !important;
 }
