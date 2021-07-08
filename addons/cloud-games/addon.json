@@ -11,7 +11,9 @@
   ],
   "popup": {
     "icon": "../../images/icons/cloud.svg",
-    "name": "Games"
+    "name": "Games",
+    "script": "popup.js",
+    "html": "popup.html"
   },
   "tags": ["popup", "recommended"],
   "versionAdded": "1.1.0",

@@ -9,10 +9,8 @@ body {
   color: #222;
 }
 
-.title {
-  color: #222;
-}
-
+.loading,
+.title,
 .title a {
   color: #222;
 }
