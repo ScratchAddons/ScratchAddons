@@ -1,0 +1,62 @@
+{
+  "name": "Customizable profile picture border",
+  "description": "Allows you to hide or change the border around profile pictures in comments.",
+  "tags": ["community", "theme"],
+  "userstyles": [
+	{
+	  "url": "hide_border.css",
+	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+	  "settingMatch": {
+		"id": "hide-border",
+		"value": true
+	  }
+	},
+	{
+	  "url": "border_color.css",
+	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+	  "settingMatch": {
+		"id": "hide-border",
+		"value": false
+	  }
+	},
+	{
+	  "url": "border_bg.css",
+	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+	  "settingMatch": {
+		"id": "border-bg",
+		"value": true
+	  }
+	}
+  ],
+  "settings": [
+    {
+      "name": "Hide border",
+      "id": "hide-border",
+      "type": "boolean",
+      "default": false
+    },
+	{
+      "name": "Fill border inside avatar",
+      "id": "border-bg",
+      "type": "boolean",
+      "default": false
+    },
+	{
+      "name": "Border color",
+      "id": "border-color",
+      "type": "color",
+	  "allowTransparency": true,
+      "default": "#4d97ff40"
+    }
+  ],
+  "credits": [
+    {
+      "name": "CST1229"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "injectAsStyleElt": true,
+  "enabledByDefault": false
+}
