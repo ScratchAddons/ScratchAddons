@@ -1,7 +1,6 @@
 export default async ({ addon, console }) => {
   if (!addon.tab.redux.state) return console.warn("Redux is not available!");
-  addon.tab.redux.initialize();
-  addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
+  const handleCopy = ({ detail }) => {
     const e = detail;
     if (!e.action || e.action.type !== "scratch-paint/clipboard/SET") return;
     const items = e.next.scratchPaint.clipboard.items;
@@ -14,5 +13,8 @@ export default async ({ addon, console }) => {
       .copyImage(dataURL)
       .then(() => console.log("Image successfully copied"))
       .catch((e) => console.error(`Image could not be copied: ${e}`));
-  });
+  };
+  addon.tab.redux.addEventListener("statechanged", handleCopy);
+  addon.self.addEventListener("disabled", () => addon.tab.redux.removeEventListener("statechanged", handleCopy));
+  addon.self.addEventListener("reenabled", () => addon.tab.redux.addEventListener("statechanged", handleCopy));
 };
