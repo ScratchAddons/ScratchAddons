@@ -15,7 +15,7 @@ export default async function ({ addon, global, console, msg }) {
     );
     const msgCount = Number(msgRes.count);
     messageCount.innerText = msgCount;
-    if (msgCount === 0 || msgCount === 'NaN') {
+    if (msgCount === 0 || msgCount === "NaN") {
       messageCount.setAttribute("style", `display: none;`);
     } else {
       messageCount.setAttribute("style", "");
