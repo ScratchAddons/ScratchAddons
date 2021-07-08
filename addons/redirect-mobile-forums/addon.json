@@ -1,17 +1,35 @@
 {
-  "name": "Redirect mobile forums to main forums",
-  "description": "Redirects you from /discuss/m/ to /discuss/.",
+  "name": "Redirects",
+  "description": "Redirect certain parts of the website.",
   "credits": [
     {
       "name": "9gr",
       "link": "https://scratch.mit.edu/users/9gr"
+    },
+    {
+      "name": "Shluffy (\"News Redirect\")",
+      "link": "https://github.com/Shluffy"
     }
   ],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/m/*"],
+      "matches": ["https://scratch.mit.edu/*"],
       "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "name": "Redirect from the mobile forums to the desktop forums",
+      "type": "boolean",
+      "default": true,
+      "id": "mobileForums"
+    },
+    {
+      "name": "Redirect /news to the announcements forum",
+      "type": "boolean",
+      "default": true,
+      "id": "news"
     }
   ],
   "versionAdded": "1.16.0",
