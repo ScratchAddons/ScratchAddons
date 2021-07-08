@@ -3,7 +3,7 @@ export default async ({ addon, console, msg }) => {
   const studioId = redux.state.studio.id;
 
   const MAX_MANAGERS = 40;
-  
+
   let isOwner = false;
   let isManager = false;
   let isCurator = false;
