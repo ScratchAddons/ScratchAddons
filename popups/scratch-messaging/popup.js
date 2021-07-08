@@ -74,6 +74,7 @@ export default async ({ addon, msg, safeMsg }) => {
                   isBad: "comment-error-filterbot-generic",
                   hasChatSite: "comment-error-filterbot-chat",
                   isSpam: "comment-error-filterbot-spam",
+                  replyLimitReached: "comment-error-reply-limit",
                   // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
                   500: "comment-error-down",
                   503: "comment-error-down",

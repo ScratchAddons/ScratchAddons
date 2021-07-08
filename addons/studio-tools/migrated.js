@@ -37,7 +37,7 @@ export default async ({ addon, console, msg }) => {
     btn.addEventListener("click", () => {
       inputTag.setAttribute("disabled", true);
       cb(inputTag.value.trim());
-      inputTag.setAttribute("disabled", false);
+      inputTag.removeAttribute("disabled");
     });
 
     if (disabledMessage) {
@@ -100,7 +100,11 @@ export default async ({ addon, console, msg }) => {
               "X-CSRFToken": addon.auth.csrfToken,
             },
           });
-          const result = await r.json();
+          let result = await r.text();
+          try {
+            // Can sometimes fail so we don't really care
+            result = JSON.parse(result);
+          } catch (e) {}
           if (!isOkay(r, result)) return;
           alert(msg("promoted", { username: u }));
           // we don't bother updating redux ourselves

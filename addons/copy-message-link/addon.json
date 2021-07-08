@@ -10,19 +10,19 @@
   "userscripts": [
     {
       "url": "profile.js",
-      "matches": ["https://scratch.mit.edu/users/*/", "https://scratch.mit.edu/studios/*/comments"],
+      "matches": ["https://scratch.mit.edu/users/*/"],
       "runAtComplete": false
     },
     {
       "url": "project.js",
-      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios_www/*"],
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "project.css",
-      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios_www/*"]
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"]
     }
   ],
   "versionAdded": "1.10.0",
