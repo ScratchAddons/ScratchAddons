@@ -36,6 +36,8 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
                       addonId,
                       injectAsStyleElt: !!manifest.injectAsStyleElt,
                       index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                      dynamicEnable: Boolean(manifest.dynamicEnable),
+                      dynamicDisable: Boolean(manifest.dynamicDisable),
                     },
                   },
                   { frameId: 0 }
