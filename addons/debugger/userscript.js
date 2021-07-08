@@ -25,16 +25,36 @@ export default async function ({ addon, global, console, msg }) {
     const pauseAddonButton = document.querySelector(".pause-btn");
     if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleConsole(true);
   };
-  addon.tab.addBlock("sa-pause", [], pause, true);
-  addon.tab.addBlock("\u200B\u200Bbreakpoint\u200B\u200B", [], pause);
-  addon.tab.addBlock("\u200B\u200Blog\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    addItem(content, thread, "log");
+  addon.tab.addBlock("sa-pause", {
+    args: [],
+    callback: pause,
+    hidden: true,
   });
-  addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    addItem(content, thread, "warn");
+  addon.tab.addBlock("\u200B\u200Bbreakpoint\u200B\u200B", {
+    args: [],
+    displayName: msg("block-breakpoint"),
+    callback: pause,
   });
-  addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    addItem(content, thread, "error");
+  addon.tab.addBlock("\u200B\u200Blog\u200B\u200B %s", {
+    args: ["content"],
+    displayName: msg("block-log"),
+    callback: ({ content }, thread) => {
+      addItem(content, thread, "log");
+    },
+  });
+  addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", {
+    args: ["content"],
+    displayName: msg("block-warn"),
+    callback: ({ content }, thread) => {
+      addItem(content, thread, "warn");
+    },
+  });
+  addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", {
+    args: ["content"],
+    displayName: msg("block-error"),
+    callback: ({ content }, thread) => {
+      addItem(content, thread, "error");
+    },
   });
 
   const consoleWrapper = Object.assign(document.createElement("div"), {
@@ -76,6 +96,8 @@ export default async function ({ addon, global, console, msg }) {
         type: "scratch-gui/navigation/ACTIVATE_TAB",
         activeTabIndex: 0,
       });
+      setTimeout(() => goToBlock(targetId, blockId), 0);
+      return;
     }
 
     // Copied from devtools. If it's code gets improved for this function, bring those changes here too.
@@ -257,8 +279,8 @@ export default async function ({ addon, global, console, msg }) {
   function dragConsole(x, y) {
     lastX = x;
     lastY = y;
-    const width = document.documentElement.clientWidth || document.body.clientWidth;
-    const height = document.documentElement.clientHeight || document.body.clientHeight;
+    const width = (document.documentElement.clientWidth || document.body.clientWidth) - 1;
+    const height = (document.documentElement.clientHeight || document.body.clientHeight) - 1;
     const clampedX = Math.max(0, Math.min(x - mouseOffsetX, width - consoleWrapper.offsetWidth));
     const clampedY = Math.max(0, Math.min(y - mouseOffsetY, height - consoleWrapper.offsetHeight));
     consoleWrapper.style.left = clampedX + "px";
@@ -351,9 +373,20 @@ export default async function ({ addon, global, console, msg }) {
       const inputBlock = target.blocks.getBlock(inputId);
       if (inputBlock && inputBlock.opcode !== "text") {
         let text, category;
-        if (inputBlock.opcode === "data_variable" || inputBlock.opcode === "data_listcontents") {
+        if (
+          inputBlock.opcode === "data_variable" ||
+          inputBlock.opcode === "data_listcontents" ||
+          inputBlock.opcode === "argument_reporter_string_number" ||
+          inputBlock.opcode === "argument_reporter_boolean"
+        ) {
           text = Object.values(inputBlock.fields)[0].value;
-          category = inputBlock.opcode === "data_variable" ? "data" : "list";
+          if (inputBlock.opcode === "data_variable") {
+            category = "data";
+          } else if (inputBlock.opcode === "data_listcontents") {
+            category = "list";
+          } else {
+            category = "more";
+          }
         } else {
           // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
           let jsonData;
@@ -370,19 +403,26 @@ export default async function ({ addon, global, console, msg }) {
               // ignore
             }
           }
+          // If the block has a simple message with no arguments, display it
           if (jsonData && jsonData.message0 && !jsonData.args0) {
             text = jsonData.message0;
             category = jsonData.category;
           }
         }
         if (text && category) {
-          const inputSpan = document.createElement("span");
-          inputSpan.textContent = text;
-          inputSpan.className = "console-variable";
-          inputSpan.dataset.category = category === "list" ? "data-lists" : category;
-          inputSpan.style.backgroundColor =
-            ScratchBlocks.Colours[category === "list" ? "data_lists" : category].primary;
-          wrapper.append(inputSpan);
+          const blocklyColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category];
+          if (blocklyColor) {
+            const inputSpan = document.createElement("span");
+            inputSpan.textContent = text;
+            inputSpan.className = "console-variable";
+            const colorCategoryMap = {
+              list: "data-lists",
+              more: "custom",
+            };
+            inputSpan.dataset.category = colorCategoryMap[category] || category;
+            inputSpan.style.backgroundColor = blocklyColor.primary;
+            wrapper.append(inputSpan);
+          }
         }
       }
     }

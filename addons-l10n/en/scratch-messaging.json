@@ -46,5 +46,6 @@
   "scratch-messaging/comment-error-filterbot-spam": "Scratch's filterbot blocked your comment for spamming.",
   "scratch-messaging/comment-error-down": "Scratch server is having a problem. Please try again later.",
   "scratch-messaging/comment-mute": "You are muted because Scratch's filterbot considered your last comment to violate the Community Guidelines.",
-  "scratch-messaging/comment-cannot-post-for": "{mins, plural, one {You cannot post comments for 1 minute.} other {You cannot post comments for # minutes.}}"
+  "scratch-messaging/comment-cannot-post-for": "{mins, plural, one {You cannot post comments for 1 minute.} other {You cannot post comments for # minutes.}}",
+  "scratch-messaging/comment-error-reply-limit": "Studio comments can no longer have more than 25 replies."
 }

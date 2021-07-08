@@ -31,18 +31,37 @@ const getNamesIdsDefaults = (blockData) => [
   blockData.args.map(() => ""),
 ];
 
-export const addBlock = (proccode, args, handler, hide) => {
+export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
   if (getCustomBlock(proccode)) {
     return;
   }
+
+  // Make sure that the argument counts all appear to be consistent.
+  // Any inconsistency may result in various strange behaviors, possibly including corruption.
+  const argumentsInProcCode = proccode.split("%").length - 1;
+  if (args.length !== argumentsInProcCode) {
+    throw new Error("Procedure code and argument list do not match");
+  }
+  if (displayName) {
+    // Make sure that the display name has the same number of arguments as the actual procedure code
+    const argumentsInDisplayName = displayName.split("%").length - 1;
+    if (argumentsInProcCode !== argumentsInDisplayName) {
+      console.warn(`block displayName ${displayName} for ${proccode} has wrong number of arguments, ignoring it.`);
+      displayName = proccode;
+    }
+  } else {
+    displayName = proccode;
+  }
+
   const blockData = {
     id: proccode,
     color: color.color,
     secondaryColor: color.secondaryColor,
     tertiaryColor: color.tertiaryColor,
     args,
-    handler,
-    hide: !!hide,
+    handler: callback,
+    hide: !!hidden,
+    displayName,
   };
   customBlocks[proccode] = blockData;
   customBlockParamNamesIdsDefaults[proccode] = getNamesIdsDefaults(blockData);
@@ -143,6 +162,19 @@ const injectWorkspace = (ScratchBlocks) => {
       };
     }
     return result;
+  };
+
+  const originalCreateAllInputs = ScratchBlocks.Blocks["procedures_call"].createAllInputs_;
+  ScratchBlocks.Blocks["procedures_call"].createAllInputs_ = function (...args) {
+    const blockData = getCustomBlock(this.procCode_);
+    if (blockData) {
+      const originalProcCode = this.procCode_;
+      this.procCode_ = blockData.displayName;
+      const ret = originalCreateAllInputs.call(this, ...args);
+      this.procCode_ = originalProcCode;
+      return ret;
+    }
+    return originalCreateAllInputs.call(this, ...args);
   };
 
   // Workspace update may be required to make category appear in flyout

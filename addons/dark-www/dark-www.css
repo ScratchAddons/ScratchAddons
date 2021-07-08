@@ -530,7 +530,8 @@ ul.curators li {
 }
 
 .djangobb td,
-.djangobb th {
+.djangobb th,
+.djangobb tbody th {
   border-color: #000000;
 }
 
