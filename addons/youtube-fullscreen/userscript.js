@@ -1,6 +1,6 @@
 export default async function ({ addon, console }) {
   const player = await addon.tab.waitForElement(".youtube-player");
-  
+
   function setFullscreenEnabled(enabled) {
     if (enabled) player.setAttribute("allowfullscreen", true);
     else player.removeAttribute("allowfullscreen");

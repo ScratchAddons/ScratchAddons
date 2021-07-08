@@ -122,7 +122,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       };
     }
   };
-  
+
   function addListeners() {
     inputButton.addEventListener("click", onButtonClick);
     uploadInput.addEventListener("change", onFileUpload);

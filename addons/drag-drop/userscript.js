@@ -125,7 +125,11 @@ export default async function ({ addon, global, console }) {
     el.addEventListener("drop", handleDrop);
   };
 
-  document.addEventListener("dragover", globalHandleDragOver, {useCapture: true});
-  addon.self.addEventListener("disabled", () => document.removeEventListener("dragover", globalHandleDragOver, {useCapture: true}));
-  addon.self.addEventListener("reenabled", () => document.addEventListener("dragover", globalHandleDragOver, {useCapture: true}));
+  document.addEventListener("dragover", globalHandleDragOver, { useCapture: true });
+  addon.self.addEventListener("disabled", () =>
+    document.removeEventListener("dragover", globalHandleDragOver, { useCapture: true })
+  );
+  addon.self.addEventListener("reenabled", () =>
+    document.addEventListener("dragover", globalHandleDragOver, { useCapture: true })
+  );
 }
