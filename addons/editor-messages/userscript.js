@@ -9,7 +9,9 @@ export default async function ({ addon, global, console, msg }) {
   messageCount.classList.add("sa-editormessages-count");
   messages.appendChild(messageCount);
   const setMessages = async () => {
-    const msgCount = Number(await addon.account.getMsgCount());
+    let user = document.querySelector("[class*='account-nav_profile-name']").innerHTML;
+    let msgRes = await fetch(`https://api.scratch.mit.edu/users/${user}/messages/count`).then(response => response.json());
+    const msgCount = Number(msgRes.count);
     messageCount.innerText = msgCount;
     if (msgCount === 0) {
       messageCount.setAttribute("style", `display: none;`);
