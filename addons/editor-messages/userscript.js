@@ -10,7 +10,9 @@ export default async function ({ addon, global, console, msg }) {
   messages.appendChild(messageCount);
   const setMessages = async () => {
     let user = document.querySelector("[class*='account-nav_profile-name']").innerHTML;
-    let msgRes = await fetch(`https://api.scratch.mit.edu/users/${user}/messages/count`).then(response => response.json());
+    let msgRes = await fetch(`https://api.scratch.mit.edu/users/${user}/messages/count`).then((response) =>
+      response.json()
+    );
     const msgCount = Number(msgRes.count);
     messageCount.innerText = msgCount;
     if (msgCount === 0) {
