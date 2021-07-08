@@ -32,7 +32,7 @@
 	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
 	  "settingMatch": {
 		"id": "round-borders",
-		"value": false
+		"value": true
 	  }
 	}
   ],
@@ -57,7 +57,7 @@
       "default": "#4d97ff40"
     },
 	{
-      "name": "Rounded corners",
+      "name": "Sharp corners",
       "id": "round-borders",
       "type": "boolean",
       "default": true
