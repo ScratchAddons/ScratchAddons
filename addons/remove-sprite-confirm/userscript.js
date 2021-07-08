@@ -3,7 +3,7 @@ export default async ({ addon, console, msg }) => {
   const vm = addon.tab.traps.vm;
   if (!vm) return;
   const oldDeleteSprite = vm.deleteSprite;
-  vm.deleteSprite = function (...args) {
+  const newDeleteSprite = function (...args) {
     const canDelete = confirm(msg("confirm"));
     if (canDelete) return oldDeleteSprite.apply(this, args);
     const restoreDeletionState = Object.assign({}, addon.tab.redux.state.scratchGui.restoreDeletion);
@@ -17,4 +17,7 @@ export default async ({ addon, console, msg }) => {
     );
     return Promise.resolve();
   };
+  vm.deleteSprite = newDeleteSprite;
+  addon.self.addEventListener("disabled", () => vm.deleteSprite = oldDeleteSprite);
+  addon.self.addEventListener("reenabled", () => vm.deleteSprite = newDeleteSprite);
 };
