@@ -46,6 +46,7 @@ export default async function ({ addon, console, msg }) {
     } else {
       actionRow.appendChild(sourceItem);
     }
+    addon.tab.displayNoneWhileDisabled(sourceItem);
     sourceItem.appendChild(document.createTextNode("| "));
     const sourceButton = document.createElement("a");
     sourceItem.appendChild(sourceButton);
