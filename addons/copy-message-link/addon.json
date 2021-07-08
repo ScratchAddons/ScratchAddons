@@ -21,10 +21,16 @@
   ],
   "userstyles": [
     {
+      "url": "profile.css",
+      "matches": ["https://scratch.mit.edu/users/*/"]
+    },
+    {
       "url": "project.css",
       "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.10.0",
   "tags": ["community", "comments", "recommended"],
   "enabledByDefault": false
