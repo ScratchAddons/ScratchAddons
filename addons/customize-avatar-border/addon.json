@@ -26,6 +26,14 @@
 		"id": "border-bg",
 		"value": true
 	  }
+	},
+	{
+	  "url": "sharp_corners.css",
+	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+	  "settingMatch": {
+		"id": "round-borders",
+		"value": false
+	  }
 	}
   ],
   "settings": [
@@ -47,6 +55,12 @@
       "type": "color",
 	  "allowTransparency": true,
       "default": "#4d97ff40"
+    },
+	{
+      "name": "Rounded corners",
+      "id": "round-borders",
+      "type": "boolean",
+      "default": true
     }
   ],
   "credits": [
