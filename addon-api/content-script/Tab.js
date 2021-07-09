@@ -250,7 +250,7 @@ export default class Tab extends Listenable {
         from: () => [],
         until: () => [
           // Small/big stage buttons (for editor mode)
-          q("[class^='stage-header_stage-size-toggle-group'"),
+          q("[class^='stage-header_stage-size-toggle-group']"),
           // Full screen icon (for player mode)
           q("[class^='stage-header_stage-size-row']").lastChild,
         ],
@@ -331,7 +331,7 @@ export default class Tab extends Listenable {
       beforeRemixButton: {
         element: () => q(".project-buttons"),
         from: () => [],
-        until: () => [q(".project-buttons > .remix-button")],
+        until: () => [q(".project-buttons > .remix-button"), q(".project-buttons > .see-inside-button")],
       },
     };
 
