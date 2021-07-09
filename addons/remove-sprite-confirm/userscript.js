@@ -19,6 +19,4 @@ export default async ({ addon, console, msg }) => {
     return Promise.resolve();
   };
   vm.deleteSprite = newDeleteSprite;
-  addon.self.addEventListener("disabled", () => (vm.deleteSprite = oldDeleteSprite));
-  addon.self.addEventListener("reenabled", () => (vm.deleteSprite = newDeleteSprite));
 };
