@@ -17,13 +17,6 @@
       "default": "#0000ff"
     }
   ],
-  "info": [
-    {
-      "type": "notice",
-      "text": "Refresh the editor to apply color changes.",
-      "id": "refresh-editor"
-    }
-  ],
   "versionAdded": "1.0.0",
   "tags": ["editor", "codeEditor"],
   "enabledByDefault": false

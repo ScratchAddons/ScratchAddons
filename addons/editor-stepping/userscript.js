@@ -1,6 +1,10 @@
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
-
+  
+  function stepping_updateColor() {
+	document.getElementById("editor-stepping-flood").setAttribute("flood-color", addon.settings.get("highlight-color")); //Change the color
+  }
+  
   // Insert this amazing filter
   document.body.insertAdjacentHTML(
     "beforeend",
@@ -15,7 +19,7 @@ export default async function ({ addon, global, console }) {
       </feFuncA>
     </feComponentTransfer>
 
-    <feFlood flood-color="` + addon.settings.get("highlight-color")  + `" flood-opacity="1" result="outColor">
+    <feFlood id="editor-stepping-flood" flood-color="blue" flood-opacity="1" result="outColor">
     </feFlood>
 
     <feComposite in="outColor" in2="outBlur" operator="in" result="outGlow">
@@ -27,6 +31,7 @@ export default async function ({ addon, global, console }) {
 </svg>
 `
   );
+  stepping_updateColor(); //Set the color
   // Wait for Blockly, as it tends to not be ready sometimes...
   await addon.tab.traps.getBlockly();
   const elementsWithFilter = new Set();
@@ -62,4 +67,5 @@ export default async function ({ addon, global, console }) {
       });
     }
   };
+  addon.settings.addEventListener("change", function() {stepping_updateColor()}); //Live update
 }
