@@ -1,5 +1,6 @@
 export default async ({ addon, console }) => {
   if (!addon.tab.redux.state) return console.warn("Redux is not available!");
+  addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", ({ detail }) => {
     if (addon.self.disabled) return;
     const e = detail;
