@@ -26,6 +26,7 @@ export default class Tab extends Listenable {
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+    this._blockContextMenu = [];
   }
   addBlock(...a) {
     blocks.init(this);
@@ -239,5 +240,14 @@ export default class Tab extends Listenable {
     const rtlLocales = ["ar", "ckb", "fa", "he"];
     const lang = scratchAddons.globalState.auth.scratchLang.split("-")[0];
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
+  }
+
+  /**
+   * Creates an item in the editor Blockly context menu.
+   * @param {function} callback Returns new menu items.
+   * @param {object} conditions - Show context menu when one of these conditions meet.
+   */
+  createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, comments = false } = {}) {
+    this._blockContextMenu.push({ callback, workspace, blocks, flyout, comments });
   }
 }
