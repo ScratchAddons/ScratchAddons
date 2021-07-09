@@ -8,19 +8,24 @@
     <style>
       @import url("../../webpages/styles/components/popup.css");
     </style>
-    <script src="../../webpages/set-lang.js" type="module"></script>
     <link rel="stylesheet" href="popup.css" />
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
-    <script src="./popup.js" type="module"></script>
+    <script src="../../webpages/popup-loader.js" type="module"></script>
   </head>
 
   <body style="display: none" v-show="true">
-    <div class="loading" v-show="projects.length === 0 || projects.length !== projectsChecked">{{ loadingMsg }}</div>
+    <div class="loading" v-show="!error && (projects.length === 0 || projects.length !== projectsChecked)">
+      {{ loadingMsg }}
+    </div>
+    <div class="loading" v-show="error">
+      {{ errorMessage }}
+      <span v-if="error !== 'server-error'">{{{ settingsHTML() }}}</span>
+    </div>
     <div v-show="loaded">
       <div class="games" v-for="project of projectsSorted">
         <div class="title">
-          <a class="project-name" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
+          <a class="project-name nolink" :href="'https://scratch.mit.edu/projects/' + project.id" target="_blank"
             >{{ project.title }}</a
           >
           <span class="float-right"
@@ -29,7 +34,11 @@
         </div>
         <div class="project-details" v-show="true || project.amt > 0 && project.extended">
           <div class="username-list">
-            <a v-for="user of project.users" :href="'https://scratch.mit.edu/users/' + user" target="_blank"
+            <a
+              v-for="user of project.users"
+              :href="'https://scratch.mit.edu/users/' + user"
+              target="_blank"
+              class="nolink"
               >{{ user }}</a
             >
           </div>
