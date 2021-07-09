@@ -2,6 +2,10 @@
   margin-right: 0.2rem;
 }
 
+.sa-debugger-small .sa-debugger-container {
+  display: none !important;
+}
+
 .debug {
   display: none;
 }
