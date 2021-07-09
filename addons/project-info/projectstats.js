@@ -29,7 +29,7 @@ export default async function ({ addon, console, msg }) {
       });
       const container = document.createElement("div");
       container.className = "sa-project-info";
-      buttons.insertBefore(container, buttons.firstChild);
+      addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: container, order: 0 });
       let projectInfo = getBlockCount();
       container.appendChild(document.createTextNode(msg("sprite", { num: projectInfo.spriteCount })));
       container.appendChild(document.createElement("br"));

@@ -66,7 +66,7 @@ export default async function ({ addon, global, console, msg }) {
     });
 
     if (addon.tab.editorMode === "editor") {
-      bar.appendChild(countContainerContainer);
+      addon.tab.appendToSharedSpace({ space: "afterStopButton", element: countContainerContainer, order: 2 });
     }
   }
 }

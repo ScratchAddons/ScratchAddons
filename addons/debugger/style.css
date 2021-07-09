@@ -1,5 +1,13 @@
-.sa-debugger-container {
+[dir="ltr"] .sa-debugger-container {
   margin-right: 0.2rem;
+}
+
+[dir="rtl"] .sa-debugger-container {
+  margin-left: 0.2rem;
+}
+
+.sa-debugger-small .sa-debugger-container {
+  display: none !important;
 }
 
 .debug {
