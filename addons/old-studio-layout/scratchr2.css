@@ -1,5 +1,5 @@
 .studio-page #view .studio-shell {
-  padding-top: 93px;
+  padding-top: 65px;
   grid-template-columns: 250px minmax(0, 1fr);
 }
 .studio-info-section:first-child /* title */ {
@@ -15,15 +15,11 @@
   right: 0;
 }
 .studio-info .studio-info-footer-stats > div:nth-child(2) /* follower count */ {
-  top: 45px;
+  top: 21px;
   right: 0;
 }
-.sa-oldstudio-logged-out #view .studio-shell {
-  padding-top: 65px;
-}
 .sa-oldstudio-logged-out .studio-info .studio-info-footer-stats > div:nth-child(2) {
-  top: 7px;
-  width: auto;
+  top: 11px;
 }
 .studio-tab-nav {
   margin: 0;

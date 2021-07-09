@@ -9,7 +9,7 @@
   box-shadow: 0 1px 0 inset var(--sa-oldstudio-default-inner-border, white);
 }
 .studio-info {
-  margin-top: 116px;
+  margin-top: 88px;
   padding: 10px;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -17,7 +17,7 @@
 .studio-tabs {
   display: flex;
   flex-direction: column;
-  padding-top: 93px;
+  padding-top: 65px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
@@ -31,18 +31,14 @@
   right: 10px;
 }
 .studio-info .studio-info-footer-stats > div:nth-child(2) /* follower count */ {
-  top: 55px;
+  top: 31px;
   right: 10px;
 }
 .sa-oldstudio-logged-out .studio-info {
   margin-top: 98px;
 }
-.sa-oldstudio-logged-out .studio-tabs {
-  padding-top: 75px;
-}
 .sa-oldstudio-logged-out .studio-info .studio-info-footer-stats > div:nth-child(2) {
-  top: 17px;
-  width: auto;
+  top: 21px;
 }
 .studio-tab-nav {
   margin: 0;
