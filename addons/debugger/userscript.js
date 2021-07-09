@@ -458,7 +458,7 @@ export default async function ({ addon, global, console, msg }) {
     });
     if (addon.tab.editorMode === "editor") {
       ScratchBlocks = await addon.tab.traps.getBlockly();
-      addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 1 });
+      addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 0 });
     } else {
       toggleConsole(false);
     }

@@ -428,7 +428,7 @@ export default async function ({ addon, global, console, msg }) {
     );
     container.dataset.editorMode = addon.tab.editorMode;
     if (target.className.includes("stage-size-row")) {
-      addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 0 });
+      addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 1 });
     } else {
       addon.tab.appendToSharedSpace({ space: "fullscreenStageHeader", element: container, order: 0 });
     }
