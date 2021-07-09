@@ -67,5 +67,6 @@ export default async function ({ addon, global, console }) {
       });
     }
   };
+  
   addon.settings.addEventListener("change", function() {stepping_updateColor()}); //Live update
 }
