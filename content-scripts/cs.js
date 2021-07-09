@@ -293,12 +293,15 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
     } else if (request.dynamicAddonEnabled) {
-      const { scripts, userstyles, cssVariables, addonId, injectAsStyleElt, index } = request.dynamicAddonEnabled;
+      const { scripts, userstyles, cssVariables, addonId, injectAsStyleElt, index, dynamicEnable, dynamicDisable } =
+        request.dynamicAddonEnabled;
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
       if (everLoadedAddons.find((addon) => addon.addonId === addonId)) {
+        if (!dynamicDisable) return;
         // Addon was reenabled
         _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
       } else {
+        if (!dynamicEnable) return;
         // Addon was not injected in page yet
         _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
       }
