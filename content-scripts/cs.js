@@ -127,6 +127,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request === "getInitialUrl") {
     sendResponse(pseudoUrl || initialUrl);
+  } else if (request === "getLocationHref") {
+    sendResponse(location.href);
   }
 });
 

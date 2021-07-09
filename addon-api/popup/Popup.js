@@ -21,14 +21,13 @@ export default class Popup {
    */
   getSelectedTabUrl() {
     return new Promise((resolve) => {
-      chrome.tabs.query(
-        {
-          active: true,
-          currentWindow: true,
-          url: "https://scratch.mit.edu/*",
-        },
-        (tabs) => resolve(tabs.find((tab) => tab.url)?.url || null)
-      );
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs.length === 0) return resolve(null);
+        chrome.tabs.sendMessage(tabs[0].id, "getLocationHref", { frameId: 0 }, (url) => {
+          if (chrome.runtime.lastError) return resolve(null);
+          resolve(url);
+        });
+      });
     });
   }
 }
