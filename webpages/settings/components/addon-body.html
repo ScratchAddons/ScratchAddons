@@ -87,16 +87,6 @@
     flex-grow: 1;
   }
 
-  .addon-warn {
-    color: white;
-    padding: 10px;
-    background: rgba(255, 38, 103, 0.2);
-    border-radius: 5px;
-    font-weight: bold;
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-  }
   .addon-description-full,
   .addon-credits {
     width: 100%;
@@ -201,23 +191,27 @@
   .iframe .clickeable-area {
     flex-grow: 1;
   }
-  .addon-notice {
-    color: black;
+  .addon-notice,
+  .addon-warn {
     padding: 10px;
-    background: rgb(255 235 59 / 0.7);
     border-radius: 5px;
     font-weight: bold;
     margin: 10px 0;
     display: flex;
     align-items: center;
   }
+  .addon-notice {
+    background: rgba(255, 123, 38, 0.25);
+  }
+  .addon-warn {
+    color: white;
+    background: #fd2b2b;
+  }
   .addon-notice img,
   .addon-warn img {
     height: 15px;
     width: 15px;
     margin-inline-end: 10px;
-  }
-  .addon-warn img {
     filter: brightness(0) invert(1);
   }
   .sh .addon-settings {
