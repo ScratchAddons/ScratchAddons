@@ -1,10 +1,10 @@
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
-  
+
   function stepping_updateColor() {
-	document.getElementById("editor-stepping-flood").setAttribute("flood-color", addon.settings.get("highlight-color")); //Change the color
+    document.getElementById("editor-stepping-flood").setAttribute("flood-color", addon.settings.get("highlight-color")); //Change the color
   }
-  
+
   // Insert this amazing filter
   document.body.insertAdjacentHTML(
     "beforeend",
@@ -67,6 +67,8 @@ export default async function ({ addon, global, console }) {
       });
     }
   };
-  
-  addon.settings.addEventListener("change", function() {stepping_updateColor()}); //Live update
+
+  addon.settings.addEventListener("change", function () {
+    stepping_updateColor();
+  }); //Live update
 }
