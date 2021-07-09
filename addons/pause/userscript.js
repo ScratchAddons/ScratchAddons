@@ -14,10 +14,10 @@ export default async function ({ addon, global, console, msg }) {
   onPauseChanged(setSrc);
 
   while (true) {
-    const flag = await addon.tab.waitForElement("[class^='green-flag']", {
+    await addon.tab.waitForElement("[class^='green-flag']", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    flag.insertAdjacentElement("afterend", img);
+    addon.tab.appendToSharedSpace({ space: "afterGreenFlag", element: img, order: 0 });
   }
 }
