@@ -14,4 +14,20 @@ export default class Popup {
   get isLightMode() {
     return scratchAddons.isLightMode;
   }
+
+  /**
+   * Gets the URL of the Scratch page that is selected, or null.
+   * @returns {Promise<?string>} - the URL
+   */
+  getSelectedTabUrl() {
+    return new Promise((resolve) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs.length === 0) return resolve(null);
+        chrome.tabs.sendMessage(tabs[0].id, "getLocationHref", { frameId: 0 }, (url) => {
+          if (chrome.runtime.lastError) return resolve(null);
+          resolve(url);
+        });
+      });
+    });
+  }
 }
