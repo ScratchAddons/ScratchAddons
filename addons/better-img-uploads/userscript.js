@@ -24,7 +24,8 @@ export default async function ({ addon, console, safeMsg: m }) {
 
   while (true) {
     //Catch all upload menus as they are created
-    let menu = await addon.tab.waitForElement('[class*="action-menu_more-buttons"]', { markAsSeen: true });
+    let menu = await addon.tab.waitForElement('[class*="action-menu_more-buttons_"]', { markAsSeen: true });
+    console.log(menu);
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
     let id = button.getAttribute("aria-label").replace(/\s+/g, "_");
@@ -110,19 +111,19 @@ export default async function ({ addon, console, safeMsg: m }) {
       } //Otherwise just leave the image the same size
 
       function getResizedWidthHeight(oldWidth, oldHeight) {
-        const STAGE_WIDTH = 240;
-        const STAGE_HEIGHT = 180;
+        const STAGE_WIDTH = 479;
+        const STAGE_HEIGHT = 360;
         const STAGE_RATIO = STAGE_WIDTH / STAGE_HEIGHT;
 
         // If both dimensions are smaller than or equal to corresponding stage dimension,
         // double both dimensions
         if (oldWidth <= STAGE_WIDTH && oldHeight <= STAGE_HEIGHT) {
-          return { width: oldWidth * 2, height: oldHeight * 2 };
+          return { width: oldWidth, height: oldHeight };
         }
 
         // If neither dimension is larger than 2x corresponding stage dimension,
         // this is an in-between image, return it as is
-        if (oldWidth <= STAGE_WIDTH * 2 && oldHeight <= STAGE_HEIGHT * 2) {
+        if (oldWidth <= STAGE_WIDTH && oldHeight <= STAGE_HEIGHT) {
           return { width: oldWidth, height: oldHeight };
         }
 
@@ -131,8 +132,8 @@ export default async function ({ addon, console, safeMsg: m }) {
         if (imageRatio >= STAGE_RATIO) {
           // Wide Image
           return {
-            width: STAGE_WIDTH * 2,
-            height: (STAGE_WIDTH * 2) / imageRatio,
+            width: STAGE_WIDTH,
+            height: Math.floor(STAGE_WIDTH / imageRatio),
           };
         }
         // In this case we have either:
@@ -144,8 +145,8 @@ export default async function ({ addon, console, safeMsg: m }) {
         // - A tall image
         // In any of these cases, resize the image to fit the height to double the stage height
         return {
-          width: STAGE_HEIGHT * 2 * imageRatio,
-          height: STAGE_HEIGHT * 2,
+          width: Math.floor(STAGE_HEIGHT * imageRatio),
+          height: STAGE_HEIGHT,
         };
       }
 
@@ -153,7 +154,7 @@ export default async function ({ addon, console, safeMsg: m }) {
         new File( //Create the svg file
           [
             `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${dim.width},${dim.height}" width="${dim.width}" height="${dim.height}">
-        <g transform="translate(0,0.5)">
+        <g>
           <g
               data-paper-data='{"isPaintingLayer":true}'
               fill="none"
