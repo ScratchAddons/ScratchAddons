@@ -5,6 +5,7 @@ export default async function ({ addon, global, console, msg }) {
     let postID = i.id.split("p")[1];
 
     let viewOnOcularContainer = document.createElement("li");
+    addon.tab.displayNoneWhileDisabled(viewOnOcularContainer);
     let viewOnOcular = document.createElement("a");
     viewOnOcular.innerText = `🔍 ocular`;
     viewOnOcular.title = msg("view-on-ocular");
@@ -19,6 +20,7 @@ export default async function ({ addon, global, console, msg }) {
 
     if (addon.auth.isLoggedIn) {
       let reactionMenuContainer = document.createElement("li");
+      addon.tab.displayNoneWhileDisabled(reactionMenuContainer);
       reactionMenuContainer.className = "my-ocular-reaction-menu";
       let reactionMenuButton = document.createElement("a");
       reactionMenuButton.href = "";
@@ -43,6 +45,7 @@ export default async function ({ addon, global, console, msg }) {
       reactionMenu.addEventListener("click", (e) => e.stopPropagation()); /* don't close the menu when it's clicked */
 
       let reactionList = document.createElement("li"); // it's a list item, because its inside the postfootright list. so it's basically a nested list
+      addon.tab.displayNoneWhileDisabled(reactionList);
       async function makeReactionList(focusedEmoji, isMenuFocused) {
         const reactions = await fetchReactions(postID);
 
