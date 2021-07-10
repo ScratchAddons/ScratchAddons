@@ -1,0 +1,1 @@
+{"disable-stage-drag-select/@name":"Sprite non glissables dans l'éditeur","disable-stage-drag-select/@description":"Enlève la possibilité de déplacer les lutins dans la scène, sauf s'ils sont définis explicitement comme glissables.","disable-stage-drag-select/@info-shift":"Maintenez Maj. enfoncé pour déplacer un sprite, même si celui-ci n'est pas glissable normalement."}
