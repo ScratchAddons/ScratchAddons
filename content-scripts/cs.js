@@ -728,7 +728,7 @@ function addonMessageListener(e) {
     window.postMessage({
       addonMessage: true,
       response: true,
-      fromBackground: false,
+      fromBackground: true,
       messageId,
       payload: res,
     });
@@ -745,3 +745,39 @@ function addonMessageListener(e) {
 }
 
 window.addEventListener("message", addonMessageListener);
+
+function addonConnectListener(e) {
+  if (!e.data.addonConnect) return;
+
+  const {
+    data: { props, portId, addonId },
+  } = e;
+
+  const port = chrome.runtime.connect({
+    addonId,
+    addonConnect: true,
+    props,
+  });
+
+  window.addEventListener("message", function (e) {
+    if (!e.data.addonPortMessage) return;
+    if (e.data.fromBackground) return;
+    if (e.data.portId !== portId) return;
+    if (e.data.disconnect) {
+      return port.disconnect();
+    } else {
+      port.postMessage(e.data.payload);
+    }
+  });
+
+  port.onMessage.addListener(function (m) {
+    window.postMessage({
+      addonPortMessage: true,
+      fromBackground: true,
+      payload: m,
+      portId,
+    });
+  });
+}
+
+window.addEventListener("message", addonConnectListener);

@@ -1,0 +1,17 @@
+{
+  "name": "Test",
+  "description": "",
+  "tags": ["editor"],
+  "credits": [
+    {
+      "name": "ErrorGamer2000"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "persistentScripts": ["background.js"]
+}

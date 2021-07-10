@@ -11,8 +11,12 @@ export default class MessagePasser {
 
     let self = this;
 
-    function runListeners(...a) {
+    function runMessageListeners(...a) {
       self._onMessageListeners.forEach((listener) => listener(...a));
+    }
+
+    function runConnectListeners(...a) {
+      self._onConnectListeners.forEach((listener) => listener(...a));
     }
 
     chrome.runtime.onMessage.addListener((m, s, sr) => {
@@ -22,23 +26,71 @@ export default class MessagePasser {
 
       if (addonId !== self._addonId) return;
 
-      function sendResponse(response) {
-        sr({
-          payload: response,
-          addonId,
-        });
-      }
-
-      runListeners(
+      runMessageListeners(
         payload,
         {
           addonId,
           id: addonId,
           url,
         },
-        sendResponse
+        sr
       );
     });
+  }
+
+  get onMessage() {
+    let self = this;
+    function addListener(func) {
+      return self._onMessageListeners.push(func);
+    }
+
+    function removeListener(func) {
+      return self._onMessageListeners.splice(self._onMessageListeners.indexOf(func), 1);
+    }
+
+    function hasListener(func) {
+      return self._onMessageListeners.includes(func);
+    }
+
+    return {
+      addListener,
+      removeListener,
+      hasListener,
+    };
+  }
+
+  get onConnect() {
+    let self = this;
+    function addListener(func) {
+      return self._onConnectListeners.push(func);
+    }
+
+    function removeListener(func) {
+      return self._onConnectListeners.splice(self._onConnectListeners.indexOf(func), 1);
+    }
+
+    function hasListener(func) {
+      return self._onConnectListeners.includes(func);
+    }
+
+    return {
+      addListener,
+      removeListener,
+      hasListener,
+    };
+  }
+}
+
+class Port {
+  constructor(data) {
+    Object.assign(this, data);
+    this._onMessageListeners = [];
+
+    let self = this;
+
+    function runListeners(...a) {
+      self._onMessageListeners.forEach((listener) => listener(...a));
+    }
   }
 
   get onMessage() {
