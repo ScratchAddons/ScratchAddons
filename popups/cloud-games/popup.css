@@ -3,6 +3,7 @@
   font-size: 0.9rem;
   padding-top: 1rem;
   font-weight: bold;
+  margin: 0 2rem;
 }
 
 .title {
@@ -45,6 +46,7 @@
 .username-list > a {
   display: inline-block;
   margin-inline-end: 10px;
+  color: #1aa0d8;
 }
 
 .games {

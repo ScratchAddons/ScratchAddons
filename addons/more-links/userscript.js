@@ -31,13 +31,12 @@ export default async function ({ addon, console }) {
       })();
       break;
 
-    case "studios":
-      if (addon.tab.clientVersion === "scratch-www") {
-        linkifyTextNode(document.querySelector("div.studio-description"));
-        break;
-      }
-      linkifyTag(document.querySelector("#description.read-only .overview"));
+    case "studios": {
+      const desc = document.querySelector("div.studio-description");
+      if (!desc) break;
+      linkifyTextNode(desc);
       break;
+    }
   }
 
   (async () => {

@@ -9,6 +9,7 @@ export default async function ({ addon, global, console, msg }) {
     });
     if (comment.querySelector("form")) continue; // Comment input
     const newElem = document.createElement("span");
+    addon.tab.displayNoneWhileDisabled(newElem);
     newElem.className = "comment-delete sa-comment-link";
     newElem.textContent = msg("copyLink");
     newElem.onclick = () => {

@@ -35,6 +35,30 @@
       "default": true
     },
     {
+      "name": "Studio Projects",
+      "id": "studioProjectScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Add to Studio Menu",
+      "id": "studioBrowseProjectScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Studio Curators",
+      "id": "studioCuratorScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Studio Activity",
+      "id": "studioActivityScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Messages",
       "id": "messageScroll",
       "type": "boolean",
@@ -60,8 +84,7 @@
       "url": "buttonScroll.js",
       "matches": [
         "https://scratch.mit.edu/projects/*",
-        "https://scratch.mit.edu/studios/*/comments",
-        "https://scratch.mit.edu/studios_www/*",
+        "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/users/*",
         "https://scratch.mit.edu/messages"
       ]

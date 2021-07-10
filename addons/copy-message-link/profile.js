@@ -16,6 +16,7 @@ export default async function ({ addon, global, console, msg }) {
       continue;
     }
     const newElem = document.createElement("span");
+    addon.tab.displayNoneWhileDisabled(newElem);
     newElem.className = "actions report sa-copy-link-btn";
     newElem.textContent = msg("copyLink");
     newElem.onclick = () => {

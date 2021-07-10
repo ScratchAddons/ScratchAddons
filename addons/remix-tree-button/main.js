@@ -9,12 +9,11 @@ export default async function ({ addon, global, console, msg }) {
         })
         .then(() => {
           if (!document.querySelector(".copy-link-button")) return;
-          const subactions = document.querySelector(".flex-row.subactions").querySelector(".action-buttons");
-
           const remixtree = document.createElement("button");
 
           const remixtreeSpan = document.createElement("span");
           remixtreeSpan.innerText = msg("remix-tree");
+          addon.tab.displayNoneWhileDisabled(remixtree);
           remixtree.className = "button action-button remixtree-button";
           remixtree.id = "scratchAddonsRemixTreeBtn";
           remixtree.appendChild(remixtreeSpan);
@@ -26,7 +25,7 @@ export default async function ({ addon, global, console, msg }) {
           if (addon.settings.get("buttonColor")) {
             remixtree.style.backgroundColor = addon.settings.get("buttonColor");
           }
-          subactions.appendChild(remixtree);
+          addon.tab.appendToSharedSpace({ space: "afterCopyLinkButton", element: remixtree, order: 0 });
         });
     }
   }
