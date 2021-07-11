@@ -11,9 +11,9 @@ export default async function ({ addon, global, console, msg }) {
   let grid = modal.querySelector(".sa-followers-modal-grid");
 
   async function getFollowers() {
-    let res = await fetch(`https://api.scratch.mit.edu/users/${addon.auth.username}/followers?offset=${offset}`);
+    let res = await fetch(`https://api.scratch.mit.edu/users/${addon.auth.username}/followers?offset=${offset}&limit=40`);
     let json = await res.json();
-    offset += 20;
+    offset += 40;
     let members = redux.state.managers.items.concat(redux.state.curators.items).map((member) => member.username);
     return json.map((follower) => {
       const btn = Object.assign(document.createElement("div"), {
