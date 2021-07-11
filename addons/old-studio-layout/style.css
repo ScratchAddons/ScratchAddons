@@ -109,7 +109,8 @@
 .overflow-menu-container .overflow-menu-dropdown {
   z-index: 20; /* above adder row */
 }
-.studio-adder-section .studio-adder-row button ~ button::before, #sa-studio-followers-btn::before {
+.studio-adder-section .studio-adder-row button ~ button::before,
+#sa-studio-followers-btn::before {
   content: "";
   display: inline-block;
   vertical-align: middle;
