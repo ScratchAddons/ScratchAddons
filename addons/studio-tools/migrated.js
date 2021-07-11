@@ -1,12 +1,20 @@
 export default async ({ addon, console, msg }) => {
   const { redux } = addon.tab;
-  const isOwner = redux.state.studio.owner === redux.state.session.session?.user?.id;
-  const isManager = redux.state.studio.manager || isOwner;
-  const isCurator = redux.state.studio.curator;
-  const canLeave = (isCurator || isManager) && !isOwner;
   const studioId = redux.state.studio.id;
 
   const MAX_MANAGERS = 40;
+
+  let isOwner = false;
+  let isManager = false;
+  let isCurator = false;
+  let canLeave = false;
+  const checkPermissions = () => {
+    isOwner = redux.state.studio.owner === redux.state.session.session?.user?.id;
+    isManager = redux.state.studio.manager || isOwner;
+    isCurator = redux.state.studio.curator;
+    canLeave = (isCurator || isManager) && !isOwner;
+  };
+  checkPermissions();
 
   const makeAdder = (headerMsg, btnMsg, cb, optDisable) => {
     const disabledMessage = optDisable && optDisable();
@@ -37,7 +45,7 @@ export default async ({ addon, console, msg }) => {
     btn.addEventListener("click", () => {
       inputTag.setAttribute("disabled", true);
       cb(inputTag.value.trim());
-      inputTag.setAttribute("disabled", false);
+      inputTag.removeAttribute("disabled");
     });
 
     if (disabledMessage) {
@@ -100,7 +108,11 @@ export default async ({ addon, console, msg }) => {
               "X-CSRFToken": addon.auth.csrfToken,
             },
           });
-          const result = await r.json();
+          let result = await r.text();
+          try {
+            // Can sometimes fail so we don't really care
+            result = JSON.parse(result);
+          } catch (e) {}
           if (!isOkay(r, result)) return;
           alert(msg("promoted", { username: u }));
           // we don't bother updating redux ourselves
@@ -127,14 +139,14 @@ export default async ({ addon, console, msg }) => {
         location.reload();
       });
 
-      const addTo = document.querySelector(".studio-tabs div:nth-child(2)");
-      addTo.prepend(pSec, rSec);
+      addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: pSec, order: 1 });
+      addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: rSec, order: 2 });
     }
 
     if (canLeave) {
       /*<button class="button x-button studio-follow-button"><span>Follow Studio</span></button>*/
       leaveSection = document.createElement("div");
-      leaveSection.className = "studio-info-section";
+      leaveSection.className = "studio-info-section sa-leave-section";
 
       let leaveBtn = document.createElement("button");
       leaveBtn.className = "button sa-leave-button";
@@ -167,4 +179,10 @@ export default async ({ addon, console, msg }) => {
   };
   render();
   addon.tab.addEventListener("urlChange", render);
+  redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "SET_ROLES") {
+      checkPermissions();
+      render();
+    }
+  });
 };

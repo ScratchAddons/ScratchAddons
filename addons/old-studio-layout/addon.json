@@ -1,0 +1,70 @@
+{
+  "name": "Old studio layout",
+  "description": "Reverts the layout of the studio page back to the one used before the studio update or the one previously available as part of the Scratch 2.0 \u2192 3.0 addon.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "This addon doesn't work well on mobile devices and in small windows.",
+      "id": "mobile"
+    }
+  ],
+  "tags": ["community", "theme", "studios"],
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "updateUserstylesOnSettingsChange": true,
+  "versionAdded": "1.17.0",
+  "userscripts": [
+    {
+      "url": "classes.js",
+      "matches": ["https://scratch.mit.edu/studios/*"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["https://scratch.mit.edu/studios/*"]
+    },
+    {
+      "url": "default.css",
+      "matches": ["https://scratch.mit.edu/studios/*"],
+      "settingMatch": {
+        "id": "version",
+        "value": "default"
+      }
+    },
+    {
+      "url": "scratchr2.css",
+      "matches": ["https://scratch.mit.edu/studios/*"],
+      "settingMatch": {
+        "id": "version",
+        "value": "scratchr2"
+      }
+    }
+  ],
+  "settings": [
+    {
+      "id": "version",
+      "type": "select",
+      "name": "Version",
+      "potentialValues": [
+        {
+          "id": "default",
+          "name": "Default"
+        },
+        {
+          "id": "scratchr2",
+          "name": "Scratch 2.0 \u2192 3.0"
+        }
+      ],
+      "default": "default"
+    }
+  ]
+}
