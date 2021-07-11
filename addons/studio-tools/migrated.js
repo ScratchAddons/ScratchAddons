@@ -139,8 +139,8 @@ export default async ({ addon, console, msg }) => {
         location.reload();
       });
 
-      const addTo = document.querySelector(".studio-tabs div:nth-child(2)");
-      addTo.prepend(pSec, rSec);
+      addon.tab.appendToSharedSpace({space: "studioCuratorsTab", element: pSec, order: 1 });
+      addon.tab.appendToSharedSpace({space: "studioCuratorsTab", element: rSec, order: 2 });
     }
 
     if (canLeave) {
