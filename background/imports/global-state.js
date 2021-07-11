@@ -56,8 +56,9 @@ function stateChange(parentObjectPath, key, value) {
   const objectPathArr = objectPath.split(".").slice(2);
   console.log(`%c${objectPath}`, "font-weight: bold;", "is now: ", objectPathArr[0] === "auth" ? "[redacted]" : value);
   if (objectPathArr[0] === "auth" && key !== "scratchLang") {
+    // NOTE: Do not send to content script; this is handled in handle-auth.js
     scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
-    messageForAllTabs({ fireEvent: { target: "auth", name: "change" } });
+    scratchAddons.sendToPopups({ fireEvent: { target: "auth", name: "change" } });
   } else if (objectPathArr[0] === "addonSettings") {
     // Send event to persistent script and userscripts, if they exist.
     const settingsEventTarget = scratchAddons.eventTargets.settings.find(

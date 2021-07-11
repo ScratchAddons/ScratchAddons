@@ -42,6 +42,7 @@ export default class Auth extends AuthCommon {
     this._lastIsLoggedIn = !!d.user;
     this._lastXToken = d.user?.token || null;
     this.dispatchEvent(new CustomEvent("session"));
+    this.dispatchEvent(new CustomEvent("change"));
   }
 
   /**
