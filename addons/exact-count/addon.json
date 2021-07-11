@@ -45,7 +45,7 @@
     },
     {
       "url": "studio.js",
-      "matches": ["https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/studios_www/*"],
+      "matches": ["https://scratch.mit.edu/studios/*"],
       "settingMatch": {
         "id": "studio",
         "value": true

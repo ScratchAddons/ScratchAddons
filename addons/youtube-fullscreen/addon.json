@@ -15,7 +15,6 @@
     }
   ],
   "versionAdded": "1.0.0",
-  "dynamicEnable": true,
   "tags": ["community", "forums"],
   "enabledByDefault": false
 }

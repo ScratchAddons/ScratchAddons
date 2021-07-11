@@ -22,14 +22,14 @@ jobs:
       - name: Find changed files (push, PR)
         if: github.event_name == 'push' || github.event_name == 'pull_request'
         id: changed
-        uses: Hans5958/changed-files@master
+        uses: ScratchAddons/changed-files@master
         with:
           pattern: '^addons\/.*\/addon.json$'
           repo-token: ${{ github.token }}
 
       - name: Validate .json with schema (changed)
         if: github.event_name == 'push' || github.event_name == 'pull_request'
-        uses: Hans5958/validate-json-action@master
+        uses: ScratchAddons/validate-json-action@master
         with:
           schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json
           jsons: |
@@ -38,7 +38,7 @@ jobs:
 
       - name: Validate .json with schema (all)
         if: "! (github.event_name == 'push' || github.event_name == 'pull_request')"
-        uses: Hans5958/validate-json-action@master
+        uses: ScratchAddons/validate-json-action@master
         with:
           schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json
           jsons: addons/*/addon.json
