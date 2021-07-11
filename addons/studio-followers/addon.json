@@ -1,0 +1,27 @@
+{
+    "name": "Add followers to your studios",
+    "description": "Creates a modal that you can add your followers to a studio.",
+    "credits": [
+      {
+        "name": "9gr",
+        "link": "https://scratch.mit.edu/users/9gr"
+      }
+    ],
+    "userscripts": [
+      {
+        "url": "userscript.js",
+        "matches": ["https://scratch.mit.edu/studios_www/*"],
+        "runAtComplete": true
+      }
+    ],
+    "userstyles": [
+      {
+        "url": "modal.css",
+        "matches": ["https://scratch.mit.edu/studios_www/*"]
+      }
+    ],
+    "versionAdded": "1.16.0",
+    "tags": ["community", "studios"],
+    "enabledByDefault": false
+  }
+  

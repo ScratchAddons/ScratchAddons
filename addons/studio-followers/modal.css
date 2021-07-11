@@ -1,0 +1,107 @@
+.sa-followers-modal .sa-followers-modal-title {
+    box-shadow: inset 0 -1px 0 0 #4280d7;
+    background-color: #4d97ff;
+    border-radius: 14px;
+    padding-top: .75rem;
+    height: 3rem;
+}
+
+.sa-followers-modal-grid {
+    margin-top: 12px;
+    margin-bottom: 8px;
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: (minmax(0, 1fr))[7];
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    -webkit-column-gap: 14px;
+    column-gap: 14px;
+    row-gap: 14px;
+}
+
+.sa-followers-modal-content {
+    padding: 0 30px 8px;
+    background: #E9F1FC;
+    height: calc(100vh - 300px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+}
+
+.studio-follower {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #d9d9d9;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+.studio-follower-pfp {
+    max-width: 100%;
+    background: #a0c6fc;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+}
+
+.studio-follower-bottom {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 6px 4px 6px 10px;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.studio-follower-username {
+    color: #4C97FF;
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.studio-follower-add-remove-image {
+    margin: 7px;
+}
+
+.studio-follower-dynamic-add {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    background-clip: padding-box;
+    color: white;
+    border-radius: 100%;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    line-height: 32px;
+    -webkit-align-content: center;
+    -ms-flex-line-pack: center;
+    align-content: center;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.studio-follower-dynamic-remove {
+    background: #0FBD8C;
+    background-clip: padding-box;
+    border: 3px solid rgba(15, 189, 140, 0.2);
+}
+
+.studio-adder-section {
+    margin-top: 7px;
+}
