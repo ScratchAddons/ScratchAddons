@@ -36,6 +36,19 @@ export default class MessagePasser {
         sr
       );
     });
+
+    chrome.runtime.onConnect.addListener(function (port) {
+      try {
+        JSON.parse(port.name);
+      } catch {
+        return;
+      }
+      const data = JSON.parse(port.name);
+      if (data.addonId !== self._addonId) return;
+      if (!data.addonConnect) return;
+
+      runConnectListeners(new Port(port, data.name));
+    });
   }
 
   get onMessage() {
@@ -82,8 +95,9 @@ export default class MessagePasser {
 }
 
 class Port {
-  constructor(data) {
-    Object.assign(this, data);
+  constructor(port, name) {
+    this._port = port;
+    this.name = name;
     this._onMessageListeners = [];
 
     let self = this;
@@ -112,5 +126,17 @@ class Port {
       removeListener,
       hasListener,
     };
+  }
+
+  disconnect() {
+    this._port.disconnect();
+  }
+
+  get onDisconnect() {
+    return this._port.onDisconnect;
+  }
+
+  postMessage(...a) {
+    this._port.postMessage(...a);
   }
 }

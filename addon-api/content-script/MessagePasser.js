@@ -5,49 +5,6 @@
 export default class MessagePasser {
   constructor(addonObject) {
     this._addonId = addonObject.id;
-
-    this._onMessageListeners = [];
-    this._onConnectListeners = [];
-
-    let self = this;
-
-    function runListeners(...a) {
-      self._onMessageListeners.forEach((listener) => listener(...a));
-    }
-
-    window.addEventListener(
-      "message",
-      (e) => {
-        if (!e.data.addonMessage) return;
-
-        const {
-          data: { addonId, payload, fromBackground, messageId },
-        } = e;
-
-        if (addonId !== self._addonId || !fromBackground) return;
-
-        function sendResponse(response) {
-          window.postMessage({
-            payload: response,
-            addonId,
-            fromBackground: false,
-            addonMessage: true,
-            messageId,
-            response: true,
-          });
-        }
-
-        runListeners(
-          payload,
-          {
-            addonId,
-            id: addonId,
-          },
-          sendResponse
-        );
-      },
-      false
-    );
   }
 
   sendMessage(message, callback) {
@@ -81,29 +38,33 @@ export default class MessagePasser {
     window.addEventListener("message", onMessage);
   }
 
-  connect(data) {
-    return new Port(data, this._addonId);
+  connect({ name = "" }) {
+    return new Port(name, this._addonId);
   }
 }
 
 class Port {
-  constructor(data, addonId) {
-    Object.assign(this, data);
-    this._dataObj = data;
+  constructor(name, addonId) {
+    this.name = name;
     this._onMessageListeners = [];
+    this._onDisconnectListeners = [];
     this._portId = getuid();
 
     window.postMessage({
       addonConnect: true,
-      props: data,
+      name,
       portId: this._portId,
       addonId,
     });
 
     let self = this;
 
-    function runListeners(...a) {
+    function runMessageListeners(...a) {
       self._onMessageListeners.forEach((listener) => listener(...a));
+    }
+
+    function runDisconnectListeners(...a) {
+      self._onDisconnectListeners.forEach((listener) => listener(...a));
     }
 
     window.addEventListener(
@@ -111,9 +72,11 @@ class Port {
       (e) => {
         if (!e.data.addonPortMessage) return;
         if (!e.data.fromBackground) return;
-        if (e.data.portId !== self.portId) return;
+        if (e.data.portId !== self._portId) return;
 
-        runListeners(e.data.payload);
+        if (e.data.disconnect) return runDisconnectListeners();
+
+        runMessageListeners(e.data.payload);
       },
       false
     );
@@ -154,6 +117,28 @@ class Port {
       disconnect: true,
       addonPortMessage: true,
     });
+  }
+
+  get onDisconnect() {
+    let self = this;
+
+    function addListener(func) {
+      return self.this._onDisconnectListeners.push(func);
+    }
+
+    function removeListener(func) {
+      return self._onDisconnectListeners.splice(self._onDisconnectListeners.indexOf(func), 1);
+    }
+
+    function hasListener(func) {
+      return self._onDisconnectListeners.includes(func);
+    }
+
+    return {
+      addListener,
+      removeListener,
+      hasListener,
+    };
   }
 }
 

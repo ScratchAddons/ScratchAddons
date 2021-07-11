@@ -705,6 +705,7 @@ if (isProfile || isStudio || isProject) {
   });
 }
 
+let runtime = chrome.runtime;
 function addonMessageListener(e) {
   if (!e.data.addonMessage) return;
 
@@ -725,7 +726,7 @@ function addonMessageListener(e) {
     });
   }
 
-  chrome.runtime.sendMessage(
+  runtime.sendMessage(
     {
       addonMessage: true,
       addonId,
@@ -741,13 +742,15 @@ function addonConnectListener(e) {
   if (!e.data.addonConnect) return;
 
   const {
-    data: { props, portId, addonId },
+    data: { name, portId, addonId },
   } = e;
 
-  const port = chrome.runtime.connect({
-    addonId,
-    addonConnect: true,
-    props,
+  let port = runtime.connect({
+    name: JSON.stringify({
+      addonId,
+      addonConnect: true,
+      name,
+    }),
   });
 
   window.addEventListener("message", function (e) {
@@ -766,6 +769,15 @@ function addonConnectListener(e) {
       addonPortMessage: true,
       fromBackground: true,
       payload: m,
+      portId,
+    });
+  });
+
+  port.onDisconnect.addListener(function () {
+    window.postMessage({
+      addonPortMessage: true,
+      fromBackground: true,
+      disconnect: true,
       portId,
     });
   });
