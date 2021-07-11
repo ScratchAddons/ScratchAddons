@@ -114,10 +114,11 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     if (!request.scratchMessaging) return;
     const popupRequest = request.scratchMessaging;
     if (popupRequest === "getData") {
-      addon.auth.fetchIsLoggedIn().then((isLoggedIn) => sendResponse(data.ready ? data : { error: isLoggedIn ? "notReady" : "loggedOut" }));
+      addon.auth
+        .fetchIsLoggedIn()
+        .then((isLoggedIn) => sendResponse(data.ready ? data : { error: isLoggedIn ? "notReady" : "loggedOut" }));
       return true;
-    }
-    else if (popupRequest.postComment) {
+    } else if (popupRequest.postComment) {
       sendComment(popupRequest.postComment).then((status) => sendResponse(status));
       return true;
     } else if (popupRequest.retrieveComments) {
