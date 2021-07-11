@@ -94,8 +94,7 @@ export default async function ({ addon, global, console, msg }) {
       modal.style.display = modal.style.display == "none" ? null : "none";
     });
     let adjacent = await addon.tab.waitForElement(".studio-members");
-    let parent = adjacent.parentNode;
-    adjacent.insertAdjacentElement("beforeBegin", button);
+    addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: button, order: 0 });
   }
   addon.tab.addEventListener("urlChange", (e) => {
     // Studios page dynamically changes the url
