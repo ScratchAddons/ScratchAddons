@@ -85,7 +85,10 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   async function initialize() {
-    if (document.getElementById("sa-studio-followers-btn")) return;
+    if (document.getElementById("sa-studio-followers-btn")) {
+      document.getElementById("sa-studio-followers-btn").style.display = "";
+      return;
+    }
     let button = document.createElement("button");
     button.className = "button";
     button.id = "sa-studio-followers-btn";
