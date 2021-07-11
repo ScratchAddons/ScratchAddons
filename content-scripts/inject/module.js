@@ -38,6 +38,7 @@ const page = {
   set dataReady(val) {
     this._dataReady = val;
     onDataReady(); // Assume set to true
+    this.refetchSession();
   },
 
   runAddonUserscripts, // Gets called by cs.js when addon enabled late
@@ -71,6 +72,28 @@ const page = {
     pendingPromises.msgCount.forEach((promiseResolver) => promiseResolver(count));
     pendingPromises.msgCount = [];
   },
+  isFetching: false,
+  async refetchSession() {
+    let res;
+    let d;
+    if (this.isFetching) return;
+    this.isFetching = true;
+    scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh());
+    try {
+      res = await fetch("https://scratch.mit.edu/session/", {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        }
+      });
+      d = await res.json();
+    } catch (e) {
+      d = {};
+      console.warn("Session fetch failed: ", e);
+      if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
+    }
+    scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
+    this.isFetching = false;
+  }
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
 

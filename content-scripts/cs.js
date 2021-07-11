@@ -336,6 +336,8 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
       sendResponse({ userscripts, userstyles, disabledDynamicAddons });
+    } else if (request === "refetchSession") {
+      _page_.refetchSession();
     }
   });
 }
