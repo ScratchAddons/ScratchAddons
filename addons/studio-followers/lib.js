@@ -36,7 +36,7 @@ export function createModal(addon, title, msg, switchType) {
 
   function createBtn(txt, active) {
     let btn = document.createElement("button");
-    btn.className = active ? "active" : ""
+    btn.className = active ? "active" : "";
     btn.innerText = txt;
     switcher.appendChild(btn);
     return btn;
@@ -44,14 +44,14 @@ export function createModal(addon, title, msg, switchType) {
 
   const followers = createBtn(msg("followers"), true);
   followers.addEventListener("click", () => {
-    following.className = ''
-    followers.className = 'active'
+    following.className = "";
+    followers.className = "active";
     switchType("followers");
   });
   const following = createBtn(msg("following"));
   following.addEventListener("click", () => {
-    followers.className = ''
-    following.className = 'active'
+    followers.className = "";
+    following.className = "active";
     switchType("following");
   });
 
