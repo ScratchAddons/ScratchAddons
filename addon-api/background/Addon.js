@@ -1,16 +1,19 @@
 import Addon from "../common/Addon.js";
 import Notifications from "./Notifications.js";
 import Badge from "./Badge.js";
+import Auth from "../common/Auth.js";
 
 /**
  * An addon that loads as a background script.
  * @extends Addon
  * @property {Notifications} [notifications]
  * @property {Badge} [badge]
+ * @property {Auth} auth
  */
 export default class BackgroundScriptAddon extends Addon {
   constructor(info) {
     super(info);
+    this.auth = new Auth(this);
     const { permissions } = info;
     this._timeouts = [];
     this._intervals = [];
