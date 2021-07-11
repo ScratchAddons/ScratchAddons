@@ -17,7 +17,7 @@
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   width: 100%;
-  height: 90px;
+  aspect-ratio: 9 / 10;
   object-fit: cover;
 }
 

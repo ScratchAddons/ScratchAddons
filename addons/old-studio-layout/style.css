@@ -91,7 +91,7 @@
 .studio-adder-section .studio-adder-row .studio-adder-vertical-divider {
   display: none;
 }
-.studio-adder-section .studio-adder-row button ~ button /* browse projects */ {
+.studio-adder-section .studio-adder-row button ~ button, #sa-studio-followers-btn /* browse projects */ {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -103,10 +103,13 @@
   color: var(--sa-oldstudio-text, #575e75);
   text-align: left;
 }
+#sa-studio-followers-btn {
+  margin: 0;
+}
 .overflow-menu-container .overflow-menu-dropdown {
   z-index: 20; /* above adder row */
 }
-.studio-adder-section .studio-adder-row button ~ button::before {
+.studio-adder-section .studio-adder-row button ~ button::before, #sa-studio-followers-btn::before {
   content: "";
   display: inline-block;
   vertical-align: middle;
@@ -163,8 +166,11 @@
     height: 250px;
   }
 }
-.user-projects-modal-grid {
+.user-projects-modal-grid:not(.sa-followers-modal-grid) {
   grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.user-projects-modal-grid.sa-followers-modal-grid {
+  grid-template-columns: repeat(14, minmax(0, 1fr));
 }
 .user-projects-modal .studio-projects-done-row {
   display: none;

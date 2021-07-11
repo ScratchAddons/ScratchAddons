@@ -265,7 +265,7 @@ body:not(.sa-body-editor) .select select option,
 .studio-tabs > div:not(.studio-tab-nav) {
   --sa-oldstudio-default-background: #282828;
 }
-.studio-adder-section .studio-adder-row button ~ button /* browse projects */ {
+.studio-adder-section .studio-adder-row button ~ button, #sa-studio-followers-btn /* browse projects */ {
   --sa-oldstudio-background: #282828;
   --sa-oldstudio-border: #606060;
   --sa-oldstudio-text: white;
