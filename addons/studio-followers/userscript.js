@@ -25,8 +25,8 @@ export default async function ({ addon, global, console, msg }) {
     if (nextType == currentType) return;
     data[nextType].grid.style.display = null;
     if (!data[nextType].activated) {
-      data[nextType].activated = true
-      loadData(nextType)
+      data[nextType].activated = true;
+      loadData(nextType);
     }
     data[currentType].grid.style.display = "none";
     currentType = nextType;
@@ -37,10 +37,10 @@ export default async function ({ addon, global, console, msg }) {
   data.followers.grid = modal.querySelector(".followers");
   data.following.grid = modal.querySelector(".following");
 
-  var isFetching = false
+  var isFetching = false;
   async function loadData(type) {
     if (isFetching) return;
-    isFetching = true
+    isFetching = true;
     data[type].offset += 40;
     let res = await fetch(
       `https://api.scratch.mit.edu/users/${addon.auth.username}/${type}?offset=${data[type].offset}&limit=40`
@@ -51,8 +51,8 @@ export default async function ({ addon, global, console, msg }) {
       data[type].grid.appendChild(user);
       return follower.username;
     });
-    isFetching = false
-    return username
+    isFetching = false;
+    return username;
   }
 
   async function init() {
@@ -95,23 +95,23 @@ export default async function ({ addon, global, console, msg }) {
 
   function checkVisible(el, container) {
     var rect = el.getBoundingClientRect();
-    var viewHeight = container.height
+    var viewHeight = container.height;
     return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
   }
 
-  let flex = data.followers.grid.parentNode
+  let flex = data.followers.grid.parentNode;
 
-  data.followers.grid.addEventListener('wheel', (e) => {
-    let els = [].slice.apply(data.followers.grid.childNodes)
+  data.followers.grid.addEventListener("wheel", (e) => {
+    let els = [].slice.apply(data.followers.grid.childNodes);
     if (checkVisible(els[els.length - 1], flex)) {
-      loadData('followers')
+      loadData("followers");
     }
-  })
+  });
 
-  data.following.grid.addEventListener('wheel', (e) => {
-    let els = [].slice.apply(data.following.grid.childNodes)
+  data.following.grid.addEventListener("wheel", (e) => {
+    let els = [].slice.apply(data.following.grid.childNodes);
     if (checkVisible(els[els.length - 1], flex)) {
-      loadData('following')
+      loadData("following");
     }
-  })
+  });
 }
