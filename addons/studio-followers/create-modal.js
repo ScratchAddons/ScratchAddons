@@ -4,7 +4,7 @@ export default function (addon, title) {
   });
 
   const div = Object.assign(document.createElement("div"), {
-    className: "modal-content sa-followers-modal",
+    className: "modal-content user-projects-modal modal-content user-projects-modal",
     tabindex: "-1",
     role: "dialog",
   });
@@ -27,15 +27,15 @@ export default function (addon, title) {
   div.appendChild(closeBtnContainer);
 
   const titleEl = document.createElement("div");
-  titleEl.className = "modal-title sa-followers-modal-title modal-header";
+  titleEl.className = "modal-title user-projects-modal-title modal-header";
   titleEl.innerText = title;
   div.appendChild(titleEl);
 
   const main = document.createElement("div");
-  main.className = "modal-inner-content sa-followers-modal-content";
+  main.className = "modal-inner-content user-projects-modal-content";
 
   const grid = document.createElement("div");
-  grid.className = "sa-followers-modal-grid";
+  grid.className = "user-projects-modal-grid sa-followers-modal-grid";
 
   main.appendChild(grid);
 
