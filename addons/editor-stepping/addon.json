@@ -1,12 +1,20 @@
 {
   "name": "Highlight currently executing blocks",
-  "description": "Adds a blue border to the blocks that are currently running in a project.",
+  "description": "Adds a colored border to the blocks that are currently running in a project.",
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Highlight color",
+      "id": "highlight-color",
+      "type": "color",
+      "default": "#0000ff"
     }
   ],
   "versionAdded": "1.0.0",

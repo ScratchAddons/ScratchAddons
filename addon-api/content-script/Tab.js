@@ -333,6 +333,15 @@ export default class Tab extends Listenable {
         from: () => [],
         until: () => [q(".project-buttons > .remix-button"), q(".project-buttons > .see-inside-button")],
       },
+      studioCuratorsTab: {
+        element: () => q(".studio-tabs div:nth-child(2)"),
+        from: () => [],
+        // .commenting-status only exists if account is muted
+        until: () => [
+          q(".studio-tabs div:nth-child(2) > .commenting-status"),
+          q(".studio-tabs div:nth-child(2) > .studio-members"),
+        ],
+      },
     };
 
     const spaceInfo = sharedSpaces[space];
