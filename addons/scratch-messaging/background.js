@@ -102,7 +102,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     data.stMessages = await (
       await fetch(`https://api.scratch.mit.edu/users/${username}/messages/admin`, {
         headers: {
-          "x-token": addon.auth.xToken,
+          "x-token": await addon.auth.fetchXToken(),
         },
       })
     ).json();
