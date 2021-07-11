@@ -56,6 +56,8 @@ export default async function ({ addon, global, console }) {
       //Events
       exsearch_searchBar.addEventListener("focusin", exsearch_clickIn);
       exsearch_searchBar.addEventListener("focusout", exsearch_clickOut);
+
+      addon.self.addEventListener("disabled", () => exsearch_clickOut());
     } else {
       //We're on scratchr2
 
@@ -76,7 +78,8 @@ export default async function ({ addon, global, console }) {
       //Events
       exsearch_searchBar.addEventListener("focusin", exsearch_clickIn);
       exsearch_searchBar.addEventListener("focusout", exsearch_clickOut);
+
+      addon.self.addEventListener("disabled", () => exsearch_clickOut());
     }
   }
-  addon.self.addEventListener("disabled", () => exsearch_clickOut());
 }
