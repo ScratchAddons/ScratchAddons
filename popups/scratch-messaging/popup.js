@@ -304,7 +304,7 @@ export default async ({ addon, msg, safeMsg }) => {
         return new Promise((resolve) => {
           chrome.runtime.sendMessage({ scratchMessaging: "getData" }, (res) => {
             if (res) {
-              this.stMessages = (res.stMessages || []).map((alert) => ({
+              this.stMessages = (Array.isArray(res.stMessages) ? res.stMessages : []).map((alert) => ({
                 ...alert,
                 datetime_created: new Date(alert.datetime_created).toDateString(),
               }));
