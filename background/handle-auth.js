@@ -15,12 +15,16 @@ function getDefaultStoreId() {
     name: "satemporarycookie",
     value: "1",
     expirationDate: 10 + Math.floor(Date.now() / 1000),
-  }).then((cookie) => {
-    return (scratchAddons.cookieStoreId = cookie.storeId);
-  }).finally(() => promisify(chrome.cookies.remove)({
-    url: "https://scratch.mit.edu/",
-    name: "satemporarycookie",
-  }));
+  })
+    .then((cookie) => {
+      return (scratchAddons.cookieStoreId = cookie.storeId);
+    })
+    .finally(() =>
+      promisify(chrome.cookies.remove)({
+        url: "https://scratch.mit.edu/",
+        name: "satemporarycookie",
+      })
+    );
 }
 
 (async function () {
@@ -30,7 +34,7 @@ function getDefaultStoreId() {
 })();
 
 chrome.cookies.onChanged.addListener(({ cookie, changeCause }) => {
-  if ((cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken")) {
+  if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken") {
     if (cookie.storeId === scratchAddons.cookieStoreId) {
       checkSession();
     }
@@ -84,7 +88,11 @@ async function checkSession() {
 function notifyContentScripts(cookie) {
   if (cookie.name === "scratchlanguage") return;
   const storeId = cookie.storeId;
-  chrome.tabs.query({
-    cookieStoreId: storeId
-  }, (tabs) => tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError)));
+  chrome.tabs.query(
+    {
+      cookieStoreId: storeId,
+    },
+    (tabs) =>
+      tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError))
+  );
 }

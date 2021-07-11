@@ -1,7 +1,7 @@
 import AuthCommon from "../common/Auth.js";
 
 export default class Auth extends AuthCommon {
-  constructor (...args) {
+  constructor(...args) {
     super(...args);
     this._refresh();
   }

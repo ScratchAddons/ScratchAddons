@@ -83,7 +83,7 @@ const page = {
       res = await fetch("https://scratch.mit.edu/session/", {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
-        }
+        },
       });
       d = await res.json();
     } catch (e) {
@@ -93,7 +93,7 @@ const page = {
     }
     scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
     this.isFetching = false;
-  }
+  },
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
 
