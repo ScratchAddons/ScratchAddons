@@ -64,6 +64,10 @@ export default async function ({ addon, global, console, msg }) {
             credentials: "include",
           }
         );
+
+        if (res.status !== 200) {
+          return alert('Something went wrong when inviting this user.')
+        }
         btn.classList.remove("mod-mutating");
         add.classList.add("studio-follower-dynamic-remove");
         img.src = addon.self.dir + "/tick.svg";
