@@ -176,7 +176,7 @@ else bodyIsEditorClassCheck();
 const originalReplaceState = history.replaceState;
 history.replaceState = function () {
   const oldUrl = location.href;
-  const newUrl = new URL(arguments[2], document.baseURI).href;
+  const newUrl = arguments[2] ? new URL(arguments[2], document.baseURI).href : oldUrl;
   const returnValue = originalReplaceState.apply(history, arguments);
   _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
@@ -189,7 +189,7 @@ history.replaceState = function () {
 const originalPushState = history.pushState;
 history.pushState = function () {
   const oldUrl = location.href;
-  const newUrl = new URL(arguments[2], document.baseURI).href;
+  const newUrl = arguments[2] ? new URL(arguments[2], document.baseURI).href : oldUrl;
   const returnValue = originalPushState.apply(history, arguments);
   _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
@@ -198,6 +198,16 @@ history.pushState = function () {
   bodyIsEditorClassCheck();
   return returnValue;
 };
+
+// replaceState or pushState will not trigger onpopstate.
+window.addEventListener("popstate", () => {
+  const newUrl = (_cs_.url = location.href);
+  for (const eventTarget of scratchAddons.eventTargets.tab) {
+    // There isn't really a way to get the previous URL from popstate event.
+    eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl: "", newUrl } }));
+  }
+  bodyIsEditorClassCheck();
+});
 
 function loadClasses() {
   scratchAddons.classNames.arr = [

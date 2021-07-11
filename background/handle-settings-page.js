@@ -27,7 +27,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const manifest = scratchAddons.manifests.find((addon) => addon.addonId === addonId).manifest;
     const { dynamicEnable, dynamicDisable } = manifest;
     // Fire disabled event for userscripts
-    if (dynamicEnable && newState === true)
+    if ((dynamicEnable || dynamicDisable) && newState === true)
       scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonDynamicEnable", { detail: { addonId, manifest } }));
     if (dynamicDisable && newState === false)
       scratchAddons.localEvents.dispatchEvent(

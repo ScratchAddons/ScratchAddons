@@ -1,30 +1,6 @@
-import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js";
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
-(async () => {
-  if (window.parent === window) {
-    // We're not in popup mode!
-    document.body.classList.add("fullscreen");
-    document.documentElement.classList.add("fullscreen");
-  }
-
-  const l10n = new WebsiteLocalizationProvider();
-
-  //theme
-  const lightThemeLink = document.createElement("link");
-  lightThemeLink.setAttribute("rel", "stylesheet");
-  lightThemeLink.setAttribute("href", "light.css");
-
-  chrome.storage.sync.get(["globalTheme"], function (r) {
-    let rr = false; //true = light, false = dark
-    if (r.globalTheme) rr = r.globalTheme;
-    if (rr) {
-      document.head.appendChild(lightThemeLink);
-    }
-  });
-
-  await l10n.loadByAddonId("scratch-messaging");
-
+export default async ({ addon, msg, safeMsg }) => {
   let dateNow = Date.now();
 
   // <comment> component
@@ -39,13 +15,13 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         deleteStep: 0,
         postingComment: false,
         messages: {
-          openNewTabMsg: l10n.get("scratch-messaging/open-new-tab"),
-          deleteMsg: l10n.get("scratch-messaging/delete"),
-          deleteConfirmMsg: l10n.get("scratch-messaging/delete-confirm"),
-          replyMsg: l10n.get("scratch-messaging/reply"),
-          postingMsg: l10n.get("scratch-messaging/posting"),
-          postMsg: l10n.get("scratch-messaging/post"),
-          cancelMsg: l10n.get("scratch-messaging/cancel"),
+          openNewTabMsg: msg("open-new-tab"),
+          deleteMsg: msg("delete"),
+          deleteConfirmMsg: msg("delete-confirm"),
+          replyMsg: msg("reply"),
+          postingMsg: msg("posting"),
+          postMsg: msg("post"),
+          cancelMsg: msg("cancel"),
         },
       };
     },
@@ -89,23 +65,24 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             if (res.error) {
               const errorCode =
                 {
-                  isEmpty: "scratch-messaging/comment-error-empty",
+                  isEmpty: "comment-error-empty",
                   // Two errors can be raised for rate limit;
                   // isFlood is the actual error, 429 is the status code
                   // ratelimit error will be unnecessary when #2505 is implemented
-                  isFlood: "scratch-messaging/comment-error-ratelimit",
-                  429: "scratch-messaging/comment-error-ratelimit",
-                  isBad: "scratch-messaging/comment-error-filterbot-generic",
-                  hasChatSite: "scratch-messaging/comment-error-filterbot-chat",
-                  isSpam: "scratch-messaging/comment-error-filterbot-spam",
+                  isFlood: "comment-error-ratelimit",
+                  429: "comment-error-ratelimit",
+                  isBad: "comment-error-filterbot-generic",
+                  hasChatSite: "comment-error-filterbot-chat",
+                  isSpam: "comment-error-filterbot-spam",
+                  replyLimitReached: "comment-error-reply-limit",
                   // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
-                  500: "scratch-messaging/comment-error-down",
-                  503: "scratch-messaging/comment-error-down",
-                }[res.error] || "scratch-messaging/send-error";
-              let errorMsg = l10n.get(errorCode);
+                  500: "comment-error-down",
+                  503: "comment-error-down",
+                }[res.error] || "send-error";
+              let errorMsg = msg(errorCode);
               if (res.muteStatus) {
-                errorMsg = l10n.get("scratch-messaging/comment-mute") + " ";
-                errorMsg += l10n.get("scratch-messaging/comment-cannot-post-for", {
+                errorMsg = msg("comment-mute") + " ";
+                errorMsg += msg("comment-cannot-post-for", {
                   mins: Math.max(Math.ceil((res.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
                 });
               }
@@ -137,7 +114,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         }
         this.deleted = true;
         const previousContent = this.thisComment.content;
-        this.thisComment.content = l10n.escaped("scratch-messaging/deleting");
+        this.thisComment.content = safeMsg("deleting");
         chrome.runtime.sendMessage(
           {
             scratchMessaging: {
@@ -150,13 +127,13 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
           },
           (res) => {
             if (res.error) {
-              alert(l10n.get("scratch-messaging/delete-error"));
+              alert(msg("delete-error"));
               this.thisComment.content = previousContent;
               this.deleteStep = 0;
               this.deleted = false;
             } else {
               if (this.isParent) this.thisComment.children = [];
-              this.thisComment.content = l10n.escaped("scratch-messaging/deleted");
+              this.thisComment.content = safeMsg("deleted");
             }
           }
         );
@@ -167,7 +144,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         return this.commentsObj[this.commentId];
       },
       replyBoxLeftMsg() {
-        return l10n.get("scratch-messaging/chars-left", { num: 500 - this.replyBoxValue.length });
+        return msg("chars-left", { num: 500 - this.replyBoxValue.length });
       },
       username() {
         return vue.username;
@@ -246,24 +223,24 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
       },
 
       uiMessages: {
-        stMessagesMsg: l10n.get("scratch-messaging/stMessages"),
-        followsMsg: l10n.get("scratch-messaging/follows"),
-        studioInvitesMsg: l10n.get("scratch-messaging/studio-invites"),
-        forumMsg: l10n.get("scratch-messaging/forum"),
-        studioActivityMsg: l10n.get("scratch-messaging/studio-activity"),
-        remixesMsg: l10n.get("scratch-messaging/remixes"),
-        yourProfileMsg: l10n.get("scratch-messaging/your-profile"),
-        loadingMsg: l10n.get("scratch-messaging/loading"),
-        loggedOutMsg: l10n.get("scratch-messaging/logged-out"),
-        loadingCommentsMsg: l10n.get("scratch-messaging/loading-comments"),
-        reloadMsg: l10n.get("scratch-messaging/reload"),
-        dismissMsg: l10n.get("scratch-messaging/dismiss"),
-        noUnreadMsg: l10n.get("scratch-messaging/no-unread"),
-        showMoreMsg: l10n.get("scratch-messaging/show-more"),
-        markAsReadMsg: l10n.get("scratch-messaging/mark-as-read"),
-        markedAsReadMsg: l10n.get("scratch-messaging/marked-as-read"),
-        openMessagesMsg: l10n.get("scratch-messaging/open-messages"),
-        studioPromotionsMsg: l10n.get("scratch-messaging/studio-promotions"),
+        stMessagesMsg: msg("stMessages"),
+        followsMsg: msg("follows"),
+        studioInvitesMsg: msg("studio-invites"),
+        forumMsg: msg("forum"),
+        studioActivityMsg: msg("studio-activity"),
+        remixesMsg: msg("remixes"),
+        yourProfileMsg: msg("your-profile"),
+        loadingMsg: msg("loading"),
+        loggedOutMsg: msg("logged-out"),
+        loadingCommentsMsg: msg("loading-comments"),
+        reloadMsg: msg("reload"),
+        dismissMsg: msg("dismiss"),
+        noUnreadMsg: msg("no-unread"),
+        showMoreMsg: msg("show-more"),
+        markAsReadMsg: msg("mark-as-read"),
+        markedAsReadMsg: msg("marked-as-read"),
+        openMessagesMsg: msg("open-messages"),
+        studioPromotionsMsg: msg("studio-promotions"),
       },
     },
     watch: {
@@ -307,7 +284,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
       },
     },
     created() {
-      document.title = l10n.get("scratch-messaging/popup-title");
+      document.title = msg("popup-title");
       (async () => {
         let fetched = await this.getData();
         if (fetched) this.analyzeMessages();
@@ -347,7 +324,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
         this.markedAsRead = true;
       },
       dismissAlert(id) {
-        const confirmation = confirm(l10n.get("scratch-messaging/stMessagesConfirm"));
+        const confirmation = confirm(msg("stMessagesConfirm"));
         if (!confirmation) return;
         chrome.runtime.sendMessage({ scratchMessaging: { dismissAlert: id } }, (res) => {
           if (res && !res.error) {
@@ -581,7 +558,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             href="https://scratch.mit.edu/studios/${invite.studioId}/curators/"
             style="text-decoration: underline"
         >${escapeHTML(invite.studioTitle)}</a>`;
-        return l10n.escaped("scratch-messaging/curate-invite", { actor, title });
+        return safeMsg("curate-invite", { actor, title });
       },
       studioPromotionHTML(promotion) {
         const actor = `<a target="_blank"
@@ -593,7 +570,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             href="https://scratch.mit.edu/studios/${promotion.studioId}/curators/"
             style="text-decoration: underline"
         >${escapeHTML(promotion.studioTitle)}</a>`;
-        return l10n.escaped("scratch-messaging/studio-promotion", { actor, title });
+        return safeMsg("studio-promotion", { actor, title });
       },
       forumHTML(forumTopic) {
         const title = `<a target="_blank"
@@ -601,7 +578,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             href="https://scratch.mit.edu/discuss/topic/${forumTopic.topicId}/unread/"
             style="text-decoration: underline"
         >${escapeHTML(forumTopic.topicTitle)}</a>`;
-        return l10n.escaped("scratch-messaging/forum-new-post", { title });
+        return safeMsg("forum-new-post", { title });
       },
       studioActivityHTML(studio) {
         const title = `<a target="_blank"
@@ -609,7 +586,7 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             href="https://scratch.mit.edu/studios/${studio.studioId}/activity/"
             style="text-decoration: underline"
         >${escapeHTML(studio.studioTitle)}</a>`;
-        return l10n.escaped("scratch-messaging/new-activity", { title });
+        return safeMsg("new-activity", { title });
       },
       remixHTML(remix) {
         const actor = `<a target="_blank"
@@ -621,17 +598,17 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
             href="https://scratch.mit.edu/projects/${remix.projectId}/"
             style="text-decoration: underline"
         >${escapeHTML(remix.remixTitle)}</a>`;
-        return l10n.escaped("scratch-messaging/remix-as", {
+        return safeMsg("remix-as", {
           actor,
           title,
           parentTitle: escapeHTML(remix.parentTitle),
         });
       },
       othersProfile(username) {
-        return l10n.get("scratch-messaging/others-profile", { username });
+        return msg("others-profile", { username });
       },
       studioText(title) {
-        return l10n.get("scratch-messaging/studio", { title });
+        return msg("studio", { title });
       },
       projectLoversAndFavers(project) {
         // First lovers&favers, then favers-only, then lovers only. Lower is better
@@ -655,4 +632,4 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
       },
     },
   });
-})();
+};
