@@ -6,25 +6,11 @@ import Listenable from "./Listenable.js";
  */
 export default class Auth extends Listenable {
   /**
-   * Whether the user is logged in or not.
-   * @type {boolean}
-   */
-  get isLoggedIn() {
-    return scratchAddons.globalState.auth.isLoggedIn;
-  }
-  /**
    * Fetch whether the user is logged in or not.
    * @returns {Promise<boolean>} - whether the user is logged in or not.
    */
   fetchIsLoggedIn() {
     return Promise.resolve(scratchAddons.globalState.auth.isLoggedIn);
-  }
-  /**
-   * Current username.
-   * @type {?string}
-   */
-  get username() {
-    return scratchAddons.globalState.auth.username;
   }
   /**
    * Fetch current username.
@@ -34,25 +20,11 @@ export default class Auth extends Listenable {
     return Promise.resolve(scratchAddons.globalState.auth.username);
   }
   /**
-   * Current user ID.
-   * @type {?number}
-   */
-  get userId() {
-    return scratchAddons.globalState.auth.userId;
-  }
-  /**
    * Fetch current user ID.
    * @returns {Promise<?number>} - the user ID.
    */
   fetchUserId() {
     return Promise.resolve(scratchAddons.globalState.auth.userId);
-  }
-  /**
-   * X-Token used in new APIs.
-   * @type {?string}
-   */
-  get xToken() {
-    return scratchAddons.globalState.auth.xToken;
   }
   /**
    * Fetch X-Token used in new APIs.
