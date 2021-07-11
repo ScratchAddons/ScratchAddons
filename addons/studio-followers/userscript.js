@@ -85,10 +85,10 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   async function initialize() {
-    if (document.getElementById('sa-studio-followers-btn')) return
+    if (document.getElementById("sa-studio-followers-btn")) return;
     let button = document.createElement("button");
     button.className = "button";
-    button.id = 'sa-studio-followers-btn'
+    button.id = "sa-studio-followers-btn";
     button.innerText = msg("button");
     button.addEventListener("click", () => {
       modal.style.display = modal.style.display == "none" ? null : "none";
@@ -97,12 +97,13 @@ export default async function ({ addon, global, console, msg }) {
     let parent = adjacent.parentNode;
     adjacent.insertAdjacentElement("beforeBegin", button);
   }
-  addon.tab.addEventListener("urlChange", (e) => { // Studios page dynamically changes the url
+  addon.tab.addEventListener("urlChange", (e) => {
+    // Studios page dynamically changes the url
     if (location.pathname.split("/")[3] == "curators") {
       initialize();
     } else {
-      let button = document.getElementById('sa-studio-followers-btn')
-      if (button) button.style.display = 'none'
+      let button = document.getElementById("sa-studio-followers-btn");
+      if (button) button.style.display = "none";
     }
   });
   if (location.pathname.split("/")[3] == "curators") {
