@@ -1,126 +1,84 @@
-import createModal from "./create-modal.js";
+import { createModal, createUser } from "./lib.js";
+
 export default async function ({ addon, global, console, msg }) {
-  const { redux } = addon.tab;
+  let { redux } = addon.tab;
+  let members = redux.state.managers.items.concat(redux.state.curators.items).map((member) => member.username)
 
-  var offset = 0;
-
-  const modal = createModal(addon, msg("modal-title"));
-
-  document.body.appendChild(modal);
-
-  let grid = modal.querySelector(".sa-followers-modal-grid");
-
-  async function getFollowers() {
-    let res = await fetch(
-      `https://api.scratch.mit.edu/users/${addon.auth.username}/followers?offset=${offset}&limit=40`
-    );
-    let json = await res.json();
-    offset += 40;
-    let members = redux.state.managers.items.concat(redux.state.curators.items).map((member) => member.username);
-    return json.map((follower) => {
-      const btn = Object.assign(document.createElement("div"), {
-        className: "studio-follower mod-clickable",
-        tabindex: "0",
-        role: "button",
-      });
-      const userImage = Object.assign(document.createElement("img"), {
-        className: "studio-follower-pfp",
-        src: `https://cdn2.scratch.mit.edu/get_image/user/${follower.id}_90x90.png`,
-      });
-
-      btn.appendChild(userImage);
-
-      const bottom = Object.assign(document.createElement("div"), {
-        className: "studio-follower-bottom",
-      });
-      const username = Object.assign(document.createElement("div"), {
-        className: "studio-follower-username",
-        innerText: follower.username,
-        title: follower.username,
-      });
-      bottom.appendChild(username);
-
-      const add = Object.assign(document.createElement("div"), {
-        className: "studio-tile-dynamic-add",
-      });
-
-      const img = Object.assign(document.createElement("img"), {
-        className: "studio-follower-add-remove-image",
-        src: addon.self.dir + "/add.svg",
-      });
-
-      let onclick = async (e) => {
-        btn.classList.remove("mod-clickable");
-        btn.classList.add("mod-mutating");
-        // Add user as a curator
-        let res = await fetch(
-          `/site-api/users/curators-in/${redux.state.studio.id}/invite_curator/?usernames=${follower.username}`,
-          {
-            headers: {
-              "x-csrftoken": addon.auth.csrfToken,
-              "x-requested-with": "XMLHttpRequest",
-            },
-            method: "PUT",
-            credentials: "include",
-          }
-        );
-
-        if (res.status !== 200) {
-          return alert(msg('fetch-err'))
-        }
-        btn.classList.remove("mod-mutating");
-        add.classList.add("studio-follower-dynamic-remove");
-        img.src = addon.self.dir + "/tick.svg";
-        btn.removeEventListener("click", onclick);
-      };
-
-      if (!members.includes(follower.username)) {
-        btn.addEventListener("click", onclick);
-      } else {
-        btn.classList.remove("mod-mutating");
-        add.classList.add("studio-follower-dynamic-remove");
-        img.src = addon.self.dir + "/tick.svg";
-      }
-
-      add.appendChild(img);
-      bottom.appendChild(add);
-      btn.appendChild(bottom);
-      return btn;
-    });
-  }
-
-  async function initialize() {
-    if (document.getElementById("sa-studio-followers-btn")) {
-      document.getElementById("sa-studio-followers-btn").style.display = "";
-      return;
+  if (!(redux.state.studio.manager ||(redux.state.studio.owner === redux.state.session.session?.user?.id))) return
+  
+  if (!true) {
+    return
+  } // This user is not a manager
+  let data = {
+    followers: {
+      offset: -40,
+      activated: false
+    },
+    following: {
+      offset: -40,
+      activated: false
     }
-    let button = document.createElement("button");
-    button.className = "button";
-    button.id = "sa-studio-followers-btn";
-    button.innerText = msg("button");
-    button.addEventListener("click", () => {
-      modal.style.display = modal.style.display == "none" ? null : "none";
-    });
-    await addon.tab.waitForElement(".studio-members");
-    addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: button, order: 0 });
   }
+  let currentType = 'followers'
+
+  let modal = createModal(addon, msg('modal-title'), msg, nextType => {
+    if (nextType == currentType) return
+    data[nextType].grid.style.display = null;
+    loadData(nextType)
+    data[currentType].grid.style.display = 'none';
+    currentType = nextType
+  })
+
+  document.body.appendChild(modal)
+
+  data.followers.grid = modal.querySelector('.followers')
+  data.following.grid = modal.querySelector('.following')
+
+  async function loadData(type) {
+    data[type].offset += 40
+    let res = await fetch(`https://api.scratch.mit.edu/users/${addon.auth.username}/${type}?offset=${data[type].offset}&limit=40`)
+    let json = await res.json()
+
+    return json.map(follower => {
+      let user = createUser(follower, addon, msg, members)
+      data[type].grid.appendChild(user)
+      return follower.username
+    })
+  }
+
+  async function init() {
+    let btn = document.getElementById("sa-studio-followers-btn")
+    if (btn) {
+      btn.style.display = ''
+      return
+    }
+
+    btn = document.createElement("button");
+    btn.className = "button";
+    btn.id = "sa-studio-followers-btn";
+    btn.innerText = msg("button");
+    btn.addEventListener("click", () => {
+      modal.style.display = modal.style.display == "none" ? null : "none";
+      if (!data[currentType].activated) {
+        data[currentType].activated = true
+        loadData(currentType)
+      }
+    })
+
+    addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: btn, order: 0 });
+  }
+
   addon.tab.addEventListener("urlChange", (e) => {
     // Studios page dynamically changes the url
     if (location.pathname.split("/")[3] == "curators") {
-      initialize();
+      init()
     } else {
       let button = document.getElementById("sa-studio-followers-btn");
       if (button) button.style.display = "none";
     }
   });
-  if (location.pathname.split("/")[3] == "curators") {
-    initialize();
-  }
-  while (true) {
-    let followers = await getFollowers();
-
-    if (followers.length == 0) break;
-
-    followers.map((follower) => grid.appendChild(follower));
+  
+  if (location.pathname.split("/")[3] == 'curators') {
+    init()
   }
 }
