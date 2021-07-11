@@ -82,10 +82,9 @@ class SharedObserver {
       for (const item of this.pending) {
         if (item.condition && !item.condition()) continue;
         for (const match of document.querySelectorAll(item.query)) {
-          if (item.seen) {
-            if (item.seen.has(match)) continue;
-            item.seen.add(match);
-          }
+          if (item.seen?.has(match)) continue;
+          if (item.elementCondition && !item.elementCondition(match)) continue;
+          item.seen?.add(match);
           this.pending.delete(item);
           item.resolve(match);
           break;
@@ -104,6 +103,7 @@ class SharedObserver {
    * @param {string} opts.query - query.
    * @param {WeakSet=} opts.seen - a WeakSet that tracks whether an element has already been seen.
    * @param {function=} opts.condition - a function that returns whether to resolve the selector or not.
+   * @param {function=} opts.elementCondition - A function that returns whether to resolve the selector or not, given an element.
    * @returns {Promise<Node>} Promise that is resolved with modified element.
    */
   watch(opts) {
