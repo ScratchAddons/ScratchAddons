@@ -5,47 +5,6 @@ import Listenable from "./Listenable.js";
  * @extends Listenable
  */
 export default class Auth extends Listenable {
-  constructor(addonObject) {
-    super();
-    this._refresh();
-  }
-
-  /**
-   * @private
-   */
-  _refresh() {
-    this._lastUsername = undefined;
-    this._lastUserId = undefined;
-    this._lastIsLoggedIn = undefined;
-    this._lastXToken = undefined;
-  }
-
-  /**
-   * @private
-   */
-  _waitUntilFetched() {
-    return new Promise((resolve) => this.addEventListener("session", resolve, { once: true }));
-  }
-
-  /**
-   * @private
-   */
-  _update(d) {
-    this._lastUsername = d.user?.username || null;
-    this._lastUserId = d.user?.id || null;
-    this._lastIsLoggedIn = !!d.user;
-    this._lastXToken = d.user?.token || null;
-    this.dispatchEvent(new CustomEvent("session"));
-  }
-
-  /**
-   * @private
-   */
-  _fetchProperty(prop) {
-    if (typeof this[prop] !== "undefined") return Promise.resolve(this[prop]);
-    return this._waitUntilFetched().then(() => this[prop]);
-  }
-
   /**
    * Whether the user is logged in or not.
    * @type {boolean}
@@ -58,7 +17,7 @@ export default class Auth extends Listenable {
    * @returns {Promise<boolean>} - whether the user is logged in or not.
    */
   fetchIsLoggedIn() {
-    return this._fetchProperty("_lastIsLoggedIn");
+    return Promise.resolve(scratchAddons.globalState.auth.isLoggedIn);
   }
   /**
    * Current username.
@@ -72,7 +31,7 @@ export default class Auth extends Listenable {
    * @returns {Promise<?string>} - the username.
    */
   fetchUsername() {
-    return this._fetchProperty("_lastUsername");
+    return Promise.resolve(scratchAddons.globalState.auth.username);
   }
   /**
    * Current user ID.
@@ -86,7 +45,7 @@ export default class Auth extends Listenable {
    * @returns {Promise<?number>} - the user ID.
    */
   fetchUserId() {
-    return this._fetchProperty("_lastUserId");
+    return Promise.resolve(scratchAddons.globalState.auth.userId);
   }
   /**
    * X-Token used in new APIs.
@@ -100,7 +59,7 @@ export default class Auth extends Listenable {
    * @returns {Promise<?string>} - the X-Token.
    */
   fetchXToken() {
-    return this._fetchProperty("_lastXToken");
+    return Promise.resolve(scratchAddons.globalState.auth.xToken);
   }
   /**
    * CSRF token used in APIs.
