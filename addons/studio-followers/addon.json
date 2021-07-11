@@ -10,14 +10,14 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/studios_www/*"],
+      "matches": ["https://scratch.mit.edu/studios/*"],
       "runAtComplete": true
     }
   ],
   "userstyles": [
     {
       "url": "modal.css",
-      "matches": ["https://scratch.mit.edu/studios_www/*"]
+      "matches": ["https://scratch.mit.edu/studios/*"]
     }
   ],
   "versionAdded": "1.16.0",
