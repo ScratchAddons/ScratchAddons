@@ -24,7 +24,10 @@ export default async function ({ addon, global, console, msg }) {
   let modal = createModal(addon, msg("modal-title"), msg, (nextType) => {
     if (nextType == currentType) return;
     data[nextType].grid.style.display = null;
-    loadData(nextType);
+    if (!data[nextType].activated) {
+      data[nextType].activated = true
+      loadData(nextType)
+    }
     data[currentType].grid.style.display = "none";
     currentType = nextType;
   });
@@ -34,18 +37,22 @@ export default async function ({ addon, global, console, msg }) {
   data.followers.grid = modal.querySelector(".followers");
   data.following.grid = modal.querySelector(".following");
 
+  var isFetching = false
   async function loadData(type) {
+    if (isFetching) return;
+    isFetching = true
     data[type].offset += 40;
     let res = await fetch(
       `https://api.scratch.mit.edu/users/${addon.auth.username}/${type}?offset=${data[type].offset}&limit=40`
     );
     let json = await res.json();
-
-    return json.map((follower) => {
+    let username = json.map((follower) => {
       let user = createUser(follower, addon, msg, members);
       data[type].grid.appendChild(user);
       return follower.username;
     });
+    isFetching = false
+    return username
   }
 
   async function init() {
@@ -83,4 +90,28 @@ export default async function ({ addon, global, console, msg }) {
   if (location.pathname.split("/")[3] == "curators") {
     init();
   }
+
+  // Infinite scrolling
+
+  function checkVisible(el, container) {
+    var rect = el.getBoundingClientRect();
+    var viewHeight = container.height
+    return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+  }
+
+  let flex = data.followers.grid.parentNode
+
+  data.followers.grid.addEventListener('wheel', (e) => {
+    let els = [].slice.apply(data.followers.grid.childNodes)
+    if (checkVisible(els[els.length - 1], flex)) {
+      loadData('followers')
+    }
+  })
+
+  data.following.grid.addEventListener('wheel', (e) => {
+    let els = [].slice.apply(data.following.grid.childNodes)
+    if (checkVisible(els[els.length - 1], flex)) {
+      loadData('following')
+    }
+  })
 }
