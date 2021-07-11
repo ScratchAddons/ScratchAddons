@@ -108,12 +108,6 @@ export default async function ({ addon, global, console, msg }) {
 
     if (followers.length == 0) break;
 
-<<<<<<< HEAD
         followers.map(follower => grid.appendChild(follower))
     }
 }
-=======
-    followers.map((follower) => follower !== "" && grid.appendChild(follower));
-  }
-}
->>>>>>> f69794f236975902854a6c246f8481aaa57b86f3
