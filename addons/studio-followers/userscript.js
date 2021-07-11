@@ -62,7 +62,6 @@ export default async function ({ addon, global, console, msg }) {
             credentials: "include",
           }
         );
-        let json = await res.json();
         btn.classList.remove("mod-mutating");
         add.classList.add("studio-follower-dynamic-remove");
         img.src = addon.self.dir + "/tick.svg";
@@ -96,7 +95,7 @@ export default async function ({ addon, global, console, msg }) {
     button.addEventListener("click", () => {
       modal.style.display = modal.style.display == "none" ? null : "none";
     });
-    let adjacent = await addon.tab.waitForElement(".studio-members");
+    await addon.tab.waitForElement(".studio-members");
     addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: button, order: 0 });
   }
   addon.tab.addEventListener("urlChange", (e) => {
