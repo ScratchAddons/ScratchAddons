@@ -139,8 +139,8 @@ export default async ({ addon, console, msg }) => {
         location.reload();
       });
 
-      addon.tab.appendToSharedSpace({space: "studioCuratorsTab", element: pSec, order: 1 });
-      addon.tab.appendToSharedSpace({space: "studioCuratorsTab", element: rSec, order: 2 });
+      addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: pSec, order: 1 });
+      addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: rSec, order: 2 });
     }
 
     if (canLeave) {

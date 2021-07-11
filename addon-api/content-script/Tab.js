@@ -337,7 +337,10 @@ export default class Tab extends Listenable {
         element: () => q(".studio-tabs div:nth-child(2)"),
         from: () => [],
         // .commenting-status only exists if account is muted
-        until: () => [q(".studio-tabs div:nth-child(2) > .commenting-status"), q(".studio-tabs div:nth-child(2) > .studio-members")],
+        until: () => [
+          q(".studio-tabs div:nth-child(2) > .commenting-status"),
+          q(".studio-tabs div:nth-child(2) > .studio-members"),
+        ],
       },
     };
 
