@@ -361,7 +361,7 @@ export default class Tab extends Listenable {
     let insertAfter = null;
 
     const children = Array.from(spaceElement.children);
-    for (let indexString in children) {
+    for (let indexString of children) {
       const child = children[indexString];
       const i = Number(indexString);
 

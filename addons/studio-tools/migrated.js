@@ -180,7 +180,7 @@ export default async ({ addon, console, msg }) => {
   render();
   addon.tab.addEventListener("urlChange", render);
   redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type == "SET_ROLES") {
+    if (e.detail.action.type === "SET_ROLES") {
       checkPermissions();
       render();
     }
