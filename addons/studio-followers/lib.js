@@ -31,32 +31,31 @@ export function createModal(addon, title, msg, switchType) {
   titleEl.innerText = title;
   div.appendChild(titleEl);
 
-  const switcher = document.createElement('div')
-  switcher.className = 'sub-nav user-projects-modal-nav sub-nav-align-left'
+  const switcher = document.createElement("div");
+  switcher.className = "sub-nav user-projects-modal-nav sub-nav-align-left";
 
   function createBtn(txt, active) {
-    let btn = document.createElement('button')
-    btn.active = `${active}`
-    btn.innerText = txt
-    switcher.appendChild(btn)
-    return btn
+    let btn = document.createElement("button");
+    btn.active = `${active}`;
+    btn.innerText = txt;
+    switcher.appendChild(btn);
+    return btn;
   }
 
-  const followers = createBtn(msg('followers'), true)
-  followers.addEventListener('click', () => {
-    followers.active = `true`
-    following.active = `false`
-    switchType('followers')
-  })
-  const following = createBtn(msg('following'), () => {
-    followers.active = `false`
-    following.active = `true`
-    switchType('following')
-  })
-  following.addEventListener('click', () => switchType('following'))
+  const followers = createBtn(msg("followers"), true);
+  followers.addEventListener("click", () => {
+    followers.active = `true`;
+    following.active = `false`;
+    switchType("followers");
+  });
+  const following = createBtn(msg("following"), () => {
+    followers.active = `false`;
+    following.active = `true`;
+    switchType("following");
+  });
+  following.addEventListener("click", () => switchType("following"));
 
-  div.appendChild(switcher)
-
+  div.appendChild(switcher);
 
   const main = document.createElement("div");
   main.className = "modal-inner-content user-projects-modal-content";
@@ -66,10 +65,10 @@ export function createModal(addon, title, msg, switchType) {
 
   const followingGrid = document.createElement("div");
   followingGrid.className = "user-projects-modal-grid sa-followers-modal-grid following";
-  followingGrid.style.display = "none"
+  followingGrid.style.display = "none";
 
   main.appendChild(followersGrid);
-  main.appendChild(followingGrid)
+  main.appendChild(followingGrid);
 
   div.appendChild(main);
 
@@ -83,7 +82,7 @@ export function createModal(addon, title, msg, switchType) {
 }
 
 export function createUser(follower, addon, msg, members) {
-  let { redux } = addon.tab
+  let { redux } = addon.tab;
   const btn = Object.assign(document.createElement("div"), {
     className: "studio-follower mod-clickable",
     tabindex: "0",
@@ -132,7 +131,7 @@ export function createUser(follower, addon, msg, members) {
     );
 
     if (res.status !== 200) {
-      return alert(msg('fetch-err'))
+      return alert(msg("fetch-err"));
     }
     btn.classList.remove("mod-mutating");
     add.classList.add("studio-follower-dynamic-remove");
