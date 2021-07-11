@@ -23,6 +23,10 @@ export default async function ({ addon, global, console, msg }) {
         newElem.style.fontWeight = "";
       }, 5000);
     };
-    comment.querySelector("div.action-list").prepend(newElem);
+    const actionList = await addon.tab.waitForElement("div.action-list", {
+      markAsSeen: true,
+      elementCondition: (e) => comment.contains(e),
+    });
+    actionList.prepend(newElem);
   }
 }
