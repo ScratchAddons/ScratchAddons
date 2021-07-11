@@ -25,7 +25,6 @@ export default async function ({ addon, console, safeMsg: m }) {
   while (true) {
     //Catch all upload menus as they are created
     let menu = await addon.tab.waitForElement('[class*="action-menu_more-buttons_"]', { markAsSeen: true });
-    console.log(menu);
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
     let id = button.getAttribute("aria-label").replace(/\s+/g, "_");
