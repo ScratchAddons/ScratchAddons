@@ -66,7 +66,7 @@ export default async function ({ addon, global, console, msg }) {
         );
 
         if (res.status !== 200) {
-          return alert('Something went wrong when inviting this user.')
+          return alert(msg('fetch-err'))
         }
         btn.classList.remove("mod-mutating");
         add.classList.add("studio-follower-dynamic-remove");
