@@ -88,10 +88,7 @@
 .studio-tab-nav li img {
   height: 1.5em;
 }
-.studio-adder-section .studio-adder-row .studio-adder-vertical-divider {
-  display: none;
-}
-.studio-adder-section .studio-adder-row button ~ button, #sa-studio-followers-btn /* browse projects */ {
+.studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton), #sa-studio-followers-btn /* browse projects */ {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -109,7 +106,7 @@
 .overflow-menu-container .overflow-menu-dropdown {
   z-index: 20; /* above adder row */
 }
-.studio-adder-section .studio-adder-row button ~ button::before,
+.studio-adder-section .studio-adder-row button ~ button:not(.sa-pseudobutton)::before,
 #sa-studio-followers-btn::before {
   content: "";
   display: inline-block;
