@@ -63,7 +63,7 @@ export default class ReduxHandler extends Listenable {
     if (typeof actions === "string") actions = [actions];
     return new Promise((resolve) => {
       const listener = ({ detail }) => {
-        if (actions && !actions.includes(detail.action)) return;
+        if (actions && !actions.includes(detail.action.type)) return;
         if (!condition(detail.next)) return;
         __scratchAddonsRedux.target.removeEventListener("statechanged", listener);
         setTimeout(resolve, 0);
