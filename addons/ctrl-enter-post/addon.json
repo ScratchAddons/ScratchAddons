@@ -1,57 +1,64 @@
 {
-    "name": "Ctrl+Enter to post",
-    "description": "Automatically posts the comment/post when you press Ctrl and Enter",
-    "credits": [
-      {
-        "name": "9gr",
-        "link": "https://scratch.mit.edu/users/9gr"
-      }
-    ],
-    "info": [
-        {
-          "type": "notice",
-          "text": "On macOS, you can use the Cmd key instead of the Ctrl key.",
-          "id": "macOS"
-        }
-    ],
-    "settings": [
-      {
-        "id": "forums",
-        "name": "Enable on forums",
-        "type": "boolean",
-        "default": true
-      },
-      {
-        "id": "studios",
-        "name": "Enable on studios",
-        "type": "boolean",
-        "default": true
-      },
-      {
-        "id": "projects",
-        "name": "Enable on projects",
-        "type": "boolean",
-        "default": true
-      },
-      {
-        "id": "users",
-        "name": "Enable on users' profiles",
-        "type": "boolean",
-        "default": false
-      }
-    ],
-    "userscripts": [
-      {
-        "url": "forums.js",
-        "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/post/*", "https://scratch.mit.edu/discuss/settings/*"]
-      },
-      {
-        "url": "comments.js",
-        "matches": ["https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/users/*", "https://scratch.mit.edu/projects/*"]
-      }
-    ],
-    "versionAdded": "1.17.0",
-    "tags": ["community", "forums"],
-    "enabledByDefault": false
-  }
-  
+  "name": "Ctrl+Enter to post",
+  "description": "Automatically posts the comment/post when you press Ctrl and Enter",
+  "credits": [
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr"
+    }
+  ],
+  "info": [
+    {
+      "type": "notice",
+      "text": "On macOS, you can use the Cmd key instead of the Ctrl key.",
+      "id": "macOS"
+    }
+  ],
+  "settings": [
+    {
+      "id": "forums",
+      "name": "Enable on forums",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "studios",
+      "name": "Enable on studios",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "projects",
+      "name": "Enable on projects",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "id": "users",
+      "name": "Enable on users' profiles",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "forums.js",
+      "matches": [
+        "https://scratch.mit.edu/discuss/topic/*",
+        "https://scratch.mit.edu/discuss/post/*",
+        "https://scratch.mit.edu/discuss/settings/*"
+      ]
+    },
+    {
+      "url": "comments.js",
+      "matches": [
+        "https://scratch.mit.edu/studios/*",
+        "https://scratch.mit.edu/users/*",
+        "https://scratch.mit.edu/projects/*"
+      ]
+    }
+  ],
+  "versionAdded": "1.17.0",
+  "tags": ["community", "forums"],
+  "enabledByDefault": false
+}
