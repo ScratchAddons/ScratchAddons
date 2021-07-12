@@ -1,5 +1,14 @@
 export default async ({ addon, console, msg }) => {
   const { redux } = addon.tab;
+  await redux.waitForState(
+    (state) => state.studio?.infoStatus === "FETCHED" && state.studio?.rolesStatus === "FETCHED",
+    // In vanilla SET_FETCH_STATUS is only used for "bad status",
+    // so we can ignore.
+    {
+      actions: ["SET_INFO", "SET_ROLES"],
+    }
+  );
+
   const studioId = redux.state.studio.id;
 
   const MAX_MANAGERS = 40;
