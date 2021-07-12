@@ -10,7 +10,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "On macOS, you can use the Cmd key instead of the Ctrl key.",
+      "text": "On macOS, you can also use the Cmd key.",
       "id": "macOS"
     }
   ],
@@ -36,7 +36,6 @@
     {
       "id": "users",
       "name": "Enable on profile pages",
-``
       "type": "boolean",
       "default": false
     }
