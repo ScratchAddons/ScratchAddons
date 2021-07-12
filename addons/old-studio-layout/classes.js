@@ -25,7 +25,7 @@ export default async function ({ addon, console }) {
     addon.tab.displayNoneWhileDisabled(button);
     document.querySelector(".studio-adder-section .studio-adder-row .studio-adder-vertical-divider").after(button);
   });
-  
+
   // Keep "invite followers" button
   addon.tab.waitForElement("#sa-studio-followers-btn").then((realButton) => {
     const button = document.createElement("button");
