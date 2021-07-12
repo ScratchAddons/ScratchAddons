@@ -13,8 +13,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/studios/*"],
-      "runAtComplete": true
+      "matches": ["https://scratch.mit.edu/studios/*"]
     }
   ],
   "userstyles": [
@@ -23,7 +22,7 @@
       "matches": ["https://scratch.mit.edu/studios/*"]
     }
   ],
-  "versionAdded": "1.16.0",
+  "versionAdded": "1.17.0",
   "tags": ["community", "studios"],
   "enabledByDefault": false
 }
