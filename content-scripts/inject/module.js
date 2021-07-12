@@ -145,14 +145,15 @@ class SharedObserver {
 }
 
 async function requestMsgCount() {
-  if (!scratchAddons.session.user?.username) return;
-  const username = scratchAddons.session.user.username;
-  let count = 0;
-  try {
-    const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count`);
-    count = (await resp.json()).count || 0;
-  } catch (e) {
-    console.warn("Could not fetch message count: ", e);
+  let count = null;
+  if (scratchAddons.session.user?.username) {
+    const username = scratchAddons.session.user.username;
+    try {
+      const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count`);
+      count = (await resp.json()).count || 0;
+    } catch (e) {
+      console.warn("Could not fetch message count: ", e);
+    }
   }
   pendingPromises.msgCount.forEach((resolve) => resolve(count));
   pendingPromises.msgCount = [];
@@ -165,10 +166,10 @@ function onDataReady() {
 
   scratchAddons.methods = {};
   scratchAddons.methods.getMsgCount = () => {
-    if (!pendingPromises.msgCount.length) requestMsgCount();
     let promiseResolver;
     const promise = new Promise((resolve) => (promiseResolver = resolve));
     pendingPromises.msgCount.push(promiseResolver);
+    if (pendingPromises.msgCount.length < 2) requestMsgCount();
     return promise;
   };
   scratchAddons.methods.copyImage = async (dataURL) => {
