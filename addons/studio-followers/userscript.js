@@ -111,9 +111,10 @@ export default async function ({ addon, global, console, msg }) {
   // Infinite scrolling
 
   function checkVisible(el, container) {
-    var rect = el.getBoundingClientRect();
-    var viewHeight = container.offsetHeight;
-    return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+    const { bottom, height, top } = el.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    return top <= containerRect.top ? containerRect.top - top <= height : bottom - containerRect.bottom <= height;
   }
 
   let flex = data.followers.grid.parentNode; // div.user-projects-modal-content
