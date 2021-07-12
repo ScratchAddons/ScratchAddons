@@ -1,0 +1,28 @@
+{
+    "name": "Ctrl+Enter to post",
+    "description": "Automatically posts the post when you press Ctrl and Enter",
+    "credits": [
+      {
+        "name": "9gr",
+        "link": "https://scratch.mit.edu/users/9gr"
+      }
+    ],
+    "info": [
+        {
+          "type": "notice",
+          "text": "On macOS, you can use the Cmd key instead of the Ctrl key.",
+          "id": "macOS"
+        }
+    ],
+    "userscripts": [
+      {
+        "url": "userscript.js",
+        "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/post/*", "https://scratch.mit.edu/discuss/settings/*"],
+        "runAtComplete": true
+      }
+    ],
+    "versionAdded": "1.18.0",
+    "tags": ["community", "forums"],
+    "enabledByDefault": false
+  }
+  
