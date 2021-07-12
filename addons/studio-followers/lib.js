@@ -103,7 +103,7 @@ export function createModal(addon, title, msg, switchType) {
 export function createUser(follower, addon, msg, members) {
   let { redux } = addon.tab;
   const btn = Object.assign(document.createElement("div"), {
-    className: "studio-follower mod-clickable",
+    className: "studio-follower mod-clickable studio-project-tile",
     tabindex: "0",
     role: "button",
   });
