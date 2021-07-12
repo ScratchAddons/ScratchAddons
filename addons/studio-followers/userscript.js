@@ -4,11 +4,7 @@ export default async function ({ addon, global, console, msg }) {
   let { redux } = addon.tab;
   let members = redux.state.managers.items.concat(redux.state.curators.items).map((member) => member.username);
 
-  if (!(redux.state.studio.manager || redux.state.studio.owner === redux.state.session.session?.user?.id)) return;
-
-  if (!true) {
-    return;
-  } // This user is not a manager
+  if (!(redux.state.studio.manager || redux.state.studio.owner === redux.state.session.session?.user?.id)) return; // This user is not a manager
   let data = {
     followers: {
       offset: -40,
