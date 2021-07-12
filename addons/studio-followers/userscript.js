@@ -119,10 +119,14 @@ export default async function ({ addon, global, console, msg }) {
 
   let flex = data.followers.grid.parentNode; // div.user-projects-modal-content
 
-  flex.addEventListener("scroll", (e) => {
-    let els = Array.from(data[currentType].grid.childNodes);
-    if (checkVisible(els[els.length - 1], flex)) {
-      loadData(currentType);
-    }
-  }, { passive: true });
+  flex.addEventListener(
+    "scroll",
+    (e) => {
+      let els = Array.from(data[currentType].grid.childNodes);
+      if (checkVisible(els[els.length - 1], flex)) {
+        loadData(currentType);
+      }
+    },
+    { passive: true }
+  );
 }
