@@ -124,5 +124,5 @@ export default async function ({ addon, global, console, msg }) {
     if (checkVisible(els[els.length - 1], flex)) {
       loadData(currentType);
     }
-  });
+  }, { passive: true });
 }
