@@ -36,7 +36,7 @@ export function createModal(addon, title, msg, switchType) {
 
   function createBtn(txt, active) {
     let btn = document.createElement("button");
-    btn.className = active ? "active" : ""
+    btn.className = active ? "active" : "";
     btn.innerText = txt;
     switcher.appendChild(btn);
     return btn;
@@ -44,14 +44,14 @@ export function createModal(addon, title, msg, switchType) {
 
   const followers = createBtn(msg("followers"), true);
   followers.addEventListener("click", () => {
-    following.className = ''
-    followers.className = 'active'
+    following.className = "";
+    followers.className = "active";
     switchType("followers");
   });
   const following = createBtn(msg("following"));
   following.addEventListener("click", () => {
-    followers.className = ''
-    following.className = 'active'
+    followers.className = "";
+    following.className = "active";
     switchType("following");
   });
 
@@ -72,26 +72,26 @@ export function createModal(addon, title, msg, switchType) {
 
   div.appendChild(main);
 
-  const doneBtnContainer = document.createElement('div')
-  doneBtnContainer.className = 'studio-projects-done-row'
+  const doneBtnContainer = document.createElement("div");
+  doneBtnContainer.className = "studio-projects-done-row";
 
-  const doneBtn = document.createElement('button')
-  doneBtn.className = 'button'
-  doneBtn.innerText = addon.tab.scratchMessage('general.done')
+  const doneBtn = document.createElement("button");
+  doneBtn.className = "button";
+  doneBtn.innerText = addon.tab.scratchMessage("general.done");
 
-  doneBtn.addEventListener('click', () => close())
+  doneBtn.addEventListener("click", () => close());
 
-  doneBtnContainer.appendChild(doneBtn)
+  doneBtnContainer.appendChild(doneBtn);
 
-  div.appendChild(doneBtnContainer)
+  div.appendChild(doneBtnContainer);
 
   overlay.appendChild(div);
 
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest(".sa-followers-main") && !e.target.closest('#sa-studio-followers-btn')) {
-      close()
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".sa-followers-main") && !e.target.closest("#sa-studio-followers-btn")) {
+      close();
     }
-  })
+  });
 
   // By default, hide the screen
 
