@@ -44,14 +44,14 @@ export function createModal(addon, title, msg, switchType) {
 
   const followers = createBtn(msg("followers"), true);
   followers.addEventListener("click", () => {
-    following.classList.remove('active')
-    followers.classList.add('active')
+    following.classList.remove("active");
+    followers.classList.add("active");
     switchType("followers");
   });
   const following = createBtn(msg("following"));
   following.addEventListener("click", () => {
-    followers.classList.remove('active')
-    following.classList.add('active')
+    followers.classList.remove("active");
+    following.classList.add("active");
     switchType("following");
   });
 
