@@ -1,6 +1,6 @@
 {
   "name": "Ctrl+Enter to post",
-  "description": "Automatically posts the comment/post when you press Ctrl and Enter",
+  "description": "Automatically posts the comment or post on Ctrl+Enter.",
   "credits": [
     {
       "name": "9gr",
