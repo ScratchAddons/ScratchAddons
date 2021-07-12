@@ -2,7 +2,6 @@ export default async function ({ addon, global, console, msg }) {
   let isScratchR2 = addon.tab.clientVersion == "scratchr2";
 
   let textboxSelector = isScratchR2 ? "textarea[name='content']" : "[name='compose-comment']";
-  // TODO: fix on user profiles as it fails
 
   while (true) {
     let textbox = await addon.tab.waitForElement(textboxSelector, { markAsSeen: true });
