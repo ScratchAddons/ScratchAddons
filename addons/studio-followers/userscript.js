@@ -2,6 +2,13 @@ import { createModal, createUser } from "./lib.js";
 
 export default async function ({ addon, global, console, msg }) {
   let { redux } = addon.tab;
+  // Same waitForState as studio-tools
+  await redux.waitForState(
+    (state) => state.studio?.infoStatus === "FETCHED" && state.studio?.rolesStatus === "FETCHED",
+    {
+      actions: ["SET_INFO", "SET_ROLES"],
+    }
+  );
   let members = redux.state.managers.items.concat(redux.state.curators.items).map((member) => member.username);
 
   if (!(redux.state.studio.manager || redux.state.studio.owner === redux.state.session.session?.user?.id)) return; // This user is not a manager
