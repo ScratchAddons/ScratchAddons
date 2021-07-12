@@ -66,9 +66,6 @@ const cs = {
     this._url = newUrl;
     csUrlObserver.dispatchEvent(new CustomEvent("change", { detail: { newUrl } }));
   },
-  requestMsgCount() {
-    chrome.runtime.sendMessage("getMsgCount");
-  },
   copyImage(dataURL) {
     // Firefox only
     return new Promise((resolve, reject) => {
@@ -330,8 +327,6 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
       // Try looking for the "userscriptMatches" function.
       removeAddonStyles(addonId);
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
-    } else if (request.setMsgCount) {
-      _page_.setMsgCount(request.setMsgCount);
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);

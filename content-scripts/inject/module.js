@@ -9,6 +9,7 @@ scratchAddons.eventTargets = {
   tab: [],
   self: [],
 };
+scratchAddons.session = {};
 
 const pendingPromises = {};
 pendingPromises.msgCount = [];
@@ -68,10 +69,6 @@ const page = {
       );
     }
   },
-  setMsgCount({ count }) {
-    pendingPromises.msgCount.forEach((promiseResolver) => promiseResolver(count));
-    pendingPromises.msgCount = [];
-  },
   isFetching: false,
   async refetchSession() {
     let res;
@@ -91,6 +88,7 @@ const page = {
       console.warn("Session fetch failed: ", e);
       if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
     }
+    scratchAddons.session = d;
     scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
     this.isFetching = false;
   },
@@ -146,6 +144,20 @@ class SharedObserver {
   }
 }
 
+async function requestMsgCount() {
+  if (!scratchAddons.session.user?.username) return;
+  const username = scratchAddons.session.user.username;
+  let count = 0;
+  try {
+    const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count`);
+    count = (await resp.json()).count || 0;
+  } catch (e) {
+    console.warn("Could not fetch message count: ", e);
+  }
+  pendingPromises.msgCount.forEach((resolve) => resolve(count));
+  pendingPromises.msgCount = [];
+}
+
 function onDataReady() {
   const addons = page.addonsWithUserscripts;
 
@@ -153,7 +165,7 @@ function onDataReady() {
 
   scratchAddons.methods = {};
   scratchAddons.methods.getMsgCount = () => {
-    if (!pendingPromises.msgCount.length) _cs_.requestMsgCount();
+    if (!pendingPromises.msgCount.length) requestMsgCount();
     let promiseResolver;
     const promise = new Promise((resolve) => (promiseResolver = resolve));
     pendingPromises.msgCount.push(promiseResolver);

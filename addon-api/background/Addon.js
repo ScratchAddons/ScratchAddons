@@ -8,12 +8,10 @@ import Auth from "../common/Auth.js";
  * @extends Addon
  * @property {Notifications} [notifications]
  * @property {Badge} [badge]
- * @property {Auth} auth
  */
 export default class BackgroundScriptAddon extends Addon {
   constructor(info) {
     super(info);
-    this.auth = new Auth(this);
     const { permissions } = info;
     this._timeouts = [];
     this._intervals = [];
