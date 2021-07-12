@@ -447,15 +447,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     if (isIframe) {
       iframeData = await getRunningAddons(manifests, addonsEnabled);
     }
-    const deepClone = (obj) => {
-      const copiedObj = {};
-      for (const key in obj) {
-        const val = obj[key];
-        if (typeof val === "object") copiedObj[key] = deepClone(val);
-        else copiedObj[key] = val;
-      }
-      return copiedObj;
-    };
+    const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
     for (const { manifest, addonId } of manifests) {
       manifest._categories = [];
       manifest._categories[0] = manifest.tags.includes("popup")
