@@ -23,19 +23,20 @@
     },
     {
       "id": "studios",
-      "name": "Enable on studios",
+      "name": "Enable on studio pages",
       "type": "boolean",
       "default": true
     },
     {
       "id": "projects",
-      "name": "Enable on projects",
+      "name": "Enable on project pages",
       "type": "boolean",
       "default": true
     },
     {
       "id": "users",
-      "name": "Enable on users' profiles",
+      "name": "Enable on profile pages",
+``
       "type": "boolean",
       "default": false
     }
