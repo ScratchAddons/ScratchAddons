@@ -108,26 +108,4 @@ export default async function ({ addon, global, console, msg }) {
   if (location.pathname.split("/")[3] == "curators") {
     init();
   }
-
-  // Infinite scrolling
-
-  function checkVisible(el, container) {
-    const { bottom, height, top } = el.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-
-    return top <= containerRect.top ? containerRect.top - top <= height : bottom - containerRect.bottom <= height;
-  }
-
-  let flex = data.followers.grid.parentNode; // div.user-projects-modal-content
-
-  flex.addEventListener(
-    "scroll",
-    (e) => {
-      let els = Array.from(data[currentType].grid.childNodes);
-      if (checkVisible(els[els.length - 1], flex)) {
-        loadData(currentType);
-      }
-    },
-    { passive: true }
-  );
 }
