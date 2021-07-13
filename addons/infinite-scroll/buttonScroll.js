@@ -37,13 +37,13 @@ export default async function ({ addon, global, console }) {
     commentLoader(addon, "#content", "[data-control=load-more]");
   const isStudio = window.location.pathname.split("/")[1] === "studios";
   const isStudioComments = isStudio && addon.settings.get("studioScroll");
-  const isProjectComments = window.location.pathname.split("/")[1] === "projects" && addon.settings.get("projectScroll");
+  const isProjectComments =
+    window.location.pathname.split("/")[1] === "projects" && addon.settings.get("projectScroll");
   if (isProjectComments || isStudioComments) {
     const buttonSelector = isStudioComments
       ? ".studio-compose-container .load-more-button"
       : "div.comments-container > div.flex-row.comments-list > button";
-    const run = () =>
-      commentLoader(addon, "#view", buttonSelector, isStudioComments ? "comments" : null);
+    const run = () => commentLoader(addon, "#view", buttonSelector, isStudioComments ? "comments" : null);
     if (location.hash.startsWith("#comments-")) {
       // Wait until user clicks "see all comments"
       // Note: we ignore the cases where the comment can't be found (e.g. /projects/x/#comments-0)
@@ -66,13 +66,13 @@ export default async function ({ addon, global, console }) {
       ".user-projects-modal-grid",
       ".user-projects-modal:not(.sa-followers-main) .user-projects-modal-grid .studio-grid-load-more > button",
       "",
-      {yProvider: ".user-projects-modal-content"}
+      { yProvider: ".user-projects-modal-content" }
     );
   if (isStudio && addon.settings.get("studioCuratorScroll"))
     commentLoader(addon, "#view", "div > .studio-members:last-child .studio-grid-load-more > button", "curators"); // Only scrolling curators for now
   if (isStudio && addon.settings.get("studioActivityScroll"))
     commentLoader(addon, "#view", ".studio-activity .studio-grid-load-more > button", "activity");
-  
+
   // Enable scrolling for studio-followers
   if (isStudio && addon.settings.get("studioBrowseProjectScroll")) {
     addon.tab.waitForElement(".sa-followers-main .user-projects-modal-content").then((el) => {

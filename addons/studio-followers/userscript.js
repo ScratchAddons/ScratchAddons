@@ -130,7 +130,7 @@ export default async function ({ addon, global, console, msg }) {
   if (location.pathname.split("/")[3] == "curators") {
     init();
   }
-  
+
   // Infinite scrolling
 
   function checkVisible(el, container) {
