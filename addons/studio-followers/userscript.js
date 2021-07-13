@@ -84,7 +84,7 @@ export default async function ({ addon, global, console, msg }) {
     btn.id = "sa-studio-followers-btn";
     btn.innerText = msg("button");
     btn.addEventListener("click", () => {
-      modal.style.display = modal.style.display == "none" ? null : "none";
+      modal.style.display = modal.style.display === "none" ? null : "none";
       if (!data[currentType].activated) {
         data[currentType].activated = true;
         loadData(currentType);
@@ -96,7 +96,7 @@ export default async function ({ addon, global, console, msg }) {
 
   addon.tab.addEventListener("urlChange", (e) => {
     // Studios page dynamically changes the url
-    if (location.pathname.split("/")[3] == "curators") {
+    if (location.pathname.split("/")[3] === "curators") {
       init();
     } else {
       let button = document.getElementById("sa-studio-followers-btn");
@@ -104,7 +104,7 @@ export default async function ({ addon, global, console, msg }) {
     }
   });
 
-  if (location.pathname.split("/")[3] == "curators") {
+  if (location.pathname.split("/")[3] === "curators") {
     init();
   }
 

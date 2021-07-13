@@ -37,7 +37,7 @@ export default async function ({ addon, console }) {
     addon.tab.displayNoneWhileDisabled(button);
     addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: button, order: 0.5 });
     addon.tab.addEventListener("urlChange", (e) => {
-      if (location.pathname.split("/")[3] == "curators") {
+      if (location.pathname.split("/")[3] === "curators") {
         addon.tab.displayNoneWhileDisabled(button);
       } else {
         button.style.display = "none";
