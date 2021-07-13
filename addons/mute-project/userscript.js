@@ -24,8 +24,7 @@ export default async function ({ addon, global, console }) {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
-    let container = button.parentElement;
-    container.appendChild(icon);
+    addon.tab.appendToSharedSpace({ space: "afterStopButton", element: icon, order: 0 });
     button.addEventListener("click", toggleMute);
     button.addEventListener("contextmenu", toggleMute);
   }

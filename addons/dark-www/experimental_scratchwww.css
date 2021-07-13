@@ -37,6 +37,7 @@ body:not(.sa-body-editor) .join-flow-title,
 .studio-page,
 .user-projects-modal .user-projects-modal-content {
   background: #252c37;
+  --sa-oldstudio-background: #202020;
 }
 #view,
 .crash-container,
@@ -241,4 +242,36 @@ body:not(.sa-body-editor) .select select option,
 .monitor_label_ci1ok, /* for some strange reason, variable names inherit their color from the body, unlike list title names */
 .monitor_list-empty_1UKsB {
   color: #575e75;
+}
+
+.studio-info,
+.studio-tabs {
+  --sa-oldstudio-default-background: #333333;
+  --sa-oldstudio-default-border: #606060;
+  --sa-oldstudio-default-inner-border: transparent;
+}
+.studio-tab-nav {
+  --sa-oldstudio-scratchr2-background: #282828;
+}
+.sub-nav li {
+  --sa-oldstudio-scratchr2-hover-border: rgba(255, 255, 255, 0.2);
+}
+.studio-tab-nav .active > li,
+.studio-tab-nav a.active.nav_link:hover > li {
+  --sa-oldstudio-default-background: #282828;
+  --sa-oldstudio-text: white;
+  --sa-oldstudio-icon-filter: none;
+}
+.studio-tabs > div:not(.studio-tab-nav) {
+  --sa-oldstudio-default-background: #282828;
+}
+.studio-adder-section .studio-adder-row button ~ button, #sa-studio-followers-btn /* browse projects */ {
+  --sa-oldstudio-background: #282828;
+  --sa-oldstudio-border: #606060;
+  --sa-oldstudio-text: white;
+  --sa-oldstudio-icon-filter: none;
+}
+.replies.collapsed > .comment:last-of-type::after {
+  --sa-oldstudio-collapsed-gradient: linear-gradient(rgba(32, 32, 32, 0), #202020);
+  --sa-oldstudio-default-collapsed-gradient: linear-gradient(rgba(40, 40, 40, 0), #282828);
 }

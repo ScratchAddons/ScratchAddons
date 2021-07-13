@@ -60,6 +60,7 @@ export default async ({ addon, console, msg }) => {
     const saColorPicker = Object.assign(document.createElement("div"), {
       className: "sa-color-picker sa-color-picker-paint",
     });
+    addon.tab.displayNoneWhileDisabled(saColorPicker, { display: "flex" });
     const saColorPickerColor = Object.assign(document.createElement("input"), {
       className: "sa-color-picker-color sa-color-picker-paint-color",
       type: "color",

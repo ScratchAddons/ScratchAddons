@@ -484,8 +484,23 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
+  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
+    document.body.classList.add("sa-debugger-small");
+  }
+  document.addEventListener(
+    "click",
+    (e) => {
+      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
+        document.body.classList.add("sa-debugger-small");
+      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
+        document.body.classList.remove("sa-debugger-small");
+      }
+    },
+    { capture: true }
+  );
+
   while (true) {
-    const stageHeaderSizeControls = await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
+    await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
       markAsSeen: true,
       reduxEvents: [
         "scratch-gui/mode/SET_PLAYER",
@@ -496,7 +511,7 @@ export default async function ({ addon, global, console, msg }) {
     });
     if (addon.tab.editorMode === "editor") {
       ScratchBlocks = await addon.tab.traps.getBlockly();
-      stageHeaderSizeControls.insertBefore(container, stageHeaderSizeControls.firstChild);
+      addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 0 });
     } else {
       toggleConsole(false);
     }

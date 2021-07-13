@@ -4,20 +4,23 @@ export default async function ({ addon, global, console, msg }) {
   posts.forEach(async (i) => {
     let postID = i.id.split("p")[1];
 
-    let footer = i.querySelector(".postfootright").children[0];
-
     let viewOnOcularContainer = document.createElement("li");
+    addon.tab.displayNoneWhileDisabled(viewOnOcularContainer);
     let viewOnOcular = document.createElement("a");
     viewOnOcular.innerText = `🔍 ocular`;
     viewOnOcular.title = msg("view-on-ocular");
     viewOnOcular.href = `https://ocular.jeffalo.net/post/${postID}`;
-    viewOnOcularContainer.appendChild(document.createTextNode(" | "));
     viewOnOcularContainer.appendChild(viewOnOcular);
-    viewOnOcularContainer.appendChild(document.createTextNode(" |"));
-    footer.insertAdjacentElement("afterbegin", viewOnOcularContainer);
+    addon.tab.appendToSharedSpace({
+      space: "forumsBeforePostReport",
+      scope: i,
+      element: viewOnOcularContainer,
+      order: 2,
+    });
 
     if (addon.auth.isLoggedIn) {
       let reactionMenuContainer = document.createElement("li");
+      addon.tab.displayNoneWhileDisabled(reactionMenuContainer);
       reactionMenuContainer.className = "my-ocular-reaction-menu";
       let reactionMenuButton = document.createElement("a");
       reactionMenuButton.href = "";
@@ -42,6 +45,7 @@ export default async function ({ addon, global, console, msg }) {
       reactionMenu.addEventListener("click", (e) => e.stopPropagation()); /* don't close the menu when it's clicked */
 
       let reactionList = document.createElement("li"); // it's a list item, because its inside the postfootright list. so it's basically a nested list
+      addon.tab.displayNoneWhileDisabled(reactionList);
       async function makeReactionList(focusedEmoji, isMenuFocused) {
         const reactions = await fetchReactions(postID);
 
@@ -105,8 +109,13 @@ export default async function ({ addon, global, console, msg }) {
           reactionList.appendChild(document.createTextNode("| "));
         }
       }
-      footer.insertAdjacentElement("afterbegin", reactionMenuContainer);
-      footer.insertAdjacentElement("afterbegin", reactionList);
+      addon.tab.appendToSharedSpace({
+        space: "forumsBeforePostReport",
+        scope: i,
+        element: reactionMenuContainer,
+        order: 1,
+      });
+      addon.tab.appendToSharedSpace({ space: "forumsBeforePostReport", scope: i, element: reactionList, order: 0 });
 
       makeReactionList();
     }

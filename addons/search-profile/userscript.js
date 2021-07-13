@@ -11,6 +11,7 @@ export default async function ({ addon, global, console, msg }) {
   img.src = addon.self.dir + "/user.svg";
   img.className = "tab-icon";
   span.innerText = msg("profile");
+  addon.tab.displayNoneWhileDisabled(tab);
   if (valid) tab.href = "/users/" + user + "/";
   //Check if whats entered is a valid username
   if (!valid) {

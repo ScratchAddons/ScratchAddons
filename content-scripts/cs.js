@@ -127,6 +127,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request === "getInitialUrl") {
     sendResponse(pseudoUrl || initialUrl);
+  } else if (request === "getLocationHref") {
+    sendResponse(location.href);
   }
 });
 
@@ -423,7 +425,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_16", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_17", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -442,7 +444,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_16"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_17"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,

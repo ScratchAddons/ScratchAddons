@@ -8,6 +8,8 @@
       "runAtComplete": false
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "credits": [{ "name": "Geotale" }, { "name": "pufferfish101007" }],
   "tags": ["community", "recommended", "profiles"],
   "versionAdded": "1.1.0",

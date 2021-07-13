@@ -1,1 +1,1 @@
-{"editor-stepping/@name":"Označi trenutno izvajajoče se bloke","editor-stepping/@description":"Doda moder okvir blokom, ki se v projektu trenutno izvajajo."}
+{"editor-stepping/@name":"Označi trenutno izvajajoče se bloke","editor-stepping/@description":"Doda barven okvir blokom, ki se v projektu trenutno izvajajo.","editor-stepping/@settings-name-highlight-color":"Barva okvirja"}
