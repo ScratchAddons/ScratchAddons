@@ -389,12 +389,12 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=hQVAamRCaAU",
+    href: "https://www.youtube.com/watch?v=4OluKLESoVU",
     target: "_blank",
   });
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.png"),
+    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.jpg"),
     style: "height: 100px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
