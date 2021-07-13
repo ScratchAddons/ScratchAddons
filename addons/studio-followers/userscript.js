@@ -21,12 +21,14 @@ export default async function ({ addon, global, console, msg }) {
       offset: -itemPageLimit,
       activated: false,
       grid: null,
+      moreButton: null,
       fetchedAll: false,
     },
     following: {
       offset: -itemPageLimit,
       activated: false,
       grid: null,
+      moreButton: null,
       fetchedAll: false,
     },
   };
@@ -52,6 +54,7 @@ export default async function ({ addon, global, console, msg }) {
   async function loadData(type) {
     if (isFetching) return;
     if (data[type].fetchedAll) return;
+    if (data[type].moreButton) data[type].moreButton.classList.add("mod-mutating");
     isFetching = true;
     data[type].offset += itemPageLimit;
     const res = await fetch(
@@ -68,6 +71,21 @@ export default async function ({ addon, global, console, msg }) {
       data[type].grid.appendChild(user);
       return follower.username;
     });
+    if (data[type].moreButton) data[type].moreButton.remove();
+    else {
+      const moreButton = document.createElement("div");
+      data[type].moreButton = moreButton;
+      data[type].grid.appendChild(moreButton);
+      moreButton.className = "studio-grid-load-more";
+      const moreButtonInner = document.createElement("button");
+      moreButton.appendChild(moreButtonInner);
+      moreButtonInner.className = "button";
+      moreButtonInner.innerText = addon.tab.scratchMessage("general.loadMore");
+      moreButtonInner.addEventListener("click", (e) => {
+        loadData(type);
+        e.stopPropagation();
+      });
+    }
     isFetching = false;
     return username;
   }
