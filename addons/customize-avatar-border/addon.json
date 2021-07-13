@@ -3,38 +3,38 @@
   "description": "Allows you to hide or change the outline around profile pictures in comments in 3.0-styled pages.",
   "tags": ["community", "theme"],
   "userstyles": [
-	{
-	  "url": "hide_outline.css",
-	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
-	  "settingMatch": {
-		"id": "hide-outline",
-		"value": true
-	  }
-	},
-	{
-	  "url": "outline_color.css",
-	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
-	  "settingMatch": {
-		"id": "hide-outline",
-		"value": false
-	  }
-	},
-	{
-	  "url": "fill_transparent.css",
-	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
-	  "settingMatch": {
-		"id": "fill-transparent",
-		"value": true
-	  }
-	},
-	{
-	  "url": "sharp_corners.css",
-	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
-	  "settingMatch": {
-		"id": "sharp-corners",
-		"value": true
-	  }
-	}
+    {
+      "url": "hide_outline.css",
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+      "settingMatch": {
+        "id": "hide-outline",
+        "value": true
+      }
+    },
+    {
+      "url": "outline_color.css",
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+      "settingMatch": {
+        "id": "hide-outline",
+        "value": false
+      }
+    },
+    {
+      "url": "fill_transparent.css",
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+      "settingMatch": {
+        "id": "fill-transparent",
+        "value": true
+      }
+    },
+    {
+      "url": "sharp_corners.css",
+      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
+      "settingMatch": {
+        "id": "sharp-corners",
+        "value": true
+      }
+    }
   ],
   "settings": [
     {
@@ -43,20 +43,20 @@
       "type": "boolean",
       "default": false
     },
-	{
+    {
       "name": "Fill transparency",
       "id": "fill-transparent",
       "type": "boolean",
       "default": false
     },
-	{
+    {
       "name": "Outline color",
       "id": "outline-color",
       "type": "color",
-	  "allowTransparency": true,
+      "allowTransparency": true,
       "default": "#4d97ff40"
     },
-	{
+    {
       "name": "Sharp corners",
       "id": "sharp-corners",
       "type": "boolean",
