@@ -193,7 +193,8 @@
   }
   .addon-notice,
   .addon-warn {
-    padding: 10px;
+    padding: 8px;
+    border: 2px solid;
     border-radius: 5px;
     font-weight: bold;
     margin: 10px 0;
@@ -201,11 +202,13 @@
     align-items: center;
   }
   .addon-notice {
-    background: rgba(255, 123, 38, 0.25);
+    border-color: rgba(253, 221, 43, 0.5);
+    background-color: var(--accent-3);
   }
   .addon-warn {
+    border-color: #fd2b2b;
+    background-color: rgba(253, 43, 43, 0.75);
     color: white;
-    background: #fd2b2b;
   }
   .addon-notice img,
   .addon-warn img {
