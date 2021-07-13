@@ -21,6 +21,7 @@ export default async function ({ addon, global, console, msg }) {
       offset: -itemPageLimit,
       activated: false,
       grid: null,
+      gridScrollPosition: 0,
       moreButton: null,
       fetchedAll: false,
     },
@@ -28,6 +29,7 @@ export default async function ({ addon, global, console, msg }) {
       offset: -itemPageLimit,
       activated: false,
       grid: null,
+      gridScrollPosition: 0,
       moreButton: null,
       fetchedAll: false,
     },
@@ -36,7 +38,9 @@ export default async function ({ addon, global, console, msg }) {
 
   const modal = createModal(addon, msg("modal-title"), msg, (nextType) => {
     if (nextType === currentType) return;
+    data[currentType].gridScrollPosition = data[currentType].grid.parentElement.scrollTop;
     data[nextType].grid.style.display = null;
+    data[nextType].grid.parentElement.scrollTop = data[nextType].gridScrollPosition;
     if (!data[nextType].activated) {
       data[nextType].activated = true;
       loadData(nextType);
