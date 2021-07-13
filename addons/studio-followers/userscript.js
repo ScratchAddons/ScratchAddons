@@ -15,15 +15,16 @@ export default async function ({ addon, global, console, msg }) {
   const isOwner = redux.state.studio.owner === redux.state.session.session?.user?.id;
   const isManager = redux.state.studio.manager || isOwner;
   if (!isManager) return;
+  const itemPageLimit = 28;
   const data = {
     followers: {
-      offset: -40,
+      offset: -itemPageLimit,
       activated: false,
       grid: null,
       fetchedAll: false,
     },
     following: {
-      offset: -40,
+      offset: -itemPageLimit,
       activated: false,
       grid: null,
       fetchedAll: false,
@@ -52,16 +53,16 @@ export default async function ({ addon, global, console, msg }) {
     if (isFetching) return;
     if (data[type].fetchedAll) return;
     isFetching = true;
-    data[type].offset += 40;
+    data[type].offset += itemPageLimit;
     const res = await fetch(
-      `https://api.scratch.mit.edu/users/${addon.auth.username}/${type}?offset=${data[type].offset}&limit=40`
+      `https://api.scratch.mit.edu/users/${addon.auth.username}/${type}?offset=${data[type].offset}&limit=${itemPageLimit}`
     );
     if (!res.ok) {
       // Cooldown in case something went wrong
       setTimeout(() => (isFetching = false), 1000);
     }
     const json = await res.json();
-    if (json.length < 40) data[type].fetchedAll = true;
+    if (json.length < itemPageLimit) data[type].fetchedAll = true;
     const username = json.map((follower) => {
       const user = createUser(follower, addon, msg, members);
       data[type].grid.appendChild(user);
