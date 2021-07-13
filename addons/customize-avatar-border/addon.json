@@ -1,29 +1,29 @@
 {
-  "name": "Customizable profile picture border",
-  "description": "Allows you to hide or change the border around profile pictures in comments.",
+  "name": "Customizable profile picture outline",
+  "description": "Allows you to hide or change the outline around profile pictures in comments in 3.0-styled pages.",
   "tags": ["community", "theme"],
   "userstyles": [
 	{
-	  "url": "hide_border.css",
+	  "url": "hide_outline.css",
 	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
 	  "settingMatch": {
-		"id": "hide-border",
+		"id": "hide-outline",
 		"value": true
 	  }
 	},
 	{
-	  "url": "border_color.css",
+	  "url": "outline_color.css",
 	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
 	  "settingMatch": {
-		"id": "hide-border",
+		"id": "hide-outline",
 		"value": false
 	  }
 	},
 	{
-	  "url": "border_bg.css",
+	  "url": "fill_transparent.css",
 	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
 	  "settingMatch": {
-		"id": "border-bg",
+		"id": "fill-transparent",
 		"value": true
 	  }
 	},
@@ -31,36 +31,36 @@
 	  "url": "sharp_corners.css",
 	  "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
 	  "settingMatch": {
-		"id": "round-borders",
+		"id": "sharp-corners",
 		"value": true
 	  }
 	}
   ],
   "settings": [
     {
-      "name": "Hide border",
-      "id": "hide-border",
+      "name": "Hide outline",
+      "id": "hide-outline",
       "type": "boolean",
       "default": false
     },
 	{
-      "name": "Fill border inside avatar",
-      "id": "border-bg",
+      "name": "Fill transparency",
+      "id": "fill-transparent",
       "type": "boolean",
       "default": false
     },
 	{
-      "name": "Border color",
-      "id": "border-color",
+      "name": "Outline color",
+      "id": "outline-color",
       "type": "color",
 	  "allowTransparency": true,
       "default": "#4d97ff40"
     },
 	{
       "name": "Sharp corners",
-      "id": "round-borders",
+      "id": "sharp-corners",
       "type": "boolean",
-      "default": true
+      "default": false
     }
   ],
   "credits": [
