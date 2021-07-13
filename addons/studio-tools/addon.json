@@ -20,12 +20,8 @@
   ],
   "userscripts": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/studios/*/curators"]
-    },
-    {
       "url": "migrated.js",
-      "matches": ["https://scratch.mit.edu/studios_www/*"]
+      "matches": ["https://scratch.mit.edu/studios/*"]
     },
     {
       "url": "mystuff.js",
@@ -39,10 +35,10 @@
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["https://scratch.mit.edu/studios_www/*"]
+      "matches": ["https://scratch.mit.edu/studios/*"]
     }
   ],
-  "tags": ["community", "studios", "beta"],
+  "tags": ["community", "studios", "recommended"],
   "versionAdded": "1.2.0",
   "enabledByDefault": true
 }

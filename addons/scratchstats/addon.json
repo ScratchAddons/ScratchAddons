@@ -21,5 +21,7 @@
       "matches": ["https://scratch.mit.edu/users/*/"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "libraries": ["chartjs"]
 }

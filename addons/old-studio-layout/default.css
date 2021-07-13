@@ -1,0 +1,85 @@
+.studio-page #view .studio-shell {
+  gap: 0;
+  grid-template-columns: 270px minmax(0, 1fr);
+}
+.studio-info,
+.studio-tabs {
+  background-color: var(--sa-oldstudio-default-background, #f2f2f2);
+  border: 1px solid var(--sa-oldstudio-default-border, #d9d9d9);
+  box-shadow: 0 1px 0 inset var(--sa-oldstudio-default-inner-border, white);
+}
+.studio-info {
+  margin-top: 88px;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.studio-tabs {
+  display: flex;
+  flex-direction: column;
+  padding-top: 65px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.studio-info-section:first-child /* title */ {
+  top: 10px;
+  left: 280px;
+  width: calc(100% - 510px);
+}
+.studio-info .sa-oldstudio-follow-section {
+  top: 10px;
+  right: 10px;
+}
+.studio-info .studio-info-footer-stats > div:nth-child(2) /* follower count */ {
+  top: 31px;
+  right: 10px;
+}
+.sa-oldstudio-logged-out .studio-info {
+  margin-top: 98px;
+}
+.sa-oldstudio-logged-out .studio-info .studio-info-footer-stats > div:nth-child(2) {
+  top: 21px;
+}
+.studio-tab-nav {
+  margin: 0;
+  padding: 0 10px;
+  box-sizing: border-box;
+  border-color: var(--sa-oldstudio-default-border, #d9d9d9);
+}
+.studio-tab-nav li {
+  position: relative;
+  top: 1px;
+  margin-top: 0;
+  margin-bottom: 0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background: transparent;
+  border-color: transparent;
+}
+.studio-tab-nav a.nav_link:hover > li,
+.studio-tab-nav li:active {
+  background-color: var(--sa-oldstudio-default-border, #d9d9d9);
+  border: 1px solid transparent;
+}
+.studio-tab-nav .active > li,
+.studio-tab-nav a.active.nav_link:hover > li {
+  background-color: var(--sa-oldstudio-default-background, white);
+  border-color: var(--sa-oldstudio-default-border, #d9d9d9);
+  border-bottom-color: var(--sa-oldstudio-default-background, white);
+  color: var(--sa-oldstudio-text, #575e75);
+}
+.studio-tab-nav .active > li img,
+.studio-tab-nav a.active.nav_link:hover > li img {
+  filter: var(--sa-oldstudio-icon-filter, invert(0.55));
+}
+.studio-tabs > div:not(.studio-tab-nav) {
+  flex-grow: 1;
+  padding: 10px;
+  padding-top: 0;
+  background-color: var(--sa-oldstudio-default-background, white);
+}
+.replies.collapsed > .comment:last-of-type::after {
+  background-image: var(--sa-oldstudio-default-collapsed-gradient, linear-gradient(rgba(255, 255, 255, 0), white));
+}

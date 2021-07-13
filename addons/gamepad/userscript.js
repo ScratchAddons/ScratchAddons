@@ -134,9 +134,6 @@ export default async function ({ addon, global, console, msg }) {
   buttonContainer.appendChild(buttonContent);
   container.appendChild(buttonContainer);
 
-  const spacer = document.createElement("div");
-  spacer.className = "sa-gamepad-spacer";
-
   let editor;
   let shouldStoreSettingsInProject = false;
   const didChangeProject = () => {
@@ -431,11 +428,9 @@ export default async function ({ addon, global, console, msg }) {
     );
     container.dataset.editorMode = addon.tab.editorMode;
     if (target.className.includes("stage-size-row")) {
-      target.insertBefore(container, target.firstChild);
-      spacer.remove();
+      addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 1 });
     } else {
-      spacer.appendChild(container);
-      target.parentElement.insertBefore(spacer, target);
+      addon.tab.appendToSharedSpace({ space: "fullscreenStageHeader", element: container, order: 0 });
     }
 
     const monitorListScaler = document.querySelector("[class^='monitor-list_monitor-list-scaler']");

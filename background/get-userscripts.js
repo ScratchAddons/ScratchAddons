@@ -36,6 +36,8 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
                       addonId,
                       injectAsStyleElt: !!manifest.injectAsStyleElt,
                       index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                      dynamicEnable: Boolean(manifest.dynamicEnable),
+                      dynamicDisable: Boolean(manifest.dynamicDisable),
                     },
                   },
                   { frameId: 0 }
@@ -286,14 +288,13 @@ const WELL_KNOWN_PATTERNS = {
   projects: /^\/projects\/(?:editor|\d+(?:\/(?:fullscreen|editor))?)\/?$/,
   projectEmbeds: /^\/projects\/\d+\/embed\/?$/,
   studios: /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/,
-  studioComments: /^\/studios\/\d+\/comments\/?$/,
   profiles: /^\/users\/[\w-]+\/?$/,
   topics: /^\/discuss\/topic\/\d+\/?$/,
   newPostScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add)\/?$/,
   editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
   forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
   scratchWWWNoProject:
-    /^\/(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|dmca|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|sec|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost)\/?$/,
+    /^\/(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|dmca|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|sec|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?)\/?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {
