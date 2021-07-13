@@ -1,1 +1,1 @@
-{"forum-time-zones/@name":"Utiliser le fuseau horaire local dans les forums","forum-time-zones/@description":"Convertit les dates de publication dans votre fuseau horaire. Utilise ScratchDB pour afficher ces informations   "}
+{"forum-time-zones/@name":"Utiliser le fuseau horaire local dans les forums","forum-time-zones/@description":"Convertit les dates des posts dans votre fuseau horaire. Utilise ScratchDB comme source d'information."}

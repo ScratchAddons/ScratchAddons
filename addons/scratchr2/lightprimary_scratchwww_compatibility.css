@@ -49,9 +49,11 @@
 #footer .inner .media li img {
   filter: var(--scratchr2-primaryColor-filter);
 }
+.studio-tab-nav a.active.nav_link:hover > li,
 .studio-info .studio-info-footer-report button:hover {
   color: var(--scratchr2-activeColor-text);
 }
+.studio-tab-nav a.active.nav_link:hover > li img,
 .studio-info .studio-info-footer-report button:hover img {
   filter: var(--scratchr2-activeColor-filter);
 }

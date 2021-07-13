@@ -1,0 +1,7 @@
+{
+  "studio-followers/modal-title": "Invite followers to studio",
+  "studio-followers/button": "Browse Followers",
+  "studio-followers/fetch-error": "Hmm, it seems like you are not allowed to do that. Make sure you're logged in.",
+  "studio-followers/followers": "Followers",
+  "studio-followers/following": "Following"
+}
