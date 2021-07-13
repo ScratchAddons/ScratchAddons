@@ -1,6 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   const headers = new Headers();
-  if (addon.auth.xToken) headers.set("X-Token", addon.auth.xToken);
+  const xToken = await addon.auth.fetchXToken();
+  if (xToken) headers.set("X-Token", xToken);
 
   const path = location.pathname.match(/\/projects\/[0-9]+/g);
   // Return if there is no project id... for example, if the user visits

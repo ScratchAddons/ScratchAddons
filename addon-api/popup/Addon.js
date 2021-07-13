@@ -1,5 +1,6 @@
 import Addon from "../common/Addon.js";
 import Popup from "./Popup.js";
+import Auth from "../common/Auth.js";
 
 /**
  * An addon that loads as a popup.

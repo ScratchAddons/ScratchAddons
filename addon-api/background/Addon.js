@@ -1,6 +1,7 @@
 import Addon from "../common/Addon.js";
 import Notifications from "./Notifications.js";
 import Badge from "./Badge.js";
+import Auth from "../common/Auth.js";
 
 /**
  * An addon that loads as a background script.
