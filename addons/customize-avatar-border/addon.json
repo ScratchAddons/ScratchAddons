@@ -26,14 +26,6 @@
         "id": "fill-transparent",
         "value": true
       }
-    },
-    {
-      "url": "sharp_corners.css",
-      "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
-      "settingMatch": {
-        "id": "sharp-corners",
-        "value": true
-      }
     }
   ],
   "settings": [
@@ -55,12 +47,6 @@
       "type": "color",
       "allowTransparency": true,
       "default": "#4d97ff40"
-    },
-    {
-      "name": "Sharp corners",
-      "id": "sharp-corners",
-      "type": "boolean",
-      "default": false
     }
   ],
   "credits": [
