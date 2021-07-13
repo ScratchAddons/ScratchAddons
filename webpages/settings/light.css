@@ -96,6 +96,10 @@
 .addon-notice img {
   filter: none;
 }
+.addon-warn {
+  background-color: #fd2b2b;
+  border-color: #d81212;
+}
 
 img :not(.navbar, .icon-type) {
   filter: invert(100%) brightness(0);
