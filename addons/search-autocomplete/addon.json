@@ -1,0 +1,19 @@
+{
+  "name": "Remove autocomplete from the search bar",
+  "description": "Removes autocomplete from the search bar.",
+  "credits": [
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
+  "tags": [],
+  "versionAdded": "1.18.0",
+  "enabledByDefault": false
+}
