@@ -23,8 +23,8 @@ button {
 .btn-dropdown img {
   filter: invert(1);
 }
-.btn-dropdown:hover {
-  background: rgba(0, 0, 0, 0.1);
+.message-type-title:hover .btn-dropdown {
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .comment {
