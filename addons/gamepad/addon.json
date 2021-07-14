@@ -1,5 +1,5 @@
 {
-  "name": "Gamepad support",
+  "name": "Gamepad/controller support",
   "description": "Interact with projects using a USB or Bluetooth controller/gamepad.",
   "credits": [
     {
