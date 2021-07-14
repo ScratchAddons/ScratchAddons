@@ -233,14 +233,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_16": {
-    "message": "New addon: \"debugger\", which brings console logs and breakpoints to Scratch. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_17": {
+    "message": "New addon: \"old studio layout\", which reverts the layout of the studio page back to the one used before the studio update. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_16": {
-    "message": "Another new addon added in this update is \"expandable search bar\", which makes the search bar on the navbar wider when it's focused."
+  "extensionUpdateInfo2_v1_17": {
+    "message": "The new \"browse followers button in studios\" addon brings back one click invites. Other new addons added this update are \"HD image uploads\" and \"non-draggable sprites in editor\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
