@@ -1,6 +1,6 @@
 {
-  "name": "Gamepad/controller support",
-  "description": "Interact with projects using a USB or Bluetooth controller/gamepad.",
+  "name": "Gamepad/video game controller support",
+  "description": "Interact with projects using a USB or Bluetooth video game controller/gamepad.",
   "credits": [
     {
       "name": "GarboMuffin"
