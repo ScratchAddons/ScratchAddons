@@ -15,17 +15,22 @@ export default async function ({ addon, global, console, msg }) {
   const isOwner = redux.state.studio.owner === redux.state.session.session?.user?.id;
   const isManager = redux.state.studio.manager || isOwner;
   if (!isManager) return;
+  const itemPageLimit = 28;
   const data = {
     followers: {
-      offset: -40,
+      offset: -itemPageLimit,
       activated: false,
       grid: null,
+      gridScrollPosition: 0,
+      moreButton: null,
       fetchedAll: false,
     },
     following: {
-      offset: -40,
+      offset: -itemPageLimit,
       activated: false,
       grid: null,
+      gridScrollPosition: 0,
+      moreButton: null,
       fetchedAll: false,
     },
   };
@@ -33,7 +38,9 @@ export default async function ({ addon, global, console, msg }) {
 
   const modal = createModal(addon, msg("modal-title"), msg, (nextType) => {
     if (nextType === currentType) return;
+    data[currentType].gridScrollPosition = data[currentType].grid.parentElement.scrollTop;
     data[nextType].grid.style.display = null;
+    data[nextType].grid.parentElement.scrollTop = data[nextType].gridScrollPosition;
     if (!data[nextType].activated) {
       data[nextType].activated = true;
       loadData(nextType);
@@ -51,22 +58,38 @@ export default async function ({ addon, global, console, msg }) {
   async function loadData(type) {
     if (isFetching) return;
     if (data[type].fetchedAll) return;
+    if (data[type].moreButton) data[type].moreButton.classList.add("mod-mutating");
     isFetching = true;
-    data[type].offset += 40;
+    data[type].offset += itemPageLimit;
     const res = await fetch(
-      `https://api.scratch.mit.edu/users/${addon.auth.username}/${type}?offset=${data[type].offset}&limit=40`
+      `https://api.scratch.mit.edu/users/${addon.auth.username}/${type}?offset=${data[type].offset}&limit=${itemPageLimit}`
     );
     if (!res.ok) {
       // Cooldown in case something went wrong
       setTimeout(() => (isFetching = false), 1000);
     }
     const json = await res.json();
-    if (json.length < 40) data[type].fetchedAll = true;
     const username = json.map((follower) => {
       const user = createUser(follower, addon, msg, members);
       data[type].grid.appendChild(user);
       return follower.username;
     });
+    if (data[type].moreButton) data[type].moreButton.remove();
+    if (json.length < itemPageLimit) data[type].fetchedAll = true;
+    else if (data[type].grid.parentNode.getAttribute("data-scrollable") !== "true") {
+      const moreButton = document.createElement("div");
+      data[type].moreButton = moreButton;
+      data[type].grid.appendChild(moreButton);
+      moreButton.className = "studio-grid-load-more";
+      const moreButtonInner = document.createElement("button");
+      moreButton.appendChild(moreButtonInner);
+      moreButtonInner.className = "button";
+      moreButtonInner.innerText = addon.tab.scratchMessage("general.loadMore");
+      moreButtonInner.addEventListener("click", (e) => {
+        loadData(type);
+        e.stopPropagation();
+      });
+    }
     isFetching = false;
     return username;
   }
@@ -84,7 +107,7 @@ export default async function ({ addon, global, console, msg }) {
     btn.id = "sa-studio-followers-btn";
     btn.innerText = msg("button");
     btn.addEventListener("click", () => {
-      modal.style.display = modal.style.display == "none" ? null : "none";
+      modal.style.display = modal.style.display === "none" ? null : "none";
       if (!data[currentType].activated) {
         data[currentType].activated = true;
         loadData(currentType);
@@ -96,7 +119,7 @@ export default async function ({ addon, global, console, msg }) {
 
   addon.tab.addEventListener("urlChange", (e) => {
     // Studios page dynamically changes the url
-    if (location.pathname.split("/")[3] == "curators") {
+    if (location.pathname.split("/")[3] === "curators") {
       init();
     } else {
       let button = document.getElementById("sa-studio-followers-btn");
@@ -104,7 +127,7 @@ export default async function ({ addon, global, console, msg }) {
     }
   });
 
-  if (location.pathname.split("/")[3] == "curators") {
+  if (location.pathname.split("/")[3] === "curators") {
     init();
   }
 
@@ -123,7 +146,7 @@ export default async function ({ addon, global, console, msg }) {
     "scroll",
     (e) => {
       let els = Array.from(data[currentType].grid.childNodes);
-      if (checkVisible(els[els.length - 1], flex)) {
+      if (checkVisible(els[els.length - 1], flex) && flex.getAttribute("data-scrollable") === "true") {
         loadData(currentType);
       }
     },
