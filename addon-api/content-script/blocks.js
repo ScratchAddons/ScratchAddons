@@ -40,6 +40,9 @@ const parseArguments = (code) => code
   .filter(i => i.charAt(0) === '%')
   .map(i => i.substring(0, 2));
 
+// Ensures all arguments have whitespace before them so that Scratch parses it correctly.
+// "test%s" -> "test %s"
+const fixDisplayName = (displayName) => displayName.replace(/([^\s])(%[nbs])/g, (_, before, arg) => `${before} ${arg}`);
 const compareArrays = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
@@ -54,6 +57,7 @@ export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
     throw new Error("Procedure code and argument list do not match");
   }
   if (displayName) {
+    displayName = fixDisplayName(displayName);
     // Make sure that the display name has the same arguments as the actual procedure code
     const displayNameArguments = parseArguments(displayName);
     if (!compareArrays(procCodeArguments, displayNameArguments)) {
