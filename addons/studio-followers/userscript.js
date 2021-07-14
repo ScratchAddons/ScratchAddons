@@ -69,13 +69,13 @@ export default async function ({ addon, global, console, msg }) {
       setTimeout(() => (isFetching = false), 1000);
     }
     const json = await res.json();
-    if (json.length < itemPageLimit) data[type].fetchedAll = true;
     const username = json.map((follower) => {
       const user = createUser(follower, addon, msg, members);
       data[type].grid.appendChild(user);
       return follower.username;
     });
     if (data[type].moreButton) data[type].moreButton.remove();
+    if (json.length < itemPageLimit) data[type].fetchedAll = true;
     else if (data[type].grid.parentNode.getAttribute("data-scrollable") !== "true") {
       const moreButton = document.createElement("div");
       data[type].moreButton = moreButton;
