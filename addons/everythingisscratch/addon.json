@@ -1,6 +1,12 @@
 {
   "name": "Everything is Scratch",
-  "description": "Will turn everything in scratch. Not recommended.",
+  "description": "Will turn everything into scratch. Not recommended.",
   "tags": ["easterEgg", "community"],
+    "userscripts": [
+    {
+      "url": "script.js",
+      "matches": ["https://scratch.mit.edu/*"]
+    }
+  ],
   "enabledByDefault": false
 }
