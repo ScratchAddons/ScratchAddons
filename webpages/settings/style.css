@@ -1,14 +1,14 @@
 html {
-  background: var(--accent-1);
+  background: var(--content-background);
 }
 
 body {
-  background: var(--accent-2);
+  background: var(--page-background);
   font-family: "Sora", sans-serif;
   margin: 0;
   height: 100vh;
   overflow: hidden;
-  color: var(--accent-5);
+  color: var(--content-text);
   font-size: 12px;
 }
 
@@ -111,19 +111,19 @@ h1 {
 
 @keyframes addonBlink {
   10% {
-    border: 1px solid var(--accent-3);
+    border: 1px solid var(--navigation-background);
   }
   25% {
     border: 1px solid #7e7e7e;
   }
   50% {
-    border: 1px solid var(--accent-3);
+    border: 1px solid var(--navigation-background);
   }
   75% {
     border: 1px solid #7e7e7e;
   }
   100% {
-    border: 1px solid var(--accent-3);
+    border: 1px solid var(--navigation-background);
   }
 }
 
@@ -145,8 +145,8 @@ h1 {
 }
 
 .large-button {
-  color: var(--accent-5);
-  background: var(--accent-2);
+  color: var(--content-text);
+  background: var(--page-background);
   border: 1px solid #000;
   padding: 6px 12px;
   border-radius: 4px;
@@ -182,7 +182,7 @@ h1 {
 
 .small-button {
   margin-left: 10px;
-  background: var(--accent-2);
+  background: var(--page-background);
   border: 1px solid #000;
   padding: 5px 10px;
   border-radius: 5px;
@@ -205,8 +205,8 @@ h1 {
   left: 25px;
 }
 .large-dropdown {
-  color: var(--accent-5);
-  background: var(--accent-2);
+  color: var(--content-text);
+  background: var(--page-background);
   border: 1px solid #000;
   padding: 8px 12px;
   border-radius: 4px;
@@ -347,7 +347,7 @@ body.iframe .search-box input {
   padding: 10px;
   position: sticky;
   top: 0;
-  background-color: var(--accent-2);
+  background-color: var(--page-background);
   z-index: 999;
 }
 

@@ -1,6 +1,6 @@
 .search-box {
   min-height: 60px;
-  background: var(--accent-1);
+  background: var(--content-background);
   display: flex;
   align-items: center;
   padding: 10px 30px;
@@ -12,7 +12,7 @@
   padding: 10px 15px;
   border: none;
   border-radius: 4px 0 0 4px;
-  color: var(--accent-5);
+  color: var(--content-text);
   width: 150px;
   height: 16px;
 }

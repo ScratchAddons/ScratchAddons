@@ -14,7 +14,7 @@
 }
 
 .modal-content {
-  background-color: var(--accent-2);
+  background-color: var(--page-background);
   margin: auto;
   padding: 20px;
   width: 50rem;

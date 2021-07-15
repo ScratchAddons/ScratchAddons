@@ -14,7 +14,7 @@
   display: flex;
   border-radius: 4px;
   overflow: hidden;
-  background: var(--accent-2);
+  background: var(--page-background);
   border: 1px solid #000;
   font-size: 10px;
   user-select: none;
