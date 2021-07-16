@@ -42,7 +42,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   function runCheckMessagesAfter(args, ms) {
     return new Promise((resolve) => {
       setTimeout(async () => {
-        await checkMessages(args);
+        await checkMessages(args).catch((e) => console.warn("Error checking messages", e));
         resolve();
       }, ms);
     });
@@ -123,8 +123,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         .catch((err) => {
           // TODO: are these errors recognized by popup?
           // (Check for other catches below as well)
-          console.error(err);
-          sendResponse(err);
+          console.warn("Comment could not be fetched:", err);
+          sendResponse({ failed: true });
         });
       return true;
     } else if (popupRequest === "markAsRead") {
@@ -185,6 +185,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           const resParent = await fetch(getCommentUrl(parentId));
           if (!resParent.ok) continue;
           const jsonParent = await resParent.json();
+          // This is sometimes null for deleted comments
+          if (jsonParent === null) continue;
           parentComment = jsonParent;
         } else {
           parentComment = json;
@@ -340,8 +342,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       item.textContent = item.textContent.replace(/\n/g, "");
       if (item instanceof Text && item.textContent === "") {
         item.remove();
-      } else if (item instanceof HTMLAnchorElement && item.href.startsWith("/")) {
-        item.href = "https://scratch.mit.edu" + item.href;
+      } else if (item instanceof HTMLAnchorElement && item.getAttribute("href").startsWith("/")) {
+        item.href = "https://scratch.mit.edu" + item.getAttribute("href");
       } else if (item instanceof HTMLImageElement) {
         const splitString = item.src.split("/");
         const imageName = splitString[splitString.length - 1];

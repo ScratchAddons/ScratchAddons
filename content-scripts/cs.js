@@ -127,6 +127,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request === "getInitialUrl") {
     sendResponse(pseudoUrl || initialUrl);
+  } else if (request === "getLocationHref") {
+    sendResponse(location.href);
   }
 });
 
@@ -265,18 +267,6 @@ function waitForDocumentHead() {
 }
 
 async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
-  const isStudio = /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/.test(location.pathname);
-  if (isStudio && !pseudoUrl) {
-    await waitForDocumentHead();
-    if (document.querySelector("meta[name='format-detection']")) {
-      // scratch-www studio
-      pseudoUrl = location.href.replace("/studios/", "/studios_www/");
-      receivedResponse = false;
-      chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
-      return;
-    }
-  }
-
   // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   const disabledDynamicAddons = [];
@@ -305,12 +295,15 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
     } else if (request.dynamicAddonEnabled) {
-      const { scripts, userstyles, cssVariables, addonId, injectAsStyleElt, index } = request.dynamicAddonEnabled;
+      const { scripts, userstyles, cssVariables, addonId, injectAsStyleElt, index, dynamicEnable, dynamicDisable } =
+        request.dynamicAddonEnabled;
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
       if (everLoadedAddons.find((addon) => addon.addonId === addonId)) {
+        if (!dynamicDisable) return;
         // Addon was reenabled
         _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
       } else {
+        if (!dynamicEnable) return;
         // Addon was not injected in page yet
         _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
       }
@@ -395,10 +388,14 @@ const showBanner = () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
+  const notifImageLink = Object.assign(document.createElement("a"), {
+    href: "https://www.youtube.com/watch?v=hQVAamRCaAU",
+    target: "_blank",
+  });
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/icon.svg"),
-    style: "height: 150px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.png"),
+    style: "height: 100px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -428,7 +425,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_16", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_17", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -447,7 +444,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_16"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_17"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -489,7 +486,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  notifInnerBody.appendChild(notifImage);
+  notifImageLink.appendChild(notifImage);
+
+  notifInnerBody.appendChild(notifImageLink);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);
@@ -506,7 +505,7 @@ const handleBanner = async () => {
   const settings = await promisify(chrome.storage.local.get.bind(chrome.storage.local))(["bannerSettings"]);
   const force = !settings || !settings.bannerSettings;
 
-  if (force || settings.bannerSettings.lastShown !== currentVersionMajorMinor) {
+  if (force || settings.bannerSettings.lastShown !== currentVersionMajorMinor || location.hash === "#sa-update-notif") {
     console.log("Banner shown.");
     await promisify(chrome.storage.local.set.bind(chrome.storage.local))({
       bannerSettings: Object.assign({}, settings.bannerSettings, { lastShown: currentVersionMajorMinor }),
@@ -523,7 +522,6 @@ if (document.readyState !== "loading") {
 
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
 const isStudio = pathArr[0] === "studios";
-const r2IsStudioComments = isStudio && pathArr[2] === "comments";
 const isProject = pathArr[0] === "projects";
 
 if (isProfile || isStudio || isProject) {
@@ -550,8 +548,7 @@ if (isProfile || isStudio || isProject) {
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
   window.addEventListener("load", () => {
-    const isScratchWww = Boolean(document.querySelector("meta[name='format-detection']"));
-    if (isProfile || (r2IsStudioComments && !isScratchWww)) {
+    if (isProfile) {
       window.addEventListener(
         "click",
         (e) => {
@@ -595,7 +592,7 @@ if (isProfile || isStudio || isProject) {
         },
         { capture: true }
       );
-    } else if (isProject || (isStudio && isScratchWww)) {
+    } else if (isProject || isStudio) {
       // For projects, we want to be careful not to hurt performance.
       // Let's capture the event in the comments container instead
       // of the whole window. There will be a new comment container

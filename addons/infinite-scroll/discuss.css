@@ -1,0 +1,7 @@
+.djangobb tbody th {
+  border-top: #e0e0e0 solid 1px;
+}
+
+.djangobb .pagination {
+  display: none;
+}

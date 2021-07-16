@@ -83,10 +83,9 @@ class SharedObserver {
       for (const item of this.pending) {
         if (item.condition && !item.condition()) continue;
         for (const match of document.querySelectorAll(item.query)) {
-          if (item.seen) {
-            if (item.seen.has(match)) continue;
-            item.seen.add(match);
-          }
+          if (item.seen?.has(match)) continue;
+          if (item.elementCondition && !item.elementCondition(match)) continue;
+          item.seen?.add(match);
           this.pending.delete(item);
           item.resolve(match);
           break;
@@ -105,6 +104,7 @@ class SharedObserver {
    * @param {string} opts.query - query.
    * @param {WeakSet=} opts.seen - a WeakSet that tracks whether an element has already been seen.
    * @param {function=} opts.condition - a function that returns whether to resolve the selector or not.
+   * @param {function=} opts.elementCondition - A function that returns whether to resolve the selector or not, given an element.
    * @returns {Promise<Node>} Promise that is resolved with modified element.
    */
   watch(opts) {
@@ -184,7 +184,7 @@ else bodyIsEditorClassCheck();
 const originalReplaceState = history.replaceState;
 history.replaceState = function () {
   const oldUrl = location.href;
-  const newUrl = new URL(arguments[2], document.baseURI).href;
+  const newUrl = arguments[2] ? new URL(arguments[2], document.baseURI).href : oldUrl;
   const returnValue = originalReplaceState.apply(history, arguments);
   _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
@@ -197,7 +197,7 @@ history.replaceState = function () {
 const originalPushState = history.pushState;
 history.pushState = function () {
   const oldUrl = location.href;
-  const newUrl = new URL(arguments[2], document.baseURI).href;
+  const newUrl = arguments[2] ? new URL(arguments[2], document.baseURI).href : oldUrl;
   const returnValue = originalPushState.apply(history, arguments);
   _cs_.url = newUrl;
   for (const eventTarget of scratchAddons.eventTargets.tab) {
@@ -206,6 +206,16 @@ history.pushState = function () {
   bodyIsEditorClassCheck();
   return returnValue;
 };
+
+// replaceState or pushState will not trigger onpopstate.
+window.addEventListener("popstate", () => {
+  const newUrl = (_cs_.url = location.href);
+  for (const eventTarget of scratchAddons.eventTargets.tab) {
+    // There isn't really a way to get the previous URL from popstate event.
+    eventTarget.dispatchEvent(new CustomEvent("urlChange", { detail: { oldUrl: "", newUrl } }));
+  }
+  bodyIsEditorClassCheck();
+});
 
 function loadClasses() {
   scratchAddons.classNames.arr = [

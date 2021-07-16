@@ -1,0 +1,72 @@
+.sa-followers-modal-grid {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.studio-follower {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #d9d9d9;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.studio-follower-pfp {
+  max-width: 100%;
+  background: #a0c6fc;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  width: 100%;
+  aspect-ratio: 9 / 10;
+  object-fit: cover;
+}
+
+.studio-follower-bottom {
+  display: flex;
+  padding: 6px 4px 6px 10px;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.studio-follower-username {
+  color: #4c97ff;
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.studio-follower-add-remove-image {
+  margin: 7px;
+}
+
+.studio-follower-dynamic-add {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  background-clip: padding-box;
+  color: white;
+  border-radius: 100%;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  line-height: 32px;
+  align-content: center;
+  display: flex;
+  justify-content: center;
+}
+
+.studio-follower-dynamic-remove {
+  background: #0fbd8c;
+  background-clip: padding-box;
+  border: 3px solid rgba(15, 189, 140, 0.2);
+}
+
+.studio-adder-section {
+  margin-top: 7px;
+}

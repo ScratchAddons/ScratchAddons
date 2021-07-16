@@ -14,7 +14,7 @@ const ICON =
 
 let vm;
 const customBlocks = {};
-const internalBlocksCache = {};
+const customBlockParamNamesIdsDefaults = Object.create(null);
 
 const getCustomBlock = (proccode) => {
   if (!Object.prototype.hasOwnProperty.call(customBlocks, proccode)) {
@@ -31,41 +31,48 @@ const getNamesIdsDefaults = (blockData) => [
   blockData.args.map(() => ""),
 ];
 
-const resetAllCaches = () => {
-  // We override Blocks.resetCache() further down
-  for (const target of vm.runtime.targets) {
-    if (target.isOriginal) {
-      target.blocks.resetCache();
-    }
-  }
-  vm.runtime.flyoutBlocks.resetCache();
-};
-
-export const addBlock = (proccode, args, handler, hide) => {
+export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
   if (getCustomBlock(proccode)) {
     return;
   }
+
+  // Make sure that the argument counts all appear to be consistent.
+  // Any inconsistency may result in various strange behaviors, possibly including corruption.
+  const argumentsInProcCode = proccode.split("%").length - 1;
+  if (args.length !== argumentsInProcCode) {
+    throw new Error("Procedure code and argument list do not match");
+  }
+  if (displayName) {
+    // Make sure that the display name has the same number of arguments as the actual procedure code
+    const argumentsInDisplayName = displayName.split("%").length - 1;
+    if (argumentsInProcCode !== argumentsInDisplayName) {
+      console.warn(`block displayName ${displayName} for ${proccode} has wrong number of arguments, ignoring it.`);
+      displayName = proccode;
+    }
+  } else {
+    displayName = proccode;
+  }
+
   const blockData = {
     id: proccode,
     color: color.color,
     secondaryColor: color.secondaryColor,
     tertiaryColor: color.tertiaryColor,
     args,
-    handler,
-    hide: !!hide,
+    handler: callback,
+    hide: !!hidden,
+    displayName,
   };
   customBlocks[proccode] = blockData;
-  internalBlocksCache[proccode] = getNamesIdsDefaults(blockData);
+  customBlockParamNamesIdsDefaults[proccode] = getNamesIdsDefaults(blockData);
   if (vm.editingTarget) {
     vm.emitWorkspaceUpdate();
   }
-  resetAllCaches();
 };
 
 export const removeBlock = (proccode) => {
   customBlocks[proccode] = null;
-  internalBlocksCache[proccode] = null;
-  resetAllCaches();
+  customBlockParamNamesIdsDefaults[proccode] = null;
 };
 
 const generateBlockXML = () => {
@@ -100,6 +107,7 @@ const injectWorkspace = (ScratchBlocks) => {
         this.colour_ = block.color;
         this.colourSecondary_ = block.secondaryColor;
         this.colourTertiary_ = block.tertiaryColor;
+        this.customContextMenu = null;
       }
     }
     return oldUpdateColour.call(this, ...args);
@@ -125,6 +133,50 @@ const injectWorkspace = (ScratchBlocks) => {
     return result;
   };
 
+  // Trick Scratch into thinking addon blocks are defined somewhere.
+  // This makes Scratch's "is this procedure used anywhere" check work when addon blocks exist.
+  // getDefineBlock is used in https://github.com/LLK/scratch-blocks/blob/37f12ae3e342480f4d8e7b6ba783c46e29e77988/core/block_dragger.js#L275-L297
+  // and https://github.com/LLK/scratch-blocks/blob/develop/core/procedures.js
+  // Only block_dragger.js should be able to reference addon blocks, but if procedures.js does
+  // somehow, we shim enough of the API that things shouldn't break.
+  const originalGetDefineBlock = ScratchBlocks.Procedures.getDefineBlock;
+  ScratchBlocks.Procedures.getDefineBlock = function (procCode, workspace) {
+    // If an actual definition with this code exists, return that instead of our shim.
+    const result = originalGetDefineBlock.call(this, procCode, workspace);
+    if (result) {
+      return result;
+    }
+    const block = getCustomBlock(procCode);
+    if (block) {
+      return {
+        workspace,
+        getInput() {
+          return {
+            connection: {
+              targetBlock() {
+                return null;
+              },
+            },
+          };
+        },
+      };
+    }
+    return result;
+  };
+
+  const originalCreateAllInputs = ScratchBlocks.Blocks["procedures_call"].createAllInputs_;
+  ScratchBlocks.Blocks["procedures_call"].createAllInputs_ = function (...args) {
+    const blockData = getCustomBlock(this.procCode_);
+    if (blockData) {
+      const originalProcCode = this.procCode_;
+      this.procCode_ = blockData.displayName;
+      const ret = originalCreateAllInputs.call(this, ...args);
+      this.procCode_ = originalProcCode;
+      return ret;
+    }
+    return originalCreateAllInputs.call(this, ...args);
+  };
+
   // Workspace update may be required to make category appear in flyout
   if (vm.editingTarget) {
     vm.emitWorkspaceUpdate();
@@ -144,12 +196,12 @@ export async function init(tab) {
 
   vm = tab.traps.vm;
 
-  // Make sure that the block cache always has something for our blocks, otherwise stepToProcedure will not be called
   const Blocks = vm.runtime.monitorBlocks.constructor;
-  const originalResetCache = Blocks.prototype.resetCache;
-  Blocks.prototype.resetCache = function () {
-    originalResetCache.call(this);
-    Object.assign(this._cache.procedureParamNames, internalBlocksCache);
+  // Worth noting that this adds a very slight overhead to every procedure call.
+  // However, it's not significant and is basically unmeasurable.
+  const originalGetProcedureParamNamesIdsAndDefaults = Blocks.prototype.getProcedureParamNamesIdsAndDefaults;
+  Blocks.prototype.getProcedureParamNamesIdsAndDefaults = function getProcedureParamNamesIdsAndDefaultsWrapped(name) {
+    return customBlockParamNamesIdsDefaults[name] || originalGetProcedureParamNamesIdsAndDefaults.call(this, name);
   };
 
   const oldStepToProcedure = vm.runtime.sequencer.stepToProcedure;

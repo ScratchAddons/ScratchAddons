@@ -58,7 +58,7 @@ const vue = new Vue({
       }
     },
     iframeSrc(addonId) {
-      return vue.popups.find((addon) => addon._addonId === addonId).url || `../../popups/${addonId}/popup.html`;
+      return vue.popups.find((addon) => addon._addonId === addonId).html;
     },
   },
 });
@@ -73,11 +73,17 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     .filter((findManifest) => findManifest !== undefined)
     .filter(({ manifest }) => manifest.popup)
     .sort(({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA))
-    .map(({ addonId, manifest }) => (manifest.popup._addonId = addonId) && manifest.popup);
+    .map(
+      ({ addonId, manifest }) =>
+        (manifest.popup._addonId = addonId) &&
+        Object.assign(manifest.popup, {
+          html: `../../popups/${addonId}/${manifest.popup.html}`,
+        })
+    );
   popupObjects.push({
     name: chrome.i18n.getMessage("quickSettings"),
     icon: "../../images/icons/wrench.svg",
-    url: "../../webpages/settings/index.html",
+    html: "../settings/index.html",
     _addonId: "__settings__",
   });
   vue.popups = popupObjects;
