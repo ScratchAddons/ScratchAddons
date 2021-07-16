@@ -428,7 +428,6 @@ function postReply (parent, replyBox) {
         });
     })
     .catch((err) => {
-      console.error(err);
       commentError(replyBox, 'comments.error');
     });
 }
