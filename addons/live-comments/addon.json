@@ -1,0 +1,12 @@
+{
+  "name": "Live comment reloading",
+  "description": "Loads new comments on project and studio pages automatically.",
+  "userscripts": [
+    {
+      "url": "script.js",
+      "matches": ["projects", "https://scratch.mit.edu/studios/*/comments"]
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": false
+}
