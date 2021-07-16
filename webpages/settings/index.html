@@ -160,11 +160,7 @@
           <span>{{ msg("moreSettings") }}</span>
         </div>
       </div>
-      <div
-        v-show="!isIframe && smallMode === false"
-        class="categories-shrink"
-        @click="sidebarToggle()"
-      >
+      <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
         <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === (direction() === 'rtl')}" />
       </div>
 

@@ -104,9 +104,8 @@ button:hover {
 .username-list > a {
   display: inline-block;
   margin-inline-end: 10px;
-}¸
-
-.hover-reverse {
+}
+¸ .hover-reverse {
   cursor: pointer;
 }
 .small-icon {

@@ -56,9 +56,7 @@
             <button @click="!postingComment && postComment()" class="post-button">
               {{ postingComment ? messages.postingMsg : messages.postMsg }}
             </button>
-            <button @click="replying = false" v-show="!postingComment">
-              {{ messages.cancelMsg }}
-            </button>
+            <button @click="replying = false" v-show="!postingComment">{{ messages.cancelMsg }}</button>
             <span class="comment-chars"> {{ replyBoxLeftMsg }}</span>
           </div>
         </div>
@@ -385,7 +383,8 @@
           <img class="small-icon" src="../../images/icons/reload.svg" /> {{ uiMessages.reloadMsg }}
         </button>
         <span v-show="messagesReady && showingMessagesAmt === 0 && stMessages.length === 0" class="status-empty"
-          >{{ uiMessages.noUnreadMsg }}</span>
+          >{{ uiMessages.noUnreadMsg }}</span
+        >
         <button @click="showAllMessages = true" v-show="canShowMoreMessages">
           <img class="small-icon" src="../../images/icons/plus.svg" /> {{ uiMessages.showMoreMsg }}
         </button>
