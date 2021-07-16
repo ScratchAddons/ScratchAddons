@@ -77,8 +77,8 @@
 
 <style>
   .addon-description {
-    margin-inline: 10px;
-    color: gray;
+    margin-inline: 20px;
+    color: var(--gray-text);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -91,7 +91,7 @@
   .addon-credits {
     width: 100%;
     white-space: normal;
-    color: #dddddd;
+    color: var(--description-text);
   }
 
   .addon-credits,
@@ -101,7 +101,7 @@
   }
   .addon-credits a,
   .addon-license a {
-    color: #6d9bff;
+    color: var(--blue-text);
   }
 
   .addon-credits > span {
@@ -122,27 +122,27 @@
     display: inline-block;
     width: 150px;
     height: 8px;
-    background-color: gray;
+    background-color: var(--gray-text);
     border-radius: 3px;
   }
   .addon-topbar {
-    height: 50px;
-    padding-inline-end: 5px;
+    height: 52px;
+    padding-inline-end: 10px;
     display: flex;
     align-items: center;
+  }
+  .clickeable-area {
+    padding-inline-start: 10px;
   }
   .addon-body {
     margin: 10px;
     background: var(--content-background);
-    border: 1px solid var(--navigation-background);
+    border: 1px solid var(--content-border);
     border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--content-shadow);
   }
   .addon-body:target {
     animation: addonBlink 2s 1;
-  }
-  .addon-body.addon-body-margin-bottom {
-    margin-bottom: 50px;
   }
 
   .clear-settings {
@@ -153,29 +153,23 @@
     margin-inline-end: 8px;
   }
   .clear-settings:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--hover-highlight);
   }
 
-  .setting-body img.dark {
-    filter: invert(0) brightness(10);
-  }
   .btn-dropdown {
     display: flex;
     align-items: center;
-    padding: 5px;
+    padding: 4px;
     border-radius: 4px;
+    transition: 0.2s ease;
   }
   .clickeable-area:hover .btn-dropdown {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .sh .btn-dropdown {
-    transform: rotate(180deg);
+    background: var(--hover-highlight);
   }
 
   .btn-dropdown img {
-    height: 23px;
-    width: 23px;
+    height: 24px;
+    width: 24px;
   }
 
   .clickeable-area {
@@ -183,7 +177,6 @@
     display: flex;
     align-self: stretch;
     align-items: center;
-    padding-inline-start: 5px;
   }
   .clickeable-area .tooltip {
     cursor: pointer;
@@ -202,13 +195,13 @@
     align-items: center;
   }
   .addon-notice {
-    border-color: rgba(253, 221, 43, 0.5);
+    border-color: var(--yellow-opacity50);
     background-color: var(--navigation-background);
   }
   .addon-warn {
-    border-color: #fd2b2b;
-    background-color: rgba(253, 43, 43, 0.75);
-    color: white;
+    border-color: var(--red);
+    background-color: var(--red-opacity75);
+    color: var(--white-text);
   }
   .addon-notice img,
   .addon-warn img {
@@ -217,11 +210,9 @@
     margin-inline-end: 10px;
     filter: brightness(0) invert(1);
   }
-  .sh .addon-settings {
-    display: flex;
-  }
   .addon-settings {
-    padding: 0 15px;
+    padding-top: 5px;
+    padding-inline: 20px;
   }
 
   .presets-column,
@@ -245,13 +236,13 @@
 
   .addon-check {
     margin-inline-start: auto;
-    padding: 5px 10px;
+    padding: 5px;
     display: flex;
   }
 
   .switch {
     display: block;
-    background: #111;
+    background: var(--switch-background);
     width: 40px;
     height: 20px;
     border-radius: 10px;
@@ -265,7 +256,7 @@
     display: block;
     width: 10px;
     height: 10px;
-    background: var(--label-text);
+    background: var(--switch-inner-background);
     border-radius: 5px;
     top: 5px;
     left: 5px;
@@ -276,7 +267,7 @@
     background: var(--brand-orange);
   }
   .switch[state="on"]::before {
-    background: #fff;
+    background: var(--white-text);
     left: 25px;
   }
 

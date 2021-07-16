@@ -1,5 +1,5 @@
 <template>
-  <div class="addon-setting">
+  <label class="addon-setting">
     <div class="setting-label" v-html="settingsName(addon)"></div>
     <template v-if="setting.type === 'boolean'">
       <input
@@ -107,7 +107,7 @@
         </div>
       </div>
     </template>
-  </div>
+  </label>
 </template>
 
 <style>
@@ -121,17 +121,19 @@
   }
   .setting-input {
     color: var(--content-text);
-    background: var(--page-background);
-    border: 1px solid #000;
-    padding: 8px 12px;
+    background: var(--input-background);
+    border: 1px solid var(--control-border);
+    height: 32px;
+    box-sizing: border-box;
+    padding: 0 12px;
     border-radius: 4px;
-    transition: 0.25s ease;
-    transition-property: box-shadow border;
+    transition: 0.2s ease;
+    transition-property: box-shadow, border;
   }
-  .setting-input:focus {
+  .setting-input:focus-visible {
     outline: none;
     border-color: var(--brand-orange);
-    box-shadow: 0 0 0 3px #ff7d265d;
+    box-shadow: var(--input-focus-shadow);
   }
 
   .setting-input.check {
@@ -143,21 +145,22 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     background-color: white;
-    background-size: 20px 20px;
+    background-size: 16px;
     background-position: center center;
+    background-repeat: no-repeat;
   }
 
   .setting-input.check:checked {
-    background-color: #175ef8;
+    background-color: var(--blue);
     background-image: url(/images/icons/check.svg);
   }
 
-  .setting-input.check:hover:not(:focus):not([disabled]) {
-    border-color: #0e44b8;
+  .setting-input.check:hover:not(:focus-visible):not([disabled]) {
+    border-color: var(--blue-variant);
   }
 
   .setting-input.number {
-    border-radius: 20px;
+    border-radius: 16px;
   }
   .setting-label {
     width: 200px;
@@ -173,7 +176,7 @@
   }
   .setting-dropdown.open .clear-button {
     border-bottom-right-radius: 0;
-    background: #151515;
+    background: var(--button-hover-background);
   }
   [dir="rtl"] .setting-dropdown.open .clear-button {
     border-bottom-right-radius: 4px;
@@ -189,9 +192,9 @@
     z-index: 3;
     border-radius: 4px;
     border-top-right-radius: 0;
-    background: var(--page-background);
+    background: var(--button-background);
     color: var(--content-text);
-    border: 1px solid #000;
+    border: 1px solid var(--control-border);
   }
   [dir="rtl"] .setting-dropdown ul {
     right: auto;
@@ -207,11 +210,11 @@
     list-style: none;
     white-space: nowrap;
     text-align: start;
-    transition: 0.25s ease;
+    transition: 0.2s ease;
     user-select: none;
   }
   .setting-dropdown li:hover {
-    background: #151515;
+    background: var(--button-hover-background);
   }
   .setting-dropdown li > * {
     vertical-align: middle;
@@ -234,6 +237,6 @@
     height: 100%;
     box-sizing: border-box;
     border-radius: 4px;
-    border: 1px solid #000;
+    border: 1px solid var(--control-border);
   }
 </style>

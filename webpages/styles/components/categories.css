@@ -6,5 +6,7 @@
   background: var(--navigation-background);
   min-width: 300px;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-text) transparent;
   padding: 20px 0;
 }

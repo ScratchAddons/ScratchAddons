@@ -6,6 +6,7 @@
     <meta charset="UTF-8" />
     <title></title>
     <style>
+      @import url("../../webpages/styles/colors.css");
       @import url("../../webpages/styles/components/popup.css");
     </style>
     <link rel="stylesheet" href="popup.css" />
@@ -14,7 +15,7 @@
     <script src="../../webpages/popup-loader.js" type="module"></script>
   </head>
 
-  <body style="display: none" v-show="true">
+  <body v-cloak>
     <div class="loading" v-show="!error && (projects.length === 0 || projects.length !== projectsChecked)">
       {{ loadingMsg }}
     </div>
