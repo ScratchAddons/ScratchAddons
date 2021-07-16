@@ -40,11 +40,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 });
 
 (async () => {
-  await loadVueComponent([
+  let components = await loadVueComponent([
     "webpages/settings/components/picker-component",
     "webpages/settings/components/reset-dropdown",
-    "webpages/settings/components/addon-setting",
-    "webpages/settings/components/addon-tag",
     "webpages/settings/components/addon-group-header",
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
@@ -157,6 +155,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   vue = window.vue = new Vue({
     el: "body",
+    components,
     data() {
       return {
         smallMode: false,

@@ -99,14 +99,6 @@ body {
   transform: scaleX(-1);
 }
 
-iframe {
-  width: 100%;
-  height: calc(100% - 45px);
-  overflow-x: hidden;
-  border: none;
-  overflow-y: scroll;
-  background-color: #222;
-}
 #version {
   color: white;
   margin: 5px;

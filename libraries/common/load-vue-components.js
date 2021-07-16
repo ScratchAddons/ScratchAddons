@@ -8,6 +8,8 @@ const styles = {};
 export default (filenames) =>
   Promise.all(
     filenames.map((filename) => {
+      let params = filename.params || {};
+      filename = filename.url || filename;
       const htmlUrl = chrome.runtime.getURL(`${filename}.html`);
       const jsUrl = chrome.runtime.getURL(`${filename}.js`);
       const jsPromise = import(jsUrl);
@@ -33,15 +35,19 @@ export default (filenames) =>
           }
           return dom.querySelector("template").innerHTML;
         })
-        .then((template) => jsPromise.then((esm) => esm.default({ template })));
+        .then((template) => jsPromise.then((esm) => esm.default({ template, ...params })));
     })
-  ).then(() =>
+  ).then((components) => {
+    let all = {};
     filenames.forEach((filename) => {
+      filename = filename.url || filename;
       if (!styles[filename]) return;
       const style = document.createElement("style");
       style.textContent = styles[filename];
       const [componentName] = filename.split("/").slice(-1);
       style.setAttribute("data-vue-component", componentName); // For debugging (has no side effects)
       document.head.insertBefore(style, document.head.querySelector("[data-below-vue-components]"));
-    })
-  );
+    });
+    components.forEach((component) => (all = { ...all, ...component }));
+    return all;
+  });
