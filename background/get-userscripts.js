@@ -2,20 +2,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
 });
 
-function getL10NURLs() {
-  const langCode = scratchAddons.globalState.auth.scratchLang.toLowerCase();
-  const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
-  if (langCode === "pt") {
-    urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
-  }
-  if (langCode.includes("-")) {
-    urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
-  }
-  const enJSON = chrome.runtime.getURL("addons-l10n/en");
-  if (!urls.includes(enJSON)) urls.push(enJSON);
-  return urls;
-}
-
 scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) => {
   const { addonId, manifest } = detail;
   chrome.tabs.query({}, (tabs) =>
@@ -133,7 +119,6 @@ async function getContentScriptInfo(url) {
   const data = {
     url,
     httpStatusCode: null, // Set by webRequest onResponseStarted listener
-    l10njson: getL10NURLs(),
     globalState: {},
     addonsWithUserscripts: [],
     addonsWithUserstyles: [],

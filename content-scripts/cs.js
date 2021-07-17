@@ -263,7 +263,21 @@ function waitForDocumentHead() {
   }
 }
 
-async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
+function getL10NURLs() {
+  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+  const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
+  if (langCode === "pt") {
+    urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
+  }
+  if (langCode.includes("-")) {
+    urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
+  }
+  const enJSON = chrome.runtime.getURL("addons-l10n/en");
+  if (!urls.includes(enJSON)) urls.push(enJSON);
+  return urls;
+}
+
+async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscripts, addonsWithUserstyles }) {
   // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   const disabledDynamicAddons = [];
@@ -280,7 +294,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
   }
 
   _page_.globalState = globalState;
-  _page_.l10njson = l10njson;
+  _page_.l10njson = getL10NURLs();
   _page_.addonsWithUserscripts = addonsWithUserscripts;
   _page_.dataReady = true;
 
