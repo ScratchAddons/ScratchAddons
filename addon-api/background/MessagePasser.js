@@ -19,10 +19,9 @@ export default class MessagePasser {
       self._onConnectListeners.forEach((listener) => listener?.(...a));
     }
 
-    chrome.runtime.onMessage.addListener((m, s, sr) => {
+    chrome.runtime.onMessage.addListener((m, { url = "" }, sr) => {
       if (!m.addonMessage) return;
-      let { payload, addonId } = m,
-        { url } = s;
+      let { payload, addonId } = m;
 
       if (addonId !== self._addonId) return;
 
@@ -103,7 +102,7 @@ class Port {
     let self = this;
 
     function runListeners(...a) {
-      self._onMessageListeners.forEach((listener) => listener(...a));
+      self._onMessageListeners.forEach((listener) => listener?.(...a));
     }
   }
 

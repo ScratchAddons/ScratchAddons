@@ -38,7 +38,7 @@ export default class MessagePasser {
     window.addEventListener("message", onMessage);
   }
 
-  connect({ name = "" }) {
+  connect({ name = "" } = {}) {
     return new Port(name, this._addonId);
   }
 }
