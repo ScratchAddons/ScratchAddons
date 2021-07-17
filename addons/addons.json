@@ -76,11 +76,13 @@
   "gamepad",
   "remove-curved-stage-border",
   "fix-pasted-scripts",
+  "better-img-uploads",
   "ctrl-click-run-scripts",
   "redirect-mobile-forums",
   "expanding-search-bar",
   "debugger",
   "disable-stage-drag-select",
+  "studio-followers",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

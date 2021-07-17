@@ -10,7 +10,7 @@ button {
 }
 
 .contents {
-  max-height: 95vh;
+  max-height: calc(100vh - 24px);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: grey transparent;
@@ -22,7 +22,7 @@ button {
   padding: 5px;
   border-radius: 4px;
 }
-.btn-dropdown:hover {
+.message-type-title:hover .btn-dropdown {
   background: rgba(255, 255, 255, 0.05);
 }
 
@@ -63,6 +63,8 @@ button {
   z-index: 999;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 
 .thread-list {
@@ -251,7 +253,6 @@ a.message-type-title-text {
   bottom: 0;
   left: 0;
   right: 0;
-  min-height: 5vh;
   background: #222;
   border-top: 1px solid #00000038;
   font-size: 12px;

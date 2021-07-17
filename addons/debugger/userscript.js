@@ -500,7 +500,7 @@ export default async function ({ addon, global, console, msg }) {
   );
 
   while (true) {
-    const stageHeaderSizeControls = await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
+    await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
       markAsSeen: true,
       reduxEvents: [
         "scratch-gui/mode/SET_PLAYER",

@@ -1,5 +1,14 @@
 export default async ({ addon, console, msg }) => {
   const { redux } = addon.tab;
+  await redux.waitForState(
+    (state) => state.studio?.infoStatus === "FETCHED" && state.studio?.rolesStatus === "FETCHED",
+    // In vanilla SET_FETCH_STATUS is only used for "bad status",
+    // so we can ignore.
+    {
+      actions: ["SET_INFO", "SET_ROLES"],
+    }
+  );
+
   const studioId = redux.state.studio.id;
 
   const MAX_MANAGERS = 40;
@@ -139,8 +148,8 @@ export default async ({ addon, console, msg }) => {
         location.reload();
       });
 
-      const addTo = document.querySelector(".studio-tabs div:nth-child(2)");
-      addTo.prepend(pSec, rSec);
+      addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: pSec, order: 1 });
+      addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: rSec, order: 2 });
     }
 
     if (canLeave) {
@@ -180,7 +189,7 @@ export default async ({ addon, console, msg }) => {
   render();
   addon.tab.addEventListener("urlChange", render);
   redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type == "SET_ROLES") {
+    if (e.detail.action.type === "SET_ROLES") {
       checkPermissions();
       render();
     }
