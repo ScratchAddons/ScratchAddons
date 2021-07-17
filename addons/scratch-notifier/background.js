@@ -228,7 +228,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
             const replyFor = message.commentee_username;
             if (profile === username) {
               if (replyFor === null) messageType += "ownProfileNewComment";
-              else if (replyFor === addon.auth.username) messageType += "ownProfileReplyToSelf";
+              else if (replyFor === username) messageType += "ownProfileReplyToSelf";
               else messageType += "ownProfileReplyToOther";
             } else {
               messageType += "otherProfileReplyToSelf";
