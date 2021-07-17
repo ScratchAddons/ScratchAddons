@@ -4,31 +4,25 @@ const promisify =
     new Promise((resolve) => callbackFn(...args, resolve));
 
 function getDefaultStoreId() {
-  // Extensions are executed on the default store.
-  // To get the default store ID reliably, we need to set cookies ourselves.
-  // We can't just grab it from existing cookies because that'll break in case
-  // someone deletes cookies.
-  // The temporary cookie expires after 10 seconds but is removed anyway.
-  return promisify(chrome.cookies.set)({
-    sameSite: chrome.cookies.SameSiteStatus.STRICT,
-    url: "https://scratch.mit.edu/",
-    name: "satemporarycookie",
-    value: "1",
-    expirationDate: 10 + Math.floor(Date.now() / 1000),
+  // Request Scratch to set the CSRF token.
+  return fetch("https://scratch.mit.edu/csrf_token/", {
+    credentials: "include",
   })
+    .catch(() => {})
+    .then(() =>
+      promisify(chrome.cookies.get)({
+        url: "https://scratch.mit.edu/",
+        name: "scratchcsrftoken",
+      })
+    )
     .then((cookie) => {
       return (scratchAddons.cookieStoreId = cookie.storeId);
-    })
-    .finally(() =>
-      promisify(chrome.cookies.remove)({
-        url: "https://scratch.mit.edu/",
-        name: "satemporarycookie",
-      })
-    );
+    });
 }
 
 (async function () {
-  await getDefaultStoreId();
+  const defaultStoreId = await getDefaultStoreId();
+  console.log("Default cookie store ID: ", defaultStoreId);
   await checkSession();
   scratchAddons.localState.ready.auth = true;
 })();
