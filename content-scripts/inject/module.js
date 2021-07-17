@@ -169,7 +169,8 @@ function onDataReady() {
     let promiseResolver;
     const promise = new Promise((resolve) => (promiseResolver = resolve));
     pendingPromises.msgCount.push(promiseResolver);
-    if (pendingPromises.msgCount.length < 2) requestMsgCount();
+    // 1 because the array was just pushed
+    if (pendingPromises.msgCount.length === 1) requestMsgCount();
     return promise;
   };
   scratchAddons.methods.copyImage = async (dataURL) => {
