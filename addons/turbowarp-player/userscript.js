@@ -35,11 +35,11 @@ export default async function ({ addon, console }) {
   };
 
   while (true) {
-    const row = await addon.tab.waitForElement(".preview .project-buttons", {
+    await addon.tab.waitForElement(".preview .project-buttons", {
       markAsSeen: true,
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
-    row.prepend(button);
+    addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: button, order: 1 });
 
     scratchStage = document.querySelector("[class^='stage-wrapper_stage-wrapper']");
 
