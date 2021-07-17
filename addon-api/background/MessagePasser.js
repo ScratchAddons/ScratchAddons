@@ -12,11 +12,11 @@ export default class MessagePasser {
     let self = this;
 
     function runMessageListeners(...a) {
-      self._onMessageListeners.forEach((listener) => listener(...a));
+      self._onMessageListeners.forEach((listener) => listener?.(...a));
     }
 
     function runConnectListeners(...a) {
-      self._onConnectListeners.forEach((listener) => listener(...a));
+      self._onConnectListeners.forEach((listener) => listener?.(...a));
     }
 
     chrome.runtime.onMessage.addListener((m, s, sr) => {

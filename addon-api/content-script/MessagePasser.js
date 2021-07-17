@@ -60,11 +60,11 @@ class Port {
     let self = this;
 
     function runMessageListeners(...a) {
-      self._onMessageListeners.forEach((listener) => listener(...a));
+      self._onMessageListeners.forEach((listener) => listener?.(...a));
     }
 
     function runDisconnectListeners(...a) {
-      self._onDisconnectListeners.forEach((listener) => listener(...a));
+      self._onDisconnectListeners.forEach((listener) => listener?.(...a));
     }
 
     window.addEventListener(

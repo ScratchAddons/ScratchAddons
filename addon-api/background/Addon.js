@@ -8,6 +8,7 @@ import MessagePasser from "./MessagePasser.js";
  * @extends Addon
  * @property {Notifications} [notifications]
  * @property {Badge} [badge]
+ * @property {MessagePasser} [messaging]
  */
 export default class BackgroundScriptAddon extends Addon {
   constructor(info) {

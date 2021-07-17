@@ -6,6 +6,7 @@ import MessagePasser from "./MessagePasser.js";
  * An addon that loads as a userscript.
  * @extends Addon
  * @property {Tab} tab
+ * @property {MessagePasser} messaging
  */
 export default class UserscriptAddon extends Addon {
   constructor(info) {
