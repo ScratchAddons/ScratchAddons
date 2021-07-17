@@ -10,20 +10,20 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   const parser = new DOMParser();
   const defaultUsername = await addon.auth.fetchUsername();
 
-  const getDefaultData = () => ({
+  const getDefaultData = (username) => ({
     messages: [],
     lastMsgCount: null,
-    username: defaultUsername,
+    username,
     ready: false,
   });
 
   addon.auth.addEventListener("change", () => (pendingAuthChange = true));
-  resetData();
+  resetData(defaultUsername);
   routine();
 
-  function resetData() {
+  function resetData(username) {
     lastDateTime = null;
-    data = getDefaultData();
+    data = getDefaultData(username);
   }
 
   async function routine() {
@@ -31,7 +31,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     while (addonEnabled) {
       if (pendingAuthChange) {
         pendingAuthChange = false;
-        resetData();
+        resetData(await addon.auth.fetchUsername());
         routine();
         break;
       } else {
