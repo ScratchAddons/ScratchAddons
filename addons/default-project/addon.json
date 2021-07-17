@@ -9,9 +9,7 @@
   ],
   "userscripts": [
     {
-      "matches": [
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["https://scratch.mit.edu/projects/editor"],
       "url": "userscript.js"
     }
   ],
