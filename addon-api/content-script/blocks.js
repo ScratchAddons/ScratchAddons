@@ -31,6 +31,21 @@ const getNamesIdsDefaults = (blockData) => [
   blockData.args.map(() => ""),
 ];
 
+// This needs to function exactly as Scratch does:
+// https://github.com/LLK/scratch-blocks/blob/abbfe93136fef57fdfb9a077198b0bc64726f012/blocks_vertical/procedures.js#L207-L215
+// Returns a list like ["%s", "%d"]
+const parseArguments = (code) =>
+  code
+    .split(/(?=[^\\]%[nbs])/g)
+    .map((i) => i.trim())
+    .filter((i) => i.charAt(0) === "%")
+    .map((i) => i.substring(0, 2));
+
+// Ensures all arguments have whitespace before them so that Scratch parses it correctly.
+// "test%s" -> "test %s"
+const fixDisplayName = (displayName) => displayName.replace(/([^\s])(%[nbs])/g, (_, before, arg) => `${before} ${arg}`);
+const compareArrays = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
 export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
   if (getCustomBlock(proccode)) {
     return;
@@ -38,15 +53,16 @@ export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
 
   // Make sure that the argument counts all appear to be consistent.
   // Any inconsistency may result in various strange behaviors, possibly including corruption.
-  const argumentsInProcCode = proccode.split("%").length - 1;
-  if (args.length !== argumentsInProcCode) {
+  const procCodeArguments = parseArguments(proccode);
+  if (args.length !== procCodeArguments.length) {
     throw new Error("Procedure code and argument list do not match");
   }
   if (displayName) {
-    // Make sure that the display name has the same number of arguments as the actual procedure code
-    const argumentsInDisplayName = displayName.split("%").length - 1;
-    if (argumentsInProcCode !== argumentsInDisplayName) {
-      console.warn(`block displayName ${displayName} for ${proccode} has wrong number of arguments, ignoring it.`);
+    displayName = fixDisplayName(displayName);
+    // Make sure that the display name has the same arguments as the actual procedure code
+    const displayNameArguments = parseArguments(displayName);
+    if (!compareArrays(procCodeArguments, displayNameArguments)) {
+      console.warn(`block displayName ${displayName} for ${proccode} does not have matching arguments, ignoring it.`);
       displayName = proccode;
     }
   } else {

@@ -1960,7 +1960,13 @@ export default class DevTools {
           code === "DELETE_VARIABLE_ID" ||
           code === "RENAME_VARIABLE_ID" ||
           code === "NEW_BROADCAST_MESSAGE_ID" ||
-          code === "NEW_BROADCAST_MESSAGE_ID"
+          code === "NEW_BROADCAST_MESSAGE_ID" ||
+          // editor-searchable-dropdowns compatibility
+          code === "createGlobalVariable" ||
+          code === "createLocalVariable" ||
+          code === "createGlobalList" ||
+          code === "createLocalList" ||
+          code === "createBroadcast"
         ) {
           continue; // Skip these
         }
