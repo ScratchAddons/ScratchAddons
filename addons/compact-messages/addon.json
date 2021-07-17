@@ -1,7 +1,7 @@
 {
   "name": "Compact Messages",
   "description": "Makes the messages page compact and easy to read.",
-    "userstyles": [
+  "userstyles": [
     {
       "url": "styles.css",
       "matches": ["https://scratch.mit.edu/messages"]
