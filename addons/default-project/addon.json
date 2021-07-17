@@ -1,6 +1,6 @@
 {
   "name": "Default project",
-  "description": "The abillity to set the default project.",
+  "description": "Adds the abillity to set the default project.",
   "credits": [
     {
       "name": "9gr",
@@ -9,13 +9,10 @@
   ],
   "userscripts": [
     {
-      "matches": [
-        "https://scratch.mit.edu/projects/editor"
-      ],
-      "url": "userscript.js"
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/editor"]
     }
   ],
-  "tags": ["editor"],
   "settings": [
     {
       "name": "Default project id",
@@ -25,6 +22,5 @@
       "default": 510186917
     }
   ],
-  "traps": true,
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json"
+  "tags": ["editor"]
 }
