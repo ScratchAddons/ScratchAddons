@@ -24,12 +24,13 @@ function getDefaultStoreId() {
   const defaultStoreId = await getDefaultStoreId();
   console.log("Default cookie store ID: ", defaultStoreId);
   await checkSession();
-  scratchAddons.localState.ready.auth = true;
 })();
 
 chrome.cookies.onChanged.addListener(({ cookie, changeCause }) => {
   if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken") {
-    if (cookie.storeId === scratchAddons.cookieStoreId) {
+    if (!scratchAddons.cookieStoreId) {
+      getDefaultStoreId().then(() => checkSession());
+    } else if (cookie.storeId === scratchAddons.cookieStoreId) {
       checkSession();
     }
     notifyContentScripts(cookie);
@@ -65,7 +66,10 @@ async function checkSession() {
     console.warn(err);
     json = {};
     // If Scratch is down, or there was no internet connection, recheck soon:
-    if ((res && !res.ok) || !res) setTimeout(checkSession, 60000);
+    if ((res && !res.ok) || !res) {
+      setTimeout(checkSession, 60000);
+      return;
+    }
   }
   const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
   const csrfToken = await getCookieValue("scratchcsrftoken");

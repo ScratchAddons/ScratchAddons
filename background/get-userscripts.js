@@ -245,7 +245,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     }
   } else {
-    // Wait until manifests, addon.auth and addon.settings are ready
+    // Wait until manifests and addon.settings are ready
     scratchAddons.localEvents.addEventListener(
       "ready",
       async () => {
