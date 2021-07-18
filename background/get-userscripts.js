@@ -262,7 +262,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.tabs.query({}, (tabs) =>
   tabs.forEach((tab) => {
     if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-      chrome.tabs.sendMessage(tab.id, "backgroundListenerReady");
+      chrome.tabs.sendMessage(tab.id, "backgroundListenerReady", () => void chrome.runtime.lastError);
     }
   })
 );
