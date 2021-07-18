@@ -1,0 +1,30 @@
+.sa-forum-toolbar {
+  background-size: 16px;
+  height: 16px;
+  width: 16px;
+}
+
+.sa-forum-toolbar-center {
+  background-image: url(./center.svg);
+}
+
+.sa-forum-toolbar-wp,
+.sa-forum-toolbar-wiki {
+  background-image: url(./wp.svg);
+}
+
+.sa-forum-toolbar-google {
+  background-image: url(./google.svg);
+}
+
+.sa-forum-toolbar-dictionary {
+  background-image: url(./dictionary.svg);
+}
+
+.sa-forum-toolbar-code {
+  background-image: url(./code.svg);
+}
+
+.sa-forum-toolbar-color {
+  background-image: url(./color.svg);
+}
