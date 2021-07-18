@@ -1,7 +1,3 @@
-.social-message-icon {
-  display: var(--compactMessages-hide_icons);
-}
-
 .social-message {
   padding: calc(1px * var(--compactMessages-message_padding));
 }
