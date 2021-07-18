@@ -13,7 +13,7 @@
       "id": "message_padding",
       "type": "integer",
       "default": 5,
-      "max": 15,
+      "max": 15
     },
     {
       "name": "Comment box padding (5-15 pixels)",
