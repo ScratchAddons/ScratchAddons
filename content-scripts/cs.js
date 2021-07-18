@@ -216,6 +216,9 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
     switch (obj.type) {
       case "settingValue":
         return addonSettings[addonId][obj.settingId];
+      case "ternary":
+        // this is not even a color lol
+        return getColor(addonId, obj.source) ? obj.true : obj.false;
       case "textColor": {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
