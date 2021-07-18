@@ -7,15 +7,10 @@
       "link": "https://scratch.mit.edu/users/9gr/"
     }
   ],
-  "tags": [
-    "forums",
-    "community"
-  ],
+  "tags": ["forums", "community"],
   "userscripts": [
     {
-      "matches": [
-        "https://scratch.mit.edu/discuss/topic/*"
-      ],
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "url": "userscript.js"
     }
   ]
