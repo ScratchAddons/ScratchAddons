@@ -1,22 +1,30 @@
 /**
- * Handles message passing. Mimics chrome.runtime message passing.
+ * Handles message passing for background scripts.
  */
 
-export default class MessagePasser {
+export default class MessagePasser extends EventTarget {
   constructor(addonObject) {
+    super();
     this._addonId = addonObject.self.id;
-
-    this._onMessageListeners = [];
-    this._onConnectListeners = [];
 
     let self = this;
 
-    function runMessageListeners(...a) {
-      self._onMessageListeners.forEach((listener) => listener?.(...a));
+    function runMessageListeners(message, sender, sendResponse) {
+      self.dispatchEvent(
+        Object.assign(new CustomEvent("message", {}), {
+          message,
+          sender,
+          sendResponse,
+        })
+      );
     }
 
-    function runConnectListeners(...a) {
-      self._onConnectListeners.forEach((listener) => listener?.(...a));
+    function runConnectListeners(port) {
+      self.dispatchEvent(
+        Object.assign(new CustomEvent("connect", {}), {
+          port,
+        })
+      );
     }
 
     chrome.runtime.onMessage.addListener((m, { url = "" }, sr) => {
@@ -49,90 +57,31 @@ export default class MessagePasser {
       runConnectListeners(new Port(port, data.name));
     });
   }
-
-  get onMessage() {
-    let self = this;
-    function addListener(func) {
-      return self._onMessageListeners.push(func);
-    }
-
-    function removeListener(func) {
-      return self._onMessageListeners.splice(self._onMessageListeners.indexOf(func), 1);
-    }
-
-    function hasListener(func) {
-      return self._onMessageListeners.includes(func);
-    }
-
-    return {
-      addListener,
-      removeListener,
-      hasListener,
-    };
-  }
-
-  get onConnect() {
-    let self = this;
-    function addListener(func) {
-      return self._onConnectListeners.push(func);
-    }
-
-    function removeListener(func) {
-      return self._onConnectListeners.splice(self._onConnectListeners.indexOf(func), 1);
-    }
-
-    function hasListener(func) {
-      return self._onConnectListeners.includes(func);
-    }
-
-    return {
-      addListener,
-      removeListener,
-      hasListener,
-    };
-  }
 }
 
-class Port {
+class Port extends EventTarget {
   constructor(port, name) {
+    super();
     this._port = port;
     this.name = name;
-    this._onMessageListeners = [];
 
     let self = this;
 
-    function runListeners(...a) {
-      self._onMessageListeners.forEach((listener) => listener?.(...a));
-    }
-  }
+    this._port.onMessage.addListener(function (message) {
+      self.dispatchEvent(
+        Object.assign(new CustomEvent("message", {}), {
+          message,
+        })
+      );
+    });
 
-  get onMessage() {
-    let self = this;
-    function addListener(func) {
-      return self._onMessageListeners.push(func);
-    }
-
-    function removeListener(func) {
-      return self._onMessageListeners.splice(self._onMessageListeners.indexOf(func), 1);
-    }
-
-    function hasListener(func) {
-      return self._onMessageListeners.includes(func);
-    }
-
-    return {
-      addListener,
-      removeListener,
-      hasListener,
-    };
+    this._port.onDisconnect.addListener(function () {
+      self.dispatchEvent(new CustomEvent("disconnect", {}));
+    });
   }
 
   disconnect() {
     this._port.disconnect();
-  }
-
-  get onDisconnect() {
-    return this._port.onDisconnect;
   }
 
   postMessage(...a) {

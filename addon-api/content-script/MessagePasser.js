@@ -1,5 +1,5 @@
 /**
- * Handles message passing. Mimics chrome.runtime message passing.
+ * Handles message passing for content scripts.
  */
 
 export default class MessagePasser {
@@ -43,11 +43,10 @@ export default class MessagePasser {
   }
 }
 
-class Port {
+class Port extends EventTarget {
   constructor(name, addonId) {
+    super();
     this.name = name;
-    this._onMessageListeners = [];
-    this._onDisconnectListeners = [];
     this._portId = getuid();
 
     window.postMessage({
@@ -59,12 +58,12 @@ class Port {
 
     let self = this;
 
-    function runMessageListeners(...a) {
-      self._onMessageListeners.forEach((listener) => listener?.(...a));
+    function runMessageListeners(message) {
+      self.dispatchEvent(Object.assign(new CustomEvent("message", {}), { message }));
     }
 
-    function runDisconnectListeners(...a) {
-      self._onDisconnectListeners.forEach((listener) => listener?.(...a));
+    function runDisconnectListeners() {
+      self.dispatchEvent(new CustomEvent("disconnect", {}));
     }
 
     window.addEventListener(
@@ -82,27 +81,6 @@ class Port {
     );
   }
 
-  get onMessage() {
-    let self = this;
-    function addListener(func) {
-      return self._onMessageListeners.push(func);
-    }
-
-    function removeListener(func) {
-      return self._onMessageListeners.splice(self._onMessageListeners.indexOf(func), 1);
-    }
-
-    function hasListener(func) {
-      return self._onMessageListeners.includes(func);
-    }
-
-    return {
-      addListener,
-      removeListener,
-      hasListener,
-    };
-  }
-
   postMessage(m) {
     window.postMessage({
       portId: this._portId,
@@ -117,28 +95,6 @@ class Port {
       disconnect: true,
       addonPortMessage: true,
     });
-  }
-
-  get onDisconnect() {
-    let self = this;
-
-    function addListener(func) {
-      return self.this._onDisconnectListeners.push(func);
-    }
-
-    function removeListener(func) {
-      return self._onDisconnectListeners.splice(self._onDisconnectListeners.indexOf(func), 1);
-    }
-
-    function hasListener(func) {
-      return self._onDisconnectListeners.includes(func);
-    }
-
-    return {
-      addListener,
-      removeListener,
-      hasListener,
-    };
   }
 }
 

@@ -25,11 +25,10 @@ export default class MessagePasser {
   }
 }
 
-class Port {
+class Port extends EventTarget {
   constructor(name, addonId) {
+    super();
     this.name = name;
-    this._onMessageListeners = [];
-    this._onDisconnectListeners = [];
 
     this._port = chrome.runtime.connect({
       name: JSON.stringify({
@@ -41,50 +40,25 @@ class Port {
 
     let self = this;
 
-    function runMessageListeners(...a) {
-      self._onMessageListeners.forEach((listener) => listener?.(...a));
+    function runMessageListeners(message) {
+      self.dispatchEvent(Object.assign(new CustomEvent("message", {}), { message }));
     }
 
-    function runDisconnectListeners(...a) {
-      self._onDisconnectListeners.forEach((listener) => listener?.(...a));
+    function runDisconnectListeners() {
+      self.dispatchEvent(new CustomEvent("disconnect", {}));
     }
 
     this._port.onMessage.addListener(function (m) {
       runMessageListeners(m);
     });
 
-    this._port.onDisconnect.addListener(function (...a) {
-      runDisconnectListeners(...a);
+    this._port.onDisconnect.addListener(function () {
+      runDisconnectListeners();
     });
-  }
-
-  get onMessage() {
-    let self = this;
-    function addListener(func) {
-      return self._onMessageListeners.push(func);
-    }
-
-    function removeListener(func) {
-      return self._onMessageListeners.splice(self._onMessageListeners.indexOf(func), 1);
-    }
-
-    function hasListener(func) {
-      return self._onMessageListeners.includes(func);
-    }
-
-    return {
-      addListener,
-      removeListener,
-      hasListener,
-    };
   }
 
   disconnect() {
     this._port.disconnect();
-  }
-
-  get onDisconnect() {
-    return this._port.onDisconnect;
   }
 
   postMessage(...a) {
