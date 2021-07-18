@@ -1,11 +1,11 @@
 .social-message-icon {
-  display: none;
+  display: var(--compactMessages-hide_icons);
 }
 
 .social-message {
-  padding: 10px;
+  padding: calc(1px * var(--compactMessages-message_padding));
 }
 
 .comment-text {
-  padding: 5px;
+  padding: calc(1px * var(--compactMessages-comment_padding));
 }
