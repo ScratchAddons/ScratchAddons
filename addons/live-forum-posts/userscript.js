@@ -1,30 +1,29 @@
-
 export default async function ({ addon, global, console, msg }) {
-    let sleep = ms => new Promise(r => setTimeout(r, ms))
+  let sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-    let postContainer = document.querySelector('#djangobbindex')
-    let posts = [].slice.apply(document.querySelectorAll('.blockpost.roweven.firstpost'))
-    if (posts.length === 20) return // Return if no posts are avaliable to be loaded
+  let postContainer = document.querySelector("#djangobbindex");
+  let posts = [].slice.apply(document.querySelectorAll(".blockpost.roweven.firstpost"));
+  if (posts.length === 20) return; // Return if no posts are avaliable to be loaded
 
-    window.postIds = posts.map(el => ({ id: el.id.substr(1), el }))
+  window.postIds = posts.map((el) => ({ id: el.id.substr(1), el }));
 
-    while (true) {
-        await sleep(2000)
-        let res = await fetch(location.href)
-        
-        let html = await res.text()
+  while (true) {
+    await sleep(2000);
+    let res = await fetch(location.href);
 
-        let parser = new DOMParser()
+    let html = await res.text();
 
-        let doc = parser.parseFromString(html, 'text/html')
+    let parser = new DOMParser();
 
-        let posts = doc.querySelectorAll('.blockpost.roweven.firstpost')
+    let doc = parser.parseFromString(html, "text/html");
 
-        for (let post of posts) {
-            if (postIds.map(e => e.id).indexOf(post.id.substr(1)) !== -1) continue
+    let posts = doc.querySelectorAll(".blockpost.roweven.firstpost");
 
-            postIds[postIds.length - 1].el.insertAdjacentHTML("afterend", post.outerHTML)
-            postIds.push({ id: post.id.substr(1), el: document.getElementById(post.id)})
-        }
+    for (let post of posts) {
+      if (postIds.map((e) => e.id).indexOf(post.id.substr(1)) !== -1) continue;
+
+      postIds[postIds.length - 1].el.insertAdjacentHTML("afterend", post.outerHTML);
+      postIds.push({ id: post.id.substr(1), el: document.getElementById(post.id) });
     }
+  }
 }
