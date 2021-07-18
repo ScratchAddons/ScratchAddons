@@ -1,6 +1,6 @@
 {
   "name": "Studio tools",
-  "description": "Adds tools to easily promote to a manager or remove anyone from your studios through the \"curators\" tab, as well as leaving any studio using a button under \"Follow Studio\".",
+  "description": "Lets managers easily promote curators to managers or remove anyone from a studio on the \"curators\" tab, and adds the ability to leave a studio using a button under \"Follow Studio\".",
   "credits": [
     {
       "name": "World_Languages"
