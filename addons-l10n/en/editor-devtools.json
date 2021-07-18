@@ -10,7 +10,7 @@
   "editor-devtools/improved-tidy-up-desc": "Right click on the code area to pop up the menu and the Clean up Blocks option will have been replaced by a Clean up Blocks + option. Use this to tidy your scripts and it will preserve your scripts columns as well as attempt to align the comments and remove all those orphaned variables, etc.",
   "editor-devtools/help-new": "★New★",
   "editor-devtools/help-make-space": "Make Space",
-  "editor-devtools/help-make-space-desc": "Make extra space around a script by right clicking on the code stack and choosing \"Make Space\".",
+  "editor-devtools/help-make-space-desc": "Make extra space around a script by right clicking on the script and choosing \"Make Space\".",
   "editor-devtools/copy-to-clipboard": "Copy to Clipboard",
   "editor-devtools/copy-to-clipboard-desc": "Right click a block and 3 new options are available to Copy All, Copy Block, and Cut Block. The Copy All will copy to the clipboard everything including and below the block you clicked on. Copy block will only copy the current block and its contents, but nothing below. And cut block will copy it and remove it from the code area.",
   "editor-devtools/paste-from-clipboard": "Paste from Clipboard",
