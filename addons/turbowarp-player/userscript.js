@@ -2,13 +2,13 @@ export default async function ({ addon, console }) {
   let playerToggled = false;
   let scratchStage;
   let twIframe = document.createElement("iframe");
-  twIframe.scrolling = "no";
+  twIframe.setAttribute("scrolling", "no");
   twIframe.setAttribute("allowtransparency", "true");
   twIframe.setAttribute("allowfullscreen", "true");
   twIframe.className = "sa-tw-iframe";
 
   const button = document.createElement("button");
-  button.className = "button see-inside-button sa-tw-button";
+  button.className = "button sa-tw-button";
   button.title = "TurboWarp";
 
   function removeIframe() {
@@ -34,11 +34,23 @@ export default async function ({ addon, console }) {
     }
   };
 
+  let showAlert = true;
   while (true) {
-    await addon.tab.waitForElement(".preview .project-buttons", {
+    const seeInside = await addon.tab.waitForElement(".see-inside-button", {
       markAsSeen: true,
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
+
+    seeInside.addEventListener("click", function seeInsideClick(event) {
+      if (!playerToggled || !showAlert) return;
+
+      if (confirm("Are you sure you want to see inside? Doing this will destroy the TurboWarp player.")) {
+        showAlert = false;
+      } else {
+        event.stopPropagation();
+      }
+    });
+
     addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: button, order: 1 });
 
     scratchStage = document.querySelector("[class^='stage-wrapper_stage-wrapper']");
