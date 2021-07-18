@@ -27,6 +27,14 @@
     {
       "url": "styles.css",
       "matches": ["https://scratch.mit.edu/messages"]
+    },
+    {
+      "url": "hide_icons.css",
+      "matches": ["https://scratch.mit.edu/messages"],
+      "settingMatch": {
+        "id": "hide_icons",
+        "value": true
+      }
     }
   ],
   "tags": ["community", "theme"],
