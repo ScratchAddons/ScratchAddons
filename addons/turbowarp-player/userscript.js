@@ -17,7 +17,7 @@ export default async function ({ addon, console }) {
     button.classList.remove("scratch");
   }
 
-  button.onclick = function buttonClick() {
+  button.onclick = () => {
     if (addon.settings.get("action") == "player") {
       playerToggled = !playerToggled;
       if (playerToggled) {
@@ -45,15 +45,5 @@ export default async function ({ addon, console }) {
 
     playerToggled = false;
     removeIframe();
-
-    if (
-      addon.settings.get("auto") &&
-      addon.settings.get("action") === "player" &&
-      [...document.querySelectorAll(".project-description")]
-        .map((e) => e.innerText)
-        .join(".")
-        .match(/turbo ?warp/gi)
-    )
-      buttonClick();
   }
 }

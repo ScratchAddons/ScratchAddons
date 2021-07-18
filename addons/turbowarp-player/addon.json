@@ -42,12 +42,6 @@
         }
       ],
       "default": "link"
-    },
-    {
-      "name": "Auto replace when mentioned in project's \"Intructions\" or \"Notes and Credits\"",
-      "id": "auto",
-      "type": "boolean",
-      "default": false
     }
   ],
   "tags": ["editor", "projectPage"]
