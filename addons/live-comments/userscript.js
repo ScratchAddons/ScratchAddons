@@ -70,11 +70,53 @@ export default async function ({ addon, global, console, msg }) {
                     redux.dispatch({ type: "ADD_NEW_COMMENT", comment: reply, topLevelCommentId: comment.id })
                 }
 
-                if (json.length < loopOffset) break
-            }
+        if (loadedComments.indexOf(comment.id) !== -1) {
+          break;
         }
 
-    }, 1000)
+        redux.dispatch({ type: "ADD_NEW_COMMENT", comment });
+      }
 
+      if (json.length < loopOffset) break;
+    }
+
+    offset = -loopOffset;
+    let comments = getAllComments();
+
+    for (let comment of comments) {
+      while (true) {
+        offset += loopOffset;
+        let res = await fetch(URL + `/${comment.id}/replies?offset=${offset}&limit=${loopOffset}`);
+        let json = await res.json();
+
+<<<<<<< HEAD
     
 }
+=======
+        if (json.length == 0) break;
+        for (let reply of json) {
+          let loadedComments = getAllComments().map((r) => r.id.toString());
+
+          if (loadedComments.indexOf(reply.id.toString()) !== -1) break;
+          console.log(`NEW REPLY: `, reply, "MY PARENT IS", reply.parent_id);
+
+          redux.dispatch({ type: "ADD_NEW_COMMENT", comment: reply, topLevelCommentId: reply.parent_id });
+        }
+
+        if (json.length < loopOffset) break;
+      }
+    }
+  }, 1000);
+
+  function getAllComments() {
+    let loadedComments = [...redux.state.comments.comments];
+    for (let replies of Object.values(redux.state.comments.replies)) {
+      loadedComments.push(...replies);
+    }
+
+    return loadedComments;
+  }
+
+  function getTopLevelCommentId(rep) {}
+}
+>>>>>>> cbb55354930ca54d5caed84b3c7681dd536708c9
