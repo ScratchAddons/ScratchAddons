@@ -1,6 +1,6 @@
 {
   "name": "Compact Messages",
-  "description": "Makes the messages page compact and easy to read.",
+  "description": "Makes the messages page more compact and easier to read.",
   "settings": [
     {
       "name": "Hide message icons",
@@ -13,14 +13,14 @@
       "id": "message_padding",
       "type": "integer",
       "default": 5,
-      "max": 15
+      "max": 15,
     },
     {
       "name": "Comment box padding (5-15 pixels)",
       "id": "comment_padding",
       "type": "integer",
       "default": 5,
-      "max": 15
+      "max": 15,
     }
   ]
   "userstyles": [
