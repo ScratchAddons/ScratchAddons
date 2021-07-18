@@ -4,7 +4,7 @@ export default async function ({ addon, global, console, msg }) {
   let postContainer = document.querySelector("#djangobbindex");
   let posts = [].slice.apply(document.querySelectorAll(".blockpost.roweven.firstpost"));
   if (posts.length === 20) return; // Return if no posts are avaliable to be loaded
-    let postIds = posts.map(el => ({ id: el.id.substr(1), el }))
+  let postIds = posts.map((el) => ({ id: el.id.substr(1), el }));
 
   while (true) {
     await sleep(2000);
