@@ -4,16 +4,11 @@ export default async function ({ addon, global, console, msg }) {
   let postContainer = document.querySelector("#djangobbindex");
   let posts = [].slice.apply(document.querySelectorAll(".blockpost.roweven.firstpost"));
   if (posts.length === 20) return; // Return if no posts are avaliable to be loaded
-
-  window.postIds = posts.map((el) => ({ id: el.id.substr(1), el }));
-
-<<<<<<< HEAD
     let postIds = posts.map(el => ({ id: el.id.substr(1), el }))
-=======
+
   while (true) {
     await sleep(2000);
     let res = await fetch(location.href);
->>>>>>> f74adc7b68d67bfe267b53e428139f070a41c840
 
     let html = await res.text();
 
