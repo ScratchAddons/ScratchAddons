@@ -50,6 +50,8 @@
       }
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "settings": [
     {
       "name": "Show statuses on profiles",

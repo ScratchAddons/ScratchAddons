@@ -9,8 +9,8 @@
           <img :src="addonIconSrc" class="icon-type" />
           <span @click="devShowAddonIds">{{ addon._displayedAddonId || addon.name }}</span>
         </div>
+        <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
       </div>
-      <addon-tag v-for="tag of addon.tags" :tag="tag"></addon-tag>
       <div class="addon-description" v-show="!expanded" dir="auto">{{ addon.description }}</div>
       <div class="addon-check">
         <div
@@ -87,16 +87,6 @@
     flex-grow: 1;
   }
 
-  .addon-warn {
-    color: white;
-    padding: 10px;
-    background: rgba(255, 38, 103, 0.2);
-    border-radius: 5px;
-    font-weight: bold;
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-  }
   .addon-description-full,
   .addon-credits {
     width: 100%;
@@ -137,7 +127,7 @@
   }
   .addon-topbar {
     height: 50px;
-    padding: 0 5px;
+    padding-inline-end: 5px;
     display: flex;
     align-items: center;
   }
@@ -175,7 +165,7 @@
     padding: 5px;
     border-radius: 4px;
   }
-  .btn-dropdown:hover {
+  .clickeable-area:hover .btn-dropdown {
     background: rgba(255, 255, 255, 0.05);
   }
 
@@ -191,25 +181,40 @@
   .clickeable-area {
     cursor: pointer;
     display: flex;
+    align-self: stretch;
     align-items: center;
+    padding-inline-start: 5px;
   }
-  .addon-notice {
-    color: black;
-    padding: 10px;
-    background: rgb(255 235 59 / 0.7);
+  .clickeable-area .tooltip {
+    cursor: pointer;
+  }
+  .iframe .clickeable-area {
+    flex-grow: 1;
+  }
+  .addon-notice,
+  .addon-warn {
+    padding: 8px;
+    border: 2px solid;
     border-radius: 5px;
     font-weight: bold;
     margin: 10px 0;
     display: flex;
     align-items: center;
   }
+  .addon-notice {
+    border-color: rgba(253, 221, 43, 0.5);
+    background-color: var(--accent-3);
+  }
+  .addon-warn {
+    border-color: #fd2b2b;
+    background-color: rgba(253, 43, 43, 0.75);
+    color: white;
+  }
   .addon-notice img,
   .addon-warn img {
     height: 15px;
     width: 15px;
     margin-inline-end: 10px;
-  }
-  .addon-warn img {
     filter: brightness(0) invert(1);
   }
   .sh .addon-settings {

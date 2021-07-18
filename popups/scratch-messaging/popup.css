@@ -6,6 +6,14 @@ button {
   background: #2a2a2a;
   padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.contents {
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: grey transparent;
 }
 
 .btn-dropdown {
@@ -14,7 +22,7 @@ button {
   padding: 5px;
   border-radius: 4px;
 }
-.btn-dropdown:hover {
+.message-type-title:hover .btn-dropdown {
   background: rgba(255, 255, 255, 0.05);
 }
 
@@ -55,6 +63,8 @@ button {
   z-index: 999;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 
 .thread-list {
@@ -89,6 +99,9 @@ button {
   margin-inline-end: auto;
   margin-inline-start: 10px;
   max-width: 75%;
+}
+a.message-type-title-text {
+  color: white;
 }
 .float-right {
   margin-inline-start: 6px;
@@ -235,7 +248,7 @@ button {
 }
 
 #bottom-bar {
-  position: fixed;
+  position: absolute;
   z-index: 10000;
   bottom: 0;
   left: 0;

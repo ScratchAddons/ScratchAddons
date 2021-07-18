@@ -41,3 +41,10 @@ console.log(
   "initialized:\n",
   JSON.parse(JSON.stringify(scratchAddons.localState))
 );
+
+/**
+ * @type {object.<string, Port[]>}
+ */
+scratchAddons.popupPorts = {};
+scratchAddons.sendToPopups = (value) =>
+  Object.values(scratchAddons.popupPorts).forEach((ports) => ports.forEach((port) => port.postMessage(value)));

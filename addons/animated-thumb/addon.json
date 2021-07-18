@@ -43,6 +43,8 @@
       "matches": ["https://scratch.mit.edu/projects/*"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "settings": [
     {
       "name": "Don't set thumbnails automatically",

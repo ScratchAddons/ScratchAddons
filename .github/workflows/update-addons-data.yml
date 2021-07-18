@@ -27,4 +27,4 @@ jobs:
           repo: ScratchAddons/website-v2
           token: ${{ steps.generate-token.outputs.token }}
           ref: refs/heads/master
-          inputs: '{ "ref": "${{ github.event.tag_name }}" }'
+          inputs: '{ "ref": "${{ github.event.release.tag_name }}" }'

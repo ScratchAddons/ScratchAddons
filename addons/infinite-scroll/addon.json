@@ -4,6 +4,9 @@
   "credits": [
     {
       "name": "DatOneLefty"
+    },
+    {
+      "name": "Hans5958"
     }
   ],
   "settings": [
@@ -32,6 +35,30 @@
       "default": true
     },
     {
+      "name": "Studio Projects",
+      "id": "studioProjectScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Add to Studio Menu",
+      "id": "studioBrowseProjectScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Studio Curators",
+      "id": "studioCuratorScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Studio Activity",
+      "id": "studioActivityScroll",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Messages",
       "id": "messageScroll",
       "type": "boolean",
@@ -47,7 +74,7 @@
   "userscripts": [
     {
       "url": "forumScroll.js",
-      "matches": ["https://scratch.mit.edu/discuss/*"],
+      "matches": ["https://scratch.mit.edu/discuss/*/"],
       "settingMatch": {
         "id": "forumScroll",
         "value": true
@@ -57,8 +84,7 @@
       "url": "buttonScroll.js",
       "matches": [
         "https://scratch.mit.edu/projects/*",
-        "https://scratch.mit.edu/studios/*/comments",
-        "https://scratch.mit.edu/studios_www/*",
+        "https://scratch.mit.edu/studios/*",
         "https://scratch.mit.edu/users/*",
         "https://scratch.mit.edu/messages"
       ]
@@ -66,10 +92,18 @@
   ],
   "userstyles": [
     {
-      "url": "userscript.css",
+      "url": "footer.css",
       "matches": ["https://scratch.mit.edu/*"],
       "settingMatch": {
         "id": "showFooter",
+        "value": true
+      }
+    },
+    {
+      "url": "discuss.css",
+      "matches": ["https://scratch.mit.edu/discuss/*/"],
+      "settingMatch": {
+        "id": "forumScroll",
         "value": true
       }
     }

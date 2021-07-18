@@ -48,6 +48,7 @@ function messageForAllTabs(message) {
       (tab) => (tab.url || (!tab.url && typeof browser !== "undefined")) && chrome.tabs.sendMessage(tab.id, message)
     )
   );
+  scratchAddons.sendToPopups(message);
 }
 
 function stateChange(parentObjectPath, key, value) {

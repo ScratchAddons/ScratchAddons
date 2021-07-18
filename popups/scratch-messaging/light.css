@@ -23,8 +23,8 @@ button {
 .btn-dropdown img {
   filter: invert(1);
 }
-.btn-dropdown:hover {
-  background: rgba(0, 0, 0, 0.1);
+.message-type-title:hover .btn-dropdown {
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .comment {
@@ -51,5 +51,9 @@ button {
 
 .reply-textarea {
   background-color: #f2f2f2;
+  color: black;
+}
+
+a.message-type-title-text {
   color: black;
 }

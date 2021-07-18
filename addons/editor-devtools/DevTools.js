@@ -1960,7 +1960,13 @@ export default class DevTools {
           code === "DELETE_VARIABLE_ID" ||
           code === "RENAME_VARIABLE_ID" ||
           code === "NEW_BROADCAST_MESSAGE_ID" ||
-          code === "NEW_BROADCAST_MESSAGE_ID"
+          code === "NEW_BROADCAST_MESSAGE_ID" ||
+          // editor-searchable-dropdowns compatibility
+          code === "createGlobalVariable" ||
+          code === "createLocalVariable" ||
+          code === "createGlobalList" ||
+          code === "createLocalList" ||
+          code === "createBroadcast"
         ) {
           continue; // Skip these
         }
@@ -2255,7 +2261,7 @@ export default class DevTools {
                         <div ${
                           this.addon.self._isDevtoolsExtension ? "" : 'style="display: none;"'
                         }><a href="#" class="s3devAction" id="s3devHelp"><b>${this.m("help")}</b></a>
-                        <a href="https://www.youtube.com/griffpatch" class="s3devAction" target="_blank" id="s3devHelp">${this.m(
+                        <a href="https://www.youtube.com/griffpatch" class="s3devAction" target="_blank" id="s3devHelp" rel="noreferrer noopener">${this.m(
                           "tutorials"
                         )}</a></div>
                     </label>
