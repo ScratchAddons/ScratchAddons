@@ -23,7 +23,7 @@ export default async function ({ addon, console }) {
       if (playerToggled) {
         let username = addon.auth.username ? "?username=" + addon.auth.username : "";
         twIframe.src = "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed" + username;
-        scratchStage.parentElement.append(twIframe);
+        scratchStage.parentElement.prepend(twIframe);
 
         scratchStage.style.display = "none";
         button.classList.add("scratch");
@@ -53,7 +53,7 @@ export default async function ({ addon, console }) {
 
     addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: button, order: 1 });
 
-    scratchStage = document.querySelector("[class^='stage-wrapper_stage-wrapper']");
+    scratchStage = document.querySelector(".guiPlayer");
 
     playerToggled = false;
     removeIframe();
