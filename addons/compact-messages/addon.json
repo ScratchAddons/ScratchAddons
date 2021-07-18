@@ -22,7 +22,7 @@
       "default": 5,
       "max": 15,
     }
-  ]
+  ],
   "userstyles": [
     {
       "url": "styles.css",
