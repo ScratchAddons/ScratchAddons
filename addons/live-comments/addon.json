@@ -1,0 +1,21 @@
+{
+  "name": "Live comment refreshing",
+  "description": "Refreshes comments to get a near-live view.",
+  "credits": [
+    {
+      "name": "Raihan142857",
+      "link": "https://scratch.mit.edu/users/Raihan142857/"
+    },
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*","https://scratch.mit.edu/studios/*"]
+    }
+  ],
+  "tags": ["community"]
+}
