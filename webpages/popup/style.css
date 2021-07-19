@@ -93,8 +93,11 @@ body {
 }
 .popup-name img {
   vertical-align: middle;
-  filter: brightness(0) invert(1);
+  filter: var(--content-icon-filter);
   height: 18px;
+}
+.popup-name.sel img {
+  filter: brightness(0) invert(1);
 }
 .popup-title {
   padding-inline-start: 5px;

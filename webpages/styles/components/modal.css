@@ -26,6 +26,7 @@
 .close {
   float: right;
   cursor: pointer;
+  filter: var(--content-icon-filter);
 }
 [dir="rtl"] .close {
   float: left;

@@ -1,8 +1,0 @@
-@import "../styles/colors-light.css";
-
-.popup-name img {
-  filter: brightness(0);
-}
-.popup-name.sel img {
-  filter: brightness(0) invert(1);
-}

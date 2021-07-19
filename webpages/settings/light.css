@@ -11,15 +11,6 @@
   border-color: var(--red-variant);
 }
 
-.icon-type,
-.btn-dropdown img,
-.categories-shrink img,
-.category img,
-.addon-group > img,
-.close {
-  filter: brightness(0);
-}
-
 .category.sel {
   font-weight: 600;
 }

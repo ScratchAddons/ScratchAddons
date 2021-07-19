@@ -38,6 +38,7 @@ button:hover {
 
 .btn-dropdown img {
   height: 24px;
+  filter: var(--content-icon-filter);
 }
 
 .message-type {
@@ -113,7 +114,7 @@ button:hover {
   vertical-align: text-bottom;
 }
 .small-icon:not(.colored) {
-  filter: brightness(0) invert(1);
+  filter: var(--content-icon-filter);
 }
 .message-type-title-text {
   white-space: nowrap;
@@ -191,7 +192,7 @@ a.message-type-title-text {
   height: 10px;
   vertical-align: baseline;
   padding-left: 2px;
-  filter: brightness(0) invert(1);
+  filter: var(--content-icon-filter);
 }
 [dir="rtl"] .popout-comment {
   transform: scaleX(-1);
@@ -317,7 +318,7 @@ a.message-type-title-text {
   vertical-align: baseline;
   margin-left: 5px;
   opacity: 0.6;
-  filter: brightness(0) invert(1);
+  filter: var(--content-icon-filter);
 }
 [dir="rtl"] #popout {
   transform: scaleX(-1);

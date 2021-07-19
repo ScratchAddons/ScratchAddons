@@ -290,6 +290,7 @@ body.iframe .search-box input {
 }
 .categories-shrink img {
   vertical-align: middle;
+  filter: var(--content-icon-filter);
 }
 .flipped {
   transform: scaleX(-1);

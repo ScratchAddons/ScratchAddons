@@ -25,6 +25,7 @@
   --control-border: #aaa;
 
   --content-text: #222;
+  --content-icon-filter: brightness(0);
   --description-text: #444;
   --label-text: #555;
   --gray-text: #a1a1a1;

@@ -57,5 +57,5 @@ body {
 .small-icon {
   height: 14px;
   vertical-align: text-bottom;
-  filter: brightness(0) invert(1);
+  filter: var(--content-icon-filter);
 }
