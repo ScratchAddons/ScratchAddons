@@ -1,5 +1,5 @@
 <template>
-  <label class="addon-setting">
+  <div class="addon-setting" :class="{'boolean-setting': setting.type === 'boolean'}">
     <div class="setting-label" v-html="settingsName(addon)"></div>
     <template v-if="setting.type === 'boolean'">
       <input
@@ -69,31 +69,33 @@
       />
     </template>
     <template v-if="setting.type === 'color'">
-      <picker
-        :value="addonSettings[addon._addonId][setting.id] || setting.default"
-        :setting="setting"
-        :addon="addon"
-        :no_alpha="!setting.allowTransparency"
-        v-click-outside="closePickers"
-      ></picker>
-      <reset-dropdown
-        v-if="showResetDropdown()"
-        :setting="setting"
-        :addon="addon"
-        :label="msg('reset')"
-        :default-label="msg('default')"
-        v-click-outside="closeResetDropdowns"
-      ></reset-dropdown>
-      <button
-        v-else
-        type="button"
-        class="large-button clear-button"
-        :disabled="!addon._enabled"
-        @click="updateOption(setting.default)"
-      >
-        <span>{{ msg("reset") }}</span>
-        <img src="../../images/icons/undo.svg" class="icon-type" />
-      </button>
+      <div class="setting-input-container">
+        <picker
+          :value="addonSettings[addon._addonId][setting.id] || setting.default"
+          :setting="setting"
+          :addon="addon"
+          :no_alpha="!setting.allowTransparency"
+          v-click-outside="closePickers"
+        ></picker>
+        <reset-dropdown
+          v-if="showResetDropdown()"
+          :setting="setting"
+          :addon="addon"
+          :label="msg('reset')"
+          :default-label="msg('default')"
+          v-click-outside="closeResetDropdowns"
+        ></reset-dropdown>
+        <button
+          v-else
+          type="button"
+          class="large-button clear-button"
+          :disabled="!addon._enabled"
+          @click="updateOption(setting.default)"
+        >
+          <span>{{ msg("reset") }}</span>
+          <img src="../../images/icons/undo.svg" class="icon-type" />
+        </button>
+      </div>
     </template>
     <template v-if="setting.type === 'select'">
       <div class="filter-options">
@@ -114,10 +116,9 @@
   .addon-setting {
     margin: 10px;
     margin-inline-end: 20px;
-    min-height: 35px;
+    min-height: 32px;
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
   }
   .setting-input {
     color: var(--content-text);
@@ -162,6 +163,12 @@
   .setting-input.number {
     border-radius: 16px;
   }
+
+  .setting-input-container {
+    display: flex;
+    align-items: center;
+  }
+
   .setting-label {
     width: 200px;
     text-transform: uppercase;
@@ -182,6 +189,12 @@
     border-bottom-right-radius: 4px;
     border-bottom-left-radius: 0;
   }
+  .iframe .setting-dropdown.open .clear-button {
+    border-bottom-right-radius: 4px;
+  }
+  [dir="rtl"] .setting-dropdown.open .clear-button {
+    border-bottom-left-radius: 4px;
+  }
   .setting-dropdown ul {
     position: absolute;
     top: calc(100% - 1px);
@@ -196,11 +209,21 @@
     color: var(--content-text);
     border: 1px solid var(--control-border);
   }
+  .iframe .setting-dropdown ul {
+    right: auto;
+    left: -100px;
+    border-top-right-radius: 4px;
+  }
   [dir="rtl"] .setting-dropdown ul {
     right: auto;
     left: 0;
     border-top-right-radius: 4px;
     border-top-left-radius: 0;
+  }
+  [dir="rtl"] .iframe .setting-dropdown ul {
+    left: auto;
+    right: -100px;
+    border-top-left-radius: 4px;
   }
   .setting-dropdown.open ul {
     display: block;

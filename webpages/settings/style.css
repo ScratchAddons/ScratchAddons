@@ -228,14 +228,43 @@ body.iframe .addon-name .icon-type {
 body.iframe .badge {
   margin-inline-start: 8px;
 }
+
 body.iframe .addon-settings {
   padding-inline: 16px;
 }
+body.iframe .settings-column {
+  flex-direction: column;
+}
+body.iframe .addon-setting {
+  margin: 10px 0;
+  min-height: 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
 body.iframe .setting-label {
-  flex: 2;
-  margin-top: 5px;
+  width: auto;
   margin-bottom: 5px;
 }
+body.iframe .setting-input {
+  flex-shrink: 0;
+}
+body.iframe .addon-setting.boolean-setting {
+  margin: 5px 0;
+  flex-direction: row;
+  align-items: center;
+}
+body.iframe .addon-setting.boolean-setting .setting-label {
+  margin-bottom: 0;
+}
+body.iframe .presets-column > .setting-label {
+  margin-inline-start: 0;
+  margin-bottom: 0;
+}
+body.iframe .presets-column > .addon-setting {
+  margin: 5px 0;
+  margin-inline-end: 10px;
+}
+
 body.iframe .addons-container {
   padding: 10px 0;
 }
@@ -250,6 +279,7 @@ body.iframe .search-box input {
   flex-grow: 1;
   flex-basis: 0;
 }
+
 .categories-shrink {
   text-align: right;
   bottom: 0;
