@@ -2,6 +2,9 @@ html,
 body {
   overflow: hidden;
 }
+html {
+  font-size: 12px;
+}
 body {
   width: var(--width, 400px);
   height: var(--height, 599px);
