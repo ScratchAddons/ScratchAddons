@@ -72,7 +72,8 @@ body {
   box-sizing: border-box;
   align-items: center;
   font-size: 12px;
-  padding-inline: 12px;
+  padding-inline-start: 10.5px;
+  padding-inline-end: 12px;
   cursor: pointer;
   background-color: var(--button-background);
   border: 1px solid var(--control-border);
