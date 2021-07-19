@@ -24,7 +24,7 @@ a.social-messages-profile-link,
 .social-form,
 body:not(.sa-body-editor) .join-flow-title,
 .initiatives-section .initiatives-tools .subsection-tag.collaborator {
-  color: #fff;
+  color: #fff !important;
 }
 .sa-body-editor h1,
 .sa-body-editor h2,
@@ -45,7 +45,7 @@ body:not(.sa-body-editor) .join-flow-title,
 .tips-getting-started,
 .tips-activity-guides,
 .studio-report-modal .studio-report-tile,
-.studio-report-modal .button:disabled {
+.studio-report-modal .button:disabled, .semicolon {
   background: #202020;
 }
 .box .box-header,
