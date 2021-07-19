@@ -58,10 +58,10 @@ export default async ({ addon, console, msg }) => {
     });
     liTag.addEventListener("click", (e) => e.preventDefault());
     liTag.addEventListener("mouseover", () => {
-      ulTag.hidden = false;
+      ulTag.style.display = "block";
     });
     liTag.addEventListener("mouseout", () => {
-      ulTag.hidden = true;
+      ulTag.style.display = "none";
     });
     liTag.append(ulTag);
     return liTag;
@@ -92,7 +92,7 @@ export default async ({ addon, console, msg }) => {
     liTag.addEventListener("click", (e) => {
       e.preventDefault();
       if (promptTag) {
-        const value = prompt(msg("prompt-" + name), defaultSelection ? getSelection(textBox) : undefined);
+        const value = prompt(msg("prompt-" + name), defaultSelection ? getSelection(textBox).trim() : undefined);
         openWith = `[${tag}${value ? `=${value}` : ""}]`;
         closeWith = `[/${tag}]`;
       } else if (promptContent) {

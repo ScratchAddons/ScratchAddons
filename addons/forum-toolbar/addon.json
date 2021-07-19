@@ -1,6 +1,6 @@
 {
-  "name": "Forum toolbar buttons",
-  "description": "Adds buttons in the forum editing toolbar to insert BBCode, such as [center] or [color].",
+  "name": "More forum toolbar buttons",
+  "description": "Adds buttons in the forum editing toolbar to insert BBCode tags, such as [center] or [color].",
   "tags": ["community", "forums"],
   "userscripts": [
     {
