@@ -62,6 +62,14 @@
 .modal .addon-body:last-child {
   margin-bottom: 0;
 }
+.modal .addon-topbar {
+  height: 36px;
+  border-bottom: 1px solid var(--content-border);
+}
 .modal .addon-name {
   margin-inline-start: 10px;
+}
+.modal .addon-settings {
+  padding: 10px;
+  padding-bottom: 0;
 }
