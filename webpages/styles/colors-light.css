@@ -5,6 +5,7 @@
   --page-background: #fcfcfc;
   --content-background: #f7f7f7;
   --navigation-background: #ecebeb;
+  --search-toolbar-background: #fcfcfc;
   --button-background: #ecebeb;
   --button-hover-background: #d4d3d3;
   --input-background: #fff;
@@ -20,6 +21,7 @@
 
   --content-border: #cfcfcf;
   --content-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --content-separator: #aaa;
   --control-border: #aaa;
 
   --content-text: #222;

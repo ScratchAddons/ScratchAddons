@@ -18,6 +18,7 @@
   --page-background: #222;
   --content-background: #2a2a2a;
   --navigation-background: #333;
+  --search-toolbar-background: #2a2a2a;
   --button-background: #222;
   --button-hover-background: #1a1a1a;
   --input-background: #222;
@@ -36,6 +37,7 @@
   --large-shadow-filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
   --content-border: #333;
   --content-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  --content-separator: #808080;
   --control-border: #000;
   --input-focus-shadow: 0 0 0 3px var(--brand-orange-opacity35);
   --fullscreen-popup-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
