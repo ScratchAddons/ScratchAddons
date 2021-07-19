@@ -12,6 +12,11 @@
   position: absolute;
   line-height: 45px;
 }
+.studio-info div.studio-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .studio-info textarea.studio-title {
   width: 100%;
   height: 45px;
