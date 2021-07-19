@@ -228,7 +228,7 @@ function appendSearch(box, query, page, term, msg) {
 
         box.appendChild(postElem);
       }
-      scratchblocks.renderMatching("pre.blocks");
+      scratchblocks.renderMatching(".forum-search-list pre.blocks");
       isCurrentlyProcessing = false;
     });
 }
