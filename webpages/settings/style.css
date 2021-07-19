@@ -210,7 +210,7 @@ body.iframe .addon-group {
   padding-inline: 6px;
 }
 body.iframe .addon-group > img {
-  margin-inline-end: 10px;
+  margin-inline-end: 5px;
 }
 body.iframe .addon-topbar {
   height: 44px;
@@ -220,7 +220,13 @@ body.iframe .clickeable-area {
   padding-inline-start: 6px;
 }
 body.iframe .addon-name {
-  margin-inline-start: 10px;
+  margin-inline-start: 6px;
+}
+body.iframe .addon-name .icon-type {
+  margin-inline-end: 6px;
+}
+body.iframe .badge {
+  margin-inline-start: 8px;
 }
 body.iframe .addon-settings {
   padding-inline: 16px;

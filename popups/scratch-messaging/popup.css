@@ -120,6 +120,9 @@ button:hover {
   text-overflow: ellipsis;
   overflow: hidden;
   margin-inline-end: auto;
+  margin-inline-start: 6px;
+}
+html.fullscreen .message-type-title-text {
   margin-inline-start: 10px;
 }
 a.message-type-title-text {
