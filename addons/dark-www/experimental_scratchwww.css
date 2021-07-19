@@ -19,12 +19,13 @@ a.social-messages-profile-link,
 .studio-project-tile .studio-project-username,
 #footer,
 #donor,
+.semicolon,
 .subactions .share-date,
 .developers #faq p,
 .social-form,
 body:not(.sa-body-editor) .join-flow-title,
 .initiatives-section .initiatives-tools .subsection-tag.collaborator {
-  color: #fff !important;
+  color: #fff;
 }
 .sa-body-editor h1,
 .sa-body-editor h2,
