@@ -339,7 +339,7 @@ body.iframe .search-box input {
 
 color-picker {
   z-index: 2;
-  filter: drop-shadow(black 2px 4px 6px);
+  box-shadow: var(--large-shadow);
   position: absolute;
   top: 30px;
   left: 0;
