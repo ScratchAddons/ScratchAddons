@@ -64,48 +64,52 @@
       "value": {
         "type": "ternary",
         "true": "block",
-        "false": "none",
+        "false": null,
         "source": {
           "type": "settingValue",
           "settingId": "wp"
         }
-      }
+      },
+      "dropNull": true
     },
     {
       "name": "wiki",
       "value": {
         "type": "ternary",
         "true": "block",
-        "false": "none",
+        "false": null,
         "source": {
           "type": "settingValue",
           "settingId": "wiki"
         }
-      }
+      },
+      "dropNull": true
     },
     {
       "name": "google",
       "value": {
         "type": "ternary",
         "true": "block",
-        "false": "none",
+        "false": null,
         "source": {
           "type": "settingValue",
           "settingId": "google"
         }
-      }
+      },
+      "dropNull": true
     },
     {
       "name": "dictionary",
       "value": {
         "type": "ternary",
         "true": "block",
-        "false": "none",
+        "false": null,
         "source": {
           "type": "settingValue",
           "settingId": "dictionary"
         }
-      }
+      },
+      "dropNull": true
     },
     {
       "name": "center",

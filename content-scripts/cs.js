@@ -197,6 +197,9 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
   const setVar = (addonId, varName, value) =>
     document.documentElement.style.setProperty(`--${hyphensToCamelCase(addonId)}-${varName}`, value);
 
+  const removeVar = (addonId, varName) =>
+    document.documentElement.style.removeProperty(`--${hyphensToCamelCase(addonId)}-${varName}`);
+
   const addonIds = addonsWithUserstyles.map((obj) => obj.addonId);
 
   // Set variables for settings
@@ -249,7 +252,12 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
     const addonId = addon.addonId;
     for (const customVar of addon.cssVariables) {
       const varName = customVar.name;
-      setVar(addonId, varName, getColor(addonId, customVar.value));
+      const varValue = getColor(addonId, customVar.value);
+      if (varValue === null && customVar.dropNull) {
+        removeVar(addonId, varName);
+      } else {
+        setVar(addonId, varName, varValue);
+      }
     }
   }
 }

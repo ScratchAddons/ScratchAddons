@@ -20,8 +20,51 @@ export default async ({ addon, console, msg }) => {
       element,
     });
     addon.tab.displayNoneWhileDisabled(element, {
-      display: `var(--forumToolbar-${element.dataset.name})`,
+      display: `var(--forumToolbar-${element.dataset.name}, none)`,
     });
+  };
+  const appendDropdown = (space, element, order) => {
+    addon.tab.appendToSharedSpace({
+      space,
+      order,
+      element,
+    });
+    const buttons = element.children[1].children;
+    const display = Array.from(buttons, (button) => `var(--forumToolbar-${button.dataset.name},`);
+    addon.tab.displayNoneWhileDisabled(element, {
+      display: `${display.join("")}none${")".repeat(buttons.length)}`,
+    });
+  };
+  const createDropdown = (name, ...buttons) => {
+    const liTag = document.createElement("li");
+    liTag.classList.add("markItUpButton");
+    liTag.classList.add("markItUpDropMenu");
+    liTag.classList.add("sa-forum-toolbar");
+    liTag.classList.add("sa-forum-toolbar-dropdown");
+    liTag.classList.add("sa-forum-toolbar-" + name);
+    liTag.dataset.name = name;
+    const buttonName = msg(name);
+    const aTag = Object.assign(document.createElement("a"), {
+      href: "#",
+      textContent: buttonName,
+      title: buttonName,
+    });
+    liTag.append(aTag);
+    const ulTag = document.createElement("ul");
+    ulTag.hidden = true;
+    buttons.forEach((button) => {
+      button.style.display = `var(--forumToolbar-${button.dataset.name}, none)`;
+      ulTag.append(button);
+    });
+    liTag.addEventListener("click", (e) => e.preventDefault());
+    liTag.addEventListener("mouseover", () => {
+      ulTag.hidden = false;
+    });
+    liTag.addEventListener("mouseout", () => {
+      ulTag.hidden = true;
+    });
+    liTag.append(ulTag);
+    return liTag;
   };
   /**
    * There are four ways to use this:
@@ -87,41 +130,32 @@ export default async ({ addon, console, msg }) => {
     1
   );
 
-  appendButton(
+  appendDropdown(
     "forumToolbarLinkDecoration",
-    createButton("wp", {
-      tag: "wp",
-      promptTag: true,
-      defaultSelection: true,
-    }),
+    createDropdown(
+      "link",
+      createButton("wp", {
+        tag: "wp",
+        promptTag: true,
+        defaultSelection: true,
+      }),
+      createButton("wiki", {
+        tag: "wiki",
+        promptTag: true,
+        defaultSelection: true,
+      }),
+      createButton("google", {
+        tag: "google",
+        promptTag: true,
+        defaultSelection: true,
+      }),
+      createButton("dictionary", {
+        tag: "dictionary",
+        promptTag: true,
+        defaultSelection: true,
+      })
+    ),
     2
-  );
-  appendButton(
-    "forumToolbarLinkDecoration",
-    createButton("wiki", {
-      tag: "wiki",
-      promptTag: true,
-      defaultSelection: true,
-    }),
-    3
-  );
-  appendButton(
-    "forumToolbarLinkDecoration",
-    createButton("google", {
-      tag: "google",
-      promptTag: true,
-      defaultSelection: true,
-    }),
-    4
-  );
-  appendButton(
-    "forumToolbarLinkDecoration",
-    createButton("dictionary", {
-      tag: "dictionary",
-      promptTag: true,
-      defaultSelection: true,
-    }),
-    5
   );
 
   appendButton(
