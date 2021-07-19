@@ -45,7 +45,8 @@ body:not(.sa-body-editor) .join-flow-title,
 .tips-getting-started,
 .tips-activity-guides,
 .studio-report-modal .studio-report-tile,
-.studio-report-modal .button:disabled, .semicolon {
+.studio-report-modal .button:disabled,
+.semicolon {
   background: #202020;
 }
 .box .box-header,
