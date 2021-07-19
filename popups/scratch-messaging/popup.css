@@ -278,7 +278,7 @@ a.message-type-title-text {
 }
 .status-empty {
   display: block;
-  margin-bottom: 20px;
+  margin-block: 10px;
 }
 
 #bottom-bar {
