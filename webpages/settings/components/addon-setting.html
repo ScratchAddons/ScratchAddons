@@ -1,6 +1,5 @@
 <template>
   <div class="addon-setting" :class="{'boolean-setting': setting.type === 'boolean'}">
-    <div class="setting-label" v-html="settingsName(addon)"></div>
     <template v-if="setting.type === 'boolean'">
       <input
         type="checkbox"
@@ -10,6 +9,7 @@
         :disabled="!addon._enabled"
       />
     </template>
+    <div class="setting-label" v-html="settingsName(addon)"></div>
     <template v-if="setting.type === 'positive_integer'">
       <input
         type="number"
@@ -176,6 +176,10 @@
     font-weight: 600;
     font-size: 12px;
     margin-inline-end: 10px;
+  }
+  .boolean-setting .setting-label {
+    margin-inline-end: 0;
+    margin-inline-start: 10px;
   }
 
   .setting-dropdown {
