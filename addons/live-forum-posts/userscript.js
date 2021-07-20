@@ -10,7 +10,16 @@ export default async function ({ addon, global, console, msg }) {
   if (addon.settings.get('softPosting')) {
     let submitButton = document.querySelector("button[name='AddPostForm']")
     let markItUpEditor = document.getElementById('id_body')
-    submitButton.addEventListener('click', (e) => {
+    let errorList = document.querySelector('.error-list')
+    if (!errorList) {
+      errorList = document.createElement('ul')
+      errorList.className = 'error-list'
+      errorList.style.display = 'none'
+     document.querySelector('#reply form label strong').insertAdjacentElement('afterend', errorList)
+    }
+
+
+    submitButton.addEventListener('click', function clickListener(e) {
       e.preventDefault()
       let data = new FormData()
 
@@ -25,14 +34,27 @@ export default async function ({ addon, global, console, msg }) {
       }).then(async res => {
         if (res.url.split('#')[0] !== location.href.split('#')[0]) {
           // We are now on the next page, go to the next page
-          console.log(res.url, location.href, res.url == location.href)
+          location.href = res.url;
         } else {
-          // TODO: handle 60 second waits
+          let parser = new DOMParser()
+          let doc = parser.parseFromString(await res.text(), 'text/html')
+          
+          let parsedErrorList = doc.querySelector('.error-list')
+          if (parsedErrorList) {
+            errorList.innerHTML = parsedErrorList.innerHTML
+            errorList.style.display = 'block'
+          } else {
+            errorList.innerHTML = ''
+            errorList.style.display = 'none'
+          }
           markItUpEditor.value = ''
-          await getNewPosts(await res.text())
+          await getNewPosts(doc)
         }
       })
+
     })
+    addon.self.addEventListener('disabled', () => submitButton.removeEventListener('click', clickListener))
+    addon.self.addEventListener('reenabled', () => submitButton.addEventListener('click', clickListener))
   }
 
   function addPost(post) {
@@ -43,11 +65,8 @@ export default async function ({ addon, global, console, msg }) {
 
   async function getNewPosts(prefetched) {
     isFetching = true
-    let html = prefetched ? prefetched : await fetch(location.href).then(r => r.text());
+    let doc = prefetched ? prefetched : (new DOMParser()).parseFromString(await fetch(location.href).then(r => r.text()), 'text/html');
 
-    let parser = new DOMParser();
-
-    let doc = parser.parseFromString(html, "text/html");
 
     let gotPosts = doc.querySelectorAll(".blockpost.roweven.firstpost");
 
@@ -83,8 +102,17 @@ export default async function ({ addon, global, console, msg }) {
 
     isFetching = false
   }
-  while (true) {
-    await sleep(addon.settings.get("waitTime") * 1000);
-    await getNewPosts()
+  
+  async function main() {
+    while (true) {
+      if (addon.self.disabled) break
+  
+      await sleep(addon.settings.get("waitTime") * 1000);
+      await getNewPosts()
+    }
   }
+
+  main()
+
+  addon.self.addEventListener('reenabled', main)
 }
