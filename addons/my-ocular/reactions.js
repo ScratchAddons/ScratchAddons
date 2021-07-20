@@ -1,7 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
-
   while (true) {
-    let i = await addon.tab.waitForElement('.blockpost', { markAsSeen: true })
+    let i = await addon.tab.waitForElement(".blockpost", { markAsSeen: true });
     let postID = i.id.split("p")[1];
 
     let viewOnOcularContainer = document.createElement("li");
