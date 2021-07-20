@@ -92,7 +92,9 @@ chrome.runtime.sendMessage("getSettingsInfo", async (res) => {
           for (let activeStyle of document.querySelectorAll(`style[data-addon-id=${popup._addonId}]`)) {
             activeStyle.removeAttribute("media");
           }
-          for (let inactiveStyle of document.querySelectorAll(`style[data-addon-id]:not([data-addon-id=${popup._addonId}])`)) {
+          for (let inactiveStyle of document.querySelectorAll(
+            `style[data-addon-id]:not([data-addon-id=${popup._addonId}])`
+          )) {
             inactiveStyle.media = "not all";
           }
         }
