@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
-  let posts = document.querySelectorAll(".blockpost");
 
-  posts.forEach(async (i) => {
+  while (true) {
+    let i = await addon.tab.waitForElement('.blockpost', { markAsSeen: true })
     let postID = i.id.split("p")[1];
 
     let viewOnOcularContainer = document.createElement("li");
@@ -119,7 +119,7 @@ export default async function ({ addon, global, console, msg }) {
 
       makeReactionList();
     }
-  });
+  }
 
   async function fetchReactions(id) {
     const response = await fetch(`https://my-ocular.jeffalo.net/api/reactions/${id}`);

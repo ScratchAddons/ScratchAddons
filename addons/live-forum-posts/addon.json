@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Live forum posts",
   "description": "Live forum post refreshing",
   "credits": [
@@ -7,11 +8,26 @@
       "link": "https://scratch.mit.edu/users/9gr/"
     }
   ],
-  "tags": ["forums", "community"],
   "userscripts": [
     {
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "url": "userscript.js"
     }
-  ]
+  ],
+  "settings": [
+    {
+      "name": "Live signatures",
+      "type": "boolean",
+      "id": "signature",
+      "default": true
+    },
+    {
+      "name": "Time in-between page fetches (in seconds)",
+      "type": "positive_integer",
+      "min": 1,
+      "id": "waitTime",
+      "default": 2
+    }
+  ],
+  "tags": ["forums", "community"]
 }
