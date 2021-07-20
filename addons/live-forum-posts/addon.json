@@ -27,7 +27,13 @@
       "min": 1,
       "id": "waitTime",
       "default": 2
+    },
+    {
+      "name": "Soft posting in forums",
+      "type": "boolean",
+      "id": "softPosting",
+      "default": true
     }
   ],
-  "tags": ["forums", "community"]
+  "tags": ["forums", "community", "beta"]
 }
