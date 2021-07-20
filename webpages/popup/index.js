@@ -89,6 +89,12 @@ chrome.runtime.sendMessage("getSettingsInfo", async (res) => {
         if (this.currentPopup !== popup) {
           this.currentPopup = popup;
           if (!this.displayedPopups.includes(popup)) this.displayedPopups.push(popup);
+          for (let activeStyle of document.querySelectorAll(`style[data-addon-id=${popup._addonId}]`)) {
+            activeStyle.removeAttribute("media");
+          }
+          for (let inactiveStyle of document.querySelectorAll(`style[data-addon-id]:not([data-addon-id=${popup._addonId}])`)) {
+            inactiveStyle.media = "not all";
+          }
         }
       },
     },

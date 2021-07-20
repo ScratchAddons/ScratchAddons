@@ -55,6 +55,10 @@ export default (filenames) =>
           style.textContent = styles[filename].light;
           const [componentName] = filename.split("/").slice(-1);
           style.setAttribute("data-vue-component", componentName); // For debugging (has no side effects)
+          if (filename.startsWith("popups/")) {
+            const [addonId] = filename.split("/").slice(1);
+            style.setAttribute("data-addon-id", addonId);
+          }
           document.head.appendChild(style);
         });
       }
@@ -66,6 +70,10 @@ export default (filenames) =>
       style.textContent = styles[filename].style;
       const [componentName] = filename.split("/").slice(-1);
       style.setAttribute("data-vue-component", componentName); // For debugging (has no side effects)
+      if (filename.startsWith("popups/")) {
+            const [addonId] = filename.split("/").slice(1);
+            style.setAttribute("data-addon-id", addonId);
+          }
       document.head.insertBefore(style, document.head.querySelector("[data-below-vue-components]"));
     });
     components.forEach((component) => (all = { ...all, ...component }));

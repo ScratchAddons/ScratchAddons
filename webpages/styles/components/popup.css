@@ -1,5 +1,6 @@
 .popup-container {
-  height: 100%;
+  height: calc(100% - 45px);
+  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: grey transparent;
   color: white;
