@@ -18,8 +18,8 @@
   color: #fff;
 }
 
-iframe {
-  background-color: #e4e4e4;
+.popup-container {
+  background-color: #fff;
 }
 
 .popup-name img {
