@@ -95,7 +95,7 @@ export default async function ({ addon, global, console, msg }) {
     }
     if (gotPosts.length == 20) {
       // Update pagination divs
-      let paginated = doc.querySelector(".pagination");
+      let paginated = doc.querySelector(".pagination").innerHTML;
 
       document.querySelectorAll(".paginated").forEach(e => (e.innerHTML = paginated))
     }
