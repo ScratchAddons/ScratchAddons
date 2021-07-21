@@ -13,7 +13,8 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     textbox.addEventListener("keyup", (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.code == "Enter") {
+      console.log(e.code)
+      if ((e.ctrlKey || e.metaKey) && (e.code == "Enter" || e.code == "NumpadEnter")) {
         button.click();
       }
     });

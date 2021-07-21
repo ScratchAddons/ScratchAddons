@@ -5,7 +5,7 @@ export default async function ({ addon }) {
   let postButton = document.querySelector(type == "topic" ? ".button.grey:nth-child(1)" : "button");
 
   textarea.addEventListener("keyup", (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.code == "Enter") {
+    if ((e.ctrlKey || e.metaKey) && (e.code == "Enter" || e.code == "NumpadEnter")) {
       postButton.click();
     }
   });
