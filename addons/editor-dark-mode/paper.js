@@ -43,7 +43,11 @@ export default async function ({ addon, console }) {
   addon.self.addEventListener("disabled", updateColors);
   addon.self.addEventListener("reenabled", updateColors);
   while (true) {
-    await addon.tab.waitForElement("[class^=paper-canvas_paper-canvas_]", { markAsSeen: true });
+    await addon.tab.waitForElement("[class^=paper-canvas_paper-canvas_]", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/navigation/ACTIVATE_TAB", "scratch-gui/mode/SET_PLAYER"],
+      reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
+    });
     updateColors();
   }
 }
