@@ -597,6 +597,18 @@
   "injectAsStyleElt": true,
   "versionAdded": "1.0.0",
   "updateUserstylesOnSettingsChange": true,
+  "userscripts": [
+    {
+      "url": "paper.js",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "runAtComplete": false
+    }
+  ],
   "userstyles": [
     {
       "url": "experimental_editor.css",
