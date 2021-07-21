@@ -1,4 +1,6 @@
 export default async function ({ addon, global, console, msg }) {
+  let wait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
   const { redux } = addon.tab;
   let [ , type, id ] = location.pathname.split('/')
   
@@ -25,19 +27,31 @@ export default async function ({ addon, global, console, msg }) {
       return replies
   }
 
+  var newest = Date.now()
 
-  setInterval(async () => {
+
+  while (true) {
+      await wait(3000)
       var loopOffset = 40
       var offset = -loopOffset
       while (true) {
           offset += loopOffset
           let res = await fetch(URL + `?offset=${offset}&limit=${loopOffset}`)
-          let json = await res.json()
+          let data = await res.json()
+
+          let json = data.map(e => {
+              let time = (new Date(e.datetime_created)).getTime()
+              if (time > newest) {
+                  return e
+              } else return undefined
+          })
+          
           if (json.length == 0) return
           let loadedComments = getAllComments().map(e => e.id)
 
           for (let j in json) {
               let comment = json[j]
+              if (!comment) continue
 
               if (loadedComments.indexOf(comment.id) !== -1) {
                   break
@@ -58,13 +72,21 @@ export default async function ({ addon, global, console, msg }) {
           while (true) {
               offset += loopOffset
               let res = await fetch(URL + `/${comment.id}/replies?offset=${offset}&limit=${loopOffset}`)
-              let json = (await res.json()).reverse()
+              let data = await res.json()
+
+              let json = data.map(e => {
+                let time = (new Date(e.datetime_created)).getTime()
+                if (time > newest) {
+                    return e
+                } else return undefined
+              })
 
               if (json.length == 0) break
               for (let reply of json) {
+                  if (!reply) continue
                   let loadedComments = getAllReplies().map(c => c.id)
 
-                  if (loadedComments.indexOf(reply.id) !== -1) break;
+                  if (loadedComments.indexOf(reply.id) !== -1) continue;
                   
                   redux.dispatch({ type: "ADD_NEW_COMMENT", comment: reply, topLevelCommentId: comment.id })
               }
@@ -73,7 +95,7 @@ export default async function ({ addon, global, console, msg }) {
           }
       }
 
-  }, 1000)
+  }
 
   
 }
