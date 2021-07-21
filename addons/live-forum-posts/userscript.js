@@ -43,7 +43,6 @@ export default async function ({ addon, global, console, msg }) {
       }).then(async (res) => {
         if (res.url.split("#")[0] !== location.href.split("#")[0]) {
           // We are now on the next page, go to the next page
-<<<<<<< HEAD
           location.href = res.url;
         } else {
           let parser = new DOMParser()
@@ -65,16 +64,6 @@ export default async function ({ addon, global, console, msg }) {
     })
     addon.self.addEventListener('disabled', () => submitButton.removeEventListener('click', clickListener))
     addon.self.addEventListener('reenabled', () => submitButton.addEventListener('click', clickListener))
-=======
-          console.log(res.url, location.href, res.url == location.href);
-        } else {
-          // TODO: handle 60 second waits
-          markItUpEditor.value = "";
-          await getNewPosts(await res.text());
-        }
-      });
-    });
->>>>>>> 4901ad0876ee7e23bef943b823dfe59daad8bfb2
   }
 
   function addPost(post) {
