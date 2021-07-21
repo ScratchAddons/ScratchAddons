@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
-  var isFetching = false
+  var isFetching = false;
   let sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   let postContainer = document.querySelector("#djangobbindex");
@@ -7,6 +7,7 @@ export default async function ({ addon, global, console, msg }) {
   if (postEls.length === 20) return; // Return if no posts are avaliable to be loaded
   let posts = postEls.map((el) => ({ id: el.id.substr(1), el }));
 
+<<<<<<< HEAD
   if (addon.settings.get('softPosting')) {
     let submitButton = document.querySelector("button[name='AddPostForm']")
     let markItUpEditor = document.getElementById('id_body')
@@ -22,18 +23,27 @@ export default async function ({ addon, global, console, msg }) {
     submitButton.addEventListener('click', function clickListener(e) {
       e.preventDefault()
       let data = new FormData()
+=======
+  if (addon.settings.get("softPosting")) {
+    let submitButton = document.querySelector("button[name='AddPostForm']");
+    let markItUpEditor = document.getElementById("id_body");
+    submitButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      let data = new FormData();
+>>>>>>> 4901ad0876ee7e23bef943b823dfe59daad8bfb2
 
-      data.append('csrfmiddlewaretoken', addon.auth.csrfToken)
-      data.append('body', markItUpEditor.value)
-      data.append('AddPostForm', '')
+      data.append("csrfmiddlewaretoken", addon.auth.csrfToken);
+      data.append("body", markItUpEditor.value);
+      data.append("AddPostForm", "");
 
       fetch(location.href, {
-        method: 'POST',
+        method: "POST",
         body: data,
-        credentials: 'include'
-      }).then(async res => {
-        if (res.url.split('#')[0] !== location.href.split('#')[0]) {
+        credentials: "include",
+      }).then(async (res) => {
+        if (res.url.split("#")[0] !== location.href.split("#")[0]) {
           // We are now on the next page, go to the next page
+<<<<<<< HEAD
           location.href = res.url;
         } else {
           let parser = new DOMParser()
@@ -55,6 +65,16 @@ export default async function ({ addon, global, console, msg }) {
     })
     addon.self.addEventListener('disabled', () => submitButton.removeEventListener('click', clickListener))
     addon.self.addEventListener('reenabled', () => submitButton.addEventListener('click', clickListener))
+=======
+          console.log(res.url, location.href, res.url == location.href);
+        } else {
+          // TODO: handle 60 second waits
+          markItUpEditor.value = "";
+          await getNewPosts(await res.text());
+        }
+      });
+    });
+>>>>>>> 4901ad0876ee7e23bef943b823dfe59daad8bfb2
   }
 
   function addPost(post) {
@@ -91,16 +111,16 @@ export default async function ({ addon, global, console, msg }) {
         continue;
       }
 
-      addPost(post)
+      addPost(post);
     }
     if (gotPosts.length == 20) {
       // Update pagination divs
       let paginated = doc.querySelector(".pagination").innerHTML;
 
-      document.querySelectorAll(".paginated").forEach(e => (e.innerHTML = paginated))
+      document.querySelectorAll(".paginated").forEach((e) => (e.innerHTML = paginated));
     }
 
-    isFetching = false
+    isFetching = false;
   }
   
   async function main() {
