@@ -68,6 +68,14 @@ async function checkSession() {
     // If Scratch is down, or there was no internet connection, recheck soon:
     if ((res && !res.ok) || !res) {
       setTimeout(checkSession, 60000);
+      scratchAddons.globalState.auth = {
+        isLoggedIn: false,
+        username: null,
+        userId: null,
+        xToken: null,
+        csrfToken: null,
+        scratchLang: (await getCookieValue("scratchlanguage")) || navigator.language,
+      };
       return;
     }
   }
