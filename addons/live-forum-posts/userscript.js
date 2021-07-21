@@ -7,21 +7,20 @@ export default async function ({ addon, global, console, msg }) {
   if (postEls.length === 20) return; // Return if no posts are avaliable to be loaded
   let posts = postEls.map((el) => ({ id: el.id.substr(1), el }));
 
-  if (addon.settings.get('softPosting')) {
-    let submitButton = document.querySelector("button[name='AddPostForm']")
-    let markItUpEditor = document.getElementById('id_body')
-    let errorList = document.querySelector('.error-list')
+  if (addon.settings.get("softPosting")) {
+    let submitButton = document.querySelector("button[name='AddPostForm']");
+    let markItUpEditor = document.getElementById("id_body");
+    let errorList = document.querySelector(".error-list");
     if (!errorList) {
-      errorList = document.createElement('ul')
-      errorList.className = 'error-list'
-      errorList.style.display = 'none'
-     document.querySelector('#reply form label strong').insertAdjacentElement('afterend', errorList)
+      errorList = document.createElement("ul");
+      errorList.className = "error-list";
+      errorList.style.display = "none";
+      document.querySelector("#reply form label strong").insertAdjacentElement("afterend", errorList);
     }
 
-
-    submitButton.addEventListener('click', function clickListener(e) {
-      e.preventDefault()
-      let data = new FormData()
+    submitButton.addEventListener("click", function clickListener(e) {
+      e.preventDefault();
+      let data = new FormData();
 
       data.append("csrfmiddlewaretoken", addon.auth.csrfToken);
       data.append("body", markItUpEditor.value);
@@ -36,25 +35,24 @@ export default async function ({ addon, global, console, msg }) {
           // We are now on the next page, go to the next page
           location.href = res.url;
         } else {
-          let parser = new DOMParser()
-          let doc = parser.parseFromString(await res.text(), 'text/html')
-          
-          let parsedErrorList = doc.querySelector('.error-list')
-          if (parsedErrorList) {
-            errorList.innerHTML = parsedErrorList.innerHTML
-            errorList.style.display = 'block'
-          } else {
-            errorList.innerHTML = ''
-            errorList.style.display = 'none'
-          }
-          markItUpEditor.value = ''
-          await getNewPosts(doc)
-        }
-      })
+          let parser = new DOMParser();
+          let doc = parser.parseFromString(await res.text(), "text/html");
 
-    })
-    addon.self.addEventListener('disabled', () => submitButton.removeEventListener('click', clickListener))
-    addon.self.addEventListener('reenabled', () => submitButton.addEventListener('click', clickListener))
+          let parsedErrorList = doc.querySelector(".error-list");
+          if (parsedErrorList) {
+            errorList.innerHTML = parsedErrorList.innerHTML;
+            errorList.style.display = "block";
+          } else {
+            errorList.innerHTML = "";
+            errorList.style.display = "none";
+          }
+          markItUpEditor.value = "";
+          await getNewPosts(doc);
+        }
+      });
+    });
+    addon.self.addEventListener("disabled", () => submitButton.removeEventListener("click", clickListener));
+    addon.self.addEventListener("reenabled", () => submitButton.addEventListener("click", clickListener));
   }
 
   function addPost(post) {
@@ -64,9 +62,10 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   async function getNewPosts(prefetched) {
-    isFetching = true
-    let doc = prefetched ? prefetched : (new DOMParser()).parseFromString(await fetch(location.href).then(r => r.text()), 'text/html');
-
+    isFetching = true;
+    let doc = prefetched
+      ? prefetched
+      : new DOMParser().parseFromString(await fetch(location.href).then((r) => r.text()), "text/html");
 
     let gotPosts = doc.querySelectorAll(".blockpost.roweven.firstpost");
 
@@ -102,17 +101,17 @@ export default async function ({ addon, global, console, msg }) {
 
     isFetching = false;
   }
-  
+
   async function main() {
     while (true) {
-      if (addon.self.disabled) break
-  
+      if (addon.self.disabled) break;
+
       await sleep(addon.settings.get("waitTime") * 1000);
-      await getNewPosts()
+      await getNewPosts();
     }
   }
 
-  main()
+  main();
 
-  addon.self.addEventListener('reenabled', main)
+  addon.self.addEventListener("reenabled", main);
 }
