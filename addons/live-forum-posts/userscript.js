@@ -7,7 +7,6 @@ export default async function ({ addon, global, console, msg }) {
   if (postEls.length === 20) return; // Return if no posts are avaliable to be loaded
   let posts = postEls.map((el) => ({ id: el.id.substr(1), el }));
 
-<<<<<<< HEAD
   if (addon.settings.get('softPosting')) {
     let submitButton = document.querySelector("button[name='AddPostForm']")
     let markItUpEditor = document.getElementById('id_body')
@@ -23,14 +22,6 @@ export default async function ({ addon, global, console, msg }) {
     submitButton.addEventListener('click', function clickListener(e) {
       e.preventDefault()
       let data = new FormData()
-=======
-  if (addon.settings.get("softPosting")) {
-    let submitButton = document.querySelector("button[name='AddPostForm']");
-    let markItUpEditor = document.getElementById("id_body");
-    submitButton.addEventListener("click", (e) => {
-      e.preventDefault();
-      let data = new FormData();
->>>>>>> 4901ad0876ee7e23bef943b823dfe59daad8bfb2
 
       data.append("csrfmiddlewaretoken", addon.auth.csrfToken);
       data.append("body", markItUpEditor.value);
