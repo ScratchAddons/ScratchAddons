@@ -31,7 +31,7 @@ export default async function ({ addon, console }) {
           TEXT_FILL: textColor(addon.settings.get("accent"), "#575e75", "#ffffff"),
         },
       };
-      
+
       const ctx = skin._canvas.getContext("2d");
 
       if (skin._textDirty) {
@@ -67,8 +67,13 @@ export default async function ({ addon, console }) {
       ctx.arcTo(0, paddedHeight, 0, paddedHeight - BubbleStyle.CORNER_RADIUS, BubbleStyle.CORNER_RADIUS);
       ctx.arcTo(0, 0, paddedWidth, 0, BubbleStyle.CORNER_RADIUS);
       ctx.arcTo(paddedWidth, 0, paddedWidth, paddedHeight, BubbleStyle.CORNER_RADIUS);
-      ctx.arcTo(paddedWidth, paddedHeight, paddedWidth - BubbleStyle.CORNER_RADIUS, paddedHeight,
-        BubbleStyle.CORNER_RADIUS);
+      ctx.arcTo(
+        paddedWidth,
+        paddedHeight,
+        paddedWidth - BubbleStyle.CORNER_RADIUS,
+        paddedHeight,
+        BubbleStyle.CORNER_RADIUS
+      );
 
       // Translate the canvas so we don't have to do a bunch of width/height arithmetic
       ctx.save();
@@ -118,8 +123,9 @@ export default async function ({ addon, console }) {
         ctx.fillText(
           line,
           BubbleStyle.PADDING,
-          BubbleStyle.PADDING + (BubbleStyle.LINE_HEIGHT * lineNumber) +
-            (BubbleStyle.FONT_HEIGHT_RATIO * BubbleStyle.FONT_SIZE)
+          BubbleStyle.PADDING +
+            BubbleStyle.LINE_HEIGHT * lineNumber +
+            BubbleStyle.FONT_HEIGHT_RATIO * BubbleStyle.FONT_SIZE
         );
       }
 
@@ -127,7 +133,7 @@ export default async function ({ addon, console }) {
     };
     return skinId;
   };
-  
+
   const updateBubbles = () => {
     // Re-render all text bubbles on settings change
     for (let skin of renderer._allSkins) {
