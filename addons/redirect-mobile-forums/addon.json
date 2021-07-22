@@ -7,6 +7,9 @@
       "link": "https://scratch.mit.edu/users/9gr"
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  
   "persistentScripts": ["background.js"],
   "versionAdded": "1.16.0",
   "tags": ["community", "forums", "easterEgg"],
