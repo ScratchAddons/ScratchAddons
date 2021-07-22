@@ -3,18 +3,17 @@ import { textColor, multiply, brighten, alphaBlend } from "../../libraries/commo
 export default async function ({ addon, console }) {
   const paper = await addon.tab.traps.getPaper();
 
-  const secondaryColor = () => textColor(
-    addon.settings.get("primary"),
-    multiply(addon.settings.get("primary"), { r: 0.66, g: 0.76, b: 0.8 }),
-    brighten(addon.settings.get("primary"), { r: 0.75, g: 0.75, b: 0.75 }),
-    60
-  );
+  const secondaryColor = () =>
+    textColor(
+      addon.settings.get("primary"),
+      multiply(addon.settings.get("primary"), { r: 0.66, g: 0.76, b: 0.8 }),
+      brighten(addon.settings.get("primary"), { r: 0.75, g: 0.75, b: 0.75 }),
+      60
+    );
 
   // Change the colors used by the selection tool
-  const isDefaultGuideColor = (color) => color.type == "rgb"
-    && color.red == 0
-    && color.green == 0.615686274509804
-    && color.blue == 0.9254901960784314;
+  const isDefaultGuideColor = (color) =>
+    color.type == "rgb" && color.red == 0 && color.green == 0.615686274509804 && color.blue == 0.9254901960784314;
   const oldItemDraw = paper.Item.prototype.draw;
   paper.Item.prototype.draw = function (...args) {
     if (addon.self.disabled) return oldItemDraw.apply(this, args);
@@ -26,14 +25,12 @@ export default async function ({ addon, console }) {
       );
     else if (this.parent?.data.isGuideLayer || this.parent?.parent?.data.isGuideLayer) {
       if (
-        this.data.origItem // hover indicator
-        || this.parent?.selectionAnchor == this
+        this.data.origItem || // hover indicator
+        this.parent?.selectionAnchor == this
       )
         this.strokeColor = addon.settings.get("highlightText");
-      else if (this.strokeColor && isDefaultGuideColor(this.strokeColor))
-        this.strokeColor = secondaryColor();
-      if (this.fillColor && isDefaultGuideColor(this.fillColor))
-        this.fillColor = addon.settings.get("highlightText");
+      else if (this.strokeColor && isDefaultGuideColor(this.strokeColor)) this.strokeColor = secondaryColor();
+      if (this.fillColor && isDefaultGuideColor(this.fillColor)) this.fillColor = addon.settings.get("highlightText");
     }
     return oldItemDraw.apply(this, args);
   };
