@@ -45,7 +45,7 @@ export default async function ({ addon, console }) {
         this.data.origItem || // hover indicator
         this.parent?.selectionAnchor == this
       ) {
-        this.saOldStrokeColor = this.strokeColor;
+        this.saOldStrokeColor = this.parent?.selectionAnchor == this ? null : this.strokeColor;
         this.saColorChanged = true;
         this.strokeColor = addon.settings.get("highlightText");
       }
