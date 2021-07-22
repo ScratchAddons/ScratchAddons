@@ -39,8 +39,7 @@ export default async function ({ addon, console }) {
         multiply(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 }),
         brighten(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 })
       );
-    }
-    else if (this.parent?.data.isGuideLayer || this.parent?.parent?.data.isGuideLayer) {
+    } else if (this.parent?.data.isGuideLayer || this.parent?.parent?.data.isGuideLayer) {
       if (
         this.data.origItem || // hover indicator
         this.parent?.selectionAnchor == this
@@ -48,8 +47,7 @@ export default async function ({ addon, console }) {
         this.saOldStrokeColor = this.parent?.selectionAnchor == this ? null : this.strokeColor;
         this.saColorChanged = true;
         this.strokeColor = addon.settings.get("highlightText");
-      }
-      else if (this.strokeColor && isDefaultGuideColor(this.strokeColor)) {
+      } else if (this.strokeColor && isDefaultGuideColor(this.strokeColor)) {
         this.saOldStrokeColor = this.strokeColor;
         this.saColorChanged = true;
         this.strokeColor = secondaryColor();
@@ -62,7 +60,7 @@ export default async function ({ addon, console }) {
     }
     return oldItemDraw.apply(this, args);
   };
-  paper.Item.prototype.getSelectedColor = () => addon.self.disabled ? null : new paper.Color(secondaryColor());
+  paper.Item.prototype.getSelectedColor = () => (addon.self.disabled ? null : new paper.Color(secondaryColor()));
 
   // Change the colors of background layers
   const updateColors = () => {
