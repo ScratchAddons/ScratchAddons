@@ -24,25 +24,45 @@ export default async function ({ addon, console }) {
     color.type == "rgb" && color.red == 0 && color.green == 0.615686274509804 && color.blue == 0.9254901960784314;
   const oldItemDraw = paper.Item.prototype.draw;
   paper.Item.prototype.draw = function (...args) {
-    if (addon.self.disabled) return oldItemDraw.apply(this, args);
-    if (this.data.isRectSelect)
+    if (addon.self.disabled) {
+      this.saColorChanged = false;
+      if (this.saOldFillColor) this.fillColor = this.saOldFillColor;
+      if (this.saOldStrokeColor) this.strokeColor = this.saOldStrokeColor;
+      return oldItemDraw.apply(this, args);
+    }
+    if (this.saColorChanged) return oldItemDraw.apply(this, args);
+    if (this.data.isRectSelect) {
+      this.saOldStrokeColor = this.strokeColor;
+      this.saColorChanged = true;
       this.strokeColor = textColor(
         addon.settings.get("accent"),
         multiply(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 }),
         brighten(addon.settings.get("accent"), { r: 0.67, g: 0.67, b: 0.67 })
       );
+    }
     else if (this.parent?.data.isGuideLayer || this.parent?.parent?.data.isGuideLayer) {
       if (
         this.data.origItem || // hover indicator
         this.parent?.selectionAnchor == this
-      )
+      ) {
+        this.saOldStrokeColor = this.strokeColor;
+        this.saColorChanged = true;
         this.strokeColor = addon.settings.get("highlightText");
-      else if (this.strokeColor && isDefaultGuideColor(this.strokeColor)) this.strokeColor = secondaryColor();
-      if (this.fillColor && isDefaultGuideColor(this.fillColor)) this.fillColor = addon.settings.get("highlightText");
+      }
+      else if (this.strokeColor && isDefaultGuideColor(this.strokeColor)) {
+        this.saOldStrokeColor = this.strokeColor;
+        this.saColorChanged = true;
+        this.strokeColor = secondaryColor();
+      }
+      if (this.fillColor && isDefaultGuideColor(this.fillColor)) {
+        this.saOldFillColor = this.fillColor;
+        this.saColorChanged = true;
+        this.fillColor = addon.settings.get("highlightText");
+      }
     }
     return oldItemDraw.apply(this, args);
   };
-  paper.Item.prototype.getSelectedColor = () => new paper.Color(secondaryColor());
+  paper.Item.prototype.getSelectedColor = () => addon.self.disabled ? null : new paper.Color(secondaryColor());
 
   // Change the colors of background layers
   const updateColors = () => {
