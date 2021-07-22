@@ -1,4 +1,4 @@
-import { textColor, multiply, brighten, alphaBlend } from "../../libraries/common/cs/text-color.esm.js";
+import { parseHex, convertToHsv, textColor, multiply, brighten, alphaBlend, makeHsv } from "../../libraries/common/cs/text-color.esm.js";
 
 export default async function ({ addon, console }) {
   const paper = await addon.tab.traps.getPaper();
@@ -50,7 +50,14 @@ export default async function ({ addon, console }) {
         addon.settings.get("accent"),
         multiply(addon.settings.get("primary"), { a: 0.1 })
       );
-      checkerboardColor = alphaBlend(addon.settings.get("accent"), multiply(addon.settings.get("primary"), { a: 0.2 }));
+      checkerboardColor = textColor(
+        addon.settings.get("accent"),
+        makeHsv(addon.settings.get("primary"), 0.1, 0.95*convertToHsv(parseHex(addon.settings.get("accent"))).v),
+        brighten(
+          makeHsv(addon.settings.get("primary"), 0.7, addon.settings.get("accent")),
+          { r: 0.85, g: 0.85, b: 0.85 }
+        )
+      );
       blueOutlineColor = secondaryColor();
       crosshairOuterColor = textColor(addon.settings.get("accent"), "#ffffff", "#000000");
       crosshairInnerColor = textColor(addon.settings.get("accent"), "#000000", "#ffffff");
