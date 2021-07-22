@@ -61,7 +61,6 @@ export default async function ({ addon, console }) {
       } else if (layer.data.isDragCrosshairLayer) {
         for (let i = 0; i < 3; i++) layer.dragCrosshair._children[i].strokeColor = crosshairOuterColor;
         for (let i = 3; i < 6; i++) layer.dragCrosshair._children[i].strokeColor = crosshairInnerColor;
-        console.log(layer.dragCrosshair._children[0].strokeColor);
       }
     }
   };
