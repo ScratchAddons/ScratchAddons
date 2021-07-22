@@ -7,6 +7,8 @@ export default async function ({ addon, console }) {
     let workspaceBackground;
     let checkerboardColor;
     let blueOutlineColor;
+    let crosshairOuterColor;
+    let crosshairInnerColor;
     if (!addon.self.disabled) {
       artboardBackground = addon.settings.get("accent");
       workspaceBackground = alphaBlend(
@@ -23,11 +25,15 @@ export default async function ({ addon, console }) {
         brighten(addon.settings.get("primary"), {r: 0.75, g: 0.75, b: 0.75}),
         60,
       );
+      crosshairOuterColor = textColor(addon.settings.get("accent"), "#ffffff", "#000000");
+      crosshairInnerColor = textColor(addon.settings.get("accent"), "#000000", "#ffffff");
     } else {
       artboardBackground = "#ffffff";
       workspaceBackground = "#ecf1f9";
       checkerboardColor = "#d9e3f2";
       blueOutlineColor = "#4280d7";
+      crosshairOuterColor = "#ffffff";
+      crosshairInnerColor = "#000000";
     }
     for (let layer of paper.project.layers) {
       if (layer.data.isBackgroundGuideLayer) {
@@ -36,9 +42,15 @@ export default async function ({ addon, console }) {
         layer.vectorBackground._children[1]._children[1].fillColor = checkerboardColor;
         layer.bitmapBackground._children[0].fillColor = artboardBackground;
         layer.bitmapBackground._children[1].fillColor = checkerboardColor;
+        for (let i = 0; i < 3; i++) layer._children[2]._children[i].strokeColor = crosshairOuterColor;
+        for (let i = 3; i < 6; i++) layer._children[2]._children[i].strokeColor = crosshairInnerColor;
       } else if (layer.data.isOutlineLayer) {
         layer._children[0].strokeColor = artboardBackground;
         layer._children[1].strokeColor = blueOutlineColor;
+      } else if (layer.data.isDragCrosshairLayer) {
+        for (let i = 0; i < 3; i++) layer.dragCrosshair._children[i].strokeColor = crosshairOuterColor;
+        for (let i = 3; i < 6; i++) layer.dragCrosshair._children[i].strokeColor = crosshairInnerColor;
+        console.log(layer.dragCrosshair._children[0].strokeColor);
       }
     }
   }
