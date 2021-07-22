@@ -2,6 +2,20 @@ import { textColor, multiply, brighten, alphaBlend } from "../../libraries/commo
 
 export default async function ({ addon, console }) {
   const paper = await addon.tab.traps.getPaper();
+
+  // Override Item.draw to handle selection rectangle that appears while dragging
+  const oldItemDraw = paper.Item.prototype.draw;
+  paper.Item.prototype.draw = function(...args) {
+    if (addon.self.disabled) return oldItemDraw.apply(this, args);
+    if (this.data.isRectSelect) this.strokeColor = textColor(
+      addon.settings.get("accent"),
+      multiply(addon.settings.get("accent"), {r: 0.67, g: 0.67, b: 0.67}),
+      brighten(addon.settings.get("accent"), {r: 0.67, g: 0.67, b: 0.67}),
+    );
+    return oldItemDraw.apply(this, args);
+  }
+
+  // Change the colors of background layers
   const updateColors = () => {
     let artboardBackground;
     let workspaceBackground;
