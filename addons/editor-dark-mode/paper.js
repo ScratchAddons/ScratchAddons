@@ -81,11 +81,7 @@ export default async function ({ addon, console }) {
       checkerboardColor = textColor(
         addon.settings.get("accent"),
         makeHsv(addon.settings.get("primary"), 0.1, 0.95 * convertToHsv(parseHex(addon.settings.get("accent"))).v),
-        brighten(makeHsv(addon.settings.get("primary"), 0.7, addon.settings.get("accent")), {
-          r: 0.85,
-          g: 0.85,
-          b: 0.85,
-        })
+        makeHsv(addon.settings.get("primary"), 0.4, convertToHsv(parseHex(addon.settings.get("accent"))).v + 0.1)
       );
       blueOutlineColor = secondaryColor();
       crosshairOuterColor = textColor(addon.settings.get("accent"), "#ffffff", "#000000");
