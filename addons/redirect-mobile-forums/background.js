@@ -1,5 +1,4 @@
 export default async function ({ addon, global, console, msg }) {
-  // dynamicEnable/disable is pretty hacky in background
   let main = ({ url }) => {
     let newURL = url.replace(/\/discuss\/m\/(.*)/g, "/discuss/$1");
     return {
