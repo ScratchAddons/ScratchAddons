@@ -149,7 +149,7 @@ export default async function ({ addon, console }) {
     if (addon.settings.get("affectStage") && !usingModifiedCreateTextSkin) {
       overrideCreateTextSkin();
       usingModifiedCreateTextSkin = true;
-    };
+    }
     updateBubbles();
   });
   addon.self.addEventListener("disabled", updateBubbles);
