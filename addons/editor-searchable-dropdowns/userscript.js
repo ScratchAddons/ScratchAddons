@@ -85,30 +85,40 @@ export default async function ({ addon, global, console, msg }) {
       const id = menuItem.getValue();
       switch (id) {
         case "createGlobalVariable": {
+          Blockly.Events.setGroup(true);
           const variable = workspace.createVariable(searchBar.value);
           // Creating a variable can cause blocks in the flyout to be disposed and recreated
           // That could cause setValue to throw
           if (this.sourceBlock_) this.setValue(variable.getId());
+          Blockly.Events.setGroup(false);
           return;
         }
         case "createLocalVariable": {
+          Blockly.Events.setGroup(true);
           const variable = workspace.createVariable(searchBar.value, "", null, true);
           if (this.sourceBlock_) this.setValue(variable.getId());
+          Blockly.Events.setGroup(false);
           return;
         }
         case "createGlobalList": {
+          Blockly.Events.setGroup(true);
           const variable = workspace.createVariable(searchBar.value, "list");
           if (this.sourceBlock_) this.setValue(variable.getId());
+          Blockly.Events.setGroup(false);
           return;
         }
         case "createLocalList": {
+          Blockly.Events.setGroup(true);
           const variable = workspace.createVariable(searchBar.value, "list", null, true);
           if (this.sourceBlock_) this.setValue(variable.getId());
+          Blockly.Events.setGroup(false);
           return;
         }
         case "createBroadcast": {
+          Blockly.Events.setGroup(true);
           const variable = workspace.createVariable(searchBar.value, "broadcast_msg");
           this.setValue(variable.getId());
+          Blockly.Events.setGroup(false);
           return;
         }
       }
