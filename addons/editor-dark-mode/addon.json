@@ -85,16 +85,6 @@
       }
     },
     {
-      "name": "primary-iconFilter",
-      "value": {
-        "type": "recolorFilter",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        }
-      }
-    },
-    {
       "name": "primary-transparent35",
       "value": {
         "type": "multiply",
