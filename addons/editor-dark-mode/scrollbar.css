@@ -30,6 +30,11 @@
   background: transparent;
 }
 
+.selector_list-area_1Xbj_ {
+  overflow-y: auto; /* auto-hide scrollbar to prevent list
+    from being off-center */
+}
+
 .scrollable-canvas_vertical-scrollbar_lbD_c,
 .scrollable-canvas_horizontal-scrollbar_2w6OD {
   background-color: rgba(96, 96, 96, 0.8);
