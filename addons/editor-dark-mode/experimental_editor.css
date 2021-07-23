@@ -145,6 +145,7 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .stage-selector_stage-selector_3oWOr,
 .stage-selector_header_2GVr1,
 .asset-panel_wrapper_366X0,
+.color-button_outline-swatch_3C0QK::after,
 .sound-editor_button_1_6Li,
 .library-item_library-item_1DcMO,
 div.s3devDDOut.vis,
@@ -160,6 +161,9 @@ div.s3devDDOut.vis,
 .debug {
   background-color: var(--editorDarkMode-accent);
   color: var(--editorDarkMode-accent-text);
+}
+.color-button_color-button-swatch_37evk[style="background: white;"] {
+  background-color: var(--editorDarkMode-accent) !important;
 }
 .stage-selector_header-title_33xCt,
 .stage-selector_label_1MCfr,
@@ -465,6 +469,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   .stage-header_stage-button-icon_3zzFK,
 .sprite-info_is-active_ewF6e .sprite-info_icon_1iZ_9,
 .fixed-tools_button-group-button-icon_1cr4a,
+.color-picker_swap-button_FvctB .labeled-icon-button_edit-field-icon_3j-Pf,
 .dropdown_dropdown-icon_3W56D,
 .sound-editor_undo-icon_So0sO,
 .sound-editor_redo-icon_XGcr5,
@@ -506,6 +511,7 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 [dir="ltr"] .fixed-tools_button-group-button_2dq9z.fixed-tools_mod-start-border_1SgX4,
 [dir="rtl"] .fixed-tools_button-group-button_2dq9z.fixed-tools_mod-start-border_1SgX4,
 .color-button_color-button-swatch_37evk,
+.color-button_outline-swatch_3C0QK::after,
 .color-button_color-button-arrow_2NxGY,
 .color-picker_divider_3a3qR,
 .color-picker_swatch_1IYWN,
