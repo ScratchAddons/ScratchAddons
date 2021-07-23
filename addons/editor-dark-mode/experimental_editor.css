@@ -144,8 +144,10 @@ img[src="/static/assets/63e5827c1506216bd7c9927a4e5eb558.svg"] {
 .sprite-info_sprite-info_3EyZh,
 .stage-selector_stage-selector_3oWOr,
 .stage-selector_header_2GVr1,
+.blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb,
 .asset-panel_wrapper_366X0,
 .color-button_outline-swatch_3C0QK::after,
+.slider_handle_3f0xk,
 .sound-editor_button_1_6Li,
 .library-item_library-item_1DcMO,
 div.s3devDDOut.vis,
@@ -279,6 +281,10 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 }
 .blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-content {
   color: var(--editorDarkMode-input-transparentText) !important;
+}
+.blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb,
+.slider_handle_3f0xk {
+  box-shadow: 0 0 0 4px var(--editorDarkMode-input-foregroundShadow);
 }
 .question_question-input_1oAB7 .input_input-form_l9eYg {
   /* Don't affect ask prompt */

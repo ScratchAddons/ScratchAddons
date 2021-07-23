@@ -454,6 +454,19 @@
       }
     },
     {
+      "name": "input-foregroundShadow",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
+        "threshold": 60,
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
       "name": "input-transparent50",
       "value": {
         "type": "multiply",
