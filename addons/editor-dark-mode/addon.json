@@ -328,6 +328,23 @@
       }
     },
     {
+      "name": "accent-openFontDropdownText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "accent"
+          },
+          "transparentSource": {
+            "type": "settingValue",
+            "settingId": "border"
+          }
+        }
+      }
+    },
+    {
       "name": "accent-filter",
       "value": {
         "type": "textColor",

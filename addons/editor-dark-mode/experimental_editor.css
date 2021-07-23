@@ -165,6 +165,7 @@ div.s3devDDOut.vis,
 .stage-selector_label_1MCfr,
 .stage-selector_count_2QK7D,
 .color-button_color-button-arrow_2NxGY,
+.dropdown_dropdown_yOinO.font-dropdown_font-dropdown_3XyMU,
 .sound-editor_tool-button_2iNn9,
 .sound-editor_effect-button_2zuzT,
 .library-item_featured-extension-metadata_3D8E8,
@@ -206,6 +207,9 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .sa-body-editor .stage-header_stage-button-toggled-off_AJ8yG .stage-header_stage-button-icon_3zzFK,
 .sprite-info_radio_v-fgn:not(.sprite-info_is-active_ewF6e) img {
   filter: var(--editorDarkMode-accent-desaturateFilter);
+}
+.font-dropdown_font-dropdown_3XyMU.dropdown_mod-open_3zJSJ {
+  color: var(--editorDarkMode-accent-openFontDropdownText);
 }
 
 /* Input background */
@@ -330,6 +334,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .sprite-selector-item_is-selected_24tQj .sprite-selector-item_sprite-info_-I0i_,
 .delete-button_delete-button-visible_kym6v,
 .stage-selector_stage-selector_3oWOr.stage-selector_is-selected_2x2r_ .stage-selector_header_2GVr1,
+.font-dropdown_mod-menu-item_1wXq5:hover:not(:active),
 .tool-select-base_mod-tool-select_1iD-h.tool-select-base_is-selected_3x4kL,
 .paint-editor_bitmap-button_keW7B,
 .sa-onion-button[data-enabled="true"],
@@ -365,6 +370,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   background-color: var(--editorDarkMode-primary-transparent15);
 }
 .button_button_u6SE2:not(.button_mod-disabled_1rf31):active,
+.fixed-tools_mod-menu-item_1syXh:not(.fixed-tools_mod-disabled_3dvDX):hover,
 .sa-onion-button:focus-within {
   background-color: var(--editorDarkMode-primary-transparent20);
 }
@@ -444,6 +450,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 
 /* Text and icon highlight color */
 .gui_tab_27Unf.gui_is-selected_sHAiu,
+.dropdown_dropdown_yOinO,
 .record-modal_playing-text_1tknI,
 .record-modal_button-row_1hdGe button {
   color: var(--editorDarkMode-highlightText);
@@ -458,6 +465,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   .stage-header_stage-button-icon_3zzFK,
 .sprite-info_is-active_ewF6e .sprite-info_icon_1iZ_9,
 .fixed-tools_button-group-button-icon_1cr4a,
+.dropdown_dropdown-icon_3W56D,
 .sound-editor_undo-icon_So0sO,
 .sound-editor_redo-icon_XGcr5,
 .sound-editor_tool-button_2iNn9 img,
@@ -507,6 +515,7 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 [dir="rtl"] .paint-editor_mod-dashed-border_1TL5q,
 [dir="ltr"] .mode-tools_mod-dashed-border_T8CR_,
 [dir="rtl"] .mode-tools_mod-dashed-border_T8CR_,
+.dropdown_dropdown_yOinO,
 .paint-editor_editor-container-top_2wxS3,
 .paint-editor_canvas-container_x2D0a,
 .paint-editor_button-group-button_1I1tm,
@@ -546,6 +555,10 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 }
 .log {
   --message-border-color: var(--editorDarkMode-border);
+}
+.dropdown_mod-open_3zJSJ {
+  background-color: var(--editorDarkMode-border);
+  border-color: transparent;
 }
 
 /* Miscellaneous styles */
