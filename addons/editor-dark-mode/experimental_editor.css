@@ -202,6 +202,7 @@ div.s3devDDOut.vis,
 .sprite-info_icon-wrapper_3Wbqq:not(.sprite-info_radio_v-fgn),
 img.tool-select-base_tool-select-icon_tJ-rr,
 .paint-editor_button-group-button-icon_10kVn,
+.mode-tools_mode-tools-icon_23c7i,
 img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 .library-item_featured-extension-metadata-detail_1M9BV img {
   filter: var(--editorDarkMode-accent-filter);
@@ -382,6 +383,7 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
 }
 .button_button_u6SE2:active,
 .fixed-tools_mod-menu-item_1syXh:not(.fixed-tools_mod-disabled_3dvDX):hover,
+.button_highlighted_2cM8r.button_button_u6SE2,
 .sa-onion-button:focus-within {
   background-color: var(--editorDarkMode-primary-transparent20);
 }
