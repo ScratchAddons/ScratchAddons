@@ -585,3 +585,7 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
 .blocklyWidgetDiv .goog-menuitem-highlight {
   border-color: transparent !important;
 }
+.sa-color-picker > .sa-color-picker-color {
+  /* Use the dark version of the browser's default button appearance. */
+  color-scheme: dark;
+}
