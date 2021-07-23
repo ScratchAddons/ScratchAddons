@@ -112,8 +112,7 @@
 }
 
 /* Asset list background */
-.selector_wrapper_8_BHs,
-.paper-canvas_paper-canvas_1y588 {
+.selector_wrapper_8_BHs {
   background-color: var(--editorDarkMode-selector2);
 }
 .sprite-selector-item_sprite-selector-item_kQm-i,
@@ -188,6 +187,9 @@ div.s3devDDOut.vis,
 .s3devDD > li.boolean::after {
   border-top: 9px solid var(--editorDarkMode-accent);
   border-bottom: 10px solid var(--editorDarkMode-accent);
+}
+.paper-canvas_paper-canvas_1y588 {
+  background-color: var(--editorDarkMode-accent-paintEditorBackground);
 }
 .sa-body-editor .stage-header_stage-button-icon_3zzFK,
 .sprite-info_icon-wrapper_3Wbqq:not(.sprite-info_radio_v-fgn),

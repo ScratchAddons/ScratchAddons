@@ -363,6 +363,46 @@
       }
     },
     {
+      "name": "accent-paintEditorBackground",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": {
+          "type": "multiply",
+          "source": {
+            "type": "textColor",
+            "black": {
+              "type": "makeHsv",
+              "h": {
+                "type": "settingValue",
+                "settingId": "primary"
+              },
+              "s": 1,
+              "v": 0.67
+            },
+            "white": {
+              "type": "makeHsv",
+              "h": {
+                "type": "settingValue",
+                "settingId": "primary"
+              },
+              "s": 0.5,
+              "v": 1
+            },
+            "threshold": 112,
+            "source": {
+              "type": "settingValue",
+              "settingId": "accent"
+            }
+          },
+          "a": 0.15
+        }
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",
