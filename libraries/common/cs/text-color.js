@@ -53,7 +53,7 @@ function convertToHsv({ r, g, b }) {
   b /= 255;
   const v = Math.max(r, g, b);
   const d = v - Math.min(r, g, b);
-  if (d == 0) return { h: 0, s: 0, v: v }; // gray
+  if (d === 0) return { h: 0, s: 0, v: v }; // gray
   const s = d / v;
   const hr = (v - r) / d;
   const hg = (v - g) / d;

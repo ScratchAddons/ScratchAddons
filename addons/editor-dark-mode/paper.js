@@ -13,7 +13,7 @@ export default async function ({ addon, console }) {
 
   // Change the colors used by the selection tool
   const isDefaultGuideColor = (color) =>
-    color.type == "rgb" && color.red == 0 && color.green == 0.615686274509804 && color.blue == 0.9254901960784314;
+    color.type === "rgb" && color.red === 0 && color.green === 0.615686274509804 && color.blue === 0.9254901960784314;
   const oldItemDraw = paper.Item.prototype.draw;
   paper.Item.prototype.draw = function (...args) {
     if (addon.self.disabled) {
@@ -34,9 +34,9 @@ export default async function ({ addon, console }) {
     } else if (this.parent?.data.isGuideLayer || this.parent?.parent?.data.isGuideLayer) {
       if (
         this.data.origItem || // hover indicator
-        this.parent?.selectionAnchor == this
+        this.parent?.selectionAnchor === this
       ) {
-        this.saOldStrokeColor = this.parent?.selectionAnchor == this ? null : this.strokeColor;
+        this.saOldStrokeColor = this.parent?.selectionAnchor === this ? null : this.strokeColor;
         this.saColorChanged = true;
         this.strokeColor = addon.settings.get("highlightText");
       } else if (this.strokeColor && isDefaultGuideColor(this.strokeColor)) {
