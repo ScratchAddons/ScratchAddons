@@ -1,11 +1,16 @@
 {
   "name": "TurboWarp button on project pages",
-  "description": "Adds a button to visit a project in turbowarp.",
+  "description": "Adds a button to play the project in TurboWarp.org next to the Remix button.",
   "info": [
     {
       "type": "notice",
-      "text": "If using the \"Replace player option\", all addons that change or add things in the project player will not be added. However, TW's features like Alt + Clicking the flag is still possible.",
-      "id": "addonWontWork"
+      "text": "\"Replace player\" mode changes the Scratch player to a TurboWarp embed, which doesn't support Scratch editor addons nor seeing inside projects.",
+      "id": "addonsWontWork"
+    },
+    {
+      "type": "notice",
+      "text": "TurboWarp has separate cloud data servers. \"Replace player\" mode will send your Scratch username to TurboWarp.org for use in cloud data.",
+      "id": "cloudData"
     }
   ],
   "credits": [
@@ -28,21 +33,22 @@
   ],
   "settings": [
     {
-      "name": "Button Action",
+      "name": "Button behavior",
       "id": "action",
       "type": "select",
       "potentialValues": [
         {
-          "id": "player",
-          "name": "Replace player"
+          "id": "link",
+          "name": "Open new tab"
         },
         {
-          "id": "link",
-          "name": "Open tab"
+          "id": "player",
+          "name": "Replace player"
         }
       ],
       "default": "link"
     }
   ],
+  "versionAdded": "1.18.0",
   "tags": ["editor", "projectPage"]
 }
