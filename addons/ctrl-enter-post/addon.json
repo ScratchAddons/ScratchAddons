@@ -1,7 +1,6 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Ctrl+Enter to post",
-  "description": "Automatically posts the comment or post on Ctrl+Enter.",
+  "description": "Automatically posts the comment or forum post on Ctrl+Enter.",
   "credits": [
     {
       "name": "9gr",
@@ -17,16 +16,16 @@
   ],
   "settings": [
     {
-      "id": "forums",
-      "name": "Enable on forums",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "id": "comments",
       "name": "Enable in comments",
       "type": "boolean",
       "default": true
+    },
+    {
+      "id": "forums",
+      "name": "Enable on forums",
+      "type": "boolean",
+      "default": false
     }
   ],
   "userscripts": [
@@ -56,6 +55,6 @@
     }
   ],
   "versionAdded": "1.18.0",
-  "tags": ["community", "forums"],
+  "tags": ["community"],
   "enabledByDefault": false
 }
