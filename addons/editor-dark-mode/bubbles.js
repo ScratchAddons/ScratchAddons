@@ -137,7 +137,7 @@ export default async function ({ addon, console }) {
   const updateBubbles = () => {
     // Re-render all text bubbles on settings change
     for (let skin of renderer._allSkins) {
-      if (skin && skin.hasOwnProperty("_bubbleType")) skin._textureDirty = true;
+      if (skin && Object.prototype.hasOwnProperty.call(skin, "_bubbleType")) skin._textureDirty = true;
     }
   };
 
