@@ -1,4 +1,5 @@
 :root {
+  --brand-orange-min-font-weight: 600;
   --green-text: var(--green);
   --blue-text: var(--blue);
 
@@ -15,6 +16,11 @@
   --tooltip-background: #ecebeb;
   --comment-background: #f0f0f0;
   --unread-comment-background: #fff;
+  --notice-background: rgba(253, 221, 43, 0.25);
+  --notice-text: #222;
+  --notice-icon-filter: none;
+  --warning-background: var(--red);
+  --warning-border: var(--red-variant);
 
   --hover-highlight: rgba(0, 0, 0, 0.05);
   --hover-darken: var(--hover-highlight);

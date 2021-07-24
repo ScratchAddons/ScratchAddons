@@ -190,26 +190,32 @@
     padding: 8px;
     border: 2px solid;
     border-radius: 5px;
-    font-weight: bold;
+    font-weight: 600;
     margin: 10px 0;
     display: flex;
     align-items: center;
   }
   .addon-notice {
-    border-color: var(--yellow-opacity50);
-    background-color: var(--navigation-background);
+    border-color: var(--notice-border);
+    background-color: var(--notice-background);
+    color: var(--notice-text);
   }
   .addon-warn {
-    border-color: var(--red);
-    background-color: var(--red-opacity75);
-    color: var(--white-text);
+    border-color: var(--warning-border);
+    background-color: var(--warning-background);
+    color: var(--warning-text);
   }
   .addon-notice img,
   .addon-warn img {
     height: 15px;
     width: 15px;
     margin-inline-end: 10px;
-    filter: brightness(0) invert(1);
+  }
+  .addon-notice img {
+    filter: var(--notice-icon-filter);
+  }
+  .addon-warn img {
+    filter: var(--warning-icon-filter);
   }
   .addon-settings {
     padding-top: 5px;

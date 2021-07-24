@@ -205,7 +205,7 @@ a.message-type-title-text {
   padding-top: 2px;
 }
 .bold {
-  font-weight: bold;
+  font-weight: 600;
   color: var(--red);
 }
 .child-comment {
@@ -220,7 +220,7 @@ a.message-type-title-text {
 .reply-button-comment {
   opacity: 0;
   color: var(--blue-text);
-  font-weight: bold;
+  font-weight: 600;
   user-select: none;
 }
 .comment:hover .reply-button-comment,
@@ -274,7 +274,7 @@ a.message-type-title-text {
   padding-top: 10px;
   padding-bottom: 20px;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 600;
   text-align: center;
 }
 .status-empty {
@@ -303,6 +303,9 @@ a.message-type-title-text {
 #bottom-bar > * {
   padding: 8px 0;
 }
+#bottom-bar > a {
+  font-weight: var(--brand-orange-min-font-weight);
+}
 #bottom-bar > a:hover {
   color: var(--brand-orange);
   text-decoration: none;
@@ -311,7 +314,7 @@ a.message-type-title-text {
   padding-inline: 5px;
 }
 .marked-as-read {
-  font-weight: bold;
+  font-weight: 600;
 }
 #popout {
   height: 10px;

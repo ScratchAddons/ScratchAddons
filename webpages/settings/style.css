@@ -385,7 +385,7 @@ button.setting-input.color {
 }
 #iframe-fullscreen-suggestion > span {
   width: 100%;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 13px;
   margin-bottom: 8px;
   display: flex;
