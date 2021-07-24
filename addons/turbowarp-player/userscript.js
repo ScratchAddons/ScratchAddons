@@ -18,13 +18,14 @@ export default async function ({ addon, console, msg }) {
     playerToggled = false;
   }
 
-  button.onclick = () => {
+  button.onclick = async () => {
     if (action === "player") {
       playerToggled = !playerToggled;
       if (playerToggled) {
-        const username = addon.auth.username ? "?username=" + addon.auth.username : "";
+        const username = await addon.auth.fetchUsername();
+        const usernameUrlParam = username ? `?username=${username}` : "";
         const projectId = window.location.pathname.split("/")[2];
-        const iframeUrl = `https://turbowarp.org/${projectId}/embed${username}`;
+        const iframeUrl = `https://turbowarp.org/${projectId}/embed${usernameUrlParam}`;
         twIframe.src = "";
         scratchStage.parentElement.prepend(twIframe);
         // Use location.replace to avoid creating a history entry
