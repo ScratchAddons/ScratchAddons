@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
-  let isScratchR2 = addon.tab.clientVersion == "scratchr2";
+  let isScratchR2 = addon.tab.clientVersion === "scratchr2";
 
   let textboxSelector = isScratchR2 ? "textarea[name='content']" : "[name='compose-comment']";
 
@@ -19,7 +19,7 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     textbox.addEventListener("keyup", (e) => {
-      if ((e.ctrlKey || e.metaKey) && (e.code == "Enter" || e.code == "NumpadEnter")) {
+      if ((e.ctrlKey || e.metaKey) && (e.code === "Enter" || e.code === "NumpadEnter")) {
         button.click();
       }
     });
