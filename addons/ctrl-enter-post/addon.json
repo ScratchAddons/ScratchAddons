@@ -43,11 +43,7 @@
     },
     {
       "url": "comments.js",
-      "matches": [
-        "https://scratch.mit.edu/studios/*",
-        "https://scratch.mit.edu/users/*",
-        "https://scratch.mit.edu/projects/*"
-      ],
+      "matches": ["https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/users/*", "projects"],
       "settingMatch": {
         "id": "comments",
         "value": true
