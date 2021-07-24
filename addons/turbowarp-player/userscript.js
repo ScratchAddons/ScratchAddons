@@ -1,8 +1,8 @@
-export default async function ({ addon, console }) {
+export default async function ({ addon, console, msg }) {
+  const action = addon.settings.get("action");
   let playerToggled = false;
   let scratchStage;
   let twIframe = document.createElement("iframe");
-  twIframe.setAttribute("scrolling", "no");
   twIframe.setAttribute("allowtransparency", "true");
   twIframe.setAttribute("allowfullscreen", "true");
   twIframe.className = "sa-tw-iframe";
@@ -15,24 +15,31 @@ export default async function ({ addon, console }) {
     twIframe.remove();
     scratchStage.style.display = "";
     button.classList.remove("scratch");
+    playerToggled = false;
   }
 
   button.onclick = () => {
-    if (addon.settings.get("action") == "player") {
+    if (action === "player") {
       playerToggled = !playerToggled;
       if (playerToggled) {
-        let username = addon.auth.username ? "?username=" + addon.auth.username : "";
-        twIframe.src = "//turbowarp.org/" + window.location.pathname.split("/")[2] + "/embed" + username;
+        const username = addon.auth.username ? "?username=" + addon.auth.username : "";
+        const projectId = window.location.pathname.split("/")[2];
+        const iframeUrl = `https://turbowarp.org/${projectId}/embed${username}`;
+        twIframe.src = ""
         scratchStage.parentElement.prepend(twIframe);
+        // Use location.replace to avoid creating a history entry
+        twIframe.contentWindow.location.replace(iframeUrl);
 
         scratchStage.style.display = "none";
         button.classList.add("scratch");
         addon.tab.traps.vm.stopAll();
       } else removeIframe();
     } else {
-      window.open("//turbowarp.org/" + window.location.pathname.split("/")[2], "_blank");
+      window.open("https://turbowarp.org/" + window.location.pathname.split("/")[2], "_blank");
     }
   };
+
+  addon.tab.addEventListener("urlChange", removeIframe);
 
   let showAlert = true;
   while (true) {
@@ -44,7 +51,7 @@ export default async function ({ addon, console }) {
     seeInside.addEventListener("click", function seeInsideClick(event) {
       if (!playerToggled || !showAlert) return;
 
-      if (confirm("Are you sure you want to see inside? Doing this will destroy the TurboWarp player.")) {
+      if (confirm(msg("confirmation"))) {
         showAlert = false;
       } else {
         event.stopPropagation();
@@ -54,8 +61,5 @@ export default async function ({ addon, console }) {
     addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: button, order: 1 });
 
     scratchStage = document.querySelector(".guiPlayer");
-
-    playerToggled = false;
-    removeIframe();
   }
 }
