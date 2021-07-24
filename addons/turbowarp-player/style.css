@@ -30,12 +30,13 @@
   border: none;
   overflow: hidden;
 
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+
   /* Same styles as .guiPlayer */
   display: inline-block;
   position: relative;
   z-index: 1;
   width: 482px;
   height: 406px;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 0.5rem;
 }
