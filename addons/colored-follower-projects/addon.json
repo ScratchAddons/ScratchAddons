@@ -1,0 +1,38 @@
+{
+  "name": "Colored projects made by following in explore",
+  "description": "Colors any project in 'Explore' that was made by someone you follow.",
+  "tags": ["community"],
+  "enabledByDefault": false,
+  "credits": [
+    {
+      "name": "codingMASTER398",
+      "link": "https://github.com/codingMASTER398"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/explore/projects/*","https://scratch.mit.edu/search/projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Color",
+      "id": "color",
+      "type": "color",
+      "default":"#FFD700"
+    },
+    {
+      "name": "Use other scratcher's following?",
+      "id": "useother",
+      "type": "boolean",
+      "default":false
+    },
+    {
+      "name": "Username of other scratcher (if using other scratcher's following)",
+      "id": "useothername",
+      "type": "string",
+      "default":""
+    }
+  ]
+}
