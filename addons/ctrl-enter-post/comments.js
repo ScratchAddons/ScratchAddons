@@ -4,7 +4,13 @@ export default async function ({ addon, global, console, msg }) {
   let textboxSelector = isScratchR2 ? "textarea[name='content']" : "[name='compose-comment']";
 
   while (true) {
-    let textbox = await addon.tab.waitForElement(textboxSelector, { markAsSeen: true });
+    let textbox = await addon.tab.waitForElement(textboxSelector, {
+      markAsSeen: true,
+      reduxCondition: (state) => {
+        if (!state.scratchGui) return true;
+        return state.scratchGui.mode.isPlayerOnly;
+      },
+    });
     var button;
     if (isScratchR2) {
       button = textbox.parentNode.parentNode.querySelector(".control-group:not(.tooltip) div[data-control='post'] a");
