@@ -208,7 +208,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for customCssVariables
   const getColor = (addonId, obj) => {
-    if (typeof obj === "string" || obj === undefined) return obj;
+    if (typeof obj !== "object") return obj;
     let hex;
     switch (obj.type) {
       case "settingValue":
@@ -231,6 +231,12 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         let opaqueHex = getColor(addonId, obj.opaqueSource);
         let transparentHex = getColor(addonId, obj.transparentSource);
         return textColorLib.alphaBlend(opaqueHex, transparentHex);
+      }
+      case "makeHsv": {
+        let hSource = getColor(addonId, obj.h);
+        let sSource = getColor(addonId, obj.s);
+        let vSource = getColor(addonId, obj.v);
+        return textColorLib.makeHsv(hSource, sSource, vSource);
       }
       case "recolorFilter": {
         hex = getColor(addonId, obj.source);
