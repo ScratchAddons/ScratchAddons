@@ -51,6 +51,10 @@ export default async ({ addon, console, msg }) => {
     });
     rateLimiter.abort(false);
     addon.tab.redux.initialize();
+    if (!("colorIndex" in addon.tab.redux.state.scratchPaint.fillMode)) {
+      console.error("Detected new paint editor; this will be supported in future versions.");
+      return;
+    }
     if (addon.tab.redux && typeof prevEventHandler === "function") {
       addon.tab.redux.removeEventListener("statechanged", prevEventHandler);
       prevEventHandler = null;

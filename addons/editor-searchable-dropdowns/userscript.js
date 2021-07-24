@@ -1,6 +1,7 @@
 export default async function ({ addon, global, console, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
+  const SCRATCH_ITEMS_TO_HIDE = ["RENAME_VARIABLE_ID", "DELETE_VARIABLE_ID", "NEW_BROADCAST_MESSAGE_ID"];
   const ADDON_ITEMS = [
     "createGlobalVariable",
     "createLocalVariable",
@@ -10,16 +11,14 @@ export default async function ({ addon, global, console, msg }) {
   ];
 
   let blocklyDropDownContent = null;
-
+  let blocklyDropdownMenu = null;
   let searchBar = null;
-  let fieldVariable = null;
-  let fieldDropdown = null;
+  let currentDropdownOptions = [];
+  let resultOfLastGetOptions = [];
 
   const oldDropDownDivShow = Blockly.DropDownDiv.show;
   Blockly.DropDownDiv.show = function (...args) {
-    fieldVariable = args[0];
-
-    const blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
+    blocklyDropdownMenu = document.querySelector(".blocklyDropdownMenu");
     if (!blocklyDropdownMenu) {
       return oldDropDownDivShow.call(this, ...args);
     }
@@ -29,14 +28,13 @@ export default async function ({ addon, global, console, msg }) {
     searchBar = document.createElement("input");
     addon.tab.displayNoneWhileDisabled(searchBar, { display: "flex" });
     searchBar.type = "text";
-    searchBar.addEventListener("input", handleInputEvent);
+    searchBar.addEventListener("input", updateSearch);
     searchBar.addEventListener("keydown", handleKeyDownEvent);
     searchBar.classList.add("u-dropdown-searchbar");
     blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
 
-    for (const item of getItems()) {
-      item.element_.hidden = hideItem(item);
-    }
+    currentDropdownOptions = resultOfLastGetOptions;
+    updateSearch();
 
     // Call the original show method after adding everything so that it can perform the correct size calculations
     const ret = oldDropDownDivShow.call(this, ...args);
@@ -61,18 +59,21 @@ export default async function ({ addon, global, console, msg }) {
 
   const oldFieldDropdownGetOptions = Blockly.FieldDropdown.prototype.getOptions;
   Blockly.FieldDropdown.prototype.getOptions = function () {
-    fieldDropdown = this;
     const options = oldFieldDropdownGetOptions.call(this);
     const block = this.sourceBlock_;
     if (block) {
       if (block.category_ === "data") {
-        options.push(getMsg("createGlobalVariable"), getMsg("createLocalVariable"));
+        options.push(getMenuItemMessage("createGlobalVariable"));
+        options.push(getMenuItemMessage("createLocalVariable"));
       } else if (block.category_ === "data-lists") {
-        options.push(getMsg("createGlobalList"), getMsg("createLocalList"));
-      } else if (["event_broadcast_menu", "event_whenbroadcastreceived"].includes(block.type)) {
-        options.push(getMsg("createBroadcast"));
+        options.push(getMenuItemMessage("createGlobalList"));
+        options.push(getMenuItemMessage("createLocalList"));
+      } else if (block.type === "event_broadcast_menu" || block.type === "event_whenbroadcastreceived") {
+        options.push(getMenuItemMessage("createBroadcast"));
       }
     }
+    // Options aren't normally stored anywhere, so we'll store them ourselves.
+    resultOfLastGetOptions = options;
     return options;
   };
 
@@ -84,30 +85,40 @@ export default async function ({ addon, global, console, msg }) {
       const id = menuItem.getValue();
       switch (id) {
         case "createGlobalVariable": {
+          Blockly.Events.setGroup(true);
           const variable = workspace.createVariable(searchBar.value);
           // Creating a variable can cause blocks in the flyout to be disposed and recreated
           // That could cause setValue to throw
           if (this.sourceBlock_) this.setValue(variable.getId());
+          Blockly.Events.setGroup(false);
           return;
         }
         case "createLocalVariable": {
+          Blockly.Events.setGroup(true);
           const variable = workspace.createVariable(searchBar.value, "", null, true);
           if (this.sourceBlock_) this.setValue(variable.getId());
+          Blockly.Events.setGroup(false);
           return;
         }
         case "createGlobalList": {
+          Blockly.Events.setGroup(true);
           const variable = workspace.createVariable(searchBar.value, "list");
           if (this.sourceBlock_) this.setValue(variable.getId());
+          Blockly.Events.setGroup(false);
           return;
         }
         case "createLocalList": {
+          Blockly.Events.setGroup(true);
           const variable = workspace.createVariable(searchBar.value, "list", null, true);
           if (this.sourceBlock_) this.setValue(variable.getId());
+          Blockly.Events.setGroup(false);
           return;
         }
         case "createBroadcast": {
+          Blockly.Events.setGroup(true);
           const variable = workspace.createVariable(searchBar.value, "broadcast_msg");
           this.setValue(variable.getId());
+          Blockly.Events.setGroup(false);
           return;
         }
       }
@@ -135,22 +146,20 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  function handleInputEvent(event) {
-    fieldDropdown.selectedItem.parent_.children_.forEach((item) => {
-      if (ADDON_ITEMS.includes(item.model_)) {
-        item.element_.lastChild.lastChild.textContent = item.content_ = getMsg(item.model_)[0];
+  function updateSearch() {
+    const items = getItems();
+    const search = searchBar.value.toLowerCase();
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      const option = currentDropdownOptions[i];
+      if (SCRATCH_ITEMS_TO_HIDE.includes(option[1])) {
+        item.element.hidden = !!search;
+      } else if (ADDON_ITEMS.includes(option[1])) {
+        item.element.lastChild.lastChild.textContent = getMenuItemMessage(option[1])[0];
+        item.element.hidden = !search;
+      } else {
+        items[i].element.hidden = !items[i].text.toLowerCase().includes(search);
       }
-    });
-
-    const value = searchBar.value.toLowerCase();
-    for (const item of getItems()) {
-      const text = item.content_;
-      item.element_.hidden =
-        // Hide scratch's items when we've typed something in
-        ["RENAME_VARIABLE_ID", "DELETE_VARIABLE_ID", "NEW_BROADCAST_MESSAGE_ID"].includes(item.model_) &&
-        value.length !== 0
-          ? true
-          : !text.toLowerCase().includes(value) || hideItem(item);
     }
   }
 
@@ -167,7 +176,6 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       const selectedBlock = Blockly.selected;
-      const items = getItems();
       if (searchBar.value === "" && selectedBlock) {
         if (
           selectedBlock.type === "event_broadcast" ||
@@ -180,9 +188,10 @@ export default async function ({ addon, global, console, msg }) {
           return;
         }
       }
+      const items = getItems();
       for (const item of items) {
-        if (!item.element_.hidden) {
-          selectItem(item.element_, true);
+        if (!item.element.hidden) {
+          selectItem(item.element, true);
           break;
         }
       }
@@ -194,14 +203,14 @@ export default async function ({ addon, global, console, msg }) {
       event.preventDefault();
       event.stopPropagation();
 
-      const items = getItems().filter((item) => !item.element_.hidden);
+      const items = getItems().filter((item) => !item.element.hidden);
       if (items.length === 0) {
         return;
       }
 
       let selectedIndex = -1;
       for (let i = 0; i < items.length; i++) {
-        if (items[i].element_.classList.contains("goog-menuitem-highlight")) {
+        if (items[i].element.classList.contains("goog-menuitem-highlight")) {
           selectedIndex = i;
           break;
         }
@@ -223,19 +232,25 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
-      selectItem(items[newIndex].element_, false);
+      selectItem(items[newIndex].element, false);
     }
   }
 
   function getItems() {
-    return fieldVariable?.selectedItem.parent_.children_ || [];
+    if (blocklyDropdownMenu) {
+      return Array.from(blocklyDropdownMenu.children)
+        .filter((child) => child.tagName !== "INPUT")
+        .map((element) => ({
+          element,
+          text: element.textContent,
+        }));
+    }
+    return [];
   }
 
-  function getMsg(message) {
+  function getMenuItemMessage(message) {
+    // Format used internally by Scratch:
+    // [human readable name, internal name]
     return [msg(message, { name: searchBar?.value || "" }), message];
-  }
-
-  function hideItem(item) {
-    return ADDON_ITEMS.includes(item.model_) && searchBar.value.length === 0;
   }
 }

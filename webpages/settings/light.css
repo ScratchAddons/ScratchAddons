@@ -90,11 +90,15 @@
   color: #111;
 }
 
-.addon-warn {
-  color: black;
+.addon-notice {
+  background-color: rgba(253, 221, 43, 0.25);
 }
-.addon-warn img {
+.addon-notice img {
   filter: none;
+}
+.addon-warn {
+  background-color: #fd2b2b;
+  border-color: #d81212;
 }
 
 img :not(.navbar, .icon-type) {
@@ -108,8 +112,8 @@ img :not(.navbar, .icon-type) {
 .addon-group > span:after {
   filter: invert(1) brightness(0);
 }
-.btn-dropdown:hover {
-  background: rgba(0, 0, 0, 0.1);
+.clickeable-area:hover .btn-dropdown {
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .category.sel {
