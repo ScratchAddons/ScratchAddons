@@ -25,7 +25,7 @@ export default async function ({ addon, console, msg }) {
         const username = addon.auth.username ? "?username=" + addon.auth.username : "";
         const projectId = window.location.pathname.split("/")[2];
         const iframeUrl = `https://turbowarp.org/${projectId}/embed${username}`;
-        twIframe.src = ""
+        twIframe.src = "";
         scratchStage.parentElement.prepend(twIframe);
         // Use location.replace to avoid creating a history entry
         twIframe.contentWindow.location.replace(iframeUrl);
