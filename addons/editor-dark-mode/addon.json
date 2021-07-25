@@ -85,16 +85,6 @@
       }
     },
     {
-      "name": "primary-iconFilter",
-      "value": {
-        "type": "recolorFilter",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        }
-      }
-    },
-    {
       "name": "primary-transparent35",
       "value": {
         "type": "multiply",
@@ -338,6 +328,23 @@
       }
     },
     {
+      "name": "accent-openFontDropdownText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "accent"
+          },
+          "transparentSource": {
+            "type": "settingValue",
+            "settingId": "border"
+          }
+        }
+      }
+    },
+    {
       "name": "accent-filter",
       "value": {
         "type": "textColor",
@@ -373,6 +380,46 @@
       }
     },
     {
+      "name": "accent-paintEditorBackground",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": {
+          "type": "multiply",
+          "source": {
+            "type": "textColor",
+            "black": {
+              "type": "makeHsv",
+              "h": {
+                "type": "settingValue",
+                "settingId": "primary"
+              },
+              "s": 1,
+              "v": 0.67
+            },
+            "white": {
+              "type": "makeHsv",
+              "h": {
+                "type": "settingValue",
+                "settingId": "primary"
+              },
+              "s": 0.5,
+              "v": 1
+            },
+            "threshold": 112,
+            "source": {
+              "type": "settingValue",
+              "settingId": "accent"
+            }
+          },
+          "a": 0.15
+        }
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",
@@ -400,6 +447,19 @@
         "type": "textColor",
         "black": "none",
         "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-foregroundShadow",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
+        "threshold": 60,
         "source": {
           "type": "settingValue",
           "settingId": "input"
@@ -597,6 +657,27 @@
   "injectAsStyleElt": true,
   "versionAdded": "1.0.0",
   "updateUserstylesOnSettingsChange": true,
+  "userscripts": [
+    {
+      "url": "bubbles.js",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ]
+    },
+    {
+      "url": "paper.js",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/",
+        "https://scratch.mit.edu/projects/*/editor",
+        "https://scratch.mit.edu/projects/*/fullscreen",
+        "https://scratch.mit.edu/projects/editor"
+      ],
+      "runAtComplete": false
+    }
+  ],
   "userstyles": [
     {
       "url": "experimental_editor.css",
@@ -790,7 +871,7 @@
       "default": false
     },
     {
-      "name": "Change the colors of variables, lists, and answer inputs on the stage",
+      "name": "Change the colors of variables, lists, speech bubbles, and answer inputs on the stage",
       "id": "affectStage",
       "type": "boolean",
       "default": false

@@ -3,10 +3,9 @@ export default async function ({ addon, global, console }) {
   let username = user1.substring(0, user1.indexOf("/"));
   let details = ["projects", "favorites", "studios_following", "studios", "following", "followers"];
   for (let j = 0; j < details.length; j++) {
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-        let response = xmlhttp.responseText;
+    fetch(`https://scratch.mit.edu/users/${username}/${details[j]}/`, { credentials: "omit" })
+      .then((res) => res.text())
+      .then((response) => {
         let find = response.search("<h2>");
         let follownum = response.substring(find, find + 200).match(/\(([^)]+)\)/)[1];
         let boxHeads = document.querySelectorAll(".box-head");
@@ -24,9 +23,6 @@ export default async function ({ addon, global, console }) {
             }
           }
         }
-      }
-    };
-    xmlhttp.open("GET", `https://scratch.mit.edu/users/${username}/${details[j]}/`, true);
-    xmlhttp.send();
+      });
   }
 }
