@@ -14,5 +14,6 @@
   "debugger/block-breakpoint": "breakpoint",
   "debugger/block-log": "log %s",
   "debugger/block-warn": "warn %s",
-  "debugger/block-error": "error %s"
+  "debugger/block-error": "error %s",
+  "debugger/pls-give-feedback":"Please give us feedback on how we can improve debugger"
 }
