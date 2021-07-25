@@ -1,4 +1,3 @@
-//Hello! I've been scripting for a while now, but i'm not great at keeping my code clean. I'll try to make it readable, but please excuse my mistakes!
 export default async function ({ addon, global, console }) {
     console.log("Running")
     if(addon.auth.isLoggedIn){ // If they are logged in, activate the rest of the code
@@ -28,7 +27,7 @@ export default async function ({ addon, global, console }) {
             const element = await addon.tab.waitForElement("div.thumbnail-creator",{
                 markAsSeen: true,
             });
-            if(following.includes(element.getElementsByTagName("a")[0].innerText)){ //If we are following them...
+            if(following.includes(element.querySelector("a").innerText)){ //If we are following them...
                 element.parentElement.parentElement.parentElement.style.backgroundColor = addon.settings.get("color")
             }
           }
