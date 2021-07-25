@@ -75,7 +75,7 @@ h1 {
   /* Doing this instead of padding in .addons-container itself to avoid
   problems with other CSS that would also set padding on the same element,
   like the "body.iframe .addons-container" selector below */
-  margin-top: 43px;
+  margin-top: 42px;
 }
 
 @keyframes addonBlink {
