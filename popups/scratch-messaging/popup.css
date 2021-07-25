@@ -64,7 +64,7 @@ button:hover {
 }
 .fullscreen .message-type-title {
   padding: 10px;
-  padding-inline-end: 20px;
+  padding-inline-end: 12px;
 }
 .message-type-title:not(.hover-reverse) {
   position: sticky;
@@ -76,9 +76,6 @@ button:hover {
   border-top-right-radius: 3px;
 }
 .message-type-title:not(.hover-reverse) .message-type-title-text {
-  margin-inline-start: 3px;
-}
-.fullscreen .message-type-title:not(.hover-reverse) .message-type-title-text {
   margin-inline-start: 10px;
 }
 
@@ -156,7 +153,7 @@ a.message-type-title-text {
   font-size: 12px;
 }
 .fullscreen .comment {
-  margin-inline: 20px;
+  margin-inline: 12px;
 }
 .comment.unread,
 .unread .comment {
