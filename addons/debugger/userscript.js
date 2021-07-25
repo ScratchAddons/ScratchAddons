@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, global, console, msg, safeMsg }) {
   let showingConsole, ScratchBlocks;
   const vm = addon.tab.traps.vm;
 
@@ -365,7 +365,7 @@ export default async function ({ addon, global, console, msg }) {
   class FeedbackWrapper {
     constructor() {
       const feedbackLog = new LogWrapper();
-      feedbackLog.append(new LogText(`${msg("feedback-log")} <a href="https://scratchaddons.com/feedback" target="_blank">${msg("feedback-log-link")}</a>`, "", true));
+      feedbackLog.append(new LogText(msg("feedback-log", { logLink: `<a href="https://scratchaddons.com/feedback" target="_blank">${safeMsg("feedback-log-link")}</a>` }), "", true));
       return feedbackLog;
     }
   }
