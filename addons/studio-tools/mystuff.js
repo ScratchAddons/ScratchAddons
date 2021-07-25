@@ -4,7 +4,7 @@ export default async function ({ addon, global, console, msg }) {
     if (window.location.hash === "#galleries" && item.childElementCount === 2) {
       let leaveButton = item.appendChild(document.createElement("a"));
       leaveButton.className = "unshare";
-      leaveButton.innerText = msg("leave");
+      leaveButton.innerText = msg("leave-new");
       leaveButton.setAttribute("data-id", item.parentElement.querySelector(".title a").href.match(/[0-9]+/g));
       leaveButton.addEventListener("click", async function (e) {
         if (confirm(msg("leave-confirm"))) {

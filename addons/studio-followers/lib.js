@@ -4,7 +4,7 @@ export function createModal(addon, title, msg, switchType) {
   });
 
   const div = Object.assign(document.createElement("div"), {
-    className: "sa-followers-main modal-content user-projects-modal modal-content user-projects-modal",
+    className: "sa-followers-main modal-content user-projects-modal",
     tabindex: "-1",
     role: "dialog",
   });
@@ -103,22 +103,22 @@ export function createModal(addon, title, msg, switchType) {
 export function createUser(follower, addon, msg, members) {
   let { redux } = addon.tab;
   const btn = Object.assign(document.createElement("div"), {
-    className: "studio-follower mod-clickable studio-project-tile",
+    className: "mod-clickable studio-project-tile studio-follower",
     tabindex: "0",
     role: "button",
   });
   const userImage = Object.assign(document.createElement("img"), {
-    className: "studio-follower-pfp",
+    className: "studio-project-image",
     src: `https://cdn2.scratch.mit.edu/get_image/user/${follower.id}_90x90.png`,
   });
 
   btn.appendChild(userImage);
 
   const bottom = Object.assign(document.createElement("div"), {
-    className: "studio-follower-bottom",
+    className: "studio-project-bottom",
   });
   const username = Object.assign(document.createElement("div"), {
-    className: "studio-follower-username",
+    className: "studio-project-title",
     innerText: follower.username,
     title: follower.username,
   });
@@ -129,7 +129,7 @@ export function createUser(follower, addon, msg, members) {
   });
 
   const img = Object.assign(document.createElement("img"), {
-    className: "studio-follower-add-remove-image",
+    className: "studio-project-add-remove-image",
     src: addon.self.dir + "/add.svg",
   });
 
@@ -153,7 +153,7 @@ export function createUser(follower, addon, msg, members) {
       return alert(msg("fetch-err"));
     }
     btn.classList.remove("mod-mutating");
-    add.classList.add("studio-follower-dynamic-remove");
+    add.classList.add("studio-tile-dynamic-remove");
     img.src = addon.self.dir + "/tick.svg";
     btn.removeEventListener("click", onclick);
   };
@@ -162,7 +162,7 @@ export function createUser(follower, addon, msg, members) {
     btn.addEventListener("click", onclick);
   } else {
     btn.classList.remove("mod-mutating");
-    add.classList.add("studio-follower-dynamic-remove");
+    add.classList.add("studio-tile-dynamic-remove");
     img.src = addon.self.dir + "/tick.svg";
   }
 

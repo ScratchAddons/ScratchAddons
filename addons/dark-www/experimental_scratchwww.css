@@ -19,6 +19,7 @@ a.social-messages-profile-link,
 .studio-project-tile .studio-project-username,
 #footer,
 #donor,
+.semicolon,
 .subactions .share-date,
 .developers #faq p,
 .social-form,
@@ -45,7 +46,8 @@ body:not(.sa-body-editor) .join-flow-title,
 .tips-getting-started,
 .tips-activity-guides,
 .studio-report-modal .studio-report-tile,
-.studio-report-modal .button:disabled {
+.studio-report-modal .button:disabled,
+.semicolon {
   background: #202020;
 }
 .box .box-header,
