@@ -84,6 +84,7 @@ button:hover {
 
 .thread-list,
 .username-list {
+  color: var(--description-text);
   font-size: 12px;
   padding-inline: 16px;
 }
