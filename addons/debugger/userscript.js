@@ -370,10 +370,9 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     }
   }
   consoleList.append(new FeedbackWrapper());
-  
+
   const addLog = (content, thread, type) => {
     const wrapper = new LogWrapper();
-    
 
     const target = thread.target;
     const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
