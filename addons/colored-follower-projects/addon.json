@@ -1,6 +1,6 @@
 {
-  "name": "Colored projects made by people you follow",
-  "description": "Colors any project on the home page or 'Explore' that was made by someone you follow.",
+  "name": "Hilighted projects by people you follow",
+  "description": "Highlights any project on the home page or 'Explore' that was made by someone you follow.",
   "tags": ["community"],
   "enabledByDefault": false,
   "credits": [
