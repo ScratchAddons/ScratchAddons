@@ -17,6 +17,7 @@
   margin: auto;
   padding: 20px;
   width: 50rem;
+  max-width: 75%;
   border-radius: 10px;
   height: 75%;
   display: flex;
@@ -34,7 +35,6 @@
 
 .footer {
   text-align: center;
-  width: 800px;
   color: var(--gray-text);
   margin-top: auto;
 }
