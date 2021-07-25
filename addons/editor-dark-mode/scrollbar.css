@@ -1,16 +1,45 @@
 .sa-body-editor::-webkit-scrollbar,
 .sa-body-editor ::-webkit-scrollbar {
-  background: #333;
+  width: 16px;
+  height: 16px;
+  background: transparent;
+}
+.sa-body-editor::-webkit-scrollbar {
+  background: var(--editorDarkMode-page);
+}
+.language-selector_language-select_8Vfnm::-webkit-scrollbar {
+  background: var(--editorDarkMode-input);
 }
 .sa-body-editor::-webkit-scrollbar-thumb,
 .sa-body-editor ::-webkit-scrollbar-thumb {
-  background: #606060;
+  width: 8px;
+  height: 8px;
+  background-color: rgba(96, 96, 96, 0.8);
+  border: 4px solid transparent;
+  background-clip: padding-box;
+  border-radius: 8px;
 }
 .sa-body-editor::-webkit-scrollbar-thumb:hover,
 .sa-body-editor ::-webkit-scrollbar-thumb:hover {
-  background: #808080;
+  background-color: rgba(128, 128, 128, 0.8);
 }
-.sa-body-editor::-webkit-scrollbar-corner,
+.sa-body-editor::-webkit-scrollbar-corner {
+  background: var(--editorDarkMode-page);
+}
 .sa-body-editor ::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+.selector_list-area_1Xbj_ {
+  overflow-y: auto; /* auto-hide scrollbar to prevent list
+    from being off-center */
+}
+
+.scrollable-canvas_vertical-scrollbar_lbD_c,
+.scrollable-canvas_horizontal-scrollbar_2w6OD {
+  background-color: rgba(96, 96, 96, 0.8);
+}
+.scrollable-canvas_vertical-scrollbar_lbD_c:hover,
+.scrollable-canvas_horizontal-scrollbar_2w6OD:hover {
+  background-color: rgba(128, 128, 128, 0.8);
 }
