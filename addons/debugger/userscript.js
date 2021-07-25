@@ -365,7 +365,15 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   class FeedbackWrapper {
     constructor() {
       const feedbackLog = new LogWrapper();
-      feedbackLog.append(new LogText(msg("feedback-log", { logLink: `<a href="https://scratchaddons.com/feedback" target="_blank">${safeMsg("feedback-log-link")}</a>` }), "", true));
+      feedbackLog.append(
+        new LogText(
+          msg("feedback-log", {
+            logLink: `<a href="https://scratchaddons.com/feedback" target="_blank">${safeMsg("feedback-log-link")}</a>`,
+          }),
+          "",
+          true
+        )
+      );
       return feedbackLog;
     }
   }
