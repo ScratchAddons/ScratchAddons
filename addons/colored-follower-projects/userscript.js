@@ -1,12 +1,8 @@
 //Hello! I've been scripting for a while now, but i'm not great at keeping my code clean. I'll try to make it readable, but please excuse my mistakes!
 export default async function ({ addon, global, console }) {
+    console.log("Running")
     if(addon.auth.isLoggedIn){ // If they are logged in, activate the rest of the code
-        var username = "griffpatch" // Default username
-        if(addon.settings.get("useother")){ // If using "other scratchers following"
-            username = addon.settings.get("useothername") // Set the username to the one provided
-        }else{
-            username = addon.auth.username // Not using "other scratchers following"? Just set it to your username.
-        }
+        var username = addon.auth.username // Get the username
 
         async function getfollowing(offset) { // Async function to get an array of following using the scratch api.
             return new Promise((resolve, reject) => {
@@ -25,23 +21,16 @@ export default async function ({ addon, global, console }) {
             })
         }
     
-        var css = '#coloredfollowing { background-color: '+addon.settings.get("color")+'; }' // The css to color the project thumbnail
-        var style = document.createElement('style'); //create the style element...
-        var following = await getfollowing(0) //Getting the following!
-        //Stuff to get the css working
-        style.innerHTML = css 
-        document.head.appendChild(style);
-        style.appendChild(document.createTextNode(css));
         
-        //Repeat the following every second, just in case the user clicked "Load more"
+        var following = await getfollowing(0) //Getting the following!
 
-        setInterval(() => {
-            var elements = document.body.getElementsByClassName('thumbnail-creator'); //Get all creators of every project shown
-    
-            for (var i = 0; i < elements.length; i++) //For every creator name...
-                if(following.includes(elements[i].getElementsByTagName("a")[0].innerText)){ //If we are following them...
-                    elements[i].parentElement.parentElement.parentElement.id = "coloredfollowing"; //Make it colored!
-                }
-        }, 1000);
+        while (true) {
+            const element = await addon.tab.waitForElement("div.thumbnail-creator",{
+                markAsSeen: true,
+            });
+            if(following.includes(element.getElementsByTagName("a")[0].innerText)){ //If we are following them...
+                element.parentElement.parentElement.parentElement.style.backgroundColor = addon.settings.get("color")
+            }
+          }
     }
 }
