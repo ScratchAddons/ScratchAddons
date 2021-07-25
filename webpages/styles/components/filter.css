@@ -23,6 +23,7 @@
 .filter-option {
   padding: 0 12px;
   line-height: 30px;
+  white-space: nowrap;
   border-inline-end: 1px solid var(--control-border);
   transition: background 0.2s ease;
 }
