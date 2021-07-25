@@ -217,13 +217,19 @@ export default async function ({ addon, global, console, msg }) {
     innerText: msg("close"),
   });
 
+  const plsGiveFeedback = Object.assign(document.createElement("a"), {
+    innerText: msg("pls-give-feedback"),
+    href: 'https://scratchaddons.com/feedback/',
+    style: 'color:white;font-family:consolas, lucida console, courier new, monospace;'
+  });
+
   consoleTitle.append(consoleText, buttons);
   buttons.append(unpauseButton, exportButton, trashButton, closeButton);
   trashButton.append(trashImg, trashText);
   closeButton.append(closeImg, closeText);
   exportButton.append(exportImg, exportText);
   unpauseButton.append(unpauseImg, unpauseText);
-  extraContainer.append(consoleList);
+  extraContainer.append(plsGiveFeedback, consoleList);
   consoleWrapper.append(consoleTitle, extraContainer);
   document.body.append(consoleWrapper);
 
