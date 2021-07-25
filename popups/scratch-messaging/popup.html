@@ -380,13 +380,13 @@
         <span v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</span>
         <span v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</span>
         <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">
-          <img class="small-icon" src="../../images/icons/reload.svg" /> {{ uiMessages.reloadMsg }}
+          <img class="small-icon" src="../../images/icons/reload.svg" /><span>{{ uiMessages.reloadMsg }}</span>
         </button>
         <span v-show="messagesReady && showingMessagesAmt === 0 && stMessages.length === 0" class="status-empty"
           >{{ uiMessages.noUnreadMsg }}</span
         >
         <button @click="showAllMessages = true" v-show="canShowMoreMessages">
-          <img class="small-icon" src="../../images/icons/plus.svg" /> {{ uiMessages.showMoreMsg }}
+          <img class="small-icon" src="../../images/icons/plus.svg" /><span>{{ uiMessages.showMoreMsg }}</span>
         </button>
       </div>
     </div>

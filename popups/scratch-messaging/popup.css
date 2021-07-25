@@ -14,6 +14,9 @@ button {
 button:hover {
   background: var(--button-hover-background);
 }
+button > span {
+  vertical-align: middle;
+}
 
 .contents {
   max-height: calc(100vh - 32px);
@@ -113,6 +116,13 @@ button:hover {
 }
 .small-icon:not(.colored) {
   filter: var(--content-icon-filter);
+}
+button > .small-icon {
+  margin-inline-start: -2px;
+  margin-inline-end: 6px;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
 }
 .message-type-title-text {
   white-space: nowrap;

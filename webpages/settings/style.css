@@ -135,6 +135,7 @@ h1 {
 }
 
 .clear-button {
+  padding-inline-end: 10px;
   border-radius: 0 4px 4px 0;
   border-inline-start: none !important;
 }
@@ -145,7 +146,7 @@ h1 {
   vertical-align: middle;
 }
 .clear-button .icon-type {
-  margin-inline-start: 8px;
+  margin-inline-start: 6px;
   margin-inline-end: 0;
 }
 
