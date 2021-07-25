@@ -39,21 +39,21 @@ export default async function ({ addon, global, console, msg }) {
     args: ["content"],
     displayName: msg("block-log"),
     callback: ({ content }, thread) => {
-      addItem(content, thread, "log");
+      addLog(content, thread, "log");
     },
   });
   addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-warn"),
     callback: ({ content }, thread) => {
-      addItem(content, thread, "warn");
+      addLog(content, thread, "warn");
     },
   });
   addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", {
     args: ["content"],
     displayName: msg("block-error"),
     callback: ({ content }, thread) => {
-      addItem(content, thread, "error");
+      addLog(content, thread, "error");
     },
   });
 
@@ -307,6 +307,7 @@ export default async function ({ addon, global, console, msg }) {
     closeDragElement();
     logs = [];
     isScrolledToEnd = true;
+    consoleList.append(new FeedbackWrapper());
   });
   trashButton.addEventListener("mouseup", () => {
     closeDragElement();
@@ -342,14 +343,37 @@ export default async function ({ addon, global, console, msg }) {
   });
   let logs = [];
   let scrollQueued = false;
-  const addItem = (content, thread, type) => {
-    const wrapper = document.createElement("div");
-    const span = (text, cl = "") => {
-      let s = document.createElement("span");
-      s.innerText = text;
-      s.className = cl;
-      return s;
-    };
+  class LogWrapper {
+    constructor() {
+      this.element = document.createElement("div");
+      this.element.className = "log";
+      return this.element;
+    }
+  }
+  class LogText {
+    constructor(text, className, useHtml = false) {
+      this.element = document.createElement("span");
+      this.element.className = className;
+      if (useHtml) {
+        this.element.innerHTML = text;
+      } else {
+        this.element.innerText = text;
+      }
+      return this.element;
+    }
+  }
+  class FeedbackWrapper {
+    constructor() {
+      const feedbackLog = new LogWrapper();
+      feedbackLog.append(new LogText(`${msg("feedback-log")} <a href="https://scratchaddons.com/feedback" target="_blank">${msg("feedback-log-link")}</a>`, "", true));
+      return feedbackLog;
+    }
+  }
+  consoleList.append(new FeedbackWrapper());
+  
+  const addLog = (content, thread, type) => {
+    const wrapper = new LogWrapper();
+    
 
     const target = thread.target;
     const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
@@ -431,7 +455,7 @@ export default async function ({ addon, global, console, msg }) {
       type,
       content,
     });
-    wrapper.append(span(content));
+    wrapper.append(new LogText(content));
 
     let link = document.createElement("a");
     link.textContent = target.isOriginal
