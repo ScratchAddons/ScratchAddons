@@ -22,11 +22,16 @@ export default async function ({ template }) {
     methods: {
       calculateShow() {
         if (!this.setting.if) return true;
-        const settings=this.addonSettings[this.addon._addonId]
+        const settings = this.addonSettings[this.addon._addonId];
 
         for (const addon in this.setting.if.addons || {}) {
           if (Object.hasOwnProperty.call(this.setting.if.addons, addon)) {
-            console.log({_addonId:this.addon._addonId, addon,value:addonsEnabled[addon],wanted:this.setting.if.addons[addon]})
+            console.log({
+              _addonId: this.addon._addonId,
+              addon,
+              value: addonsEnabled[addon],
+              wanted: this.setting.if.addons[addon],
+            });
             if (addonsEnabled[addon] !== this.setting.if.addons[addon]) return false;
           }
         }
@@ -36,11 +41,11 @@ export default async function ({ template }) {
             /** `settingValue` can be a single value or an array of values. If it's an array, only 1 must match. */
             const settingValue = this.setting.if.settings[setting];
             if (settingValue instanceof Array) {
-              console.log({settingValue, setting, actualsettingValue:settings[setting]});
+              console.log({ settingValue, setting, actualsettingValue: settings[setting] });
               for (const possibleValue of settingValue) {
                 if (settings[setting] === possibleValue) return true;
               }
-            }else if (settings[setting] !== settingValue) return false;
+            } else if (settings[setting] !== settingValue) return false;
           }
         }
         return true;
