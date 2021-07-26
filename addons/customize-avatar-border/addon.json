@@ -54,6 +54,7 @@
       "name": "CST1229"
     }
   ],
+  "versionAdded": "1.18.0",
   "dynamicEnable": true,
   "dynamicDisable": true,
   "updateUserstylesOnSettingsChange": true,
