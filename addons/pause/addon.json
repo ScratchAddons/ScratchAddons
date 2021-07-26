@@ -1,13 +1,6 @@
 {
   "name": "Pause button",
   "description": "Adds a pause button next to the green flag.",
-  "info": [
-    {
-      "type": "notice",
-      "text": "To programmatically pause a project in Scratch (also known as breakpoints), use the \"breakpoint\" block provided by the \"debugger\" addon.",
-      "id": "programpause"
-    }
-  ],
   "credits": [
     {
       "name": "Jeffalo"
