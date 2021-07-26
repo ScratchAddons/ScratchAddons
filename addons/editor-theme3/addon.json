@@ -98,21 +98,21 @@
       "allowTransparency": true
     },
     {
+      "name": "debugger",
+      "id": "debugger-color",
+      "type": "color",
+      "default": "#29BEB8",
+      "allowTransparency": true,
+      "if": {
+        "addons": { "debugger": true }
+      }
+    },
+    {
       "name": "extensions",
       "id": "Pen-color",
       "type": "color",
       "default": "#0FBD8C",
       "allowTransparency": true
-    },
-    {
-      "name": "debugger",
-      "id": "debugger-color",
-      "type": "color",
-      "default": "#FF6680",
-      "allowTransparency": true,
-      "if": {
-        "addons": { "debugger": true }
-      }
     },
     {
       "name": "Block inputs",
