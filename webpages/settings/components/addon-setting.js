@@ -22,7 +22,7 @@ export default async function ({ template }) {
     methods: {
       calculateShow() {
         if (!this.setting.if) return true;
-        const settings=this.addonSettings[this.addon._addonId]
+        const settings = this.addonSettings[this.addon._addonId];
 
         for (const addon in this.setting.if.addons || {}) {
           if (Object.hasOwnProperty.call(this.setting.if.addons, addon)) {
@@ -38,7 +38,7 @@ export default async function ({ template }) {
               for (const possibleValue of settingValue) {
                 if (settings[setting] === possibleValue) return true;
               }
-            }else if (settings[setting] !== settingValue) return false;
+            } else if (settings[setting] !== settingValue) return false;
           }
         }
         return true;
