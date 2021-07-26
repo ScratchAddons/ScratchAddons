@@ -35,17 +35,15 @@
     {
       "url": "default.css",
       "matches": ["https://scratch.mit.edu/studios/*"],
-      "settingMatch": {
-        "id": "version",
-        "value": "default"
+      "if": {
+        "settings": { "version": "default" }
       }
     },
     {
       "url": "scratchr2.css",
       "matches": ["https://scratch.mit.edu/studios/*"],
-      "settingMatch": {
-        "id": "version",
-        "value": "scratchr2"
+      "if": {
+        "settings": { "version": "scratchr2" }
       }
     }
   ],

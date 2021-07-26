@@ -36,17 +36,15 @@
         "https://scratch.mit.edu/discuss/post/*",
         "https://scratch.mit.edu/discuss/settings/*"
       ],
-      "settingMatch": {
-        "id": "forums",
-        "value": true
+      "if": {
+        "settings": { "forums": true }
       }
     },
     {
       "url": "comments.js",
       "matches": ["https://scratch.mit.edu/studios/*", "https://scratch.mit.edu/users/*", "projects"],
-      "settingMatch": {
-        "id": "comments",
-        "value": true
+      "if": {
+        "settings": { "comments": true }
       }
     }
   ],

@@ -289,13 +289,33 @@ const WELL_KNOWN_MATCHERS = {
   },
 };
 
+/** Moved out of `userscriptMatches` so I can return early */
+function matchesIf(injectable, settings) {
+  for (const addon in injectable.if?.addons || {}) {
+    if (Object.hasOwnProperty.call(injectable.if.addons, addon)) {
+      if (scratchAddons.localState.addonsEnabled[addon] !== injectable.if.addons[addon]) return false;
+    }
+  }
+
+  for (const setting in injectable.if?.settings || {}) {
+    if (Object.hasOwnProperty.call(injectable.if.settings, setting)) {
+      /** `settingValue` can be a single value or an array of values. If it's an array, only 1 must match. */
+      const settingValue = injectable.if.settings[setting];
+      if (settingValue instanceof Array) {
+        for (const possibleValue of settingValue) {
+          if (settings[setting] === possibleValue) return true;
+        }
+      } else if (settings[setting] !== settingValue) return false;
+    }
+  }
+  return true;
+}
+
 // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
 // matchesPattern = "*" | regexPattern | Array<wellKnownName | wellKnownMatcher | regexPattern | legacyPattern>
 function userscriptMatches(data, scriptOrStyle, addonId) {
-  if (scriptOrStyle.settingMatch) {
-    const { id, value } = scriptOrStyle.settingMatch;
-    if (scratchAddons.globalState.addonSettings[addonId][id] !== value) return false;
-  }
+  if (!matchesIf(scriptOrStyle, scratchAddons.globalState.addonSettings[addonId])) return false;
+
   const url = data.url;
   const parsedURL = new URL(url);
   const { matches, _scratchDomainImplied } = scriptOrStyle;

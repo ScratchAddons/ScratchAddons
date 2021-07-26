@@ -696,9 +696,8 @@
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
       ],
-      "settingMatch": {
-        "id": "textShadow",
-        "value": true
+      "if": {
+        "settings": { "textShadow": true }
       }
     },
     {
@@ -709,9 +708,8 @@
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
       ],
-      "settingMatch": {
-        "id": "dots",
-        "value": false
+      "if": {
+        "settings": { "dots": false }
       }
     },
     {
@@ -722,9 +720,8 @@
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
       ],
-      "settingMatch": {
-        "id": "affectStage",
-        "value": true
+      "if": {
+        "settings": { "affectStage": true }
       }
     },
     {
@@ -735,9 +732,8 @@
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
       ],
-      "settingMatch": {
-        "id": "darkComments",
-        "value": true
+      "if": {
+        "settings": { "darkComments": true }
       }
     },
     {
@@ -748,9 +744,8 @@
         "https://scratch.mit.edu/projects/*/fullscreen",
         "https://scratch.mit.edu/projects/editor"
       ],
-      "settingMatch": {
-        "id": "darkScrollbars",
-        "value": true
+      "if": {
+        "settings": { "darkScrollbars": true }
       }
     }
   ],

@@ -17,9 +17,8 @@
     {
       "url": "style.css",
       "matches": ["https://scratch.mit.edu/"],
-      "settingMatch": {
-        "id": "styleAsNormalText",
-        "value": true
+      "if": {
+        "settings": { "styleAsNormalText": true }
       }
     }
   ],
