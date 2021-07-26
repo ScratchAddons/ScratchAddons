@@ -145,13 +145,11 @@ export default async function ({ addon, console }) {
   };
 
   if (renderer !== undefined) {
-    console.log("renderer available");
     overrideCreateTextSkin();
   } else {
     const runtime = addon.tab.traps.vm.runtime;
     const oldAttachRenderer = runtime.attachRenderer.bind(runtime);
     runtime.attachRenderer = (newRenderer) => {
-      console.log("it works!");
       renderer = newRenderer;
       overrideCreateTextSkin();
       return oldAttachRenderer(newRenderer);
