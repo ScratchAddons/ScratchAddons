@@ -105,6 +105,16 @@
       "allowTransparency": true
     },
     {
+      "name": "debugger",
+      "id": "debugger-color",
+      "type": "color",
+      "default": "#FF6680",
+      "allowTransparency": true,
+      "if": {
+        "addons": { "debugger": true }
+      }
+    },
+    {
       "name": "Block inputs",
       "id": "input-color",
       "type": "color",

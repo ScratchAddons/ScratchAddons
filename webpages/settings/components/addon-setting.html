@@ -1,5 +1,5 @@
 <template>
-  <div class="addon-setting">
+  <div class="addon-setting" v-if="show">
     <div class="setting-label" v-html="settingsName(addon)"></div>
     <template v-if="setting.type === 'boolean'">
       <input

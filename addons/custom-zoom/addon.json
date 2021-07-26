@@ -83,7 +83,10 @@
           "name": "Long"
         }
       ],
-      "default": "default"
+      "default": "default",
+      "if": {
+        "settings": { "autohide": true }
+      }
     }
   ]
 }

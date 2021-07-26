@@ -30,18 +30,6 @@
       "default": false
     },
     {
-      "id": "autoPlay",
-      "name": "Auto-play projects (for alternative players)",
-      "type": "boolean",
-      "default": false
-    },
-    {
-      "id": "forceAlternative",
-      "name": "Force using alternative player",
-      "type": "boolean",
-      "default": false
-    },
-    {
       "id": "alternativePlayer",
       "name": "Alternative player",
       "type": "select",
@@ -60,6 +48,24 @@
           "name": "forkphorus"
         }
       ]
+    },
+    {
+      "id": "autoPlay",
+      "name": "Auto-play projects (for alternative players)",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": { "alternativePlayer": ["turbowarp", "forkphorus"] }
+      }
+    },
+    {
+      "id": "forceAlternative",
+      "name": "Force using alternative player",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "settings": { "alternativePlayer": ["turbowarp", "forkphorus"] }
+      }
     }
   ],
   "tags": ["community", "profiles"],

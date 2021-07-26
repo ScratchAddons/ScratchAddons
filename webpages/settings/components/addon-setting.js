@@ -1,11 +1,50 @@
 export default async function ({ template }) {
+  const promisify =
+    (callbackFn) =>
+    (...args) =>
+      new Promise((resolve) => callbackFn(...args, resolve));
+  const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
+  const { addonsEnabled } = await syncGet(["addonsEnabled"]);
   const AddonSetting = Vue.extend({
-    props: ["addon", "setting", "addon-settings"],
+    props: ["addon", "setting", "addon-settings", "addonsEnabled"],
     template,
     data() {
-      return {};
+      return {
+        show: this.calculateShow(),
+      };
+    },
+    ready() {
+      this.$root.$on("update-shown-settings", (info) => {
+        addonsEnabled[info.changeEnabledState.addonId] = info.changeEnabledState.newState;
+        this.show = this.calculateShow();
+      });
     },
     methods: {
+      calculateShow() {
+        if (!this.setting.if) return true;
+        const settings=this.addonSettings[this.addon._addonId]
+
+        for (const addon in this.setting.if.addons || {}) {
+          if (Object.hasOwnProperty.call(this.setting.if.addons, addon)) {
+            console.log({_addonId:this.addon._addonId, addon,value:addonsEnabled[addon],wanted:this.setting.if.addons[addon]})
+            if (addonsEnabled[addon] !== this.setting.if.addons[addon]) return false;
+          }
+        }
+
+        for (const setting in this.setting.if.settings || {}) {
+          if (Object.hasOwnProperty.call(this.setting.if.settings, setting)) {
+            /** `settingValue` can be a single value or an array of values. If it's an array, only 1 must match. */
+            const settingValue = this.setting.if.settings[setting];
+            if (settingValue instanceof Array) {
+              console.log({settingValue, setting, actualsettingValue:settings[setting]});
+              for (const possibleValue of settingValue) {
+                if (settings[setting] === possibleValue) return true;
+              }
+            }else if (settings[setting] !== settingValue) return false;
+          }
+        }
+        return true;
+      },
       settingsName(addon) {
         const name = this.setting.name;
         const regex = /([\\]*)(@|#)([a-zA-Z0-9.\-\/_]*)/g;
