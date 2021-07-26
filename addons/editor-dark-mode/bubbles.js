@@ -155,7 +155,7 @@ export default async function ({ addon, console }) {
       renderer = newRenderer;
       overrideCreateTextSkin();
       return oldAttachRenderer(newRenderer);
-    }
+    };
   }
   addon.settings.addEventListener("change", () => {
     if (!usingModifiedCreateTextSkin && renderer !== undefined) {
