@@ -1,0 +1,19 @@
+{
+  "name": "Fix CSS Bugs",
+  "description": "Fixes bugs related to CSS.",
+  "tags": ["editor", "codeEditor"],
+  "enabledByDefault": true,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+
+  "credits": [
+    { "name": "Utter Donkey", "link": "https://pixelbulb.online" }
+
+  ]
+}

@@ -83,8 +83,7 @@
   "debugger",
   "disable-stage-drag-select",
   "studio-followers",
-  "ctrl-enter-post",
-
+  "ctrl-enter-post","css-fix",
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
   "// because the first in the list gets their CSS injected first,",
