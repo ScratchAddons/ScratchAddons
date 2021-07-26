@@ -1,10 +1,12 @@
 import { textColor } from "../../libraries/common/cs/text-color.esm.js";
 
 export default async function ({ addon, console }) {
-  const renderer = addon.tab.traps.vm.runtime.renderer;
+  let renderer = addon.tab.traps.vm.runtime.renderer;
   let usingModifiedCreateTextSkin = false;
 
   const overrideCreateTextSkin = () => {
+    if (!addon.settings.get("affectStage")) return;
+
     const oldCreateTextSkin = renderer.createTextSkin.bind(renderer);
     renderer.createTextSkin = function (...args) {
       const skinId = oldCreateTextSkin(...args);
@@ -132,6 +134,7 @@ export default async function ({ addon, console }) {
       };
       return skinId;
     };
+    usingModifiedCreateTextSkin = true;
   };
 
   const updateBubbles = () => {
@@ -141,14 +144,22 @@ export default async function ({ addon, console }) {
     }
   };
 
-  if (addon.settings.get("affectStage")) {
+  if (renderer !== undefined) {
+    console.log("renderer available");
     overrideCreateTextSkin();
-    usingModifiedCreateTextSkin = true;
+  } else {
+    const runtime = addon.tab.traps.vm.runtime;
+    const oldAttachRenderer = runtime.attachRenderer.bind(runtime);
+    runtime.attachRenderer = (newRenderer) => {
+      console.log("it works!");
+      renderer = newRenderer;
+      overrideCreateTextSkin();
+      return oldAttachRenderer(newRenderer);
+    }
   }
   addon.settings.addEventListener("change", () => {
-    if (addon.settings.get("affectStage") && !usingModifiedCreateTextSkin) {
+    if (!usingModifiedCreateTextSkin && renderer !== undefined) {
       overrideCreateTextSkin();
-      usingModifiedCreateTextSkin = true;
     }
     updateBubbles();
   });
