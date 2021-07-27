@@ -1,10 +1,17 @@
 export default async function ({ addon, global, console, msg }) {
-  addon.tab.addEventListener("urlChange", function main(e) {
-    // We need to wait until we get a project id
-    let id = location.pathname.replace(/\/projects\/([0-9]+)\/(.*)/g, "$1");
+  const loadProject = () => {
+    const projectId = addon.settings.get("projectId");
+    if (projectId !== 510186917) addon.tab.traps.vm.downloadProjectId(projectId);
+  };
 
-    if (!addon.tab.traps.vm || !id) return;
+  const initialPathname = location.pathname;
+  // For newly created projects (e.g. clicking create button)
+  if (initialPathname === "/projects/editor/") addon.tab.addEventListener("urlChange", loadProject, { once: true });
 
-    addon.tab.traps.vm.downloadProjectId(addon.settings.get("projectId"));
+  // File > New
+  addon.tab.addEventListener("urlChange", (e) => {
+    if (e.detail.newUrl === "https://scratch.mit.edu/projects/editor") {
+      addon.tab.addEventListener("urlChange", loadProject, { once: true });
+    }
   });
 }
