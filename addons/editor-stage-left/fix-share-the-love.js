@@ -15,4 +15,5 @@ export default async function ({ addon, global, console }) {
     rect.width -= 1000000000;
     return rect;
   };
+  if (addon.self.enabledLate) updateAreas();
 }
