@@ -1,6 +1,6 @@
 {
   "name": "Debugger",
-  "description": "Adds a new \"debugger\" block category and a \"logs\" window to the editor. The \"log\", \"warn\" and \"error\" blocks will print the specified message into the logs window. The \"breakpoint\" block will pause the project when executed.",
+  "description": "Adds a new \"debugger\" block category and a \"logs\" window to the editor. The \"log\", \"warn\" and \"error\" blocks will print the specified message into the logs window. The \"breakpoint\" block will pause the project when executed. The \"comment\" ",
   "credits": [
     {
       "name": "GrahamSH"
@@ -10,6 +10,9 @@
     },
     {
       "name": "retronbv"
+    },
+    {
+      "name":"8bitjake"
     }
   ],
   "userscripts": [
@@ -22,6 +25,14 @@
     {
       "url": "style.css",
       "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "id": "comments",
+      "name": "Comment Blocks",
+      "default": true,
+      "type": "boolean"
     }
   ],
   "tags": ["editor", "beta"],
