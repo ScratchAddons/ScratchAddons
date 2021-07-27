@@ -1,6 +1,6 @@
 {
-  "name": "Default project",
-  "description": "Adds the abillity to set the default project.",
+  "name": "Customizable default project",
+  "description": "Change the default project from the Scratch Cat to any existing project.",
   "credits": [
     {
       "name": "9gr",
@@ -16,12 +16,13 @@
   ],
   "settings": [
     {
-      "name": "Default project id",
-      "type": "positive_integer",
+      "name": "Default project ID",
+      "type": "integer",
       "id": "projectId",
       "min": 1,
       "default": 510186917
     }
   ],
-  "tags": ["editor"]
+  "tags": ["editor", "beta"],
+  "versionAdded": "1.18.0"
 }
