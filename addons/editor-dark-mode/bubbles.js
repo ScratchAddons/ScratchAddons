@@ -1,6 +1,10 @@
 import { textColor } from "../../libraries/common/cs/text-color.esm.js";
 
 export default async function ({ addon, console }) {
+  await new Promise((resolve) => {
+    if (addon.tab.traps.vm.editingTarget) return resolve();
+    addon.tab.traps.vm.runtime.once("PROJECT_LOADED", resolve);
+  });
   const renderer = addon.tab.traps.vm.runtime.renderer;
   let usingModifiedCreateTextSkin = false;
 
