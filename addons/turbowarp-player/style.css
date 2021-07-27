@@ -28,6 +28,7 @@
 
 .sa-tw-iframe {
   overflow: hidden;
+  box-sizing: border-box;
 
   /* Same styles as .project-description */
   border: 1px solid rgba(77, 151, 255, 0.1);
