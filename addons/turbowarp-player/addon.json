@@ -1,6 +1,6 @@
 {
-  "name": "TurboWarp button on project pages",
-  "description": "Adds a button to play the project in TurboWarp.org next to the Remix button.",
+  "name": "TurboWarp button",
+  "description": "Adds a button on project pages to play the project in TurboWarp.org, next to the Remix button.",
   "info": [
     {
       "type": "notice",
