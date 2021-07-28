@@ -45,6 +45,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
           _realConsole.table(...args)
         }
       }
+      betterConsole.log(`addons/${addonId}/${scriptPath}: ${scriptUrl}, runAtComplete: ${runAtComplete}`,`${addonId} [core]`);
       const localConsole = {
         log: (log)=>{return betterConsole.log(log,addonId)},
         debug: (log)=>{return betterConsole.debug(log,addonId)},
@@ -56,7 +57,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
       module.default({
         addon: addonObj,
         global: globalObj,
-        console: { ..._realConsole, log, warn },
+        console: localConsole,
         msg,
         safeMsg: (key, placeholders) =>
           scratchAddons.l10n.escaped(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders),
