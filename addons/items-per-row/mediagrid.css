@@ -1,0 +1,94 @@
+.media-grid .project.thumb.item {
+  width: calc(914px / var(--itemsPerRow-projects) - 37px);
+}
+.media-grid .gallery.thumb.item {
+  width: calc(914px / var(--itemsPerRow-studios) - 39px);
+}
+.media-grid .user.thumb.item {
+  width: calc(914px / var(--itemsPerRow-users) - 16px);
+}
+
+.items-per-row-projects-min6 .media-grid .project.thumb.item {
+  margin-right: 15px;
+  width: calc(914px / var(--itemsPerRow-projects) - 19px);
+}
+.items-per-row-studios-min6 .media-grid .gallery.thumb.item {
+  margin-right: 15px;
+  width: calc(914px / var(--itemsPerRow-studios) - 21px);
+}
+
+.items-per-row-projects-min7 .media-grid .project.thumb.item {
+  margin-right: 2px;
+  margin-bottom: 5px;
+  width: calc(914px / var(--itemsPerRow-projects) - 6px);
+}
+.items-per-row-studios-min7 .media-grid .gallery.thumb.item {
+  margin-right: 2px;
+  margin-bottom: 5px;
+  width: calc(914px / var(--itemsPerRow-studios) - 8px);
+}
+
+.items-per-row-users-min12 .media-grid .user.thumb.item {
+  margin-right: 6px;
+  margin-bottom: 6px;
+  width: calc(914px / var(--itemsPerRow-users) - 10px);
+}
+
+.items-per-row-users-min15 .media-grid .user.thumb.item {
+  margin-right: 0;
+  margin-bottom: 2px;
+  width: calc(914px / var(--itemsPerRow-users) - 4px);
+}
+
+.items-per-row-projects-max4 .media-grid .project.thumb.item,
+.items-per-row-studios-max3 .media-grid .gallery.thumb.item {
+  margin-bottom: 26px;
+}
+
+.project.thumb img {
+  width: calc(100% - 2px);
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+.gallery.thumb span.image {
+  width: calc(100% - 7px);
+}
+.gallery.thumb span.image img {
+  width: calc(100% - 12px);
+  height: auto;
+  aspect-ratio: 17 / 10;
+}
+.user.thumb img {
+  width: calc(100% - 7px);
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.items-per-row-users-min15 .user.thumb img {
+  width: calc(100% - 2px);
+  margin-bottom: 1px;
+}
+
+.gallery.thumb .stats {
+  right: 10px;
+}
+
+.items-per-row-users-min15 .user.thumb span.title {
+  font-size: 10px;
+}
+
+.items-per-row-projects-max4 .project.thumb span.title,
+.items-per-row-studios-max3 .gallery.thumb span.title {
+  font-size: 13px;
+}
+
+.items-per-row-projects-max3 .project.thumb span.title,
+.items-per-row-studios-max3 .gallery.thumb span.title {
+  margin-top: 5px;
+}
+
+.thumb span.owner {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
