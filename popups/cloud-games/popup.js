@@ -8,7 +8,10 @@ export default async ({ addon, msg, safeMsg }) => {
     data: {
       projects: [],
       loaded: false,
-      messages: { noUsersMsg: msg("no-users") },
+      messages: {
+        noUsersMsg: msg("no-users"),
+        brokenMsg: msg("broken-notice"),
+      },
       projectsChecked: 0,
       error: shouldFailEarly ? "general-error" : null,
     },

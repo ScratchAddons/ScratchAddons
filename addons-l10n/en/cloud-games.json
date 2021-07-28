@@ -6,5 +6,6 @@
   "cloud-games/server-error": "It seems like the Scratch server is having a problem.",
   "cloud-games/no-projects": "There are no projects to display.",
   "cloud-games/change-studio": "You can change the projects by entering the studio URL in the {settings}.",
-  "cloud-games/addon-settings": "addon settings"
+  "cloud-games/addon-settings": "addon settings",
+  "cloud-games/broken-notice": "Note: Due to Scratch bugs, player lists may show \"no users currently playing\" when there are online players. Check the project manually to see if anyone is actually playing."
 }
