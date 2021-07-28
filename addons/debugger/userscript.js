@@ -365,12 +365,12 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
         href: "https://scratchaddons.com/feedback?version=1.18-debugger",
         className: "sa-debugger-feedback",
         target: "_blank",
-        textContent: msg("feedback-log-link")
-      }).innerHTML
+        textContent: msg("feedback-log-link"),
+      }).innerHTML,
     });
     wrapper.appendChild(s);
     consoleList.append(wrapper);
-  };
+  }
 
   const addLog = (content, thread, type) => {
     const wrapper = createLogWrapper(type);
