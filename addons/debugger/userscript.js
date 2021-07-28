@@ -365,11 +365,20 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   class FeedbackWrapper {
     constructor() {
       const feedbackLog = new LogWrapper();
+      window.saFeedbackRemove = () => {
+        localStorage.setItem("saDebuggerFeedbackRemove", "1");
+        feedbackLog.remove();
+      };
       feedbackLog.append(
         new LogText(
           msg("feedback-log", {
-            logLink: `<a href="https://scratchaddons.com/feedback" target="_blank">${safeMsg("feedback-log-link")}</a>`,
-          }),
+            logLink: `<a href="https://scratchaddons.com/feedback?version=1.18-debugger" class="sa-debugger-feedback" target="_blank">${safeMsg(
+              "feedback-log-link"
+            )}</a>`,
+          }) +
+            `<br><a href="javascript:window.saFeedbackRemove()" class="sa-debugger-feedback">${safeMsg(
+              "feedback-remove"
+            )}</a>`,
           "",
           true
         )
@@ -377,7 +386,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       return feedbackLog;
     }
   }
-  consoleList.append(new FeedbackWrapper());
+  if (localStorage.getItem("saDebuggerFeedbackRemove") !== "1") consoleList.append(new FeedbackWrapper());
 
   const addLog = (content, thread, type) => {
     const wrapper = new LogWrapper();
