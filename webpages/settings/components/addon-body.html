@@ -59,16 +59,17 @@
       </div>
       <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
         <div class="setting-label">{{ msg("presets") }}</div>
-        <button
-          v-for="preset of addon.presets"
-          type="button"
-          class="large-button"
-          :disabled="!addon._enabled"
-          @click="loadPreset(preset)"
-          :title="preset.description"
-        >
-          {{preset.name}}
-        </button>
+        <div class="addon-setting" v-for="preset of addon.presets">
+          <button
+            type="preset-button"
+            class="large-button"
+            :disabled="!addon._enabled"
+            @click="loadPreset(preset)"
+            :title="preset.description"
+          >
+            {{preset.name}}
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -226,19 +227,18 @@
     width: 100%;
     margin: 10px 0;
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
   }
 
   .presets-column {
     align-items: center;
+    margin: 10px 0;
   }
   .presets-column > .setting-label {
     margin-inline-start: 10px;
   }
-  .presets-column > .large-button {
-    margin-block: 10px;
-    margin-inline-end: 10px;
+  .addon-preset {
+    margin-inline-end: 30px;
   }
 
   .addon-check {

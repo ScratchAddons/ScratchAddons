@@ -237,30 +237,22 @@ body.iframe .addon-settings {
 }
 body.iframe .settings-column {
   flex-direction: column;
-  align-items: flex-start;
-  padding-inline-start: 10px;
 }
 body.iframe .addon-setting {
-  width: auto;
   margin: 10px 0;
+  min-height: 0;
   flex-direction: column;
   align-items: flex-start;
 }
 body.iframe .setting-label {
   width: auto;
   margin-bottom: 5px;
-  text-align: start;
 }
 body.iframe .setting-input {
   flex-shrink: 0;
-  flex-basis: auto;
-}
-body.iframe button.setting-input.color {
-  width: 100px;
 }
 body.iframe .addon-setting.boolean-setting {
   margin: 5px 0;
-  display: flex;
   flex-direction: row;
   align-items: center;
 }
@@ -268,10 +260,12 @@ body.iframe .addon-setting.boolean-setting .setting-label {
   margin-bottom: 0;
 }
 body.iframe .presets-column > .setting-label {
+  margin-inline-start: 0;
   margin-bottom: 0;
 }
-body.iframe .presets-column > .large-button {
-  margin-block: 5px;
+body.iframe .presets-column > .addon-setting {
+  margin: 5px 0;
+  margin-inline-end: 10px;
 }
 
 body.iframe .addons-container {
@@ -377,8 +371,8 @@ color-picker {
 }
 
 button.setting-input.color {
-  flex-grow: 1;
   position: relative;
+  width: 100px;
   border-radius: 4px 0 0 4px;
 }
 [dir="rtl"] button.setting-input.color {
@@ -392,7 +386,6 @@ button.setting-input.color {
   background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
   border-radius: 5px;
   background-color: white;
-  flex-grow: 1;
   display: flex;
 }
 
