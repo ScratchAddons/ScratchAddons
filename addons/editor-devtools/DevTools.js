@@ -441,7 +441,7 @@ export default class DevTools {
       // Locate unused local variables...
       let workspace = this.utils.getWorkspace();
       let map = workspace.getVariableMap();
-      let vars = map.getVariablesOfType("");      
+      let vars = map.getVariablesOfType("");
       let unusedLocals = [];
 
       for (const row of vars) {
@@ -471,7 +471,7 @@ export default class DevTools {
           }
         }
       }
-      
+
       // Locate unused local lists...
       let lists = map.getVariablesOfType("list");
       let unusedLists = [];
