@@ -30,12 +30,6 @@ export default async function ({ addon, global, console, msg }) {
     callback: pause,
     hidden: true,
   });
-  if (addon.settings.get("comments")) { // feel free to remove the setting
-  addon.tab.addBlock("\u200B\u200Bcomment %s", {
-    args: ["content"],
-    displayName: msg("block-comment"),
-  });
-}
   addon.tab.addBlock("\u200B\u200Bbreakpoint\u200B\u200B", {
     args: [],
     displayName: msg("block-breakpoint"),
