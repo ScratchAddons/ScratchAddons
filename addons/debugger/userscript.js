@@ -356,7 +356,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
 
   // Feedback
   if (localStorage.getItem("saDebuggerFeedbackRemove") !== "1") {
-    const wrapper = createLogWrapper();
+    const wrapper = createLogWrapper("log");
     const s = document.createElement("span");
     s.innerHTML = safeMsg("feedback-log", { logLink: "$0" }).replace(
       "$0",
