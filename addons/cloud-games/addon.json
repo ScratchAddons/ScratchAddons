@@ -15,7 +15,7 @@
     "script": "popup.js",
     "html": "popup.html"
   },
-  "tags": ["popup", "recommended"],
+  "tags": ["popup", "beta"],
   "versionAdded": "1.1.0",
   "enabledByDefault": true
 }
