@@ -7,7 +7,6 @@ try {
 const _realConsole = window.console;
 const console = {
   _createOutput(...args) {
-    const hasAddonId = typeof args[0] === "object" && args[0]._consoleAddonId;
     const logAuthor = "[cs]";
     const logContent = args;
     return [`%cSA%c${logAuthor}%c`, this._style.leftPrefix, this._style.rightPrefix, this._style.text, ...logContent];
