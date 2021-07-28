@@ -972,8 +972,8 @@
       "description": "A dark theme based on TurboWarp's dark mode.",
       "values": {
         "page": "#111111",
-        "primary": "#4d97ff",
-        "highlightText": "#4d97ff",
+        "primary": "#ff4d4d",
+        "highlightText": "#ff4d4d",
         "menuBar": "#333333",
         "activeTab": "#1e1e1e",
         "tab": "#2e2e2e",
