@@ -307,7 +307,6 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     closeDragElement();
     logs = [];
     isScrolledToEnd = true;
-    // TODO // consoleList.append(new FeedbackWrapper());
   });
   trashButton.addEventListener("mouseup", () => {
     closeDragElement();
