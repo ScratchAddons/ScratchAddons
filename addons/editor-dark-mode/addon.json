@@ -983,7 +983,7 @@
         "palette": "#111111",
         "fullscreen": "#111111",
         "stageHeader": "#111111",
-        "border": "#00000026",
+        "border": "#ffffff0d",
         "textShadow": false,
         "dots": true,
         "darkComments": true,
