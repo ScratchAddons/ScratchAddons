@@ -343,59 +343,41 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   });
   let logs = [];
   let scrollQueued = false;
-  class LogWrapper {
-    constructor() {
-      this.element = document.createElement("div");
-      this.element.className = "log";
-      return this.element;
-    }
-  }
-  class LogText {
-    constructor(text, className, useHtml = false) {
-      this.element = document.createElement("span");
-      this.element.className = className;
-      if (useHtml) {
-        this.element.innerHTML = text;
-      } else {
-        this.element.innerText = text;
-      }
-      return this.element;
-    }
-  }
-  class FeedbackWrapper {
-    constructor() {
-      const feedbackLog = new LogWrapper();
-      window.saFeedbackRemove = () => {
-        localStorage.setItem("saDebuggerFeedbackRemove", "1");
-        feedbackLog.remove();
-      };
-      feedbackLog.append(
-        new LogText(
-          msg("feedback-log", {
-            logLink: `<a href="https://scratchaddons.com/feedback?version=1.18-debugger" class="sa-debugger-feedback" target="_blank">${safeMsg(
-              "feedback-log-link"
-            )}</a>`,
-          }) +
-            `<br><a href="javascript:window.saFeedbackRemove()" class="sa-debugger-feedback">${safeMsg(
-              "feedback-remove"
-            )}</a>`,
-          "",
-          true
-        )
-      );
-      return feedbackLog;
-    }
-  }
-  if (localStorage.getItem("saDebuggerFeedbackRemove") !== "1") consoleList.append(new FeedbackWrapper());
+  const createLogWrapper = (type) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "log";
+    wrapper.classList.add(type);
+    return wrapper;
+  };
+  const createLogText = (text) => {
+    const s = document.createElement("span");
+    s.innerText = text;
+    return s;
+  };
+
+  // Feedback
+  if (localStorage.getItem("saDebuggerFeedbackRemove") !== "1") {
+    const wrapper = createLogWrapper();
+    const s = document.createElement("span");
+    // ???
+    s.innerHTML = safeMsg("feedback-log", {
+      logLink: Object.assign(document.createElement("a"), {
+        href: "https://scratchaddons.com/feedback?version=1.18-debugger",
+        className: "sa-debugger-feedback",
+        target: "_blank",
+        textContent: msg("feedback-log-link")
+      }).innerHTML
+    });
+    wrapper.appendChild(s);
+    consoleList.append(wrapper);
+  };
 
   const addLog = (content, thread, type) => {
-    const wrapper = new LogWrapper();
+    const wrapper = createLogWrapper(type);
 
     const target = thread.target;
     const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
     const targetId = parentTarget.id;
-    wrapper.className = "log";
-    wrapper.classList.add(type);
     consoleList.append(wrapper);
     if (type !== "log") {
       const imageURL = addon.self.dir + (type === "error" ? "/error.svg" : "/warning.svg");
@@ -471,7 +453,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       type,
       content,
     });
-    wrapper.append(new LogText(content));
+    wrapper.append(createLogText(content));
 
     let link = document.createElement("a");
     link.textContent = target.isOriginal
