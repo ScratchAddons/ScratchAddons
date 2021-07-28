@@ -1,7 +1,12 @@
 {
   "name": "Customizable profile picture outline",
   "description": "Allows you to hide or change the outline around profile pictures in comments in 3.0-styled pages.",
-  "tags": ["community", "theme"],
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229"
+    }
+  ],
   "userstyles": [
     {
       "url": "hide_outline.css",
@@ -28,6 +33,10 @@
       }
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "injectAsStyleElt": true,
   "settings": [
     {
       "name": "Hide outline",
@@ -42,23 +51,15 @@
       "default": false
     },
     {
-      "name": "Outline color",
+      "name": "Outline colour",
       "id": "outline-color",
       "type": "color",
       "allowTransparency": true,
       "default": "#4d97ff40"
     }
   ],
-  "credits": [
-    {
-      "name": "CST1229",
-      "link": "https://github.com/CST1229"
-    }
-  ],
+  
+  "tags": ["community", "theme"],
   "versionAdded": "1.18.0",
-  "dynamicEnable": true,
-  "dynamicDisable": true,
-  "updateUserstylesOnSettingsChange": true,
-  "injectAsStyleElt": true,
   "enabledByDefault": false
 }
