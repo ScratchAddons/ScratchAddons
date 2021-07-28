@@ -13,6 +13,10 @@
     {
       "name": "_nix (Dark editor)",
       "link": "https://github.com/towerofnix"
+    },
+    {
+      "name": "GarboMuffin (TurboWarp Dark)",
+      "link": "https://github.com/GarboMuffin"
     }
   ],
   "customCssVariables": [
