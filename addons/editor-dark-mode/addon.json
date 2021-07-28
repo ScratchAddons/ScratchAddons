@@ -986,8 +986,8 @@
         "border": "#00000026",
         "textShadow": false,
         "dots": true,
-        "darkComments": false,
-        "darkScrollbars": false
+        "darkComments": true,
+        "darkScrollbars": true
       }
     },
     {
