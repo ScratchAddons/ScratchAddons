@@ -13,7 +13,7 @@ export default async function ({ addon, console, safeMsg: m }) {
     <img class="${addon.tab.scratchClass("action-menu_more-icon")} sa-better-img-uploader" draggable="false" src="${
     addon.self.dir + "/icon.svg"
   }" height="10", width="10">
-     <input accept=".svg, .png, .bmp, .jpg, .jpeg, .gif" class="${addon.tab.scratchClass(
+     <input accept=".svg, .png, .bmp, .jpg, .jpeg" class="${addon.tab.scratchClass(
        "action-menu_file-input"
      )}" multiple="" type="file">
   </button>
