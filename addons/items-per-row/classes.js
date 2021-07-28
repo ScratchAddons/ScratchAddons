@@ -20,7 +20,7 @@ export default async function ({ addon, console }) {
     setClasses("projects", addon.settings.get("projects"), { min: [6, 7], max: [4, 3] });
     setClasses("studios", addon.settings.get("studios"), { min: [6, 7], max: [3] });
     setClasses("users", addon.settings.get("users"), { min: [12, 15], max: [] });
-  }
+  };
   updateClasses();
   addon.settings.addEventListener("change", () => {
     updateClasses();
