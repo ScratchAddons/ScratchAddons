@@ -20,7 +20,7 @@
       "id": "comment_padding",
       "type": "integer",
       "default": 5,
-      "max": 15,
+      "max": 15
     }
   ],
   "userstyles": [
