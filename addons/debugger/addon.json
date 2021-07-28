@@ -27,14 +27,6 @@
       "matches": ["projects"]
     }
   ],
-  "settings": [
-    {
-      "id": "comments",
-      "name": "Comment Blocks",
-      "default": true,
-      "type": "boolean"
-    }
-  ],
   "tags": ["editor", "beta"],
   "enabledByDefault": false,
   "versionAdded": "1.16.0"
