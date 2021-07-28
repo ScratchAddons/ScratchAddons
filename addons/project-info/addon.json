@@ -1,6 +1,6 @@
 {
   "name": "Sprite and script count",
-  "description": "Shows the number of sprites and scripts a project has.",
+  "description": "Shows the number of sprites and scripts a project has next to the Remix button.",
   "tags": ["community", "projectPage"],
   "credits": [
     {
@@ -11,11 +11,11 @@
   "userscripts": [
     {
       "url": "projectstats.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     },
     {
       "url": "blockcount.js",
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["projects"],
       "settingMatch": {
         "id": "editorCount",
         "value": true
@@ -25,7 +25,7 @@
   "userstyles": [
     {
       "url": "userscript.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "settings": [

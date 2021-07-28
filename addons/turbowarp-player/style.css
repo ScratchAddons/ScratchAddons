@@ -1,0 +1,44 @@
+.preview .sa-tw-button {
+  padding: 0px 5px 0px 11px;
+  background: #ff4d4d;
+  margin-top: 0;
+  border-radius: 0.25rem;
+  height: 2.5rem;
+  font-size: 0.875rem;
+}
+.preview .sa-tw-button.scratch {
+  background: #f8aa36;
+}
+.preview .sa-tw-button:before {
+  background-image: url(icon.svg);
+  display: inline-block;
+  margin-top: -2px;
+  margin-right: 0.4375rem;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  width: 1.125rem;
+  height: 1.125rem;
+  vertical-align: middle;
+  content: "";
+}
+.preview .sa-tw-button.scratch:before {
+  background-image: url(https://scratch.mit.edu/favicon.ico);
+}
+
+.sa-tw-iframe {
+  overflow: hidden;
+  box-sizing: border-box;
+
+  /* Same styles as .project-description */
+  border: 1px solid rgba(77, 151, 255, 0.1);
+  border-radius: 8px;
+  background-color: rgba(77, 151, 255, 0.1);
+
+  /* Same styles as .guiPlayer */
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  width: 482px;
+  height: 406px;
+}

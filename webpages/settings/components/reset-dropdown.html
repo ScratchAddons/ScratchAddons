@@ -1,8 +1,7 @@
 <template>
   <div :class="{'setting-dropdown': true, open: isOpen}">
     <button type="button" class="large-button clear-button" :disabled="!addon._enabled" @click="toggle">
-      <span>{{ label }}</span>
-      <img src="../../images/icons/expand.svg" class="icon-type" />
+      <span>{{ label }}</span><img src="../../images/icons/expand.svg" class="icon-type" />
     </button>
     <ul>
       <li @click="resetToDefault">

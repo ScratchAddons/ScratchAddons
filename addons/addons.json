@@ -82,7 +82,10 @@
   "expanding-search-bar",
   "debugger",
   "disable-stage-drag-select",
-  "studio-followers",
+  "studio-followers", 
+  "default-project",
+  "turbowarp-player",
+  "ctrl-enter-post",
   "live-comments",
 
   "// NEW ADDONS ABOVE THIS ↑↑",

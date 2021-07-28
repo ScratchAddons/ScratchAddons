@@ -1,6 +1,6 @@
 {
   "name": "Thumbnails setter",
-  "description": "Adds a button to the editor to set the thumbnail of your project to any image (including gifs).",
+  "description": "Adds a button to the editor menu bar to set the thumbnail of your project to any image (including gifs).",
   "info": [
     {
       "type": "notice",
@@ -25,11 +25,11 @@
   ],
   "userscripts": [
     {
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["projects"],
       "url": "userscript.js"
     },
     {
-      "matches": ["https://scratch.mit.edu/projects/*"],
+      "matches": ["projects"],
       "url": "persistent-thumb.js",
       "settingMatch": {
         "id": "persistentThumb",
@@ -40,7 +40,7 @@
   "userstyles": [
     {
       "url": "userscript.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "dynamicEnable": true,
