@@ -1,6 +1,6 @@
 {
-  "name": "Customizable profile picture outline",
-  "description": "Allows you to hide or change the outline around profile pictures in comments in 3.0-styled pages.",
+  "name": "Customizable profile picture border",
+  "description": "Allows you to hide or change the outline around profile pictures in project and studio comments.",
   "credits": [
     {
       "name": "CST1229",
@@ -58,7 +58,6 @@
       "default": "#4d97ff40"
     }
   ],
-
   "tags": ["community", "theme"],
   "versionAdded": "1.18.0",
   "enabledByDefault": false
