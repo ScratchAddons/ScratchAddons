@@ -660,42 +660,22 @@
   "userscripts": [
     {
       "url": "bubbles.js",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ]
+      "matches": ["projects"]
     },
     {
       "url": "paper.js",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "experimental_editor.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ]
+      "matches": ["projects"]
     },
     {
       "url": "text-shadow.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "settingMatch": {
         "id": "textShadow",
         "value": true
@@ -703,12 +683,7 @@
     },
     {
       "url": "hide_dots.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "settingMatch": {
         "id": "dots",
         "value": false
@@ -716,12 +691,7 @@
     },
     {
       "url": "stage.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "settingMatch": {
         "id": "affectStage",
         "value": true
@@ -729,12 +699,7 @@
     },
     {
       "url": "dark_comments.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "settingMatch": {
         "id": "darkComments",
         "value": true
@@ -742,12 +707,7 @@
     },
     {
       "url": "scrollbar.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "settingMatch": {
         "id": "darkScrollbars",
         "value": true
@@ -798,13 +758,13 @@
       "default": "#202020"
     },
     {
-      "name": "Asset list background",
+      "name": "Costume/sound list background",
       "id": "selector2",
       "type": "color",
       "default": "#202020"
     },
     {
-      "name": "Selected sprite/asset background",
+      "name": "Selected sprite/costume/sound background",
       "id": "selectorSelection",
       "type": "color",
       "default": "#111111"
@@ -822,7 +782,7 @@
       "default": "#202020"
     },
     {
-      "name": "Workspace background",
+      "name": "Code area background",
       "id": "workspace",
       "type": "color",
       "default": "#151515"
