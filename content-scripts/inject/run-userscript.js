@@ -12,18 +12,17 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
       const msg = (key, placeholders) =>
         scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
       msg.locale = scratchAddons.l10n.locale;
-      const betterConsole = scratchAddons.console;
-      betterConsole.log(
-        `addons/${addonId}/${scriptPath}: ${scriptUrl}, runAtComplete: ${runAtComplete}`,
-        `${addonId} [core]`
+      scratchAddons.console.log(
+        { _consoleAddonId: `${addonId} [page]` },
+        `Running ${scriptUrl}, runAtComplete: ${runAtComplete}, enabledLate: ${enabledLate}`
       );
       const localConsole = {
-        log: (log) => betterConsole.log(log, addonId),
-        debug: (log) => betterConsole.debug(log, addonId),
-        error: (log) => betterConsole.error(log, addonId),
-        info: (log) => betterConsole.info(log, addonId),
-        warn: (log) => betterConsole.warn(log, addonId),
-        table: (log) => betterConsole.table(log, addonId),
+        log: (log) => scratchAddons.console.log({ _consoleAddonId: addonId }, log),
+        debug: (log) => scratchAddons.console.debug({ _consoleAddonId: addonId }, log),
+        error: (log) => scratchAddons.console.error({ _consoleAddonId: addonId }, log),
+        info: (log) => scratchAddons.console.info({ _consoleAddonId: addonId }, log),
+        warn: (log) => scratchAddons.console.warn({ _consoleAddonId: addonId }, log),
+        table: (log) => scratchAddons.console.table({ _consoleAddonId: addonId }, log),
       };
       module.default({
         addon: addonObj,

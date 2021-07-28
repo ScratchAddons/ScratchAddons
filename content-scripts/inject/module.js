@@ -12,35 +12,22 @@ scratchAddons.eventTargets = {
 scratchAddons.session = {};
 scratchAddons.console = {
   _createOutput(...args) {
-    const argLength = args.length;
-    const logContent = args.slice(0, argLength);
-    const addonId = argLength === 1 ? "[core]" : args[argLength - 1];
-    return [`%cSA%c${addonId}%c`, this._style.leftPrefix, this._style.rightPrefix, this._style.text, ...logContent];
+    const hasAddonId = typeof args[0] === "object" && args[0]._consoleAddonId;
+    const logAuthor = hasAddonId ? args[0]._consoleAddonId : "[page]";
+    const logContent = args.slice(hasAddonId ? 1 : 0, args.length);
+    return [`%cSA%c${logAuthor}%c`, this._style.leftPrefix, this._style.rightPrefix, this._style.text, ...logContent];
   },
   _style: {
+    // Remember to change these as well on cs.js
     leftPrefix: "background:  #ff7b26; color: white; border-radius: 0.5rem 0 0 0.5rem; padding: 0 0.5rem",
     rightPrefix:
       "background: #222; color: white; border-radius: 0 0.5rem 0.5rem 0; padding: 0 0.5rem; font-weight: bold",
     text: "",
   },
-  log(...args) {
-    return _realConsole.log(...this._createOutput(...args));
-  },
-  debug(...args) {
-    return _realConsole.debug(...this._createOutput(...args));
-  },
-  error(...args) {
-    return _realConsole.error(...this._createOutput(...args));
-  },
-  info(...args) {
-    return _realConsole.info(...this._createOutput(...args));
-  },
-  warn(...args) {
-    return _realConsole.warn(...this._createOutput(...args));
-  },
-  table(...args) {
-    return _realConsole.table(...args);
-  },
+  log: (...args) => _realConsole.log(...scratchAddons.console._createOutput(...args)),
+  warn: (...args) => _realConsole.warn(...scratchAddons.console._createOutput(...args)),
+  error: (...args) => _realConsole.error(...scratchAddons.console._createOutput(...args)),
+  table: (...args) => _realConsole.table(...args),
 };
 
 const pendingPromises = {};
