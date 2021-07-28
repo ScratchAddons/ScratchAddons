@@ -10,6 +10,38 @@ scratchAddons.eventTargets = {
   self: [],
 };
 scratchAddons.session = {};
+scratchAddons.console = {
+  _createOutput(...args) {
+    const argLength = args.length;
+    const logContent = args.slice(0, argLength);
+    const addonId = argLength === 1 ? "[core]" : args[argLength - 1];
+    return [`%cSA%c${addonId}%c`, this._style.leftPrefix, this._style.rightPrefix, this._style.text, ...logContent];
+  },
+  _style: {
+    leftPrefix: "background:  #ff7b26; color: white; border-radius: 0.5rem 0 0 0.5rem; padding: 0 0.5rem",
+    rightPrefix:
+      "background: #222; color: white; border-radius: 0 0.5rem 0.5rem 0; padding: 0 0.5rem; font-weight: bold",
+    text: "",
+  },
+  log(...args) {
+    return _realConsole.log(...this._createOutput(...args));
+  },
+  debug(...args) {
+    return _realConsole.debug(...this._createOutput(...args));
+  },
+  error(...args) {
+    return _realConsole.error(...this._createOutput(...args));
+  },
+  info(...args) {
+    return _realConsole.info(...this._createOutput(...args));
+  },
+  warn(...args) {
+    return _realConsole.warn(...this._createOutput(...args));
+  },
+  table(...args) {
+    return _realConsole.table(...args);
+  },
+};
 
 const pendingPromises = {};
 pendingPromises.msgCount = [];
