@@ -13,6 +13,10 @@
     {
       "name": "_nix (Dark editor)",
       "link": "https://github.com/towerofnix"
+    },
+    {
+      "name": "GarboMuffin (TurboWarp Dark)",
+      "link": "https://github.com/GarboMuffin"
     }
   ],
   "customCssVariables": [
@@ -956,6 +960,34 @@
         "fullscreen": "#282828",
         "stageHeader": "#333333",
         "border": "#444444",
+        "textShadow": false,
+        "dots": true,
+        "darkComments": true,
+        "darkScrollbars": true
+      }
+    },
+    {
+      "name": "TurboWarp Dark",
+      "id": "tw-dark",
+      "description": "A dark theme based on TurboWarp's dark mode.",
+      "values": {
+        "page": "#111111",
+        "primary": "#ff4d4d",
+        "highlightText": "#ff4d4d",
+        "menuBar": "#333333",
+        "activeTab": "#1e1e1e",
+        "tab": "#2e2e2e",
+        "selector": "#1e1e1e",
+        "selector2": "#2e2e2e",
+        "selectorSelection": "#111111",
+        "accent": "#111111",
+        "input": "#1e1e1e",
+        "workspace": "#1e1e1e",
+        "categoryMenu": "#111111",
+        "palette": "#111111",
+        "fullscreen": "#111111",
+        "stageHeader": "#111111",
+        "border": "#ffffff0d",
         "textShadow": false,
         "dots": true,
         "darkComments": true,
