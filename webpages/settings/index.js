@@ -22,7 +22,7 @@ let initialTheme;
 let initialThemePath;
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "light.css");
+lightThemeLink.setAttribute("href", "../styles/colors-light.css");
 lightThemeLink.setAttribute("data-below-vue-components", "");
 chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   if (globalTheme === true) {
@@ -634,7 +634,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   document.title = chrome.i18n.getMessage("settingsTitle");
   function resize() {
-    if (window.innerWidth < 1000) {
+    if (window.innerWidth < 1100) {
       vue.smallMode = true;
       vue.categoryOpen = false;
       vue.switchPath = "../../images/icons/switch.svg";
