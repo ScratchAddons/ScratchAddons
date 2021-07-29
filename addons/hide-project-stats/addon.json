@@ -40,5 +40,6 @@
       "type": "boolean"
     }
   ],
-  "tags": ["community", "projectPage"]
+  "tags": ["community", "projectPage"],
+  "versionAdded": "1.18.0"
 }
