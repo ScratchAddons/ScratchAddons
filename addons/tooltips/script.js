@@ -132,7 +132,7 @@ let tooltipContentFunctions = {
             infoWrapper.appendChild(titleText)
             wrapper.appendChild(imgWrapper)
             wrapper.appendChild(infoWrapper)
-            return wrapper
+            return { wrapper, data }
         },
 
         async user(msg, id) {
@@ -166,7 +166,7 @@ let tooltipContentFunctions = {
             infoWrapper.appendChild(usernameText)
             wrapper.appendChild(imgWrapper)
             wrapper.appendChild(infoWrapper)
-            return wrapper
+            return { wrapper, data }
         },
 
         async forumTopic(msg, id) {
@@ -258,10 +258,44 @@ let tooltipContentFunctions = {
     },
 
     extended: {
+        async project(msg, id) {
+            let { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
+
+            let infoExtendedWrapper = document.createElement("div")
+            infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
+            infoExtendedWrapper.textContent = data.description.replace(/^\s+|\s$/, "") || data.instructions.replace(/^\s+|\s$/, "")
+
+            wrapper.appendChild(infoExtendedWrapper)
+
+            return wrapper
+        },
+
+        async studio(msg, id) {
+            let { wrapper, data } = await tooltipContentFunctions._default.studio(msg, id)
+
+            let infoExtendedWrapper = document.createElement("div")
+            infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
+            infoExtendedWrapper.textContent = data.description.replace(/^\s+|\s$/, "")
+
+            wrapper.appendChild(infoExtendedWrapper)
+
+            return wrapper
+        },
+
+        async user(msg, id) {
+            let { wrapper, data } = await tooltipContentFunctions._default.user(msg, id)
+
+            let infoExtendedWrapper = document.createElement("div")
+            infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
+            infoExtendedWrapper.textContent = data.profile.bio.replace(/^\s+|\s$/, "")
+
+            wrapper.appendChild(infoExtendedWrapper)
+
+            return wrapper
+        },
+
         async forumTopic(msg, id) {
             let wrapper = await tooltipContentFunctions._default.forumTopic(msg, id)
-
-            console.log(wrapper)
 
             let postText = document.createElement("div")
             postText.className = "sa-tooltips-post"
@@ -273,7 +307,7 @@ let tooltipContentFunctions = {
             if (!data) return wrapper
             
             postText.textContent = data[0].content.bb.substr(0, 256)
-            wrapper.insertBefore(postText, wrapper.children[2])
+            wrapper.lastChild.insertBefore(postText, wrapper.lastChild.children[2])
 
             return wrapper
         },
@@ -328,6 +362,35 @@ let tooltipContentFunctions = {
             return wrapper
         },
 
+        async studio(msg, id) {
+            let { wrapper, data } = await tooltipContentFunctions._default.studio(msg, id)
+
+            let projectsText = document.createElement("div")
+            let commentsText = document.createElement("div")
+            let followersText = document.createElement("div")
+            let managersText = document.createElement("div")
+            let infoExtendedWrapper = document.createElement("div")
+
+            projectsText.className = "sa-tooltips-projects"
+            commentsText.className = "sa-tooltips-comments"
+            followersText.className = "sa-tooltips-followers"
+            managersText.className = "sa-tooltips-managers"
+            infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"
+
+            projectsText.textContent = data.stats.projects === 100 ? msg("info-projects-100") : msg("info-projects", { count: data.stats.projects })
+            commentsText.textContent = data.stats.comments === 100 ? msg("info-comments-100") : msg("info-comments", { count: data.stats.comments })
+            followersText.textContent = msg("info-followers", { count: data.stats.followers })
+            managersText.textContent = msg("info-managers", { count: data.stats.managers })
+
+            infoExtendedWrapper.appendChild(projectsText)
+            infoExtendedWrapper.appendChild(commentsText)
+            infoExtendedWrapper.appendChild(followersText)
+            infoExtendedWrapper.appendChild(managersText)
+            wrapper.appendChild(infoExtendedWrapper)
+
+            return wrapper
+        },
+
         async user(msg, id) {
             let { wrapper } = await tooltipContentFunctions._default.user(msg, id)
 
@@ -347,33 +410,31 @@ let tooltipContentFunctions = {
 
             infoExtendedWrapper.appendChild(originText)
 
-            if (data.statistics) {
+            if (!data.statistics) return wrapper
+            
+            let viewsText = document.createElement("div")
+            let lovesText = document.createElement("div")
+            let favoritesText = document.createElement("div")
+            let followersText = document.createElement("div")
+            let followingText = document.createElement("div")    
 
-                let viewsText = document.createElement("div")
-                let lovesText = document.createElement("div")
-                let favoritesText = document.createElement("div")
-                let followersText = document.createElement("div")
-                let followingText = document.createElement("div")    
+            viewsText.className = "sa-tooltips-views"
+            lovesText.className = "sa-tooltips-loves"
+            favoritesText.className = "sa-tooltips-favorites"
+            followersText.className = "sa-tooltips-followers"
+            followingText.className = "sa-tooltips-following"
+            
+            viewsText.textContent = msg("info-views", { count: data.statistics.views })
+            lovesText.textContent = msg("info-loves", { count: data.statistics.loves })
+            favoritesText.textContent = msg("info-favorites", { count: data.statistics.favorites })
+            followersText.textContent = msg("info-followers", { count: data.statistics.followers })
+            followingText.textContent = msg("info-following", { count: data.statistics.following })
 
-                viewsText.className = "sa-tooltips-views"
-                lovesText.className = "sa-tooltips-loves"
-                favoritesText.className = "sa-tooltips-favorites"
-                followersText.className = "sa-tooltips-followers"
-                followingText.className = "sa-tooltips-following"
-                
-                viewsText.textContent = msg("info-views", { count: data.statistics.views })
-                lovesText.textContent = msg("info-loves", { count: data.statistics.loves })
-                favoritesText.textContent = msg("info-favorites", { count: data.statistics.favorites })
-                followersText.textContent = msg("info-followers", { count: data.statistics.followers })
-                followingText.textContent = msg("info-following", { count: data.statistics.following })
-
-                infoExtendedWrapper.appendChild(viewsText)
-                infoExtendedWrapper.appendChild(lovesText)
-                infoExtendedWrapper.appendChild(favoritesText)
-                infoExtendedWrapper.appendChild(followersText)
-                infoExtendedWrapper.appendChild(followingText)    
-
-            }
+            infoExtendedWrapper.appendChild(viewsText)
+            infoExtendedWrapper.appendChild(lovesText)
+            infoExtendedWrapper.appendChild(favoritesText)
+            infoExtendedWrapper.appendChild(followersText)
+            infoExtendedWrapper.appendChild(followingText)    
 
             wrapper.appendChild(infoExtendedWrapper)
 
@@ -430,7 +491,7 @@ let tippyGlobalOptions = {
     // }
 }
 
-export default async function ({ addon, msg }) {
+export default async function ({ addon, console, msg }) {
 
     let theme = addon.settings.get("theme")
 
@@ -460,22 +521,17 @@ export default async function ({ addon, msg }) {
                 instance._isFetching = true
 
                 let themeKey
-                if (tooltipContentFunctions[theme][type]) themeKey = theme
+                if (tooltipContentFunctions[theme] && tooltipContentFunctions[theme][type]) themeKey = theme
                 else themeKey = "_default"
-
-                console.log(themeKey)
 
                 await tooltipContentFunctions[themeKey][type](msg, id)
                     .then(content => {
-                        console.log(content)
-                        console.log(content.wrapper)
                         if (content.wrapper) instance.setContent(content.wrapper)
                         else instance.setContent(content)        
                     })
                     .catch(error => {
                         instance._error = error
                         instance.setContent(error)
-                        console.error(error)
                     })
 
             }

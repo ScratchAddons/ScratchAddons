@@ -14,7 +14,7 @@
 
 .sa-tooltips-project-author,
 .sa-tooltips-project-title {
-  width: calc(250px - 3em);
+  width: calc(200px - 3em);
 }
 
 .sa-tooltips-project-img,
@@ -130,16 +130,22 @@
 .sa-tooltips-project .sa-tooltips-info-extended-wrapper,
 .sa-tooltips-studio .sa-tooltips-info-extended-wrapper,
 .sa-tooltips-user .sa-tooltips-info-extended-wrapper {
-  width: 250px;
+  width: 200px;
   font-size: .8462em;
   font-weight: normal;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-auto-flow: column;
   margin-bottom: auto;
-  white-space: pre-line;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 6;
+}
+
+.sa-tooltips-user .sa-tooltips-info-extended-wrapper {
+  width: 200px;
+  font-size: .8462em;
+  font-weight: normal;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: auto;
 }
 
 .sa-tooltips-user .sa-tooltips-origin {

@@ -42,6 +42,14 @@
         "id": "theme",
         "value": "extended"
       }
+    },
+    {
+      "url": "extended-statistics.css",
+      "matches": "*",
+      "settingMatch": {
+        "id": "theme",
+        "value": "extendedStatistics"
+      }
     }
   ],
   "settings": [
