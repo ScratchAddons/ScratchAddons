@@ -1,16 +1,32 @@
 body:not(.sa-body-editor)::-webkit-scrollbar,
 body:not(.sa-body-editor) ::-webkit-scrollbar {
-  background: #333;
+  width: 16px;
+  height: 16px;
+  background: transparent;
+}
+body:not(.sa-body-editor)::-webkit-scrollbar {
+  background: #202020;
 }
 body:not(.sa-body-editor)::-webkit-scrollbar-thumb,
 body:not(.sa-body-editor) ::-webkit-scrollbar-thumb {
-  background: #606060;
+  width: 8px;
+  height: 8px;
+  background-color: rgba(96, 96, 96, 0.8);
+  border: 4px solid transparent;
+  background-clip: padding-box;
+  border-radius: 8px;
 }
 body:not(.sa-body-editor)::-webkit-scrollbar-thumb:hover,
 body:not(.sa-body-editor) ::-webkit-scrollbar-thumb:hover {
-  background: #808080;
+  background-color: rgba(128, 128, 128, 0.8);
 }
 body:not(.sa-body-editor)::-webkit-scrollbar-corner,
 body:not(.sa-body-editor) ::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+/* Override scratchr2 scrollbar style */
+.viewport::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track {
+  box-shadow: none;
 }

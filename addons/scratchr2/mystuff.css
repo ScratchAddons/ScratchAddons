@@ -87,6 +87,9 @@
   position: static;
   margin-top: 20px;
 }
+#new_studio button[type="submit"] {
+  position: relative;
+}
 .box .box-content {
   position: static;
 }
