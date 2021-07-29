@@ -75,6 +75,7 @@ function updateSettings(addon, newStyle) {
     if (textMode === "white" || textMode === "black") {
       stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground {
         fill: var(--editorTheme3-${settingName}Color);
+        ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
       }
       .scratchCategoryId-${categories[prop].alt ? categories[prop].alt : prop} > .scratchCategoryItemBubble {
         background-color: var(--editorTheme3-${settingName}Color) !important;
@@ -96,16 +97,19 @@ function updateSettings(addon, newStyle) {
       if (prop === "custom") {
         stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
           fill: var(--editorTheme3-${prop}Color);
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
         }`;
       }
       if (prop === "sensing") {
         stylesheet += `path.blocklyBlockBackground[fill="#5CB1D6"] {
           fill: var(--editorTheme3-${prop}Color);
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
         }`;
       }
       if (prop === "events") {
         stylesheet += `path.blocklyBlockBackground[fill="#FFBF00"] {
           fill: var(--editorTheme3-${prop}Color);
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
         }
         .blocklyDropDownDiv[style*="rgb(255, 191, 0)"] {
           background-color: var(--editorTheme3-${prop}Color) !important;
@@ -115,6 +119,7 @@ function updateSettings(addon, newStyle) {
       if (prop === "Pen") {
         stylesheet += `path.blocklyBlockBackground[fill="#0FBD8C"] {
           fill: var(--editorTheme3-${prop}Color);
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
         }
         .blocklyDropDownDiv[style*="rgb(15, 189, 140)"] {
           background-color: var(--editorTheme3-${prop}Color) !important;
@@ -125,11 +130,14 @@ function updateSettings(addon, newStyle) {
       let background = { colorOnWhite: "#fff", colorOnBlack: "#282828" }[textMode];
       let inputShadow = { colorOnWhite: "#00000026", colorOnBlack: "#fff3" }[textMode];
       let secondary = multiply(addon.settings.get(prop + "-color"), { a: 0.15 });
+      let menuText = { colorOnWhite: "#575e75", colorOnBlack: "#fff" }[textMode];
       stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground,
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > rect,
       g[data-category="${prop}"] > g[data-argument-type="variable"] > rect {
         fill: ${background};
         stroke: var(--editorTheme3-${settingName}Color);
+        --sa-block-text-color: ${menuText};
+        --sa-block-secondary-color: ${secondary};
       }
       g[data-category="${prop}"] > .blocklyText {
         fill: var(--editorTheme3-${settingName}Color);
@@ -174,6 +182,8 @@ function updateSettings(addon, newStyle) {
         stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
+          --sa-block-text-color: ${menuText};
+          --sa-block-secondary-color: ${secondary};
         }
         path.blocklyBlockBackground[fill="#FF6680"] ~ .blocklyText,
         g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > .blocklyText,
@@ -198,6 +208,8 @@ function updateSettings(addon, newStyle) {
         g[data-argument-type="dropdown"] > rect[fill="#2E8EB8"] {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
+          --sa-block-text-color: ${menuText};
+          --sa-block-secondary-color: ${secondary};
         }
         g[data-argument-type="dropdown"] > path[fill="#47A8D1"],
         g[data-argument-type="dropdown"] > path[fill="#2E8EB8"] {
@@ -227,6 +239,8 @@ function updateSettings(addon, newStyle) {
         g[data-argument-type="dropdown"] > rect[fill="#CC9900"] {
           fill: ${background};
           stroke: var(--editorTheme3-${settingName}Color);
+          --sa-block-text-color: ${menuText};
+          --sa-block-secondary-color: ${secondary};
         }
         path.blocklyBlockBackground[fill="#FFBF00"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
@@ -250,6 +264,8 @@ function updateSettings(addon, newStyle) {
         stylesheet += `g[data-category] /* specificity */ > path.blocklyBlockBackground[fill="#0FBD8C"] {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
+          --sa-block-text-color: ${menuText};
+          --sa-block-secondary-color: ${secondary};
         }
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
