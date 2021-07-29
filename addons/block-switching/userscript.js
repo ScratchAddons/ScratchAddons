@@ -678,7 +678,15 @@ export default async function ({ addon, global, console, msg }) {
           const isNoop = opcodeData.opcode === "noop";
           if (isNoop && !addon.settings.get("noop")) return;
 
-          items.push({
+          const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
+          const insertBeforeIndex =
+            makeSpaceItemIndex !== -1
+              ? // If "make space" button exists, add own items before it
+                makeSpaceItemIndex
+              : // If there's no such button, insert at end
+                items.length;
+
+          items.splice(insertBeforeIndex, 0, {
             enabled: true,
             text: msg(isNoop ? block.type : opcodeData.opcode),
             callback: menuCallbackFactory(block, opcodeData),

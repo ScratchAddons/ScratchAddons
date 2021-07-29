@@ -46,6 +46,9 @@ export default async function ({ addon, global, console, msg }) {
   addon.tab.createBlockContextMenu(
     (items, block) => {
       let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
+
+      // No editor-devtools buttons on workspace context menu
+
       items.push(
         {
           enabled: !!svgchild?.childNodes?.length,
@@ -70,7 +73,17 @@ export default async function ({ addon, global, console, msg }) {
   );
   addon.tab.createBlockContextMenu(
     (items, block) => {
-      items.push(
+      const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
+      const insertBeforeIndex =
+        makeSpaceItemIndex !== -1
+          ? // If "make space" button exists, add own items before it
+            makeSpaceItemIndex
+          : // If there's no such button, insert at end
+            items.length;
+
+      items.splice(
+        insertBeforeIndex,
+        0,
         {
           enabled: true,
           text: msg("export_selected_to_SVG"),

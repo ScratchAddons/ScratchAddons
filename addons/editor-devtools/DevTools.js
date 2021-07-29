@@ -114,6 +114,7 @@ export default class DevTools {
           {
             enabled: true,
             text: this.m("make-space"),
+            _isDevtoolsFirstItem: true,
             callback: () => {
               this.doCleanUp(block);
             },

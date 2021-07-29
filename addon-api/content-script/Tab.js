@@ -8,7 +8,7 @@ import * as blocks from "./blocks.js";
 const DATA_PNG = "data:image/png;base64,";
 
 const contextMenuCallbacks = [];
-const CONTEXT_MENU_ORDER = ["block-switching", "editor-devtools", "blocks2image"];
+const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image"];
 let createdAnyBlockContextMenus = false;
 
 /**
