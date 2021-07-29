@@ -7,6 +7,10 @@ import * as blocks from "./blocks.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
+const contextMenuCallbacks = [];
+const CONTEXT_MENU_ORDER = ["block-switching", "editor-devtools", "blocks2image"];
+let createdAnyBlockContextMenus = false;
+
 /**
  * APIs specific to userscripts.
  * @extends Listenable
@@ -26,7 +30,6 @@ export default class Tab extends Listenable {
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
-    this._blockContextMenu = [];
   }
   addBlock(...a) {
     blocks.init(this);
@@ -431,6 +434,43 @@ export default class Tab extends Listenable {
    * @param {object} conditions - Show context menu when one of these conditions meet.
    */
   createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, comments = false } = {}) {
-    this._blockContextMenu.push({ callback, workspace, blocks, flyout, comments });
+    contextMenuCallbacks.push({ addonId: this._addonId, callback, workspace, blocks, flyout, comments });
+
+    // Sort to ensure userscript run order doesn't change callback order
+    contextMenuCallbacks.sort((b, a) => CONTEXT_MENU_ORDER.indexOf(b.addonId) - CONTEXT_MENU_ORDER.indexOf(a.addonId));
+
+    if (createdAnyBlockContextMenus) return;
+    createdAnyBlockContextMenus = true;
+
+    this.traps.getBlockly().then((blockly) => {
+      const oldShow = blockly.ContextMenu.show;
+      blockly.ContextMenu.show = function (event, items, rtl) {
+        const gesture = blockly.mainWorkspace.currentGesture_;
+        const block = gesture.targetBlock_;
+
+        for (const { callback, workspace, blocks, flyout, comments } of contextMenuCallbacks) {
+          let injectMenu =
+            // Workspace
+            (workspace && !block && !gesture.flyout_ && !gesture.startBubble_) ||
+            // Block in workspace
+            (blocks && block && !gesture.flyout_) ||
+            // Block in flyout
+            (flyout && gesture.flyout_) ||
+            // Comments
+            (comments && gesture.startBubble_);
+          if (injectMenu) items = callback(items, block);
+        }
+
+        oldShow.call(this, event, items, rtl);
+
+        items.forEach((item, i) => {
+          if (item.separator) {
+            const itemElt = document.querySelector(".blocklyContextMenu").children[i];
+            itemElt.style.paddingTop = "2px";
+            itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+          }
+        });
+      };
+    });
   }
 }
