@@ -442,7 +442,6 @@ export default class DevTools {
       let workspace = this.utils.getWorkspace();
       let map = workspace.getVariableMap();
       let vars = map.getVariablesOfType("");
-
       let unusedLocals = [];
 
       for (const row of vars) {
@@ -468,6 +467,37 @@ export default class DevTools {
         }
         if (confirm(message)) {
           for (const orphan of unusedLocals) {
+            workspace.deleteVariableById(orphan.getId());
+          }
+        }
+      }
+
+      // Locate unused local lists...
+      let lists = map.getVariablesOfType("list");
+      let unusedLists = [];
+
+      for (const row of lists) {
+        if (row.isLocal) {
+          let usages = map.getVariableUsesById(row.getId());
+          if (!usages || usages.length === 0) {
+            unusedLists.push(row);
+          }
+        }
+      }
+      if (unusedLists.length > 0 && !dataId) {
+        const unusedCount = unusedLists.length;
+        let message = this.msg("unused-list", {
+          count: unusedCount,
+        });
+        for (let i = 0; i < unusedLists.length; i++) {
+          let orphan = unusedLists[i];
+          if (i > 0) {
+            message += ", ";
+          }
+          message += orphan.name;
+        }
+        if (confirm(message)) {
+          for (const orphan of unusedLists) {
             workspace.deleteVariableById(orphan.getId());
           }
         }

@@ -30,6 +30,7 @@
   "editor-devtools/youtube": "YouTube tutorials",
   "editor-devtools/orphaned": "{count, plural, one {Developer tools: Delete 1 orphaned reporter block?} other {Developer tools: Delete # orphaned reporter blocks?} }",
   "editor-devtools/unused-var": "{count, plural, one {Developer tools: Delete 1 unused local variable? Here it is:\n} other {Developer tools: Delete # unused local variables? Here they are:\n} }",
+  "editor-devtools/unused-list": "{count, plural, one {Developer tools: Delete 1 unused local list? Here it is:\n} other {Developer tools: Delete # unused local lists? Here they are:\n} }",
   "editor-devtools/var-not-exist": "That variable does not exist...",
   "editor-devtools/find": "Find",
   "editor-devtools/find-placeholder": "Find (Ctrl+F)",
