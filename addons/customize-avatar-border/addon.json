@@ -45,7 +45,7 @@
       "default": false
     },
     {
-      "name": "Fill transparency",
+      "name": "Fill transparent profile pictures",
       "id": "fill-transparent",
       "type": "boolean",
       "default": false
