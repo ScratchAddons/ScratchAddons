@@ -61,6 +61,10 @@
         {
           "id": "extended",
           "name": "Extended"
+        },
+        {
+          "id": "extendedStatistics",
+          "name": "Extended (statistics)"
         }
       ],
       "default": "scratch3"
