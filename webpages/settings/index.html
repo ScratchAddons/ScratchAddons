@@ -165,10 +165,10 @@
 
       <!-- This is a the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
-        <div class="search-box" :class="{smallMode: smallMode === true}">
+        <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
           <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
-          <button v-cloak v-else class="search-clear-button" @click="clearSearch()"></button>
+          <button v-else class="search-clear-button" @click="clearSearch()"></button>
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>
