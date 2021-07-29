@@ -1,0 +1,44 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "Hide project stats",
+  "description": "Hides project stats",
+  "credits": [
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Hide \"love\" count",
+      "default": true,
+      "id": "loves",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide \"favorite\" count",
+      "default": true,
+      "id": "favorites",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide \"remix\" count",
+      "default": true,
+      "id": "remixes",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide \"view\" count",
+      "default": true,
+      "id": "views",
+      "type": "boolean"
+    }
+  ],
+  "tags": ["community", "projectPage"]
+}
