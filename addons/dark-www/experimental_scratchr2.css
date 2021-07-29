@@ -139,6 +139,15 @@ h4 {
 #featured-project-modal .project.thumb {
   background: #282828;
 }
+#email-resend-box {
+  border: none;
+}
+#email-resend-box .email-resend-subsection {
+  color: white;
+}
+#email-resend-box .modal-footer {
+  background: #282828;
+}
 #page-404 .box-header h1 {
   color: #fff;
 }
