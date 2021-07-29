@@ -358,15 +358,14 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   if (localStorage.getItem("saDebuggerFeedbackRemove") !== "1") {
     const wrapper = createLogWrapper("log");
     const s = document.createElement("span");
-    s.innerHTML = safeMsg("feedback-log", { logLink: "$0" }).replace(
-      "$0",
-      Object.assign(document.createElement("a"), {
+    s.innerHTML = safeMsg("feedback-log", {
+      logLink: Object.assign(document.createElement("a"), {
         href: "https://scratchaddons.com/feedback?version=1.18-debugger",
         className: "sa-debugger-feedback",
         target: "_blank",
         textContent: msg("feedback-log-link"),
-      }).outerHTML
-    );
+      }).outerHTML,
+    });
     s.appendChild(document.createElement("br"));
     s.appendChild(
       Object.assign(document.createElement("a"), {
