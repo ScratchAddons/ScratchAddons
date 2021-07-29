@@ -257,13 +257,23 @@ let tooltipContentFunctions = {
         },
     },
 
+    scratch2: {
+        async project(msg, id) {
+            let { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
+
+            wrapper.querySelector(".sa-tooltips-project-author").textContent = msg("info-by", {author: data.author.username})
+
+            return wrapper
+        }
+    },
+
     extended: {
         async project(msg, id) {
             let { wrapper, data } = await tooltipContentFunctions._default.project(msg, id)
 
             let infoExtendedWrapper = document.createElement("div")
             infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
-            infoExtendedWrapper.textContent = data.description.replace(/^\s+|\s$/, "") || data.instructions.replace(/^\s+|\s$/, "")
+            infoExtendedWrapper.textContent = data.description.replace(/^\n+|\n$/, "") || data.instructions.replace(/^\n+|\n$/, "")
 
             wrapper.appendChild(infoExtendedWrapper)
 
@@ -275,7 +285,7 @@ let tooltipContentFunctions = {
 
             let infoExtendedWrapper = document.createElement("div")
             infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
-            infoExtendedWrapper.textContent = data.description.replace(/^\s+|\s$/, "")
+            infoExtendedWrapper.textContent = data.description.replace(/^\n+|\n$/, "")
 
             wrapper.appendChild(infoExtendedWrapper)
 
@@ -287,7 +297,7 @@ let tooltipContentFunctions = {
 
             let infoExtendedWrapper = document.createElement("div")
             infoExtendedWrapper.className = "sa-tooltips-info-extended-wrapper"    
-            infoExtendedWrapper.textContent = data.profile.bio.replace(/^\s+|\s$/, "")
+            infoExtendedWrapper.textContent = data.profile.bio.replace(/^\n+|\n$/, "")
 
             wrapper.appendChild(infoExtendedWrapper)
 

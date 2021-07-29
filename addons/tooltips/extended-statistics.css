@@ -134,9 +134,17 @@
   font-size: .8462em;
   font-weight: normal;
   display: grid;
+  margin-bottom: auto;
+}
+
+.sa-tooltips-project .sa-tooltips-info-extended-wrapper,
+.sa-tooltips-studio .sa-tooltips-info-extended-wrapper {
   grid-template-rows: 1fr 1fr;
   grid-auto-flow: column;
-  margin-bottom: auto;
+}
+
+.sa-tooltips-user .sa-tooltips-info-extended-wrapper {
+  grid-template-columns: 1fr 1fr;
 }
 
 .sa-tooltips-user .sa-tooltips-info-extended-wrapper {

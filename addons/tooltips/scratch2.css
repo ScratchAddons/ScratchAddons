@@ -74,9 +74,10 @@
   line-height: 1.2em;
 }
 
-.sa-tooltips-wrapper .sa-tooltips-title,
+.sa-tooltips-project-title,
+.sa-tooltips-studio-title,
 .sa-tooltips-user-name {
-	font-weight: bold;
+  font-weight: 800;
 }
 
 .sa-tooltips-project-author,
