@@ -5,16 +5,24 @@
     </button>
     <ul>
       <li @click="resetToDefault">
-        <span class="reset-preview"><span :style="{backgroundColor: setting.default}"></span></span>
+        <span v-if="setting.type === 'color'" class="color-preview"
+          ><span :style="{backgroundColor: setting.default}"></span
+        ></span>
         <span>{{ defaultLabel }}</span>
+        <span v-if="setting.type !== 'color'" class="text-preview">{{ setting.default }}</span>
       </li>
       <template v-for="preset in addon.presets">
         <li
-          v-if="preset.values.hasOwnProperty(setting.id) && preset.values[setting.id].toLowerCase() != setting.default.toLowerCase()"
+          v-if="preset.values.hasOwnProperty(setting.id) && setting.type === 'color'
+            ? preset.values[setting.id].toLowerCase() != setting.default.toLowerCase()
+            : preset.values[this.setting.id] !== setting.default"
           @click="resetToPreset(preset)"
         >
-          <span class="reset-preview"><span :style="{backgroundColor: preset.values[setting.id]}"></span></span>
+          <span v-if="setting.type === 'color'" class="color-preview"
+            ><span :style="{backgroundColor: preset.values[setting.id]}"></span
+          ></span>
           <span>{{ preset.name }}</span>
+          <span v-if="setting.type !== 'color'" class="text-preview">{{ preset.values[setting.id] }}</span>
         </li>
       </template>
     </ul>
