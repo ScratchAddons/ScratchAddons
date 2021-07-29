@@ -14,7 +14,7 @@ export default async function ({ addon, global, console }) {
     if (last) li.classList.add("last");
 
     const a = document.createElement("a");
-    a.href = url.startsWith("javascript") ? "" : url;
+    a.href = ["http:", "https:"].includes(new URL(url, location.href).protocol) ? url : "";
     li.append(a);
 
     const span = document.createElement("span");
