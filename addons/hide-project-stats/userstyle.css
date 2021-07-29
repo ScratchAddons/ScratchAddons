@@ -1,7 +1,7 @@
 .project-remixes {
-    display: var(--hideProjectStats-hideRemixCount)
+  display: var(--hideProjectStats-hideRemixCount);
 }
 
 .project-views {
-    display: var(--hideProjectStats-hideViewCount)
+  display: var(--hideProjectStats-hideViewCount);
 }
