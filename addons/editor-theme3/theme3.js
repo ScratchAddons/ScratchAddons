@@ -139,7 +139,8 @@ function updateSettings(addon, newStyle) {
         --sa-block-text-color: ${menuText};
         --sa-block-secondary-color: ${secondary};
       }
-      g[data-category="${prop}"] > .blocklyText {
+      g[data-category="${prop}"] > .blocklyText,
+      g[data-category="${prop}"] > g:not([data-category]) > .blocklyText /* variable and list reporters */ {
         fill: var(--editorTheme3-${settingName}Color);
       }
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > .blocklyDropdownText,
