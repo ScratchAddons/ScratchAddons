@@ -66,9 +66,6 @@ const cs = {
     this._url = newUrl;
     csUrlObserver.dispatchEvent(new CustomEvent("change", { detail: { newUrl } }));
   },
-  requestMsgCount() {
-    chrome.runtime.sendMessage("getMsgCount");
-  },
   copyImage(dataURL) {
     // Firefox only
     return new Promise((resolve, reject) => {
@@ -127,6 +124,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request === "getInitialUrl") {
     sendResponse(pseudoUrl || initialUrl);
+  } else if (request === "getLocationHref") {
+    sendResponse(location.href);
   }
 });
 
@@ -209,7 +208,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for customCssVariables
   const getColor = (addonId, obj) => {
-    if (typeof obj === "string" || obj === undefined) return obj;
+    if (typeof obj !== "object") return obj;
     let hex;
     switch (obj.type) {
       case "settingValue":
@@ -232,6 +231,12 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         let opaqueHex = getColor(addonId, obj.opaqueSource);
         let transparentHex = getColor(addonId, obj.transparentSource);
         return textColorLib.alphaBlend(opaqueHex, transparentHex);
+      }
+      case "makeHsv": {
+        let hSource = getColor(addonId, obj.h);
+        let sSource = getColor(addonId, obj.s);
+        let vSource = getColor(addonId, obj.v);
+        return textColorLib.makeHsv(hSource, sSource, vSource);
       }
       case "recolorFilter": {
         hex = getColor(addonId, obj.source);
@@ -264,19 +269,21 @@ function waitForDocumentHead() {
   }
 }
 
-async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
-  const isStudio = /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/.test(location.pathname);
-  if (isStudio && !pseudoUrl) {
-    await waitForDocumentHead();
-    if (document.querySelector("meta[name='format-detection']")) {
-      // scratch-www studio
-      pseudoUrl = location.href.replace("/studios/", "/studios_www/");
-      receivedResponse = false;
-      chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
-      return;
-    }
+function getL10NURLs() {
+  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+  const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
+  if (langCode === "pt") {
+    urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
   }
+  if (langCode.includes("-")) {
+    urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
+  }
+  const enJSON = chrome.runtime.getURL("addons-l10n/en");
+  if (!urls.includes(enJSON)) urls.push(enJSON);
+  return urls;
+}
 
+async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscripts, addonsWithUserstyles }) {
   // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   const disabledDynamicAddons = [];
@@ -293,7 +300,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
   }
 
   _page_.globalState = globalState;
-  _page_.l10njson = l10njson;
+  _page_.l10njson = getL10NURLs();
   _page_.addonsWithUserscripts = addonsWithUserscripts;
   _page_.dataReady = true;
 
@@ -305,12 +312,15 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
     } else if (request.dynamicAddonEnabled) {
-      const { scripts, userstyles, cssVariables, addonId, injectAsStyleElt, index } = request.dynamicAddonEnabled;
+      const { scripts, userstyles, cssVariables, addonId, injectAsStyleElt, index, dynamicEnable, dynamicDisable } =
+        request.dynamicAddonEnabled;
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
       if (everLoadedAddons.find((addon) => addon.addonId === addonId)) {
+        if (!dynamicDisable) return;
         // Addon was reenabled
         _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
       } else {
+        if (!dynamicEnable) return;
         // Addon was not injected in page yet
         _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
       }
@@ -337,12 +347,12 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
       // Try looking for the "userscriptMatches" function.
       removeAddonStyles(addonId);
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
-    } else if (request.setMsgCount) {
-      _page_.setMsgCount(request.setMsgCount);
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
       sendResponse({ userscripts, userstyles, disabledDynamicAddons });
+    } else if (request === "refetchSession") {
+      _page_.refetchSession();
     }
   });
 }
@@ -396,12 +406,12 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=hQVAamRCaAU",
+    href: "https://www.youtube.com/watch?v=4OluKLESoVU",
     target: "_blank",
   });
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.png"),
+    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.jpg"),
     style: "height: 100px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
@@ -432,7 +442,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_16", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_17", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -451,7 +461,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_16"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_17"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -529,7 +539,6 @@ if (document.readyState !== "loading") {
 
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
 const isStudio = pathArr[0] === "studios";
-const r2IsStudioComments = isStudio && pathArr[2] === "comments";
 const isProject = pathArr[0] === "projects";
 
 if (isProfile || isStudio || isProject) {
@@ -556,8 +565,7 @@ if (isProfile || isStudio || isProject) {
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
   window.addEventListener("load", () => {
-    const isScratchWww = Boolean(document.querySelector("meta[name='format-detection']"));
-    if (isProfile || (r2IsStudioComments && !isScratchWww)) {
+    if (isProfile) {
       window.addEventListener(
         "click",
         (e) => {
@@ -601,7 +609,7 @@ if (isProfile || isStudio || isProject) {
         },
         { capture: true }
       );
-    } else if (isProject || (isStudio && isScratchWww)) {
+    } else if (isProject || isStudio) {
       // For projects, we want to be careful not to hurt performance.
       // Let's capture the event in the comments container instead
       // of the whole window. There will be a new comment container

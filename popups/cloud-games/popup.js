@@ -1,37 +1,29 @@
-import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js";
-
-(async () => {
-  const l10n = new WebsiteLocalizationProvider();
-
-  //theme
-  const lightThemeLink = document.createElement("link");
-  lightThemeLink.setAttribute("rel", "stylesheet");
-  lightThemeLink.setAttribute("href", "light.css");
-
-  chrome.storage.sync.get(["globalTheme"], function (r) {
-    let rr = false; //true = light, false = dark
-    if (r.globalTheme) rr = r.globalTheme;
-    if (rr) {
-      document.head.appendChild(lightThemeLink);
-    }
-  });
-
-  await l10n.loadByAddonId("cloud-games");
-
+export default async ({ addon, msg, safeMsg }) => {
+  // TODO: support setting this via settings page
+  const url = "https://scratch.mit.edu/studios/539952/";
+  const studioId = url.match(/\d+/)?.[0];
+  const shouldFailEarly = !studioId || isNaN(studioId);
   window.vue = new Vue({
     el: "body",
     data: {
       projects: [],
       loaded: false,
-      messages: { noUsersMsg: l10n.get("cloud-games/no-users") },
+      messages: { noUsersMsg: msg("no-users") },
       projectsChecked: 0,
+      error: shouldFailEarly ? "general-error" : null,
     },
     computed: {
       projectsSorted() {
-        return this.projects.sort((b, a) => a.amt - b.amt);
+        return this.projects.sort((b, a) => {
+          if (a.amt !== b.amt) return a.amt - b.amt;
+          return a.timestamp - b.timestamp;
+        });
       },
       loadingMsg() {
-        return l10n.get("cloud-games/loading", { done: this.projectsChecked, amount: this.projects.length || "?" });
+        return msg("loading", { done: this.projectsChecked, amount: this.projects.length || "?" });
+      },
+      errorMessage() {
+        return this.error && msg(this.error);
       },
     },
     methods: {
@@ -48,6 +40,7 @@ import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js"
               if (dateNow - varChange.timestamp > 60000) break;
               usersSet.add(varChange.user);
             }
+            projectObject.timestamp = json[0]?.timestamp || 0;
             projectObject.amt = usersSet.size;
             projectObject.users = Array.from(usersSet);
             this.projectsChecked++;
@@ -59,11 +52,40 @@ import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js"
           }, i * 125);
         });
       },
+      settingsHTML() {
+        const link = document.createElement("a");
+        link.target = "_blank";
+        link.href = chrome.runtime.getURL("/webpages/settings/index.html#addon-cloud-games");
+        link.textContent = msg("addon-settings");
+        return safeMsg("change-studio", {
+          settings: link.outerHTML,
+        });
+      },
     },
     async created() {
-      document.title = l10n.get("cloud-games/popup-title");
-      const res = await fetch("https://api.scratch.mit.edu/studios/539952/projects/?limit=40");
+      document.title = msg("popup-title");
+      if (shouldFailEarly) return;
+      let res;
+      try {
+        res = await fetch(`https://api.scratch.mit.edu/studios/${studioId}/projects/?limit=40`);
+      } catch (e) {
+        console.warn("Error when fetching studios: ", e);
+        this.error = "server-error";
+        return;
+      }
+      if (res.status >= 500) {
+        this.error = "server-error";
+        return;
+      }
+      if (res.status >= 400) {
+        this.error = "general-error";
+        return;
+      }
       const projects = await res.json();
+      if (projects.length === 0) {
+        this.error = "no-projects";
+        return;
+      }
       // TODO: add currently opened game to projects array. Sort function should put it on top
       this.projects = projects
         .map((project) => ({ title: project.title, id: project.id, amt: 0, users: [], extended: true }))
@@ -71,4 +93,4 @@ import WebsiteLocalizationProvider from "../../libraries/common/website-l10n.js"
       await Promise.all(this.projects.map((project, i) => this.setCloudDataForProject(project, i)));
     },
   });
-})();
+};

@@ -2,20 +2,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
 });
 
-function getL10NURLs() {
-  const langCode = scratchAddons.globalState.auth.scratchLang.toLowerCase();
-  const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
-  if (langCode === "pt") {
-    urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
-  }
-  if (langCode.includes("-")) {
-    urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
-  }
-  const enJSON = chrome.runtime.getURL("addons-l10n/en");
-  if (!urls.includes(enJSON)) urls.push(enJSON);
-  return urls;
-}
-
 scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) => {
   const { addonId, manifest } = detail;
   chrome.tabs.query({}, (tabs) =>
@@ -36,6 +22,8 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
                       addonId,
                       injectAsStyleElt: !!manifest.injectAsStyleElt,
                       index: scratchAddons.manifests.findIndex((addon) => addon.addonId === addonId),
+                      dynamicEnable: Boolean(manifest.dynamicEnable),
+                      dynamicDisable: Boolean(manifest.dynamicDisable),
                     },
                   },
                   { frameId: 0 }
@@ -131,7 +119,6 @@ async function getContentScriptInfo(url) {
   const data = {
     url,
     httpStatusCode: null, // Set by webRequest onResponseStarted listener
-    l10njson: getL10NURLs(),
     globalState: {},
     addonsWithUserscripts: [],
     addonsWithUserstyles: [],
@@ -258,7 +245,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     }
   } else {
-    // Wait until manifests, addon.auth and addon.settings are ready
+    // Wait until manifests and addon.settings are ready
     scratchAddons.localEvents.addEventListener(
       "ready",
       async () => {
@@ -275,7 +262,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.tabs.query({}, (tabs) =>
   tabs.forEach((tab) => {
     if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-      chrome.tabs.sendMessage(tab.id, "backgroundListenerReady");
+      chrome.tabs.sendMessage(tab.id, "backgroundListenerReady", () => void chrome.runtime.lastError);
     }
   })
 );
@@ -286,14 +273,13 @@ const WELL_KNOWN_PATTERNS = {
   projects: /^\/projects\/(?:editor|\d+(?:\/(?:fullscreen|editor))?)\/?$/,
   projectEmbeds: /^\/projects\/\d+\/embed\/?$/,
   studios: /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/,
-  studioComments: /^\/studios\/\d+\/comments\/?$/,
   profiles: /^\/users\/[\w-]+\/?$/,
   topics: /^\/discuss\/topic\/\d+\/?$/,
   newPostScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add)\/?$/,
   editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
   forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
   scratchWWWNoProject:
-    /^\/(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|dmca|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|sec|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost)\/?$/,
+    /^\/(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|dmca|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|sec|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?)\/?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {

@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import getDirection from "../rtl-list.js";
 import loadVueComponent from "../../libraries/common/load-vue-components.js";
-import Fuse from "../../libraries/thirdparty/fuse.basic.esm.min.js";
+import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
@@ -22,7 +22,7 @@ let initialTheme;
 let initialThemePath;
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "light.css");
+lightThemeLink.setAttribute("href", "../styles/colors-light.css");
 lightThemeLink.setAttribute("data-below-vue-components", "");
 chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   if (globalTheme === true) {
@@ -203,7 +203,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           // Enabled addons at top
           else return b.item._enabled - a.item._enabled;
         });
-        const results = fuseSearch.map((result) => this.addonListObjs.find((obj) => obj.manifest === result.item));
+        const results = fuseSearch.map((result) =>
+          this.addonListObjs.find((obj) => obj.manifest._addonId === result.item._addonId)
+        );
         for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
         return this.addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
       },
@@ -440,10 +442,12 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
     vue.addonSettings = addonSettings;
+    const cleanManifests = [];
     let iframeData;
     if (isIframe) {
       iframeData = await getRunningAddons(manifests, addonsEnabled);
     }
+    const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
     for (const { manifest, addonId } of manifests) {
       manifest._categories = [];
       manifest._categories[0] = manifest.tags.includes("popup")
@@ -529,14 +533,16 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       for (const groupId of manifest._groups) {
         vue.addonGroups.find((g) => g.id === groupId)?.addonIds.push(manifest._addonId);
       }
+      cleanManifests.push(deepClone(manifest));
+    }
 
+    // Manifest objects will now be owned by Vue
+    for (const { manifest } of manifests) {
       Vue.set(vue.manifestsById, manifest._addonId, manifest);
     }
     vue.manifests = manifests.map(({ manifest }) => manifest);
-    fuse = new Fuse(
-      manifests.map(({ manifest }) => manifest),
-      fuseOptions
-    );
+
+    fuse = new Fuse(cleanManifests, fuseOptions);
 
     const checkTag = (tagOrTags, manifestA, manifestB) => {
       const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
@@ -628,7 +634,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   document.title = chrome.i18n.getMessage("settingsTitle");
   function resize() {
-    if (window.innerWidth < 1000) {
+    if (window.innerWidth < 1100) {
       vue.smallMode = true;
       vue.categoryOpen = false;
       vue.switchPath = "../../images/icons/switch.svg";

@@ -1,10 +1,9 @@
 export default async function ({ addon }) {
   function countProjects(url, page, delta, callback) {
-    const request = new XMLHttpRequest();
-    request.open("GET", url + 40 * page);
-    request.onreadystatechange = function () {
-      if (request.readyState === 4) {
-        let pageLen = JSON.parse(request.response).length;
+    fetch(url + 40 * page)
+      .then((resp) => resp.json())
+      .then((resp) => {
+        let pageLen = resp.length;
         if (pageLen === 40) {
           countProjects(url, page + delta, delta, callback);
         } else if (pageLen > 0) {
@@ -17,21 +16,13 @@ export default async function ({ addon }) {
           delta /= 10;
           countProjects(url, page + delta, delta, callback);
         }
-      }
-    };
-    request.send();
+      });
   }
   const apiUrlPrefix =
     "https://api.scratch.mit.edu/studios/" + /[0-9]+/.exec(location.pathname)[0] + "/projects/?limit=40&offset=";
   const initialDelta = 100;
-  if (addon.tab.clientVersion === "scratch-www") {
-    const countElement = await addon.tab.waitForElement(".studio-tab-nav > a:first-child .tab-count");
-    countProjects(apiUrlPrefix, 0, initialDelta, function (count) {
-      countElement.innerText = `(${count})`;
-    });
-  } else {
-    countProjects(apiUrlPrefix, 0, initialDelta, function (count) {
-      document.querySelector("[data-count=projects]").innerText = count;
-    });
-  }
+  const countElement = await addon.tab.waitForElement(".studio-tab-nav > a:first-child .tab-count");
+  countProjects(apiUrlPrefix, 0, initialDelta, function (count) {
+    countElement.innerText = `(${count})`;
+  });
 }

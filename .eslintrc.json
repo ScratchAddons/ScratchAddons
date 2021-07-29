@@ -59,6 +59,7 @@
     {
       "files": [
         "addon-api/background/*.js",
+        "addon-api/popup/*.js",
         "addons/*/background.js",
         "background/**/*.js",
         "content-scripts/*.js",
