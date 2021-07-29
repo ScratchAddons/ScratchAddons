@@ -29,5 +29,5 @@ body, /* scratch-www */
 }
 
 :root {
-	--footer-hover-height: 300px; /* How high the hovered footer is (for donor text fix) */
+  --footer-hover-height: 300px; /* How high the hovered footer is (for donor text fix) */
 }
