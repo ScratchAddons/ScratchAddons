@@ -39,9 +39,8 @@
 }
 
 .sa-tw-iframe {
-  width: calc(100% + 8px);
+  width: 100%;
   height: calc(100% + 10px);
-  margin-left: -4px;
   margin-top: -3px;
   border: none;
 }
