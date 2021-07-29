@@ -80,7 +80,7 @@ function updateSettings(addon, newStyle) {
       .scratchCategoryId-${categories[prop].alt ? categories[prop].alt : prop} > .scratchCategoryItemBubble {
         background-color: var(--editorTheme3-${settingName}Color) !important;
       }
-      .blocklyDropDownDiv[data-category="${prop}"] {
+      .blocklyDropDownDiv[data-category="${prop}"]:not([style*="rgb(255, 255, 255)"]) {
         background-color: var(--editorTheme3-${settingName}Color) !important;
         border-color: #0003 !important;
       }
@@ -156,7 +156,7 @@ function updateSettings(addon, newStyle) {
       .scratchCategoryId-${categories[prop].alt ? categories[prop].alt : prop} > .scratchCategoryItemBubble {
         background-color: var(--editorTheme3-${settingName}Color) !important;
       }
-      .blocklyDropDownDiv[data-category="${prop}"] {
+      .blocklyDropDownDiv[data-category="${prop}"]:not([style*="rgb(255, 255, 255)"]) {
         background-color: ${background} !important;
         border-color: var(--editorTheme3-${settingName}Color) !important;
       }

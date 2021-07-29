@@ -266,8 +266,9 @@ img[src="/static/assets/7bd7487b704797cb5ab3cb441486ea70.svg"],
   stroke: var(--editorDarkMode-input);
 }
 .blocklyDropDownDiv[style*="background-color: rgb(255, 255, 255)"] {
-  /* scratch-blocks color picker */
+  /* scratch-blocks color pickers and result bubbles */
   background-color: var(--editorDarkMode-input) !important;
+  color: var(--editorDarkMode-input-text);
 }
 .scratchEyedropper img,
 .sa-onion-settings .sa-onion-image {
