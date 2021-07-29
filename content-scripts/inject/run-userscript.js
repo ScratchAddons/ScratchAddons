@@ -27,7 +27,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
       module.default({
         addon: addonObj,
         global: globalObj,
-        console: localConsole,
+        console: {...console, ...localConsole},
         msg,
         safeMsg: (key, placeholders) =>
           scratchAddons.l10n.escaped(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders),
