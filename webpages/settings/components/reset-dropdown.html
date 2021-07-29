@@ -5,7 +5,9 @@
     </button>
     <ul>
       <li @click="resetToDefault">
-        <span v-if="setting.type === 'color'" class="color-preview"><span :style="{backgroundColor: setting.default}"></span></span>
+        <span v-if="setting.type === 'color'" class="color-preview"
+          ><span :style="{backgroundColor: setting.default}"></span
+        ></span>
         <span>{{ defaultLabel }}</span>
         <span v-if="setting.type !== 'color'" class="text-preview">{{ setting.default }}</span>
       </li>
@@ -16,7 +18,9 @@
             : preset.values[this.setting.id] !== setting.default"
           @click="resetToPreset(preset)"
         >
-          <span v-if="setting.type === 'color'" class="color-preview"><span :style="{backgroundColor: preset.values[setting.id]}"></span></span>
+          <span v-if="setting.type === 'color'" class="color-preview"
+            ><span :style="{backgroundColor: preset.values[setting.id]}"></span
+          ></span>
           <span>{{ preset.name }}</span>
           <span v-if="setting.type !== 'color'" class="text-preview">{{ preset.values[setting.id] }}</span>
         </li>

@@ -25,8 +25,8 @@ export default async function ({ template }) {
       showResetDropdown() {
         return (
           this.addon.presets &&
-          this.addon.presets.some(
-            (preset) => preset.values.hasOwnProperty(this.setting.id) && this.setting.type === "color"
+          this.addon.presets.some((preset) =>
+            preset.values.hasOwnProperty(this.setting.id) && this.setting.type === "color"
               ? preset.values[this.setting.id].toLowerCase() !== this.setting.default.toLowerCase()
               : preset.values[this.setting.id] !== this.setting.default
           )
