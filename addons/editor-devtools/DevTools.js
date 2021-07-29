@@ -87,29 +87,6 @@ export default class DevTools {
     );
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
-        if (block.getCategory() === "data" || block.getCategory() === "data-lists") {
-          this.selVarID = block.getVars()[0];
-          items.push({
-            enabled: true,
-            text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
-            _isDevtoolsFirstItem: true,
-            callback: () => {
-              let wksp = this.utils.getWorkspace();
-              let v = wksp.getVariableById(this.selVarID);
-              let varName = window.prompt(this.msg("replace", { name: v.name }));
-              if (varName) {
-                this.doReplaceVariable(this.selVarID, varName, v.type);
-              }
-            },
-            separator: true,
-          });
-        }
-        return items;
-      },
-      { blocks: true, flyout: true }
-    );
-    this.addon.tab.createBlockContextMenu(
-      (items, block) => {
         items.push(
           {
             enabled: true,
@@ -163,6 +140,28 @@ export default class DevTools {
         return items;
       },
       { blocks: true }
+    );
+    this.addon.tab.createBlockContextMenu(
+      (items, block) => {
+        if (block.getCategory() === "data" || block.getCategory() === "data-lists") {
+          this.selVarID = block.getVars()[0];
+          items.push({
+            enabled: true,
+            text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
+            callback: () => {
+              let wksp = this.utils.getWorkspace();
+              let v = wksp.getVariableById(this.selVarID);
+              let varName = window.prompt(this.msg("replace", { name: v.name }));
+              if (varName) {
+                this.doReplaceVariable(this.selVarID, varName, v.type);
+              }
+            },
+            separator: true,
+          });
+        }
+        return items;
+      },
+      { blocks: true, flyout: true }
     );
   }
 

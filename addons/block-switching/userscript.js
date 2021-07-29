@@ -678,7 +678,6 @@ export default async function ({ addon, global, console, msg }) {
           const isNoop = opcodeData.opcode === "noop";
           if (isNoop && !addon.settings.get("noop")) return;
 
-          // makeSpaceItemIndex = either "swap variables in sprite" or "make space"
           const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
           const insertBeforeIndex =
             makeSpaceItemIndex !== -1
