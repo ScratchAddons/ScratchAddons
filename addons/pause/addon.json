@@ -15,13 +15,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects", "projectEmbeds"]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects", "projectEmbeds"]
     }
   ],
   "tags": ["editor", "projectPlayer", "recommended"],
