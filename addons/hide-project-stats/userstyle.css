@@ -1,0 +1,7 @@
+.project-remixes {
+    display: var(--hideProjectStats-hideRemixCount)
+}
+
+.project-views {
+    display: var(--hideProjectStats-hideViewCount)
+}

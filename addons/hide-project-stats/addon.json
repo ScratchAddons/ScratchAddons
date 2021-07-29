@@ -14,6 +14,39 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "customCssVariables": [
+    {
+      "name": "hideRemixCount",
+      "value": {
+        "settingId": "remixes",
+        "type": "ternary",
+        "true": "none",
+        "false": "block",
+        "source": {
+          "type": "settingValue",
+          "settingId": "remixes"
+        }
+      }
+    },
+    {
+      "name": "hideViewCount",
+      "value": {
+        "type": "ternary",
+        "true": "none",
+        "false": "block",
+        "source": {
+          "type": "settingValue",
+          "settingId": "views"
+        }
+      }
+    }
+  ],
   "settings": [
     {
       "name": "Hide \"love\" count",
@@ -41,5 +74,6 @@
     }
   ],
   "tags": ["community", "projectPage"],
-  "versionAdded": "1.18.0"
+  "versionAdded": "1.18.0",
+  "enabledByDefault": false
 }
