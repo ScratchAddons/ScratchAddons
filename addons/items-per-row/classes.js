@@ -25,6 +25,6 @@ export default async function ({ addon, console }) {
   addon.settings.addEventListener("change", () => {
     updateClasses();
     // Handle scratchr2's lazy image loading
-    if (addon.tab.clientVersion === "scratchr2") window.dispatchEvent(new CustomEvent("scroll"));
+    if (addon.tab.clientVersion === "scratchr2") window.dispatchEvent(new Event("scroll"));
   });
 }
