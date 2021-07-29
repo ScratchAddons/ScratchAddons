@@ -73,6 +73,7 @@ export default async function ({ addon, global, console, msg }) {
   );
   addon.tab.createBlockContextMenu(
     (items, block) => {
+      // makeSpaceItemIndex = either "swap variables in sprite" or "make space"
       const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
       const insertBeforeIndex =
         makeSpaceItemIndex !== -1

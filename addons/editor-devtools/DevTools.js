@@ -18,7 +18,6 @@ export default class DevTools {
     this.utils = new Utils(addon);
     this.domHelpers = new DomHelpers(addon);
     this.multi = new Multi(this.utils);
-    // this.showBroadcastSingleton = new ShowBroadcast(addon);
 
     this._helpHTML = helpHTML;
     this.find = null;
@@ -93,6 +92,7 @@ export default class DevTools {
           items.push({
             enabled: true,
             text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
+            _isDevtoolsFirstItem: true,
             callback: () => {
               let wksp = this.utils.getWorkspace();
               let v = wksp.getVariableById(this.selVarID);
@@ -101,7 +101,7 @@ export default class DevTools {
                 this.doReplaceVariable(this.selVarID, varName, v.type);
               }
             },
-            separator: false,
+            separator: true,
           });
         }
         return items;

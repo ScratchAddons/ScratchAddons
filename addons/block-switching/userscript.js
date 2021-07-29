@@ -678,6 +678,7 @@ export default async function ({ addon, global, console, msg }) {
           const isNoop = opcodeData.opcode === "noop";
           if (isNoop && !addon.settings.get("noop")) return;
 
+          // makeSpaceItemIndex = either "swap variables in sprite" or "make space"
           const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
           const insertBeforeIndex =
             makeSpaceItemIndex !== -1
@@ -694,8 +695,12 @@ export default async function ({ addon, global, console, msg }) {
           });
         });
         if (block.type == "data_variable" && block.category_ == "data") {
+          // Add top border to first variable (if it exists)
           const delBlockIndex = items.findIndex((item) => item.text === Blockly.Msg.DELETE_BLOCK);
-          items[delBlockIndex + 1].separator = addon.settings.get("border");
+          // firstVariableItem might be undefined, a variable to switch to,
+          // or an item added by editor-devtools (or any addon before this one)
+          const firstVariableItem = items[delBlockIndex + 1];
+          if (firstVariableItem && addon.settings.get("border")) firstVariableItem.separator = true;
         }
       }
       return items;
