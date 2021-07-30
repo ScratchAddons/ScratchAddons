@@ -88,6 +88,7 @@ function updateSettings(addon, newStyle) {
   for (var prop of Object.keys(categories)) {
     var settingName = categories[prop].var ? categories[prop].var : prop;
     if (textMode === "white" || textMode === "black") {
+      let tertiary = multiply(addon.settings.get(prop + "-color"), { r: 0.8, g: 0.8, b: 0.8 });
       stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground {
         fill: var(--editorTheme3-${settingName}Color);
         ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
@@ -108,6 +109,10 @@ function updateSettings(addon, newStyle) {
       #s3devIDD > li.${prop} {
         background-color: var(--editorTheme3-${settingName}Color);
       }
+      #s3devIDD > li.${prop}:hover,
+      #s3devIDD > li.${prop}.sel {
+        background-color: ${tertiary};
+      }
       .console-variable[data-category="${prop}"] {
         background-color: var(--editorTheme3-${settingName}Color) !important;
       }
@@ -116,6 +121,13 @@ function updateSettings(addon, newStyle) {
         stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
           fill: var(--editorTheme3-${prop}Color);
           ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
+        }
+        #s3devIDD > li.null {
+          background-color: var(--editorTheme3-${settingName}Color);
+        }
+        #s3devIDD > li.null:hover,
+        #s3devIDD > li.null.sel {
+          background-color: ${tertiary};
         }`;
       }
       if (prop === "sensing") {
@@ -142,6 +154,13 @@ function updateSettings(addon, newStyle) {
         .blocklyDropDownDiv[style*="rgb(15, 189, 140)"] {
           background-color: var(--editorTheme3-${prop}Color) !important;
           border-color: #0003 !important;
+        }
+        #s3devIDD > li.extension {
+          background-color: var(--editorTheme3-${settingName}Color);
+        }
+        #s3devIDD > li.extension:hover,
+        #s3devIDD > li.extension.sel {
+          background-color: ${tertiary};
         }`;
       }
     } else {
@@ -195,11 +214,12 @@ function updateSettings(addon, newStyle) {
         box-shadow: 0 0 0 4px ${inputShadow} !important;
       }
       #s3devIDD > li.${prop} {
-        background-color: ${background};
+        background-color: ${secondary};
         color: var(--editorTheme3-${settingName}Color);
       }
-      #s3devIDD > li.${prop}:not(.boolean) {
-        border: 1px solid var(--editorTheme3-${settingName}Color);
+      #s3devIDD > li.${prop}:hover,
+      #s3devIDD > li.${prop}.sel {
+        background-color: ${secondaryActive};
       }`;
       if (prop === "custom") {
         stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
@@ -223,6 +243,14 @@ function updateSettings(addon, newStyle) {
         }
         .blocklyEditableText > rect[fill="#FF3355"] {
           fill: ${secondary};
+        }
+        #s3devIDD > li.null {
+          background-color: ${secondary};
+          color: var(--editorTheme3-${settingName}Color);
+        }
+        #s3devIDD > li.null:hover,
+        #s3devIDD > li.null.sel {
+          background-color: ${secondaryActive};
         }`;
       }
       if (prop === "sensing") {
@@ -310,11 +338,12 @@ function updateSettings(addon, newStyle) {
           stroke: var(--editorTheme3-${prop}Color);
         }
         #s3devIDD > li.extension {
-          background-color: ${background};
+          background-color: ${secondary};
           color: var(--editorTheme3-${settingName}Color);
         }
-        #s3devIDD > li.extension:not(.boolean) {
-          border: 1px solid var(--editorTheme3-${settingName}Color);
+        #s3devIDD > li.extension:hover,
+        #s3devIDD > li.extension.sel {
+          background-color: ${secondaryActive};
         }`;
       }
     }

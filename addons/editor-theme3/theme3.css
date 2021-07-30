@@ -24,10 +24,6 @@ g[data-argument-type*="text"] > path,
   border-color: #0003 !important;
 }
 
-#s3devDD > li.extension {
-  background-color: var(--editorTheme3-PenColor);
-}
-
 .fieldTextInput {
   border-color: #0003 !important;
 }
