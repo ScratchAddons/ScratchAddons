@@ -464,7 +464,7 @@ const showBanner = () => {
     chrome.runtime.getManifest().version
   }`;
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
-    href: `https://scratchaddons.com/${localeSlash}changelog/${utm}`,
+    href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });

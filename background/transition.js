@@ -20,5 +20,5 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
 });
 if (chrome.runtime.getManifest().version_name.includes("-prerelease") === false) {
-  chrome.runtime.setUninstallURL(`https://scratchaddons.com/${localeSlash}farewell/${utm}`);
+  chrome.runtime.setUninstallURL(`https://scratchaddons.com/${localeSlash}farewell?${utm}`);
 }

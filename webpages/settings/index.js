@@ -192,7 +192,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           return {
             contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
             feedback: `https://scratchaddons.com/${localeSlash}feedback/?version=${versionName}&${utm}`,
-            changelog: `https://scratchaddons.com/${localeSlash}changelog/${utm}`,
+            changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
         })(),
       };
