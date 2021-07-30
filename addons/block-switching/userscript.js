@@ -1,7 +1,7 @@
 import blockToDom from "./blockToDom.js";
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.traps.getBlockly();
+  const blockly = await addon.tab.traps.getBlockly();
 
   const blockSwitches = {};
 
@@ -669,7 +669,6 @@ export default async function ({ addon, global, console, msg }) {
     }, 0);
   };
 
-  const Blockly = await addon.tab.traps.getBlockly();
   addon.tab.createBlockContextMenu(
     (items, block) => {
       if (!addon.self.disabled) {
@@ -695,7 +694,7 @@ export default async function ({ addon, global, console, msg }) {
         });
         if (block.type == "data_variable" && block.category_ == "data") {
           // Add top border to first variable (if it exists)
-          const delBlockIndex = items.findIndex((item) => item.text === Blockly.Msg.DELETE_BLOCK);
+          const delBlockIndex = items.findIndex((item) => item.text === blockly.Msg.DELETE_BLOCK);
           // firstVariableItem might be undefined, a variable to switch to,
           // or an item added by editor-devtools (or any addon before this one)
           const firstVariableItem = items[delBlockIndex + 1];

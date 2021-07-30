@@ -43,25 +43,25 @@ export default class DevTools {
     }
   }
   async addContextMenus() {
-    const Blockly = await this.addon.tab.traps.getBlockly();
-    const oldCleanUpFunc = Blockly.WorkspaceSvg.prototype.cleanUp;
+    const blockly = await this.addon.tab.traps.getBlockly();
+    const oldCleanUpFunc = blockly.WorkspaceSvg.prototype.cleanUp;
     const self = this;
-    Blockly.WorkspaceSvg.prototype.cleanUp = function () {
+    blockly.WorkspaceSvg.prototype.cleanUp = function () {
       if (self.addon.settings.get("enableCleanUpPlus")) {
         self.doCleanUp();
       } else {
         oldCleanUpFunc.call(this);
       }
     };
-    if (this.addon.settings.get("enableCleanUpPlus")) Blockly.Msg.CLEAN_UP = this.m("clean-plus");
+    if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
     this.addon.settings.addEventListener("change", () => {
-      if (this.addon.settings.get("enableCleanUpPlus")) Blockly.Msg.CLEAN_UP = this.m("clean-plus");
+      if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
     });
 
     this.addon.tab.createBlockContextMenu(
       (items, block) => {
         items.push({
-          enabled: Blockly.clipboardXml_,
+          enabled: blockly.clipboardXml_,
           text: this.m("paste"),
           callback: () => {
             let wksp = this.utils.getWorkspace();
