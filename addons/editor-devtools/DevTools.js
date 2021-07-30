@@ -64,6 +64,7 @@ export default class DevTools {
           enabled: blockly.clipboardXml_,
           text: this.m("paste"),
           separator: true,
+          _isDevtoolsFirstItem: true,
           callback: () => {
             let wksp = this.utils.getWorkspace();
 

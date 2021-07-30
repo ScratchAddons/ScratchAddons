@@ -47,9 +47,17 @@ export default async function ({ addon, global, console, msg }) {
     (items, block) => {
       let svgchild = document.querySelector("svg.blocklySvg g.blocklyBlockCanvas");
 
-      // No editor-devtools buttons on workspace context menu
+      const pasteItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
+      const insertBeforeIndex =
+        pasteItemIndex !== -1
+          ? // If "paste" button exists, add own items before it
+            pasteItemIndex
+          : // If there's no such button, insert at end
+            items.length;
 
-      items.push(
+      items.splice(
+        insertBeforeIndex,
+        0,
         {
           enabled: !!svgchild?.childNodes?.length,
           text: msg("export_all_to_SVG"),
