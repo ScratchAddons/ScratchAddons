@@ -1,6 +1,6 @@
 {
   "name": "Save blocks as image",
-  "description": "Right click the editor workspace to export blocks as SVG/PNG images.",
+  "description": "Right click the code area to export blocks as SVG/PNG images.",
   "tags": ["editor", "codeEditor"],
   "credits": [
     {
@@ -11,7 +11,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "versionAdded": "1.13.0",

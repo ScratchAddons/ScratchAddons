@@ -13,6 +13,10 @@
     {
       "name": "_nix (Dark editor)",
       "link": "https://github.com/towerofnix"
+    },
+    {
+      "name": "GarboMuffin (TurboWarp Dark)",
+      "link": "https://github.com/GarboMuffin"
     }
   ],
   "customCssVariables": [
@@ -660,41 +664,23 @@
   "userscripts": [
     {
       "url": "bubbles.js",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ]
+      "matches": ["projects"]
     },
     {
       "url": "paper.js",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "experimental_editor.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ]
+      "matches": ["projects"]
     },
     {
       "url": "text-shadow.css",
       "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
+        "projects"
       ],
       "if": {
         "settings": { "textShadow": true }
@@ -703,10 +689,7 @@
     {
       "url": "hide_dots.css",
       "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
+        "projects"
       ],
       "if": {
         "settings": { "dots": false }
@@ -715,10 +698,7 @@
     {
       "url": "stage.css",
       "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
+        "projects"
       ],
       "if": {
         "settings": { "affectStage": true }
@@ -727,10 +707,7 @@
     {
       "url": "dark_comments.css",
       "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
+        "projects"
       ],
       "if": {
         "settings": { "darkComments": true }
@@ -738,12 +715,7 @@
     },
     {
       "url": "scrollbar.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "if": {
         "settings": { "darkScrollbars": true }
       }
@@ -793,13 +765,13 @@
       "default": "#202020"
     },
     {
-      "name": "Asset list background",
+      "name": "Costume/sound list background",
       "id": "selector2",
       "type": "color",
       "default": "#202020"
     },
     {
-      "name": "Selected sprite/asset background",
+      "name": "Selected sprite/costume/sound background",
       "id": "selectorSelection",
       "type": "color",
       "default": "#111111"
@@ -817,7 +789,7 @@
       "default": "#202020"
     },
     {
-      "name": "Workspace background",
+      "name": "Code area background",
       "id": "workspace",
       "type": "color",
       "default": "#151515"
@@ -991,6 +963,34 @@
         "fullscreen": "#282828",
         "stageHeader": "#333333",
         "border": "#444444",
+        "textShadow": false,
+        "dots": true,
+        "darkComments": true,
+        "darkScrollbars": true
+      }
+    },
+    {
+      "name": "TurboWarp Dark",
+      "id": "tw-dark",
+      "description": "A dark theme based on TurboWarp's dark mode.",
+      "values": {
+        "page": "#111111",
+        "primary": "#ff4d4d",
+        "highlightText": "#ff4d4d",
+        "menuBar": "#333333",
+        "activeTab": "#1e1e1e",
+        "tab": "#2e2e2e",
+        "selector": "#1e1e1e",
+        "selector2": "#2e2e2e",
+        "selectorSelection": "#111111",
+        "accent": "#111111",
+        "input": "#1e1e1e",
+        "workspace": "#1e1e1e",
+        "categoryMenu": "#111111",
+        "palette": "#111111",
+        "fullscreen": "#111111",
+        "stageHeader": "#111111",
+        "border": "#ffffff0d",
         "textShadow": false,
         "dots": true,
         "darkComments": true,

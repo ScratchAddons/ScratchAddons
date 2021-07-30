@@ -83,6 +83,8 @@
   "debugger",
   "disable-stage-drag-select",
   "studio-followers",
+  "default-project",
+  "turbowarp-player",
   "ctrl-enter-post",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
@@ -96,5 +98,6 @@
   "// For website:",
   "scratchr2",
   "dark-www",
-  "old-studio-layout"
+  "old-studio-layout",
+  "customize-avatar-border"
 ]

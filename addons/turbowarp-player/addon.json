@@ -1,0 +1,54 @@
+{
+  "name": "TurboWarp button",
+  "description": "Adds a button on project pages to play the project in TurboWarp.org, next to the Remix button.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "\"Replace player\" mode changes the Scratch player to a TurboWarp embed, which doesn't support Scratch editor addons nor seeing inside projects.",
+      "id": "addonsWontWork"
+    },
+    {
+      "type": "notice",
+      "text": "TurboWarp has separate cloud data servers. \"Replace player\" mode will send your Scratch username to TurboWarp.org for use in cloud data.",
+      "id": "cloudData"
+    }
+  ],
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Button behavior",
+      "id": "action",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "link",
+          "name": "Open new tab"
+        },
+        {
+          "id": "player",
+          "name": "Replace player"
+        }
+      ],
+      "default": "link"
+    }
+  ],
+  "versionAdded": "1.18.0",
+  "tags": ["community", "projectPage"]
+}

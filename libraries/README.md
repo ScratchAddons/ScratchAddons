@@ -11,6 +11,6 @@ Third-party libraries included are:
 - [color-picker-web-component 1.3.7](https://unpkg.com/color-picker-web-component@1.3.7/dist/color-picker-esm.min.js) (MIT)
 - [comlink 4.3.1](https://unpkg.com/comlink@4.3.1/dist/umd/comlink.js) (Apache-2.0)
 - [Sora](https://fonts.google.com/specimen/Sora) (OFL)
-- [Fuse](https://unpkg.com/fuse.js@6.4.6/dist/fuse.basic.esm.min.js) (Apache-2.0)
+- [Fuse.js 6.4.6](https://unpkg.com/fuse.js@6.4.6/dist/fuse.esm.min.js) (Apache-2.0)
 
 Note that these libraries are either from official release websites or from unpkg (which distributes the content uploaded to NPM as-is).
