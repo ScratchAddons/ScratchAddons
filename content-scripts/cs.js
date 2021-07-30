@@ -357,7 +357,7 @@ function forumWarning(key) {
     const uiLanguage = (
       `; ${document.cookie}`.split("; scratchlanguage=").pop().split(";").shift() || navigator.language
     ).toLowerCase();
-    const localeSlash = uiLanguage.startsWith("en-") ? "" : `${uiLanguage.split("-")[0]}/`;
+    const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
     const utm = `utm_source=extension&utm_medium=forumwarning&utm_campaign=v${chrome.runtime.getManifest().version}`;
     reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?version=${
       chrome.runtime.getManifest().version
@@ -459,7 +459,7 @@ const showBanner = () => {
   const uiLanguage = (
     `; ${document.cookie}`.split("; scratchlanguage=").pop().split(";").shift() || navigator.language
   ).toLowerCase();
-  const localeSlash = uiLanguage.startsWith("en-") ? "" : `${uiLanguage.split("-")[0]}/`;
+  const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
   const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${
     chrome.runtime.getManifest().version
   }`;

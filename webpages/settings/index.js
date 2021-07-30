@@ -185,7 +185,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         addonListObjs: [],
         sidebarUrls: (() => {
           const uiLanguage = chrome.i18n.getUILanguage();
-          const localeSlash = uiLanguage.startsWith("en-") ? "" : `${uiLanguage.split("-")[0]}/`;
+          const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
           const version = chrome.runtime.getManifest().version;
           const versionName = chrome.runtime.getManifest().version_name;
           const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;

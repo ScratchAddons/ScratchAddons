@@ -1,7 +1,7 @@
 const utm = `utm_source=extension&utm_medium=tabscreate&utm_campaign=v${chrome.runtime.getManifest().version}`;
 chrome.runtime.onInstalled.addListener(async (details) => {
   const uiLanguage = chrome.i18n.getUILanguage();
-  const localeSlash = uiLanguage.startsWith("en-") ? "" : `${uiLanguage.split("-")[0]}/`;
+  const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
   const currentVersion = chrome.runtime.getManifest().version;
   const [major, minor, _] = currentVersion.split(".");
   if (details.previousVersion && details.previousVersion.startsWith("0")) {
