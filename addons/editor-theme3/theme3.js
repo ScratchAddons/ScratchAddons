@@ -91,7 +91,7 @@ function updateSettings(addon, newStyle) {
       let tertiary = multiply(addon.settings.get(prop + "-color"), { r: 0.8, g: 0.8, b: 0.8 });
       stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground {
         fill: var(--editorTheme3-${settingName}Color);
-        ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
+        ${textMode === "black" ? "--sa-block-text-color: #575e75;" : ""}
       }
       .blocklyBlockBackground[fill="${categories[prop].tertiaryColor}"] /* open dropdown */ {
         fill: #0003;
@@ -120,7 +120,7 @@ function updateSettings(addon, newStyle) {
       if (prop === "custom") {
         stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
           fill: var(--editorTheme3-${prop}Color);
-          ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;" : ""}
         }
         #s3devIDD > li.null {
           background-color: var(--editorTheme3-${settingName}Color);
@@ -133,13 +133,13 @@ function updateSettings(addon, newStyle) {
       if (prop === "sensing") {
         stylesheet += `path.blocklyBlockBackground[fill="#5CB1D6"] {
           fill: var(--editorTheme3-${prop}Color);
-          ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;" : ""}
         }`;
       }
       if (prop === "events") {
         stylesheet += `path.blocklyBlockBackground[fill="#FFBF00"] {
           fill: var(--editorTheme3-${prop}Color);
-          ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;" : ""}
         }
         .blocklyDropDownDiv[style*="rgb(255, 191, 0)"] {
           background-color: var(--editorTheme3-${prop}Color) !important;
@@ -149,7 +149,7 @@ function updateSettings(addon, newStyle) {
       if (prop === "Pen") {
         stylesheet += `path.blocklyBlockBackground[fill="#0FBD8C"] {
           fill: var(--editorTheme3-${prop}Color);
-          ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;" : ""}
         }
         .blocklyDropDownDiv[style*="rgb(15, 189, 140)"] {
           background-color: var(--editorTheme3-${prop}Color) !important;
