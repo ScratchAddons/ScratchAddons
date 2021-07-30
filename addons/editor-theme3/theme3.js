@@ -148,7 +148,7 @@ function updateSettings(addon, newStyle) {
       let background = { colorOnWhite: "#fff", colorOnBlack: "#282828" }[textMode];
       let inputShadow = { colorOnWhite: "#00000026", colorOnBlack: "#fff3" }[textMode];
       let secondary = multiply(addon.settings.get(prop + "-color"), { a: 0.15 });
-      let secondaryActive = multiply(addon.settings.get(prop + "-color"), { a: 0.2 });
+      let secondaryActive = multiply(addon.settings.get(prop + "-color"), { a: 0.25 });
       let menuText = { colorOnWhite: "#575e75", colorOnBlack: "#fff" }[textMode];
       stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground,
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > rect,
