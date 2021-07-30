@@ -354,9 +354,7 @@ function forumWarning(key) {
     }
     let addonError = document.createElement("li");
     let reportLink = document.createElement("a");
-    const uiLanguage = (
-      `; ${document.cookie}`.split("; scratchlanguage=").pop().split(";").shift() || navigator.language
-    ).toLowerCase();
+    const uiLanguage = chrome.i18n.getUILanguage();
     const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
     const utm = `utm_source=extension&utm_medium=forumwarning&utm_campaign=v${chrome.runtime.getManifest().version}`;
     reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?version=${
@@ -456,9 +454,7 @@ const showBanner = () => {
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
   });
-  const uiLanguage = (
-    `; ${document.cookie}`.split("; scratchlanguage=").pop().split(";").shift() || navigator.language
-  ).toLowerCase();
+  const uiLanguage = chrome.i18n.getUILanguage();
   const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
   const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${
     chrome.runtime.getManifest().version
