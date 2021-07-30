@@ -35,8 +35,11 @@ export default class DevTools {
     this.mouseXY = { x: 0, y: 0 };
   }
 
-  init() {
-    setTimeout(() => this.initInner(), 500);
+  async init() {
+    while (true) {
+      const root = await this.addon.tab.waitForElement("ul[class*=gui_tab-list_]", { markAsSeen: true });
+      this.initInner(root);
+    }
   }
 
   isScriptEditor() {
@@ -439,7 +442,6 @@ export default class DevTools {
       let workspace = this.utils.getWorkspace();
       let map = workspace.getVariableMap();
       let vars = map.getVariablesOfType("");
-
       let unusedLocals = [];
 
       for (const row of vars) {
@@ -465,6 +467,37 @@ export default class DevTools {
         }
         if (confirm(message)) {
           for (const orphan of unusedLocals) {
+            workspace.deleteVariableById(orphan.getId());
+          }
+        }
+      }
+
+      // Locate unused local lists...
+      let lists = map.getVariablesOfType("list");
+      let unusedLists = [];
+
+      for (const row of lists) {
+        if (row.isLocal) {
+          let usages = map.getVariableUsesById(row.getId());
+          if (!usages || usages.length === 0) {
+            unusedLists.push(row);
+          }
+        }
+      }
+      if (unusedLists.length > 0 && !dataId) {
+        const unusedCount = unusedLists.length;
+        let message = this.msg("unused-list", {
+          count: unusedCount,
+        });
+        for (let i = 0; i < unusedLists.length; i++) {
+          let orphan = unusedLists[i];
+          if (i > 0) {
+            message += ", ";
+          }
+          message += orphan.name;
+        }
+        if (confirm(message)) {
+          for (const orphan of unusedLists) {
             workspace.deleteVariableById(orphan.getId());
           }
         }
@@ -1622,11 +1655,6 @@ export default class DevTools {
       }
 
       if (chk && chk.className && chk.className.indexOf) {
-        if (chk.className.indexOf("see-inside-button") >= 0) {
-          // Try to re-inject GUI after rebuild
-          setTimeout(() => this.initInner(), 200);
-        }
-
         if (!this.canShare && chk.className.indexOf("share-button") >= 0) {
           // Commented for ScratchAddons
           /*e.cancelBubble = true;
@@ -2219,14 +2247,8 @@ export default class DevTools {
     p.append(dd);
   }
 
-  // Loop until the DOM is ready for us...
-  initInner() {
-    let root = document.querySelector("ul[class*=gui_tab-list_]");
-    let guiTabs = root && root.childNodes;
-    if (!guiTabs || guiTabs.length < 3) {
-      setTimeout(() => this.initInner(), 1000);
-      return;
-    }
+  initInner(root) {
+    let guiTabs = root.childNodes;
 
     if (this.codeTab && guiTabs[0] !== this.codeTab) {
       // We have been CHANGED!!! - Happens when going to project page, and then back inside again!!!

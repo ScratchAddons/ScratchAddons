@@ -1,5 +1,5 @@
 {
-  "name": "Alt+GreenFlag 60FPS player mode",
+  "name": "60FPS project player mode",
   "description": "Alt+Click the green flag to toggle 60FPS.",
   "info": [
     {
@@ -23,7 +23,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects", "projectEmbeds"]
     }
   ],
   "settings": [
