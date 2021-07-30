@@ -1,5 +1,11 @@
 <template>
-  <div class="addon-setting">
+  <div
+    class="addon-setting"
+    :class="{
+    'boolean-setting': setting.type === 'boolean',
+    'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
+  }"
+  >
     <div class="setting-label" v-html="settingsName(addon)"></div>
     <template v-if="setting.type === 'boolean'">
       <input
@@ -10,72 +16,86 @@
         :disabled="!addon._enabled"
       />
     </template>
-    <template v-if="setting.type === 'positive_integer'">
-      <input
-        type="number"
-        class="setting-input number"
-        v-model="addonSettings[addon._addonId][setting.id]"
-        @change="checkValidity() || updateSettings()"
-        :disabled="!addon._enabled"
-        min="0"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
-        number
-      />
+    <template v-if="setting.type === 'select'">
+      <div class="filter-options">
+        <div
+          class="filter-option"
+          v-for="option of setting.potentialValues"
+          :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
+          @click="updateOption(option.id);"
+        >
+          {{ option.name }}
+        </div>
+      </div>
     </template>
-    <template v-if="setting.type === 'integer'">
-      <input
-        type="number"
-        class="setting-input number"
-        v-model="addonSettings[addon._addonId][setting.id]"
-        @change="checkValidity() || updateSettings()"
-        :disabled="!addon._enabled"
-        :min="setting.min"
-        :max="setting.max"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
-        number
-      />
-    </template>
-    <template v-if="setting.type === 'string'">
-      <input
-        type="text"
-        class="setting-input string"
-        v-model="addonSettings[addon._addonId][setting.id]"
-        @change="checkValidity() || updateSettings()"
-        :disabled="!addon._enabled"
-        :placeholder="setting.default"
-        :maxlength="setting.max || 100"
-        :minlength="setting.min || 0"
-        :required="!!setting.min"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
-      />
-    </template>
-    <template v-if="setting.type === 'key'">
-      <input
-        type="text"
-        class="setting-input"
-        v-model="addonSettings[addon._addonId][setting.id]"
-        @input="updateSettings()"
-        @keydown="keySettingKeyDown"
-        @keyup="keySettingKeyUp"
-        :disabled="!addon._enabled"
-        :placeholder="setting.default"
-        maxlength="100"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
-        spellcheck="false"
-      />
-    </template>
-    <template v-if="setting.type === 'color'">
-      <picker
-        :value="addonSettings[addon._addonId][setting.id] || setting.default"
-        :setting="setting"
-        :addon="addon"
-        :no_alpha="!setting.allowTransparency"
-        v-click-outside="closePickers"
-      ></picker>
+    <div v-if="!['boolean', 'select'].includes(setting.type)" class="setting-input-container">
+      <template v-if="setting.type === 'positive_integer'">
+        <input
+          type="number"
+          class="setting-input number"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @change="checkValidity() || updateSettings()"
+          :disabled="!addon._enabled"
+          min="0"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+          number
+        />
+      </template>
+      <template v-if="setting.type === 'integer'">
+        <input
+          type="number"
+          class="setting-input number"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @change="checkValidity() || updateSettings()"
+          :disabled="!addon._enabled"
+          :min="setting.min"
+          :max="setting.max"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+          number
+        />
+      </template>
+      <template v-if="setting.type === 'string'">
+        <input
+          type="text"
+          class="setting-input string"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @change="checkValidity() || updateSettings()"
+          :disabled="!addon._enabled"
+          :placeholder="setting.default"
+          :maxlength="setting.max || 100"
+          :minlength="setting.min || 0"
+          :required="!!setting.min"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+        />
+      </template>
+      <template v-if="setting.type === 'key'">
+        <input
+          type="text"
+          class="setting-input"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @input="updateSettings()"
+          @keydown="keySettingKeyDown"
+          @keyup="keySettingKeyUp"
+          :disabled="!addon._enabled"
+          :placeholder="setting.default"
+          maxlength="100"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+          spellcheck="false"
+        />
+      </template>
+      <template v-if="setting.type === 'color'">
+        <picker
+          :value="addonSettings[addon._addonId][setting.id] || setting.default"
+          :setting="setting"
+          :addon="addon"
+          :no_alpha="!setting.allowTransparency"
+          v-click-outside="closePickers"
+        ></picker>
+      </template>
       <reset-dropdown
         v-if="showResetDropdown()"
         :setting="setting"
@@ -91,22 +111,9 @@
         :disabled="!addon._enabled"
         @click="updateOption(setting.default)"
       >
-        <span>{{ msg("reset") }}</span>
-        <img src="../../images/icons/undo.svg" class="icon-type" />
+        <span>{{ msg("reset") }}</span><img src="../../images/icons/undo.svg" class="icon-type" />
       </button>
-    </template>
-    <template v-if="setting.type === 'select'">
-      <div class="filter-options">
-        <div
-          class="filter-option"
-          v-for="option of setting.potentialValues"
-          :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
-          @click="updateOption(option.id);"
-        >
-          {{ option.name }}
-        </div>
-      </div>
-    </template>
+    </div>
   </div>
 </template>
 
@@ -114,24 +121,28 @@
   .addon-setting {
     margin: 10px;
     margin-inline-end: 20px;
-    min-height: 35px;
+    min-height: 32px;
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
   }
   .setting-input {
-    color: var(--accent-5);
-    background: var(--accent-2);
-    border: 1px solid #000;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: 0.25s ease;
-    transition-property: box-shadow border;
+    color: var(--content-text);
+    background: var(--input-background);
+    border: 1px solid var(--control-border);
+    height: 32px;
+    box-sizing: border-box;
+    padding: 0 12px;
+    border-radius: 4px 0 0 4px;
+    transition: 0.2s ease;
+    transition-property: box-shadow, border;
   }
-  .setting-input:focus {
+  [dir="rtl"] .setting-input {
+    border-radius: 0 4px 4px 0;
+  }
+  .setting-input:focus-visible {
     outline: none;
     border-color: var(--brand-orange);
-    box-shadow: 0 0 0 3px #ff7d265d;
+    box-shadow: var(--input-focus-shadow);
   }
 
   .setting-input.check {
@@ -143,26 +154,38 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     background-color: white;
-    background-size: 20px 20px;
+    background-size: 16px;
     background-position: center center;
+    background-repeat: no-repeat;
+    border-radius: 4px;
   }
 
   .setting-input.check:checked {
-    background-color: #175ef8;
+    background-color: var(--blue);
     background-image: url(/images/icons/check.svg);
   }
 
-  .setting-input.check:hover:not(:focus):not([disabled]) {
-    border-color: #0e44b8;
+  .setting-input.check:hover:not(:focus-visible):not([disabled]) {
+    border-color: var(--blue-variant);
   }
 
   .setting-input.number {
-    border-radius: 20px;
+    max-width: 150px;
+    border-radius: 16px 0 0 16px;
   }
+  [dir="rtl"] .setting-input.number {
+    border-radius: 0 16px 16px 0;
+  }
+
+  .setting-input-container {
+    display: flex;
+    align-items: center;
+  }
+
   .setting-label {
     width: 200px;
     text-transform: uppercase;
-    color: var(--accent-4);
+    color: var(--label-text);
     font-weight: 600;
     font-size: 12px;
     margin-inline-end: 10px;
@@ -173,11 +196,17 @@
   }
   .setting-dropdown.open .clear-button {
     border-bottom-right-radius: 0;
-    background: #151515;
+    background: var(--button-hover-background);
   }
   [dir="rtl"] .setting-dropdown.open .clear-button {
     border-bottom-right-radius: 4px;
     border-bottom-left-radius: 0;
+  }
+  .iframe .setting-dropdown.open .clear-button {
+    border-bottom-right-radius: 4px;
+  }
+  [dir="rtl"] .setting-dropdown.open .clear-button {
+    border-bottom-left-radius: 4px;
   }
   .setting-dropdown ul {
     position: absolute;
@@ -189,15 +218,25 @@
     z-index: 3;
     border-radius: 4px;
     border-top-right-radius: 0;
-    background: var(--accent-2);
-    color: var(--accent-5);
-    border: 1px solid #000;
+    background: var(--button-background);
+    color: var(--content-text);
+    border: 1px solid var(--control-border);
+  }
+  .iframe .setting-dropdown ul {
+    right: auto;
+    left: -100px;
+    border-top-right-radius: 4px;
   }
   [dir="rtl"] .setting-dropdown ul {
     right: auto;
     left: 0;
     border-top-right-radius: 4px;
     border-top-left-radius: 0;
+  }
+  [dir="rtl"] .iframe .setting-dropdown ul {
+    left: auto;
+    right: -100px;
+    border-top-left-radius: 4px;
   }
   .setting-dropdown.open ul {
     display: block;
@@ -207,16 +246,16 @@
     list-style: none;
     white-space: nowrap;
     text-align: start;
-    transition: 0.25s ease;
+    transition: 0.2s ease;
     user-select: none;
   }
   .setting-dropdown li:hover {
-    background: #151515;
+    background: var(--button-hover-background);
   }
   .setting-dropdown li > * {
     vertical-align: middle;
   }
-  .setting-dropdown .reset-preview {
+  .setting-dropdown .color-preview {
     display: inline-block;
     width: 18px;
     height: 18px;
@@ -228,12 +267,17 @@
     background-size: 6px 6px;
     background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
   }
-  .setting-dropdown .reset-preview span {
+  .setting-dropdown .color-preview span {
     display: inline-block;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
     border-radius: 4px;
-    border: 1px solid #000;
+    border: 1px solid var(--control-border);
+  }
+  .setting-dropdown .text-preview {
+    margin-left: 12px;
+    color: var(--label-text);
+    font-weight: 600;
   }
 </style>
