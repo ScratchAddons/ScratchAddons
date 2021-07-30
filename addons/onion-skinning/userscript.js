@@ -2,6 +2,15 @@ export default async function ({ addon, global, console, msg }) {
   const paper = await addon.tab.traps.getPaper();
 
   const paintEditorCanvasContainer = await addon.tab.waitForElement("[class^='paint-editor_canvas-container']");
+  try {
+    if (!("colorIndex" in addon.tab.redux.state.scratchPaint.fillMode)) {
+      console.error("Detected new paint editor; this will be supported in future versions.");
+      return;
+    }
+  } catch (_) {
+    // The check can technically fail when Redux isn't supported (rare cases)
+    // Just ignore in this case
+  }
   const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
   const reactInternalKey = Object.keys(paintEditorCanvasContainer).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
   const paperCanvas = paintEditorCanvasContainer[reactInternalKey].child.child.child.stateNode;

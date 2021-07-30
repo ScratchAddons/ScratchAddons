@@ -8,7 +8,7 @@
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "versionAdded": "1.11.0",
