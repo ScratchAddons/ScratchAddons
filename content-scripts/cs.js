@@ -371,7 +371,12 @@ function forumWarning(key) {
     }
     let addonError = document.createElement("li");
     let reportLink = document.createElement("a");
-    reportLink.href = "https://scratchaddons.com/feedback";
+    const uiLanguage = chrome.i18n.getUILanguage();
+    const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+    const utm = `utm_source=extension&utm_medium=forumwarning&utm_campaign=v${chrome.runtime.getManifest().version}`;
+    reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?version=${
+      chrome.runtime.getManifest().version
+    }&${utm}`;
     reportLink.target = "_blank";
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     let text1 = document.createElement("span");
@@ -466,13 +471,20 @@ const showBanner = () => {
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
   });
+  const uiLanguage = chrome.i18n.getUILanguage();
+  const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+  const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${
+    chrome.runtime.getManifest().version
+  }`;
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
-    href: `https://scratchaddons.com/changelog?versionname=${chrome.runtime.getManifest().version}-notif`,
+    href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
-    href: `https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}-notif`,
+    href: `https://scratchaddons.com/${localeSlash}feedback/?version=${
+      chrome.runtime.getManifest().version
+    }-notif&${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("feedback"),
   });

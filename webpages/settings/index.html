@@ -129,7 +129,8 @@
           v-cloak
           class="category category-small"
           style="margin-top: auto"
-          href="https://scratchaddons.com/contributors"
+          href="https://scratchaddons.com/contributors/"
+          :href="sidebarUrls.contributors"
           target="_blank"
         >
           <img src="../../images/icons/users.svg" />
@@ -148,7 +149,8 @@
         <a
           v-cloak
           class="category category-small"
-          href="https://scratchaddons.com/feedback/?version={{versionName}}"
+          href="https://scratchaddons.com/feedback/"
+          :href="sidebarUrls.feedback"
           target="_blank"
         >
           <img src="../../images/icons/comment.svg" />
@@ -253,7 +255,8 @@
           <p>
             {{ msg("extensionName") }}
             <a
-              href="https://scratchaddons.com/changelog?versionname={{ versionName }}"
+              href="https://scratchaddons.com/changelog"
+              :href="sidebarUrls.changelog"
               title="{{ msg('changelog') }}"
               target="_blank"
             >
