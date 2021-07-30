@@ -8,32 +8,59 @@
   "versionAdded": "1.0.0",
   "settings": [
     {
-      "name": "Badge color",
-      "id": "color",
+      "name": "Badge color for message count",
+      "id": "countColor",
       "type": "color",
       "default": "#008000"
+    },
+    {
+      "name": "Indicate when not signed in",
+      "id": "showOffline",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Badge color when not signed in",
+      "id": "offlineColor",
+      "type": "color",
+      "default": "#e90404"
+    },
+    {
+      "name": "Badge indicator when not signed in",
+      "id": "offlineText",
+      "type": "string",
+      "default": "?",
+      "min": "1"
     }
   ],
   "presets": [
     {
-      "name": "Old light green",
+      "name": "Legacy",
       "id": "oldLightGreen",
+      "description": "The badge color from the original Scratch Messaging extension.",
       "values": {
-        "color": "#8ce68c"
+        "countColor": "#8ce68c"
       }
     },
     {
       "name": "Blue",
       "id": "blue",
       "values": {
-        "color": "#175ef8"
+        "countColor": "#175ef8"
+      }
+    },
+    {
+      "name": "Red",
+      "id": "red",
+      "values": {
+        "countColor": "#e90404"
       }
     },
     {
       "name": "Black",
       "id": "black",
       "values": {
-        "color": "#000000"
+        "countColor": "#000000"
       }
     }
   ]
