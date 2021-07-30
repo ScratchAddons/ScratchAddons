@@ -1,12 +1,12 @@
 <template>
   <div
-        v-if="show"
+    v-if="show"
     class="addon-setting"
     :class="{
     'boolean-setting': setting.type === 'boolean',
     'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
   }"
-       >
+  >
     <div class="setting-label" v-html="settingsName(addon)"></div>
     <template v-if="setting.type === 'boolean'">
       <input

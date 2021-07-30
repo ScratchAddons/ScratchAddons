@@ -679,36 +679,28 @@
     },
     {
       "url": "text-shadow.css",
-      "matches": [
-        "projects"
-      ],
+      "matches": ["projects"],
       "if": {
         "settings": { "textShadow": true }
       }
     },
     {
       "url": "hide_dots.css",
-      "matches": [
-        "projects"
-      ],
+      "matches": ["projects"],
       "if": {
         "settings": { "dots": false }
       }
     },
     {
       "url": "stage.css",
-      "matches": [
-        "projects"
-      ],
+      "matches": ["projects"],
       "if": {
         "settings": { "affectStage": true }
       }
     },
     {
       "url": "dark_comments.css",
-      "matches": [
-        "projects"
-      ],
+      "matches": ["projects"],
       "if": {
         "settings": { "darkComments": true }
       }
