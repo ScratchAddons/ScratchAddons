@@ -1,4 +1,5 @@
 export default async function ({ addon, console, safeMsg: m }) {
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/libgif.js");
   let mode = addon.settings.get("fitting");
 
   addon.settings.addEventListener("change", () => {
@@ -13,7 +14,7 @@ export default async function ({ addon, console, safeMsg: m }) {
     <img class="${addon.tab.scratchClass("action-menu_more-icon")} sa-better-img-uploader" draggable="false" src="${
     addon.self.dir + "/icon.svg"
   }" height="10", width="10">
-     <input accept=".svg, .png, .bmp, .jpg, .jpeg" class="${addon.tab.scratchClass(
+     <input accept=".svg, .png, .bmp, .jpg, .jpeg, .gif" class="${addon.tab.scratchClass(
        "action-menu_file-input"
      )}" multiple="" type="file">
   </button>
@@ -85,6 +86,8 @@ export default async function ({ addon, console, safeMsg: m }) {
       });
 
       let i = new Image(); //New image to get the image's size
+      i.style.display = "none";
+      document.body.appendChild(i);
       i.src = blob;
       await new Promise((resolve) => {
         i.onload = resolve;
@@ -149,10 +152,27 @@ export default async function ({ addon, console, safeMsg: m }) {
         };
       }
 
-      processed.push(
-        new File( //Create the svg file
-          [
-            `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${dim.width},${dim.height}" width="${dim.width}" height="${dim.height}">
+      if (file.type.includes("gif")) {
+        let sg = new SuperGif({ gif: i });
+        let frames = new Array();
+
+        await new Promise(function (resolve, reject) {
+          sg.load(resolve);
+        });
+
+        sg.move_to(0);
+
+        for (let i = 0; i < sg.get_length(); i++) {
+          sg.move_relative(1);
+          let canv = sg.get_canvas();
+          frames.push(canv.toDataURL("image/png"));
+        }
+
+        processed.push(
+          ...frames.map(function (blob) {
+            return new File(
+              [
+                `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${dim.width},${dim.height}" width="${dim.width}" height="${dim.height}">
         <g>
           <g
               data-paper-data='{"isPaintingLayer":true}'
@@ -175,14 +195,52 @@ export default async function ({ addon, console, safeMsg: m }) {
           </g>
         </g>
       </svg>`,
-          ],
-          `${file.name.replace(/(.*)\..*/, "$1")}.svg`,
-          {
-            type: "image/svg+xml",
-          }
-        )
-      );
+              ],
+              `${file.name.replace(/(.*)\..*/, "$1")}.svg`,
+              {
+                type: "image/svg+xml",
+              }
+            );
+          })
+        );
+      } else {
+        processed.push(
+          new File( //Create the svg file
+            [
+              `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${dim.width},${dim.height}" width="${dim.width}" height="${dim.height}">
+        <g>
+          <g
+              data-paper-data='{"isPaintingLayer":true}'
+              fill="none"
+              fill-rule="nonzero"
+              stroke="none"
+              stroke-width="0.5"
+              stroke-linecap="butt"
+              stroke-linejoin="miter"
+              stroke-miterlimit="10"
+              stroke-dasharray=""
+              stroke-dashoffset="0"
+              style="mix-blend-mode: normal;"
+          >
+            <image
+                width="${dim.width}"
+                height="${dim.height}"
+                xlink:href="${blob}"
+            />
+          </g>
+        </g>
+      </svg>`,
+            ],
+            `${file.name.replace(/(.*)\..*/, "$1")}.svg`,
+            {
+              type: "image/svg+xml",
+            }
+          )
+        );
+      }
     }
+
+    console.log(processed);
 
     (el = document.getElementById(iD).nextElementSibling.querySelector("input")).files = new FileList(processed); //Convert processed image array to a FileList, which is not normally constructible.
 
