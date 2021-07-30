@@ -1,25 +1,15 @@
-function getExtensionLocale() {
-  let locale = chrome.i18n.getUILanguage().toLowerCase();
-  if (locale.includes("-")) locale = locale.split("-")[0];
-  if (locale.startsWith("pt")) locale = "pt-br";
-  return locale;
-}
 chrome.runtime.onInstalled.addListener(async (details) => {
-  const locale = getExtensionLocale();
+  const uiLanguage = chrome.i18n.getUILanguage();
+  const localeSlash = uiLanguage.startsWith("en-") ? "" : `${uiLanguage.split("-")[0]}/`;
   const currentVersion = chrome.runtime.getManifest().version;
   const [major, minor, _] = currentVersion.split(".");
   if (details.previousVersion && details.previousVersion.startsWith("0")) {
-    const url =
-      locale == "en"
-        ? "https://scratchaddons.com/scratch-messaging-transition"
-        : `https://scratchaddons.com/${locale}/scratch-messaging-transition`;
-    chrome.tabs.create({ url });
+    chrome.tabs.create({ url: `https://scratchaddons.com/${localeSlash}scratch-messaging-transition/` });
   } else if (
     details.reason === "install" &&
     chrome.runtime.getManifest().version_name.includes("-prerelease") === false
   ) {
-    const url = locale == "en" ? "https://scratchaddons.com/welcome" : `https://scratchaddons.com/${locale}/welcome`;
-    chrome.tabs.create({ url });
+    chrome.tabs.create({ url: `https://scratchaddons.com/${localeSlash}welcome/` });
   }
 
   if (details.reason === "install") {
@@ -29,8 +19,5 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
 });
 if (chrome.runtime.getManifest().version_name.includes("-prerelease") === false) {
-  let locale = getExtensionLocale();
-  const uninstallURL =
-    locale == "en" ? "https://scratchaddons.com/farewell" : `https://scratchaddons.com/${locale}/farewell`;
-  chrome.runtime.setUninstallURL(uninstallURL);
+  chrome.runtime.setUninstallURL(`https://scratchaddons.com/${localeSlash}farewell/`);
 }
