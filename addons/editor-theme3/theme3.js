@@ -16,6 +16,21 @@ function updateSettings(addon, newStyle) {
         color: #575e75;
       }`;
   }
+  if (textMode === "colorOnWhite") {
+    stylesheet += `
+      .blocklyDropDownDiv:not([style*="rgb(255, 255, 255)"]) .goog-menuitem {
+        color: #575e75;
+      }`;
+  }
+  if (textMode === "colorOnBlack") {
+    stylesheet += `
+      .blocklyDropDownDiv:not([style*="rgb(255, 255, 255)"]) .goog-option-selected .goog-menuitem-checkbox {
+        filter: brightness(0) invert(1);
+      }
+      .u-dropdown-searchbar {
+        border-color: rgba(255, 255, 255, 0.15);
+      }`;
+  }
   var categories = {
     motion: {
       color: "#4C97FF",
@@ -77,6 +92,9 @@ function updateSettings(addon, newStyle) {
         fill: var(--editorTheme3-${settingName}Color);
         ${textMode === "black" ? "--sa-block-text-color: #575e75;": ""}
       }
+      .blocklyBlockBackground[fill="${categories[prop].tertiaryColor}"] /* open dropdown */ {
+        fill: #0003;
+      }
       .scratchCategoryId-${categories[prop].alt ? categories[prop].alt : prop} > .scratchCategoryItemBubble {
         background-color: var(--editorTheme3-${settingName}Color) !important;
       }
@@ -130,6 +148,7 @@ function updateSettings(addon, newStyle) {
       let background = { colorOnWhite: "#fff", colorOnBlack: "#282828" }[textMode];
       let inputShadow = { colorOnWhite: "#00000026", colorOnBlack: "#fff3" }[textMode];
       let secondary = multiply(addon.settings.get(prop + "-color"), { a: 0.15 });
+      let secondaryActive = multiply(addon.settings.get(prop + "-color"), { a: 0.2 });
       let menuText = { colorOnWhite: "#575e75", colorOnBlack: "#fff" }[textMode];
       stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground,
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > rect,
@@ -137,10 +156,10 @@ function updateSettings(addon, newStyle) {
         fill: ${background};
         stroke: var(--editorTheme3-${settingName}Color);
         --sa-block-text-color: ${menuText};
-        --sa-block-secondary-color: ${secondary};
+        --sa-block-secondary-color: ${secondaryActive};
       }
       g[data-category="${prop}"] > .blocklyText,
-      g[data-category="${prop}"] > g:not([data-category]) > .blocklyText /* variable and list reporters */ {
+      g[data-category="${prop}"] > g:not(.blocklyDraggable) > .blocklyText /* variable and list reporters */ {
         fill: var(--editorTheme3-${settingName}Color);
       }
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > .blocklyDropdownText,
@@ -154,6 +173,9 @@ function updateSettings(addon, newStyle) {
         fill: ${secondary};
         stroke: var(--editorTheme3-${settingName}Color);
       }
+      .blocklyBlockBackground[fill="${categories[prop].tertiaryColor}"] /* open dropdown */ {
+        fill: ${secondaryActive} !important;
+      }
       .scratchCategoryId-${categories[prop].alt ? categories[prop].alt : prop} > .scratchCategoryItemBubble {
         background-color: var(--editorTheme3-${settingName}Color) !important;
       }
@@ -161,8 +183,8 @@ function updateSettings(addon, newStyle) {
         background-color: ${background} !important;
         border-color: var(--editorTheme3-${settingName}Color) !important;
       }
-      .blocklyDropDownDiv[data-category="${prop}"] .goog-menuitem {
-        color: var(--editorTheme3-${settingName}Color);
+      .blocklyDropDownDiv[data-category="${prop}"] .goog-menuitem-highlight {
+        background-color: ${secondaryActive};
       }
       .blocklyBubbleCanvas [stroke="${categories[prop].tertiaryColor}"],
       g[data-category=${prop}] > g[data-argument-type*="text"] > path,
@@ -184,7 +206,7 @@ function updateSettings(addon, newStyle) {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
           --sa-block-text-color: ${menuText};
-          --sa-block-secondary-color: ${secondary};
+          --sa-block-secondary-color: ${secondaryActive};
         }
         path.blocklyBlockBackground[fill="#FF6680"] ~ .blocklyText,
         g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > .blocklyText,
@@ -205,15 +227,13 @@ function updateSettings(addon, newStyle) {
       }
       if (prop === "sensing") {
         stylesheet += `path.blocklyBlockBackground[fill="#5CB1D6"],
-        g[data-argument-type="dropdown"] > rect[fill="#5CB1D6"],
-        g[data-argument-type="dropdown"] > rect[fill="#2E8EB8"] {
+        g[data-argument-type="dropdown"] > rect[fill="#5CB1D6"] {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
           --sa-block-text-color: ${menuText};
-          --sa-block-secondary-color: ${secondary};
+          --sa-block-secondary-color: ${secondaryActive};
         }
-        g[data-argument-type="dropdown"] > path[fill="#47A8D1"],
-        g[data-argument-type="dropdown"] > path[fill="#2E8EB8"] {
+        g[data-argument-type="dropdown"] > path[fill="#47A8D1"] {
           fill: ${secondary};
           stroke: var(--editorTheme3-${prop}Color);
         }
@@ -230,8 +250,8 @@ function updateSettings(addon, newStyle) {
           background-color: ${background} !important;
           border-color: var(--editorTheme3-${settingName}Color) !important;
         }
-        .blocklyDropDownDiv[style*="rgb(92, 177, 214)"] .goog-menuitem {
-          color: var(--editorTheme3-${settingName}Color);
+        .blocklyDropDownDiv[style*="rgb(92, 177, 214)"] .goog-menuitem-highlight {
+          background-color: ${secondaryActive};
         }`;
       }
       if (prop === "events") {
@@ -241,7 +261,7 @@ function updateSettings(addon, newStyle) {
           fill: ${background};
           stroke: var(--editorTheme3-${settingName}Color);
           --sa-block-text-color: ${menuText};
-          --sa-block-secondary-color: ${secondary};
+          --sa-block-secondary-color: ${secondaryActive};
         }
         path.blocklyBlockBackground[fill="#FFBF00"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
@@ -257,8 +277,8 @@ function updateSettings(addon, newStyle) {
           background-color: ${background} !important;
           border-color: var(--editorTheme3-${settingName}Color) !important;
         }
-        .blocklyDropDownDiv[style*="rgb(255, 191, 0)"] .goog-menuitem {
-          color: var(--editorTheme3-${settingName}Color);
+        .blocklyDropDownDiv[style*="rgb(255, 191, 0)"] .goog-menuitem-highlight {
+          background-color: ${secondaryActive};
         }`;
       }
       if (prop === "Pen") {
@@ -266,7 +286,7 @@ function updateSettings(addon, newStyle) {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
           --sa-block-text-color: ${menuText};
-          --sa-block-secondary-color: ${secondary};
+          --sa-block-secondary-color: ${secondaryActive};
         }
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
@@ -274,14 +294,16 @@ function updateSettings(addon, newStyle) {
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ g[data-argument-type="dropdown"] > g > .blocklyDropdownText {
           fill: var(--editorTheme3-${prop}Color) !important;
         }
-        g[data-argument-type="dropdown"] > path[fill="#0DA57A"],
-        g[data-argument-type="dropdown"] > path[fill="#0B8E69"] {
+        g[data-argument-type="dropdown"] > path[fill="#0DA57A"] {
           fill: ${secondary};
           stroke: var(--editorTheme3-${prop}Color);
         }
         .blocklyDropDownDiv[style*="rgb(15, 189, 140)"] {
           background-color: ${background} !important;
           border-color: var(--editorTheme3-${settingName}Color) !important;
+        }
+        .blocklyDropDownDiv[style*="rgb(15, 189, 140)"] .goog-menuitem-highlight {
+          background-color: ${secondaryActive};
         }
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ [data-argument-type="text"] > path,
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ g > line  {
