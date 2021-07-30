@@ -5,23 +5,21 @@ try {
 }
 
 const _realConsole = window.console;
-const console = {
-  _createOutput(...args) {
-    const logAuthor = "[cs]";
-    const logContent = args;
-    return [`%cSA%c${logAuthor}%c`, this._style.leftPrefix, this._style.rightPrefix, this._style.text, ...logContent];
-  },
-  _style: {
+const consoleOutput = (logAuthor = "[cs]") => {
+  const style = {
     // Remember to change these as well on module.js
     leftPrefix: "background:  #ff7b26; color: white; border-radius: 0.5rem 0 0 0.5rem; padding: 0 0.5rem",
     rightPrefix:
       "background: #222; color: white; border-radius: 0 0.5rem 0.5rem 0; padding: 0 0.5rem; font-weight: bold",
     text: "",
-  },
-  log: (...args) => _realConsole.log(...console._createOutput(...args)),
-  warn: (...args) => _realConsole.warn(...console._createOutput(...args)),
-  error: (...args) => _realConsole.error(...console._createOutput(...args)),
-  table: (...args) => _realConsole.table(...args),
+  };
+  return [`%cSA%c${logAuthor}%c`, style.leftPrefix, style.rightPrefix, style.text];
+};
+const console = {
+  ..._realConsole,
+  log: _realConsole.log.bind(_realConsole, ...consoleOutput()),
+  warn: _realConsole.warn.bind(_realConsole, ...consoleOutput()),
+  error: _realConsole.error.bind(_realConsole, ...consoleOutput()),
 };
 
 let pseudoUrl; // Fake URL to use if response code isn't 2xx

@@ -10,24 +10,23 @@ scratchAddons.eventTargets = {
   self: [],
 };
 scratchAddons.session = {};
-scratchAddons.console = {
-  _createOutput(...args) {
-    const hasAddonId = typeof args[0] === "object" && args[0]._consoleAddonId;
-    const logAuthor = hasAddonId ? args[0]._consoleAddonId : "[page]";
-    const logContent = args.slice(hasAddonId ? 1 : 0, args.length);
-    return [`%cSA%c${logAuthor}%c`, this._style.leftPrefix, this._style.rightPrefix, this._style.text, ...logContent];
-  },
-  _style: {
+const consoleOutput = (logAuthor = "[page]") => {
+  const style = {
     // Remember to change these as well on cs.js
     leftPrefix: "background:  #ff7b26; color: white; border-radius: 0.5rem 0 0 0.5rem; padding: 0 0.5rem",
     rightPrefix:
       "background: #222; color: white; border-radius: 0 0.5rem 0.5rem 0; padding: 0 0.5rem; font-weight: bold",
     text: "",
-  },
-  log: (...args) => _realConsole.log(...scratchAddons.console._createOutput(...args)),
-  warn: (...args) => _realConsole.warn(...scratchAddons.console._createOutput(...args)),
-  error: (...args) => _realConsole.error(...scratchAddons.console._createOutput(...args)),
-  table: (...args) => _realConsole.table(...args),
+  };
+  return [`%cSA%c${logAuthor}%c`, style.leftPrefix, style.rightPrefix, style.text];
+};
+scratchAddons.console = {
+  log: _realConsole.log.bind(_realConsole, ...consoleOutput()),
+  warn: _realConsole.warn.bind(_realConsole, ...consoleOutput()),
+  error: _realConsole.error.bind(_realConsole, ...consoleOutput()),
+  logForAddon: (addonId) => _realConsole.log.bind(_realConsole, ...consoleOutput(addonId)),
+  warnForAddon: (addonId) => _realConsole.warn.bind(_realConsole, ...consoleOutput(addonId)),
+  errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
 };
 
 const pendingPromises = {};
