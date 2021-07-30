@@ -103,7 +103,7 @@ const page = {
       d = await res.json();
     } catch (e) {
       d = {};
-      console.warn("Session fetch failed: ", e);
+      scratchAddons.console.warn("Session fetch failed: ", e);
       if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
     }
     scratchAddons.session = d;
@@ -170,7 +170,7 @@ async function requestMsgCount() {
       const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count`);
       count = (await resp.json()).count || 0;
     } catch (e) {
-      console.warn("Could not fetch message count: ", e);
+      scratchAddons.console.warn("Could not fetch message count: ", e);
     }
   }
   pendingPromises.msgCount.forEach((resolve) => resolve(count));
