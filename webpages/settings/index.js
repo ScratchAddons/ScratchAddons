@@ -183,6 +183,16 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         browserLevelPermissions,
         grantedOptionalPermissions,
         addonListObjs: [],
+        sidebarUrls: (() => {
+          const uiLanguage = chrome.i18n.getUILanguage();
+          const localeSlash = uiLanguage.startsWith("en-") ? "" : `${uiLanguage.split("-")[0]}/`;
+          const versionName = chrome.runtime.getManifest().version_name;
+          return {
+            contributors: `https://scratchaddons.com/${localeSlash}contributors/`,
+            feedback: `https://scratchaddons.com/${localeSlash}feedback/?version=${versionName}`,
+            changelog: `https://scratchaddons.com/${localeSlash}changelog/`,
+          };
+        })(),
       };
     },
     computed: {
