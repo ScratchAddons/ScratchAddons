@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
 
-    <!-- Preload styles-->
-    <link rel="preload" href="light.css" as="style" />
+    <!-- Preload styles -->
+    <link rel="preload" href="../styles/colors-light.css" as="style" />
     <link rel="preload" href="style.css" as="style" />
 
-    <!-- Preload font-->
+    <!-- Preload font -->
     <link rel="preload" href="../../libraries/thirdparty/Sora.css" as="style" />
     <link
       rel="preload"
@@ -42,10 +42,10 @@
     <link rel="icon" href="../../images/icon.png" />
 
     <!-- Preload index.js imports -->
-    <link rel="modulepreload" href="../../libraries/common/cs/download-blob.js"">
+    <link rel="modulepreload" href="../../libraries/common/cs/download-blob.js" />
     <link rel="modulepreload" href="../rtl-list.js" />
     <link rel="modulepreload" href="../../libraries/common/load-vue-components.js" />
-    <link rel="modulepreload" href="../../libraries/thirdparty/fuse.basic.esm.min.js" />
+    <link rel="modulepreload" href="../../libraries/thirdparty/fuse.esm.min.js" />
     <link rel="modulepreload" href="data/tags.js" />
     <link rel="modulepreload" href="data/addon-groups.js" />
     <link rel="modulepreload" href="data/categories.js" />
@@ -123,17 +123,17 @@
         v-show="categoryOpen && !isIframe"
         :class="{smallMode: smallMode === true}"
       >
-        <div class="selected-category-orange"></div>
         <category-selector v-for="category of categories" :category="category"></category-selector>
 
         <a
+          v-cloak
           class="category category-small"
           style="margin-top: auto"
           href="https://scratchaddons.com/contributors"
           target="_blank"
         >
           <img src="../../images/icons/users.svg" />
-          <span v-cloak>{{ msg("credits") }} <img src="../../images/icons/popout.svg" /></span>
+          <span>{{ msg("credits") }} <img src="../../images/icons/popout.svg" /></span>
         </a>
         <!--
         <div class="category category-small" @click="openReview()">
@@ -141,38 +141,34 @@
           <span v-cloak>{{ msg("review") }}</span>
         </div>
         -->
-        <a class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
+        <a v-cloak class="category category-small" href="https://scratchaddons.com/translate" target="_blank">
           <img src="../../images/icons/translate.svg" />
-          <span v-cloak>{{ msg("translate") }} <img src="../../images/icons/popout.svg" /></span>
+          <span>{{ msg("translate") }} <img src="../../images/icons/popout.svg" /></span>
         </a>
         <a
+          v-cloak
           class="category category-small"
           href="https://scratchaddons.com/feedback/?version={{versionName}}"
           target="_blank"
         >
           <img src="../../images/icons/comment.svg" />
-          <span v-cloak>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
+          <span>{{ msg("feedback") }} <img src="../../images/icons/popout.svg" /></span>
         </a>
-        <div class="category" style="cursor: pointer; margin-top: 12px; margin-bottom: 12px" @click="modalToggle()">
+        <div v-cloak class="category" style="margin-top: 12px; margin-bottom: 14px" @click="modalToggle()">
           <img src="../../images/icons/wrench.svg" />
-          <span v-cloak>{{ msg("moreSettings") }}</span>
+          <span>{{ msg("moreSettings") }}</span>
         </div>
       </div>
-      <div
-        v-show="!isIframe && smallMode === false"
-        class="categories-shrink"
-        style="display: block !important"
-        @click="sidebarToggle()"
-      >
+      <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
         <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === (direction() === 'rtl')}" />
       </div>
 
-      <!-- This is a the main menu, where the searchbar and the addon items are located -->
+      <!-- This is the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
-        <div class="search-box" :class="{smallMode: smallMode === true}">
+        <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
           <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
           <button v-show="searchInput === ''" class="search-button"></button>
-          <button v-cloak v-else class="search-clear-button" @click="clearSearch()"></button>
+          <button v-else class="search-clear-button" @click="clearSearch()"></button>
         </div>
 
         <div class="addons-container" :class="{placeholder: !loaded}" v-cloak>

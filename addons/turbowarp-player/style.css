@@ -26,19 +26,26 @@
   background-image: url(https://scratch.mit.edu/favicon.ico);
 }
 
-.sa-tw-iframe {
-  overflow: hidden;
-  box-sizing: border-box;
-
-  /* Same styles as .project-description */
-  border: 1px solid rgba(77, 151, 255, 0.1);
-  border-radius: 8px;
-  background-color: rgba(77, 151, 255, 0.1);
-
+.sa-tw-iframe-container {
   /* Same styles as .guiPlayer */
   display: inline-block;
   position: relative;
   z-index: 1;
   width: 482px;
   height: 406px;
+
+  /* Hide part of loading screen to make it the same size as Scratch's */
+  overflow: hidden;
+}
+
+.sa-tw-iframe {
+  width: 100%;
+  /* TW scratch-gui/src/lib/screen-utils.js, line 57
+     The stage height should be 360px
+     innerHeight = 360px + 44px + 12px = 416px = 100% + 10px */
+  height: calc(100% + 10px);
+  /* Move the stage up to align it with the project description */
+  margin-top: -3px;
+
+  border: none;
 }
