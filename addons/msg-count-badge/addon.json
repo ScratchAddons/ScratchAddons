@@ -30,7 +30,7 @@
       "id": "offlineText",
       "type": "string",
       "default": "?",
-      "min": "1"
+      "min": 1
     }
   ],
   "presets": [
