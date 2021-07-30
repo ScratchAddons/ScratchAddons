@@ -1,1 +1,1 @@
-{"ctrl-click-run-scripts/@name":"Ctrl+Click per eseguire gli script","ctrl-click-run-scripts/@info-macContextDisabled":"In macOS usa il tasto Cmd invece del tasto Ctrl."}
+{"ctrl-click-run-scripts/@name":"Ctrl+Click per eseguire gli script","ctrl-click-run-scripts/@description":"Esegue gli script cliccati solo se si preme contemporaneamente il tasto Ctrl.","ctrl-click-run-scripts/@info-macContextDisabled":"In macOS usa il tasto Cmd invece del tasto Ctrl."}
