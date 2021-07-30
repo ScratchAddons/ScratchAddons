@@ -469,7 +469,9 @@ const showBanner = () => {
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
-    href: `https://scratchaddons.com/${localeSlash}feedback/?version=${chrome.runtime.getManifest().version}-notif&${utm}`,
+    href: `https://scratchaddons.com/${localeSlash}feedback/?version=${
+      chrome.runtime.getManifest().version
+    }-notif&${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("feedback"),
   });
