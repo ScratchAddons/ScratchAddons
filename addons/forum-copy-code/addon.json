@@ -1,0 +1,28 @@
+{
+  "name": "Copy Code button in forums",
+  "description": "Adds a button to copy code inserted via [code] tags in the forums.",
+  "tags": ["community", "forums"],
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+	  "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "versionAdded": "1.18.0"
+}
