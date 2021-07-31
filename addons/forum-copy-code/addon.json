@@ -12,7 +12,7 @@
     {
       "url": "userscript.js",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-	  "runAtComplete": false
+      "runAtComplete": false
     }
   ],
   "userstyles": [
