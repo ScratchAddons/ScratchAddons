@@ -557,8 +557,6 @@ export default async function ({ addon, global, console, msg }) {
   blockSwitches["data_variable"] = [];
   blockSwitches["data_listcontents"] = [];
 
-  let addBorderToContextMenuItem = -1;
-
   const genuid = () => {
     const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
     let result = "";

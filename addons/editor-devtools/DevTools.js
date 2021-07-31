@@ -66,8 +66,6 @@ export default class DevTools {
           separator: true,
           _isDevtoolsFirstItem: true,
           callback: () => {
-            let wksp = this.utils.getWorkspace();
-
             let ids = this.getTopBlockIDs();
 
             document.dispatchEvent(
