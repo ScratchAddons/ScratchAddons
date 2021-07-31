@@ -1,6 +1,6 @@
 export default function ({ addon }) {
 	let usernameHeader = document.querySelector("header-text").firstElementChild;
-	const userId = Object.assign(document.createElement("font"), {
+	const userId = Object.assign(document.createElement("["), {
 		innerText: `#${Scratch.INIT_DATA.PROFILE.model.userId}`,
 		className: "sa-user-id"
 	});
