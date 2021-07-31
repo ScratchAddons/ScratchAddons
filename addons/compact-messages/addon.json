@@ -1,6 +1,12 @@
 {
   "name": "Compact messages",
   "description": "Makes Scratch's messages page more compact and easier to read.",
+  "credits": [
+    {
+      "name": "LankyBox01",
+      "link": "https://lankybox01.leahcimto.com/"
+    }
+  ],
   "settings": [
     {
       "name": "Hide message type icons",
