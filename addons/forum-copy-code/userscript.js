@@ -1,4 +1,8 @@
 export default async function ({ addon, global, console, msg }) {
+	var style = document.createElement("style"); //Doing this in a userscript because we have dynamic enable-disable and you can see unstyled elements for a split second
+	style.textContent = ".sa-copyCodeDiv{text-align:right;height:0}.sa-copyCodeButton{opacity:.75;cursor:pointer;font-size:80%;position:relative;bottom:3px;user-select:none}.sa-copyCodeButton:active{text-decoration:underline}"; //The styling
+	document.head.appendChild(style); //Append it
+	
   while (true) {
     const codeBlock = await addon.tab.waitForElement("div.code", {
       markAsSeen: true,
