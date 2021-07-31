@@ -1,6 +1,20 @@
 {
   "name": "Compact messages",
   "description": "Makes Scratch's messages page more compact and easier to read.",
+  "credits": [
+    {
+      "name": "World_Languages",
+      "link": "https://github.com/WorldLanguages/"
+    },
+    {
+      "name": "LankyBox01",
+      "link": "https://lankybox01.leahcimto.com/"
+    },
+    {
+      "name": "RedGuy7",
+      "link": "https://paul-s-reid.com/web-dev/"
+    }
+  ],
   "settings": [
     {
       "name": "Hide message type icons",
