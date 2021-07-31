@@ -1,0 +1,12 @@
+{
+  "name": "Show user IDs",
+  "description": "Allows you to view any user's ID on their profile page.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["users"]
+    }
+  ],
+  "tags": ["community"],
+  "enabledByDefault": false
+}
