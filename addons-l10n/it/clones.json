@@ -1,1 +1,1 @@
-{"clones/clones":"cloni: {cloneCount}","clones/@name":"Numero dei cloni"}
+{"clones/clones":"cloni: {cloneCount}","clones/@name":"Numero dei cloni","clones/@description":"Mostra sopra lo stage dell'editor il numero totale di cloni."}
