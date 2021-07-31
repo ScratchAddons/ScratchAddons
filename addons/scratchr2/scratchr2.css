@@ -6,7 +6,8 @@ body {
 }
 a,
 input.link,
-.ui-widget-content a {
+.ui-widget-content a,
+#email-resend-box a {
   color: var(--scratchr2-linkColor);
   font-weight: bold;
   text-decoration: none;
@@ -86,7 +87,9 @@ button:hover,
 .button.grey,
 button.grey,
 .button[data-control="load-more"]:hover,
-.ui-widget button.ui-state-default {
+.ui-widget button.ui-state-default,
+#email-resend-box input[type="button"],
+#email-resend-box input[type="button"]:hover {
   border-radius: 4px;
   border: none;
   background: var(--scratchr2-primaryColor);

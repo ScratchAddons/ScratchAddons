@@ -1,12 +1,14 @@
 export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
 
-  // Insert this amazing filter
+  const setColor = () =>
+    document.getElementById("editor-stepping-flood").setAttribute("flood-color", addon.settings.get("highlight-color"));
+
   document.body.insertAdjacentHTML(
     "beforeend",
     `
 <svg style="position: fixed; top: -999999%;">
-  <filter id="blueStackGlow" height="160%" width="180%" y="-30%" x="-40%">
+  <filter id="colorStackGlow" height="160%" width="180%" y="-30%" x="-40%">
     <feGaussianBlur in="SourceGraphic" stdDeviation="4">
     </feGaussianBlur>
 
@@ -15,7 +17,7 @@ export default async function ({ addon, global, console }) {
       </feFuncA>
     </feComponentTransfer>
 
-    <feFlood flood-color="blue" flood-opacity="1" result="outColor">
+    <feFlood id="editor-stepping-flood" flood-color="blue" flood-opacity="1" result="outColor">
     </feFlood>
 
     <feComposite in="outColor" in2="outBlur" operator="in" result="outGlow">
@@ -27,6 +29,7 @@ export default async function ({ addon, global, console }) {
 </svg>
 `
   );
+  setColor();
   // Wait for Blockly, as it tends to not be ready sometimes...
   await addon.tab.traps.getBlockly();
   const elementsWithFilter = new Set();
@@ -55,11 +58,13 @@ export default async function ({ addon, global, console }) {
           });
           if (!childblock && block.svgPath_) {
             const svgPath = block.svgPath_;
-            svgPath.style.filter = "url(#blueStackGlow)";
+            svgPath.style.filter = "url(#colorStackGlow)";
             elementsWithFilter.add(svgPath);
           }
         });
       });
     }
   };
+
+  addon.settings.addEventListener("change", setColor);
 }

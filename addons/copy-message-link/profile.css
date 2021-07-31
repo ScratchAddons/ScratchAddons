@@ -1,0 +1,7 @@
+#comments .comment .report {
+  display: block;
+  opacity: 0;
+}
+#comments .comment:hover .report {
+  opacity: 1;
+}

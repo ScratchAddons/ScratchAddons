@@ -47,7 +47,7 @@ async function updateMsgCount() {
       return lastMsgCount;
     }
   } catch (err) {
-    console.error(err);
+    console.error("Error checking message count:", err);
     return null;
   }
 }
@@ -121,6 +121,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request === "getMsgCount") {
     (async () => {
       const count = await scratchAddons.methods.getMsgCount();
+      if (!sender.tab || sender.tab?.url?.startsWith(chrome.runtime.getURL("popups")))
+        return scratchAddons.sendToPopups({ setMsgCount: { count } });
       chrome.tabs.sendMessage(sender.tab.id, { setMsgCount: { count } }, { frameId: sender.tab.frameId });
     })();
   }

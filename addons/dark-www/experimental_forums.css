@@ -39,6 +39,7 @@
 }
 .djangobb td,
 .djangobb th,
+.djangobb tbody th,
 .djangobb blockquote,
 .code {
   border-color: #606060;

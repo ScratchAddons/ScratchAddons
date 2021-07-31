@@ -8,6 +8,8 @@ export default async function ({ addon, global, console }) {
   };
 
   const globalHandleDragOver = (e) => {
+    if (addon.self.disabled) return;
+
     if (!e.dataTransfer.types.includes("Files")) {
       return;
     }
@@ -125,5 +127,5 @@ export default async function ({ addon, global, console }) {
     el.addEventListener("drop", handleDrop);
   };
 
-  document.addEventListener("dragover", globalHandleDragOver, true);
+  document.addEventListener("dragover", globalHandleDragOver, { useCapture: true });
 }

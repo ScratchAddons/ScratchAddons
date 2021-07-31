@@ -1,11 +1,8 @@
-.sa-gamepad-container {
+[dir="ltr"] .sa-gamepad-container {
   margin-right: 0.2rem;
 }
-
-.sa-gamepad-spacer {
-  display: flex;
-  width: 100%;
-  justify-content: flex-end;
+[dir="rtl"] .sa-gamepad-container {
+  margin-left: 0.2rem;
 }
 
 .sa-gamepad-popup-outer {

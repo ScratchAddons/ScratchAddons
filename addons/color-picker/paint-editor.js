@@ -51,6 +51,10 @@ export default async ({ addon, console, msg }) => {
     });
     rateLimiter.abort(false);
     addon.tab.redux.initialize();
+    if (!("colorIndex" in addon.tab.redux.state.scratchPaint.fillMode)) {
+      console.error("Detected new paint editor; this will be supported in future versions.");
+      return;
+    }
     if (addon.tab.redux && typeof prevEventHandler === "function") {
       addon.tab.redux.removeEventListener("statechanged", prevEventHandler);
       prevEventHandler = null;
@@ -60,6 +64,7 @@ export default async ({ addon, console, msg }) => {
     const saColorPicker = Object.assign(document.createElement("div"), {
       className: "sa-color-picker sa-color-picker-paint",
     });
+    addon.tab.displayNoneWhileDisabled(saColorPicker, { display: "flex" });
     const saColorPickerColor = Object.assign(document.createElement("input"), {
       className: "sa-color-picker-color sa-color-picker-paint-color",
       type: "color",

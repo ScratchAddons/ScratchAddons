@@ -1,12 +1,11 @@
 export default async function ({ addon, global, console, msg }) {
-  const headers = new Headers();
-  if (addon.auth.xToken) headers.set("X-Token", addon.auth.xToken);
+  let { redux } = addon.tab;
 
-  const path = location.pathname.match(/\/projects\/[0-9]+/g);
-  // Return if there is no project id... for example, if the user visits
-  // scratch.mit.edu/projects/editor/?tutorial=getStarted
-  if (!path.length) return;
-  const data = await (await fetch("https://api.scratch.mit.edu" + path[0], { headers })).json();
+  await redux.waitForState((state) => state.preview.status.project === "FETCHED", {
+    actions: ["SET_INFO"],
+  });
+
+  let data = redux.state.preview.projectInfo;
 
   if (!data.history) return;
 

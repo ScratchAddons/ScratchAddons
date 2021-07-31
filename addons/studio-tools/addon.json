@@ -1,6 +1,6 @@
 {
-  "name": "Studio manager tools",
-  "description": "Lets you easily promote or remove anyone from your studios, as well as leaving any studio, through the \"curators\" tab.",
+  "name": "Studio tools",
+  "description": "Lets managers easily promote curators to managers or remove anyone from a studio on the \"curators\" tab, and adds the ability to leave a studio using a button under \"Follow Studio\".",
   "credits": [
     {
       "name": "World_Languages"
@@ -20,12 +20,8 @@
   ],
   "userscripts": [
     {
-      "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/studios/*/curators"]
-    },
-    {
       "url": "migrated.js",
-      "matches": ["https://scratch.mit.edu/studios_www/*"]
+      "matches": ["https://scratch.mit.edu/studios/*"]
     },
     {
       "url": "mystuff.js",
@@ -39,7 +35,7 @@
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["https://scratch.mit.edu/studios_www/*"]
+      "matches": ["https://scratch.mit.edu/studios/*"]
     }
   ],
   "tags": ["community", "studios", "recommended"],

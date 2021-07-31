@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import getDirection from "../rtl-list.js";
 import loadVueComponent from "../../libraries/common/load-vue-components.js";
-import Fuse from "../../libraries/thirdparty/fuse.basic.esm.min.js";
+import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
@@ -22,7 +22,7 @@ let initialTheme;
 let initialThemePath;
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "light.css");
+lightThemeLink.setAttribute("href", "../styles/colors-light.css");
 lightThemeLink.setAttribute("data-below-vue-components", "");
 chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   if (globalTheme === true) {
@@ -183,25 +183,41 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         browserLevelPermissions,
         grantedOptionalPermissions,
         addonListObjs: [],
+        sidebarUrls: (() => {
+          const uiLanguage = chrome.i18n.getUILanguage();
+          const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+          const version = chrome.runtime.getManifest().version;
+          const versionName = chrome.runtime.getManifest().version_name;
+          const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
+          return {
+            contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
+            feedback: `https://scratchaddons.com/${localeSlash}feedback/?version=${versionName}&${utm}`,
+            changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
+          };
+        })(),
       };
     },
     computed: {
       addonList() {
         if (!this.searchInput) {
-          this.addonListObjs
-            .filter((obj) => obj.group.id !== "_iframeSearch")
-            .forEach((obj) => (obj.matchesSearch = true));
+          this.addonListObjs.forEach((obj) => {
+            // Hide addons from _iframeSearch pseudogroup when not searching (popup)
+            if (obj.group.id === "_iframeSearch") obj.matchesSearch = false;
+            else obj.matchesSearch = true;
+          });
           return this.addonListObjs.sort((b, a) => b.naturalIndex - a.naturalIndex);
         }
 
         if (!fuse) return [];
         const fuseSearch = fuse.search(this.searchInput).sort((a, b) => {
           // Sort very good matches at the top no matter what
-          if ((a.score < 0.1) ^ (b.score < 0.1)) return Boolean(b.score < 0.1) - Boolean(b.score < 0.1);
+          if ((a.score < 0.1) ^ (b.score < 0.1)) return a.score < 0.1 ? -1 : 1;
           // Enabled addons at top
           else return b.item._enabled - a.item._enabled;
         });
-        const results = fuseSearch.map((result) => this.addonListObjs.find((obj) => obj.manifest === result.item));
+        const results = fuseSearch.map((result) =>
+          this.addonListObjs.find((obj) => obj.manifest._addonId === result.item._addonId)
+        );
         for (const obj of this.addonListObjs) obj.matchesSearch = results.includes(obj);
         return this.addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
       },
@@ -272,10 +288,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       },
       stopPropagation(e) {
         e.stopPropagation();
-      },
-      updateOption(id, newValue, addon) {
-        this.addonSettings[addon._addonId][id] = newValue;
-        this.updateSettings(addon);
       },
       updateSettings(addon, { wait = 0, settingId = null } = {}) {
         const value = settingId && this.addonSettings[addon._addonId][settingId];
@@ -361,7 +373,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         ).length;
       },
       groupMarginAbove(group) {
-        const i = this.addonGroups.indexOf(group);
         const firstVisibleGroup = this.addonGroups.find((group) => this.groupShownCount(group) > 0);
         return group !== firstVisibleGroup;
       },
@@ -443,10 +454,12 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
     vue.addonSettings = addonSettings;
+    const cleanManifests = [];
     let iframeData;
     if (isIframe) {
       iframeData = await getRunningAddons(manifests, addonsEnabled);
     }
+    const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
     for (const { manifest, addonId } of manifests) {
       manifest._categories = [];
       manifest._categories[0] = manifest.tags.includes("popup")
@@ -532,14 +545,16 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       for (const groupId of manifest._groups) {
         vue.addonGroups.find((g) => g.id === groupId)?.addonIds.push(manifest._addonId);
       }
+      cleanManifests.push(deepClone(manifest));
+    }
 
+    // Manifest objects will now be owned by Vue
+    for (const { manifest } of manifests) {
       Vue.set(vue.manifestsById, manifest._addonId, manifest);
     }
     vue.manifests = manifests.map(({ manifest }) => manifest);
-    fuse = new Fuse(
-      manifests.map(({ manifest }) => manifest),
-      fuseOptions
-    );
+
+    fuse = new Fuse(cleanManifests, fuseOptions);
 
     const checkTag = (tagOrTags, manifestA, manifestB) => {
       const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
@@ -599,7 +614,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
 
     vue.loaded = true;
-    setTimeout(handleKeySettings, 0);
     setTimeout(() => {
       // Set hash again after loading addons, to force scroll to addon
       let hash = window.location.hash;
@@ -620,36 +634,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     }, 0);
   });
 
-  function handleKeySettings() {
-    let keyInputs = document.querySelectorAll(".key");
-    for (const input of keyInputs) {
-      input.addEventListener("keydown", function (e) {
-        e.preventDefault();
-        e.target.value = e.ctrlKey
-          ? "Ctrl" +
-            (e.shiftKey ? " + Shift" : "") +
-            (e.key === "Control" || e.key === "Shift"
-              ? ""
-              : (e.ctrlKey ? " + " : "") +
-                (e.key.toUpperCase() === e.key
-                  ? e.code.includes("Digit")
-                    ? e.code.substring(5, e.code.length)
-                    : e.key
-                  : e.key.toUpperCase()))
-          : "";
-        vue.updateOption(
-          e.target.getAttribute("data-setting-id"),
-          e.target.value,
-          vue.manifests.find((manifest) => manifest._addonId === e.target.getAttribute("data-addon-id"))
-        );
-      });
-      input.addEventListener("keyup", function (e) {
-        // Ctrl by itself isn't a hotkey
-        if (e.target.value === "Ctrl") e.target.value = "";
-      });
-    }
-  }
-
   window.addEventListener("keydown", function (e) {
     if (e.ctrlKey && e.key === "f") {
       e.preventDefault();
@@ -662,7 +646,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   document.title = chrome.i18n.getMessage("settingsTitle");
   function resize() {
-    if (window.innerWidth < 1000) {
+    if (window.innerWidth < 1100) {
       vue.smallMode = true;
       vue.categoryOpen = false;
       vue.switchPath = "../../images/icons/switch.svg";

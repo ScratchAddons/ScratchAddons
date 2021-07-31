@@ -25,8 +25,10 @@ export default async function ({ template }) {
       showResetDropdown() {
         return (
           this.addon.presets &&
-          this.addon.presets.some(
-            (preset) => this.setting.id in preset.values && preset.values[this.setting.id] !== this.setting.default
+          this.addon.presets.some((preset) =>
+            Object.prototype.hasOwnProperty.call(preset.values, this.setting.id) && this.setting.type === "color"
+              ? preset.values[this.setting.id].toLowerCase() !== this.setting.default.toLowerCase()
+              : preset.values[this.setting.id] !== this.setting.default
           )
         );
       },
@@ -39,6 +41,26 @@ export default async function ({ template }) {
           ? input.value
           : this.setting.default;
       },
+      keySettingKeyDown(e) {
+        e.preventDefault();
+        e.target.value = e.ctrlKey
+          ? "Ctrl" +
+            (e.shiftKey ? " + Shift" : "") +
+            (e.key === "Control" || e.key === "Shift"
+              ? ""
+              : (e.ctrlKey ? " + " : "") +
+                (e.key.toUpperCase() === e.key
+                  ? e.code.includes("Digit")
+                    ? e.code.substring(5, e.code.length)
+                    : e.key
+                  : e.key.toUpperCase()))
+          : "";
+      },
+      keySettingKeyUp(e) {
+        // Ctrl by itself isn't a hotkey
+        if (e.target.value === "Ctrl") e.target.value = "";
+        this.updateOption(e.target.value);
+      },
       msg(...params) {
         return this.$root.msg(...params);
       },
@@ -47,7 +69,8 @@ export default async function ({ template }) {
         this.$root.updateSettings(...params);
       },
       updateOption(newValue) {
-        this.$root.updateOption(this.setting.id, newValue, this.addon);
+        this.addonSettings[this.addon._addonId][this.setting.id] = newValue;
+        this.updateSettings();
       },
     },
     events: {

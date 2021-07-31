@@ -21,7 +21,7 @@ jobs:
           
       - name: Prettify code (ScratchAddons)
         if: steps.generate-token.outcome == 'success'
-        uses: creyD/prettier_action@v3.1
+        uses: ScratchAddons/prettier_action@master
         with:
           prettier_options: --write .
           commit_message: Format code
@@ -30,7 +30,7 @@ jobs:
           
       - name: Prettify code (outside ScratchAddons)
         if: steps.generate-token.outcome != 'success'
-        uses: creyD/prettier_action@v3.1
+        uses: ScratchAddons/prettier_action@master
         with:
           prettier_options: --write .
           commit_message: Format code

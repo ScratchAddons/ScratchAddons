@@ -1,0 +1,48 @@
+{
+  "name": "Compact messages",
+  "description": "Makes Scratch's messages page more compact and easier to read.",
+  "settings": [
+    {
+      "name": "Hide message type icons",
+      "id": "hide_icons",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Message padding (px)",
+      "id": "message_padding",
+      "type": "integer",
+      "default": 5,
+      "min": 0,
+      "max": 16
+    },
+    {
+      "name": "Comment box padding (px)",
+      "id": "comment_padding",
+      "type": "integer",
+      "default": 5,
+      "min": 0,
+      "max": 16
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "styles.css",
+      "matches": ["https://scratch.mit.edu/messages"]
+    },
+    {
+      "url": "hide_icons.css",
+      "matches": ["https://scratch.mit.edu/messages"],
+      "settingMatch": {
+        "id": "hide_icons",
+        "value": true
+      }
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "versionAdded": "1.18.0",
+  "tags": ["community", "theme"],
+  "enabledByDefault": false
+}

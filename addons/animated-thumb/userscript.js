@@ -9,6 +9,7 @@ export default async function ({ addon, global, console, msg }) {
     });
     if (document.querySelector("[class*='project-title-input_title-field']")) {
       let setthumb = document.createElement("div");
+      addon.tab.displayNoneWhileDisabled(setthumb, { display: "flex" });
       setthumb.classList.add(addon.tab.scratchClass("menu-bar_menu-bar-item"));
       setthumb.title = msg("added-by");
       let thumbinner = document.createElement("span");

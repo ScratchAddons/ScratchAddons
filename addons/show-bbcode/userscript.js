@@ -38,15 +38,9 @@ function viewSource(post, msg) {
 export default async function ({ addon, console, msg }) {
   while (true) {
     const post = await addon.tab.waitForElement(".blockpost", { markAsSeen: true });
-    const actionRow = post.querySelector(".postfootright ul");
     const sourceItem = document.createElement("li");
-    const quoteItem = actionRow.querySelector(".postquote");
-    if (quoteItem) {
-      actionRow.insertBefore(sourceItem, quoteItem);
-    } else {
-      actionRow.appendChild(sourceItem);
-    }
-    sourceItem.appendChild(document.createTextNode("| "));
+    addon.tab.displayNoneWhileDisabled(sourceItem);
+    addon.tab.appendToSharedSpace({ space: "forumsAfterPostReport", scope: post, element: sourceItem, order: 0 });
     const sourceButton = document.createElement("a");
     sourceItem.appendChild(sourceButton);
     sourceItem.appendChild(document.createTextNode(" "));

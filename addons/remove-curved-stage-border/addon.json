@@ -15,7 +15,7 @@
   "userstyles": [
     {
       "url": "remove-borders.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ]
 }

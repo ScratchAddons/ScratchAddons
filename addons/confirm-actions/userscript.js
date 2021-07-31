@@ -13,8 +13,7 @@ export default async function ({ addon, console, msg }) {
       } else if (
         /^\/studios\/\d+\/curators/g.test(location.pathname) &&
         addon.settings.get("joiningstudio") &&
-        (e.target.closest("a.accept") ||
-          (e.target.textContent && e.target.textContent === addon.tab.scratchMessage("studio.curatorAcceptInvite")))
+        e.target.closest("button.studio-invitation-button")
       ) {
         cancelMessage = msg("joinstudio");
       } else if (addon.settings.get("closingtopic") && e.target.closest("dd form button")) {

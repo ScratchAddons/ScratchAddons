@@ -4,7 +4,7 @@
   "credits": [
     {
       "name": "Maximouse (addon, \"Experimental\" Dark)",
-      "link": "https://github.com/mxmou/customize-scratch"
+      "link": "https://scratch.mit.edu/users/Maximouse/"
     },
     {
       "name": "infinitytec (3.Dark, 3.Darker)",
@@ -13,6 +13,10 @@
     {
       "name": "_nix (Dark editor)",
       "link": "https://github.com/towerofnix"
+    },
+    {
+      "name": "GarboMuffin (TurboWarp Dark)",
+      "link": "https://github.com/GarboMuffin"
     }
   ],
   "customCssVariables": [
@@ -78,16 +82,6 @@
         "type": "textColor",
         "black": "none",
         "white": "brightness(0) invert(1)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primary"
-        }
-      }
-    },
-    {
-      "name": "primary-iconFilter",
-      "value": {
-        "type": "recolorFilter",
         "source": {
           "type": "settingValue",
           "settingId": "primary"
@@ -338,6 +332,23 @@
       }
     },
     {
+      "name": "accent-openFontDropdownText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "accent"
+          },
+          "transparentSource": {
+            "type": "settingValue",
+            "settingId": "border"
+          }
+        }
+      }
+    },
+    {
       "name": "accent-filter",
       "value": {
         "type": "textColor",
@@ -373,6 +384,46 @@
       }
     },
     {
+      "name": "accent-paintEditorBackground",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "accent"
+        },
+        "transparentSource": {
+          "type": "multiply",
+          "source": {
+            "type": "textColor",
+            "black": {
+              "type": "makeHsv",
+              "h": {
+                "type": "settingValue",
+                "settingId": "primary"
+              },
+              "s": 1,
+              "v": 0.67
+            },
+            "white": {
+              "type": "makeHsv",
+              "h": {
+                "type": "settingValue",
+                "settingId": "primary"
+              },
+              "s": 0.5,
+              "v": 1
+            },
+            "threshold": 112,
+            "source": {
+              "type": "settingValue",
+              "settingId": "accent"
+            }
+          },
+          "a": 0.15
+        }
+      }
+    },
+    {
       "name": "input-text",
       "value": {
         "type": "textColor",
@@ -400,6 +451,19 @@
         "type": "textColor",
         "black": "none",
         "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-foregroundShadow",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.15)",
+        "white": "rgba(255, 255, 255, 0.15)",
+        "threshold": 60,
         "source": {
           "type": "settingValue",
           "settingId": "input"
@@ -597,24 +661,25 @@
   "injectAsStyleElt": true,
   "versionAdded": "1.0.0",
   "updateUserstylesOnSettingsChange": true,
+  "userscripts": [
+    {
+      "url": "bubbles.js",
+      "matches": ["projects"]
+    },
+    {
+      "url": "paper.js",
+      "matches": ["projects"],
+      "runAtComplete": false
+    }
+  ],
   "userstyles": [
     {
       "url": "experimental_editor.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ]
+      "matches": ["projects"]
     },
     {
       "url": "text-shadow.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "settingMatch": {
         "id": "textShadow",
         "value": true
@@ -622,12 +687,7 @@
     },
     {
       "url": "hide_dots.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "settingMatch": {
         "id": "dots",
         "value": false
@@ -635,12 +695,7 @@
     },
     {
       "url": "stage.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "settingMatch": {
         "id": "affectStage",
         "value": true
@@ -648,12 +703,7 @@
     },
     {
       "url": "dark_comments.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "settingMatch": {
         "id": "darkComments",
         "value": true
@@ -661,12 +711,7 @@
     },
     {
       "url": "scrollbar.css",
-      "matches": [
-        "https://scratch.mit.edu/projects/*/",
-        "https://scratch.mit.edu/projects/*/editor",
-        "https://scratch.mit.edu/projects/*/fullscreen",
-        "https://scratch.mit.edu/projects/editor"
-      ],
+      "matches": ["projects"],
       "settingMatch": {
         "id": "darkScrollbars",
         "value": true
@@ -717,13 +762,13 @@
       "default": "#202020"
     },
     {
-      "name": "Asset list background",
+      "name": "Costume/sound list background",
       "id": "selector2",
       "type": "color",
       "default": "#202020"
     },
     {
-      "name": "Selected sprite/asset background",
+      "name": "Selected sprite/costume/sound background",
       "id": "selectorSelection",
       "type": "color",
       "default": "#111111"
@@ -741,7 +786,7 @@
       "default": "#202020"
     },
     {
-      "name": "Workspace background",
+      "name": "Code area background",
       "id": "workspace",
       "type": "color",
       "default": "#151515"
@@ -790,7 +835,7 @@
       "default": false
     },
     {
-      "name": "Change the colors of variables, lists, and answer inputs on the stage",
+      "name": "Change the colors of variables, lists, speech bubbles, and answer inputs on the stage",
       "id": "affectStage",
       "type": "boolean",
       "default": false
@@ -915,6 +960,34 @@
         "fullscreen": "#282828",
         "stageHeader": "#333333",
         "border": "#444444",
+        "textShadow": false,
+        "dots": true,
+        "darkComments": true,
+        "darkScrollbars": true
+      }
+    },
+    {
+      "name": "TurboWarp Dark",
+      "id": "tw-dark",
+      "description": "A dark theme based on TurboWarp's dark mode.",
+      "values": {
+        "page": "#111111",
+        "primary": "#ff4d4d",
+        "highlightText": "#ff4d4d",
+        "menuBar": "#333333",
+        "activeTab": "#1e1e1e",
+        "tab": "#2e2e2e",
+        "selector": "#1e1e1e",
+        "selector2": "#2e2e2e",
+        "selectorSelection": "#111111",
+        "accent": "#111111",
+        "input": "#1e1e1e",
+        "workspace": "#1e1e1e",
+        "categoryMenu": "#111111",
+        "palette": "#111111",
+        "fullscreen": "#111111",
+        "stageHeader": "#111111",
+        "border": "#ffffff0d",
         "textShadow": false,
         "dots": true,
         "darkComments": true,

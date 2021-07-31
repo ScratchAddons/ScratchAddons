@@ -4,6 +4,24 @@ try {
   throw "Scratch Addons: not first party iframe";
 }
 
+const _realConsole = window.console;
+const consoleOutput = (logAuthor = "[cs]") => {
+  const style = {
+    // Remember to change these as well on module.js
+    leftPrefix: "background:  #ff7b26; color: white; border-radius: 0.5rem 0 0 0.5rem; padding: 0 0.5rem",
+    rightPrefix:
+      "background: #222; color: white; border-radius: 0 0.5rem 0.5rem 0; padding: 0 0.5rem; font-weight: bold",
+    text: "",
+  };
+  return [`%cSA%c${logAuthor}%c`, style.leftPrefix, style.rightPrefix, style.text];
+};
+const console = {
+  ..._realConsole,
+  log: _realConsole.log.bind(_realConsole, ...consoleOutput()),
+  warn: _realConsole.warn.bind(_realConsole, ...consoleOutput()),
+  error: _realConsole.error.bind(_realConsole, ...consoleOutput()),
+};
+
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
 
 let receivedResponse = false;
@@ -66,9 +84,6 @@ const cs = {
     this._url = newUrl;
     csUrlObserver.dispatchEvent(new CustomEvent("change", { detail: { newUrl } }));
   },
-  requestMsgCount() {
-    chrome.runtime.sendMessage("getMsgCount");
-  },
   copyImage(dataURL) {
     // Firefox only
     return new Promise((resolve, reject) => {
@@ -127,6 +142,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request === "getInitialUrl") {
     sendResponse(pseudoUrl || initialUrl);
+  } else if (request === "getLocationHref") {
+    sendResponse(location.href);
   }
 });
 
@@ -209,7 +226,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for customCssVariables
   const getColor = (addonId, obj) => {
-    if (typeof obj === "string" || obj === undefined) return obj;
+    if (typeof obj !== "object") return obj;
     let hex;
     switch (obj.type) {
       case "settingValue":
@@ -232,6 +249,12 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         let opaqueHex = getColor(addonId, obj.opaqueSource);
         let transparentHex = getColor(addonId, obj.transparentSource);
         return textColorLib.alphaBlend(opaqueHex, transparentHex);
+      }
+      case "makeHsv": {
+        let hSource = getColor(addonId, obj.h);
+        let sSource = getColor(addonId, obj.s);
+        let vSource = getColor(addonId, obj.v);
+        return textColorLib.makeHsv(hSource, sSource, vSource);
       }
       case "recolorFilter": {
         hex = getColor(addonId, obj.source);
@@ -264,19 +287,21 @@ function waitForDocumentHead() {
   }
 }
 
-async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
-  const isStudio = /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/.test(location.pathname);
-  if (isStudio && !pseudoUrl) {
-    await waitForDocumentHead();
-    if (document.querySelector("meta[name='format-detection']")) {
-      // scratch-www studio
-      pseudoUrl = location.href.replace("/studios/", "/studios_www/");
-      receivedResponse = false;
-      chrome.runtime.sendMessage({ contentScriptReady: { url: pseudoUrl } }, onResponse);
-      return;
-    }
+function getL10NURLs() {
+  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+  const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
+  if (langCode === "pt") {
+    urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
   }
+  if (langCode.includes("-")) {
+    urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
+  }
+  const enJSON = chrome.runtime.getURL("addons-l10n/en");
+  if (!urls.includes(enJSON)) urls.push(enJSON);
+  return urls;
+}
 
+async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscripts, addonsWithUserstyles }) {
   // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   const disabledDynamicAddons = [];
@@ -293,7 +318,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
   }
 
   _page_.globalState = globalState;
-  _page_.l10njson = l10njson;
+  _page_.l10njson = getL10NURLs();
   _page_.addonsWithUserscripts = addonsWithUserscripts;
   _page_.dataReady = true;
 
@@ -305,12 +330,15 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
     } else if (request.fireEvent) {
       _page_.fireEvent(request.fireEvent);
     } else if (request.dynamicAddonEnabled) {
-      const { scripts, userstyles, cssVariables, addonId, injectAsStyleElt, index } = request.dynamicAddonEnabled;
+      const { scripts, userstyles, cssVariables, addonId, injectAsStyleElt, index, dynamicEnable, dynamicDisable } =
+        request.dynamicAddonEnabled;
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
       if (everLoadedAddons.find((addon) => addon.addonId === addonId)) {
+        if (!dynamicDisable) return;
         // Addon was reenabled
         _page_.fireEvent({ name: "reenabled", addonId, target: "self" });
       } else {
+        if (!dynamicEnable) return;
         // Addon was not injected in page yet
         _page_.runAddonUserscripts({ addonId, scripts, enabledLate: true });
       }
@@ -337,12 +365,12 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
       // Try looking for the "userscriptMatches" function.
       removeAddonStyles(addonId);
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
-    } else if (request.setMsgCount) {
-      _page_.setMsgCount(request.setMsgCount);
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
       sendResponse({ userscripts, userstyles, disabledDynamicAddons });
+    } else if (request === "refetchSession") {
+      _page_.refetchSession();
     }
   });
 }
@@ -361,7 +389,12 @@ function forumWarning(key) {
     }
     let addonError = document.createElement("li");
     let reportLink = document.createElement("a");
-    reportLink.href = "https://scratchaddons.com/feedback";
+    const uiLanguage = chrome.i18n.getUILanguage();
+    const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+    const utm = `utm_source=extension&utm_medium=forumwarning&utm_campaign=v${chrome.runtime.getManifest().version}`;
+    reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?version=${
+      chrome.runtime.getManifest().version
+    }&${utm}`;
     reportLink.target = "_blank";
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     let text1 = document.createElement("span");
@@ -395,10 +428,14 @@ const showBanner = () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
+  const notifImageLink = Object.assign(document.createElement("a"), {
+    href: "https://www.youtube.com/watch?v=4OluKLESoVU",
+    target: "_blank",
+  });
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/icon.svg"),
-    style: "height: 150px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.jpg"),
+    style: "height: 100px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -428,7 +465,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_17", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -447,25 +484,25 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo2", DOLLARS)).replace(
-      "$1",
-      Object.assign(document.createElement("a"), {
-        href: "https://scratch.mit.edu/scratch-addons-extension/settings#addon-msg-count-badge",
-        target: "_blank",
-        textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
-      }).outerHTML
-    ),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_17"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
   });
+  const uiLanguage = chrome.i18n.getUILanguage();
+  const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+  const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${
+    chrome.runtime.getManifest().version
+  }`;
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
-    href: `https://scratchaddons.com/changelog?versionname=${chrome.runtime.getManifest().version}-notif`,
+    href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
-    href: `https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}-notif`,
+    href: `https://scratchaddons.com/${localeSlash}feedback/?version=${
+      chrome.runtime.getManifest().version
+    }-notif&${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("feedback"),
   });
@@ -496,7 +533,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  notifInnerBody.appendChild(notifImage);
+  notifImageLink.appendChild(notifImage);
+
+  notifInnerBody.appendChild(notifImageLink);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);
@@ -513,7 +552,7 @@ const handleBanner = async () => {
   const settings = await promisify(chrome.storage.local.get.bind(chrome.storage.local))(["bannerSettings"]);
   const force = !settings || !settings.bannerSettings;
 
-  if (force || settings.bannerSettings.lastShown !== currentVersionMajorMinor) {
+  if (force || settings.bannerSettings.lastShown !== currentVersionMajorMinor || location.hash === "#sa-update-notif") {
     console.log("Banner shown.");
     await promisify(chrome.storage.local.set.bind(chrome.storage.local))({
       bannerSettings: Object.assign({}, settings.bannerSettings, { lastShown: currentVersionMajorMinor }),
@@ -530,7 +569,6 @@ if (document.readyState !== "loading") {
 
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
 const isStudio = pathArr[0] === "studios";
-const r2IsStudioComments = isStudio && pathArr[2] === "comments";
 const isProject = pathArr[0] === "projects";
 
 if (isProfile || isStudio || isProject) {
@@ -557,8 +595,7 @@ if (isProfile || isStudio || isProject) {
   const confirmMsg = chrome.i18n.getMessage("captureCommentConfirm");
 
   window.addEventListener("load", () => {
-    const isScratchWww = Boolean(document.querySelector("meta[name='format-detection']"));
-    if (isProfile || (r2IsStudioComments && !isScratchWww)) {
+    if (isProfile) {
       window.addEventListener(
         "click",
         (e) => {
@@ -602,7 +639,7 @@ if (isProfile || isStudio || isProject) {
         },
         { capture: true }
       );
-    } else if (isProject || (isStudio && isScratchWww)) {
+    } else if (isProject || isStudio) {
       // For projects, we want to be careful not to hurt performance.
       // Let's capture the event in the comments container instead
       // of the whole window. There will be a new comment container
