@@ -562,7 +562,7 @@ export default class DevTools {
         }
       }
 
-      if (unusedLocals.length > 0 && !dataId) {
+      if (unusedLocals.length > 0) {
         const unusedCount = unusedLocals.length;
         let message = this.msg("unused-var", {
           count: unusedCount,
@@ -593,7 +593,7 @@ export default class DevTools {
           }
         }
       }
-      if (unusedLists.length > 0 && !dataId) {
+      if (unusedLists.length > 0) {
         const unusedCount = unusedLists.length;
         let message = this.msg("unused-list", {
           count: unusedCount,
