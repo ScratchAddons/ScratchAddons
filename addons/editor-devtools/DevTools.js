@@ -53,9 +53,12 @@ export default class DevTools {
         oldCleanUpFunc.call(this);
       }
     };
+
+    let orginialMsg = blockly.Msg.CLEAN_UP;
     if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
     this.addon.settings.addEventListener("change", () => {
       if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
+      else blockly.Msg.CLEAN_UP = orginialMsg;
     });
 
     this.addon.tab.createBlockContextMenu(
