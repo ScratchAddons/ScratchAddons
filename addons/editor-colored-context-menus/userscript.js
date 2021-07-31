@@ -51,15 +51,15 @@ function handleClick(e) {
     return;
   }
 
-  const fillHex = fill.substr(1);
-  const rgb = parseInt(fillHex, 16);
-  const hsl = rgb2hsl(rgb);
-  hsl[2] = Math.max(hsl[2] - 15, 0);
-  const border = "hsl(" + hsl[0] + ", " + hsl[1] + "%, " + hsl[2] + "%)";
+  const border = window.getComputedStyle(background).getPropertyValue("stroke") || "#0003";
+  const textColor = window.getComputedStyle(background).getPropertyValue("--sa-block-text-color") || "#fff";
+  const hoverBg = window.getComputedStyle(background).getPropertyValue("--sa-block-secondary-color") || "#0001";
 
   widgetDiv.classList.add("u-contextmenu-colored");
   widgetDiv.style.setProperty("--u-contextmenu-bg", fill);
   widgetDiv.style.setProperty("--u-contextmenu-border", border);
+  widgetDiv.style.setProperty("--u-contextmenu-text", textColor);
+  widgetDiv.style.setProperty("--u-contextmenu-hover", hoverBg);
 }
 
 function rgb2hsl(rgb) {
