@@ -5,13 +5,16 @@ g[data-category] > path.blocklyBlockBackground {
   stroke: #0003;
 }
 g[data-argument-type="dropdown"] > path,
-g[data-argument-type="dropdown"] > rect,
-g[data-argument-type="variable"] > rect,
 g[data-argument-type="variable"] > path,
-g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > path,
-path[data-argument-type="boolean"] {
+path[data-argument-type="boolean"],
+g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > path /* block preview in define block */ {
   stroke: #0003;
   fill: #0001;
+}
+g[data-argument-type="dropdown"] > rect,
+g[data-argument-type="variable"] > rect {
+  stroke: #0003;
+  fill: none;
 }
 g[data-argument-type*="text"] > path,
 [data-category] g > line {
@@ -19,14 +22,6 @@ g[data-argument-type*="text"] > path,
 }
 .scratchCategoryItemBubble {
   border-color: #0003 !important;
-}
-
-#s3devDD > li.extension {
-  background-color: var(--editorTheme3-PenColor);
-}
-
-.blocklyEditableText rect {
-  fill: #0001;
 }
 
 .fieldTextInput {

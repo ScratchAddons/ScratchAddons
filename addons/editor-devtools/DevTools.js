@@ -1505,7 +1505,7 @@ export default class DevTools {
       this.hideFloatDropDown();
     }
 
-    if (e.button === 1) {
+    if (e.button === 1 || e.altKey) {
       // Wheel button...
       try {
         this.middleClick(e);
