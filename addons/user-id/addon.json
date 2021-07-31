@@ -1,6 +1,12 @@
 {
   "name": "Show user IDs",
   "description": "Allows you to view any user's ID on their profile page.",
+  "credits": [
+  	{
+  		"name": "LankyBox01",
+  		"link": "https://lankybox01.leahcimto.com/"
+    }
+  ],
   "userscripts": [
     {
       "url": "userscript.js",
@@ -8,5 +14,6 @@
     }
   ],
   "tags": ["community", "profiles"],
+  "versionAdded": "1.18.0",
   "enabledByDefault": false
 }
