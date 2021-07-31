@@ -71,6 +71,25 @@
           :data-setting-id="setting.id"
         />
       </template>
+      <template v-if="setting.type === 'datalist'">
+        <input
+          type="text"
+          class="setting-input string"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @change="checkValidity() || updateSettings()"
+          :disabled="!addon._enabled"
+          :placeholder="setting.default"
+          :maxlength="setting.max || 100"
+          :minlength="setting.min || 0"
+          :required="!!setting.min"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+          :list="'data-list-' + addon._addonId + '-' + setting.id"
+        />
+        <datalist :id="'data-list-' + addon._addonId + '-' + setting.id">
+          <option v-for="item of setting.items" :value="item"></option>
+        </datalist>
+      </template>
       <template v-if="setting.type === 'key'">
         <input
           type="text"

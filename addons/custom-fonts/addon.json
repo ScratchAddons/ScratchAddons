@@ -30,38 +30,44 @@
     {
       "name": "Navigation bar font",
       "id": "navfnt",
-      "type": "string",
-      "default": "Helvetica"
+      "type": "datalist",
+      "default": "Helvetica",
+      "items": ["Sora", "Helvetica", "Arial"]
     },
     {
       "name": "Main font",
       "id": "mainfnt",
-      "type": "string",
-      "default": "Helvetica"
+      "type": "datalist",
+      "default": "Helvetica",
+      "items": ["Sora", "Helvetica", "Arial"]
     },
     {
       "name": "Editor font",
       "id": "editfnt",
-      "type": "string",
-      "default": "Helvetica"
+      "type": "datalist",
+      "default": "Helvetica",
+      "items": ["Sora", "Helvetica", "Arial"]
     },
     {
       "name": "Block Font",
       "id": "blockfnt",
-      "type": "string",
-      "default": "Helvetica"
+      "type": "datalist",
+      "default": "Helvetica",
+      "items": ["Sora", "Helvetica", "Arial"]
     },
     {
       "name": "Header font",
       "id": "headfnt",
-      "type": "string",
-      "default": "Helvetica"
+      "type": "datalist",
+      "default": "Helvetica",
+      "items": ["Sora", "Helvetica", "Arial"]
     },
     {
       "name": "Footer font",
       "id": "footerfnt",
-      "type": "string",
-      "default": "Helvetica"
+      "type": "datalist",
+      "default": "Helvetica",
+      "items": ["Sora", "Helvetica", "Arial"]
     }
   ]
 }
