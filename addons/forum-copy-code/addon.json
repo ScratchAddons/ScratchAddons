@@ -1,6 +1,6 @@
 {
   "name": "Copy Code button in forums",
-  "description": "Adds a button to copy code inserted via [code] tags in the forums.",
+  "description": "Adds buttons to copy code inserted via code tags in the forums.",
   "tags": ["community", "forums"],
   "credits": [
     {
