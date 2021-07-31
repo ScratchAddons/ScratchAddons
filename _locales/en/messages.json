@@ -234,7 +234,7 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1_v1_18": {
-    "message": "New addon: \"turbowarp button\", which adds a button on project pages to play the project in TurboWarp.org. Go to $1 to enable it."
+    "message": "New addon: \"TurboWarp button\", which adds a button on project pages to play the project in TurboWarp.org. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
