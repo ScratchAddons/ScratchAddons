@@ -4,7 +4,7 @@ import loadPopup from "../popup-loader.js";
 //theme switching
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "light.css");
+lightThemeLink.setAttribute("href", "../styles/colors-light.css");
 chrome.storage.sync.get(["globalTheme"], function (r) {
   let rr = false; //true = light, false = dark
   if (r.globalTheme) rr = r.globalTheme;

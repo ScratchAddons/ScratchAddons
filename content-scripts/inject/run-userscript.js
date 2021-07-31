@@ -6,22 +6,24 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
   for (const scriptInfo of scripts) {
     const { url: scriptPath, runAtComplete } = scriptInfo;
     const scriptUrl = `${new URL(import.meta.url).origin}/addons/${addonId}/${scriptPath}`;
-    console.log(
-      `%cDebug addons/${addonId}/${scriptPath}: ${scriptUrl}, runAtComplete: ${runAtComplete}`,
-      "color:red; font-weight: bold; font-size: 1.2em;"
-    );
     const loadUserscript = async () => {
       await scratchAddons.l10n.loadByAddonId(addonId);
       const module = await import(scriptUrl);
-      const log = _realConsole.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
-      const warn = _realConsole.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
       const msg = (key, placeholders) =>
         scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
       msg.locale = scratchAddons.l10n.locale;
+      scratchAddons.console.logForAddon(`${addonId} [page]`)(
+        `Running ${scriptUrl}, runAtComplete: ${runAtComplete}, enabledLate: ${enabledLate}`
+      );
+      const localConsole = {
+        log: scratchAddons.console.logForAddon(addonId),
+        warn: scratchAddons.console.warnForAddon(addonId),
+        error: scratchAddons.console.errorForAddon(addonId),
+      };
       module.default({
         addon: addonObj,
         global: globalObj,
-        console: { ..._realConsole, log, warn },
+        console: { ...console, ...localConsole },
         msg,
         safeMsg: (key, placeholders) =>
           scratchAddons.l10n.escaped(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders),

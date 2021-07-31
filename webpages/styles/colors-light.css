@@ -1,0 +1,38 @@
+:root {
+  --brand-orange-min-font-weight: 600;
+  --green-text: var(--green);
+  --blue-text: var(--blue);
+
+  --page-background: #fcfcfc;
+  --content-background: #f7f7f7;
+  --navigation-background: #ecebeb;
+  --search-toolbar-background: #fcfcfc;
+  --button-background: #ecebeb;
+  --button-hover-background: #d4d3d3;
+  --input-background: #fff;
+  --search-input-background: #f0f0f0;
+  --switch-background: #888;
+  --switch-inner-background: #fff;
+  --tooltip-background: #ecebeb;
+  --comment-background: #f0f0f0;
+  --unread-comment-background: #fff;
+  --notice-background: rgba(253, 221, 43, 0.25);
+  --notice-text: #222;
+  --notice-icon-filter: none;
+  --warning-background: var(--red);
+  --warning-border: var(--red-variant);
+
+  --hover-highlight: rgba(0, 0, 0, 0.05);
+  --hover-darken: var(--hover-highlight);
+
+  --content-border: #cfcfcf;
+  --content-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --content-separator: #aaa;
+  --control-border: #aaa;
+
+  --content-text: #222;
+  --content-icon-filter: brightness(0);
+  --description-text: #444;
+  --label-text: #555;
+  --gray-text: #a1a1a1;
+}

@@ -83,6 +83,10 @@
   "debugger",
   "disable-stage-drag-select",
   "studio-followers",
+  "items-per-row",
+  "default-project",
+  "turbowarp-player",
+  "ctrl-enter-post",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -95,5 +99,7 @@
   "// For website:",
   "scratchr2",
   "dark-www",
-  "old-studio-layout"
+  "old-studio-layout",
+  "compact-messages",
+  "customize-avatar-border"
 ]

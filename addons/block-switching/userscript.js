@@ -1,7 +1,7 @@
 import blockToDom from "./blockToDom.js";
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.traps.getBlockly();
+  const blockly = await addon.tab.traps.getBlockly();
 
   const blockSwitches = {};
 
@@ -557,8 +557,6 @@ export default async function ({ addon, global, console, msg }) {
   blockSwitches["data_variable"] = [];
   blockSwitches["data_listcontents"] = [];
 
-  let addBorderToContextMenuItem = -1;
-
   const genuid = () => {
     const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
     let result = "";
@@ -669,111 +667,40 @@ export default async function ({ addon, global, console, msg }) {
     }, 0);
   };
 
-  const customContextMenuHandler = function (options) {
-    if (addon.self.disabled) return;
+  addon.tab.createBlockContextMenu(
+    (items, block) => {
+      if (!addon.self.disabled) {
+        const switches = blockSwitches[block.type] || [];
+        switches.forEach((opcodeData, i) => {
+          const isNoop = opcodeData.opcode === "noop";
+          if (isNoop && !addon.settings.get("noop")) return;
 
-    if (addon.settings.get("border")) {
-      addBorderToContextMenuItem = options.length;
-    }
+          const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
+          const insertBeforeIndex =
+            makeSpaceItemIndex !== -1
+              ? // If "make space" button exists, add own items before it
+                makeSpaceItemIndex
+              : // If there's no such button, insert at end
+                items.length;
 
-    if (this._originalCustomContextMenu) {
-      this._originalCustomContextMenu.call(this, options);
-    }
-
-    const switches = blockSwitches[this.type];
-    for (const opcodeData of switches) {
-      const isNoop = opcodeData.opcode === "noop";
-      if (isNoop && !addon.settings.get("noop")) {
-        continue;
-      }
-      const translationOpcode = isNoop ? this.type : opcodeData.opcode;
-      const translation = msg(translationOpcode);
-      options.push({
-        enabled: true,
-        text: translation,
-        callback: menuCallbackFactory(this, opcodeData),
-      });
-    }
-  };
-
-  const injectCustomContextMenu = (block) => {
-    const type = block.type;
-    if (!Object.prototype.hasOwnProperty.call(blockSwitches, type)) {
-      return;
-    }
-
-    if (block._customContextMenuInjected) {
-      return;
-    }
-    block._customContextMenuInjected = true;
-
-    if (block.customContextMenu) {
-      block._originalCustomContextMenu = block.customContextMenu;
-    }
-
-    block.customContextMenu = customContextMenuHandler;
-  };
-
-  const changeListener = (change) => {
-    if (change.type !== "create") {
-      return;
-    }
-
-    for (const id of change.ids) {
-      const block = Blockly.getMainWorkspace().getBlockById(id);
-      if (!block) continue;
-      injectCustomContextMenu(block);
-    }
-  };
-
-  const mutationObserverCallback = (mutations) => {
-    if (addon.self.disabled) return;
-    for (const mutation of mutations) {
-      for (const node of mutation.addedNodes) {
-        if (node.classList.contains("blocklyContextMenu")) {
-          if (addBorderToContextMenuItem === -1) {
-            continue;
-          }
-          const children = node.children;
-          const item = children[addBorderToContextMenuItem];
-          if (item) {
-            item.style.paddingTop = "2px";
-            item.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
-          }
-          addBorderToContextMenuItem = -1;
+          items.splice(insertBeforeIndex, 0, {
+            enabled: true,
+            text: msg(isNoop ? block.type : opcodeData.opcode),
+            callback: menuCallbackFactory(block, opcodeData),
+            separator: addon.settings.get("border") && i === 0,
+          });
+        });
+        if (block.type === "data_variable" && block.category_ === "data") {
+          // Add top border to first variable (if it exists)
+          const delBlockIndex = items.findIndex((item) => item.text === blockly.Msg.DELETE_BLOCK);
+          // firstVariableItem might be undefined, a variable to switch to,
+          // or an item added by editor-devtools (or any addon before this one)
+          const firstVariableItem = items[delBlockIndex + 1];
+          if (firstVariableItem && addon.settings.get("border")) firstVariableItem.separator = true;
         }
       }
-    }
-  };
-
-  const inject = () => {
-    const workspace = Blockly.getMainWorkspace();
-    if (workspace._blockswitchingInjected) {
-      return;
-    }
-    mutationObserver.observe(document.querySelector(".blocklyWidgetDiv"), {
-      childList: true,
-    });
-    workspace._blockswitchingInjected = true;
-    workspace.getAllBlocks().forEach(injectCustomContextMenu);
-    workspace.addChangeListener(changeListener);
-    const languageSelector = document.querySelector('[class^="language-selector_language-select"]');
-    if (languageSelector) {
-      languageSelector.addEventListener("change", () => {
-        setTimeout(inject);
-      });
-    }
-  };
-
-  const mutationObserver = new MutationObserver(mutationObserverCallback);
-
-  if (addon.tab.editorMode === "editor") {
-    const interval = setInterval(() => {
-      if (Blockly.getMainWorkspace()) {
-        inject();
-        clearInterval(interval);
-      }
-    }, 100);
-  }
-  addon.tab.addEventListener("urlChange", () => addon.tab.editorMode === "editor" && inject());
+      return items;
+    },
+    { blocks: true }
+  );
 }

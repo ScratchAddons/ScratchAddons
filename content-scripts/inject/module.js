@@ -9,6 +9,25 @@ scratchAddons.eventTargets = {
   tab: [],
   self: [],
 };
+scratchAddons.session = {};
+const consoleOutput = (logAuthor = "[page]") => {
+  const style = {
+    // Remember to change these as well on cs.js
+    leftPrefix: "background:  #ff7b26; color: white; border-radius: 0.5rem 0 0 0.5rem; padding: 0 0.5rem",
+    rightPrefix:
+      "background: #222; color: white; border-radius: 0 0.5rem 0.5rem 0; padding: 0 0.5rem; font-weight: bold",
+    text: "",
+  };
+  return [`%cSA%c${logAuthor}%c`, style.leftPrefix, style.rightPrefix, style.text];
+};
+scratchAddons.console = {
+  log: _realConsole.log.bind(_realConsole, ...consoleOutput()),
+  warn: _realConsole.warn.bind(_realConsole, ...consoleOutput()),
+  error: _realConsole.error.bind(_realConsole, ...consoleOutput()),
+  logForAddon: (addonId) => _realConsole.log.bind(_realConsole, ...consoleOutput(addonId)),
+  warnForAddon: (addonId) => _realConsole.warn.bind(_realConsole, ...consoleOutput(addonId)),
+  errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
+};
 
 const pendingPromises = {};
 pendingPromises.msgCount = [];
@@ -38,6 +57,7 @@ const page = {
   set dataReady(val) {
     this._dataReady = val;
     onDataReady(); // Assume set to true
+    this.refetchSession();
   },
 
   runAddonUserscripts, // Gets called by cs.js when addon enabled late
@@ -67,9 +87,28 @@ const page = {
       );
     }
   },
-  setMsgCount({ count }) {
-    pendingPromises.msgCount.forEach((promiseResolver) => promiseResolver(count));
-    pendingPromises.msgCount = [];
+  isFetching: false,
+  async refetchSession() {
+    let res;
+    let d;
+    if (this.isFetching) return;
+    this.isFetching = true;
+    scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh());
+    try {
+      res = await fetch("https://scratch.mit.edu/session/", {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      });
+      d = await res.json();
+    } catch (e) {
+      d = {};
+      scratchAddons.console.warn("Session fetch failed: ", e);
+      if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
+    }
+    scratchAddons.session = d;
+    scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
+    this.isFetching = false;
   },
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
@@ -123,6 +162,21 @@ class SharedObserver {
   }
 }
 
+async function requestMsgCount() {
+  let count = null;
+  if (scratchAddons.session.user?.username) {
+    const username = scratchAddons.session.user.username;
+    try {
+      const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count`);
+      count = (await resp.json()).count || 0;
+    } catch (e) {
+      scratchAddons.console.warn("Could not fetch message count: ", e);
+    }
+  }
+  pendingPromises.msgCount.forEach((resolve) => resolve(count));
+  pendingPromises.msgCount = [];
+}
+
 function onDataReady() {
   const addons = page.addonsWithUserscripts;
 
@@ -130,10 +184,11 @@ function onDataReady() {
 
   scratchAddons.methods = {};
   scratchAddons.methods.getMsgCount = () => {
-    if (!pendingPromises.msgCount.length) _cs_.requestMsgCount();
     let promiseResolver;
     const promise = new Promise((resolve) => (promiseResolver = resolve));
     pendingPromises.msgCount.push(promiseResolver);
+    // 1 because the array was just pushed
+    if (pendingPromises.msgCount.length === 1) requestMsgCount();
     return promise;
   };
   scratchAddons.methods.copyImage = async (dataURL) => {

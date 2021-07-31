@@ -2,7 +2,7 @@
   height: calc(100% - 45px);
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: grey transparent;
+  scrollbar-color: var(--gray-text) transparent;
   color: white;
 }
 .popup-container.fullscreen {
@@ -24,4 +24,28 @@
 }
 .popup-container a:hover {
   text-decoration: underline;
+}
+
+[v-cloak] {
+  display: none !important;
+}
+
+/*scrollbar*/
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+/* hide track */
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 4px;
 }
