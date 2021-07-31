@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
 
-    <!-- Preload styles-->
+    <!-- Preload styles -->
     <link rel="preload" href="../styles/colors-light.css" as="style" />
     <link rel="preload" href="style.css" as="style" />
 
-    <!-- Preload font-->
+    <!-- Preload font -->
     <link rel="preload" href="../../libraries/thirdparty/Sora.css" as="style" />
     <link
       rel="preload"
@@ -42,7 +42,7 @@
     <link rel="icon" href="../../images/icon.png" />
 
     <!-- Preload index.js imports -->
-    <link rel="modulepreload" href="../../libraries/common/cs/download-blob.js"">
+    <link rel="modulepreload" href="../../libraries/common/cs/download-blob.js" />
     <link rel="modulepreload" href="../rtl-list.js" />
     <link rel="modulepreload" href="../../libraries/common/load-vue-components.js" />
     <link rel="modulepreload" href="../../libraries/thirdparty/fuse.esm.min.js" />
@@ -129,7 +129,8 @@
           v-cloak
           class="category category-small"
           style="margin-top: auto"
-          href="https://scratchaddons.com/contributors"
+          href="https://scratchaddons.com/contributors/"
+          :href="sidebarUrls.contributors"
           target="_blank"
         >
           <img src="../../images/icons/users.svg" />
@@ -148,7 +149,8 @@
         <a
           v-cloak
           class="category category-small"
-          href="https://scratchaddons.com/feedback/?version={{versionName}}"
+          href="https://scratchaddons.com/feedback/"
+          :href="sidebarUrls.feedback"
           target="_blank"
         >
           <img src="../../images/icons/comment.svg" />
@@ -163,7 +165,7 @@
         <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === (direction() === 'rtl')}" />
       </div>
 
-      <!-- This is a the main menu, where the searchbar and the addon items are located -->
+      <!-- This is the main menu, where the searchbar and the addon items are located -->
       <div class="addons-block">
         <div v-cloak class="search-box" :class="{smallMode: smallMode === true}">
           <input type="text" id="searchBox" :placeholder="searchMsg" v-model="searchInputReal" autofocus />
@@ -253,7 +255,8 @@
           <p>
             {{ msg("extensionName") }}
             <a
-              href="https://scratchaddons.com/changelog?versionname={{ versionName }}"
+              href="https://scratchaddons.com/changelog"
+              :href="sidebarUrls.changelog"
               title="{{ msg('changelog') }}"
               target="_blank"
             >

@@ -124,7 +124,8 @@ h4 {
   background-clip: border-box;
 }
 .jqui-modal,
-.jqui-modal.ui-corner-all {
+.jqui-modal.ui-corner-all,
+#new-scratcher-gallery-modal {
   background: #282828;
 }
 .modal .modal-header,
@@ -138,6 +139,20 @@ h4 {
 }
 #featured-project-modal .project.thumb {
   background: #282828;
+}
+#email-resend-box {
+  border: none;
+}
+#email-resend-box .email-resend-subsection {
+  color: white;
+}
+#email-resend-box .modal-footer,
+#new-scratcher-gallery-modal .modal-footer {
+  background: #282828;
+  box-shadow: none;
+}
+#new-scratcher-gallery-modal .modal-header {
+  border: none;
 }
 #page-404 .box-header h1 {
   color: #fff;

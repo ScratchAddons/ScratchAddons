@@ -2,17 +2,20 @@ export default async function ({ addon, console, msg }) {
   const action = addon.settings.get("action");
   let playerToggled = false;
   let scratchStage;
+  let twIframeContainer = document.createElement("div");
+  twIframeContainer.className = "sa-tw-iframe-container";
   let twIframe = document.createElement("iframe");
   twIframe.setAttribute("allowtransparency", "true");
   twIframe.setAttribute("allowfullscreen", "true");
   twIframe.className = "sa-tw-iframe";
+  twIframeContainer.appendChild(twIframe);
 
   const button = document.createElement("button");
   button.className = "button sa-tw-button";
   button.title = "TurboWarp";
 
   function removeIframe() {
-    twIframe.remove();
+    twIframeContainer.remove();
     scratchStage.style.display = "";
     button.classList.remove("scratch");
     playerToggled = false;
@@ -27,7 +30,7 @@ export default async function ({ addon, console, msg }) {
         const projectId = window.location.pathname.split("/")[2];
         const iframeUrl = `https://turbowarp.org/${projectId}/embed${usernameUrlParam}`;
         twIframe.src = "";
-        scratchStage.parentElement.prepend(twIframe);
+        scratchStage.parentElement.prepend(twIframeContainer);
         // Use location.replace to avoid creating a history entry
         twIframe.contentWindow.location.replace(iframeUrl);
 
@@ -36,7 +39,7 @@ export default async function ({ addon, console, msg }) {
         addon.tab.traps.vm.stopAll();
       } else removeIframe();
     } else {
-      window.open("https://turbowarp.org/" + window.location.pathname.split("/")[2], "_blank");
+      window.open("https://turbowarp.org/" + window.location.pathname.split("/")[2], "_blank", "noopener,noreferrer");
     }
   };
 

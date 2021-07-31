@@ -1,5 +1,11 @@
 <template>
-  <div class="addon-setting" :class="{'boolean-setting': setting.type === 'boolean'}">
+  <div
+    class="addon-setting"
+    :class="{
+    'boolean-setting': setting.type === 'boolean',
+    'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
+  }"
+  >
     <div class="setting-label" v-html="settingsName(addon)"></div>
     <template v-if="setting.type === 'boolean'">
       <input
@@ -9,92 +15,6 @@
         @change="updateSettings()"
         :disabled="!addon._enabled"
       />
-    </template>
-    <template v-if="setting.type === 'positive_integer'">
-      <input
-        type="number"
-        class="setting-input number"
-        v-model="addonSettings[addon._addonId][setting.id]"
-        @change="checkValidity() || updateSettings()"
-        :disabled="!addon._enabled"
-        min="0"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
-        number
-      />
-    </template>
-    <template v-if="setting.type === 'integer'">
-      <input
-        type="number"
-        class="setting-input number"
-        v-model="addonSettings[addon._addonId][setting.id]"
-        @change="checkValidity() || updateSettings()"
-        :disabled="!addon._enabled"
-        :min="setting.min"
-        :max="setting.max"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
-        number
-      />
-    </template>
-    <template v-if="setting.type === 'string'">
-      <input
-        type="text"
-        class="setting-input string"
-        v-model="addonSettings[addon._addonId][setting.id]"
-        @change="checkValidity() || updateSettings()"
-        :disabled="!addon._enabled"
-        :placeholder="setting.default"
-        :maxlength="setting.max || 100"
-        :minlength="setting.min || 0"
-        :required="!!setting.min"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
-      />
-    </template>
-    <template v-if="setting.type === 'key'">
-      <input
-        type="text"
-        class="setting-input"
-        v-model="addonSettings[addon._addonId][setting.id]"
-        @input="updateSettings()"
-        @keydown="keySettingKeyDown"
-        @keyup="keySettingKeyUp"
-        :disabled="!addon._enabled"
-        :placeholder="setting.default"
-        maxlength="100"
-        :data-addon-id="addon._addonId"
-        :data-setting-id="setting.id"
-        spellcheck="false"
-      />
-    </template>
-    <template v-if="setting.type === 'color'">
-      <div class="setting-input-container">
-        <picker
-          :value="addonSettings[addon._addonId][setting.id] || setting.default"
-          :setting="setting"
-          :addon="addon"
-          :no_alpha="!setting.allowTransparency"
-          v-click-outside="closePickers"
-        ></picker>
-        <reset-dropdown
-          v-if="showResetDropdown()"
-          :setting="setting"
-          :addon="addon"
-          :label="msg('reset')"
-          :default-label="msg('default')"
-          v-click-outside="closeResetDropdowns"
-        ></reset-dropdown>
-        <button
-          v-else
-          type="button"
-          class="large-button clear-button"
-          :disabled="!addon._enabled"
-          @click="updateOption(setting.default)"
-        >
-          <span>{{ msg("reset") }}</span><img src="../../images/icons/undo.svg" class="icon-type" />
-        </button>
-      </div>
     </template>
     <template v-if="setting.type === 'select'">
       <div class="filter-options">
@@ -108,7 +28,93 @@
         </div>
       </div>
     </template>
-  </label>
+    <div v-if="!['boolean', 'select'].includes(setting.type)" class="setting-input-container">
+      <template v-if="setting.type === 'positive_integer'">
+        <input
+          type="number"
+          class="setting-input number"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @change="checkValidity() || updateSettings()"
+          :disabled="!addon._enabled"
+          min="0"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+          number
+        />
+      </template>
+      <template v-if="setting.type === 'integer'">
+        <input
+          type="number"
+          class="setting-input number"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @change="checkValidity() || updateSettings()"
+          :disabled="!addon._enabled"
+          :min="setting.min"
+          :max="setting.max"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+          number
+        />
+      </template>
+      <template v-if="setting.type === 'string'">
+        <input
+          type="text"
+          class="setting-input string"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @change="checkValidity() || updateSettings()"
+          :disabled="!addon._enabled"
+          :placeholder="setting.default"
+          :maxlength="setting.max || 100"
+          :minlength="setting.min || 0"
+          :required="!!setting.min"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+        />
+      </template>
+      <template v-if="setting.type === 'key'">
+        <input
+          type="text"
+          class="setting-input"
+          v-model="addonSettings[addon._addonId][setting.id]"
+          @input="updateSettings()"
+          @keydown="keySettingKeyDown"
+          @keyup="keySettingKeyUp"
+          :disabled="!addon._enabled"
+          :placeholder="setting.default"
+          maxlength="100"
+          :data-addon-id="addon._addonId"
+          :data-setting-id="setting.id"
+          spellcheck="false"
+        />
+      </template>
+      <template v-if="setting.type === 'color'">
+        <picker
+          :value="addonSettings[addon._addonId][setting.id] || setting.default"
+          :setting="setting"
+          :addon="addon"
+          :no_alpha="!setting.allowTransparency"
+          v-click-outside="closePickers"
+        ></picker>
+      </template>
+      <reset-dropdown
+        v-if="showResetDropdown()"
+        :setting="setting"
+        :addon="addon"
+        :label="msg('reset')"
+        :default-label="msg('default')"
+        v-click-outside="closeResetDropdowns"
+      ></reset-dropdown>
+      <button
+        v-else
+        type="button"
+        class="large-button clear-button"
+        :disabled="!addon._enabled"
+        @click="updateOption(setting.default)"
+      >
+        <span>{{ msg("reset") }}</span><img src="../../images/icons/undo.svg" class="icon-type" />
+      </button>
+    </div>
+  </div>
 </template>
 
 <style>
@@ -126,9 +132,12 @@
     height: 32px;
     box-sizing: border-box;
     padding: 0 12px;
-    border-radius: 4px;
+    border-radius: 4px 0 0 4px;
     transition: 0.2s ease;
     transition-property: box-shadow, border;
+  }
+  [dir="rtl"] .setting-input {
+    border-radius: 0 4px 4px 0;
   }
   .setting-input:focus-visible {
     outline: none;
@@ -148,6 +157,7 @@
     background-size: 16px;
     background-position: center center;
     background-repeat: no-repeat;
+    border-radius: 4px;
   }
 
   .setting-input.check:checked {
@@ -160,7 +170,11 @@
   }
 
   .setting-input.number {
-    border-radius: 16px;
+    max-width: 150px;
+    border-radius: 16px 0 0 16px;
+  }
+  [dir="rtl"] .setting-input.number {
+    border-radius: 0 16px 16px 0;
   }
 
   .setting-input-container {
@@ -241,7 +255,7 @@
   .setting-dropdown li > * {
     vertical-align: middle;
   }
-  .setting-dropdown .reset-preview {
+  .setting-dropdown .color-preview {
     display: inline-block;
     width: 18px;
     height: 18px;
@@ -253,12 +267,17 @@
     background-size: 6px 6px;
     background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
   }
-  .setting-dropdown .reset-preview span {
+  .setting-dropdown .color-preview span {
     display: inline-block;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
     border-radius: 4px;
     border: 1px solid var(--control-border);
+  }
+  .setting-dropdown .text-preview {
+    margin-left: 12px;
+    color: var(--label-text);
+    font-weight: 600;
   }
 </style>

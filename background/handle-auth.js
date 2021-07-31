@@ -94,11 +94,14 @@ async function checkSession() {
 function notifyContentScripts(cookie) {
   if (cookie.name === "scratchlanguage") return;
   const storeId = cookie.storeId;
-  chrome.tabs.query(
-    {
-      cookieStoreId: storeId,
-    },
-    (tabs) =>
-      tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError))
+  const cond = {};
+  if (typeof browser === "object") {
+    // Firefox-exclusive.
+    cond.cookieStoreId = storeId;
+  }
+  // On Chrome this can cause unnecessary session re-fetch, but there should be
+  // no harm (aside from extra requests) when doing so.
+  chrome.tabs.query(cond, (tabs) =>
+    tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError))
   );
 }

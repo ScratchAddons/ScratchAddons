@@ -36,10 +36,133 @@ export default class DevTools {
   }
 
   async init() {
+    this.addContextMenus();
     while (true) {
       const root = await this.addon.tab.waitForElement("ul[class*=gui_tab-list_]", { markAsSeen: true });
       this.initInner(root);
     }
+  }
+  async addContextMenus() {
+    const blockly = await this.addon.tab.traps.getBlockly();
+    const oldCleanUpFunc = blockly.WorkspaceSvg.prototype.cleanUp;
+    const self = this;
+    blockly.WorkspaceSvg.prototype.cleanUp = function () {
+      if (self.addon.settings.get("enableCleanUpPlus")) {
+        self.doCleanUp();
+      } else {
+        oldCleanUpFunc.call(this);
+      }
+    };
+    if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
+    this.addon.settings.addEventListener("change", () => {
+      if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
+    });
+
+    this.addon.tab.createBlockContextMenu(
+      (items, block) => {
+        items.push({
+          enabled: blockly.clipboardXml_,
+          text: this.m("paste"),
+          separator: true,
+          _isDevtoolsFirstItem: true,
+          callback: () => {
+            let ids = this.getTopBlockIDs();
+
+            document.dispatchEvent(
+              new KeyboardEvent("keydown", {
+                keyCode: 86,
+                ctrlKey: true,
+                griff: true,
+              })
+            );
+
+            setTimeout(() => {
+              this.beginDragOfNewBlocksNotInIDs(ids);
+            }, 10);
+          },
+        });
+        return items;
+      },
+      { workspace: true }
+    );
+    this.addon.tab.createBlockContextMenu(
+      (items, block) => {
+        items.push(
+          {
+            enabled: true,
+            text: this.m("make-space"),
+            _isDevtoolsFirstItem: true,
+            callback: () => {
+              this.doCleanUp(block);
+            },
+            separator: true,
+          },
+          {
+            enabled: true,
+            text: this.m("copy-all"),
+            callback: () => {
+              this.eventCopyClick(block);
+            },
+            separator: true,
+          },
+          {
+            enabled: true,
+            text: this.m("copy-block"),
+            callback: () => {
+              this.eventCopyClick(block, 1);
+            },
+          },
+          {
+            enabled: true,
+            text: this.m("cut-block"),
+            callback: () => {
+              this.eventCopyClick(block, 2);
+            },
+          }
+        );
+        // const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
+        // if (BROADCAST_BLOCKS.includes(block.type)) {
+        //   // Show Broadcast
+        //   const broadcastId = this.showBroadcastSingleton.getAssociatedBroadcastId(block.id);
+        //   if (broadcastId) {
+        //     ["Senders", "Receivers"].forEach((showKey, i) => {
+        //       items.push({
+        //         enabled: true,
+        //         text: this.msg(`show-${showKey}`.toLowerCase()),
+        //         callback: () => {
+        //           this.showBroadcastSingleton[`show${showKey}`](broadcastId);
+        //         },
+        //         separator: i == 0,
+        //       });
+        //     });
+        //   }
+        // }
+        return items;
+      },
+      { blocks: true }
+    );
+    this.addon.tab.createBlockContextMenu(
+      (items, block) => {
+        if (block.getCategory() === "data" || block.getCategory() === "data-lists") {
+          this.selVarID = block.getVars()[0];
+          items.push({
+            enabled: true,
+            text: this.m("swap", { var: block.getCategory() === "data" ? this.m("variables") : this.m("lists") }),
+            callback: () => {
+              let wksp = this.utils.getWorkspace();
+              let v = wksp.getVariableById(this.selVarID);
+              let varName = window.prompt(this.msg("replace", { name: v.name }));
+              if (varName) {
+                this.doReplaceVariable(this.selVarID, varName, v.type);
+              }
+            },
+            separator: true,
+          });
+        }
+        return items;
+      },
+      { blocks: true, flyout: true }
+    );
   }
 
   isScriptEditor() {
@@ -362,35 +485,19 @@ export default class DevTools {
     return topBlocks;
   }
 
-  hidePopups(wksp) {
-    // Fire fake mouse events to trick the popup into hiding.
-    const element = wksp.getToolbox().HtmlDiv;
-    element.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: element, bubbles: true }));
-    element.dispatchEvent(new MouseEvent("mouseup", { relatedTarget: element, bubbles: true }));
-  }
-
   /**
    * A much nicer way of laying out the blocks into columns
    */
-  doCleanUp(e, dataId) {
+  doCleanUp(block) {
     let workspace = this.utils.getWorkspace();
-    if (e) {
-      e.cancelBubble = true;
-      e.preventDefault();
-      this.hidePopups(workspace);
-      setTimeout(() => this.doCleanUp(undefined, dataId), 0);
-      return;
-    }
-
-    let makeSpaceForBlock = dataId && workspace.getBlockById(dataId);
-    makeSpaceForBlock = makeSpaceForBlock && makeSpaceForBlock.getRootBlock();
+    let makeSpaceForBlock = block && block.getRootBlock();
 
     UndoGroup.startUndoGroup(workspace);
 
     let result = this.getOrderedTopBlockColumns(true);
     let columns = result.cols;
     let orphanCount = result.orphans.blocks.length;
-    if (orphanCount > 0 && !dataId) {
+    if (orphanCount > 0 && !block) {
       let message = this.msg("orphaned", {
         count: orphanCount,
       });
@@ -442,7 +549,6 @@ export default class DevTools {
       let workspace = this.utils.getWorkspace();
       let map = workspace.getVariableMap();
       let vars = map.getVariablesOfType("");
-
       let unusedLocals = [];
 
       for (const row of vars) {
@@ -454,7 +560,7 @@ export default class DevTools {
         }
       }
 
-      if (unusedLocals.length > 0 && !dataId) {
+      if (unusedLocals.length > 0) {
         const unusedCount = unusedLocals.length;
         let message = this.msg("unused-var", {
           count: unusedCount,
@@ -468,6 +574,37 @@ export default class DevTools {
         }
         if (confirm(message)) {
           for (const orphan of unusedLocals) {
+            workspace.deleteVariableById(orphan.getId());
+          }
+        }
+      }
+
+      // Locate unused local lists...
+      let lists = map.getVariablesOfType("list");
+      let unusedLists = [];
+
+      for (const row of lists) {
+        if (row.isLocal) {
+          let usages = map.getVariableUsesById(row.getId());
+          if (!usages || usages.length === 0) {
+            unusedLists.push(row);
+          }
+        }
+      }
+      if (unusedLists.length > 0) {
+        const unusedCount = unusedLists.length;
+        let message = this.msg("unused-list", {
+          count: unusedCount,
+        });
+        for (let i = 0; i < unusedLists.length; i++) {
+          let orphan = unusedLists[i];
+          if (i > 0) {
+            message += ", ";
+          }
+          message += orphan.name;
+        }
+        if (confirm(message)) {
+          for (const orphan of unusedLists) {
             workspace.deleteVariableById(orphan.getId());
           }
         }
@@ -1179,17 +1316,6 @@ export default class DevTools {
       console.log(ids);
     }
      */
-
-  /*
-          function clickCleanUp(e) {
-              // if (window.confirm('Griffpatch: Tidy up your scripts?')) {
-                  doCleanUp();
-              // }
-              e.preventDefault();
-              return false;
-          }
-      */
-
   /*
     function clickInject(e) {
       let codeString = window.prompt("Griffpatch: Enter an expression (i.e. a+2*3)");
@@ -1200,27 +1326,6 @@ export default class DevTools {
       return false;
     }
     */
-
-  /**
-   * Click Event Handler - User has clicked the replace variable option - ask for the variable to replace with...
-   * @param e the event
-   * @returns {boolean} cancelled?
-   */
-  clickReplace(e) {
-    let wksp = this.utils.getWorkspace();
-    this.hidePopups(wksp);
-
-    setTimeout(() => {
-      let wksp = this.utils.getWorkspace();
-      let v = wksp.getVariableById(this.selVarID);
-      let varName = window.prompt(this.msg("replace", { name: v.name }));
-      if (varName) {
-        this.doReplaceVariable(this.selVarID, varName, v.type);
-      }
-    }, 0);
-    e.preventDefault();
-    return false;
-  }
 
   /**
    * Returns a Set of the top blocks in this workspace / sprite
@@ -1357,6 +1462,33 @@ export default class DevTools {
     // }
   }
 
+  eventCopyClick(block, blockOnly) {
+    let wksp = this.utils.getWorkspace();
+
+    if (block) {
+      block.select();
+      let next = blockOnly ? block.getNextBlock() : null;
+      if (next) {
+        next.unplug(false); // setParent(null);
+      }
+
+      // separate child temporarily
+      document.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
+      if (next || blockOnly === 2) {
+        setTimeout(() => {
+          if (next) {
+            wksp.undo(); // undo the unplug above...
+          }
+          if (blockOnly === 2) {
+            UndoGroup.startUndoGroup(wksp);
+            block.dispose(true);
+            UndoGroup.endUndoGroup(wksp);
+          }
+        }, 0);
+      }
+    }
+  }
+
   eventMouseDown(e) {
     this.updateMousePosition(e);
 
@@ -1400,219 +1532,6 @@ export default class DevTools {
                                 tabindex="-1" aria-disabled="false"><span>${this.m("bottom")}</span></div>
                         `
           );
-        }
-      }
-
-      let blockSvg = e.target.closest("[data-id]");
-      let isBackground = !blockSvg && e.target.closest("svg.blocklySvg");
-      if (blockSvg || isBackground) {
-        let dataId = blockSvg && blockSvg.getAttribute("data-id");
-        if (dataId || isBackground) {
-          setTimeout(async () => {
-            // Is there a popup menu to hi-jack?
-            let widget = document.querySelector("div.blocklyWidgetDiv");
-            if (!widget) {
-              return;
-            }
-            let blocklyContextMenu = widget.querySelector("div.blocklyContextMenu");
-            if (!blocklyContextMenu) {
-              return;
-            }
-            if (isBackground) {
-              let cleanupPlus = this.addon.settings.get("enableCleanUpPlus");
-
-              let nodes = blocklyContextMenu.children;
-              const realBlockly = await this.addon.tab.traps.getBlockly();
-              if (cleanupPlus) {
-                for (const node of nodes) {
-                  if (node.textContent === realBlockly.Msg.CLEAN_UP) {
-                    node.remove();
-                    break;
-                  }
-                }
-              }
-              let html = cleanupPlus
-                ? `
-                  <div
-                    id="s3devCleanUp"
-                    class="goog-menuitem s3dev-mi ${this.addon.tab.direction === "rtl" ? "goog-menuitem-rtl" : ""}"
-                    role="menuitem"
-                    style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);"
-                  >
-                      <div class="goog-menuitem-content" style="user-select: none;">${this.m("clean-plus")}</div>
-                  </div>
-              `
-                : "";
-
-              html += `
-                  <div
-                    id="s3devPaste"
-                    class="goog-menuitem s3dev-mi ${this.addon.tab.direction === "rtl" ? "goog-menuitem-rtl" : ""}"
-                    role="menuitem"
-                    style="user-select: none;"
-                  >
-                      <div class="goog-menuitem-content" style="user-select: none;">${this.m("paste")}</div>
-                  </div>
-              `;
-              blocklyContextMenu.insertAdjacentHTML("beforeend", html);
-            } else {
-              let wksp = this.utils.getWorkspace();
-              let block = wksp.getBlockById(dataId);
-              let isFlyOut = block.workspace.isFlyout;
-
-              /* todo - look at this menu code ***** !!!!!
-                const BROADCAST_BLOCKS = ["event_whenbroadcastreceived", "event_broadcast", "event_broadcastandwait"];
-                if (BROADCAST_BLOCKS.includes(block.type)) {
-                  // Show Broadcast
-                  const broadcastId = showBroadcastSingleton.getAssociatedBroadcastId(dataId);
-                  if (broadcastId) {
-                    for (const showKey of ["Senders", "Receivers"]) {
-                      const googMenuItemContent = Object.assign(document.createElement("div"), {
-                        textContent: this.msg(`show-${showKey}`.toLowerCase()),
-                        style: "user-select: none;",
-                        className: "goog-menuitem-content",
-                      });
-                      const googMenuItem = Object.assign(document.createElement("div"), {
-                        id: `s3devShow${showKey}`,
-                        className: "goog-menuitem s3dev-mi",
-                        role: "menuitem",
-                        style: "user-select: none;",
-                      });
-                      googMenuItem.addEventListener("click", () => {
-                        hidePopups(wksp);
-                        showBroadcastSingleton[`show${showKey}`](broadcastId);
-                      });
-                      googMenuItem.appendChild(googMenuItemContent);
-                      blocklyContextMenu.appendChild(googMenuItem);
-                    }
-                  }
-                }
-                */
-
-              if (!isFlyOut) {
-                blocklyContextMenu.insertAdjacentHTML(
-                  "beforeend",
-                  `
-                    <div id="s3devMakeSpace" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
-                        <div class="goog-menuitem-content" style="user-select: none;">${this.m("make-space")}</div>
-                    </div>
-                    <div id="s3devCopy" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
-                        <div class="goog-menuitem-content" style="user-select: none;">${this.m("copy-all")}</div>
-                    </div>
-                    <div id="s3devCopyBlock" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
-                        <div class="goog-menuitem-content" style="user-select: none;">${this.m("copy-block")}</div>
-                    </div>
-                    <div id="s3devCutBlock" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none;">
-                        <div class="goog-menuitem-content" style="user-select: none;">${this.m("cut-block")}</div>
-                    </div>
-                  `
-                );
-              }
-
-              // Is this a variable or a list?
-              if (block && (block.getCategory() === "data" || block.getCategory() === "data-lists")) {
-                blocklyContextMenu.insertAdjacentHTML(
-                  "beforeend",
-                  `
-                        <div id="s3devReplaceAllVars" class="goog-menuitem s3dev-mi" role="menuitem" style="user-select: none; border-top: 1px solid hsla(0, 0%, 0%, 0.15);">
-                            <div class="goog-menuitem-content" style="user-select: none;">${this.m("swap", {
-                              var: block.getCategory() === "data" ? this.m("variables") : this.m("lists"),
-                            })}</div>
-                        </div>
-                  `
-                );
-                this.selVarID = block.getVars()[0];
-              }
-            }
-
-            if (blocklyContextMenu.children.length < 15) {
-              blocklyContextMenu.style.maxHeight = "none";
-              widget.style.height = blocklyContextMenu.getBoundingClientRect().height + 12 + "px";
-              blocklyContextMenu.style.maxHeight = "";
-            }
-
-            let copyDiv = blocklyContextMenu.querySelector("div#s3devCleanUp");
-            if (copyDiv) {
-              copyDiv.addEventListener("click", (...e) => this.doCleanUp(...e));
-            }
-            copyDiv = blocklyContextMenu.querySelector("div#s3devMakeSpace");
-            if (copyDiv) {
-              copyDiv.addEventListener("click", (e) => this.doCleanUp(e, dataId));
-            }
-            copyDiv = blocklyContextMenu.querySelector("div#s3devCopy");
-            if (copyDiv) {
-              copyDiv.addEventListener("click", (...e) => eventCopyClick(...e));
-            }
-            copyDiv = blocklyContextMenu.querySelector("div#s3devCopyBlock");
-            if (copyDiv) {
-              copyDiv.addEventListener("click", (e) => {
-                eventCopyClick(e, 1);
-              });
-            }
-            copyDiv = blocklyContextMenu.querySelector("div#s3devCutBlock");
-            if (copyDiv) {
-              copyDiv.addEventListener("click", (e) => {
-                eventCopyClick(e, 2);
-              });
-            }
-            copyDiv = blocklyContextMenu.querySelector("div#s3devReplaceAllVars");
-            if (copyDiv) {
-              copyDiv.addEventListener("click", (...e) => this.clickReplace(...e));
-            }
-
-            let devTools = this;
-            function eventCopyClick(e, blockOnly) {
-              let wksp = devTools.utils.getWorkspace();
-              devTools.hidePopups(wksp);
-
-              let block = wksp.getBlockById(dataId);
-              if (block) {
-                block.select();
-                let next = blockOnly ? block.getNextBlock() : null;
-                if (next) {
-                  next.unplug(false); // setParent(null);
-                }
-
-                // separate child temporarily
-                document.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 67, ctrlKey: true }));
-                if (next || blockOnly === 2) {
-                  setTimeout(() => {
-                    if (next) {
-                      wksp.undo(); // undo the unplug above...
-                    }
-                    if (blockOnly === 2) {
-                      let block = wksp.getBlockById(dataId);
-                      UndoGroup.startUndoGroup(wksp);
-                      block.dispose(true);
-                      UndoGroup.endUndoGroup(wksp);
-                    }
-                  }, 0);
-                }
-              }
-            }
-
-            let pasteDiv = blocklyContextMenu.querySelector("div#s3devPaste");
-            if (pasteDiv) {
-              pasteDiv.addEventListener("click", function () {
-                let wksp = devTools.utils.getWorkspace();
-                devTools.hidePopups(wksp);
-
-                let ids = devTools.getTopBlockIDs();
-
-                document.dispatchEvent(
-                  new KeyboardEvent("keydown", {
-                    keyCode: 86,
-                    ctrlKey: true,
-                    griff: true,
-                  })
-                );
-
-                setTimeout(() => {
-                  devTools.beginDragOfNewBlocksNotInIDs(ids);
-                }, 10);
-              });
-            }
-          }, 1);
         }
       }
     } else {
@@ -2257,8 +2176,6 @@ export default class DevTools {
                           "tutorials"
                         )}</a></div>
                     </label>
-<!--                    <a id="s3devCleanUp" class="s3devAction" href="#">Clean Up</a>-->
-<!--                    <a id="s3devReplace" class="s3devAction s3devHide" href="#">Replace All</a>-->
                 </div>
             `
       );
@@ -2288,10 +2205,6 @@ export default class DevTools {
     this.domHelpers.bindOnce(document, "mousemove", (...e) => this.eventMouseMove(...e), true);
     this.domHelpers.bindOnce(document, "mousedown", (...e) => this.eventMouseDown(...e), true); // true to capture all mouse downs 'before' the dom events handle them
     this.domHelpers.bindOnce(document, "mouseup", (...e) => this.eventMouseUp(...e), true);
-    // bindOnce(document.getElementById("s3devDeep"), "click", deepSearch);
-    // bindOnce(document.getElementById('s3devCleanUp'),'click', clickCleanUp);
-    // bindOnce(document.getElementById("s3devInject"), "click", clickInject);
-    // bindOnce(document.getElementById('s3devReplace'), 'click', clickReplace);
   }
 }
 
