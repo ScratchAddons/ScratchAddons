@@ -5,7 +5,6 @@ export default function ({ addon }) {
     className: "sa-user-id",
   });
   userId.style.color = "lightgrey";
-  userId.style.size = 2;
 
   usernameHeader.appendChild(userId);
 }
