@@ -557,8 +557,6 @@ export default async function ({ addon, global, console, msg }) {
   blockSwitches["data_variable"] = [];
   blockSwitches["data_listcontents"] = [];
 
-  let addBorderToContextMenuItem = -1;
-
   const genuid = () => {
     const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
     let result = "";
@@ -689,10 +687,10 @@ export default async function ({ addon, global, console, msg }) {
             enabled: true,
             text: msg(isNoop ? block.type : opcodeData.opcode),
             callback: menuCallbackFactory(block, opcodeData),
-            separator: addon.settings.get("border") && i == 0,
+            separator: addon.settings.get("border") && i === 0,
           });
         });
-        if (block.type == "data_variable" && block.category_ == "data") {
+        if (block.type === "data_variable" && block.category_ === "data") {
           // Add top border to first variable (if it exists)
           const delBlockIndex = items.findIndex((item) => item.text === blockly.Msg.DELETE_BLOCK);
           // firstVariableItem might be undefined, a variable to switch to,

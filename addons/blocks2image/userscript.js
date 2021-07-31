@@ -115,7 +115,7 @@ export default async function ({ addon, global, console, msg }) {
   );
 
   function exportBlock(isExportPNG, block) {
-    let svg = exSVG.cloneNode();
+    let svg;
     if (block) {
       svg = selectedBlocks(isExportPNG, block);
     } else {

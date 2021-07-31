@@ -235,12 +235,22 @@ export default class Tab extends Listenable {
     return res;
   }
 
+  /**
+   * Hides an element when the addon is disabled.
+   * @param {HTMLElement} el - the element.
+   * @param {object=} opts - the options.
+   * @param {string=} opts.display - the fallback value for CSS display.
+   */
   displayNoneWhileDisabled(el, { display = "" } = {}) {
     el.style.display = `var(--${this._addonId.replace(/-([a-z])/g, (g) =>
       g[1].toUpperCase()
     )}-_displayNoneWhileDisabledValue${display ? ", " : ""}${display})`;
   }
 
+  /**
+   * The direction of the text; i.e. rtl or ltr.
+   * @type {string}
+   */
   get direction() {
     // https://github.com/LLK/scratch-l10n/blob/master/src/supported-locales.js
     const rtlLocales = ["ar", "ckb", "fa", "he"];
@@ -248,6 +258,26 @@ export default class Tab extends Listenable {
     return rtlLocales.includes(lang) ? "rtl" : "ltr";
   }
 
+  /**
+   * Adds an item to a shared space.
+   * Defined shared spaces are:
+   * stageHeader - the stage header
+   * fullscreenStageHeader - the stage header for fullscreen
+   * afterGreenFlag - after the green flag
+   * afterStopButton - after the stop button
+   * afterCopyLinkButton - after the copy link button, shown below project descriptions
+   * afterSoundTab - after the sound tab in editor
+   * forumsBeforePostReport - before the report button in forum posts
+   * forumsAfterPostReport - after the report button in forum posts
+   * beforeRemixButton - before the remix button in project page
+   * studioCuratorsTab - inside the studio curators tab
+   * @param {object} opts - options.
+   * @param {string} opts.space - the shared space name.
+   * @param {HTMLElement} element - the element to add.
+   * @param {number} order - the order of the added element. Should not conflict with other addons.
+   * @param {HTMLElement=} scope - if multiple shared spaces exist, the one where the shared space gets added to.
+   * @returns {boolean} whether the operation was successful or not.
+   */
   appendToSharedSpace({ space, element, order, scope }) {
     const q = document.querySelector.bind(document);
     const sharedSpaces = {
@@ -429,9 +459,30 @@ export default class Tab extends Listenable {
   }
 
   /**
+   * Type for context menu item.
+   * @typedef {object} Tab~ContextMenuItem
+   * @property {boolean} enabled - whether it is enabled.
+   * @property {string} text - the context menu item label.
+   * @property {function} callback - the function that is called when item is clicked.
+   * @property {boolean} separator - whether to add a separator above the item.
+   */
+
+  /**
+   * Callback to modify the context menu.
+   * @callback Tab~blockContextMenuCallback
+   * @param {Tab~ContextMenuItem[]} items - the items added by vanilla code or other addons.
+   * @param {?object} block - the targetted block, if any.
+   * @returns {Tab~ContextMenuItem[]} the array that contains values of items array as well as new items.
+   */
+
+  /**
    * Creates an item in the editor Blockly context menu.
-   * @param {function} callback Returns new menu items.
+   * @param {Tab~blockContextMenuCallback} callback Returns new menu items.
    * @param {object} conditions - Show context menu when one of these conditions meet.
+   * @param {boolean=} conditions.workspace - Add to workspace context menu.
+   * @param {boolean=} conditions.blocks - Add to block context menu outside the flyout.
+   * @param {boolean=} conditions.flyout - Add to block context menu in flyout/palette.
+   * @param {boolean=} conditions.comments - Add to comments.
    */
   createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, comments = false } = {}) {
     contextMenuCallbacks.push({ addonId: this._addonId, callback, workspace, blocks, flyout, comments });

@@ -26,7 +26,7 @@ export default async function ({ template }) {
         return (
           this.addon.presets &&
           this.addon.presets.some((preset) =>
-            preset.values.hasOwnProperty(this.setting.id) && this.setting.type === "color"
+            Object.prototype.hasOwnProperty.call(preset.values, this.setting.id) && this.setting.type === "color"
               ? preset.values[this.setting.id].toLowerCase() !== this.setting.default.toLowerCase()
               : preset.values[this.setting.id] !== this.setting.default
           )
