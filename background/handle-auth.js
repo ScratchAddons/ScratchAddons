@@ -26,7 +26,7 @@ function getDefaultStoreId() {
   await checkSession();
 })();
 
-chrome.cookies.onChanged.addListener(({ cookie, changeCause }) => {
+chrome.cookies.onChanged.addListener(({ cookie, cause }) => {
   if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken") {
     if (!scratchAddons.cookieStoreId) {
       getDefaultStoreId().then(() => checkSession());
@@ -52,9 +52,13 @@ function getCookieValue(name) {
   });
 }
 
+let isChecking = false;
+
 async function checkSession() {
   let res;
   let json;
+  if (isChecking) return;
+  isChecking = true;
   try {
     res = await fetch("https://scratch.mit.edu/session/", {
       headers: {
@@ -67,6 +71,7 @@ async function checkSession() {
     json = {};
     // If Scratch is down, or there was no internet connection, recheck soon:
     if ((res && !res.ok) || !res) {
+      isChecking = false;
       setTimeout(checkSession, 60000);
       scratchAddons.globalState.auth = {
         isLoggedIn: false,
@@ -89,6 +94,7 @@ async function checkSession() {
     csrfToken,
     scratchLang,
   };
+  isChecking = false;
 }
 
 function notifyContentScripts(cookie) {
