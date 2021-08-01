@@ -1,1 +1,1 @@
-{"disable-stage-drag-select/@name":"Atores não arrastáveis no editor","disable-stage-drag-select/@info-shift":"Segure Shift enquanto arrasta um ator para movê-lo, mesmo se o ator não for arrastável."}
+{"disable-stage-drag-select/@name":"Atores não arrastáveis no editor","disable-stage-drag-select/@description":"Remove a habilidade de arrastar atores no palco no editor, a não ser aqueles cujo \"modo de arrasto\" é arrastável.","disable-stage-drag-select/@info-shift":"Segure Shift enquanto arrasta um ator para movê-lo, mesmo se o ator não for arrastável."}
