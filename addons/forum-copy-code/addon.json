@@ -1,7 +1,6 @@
 {
-  "name": "Copy Code button in forums",
-  "description": "Adds buttons to copy code inserted via code tags in the forums.",
-  "tags": ["community", "forums"],
+  "name": "Copy code button in forums",
+  "description": "Adds a button above a code box inside the forums that you can use to \"copy\" the contents.",
   "credits": [
     {
       "name": "CST1229",
@@ -11,8 +10,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "runAtComplete": false
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
     }
   ],
   "userstyles": [
@@ -23,5 +21,6 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
+  "tags": ["community", "forums"],
   "versionAdded": "1.19.0"
 }
