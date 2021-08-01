@@ -16,10 +16,15 @@ export default async function ({ addon, global, console, msg }) {
     const copyCodeButton = document.createElement("span"); //The actual button
     copyCodeButton.className = "sa-copyCodeButton"; //Class
     copyCodeButton.textContent = msg("copy-code"); //The text
-    copyCodeButton.setAttribute(
-      "onclick",
-      "console.log('copied'); const codeBlockText = this.parentNode.nextSibling.children[0].textContent; var textArea = document.createElement('textarea'); document.body.appendChild(textArea); textArea.textContent = codeBlockText; textArea.select(); document.execCommand('copy'); textArea.remove();"
-    ); //Code to copy the code
+	copyCodeButton.onclick = function() { //Code to copy the code
+		  const codeBlockText = this.parentNode.nextSibling.children[0].textContent; //Get the code
+		  let textArea = document.createElement('textarea'); //Create a textarea for the copying to work
+		  document.body.appendChild(textArea); //Append it to the pageX
+		  textArea.textContent = codeBlockText; //Copy the code into the textarea
+		  textArea.select(); //Select
+		  document.execCommand('copy'); //Copy
+		  textArea.remove(); //It is longer needed
+	}
 
     copyCode.appendChild(copyCodeButton); //Add the copyCodeButton link to the copyCodeDiv
     codeBlock.parentNode.insertBefore(copyCode, codeBlock); //And finally, add the copyCodeDiv next to the code block
