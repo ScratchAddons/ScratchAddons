@@ -30,6 +30,7 @@ export default async ({ addon, console, msg }) => {
 
     const adderSec = document.createElement("div");
     adderSec.className = "studio-adder-section";
+    addon.tab.displayNoneWhileDisabled(adderSec);
 
     const adderHeader = document.createElement("h3");
     const adderHeaderSpan = document.createElement("span");
