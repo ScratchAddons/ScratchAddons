@@ -63,7 +63,6 @@ export default async function ({ addon, global, console, msg }) {
     data[type].offset += itemPageLimit;
     const res = await fetch(
       `https://api.scratch.mit.edu/users/${await addon.auth.fetchUsername()}/${type}?offset=${
-        // dynamicEnable with promise-based auth api doesnt work
         data[type].offset
       }&limit=${itemPageLimit}`
     );
