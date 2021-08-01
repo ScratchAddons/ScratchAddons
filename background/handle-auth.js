@@ -28,7 +28,9 @@ function getDefaultStoreId() {
 
 chrome.cookies.onChanged.addListener(({ cookie, cause }) => {
   if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken") {
-    if (!scratchAddons.cookieStoreId) {
+    if (cookie.name === "scratchlanguage") {
+      setLanguage();
+    } else if (!scratchAddons.cookieStoreId) {
       getDefaultStoreId().then(() => checkSession());
     } else if (cookie.storeId === scratchAddons.cookieStoreId) {
       checkSession();
@@ -50,6 +52,10 @@ function getCookieValue(name) {
       }
     );
   });
+}
+
+async function setLanguage() {
+  scratchAddons.globalState.auth.scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
 }
 
 let isChecking = false;
