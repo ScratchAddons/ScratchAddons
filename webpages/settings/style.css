@@ -135,7 +135,7 @@ h1 {
 }
 
 .clear-button {
-  padding-inline-end: 10px;
+  padding-inline: 7px;
   border-radius: 0 4px 4px 0;
   border-inline-start: none !important;
 }
@@ -148,12 +148,8 @@ h1 {
 [dir="rtl"] .number-setting .clear-button {
   border-radius: 16px 0 0 16px;
 }
-.clear-button span {
-  vertical-align: middle;
-}
 .clear-button .icon-type {
-  margin-inline-start: 6px;
-  margin-inline-end: 0;
+  margin: 0;
 }
 
 .reverted {
