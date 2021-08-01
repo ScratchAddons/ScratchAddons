@@ -62,7 +62,8 @@ export default async function ({ addon, global, console, msg }) {
     isFetching = true;
     data[type].offset += itemPageLimit;
     const res = await fetch(
-      `https://api.scratch.mit.edu/users/${redux.state.session.session.user.username}/${type}?offset=${ // dynamicEnable with promise-based auth api doesnt work
+      `https://api.scratch.mit.edu/users/${redux.state.session.session.user.username}/${type}?offset=${
+        // dynamicEnable with promise-based auth api doesnt work
         data[type].offset
       }&limit=${itemPageLimit}`
     );
@@ -109,13 +110,13 @@ export default async function ({ addon, global, console, msg }) {
     btn.id = "sa-studio-followers-btn";
     btn.innerText = msg("button");
     // addon.tab.displayNoneWhileDisabled behaves weirdly in studios
-    addon.self.addEventListener('disabled', () => btn.style.display = 'none')
-    addon.self.addEventListener('reenabled', () => {
-      if (location.pathname.includes('curators')) btn.style.display = 'block'
-         else btn.style.display = 'none'
-    })
+    addon.self.addEventListener("disabled", () => (btn.style.display = "none"));
+    addon.self.addEventListener("reenabled", () => {
+      if (location.pathname.includes("curators")) btn.style.display = "block";
+      else btn.style.display = "none";
+    });
     btn.addEventListener("click", () => {
-      console.log("HELLO!", modal.style.display, data[currentType], "I am fetching?", isFetching)
+      console.log("HELLO!", modal.style.display, data[currentType], "I am fetching?", isFetching);
       modal.style.display = modal.style.display === "none" ? null : "none";
       if (!data[currentType].activated) {
         data[currentType].activated = true;
@@ -162,5 +163,5 @@ export default async function ({ addon, global, console, msg }) {
     { passive: true }
   );
 
-  addon.self.addEventListener('disabled', () => modal.style.display = 'none')
+  addon.self.addEventListener("disabled", () => (modal.style.display = "none"));
 }
