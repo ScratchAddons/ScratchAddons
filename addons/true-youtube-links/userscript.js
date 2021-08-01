@@ -1,16 +1,11 @@
 ﻿export default async function ({ addon, console }) {
-  addon.self.addEventListener('disabled', e => {
-    document.querySelectorAll(
-      'a[href*="https://www.youtube.com/watch?v="]'
-    ).forEach(element => {
-      element.href = element.href.replace(
-        "https://www.youtube.com/watch?v=",
-        "/discuss/youtube/"
-      );
-    })
-  })
+  addon.self.addEventListener("disabled", (e) => {
+    document.querySelectorAll('a[href*="https://www.youtube.com/watch?v="]').forEach((element) => {
+      element.href = element.href.replace("https://www.youtube.com/watch?v=", "/discuss/youtube/");
+    });
+  });
 
-  addon.self.addEventListener('reenabled', () => replaceYouTubeLinks())
+  addon.self.addEventListener("reenabled", () => replaceYouTubeLinks());
 
   async function replaceYouTubeLinks() {
     await addon.tab.waitForElement(
@@ -22,15 +17,15 @@
         },
       }
     );
-    document.querySelectorAll(
-      'a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]'
-    ).forEach((element) => {
-      element.href = element.href.replace(
-        "https://scratch.mit.edu/discuss/youtube/",
-        "https://www.youtube.com/watch?v="
-      );
-    });
+    document
+      .querySelectorAll('a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]')
+      .forEach((element) => {
+        element.href = element.href.replace(
+          "https://scratch.mit.edu/discuss/youtube/",
+          "https://www.youtube.com/watch?v="
+        );
+      });
   }
 
-  replaceYouTubeLinks()
+  replaceYouTubeLinks();
 }
