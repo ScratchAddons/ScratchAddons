@@ -115,7 +115,6 @@ export default async function ({ addon, global, console, msg }) {
          else btn.style.display = 'none'
     })
     btn.addEventListener("click", () => {
-      console.log("HELLO!", modal.style.display, data[currentType], "I am fetching?", isFetching)
       modal.style.display = modal.style.display === "none" ? null : "none";
       if (!data[currentType].activated) {
         data[currentType].activated = true;
