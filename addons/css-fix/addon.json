@@ -12,8 +12,5 @@
     }
   ],
 
-  "credits": [
-    { "name": "Utter Donkey", "link": "https://pixelbulb.online/" }
-
-  ]
+  "credits": [{ "name": "Utter Donkey", "link": "https://pixelbulb.online/" }]
 }

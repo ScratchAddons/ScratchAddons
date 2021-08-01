@@ -1,18 +1,17 @@
-
 .blocklyWidgetDiv .goog-menu {
-overflow: hidden; /* Hide scrollbars */
+  overflow: hidden; /* Hide scrollbars */
 }
 .sprite-selector_items-wrapper_4bcOj.box_box_2jjDp {
-overflow: hidden;
+  overflow: hidden;
 }
 .sprite-selector_items-wrapper_17MEf {
-overflow: hidden; /* Hide scrollbars */
+  overflow: hidden; /* Hide scrollbars */
 }
 .s3devSTT {
-border-top: 1px solid hsla(0, 0%, 0%, 0.15);
-padding: 8px 12px;
+  border-top: 1px solid hsla(0, 0%, 0%, 0.15);
+  padding: 8px 12px;
 }
 .react-contextmenu-item:hover {
-background: hsla(215, 100%, 65%, 1);
-color: white;
+  background: hsla(215, 100%, 65%, 1);
+  color: white;
 }
