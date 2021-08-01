@@ -1,5 +1,18 @@
 ﻿export default async function ({ addon, console }) {
-  while (true) {
+  addon.self.addEventListener('disabled', e => {
+    document.querySelectorAll(
+      'a[href*="https://www.youtube.com/watch?v="]'
+    ).forEach(element => {
+      element.href = element.href.replace(
+        "https://www.youtube.com/watch?v=",
+        "/discuss/youtube/"
+      );
+    })
+  })
+
+  addon.self.addEventListener('reenabled', () => replaceYouTubeLinks())
+
+  async function replaceYouTubeLinks() {
     await addon.tab.waitForElement(
       'a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]',
       {
@@ -9,14 +22,15 @@
         },
       }
     );
-    var elements = document.querySelectorAll(
+    document.querySelectorAll(
       'a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]'
-    );
-    elements.forEach((element) => {
+    ).forEach((element) => {
       element.href = element.href.replace(
         "https://scratch.mit.edu/discuss/youtube/",
         "https://www.youtube.com/watch?v="
       );
     });
   }
+
+  replaceYouTubeLinks()
 }
