@@ -1,0 +1,18 @@
+{
+    "name": "Light blue background",
+    "description": "Adds a light blue background to Scratch",
+    "tags": ["community","popup"],
+    "enabledByDefault": false,
+    "credits": [
+      {
+        "name": "era2010",
+        "link": "https://scratch.mit.edu/users/era2010"
+      }
+    ],
+    "userstyles": [
+      {
+        "url": "userstyle.css",
+        "matches": ["https://scratch.mit.edu/*"]
+      }
+    ]
+}
