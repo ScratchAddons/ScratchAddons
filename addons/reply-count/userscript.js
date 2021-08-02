@@ -19,17 +19,17 @@ export default async function ({ addon, global, console, msg }) {
         elementCondition: (el) => topLevelComment.contains(el),
       });
 
-      let count = reply.parentNode.childNodes.length
-      const moreRepliesToLoad = count !== reply.parentNode.querySelectorAll('div.comment').length
-      
+      let count = reply.parentNode.childNodes.length;
+      const moreRepliesToLoad = count !== reply.parentNode.querySelectorAll("div.comment").length;
+
       if (moreRepliesToLoad) {
-        count = count - 1
+        count = count - 1;
       }
       replyCount.innerText = msg("replies", {
-        count
+        count,
       });
 
-      if (moreRepliesToLoad) replyCount.innerText.replace(`${count}`, `${count}+`)
+      if (moreRepliesToLoad) replyCount.innerText.replace(`${count}`, `${count}+`);
 
       replyCount.setAttribute("data-count", reply.parentNode.childNodes.length);
 
