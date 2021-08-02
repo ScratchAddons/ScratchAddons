@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import getDirection from "../rtl-list.js";
 import loadVueComponent from "../../libraries/common/load-vue-components.js";
-import Fuse from "../../libraries/thirdparty/fuse.basic.esm.min.js";
+import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
@@ -15,6 +15,15 @@ if (window.parent !== window) {
   isIframe = true;
 }
 
+const NEW_ADDON_ORDER = [
+  "turbowarp-player",
+  "items-per-row",
+  "ctrl-enter-post",
+  "customize-avatar-border",
+  "compact-messages",
+  "default-project",
+];
+
 let vue;
 let fuse;
 
@@ -22,7 +31,7 @@ let initialTheme;
 let initialThemePath;
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "light.css");
+lightThemeLink.setAttribute("href", "../styles/colors-light.css");
 lightThemeLink.setAttribute("data-below-vue-components", "");
 chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   if (globalTheme === true) {
@@ -183,6 +192,18 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         browserLevelPermissions,
         grantedOptionalPermissions,
         addonListObjs: [],
+        sidebarUrls: (() => {
+          const uiLanguage = chrome.i18n.getUILanguage();
+          const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+          const version = chrome.runtime.getManifest().version;
+          const versionName = chrome.runtime.getManifest().version_name;
+          const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
+          return {
+            contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
+            feedback: `https://scratchaddons.com/${localeSlash}feedback/?version=${versionName}&${utm}`,
+            changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
+          };
+        })(),
       };
     },
     computed: {
@@ -557,6 +578,11 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     const order = [["danger", "beta"], "editor", "community", "popup"];
 
     vue.addonGroups.forEach((group) => {
+      if (group.id === "new") {
+        group.addonIds.sort((b, a) => NEW_ADDON_ORDER.indexOf(b) - NEW_ADDON_ORDER.indexOf(a));
+        return;
+      }
+
       group.addonIds = group.addonIds
         .map((id) => vue.manifestsById[id])
         .sort((manifestA, manifestB) => {
@@ -634,7 +660,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   document.title = chrome.i18n.getMessage("settingsTitle");
   function resize() {
-    if (window.innerWidth < 1000) {
+    if (window.innerWidth < 1100) {
       vue.smallMode = true;
       vue.categoryOpen = false;
       vue.switchPath = "../../images/icons/switch.svg";

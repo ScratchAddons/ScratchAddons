@@ -4,6 +4,24 @@ try {
   throw "Scratch Addons: not first party iframe";
 }
 
+const _realConsole = window.console;
+const consoleOutput = (logAuthor = "[cs]") => {
+  const style = {
+    // Remember to change these as well on module.js
+    leftPrefix: "background:  #ff7b26; color: white; border-radius: 0.5rem 0 0 0.5rem; padding: 0 0.5rem",
+    rightPrefix:
+      "background: #222; color: white; border-radius: 0 0.5rem 0.5rem 0; padding: 0 0.5rem; font-weight: bold",
+    text: "",
+  };
+  return [`%cSA%c${logAuthor}%c`, style.leftPrefix, style.rightPrefix, style.text];
+};
+const console = {
+  ..._realConsole,
+  log: _realConsole.log.bind(_realConsole, ...consoleOutput()),
+  warn: _realConsole.warn.bind(_realConsole, ...consoleOutput()),
+  error: _realConsole.error.bind(_realConsole, ...consoleOutput()),
+};
+
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
 
 let receivedResponse = false;
@@ -65,9 +83,6 @@ const cs = {
   set url(newUrl) {
     this._url = newUrl;
     csUrlObserver.dispatchEvent(new CustomEvent("change", { detail: { newUrl } }));
-  },
-  requestMsgCount() {
-    chrome.runtime.sendMessage("getMsgCount");
   },
   copyImage(dataURL) {
     // Firefox only
@@ -211,7 +226,7 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
 
   // Set variables for customCssVariables
   const getColor = (addonId, obj) => {
-    if (typeof obj === "string" || obj === undefined) return obj;
+    if (typeof obj !== "object") return obj;
     let hex;
     switch (obj.type) {
       case "settingValue":
@@ -234,6 +249,12 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         let opaqueHex = getColor(addonId, obj.opaqueSource);
         let transparentHex = getColor(addonId, obj.transparentSource);
         return textColorLib.alphaBlend(opaqueHex, transparentHex);
+      }
+      case "makeHsv": {
+        let hSource = getColor(addonId, obj.h);
+        let sSource = getColor(addonId, obj.s);
+        let vSource = getColor(addonId, obj.v);
+        return textColorLib.makeHsv(hSource, sSource, vSource);
       }
       case "recolorFilter": {
         hex = getColor(addonId, obj.source);
@@ -266,7 +287,21 @@ function waitForDocumentHead() {
   }
 }
 
-async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWithUserscripts, addonsWithUserstyles }) {
+function getL10NURLs() {
+  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+  const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
+  if (langCode === "pt") {
+    urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
+  }
+  if (langCode.includes("-")) {
+    urls.push(chrome.runtime.getURL(`addons-l10n/${langCode.split("-")[0]}`));
+  }
+  const enJSON = chrome.runtime.getURL("addons-l10n/en");
+  if (!urls.includes(enJSON)) urls.push(enJSON);
+  return urls;
+}
+
+async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscripts, addonsWithUserstyles }) {
   // In order for the "everLoadedAddons" not to change when "addonsWithUserscripts" changes, we stringify and parse
   const everLoadedAddons = JSON.parse(JSON.stringify(addonsWithUserscripts));
   const disabledDynamicAddons = [];
@@ -283,7 +318,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
   }
 
   _page_.globalState = globalState;
-  _page_.l10njson = l10njson;
+  _page_.l10njson = getL10NURLs();
   _page_.addonsWithUserscripts = addonsWithUserscripts;
   _page_.dataReady = true;
 
@@ -330,12 +365,12 @@ async function onInfoAvailable({ globalState: globalStateMsg, l10njson, addonsWi
       // Try looking for the "userscriptMatches" function.
       removeAddonStyles(addonId);
       addStyle({ styles: userstyles, addonId, injectAsStyleElt, index });
-    } else if (request.setMsgCount) {
-      _page_.setMsgCount(request.setMsgCount);
     } else if (request === "getRunningAddons") {
       const userscripts = addonsWithUserscripts.map((obj) => obj.addonId);
       const userstyles = addonsWithUserstyles.map((obj) => obj.addonId);
       sendResponse({ userscripts, userstyles, disabledDynamicAddons });
+    } else if (request === "refetchSession") {
+      _page_.refetchSession();
     }
   });
 }
@@ -354,7 +389,12 @@ function forumWarning(key) {
     }
     let addonError = document.createElement("li");
     let reportLink = document.createElement("a");
-    reportLink.href = "https://scratchaddons.com/feedback";
+    const uiLanguage = chrome.i18n.getUILanguage();
+    const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+    const utm = `utm_source=extension&utm_medium=forumwarning&utm_campaign=v${chrome.runtime.getManifest().version}`;
+    reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?version=${
+      chrome.runtime.getManifest().version
+    }&${utm}`;
     reportLink.target = "_blank";
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     let text1 = document.createElement("span");
@@ -425,7 +465,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_17", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_18", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -444,18 +484,25 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_17"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_18"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
   });
+  const uiLanguage = chrome.i18n.getUILanguage();
+  const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+  const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${
+    chrome.runtime.getManifest().version
+  }`;
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
-    href: `https://scratchaddons.com/changelog?versionname=${chrome.runtime.getManifest().version}-notif`,
+    href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
-    href: `https://scratchaddons.com/feedback?version=${chrome.runtime.getManifest().version}-notif`,
+    href: `https://scratchaddons.com/${localeSlash}feedback/?version=${
+      chrome.runtime.getManifest().version
+    }-notif&${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("feedback"),
   });

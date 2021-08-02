@@ -6,6 +6,11 @@
       "type": "notice",
       "text": "This addon doesn't work well on mobile devices and in small windows.",
       "id": "mobile"
+    },
+    {
+      "type": "notice",
+      "text": "The size of most elements is not changed. If you want to see more projects and curators at once, use the \"more items per row\" addon.",
+      "id": "itemsPerRow"
     }
   ],
   "tags": ["community", "theme", "studios"],

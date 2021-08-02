@@ -1,7 +1,7 @@
 //theme switching
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "light.css");
+lightThemeLink.setAttribute("href", "../styles/colors-light.css");
 chrome.storage.sync.get(["globalTheme"], function (r) {
   let rr = false; //true = light, false = dark
   if (r.globalTheme) rr = r.globalTheme;
@@ -47,7 +47,10 @@ const vue = new Vue({
       this.closePopup();
     },
     openChangelog() {
-      window.open("https://scratchaddons.com/changelog?versionname=" + chrome.runtime.getManifest().version_name);
+      const uiLanguage = chrome.i18n.getUILanguage();
+      const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+      const utm = `utm_source=extension&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
+      window.open(`https://scratchaddons.com/${localeSlash}changelog/?${utm}`);
       this.closePopup();
     },
     setPopup(popup) {

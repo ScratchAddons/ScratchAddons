@@ -1,6 +1,6 @@
 {
   "name": "Searchable dropdowns",
-  "description": "Allows you to search dropdowns in the Scratch editor.",
+  "description": "Allows you to search block dropdowns.",
   "credits": [
     {
       "name": "GarboMuffin"
@@ -11,13 +11,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
       "url": "userscript.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "versionAdded": "1.0.0",
