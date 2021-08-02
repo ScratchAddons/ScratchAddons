@@ -525,7 +525,7 @@ export default class Tab extends Listenable {
     });
   }
 
-  _createEditorModal(title, { isOpen = false }) {
+  _createEditorModal(title, { isOpen = false } = {}) {
     const container = Object.assign(document.createElement("div"), {
       className: this.scratchClass("modal_modal-overlay"),
       dir: this.direction,
@@ -578,7 +578,7 @@ export default class Tab extends Listenable {
     };
   }
 
-  _createScratchWwwModal(title, { isOpen = false }) {
+  _createScratchWwwModal(title, { isOpen = false, useSizesClass = true } = {}) {
     const container = Object.assign(document.createElement("div"), {
       className: "modal-overlay",
     });
@@ -586,11 +586,12 @@ export default class Tab extends Listenable {
     if (isOpen) document.body.classList.add("overflow-hidden");
     document.body.appendChild(container);
     const modal = Object.assign(document.createElement("div"), {
-      className: "modal-content modal-sizes",
+      className: "modal-content",
       style: `
         overflow: hidden;
       `,
     });
+    if (useSizesClass) modal.classList.add("modal-sizes");
     modal.addEventListener("click", (e) => e.stopPropagation());
     container.appendChild(modal);
     const closeButton = Object.assign(document.createElement("div"), {
@@ -636,7 +637,7 @@ export default class Tab extends Listenable {
     };
   }
 
-  _createScratchr2Modal(title, { isOpen = false }) {
+  _createScratchr2Modal(title, { isOpen = false } = {}) {
     const backdrop = Object.assign(document.createElement("div"), {
       className: "modal-backdrop fade",
     });
@@ -697,9 +698,9 @@ export default class Tab extends Listenable {
     };
   }
 
-  createModal(title, { isOpen = false, useEditorClasses = false }) {
+  createModal(title, { isOpen = false, useEditorClasses = false, useSizesClass = false } = {}) {
     if (this.editorMode !== null && useEditorClasses) return this._createEditorModal(title, { isOpen });
-    if (this.clientVersion === "scratch-www") return this._createScratchWwwModal(title, { isOpen });
+    if (this.clientVersion === "scratch-www") return this._createScratchWwwModal(title, { isOpen, useSizesClass });
     return this._createScratchr2Modal(title, { isOpen });
   }
 }
