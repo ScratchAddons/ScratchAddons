@@ -16,10 +16,10 @@ export default async ({ addon, console, msg }) => {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
     const getOptions = () => {
-      const { backdrop, container, content, closeButton, remove } = addon.tab.createModal(
-        msg("option-title"),
-        { isOpen: true, useEditorClasses: true }
-      );
+      const { backdrop, container, content, closeButton, remove } = addon.tab.createModal(msg("option-title"), {
+        isOpen: true,
+        useEditorClasses: true,
+      });
       container.classList.add("mediaRecorderPopup");
       content.classList.add("mediaRecorderPopupContent");
 

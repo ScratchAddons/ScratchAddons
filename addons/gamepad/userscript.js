@@ -207,10 +207,10 @@ export default async function ({ addon, global, console, msg }) {
     const editorEl = editor.generateEditor();
     handleEditorControllerChanged();
 
-    const { backdrop, container, content, closeButton, remove } = addon.tab.createModal(
-      msg("settings"),
-      { isOpen: true, useEditorClasses: true }
-    );
+    const { backdrop, container, content, closeButton, remove } = addon.tab.createModal(msg("settings"), {
+      isOpen: true,
+      useEditorClasses: true,
+    });
 
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && !e.target.closest("[data-accepting-input]")) {
