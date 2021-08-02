@@ -1,17 +1,34 @@
 export default async function ({ addon, global, console, msg }) {
-  const loadProject = () => {
+  let pendingReplacement = false;
+  const replace = async () => {
+    // Current loadingState is LOADING_VM_NEW_DEFAULT
+
+    if (pendingReplacement) {
+      // Never happens AFAIK
+      console.log("Pending replacement");
+      return;
+    }
+    pendingReplacement = true;
+
+    const isLoggedIn = await addon.auth.fetchIsLoggedIn();
+    if (isLoggedIn) {
+      await addon.tab.redux.waitForState((state) => state.scratchGui.projectState.loadingState === "SHOWING_WITH_ID");
+    } else {
+      // If the user is logged out, SHOWING_WITHOUT_ID will be the last state.
+      await addon.tab.redux.waitForState(
+        (state) => state.scratchGui.projectState.loadingState === "SHOWING_WITHOUT_ID"
+      );
+    }
+
     const projectId = addon.settings.get("projectId");
     if (projectId !== 510186917) addon.tab.traps.vm.downloadProjectId(projectId);
+    pendingReplacement = false;
   };
 
-  const initialPathname = location.pathname;
-  // For newly created projects (e.g. clicking create button)
-  if (initialPathname === "/projects/editor/") addon.tab.addEventListener("urlChange", loadProject, { once: true });
+  if (addon.tab.redux.state.scratchGui.projectState.loadingState === "LOADING_VM_NEW_DEFAULT") replace();
 
-  // File > New
-  addon.tab.addEventListener("urlChange", (e) => {
-    if (e.detail.newUrl === "https://scratch.mit.edu/projects/editor") {
-      addon.tab.addEventListener("urlChange", loadProject, { once: true });
-    }
+  addon.tab.redux.initialize();
+  addon.tab.redux.addEventListener("statechanged", async (e) => {
+    if (e.detail.action.type === "scratch-gui/project-state/DONE_FETCHING_DEFAULT") replace();
   });
 }
