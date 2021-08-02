@@ -243,7 +243,7 @@ export default async function ({ addon, global, console, msg }) {
   searchBar.setAttribute("type", "text");
   let pathSplit = window.location.pathname.split("/");
   let searchPlaceholder = msg("placeholder");
-  if (pathSplit[2] !== 'settings') {
+  if (pathSplit[2] !== "settings") {
     switch (pathSplit.length) {
       case 5: {
         let topicTitle = document
@@ -263,7 +263,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
   }
-  
+
   searchBar.setAttribute("placeholder", searchPlaceholder);
   search.appendChild(searchBar);
 
