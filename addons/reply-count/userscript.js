@@ -22,9 +22,8 @@ export default async function ({ addon, global, console, msg }) {
       let count = reply.parentNode.childNodes.length;
       const moreRepliesToLoad = count !== reply.parentNode.querySelectorAll("div.comment").length;
 
-      if (moreRepliesToLoad) {
-        count = count - 1;
-      }
+      if (moreRepliesToLoad) count--
+      
       replyCount.innerText = msg("replies", {
         count,
       });
