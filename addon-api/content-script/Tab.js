@@ -564,7 +564,7 @@ export default class Tab extends Listenable {
     const content = document.createElement("div");
     modal.appendChild(content);
     return {
-      container,
+      container: modal,
       content,
       backdrop: container,
       closeButton,
@@ -620,7 +620,7 @@ export default class Tab extends Listenable {
     });
     modal.appendChild(content);
     return {
-      container,
+      container: modal,
       content,
       backdrop: container,
       closeButton,

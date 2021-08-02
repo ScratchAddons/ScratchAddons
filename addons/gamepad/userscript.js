@@ -222,7 +222,7 @@ export default async function ({ addon, global, console, msg }) {
     addon.self.addEventListener("disabled", remove);
 
     backdrop.classList.add("sa-gamepad-popup-outer");
-    container.querySelector("[class^=modal_modal-content_]").classList.add("sa-gamepad-popup");
+    container.classList.add("sa-gamepad-popup");
 
     closeButton.tabIndex = "0";
     closeButton.setAttribute("role", "button");

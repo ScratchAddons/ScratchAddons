@@ -16,29 +16,14 @@ export default async ({ addon, console, msg }) => {
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
     });
     const getOptions = () => {
-      const recordOption = Object.assign(document.createElement("div"), {
-        className: addon.tab.scratchClass("modal_modal-overlay"),
-      });
-      const recordOptionPopup = Object.assign(document.createElement("div"), {
-        className: addon.tab.scratchClass("modal_modal-content", { others: "mediaRecorderPopup" }),
-        dir: addon.tab.direction,
-      });
-      const recordOptionHeader = Object.assign(document.createElement("div"), {
-        className: addon.tab.scratchClass("modal_header"),
-      });
-      recordOptionHeader.appendChild(
-        Object.assign(document.createElement("div"), {
-          className: addon.tab.scratchClass("modal_header-item", "modal_header-item-title"),
-          textContent: msg("option-title"),
-          title: msg("added-by"),
-        })
+      const { backdrop, container, content, closeButton, remove } = addon.tab.createModal(
+        msg("option-title"),
+        { isOpen: true, useEditorClasses: true }
       );
-      recordOptionPopup.appendChild(recordOptionHeader);
-      const recordOptionInner = Object.assign(document.createElement("div"), {
-        className: "mediaRecorderPopupContent",
-      });
+      container.classList.add("mediaRecorderPopup");
+      content.classList.add("mediaRecorderPopupContent");
 
-      recordOptionInner.appendChild(
+      content.appendChild(
         Object.assign(document.createElement("p"), {
           textContent: msg("record-description"),
           className: "recordOptionDescription",
@@ -61,7 +46,7 @@ export default async ({ addon, console, msg }) => {
       });
       recordOptionSeconds.appendChild(recordOptionSecondsLabel);
       recordOptionSeconds.appendChild(recordOptionSecondsInput);
-      recordOptionInner.appendChild(recordOptionSeconds);
+      content.appendChild(recordOptionSeconds);
 
       // Audio
       const recordOptionAudio = document.createElement("p");
@@ -77,7 +62,7 @@ export default async ({ addon, console, msg }) => {
       });
       recordOptionAudio.appendChild(recordOptionAudioInput);
       recordOptionAudio.appendChild(recordOptionAudioLabel);
-      recordOptionInner.appendChild(recordOptionAudio);
+      content.appendChild(recordOptionAudio);
 
       // Mic
       const recordOptionMic = document.createElement("p");
@@ -92,7 +77,7 @@ export default async ({ addon, console, msg }) => {
       });
       recordOptionMic.appendChild(recordOptionMicInput);
       recordOptionMic.appendChild(recordOptionMicLabel);
-      recordOptionInner.appendChild(recordOptionMic);
+      content.appendChild(recordOptionMic);
 
       // Green flag
       const recordOptionFlag = document.createElement("p");
@@ -107,7 +92,7 @@ export default async ({ addon, console, msg }) => {
       });
       recordOptionFlag.appendChild(recordOptionFlagInput);
       recordOptionFlag.appendChild(recordOptionFlagLabel);
-      recordOptionInner.appendChild(recordOptionFlag);
+      content.appendChild(recordOptionFlag);
 
       // Stop sign
       const recordOptionStop = document.createElement("p");
@@ -130,7 +115,7 @@ export default async ({ addon, console, msg }) => {
       });
       recordOptionStop.appendChild(recordOptionStopInput);
       recordOptionStop.appendChild(recordOptionStopLabel);
-      recordOptionInner.appendChild(recordOptionStop);
+      content.appendChild(recordOptionStop);
 
       let resolvePromise = null;
       const optionPromise = new Promise((resolve) => {
@@ -138,21 +123,12 @@ export default async ({ addon, console, msg }) => {
       });
       let handleOptionClose = null;
 
-      const handleClickOutside = (e) => {
-        if (recordOptionPopup.contains(e.target)) return;
-        handleOptionClose(null);
-      };
-
-      document.body.addEventListener("click", handleClickOutside, {
-        capture: true,
-      });
+      backdrop.addEventListener("click", () => handleOptionClose(null));
+      closeButton.addEventListener("click", () => handleOptionClose(null));
 
       handleOptionClose = (value) => {
         resolvePromise(value);
-        document.body.removeEventListener("click", handleClickOutside, {
-          capture: true,
-        });
-        recordOption.remove();
+        remove();
       };
 
       const buttonRow = Object.assign(document.createElement("div"), {
@@ -180,11 +156,7 @@ export default async ({ addon, console, msg }) => {
         { once: true }
       );
       buttonRow.appendChild(startButton);
-      recordOptionInner.appendChild(buttonRow);
-
-      recordOptionPopup.appendChild(recordOptionInner);
-      recordOption.appendChild(recordOptionPopup);
-      document.body.appendChild(recordOption);
+      content.appendChild(buttonRow);
 
       return optionPromise;
     };
