@@ -32,7 +32,7 @@ export default async function ({ addon, global, console, msg }) {
   var newest = Date.now();
 
   while (true) {
-    await wait(3000);
+    await wait(10000);
     var loopOffset = 40;
     var offset = -loopOffset;
     while (true) {
