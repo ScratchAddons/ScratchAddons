@@ -1,4 +1,4 @@
-export default async function ({ addon, msg, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   (async () => {
     while (true) {
       const reply = await addon.tab.waitForElement(".replies div.comment", {
@@ -19,9 +19,17 @@ export default async function ({ addon, msg, global, console }) {
         elementCondition: (el) => topLevelComment.contains(el),
       });
 
+      let count = reply.parentNode.childNodes.length
+      const moreRepliesToLoad = count !== reply.parentNode.querySelectorAll('div.comment').length
+      
+      if (moreRepliesToLoad) {
+        count = count - 1
+      }
       replyCount.innerText = msg("replies", {
-        count: reply.parentNode.childNodes.length,
+        count
       });
+
+      if (moreRepliesToLoad) replyCount.innerText.replace(`${count}`, `${count}+`)
 
       replyCount.setAttribute("data-count", reply.parentNode.childNodes.length);
 
