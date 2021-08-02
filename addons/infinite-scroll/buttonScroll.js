@@ -18,7 +18,7 @@ async function commentLoader(addon, heightControl, selector, pathname, { yProvid
     func = () => {
       const threshold = yProvider ? yProvider.scrollTop + yProvider.clientHeight : window.scrollY + window.innerHeight;
       if (typeof pathname === "string" && (window.location.pathname.split("/")[3] || "") !== pathname) return;
-      if (threshold >= el.closest(heightControl).offsetHeight - 250) {
+      if (threshold >= el.closest(heightControl).offsetHeight - 500) {
         if (el) {
           el.click();
         }
