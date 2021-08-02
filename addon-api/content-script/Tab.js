@@ -535,6 +535,7 @@ export default class Tab extends Listenable {
     const modal = Object.assign(document.createElement("div"), {
       className: this.scratchClass("modal_modal-content"),
     });
+    modal.addEventListener("click", (e) => e.stopPropagation());
     container.appendChild(modal);
     const header = Object.assign(document.createElement("div"), {
       className: this.scratchClass("modal_header"),
@@ -573,7 +574,7 @@ export default class Tab extends Listenable {
       close: () => {
         container.style.display = "none";
       },
-      remove: container.remove,
+      remove: container.remove.bind(container),
     };
   }
 
@@ -631,7 +632,7 @@ export default class Tab extends Listenable {
         container.style.display = "none";
         document.body.classList.remove("overflow-hidden");
       },
-      remove: container.remove,
+      remove: container.remove.bind(container),
     };
   }
 
