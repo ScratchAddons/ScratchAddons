@@ -471,7 +471,7 @@ export default class Tab extends Listenable {
    * Callback to modify the context menu.
    * @callback Tab~blockContextMenuCallback
    * @param {Tab~ContextMenuItem[]} items - the items added by vanilla code or other addons.
-   * @param {?object} block - the targetted block, if any.
+   * @param {?object} block - the targeted block, if any.
    * @returns {Tab~ContextMenuItem[]} the array that contains values of items array as well as new items.
    */
 
