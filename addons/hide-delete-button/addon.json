@@ -1,0 +1,55 @@
+{
+  "name": "Hide delete button",
+  "description": "Hides delete button (trash can icon) from sprites, costumes or sounds. They can still be deleted using the right-click context menu.",
+  "tags": ["editor"],
+  "versionAdded": "1.19.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "settings": [
+    {
+      "name": "Sprites",
+      "id": "sprites",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Costumes and backdrops",
+      "id": "costumes",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Sounds",
+      "id": "sounds",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "sprites.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "sprites",
+        "value": true
+      }
+    },
+    {
+      "url": "costumes.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "costumes",
+        "value": true
+      }
+    },
+    {
+      "url": "sounds.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "sounds",
+        "value": true
+      }
+    }
+  ]
+}
