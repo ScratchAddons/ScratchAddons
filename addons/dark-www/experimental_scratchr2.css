@@ -23,7 +23,8 @@ select,
 .editable-empty,
 .editable.read,
 .editable.write,
-.editable:hover {
+.editable:hover,
+.modal {
   background-color: #282828;
   color: #fff;
 }

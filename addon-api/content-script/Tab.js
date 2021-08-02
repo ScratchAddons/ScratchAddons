@@ -524,4 +524,173 @@ export default class Tab extends Listenable {
       };
     });
   }
+
+  _createEditorModal(title, { isOpen = false }) {
+    const container = Object.assign(document.createElement("div"), {
+      className: this.scratchClass("modal_modal-overlay"),
+      dir: this.direction,
+    });
+    container.style.display = isOpen ? "" : "none";
+    document.body.appendChild(container);
+    const modal = Object.assign(document.createElement("div"), {
+      className: this.scratchClass("modal_modal-content"),
+    });
+    container.appendChild(modal);
+    const header = Object.assign(document.createElement("div"), {
+      className: this.scratchClass("modal_header"),
+    });
+    modal.appendChild(header);
+    header.appendChild(Object.assign(document.createElement("div"), {
+      className: this.scratchClass("modal_header-item", "modal_header-item-title"),
+      innerText: title,
+    }));
+    const closeContainer = Object.assign(document.createElement("div"), {
+      className: this.scratchClass("modal_header-item", "modal_header-item-close"),
+    });
+    header.appendChild(closeContainer);
+    const closeButton = Object.assign(document.createElement("div"), {
+      className: this.scratchClass("close-button_close-button", "close-button_large"),
+    });
+    closeContainer.appendChild(closeButton);
+    closeButton.appendChild(Object.assign(document.createElement("img"), {
+      className: this.scratchClass("close-button_close-icon"),
+      src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
+    }));
+    const content = document.createElement("div");
+    modal.appendChild(content);
+    return {
+      container,
+      content,
+      backdrop: container,
+      closeButton,
+      open: () => {
+        container.style.display = "";
+      },
+      close: () => {
+        container.style.display = "none";
+      },
+      remove: container.remove,
+    };
+  }
+
+  _createScratchWwwModal(title, { isOpen = false }) {
+    const container = Object.assign(document.createElement("div"), {
+      className: "modal-overlay",
+    });
+    container.style.display = isOpen ? "" : "none";
+    if (isOpen) document.body.classList.add("overflow-hidden");
+    document.body.appendChild(container);
+    const modal = Object.assign(document.createElement("div"), {
+      className: "modal-content modal-sizes",
+      style: `
+        overflow: hidden;
+      `,
+    });
+    modal.addEventListener("click", (e) => e.stopPropagation());
+    container.appendChild(modal);
+    const closeButton = Object.assign(document.createElement("div"), {
+      className: "modal-content-close",
+    });
+    modal.appendChild(closeButton);
+    closeButton.appendChild(Object.assign(document.createElement("img"), {
+      className: "modal-content-close-img",
+      src: "/svgs/modal/close-x.svg",
+    }));
+    const header = Object.assign(document.createElement("div"), {
+      className: "modal-header modal-title",
+      style: `
+        background-color: var(--scratchr2-primaryColor, #4d97ff);
+        box-shadow: 0 -1px 0 0 inset #4280d7;
+        color: white;
+        text-align: center;
+        font-weight: bold;
+      `,
+      innerText: title,
+    });
+    modal.appendChild(header);
+    const content = Object.assign(document.createElement("div"), {
+      className: "modal-inner-content",
+    });
+    modal.appendChild(content);
+    return {
+      container,
+      content,
+      backdrop: container,
+      closeButton,
+      open: () => {
+        container.style.display = "";
+        document.body.classList.add("overflow-hidden");
+      },
+      close: () => {
+        container.style.display = "none";
+        document.body.classList.remove("overflow-hidden");
+      },
+      remove: container.remove,
+    };
+  }
+
+  _createScratchr2Modal(title, { isOpen = false }) {
+    const backdrop = Object.assign(document.createElement("div"), {
+      className: "modal-backdrop fade",
+    });
+    if (isOpen) backdrop.classList.add("in");
+    else backdrop.classList.add("hide");
+    document.body.appendChild(backdrop);
+    const modal = Object.assign(document.createElement("div"), {
+      className: "modal fade",
+    });
+    if (isOpen) modal.classList.add("in");
+    else modal.classList.add("hide");
+    document.body.appendChild(modal);
+    const header = Object.assign(document.createElement("div"), {
+      className: "modal-header",
+    });
+    modal.appendChild(header);
+    const closeButton = Object.assign(document.createElement("span"), {
+      className: "close",
+      innerText: "×",
+    });
+    header.appendChild(closeButton);
+    header.appendChild(Object.assign(document.createElement("h3"), {
+      innerText: title,
+    }));
+    const content = Object.assign(document.createElement("div"), {
+      className: "modal-body",
+    });
+    modal.appendChild(content);
+    return {
+      container: modal,
+      content,
+      backdrop,
+      closeButton,
+      open: () => {
+        backdrop.classList.remove("hide");
+        modal.classList.remove("hide");
+        setTimeout(() => {
+          backdrop.classList.add("in");
+          modal.classList.add("in");
+        }, 300);
+      },
+      close: () => {
+        modal.classList.remove("in");
+        setTimeout(() => {
+          modal.classList.add("hide");
+          backdrop.classList.remove("in");
+          setTimeout(() => {
+            backdrop.classList.add("hide");
+          }, 300);
+        }, 300);
+      },
+      remove: () => {
+        backdrop.remove();
+        modal.remove();
+      },
+    };
+  }
+
+  createModal(title, { isOpen = false, useEditorClasses = false }) {
+    if (this.editorMode !== null && useEditorClasses) return this._createEditorModal(title, { isOpen });
+    if (this.clientVersion === "scratch-www") return this._createScratchWwwModal(title, { isOpen });
+    return this._createScratchr2Modal(title, { isOpen });
+  }
 }

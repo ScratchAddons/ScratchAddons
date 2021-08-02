@@ -1,0 +1,11 @@
+{
+  "name": "createModal test",
+  "description": "Test.",
+  "tags": ["community"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": "*"
+    }
+  ]
+}
