@@ -429,7 +429,7 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=4OluKLESoVU",
+    href: "https://www.youtube.com/watch?v=GrKHdKQq_hc",
     target: "_blank",
   });
   const notifImage = Object.assign(document.createElement("img"), {
