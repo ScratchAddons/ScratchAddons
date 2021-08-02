@@ -1,0 +1,20 @@
+{
+  "name": "Create empty sprite/costume instead of opening library",
+  "description": "Changes the \"Choose a Sprite\" and \"Choose a Costume\" buttons to create an empty sprite/costume instead of opening the library.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.19.0",
+  "tags": ["editor"],
+  "enabledByDefault": false
+}
