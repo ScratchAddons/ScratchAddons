@@ -1,7 +1,7 @@
 {
     "name": "Light blue background",
     "description": "Adds a light blue background to Scratch",
-    "tags": ["community","popup"],
+    "tags": ["community"],
     "enabledByDefault": false,
     "credits": [
       {
