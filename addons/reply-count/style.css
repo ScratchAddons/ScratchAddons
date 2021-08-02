@@ -1,7 +1,7 @@
 .sa-comment-reply-count::before {
-    background-image: none !important;
+  background-image: none !important;
 }
 
 .sa-comment-reply-count {
-    cursor: default !important;
+  cursor: default !important;
 }
