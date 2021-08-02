@@ -540,10 +540,12 @@ export default class Tab extends Listenable {
       className: this.scratchClass("modal_header"),
     });
     modal.appendChild(header);
-    header.appendChild(Object.assign(document.createElement("div"), {
-      className: this.scratchClass("modal_header-item", "modal_header-item-title"),
-      innerText: title,
-    }));
+    header.appendChild(
+      Object.assign(document.createElement("div"), {
+        className: this.scratchClass("modal_header-item", "modal_header-item-title"),
+        innerText: title,
+      })
+    );
     const closeContainer = Object.assign(document.createElement("div"), {
       className: this.scratchClass("modal_header-item", "modal_header-item-close"),
     });
@@ -552,10 +554,12 @@ export default class Tab extends Listenable {
       className: this.scratchClass("close-button_close-button", "close-button_large"),
     });
     closeContainer.appendChild(closeButton);
-    closeButton.appendChild(Object.assign(document.createElement("img"), {
-      className: this.scratchClass("close-button_close-icon"),
-      src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
-    }));
+    closeButton.appendChild(
+      Object.assign(document.createElement("img"), {
+        className: this.scratchClass("close-button_close-icon"),
+        src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
+      })
+    );
     const content = document.createElement("div");
     modal.appendChild(content);
     return {
@@ -592,10 +596,12 @@ export default class Tab extends Listenable {
       className: "modal-content-close",
     });
     modal.appendChild(closeButton);
-    closeButton.appendChild(Object.assign(document.createElement("img"), {
-      className: "modal-content-close-img",
-      src: "/svgs/modal/close-x.svg",
-    }));
+    closeButton.appendChild(
+      Object.assign(document.createElement("img"), {
+        className: "modal-content-close-img",
+        src: "/svgs/modal/close-x.svg",
+      })
+    );
     const header = Object.assign(document.createElement("div"), {
       className: "modal-header modal-title",
       style: `
@@ -651,9 +657,11 @@ export default class Tab extends Listenable {
       innerText: "×",
     });
     header.appendChild(closeButton);
-    header.appendChild(Object.assign(document.createElement("h3"), {
-      innerText: title,
-    }));
+    header.appendChild(
+      Object.assign(document.createElement("h3"), {
+        innerText: title,
+      })
+    );
     const content = Object.assign(document.createElement("div"), {
       className: "modal-body",
     });

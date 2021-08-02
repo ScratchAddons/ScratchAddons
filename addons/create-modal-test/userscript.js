@@ -1,7 +1,7 @@
 export default async function ({ addon, console }) {
-  const { open, close, container, content, backdrop, closeButton } = addon.tab.createModal(
-    "Test Modal", { useEditorClasses: true }
-  );
+  const { open, close, container, content, backdrop, closeButton } = addon.tab.createModal("Test Modal", {
+    useEditorClasses: true,
+  });
   backdrop.addEventListener("click", close);
   closeButton.addEventListener("click", close);
   content.style.padding = "1rem";
