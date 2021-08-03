@@ -115,7 +115,7 @@ export default async function ({ addon, global, console }) {
     // scratchblocks
     let scratchBlocksPres = html.getElementsByClassName("blocks");
     for (let pre of scratchBlocksPres) {
-      pre.textContent = pre.getAttribute("data-original"); // cs.js manages data-original because 3.0 scratchblocks
+      pre.textContent = `[scratchblocks]\n${pre.getAttribute("data-original")}\n[/scratchblocks]`; // cs.js manages data-original because 3.0 scratchblocks
     }
 
     // code blocks
