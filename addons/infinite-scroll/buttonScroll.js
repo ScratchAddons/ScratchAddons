@@ -15,17 +15,13 @@ async function commentLoader(addon, heightControl, selector, pathname, { yProvid
     if (func && prevScrollDetector) prevScrollDetector.removeEventListener("scroll", func, { passive: true });
     el.style.display = "none";
     prevScrollDetector = scrollDetecter;
-    let edge = false;
     func = () => {
       const threshold = yProvider ? yProvider.scrollTop + yProvider.clientHeight : window.scrollY + window.innerHeight;
       if (typeof pathname === "string" && (window.location.pathname.split("/")[3] || "") !== pathname) return;
-      if (!edge && threshold >= el.closest(heightControl).offsetHeight - 500) {
-        edge = true;
+      if (threshold >= el.closest(heightControl).offsetHeight - 500) {
         if (el) {
           el.click();
         }
-      } else if (threshold < el.closest(heightControl).offsetHeight - 500) {
-        edge = false;
       }
     };
     scrollDetecter.addEventListener("scroll", func, { passive: true });
@@ -78,5 +74,56 @@ export default async function ({ addon, global, console }) {
     addon.tab.waitForElement(".sa-followers-main .user-projects-modal-content").then((el) => {
       el.setAttribute("data-scrollable", "true");
     });
+  }
+
+  if (isStudio && addon.tab.redux.state) {
+    // Fix vanilla bug causing unnecessary re-fetch
+    let projectsRefetching = false;
+    let curatorsRefetching = false;
+    let activityRefetching = false;
+    addon.tab.redux.initialize();
+    addon.tab.redux.addEventListener("statechanged", (e) => {
+      switch (e.detail.action.type) {
+        case "projects_APPEND": {
+          projectsRefetching = false;
+          return;
+        }
+        case "curators_APPEND": {
+          curatorsRefetching = false;
+          return;
+        }
+        case "activity_APPEND": {
+          activityRefetching = false;
+          return;
+        }
+      }
+    });
+    document.body.addEventListener(
+      "click",
+      (e) => {
+        if (!e.target.closest("button.button")) return;
+        if (e.target.closest(".studio-projects-grid .studio-grid-load-more > button")) {
+          if (projectsRefetching) e.stopPropagation();
+          projectsRefetching = true;
+          return;
+        } else if (e.target.closest("div > .studio-members:last-child .studio-grid-load-more > button")) {
+          if (curatorsRefetching) e.stopPropagation();
+          curatorsRefetching = true;
+          return;
+        } else if (e.target.closest(".studio-activity .studio-grid-load-more > button")) {
+          if (activityRefetching) e.stopPropagation();
+          activityRefetching = true;
+          return;
+        } else if (
+          e.target.closest(
+            ".user-projects-modal:not(.sa-followers-main) .user-projects-modal-grid .studio-grid-load-more > button"
+          )
+        ) {
+          if (addon.tab.redux.state?.["user-projects"].loading) e.stopPropagation();
+          return;
+        }
+      },
+      { capture: true }
+    );
   }
 }

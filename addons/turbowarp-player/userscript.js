@@ -43,8 +43,6 @@ export default async function ({ addon, console, msg }) {
     }
   };
 
-  addon.tab.addEventListener("urlChange", removeIframe);
-
   let showAlert = true;
   while (true) {
     const seeInside = await addon.tab.waitForElement(".see-inside-button", {

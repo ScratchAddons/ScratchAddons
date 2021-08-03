@@ -135,7 +135,7 @@ h1 {
 }
 
 .clear-button {
-  padding-inline-end: 10px;
+  padding-inline: 7px;
   border-radius: 0 4px 4px 0;
   border-inline-start: none !important;
 }
@@ -148,12 +148,8 @@ h1 {
 [dir="rtl"] .number-setting .clear-button {
   border-radius: 16px 0 0 16px;
 }
-.clear-button span {
-  vertical-align: middle;
-}
 .clear-button .icon-type {
-  margin-inline-start: 6px;
-  margin-inline-end: 0;
+  margin: 0;
 }
 
 .reverted {
@@ -368,17 +364,22 @@ body.iframe .search-box input {
 
 color-picker {
   z-index: 2;
-  box-shadow: var(--large-shadow);
   position: absolute;
-  top: 30px;
+  top: calc(100% - 1px);
   left: 0;
-  --color-picker-background-color: var(--page-background) !important;
-  --color-picker-color: var(--content-text) !important;
+  border: 1px solid var(--control-border);
+  --color-picker-background-color: var(--button-background);
+  --color-picker-color: var(--content-text);
+  --color-picker-font-family: Sora, sans-serif;
 }
 
 button.setting-input.color {
-  position: relative;
   width: 100px;
+  transition: border-radius 0.2s ease;
+}
+
+button.setting-input.color.open {
+  border-bottom-left-radius: 0;
 }
 
 .color-container {
@@ -389,6 +390,7 @@ button.setting-input.color {
   border-radius: 5px;
   background-color: white;
   display: flex;
+  position: relative;
 }
 
 .action-disabled {

@@ -16,6 +16,21 @@ function updateSettings(addon, newStyle) {
         color: #575e75;
       }`;
   }
+  if (textMode === "colorOnWhite") {
+    stylesheet += `
+      .blocklyDropDownDiv:not([style*="rgb(255, 255, 255)"]) .goog-menuitem {
+        color: #575e75;
+      }`;
+  }
+  if (textMode === "colorOnBlack") {
+    stylesheet += `
+      .blocklyDropDownDiv:not([style*="rgb(255, 255, 255)"]) .goog-option-selected .goog-menuitem-checkbox {
+        filter: brightness(0) invert(1);
+      }
+      .u-dropdown-searchbar {
+        border-color: rgba(255, 255, 255, 0.15);
+      }`;
+  }
   var categories = {
     motion: {
       color: "#4C97FF",
@@ -73,13 +88,18 @@ function updateSettings(addon, newStyle) {
   for (var prop of Object.keys(categories)) {
     var settingName = categories[prop].var ? categories[prop].var : prop;
     if (textMode === "white" || textMode === "black") {
+      let tertiary = multiply(addon.settings.get(prop + "-color"), { r: 0.8, g: 0.8, b: 0.8 });
       stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground {
         fill: var(--editorTheme3-${settingName}Color);
+        ${textMode === "black" ? "--sa-block-text-color: #575e75;" : ""}
+      }
+      .blocklyBlockBackground[fill="${categories[prop].tertiaryColor}"] /* open dropdown */ {
+        fill: #0003;
       }
       .scratchCategoryId-${categories[prop].alt ? categories[prop].alt : prop} > .scratchCategoryItemBubble {
         background-color: var(--editorTheme3-${settingName}Color) !important;
       }
-      .blocklyDropDownDiv[data-category="${prop}"] {
+      .blocklyDropDownDiv[data-category="${prop}"]:not([style*="rgb(255, 255, 255)"]) {
         background-color: var(--editorTheme3-${settingName}Color) !important;
         border-color: #0003 !important;
       }
@@ -89,6 +109,10 @@ function updateSettings(addon, newStyle) {
       #s3devIDD > li.${prop} {
         background-color: var(--editorTheme3-${settingName}Color);
       }
+      #s3devIDD > li.${prop}:hover,
+      #s3devIDD > li.${prop}.sel {
+        background-color: ${tertiary};
+      }
       .console-variable[data-category="${prop}"] {
         background-color: var(--editorTheme3-${settingName}Color) !important;
       }
@@ -96,16 +120,26 @@ function updateSettings(addon, newStyle) {
       if (prop === "custom") {
         stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
           fill: var(--editorTheme3-${prop}Color);
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;" : ""}
+        }
+        #s3devIDD > li.null {
+          background-color: var(--editorTheme3-${settingName}Color);
+        }
+        #s3devIDD > li.null:hover,
+        #s3devIDD > li.null.sel {
+          background-color: ${tertiary};
         }`;
       }
       if (prop === "sensing") {
         stylesheet += `path.blocklyBlockBackground[fill="#5CB1D6"] {
           fill: var(--editorTheme3-${prop}Color);
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;" : ""}
         }`;
       }
       if (prop === "events") {
         stylesheet += `path.blocklyBlockBackground[fill="#FFBF00"] {
           fill: var(--editorTheme3-${prop}Color);
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;" : ""}
         }
         .blocklyDropDownDiv[style*="rgb(255, 191, 0)"] {
           background-color: var(--editorTheme3-${prop}Color) !important;
@@ -115,23 +149,36 @@ function updateSettings(addon, newStyle) {
       if (prop === "Pen") {
         stylesheet += `path.blocklyBlockBackground[fill="#0FBD8C"] {
           fill: var(--editorTheme3-${prop}Color);
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;" : ""}
         }
         .blocklyDropDownDiv[style*="rgb(15, 189, 140)"] {
           background-color: var(--editorTheme3-${prop}Color) !important;
           border-color: #0003 !important;
+        }
+        #s3devIDD > li.extension {
+          background-color: var(--editorTheme3-${settingName}Color);
+        }
+        #s3devIDD > li.extension:hover,
+        #s3devIDD > li.extension.sel {
+          background-color: ${tertiary};
         }`;
       }
     } else {
       let background = { colorOnWhite: "#fff", colorOnBlack: "#282828" }[textMode];
       let inputShadow = { colorOnWhite: "#00000026", colorOnBlack: "#fff3" }[textMode];
       let secondary = multiply(addon.settings.get(prop + "-color"), { a: 0.15 });
+      let secondaryActive = multiply(addon.settings.get(prop + "-color"), { a: 0.25 });
+      let menuText = { colorOnWhite: "#575e75", colorOnBlack: "#fff" }[textMode];
       stylesheet += `g[data-category="${prop}"] > path.blocklyBlockBackground,
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > rect,
       g[data-category="${prop}"] > g[data-argument-type="variable"] > rect {
         fill: ${background};
         stroke: var(--editorTheme3-${settingName}Color);
+        --sa-block-text-color: ${menuText};
+        --sa-block-secondary-color: ${secondaryActive};
       }
-      g[data-category="${prop}"] > .blocklyText {
+      g[data-category="${prop}"] > .blocklyText,
+      g[data-category="${prop}"] > g:not(.blocklyDraggable) > .blocklyText /* variable and list reporters */ {
         fill: var(--editorTheme3-${settingName}Color);
       }
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > .blocklyDropdownText,
@@ -145,15 +192,18 @@ function updateSettings(addon, newStyle) {
         fill: ${secondary};
         stroke: var(--editorTheme3-${settingName}Color);
       }
+      .blocklyBlockBackground[fill="${categories[prop].tertiaryColor}"] /* open dropdown */ {
+        fill: ${secondaryActive} !important;
+      }
       .scratchCategoryId-${categories[prop].alt ? categories[prop].alt : prop} > .scratchCategoryItemBubble {
         background-color: var(--editorTheme3-${settingName}Color) !important;
       }
-      .blocklyDropDownDiv[data-category="${prop}"] {
+      .blocklyDropDownDiv[data-category="${prop}"]:not([style*="rgb(255, 255, 255)"]) {
         background-color: ${background} !important;
         border-color: var(--editorTheme3-${settingName}Color) !important;
       }
-      .blocklyDropDownDiv[data-category="${prop}"] .goog-menuitem {
-        color: var(--editorTheme3-${settingName}Color);
+      .blocklyDropDownDiv[data-category="${prop}"] .goog-menuitem-highlight {
+        background-color: ${secondaryActive};
       }
       .blocklyBubbleCanvas [stroke="${categories[prop].tertiaryColor}"],
       g[data-category=${prop}] > g[data-argument-type*="text"] > path,
@@ -164,16 +214,19 @@ function updateSettings(addon, newStyle) {
         box-shadow: 0 0 0 4px ${inputShadow} !important;
       }
       #s3devIDD > li.${prop} {
-        background-color: ${background};
+        background-color: ${secondary};
         color: var(--editorTheme3-${settingName}Color);
       }
-      #s3devIDD > li.${prop}:not(.boolean) {
-        border: 1px solid var(--editorTheme3-${settingName}Color);
+      #s3devIDD > li.${prop}:hover,
+      #s3devIDD > li.${prop}.sel {
+        background-color: ${secondaryActive};
       }`;
       if (prop === "custom") {
         stylesheet += `path.blocklyBlockBackground[fill="#FF6680"] {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
+          --sa-block-text-color: ${menuText};
+          --sa-block-secondary-color: ${secondaryActive};
         }
         path.blocklyBlockBackground[fill="#FF6680"] ~ .blocklyText,
         g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > .blocklyText,
@@ -190,17 +243,25 @@ function updateSettings(addon, newStyle) {
         }
         .blocklyEditableText > rect[fill="#FF3355"] {
           fill: ${secondary};
+        }
+        #s3devIDD > li.null {
+          background-color: ${secondary};
+          color: var(--editorTheme3-${settingName}Color);
+        }
+        #s3devIDD > li.null:hover,
+        #s3devIDD > li.null.sel {
+          background-color: ${secondaryActive};
         }`;
       }
       if (prop === "sensing") {
         stylesheet += `path.blocklyBlockBackground[fill="#5CB1D6"],
-        g[data-argument-type="dropdown"] > rect[fill="#5CB1D6"],
-        g[data-argument-type="dropdown"] > rect[fill="#2E8EB8"] {
+        g[data-argument-type="dropdown"] > rect[fill="#5CB1D6"] {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
+          --sa-block-text-color: ${menuText};
+          --sa-block-secondary-color: ${secondaryActive};
         }
-        g[data-argument-type="dropdown"] > path[fill="#47A8D1"],
-        g[data-argument-type="dropdown"] > path[fill="#2E8EB8"] {
+        g[data-argument-type="dropdown"] > path[fill="#47A8D1"] {
           fill: ${secondary};
           stroke: var(--editorTheme3-${prop}Color);
         }
@@ -217,8 +278,8 @@ function updateSettings(addon, newStyle) {
           background-color: ${background} !important;
           border-color: var(--editorTheme3-${settingName}Color) !important;
         }
-        .blocklyDropDownDiv[style*="rgb(92, 177, 214)"] .goog-menuitem {
-          color: var(--editorTheme3-${settingName}Color);
+        .blocklyDropDownDiv[style*="rgb(92, 177, 214)"] .goog-menuitem-highlight {
+          background-color: ${secondaryActive};
         }`;
       }
       if (prop === "events") {
@@ -227,6 +288,8 @@ function updateSettings(addon, newStyle) {
         g[data-argument-type="dropdown"] > rect[fill="#CC9900"] {
           fill: ${background};
           stroke: var(--editorTheme3-${settingName}Color);
+          --sa-block-text-color: ${menuText};
+          --sa-block-secondary-color: ${secondaryActive};
         }
         path.blocklyBlockBackground[fill="#FFBF00"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
@@ -242,14 +305,16 @@ function updateSettings(addon, newStyle) {
           background-color: ${background} !important;
           border-color: var(--editorTheme3-${settingName}Color) !important;
         }
-        .blocklyDropDownDiv[style*="rgb(255, 191, 0)"] .goog-menuitem {
-          color: var(--editorTheme3-${settingName}Color);
+        .blocklyDropDownDiv[style*="rgb(255, 191, 0)"] .goog-menuitem-highlight {
+          background-color: ${secondaryActive};
         }`;
       }
       if (prop === "Pen") {
         stylesheet += `g[data-category] /* specificity */ > path.blocklyBlockBackground[fill="#0FBD8C"] {
           fill: ${background};
           stroke: var(--editorTheme3-${prop}Color);
+          --sa-block-text-color: ${menuText};
+          --sa-block-secondary-color: ${secondaryActive};
         }
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ .blocklyText {
           fill: var(--editorTheme3-${prop}Color);
@@ -257,8 +322,7 @@ function updateSettings(addon, newStyle) {
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ g[data-argument-type="dropdown"] > g > .blocklyDropdownText {
           fill: var(--editorTheme3-${prop}Color) !important;
         }
-        g[data-argument-type="dropdown"] > path[fill="#0DA57A"],
-        g[data-argument-type="dropdown"] > path[fill="#0B8E69"] {
+        g[data-argument-type="dropdown"] > path[fill="#0DA57A"] {
           fill: ${secondary};
           stroke: var(--editorTheme3-${prop}Color);
         }
@@ -266,16 +330,20 @@ function updateSettings(addon, newStyle) {
           background-color: ${background} !important;
           border-color: var(--editorTheme3-${settingName}Color) !important;
         }
+        .blocklyDropDownDiv[style*="rgb(15, 189, 140)"] .goog-menuitem-highlight {
+          background-color: ${secondaryActive};
+        }
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ [data-argument-type="text"] > path,
         path.blocklyBlockBackground[fill="#0FBD8C"] ~ g > line  {
           stroke: var(--editorTheme3-${prop}Color);
         }
         #s3devIDD > li.extension {
-          background-color: ${background};
+          background-color: ${secondary};
           color: var(--editorTheme3-${settingName}Color);
         }
-        #s3devIDD > li.extension:not(.boolean) {
-          border: 1px solid var(--editorTheme3-${settingName}Color);
+        #s3devIDD > li.extension:hover,
+        #s3devIDD > li.extension.sel {
+          background-color: ${secondaryActive};
         }`;
       }
     }

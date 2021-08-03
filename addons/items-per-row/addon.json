@@ -1,0 +1,108 @@
+{
+  "name": "More items per row",
+  "description": "Lets you change the number of items displayed in a single row in a grid of projects, studios, or users.",
+  "tags": ["community"],
+  "credits": [
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "injectAsStyleElt": true,
+  "updateUserstylesOnSettingsChange": true,
+  "versionAdded": "1.18.0",
+  "userstyles": [
+    {
+      "url": "search.css",
+      "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/search/*"]
+    },
+    {
+      "url": "studio.css",
+      "matches": ["studios"]
+    },
+    {
+      "url": "mediagrid.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/remixes/",
+        "https://scratch.mit.edu/projects/*/studios/",
+        "https://scratch.mit.edu/users/*/projects/",
+        "https://scratch.mit.edu/users/*/favorites/",
+        "https://scratch.mit.edu/users/*/studios/",
+        "https://scratch.mit.edu/users/*/studios_following/",
+        "https://scratch.mit.edu/users/*/followers/",
+        "https://scratch.mit.edu/users/*/following/"
+      ]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "classes.js",
+      "matches": [
+        "https://scratch.mit.edu/explore/*",
+        "https://scratch.mit.edu/search/*",
+        "studios",
+        "https://scratch.mit.edu/projects/*/remixes/",
+        "https://scratch.mit.edu/projects/*/studios/",
+        "https://scratch.mit.edu/users/*/projects/",
+        "https://scratch.mit.edu/users/*/favorites/",
+        "https://scratch.mit.edu/users/*/studios/",
+        "https://scratch.mit.edu/users/*/studios_following/",
+        "https://scratch.mit.edu/users/*/followers/",
+        "https://scratch.mit.edu/users/*/following/"
+      ],
+      "runAtComplete": false
+    }
+  ],
+  "settings": [
+    {
+      "id": "search",
+      "type": "integer",
+      "name": "Explore and search",
+      "min": 2,
+      "max": 8,
+      "default": 4
+    },
+    {
+      "id": "studioProjects",
+      "type": "integer",
+      "name": "Studio projects",
+      "min": 2,
+      "max": 6,
+      "default": 3
+    },
+    {
+      "id": "studioCurators",
+      "type": "integer",
+      "name": "Studio curators",
+      "min": 2,
+      "max": 6,
+      "default": 3
+    },
+    {
+      "id": "projects",
+      "type": "integer",
+      "name": "Project remixes, user shared and favorite projects",
+      "min": 3,
+      "max": 8,
+      "default": 5
+    },
+    {
+      "id": "studios",
+      "type": "integer",
+      "name": "Project studios, user curated and followed studios",
+      "min": 2,
+      "max": 8,
+      "default": 4
+    },
+    {
+      "id": "users",
+      "type": "integer",
+      "name": "User followers and following",
+      "min": 6,
+      "max": 22,
+      "default": 11
+    }
+  ]
+}

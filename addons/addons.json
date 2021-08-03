@@ -84,6 +84,7 @@
   "disable-stage-drag-select",
   "studio-followers",
   "forum-toolbar",
+  "items-per-row",
   "default-project",
   "turbowarp-player",
   "ctrl-enter-post",
@@ -100,5 +101,6 @@
   "scratchr2",
   "dark-www",
   "old-studio-layout",
+  "compact-messages",
   "customize-avatar-border"
 ]

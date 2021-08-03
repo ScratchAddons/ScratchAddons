@@ -88,6 +88,15 @@
         "https://scratch.mit.edu/users/*",
         "https://scratch.mit.edu/messages"
       ]
+    },
+    {
+      "url": "moveDonor.js",
+      "matches": ["https://scratch.mit.edu/"],
+      "settingMatch": {
+        "id": "showFooter",
+        "value": true
+      },
+      "runAtComplete": false
     }
   ],
   "userstyles": [

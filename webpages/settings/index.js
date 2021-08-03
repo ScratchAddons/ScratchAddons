@@ -15,6 +15,15 @@ if (window.parent !== window) {
   isIframe = true;
 }
 
+const NEW_ADDON_ORDER = [
+  "turbowarp-player",
+  "items-per-row",
+  "ctrl-enter-post",
+  "customize-avatar-border",
+  "compact-messages",
+  "default-project",
+];
+
 let vue;
 let fuse;
 
@@ -183,6 +192,18 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         browserLevelPermissions,
         grantedOptionalPermissions,
         addonListObjs: [],
+        sidebarUrls: (() => {
+          const uiLanguage = chrome.i18n.getUILanguage();
+          const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+          const version = chrome.runtime.getManifest().version;
+          const versionName = chrome.runtime.getManifest().version_name;
+          const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
+          return {
+            contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
+            feedback: `https://scratchaddons.com/${localeSlash}feedback/?version=${versionName}&${utm}`,
+            changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
+          };
+        })(),
       };
     },
     computed: {
@@ -557,6 +578,11 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     const order = [["danger", "beta"], "editor", "community", "popup"];
 
     vue.addonGroups.forEach((group) => {
+      if (group.id === "new") {
+        group.addonIds.sort((b, a) => NEW_ADDON_ORDER.indexOf(b) - NEW_ADDON_ORDER.indexOf(a));
+        return;
+      }
+
       group.addonIds = group.addonIds
         .map((id) => vue.manifestsById[id])
         .sort((manifestA, manifestB) => {
