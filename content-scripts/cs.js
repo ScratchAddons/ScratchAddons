@@ -569,6 +569,19 @@ if (document.readyState !== "loading") {
   window.addEventListener("DOMContentLoaded", handleBanner, { once: true });
 }
 
+if (location.pathname.match(/\/discuss\/(.*)/gm)) {
+  function fixScratchblocks() {
+    [].slice.apply(document.querySelectorAll("pre.blocks")).forEach((el) => {
+      el.setAttribute("data-original", el.innerText);
+    });
+  }
+  if (document.readyState !== "loading") {
+    fixScratchblocks();
+  } else {
+    window.addEventListener("DOMContentLoaded", fixScratchblocks, { once: true });
+  }
+}
+
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
 const isStudio = pathArr[0] === "studios";
 const isProject = pathArr[0] === "projects";
