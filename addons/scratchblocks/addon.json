@@ -24,5 +24,12 @@
     }
   ],
   "tags": ["community", "forums", "beta"],
-  "libraries": ["scratchblocks"]
+  "libraries": ["scratchblocks"],
+  "info": [
+    {
+      "type": "notice",
+      "text": "You may see a flash of 2.0 blocks when starting the page.",
+      "id": "scratchblocks_notice"
+    }
+  ]
 }
