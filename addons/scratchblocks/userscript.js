@@ -84,17 +84,18 @@ export default async function ({ addon, global, console, msg }) {
 
   // Render 3.0 scratchblocks selectors
 
-  const menu = await addon.tab.waitForElement('.scratchblocks-button', {
-      reduxCondition: (state) => state.scratchGui ? state.scratchGui.mode.isPlayerOnly : true
-  })
-  
+  const menu = await addon.tab.waitForElement(".scratchblocks-button", {
+    reduxCondition: (state) => (state.scratchGui ? state.scratchGui.mode.isPlayerOnly : true),
+  });
 
-  const scratchblocksButtons = Array.from(document.querySelectorAll('.scratchblocks-button ul a[title]')).filter(el => !!el.querySelector('.scratchblocks svg'))
+  const scratchblocksButtons = Array.from(document.querySelectorAll(".scratchblocks-button ul a[title]")).filter(
+    (el) => !!el.querySelector(".scratchblocks svg")
+  );
 
-  scratchblocksButtons.forEach(scratchblocksButton => {
-    scratchblocksButton.innerHTML = ""
-    scratchblocksButton.innerText = scratchblocksButton.title
-    scratchblocksButton.id = scratchblocksButton.title.replaceAll('\n', '-n')
-    scratchblocks.renderMatching(`a[id='${scratchblocksButton.id}']`)
-  })
+  scratchblocksButtons.forEach((scratchblocksButton) => {
+    scratchblocksButton.innerHTML = "";
+    scratchblocksButton.innerText = scratchblocksButton.title;
+    scratchblocksButton.id = scratchblocksButton.title.replaceAll("\n", "-n");
+    scratchblocks.renderMatching(`a[id='${scratchblocksButton.id}']`);
+  });
 }
