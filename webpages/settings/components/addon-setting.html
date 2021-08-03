@@ -100,6 +100,7 @@
         v-if="showResetDropdown()"
         :setting="setting"
         :addon="addon"
+        :label="msg('reset')"
         :default-label="msg('default')"
         v-click-outside="closeResetDropdowns"
       ></reset-dropdown>
@@ -108,6 +109,7 @@
         type="button"
         class="large-button clear-button"
         :disabled="!addon._enabled"
+        :title="msg('reset')"
         @click="updateOption(setting.default)"
       >
         <img src="../../images/icons/undo.svg" class="icon-type" />
