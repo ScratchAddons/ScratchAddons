@@ -10,12 +10,16 @@
     {
       "name": "CubeyTheCube",
       "link": "https://github.com/CubeyTheCube"
+    },
+    {
+      "name": "apple502j",
+      "link": "https://github.com/apple502j"
     }
   ],
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/*"],
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
       "runAtComplete": false
     }
   ],
