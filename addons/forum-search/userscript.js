@@ -26,13 +26,6 @@ function cleanPost(post) {
   const dom = new DOMParser();
   const readableDom = dom.parseFromString(post, "text/html");
 
-  const codeSegments = readableDom.querySelectorAll("pre");
-
-  for (const segment of codeSegments) {
-    segment.innerHTML = segment.innerHTML.replace(/<br>/g, "\n");
-    segment.innerHTML = segment.innerHTML.replace(/</g, "&lt;");
-  }
-
   const recursiveCheck = (elem) => {
     if (!(elem instanceof Element)) return;
     const allowed = ALLOWED_TAGS[elem.tagName];
