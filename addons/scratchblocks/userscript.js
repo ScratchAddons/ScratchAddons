@@ -90,7 +90,8 @@ export default async function ({ addon, global, console, msg }) {
 
   while (true) {
       const scratchblocksButton = await addon.tab.waitForElement('.scratchblocks-button ul a[title]', {
-          elementCondition: (el) => !!el.querySelector('.scratchblocks svg')
+          elementCondition: (el) => !!el.querySelector('.scratchblocks svg'),
+          markAsSeen: true
       })
 
       scratchblocksButton.innerHTML = ""
