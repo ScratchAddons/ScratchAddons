@@ -140,9 +140,6 @@
   "viewLicenses": {
     "message": "View library licenses"
   },
-  "reset": {
-    "message": "Reset"
-  },
   "default": {
     "message": "Default"
   },
