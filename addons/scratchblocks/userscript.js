@@ -66,15 +66,15 @@ export default async function ({ addon, global, console, msg }) {
       container.appendChild(svg);
       el.innerHTML = container.outerHTML;
     }
-    scratchblocks.scale(".scratchblocks3 svg")
+    scratchblocks.scale(".scratchblocks3 svg");
   }
   window.scratchblocks.renderMatching = renderMatching;
   window.scratchblocks.scale = (qs) => {
     document.querySelectorAll(qs).forEach((e) => {
-        if (!e.classList.contains('scaled')) {
-            scale(e, 0.75)
-            e.classList.add('scaled')
-        }
+      if (!e.classList.contains("scaled")) {
+        scale(e, 0.75);
+        e.classList.add("scaled");
+      }
     });
   };
   renderMatching(".blockpost pre.blocks", {
