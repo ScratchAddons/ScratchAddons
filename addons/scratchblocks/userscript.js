@@ -44,7 +44,30 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  scratchblocks.renderMatching(".blockpost pre.blocks", {
+  function renderMatching(selector, options) {
+      const opts = {
+          ...options,
+          style: "scratch3",
+          read: scratchblocks.read,
+          parse: scratchblocks.parse,
+          render: scratchblocks.render
+      }
+
+      for (let el of [].slice.apply(document.querySelectorAll(selector))) {
+        // isolate scratchblocks
+        var parser = new DOMParser()
+        var doc = parser.parseFromString(el.outerHTML, 'text/html')
+        var code = opts.read(doc.querySelector(el.tagName), opts)
+        var parsed = opts.parse(code, opts)
+        var svg = opts.render(parsed, opts)
+
+        var container = doc.createElement('div')
+        container.className = 'scratchblocks3'
+        container.appendChild(svg)
+        el.innerHTML = container.outerHTML
+      }
+  }
+  renderMatching(".blockpost pre.blocks", {
     languages: lang,
     style: "scratch3",
   });
@@ -52,5 +75,5 @@ export default async function ({ addon, global, console, msg }) {
   window.scratchblocks.scale = (qs) => {
       document.querySelectorAll(qs).forEach(e => scale(e, .75))
   }
-  scratchblocks.scale('.scratchblocks > svg')
+  scratchblocks.scale('.scratchblocks3 > svg')
 }
