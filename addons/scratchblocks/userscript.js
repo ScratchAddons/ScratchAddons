@@ -14,7 +14,7 @@ export default async function ({ addon, global, console, msg }) {
     el.innerText = el.getAttribute("data-original"); // data-original is managed by cs.js, the only way it works
   });
 
-  const forumId = /\d+/.exec(document.querySelector(".linkst li:nth-child(2) a").href)[0];
+  const forumId = /\d+/.exec((await addon.tab.waitForElement(".linkst li:nth-child(2) a")).href)[0];
   const forumIdToLang = {
     13: "de",
     14: "es",
