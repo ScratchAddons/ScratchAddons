@@ -1,5 +1,5 @@
 export default async function ({ addon, global, console, msg }) {
-  window.scratchblocks3Enabled = true
+  window.scratchblocks3Enabled = true;
   // thanks cubey
   function scale(svg, factor) {
     svg.setAttribute("width", svg.getAttribute("width") * factor);
@@ -7,14 +7,14 @@ export default async function ({ addon, global, console, msg }) {
   }
   // document.querySelectorAll("pre.blocks").forEach((e) => (e.innerHTML = "Loading"));
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js"); // load new scratchblocks
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js") // load translations
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js"); // load translations
 
   document.querySelectorAll("pre.blocks").forEach((el) => {
     el.innerHTML = ""; // clear html
     el.innerText = el.getAttribute("data-original");
   });
 
-  const forumId = /\d+/.exec(document.querySelector(".linkst li:nth-child(2) a").href)[0]
+  const forumId = /\d+/.exec(document.querySelector(".linkst li:nth-child(2) a").href)[0];
   const forumIdToLang = {
     13: "de",
     14: "es",
@@ -43,7 +43,6 @@ export default async function ({ addon, global, console, msg }) {
       lang = ["en", forumIdToLang[forumId]];
     }
   }
-
 
   scratchblocks.renderMatching("pre.blocks", {
     languages: lang,
