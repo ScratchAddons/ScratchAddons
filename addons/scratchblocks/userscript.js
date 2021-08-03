@@ -71,7 +71,7 @@ export default async function ({ addon, global, console, msg }) {
     languages: lang,
     style: "scratch3",
   });
-  window.scratchblocks.renderMatching = renderMatching
+  window.scratchblocks.renderMatching = renderMatching;
   window.scratchblocks.scale = (qs) => {
     document.querySelectorAll(qs).forEach((e) => scale(e, 0.75));
   };
