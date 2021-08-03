@@ -82,21 +82,19 @@ export default async function ({ addon, global, console, msg }) {
     style: "scratch3",
   });
 
-  // Render 3.0 scratchblocks selector
+  // Render 3.0 scratchblocks selectors
 
   const menu = await addon.tab.waitForElement('.scratchblocks-button', {
       reduxCondition: (state) => state.scratchGui ? state.scratchGui.mode.isPlayerOnly : true
   })
+  
 
-  while (true) {
-      const scratchblocksButton = await addon.tab.waitForElement('.scratchblocks-button ul a[title]', {
-          elementCondition: (el) => !!el.querySelector('.scratchblocks svg'),
-          markAsSeen: true
-      })
+  const scratchblocksButtons = Array.from(document.querySelectorAll('.scratchblocks-button ul a[title]')).filter(el => !!el.querySelector('.scratchblocks svg'))
 
-      scratchblocksButton.innerHTML = ""
-      scratchblocksButton.innerText = scratchblocksButton.title
-      scratchblocksButton.id = scratchblocksButton.title.replaceAll('\n', '-n')
-      scratchblocks.renderMatching(`a[id='${scratchblocksButton.id}']`)
-  }
+  scratchblocksButtons.forEach(scratchblocksButton => {
+    scratchblocksButton.innerHTML = ""
+    scratchblocksButton.innerText = scratchblocksButton.title
+    scratchblocksButton.id = scratchblocksButton.title.replaceAll('\n', '-n')
+    scratchblocks.renderMatching(`a[id='${scratchblocksButton.id}']`)
+  })
 }
