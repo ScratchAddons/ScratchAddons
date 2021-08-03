@@ -57,14 +57,11 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     for (let el of [].slice.apply(document.querySelectorAll(selector))) {
-      // isolate scratchblocks
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(el.outerHTML, "text/html");
-      var code = opts.read(doc.querySelector(el.tagName), opts);
+      var code = opts.read(el, opts);
       var parsed = opts.parse(code, opts);
       var svg = opts.render(parsed, opts);
 
-      var container = doc.createElement("div");
+      var container = document.createElement("div");
       container.className = "scratchblocks3";
       container.appendChild(svg);
       el.innerHTML = container.outerHTML;
