@@ -509,7 +509,13 @@ export default class Tab extends Listenable {
             (flyout && gesture.flyout_) ||
             // Comments
             (comments && gesture.startBubble_);
-          if (injectMenu) items = callback(items, block);
+          if (injectMenu) {
+            try {
+              items = callback(items, block);
+            } catch (e) {
+              console.error("Error while calling context menu callback: ", e);
+            }
+          }
         }
 
         oldShow.call(this, event, items, rtl);
