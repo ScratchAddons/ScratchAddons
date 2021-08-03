@@ -66,15 +66,15 @@ export default async function ({ addon, global, console, msg }) {
       container.appendChild(svg);
       el.innerHTML = container.outerHTML;
     }
-    scratchblocks.scale(".scratchblocks3 svg")
+    scratchblocks.scale(".scratchblocks3 svg");
   }
   window.scratchblocks.renderMatching = renderMatching;
   window.scratchblocks.scale = (qs) => {
     document.querySelectorAll(qs).forEach((e) => {
-        if (!e.classList.contains('scaled')) {
-            scale(e, 0.75)
-            e.classList.add('scaled')
-        }
+      if (!e.classList.contains("scaled")) {
+        scale(e, 0.75);
+        e.classList.add("scaled");
+      }
     });
   };
   renderMatching(".blockpost pre.blocks", {
@@ -84,18 +84,18 @@ export default async function ({ addon, global, console, msg }) {
 
   // Render 3.0 scratchblocks selector
 
-  const menu = await addon.tab.waitForElement('.scratchblocks-button', {
-      reduxCondition: (state) => state.scratchGui ? state.scratchGui.mode.isPlayerOnly : true
-  })
+  const menu = await addon.tab.waitForElement(".scratchblocks-button", {
+    reduxCondition: (state) => (state.scratchGui ? state.scratchGui.mode.isPlayerOnly : true),
+  });
 
   while (true) {
-      const scratchblocksButton = await addon.tab.waitForElement('.scratchblocks-button ul a[title]', {
-          elementCondition: (el) => !!el.querySelector('.scratchblocks svg')
-      })
+    const scratchblocksButton = await addon.tab.waitForElement(".scratchblocks-button ul a[title]", {
+      elementCondition: (el) => !!el.querySelector(".scratchblocks svg"),
+    });
 
-      scratchblocksButton.innerHTML = ""
-      scratchblocksButton.innerText = scratchblocksButton.title
-      scratchblocksButton.id = scratchblocksButton.title.replaceAll('\n', '-n')
-      scratchblocks.renderMatching(`a[id='${scratchblocksButton.id}']`)
+    scratchblocksButton.innerHTML = "";
+    scratchblocksButton.innerText = scratchblocksButton.title;
+    scratchblocksButton.id = scratchblocksButton.title.replaceAll("\n", "-n");
+    scratchblocks.renderMatching(`a[id='${scratchblocksButton.id}']`);
   }
 }
