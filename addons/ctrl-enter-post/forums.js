@@ -1,4 +1,4 @@
-export default function ({ addon }) {
+export default async function ({ addon }) {
   let type = location.pathname.split("/")[2];
 
   let textarea = document.querySelector(type === "settings" ? "#id_signature" : "#id_body");
