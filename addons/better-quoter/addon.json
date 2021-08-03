@@ -18,5 +18,12 @@
     }
   ],
   "versionAdded": "1.7.0",
-  "tags": ["forums", "community"]
+  "tags": ["forums", "community"],
+  "info": [
+    {
+      "type": "notice",
+      "text": "The bbcode may not be 100% accurate. To get fully accurate quotes, quote as normal and delete any parts that you don't need.",
+      "id": "bbcode_inaccuracy"
+    }
+  ]
 }
