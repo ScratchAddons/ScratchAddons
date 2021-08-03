@@ -57,11 +57,11 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     for (let el of [].slice.apply(document.querySelectorAll(selector))) {
-      var code = opts.read(el, opts);
-      var parsed = opts.parse(code, opts);
-      var svg = opts.render(parsed, opts);
+      let code = opts.read(el, opts);
+      let parsed = opts.parse(code, opts);
+      let svg = opts.render(parsed, opts);
 
-      var container = document.createElement("div");
+      let container = document.createElement("div");
       container.className = "scratchblocks3";
       container.appendChild(svg);
       el.innerHTML = container.outerHTML;
