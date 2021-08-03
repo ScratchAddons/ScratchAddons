@@ -5,16 +5,19 @@ export default async function ({ addon, global, console, msg }) {
     svg.setAttribute("width", svg.getAttribute("width") * factor);
     svg.setAttribute("height", svg.getAttribute("height") * factor);
   }
-
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js"); // load new scratchblocks
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js"); // load translations
+  await Promise.all([
+    addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js"),
+    addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js"),
+  ]); // load new scratchblocks
 
   document.querySelectorAll("pre.blocks").forEach((el) => {
     el.innerHTML = ""; // clear html
     el.innerText = el.getAttribute("data-original"); // data-original is managed by cs.js, the only way it works
   });
 
-  const forumId = /\d+/.exec((await addon.tab.waitForElement(".linkst li:nth-child(2) a")).href)[0];
+  const category = await addon.tab.waitForElement(".linkst li:nth-child(2) a");
+
+  const forumId = /\d+/.exec(category.href)[0];
   const forumIdToLang = {
     13: "de",
     14: "es",
