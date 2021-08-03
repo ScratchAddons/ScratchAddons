@@ -5,13 +5,13 @@ export default async function ({ addon, global, console, msg }) {
     svg.setAttribute("width", svg.getAttribute("width") * factor);
     svg.setAttribute("height", svg.getAttribute("height") * factor);
   }
-  // document.querySelectorAll("pre.blocks").forEach((e) => (e.innerHTML = "Loading"));
+
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js"); // load new scratchblocks
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js") // load translations
 
   document.querySelectorAll("pre.blocks").forEach((el) => {
     el.innerHTML = ""; // clear html
-    el.innerText = el.getAttribute("data-original");
+    el.innerText = el.getAttribute("data-original"); // data-original is managed by cs.js, the only way it works
   });
 
   const forumId = /\d+/.exec(document.querySelector(".linkst li:nth-child(2) a").href)[0]
@@ -45,12 +45,13 @@ export default async function ({ addon, global, console, msg }) {
   }
 
 
-  scratchblocks.renderMatching("pre.blocks", {
+  scratchblocks.renderMatching(".blockpost pre.blocks", {
     languages: lang,
     style: "scratch3",
   });
 
-  for (const svg of document.querySelectorAll(".scratchblocks > svg")) {
-    scale(svg, 0.75);
+  window.scratchblocks.scale = (qs) => {
+      document.querySelectorAll(qs).forEach(e => scale(e, .75))
   }
+  scratchblocks.scale('.scratchblocks > svg')
 }

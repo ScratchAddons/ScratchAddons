@@ -221,13 +221,19 @@ function appendSearch(box, query, page, term, msg) {
 
         box.appendChild(postElem);
       }
-      scratchblocks.renderMatching(".forum-search-list pre.blocks");
+      const options = {}
+      if (window.scratchblocks3Enabled) options.style = 'scratch3'
+      scratchblocks.renderMatching(".forum-search-list pre.blocks", options || undefined);
+      if (window.scratchblocks3Enabled) scratchblocks.scale(".forum-search-list pre.blocks")
       isCurrentlyProcessing = false;
     });
 }
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
+  if (!window.scratchblocks3Enabled) {
+    await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
+  }
+  
   // create the search bar
   let search = document.createElement("form");
   search.id = "forum-search-form";
