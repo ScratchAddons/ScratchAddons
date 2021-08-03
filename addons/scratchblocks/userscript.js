@@ -45,27 +45,27 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function renderMatching(selector, options) {
-      const opts = {
-          ...options,
-          style: "scratch3",
-          read: scratchblocks.read,
-          parse: scratchblocks.parse,
-          render: scratchblocks.render
-      }
+    const opts = {
+      ...options,
+      style: "scratch3",
+      read: scratchblocks.read,
+      parse: scratchblocks.parse,
+      render: scratchblocks.render,
+    };
 
-      for (let el of [].slice.apply(document.querySelectorAll(selector))) {
-        // isolate scratchblocks
-        var parser = new DOMParser()
-        var doc = parser.parseFromString(el.outerHTML, 'text/html')
-        var code = opts.read(doc.querySelector(el.tagName), opts)
-        var parsed = opts.parse(code, opts)
-        var svg = opts.render(parsed, opts)
+    for (let el of [].slice.apply(document.querySelectorAll(selector))) {
+      // isolate scratchblocks
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(el.outerHTML, "text/html");
+      var code = opts.read(doc.querySelector(el.tagName), opts);
+      var parsed = opts.parse(code, opts);
+      var svg = opts.render(parsed, opts);
 
-        var container = doc.createElement('div')
-        container.className = 'scratchblocks3'
-        container.appendChild(svg)
-        el.innerHTML = container.outerHTML
-      }
+      var container = doc.createElement("div");
+      container.className = "scratchblocks3";
+      container.appendChild(svg);
+      el.innerHTML = container.outerHTML;
+    }
   }
   renderMatching(".blockpost pre.blocks", {
     languages: lang,
