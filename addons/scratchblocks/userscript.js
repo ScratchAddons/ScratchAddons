@@ -73,7 +73,7 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   window.scratchblocks.scale = (qs) => {
-      document.querySelectorAll(qs).forEach(e => scale(e, .75))
-  }
-  scratchblocks.scale('.scratchblocks3 > svg')
+    document.querySelectorAll(qs).forEach((e) => scale(e, 0.75));
+  };
+  scratchblocks.scale(".scratchblocks3 > svg");
 }
