@@ -221,10 +221,7 @@ function appendSearch(box, query, page, term, msg) {
 
         box.appendChild(postElem);
       }
-      const options = {};
-      if (window.scratchblocks3Enabled) options.style = "scratch3";
-      scratchblocks.renderMatching(".forum-search-list pre.blocks", options || undefined);
-      if (window.scratchblocks3Enabled) scratchblocks.scale(".forum-search-list pre.blocks");
+      scratchblocks.renderMatching(".forum-search-list pre.blocks");
       isCurrentlyProcessing = false;
     });
 }
