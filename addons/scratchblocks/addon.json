@@ -23,5 +23,6 @@
       "runAtComplete": false
     }
   ],
-  "tags": ["community", "forums", "beta"]
+  "tags": ["community", "forums", "beta"],
+  "libraries": ["scratchblocks"]
 }
