@@ -1,20 +1,12 @@
-export default async function ({ addon, global, console, msg }) {
-  window.scratchblocks3Enabled = true;
-  // thanks cubey
-  function scale(svg, factor) {
-    svg.setAttribute("width", svg.getAttribute("width") * factor);
-    svg.setAttribute("height", svg.getAttribute("height") * factor);
-  }
-  await Promise.all([
-    addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js"),
-    addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js"),
-  ]); // load new scratchblocks
+function scaleSVG(svg, factor) {
+  if (svg.classList.contains("scaled")) return;
 
-  document.querySelectorAll("pre.blocks").forEach((el) => {
-    el.innerHTML = ""; // clear html
-    el.innerText = el.getAttribute("data-original"); // data-original is managed by cs.js, the only way it works
-  });
+  svg.setAttribute("width", svg.getAttribute("width") * factor);
+  svg.setAttribute("height", svg.getAttribute("height") * factor);
 
+  svg.classList.add("scaled");
+}
+async function getLocales(addon) {
   const category = await addon.tab.waitForElement(".linkst li:nth-child(2) a");
 
   const forumId = /\d+/.exec(category.href)[0];
@@ -47,42 +39,55 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
+  return lang;
+}
+export default async function ({ addon, global }) {
+  window.scratchblocks3Enabled = true;
+  const blocks = document.querySelectorAll("pre.blocks");
+  blocks.forEach((block) => {
+    block.innerHTML = "";
+    block.innerText = block.getAttribute("data-original");
+  });
+  global.sb3Loaded = true;
+  await Promise.all([
+    // We use Promise.all to load scripts all at once
+    addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js"),
+    addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js"),
+  ]);
+
+  const languages = await getLocales(addon);
+
   function renderMatching(selector, options = {}) {
     const opts = {
       ...options,
+      languages,
       style: "scratch3",
       read: scratchblocks.read,
       parse: scratchblocks.parse,
       render: scratchblocks.render,
+      document: options.doc || document,
     };
-
-    for (let el of [].slice.apply(document.querySelectorAll(selector))) {
-      let code = opts.read(el, opts);
+    const elements = Array.from(opts.document.querySelectorAll(selector));
+    for (let element of elements) {
+      let code = opts.read(element, opts);
       let parsed = opts.parse(code, opts);
       let svg = opts.render(parsed, opts);
+      scaleSVG(svg, 0.75);
 
-      let container = document.createElement("div");
+      let container = opts.document.createElement("div");
       container.className = "scratchblocks3";
       container.appendChild(svg);
-      el.innerHTML = container.outerHTML;
-    }
-    scratchblocks.scale(".scratchblocks3 svg");
-  }
-  window.scratchblocks.renderMatching = renderMatching;
-  window.scratchblocks.scale = (qs) => {
-    document.querySelectorAll(qs).forEach((e) => {
-      if (!e.classList.contains("scaled")) {
-        scale(e, 0.75);
-        e.classList.add("scaled");
-      }
-    });
-  };
-  renderMatching(".blockpost pre.blocks", {
-    languages: lang,
-    style: "scratch3",
-  });
 
-  // Render 3.0 scratchblocks selectors
+      element.innerHTML = "";
+      element.appendChild(container);
+    }
+  }
+
+  window.scratchblocks.renderMatching = renderMatching;
+
+  renderMatching(".blockpost pre.blocks");
+
+  // Render 3.0 menu selectors
 
   const menu = await addon.tab.waitForElement(".scratchblocks-button", {
     reduxCondition: (state) => (state.scratchGui ? state.scratchGui.mode.isPlayerOnly : true),
@@ -95,7 +100,56 @@ export default async function ({ addon, global, console, msg }) {
   scratchblocksButtons.forEach((scratchblocksButton) => {
     scratchblocksButton.innerHTML = "";
     scratchblocksButton.innerText = scratchblocksButton.title;
-    scratchblocksButton.id = scratchblocksButton.title.replaceAll("\n", "-n");
-    scratchblocks.renderMatching(`a[id='${scratchblocksButton.id}']`);
+    scratchblocksButton.id = scratchblocksButton.title.replaceAll("\n", "-n").replaceAll(" ", "").trim();
+    renderMatching(`a[id='${scratchblocksButton.id}']`);
   });
+
+  /*
+  const textbox = await addon.tab.waitForElement("textarea.markup.markItUpEditor", {
+    markAsSeen: true,
+  });
+
+  const previewButton = await addon.tab.waitForElement(".preview a", {
+    markAsSeen: true,
+  });
+
+  
+  const originalOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = (method, url) => {
+    if (!method || !url) return originalOpen.apply(this, arguments)
+    
+    let match = url.match(/\/discuss\/preview\//)
+    if (match) {
+      throw new Error;
+    } else originalOpen.apply(this.arguments)
+  } 
+  previewButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    fetch(POST_PREVIEW_URL, {
+      headers: { "content-type": "application/x-www-form-urlencoded; charset=UTF-8" },
+      method: "POST",
+      body: `data=${encodeURIComponent(textbox.value)}`,
+    })
+      .then((res) => res.text())
+      .then((html) => new DOMParser().parseFromString(html, "text/html"))
+      .then((doc) => {
+        const parsedBlocks = doc.querySelectorAll("pre.blocks");
+        parsedBlocks.forEach(e => e.className = 'blocks3 rendered')
+        renderMatching("pre.blocks3", { doc });
+
+        let iframe = document.querySelector("iframe.markItUpPreviewFrame");
+        if (!iframe) {
+          iframe = document.createElement("iframe");
+          iframe.className = "markItUpPreviewFrame";
+
+          const markItUpContainer = document.querySelector("div.markItUpContainer");
+          markItUpContainer.appendChild(iframe);
+        }
+
+        iframe.contentDocument.documentElement.innerHTML = doc.documentElement.innerHTML;
+      })
+      .catch((err) => console.error(`Error on fetching preview: ${err}`));
+  });
+  */
 }
