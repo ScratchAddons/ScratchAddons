@@ -15,6 +15,8 @@ export default async function ({ addon, console }) {
       } else {
         index = indexes[addon.settings.get("costume")];
       }
+    } else if (mainButton.closest("[class*=target-pane_stage-selector-wrapper]")) {
+      index = indexes[addon.settings.get("backdrop")];
     } else {
       index = indexes[addon.settings.get("sprite")];
     }

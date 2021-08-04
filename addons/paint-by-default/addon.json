@@ -62,6 +62,30 @@
       "default": "paint"
     },
     {
+      "id": "backdrop",
+      "name": "Add backdrop",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "Open Library",
+          "name": "Open Library"
+        },
+        {
+          "id": "paint",
+          "name": "Create Empty"
+        },
+        {
+          "id": "surprise",
+          "name": "Surprise"
+        },
+        {
+          "id": "upload",
+          "name": "Upload"
+        }
+      ],
+      "default": "paint"
+    },
+    {
       "id": "sound",
       "name": "Add sound",
       "type": "select",
