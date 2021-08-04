@@ -12,6 +12,80 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "id": "sprite",
+      "name": "Add sprite",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "library",
+          "name": "Open Library"
+        },
+        {
+          "id": "paint",
+          "name": "Create Empty"
+        },
+        {
+          "id": "surprise",
+          "name": "Surprise"
+        },
+        {
+          "id": "upload",
+          "name": "Upload"
+        }
+      ],
+      "default": "paint"
+    },
+    {
+      "id": "costume",
+      "name": "Add costume",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "Open Library",
+          "name": "Open Library"
+        },
+        {
+          "id": "paint",
+          "name": "Create Empty"
+        },
+        {
+          "id": "surprise",
+          "name": "Surprise"
+        },
+        {
+          "id": "upload",
+          "name": "Upload"
+        }
+      ],
+      "default": "paint"
+    },
+    {
+      "id": "sound",
+      "name": "Add sound",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "library",
+          "name": "Open Library"
+        },
+        {
+          "id": "record",
+          "name": "Record"
+        },
+        {
+          "id": "surprise",
+          "name": "Surprise"
+        },
+        {
+          "id": "upload",
+          "name": "Upload"
+        }
+      ],
+      "default": "library"
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.19.0",
