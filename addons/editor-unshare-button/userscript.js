@@ -46,7 +46,7 @@ export default async function ({ addon, msg, global, console }) {
             status: "FETCHED",
           });
 
-          button.classList.remove('sa-unshare-button')
+          button.classList.remove("sa-unshare-button");
           redux.dispatch({
             type: "UPDATE_PROJECT_INFO",
             info: {
