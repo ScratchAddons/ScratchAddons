@@ -10,8 +10,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects"],
-      "runAtComplete": false
+      "matches": ["projects"]
     }
   ],
   "settings": [

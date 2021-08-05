@@ -4,6 +4,7 @@ export default async function ({ addon }) {
   let textarea = document.querySelector(type === "settings" ? "#id_signature" : "#id_body");
   let postButton = document.querySelector(type === "topic" ? ".button.grey:nth-child(1)" : "button");
 
+  if (!textarea) return;
   textarea.addEventListener("keyup", (e) => {
     if ((e.ctrlKey || e.metaKey) && (e.code === "Enter" || e.code === "NumpadEnter")) {
       postButton.click();

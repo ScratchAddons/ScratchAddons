@@ -42,7 +42,7 @@ export default async ({ addon, console, msg }) => {
 
     const inputTag = document.createElement("input");
     inputTag.type = "text";
-    inputTag.placeholder = msg("username");
+    inputTag.placeholder = addon.tab.scratchMessage("studio.inviteCuratorPlaceholder");
     adderRow.appendChild(inputTag);
 
     const btn = document.createElement("button");
