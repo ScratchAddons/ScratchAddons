@@ -131,25 +131,30 @@ if (path[path.length - 1] !== "/") path += "/";
 const pathArr = path.split("/");
 if (initialUrlUrl.searchParams.has("sa-intents")) {
   const intents = initialUrlUrl.searchParams.get("sa-intents").split(",");
-  chrome.runtime.sendMessage({
-    consumeIntents: intents,
-  }, (newIntents) => {
-    for (const intent of newIntents) {
-      if (intent === "clearMessages") {
-        fetch("https://scratch.mit.edu/site-api/messages/messages-clear/", {
-          method: "POST",
-          headers: { "x-csrftoken": getCookie("scratchcsrftoken"), "x-requested-with": "XMLHttpRequest" },
-          referrer: location.href,
-        }).then((res) => {
-          if (res.ok) {
-            chrome.runtime.sendMessage("resetMsgCount", () => {});
-            return;
-          }
-          throw new Error("Message count API returned " + res.status);
-        }).catch((e) => console.error("Could not clear message count", e));
+  chrome.runtime.sendMessage(
+    {
+      consumeIntents: intents,
+    },
+    (newIntents) => {
+      for (const intent of newIntents) {
+        if (intent === "clearMessages") {
+          fetch("https://scratch.mit.edu/site-api/messages/messages-clear/", {
+            method: "POST",
+            headers: { "x-csrftoken": getCookie("scratchcsrftoken"), "x-requested-with": "XMLHttpRequest" },
+            referrer: location.href,
+          })
+            .then((res) => {
+              if (res.ok) {
+                chrome.runtime.sendMessage("resetMsgCount", () => {});
+                return;
+              }
+              throw new Error("Message count API returned " + res.status);
+            })
+            .catch((e) => console.error("Could not clear message count", e));
+        }
       }
     }
-  })
+  );
 }
 if (pathArr[0] === "scratch-addons-extension") {
   if (pathArr[1] === "settings") {

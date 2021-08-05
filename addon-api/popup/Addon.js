@@ -31,13 +31,16 @@ export default class PopupAddon extends Addon {
   issueIntentURL(url, ...intents) {
     if (intents.length === 0) return Promise.resolve(url);
     return new Promise((resolve) => {
-      chrome.runtime.sendMessage({
-        createIntents: intents
-      }, (keys) => {
-        const newURL = new URL(url);
-        newURL.searchParams.set("sa-intents", keys.join(","));
-        resolve(String(newURL));
-      });
+      chrome.runtime.sendMessage(
+        {
+          createIntents: intents,
+        },
+        (keys) => {
+          const newURL = new URL(url);
+          newURL.searchParams.set("sa-intents", keys.join(","));
+          resolve(String(newURL));
+        }
+      );
     });
   }
 }
