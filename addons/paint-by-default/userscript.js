@@ -2,74 +2,74 @@ export default async function ({ addon, console }) {
   const spriteMeta = {
     upload: {
       index: 0,
-      tooltip: "gui.spriteSelector.addSpriteFromFile"
+      tooltip: "gui.spriteSelector.addSpriteFromFile",
     },
     surprise: {
       index: 1,
-      tooltip: "gui.spriteSelector.addSpriteFromSurprise"
+      tooltip: "gui.spriteSelector.addSpriteFromSurprise",
     },
     paint: {
       index: 2,
-      tooltip: "gui.spriteSelector.addSpriteFromPaint"
+      tooltip: "gui.spriteSelector.addSpriteFromPaint",
     },
     library: {
       index: 3,
-      tooltip: "gui.spriteSelector.addSpriteFromLibrary"
-    }
+      tooltip: "gui.spriteSelector.addSpriteFromLibrary",
+    },
   };
   const backdropMeta = {
     upload: {
       index: 0,
-      tooltip: "gui.stageSelector.addBackdropFromFile"
+      tooltip: "gui.stageSelector.addBackdropFromFile",
     },
     surprise: {
       index: 1,
-      tooltip: "gui.stageSelector.addBackdropFromSurprise"
+      tooltip: "gui.stageSelector.addBackdropFromSurprise",
     },
     paint: {
       index: 2,
-      tooltip: "gui.stageSelector.addBackdropFromPaint"
+      tooltip: "gui.stageSelector.addBackdropFromPaint",
     },
     library: {
       index: 3,
-      tooltip: "gui.spriteSelector.addBackdropFromLibrary"
-    }
+      tooltip: "gui.spriteSelector.addBackdropFromLibrary",
+    },
   };
   const costumeMeta = {
     upload: {
       index: 0,
-      tooltip: "gui.costumeTab.addFileCostume"
+      tooltip: "gui.costumeTab.addFileCostume",
     },
     surprise: {
       index: 1,
-      tooltip: "gui.costumeTab.addSurpriseCostume"
+      tooltip: "gui.costumeTab.addSurpriseCostume",
     },
     paint: {
       index: 2,
-      tooltip: "gui.costumeTab.addBlankCostume"
+      tooltip: "gui.costumeTab.addBlankCostume",
     },
     library: {
       index: 3,
-      tooltip: "gui.costumeTab.addCostumeFromLibrary"
-    }
+      tooltip: "gui.costumeTab.addCostumeFromLibrary",
+    },
   };
   const soundMeta = {
     upload: {
       index: 0,
-      tooltip: "gui.soundTab.fileUploadSound"
+      tooltip: "gui.soundTab.fileUploadSound",
     },
     surprise: {
       index: 1,
-      tooltip: "gui.soundTab.surpriseSound"
+      tooltip: "gui.soundTab.surpriseSound",
     },
     record: {
       index: 2,
-      tooltip: "gui.soundTab.recordSound"
+      tooltip: "gui.soundTab.recordSound",
     },
     library: {
       index: 3,
-      tooltip: "gui.soundTab.addSoundFromLibrary"
-    }
+      tooltip: "gui.soundTab.addSoundFromLibrary",
+    },
   };
   const getSetting = (id) => {
     if (addon.self.disabled) {
@@ -104,7 +104,7 @@ export default async function ({ addon, console }) {
       e.stopPropagation();
       const moreButtonsElement = mainButton.parentElement.querySelector('[class*="action-menu_more-buttons_"]');
       const moreButtons = moreButtonsElement.children;
-      const {index} = getButtonToClick(mainButton);
+      const { index } = getButtonToClick(mainButton);
       // better-img-uploads can add a button at the start, so search "from the end" for compatibility
       const buttonToClick = moreButtons[moreButtons.length - (4 - index)];
       const elementToClick = buttonToClick.querySelector("button");
@@ -122,7 +122,7 @@ export default async function ({ addon, console }) {
         return;
       }
       const tooltipElement = mainButton.parentElement.querySelector(".__react_component_tooltip");
-      const {tooltip} = getButtonToClick(mainButton);
+      const { tooltip } = getButtonToClick(mainButton);
       const translatedTooltip = addon.tab.redux.state.locales.messages[tooltip];
       const needToFixTooltipText = translatedTooltip && tooltipElement.textContent !== translatedTooltip;
       if (needToFixTooltipText) {
@@ -134,7 +134,7 @@ export default async function ({ addon, console }) {
       }
     },
     {
-      bubble: true
+      bubble: true,
     }
   );
 }
