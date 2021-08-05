@@ -21,7 +21,6 @@ export default async function ({ addon, msg, global, console }) {
         const author = project.author;
         fetch(`/site-api/projects/all/${redux.state.preview.projectInfo.id}/`, {
           headers: {
-            accept: "application/json, text/javascript, */*; q=0.01",
             "x-csrftoken": addon.auth.csrfToken,
             "x-requested-with": "XMLHttpRequest",
           },
