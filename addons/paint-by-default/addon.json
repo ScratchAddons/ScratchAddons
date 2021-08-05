@@ -1,6 +1,6 @@
 {
-  "name": "Create empty sprite/costume instead of opening library",
-  "description": "Changes the \"Choose a Sprite\" and \"Choose a Costume\" buttons to create an empty sprite/costume instead of opening the library.",
+  "name": "Change behavior of create new sprite/backdrop/costume/sound buttons",
+  "description": "Changes create asset buttons to create an empty costume, upload a file, or create a random asset instead of opening the library.",
   "credits": [
     {
       "name": "GarboMuffin"
@@ -20,7 +20,7 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Open Library"
+          "name": "Search Library"
         },
         {
           "id": "paint",
@@ -44,7 +44,7 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Open Library"
+          "name": "Search Library"
         },
         {
           "id": "paint",
@@ -68,7 +68,7 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Open Library"
+          "name": "Search Library"
         },
         {
           "id": "paint",
@@ -92,7 +92,7 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Open Library"
+          "name": "Search Library"
         },
         {
           "id": "record",
