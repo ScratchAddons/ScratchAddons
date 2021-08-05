@@ -318,7 +318,11 @@ export default async ({ addon, msg, safeMsg }) => {
 
       // For UI
       markAsRead() {
-        chrome.runtime.sendMessage({ scratchMessaging: "markAsRead" });
+        addon.account.getClearMessagesIntent("https://scratch.mit.edu/").then((url) => {
+          chrome.tabs.create({
+            url,
+          });
+        });
         this.markedAsRead = true;
       },
       dismissAlert(id) {

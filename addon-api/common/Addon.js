@@ -14,7 +14,7 @@ export default class Addon {
   constructor(info) {
     this.self = new Self(this, info);
     this.auth = new Auth(this);
-    this.account = new Account();
+    this.account = new Account(this);
     this.settings = new Settings(this);
   }
 

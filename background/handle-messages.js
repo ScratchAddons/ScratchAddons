@@ -51,16 +51,6 @@ async function updateMsgCount() {
     return null;
   }
 }
-scratchAddons.methods.clearMessages = async function () {
-  const res = await fetch("https://scratch.mit.edu/site-api/messages/messages-clear/?sareferer", {
-    method: "POST",
-    headers: { "x-csrftoken": scratchAddons.globalState.auth.csrfToken, "x-requested-with": "XMLHttpRequest" },
-  });
-  if (res.ok) {
-    lastCountCheck = Date.now();
-    lastMsgCount = 0;
-  }
-};
 
 scratchAddons.methods.getMessages = async function ({ offset = 0 } = {}) {
   if (offset !== 0) return await requestMessages({ offset });
@@ -125,5 +115,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         return scratchAddons.sendToPopups({ setMsgCount: { count } });
       chrome.tabs.sendMessage(sender.tab.id, { setMsgCount: { count } }, { frameId: sender.tab.frameId });
     })();
+  } else if (request === "resetMsgCount") {
+    lastCountCheck = Date.now();
+    lastMsgCount = 0;
   }
 });

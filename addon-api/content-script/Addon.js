@@ -30,4 +30,12 @@ export default class UserscriptAddon extends Addon {
   get _path() {
     return this.__path;
   }
+
+  /**
+   * @private
+   * @returns {Promise} a promise that always rejects.
+   */
+  issueIntentURL() {
+    return Promise.reject(new Error("This method is unavailable in userscripts."));
+  }
 }

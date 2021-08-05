@@ -36,4 +36,21 @@ export default class BackgroundScriptAddon extends Addon {
   get _path() {
     return chrome.runtime.getURL("");
   }
+
+  /**
+   * Issues an intent URL that, when accessed, will perform some side-effects.
+   * The intents will become invalid after 30 seconds.
+   * Only available on background scripts and popups.
+   * @private
+   * @param {string} url - the URL to add intents to.
+   * @param {...*} intents - the intents to issue.
+   * @returns {Promise<string>} the new URL.
+   */
+  issueIntentURL(url, ...intents) {
+    if (intents.length === 0) return Promise.resolve(url);
+    const keys = scratchAddons.createIntents(intents);
+    const newURL = new URL(url);
+    newURL.searchParams.set("sa-intents", keys.join(","));
+    return Promise.resolve(String(newURL));
+  }
 }

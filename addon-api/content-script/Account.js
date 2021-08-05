@@ -1,11 +1,6 @@
 import AccountCommon from "../common/Account.js";
 
 export default class Account extends AccountCommon {
-  constructor(addon) {
-    super();
-    this._addon = addon;
-  }
-
   /**
    * Fetches message count.
    * @returns {Promise<?number>} - current message count.
@@ -27,7 +22,7 @@ export default class Account extends AccountCommon {
   /**
    * @returns {Promise} - a promise that always rejects.
    */
-  clearMessages() {
+  getClearMessagesIntent() {
     return Promise.reject(new Error("This method is unavailable."));
   }
 }

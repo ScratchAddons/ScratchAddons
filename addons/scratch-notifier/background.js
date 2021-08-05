@@ -147,15 +147,24 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     if (!notifId) return;
     const onClick = (e) => {
       if (e.detail.id === notifId) {
-        chrome.tabs.create({ url });
         addon.notifications.clear(notifId);
-        if (addon.settings.get("mark_as_read_when_clicked") === true) markAsRead();
+        if (addon.settings.get("mark_as_read_when_clicked")) {
+          addon.account.getClearMessagesIntent(url, "clearMessages").then((newUrl) => {
+            chrome.tabs.create({ url: newUrl });
+          });
+        } else {
+          chrome.tabs.create({ url });
+        }
       }
     };
     const onButtonClick = (e) => {
       if (e.detail.id === notifId) {
         if (e.detail.buttonIndex === 0) openMessagesPage();
-        else markAsRead();
+        else {
+          addon.account.getClearMessagesIntent("https://scratch.mit.edu/", "clearMessages").then((newUrl) => {
+            chrome.tabs.create({ url: newUrl });
+          });
+        }
         addon.notifications.clear(notifId);
       }
     };

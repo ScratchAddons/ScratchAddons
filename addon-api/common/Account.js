@@ -5,8 +5,9 @@ import Listenable from "./Listenable.js";
  * @extends Listenable
  */
 export default class Account extends Listenable {
-  constructor() {
+  constructor(addon) {
     super();
+    this._addon = addon;
   }
   /**
    * Fetches message count.
@@ -23,10 +24,11 @@ export default class Account extends Listenable {
     return scratchAddons.methods.getMessages(...args);
   }
   /**
-   * Clears unread messages.
-   * @returns {Promise}
+   * Returns an URL that can be opened to clear unread messages.
+   * @param {string=} url - the base URL.
+   * @returns {Promise<string>} the new URL.
    */
-  clearMessages() {
-    return scratchAddons.methods.clearMessages();
+  getClearMessagesIntent(url = "https://scratch.mit.edu/scratch-addons-extension/clear-messages/") {
+    return this._addon.issueIntentURL(url, "clearMessages");
   }
 }
