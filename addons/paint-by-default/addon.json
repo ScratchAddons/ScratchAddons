@@ -43,7 +43,7 @@
       "type": "select",
       "potentialValues": [
         {
-          "id": "Open Library",
+          "id": "library",
           "name": "Open Library"
         },
         {
@@ -67,7 +67,7 @@
       "type": "select",
       "potentialValues": [
         {
-          "id": "Open Library",
+          "id": "library",
           "name": "Open Library"
         },
         {
