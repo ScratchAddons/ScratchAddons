@@ -1,34 +1,89 @@
 export default async function ({ addon, console }) {
+  const spriteMeta = {
+    upload: {
+      index: 0,
+      tooltip: "gui.spriteSelector.addSpriteFromFile"
+    },
+    surprise: {
+      index: 1,
+      tooltip: "gui.spriteSelector.addSpriteFromSurprise"
+    },
+    paint: {
+      index: 2,
+      tooltip: "gui.spriteSelector.addSpriteFromPaint"
+    },
+    library: {
+      index: 3,
+      tooltip: "gui.spriteSelector.addSpriteFromLibrary"
+    }
+  };
+  const backdropMeta = {
+    upload: {
+      index: 0,
+      tooltip: "gui.stageSelector.addBackdropFromFile"
+    },
+    surprise: {
+      index: 1,
+      tooltip: "gui.stageSelector.addBackdropFromSurprise"
+    },
+    paint: {
+      index: 2,
+      tooltip: "gui.stageSelector.addBackdropFromPaint"
+    },
+    library: {
+      index: 3,
+      tooltip: "gui.spriteSelector.addBackdropFromLibrary"
+    }
+  };
+  const costumeMeta = {
+    upload: {
+      index: 0,
+      tooltip: "gui.costumeTab.addFileCostume"
+    },
+    surprise: {
+      index: 1,
+      tooltip: "gui.costumeTab.addSurpriseCostume"
+    },
+    paint: {
+      index: 2,
+      tooltip: "gui.costumeTab.addBlankCostume"
+    },
+    library: {
+      index: 3,
+      tooltip: "gui.costumeTab.addCostumeFromLibrary"
+    }
+  };
+  const soundMeta = {
+    upload: {
+      index: 0,
+      tooltip: "gui.soundTab.fileUploadSound"
+    },
+    surprise: {
+      index: 1,
+      tooltip: "gui.soundTab.surpriseSound"
+    },
+    record: {
+      index: 2,
+      tooltip: "gui.soundTab.recordSound"
+    },
+    library: {
+      index: 3,
+      tooltip: "gui.soundTab.addSoundFromLibrary"
+    }
+  };
   const getButtonToClick = (mainButton) => {
-    let index;
-    const indexes = {
-      upload: 0,
-      surprise: 1,
-      paint: 2,
-      record: 2,
-      library: 3
-    };
     const assetPanelWrapper = mainButton.closest("[class*=asset-panel_wrapper_]");
     if (assetPanelWrapper) {
       if (assetPanelWrapper.querySelector("[class*=sound-editor_editor-container_]")) {
-        index = indexes[addon.settings.get("sound")];
+        return soundMeta[addon.settings.get("sound")];
       } else {
-        index = indexes[addon.settings.get("costume")];
+        return costumeMeta[addon.settings.get("costume")];
       }
-    } else if (mainButton.closest("[class*=target-pane_stage-selector-wrapper]")) {
-      index = indexes[addon.settings.get("backdrop")];
+    } else if (mainButton.closest('[class*="target-pane_stage-selector-wrapper"]')) {
+      return backdropMeta[addon.settings.get("backdrop")];
     } else {
-      index = indexes[addon.settings.get("sprite")];
+      return spriteMeta[addon.settings.get("sprite")];
     }
-    if (typeof index !== 'number') {
-      // should never happen
-      return;
-    }
-    const moreButtonsElement = mainButton.parentElement.querySelector('[class*="action-menu_more-buttons_"]');
-    const moreButtons = moreButtonsElement.children;
-    // Search from end of array for compatibility with better-img-uploads
-    const buttonToClick = moreButtons[moreButtons.length - (4 - index)];
-    return buttonToClick;
   };
   document.body.addEventListener(
     "click",
@@ -40,11 +95,12 @@ export default async function ({ addon, console }) {
       if (!mainButton) {
         return;
       }
-      const buttonToClick = getButtonToClick(mainButton);
-      if (!buttonToClick) {
-        return;
-      }
       e.stopPropagation();
+      const moreButtonsElement = mainButton.parentElement.querySelector('[class*="action-menu_more-buttons_"]');
+      const moreButtons = moreButtonsElement.children;
+      const {index} = getButtonToClick(mainButton);
+      // better-img-uploads can add a button at the start, so search "from the end" for compatibility
+      const buttonToClick = moreButtons[moreButtons.length - (4 - index)];
       const elementToClick = buttonToClick.querySelector("button");
       elementToClick.click();
     },
@@ -52,4 +108,14 @@ export default async function ({ addon, console }) {
       bubble: true,
     }
   );
+  /*
+  const updateTooltips = () => {
+    const messages = addon.tab.redux.state.locales.messages;
+    messages[spriteMeta.library.tooltip] = messages[spriteMeta[addon.settings.get("sprite")].tooltip];
+    messages[backdropMeta.library.tooltip] = messages[backdropMeta[addon.settings.get("backdrop")].tooltip];
+    messages[costumeMeta.library.tooltip] = messages[costumeMeta[addon.settings.get("costume")].tooltip];
+    messages[soundMeta.library.tooltip] = messages[soundMeta[addon.settings.get("sound")].tooltip];
+  };
+  updateTooltips();
+  */
 }
