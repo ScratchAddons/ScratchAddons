@@ -1,3 +1,7 @@
 .project-remixes {
   display: none;
 }
+
+.thumbnail-remixes {
+  visibility: hidden;
+}

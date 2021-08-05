@@ -40,6 +40,22 @@
         "id": "favorites",
         "value": true
       }
+    },
+    {
+      "url": "hide_love_count.css",
+      "matches": ["https://scratch.mit.edu/"],
+      "settingMatch": {
+        "id": "loves-front",
+        "value": true
+      }
+    },
+    {
+      "url": "hide_remix_count.css",
+      "matches": ["https://scratch.mit.edu/"],
+      "settingMatch": {
+        "id": "remixes-front",
+        "value": true
+      }
     }
   ],
   "settings": [
@@ -65,6 +81,18 @@
       "name": "Hide \"view\" count",
       "default": true,
       "id": "views",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide \"loves\" count in \"What the Community is Loving\"",
+      "default": true,
+      "id": "loves-front",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide \"loves\" count in \"What the Community is Remixing\"",
+      "default": true,
+      "id": "remixes-front",
       "type": "boolean"
     }
   ],

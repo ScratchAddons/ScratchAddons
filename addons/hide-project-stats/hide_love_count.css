@@ -5,3 +5,7 @@
 .project-loves::before {
   visibility: visible;
 }
+
+.thumbnail-loves {
+  visibility: hidden;
+}
