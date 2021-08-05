@@ -8,42 +8,37 @@
       "link": "https://scratch.mit.edu/users/9gr"
     }
   ],
-  "userscripts": [
-    {
-      "url": "userscript.js",
-      "matches": ["projects"]
-    }
-  ],
   "userstyles": [
     {
-      "url": "userstyle.css",
-      "matches": ["projects"]
-    }
-  ],
-  "customCssVariables": [
-    {
-      "name": "hideRemixCount",
-      "value": {
-        "settingId": "remixes",
-        "type": "ternary",
-        "true": "none",
-        "false": "block",
-        "source": {
-          "type": "settingValue",
-          "settingId": "remixes"
-        }
+      "url": "hide_remix_count.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "remixes",
+        "value": true
       }
     },
     {
-      "name": "hideViewCount",
-      "value": {
-        "type": "ternary",
-        "true": "none",
-        "false": "block",
-        "source": {
-          "type": "settingValue",
-          "settingId": "views"
-        }
+      "url": "hide_view_count.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "views",
+        "value": true
+      }
+    },
+    {
+      "url": "hide_love_count.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "loves",
+        "value": true
+      }
+    },
+    {
+      "url": "hide_favorite_count.css",
+      "matches": ["projects"],
+      "settingMatch": {
+        "id": "favorites",
+        "value": true
       }
     }
   ],
@@ -73,6 +68,10 @@
       "type": "boolean"
     }
   ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "injectAsStyleElt": true,
   "tags": ["community", "projectPage"],
   "versionAdded": "1.18.0",
   "enabledByDefault": false
