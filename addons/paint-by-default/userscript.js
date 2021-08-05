@@ -108,14 +108,26 @@ export default async function ({ addon, console }) {
       bubble: true,
     }
   );
-  /*
-  const updateTooltips = () => {
-    const messages = addon.tab.redux.state.locales.messages;
-    messages[spriteMeta.library.tooltip] = messages[spriteMeta[addon.settings.get("sprite")].tooltip];
-    messages[backdropMeta.library.tooltip] = messages[backdropMeta[addon.settings.get("backdrop")].tooltip];
-    messages[costumeMeta.library.tooltip] = messages[costumeMeta[addon.settings.get("costume")].tooltip];
-    messages[soundMeta.library.tooltip] = messages[soundMeta[addon.settings.get("sound")].tooltip];
-  };
-  updateTooltips();
-  */
+  document.body.addEventListener(
+    "mouseover",
+    (e) => {
+      const mainButton = e.target.closest('[class*="action-menu_main-button_"]');
+      if (!mainButton) {
+        return;
+      }
+      const tooltipElement = mainButton.parentElement.querySelector(".__react_component_tooltip");
+      const {tooltip} = getButtonToClick(mainButton);
+      const messages = addon.tab.redux.state.locales.messages;
+      const translatedTooltip = messages[tooltip];
+      if (translatedTooltip) {
+        tooltipElement.textContent = translatedTooltip;
+        setTimeout(() => {
+          tooltipElement.textContent = translatedTooltip;
+        });
+      }
+    },
+    {
+      bubble: true
+    }
+  );
 }
