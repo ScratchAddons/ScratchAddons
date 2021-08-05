@@ -53,9 +53,12 @@ export default class DevTools {
         oldCleanUpFunc.call(this);
       }
     };
+
+    let originalMsg = blockly.Msg.CLEAN_UP;
     if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
     this.addon.settings.addEventListener("change", () => {
       if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
+      else blockly.Msg.CLEAN_UP = originalMsg;
     });
 
     this.addon.tab.createBlockContextMenu(
@@ -1502,7 +1505,7 @@ export default class DevTools {
       this.hideFloatDropDown();
     }
 
-    if (e.button === 1) {
+    if (e.button === 1 || e.altKey) {
       // Wheel button...
       try {
         this.middleClick(e);

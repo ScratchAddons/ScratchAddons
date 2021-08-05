@@ -471,7 +471,7 @@ export default class Tab extends Listenable {
    * Callback to modify the context menu.
    * @callback Tab~blockContextMenuCallback
    * @param {Tab~ContextMenuItem[]} items - the items added by vanilla code or other addons.
-   * @param {?object} block - the targetted block, if any.
+   * @param {?object} block - the targeted block, if any.
    * @returns {Tab~ContextMenuItem[]} the array that contains values of items array as well as new items.
    */
 
@@ -509,7 +509,13 @@ export default class Tab extends Listenable {
             (flyout && gesture.flyout_) ||
             // Comments
             (comments && gesture.startBubble_);
-          if (injectMenu) items = callback(items, block);
+          if (injectMenu) {
+            try {
+              items = callback(items, block);
+            } catch (e) {
+              console.error("Error while calling context menu callback: ", e);
+            }
+          }
         }
 
         oldShow.call(this, event, items, rtl);

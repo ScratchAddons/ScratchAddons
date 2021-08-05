@@ -26,13 +26,6 @@ function cleanPost(post) {
   const dom = new DOMParser();
   const readableDom = dom.parseFromString(post, "text/html");
 
-  const codeSegments = readableDom.querySelectorAll("pre");
-
-  for (const segment of codeSegments) {
-    segment.innerHTML = segment.innerHTML.replace(/<br>/g, "\n");
-    segment.innerHTML = segment.innerHTML.replace(/</g, "&lt;");
-  }
-
   const recursiveCheck = (elem) => {
     if (!(elem instanceof Element)) return;
     const allowed = ALLOWED_TAGS[elem.tagName];
@@ -243,24 +236,27 @@ export default async function ({ addon, global, console, msg }) {
   searchBar.setAttribute("type", "text");
   let pathSplit = window.location.pathname.split("/");
   let searchPlaceholder = msg("placeholder");
-  switch (pathSplit.length) {
-    case 5: {
-      let topicTitle = document
-        .getElementsByClassName("linkst")[0]
-        .getElementsByTagName("li")[2]
-        .innerText.substring(2)
-        .trim();
-      locationQuery = ` +topic:${pathSplit[3]}`;
-      searchPlaceholder = msg("search-topic", { topic: topicTitle });
-      break;
-    }
-    case 4: {
-      let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].innerHTML;
-      locationQuery = ` +category:"${category}"`;
-      searchPlaceholder = msg("search-cat", { cat: category });
-      break;
+  if (pathSplit[2] !== "settings") {
+    switch (pathSplit.length) {
+      case 5: {
+        let topicTitle = document
+          .getElementsByClassName("linkst")[0]
+          .getElementsByTagName("li")[2]
+          .innerText.substring(2)
+          .trim();
+        locationQuery = ` +topic:${pathSplit[3]}`;
+        searchPlaceholder = msg("search-topic", { topic: topicTitle });
+        break;
+      }
+      case 4: {
+        let category = document.getElementsByClassName("box-head")[1].getElementsByTagName("span")[0].innerHTML;
+        locationQuery = ` +category:"${category}"`;
+        searchPlaceholder = msg("search-cat", { cat: category });
+        break;
+      }
     }
   }
+
   searchBar.setAttribute("placeholder", searchPlaceholder);
   search.appendChild(searchBar);
 
