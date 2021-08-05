@@ -71,18 +71,24 @@ export default async function ({ addon, console }) {
       tooltip: "gui.soundTab.addSoundFromLibrary"
     }
   };
+  const getSetting = (id) => {
+    if (addon.self.disabled) {
+      return "library";
+    }
+    return addon.settings.get(id);
+  };
   const getButtonToClick = (mainButton) => {
     const assetPanelWrapper = mainButton.closest("[class*=asset-panel_wrapper_]");
     if (assetPanelWrapper) {
       if (assetPanelWrapper.querySelector("[class*=sound-editor_editor-container_]")) {
-        return soundMeta[addon.settings.get("sound")];
+        return soundMeta[getSetting("sound")] || soundMeta.library;
       } else {
-        return costumeMeta[addon.settings.get("costume")];
+        return costumeMeta[getSetting("costume")] || costumeMeta.library;
       }
     } else if (mainButton.closest('[class*="target-pane_stage-selector-wrapper"]')) {
-      return backdropMeta[addon.settings.get("backdrop")];
+      return backdropMeta[getSetting("backdrop")] || backdropMeta.library;
     } else {
-      return spriteMeta[addon.settings.get("sprite")];
+      return spriteMeta[getSetting("sprite")] || spriteMeta.library;
     }
   };
   document.body.addEventListener(
@@ -117,12 +123,13 @@ export default async function ({ addon, console }) {
       }
       const tooltipElement = mainButton.parentElement.querySelector(".__react_component_tooltip");
       const {tooltip} = getButtonToClick(mainButton);
-      const messages = addon.tab.redux.state.locales.messages;
-      const translatedTooltip = messages[tooltip];
-      if (translatedTooltip) {
+      const translatedTooltip = addon.tab.redux.state.locales.messages[tooltip];
+      const needToFixTooltipText = translatedTooltip && tooltipElement.textContent !== translatedTooltip;
+      if (needToFixTooltipText) {
         tooltipElement.textContent = translatedTooltip;
         setTimeout(() => {
           tooltipElement.textContent = translatedTooltip;
+          mainButton.dispatchEvent(new Event("mouseenter"));
         });
       }
     },
