@@ -1,5 +1,5 @@
 export default async function ({ addon, console }) {
-  const spriteMeta = {
+  const spriteMeta = Object.assign(Object.create(null), {
     upload: {
       index: 0,
       tooltip: "gui.spriteSelector.addSpriteFromFile",
@@ -16,8 +16,8 @@ export default async function ({ addon, console }) {
       index: 3,
       tooltip: "gui.spriteSelector.addSpriteFromLibrary",
     },
-  };
-  const backdropMeta = {
+  });
+  const backdropMeta = Object.assign(Object.create(null), {
     upload: {
       index: 0,
       tooltip: "gui.stageSelector.addBackdropFromFile",
@@ -34,8 +34,8 @@ export default async function ({ addon, console }) {
       index: 3,
       tooltip: "gui.spriteSelector.addBackdropFromLibrary",
     },
-  };
-  const costumeMeta = {
+  });
+  const costumeMeta = Object.assign(Object.create(null), {
     upload: {
       index: 0,
       tooltip: "gui.costumeTab.addFileCostume",
@@ -52,8 +52,8 @@ export default async function ({ addon, console }) {
       index: 3,
       tooltip: "gui.costumeTab.addCostumeFromLibrary",
     },
-  };
-  const soundMeta = {
+  });
+  const soundMeta = Object.assign(Object.create(null), {
     upload: {
       index: 0,
       tooltip: "gui.soundTab.fileUploadSound",
@@ -70,7 +70,7 @@ export default async function ({ addon, console }) {
       index: 3,
       tooltip: "gui.soundTab.addSoundFromLibrary",
     },
-  };
+  });
   const getSetting = (id) => {
     if (addon.self.disabled) {
       return "library";
