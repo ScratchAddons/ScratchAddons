@@ -30,6 +30,11 @@
       "type": "notice",
       "text": "You may see a flash of 2.0 blocks when starting the page.",
       "id": "scratchblocks_notice"
+    },
+    {
+      "type": "notice",
+      "text": "The built-in preview does not support this addon.",
+      "id": "preview_notice"
     }
   ]
 }
