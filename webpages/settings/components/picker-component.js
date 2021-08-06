@@ -22,7 +22,7 @@ export default async function ({ template }) {
       this.$els.pickr.addEventListener("input", (e) => {
         this.color = "#" + e.detail.value;
         if (this.value !== this.color) {
-          this.$parent.addonSettings[this.addon._addonId][this.setting.id] = "#" + this.$els.pickr.hex8;
+          this.$parent.addonSettings[this.setting.id] = "#" + this.$els.pickr.hex8;
           this.$parent.updateSettings(this.addon, { wait: 250, settingId: this.setting.id });
         }
       });

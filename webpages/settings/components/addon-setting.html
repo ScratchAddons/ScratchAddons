@@ -7,8 +7,8 @@
   }"
   >
     <div class="setting-label" v-html="settingsName(addon)"></div>
-    <template v-if="setting.type === 'table'">
-      <div class="setting-table">
+    <template v-if="noResetDropdown">
+      <div v-if="setting.type === 'table'" class="setting-table">
         <div class="setting-table-list" v-sortable>
           <div class="setting-table-row" v-for="(i, row) of addonSettings[setting.id]">
             <div class="setting-table-options">
@@ -33,18 +33,15 @@
           <img class="icon-type" src="../../images/icons/plus.svg" />
         </div>
       </div>
-    </template>
-    <template v-if="setting.type === 'boolean'">
       <input
+        v-if="setting.type === 'boolean'"
         type="checkbox"
         class="setting-input check"
         v-model="addonSettings[setting.id]"
         @change="updateSettings()"
         :disabled="!addon._enabled"
       />
-    </template>
-    <template v-if="setting.type === 'select'">
-      <div class="filter-options">
+      <div v-if="setting.type === 'select'" class="filter-options">
         <div
           class="filter-option"
           v-for="option of setting.potentialValues"
@@ -55,7 +52,7 @@
         </div>
       </div>
     </template>
-    <div v-if="!['boolean', 'select'].includes(setting.type)" class="setting-input-container">
+    <div v-else class="setting-input-container">
       <template v-if="setting.type === 'positive_integer'">
         <input
           type="number"
@@ -313,7 +310,7 @@
     margin: 10px 0px;
   }
   .setting-table-row-settings {
-    background: var(--accent-3);
+    background: var(--content-border);
     border-radius: 10px;
   }
   .setting-table-options {

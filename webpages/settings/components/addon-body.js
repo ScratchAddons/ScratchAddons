@@ -40,7 +40,7 @@ export default async function ({ template }) {
       loadPreset(preset) {
         if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
           for (const property of Object.keys(preset.values)) {
-            this.$root.addonSettings[this.addon._addonId][property] = preset.values[property];
+            this.$root.addonSettings[property] = preset.values[property];
           }
           this.$root.updateSettings(this.addon);
           console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
@@ -49,11 +49,11 @@ export default async function ({ template }) {
       loadDefaults() {
         if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
           for (const property of this.addon.settings) {
-            this.$root.addonSettings[this.addon._addonId][property.id] = property.default;
+            let rootSettings = this.$root.addonSettings[this.addon._addonId];
+            console.log(property);
+            rootSettings[property.id] = property.default;
             if (property.type === "table") {
-              this.$root.addonSettings[this.addon._addonId][property.id] = this.$root.addonSettings[
-                this.addon._addonId
-              ][property.id].map((defaultValues) => {
+              rootSettings[property.id] = rootSettings[property.id].map((defaultValues) => {
                 let info = {};
                 defaultValues.forEach((defaultValue, i) => (info[property.row[i].id] = defaultValue));
                 return info;

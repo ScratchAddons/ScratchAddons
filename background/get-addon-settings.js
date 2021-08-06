@@ -4,16 +4,17 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
+      addonSettings[addonId] = undefined;
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
       if (manifest.settings) {
-        if (addonId === "discuss-button" && typeof settings.buttonName !== "undefined") {
-          // Transition v1.16.0 modes to v1.17.0 settings
+        if (addonId === "discuss-button" && !settings.items) {
+          // Transition v1.17.0 modes to v1.18.0 settings
           madeChangesToAddon = true;
           madeAnyChanges = true;
 
           let option = manifest.settings.find((option) => option.id === "items");
-          settings.items = option.default;
+          settings.items = Object.assign([], option.default);
           settings.items.splice(3, 0, [settings.buttonName, "/discuss"]);
           if (settings.removeIdeasBtn) settings.items.splice(2, 1);
 
@@ -32,7 +33,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               settings.version = "scratchr2";
               continue;
             }
-            settings[option.id] = option.default;
+            settings[option.id] = Object.assign([], option.default);
             if (option.type === "table") {
               settings[option.id] = settings[option.id].map((items) => {
                 let setting = {};

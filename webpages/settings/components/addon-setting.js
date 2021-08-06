@@ -3,7 +3,9 @@ export default async function ({ template }) {
     props: ["addon", "setting", "addon-settings"],
     template,
     data() {
-      return {};
+      return {
+        noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
+      };
     },
     methods: {
       settingsName(addon) {
