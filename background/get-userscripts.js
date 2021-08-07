@@ -294,15 +294,15 @@ function matchesIf(injectable, settings) {
   // Return true as soon as any condition matches. Everything is an OR, not an AND.
 
   if (injectable.if.addonEnabled) {
-    const arr = Array.isArray(injectable.if.addonEnabled)
-      ? injectable.if.addonEnabled
-      : [injectable.if.addonEnabled];
-    if (arr.some((addon) => scratchAddons.localState.addonEnabled[addon] === true)) return true;
+    const arr = Array.isArray(injectable.if.addonEnabled) ? injectable.if.addonEnabled : [injectable.if.addonEnabled];
+    if (arr.some((addon) => scratchAddons.localState.addonsEnabled[addon] === true)) return true;
   }
 
   if (injectable.if.settings) {
     const anyMatches = Object.keys(injectable.if.settings).some((settingName) => {
-      const arr = Array.isArray(injectable.if.settings) ? injectable.if.settings : [injectable.if.settings];
+      const arr = Array.isArray(injectable.if.settings[settingName])
+        ? injectable.if.settings[settingName]
+        : [injectable.if.settings[settingName]];
       return arr.some((possibleValue) => settings[settingName] === possibleValue);
     });
     if (anyMatches === true) return true;

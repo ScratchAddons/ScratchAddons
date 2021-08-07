@@ -71,7 +71,6 @@ export default async function ({ template }) {
               ? false
               : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
-          this.$root.$emit("update-shown-settings", { changeEnabledState: { addonId: this.addon._addonId, newState } });
         };
 
         const requiredPermissions = (this.addon.permissions || []).filter((value) =>
