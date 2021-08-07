@@ -5,7 +5,6 @@ export default async function ({ template }) {
     computed: {
       show() {
         if (!this.setting.if) return true;
-        //console.log(this.setting)
 
         if (this.setting.if.addonEnabled) {
           const arr = Array.isArray(this.setting.if.addonEnabled)
