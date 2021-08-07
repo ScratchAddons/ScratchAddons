@@ -20,11 +20,11 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Search Library"
+          "name": "Search library"
         },
         {
           "id": "paint",
-          "name": "Create Empty"
+          "name": "Create empty"
         },
         {
           "id": "surprise",
@@ -44,11 +44,11 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Search Library"
+          "name": "Search library"
         },
         {
           "id": "paint",
-          "name": "Create Empty"
+          "name": "Create empty"
         },
         {
           "id": "surprise",
@@ -68,11 +68,11 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Search Library"
+          "name": "Search library"
         },
         {
           "id": "paint",
-          "name": "Create Empty"
+          "name": "Create empty"
         },
         {
           "id": "surprise",
@@ -92,7 +92,7 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Search Library"
+          "name": "Search library"
         },
         {
           "id": "record",
