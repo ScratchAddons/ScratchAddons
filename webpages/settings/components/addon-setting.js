@@ -1,6 +1,6 @@
 export default async function ({ template }) {
   const AddonSetting = Vue.extend({
-    props: ["addon", "setting", "addon-settings", "addonsEnabled"],
+    props: ["addon", "setting", "addon-settings"],
     template,
     computed: {
       show() {
