@@ -1,0 +1,17 @@
+{
+  "name": "Name scripts in backpack",
+  "description": "A prompt will appear when you place a script in your backpack.",
+  "credits": [
+    {
+      "name": "TheColaber"
+    }
+  ],
+  "tags": ["editor"],
+  "versionAdded": "1.19.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ]
+}
