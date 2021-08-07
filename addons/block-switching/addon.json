@@ -82,15 +82,6 @@
       "id": "extension",
       "type": "boolean",
       "default": true
-    },
-    {
-      "name": "Debugger blocks",
-      "id": "debugger",
-      "type": "boolean",
-      "default": true,
-      "if": {
-        "addonEnabled": "debugger"
-      }
     }
   ],
   "libraries": ["scratch-blocks"],

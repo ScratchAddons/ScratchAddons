@@ -102,10 +102,7 @@
       "id": "debugger-color",
       "type": "color",
       "default": "#29BEB8",
-      "allowTransparency": true,
-      "if": {
-        "addons": { "debugger": true }
-      }
+      "allowTransparency": true
     },
     {
       "name": "extensions",
