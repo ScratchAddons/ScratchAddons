@@ -289,32 +289,32 @@ const WELL_KNOWN_MATCHERS = {
   },
 };
 
-/** Moved out of `userscriptMatches` so I can return early */
 function matchesIf(injectable, settings) {
-  for (const addon in injectable.if?.addons || {}) {
-    if (Object.hasOwnProperty.call(injectable.if.addons, addon)) {
-      if (scratchAddons.localState.addonsEnabled[addon] !== injectable.if.addons[addon]) return false;
-    }
+  // injectable.if is guaranteed to exist
+  // Return true as soon as any condition matches. Everything is an OR, not an AND.
+
+  if (injectable.if.addonEnabled) {
+    const arr = Array.isArray(injectable.if.addonEnabled)
+      ? injectable.if.addonEnabled
+      : [injectable.if.addonEnabled];
+    if (arr.some((addon) => scratchAddons.localState.addonEnabled[addon] === true)) return true;
   }
 
-  for (const setting in injectable.if?.settings || {}) {
-    if (Object.hasOwnProperty.call(injectable.if.settings, setting)) {
-      /** `settingValue` can be a single value or an array of values. If it's an array, only 1 must match. */
-      const settingValue = injectable.if.settings[setting];
-      if (settingValue instanceof Array) {
-        for (const possibleValue of settingValue) {
-          if (settings[setting] === possibleValue) return true;
-        }
-      } else if (settings[setting] !== settingValue) return false;
-    }
+  if (injectable.if.settings) {
+    const anyMatches = Object.keys(injectable.if.settings).some((settingName) => {
+      const arr = Array.isArray(injectable.if.settings) ? injectable.if.settings : [injectable.if.settings];
+      return arr.some((possibleValue) => settings[settingName] === possibleValue);
+    });
+    if (anyMatches === true) return true;
   }
-  return true;
+
+  return false;
 }
 
 // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
 // matchesPattern = "*" | regexPattern | Array<wellKnownName | wellKnownMatcher | regexPattern | legacyPattern>
 function userscriptMatches(data, scriptOrStyle, addonId) {
-  if (!matchesIf(scriptOrStyle, scratchAddons.globalState.addonSettings[addonId])) return false;
+  if (scriptOrStyle.if && !matchesIf(scriptOrStyle, scratchAddons.globalState.addonSettings[addonId])) return false;
 
   const url = data.url;
   const parsedURL = new URL(url);

@@ -89,7 +89,7 @@
       "type": "boolean",
       "default": true,
       "if": {
-        "addons": { "debugger": true }
+        "addonEnabled": "debugger"
       }
     }
   ],
