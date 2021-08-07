@@ -98,13 +98,6 @@
       "allowTransparency": true
     },
     {
-      "name": "debugger",
-      "id": "debugger-color",
-      "type": "color",
-      "default": "#29BEB8",
-      "allowTransparency": true
-    },
-    {
       "name": "extensions",
       "id": "Pen-color",
       "type": "color",
