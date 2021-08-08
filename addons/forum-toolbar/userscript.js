@@ -93,11 +93,13 @@ export default async ({ addon, console, msg }) => {
       e.preventDefault();
       if (promptTag) {
         const value = prompt(msg("prompt-" + name), defaultSelection ? getSelection(textBox).trim() : undefined);
-        openWith = `[${tag}${value ? `=${value}` : ""}]`;
-        closeWith = `[/${tag}]`;
+        if (value !== null) {
+          openWith = `[${tag}${value ? `=${value}` : ""}]`;
+          closeWith = `[/${tag}]`;
+        }
       } else if (promptContent) {
         const value = getSelection(textBox) || prompt(msg("prompt-" + name));
-        replaceWith = `[${tag}]${value}[/${tag}]`;
+        if (value !== null) replaceWith = `[${tag}]${value}[/${tag}]`;
       }
       if (typeof replaceWith === "string") {
         insert(textBox, replaceWith);
@@ -106,6 +108,7 @@ export default async ({ addon, console, msg }) => {
       } else if (callback) {
         callback();
       }
+      if (promptTag || promptContent) textBox.focus();
     });
     return liTag;
   };
