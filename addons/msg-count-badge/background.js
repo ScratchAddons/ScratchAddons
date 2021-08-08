@@ -3,7 +3,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
 
   const setBadge = () => {
     if (msgCount === null && addon.settings.get("showOffline")) {
-      addon.badge.color = "black";
+      addon.badge.color = "#dd2222";
       addon.badge.text = "?";
     } else {
       addon.badge.color = addon.settings.get("color");
