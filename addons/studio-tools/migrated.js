@@ -126,7 +126,7 @@ export default async ({ addon, console, msg }) => {
           alert(msg("promoted", { username: u }));
 
           const curatorList = redux.state.curators.items;
-          const index = curatorList.findIndex((v) => v.username.toLowerCase() == u.toLowerCase());
+          const index = curatorList.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
           const curatorItem = curatorList[index];
           if (index !== -1)
             redux.dispatch({
@@ -166,7 +166,7 @@ export default async ({ addon, console, msg }) => {
         alert(msg("removed", { username: u }));
 
         let index = redux.state.curators.items.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
-        if (index == -1) {
+        if (index === -1) {
           index = redux.state.managers.items.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
           index !== -1 &&
             redux.dispatch({
