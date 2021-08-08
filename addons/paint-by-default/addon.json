@@ -1,6 +1,6 @@
 {
-  "name": "Change behavior of create new sprite/backdrop/costume/sound buttons",
-  "description": "Changes create asset buttons to create an empty costume, upload a file, or create a random asset instead of opening the library.",
+  "name": "Paint costume by default",
+  "description": "Changes the default action of \"Choose a Sprite/Costume/Backdrop/Sound\" buttons, which open the library by default.",
   "credits": [
     {
       "name": "GarboMuffin"
@@ -20,11 +20,11 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Search library"
+          "name": "Library"
         },
         {
           "id": "paint",
-          "name": "Create empty"
+          "name": "Paint"
         },
         {
           "id": "surprise",
@@ -44,11 +44,11 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Search library"
+          "name": "Library"
         },
         {
           "id": "paint",
-          "name": "Create empty"
+          "name": "Paint"
         },
         {
           "id": "surprise",
@@ -68,11 +68,11 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Search library"
+          "name": "Library"
         },
         {
           "id": "paint",
-          "name": "Create empty"
+          "name": "Paint"
         },
         {
           "id": "surprise",
@@ -92,7 +92,7 @@
       "potentialValues": [
         {
           "id": "library",
-          "name": "Search library"
+          "name": "Library"
         },
         {
           "id": "record",
@@ -113,6 +113,6 @@
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.19.0",
-  "tags": ["editor"],
+  "tags": ["editor", "recommended"],
   "enabledByDefault": false
 }
