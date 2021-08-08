@@ -31,6 +31,6 @@
     }
   ],
   "versionAdded": "1.4.0",
-  "tags": ["community"],
+  "tags": ["community", "minor"],
   "enabledByDefault": false
 }

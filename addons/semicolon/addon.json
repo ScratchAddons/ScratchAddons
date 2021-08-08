@@ -20,6 +20,6 @@
     }
   ],
   "versionAdded": "1.7.0",
-  "tags": ["community", "easterEgg"],
+  "tags": ["community", "minor"],
   "enabledByDefault": false
 }

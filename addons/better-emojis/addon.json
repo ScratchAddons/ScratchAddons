@@ -1,7 +1,7 @@
 {
   "name": "Better emojis",
   "description": "Replaces the cat emojis in comments on the website with improved vector designs.",
-  "tags": ["community", "comments"],
+  "tags": ["community", "comments", "minor"],
   "credits": [
     {
       "name": "getbent",
