@@ -30,6 +30,7 @@ export default async ({ addon, console, msg }) => {
 
     const adderSec = document.createElement("div");
     adderSec.className = "studio-adder-section";
+    addon.tab.displayNoneWhileDisabled(adderSec);
 
     const adderHeader = document.createElement("h3");
     const adderHeaderSpan = document.createElement("span");
@@ -42,7 +43,7 @@ export default async ({ addon, console, msg }) => {
 
     const inputTag = document.createElement("input");
     inputTag.type = "text";
-    inputTag.placeholder = msg("username");
+    inputTag.placeholder = addon.tab.scratchMessage("studio.inviteCuratorPlaceholder");
     adderRow.appendChild(inputTag);
 
     const btn = document.createElement("button");
@@ -184,6 +185,7 @@ export default async ({ addon, console, msg }) => {
       const studioInfo = document.querySelector(".studio-info");
       const followButton = document.querySelector(".studio-follow-button");
       studioInfo.insertBefore(leaveSection, followButton.parentNode.nextSibling);
+      addon.tab.displayNoneWhileDisabled(leaveSection);
     }
   };
   render();

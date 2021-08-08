@@ -24,12 +24,13 @@ export default async function ({ addon, console, safeMsg: m }) {
 
   while (true) {
     //Catch all upload menus as they are created
-    let menu = await addon.tab.waitForElement('[class*="action-menu_more-buttons_"]', { markAsSeen: true });
+    let menu = await addon.tab.waitForElement(
+      '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"], #react-tabs-3 [class*="action-menu_more-buttons_"]',
+      { markAsSeen: true }
+    );
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
     let id = button.getAttribute("aria-label").replace(/\s+/g, "_");
-
-    if (id === "Choose_a_Sound") continue; //Don't want it in the sounds tab!
 
     let isRight = //Is it on the right side of the screen?
       button.parentElement.classList.contains(addon.tab.scratchClass("sprite-selector_add-button")) ||
