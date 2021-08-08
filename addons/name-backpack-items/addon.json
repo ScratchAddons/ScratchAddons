@@ -1,12 +1,12 @@
 {
-  "name": "Name scripts in backpack",
-  "description": "A prompt will appear when you place a script in your backpack.",
+  "name": "Name scripts before placing in backpack",
+  "description": "Asks you to name scripts after you drag them into the backpack, instead of using the default name \"code\".",
   "credits": [
     {
       "name": "TheColaber"
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "codeEditor"],
   "versionAdded": "1.19.0",
   "userscripts": [
     {
