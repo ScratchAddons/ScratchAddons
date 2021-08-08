@@ -2,7 +2,7 @@ export default async function ({ addon, msg, global, console }) {
   const oldSend = XMLHttpRequest.prototype.send;
 
   XMLHttpRequest.prototype.send = function () {
-    if (this.method === "POST" && this.url?.startsWith("https://backpack.scratch.mit.edu/")) {
+    if (!addon.self.disabled && this.method === "POST" && this.url?.startsWith("https://backpack.scratch.mit.edu/")) {
       try {
         const arg = JSON.parse(arguments[0]);
         if (arg.type === "script") {

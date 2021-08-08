@@ -13,5 +13,7 @@
       "url": "userscript.js",
       "matches": ["projects"]
     }
-  ]
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true
 }
