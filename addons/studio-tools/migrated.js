@@ -185,6 +185,7 @@ export default async ({ addon, console, msg }) => {
       const studioInfo = document.querySelector(".studio-info");
       const followButton = document.querySelector(".studio-follow-button");
       studioInfo.insertBefore(leaveSection, followButton.parentNode.nextSibling);
+      addon.tab.displayNoneWhileDisabled(leaveSection);
     }
   };
   render();
