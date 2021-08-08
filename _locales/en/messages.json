@@ -252,6 +252,10 @@
     "message": "Enabled",
     "description": "Used as a category name for enabled addons"
   },
+  "smallFeatures": {
+    "message": "Small features",
+    "description": "Used as a category name for minor addons"
+  },
   "exportAndImportSettings": {
     "message": "Export and Import Settings"
   },
