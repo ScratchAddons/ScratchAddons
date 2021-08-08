@@ -40,6 +40,12 @@
       "default": false
     },
     {
+      "name": "Color",
+      "id": "color",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "Center",
       "id": "center",
       "type": "boolean",
@@ -48,12 +54,6 @@
     {
       "name": "Code",
       "id": "code",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Color",
-      "id": "color",
       "type": "boolean",
       "default": true
     }
