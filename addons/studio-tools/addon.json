@@ -26,9 +26,8 @@
     {
       "url": "mystuff.js",
       "matches": ["https://scratch.mit.edu/mystuff/*"],
-      "settingMatch": {
-        "id": "mystufftools",
-        "value": true
+      "if": {
+        "settings": { "mystufftools": true }
       }
     }
   ],

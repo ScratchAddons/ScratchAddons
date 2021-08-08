@@ -10,25 +10,22 @@
     {
       "url": "discuss.js",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "settingMatch": {
-        "id": "discuss",
-        "value": true
+      "if": {
+        "settings": { "discuss": true }
       }
     },
     {
       "url": "profile.js",
       "matches": ["https://scratch.mit.edu/users/*/"],
-      "settingMatch": {
-        "id": "profile",
-        "value": true
+      "if": {
+        "settings": { "profile": true }
       }
     },
     {
       "url": "reactions.js",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "settingMatch": {
-        "id": "reactions",
-        "value": true
+      "if": {
+        "settings": { "reactions": true }
       }
     }
   ],
@@ -36,17 +33,15 @@
     {
       "url": "discuss.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "settingMatch": {
-        "id": "discuss",
-        "value": true
+      "if": {
+        "settings": { "discuss": true }
       }
     },
     {
       "url": "reactions.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "settingMatch": {
-        "id": "reactions",
-        "value": true
+      "if": {
+        "settings": { "reactions": true }
       }
     }
   ],
