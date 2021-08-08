@@ -9,7 +9,7 @@
   "settings": [
     {
       "name": "Badge color for message count",
-      "id": "countColor",
+      "id": "color",
       "type": "color",
       "default": "#008000"
     },
