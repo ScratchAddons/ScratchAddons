@@ -1,13 +1,5 @@
 ﻿export default async function ({ addon, console }) {
-  addon.self.addEventListener("disabled", (e) => {
-    document.querySelectorAll('a[href*="https://www.youtube.com/watch?v="]').forEach((element) => {
-      element.href = element.href.replace("https://www.youtube.com/watch?v=", "/discuss/youtube/");
-    });
-  });
-
-  addon.self.addEventListener("reenabled", () => replaceYouTubeLinks());
-
-  async function replaceYouTubeLinks() {
+  while (true) {
     await addon.tab.waitForElement(
       'a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]',
       {
@@ -17,15 +9,14 @@
         },
       }
     );
-    document
-      .querySelectorAll('a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]')
-      .forEach((element) => {
-        element.href = element.href.replace(
-          "https://scratch.mit.edu/discuss/youtube/",
-          "https://www.youtube.com/watch?v="
-        );
-      });
+    var elements = document.querySelectorAll(
+      'a[href^="https://scratch.mit.edu/discuss/youtube/"], a[href^="/discuss/youtube/"]'
+    );
+    elements.forEach((element) => {
+      element.href = element.href.replace(
+        "https://scratch.mit.edu/discuss/youtube/",
+        "https://www.youtube.com/watch?v="
+      );
+    });
   }
-
-  replaceYouTubeLinks();
 }
