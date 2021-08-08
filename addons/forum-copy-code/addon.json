@@ -1,6 +1,6 @@
 {
-  "name": "Copy code button in forums",
-  "description": "Adds a button above a code box inside the forums that you can use to \"copy\" the contents.",
+  "name": "Copy code button on forums",
+  "description": "Adds a \"copy code\" button above code boxes in forum posts that copies the contents into the clipboard.",
   "credits": [
     {
       "name": "CST1229",
