@@ -8,7 +8,7 @@
   "versionAdded": "1.0.0",
   "settings": [
     {
-      "name": "Badge color for message count",
+      "name": "Badge color",
       "id": "color",
       "type": "color",
       "default": "#008000"
@@ -18,19 +18,6 @@
       "id": "showOffline",
       "type": "boolean",
       "default": false
-    },
-    {
-      "name": "Badge color when not signed in",
-      "id": "offlineColor",
-      "type": "color",
-      "default": "#e90404"
-    },
-    {
-      "name": "Badge indicator when not signed in",
-      "id": "offlineText",
-      "type": "string",
-      "default": "?",
-      "min": 1
     }
   ],
   "presets": [
