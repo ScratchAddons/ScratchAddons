@@ -22,32 +22,25 @@
   ],
   "presets": [
     {
-      "name": "Legacy",
+      "name": "Old light green",
       "id": "oldLightGreen",
-      "description": "The badge color from the original Scratch Messaging extension.",
+      "description": "The badge color from the original Scratch Messaging Extension.",
       "values": {
-        "countColor": "#8ce68c"
+        "color": "#8ce68c"
       }
     },
     {
       "name": "Blue",
       "id": "blue",
       "values": {
-        "countColor": "#175ef8"
-      }
-    },
-    {
-      "name": "Red",
-      "id": "red",
-      "values": {
-        "countColor": "#e90404"
+        "color": "#175ef8"
       }
     },
     {
       "name": "Black",
       "id": "black",
       "values": {
-        "countColor": "#000000"
+        "color": "#000000"
       }
     }
   ]
