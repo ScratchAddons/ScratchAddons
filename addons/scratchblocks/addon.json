@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "3.0 Scratchblocks in forums",
-  "description": "Replaces 2.0 scratchblocks with 3.0 scratchblocks",
+  "description": "Enables the new version of scratchblocks in the forums.",
   "credits": [
     {
       "name": "9gr",

@@ -377,6 +377,19 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
+if (location.pathname.match(/\/discuss\/(.*)/gm)) { // First as scratchblocks2 runs fast, we need to preserve original blocks.
+  const preserveBlocks = () => {
+    document.querySelectorAll("pre.blocks").forEach((el) => {
+      el.setAttribute("data-original", el.innerText);
+    });
+  };
+  if (document.readyState !== "loading") {
+    (async () => preserveBlocks())(); // Run this asynchronously to run below scripts faster
+  } else {
+    window.addEventListener("DOMContentLoaded", (e) => preserveBlocks(), { once: true });
+  }
+}
+
 function forumWarning(key) {
   let postArea = document.querySelector("form#post > label");
   if (postArea) {
@@ -567,19 +580,6 @@ if (document.readyState !== "loading") {
   handleBanner();
 } else {
   window.addEventListener("DOMContentLoaded", handleBanner, { once: true });
-}
-
-if (location.pathname.match(/\/discuss\/(.*)/gm)) {
-  const preserveBlocks = () => {
-    document.querySelectorAll("pre.blocks").forEach((el) => {
-      el.setAttribute("data-original", el.innerText);
-    });
-  };
-  if (document.readyState !== "loading") {
-    preserveBlocks();
-  } else {
-    window.addEventListener("DOMContentLoaded", (e) => preserveBlocks(), { once: true });
-  }
 }
 
 const isProfile = pathArr[0] === "users" && pathArr[2] === "";
