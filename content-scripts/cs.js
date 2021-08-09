@@ -574,7 +574,7 @@ if (location.pathname.match(/\/discuss\/(.*)/gm)) {
     document.querySelectorAll("pre.blocks").forEach((el) => {
       el.setAttribute("data-original", el.innerText);
     });
-  }
+  };
   if (document.readyState !== "loading") {
     preserveBlocks();
   } else {

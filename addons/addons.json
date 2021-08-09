@@ -87,7 +87,6 @@
   "default-project",
   "turbowarp-player",
   "ctrl-enter-post",
-  "scratchblocks",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -102,5 +101,6 @@
   "dark-www",
   "old-studio-layout",
   "compact-messages",
-  "customize-avatar-border"
+  "customize-avatar-border",
+  "scratchblocks"
 ]
