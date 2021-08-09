@@ -12,12 +12,19 @@
       "id": "color",
       "type": "color",
       "default": "#008000"
+    },
+    {
+      "name": "Indicate when not signed in",
+      "id": "showOffline",
+      "type": "boolean",
+      "default": false
     }
   ],
   "presets": [
     {
       "name": "Old light green",
       "id": "oldLightGreen",
+      "description": "The badge color from the original Scratch Messaging Extension.",
       "values": {
         "color": "#8ce68c"
       }

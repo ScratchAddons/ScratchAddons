@@ -87,8 +87,10 @@
   "default-project",
   "turbowarp-player",
   "ctrl-enter-post",
+  "forum-copy-code",
+  "paint-by-default",
   "reply-count",
-
+  
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
   "// because the first in the list gets their CSS injected first,",
