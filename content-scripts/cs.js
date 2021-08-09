@@ -377,7 +377,8 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
-if (location.pathname.match(/\/discuss\/(.*)/gm)) { // First as scratchblocks2 runs fast, we need to preserve original blocks.
+if (location.pathname.match(/\/discuss\/(.*)/gm)) {
+  // First as scratchblocks2 runs fast, we need to preserve original blocks.
   const preserveBlocks = () => {
     document.querySelectorAll("pre.blocks").forEach((el) => {
       el.setAttribute("data-original", el.innerText);
