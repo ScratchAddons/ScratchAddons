@@ -91,24 +91,27 @@ export default async ({ addon, console, msg }) => {
     liTag.append(aTag);
     liTag.addEventListener("click", (e) => {
       e.preventDefault();
+      let ow = openWith,
+        cw = closeWith,
+        rw = replaceWith;
       if (promptTag) {
         const value = prompt(msg("prompt-" + name), defaultSelection ? getSelection(textBox).trim() : undefined);
         if (value !== null) {
-          openWith = `[${tag}${value ? `=${value}` : ""}]`;
-          closeWith = `[/${tag}]`;
+          ow = `[${tag}${value ? `=${value}` : ""}]`;
+          cw = `[/${tag}]`;
         }
       } else if (promptContent) {
         const value = getSelection(textBox) || prompt(msg("prompt-" + name));
-        if (value !== null) replaceWith = `[${tag}]${value}[/${tag}]`;
+        if (value !== null) rw = `[${tag}]${value}[/${tag}]`;
       }
-      if (typeof replaceWith === "string") {
-        insert(textBox, replaceWith);
-      } else if (typeof openWith === "string" || typeof closeWith === "string") {
-        wrapSelection(textBox, openWith || "", closeWith || "");
+      if (typeof rw === "string") {
+        insert(textBox, rw);
+      } else if (typeof ow === "string" || typeof cw === "string") {
+        wrapSelection(textBox, ow || "", cw || "");
       } else if (callback) {
         callback();
       }
-      if (promptTag || promptContent) textBox.focus();
+      textBox.focus();
     });
     return liTag;
   };
