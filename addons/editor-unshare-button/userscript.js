@@ -11,12 +11,12 @@ export default async function ({ addon, msg, global, console }) {
     button.addEventListener(
       "click",
       (e) => {
+        if (!confirm(msg('unshare-msg'))) return
         redux.dispatch({
           type: "SET_COMMENT_FETCH_STATUS",
           infoType: "project",
           status: "FETCHING",
         });
-
         const project = redux.state.preview.projectInfo;
         const author = project.author;
         fetch(`/site-api/projects/all/${redux.state.preview.projectInfo.id}/`, {
