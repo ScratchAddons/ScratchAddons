@@ -12,4 +12,5 @@ export default async function ({ addon, global, console }) {
   };
   ready();
   addon.tab.addEventListener("urlChange", ready);
+  addon.tab.displayNoneWhileDisabled(semicolon);
 }

@@ -30,6 +30,7 @@ export default async ({ addon, console, msg }) => {
 
     const adderSec = document.createElement("div");
     adderSec.className = "studio-adder-section";
+    addon.tab.displayNoneWhileDisabled(adderSec);
 
     const adderHeader = document.createElement("h3");
     const adderHeaderSpan = document.createElement("span");
@@ -124,8 +125,28 @@ export default async ({ addon, console, msg }) => {
           } catch (e) {}
           if (!isOkay(r, result)) return;
           alert(msg("promoted", { username: u }));
-          // we don't bother updating redux ourselves
-          location.reload();
+
+          const curatorList = redux.state.curators.items;
+          const index = curatorList.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
+          const curatorItem = curatorList[index];
+          if (index !== -1)
+            redux.dispatch({
+              type: "curators_REMOVE",
+              index,
+            });
+
+          redux.dispatch({
+            type: "managers_CREATE",
+            item: curatorItem,
+            atEnd: true,
+          });
+
+          redux.dispatch({
+            type: "SET_INFO",
+            info: {
+              managers: redux.state.studio.managers + 1,
+            },
+          });
         },
         () => {
           if (redux.state.studio.managers < MAX_MANAGERS) return null;
@@ -144,8 +165,20 @@ export default async ({ addon, console, msg }) => {
         });
         if (!isOkay(r)) return;
         alert(msg("removed", { username: u }));
-        // we don't bother updating redux ourselves
-        location.reload();
+
+        let index = redux.state.curators.items.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
+        if (index === -1) {
+          index = redux.state.managers.items.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
+          index !== -1 &&
+            redux.dispatch({
+              type: "managers_REMOVE",
+              index,
+            });
+        } else
+          redux.dispatch({
+            type: "curators_REMOVE",
+            index,
+          });
       });
 
       addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: pSec, order: 1 });
@@ -184,6 +217,7 @@ export default async ({ addon, console, msg }) => {
       const studioInfo = document.querySelector(".studio-info");
       const followButton = document.querySelector(".studio-follow-button");
       studioInfo.insertBefore(leaveSection, followButton.parentNode.nextSibling);
+      addon.tab.displayNoneWhileDisabled(leaveSection);
     }
   };
   render();

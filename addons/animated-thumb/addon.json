@@ -31,9 +31,8 @@
     {
       "matches": ["projects"],
       "url": "persistent-thumb.js",
-      "settingMatch": {
-        "id": "persistentThumb",
-        "value": true
+      "if": {
+        "settings": { "persistentThumb": true }
       }
     }
   ],
