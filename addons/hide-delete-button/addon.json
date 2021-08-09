@@ -30,25 +30,28 @@
     {
       "url": "sprites.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "sprites",
-        "value": true
+      "if": {
+        "settings": {
+          "sprites": true
+        }
       }
     },
     {
       "url": "costumes.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "costumes",
-        "value": true
+      "if": {
+        "settings": {
+          "costumes": true
+        }
       }
     },
     {
       "url": "sounds.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "sounds",
-        "value": true
+      "if": {
+        "settings": {
+          "sounds": true
+        }
       }
     }
   ]
