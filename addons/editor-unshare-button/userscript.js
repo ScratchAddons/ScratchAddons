@@ -11,7 +11,7 @@ export default async function ({ addon, msg, global, console }) {
     button.addEventListener(
       "click",
       (e) => {
-        if (!confirm(msg('unshare-msg'))) return
+        if (!confirm(msg("unshare-msg"))) return;
         redux.dispatch({
           type: "SET_COMMENT_FETCH_STATUS",
           infoType: "project",
