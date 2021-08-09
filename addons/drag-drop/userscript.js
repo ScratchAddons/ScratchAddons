@@ -22,8 +22,7 @@ export default async function ({ addon, global, console }) {
       (el = e.target.closest('div[class*="selector_wrapper"]'))
     ) {
       callback = (files) => {
-        const hdFilter = addon.settings.get("use-hd-upload") ? "" : ":not(.sa-better-img-uploads-input)";
-        const fileInput = el.querySelector('input[class*="action-menu_file-input"]' + hdFilter);
+        const fileInput = el.querySelector('input[class*="action-menu_file-input"]:not(.sa-better-img-uploads-input)');
         fileInput.files = files;
         fileInput.dispatchEvent(new Event("change", { bubbles: true }));
       };
