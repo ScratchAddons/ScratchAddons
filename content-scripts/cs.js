@@ -570,15 +570,15 @@ if (document.readyState !== "loading") {
 }
 
 if (location.pathname.match(/\/discuss\/(.*)/gm)) {
-  function fixScratchblocks() {
-    [].slice.apply(document.querySelectorAll("pre.blocks")).forEach((el) => {
+  const preserveBlocks = () => {
+    document.querySelectorAll("pre.blocks").forEach((el) => {
       el.setAttribute("data-original", el.innerText);
     });
   }
   if (document.readyState !== "loading") {
-    fixScratchblocks();
+    preserveBlocks();
   } else {
-    window.addEventListener("DOMContentLoaded", fixScratchblocks, { once: true });
+    window.addEventListener("DOMContentLoaded", (e) => preserveBlocks(), { once: true });
   }
 }
 
