@@ -325,7 +325,7 @@ export default class Tab extends Listenable {
       afterSoundTab: {
         element: () => q("[class^='react-tabs_react-tabs__tab-list']"),
         from: () => [q("[class^='react-tabs_react-tabs__tab-list']").children[2]],
-        until: () => [q(".s3devToolBar")],
+        until: () => [q("#s3devToolBar")],
       },
       forumsBeforePostReport: {
         element: () => scope.querySelector(".postfootright > ul"),
@@ -509,7 +509,13 @@ export default class Tab extends Listenable {
             (flyout && gesture.flyout_) ||
             // Comments
             (comments && gesture.startBubble_);
-          if (injectMenu) items = callback(items, block);
+          if (injectMenu) {
+            try {
+              items = callback(items, block);
+            } catch (e) {
+              console.error("Error while calling context menu callback: ", e);
+            }
+          }
         }
 
         oldShow.call(this, event, items, rtl);

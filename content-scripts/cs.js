@@ -429,8 +429,10 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=4OluKLESoVU",
+    href: "https://www.youtube.com/watch?v=GrKHdKQq_hc",
     target: "_blank",
+    rel: "noopener",
+    referrerPolicy: "strict-origin-when-cross-origin",
   });
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
