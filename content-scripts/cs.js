@@ -377,7 +377,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
-if (location.pathname.match(/\/discuss\/(.*)/gm)) { 
+if (location.pathname.match(/\/discuss\/(.*)/gm)) {
   // We do this first as sb2 runs fast.
   const preserveBlocks = () => {
     document.querySelectorAll("pre.blocks").forEach((el) => {
