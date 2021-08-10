@@ -16,9 +16,7 @@
     {
       "url": "experimental_forums_preview.js",
       "matches": [
-        "https://scratch.mit.edu/discuss/topic/*",
-        "https://scratch.mit.edu/discuss/post/*/edit/",
-        "https://scratch.mit.edu/discuss/settings/*/"
+        "editingScreens"
       ]
     }
   ],
@@ -30,25 +28,7 @@
     {
       "url": "experimental_scratchr2.css",
       "matches": [
-        "https://scratch.mit.edu/discuss/*",
-        "https://scratch.mit.edu/mystuff/",
-        "https://scratch.mit.edu/users/*",
-        "https://scratch.mit.edu/classes/*",
-        "https://scratch.mit.edu/projects/*/remixes/",
-        "https://scratch.mit.edu/projects/*/studios/",
-        "https://scratch.mit.edu/projects/*/remixtree/",
-        "https://scratch.mit.edu/accounts/*",
-        "https://scratch.mit.edu/statistics/",
-        "https://scratch.mit.edu/info/quotes/",
-        "https://scratch.mit.edu/info/ext_download/",
-        "https://scratch.mit.edu/cloudmonitor/*",
-        "https://scratch.mit.edu/403/",
-        "https://scratch.mit.edu/404/",
-        "https://scratch.mit.edu/500/",
-        "https://scratch.mit.edu/503/",
-        "https://scratch.mit.edu/login",
-        "https://scratch.mit.edu/login_retry",
-        "https://scratch.mit.edu/news"
+        "isNotScratchWWW"
       ]
     },
     {
@@ -100,7 +80,7 @@
     },
     {
       "url": "experimental_project_embed.css",
-      "matches": ["https://scratch.mit.edu/projects/*/embed"]
+      "matches": ["projectEmbeds"]
     },
     {
       "url": "pygments.css",
