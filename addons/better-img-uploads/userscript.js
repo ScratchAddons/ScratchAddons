@@ -14,7 +14,7 @@ export default async function ({ addon, console, safeMsg: m }) {
     addon.self.dir + "/icon.svg"
   }" height="10", width="10">
      <input accept=".svg, .png, .bmp, .jpg, .jpeg" class="${addon.tab.scratchClass(
-       "action-menu_file-input"
+       "action-menu_file-input" /* TODO: when adding dynamicDisable, ensure compat with drag-drop */
      )} sa-better-img-uploads-input" multiple="" type="file">
   </button>
   <div class="__react_component_tooltip place-${right ? "left" : "right"} type-dark ${addon.tab.scratchClass(
