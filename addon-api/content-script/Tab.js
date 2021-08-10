@@ -325,7 +325,7 @@ export default class Tab extends Listenable {
       afterSoundTab: {
         element: () => q("[class^='react-tabs_react-tabs__tab-list']"),
         from: () => [q("[class^='react-tabs_react-tabs__tab-list']").children[2]],
-        until: () => [q(".s3devToolBar")],
+        until: () => [q("#s3devToolBar")],
       },
       forumsBeforePostReport: {
         element: () => scope.querySelector(".postfootright > ul"),

@@ -19,6 +19,7 @@ export default async function ({ addon, console, msg }) {
     scratchStage.style.display = "";
     button.classList.remove("scratch");
     playerToggled = false;
+    button.title = "TurboWarp";
   }
 
   button.onclick = async () => {
@@ -36,6 +37,7 @@ export default async function ({ addon, console, msg }) {
 
         scratchStage.style.display = "none";
         button.classList.add("scratch");
+        button.title = "Scratch";
         addon.tab.traps.vm.stopAll();
       } else removeIframe();
     } else {

@@ -16,9 +16,8 @@
     {
       "url": "blockcount.js",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "editorCount",
-        "value": true
+      "if": {
+        "settings": { "editorCount": true }
       }
     }
   ],
