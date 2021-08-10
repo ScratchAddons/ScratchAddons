@@ -84,7 +84,7 @@
     },
     {
       "url": "pygments.css",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+      "matches": ["forums"]
     }
   ]
 }
