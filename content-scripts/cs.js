@@ -384,8 +384,8 @@ if (location.pathname.match(/\/discuss\/(.*)/gm)) {
       el.setAttribute("data-original", el.innerText);
     });
   };
-  if (document.readyState === "complete") {
-    (async () => preserveBlocks())();
+  if (document.readyState !== "loading") {
+    setTimeout(preserveBlocks, 0);
   } else {
     window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true });
   }
