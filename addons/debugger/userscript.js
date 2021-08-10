@@ -20,7 +20,16 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   container.appendChild(buttonContainer);
   buttonContainer.addEventListener("click", () => toggleConsole(true));
 
-  const pause = () => {
+  let hasLoggedPauseError = false;
+
+  const pause = (_, thread) => {
+    if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
+      if (!hasLoggedPauseError) {
+        addLog(msg("cannot-pause-player"), thread, "error");
+        hasLoggedPauseError = true;
+      }
+      return;
+    }
     setPaused(!paused);
     const pauseAddonButton = document.querySelector(".pause-btn");
     if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleConsole(true);
