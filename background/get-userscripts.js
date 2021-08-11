@@ -291,24 +291,36 @@ const WELL_KNOWN_MATCHERS = {
 
 function matchesIf(injectable, settings) {
   // injectable.if is guaranteed to exist
-  // Return true as soon as any condition matches. Everything is an OR, not an AND.
+  // addonEnabled and settings are AND-ed
+  // settings keys are AND-ed
+  // addonEnabled and settings values are OR-ed
 
-  if (injectable.if.addonEnabled) {
-    const arr = Array.isArray(injectable.if.addonEnabled) ? injectable.if.addonEnabled : [injectable.if.addonEnabled];
-    if (arr.some((addon) => scratchAddons.localState.addonsEnabled[addon] === true)) return true;
-  }
+  /**
+   * Formula:
+   * NOT (
+   *  (addonEnabled exists AND all of the addons are disabled) OR
+   *  (settings exists AND there is a setting where none of potential values match)
+   * )
+   * Or,
+   * NOT (
+   *  (addonEnabled AND AND(addons**Dis**abled)) OR
+   *  (settings exists AND OR(AND(settings do **NOT** match)))
+   * )
+   */
 
-  if (injectable.if.settings) {
-    const anyMatches = Object.keys(injectable.if.settings).some((settingName) => {
-      const arr = Array.isArray(injectable.if.settings[settingName])
-        ? injectable.if.settings[settingName]
-        : [injectable.if.settings[settingName]];
-      return arr.some((possibleValue) => settings[settingName] === possibleValue);
-    });
-    if (anyMatches === true) return true;
-  }
-
-  return false;
+  return !(
+    (injectable.if.addonEnabled?.length &&
+      (Array.isArray(injectable.if.addonEnabled) ? injectable.if.addonEnabled : [injectable.if.addonEnabled]).every(
+        (addon) => !scratchAddons.localState.addonsEnabled[addon]
+      )) ||
+    (injectable.if.settings &&
+      Object.keys(injectable.if.settings).some((settingName) =>
+        (Array.isArray(injectable.if.settings[settingName])
+          ? injectable.if.settings[settingName]
+          : [injectable.if.settings[settingName]]
+        ).every((possibleValue) => settings[settingName] !== possibleValue)
+      ))
+  );
 }
 
 // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
