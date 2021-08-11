@@ -178,7 +178,7 @@ function updateSettings(addon, newStyle) {
         --sa-block-secondary-color: ${secondaryActive};
       }
       g[data-category="${prop}"] > .blocklyText,
-      g[data-category="${prop}"] > g:not(.blocklyDraggable) > .blocklyText /* variable and list reporters */ {
+      g[data-category="${prop}"] > g:not([data-id]) > .blocklyText /* variable and list reporters */ {
         fill: var(--editorTheme3-${settingName}Color);
       }
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > .blocklyDropdownText,
