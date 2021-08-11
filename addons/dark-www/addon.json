@@ -15,9 +15,7 @@
   "userscripts": [
     {
       "url": "experimental_forums_preview.js",
-      "matches": [
-        "editingScreens"
-      ]
+      "matches": ["editingScreens"]
     }
   ],
   "userstyles": [
@@ -27,16 +25,11 @@
     },
     {
       "url": "experimental_scratchr2.css",
-      "matches": [
-        "isNotScratchWWW"
-      ]
+      "matches": ["isNotScratchWWW"]
     },
     {
       "url": "experimental_scratchwww.css",
-      "matches": [
-        "scratchWWWNoProject",
-        "projects"
-      ]
+      "matches": ["scratchWWWNoProject", "projects"]
     },
     {
       "url": "experimental_forums.css",
