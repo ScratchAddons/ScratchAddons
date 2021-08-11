@@ -89,22 +89,15 @@
   "userstyles": [
     {
       "url": "scratchr2.css",
-      "matches": [
-        "isNotScratchWWW"
-      ]
+      "matches": ["isNotScratchWWW"]
     },
     {
       "url": "scratchr2_errors.css",
-      "matches": [
-        "isNotScratchWWW"
-      ]
+      "matches": ["isNotScratchWWW"]
     },
     {
       "url": "scratchwww.css",
-      "matches": [
-        "scratchWWWNoProject",
-        "projects"
-      ]
+      "matches": ["scratchWWWNoProject", "projects"]
     },
     {
       "url": "forums.css",
@@ -152,16 +145,11 @@
     },
     {
       "url": "lightprimary_compatibility.css",
-      "matches": [
-        "isNotScratchWWW"
-      ]
+      "matches": ["isNotScratchWWW"]
     },
     {
       "url": "lightprimary_scratchwww_compatibility.css",
-      "matches": [
-        "scratchWWWNoProject",
-        "projects"
-      ]
+      "matches": ["scratchWWWNoProject", "projects"]
     },
     {
       "url": "lightprimary_mystuff_compatibility.css",
