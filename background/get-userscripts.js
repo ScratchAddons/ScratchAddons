@@ -308,7 +308,19 @@ function matchesIf(injectable, settings) {
    * )
    */
 
-  return !((injectable.if.addonEnabled?.length && (Array.isArray(injectable.if.addonEnabled) ? injectable.if.addonEnabled : [injectable.if.addonEnabled]).every((addon) => !scratchAddons.localState.addonsEnabled[addon])) || (injectable.if.settings && Object.keys(injectable.if.settings).some((settingName) => (Array.isArray(injectable.if.settings[settingName]) ? injectable.if.settings[settingName] : [injectable.if.settings[settingName]]).every((possibleValue) => settings[settingName] !== possibleValue))));
+  return !(
+    (injectable.if.addonEnabled?.length &&
+      (Array.isArray(injectable.if.addonEnabled) ? injectable.if.addonEnabled : [injectable.if.addonEnabled]).every(
+        (addon) => !scratchAddons.localState.addonsEnabled[addon]
+      )) ||
+    (injectable.if.settings &&
+      Object.keys(injectable.if.settings).some((settingName) =>
+        (Array.isArray(injectable.if.settings[settingName])
+          ? injectable.if.settings[settingName]
+          : [injectable.if.settings[settingName]]
+        ).every((possibleValue) => settings[settingName] !== possibleValue)
+      ))
+  );
 }
 
 // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
