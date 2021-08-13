@@ -41,14 +41,14 @@
       "url": "hide_love_count.css",
       "matches": ["https://scratch.mit.edu/"],
       "if": {
-        "settings": { "loves-front": true }
+        "settings": { "lovesFront": true }
       }
     },
     {
       "url": "hide_remix_count.css",
       "matches": ["https://scratch.mit.edu/"],
       "if": {
-        "settings": { "remixes-front": true }
+        "settings": { "remixesFront": true }
       }
     }
   ],
@@ -80,13 +80,13 @@
     {
       "name": "Hide love count in \"What the Community is Loving\"",
       "default": true,
-      "id": "loves-front",
+      "id": "lovesFront",
       "type": "boolean"
     },
     {
       "name": "Hide loves count in \"What the Community is Remixing\"",
       "default": true,
-      "id": "remixes-front",
+      "id": "remixesFront",
       "type": "boolean"
     }
   ],
