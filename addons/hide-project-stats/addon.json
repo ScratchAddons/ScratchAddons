@@ -54,37 +54,37 @@
   ],
   "settings": [
     {
-      "name": "Hide \"love\" count",
+      "name": "Hide love count",
       "default": true,
       "id": "loves",
       "type": "boolean"
     },
     {
-      "name": "Hide \"favorite\" count",
+      "name": "Hide favorite count",
       "default": true,
       "id": "favorites",
       "type": "boolean"
     },
     {
-      "name": "Hide \"remix\" count",
+      "name": "Hide remix count",
       "default": true,
       "id": "remixes",
       "type": "boolean"
     },
     {
-      "name": "Hide \"view\" count",
+      "name": "Hide view count",
       "default": true,
       "id": "views",
       "type": "boolean"
     },
     {
-      "name": "Hide \"loves\" count in \"What the Community is Loving\"",
+      "name": "Hide love count in \"What the Community is Loving\"",
       "default": true,
       "id": "loves-front",
       "type": "boolean"
     },
     {
-      "name": "Hide \"loves\" count in \"What the Community is Remixing\"",
+      "name": "Hide loves count in \"What the Community is Remixing\"",
       "default": true,
       "id": "remixes-front",
       "type": "boolean"
