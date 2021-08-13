@@ -6,6 +6,6 @@
   visibility: visible;
 }
 
-.thumbnail-loves {
-  visibility: hidden;
+.thumbnail .thumbnail-loves {
+  display: none;
 }

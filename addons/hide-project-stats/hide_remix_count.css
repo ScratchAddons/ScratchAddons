@@ -2,6 +2,6 @@
   display: none;
 }
 
-.thumbnail-remixes {
-  visibility: hidden;
+.thumbnail .thumbnail-remixes {
+  display: none;
 }
