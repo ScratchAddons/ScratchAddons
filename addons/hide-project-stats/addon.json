@@ -12,49 +12,43 @@
     {
       "url": "hide_remix_count.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "remixes",
-        "value": true
+      "if": {
+        "settings": { "remixes": true }
       }
     },
     {
       "url": "hide_view_count.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "views",
-        "value": true
+      "if": {
+        "settings": { "views": true }
       }
     },
     {
       "url": "hide_love_count.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "loves",
-        "value": true
+      "if": {
+        "settings": { "loves": true }
       }
     },
     {
       "url": "hide_favorite_count.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "favorites",
-        "value": true
+      "if": {
+        "settings": { "favorites": true }
       }
     },
     {
       "url": "hide_love_count.css",
       "matches": ["https://scratch.mit.edu/"],
-      "settingMatch": {
-        "id": "loves-front",
-        "value": true
+      "if": {
+        "settings": { "loves-front": true }
       }
     },
     {
       "url": "hide_remix_count.css",
       "matches": ["https://scratch.mit.edu/"],
-      "settingMatch": {
-        "id": "remixes-front",
-        "value": true
+      "if": {
+        "settings": { "remixes-front": true }
       }
     }
   ],
