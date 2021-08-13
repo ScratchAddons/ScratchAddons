@@ -4,7 +4,7 @@
   "credits": [
     {
       "name": "9gr",
-      "link": "https://scratch.mit.edu/users/9gr"
+      "link": "https://scratch.mit.edu/users/9gr/"
     }
   ],
   "userstyles": [
@@ -94,6 +94,6 @@
   "updateUserstylesOnSettingsChange": true,
   "injectAsStyleElt": true,
   "tags": ["community", "projectPage"],
-  "versionAdded": "1.18.0",
+  "versionAdded": "1.19.0",
   "enabledByDefault": false
 }
