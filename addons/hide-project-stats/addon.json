@@ -1,7 +1,6 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Hide project stats",
-  "description": "Hides project stats",
+  "description": "Lets you hide love, favorite, remix and view counts in the front page and project pages.",
   "credits": [
     {
       "name": "9gr",
