@@ -47,7 +47,8 @@ button.grey,
 .button.grey:not([data-control="load-more"]),
 button.grey,
 .button.grey:not([data-control="load-more"]):hover,
-button.grey:hover {
+button.grey:hover,
+form.post-editor input[type="submit"] {
   background-color: #282828;
   background-image: none;
   color: var(--scratchr2-linkColor, #fff);

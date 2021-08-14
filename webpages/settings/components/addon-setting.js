@@ -2,8 +2,29 @@ export default async function ({ template }) {
   const AddonSetting = Vue.extend({
     props: ["addon", "setting", "addon-settings"],
     template,
-    data() {
-      return {};
+    computed: {
+      show() {
+        if (!this.setting.if) return true;
+
+        if (this.setting.if.addonEnabled) {
+          const arr = Array.isArray(this.setting.if.addonEnabled)
+            ? this.setting.if.addonEnabled
+            : [this.setting.if.addonEnabled];
+          if (arr.some((addon) => this.$root.manifestsById[addon]._enabled === true)) return true;
+        }
+
+        if (this.setting.if.settings) {
+          const anyMatches = Object.keys(this.setting.if.settings).some((settingName) => {
+            const arr = Array.isArray(this.setting.if.settings[settingName])
+              ? this.setting.if.settings[settingName]
+              : [this.setting.if.settings[settingName]];
+            return arr.some((possibleValue) => this.addonSettings[this.addon._addonId][settingName] === possibleValue);
+          });
+          if (anyMatches === true) return true;
+        }
+
+        return false;
+      },
     },
     methods: {
       settingsName(addon) {

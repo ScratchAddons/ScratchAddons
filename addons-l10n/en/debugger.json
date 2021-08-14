@@ -17,5 +17,6 @@
   "debugger/block-error": "error %s",
   "debugger/feedback-log": "Please send debugger addon feedback {logLink}. We plan to add new features in the upcoming weeks.",
   "debugger/feedback-log-link": "here",
-  "debugger/feedback-remove": "Don't ask me again"
+  "debugger/feedback-remove": "Don't ask me again",
+  "debugger/cannot-pause-player": "Breakpoint block can only be used while on the editor."
 }
