@@ -648,7 +648,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     }, 0);
 
     let binaryNum = "";
-    manifests.forEach(({addonId}) => binaryNum += addonsEnabled[addonId] === true ? "1" : "0");
+    manifests.forEach(({ addonId }) => (binaryNum += addonsEnabled[addonId] === true ? "1" : "0"));
     const addonsEnabledBase36 = BigInt(`0b${binaryNum}`).toString(36);
     vue.sidebarUrls.feedback += `#_${addonsEnabledBase36}`;
   });
