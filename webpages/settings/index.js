@@ -200,7 +200,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
           return {
             contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
-            feedback: `https://scratchaddons.com/${localeSlash}feedback/?version=${versionName}&${utm}`,
+            feedback: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${versionName}&${utm}`,
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
         })(),
@@ -646,6 +646,11 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         }
       }
     }, 0);
+
+    let binaryNum = "";
+    manifests.forEach(({addonId}) => binaryNum += addonsEnabled[addonId] === true ? "1" : "0");
+    const addonsEnabledBase36 = BigInt(`0b${binaryNum}`).toString(36);
+    vue.sidebarUrls.feedback += `#_${addonsEnabledBase36}`;
   });
 
   window.addEventListener("keydown", function (e) {

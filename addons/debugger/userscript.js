@@ -369,7 +369,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     const s = document.createElement("span");
     s.innerHTML = safeMsg("feedback-log", {
       logLink: Object.assign(document.createElement("a"), {
-        href: "https://scratchaddons.com/feedback?version=1.18-debugger",
+        href: "https://scratchaddons.com/feedback/?ext_version=1.18%2Bdebugger",
         className: "sa-debugger-feedback",
         target: "_blank",
         textContent: msg("feedback-log-link"),
