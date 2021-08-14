@@ -557,7 +557,7 @@ export default async function ({ addon, global, console, msg }) {
   // Because we don't implement the switching ourselves, this is not controlled by the data category option.
   blockSwitches["data_variable"] = [];
   blockSwitches["data_listcontents"] = [];
-  
+
   const genuid = () => {
     const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
     let result = "";
@@ -572,7 +572,7 @@ export default async function ({ addon, global, console, msg }) {
       block.setFieldValue(opcodeData, "VALUE");
       return;
     }
-    
+
     if (opcodeData.opcode === "noop") {
       return;
     }
@@ -602,9 +602,9 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     const pasteSeparately = [];
-    
+
     let remap = opcodeData.remap;
-    
+
     // Apply input remappings.
     if (remap) {
       for (const child of Array.from(xml.children)) {
@@ -618,7 +618,7 @@ export default async function ({ addon, global, console, msg }) {
             const inputBlock = workspace.getBlockById(inputId);
             const position = inputBlock.getRelativeToSurfaceXY();
             inputXml.setAttribute("x", Math.round(workspace.RTL ? -position.x : position.x));
-            inputXml.setAttribute("y",   Math.round(position.y));
+            inputXml.setAttribute("y", Math.round(position.y));
             pasteSeparately.push(inputXml);
             xml.removeChild(child);
           } else {
@@ -639,7 +639,7 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
     }
-    
+
     // Mark the latest event in the undo stack.
     // This will be used later to group all of our events.
     const undoStack = workspace.undoStack_;
@@ -661,7 +661,7 @@ export default async function ({ addon, global, console, msg }) {
       const newBlockConnection = newBlockConnections.find((c) => c.type === blockConnectionType);
       newBlockConnection.connect(parentConnection);
     }
-    
+
     // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
     // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
     setTimeout(() => {
@@ -671,7 +671,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     }, 0);
   };
-  
+
   addon.tab.createBlockContextMenu(
     (items, block) => {
       if (!addon.self.disabled) {
@@ -679,31 +679,36 @@ export default async function ({ addon, global, console, msg }) {
         // switchType: "native" | "arg"
         let switchType = "native";
         let switches = blockSwitches[block.type] || [];
-        
+
         const customArgsMode = addon.settings.get("customargs");
         if (customArgsMode !== "off") {
-         if (["argument_reporter_boolean", "argument_reporter_string_number"].includes(type) && 
-             // if the arg is a shadow, it's in a procedures_prototype so we don't want it to be switchable
-             !block.isShadow() 
-           ) {
+          if (
+            ["argument_reporter_boolean", "argument_reporter_string_number"].includes(type) &&
+            // if the arg is a shadow, it's in a procedures_prototype so we don't want it to be switchable
+            !block.isShadow()
+          ) {
             getCustomBlocks();
             switchType = "arg";
           }
           if (customArgsMode === "all") {
             switch (type) {
               case "argument_reporter_string_number":
-                let stringArgs = Object.values(customBlocks).map(cb => cb.stringArgs).flat(1);
+                let stringArgs = Object.values(customBlocks)
+                  .map((cb) => cb.stringArgs)
+                  .flat(1);
                 if (stringArgs.includes(block.getFieldValue("VALUE"))) {
                   switches = stringArgs;
                 }
                 break;
               case "argument_reporter_boolean":
-                let boolArgs = Object.values(customBlocks).map(cb => cb.boolArgs).flat(1);
+                let boolArgs = Object.values(customBlocks)
+                  .map((cb) => cb.boolArgs)
+                  .flat(1);
                 if (boolArgs.includes(block.getFieldValue("VALUE"))) {
                   switches = boolArgs;
                 }
                 break;
-            } 
+            }
           } else if (customArgsMode === "defOnly") {
             let root = block.getRootBlock();
             if (root.type !== "procedures_definition") return items;
@@ -719,12 +724,13 @@ export default async function ({ addon, global, console, msg }) {
                   switches = customBlockObj.boolArgs;
                 }
                 break;
-            } 
+            }
           }
         }
-        
+
         switches.forEach((opcodeData, i) => {
-          const isNoop = switchType === "native" ? opcodeData.opcode === "noop" : opcodeData === block.getFieldValue("VALUE");
+          const isNoop =
+            switchType === "native" ? opcodeData.opcode === "noop" : opcodeData === block.getFieldValue("VALUE");
           if (isNoop && !addon.settings.get("noop")) return;
 
           const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
@@ -755,17 +761,19 @@ export default async function ({ addon, global, console, msg }) {
     },
     { blocks: true }
   );
-  
+
   const getCustomBlocks = () => {
     customBlocks = {};
     const target = vm.editingTarget;
     Object.entries(target.blocks._blocks)
-    .filter(([,block]) => block.opcode === "procedures_prototype").forEach(
-      ([id, block]) => addCustomBlock(id, block));
+      .filter(([, block]) => block.opcode === "procedures_prototype")
+      .forEach(([id, block]) => addCustomBlock(id, block));
   };
-  
+
   const addCustomBlock = (id, block) => {
-    let { mutation: { proccode, argumentids, argumentnames, argumentdefaults }} = block;
+    let {
+      mutation: { proccode, argumentids, argumentnames, argumentdefaults },
+    } = block;
     customBlocks[proccode] = { stringArgs: [], boolArgs: [] };
     let [ids, names, defaults] = [argumentids, argumentnames, argumentdefaults].map(JSON.parse);
     for (let i = 0; i < ids.length; i++) {
