@@ -3,7 +3,6 @@ import blockToDom from "./blockToDom.js";
 export default async function ({ addon, global, console, msg }) {
   const blockly = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
-  window.onerror = alert;
   let customBlocks = {};
   const blockSwitches = {};
 
