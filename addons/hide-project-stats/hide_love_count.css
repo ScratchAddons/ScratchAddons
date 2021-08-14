@@ -1,0 +1,11 @@
+.project-loves {
+  visibility: hidden;
+}
+
+.project-loves::before {
+  visibility: visible;
+}
+
+.thumbnail .thumbnail-loves {
+  display: none;
+}

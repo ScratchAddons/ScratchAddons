@@ -11,12 +11,14 @@ export default async function ({ addon, console }) {
       60
     );
 
+  const darkPaperDisabled = () => addon.self.disabled || !addon.settings.get("affectPaper");
+
   // Change the colors used by the selection tool
   const isDefaultGuideColor = (color) =>
     color.type === "rgb" && color.red === 0 && color.green === 0.615686274509804 && color.blue === 0.9254901960784314;
   const oldItemDraw = paper.Item.prototype.draw;
   paper.Item.prototype.draw = function (...args) {
-    if (addon.self.disabled) {
+    if (darkPaperDisabled()) {
       this.saColorChanged = false;
       if (this.saOldFillColor) this.fillColor = this.saOldFillColor;
       if (this.saOldStrokeColor) this.strokeColor = this.saOldStrokeColor;
@@ -52,7 +54,7 @@ export default async function ({ addon, console }) {
     }
     return oldItemDraw.apply(this, args);
   };
-  paper.Item.prototype.getSelectedColor = () => (addon.self.disabled ? null : new paper.Color(secondaryColor()));
+  paper.Item.prototype.getSelectedColor = () => (darkPaperDisabled() ? null : new paper.Color(secondaryColor()));
 
   // Change the colors of background layers
   const updateColors = () => {
@@ -62,7 +64,7 @@ export default async function ({ addon, console }) {
     let blueOutlineColor;
     let crosshairOuterColor;
     let crosshairInnerColor;
-    if (!addon.self.disabled) {
+    if (!darkPaperDisabled()) {
       artboardBackground = addon.settings.get("accent");
       workspaceBackground = alphaBlend(
         addon.settings.get("accent"),
