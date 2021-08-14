@@ -2,13 +2,14 @@ import blockToDom from "./blockToDom.js";
 
 export default async function ({ addon, global, console, msg }) {
   const blockly = await addon.tab.traps.getBlockly();
-
+  const vm = addon.tab.traps.vm;
+  window.onerror = alert;
+  let customBlocks = {};
   const blockSwitches = {};
 
   const noopSwitch = {
     opcode: "noop",
   };
-
   if (addon.settings.get("motion")) {
     blockSwitches["motion_turnright"] = [
       noopSwitch,
@@ -556,7 +557,7 @@ export default async function ({ addon, global, console, msg }) {
   // Because we don't implement the switching ourselves, this is not controlled by the data category option.
   blockSwitches["data_variable"] = [];
   blockSwitches["data_listcontents"] = [];
-
+  
   const genuid = () => {
     const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
     let result = "";
@@ -566,7 +567,12 @@ export default async function ({ addon, global, console, msg }) {
     return result;
   };
 
-  const menuCallbackFactory = (block, opcodeData) => () => {
+  const menuCallbackFactory = (block, opcodeData, mode) => () => {
+    if (mode === "arg") {
+      block.setFieldValue(opcodeData, "VALUE");
+      return;
+    }
+    
     if (opcodeData.opcode === "noop") {
       return;
     }
@@ -596,22 +602,23 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     const pasteSeparately = [];
+    
+    let remap = opcodeData.remap;
+    
     // Apply input remappings.
-    if (opcodeData.remap) {
+    if (remap) {
       for (const child of Array.from(xml.children)) {
         const oldName = child.getAttribute("name");
-        const newName = opcodeData.remap[oldName];
+        const newName = remap[oldName];
         if (newName) {
           if (newName === "split") {
             // This input will be split off into its own script.
             const inputXml = child.firstChild;
             const inputId = inputXml.id;
             const inputBlock = workspace.getBlockById(inputId);
-
             const position = inputBlock.getRelativeToSurfaceXY();
             inputXml.setAttribute("x", Math.round(workspace.RTL ? -position.x : position.x));
-            inputXml.setAttribute("y", Math.round(position.y));
-
+            inputXml.setAttribute("y",   Math.round(position.y));
             pasteSeparately.push(inputXml);
             xml.removeChild(child);
           } else {
@@ -632,7 +639,7 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
     }
-
+    
     // Mark the latest event in the undo stack.
     // This will be used later to group all of our events.
     const undoStack = workspace.undoStack_;
@@ -646,17 +653,15 @@ export default async function ({ addon, global, console, msg }) {
     for (const separateBlock of pasteSeparately) {
       workspace.paste(separateBlock);
     }
-
     // The new block will have the same ID as the old one.
     const newBlock = workspace.getBlockById(id);
-
     if (parentConnection) {
       // Search for the same type of connection on the new block as on the old block.
       const newBlockConnections = newBlock.getConnections_();
       const newBlockConnection = newBlockConnections.find((c) => c.type === blockConnectionType);
       newBlockConnection.connect(parentConnection);
     }
-
+    
     // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
     // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
     setTimeout(() => {
@@ -666,13 +671,60 @@ export default async function ({ addon, global, console, msg }) {
       }
     }, 0);
   };
-
+  
   addon.tab.createBlockContextMenu(
     (items, block) => {
       if (!addon.self.disabled) {
-        const switches = blockSwitches[block.type] || [];
+        const type = block.type;
+        // switchType: "native" | "arg"
+        let switchType = "native";
+        let switches = blockSwitches[block.type] || [];
+        
+        const customArgsMode = addon.settings.get("customargs");
+        if (customArgsMode !== "off") {
+         if (["argument_reporter_boolean", "argument_reporter_string_number"].includes(type) && 
+             // if the arg is a shadow, it's in a procedures_prototype so we don't want it to be switchable
+             !block.isShadow() 
+           ) {
+            getCustomBlocks();
+            switchType = "arg";
+          }
+          if (customArgsMode === "all") {
+            switch (type) {
+              case "argument_reporter_string_number":
+                let stringArgs = Object.values(customBlocks).map(cb => cb.stringArgs).flat(1);
+                if (stringArgs.includes(block.getFieldValue("VALUE"))) {
+                  switches = stringArgs;
+                }
+                break;
+              case "argument_reporter_boolean":
+                let boolArgs = Object.values(customBlocks).map(cb => cb.boolArgs).flat(1);
+                if (boolArgs.includes(block.getFieldValue("VALUE"))) {
+                  switches = boolArgs;
+                }
+                break;
+            } 
+          } else if (customArgsMode === "defOnly") {
+            let root = block.getRootBlock();
+            if (root.type !== "procedures_definition") return items;
+            const customBlockObj = customBlocks[root.getChildren(true)[0].getProcCode()];
+            switch (type) {
+              case "argument_reporter_string_number":
+                if (customBlockObj.stringArgs.includes(block.getFieldValue("VALUE"))) {
+                  switches = customBlockObj.stringArgs;
+                }
+                break;
+              case "argument_reporter_boolean":
+                if (customBlockObj.boolArgs.includes(block.getFieldValue("VALUE"))) {
+                  switches = customBlockObj.boolArgs;
+                }
+                break;
+            } 
+          }
+        }
+        
         switches.forEach((opcodeData, i) => {
-          const isNoop = opcodeData.opcode === "noop";
+          const isNoop = switchType === "native" ? opcodeData.opcode === "noop" : opcodeData === block.getFieldValue("VALUE");
           if (isNoop && !addon.settings.get("noop")) return;
 
           const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
@@ -682,11 +734,11 @@ export default async function ({ addon, global, console, msg }) {
                 makeSpaceItemIndex
               : // If there's no such button, insert at end
                 items.length;
-
+          let text = switchType === "native" ? msg(isNoop ? block.type : opcodeData.opcode) : opcodeData;
           items.splice(insertBeforeIndex, 0, {
             enabled: true,
-            text: msg(isNoop ? block.type : opcodeData.opcode),
-            callback: menuCallbackFactory(block, opcodeData),
+            text,
+            callback: menuCallbackFactory(block, opcodeData, switchType),
             separator: addon.settings.get("border") && i === 0,
           });
         });
@@ -703,4 +755,25 @@ export default async function ({ addon, global, console, msg }) {
     },
     { blocks: true }
   );
+  
+  const getCustomBlocks = () => {
+    customBlocks = {};
+    const target = vm.editingTarget;
+    Object.entries(target.blocks._blocks)
+    .filter(([,block]) => block.opcode === "procedures_prototype").forEach(
+      ([id, block]) => addCustomBlock(id, block));
+  };
+  
+  const addCustomBlock = (id, block) => {
+    let { mutation: { proccode, argumentids, argumentnames, argumentdefaults }} = block;
+    customBlocks[proccode] = { stringArgs: [], boolArgs: [] };
+    let [ids, names, defaults] = [argumentids, argumentnames, argumentdefaults].map(JSON.parse);
+    for (let i = 0; i < ids.length; i++) {
+      if (defaults[i] === "") {
+        customBlocks[proccode].stringArgs.push(names[i]);
+      } else {
+        customBlocks[proccode].boolArgs.push(names[i]);
+      }
+    }
+  };
 }
