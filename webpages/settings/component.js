@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import getDirection from "../rtl-list.js";
 import loadVueComponent from "../../libraries/common/load-vue-components.js";
-import Fuse from "../../libraries/thirdparty/fuse.basic.esm.min.js";
+import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
@@ -26,8 +26,6 @@ export default async function ({ template }) {
   }
 
   let components = await loadVueComponent([
-    "webpages/settings/components/picker-component",
-    "webpages/settings/components/reset-dropdown",
     "webpages/settings/components/addon-group-header",
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
@@ -39,21 +37,17 @@ export default async function ({ template }) {
   let initialThemePath;
   const lightThemeLink = document.createElement("link");
   lightThemeLink.setAttribute("rel", "stylesheet");
-  lightThemeLink.setAttribute("href", "light.css");
+  lightThemeLink.setAttribute("href", "../styles/colors-light.css");
   lightThemeLink.setAttribute("data-below-vue-components", "");
-  chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
-    if (globalTheme === true) {
-      document.head.appendChild(lightThemeLink);
-    }
-    const themePath = globalTheme ? "../../images/icons/moon.svg" : (initialThemePath = "../../images/icons/theme.svg");
-    // if (vue) {
-    //   vue.theme = globalTheme;
-    //   vue.themePath = themePath;
-    // } else {
-    initialTheme = globalTheme;
-    initialThemePath = themePath;
-    // }
-    if (!isIframe) document.body.style.display = "";
+  await new Promise((resolve) => {
+    chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
+      if (globalTheme === true) {
+        document.head.appendChild(lightThemeLink);
+      }
+      initialTheme = globalTheme;
+      initialThemePath = globalTheme ? "../../images/icons/moon.svg" : "../../images/icons/theme.svg";
+      resolve();
+    });
   });
 
   let iframeData;
@@ -70,6 +64,8 @@ export default async function ({ template }) {
         });
       });
     });
+  } else {
+    document.body.style.display = "";
   }
 
   const browserLevelPermissions = ["notifications"];
@@ -88,6 +84,8 @@ export default async function ({ template }) {
     template,
     components,
     data() {
+      window.settingsContext = this;
+
       const cleanManifests = [];
       for (const { manifest, addonId } of manifests) {
         manifest._categories = [];
@@ -258,7 +256,7 @@ export default async function ({ template }) {
         categoryOpen: true,
         searchLoaded: false,
         manifests: manifests.map(({ manifest }) => manifest),
-        manifestsById: {},
+        manifestsById,
         selectedCategory: "all",
         searchInput: "",
         searchInputReal: "",
@@ -272,6 +270,18 @@ export default async function ({ template }) {
         browserLevelPermissions,
         grantedOptionalPermissions,
         addonListObjs,
+        sidebarUrls: (() => {
+          const uiLanguage = chrome.i18n.getUILanguage();
+          const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+          const version = chrome.runtime.getManifest().version;
+          const versionName = chrome.runtime.getManifest().version_name;
+          const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
+          return {
+            contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
+            feedback: `https://scratchaddons.com/${localeSlash}feedback/?version=${versionName}&${utm}`,
+            changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
+          };
+        })(),
       };
     },
     computed: {
@@ -342,9 +352,9 @@ export default async function ({ template }) {
         this.searchInputReal = "";
       },
       setTheme(mode) {
-        chrome.storage.sync.get(["globalTheme"], function (r) {
+        chrome.storage.sync.get(["globalTheme"], (r) => {
           let rr = mode ?? true;
-          chrome.storage.sync.set({ globalTheme: rr }, function () {
+          chrome.storage.sync.set({ globalTheme: rr }, () => {
             if (rr && r.globalTheme !== rr) {
               document.head.appendChild(lightThemeLink);
               this.theme = true;
@@ -485,148 +495,144 @@ export default async function ({ template }) {
       // we also manually focus on Firefox, even in fullscreen
       if (isIframe || typeof browser !== "undefined")
         setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
-    },
-    directives: {
-      "click-outside": {
-        priority: 700,
-        bind() {
-          let self = this;
-          this.event = function (event) {
-            self.vm.$emit(self.expression, event);
-          };
-          this.el.addEventListener("mousedown", this.stopProp);
-          document.body.addEventListener("mousedown", this.event);
-        },
 
-        unbind() {
-          this.el.removeEventListener("mousedown", this.stopProp);
-          document.body.removeEventListener("mousedown", this.event);
-        },
-        stopProp(event) {
-          event.stopPropagation();
-        },
-      },
+      window.addEventListener("keydown", function (e) {
+        if (e.ctrlKey && e.key === "f") {
+          e.preventDefault();
+          document.querySelector("#searchBox").focus();
+        } else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
+          e.preventDefault();
+          this.searchInputReal = "";
+        }
+      });
+
+      const resize = () => {
+        if (window.innerWidth < 1000) {
+          this.smallMode = true;
+          this.categoryOpen = false;
+          this.switchPath = "../../images/icons/switch.svg";
+        } else if (this.smallMode !== false) {
+          this.smallMode = false;
+          this.categoryOpen = true;
+          this.switchPath = "../../images/icons/close.svg";
+        }
+      };
+      window.onresize = resize;
+      resize();
+
+      // Konami code easter egg
+      let cursor = 0;
+      const KONAMI_CODE = [
+        "ArrowUp",
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "ArrowLeft",
+        "ArrowRight",
+        "KeyB",
+        "KeyA",
+      ];
+      document.addEventListener("keydown", (e) => {
+        cursor = e.code === KONAMI_CODE[cursor] ? cursor + 1 : 0;
+        if (cursor === KONAMI_CODE.length) {
+          this.selectedCategory = "easterEgg";
+          setTimeout(() => (this.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
+        }
+      });
     },
   });
   return { "settings-page": SettingsPage };
 }
 
-// (async () => {
-//   let handleConfirmClicked = null;
+Vue.directive("click-outside", {
+  priority: 700,
+  bind() {
+    let self = this;
+    this.event = function (event) {
+      self.vm.$emit(self.expression, event);
+    };
+    this.el.addEventListener("mousedown", this.stopProp);
+    document.body.addEventListener("mousedown", this.event);
+  },
 
-//   const serializeSettings = async () => {
-//     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-//     const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
-//     const serialized = {
-//       core: {
-//         lightTheme: storedSettings.globalTheme,
-//         version: chrome.runtime.getManifest().version_name,
-//       },
-//       addons: {},
-//     };
-//     for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
-//       serialized.addons[addonId] = {
-//         enabled: storedSettings.addonsEnabled[addonId],
-//         settings: storedSettings.addonSettings[addonId] || {},
-//       };
-//     }
-//     return JSON.stringify(serialized);
-//   };
+  unbind() {
+    this.el.removeEventListener("mousedown", this.stopProp);
+    document.body.removeEventListener("mousedown", this.event);
+  },
+  stopProp(event) {
+    event.stopPropagation();
+  },
+});
 
-//   const deserializeSettings = async (str, manifests, confirmElem) => {
-//     const obj = JSON.parse(str);
-//     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
-//     const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
-//     const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
-//     const pendingPermissions = {};
-//     for (const addonId of Object.keys(obj.addons)) {
-//       const addonValue = obj.addons[addonId];
-//       const addonManifest = manifests.find((m) => m._addonId === addonId);
-//       if (!addonManifest) continue;
-//       const permissionsRequired = addonManifest.permissions || [];
-//       const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
-//       console.log(addonId, permissionsRequired, browserPermissionsRequired);
-//       if (addonValue.enabled && browserPermissionsRequired.length) {
-//         pendingPermissions[addonId] = browserPermissionsRequired;
-//       } else {
-//         addonsEnabled[addonId] = addonValue.enabled;
-//       }
-//       addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
-//     }
-//     if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
-//     let resolvePromise = null;
-//     const resolveOnConfirmPromise = new Promise((resolve) => {
-//       resolvePromise = resolve;
-//     });
-//     handleConfirmClicked = async () => {
-//       handleConfirmClicked = null;
-//       if (Object.keys(pendingPermissions).length) {
-//         const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
-//           permissions: Object.values(pendingPermissions).flat(),
-//         });
-//         console.log(pendingPermissions, granted);
-//         Object.keys(pendingPermissions).forEach((addonId) => {
-//           addonsEnabled[addonId] = granted;
-//         });
-//       }
-//       await syncSet({
-//         globalTheme: !!obj.core.lightTheme,
-//         addonsEnabled,
-//         addonSettings,
-//       });
-//       resolvePromise();
-//     };
-//     confirmElem.classList.remove("hidden-button");
-//     confirmElem.addEventListener("click", handleConfirmClicked, { once: true });
-//     return resolveOnConfirmPromise;
-//   };
+let handleConfirmClicked = null;
 
-//   window.addEventListener("keydown", function (e) {
-//     if (e.ctrlKey && e.key === "f") {
-//       e.preventDefault();
-//       document.querySelector("#searchBox").focus();
-//     } else if (e.key === "Escape" && document.activeElement === document.querySelector("#searchBox")) {
-//       e.preventDefault();
-//       vue.searchInputReal = "";
-//     }
-//   });
+const serializeSettings = async () => {
+  const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
+  const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
+  const serialized = {
+    core: {
+      lightTheme: storedSettings.globalTheme,
+      version: chrome.runtime.getManifest().version_name,
+    },
+    addons: {},
+  };
+  for (const addonId of Object.keys(storedSettings.addonsEnabled)) {
+    serialized.addons[addonId] = {
+      enabled: storedSettings.addonsEnabled[addonId],
+      settings: storedSettings.addonSettings[addonId] || {},
+    };
+  }
+  return JSON.stringify(serialized);
+};
 
-//   document.title = chrome.i18n.getMessage("settingsTitle");
-//   function resize() {
-//     if (window.innerWidth < 1000) {
-//       vue.smallMode = true;
-//       vue.categoryOpen = false;
-//       vue.switchPath = "../../images/icons/switch.svg";
-//     } else if (vue.smallMode !== false) {
-//       vue.smallMode = false;
-//       vue.categoryOpen = true;
-//       vue.switchPath = "../../images/icons/close.svg";
-//     }
-//   }
-//   window.onresize = resize;
-//   resize();
+const deserializeSettings = async (str, manifests, confirmElem) => {
+  const obj = JSON.parse(str);
+  const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
+  const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
+  const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
+  const pendingPermissions = {};
+  for (const addonId of Object.keys(obj.addons)) {
+    const addonValue = obj.addons[addonId];
+    const addonManifest = manifests.find((m) => m._addonId === addonId);
+    if (!addonManifest) continue;
+    const permissionsRequired = addonManifest.permissions || [];
+    const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
+    console.log(addonId, permissionsRequired, browserPermissionsRequired);
+    if (addonValue.enabled && browserPermissionsRequired.length) {
+      pendingPermissions[addonId] = browserPermissionsRequired;
+    } else {
+      addonsEnabled[addonId] = addonValue.enabled;
+    }
+    addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
+  }
+  if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
+  let resolvePromise = null;
+  const resolveOnConfirmPromise = new Promise((resolve) => {
+    resolvePromise = resolve;
+  });
+  handleConfirmClicked = async () => {
+    handleConfirmClicked = null;
+    if (Object.keys(pendingPermissions).length) {
+      const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
+        permissions: Object.values(pendingPermissions).flat(),
+      });
+      console.log(pendingPermissions, granted);
+      Object.keys(pendingPermissions).forEach((addonId) => {
+        addonsEnabled[addonId] = granted;
+      });
+    }
+    await syncSet({
+      globalTheme: !!obj.core.lightTheme,
+      addonsEnabled,
+      addonSettings,
+    });
+    resolvePromise();
+  };
+  confirmElem.classList.remove("hidden-button");
+  confirmElem.addEventListener("click", handleConfirmClicked, { once: true });
+  return resolveOnConfirmPromise;
+};
 
-//   // Konami code easter egg
-//   let cursor = 0;
-//   const KONAMI_CODE = [
-//     "ArrowUp",
-//     "ArrowUp",
-//     "ArrowDown",
-//     "ArrowDown",
-//     "ArrowLeft",
-//     "ArrowRight",
-//     "ArrowLeft",
-//     "ArrowRight",
-//     "KeyB",
-//     "KeyA",
-//   ];
-//   document.addEventListener("keydown", (e) => {
-//     cursor = e.code === KONAMI_CODE[cursor] ? cursor + 1 : 0;
-//     if (cursor === KONAMI_CODE.length) {
-//       vue.selectedCategory = "easterEgg";
-//       setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
-//     }
-//   });
-
-//   chrome.runtime.sendMessage("checkPermissions");
-// })();
+chrome.runtime.sendMessage("checkPermissions");

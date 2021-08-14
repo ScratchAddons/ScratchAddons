@@ -1,7 +1,14 @@
+import loadVueComponent from "../../../libraries/common/load-vue-components.js";
+let components = await loadVueComponent([
+  "webpages/settings/components/reset-dropdown",
+  "webpages/settings/components/picker-component",
+]);
+
 export default async function ({ template }) {
   const AddonSetting = Vue.extend({
     props: ["addon", "setting", "addon-settings"],
     template,
+    components,
     computed: {
       show() {
         if (!this.setting.if) return true;
@@ -10,7 +17,7 @@ export default async function ({ template }) {
           const arr = Array.isArray(this.setting.if.addonEnabled)
             ? this.setting.if.addonEnabled
             : [this.setting.if.addonEnabled];
-          if (arr.some((addon) => this.$root.manifestsById[addon]._enabled === true)) return true;
+          if (arr.some((addon) => settingsContext.manifestsById[addon]._enabled === true)) return true;
         }
 
         if (this.setting.if.settings) {
@@ -83,11 +90,11 @@ export default async function ({ template }) {
         this.updateOption(e.target.value);
       },
       msg(...params) {
-        return this.$root.msg(...params);
+        return settingsContext.msg(...params);
       },
       updateSettings(...params) {
         if (!params[0]) params[0] = this.addon;
-        this.$root.updateSettings(...params);
+        settingsContext.updateSettings(...params);
       },
       updateOption(newValue) {
         this.addonSettings[this.addon._addonId][this.setting.id] = newValue;
@@ -96,10 +103,10 @@ export default async function ({ template }) {
     },
     events: {
       closePickers(...params) {
-        return this.$root.closePickers(...params);
+        return settingsContext.closePickers(...params);
       },
       closeResetDropdowns(...params) {
-        return this.$root.closeResetDropdowns(...params);
+        return settingsContext.closeResetDropdowns(...params);
       },
     },
   });
