@@ -80,6 +80,7 @@ export default async function ({ template }) {
   chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
   chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
 
+  let fuse;
   const SettingsPage = Vue.extend({
     template,
     components,
@@ -170,7 +171,7 @@ export default async function ({ template }) {
         manifestsById[manifest._addonId] = manifest;
       }
 
-      let fuse = new Fuse(cleanManifests, fuseOptions);
+      fuse = new Fuse(cleanManifests, fuseOptions);
       const checkTag = (tagOrTags, manifestA, manifestB) => {
         const tags = Array.isArray(tagOrTags) ? tagOrTags : [tagOrTags];
         const aHasTag = tags.some((tag) => manifestA.tags.includes(tag));
