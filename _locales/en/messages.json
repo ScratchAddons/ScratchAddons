@@ -44,6 +44,9 @@
   "recommended": {
     "message": "Recommended"
   },
+  "featured": {
+    "message": "Featured"
+  },
   "beta": {
     "message": "Beta"
   },
