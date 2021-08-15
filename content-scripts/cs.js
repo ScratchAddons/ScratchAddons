@@ -403,7 +403,7 @@ function forumWarning(key) {
     const uiLanguage = chrome.i18n.getUILanguage();
     const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
     const utm = `utm_source=extension&utm_medium=forumwarning&utm_campaign=v${chrome.runtime.getManifest().version}`;
-    reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?version=${
+    reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${
       chrome.runtime.getManifest().version
     }&${utm}`;
     reportLink.target = "_blank";
@@ -513,9 +513,9 @@ const showBanner = () => {
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
-    href: `https://scratchaddons.com/${localeSlash}feedback/?version=${
+    href: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${
       chrome.runtime.getManifest().version
-    }-notif&${utm}`,
+    }&${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("feedback"),
   });

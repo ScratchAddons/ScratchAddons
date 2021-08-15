@@ -1,0 +1,25 @@
+{
+  "name": "Show user IDs",
+  "description": "Adds the user ID next to the username at the top of profile pages.",
+  "credits": [
+    {
+      "name": "LankyBox01",
+      "link": "https://lankybox01.leahcimto.com/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["profiles"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["profiles"]
+    }
+  ],
+  "tags": ["community", "profiles"],
+  "versionAdded": "1.19.0",
+  "enabledByDefault": false
+}
