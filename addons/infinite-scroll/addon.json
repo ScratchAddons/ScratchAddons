@@ -75,9 +75,8 @@
     {
       "url": "forumScroll.js",
       "matches": ["https://scratch.mit.edu/discuss/*/"],
-      "settingMatch": {
-        "id": "forumScroll",
-        "value": true
+      "if": {
+        "settings": { "forumScroll": true }
       }
     },
     {
@@ -103,17 +102,15 @@
     {
       "url": "footer.css",
       "matches": ["https://scratch.mit.edu/*"],
-      "settingMatch": {
-        "id": "showFooter",
-        "value": true
+      "if": {
+        "settings": { "showFooter": true }
       }
     },
     {
       "url": "discuss.css",
       "matches": ["https://scratch.mit.edu/discuss/*/"],
-      "settingMatch": {
-        "id": "forumScroll",
-        "value": true
+      "if": {
+        "settings": { "forumScroll": true }
       }
     }
   ],

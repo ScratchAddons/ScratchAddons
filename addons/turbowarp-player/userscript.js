@@ -19,6 +19,7 @@ export default async function ({ addon, console, msg }) {
     scratchStage.style.display = "";
     button.classList.remove("scratch");
     playerToggled = false;
+    button.title = "TurboWarp";
   }
 
   button.onclick = async () => {
@@ -36,14 +37,13 @@ export default async function ({ addon, console, msg }) {
 
         scratchStage.style.display = "none";
         button.classList.add("scratch");
+        button.title = "Scratch";
         addon.tab.traps.vm.stopAll();
       } else removeIframe();
     } else {
       window.open("https://turbowarp.org/" + window.location.pathname.split("/")[2], "_blank", "noopener,noreferrer");
     }
   };
-
-  addon.tab.addEventListener("urlChange", removeIframe);
 
   let showAlert = true;
   while (true) {

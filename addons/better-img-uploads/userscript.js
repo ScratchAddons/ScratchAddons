@@ -14,8 +14,8 @@ export default async function ({ addon, console, safeMsg: m }) {
     addon.self.dir + "/icon.svg"
   }" height="10", width="10">
      <input accept=".svg, .png, .bmp, .jpg, .jpeg" class="${addon.tab.scratchClass(
-       "action-menu_file-input"
-     )}" multiple="" type="file">
+       "action-menu_file-input" /* TODO: when adding dynamicDisable, ensure compat with drag-drop */
+     )} sa-better-img-uploads-input" multiple="" type="file">
   </button>
   <div class="__react_component_tooltip place-${right ? "left" : "right"} type-dark ${addon.tab.scratchClass(
     "action-menu_tooltip"
@@ -24,12 +24,13 @@ export default async function ({ addon, console, safeMsg: m }) {
 
   while (true) {
     //Catch all upload menus as they are created
-    let menu = await addon.tab.waitForElement('[class*="action-menu_more-buttons_"]', { markAsSeen: true });
+    let menu = await addon.tab.waitForElement(
+      '[class*="sprite-selector_sprite-selector_"] [class*="action-menu_more-buttons_"], #react-tabs-3 [class*="action-menu_more-buttons_"]',
+      { markAsSeen: true }
+    );
     let button = menu.parentElement.previousElementSibling.previousElementSibling; //The base button that the popup menu is from
 
     let id = button.getAttribute("aria-label").replace(/\s+/g, "_");
-
-    if (id === "Choose_a_Sound") continue; //Don't want it in the sounds tab!
 
     let isRight = //Is it on the right side of the screen?
       button.parentElement.classList.contains(addon.tab.scratchClass("sprite-selector_add-button")) ||

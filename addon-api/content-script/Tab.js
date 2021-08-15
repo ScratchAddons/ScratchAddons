@@ -325,7 +325,7 @@ export default class Tab extends Listenable {
       afterSoundTab: {
         element: () => q("[class^='react-tabs_react-tabs__tab-list']"),
         from: () => [q("[class^='react-tabs_react-tabs__tab-list']").children[2]],
-        until: () => [q(".s3devToolBar")],
+        until: () => [q("#s3devToolBar")],
       },
       forumsBeforePostReport: {
         element: () => scope.querySelector(".postfootright > ul"),
@@ -378,6 +378,46 @@ export default class Tab extends Listenable {
           q(".studio-tabs div:nth-child(2) > .commenting-status"),
           q(".studio-tabs div:nth-child(2) > .studio-members"),
         ],
+      },
+      forumToolbarTextDecoration: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton4")],
+        until: () => [q(".markItUpButton4 ~ .markItUpSeparator")],
+      },
+      forumToolbarLinkDecoration: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton6")],
+        until: () => [q(".markItUpButton6 ~ .markItUpSeparator")],
+      },
+      forumToolbarFont: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton7")],
+        until: () => [q(".markItUpButton7 ~ .markItUpSeparator")],
+      },
+      forumToolbarList: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton10")],
+        until: () => [q(".markItUpButton10 ~ .markItUpSeparator")],
+      },
+      forumToolbarDecoration: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton12")],
+        until: () => [q(".markItUpButton12 ~ .markItUpSeparator")],
+      },
+      forumToolbarEnvironment: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton13")],
+        until: () => [q(".markItUpButton13 ~ .markItUpSeparator")],
+      },
+      forumToolbarScratchblocks: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton14")],
+        until: () => [q(".markItUpButton14 ~ .markItUpSeparator")],
+      },
+      forumToolbarTools: {
+        element: () => q(".markItUpHeader > ul"),
+        from: () => [q(".markItUpButton16")],
+        until: () => [],
       },
     };
 
@@ -471,7 +511,7 @@ export default class Tab extends Listenable {
    * Callback to modify the context menu.
    * @callback Tab~blockContextMenuCallback
    * @param {Tab~ContextMenuItem[]} items - the items added by vanilla code or other addons.
-   * @param {?object} block - the targetted block, if any.
+   * @param {?object} block - the targeted block, if any.
    * @returns {Tab~ContextMenuItem[]} the array that contains values of items array as well as new items.
    */
 
@@ -509,7 +549,13 @@ export default class Tab extends Listenable {
             (flyout && gesture.flyout_) ||
             // Comments
             (comments && gesture.startBubble_);
-          if (injectMenu) items = callback(items, block);
+          if (injectMenu) {
+            try {
+              items = callback(items, block);
+            } catch (e) {
+              console.error("Error while calling context menu callback: ", e);
+            }
+          }
         }
 
         oldShow.call(this, event, items, rtl);
