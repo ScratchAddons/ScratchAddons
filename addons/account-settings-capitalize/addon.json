@@ -7,6 +7,6 @@
       "matches": ["https://scratch.mit.edu/*"]
     }
   ],
-  "tags": ["community"],
+  "tags": ["easterEgg", "community"],
   "versionAdded": "1.9.0"
 }
