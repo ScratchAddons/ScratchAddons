@@ -601,13 +601,11 @@ export default async function ({ addon, global, console, msg }) {
 
     const pasteSeparately = [];
 
-    let remap = opcodeData.remap;
-
     // Apply input remappings.
-    if (remap) {
+    if (opcodeData.remap) {
       for (const child of Array.from(xml.children)) {
         const oldName = child.getAttribute("name");
-        const newName = remap[oldName];
+        const newName = opcodeData.remap[oldName];
         if (newName) {
           if (newName === "split") {
             // This input will be split off into its own script.
