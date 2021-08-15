@@ -1,6 +1,6 @@
 {
   "name": "Show user IDs",
-  "description": "Allows you to view any user's ID on their profile page.",
+  "description": "Adds the user ID next to the username at the top of profile pages.",
   "credits": [
     {
       "name": "LankyBox01",
@@ -10,10 +10,10 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/users/*"]
+      "matches": ["profiles"]
     }
   ],
   "tags": ["community", "profiles"],
-  "versionAdded": "1.18.0",
+  "versionAdded": "1.19.0",
   "enabledByDefault": false
 }
