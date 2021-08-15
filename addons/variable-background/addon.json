@@ -1,0 +1,27 @@
+{
+    "name": "Customizable Variable Background",
+    "description": "Removes the blue overlay and replaces it with a more modern blur when creating a new variable in the editor.",
+    "credits": [
+      {
+        "name": "Cool Scratcher",
+        "link": "https://github.com/Cool-Scratcher"
+      }
+    ],
+    "userstyles": [
+        {
+            "url": "style.css",
+            "matches": ["https://scratch.mit.edu/projects/*"]
+        }
+    ],
+    "settings": [
+        {
+          "name": "Amount to blur the background",
+          "id": "blur",
+          "type": "positive_integer",
+          "default": 5
+        }
+      ],
+    "versionAdded": "1.19.0",
+    "tags": ["editor", "codeEditor"],
+    "enabledByDefault": false
+  }

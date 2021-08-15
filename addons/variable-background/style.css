@@ -1,0 +1,4 @@
+.modal_modal-overlay_1Lcbx {
+    background-color: transparent; /*bye bye blue */
+    backdrop-filter: blur(calc(var(--variableBackground-blur) * 1px)); /*taking value set by user and turning into a useable value (adding "px")*/ 
+}
