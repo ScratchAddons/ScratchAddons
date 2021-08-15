@@ -91,9 +91,10 @@
     {
       "url": "moveDonor.js",
       "matches": ["https://scratch.mit.edu/"],
-      "settingMatch": {
-        "id": "showFooter",
-        "value": true
+      "if": {
+        "settings": {
+          "showFooter": true
+        }
       },
       "runAtComplete": false
     }

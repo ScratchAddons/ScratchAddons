@@ -11,25 +11,28 @@
     {
       "url": "hide_outline.css",
       "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
-      "settingMatch": {
-        "id": "hide-outline",
-        "value": true
+      "if": {
+        "settings": {
+          "hide-outline": true
+        }
       }
     },
     {
       "url": "outline_color.css",
       "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
-      "settingMatch": {
-        "id": "hide-outline",
-        "value": false
+      "if": {
+        "settings": {
+          "hide-outline": false
+        }
       }
     },
     {
       "url": "fill_transparent.css",
       "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"],
-      "settingMatch": {
-        "id": "fill-transparent",
-        "value": true
+      "if": {
+        "settings": {
+          "fill-transparent": true
+        }
       }
     }
   ],
