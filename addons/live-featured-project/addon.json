@@ -66,6 +66,15 @@
       "if": {
         "settings": { "alternativePlayer": ["turbowarp", "forkphorus"] }
       }
+    },
+    {
+      "id": "enableTWAddons",
+      "name": "Enable TurboWarp addons",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": { "alternativePlayer": ["turbowarp"] }
+      }
     }
   ],
   "tags": ["community", "profiles"],

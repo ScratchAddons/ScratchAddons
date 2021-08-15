@@ -7,6 +7,10 @@ export default async function ({ addon, console, msg }) {
   let twIframe = document.createElement("iframe");
   twIframe.setAttribute("allowtransparency", "true");
   twIframe.setAttribute("allowfullscreen", "true");
+  twIframe.setAttribute(
+    "allow",
+    "autoplay *; camera https://turbowarp.org; document-domain 'none'; fullscreen *; gamepad https://turbowarp.org; microphone https://turbowarp.org;"
+  );
   twIframe.className = "sa-tw-iframe";
   twIframeContainer.appendChild(twIframe);
 
@@ -27,9 +31,14 @@ export default async function ({ addon, console, msg }) {
       playerToggled = !playerToggled;
       if (playerToggled) {
         const username = await addon.auth.fetchUsername();
-        const usernameUrlParam = username ? `?username=${username}` : "";
+        const usp = new URLSearchParams();
+        if (username) usp.set("username", username);
         const projectId = window.location.pathname.split("/")[2];
-        const iframeUrl = `https://turbowarp.org/${projectId}/embed${usernameUrlParam}`;
+        if (addon.settings.get("addons")) {
+          const enabledAddons = await addon.getEnabledAddons("editor");
+          usp.set("addons", enabledAddons.join(","));
+        }
+        const iframeUrl = `https://turbowarp.org/${projectId}/embed?${usp}`;
         twIframe.src = "";
         scratchStage.parentElement.prepend(twIframeContainer);
         // Use location.replace to avoid creating a history entry
