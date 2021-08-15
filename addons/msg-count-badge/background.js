@@ -1,12 +1,23 @@
 export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
-  const setBadge = async () => {
-    const msgCount = await addon.account.getMsgCount();
-    addon.badge.text = msgCount;
+  let msgCount;
+
+  const setBadge = () => {
+    if (msgCount === null && addon.settings.get("showOffline")) {
+      addon.badge.color = "#dd2222";
+      addon.badge.text = "?";
+    } else {
+      addon.badge.color = addon.settings.get("color");
+      addon.badge.text = msgCount;
+    }
   };
-  setBadge();
-  addon.badge.color = addon.settings.get("color");
-  addon.settings.addEventListener("change", () => {
-    addon.badge.color = addon.settings.get("color");
-  });
-  setInterval(setBadge, 2500);
+  const getMsgCountAndSetBadge = async () => {
+    msgCount = await addon.account.getMsgCount();
+    setBadge();
+  };
+
+  getMsgCountAndSetBadge();
+
+  addon.settings.addEventListener("change", setBadge);
+
+  setInterval(getMsgCountAndSetBadge, 2500);
 }

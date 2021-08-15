@@ -279,7 +279,7 @@ const WELL_KNOWN_PATTERNS = {
   editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
   forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
   scratchWWWNoProject:
-    /^\/(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|dmca|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|sec|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?)\/?$/,
+    /^\/(?:(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|DMCA|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?)\/?)?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {
@@ -289,13 +289,45 @@ const WELL_KNOWN_MATCHERS = {
   },
 };
 
+function matchesIf(injectable, settings) {
+  // injectable.if is guaranteed to exist
+  // addonEnabled and settings are AND-ed
+  // settings keys are AND-ed
+  // addonEnabled and settings values are OR-ed
+
+  /**
+   * Formula:
+   * NOT (
+   *  (addonEnabled exists AND all of the addons are disabled) OR
+   *  (settings exists AND there is a setting where none of potential values match)
+   * )
+   * Or,
+   * NOT (
+   *  (addonEnabled AND AND(addons**Dis**abled)) OR
+   *  (settings exists AND OR(AND(settings do **NOT** match)))
+   * )
+   */
+
+  return !(
+    (injectable.if.addonEnabled?.length &&
+      (Array.isArray(injectable.if.addonEnabled) ? injectable.if.addonEnabled : [injectable.if.addonEnabled]).every(
+        (addon) => !scratchAddons.localState.addonsEnabled[addon]
+      )) ||
+    (injectable.if.settings &&
+      Object.keys(injectable.if.settings).some((settingName) =>
+        (Array.isArray(injectable.if.settings[settingName])
+          ? injectable.if.settings[settingName]
+          : [injectable.if.settings[settingName]]
+        ).every((possibleValue) => settings[settingName] !== possibleValue)
+      ))
+  );
+}
+
 // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
 // matchesPattern = "*" | regexPattern | Array<wellKnownName | wellKnownMatcher | regexPattern | legacyPattern>
 function userscriptMatches(data, scriptOrStyle, addonId) {
-  if (scriptOrStyle.settingMatch) {
-    const { id, value } = scriptOrStyle.settingMatch;
-    if (scratchAddons.globalState.addonSettings[addonId][id] !== value) return false;
-  }
+  if (scriptOrStyle.if && !matchesIf(scriptOrStyle, scratchAddons.globalState.addonSettings[addonId])) return false;
+
   const url = data.url;
   const parsedURL = new URL(url);
   const { matches, _scratchDomainImplied } = scriptOrStyle;

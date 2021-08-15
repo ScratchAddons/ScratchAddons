@@ -83,6 +83,10 @@ function updateSettings(addon, newStyle) {
       tertiaryColor: "#0B8E69",
       alt: "pen",
     },
+    sa: {
+      color: "#29beb8",
+      tertiaryColor: "#3aa8a4",
+    },
   };
 
   for (var prop of Object.keys(categories)) {
@@ -163,6 +167,12 @@ function updateSettings(addon, newStyle) {
           background-color: ${tertiary};
         }`;
       }
+      if (prop === "sa") {
+        stylesheet += `path.blocklyBlockBackground[fill="#29beb8"] {
+          fill: var(--editorTheme3-${prop}Color);
+          ${textMode === "black" ? "--sa-block-text-color: #575e75;" : ""}
+        }`;
+      }
     } else {
       let background = { colorOnWhite: "#fff", colorOnBlack: "#282828" }[textMode];
       let inputShadow = { colorOnWhite: "#00000026", colorOnBlack: "#fff3" }[textMode];
@@ -178,7 +188,7 @@ function updateSettings(addon, newStyle) {
         --sa-block-secondary-color: ${secondaryActive};
       }
       g[data-category="${prop}"] > .blocklyText,
-      g[data-category="${prop}"] > g:not(.blocklyDraggable) > .blocklyText /* variable and list reporters */ {
+      g[data-category="${prop}"] > g:not([data-id]) > .blocklyText /* variable and list reporters */ {
         fill: var(--editorTheme3-${settingName}Color);
       }
       g[data-category="${prop}"] > g[data-argument-type="dropdown"] > .blocklyDropdownText,
@@ -344,6 +354,20 @@ function updateSettings(addon, newStyle) {
         #s3devIDD > li.extension:hover,
         #s3devIDD > li.extension.sel {
           background-color: ${secondaryActive};
+        }`;
+      }
+      if (prop === "sa") {
+        stylesheet += `path.blocklyBlockBackground[fill="#29beb8"] {
+          fill: ${background};
+          stroke: var(--editorTheme3-${prop}Color);
+          --sa-block-text-color: ${menuText};
+          --sa-block-secondary-color: ${secondaryActive};
+        }
+        path.blocklyBlockBackground[fill="#29beb8"] ~ .blocklyText {
+          fill: var(--editorTheme3-${prop}Color);
+        }
+        path.blocklyBlockBackground[fill="#29beb8"] ~ [data-argument-type="text"] > path {
+          stroke: var(--editorTheme3-${prop}Color);
         }`;
       }
     }

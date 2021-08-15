@@ -1,5 +1,6 @@
 <template>
   <div
+    v-show="show"
     class="addon-setting"
     :class="{
     'boolean-setting': setting.type === 'boolean',
@@ -109,9 +110,10 @@
         type="button"
         class="large-button clear-button"
         :disabled="!addon._enabled"
+        :title="msg('reset')"
         @click="updateOption(setting.default)"
       >
-        <span>{{ msg("reset") }}</span><img src="../../images/icons/undo.svg" class="icon-type" />
+        <img src="../../images/icons/undo.svg" class="icon-type" />
       </button>
     </div>
   </div>

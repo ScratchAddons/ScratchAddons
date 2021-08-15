@@ -212,6 +212,9 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
   const setVar = (addonId, varName, value) =>
     document.documentElement.style.setProperty(`--${hyphensToCamelCase(addonId)}-${varName}`, value);
 
+  const removeVar = (addonId, varName) =>
+    document.documentElement.style.removeProperty(`--${hyphensToCamelCase(addonId)}-${varName}`);
+
   const addonIds = addonsWithUserstyles.map((obj) => obj.addonId);
 
   // Set variables for settings
@@ -231,6 +234,9 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
     switch (obj.type) {
       case "settingValue":
         return addonSettings[addonId][obj.settingId];
+      case "ternary":
+        // this is not even a color lol
+        return getColor(addonId, obj.source) ? obj.true : obj.false;
       case "textColor": {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
@@ -267,7 +273,12 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
     const addonId = addon.addonId;
     for (const customVar of addon.cssVariables) {
       const varName = customVar.name;
-      setVar(addonId, varName, getColor(addonId, customVar.value));
+      const varValue = getColor(addonId, customVar.value);
+      if (varValue === null && customVar.dropNull) {
+        removeVar(addonId, varName);
+      } else {
+        setVar(addonId, varName, varValue);
+      }
     }
   }
 }
@@ -392,7 +403,7 @@ function forumWarning(key) {
     const uiLanguage = chrome.i18n.getUILanguage();
     const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
     const utm = `utm_source=extension&utm_medium=forumwarning&utm_campaign=v${chrome.runtime.getManifest().version}`;
-    reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?version=${
+    reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${
       chrome.runtime.getManifest().version
     }&${utm}`;
     reportLink.target = "_blank";
@@ -429,8 +440,10 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=4OluKLESoVU",
+    href: "https://www.youtube.com/watch?v=GrKHdKQq_hc",
     target: "_blank",
+    rel: "noopener",
+    referrerPolicy: "strict-origin-when-cross-origin",
   });
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
@@ -500,9 +513,9 @@ const showBanner = () => {
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
-    href: `https://scratchaddons.com/${localeSlash}feedback/?version=${
+    href: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${
       chrome.runtime.getManifest().version
-    }-notif&${utm}`,
+    }&${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("feedback"),
   });
