@@ -680,15 +680,14 @@ export default async function ({ addon, global, console, msg }) {
         let switches = blockSwitches[block.type] || [];
 
         const customArgsMode = addon.settings.get("customargs");
-        if (customArgsMode !== "off") {
-          if (
-            ["argument_reporter_boolean", "argument_reporter_string_number"].includes(type) &&
-            // if the arg is a shadow, it's in a procedures_prototype so we don't want it to be switchable
-            !block.isShadow()
-          ) {
-            getCustomBlocks();
-            switchType = "arg";
-          }
+        if (
+          customArgsMode !== "off" &&
+          ["argument_reporter_boolean", "argument_reporter_string_number"].includes(type) &&
+          // if the arg is a shadow, it's in a procedures_prototype so we don't want it to be switchable
+          !block.isShadow()
+        ) {
+          getCustomBlocks();
+          switchType = "arg";
           if (customArgsMode === "all") {
             switch (type) {
               case "argument_reporter_string_number":
