@@ -415,6 +415,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           obj.matchesCategory =
             !shouldHideAsEasterEgg && (newValue === "all" || obj.manifest._categories.includes(newValue));
         });
+        if (newValue === "forums") this.addonGroups.find((group) => group.id === "forums").expanded = true;
       },
     },
     ready() {
