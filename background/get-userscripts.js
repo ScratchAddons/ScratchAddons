@@ -8,6 +8,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
+          void chrome.runtime.lastError;
           if (res) {
             (async () => {
               const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
@@ -41,7 +42,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) =
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(tab.id, { dynamicAddonDisable: { addonId } }, { frameId: 0 });
+        chrome.tabs.sendMessage(tab.id, { dynamicAddonDisable: { addonId } }, { frameId: 0 }, () => void chrome.runtime.lastError);
       }
     })
   );
