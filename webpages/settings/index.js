@@ -415,6 +415,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           obj.matchesCategory =
             !shouldHideAsEasterEgg && (newValue === "all" || obj.manifest._categories.includes(newValue));
         });
+        if (newValue === "forums") this.addonGroups.find((group) => group.id === "forums").expanded = true;
       },
     },
     ready() {
@@ -547,7 +548,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       else {
         // Addon is disabled
         if (manifest.tags.includes("recommended")) manifest._groups.push("recommended");
+        else if (manifest.tags.includes("featured")) manifest._groups.push("featured");
         else if (manifest.tags.includes("beta") || manifest.tags.includes("danger")) manifest._groups.push("beta");
+        else if (manifest.tags.includes("forums")) manifest._groups.push("forums");
         else manifest._groups.push("others");
       }
 

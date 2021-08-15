@@ -51,6 +51,22 @@ export default [
     fullscreenShow: true,
   },
   {
+    id: "featured",
+    name: chrome.i18n.getMessage("featured"),
+    addonIds: [],
+    expanded: true,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+  {
+    id: "forums",
+    name: chrome.i18n.getMessage("forums"),
+    addonIds: [],
+    expanded: false,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+  {
     id: "others",
     name: chrome.i18n.getMessage("others"),
     addonIds: [],

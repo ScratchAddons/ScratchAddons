@@ -6,7 +6,7 @@
       "name": "TheColaber"
     }
   ],
-  "tags": ["editor", "codeEditor"],
+  "tags": ["editor", "codeEditor", "featured"],
   "versionAdded": "1.19.0",
   "userscripts": [
     {
