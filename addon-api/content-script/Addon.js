@@ -30,4 +30,13 @@ export default class UserscriptAddon extends Addon {
   get _path() {
     return this.__path;
   }
+
+  /**
+   * Gets a list of addon IDs enabled, optionally filtered using tags.
+   * @param {string=} tag - the tag for filtering.
+   * @returns {Promise<string[]>} enabled addons' IDs
+   */
+  getEnabledAddons(tag) {
+    return scratchAddons.methods.getEnabledAddons(tag);
+  }
 }
