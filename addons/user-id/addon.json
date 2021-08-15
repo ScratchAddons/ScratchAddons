@@ -13,6 +13,12 @@
       "matches": ["profiles"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["profiles"]
+    }
+  ],
   "tags": ["community", "profiles"],
   "versionAdded": "1.19.0",
   "enabledByDefault": false
