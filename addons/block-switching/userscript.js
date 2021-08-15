@@ -3,7 +3,6 @@ import blockToDom from "./blockToDom.js";
 export default async function ({ addon, global, console, msg }) {
   const blockly = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
-  let customBlocks = {};
   const blockSwitches = {};
 
   const noopSwitch = {
@@ -686,7 +685,7 @@ export default async function ({ addon, global, console, msg }) {
           // if the arg is a shadow, it's in a procedures_prototype so we don't want it to be switchable
           !block.isShadow()
         ) {
-          getCustomBlocks();
+          const customBlocks = getCustomBlocks();
           switchType = "arg";
           if (customArgsMode === "all") {
             switch (type) {
@@ -761,25 +760,24 @@ export default async function ({ addon, global, console, msg }) {
   );
 
   const getCustomBlocks = () => {
-    customBlocks = {};
+    const customBlocks = {};
     const target = vm.editingTarget;
     Object.entries(target.blocks._blocks)
       .filter(([, block]) => block.opcode === "procedures_prototype")
-      .forEach(([id, block]) => addCustomBlock(id, block));
-  };
-
-  const addCustomBlock = (id, block) => {
-    let {
-      mutation: { proccode, argumentids, argumentnames, argumentdefaults },
-    } = block;
-    customBlocks[proccode] = { stringArgs: [], boolArgs: [] };
-    let [ids, names, defaults] = [argumentids, argumentnames, argumentdefaults].map(JSON.parse);
-    for (let i = 0; i < ids.length; i++) {
-      if (defaults[i] === "") {
-        customBlocks[proccode].stringArgs.push(names[i]);
-      } else {
-        customBlocks[proccode].boolArgs.push(names[i]);
-      }
-    }
+      .forEach(([id, block]) => {
+        let {
+          mutation: { proccode, argumentids, argumentnames, argumentdefaults },
+        } = block;
+        customBlocks[proccode] = { stringArgs: [], boolArgs: [] };
+        let [ids, names, defaults] = [argumentids, argumentnames, argumentdefaults].map(JSON.parse);
+        for (let i = 0; i < ids.length; i++) {
+          if (defaults[i] === "") {
+            customBlocks[proccode].stringArgs.push(names[i]);
+          } else {
+            customBlocks[proccode].boolArgs.push(names[i]);
+          }
+        }
+      });
+    return customBlocks;
   };
 }
