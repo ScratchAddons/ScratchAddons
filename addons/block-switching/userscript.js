@@ -690,36 +690,26 @@ export default async function ({ addon, global, console, msg }) {
           if (customArgsMode === "all") {
             switch (type) {
               case "argument_reporter_string_number":
-                let stringArgs = Object.values(customBlocks)
+                switches = Object.values(customBlocks)
                   .map((cb) => cb.stringArgs)
                   .flat(1);
-                if (stringArgs.includes(block.getFieldValue("VALUE"))) {
-                  switches = stringArgs;
-                }
                 break;
               case "argument_reporter_boolean":
-                let boolArgs = Object.values(customBlocks)
+                switches = Object.values(customBlocks)
                   .map((cb) => cb.boolArgs)
                   .flat(1);
-                if (boolArgs.includes(block.getFieldValue("VALUE"))) {
-                  switches = boolArgs;
-                }
                 break;
             }
           } else if (customArgsMode === "defOnly") {
-            let root = block.getRootBlock();
+            const root = block.getRootBlock();
             if (root.type !== "procedures_definition") return items;
             const customBlockObj = customBlocks[root.getChildren(true)[0].getProcCode()];
             switch (type) {
               case "argument_reporter_string_number":
-                if (customBlockObj.stringArgs.includes(block.getFieldValue("VALUE"))) {
-                  switches = customBlockObj.stringArgs;
-                }
+                switches = customBlockObj.stringArgs;
                 break;
               case "argument_reporter_boolean":
-                if (customBlockObj.boolArgs.includes(block.getFieldValue("VALUE"))) {
-                  switches = customBlockObj.boolArgs;
-                }
+                switches = customBlockObj.boolArgs;
                 break;
             }
           }
