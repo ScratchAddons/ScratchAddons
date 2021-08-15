@@ -1,7 +1,6 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
-  "name": "3.0 Scratchblocks in forums",
-  "description": "Enables the new version of scratchblocks in the forums.",
+  "name": "3.0 Scratchblocks on forums",
+  "description": "Enables the new version of scratchblocks on the forums.",
   "credits": [
     {
       "name": "9gr",
@@ -28,12 +27,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "You may see a flash of 2.0 blocks when starting the page.",
-      "id": "scratchblocks_notice"
-    },
-    {
-      "type": "notice",
-      "text": "The built-in preview does not support this addon.",
+      "text": "The built-in post preview does not support this addon.",
       "id": "preview_notice"
     }
   ]

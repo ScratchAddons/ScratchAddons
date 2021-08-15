@@ -42,13 +42,12 @@ async function getLocales(addon) {
   return lang;
 }
 export default async function ({ addon, global }) {
-  window.scratchblocks3Enabled = true;
+  window.scratchAddons._scratchblocks3Enabled = true;
   const blocks = document.querySelectorAll("pre.blocks");
   blocks.forEach((block) => {
     block.innerHTML = "";
     block.innerText = block.getAttribute("data-original");
   });
-  global.sb3Loaded = true;
   await Promise.all([
     // We use Promise.all to load scripts all at once
     addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js"),

@@ -227,7 +227,7 @@ function appendSearch(box, query, page, term, msg) {
 }
 
 export default async function ({ addon, global, console, msg }) {
-  if (!window.scratchblocks3Enabled) {
+  if (!window.scratchAddons._scratchblocks3Enabled) {
     await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
   }
 
