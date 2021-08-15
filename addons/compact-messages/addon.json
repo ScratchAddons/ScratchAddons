@@ -39,9 +39,10 @@
     {
       "url": "hide_icons.css",
       "matches": ["https://scratch.mit.edu/messages"],
-      "settingMatch": {
-        "id": "hide_icons",
-        "value": true
+      "if": {
+        "settings": {
+          "hide_icons": true
+        }
       }
     }
   ],
