@@ -240,6 +240,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             scratchAddons.localEvents.removeEventListener("csInfoCacheUpdated", thisFunction);
           }
         });
+        return true;
       } else {
         sendResponse(cacheEntry.info);
         csInfoCache.delete(identity);
