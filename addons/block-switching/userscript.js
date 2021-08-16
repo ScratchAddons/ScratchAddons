@@ -676,7 +676,7 @@ export default async function ({ addon, global, console, msg }) {
         let switchType = "native";
         let switches = blockSwitches[block.type] || [];
 
-        const customArgsMode = addon.settings.get("customargs");
+        const customArgsMode = addon.settings.get("customargs") ? addon.settings.get("customargsmode") : "off";
         if (
           customArgsMode !== "off" &&
           ["argument_reporter_boolean", "argument_reporter_string_number"].includes(type) &&
