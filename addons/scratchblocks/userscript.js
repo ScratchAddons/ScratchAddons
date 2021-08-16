@@ -45,6 +45,7 @@ export default async function ({ addon, global }) {
   window.scratchAddons._scratchblocks3Enabled = true;
   const blocks = document.querySelectorAll("pre.blocks");
   blocks.forEach((block) => {
+    block.className = block.className.replace("blocks", "blocks3");
     block.textContent = block.getAttribute("data-original");
   });
 
