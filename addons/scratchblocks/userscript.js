@@ -86,7 +86,7 @@ export default async function ({ addon, global }) {
 
   // Render 3.0 menu selectors
 
-  const menu = await addon.tab.waitForElement(".scratchblocks-button");
+  await addon.tab.waitForElement(".scratchblocks-button");
 
   const scratchblocksButtons = Array.from(document.querySelectorAll(".scratchblocks-button ul a[title]")).filter(
     (el) => !!el.querySelector(".scratchblocks svg")
