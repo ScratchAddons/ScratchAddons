@@ -75,7 +75,7 @@ export default async function ({ addon, msg }) {
     const usp = new URLSearchParams();
     if (autoPlay) usp.set("autoplay", "");
     if (enableTWAddons) usp.set("addons", enabledAddons.join(","));
-    iframeElement.setAttribute("src", `https://turbowarp.org/${projectId}/embed?${usp}#${projectId}`);
+    iframeElement.setAttribute("src", `https://turbowarp.org/${projectId}/embed?${usp}`);
     wrapperElement.dataset.player = "turbowarp";
     if (!showMenu) iframeElement.setAttribute("height", "260");
   };
