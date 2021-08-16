@@ -1,5 +1,17 @@
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
+  else if (request.getEnabledAddons) {
+    let enabled = Object.keys(scratchAddons.localState.addonsEnabled).filter(
+      (addonId) => scratchAddons.localState.addonsEnabled[addonId]
+    );
+    const tag = request.getEnabledAddons.tag;
+    if (tag) {
+      enabled = enabled.filter((id) =>
+        scratchAddons.manifests.some(({ addonId, manifest }) => addonId === id && manifest.tags.includes(tag))
+      );
+    }
+    sendResponse(enabled);
+  }
 });
 
 scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) => {

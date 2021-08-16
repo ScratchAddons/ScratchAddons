@@ -97,6 +97,19 @@ const cs = {
       );
     });
   },
+  getEnabledAddons(tag) {
+    // Return addons that are enabled
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage(
+        {
+          getEnabledAddons: {
+            tag,
+          },
+        },
+        (res) => resolve(res)
+      );
+    });
+  },
 };
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
 
