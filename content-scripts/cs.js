@@ -405,7 +405,7 @@ if (location.pathname.startsWith("/discuss/")) {
   // We do this first as sb2 runs fast.
   const preserveBlocks = () => {
     document.querySelectorAll("pre.blocks").forEach((el) => {
-      el.setAttribute("data-original", el.textContent);
+      el.setAttribute("data-original", el.innerText);
     });
   };
   if (document.readyState !== "loading") {
