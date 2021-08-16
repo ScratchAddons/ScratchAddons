@@ -48,11 +48,10 @@ export default async function ({ addon, global }) {
     block.innerHTML = "";
     block.innerText = block.getAttribute("data-original");
   });
-  await Promise.all([
-    // We use Promise.all to load scripts all at once
-    addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js"),
-    addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js"),
-  ]);
+
+  // Translations can't load first
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
+  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js");
 
   const languages = await getLocales(addon);
 
