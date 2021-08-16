@@ -1,0 +1,17 @@
+{
+  "name": "Enter Key Support",
+  "description": "Adds support for detecting the enter key.",
+  "tags": ["editor", "codeEditor"],
+  "credits": [
+    {
+      "name": "Tacodude7729",
+      "link": "https://github.com/Tacodude7729"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ]
+}
