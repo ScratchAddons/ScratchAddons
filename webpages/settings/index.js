@@ -532,7 +532,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
         if (extMajor === addonMajor && extMinor === addonMinor) {
           manifest.tags.push("new");
-          manifest._groups.push("new");
+          manifest._groups.push(
+            manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
+          );
         }
       }
 
