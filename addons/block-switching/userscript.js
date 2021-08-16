@@ -3,7 +3,6 @@ import blockToDom from "./blockToDom.js";
 export default async function ({ addon, global, console, msg }) {
   const blockly = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
-  let customBlocks = {};
   const blockSwitches = {};
 
   const noopSwitch = {
@@ -602,13 +601,11 @@ export default async function ({ addon, global, console, msg }) {
 
     const pasteSeparately = [];
 
-    let remap = opcodeData.remap;
-
     // Apply input remappings.
-    if (remap) {
+    if (opcodeData.remap) {
       for (const child of Array.from(xml.children)) {
         const oldName = child.getAttribute("name");
-        const newName = remap[oldName];
+        const newName = opcodeData.remap[oldName];
         if (newName) {
           if (newName === "split") {
             // This input will be split off into its own script.
@@ -680,48 +677,37 @@ export default async function ({ addon, global, console, msg }) {
         let switches = blockSwitches[block.type] || [];
 
         const customArgsMode = addon.settings.get("customargs");
-        if (customArgsMode !== "off") {
-          if (
-            ["argument_reporter_boolean", "argument_reporter_string_number"].includes(type) &&
-            // if the arg is a shadow, it's in a procedures_prototype so we don't want it to be switchable
-            !block.isShadow()
-          ) {
-            getCustomBlocks();
-            switchType = "arg";
-          }
+        if (
+          customArgsMode !== "off" &&
+          ["argument_reporter_boolean", "argument_reporter_string_number"].includes(type) &&
+          // if the arg is a shadow, it's in a procedures_prototype so we don't want it to be switchable
+          !block.isShadow()
+        ) {
+          const customBlocks = getCustomBlocks();
+          switchType = "arg";
           if (customArgsMode === "all") {
             switch (type) {
               case "argument_reporter_string_number":
-                let stringArgs = Object.values(customBlocks)
+                switches = Object.values(customBlocks)
                   .map((cb) => cb.stringArgs)
                   .flat(1);
-                if (stringArgs.includes(block.getFieldValue("VALUE"))) {
-                  switches = stringArgs;
-                }
                 break;
               case "argument_reporter_boolean":
-                let boolArgs = Object.values(customBlocks)
+                switches = Object.values(customBlocks)
                   .map((cb) => cb.boolArgs)
                   .flat(1);
-                if (boolArgs.includes(block.getFieldValue("VALUE"))) {
-                  switches = boolArgs;
-                }
                 break;
             }
           } else if (customArgsMode === "defOnly") {
-            let root = block.getRootBlock();
+            const root = block.getRootBlock();
             if (root.type !== "procedures_definition") return items;
             const customBlockObj = customBlocks[root.getChildren(true)[0].getProcCode()];
             switch (type) {
               case "argument_reporter_string_number":
-                if (customBlockObj.stringArgs.includes(block.getFieldValue("VALUE"))) {
-                  switches = customBlockObj.stringArgs;
-                }
+                switches = customBlockObj.stringArgs;
                 break;
               case "argument_reporter_boolean":
-                if (customBlockObj.boolArgs.includes(block.getFieldValue("VALUE"))) {
-                  switches = customBlockObj.boolArgs;
-                }
+                switches = customBlockObj.boolArgs;
                 break;
             }
           }
@@ -762,25 +748,24 @@ export default async function ({ addon, global, console, msg }) {
   );
 
   const getCustomBlocks = () => {
-    customBlocks = {};
+    const customBlocks = {};
     const target = vm.editingTarget;
     Object.entries(target.blocks._blocks)
       .filter(([, block]) => block.opcode === "procedures_prototype")
-      .forEach(([id, block]) => addCustomBlock(id, block));
-  };
-
-  const addCustomBlock = (id, block) => {
-    let {
-      mutation: { proccode, argumentids, argumentnames, argumentdefaults },
-    } = block;
-    customBlocks[proccode] = { stringArgs: [], boolArgs: [] };
-    let [ids, names, defaults] = [argumentids, argumentnames, argumentdefaults].map(JSON.parse);
-    for (let i = 0; i < ids.length; i++) {
-      if (defaults[i] === "") {
-        customBlocks[proccode].stringArgs.push(names[i]);
-      } else {
-        customBlocks[proccode].boolArgs.push(names[i]);
-      }
-    }
+      .forEach(([id, block]) => {
+        let {
+          mutation: { proccode, argumentids, argumentnames, argumentdefaults },
+        } = block;
+        customBlocks[proccode] = { stringArgs: [], boolArgs: [] };
+        let [ids, names, defaults] = [argumentids, argumentnames, argumentdefaults].map(JSON.parse);
+        for (let i = 0; i < ids.length; i++) {
+          if (defaults[i] === "") {
+            customBlocks[proccode].stringArgs.push(names[i]);
+          } else {
+            customBlocks[proccode].boolArgs.push(names[i]);
+          }
+        }
+      });
+    return customBlocks;
   };
 }
