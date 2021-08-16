@@ -52,7 +52,10 @@
       "name": "Enable addons",
       "id": "addons",
       "type": "boolean",
-      "default": true
+      "default": true,
+      "if": {
+        "settings": { "action": "player" }
+      }
     }
   ],
   "versionAdded": "1.18.0",
