@@ -35,7 +35,7 @@ export default async function ({ addon, console, msg }) {
         if (username) usp.set("username", username);
         const projectId = window.location.pathname.split("/")[2];
         if (addon.settings.get("addons")) {
-          const enabledAddons = await addon.getEnabledAddons("editor");
+          const enabledAddons = await addon.self.getEnabledAddons("editor");
           usp.set("addons", enabledAddons.join(","));
         }
         const iframeUrl = `https://turbowarp.org/${projectId}/embed?${usp}`;

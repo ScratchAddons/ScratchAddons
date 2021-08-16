@@ -4,7 +4,7 @@ export default async function ({ addon, msg }) {
   const alternativePlayer = addon.settings.get("alternativePlayer");
   const autoPlay = addon.settings.get("autoPlay");
   const enableTWAddons = addon.settings.get("enableTWAddons");
-  const enabledAddons = await addon.getEnabledAddons("editor");
+  const enabledAddons = await addon.self.getEnabledAddons("editor");
 
   const stageElement = document.querySelector(".stage");
   const projectId = window.Scratch.INIT_DATA.PROFILE.featuredProject.id;
