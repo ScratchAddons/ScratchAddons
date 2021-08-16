@@ -227,7 +227,10 @@ function appendSearch(box, query, page, term, msg) {
 }
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
+  if (!window.scratchAddons._scratchblocks3Enabled) {
+    await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
+  }
+
   // create the search bar
   let search = document.createElement("form");
   search.id = "forum-search-form";

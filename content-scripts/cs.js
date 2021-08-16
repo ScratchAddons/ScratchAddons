@@ -388,6 +388,20 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
+if (location.pathname.match(/\/discuss\/(.*)/gm)) {
+  // We do this first as sb2 runs fast.
+  const preserveBlocks = () => {
+    document.querySelectorAll("pre.blocks").forEach((el) => {
+      el.setAttribute("data-original", el.innerText);
+    });
+  };
+  if (document.readyState !== "loading") {
+    setTimeout(preserveBlocks, 0);
+  } else {
+    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true });
+  }
+}
+
 function forumWarning(key) {
   let postArea = document.querySelector("form#post > label");
   if (postArea) {
