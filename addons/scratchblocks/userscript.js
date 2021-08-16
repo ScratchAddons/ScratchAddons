@@ -45,8 +45,7 @@ export default async function ({ addon, global }) {
   window.scratchAddons._scratchblocks3Enabled = true;
   const blocks = document.querySelectorAll("pre.blocks");
   blocks.forEach((block) => {
-    block.innerHTML = "";
-    block.innerText = block.getAttribute("data-original");
+    block.textContent = block.getAttribute("data-original");
   });
 
   // Translations can't load first
@@ -87,18 +86,15 @@ export default async function ({ addon, global }) {
 
   // Render 3.0 menu selectors
 
-  const menu = await addon.tab.waitForElement(".scratchblocks-button", {
-    reduxCondition: (state) => (state.scratchGui ? state.scratchGui.mode.isPlayerOnly : true),
-  });
+  await addon.tab.waitForElement(".scratchblocks-button");
 
   const scratchblocksButtons = Array.from(document.querySelectorAll(".scratchblocks-button ul a[title]")).filter(
     (el) => !!el.querySelector(".scratchblocks svg")
   );
 
   scratchblocksButtons.forEach((scratchblocksButton) => {
-    scratchblocksButton.innerHTML = "";
-    scratchblocksButton.innerText = scratchblocksButton.title;
-    scratchblocksButton.id = scratchblocksButton.title.replaceAll("\n", "-n").replaceAll(" ", "").trim();
+    scratchblocksButton.textContent = scratchblocksButton.title;
+    scratchblocksButton.id = scratchblocksButton.title.replace(/\n/g, "-n").replace(/ /g, "").trim();
     renderMatching(`a[id='${scratchblocksButton.id}']`);
   });
 }
