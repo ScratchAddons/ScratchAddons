@@ -62,7 +62,7 @@ export default async function ({ addon, global }) {
   if (blocks.length > 0) {
     await addon.tab.waitForElement("pre.blocks[data-original]"); // wait for cs.js to preserve the blocks
     await addon.tab.waitForElement("pre.blocks div.scratchblocks"); // wait for sb2 to run
-  } 
+  }
 
   blocks.forEach((block) => {
     block.innerHTML = "";
