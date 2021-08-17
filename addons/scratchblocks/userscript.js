@@ -43,9 +43,9 @@ async function getLocales(addon) {
 }
 export default async function ({ addon, global }) {
   window.scratchAddons._scratchblocks3Enabled = true;
-  
+
   const oldScript = await addon.tab.waitForElement("script[src*='scratchblocks.js']");
-  oldScript.remove()
+  oldScript.remove();
 
   // Translations can't load first
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
