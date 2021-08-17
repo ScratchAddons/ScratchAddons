@@ -44,6 +44,7 @@ async function getLocales(addon) {
 export default async function ({ addon, global }) {
   window.scratchAddons._scratchblocks3Enabled = true;
 
+  let languages = ['en']
   const oldScript = await addon.tab.waitForElement("script[src*='scratchblocks.js']");
   oldScript.remove();
 
@@ -51,27 +52,6 @@ export default async function ({ addon, global }) {
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js");
 
-  const languages = await getLocales(addon);
-
-  await new Promise((resolve) => {
-    if (document.readyState !== "loading") {
-      resolve();
-    } else {
-      window.addEventListener("DOMContentLoaded", resolve, { once: true });
-    }
-  });
-  const blocks = document.querySelectorAll("pre.blocks");
-
-  if (blocks.length > 0) {
-    await addon.tab.waitForElement("pre.blocks[data-original]"); // wait for cs.js to preserve the blocks
-  }
-
-  blocks.forEach((block) => {
-    block.innerHTML = "";
-    block.classList.remove("blocks");
-    block.classList.add("blocks3");
-    block.innerText = block.getAttribute("data-original");
-  });
 
   function renderMatching(selector, options = {}) {
     const opts = {
@@ -102,6 +82,34 @@ export default async function ({ addon, global }) {
   }
 
   window.scratchblocks.renderMatching = renderMatching;
+
+  Object.defineProperty(window, "scratchblocks", {
+    // Block other scratchblocks scripts from loading.
+    writable: false,
+  });
+
+  await new Promise((resolve) => {
+    if (document.readyState !== "loading") {
+      resolve();
+    } else {
+      window.addEventListener("DOMContentLoaded", resolve, { once: true });
+    }
+  });
+
+  languages = await getLocales(addon)
+  const blocks = document.querySelectorAll("pre.blocks");
+
+  if (blocks.length > 0) {
+    await addon.tab.waitForElement("pre.blocks[data-original]"); // wait for cs.js to preserve the blocks
+  }
+
+  blocks.forEach((block) => {
+    block.innerHTML = "";
+    block.classList.remove("blocks");
+    block.classList.add("blocks3");
+    block.innerText = block.getAttribute("data-original");
+  });
+
 
   renderMatching(".blockpost pre.blocks3");
 
