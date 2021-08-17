@@ -50,13 +50,13 @@ export default async function ({ addon, global }) {
 
   const languages = await getLocales(addon);
 
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     if (document.readyState !== "loading") {
       resolve();
     } else {
-      window.addEventListener("DOMContentLoaded", resolve, { once: true })
+      window.addEventListener("DOMContentLoaded", resolve, { once: true });
     }
-  })
+  });
   const blocks = document.querySelectorAll("pre.blocks");
 
   if (blocks.length > 0) {
