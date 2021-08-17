@@ -63,9 +63,9 @@ export default async function ({ addon, global }) {
       document: options.doc || document,
     };
     const elements = Array.from(opts.document.querySelectorAll(selector));
-    for (let element of elements) {
-      if (element.classList.contains("rendered")) continue;
-      let code = opts.read(element, opts);
+    elements.forEach((element) => {
+      if (element.classList.contains("rendered")) return;
+      let code = element.innerText.replace(/<br>\s?|\n|\r\n|\r/gi, "\n");
       let parsed = opts.parse(code, opts);
       let svg = opts.render(parsed, opts);
       scaleSVG(svg, 0.75);
@@ -77,7 +77,7 @@ export default async function ({ addon, global }) {
       element.innerHTML = "";
       element.classList.add("rendered");
       element.appendChild(container);
-    }
+    }, 0);
   }
 
   window.scratchblocks.renderMatching = renderMatching;
