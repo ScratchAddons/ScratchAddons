@@ -136,7 +136,7 @@ if (path[path.length - 1] !== "/") path += "/";
 const pathArr = path.split("/");
 if (pathArr[0] === "scratch-addons-extension") {
   if (pathArr[1] === "settings") {
-    let url = chrome.runtime.getURL("webpages/settings/index.html");
+    let url = chrome.runtime.getURL(`webpages/settings/index.html${window.location.search}`);
     if (location.hash) url += location.hash;
     chrome.runtime.sendMessage({ replaceTabWithUrl: url });
   }
@@ -515,7 +515,7 @@ const showBanner = () => {
             .outerHTML,
           */
           Object.assign(document.createElement("a"), {
-            href: "https://scratch.mit.edu/scratch-addons-extension/settings",
+            href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
             target: "_blank",
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
