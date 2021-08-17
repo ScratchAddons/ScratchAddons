@@ -77,7 +77,7 @@ export default async function ({ addon, global }) {
       element.innerHTML = "";
       element.classList.add("rendered");
       element.appendChild(container);
-    }, 0);
+    });
   }
 
   window.scratchblocks.renderMatching = renderMatching;
