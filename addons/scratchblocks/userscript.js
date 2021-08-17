@@ -43,6 +43,9 @@ async function getLocales(addon) {
 }
 export default async function ({ addon, global }) {
   window.scratchAddons._scratchblocks3Enabled = true;
+  
+  const oldScript = await addon.tab.waitForElement("script[src*='scratchblocks.js']");
+  oldScript.remove()
 
   // Translations can't load first
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
@@ -61,7 +64,6 @@ export default async function ({ addon, global }) {
 
   if (blocks.length > 0) {
     await addon.tab.waitForElement("pre.blocks[data-original]"); // wait for cs.js to preserve the blocks
-    await addon.tab.waitForElement("pre.blocks div.scratchblocks"); // wait for sb2 to run
   }
 
   blocks.forEach((block) => {
@@ -83,6 +85,7 @@ export default async function ({ addon, global }) {
     };
     const elements = Array.from(opts.document.querySelectorAll(selector));
     for (let element of elements) {
+      if (element.classList.contains("rendered")) continue;
       let code = opts.read(element, opts);
       let parsed = opts.parse(code, opts);
       let svg = opts.render(parsed, opts);
@@ -93,6 +96,7 @@ export default async function ({ addon, global }) {
       container.appendChild(svg);
 
       element.innerHTML = "";
+      element.classList.add("rendered");
       element.appendChild(container);
     }
   }
