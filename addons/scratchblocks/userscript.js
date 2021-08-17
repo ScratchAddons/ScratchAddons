@@ -43,13 +43,21 @@ async function getLocales(addon) {
 }
 export default async function ({ addon, global }) {
   window.scratchAddons._scratchblocks3Enabled = true;
-  const blocks = document.querySelectorAll("pre.blocks");
 
   // Translations can't load first
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js");
 
   const languages = await getLocales(addon);
+
+  await new Promise(resolve => {
+    if (document.readyState !== "loading") {
+      resolve();
+    } else {
+      window.addEventListener("DOMContentLoaded", resolve, { once: true })
+    }
+  })
+  const blocks = document.querySelectorAll("pre.blocks");
 
   if (blocks.length > 0) {
     await addon.tab.waitForElement("pre.blocks[data-original]"); // wait for cs.js to preserve the blocks
