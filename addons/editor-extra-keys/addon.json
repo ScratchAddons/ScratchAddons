@@ -1,6 +1,6 @@
 {
-  "name": "Enter Key Support",
-  "description": "Adds support for detecting the enter key.",
+  "name": "Extra Key Support",
+  "description": "Adds support for detecting more key like enter, comma, fullstop, and more.",
   "tags": ["editor", "codeEditor"],
   "credits": [
     {
