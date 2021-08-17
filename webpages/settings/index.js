@@ -15,15 +15,6 @@ if (window.parent !== window) {
   isIframe = true;
 }
 
-const NEW_ADDON_ORDER = [
-  "turbowarp-player",
-  "items-per-row",
-  "ctrl-enter-post",
-  "customize-avatar-border",
-  "compact-messages",
-  "default-project",
-];
-
 let vue;
 let fuse;
 
@@ -532,7 +523,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
         if (extMajor === addonMajor && extMinor === addonMinor) {
           manifest.tags.push("new");
-          manifest._groups.push("new");
+          manifest._groups.push(
+            manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
+          );
         }
       }
 
@@ -581,11 +574,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     const order = [["danger", "beta"], "editor", "community", "popup"];
 
     vue.addonGroups.forEach((group) => {
-      if (group.id === "new") {
-        group.addonIds.sort((b, a) => NEW_ADDON_ORDER.indexOf(b) - NEW_ADDON_ORDER.indexOf(a));
-        return;
-      }
-
       group.addonIds = group.addonIds
         .map((id) => vue.manifestsById[id])
         .sort((manifestA, manifestB) => {

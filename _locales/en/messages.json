@@ -249,7 +249,16 @@
     "message": "Scratch Addons is not affiliated with Scratch."
   },
   "new": {
-    "message": "New!"
+    "message": "New!",
+    "description": "Tag for addons. Singular."
+  },
+  "newGroup": {
+    "message": "Other new addons",
+    "description": "Used as a category name for new addons"
+  },
+  "featuredNew": {
+    "message": "Featured new addons",
+    "description": "Used as a category name for featured new addons"
   },
   "enabled": {
     "message": "Enabled",

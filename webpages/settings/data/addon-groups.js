@@ -27,10 +27,18 @@ export default [
   },
 
   {
-    id: "new",
-    name: chrome.i18n.getMessage("new"),
+    id: "featuredNew",
+    name: chrome.i18n.getMessage("featuredNew"),
     addonIds: [],
     expanded: true,
+    iframeShow: false,
+    fullscreenShow: true,
+  },
+  {
+    id: "new",
+    name: chrome.i18n.getMessage("newGroup"),
+    addonIds: [],
+    expanded: new URLSearchParams(window.location.search).get("source") === "updatenotif",
     iframeShow: false,
     fullscreenShow: true,
   },
