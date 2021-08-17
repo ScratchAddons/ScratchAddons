@@ -44,14 +44,13 @@ async function getLocales(addon) {
 export default async function ({ addon, global }) {
   window.scratchAddons._scratchblocks3Enabled = true;
 
-  let languages = ['en']
+  let languages = ["en"];
   const oldScript = await addon.tab.waitForElement("script[src*='scratchblocks.js']");
   oldScript.remove();
 
   // Translations can't load first
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js");
-
 
   function renderMatching(selector, options = {}) {
     const opts = {
@@ -96,7 +95,7 @@ export default async function ({ addon, global }) {
     }
   });
 
-  languages = await getLocales(addon)
+  languages = await getLocales(addon);
   const blocks = document.querySelectorAll("pre.blocks");
 
   if (blocks.length > 0) {
@@ -109,7 +108,6 @@ export default async function ({ addon, global }) {
     block.classList.add("blocks3");
     block.innerText = block.getAttribute("data-original");
   });
-
 
   renderMatching(".blockpost pre.blocks3");
 
