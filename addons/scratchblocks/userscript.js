@@ -106,9 +106,9 @@ export default async function ({ addon, global }) {
   }
 
   blocks.forEach((block) => {
-    block.innerHTML = "";
     block.classList.remove("blocks");
     block.classList.add("blocks3");
+    block.innerHTML = "";
     block.innerText = block.getAttribute("data-original");
   });
 
@@ -118,13 +118,12 @@ export default async function ({ addon, global }) {
 
   await addon.tab.waitForElement(".scratchblocks-button");
 
-  const scratchblocksButtons = Array.from(document.querySelectorAll(".scratchblocks-button ul a[title]")).filter(
-    (el) => !!el.querySelector(".scratchblocks svg")
-  );
+  const scratchblocksButtons = Array.from(document.querySelectorAll(".scratchblocks-button ul a[title]"));
 
-  scratchblocksButtons.forEach((scratchblocksButton) => {
+  scratchblocksButtons.forEach((scratchblocksButton, index) => {
+    scratchblocksButton.innerHTML = "";
     scratchblocksButton.textContent = scratchblocksButton.title;
-    scratchblocksButton.id = scratchblocksButton.title.replace(/\n/g, "-n").replace(/ /g, "").trim();
+    scratchblocksButton.id = `menuBlock-${index}`;
     renderMatching(`a[id='${scratchblocksButton.id}']`);
   });
 }
