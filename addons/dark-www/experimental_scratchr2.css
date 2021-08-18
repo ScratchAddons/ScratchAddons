@@ -1,6 +1,7 @@
 html,
 body,
-#pagewrapper {
+#pagewrapper,
+.semicolon {
   background: #202020;
   color: #fff;
   text-shadow: none;
@@ -46,7 +47,8 @@ button.grey,
 .button.grey:not([data-control="load-more"]),
 button.grey,
 .button.grey:not([data-control="load-more"]):hover,
-button.grey:hover {
+button.grey:hover,
+form.post-editor input[type="submit"] {
   background-color: #282828;
   background-image: none;
   color: var(--scratchr2-linkColor, #fff);
@@ -123,7 +125,8 @@ h4 {
   background-clip: border-box;
 }
 .jqui-modal,
-.jqui-modal.ui-corner-all {
+.jqui-modal.ui-corner-all,
+#new-scratcher-gallery-modal {
   background: #282828;
 }
 .modal .modal-header,
@@ -137,6 +140,20 @@ h4 {
 }
 #featured-project-modal .project.thumb {
   background: #282828;
+}
+#email-resend-box {
+  border: none;
+}
+#email-resend-box .email-resend-subsection {
+  color: white;
+}
+#email-resend-box .modal-footer,
+#new-scratcher-gallery-modal .modal-footer {
+  background: #282828;
+  box-shadow: none;
+}
+#new-scratcher-gallery-modal .modal-header {
+  border: none;
 }
 #page-404 .box-header h1 {
   color: #fff;

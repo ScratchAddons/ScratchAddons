@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import getDirection from "../rtl-list.js";
 import loadVueComponent from "../../libraries/common/load-vue-components.js";
-import Fuse from "../../libraries/thirdparty/fuse.basic.esm.min.js";
+import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
@@ -22,7 +22,7 @@ let initialTheme;
 let initialThemePath;
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "light.css");
+lightThemeLink.setAttribute("href", "../styles/colors-light.css");
 lightThemeLink.setAttribute("data-below-vue-components", "");
 chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   if (globalTheme === true) {
@@ -183,6 +183,18 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         browserLevelPermissions,
         grantedOptionalPermissions,
         addonListObjs: [],
+        sidebarUrls: (() => {
+          const uiLanguage = chrome.i18n.getUILanguage();
+          const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+          const version = chrome.runtime.getManifest().version;
+          const versionName = chrome.runtime.getManifest().version_name;
+          const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
+          return {
+            contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
+            feedback: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${versionName}&${utm}`,
+            changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
+          };
+        })(),
       };
     },
     computed: {
@@ -394,6 +406,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           obj.matchesCategory =
             !shouldHideAsEasterEgg && (newValue === "all" || obj.manifest._categories.includes(newValue));
         });
+        if (newValue === "forums") this.addonGroups.find((group) => group.id === "forums").expanded = true;
       },
     },
     ready() {
@@ -510,7 +523,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
         if (extMajor === addonMajor && extMinor === addonMinor) {
           manifest.tags.push("new");
-          manifest._groups.push("new");
+          manifest._groups.push(
+            manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
+          );
         }
       }
 
@@ -526,7 +541,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       else {
         // Addon is disabled
         if (manifest.tags.includes("recommended")) manifest._groups.push("recommended");
+        else if (manifest.tags.includes("featured")) manifest._groups.push("featured");
         else if (manifest.tags.includes("beta") || manifest.tags.includes("danger")) manifest._groups.push("beta");
+        else if (manifest.tags.includes("forums")) manifest._groups.push("forums");
         else manifest._groups.push("others");
       }
 
@@ -620,6 +637,11 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         }
       }
     }, 0);
+
+    let binaryNum = "";
+    manifests.forEach(({ addonId }) => (binaryNum += addonsEnabled[addonId] === true ? "1" : "0"));
+    const addonsEnabledBase36 = BigInt(`0b${binaryNum}`).toString(36);
+    vue.sidebarUrls.feedback += `#_${addonsEnabledBase36}`;
   });
 
   window.addEventListener("keydown", function (e) {
@@ -634,7 +656,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   document.title = chrome.i18n.getMessage("settingsTitle");
   function resize() {
-    if (window.innerWidth < 1000) {
+    if (window.innerWidth < 1100) {
       vue.smallMode = true;
       vue.categoryOpen = false;
       vue.switchPath = "../../images/icons/switch.svg";

@@ -1,14 +1,13 @@
 import blockToDom from "./blockToDom.js";
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.traps.getBlockly();
-
+  const blockly = await addon.tab.traps.getBlockly();
+  const vm = addon.tab.traps.vm;
   const blockSwitches = {};
 
   const noopSwitch = {
     opcode: "noop",
   };
-
   if (addon.settings.get("motion")) {
     blockSwitches["motion_turnright"] = [
       noopSwitch,
@@ -557,8 +556,6 @@ export default async function ({ addon, global, console, msg }) {
   blockSwitches["data_variable"] = [];
   blockSwitches["data_listcontents"] = [];
 
-  let addBorderToContextMenuItem = -1;
-
   const genuid = () => {
     const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
     let result = "";
@@ -568,7 +565,12 @@ export default async function ({ addon, global, console, msg }) {
     return result;
   };
 
-  const menuCallbackFactory = (block, opcodeData) => () => {
+  const menuCallbackFactory = (block, opcodeData, mode) => () => {
+    if (mode === "arg") {
+      block.setFieldValue(opcodeData, "VALUE");
+      return;
+    }
+
     if (opcodeData.opcode === "noop") {
       return;
     }
@@ -598,6 +600,7 @@ export default async function ({ addon, global, console, msg }) {
     }
 
     const pasteSeparately = [];
+
     // Apply input remappings.
     if (opcodeData.remap) {
       for (const child of Array.from(xml.children)) {
@@ -609,11 +612,9 @@ export default async function ({ addon, global, console, msg }) {
             const inputXml = child.firstChild;
             const inputId = inputXml.id;
             const inputBlock = workspace.getBlockById(inputId);
-
             const position = inputBlock.getRelativeToSurfaceXY();
             inputXml.setAttribute("x", Math.round(workspace.RTL ? -position.x : position.x));
             inputXml.setAttribute("y", Math.round(position.y));
-
             pasteSeparately.push(inputXml);
             xml.removeChild(child);
           } else {
@@ -648,10 +649,8 @@ export default async function ({ addon, global, console, msg }) {
     for (const separateBlock of pasteSeparately) {
       workspace.paste(separateBlock);
     }
-
     // The new block will have the same ID as the old one.
     const newBlock = workspace.getBlockById(id);
-
     if (parentConnection) {
       // Search for the same type of connection on the new block as on the old block.
       const newBlockConnections = newBlock.getConnections_();
@@ -669,111 +668,104 @@ export default async function ({ addon, global, console, msg }) {
     }, 0);
   };
 
-  const customContextMenuHandler = function (options) {
-    if (addon.self.disabled) return;
+  addon.tab.createBlockContextMenu(
+    (items, block) => {
+      if (!addon.self.disabled) {
+        const type = block.type;
+        // switchType: "native" | "arg"
+        let switchType = "native";
+        let switches = blockSwitches[block.type] || [];
 
-    if (addon.settings.get("border")) {
-      addBorderToContextMenuItem = options.length;
-    }
-
-    if (this._originalCustomContextMenu) {
-      this._originalCustomContextMenu.call(this, options);
-    }
-
-    const switches = blockSwitches[this.type];
-    for (const opcodeData of switches) {
-      const isNoop = opcodeData.opcode === "noop";
-      if (isNoop && !addon.settings.get("noop")) {
-        continue;
-      }
-      const translationOpcode = isNoop ? this.type : opcodeData.opcode;
-      const translation = msg(translationOpcode);
-      options.push({
-        enabled: true,
-        text: translation,
-        callback: menuCallbackFactory(this, opcodeData),
-      });
-    }
-  };
-
-  const injectCustomContextMenu = (block) => {
-    const type = block.type;
-    if (!Object.prototype.hasOwnProperty.call(blockSwitches, type)) {
-      return;
-    }
-
-    if (block._customContextMenuInjected) {
-      return;
-    }
-    block._customContextMenuInjected = true;
-
-    if (block.customContextMenu) {
-      block._originalCustomContextMenu = block.customContextMenu;
-    }
-
-    block.customContextMenu = customContextMenuHandler;
-  };
-
-  const changeListener = (change) => {
-    if (change.type !== "create") {
-      return;
-    }
-
-    for (const id of change.ids) {
-      const block = Blockly.getMainWorkspace().getBlockById(id);
-      if (!block) continue;
-      injectCustomContextMenu(block);
-    }
-  };
-
-  const mutationObserverCallback = (mutations) => {
-    if (addon.self.disabled) return;
-    for (const mutation of mutations) {
-      for (const node of mutation.addedNodes) {
-        if (node.classList.contains("blocklyContextMenu")) {
-          if (addBorderToContextMenuItem === -1) {
-            continue;
+        const customArgsMode = addon.settings.get("customargs") ? addon.settings.get("customargsmode") : "off";
+        if (
+          customArgsMode !== "off" &&
+          ["argument_reporter_boolean", "argument_reporter_string_number"].includes(type) &&
+          // if the arg is a shadow, it's in a procedures_prototype so we don't want it to be switchable
+          !block.isShadow()
+        ) {
+          const customBlocks = getCustomBlocks();
+          switchType = "arg";
+          if (customArgsMode === "all") {
+            switch (type) {
+              case "argument_reporter_string_number":
+                switches = Object.values(customBlocks)
+                  .map((cb) => cb.stringArgs)
+                  .flat(1);
+                break;
+              case "argument_reporter_boolean":
+                switches = Object.values(customBlocks)
+                  .map((cb) => cb.boolArgs)
+                  .flat(1);
+                break;
+            }
+          } else if (customArgsMode === "defOnly") {
+            const root = block.getRootBlock();
+            if (root.type !== "procedures_definition") return items;
+            const customBlockObj = customBlocks[root.getChildren(true)[0].getProcCode()];
+            switch (type) {
+              case "argument_reporter_string_number":
+                switches = customBlockObj.stringArgs;
+                break;
+              case "argument_reporter_boolean":
+                switches = customBlockObj.boolArgs;
+                break;
+            }
           }
-          const children = node.children;
-          const item = children[addBorderToContextMenuItem];
-          if (item) {
-            item.style.paddingTop = "2px";
-            item.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
-          }
-          addBorderToContextMenuItem = -1;
+        }
+
+        switches.forEach((opcodeData, i) => {
+          const isNoop =
+            switchType === "native" ? opcodeData.opcode === "noop" : opcodeData === block.getFieldValue("VALUE");
+          if (isNoop && !addon.settings.get("noop")) return;
+
+          const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
+          const insertBeforeIndex =
+            makeSpaceItemIndex !== -1
+              ? // If "make space" button exists, add own items before it
+                makeSpaceItemIndex
+              : // If there's no such button, insert at end
+                items.length;
+          let text = switchType === "native" ? msg(isNoop ? block.type : opcodeData.opcode) : opcodeData;
+          items.splice(insertBeforeIndex, 0, {
+            enabled: true,
+            text,
+            callback: menuCallbackFactory(block, opcodeData, switchType),
+            separator: addon.settings.get("border") && i === 0,
+          });
+        });
+        if (block.type === "data_variable" && block.category_ === "data") {
+          // Add top border to first variable (if it exists)
+          const delBlockIndex = items.findIndex((item) => item.text === blockly.Msg.DELETE_BLOCK);
+          // firstVariableItem might be undefined, a variable to switch to,
+          // or an item added by editor-devtools (or any addon before this one)
+          const firstVariableItem = items[delBlockIndex + 1];
+          if (firstVariableItem && addon.settings.get("border")) firstVariableItem.separator = true;
         }
       }
-    }
-  };
+      return items;
+    },
+    { blocks: true }
+  );
 
-  const inject = () => {
-    const workspace = Blockly.getMainWorkspace();
-    if (workspace._blockswitchingInjected) {
-      return;
-    }
-    mutationObserver.observe(document.querySelector(".blocklyWidgetDiv"), {
-      childList: true,
-    });
-    workspace._blockswitchingInjected = true;
-    workspace.getAllBlocks().forEach(injectCustomContextMenu);
-    workspace.addChangeListener(changeListener);
-    const languageSelector = document.querySelector('[class^="language-selector_language-select"]');
-    if (languageSelector) {
-      languageSelector.addEventListener("change", () => {
-        setTimeout(inject);
+  const getCustomBlocks = () => {
+    const customBlocks = {};
+    const target = vm.editingTarget;
+    Object.entries(target.blocks._blocks)
+      .filter(([, block]) => block.opcode === "procedures_prototype")
+      .forEach(([id, block]) => {
+        let {
+          mutation: { proccode, argumentids, argumentnames, argumentdefaults },
+        } = block;
+        customBlocks[proccode] = { stringArgs: [], boolArgs: [] };
+        let [ids, names, defaults] = [argumentids, argumentnames, argumentdefaults].map(JSON.parse);
+        for (let i = 0; i < ids.length; i++) {
+          if (defaults[i] === "") {
+            customBlocks[proccode].stringArgs.push(names[i]);
+          } else {
+            customBlocks[proccode].boolArgs.push(names[i]);
+          }
+        }
       });
-    }
+    return customBlocks;
   };
-
-  const mutationObserver = new MutationObserver(mutationObserverCallback);
-
-  if (addon.tab.editorMode === "editor") {
-    const interval = setInterval(() => {
-      if (Blockly.getMainWorkspace()) {
-        inject();
-        clearInterval(interval);
-      }
-    }, 100);
-  }
-  addon.tab.addEventListener("urlChange", () => addon.tab.editorMode === "editor" && inject());
 }

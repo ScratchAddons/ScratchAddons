@@ -1,5 +1,5 @@
 {
-  "name": "Auto-hide block palette",
+  "name": "Auto-hiding block palette",
   "description": "Hides the block palette if not hovered. Click the lock icon to lock it in place temporarily. Alternatively, use \"category click\" mode.",
   "credits": [
     {
@@ -17,7 +17,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "userstyles": [

@@ -75,9 +75,8 @@
     {
       "url": "forumScroll.js",
       "matches": ["https://scratch.mit.edu/discuss/*/"],
-      "settingMatch": {
-        "id": "forumScroll",
-        "value": true
+      "if": {
+        "settings": { "forumScroll": true }
       }
     },
     {
@@ -88,27 +87,35 @@
         "https://scratch.mit.edu/users/*",
         "https://scratch.mit.edu/messages"
       ]
+    },
+    {
+      "url": "moveDonor.js",
+      "matches": ["https://scratch.mit.edu/"],
+      "if": {
+        "settings": {
+          "showFooter": true
+        }
+      },
+      "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "footer.css",
       "matches": ["https://scratch.mit.edu/*"],
-      "settingMatch": {
-        "id": "showFooter",
-        "value": true
+      "if": {
+        "settings": { "showFooter": true }
       }
     },
     {
       "url": "discuss.css",
       "matches": ["https://scratch.mit.edu/discuss/*/"],
-      "settingMatch": {
-        "id": "forumScroll",
-        "value": true
+      "if": {
+        "settings": { "forumScroll": true }
       }
     }
   ],
-  "tags": ["community"],
+  "tags": ["community", "featured"],
   "versionAdded": "1.2.0",
   "enabledByDefault": false
 }
