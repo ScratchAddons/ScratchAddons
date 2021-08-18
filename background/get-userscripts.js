@@ -1,3 +1,6 @@
+import changeAddonState from "./imports/change-addon-state.js";
+import { getMissingOptionalPermissions } from "./imports/util.js";
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
   else if (request.getEnabledAddons) {
@@ -142,8 +145,13 @@ async function getContentScriptInfo(url) {
     addonsWithUserstyles: [],
   };
   const promises = [];
+  const missingPermissions = await getMissingOptionalPermissions();
   scratchAddons.manifests.forEach(async ({ addonId, manifest }, i) => {
     if (!scratchAddons.localState.addonsEnabled[addonId]) return;
+    if (manifest.permissions?.some((p) => missingPermissions.includes(p))) {
+      changeAddonState(addonId, false);
+      return;
+    }
     const promise = getAddonData({ addonId, manifest, url });
     promises.push(promise);
     const { userscripts, userstyles, cssVariables } = await promise;
