@@ -6,7 +6,7 @@ function scaleSVG(svg, factor) {
 
   svg.classList.add("scaled");
 }
-async function getLocales(addon, { locale }) {
+async function getLocales(addon) {
   const forumIdToLang = {
     13: "de",
     14: "es",
@@ -102,7 +102,7 @@ export default async function ({ addon, msg }) {
     }
   });
 
-  languages = await getLocales(addon, msg);
+  languages = await getLocales(addon);
   const blocks = document.querySelectorAll("pre.blocks");
   if (blocks.length > 0) {
     await addon.tab.waitForElement("pre.blocks[data-original]"); // wait for cs.js to preserve the blocks
