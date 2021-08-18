@@ -82,8 +82,11 @@ export default async function ({ addon, global }) {
 
   window.scratchblocks.renderMatching = renderMatching;
 
+  const scratchblocks = Object.freeze(window.scratchblocks);
+
   Object.defineProperty(window, "scratchblocks", {
     // Block other scratchblocks scripts from loading.
+    value: { ...scratchblocks, replace: () => undefined, sa: true },
     writable: false,
   });
 
