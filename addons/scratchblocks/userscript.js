@@ -6,15 +6,11 @@ function scaleSVG(svg, factor) {
 
   svg.classList.add("scaled");
 }
-async function getLocales(addon) {
-  const category = await addon.tab.waitForElement(".linkst li:nth-child(2) a");
-
-  const forumId = /\d+/.exec(category.href)[0];
+async function getLocales(addon, { locale }) {
   const forumIdToLang = {
     13: "de",
     14: "es",
     15: "fr",
-    16: ["zh-cn", "zh-tw"],
     17: "pl",
     18: "ja",
     19: "nl",
@@ -30,6 +26,14 @@ async function getLocales(addon) {
     36: "id",
     59: "fa",
   };
+
+  if (location.pathname.split("/")[2] === "settings") {
+    return ["en", locale]
+  }
+
+  const category = await addon.tab.waitForElement(".linkst li:nth-child(2) a");
+  const forumId = /\d+/.exec(category.href)[0];
+  
   let lang = ["en"];
   if (forumIdToLang[forumId]) {
     if (Array.isArray(forumIdToLang[forumId])) {
@@ -41,12 +45,13 @@ async function getLocales(addon) {
 
   return lang;
 }
-export default async function ({ addon, global }) {
+export default async function ({ addon, msg }) {
   window.scratchAddons._scratchblocks3Enabled = true;
 
   let languages = ["en"];
-  const oldScript = await addon.tab.waitForElement("script[src*='scratchblocks.js']");
+  const oldScript = await addon.tab.waitForElement("script[src$='scratchblocks.js']");
   oldScript.remove();
+  
 
   // Translations can't load first
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
@@ -98,9 +103,9 @@ export default async function ({ addon, global }) {
     }
   });
 
-  languages = await getLocales(addon);
-  const blocks = document.querySelectorAll("pre.blocks");
 
+  languages = await getLocales(addon, msg);
+  const blocks = document.querySelectorAll("pre.blocks");
   if (blocks.length > 0) {
     await addon.tab.waitForElement("pre.blocks[data-original]"); // wait for cs.js to preserve the blocks
   }
@@ -112,6 +117,7 @@ export default async function ({ addon, global }) {
     block.innerText = block.getAttribute("data-original");
   });
 
+
   renderMatching(".blockpost pre.blocks3");
 
   // Render 3.0 menu selectors
@@ -119,10 +125,10 @@ export default async function ({ addon, global }) {
   await addon.tab.waitForElement(".scratchblocks-button");
 
   let i = 0;
-
+  
   while (true) {
     const button = await addon.tab.waitForElement(`.scratchblocks-button ul a[title]`, {
-      markAsSeen: true,
+      markAsSeen: true
     });
 
     setTimeout(() => {
