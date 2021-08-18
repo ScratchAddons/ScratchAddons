@@ -118,12 +118,26 @@ export default async function ({ addon, global }) {
 
   await addon.tab.waitForElement(".scratchblocks-button");
 
-  const scratchblocksButtons = Array.from(document.querySelectorAll(".scratchblocks-button ul a[title]"));
+  let i = 0;
 
-  scratchblocksButtons.forEach((scratchblocksButton, index) => {
-    scratchblocksButton.innerHTML = "";
-    scratchblocksButton.textContent = scratchblocksButton.title;
-    scratchblocksButton.id = `menuBlock-${index}`;
-    renderMatching(`a[id='${scratchblocksButton.id}']`);
-  });
+  while (true) {
+    const button = await addon.tab.waitForElement(`.scratchblocks-button ul a[title]`, {
+      markAsSeen: true
+    })
+
+    setTimeout(() => { // wait for any scratchblocks rendering to happen
+      if (button.firstElementChild && button.firstElementChild.classList.contains("scratchblocks")) {
+        button.firstElementChild.remove()
+      } else if (button.firstElementChild && button.firstElementChild.classList.contains("scratchblocks3")) {
+        return;
+      }
+
+      button.innerHTML = '';
+      button.innerText = button.title;
+      button.id = button.id || `block-${++i}`
+      
+      renderMatching(`#${button.id}`)
+    }, 200)
+
+  }
 }
