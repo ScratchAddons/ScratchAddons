@@ -28,7 +28,7 @@ async function getLocales(addon, { locale }) {
   };
 
   if (location.pathname.split("/")[2] === "settings") {
-    return ["en", locale];
+    return ["en"];
   }
 
   const category = await addon.tab.waitForElement(".linkst li:nth-child(2) a");
