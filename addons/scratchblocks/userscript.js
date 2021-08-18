@@ -133,7 +133,8 @@ export default async function ({ addon, global }) {
       }
 
       button.innerHTML = '';
-      button.innerText = button.title;
+      button.textContent = button.title
+      
       button.id = button.id || `block-${++i}`
       
       renderMatching(`#${button.id}`)
