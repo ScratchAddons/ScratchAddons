@@ -1,4 +1,4 @@
-import runPersistentScripts from "./imports/run-persistent-scripts.js";
+import changeAddonState from "./imports/change-addon-state.js";
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // Message used to load popups as well
@@ -20,32 +20,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
   } else if (request.changeEnabledState) {
     const { addonId, newState } = request.changeEnabledState;
-    scratchAddons.localState.addonsEnabled[addonId] = newState;
-    chrome.storage.sync.set({
-      addonsEnabled: scratchAddons.localState.addonsEnabled,
-    });
-    const manifest = scratchAddons.manifests.find((addon) => addon.addonId === addonId).manifest;
-    const { dynamicEnable, dynamicDisable } = manifest;
-    // Fire disabled event for userscripts
-    if ((dynamicEnable || dynamicDisable) && newState === true)
-      scratchAddons.localEvents.dispatchEvent(new CustomEvent("addonDynamicEnable", { detail: { addonId, manifest } }));
-    if (dynamicDisable && newState === false)
-      scratchAddons.localEvents.dispatchEvent(
-        new CustomEvent("addonDynamicDisable", { detail: { addonId, manifest } })
-      );
-
-    if (newState === false) {
-      // TODO: can there be many addon objects for the same addon?
-      const addonObjs = scratchAddons.addonObjects.filter((addonObj) => addonObj.self.id === addonId);
-      if (addonObjs)
-        addonObjs.forEach((addonObj) => {
-          addonObj.self.dispatchEvent(new CustomEvent("disabled"));
-          addonObj._kill();
-        });
-      scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
-    } else {
-      runPersistentScripts(addonId);
-    }
+    changeAddonState(addonId, newState);
   } else if (request.changeAddonSettings) {
     const { addonId, newSettings } = request.changeAddonSettings;
     scratchAddons.globalState.addonSettings[addonId] = newSettings;
