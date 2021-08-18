@@ -122,23 +122,23 @@ export default async function ({ addon, global }) {
 
   while (true) {
     const button = await addon.tab.waitForElement(`.scratchblocks-button ul a[title]`, {
-      markAsSeen: true
-    })
+      markAsSeen: true,
+    });
 
-    setTimeout(() => { // wait for any scratchblocks rendering to happen
+    setTimeout(() => {
+      // wait for any scratchblocks rendering to happen
       if (button.firstElementChild && button.firstElementChild.classList.contains("scratchblocks")) {
-        button.firstElementChild.remove()
+        button.firstElementChild.remove();
       } else if (button.firstElementChild && button.firstElementChild.classList.contains("scratchblocks3")) {
         return;
       }
 
-      button.innerHTML = '';
-      button.textContent = button.title
-      
-      button.id = button.id || `block-${++i}`
-      
-      renderMatching(`#${button.id}`)
-    }, 200)
+      button.innerHTML = "";
+      button.textContent = button.title;
 
+      button.id = button.id || `block-${++i}`;
+
+      renderMatching(`#${button.id}`);
+    }, 200);
   }
 }
