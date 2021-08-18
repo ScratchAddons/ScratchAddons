@@ -28,12 +28,12 @@ async function getLocales(addon, { locale }) {
   };
 
   if (location.pathname.split("/")[2] === "settings") {
-    return ["en", locale]
+    return ["en", locale];
   }
 
   const category = await addon.tab.waitForElement(".linkst li:nth-child(2) a");
   const forumId = /\d+/.exec(category.href)[0];
-  
+
   let lang = ["en"];
   if (forumIdToLang[forumId]) {
     if (Array.isArray(forumIdToLang[forumId])) {
@@ -51,7 +51,6 @@ export default async function ({ addon, msg }) {
   let languages = ["en"];
   const oldScript = await addon.tab.waitForElement("script[src$='scratchblocks.js']");
   oldScript.remove();
-  
 
   // Translations can't load first
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
@@ -103,7 +102,6 @@ export default async function ({ addon, msg }) {
     }
   });
 
-
   languages = await getLocales(addon, msg);
   const blocks = document.querySelectorAll("pre.blocks");
   if (blocks.length > 0) {
@@ -117,7 +115,6 @@ export default async function ({ addon, msg }) {
     block.innerText = block.getAttribute("data-original");
   });
 
-
   renderMatching(".blockpost pre.blocks3");
 
   // Render 3.0 menu selectors
@@ -125,10 +122,10 @@ export default async function ({ addon, msg }) {
   await addon.tab.waitForElement(".scratchblocks-button");
 
   let i = 0;
-  
+
   while (true) {
     const button = await addon.tab.waitForElement(`.scratchblocks-button ul a[title]`, {
-      markAsSeen: true
+      markAsSeen: true,
     });
 
     setTimeout(() => {
