@@ -14,6 +14,15 @@ export default async function ({ addon, msg, global, console }) {
     await addon.tab.waitForElement(".divider");
     const username = await addon.auth.fetchUsername();
 
+    function sendBGMsg(type, username) {
+      return async function (event) {
+        if (!event.isTrusted) return;
+        addon.messaging.sendMessage({ type, username }, () => {
+          window.location.reload();
+        });
+      };
+    }
+
     addon.messaging.sendMessage(
       {
         type: "get-accounts",
@@ -29,21 +38,13 @@ export default async function ({ addon, msg, global, console }) {
             didDivider = true;
           }
           let item = dropdown.insertBefore(el("li", elProps), dropdown.querySelector(".divider:last-child"));
+          const countReq = fetch(`https://api.scratch.mit.edu/users/${account}/messages/count`);
+          const { count } = await (await countReq).json();
           item.append(
             el("a", {
               href: "javascript:void(0)",
-              textContent: account,
-              async onclick() {
-                addon.messaging.sendMessage(
-                  {
-                    type: "switch-account",
-                    username: account,
-                  },
-                  () => {
-                    window.location.reload();
-                  }
-                );
-              },
+              textContent: account + " " + count,
+              onclick: sendBGMsg("switch-account", account),
             })
           );
         }
@@ -59,16 +60,7 @@ export default async function ({ addon, msg, global, console }) {
             el("a", {
               href: "javascript:void(0)",
               textContent: "Remove account",
-              async onclick() {
-                addon.messaging.sendMessage(
-                  {
-                    type: "remove-account",
-                  },
-                  () => {
-                    window.location.reload();
-                  }
-                );
-              },
+              onclick: sendBGMsg("remove-account"),
             })
           );
         } else {
@@ -76,16 +68,7 @@ export default async function ({ addon, msg, global, console }) {
             el("a", {
               href: "javascript:void(0)",
               textContent: "Add account",
-              async onclick() {
-                addon.messaging.sendMessage(
-                  {
-                    type: "add-account",
-                  },
-                  () => {
-                    window.location.reload();
-                  }
-                );
-              },
+              onclick: sendBGMsg("add-account"),
             })
           );
         }
