@@ -7,14 +7,10 @@ function scaleSVG(svg, factor) {
   svg.classList.add("scaled");
 }
 async function getLocales(addon) {
-  const category = await addon.tab.waitForElement(".linkst li:nth-child(2) a");
-
-  const forumId = /\d+/.exec(category.href)[0];
   const forumIdToLang = {
     13: "de",
     14: "es",
     15: "fr",
-    16: ["zh-cn", "zh-tw"],
     17: "pl",
     18: "ja",
     19: "nl",
@@ -30,6 +26,14 @@ async function getLocales(addon) {
     36: "id",
     59: "fa",
   };
+
+  if (location.pathname.split("/")[2] === "settings") {
+    return ["en"];
+  }
+
+  const category = await addon.tab.waitForElement(".linkst li:nth-child(2) a");
+  const forumId = /\d+/.exec(category.href)[0];
+
   let lang = ["en"];
   if (forumIdToLang[forumId]) {
     if (Array.isArray(forumIdToLang[forumId])) {
@@ -41,18 +45,16 @@ async function getLocales(addon) {
 
   return lang;
 }
-export default async function ({ addon, global }) {
+export default async function ({ addon, msg }) {
   window.scratchAddons._scratchblocks3Enabled = true;
-  const blocks = document.querySelectorAll("pre.blocks");
-  blocks.forEach((block) => {
-    block.textContent = block.getAttribute("data-original");
-  });
+
+  let languages = ["en"];
+  const oldScript = await addon.tab.waitForElement("script[src$='scratchblocks.js']");
+  oldScript.remove();
 
   // Translations can't load first
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/scratchblocks-v3.5.2-min.js");
   await addon.tab.loadScript(addon.self.lib + "/thirdparty/cs/translations-all-v3.5.2.js");
-
-  const languages = await getLocales(addon);
 
   function renderMatching(selector, options = {}) {
     const opts = {
@@ -65,8 +67,9 @@ export default async function ({ addon, global }) {
       document: options.doc || document,
     };
     const elements = Array.from(opts.document.querySelectorAll(selector));
-    for (let element of elements) {
-      let code = opts.read(element, opts);
+    elements.forEach((element) => {
+      if (element.classList.contains("rendered")) return;
+      let code = element.innerText.replace(/<br>\s?|\n|\r\n|\r/gi, "\n");
       let parsed = opts.parse(code, opts);
       let svg = opts.render(parsed, opts);
       scaleSVG(svg, 0.75);
@@ -76,25 +79,69 @@ export default async function ({ addon, global }) {
       container.appendChild(svg);
 
       element.innerHTML = "";
+      element.classList.add("rendered");
       element.appendChild(container);
-    }
+    });
   }
 
   window.scratchblocks.renderMatching = renderMatching;
 
-  renderMatching(".blockpost pre.blocks");
+  const scratchblocks = Object.freeze(window.scratchblocks);
+
+  Object.defineProperty(window, "scratchblocks", {
+    // Block other scratchblocks scripts from loading.
+    value: { ...scratchblocks, replace: () => undefined, sa: true },
+    writable: false,
+  });
+
+  await new Promise((resolve) => {
+    if (document.readyState !== "loading") {
+      resolve();
+    } else {
+      window.addEventListener("DOMContentLoaded", resolve, { once: true });
+    }
+  });
+
+  languages = await getLocales(addon);
+  const blocks = document.querySelectorAll("pre.blocks");
+  if (blocks.length > 0) {
+    await addon.tab.waitForElement("pre.blocks[data-original]"); // wait for cs.js to preserve the blocks
+  }
+
+  blocks.forEach((block) => {
+    block.classList.remove("blocks");
+    block.classList.add("blocks3");
+    block.innerHTML = "";
+    block.innerText = block.getAttribute("data-original");
+  });
+
+  renderMatching(".blockpost pre.blocks3");
 
   // Render 3.0 menu selectors
 
   await addon.tab.waitForElement(".scratchblocks-button");
 
-  const scratchblocksButtons = Array.from(document.querySelectorAll(".scratchblocks-button ul a[title]")).filter(
-    (el) => !!el.querySelector(".scratchblocks svg")
-  );
+  let i = 0;
 
-  scratchblocksButtons.forEach((scratchblocksButton) => {
-    scratchblocksButton.textContent = scratchblocksButton.title;
-    scratchblocksButton.id = scratchblocksButton.title.replace(/\n/g, "-n").replace(/ /g, "").trim();
-    renderMatching(`a[id='${scratchblocksButton.id}']`);
-  });
+  while (true) {
+    const button = await addon.tab.waitForElement(`.scratchblocks-button ul a[title]`, {
+      markAsSeen: true,
+    });
+
+    setTimeout(() => {
+      // wait for any scratchblocks rendering to happen
+      if (button.firstElementChild && button.firstElementChild.classList.contains("scratchblocks")) {
+        button.firstElementChild.remove();
+      } else if (button.firstElementChild && button.firstElementChild.classList.contains("scratchblocks3")) {
+        return;
+      }
+
+      button.innerHTML = "";
+      button.textContent = button.title;
+
+      button.id = button.id || `block-${++i}`;
+
+      renderMatching(`#${button.id}`);
+    }, 200);
+  }
 }

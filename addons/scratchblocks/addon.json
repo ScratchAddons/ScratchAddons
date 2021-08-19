@@ -18,8 +18,14 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/discuss/topic/*"],
+      "matches": ["editingScreens"],
       "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "fix-dropdown.css",
+      "matches": ["https://scratch.mit.edu/discuss/post/*/edit/"]
     }
   ],
   "tags": ["community", "forums", "beta"],
@@ -31,5 +37,6 @@
       "id": "preview_notice"
     }
   ],
-  "versionAdded": "1.19.0"
+  "versionAdded": "1.19.0",
+  "injectAsStyleElt": true
 }
