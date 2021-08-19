@@ -110,6 +110,18 @@ const cs = {
       );
     });
   },
+
+  sendMessage(message, addonId) {
+    return new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage({ message, addonId }, (res) => {
+        if (res && res.error) {
+          reject(res.error);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  },
 };
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
 
@@ -791,83 +803,3 @@ if (isProfile || isStudio || isProject) {
     }
   });
 }
-
-let runtime = chrome.runtime;
-function addonMessageListener(e) {
-  if (!e.data.addonMessage) return;
-
-  const {
-    data: { payload, addonId, fromBackground, response, messageId },
-  } = e;
-
-  if (response) return;
-  if (fromBackground) return;
-
-  function onResponse(res) {
-    window.postMessage({
-      addonMessage: true,
-      response: true,
-      fromBackground: true,
-      messageId,
-      payload: res,
-    });
-  }
-
-  runtime.sendMessage(
-    {
-      addonMessage: true,
-      addonId,
-      payload,
-    },
-    onResponse
-  );
-}
-
-window.addEventListener("message", addonMessageListener);
-
-function addonConnectListener(e) {
-  if (!e.data.addonConnect) return;
-
-  const {
-    data: { name, portId, addonId },
-  } = e;
-
-  let port = runtime.connect({
-    name: JSON.stringify({
-      addonId,
-      addonConnect: true,
-      name,
-    }),
-  });
-
-  window.addEventListener("message", function (e) {
-    if (!e.data.addonPortMessage) return;
-    if (e.data.fromBackground) return;
-    if (e.data.portId !== portId) return;
-    if (e.data.disconnect) {
-      return port.disconnect();
-    } else {
-      port.postMessage(e.data.payload);
-    }
-  });
-
-  port.onMessage.addListener(function (m) {
-    window.postMessage({
-      addonPortMessage: true,
-      fromBackground: true,
-      payload: m,
-      portId,
-    });
-  });
-
-  port.onDisconnect.addListener(function () {
-    window.postMessage({
-      addonPortMessage: true,
-      fromBackground: true,
-      disconnect: true,
-      portId,
-    });
-  });
-}
-
-window.addEventListener("message", addonConnectListener);

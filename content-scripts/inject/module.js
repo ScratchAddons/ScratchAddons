@@ -195,6 +195,9 @@ function onDataReady() {
     return _cs_.copyImage(dataURL);
   };
   scratchAddons.methods.getEnabledAddons = (tag) => _cs_.getEnabledAddons(tag);
+  scratchAddons.methods.sendMessage = async (message, addonId) => {
+    return _cs_.sendMessage(message, addonId);
+  };
 
   scratchAddons.sharedObserver = new SharedObserver();
 

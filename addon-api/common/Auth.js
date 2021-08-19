@@ -47,6 +47,13 @@ export default class Auth extends Listenable {
   get scratchLang() {
     return scratchAddons.globalState.auth.scratchLang;
   }
+  /**
+   * Session ID of the website.
+   * @type {string}
+   */
+  get sessionId() {
+    return scratchAddons.globalState.auth.sessionId;
+  }
 
   /**
    * @private

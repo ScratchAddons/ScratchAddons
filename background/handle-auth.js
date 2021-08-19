@@ -85,6 +85,7 @@ async function checkSession() {
         userId: null,
         xToken: null,
         csrfToken: null,
+        sessionId: null,
         scratchLang: (await getCookieValue("scratchlanguage")) || navigator.language,
       };
       return;
@@ -92,12 +93,14 @@ async function checkSession() {
   }
   const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
   const csrfToken = await getCookieValue("scratchcsrftoken");
+  const sessionId = await getCookieValue("scratchsessionsid");
   scratchAddons.globalState.auth = {
     isLoggedIn: Boolean(json.user),
     username: json.user ? json.user.username : null,
     userId: json.user ? json.user.id : null,
     xToken: json.user ? json.user.token : null,
     csrfToken,
+    sessionId,
     scratchLang,
   };
   isChecking = false;

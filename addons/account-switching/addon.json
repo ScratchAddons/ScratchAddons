@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "Account Switching",
+  "description": "Easily switch to other accounts you own and view their message counts too.",
+  "credits": [
+    {
+      "name": "TheColaber"
+    }
+  ],
+  "tags": ["community"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": "*"
+    }
+  ],
+  "persistentScripts": ["background.js"],
+  "versionAdded": "1.19.0"
+}
