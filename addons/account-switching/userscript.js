@@ -20,9 +20,6 @@ const el = (el, properties = {}, children) => {
 };
 
 export default async function ({ addon, msg, global, console }) {
-  addon.messaging.onMessage((msg) => {
-    console.log(msg);
-  });
   while (true) {
     const dropdown = await addon.tab.waitForElement("ul.dropdown, ul.user-nav", { markAsSeen: true });
     await addon.tab.waitForElement(".divider");
@@ -91,7 +88,7 @@ export default async function ({ addon, msg, global, console }) {
           item.append(
             el("a", {
               href: "javascript:void(0)",
-              textContent: "Remove account",
+              textContent: msg("remove-account"),
               listeners: {
                 click: sendBGMsg("remove-account"),
               },
@@ -101,7 +98,7 @@ export default async function ({ addon, msg, global, console }) {
           item.append(
             el("a", {
               href: "javascript:void(0)",
-              textContent: "Add account",
+              textContent: msg("add-account"),
               listeners: {
                 click: sendBGMsg("add-account"),
               },
