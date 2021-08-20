@@ -14,6 +14,12 @@
       "matches": "*"
     }
   ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": "*"
+    }
+  ],
   "persistentScripts": ["background.js"],
   "versionAdded": "1.19.0"
 }

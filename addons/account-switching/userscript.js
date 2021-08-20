@@ -1,11 +1,16 @@
-const el = (el, properties = {}) => {
-  const elm = document.createElement(el);
-  for (const prop in properties) {
-    if (properties.hasOwnProperty(prop)) {
-      elm[prop] = properties[prop];
-    }
+const el = (el, properties = {}, children) => {
+  const element = document.createElement(el);
+  Object.keys(properties).forEach((key) => {
+    element[key] = properties[key];
+  });
+  if (Array.isArray(children)) {
+    children.forEach((child) => {
+      element.appendChild(child);
+    });
+  } else if (children) {
+    element.appendChild(children);
   }
-  return elm;
+  return element;
 };
 
 export default async function ({ addon, msg, global, console }) {
@@ -32,20 +37,36 @@ export default async function ({ addon, msg, global, console }) {
         for (const account of accounts) {
           if (account === username) continue;
 
+          const countReq = fetch(`https://api.scratch.mit.edu/users/${account}/messages/count`);
+          const { count } = await (await countReq).json();
+          const accountInfoReq = fetch(`https://api.scratch.mit.edu/users/${account}/`);
+          const {
+            profile: { images },
+          } = await (await accountInfoReq).json();
+
           const elProps = {};
           if (!didDivider) {
             elProps.className = "divider";
             didDivider = true;
           }
-          let item = dropdown.insertBefore(el("li", elProps), dropdown.querySelector(".divider:last-child"));
-          const countReq = fetch(`https://api.scratch.mit.edu/users/${account}/messages/count`);
-          const { count } = await (await countReq).json();
-          item.append(
-            el("a", {
-              href: "javascript:void(0)",
-              textContent: account + " " + count,
-              onclick: sendBGMsg("switch-account", account),
-            })
+          dropdown.insertBefore(
+            el(
+              "li",
+              elProps,
+              el(
+                "a",
+                {
+                  href: "javascript:void(0)",
+                  onclick: sendBGMsg("switch-account", account),
+                },
+                [
+                  el("img", { src: images["32x32"] }),
+                  el("span", { innerText: account }),
+                  el("span", { innerText: count, className: "sa-msg-count" }),
+                ]
+              )
+            ),
+            dropdown.querySelector(".divider:last-child")
           );
         }
 

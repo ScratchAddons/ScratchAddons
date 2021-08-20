@@ -1,0 +1,16 @@
+.dropdown li a {
+  display: flex;
+}
+
+.sa-msg-count {
+  display: block;
+  border-radius: 1rem;
+  background-color: #ffab1a;
+  padding: 0 0.25rem;
+  text-indent: 0;
+  line-height: 1rem;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  height: fit-content;
+}
