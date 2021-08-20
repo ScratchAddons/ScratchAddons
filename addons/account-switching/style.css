@@ -1,5 +1,5 @@
 .dropdown li a {
-  display: flex;
+  display: flex !important;
 }
 
 .sa-msg-count {

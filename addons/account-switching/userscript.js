@@ -21,7 +21,7 @@ const el = (el, properties = {}, children) => {
 
 export default async function ({ addon, msg, global, console }) {
   while (true) {
-    const dropdown = await addon.tab.waitForElement(".dropdown", { markAsSeen: true });
+    const dropdown = await addon.tab.waitForElement("ul.dropdown, ul.user-nav", { markAsSeen: true });
     await addon.tab.waitForElement(".divider");
     const username = await addon.auth.fetchUsername();
 
@@ -64,7 +64,7 @@ export default async function ({ addon, msg, global, console }) {
                 {
                   href: "javascript:void(0)",
                   listeners: {
-                    click: sendBGMsg("switch-account", username),
+                    click: sendBGMsg("switch-account", account),
                   },
                 },
                 [
