@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
+  "name": "Forum link fix",
+  "description": "Fixes certain links in the forums, e.g Replit source URLs.",
+  "credits": [
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+    }
+  ],
+  "tags": ["community", "forums"],
+  "versionAdded": "1.20.0"
+}
