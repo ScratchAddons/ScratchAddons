@@ -8,10 +8,10 @@ export default class MessagePasser extends EventTarget {
     this._addonId = addonObject.self.id;
   }
 
-  onMessage(onMsgCallback) {
-    chrome.runtime.onMessage.addListener(({ addonMsg: { message, addonId } = {} }, sender, callback) => {
+  onMessage(callback) {
+    chrome.runtime.onMessage.addListener(({ addonMsg: { message, addonId } = {} }, sender, sendResponse) => {
       if (addonId === this._addonId) {
-        onMsgCallback(message, callback);
+        callback(message, sendResponse);
       }
       return true;
     });
@@ -19,5 +19,12 @@ export default class MessagePasser extends EventTarget {
 
   broadcast(message) {
     chrome.runtime.sendMessage({ addonMsg: { message, addonId: this._addonId } });
+    chrome.tabs.query({}, (tabs) =>
+      tabs.forEach((tab) => {
+        if (tab.url || (!tab.url && typeof browser !== "undefined")) {
+          chrome.tabs.sendMessage(tab.id, { addonMsg: { message, addonId: this._addonId } });
+        }
+      })
+    );
   }
 }

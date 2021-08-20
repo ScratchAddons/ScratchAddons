@@ -8,6 +8,7 @@ scratchAddons.eventTargets = {
   settings: [],
   tab: [],
   self: [],
+  messaging: [],
 };
 scratchAddons.session = {};
 const consoleOutput = (logAuthor = "[page]") => {
@@ -86,9 +87,9 @@ const page = {
     }
   },
   addonMsg({ addonId, message }) {
-    const eventTargets = scratchAddons.eventTargets.self.filter(({ _addonId }) => _addonId === addonId);
+    const eventTargets = scratchAddons.eventTargets.messaging.filter(({ _addonId }) => _addonId === addonId);
     for (const eventTarget of eventTargets) {
-      eventTarget.onMessageCallback(message);
+      eventTarget.onMessageCallback?.(message);
     }
   },
   isFetching: false,

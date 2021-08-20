@@ -1,5 +1,4 @@
 export default async function ({ addon, msg, console }) {
-  addon.messaging.broadcast("hi!");
   addon.messaging.onMessage(async ({ type, username }, callback) => {
     if (type === "add-account") {
       chrome.cookies.get({ url: "https://scratch.mit.edu/", name: "accounts" }, async (cookie) => {

@@ -1,8 +1,10 @@
+import Listenable from "../common/Listenable.js";
+
 /**
  * Handles message passing for content scripts.
  */
 
-export default class MessagePasser extends EventTarget {
+export default class MessagePasser extends Listenable {
   constructor(addonObject) {
     super();
     this._addonId = addonObject.id;
@@ -20,5 +22,12 @@ export default class MessagePasser extends EventTarget {
 
   onMessage(callback) {
     this.onMessageCallback = callback;
+  }
+
+  /**
+   * @private
+   */
+  get _eventTargetKey() {
+    return "messaging";
   }
 }
