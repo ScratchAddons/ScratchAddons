@@ -333,6 +333,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
 
   function fixCommentContent(value) {
     const shouldLinkify = scratchAddons.localState.addonsEnabled["more-links"] === true;
+    const shouldInsertLinebreak = scratchAddons.localState.addonsEnabled["comments-linebreaks"] === true;
     let node;
     if (value instanceof Node) {
       // profile
@@ -344,7 +345,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     }
     for (let i = node.childNodes.length; i--; ) {
       const item = node.childNodes[i];
-      item.textContent = item.textContent.replace(/\n/g, "");
+      if (!shouldInsertLinebreak) item.textContent = item.textContent.replace(/\n/g, "");
       if (item instanceof Text && item.textContent === "") {
         item.remove();
       } else if (item instanceof HTMLAnchorElement && item.getAttribute("href").startsWith("/")) {
