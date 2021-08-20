@@ -112,14 +112,8 @@ const cs = {
   },
 
   sendMessage(message, addonId) {
-    return new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage({ message, addonId }, (res) => {
-        if (res && res.error) {
-          reject(res.error);
-        } else {
-          resolve(res);
-        }
-      });
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage({ addonMsg: { message, addonId } }, resolve);
     });
   },
 };
@@ -407,6 +401,8 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
       sendResponse({ userscripts, userstyles, disabledDynamicAddons });
     } else if (request === "refetchSession") {
       _page_.refetchSession();
+    } else if (request.addonMsg) {
+      _page_.addonMsg(request.addonMsg);
     }
   });
 }

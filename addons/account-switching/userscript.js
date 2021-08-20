@@ -20,6 +20,9 @@ const el = (el, properties = {}, children) => {
 };
 
 export default async function ({ addon, msg, global, console }) {
+  addon.messaging.onMessage((msg) => {
+    console.log(msg);
+  });
   while (true) {
     const dropdown = await addon.tab.waitForElement("ul.dropdown, ul.user-nav", { markAsSeen: true });
     await addon.tab.waitForElement(".divider");

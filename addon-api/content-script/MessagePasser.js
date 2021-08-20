@@ -2,9 +2,11 @@
  * Handles message passing for content scripts.
  */
 
-export default class MessagePasser {
+export default class MessagePasser extends EventTarget {
   constructor(addonObject) {
+    super();
     this._addonId = addonObject.id;
+    this.onMessageCallback = null;
   }
 
   sendMessage(message, callback) {
@@ -14,5 +16,9 @@ export default class MessagePasser {
         if (callback) callback(response);
       })
       .catch(console.error);
+  }
+
+  onMessage(callback) {
+    this.onMessageCallback = callback;
   }
 }

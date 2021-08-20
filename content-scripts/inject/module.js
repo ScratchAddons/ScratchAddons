@@ -62,29 +62,33 @@ const page = {
 
   runAddonUserscripts, // Gets called by cs.js when addon enabled late
 
-  fireEvent(info) {
-    if (info.addonId) {
-      if (info.name === "disabled") {
+  fireEvent({ addonId, name, target, data = {} }) {
+    if (addonId) {
+      if (name === "disabled") {
         document.documentElement.style.setProperty(
           `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`,
           "none"
         );
-      } else if (info.name === "reenabled") {
+      } else if (name === "reenabled") {
         document.documentElement.style.removeProperty(
-          `--${info.addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`
+          `--${addonId.replace(/-([a-z])/g, (g) => g[1].toUpperCase())}-_displayNoneWhileDisabledValue`
         );
       }
 
       // Addon specific events, like settings change and self disabled
-      const eventTarget = scratchAddons.eventTargets[info.target].find(
-        (eventTarget) => eventTarget._addonId === info.addonId
-      );
-      if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(info.name));
+      const eventTarget = scratchAddons.eventTargets[target].find((eventTarget) => eventTarget._addonId === addonId);
+      if (eventTarget) eventTarget.dispatchEvent(new CustomEvent(name, { detail: data }));
     } else {
       // Global events, like auth change
-      scratchAddons.eventTargets[info.target].forEach((eventTarget) =>
-        eventTarget.dispatchEvent(new CustomEvent(info.name))
+      scratchAddons.eventTargets[target].forEach((eventTarget) =>
+        eventTarget.dispatchEvent(new CustomEvent(name, { detail: data }))
       );
+    }
+  },
+  addonMsg({ addonId, message }) {
+    const eventTargets = scratchAddons.eventTargets.self.filter(({ _addonId }) => _addonId === addonId);
+    for (const eventTarget of eventTargets) {
+      eventTarget.onMessageCallback(message);
     }
   },
   isFetching: false,
