@@ -1,7 +1,13 @@
 const el = (el, properties = {}, children) => {
   const element = document.createElement(el);
   Object.keys(properties).forEach((key) => {
-    element[key] = properties[key];
+    if (key === "listeners") {
+      Object.keys(properties.listeners).forEach((event) => {
+        element.addEventListener(event, properties.listeners[event]);
+      });
+    } else {
+      element[key] = properties[key];
+    }
   });
   if (Array.isArray(children)) {
     children.forEach((child) => {
@@ -57,7 +63,9 @@ export default async function ({ addon, msg, global, console }) {
                 "a",
                 {
                   href: "javascript:void(0)",
-                  onclick: sendBGMsg("switch-account", account),
+                  listeners: {
+                    click: sendBGMsg("switch-account", username),
+                  },
                 },
                 [
                   el("img", { src: images["32x32"] }),
@@ -81,7 +89,9 @@ export default async function ({ addon, msg, global, console }) {
             el("a", {
               href: "javascript:void(0)",
               textContent: "Remove account",
-              onclick: sendBGMsg("remove-account"),
+              listeners: {
+                click: sendBGMsg("remove-account"),
+              },
             })
           );
         } else {
@@ -89,7 +99,9 @@ export default async function ({ addon, msg, global, console }) {
             el("a", {
               href: "javascript:void(0)",
               textContent: "Add account",
-              onclick: sendBGMsg("add-account"),
+              listeners: {
+                click: sendBGMsg("add-account"),
+              },
             })
           );
         }
