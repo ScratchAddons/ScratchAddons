@@ -36,7 +36,7 @@ export default async function ({ addon, global, console }) {
 	var emojiPicker = document.createElement("div");
 	emojiPicker.id = "sa-emoji-picker";
 	addon.tab.displayNoneWhileDisabled(emojiPicker, {display: "inline-block"});
-	//Create emoji picker items
+	//Create picker items
 	emojis.forEach(
 		(emoji) => {
 			//Container for emoji picker item
@@ -53,6 +53,43 @@ export default async function ({ addon, global, console }) {
 			emojiPicker.appendChild(container);
 		}
 	);
-	//Test
-	document.body.appendChild(emojiPicker);
+	
+	//Function for showing the emoji picker
+	const showEmojiPicker = function() {
+		this.appendChild(emojiPicker);
+		//Also add effect on emoji button
+		this.classList.add("sa-emoji-button-selected");
+	}
+	
+	//Hide emoji picker when clicked outside of
+	document.addEventListener('mouseup', function(event) {
+		if (!emojiPicker.contains(event.target)) {
+			emojiPicker.remove();
+		}
+		//Also deselect emoji buttons
+		document.querySelectorAll(".sa-emoji-button.sa-emoji-button-selected").forEach(
+			(e) => e.classList.remove("sa-emoji-button-selected")
+		);
+	});
+	
+	//Add emoji buttons
+	while (true) {
+		const textBox = await addon.tab.waitForElement('textarea[id*="frc-compose-comment"]', {
+			markAsSeen: true,
+			reduxCondition: (state) => {
+				if (!state.scratchGui) return true;
+				return state.scratchGui.mode.isPlayerOnly;
+			},
+		});
+		const textContainer = textBox.parentElement;
+		//The emoji button
+		let emojiButton = document.createElement("div");
+		emojiButton.textContent = "🙂";
+		emojiButton.title = "Button added by the Scratch Addons browser extension"
+		emojiButton.classList.add("sa-emoji-button");
+		emojiButton.onclick = showEmojiPicker;
+		addon.tab.displayNoneWhileDisabled(emojiPicker, {display: "inline-block"});
+		//Append
+		textContainer.appendChild(emojiButton);
+	}
 }
