@@ -32,33 +32,36 @@ export default async function ({ addon, global, console }) {
 		{text: "_pride_", image: "/images/emoji/pride.png"},
 		{text: "_blm_", image: "/images/emoji/blm.png"}
 	];
-	//Create picker
-	var emojiPicker = document.createElement("div");
-	emojiPicker.id = "sa-emoji-picker";
-	addon.tab.displayNoneWhileDisabled(emojiPicker, {display: "inline-block"});
-	//Create picker items
-	emojis.forEach(
-		(emoji) => {
-			//Container for emoji picker item
-			let container = document.createElement("span");
-			container.classList.add("sa-emoji-picker-item");
-			//The actual item
-			let item = document.createElement("img");
-			item.dataset.text = emoji.text;
-			item.src = emoji.image;
-			item.classList.add("sa-emoji-picker-item-inner");
-			item.classList.add("emoji");
-			//Append
-			container.appendChild(item);
-			emojiPicker.appendChild(container);
-		}
-	);
+	
+	//Functions
 	
 	//Function for showing the emoji picker
 	const showEmojiPicker = function() {
 		this.appendChild(emojiPicker);
 		//Also add effect on emoji button
 		this.children[0].classList.add("sa-emoji-button-selected");
+	}
+	
+	//Function for inserting text into a textarea
+	const insertTextToTextArea = function(insertText, textBox) {
+		if (textBox.selectionStart === textBox.value.length && textBox.selectionEnd === textBox.value.length) {
+		  //Cursor is at the end
+		  if (
+			  !(textBox.value[textBox.value.length-1]===" ") &&
+			  !(textBox.value[textBox.value.length-1]===undefined)
+		  ) {
+			  insertText = " " + insertText;
+		}
+		  textBox.value += insertText;
+		} else {
+		  //Cursor is somewhere else or is selecting a part of the textbox
+		  if (!(textBox.value[textBox.selectionStart]===" ")) {insertText = " " + insertText;}
+		  if (!(textBox.value[textBox.selectionEnd-1]===" ")) {insertText += " ";}
+		  textBox.value =
+			textBox.value.substring(0, textBox.selectionStart) +
+			insertText +
+			textBox.value.substring(textBox.selectionEnd - 1, textBox.value.length);
+		}
 	}
 	
 	//Hide emoji picker when clicked outside of
@@ -72,6 +75,39 @@ export default async function ({ addon, global, console }) {
 		);
 	});
 	
+	//Function for adding an emoji
+	const addEmoji = function() {
+		try {
+			const textBox = this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector('textarea[id*="frc-compose-comment"]');
+			insertTextToTextArea(this.dataset.text, textBox);
+		} catch(error) {
+			console.error("Error adding emoji:", error)
+		}
+	}
+	
+	//Create picker
+	var emojiPicker = document.createElement("div");
+	emojiPicker.id = "sa-emoji-picker";
+	addon.tab.displayNoneWhileDisabled(emojiPicker, {display: "inline-block"});
+	//Create picker items
+	emojis.forEach(
+		(emoji) => {
+			//Container for emoji picker item
+			let container = document.createElement("span");
+			container.classList.add("sa-emoji-picker-item");
+			container.dataset.text = emoji.text;
+			container.onclick = addEmoji;
+			//The actual item
+			let item = document.createElement("img");
+			item.src = emoji.image;
+			item.classList.add("emoji");
+			item.classList.add("sa-emoji-picker-item-inner");
+			//Append
+			container.appendChild(item);
+			emojiPicker.appendChild(container);
+		}
+	);
+	
 	//Add emoji buttons
 	while (true) {
 		const textBox = await addon.tab.waitForElement('textarea[id*="frc-compose-comment"]', {
@@ -81,6 +117,7 @@ export default async function ({ addon, global, console }) {
 				return state.scratchGui.mode.isPlayerOnly;
 			},
 		});
+		const limitText = textBox.parentElement.parentElement.parentElement.querySelector(".compose-limit");
 		const textContainer = textBox.parentElement;
 		//The emoji button
 		let emojiButton = document.createElement("div");
@@ -94,6 +131,6 @@ export default async function ({ addon, global, console }) {
 		emojiButton.appendChild(emojiButtonText);
 		addon.tab.displayNoneWhileDisabled(emojiPicker, {display: "inline-block"});
 		//Append
-		textContainer.appendChild(emojiButton);
+		limitText.appendChild(emojiButton);
 	}
 }

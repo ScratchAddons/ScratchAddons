@@ -10,14 +10,14 @@
 	"userscripts": [
 		{
 			"url": "userscript.js",
-			"matches": ["projects"],
+			"matches": ["projects", "studios"],
 			"runAtComplete": false
 		}
 	],
 	"userstyles": [
 		{
 			"url": "userstyle.css",
-			"matches": ["projects"]
+			"matches": ["projects", "studios"]
 		}
 	],
 	"dynamicEnable": true,
