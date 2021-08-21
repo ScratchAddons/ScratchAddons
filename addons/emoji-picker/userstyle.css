@@ -1,53 +1,53 @@
 #sa-emoji-picker {
-	user-select: none;
-	cursor: auto;
-	position: absolute;
-	top: 23px;
-	right: -5px;
-	width: 390px;
-	height: 58px;
-	background-color: white;
-	border-radius: 8px;
-	border: 2px solid rgba(0, 0, 0, 0.15);
-	box-shadow: 0px 0px 5px #00000022;
-	z-index: 1;
-	padding: 5px;
-	overflow: hidden;
+  user-select: none;
+  cursor: auto;
+  position: absolute;
+  top: 23px;
+  right: -5px;
+  width: 390px;
+  height: 58px;
+  background-color: white;
+  border-radius: 8px;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 5px #00000022;
+  z-index: 1;
+  padding: 5px;
+  overflow: hidden;
 }
 .sa-emoji-picker-item {
-	cursor: pointer;
-	width: 24px;
-	height: 24px;
-	margin: 1px;
-	display: inline-block;
-	position: relative;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  margin: 1px;
+  display: inline-block;
+  position: relative;
 }
 .sa-emoji-picker-item:hover {
-	background-color: rgba(0.5, 0.5, 0.5, 0.08);
+  background-color: rgba(0.5, 0.5, 0.5, 0.08);
 }
 .sa-emoji-picker-item-inner {
-	max-width: 100%;
-	max-height: 100%;
-	margin: 0;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translateY(-50%) translateX(-50%);
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
 }
 .sa-emoji-button {
-	transition: filter 0.1s;
-	font-size: 120%;
+  transition: filter 0.1s;
+  font-size: 120%;
 }
 .sa-emoji-button-container {
-	user-select: none;
-	cursor: pointer;
-	display: inline-block;
-	position: relative;
-	margin-left: 0.5em;
+  user-select: none;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  margin-left: 0.5em;
 }
 .sa-emoji-button:not(.sa-emoji-button-selected) {
-	filter: grayscale(100%);
+  filter: grayscale(100%);
 }
 .sa-emoji-button:not(.sa-emoji-button-selected):hover {
-	filter: grayscale(80%);
+  filter: grayscale(80%);
 }
