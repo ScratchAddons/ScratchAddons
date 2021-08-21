@@ -10,20 +10,14 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": [
-        "profiles"
-      ],
+      "matches": ["profiles"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "break-spaces.css",
-      "matches": [
-        "studios",
-        "projects",
-        "profiles"
-      ]
+      "matches": ["studios", "projects", "profiles"]
     }
   ],
   "dynamicEnable": true,
