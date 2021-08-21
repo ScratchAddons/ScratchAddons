@@ -11,13 +11,22 @@
     {
       "url": "userscript.js",
       "matches": [
-        "https://scratch.mit.edu/users/*/",
-        "https://scratch.mit.edu/projects/*",
-        "https://scratch.mit.edu/studios/*"
+        "profiles"
       ],
       "runAtComplete": false
     }
   ],
+  "userstyles": [
+    {
+      "url": "break-spaces.css",
+      "matches": [
+        "studios",
+        "projects",
+        "profiles"
+      ]
+    }
+  ],
+  "dynamicEnable": true,
   "versionAdded": "1.8.0",
   "tags": ["community", "comments"]
 }
