@@ -1,5 +1,6 @@
 import commentEmojis from "../scratch-notifier/comment-emojis.js";
 import { linkifyTextNode, pingifyTextNode } from "../../libraries/common/cs/fast-linkify.js";
+import formatProfileComments from "../../libraries/common/cs/format-profile-comments.js";
 
 export default async function ({ addon, global, console, setTimeout, setInterval, clearTimeout, clearInterval }) {
   let lastDateTime;
@@ -338,6 +339,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     if (value instanceof Node) {
       // profile
       node = value.cloneNode(true);
+      if (shouldInsertLinebreak) formatProfileComments(node);
     } else {
       // JSON API
       const fragment = parser.parseFromString(value.trim(), "text/html");
