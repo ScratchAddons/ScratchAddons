@@ -1,8 +1,18 @@
 import Addon from "../../addon-api/background/Addon.js";
+// Intentional circular import
+// ESM so this is fine
+import changeAddonState from "./change-addon-state.js";
+import { getMissingOptionalPermissions } from "./util.js";
 
 export default async function runPersistentScripts(addonId) {
   const manifest = scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest;
   const permissions = manifest.permissions || [];
+  const missing = await getMissingOptionalPermissions();
+  if (permissions.some((p) => missing.includes(p))) {
+    console.warn("Disabled addon", addonId, "due to missing optional permission");
+    changeAddonState(addonId, false);
+    return;
+  }
   if (manifest.persistentScripts)
     executePersistentScripts({ addonId, permissions, scriptUrls: manifest.persistentScripts });
 }

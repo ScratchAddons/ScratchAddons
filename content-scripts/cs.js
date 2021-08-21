@@ -97,6 +97,19 @@ const cs = {
       );
     });
   },
+  getEnabledAddons(tag) {
+    // Return addons that are enabled
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage(
+        {
+          getEnabledAddons: {
+            tag,
+          },
+        },
+        (res) => resolve(res)
+      );
+    });
+  },
 };
 Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
 
@@ -123,7 +136,7 @@ if (path[path.length - 1] !== "/") path += "/";
 const pathArr = path.split("/");
 if (pathArr[0] === "scratch-addons-extension") {
   if (pathArr[1] === "settings") {
-    let url = chrome.runtime.getURL("webpages/settings/index.html");
+    let url = chrome.runtime.getURL(`webpages/settings/index.html${window.location.search}`);
     if (location.hash) url += location.hash;
     chrome.runtime.sendMessage({ replaceTabWithUrl: url });
   }
@@ -388,6 +401,20 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);
 
+if (location.pathname.startsWith("/discuss/")) {
+  // We do this first as sb2 runs fast.
+  const preserveBlocks = () => {
+    document.querySelectorAll("pre.blocks").forEach((el) => {
+      el.setAttribute("data-original", el.innerText);
+    });
+  };
+  if (document.readyState !== "loading") {
+    setTimeout(preserveBlocks, 0);
+  } else {
+    window.addEventListener("DOMContentLoaded", preserveBlocks, { once: true });
+  }
+}
+
 function forumWarning(key) {
   let postArea = document.querySelector("form#post > label");
   if (postArea) {
@@ -478,7 +505,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_18", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_19", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -488,7 +515,7 @@ const showBanner = () => {
             .outerHTML,
           */
           Object.assign(document.createElement("a"), {
-            href: "https://scratch.mit.edu/scratch-addons-extension/settings",
+            href: "https://scratch.mit.edu/scratch-addons-extension/settings?source=updatenotif",
             target: "_blank",
             textContent: chrome.i18n.getMessage("scratchAddonsSettings"),
           }).outerHTML,
@@ -497,7 +524,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_18"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_19"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,

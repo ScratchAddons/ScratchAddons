@@ -1,0 +1,42 @@
+{
+  "name": "3.0 Scratchblocks on forums",
+  "description": "Enables the new version of scratchblocks on the forums.",
+  "credits": [
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    },
+    {
+      "name": "CubeyTheCube",
+      "link": "https://github.com/CubeyTheCube"
+    },
+    {
+      "name": "apple502j",
+      "link": "https://github.com/apple502j"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["editingScreens"],
+      "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "fix-dropdown.css",
+      "matches": ["https://scratch.mit.edu/discuss/post/*/edit/"]
+    }
+  ],
+  "tags": ["community", "forums", "beta"],
+  "libraries": ["scratchblocks"],
+  "info": [
+    {
+      "type": "notice",
+      "text": "The built-in post preview does not support this addon.",
+      "id": "preview_notice"
+    }
+  ],
+  "versionAdded": "1.19.0",
+  "injectAsStyleElt": true
+}

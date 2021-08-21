@@ -23,7 +23,7 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "featured"],
   "enabledByDefault": false,
   "dynamicDisable": true,
   "dynamicEnable": true,

@@ -1,5 +1,20 @@
+import changeAddonState from "./imports/change-addon-state.js";
+import { getMissingOptionalPermissions } from "./imports/util.js";
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
+  else if (request.getEnabledAddons) {
+    let enabled = Object.keys(scratchAddons.localState.addonsEnabled).filter(
+      (addonId) => scratchAddons.localState.addonsEnabled[addonId]
+    );
+    const tag = request.getEnabledAddons.tag;
+    if (tag) {
+      enabled = enabled.filter((id) =>
+        scratchAddons.manifests.some(({ addonId, manifest }) => addonId === id && manifest.tags.includes(tag))
+      );
+    }
+    sendResponse(enabled);
+  }
 });
 
 scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) => {
@@ -8,6 +23,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
+          void chrome.runtime.lastError;
           if (res) {
             (async () => {
               const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
@@ -41,7 +57,12 @@ scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) =
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(tab.id, { dynamicAddonDisable: { addonId } }, { frameId: 0 });
+        chrome.tabs.sendMessage(
+          tab.id,
+          { dynamicAddonDisable: { addonId } },
+          { frameId: 0 },
+          () => void chrome.runtime.lastError
+        );
       }
     })
   );
@@ -124,8 +145,13 @@ async function getContentScriptInfo(url) {
     addonsWithUserstyles: [],
   };
   const promises = [];
+  const missingPermissions = await getMissingOptionalPermissions();
   scratchAddons.manifests.forEach(async ({ addonId, manifest }, i) => {
     if (!scratchAddons.localState.addonsEnabled[addonId]) return;
+    if (manifest.permissions?.some((p) => missingPermissions.includes(p))) {
+      changeAddonState(addonId, false);
+      return;
+    }
     const promise = getAddonData({ addonId, manifest, url });
     promises.push(promise);
     const { userscripts, userstyles, cssVariables } = await promise;
@@ -234,6 +260,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             scratchAddons.localEvents.removeEventListener("csInfoCacheUpdated", thisFunction);
           }
         });
+        return true;
       } else {
         sendResponse(cacheEntry.info);
         csInfoCache.delete(identity);
