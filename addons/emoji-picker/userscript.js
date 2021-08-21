@@ -3,20 +3,6 @@ export default async function ({ addon, global, console }) {
 	const emojis = [
 		{text: "_meow_", image: "/images/emoji/meow.png"},
 		{text: "_gobo_", image: "/images/emoji/gobo.png"},
-		{text: "_waffle_", image: "/images/emoji/waffle.png"},
-		{text: "_taco_", image: "/images/emoji/taco.png"},
-		{text: "_sushi_", image: "/images/emoji/sushi.png"},
-		{text: "_apple_", image: "/images/emoji/apple.png"},
-		{text: "_broccoli_", image: "/images/emoji/broccoli.png"},
-		{text: "_pizza_", image: "/images/emoji/pizza.png"},
-		{text: "_candycorn_", image: "/images/emoji/candycorn.png"},
-		{text: "_10mil_", image: "/images/emoji/10mil.png"},
-		{text: "_map_", image: "/images/emoji/map.png"},
-		{text: "_camera_", image: "/images/emoji/camera.png"},
-		{text: "_suitcase_", image: "/images/emoji/suitcase.png"},
-		{text: "_compass_", image: "/images/emoji/compass.png"},
-		{text: "_binoculars_", image: "/images/emoji/binoculars.png"},
-		{text: "_cupcake_", image: "/images/emoji/cupcake.png"},
 		{text: "_:)_", image: "/images/emoji/cat.png"},
 		{text: "_:D_", image: "/images/emoji/aww-cat.png"},
 		{text: "_B)_", image: "/images/emoji/cool-cat.png"},
@@ -29,6 +15,20 @@ export default async function ({ addon, global, console }) {
 		{text: "_**_", image: "/images/emoji/fav-it-cat.png"},
 		{text: "_:))_", image: "/images/emoji/rainbow-cat.png"},
 		{text: "_:D<_", image: "/images/emoji/pizza-cat.png"},
+		{text: "_10mil_", image: "/images/emoji/10mil.png"},
+		{text: "_waffle_", image: "/images/emoji/waffle.png"},
+		{text: "_taco_", image: "/images/emoji/taco.png"},
+		{text: "_sushi_", image: "/images/emoji/sushi.png"},
+		{text: "_apple_", image: "/images/emoji/apple.png"},
+		{text: "_broccoli_", image: "/images/emoji/broccoli.png"},
+		{text: "_pizza_", image: "/images/emoji/pizza.png"},
+		{text: "_candycorn_", image: "/images/emoji/candycorn.png"},
+		{text: "_map_", image: "/images/emoji/map.png"},
+		{text: "_camera_", image: "/images/emoji/camera.png"},
+		{text: "_suitcase_", image: "/images/emoji/suitcase.png"},
+		{text: "_compass_", image: "/images/emoji/compass.png"},
+		{text: "_binoculars_", image: "/images/emoji/binoculars.png"},
+		{text: "_cupcake_", image: "/images/emoji/cupcake.png"},
 		{text: "_pride_", image: "/images/emoji/pride.png"},
 		{text: "_blm_", image: "/images/emoji/blm.png"}
 	];
@@ -58,7 +58,7 @@ export default async function ({ addon, global, console }) {
 	const showEmojiPicker = function() {
 		this.appendChild(emojiPicker);
 		//Also add effect on emoji button
-		this.classList.add("sa-emoji-button-selected");
+		this.children[0].classList.add("sa-emoji-button-selected");
 	}
 	
 	//Hide emoji picker when clicked outside of
@@ -84,10 +84,14 @@ export default async function ({ addon, global, console }) {
 		const textContainer = textBox.parentElement;
 		//The emoji button
 		let emojiButton = document.createElement("div");
-		emojiButton.textContent = "🙂";
-		emojiButton.title = "Button added by the Scratch Addons browser extension"
-		emojiButton.classList.add("sa-emoji-button");
+		emojiButton.classList.add("sa-emoji-button-container");
 		emojiButton.onclick = showEmojiPicker;
+		//Text inside the emoji button
+		let emojiButtonText = document.createElement("span");
+		emojiButtonText.textContent = "🙂";
+		emojiButtonText.title = "Button added by the Scratch Addons browser extension"
+		emojiButtonText.classList.add("sa-emoji-button");
+		emojiButton.appendChild(emojiButtonText);
 		addon.tab.displayNoneWhileDisabled(emojiPicker, {display: "inline-block"});
 		//Append
 		textContainer.appendChild(emojiButton);

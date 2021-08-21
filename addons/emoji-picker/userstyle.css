@@ -35,6 +35,9 @@
 	transform: translateY(-50%) translateX(-50%);
 }
 .sa-emoji-button {
+	transition: filter 0.1s;
+}
+.sa-emoji-button-container {
 	user-select: none;
 	cursor: pointer;
 	position: absolute;
@@ -43,7 +46,6 @@
 	display: inline-block;
 	width: 20px;
 	height: 20px;
-	transition: filter 0.1s;
 }
 .sa-emoji-button:not(.sa-emoji-button-selected) {
 	filter: grayscale(100%);
