@@ -22,7 +22,7 @@
 	display: inline-block;
 	position: relative;
 }
-.sa-emoji-picker-item::hover {
+.sa-emoji-picker-item:hover {
 	background-color: rgba(0.5, 0.5, 0.5, 0.08);
 }
 .sa-emoji-picker-item-inner {
@@ -47,4 +47,7 @@
 }
 .sa-emoji-button:not(.sa-emoji-button-selected) {
 	filter: grayscale(100%);
+}
+.sa-emoji-button:not(.sa-emoji-button-selected):hover {
+	filter: grayscale(80%);
 }
