@@ -62,7 +62,7 @@ export default async function ({ addon, msg, global, console }) {
               el(
                 "a",
                 {
-                  href: "javascript:void(0)",
+                  href: "#",
                   listeners: {
                     click: sendBGMsg("switch-account", account),
                   },
@@ -87,7 +87,7 @@ export default async function ({ addon, msg, global, console }) {
         if (accounts.includes(username)) {
           item.append(
             el("a", {
-              href: "javascript:void(0)",
+              href: "#",
               textContent: msg("remove-account"),
               listeners: {
                 click: sendBGMsg("remove-account"),
@@ -97,7 +97,7 @@ export default async function ({ addon, msg, global, console }) {
         } else {
           item.append(
             el("a", {
-              href: "javascript:void(0)",
+              href: "#",
               textContent: msg("add-account"),
               listeners: {
                 click: sendBGMsg("add-account"),

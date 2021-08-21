@@ -1,8 +1,10 @@
+import Listenable from "../common/Listenable.js";
+
 /**
  * Handles message passing for background scripts.
  */
 
-export default class MessagePasser extends EventTarget {
+export default class MessagePasser extends Listenable {
   constructor(addonObject) {
     super();
     this._addonId = addonObject.self.id;
