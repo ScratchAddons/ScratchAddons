@@ -13,13 +13,13 @@ export default async function ({ template }) {
     components,
     data() {
       return {
-        expanded: this.getDefaultExpanded(),
-        everExpanded: this.getDefaultExpanded(),
+        expanded: this.defaultExpanded,
+        everExpanded: this.defaultExpanded,
       };
     },
     computed: {
       shouldShow() {
-        return this.visible && (settingsContext.searchInput === "" ? this.groupExpanded : true);
+        return this.visible && (this.$settingsContext.searchInput === "" ? this.groupExpanded : true);
       },
       addonIconSrc() {
         const map = {
@@ -32,33 +32,33 @@ export default async function ({ template }) {
         return `../../images/icons/${map[this.addon._icon]}.svg`;
       },
       addonSettings() {
-        return settingsContext.addonSettings;
+        return this.$settingsContext.addonSettings;
+      },
+      defaultExpanded() {
+        return isIframe ? false : this.groupId === "enabled";
       },
     },
     methods: {
-      getDefaultExpanded() {
-        return isIframe ? false : this.groupId === "enabled";
-      },
       devShowAddonIds(event) {
-        if (!settingsContext.versionName.endsWith("-prerelease") || !event.ctrlKey) return;
+        if (!this.$settingsContext.versionName.endsWith("-prerelease") || !event.ctrlKey) return;
         event.stopPropagation();
         Vue.set(this.addon, "_displayedAddonId", this.addon._addonId);
       },
       loadPreset(preset) {
         if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
           for (const property of Object.keys(preset.values)) {
-            settingsContext.addonSettings[this.addon._addonId][property] = preset.values[property];
+            this.$settingsContext.addonSettings[this.addon._addonId][property] = preset.values[property];
           }
-          settingsContext.updateSettings(this.addon);
+          this.$settingsContext.updateSettings(this.addon);
           console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
         }
       },
       loadDefaults() {
         if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
           for (const property of this.addon.settings) {
-            settingsContext.addonSettings[this.addon._addonId][property.id] = property.default;
+            this.$settingsContext.addonSettings[this.addon._addonId][property.id] = property.default;
           }
-          settingsContext.updateSettings(this.addon);
+          this.$settingsContext.updateSettings(this.addon);
           console.log(`Loaded default values for ${this.addon._addonId}`);
         }
       },
@@ -81,19 +81,19 @@ export default async function ({ template }) {
         };
 
         const requiredPermissions = (this.addon.permissions || []).filter((value) =>
-          settingsContext.browserLevelPermissions.includes(value)
+          this.$settingsContext.browserLevelPermissions.includes(value)
         );
         if (!this.addon._enabled && this.addon.tags.includes("danger")) {
           const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
           if (!confirmation) return;
         }
         if (!this.addon._enabled && requiredPermissions.length) {
-          const result = requiredPermissions.every((p) => settingsContext.grantedOptionalPermissions.includes(p));
+          const result = requiredPermissions.every((p) => this.$settingsContext.grantedOptionalPermissions.includes(p));
           if (result === false) {
             if (isIframe) {
-              settingsContext.addonToEnable = this.addon;
+              this.$settingsContext.addonToEnable = this.addon;
               document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
-              settingsContext.showPopupModal = true;
+              this.$settingsContext.showPopupModal = true;
             } else
               chrome.permissions.request(
                 {
@@ -110,7 +110,7 @@ export default async function ({ template }) {
         } else toggle();
       },
       msg(...params) {
-        return settingsContext.msg(...params);
+        return this.$settingsContext.msg(...params);
       },
     },
     watch: {

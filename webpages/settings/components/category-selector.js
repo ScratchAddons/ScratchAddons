@@ -7,10 +7,10 @@ export default async function ({ template }) {
     },
     computed: {
       selectedCategory() {
-        return settingsContext.selectedCategory;
+        return this.$settingsContext.selectedCategory;
       },
       shouldShow() {
-        const categoriesWithParent = settingsContext.categories
+        const categoriesWithParent = this.$settingsContext.categories
           .filter((category) => category.parent === this.category.parent)
           .map((category) => category.id);
         return !this.category.parent || [this.category.parent, ...categoriesWithParent].includes(this.selectedCategory);
@@ -19,7 +19,7 @@ export default async function ({ template }) {
     methods: {
       onClick(event) {
         event.stopPropagation();
-        settingsContext.selectedCategory = this.category.id;
+        this.$settingsContext.selectedCategory = this.category.id;
       },
     },
   });

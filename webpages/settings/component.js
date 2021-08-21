@@ -85,7 +85,17 @@ export default async function ({ template }) {
     template,
     components,
     data() {
-      window.settingsContext = this;
+      const settingsContext = this;
+      function globalSettings() {
+        this.$settingsContext = settingsContext;
+      }
+      const _init = Vue.prototype._init;
+      Vue.prototype._init = function (options) {
+        if (options === void 0) options = {};
+
+        options.init = options.init ? [globalSettings].concat(options.init) : globalSettings;
+        _init.call(this, options);
+      };
 
       const cleanManifests = [];
       for (const { manifest, addonId } of manifests) {

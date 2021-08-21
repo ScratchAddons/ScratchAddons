@@ -7,11 +7,11 @@ export default async function ({ template }) {
     },
     computed: {
       shouldShow() {
-        if (this.$root.searchInput !== "") return false;
+        if (this.$settingsContext.searchInput !== "") return false;
         return this.shownCount > 0;
       },
       manifestsById() {
-        return this.$root.manifestsById;
+        return this.$settingsContext.manifestsById;
       },
     },
     methods: {

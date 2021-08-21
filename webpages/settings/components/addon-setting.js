@@ -17,7 +17,7 @@ export default async function ({ template }) {
           const arr = Array.isArray(this.setting.if.addonEnabled)
             ? this.setting.if.addonEnabled
             : [this.setting.if.addonEnabled];
-          if (arr.some((addon) => settingsContext.manifestsById[addon]._enabled === true)) return true;
+          if (arr.some((addon) => this.$settingsContext.manifestsById[addon]._enabled === true)) return true;
         }
 
         if (this.setting.if.settings) {
@@ -90,11 +90,11 @@ export default async function ({ template }) {
         this.updateOption(e.target.value);
       },
       msg(...params) {
-        return settingsContext.msg(...params);
+        return this.$settingsContext.msg(...params);
       },
       updateSettings(...params) {
         if (!params[0]) params[0] = this.addon;
-        settingsContext.updateSettings(...params);
+        this.$settingsContext.updateSettings(...params);
       },
       updateOption(newValue) {
         this.addonSettings[this.addon._addonId][this.setting.id] = newValue;
@@ -103,10 +103,10 @@ export default async function ({ template }) {
     },
     events: {
       closePickers(...params) {
-        return settingsContext.closePickers(...params);
+        return this.$settingsContext.closePickers(...params);
       },
       closeResetDropdowns(...params) {
-        return settingsContext.closeResetDropdowns(...params);
+        return this.$settingsContext.closeResetDropdowns(...params);
       },
     },
   });
