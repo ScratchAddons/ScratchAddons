@@ -1,0 +1,15 @@
+#view {
+  background-color: #E9F1FC;
+}
+
+.box-header {
+  background-color: #4d97ff;
+}
+
+.box-header > h1, h2, h3, h4, h5, p {
+    color: white;
+}
+
+.box-content {
+  background-color: #dfecff;
+}
