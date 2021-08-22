@@ -1,6 +1,12 @@
 {
   "name": "Better homepage",
   "description": "Improves the styling of the homepage",
+  "credits": [
+    {
+      "name": "LankyBox01",
+      "link": "https://lankybox01.glitch.me/"
+    }
+  ],
   "userstyles": [
     {
       "url": "userstyle.css",
