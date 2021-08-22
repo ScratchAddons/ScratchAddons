@@ -1,0 +1,6 @@
+{
+  "name": "Better homepage",
+  "description": "Improves the styling of the homepage",
+  "tags": ["community"],
+  "enabledByDefault": false
+}
