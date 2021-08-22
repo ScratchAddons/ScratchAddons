@@ -680,41 +680,43 @@
     {
       "url": "text-shadow.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "textShadow",
-        "value": true
+      "if": {
+        "settings": { "textShadow": true }
       }
     },
     {
       "url": "hide_dots.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "dots",
-        "value": false
+      "if": {
+        "settings": { "dots": false }
+      }
+    },
+    {
+      "url": "paper.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "affectPaper": true }
       }
     },
     {
       "url": "stage.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "affectStage",
-        "value": true
+      "if": {
+        "settings": { "affectStage": true }
       }
     },
     {
       "url": "dark_comments.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "darkComments",
-        "value": true
+      "if": {
+        "settings": { "darkComments": true }
       }
     },
     {
       "url": "scrollbar.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "darkScrollbars",
-        "value": true
+      "if": {
+        "settings": { "darkScrollbars": true }
       }
     }
   ],
@@ -833,6 +835,12 @@
       "id": "textShadow",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Change the costume editor background and selection borders",
+      "id": "affectPaper",
+      "type": "boolean",
+      "default": true
     },
     {
       "name": "Change the colors of variables, lists, speech bubbles, and answer inputs on the stage",
@@ -1023,6 +1031,6 @@
       }
     }
   ],
-  "tags": ["editor", "theme", "recommended"],
+  "tags": ["editor", "theme", "featured"],
   "enabledByDefault": false
 }

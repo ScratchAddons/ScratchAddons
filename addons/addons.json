@@ -83,10 +83,18 @@
   "debugger",
   "disable-stage-drag-select",
   "studio-followers",
+  "forum-toolbar",
   "items-per-row",
   "default-project",
   "turbowarp-player",
   "ctrl-enter-post",
+  "no-script-bumping",
+  "user-id",
+  "hide-delete-button",
+  "name-backpack-items",
+  "forum-copy-code",
+  "paint-by-default",
+  "hide-project-stats",
   "live-comments",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
@@ -102,5 +110,6 @@
   "dark-www",
   "old-studio-layout",
   "compact-messages",
-  "customize-avatar-border"
+  "customize-avatar-border",
+  "scratchblocks"
 ]

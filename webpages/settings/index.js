@@ -15,15 +15,6 @@ if (window.parent !== window) {
   isIframe = true;
 }
 
-const NEW_ADDON_ORDER = [
-  "turbowarp-player",
-  "items-per-row",
-  "ctrl-enter-post",
-  "customize-avatar-border",
-  "compact-messages",
-  "default-project",
-];
-
 let vue;
 let fuse;
 
@@ -200,7 +191,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
           return {
             contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
-            feedback: `https://scratchaddons.com/${localeSlash}feedback/?version=${versionName}&${utm}`,
+            feedback: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${versionName}&${utm}`,
             changelog: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
           };
         })(),
@@ -415,6 +406,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           obj.matchesCategory =
             !shouldHideAsEasterEgg && (newValue === "all" || obj.manifest._categories.includes(newValue));
         });
+        if (newValue === "forums") this.addonGroups.find((group) => group.id === "forums").expanded = true;
       },
     },
     ready() {
@@ -531,7 +523,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         const [addonMajor, addonMinor, __] = manifest.versionAdded.split(".");
         if (extMajor === addonMajor && extMinor === addonMinor) {
           manifest.tags.push("new");
-          manifest._groups.push("new");
+          manifest._groups.push(
+            manifest.tags.includes("recommended") || manifest.tags.includes("featured") ? "featuredNew" : "new"
+          );
         }
       }
 
@@ -547,7 +541,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       else {
         // Addon is disabled
         if (manifest.tags.includes("recommended")) manifest._groups.push("recommended");
+        else if (manifest.tags.includes("featured")) manifest._groups.push("featured");
         else if (manifest.tags.includes("beta") || manifest.tags.includes("danger")) manifest._groups.push("beta");
+        else if (manifest.tags.includes("forums")) manifest._groups.push("forums");
         else manifest._groups.push("others");
       }
 
@@ -578,11 +574,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     const order = [["danger", "beta"], "editor", "community", "popup"];
 
     vue.addonGroups.forEach((group) => {
-      if (group.id === "new") {
-        group.addonIds.sort((b, a) => NEW_ADDON_ORDER.indexOf(b) - NEW_ADDON_ORDER.indexOf(a));
-        return;
-      }
-
       group.addonIds = group.addonIds
         .map((id) => vue.manifestsById[id])
         .sort((manifestA, manifestB) => {
@@ -646,6 +637,11 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         }
       }
     }, 0);
+
+    let binaryNum = "";
+    manifests.forEach(({ addonId }) => (binaryNum += addonsEnabled[addonId] === true ? "1" : "0"));
+    const addonsEnabledBase36 = BigInt(`0b${binaryNum}`).toString(36);
+    vue.sidebarUrls.feedback += `#_${addonsEnabledBase36}`;
   });
 
   window.addEventListener("keydown", function (e) {

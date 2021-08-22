@@ -20,7 +20,16 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
   container.appendChild(buttonContainer);
   buttonContainer.addEventListener("click", () => toggleConsole(true));
 
-  const pause = () => {
+  let hasLoggedPauseError = false;
+
+  const pause = (_, thread) => {
+    if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
+      if (!hasLoggedPauseError) {
+        addLog(msg("cannot-pause-player"), thread, "error");
+        hasLoggedPauseError = true;
+      }
+      return;
+    }
     setPaused(!paused);
     const pauseAddonButton = document.querySelector(".pause-btn");
     if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleConsole(true);
@@ -360,7 +369,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     const s = document.createElement("span");
     s.innerHTML = safeMsg("feedback-log", {
       logLink: Object.assign(document.createElement("a"), {
-        href: "https://scratchaddons.com/feedback?version=1.18-debugger",
+        href: "https://scratchaddons.com/feedback/?ext_version=1.19%2Bdebugger",
         className: "sa-debugger-feedback",
         target: "_blank",
         textContent: msg("feedback-log-link"),

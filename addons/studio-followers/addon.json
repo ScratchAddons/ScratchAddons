@@ -22,7 +22,9 @@
       "matches": ["https://scratch.mit.edu/studios/*"]
     }
   ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.17.0",
-  "tags": ["community", "studios"],
+  "tags": ["community", "studios", "featured"],
   "enabledByDefault": false
 }
