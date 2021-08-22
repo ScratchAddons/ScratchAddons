@@ -1,6 +1,12 @@
 {
   "name": "Better homepage",
   "description": "Improves the styling of the homepage",
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/"]
+    }
+  ],
   "tags": ["community"],
   "enabledByDefault": false
 }
