@@ -2,8 +2,8 @@
   user-select: none;
   cursor: auto;
   position: absolute;
-  top: 23px;
-  right: -5px;
+  top: 48px;
+  right: -10px;
   width: 390px;
   height: 58px;
   background-color: white;
@@ -35,8 +35,8 @@
   transform: translateY(-50%) translateX(-50%);
 }
 .sa-emoji-button {
-  transition: filter 0.1s;
-  font-size: 120%;
+	padding: 0.74rem 0.99rem;
+	vertical-align: middle;
 }
 .sa-emoji-button-container {
   user-select: none;
@@ -44,10 +44,4 @@
   display: inline-block;
   position: relative;
   margin-left: 0.5em;
-}
-.sa-emoji-button:not(.sa-emoji-button-selected) {
-  filter: grayscale(100%);
-}
-.sa-emoji-button:not(.sa-emoji-button-selected):hover {
-  filter: grayscale(80%);
 }
