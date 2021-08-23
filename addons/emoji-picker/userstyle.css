@@ -35,8 +35,8 @@
   transform: translateY(-50%) translateX(-50%);
 }
 .sa-emoji-button {
-	padding: 0.74rem 0.99rem;
-	vertical-align: middle;
+  padding: 0.74rem 0.99rem;
+  vertical-align: middle;
 }
 .sa-emoji-button-container {
   user-select: none;

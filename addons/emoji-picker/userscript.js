@@ -80,17 +80,17 @@ export default async function ({ addon, global, console }) {
   });
 
   //Function for adding an emoji
-  const addEmoji = function() {
+  const addEmoji = function () {
     try {
       const textBox =
         this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(
           'textarea[id*="frc-compose-comment"]'
         );
       insertTextToTextArea(this.dataset.text, textBox);
-	  //Simulate inputting so that Scratch doesn't consider 
-	  //emojis added from an empty comment using this button
-	  //as an empty comment
-	  textBox.dispatchEvent(new Event("input", { 'bubbles': true }));
+      //Simulate inputting so that Scratch doesn't consider
+      //emojis added from an empty comment using this button
+      //as an empty comment
+      textBox.dispatchEvent(new Event("input", { bubbles: true }));
     } catch (error) {
       console.error("Error adding emoji:", error);
     }
@@ -137,7 +137,7 @@ export default async function ({ addon, global, console }) {
     emojiButtonText.textContent = "🙂";
     emojiButtonText.title = "Button added by the Scratch Addons browser extension";
     emojiButtonText.classList.add("sa-emoji-button");
-	emojiButtonText.classList.add("button");
+    emojiButtonText.classList.add("button");
     emojiButton.appendChild(emojiButtonText);
     addon.tab.displayNoneWhileDisabled(emojiPicker, { display: "inline-block" });
     //Append
