@@ -348,7 +348,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     node.normalize();
     for (let i = node.childNodes.length; i--; ) {
       const item = node.childNodes[i];
-      if (!shouldInsertLinebreak) item.textContent = item.textContent.replace(/\n/g, "").replace(/\s+/g, " ");
+      if (!shouldInsertLinebreak) item.textContent = item.textContent.replace(/\s+/g, " ");
       if (item instanceof Text && item.textContent === "") {
         item.remove();
       } else if (item instanceof HTMLAnchorElement && item.getAttribute("href").startsWith("/")) {
