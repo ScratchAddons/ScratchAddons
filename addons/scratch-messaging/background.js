@@ -345,9 +345,10 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       const fragment = parser.parseFromString(value.trim(), "text/html");
       node = fragment.body;
     }
+    node.normalize();
     for (let i = node.childNodes.length; i--; ) {
       const item = node.childNodes[i];
-      if (!shouldInsertLinebreak) item.textContent = item.textContent.replace(/\n/g, "");
+      if (!shouldInsertLinebreak) item.textContent = item.textContent.replace(/\s+/g, " ");
       if (item instanceof Text && item.textContent === "") {
         item.remove();
       } else if (item instanceof HTMLAnchorElement && item.getAttribute("href").startsWith("/")) {
@@ -362,7 +363,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       linkifyTextNode(node);
     }
     pingifyTextNode(node);
-    return node.innerHTML;
+    return node.innerHTML.trimStart();
   }
 
   async function sendComment({ resourceType, resourceId, content, parent_id, commentee_id, commenteeUsername }) {
