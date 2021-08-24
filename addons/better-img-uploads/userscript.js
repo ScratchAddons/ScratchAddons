@@ -1,27 +1,50 @@
-export default async function ({ addon, console, safeMsg: m }) {
+export default async function ({ addon, console, msg }) {
   let mode = addon.settings.get("fitting");
 
   addon.settings.addEventListener("change", () => {
     mode = addon.settings.get("fitting");
   });
 
-  //Returns html code for an item in the selection lists, complete with tooltip.
-  let html = (id, right) => `<div id="${id}">
-  <button aria-label="Upload Costume" class="${addon.tab.scratchClass("action-menu_button")} ${addon.tab.scratchClass(
-    "action-menu_more-button"
-  )} sa-better-img-uploads-btn" data-for="sa-${id}-HD Upload" data-tip="${m("upload")}" currentitem="false">
-    <img class="${addon.tab.scratchClass("action-menu_more-icon")} sa-better-img-uploader" draggable="false" src="${
-    addon.self.dir + "/icon.svg"
-  }" height="10", width="10">
-     <input accept=".svg, .png, .bmp, .jpg, .jpeg" class="${addon.tab.scratchClass(
-       "action-menu_file-input"
-     )}" multiple="" type="file">
-  </button>
-  <div class="__react_component_tooltip place-${right ? "left" : "right"} type-dark ${addon.tab.scratchClass(
-    "action-menu_tooltip"
-  )} sa-better-img-uploads-tooltip" id="sa-${id}-HD Upload" data-id="tooltip" >${m("upload")}</div>
-</div>`;
-
+  const createItem = (id, right) => {
+    const uploadMsg = msg("upload");
+    const wrapper = Object.assign(document.createElement("div"), { id });
+    const button = Object.assign(document.createElement("button"), {
+      className: `${addon.tab.scratchClass("action-menu_button")} ${addon.tab.scratchClass(
+        "action-menu_more-button"
+      )} sa-better-img-uploads-btn`,
+      currentitem: "false",
+    });
+    button.dataset.for = `sa-${id}-HD Upload`;
+    button.dataset.tip = uploadMsg;
+    const img = Object.assign(document.createElement("img"), {
+      className: `${addon.tab.scratchClass("action-menu_more-icon")} sa-better-img-uploader`,
+      draggable: "false",
+      src: `${addon.self.dir}/icon.svg`,
+      height: "10",
+      width: "10",
+    });
+    button.append(img);
+    const input = Object.assign(document.createElement("input"), {
+      accept: ".svg, .png, .bmp, .jpg, .jpeg",
+      className: `${addon.tab.scratchClass(
+        "action-menu_file-input" /* TODO: when adding dynamicDisable, ensure compat with drag-drop */
+      )} sa-better-img-uploads-input`,
+      multiple: "true",
+      type: "file",
+    });
+    button.append(input);
+    wrapper.append(button);
+    const tooltip = Object.assign(document.createElement("div"), {
+      className: `__react_component_tooltip place-${right ? "left" : "right"} type-dark ${addon.tab.scratchClass(
+        "action-menu_tooltip"
+      )} sa-better-img-uploads-tooltip`,
+      id: `sa-${id}-HD Upload`,
+      textContent: uploadMsg,
+    });
+    tooltip.dataset.id = "tooltip";
+    wrapper.append(tooltip);
+    return [wrapper, button, input, tooltip];
+  };
   while (true) {
     //Catch all upload menus as they are created
     let menu = await addon.tab.waitForElement(
@@ -40,15 +63,15 @@ export default async function ({ addon, console, safeMsg: m }) {
       id += "_right";
     }
 
-    menu.insertAdjacentHTML("afterbegin", html(id, isRight));
-    let menuItem = document.getElementById(id);
+    const [menuItem, hdButton, input, tooltip] = createItem(id, isRight);
+    menu.prepend(menuItem);
 
-    menuItem.querySelector("button").addEventListener("click", (e) => {
-      menuItem.querySelector("button > input").files = new FileList(); //Empty the input to make sure the change event fires even if the same file was uploaded.
-      menuItem.querySelector("button > input").click();
+    hdButton.addEventListener("click", (e) => {
+      input.files = new FileList(); //Empty the input to make sure the change event fires even if the same file was uploaded.
+      input.click();
     });
 
-    menuItem.querySelector("button > input").addEventListener("change", (e) => {
+    input.addEventListener("change", (e) => {
       onchange(e, id);
     });
 
@@ -58,8 +81,8 @@ export default async function ({ addon, console, safeMsg: m }) {
 
     function doresize(id, menu, menuItem, isRight) {
       let rect = menuItem.getBoundingClientRect();
-      menuItem.querySelector(`.sa-better-img-uploads-tooltip`).style.top = rect.top + 2 + "px";
-      menuItem.querySelector(`.sa-better-img-uploads-tooltip`).style[isRight ? "right" : "left"] = isRight
+      tooltip.style.top = rect.top + 2 + "px";
+      tooltip.style[isRight ? "right" : "left"] = isRight
         ? window.innerWidth - rect.right + rect.width + 10 + "px"
         : rect.left + rect.width + "px";
     }

@@ -1,5 +1,16 @@
 export default async function ({ addon, global, console, msg }) {
   let pendingReplacement = false;
+
+  let reduxAvailable = Boolean(addon.tab.redux.state);
+  while (!reduxAvailable) {
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        reduxAvailable = Boolean(addon.tab.redux.state);
+        resolve();
+      }, 0);
+    });
+  }
+
   addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", async (e) => {
     if (e.detail.action.type === "scratch-gui/project-state/DONE_LOADING_VM_WITHOUT_ID") {

@@ -83,13 +83,19 @@
   "debugger",
   "disable-stage-drag-select",
   "studio-followers",
+  "forum-toolbar",
   "items-per-row",
   "default-project",
   "turbowarp-player",
   "ctrl-enter-post",
+  "no-script-bumping",
+  "user-id",
+  "hide-delete-button",
+  "name-backpack-items",
   "forum-copy-code",
   "paint-by-default",
   "editor-unshare-button",
+  "hide-project-stats",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -104,5 +110,6 @@
   "dark-www",
   "old-studio-layout",
   "compact-messages",
-  "customize-avatar-border"
+  "customize-avatar-border",
+  "scratchblocks"
 ]

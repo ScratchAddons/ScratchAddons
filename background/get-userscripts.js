@@ -1,5 +1,20 @@
+import changeAddonState from "./imports/change-addon-state.js";
+import { getMissingOptionalPermissions } from "./imports/util.js";
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
+  else if (request.getEnabledAddons) {
+    let enabled = Object.keys(scratchAddons.localState.addonsEnabled).filter(
+      (addonId) => scratchAddons.localState.addonsEnabled[addonId]
+    );
+    const tag = request.getEnabledAddons.tag;
+    if (tag) {
+      enabled = enabled.filter((id) =>
+        scratchAddons.manifests.some(({ addonId, manifest }) => addonId === id && manifest.tags.includes(tag))
+      );
+    }
+    sendResponse(enabled);
+  }
 });
 
 scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) => {
@@ -8,6 +23,7 @@ scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
         chrome.tabs.sendMessage(tab.id, "getInitialUrl", { frameId: 0 }, (res) => {
+          void chrome.runtime.lastError;
           if (res) {
             (async () => {
               const { userscripts, userstyles, cssVariables } = await getAddonData({ addonId, url: res, manifest });
@@ -41,7 +57,12 @@ scratchAddons.localEvents.addEventListener("addonDynamicDisable", ({ detail }) =
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach((tab) => {
       if (tab.url || (!tab.url && typeof browser !== "undefined")) {
-        chrome.tabs.sendMessage(tab.id, { dynamicAddonDisable: { addonId } }, { frameId: 0 });
+        chrome.tabs.sendMessage(
+          tab.id,
+          { dynamicAddonDisable: { addonId } },
+          { frameId: 0 },
+          () => void chrome.runtime.lastError
+        );
       }
     })
   );
@@ -124,8 +145,13 @@ async function getContentScriptInfo(url) {
     addonsWithUserstyles: [],
   };
   const promises = [];
+  const missingPermissions = await getMissingOptionalPermissions();
   scratchAddons.manifests.forEach(async ({ addonId, manifest }, i) => {
     if (!scratchAddons.localState.addonsEnabled[addonId]) return;
+    if (manifest.permissions?.some((p) => missingPermissions.includes(p))) {
+      changeAddonState(addonId, false);
+      return;
+    }
     const promise = getAddonData({ addonId, manifest, url });
     promises.push(promise);
     const { userscripts, userstyles, cssVariables } = await promise;
@@ -234,6 +260,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             scratchAddons.localEvents.removeEventListener("csInfoCacheUpdated", thisFunction);
           }
         });
+        return true;
       } else {
         sendResponse(cacheEntry.info);
         csInfoCache.delete(identity);
@@ -279,7 +306,7 @@ const WELL_KNOWN_PATTERNS = {
   editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
   forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
   scratchWWWNoProject:
-    /^\/(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|dmca|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|sec|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?)\/?$/,
+    /^\/(?:(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|DMCA|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?)\/?)?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {
@@ -291,24 +318,36 @@ const WELL_KNOWN_MATCHERS = {
 
 function matchesIf(injectable, settings) {
   // injectable.if is guaranteed to exist
-  // Return true as soon as any condition matches. Everything is an OR, not an AND.
+  // addonEnabled and settings are AND-ed
+  // settings keys are AND-ed
+  // addonEnabled and settings values are OR-ed
 
-  if (injectable.if.addonEnabled) {
-    const arr = Array.isArray(injectable.if.addonEnabled) ? injectable.if.addonEnabled : [injectable.if.addonEnabled];
-    if (arr.some((addon) => scratchAddons.localState.addonsEnabled[addon] === true)) return true;
-  }
+  /**
+   * Formula:
+   * NOT (
+   *  (addonEnabled exists AND all of the addons are disabled) OR
+   *  (settings exists AND there is a setting where none of potential values match)
+   * )
+   * Or,
+   * NOT (
+   *  (addonEnabled AND AND(addons**Dis**abled)) OR
+   *  (settings exists AND OR(AND(settings do **NOT** match)))
+   * )
+   */
 
-  if (injectable.if.settings) {
-    const anyMatches = Object.keys(injectable.if.settings).some((settingName) => {
-      const arr = Array.isArray(injectable.if.settings[settingName])
-        ? injectable.if.settings[settingName]
-        : [injectable.if.settings[settingName]];
-      return arr.some((possibleValue) => settings[settingName] === possibleValue);
-    });
-    if (anyMatches === true) return true;
-  }
-
-  return false;
+  return !(
+    (injectable.if.addonEnabled?.length &&
+      (Array.isArray(injectable.if.addonEnabled) ? injectable.if.addonEnabled : [injectable.if.addonEnabled]).every(
+        (addon) => !scratchAddons.localState.addonsEnabled[addon]
+      )) ||
+    (injectable.if.settings &&
+      Object.keys(injectable.if.settings).some((settingName) =>
+        (Array.isArray(injectable.if.settings[settingName])
+          ? injectable.if.settings[settingName]
+          : [injectable.if.settings[settingName]]
+        ).every((possibleValue) => settings[settingName] !== possibleValue)
+      ))
+  );
 }
 
 // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
