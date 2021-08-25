@@ -3,7 +3,8 @@
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
-  color: white;
+  color: var(--content-text);
+  background-color: var(--page-background);
 }
 .popup-container.fullscreen {
   width: 55%;

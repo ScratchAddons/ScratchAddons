@@ -19,12 +19,8 @@ export default (filenames) =>
           const dom = new DOMParser().parseFromString(text, "text/html");
 
           styles[filename] = {};
-          const lightCss = dom.querySelector("style[light]")?.textContent;
-          if (lightCss) {
-            styles[filename].light = lightCss;
-          }
 
-          const css = dom.querySelector("style:not([light])")?.textContent;
+          const css = dom.querySelector("style")?.textContent;
           if (css) {
             if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
               const normalizedCss = css.replace("\n", "").trimEnd();
@@ -46,23 +42,6 @@ export default (filenames) =>
     })
   ).then((components) => {
     let all = {};
-    chrome.storage.sync.get(["globalTheme"], function (r) {
-      if (r.globalTheme) {
-        filenames.forEach((filename) => {
-          filename = filename.url || filename;
-          if (!styles[filename].light) return;
-          const style = document.createElement("style");
-          style.textContent = styles[filename].light;
-          const [componentName] = filename.split("/").slice(-1);
-          style.setAttribute("data-vue-component", componentName); // For debugging (has no side effects)
-          if (filename.startsWith("popups/")) {
-            const [addonId] = filename.split("/").slice(1);
-            style.setAttribute("data-addon-id", addonId);
-          }
-          document.head.appendChild(style);
-        });
-      }
-    });
     filenames.forEach((filename) => {
       filename = filename.url || filename;
       if (!styles[filename].style) return;
