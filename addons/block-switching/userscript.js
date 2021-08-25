@@ -794,7 +794,7 @@ export default async function ({ addon, global, console, msg }) {
                 makeSpaceItemIndex
               : // If there's no such button, insert at end
                 items.length;
-          let text = opcodeData.msg
+          const text = opcodeData.msg
             ? opcodeData.msg
             : opcodeData.opcode
             ? msg(opcodeData.opcode)
@@ -806,6 +806,7 @@ export default async function ({ addon, global, console, msg }) {
             separator: addon.settings.get("border") && i === 0,
           });
         });
+
         if (addon.settings.get("border") && (block.type === "data_variable" || block.type === "data_listcontents")) {
           // Add top border to first variable (if it exists)
           const delBlockIndex = items.findIndex((item) => item.text === blockly.Msg.DELETE_BLOCK);
