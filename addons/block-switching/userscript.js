@@ -782,9 +782,11 @@ export default async function ({ addon, global, console, msg }) {
           }
         }
 
-        switches.forEach((opcodeData, i) => {
-          if (opcodeData.isNoop && !addon.settings.get("noop")) return;
+        if (!addon.settings.get("noop")) {
+          switches = switches.filter((i) => !i.isNoop);
+        }
 
+        switches.forEach((opcodeData, i) => {
           const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
           const insertBeforeIndex =
             makeSpaceItemIndex !== -1
