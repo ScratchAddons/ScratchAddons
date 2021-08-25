@@ -21,9 +21,7 @@ export default async function ({ addon, global, console, msg }) {
   };
   // Declare the active array, and either get it from localStorage or set it to every class in filter.
   // The 'active' array holds the list of the classes of the messages that are shown.
-  let active =
-    JSON.parse(localStorage.getItem("scratchAddonsMessageFiltersSettings")) ||
-    Object.values(filter);
+  let active = JSON.parse(localStorage.getItem("scratchAddonsMessageFiltersSettings")) || Object.values(filter);
 
   // Migration: auto-enable mod-become-host when updating.
   if (!localStorage.getItem("scratchAddonsMessageFiltersSupportsHost")) {
