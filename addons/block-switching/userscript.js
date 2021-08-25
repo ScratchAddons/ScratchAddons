@@ -4,7 +4,7 @@ export default async function ({ addon, global, console, msg }) {
   const blockly = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
   const blockSwitches = {};
-
+  const saBlockSwitches = {};
   const noopSwitch = {
     opcode: "noop",
   };
@@ -555,6 +555,29 @@ export default async function ({ addon, global, console, msg }) {
   // Because we don't implement the switching ourselves, this is not controlled by the data category option.
   blockSwitches["data_variable"] = [];
   blockSwitches["data_listcontents"] = [];
+  if (addon.settings.get("sa") && (await addon.self.getEnabledAddons()).includes("debugger")) {
+    // note that here opcode actually means proccode
+    const logProc = "\u200B\u200Blog\u200B\u200B %s",
+      warnProc = "\u200B\u200Bwarn\u200B\u200B %s",
+      errProc = "\u200B\u200Berror\u200B\u200B %s";
+    const logMsg = msg("/debugger/block-log").split("%s")[0].trim(),
+      warnMsg = msg("/debugger/block-warn").split("%s")[0].trim(),
+      errMsg = msg("/debugger/block-error").split("%s")[0].trim();
+    saBlockSwitches[logProc] = saBlockSwitches[warnProc] = saBlockSwitches[errProc] = [
+      {
+        opcode: logProc,
+        msg: logMsg
+      },
+      {
+        opcode: warnProc,
+        msg: warnMsg
+      },
+      {
+        opcode: errProc,
+        msg: errMsg
+      }
+    ];
+  }
 
   const genuid = () => {
     const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
@@ -580,7 +603,11 @@ export default async function ({ addon, global, console, msg }) {
     // Make a copy of the block with the proper type set.
     // It doesn't seem to be possible to change a Block's type after it's created, so we'll just make a new block instead.
     const xml = blockToDom(block);
-    xml.setAttribute("type", opcodeData.opcode);
+    if (mode === "native") {
+      xml.setAttribute("type", opcodeData.opcode);
+    } else {
+      xml.querySelector("mutation").setAttribute("proccode", opcodeData.opcode);
+    }
 
     const id = block.id;
     const parent = block.getParent();
@@ -672,7 +699,7 @@ export default async function ({ addon, global, console, msg }) {
     (items, block) => {
       if (!addon.self.disabled) {
         const type = block.type;
-        // switchType: "native" | "arg"
+        // switchType: "native" | "arg" | "custom"
         let switchType = "native";
         let switches = blockSwitches[block.type] || [];
 
@@ -712,10 +739,15 @@ export default async function ({ addon, global, console, msg }) {
             }
           }
         }
+        let proccode;
+        if (block.type === "procedures_call" && saBlockSwitches[(proccode = block.getProcCode())]) {
+          switches = saBlockSwitches[proccode];
+          switchType = "custom";
+        }
 
         switches.forEach((opcodeData, i) => {
           const isNoop =
-            switchType === "native" ? opcodeData.opcode === "noop" : opcodeData === block.getFieldValue("VALUE");
+            switchType === "native" ? opcodeData.opcode === "noop" : (switchType === "arg" ? opcodeData === block.getFieldValue("VALUE") : opcodeData.opcode === proccode);
           if (isNoop && !addon.settings.get("noop")) return;
 
           const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
@@ -725,7 +757,7 @@ export default async function ({ addon, global, console, msg }) {
                 makeSpaceItemIndex
               : // If there's no such button, insert at end
                 items.length;
-          let text = switchType === "native" ? msg(isNoop ? block.type : opcodeData.opcode) : opcodeData;
+          let text = switchType === "custom" ? opcodeData.msg : (switchType === "native" ? msg(isNoop ? block.type : opcodeData.opcode) : opcodeData);
           items.splice(insertBeforeIndex, 0, {
             enabled: true,
             text,
