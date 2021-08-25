@@ -1,8 +1,4 @@
-html {
-  background: var(--content-background);
-}
-
-body {
+.main {
   background: var(--page-background);
   font-family: "Sora", sans-serif;
   margin: 0;
