@@ -563,20 +563,23 @@ export default async function ({ addon, global, console, msg }) {
     const logMsg = msg("/debugger/block-log").split("%s")[0].trim(),
       warnMsg = msg("/debugger/block-warn").split("%s")[0].trim(),
       errMsg = msg("/debugger/block-error").split("%s")[0].trim();
-    saBlockSwitches[logProc] = saBlockSwitches[warnProc] = saBlockSwitches[errProc] = [
-      {
-        opcode: logProc,
-        msg: logMsg
-      },
-      {
-        opcode: warnProc,
-        msg: warnMsg
-      },
-      {
-        opcode: errProc,
-        msg: errMsg
-      }
-    ];
+    saBlockSwitches[logProc] =
+      saBlockSwitches[warnProc] =
+      saBlockSwitches[errProc] =
+        [
+          {
+            opcode: logProc,
+            msg: logMsg,
+          },
+          {
+            opcode: warnProc,
+            msg: warnMsg,
+          },
+          {
+            opcode: errProc,
+            msg: errMsg,
+          },
+        ];
   }
 
   const genuid = () => {
@@ -747,7 +750,11 @@ export default async function ({ addon, global, console, msg }) {
 
         switches.forEach((opcodeData, i) => {
           const isNoop =
-            switchType === "native" ? opcodeData.opcode === "noop" : (switchType === "arg" ? opcodeData === block.getFieldValue("VALUE") : opcodeData.opcode === proccode);
+            switchType === "native"
+              ? opcodeData.opcode === "noop"
+              : switchType === "arg"
+              ? opcodeData === block.getFieldValue("VALUE")
+              : opcodeData.opcode === proccode;
           if (isNoop && !addon.settings.get("noop")) return;
 
           const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
@@ -757,7 +764,12 @@ export default async function ({ addon, global, console, msg }) {
                 makeSpaceItemIndex
               : // If there's no such button, insert at end
                 items.length;
-          let text = switchType === "custom" ? opcodeData.msg : (switchType === "native" ? msg(isNoop ? block.type : opcodeData.opcode) : opcodeData);
+          let text =
+            switchType === "custom"
+              ? opcodeData.msg
+              : switchType === "native"
+              ? msg(isNoop ? block.type : opcodeData.opcode)
+              : opcodeData;
           items.splice(insertBeforeIndex, 0, {
             enabled: true,
             text,
