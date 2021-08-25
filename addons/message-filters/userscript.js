@@ -17,12 +17,20 @@ export default async function ({ addon, global, console, msg }) {
     [msg("follow")]: "mod-follow-user",
     [msg("invite")]: "mod-curator-invite",
     [msg("forum")]: "mod-forum-activity",
+    [msg("host")]: "mod-become-host",
   };
   // Declare the active array, and either get it from localStorage or set it to every class in filter.
   // The 'active' array holds the list of the classes of the messages that are shown.
   let active =
     JSON.parse(localStorage.getItem("scratchAddonsMessageFiltersSettings")) ||
-    Object.keys(filter).map((i) => filter[i]);
+    Object.values(filter);
+
+  // Migration: auto-enable mod-become-host when updating.
+  if (!localStorage.getItem("scratchAddonsMessageFiltersSupportsHost")) {
+    active.push("mod-become-host");
+    localStorage.setItem("scratchAddonsMessageFiltersSettings", JSON.stringify(active));
+    localStorage.setItem("scratchAddonsMessageFiltersSupportsHost", "true");
+  }
   // Create the checkbox element, which is the container for the message filtering div.
   let container = document.createElement("div");
   container.classList.add("filter-container");
