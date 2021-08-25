@@ -469,7 +469,8 @@ export default async ({ addon, msg, safeMsg }) => {
             });
           } else if (message.type === "becomehoststudio") {
             this.studioHostTransfers.push({
-              actor: message.admin_actor ? msg("st") : message.actor_username,
+              actorAdmin: message.admin_actor,
+              actor: message.actor_username,
               studioId: message.gallery_id,
               studioTitle: message.gallery_title,
             });
@@ -581,8 +582,7 @@ export default async ({ addon, msg, safeMsg }) => {
         return safeMsg("studio-promotion", { actor, title });
       },
       studioHostTransferHTML(promotion) {
-        // Escaping here since it could be a translation
-        const actor = `<a target="_blank"
+        const actor = promotion.actorAdmin ? safeMsg("st") : `<a target="_blank"
             rel="noopener noreferrer"
             href="https://scratch.mit.edu/users/${escapeHTML(promotion.actor)}/"
         >${escapeHTML(promotion.actor)}</a>`;
