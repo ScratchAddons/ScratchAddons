@@ -557,12 +557,12 @@ export default async function ({ addon, global, console, msg }) {
   blockSwitches["data_listcontents"] = [];
   if (addon.settings.get("sa") && (await addon.self.getEnabledAddons()).includes("debugger")) {
     // note that here opcode actually means proccode
-    const logProc = "\u200B\u200Blog\u200B\u200B %s",
-      warnProc = "\u200B\u200Bwarn\u200B\u200B %s",
-      errProc = "\u200B\u200Berror\u200B\u200B %s";
-    const logMsg = msg("/debugger/block-log").split("%s")[0].trim(),
-      warnMsg = msg("/debugger/block-warn").split("%s")[0].trim(),
-      errMsg = msg("/debugger/block-error").split("%s")[0].trim();
+    const logProc = "\u200B\u200Blog\u200B\u200B %s";
+    const warnProc = "\u200B\u200Bwarn\u200B\u200B %s";
+    const errProc = "\u200B\u200Berror\u200B\u200B %s";
+    const logMsg = msg("/debugger/block-log").split("%s")[0].trim();
+    const warnMsg = msg("/debugger/block-warn").split("%s")[0].trim();
+    const errMsg = msg("/debugger/block-error").split("%s")[0].trim();
     saBlockSwitches[logProc] =
       saBlockSwitches[warnProc] =
       saBlockSwitches[errProc] =
