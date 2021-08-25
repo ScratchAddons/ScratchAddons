@@ -563,6 +563,7 @@ export default async function ({ addon, global, console, msg }) {
       const logProc = "\u200B\u200Blog\u200B\u200B %s";
       const warnProc = "\u200B\u200Bwarn\u200B\u200B %s";
       const errorProc = "\u200B\u200Berror\u200B\u200B %s";
+      // TODO: this will not work in Japanese or German
       const logMessage = msg("/debugger/block-log").split("%s")[0].trim();
       const warnMessage = msg("/debugger/block-warn").split("%s")[0].trim();
       const errorMessage = msg("/debugger/block-error").split("%s")[0].trim();
