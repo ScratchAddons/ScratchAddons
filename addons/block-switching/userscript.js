@@ -4,9 +4,9 @@ export default async function ({ addon, global, console, msg }) {
   const blockly = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
   const blockSwitches = {};
-  const saBlockSwitches = {};
+  const procedureSwitches = {};
   const noopSwitch = {
-    opcode: "noop",
+    isNoop: true
   };
   if (addon.settings.get("motion")) {
     blockSwitches["motion_turnright"] = [
@@ -559,27 +559,52 @@ export default async function ({ addon, global, console, msg }) {
     // note that here opcode actually means proccode
     const logProc = "\u200B\u200Blog\u200B\u200B %s";
     const warnProc = "\u200B\u200Bwarn\u200B\u200B %s";
-    const errProc = "\u200B\u200Berror\u200B\u200B %s";
-    const logMsg = msg("/debugger/block-log").split("%s")[0].trim();
-    const warnMsg = msg("/debugger/block-warn").split("%s")[0].trim();
-    const errMsg = msg("/debugger/block-error").split("%s")[0].trim();
-    saBlockSwitches[logProc] =
-      saBlockSwitches[warnProc] =
-      saBlockSwitches[errProc] =
-        [
-          {
-            opcode: logProc,
-            msg: logMsg,
-          },
-          {
-            opcode: warnProc,
-            msg: warnMsg,
-          },
-          {
-            opcode: errProc,
-            msg: errMsg,
-          },
-        ];
+    const errorProc = "\u200B\u200Berror\u200B\u200B %s";
+    const logMessage = msg("/debugger/block-log").split("%s")[0].trim();
+    const warnMessage = msg("/debugger/block-warn").split("%s")[0].trim();
+    const errorMessage = msg("/debugger/block-error").split("%s")[0].trim();
+    const logSwitch = {
+      mutate: {
+        proccode: logProc
+      },
+      msg: logMessage
+    };
+    const warnSwitch = {
+      mutate: {
+        proccode: warnProc
+      },
+      msg: warnMessage
+    };
+    const errorSwitch = {
+      mutate: {
+        proccode: errorProc
+      },
+      msg: errorMessage
+    };
+    procedureSwitches[logProc] = [
+      {
+        msg: logMessage,
+        isNoop: true
+      },
+      warnSwitch,
+      errorSwitch,
+    ];
+    procedureSwitches[warnProc] = [
+      logSwitch,
+      {
+        msg: warnMessage,
+        isNoop: true
+      },
+      errorSwitch,
+    ];
+    procedureSwitches[errorProc] = [
+      logSwitch,
+      warnSwitch,
+      {
+        msg: errorMessage,
+        isNoop: true
+      },
+    ];
   }
 
   const genuid = () => {
@@ -591,13 +616,13 @@ export default async function ({ addon, global, console, msg }) {
     return result;
   };
 
-  const menuCallbackFactory = (block, opcodeData, mode) => () => {
-    if (mode === "arg") {
-      block.setFieldValue(opcodeData, "VALUE");
+  const menuCallbackFactory = (block, opcodeData) => () => {
+    if (opcodeData.isNoop) {
       return;
     }
 
-    if (opcodeData.opcode === "noop") {
+    if (opcodeData.fieldValue) {
+      block.setFieldValue(opcodeData.fieldValue, "VALUE");
       return;
     }
 
@@ -606,10 +631,8 @@ export default async function ({ addon, global, console, msg }) {
     // Make a copy of the block with the proper type set.
     // It doesn't seem to be possible to change a Block's type after it's created, so we'll just make a new block instead.
     const xml = blockToDom(block);
-    if (mode === "native") {
+    if (opcodeData.opcode) {
       xml.setAttribute("type", opcodeData.opcode);
-    } else {
-      xml.querySelector("mutation").setAttribute("proccode", opcodeData.opcode);
     }
 
     const id = block.id;
@@ -665,6 +688,12 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
     }
+    if (opcodeData.mutate) {
+      const mutation = xml.querySelector("mutation");
+      for (const [key, value] of Object.entries(opcodeData.mutate)) {
+        mutation.setAttribute(key, value);
+      }
+    }
 
     // Mark the latest event in the undo stack.
     // This will be used later to group all of our events.
@@ -702,8 +731,6 @@ export default async function ({ addon, global, console, msg }) {
     (items, block) => {
       if (!addon.self.disabled) {
         const type = block.type;
-        // switchType: "native" | "arg" | "custom"
-        let switchType = "native";
         let switches = blockSwitches[block.type] || [];
 
         const customArgsMode = addon.settings.get("customargs") ? addon.settings.get("customargsmode") : "off";
@@ -714,7 +741,6 @@ export default async function ({ addon, global, console, msg }) {
           !block.isShadow()
         ) {
           const customBlocks = getCustomBlocks();
-          switchType = "arg";
           if (customArgsMode === "all") {
             switch (type) {
               case "argument_reporter_string_number":
@@ -741,21 +767,20 @@ export default async function ({ addon, global, console, msg }) {
                 break;
             }
           }
+          const currentValue = block.getFieldValue("VALUE");
+          switches = switches.map((i) => ({
+            isNoop: i === currentValue,
+            fieldValue: i,
+            msg: i
+          }));
         }
         let proccode;
-        if (block.type === "procedures_call" && saBlockSwitches[(proccode = block.getProcCode())]) {
-          switches = saBlockSwitches[proccode];
-          switchType = "custom";
+        if (block.type === "procedures_call" && procedureSwitches[(proccode = block.getProcCode())]) {
+          switches = procedureSwitches[proccode];
         }
 
         switches.forEach((opcodeData, i) => {
-          const isNoop =
-            switchType === "native"
-              ? opcodeData.opcode === "noop"
-              : switchType === "arg"
-              ? opcodeData === block.getFieldValue("VALUE")
-              : opcodeData.opcode === proccode;
-          if (isNoop && !addon.settings.get("noop")) return;
+          if (opcodeData.isNoop && !addon.settings.get("noop")) return;
 
           const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
           const insertBeforeIndex =
@@ -764,16 +789,15 @@ export default async function ({ addon, global, console, msg }) {
                 makeSpaceItemIndex
               : // If there's no such button, insert at end
                 items.length;
-          let text =
-            switchType === "custom"
-              ? opcodeData.msg
-              : switchType === "native"
-              ? msg(isNoop ? block.type : opcodeData.opcode)
-              : opcodeData;
+          let text = opcodeData.msg
+            ? opcodeData.msg
+            : opcodeData.opcode
+            ? msg(opcodeData.opcode)
+            : msg(block.type);
           items.splice(insertBeforeIndex, 0, {
             enabled: true,
             text,
-            callback: menuCallbackFactory(block, opcodeData, switchType),
+            callback: menuCallbackFactory(block, opcodeData),
             separator: addon.settings.get("border") && i === 0,
           });
         });
