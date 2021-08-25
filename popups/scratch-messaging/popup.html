@@ -324,12 +324,15 @@
   <!-- Bottom bar-->
   <div id="bottom-bar" v-show="messagesReady">
     <a @click="markAsRead()" v-show="!markedAsRead">{{ uiMessages.markAsReadMsg }}</a>
-    <span v-show="markedAsRead" style="font-weight: bold"
-      ><img class="small-icon" src="../../images/icons/read.svg" /> {{ uiMessages.markedAsReadMsg }}</span
-    >&nbsp;&nbsp;|&nbsp;&nbsp;
-    <a href="https://scratch.mit.edu/messages" id="open-messages"
-      >{{ uiMessages.openMessagesMsg }}&nbsp;&nbsp;<img src="../../images/icons/popout.svg" id="popout"
-    /></a>
+    <span v-show="markedAsRead" style="font-weight: bold">
+      <img class="small-icon" src="../../images/icons/read.svg" />
+      {{ uiMessages.markedAsReadMsg }}
+    </span>
+    <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <a href="https://scratch.mit.edu/messages" id="open-messages">
+      {{ uiMessages.openMessagesMsg }}
+      <img src="../../images/icons/popout.svg" id="popout" />
+    </a>
   </div>
 </template>
 
