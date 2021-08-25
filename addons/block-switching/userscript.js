@@ -3,609 +3,620 @@ import blockToDom from "./blockToDom.js";
 export default async function ({ addon, global, console, msg }) {
   const blockly = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
-  const blockSwitches = {};
-  const procedureSwitches = {};
+
+  let blockSwitches = {};
+  let procedureSwitches = {};
   const noopSwitch = {
     isNoop: true
   };
-  if (addon.settings.get("motion")) {
-    blockSwitches["motion_turnright"] = [
-      noopSwitch,
-      {
-        opcode: "motion_turnleft",
-      },
-    ];
-    blockSwitches["motion_turnleft"] = [
-      {
-        opcode: "motion_turnright",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["motion_setx"] = [
-      noopSwitch,
-      {
-        opcode: "motion_changexby",
-        remap: { X: "DX" },
-      },
-      {
-        opcode: "motion_sety",
-        remap: { X: "Y" },
-      },
-      {
-        opcode: "motion_changeyby",
-        remap: { X: "DY" },
-      },
-    ];
-    blockSwitches["motion_changexby"] = [
-      {
-        opcode: "motion_setx",
-        remap: { DX: "X" },
-      },
-      noopSwitch,
-      {
-        opcode: "motion_sety",
-        remap: { DX: "Y" },
-      },
-      {
-        opcode: "motion_changeyby",
-        remap: { DX: "DY" },
-      },
-    ];
-    blockSwitches["motion_sety"] = [
-      {
-        opcode: "motion_setx",
-        remap: { Y: "X" },
-      },
-      {
-        opcode: "motion_changexby",
-        remap: { Y: "DX" },
-      },
-      noopSwitch,
-      {
-        opcode: "motion_changeyby",
-        remap: { Y: "DY" },
-      },
-    ];
-    blockSwitches["motion_changeyby"] = [
-      {
-        opcode: "motion_setx",
-        remap: { DY: "X" },
-      },
-      {
-        opcode: "motion_changexby",
-        remap: { DY: "DX" },
-      },
-      {
-        opcode: "motion_sety",
-        remap: { DY: "Y" },
-      },
-      noopSwitch,
-    ];
-    blockSwitches["motion_xposition"] = [
-      noopSwitch,
-      {
-        opcode: "motion_yposition",
-      },
-    ];
-    blockSwitches["motion_yposition"] = [
-      {
-        opcode: "motion_xposition",
-      },
-      noopSwitch,
-    ];
-  }
 
-  if (addon.settings.get("looks")) {
-    blockSwitches["looks_seteffectto"] = [
-      noopSwitch,
-      {
-        opcode: "looks_changeeffectby",
-        remap: { VALUE: "CHANGE" },
-      },
-    ];
-    blockSwitches["looks_changeeffectby"] = [
-      {
-        opcode: "looks_seteffectto",
-        remap: { CHANGE: "VALUE" },
-      },
-      noopSwitch,
-    ];
-    blockSwitches["looks_setsizeto"] = [
-      noopSwitch,
-      {
-        opcode: "looks_changesizeby",
-        remap: { SIZE: "CHANGE" },
-      },
-    ];
-    blockSwitches["looks_changesizeby"] = [
-      {
-        opcode: "looks_setsizeto",
-        remap: { CHANGE: "SIZE" },
-      },
-      noopSwitch,
-    ];
-    blockSwitches["looks_costumenumbername"] = [
-      noopSwitch,
-      {
-        opcode: "looks_backdropnumbername",
-      },
-    ];
-    blockSwitches["looks_backdropnumbername"] = [
-      {
-        opcode: "looks_costumenumbername",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["looks_show"] = [
-      noopSwitch,
-      {
-        opcode: "looks_hide",
-      },
-    ];
-    blockSwitches["looks_hide"] = [
-      {
-        opcode: "looks_show",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["looks_nextcostume"] = [
-      noopSwitch,
-      {
-        opcode: "looks_nextbackdrop",
-      },
-    ];
-    blockSwitches["looks_nextbackdrop"] = [
-      {
-        opcode: "looks_nextcostume",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["looks_think"] = [
-      noopSwitch,
-      {
-        opcode: "looks_say",
-      },
-    ];
-    blockSwitches["looks_say"] = [
-      {
-        opcode: "looks_think",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["looks_thinkforsecs"] = [
-      noopSwitch,
-      {
-        opcode: "looks_sayforsecs",
-      },
-    ];
-    blockSwitches["looks_sayforsecs"] = [
-      {
-        opcode: "looks_thinkforsecs",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["looks_switchbackdropto"] = [
-      noopSwitch,
-      {
-        opcode: "looks_switchbackdroptoandwait",
-      },
-    ];
-    blockSwitches["looks_switchbackdroptoandwait"] = [
-      {
-        opcode: "looks_switchbackdropto",
-      },
-      noopSwitch,
-    ];
-  }
+  // TODO: it isn't **really** necessary to know whether debugger is enabled or not
+  const hasDebuggerEnabled = (await addon.self.getEnabledAddons()).includes("debugger");
+  const buildSwitches = () => {
+    blockSwitches = {};
+    procedureSwitches = {};
 
-  if (addon.settings.get("sound")) {
-    blockSwitches["sound_play"] = [
-      noopSwitch,
-      {
-        opcode: "sound_playuntildone",
-      },
-    ];
-    blockSwitches["sound_playuntildone"] = [
-      {
-        opcode: "sound_play",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["sound_seteffectto"] = [
-      noopSwitch,
-      {
-        opcode: "sound_changeeffectby",
-      },
-    ];
-    blockSwitches["sound_changeeffectby"] = [
-      {
-        opcode: "sound_seteffectto",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["sound_setvolumeto"] = [
-      noopSwitch,
-      {
-        opcode: "sound_changevolumeby",
-      },
-    ];
-    blockSwitches["sound_changevolumeby"] = [
-      {
-        opcode: "sound_setvolumeto",
-      },
-      noopSwitch,
-    ];
-  }
+    if (addon.settings.get("motion")) {
+      blockSwitches["motion_turnright"] = [
+        noopSwitch,
+        {
+          opcode: "motion_turnleft",
+        },
+      ];
+      blockSwitches["motion_turnleft"] = [
+        {
+          opcode: "motion_turnright",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["motion_setx"] = [
+        noopSwitch,
+        {
+          opcode: "motion_changexby",
+          remap: { X: "DX" },
+        },
+        {
+          opcode: "motion_sety",
+          remap: { X: "Y" },
+        },
+        {
+          opcode: "motion_changeyby",
+          remap: { X: "DY" },
+        },
+      ];
+      blockSwitches["motion_changexby"] = [
+        {
+          opcode: "motion_setx",
+          remap: { DX: "X" },
+        },
+        noopSwitch,
+        {
+          opcode: "motion_sety",
+          remap: { DX: "Y" },
+        },
+        {
+          opcode: "motion_changeyby",
+          remap: { DX: "DY" },
+        },
+      ];
+      blockSwitches["motion_sety"] = [
+        {
+          opcode: "motion_setx",
+          remap: { Y: "X" },
+        },
+        {
+          opcode: "motion_changexby",
+          remap: { Y: "DX" },
+        },
+        noopSwitch,
+        {
+          opcode: "motion_changeyby",
+          remap: { Y: "DY" },
+        },
+      ];
+      blockSwitches["motion_changeyby"] = [
+        {
+          opcode: "motion_setx",
+          remap: { DY: "X" },
+        },
+        {
+          opcode: "motion_changexby",
+          remap: { DY: "DX" },
+        },
+        {
+          opcode: "motion_sety",
+          remap: { DY: "Y" },
+        },
+        noopSwitch,
+      ];
+      blockSwitches["motion_xposition"] = [
+        noopSwitch,
+        {
+          opcode: "motion_yposition",
+        },
+      ];
+      blockSwitches["motion_yposition"] = [
+        {
+          opcode: "motion_xposition",
+        },
+        noopSwitch,
+      ];
+    }
 
-  if (addon.settings.get("event")) {
-    blockSwitches["event_broadcast"] = [
-      noopSwitch,
-      {
-        opcode: "event_broadcastandwait",
-      },
-    ];
-    blockSwitches["event_broadcastandwait"] = [
-      {
-        opcode: "event_broadcast",
-      },
-      noopSwitch,
-    ];
-  }
+    if (addon.settings.get("looks")) {
+      blockSwitches["looks_seteffectto"] = [
+        noopSwitch,
+        {
+          opcode: "looks_changeeffectby",
+          remap: { VALUE: "CHANGE" },
+        },
+      ];
+      blockSwitches["looks_changeeffectby"] = [
+        {
+          opcode: "looks_seteffectto",
+          remap: { CHANGE: "VALUE" },
+        },
+        noopSwitch,
+      ];
+      blockSwitches["looks_setsizeto"] = [
+        noopSwitch,
+        {
+          opcode: "looks_changesizeby",
+          remap: { SIZE: "CHANGE" },
+        },
+      ];
+      blockSwitches["looks_changesizeby"] = [
+        {
+          opcode: "looks_setsizeto",
+          remap: { CHANGE: "SIZE" },
+        },
+        noopSwitch,
+      ];
+      blockSwitches["looks_costumenumbername"] = [
+        noopSwitch,
+        {
+          opcode: "looks_backdropnumbername",
+        },
+      ];
+      blockSwitches["looks_backdropnumbername"] = [
+        {
+          opcode: "looks_costumenumbername",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["looks_show"] = [
+        noopSwitch,
+        {
+          opcode: "looks_hide",
+        },
+      ];
+      blockSwitches["looks_hide"] = [
+        {
+          opcode: "looks_show",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["looks_nextcostume"] = [
+        noopSwitch,
+        {
+          opcode: "looks_nextbackdrop",
+        },
+      ];
+      blockSwitches["looks_nextbackdrop"] = [
+        {
+          opcode: "looks_nextcostume",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["looks_think"] = [
+        noopSwitch,
+        {
+          opcode: "looks_say",
+        },
+      ];
+      blockSwitches["looks_say"] = [
+        {
+          opcode: "looks_think",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["looks_thinkforsecs"] = [
+        noopSwitch,
+        {
+          opcode: "looks_sayforsecs",
+        },
+      ];
+      blockSwitches["looks_sayforsecs"] = [
+        {
+          opcode: "looks_thinkforsecs",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["looks_switchbackdropto"] = [
+        noopSwitch,
+        {
+          opcode: "looks_switchbackdroptoandwait",
+        },
+      ];
+      blockSwitches["looks_switchbackdroptoandwait"] = [
+        {
+          opcode: "looks_switchbackdropto",
+        },
+        noopSwitch,
+      ];
+    }
 
-  if (addon.settings.get("control")) {
-    blockSwitches["control_if"] = [
-      noopSwitch,
-      {
-        opcode: "control_if_else",
-      },
-    ];
-    blockSwitches["control_if_else"] = [
-      {
-        opcode: "control_if",
-        remap: { SUBSTACK2: "split" },
-      },
-      noopSwitch,
-    ];
-    blockSwitches["control_repeat_until"] = [
-      noopSwitch,
-      {
-        opcode: "control_wait_until",
-        remap: { SUBSTACK: "split" },
-      },
-      {
-        opcode: "control_forever",
-        remap: { CONDITION: "split" },
-      },
-    ];
-    blockSwitches["control_forever"] = [
-      {
-        opcode: "control_repeat_until",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["control_wait_until"] = [
-      {
-        opcode: "control_repeat_until",
-      },
-      noopSwitch,
-    ];
-  }
+    if (addon.settings.get("sound")) {
+      blockSwitches["sound_play"] = [
+        noopSwitch,
+        {
+          opcode: "sound_playuntildone",
+        },
+      ];
+      blockSwitches["sound_playuntildone"] = [
+        {
+          opcode: "sound_play",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["sound_seteffectto"] = [
+        noopSwitch,
+        {
+          opcode: "sound_changeeffectby",
+        },
+      ];
+      blockSwitches["sound_changeeffectby"] = [
+        {
+          opcode: "sound_seteffectto",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["sound_setvolumeto"] = [
+        noopSwitch,
+        {
+          opcode: "sound_changevolumeby",
+        },
+      ];
+      blockSwitches["sound_changevolumeby"] = [
+        {
+          opcode: "sound_setvolumeto",
+        },
+        noopSwitch,
+      ];
+    }
 
-  if (addon.settings.get("operator")) {
-    blockSwitches["operator_equals"] = [
-      {
-        opcode: "operator_gt",
-      },
-      noopSwitch,
-      {
-        opcode: "operator_lt",
-      },
-    ];
-    blockSwitches["operator_gt"] = [
-      noopSwitch,
-      {
-        opcode: "operator_equals",
-      },
-      {
-        opcode: "operator_lt",
-      },
-    ];
-    blockSwitches["operator_lt"] = [
-      {
-        opcode: "operator_gt",
-      },
-      {
-        opcode: "operator_equals",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["operator_add"] = [
-      noopSwitch,
-      {
-        opcode: "operator_subtract",
-      },
-      {
-        opcode: "operator_multiply",
-      },
-      {
-        opcode: "operator_divide",
-      },
-      {
-        opcode: "operator_mod",
-      },
-    ];
-    blockSwitches["operator_subtract"] = [
-      {
-        opcode: "operator_add",
-      },
-      noopSwitch,
-      {
-        opcode: "operator_multiply",
-      },
-      {
-        opcode: "operator_divide",
-      },
-      {
-        opcode: "operator_mod",
-      },
-    ];
-    blockSwitches["operator_multiply"] = [
-      {
-        opcode: "operator_add",
-      },
-      {
-        opcode: "operator_subtract",
-      },
-      noopSwitch,
-      {
-        opcode: "operator_divide",
-      },
-      {
-        opcode: "operator_mod",
-      },
-    ];
-    blockSwitches["operator_divide"] = [
-      {
-        opcode: "operator_add",
-      },
-      {
-        opcode: "operator_subtract",
-      },
-      {
-        opcode: "operator_multiply",
-      },
-      noopSwitch,
-      {
-        opcode: "operator_mod",
-      },
-    ];
-    blockSwitches["operator_mod"] = [
-      {
-        opcode: "operator_add",
-      },
-      {
-        opcode: "operator_subtract",
-      },
-      {
-        opcode: "operator_multiply",
-      },
-      {
-        opcode: "operator_divide",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["operator_and"] = [
-      noopSwitch,
-      {
-        opcode: "operator_or",
-      },
-    ];
-    blockSwitches["operator_or"] = [
-      {
-        opcode: "operator_and",
-      },
-      noopSwitch,
-    ];
-  }
+    if (addon.settings.get("event")) {
+      blockSwitches["event_broadcast"] = [
+        noopSwitch,
+        {
+          opcode: "event_broadcastandwait",
+        },
+      ];
+      blockSwitches["event_broadcastandwait"] = [
+        {
+          opcode: "event_broadcast",
+        },
+        noopSwitch,
+      ];
+    }
 
-  if (addon.settings.get("sensing")) {
-    blockSwitches["sensing_mousex"] = [
-      noopSwitch,
-      {
-        opcode: "sensing_mousey",
-      },
-    ];
-    blockSwitches["sensing_mousey"] = [
-      {
-        opcode: "sensing_mousex",
-      },
-      noopSwitch,
-    ];
-  }
+    if (addon.settings.get("control")) {
+      blockSwitches["control_if"] = [
+        noopSwitch,
+        {
+          opcode: "control_if_else",
+        },
+      ];
+      blockSwitches["control_if_else"] = [
+        {
+          opcode: "control_if",
+          remap: { SUBSTACK2: "split" },
+        },
+        noopSwitch,
+      ];
+      blockSwitches["control_repeat_until"] = [
+        noopSwitch,
+        {
+          opcode: "control_wait_until",
+          remap: { SUBSTACK: "split" },
+        },
+        {
+          opcode: "control_forever",
+          remap: { CONDITION: "split" },
+        },
+      ];
+      blockSwitches["control_forever"] = [
+        {
+          opcode: "control_repeat_until",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["control_wait_until"] = [
+        {
+          opcode: "control_repeat_until",
+        },
+        noopSwitch,
+      ];
+    }
 
-  if (addon.settings.get("data")) {
-    blockSwitches["data_setvariableto"] = [
-      noopSwitch,
-      {
-        opcode: "data_changevariableby",
-        remapValueType: { VALUE: "math_number" },
-      },
-    ];
-    blockSwitches["data_changevariableby"] = [
-      {
-        opcode: "data_setvariableto",
-        remapValueType: { VALUE: "text" },
-      },
-      noopSwitch,
-    ];
-    blockSwitches["data_showvariable"] = [
-      noopSwitch,
-      {
-        opcode: "data_hidevariable",
-      },
-    ];
-    blockSwitches["data_hidevariable"] = [
-      {
-        opcode: "data_showvariable",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["data_showlist"] = [
-      noopSwitch,
-      {
-        opcode: "data_hidelist",
-      },
-    ];
-    blockSwitches["data_hidelist"] = [
-      {
-        opcode: "data_showlist",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["data_replaceitemoflist"] = [
-      noopSwitch,
-      {
-        opcode: "data_insertatlist",
-      },
-    ];
-    blockSwitches["data_insertatlist"] = [
-      {
-        opcode: "data_replaceitemoflist",
-      },
-      noopSwitch,
-    ];
-  }
+    if (addon.settings.get("operator")) {
+      blockSwitches["operator_equals"] = [
+        {
+          opcode: "operator_gt",
+        },
+        noopSwitch,
+        {
+          opcode: "operator_lt",
+        },
+      ];
+      blockSwitches["operator_gt"] = [
+        noopSwitch,
+        {
+          opcode: "operator_equals",
+        },
+        {
+          opcode: "operator_lt",
+        },
+      ];
+      blockSwitches["operator_lt"] = [
+        {
+          opcode: "operator_gt",
+        },
+        {
+          opcode: "operator_equals",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["operator_add"] = [
+        noopSwitch,
+        {
+          opcode: "operator_subtract",
+        },
+        {
+          opcode: "operator_multiply",
+        },
+        {
+          opcode: "operator_divide",
+        },
+        {
+          opcode: "operator_mod",
+        },
+      ];
+      blockSwitches["operator_subtract"] = [
+        {
+          opcode: "operator_add",
+        },
+        noopSwitch,
+        {
+          opcode: "operator_multiply",
+        },
+        {
+          opcode: "operator_divide",
+        },
+        {
+          opcode: "operator_mod",
+        },
+      ];
+      blockSwitches["operator_multiply"] = [
+        {
+          opcode: "operator_add",
+        },
+        {
+          opcode: "operator_subtract",
+        },
+        noopSwitch,
+        {
+          opcode: "operator_divide",
+        },
+        {
+          opcode: "operator_mod",
+        },
+      ];
+      blockSwitches["operator_divide"] = [
+        {
+          opcode: "operator_add",
+        },
+        {
+          opcode: "operator_subtract",
+        },
+        {
+          opcode: "operator_multiply",
+        },
+        noopSwitch,
+        {
+          opcode: "operator_mod",
+        },
+      ];
+      blockSwitches["operator_mod"] = [
+        {
+          opcode: "operator_add",
+        },
+        {
+          opcode: "operator_subtract",
+        },
+        {
+          opcode: "operator_multiply",
+        },
+        {
+          opcode: "operator_divide",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["operator_and"] = [
+        noopSwitch,
+        {
+          opcode: "operator_or",
+        },
+      ];
+      blockSwitches["operator_or"] = [
+        {
+          opcode: "operator_and",
+        },
+        noopSwitch,
+      ];
+    }
 
-  if (addon.settings.get("extension")) {
-    blockSwitches["pen_penDown"] = [
-      noopSwitch,
-      {
-        opcode: "pen_penUp",
-      },
-    ];
-    blockSwitches["pen_penUp"] = [
-      {
-        opcode: "pen_penDown",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["pen_setPenColorParamTo"] = [
-      noopSwitch,
-      {
-        opcode: "pen_changePenColorParamBy",
-      },
-    ];
-    blockSwitches["pen_changePenColorParamBy"] = [
-      {
-        opcode: "pen_setPenColorParamTo",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["pen_setPenHueToNumber"] = [
-      noopSwitch,
-      {
-        opcode: "pen_changePenHueBy",
-      },
-    ];
-    blockSwitches["pen_changePenHueBy"] = [
-      {
-        opcode: "pen_setPenHueToNumber",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["pen_setPenShadeToNumber"] = [
-      noopSwitch,
-      {
-        opcode: "pen_changePenShadeBy",
-      },
-    ];
-    blockSwitches["pen_changePenShadeBy"] = [
-      {
-        opcode: "pen_setPenShadeToNumber",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["pen_setPenSizeTo"] = [
-      noopSwitch,
-      {
-        opcode: "pen_changePenSizeBy",
-      },
-    ];
-    blockSwitches["pen_changePenSizeBy"] = [
-      {
-        opcode: "pen_setPenSizeTo",
-      },
-      noopSwitch,
-    ];
-    blockSwitches["music_setTempo"] = [
-      noopSwitch,
-      {
-        opcode: "music_changeTempo",
-      },
-    ];
-    blockSwitches["music_changeTempo"] = [
-      {
-        opcode: "music_setTempo",
-      },
-      noopSwitch,
-    ];
-  }
+    if (addon.settings.get("sensing")) {
+      blockSwitches["sensing_mousex"] = [
+        noopSwitch,
+        {
+          opcode: "sensing_mousey",
+        },
+      ];
+      blockSwitches["sensing_mousey"] = [
+        {
+          opcode: "sensing_mousex",
+        },
+        noopSwitch,
+      ];
+    }
 
-  // Switching for these is implemented by Scratch. We only define them here to optionally add a border.
-  // Because we don't implement the switching ourselves, this is not controlled by the data category option.
-  blockSwitches["data_variable"] = [];
-  blockSwitches["data_listcontents"] = [];
-  if (addon.settings.get("sa") && (await addon.self.getEnabledAddons()).includes("debugger")) {
-    // note that here opcode actually means proccode
-    const logProc = "\u200B\u200Blog\u200B\u200B %s";
-    const warnProc = "\u200B\u200Bwarn\u200B\u200B %s";
-    const errorProc = "\u200B\u200Berror\u200B\u200B %s";
-    const logMessage = msg("/debugger/block-log").split("%s")[0].trim();
-    const warnMessage = msg("/debugger/block-warn").split("%s")[0].trim();
-    const errorMessage = msg("/debugger/block-error").split("%s")[0].trim();
-    const logSwitch = {
-      mutate: {
-        proccode: logProc
-      },
-      msg: logMessage
-    };
-    const warnSwitch = {
-      mutate: {
-        proccode: warnProc
-      },
-      msg: warnMessage
-    };
-    const errorSwitch = {
-      mutate: {
-        proccode: errorProc
-      },
-      msg: errorMessage
-    };
-    procedureSwitches[logProc] = [
-      {
-        msg: logMessage,
-        isNoop: true
-      },
-      warnSwitch,
-      errorSwitch,
-    ];
-    procedureSwitches[warnProc] = [
-      logSwitch,
-      {
-        msg: warnMessage,
-        isNoop: true
-      },
-      errorSwitch,
-    ];
-    procedureSwitches[errorProc] = [
-      logSwitch,
-      warnSwitch,
-      {
-        msg: errorMessage,
-        isNoop: true
-      },
-    ];
-  }
+    if (addon.settings.get("data")) {
+      blockSwitches["data_setvariableto"] = [
+        noopSwitch,
+        {
+          opcode: "data_changevariableby",
+          remapValueType: { VALUE: "math_number" },
+        },
+      ];
+      blockSwitches["data_changevariableby"] = [
+        {
+          opcode: "data_setvariableto",
+          remapValueType: { VALUE: "text" },
+        },
+        noopSwitch,
+      ];
+      blockSwitches["data_showvariable"] = [
+        noopSwitch,
+        {
+          opcode: "data_hidevariable",
+        },
+      ];
+      blockSwitches["data_hidevariable"] = [
+        {
+          opcode: "data_showvariable",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["data_showlist"] = [
+        noopSwitch,
+        {
+          opcode: "data_hidelist",
+        },
+      ];
+      blockSwitches["data_hidelist"] = [
+        {
+          opcode: "data_showlist",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["data_replaceitemoflist"] = [
+        noopSwitch,
+        {
+          opcode: "data_insertatlist",
+        },
+      ];
+      blockSwitches["data_insertatlist"] = [
+        {
+          opcode: "data_replaceitemoflist",
+        },
+        noopSwitch,
+      ];
+    }
+
+    if (addon.settings.get("extension")) {
+      blockSwitches["pen_penDown"] = [
+        noopSwitch,
+        {
+          opcode: "pen_penUp",
+        },
+      ];
+      blockSwitches["pen_penUp"] = [
+        {
+          opcode: "pen_penDown",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["pen_setPenColorParamTo"] = [
+        noopSwitch,
+        {
+          opcode: "pen_changePenColorParamBy",
+        },
+      ];
+      blockSwitches["pen_changePenColorParamBy"] = [
+        {
+          opcode: "pen_setPenColorParamTo",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["pen_setPenHueToNumber"] = [
+        noopSwitch,
+        {
+          opcode: "pen_changePenHueBy",
+        },
+      ];
+      blockSwitches["pen_changePenHueBy"] = [
+        {
+          opcode: "pen_setPenHueToNumber",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["pen_setPenShadeToNumber"] = [
+        noopSwitch,
+        {
+          opcode: "pen_changePenShadeBy",
+        },
+      ];
+      blockSwitches["pen_changePenShadeBy"] = [
+        {
+          opcode: "pen_setPenShadeToNumber",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["pen_setPenSizeTo"] = [
+        noopSwitch,
+        {
+          opcode: "pen_changePenSizeBy",
+        },
+      ];
+      blockSwitches["pen_changePenSizeBy"] = [
+        {
+          opcode: "pen_setPenSizeTo",
+        },
+        noopSwitch,
+      ];
+      blockSwitches["music_setTempo"] = [
+        noopSwitch,
+        {
+          opcode: "music_changeTempo",
+        },
+      ];
+      blockSwitches["music_changeTempo"] = [
+        {
+          opcode: "music_setTempo",
+        },
+        noopSwitch,
+      ];
+    }
+
+    if (addon.settings.get("sa") && hasDebuggerEnabled) {
+      const logProc = "\u200B\u200Blog\u200B\u200B %s";
+      const warnProc = "\u200B\u200Bwarn\u200B\u200B %s";
+      const errorProc = "\u200B\u200Berror\u200B\u200B %s";
+      const logMessage = msg("/debugger/block-log").split("%s")[0].trim();
+      const warnMessage = msg("/debugger/block-warn").split("%s")[0].trim();
+      const errorMessage = msg("/debugger/block-error").split("%s")[0].trim();
+      const logSwitch = {
+        mutate: {
+          proccode: logProc
+        },
+        msg: logMessage
+      };
+      const warnSwitch = {
+        mutate: {
+          proccode: warnProc
+        },
+        msg: warnMessage
+      };
+      const errorSwitch = {
+        mutate: {
+          proccode: errorProc
+        },
+        msg: errorMessage
+      };
+      procedureSwitches[logProc] = [
+        {
+          msg: logMessage,
+          isNoop: true
+        },
+        warnSwitch,
+        errorSwitch,
+      ];
+      procedureSwitches[warnProc] = [
+        logSwitch,
+        {
+          msg: warnMessage,
+          isNoop: true
+        },
+        errorSwitch,
+      ];
+      procedureSwitches[errorProc] = [
+        logSwitch,
+        warnSwitch,
+        {
+          msg: errorMessage,
+          isNoop: true
+        },
+      ];
+    }
+
+    // Switching for these is implemented by Scratch. We only define them here to optionally add a border.
+    // Because we don't implement the switching ourselves, this is not controlled by the data category option.
+    blockSwitches["data_variable"] = [];
+    blockSwitches["data_listcontents"] = [];
+  };
+  buildSwitches();
+  addon.settings.addEventListener("change", buildSwitches);
 
   const genuid = () => {
     const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
