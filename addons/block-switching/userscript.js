@@ -774,9 +774,12 @@ export default async function ({ addon, global, console, msg }) {
             msg: i
           }));
         }
-        let proccode;
-        if (block.type === "procedures_call" && procedureSwitches[(proccode = block.getProcCode())]) {
-          switches = procedureSwitches[proccode];
+
+        if (block.type === "procedures_call") {
+          const proccode = block.getProcCode();
+          if (procedureSwitches[proccode]) {
+            switches = procedureSwitches[proccode];
+          }
         }
 
         switches.forEach((opcodeData, i) => {
