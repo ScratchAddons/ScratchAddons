@@ -1,6 +1,3 @@
-import loadVueComponent from "../../../libraries/common/load-vue-components.js";
-let components = await loadVueComponent(["webpages/settings/components/picker-component"]);
-
 export default async function ({ template }) {
   const ResetDropdown = Vue.extend({
     props: ["addon", "setting", "label", "defaultLabel"],

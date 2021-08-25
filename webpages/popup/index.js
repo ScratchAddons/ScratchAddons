@@ -58,7 +58,7 @@ chrome.runtime.sendMessage("getSettingsInfo", async (res) => {
   components = await loadVueComponent(components);
   console.log(components);
 
-  const vue = new Vue({
+  window.vue = new Vue({
     el: "body",
     components,
     data: {

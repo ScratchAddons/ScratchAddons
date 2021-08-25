@@ -5,7 +5,6 @@ import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
-import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 
 const promisify =
