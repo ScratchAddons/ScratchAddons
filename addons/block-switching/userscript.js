@@ -7,7 +7,7 @@ export default async function ({ addon, global, console, msg }) {
   let blockSwitches = {};
   let procedureSwitches = {};
   const noopSwitch = {
-    isNoop: true
+    isNoop: true,
   };
 
   // TODO: it isn't **really** necessary to know whether debugger is enabled or not
@@ -569,26 +569,26 @@ export default async function ({ addon, global, console, msg }) {
       const errorMessage = msg("/debugger/block-error").split("%s")[0].trim();
       const logSwitch = {
         mutate: {
-          proccode: logProc
+          proccode: logProc,
         },
-        msg: logMessage
+        msg: logMessage,
       };
       const warnSwitch = {
         mutate: {
-          proccode: warnProc
+          proccode: warnProc,
         },
-        msg: warnMessage
+        msg: warnMessage,
       };
       const errorSwitch = {
         mutate: {
-          proccode: errorProc
+          proccode: errorProc,
         },
-        msg: errorMessage
+        msg: errorMessage,
       };
       procedureSwitches[logProc] = [
         {
           msg: logMessage,
-          isNoop: true
+          isNoop: true,
         },
         warnSwitch,
         errorSwitch,
@@ -597,7 +597,7 @@ export default async function ({ addon, global, console, msg }) {
         logSwitch,
         {
           msg: warnMessage,
-          isNoop: true
+          isNoop: true,
         },
         errorSwitch,
       ];
@@ -606,7 +606,7 @@ export default async function ({ addon, global, console, msg }) {
         warnSwitch,
         {
           msg: errorMessage,
-          isNoop: true
+          isNoop: true,
         },
       ];
     }
@@ -783,7 +783,7 @@ export default async function ({ addon, global, console, msg }) {
           switches = switches.map((i) => ({
             isNoop: i === currentValue,
             fieldValue: i,
-            msg: i
+            msg: i,
           }));
         }
 
@@ -806,11 +806,7 @@ export default async function ({ addon, global, console, msg }) {
                 makeSpaceItemIndex
               : // If there's no such button, insert at end
                 items.length;
-          const text = opcodeData.msg
-            ? opcodeData.msg
-            : opcodeData.opcode
-            ? msg(opcodeData.opcode)
-            : msg(block.type);
+          const text = opcodeData.msg ? opcodeData.msg : opcodeData.opcode ? msg(opcodeData.opcode) : msg(block.type);
           items.splice(insertBeforeIndex, 0, {
             enabled: true,
             text,
