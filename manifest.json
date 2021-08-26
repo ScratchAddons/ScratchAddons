@@ -2,8 +2,8 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "1.19.0",
-  "version_name": "1.19.0-prerelease",
+  "version": "1.19.1",
+  "version_name": "1.19.1",
   "default_locale": "en",
   "background": {
     "page": "background/background.html"
