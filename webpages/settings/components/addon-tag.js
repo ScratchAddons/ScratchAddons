@@ -16,7 +16,10 @@ export default async function ({ template }) {
       },
       shouldShow() {
         if (isIframe) return this.tagInfo && this.tagInfo.iframeAlwaysShow;
-        return this.tagInfo && (!this.tagInfo.addonTabShow || this.tagInfo.addonTabShow[this.$root.selectedCategory]);
+        return (
+          this.tagInfo &&
+          (!this.tagInfo.addonTabShow || this.tagInfo.addonTabShow[this.$settingsContext.selectedCategory])
+        );
       },
       tagName() {
         return chrome.i18n.getMessage(this.tagInfo.name);

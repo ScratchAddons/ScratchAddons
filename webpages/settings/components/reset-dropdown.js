@@ -9,7 +9,7 @@ export default async function ({ template }) {
       };
     },
     ready() {
-      this.$root.$on("close-reset-dropdowns", (except) => {
+      this.$settingsContext.$on("close-reset-dropdowns", (except) => {
         if (this.isOpen && this !== except) {
           this.isOpen = false;
         }
@@ -18,10 +18,10 @@ export default async function ({ template }) {
     methods: {
       toggle() {
         this.isOpen = !this.isOpen;
-        this.$root.closePickers({ isTrusted: true }, null, {
+        this.$settingsContext.closePickers({ isTrusted: true }, null, {
           callCloseDropdowns: false,
         });
-        this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
+        this.$settingsContext.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
       },
       resetToDefault() {
         this.$parent.addonSettings[this.addon._addonId][this.setting.id] = this.setting.default;

@@ -26,7 +26,7 @@ export default async function ({ template }) {
           this.$parent.updateSettings(this.addon, { wait: 250, settingId: this.setting.id });
         }
       });
-      this.$root.$on("close-pickers", (except) => {
+      this.$settingsContext.$on("close-pickers", (except) => {
         if (this.isOpen && this !== except) {
           const addon = this.$parent.addon;
           const setting = this.$parent.setting;
@@ -49,10 +49,10 @@ export default async function ({ template }) {
         this.isOpen = value;
         this.opening = true;
         if (callClosePickers)
-          this.$root.closePickers({ isTrusted: true }, this, {
+          this.$settingsContext.closePickers({ isTrusted: true }, this, {
             callCloseDropdowns: false,
           });
-        if (callCloseDropdowns) this.$root.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
+        if (callCloseDropdowns) this.$settingsContext.closeResetDropdowns({ isTrusted: true }); // close other dropdowns
         this.opening = false;
         this.$els.pickr._valueChanged();
         this.color = "#" + this.$els.pickr.hex8;
