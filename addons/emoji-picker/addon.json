@@ -1,5 +1,5 @@
 {
-  "name": "Emoji picker",
+  "name": "Emoji picker for comments",
   "description": "Adds a button to easily add emojis to comments on the website.",
   "credits": [
     {
@@ -10,14 +10,14 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects", "studios"],
+      "matches": ["projects", "studios", "profiles"],
       "runAtComplete": false
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["projects", "studios"]
+      "matches": ["projects", "studios", "profiles"]
     }
   ],
   "dynamicEnable": true,
