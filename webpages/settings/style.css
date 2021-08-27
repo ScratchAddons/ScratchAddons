@@ -1,14 +1,4 @@
-.main {
-  background: var(--page-background);
-  font-family: "Sora", sans-serif;
-  margin: 0;
-  height: 100vh;
-  overflow: hidden;
-  color: var(--content-text);
-  font-size: 12px;
-}
-
-:not(body)[v-cloak] {
+[v-cloak] {
   display: none !important;
 }
 
@@ -41,11 +31,19 @@ h1 {
   margin-inline-end: 9px;
 }
 
+.container {
+  height: inherit;
+}
+
 .main {
   display: flex;
   height: calc(100% - 60px);
   width: 100%;
   align-items: stretch;
+  background: var(--page-background);
+  font-family: "Sora", sans-serif;
+  color: var(--content-text);
+  font-size: 12px;
 }
 
 .addons-block {

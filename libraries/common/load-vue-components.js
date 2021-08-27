@@ -1,5 +1,3 @@
-const styles = {};
-
 /**
  * Loads Vue components.
  * @param {string[]} filenames - filenames of the components, without extensions.
@@ -18,12 +16,10 @@ export default (filenames) =>
         .then((text) => {
           const dom = new DOMParser().parseFromString(text, "text/html");
 
-          styles[filename] = {};
-
-          const css = dom.querySelector("style")?.textContent;
+          let css = dom.querySelector("style");
           if (css) {
             if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
-              const normalizedCss = css.replace("\n", "").trimEnd();
+              const normalizedCss = css.textContent.replace("\n", "").trimEnd();
               const normalizedText = text.replace(/\r/g, "");
               const cssFirstLine = normalizedCss.substring(0, normalizedCss.indexOf("\n"));
               const linesToAdd = normalizedText.split("\n").findIndex((line) => line === cssFirstLine);
@@ -31,10 +27,15 @@ export default (filenames) =>
                 0: "/*",
                 [linesToAdd - 1]: "<style> */",
               }).join("\n");
-              styles[filename].style = `${newLines}\n${normalizedCss}/* \n</style> */\n/*# sourceURL=${htmlUrl} */`;
-            } else {
-              styles[filename].style = css;
+              css.textContent = `${newLines}\n${normalizedCss}/* \n</style> */\n/*# sourceURL=${htmlUrl} */`;
             }
+            const [componentName] = filename.split("/").slice(-1);
+            css.setAttribute("data-vue-component", componentName); // For debugging (has no side effects)
+            if (filename.startsWith("popups/")) {
+              const [addonId] = filename.split("/").slice(1);
+              css.setAttribute("data-addon-id", addonId);
+            }
+            document.head.insertBefore(css, document.head.querySelector("[data-below-vue-components]"));
           }
           return dom.querySelector("template").innerHTML;
         })
@@ -42,19 +43,6 @@ export default (filenames) =>
     })
   ).then((components) => {
     let all = {};
-    filenames.forEach((filename) => {
-      filename = filename.url || filename;
-      if (!styles[filename].style) return;
-      const style = document.createElement("style");
-      style.textContent = styles[filename].style;
-      const [componentName] = filename.split("/").slice(-1);
-      style.setAttribute("data-vue-component", componentName); // For debugging (has no side effects)
-      if (filename.startsWith("popups/")) {
-        const [addonId] = filename.split("/").slice(1);
-        style.setAttribute("data-addon-id", addonId);
-      }
-      document.head.insertBefore(style, document.head.querySelector("[data-below-vue-components]"));
-    });
     components.forEach((component) => (all = { ...all, ...component }));
     return all;
   });
