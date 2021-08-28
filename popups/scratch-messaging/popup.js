@@ -9,8 +9,6 @@ export default async ({ template, addon, msg, safeMsg }) => {
     components,
     data() {
       return {
-        mounted: true, // Always true
-
         stMessages: [],
         messages: [],
         comments: {},

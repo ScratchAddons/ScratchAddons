@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-      <div v-for="popup in displayedPopups" v-show="currentPopup === popup" class="popup-container">
+      <div v-for="popup in displayedPopups" v-show="currentPopup === popup" class="popup-container" v-cloak>
         <component :is="popup._addonId"></component>
       </div>
     </div>

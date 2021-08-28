@@ -11,7 +11,7 @@
       >{{ thisComment.author }}</a
     >{{ thisComment.scratchTeam ? "*" : "" }}
     <span class="comment-time" v-show="deleteStep !== 1 && !deleted">
-      · {{ commentTimeAgo }}&nbsp;&nbsp;
+      · {{ commentTimeAgo }}
       <a rel="noopener noreferrer" target="_blank" :href="commentURL">
         <img src="../../images/icons/popout.svg" class="popout-comment" title="{{ messages.openNewTabMsg }}" />
       </a>
@@ -36,10 +36,10 @@
     <div class="reply-box-comment" v-show="replying">
       <textarea class="reply-textarea" maxlength="500" v-model="replyBoxValue"></textarea>
       <div class="reply-box-buttons">
-        <button @click="!postingComment && postComment()" style="background-color: #4d97ff">
+        <button @click="!postingComment && postComment()" class="post-button">
           {{ postingComment ? messages.postingMsg : messages.postMsg }}
         </button>
-        <button @click="replying = false" style="background-color: gray" v-show="!postingComment">
+        <button @click="replying = false" v-show="!postingComment">
           {{ messages.cancelMsg }}
         </button>
         <span class="comment-chars"> {{ replyBoxLeftMsg }}</span>
@@ -51,18 +51,18 @@
 <style>
   .comment {
     padding: 3px 8px;
-    background: #222222;
-    border: 1px solid #000;
+    background: var(--comment-background);
+    border: 1px solid var(--control-border);
     border-radius: 8px;
     margin: 8px;
     font-size: 12px;
   }
-  .comment.st-alert {
-    padding: 10px;
+  .fullscreen .comment {
+    margin-inline: 12px;
   }
   .comment.unread,
   .unread .comment {
-    background-color: #000;
+    background-color: var(--unread-comment-background);
   }
   .comment-content {
     word-break: break-word;
@@ -70,6 +70,8 @@
   }
   .comment-content-text {
     margin-right: 10px;
+    /* For multi-line comments */
+    white-space: break-spaces;
   }
   .comment-content-text:after {
     /* So that empty comments take up a line */
@@ -77,11 +79,11 @@
   }
   .comment-author {
     font-weight: 600;
-    color: #d84a27;
+    color: var(--dark-red-text);
   }
   .comment-me .comment-author {
     font-weight: 700;
-    color: green;
+    color: var(--green-text);
   }
   .unread .comment-author {
     font-weight: 700;
@@ -93,8 +95,9 @@
   .popout-comment {
     cursor: pointer;
     height: 10px;
-    vertical-align: text-top;
-    filter: brightness(100);
+    vertical-align: baseline;
+    padding-left: 2px;
+    filter: var(--content-icon-filter);
   }
   [dir="rtl"] .popout-comment {
     transform: scaleX(-1);
@@ -102,28 +105,27 @@
   .delete-btn {
     float: right;
     opacity: 0;
-    color: gray;
+    color: var(--gray-text);
     font-size: 0.65rem;
     padding-top: 2px;
   }
   .bold {
-    font-weight: bold;
-    color: red;
+    font-weight: 600;
+    color: var(--red);
   }
   .child-comment {
-    /*padding-left: 4px;*/
-    /*margin-left: 24px;*/
-    /*border-top: 1px dashed gray;*/
     margin-inline-start: 3em;
   }
+  .fullscreen .child-comment {
+    margin-inline-start: calc(3em + 12px);
+  }
   .unread {
-    /*border-left: 3px solid #0f8bc0;*/
     font-weight: 500;
   }
   .reply-button-comment {
     opacity: 0;
-    color: #0f8bc0;
-    font-weight: bold;
+    color: var(--blue-text);
+    font-weight: 600;
     user-select: none;
   }
   .comment:hover .reply-button-comment,
@@ -131,34 +133,42 @@
     opacity: 1;
   }
   .reply-textarea {
+    display: block;
     width: 100%;
     box-sizing: border-box;
     height: 5rem;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     padding: 8px;
     resize: vertical;
     margin-top: 8px;
     font-size: 12px;
-    border-radius: 8px;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    background-color: #222222;
-    color: white;
+    border-radius: 4px;
+    border: 1px solid var(--control-border);
+    background-color: var(--input-background);
+    color: var(--content-text);
+    transition: 0.2s ease;
+  }
+  .reply-textarea:focus {
+    outline: none;
+    border-color: var(--brand-orange);
+    box-shadow: var(--input-focus-shadow);
   }
   .reply-box-buttons {
-    padding-inline-end: 4px;
     display: flex;
-    justify-content: center;
     align-items: center;
+    margin-top: 8px;
+    margin-bottom: 5px;
   }
   .reply-box-buttons > button {
-    border-radius: 0.25rem;
-    border: 1px solid black;
-    color: white;
-    font-weight: bold;
-    padding: 8px;
-    outline: none;
-    margin-inline-end: 4px;
-    cursor: pointer;
+    margin-inline-end: 8px;
+  }
+  .post-button {
+    background-color: var(--blue);
+    color: var(--white-text);
+  }
+  .post-button:hover {
+    background-color: var(--blue);
+    border-color: var(--blue-variant);
   }
   .comment-chars {
     margin-inline-start: auto;
