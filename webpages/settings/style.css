@@ -31,10 +31,6 @@ h1 {
   margin-inline-end: 9px;
 }
 
-.container {
-  height: inherit;
-}
-
 .main {
   display: flex;
   height: calc(100% - 60px);
