@@ -61,6 +61,16 @@ h1 {
   scrollbar-color: var(--gray-text) transparent;
 }
 
+.addons-container.placeholder {
+  pointer-events: none;
+}
+.addons-container.placeholder .addon-body:first-child {
+  /* Doing this instead of padding in .addons-container itself to avoid
+  problems with other CSS that would also set padding on the same element,
+  like the "body.iframe .addons-container" selector below */
+  margin-top: 42px;
+}
+
 @keyframes addonBlink {
   10% {
     border: 1px solid var(--content-border);

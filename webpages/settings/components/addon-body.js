@@ -116,10 +116,10 @@ export default async function ({ template }) {
     watch: {
       groupId(newValue) {
         // Happens when going from "example" addon to real addon
-        this.expanded = this.getDefaultExpanded();
+        this.expanded = this.defaultExpanded;
       },
       searchInput(newValue) {
-        if (newValue === "") this.expanded = this.getDefaultExpanded();
+        if (newValue === "") this.expanded = this.defaultExpanded;
         else this.expanded = false;
       },
       expanded(newValue) {
