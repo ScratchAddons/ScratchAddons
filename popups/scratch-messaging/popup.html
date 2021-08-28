@@ -357,8 +357,14 @@
     vertical-align: middle;
   }
 
+  .popup-container {
+    display: flex;
+    flex-direction: column;
+  }
+
   .contents {
-    height: inherit;
+    flex-grow: 1;
+    flex-basis: 0;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--gray-text) transparent;
@@ -632,11 +638,6 @@
   }
 
   #bottom-bar {
-    position: absolute;
-    z-index: 10000;
-    bottom: 0;
-    left: 0;
-    right: 0;
     background: var(--content-background);
     border-top: 1px solid var(--content-border);
     font-size: 12px;
