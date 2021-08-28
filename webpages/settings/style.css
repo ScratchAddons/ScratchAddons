@@ -59,7 +59,6 @@ h1 {
   padding-top: 10px;
   scrollbar-width: thin;
   scrollbar-color: var(--gray-text) transparent;
-  height: 100vh;
 }
 
 @keyframes addonBlink {
