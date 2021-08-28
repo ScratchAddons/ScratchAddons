@@ -548,7 +548,9 @@ export default async function ({ template }) {
           const addonsInGroups = [];
           for (const group of this.addonGroups) group.addonIds.forEach((addonId) => addonsInGroups.push(addonId));
           const searchGroup = this.addonGroups.find((group) => group.id === "_iframeSearch");
-          searchGroup.addonIds = Object.keys(this.manifestsById).filter((addonId) => addonsInGroups.indexOf(addonId) === -1);
+          searchGroup.addonIds = Object.keys(this.manifestsById).filter(
+            (addonId) => addonsInGroups.indexOf(addonId) === -1
+          );
         }
 
         let naturalIndex = 0; // Index when not searching
@@ -562,7 +564,8 @@ export default async function ({ template }) {
             obj.manifest = this.manifestsById[addonId];
             obj.group = group;
             obj.matchesSearch = false; // Later set to true by this.addonList if needed
-            const shouldHideAsEasterEgg = obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
+            const shouldHideAsEasterEgg =
+              obj.manifest._categories[0] === "easterEgg" && obj.manifest._enabled === false;
             obj.matchesCategory = !shouldHideAsEasterEgg;
             obj.naturalIndex = naturalIndex;
             obj.headerAbove = groupIndex === 0;
