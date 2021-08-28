@@ -39,9 +39,7 @@
         <button @click="!postingComment && postComment()" class="post-button">
           {{ postingComment ? messages.postingMsg : messages.postMsg }}
         </button>
-        <button @click="replying = false" v-show="!postingComment">
-          {{ messages.cancelMsg }}
-        </button>
+        <button @click="replying = false" v-show="!postingComment">{{ messages.cancelMsg }}</button>
         <span class="comment-chars"> {{ replyBoxLeftMsg }}</span>
       </div>
     </div>
