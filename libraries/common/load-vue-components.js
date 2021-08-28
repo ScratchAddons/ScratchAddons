@@ -31,9 +31,12 @@ export default (filenames) =>
             }
             const [componentName] = filename.split("/").slice(-1);
             css.setAttribute("data-vue-component", componentName); // For debugging (has no side effects)
+            // Add data-addon-id - used by the popup to disable styles from inactive tabs
             if (filename.startsWith("popups/")) {
               const [addonId] = filename.split("/").slice(1);
               css.setAttribute("data-addon-id", addonId);
+            } else if (filename.startsWith("webpages/settings/")) {
+              css.setAttribute("data-addon-id", "settings-page");
             }
             document.head.insertBefore(css, document.head.querySelector("[data-below-vue-components]"));
           }
