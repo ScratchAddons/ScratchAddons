@@ -329,8 +329,7 @@
     </span>
     <span class="separator">|</span>
     <a href="https://scratch.mit.edu/messages" id="open-messages">
-      {{ uiMessages.openMessagesMsg }}
-      <img src="../../images/icons/popout.svg" id="popout" />
+      {{ uiMessages.openMessagesMsg }}<img src="../../images/icons/popout.svg" id="popout" />
     </a>
   </div>
 </template>
@@ -519,12 +518,14 @@
     line-height: 15px;
     min-height: 31px;
     display: flex;
-    align-items: stretch;
+    align-items: center;
     justify-content: center;
+    padding-inline: 5px;
     user-select: none;
   }
   #bottom-bar > * {
-    padding: 8px 0;
+    padding-top: 6px;
+    padding-bottom: 8px;
   }
   #bottom-bar > a {
     font-weight: var(--brand-orange-min-font-weight);
