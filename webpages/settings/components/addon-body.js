@@ -4,7 +4,7 @@ let components = await loadVueComponent([
   "webpages/settings/components/addon-tag",
 ]);
 
-const isIframe = window.parent !== window;
+const isIframe = window.location.pathname === "/webpages/popup/index.html";
 
 export default async function ({ template }) {
   const AddonBody = Vue.extend({

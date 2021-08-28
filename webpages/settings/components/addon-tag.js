@@ -1,6 +1,6 @@
 import tags from "../data/tags.js";
 
-const isIframe = window.parent !== window;
+const isIframe = window.location.pathname === "/webpages/popup/index.html";
 
 export default async function ({ template }) {
   const AddonTag = Vue.extend({
