@@ -1,7 +1,3 @@
 .project-favorites {
   visibility: hidden;
 }
-
-.project-favorites::before {
-  visibility: visible;
-}
