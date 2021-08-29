@@ -27,8 +27,7 @@ export default async function ({ addon, msg, global, console }) {
         type: "RESET_COMMENTS",
       });
 
-      button.classList.add("remixing");
-      button.classList.add("disabled");
+      button.classList.add("remixing", "disabled");
     });
 
     const inner = document.createElement("span");
