@@ -1,9 +1,7 @@
 #sa-emoji-picker {
-  user-select: none;
   cursor: auto;
   position: absolute;
   width: 390px;
-  height: 52px;
   background-color: white;
   border-radius: 8px;
   border: 2px solid rgba(0, 0, 0, 0.15);
@@ -12,10 +10,11 @@
   padding: 5px;
   overflow: hidden;
   line-height: 0px;
+  font-size: 15px;
 }
 .sa-emoji-button-www #sa-emoji-picker {
   top: 48px;
-  right: -10px;
+  right: -7px;
 }
 .sa-emoji-button-r2 #sa-emoji-picker {
   top: 30px;
@@ -51,4 +50,23 @@
   display: inline-block;
   position: relative;
   margin-left: 0.5em;
+}
+.sa-emoji-picker-divider {
+	height: 1px;
+	margin: 5px;
+	display: block;
+	border-top: 2px solid rgba(0, 0, 0, 0.15);
+}
+.sa-emoji-picker-break {
+	margin-bottom: 9px;
+	height: 2px;
+}
+.sa-emoji-picker-unicode {
+	font-size: 15px;
+	position: relative;
+	left: 6px;
+}
+.sa-emoji-picker-unicode .sa-emoji-picker-item {
+	width: 20px;
+	height: 20px;
 }
