@@ -52,21 +52,21 @@
   margin-left: 0.5em;
 }
 .sa-emoji-picker-divider {
-	height: 1px;
-	margin: 5px;
-	display: block;
-	border-top: 2px solid rgba(0, 0, 0, 0.15);
+  height: 1px;
+  margin: 5px;
+  display: block;
+  border-top: 2px solid rgba(0, 0, 0, 0.15);
 }
 .sa-emoji-picker-break {
-	margin-bottom: 9px;
-	height: 2px;
+  margin-bottom: 9px;
+  height: 2px;
 }
 .sa-emoji-picker-unicode {
-	font-size: 15px;
-	position: relative;
-	left: 6px;
+  font-size: 15px;
+  position: relative;
+  left: 6px;
 }
 .sa-emoji-picker-unicode .sa-emoji-picker-item {
-	width: 20px;
-	height: 20px;
+  width: 20px;
+  height: 20px;
 }

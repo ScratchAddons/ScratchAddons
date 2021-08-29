@@ -179,26 +179,177 @@ export default async function ({ addon, global, console }) {
       imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/blm.png",
     },
   ];
-  const unicodeEmojis = ["⌚️", "⏰", "⏱️", "⏲️", "⌨️", "☎️", "⌛️", "⚖️", "⚙️", "✉️", "✂️", "✒️", "☂️", "✏️", "☕️", "♟️", "⚰️", "⚱️", "⛏️",  "⚔️", "⚒️", "⛓️", "⚗️", "⛑️",
-"br",
-"⭐️", "✨", "⚡️", "☄️", "☀️", "⛅️", "☁️", "⛈️", "⛄️", "❄️", "☔️", "☘️",
-"br",
-"☹️", "Ⓜ️", "✌️", "☝️", "✍️", "✋", "✊", "☺️",
-"br",
-"⚽️", "⚾️", "⛳️", "⛹️", "⛷️", "⛸️",
-"br",
-"✈️", "⛵️", "⚓️", "⛽️", "⛲️", "⛺️", "⛪️", "⛰️", "⛱️", "⛴️", "⛩️", "♨️",
-"br",
-"❗️", "❕", "❓", "❔", "©️", "®️", "‼️", "⁉️", "™️", "➕", "➖", "➗", "✖️", "⛔", "⭕", "❌", "✔️", "〰️", "〽️", "⚠️",
-"br",
-"☑️", "✅", "❎", "▶️", "⏩", "⏪", "⏫", "⏬", "ℹ️", "⏭️", "⏮️", "⏯️", "⏏️", "◀️", "➡️", "⬅️", "⬆️", "⬇️", "↗️", "↘️", "↙️", "↖️", "↪️", "↩️", "⤴️", "⤵️", "✳️", "✴️", "❇️", "㊗️", "㊙️",
-"br",
-"⚕️", "☦️", "♾️", "⚛️", "⛎️", "✝️", "☪️", "☮️", "☯️", "☸️", "♈️", "♉️", "♊️", "♋️", "♌️", "♍️", "♎️", "♏️", "♐️", "♑️", "♒️", "♓️",
-"br",
-"❤️", "❣️", "♠️", "♣️", "♥️", "♦️", "♀️", "♂️", "♻️", "☢️", "☣️", "⚜️", "➰️", "➿️", "☠️",
-"br",
-"⬛️", "⬜️", "⚪️", "⚫️", "▪️", "▫️", "◻️", "◼️", "◽️", "◾️",
-];
+  const unicodeEmojis = [
+    "⌚️",
+    "⏰",
+    "⏱️",
+    "⏲️",
+    "⌨️",
+    "☎️",
+    "⌛️",
+    "⚖️",
+    "⚙️",
+    "✉️",
+    "✂️",
+    "✒️",
+    "☂️",
+    "✏️",
+    "☕️",
+    "♟️",
+    "⚰️",
+    "⚱️",
+    "⛏️",
+    "⚔️",
+    "⚒️",
+    "⛓️",
+    "⚗️",
+    "⛑️",
+    "br",
+    "⭐️",
+    "✨",
+    "⚡️",
+    "☄️",
+    "☀️",
+    "⛅️",
+    "☁️",
+    "⛈️",
+    "⛄️",
+    "❄️",
+    "☔️",
+    "☘️",
+    "br",
+    "☹️",
+    "Ⓜ️",
+    "✌️",
+    "☝️",
+    "✍️",
+    "✋",
+    "✊",
+    "☺️",
+    "br",
+    "⚽️",
+    "⚾️",
+    "⛳️",
+    "⛹️",
+    "⛷️",
+    "⛸️",
+    "br",
+    "✈️",
+    "⛵️",
+    "⚓️",
+    "⛽️",
+    "⛲️",
+    "⛺️",
+    "⛪️",
+    "⛰️",
+    "⛱️",
+    "⛴️",
+    "⛩️",
+    "♨️",
+    "br",
+    "❗️",
+    "❕",
+    "❓",
+    "❔",
+    "©️",
+    "®️",
+    "‼️",
+    "⁉️",
+    "™️",
+    "➕",
+    "➖",
+    "➗",
+    "✖️",
+    "⛔",
+    "⭕",
+    "❌",
+    "✔️",
+    "〰️",
+    "〽️",
+    "⚠️",
+    "br",
+    "☑️",
+    "✅",
+    "❎",
+    "▶️",
+    "⏩",
+    "⏪",
+    "⏫",
+    "⏬",
+    "ℹ️",
+    "⏭️",
+    "⏮️",
+    "⏯️",
+    "⏏️",
+    "◀️",
+    "➡️",
+    "⬅️",
+    "⬆️",
+    "⬇️",
+    "↗️",
+    "↘️",
+    "↙️",
+    "↖️",
+    "↪️",
+    "↩️",
+    "⤴️",
+    "⤵️",
+    "✳️",
+    "✴️",
+    "❇️",
+    "㊗️",
+    "㊙️",
+    "br",
+    "⚕️",
+    "☦️",
+    "♾️",
+    "⚛️",
+    "⛎️",
+    "✝️",
+    "☪️",
+    "☮️",
+    "☯️",
+    "☸️",
+    "♈️",
+    "♉️",
+    "♊️",
+    "♋️",
+    "♌️",
+    "♍️",
+    "♎️",
+    "♏️",
+    "♐️",
+    "♑️",
+    "♒️",
+    "♓️",
+    "br",
+    "❤️",
+    "❣️",
+    "♠️",
+    "♣️",
+    "♥️",
+    "♦️",
+    "♀️",
+    "♂️",
+    "♻️",
+    "☢️",
+    "☣️",
+    "⚜️",
+    "➰️",
+    "➿️",
+    "☠️",
+    "br",
+    "⬛️",
+    "⬜️",
+    "⚪️",
+    "⚫️",
+    "▪️",
+    "▫️",
+    "◻️",
+    "◼️",
+    "◽️",
+    "◾️",
+  ];
 
   //Functions
 
@@ -279,7 +430,7 @@ export default async function ({ addon, global, console }) {
     let container = document.createElement("span");
     container.classList.add("sa-emoji-picker-item");
     container.dataset.text = emoji.text;
-	container.title = emoji.text;
+    container.title = emoji.text;
     container.onclick = addEmoji;
     //The actual item
     let item = document.createElement("img");
@@ -291,39 +442,41 @@ export default async function ({ addon, global, console }) {
     emojiPicker.appendChild(container);
   });
   //Unicode emojis
-  let unicodeContainer =document.createElement("div");
-  unicodeContainer.classList.add("sa-emoji-picker-unicode")
+  let unicodeContainer = document.createElement("div");
+  unicodeContainer.classList.add("sa-emoji-picker-unicode");
   //Divider between emoji types
   let pickerDivider = document.createElement("div");
   pickerDivider.classList.add("sa-emoji-picker-divider");
   emojiPicker.appendChild(pickerDivider);
   //Unicode emojis
   unicodeEmojis.forEach((emoji) => {
-	//Container for emoji picker item
-	if (emoji === "br") { //Line break
-		let br = document.createElement("br");
-		br.classList.add("sa-emoji-picker-break");
-		unicodeContainer.appendChild(br);
-	} else { //Emoji
-		let container = document.createElement("span");
-		container.classList.add("sa-emoji-picker-item");
-		container.dataset.text = emoji;
-		container.onclick = addEmoji;
-		//The actual item
-		let item = document.createElement("span");
-		item.textContent = emoji;
-		item.classList.add("sa-emoji-picker-item-inner");
-		//Append
-		container.appendChild(item);
-		unicodeContainer.appendChild(container);
-	}
+    //Container for emoji picker item
+    if (emoji === "br") {
+      //Line break
+      let br = document.createElement("br");
+      br.classList.add("sa-emoji-picker-break");
+      unicodeContainer.appendChild(br);
+    } else {
+      //Emoji
+      let container = document.createElement("span");
+      container.classList.add("sa-emoji-picker-item");
+      container.dataset.text = emoji;
+      container.onclick = addEmoji;
+      //The actual item
+      let item = document.createElement("span");
+      item.textContent = emoji;
+      item.classList.add("sa-emoji-picker-item-inner");
+      //Append
+      container.appendChild(item);
+      unicodeContainer.appendChild(container);
+    }
   });
   emojiPicker.appendChild(unicodeContainer);
-  
+
   //Settings change
-  const updateSettings = function() {
-	unicodeContainer.style.display = addon.settings.get("unicode") ? "block" : "none";
-  }
+  const updateSettings = function () {
+    unicodeContainer.style.display = addon.settings.get("unicode") ? "block" : "none";
+  };
   addon.settings.addEventListener("change", updateSettings);
   updateSettings();
 
