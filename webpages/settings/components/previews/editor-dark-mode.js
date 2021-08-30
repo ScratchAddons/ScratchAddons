@@ -72,6 +72,7 @@ export default async function ({ template }) {
     methods: {
       selectTab(id) {
         this.selectedTab = id;
+        this.$emit("areahover", "activeTab");
       },
       toggleFullScreenView() {
         this.fullScreenView = !this.fullScreenView;

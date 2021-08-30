@@ -57,12 +57,14 @@
             :options="addon.addonPreview"
             :settings="addonSettings[addon._addonId]"
             :hovered-setting-id="hoveredSettingId"
+            @areahover="highlightSetting"
           />
         </div>
       </div>
       <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
         <addon-setting
           v-for="setting of addon.settings"
+          :class="{'setting-highlighted': highlightedSettingId === setting.id}"
           :addon="addon"
           :setting="setting"
           :addon-settings="addonSettings"
@@ -242,6 +244,16 @@
   .addon-settings {
     padding-top: 5px;
     padding-inline: 20px;
+  }
+  .setting-highlighted::after {
+    content: "";
+    position: absolute;
+    top: -7px;
+    bottom: -7px;
+    left: -7px;
+    right: -7px;
+    border: 1px solid var(--brand-orange);
+    border-radius: 4px;
   }
 
   .presets-column,

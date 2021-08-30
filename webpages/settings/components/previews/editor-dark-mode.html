@@ -1,40 +1,47 @@
 <template>
-  <div role="presentation" class="edm-preview" :data-setting-hovered="hoveredSettingId" style="
-    --page: {{ settings.page }};
-    --page-text: {{ colors.pageText }};
-    --primary: {{ settings.primary }};
-    --primary-transparent: {{ colors.primaryTransparent }};
-    --primary-text: {{ colors.primaryText }};
-    --highlightText: {{ settings.highlightText }};
-    --menuBar: {{ settings.menuBar }};
-    --menuBar-text: {{ colors.menuBarText }};
-    --menuBar-border: {{ colors.menuBarBorder }};
-    --accent: {{ settings.accent }};
-    --accent-text: {{ colors.accentText }};
-    --accent-transparentText: {{ colors.accentTransparentText }};
-    --accent-artboard: {{ colors.accentArtboard }};
-    --accent-checkerboard: {{ colors.accentCheckerboard }};
-    --input: {{ settings.input }};
-    --input-transparent: {{ colors.inputTransparent }};
-    --input-text: {{ colors.inputText }};
-    --tab: {{ settings.tab }};
-    --tab-text: {{ colors.tabText }};
-    --activeTab: {{ settings.activeTab }};
-    --workspace: {{ settings.workspace }};
-    --categoryMenu: {{ settings.categoryMenu }};
-    --categoryMenu-text: {{ colors.categoryMenuText }};
-    --categoryMenu-selection: {{ colors.categoryMenuSelection }};
-    --palette: {{ colors.palette }};
-    --selector: {{ settings.selector }};
-    --selector-text: {{ colors.selectorText }};
-    --selector2: {{ settings.selector2 }};
-    --selector2-text: {{ colors.selector2Text }};
-    --selectorSelection: {{ settings.selectorSelection }};
-    --fullscreen: {{ settings.fullscreen }};
-    --stageHeader: {{ settings.stageHeader }};
-    --border: {{ hoveredSettingId === 'border' ? 'var(--brand-orange)' : settings.border }};
-  ">
-    <div class="edm-menu-bar">
+  <div
+    role="presentation"
+    class="edm-preview"
+    :data-setting-hovered="hoveredSettingId"
+    @mouseenter="$emit('areahover', 'page')"
+    @mouseleave="$emit('areahover', null)"
+    style="
+      --page: {{ settings.page }};
+      --page-text: {{ colors.pageText }};
+      --primary: {{ settings.primary }};
+      --primary-transparent: {{ colors.primaryTransparent }};
+      --primary-text: {{ colors.primaryText }};
+      --highlightText: {{ settings.highlightText }};
+      --menuBar: {{ settings.menuBar }};
+      --menuBar-text: {{ colors.menuBarText }};
+      --menuBar-border: {{ colors.menuBarBorder }};
+      --accent: {{ settings.accent }};
+      --accent-text: {{ colors.accentText }};
+      --accent-transparentText: {{ colors.accentTransparentText }};
+      --accent-artboard: {{ colors.accentArtboard }};
+      --accent-checkerboard: {{ colors.accentCheckerboard }};
+      --input: {{ settings.input }};
+      --input-transparent: {{ colors.inputTransparent }};
+      --input-text: {{ colors.inputText }};
+      --tab: {{ settings.tab }};
+      --tab-text: {{ colors.tabText }};
+      --activeTab: {{ settings.activeTab }};
+      --workspace: {{ settings.workspace }};
+      --categoryMenu: {{ settings.categoryMenu }};
+      --categoryMenu-text: {{ colors.categoryMenuText }};
+      --categoryMenu-selection: {{ colors.categoryMenuSelection }};
+      --palette: {{ colors.palette }};
+      --selector: {{ settings.selector }};
+      --selector-text: {{ colors.selectorText }};
+      --selector2: {{ settings.selector2 }};
+      --selector2-text: {{ colors.selector2Text }};
+      --selectorSelection: {{ settings.selectorSelection }};
+      --fullscreen: {{ settings.fullscreen }};
+      --stageHeader: {{ settings.stageHeader }};
+      --border: {{ hoveredSettingId === 'border' ? 'var(--brand-orange)' : settings.border }};
+    "
+  >
+    <div class="edm-menu-bar" @mouseenter="$emit('areahover', 'menuBar')"  @mouseleave="$emit('areahover', 'page')">
       <div class="edm-logo-placeholder"></div>
       <div class="edm-menu-bar-menu edm-icon-placeholder edm-icon-placeholder-24px"><!-- Language --></div>
       <div class="edm-menu-bar-menu edm-text-placeholder" style="--length: 4;"><!-- File --></div>
@@ -74,6 +81,8 @@
             v-for="tab of tabs"
             class="edm-tab"
             :class="{'edm-tab-selected': selectedTab === tab.id}"
+            @mouseenter="$emit('areahover', selectedTab === tab.id ? 'activeTab' : 'tab')"
+            @mouseleave="$emit('areahover', 'page')"
             @click="selectTab(tab.id)"
           >
             <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
@@ -81,7 +90,11 @@
           </div>
         </div>
         <div class="edm-tab-content edm-workspace" v-if="selectedTab === 'code'">
-          <div class="edm-category-menu">
+          <div
+            class="edm-category-menu"
+            @mouseenter="$emit('areahover', 'categoryMenu')"
+            @mouseleave="$emit('areahover', 'page')"
+          >
             <div
               v-for="category of blockCategories"
               class="edm-category"
@@ -100,23 +113,57 @@
               </div>
             </div>
             <div class="edm-spacer"></div>
-            <div class="edm-add-extension">
+            <div
+              class="edm-add-extension"
+              @mouseenter="$emit('areahover', 'primary')"
+              @mouseleave="$emit('areahover', 'categoryMenu')"
+            >
               <div class="edm-icon-placeholder edm-icon-placeholder-24px"><!-- Add Extension --></div>
             </div>
           </div>
-          <div class="edm-palette"></div>
-          <div class="edm-workspace-hover-target"></div>
+          <div
+            class="edm-palette"
+            @mouseenter="$emit('areahover', 'palette')"
+            @mouseleave="$emit('areahover', 'page')"
+          ></div>
+          <div
+            class="edm-workspace-hover-target"
+            @mouseenter="$emit('areahover', 'workspace')"
+            @mouseleave="$emit('areahover', 'page')"
+          ></div>
         </div>
-        <div class="edm-tab-content edm-asset-tab" v-else>
-          <div class="edm-asset-list" :class="{'edm-sound-list': selectedTab === 'sounds'}">
-            <div class="edm-asset edm-asset-selected">
+        <div
+          v-else
+          class="edm-tab-content edm-asset-tab"
+          @mouseenter="$emit('areahover', 'accent')"
+          @mouseleave="$emit('areahover', 'page')"
+        >
+          <div
+            class="edm-asset-list"
+            :class="{'edm-sound-list': selectedTab === 'sounds'}"
+            @mouseenter="$emit('areahover', 'selector2')"
+            @mouseleave="$emit('areahover', 'accent')"
+          >
+            <div
+              class="edm-asset edm-asset-selected"
+              @mouseenter="$emit('areahover', 'selectorSelection')"
+              @mouseleave="$emit('areahover', 'selector2')"
+            >
               <div class="edm-asset-image">
                 <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
               </div>
-              <div class="edm-asset-name">
+              <div
+                class="edm-asset-name"
+                @mouseenter="$emit('areahover', 'primary')"
+                @mouseleave="$emit('areahover', 'selectorSelection')"
+              >
                 <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7;"></div>
               </div>
-              <div class="edm-asset-delete">
+              <div
+                class="edm-asset-delete"
+                @mouseenter="$emit('areahover', 'primary')"
+                @mouseleave="$emit('areahover', 'selectorSelection')"
+              >
                 <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
               </div>
             </div>
@@ -137,7 +184,11 @@
                 <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1;"></div>
               </div>
             </div>
-            <div class="edm-asset-new">
+            <div
+              class="edm-asset-new"
+              @mouseenter="$emit('areahover', 'primary')"
+              @mouseleave="$emit('areahover', 'selector2')"
+            >
               <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
             </div>
           </div>
@@ -145,7 +196,11 @@
             <div class="edm-toolbar">
               <div>
                 <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7;"><!-- Costume --></div>
-                <div class="edm-input">
+                <div
+                  class="edm-input"
+                  @mouseenter="$emit('areahover', 'input')"
+                  @mouseleave="$emit('areahover', 'accent')"
+                >
                   <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8;"></div>
                 </div>
               </div>
@@ -200,7 +255,11 @@
                 <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7;"><!-- Outline --></div>
                 <div class="edm-outlined-button edm-outlined-button-first edm-paint-picker-color"></div>
                 <div class="edm-outlined-button edm-outlined-button-last edm-paint-picker-arrow"></div>
-                <div class="edm-input edm-input-number">
+                <div
+                  class="edm-input edm-input-number"
+                  @mouseenter="$emit('areahover', 'input')"
+                  @mouseleave="$emit('areahover', 'accent')"
+                >
                   <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 2;"></div>
                 </div>
               </div>
@@ -242,7 +301,11 @@
             </div>
             <div class="edm-paint-bottom">
               <div class="edm-paint-tool-column">
-                <div class="edm-paint-tool edm-paint-tool-selected">
+                <div
+                  class="edm-paint-tool edm-paint-tool-selected"
+                  @mouseenter="$emit('areahover', 'primary')"
+                  @mouseleave="$emit('areahover', 'accent')"
+                >
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
                 </div>
                 <div class="edm-paint-tool" v-for="item of [0, 1, 2, 3]">
@@ -257,7 +320,11 @@
               <div class="edm-paint-canvas-and-controls">
                 <div class="edm-paint-canvas"></div>
                 <div class="edm-paint-controls">
-                  <div class="edm-button"><!-- Convert to Bitmap -->
+                  <div
+                    class="edm-button"
+                    @mouseenter="$emit('areahover', 'primary')"
+                    @mouseleave="$emit('areahover', 'accent')"
+                  ><!-- Convert to Bitmap -->
                     <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
                     <div class="edm-text-placeholder" style="--length: 7;"></div>
                     <div class="edm-text-placeholder" style="--length: 2;"></div>
@@ -282,7 +349,11 @@
             <div class="edm-toolbar">
               <div>
                 <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5;"><!-- Sound --></div>
-                <div class="edm-input">
+                <div
+                  class="edm-input"
+                  @mouseenter="$emit('areahover', 'input')"
+                  @mouseleave="$emit('areahover', 'accent')"
+                >
                   <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4;"><!-- sound name --></div>
                 </div>
               </div>
@@ -328,7 +399,11 @@
             <div class="edm-waveform"></div>
             <div class="edm-toolbar edm-sound-effects">
               <div>
-                <div class="edm-play-button">
+                <div
+                  class="edm-play-button"
+                  @mouseenter="$emit('areahover', 'primary')"
+                  @mouseleave="$emit('areahover', 'accent')"
+                >
                   <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
                 </div>
               </div>
@@ -348,7 +423,7 @@
             </div>
           </div>
         </div>
-        <div class="edm-backpack">
+        <div class="edm-backpack" @mouseenter="$emit('areahover', 'accent')" @mouseleave="$emit('areahover', 'page')">
           <div class="edm-text-placeholder" style="--length: 8;"></div>
         </div>
       </div>
@@ -357,20 +432,37 @@
           <div class="edm-icon-placeholder edm-icon-placeholder-20px edm-green-flag"><!-- Green flag --></div>
           <div class="edm-icon-placeholder edm-icon-placeholder-20px edm-stop-sign"><!-- Stop --></div>
           <div class="edm-spacer"></div>
-          <div class="edm-outlined-button edm-outlined-button-first edm-outlined-button-unselected">
+          <div
+            class="edm-outlined-button edm-outlined-button-first edm-outlined-button-unselected"
+            @mouseenter="$emit('areahover', 'accent')"
+            @mouseleave="$emit('areahover', 'page')"
+          >
             <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Small stage --></div>
           </div>
-          <div class="edm-outlined-button edm-outlined-button-last edm-outlined-button-selected">
+          <div
+            class="edm-outlined-button edm-outlined-button-last edm-outlined-button-selected"
+            @mouseenter="$emit('areahover', 'accent')"
+            @mouseleave="$emit('areahover', 'page')"
+          >
             <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Large stage --></div>
           </div>
-          <div class="edm-outlined-button edm-fullscreen-toggle" @click="toggleFullScreenView()">
+          <div
+            class="edm-outlined-button edm-fullscreen-toggle"
+            @mouseenter="$emit('areahover', 'accent')"
+            @mouseleave="$emit('areahover', 'page')"
+            @click="toggleFullScreenView()"
+          >
             <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Full screen --></div>
           </div>
         </div>
-        <div class="edm-stage"></div>
+        <div class="edm-stage" @mouseenter="$emit('areahover', null)" @mouseleave="$emit('areahover', 'page')"></div>
         <div class="edm-targets">
           <div class="edm-sprite-selector">
-            <div class="edm-sprite-info">
+            <div
+              class="edm-sprite-info"
+              @mouseenter="$emit('areahover', 'accent')"
+              @mouseleave="$emit('areahover', 'page')"
+            >
               <div class="edm-sprite-info-row">
                 <div>
                   <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6;"><!-- Sprite --></div>
@@ -417,15 +509,31 @@
                 </div>
               </div>
             </div>
-            <div class="edm-sprite-list">
-              <div class="edm-asset edm-asset-selected">
+            <div
+              class="edm-sprite-list"
+              @mouseenter="$emit('areahover', 'selector')"
+              @mouseleave="$emit('areahover', 'page')"
+            >
+              <div
+                class="edm-asset edm-asset-selected"
+                @mouseenter="$emit('areahover', 'selectorSelection')"
+                @mouseleave="$emit('areahover', 'selector')"
+              >
                 <div class="edm-asset-image">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
                 </div>
-                <div class="edm-asset-name">
+                <div
+                  class="edm-asset-name"
+                  @mouseenter="$emit('areahover', 'primary')"
+                  @mouseleave="$emit('areahover', 'selectorSelection')"
+                >
                   <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7;"></div>
                 </div>
-                <div class="edm-asset-delete">
+                <div
+                  class="edm-asset-delete"
+                  @mouseenter="$emit('areahover', 'primary')"
+                  @mouseleave="$emit('areahover', 'selectorSelection')"
+                >
                   <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
                 </div>
               </div>
@@ -446,12 +554,20 @@
                   <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1;"></div>
                 </div>
               </div>
-              <div class="edm-asset-new">
+              <div
+                class="edm-asset-new"
+                @mouseenter="$emit('areahover', 'primary')"
+                @mouseleave="$emit('areahover', 'selector')"
+              >
                 <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
               </div>
             </div>
           </div>
-          <div class="edm-stage-selector">
+          <div
+            class="edm-stage-selector"
+            @mouseenter="$emit('areahover', 'accent')"
+            @mouseleave="$emit('areahover', 'page')"
+          >
             <div class="edm-stage-title">
               <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5;"><!-- Stage --></div>
             </div>
@@ -462,26 +578,48 @@
             <div class="edm-stage-info">
               <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1;"></div>
             </div>
-            <div class="edm-asset-new">
+            <div
+              class="edm-asset-new"
+              @mouseenter="$emit('areahover', 'primary')"
+              @mouseleave="$emit('areahover', 'accent')"
+            >
               <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="edm-fullscreen-view" v-if="fullScreenView">
-      <div class="edm-fullscreen-controls">
+    <div
+      v-if="fullScreenView"
+      class="edm-fullscreen-view"
+      @mouseenter="$emit('areahover', 'fullscreen')"
+      @mouseleave="$emit('areahover', 'page')"
+    >
+      <div
+        class="edm-fullscreen-controls"
+        @mouseenter="$emit('areahover', 'stageHeader')"
+        @mouseleave="$emit('areahover', 'fullscreen')"
+      >
         <div class="edm-fullscreen-controls-inner">
           <div>
             <div class="edm-icon-placeholder edm-icon-placeholder-20px edm-green-flag"><!-- Green flag --></div>
             <div class="edm-icon-placeholder edm-icon-placeholder-20px edm-stop-sign"><!-- Stop --></div>
           </div>
-          <div class="edm-outlined-button edm-fullscreen-toggle" @click="toggleFullScreenView()">
+          <div
+            class="edm-outlined-button edm-fullscreen-toggle"
+            @mouseenter="$emit('areahover', 'accent')"
+            @mouseleave="$emit('areahover', 'stageHeader')"
+            @click="toggleFullScreenView()"
+          >
             <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Exit full screen --></div>
           </div>
         </div>
       </div>
-      <div class="edm-fullscreen-stage"></div>
+      <div
+        class="edm-fullscreen-stage"
+        @mouseenter="$emit('areahover', null)"
+        @mouseleave="$emit('areahover', 'fullscreen')"
+      ></div>
     </div>
   </div>
 </template>
