@@ -63,7 +63,7 @@ export default async function ({ template }) {
           ) : "#d9e3f28c",
           tabText: textColor(this.settings.tab, "rgba(87, 94, 117, 0.75)", "rgba(255, 255, 255, 0.75)"),
           categoryMenuSelection: textColor(this.settings.categoryMenu, "rgba(87, 124, 155, 0.13)", "rgba(255, 255, 255, 0.05)"),
-          primaryTransparent35: multiply(this.settings.primary, {a: 0.35}),
+          primaryTransparent: multiply(this.settings.primary, {a: 0.35}),
           inputTransparent: multiply(this.settings.input, {a: 0.25}),
           palette: multiply(this.settings.palette, {a: 0.8}),
         };
