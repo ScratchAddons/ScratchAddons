@@ -1,5 +1,5 @@
 <template>
-  <div role="presentation" class="edm-preview" style="
+  <div role="presentation" class="edm-preview" :data-setting-hovered="hoveredSettingId" style="
     --page: {{ settings.page }};
     --page-text: {{ colors.pageText }};
     --primary: {{ settings.primary }};
@@ -32,7 +32,7 @@
     --selectorSelection: {{ settings.selectorSelection }};
     --fullscreen: {{ settings.fullscreen }};
     --stageHeader: {{ settings.stageHeader }};
-    --border: {{ settings.border }};
+    --border: {{ hoveredSettingId === 'border' ? 'var(--brand-orange)' : settings.border }};
   ">
     <div class="edm-menu-bar">
       <div class="edm-logo-placeholder"></div>
@@ -105,6 +105,7 @@
             </div>
           </div>
           <div class="edm-palette"></div>
+          <div class="edm-workspace-hover-target"></div>
         </div>
         <div class="edm-tab-content edm-asset-tab" v-else>
           <div class="edm-asset-list" :class="{'edm-sound-list': selectedTab === 'sounds'}">
@@ -498,6 +499,38 @@
     border-radius: 4px;
   }
 
+  .edm-preview[data-setting-hovered="page"],
+  .edm-preview[data-setting-hovered="menuBar"] .edm-menu-bar,
+  .edm-preview[data-setting-hovered="accent"] .edm-asset-editor,
+  .edm-preview[data-setting-hovered="accent"] .edm-sprite-info,
+  .edm-preview[data-setting-hovered="accent"] .edm-stage-selector,
+  .edm-preview[data-setting-hovered="selector"] .edm-sprite-list,
+  .edm-preview[data-setting-hovered="selector2"] .edm-asset-list,
+  .edm-preview[data-setting-hovered="workspace"] .edm-workspace-hover-target,
+  .edm-preview[data-setting-hovered="categoryMenu"] .edm-category-menu,
+  .edm-preview[data-setting-hovered="palette"] .edm-palette,
+  .edm-preview[data-setting-hovered="fullscreen"] .edm-fullscreen-view,
+  .edm-preview[data-setting-hovered="stageHeader"] .edm-fullscreen-controls {
+    box-shadow: 0 0 8px inset var(--brand-orange);
+  }
+
+  .edm-preview[data-setting-hovered="page"] .edm-menu-bar,
+  .edm-preview[data-setting-hovered="primary"] .edm-button,
+  .edm-preview[data-setting-hovered="primary"] .edm-add-extension,
+  .edm-preview[data-setting-hovered="primary"] .edm-asset-selected,
+  .edm-preview[data-setting-hovered="primary"] .edm-asset-delete,
+  .edm-preview[data-setting-hovered="primary"] .edm-asset-new,
+  .edm-preview[data-setting-hovered="primary"] .edm-paint-tool-selected,
+  .edm-preview[data-setting-hovered="primary"] .edm-play-button,
+  .edm-preview[data-setting-hovered="accent"] .edm-outlined-button,
+  .edm-preview[data-setting-hovered="accent"] .edm-backpack,
+  .edm-preview[data-setting-hovered="input"] .edm-input,
+  .edm-preview[data-setting-hovered="tab"] .edm-tab:not(.edm-tab-selected),
+  .edm-preview[data-setting-hovered="activeTab"] .edm-tab-selected,
+  .edm-preview[data-setting-hovered="selectorSelection"] .edm-asset-selected {
+    filter: drop-shadow(0 0 4px var(--brand-orange));
+  }
+
   .edm-icon-placeholder {
     background-color: currentColor;
     border-radius: 50%; /* circle */
@@ -817,6 +850,7 @@
   .edm-workspace {
     background-color: var(--workspace);
     display: flex;
+    overflow: hidden;
   }
   .edm-category-menu {
     width: 29px;
@@ -858,6 +892,9 @@
     width: 124px;
     background-color: var(--palette);
     border-inline-end: 1px solid var(--border);
+  }
+  .edm-workspace-hover-target {
+    flex-grow: 1;
   }
 
   .edm-asset-tab {

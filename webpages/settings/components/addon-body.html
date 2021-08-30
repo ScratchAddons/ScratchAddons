@@ -56,6 +56,7 @@
             :is="'preview-' + addon.addonPreview.type"
             :options="addon.addonPreview"
             :settings="addonSettings[addon._addonId]"
+            :hovered-setting-id="hoveredSettingId"
           />
         </div>
       </div>
@@ -65,6 +66,8 @@
           :addon="addon"
           :setting="setting"
           :addon-settings="addonSettings"
+          @mouseenter="hoveredSettingId = setting.id"
+          @mouseleave="hoveredSettingId = null"
         ></addon-setting>
       </div>
       <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">

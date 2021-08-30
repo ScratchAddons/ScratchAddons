@@ -9,6 +9,7 @@ export default async function ({ template }) {
         isIframe: isIframe,
         expanded: this.getDefaultExpanded(),
         everExpanded: this.getDefaultExpanded(),
+        hoveredSettingId: null,
       };
     },
     computed: {
