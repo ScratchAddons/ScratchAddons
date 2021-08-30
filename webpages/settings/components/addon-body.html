@@ -77,7 +77,16 @@
             @click="loadPreset(preset)"
             :title="preset.description"
           >
-            {{preset.name}}
+            <span class="preset-preview">
+              <component
+                v-if="addon.presetPreview"
+                :is="'preview-' + addon.presetPreview.type"
+                :options="addon.presetPreview"
+                :setting-data="addon.settings"
+                :settings="preset.values"
+              />
+            </span>
+            <span>{{preset.name}}</span>
           </button>
         </div>
       </div>
@@ -254,6 +263,9 @@
   }
   .addon-preset {
     margin-inline-end: 30px;
+  }
+  .preset-preview {
+    display: inline-flex;
   }
 
   .addon-check {
