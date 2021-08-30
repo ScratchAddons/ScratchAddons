@@ -6,6 +6,7 @@ export default async function ({ template }) {
     template,
     data() {
       return {
+        isIframe: isIframe,
         expanded: this.getDefaultExpanded(),
         everExpanded: this.getDefaultExpanded(),
       };

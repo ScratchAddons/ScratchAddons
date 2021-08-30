@@ -49,6 +49,16 @@
           >{{ msg("viewLicenses") }}</a
         >
       </div>
+      <div class="preview-column" v-if="addon.addonPreview && !isIframe" v-bind:class="[!addon._enabled ? 'disabled' : '']">
+        <div class="setting-label">{{ msg("preview") }}</div>
+        <div class="preview-scroll">
+          <component
+            :is="'preview-' + addon.addonPreview.type"
+            :options="addon.addonPreview"
+            :settings="addonSettings[addon._addonId]"
+          />
+        </div>
+      </div>
       <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
         <addon-setting
           v-for="setting of addon.settings"
@@ -229,10 +239,15 @@
     display: flex;
     flex-wrap: wrap;
   }
-
+  .preview-column {
+    margin: 10px 0;
+    padding-left: 10px;
+  }
+  .preview-scroll {
+    overflow-x: auto;
+  }
   .presets-column {
     align-items: center;
-    margin: 10px 0;
   }
   .presets-column > .setting-label {
     margin-inline-start: 10px;
