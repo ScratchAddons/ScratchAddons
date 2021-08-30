@@ -56,7 +56,6 @@ chrome.runtime.sendMessage("getSettingsInfo", async (res) => {
     components.push({ url: popup.html, params });
   }
   components = await loadVueComponent(components);
-  console.log(components);
 
   window.vue = new Vue({
     el: "body",
