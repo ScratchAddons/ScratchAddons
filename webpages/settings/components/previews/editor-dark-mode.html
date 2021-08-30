@@ -41,37 +41,37 @@
       --border: {{ hoveredSettingId === 'border' ? 'var(--brand-orange)' : settings.border }};
     "
   >
-    <div class="edm-menu-bar" @mouseenter="$emit('areahover', 'menuBar')"  @mouseleave="$emit('areahover', 'page')">
+    <div class="edm-menu-bar" @mouseenter="$emit('areahover', 'menuBar')" @mouseleave="$emit('areahover', 'page')">
       <div class="edm-logo-placeholder"></div>
       <div class="edm-menu-bar-menu edm-icon-placeholder edm-icon-placeholder-24px"><!-- Language --></div>
-      <div class="edm-menu-bar-menu edm-text-placeholder" style="--length: 4;"><!-- File --></div>
-      <div class="edm-menu-bar-menu edm-text-placeholder" style="--length: 4;"><!-- Edit --></div>
+      <div class="edm-menu-bar-menu edm-text-placeholder" style="--length: 4"><!-- File --></div>
+      <div class="edm-menu-bar-menu edm-text-placeholder" style="--length: 4"><!-- Edit --></div>
       <div class="edm-menu-bar-separator"></div>
       <div class="edm-menu-bar-menu edm-menu-bar-tutorials">
         <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
-        <div class="edm-text-placeholder" style="--length: 9;"><!-- Tutorials --></div>
+        <div class="edm-text-placeholder" style="--length: 9"><!-- Tutorials --></div>
       </div>
       <div class="edm-menu-bar-separator"></div>
       <div class="edm-menu-bar-input">
         <!-- Project title -->
-        <div class="edm-text-placeholder" style="--length: 8;"></div>
-        <div class="edm-text-placeholder" style="--length: 1;"></div>
+        <div class="edm-text-placeholder" style="--length: 8"></div>
+        <div class="edm-text-placeholder" style="--length: 1"></div>
       </div>
       <div class="edm-menu-bar-button edm-menu-bar-share">
-        <div class="edm-text-placeholder" style="--length: 5;"><!-- Share --></div>
+        <div class="edm-text-placeholder" style="--length: 5"><!-- Share --></div>
       </div>
       <div class="edm-menu-bar-button">
         <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
         <!-- See Project Page -->
-        <div class="edm-text-placeholder" style="--length: 3;"></div>
-        <div class="edm-text-placeholder" style="--length: 7;"></div>
-        <div class="edm-text-placeholder" style="--length: 4;"></div>
+        <div class="edm-text-placeholder" style="--length: 3"></div>
+        <div class="edm-text-placeholder" style="--length: 7"></div>
+        <div class="edm-text-placeholder" style="--length: 4"></div>
       </div>
       <div class="edm-spacer"></div>
       <div class="edm-menu-bar-menu edm-icon-placeholder edm-icon-placeholder-24px"><!-- My Stuff --></div>
       <div class="edm-menu-bar-menu">
         <div class="edm-menu-bar-button edm-avatar-placeholder"></div>
-        <div class="edm-text-placeholder" style="--length: 10;"><!-- Account --></div>
+        <div class="edm-text-placeholder" style="--length: 10"><!-- Account --></div>
       </div>
     </div>
     <div class="edm-main">
@@ -157,7 +157,7 @@
                 @mouseenter="$emit('areahover', 'primary')"
                 @mouseleave="$emit('areahover', 'selectorSelection')"
               >
-                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7;"></div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"></div>
               </div>
               <div
                 class="edm-asset-delete"
@@ -172,7 +172,7 @@
                 <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
               </div>
               <div class="edm-asset-name">
-                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5;"></div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"></div>
               </div>
             </div>
             <div class="edm-asset edm-asset">
@@ -180,8 +180,8 @@
                 <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
               </div>
               <div class="edm-asset-name">
-                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3;"></div>
-                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1;"></div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
               </div>
             </div>
             <div
@@ -195,13 +195,13 @@
           <div class="edm-asset-editor edm-tool-button-icons-not-affected" v-if="selectedTab === 'costumes'">
             <div class="edm-toolbar">
               <div>
-                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7;"><!-- Costume --></div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"><!-- Costume --></div>
                 <div
                   class="edm-input"
                   @mouseenter="$emit('areahover', 'input')"
                   @mouseleave="$emit('areahover', 'accent')"
                 >
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8;"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8"></div>
                 </div>
               </div>
               <div>
@@ -215,44 +215,50 @@
               <div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6;"><!-- Group --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6"><!-- Group --></div>
                 </div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8;"><!-- Ungroup --></div>
-                </div>
-              </div>
-              <div class="edm-toolbar-separator"></div>
-              <div>
-                <div class="edm-tool-button">
-                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7;"><!-- Forward --></div>
-                </div>
-                <div class="edm-tool-button">
-                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8;"><!-- Backward --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8">
+                    <!-- Ungroup -->
+                  </div>
                 </div>
               </div>
               <div class="edm-toolbar-separator"></div>
               <div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5;"><!-- Front --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7">
+                    <!-- Forward -->
+                  </div>
                 </div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4;"><!-- Back --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8">
+                    <!-- Backward -->
+                  </div>
+                </div>
+              </div>
+              <div class="edm-toolbar-separator"></div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"><!-- Front --></div>
+                </div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Back --></div>
                 </div>
               </div>
             </div>
             <div class="edm-toolbar">
               <div>
-                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4;"><!-- Fill --></div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Fill --></div>
                 <div class="edm-outlined-button edm-outlined-button-first edm-paint-picker-color"></div>
                 <div class="edm-outlined-button edm-outlined-button-last edm-paint-picker-arrow"></div>
               </div>
               <div>
-                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7;"><!-- Outline --></div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"><!-- Outline --></div>
                 <div class="edm-outlined-button edm-outlined-button-first edm-paint-picker-color"></div>
                 <div class="edm-outlined-button edm-outlined-button-last edm-paint-picker-arrow"></div>
                 <div
@@ -260,41 +266,43 @@
                   @mouseenter="$emit('areahover', 'input')"
                   @mouseleave="$emit('areahover', 'accent')"
                 >
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 2;"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 2"></div>
                 </div>
               </div>
               <div class="edm-toolbar-separator"></div>
               <div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4;"><!-- Copy --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Copy --></div>
                 </div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5;"><!-- Paste --></div>
-                </div>
-              </div>
-              <div class="edm-toolbar-separator"></div>
-              <div>
-                <div class="edm-tool-button">
-                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6;"><!-- Delete --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"><!-- Paste --></div>
                 </div>
               </div>
               <div class="edm-toolbar-separator"></div>
               <div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div><!-- Flip Horizontal -->
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4;"></div>
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 10;"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6"><!-- Delete --></div>
+                </div>
+              </div>
+              <div class="edm-toolbar-separator"></div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div>
+                    <!-- Flip Horizontal -->
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 10"></div>
                   </div>
                 </div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div><!-- Flip Vertical -->
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4;"></div>
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8;"></div>
+                  <div>
+                    <!-- Flip Vertical -->
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8"></div>
                   </div>
                 </div>
               </div>
@@ -324,11 +332,12 @@
                     class="edm-button"
                     @mouseenter="$emit('areahover', 'primary')"
                     @mouseleave="$emit('areahover', 'accent')"
-                  ><!-- Convert to Bitmap -->
+                  >
+                    <!-- Convert to Bitmap -->
                     <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
-                    <div class="edm-text-placeholder" style="--length: 7;"></div>
-                    <div class="edm-text-placeholder" style="--length: 2;"></div>
-                    <div class="edm-text-placeholder" style="--length: 6;"></div>
+                    <div class="edm-text-placeholder" style="--length: 7"></div>
+                    <div class="edm-text-placeholder" style="--length: 2"></div>
+                    <div class="edm-text-placeholder" style="--length: 6"></div>
                   </div>
                   <div class="edm-paint-zoom">
                     <div class="edm-outlined-button edm-outlined-button-first">
@@ -348,13 +357,15 @@
           <div class="edm-asset-editor" v-if="selectedTab === 'sounds'">
             <div class="edm-toolbar">
               <div>
-                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5;"><!-- Sound --></div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"><!-- Sound --></div>
                 <div
                   class="edm-input"
                   @mouseenter="$emit('areahover', 'input')"
                   @mouseleave="$emit('areahover', 'accent')"
                 >
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4;"><!-- sound name --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4">
+                    <!-- sound name -->
+                  </div>
                 </div>
               </div>
               <div>
@@ -369,22 +380,23 @@
               <div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4;"><!-- Copy --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Copy --></div>
                 </div>
               </div>
               <div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5;"><!-- Paste --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"><!-- Paste --></div>
                 </div>
               </div>
               <div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div><!-- Copy to New -->
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4;"></div>
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 2;"></div>
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3;"></div>
+                  <div>
+                    <!-- Copy to New -->
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 2"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
                   </div>
                 </div>
               </div>
@@ -392,7 +404,7 @@
               <div>
                 <div class="edm-tool-button">
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6;"><!-- Delete --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6"><!-- Delete --></div>
                 </div>
               </div>
             </div>
@@ -424,7 +436,7 @@
           </div>
         </div>
         <div class="edm-backpack" @mouseenter="$emit('areahover', 'accent')" @mouseleave="$emit('areahover', 'page')">
-          <div class="edm-text-placeholder" style="--length: 8;"></div>
+          <div class="edm-text-placeholder" style="--length: 8"></div>
         </div>
       </div>
       <div class="edm-right">
@@ -465,29 +477,29 @@
             >
               <div class="edm-sprite-info-row">
                 <div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6;"><!-- Sprite --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6"><!-- Sprite --></div>
                   <div class="edm-input">
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7;"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"></div>
                   </div>
                 </div>
                 <div>
                   <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1;"><!-- x --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"><!-- x --></div>
                   <div class="edm-input edm-input-number">
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1;"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
                   </div>
                 </div>
                 <div>
                   <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1;"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
                   <div class="edm-input edm-input-number">
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1;"><!-- y --></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"><!-- y --></div>
                   </div>
                 </div>
               </div>
               <div class="edm-sprite-info-row">
                 <div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4;"><!-- Show --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Show --></div>
                   <div class="edm-outlined-button edm-outlined-button-first edm-outlined-button-selected">
                     <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
                   </div>
@@ -496,15 +508,17 @@
                   </div>
                 </div>
                 <div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4;"><!-- Size --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Size --></div>
                   <div class="edm-input edm-input-number">
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3;"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
                   </div>
                 </div>
                 <div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 9;"><!-- Direction --></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 9">
+                    <!-- Direction -->
+                  </div>
                   <div class="edm-input edm-input-number">
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3;"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
                   </div>
                 </div>
               </div>
@@ -527,7 +541,7 @@
                   @mouseenter="$emit('areahover', 'primary')"
                   @mouseleave="$emit('areahover', 'selectorSelection')"
                 >
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7;"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"></div>
                 </div>
                 <div
                   class="edm-asset-delete"
@@ -542,7 +556,7 @@
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
                 </div>
                 <div class="edm-asset-name">
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5;"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"></div>
                 </div>
               </div>
               <div class="edm-asset edm-asset">
@@ -550,8 +564,8 @@
                   <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
                 </div>
                 <div class="edm-asset-name">
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3;"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1;"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
                 </div>
               </div>
               <div
@@ -569,14 +583,14 @@
             @mouseleave="$emit('areahover', 'page')"
           >
             <div class="edm-stage-title">
-              <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5;"><!-- Stage --></div>
+              <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"><!-- Stage --></div>
             </div>
             <div class="edm-stage-image"></div>
             <div class="edm-stage-info">
-              <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 9;"><!-- Backdrops --></div>
+              <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 9"><!-- Backdrops --></div>
             </div>
             <div class="edm-stage-info">
-              <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1;"></div>
+              <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
             </div>
             <div
               class="edm-asset-new"
@@ -661,9 +675,13 @@
   .edm-preview[data-setting-hovered="primary"] .edm-asset-new,
   .edm-preview[data-setting-hovered="primary"] .edm-paint-tool-selected,
   .edm-preview[data-setting-hovered="primary"] .edm-play-button,
-  .edm-preview[data-setting-hovered="highlightText"] .edm-tab-selected :is(.edm-text-placeholder, .edm-icon-placeholder),
+  .edm-preview[data-setting-hovered="highlightText"]
+    .edm-tab-selected
+    :is(.edm-text-placeholder, .edm-icon-placeholder),
   .edm-preview[data-setting-hovered="highlightText"] .edm-outlined-button-selected .edm-icon-placeholder,
-  .edm-preview[data-setting-hovered="highlightText"] .edm-tool-button:not(.edm-tool-button-icons-not-affected *) .edm-icon-placeholder,
+  .edm-preview[data-setting-hovered="highlightText"]
+    .edm-tool-button:not(.edm-tool-button-icons-not-affected *)
+    .edm-icon-placeholder,
   .edm-preview[data-setting-hovered="accent"] .edm-outlined-button,
   .edm-preview[data-setting-hovered="accent"] .edm-backpack,
   .edm-preview[data-setting-hovered="input"] .edm-input,
@@ -1135,8 +1153,10 @@
   .edm-paint-canvas {
     flex-grow: 1;
     background-color: var(--accent-artboard);
-    background-image: linear-gradient(45deg, var(--accent-checkerboard) 25%, transparent 25%), linear-gradient(-45deg, var(--accent-checkerboard) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, var(--accent-checkerboard) 75%), linear-gradient(-45deg, transparent 75%, var(--accent-checkerboard) 75%);
+    background-image: linear-gradient(45deg, var(--accent-checkerboard) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--accent-checkerboard) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--accent-checkerboard) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--accent-checkerboard) 75%);
     background-size: 16px 16px;
     background-position: 0 0, 0 8px, 8px -8px, -8px 0;
     border: 1px solid var(--border);

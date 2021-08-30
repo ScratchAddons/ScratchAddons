@@ -1036,14 +1036,7 @@
   },
   "presetPreview": {
     "type": "palette",
-    "colors": [
-      "primary",
-      "menuBar",
-      "page",
-      "accent",
-      "workspace",
-      "selector"
-    ]
+    "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
   },
   "tags": ["editor", "theme", "featured"],
   "enabledByDefault": false

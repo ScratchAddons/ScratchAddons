@@ -6,7 +6,7 @@ export default async function ({ template }) {
       settingName(id) {
         return this.settingData.find((setting) => setting.id === id).name;
       },
-    }
+    },
   });
   Vue.component("preview-palette", PalettePreview);
 }
