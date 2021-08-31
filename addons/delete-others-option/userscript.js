@@ -3,7 +3,6 @@ var addonGlobal;
 import {insertAfter, queryByText, removeClassContainingText, getAncestorWithClass} from "./utils.js";
 
 function deleteOtherCostumes(contextMenu){
-    console.log("delete others event called")
     const currentCostumeSelector = contextMenu.parentNode.parentNode
     const costumeSelectorsContainer = currentCostumeSelector.parentNode
     const costumeSelectors = Array.from(costumeSelectorsContainer.children)
@@ -11,9 +10,6 @@ function deleteOtherCostumes(contextMenu){
         const costumeSelector = costumeSelectors[i]
         if(costumeSelector !== currentCostumeSelector){
             contextMenu = costumeSelector.querySelector(".react-contextmenu")
-            //const deleteBtn = queryByText(contextMenu,"delete")
-            //console.log(i, deleteBtn.outerHTML)
-            //deleteBtn.click();
             const restoreCostumeFun = addonGlobal.tab.traps.vm.deleteCostume(i);
             addonGlobal.tab.redux.dispatch({ 
                 type: 'scratch-gui/restore-deletion/RESTORE_UPDATE',
@@ -35,7 +31,6 @@ function addDeleteOthersOption(contextMenu){
         })
 
         insertAfter(deleteOthersNode, deleteNode);
-        console.log("added delete option")
     }
 }
 
