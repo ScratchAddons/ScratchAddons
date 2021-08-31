@@ -10,7 +10,7 @@ export default async function ({ addon, global, console, msg }) {
     isNoop: true,
   };
 
-    const buildSwitches = () => {
+  const buildSwitches = () => {
     blockSwitches = {};
     procedureSwitches = {};
 
