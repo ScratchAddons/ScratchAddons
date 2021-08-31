@@ -3,9 +3,8 @@ export default async function ({ addon, global, console }) {
     let userbox = await addon.tab.waitForElement(".postleft dl", { markAsSeen: true });
     if (userbox.childNodes[6] && userbox.childNodes[6].nodeValue.includes("+")) {
       const postCountReal = Number(
-        /(?:(\d+)\+ posts|(\d\d\d?) posts|(1) post)/
-          .exec(userbox.childNodes[6].nodeValue)
-          .filter((n) => typeof n === "string")[1]
+        /(\d\d?\d?\d?)\+? posts?/
+          .exec(userbox.childNodes[6].nodeValue)[1]
       );
       fetch("https://scratchdb.lefty.one/v3/forum/user/info/" + userbox.querySelector("a").innerText)
         .then((response) => response.json())
