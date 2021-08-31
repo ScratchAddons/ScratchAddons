@@ -183,12 +183,26 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function updateSearch() {
+    const previousSearchedItems = searchedItems;
     searchedItems = performSearch();
-    for (const item of items) {
-      item.element.remove();
+    let needToUpdateDOM = previousSearchedItems.length !== searchedItems.length;
+    if (!needToUpdateDOM) {
+      for (let i = 0; i < searchedItems.length; i++) {
+        if (searchedItems[i] !== previousSearchedItems[i]) {
+          needToUpdateDOM = true;
+          break;
+        }
+      }
     }
-    for (const item of searchedItems) {
-      blocklyDropdownMenu.appendChild(item.element);
+    if (needToUpdateDOM) {
+      // There are probably more efficient ways to do this, but it doesn't seem necessary to optimize this yet
+      // It's still quite fast
+      for (const item of items) {
+        item.element.remove();
+      }
+      for (const item of searchedItems) {
+        blocklyDropdownMenu.appendChild(item.element);
+      }
     }
   }
 
