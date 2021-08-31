@@ -11,21 +11,21 @@ export function queryByText(node, text) {
 export function removeClassContainingText(classList, text) {
     const classArray = Array.from(classList);
     const classContaingText = classArray.find((nodeClass) => nodeClass.includes(text))
-    if(classContaingText){
+    if (classContaingText) {
         classList.remove(classContaingText)
     }
 }
 
 export function getSiblings(e) {
-    let siblings = []; 
+    let siblings = [];
 
     // if no parent, return no sibling
-    if(!e.parentNode) {
+    if (!e.parentNode) {
         return siblings;
     }
 
-    let sibling  = e.parentNode.firstChild;
-    
+    let sibling = e.parentNode.firstChild;
+
     // collecting siblings
     while (sibling) {
         if (sibling.nodeType === 1 && sibling !== e) {
@@ -36,7 +36,7 @@ export function getSiblings(e) {
     return siblings;
 }
 
-export function getMutationAddedNode(mutation){
+export function getMutationAddedNode(mutation) {
     if (mutation.type === 'childList') {
         const addedNodes = mutation.addedNodes;
         if (addedNodes.length === 1) {
@@ -44,4 +44,14 @@ export function getMutationAddedNode(mutation){
         }
     }
     return null;
+}
+
+export function getAncestorWithClass(node, className) {
+    while (true) {
+        node = node.parentNode;
+        if (!node) { return false; }
+        if (node.classList.contains(className)) {
+            return node;
+        }
+    }
 }

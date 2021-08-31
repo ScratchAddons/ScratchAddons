@@ -1,6 +1,6 @@
 var addonGlobal;
 
-import {insertAfter, queryByText, removeClassContainingText, getSiblings, getMutationAddedNode} from "./utils.js";
+import {insertAfter, queryByText, removeClassContainingText, getSiblings, getMutationAddedNode, getAncestorWithClass} from "./utils.js";
 
 function deleteOtherCostumes(contextMenu){
     console.log("delete others event called")
@@ -39,38 +39,12 @@ function addDeleteOthersOption(contextMenu){
     }
 }
 
-function mutationCallback(mutationsList, observer) {
-    mutationsList.forEach((mutation) => {
-        const addedNode = getMutationAddedNode(mutation)
-        if(addedNode && addedNode.nodeType === 1){
-            addedNode.querySelectorAll(".react-contextmenu").forEach((contextMenu) => {
-               addDeleteOthersOption(contextMenu)
-            })
-        }
-    });
-}
-
 export default async ({ addon, console }) => {
     addonGlobal = addon
-    const tabs = document.querySelectorAll('[role="tab"]');
-    const config = { childList: true, subtree: true };
-    var observer = null;
-
-    tabs.forEach((tab) => {
-        tab.addEventListener("click", (e) => {
-            if (["Costumes", "Backdrops"].includes(tab.textContent)) {
-                const tabPanel = document.querySelector("#react-tabs-3")
-                console.log("costume/backdrop clicked")
-                observer = new MutationObserver(mutationCallback);
-                // Start observing the tab panel for configured mutations
-                observer.observe(tabPanel, config);
-            } else {
-                // If the costume/backdrop tab is left then disconnect the observer
-                if (observer) {
-                    console.log("observer disconnected")
-                    observer.disconnect();
-                }
-            }
-        });
+    document.addEventListener("contextmenu", (e)=>{ 
+        const contextMenuWrapper = getAncestorWithClass(e.target, "react-contextmenu-wrapper");
+        if(contextMenuWrapper){
+            addDeleteOthersOption(contextMenuWrapper.querySelector(".react-contextmenu"))
+        }
     })
 };
