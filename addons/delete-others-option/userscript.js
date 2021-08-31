@@ -1,8 +1,9 @@
 var addonGlobal;
 
-import {insertAfter, queryByText, removeClassContainingText, getAncestorWithClass} from "./utils.js";
+import {insertAfter, queryByText, removeClassContainingText, getAncestorWithClass, getAncestorWithId} from "./utils.js";
 
 function deleteOtherCostumes(contextMenu){
+    // this works for both costumes and backdrops since backdrops use costumes under the hood.
     const currentCostumeSelector = contextMenu.parentNode.parentNode
     const costumeSelectorsContainer = currentCostumeSelector.parentNode
     const costumeSelectors = Array.from(costumeSelectorsContainer.children)
@@ -21,10 +22,16 @@ function deleteOtherCostumes(contextMenu){
 }
 
 function addDeleteOthersOption(contextMenu){
+    const existingDeleteOthers = contextMenu.querySelector(".delete-others")
+    if(existingDeleteOthers){
+        return;
+    }
+
     const deleteNode = queryByText(contextMenu, "delete");
     if (deleteNode) {
         const deleteOthersNode = deleteNode.cloneNode();
         deleteOthersNode.textContent = "delete others";
+        deleteOthersNode.classList.add("delete-others")
         removeClassContainingText(deleteOthersNode.classList, "border")
         deleteOthersNode.addEventListener("click", (e)=>{
             deleteOtherCostumes(contextMenu)
@@ -37,9 +44,20 @@ function addDeleteOthersOption(contextMenu){
 export default async ({ addon, console }) => {
     addonGlobal = addon
     document.addEventListener("contextmenu", (e)=>{ 
+
+        // check user right clicked on a context menu inside react tab 3
         const contextMenuWrapper = getAncestorWithClass(e.target, "react-contextmenu-wrapper");
-        if(contextMenuWrapper){
-            addDeleteOthersOption(contextMenuWrapper.querySelector(".react-contextmenu"))
+        const tab = getAncestorWithId(e.target, "react-tabs-3");
+        if(!contextMenuWrapper || !tab){
+            return;
         }
+
+        //Check more than one costumeSelector exists
+        const costumeSelectors = contextMenuWrapper.parentNode.parentNode.children
+        if(costumeSelectors.length<2){
+            return;
+        }
+
+        addDeleteOthersOption(contextMenuWrapper.querySelector(".react-contextmenu"))
     })
 };

@@ -25,3 +25,13 @@ export function getAncestorWithClass(node, className) {
         }
     }
 }
+
+export function getAncestorWithId(node, id) {
+    while (true) {
+        node = node.parentNode;
+        if (!node) { return false; }
+        if (node.id === id) {
+            return node;
+        }
+    }
+}
