@@ -64,6 +64,8 @@ export default async function ({ addon, global, console, msg }) {
   const oldDropDownDivClearContent = Blockly.DropDownDiv.clearContent;
   Blockly.DropDownDiv.clearContent = function () {
     oldDropDownDivClearContent.call(this);
+    items = [];
+    searchedItems = [];
     Blockly.DropDownDiv.content_.style.height = "";
   };
 
