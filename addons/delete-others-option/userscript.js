@@ -1,9 +1,4 @@
-import {
-    insertAfter,
-    removeClassContainingText,
-    getAncestorWithClass,
-    getAncestorWithId,
-} from "./utils.js";
+import { insertAfter, removeClassContainingText, getAncestorWithClass, getAncestorWithId } from "./utils.js";
 
 export default async ({ addon, console }) => {
     function deleteOtherCostumes(contextMenu) {
