@@ -27,7 +27,7 @@ function addDeleteOthersOption(contextMenu){
         return;
     }
 
-    const deleteNode = queryByText(contextMenu, "delete");
+    const deleteNode = contextMenu.querySelectorAll(".react-contextmenu-item")[2]
     if (deleteNode) {
         const deleteOthersNode = deleteNode.cloneNode();
         deleteOthersNode.textContent = "delete others";
