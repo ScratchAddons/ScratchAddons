@@ -1,6 +1,6 @@
 var addonGlobal;
 
-import {insertAfter, queryByText, removeClassContainingText, getSiblings, getMutationAddedNode, getAncestorWithClass} from "./utils.js";
+import {insertAfter, queryByText, removeClassContainingText, getAncestorWithClass} from "./utils.js";
 
 function deleteOtherCostumes(contextMenu){
     console.log("delete others event called")

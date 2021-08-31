@@ -16,36 +16,6 @@ export function removeClassContainingText(classList, text) {
     }
 }
 
-export function getSiblings(e) {
-    let siblings = [];
-
-    // if no parent, return no sibling
-    if (!e.parentNode) {
-        return siblings;
-    }
-
-    let sibling = e.parentNode.firstChild;
-
-    // collecting siblings
-    while (sibling) {
-        if (sibling.nodeType === 1 && sibling !== e) {
-            siblings.push(sibling);
-        }
-        sibling = sibling.nextSibling;
-    }
-    return siblings;
-}
-
-export function getMutationAddedNode(mutation) {
-    if (mutation.type === 'childList') {
-        const addedNodes = mutation.addedNodes;
-        if (addedNodes.length === 1) {
-            return addedNodes[0];
-        }
-    }
-    return null;
-}
-
 export function getAncestorWithClass(node, className) {
     while (true) {
         node = node.parentNode;
