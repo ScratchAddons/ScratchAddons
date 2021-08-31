@@ -14,8 +14,8 @@ export default async function ({ addon, global, console, msg }) {
   let blocklyDropdownMenu = null;
   let searchBar = null;
   // Contains DOM and addon state
-  let items;
-  let searchedItems;
+  let items = [];
+  let searchedItems = [];
   // Tracks internal Scratch state
   let currentDropdownOptions = [];
   let resultOfLastGetOptions = [];
