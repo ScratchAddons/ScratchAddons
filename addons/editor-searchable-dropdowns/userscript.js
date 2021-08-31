@@ -15,6 +15,7 @@ export default async function ({ addon, global, console, msg }) {
   let searchBar = null;
   // Contains DOM and addon state
   let items;
+  let searchedItems;
   // Tracks internal Scratch state
   let currentDropdownOptions = [];
   let resultOfLastGetOptions = [];
@@ -155,20 +156,37 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  function updateSearch() {
-    const search = searchBar.value.toLowerCase();
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      const option = currentDropdownOptions[i];
+  function performSearch() {
+    const rank = (item, option) => {
+      // Negative number will hide
+      // Higher numbers will appear first
       if (SCRATCH_ITEMS_TO_HIDE.includes(option[1])) {
-        item.element.hidden = !!search;
+        return query ? -1 : 0;
       } else if (ADDON_ITEMS.includes(option[1])) {
         item.element.lastChild.lastChild.textContent = getMenuItemMessage(option[1])[0];
-        item.element.hidden = !search;
-      } else {
-        const itemText = item.text.toLowerCase();
-        item.element.hidden = !itemText.includes(search);
+        return query ? 0 : -1;
       }
+      const itemText = item.text.toLowerCase();
+      if (query === itemText) {
+        return 2;
+      }
+      return itemText.includes(query) ? 1 : -1;
+    };
+    const query = searchBar.value.toLowerCase().trim();
+    return items
+      .map((item, index) => [item, rank(item, currentDropdownOptions[index])])
+      .filter(([_item, score]) => score >= 0)
+      .sort(([_itemA, scoreA], [_itemB, scoreB]) => scoreB - scoreA)
+      .map(([item, _score]) => item);
+  }
+
+  function updateSearch() {
+    searchedItems = performSearch();
+    for (const item of items) {
+      item.element.remove();
+    }
+    for (const item of searchedItems) {
+      blocklyDropdownMenu.appendChild(item.element);
     }
   }
 
@@ -197,13 +215,11 @@ export default async function ({ addon, global, console, msg }) {
           return;
         }
       }
-      for (const item of items) {
-        if (!item.element.hidden) {
-          selectItem(item.element, true);
-          break;
-        }
+      const topItem = searchedItems[0];
+      if (topItem) {
+        selectItem(topItem.element, true);
       }
-      // If there is no top value, just leave the dropdown open.
+      // If there is no top value, do nothing and leave the dropdown open
     } else if (event.key === "Escape") {
       Blockly.DropDownDiv.hide();
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -211,20 +227,19 @@ export default async function ({ addon, global, console, msg }) {
       event.preventDefault();
       event.stopPropagation();
 
-      const visibleItems = items.filter((item) => !item.element.hidden);
-      if (visibleItems.length === 0) {
+      if (searchedItems.length === 0) {
         return;
       }
 
       let selectedIndex = -1;
-      for (let i = 0; i < visibleItems.length; i++) {
-        if (visibleItems[i].element.classList.contains("goog-menuitem-highlight")) {
+      for (let i = 0; i < searchedItems.length; i++) {
+        if (searchedItems[i].element.classList.contains("goog-menuitem-highlight")) {
           selectedIndex = i;
           break;
         }
       }
 
-      const lastIndex = visibleItems.length - 1;
+      const lastIndex = searchedItems.length - 1;
       let newIndex = 0;
       if (event.key === "ArrowDown") {
         if (selectedIndex === -1 || selectedIndex === lastIndex) {
@@ -240,7 +255,7 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
-      selectItem(visibleItems[newIndex].element, false);
+      selectItem(searchedItems[newIndex].element, false);
     }
   }
 
