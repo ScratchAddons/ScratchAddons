@@ -2,11 +2,6 @@ export function insertAfter(newNode, referenceNode) {
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
-export function queryByText(node, text) {
-  const childNodes = Array.from(node.childNodes);
-  return childNodes.find((childNode) => childNode.innerText === text);
-}
-
 export function removeClassContainingText(classList, text) {
   const classArray = Array.from(classList);
   const classContaingText = classArray.find((nodeClass) => nodeClass.includes(text));

@@ -2,7 +2,6 @@ var addonGlobal;
 
 import {
   insertAfter,
-  queryByText,
   removeClassContainingText,
   getAncestorWithClass,
   getAncestorWithId,
