@@ -1,11 +1,6 @@
 var addonGlobal;
 
-import {
-  insertAfter,
-  removeClassContainingText,
-  getAncestorWithClass,
-  getAncestorWithId,
-} from "./utils.js";
+import { insertAfter, removeClassContainingText, getAncestorWithClass, getAncestorWithId } from "./utils.js";
 
 function deleteOtherCostumes(contextMenu) {
   // this works for both costumes and backdrops since backdrops use costumes under the hood.
