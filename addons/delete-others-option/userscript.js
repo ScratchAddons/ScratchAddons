@@ -7,6 +7,11 @@ import {
 
 export default async ({ addon, console }) => {
     function deleteOtherCostumes(contextMenu) {
+        //prompt user with confirmation dialog
+        if (!confirm("Are you sure you want to delete all other costumes?")) {
+            return;
+        }
+
         // this works for both costumes and backdrops since backdrops use costumes under the hood.
         const currentCostumeSelector = contextMenu.parentNode.parentNode;
         const costumeSelectorsContainer = currentCostumeSelector.parentNode;
