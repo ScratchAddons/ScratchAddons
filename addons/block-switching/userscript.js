@@ -10,9 +10,7 @@ export default async function ({ addon, global, console, msg }) {
     isNoop: true,
   };
 
-  // TODO: it isn't **really** necessary to know whether debugger is enabled or not
-  const hasDebuggerEnabled = (await addon.self.getEnabledAddons()).includes("debugger");
-  const buildSwitches = () => {
+    const buildSwitches = () => {
     blockSwitches = {};
     procedureSwitches = {};
 
@@ -559,11 +557,10 @@ export default async function ({ addon, global, console, msg }) {
       ];
     }
 
-    if (addon.settings.get("sa") && hasDebuggerEnabled) {
+    if (addon.settings.get("sa")) {
       const logProc = "\u200B\u200Blog\u200B\u200B %s";
       const warnProc = "\u200B\u200Bwarn\u200B\u200B %s";
       const errorProc = "\u200B\u200Berror\u200B\u200B %s";
-      // TODO: this will not work in Japanese or German
       const logMessage = msg("debugger_log");
       const warnMessage = msg("debugger_warn");
       const errorMessage = msg("debugger_error");
