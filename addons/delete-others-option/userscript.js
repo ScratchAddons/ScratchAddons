@@ -76,7 +76,6 @@ export default async ({ addon, console }) => {
             });
         }
     }
-  }
 
     document.addEventListener("contextmenu", (e) => {
         // check user right clicked on a context menu inside react tab 3
