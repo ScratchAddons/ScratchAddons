@@ -13,7 +13,7 @@ export function removeClassContainingText(classList, text) {
 export function getAncestorWithClass(node, className) {
   while (true) {
     node = node.parentNode;
-    if (!node) {
+    if (!node && !node.classList) {
       return false;
     }
     if (node.classList.contains(className)) {
