@@ -1,25 +1,21 @@
 {
-    "name": "Delete others option",
-    "description": "Adds an option to \"delete others\" to the costume/backdrop selector context menu in the Costumes tab and Backdrops tab",
-    "credits": [
-        {
-            "name": "Chrome_Cat",
-            "link": "https://scratch.mit.edu/users/Chrome_Cat/"
-        }
-    ],
-    "userscripts": [
-        {
-            "url": "userscript.js",
-            "matches": [
-                "projects"
-            ]
-        }
-    ],
-    "tags": [
-        "editor"
-    ],
-    "enabledByDefault": true,
-    "dynamicDisable": true,
-    "dynamicEnable": true,
-    "versionAdded": "1.20.0"
+  "name": "Delete others option",
+  "description": "Adds an option to \"delete others\" to the costume/backdrop selector context menu in the Costumes tab and Backdrops tab",
+  "credits": [
+    {
+      "name": "Chrome_Cat",
+      "link": "https://scratch.mit.edu/users/Chrome_Cat/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor"],
+  "enabledByDefault": true,
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "versionAdded": "1.20.0"
 }
