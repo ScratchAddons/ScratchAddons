@@ -13,6 +13,9 @@ export default async function ({ addon, global, console, msg }) {
   let blocklyDropDownContent = null;
   let blocklyDropdownMenu = null;
   let searchBar = null;
+  // Contains DOM and addon state
+  let items;
+  // Tracks internal Scratch state
   let currentDropdownOptions = [];
   let resultOfLastGetOptions = [];
 
@@ -33,6 +36,12 @@ export default async function ({ addon, global, console, msg }) {
     searchBar.classList.add("u-dropdown-searchbar");
     blocklyDropdownMenu.insertBefore(searchBar, blocklyDropdownMenu.firstChild);
 
+    items = Array.from(blocklyDropdownMenu.children)
+      .filter((child) => child.tagName !== "INPUT")
+      .map((element) => ({
+        element,
+        text: element.textContent,
+      }));
     currentDropdownOptions = resultOfLastGetOptions;
     updateSearch();
 
@@ -147,7 +156,6 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function updateSearch() {
-    const items = getItems();
     const search = searchBar.value.toLowerCase();
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
@@ -158,7 +166,8 @@ export default async function ({ addon, global, console, msg }) {
         item.element.lastChild.lastChild.textContent = getMenuItemMessage(option[1])[0];
         item.element.hidden = !search;
       } else {
-        items[i].element.hidden = !items[i].text.toLowerCase().includes(search);
+        const itemText = item.text.toLowerCase();
+        item.element.hidden = !itemText.includes(search);
       }
     }
   }
@@ -188,7 +197,6 @@ export default async function ({ addon, global, console, msg }) {
           return;
         }
       }
-      const items = getItems();
       for (const item of items) {
         if (!item.element.hidden) {
           selectItem(item.element, true);
@@ -203,20 +211,20 @@ export default async function ({ addon, global, console, msg }) {
       event.preventDefault();
       event.stopPropagation();
 
-      const items = getItems().filter((item) => !item.element.hidden);
-      if (items.length === 0) {
+      const visibleItems = items.filter((item) => !item.element.hidden);
+      if (visibleItems.length === 0) {
         return;
       }
 
       let selectedIndex = -1;
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].element.classList.contains("goog-menuitem-highlight")) {
+      for (let i = 0; i < visibleItems.length; i++) {
+        if (visibleItems[i].element.classList.contains("goog-menuitem-highlight")) {
           selectedIndex = i;
           break;
         }
       }
 
-      const lastIndex = items.length - 1;
+      const lastIndex = visibleItems.length - 1;
       let newIndex = 0;
       if (event.key === "ArrowDown") {
         if (selectedIndex === -1 || selectedIndex === lastIndex) {
@@ -232,20 +240,8 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
-      selectItem(items[newIndex].element, false);
+      selectItem(visibleItems[newIndex].element, false);
     }
-  }
-
-  function getItems() {
-    if (blocklyDropdownMenu) {
-      return Array.from(blocklyDropdownMenu.children)
-        .filter((child) => child.tagName !== "INPUT")
-        .map((element) => ({
-          element,
-          text: element.textContent,
-        }));
-    }
-    return [];
   }
 
   function getMenuItemMessage(message) {
