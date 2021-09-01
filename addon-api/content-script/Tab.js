@@ -368,7 +368,10 @@ export default class Tab extends Listenable {
       beforeRemixButton: {
         element: () => q(".project-buttons"),
         from: () => [],
-        until: () => [q(".project-buttons > .remix-button"), q(".project-buttons > .see-inside-button")],
+        until: () => [
+          q(".project-buttons > .remix-button:not(.sa-remix-button)"),
+          q(".project-buttons > .see-inside-button"),
+        ],
       },
       studioCuratorsTab: {
         element: () => q(".studio-tabs div:nth-child(2)"),
