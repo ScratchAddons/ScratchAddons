@@ -236,9 +236,11 @@ export default async function ({ addon, global, console, msg }) {
           return;
         }
       }
-      const topItem = searchedItems[0];
-      if (topItem) {
-        selectItem(topItem.element, true);
+      for (const {item} of searchedItems) {
+        if (!item.element.hidden) {
+          selectItem(item.element, true);
+          break;
+        }
       }
       // If there is no top value, do nothing and leave the dropdown open
     } else if (event.key === "Escape") {
@@ -248,19 +250,22 @@ export default async function ({ addon, global, console, msg }) {
       event.preventDefault();
       event.stopPropagation();
 
-      if (searchedItems.length === 0) {
+      const items = searchedItems
+        .filter((i) => i.score >= 0)
+        .map((i) => i.item);
+      if (items.length === 0) {
         return;
       }
 
       let selectedIndex = -1;
-      for (let i = 0; i < searchedItems.length; i++) {
-        if (searchedItems[i].element.classList.contains("goog-menuitem-highlight")) {
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].element.classList.contains("goog-menuitem-highlight")) {
           selectedIndex = i;
           break;
         }
       }
 
-      const lastIndex = searchedItems.length - 1;
+      const lastIndex = items.length - 1;
       let newIndex = 0;
       if (event.key === "ArrowDown") {
         if (selectedIndex === -1 || selectedIndex === lastIndex) {
@@ -276,7 +281,7 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
-      selectItem(searchedItems[newIndex].element, false);
+      selectItem(items[newIndex].element, false);
     }
   }
 
