@@ -198,7 +198,7 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
     }
-    if (needToUpdateDOM) {
+    if (needToUpdateDOM && previousSearchedItems.length > 0) {
       for (const {item} of previousSearchedItems) {
         item.element.remove();
       }
