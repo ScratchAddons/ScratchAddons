@@ -170,16 +170,20 @@ export default async function ({ addon, global, console, msg }) {
       }
       const itemText = item.text.toLowerCase();
       if (query === itemText) {
-        return 2;
+        return 1;
       }
-      return itemText.includes(query) ? 1 : -1;
+      return itemText.includes(query) ? 0 : -1;
     };
     const query = searchBar.value.toLowerCase().trim();
     return items
-      .map((item, index) => [item, rank(item, currentDropdownOptions[index])])
-      .filter(([_item, score]) => score >= 0)
-      .sort(([_itemA, scoreA], [_itemB, scoreB]) => scoreB - scoreA)
-      .map(([item, _score]) => item);
+      .map((item, index) => ({
+        item,
+        score: rank(item, currentDropdownOptions[index])
+      }))
+      .sort(({score: scoreA}, {score: scoreB}) => (
+        Math.max(0, scoreB) -
+        Math.max(0, scoreA)
+      ));
   }
 
   function updateSearch() {
@@ -188,21 +192,22 @@ export default async function ({ addon, global, console, msg }) {
     let needToUpdateDOM = previousSearchedItems.length !== searchedItems.length;
     if (!needToUpdateDOM) {
       for (let i = 0; i < searchedItems.length; i++) {
-        if (searchedItems[i] !== previousSearchedItems[i]) {
+        if (searchedItems[i].item !== previousSearchedItems[i].item) {
           needToUpdateDOM = true;
           break;
         }
       }
     }
     if (needToUpdateDOM) {
-      // There are probably more efficient ways to do this, but it doesn't seem necessary to optimize this yet
-      // It's still quite fast
-      for (const item of items) {
+      for (const {item} of previousSearchedItems) {
         item.element.remove();
       }
-      for (const item of searchedItems) {
+      for (const {item} of searchedItems) {
         blocklyDropdownMenu.appendChild(item.element);
       }
+    }
+    for (const {item, score} of searchedItems) {
+      item.element.hidden = score < 0;
     }
   }
 
