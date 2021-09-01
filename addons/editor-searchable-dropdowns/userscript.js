@@ -159,9 +159,11 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function performSearch() {
-    const rank = (item, option) => {
+    const query = searchBar.value.toLowerCase().trim();
+    const rank = (item, index) => {
       // Negative number will hide
       // Higher numbers will appear first
+      const option = currentDropdownOptions[index];
       if (SCRATCH_ITEMS_TO_HIDE.includes(option[1])) {
         return query ? -1 : 0;
       } else if (ADDON_ITEMS.includes(option[1])) {
@@ -175,13 +177,15 @@ export default async function ({ addon, global, console, msg }) {
       if (itemText.startsWith(query)) {
         return 1;
       }
-      return itemText.includes(query) ? 0 : -1;
+      if (itemText.includes(query)) {
+        return 0;
+      }
+      return -1;
     };
-    const query = searchBar.value.toLowerCase().trim();
     return items
       .map((item, index) => ({
         item,
-        score: rank(item, currentDropdownOptions[index]),
+        score: rank(item, index),
       }))
       .sort(({ score: scoreA }, { score: scoreB }) => Math.max(0, scoreB) - Math.max(0, scoreA));
   }
