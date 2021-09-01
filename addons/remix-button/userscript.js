@@ -36,5 +36,6 @@ export default async function ({ addon, msg, global, console }) {
     button.append(inner);
 
     addon.tab.appendToSharedSpace({ space: "beforeRemixButton", element: button, order: 9 });
+    addon.tab.displayNoneWhileDisabled(button);
   }
 }
