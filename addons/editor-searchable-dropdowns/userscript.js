@@ -178,12 +178,9 @@ export default async function ({ addon, global, console, msg }) {
     return items
       .map((item, index) => ({
         item,
-        score: rank(item, currentDropdownOptions[index])
+        score: rank(item, currentDropdownOptions[index]),
       }))
-      .sort(({score: scoreA}, {score: scoreB}) => (
-        Math.max(0, scoreB) -
-        Math.max(0, scoreA)
-      ));
+      .sort(({ score: scoreA }, { score: scoreB }) => Math.max(0, scoreB) - Math.max(0, scoreA));
   }
 
   function updateSearch() {
@@ -199,14 +196,14 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
     if (needToUpdateDOM && previousSearchedItems.length > 0) {
-      for (const {item} of previousSearchedItems) {
+      for (const { item } of previousSearchedItems) {
         item.element.remove();
       }
-      for (const {item} of searchedItems) {
+      for (const { item } of searchedItems) {
         blocklyDropdownMenu.appendChild(item.element);
       }
     }
-    for (const {item, score} of searchedItems) {
+    for (const { item, score } of searchedItems) {
       item.element.hidden = score < 0;
     }
   }
@@ -236,7 +233,7 @@ export default async function ({ addon, global, console, msg }) {
           return;
         }
       }
-      for (const {item} of searchedItems) {
+      for (const { item } of searchedItems) {
         if (!item.element.hidden) {
           selectItem(item.element, true);
           break;
@@ -250,9 +247,7 @@ export default async function ({ addon, global, console, msg }) {
       event.preventDefault();
       event.stopPropagation();
 
-      const items = searchedItems
-        .filter((i) => i.score >= 0)
-        .map((i) => i.item);
+      const items = searchedItems.filter((i) => i.score >= 0).map((i) => i.item);
       if (items.length === 0) {
         return;
       }
