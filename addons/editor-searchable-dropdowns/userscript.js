@@ -170,6 +170,9 @@ export default async function ({ addon, global, console, msg }) {
       }
       const itemText = item.text.toLowerCase();
       if (query === itemText) {
+        return 2;
+      }
+      if (itemText.startsWith(query)) {
         return 1;
       }
       return itemText.includes(query) ? 0 : -1;
