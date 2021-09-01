@@ -43,7 +43,6 @@
   "project-notes-tabs",
   "block-switching",
   "my-ocular",
-  "better-featured-project",
   "mediarecorder",
   "color-picker",
   "onion-skinning",
@@ -111,5 +110,6 @@
   "old-studio-layout",
   "compact-messages",
   "customize-avatar-border",
-  "scratchblocks"
+  "scratchblocks",
+  "better-featured-project"
 ]
