@@ -1,0 +1,20 @@
+{
+  "name": "Remix button in own projects",
+  "description": "Adds the Remix button to your own projects.",
+  "credits": [
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["community", "projectPage", "featured"],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "versionAdded": "1.20.0"
+}
