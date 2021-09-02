@@ -28,11 +28,13 @@ export default async ({ addon, console, msg }) => {
       });
       item.append(Object.assign(document.createElement("span"), { textContent: name }));
       item.addEventListener("click", () => {
-        window.dispatchEvent(new CustomEvent("REACT_CONTEXTMENU_HIDE", {
-          detail: {
-            type: "REACT_CONTEXTMENU_HIDE"
-          }
-        }));
+        window.dispatchEvent(
+          new CustomEvent("REACT_CONTEXTMENU_HIDE", {
+            detail: {
+              type: "REACT_CONTEXTMENU_HIDE",
+            },
+          })
+        );
         cb();
       });
       return item;
@@ -56,7 +58,7 @@ export default async ({ addon, console, msg }) => {
       }
     );
     addon.tab.displayNoneWhileDisabled(moveToTopBtn, {
-      display: "var(--sa-asset-ctx-menu-display, block)"
+      display: "var(--sa-asset-ctx-menu-display, block)",
     });
     exportButton.after(moveToTopBtn);
 
@@ -75,7 +77,7 @@ export default async ({ addon, console, msg }) => {
       }
     );
     addon.tab.displayNoneWhileDisabled(moveToBottomBtn, {
-      display: "var(--sa-asset-ctx-menu-display, block)"
+      display: "var(--sa-asset-ctx-menu-display, block)",
     });
     exportButton.after(moveToBottomBtn);
 
@@ -110,7 +112,7 @@ export default async ({ addon, console, msg }) => {
         }
       );
       addon.tab.displayNoneWhileDisabled(deleteAllBtn, {
-        display: "var(--sa-asset-ctx-menu-display, block)"
+        display: "var(--sa-asset-ctx-menu-display, block)",
       });
       ctxMenu.append(deleteAllBtn);
     }
@@ -177,7 +179,7 @@ export default async ({ addon, console, msg }) => {
       }
     );
     addon.tab.displayNoneWhileDisabled(deleteOthersBtn, {
-      display: "var(--sa-asset-ctx-menu-display, block)"
+      display: "var(--sa-asset-ctx-menu-display, block)",
     });
     ctxMenu.append(deleteOthersBtn);
   }
