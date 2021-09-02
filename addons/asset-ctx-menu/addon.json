@@ -1,0 +1,20 @@
+{
+  "name": "Costume and sound management options",
+  "description": "Adds right click menu options to costumes and sounds, such as \"move to bottom\" or \"delete all\".",
+  "tags": ["editor", "featured"],
+  "versionAdded": "1.20.0",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true
+}

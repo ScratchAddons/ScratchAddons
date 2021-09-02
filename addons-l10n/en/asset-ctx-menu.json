@@ -1,0 +1,12 @@
+{
+  "asset-ctx-menu/added-by-sa": "Added by Scratch Addons extension",
+  "asset-ctx-menu/move-to-top": "move to top",
+  "asset-ctx-menu/move-to-bottom": "move to bottom",
+  "asset-ctx-menu/delete-all": "delete all",
+  "asset-ctx-menu/delete-others": "delete others",
+  "asset-ctx-menu/delete-all-sounds-confirm": "Scratch Addons: Are you sure you want to delete all sounds?",
+  "asset-ctx-menu/delete-others-confirm": "Scratch Addons: Are you sure you want to delete {type}?",
+  "asset-ctx-menu/backdrops": "{num, plural, one {the backdrop} other {# backdrops}}",
+  "asset-ctx-menu/costumes": "{num, plural, one {the costume} other {# costumes}}",
+  "asset-ctx-menu/sounds": "{num, plural, one {the sound} other {# sounds}}"
+}

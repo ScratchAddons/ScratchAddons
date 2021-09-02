@@ -1,0 +1,14 @@
+div[class*="selector_list-area_"] > div:first-child nav.react-contextmenu > div.sa-asset-ctx-menu-move-to-top {
+  /* Do not display "move to top" on the first item */
+  display: none;
+}
+
+div[class*="selector_list-area_"] > div:last-child nav.react-contextmenu > div.sa-asset-ctx-menu-move-to-bottom {
+  /* Do not display "move to bottom" on the last item */
+  display: none;
+}
+
+div[class*="selector_list-area_"] > div:only-child nav.react-contextmenu > div.sa-asset-ctx-menu-delete-others {
+  /* Do not display "delete others" on the only item */
+  display: none;
+}

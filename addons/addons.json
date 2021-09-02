@@ -95,6 +95,7 @@
   "paint-by-default",
   "hide-project-stats",
   "remix-button",
+  "asset-ctx-menu",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
