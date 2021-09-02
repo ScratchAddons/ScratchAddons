@@ -7,11 +7,6 @@ export default async ({ addon, console, msg }) => {
       "div[class*='asset-panel_wrapper'] div[class*='sprite-selector-item_sprite-selector-item_'] > nav.react-contextmenu",
       {
         markAsSeen: true,
-        reduxEvents: [
-          "scratch-gui/mode/SET_PLAYER",
-          "fontsLoaded/SET_FONTS_LOADED",
-          "scratch-gui/locales/SELECT_LOCALE",
-        ],
         reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
       }
     );
@@ -26,13 +21,20 @@ export default async ({ addon, console, msg }) => {
       const classes = ["context-menu_menu-item"];
       if (isDangerous) classes.push("context-menu_menu-item-danger");
       const item = Object.assign(document.createElement("div"), {
-        className: addon.tab.scatchClass(...classes, {
+        className: addon.tab.scratchClass(...classes, {
           others: ["react-contextmenu-item", className],
         }),
         title: msg("added-by-sa"),
       });
       item.append(Object.assign(document.createElement("span"), { textContent: name }));
-      item.addEventListener("click", () => cb());
+      item.addEventListener("click", () => {
+        window.dispatchEvent(new CustomEvent("REACT_CONTEXTMENU_HIDE", {
+          detail: {
+            type: "REACT_CONTEXTMENU_HIDE"
+          }
+        }));
+        cb();
+      });
       return item;
     };
 
@@ -49,9 +51,13 @@ export default async ({ addon, console, msg }) => {
         } else {
           target.reorderSound(stateNode.props.index, 0);
         }
+        // Yes you can use React internals but it's harder to access
+        queueMicrotask(() => ctxMenu.parentNode.click());
       }
     );
-    addon.tab.displayNoneWhileDisabled(moveToTopBtn);
+    addon.tab.displayNoneWhileDisabled(moveToTopBtn, {
+      display: "var(--sa-asset-ctx-menu-display, block)"
+    });
     exportButton.after(moveToTopBtn);
 
     const moveToBottomBtn = createButton(
@@ -65,9 +71,12 @@ export default async ({ addon, console, msg }) => {
         } else {
           target.reorderSound(stateNode.props.index, Infinity);
         }
+        queueMicrotask(() => ctxMenu.parentNode.click());
       }
     );
-    addon.tab.displayNoneWhileDisabled(moveToBottomBtn);
+    addon.tab.displayNoneWhileDisabled(moveToBottomBtn, {
+      display: "var(--sa-asset-ctx-menu-display, block)"
+    });
     exportButton.after(moveToBottomBtn);
 
     if (!isCostume) {
@@ -79,7 +88,7 @@ export default async ({ addon, console, msg }) => {
           isDangerous: true,
         },
         () => {
-          if (confirm("delete-all-sounds-confirm")) {
+          if (confirm(msg("delete-all-sounds-confirm"))) {
             const sounds = [...target.sprite.sounds];
             target.sprite.sounds.length = 0;
             vm.emitTargetsUpdate();
@@ -100,7 +109,9 @@ export default async ({ addon, console, msg }) => {
           }
         }
       );
-      addon.tab.displayNoneWhileDisabled(deleteAllBtn);
+      addon.tab.displayNoneWhileDisabled(deleteAllBtn, {
+        display: "var(--sa-asset-ctx-menu-display, block)"
+      });
       ctxMenu.append(deleteAllBtn);
     }
 
@@ -165,7 +176,9 @@ export default async ({ addon, console, msg }) => {
         }
       }
     );
-    addon.tab.displayNoneWhileDisabled(deleteOthersBtn);
+    addon.tab.displayNoneWhileDisabled(deleteOthersBtn, {
+      display: "var(--sa-asset-ctx-menu-display, block)"
+    });
     ctxMenu.append(deleteOthersBtn);
   }
 };
