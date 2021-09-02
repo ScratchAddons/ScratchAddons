@@ -191,7 +191,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
       var data = await res.json();
 
       if (data.status === "ok") {
-        insert(textBox, `[img]https://assets.scratch.mit.edu/get_image/.%2E/${data["content-name"]}[/img]`);
+        insert(textBox, `[img=https://assets.scratch.mit.edu/get_image/.%2E/${data["content-name"]}]`);
         progresselement.remove();
       } else {
         alert(msg("upload-error"));
