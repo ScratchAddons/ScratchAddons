@@ -1,4 +1,4 @@
-export default async function ({ addon, global, console }) {
+export default async function ({ addon, global, console, msg }) {
   //Emojis
   const emojis = [
     {
@@ -179,182 +179,42 @@ export default async function ({ addon, global, console }) {
       imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/blm.png",
     },
   ];
-  const unicodeEmojis = [
-    "⌚️",
-    "⏰",
-    "⏱️",
-    "⏲️",
-    "⌨️",
-    "☎️",
-    "⌛️",
-    "⚖️",
-    "⚙️",
-    "✉️",
-    "✂️",
-    "✒️",
-    "☂️",
-    "✏️",
-    "☕️",
-    "♟️",
-    "⚰️",
-    "⚱️",
-    "⛏️",
-    "⚔️",
-    "⚒️",
-    "⛓️",
-    "⚗️",
-    "⛑️",
-    "br",
-    "⭐️",
-    "✨",
-    "⚡️",
-    "☄️",
-    "☀️",
-    "⛅️",
-    "☁️",
-    "⛈️",
-    "⛄️",
-    "❄️",
-    "☔️",
-    "☘️",
-    "br",
-    "☹️",
-    "Ⓜ️",
-    "✌️",
-    "☝️",
-    "✍️",
-    "✋",
-    "✊",
-    "☺️",
-    "br",
-    "⚽️",
-    "⚾️",
-    "⛳️",
-    "⛹️",
-    "⛷️",
-    "⛸️",
-    "br",
-    "✈️",
-    "⛵️",
-    "⚓️",
-    "⛽️",
-    "⛲️",
-    "⛺️",
-    "⛪️",
-    "⛰️",
-    "⛱️",
-    "⛴️",
-    "⛩️",
-    "♨️",
-    "br",
-    "❗️",
-    "❕",
-    "❓",
-    "❔",
-    "©️",
-    "®️",
-    "‼️",
-    "⁉️",
-    "™️",
-    "➕",
-    "➖",
-    "➗",
-    "✖️",
-    "⛔",
-    "⭕",
-    "❌",
-    "✔️",
-    "〰️",
-    "〽️",
-    "⚠️",
-    "br",
-    "☑️",
-    "✅",
-    "❎",
-    "▶️",
-    "⏩",
-    "⏪",
-    "⏫",
-    "⏬",
-    "ℹ️",
-    "⏭️",
-    "⏮️",
-    "⏯️",
-    "⏏️",
-    "◀️",
-    "➡️",
-    "⬅️",
-    "⬆️",
-    "⬇️",
-    "↗️",
-    "↘️",
-    "↙️",
-    "↖️",
-    "↪️",
-    "↩️",
-    "⤴️",
-    "⤵️",
-    "✳️",
-    "✴️",
-    "❇️",
-    "㊗️",
-    "㊙️",
-    "br",
-    "⚕️",
-    "☦️",
-    "♾️",
-    "⚛️",
-    "⛎️",
-    "✝️",
-    "☪️",
-    "☮️",
-    "☯️",
-    "☸️",
-    "♈️",
-    "♉️",
-    "♊️",
-    "♋️",
-    "♌️",
-    "♍️",
-    "♎️",
-    "♏️",
-    "♐️",
-    "♑️",
-    "♒️",
-    "♓️",
-    "br",
-    "❤️",
-    "❣️",
-    "♠️",
-    "♣️",
-    "♥️",
-    "♦️",
-    "♀️",
-    "♂️",
-    "♻️",
-    "☢️",
-    "☣️",
-    "⚜️",
-    "➰️",
-    "➿️",
-    "☠️",
-    "br",
-    "⬛️",
-    "⬜️",
-    "⚪️",
-    "⚫️",
-    "▪️",
-    "▫️",
-    "◻️",
-    "◼️",
-    "◽️",
-    "◾️",
-  ];
-
+  const unicodeEmojis = ["⌚️", "⏰", "⏱️", "⏲️", "⌨️", "☎️", "⌛️", "⚖️", "⚙️", "✉️", "✂️", "✒️", "☂️", "✏️", "☕️", "♟️", "⚰️", "⚱️", "⛏️",  "⚔️", "⚒️", "⛓️", "⚗️", "⛑️",
+	"br",
+	"⭐️", "✨", "⚡️", "☄️", "☀️", "⛅️", "☁️", "⛈️", "⛄️", "❄️", "☔️", "☘️",
+	"br",
+	"☹️", "Ⓜ️", "✌️", "☝️", "✍️", "✋", "✊", "☺️",
+	"br",
+	"⚽️", "⚾️", "⛳️", "⛹️", "⛷️", "⛸️",
+	"br",
+	"✈️", "⛵️", "⚓️", "⛽️", "⛲️", "⛺️", "⛪️", "⛰️", "⛱️", "⛴️", "⛩️", "♨️",
+	"br",
+	"❗️", "❕", "❓", "❔", "©️", "®️", "‼️", "⁉️", "™️", "➕", "➖", "➗", "✖️", "⛔", "⭕", "❌", "✔️", "〰️", "〽️", "⚠️",
+	"br",
+	"☑️", "✅", "❎", "▶️", "⏩", "⏪", "⏫", "⏬", "ℹ️", "⏭️", "⏮️", "⏯️", "⏏️", "◀️", "➡️", "⬅️", "⬆️", "⬇️", "↗️", "↘️", "↙️", "↖️", "↪️", "↩️", "⤴️", "⤵️", "✳️", "✴️", "❇️", "㊗️", "㊙️",
+	"br",
+	"⚕️", "☦️", "♾️", "⚛️", "⛎️", "✝️", "☪️", "☮️", "☯️", "☸️", "♈️", "♉️", "♊️", "♋️", "♌️", "♍️", "♎️", "♏️", "♐️", "♑️", "♒️", "♓️",
+	"br",
+	"❤️", "❣️", "♠️", "♣️", "♥️", "♦️", "♀️", "♂️", "♻️", "☢️", "☣️", "⚜️", "➰️", "➿️", "☠️",
+	"br",
+	"⬛️", "⬜️", "⚪️", "⚫️", "▪️", "▫️", "◻️", "◼️", "◽️", "◾️",
+	];
+	
   //Functions
 
   //Function for showing the emoji picker
-  const showEmojiPicker = function () {
+  const showEmojiPicker = function(event) {
+	  if (!event.target.classList.contains("sa-emoji-button")) return; //Only attempt to show when clicking button, not picker
+	  //Reset unicode emojis opened
+	unicodeContainer.style.display = "none";
+	pickerDivider.style.display = "none";
+	setSeeMoreText();
+    if (document.querySelector(".comment:not(.compose-row)")) {
+		emojiPicker.classList.remove("sa-emoji-picker-no-comments");
+	} else {
+		emojiPicker.classList.add("sa-emoji-picker-no-comments");
+	}
+	//Append
     this.appendChild(emojiPicker);
   };
 
@@ -392,7 +252,7 @@ export default async function ({ addon, global, console }) {
   });
 
   //Function for adding an emoji
-  const addEmoji = function () {
+  const addEmoji = function() {
     try {
       var textBox;
       if (addon.tab.clientVersion === "scratch-www") {
@@ -412,13 +272,11 @@ export default async function ({ addon, global, console }) {
       //emojis added from an empty comment using this button
       //as an empty comment
       textBox.dispatchEvent(new Event("input", { bubbles: true }));
-    } catch (error) {
-      console.error("Error adding emoji:", error);
-    }
+    } catch (error) {}
   };
 
   //Addon
-
+	
   //Create picker
   var emojiPicker = document.createElement("div");
   emojiPicker.id = "sa-emoji-picker";
@@ -447,6 +305,7 @@ export default async function ({ addon, global, console }) {
   //Divider between emoji types
   let pickerDivider = document.createElement("div");
   pickerDivider.classList.add("sa-emoji-picker-divider");
+  pickerDivider.style.display = "none";
   emojiPicker.appendChild(pickerDivider);
   //Unicode emojis
   unicodeEmojis.forEach((emoji) => {
@@ -471,14 +330,23 @@ export default async function ({ addon, global, console }) {
       unicodeContainer.appendChild(container);
     }
   });
+  unicodeContainer.style.display = "none";
   emojiPicker.appendChild(unicodeContainer);
-
-  //Settings change
-  const updateSettings = function () {
-    unicodeContainer.style.display = addon.settings.get("unicode") ? "block" : "none";
-  };
-  addon.settings.addEventListener("change", updateSettings);
-  updateSettings();
+  //Show More/Less button
+  var seeMoreButton = document.createElement("button");
+  seeMoreButton.type = "button";
+  seeMoreButton.classList.add("sa-emoji-picker-see-more");
+  seeMoreButton.classList.add("button");
+  const setSeeMoreText = function() {
+	  seeMoreButton.textContent = unicodeContainer.style.display === "none" ? msg("show-more") : msg("show-less")
+  }
+  seeMoreButton.onclick = function() {
+	  unicodeContainer.style.display = unicodeContainer.style.display === "none" ? "block" : "none";
+	  pickerDivider.style.display = unicodeContainer.style.display;
+	  setSeeMoreText();
+  }
+  setSeeMoreText();
+  emojiPicker.appendChild(seeMoreButton);
 
   //Add emoji buttons
   while (true) {
@@ -523,7 +391,7 @@ export default async function ({ addon, global, console }) {
       emojiButtonText = document.createElement("a");
     }
     emojiButtonText.textContent = "🙂";
-    emojiButtonText.title = "Button added by the Scratch Addons browser extension";
+    emojiButtonText.title = msg("emoji-button-hover");
     emojiButtonText.classList.add("sa-emoji-button");
     emojiButton.appendChild(emojiButtonText);
     addon.tab.displayNoneWhileDisabled(emojiButton, { display: "inline-block" });
