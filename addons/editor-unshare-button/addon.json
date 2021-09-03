@@ -1,7 +1,6 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json",
   "name": "Unshare button in editor",
-  "description": "Replaces the \"Shared\" button next to the title with a button to unshare the project.",
+  "description": "Replaces the \"Shared\" button next to the project title box with a button to unshare the project.",
   "credits": [
     {
       "name": "9gr",
@@ -20,5 +19,6 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "editorMenuBar"]
+  "tags": ["editor", "editorMenuBar"],
+  "versionAdded": "1.20.0"
 }
