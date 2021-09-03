@@ -685,5 +685,3 @@ const deserializeSettings = async (str, manifests, confirmElem) => {
   confirmElem.addEventListener("click", handleConfirmClicked, { once: true });
   return resolveOnConfirmPromise;
 };
-
-chrome.runtime.sendMessage("checkPermissions");
