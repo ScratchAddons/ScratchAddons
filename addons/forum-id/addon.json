@@ -1,0 +1,21 @@
+{
+  "name": "Forum ID",
+  "description": "Add the forum ID to your head of the post to reply.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["forums"],
+      "runAtComplete": false
+    }
+  ],
+  "versionAdded": "1.19.1",
+  "tags": ["community", "forums"],
+  "enabledByDefault": false,
+  "credits": [
+    {
+      "name": "itta611",
+      "link": "https://github.com/itta611/"
+    }
+  ]
+}
+
