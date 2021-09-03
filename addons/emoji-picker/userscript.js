@@ -179,42 +179,193 @@ export default async function ({ addon, global, console, msg }) {
       imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/blm.png",
     },
   ];
-  const unicodeEmojis = ["⌚️", "⏰", "⏱️", "⏲️", "⌨️", "☎️", "⌛️", "⚖️", "⚙️", "✉️", "✂️", "✒️", "☂️", "✏️", "☕️", "♟️", "⚰️", "⚱️", "⛏️",  "⚔️", "⚒️", "⛓️", "⚗️", "⛑️",
-	"br",
-	"⭐️", "✨", "⚡️", "☄️", "☀️", "⛅️", "☁️", "⛈️", "⛄️", "❄️", "☔️", "☘️",
-	"br",
-	"☹️", "Ⓜ️", "✌️", "☝️", "✍️", "✋", "✊", "☺️",
-	"br",
-	"⚽️", "⚾️", "⛳️", "⛹️", "⛷️", "⛸️",
-	"br",
-	"✈️", "⛵️", "⚓️", "⛽️", "⛲️", "⛺️", "⛪️", "⛰️", "⛱️", "⛴️", "⛩️", "♨️",
-	"br",
-	"❗️", "❕", "❓", "❔", "©️", "®️", "‼️", "⁉️", "™️", "➕", "➖", "➗", "✖️", "⛔", "⭕", "❌", "✔️", "〰️", "〽️", "⚠️",
-	"br",
-	"☑️", "✅", "❎", "▶️", "⏩", "⏪", "⏫", "⏬", "ℹ️", "⏭️", "⏮️", "⏯️", "⏏️", "◀️", "➡️", "⬅️", "⬆️", "⬇️", "↗️", "↘️", "↙️", "↖️", "↪️", "↩️", "⤴️", "⤵️", "✳️", "✴️", "❇️", "㊗️", "㊙️",
-	"br",
-	"⚕️", "☦️", "♾️", "⚛️", "⛎️", "✝️", "☪️", "☮️", "☯️", "☸️", "♈️", "♉️", "♊️", "♋️", "♌️", "♍️", "♎️", "♏️", "♐️", "♑️", "♒️", "♓️",
-	"br",
-	"❤️", "❣️", "♠️", "♣️", "♥️", "♦️", "♀️", "♂️", "♻️", "☢️", "☣️", "⚜️", "➰️", "➿️", "☠️",
-	"br",
-	"⬛️", "⬜️", "⚪️", "⚫️", "▪️", "▫️", "◻️", "◼️", "◽️", "◾️",
-	];
-	
+  const unicodeEmojis = [
+    "⌚️",
+    "⏰",
+    "⏱️",
+    "⏲️",
+    "⌨️",
+    "☎️",
+    "⌛️",
+    "⚖️",
+    "⚙️",
+    "✉️",
+    "✂️",
+    "✒️",
+    "☂️",
+    "✏️",
+    "☕️",
+    "♟️",
+    "⚰️",
+    "⚱️",
+    "⛏️",
+    "⚔️",
+    "⚒️",
+    "⛓️",
+    "⚗️",
+    "⛑️",
+    "br",
+    "⭐️",
+    "✨",
+    "⚡️",
+    "☄️",
+    "☀️",
+    "⛅️",
+    "☁️",
+    "⛈️",
+    "⛄️",
+    "❄️",
+    "☔️",
+    "☘️",
+    "br",
+    "☹️",
+    "Ⓜ️",
+    "✌️",
+    "☝️",
+    "✍️",
+    "✋",
+    "✊",
+    "☺️",
+    "br",
+    "⚽️",
+    "⚾️",
+    "⛳️",
+    "⛹️",
+    "⛷️",
+    "⛸️",
+    "br",
+    "✈️",
+    "⛵️",
+    "⚓️",
+    "⛽️",
+    "⛲️",
+    "⛺️",
+    "⛪️",
+    "⛰️",
+    "⛱️",
+    "⛴️",
+    "⛩️",
+    "♨️",
+    "br",
+    "❗️",
+    "❕",
+    "❓",
+    "❔",
+    "©️",
+    "®️",
+    "‼️",
+    "⁉️",
+    "™️",
+    "➕",
+    "➖",
+    "➗",
+    "✖️",
+    "⛔",
+    "⭕",
+    "❌",
+    "✔️",
+    "〰️",
+    "〽️",
+    "⚠️",
+    "br",
+    "☑️",
+    "✅",
+    "❎",
+    "▶️",
+    "⏩",
+    "⏪",
+    "⏫",
+    "⏬",
+    "ℹ️",
+    "⏭️",
+    "⏮️",
+    "⏯️",
+    "⏏️",
+    "◀️",
+    "➡️",
+    "⬅️",
+    "⬆️",
+    "⬇️",
+    "↗️",
+    "↘️",
+    "↙️",
+    "↖️",
+    "↪️",
+    "↩️",
+    "⤴️",
+    "⤵️",
+    "✳️",
+    "✴️",
+    "❇️",
+    "㊗️",
+    "㊙️",
+    "br",
+    "⚕️",
+    "☦️",
+    "♾️",
+    "⚛️",
+    "⛎️",
+    "✝️",
+    "☪️",
+    "☮️",
+    "☯️",
+    "☸️",
+    "♈️",
+    "♉️",
+    "♊️",
+    "♋️",
+    "♌️",
+    "♍️",
+    "♎️",
+    "♏️",
+    "♐️",
+    "♑️",
+    "♒️",
+    "♓️",
+    "br",
+    "❤️",
+    "❣️",
+    "♠️",
+    "♣️",
+    "♥️",
+    "♦️",
+    "♀️",
+    "♂️",
+    "♻️",
+    "☢️",
+    "☣️",
+    "⚜️",
+    "➰️",
+    "➿️",
+    "☠️",
+    "br",
+    "⬛️",
+    "⬜️",
+    "⚪️",
+    "⚫️",
+    "▪️",
+    "▫️",
+    "◻️",
+    "◼️",
+    "◽️",
+    "◾️",
+  ];
+
   //Functions
 
   //Function for showing the emoji picker
-  const showEmojiPicker = function(event) {
-	  if (!event.target.classList.contains("sa-emoji-button")) return; //Only attempt to show when clicking button, not picker
-	  //Reset unicode emojis opened
-	unicodeContainer.style.display = "none";
-	pickerDivider.style.display = "none";
-	setSeeMoreText();
+  const showEmojiPicker = function (event) {
+    if (!event.target.classList.contains("sa-emoji-button")) return; //Only attempt to show when clicking button, not picker
+    //Reset unicode emojis opened
+    unicodeContainer.style.display = "none";
+    pickerDivider.style.display = "none";
+    setSeeMoreText();
     if (document.querySelector(".comment:not(.compose-row)")) {
-		emojiPicker.classList.remove("sa-emoji-picker-no-comments");
-	} else {
-		emojiPicker.classList.add("sa-emoji-picker-no-comments");
-	}
-	//Append
+      emojiPicker.classList.remove("sa-emoji-picker-no-comments");
+    } else {
+      emojiPicker.classList.add("sa-emoji-picker-no-comments");
+    }
+    //Append
     this.appendChild(emojiPicker);
   };
 
@@ -252,7 +403,7 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   //Function for adding an emoji
-  const addEmoji = function() {
+  const addEmoji = function () {
     try {
       var textBox;
       if (addon.tab.clientVersion === "scratch-www") {
@@ -276,7 +427,7 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   //Addon
-	
+
   //Create picker
   var emojiPicker = document.createElement("div");
   emojiPicker.id = "sa-emoji-picker";
@@ -337,14 +488,14 @@ export default async function ({ addon, global, console, msg }) {
   seeMoreButton.type = "button";
   seeMoreButton.classList.add("sa-emoji-picker-see-more");
   seeMoreButton.classList.add("button");
-  const setSeeMoreText = function() {
-	  seeMoreButton.textContent = unicodeContainer.style.display === "none" ? msg("show-more") : msg("show-less")
-  }
-  seeMoreButton.onclick = function() {
-	  unicodeContainer.style.display = unicodeContainer.style.display === "none" ? "block" : "none";
-	  pickerDivider.style.display = unicodeContainer.style.display;
-	  setSeeMoreText();
-  }
+  const setSeeMoreText = function () {
+    seeMoreButton.textContent = unicodeContainer.style.display === "none" ? msg("show-more") : msg("show-less");
+  };
+  seeMoreButton.onclick = function () {
+    unicodeContainer.style.display = unicodeContainer.style.display === "none" ? "block" : "none";
+    pickerDivider.style.display = unicodeContainer.style.display;
+    setSeeMoreText();
+  };
   setSeeMoreText();
   emojiPicker.appendChild(seeMoreButton);
 
