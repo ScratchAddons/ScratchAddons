@@ -16,6 +16,6 @@ export default async function ({addon, console, msg}) {
     let idName = e.path[6].querySelector('.box-head > .conr').textContent;
     let id = e.path[6].id + '';
     id = id.substring(1);
-    textEditor.textContent = `[url=https://scratch.mit.edu/discuss/post/${id}/]${idName}[/url] ` + textEditor.textContent;
+    textEditor.value = `[url=https://scratch.mit.edu/discuss/post/${id}/]${idName}[/url] ` + textEditor.value;
   }
 }
