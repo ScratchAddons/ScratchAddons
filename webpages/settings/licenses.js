@@ -1,14 +1,16 @@
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "light.css");
-
-chrome.storage.sync.get(["globalTheme"], function (r) {
-  let rr = false; //true = light, false = dark
-  if (r.globalTheme) rr = r.globalTheme;
-  if (rr) {
-    document.head.appendChild(lightThemeLink);
-  }
+lightThemeLink.setAttribute("href", "../styles/colors-light.css");
+lightThemeLink.setAttribute("data-below-vue-components", "");
+await new Promise((resolve) => {
+  chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
+    if (globalTheme === true) {
+      document.head.appendChild(lightThemeLink);
+    }
+    resolve();
+  });
 });
+
 const vue = new Vue({
   el: "body",
   data: {
@@ -27,7 +29,6 @@ chrome.runtime.sendMessage("getLibraryInfo", (libraryLicenses) => {
   const libraryParam = searchParams.get("libraries");
   if (typeof libraryParam !== "string") return;
   const libraries = libraryParam.split(",");
-  console.log(libraryLicenses, libraries);
   for (const library of libraries) {
     const licenseName = libraryLicenses[library];
     if (!licenseName) continue;

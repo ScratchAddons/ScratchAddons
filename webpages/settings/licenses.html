@@ -7,14 +7,37 @@
     <link rel="icon" href="../../images/icon.png" />
     <script src="../set-lang.js" type="module"></script>
     <style>
-      /* Imports are here to attempt to speed up load */
       @import url("../styles/colors.css");
-      @import url("../styles/components/licenses.css");
+
+      html {
+        background: var(--page-background);
+      }
+
+      body {
+        margin: 0px;
+        height: 100vh;
+        color: var(--white-text);
+        font-family: "Sora", sans-serif;
+      }
+
+      .licenses {
+        height: 100%;
+        min-height: 100vh;
+        overflow-y: auto;
+      }
+
+      .licenses-block {
+        padding: 2rem;
+      }
+
+      .licenses-body pre {
+        white-space: pre-wrap;
+      }
     </style>
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
-    <script src="licenses.js" defer></script>
+    <script src="licenses.js" type="module"></script>
   </head>
   <body class="licenses">
     <div class="navbar">
