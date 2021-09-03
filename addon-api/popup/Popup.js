@@ -4,7 +4,7 @@ export default class Popup {
    * @type {boolean}
    */
   get isFullscreen() {
-    return window.parent === window;
+    return window.location.pathname === "/webpages/popup/fullscreen.html";
   }
 
   /**

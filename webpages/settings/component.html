@@ -9,7 +9,7 @@
     <div
       class="categories-block"
       v-click-outside="closesidebar"
-      v-show="categoryOpen && !isIframe"
+      v-show="categoryOpen && !isInPopup"
       :class="{smallMode: smallMode === true}"
     >
       <category-selector v-for="category of categories" :category="category"></category-selector>
@@ -50,7 +50,7 @@
         <span>{{ msg("moreSettings") }}</span>
       </div>
     </div>
-    <div v-show="!isIframe && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
+    <div v-show="!isInPopup && smallMode === false" class="categories-shrink" @click="sidebarToggle()">
       <img src="../../images/icons/left-arrow.svg" :class="{flipped: categoryOpen === (direction() === 'rtl')}" />
     </div>
 
@@ -66,7 +66,7 @@
         <template v-for="addon of addonList">
           <div
             id="iframe-fullscreen-suggestion"
-            v-if="isIframe && addon.headerAbove && addon.group.id === 'enabled'"
+            v-if="isInPopup && addon.headerAbove && addon.group.id === 'enabled'"
             v-show="searchInput === ''"
           >
             <span>{{ msg("exploreAllAddons", [addonAmt]) }}</span>

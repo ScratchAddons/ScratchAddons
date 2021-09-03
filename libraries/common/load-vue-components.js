@@ -3,11 +3,12 @@
  * @param {string[]} filenames - filenames of the components, without extensions.
  * @returns {Promise}
  */
-export default (filenames) =>
+const loadVueComponents = (filenames) =>
   Promise.all(
     filenames.map((filename) => {
       let params = filename.params || {};
       filename = filename.url || filename;
+      const [componentName] = filename.split("/").slice(-1);
       const htmlUrl = chrome.runtime.getURL(`${filename}.html`);
       const jsUrl = chrome.runtime.getURL(`${filename}.js`);
       const jsPromise = import(jsUrl);
@@ -29,7 +30,6 @@ export default (filenames) =>
               }).join("\n");
               css.textContent = `${newLines}\n${normalizedCss}/* \n</style> */\n/*# sourceURL=${htmlUrl} */`;
             }
-            const [componentName] = filename.split("/").slice(-1);
             css.setAttribute("data-vue-component", componentName); // For debugging (has no side effects)
             // Add data-addon-id - used by the popup to disable styles from inactive tabs
             if (filename.startsWith("popups/")) {
@@ -42,10 +42,21 @@ export default (filenames) =>
           }
           return dom.querySelector("template").innerHTML;
         })
-        .then((template) => jsPromise.then((esm) => esm.default({ template, ...params })));
+        .then((template) =>
+          jsPromise.then(async ({ default: details }) => {
+            details.mixins = details.mixins ?? [];
+            details.mixins.push({
+              name: componentName,
+              template,
+              data: () => params,
+            });
+            if (details.components) {
+              details.components = await loadVueComponents(details.components);
+            }
+            return Vue.extend(details);
+          })
+        );
     })
-  ).then((components) => {
-    let all = {};
-    components.forEach((component) => (all = { ...all, ...component }));
-    return all;
-  });
+  );
+
+export default loadVueComponents;

@@ -1,24 +1,20 @@
-export default async function ({ template }) {
-  const AddonGroup = Vue.extend({
-    props: ["group", "shownCount", "marginAbove"],
-    template,
-    data() {
-      return {};
+export default {
+  props: ["group", "shownCount", "marginAbove"],
+  data() {
+    return {};
+  },
+  computed: {
+    shouldShow() {
+      if (this.$settingsContext.searchInput !== "") return false;
+      return this.shownCount > 0;
     },
-    computed: {
-      shouldShow() {
-        if (this.$settingsContext.searchInput !== "") return false;
-        return this.shownCount > 0;
-      },
-      manifestsById() {
-        return this.$settingsContext.manifestsById;
-      },
+    manifestsById() {
+      return this.$settingsContext.manifestsById;
     },
-    methods: {
-      toggle() {
-        this.group.expanded = !this.group.expanded;
-      },
+  },
+  methods: {
+    toggle() {
+      this.group.expanded = !this.group.expanded;
     },
-  });
-  return { "addon-group-header": AddonGroup };
-}
+  },
+};

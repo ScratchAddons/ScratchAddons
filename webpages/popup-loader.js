@@ -99,8 +99,3 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     document.head.appendChild(lightThemeLink);
   }
 });
-
-if (window.parent === window) {
-  document.body.classList.add("fullscreen");
-  document.documentElement.classList.add("fullscreen");
-}

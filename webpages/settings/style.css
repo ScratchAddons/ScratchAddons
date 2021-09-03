@@ -64,7 +64,7 @@ h1 {
 .addons-container.placeholder .addon-body:first-child {
   /* Doing this instead of padding in .addons-container itself to avoid
   problems with other CSS that would also set padding on the same element,
-  like the "body.iframe .addons-container" selector below */
+  like the ".popup-container .addons-container" selector below */
   margin-top: 42px;
 }
 
@@ -185,92 +185,92 @@ h1 {
   border-radius: 4px;
 }
 
-body.iframe .tooltiptext {
+.popup-container .tooltiptext {
   display: none;
 }
-body.iframe .addon-description {
+.popup-container .addon-description {
   display: none;
 }
-body.iframe .search-box {
+.popup-container .search-box {
   padding: 10px;
 }
-body.iframe .navbar {
+.popup-container .navbar {
   display: none;
 }
-body.iframe .main {
+.popup-container .main {
   /* No calc -60px because there's no navbar */
   height: 100%;
 }
-body.iframe .addon-group {
+.popup-container .addon-group {
   padding-inline: 6px;
 }
-body.iframe .addon-group > img {
+.popup-container .addon-group > img {
   margin-inline-end: 5px;
 }
-body.iframe .addon-topbar {
+.popup-container .addon-topbar {
   height: 44px;
   padding-inline-end: 6px;
 }
-body.iframe .clickeable-area {
+.popup-container .clickeable-area {
   padding-inline-start: 6px;
 }
-body.iframe .addon-name {
+.popup-container .addon-name {
   margin-inline-start: 6px;
 }
-body.iframe .addon-name .icon-type {
+.popup-container .addon-name .icon-type {
   margin-inline-end: 6px;
 }
-body.iframe .badge {
+.popup-container .badge {
   margin-inline-start: 8px;
 }
 
-body.iframe .addon-settings {
+.popup-container .addon-settings {
   padding-inline: 16px;
 }
-body.iframe .settings-column {
+.popup-container .settings-column {
   flex-direction: column;
 }
-body.iframe .addon-setting {
+.popup-container .addon-setting {
   margin: 10px 0;
   min-height: 0;
   flex-direction: column;
   align-items: flex-start;
 }
-body.iframe .setting-label {
+.popup-container .setting-label {
   width: auto;
   margin-bottom: 5px;
 }
-body.iframe .setting-input {
+.popup-container .setting-input {
   flex-shrink: 0;
 }
-body.iframe .addon-setting.boolean-setting {
+.popup-container .addon-setting.boolean-setting {
   margin: 5px 0;
   flex-direction: row;
   align-items: center;
 }
-body.iframe .addon-setting.boolean-setting .setting-label {
+.popup-container .addon-setting.boolean-setting .setting-label {
   margin-bottom: 0;
 }
-body.iframe .presets-column > .setting-label {
+.popup-container .presets-column > .setting-label {
   margin-inline-start: 0;
   margin-bottom: 0;
 }
-body.iframe .presets-column > .addon-setting {
+.popup-container .presets-column > .addon-setting {
   margin: 5px 0;
   margin-inline-end: 10px;
 }
 
-body.iframe .addons-container {
+.popup-container .addons-container {
   padding: 10px 0;
 }
-body.iframe .filter-options {
+.popup-container .filter-options {
   flex-wrap: wrap;
 }
-body.iframe .filter-option {
+.popup-container .filter-option {
   flex-grow: 1;
   text-align: center;
 }
-body.iframe .search-box input {
+.popup-container .search-box input {
   flex-grow: 1;
   flex-basis: 0;
 }
