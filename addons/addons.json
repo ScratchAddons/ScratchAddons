@@ -43,7 +43,6 @@
   "project-notes-tabs",
   "block-switching",
   "my-ocular",
-  "better-featured-project",
   "mediarecorder",
   "color-picker",
   "onion-skinning",
@@ -95,6 +94,7 @@
   "forum-copy-code",
   "paint-by-default",
   "hide-project-stats",
+  "remix-button",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -110,5 +110,6 @@
   "old-studio-layout",
   "compact-messages",
   "customize-avatar-border",
-  "scratchblocks"
+  "scratchblocks",
+  "better-featured-project"
 ]
