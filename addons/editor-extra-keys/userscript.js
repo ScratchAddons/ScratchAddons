@@ -48,10 +48,7 @@ export default async function ({ addon, global, cons, msg }) {
 
   const workspace = Blockly.getMainWorkspace();
   if (workspace) {
-    const allBlocks = [
-      ...workspace.getAllBlocks(),
-      ...workspace.getFlyout().getWorkspace().getAllBlocks()
-    ];
+    const allBlocks = [...workspace.getAllBlocks(), ...workspace.getFlyout().getWorkspace().getAllBlocks()];
     for (const block of allBlocks) {
       if (block.type !== "event_whenkeypressed" && block.type !== "sensing_keyoptions") {
         continue;
@@ -68,5 +65,4 @@ export default async function ({ addon, global, cons, msg }) {
       appendKeys(menuGenerator);
     }
   }
-
 }
