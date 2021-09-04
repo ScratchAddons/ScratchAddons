@@ -30,6 +30,9 @@ export default class Tab extends Listenable {
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
+
+    this._reactContextMenus = [];
+    this._reactContextMenusInited = false;
   }
   addBlock(...a) {
     blocks.init(this);
@@ -161,6 +164,11 @@ export default class Tab extends Listenable {
    */
   scratchMessage(key) {
     if (this.clientVersion === "scratch-www") {
+      if (this.editorMode && this.redux.state) {
+        if (this.redux.state.locales.messages[key]) {
+          return this.redux.state.locales.messages[key];
+        }
+      }
       const locales = [window._locale ? window._locale.toLowerCase() : "en"];
       if (locales[0].includes("-")) locales.push(locales[0].split("-")[0]);
       if (locales.includes("pt") && !locales.includes("pt-br")) locales.push("pt-br");
@@ -422,6 +430,45 @@ export default class Tab extends Listenable {
         from: () => [q(".markItUpButton16")],
         until: () => [],
       },
+      assetContextMenuAfterExport: {
+        element: () => scope,
+        from: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuExport")
+          );
+        },
+        until: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete")
+          );
+        },
+      },
+      assetContextMenuAfterDelete: {
+        element: () => scope,
+        from: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete")
+          );
+        },
+        until: () => [],
+      },
+      monitor: {
+        element: () => scope,
+        from: () => {
+          const endOfVanilla = [
+            this.scratchMessage("gui.monitor.contextMenu.large"),
+            this.scratchMessage("gui.monitor.contextMenu.slider"),
+            this.scratchMessage("gui.monitor.contextMenu.sliderRange"),
+            this.scratchMessage("gui.monitor.contextMenu.export"),
+          ];
+          const potential = Array.prototype.filter.call(scope.children, (c) => endOfVanilla.includes(c.textContent));
+          return [potential[potential.length - 1]];
+        },
+        until: () => [],
+      },
     };
 
     const spaceInfo = sharedSpaces[space];
@@ -572,5 +619,134 @@ export default class Tab extends Listenable {
         });
       };
     });
+  }
+
+  _onReactContextMenu(e) {
+    if (!e.target) return;
+    const ctxTarget = e.target.closest(".react-contextmenu-wrapper");
+    if (!ctxTarget) return;
+    let ctxMenu = ctxTarget.querySelector("nav.react-contextmenu");
+    let type;
+    const extra = {};
+    if (!ctxMenu && ctxTarget.closest(".monitor-overlay")) {
+      // Monitors are rendered on document.body.
+      // This is internal id which is different from the actual monitor ID.
+      // Optional chain just to prevent crashes when they change the internal stuff.
+      const mInternalId = ctxTarget[this.traps.getInternalKey(ctxTarget)]?.return?.stateNode?.props?.id;
+      if (!mInternalId) return;
+      ctxMenu = Array.prototype.find.call(
+        document.querySelectorAll("body > nav.react-contextmenu"),
+        (candidate) => candidate[this.traps.getInternalKey(candidate)]?.return?.stateNode?.props?.id === mInternalId
+      );
+      if (!ctxMenu) return;
+      const props = ctxTarget[this.traps.getInternalKey(ctxTarget)]?.return?.return?.return?.stateNode?.props;
+      if (!props) return;
+      extra.monitorParams = props.params;
+      extra.opcode = props.opcode;
+      extra.itemId = props.id;
+      extra.targetId = props.targetId;
+      type = `monitor_${props.mode}`;
+    } else if (ctxTarget[this.traps.getInternalKey(ctxTarget)]?.return?.return?.return?.stateNode?.props?.dragType) {
+      // SpriteSelectorItem which despite its name is used for costumes, sounds, backpacked script etc
+      const props = ctxTarget[this.traps.getInternalKey(ctxTarget)].return.return.return.stateNode.props;
+      type = props.dragType.toLowerCase();
+      extra.name = props.name;
+      extra.itemId = props.id;
+      extra.index = props.index;
+    } else {
+      return;
+    }
+    const ctx = {
+      menuItem: ctxMenu,
+      target: ctxTarget,
+      type,
+      ...extra,
+    };
+    Array.from(ctxMenu.children).forEach((existing) => {
+      if (existing.classList.contains("sa-ctx-menu")) existing.remove();
+    });
+    for (const item of this._reactContextMenus) {
+      if (!item.types.some((itemType) => type === itemType)) continue;
+      if (item.condition && !item.condition(ctx)) continue;
+      const itemElem = document.createElement("div");
+      const classes = ["context-menu_menu-item"];
+      if (item.border) classes.push("context-menu_menu-item-bordered");
+      if (item.dangerous) classes.push("context-menu_menu-item-danger");
+      itemElem.className = this.scratchClass(...classes, {
+        others: ["react-contextmenu-item", "sa-ctx-menu", item.className || ""],
+      });
+      const label = document.createElement("span");
+      label.textContent = item.label;
+      itemElem.append(label);
+      this.displayNoneWhileDisabled(itemElem, {
+        display: "block",
+      });
+
+      itemElem.addEventListener("click", () => {
+        window.dispatchEvent(
+          new CustomEvent("REACT_CONTEXTMENU_HIDE", {
+            detail: {
+              action: "REACT_CONTEXTMENU_HIDE",
+            },
+          })
+        );
+        item.callback(ctx);
+      });
+
+      this.appendToSharedSpace({
+        space: item.position,
+        order: item.order,
+        scope: ctxMenu,
+        element: itemElem,
+      });
+    }
+    return;
+  }
+
+  /**
+   * @typedef {object} Tab~EditorContextMenuContext
+   * @property {string} type - the type of the context menu.
+   * @property {HTMLElement} menuItem - the item element.
+   * @property {HTMLElement} target - the target item.
+   * @property {number=} index - the index, if applicable.
+   */
+
+  /**
+   * Callback executed when the item is clicked.
+   * @callback Tab~EditorContextMenuItemCallback
+   * @param {Tab~EditorContextMenuContext} context - the context for the action.
+   */
+
+  /**
+   * Callback to check if the item should be visible.
+   * @callback Tab~EditorContextMenuItemCallback
+   * @param {Tab~EditorContextMenuContext} context - the context for the action.
+   * @returns {boolean} true to make it visible, false to hide
+   */
+
+  /**
+   * Adds a context menu item for the editor.
+   * @param {Tab~EditorContextMenuItemCallback} callback - the callback executed when the item is clicked.
+   * @param {object} opts - the options.
+   * @param {string} opts.className - the class name to add to the item.
+   * @param {string[]} opts.types - which types of context menu it should add to.
+   * @param {string} opts.position - the position inside the context menu.
+   * @param {number} opts.order - the order within the position.
+   * @param {string} opts.label - the label for the item.
+   * @param {boolean=} opts.border - whether to add a border at the top or not.
+   * @param {boolean=} opts.dangerous - whether to indicate the item as dangerous or not.
+   * @param {Tab~EditorContextMenuItemCondition} opts.condition - a function to check if the item should be shown.
+   */
+  createEditorContextMenu(callback, opts) {
+    this._reactContextMenus.push({
+      ...opts,
+      callback,
+    });
+    if (!this._reactContextMenusInited) {
+      this._reactContextMenusInited = true;
+      document.body.addEventListener("contextmenu", (e) => this._onReactContextMenu(e), {
+        capture: true,
+      });
+    }
   }
 }
