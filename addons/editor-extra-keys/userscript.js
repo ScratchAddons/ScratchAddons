@@ -46,5 +46,27 @@ export default async function ({ addon, global, cons, msg }) {
     },
   };
 
-  addon.tab.traps.vm.emitWorkspaceUpdate();
+  const workspace = Blockly.getMainWorkspace();
+  if (workspace) {
+    const allBlocks = [
+      ...workspace.getAllBlocks(),
+      ...workspace.getFlyout().getWorkspace().getAllBlocks()
+    ];
+    for (const block of allBlocks) {
+      if (block.type !== "event_whenkeypressed" && block.type !== "sensing_keyoptions") {
+        continue;
+      }
+      const input = block.inputList[0];
+      if (!input) {
+        continue;
+      }
+      const field = input.fieldRow[1];
+      if (!field) {
+        continue;
+      }
+      const menuGenerator = field.menuGenerator_;
+      appendKeys(menuGenerator);
+    }
+  }
+
 }
