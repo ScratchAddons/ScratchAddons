@@ -53,8 +53,7 @@ export default async function ({ addon, msg, global, console }) {
             },
           });
         });
-      },
-      { once: true }
+      }
     );
   }
 }
