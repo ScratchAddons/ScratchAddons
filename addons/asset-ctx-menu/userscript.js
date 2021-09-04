@@ -7,7 +7,17 @@ export default async ({ addon, console, msg }) => {
       "div[class*='asset-panel_wrapper'] div[class*='sprite-selector-item_sprite-selector-item_'] > nav.react-contextmenu",
       {
         markAsSeen: true,
-        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+        reduxCondition: (state) => {
+          const { mode, editorTab } = state.scratchGui;
+          return !mode.isPlayerOnly && (editorTab.activeTabIndex === 1 || editorTab.activeTabIndex === 2);
+        },
+        reduxEvents: [
+          "scratch-gui/mode/SET_PLAYER",
+          "fontsLoaded/SET_FONTS_LOADED",
+          "scratch-gui/locales/SELECT_LOCALE",
+          "scratch-gui/navigation/ACTIVATE_TAB",
+          "scratch-gui/targets/UPDATE_TARGET_LIST",
+        ],
       }
     );
     const isCostume = !!ctxMenu.closest("#react-tabs-3");
