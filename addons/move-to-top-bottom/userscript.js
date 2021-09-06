@@ -7,7 +7,11 @@ export default async ({ addon, console, msg }) => {
       } else {
         target.reorderCostume(ctx.index, 0);
       }
-      queueMicrotask(() => ctx.target.click());
+      queueMicrotask(() => {
+        addon.tab.traps.vm.emitTargetsUpdate();
+        addon.tab.traps.vm.runtime.emitProjectChanged();
+        ctx.target.click();
+      });
     },
     {
       types: ["sound", "costume"],
@@ -25,7 +29,11 @@ export default async ({ addon, console, msg }) => {
       } else {
         target.reorderCostume(ctx.index, Infinity);
       }
-      queueMicrotask(() => ctx.target.click());
+      queueMicrotask(() => {
+        addon.tab.traps.vm.emitTargetsUpdate();
+        addon.tab.traps.vm.runtime.emitProjectChanged();
+        ctx.target.click();
+      });
     },
     {
       types: ["sound", "costume"],
