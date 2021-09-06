@@ -3,7 +3,7 @@ const url = "https://scratch.mit.edu/studios/539952/";
 const studioId = url.match(/\d+/)?.[0];
 const shouldFailEarly = !studioId || isNaN(studioId);
 
-export default {
+export default ({ addon, msg, safeMsg }) => ({
   name: "cloud-games",
   props: [],
   data() {
@@ -31,10 +31,10 @@ export default {
   },
   methods: {
     msg(...args) {
-      return this.$parent.msg(...args);
+      return msg(...args);
     },
     safeMsg(...args) {
-      return this.$parent.safeMsg(...args);
+      return safeMsg(...args);
     },
     setCloudDataForProject(projectObject, i) {
       return new Promise((resolve) => {
@@ -101,4 +101,4 @@ export default {
       .reverse();
     await Promise.all(this.projects.map((project, i) => this.setCloudDataForProject(project, i)));
   },
-};
+});

@@ -44,11 +44,13 @@ const loadVueComponents = (filenames) =>
         })
         .then((template) =>
           jsPromise.then(async ({ default: details }) => {
+            if (typeof details === "function") {
+              details = details(params);
+            }
             details.mixins = details.mixins ?? [];
             details.mixins.push({
               name: componentName,
               template,
-              data: () => params,
             });
             if (details.components) {
               details.components = await loadVueComponents(details.components);

@@ -1,6 +1,6 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
-export default {
+export default ({ addon, msg, safeMsg }) => ({
   name: "scratch-messaging",
   components: ["popups/scratch-messaging/comment"],
   data() {
@@ -122,6 +122,12 @@ export default {
     })();
   },
   methods: {
+    msg(...args) {
+      return msg(...args);
+    },
+    safeMsg(...args) {
+      return safeMsg(...args);
+    },
     getData() {
       return new Promise((resolve) => {
         chrome.runtime.sendMessage({ scratchMessaging: "getData" }, (res) => {
@@ -450,4 +456,4 @@ export default {
       return str;
     },
   },
-};
+});
