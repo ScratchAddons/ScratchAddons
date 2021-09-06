@@ -4,6 +4,7 @@ import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import getWorkerScript from "./worker.js";
 import * as blocks from "./blocks.js";
+import { addContextMenu } from "./contextmenu.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
@@ -621,88 +622,6 @@ export default class Tab extends Listenable {
     });
   }
 
-  _onReactContextMenu(e) {
-    if (!e.target) return;
-    const ctxTarget = e.target.closest(".react-contextmenu-wrapper");
-    if (!ctxTarget) return;
-    let ctxMenu = ctxTarget.querySelector("nav.react-contextmenu");
-    let type;
-    const extra = {};
-    if (!ctxMenu && ctxTarget.closest(".monitor-overlay")) {
-      // Monitors are rendered on document.body.
-      // This is internal id which is different from the actual monitor ID.
-      // Optional chain just to prevent crashes when they change the internal stuff.
-      const mInternalId = ctxTarget[this.traps.getInternalKey(ctxTarget)]?.return?.stateNode?.props?.id;
-      if (!mInternalId) return;
-      ctxMenu = Array.prototype.find.call(
-        document.querySelectorAll("body > nav.react-contextmenu"),
-        (candidate) => candidate[this.traps.getInternalKey(candidate)]?.return?.stateNode?.props?.id === mInternalId
-      );
-      if (!ctxMenu) return;
-      const props = ctxTarget[this.traps.getInternalKey(ctxTarget)]?.return?.return?.return?.stateNode?.props;
-      if (!props) return;
-      extra.monitorParams = props.params;
-      extra.opcode = props.opcode;
-      extra.itemId = props.id;
-      extra.targetId = props.targetId;
-      type = `monitor_${props.mode}`;
-    } else if (ctxTarget[this.traps.getInternalKey(ctxTarget)]?.return?.return?.return?.stateNode?.props?.dragType) {
-      // SpriteSelectorItem which despite its name is used for costumes, sounds, backpacked script etc
-      const props = ctxTarget[this.traps.getInternalKey(ctxTarget)].return.return.return.stateNode.props;
-      type = props.dragType.toLowerCase();
-      extra.name = props.name;
-      extra.itemId = props.id;
-      extra.index = props.index;
-    } else {
-      return;
-    }
-    const ctx = {
-      menuItem: ctxMenu,
-      target: ctxTarget,
-      type,
-      ...extra,
-    };
-    Array.from(ctxMenu.children).forEach((existing) => {
-      if (existing.classList.contains("sa-ctx-menu")) existing.remove();
-    });
-    for (const item of this._reactContextMenus) {
-      if (!item.types.some((itemType) => type === itemType)) continue;
-      if (item.condition && !item.condition(ctx)) continue;
-      const itemElem = document.createElement("div");
-      const classes = ["context-menu_menu-item"];
-      if (item.border) classes.push("context-menu_menu-item-bordered");
-      if (item.dangerous) classes.push("context-menu_menu-item-danger");
-      itemElem.className = this.scratchClass(...classes, {
-        others: ["react-contextmenu-item", "sa-ctx-menu", item.className || ""],
-      });
-      const label = document.createElement("span");
-      label.textContent = item.label;
-      itemElem.append(label);
-      this.displayNoneWhileDisabled(itemElem, {
-        display: "block",
-      });
-
-      itemElem.addEventListener("click", () => {
-        window.dispatchEvent(
-          new CustomEvent("REACT_CONTEXTMENU_HIDE", {
-            detail: {
-              action: "REACT_CONTEXTMENU_HIDE",
-            },
-          })
-        );
-        item.callback(ctx);
-      });
-
-      this.appendToSharedSpace({
-        space: item.position,
-        order: item.order,
-        scope: ctxMenu,
-        element: itemElem,
-      });
-    }
-    return;
-  }
-
   /**
    * @typedef {object} Tab~EditorContextMenuContext
    * @property {string} type - the type of the context menu.
@@ -737,16 +656,7 @@ export default class Tab extends Listenable {
    * @param {boolean=} opts.dangerous - whether to indicate the item as dangerous or not.
    * @param {Tab~EditorContextMenuItemCondition} opts.condition - a function to check if the item should be shown.
    */
-  createEditorContextMenu(callback, opts) {
-    this._reactContextMenus.push({
-      ...opts,
-      callback,
-    });
-    if (!this._reactContextMenusInited) {
-      this._reactContextMenusInited = true;
-      document.body.addEventListener("contextmenu", (e) => this._onReactContextMenu(e), {
-        capture: true,
-      });
-    }
+  createEditorContextMenu(...args) {
+    addContextMenu(this, ...args);
   }
 }
