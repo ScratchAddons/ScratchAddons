@@ -276,6 +276,9 @@
   "export": {
     "message": "Export Settings"
   },
+  "copy":{
+    "message": "Copy Settings to Clipboard"
+  },
   "import": {
     "message": "Import Settings"
   },
