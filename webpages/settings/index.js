@@ -313,6 +313,11 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           downloadBlob("scratch-addons-settings.json", blob);
         });
       },
+      copySettings() {
+        serializeSettings().then((serialized) => {
+          navigator.clipboard.writeText(serialized);
+        });
+      },
       importSettings() {
         const inputElem = Object.assign(document.createElement("input"), {
           hidden: true,
