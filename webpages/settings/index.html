@@ -244,6 +244,9 @@
                   <button class="large-button" @click="exportSettings()">{{ msg("export") }}</button>
                 </div>
                 <div class="filter-selector">
+                  <button class="large-button" @click="copySettings()">{{ msg("copySettings") }}</button>
+                </div>
+                <div class="filter-selector">
                   <button class="large-button" @click="importSettings()">{{ msg("import") }}</button>
                   <button class="large-button hidden-button" id="confirmImport">{{ msg("confirmImport") }}</button>
                 </div>
