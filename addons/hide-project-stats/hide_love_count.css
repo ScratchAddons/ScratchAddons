@@ -1,5 +1,17 @@
+.project-loves::before {
+  margin: 0;
+}
+
 .project-loves {
-  visibility: hidden;
+  font-size: 0;
+  padding: 0;
+}
+
+#sa-love-label {
+  padding-left: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  padding-right: 1.5rem;
 }
 
 .thumbnail .thumbnail-loves {

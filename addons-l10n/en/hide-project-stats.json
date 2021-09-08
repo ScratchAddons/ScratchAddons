@@ -1,4 +1,6 @@
 {
-  "hide-project-stats/love": "Love",
-  "hide-project-stats/favorite": "Favorite"
+  "hide-project-stats/love-disabled": "Love",
+  "hide-project-stats/favorite-disabled": "Favorite",
+  "hide-project-stats/love-enabled": "Loved",
+  "hide-project-stats/favorite-enabled": "Favorited"
 }
