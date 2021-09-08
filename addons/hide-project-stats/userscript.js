@@ -5,7 +5,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   function initializeLabels(button) {
     button.labelExists = false;
     button.buttonElement = document.getElementsByClassName(`project-${button.name}s`)[0];
-    button.userLiked = (document.getElementsByClassName(`${button.name}d`).length != 0);
+    button.userLiked = document.getElementsByClassName(`${button.name}d`).length != 0;
     button.labelElement = document.createElement("span");
     button.labelElement.id = `sa-${button.name}-label`;
     button.buttonElement.after(button.labelElement);
@@ -36,9 +36,15 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   initializeLabels(favorites);
   toggleLabels();
 
-  addon.settings.addEventListener("change", () => { toggleLabels(); });
-  addon.self.addEventListener("disabled", () => { toggleLabels(); });
-  addon.self.addEventListener("reenabled", () => { toggleLabels(); });
+  addon.settings.addEventListener("change", () => {
+    toggleLabels();
+  });
+  addon.self.addEventListener("disabled", () => {
+    toggleLabels();
+  });
+  addon.self.addEventListener("reenabled", () => {
+    toggleLabels();
+  });
   addon.tab.redux.addEventListener("statechanged", (data) => {
     if (data.detail.action.type === "SET_LOVED") {
       loves.userLiked = !loves.userLiked;
