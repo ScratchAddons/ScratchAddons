@@ -1,0 +1,18 @@
+{
+  "name": "Featured users",
+  "description": "Adds a Featured Users section to the homepage",
+  "credits": [
+    {
+      "name": "LankyBox01",
+      "link": "https://scratch.mit.edu/users/lankybox01"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/"]
+    }
+  ]
+  "tags": ["community"],
+  "enabledByDefault": false
+}
