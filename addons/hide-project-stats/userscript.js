@@ -5,8 +5,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   let visitingOwnProject = document.querySelector(".button.action-button.report-button") == null;
 
   function initializeLabels(button) {
-    button.buttonElement = document.getElementsByClassName(`project-${button.name}s`)[0];
-    button.userLiked = document.getElementsByClassName(`${button.name}d`).length != 0;
+    button.buttonElement = document.querySelector(`.project-${button.name}s`);
     button.labelElement = document.createElement("span");
     button.labelElement.id = `sa-${button.name}-label`;
     button.buttonElement.after(button.labelElement);
@@ -36,7 +35,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       !(addon.settings.get("showOwnStats") && visitingOwnProject)
     ) {
       // Setting was turned on
-      if (button.userLiked) {
+      if (document.querySelector(`.${button.name}d`) != null) { // Checks for class that enables button
         button.labelElement.innerText = m(`${button.name}-enabled`);
       } else {
         button.labelElement.innerText = m(`${button.name}-disabled`);
@@ -64,11 +63,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   });
   addon.tab.redux.addEventListener("statechanged", (data) => {
     if (data.detail.action.type === "SET_LOVED") {
-      loves.userLiked = !loves.userLiked;
       refreshButton(loves);
     }
     if (data.detail.action.type === "SET_FAVED") {
-      favorites.userLiked = !favorites.userLiked;
       refreshButton(favorites);
     }
   });
