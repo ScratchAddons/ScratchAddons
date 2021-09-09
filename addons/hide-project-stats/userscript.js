@@ -1,7 +1,8 @@
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
   let loves = { name: "love" };
   let favorites = { name: "favorite" };
-  let visitingOwnProject = typeof document.querySelector(".button.action-button.report-button") != "null";
+  await addon.tab.waitForElement(".project-loves");
+  let visitingOwnProject = (document.querySelector(".button.action-button.report-button") == null);
 
   function initializeLabels(button) {
     button.buttonElement = document.getElementsByClassName(`project-${button.name}s`)[0];
@@ -40,9 +41,11 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       } else {
         button.labelElement.innerText = m(`${button.name}-disabled`);
       }
+      button.buttonElement.style = "";
     } else {
       // Setting was turned off
       button.labelElement.innerText = "";
+      button.buttonElement.style = "font-size: 16px;";
     }
   }
 
