@@ -2,7 +2,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   let loves = { name: "love" };
   let favorites = { name: "favorite" };
   await addon.tab.waitForElement(".project-loves");
-  let visitingOwnProject = (document.querySelector(".button.action-button.report-button") == null);
+  let visitingOwnProject = document.querySelector(".button.action-button.report-button") == null;
 
   function initializeLabels(button) {
     button.buttonElement = document.getElementsByClassName(`project-${button.name}s`)[0];
