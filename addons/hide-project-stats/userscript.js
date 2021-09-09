@@ -1,9 +1,9 @@
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
   let loves = { name: "love" };
   let favorites = { name: "favorite" };
+  let visitingOwnProject = (typeof(document.querySelector(".button.action-button.report-button")) != "null");
 
   function initializeLabels(button) {
-    button.labelExists = false;
     button.buttonElement = document.getElementsByClassName(`project-${button.name}s`)[0];
     button.userLiked = (document.getElementsByClassName(`${button.name}d`).length != 0);
     button.labelElement = document.createElement("span");
@@ -11,15 +11,27 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     button.buttonElement.after(button.labelElement);
   }
 
-  function toggleLabels() {
-    toggleOnButton(loves);
-    toggleOnButton(favorites);
+  function refreshLabels() {
+    refreshButton(loves);
+    refreshButton(favorites);
+    // If the user has the "show stats on my own projects" setting enabled,
+    // show the remix and view count if the user owns the project.
+    // Love and favorite counts are handled separately since they get custom labels.
+    document.querySelectorAll(".project-remixes, .project-views").forEach(element => {
+      if (!addon.self.disabled && addon.settings.get("showOwnStats") && visitingOwnProject) {
+        element.style = "display: flex;";
+      } else {
+        element.style = "";
+      }
+    });
   }
 
-  function toggleOnButton(button) {
-    if (addon.settings.get(`${button.name}s`) && !addon.self.disabled) {
+  // Handles the buttons -- we can't simply hide them or the user wouldn't be able to love or favorite.
+  // This just controls an appended label -- a lot of the work is actually done by CSS.
+  function refreshButton(button) {
+    if (!addon.self.disabled && addon.settings.get(`${button.name}s`)
+        && !(addon.settings.get("showOwnStats") && visitingOwnProject)) {
       // Setting was turned on
-      button.labelExists = true;
       if (button.userLiked) {
         button.labelElement.innerText = m(`${button.name}-enabled`);
       } else {
@@ -27,26 +39,25 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       }
     } else {
       // Setting was turned off
-      button.labelExists = false;
       button.labelElement.innerText = "";
     }
   }
 
   initializeLabels(loves);
   initializeLabels(favorites);
-  toggleLabels();
+  refreshLabels();
 
-  addon.settings.addEventListener("change", () => { toggleLabels(); });
-  addon.self.addEventListener("disabled", () => { toggleLabels(); });
-  addon.self.addEventListener("reenabled", () => { toggleLabels(); });
+  addon.settings.addEventListener("change", () => { refreshLabels(); });
+  addon.self.addEventListener("disabled", () => { refreshLabels(); });
+  addon.self.addEventListener("reenabled", () => { refreshLabels(); });
   addon.tab.redux.addEventListener("statechanged", (data) => {
     if (data.detail.action.type === "SET_LOVED") {
       loves.userLiked = !loves.userLiked;
-      toggleOnButton(loves);
+      refreshButton(loves);
     }
     if (data.detail.action.type === "SET_FAVED") {
       favorites.userLiked = !favorites.userLiked;
-      toggleOnButton(favorites);
+      refreshButton(favorites);
     }
   });
 }

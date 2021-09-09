@@ -58,7 +58,8 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["projects"]
+      "matches": ["projects"],
+      "runAtComplete": "true"
     }
   ],
   "settings": [
@@ -99,9 +100,9 @@
       "type": "boolean"
     },
     {
-      "name": "Keep stats visible for your own projects",
+      "name": "Show stats on my own projects",
       "default": false,
-      "id": "ownStats",
+      "id": "showOwnStats",
       "type": "boolean"
     }
   ],
