@@ -35,7 +35,8 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       !(addon.settings.get("showOwnStats") && visitingOwnProject)
     ) {
       // Setting was turned on
-      if (document.querySelector(`.${button.name}d`) != null) { // Checks for class that enables button
+      if (document.querySelector(`.${button.name}d`) != null) {
+        // Checks for class that enables button
         button.labelElement.innerText = m(`${button.name}-enabled`);
       } else {
         button.labelElement.innerText = m(`${button.name}-disabled`);
