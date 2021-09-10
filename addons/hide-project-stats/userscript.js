@@ -19,9 +19,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
     // Love and favorite counts are handled separately since they get custom labels.
     document.querySelectorAll(".project-remixes, .project-views").forEach((element) => {
       if (!addon.self.disabled && addon.settings.get("showOwnStats") && visitingOwnProject) {
-        element.style = "display: flex;";
+        element.classList.add("stat-display");
       } else {
-        element.style = "";
+        element.classList.remove("stat-display");
       }
     });
   }
@@ -41,11 +41,11 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       } else {
         button.labelElement.innerText = m(`${button.name}-disabled`);
       }
-      button.buttonElement.style = "";
+      button.buttonElement.classList.remove("stat-display");
     } else {
       // Setting was turned off
       button.labelElement.innerText = "";
-      button.buttonElement.style = "font-size: 16px;";
+      button.buttonElement.classList.add("stat-display");
     }
   }
 

@@ -1,3 +1,7 @@
 .project-views {
   display: none;
 }
+
+.project-views.stat-display {
+  display: flex;
+}

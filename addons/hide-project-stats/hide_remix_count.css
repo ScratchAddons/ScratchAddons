@@ -2,6 +2,10 @@
   display: none;
 }
 
+.project-remixes.stat-display {
+  display: flex;
+}
+
 .thumbnail .thumbnail-remixes {
   display: none;
 }
