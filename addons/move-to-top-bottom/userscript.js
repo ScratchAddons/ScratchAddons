@@ -1,7 +1,7 @@
 export default async ({ addon, console, msg }) => {
   const types = ["sound"];
 
-  // Costumes should not be affected if user is running DevtoolsExtensio before version 1.20.0
+  // Costumes should not be affected if user is running DevtoolsExtension before version 1.20.0
   const extVersion = window.devtoolsExtensionVersion || "1.17.1"; // 1.17.1 (or lower)
   const [major, minor, _] = extVersion.split(".");
   if (window.initGUI && major === "1" && Number(minor) < 20) {
