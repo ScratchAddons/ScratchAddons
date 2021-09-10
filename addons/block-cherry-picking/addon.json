@@ -1,6 +1,6 @@
 {
   "name": "Block cherry-picking",
-  "description": "Adds the ability to drag a block out of the middle of a script (instead of the entire stack) while holding the Ctrl key",
+  "description": "Adds the ability to drag a block out of the middle of a script (instead of the entire stack) while holding the Ctrl key.",
   "credits": [
     {
       "name": "lisa_wolfgang",
