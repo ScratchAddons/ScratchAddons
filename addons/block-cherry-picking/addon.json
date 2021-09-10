@@ -1,0 +1,28 @@
+{
+  "name": "Block cherry-picking",
+  "description": "Adds the ability to drag a block out of the middle of a script (instead of the entire stack) while holding the Ctrl key",
+  "credits": [
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://github.com/lisa-wolfgang"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Enable without holding Ctrl (hold Ctrl for regular drag)",
+      "id": "invertDrag",
+      "type": "boolean",
+      "default": false
+    }
+  ],
+  "tags": ["editor", "codeEditor"],
+  "dynamicDisable": true,
+  "dynamicEnable": false,
+  "enabledByDefault": false
+}
