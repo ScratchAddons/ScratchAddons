@@ -1,13 +1,14 @@
 export default async function ({ addon, global, console, msg, safeMsg: m }) {
   let loves = { name: "love" };
   let favorites = { name: "favorite" };
+  let username = await addon.auth.fetchUsername();
   await addon.tab.waitForElement(".project-loves");
-  let visitingOwnProject = document.querySelector(".button.action-button.report-button") == null;
+  let visitingOwnProject = username != null && document.querySelector(".button.action-button.report-button") == null;
 
   function initializeLabels(button) {
     button.buttonElement = document.querySelector(`.project-${button.name}s`);
     button.labelElement = document.createElement("span");
-    button.labelElement.id = `sa-${button.name}-label`;
+    button.labelElement.classList.add(`sa-${button.name}-label`);
     button.buttonElement.after(button.labelElement);
   }
 
@@ -28,7 +29,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
   // Handles the buttons -- we can't simply hide them or the user wouldn't be able to love or favorite.
   // This just controls an appended label -- a lot of the work is actually done by CSS.
-  function refreshButton(button) {
+  async function refreshButton(button) {
     if (
       !addon.self.disabled &&
       addon.settings.get(`${button.name}s`) &&
@@ -42,6 +43,14 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
         button.labelElement.innerText = m(`${button.name}-disabled`);
       }
       button.buttonElement.classList.remove("stat-display");
+      username = await addon.auth.fetchUsername();
+      if (username == null) {
+        button.buttonElement.classList.add("hidden");
+        button.labelElement.classList.add("hidden");
+      } else {
+        button.buttonElement.classList.remove("hidden");
+        button.labelElement.classList.remove("hidden");
+      }
     } else {
       // Setting was turned off
       button.labelElement.innerText = "";

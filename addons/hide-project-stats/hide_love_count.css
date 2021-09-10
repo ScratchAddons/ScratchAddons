@@ -7,11 +7,15 @@
   font-size: 16px;
 }
 
-#sa-love-label {
+.sa-love-label {
   padding-left: -0.5rem;
   font-size: 16px;
   font-weight: 700;
   padding-right: 2rem;
+}
+
+.project-loves.hidden, .sa-love-label.hidden {
+  display: none;
 }
 
 .thumbnail .thumbnail-loves {
