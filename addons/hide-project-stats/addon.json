@@ -59,7 +59,7 @@
     {
       "url": "userscript.js",
       "matches": ["projects"],
-      "runAtComplete": "true"
+      "runAtComplete": true
     }
   ],
   "settings": [
