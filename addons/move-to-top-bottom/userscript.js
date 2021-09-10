@@ -1,4 +1,15 @@
 export default async ({ addon, console, msg }) => {
+  const types = ["sound"];
+
+  // Costumes should not be affected if user is running DevtoolsExtensio before version 1.20.0
+  const extVersion = window.devtoolsExtensionVersion || "1.17.1"; // 1.17.1 (or lower)
+  const [major, minor, _] = extVersion.split(".");
+  if (window.initGUI && major === "1" && Number(minor) < 20) {
+    console.log("Devtools extension already adds send to top/bottom buttons to costumes");
+  } else {
+    types.push("costume");
+  }
+
   addon.tab.createEditorContextMenu(
     (ctx) => {
       const target = addon.tab.traps.vm.editingTarget;
@@ -14,7 +25,7 @@ export default async ({ addon, console, msg }) => {
       });
     },
     {
-      types: ["sound", "costume"],
+      types,
       position: "assetContextMenuAfterExport",
       order: 1,
       label: msg("top"),
@@ -36,7 +47,7 @@ export default async ({ addon, console, msg }) => {
       });
     },
     {
-      types: ["sound", "costume"],
+      types,
       position: "assetContextMenuAfterExport",
       order: 2,
       label: msg("bottom"),
