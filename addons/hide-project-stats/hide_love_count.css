@@ -14,7 +14,8 @@
   padding-right: 2rem;
 }
 
-.project-loves.hidden, .sa-love-label.hidden {
+.project-loves.hidden,
+.sa-love-label.hidden {
   display: none;
 }
 

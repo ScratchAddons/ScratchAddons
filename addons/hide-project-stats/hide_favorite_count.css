@@ -14,6 +14,7 @@
   padding-right: 2rem;
 }
 
-.project-favorites.hidden, .sa-favorite-label.hidden {
+.project-favorites.hidden,
+.sa-favorite-label.hidden {
   display: none;
 }
