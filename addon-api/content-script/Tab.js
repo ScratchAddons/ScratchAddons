@@ -31,9 +31,6 @@ export default class Tab extends Listenable {
     this.traps = new Trap(this);
     this.redux = new ReduxHandler();
     this._waitForElementSet = new WeakSet();
-
-    this._reactContextMenus = [];
-    this._reactContextMenusInited = false;
   }
   addBlock(...a) {
     blocks.init(this);
