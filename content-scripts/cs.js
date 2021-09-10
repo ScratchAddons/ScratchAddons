@@ -220,13 +220,21 @@ function injectUserstyles(addonsWithUserstyles) {
 }
 
 const textColorLib = __scratchAddonsTextColor;
+const existingCssVariables = [];
 function setCssVariables(addonSettings, addonsWithUserstyles) {
   const hyphensToCamelCase = (s) => s.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-  const setVar = (addonId, varName, value) =>
-    document.documentElement.style.setProperty(`--${hyphensToCamelCase(addonId)}-${varName}`, value);
+  const setVar = (addonId, varName, value) => {
+    const realVarName = `--${hyphensToCamelCase(addonId)}-${varName}`;
+    document.documentElement.style.setProperty(realVarName, value);
+    existingCssVariables.push(realVarName);
+  };
 
   const removeVar = (addonId, varName) =>
     document.documentElement.style.removeProperty(`--${hyphensToCamelCase(addonId)}-${varName}`);
+
+  // First remove all CSS variables, we add them all back anyway
+  existingCssVariables.forEach((varName) => document.documentElement.style.removeProperty(varName));
+  existingCssVariables.length = 0;
 
   const addonIds = addonsWithUserstyles.map((obj) => obj.addonId);
 
@@ -382,6 +390,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 
       removeAddonStyles(addonId);
       _page_.fireEvent({ name: "disabled", addonId, target: "self" });
+      setCssVariables(globalState.addonSettings, addonsWithUserstyles);
     } else if (request.updateUserstylesSettingsChange) {
       const { userstyles, addonId, injectAsStyleElt, index } = request.updateUserstylesSettingsChange;
       // Removing the addon styles and readding them works since the background
