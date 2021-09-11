@@ -2,8 +2,9 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   let loves = { name: "love" };
   let favorites = { name: "favorite" };
   let username = await addon.auth.fetchUsername();
-  await addon.tab.waitForElement(".project-loves");
-  let visitingOwnProject = username != null && document.querySelector(".button.action-button.report-button") == null;
+  while (true) {
+  await addon.tab.waitForElement(".project-loves", { markAsSeen: true });
+  let visitingOwnProject = username !== null && document.querySelector(".button.action-button.report-button") === null;
 
   function initializeLabels(button) {
     button.buttonElement = document.querySelector(`.project-${button.name}s`);
@@ -79,4 +80,5 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
       refreshButton(favorites);
     }
   });
+}
 }
