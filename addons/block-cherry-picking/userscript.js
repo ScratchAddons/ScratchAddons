@@ -7,6 +7,9 @@ export default async function ({ addon, global, console }) {
   document.addEventListener("keydown", function (e) {
     ctrlKeyPressed = e.ctrlKey || e.metaKey;
   });
+  document.addEventListener("keyup", function (e) {
+    ctrlKeyPressed = e.ctrlKey || e.metaKey;
+  });
 
   // `opt_healStack` is a built-in option in scratch-blocks that enables cherry-picking behavior.
   // All this function does is enable that built-in option for every block.
