@@ -83,6 +83,10 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
           madeChangesToAddon = true;
           madeAnyChanges = true;
         }
+      } else if (addonId === "editor-devtools" && addonsEnabled["move-to-top-bottom"] === undefined) {
+        // Existing editor-devtools users should have move-to-top-bottom enabled.
+        addonsEnabled["move-to-top-bottom"] = true;
+        madeAnyChanges = true;
       }
 
       if (madeChangesToAddon) {
