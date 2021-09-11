@@ -78,8 +78,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 
   while (true) {
     await addon.tab.waitForElement(".project-loves", { markAsSeen: true });
-    visitingOwnProject =
-      username !== null && document.querySelector(".button.action-button.report-button") === null;
+    visitingOwnProject = username !== null && document.querySelector(".button.action-button.report-button") === null;
 
     initializeLabels(loves);
     initializeLabels(favorites);
