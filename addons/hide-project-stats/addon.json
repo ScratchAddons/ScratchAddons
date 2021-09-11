@@ -83,7 +83,7 @@
       "type": "boolean"
     },
     {
-      "name": "Hide loves count in \"What the Community is Remixing\"",
+      "name": "Hide remix count in \"What the Community is Remixing\"",
       "default": true,
       "id": "remixesFront",
       "type": "boolean"

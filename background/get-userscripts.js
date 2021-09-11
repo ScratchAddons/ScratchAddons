@@ -1,5 +1,20 @@
+import changeAddonState from "./imports/change-addon-state.js";
+import { getMissingOptionalPermissions } from "./imports/util.js";
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.replaceTabWithUrl) chrome.tabs.update(sender.tab.id, { url: request.replaceTabWithUrl });
+  else if (request.getEnabledAddons) {
+    let enabled = Object.keys(scratchAddons.localState.addonsEnabled).filter(
+      (addonId) => scratchAddons.localState.addonsEnabled[addonId]
+    );
+    const tag = request.getEnabledAddons.tag;
+    if (tag) {
+      enabled = enabled.filter((id) =>
+        scratchAddons.manifests.some(({ addonId, manifest }) => addonId === id && manifest.tags.includes(tag))
+      );
+    }
+    sendResponse(enabled);
+  }
 });
 
 scratchAddons.localEvents.addEventListener("addonDynamicEnable", ({ detail }) => {
@@ -130,8 +145,13 @@ async function getContentScriptInfo(url) {
     addonsWithUserstyles: [],
   };
   const promises = [];
+  const missingPermissions = await getMissingOptionalPermissions();
   scratchAddons.manifests.forEach(async ({ addonId, manifest }, i) => {
     if (!scratchAddons.localState.addonsEnabled[addonId]) return;
+    if (manifest.permissions?.some((p) => missingPermissions.includes(p))) {
+      changeAddonState(addonId, false);
+      return;
+    }
     const promise = getAddonData({ addonId, manifest, url });
     promises.push(promise);
     const { userscripts, userstyles, cssVariables } = await promise;
@@ -286,7 +306,7 @@ const WELL_KNOWN_PATTERNS = {
   editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
   forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
   scratchWWWNoProject:
-    /^\/(?:(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|DMCA|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?)\/?)?$/,
+    /^\/(?:(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|DMCA|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+(?:\/popular)?|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?)\/?)?$/,
 };
 
 const WELL_KNOWN_MATCHERS = {

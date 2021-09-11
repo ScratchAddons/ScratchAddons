@@ -22,7 +22,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "Scratchblocks tags are not supported, and the bbcode may not be 100% accurate. To get fully accurate quotes, quote as normal and delete any parts that you don't need.",
+      "text": "The BBCode may not be 100% accurate. To get fully accurate quotes, quote as normal and delete any parts that you don't need.",
       "id": "scratchblocks_notice"
     }
   ]
