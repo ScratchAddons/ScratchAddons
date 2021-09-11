@@ -30,6 +30,6 @@
   ],
   "tags": ["editor", "codeEditor"],
   "dynamicDisable": true,
-  "dynamicEnable": false,
+  "dynamicEnable": true,
   "enabledByDefault": false
 }
