@@ -4,17 +4,20 @@ export default async function ({ addon, global, cons, msg }) {
   function appendKeys(keys) {
     keys.push(
       ...[
-        ["`", "`"],
         ["-", "-"],
+        [",", ","],
+        [".", "."],
+
+        /*
+        ["`", "`"],
         ["=", "="],
         ["[", "["],
         ["]", "]"],
         ["\\", "\\"],
         [";", ";"],
         ["'", "'"],
-        [",", ","],
-        [".", "."],
         ["/", "/"],
+        */
       ]
     );
     keys.splice(5, 0, [msg("enter-key"), "enter"]);
