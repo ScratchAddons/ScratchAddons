@@ -10,7 +10,7 @@
     {
       "type": "notice",
       "text": "If \"flip controls\" is enabled, grabbing blocks individually will be the default behavior. Hold Ctrl to drag the entire stack.",
-      "id": "macContextDisabled"
+      "id": "flipControls"
     }
   ],
   "credits": [
