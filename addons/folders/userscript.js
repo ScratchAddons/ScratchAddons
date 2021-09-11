@@ -1044,8 +1044,9 @@ export default async function ({ addon, global, console, msg }) {
       itemIndex,
       newIndex
     ) => {
-      itemIndex = clamp(itemIndex, 0, guiItems.length);
-      newIndex = clamp(newIndex, 0, guiItems.length);
+      // First index depends on zeroIndexed
+      itemIndex = clamp(itemIndex, zeroIndexed ? 0 : 1, zeroIndexed ? guiItems.length - 1 : guiItems.length);
+      newIndex = clamp(newIndex, zeroIndexed ? 0 : 1, zeroIndexed ? guiItems.length - 1 : guiItems.length);
       if (itemIndex === newIndex) {
         return false;
       }
