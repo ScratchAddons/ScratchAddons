@@ -27,7 +27,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       [addonId]: newSettings,
     });
     chrome.storage.sync.set({
-      addonSettings: newSettings,
+      addonSettings,
     });
   }
 });
