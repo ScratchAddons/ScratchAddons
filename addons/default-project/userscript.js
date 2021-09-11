@@ -12,6 +12,7 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   addon.tab.redux.initialize();
+  let isFileUpload = false;
   addon.tab.redux.addEventListener("statechanged", async (e) => {
     if (e.detail.action.type === "scratch-gui/project-state/DONE_LOADING_VM_WITHOUT_ID") {
       // Current loadingState is SHOWING_WITHOUT_ID
@@ -36,8 +37,12 @@ export default async function ({ addon, global, console, msg }) {
       }
 
       const projectId = addon.settings.get("projectId");
-      if (projectId !== 510186917 && !expired) addon.tab.traps.vm.downloadProjectId(projectId);
+      if (projectId !== 510186917 && !expired && !isFileUpload) addon.tab.traps.vm.downloadProjectId(projectId);
       pendingReplacement = false;
+      isFileUpload = false;
+    } else if (e.detail.action.type === "scratch-gui/project-state/START_LOADING_VM_FILE_UPLOAD") {
+      // A file upload will then dispatch DONE_LOADING_VM_WITHOUT_ID, but we should ignore it
+      isFileUpload = true;
     }
   });
 }

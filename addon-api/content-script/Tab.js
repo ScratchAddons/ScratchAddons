@@ -4,6 +4,7 @@ import Listenable from "../common/Listenable.js";
 import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import getWorkerScript from "./worker.js";
 import * as blocks from "./blocks.js";
+import { addContextMenu } from "./contextmenu.js";
 
 const DATA_PNG = "data:image/png;base64,";
 
@@ -161,6 +162,11 @@ export default class Tab extends Listenable {
    */
   scratchMessage(key) {
     if (this.clientVersion === "scratch-www") {
+      if (this.editorMode && this.redux.state) {
+        if (this.redux.state.locales.messages[key]) {
+          return this.redux.state.locales.messages[key];
+        }
+      }
       const locales = [window._locale ? window._locale.toLowerCase() : "en"];
       if (locales[0].includes("-")) locales.push(locales[0].split("-")[0]);
       if (locales.includes("pt") && !locales.includes("pt-br")) locales.push("pt-br");
@@ -422,6 +428,45 @@ export default class Tab extends Listenable {
         from: () => [q(".markItUpButton16")],
         until: () => [],
       },
+      assetContextMenuAfterExport: {
+        element: () => scope,
+        from: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuExport")
+          );
+        },
+        until: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete")
+          );
+        },
+      },
+      assetContextMenuAfterDelete: {
+        element: () => scope,
+        from: () => {
+          return Array.prototype.filter.call(
+            scope.children,
+            (c) => c.textContent === this.scratchMessage("gui.spriteSelectorItem.contextMenuDelete")
+          );
+        },
+        until: () => [],
+      },
+      monitor: {
+        element: () => scope,
+        from: () => {
+          const endOfVanilla = [
+            this.scratchMessage("gui.monitor.contextMenu.large"),
+            this.scratchMessage("gui.monitor.contextMenu.slider"),
+            this.scratchMessage("gui.monitor.contextMenu.sliderRange"),
+            this.scratchMessage("gui.monitor.contextMenu.export"),
+          ];
+          const potential = Array.prototype.filter.call(scope.children, (c) => endOfVanilla.includes(c.textContent));
+          return [potential[potential.length - 1]];
+        },
+        until: () => [],
+      },
     };
 
     const spaceInfo = sharedSpaces[space];
@@ -572,5 +617,43 @@ export default class Tab extends Listenable {
         });
       };
     });
+  }
+
+  /**
+   * @typedef {object} Tab~EditorContextMenuContext
+   * @property {string} type - the type of the context menu.
+   * @property {HTMLElement} menuItem - the item element.
+   * @property {HTMLElement} target - the target item.
+   * @property {number=} index - the index, if applicable.
+   */
+
+  /**
+   * Callback executed when the item is clicked.
+   * @callback Tab~EditorContextMenuItemCallback
+   * @param {Tab~EditorContextMenuContext} context - the context for the action.
+   */
+
+  /**
+   * Callback to check if the item should be visible.
+   * @callback Tab~EditorContextMenuItemCallback
+   * @param {Tab~EditorContextMenuContext} context - the context for the action.
+   * @returns {boolean} true to make it visible, false to hide
+   */
+
+  /**
+   * Adds a context menu item for the editor.
+   * @param {Tab~EditorContextMenuItemCallback} callback - the callback executed when the item is clicked.
+   * @param {object} opts - the options.
+   * @param {string} opts.className - the class name to add to the item.
+   * @param {string[]} opts.types - which types of context menu it should add to.
+   * @param {string} opts.position - the position inside the context menu.
+   * @param {number} opts.order - the order within the position.
+   * @param {string} opts.label - the label for the item.
+   * @param {boolean=} opts.border - whether to add a border at the top or not.
+   * @param {boolean=} opts.dangerous - whether to indicate the item as dangerous or not.
+   * @param {Tab~EditorContextMenuItemCondition} opts.condition - a function to check if the item should be shown.
+   */
+  createEditorContextMenu(...args) {
+    addContextMenu(this, ...args);
   }
 }
