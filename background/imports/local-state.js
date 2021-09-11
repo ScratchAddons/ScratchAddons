@@ -1,3 +1,5 @@
+import { handleAddonStateChange } from "./change-addon-state.js";
+
 // Local state is a JSON object where the background page stores data.
 // It is abstracted through a proxy in order to easily detect changes that should trigger events or side effects.
 
@@ -28,14 +30,14 @@ class StateProxy {
     target[key] = value;
 
     if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
-      stateChange(this.name, key, value);
+      stateChange(this.name, key, value, oldValue);
     }
 
     return true;
   }
 }
 
-function stateChange(parentObjectPath, key, value) {
+function stateChange(parentObjectPath, key, value, oldValue) {
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
   console.log(`%c${objectPath}`, "font-weight: bold;", "is now: ", objectPathArr[0] === "auth" ? "[redacted]" : value);
@@ -46,6 +48,14 @@ function stateChange(parentObjectPath, key, value) {
   }
   if (objectPathArr[0] === "badges") {
     scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
+  }
+  // Only dispatch after initial load
+  if (objectPathArr.length === 1 && objectPathArr[0] === "addonsEnabled" && Object.keys(oldValue).length === 0) {
+    for (const addonId of Object.keys(value)) {
+      if (oldValue[addonId] !== value[addonId]) {
+        handleAddonStateChange(addonId, value[addonId]);
+      }
+    }
   }
 }
 

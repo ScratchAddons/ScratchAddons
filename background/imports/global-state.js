@@ -32,7 +32,7 @@ class StateProxy {
     messageForAllTabs({ newGlobalState: _globalState });
 
     if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
-      stateChange(this.name, key, value);
+      stateChange(this.name, key, value, oldValue);
     }
 
     return true;
@@ -50,7 +50,7 @@ function messageForAllTabs(message) {
   scratchAddons.sendToPopups(message);
 }
 
-function stateChange(parentObjectPath, key, value) {
+function stateChange(parentObjectPath, key, value, oldValue) {
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
   console.log(`%c${objectPath}`, "font-weight: bold;", "is now: ", objectPathArr[0] === "auth" ? "[redacted]" : value);
@@ -58,19 +58,29 @@ function stateChange(parentObjectPath, key, value) {
     // NOTE: Do not send to content script; this is handled in handle-auth.js
     scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
     scratchAddons.sendToPopups({ fireEvent: { target: "auth", name: "change" } });
-  } else if (objectPathArr[0] === "addonSettings") {
-    // Send event to persistent script and userscripts, if they exist.
-    const settingsEventTarget = scratchAddons.eventTargets.settings.find(
-      (eventTarget) => eventTarget._addonId === objectPathArr[1]
-    );
-    if (settingsEventTarget) settingsEventTarget.dispatchEvent(new CustomEvent("change"));
-    messageForAllTabs({
-      fireEvent: {
-        target: "settings",
-        name: "change",
-        addonId: objectPathArr[1],
-      },
-    });
+  } else if (objectPathArr.length === 1 && objectPathArr[0] === "addonSettings" && Object.keys(oldValue).length === 0) {
+    // Only dispatch after initial load
+    for (const addonId of Object.keys(value)) {
+      if (JSON.stringify(value[addonId]) === JSON.stringify(oldValue[addonId])) continue;
+      // Send event to persistent script and userscripts, if they exist.
+      const settingsEventTarget = scratchAddons.eventTargets.settings.find(
+        (eventTarget) => eventTarget._addonId === addonId
+      );
+      if (settingsEventTarget) settingsEventTarget.dispatchEvent(new CustomEvent("change"));
+      messageForAllTabs({
+        fireEvent: {
+          target: "settings",
+          name: "change",
+          addonId,
+        },
+      });
+      const manifest = scratchAddons.manifests.find((addon) => addon.addonId === addonId).manifest;
+      const { updateUserstylesOnSettingsChange } = manifest;
+      if (updateUserstylesOnSettingsChange)
+        scratchAddons.localEvents.dispatchEvent(
+          new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest } })
+        );
+    }
   }
 }
 
