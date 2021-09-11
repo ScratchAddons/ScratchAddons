@@ -1009,7 +1009,7 @@
       "values": {
         "page": "#ffffffff",
         "primary": "#179fd7ff",
-        "highlightText": "#fba939",
+        "highlightText": "#1e9ed6",
         "menuBar": "#9c9ea2ff",
         "activeTab": "#e6e8e8",
         "tab": "#f1f2f2ff",
