@@ -11,8 +11,7 @@ export default async function ({ addon, global, console }) {
   // `opt_healStack` is a built-in option in scratch-blocks that enables cherry-picking behavior.
   // All this function does is enable that built-in option for every block.
   BlocklyInstance.BlockSvg.prototype.unplug = function (opt_healStack) {
-    if (ctrlKeyPressed !== addon.settings.get("invertDrag")
-    && !addon.self.disabled) {
+    if (ctrlKeyPressed !== addon.settings.get("invertDrag") && !addon.self.disabled) {
       opt_healStack = true;
     }
     return originalObject.call(this, opt_healStack);
