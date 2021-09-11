@@ -50,7 +50,11 @@ function stateChange(parentObjectPath, key, value, oldValue) {
     scratchAddons.localEvents.dispatchEvent(new CustomEvent("badgeUpdateNeeded"));
   }
   // Only dispatch after initial load
-  if (objectPathArr.length === 1 && objectPathArr[0] === "addonsEnabled" && Object.keys(oldValue).length === 0) {
+  if (
+    objectPathArr.length === 1 &&
+    objectPathArr[0] === "addonsEnabled" &&
+    scratchAddons.localState.ready.addonSettings
+  ) {
     for (const addonId of Object.keys(value)) {
       if (oldValue[addonId] !== value[addonId]) {
         handleAddonStateChange(addonId, value[addonId]);

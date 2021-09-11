@@ -58,7 +58,11 @@ function stateChange(parentObjectPath, key, value, oldValue) {
     // NOTE: Do not send to content script; this is handled in handle-auth.js
     scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
     scratchAddons.sendToPopups({ fireEvent: { target: "auth", name: "change" } });
-  } else if (objectPathArr.length === 1 && objectPathArr[0] === "addonSettings" && Object.keys(oldValue).length === 0) {
+  } else if (
+    objectPathArr.length === 1 &&
+    objectPathArr[0] === "addonSettings" &&
+    scratchAddons.localState.ready.addonSettings
+  ) {
     // Only dispatch after initial load
     for (const addonId of Object.keys(value)) {
       if (JSON.stringify(value[addonId]) === JSON.stringify(oldValue[addonId])) continue;
