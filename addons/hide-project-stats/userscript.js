@@ -2,7 +2,7 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
   let loves = { name: "love" };
   let favorites = { name: "favorite" };
   let username = await addon.auth.fetchUsername();
-  await addon.tab.waitForElement(".button.action-button.report-button");
+  await addon.tab.waitForElement(".project-loves");
   let visitingOwnProject = username !== null && document.querySelector(".button.action-button.report-button") === null;
 
   // Adds the elements that contain the "Love" and "Favorite" labels
