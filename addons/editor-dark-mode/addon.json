@@ -1003,6 +1003,34 @@
       }
     },
     {
+      "name": "Scratch 2.0",
+      "id": "scratch2",
+      "description": "A theme based on Scratch 2.0's colors.",
+      "values": {
+        "page": "#ffffffff",
+        "primary": "#179fd7ff",
+        "highlightText": "#1e9ed6",
+        "menuBar": "#9c9ea2ff",
+        "activeTab": "#e6e8e8",
+        "tab": "#f1f2f2ff",
+        "selector": "#e6e8e8",
+        "selector2": "#e6e8e8",
+        "selectorSelection": "#d0d0d0ff",
+        "accent": "#f2f2f2",
+        "input": "#ffffffff",
+        "workspace": "#dddedeff",
+        "categoryMenu": "#e6e8e8ff",
+        "palette": "#e6e8e8ff",
+        "fullscreen": "#ffffffff",
+        "stageHeader": "#e6e8e8",
+        "border": "#d0d1d2",
+        "textShadow": false,
+        "dots": true,
+        "darkComments": false,
+        "darkScrollbars": false
+      }
+    },
+    {
       "name": "Scratch's default colors",
       "id": "scratch",
       "description": "The colors normally used by Scratch",
