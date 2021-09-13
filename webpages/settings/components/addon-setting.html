@@ -1,11 +1,11 @@
 <template>
   <div
-    v-show="show"
     class="addon-setting"
     :class="{
     'boolean-setting': setting.type === 'boolean',
     'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
   }"
+    v-bind:class="[show ? '' : 'disabled']"
   >
     <div class="setting-label" v-html="settingsName(addon)"></div>
     <template v-if="setting.type === 'boolean'">
@@ -14,7 +14,7 @@
         class="setting-input check"
         v-model="addonSettings[addon._addonId][setting.id]"
         @change="updateSettings()"
-        :disabled="!addon._enabled"
+        :disabled="!addon._enabled||!show"
       />
     </template>
     <template v-if="setting.type === 'select'">
@@ -22,7 +22,7 @@
         <div
           class="filter-option"
           v-for="option of setting.potentialValues"
-          :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled}"
+          :class="{'sel' : addonSettings[addon._addonId][setting.id] === option.id, 'disabled': !addon._enabled||!show}"
           @click="updateOption(option.id);"
         >
           {{ option.name }}
@@ -36,7 +36,7 @@
           class="setting-input number"
           v-model="addonSettings[addon._addonId][setting.id]"
           @change="checkValidity() || updateSettings()"
-          :disabled="!addon._enabled"
+          :disabled="!addon._enabled||!show"
           min="0"
           :data-addon-id="addon._addonId"
           :data-setting-id="setting.id"
@@ -49,7 +49,7 @@
           class="setting-input number"
           v-model="addonSettings[addon._addonId][setting.id]"
           @change="checkValidity() || updateSettings()"
-          :disabled="!addon._enabled"
+          :disabled="!addon._enabled||!show"
           :min="setting.min"
           :max="setting.max"
           :data-addon-id="addon._addonId"
@@ -63,7 +63,7 @@
           class="setting-input string"
           v-model="addonSettings[addon._addonId][setting.id]"
           @change="checkValidity() || updateSettings()"
-          :disabled="!addon._enabled"
+          :disabled="!addon._enabled||!show"
           :placeholder="setting.default"
           :maxlength="setting.max || 100"
           :minlength="setting.min || 0"
@@ -80,7 +80,7 @@
           @input="updateSettings()"
           @keydown="keySettingKeyDown"
           @keyup="keySettingKeyUp"
-          :disabled="!addon._enabled"
+          :disabled="!addon._enabled||!show"
           :placeholder="setting.default"
           maxlength="100"
           :data-addon-id="addon._addonId"
@@ -93,6 +93,7 @@
           :value="addonSettings[addon._addonId][setting.id] || setting.default"
           :setting="setting"
           :addon="addon"
+          :show="show"
           :no_alpha="!setting.allowTransparency"
           v-click-outside="closePickers"
         ></picker>
@@ -101,6 +102,7 @@
         v-if="showResetDropdown()"
         :setting="setting"
         :addon="addon"
+        :show="show"
         :label="msg('reset')"
         :default-label="msg('default')"
         v-click-outside="closeResetDropdowns"
@@ -109,7 +111,7 @@
         v-else
         type="button"
         class="large-button clear-button"
-        :disabled="!addon._enabled"
+        :disabled="!addon._enabled||!show"
         :title="msg('reset')"
         @click="updateOption(setting.default)"
       >
