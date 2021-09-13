@@ -95,7 +95,11 @@
   "paint-by-default",
   "editor-unshare-button",
   "hide-project-stats",
+  "editor-extra-keys",
   "remix-button",
+  "block-cherry-picking",
+  "hide-new-variables",
+  "move-to-top-bottom",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
