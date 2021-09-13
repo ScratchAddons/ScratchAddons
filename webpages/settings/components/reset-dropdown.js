@@ -1,6 +1,6 @@
 export default async function ({ template }) {
   const ResetDropdown = Vue.extend({
-    props: ["addon", "setting", "label", "defaultLabel","show"],
+    props: ["addon", "setting", "label", "defaultLabel", "show"],
     template,
     data() {
       return {
