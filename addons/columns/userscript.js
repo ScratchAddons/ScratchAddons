@@ -95,5 +95,6 @@ export default async function ({ addon, msg, global, console }) {
       innerText: addon.tab.scratchMessage("gui.gui.addExtension"),
     });
     addExtensionButton.appendChild(addExtensionLabel);
+    addExtensionButton.removeAttribute("title");
   }
 }
