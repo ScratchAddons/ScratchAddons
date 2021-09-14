@@ -11,7 +11,7 @@
   "info": [
     {
       "type": "warning",
-      "text": "The \"experimental keys\" include enter, slash, semicolon and more. They may not work on all operating systems or keyboard layouts.",
+      "text": "The \"experimental keys\" include equals, slash, semicolon and more. They may not work on all operating systems or keyboard layouts.",
       "id": "experimentalKeysWarn"
     },
     {
