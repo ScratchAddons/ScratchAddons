@@ -1,1 +1,1 @@
-{"redirect-mobile-forums/@name":"모바일 토론방에서 메인 토론방으로 리다이렉트합니다","redirect-mobile-forums/@description":"/discuss/m/에서 /discuss/로 리다이렉트시키기"}
+{"redirect-mobile-forums/@name":"모바일 토론방에서 일반 토론방으로 리다이렉트하기","redirect-mobile-forums/@description":"모바일 토론방을 클릭했을 때 일반(\"메인\") 토론방으로 리다이렉트됩니다."}
