@@ -16,7 +16,6 @@ export default async function ({ addon, msg, global, console }) {
         status: "FETCHING",
       });
       const project = redux.state.preview.projectInfo;
-      const author = project.author;
       fetch(`/site-api/projects/all/${redux.state.preview.projectInfo.id}/`, {
         headers: {
           "x-csrftoken": addon.auth.csrfToken,
