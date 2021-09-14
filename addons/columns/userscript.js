@@ -70,6 +70,9 @@ export default async function ({ addon, msg, global, console }) {
       this.scrollbar_.setOrigin(x + width, y);
       this.scrollbar_.resize();
     }
+
+    // Set CSS variable used by add extension button.
+    this.svgGroup_.closest("[class*='gui_tab-panel_']").style.setProperty("--sa-add-extension-button-y", y - 33);
   };
 
   // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L710
@@ -80,4 +83,17 @@ export default async function ({ addon, msg, global, console }) {
   };
 
   toolbox.init();
+
+  while (true) {
+    const addExtensionButton = await addon.tab.waitForElement("[class*='gui_extension-button_']", {
+      markAsSeen: true,
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+      condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
+    });
+    const addExtensionLabel = Object.assign(document.createElement("span"), {
+      className: "sa-add-extension-label",
+      innerText: addon.tab.scratchMessage("gui.gui.addExtension"),
+    });
+    addExtensionButton.appendChild(addExtensionLabel);
+  }
 }
