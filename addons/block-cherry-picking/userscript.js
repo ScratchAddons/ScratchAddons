@@ -10,6 +10,7 @@ export default async function ({ addon, global, console }) {
     ctrlKeyPressed = e.ctrlKey || e.metaKey;
   });
 
+  // https://github.com/LLK/scratch-blocks/blob/102b33d14b25400c064e9bf6924a7ae1b0dcb2ab/core/block_dragger.js#L160
   let isInStartBlockDrag = false;
   const originalStartBlockDrag = BlocklyInstance.BlockDragger.prototype.startBlockDrag;
   BlocklyInstance.BlockDragger.prototype.startBlockDrag = function (...args) {
@@ -23,6 +24,7 @@ export default async function ({ addon, global, console }) {
 
   // `opt_healStack` is a built-in option in scratch-blocks that enables cherry-picking behavior.
   // All this function does is enable that built-in option for every block.
+  // https://github.com/LLK/scratch-blocks/blob/102b33d14b25400c064e9bf6924a7ae1b0dcb2ab/core/block.js#L336
   const originalUnplug = BlocklyInstance.Block.prototype.unplug;
   BlocklyInstance.BlockSvg.prototype.unplug = function (opt_healStack) {
     if (isInStartBlockDrag && ctrlKeyPressed !== addon.settings.get("invertDrag") && !addon.self.disabled) {
