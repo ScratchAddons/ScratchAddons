@@ -6,30 +6,22 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    margin-top: 10px;
-    margin-bottom: 5px;
-}
-
-.scratchCategoryMenuRow {
-    margin-left: 10px;
+    padding: 0.25rem;
 }
 
 .scratchCategoryMenuItem {
-    padding: 0px;
     display: flex;
-    margin-bottom: 2px;
-    width: 90%;
+    padding: 0.25rem;
+    border-radius: 14px;
 }
 
-.scratchCategoryItemBubble {
-    border-radius: 0px;
-    width: 8px;
-    margin: 0px 2px 0px 0px;
-    border: none !important;
+.scratchCategoryItemBubble,
+.scratchCategoryItemIcon {
+    margin: 0;
+    margin-right: 0.5rem;
 }
 
 .scratchCategoryMenuItemLabel {
-    font-size: 12px;
     flex: 1;
     display: flex;
     align-items: center;
