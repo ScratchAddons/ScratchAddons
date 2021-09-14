@@ -49,19 +49,17 @@
 }
 
 [class*="gui_extension-button_"] {
+  display: flex;
+  align-items: center;
   padding-inline: calc(0.125rem - 1px);
-  text-align: left;
 }
 
 [class*="gui_extension-button-icon_"] {
-  vertical-align: middle;
-  margin-top: -1px;
   margin-inline-end: 0.125rem;
   filter: var(--editorDarkMode-accent-invertedFilter, brightness(0.4));
 }
 
 .sa-add-extension-label {
-  vertical-align: middle;
   color: var(--editorDarkMode-accent-text, #575e75);
   font-size: 0.65rem;
 }
