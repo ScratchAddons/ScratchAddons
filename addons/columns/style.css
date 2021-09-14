@@ -37,7 +37,7 @@
   height: calc(1.75rem - 2px);
   background-color: var(--editorDarkMode-accent, white);
   border-color: var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
-  border-radius: 0.875rem;
+  border-radius: 0.25rem;
 }
 
 [class*="gui_extension-button-container_"]:hover {
