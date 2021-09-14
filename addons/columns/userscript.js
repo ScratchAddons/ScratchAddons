@@ -87,7 +87,7 @@ export default async function ({ addon, msg, global, console }) {
   while (true) {
     const addExtensionButton = await addon.tab.waitForElement("[class*='gui_extension-button_']", {
       markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER"],
+      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       condition: () => !addon.tab.redux.state.scratchGui.mode.isPlayerOnly,
     });
     const addExtensionLabel = Object.assign(document.createElement("span"), {
