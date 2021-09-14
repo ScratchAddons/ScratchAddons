@@ -445,14 +445,14 @@
           <div class="edm-icon-placeholder edm-icon-placeholder-20px edm-stop-sign"><!-- Stop --></div>
           <div class="edm-spacer"></div>
           <div
-            class="edm-outlined-button edm-outlined-button-first edm-outlined-button-unselected"
+            class="edm-outlined-button edm-outlined-button-first edm-outlined-button-selected"
             @mouseenter="$emit('areahover', 'accent')"
             @mouseleave="$emit('areahover', 'page')"
           >
             <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Small stage --></div>
           </div>
           <div
-            class="edm-outlined-button edm-outlined-button-last edm-outlined-button-selected"
+            class="edm-outlined-button edm-outlined-button-last edm-outlined-button-unselected"
             @mouseenter="$emit('areahover', 'accent')"
             @mouseleave="$emit('areahover', 'page')"
           >
@@ -477,95 +477,71 @@
             >
               <div class="edm-sprite-info-row">
                 <div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6"><!-- Sprite --></div>
                   <div class="edm-input">
                     <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"></div>
                   </div>
                 </div>
+              </div>
+              <div class="edm-sprite-info-row">
                 <div>
-                  <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
                   <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"><!-- x --></div>
                   <div class="edm-input edm-input-number">
                     <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
                   </div>
                 </div>
                 <div>
-                  <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
                   <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
                   <div class="edm-input edm-input-number">
                     <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"><!-- y --></div>
                   </div>
                 </div>
               </div>
-              <div class="edm-sprite-info-row">
-                <div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Show --></div>
-                  <div class="edm-outlined-button edm-outlined-button-first edm-outlined-button-selected">
-                    <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
-                  </div>
-                  <div class="edm-outlined-button edm-outlined-button-last edm-outlined-button-unselected">
-                    <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
-                  </div>
-                </div>
-                <div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Size --></div>
-                  <div class="edm-input edm-input-number">
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
-                  </div>
-                </div>
-                <div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 9">
-                    <!-- Direction -->
-                  </div>
-                  <div class="edm-input edm-input-number">
-                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
-                  </div>
-                </div>
-              </div>
             </div>
             <div
-              class="edm-sprite-list"
+              class="edm-sprite-list-container"
               @mouseenter="$emit('areahover', 'selector')"
               @mouseleave="$emit('areahover', 'page')"
             >
-              <div
-                class="edm-asset edm-asset-selected"
-                @mouseenter="$emit('areahover', 'selectorSelection')"
-                @mouseleave="$emit('areahover', 'selector')"
-              >
-                <div class="edm-asset-image">
-                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                </div>
+              <div class="edm-sprite-list">
                 <div
-                  class="edm-asset-name"
-                  @mouseenter="$emit('areahover', 'primary')"
-                  @mouseleave="$emit('areahover', 'selectorSelection')"
+                  class="edm-asset edm-asset-selected"
+                  @mouseenter="$emit('areahover', 'selectorSelection')"
+                  @mouseleave="$emit('areahover', 'selector')"
                 >
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"></div>
+                  <div class="edm-asset-image">
+                    <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  </div>
+                  <div
+                    class="edm-asset-name"
+                    @mouseenter="$emit('areahover', 'primary')"
+                    @mouseleave="$emit('areahover', 'selectorSelection')"
+                  >
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"></div>
+                  </div>
+                  <div
+                    class="edm-asset-delete"
+                    @mouseenter="$emit('areahover', 'primary')"
+                    @mouseleave="$emit('areahover', 'selectorSelection')"
+                  >
+                    <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+                  </div>
                 </div>
-                <div
-                  class="edm-asset-delete"
-                  @mouseenter="$emit('areahover', 'primary')"
-                  @mouseleave="$emit('areahover', 'selectorSelection')"
-                >
-                  <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+                <div class="edm-asset edm-asset">
+                  <div class="edm-asset-image">
+                    <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  </div>
+                  <div class="edm-asset-name">
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"></div>
+                  </div>
                 </div>
-              </div>
-              <div class="edm-asset edm-asset">
-                <div class="edm-asset-image">
-                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                </div>
-                <div class="edm-asset-name">
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"></div>
-                </div>
-              </div>
-              <div class="edm-asset edm-asset">
-                <div class="edm-asset-image">
-                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
-                </div>
-                <div class="edm-asset-name">
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
-                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
+                <div class="edm-asset edm-asset">
+                  <div class="edm-asset-image">
+                    <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  </div>
+                  <div class="edm-asset-name">
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
+                  </div>
                 </div>
               </div>
               <div
@@ -641,9 +617,8 @@
 <style>
   .edm-preview {
     margin-top: 10px;
-    min-width: 512px;
-    max-width: 650px;
-    height: 350px;
+    width: 512px;
+    height: 300px;
     overflow: hidden;
     position: relative;
     background-color: var(--page);
@@ -795,7 +770,7 @@
   }
   .edm-input-number {
     width: auto;
-    padding-inline: 12px;
+    padding-inline: 8px;
   }
   .edm-icon-placeholder + .edm-input,
   .edm-text-placeholder + .edm-input,
@@ -1199,7 +1174,7 @@
   }
 
   .edm-right {
-    width: 250px;
+    width: 130px;
     display: flex;
     flex-direction: column;
     padding-inline: 4px;
@@ -1221,7 +1196,7 @@
     cursor: pointer;
   }
   .edm-stage {
-    height: 180px;
+    height: 90px;
     background-color: white;
     background-clip: padding-box;
     border: 1px solid var(--border);
@@ -1258,15 +1233,18 @@
     display: flex;
     align-items: center;
   }
-  .edm-sprite-list {
+  .edm-sprite-list-container {
     flex-grow: 1;
-    display: flex;
     padding: 2px;
     position: relative;
     background-color: var(--selector);
     color: var(--selector-text);
   }
-  .edm-sprite-list .edm-asset-new {
+  .edm-sprite-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .edm-sprite-list-container .edm-asset-new {
     left: auto;
     right: 6px;
     transform: none;
