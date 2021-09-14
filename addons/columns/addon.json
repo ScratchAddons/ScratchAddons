@@ -14,5 +14,11 @@
       "matches": ["projects"],
       "runAtComplete": true
     }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
   ]
 }

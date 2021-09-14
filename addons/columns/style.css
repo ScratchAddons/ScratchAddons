@@ -1,0 +1,36 @@
+[class*="blocks_blocks_"] .blocklyToolboxDiv {
+    height: auto !important;
+}
+
+.scratchCategoryMenu {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.scratchCategoryMenuRow {
+    margin-left: 10px;
+}
+
+.scratchCategoryMenuItem {
+    padding: 0px;
+    display: flex;
+    margin-bottom: 2px;
+    width: 90%;
+}
+
+.scratchCategoryItemBubble {
+    border-radius: 0px;
+    width: 8px;
+    margin: 0px 2px 0px 0px;
+    border: none !important;
+}
+
+.scratchCategoryMenuItemLabel {
+    font-size: 12px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}

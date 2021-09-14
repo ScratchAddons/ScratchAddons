@@ -25,7 +25,6 @@ export default async function ({ addon, msg, global, console }) {
       // Left
       treeDiv.style.left = "0";
     }
-    treeDiv.style.setProperty("height", "auto", "important");
     treeDiv.style.setProperty("width", Blockly.VerticalFlyout.prototype.DEFAULT_WIDTH + 60 + "px");
   };
 
@@ -76,56 +75,11 @@ export default async function ({ addon, msg, global, console }) {
     }
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L595
-  const _CategoryMenuCreateDom = Blockly.Toolbox.CategoryMenu.prototype.createDom;
-  Blockly.Toolbox.CategoryMenu.prototype.createDom = function () {
-    _CategoryMenuCreateDom.call(this);
-    this.table.style.setProperty("width", "100%");
-    this.table.style.setProperty("display", "grid");
-    this.table.style.setProperty("grid-template-columns", "repeat(2, 1fr)");
-    this.table.style.setProperty("margin-top", "10px");
-    this.table.style.setProperty("margin-bottom", "5px");
-    // margin-bottom: 2px;
-  };
-
   // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L710
   const _CategoryCreateDom = Blockly.Toolbox.Category.prototype.createDom;
   Blockly.Toolbox.Category.prototype.createDom = function () {
     _CategoryCreateDom.call(this);
-
-    this.parentHtml_.style.setProperty("margin-left", "10px");
-
-    this.item_.style.setProperty("padding", "0px");
-    this.item_.style.setProperty("display", "flex");
-    this.item_.style.setProperty("margin-bottom", "2px");
-    this.item_.style.setProperty("width", "90%");
-
-    this.bubble_.style.setProperty("border-radius", "0px");
-    this.bubble_.style.setProperty("width", "8px");
-    this.bubble_.style.setProperty("margin", "0px 2px 0px 0px");
-    this.bubble_.style.setProperty("border", "none", "important");
-
-    this.label_.style.setProperty("font-size", "12px");
-    this.label_.style.setProperty("flex", "1");
-    this.label_.style.setProperty("display", "flex");
-    this.label_.style.setProperty("align-items", "center");
-
     this.parent_.parent_.flyout_.position();
-  };
-
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L738
-  const _CategorySetSelected = Blockly.Toolbox.Category.prototype.setSelected;
-  Blockly.Toolbox.Category.prototype.setSelected = function (selected) {
-    _CategorySetSelected.call(this, selected);
-    if (selected) {
-      this.item_.style.setProperty("background", this.colour_);
-      this.label_.style.setProperty("color", "white");
-      this.label_.style.setProperty("font-weight", "bold");
-    } else {
-      this.item_.style.setProperty("background", "none");
-      this.label_.style.setProperty("color", "inherit");
-      this.label_.style.setProperty("font-weight", "inherit");
-    }
   };
 
   toolbox.init();
