@@ -1,0 +1,18 @@
+{
+  "name": "Category Columns",
+  "description": "todo",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/TheColaber"
+    }
+  ],
+  "tags": ["editor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": true
+    }
+  ]
+}
