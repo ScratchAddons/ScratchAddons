@@ -4,15 +4,15 @@
 
 .scratchCategoryMenu {
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  columns: 2;
   column-gap: 0.5rem;
   padding: 0.25rem;
   padding-bottom: 2.25rem;
 }
 
 .scratchCategoryMenuItem {
-  display: flex;
+  display: inline-flex; /* inline so that it isn't split between both columns */
+  width: 100%;
   padding: 0.25rem;
   border-radius: 0.875rem;
 }
