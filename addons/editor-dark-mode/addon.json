@@ -570,6 +570,18 @@
       }
     },
     {
+      "name": "categoryMenu-invertedFilter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
       "name": "categoryMenu-selection",
       "value": {
         "type": "textColor",
