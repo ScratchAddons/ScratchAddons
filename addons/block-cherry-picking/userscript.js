@@ -1,6 +1,5 @@
 export default async function ({ addon, global, console }) {
   const BlocklyInstance = await addon.tab.traps.getBlockly();
-  const originalObject = BlocklyInstance.Block.prototype.unplug;
 
   // Necessary to detect the CTRL/CMD key
   let ctrlKeyPressed = false;
@@ -11,12 +10,24 @@ export default async function ({ addon, global, console }) {
     ctrlKeyPressed = e.ctrlKey || e.metaKey;
   });
 
+  let isInStartBlockDrag = false;
+  const originalStartBlockDrag = BlocklyInstance.BlockDragger.prototype.startBlockDrag;
+  BlocklyInstance.BlockDragger.prototype.startBlockDrag = function (...args) {
+    isInStartBlockDrag = true;
+    try {
+      return originalStartBlockDrag.call(this, ...args);
+    } finally {
+      isInStartBlockDrag = false;
+    }
+  };
+
   // `opt_healStack` is a built-in option in scratch-blocks that enables cherry-picking behavior.
   // All this function does is enable that built-in option for every block.
+  const originalUnplug = BlocklyInstance.Block.prototype.unplug;
   BlocklyInstance.BlockSvg.prototype.unplug = function (opt_healStack) {
-    if (ctrlKeyPressed !== addon.settings.get("invertDrag") && !addon.self.disabled) {
+    if (isInStartBlockDrag && ctrlKeyPressed !== addon.settings.get("invertDrag") && !addon.self.disabled) {
       opt_healStack = true;
     }
-    return originalObject.call(this, opt_healStack);
+    return originalUnplug.call(this, opt_healStack);
   };
 }
