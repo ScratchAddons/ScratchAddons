@@ -52,10 +52,7 @@ export default async function ({ addon, msg, global, console }) {
     this.width_ += width;
 
     var x = 0;
-    console.log(this.parentToolbox_.HtmlDiv);
     var y = this.parentToolbox_.HtmlDiv.offsetHeight;
-    console.log(y);
-    y = 126; // temp fix
 
     // Record the height for Blockly.Flyout.getMetrics_
     this.height_ = Math.max(0, targetWorkspaceMetrics.viewHeight - y);
