@@ -6,6 +6,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  column-gap: 0.5rem;
   padding: 0.25rem;
 }
 
