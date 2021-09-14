@@ -1,28 +1,28 @@
 [class*="blocks_blocks_"] .blocklyToolboxDiv {
-    height: auto !important;
+  height: auto !important;
 }
 
 .scratchCategoryMenu {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    padding: 0.25rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 0.25rem;
 }
 
 .scratchCategoryMenuItem {
-    display: flex;
-    padding: 0.25rem;
-    border-radius: 14px;
+  display: flex;
+  padding: 0.25rem;
+  border-radius: 14px;
 }
 
 .scratchCategoryItemBubble,
 .scratchCategoryItemIcon {
-    margin: 0;
-    margin-right: 0.5rem;
+  margin: 0;
+  margin-right: 0.5rem;
 }
 
 .scratchCategoryMenuItemLabel {
-    flex: 1;
-    display: flex;
-    align-items: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
 }
