@@ -101,6 +101,11 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     textBox.style.backgroundColor = "transparent";
   };
 
+  const onDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  };
+
   const onDrop = (e) => {
     textBox.style.backgroundColor = "";
     console.log(e.dataTransfer);
@@ -131,6 +136,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     uploadInput.addEventListener("change", onFileUpload);
     textBox.addEventListener("paste", onPaste);
     textBox.addEventListener("dragenter", onDragEnter);
+    textBox.addEventListener("dragover", onDragOver);
     textBox.addEventListener("dragleave", onDragLeave);
     textBox.addEventListener("dragend", onDragEnd);
     textBox.addEventListener("drop", onDrop);
@@ -140,6 +146,7 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     uploadInput.removeEventListener("change", onFileUpload);
     textBox.removeEventListener("paste", onPaste);
     textBox.removeEventListener("dragenter", onDragEnter);
+    textBox.removeEventListener("dragover", onDragOver);
     textBox.removeEventListener("dragleave", onDragLeave);
     textBox.removeEventListener("dragend", onDragEnd);
     textBox.removeEventListener("drop", onDrop);
