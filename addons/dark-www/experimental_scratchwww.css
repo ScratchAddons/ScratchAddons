@@ -62,8 +62,7 @@ body:not(.sa-body-editor) .join-flow-title,
 .download .installation,
 body:not(.sa-body-editor) .gender-radio-row,
 .wedo .banner,
-.studio-report-modal .studio-report-tile-header,
-.studio-info-box.studio-info-box-success {
+.studio-report-modal .studio-report-tile-header {
   background: #333;
 }
 .thumbnail .thumbnail-loves::before,
