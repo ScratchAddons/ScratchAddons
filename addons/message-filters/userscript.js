@@ -17,12 +17,18 @@ export default async function ({ addon, global, console, msg }) {
     [msg("follow")]: "mod-follow-user",
     [msg("invite")]: "mod-curator-invite",
     [msg("forum")]: "mod-forum-activity",
+    [msg("promotion")]: "mod-become-manager", // Note: this also includes transfer (see below)
   };
   // Declare the active array, and either get it from localStorage or set it to every class in filter.
   // The 'active' array holds the list of the classes of the messages that are shown.
-  let active =
-    JSON.parse(localStorage.getItem("scratchAddonsMessageFiltersSettings")) ||
-    Object.keys(filter).map((i) => filter[i]);
+  let active = JSON.parse(localStorage.getItem("scratchAddonsMessageFiltersSettings")) || Object.values(filter);
+
+  // Migration: auto-enable mod-become-host when updating.
+  if (!localStorage.getItem("scratchAddonsMessageFiltersSupportsHost")) {
+    active.push("mod-become-host");
+    localStorage.setItem("scratchAddonsMessageFiltersSettings", JSON.stringify(active));
+    localStorage.setItem("scratchAddonsMessageFiltersSupportsHost", "true");
+  }
   // Create the checkbox element, which is the container for the message filtering div.
   let container = document.createElement("div");
   container.classList.add("filter-container");
@@ -98,9 +104,10 @@ export default async function ({ addon, global, console, msg }) {
       //Assume that the message is hidden, to fix classes that are not included in the filters.
       message.style.display = "none";
       for (let j = 0; j < classes.length; j++) {
+        const className = classes[j] === "mod-become-host" ? "mod-become-manager" : classes[j];
         // For each CLASS of the message test if the active array includes it and display or hide it.
         //If the active array has nothing show all messages
-        if (active.includes(classes[j]) || active.length === 0) {
+        if (active.includes(className) || active.length === 0) {
           // Increment the count variable if the message is showing.
           count++;
           message.style.display = "list-item";
