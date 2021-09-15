@@ -8,5 +8,5 @@
   "message-filters/follow": "Follows",
   "message-filters/invite": "Studio invites",
   "message-filters/forum": "Forum activity",
-  "message-filters/host": "Studio host transfer"
+  "message-filters/promotion": "Studio promotions"
 }
