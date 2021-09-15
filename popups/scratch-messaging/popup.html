@@ -176,7 +176,9 @@
             >
           </div>
           <div class="message-type-details" v-show="messageTypeExtended.studioHostTransfers">
-            <div class="thread-list" v-for="transfer of studioHostTransfers">{{{ studioHostTransferHTML(transfer) }}}</div>
+            <div class="thread-list" v-for="transfer of studioHostTransfers">
+              {{{ studioHostTransferHTML(transfer) }}}
+            </div>
           </div>
         </div>
 

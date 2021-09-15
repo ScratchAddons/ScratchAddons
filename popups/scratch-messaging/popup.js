@@ -582,7 +582,9 @@ export default async ({ addon, msg, safeMsg }) => {
         return safeMsg("studio-promotion", { actor, title });
       },
       studioHostTransferHTML(promotion) {
-        const actor = promotion.actorAdmin ? safeMsg("st") : `<a target="_blank"
+        const actor = promotion.actorAdmin
+          ? safeMsg("st")
+          : `<a target="_blank"
             rel="noopener noreferrer"
             href="https://scratch.mit.edu/users/${escapeHTML(promotion.actor)}/"
         >${escapeHTML(promotion.actor)}</a>`;
