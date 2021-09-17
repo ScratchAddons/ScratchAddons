@@ -65,63 +65,52 @@
     {
       "url": "resizeWindow.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "resizeWindow",
-        "value": true
+      "if": {
+        "settings": { "resizeWindow": true }
       }
     },
     {
       "url": "hideOverflow.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "hideOverflow",
-        "value": true
+      "if": {
+        "settings": { "hideOverflow": true }
       }
     },
     {
       "url": "darkenBg.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "darkenBg",
-        "value": true
+      "if": {
+        "settings": { "darkenBg": true }
       }
     },
     {
       "url": "removeCorners.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "removeCorners",
-        "value": true
+      "if": {
+        "settings": { "removeCorners": true }
       }
     },
     {
       "url": "removeBorder.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "removeBorder",
-        "value": true
+      "if": {
+        "settings": { "removeBorder": true }
       }
     },
     {
       "url": "hideToolbar.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "hideToolbar",
-        "value": true
+      "if": {
+        "settings": { "hideToolbar": true }
       }
     }
   ],
   "userscripts": [
     {
       "url": "browserFullscreen.js",
-      "matches": ["projects"],
-      "settingMatch": {
-        "id": "browserFullscreen",
-        "value": true
-      }
+      "matches": ["projects"]
     }
   ],
   "tags": ["editor", "projectPlayer"],
-  "versionAdded": "1.17.0",
   "enabledByDefault": false
 }
