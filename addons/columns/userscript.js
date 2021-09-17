@@ -41,20 +41,11 @@ export default async function ({ addon, msg, global, console }) {
       return;
     }
 
-    // This version of the flyout does not change width to fit its contents.
-    // Instead it matches the width of its parent or uses a default value.
-    this.width_ = this.getWidth();
-
-    var toolboxWidth = this.parentToolbox_.getWidth();
-    var categoryWidth = toolboxWidth - this.width_;
-    var width = this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT ? targetWorkspaceMetrics.viewWidth : categoryWidth;
-
-    this.width_ += width;
-
-    var x = 0;
+    var x = this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT ? targetWorkspaceMetrics.viewWidth : 0;
     var y = this.parentToolbox_.HtmlDiv.offsetHeight;
 
-    // Record the height for Blockly.Flyout.getMetrics_
+    // Addon sets the width of the flyout to the width of the toolbox.
+    this.width_ = this.parentToolbox_.getWidth();
     this.height_ = Math.max(0, targetWorkspaceMetrics.viewHeight - y);
 
     this.setBackgroundPath_(this.width_, this.height_);
@@ -67,7 +58,10 @@ export default async function ({ addon, msg, global, console }) {
     // Update the scrollbar (if one exists).
     if (this.scrollbar_) {
       // Set the scrollbars origin to be the top left of the flyout.
-      this.scrollbar_.setOrigin(x + width, y);
+      this.scrollbar_.setOrigin(
+        x + (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT ? 0 : this.width_ - this.getWidth()),
+        y
+      );
       this.scrollbar_.resize();
     }
 
