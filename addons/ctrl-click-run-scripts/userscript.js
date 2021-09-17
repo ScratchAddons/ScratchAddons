@@ -7,11 +7,15 @@ export default async function ({ addon, global, console }) {
   const originalBlocklyListen = vm.editingTarget.blocks.constructor.prototype.blocklyListen;
 
   let ctrlKeyPressed = false;
-  document.addEventListener("mousedown", function (e) {
-    ctrlKeyPressed = e.ctrlKey || e.metaKey;
-  }, {
-    capture: true
-  });
+  document.addEventListener(
+    "mousedown",
+    function (e) {
+      ctrlKeyPressed = e.ctrlKey || e.metaKey;
+    },
+    {
+      capture: true,
+    }
+  );
 
   // Limits all script running to CTRL + click
   const newBlocklyListen = function (e) {
