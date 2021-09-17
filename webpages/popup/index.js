@@ -1,7 +1,7 @@
 //theme switching
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "light.css");
+lightThemeLink.setAttribute("href", "../styles/colors-light.css");
 chrome.storage.sync.get(["globalTheme"], function (r) {
   let rr = false; //true = light, false = dark
   if (r.globalTheme) rr = r.globalTheme;
@@ -47,7 +47,10 @@ const vue = new Vue({
       this.closePopup();
     },
     openChangelog() {
-      window.open("https://scratchaddons.com/changelog?versionname=" + chrome.runtime.getManifest().version_name);
+      const uiLanguage = chrome.i18n.getUILanguage();
+      const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+      const utm = `utm_source=extension&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
+      window.open(`https://scratchaddons.com/${localeSlash}changelog/?${utm}`);
       this.closePopup();
     },
     setPopup(popup) {
@@ -58,7 +61,7 @@ const vue = new Vue({
       }
     },
     iframeSrc(addonId) {
-      return vue.popups.find((addon) => addon._addonId === addonId).url || `../../popups/${addonId}/popup.html`;
+      return vue.popups.find((addon) => addon._addonId === addonId).html;
     },
   },
 });
@@ -73,11 +76,17 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
     .filter((findManifest) => findManifest !== undefined)
     .filter(({ manifest }) => manifest.popup)
     .sort(({ addonId: addonIdB }, { addonId: addonIdA }) => TAB_ORDER.indexOf(addonIdB) - TAB_ORDER.indexOf(addonIdA))
-    .map(({ addonId, manifest }) => (manifest.popup._addonId = addonId) && manifest.popup);
+    .map(
+      ({ addonId, manifest }) =>
+        (manifest.popup._addonId = addonId) &&
+        Object.assign(manifest.popup, {
+          html: `../../popups/${addonId}/${manifest.popup.html}`,
+        })
+    );
   popupObjects.push({
     name: chrome.i18n.getMessage("quickSettings"),
     icon: "../../images/icons/wrench.svg",
-    url: "../../webpages/settings/index.html",
+    html: "../settings/index.html",
     _addonId: "__settings__",
   });
   vue.popups = popupObjects;

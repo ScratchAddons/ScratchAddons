@@ -2,6 +2,12 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
   const func = () => {
     let madeAnyChanges = false;
 
+    if (addonsEnabled["editor-devtools"] === true && addonsEnabled["move-to-top-bottom"] === undefined) {
+      // Existing editor-devtools users should have move-to-top-bottom enabled.
+      addonsEnabled["move-to-top-bottom"] = true;
+      madeAnyChanges = true;
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
@@ -49,6 +55,12 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
           if (settings[option.id] === undefined) {
             madeChangesToAddon = true;
             madeAnyChanges = true;
+            // Transition v1.16.5 to v1.17.0
+            // Users of scratchr2 addon will get "scratchr2" version of old-studio-layout
+            if (addonId === "old-studio-layout" && option.id === "version" && addonsEnabled.scratchr2) {
+              settings.version = "scratchr2";
+              continue;
+            }
             settings[option.id] = option.default;
           } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number

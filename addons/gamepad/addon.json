@@ -9,17 +9,17 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "userstyles": [
     {
       "url": "style.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     },
     {
       "url": "gamepadlib.css",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects"]
     }
   ],
   "settings": [
@@ -30,7 +30,7 @@
       "id": "hide"
     }
   ],
-  "tags": ["editor", "projectPlayer", "recommended"],
+  "tags": ["editor", "projectPlayer", "featured"],
   "enabledByDefault": false,
   "versionAdded": "1.14.0",
   "dynamicEnable": true,

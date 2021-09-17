@@ -67,6 +67,10 @@ export default async ({ addon, console, msg }) => {
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
     rateLimiter.abort(false);
+    if (!("colorIndex" in addon.tab.redux.state.scratchPaint.fillMode)) {
+      console.error("Detected new paint editor; this will be supported in future versions.");
+      return;
+    }
 
     // update the bg color of the picker
     function updateColor() {

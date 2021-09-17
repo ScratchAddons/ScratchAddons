@@ -1,0 +1,29 @@
+.sa-followers-modal-grid {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  overflow-anchor: none;
+}
+
+.studio-follower .studio-project-image {
+  background: transparent;
+  aspect-ratio: 1 / 1;
+  object-fit: fill;
+}
+
+/* Make add icon smaller and closer to edge - profile pictures are much smaller
+   than project tiles: */
+
+.studio-follower .studio-tile-dynamic-remove,
+.studio-follower .studio-tile-dynamic-add {
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+}
+
+.studio-follower .studio-project-add-remove-image {
+  margin: 3px;
+}
+
+#sa-studio-followers-btn.hidden {
+  display: none !important;
+}

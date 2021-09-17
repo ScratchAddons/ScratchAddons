@@ -44,6 +44,9 @@
   "recommended": {
     "message": "Recommended"
   },
+  "featured": {
+    "message": "Featured"
+  },
   "beta": {
     "message": "Beta"
   },
@@ -233,20 +236,29 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_16": {
-    "message": "New addon: \"debugger\", which brings console logs and breakpoints to Scratch. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_20": {
+    "message": "New addon: \"grab single block with Ctrl key\", which adds the ability to drag a single block out of the middle of a script (instead of the entire stack attached below it) while holding the Ctrl key. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_16": {
-    "message": "Another new addon added in this update is \"expandable search bar\", which makes the search bar on the navbar wider when it's focused."
+  "extensionUpdateInfo2_v1_20": {
+    "message": "The \"editor dark mode and customizable colors\" addon has a new \"Scratch 2.0\" color preset. Other new addons added this update are \"hide new variables\" and \"move costume to top or bottom\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
   "new": {
-    "message": "New!"
+    "message": "New!",
+    "description": "Tag for addons. Singular."
+  },
+  "newGroup": {
+    "message": "Other new addons",
+    "description": "Used as a category name for new addons"
+  },
+  "featuredNew": {
+    "message": "Featured new addons",
+    "description": "Used as a category name for featured new addons"
   },
   "enabled": {
     "message": "Enabled",

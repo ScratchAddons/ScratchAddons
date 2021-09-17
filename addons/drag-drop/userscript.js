@@ -8,6 +8,8 @@ export default async function ({ addon, global, console }) {
   };
 
   const globalHandleDragOver = (e) => {
+    if (addon.self.disabled) return;
+
     if (!e.dataTransfer.types.includes("Files")) {
       return;
     }
@@ -20,7 +22,8 @@ export default async function ({ addon, global, console }) {
       (el = e.target.closest('div[class*="selector_wrapper"]'))
     ) {
       callback = (files) => {
-        const fileInput = el.querySelector('input[class*="action-menu_file-input"]');
+        const hdFilter = addon.settings.get("use-hd-upload") ? "" : ":not(.sa-better-img-uploads-input)";
+        const fileInput = el.querySelector('input[class*="action-menu_file-input"]' + hdFilter);
         fileInput.files = files;
         fileInput.dispatchEvent(new Event("change", { bubbles: true }));
       };
@@ -106,7 +109,9 @@ export default async function ({ addon, global, console }) {
 
     const handleDragOver = (e) => {
       e.preventDefault();
+      e.dataTransfer.dropEffect = "copy";
     };
+    e.dataTransfer.dropEffect = "copy";
 
     const handleDragLeave = (e) => {
       e.preventDefault();
@@ -125,5 +130,5 @@ export default async function ({ addon, global, console }) {
     el.addEventListener("drop", handleDrop);
   };
 
-  document.addEventListener("dragover", globalHandleDragOver, true);
+  document.addEventListener("dragover", globalHandleDragOver, { useCapture: true });
 }

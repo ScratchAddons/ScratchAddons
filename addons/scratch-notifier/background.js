@@ -14,13 +14,14 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     remixproject: "remix",
     studioactivity: "studio",
     becomeownerstudio: "adminusers",
+    becomehoststudio: "users",
   };
 
   checkCount();
   setInterval(checkCount, 5000);
 
   async function checkCount() {
-    if (!addon.auth.isLoggedIn) return;
+    if (!(await addon.auth.fetchIsLoggedIn())) return;
     const previousLastAuthChange = lastAuthChange;
     const newCount = await addon.account.getMsgCount();
     if (previousLastAuthChange !== lastAuthChange) return;
@@ -42,6 +43,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     title,
     element_id,
     parent_title,
+    admin_actor,
   }) {
     let text = "";
     let url;
@@ -111,6 +113,10 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         case "becomeownerstudio":
           notificationTitle = msg("notif-promotion", { actor, title });
           url = `https://scratch.mit.edu/studios/${element_id}/curators/`;
+          break;
+        case "becomehoststudio":
+          notificationTitle = msg("notif-host", { actor: admin_actor ? msg("st") : actor, title });
+          url = `https://scratch.mit.edu/studios/${element_id}/`;
           break;
         case "remixproject":
           notificationTitle = msg("notif-remix", { actor, parent_title, title });
@@ -203,6 +209,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   }
 
   async function checkMessages() {
+    const username = await addon.auth.fetchUsername();
     const previousLastAuthChange = lastAuthChange;
     const messages = await addon.account.getMessages();
     if (lastAuthChange !== previousLastAuthChange) return;
@@ -219,15 +226,15 @@ export default async function ({ addon, global, console, setTimeout, setInterval
             // Project comment
             const replyFor = message.commentee_username;
             if (replyFor === null) messageType += "ownProjectNewComment";
-            else if (replyFor === addon.auth.username) messageType += "projectReplyToSelf";
+            else if (replyFor === username) messageType += "projectReplyToSelf";
             else messageType += "ownProjectReplyToOther";
             commentUrl = `https://scratch.mit.edu/projects/${message.comment_obj_id}/#comments-${message.comment_id}`;
           } else if (message.comment_type === 1) {
             const profile = message.comment_obj_title;
             const replyFor = message.commentee_username;
-            if (profile === addon.auth.username) {
+            if (profile === username) {
               if (replyFor === null) messageType += "ownProfileNewComment";
-              else if (replyFor === addon.auth.username) messageType += "ownProfileReplyToSelf";
+              else if (replyFor === username) messageType += "ownProfileReplyToSelf";
               else messageType += "ownProfileReplyToOther";
             } else {
               messageType += "otherProfileReplyToSelf";
@@ -263,6 +270,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           emoji: emojis[message.type],
           messageType,
           actor: message.actor_username,
+          admin_actor: message.admin_actor || false, // Host transfer only
           fragment: htmlToText(message.comment_fragment), // Comments only
           commentee: message.commentee_username, // Comments only
           commentUrl, // Comments only

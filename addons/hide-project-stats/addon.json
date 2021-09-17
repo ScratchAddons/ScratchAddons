@@ -1,0 +1,99 @@
+{
+  "name": "Hide project stats",
+  "description": "Lets you hide love, favorite, remix and view counts in the front page and project pages.",
+  "credits": [
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "hide_remix_count.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "remixes": true }
+      }
+    },
+    {
+      "url": "hide_view_count.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "views": true }
+      }
+    },
+    {
+      "url": "hide_love_count.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "loves": true }
+      }
+    },
+    {
+      "url": "hide_favorite_count.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "favorites": true }
+      }
+    },
+    {
+      "url": "hide_love_count.css",
+      "matches": ["https://scratch.mit.edu/"],
+      "if": {
+        "settings": { "lovesFront": true }
+      }
+    },
+    {
+      "url": "hide_remix_count.css",
+      "matches": ["https://scratch.mit.edu/"],
+      "if": {
+        "settings": { "remixesFront": true }
+      }
+    }
+  ],
+  "settings": [
+    {
+      "name": "Hide love count",
+      "default": true,
+      "id": "loves",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide favorite count",
+      "default": true,
+      "id": "favorites",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide remix count",
+      "default": true,
+      "id": "remixes",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide view count",
+      "default": true,
+      "id": "views",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide love count in \"What the Community is Loving\"",
+      "default": true,
+      "id": "lovesFront",
+      "type": "boolean"
+    },
+    {
+      "name": "Hide remix count in \"What the Community is Remixing\"",
+      "default": true,
+      "id": "remixesFront",
+      "type": "boolean"
+    }
+  ],
+  "dynamicDisable": true,
+  "dynamicEnable": true,
+  "updateUserstylesOnSettingsChange": true,
+  "injectAsStyleElt": true,
+  "tags": ["community", "projectPage"],
+  "versionAdded": "1.19.0",
+  "enabledByDefault": false
+}

@@ -31,18 +31,53 @@ const getNamesIdsDefaults = (blockData) => [
   blockData.args.map(() => ""),
 ];
 
-export const addBlock = (proccode, args, handler, hide) => {
+// This needs to function exactly as Scratch does:
+// https://github.com/LLK/scratch-blocks/blob/abbfe93136fef57fdfb9a077198b0bc64726f012/blocks_vertical/procedures.js#L207-L215
+// Returns a list like ["%s", "%d"]
+const parseArguments = (code) =>
+  code
+    .split(/(?=[^\\]%[nbs])/g)
+    .map((i) => i.trim())
+    .filter((i) => i.charAt(0) === "%")
+    .map((i) => i.substring(0, 2));
+
+// Ensures all arguments have whitespace before them so that Scratch parses it correctly.
+// "test%s" -> "test %s"
+const fixDisplayName = (displayName) => displayName.replace(/([^\s])(%[nbs])/g, (_, before, arg) => `${before} ${arg}`);
+const compareArrays = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
   if (getCustomBlock(proccode)) {
     return;
   }
+
+  // Make sure that the argument counts all appear to be consistent.
+  // Any inconsistency may result in various strange behaviors, possibly including corruption.
+  const procCodeArguments = parseArguments(proccode);
+  if (args.length !== procCodeArguments.length) {
+    throw new Error("Procedure code and argument list do not match");
+  }
+  if (displayName) {
+    displayName = fixDisplayName(displayName);
+    // Make sure that the display name has the same arguments as the actual procedure code
+    const displayNameArguments = parseArguments(displayName);
+    if (!compareArrays(procCodeArguments, displayNameArguments)) {
+      console.warn(`block displayName ${displayName} for ${proccode} does not have matching arguments, ignoring it.`);
+      displayName = proccode;
+    }
+  } else {
+    displayName = proccode;
+  }
+
   const blockData = {
     id: proccode,
     color: color.color,
     secondaryColor: color.secondaryColor,
     tertiaryColor: color.tertiaryColor,
     args,
-    handler,
-    hide: !!hide,
+    handler: callback,
+    hide: !!hidden,
+    displayName,
   };
   customBlocks[proccode] = blockData;
   customBlockParamNamesIdsDefaults[proccode] = getNamesIdsDefaults(blockData);
@@ -143,6 +178,19 @@ const injectWorkspace = (ScratchBlocks) => {
       };
     }
     return result;
+  };
+
+  const originalCreateAllInputs = ScratchBlocks.Blocks["procedures_call"].createAllInputs_;
+  ScratchBlocks.Blocks["procedures_call"].createAllInputs_ = function (...args) {
+    const blockData = getCustomBlock(this.procCode_);
+    if (blockData) {
+      const originalProcCode = this.procCode_;
+      this.procCode_ = blockData.displayName;
+      const ret = originalCreateAllInputs.call(this, ...args);
+      this.procCode_ = originalProcCode;
+      return ret;
+    }
+    return originalCreateAllInputs.call(this, ...args);
   };
 
   // Workspace update may be required to make category appear in flyout

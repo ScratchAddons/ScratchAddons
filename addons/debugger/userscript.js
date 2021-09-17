@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
 
-export default async function ({ addon, global, console, msg }) {
+export default async function ({ addon, global, console, msg, safeMsg }) {
   let showingConsole, ScratchBlocks;
   const vm = addon.tab.traps.vm;
 
@@ -20,21 +20,50 @@ export default async function ({ addon, global, console, msg }) {
   container.appendChild(buttonContainer);
   buttonContainer.addEventListener("click", () => toggleConsole(true));
 
-  const pause = () => {
+  let hasLoggedPauseError = false;
+
+  const pause = (_, thread) => {
+    if (addon.tab.redux.state.scratchGui.mode.isPlayerOnly) {
+      if (!hasLoggedPauseError) {
+        addLog(msg("cannot-pause-player"), thread, "error");
+        hasLoggedPauseError = true;
+      }
+      return;
+    }
     setPaused(!paused);
     const pauseAddonButton = document.querySelector(".pause-btn");
     if (!pauseAddonButton || getComputedStyle(pauseAddonButton).display === "none") toggleConsole(true);
   };
-  addon.tab.addBlock("sa-pause", [], pause, true);
-  addon.tab.addBlock("\u200B\u200Bbreakpoint\u200B\u200B", [], pause);
-  addon.tab.addBlock("\u200B\u200Blog\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    addItem(content, thread, "log");
+  addon.tab.addBlock("sa-pause", {
+    args: [],
+    callback: pause,
+    hidden: true,
   });
-  addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    addItem(content, thread, "warn");
+  addon.tab.addBlock("\u200B\u200Bbreakpoint\u200B\u200B", {
+    args: [],
+    displayName: msg("block-breakpoint"),
+    callback: pause,
   });
-  addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", ["content"], ({ content }, thread) => {
-    addItem(content, thread, "error");
+  addon.tab.addBlock("\u200B\u200Blog\u200B\u200B %s", {
+    args: ["content"],
+    displayName: msg("block-log"),
+    callback: ({ content }, thread) => {
+      addLog(content, thread, "log");
+    },
+  });
+  addon.tab.addBlock("\u200B\u200Bwarn\u200B\u200B %s", {
+    args: ["content"],
+    displayName: msg("block-warn"),
+    callback: ({ content }, thread) => {
+      addLog(content, thread, "warn");
+    },
+  });
+  addon.tab.addBlock("\u200B\u200Berror\u200B\u200B %s", {
+    args: ["content"],
+    displayName: msg("block-error"),
+    callback: ({ content }, thread) => {
+      addLog(content, thread, "error");
+    },
   });
 
   const consoleWrapper = Object.assign(document.createElement("div"), {
@@ -322,20 +351,51 @@ export default async function ({ addon, global, console, msg }) {
   });
   let logs = [];
   let scrollQueued = false;
-  const addItem = (content, thread, type) => {
+  const createLogWrapper = (type) => {
     const wrapper = document.createElement("div");
-    const span = (text, cl = "") => {
-      let s = document.createElement("span");
-      s.innerText = text;
-      s.className = cl;
-      return s;
-    };
+    wrapper.className = "log";
+    wrapper.classList.add(type);
+    return wrapper;
+  };
+  const createLogText = (text) => {
+    const s = document.createElement("span");
+    s.innerText = text;
+    return s;
+  };
+
+  // Feedback
+  if (localStorage.getItem("saDebuggerFeedbackRemove") !== "1") {
+    const wrapper = createLogWrapper("log");
+    const s = document.createElement("span");
+    s.innerHTML = safeMsg("feedback-log", {
+      logLink: Object.assign(document.createElement("a"), {
+        href: "https://scratchaddons.com/feedback/?ext_version=1.19%2Bdebugger",
+        className: "sa-debugger-feedback",
+        target: "_blank",
+        textContent: msg("feedback-log-link"),
+      }).outerHTML,
+    });
+    s.appendChild(document.createElement("br"));
+    s.appendChild(
+      Object.assign(document.createElement("a"), {
+        className: "sa-debugger-feedback",
+        textContent: msg("feedback-remove"),
+        onclick: () => {
+          localStorage.setItem("saDebuggerFeedbackRemove", "1");
+          wrapper.remove();
+        },
+      })
+    );
+    wrapper.appendChild(s);
+    consoleList.append(wrapper);
+  }
+
+  const addLog = (content, thread, type) => {
+    const wrapper = createLogWrapper(type);
 
     const target = thread.target;
     const parentTarget = target.isOriginal ? target : target.sprite.clones[0];
     const targetId = parentTarget.id;
-    wrapper.className = "log";
-    wrapper.classList.add(type);
     consoleList.append(wrapper);
     if (type !== "log") {
       const imageURL = addon.self.dir + (type === "error" ? "/error.svg" : "/warning.svg");
@@ -353,9 +413,20 @@ export default async function ({ addon, global, console, msg }) {
       const inputBlock = target.blocks.getBlock(inputId);
       if (inputBlock && inputBlock.opcode !== "text") {
         let text, category;
-        if (inputBlock.opcode === "data_variable" || inputBlock.opcode === "data_listcontents") {
+        if (
+          inputBlock.opcode === "data_variable" ||
+          inputBlock.opcode === "data_listcontents" ||
+          inputBlock.opcode === "argument_reporter_string_number" ||
+          inputBlock.opcode === "argument_reporter_boolean"
+        ) {
           text = Object.values(inputBlock.fields)[0].value;
-          category = inputBlock.opcode === "data_variable" ? "data" : "list";
+          if (inputBlock.opcode === "data_variable") {
+            category = "data";
+          } else if (inputBlock.opcode === "data_listcontents") {
+            category = "list";
+          } else {
+            category = "more";
+          }
         } else {
           // Try to call things like https://github.com/LLK/scratch-blocks/blob/develop/blocks_vertical/operators.js
           let jsonData;
@@ -372,19 +443,26 @@ export default async function ({ addon, global, console, msg }) {
               // ignore
             }
           }
+          // If the block has a simple message with no arguments, display it
           if (jsonData && jsonData.message0 && !jsonData.args0) {
             text = jsonData.message0;
             category = jsonData.category;
           }
         }
         if (text && category) {
-          const inputSpan = document.createElement("span");
-          inputSpan.textContent = text;
-          inputSpan.className = "console-variable";
-          inputSpan.dataset.category = category === "list" ? "data-lists" : category;
-          inputSpan.style.backgroundColor =
-            ScratchBlocks.Colours[category === "list" ? "data_lists" : category].primary;
-          wrapper.append(inputSpan);
+          const blocklyColor = ScratchBlocks.Colours[category === "list" ? "data_lists" : category];
+          if (blocklyColor) {
+            const inputSpan = document.createElement("span");
+            inputSpan.textContent = text;
+            inputSpan.className = "console-variable";
+            const colorCategoryMap = {
+              list: "data-lists",
+              more: "custom",
+            };
+            inputSpan.dataset.category = colorCategoryMap[category] || category;
+            inputSpan.style.backgroundColor = blocklyColor.primary;
+            wrapper.append(inputSpan);
+          }
         }
       }
     }
@@ -393,7 +471,7 @@ export default async function ({ addon, global, console, msg }) {
       type,
       content,
     });
-    wrapper.append(span(content));
+    wrapper.append(createLogText(content));
 
     let link = document.createElement("a");
     link.textContent = target.isOriginal
@@ -446,8 +524,23 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
+  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
+    document.body.classList.add("sa-debugger-small");
+  }
+  document.addEventListener(
+    "click",
+    (e) => {
+      if (e.target.closest("[class*='stage-header_stage-button-first']")) {
+        document.body.classList.add("sa-debugger-small");
+      } else if (e.target.closest("[class*='stage-header_stage-button-last']")) {
+        document.body.classList.remove("sa-debugger-small");
+      }
+    },
+    { capture: true }
+  );
+
   while (true) {
-    const stageHeaderSizeControls = await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
+    await addon.tab.waitForElement('[class*="stage-header_stage-size-row"]', {
       markAsSeen: true,
       reduxEvents: [
         "scratch-gui/mode/SET_PLAYER",
@@ -458,7 +551,7 @@ export default async function ({ addon, global, console, msg }) {
     });
     if (addon.tab.editorMode === "editor") {
       ScratchBlocks = await addon.tab.traps.getBlockly();
-      stageHeaderSizeControls.insertBefore(container, stageHeaderSizeControls.firstChild);
+      addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 0 });
     } else {
       toggleConsole(false);
     }

@@ -1,5 +1,5 @@
 {
-  "name": "Mute project player",
+  "name": "Muted project player mode",
   "description": "Ctrl+Click the green flag to mute/unmute the project.",
   "credits": [
     {
@@ -10,7 +10,7 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/*"]
+      "matches": ["projects", "projectEmbeds"]
     }
   ],
   "versionAdded": "1.7.0",
