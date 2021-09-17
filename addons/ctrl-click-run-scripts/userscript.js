@@ -6,27 +6,11 @@ export default async function ({ addon, global, console }) {
   });
   const originalBlocklyListen = vm.editingTarget.blocks.constructor.prototype.blocklyListen;
 
-  // Necessary to detect the CTRL/CMD key
-  var ctrlKeyPressed = false;
-  document.addEventListener("keydown", function (e) {
-    if (e.ctrlKey) {
-      ctrlKeyPressed = true;
-    }
-  });
-  document.addEventListener("keyup", function (e) {
-    if (!e.ctrlKey) {
-      ctrlKeyPressed = false;
-    }
-  });
-  document.addEventListener("keydown", function (e) {
-    if (e.metaKey) {
-      ctrlKeyPressed = true;
-    }
-  });
-  document.addEventListener("keyup", function (e) {
-    if (!e.metaKey) {
-      ctrlKeyPressed = false;
-    }
+  let ctrlKeyPressed = false;
+  document.addEventListener("mousedown", function (e) {
+    ctrlKeyPressed = e.ctrlKey || e.metaKey;
+  }, {
+    capture: true
   });
 
   // Limits all script running to CTRL + click
