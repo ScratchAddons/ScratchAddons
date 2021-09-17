@@ -8,7 +8,7 @@ export default async function ({ addon, msg, global, console }) {
     (state) => state.preview.status.project === "FETCHED" && state.preview.projectInfo.author?.username === username
   );
   while (true) {
-    const seeInsideButton = await addon.tab.waitForElement(".project-buttons .see-inside-button", {
+    await addon.tab.waitForElement(".project-buttons .see-inside-button", {
       markAsSeen: true,
       reduxCondition: (state) => (state.scratchGui ? state.scratchGui.mode.isPlayerOnly : true),
     });
