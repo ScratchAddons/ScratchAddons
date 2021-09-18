@@ -1,14 +1,16 @@
 export default async function ({ addon, global, console }) {
   const BlocklyInstance = await addon.tab.traps.getBlockly();
 
-  // Necessary to detect the CTRL/CMD key
   let ctrlKeyPressed = false;
-  document.addEventListener("keydown", function (e) {
-    ctrlKeyPressed = e.ctrlKey || e.metaKey;
-  });
-  document.addEventListener("keyup", function (e) {
-    ctrlKeyPressed = e.ctrlKey || e.metaKey;
-  });
+  document.addEventListener(
+    "mousedown",
+    function (e) {
+      ctrlKeyPressed = e.ctrlKey || e.metaKey;
+    },
+    {
+      capture: true,
+    }
+  );
 
   // https://github.com/LLK/scratch-blocks/blob/102b33d14b25400c064e9bf6924a7ae1b0dcb2ab/core/block_dragger.js#L160
   let isInStartBlockDrag = false;
