@@ -10,44 +10,29 @@
   "info": [
     {
       "type": "notice",
-      "text": "If you hide the toolbar, you'll need to use your browser's back feature to exit fullscreen mode.",
+      "text": "If you hide the toolbar, you'll need to use the Esc key on your keyboard to exit fullscreen mode.",
       "id": "hideToolbarNotice"
     }
   ],
   "settings": [
     {
-      "name": "Automatically resize to window",
-      "id": "resizeWindow",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Remove unused scrollbar",
-      "id": "hideOverflow",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Automatically toggle browser fullscreen",
+      "name": "Synchronize browser's and Scratch's fullscreen modes",
       "id": "browserFullscreen",
       "type": "boolean",
       "default": true
     },
     {
+      "name": "Only toggle browser fullscreen in editor with stage button",
+      "id": "editorFullscreen",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "settings": { "browserFullscreen": true }
+      }
+    },
+    {
       "name": "Darken background",
       "id": "darkenBg",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Remove rounded corners",
-      "id": "removeCorners",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Remove border",
-      "id": "removeBorder",
       "type": "boolean",
       "default": true
     },
@@ -63,17 +48,29 @@
   "updateUserstylesOnSettingsChange": true,
   "userstyles": [
     {
+      "url": "hideOverflow.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "removeBorder.css",
+      "matches": ["projects"]
+    },
+    {
       "url": "resizeWindow.css",
       "matches": ["projects"],
       "if": {
-        "settings": { "resizeWindow": true }
+        "settings": {
+          "hideToolbar": false
+        }
       }
     },
     {
-      "url": "hideOverflow.css",
+      "url": "resizeWindow_noToolbar.css",
       "matches": ["projects"],
       "if": {
-        "settings": { "hideOverflow": true }
+        "settings": {
+          "hideToolbar": true
+        }
       }
     },
     {
@@ -81,20 +78,6 @@
       "matches": ["projects"],
       "if": {
         "settings": { "darkenBg": true }
-      }
-    },
-    {
-      "url": "removeCorners.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "removeCorners": true }
-      }
-    },
-    {
-      "url": "removeBorder.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "removeBorder": true }
       }
     },
     {
@@ -107,10 +90,10 @@
   ],
   "userscripts": [
     {
-      "url": "browserFullscreen.js",
+      "url": "userscript.js",
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "projectPlayer"],
+  "tags": ["editor", "theme", "projectPlayer"],
   "enabledByDefault": false
 }

@@ -1,4 +1,4 @@
-[class*="stage-header_stage-header-wrapper-overlay"] {
+[class*="stage-wrapper_full-screen"] [class*="stage-header_stage-header-wrapper-overlay"] {
   display: none;
 }
 
