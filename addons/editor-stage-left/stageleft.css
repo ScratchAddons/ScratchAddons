@@ -2,8 +2,6 @@
   transform: scaleX(-1);
 }
 [class^="target-pane_target-pane"] {
-  -webkit-flex-direction: row-reverse;
-  -ms-flex-direction: row-reverse;
   flex-direction: row-reverse;
 }
 [dir="ltr"] [class^="target-pane_stage-selector-wrapper"] {
@@ -23,8 +21,6 @@
   margin-left: 0;
 }
 [class^="gui_flex-wrapper"] {
-  -webkit-flex-direction: row-reverse;
-  -ms-flex-direction: row-reverse;
   flex-direction: row-reverse;
   overflow-x: hidden;
 }

@@ -1,7 +1,4 @@
 .pos-container-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   align-items: center;
   padding: 0.25rem;
