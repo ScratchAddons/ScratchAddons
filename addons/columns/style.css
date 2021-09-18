@@ -20,7 +20,7 @@
 .scratchCategoryItemBubble,
 .scratchCategoryItemIcon {
   margin: 0;
-  margin-right: 0.5rem;
+  margin-inline-end: 0.5rem;
 }
 
 .scratchCategoryMenuItemLabel {
@@ -32,7 +32,7 @@
 [class*="gui_extension-button-container_"] {
   top: calc(var(--sa-add-extension-button-y) * 1px);
   bottom: auto;
-  margin-left: 0.5rem;
+  margin-inline-start: 0.5rem;
   width: calc(308px - 1rem);
   height: calc(1.75rem - 2px);
   background-color: transparent;
