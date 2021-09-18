@@ -41,7 +41,9 @@ export default async function ({ addon, msg, global, console }) {
       return;
     }
 
-    var x = this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT ? targetWorkspaceMetrics.viewWidth : 0;
+    // In RTL, subtract the total width of left and right workspace borders and the category menu border
+    // from the workspace width.
+    var x = this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT ? targetWorkspaceMetrics.viewWidth - 3 : 0;
     var y = this.parentToolbox_.HtmlDiv.offsetHeight;
 
     // Addon sets the width of the flyout to the width of the toolbox.
@@ -68,6 +70,12 @@ export default async function ({ addon, msg, global, console }) {
     // Set CSS variable used by add extension button.
     this.svgGroup_.closest("[class*='gui_tab-panel_']").style.setProperty("--sa-add-extension-button-y", y - 33);
   };
+
+  const _VerticalFlyoutGetWidth = Blockly.VerticalFlyout.prototype.getWidth;
+  Blockly.VerticalFlyout.prototype.getWidth = function () {
+    // In RTL, this will be called by Blockly to position blocks inside the flyout.
+    return _VerticalFlyoutGetWidth.call(this) + 60;
+  }
 
   // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L710
   const _CategoryCreateDom = Blockly.Toolbox.Category.prototype.createDom;
