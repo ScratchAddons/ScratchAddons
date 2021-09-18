@@ -8,10 +8,12 @@ export default async function ({ addon, global, console }) {
       // be enabled.
       if (addon.tab.editorMode === "fullscreen" && window.innerHeight !== window.screen.height) {
         document.documentElement.requestFullscreen();
-      // Likewise, if Scratch fullscreen is disabled, then browser fullscreen
-      // should also be disabled.
+        // Likewise, if Scratch fullscreen is disabled, then browser fullscreen
+        // should also be disabled.
       } else if (addon.tab.editorMode !== "fullscreen") {
-        document.exitFullscreen().catch((err) => { return; });
+        document.exitFullscreen().catch((err) => {
+          return;
+        });
       }
     }
   }
@@ -23,14 +25,22 @@ export default async function ({ addon, global, console }) {
       // If browser fullscreen is enabled, then Scratch fullscreen should also
       // be enabled.
       // Also respect the setting to make the editor not respond to F11.
-      if (!(addon.settings.get("editorFullscreen") && addon.tab.editorMode === "editor") && (window.innerHeight === window.screen.height || document.fullscreenElement !== null) && addon.tab.editorMode !== "fullscreen") {
+      if (
+        !(addon.settings.get("editorFullscreen") && addon.tab.editorMode === "editor") &&
+        (window.innerHeight === window.screen.height || document.fullscreenElement !== null) &&
+        addon.tab.editorMode !== "fullscreen"
+      ) {
         addon.tab.redux.dispatch({
           type: "scratch-gui/mode/SET_FULL_SCREEN",
           isFullScreen: true,
         });
-      // Likewise, if browser fullscreen is disabled, then Scratch fullscreen
-      // should also be disabled.
-      } else if ((!(window.innerHeight === window.screen.height || document.fullscreenElement !== null) || document.fullscreenElement === null) && addon.tab.editorMode === "fullscreen") {
+        // Likewise, if browser fullscreen is disabled, then Scratch fullscreen
+        // should also be disabled.
+      } else if (
+        (!(window.innerHeight === window.screen.height || document.fullscreenElement !== null) ||
+          document.fullscreenElement === null) &&
+        addon.tab.editorMode === "fullscreen"
+      ) {
         addon.tab.redux.dispatch({
           type: "scratch-gui/mode/SET_FULL_SCREEN",
           isFullScreen: false,
@@ -50,7 +60,7 @@ export default async function ({ addon, global, console }) {
   // These handle the case of the user already being in Scratch fullscreen
   // (without being in browser fullscreen) when the addon or sync option are
   // dynamically enabled.
-  addon.settings.addEventListener("change", function() {
+  addon.settings.addEventListener("change", function () {
     updateBrowserFullscreen();
     updateScratchFullscreen();
   });
