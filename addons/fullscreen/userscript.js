@@ -26,14 +26,14 @@ export default async function ({ addon, global, console }) {
       if (!(addon.settings.get("editorFullscreen") && addon.tab.editorMode === "editor") && (window.innerHeight === window.screen.height || document.fullscreenElement !== null) && addon.tab.editorMode !== "fullscreen") {
         addon.tab.redux.dispatch({
           type: "scratch-gui/mode/SET_FULL_SCREEN",
-          isFullScreen: true
+          isFullScreen: true,
         });
       // Likewise, if browser fullscreen is disabled, then Scratch fullscreen
       // should also be disabled.
       } else if ((!(window.innerHeight === window.screen.height || document.fullscreenElement !== null) || document.fullscreenElement === null) && addon.tab.editorMode === "fullscreen") {
         addon.tab.redux.dispatch({
           type: "scratch-gui/mode/SET_FULL_SCREEN",
-          isFullScreen: false
+          isFullScreen: false,
         });
       }
     }
@@ -54,8 +54,8 @@ export default async function ({ addon, global, console }) {
     updateBrowserFullscreen();
     updateScratchFullscreen();
   });
-  addon.self.addEventListener("reenabled", function() {
+  addon.self.addEventListener("reenabled", function () {
     updateBrowserFullscreen();
     updateScratchFullscreen();
-  })
+  });
 }
