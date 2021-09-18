@@ -75,7 +75,7 @@ export default async function ({ addon, msg, global, console }) {
   Blockly.VerticalFlyout.prototype.getWidth = function () {
     // In RTL, this will be called by Blockly to position blocks inside the flyout.
     return _VerticalFlyoutGetWidth.call(this) + 60;
-  }
+  };
 
   // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L710
   const _CategoryCreateDom = Blockly.Toolbox.Category.prototype.createDom;
