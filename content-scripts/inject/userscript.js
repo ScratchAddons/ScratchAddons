@@ -65,7 +65,7 @@ function getURL(url) {
   return new URL("../../" + url, import.meta.url).href;
 }
 
-function onDataReady() {
+async function onDataReady() {
   const addons = (await fetch(getURL("addons/addons.json")).then((r) => r.json())).filter(
     (addon) => !addon.startsWith("//")
   );
