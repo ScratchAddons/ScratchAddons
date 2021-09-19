@@ -161,6 +161,11 @@ else {
   stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
 }
 
+document.body.append(Object.assign(document.createElement("script"),{src: new URL("../../libraries/common/cs/text-color.js", import.meta.url).href}))
+document.body.append(Object.assign(document.createElement("script"),{src: new URL("../prototype-handler.js", import.meta.url).href}))
+document.body.append(Object.assign(document.createElement("script"),{src: new URL("../load-redux.js", import.meta.url).href}))
+document.body.append(Object.assign(document.createElement("script"),{src: new URL("../fix-console.js", import.meta.url).href}))
+
 const addons = (await fetch(new URL("../../addons/addons.json", import.meta.url).href).then((r) => r.json())).filter(
   (addon) => !addon.startsWith("//")
 );
