@@ -1,5 +1,12 @@
 import runAddonUserscripts from "./run-userscript.js";
 
+await Promise.all([
+	loadScriptFromUrl("../../libraries/common/cs/text-color.js"),
+	loadScriptFromUrl("../prototype-handler.js"),
+	loadScriptFromUrl("../load-redux.js"),
+	loadScriptFromUrl("../fix-console.js"),
+]);
+
 window.scratchAddons = {};
 scratchAddons.classNames = { loaded: false };
 scratchAddons.eventTargets = {
@@ -172,13 +179,6 @@ function loadScriptFromUrl(url) {
     document.body.append(script);
   });
 }
-
-await Promise.all([
-  loadScriptFromUrl("../../libraries/common/cs/text-color.js"),
-  loadScriptFromUrl("../prototype-handler.js"),
-  loadScriptFromUrl("../load-redux.js"),
-  loadScriptFromUrl("../fix-console.js"),
-]);
 
 const addons = (await fetch(new URL("../../addons/addons.json", import.meta.url).href).then((r) => r.json())).filter(
   (addon) => !addon.startsWith("//")
