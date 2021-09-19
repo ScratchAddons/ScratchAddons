@@ -1,10 +1,10 @@
 import runAddonUserscripts from "./run-userscript.js";
 
 await Promise.all([
-  loadScriptFromUrl("../../libraries/common/cs/text-color.js"),
-  loadScriptFromUrl("../prototype-handler.js"),
-  loadScriptFromUrl("../load-redux.js"),
-  loadScriptFromUrl("../fix-console.js"),
+  loadScriptFromUrl("libraries/common/cs/text-color.js"),
+  loadScriptFromUrl("prototype-handler.js"),
+  loadScriptFromUrl("load-redux.js"),
+  loadScriptFromUrl("fix-console.js"),
 ]);
 
 window.scratchAddons = {};
