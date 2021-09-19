@@ -84,7 +84,14 @@ export default async function ({ addon, msg, global, console }) {
     this.parent_.parent_.flyout_.position();
   };
 
+  // Reload the toolbox
   toolbox.init();
+  // Connects events to VM
+  // https://github.com/LLK/scratch-gui/blob/ba76db7350bd43b79119cac2701bc10f6c511f0c/src/containers/blocks.jsx#L250-L254
+  const flyoutWorkspace = workspace.getFlyout().getWorkspace();
+  const vm = addon.tab.traps.vm;
+  flyoutWorkspace.addChangeListener(vm.flyoutBlockListener);
+  flyoutWorkspace.addChangeListener(vm.monitorBlockListener);
 
   while (true) {
     const addExtensionButton = await addon.tab.waitForElement("[class*='gui_extension-button_']", {
