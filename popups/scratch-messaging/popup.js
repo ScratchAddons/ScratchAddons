@@ -23,6 +23,7 @@ export default ({ addon, msg, safeMsg }) => ({
       follows: [],
       studioInvites: [],
       studioPromotions: [],
+      studioHostTransfers: [],
       forumActivity: [],
       studioActivity: [],
       remixes: [],
@@ -36,6 +37,7 @@ export default ({ addon, msg, safeMsg }) => ({
         follows: false,
         studioInvites: false,
         studioPromotions: false,
+        studioHostTransfers: false,
         forumActivity: false,
         studioActivity: false,
         remixes: false,
@@ -79,6 +81,7 @@ export default ({ addon, msg, safeMsg }) => ({
         markedAsReadMsg: this.msg("marked-as-read"),
         openMessagesMsg: this.msg("open-messages"),
         studioPromotionsMsg: this.msg("studio-promotions"),
+        studioHostTransfersMsg: this.msg("studio-host-transfers"),
       };
     },
 
@@ -312,7 +315,29 @@ export default ({ addon, msg, safeMsg }) => ({
           if (!this.studioActivity.find((obj) => obj.studioId === message.gallery_id)) {
             this.studioActivity.push({
               studioId: message.gallery_id,
-              studioTitle: message.title,
+              studioTitle: message.gallery_title,
+            });
+          } else if (message.type === "becomehoststudio") {
+            this.studioHostTransfers.push({
+              actorAdmin: message.admin_actor,
+              actor: message.actor_username,
+              studioId: message.gallery_id,
+              studioTitle: message.gallery_title,
+            });
+          } else if (message.type === "forumpost") {
+            // We only want one message per forum topic
+            if (!this.forumActivity.find((obj) => obj.topicId === message.topic_id)) {
+              this.forumActivity.push({
+                topicId: message.topic_id,
+                topicTitle: message.topic_title,
+              });
+            }
+          } else if (message.type === "remixproject") {
+            this.remixes.push({
+              parentTitle: message.parent_title,
+              remixTitle: message.title,
+              actor: message.actor_username,
+              projectId: message.project_id,
             });
           }
         } else if (message.type === "loveproject") {
@@ -395,7 +420,21 @@ export default ({ addon, msg, safeMsg }) => ({
             href="https://scratch.mit.edu/studios/${promotion.studioId}/curators/"
             style="text-decoration: underline"
         >${escapeHTML(promotion.studioTitle)}</a>`;
-      return this.safeMsg("studio-promotion", { actor, title });
+      return safeMsg("studio-promotion", { actor, title });
+    },
+    studioHostTransferHTML(promotion) {
+      const actor = promotion.actorAdmin
+        ? safeMsg("st")
+        : `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/users/${escapeHTML(promotion.actor)}/"
+        >${escapeHTML(promotion.actor)}</a>`;
+      const title = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/studios/${promotion.studioId}/"
+            style="text-decoration: underline"
+        >${escapeHTML(promotion.studioTitle)}</a>`;
+      return safeMsg("studio-host-transfer", { actor, title });
     },
     forumHTML(forumTopic) {
       const title = `<a target="_blank"

@@ -1,0 +1,18 @@
+{
+  "name": "Extra key support",
+  "description": "Adds more keys to the \"key () pressed?\" block dropdown, such as enter, dot, comma, and more.",
+  "tags": ["editor", "codeEditor", "beta"],
+  "credits": [
+    {
+      "name": "Tacodude7729",
+      "link": "https://github.com/Tacodude7729"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.20.0"
+}

@@ -1,7 +1,7 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import { paused, setPaused, onPauseChanged } from "./../pause/module.js";
 
-export default async function ({ addon, global, console, msg, safeMsg }) {
+export default async function ({ addon, global, console, msg }) {
   let showingConsole, ScratchBlocks;
   const vm = addon.tab.traps.vm;
 
@@ -362,33 +362,6 @@ export default async function ({ addon, global, console, msg, safeMsg }) {
     s.innerText = text;
     return s;
   };
-
-  // Feedback
-  if (localStorage.getItem("saDebuggerFeedbackRemove") !== "1") {
-    const wrapper = createLogWrapper("log");
-    const s = document.createElement("span");
-    s.innerHTML = safeMsg("feedback-log", {
-      logLink: Object.assign(document.createElement("a"), {
-        href: "https://scratchaddons.com/feedback/?ext_version=1.19%2Bdebugger",
-        className: "sa-debugger-feedback",
-        target: "_blank",
-        textContent: msg("feedback-log-link"),
-      }).outerHTML,
-    });
-    s.appendChild(document.createElement("br"));
-    s.appendChild(
-      Object.assign(document.createElement("a"), {
-        className: "sa-debugger-feedback",
-        textContent: msg("feedback-remove"),
-        onclick: () => {
-          localStorage.setItem("saDebuggerFeedbackRemove", "1");
-          wrapper.remove();
-        },
-      })
-    );
-    wrapper.appendChild(s);
-    consoleList.append(wrapper);
-  }
 
   const addLog = (content, thread, type) => {
     const wrapper = createLogWrapper(type);

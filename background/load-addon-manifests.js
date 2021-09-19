@@ -64,6 +64,7 @@
             studioIcon: "@studio.svg",
             remixIcon: "@remix.svg",
             adminusersIcon: "@adminusers.svg",
+            usersIcon: "@users.svg",
           },
           option.name
         );

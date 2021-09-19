@@ -13,7 +13,7 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["community", "projectPage", "featured"],
+  "tags": ["community", "projectPage"],
   "dynamicDisable": true,
   "dynamicEnable": true,
   "versionAdded": "1.20.0"
