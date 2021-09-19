@@ -60,12 +60,11 @@ export default async function ({ addon, global, cons, msg }) {
       if (!input) {
         continue;
       }
-      const field = input.fieldRow[1];
+      const field = input.fieldRow.find((i) => i && Array.isArray(i.menuGenerator_));
       if (!field) {
         continue;
       }
-      const menuGenerator = field.menuGenerator_;
-      appendKeys(menuGenerator);
+      appendKeys(field.menuGenerator_);
     }
   }
 }
