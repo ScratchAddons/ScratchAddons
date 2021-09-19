@@ -1,4 +1,5 @@
 import runAddonUserscripts from "./run-userscript.js";
+import Localization from "./l10n.js";
 
 await Promise.all([
   loadScriptFromUrl("libraries/common/cs/text-color.js"),
