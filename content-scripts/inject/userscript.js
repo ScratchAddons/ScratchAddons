@@ -1,10 +1,10 @@
 import runAddonUserscripts from "./run-userscript.js";
 
 await Promise.all([
-	loadScriptFromUrl("../../libraries/common/cs/text-color.js"),
-	loadScriptFromUrl("../prototype-handler.js"),
-	loadScriptFromUrl("../load-redux.js"),
-	loadScriptFromUrl("../fix-console.js"),
+  loadScriptFromUrl("../../libraries/common/cs/text-color.js"),
+  loadScriptFromUrl("../prototype-handler.js"),
+  loadScriptFromUrl("../load-redux.js"),
+  loadScriptFromUrl("../fix-console.js"),
 ]);
 
 window.scratchAddons = {};
@@ -60,10 +60,31 @@ const getSession = {
     this.isFetching = false;
   },
 };
-function onDataReady() {
-  const addons = page.addonsWithUserscripts;
 
-  scratchAddons.l10n = new Localization(page.l10njson);
+function getURL(url) {
+  return new URL("../../" + url, import.meta.url).href;
+}
+
+function onDataReady() {
+  const addons = (await fetch(getURL("addons/addons.json")).then((r) => r.json())).filter(
+    (addon) => !addon.startsWith("//")
+  );
+
+  function getL10NURLs() {
+    const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+    const urls = [getURL(`addons-l10n/${langCode}`)];
+    if (langCode === "pt") {
+      urls.push(getURL(`addons-l10n/pt-br`));
+    }
+    if (langCode.includes("-")) {
+      urls.push(getURL(`addons-l10n/${langCode.split("-")[0]}`));
+    }
+    const enJSON = getURL("addons-l10n/en");
+    if (!urls.includes(enJSON)) urls.push(enJSON);
+    return urls;
+  }
+
+  scratchAddons.l10n = new Localization(getL10NURLs());
 
   scratchAddons.methods = {};
   scratchAddons.methods.getMsgCount = () => {
@@ -74,18 +95,15 @@ function onDataReady() {
     if (pendingPromises.msgCount.length === 1) requestMsgCount();
     return promise;
   };
-  scratchAddons.methods.copyImage = async (dataURL) => {
-    return _cs_.copyImage(dataURL);
-  };
-  scratchAddons.methods.getEnabledAddons = (tag) => _cs_.getEnabledAddons(tag);
 
   scratchAddons.sharedObserver = new SharedObserver();
 
-  const runUserscripts = () => {
-    for (const addon of addons) {
-      if (addon.scripts.length) runAddonUserscripts(addon);
-    }
-  };
+  function runUserscripts() {
+    addons.forEach(async (addonId) => {
+      const manifest = await fetch(getURL("addons/" + addonId + "/addon.json")).then((r) => r.json());
+      runAddonUserscripts({ addonId, scripts: manifest.scripts });
+    });
+  }
 
   // Note: we currently load userscripts and locales after head loaded
   // We could do that before head loaded just fine, as long as we don't
@@ -171,7 +189,7 @@ else {
 function loadScriptFromUrl(url) {
   return new Promise((resolve, reject) => {
     const script = Object.assign(document.createElement("script"), {
-      src: new URL(url, import.meta.url).href,
+      src: getURL(url),
     });
     script.addEventListener("load", () => {
       resolve();
@@ -180,14 +198,5 @@ function loadScriptFromUrl(url) {
   });
 }
 
-const addons = (await fetch(new URL("../../addons/addons.json", import.meta.url).href).then((r) => r.json())).filter(
-  (addon) => !addon.startsWith("//")
-);
 onDataReady();
 getSession.refetchSession();
-addons.forEach(async (addonId) => {
-  const manifest = await fetch(new URL("../../addons/" + addonId + "/addon.json", import.meta.url).href).then((r) =>
-    r.json()
-  );
-  runAddonUserscripts({ addonId, scripts: manifest.scripts });
-});
