@@ -60,7 +60,7 @@ export default async function ({ addon, global, cons, msg }) {
       if (!input) {
         continue;
       }
-      const field = input.fieldRow.find(i => i && Array.isArray(i.menuGenerator_));
+      const field = input.fieldRow.find((i) => i && Array.isArray(i.menuGenerator_));
       if (!field) {
         continue;
       }
