@@ -67,7 +67,7 @@ import globalStateProxy from "../background/imports/global-state.js";
   await loadScriptFromUrl("background/handle-auth.js");
 
   function getURL(url) {
-    return new URL("../../" + url, import.meta.url).href;
+    return new URL("../../../" + url, import.meta.url).href;
   }
 
   class SharedObserver {
