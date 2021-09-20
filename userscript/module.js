@@ -161,7 +161,7 @@ console.log(
 const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js");
 
 function getL10NURLs() {
-  const langCode = getCookieValue("scratchlanguage");
+  const langCode = getCookieValue("scratchlanguage") || "en";
   const urls = [getURL(`addons-l10n/${langCode}`)];
   if (langCode === "pt") {
     urls.push(getURL(`addons-l10n/pt-br`));
