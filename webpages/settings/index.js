@@ -8,9 +8,8 @@ import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 
-
-if (window.parent=== window) {
-  location.href="https://scratch.mit.edu/scratch-addons-extention/settings"
+if (window.parent === window) {
+  location.href = "https://scratch.mit.edu/scratch-addons-extention/settings";
 }
 
 let isIframe = false;
@@ -20,7 +19,7 @@ if (new URLSearchParams(window.location.search).get("iframe") === "true") {
   isIframe = true;
 }
 
-window.parent.postMessage("hi")
+window.parent.postMessage("hi");
 
 let vue;
 let fuse;
@@ -112,7 +111,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       const addonValue = obj.addons[addonId];
       const addonManifest = manifests.find((m) => m._addonId === addonId);
       if (!addonManifest) continue;
-        addonsEnabled[addonId] = addonValue.enabled;
+      addonsEnabled[addonId] = addonValue.enabled;
 
       addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
     }

@@ -18,9 +18,8 @@
 // ==/UserScript==
 
 if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathname)) {
-  document.documentElement.innerHTML = ""
-
- } else {
+  document.documentElement.innerHTML = "";
+} else {
   document.documentElement.append(
     Object.assign(document.createElement("script"), {
       src: "https://cdn.jsdelivr.net/gh/RedGuy12/ScratchAddons@5c202ca/userscript/module.min.js",
@@ -29,7 +28,7 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
   );
 
   if (typeof scratchAddons === "undefined") window.scratchAddons = {};
-  window.scratchAddons = {...scratchAddons, classNames: {loaded: false}, session: {}};
+  window.scratchAddons = { ...scratchAddons, classNames: { loaded: false }, session: {} };
   scratchAddons.eventTargets = {
     auth: [],
     settings: [],
@@ -99,7 +98,7 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
         loadClasses();
       }
     });
-    stylesObserver.observe(document.documentElement, {childList: true, subtree: true});
+    stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
   }
   const consoleOutput = (logAuthor = "[page]") => {
     const style = {

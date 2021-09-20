@@ -54,7 +54,7 @@ function getL10NURLs() {
     if (typeof scratchAddons !== "undefined") resolve();
     const interval = setInterval(() => {
       if (typeof scratchAddons !== "undefined") {
-        clearInterval(interval)
+        clearInterval(interval);
         resolve();
       }
     }, 100);
@@ -108,8 +108,8 @@ function getL10NURLs() {
           manifest.userscripts = manifest.userscripts?.filter((injectable) =>
             userscriptMatches({ url: location.href }, injectable, addonId)
           );
-         function run() {
-            if (manifest.userscripts) runAddonUserscripts({ addonId, scripts: manifest.userscripts })
+          function run() {
+            if (manifest.userscripts) runAddonUserscripts({ addonId, scripts: manifest.userscripts });
 
             for (let [index, injectable] of (manifest.userstyles || []).entries()) {
               addStyle({
