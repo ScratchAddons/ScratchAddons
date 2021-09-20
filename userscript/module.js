@@ -309,7 +309,7 @@ import globalStateProxy from "../background/imports/global-state.js";
 
             addStyle({
               addonId,
-              userstyle: injectable,
+              userstyle: injectable.url,
               injectAsStyleElt: manifest.injectAsStyleElt,
               index: i,
             });
