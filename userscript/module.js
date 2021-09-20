@@ -36,130 +36,6 @@ const addonListPromise = fetch(getURL("addons/addons.json"))
         return [addonId, manifest];
       })
   );
-window.scratchAddons = { globalState: globalStateProxy, classNames: { loaded: false }, session: {} };
-scratchAddons.eventTargets = {
-  auth: [],
-  settings: [],
-  tab: [],
-  self: [],
-};
-function loadClasses() {
-  scratchAddons.classNames.arr = [
-    ...new Set(
-      [...document.styleSheets]
-        .filter(
-          (styleSheet) =>
-            !(
-              styleSheet.ownerNode.textContent.startsWith(
-                "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library."
-              ) &&
-              (styleSheet.ownerNode.textContent.includes("input_input-form") ||
-                styleSheet.ownerNode.textContent.includes("label_input-group_"))
-            )
-        )
-        .map((e) => {
-          try {
-            return [...e.cssRules];
-          } catch (e) {
-            return [];
-          }
-        })
-        .flat()
-        .map((e) => e.selectorText)
-        .filter((e) => e)
-        .map((e) => e.match(/(([\w-]+?)_([\w-]+)_([\w\d-]+))/g))
-        .filter((e) => e)
-        .flat()
-    ),
-  ];
-  scratchAddons.classNames.loaded = true;
-
-  const fixPlaceHolderClasses = () =>
-    document.querySelectorAll("[class*='scratchAddonsScratchClass/']").forEach((el) => {
-      [...el.classList]
-        .filter((className) => className.startsWith("scratchAddonsScratchClass"))
-        .map((className) => className.substring(className.indexOf("/") + 1))
-        .forEach((classNameToFind) =>
-          el.classList.replace(
-            `scratchAddonsScratchClass/${classNameToFind}`,
-            scratchAddons.classNames.arr.find(
-              (className) =>
-                className.startsWith(classNameToFind + "_") && className.length === classNameToFind.length + 6
-            ) || `scratchAddonsScratchClass/${classNameToFind}`
-          )
-        );
-    });
-
-  fixPlaceHolderClasses();
-  new MutationObserver(() => fixPlaceHolderClasses()).observe(document.documentElement, {
-    attributes: false,
-    childList: true,
-    subtree: true,
-  });
-}
-
-if (document.querySelector("title")) loadClasses();
-else {
-  const stylesObserver = new MutationObserver(() => {
-    if (document.querySelector("title")) {
-      stylesObserver.disconnect();
-      loadClasses();
-    }
-  });
-  stylesObserver.observe(document.documentElement, { childList: true, subtree: true });
-}
-const consoleOutput = (logAuthor = "[page]") => {
-  const style = {
-    leftPrefix: "background:  #ff7b26; color: white; border-radius: 0.5rem 0 0 0.5rem; padding: 0 0.5rem",
-    rightPrefix:
-      "background: #222; color: white; border-radius: 0 0.5rem 0.5rem 0; padding: 0 0.5rem; font-weight: bold",
-    text: "",
-  };
-  return [`%cSA%c${logAuthor}%c`, style.leftPrefix, style.rightPrefix, style.text];
-};
-scratchAddons.console = {
-  log: _realConsole.log.bind(_realConsole, ...consoleOutput()),
-  warn: _realConsole.warn.bind(_realConsole, ...consoleOutput()),
-  error: _realConsole.error.bind(_realConsole, ...consoleOutput()),
-  logForAddon: (addonId) => _realConsole.log.bind(_realConsole, ...consoleOutput(addonId)),
-  warnForAddon: (addonId) => _realConsole.warn.bind(_realConsole, ...consoleOutput(addonId)),
-  errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
-};
-
-const getSession = {
-  isFetching: false,
-  async refetchSession() {
-    let res;
-    let d;
-    if (this.isFetching) return;
-    this.isFetching = true;
-    scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh());
-    try {
-      res = await fetch("https://scratch.mit.edu/session/", {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      });
-      d = await res.json();
-    } catch (e) {
-      d = {};
-      scratchAddons.console.warn("Session fetch failed: ", e);
-      if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
-    }
-    scratchAddons.session = d;
-    scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
-    this.isFetching = false;
-  },
-};
-console.log(
-  "%cscratchAddons.globalState",
-  "font-weight: bold;",
-  "initialized:\n",
-  JSON.parse(JSON.stringify(scratchAddons.globalState))
-);
-
-const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js");
-
 function getL10NURLs() {
   const langCode = getCookieValue("scratchlanguage") || "en";
   const urls = [getURL(`addons-l10n/${langCode}`)];
@@ -173,52 +49,90 @@ function getL10NURLs() {
   if (!urls.includes(enJSON)) urls.push(enJSON);
   return urls;
 }
+(async () => {
+  await new Promise((resolve) => {
+    if (typeof scratchAddons !== "undefined") resolve();
+    const interval = setInterval(() => {
+      if (typeof scratchAddons !== "undefined") {
+        interval.clear();
+        resolve();
+      }
+    }, 100);
+  });
 
-scratchAddons.l10n = new Localization(getL10NURLs());
+  scratchAddons.globalState = globalStateProxy;
 
-scratchAddons.methods = {};
+  const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js");
 
-handleAuthPromise.then(() => {
-  addonListPromise.then((addons) =>
-    addons.forEach((promise) =>
-      promise.then(([addonId, manifest]) => {
-        manifest.userstyles = manifest.userstyles?.filter((injectable) =>
-          userscriptMatches({ url: location.href }, injectable, addonId)
-        );
-        manifest.userscripts = manifest.userscripts?.filter((injectable) =>
-          userscriptMatches({ url: location.href }, injectable, addonId)
-        );
-        function run() {
-          if (manifest.userscripts) runAddonUserscripts({ addonId, scripts: manifest.userscripts });
+  scratchAddons.l10n = new Localization(getL10NURLs());
 
-          for (let [index, injectable] of (manifest.userstyles || []).entries()) {
-            addStyle({
-              addonId,
-              userstyle: getURL("addons/" + addonId + "/" + injectable.url),
-              injectAsStyleElt: manifest.injectAsStyleElt,
-              index,
-            });
-          }
-        }
-        // Note: we currently load userscripts and locales after head loaded
-        // We could do that before head loaded just fine, as long as we don't
-        // actually *run* the addons before document.head is defined.
-        if (document.head) run();
-        else {
-          const observer = new MutationObserver(() => {
-            if (document.head) {
-              run();
-              observer.disconnect();
+  const getSession = {
+    isFetching: false,
+    async refetchSession() {
+      let res;
+      let d;
+      if (this.isFetching) return;
+      this.isFetching = true;
+      scratchAddons.eventTargets.auth.forEach((auth) => auth._refresh());
+      try {
+        res = await fetch("https://scratch.mit.edu/session/", {
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+          },
+        });
+        d = await res.json();
+      } catch (e) {
+        d = {};
+        scratchAddons.console.warn("Session fetch failed: ", e);
+        if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
+      }
+      scratchAddons.session = d;
+      scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
+      this.isFetching = false;
+    },
+  };
+  handleAuthPromise.then(() => {
+    addonListPromise.then((addons) =>
+      addons.forEach((promise) =>
+        promise.then(([addonId, manifest]) => {
+          manifest.userstyles = manifest.userstyles?.filter((injectable) =>
+            userscriptMatches({ url: location.href }, injectable, addonId)
+          );
+          manifest.userscripts = manifest.userscripts?.filter((injectable) =>
+            userscriptMatches({ url: location.href }, injectable, addonId)
+          );
+          function run() {
+            if (manifest.userscripts) runAddonUserscripts({ addonId, scripts: manifest.userscripts });
+
+            for (let [index, injectable] of (manifest.userstyles || []).entries()) {
+              addStyle({
+                addonId,
+                userstyle: getURL("addons/" + addonId + "/" + injectable.url),
+                injectAsStyleElt: manifest.injectAsStyleElt,
+                index,
+              });
             }
-          });
-          observer.observe(document.documentElement, { subtree: true, childList: true });
-        }
-      })
-    )
-  );
-  getSession.refetchSession();
-});
-
+            console.timeLog("sa")
+          }
+          // Note: we currently load userscripts and locales after head loaded
+          // We could do that before head loaded just fine, as long as we don't
+          // actually *run* the addons before document.head is defined.
+          if (document.head) run();
+          else {
+            const observer = new MutationObserver(() => {
+              if (document.head) {
+                run();
+                observer.disconnect();
+              }
+            });
+            observer.observe(document.documentElement, { subtree: true, childList: true });
+          }
+        })
+      )
+    );
+    getSession.refetchSession();
+  });
+})();
 function getURL(url) {
   return new URL("../" + url, import.meta.url).href.replace(/(?<!\.min)\.js$/, ".min.js");
 }
