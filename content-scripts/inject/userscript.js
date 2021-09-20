@@ -71,6 +71,8 @@ import globalStateProxy from "../../background/imports/global-state.js";
     JSON.parse(JSON.stringify(scratchAddons.globalState))
   );
 
+  await loadScriptFromUrl("background/handle-auth.js");
+
   function getURL(url) {
     return new URL("../../" + url, import.meta.url).href;
   }
