@@ -21,19 +21,20 @@ function parseMatches(injectable) {
 
 const addonListPromise = fetch(getURL("addons/addons.json"))
   .then((r) => r.json())
-  .filter((addon) => !addon.startsWith("//"))
   .then((addons) =>
-    addons.map(async (addonId) => {
-      const manifest = await fetch(getURL("addons/" + addonId + "/addon.json")).then((r) => r.json());
-      for (let injectable of manifest.userscripts || []) {
-        injectable = parseMatches(injectable);
-      }
-      for (let injectable of manifest.userstyles || []) {
-        injectable = parseMatches(injectable);
-      }
+    addons
+      .filter((addon) => !addon.startsWith("//"))
+      .map(async (addonId) => {
+        const manifest = await fetch(getURL("addons/" + addonId + "/addon.json")).then((r) => r.json());
+        for (let injectable of manifest.userscripts || []) {
+          injectable = parseMatches(injectable);
+        }
+        for (let injectable of manifest.userstyles || []) {
+          injectable = parseMatches(injectable);
+        }
 
-      return [addonId, manifest];
-    })
+        return [addonId, manifest];
+      })
   );
 window.scratchAddons = { globalState: globalStateProxy, classNames: { loaded: false }, session: {} };
 scratchAddons.eventTargets = {
