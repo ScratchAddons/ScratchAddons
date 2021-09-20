@@ -1,6 +1,6 @@
-import runAddonUserscripts from "../content-scripts/inject/run-userscript.js";
-import Localization from "../content-scripts/inject/l10n.js";
-import globalStateProxy from "../background/imports/global-state.js";
+import runAddonUserscripts from "../content-scripts/inject/run-userscript.min.js";
+import Localization from "../content-scripts/inject/l10n.min.js";
+import globalStateProxy from "../background/imports/global-state.min.js";
 
 (async function () {
   window.scratchAddons = {};
@@ -14,7 +14,6 @@ import globalStateProxy from "../background/imports/global-state.js";
   scratchAddons.session = {};
   const consoleOutput = (logAuthor = "[page]") => {
     const style = {
-      // Remember to change these as well on cs.js
       leftPrefix: "background:  #ff7b26; color: white; border-radius: 0.5rem 0 0 0.5rem; padding: 0 0.5rem",
       rightPrefix:
         "background: #222; color: white; border-radius: 0 0.5rem 0.5rem 0; padding: 0 0.5rem; font-weight: bold",
@@ -67,7 +66,7 @@ import globalStateProxy from "../background/imports/global-state.js";
   await loadScriptFromUrl("background/handle-auth.js");
 
   function getURL(url) {
-    return new URL("../" + url, import.meta.url).href;
+    return new URL("../" + url, import.meta.url).href.replace(/(?<!\.min)\.js$/, ".min.js");
   }
 
   class SharedObserver {
@@ -190,139 +189,6 @@ import globalStateProxy from "../background/imports/global-state.js";
   };
 
   scratchAddons.sharedObserver = new SharedObserver();
-  async function onDataReady() {
-    const addons = (await fetch(getURL("addons/addons.json")).then((r) => r.json())).filter(
-      (addon) => !addon.startsWith("//")
-    );
-
-    addons.forEach(async (addonId) => {
-      const manifest = await fetch(getURL("addons/" + addonId + "/addon.json")).then((r) => r.json());
-      for (let injectable of manifest.userscripts || []) {
-        injectable = parseMatches(injectable);
-      }
-      for (let injectable of manifest.userstyles || []) {
-        injectable = parseMatches(injectable);
-      }
-
-      manifest.userstyles = manifest.userstyles?.filter((injectable) =>
-        userscriptMatches({ url: location.href }, injectable, addonId)
-      );
-      manifest.userscripts = manifest.userscripts?.filter((injectable) =>
-        userscriptMatches({ url: location.href }, injectable, addonId)
-      );
-      function run() {
-        if (manifest.userscripts) runAddonUserscripts({ addonId, scripts: manifest.userscripts });
-
-        for (let [index, injectable] of (manifest.userstyles || []).entries()) {
-          addStyle({
-            addonId,
-            userstyle: getURL("addons/" + addonId + "/" + injectable.url),
-            injectAsStyleElt: manifest.injectAsStyleElt,
-            index,
-          });
-        }
-      }
-      // Note: we currently load userscripts and locales after head loaded
-      // We could do that before head loaded just fine, as long as we don't
-      // actually *run* the addons before document.head is defined.
-      if (document.head) run();
-      else {
-        const observer = new MutationObserver(() => {
-          if (document.head) {
-            run();
-            observer.disconnect();
-          }
-        });
-        observer.observe(document.documentElement, { subtree: true, childList: true });
-      }
-    });
-
-    // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
-    // matchesPattern = "*" | regexPattern | Array<wellKnownName | wellKnownMatcher | regexPattern | legacyPattern>
-    function userscriptMatches(data, scriptOrStyle, addonId) {
-      // if (scriptOrStyle.if && !matchesIf(scriptOrStyle, scratchAddons.globalState.addonSettings[addonId])) return false;
-      // todo ^
-
-      const url = data.url;
-      const parsedURL = new URL(url);
-      const { matches, _scratchDomainImplied } = scriptOrStyle;
-      const parsedPathname = parsedURL.pathname;
-      const parsedOrigin = parsedURL.origin;
-      const originPath = parsedOrigin + parsedPathname;
-      const matchURL = _scratchDomainImplied ? parsedPathname : originPath;
-      const scratchOrigin = "https://scratch.mit.edu";
-      const isScratchOrigin = parsedOrigin === scratchOrigin;
-      // "*" is used for any URL on Scratch origin
-      if (matches === "*") return isScratchOrigin;
-      // matches becomes RegExp if it is a string that starts with ^
-      if (matches instanceof RegExp) {
-        if (_scratchDomainImplied && !isScratchOrigin) return false;
-        return matches.test(matchURL);
-      }
-      for (const match of matches) {
-        if (match instanceof RegExp) {
-          if (match._scratchDomainImplied && !isScratchOrigin) continue;
-          if (match.test(match._scratchDomainImplied ? parsedPathname : originPath)) {
-            return true;
-          }
-        } else if (Object.prototype.hasOwnProperty.call(WELL_KNOWN_PATTERNS, match)) {
-          if (isScratchOrigin && WELL_KNOWN_PATTERNS[match].test(parsedPathname)) return true;
-        } else if (Object.prototype.hasOwnProperty.call(WELL_KNOWN_MATCHERS, match)) {
-          if (isScratchOrigin && WELL_KNOWN_MATCHERS[match](parsedPathname)) return true;
-        } else if (urlMatchesLegacyPattern(match, parsedURL)) return true;
-      }
-      return false;
-    }
-
-    function parseMatches(injectable) {
-      const { matches } = injectable;
-      if (typeof matches === "string" && matches.startsWith("^")) {
-        injectable._scratchDomainImplied = !matches.startsWith("^https:");
-        injectable.matches = new RegExp(matches, "u");
-      } else if (Array.isArray(matches)) {
-        for (let i = matches.length; i--; ) {
-          const match = matches[i];
-          if (typeof match === "string" && match.startsWith("^")) {
-            matches[i] = new RegExp(match, "u");
-            matches[i]._scratchDomainImplied = !match.startsWith("^https:");
-          }
-        }
-      }
-      return injectable;
-    }
-    function addStyle(addon) {
-      const allStyles = [...document.querySelectorAll(".scratch-addons-style")];
-
-      const appendByIndex = (el, index) => {
-        // Append a style element in the correct place preserving order
-        const nextElement = allStyles.find((el) => Number(el.getAttribute("data-addon-index") > index));
-        if (nextElement) document.documentElement.insertBefore(el, nextElement);
-        else {
-          if (document.body) document.documentElement.insertBefore(el, document.body);
-          else document.documentElement.appendChild(el);
-        }
-      };
-
-      if (addon.injectAsStyleElt) {
-        const style = document.createElement("style");
-        style.classList.add("scratch-addons-style");
-        style.setAttribute("data-addon-id", addon.addonId);
-        style.setAttribute("data-addon-index", addon.index);
-        fetch(addon.userstyle)
-          .then((res) => res.text())
-          .then((res) => (style.textContent = res));
-        appendByIndex(style, addon.index);
-      } else {
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.setAttribute("data-addon-id", addon.addonId);
-        link.setAttribute("data-addon-index", addon.index);
-        link.classList.add("scratch-addons-style");
-        link.href = addon.userstyle;
-        appendByIndex(link, addon.index);
-      }
-    }
-  }
 
   function loadClasses() {
     scratchAddons.classNames.arr = [
@@ -402,6 +268,137 @@ import globalStateProxy from "../background/imports/global-state.js";
     });
   }
 
-  onDataReady();
+  const addons = (await fetch(getURL("addons/addons.json")).then((r) => r.json())).filter(
+    (addon) => !addon.startsWith("//")
+  );
+
+  addons.forEach(async (addonId) => {
+    const manifest = await fetch(getURL("addons/" + addonId + "/addon.json")).then((r) => r.json());
+    for (let injectable of manifest.userscripts || []) {
+      injectable = parseMatches(injectable);
+    }
+    for (let injectable of manifest.userstyles || []) {
+      injectable = parseMatches(injectable);
+    }
+
+    manifest.userstyles = manifest.userstyles?.filter((injectable) =>
+      userscriptMatches({ url: location.href }, injectable, addonId)
+    );
+    manifest.userscripts = manifest.userscripts?.filter((injectable) =>
+      userscriptMatches({ url: location.href }, injectable, addonId)
+    );
+    function run() {
+      if (manifest.userscripts) runAddonUserscripts({ addonId, scripts: manifest.userscripts });
+
+      for (let [index, injectable] of (manifest.userstyles || []).entries()) {
+        addStyle({
+          addonId,
+          userstyle: getURL("addons/" + addonId + "/" + injectable.url),
+          injectAsStyleElt: manifest.injectAsStyleElt,
+          index,
+        });
+      }
+    }
+    // Note: we currently load userscripts and locales after head loaded
+    // We could do that before head loaded just fine, as long as we don't
+    // actually *run* the addons before document.head is defined.
+    if (document.head) run();
+    else {
+      const observer = new MutationObserver(() => {
+        if (document.head) {
+          run();
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.documentElement, { subtree: true, childList: true });
+    }
+  });
+
+  // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
+  // matchesPattern = "*" | regexPattern | Array<wellKnownName | wellKnownMatcher | regexPattern | legacyPattern>
+  function userscriptMatches(data, scriptOrStyle, addonId) {
+    // if (scriptOrStyle.if && !matchesIf(scriptOrStyle, scratchAddons.globalState.addonSettings[addonId])) return false;
+    // todo ^
+
+    const url = data.url;
+    const parsedURL = new URL(url);
+    const { matches, _scratchDomainImplied } = scriptOrStyle;
+    const parsedPathname = parsedURL.pathname;
+    const parsedOrigin = parsedURL.origin;
+    const originPath = parsedOrigin + parsedPathname;
+    const matchURL = _scratchDomainImplied ? parsedPathname : originPath;
+    const scratchOrigin = "https://scratch.mit.edu";
+    const isScratchOrigin = parsedOrigin === scratchOrigin;
+    // "*" is used for any URL on Scratch origin
+    if (matches === "*") return isScratchOrigin;
+    // matches becomes RegExp if it is a string that starts with ^
+    if (matches instanceof RegExp) {
+      if (_scratchDomainImplied && !isScratchOrigin) return false;
+      return matches.test(matchURL);
+    }
+    for (const match of matches) {
+      if (match instanceof RegExp) {
+        if (match._scratchDomainImplied && !isScratchOrigin) continue;
+        if (match.test(match._scratchDomainImplied ? parsedPathname : originPath)) {
+          return true;
+        }
+      } else if (Object.prototype.hasOwnProperty.call(WELL_KNOWN_PATTERNS, match)) {
+        if (isScratchOrigin && WELL_KNOWN_PATTERNS[match].test(parsedPathname)) return true;
+      } else if (Object.prototype.hasOwnProperty.call(WELL_KNOWN_MATCHERS, match)) {
+        if (isScratchOrigin && WELL_KNOWN_MATCHERS[match](parsedPathname)) return true;
+      } else if (urlMatchesLegacyPattern(match, parsedURL)) return true;
+    }
+    return false;
+  }
+
+  function parseMatches(injectable) {
+    const { matches } = injectable;
+    if (typeof matches === "string" && matches.startsWith("^")) {
+      injectable._scratchDomainImplied = !matches.startsWith("^https:");
+      injectable.matches = new RegExp(matches, "u");
+    } else if (Array.isArray(matches)) {
+      for (let i = matches.length; i--; ) {
+        const match = matches[i];
+        if (typeof match === "string" && match.startsWith("^")) {
+          matches[i] = new RegExp(match, "u");
+          matches[i]._scratchDomainImplied = !match.startsWith("^https:");
+        }
+      }
+    }
+    return injectable;
+  }
+  function addStyle(addon) {
+    const allStyles = [...document.querySelectorAll(".scratch-addons-style")];
+
+    const appendByIndex = (el, index) => {
+      // Append a style element in the correct place preserving order
+      const nextElement = allStyles.find((el) => Number(el.getAttribute("data-addon-index") > index));
+      if (nextElement) document.documentElement.insertBefore(el, nextElement);
+      else {
+        if (document.body) document.documentElement.insertBefore(el, document.body);
+        else document.documentElement.appendChild(el);
+      }
+    };
+
+    if (addon.injectAsStyleElt) {
+      const style = document.createElement("style");
+      style.classList.add("scratch-addons-style");
+      style.setAttribute("data-addon-id", addon.addonId);
+      style.setAttribute("data-addon-index", addon.index);
+      fetch(addon.userstyle)
+        .then((res) => res.text())
+        .then((res) => (style.textContent = res));
+      appendByIndex(style, addon.index);
+    } else {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.setAttribute("data-addon-id", addon.addonId);
+      link.setAttribute("data-addon-index", addon.index);
+      link.classList.add("scratch-addons-style");
+      link.href = addon.userstyle;
+      appendByIndex(link, addon.index);
+    }
+  }
+
   getSession.refetchSession();
 })();
