@@ -3,14 +3,6 @@ import Localization from "./l10n.js";
 import globalStateProxy from "../../background/imports/global-state.js";
 
 (async function () {
-  scratchAddons.globalState = globalStateProxy;
-  console.log(
-    "%cscratchAddons.globalState",
-    "font-weight: bold;",
-    "initialized:\n",
-    JSON.parse(JSON.stringify(scratchAddons.globalState))
-  );
-
   await Promise.all([
     loadScriptFromUrl("libraries/common/cs/text-color.js"),
     loadScriptFromUrl("content-scripts/prototype-handler.js"),
@@ -71,6 +63,13 @@ import globalStateProxy from "../../background/imports/global-state.js";
       this.isFetching = false;
     },
   };
+  scratchAddons.globalState = globalStateProxy;
+  console.log(
+    "%cscratchAddons.globalState",
+    "font-weight: bold;",
+    "initialized:\n",
+    JSON.parse(JSON.stringify(scratchAddons.globalState))
+  );
 
   function getURL(url) {
     return new URL("../../" + url, import.meta.url).href;
@@ -106,7 +105,8 @@ import globalStateProxy from "../../background/imports/global-state.js";
      * @param {string} opts.query - Query.
      * @param {WeakSet} [opts.seen] - A WeakSet that tracks whether an element has already been seen.
      * @param {function} [opts.condition] - A function that returns whether to resolve the selector or not.
-     * @param {function} [opts.elementCondition] - A function that returns whether to resolve the selector or not, given an element.
+     * @param {function} [opts.elementCondition] - A function that returns whether to resolve the selector or not, given
+     *   an element.
      * @returns {Promise<Node>} Promise that is resolved with modified element.
      */
     watch(opts) {
