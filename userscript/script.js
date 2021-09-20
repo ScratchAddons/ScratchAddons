@@ -26,7 +26,7 @@ document.documentElement.append(
   })
 );
 
-if(!scratchAddons) window.scratchAddons = {}
+if(typeof scratchAddons === "undefined") window.scratchAddons = {}
 window.scratchAddons = { ...scratchAddons, classNames: { loaded: false }, session: {} };
 scratchAddons.eventTargets = {
   auth: [],
@@ -116,12 +116,5 @@ scratchAddons.console = {
   warnForAddon: (addonId) => _realConsole.warn.bind(_realConsole, ...consoleOutput(addonId)),
   errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
 };
-
-console.log(
-  "%cscratchAddons.globalState",
-  "font-weight: bold;",
-  "initialized:\n",
-  JSON.parse(JSON.stringify(scratchAddons.globalState))
-);
 
 scratchAddons.methods = {};

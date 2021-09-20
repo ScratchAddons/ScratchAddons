@@ -54,7 +54,7 @@ function getL10NURLs() {
     if (typeof scratchAddons !== "undefined") resolve();
     const interval = setInterval(() => {
       if (typeof scratchAddons !== "undefined") {
-        interval.clear();
+        clearInterval(interval)
         resolve();
       }
     }, 100);
@@ -63,6 +63,12 @@ function getL10NURLs() {
   scratchAddons.globalState = globalStateProxy;
 
   const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js");
+  console.log(
+    "%cscratchAddons.globalState",
+    "font-weight: bold;",
+    "initialized:\n",
+    JSON.parse(JSON.stringify(scratchAddons.globalState))
+  );
 
   scratchAddons.l10n = new Localization(getL10NURLs());
 
@@ -91,6 +97,7 @@ function getL10NURLs() {
       this.isFetching = false;
     },
   };
+
   handleAuthPromise.then(() => {
     addonListPromise.then((addons) =>
       addons.forEach((promise) =>
