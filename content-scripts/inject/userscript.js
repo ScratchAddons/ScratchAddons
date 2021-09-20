@@ -204,9 +204,8 @@ async function onDataReady() {
             }
           }
         }
+		if (userscriptMatches({ url:location.href }, injectable, addonId)) runAddonUserscripts({ addonId, scripts: [injectable] });
       }
-
-	  if (userscriptMatches({ url:location.href }, injectable, addonId)) runAddonUserscripts({ addonId, scripts: manifest.userscripts || [] });
     });
   }
 
