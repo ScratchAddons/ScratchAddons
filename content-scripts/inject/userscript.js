@@ -1,6 +1,6 @@
 import runAddonUserscripts from "./run-userscript.js";
 import Localization from "./l10n.js";
-import globalStateProxy from "./imports/global-state.js";
+import globalStateProxy from "../../background/imports/global-state.js";
 
 (async function () {
   scratchAddons.globalState = globalStateProxy;
