@@ -108,8 +108,9 @@ function getL10NURLs() {
           manifest.userscripts = manifest.userscripts?.filter((injectable) =>
             userscriptMatches({ url: location.href }, injectable, addonId)
           );
-          function run() {
-            if (manifest.userscripts) runAddonUserscripts({ addonId, scripts: manifest.userscripts });
+         function run() {
+            if (manifest.userscripts) runAddonUserscripts({ addonId, scripts: manifest.userscripts }).then(()=>
+            console.timeLog("sa"));
 
             for (let [index, injectable] of (manifest.userstyles || []).entries()) {
               addStyle({
@@ -118,8 +119,8 @@ function getL10NURLs() {
                 injectAsStyleElt: manifest.injectAsStyleElt,
                 index,
               });
+              console.timeLog("sa")
             }
-            console.timeLog("sa")
           }
           // Note: we currently load userscripts and locales after head loaded
           // We could do that before head loaded just fine, as long as we don't
