@@ -23,7 +23,7 @@ export default async function ({ addon, global, cons, msg }) {
           ["'", "'"],
           ["/", "/"],
         ]
-      )
+      );
     }
     if (enableShiftKeys && addon.settings.get("shiftKeys")) {
       keys.push(
@@ -44,13 +44,13 @@ export default async function ({ addon, global, cons, msg }) {
           ["}", "}"],
           ["|", "|"],
           [":", ":"],
-          ["\"", "\""],
+          ['"', '"'],
           ["?", "?"],
           ["<", "<"],
           [">", ">"],
           ["~", "~"],
         ]
-      )
+      );
     }
   }
 

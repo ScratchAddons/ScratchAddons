@@ -22,13 +22,13 @@
   ],
   "settings": [
     {
-      "name":"Enable experimental keys",
+      "name": "Enable experimental keys",
       "id": "experimentalKeys",
       "type": "boolean",
       "default": false
     },
     {
-      "name":"Enable shift keys",
+      "name": "Enable shift keys",
       "id": "shiftKeys",
       "type": "boolean",
       "default": false
