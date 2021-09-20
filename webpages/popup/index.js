@@ -92,5 +92,3 @@ chrome.runtime.sendMessage("getSettingsInfo", (res) => {
   vue.popups = popupObjects;
   vue.setPopup(vue.popups[0]);
 });
-
-chrome.runtime.sendMessage("checkPermissions");

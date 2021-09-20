@@ -73,34 +73,11 @@ export default async function ({ template }) {
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
         };
 
-        const requiredPermissions = (this.addon.permissions || []).filter((value) =>
-          this.$root.browserLevelPermissions.includes(value)
-        );
         if (!this.addon._enabled && this.addon.tags.includes("danger")) {
           const confirmation = confirm(chrome.i18n.getMessage("dangerWarning", [this.addon.name]));
           if (!confirmation) return;
         }
-        if (!this.addon._enabled && requiredPermissions.length) {
-          const result = requiredPermissions.every((p) => this.$root.grantedOptionalPermissions.includes(p));
-          if (result === false) {
-            if (isIframe) {
-              this.$root.addonToEnable = this.addon;
-              document.querySelector(".popup").style.animation = "dropDown 1.6s 1";
-              this.$root.showPopupModal = true;
-            } else
-              chrome.permissions.request(
-                {
-                  permissions: requiredPermissions,
-                },
-                (granted) => {
-                  if (granted) {
-                    console.log("Permissions granted!");
-                    toggle();
-                  }
-                }
-              );
-          } else toggle();
-        } else toggle();
+        toggle();
       },
       msg(...params) {
         return this.$root.msg(...params);

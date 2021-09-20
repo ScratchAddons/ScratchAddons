@@ -8,12 +8,19 @@ import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 
+
+if (window.parent=== window) {
+  location.href="https://scratch.mit.edu/scratch-addons-extention/settings"
+}
+
 let isIframe = false;
-if (window.parent !== window) {
+if (new URLSearchParams(window.location.search).get("iframe") === "true") {
   // We're in a popup!
   document.body.classList.add("iframe");
   isIframe = true;
 }
+
+window.parent.postMessage("hi")
 
 let vue;
 let fuse;
@@ -70,17 +77,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     },
   });
 
-  const browserLevelPermissions = ["notifications"];
-  if (typeof browser !== "undefined") browserLevelPermissions.push("clipboardWrite");
-  let grantedOptionalPermissions = [];
-  const updateGrantedPermissions = () =>
-    chrome.permissions.getAll(({ permissions }) => {
-      grantedOptionalPermissions = permissions.filter((p) => browserLevelPermissions.includes(p));
-    });
-  updateGrantedPermissions();
-  chrome.permissions.onAdded?.addListener(updateGrantedPermissions);
-  chrome.permissions.onRemoved?.addListener(updateGrantedPermissions);
-
   const promisify =
     (callbackFn) =>
     (...args) =>
@@ -112,19 +108,12 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     const syncGet = promisify(chrome.storage.sync.get.bind(chrome.storage.sync));
     const syncSet = promisify(chrome.storage.sync.set.bind(chrome.storage.sync));
     const { addonSettings, addonsEnabled } = await syncGet(["addonSettings", "addonsEnabled"]);
-    const pendingPermissions = {};
     for (const addonId of Object.keys(obj.addons)) {
       const addonValue = obj.addons[addonId];
       const addonManifest = manifests.find((m) => m._addonId === addonId);
       if (!addonManifest) continue;
-      const permissionsRequired = addonManifest.permissions || [];
-      const browserPermissionsRequired = permissionsRequired.filter((p) => browserLevelPermissions.includes(p));
-      console.log(addonId, permissionsRequired, browserPermissionsRequired);
-      if (addonValue.enabled && browserPermissionsRequired.length) {
-        pendingPermissions[addonId] = browserPermissionsRequired;
-      } else {
         addonsEnabled[addonId] = addonValue.enabled;
-      }
+
       addonSettings[addonId] = Object.assign({}, addonSettings[addonId], addonValue.settings);
     }
     if (handleConfirmClicked) confirmElem.removeEventListener("click", handleConfirmClicked, { once: true });
@@ -134,15 +123,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     });
     handleConfirmClicked = async () => {
       handleConfirmClicked = null;
-      if (Object.keys(pendingPermissions).length) {
-        const granted = await promisify(chrome.permissions.request.bind(chrome.permissions))({
-          permissions: Object.values(pendingPermissions).flat(),
-        });
-        console.log(pendingPermissions, granted);
-        Object.keys(pendingPermissions).forEach((addonId) => {
-          addonsEnabled[addonId] = granted;
-        });
-      }
       await syncSet({
         globalTheme: !!obj.core.lightTheme,
         addonsEnabled,
@@ -180,8 +160,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         addonGroups: addonGroups.filter((g) => (isIframe ? g.iframeShow : g.fullscreenShow)),
         categories,
         searchMsg: this.msg("search"),
-        browserLevelPermissions,
-        grantedOptionalPermissions,
         addonListObjs: [],
         sidebarUrls: (() => {
           const uiLanguage = chrome.i18n.getUILanguage();
@@ -690,6 +668,4 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
     }
   });
-
-  chrome.runtime.sendMessage("checkPermissions");
 })();

@@ -273,12 +273,5 @@
         </div>
       </div>
     </div>
-    <div class="popup" v-cloak v-show="showPopupModal">
-      <div class="label">{{ msg("settingsPagePermission", addonToEnable ? addonToEnable.name : "") }}</div>
-      <div>
-        <button class="large-button" @click="openFullSettings()">{{ msg("openFullSettings") }}</button>
-        <button class="large-button" @click="hidePopup()">{{ msg("skipOpenFullSettings") }}</button>
-      </div>
-    </div>
   </body>
 </html>
