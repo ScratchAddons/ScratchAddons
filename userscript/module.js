@@ -233,26 +233,87 @@ import globalStateProxy from "../background/imports/global-state.js";
       return false;
     }
 
+    function parseMatches(injectable) {
+      const { matches } = injectable;
+      if (typeof matches === "string" && matches.startsWith("^")) {
+        injectable._scratchDomainImplied = !matches.startsWith("^https:");
+        injectable.matches = new RegExp(matches, "u");
+      } else if (Array.isArray(matches)) {
+        for (let i = matches.length; i--; ) {
+          const match = matches[i];
+          if (typeof match === "string" && match.startsWith("^")) {
+            matches[i] = new RegExp(match, "u");
+            matches[i]._scratchDomainImplied = !match.startsWith("^https:");
+          }
+        }
+      }
+      return injectable;
+    }
+
     function runUserscripts() {
       addons.forEach(async (addonId) => {
         const manifest = await fetch(getURL("addons/" + addonId + "/addon.json")).then((r) => r.json());
 
-        for (const injectable of manifest.userscripts || []) {
-          const { matches } = injectable;
-          if (typeof matches === "string" && matches.startsWith("^")) {
-            injectable._scratchDomainImplied = !matches.startsWith("^https:");
-            injectable.matches = new RegExp(matches, "u");
-          } else if (Array.isArray(matches)) {
-            for (let i = matches.length; i--; ) {
-              const match = matches[i];
-              if (typeof match === "string" && match.startsWith("^")) {
-                matches[i] = new RegExp(match, "u");
-                matches[i]._scratchDomainImplied = !match.startsWith("^https:");
-              }
-            }
-          }
+        for (let injectable of manifest.userscripts || []) {
+          injectable = parseMatches(injectable);
           if (userscriptMatches({ url: location.href }, injectable, addonId))
             runAddonUserscripts({ addonId, scripts: [injectable] });
+        }
+        for (let [i, injectable] of (manifest.userstyles || []).entries()) {
+          injectable = parseMatches(injectable);
+          if (userscriptMatches({ url: location.href }, injectable, addonId)) {
+            function addStyle(addon) {
+              const allStyles = [...document.querySelectorAll(".scratch-addons-style")];
+              const addonStyles = allStyles.filter((el) => el.getAttribute("data-addon-id") === addon.addonId);
+
+              const appendByIndex = (el, index) => {
+                // Append a style element in the correct place preserving order
+                const nextElement = allStyles.find((el) => Number(el.getAttribute("data-addon-index") > index));
+                if (nextElement) document.documentElement.insertBefore(el, nextElement);
+                else {
+                  if (document.body) document.documentElement.insertBefore(el, document.body);
+                  else document.documentElement.appendChild(el);
+                }
+              };
+
+              if (addon.injectAsStyleElt) {
+                // If an existing style is already appended, just enable it instead
+                const existingEl = addonStyles.find((style) => style.textContent === addon.userstyle);
+                if (existingEl) {
+                  existingEl.disabled = false;
+                  return;
+                }
+
+                const style = document.createElement("style");
+                style.classList.add("scratch-addons-style");
+                style.setAttribute("data-addon-id", addon.addonId);
+                style.setAttribute("data-addon-index", addon.index);
+                style.textContent = addon.userstyle;
+                appendByIndex(style, addon.index);
+              } else {
+                const existingEl = addonStyles.find((style) => style.href === addon.userstyle);
+                if (existingEl) {
+                  existingEl.disabled = false;
+                  return;
+                }
+
+                const link = document.createElement("link");
+                link.rel = "stylesheet";
+                link.setAttribute("data-addon-id", addon.addonId);
+                link.setAttribute("data-addon-index", addon.index);
+                link.classList.add("scratch-addons-style");
+                link.href = addon.userstyle;
+                appendByIndex(link, addon.index);
+              }
+            }
+
+            addStyle({
+              addonId,
+              userstyle: injectable,
+              injectAsStyleElt: manifest.injectAsStyleElt,
+              index: i,
+            });
+          }
         }
       });
     }
