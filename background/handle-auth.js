@@ -3,29 +3,30 @@ const promisify =
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
 
+/*
 function getDefaultStoreId() {
   // Request Scratch to set the CSRF token.
   return fetch("https://scratch.mit.edu/csrf_token/", {
     credentials: "include",
   })
     .catch(() => {})
-    .then(() =>
-      promisify(chrome.cookies.get)({
-        url: "https://scratch.mit.edu/",
-        name: "scratchcsrftoken",
-      })
-    )
+    .then(() => getCookieValue("scratchcsrftoken"))
     .then((cookie) => {
       return (scratchAddons.cookieStoreId = cookie.storeId);
     });
 }
+*/
 
 (async function () {
+  /*
   const defaultStoreId = await getDefaultStoreId();
   console.log("Default cookie store ID: ", defaultStoreId);
+  */
+
   await checkSession();
 })();
 
+/*
 chrome.cookies.onChanged.addListener(({ cookie, cause }) => {
   if (cookie.name === "scratchsessionsid" || cookie.name === "scratchlanguage" || cookie.name === "scratchcsrftoken") {
     if (cookie.name === "scratchlanguage") {
@@ -38,20 +39,11 @@ chrome.cookies.onChanged.addListener(({ cookie, cause }) => {
     notifyContentScripts(cookie);
   }
 });
+*/
 
 function getCookieValue(name) {
-  return new Promise((resolve) => {
-    chrome.cookies.get(
-      {
-        url: "https://scratch.mit.edu/",
-        name,
-      },
-      (cookie) => {
-        if (cookie && cookie.value) resolve(cookie.value);
-        else resolve(null);
-      }
-    );
-  });
+  name = name.replace(/(?<character>[!$()*+./:=?[\\\]^{|}])/g, "\\$<character>");
+  return new RegExp("; " + name + "=(.*?); ").exec("; " + document.cookie + "; ")?.[1];
 }
 
 async function setLanguage() {
@@ -103,6 +95,7 @@ async function checkSession() {
   isChecking = false;
 }
 
+/*
 function notifyContentScripts(cookie) {
   if (cookie.name === "scratchlanguage") return;
   const storeId = cookie.storeId;
@@ -117,3 +110,4 @@ function notifyContentScripts(cookie) {
     tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError))
   );
 }
+*/

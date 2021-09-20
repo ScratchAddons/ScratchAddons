@@ -29,7 +29,7 @@ class StateProxy {
   set(target, key, value) {
     const oldValue = target[key];
     target[key] = value;
-    messageForAllTabs({ newGlobalState: _globalState });
+    // todo: reload
 
     if (JSON.stringify(oldValue) !== JSON.stringify(value)) {
       stateChange(this.name, key, value);
@@ -57,20 +57,21 @@ function stateChange(parentObjectPath, key, value) {
   if (objectPathArr[0] === "auth" && key !== "scratchLang") {
     // NOTE: Do not send to content script; this is handled in handle-auth.js
     scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));
-    scratchAddons.sendToPopups({ fireEvent: { target: "auth", name: "change" } });
+    // scratchAddons.sendToPopups({ fireEvent: { target: "auth", name: "change" } });
   } else if (objectPathArr[0] === "addonSettings") {
     // Send event to persistent script and userscripts, if they exist.
     const settingsEventTarget = scratchAddons.eventTargets.settings.find(
       (eventTarget) => eventTarget._addonId === objectPathArr[1]
     );
     if (settingsEventTarget) settingsEventTarget.dispatchEvent(new CustomEvent("change"));
-    messageForAllTabs({
-      fireEvent: {
-        target: "settings",
-        name: "change",
-        addonId: objectPathArr[1],
-      },
-    });
+    /* todo
+      messageForAllTabs({
+       fireEvent: {
+          target: "settings",
+          name: "change",
+          addonId: objectPathArr[1],
+        },
+      }); */
   }
 }
 
