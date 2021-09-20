@@ -163,38 +163,79 @@ import globalStateProxy from "../background/imports/global-state.js";
     return true;
   }
 
+  function getL10NURLs() {
+    const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+    const urls = [getURL(`addons-l10n/${langCode}`)];
+    if (langCode === "pt") {
+      urls.push(getURL(`addons-l10n/pt-br`));
+    }
+    if (langCode.includes("-")) {
+      urls.push(getURL(`addons-l10n/${langCode.split("-")[0]}`));
+    }
+    const enJSON = getURL("addons-l10n/en");
+    if (!urls.includes(enJSON)) urls.push(enJSON);
+    return urls;
+  }
+
+  scratchAddons.l10n = new Localization(getL10NURLs());
+
+  scratchAddons.methods = {};
+  scratchAddons.methods.getMsgCount = () => {
+    let promiseResolver;
+    const promise = new Promise((resolve) => (promiseResolver = resolve));
+    pendingPromises.msgCount.push(promiseResolver);
+    // 1 because the array was just pushed
+    if (pendingPromises.msgCount.length === 1) requestMsgCount();
+    return promise;
+  };
+
+  scratchAddons.sharedObserver = new SharedObserver();
   async function onDataReady() {
     const addons = (await fetch(getURL("addons/addons.json")).then((r) => r.json())).filter(
       (addon) => !addon.startsWith("//")
     );
 
-    function getL10NURLs() {
-      const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
-      const urls = [getURL(`addons-l10n/${langCode}`)];
-      if (langCode === "pt") {
-        urls.push(getURL(`addons-l10n/pt-br`));
+    addons.forEach(async (addonId) => {
+      const manifest = await fetch(getURL("addons/" + addonId + "/addon.json")).then((r) => r.json());
+      for (let injectable of manifest.userscripts || []) {
+        injectable = parseMatches(injectable);
       }
-      if (langCode.includes("-")) {
-        urls.push(getURL(`addons-l10n/${langCode.split("-")[0]}`));
+      for (let injectable of manifest.userstyles || []) {
+        injectable = parseMatches(injectable);
       }
-      const enJSON = getURL("addons-l10n/en");
-      if (!urls.includes(enJSON)) urls.push(enJSON);
-      return urls;
-    }
 
-    scratchAddons.l10n = new Localization(getL10NURLs());
+      manifest.userstyles = manifest.userstyles?.filter((injectable) =>
+        userscriptMatches({ url: location.href }, injectable, addonId)
+      );
+      manifest.userscripts = manifest.userscripts?.filter((injectable) =>
+        userscriptMatches({ url: location.href }, injectable, addonId)
+      );
+      function run() {
+        if (manifest.userscripts) runAddonUserscripts({ addonId, scripts: manifest.userscripts });
 
-    scratchAddons.methods = {};
-    scratchAddons.methods.getMsgCount = () => {
-      let promiseResolver;
-      const promise = new Promise((resolve) => (promiseResolver = resolve));
-      pendingPromises.msgCount.push(promiseResolver);
-      // 1 because the array was just pushed
-      if (pendingPromises.msgCount.length === 1) requestMsgCount();
-      return promise;
-    };
-
-    scratchAddons.sharedObserver = new SharedObserver();
+        for (let [index, injectable] of (manifest.userstyles || []).entries()) {
+          addStyle({
+            addonId,
+            userstyle: getURL("addons/" + addonId + "/" + injectable.url),
+            injectAsStyleElt: manifest.injectAsStyleElt,
+            index,
+          });
+        }
+      }
+      // Note: we currently load userscripts and locales after head loaded
+      // We could do that before head loaded just fine, as long as we don't
+      // actually *run* the addons before document.head is defined.
+      if (document.head) run();
+      else {
+        const observer = new MutationObserver(() => {
+          if (document.head) {
+            run();
+            observer.disconnect();
+          }
+        });
+        observer.observe(document.documentElement, { subtree: true, childList: true });
+      }
+    });
 
     // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
     // matchesPattern = "*" | regexPattern | Array<wellKnownName | wellKnownMatcher | regexPattern | legacyPattern>
@@ -249,87 +290,37 @@ import globalStateProxy from "../background/imports/global-state.js";
       }
       return injectable;
     }
+    function addStyle(addon) {
+      const allStyles = [...document.querySelectorAll(".scratch-addons-style")];
 
-    function runUserscripts() {
-      addons.forEach(async (addonId) => {
-        const manifest = await fetch(getURL("addons/" + addonId + "/addon.json")).then((r) => r.json());
-
-        for (let injectable of manifest.userscripts || []) {
-          injectable = parseMatches(injectable);
-          if (userscriptMatches({ url: location.href }, injectable, addonId))
-            runAddonUserscripts({ addonId, scripts: [injectable] });
+      const appendByIndex = (el, index) => {
+        // Append a style element in the correct place preserving order
+        const nextElement = allStyles.find((el) => Number(el.getAttribute("data-addon-index") > index));
+        if (nextElement) document.documentElement.insertBefore(el, nextElement);
+        else {
+          if (document.body) document.documentElement.insertBefore(el, document.body);
+          else document.documentElement.appendChild(el);
         }
-        for (let [i, injectable] of (manifest.userstyles || []).entries()) {
-          injectable = parseMatches(injectable);
-          if (userscriptMatches({ url: location.href }, injectable, addonId)) {
-            function addStyle(addon) {
-              const allStyles = [...document.querySelectorAll(".scratch-addons-style")];
-              const addonStyles = allStyles.filter((el) => el.getAttribute("data-addon-id") === addon.addonId);
+      };
 
-              const appendByIndex = (el, index) => {
-                // Append a style element in the correct place preserving order
-                const nextElement = allStyles.find((el) => Number(el.getAttribute("data-addon-index") > index));
-                if (nextElement) document.documentElement.insertBefore(el, nextElement);
-                else {
-                  if (document.body) document.documentElement.insertBefore(el, document.body);
-                  else document.documentElement.appendChild(el);
-                }
-              };
-
-              if (addon.injectAsStyleElt) {
-                // If an existing style is already appended, just enable it instead
-                const existingEl = addonStyles.find((style) => style.textContent === addon.userstyle);
-                if (existingEl) {
-                  existingEl.disabled = false;
-                  return;
-                }
-
-                const style = document.createElement("style");
-                style.classList.add("scratch-addons-style");
-                style.setAttribute("data-addon-id", addon.addonId);
-                style.setAttribute("data-addon-index", addon.index);
-                style.textContent = addon.userstyle;
-                appendByIndex(style, addon.index);
-              } else {
-                const existingEl = addonStyles.find((style) => style.href === addon.userstyle);
-                if (existingEl) {
-                  existingEl.disabled = false;
-                  return;
-                }
-
-                const link = document.createElement("link");
-                link.rel = "stylesheet";
-                link.setAttribute("data-addon-id", addon.addonId);
-                link.setAttribute("data-addon-index", addon.index);
-                link.classList.add("scratch-addons-style");
-                link.href = addon.userstyle;
-                appendByIndex(link, addon.index);
-              }
-            }
-
-            addStyle({
-              addonId,
-              userstyle: injectable.url,
-              injectAsStyleElt: manifest.injectAsStyleElt,
-              index: i,
-            });
-          }
-        }
-      });
-    }
-
-    // Note: we currently load userscripts and locales after head loaded
-    // We could do that before head loaded just fine, as long as we don't
-    // actually *run* the addons before document.head is defined.
-    if (document.head) runUserscripts();
-    else {
-      const observer = new MutationObserver(() => {
-        if (document.head) {
-          runUserscripts();
-          observer.disconnect();
-        }
-      });
-      observer.observe(document.documentElement, { subtree: true, childList: true });
+      if (addon.injectAsStyleElt) {
+        const style = document.createElement("style");
+        style.classList.add("scratch-addons-style");
+        style.setAttribute("data-addon-id", addon.addonId);
+        style.setAttribute("data-addon-index", addon.index);
+        fetch(addon.userstyle)
+          .then((res) => res.text())
+          .then((res) => (style.textContent = res));
+        appendByIndex(style, addon.index);
+      } else {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.setAttribute("data-addon-id", addon.addonId);
+        link.setAttribute("data-addon-index", addon.index);
+        link.classList.add("scratch-addons-style");
+        link.href = addon.userstyle;
+        appendByIndex(link, addon.index);
+      }
     }
   }
 
