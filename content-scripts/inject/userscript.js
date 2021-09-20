@@ -138,6 +138,26 @@ const WELL_KNOWN_MATCHERS = {
   },
 };
 
+function urlMatchesLegacyPattern(pattern, urlUrl) {
+	const patternUrl = new URL(pattern);
+	// We assume both URLs start with https://scratch.mit.edu
+
+	const patternPath = patternUrl.pathname.split("/");
+	const urlPath = urlUrl.pathname.split("/");
+	// Implicit slash at the end of the URL path, if it's not there
+	if (urlPath[urlPath.length - 1] !== "") urlPath.push("");
+	// Implicit slash at the end of the pattern, unless it's a wildcard
+	if (patternPath[patternPath.length - 1] !== "" && patternPath[patternPath.length - 1] !== "*") patternPath.push("");
+
+	while (patternPath.length) {
+	  // shift() removes the first item of an array, and returns it
+	  const patternItem = patternPath.shift();
+	  const urlItem = urlPath.shift();
+	  if (patternItem !== urlItem && patternItem !== "*") return false;
+	}
+	return true;
+  }
+
 async function onDataReady() {
   const addons = (await fetch(getURL("addons/addons.json")).then((r) => r.json())).filter(
     (addon) => !addon.startsWith("//")
