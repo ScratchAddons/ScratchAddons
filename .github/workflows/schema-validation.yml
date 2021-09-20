@@ -31,7 +31,7 @@ jobs:
         if: github.event_name == 'push' || github.event_name == 'pull_request'
         uses: ScratchAddons/validate-json-action@master
         with:
-          schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json
+          schema: https://raw.githubusercontent.com/SA-Userscript/manifest-schema/dist/schema.json
           jsons: |
             ${{ steps.changed.outputs.files_created }}
             ${{ steps.changed.outputs.files_updated }}
@@ -40,5 +40,5 @@ jobs:
         if: "! (github.event_name == 'push' || github.event_name == 'pull_request')"
         uses: ScratchAddons/validate-json-action@master
         with:
-          schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json
+          schema: https://raw.githubusercontent.com/SA-Userscript/manifest-schema/dist/schema.json
           jsons: addons/*/addon.json

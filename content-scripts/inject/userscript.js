@@ -149,10 +149,64 @@ async function onDataReady() {
 
   scratchAddons.sharedObserver = new SharedObserver();
 
+  // regexPattern = "^https:(absolute-regex)" | "^(relative-regex)"
+  // matchesPattern = "*" | regexPattern | Array<wellKnownName | wellKnownMatcher | regexPattern | legacyPattern>
+  function userscriptMatches(data, scriptOrStyle, addonId) {
+    // if (scriptOrStyle.if && !matchesIf(scriptOrStyle, scratchAddons.globalState.addonSettings[addonId])) return false;
+    // todo ^
+
+    const url = data.url;
+    const parsedURL = new URL(url);
+    const { matches, _scratchDomainImplied } = scriptOrStyle;
+    const parsedPathname = parsedURL.pathname;
+    const parsedOrigin = parsedURL.origin;
+    const originPath = parsedOrigin + parsedPathname;
+    const matchURL = _scratchDomainImplied ? parsedPathname : originPath;
+    const scratchOrigin = "https://scratch.mit.edu";
+    const isScratchOrigin = parsedOrigin === scratchOrigin;
+    // "*" is used for any URL on Scratch origin
+    if (matches === "*") return isScratchOrigin;
+    // matches becomes RegExp if it is a string that starts with ^
+    if (matches instanceof RegExp) {
+      if (_scratchDomainImplied && !isScratchOrigin) return false;
+      return matches.test(matchURL);
+    }
+    for (const match of matches) {
+      if (match instanceof RegExp) {
+        if (match._scratchDomainImplied && !isScratchOrigin) continue;
+        if (match.test(match._scratchDomainImplied ? parsedPathname : originPath)) {
+          return true;
+        }
+      } else if (Object.prototype.hasOwnProperty.call(WELL_KNOWN_PATTERNS, match)) {
+        if (isScratchOrigin && WELL_KNOWN_PATTERNS[match].test(parsedPathname)) return true;
+      } else if (Object.prototype.hasOwnProperty.call(WELL_KNOWN_MATCHERS, match)) {
+        if (isScratchOrigin && WELL_KNOWN_MATCHERS[match](parsedPathname)) return true;
+      } else if (urlMatchesLegacyPattern(match, parsedURL)) return true;
+    }
+    return false;
+  }
+
   function runUserscripts() {
     addons.forEach(async (addonId) => {
       const manifest = await fetch(getURL("addons/" + addonId + "/addon.json")).then((r) => r.json());
-      runAddonUserscripts({ addonId, scripts: manifest.scripts });
+
+      for (const injectable of manifest.userscripts || []) {
+        const { matches } = injectable;
+        if (typeof matches === "string" && matches.startsWith("^")) {
+          injectable._scratchDomainImplied = !matches.startsWith("^https:");
+          injectable.matches = new RegExp(matches, "u");
+        } else if (Array.isArray(matches)) {
+          for (let i = matches.length; i--; ) {
+            const match = matches[i];
+            if (typeof match === "string" && match.startsWith("^")) {
+              matches[i] = new RegExp(match, "u");
+              matches[i]._scratchDomainImplied = !match.startsWith("^https:");
+            }
+          }
+        }
+      }
+
+	  if (userscriptMatches({ url:location.href }, injectable, addonId)) runAddonUserscripts({ addonId, scripts: manifest.userscripts || [] });
     });
   }
 

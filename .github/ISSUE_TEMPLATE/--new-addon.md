@@ -16,7 +16,7 @@ READ BEFORE CREATING!
 - Asking for help should be done on Discussions or our Discord server. Return to the last page for the links.
 
 FAQ: https://scratchaddons.com/faq
-Return to the last page: https://github.com/ScratchAddons/ScratchAddons/issues/new/choose
+Return to the last page: https://github.com/SA-Userscript/ScratchAddons/issues/new/choose
 
 -->
 

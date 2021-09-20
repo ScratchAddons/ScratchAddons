@@ -4,7 +4,7 @@ on:
   release:
     types: [released]
   # Want to trigger manually? Go to the link below.
-  # https://github.com/ScratchAddons/website/actions?query=workflow%3A%22Addons+Data+Update%22
+  # https://github.com/SA-Userscript/website/actions?query=workflow%3A%22Addons+Data+Update%22
 
 jobs:
   update:

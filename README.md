@@ -1,19 +1,19 @@
-<img src="https://raw.githubusercontent.com/ScratchAddons/ScratchAddons/master/images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
+<img src="https://raw.githubusercontent.com/SA-Userscript/ScratchAddons/master/images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
 # Welcome to Scratch Addons' repository!
 
-[![](https://img.shields.io/github/stars/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/stargazers) 
-[![](https://img.shields.io/github/forks/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/network/members)
-[![](https://img.shields.io/github/watchers/ScratchAddons/ScratchAddons?color=blue&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/watchers) 
-[![](https://img.shields.io/github/issues/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/issues) 
-[![](https://img.shields.io/github/issues-pr/ScratchAddons/ScratchAddons?color=green&style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/pulls) 
-[![](https://img.shields.io/github/license/ScratchAddons/ScratchAddons?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE) <!-- 2 spaces -->  
+[![](https://img.shields.io/github/stars/SA-Userscript/ScratchAddons?color=blue&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/stargazers)
+[![](https://img.shields.io/github/forks/SA-Userscript/ScratchAddons?color=blue&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/network/members)
+[![](https://img.shields.io/github/watchers/SA-Userscript/ScratchAddons?color=blue&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/watchers)
+[![](https://img.shields.io/github/issues/SA-Userscript/ScratchAddons?color=green&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/issues)
+[![](https://img.shields.io/github/issues-pr/SA-Userscript/ScratchAddons?color=green&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/pulls)
+[![](https://img.shields.io/github/license/SA-Userscript/ScratchAddons?style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/blob/master/LICENSE) <!-- 2 spaces -->
 [![](https://img.shields.io/chrome-web-store/v/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=version&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
 [![](https://img.shields.io/chrome-web-store/users/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=users&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
 [![](https://img.shields.io/amo/v/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=version&color=FF7139)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)
 [![](https://img.shields.io/amo/users/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=users&color=FF7139)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)
-[![](https://img.shields.io/github/v/release/ScratchAddons/ScratchAddons?style=flat-square&logo=github&logoColor=white&label=version&color=181717)](https://github.com/ScratchAddons/ScratchAddons/releases)
-[![](https://img.shields.io/github/downloads/ScratchAddons/ScratchAddons/total?style=flat-square&logo=github&logoColor=white&label=downloads&color=181717)](https://github.com/ScratchAddons/ScratchAddons/releases)
-[![](https://img.shields.io/badge/discuss-on_github-181717.svg?style=flat-square)](https://github.com/ScratchAddons/ScratchAddons/discussions)
+[![](https://img.shields.io/github/v/release/SA-Userscript/ScratchAddons?style=flat-square&logo=github&logoColor=white&label=version&color=181717)](https://github.com/SA-Userscript/ScratchAddons/releases)
+[![](https://img.shields.io/github/downloads/SA-Userscript/ScratchAddons/total?style=flat-square&logo=github&logoColor=white&label=downloads&color=181717)](https://github.com/SA-Userscript/ScratchAddons/releases)
+[![](https://img.shields.io/badge/discuss-on_github-181717.svg?style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/discussions)
 [![](https://img.shields.io/badge/chat-on_discord-7289da.svg?style=flat-square)](https://discord.gg/R5NBqwMjNc)
 [![](https://img.shields.io/badge/website-scratchaddons.com-ff7b26.svg?style=flat-square)](https://scratchaddons.com)
 
@@ -43,32 +43,32 @@ Scratch Addons by itself is just an addon loader. Its main tasks are:
 
 ### Addons outside of Scratch Addons itself
 
-Other extensions (and even forks of Scratch) can also provide their users with most addons from Scratch Addons, as long as a compatibility layer for `addon.*` and other parts of the addon loader is present. Notable examples are the [Scratch 3 Developer Tools extension](https://github.com/ScratchAddons/DevtoolsExtension) and the [TurboWarp](https://github.com/TurboWarp/scratch-gui/tree/develop/src/addons) editor. These also inherit translations from the Scratch Addons project.
+Other extensions (and even forks of Scratch) can also provide their users with most addons from Scratch Addons, as long as a compatibility layer for `addon.*` and other parts of the addon loader is present. Notable examples are the [Scratch 3 Developer Tools extension](https://github.com/SA-Userscript/DevtoolsExtension) and the [TurboWarp](https://github.com/TurboWarp/scratch-gui/tree/develop/src/addons) editor. These also inherit translations from the Scratch Addons project.
 
 ## Install
 
 ### From extension stores
 
-[![](https://img.shields.io/chrome-web-store/v/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=install&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)  
+[![](https://img.shields.io/chrome-web-store/v/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=install&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
 &nbsp;&nbsp;&nbsp;&nbsp;↳ Install on Google Chrome, Opera, Brave, Vivaldi, Microsoft Edge (>79), and other Chromium-based browsers.
 
-[![](https://img.shields.io/amo/v/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=install&color=FF7139)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)  
+[![](https://img.shields.io/amo/v/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=install&color=FF7139)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)
 &nbsp;&nbsp;&nbsp;&nbsp;↳ Install on Mozilla Firefox.
 
 ### From source
 
 No build is required. You may download the source code by doing one of these steps.
 
-1. Cloning the repository by running `git clone https://github.com/ScratchAddons/ScratchAddons.git`.
-2. Download the zipball of the current state of the repository [here](https://github.com/ScratchAddons/ScratchAddons/archive/master.zip).
-3. Download one of the builds on [the releases page](https://github.com/ScratchAddons/ScratchAddons/releases). (.zip recommended)
+1. Cloning the repository by running `git clone https://github.com/SA-Userscript/ScratchAddons.git`.
+2. Download the zipball of the current state of the repository [here](https://github.com/SA-Userscript/ScratchAddons/archive/master.zip).
+3. Download one of the builds on [the releases page](https://github.com/SA-Userscript/ScratchAddons/releases). (.zip recommended)
 
 After downloading the extension to your computer, just load it by following these steps.
 
 - Google Chrome
   1. Open `chrome://extensions` to open the Extension Management page by typing it into your address bar.
   2. Enable Developer Mode by clicking the toggle switch next to Developer mode.
-  3. Click the `Load unpacked` button on the top and select the extension directory which has the `manifest.json` file in it. 
+  3. Click the `Load unpacked` button on the top and select the extension directory which has the `manifest.json` file in it.
 
 - Mozilla Firefox
   1. Open `about:debugging` to open the add-ons page by typing it into your address bar.
@@ -77,10 +77,10 @@ After downloading the extension to your computer, just load it by following thes
 
 ## Contribute
 
-If you found a bug, or want to suggest new features, please use the [issues tab](https://github.com/ScratchAddons/ScratchAddons/issues). If you want to help with the code or add a new addon, fork this repository, and then create a [pull request](https://github.com/ScratchAddons/ScratchAddons/pulls). Also, please read our [contributing guidelines](https://github.com/ScratchAddons/ScratchAddons/blob/master/CONTRIBUTING.md).
+If you found a bug, or want to suggest new features, please use the [issues tab](https://github.com/SA-Userscript/ScratchAddons/issues). If you want to help with the code or add a new addon, fork this repository, and then create a [pull request](https://github.com/SA-Userscript/ScratchAddons/pulls). Also, please read our [contributing guidelines](https://github.com/SA-Userscript/ScratchAddons/blob/master/CONTRIBUTING.md).
 
 ## License
 
-Scratch Addons is licensed under the terms of the [GNU General Public License v3.0](https://github.com/ScratchAddons/ScratchAddons/blob/master/LICENSE).
+Scratch Addons is licensed under the terms of the [GNU General Public License v3.0](https://github.com/SA-Userscript/ScratchAddons/blob/master/LICENSE).
 
-Other third-party libraries used are listed on [/libraries/README.md](https://github.com/ScratchAddons/ScratchAddons/tree/master/libraries#readme).
+Other third-party libraries used are listed on [/libraries/README.md](https://github.com/SA-Userscript/ScratchAddons/tree/master/libraries#readme).

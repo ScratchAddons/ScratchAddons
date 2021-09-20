@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: 💬 GitHub Discussions
-    url: https://github.com/ScratchAddons/ScratchAddons/discussions
+    url: https://github.com/SA-Userscript/ScratchAddons/discussions
     about: Ask a question, or just discuss about Scratch Addons on our GitHub Discussions (our own forums)
   - name: 📝 Send feedback
     url: https://scratchaddons.com/feedback
