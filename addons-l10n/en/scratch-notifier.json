@@ -18,5 +18,7 @@
   "scratch-notifier/notif-generic": "New Scratch message",
   "scratch-notifier/open": "Open messages page",
   "scratch-notifier/clear": "Mark all as read",
-  "scratch-notifier/notif-promotion": "{actor} promoted you to manager for the studio \"{title}\""
+  "scratch-notifier/notif-promotion": "{actor} promoted you to manager for the studio \"{title}\"",
+  "scratch-notifier/notif-host": "{actor} made you the host of the studio \"{title}\"",
+  "scratch-notifier/st": "A Scratch Team member"
 }

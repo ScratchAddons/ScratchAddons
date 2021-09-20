@@ -123,7 +123,8 @@ body:not(.sa-body-editor) .modal-content,
 .card,
 .extension-landing .project-card,
 .promote-modal .cancel-button,
-body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
+body:not(.sa-body-editor) .stage-header_stage-button_hkl9B,
+.transfer-host-modal .cancel-button {
   background: #282828;
 }
 .comment-text::after {
@@ -186,7 +187,9 @@ input[type="checkbox"].formik-checkbox,
 .extension-landing hr,
 .extension-landing .project-card,
 body:not(.sa-body-editor) .stage_stage_1fD7k,
-body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
+body:not(.sa-body-editor) .stage-header_stage-button_hkl9B,
+.transfer-host-modal .transfer-password-input,
+.studio-info-box.studio-info-box-success {
   border-color: #606060;
 }
 .box .box-header {
@@ -196,7 +199,8 @@ body:not(.sa-body-editor) .stage-header_stage-button_hkl9B {
 .inplace-textarea,
 .textarea,
 .studio-adder-section input,
-.modal {
+.modal,
+.transfer-host-modal .transfer-password-input {
   background: #282828;
   color: #fff;
 }

@@ -90,12 +90,11 @@ export default async function ({ addon, global, cons, msg }) {
       if (!input) {
         continue;
       }
-      const field = input.fieldRow[1];
+      const field = input.fieldRow.find((i) => i && Array.isArray(i.menuGenerator_));
       if (!field) {
         continue;
       }
-      const menuGenerator = field.menuGenerator_;
-      appendKeys(menuGenerator, block.type === "event_whenkeypressed");
+      appendKeys(field.menuGenerator_, block.type === "event_whenkeypressed");
     }
   }
 }
