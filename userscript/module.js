@@ -3,13 +3,6 @@ import Localization from "../content-scripts/inject/l10n.js";
 import globalStateProxy from "../background/imports/global-state.js";
 
 (async function () {
-  await Promise.all([
-    loadScriptFromUrl("libraries/common/cs/text-color.js"),
-    loadScriptFromUrl("content-scripts/prototype-handler.js"),
-    loadScriptFromUrl("content-scripts/load-redux.js"),
-    loadScriptFromUrl("content-scripts/fix-console.js"),
-  ]);
-
   window.scratchAddons = {};
   scratchAddons.classNames = { loaded: false };
   scratchAddons.eventTargets = {
