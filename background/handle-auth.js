@@ -3,6 +3,8 @@ const promisify =
   (...args) =>
     new Promise((resolve) => callbackFn(...args, resolve));
 
+let isChecking = false;
+
 /*
 function getDefaultStoreId() {
   // Request Scratch to set the CSRF token.
@@ -49,8 +51,6 @@ function getCookieValue(name) {
 async function setLanguage() {
   scratchAddons.globalState.auth.scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
 }
-
-let isChecking = false;
 
 async function checkSession() {
   let res;
