@@ -116,6 +116,28 @@ class SharedObserver {
   }
 }
 
+// Pathname patterns. Make sure NOT to set global flag!
+// Don't forget ^ and $
+const WELL_KNOWN_PATTERNS = {
+  projects: /^\/projects\/(?:editor|\d+(?:\/(?:fullscreen|editor))?)\/?$/,
+  projectEmbeds: /^\/projects\/\d+\/embed\/?$/,
+  studios: /^\/studios\/\d+(?:\/(?:projects|comments|curators|activity))?\/?$/,
+  profiles: /^\/users\/[\w-]+\/?$/,
+  topics: /^\/discuss\/topic\/\d+\/?$/,
+  newPostScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add)\/?$/,
+  editingScreens: /^\/discuss\/(?:topic\/\d+|\d+\/topic\/add|post\/\d+\/edit|settings\/[\w-]+)\/?$/,
+  forums: /^\/discuss(?!\/m(?:$|\/))(?:\/.*)?$/,
+  scratchWWWNoProject:
+    /^\/(?:(?:about|annual-report|camp|conference\/20(?:1[79]|[2-9]\d|18(?:\/(?:[^\/]+\/details|expect|plan|schedule))?)|contact-us|credits|developers|DMCA|download(?:\/scratch2)?|educators(?:\/faq|register|waiting)?|explore\/(?:project|studio)s\/\w+(?:\/\w+)?|info\/faq|community_guidelines|ideas|join|messages|parents|privacy_policy|research|scratch_1\.4|search\/(?:project|studio)s|starter-projects|classes\/(?:complete_registration|[^\/]+\/register\/[^\/]+)|signup\/[^\/]+|terms_of_use|wedo(?:-legacy)?|ev3|microbit|vernier|boost|studios\/\d*(?:\/(?:projects|comments|curators|activity))?)\/?)?$/,
+};
+
+const WELL_KNOWN_MATCHERS = {
+  isNotScratchWWW: (match) => {
+    const { projects, projectEmbeds, scratchWWWNoProject } = WELL_KNOWN_PATTERNS;
+    return !(projects.test(match) || projectEmbeds.test(match) || scratchWWWNoProject.test(match));
+  },
+};
+
 async function onDataReady() {
   const addons = (await fetch(getURL("addons/addons.json")).then((r) => r.json())).filter(
     (addon) => !addon.startsWith("//")
@@ -204,7 +226,8 @@ async function onDataReady() {
             }
           }
         }
-		if (userscriptMatches({ url:location.href }, injectable, addonId)) runAddonUserscripts({ addonId, scripts: [injectable] });
+        if (userscriptMatches({ url: location.href }, injectable, addonId))
+          runAddonUserscripts({ addonId, scripts: [injectable] });
       }
     });
   }
