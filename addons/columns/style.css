@@ -1,4 +1,5 @@
 [class*="blocks_blocks_"] .blocklyToolboxDiv {
+  width: 310px;
   height: auto !important;
 }
 

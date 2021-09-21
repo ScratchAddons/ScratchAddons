@@ -2,8 +2,6 @@ export default async function ({ addon, msg, global, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
   const workspace = Blockly.getMainWorkspace();
   const toolbox = workspace.getToolbox();
-  toolbox.dispose();
-  toolbox.workspace_ = workspace;
 
   // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L235
   const _ToolboxPosition = Blockly.Toolbox.prototype.position;
@@ -18,21 +16,20 @@ export default async function ({ addon, msg, global, console }) {
     // var svg = this.workspace_.getParentSvg();
     // var svgSize = Blockly.svgSize(svg);
 
-    if (this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
-      // Right
-      treeDiv.style.right = "0";
-    } else {
-      // Left
-      treeDiv.style.left = "0";
+    // Update flyout position when category menu height changes.
+    if (!this.HtmlDiv._observer) {
+      this.HtmlDiv._observer = new ResizeObserver(() => {
+        this.flyout_.position();
+      });
+      this.HtmlDiv._observer.observe(this.HtmlDiv);
     }
-    treeDiv.style.setProperty("width", Blockly.VerticalFlyout.prototype.DEFAULT_WIDTH + 60 + "px");
   };
 
   // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/flyout_vertical.js#L314
   const _VerticalFlyoutPosition = Blockly.VerticalFlyout.prototype.position;
   Blockly.VerticalFlyout.prototype.position = function () {
     _VerticalFlyoutPosition.call(this);
-    if (!this.isVisible()) {
+    if (addon.self.disabled || !this.isVisible()) {
       return;
     }
     var targetWorkspaceMetrics = this.targetWorkspace_.getMetrics();
@@ -76,24 +73,26 @@ export default async function ({ addon, msg, global, console }) {
   const _VerticalFlyoutGetWidth = Blockly.VerticalFlyout.prototype.getWidth;
   Blockly.VerticalFlyout.prototype.getWidth = function () {
     // In RTL, this will be called by Blockly to position blocks inside the flyout.
+    if (addon.self.disabled) return _VerticalFlyoutGetWidth.call(this);
     return _VerticalFlyoutGetWidth.call(this) + 60;
   };
 
-  // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L710
-  const _CategoryCreateDom = Blockly.Toolbox.Category.prototype.createDom;
-  Blockly.Toolbox.Category.prototype.createDom = function () {
-    _CategoryCreateDom.call(this);
-    this.parent_.parent_.flyout_.position();
-  };
-
   // Reload the toolbox
-  toolbox.init();
-  // Connects events to VM
-  // https://github.com/LLK/scratch-gui/blob/ba76db7350bd43b79119cac2701bc10f6c511f0c/src/containers/blocks.jsx#L250-L254
-  const flyoutWorkspace = workspace.getFlyout().getWorkspace();
-  const vm = addon.tab.traps.vm;
-  flyoutWorkspace.addChangeListener(vm.flyoutBlockListener);
-  flyoutWorkspace.addChangeListener(vm.monitorBlockListener);
+  function updateToolbox() {
+    toolbox.dispose();
+    toolbox.workspace_ = workspace;
+    toolbox.init();
+
+    // Connects events to VM
+    // https://github.com/LLK/scratch-gui/blob/ba76db7350bd43b79119cac2701bc10f6c511f0c/src/containers/blocks.jsx#L250-L254
+    const flyoutWorkspace = workspace.getFlyout().getWorkspace();
+    const vm = addon.tab.traps.vm;
+    flyoutWorkspace.addChangeListener(vm.flyoutBlockListener);
+    flyoutWorkspace.addChangeListener(vm.monitorBlockListener);
+  }
+  updateToolbox();
+  addon.self.addEventListener("disabled", updateToolbox);
+  addon.self.addEventListener("reenabled", updateToolbox);
 
   while (true) {
     const addExtensionButton = await addon.tab.waitForElement("[class*='gui_extension-button_']", {
@@ -105,6 +104,7 @@ export default async function ({ addon, msg, global, console }) {
       className: "sa-add-extension-label",
       innerText: addon.tab.scratchMessage("gui.gui.addExtension"),
     });
+    addon.tab.displayNoneWhileDisabled(addExtensionLabel);
     addExtensionButton.appendChild(addExtensionLabel);
     addExtensionButton.removeAttribute("title");
   }
