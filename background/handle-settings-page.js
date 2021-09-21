@@ -3,19 +3,22 @@ import changeAddonState from "./imports/change-addon-state.js";
 export default function (request, sendResponse) {
   // Message used to load popups as well
   if (request === "getSettingsInfo") {
-    console.log("getSettingsInfo")
-    const sendRes = () =>{
+    console.log("getSettingsInfo");
+    const sendRes = () => {
+      console.log("sending SettingsInfo")
       sendResponse({
         manifests: scratchAddons.manifests,
         // Firefox breaks if we send proxies
         addonsEnabled: scratchAddons.localState._target.addonsEnabled,
         addonSettings: scratchAddons.globalState._target.addonSettings,
       });
-      console.log("sent")}
+      console.log("sent");
+    };
     // Data might have not loaded yet, or be partial.
     // Only respond when all data is ready
     if (scratchAddons.localState.allReady) {
       sendRes();
+      return true;
     } else {
       scratchAddons.localEvents.addEventListener("ready", sendRes);
       return true;

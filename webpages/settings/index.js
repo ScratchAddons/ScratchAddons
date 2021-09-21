@@ -427,7 +427,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     });
   };
 
+  console.log("getting SettingsInfo")
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
+    console.log("got SettingsInfo")
     vue.addonSettings = addonSettings;
     const cleanManifests = [];
     let iframeData;
