@@ -7,8 +7,7 @@
   const useDefault = scratchAddons.l10n.locale.startsWith("en");
   scratchAddons.manifests.push(
     ...(await Promise.all(
-      folderNames.map(async (folderName) => {
-        if (folderName.startsWith("//")) return;
+      folderNames.filter((folderName)=> {return !folderName.startsWith("//")}).map(async (folderName) => {
         const manifest = await (await fetch(chrome.runtime.getURL(`addons/${folderName}/addon.json`))).json();
         if (!useDefault) {
           manifest._english = {};
