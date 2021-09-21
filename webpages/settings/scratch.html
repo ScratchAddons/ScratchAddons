@@ -8,10 +8,13 @@
         if (e.source !== document.querySelector("iframe").contentWindow) return;
 
         if (e.data.getFromStorage) {
-          return e.source.postMessage(localStorage[e.data.getFromStorage]);
+          return e.source.postMessage(localStorage[e.data.getFromStorage], e.origin);
         }
         if (e.data.setInStorage) {
-          return e.source.postMessage((localStorage[e.data.setInStorage[0]] = JSON.stringify(e.data.setInStorage[1])));
+          return e.source.postMessage(
+            (localStorage[e.data.setInStorage[0]] = JSON.stringify(e.data.setInStorage[1])),
+            e.origin
+          );
         }
       });
     </script>
