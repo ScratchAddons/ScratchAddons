@@ -19,7 +19,7 @@ if (new URLSearchParams(window.location.search).get("iframe") === "true") {
   isIframe = true;
 }
 
-window.parent.postMessage("hi");
+window.parent.postMessage("hi","*");
 
 let vue;
 let fuse;
