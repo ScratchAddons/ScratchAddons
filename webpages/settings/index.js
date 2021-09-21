@@ -13,7 +13,7 @@ if (window.parent === window) {
 }
 
 let isIframe = false;
-if (new URLSearchParams(window.location.search).get("iframe") === "true") {
+if (new URLSearchParams(window.location.search).get("popup") === "true") {
   // We're in a popup!
   document.body.classList.add("iframe");
   isIframe = true;

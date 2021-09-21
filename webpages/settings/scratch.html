@@ -25,8 +25,12 @@
       window.chrome = chrome;
     </script>
 
-    <script src="../set-lang.js" type="module"></script>
+    <script src="../set-lang.js" defer type="module"></script>
     <script src="../check-unsupported.js" defer type="module"></script>
+    <script src="../../background/load-addon-manifests.js" type="module"></script>
+    <script src="../../background/get-addon-settings.js" type="module"></script>
+    <script src="../../background/handle-l10n.js" type="module"></script>
+    <script src="../../background/handle-settings-page.js" type="module"></script>
   </head>
   <body style="width: 100%; height: 100%; padding: 0; margin: 0">
     <iframe src="./index.html" style="width: 100%; height: 100%; border: none"></iframe>
