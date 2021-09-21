@@ -17,6 +17,13 @@
 // @grant        none
 // ==/UserScript==
 
+document.documentElement.append(
+  Object.assign(document.createElement("script"), {
+    src: "https://cdn.jsdelivr.net/gh/RedGuy12/ScratchAddons@5c202ca/webpages/check-unsupported.js",
+    type: "module",
+  })
+);
+
 if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathname)) {
   document.documentElement.innerHTML = "";
 } else {

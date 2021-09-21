@@ -5,27 +5,32 @@ const promisify =
 
 const storage = {
   get(keys, callback) {
-    return callback(
-      Object.fromEntries(
-        keys.map((key) => {
-          return [key, JSON.parse(promisify(sendMessage)({ getFromStorage: key }))];
-          // localStorage[key]
-        })
-      )
-    );
+    return Promise.all(
+      keys.map(async (key) => {
+        return [key, JSON.parse(await promisify(sendMessage)({ getFromStorage: key }))];
+        // localStorage[key]
+      })
+    ).then((res) => callback(Object.fromEntries(res)));
   },
   set(keys, callback) {
-    return callback(
-      Object.entries(keys).forEach(([key, value]) => {
-        promisify(sendMessage)({ setInStorage: [key, value] });
+    return Promise.all(
+      Object.entries(keys).map(
+        async ([key, value]) => await promisify(sendMessage)({ setInStorage: [key, value] })
         // localStorage[key] = JSON.stringify(value);
-      })
-    );
+      )
+    ).then(() => callback());
   },
 };
 
 function sendMessage(message, callback = () => {}) {
-  window.parent.postMessage({ message, callback }, "*");
+  window.parent.postMessage(message, "*");
+  const listener=(event) => {
+    if (event.source === window.parent) {
+      window.removeEventListener("message", listener)
+      callback(event.data);
+    }
+  }
+  window.addEventListener("message", listener)
 }
 export default {
   storage: { sync: storage, local: storage },
