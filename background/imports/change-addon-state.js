@@ -9,7 +9,7 @@ import runPersistentScripts from "./run-persistent-scripts.js";
 export default (addonId, newState) => {
   scratchAddons.localState.addonsEnabled[addonId] = newState;
   chrome.storage.sync.set({
-    addonsEnabled: scratchAddons.localState.addonsEnabled,
+    addonsEnabled: scratchAddons.localState.addonsEnabled._target,
   });
   const { manifest } = scratchAddons.manifests.find((addon) => addon.addonId === addonId);
   const { dynamicEnable, dynamicDisable } = manifest;
