@@ -15,8 +15,16 @@
 
       window.addEventListener("message", (e) => {
         if (e.source !== document.querySelector("iframe").contentWindow) return;
+        console.log("got msg");
 
-        if (handleSettingsPage(e.data, (res) => e.source.postMessage(res, e.origin))) return;
+        if (
+          handleSettingsPage(e.data, (res) => {
+            console.log("sending res");
+            e.source.postMessage(res, e.origin);
+    console.log("sent res")
+          })
+        )
+          return;
         if (handleL10n(e.data, (res) => e.source.postMessage(res, e.origin))) return;
 
         if (e.data.getFromStorage) {

@@ -20,7 +20,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
       for (const addonId of addonIds) {
         let resp;
         let messages = {};
-        const url = `/addons-l10n/${locale}/${addonId}.json`;
+        const url = chrome.runtime.getURL(`addons-l10n/${locale}/${addonId}.json`);
         try {
           resp = await fetch(url);
           messages = await resp.json();
