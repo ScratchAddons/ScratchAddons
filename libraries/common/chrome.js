@@ -18,7 +18,7 @@ const storage = {
       })
     ).then((res) => callback(Object.fromEntries(res)));
   },
-  set(keys, callback) {
+  set(keys, callback = () => {}) {
     return Promise.all(
       Object.entries(keys).map(
         async ([key, value]) => await promisify(sendMessage)({ setInStorage: [key, value] })
@@ -68,6 +68,7 @@ export default {
 };
 
 function getURL(url, min = false) {
+  // todo min true
   const { href } = new URL("../../" + url, import.meta.url);
   return min ? href.replace(/(?<!\.min)\.js$/, ".min.js").replace(/(?<!\.min)\.css$/, ".min.css") : href;
 }
