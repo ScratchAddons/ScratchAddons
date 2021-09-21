@@ -30,7 +30,7 @@
 }
 
 [class*="gui_extension-button-container_"] {
-  top: calc(var(--sa-add-extension-button-y) * 1px);
+  top: var(--sa-add-extension-button-y);
   bottom: auto;
   margin-inline-start: 0.5rem;
   width: calc(308px - 1rem);
@@ -70,4 +70,28 @@
 [class*="gui_extension-button-container_"]:hover .sa-add-extension-label {
   color: var(--editorDarkMode-accent-text, #575e75);
   font-size: 0.65rem;
+}
+
+/* hide-flyout compatibility */
+
+.blocklyFlyout.sa-flyoutClose {
+  transform: translate(-320px, var(--sa-flyout-y)) !important;
+}
+
+.blocklyFlyoutScrollbar.sa-flyoutClose {
+  transform: translate(-25px, calc(var(--sa-flyout-y) + 2.5px)) !important;
+}
+
+.sa-lock-image.sa-flyoutClose {
+  transform: translateX(-320px);
+}
+
+.sa-flyout-placeHolder {
+  left: 0;
+  top: calc(var(--sa-flyout-y) + 44px);
+  width: 311px;
+}
+
+.sa-lock-image {
+  top: calc(var(--sa-flyout-y) + 46px);
 }

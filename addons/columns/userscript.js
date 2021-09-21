@@ -67,8 +67,10 @@ export default async function ({ addon, msg, global, console }) {
       this.scrollbar_.resize();
     }
 
-    // Set CSS variable used by add extension button.
-    this.svgGroup_.closest("[class*='gui_tab-panel_']").style.setProperty("--sa-add-extension-button-y", y - 33);
+    // Set CSS variables for the userstyle.
+    const container = this.svgGroup_.closest("[class*='gui_tab-panel_']");
+    container.style.setProperty("--sa-add-extension-button-y", `${y - 33}px`);
+    container.parentElement.style.setProperty("--sa-flyout-y", `${y}px`);
   };
 
   const _VerticalFlyoutGetWidth = Blockly.VerticalFlyout.prototype.getWidth;
