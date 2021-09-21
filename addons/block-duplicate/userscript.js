@@ -7,9 +7,9 @@ export default async function ({ addon, global, console }) {
       // Scratch will reset the group on its own when the drag ends
       ScratchBlocks.Events.setGroup(true);
       this.shouldDuplicateOnDrag_ = true;
-      this.sa_shouldDisconnectFromNextBlock = this.mostRecentEvent_.ctrlKey || this.mostRecentEvent_.metaKey;
+      this.sa_shouldIsolateDuplicatedBlock = this.mostRecentEvent_.ctrlKey || this.mostRecentEvent_.metaKey;
     } else {
-      this.sa_shouldDisconnectFromNextBlock = false;
+      this.sa_shouldIsolateDuplicatedBlock = false;
     }
     return originalStartDraggingBlock.call(this, ...args);
   };
@@ -17,7 +17,7 @@ export default async function ({ addon, global, console }) {
   const originalDuplicateOnDrag = ScratchBlocks.Gesture.prototype.duplicateOnDrag_;
   ScratchBlocks.Gesture.prototype.duplicateOnDrag_ = function (...args) {
     const ret = originalDuplicateOnDrag.call(this, ...args);
-    if (this.sa_shouldDisconnectFromNextBlock) {
+    if (this.sa_shouldIsolateDuplicatedBlock) {
       const block = this.targetBlock_;
       const nextBlock = block.getNextBlock();
       if (nextBlock) {
