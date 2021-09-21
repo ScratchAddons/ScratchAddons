@@ -14,15 +14,15 @@
       import handleL10n from "../../background/handle-l10n.js";
 
       window.addEventListener("message", (e) => {
-        console.log("got msg");
+        console.log("got msg",e);
         if (e.source !== document.querySelector("iframe").contentWindow) return;
-        console.log("msg from us");
+        console.log("msg from us",e);
 
         if (
           handleSettingsPage(e.data, (res) => {
-            console.log("sending res");
+            console.log("sending res",res);
             e.source.postMessage(res, e.origin);
-            console.log("sent res");
+            console.log("sent res",res);
           })
         )
           return;
