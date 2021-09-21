@@ -7,6 +7,7 @@ import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
+import chrome from "../../libraries/common/chrome.js";
 
 if (window.parent === window) {
   location.href = "https://scratch.mit.edu/scratch-addons-extention/settings";
@@ -54,6 +55,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     "webpages/settings/components/category-selector",
   ]);
 
+  const manifest = chrome.runtime.getManifest();
+
   Vue.directive("click-outside", {
     priority: 700,
     bind() {
@@ -87,7 +90,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     const serialized = {
       core: {
         lightTheme: storedSettings.globalTheme,
-        version: chrome.runtime.getManifest().version_name,
+        version: manifest.version_name,
       },
       addons: {},
     };
@@ -161,8 +164,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         sidebarUrls: (() => {
           const uiLanguage = chrome.i18n.getUILanguage();
           const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-          const version = chrome.runtime.getManifest().version;
-          const versionName = chrome.runtime.getManifest().version_name;
+          const version = manifest.version;
+          const versionName = manifest.version_name;
           const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
           return {
             contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
@@ -197,10 +200,10 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         return this.addonListObjs.sort((b, a) => results.indexOf(b) - results.indexOf(a));
       },
       version() {
-        return chrome.runtime.getManifest().version;
+        return manifest.version;
       },
       versionName() {
-        return chrome.runtime.getManifest().version_name;
+        return manifest.version_name;
       },
       addonAmt() {
         return `${Math.floor(this.manifests.length / 5) * 5}+`;
@@ -415,15 +418,12 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   const getRunningAddons = (manifests, addonsEnabled) => {
     return new Promise((resolve) => {
-      chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-        if (!tabs[0].id) return;
-        chrome.tabs.sendMessage(tabs[0].id, "getRunningAddons", { frameId: 0 }, (res) => {
-          // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
-          void chrome.runtime.lastError;
-          const addonsCurrentlyOnTab = res ? [...res.userscripts, ...res.userstyles] : [];
-          const addonsPreviouslyOnTab = res ? res.disabledDynamicAddons : [];
-          resolve({ addonsCurrentlyOnTab, addonsPreviouslyOnTab });
-        });
+      chrome.runtime.sendMessage("getRunningAddons", (res) => {
+        // Just so we don't get any errors in the console if we don't get any response from a non scratch tab.
+        void chrome.runtime.lastError;
+        const addonsCurrentlyOnTab = res ? [...res.userscripts, ...res.userstyles] : [];
+        const addonsPreviouslyOnTab = res ? res.disabledDynamicAddons : [];
+        resolve({ addonsCurrentlyOnTab, addonsPreviouslyOnTab });
       });
     });
   };
