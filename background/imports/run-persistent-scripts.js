@@ -65,7 +65,7 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
   const globalObj = Object.create(null);
 
   for (const scriptPath of scriptUrls) {
-    const scriptUrl = chrome.runtime.getURL(`/addons/${addonId}/${scriptPath}`);
+    const scriptUrl = chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`);
     console.log(
       `%cDebug addons/${addonId}/${scriptPath}: ${scriptUrl}`,
       "color:red; font-weight: bold; font-size: 1.2em;"

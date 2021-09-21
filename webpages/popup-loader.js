@@ -86,7 +86,7 @@ scratchAddons.isLightMode = false;
   msg.locale = scratchAddons.l10n.locale;
 
   const fileName = popupData.popup.script;
-  const module = await import(chrome.runtime.getURL(`/popups/${addonId}/${fileName}`));
+  const module = await import(chrome.runtime.getURL(`popups/${addonId}/${fileName}`));
   module.default({
     addon: addon,
     global: globalObj,

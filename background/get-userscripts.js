@@ -117,7 +117,7 @@ async function getAddonData({ addonId, manifest, url }) {
         const arrLength = userstyles.push(null);
         const indexToUse = arrLength - 1;
         promises.push(
-          fetch(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`))
+          fetch(chrome.runtime.getURL(`addons/${addonId}/${style.url}`))
             .then((res) => res.text())
             .then((text) => {
               // Replace %addon-self-dir% for relative URLs
@@ -128,7 +128,7 @@ async function getAddonData({ addonId, manifest, url }) {
             })
         );
       } else {
-        userstyles.push(chrome.runtime.getURL(`/addons/${addonId}/${style.url}`));
+        userstyles.push(chrome.runtime.getURL(`addons/${addonId}/${style.url}`));
       }
   }
   await Promise.all(promises);

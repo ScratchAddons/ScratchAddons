@@ -15,7 +15,7 @@ export default async function ({ addon, msg, global, console }) {
         infoType: "project",
         status: "FETCHING",
       });
-      fetch(`/site-api/projects/all/${redux.state.preview.projectInfo.id}/`, {
+      fetch(`https://scratch.mit.edu/site-api/projects/all/${redux.state.preview.projectInfo.id}/`, {
         headers: {
           "x-csrftoken": addon.auth.csrfToken,
           "x-requested-with": "XMLHttpRequest",

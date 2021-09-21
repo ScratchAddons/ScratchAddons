@@ -8,7 +8,7 @@ fetch("../libraries/license-info.json")
   })
   .then((o) =>
     Object.values(o).map((name) =>
-      fetch(`/libraries/licenses/${name}.txt`)
+      fetch(`../libraries/licenses/${name}.txt`)
         .then((res) => res.text())
         .then((text) => ({ name, text }))
     )
