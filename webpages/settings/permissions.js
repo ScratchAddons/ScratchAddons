@@ -31,7 +31,7 @@ const promisify =
     new Promise((resolve) => callbackFn(...args, resolve));
 
 document.getElementById("permissionsBtn").addEventListener("click", async () => {
-  const manifest = chrome.runtime.getManifest();
+  const manifest = await chrome.runtime.getManifest();
   const origins = manifest.permissions.filter((url) => url.startsWith("https://"));
 
   const isAlreadyGranted = await promisify(chrome.permissions.contains)({ origins });

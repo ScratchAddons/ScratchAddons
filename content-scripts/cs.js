@@ -424,7 +424,8 @@ if (location.pathname.startsWith("/discuss/")) {
   }
 }
 
-function forumWarning(key) {
+async function forumWarning(key) {
+  const manifest=(await chrome.runtime.getManifest())
   let postArea = document.querySelector("form#post > label");
   if (postArea) {
     var errorList = document.querySelector("form#post > label > ul");
@@ -438,9 +439,9 @@ function forumWarning(key) {
     let reportLink = document.createElement("a");
     const uiLanguage = chrome.i18n.getUILanguage();
     const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-    const utm = `utm_source=extension&utm_medium=forumwarning&utm_campaign=v${chrome.runtime.getManifest().version}`;
+    const utm = `utm_source=extension&utm_medium=forumwarning&utm_campaign=v${manifest.version}`;
     reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${
-      chrome.runtime.getManifest().version
+      manifest.version
     }&${utm}`;
     reportLink.target = "_blank";
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
@@ -451,7 +452,7 @@ function forumWarning(key) {
   }
 }
 
-const showBanner = () => {
+const showBanner = async () => {
   const makeBr = () => document.createElement("br");
 
   const notifOuterBody = document.createElement("div");
@@ -508,12 +509,12 @@ const showBanner = () => {
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
   const NOTIF_TEXT_STYLE = "display: block; font-size: 14px; color: white !important;";
-
+const manifest=(await chrome.runtime.getManifest())
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
     textContent: chrome.i18n
       .getMessage("extensionHasUpdated", DOLLARS)
-      .replace(/\$(\d+)/g, (_, i) => [chrome.runtime.getManifest().version][Number(i) - 1]),
+      .replace(/\$(\d+)/g, (_, i) => [manifest.version][Number(i) - 1]),
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -544,7 +545,7 @@ const showBanner = () => {
   const uiLanguage = chrome.i18n.getUILanguage();
   const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
   const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${
-    chrome.runtime.getManifest().version
+    manifest.version
   }`;
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
@@ -553,7 +554,7 @@ const showBanner = () => {
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${
-      chrome.runtime.getManifest().version
+      manifest.version
     }&${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("feedback"),
@@ -596,7 +597,7 @@ const showBanner = () => {
 };
 
 const handleBanner = async () => {
-  const currentVersion = chrome.runtime.getManifest().version;
+  const currentVersion = (await chrome.runtime.getManifest()).version;
   const [major, minor, _] = currentVersion.split(".");
   const currentVersionMajorMinor = `${major}.${minor}`;
   // Making this configurable in the future?

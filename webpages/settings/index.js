@@ -54,7 +54,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     "webpages/settings/components/category-selector",
   ]);
 
-  const manifest = chrome.runtime.getManifest();
+  const manifest = await chrome.runtime.getManifest();
 
   Vue.directive("click-outside", {
     priority: 700,

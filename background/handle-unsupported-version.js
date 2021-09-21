@@ -9,17 +9,20 @@ const checkIfUnsupported = () => {
   return (browser === "Chrome" && version < 80) || (browser === "Firefox" && version < 74);
 };
 
-/* if (checkIfUnsupported()) {
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request === "checkIfUnsupported") { */
-const uiLanguage = chrome.i18n.getUILanguage();
-const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-const utm = `utm_source=extension&utm_medium=tabscreate&utm_campaign=v${chrome.runtime.getManifest().version}`;
-export const url = `https://scratchaddons.com/${localeSlash}unsupported-browser/?${utm}`;
-/* if (sender.tab) chrome.tabs.update(sender.tab.id, { url });
-      else chrome.tabs.create({ url });
-    }
-  });
-} */
-
+export async function url() {
+  /* if (checkIfUnsupported()) {
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request === "checkIfUnsupported") { */
+  const uiLanguage = chrome.i18n.getUILanguage();
+  const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+  const utm = `utm_source=extension&utm_medium=tabscreate&utm_campaign=v${
+    (await chrome.runtime.getManifest()).version
+  }`;
+  return `https://scratchaddons.com/${localeSlash}unsupported-browser/?${utm}`;
+  /* if (sender.tab) chrome.tabs.update(sender.tab.id, { url });
+        else chrome.tabs.create({ url });
+      }
+    });
+  } */
+}
 export default checkIfUnsupported;

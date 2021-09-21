@@ -13,11 +13,11 @@ export default (filenames) =>
       const jsPromise = import(jsUrl);
       return fetch(htmlUrl)
         .then((resp) => resp.text())
-        .then((text) => {
+        .then(async (text) => {
           const dom = new DOMParser().parseFromString(text, "text/html");
           const css = dom.querySelector("style")?.textContent;
           if (css) {
-            if (chrome.runtime.getManifest().version_name.includes("-prerelease")) {
+            if ((await chrome.runtime.getManifest()).version_name.includes("-prerelease")) {
               const normalizedCss = css.replace("\n", "").trimEnd();
               const normalizedText = text.replace(/\r/g, "");
               const cssFirstLine = normalizedCss.substring(0, normalizedCss.indexOf("\n"));
