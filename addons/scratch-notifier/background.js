@@ -138,7 +138,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     const notifId = await addon.notifications.create({
       type: "basic",
       title: notificationTitle,
-      iconUrl: emoji ? `../../images/icons/${emoji}.svg` : "/images/icon.png",
+      iconUrl: emoji ? `../../images/icons/${emoji}.svg` : "../../images/icon.png",
       message: text,
       buttons: [
         {

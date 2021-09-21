@@ -1,6 +1,6 @@
 let libraryLicenses = {};
 let licenseNameToText = {};
-fetch("/libraries/license-info.json")
+fetch("../libraries/license-info.json")
   .then((res) => res.json())
   .then((o) => {
     libraryLicenses = o;

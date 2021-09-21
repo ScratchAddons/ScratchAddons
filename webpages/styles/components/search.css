@@ -42,9 +42,9 @@
 }
 
 .search-button {
-  background-image: url(/images/icons/search.svg);
+  background-image: url(../../../images/icons/search.svg);
 }
 
 .search-clear-button {
-  background-image: url(/images/icons/x.svg);
+  background-image: url(../../../images/icons/x.svg);
 }
