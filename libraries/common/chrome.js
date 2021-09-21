@@ -38,12 +38,15 @@ function sendMessage(message, callback = () => {}) {
   };
   window.addEventListener("message", listener);
 }
+let manifest;
+
 export default {
   storage: { sync: storage, local: storage },
   runtime: {
     async getManifest() {
+      if (manifest) return manifest;
       const response = await fetch(getURL("manifest.json"));
-      return await response.json();
+      return (manifest = await response.json());
     },
     reload() {},
     getURL,
