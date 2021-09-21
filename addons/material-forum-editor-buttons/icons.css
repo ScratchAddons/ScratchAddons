@@ -1,76 +1,76 @@
 .markItUp .markItUpButton1 a {
-  background-image: url(bold.svg) !important;
+  background-image: url(./bold.svg) !important;
   background-size: 20px;
   display: block;
   height: 16px;
 }
 .markItUp .markItUpButton2 a {
-  background-image: url(italic.svg) !important;
+  background-image: url(./italic.svg) !important;
   background-size: 20px;
 }
 .markItUp .markItUpButton3 a {
-  background-image: url(underlined.svg) !important;
+  background-image: url(./underlined.svg) !important;
   background-size: 20px;
 }
 
 .markItUp .markItUpButton4 a {
-  background-image: url(strikethrough.svg) !important;
+  background-image: url(./strikethrough.svg) !important;
   background-size: 20px;
 }
 
 .markItUp .markItUpButton5 a {
-  background-image: url(image.svg) !important;
+  background-image: url(./image.svg) !important;
   background-size: 20px;
 }
 .markItUp .markItUpButton6 a {
-  background-image: url(link.svg) !important;
+  background-image: url(./link.svg) !important;
   background-size: 20px;
 }
 
 .markItUp .markItUpButton7 a {
-  background-image: url(size.svg) !important;
+  background-image: url(./size.svg) !important;
   background-size: 20px;
 }
 .markItUp .markItUpButton8 a {
-  background-image: url(bullet_list.svg) !important;
+  background-image: url(./bullet_list.svg) !important;
   background-size: 20px;
 }
 .markItUp .markItUpButton9 a {
-  background-image: url(number_list.svg) !important;
+  background-image: url(./number_list.svg) !important;
   background-size: 20px;
 }
 .markItUp .markItUpButton10 a {
-  background-image: url(list_item.svg) !important;
+  background-image: url(./list_item.svg) !important;
   background-size: 20px;
 }
 
 .markItUp .markItUpButton11 a {
-  background-image: url(quote.svg) !important;
+  background-image: url(./quote.svg) !important;
   background-size: 20px;
 }
 .markItUp .markItUpButton12 > a {
-  background-image: url(smiley.svg) !important;
+  background-image: url(./smiley.svg) !important;
   background-size: 20px;
 }
 .markItUp .scratchblocks-button > a {
-  background-image: url(scratchblocks.svg) !important;
+  background-image: url(./scratchblocks.svg) !important;
   background-size: 20px;
 }
 .markItUp .browser-os-button a {
-  background-image: url(computer.svg) !important;
+  background-image: url(./computer.svg) !important;
   background-size: 20px;
 }
 .markItUp .clean a {
-  background-image: url(code.svg) !important;
+  background-image: url(./code.svg) !important;
   background-size: 20px;
 }
 .markItUp .preview a {
-  background-image: url(done.svg) !important;
+  background-image: url(./done.svg) !important;
   background-size: 20px;
 }
 #ibbBtn,
 #uploadButton {
-  background-image: url(uploader.svg) !important;
+  background-image: url(./uploader.svg) !important;
   background-size: 20px;
 }
 .markItUpButton img[src*="//cdn.scratch.mit.edu/scratchr2/static/"]

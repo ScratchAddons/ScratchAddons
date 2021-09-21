@@ -24,7 +24,7 @@
 }
 
 .sa-var-manager-searchbox {
-  background-image: url("search.svg");
+  background-image: url("./search.svg");
   width: 25%;
   margin-bottom: 4px;
   padding: 8px;
