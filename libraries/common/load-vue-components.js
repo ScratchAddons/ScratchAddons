@@ -8,8 +8,8 @@ const styles = {};
 export default (filenames) =>
   Promise.all(
     filenames.map((filename) => {
-      const htmlUrl = chrome.runtime.getURL(`${filename}.html`);
-      const jsUrl = chrome.runtime.getURL(`${filename}.js`);
+      const htmlUrl = chrome.runtime.getURL(`${filename}.html`,false);
+      const jsUrl = chrome.runtime.getURL(`${filename}.js`,false);
       const jsPromise = import(jsUrl);
       return fetch(htmlUrl)
         .then((resp) => resp.text())

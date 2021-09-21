@@ -24,13 +24,13 @@ const storage = {
 
 function sendMessage(message, callback = () => {}) {
   window.parent.postMessage(message, "*");
-  const listener=(event) => {
+  const listener = (event) => {
     if (event.source === window.parent) {
-      window.removeEventListener("message", listener)
+      window.removeEventListener("message", listener);
       callback(event.data);
     }
-  }
-  window.addEventListener("message", listener)
+  };
+  window.addEventListener("message", listener);
 }
 export default {
   storage: { sync: storage, local: storage },
@@ -58,8 +58,7 @@ export default {
   },
 };
 
-function getURL(url) {
-  return new URL("../../" + url, import.meta.url).href
-    .replace(/(?<!\.min)\.js$/, ".min.js")
-    .replace(/(?<!\.min)\.css$/, ".min.css");
+function getURL(url, min = true) {
+  const { href } = new URL("../../" + url, import.meta.url);
+  return min ? href.replace(/(?<!\.min)\.js$/, ".min.js").replace(/(?<!\.min)\.css$/, ".min.css") : href;
 }
