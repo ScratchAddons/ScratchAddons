@@ -1,0 +1,20 @@
+{
+  "name": "Duplicate script with Shift key",
+  "description": "Quickly duplicate a script by dragging it while holding the Shift key.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.21.0",
+  "tags": ["editor", "codeEditor"],
+  "enabledByDefault": false
+}
