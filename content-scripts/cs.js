@@ -487,7 +487,7 @@ const showBanner = async () => {
   */
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/single-block-grab.gif"),
+    src: chrome.runtime.getURL("images/cs/single-block-grab.gif"),
     style: "height: 175px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {

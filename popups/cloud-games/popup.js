@@ -55,7 +55,7 @@ export default async ({ addon, msg, safeMsg }) => {
       settingsHTML() {
         const link = document.createElement("a");
         link.target = "_blank";
-        link.href = chrome.runtime.getURL("/webpages/settings/index.html#addon-cloud-games");
+        link.href = chrome.runtime.getURL("webpages/settings/index.html#addon-cloud-games");
         link.textContent = msg("addon-settings");
         return safeMsg("change-studio", {
           settings: link.outerHTML,

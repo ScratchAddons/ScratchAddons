@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" style="width: 100%; height: 100%">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
-      window.addEventListener("message", (e)=>{
-        if(e.source !== document.querySelector("iframe").contentWindow)return
+      window.addEventListener("message", (e) => {
+        if (e.source !== document.querySelector("iframe").contentWindow) return;
 
-        if(e.data.getFromStorage) {
-          return e.source.postMessage(localStorage[e.data.getFromStorage])
+        if (e.data.getFromStorage) {
+          return e.source.postMessage(localStorage[e.data.getFromStorage]);
         }
-        if(e.data.setInStorage) {
-          return e.source.postMessage(localStorage[e.data.setInStorage[0]] = JSON.stringify(e.data.setInStorage[1]))
+        if (e.data.setInStorage) {
+          return e.source.postMessage((localStorage[e.data.setInStorage[0]] = JSON.stringify(e.data.setInStorage[1])));
         }
       });
     </script>
@@ -25,7 +25,7 @@
     <script src="../set-lang.js" type="module"></script>
     <script src="../check-unsupported.js" defer type="module"></script>
   </head>
-  <body style="padding: 0; margin: 0">
-    <iframe src="./index.html" style="width: 100vw; height: 100vh; border: none"></iframe>
+  <body style="width: 100%; height: 100%; padding: 0; margin: 0">
+    <iframe src="./index.html" style="width: 100%; height: 100%; border: none"></iframe>
   </body>
 </html>

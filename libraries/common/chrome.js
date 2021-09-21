@@ -7,8 +7,8 @@ const storage = {
   get(keys, callback) {
     return Promise.all(
       keys.map(async (key) => {
-        const res=await promisify(sendMessage)({ getFromStorage: key })
-        return [key, JSON.parse(res==="undefined"||res===""?null:res)];
+        const res = await promisify(sendMessage)({ getFromStorage: key });
+        return [key, JSON.parse(res === "undefined" || res === "" || res.startsWith("[object") ? null : res)];
         // localStorage[key]
       })
     ).then((res) => callback(Object.fromEntries(res)));
