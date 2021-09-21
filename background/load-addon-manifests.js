@@ -1,5 +1,5 @@
 (async function () {
-  const folderNames = await (await fetch("../addons/addons.json")).json();
+  const folderNames = await (await fetch(chrome.runtime.getURL("addons/addons.json"))).json();
   folderNames.forEach((addonId, i) => {
     if (folderNames.lastIndexOf(addonId) !== i) throw "Duplicated value in /addons/addons.json";
   });
@@ -7,7 +7,7 @@
   const useDefault = scratchAddons.l10n.locale.startsWith("en");
   for (const folderName of folderNames) {
     if (folderName.startsWith("//")) continue;
-    const manifest = await (await fetch(`../addons/${folderName}/addon.json`)).json();
+    const manifest = await (await fetch(chrome.runtime.getURL(`addons/${folderName}/addon.json`))).json();
     if (!useDefault) {
       manifest._english = {};
       for (const prop of ["name", "description"]) {
