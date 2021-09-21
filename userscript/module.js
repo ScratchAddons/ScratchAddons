@@ -1,6 +1,6 @@
-import runAddonUserscripts from "../content-scripts/inject/run-userscript.min.js";
-import Localization from "../content-scripts/inject/l10n.min.js";
-import globalStateProxy from "../background/imports/global-state.min.js";
+import runAddonUserscripts from "../content-scripts/inject/run-userscript.js";
+import Localization from "../content-scripts/inject/l10n.js";
+import globalStateProxy from "../background/imports/global-state.js";
 
 function parseMatches(injectable) {
   const { matches } = injectable;

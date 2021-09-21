@@ -58,7 +58,7 @@ export default {
   },
 };
 
-function getURL(url, min = true) {
+function getURL(url, min = false) {
   const { href } = new URL("../../" + url, import.meta.url);
   return min ? href.replace(/(?<!\.min)\.js$/, ".min.js").replace(/(?<!\.min)\.css$/, ".min.css") : href;
 }

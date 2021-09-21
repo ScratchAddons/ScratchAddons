@@ -5,21 +5,21 @@
 // @author
 // @description
 // @homepage     https://scratchaddons.com/
-// @icon         https://cdn.jsdelivr.net/gh/RedGuy12/ScratchAddons@5c202ca/images/icon.svg
-// @updateURL    https://cdn.jsdelivr.net/gh/RedGuy12/ScratchAddons@5c202ca/userscript/script.min.user.js
+// @icon         https://sa-userscript.github.io/ScratchAddons/images/icon.svg
+// @updateURL    https://sa-userscript.github.io/ScratchAddons/userscript/script.user.js
 // @supportURL   https://scratchaddons.com/feedback
 // @match        https://scratch.mit.edu/*
-// @require      https:///cdn.jsdelivr.net/gh/RedGuy12/ScratchAddons@5c202ca/content-scripts/prototype-handler.min.js
-// @require      https:///cdn.jsdelivr.net/gh/RedGuy12/ScratchAddons@5c202ca/content-scripts/load-redux.min.js
-// @require      https:///cdn.jsdelivr.net/gh/RedGuy12/ScratchAddons@5c202ca/content-scripts/fix-console.min.js
-// @require      https:///cdn.jsdelivr.net/gh/RedGuy12/ScratchAddons@5c202ca/libraries/common/cs/text-color.min.js
+// @require      https://sa-userscript.github.io/ScratchAddons/content-scripts/prototype-handler.js
+// @require      https://sa-userscript.github.io/ScratchAddons/content-scripts/load-redux.js
+// @require      https://sa-userscript.github.io/ScratchAddons/content-scripts/fix-console.js
+// @require      https://sa-userscript.github.io/ScratchAddons/libraries/common/cs/text-color.js
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
 
 document.documentElement.append(
   Object.assign(document.createElement("script"), {
-    src: "https://cdn.jsdelivr.net/gh/RedGuy12/ScratchAddons@5c202ca/webpages/check-unsupported.js",
+    src: "https://sa-userscript.github.io/ScratchAddons/webpages/check-unsupported.js",
     type: "module",
   })
 );
@@ -29,7 +29,7 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
 } else {
   document.documentElement.append(
     Object.assign(document.createElement("script"), {
-      src: "https://cdn.jsdelivr.net/gh/RedGuy12/ScratchAddons@5c202ca/userscript/module.min.js",
+      src: "https://sa-userscript.github.io/ScratchAddons/userscript/module.js",
       type: "module",
     })
   );
