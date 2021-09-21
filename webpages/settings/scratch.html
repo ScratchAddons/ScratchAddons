@@ -4,7 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
-      window.addEventListener("message", console.log);
+      window.addEventListener("message", (e)=>{
+        if(e.source !== document.querySelector("iframe").contentWindow)return
+
+        if(e.data.getFromStorage) {
+          return e.source.postMessage(localStorage[e.data.getFromStorage])
+        }
+        if(e.data.setInStorage) {
+          return e.source.postMessage(localStorage[e.data.setInStorage[0]] = JSON.stringify(e.data.setInStorage[1]))
+        }
+      });
     </script>
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
