@@ -3,13 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
+    <title></title>
+    <link rel="icon" href="../../images/icon.png" />
+    <script type="module">
+      import chrome from "../../libraries/common/chrome.js";
+      window.chrome = chrome;
+    </script>
+    <script type="module">
+      import handleSettingsPage from "../../background/handle-settings-page.js";
+      import handleL10n from "../../background/handle-l10n.js";
+
       window.addEventListener("message", (e) => {
         if (e.source !== document.querySelector("iframe").contentWindow) return;
+
+        if (handleSettingsPage(e.data, (res) => e.source.postMessage(res, e.origin))) return;
+        if (handleL10n(e.data, (res) => e.source.postMessage(res, e.origin))) return;
 
         if (e.data.getFromStorage) {
           return e.source.postMessage(localStorage[e.data.getFromStorage], e.origin);
         }
+
         if (e.data.setInStorage) {
           return e.source.postMessage(
             (localStorage[e.data.setInStorage[0]] = JSON.stringify(e.data.setInStorage[1])),
@@ -18,15 +31,10 @@
         }
       });
     </script>
-    <title></title>
-    <link rel="icon" href="../../images/icon.png" />
-    <script type="module">
-      import chrome from "../../libraries/common/chrome.js";
-      window.chrome = chrome;
-    </script>
 
     <script src="../set-lang.js" defer type="module"></script>
     <script src="../check-unsupported.js" defer type="module"></script>
+    <script src="../../background/declare-scratchaddons-object.js" type="module"></script>
     <script src="../../background/load-addon-manifests.js" type="module"></script>
     <script src="../../background/get-addon-settings.js" type="module"></script>
     <script src="../../background/handle-l10n.js" type="module"></script>

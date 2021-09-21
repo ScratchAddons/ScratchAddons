@@ -1,6 +1,6 @@
 import changeAddonState from "./imports/change-addon-state.js";
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+export default function (request, sendResponse) {
   // Message used to load popups as well
   if (request === "getSettingsInfo") {
     const sendRes = () =>
@@ -21,6 +21,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   } else if (request.changeEnabledState) {
     const { addonId, newState } = request.changeEnabledState;
     changeAddonState(addonId, newState);
+    return true;
   } else if (request.changeAddonSettings) {
     const { addonId, newSettings } = request.changeAddonSettings;
     scratchAddons.globalState.addonSettings[addonId] = newSettings;
@@ -34,5 +35,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       scratchAddons.localEvents.dispatchEvent(
         new CustomEvent("updateUserstylesSettingsChange", { detail: { addonId, manifest } })
       );
+    return true;
   }
-});
+}
