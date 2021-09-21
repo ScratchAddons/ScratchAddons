@@ -10,6 +10,7 @@ assignees: ''
 
 READ BEFORE CREATING!
 
+- MAKE SURE THIS ISSUE IS ABOUT THE LOADER. Anything to do with the addons themselves should go here: https://github.com/ScratchAddons/ScratchAddons/issues/new/choose
 - Avoid creating duplicates! Read the FAQ page and search through Issues and Discussions before creating one.
 - Try to do a simple but descriptive title, and include detailed information in here.
 - Make sure to use the latest version of Scratch Addons.

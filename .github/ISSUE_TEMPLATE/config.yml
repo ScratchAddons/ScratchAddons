@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+  - name: ☝ Addon Help
+    url: https://github.com/ScratchAddons/ScratchAddons/issues/new/choose
+    about: Get help, ask questions, request features, report bugs, and ectetera about the addons themselves. THIS REPO IS ONLY FOR THE USERSCRIPT ADDON LOADER.
   - name: 💬 GitHub Discussions
     url: https://github.com/SA-Userscript/ScratchAddons/discussions
-    about: Ask a question, or just discuss about Scratch Addons on our GitHub Discussions (our own forums)
+    about: Ask a question, or just discuss about the userscript on our GitHub Discussions (our own forums)
   - name: 📝 Send feedback
     url: https://scratchaddons.com/feedback
     about: Send a general feedback on our website
@@ -12,3 +15,6 @@ contact_links:
   - name: 🔧 Development Discord
     url: https://discord.gg/Ak8sCDQ
     about: Discuss about Scratch Addons on our development Discord server
+  - name: 🏗 Userscript Implementation Discord
+    url: https://discord.gg/tQ4FE3f8x9
+    about: Discuss about Scratch Addons on our userscript Discord server
