@@ -67,6 +67,7 @@
   border-inline-end-color: transparent;
   border-inline-start-color: var(--tooltip-background);
 }
+
 [dir="rtl"] .tooltip .tooltiptext.tooltiptextleft::after {
   left: auto;
   right: 100%;
