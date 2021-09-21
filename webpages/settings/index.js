@@ -7,7 +7,6 @@ import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
-import chrome from "../../libraries/common/chrome.js";
 
 if (window.parent === window) {
   location.href = "https://scratch.mit.edu/scratch-addons-extention/settings";
