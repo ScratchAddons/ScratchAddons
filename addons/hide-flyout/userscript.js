@@ -129,7 +129,7 @@ export default async function ({ addon, global, console }) {
     if (toggleSetting === "cathover") {
       onmouseleave(null, 0);
 
-      const toolbox = document.querySelector(".blocklyToolboxDiv")
+      const toolbox = document.querySelector(".blocklyToolboxDiv");
       const addExtensionButton = document.querySelector("[class^=gui_extension-button-container_]");
 
       for (let e of [toolbox, addExtensionButton, flyOut, scrollBar]) {
