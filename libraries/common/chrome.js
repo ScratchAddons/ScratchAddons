@@ -118,5 +118,5 @@ export default {
 function getURL(url, min = false) {
   // todo min true
   const { href } = new URL("../../" + url, import.meta.url);
-  return min ? href.replace(/(?<!\.min)\.js$/, ".min.js").replace(/(?<!\.min)\.css$/, ".min.css") : href;
+  return min ? href.replace(/(?<!\.min)\.js$/, ".js").replace(/(?<!\.min)\.css$/, ".css") : href;
 }

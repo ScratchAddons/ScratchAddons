@@ -7,8 +7,8 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
   for (const scriptInfo of scripts) {
     const { url: scriptPath, runAtComplete } = scriptInfo;
     const scriptUrl = new URL("../../" + `addons/${addonId}/${scriptPath}`, import.meta.url).href
-      .replace(/(?<!\.min)\.js$/, ".min.js")
-      .replace(/(?<!\.min)\.css$/, ".min.css");
+      .replace(/(?<!\.min)\.js$/, ".js")
+      .replace(/(?<!\.min)\.css$/, ".css");
     const loadUserscript = async () => {
       await scratchAddons.l10n.loadByAddonId(addonId);
       const module = await import(scriptUrl);
