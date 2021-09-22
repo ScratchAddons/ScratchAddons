@@ -9,7 +9,8 @@
       import chrome from "../../libraries/common/chrome.js";
       window.chrome = chrome;
     </script>
-    <script type="module" defer async>
+    <script src="../../background/declare-scratchaddons-object.js" type="module"></script>
+    <script type="module" async>
       import handleSettings from "../../background/handle-settings-page.js";
       import handleL10n from "../../background/handle-l10n.js";
 
@@ -67,7 +68,6 @@
 
     <script src="../set-lang.js" defer async type="module"></script>
     <script src="../check-unsupported.js" defer async type="module"></script>
-    <script src="../../background/declare-scratchaddons-object.js" type="module"></script>
     <script src="../../background/load-addon-manifests.js" type="module"></script>
     <script src="../../background/get-addon-settings.js" type="module"></script>
   </head>
