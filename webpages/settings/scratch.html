@@ -13,7 +13,11 @@
       window.chrome = chrome;
 
       window.addEventListener("message", async (e) => {
-        if (e.source !== document.querySelector("iframe").contentWindow && e.source !== window) return;
+        if (
+          typeof e.data.reqId === "string" ||
+          (e.source !== document.querySelector("iframe").contentWindow && e.source !== window)
+        )
+          return;
 
         const promisify =
           (callbackFn) =>
@@ -21,7 +25,7 @@
             new Promise((resolve) => callbackFn(...args, resolve));
 
         function sendResponse(res = {}) {
-          return e.source.postMessage({ ...res, original: e.data.id + "r" }, e.origin);
+          return e.source.postMessage({ ...res, reqId: e.data.id + "r" }, e.origin);
         }
 
         const data = e.data.message;
