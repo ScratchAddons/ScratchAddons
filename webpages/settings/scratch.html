@@ -25,7 +25,7 @@
             new Promise((resolve) => callbackFn(...args, resolve));
 
         function sendResponse(res = {}) {
-          return e.source.postMessage({ ...res, reqId: e.data.id + "r" }, e.origin);
+          return e.source.postMessage({ res, reqId: e.data.id + "r" }, e.origin);
         }
 
         const data = e.data.message;
@@ -51,9 +51,10 @@
             sendResponse();
           } else {
             console.log("waiting still");
-            await promisify(scratchAddons.localEvents.addEventListener)("ready");
-            console.log("ready");
-            sendResponse();
+            scratchAddons.localEvents.addEventListener("ready", () => {
+              console.log("ready");
+              sendResponse();
+            });
           }
         }
 
