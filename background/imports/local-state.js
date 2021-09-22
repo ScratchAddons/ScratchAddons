@@ -9,6 +9,7 @@ const _localState = {
   allReady: false,
   addonsEnabled: {},
   badges: {},
+nextMsgId : 0
 };
 
 class StateProxy {

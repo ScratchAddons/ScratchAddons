@@ -28,10 +28,8 @@ const storage = {
   },
 };
 
-let nextMsgId = 0;
-
 function sendMessage(message, callback = () => {}) {
-  const id = nextMsgId++;
+  const id = scratchAddons.localState.nextMsgId++;
   window.parent.postMessage({ id, message }, "*"); // todo not *
   const listener = (event) => {
     if (event.source === window.parent && event.data.reqId === id + "r") {
