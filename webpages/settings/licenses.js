@@ -1,3 +1,5 @@
+/* global libraryLicenses, licenseNameToText */
+
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
@@ -21,8 +23,7 @@ const vue = new Vue({
   },
 });
 
-chrome.runtime.sendMessage("getLibraryInfo", (libraryLicenses) => {
-  const licenseNameToText = {};
+window.addEventListener("licenses-loaded", () => {
   const searchParams = new URL(location.href).searchParams;
   const libraryParam = searchParams.get("libraries");
   if (typeof libraryParam !== "string") return;
@@ -31,16 +32,14 @@ chrome.runtime.sendMessage("getLibraryInfo", (libraryLicenses) => {
   for (const library of libraries) {
     const licenseName = libraryLicenses[library];
     if (!licenseName) continue;
-    if (Object.prototype.hasOwnProperty.call(licenseNameToText, licenseName)) {
-      vue.libraries = [
-        ...vue.libraries,
-        {
-          name: library,
-          license: licenseNameToText[licenseName],
-        },
-      ];
-      continue;
-    }
+    vue.libraries = [
+      ...vue.libraries,
+      {
+        name: library,
+        license: licenseNameToText[licenseName],
+      },
+    ];
+    /*
     chrome.runtime.sendMessage({ licenseName }, ({ licenseText }) => {
       licenseNameToText[licenseName] = licenseText;
       vue.libraries = [
@@ -51,6 +50,7 @@ chrome.runtime.sendMessage("getLibraryInfo", (libraryLicenses) => {
         },
       ];
     });
+    */
   }
 });
 

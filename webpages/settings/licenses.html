@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
-    <script src="../set-lang.js" type="module"></script>
+    <script type="module">
+      import chrome from "../../libraries/common/chrome.js";
+      window.chrome = chrome;
+    </script>
+
+    <script src="../set-lang.js" defer async type="module"></script>
+    <script src="../check-unsupported.js" defer async type="module"></script>
     <style>
       /* Imports are here to attempt to speed up load */
       @import url("../styles/colors.css");

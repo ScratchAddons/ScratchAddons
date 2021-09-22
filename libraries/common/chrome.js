@@ -1,3 +1,5 @@
+/* global nextMsgId: writable */
+
 const promisify =
   (callbackFn) =>
   (...args) =>
@@ -31,7 +33,7 @@ const storage = {
 window.nextMsgId = 0;
 
 function sendMessage(message, callback = () => {}) {
-  const id = window.nextMsgId++;
+  const id = nextMsgId++;
   window.parent.postMessage({ id, message }, "*"); // todo not *
   const listener = (event) => {
     if (event.source === window.parent && event.data.reqId === id + "r") {
