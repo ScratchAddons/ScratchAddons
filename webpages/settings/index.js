@@ -3,8 +3,8 @@ import getDirection from "../rtl-list.js";
 import loadVueComponent from "../../libraries/common/load-vue-components.js";
 import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
 import tags from "./data/tags.js";
-import addonGroups from "./data/addon-groups.js";
-import categories from "./data/categories.js";
+import addonGroupsFunc from "./data/addon-groups.js";
+import categoriesFunc from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
 
@@ -82,6 +82,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
 async function func() {
   const manifest = await chrome.runtime.getManifest();
+
+  const addonGroups = addonGroupsFunc();
+  const categories = categoriesFunc();
 
   const promisify =
     (callbackFn) =>

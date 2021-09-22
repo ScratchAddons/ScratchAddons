@@ -1,5 +1,7 @@
 /* global libraryLicenses, licenseNameToText, licensesReady */
 
+chrome.i18n.init()
+
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
@@ -11,21 +13,26 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
     document.head.appendChild(lightThemeLink);
   }
 });
-const vue = new Vue({
-  el: "body",
-  data: {
-    libraries: [],
-  },
-  methods: {
-    msg(message, ...param) {
-      return chrome.i18n.getMessage(message, ...param);
-    },
-  },
-});
 
-chrome.i18n.init()
 
 function func() {
+  if (chrome.i18n.ready) func1();
+  else window.addEventListener("licenses-loaded", () => func1());
+
+  const vue = new Vue({
+    el: "body",
+    data: {
+      libraries: [],
+    },
+    methods: {
+      msg(message, ...param) {
+        return chrome.i18n.getMessage(message, ...param);
+      },
+    },
+  });
+}
+
+function func1() {
   document.title = chrome.i18n.getMessage("licensesTitle");
 
   const searchParams = new URL(location.href).searchParams;
@@ -54,10 +61,6 @@ function func() {
     */
   }
 }
-function func1() {
-  if (chrome.i18n.ready) func();
-  else window.addEventListener(".i18n load", () => func());
-}
 
-if (window.licensesReady) func1();
-else window.addEventListener("licenses-loaded", () => func1());
+if (window.licensesReady) func();
+else window.addEventListener(".i18n load", () => func());

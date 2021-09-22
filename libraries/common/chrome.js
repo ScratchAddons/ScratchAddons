@@ -102,7 +102,7 @@ export default {
       if (!this.ready)
         throw new ReferenceError("Call `await .i18n.init()` before `.i18n.getMessage(message, placeholders)`!");
       if (typeof placeholders === "string") placeholders = [placeholders];
-      return messages[message];
+      return messages[message].message;
     },
   },
 };

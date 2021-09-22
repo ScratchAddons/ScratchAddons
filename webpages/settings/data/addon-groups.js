@@ -1,4 +1,4 @@
-export default [
+export default () => [
   // Only popup:
   {
     id: "recentlyUsed",
