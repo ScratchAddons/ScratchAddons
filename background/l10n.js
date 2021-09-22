@@ -24,8 +24,9 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
         const url = chrome.runtime.getURL(`addons-l10n/${locale}/${addonId}.json`);
         const messages = await fetch(url)
           .then((resp) => resp.json())
-          .catch(() => {
+          .catch((e) => {
             if (addonId === "_general") skip = true;
+            else console.error(e)
           });
 
         return messages;
@@ -36,7 +37,7 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
         ...(await Promise.all(localePromises)).filter((addon) => addon) // filter out undefined values
       );
     });
-    
+
     this.messages = Object.assign({}, ...(await Promise.all(localePromises)).reverse());
 
     this._reconfigure();
