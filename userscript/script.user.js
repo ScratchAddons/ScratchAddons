@@ -5,21 +5,21 @@
 // @author
 // @description
 // @homepage     https://scratchaddons.com/
-// @icon         https://sa-userscript.pages.dev/images/icon.svg
-// @updateURL    https://sa-userscript.pages.dev/userscript/script.user.js
+// @icon         https://userscript.scratchaddons.cf/images/icon.svg
+// @updateURL    https://userscript.scratchaddons.cf/userscript/script.user.js
 // @supportURL   https://scratchaddons.com/feedback
 // @match        https://scratch.mit.edu/*
-// @require      https://sa-userscript.pages.dev/content-scripts/prototype-handler.js
-// @require      https://sa-userscript.pages.dev/content-scripts/load-redux.js
-// @require      https://sa-userscript.pages.dev/content-scripts/fix-console.js
-// @require      https://sa-userscript.pages.dev/libraries/common/cs/text-color.js
+// @require      https://userscript.scratchaddons.cf/content-scripts/prototype-handler.js
+// @require      https://userscript.scratchaddons.cf/content-scripts/load-redux.js
+// @require      https://userscript.scratchaddons.cf/content-scripts/fix-console.js
+// @require      https://userscript.scratchaddons.cf/libraries/common/cs/text-color.js
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
 
 document.documentElement.append(
   Object.assign(document.createElement("script"), {
-    src: "https://sa-userscript.pages.dev/webpages/check-unsupported.js",
+    src: "https://userscript.scratchaddons.cf/webpages/check-unsupported.js",
     type: "module",
   })
 );
@@ -27,13 +27,13 @@ document.documentElement.append(
 if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathname)) {
   window.stop();
   document.documentElement.innerHTML = "";
-  fetch("https://sa-userscript.pages.dev/webpages/settings/scratch")
+  fetch("https://userscript.scratchaddons.cf/webpages/settings/scratch")
     .then((r) => r.text())
     .then((html) => (document.documentElement.innerHTML = html));
 } else {
   document.documentElement.append(
     Object.assign(document.createElement("script"), {
-      src: "https://sa-userscript.pages.dev/userscript/module.js",
+      src: "https://userscript.scratchaddons.cf/userscript/module.js",
       type: "module",
     })
   );
