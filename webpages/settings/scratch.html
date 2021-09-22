@@ -39,6 +39,8 @@
         if (e.data.title) {
           return e.source.postMessage((document.title = e.data.title), e.origin);
         }
+
+        return e.source.postMessage(undefined, e.origin);
       });
     </script>
 
