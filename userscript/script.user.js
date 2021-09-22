@@ -5,31 +5,32 @@
 // @author
 // @description
 // @homepage     https://scratchaddons.com/
-// @icon         https://sa-userscript.github.io/ScratchAddons/images/icon.svg
-// @updateURL    https://sa-userscript.github.io/ScratchAddons/userscript/script.user.js
+// @icon         https://sa-userscript.pages.dev/images/icon.svg
+// @updateURL    https://sa-userscript.pages.dev/userscript/script.user.js
 // @supportURL   https://scratchaddons.com/feedback
 // @match        https://scratch.mit.edu/*
-// @require      https://sa-userscript.github.io/ScratchAddons/content-scripts/prototype-handler.js
-// @require      https://sa-userscript.github.io/ScratchAddons/content-scripts/load-redux.js
-// @require      https://sa-userscript.github.io/ScratchAddons/content-scripts/fix-console.js
-// @require      https://sa-userscript.github.io/ScratchAddons/libraries/common/cs/text-color.js
+// @require      https://sa-userscript.pages.dev/content-scripts/prototype-handler.js
+// @require      https://sa-userscript.pages.dev/content-scripts/load-redux.js
+// @require      https://sa-userscript.pages.dev/content-scripts/fix-console.js
+// @require      https://sa-userscript.pages.dev/libraries/common/cs/text-color.js
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
 
 document.documentElement.append(
   Object.assign(document.createElement("script"), {
-    src: "https://sa-userscript.github.io/ScratchAddons/webpages/check-unsupported.js",
+    src: "https://sa-userscript.pages.dev/webpages/check-unsupported.js",
     type: "module",
   })
 );
 
 if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathname)) {
+  window.stop()
   document.documentElement.innerHTML = "";
 } else {
   document.documentElement.append(
     Object.assign(document.createElement("script"), {
-      src: "https://sa-userscript.github.io/ScratchAddons/userscript/module.js",
+      src: "https://sa-userscript.pages.dev/userscript/module.js",
       type: "module",
     })
   );

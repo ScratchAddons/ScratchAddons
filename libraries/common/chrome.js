@@ -31,7 +31,7 @@ const storage = {
   },
 };
 
-window.nextMsgId = 0;
+window.nextMsgId = window.nextMsgId || 0;
 
 function sendMessage(message, callback = () => {}) {
   const id = nextMsgId++;
