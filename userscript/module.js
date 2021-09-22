@@ -91,7 +91,7 @@ function getL10NURLs() {
       } catch (e) {
         d = {};
         scratchAddons.console.warn("Session fetch failed: ", e);
-        if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
+        if ((res && !res.ok) || !res) setTimeout(this.refetchSession, 60000);
       }
       scratchAddons.session = d;
       scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));

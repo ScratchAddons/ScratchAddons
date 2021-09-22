@@ -90,7 +90,7 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
       });
 
     fixPlaceHolderClasses();
-    new MutationObserver(() => fixPlaceHolderClasses()).observe(document.documentElement, {
+    new MutationObserver(fixPlaceHolderClasses).observe(document.documentElement, {
       attributes: false,
       childList: true,
       subtree: true,

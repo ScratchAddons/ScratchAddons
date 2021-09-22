@@ -1,6 +1,6 @@
-/* global libraryLicenses, licenseNameToText, licensesReady */
+/* global libraryLicenses, licenseNameToText, licensesReady, vue */
 
-chrome.i18n.init()
+chrome.i18n.init();
 
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
@@ -14,12 +14,11 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
-
 function func() {
-  if (chrome.i18n.ready) func1();
-  else window.addEventListener("licenses-loaded", () => func1());
+  if (window.licensesReady) func1();
+  else window.addEventListener("licenses-loaded", func1);
 
-  const vue = new Vue({
+  window.vue = new Vue({
     el: "body",
     data: {
       libraries: [],
@@ -62,5 +61,5 @@ function func1() {
   }
 }
 
-if (window.licensesReady) func();
-else window.addEventListener(".i18n load", () => func());
+if (chrome.i18n.ready) func();
+else window.addEventListener(".i18n load", func);
