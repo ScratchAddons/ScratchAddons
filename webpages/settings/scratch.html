@@ -13,7 +13,7 @@
       import handleSettings from "../../background/handle-settings-page.js";
       import handleL10n from "../../background/handle-l10n.js";
 
-      window.addEventListener("message", (e) => {
+      window.addEventListener("message", async (e) => {
         function sendResponse(res) {
           return e.source.postMessage(res, e.origin);
         }
@@ -34,6 +34,11 @@
 
         if (e.data.title) {
           return sendResponse((document.title = e.data.title));
+        }
+
+        if (e.data === "waitForState") {
+          if (scratchAddons.localState.allReady) sendResponse();
+          else scratchAddons.localEvents.addEventListener("ready", sendResponse);
         }
 
         return sendResponse(undefined);

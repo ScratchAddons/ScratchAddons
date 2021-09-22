@@ -428,11 +428,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   };
 
   // Wait for scratchAddons to init
-  await new Promise((resolve) => {
-    if (scratchAddons.localState.allReady) resolve();
-    else scratchAddons.localEvents.addEventListener("ready", resolve);
-  });
-
+  await promisify(chrome.runtime.sendMessage)("waitForState")
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
     vue.addonSettings = addonSettings;
     const cleanManifests = [];
