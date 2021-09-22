@@ -10,22 +10,19 @@
       window.chrome = chrome;
     </script>
     <script type="module">
-      import handleSettingsPage from "../../background/handle-settings-page.js";
+      import handleSettings from "../../background/handle-settings-page.js";
       import handleL10n from "../../background/handle-l10n.js";
 
       window.addEventListener("message", (e) => {
-        console.log("got msg",e);
         if (e.source !== document.querySelector("iframe").contentWindow) return;
-        console.log("msg from us",e);
 
         if (
-          handleSettingsPage(e.data, (res) => {
-            console.log("sending res",res);
+          handleSettings(e.data, (res) => {
             e.source.postMessage(res, e.origin);
-            console.log("sent res",res);
           })
         )
           return;
+
         if (handleL10n(e.data, (res) => e.source.postMessage(res, e.origin))) return;
 
         if (e.data.getFromStorage) {
@@ -37,6 +34,10 @@
             (localStorage[e.data.setInStorage[0]] = JSON.stringify(e.data.setInStorage[1])),
             e.origin
           );
+        }
+
+        if (e.data.title) {
+          return e.source.postMessage((document.title = e.data.title), e.origin);
         }
       });
     </script>

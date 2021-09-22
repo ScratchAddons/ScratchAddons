@@ -427,9 +427,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     });
   };
 
-  console.log("getting SettingsInfo")
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
-    console.log("got SettingsInfo")
     vue.addonSettings = addonSettings;
     const cleanManifests = [];
     let iframeData;
@@ -437,6 +435,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       iframeData = await getRunningAddons(manifests, addonsEnabled);
     }
     const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
+    vue.manifests = [];
+    let binaryNum = "";
     for (const { manifest, addonId } of manifests) {
       manifest._categories = [];
       manifest._categories[0] = manifest.tags.includes("popup")
@@ -527,13 +527,14 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         vue.addonGroups.find((g) => g.id === groupId)?.addonIds.push(manifest._addonId);
       }
       cleanManifests.push(deepClone(manifest));
-    }
 
-    // Manifest objects will now be owned by Vue
-    for (const { manifest } of manifests) {
+      // Manifest objects will now be owned by Vue
       Vue.set(vue.manifestsById, manifest._addonId, manifest);
+
+      vue.manifests.push(manifest);
+
+      binaryNum += addonsEnabled[addonId] === true ? "1" : "0";
     }
-    vue.manifests = manifests.map(({ manifest }) => manifest);
 
     fuse = new Fuse(cleanManifests, fuseOptions);
 
@@ -549,6 +550,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     };
     const order = [["danger", "beta"], "editor", "community", "popup"];
 
+    let naturalIndex = 0; // Index when not searching
+
     vue.addonGroups.forEach((group) => {
       group.addonIds = group.addonIds
         .map((id) => vue.manifestsById[id])
@@ -560,17 +563,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           return 0; // just to suppress linter
         })
         .map((addon) => addon._addonId);
-    });
 
-    if (isIframe) {
-      const addonsInGroups = [];
-      for (const group of vue.addonGroups) group.addonIds.forEach((addonId) => addonsInGroups.push(addonId));
-      const searchGroup = vue.addonGroups.find((group) => group.id === "_iframeSearch");
-      searchGroup.addonIds = Object.keys(vue.manifestsById).filter((addonId) => addonsInGroups.indexOf(addonId) === -1);
-    }
-
-    let naturalIndex = 0; // Index when not searching
-    for (const group of vue.addonGroups) {
       group.addonIds.forEach((addonId, groupIndex) => {
         const cachedObj = vue.addonListObjs.find((o) => o.manifest._addonId === "example");
         const obj = cachedObj || {};
@@ -590,9 +583,17 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         if (!cachedObj) vue.addonListObjs.push(obj);
         naturalIndex++;
       });
+    });
+
+    if (isIframe) {
+      const addonsInGroups = [];
+      for (const group of vue.addonGroups) group.addonIds.forEach((addonId) => addonsInGroups.push(addonId));
+      const searchGroup = vue.addonGroups.find((group) => group.id === "_iframeSearch");
+      searchGroup.addonIds = Object.keys(vue.manifestsById).filter((addonId) => addonsInGroups.indexOf(addonId) === -1);
+
+      // Remove unused remaining cached objects. Can only happen in iframe mode
+      vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
     }
-    // Remove unused remaining cached objects. Can only happen in iframe mode
-    vue.addonListObjs = vue.addonListObjs.filter((o) => o.manifest._addonId !== "example");
 
     vue.loaded = true;
     setTimeout(() => {
@@ -605,6 +606,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
           const addonId = hash.substring(7);
           const groupWithAddon = vue.addonGroups.find((group) => group.addonIds.includes(addonId));
           groupWithAddon.expanded = true;
+        }
+
+        if (browser) {
           setTimeout(() => {
             // Only required in Firefox
             window.location.hash = "";
@@ -614,8 +618,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       }
     }, 0);
 
-    let binaryNum = "";
-    manifests.forEach(({ addonId }) => (binaryNum += addonsEnabled[addonId] === true ? "1" : "0"));
     const addonsEnabledBase36 = BigInt(`0b${binaryNum}`).toString(36);
     vue.sidebarUrls.feedback += `#_${addonsEnabledBase36}`;
   });
@@ -631,6 +633,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   });
 
   document.title = chrome.i18n.getMessage("settingsTitle");
+  chrome.runtime.sendMessage({ title: document.title });
+
   function resize() {
     if (window.innerWidth < 1100) {
       vue.smallMode = true;
@@ -642,7 +646,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       vue.switchPath = "../../images/icons/close.svg";
     }
   }
-  window.onresize = resize;
+  window.addEventListener("resize", resize);
   resize();
 
   // Konami code easter egg
