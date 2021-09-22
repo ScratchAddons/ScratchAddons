@@ -1,9 +1,9 @@
 (async function () {
-  const folderNames = [
-    ...new Set(await (await fetch(chrome.runtime.getURL("addons/addons.json"))).json()).filter((folderName) => {
+  const folderNames = [...new Set(await (await fetch(chrome.runtime.getURL("addons/addons.json"))).json())].filter(
+    (folderName) => {
       return !folderName.startsWith("//");
-    }),
-  ];
+    }
+  );
 
   await scratchAddons.l10n.load(folderNames);
   const useDefault = scratchAddons.l10n.locale.startsWith("en");
