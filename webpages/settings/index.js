@@ -429,7 +429,11 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 
   console.log("waiting for scratchAddons");
   // Wait for scratchAddons to load
-  await promisify(chrome.runtime.sendMessage)("waitForState");
+  await new Promise((resolve) =>
+    window.addEventListener("message", async (e) => {
+      if (e.source === window.parent && e.data === "scratchAddons ready") return resolve();
+    })
+  );
   console.log("done waiting for scratchAddons");
 
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {

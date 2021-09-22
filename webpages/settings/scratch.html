@@ -44,26 +44,22 @@
           return sendResponse((document.title = data.title));
         }
 
-        if (data === "waitForState") {
-          console.log("asked to wait for scratchAddons");
-          if (scratchAddons.localState.allReady) {
-            console.log("already ready");
-            sendResponse();
-          } else {
-            console.log("waiting still");
-            scratchAddons.localEvents.addEventListener("ready", () => {
-              console.log("ready");
-              sendResponse();
-            });
-          }
-        }
-
         // data.changeAddonSettings todo
 
         return sendResponse(undefined);
       });
 
-      iframe.src = "./index.html";
+      console.log("asked to wait for scratchAddons");
+      if (scratchAddons.localState.allReady) {
+        console.log("already ready");
+        window.parent.postMessage("scratchAddons ready", "*"); // todo not *
+      } else {
+        console.log("waiting still");
+        scratchAddons.localEvents.addEventListener("ready", () => {
+          console.log("ready");
+          window.parent.postMessage("scratchAddons ready", "*"); // todo not *
+        });
+      }
     </script>
 
     <script src="../set-lang.js" defer async type="module"></script>
@@ -72,6 +68,6 @@
     <script src="../../background/get-addon-settings.js" type="module"></script>
   </head>
   <body style="width: 100%; height: 100%; padding: 0; margin: 0">
-    <iframe src="about:blank" style="width: 100%; height: 100%; border: none"></iframe>
+    <iframe src="./index.html" style="width: 100%; height: 100%; border: none"></iframe>
   </body>
 </html>
