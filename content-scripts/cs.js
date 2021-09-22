@@ -425,7 +425,7 @@ if (location.pathname.startsWith("/discuss/")) {
 }
 
 async function forumWarning(key) {
-  const manifest=(await chrome.runtime.getManifest())
+  const manifest = await chrome.runtime.getManifest();
   let postArea = document.querySelector("form#post > label");
   if (postArea) {
     var errorList = document.querySelector("form#post > label > ul");
@@ -440,9 +440,7 @@ async function forumWarning(key) {
     const uiLanguage = chrome.i18n.getUILanguage();
     const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
     const utm = `utm_source=extension&utm_medium=forumwarning&utm_campaign=v${manifest.version}`;
-    reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${
-      manifest.version
-    }&${utm}`;
+    reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${manifest.version}&${utm}`;
     reportLink.target = "_blank";
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     let text1 = document.createElement("span");
@@ -509,7 +507,7 @@ const showBanner = async () => {
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
   const NOTIF_TEXT_STYLE = "display: block; font-size: 14px; color: white !important;";
-const manifest=(await chrome.runtime.getManifest())
+  const manifest = await chrome.runtime.getManifest();
   const notifInnerText0 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE + "font-weight: bold;",
     textContent: chrome.i18n
@@ -544,18 +542,14 @@ const manifest=(await chrome.runtime.getManifest())
   });
   const uiLanguage = chrome.i18n.getUILanguage();
   const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-  const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${
-    manifest.version
-  }`;
+  const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${manifest.version}`;
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("notifChangelog"),
   });
   const notifFooterFeedback = Object.assign(document.createElement("a"), {
-    href: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${
-      manifest.version
-    }&${utm}`,
+    href: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${manifest.version}&${utm}`,
     target: "_blank",
     textContent: chrome.i18n.getMessage("feedback"),
   });

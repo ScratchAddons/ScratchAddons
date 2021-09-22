@@ -427,10 +427,10 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     });
   };
 
-  console.log("waiting for scratchAddons")
+  console.log("waiting for scratchAddons");
   // Wait for scratchAddons to load
-  await promisify(chrome.runtime.sendMessage)("waitForState")
-  console.log("done waiting for scratchAddons")
+  await promisify(chrome.runtime.sendMessage)("waitForState");
+  console.log("done waiting for scratchAddons");
 
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
     vue.addonSettings = addonSettings;
