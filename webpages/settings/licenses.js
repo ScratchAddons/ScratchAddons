@@ -1,4 +1,4 @@
-/* global libraryLicenses, licenseNameToText */
+/* global libraryLicenses, licenseNameToText, licensesReady */
 
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
@@ -23,7 +23,7 @@ const vue = new Vue({
   },
 });
 
-window.addEventListener("licenses-loaded", () => {
+function func() {
   const searchParams = new URL(location.href).searchParams;
   const libraryParam = searchParams.get("libraries");
   if (typeof libraryParam !== "string") return;
@@ -52,6 +52,9 @@ window.addEventListener("licenses-loaded", () => {
     });
     */
   }
-});
+}
+
+if (window.licensesReady) func();
+else window.addEventListener("licenses-loaded", () => func);
 
 document.title = chrome.i18n.getMessage("licensesTitle");

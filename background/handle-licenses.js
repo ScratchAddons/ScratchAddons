@@ -1,4 +1,4 @@
-/* global libraryLicenses, licenseNameToText */
+/* global libraryLicenses, licenseNameToText, licensesReady */
 
 window.licenseNameToText = {};
 fetch(chrome.runtime.getURL("libraries/license-info.json"))
@@ -20,7 +20,10 @@ fetch(chrome.runtime.getURL("libraries/license-info.json"))
       licenseNameToText[name] = text;
     })
   )
-  .then(() => window.dispatchEvent(new CustomEvent("licenses-loaded")));
+  .then(() => {
+    window.dispatchEvent(new CustomEvent("licenses-loaded"));
+    window.licensesReady = true;
+  });
 
 /*
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
