@@ -7,40 +7,40 @@
     <link rel="icon" href="../../images/icon.png" />
     <script type="module">
       import chrome from "../../libraries/common/chrome.js";
-      window.chrome = chrome;
-    </script>
-    <script type="module">
       import handleSettings from "../../background/handle-settings-page.js";
       import handleL10n from "../../background/handle-l10n.js";
 
+      window.chrome = chrome;
+
       window.addEventListener("message", async (e) => {
+        if (e.source !== document.querySelector("iframe").contentWindow) return;
+
         const promisify =
           (callbackFn) =>
           (...args) =>
             new Promise((resolve) => callbackFn(...args, resolve));
+
         function sendResponse(res = {}) {
-          return e.source.postMessage({ ...res, original: e.data }, e.origin);
+          return e.source.postMessage({ ...res, original: e.data.id }, e.origin);
         }
 
-        if (e.source !== document.querySelector("iframe").contentWindow) return;
+        const data = e.data.message;
 
-        if (handleSettings(e.data, sendResponse)) return;
+        if (handleSettings(data, sendResponse) || handleL10n(data, sendResponse)) return;
 
-        if (handleL10n(e.data, sendResponse)) return;
-
-        if (e.data.getFromStorage) {
-          return sendResponse(localStorage[e.data.getFromStorage]);
+        if (data.getFromStorage) {
+          return sendResponse(localStorage[data.getFromStorage]);
         }
 
-        if (e.data.setInStorage) {
-          return sendResponse((localStorage[e.data.setInStorage[0]] = JSON.stringify(e.data.setInStorage[1])));
+        if (data.setInStorage) {
+          return sendResponse((localStorage[data.setInStorage[0]] = JSON.stringify(data.setInStorage[1])));
         }
 
-        if (e.data.title) {
-          return sendResponse((document.title = e.data.title));
+        if (data.title) {
+          return sendResponse((document.title = data.title));
         }
 
-        if (e.data === "waitForState") {
+        if (data === "waitForState") {
           console.log("asked to wait for scratchAddons");
           if (scratchAddons.localState.allReady) {
             console.log("already ready");
@@ -53,7 +53,7 @@
           }
         }
 
-        // e.data.changeAddonSettings todo
+        // data.changeAddonSettings todo
 
         return sendResponse(undefined);
       });
@@ -64,8 +64,6 @@
     <script src="../../background/declare-scratchaddons-object.js" type="module"></script>
     <script src="../../background/load-addon-manifests.js" type="module"></script>
     <script src="../../background/get-addon-settings.js" type="module"></script>
-    <script src="../../background/handle-l10n.js" type="module"></script>
-    <script src="../../background/handle-settings-page.js" type="module"></script>
   </head>
   <body style="width: 100%; height: 100%; padding: 0; margin: 0">
     <iframe src="./index.html" style="width: 100%; height: 100%; border: none"></iframe>

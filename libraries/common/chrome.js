@@ -28,10 +28,13 @@ const storage = {
   },
 };
 
-function sendMessage(message, callback = () => {}) {
-  window.parent.postMessage(message, "*"); // todo not *
+let nextMsgId = 0;
+
+function sendMessage(message, callback = () => { }) {
+  const id=nextMsgId++;
+  window.parent.postMessage({id,message}, "*"); // todo not *
   const listener = (event) => {
-    if (event.source === window.parent&&event.data.original ===message) {
+    if (event.source === window.parent&&event.data.id ===id) {
       window.removeEventListener("message", listener);
       callback(event.data);
     }
