@@ -51,7 +51,9 @@ export default {
       const response = await fetch(getURL("manifest.json"));
       return (manifest = await response.json());
     },
-    reload() {},
+    reload() {
+      location.reload()
+    },
     getURL,
     sendMessage,
     lastError: undefined,
