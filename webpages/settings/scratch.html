@@ -37,9 +37,20 @@
         }
 
         if (e.data === "waitForState") {
-          if (scratchAddons.localState.allReady) sendResponse();
-          else scratchAddons.localEvents.addEventListener("ready", sendResponse);
+          console.log("asked to wait for scratchAddons");
+          if (scratchAddons.localState.allReady) {
+            console.log("already ready");
+            sendResponse();
+          } else {
+            console.log("waiting still");
+            scratchAddons.localEvents.addEventListener("ready", () => {
+              console.log("ready");
+              sendResponse();
+            });
+          }
         }
+
+        // e.data.changeAddonSettings todo
 
         return sendResponse(undefined);
       });
