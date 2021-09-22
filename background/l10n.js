@@ -17,25 +17,23 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     if (!locales.includes("en")) locales.push("en");
 
     this.messages = {
-      ...Promise.all(
+      ...(await Promise.all(
         locales.map(async (locale) => {
           let allMessages = {};
+          let skip = false;
           for (const addonId of addonIds) {
-            let resp;
-            let messages = {};
+            if (skip) continue;
             const url = chrome.runtime.getURL(`addons-l10n/${locale}/${addonId}.json`);
-            try {
-              resp = await fetch(url);
-              messages = await resp.json();
-            } catch (_) {
-              if (addonId === "_general") return;
-              continue;
-            }
+            const messages = await fetch(url)
+              .then((resp) => resp.json())
+              .catch(() => {
+                if (addonId === "_general") skip = true;
+              });
             allMessages = Object.assign(messages, allMessages);
           }
           return allMessages;
         })
-      ),
+      )),
     };
     this._reconfigure();
     this.loaded = this.loaded.concat(addonIds);
