@@ -46,7 +46,7 @@ function sendMessage(message, callback = () => {}) {
 }
 let manifest;
 
-const ui = chrome.i18n.getUILanguage().toLowerCase();
+const ui = navigator.language.toLowerCase();
 const locales = [ui];
 if (ui.includes("-")) locales.push(ui.split("-")[0]);
 if (ui.startsWith("pt") && ui !== "pt-br") locales.push("pt-br");
@@ -83,7 +83,7 @@ export default {
       });
 
       messages = Object.assign({}, ...(await Promise.all(localePromises).reverse()));
-      window.dispatchEvent(new CustomEvent("chrome.i18n load"));
+      window.dispatchEvent(new CustomEvent(".i18n load"));
       this.ready = true;
     },
     getUILanguage() {
@@ -91,7 +91,7 @@ export default {
     },
     getMessage(message, placeholders = []) {
       if (!this.ready)
-        throw new ReferenceError("Call `await chrome.i18n.init()` before `getMessage(message, placeholders)`!");
+        throw new ReferenceError("Call `await .i18n.init()` before `.i18n.getMessage(message, placeholders)`!");
       if (typeof placeholders === "string") placeholders = [placeholders];
       return messages[message];
     },

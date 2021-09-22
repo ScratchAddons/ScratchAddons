@@ -77,7 +77,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
   });
 
   if (chrome.i18n.ready) func();
-  else window.addEventListener("chrome.i18n load", () => func());
+  else window.addEventListener(".i18n load", () => func());
 })();
 
 async function func() {
