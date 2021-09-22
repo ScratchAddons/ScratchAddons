@@ -31,7 +31,7 @@ const storage = {
 function sendMessage(message, callback = () => {}) {
   window.parent.postMessage(message, "*"); // todo not *
   const listener = (event) => {
-    if (event.source === window.parent) {
+    if (event.source === window.parent&&event.data.original ===message) {
       window.removeEventListener("message", listener);
       callback(event.data);
     }

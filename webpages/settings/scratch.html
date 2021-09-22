@@ -14,8 +14,12 @@
       import handleL10n from "../../background/handle-l10n.js";
 
       window.addEventListener("message", async (e) => {
-        function sendResponse(res) {
-          return e.source.postMessage(res, e.origin);
+        const promisify =
+          (callbackFn) =>
+          (...args) =>
+            new Promise((resolve) => callbackFn(...args, resolve));
+        function sendResponse(res = {}) {
+          return e.source.postMessage({ ...res, original: e.data }, e.origin);
         }
 
         if (e.source !== document.querySelector("iframe").contentWindow) return;
@@ -43,10 +47,9 @@
             sendResponse();
           } else {
             console.log("waiting still");
-            scratchAddons.localEvents.addEventListener("ready", () => {
-              console.log("ready");
-              sendResponse();
-            });
+            await promisify(scratchAddons.localEvents.addEventListener)("ready");
+            console.log("ready");
+            sendResponse();
           }
         }
 
