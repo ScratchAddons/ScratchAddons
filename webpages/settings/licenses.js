@@ -1,7 +1,5 @@
 /* global libraryLicenses, licenseNameToText, licensesReady, vue */
 
-chrome.i18n.init();
-
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
@@ -14,7 +12,9 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
   }
 });
 
-function func() {
+(async () => {
+  await chrome.i18n.init();
+  
   if (window.licensesReady) func1();
   else window.addEventListener("licenses-loaded", func1);
 
@@ -29,7 +29,7 @@ function func() {
       },
     },
   });
-}
+})();
 
 function func1() {
   document.title = chrome.i18n.getMessage("licensesTitle");
@@ -60,6 +60,3 @@ function func1() {
     */
   }
 }
-
-if (chrome.i18n.ready) func();
-else window.addEventListener(".i18n load", func);

@@ -102,7 +102,15 @@ export default {
       if (!this.ready)
         throw new ReferenceError("Call `await .i18n.init()` before `.i18n.getMessage(message, placeholders)`!");
       if (typeof placeholders === "string") placeholders = [placeholders];
-      return messages[message].message;
+
+      return messages[message].message
+        .replace(/\$(\d+)/g, (_, dollar) => placeholders[dollar - 1])
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/['`‘]/g, "&#8217;")
+        .replace(/\.{3}/g, "…");
     },
   },
 };
