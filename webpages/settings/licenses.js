@@ -32,13 +32,11 @@ function func() {
   for (const library of libraries) {
     const licenseName = libraryLicenses[library];
     if (!licenseName) continue;
-    vue.libraries = [
-      ...vue.libraries,
+    vue.libraries.push(
       {
         name: library,
         license: licenseNameToText[licenseName],
-      },
-    ];
+      })
     /*
     chrome.runtime.sendMessage({ licenseName }, ({ licenseText }) => {
       licenseNameToText[licenseName] = licenseText;
@@ -55,6 +53,6 @@ function func() {
 }
 
 if (window.licensesReady) func();
-else window.addEventListener("licenses-loaded", () => func);
+else window.addEventListener("licenses-loaded", () => func());
 
 document.title = chrome.i18n.getMessage("licensesTitle");
