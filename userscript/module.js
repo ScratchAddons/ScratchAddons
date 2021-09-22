@@ -142,8 +142,8 @@ function getL10NURLs() {
 })();
 function getURL(url) {
   return new URL("../" + url, import.meta.url).href
-    .replace(/(?<!\.min)\.js$/, ".min.js")
-    .replace(/(?<!\.min)\.css$/, ".min.css");
+    .replace(/(?<!\.min)\.js$/, ".js")
+    .replace(/(?<!\.min)\.css$/, ".css");
 }
 
 // Pathname patterns. Make sure NOT to set global flag!
