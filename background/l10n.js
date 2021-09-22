@@ -22,11 +22,12 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
       const localePromises = addonIds.map(async (addonId) => {
         if (skip) return;
         const url = chrome.runtime.getURL(`addons-l10n/${locale}/${addonId}.json`);
+        let res
         const messages = await fetch(url)
-          .then((resp) => resp.json())
+          .then((resp) => {res = resp;return resp.json()})
           .catch((e) => {
             if (addonId === "_general") skip = true;
-            else console.error(e)
+            if(res?.status!==404) console.error(e)
           });
 
         return messages;
