@@ -12,6 +12,8 @@ if (window.parent === window) {
   location.href = "https://scratch.mit.edu/scratch-addons-extention/settings";
 }
 
+chrome.i18n.init();
+
 let isIframe = false;
 if (new URLSearchParams(window.location.search).get("popup")) {
   // We're in a popup!
@@ -54,8 +56,6 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     "webpages/settings/components/category-selector",
   ]);
 
-  const manifest = await chrome.runtime.getManifest();
-
   Vue.directive("click-outside", {
     priority: 700,
     bind() {
@@ -75,6 +75,13 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       event.stopPropagation();
     },
   });
+
+  if (chrome.i18n.ready) func();
+  else window.addEventListener("chrome.i18n load", () => func());
+})();
+
+async function func() {
+  const manifest = await chrome.runtime.getManifest();
 
   const promisify =
     (callbackFn) =>
@@ -427,11 +434,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     });
   };
 
-  console.log("waiting for scratchAddons");
   // Wait for scratchAddons to load
   await promisify(chrome.runtime.sendMessage)("waitForState");
-
-  console.log("done waiting for scratchAddons");
 
   chrome.runtime.sendMessage("getSettingsInfo", async ({ manifests, addonsEnabled, addonSettings }) => {
     vue.addonSettings = addonSettings;
@@ -676,4 +680,4 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       setTimeout(() => (vue.searchInputReal = ""), 0); // Allow konami code in autofocused search bar
     }
   });
-})();
+}

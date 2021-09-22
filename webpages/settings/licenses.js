@@ -23,7 +23,11 @@ const vue = new Vue({
   },
 });
 
+chrome.i18n.init()
+
 function func() {
+  document.title = chrome.i18n.getMessage("licensesTitle");
+
   const searchParams = new URL(location.href).searchParams;
   const libraryParam = searchParams.get("libraries");
   if (typeof libraryParam !== "string") return;
@@ -32,11 +36,10 @@ function func() {
   for (const library of libraries) {
     const licenseName = libraryLicenses[library];
     if (!licenseName) continue;
-    vue.libraries.push(
-      {
-        name: library,
-        license: licenseNameToText[licenseName],
-      })
+    vue.libraries.push({
+      name: library,
+      license: licenseNameToText[licenseName],
+    });
     /*
     chrome.runtime.sendMessage({ licenseName }, ({ licenseText }) => {
       licenseNameToText[licenseName] = licenseText;
@@ -51,8 +54,10 @@ function func() {
     */
   }
 }
+function func1() {
+  if (chrome.i18n.ready) func();
+  else window.addEventListener("chrome.i18n load", () => func());
+}
 
-if (window.licensesReady) func();
-else window.addEventListener("licenses-loaded", () => func());
-
-document.title = chrome.i18n.getMessage("licensesTitle");
+if (window.licensesReady) func1();
+else window.addEventListener("licenses-loaded", () => func1());

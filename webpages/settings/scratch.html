@@ -53,14 +53,10 @@
         }
 
         if (data === "waitForState") {
-          console.log("asked to wait for scratchAddons");
           if (scratchAddons.localState.allReady) {
-            console.log("already ready");
             sendResponse();
           } else {
-            console.log("waiting still");
             scratchAddons.localEvents.addEventListener("ready", () => {
-              console.log("ready");
               sendResponse();
             });
           }

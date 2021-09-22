@@ -6,8 +6,8 @@ const promisify =
     new Promise((resolve) => callbackFn(...args, resolve));
 
 const storage = {
-  get(keys, callback) {
-    return Promise.all(
+  async get(keys, callback) {
+    const res_1 = await Promise.all(
       keys.map(async (key) => {
         const res = await promisify(sendMessage)({ getFromStorage: key });
         return [
@@ -16,17 +16,18 @@ const storage = {
             ? JSON.parse(res === "undefined" || res === "" || res.startsWith("[object") ? null : res)
             : res,
         ];
-        // localStorage[key]
       })
-    ).then((res) => callback(Object.fromEntries(res)));
+    );
+    return callback(Object.fromEntries(res_1));
   },
-  set(keys, callback = () => {}) {
-    return Promise.all(
+  async set(keys, callback = () => {}) {
+    await Promise.all(
       Object.entries(keys).map(
-        async ([key, value]) => await promisify(sendMessage)({ setInStorage: [key, value] })
+        async ([key, value_1]) => await promisify(sendMessage)({ setInStorage: [key, value_1] })
         // localStorage[key] = JSON.stringify(value);
       )
-    ).then(() => callback());
+    );
+    return callback();
   },
 };
 
@@ -45,6 +46,15 @@ function sendMessage(message, callback = () => {}) {
 }
 let manifest;
 
+const ui = chrome.i18n.getUILanguage().toLowerCase();
+const locales = [ui];
+if (ui.includes("-")) locales.push(ui.split("-")[0]);
+if (ui.startsWith("pt") && ui !== "pt-br") locales.push("pt-br");
+if (!locales.includes("en")) locales.push("en");
+locales.splice(locales.indexOf("en") + 1);
+
+let messages = {};
+
 export default {
   storage: { sync: storage, local: storage },
   runtime: {
@@ -54,7 +64,7 @@ export default {
       return (manifest = await response.json());
     },
     reload() {
-      location.reload()
+      location.reload();
     },
     getURL,
     sendMessage,
@@ -65,11 +75,25 @@ export default {
     },
   },
   i18n: {
+    ready: false,
+    async init() {
+      const localePromises = locales.map(async (locale) => {
+        const r = await fetch(getURL("_locales/" + locale + "/messages.json"));
+        return await r.json();
+      });
+
+      messages = Object.assign({}, ...(await Promise.all(localePromises).reverse()));
+      window.dispatchEvent(new CustomEvent("chrome.i18n load"));
+      this.ready = true;
+    },
     getUILanguage() {
       return navigator.language;
     },
-    getMessage() {
-      return "Not implemented yet";
+    getMessage(message, placeholders = []) {
+      if (!this.ready)
+        throw new ReferenceError("Call `await chrome.i18n.init()` before `getMessage(message, placeholders)`!");
+      if (typeof placeholders === "string") placeholders = [placeholders];
+      return messages[message];
     },
   },
 };

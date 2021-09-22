@@ -5,6 +5,7 @@ const locales = [ui];
 if (ui.includes("-")) locales.push(ui.split("-")[0]);
 if (ui.startsWith("pt") && ui !== "pt-br") locales.push("pt-br");
 if (!locales.includes("en")) locales.push("en");
+locales.splice(locales.indexOf("en") + 1)
 
 export default class BackgroundLocalizationProvider extends LocalizationProvider {
   constructor() {
