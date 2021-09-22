@@ -14,9 +14,6 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 
 (async () => {
   await chrome.i18n.init();
-  
-  if (window.licensesReady) func1();
-  else window.addEventListener("licenses-loaded", func1);
 
   window.vue = new Vue({
     el: "body",
@@ -29,6 +26,9 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
       },
     },
   });
+
+  if (window.licensesReady) func1();
+  else window.addEventListener("licenses-loaded", func1);
 })();
 
 function func1() {
