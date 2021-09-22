@@ -16,25 +16,29 @@ export default class BackgroundLocalizationProvider extends LocalizationProvider
     if (ui.startsWith("pt") && ui !== "pt-br") locales.push("pt-br");
     if (!locales.includes("en")) locales.push("en");
 
-    this.messages = {
-      ...(await Promise.all(
-        locales.map(async (locale) => {
-          let allMessages = {};
-          let skip = false;
-          for (const addonId of addonIds) {
-            if (skip) continue;
-            const url = chrome.runtime.getURL(`addons-l10n/${locale}/${addonId}.json`);
-            const messages = await fetch(url)
-              .then((resp) => resp.json())
-              .catch(() => {
-                if (addonId === "_general") skip = true;
-              });
-            allMessages = Object.assign(messages, allMessages);
-          }
-          return allMessages;
-        })
-      )),
-    };
+    const localePromises = locales.map(async (locale) => {
+      let skip = false;
+
+      const localePromises = addonIds.map(async (addonId) => {
+        if (skip) return;
+        const url = chrome.runtime.getURL(`addons-l10n/${locale}/${addonId}.json`);
+        const messages = await fetch(url)
+          .then((resp) => resp.json())
+          .catch(() => {
+            if (addonId === "_general") skip = true;
+          });
+
+        return messages;
+      });
+
+      return Object.assign(
+        {},
+        ...(await Promise.all(localePromises)).filter((addon) => addon) // filter out undefined values
+      );
+    });
+    
+    this.messages = Object.assign({}, ...(await Promise.all(localePromises)).reverse());
+
     this._reconfigure();
     this.loaded = this.loaded.concat(addonIds);
   }
