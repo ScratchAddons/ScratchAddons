@@ -10,8 +10,8 @@
       window.chrome = chrome;
     </script>
 
-<script src="../set-lang.js" defer async type="module"></script>
-<script src="../check-unsupported.js" defer async type="module"></script>
+    <script src="../set-lang.js" defer async type="module"></script>
+    <script src="../check-unsupported.js" defer async type="module"></script>
     <script type="module">
       import handleSettings from "../../background/handle-settings-page.js";
       import handleL10n from "../../background/handle-l10n.js";
@@ -19,7 +19,12 @@
       const iframe = document.querySelector("iframe");
 
       window.addEventListener("message", async (e) => {
-        if (typeof e.data.reqId === "string" || (e.source !== iframe.contentWindow && e.source !== window)) return;
+        if (
+          typeof e.data.reqId === "string" ||
+          (e.source !== iframe.contentWindow && e.source !== window) ||
+          !e.data.message
+        )
+          return;
 
         const promisify =
           (callbackFn) =>
