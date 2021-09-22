@@ -5,19 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
-    <script type="module">
+    <script type="module" defer async>
       import chrome from "../../libraries/common/chrome.js";
       import handleSettings from "../../background/handle-settings-page.js";
       import handleL10n from "../../background/handle-l10n.js";
 
       window.chrome = chrome;
 
+      const iframe = document.querySelector("iframe");
+
       window.addEventListener("message", async (e) => {
-        if (
-          typeof e.data.reqId === "string" ||
-          (e.source !== document.querySelector("iframe").contentWindow && e.source !== window)
-        )
-          return;
+        if (typeof e.data.reqId === "string" || (e.source !== iframe.contentWindow && e.source !== window)) return;
 
         const promisify =
           (callbackFn) =>
@@ -62,15 +60,17 @@
 
         return sendResponse(undefined);
       });
+
+      iframe.src = "./index.html";
     </script>
 
-    <script src="../set-lang.js" defer type="module"></script>
-    <script src="../check-unsupported.js" defer type="module"></script>
+    <script src="../set-lang.js" defer async type="module"></script>
+    <script src="../check-unsupported.js" defer async type="module"></script>
     <script src="../../background/declare-scratchaddons-object.js" type="module"></script>
     <script src="../../background/load-addon-manifests.js" type="module"></script>
     <script src="../../background/get-addon-settings.js" type="module"></script>
   </head>
   <body style="width: 100%; height: 100%; padding: 0; margin: 0">
-    <iframe src="./index.html" style="width: 100%; height: 100%; border: none"></iframe>
+    <iframe src="about:blank" style="width: 100%; height: 100%; border: none"></iframe>
   </body>
 </html>
