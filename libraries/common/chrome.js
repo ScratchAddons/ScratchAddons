@@ -6,9 +6,10 @@ const promisify =
     new Promise((resolve) => callbackFn(...args, resolve));
 
 const storage = {
-  async get(keys, callback) {
-    const res_1 = await Promise.all(
+  get(keys, callback) {
+    return Promise.all(
       keys.map(async (key) => {
+        // localStorage[key]
         const res = await promisify(sendMessage)({ getFromStorage: key });
         return [
           key,
@@ -17,13 +18,12 @@ const storage = {
             : res,
         ];
       })
-    );
-    return callback(Object.fromEntries(res_1));
+    ).then((res) => callback(Object.fromEntries(res)));
   },
   async set(keys, callback = () => {}) {
     await Promise.all(
       Object.entries(keys).map(
-        async ([key, value_1]) => await promisify(sendMessage)({ setInStorage: [key, value_1] })
+        async ([key, value]) => await promisify(sendMessage)({ setInStorage: [key, value] })
         // localStorage[key] = JSON.stringify(value);
       )
     );
@@ -77,12 +77,21 @@ export default {
   i18n: {
     ready: false,
     async init() {
-      const localePromises = locales.map(async (locale) => {
-        const r = await fetch(getURL("_locales/" + locale + "/messages.json"));
-        return await r.json();
-      });
+      const localePromises = locales
+        .map((locale) => {
+          let res;
+          return fetch(getURL("_locales/" + locale + "/messages.json"))
+            .then((resp) => {
+              res = resp;
+              return resp.json();
+            })
+            .catch((e) => {
+              if (res?.status !== 404) console.error(e);
+            });
+        })
+        .reverse();
 
-      messages = Object.assign({}, ...(await Promise.all(localePromises).reverse()));
+      messages = Object.assign({}, ...(await Promise.all(localePromises)));
       window.dispatchEvent(new CustomEvent(".i18n load"));
       this.ready = true;
     },
