@@ -21,7 +21,7 @@
             new Promise((resolve) => callbackFn(...args, resolve));
 
         function sendResponse(res = {}) {
-          return e.source.postMessage({ ...res, original: e.data.id }, e.origin);
+          return e.source.postMessage({ ...res, original: e.data.id+"r" }, e.origin);
         }
 
         const data = e.data.message;

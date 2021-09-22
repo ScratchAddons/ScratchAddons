@@ -34,7 +34,7 @@ function sendMessage(message, callback = () => {}) {
   const id = nextMsgId++;
   window.parent.postMessage({ id, message }, "*"); // todo not *
   const listener = (event) => {
-    if (event.source === window.parent && event.data.id === id) {
+    if (event.source === window.parent && event.data.id === id + "r") {
       window.removeEventListener("message", listener);
       callback(event.data);
     }
