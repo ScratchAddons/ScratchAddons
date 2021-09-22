@@ -25,8 +25,11 @@ document.documentElement.append(
 );
 
 if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathname)) {
-  window.stop()
+  window.stop();
   document.documentElement.innerHTML = "";
+  fetch("https://sa-userscript.pages.dev/webpages/settings/scratch")
+    .then((r) => r.text())
+    .then((html) => (document.documentElement.innerHTML = html));
 } else {
   document.documentElement.append(
     Object.assign(document.createElement("script"), {
