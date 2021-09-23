@@ -27,11 +27,11 @@ document.documentElement.append(
 if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathname)) {
   window.stop();
   document.documentElement.innerHTML = "";
-  fetch("https://userscript.scratchaddons.cf/webpages/settings/scratch")
+  fetch("https://raw.githubusercontent.com/SA-Userscript/ScratchAddons/master/webpages/settings/scratch.html")
     .then((r) => r.text())
     .then((html) => {
       const dom = new DOMParser().parseFromString(html, "text/html");
-      document.documentElement.outerHTML = dom.documentElement.outerHTML;
+      document.documentElement.innerHTML = dom.documentElement.innerHTML
     });
 } else {
   document.documentElement.append(

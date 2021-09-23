@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" style="width: 100%; height: 100%">
+<html lang="en">
+  <!-- NOTE: Only markup INSIDE of `<html>` is preserved. So no `DOCTYPE` changes, attribute changes on `<html>`, etc. Use JS. -->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <base href="https://userscript.scratchaddons.cf/webpages/settings/scratch" />
     <link rel="icon" href="../../images/icon.png" />
+    <style>
+      html,
+      body,
+      iframe {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        border: none;
+      }
+    </style>
     <script type="module">
       import chrome from "../../libraries/common/chrome.js";
       window.chrome = chrome;
@@ -72,7 +84,7 @@
     <script src="../../background/load-addon-manifests.js" type="module"></script>
     <script src="../../background/get-addon-settings.js" type="module"></script>
   </head>
-  <body style="width: 100%; height: 100%; padding: 0; margin: 0">
-    <iframe src="./index.html" style="width: 100%; height: 100%; border: none"></iframe>
+  <body>
+    <iframe src="./index.html"></iframe>
   </body>
 </html>
