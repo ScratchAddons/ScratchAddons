@@ -35,7 +35,7 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
     .then((r) => r.text())
     .then((html) => {
       const dom = new DOMParser().parseFromString(html, "text/html");
-      window.stop();
+      // window.stop();
 
       updateAttrs(document.documentElement, dom.documentElement);
 
