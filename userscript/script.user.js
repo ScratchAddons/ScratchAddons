@@ -29,7 +29,10 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
   document.documentElement.innerHTML = "";
   fetch("https://userscript.scratchaddons.cf/webpages/settings/scratch")
     .then((r) => r.text())
-    .then((html) => (document.documentElement.innerHTML = html));
+    .then((html) => {
+      const dom = new DOMParser().parseFromString(html, "text/html");
+      document.documentElement.outerHTML = dom.documentElement.outerHTML;
+    });
 } else {
   document.documentElement.append(
     Object.assign(document.createElement("script"), {
