@@ -53,17 +53,17 @@
         if (handleSettings(data, sendResponse) || handleL10n(data, sendResponse)) return;
 
         if (data.getFromStorage) {
-          return sendResponse(window.parent.localStorage[data.getFromStorage]);
+          return sendResponse(window.top.localStorage[data.getFromStorage]);
         }
 
         if (data.setInStorage) {
           return sendResponse(
-            (window.parent.localStorage[data.setInStorage[0]] = JSON.stringify(data.setInStorage[1]))
+            (window.top.localStorage[data.setInStorage[0]] = JSON.stringify(data.setInStorage[1]))
           );
         }
 
         if (data.title) {
-          return sendResponse((document.title = window.parent.document.title = data.title));
+          return sendResponse((document.title = window.top.document.title = data.title));
         }
 
         if (data === "waitForState") {
