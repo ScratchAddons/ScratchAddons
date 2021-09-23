@@ -24,6 +24,17 @@ document.documentElement.append(
   })
 );
 
+// https://stackoverflow.com/a/47614491/11866686
+function setInnerHTML(elm, html) {
+  elm.innerHTML = html;
+  Array.from(elm.querySelectorAll("script")).forEach((oldScript) => {
+    const newScript = document.createElement("script");
+    Array.from(oldScript.attributes).forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+    oldScript.parentNode.replaceChild(newScript, oldScript);
+  });
+}
+
 if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathname)) {
   window.stop();
   document.documentElement.innerHTML = "";
@@ -31,7 +42,7 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
     .then((r) => r.text())
     .then((html) => {
       const dom = new DOMParser().parseFromString(html, "text/html");
-      document.documentElement.innerHTML = dom.documentElement.innerHTML
+      setInnerHTML(document.documentElement.innerHTML, dom.documentElement.innerHTML);
     });
 } else {
   document.documentElement.append(
