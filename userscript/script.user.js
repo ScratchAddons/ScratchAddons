@@ -42,7 +42,27 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
       if (!document.head) document.documentElement.append(document.createElement("head"));
       updateAttrs(document.head, dom.head);
       document.head.innerHTML = "";
-      [...dom.head.children].forEach((element) => document.adoptNode(element));
+      const deferred = [];
+      Promise.all(
+        [...dom.head.children].map(async (element) => {
+          if (element.tagName === "SCRIPT") {
+            const run = async () => {
+              const load = async () => {
+                return await import(
+                  element.src ? new URL(element.src, document.baseURI).href : import(element.textContent)
+                );
+              };
+              if (element.async) setTimeout(async () => await load(), 0);
+              else await load();
+            };
+
+            if (element.defer) deferred.push(run);
+            else await run();
+          } else {
+            document.head.append(element.cloneNode(true));
+          }
+        })
+      ).then(() => deferred.forEach(async (run) => await run()));
 
       if (!document.body) document.documentElement.append(document.createElement("body"));
       updateAttrs(document.body, dom.body);
