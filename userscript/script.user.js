@@ -42,7 +42,7 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
       if (!document.head) document.documentElement.append(document.createElement("head"));
       updateAttrs(document.head, dom.head);
       document.head.innerHTML = "";
-      [...dom.head.children].forEach((element) => document.importNode(element));
+      [...dom.head.children].forEach((element) => document.adoptNode(element));
 
       if (!document.body) document.documentElement.append(document.createElement("body"));
       updateAttrs(document.body, dom.body);
