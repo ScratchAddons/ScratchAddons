@@ -24,25 +24,29 @@ document.documentElement.append(
   })
 );
 
-// https://stackoverflow.com/a/47614491/11866686
-function setInnerHTML(elm, html) {
-  elm.innerHTML = html;
-  Array.from(elm.querySelectorAll("script")).forEach((oldScript) => {
-    const newScript = document.createElement("script");
-    Array.from(oldScript.attributes).forEach((attr) => newScript.setAttribute(attr.name, attr.value));
-    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-    oldScript.parentNode.replaceChild(newScript, oldScript);
-  });
+function updateAttrs(target, source) {
+  Array.from(target.attributes).forEach((attr) => target.removeAttribute(attr.name));
+
+  Array.from(source.attributes).forEach((attr) => target.setAttribute(attr.name, attr.value));
 }
 
 if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathname)) {
-  window.stop();
-  document.documentElement.innerHTML = "";
   fetch("https://raw.githubusercontent.com/SA-Userscript/ScratchAddons/master/webpages/settings/scratch.html")
     .then((r) => r.text())
     .then((html) => {
       const dom = new DOMParser().parseFromString(html, "text/html");
-      setInnerHTML(document.documentElement.innerHTML, dom.documentElement.innerHTML);
+      window.stop();
+
+      updateAttrs(document.documentElement, dom.documentElement);
+
+      if (!document.head) document.documentElement.append(document.createElement("head"));
+      updateAttrs(document.head, dom.head);
+      document.head.innerHTML = "";
+      [...dom.head.children].forEach((element) => document.head.append(element.cloneNode(true)));
+
+      if (!document.body) document.documentElement.append(document.createElement("body"));
+      updateAttrs(document.body, dom.body);
+      document.body.innerHTML = dom.body.innerHTML;
     });
 } else {
   document.documentElement.append(

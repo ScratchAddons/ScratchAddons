@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- NOTE: Only markup INSIDE of `<html>` is preserved. So no `DOCTYPE` changes, attribute changes on `<html>`, etc. Use JS. -->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -54,16 +53,17 @@
         if (handleSettings(data, sendResponse) || handleL10n(data, sendResponse)) return;
 
         if (data.getFromStorage) {
-          return sendResponse(localStorage[data.getFromStorage]);
+          return sendResponse(window.parent.localStorage[data.getFromStorage]);
         }
 
         if (data.setInStorage) {
-          return sendResponse((localStorage[data.setInStorage[0]] = JSON.stringify(data.setInStorage[1])));
+          return sendResponse(
+            (window.parent.localStorage[data.setInStorage[0]] = JSON.stringify(data.setInStorage[1]))
+          );
         }
 
         if (data.title) {
-          // todo also `lang` and `dir`
-          return sendResponse((document.title = data.title));
+          return sendResponse((document.title = window.parent.document.title = data.title));
         }
 
         if (data === "waitForState") {
