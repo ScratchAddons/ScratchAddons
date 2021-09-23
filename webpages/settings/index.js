@@ -397,11 +397,10 @@ async function func() {
       },
     },
     ready() {
-      // Autofocus search bar in iframe mode for both browsers
-      // autofocus attribute only works in Chrome for us, so
-      // we also manually focus on Firefox, even in fullscreen
-      if (isIframe || typeof browser !== "undefined")
-        setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
+      // Autofocus search bar
+      // autofocus attribute doesn't work
+      // `Blocked autofocusing on a <input> element in a cross-origin subframe.`
+      setTimeout(() => document.getElementById("searchBox")?.focus(), 0);
 
       const exampleAddonListItem = {
         // Need to specify all used properties for reactivity!
