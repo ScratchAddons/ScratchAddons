@@ -10,17 +10,19 @@ window.addEventListener("message", async (e) => {
   function sendResponse(res = {}) {
     return e.source.postMessage({ res, reqId: e.data.id + "r" }, e.origin);
   }
-  
+
   const data = e.data.message;
 
   if (handleSettings(data, sendResponse) || handleL10n(data, sendResponse)) return;
 
   if (data.getFromStorage) {
-    return sendResponse(window.top.localStorage[data.getFromStorage]);
+    return sendResponse(window.top.localStorage["SCRATCH-ADDONS__" + data.getFromStorage]);
   }
 
   if (data.setInStorage) {
-    return sendResponse((window.top.localStorage[data.setInStorage[0]] = JSON.stringify(data.setInStorage[1])));
+    return sendResponse(
+      (window.top.localStorage["SCRATCH-ADDONS__" + data.setInStorage[0]] = JSON.stringify(data.setInStorage[1]))
+    );
   }
 
   if (data.title) {
