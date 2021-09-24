@@ -17,13 +17,6 @@
 // @grant        none
 // ==/UserScript==
 
-document.documentElement.append(
-  Object.assign(document.createElement("script"), {
-    src: "https://userscript.scratchaddons.cf/webpages/check-unsupported.js",
-    type: "module",
-  })
-);
-
 function updateAttrs(target, source) {
   Array.from(target.attributes).forEach((attr) => target.removeAttribute(attr.name));
 
@@ -71,6 +64,13 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
       for (const run of deferred) await run();
     });
 } else {
+  document.documentElement.append(
+    Object.assign(document.createElement("script"), {
+      src: "https://userscript.scratchaddons.cf/webpages/check-unsupported.js",
+      type: "module",
+    })
+  );
+
   document.documentElement.append(
     Object.assign(document.createElement("script"), {
       src: "https://userscript.scratchaddons.cf/userscript/module.js",
