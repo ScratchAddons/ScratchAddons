@@ -33,7 +33,7 @@ function updateAttrs(target, source) {
 if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathname)) {
   fetch("https://raw.githubusercontent.com/SA-Userscript/ScratchAddons/master/webpages/settings/scratch.html")
     .then((r) => r.text())
-    .then((html) => {
+    .then(async (html) => {
       const dom = new DOMParser().parseFromString(html, "text/html");
       // window.stop();
 
@@ -43,30 +43,30 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
       updateAttrs(document.head, dom.head);
       document.head.innerHTML = "";
       const deferred = [];
-      Promise.all(
-        [...dom.head.children].map(async (element) => {
-          if (element.tagName === "SCRIPT") {
-            const run = async () => {
-              const load = async () => {
-                return await import(
-                  element.src ? new URL(element.src, document.baseURI).href : import(element.textContent)
-                );
-              };
-              if (element.async) setTimeout(async () => await load(), 0);
-              else await load();
+      for (const element of [...dom.head.children]) {
+        if (element.tagName === "SCRIPT") {
+          const run = async () => {
+            const load = async () => {
+              return await import(
+                element.src ? new URL(element.src, document.baseURI).href : import(element.textContent)
+              );
             };
+            if (element.async) setTimeout(async () => await load(), 0);
+            else await load();
+          };
 
-            if (element.defer) deferred.push(run);
-            else await run();
-          } else {
-            document.head.append(element.cloneNode(true));
-          }
-        })
-      ).then(() => deferred.forEach(async (run) => await run()));
+          if (element.defer) deferred.push(run);
+          else await run();
+        } else {
+          document.head.append(element.cloneNode(true));
+        }
+      }
 
       if (!document.body) document.documentElement.append(document.createElement("body"));
       updateAttrs(document.body, dom.body);
       document.body.innerHTML = dom.body.innerHTML;
+
+      for (const run of deferred) await run();
     });
 } else {
   document.documentElement.append(
