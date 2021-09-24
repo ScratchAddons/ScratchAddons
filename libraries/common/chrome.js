@@ -33,16 +33,18 @@ const storage = {
 
 window.nextMsgId = window.nextMsgId || 0;
 
-function sendMessage(message, callback = () => {}) {
+function sendMessage(message, callback) {
   const id = nextMsgId++;
   window.parent.postMessage({ id, message }, "*"); // todo not *
-  const listener = (event) => {
-    if (event.source === window.parent && event.data.reqId === id + "r") {
-      window.removeEventListener("message", listener);
-      callback(event.data.res);
-    }
-  };
-  window.addEventListener("message", listener);
+  if (callback) {
+    const listener = (event) => {
+      if (event.source === window.parent && event.data.reqId === id + "r") {
+        window.removeEventListener("message", listener);
+        callback(event.data.res);
+      }
+    };
+    window.addEventListener("message", listener);
+  }
 }
 let manifest;
 
