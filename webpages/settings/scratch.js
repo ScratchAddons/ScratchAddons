@@ -10,9 +10,7 @@ window.addEventListener("message", async (e) => {
   function sendResponse(res = {}) {
     return e.source.postMessage({ res, reqId: e.data.id + "r" }, e.origin);
   }
-  console.log("localStorage", localStorage);
-  console.log("window.location", window.location);
-  console.log("window.top", window.top);
+  
   const data = e.data.message;
 
   if (handleSettings(data, sendResponse) || handleL10n(data, sendResponse)) return;
@@ -38,8 +36,6 @@ window.addEventListener("message", async (e) => {
       });
     }
   }
-
-  // data.changeAddonSettings todo
 
   return sendResponse(undefined);
 });
