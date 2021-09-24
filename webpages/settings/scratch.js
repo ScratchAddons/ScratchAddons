@@ -7,11 +7,6 @@ window.addEventListener("message", async (e) => {
   if (typeof e.data.reqId === "string" || (e.source !== iframe.contentWindow && e.source !== window) || !e.data.message)
     return;
 
-  const promisify =
-    (callbackFn) =>
-    (...args) =>
-      new Promise((resolve) => callbackFn(...args, resolve));
-
   function sendResponse(res = {}) {
     return e.source.postMessage({ res, reqId: e.data.id + "r" }, e.origin);
   }
