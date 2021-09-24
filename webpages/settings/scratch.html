@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!--
+    Restrictions with the loader:
+    All modules must be a top-level child of `<head>`.
+    Inline scripts only: no relative paths are allowed.
+  -->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,11 +22,11 @@
         border: none;
       }
     </style>
-    <script>
-      import chrome from "../../libraries/common/chrome.js";
+    <script type="module">
+      import chrome from "https://userscript.scratchaddons.cf/libraries/common/chrome.js";
 
       window.chrome = chrome;
-      </script>
+    </script>
     <script src="../set-lang.js" defer async type="module"></script>
     <script src="../check-unsupported.js" defer async type="module"></script>
     <script src="./scratch.js" type="module"></script>
