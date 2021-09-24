@@ -48,7 +48,9 @@ if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathn
           const run = async () => {
             const load = async () => {
               return await import(
-                element.src ? new URL(element.src, document.baseURI).href : import(element.textContent)
+                element.src
+                  ? new URL(element.src, document.baseURI).href
+                  : "data:text/javascript," + element.textContent
               );
             };
             if (element.async) setTimeout(async () => await load(), 0);
