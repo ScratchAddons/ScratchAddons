@@ -1,7 +1,5 @@
 import handleSettings from "../../background/handle-settings-page.js";
 import handleL10n from "../../background/handle-l10n.js";
-import chrome from "../../libraries/common/chrome.js";
-window.chrome = chrome;
 
 const iframe = document.querySelector("iframe");
 

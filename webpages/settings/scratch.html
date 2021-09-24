@@ -17,10 +17,14 @@
         border: none;
       }
     </style>
-    <script src="./scratch.js" defer type="module">
-    </script>
+    <script>
+      import chrome from "../../libraries/common/chrome.js";
+
+      window.chrome = chrome;
+      </script>
     <script src="../set-lang.js" defer async type="module"></script>
     <script src="../check-unsupported.js" defer async type="module"></script>
+    <script src="./scratch.js" type="module"></script>
     <script src="../../background/declare-scratchaddons-object.js" type="module"></script>
     <script src="../../background/load-addon-manifests.js" type="module"></script>
     <script src="../../background/get-addon-settings.js" type="module"></script>
