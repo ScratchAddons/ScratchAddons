@@ -48,10 +48,18 @@ function sendMessage(message, callback) {
 }
 let manifest;
 
-const ui = navigator.language.toLowerCase();
-const locales = [ui];
-if (ui.includes("-")) locales.push(ui.split("-")[0]);
-if (ui.startsWith("pt") && ui !== "pt-br") locales.push("pt-br");
+const ui = navigator.language.toLowerCase().split("-");
+
+// Start with the chosen language
+const locales = [ui[0] + (ui[1] ? "_" + ui[1].toUpperCase() : "")];
+
+// Remove country code
+if (ui[1]) locales.push(ui[0]);
+
+// If non-Brazillian Portugese is chosen, add Brazilian as a fallback.
+if (ui[0] === "pt" && ui[1] !== "br") locales.push("pt_BR");
+
+// Add English as a fallback
 if (!locales.includes("en")) locales.push("en");
 locales.splice(locales.indexOf("en") + 1);
 
