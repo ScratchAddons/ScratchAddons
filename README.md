@@ -5,11 +5,5 @@ Scroll Down.
 
 # Story
 
-The Scratch Addons was Started by @World_Languages.<br>
-After It, Most of the Peoples contributed it and Loves it!<br>
-A Lot Of Addons are currently available. Most of by @World_Languages.<br>
-**I'm now Contributed!!**<br>
-Having a Issue To Know How To Enable My Addon "Scratch Project Fullscreen". Currently not showing.<br>
-Need Help From @World_Languages!!<br>
-See At ScratchAddons/addons/project-fullscreen For my Files I Made.<br>
-Thank you, I Hope that @World_Languages may always Help me!!
+I've added an extension!! ScratchAddons/addons/project-fullscreen!!<br?
+Thank you, I Hope that @World_Languages may always merge the request!
