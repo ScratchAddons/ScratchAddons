@@ -1,0 +1,52 @@
+// Made by @NorthenSuperCoders On Scratch.
+// @E-Coders On Github.
+// @ECodersOfficial On Twitter.
+
+// Made For Scratch Addons!
+// Credits Goes to these Addons Creators For JSON -
+// better-emojis, project-fullscreen, and scratch-messaging!!
+// Thank you!!
+
+{
+  // General Credetinals - Name, Description, Credits
+
+  // Name
+  "name": "Scratch Project Fullscreen",
+
+  // Description
+  "description": "Enables the full screen button in Scratch Projects that automatically switches to the Fullscreen.By @Maximouse & @NorthenSuperCoders!!",
+  "credits": [
+    {
+      "name": "NorthenSuperCoders",
+      "link": "https://scratch.mit.edu/users/NorthenSuperCoders/"
+    },
+    {
+      "name": "Maximouse",
+      "link": "https://scratch.mit.edu/users/Maximouse/"
+    }
+  ],
+
+  // Usage Scripts
+
+  // User Scripts
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+      "runAtComplete": false
+    }
+  ],
+
+  // User Styles
+  "userstyles": [
+    {
+      "url": "userstyles.css",
+      "matches": ["https://scratch.mit.edu/projects/*"],
+    }
+  ],
+  "versionAdded": "2.2.6",
+  "dynamicDisable": false,
+  "dynamicEnable": false,
+  "tags": ["community", "projectPage"],
+  "enabledByDefault": true
+}
