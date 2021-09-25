@@ -31,7 +31,7 @@ lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "../styles/colors-light.css");
 lightThemeLink.setAttribute("data-below-vue-components", "");
 chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
-  if (globalTheme === true) {
+  if (globalTheme) {
     document.head.appendChild(lightThemeLink);
   }
   const themePath = globalTheme ? "../../images/icons/moon.svg" : (initialThemePath = "../../images/icons/theme.svg");
@@ -98,7 +98,7 @@ async function func() {
     const storedSettings = await syncGet(["globalTheme", "addonSettings", "addonsEnabled"]);
     const serialized = {
       core: {
-        lightTheme: storedSettings.globalTheme,
+        lightTheme: !!storedSettings.globalTheme,
         version: manifest.version_name,
       },
       addons: {},
@@ -150,7 +150,7 @@ async function func() {
       return {
         smallMode: false,
         theme: initialTheme ?? false,
-        themePath: initialThemePath ?? "",
+        themePath: initialThemePath,
         switchPath: "../../images/icons/switch.svg",
         isOpen: false,
         canCloseOutside: false,
@@ -257,9 +257,8 @@ async function func() {
       clearSearch() {
         this.searchInputReal = "";
       },
-      setTheme(mode) {
+      setTheme(rr = true) {
         chrome.storage.sync.get(["globalTheme"], function (r) {
-          let rr = mode ?? true;
           chrome.storage.sync.set({ globalTheme: rr }, function () {
             if (rr && r.globalTheme !== rr) {
               document.head.appendChild(lightThemeLink);

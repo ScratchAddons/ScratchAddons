@@ -102,7 +102,7 @@ lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "../../webpages/styles/colors-light.css");
 
 chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
-  if (globalTheme === true) {
+  if (globalTheme) {
     scratchAddons.isLightMode = true;
     document.head.appendChild(lightThemeLink);
   }
