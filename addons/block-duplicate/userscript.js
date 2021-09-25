@@ -5,7 +5,9 @@ export default async function ({ addon, global, console }) {
   ScratchBlocks.Gesture.prototype.startDraggingBlock_ = function (...args) {
     if (!this.flyout_ && this.targetBlock_.type !== "procedures_definition" && this.mostRecentEvent_.shiftKey && !addon.self.disabled) {
       // Scratch will reset the group on its own when the drag ends
-      ScratchBlocks.Events.setGroup(true);
+      if (!ScratchBlocks.Events.getGroup()) {
+        ScratchBlocks.Events.setGroup(true);
+      }
       this.shouldDuplicateOnDrag_ = true;
       this.sa_shouldIsolateDuplicatedBlock = this.mostRecentEvent_.ctrlKey || this.mostRecentEvent_.metaKey;
     } else {
