@@ -1,0 +1,11 @@
+body{
+	display: block;
+}
+.large-button{
+	display: block;
+	cursor: pointer;
+}
+.filter-options, .filter-option, .sel{
+	display: block;
+	cursor: pointer;	
+}
