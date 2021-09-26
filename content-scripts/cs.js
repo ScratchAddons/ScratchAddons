@@ -80,6 +80,7 @@ function loadScriptFromUrl(url, module = false) {
 }
 
 async function loadState() {
+  console.log('module.js loaded', Date.now());
   scratchAddons.localState = localStateProxy;
   const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js", true);
   console.log(

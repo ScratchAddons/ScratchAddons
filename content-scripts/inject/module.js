@@ -346,3 +346,4 @@ if (location.pathname === "/discuss/3/topic/add/") {
   };
   if (!checkUA()) window.addEventListener("DOMContentLoaded", () => checkUA(), { once: true });
 }
+console.log('module.js executed', Date.now());
