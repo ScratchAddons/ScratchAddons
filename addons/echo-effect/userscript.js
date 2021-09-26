@@ -1,4 +1,4 @@
-export default async ({ addon, msg }) => {
+export default async ({ addon }) => {
   while (true) {
     const soundEditorRobot = await addon.tab.waitForElement('[class*="sound-editor_row-reverse_"] > :nth-child(10)', {
       markAsSeen: true,
@@ -23,7 +23,7 @@ export default async ({ addon, msg }) => {
       className: addon.tab.scratchClass("icon-button_title"),
     });
     const echoTitle = Object.assign(document.createElement("span"), {
-      textContent: msg("echo"),
+      textContent: addon.tab.scratchMessage("gui.soundEditor.echo"),
     });
     echoTitleWrapper.append(echoTitle);
     echoButton.append(echoIcon, echoTitleWrapper);
