@@ -3,6 +3,9 @@ import Addon from "../../addon-api/background/Addon.js";
 // ESM so this is fine
 import changeAddonState from "./change-addon-state.js";
 import { getMissingOptionalPermissions } from "./util.js";
+import createConsole from "../../libraries/common/console.js";
+
+const console=createConsole("page")
 
 export default async function runPersistentScripts(addonId) {
   const manifest = scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest;

@@ -1,3 +1,7 @@
+import createConsole from "../libraries/common/console.js";
+
+const console=createConsole("background")
+
 const dataURLToArrayBuffer = function (dataURL) {
   const byteString = atob(dataURL.split(",")[1]);
   const arrayBuffer = new ArrayBuffer(byteString.length);

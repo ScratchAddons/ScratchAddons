@@ -1,5 +1,8 @@
 import changeAddonState from "./imports/change-addon-state.js";
 import { getMissingOptionalPermissions } from "./imports/util.js";
+import createConsole from "../libraries/common/console.js";
+
+const console=createConsole("background")
 
 const onPermissionsRevoked = () => {
   console.error("Site access is not granted.");

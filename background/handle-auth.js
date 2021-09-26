@@ -1,3 +1,7 @@
+import createConsole from "../libraries/common/console.js";
+
+const console=createConsole("background")
+
 const promisify =
   (callbackFn) =>
   (...args) =>

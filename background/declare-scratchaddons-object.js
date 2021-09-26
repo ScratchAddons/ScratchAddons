@@ -1,6 +1,9 @@
 import globalStateProxy from "./imports/global-state.js";
 import localStateProxy from "./imports/local-state.js";
 import BackgroundLocalizationProvider from "./l10n.js";
+import createConsole from "../libraries/common/console.js";
+
+const console=createConsole("background")
 
 window.scratchAddons = {};
 

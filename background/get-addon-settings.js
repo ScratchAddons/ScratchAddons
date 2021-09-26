@@ -1,4 +1,7 @@
 import chrome from "../libraries/common/chrome.js";
+import createConsole from "../libraries/common/console.js";
+
+const console=createConsole("background")
 
 chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({addonSettings = {}, addonsEnabled = {}}) => {
   const func = () => {

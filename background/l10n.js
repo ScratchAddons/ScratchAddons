@@ -1,4 +1,7 @@
 import LocalizationProvider from "../libraries/common/cs/l10n.js";
+import createConsole from "../libraries/common/console.js";
+
+const console=createConsole("background")
 
 const ui = chrome.i18n.getUILanguage().toLowerCase();
 const locales = [ui];

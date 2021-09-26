@@ -3,30 +3,15 @@ import localStateProxy from "../background/imports/local-state.js";
 import loadManifests from "../background/load-addon-manifests.js";
 import globalStateProxy from "../background/imports/global-state.js";
 import getContentScriptInfo from "../background/get-userscripts.js";
+import createConsole from "../libraries/common/console.js";
+
+const console=createConsole("content script")
 
 try {
   if (window.top.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
 } catch {
   throw "Scratch Addons: not first party iframe";
 }
-
-const _realConsole = window.console;
-const consoleOutput = (logAuthor = "[cs]") => {
-  const style = {
-    // Remember to change these as well on module.js
-    leftPrefix: "background:  #ff7b26; color: white; border-radius: 0.5rem 0 0 0.5rem; padding: 0 0.5rem",
-    rightPrefix:
-      "background: #222; color: white; border-radius: 0 0.5rem 0.5rem 0; padding: 0 0.5rem; font-weight: bold",
-    text: "",
-  };
-  return [`%cSA%c${logAuthor}%c`, style.leftPrefix, style.rightPrefix, style.text];
-};
-const console = {
-  ..._realConsole,
-  log: _realConsole.log.bind(_realConsole, ...consoleOutput()),
-  warn: _realConsole.warn.bind(_realConsole, ...consoleOutput()),
-  error: _realConsole.error.bind(_realConsole, ...consoleOutput()),
-};
 
 if (typeof scratchAddons !== "undefined") {
   console.log("Scratch Addons: extention running, stopping userscript");
@@ -80,7 +65,7 @@ function loadScriptFromUrl(url, module = false) {
 }
 
 async function loadState() {
-  console.log('module.js loaded', Date.now());
+  console.log("module.js loaded", Date.now());
   scratchAddons.localState = localStateProxy;
   const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js", true);
   console.log(

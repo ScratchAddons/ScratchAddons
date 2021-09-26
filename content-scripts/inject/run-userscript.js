@@ -1,4 +1,7 @@
 import Addon from "../../addon-api/content-script/Addon.js";
+import createConsole from "../../libraries/common/console.js";
+
+const console=createConsole("page")
 
 export default async function runAddonUserscripts({ addonId, scripts, enabledLate = false }) {
   const addonObj = new Addon({ id: addonId, enabledLate });
@@ -15,13 +18,13 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
       const msg = (key, placeholders) =>
         scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
       msg.locale = scratchAddons.l10n.locale;
-      scratchAddons.console.logForAddon(`${addonId} [page]`)(
+      console.logForAddon(`${addonId} [page]`)(
         `Running ${scriptUrl}, runAtComplete: ${runAtComplete}, enabledLate: ${enabledLate}`
       );
       const localConsole = {
-        log: scratchAddons.console.logForAddon(addonId),
-        warn: scratchAddons.console.warnForAddon(addonId),
-        error: scratchAddons.console.errorForAddon(addonId),
+        log: console.logForAddon(addonId),
+        warn: console.warnForAddon(addonId),
+        error: console.errorForAddon(addonId),
       };
       module.default({
         addon: addonObj,

@@ -1,6 +1,8 @@
 import runAddonUserscripts from "./run-userscript.js";
 import Localization from "./l10n.js";
+import createConsole from "../../libraries/common/console.js";
 
+const console = createConsole("page");
 window.scratchAddons = {};
 scratchAddons.classNames = { loaded: false };
 scratchAddons.eventTargets = {
@@ -10,24 +12,7 @@ scratchAddons.eventTargets = {
   self: [],
 };
 scratchAddons.session = {};
-const consoleOutput = (logAuthor = "[page]") => {
-  const style = {
-    // Remember to change these as well on cs.js
-    leftPrefix: "background:  #ff7b26; color: white; border-radius: 0.5rem 0 0 0.5rem; padding: 0 0.5rem",
-    rightPrefix:
-      "background: #222; color: white; border-radius: 0 0.5rem 0.5rem 0; padding: 0 0.5rem; font-weight: bold",
-    text: "",
-  };
-  return [`%cSA%c${logAuthor}%c`, style.leftPrefix, style.rightPrefix, style.text];
-};
-scratchAddons.console = {
-  log: _realConsole.log.bind(_realConsole, ...consoleOutput()),
-  warn: _realConsole.warn.bind(_realConsole, ...consoleOutput()),
-  error: _realConsole.error.bind(_realConsole, ...consoleOutput()),
-  logForAddon: (addonId) => _realConsole.log.bind(_realConsole, ...consoleOutput(addonId)),
-  warnForAddon: (addonId) => _realConsole.warn.bind(_realConsole, ...consoleOutput(addonId)),
-  errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
-};
+scratchAddons.console = console;
 
 const pendingPromises = {};
 pendingPromises.msgCount = [];
@@ -105,7 +90,7 @@ const page = {
       d = await res.json();
     } catch (e) {
       d = {};
-      scratchAddons.console.warn("Session fetch failed: ", e);
+      console.warn("Session fetch failed: ", e);
       if ((res && !res.ok) || !res) setTimeout(this.refetchSession, 60000);
     }
     scratchAddons.session = d;
@@ -174,7 +159,7 @@ async function requestMsgCount() {
       const resp = await fetch(`https://api.scratch.mit.edu/users/${username}/messages/count`);
       count = (await resp.json()).count || 0;
     } catch (e) {
-      scratchAddons.console.warn("Could not fetch message count: ", e);
+      console.warn("Could not fetch message count: ", e);
     }
   }
   pendingPromises.msgCount.forEach((resolve) => resolve(count));
@@ -346,4 +331,4 @@ if (location.pathname === "/discuss/3/topic/add/") {
   };
   if (!checkUA()) window.addEventListener("DOMContentLoaded", () => checkUA(), { once: true });
 }
-console.log('module.js executed', Date.now());
+console.log("module.js executed", Date.now());
