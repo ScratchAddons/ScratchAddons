@@ -1,4 +1,4 @@
-/* global nextMsgId: writable */
+/* global SCRATCHADDONS__nextMsgId: writable */
 
 const promisify =
   (callbackFn) =>
@@ -31,10 +31,10 @@ const storage = {
   },
 };
 
-window.nextMsgId = window.nextMsgId || 0;
+window.SCRATCHADDONS__nextMsgId = window.SCRATCHADDONS__nextMsgId || 0;
 
 function sendMessage(message, callback) {
-  const id = nextMsgId++;
+  const id = SCRATCHADDONS__nextMsgId++;
   window.parent.postMessage({ id, message }, "*"); // todo not *
   if (callback) {
     const listener = (event) => {

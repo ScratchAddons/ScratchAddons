@@ -16,12 +16,12 @@ window.addEventListener("message", async (e) => {
   if (handleSettings(data, sendResponse) || handleL10n(data, sendResponse)) return;
 
   if (data.getFromStorage) {
-    return sendResponse(window.top.localStorage["SCRATCH-ADDONS__" + data.getFromStorage]);
+    return sendResponse(window.top.localStorage["SCRATCHADDONS__" + data.getFromStorage]);
   }
 
   if (data.setInStorage) {
     return sendResponse(
-      (window.top.localStorage["SCRATCH-ADDONS__" + data.setInStorage[0]] = JSON.stringify(data.setInStorage[1]))
+      (window.top.localStorage["SCRATCHADDONS__" + data.setInStorage[0]] = JSON.stringify(data.setInStorage[1]))
     );
   }
 

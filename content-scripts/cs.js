@@ -79,7 +79,7 @@ function loadScriptFromUrl(url, module = false) {
   });
 }
 
-(async function () {
+async function loadState() {
   scratchAddons.localState = localStateProxy;
   const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js", true);
   console.log(
@@ -116,7 +116,7 @@ function loadScriptFromUrl(url, module = false) {
     );
     return true;
   }
-})();
+}
 
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
@@ -183,14 +183,17 @@ const cs = {
   },
 };
 
-const comlinkPromise = loadScriptFromUrl("libraries/thirdparty/cs/comlink.js", false);
+const comlinkPromise = loadScriptFromUrl("libraries/thirdparty/cs/comlink.js", false),
+  modulePromise = loadScriptFromUrl("content-scripts/inject/module.js", true);
 
-comlinkPromise.then(() =>
+  comlinkPromise.then(() =>
   Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow))
 );
-Promise.all([comlinkPromise, loadScriptFromUrl("content-scripts/inject/module.js", true)]).then(() => {
+modulePromise.then(loadState()
+);
+Promise.all([comlinkPromise, modulePromise]).then(() => (
   _page_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe3.contentWindow, comlinkIframe4.contentWindow));
-});
+));
 
 let initialUrl = location.href;
 let path = new URL(initialUrl).pathname.substring(1);

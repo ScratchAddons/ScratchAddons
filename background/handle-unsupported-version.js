@@ -1,5 +1,3 @@
-import chrome from "../libraries/common/chrome.js";
-
 const checkIfUnsupported = () => {
   const getVersion = () => {
     let userAgent = /(Firefox|Chrome)\/([0-9.]+)/.exec(navigator.userAgent);
