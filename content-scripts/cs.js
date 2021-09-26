@@ -404,7 +404,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
     await new Promise((resolve) => {
       // We're registering this load event after the load event that
       // sets _page_, so we can guarantee _page_ exists now
-      moduleScript.addEventListener("load", resolve);
+      modulePromise.addEventListener("load", resolve);
     });
   }
 
