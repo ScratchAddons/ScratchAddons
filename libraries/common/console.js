@@ -8,7 +8,6 @@ const consoleOutput = (logAuthor) => {
   return [`%cSA%c[${logAuthor}]%c`, style.leftPrefix, style.rightPrefix, style.text];
 };
 
-const _realConsole = typeof _realConsole === "object" ? _realConsole : console;
 export default (logAuthor)=>({
   ..._realConsole,
   log: _realConsole.log.bind(_realConsole, ...consoleOutput(logAuthor)),
