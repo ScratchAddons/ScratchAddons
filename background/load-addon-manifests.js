@@ -1,13 +1,13 @@
 export default async function (translations = false) {
-  chrome = chrome.pollyfilled ? chrome :( await import("../libraries/common/chrome.js")).default;
+  chrome = chrome.pollyfilled ? chrome : (await import("../libraries/common/chrome.js")).default;
   const folderNames = [...new Set(await (await fetch(chrome.runtime.getURL("addons/addons.json"))).json())].filter(
     (folderName) => {
       return !folderName.startsWith("//");
     }
   );
 
-  if (translations) await scratchAddons.l10n?.load(folderNames);
-  const useDefault = scratchAddons.l10n?.locale?.startsWith("en") ?? true;
+  if (translations && typeof scratchAddons === "object") await scratchAddons.l10n?.load(folderNames);
+  const useDefault = typeof scratchAddons === "object" ? scratchAddons.l10n?.locale?.startsWith("en") ?? true : true;
 
   const manifests = [];
 
