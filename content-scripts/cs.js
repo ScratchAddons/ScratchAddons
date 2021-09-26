@@ -75,7 +75,7 @@ function loadScriptFromUrl(url, module = false) {
     script.addEventListener("load", () => {
       resolve();
     });
-    document.body.append(script);
+    document.documentElement.append(script);
   });
 }
 
