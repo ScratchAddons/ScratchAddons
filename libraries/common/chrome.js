@@ -66,7 +66,9 @@ locales.splice(locales.indexOf("en") + 1);
 let messages = {};
 
 export default {
-  ...(chrome || {}),
+  ...(window.browser || {}),
+  ...(window.chrome || {}),
+  pollyfilled: true,
   storage: { sync: storage, local: storage },
   runtime: {
     async getManifest() {

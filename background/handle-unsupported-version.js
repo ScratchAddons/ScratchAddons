@@ -10,7 +10,7 @@ const checkIfUnsupported = () => {
 };
 
 export async function url() {
-  chrome = typeof chrome.i18n === "object" ? chrome : await import("../libraries/common/chrome.js");
+  chrome = chrome.pollyfilled ? chrome : await import("../libraries/common/chrome.js");
   /* if (checkIfUnsupported()) {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request === "checkIfUnsupported") { */
