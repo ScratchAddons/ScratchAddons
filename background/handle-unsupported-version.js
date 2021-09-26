@@ -1,3 +1,5 @@
+import chrome from "../libraries/common/chrome.js";
+
 const checkIfUnsupported = () => {
   const getVersion = () => {
     let userAgent = /(Firefox|Chrome)\/([0-9.]+)/.exec(navigator.userAgent);
@@ -10,12 +12,13 @@ const checkIfUnsupported = () => {
 };
 
 export async function url() {
+  chrome = typeof chrome.i18n === "object" ? chrome : await import("../libraries/common/chrome.js");
   /* if (checkIfUnsupported()) {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request === "checkIfUnsupported") { */
   const uiLanguage = chrome.i18n.getUILanguage();
   const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-  const utm = `utm_source=extension&utm_medium=tabscreate&utm_campaign=v${
+  const utm = `utm_source=userscript&utm_medium=tabscreate&utm_campaign=v${
     (await chrome.runtime.getManifest()).version
   }`;
   return `https://scratchaddons.com/${localeSlash}unsupported-browser/?${utm}`;

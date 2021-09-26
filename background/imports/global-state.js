@@ -39,7 +39,7 @@ class StateProxy {
   }
 }
 
-function messageForAllTabs(message) {
+/* function messageForAllTabs(message) {
   chrome.tabs.query({}, (tabs) =>
     tabs.forEach(
       (tab) =>
@@ -48,7 +48,7 @@ function messageForAllTabs(message) {
     )
   );
   scratchAddons.sendToPopups(message);
-}
+} */
 
 function stateChange(parentObjectPath, key, value) {
   const objectPath = `${parentObjectPath}.${key}`;

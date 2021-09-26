@@ -49,7 +49,7 @@ const vue = new Vue({
     openChangelog() {
       const uiLanguage = chrome.i18n.getUILanguage();
       const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-      const utm = `utm_source=extension&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
+      const utm = `utm_source=userscript&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
       window.open(`https://scratchaddons.com/${localeSlash}changelog/?${utm}`);
       this.closePopup();
     },

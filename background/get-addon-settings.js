@@ -1,4 +1,6 @@
-chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {}, addonsEnabled = {} }) => {
+import chrome from "../libraries/common/chrome.js";
+
+chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({addonSettings = {}, addonsEnabled = {}}) => {
   const func = () => {
     let madeAnyChanges = false;
 

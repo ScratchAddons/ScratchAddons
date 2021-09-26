@@ -1,4 +1,5 @@
 export default async function (translations = false) {
+  chrome = typeof chrome.i18n === "object" ? chrome : await import("../libraries/common/chrome.js");
   const folderNames = [...new Set(await (await fetch(chrome.runtime.getURL("addons/addons.json"))).json())].filter(
     (folderName) => {
       return !folderName.startsWith("//");

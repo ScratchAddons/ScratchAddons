@@ -175,7 +175,7 @@ async function func() {
           const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
           const version = manifest.version;
           const versionName = manifest.version_name;
-          const utm = `utm_source=extension&utm_medium=settingspage&utm_campaign=v${version}`;
+          const utm = `utm_source=userscript&utm_medium=settingspage&utm_campaign=v${version}`;
           return {
             contributors: `https://scratchaddons.com/${localeSlash}contributors?${utm}`,
             feedback: `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${versionName}&${utm}`,
@@ -246,6 +246,7 @@ async function func() {
         return getDirection(chrome.i18n.getUILanguage());
       },
       openReview() {
+        // tODO
         if (typeof browser !== "undefined") {
           window.open(`https://addons.mozilla.org/en-US/firefox/addon/scratch-messaging-extension/reviews/`);
         } else {

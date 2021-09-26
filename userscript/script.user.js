@@ -23,7 +23,7 @@ function updateAttrs(target, source) {
   Array.from(source.attributes).forEach((attr) => target.setAttribute(attr.name, attr.value));
 }
 
-if (/^\/(scratch\-addons\-extension|sa\-ext)\/settings\/?$/i.test(location.pathname)) {
+if (/^\/(scratch\-addons\-extension|sa\-ext|sa|scratch-addons|)\/settings\/?$/i.test(location.pathname)) {
   fetch("https://raw.githubusercontent.com/SA-Userscript/ScratchAddons/master/webpages/settings/scratch.html")
     .then((r) => r.text())
     .then(async (html) => {

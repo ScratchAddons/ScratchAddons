@@ -1,8 +1,8 @@
 import chrome from "../libraries/common/chrome.js";
-import localStateProxy from "./imports/local-state.js";
+import localStateProxy from "../background/imports/local-state.js";
 import loadManifests from "../background/load-addon-manifests.js";
 import globalStateProxy from "../background/imports/global-state.js";
-import getContentScriptInfo from "../background/get-userscripts.js"
+import getContentScriptInfo from "../background/get-userscripts.js";
 
 try {
   if (window.top.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
@@ -28,12 +28,16 @@ const console = {
   error: _realConsole.error.bind(_realConsole, ...consoleOutput()),
 };
 
+if (typeof scratchAddons !== "undefined") {
+  console.log("Scratch Addons: extention running, stopping userscript");
+}
+
 const addonListPromise = loadManifests(false).then((manifests) => {
   scratchAddons.manifests = manifests;
   scratchAddons.localState.ready.manifests = true;
   scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
 
-  return loadScriptFromUrl("background/get-addon-settings.js");
+  return loadScriptFromUrl("background/get-addon-settings.js", true);
 });
 /*
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
@@ -62,10 +66,11 @@ const onResponse = (res) => {
 chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse);
 */
 
-function loadScriptFromUrl(url) {
+function loadScriptFromUrl(url, module = false) {
   return new Promise((resolve, reject) => {
     const script = Object.assign(document.createElement("script"), {
       src: chrome.runtime.getURL(url),
+      type: module ? "module" : "text/javascript",
     });
     script.addEventListener("load", () => {
       resolve();
@@ -76,7 +81,7 @@ function loadScriptFromUrl(url) {
 
 (async function () {
   scratchAddons.localState = localStateProxy;
-  const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js");
+  const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js", true);
   console.log(
     "%cscratchAddons.localState",
     "font-weight: bold;",
@@ -177,34 +182,20 @@ const cs = {
     });
   },
 };
-Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow));
 
-const pageComlinkScript = document.createElement("script");
-pageComlinkScript.src = chrome.runtime.getURL("libraries/thirdparty/cs/comlink.js");
-document.documentElement.appendChild(pageComlinkScript);
+const comlinkPromise = loadScriptFromUrl("libraries/thirdparty/cs/comlink.js", false);
 
-const moduleScript = document.createElement("script");
-moduleScript.type = "module";
-moduleScript.src = chrome.runtime.getURL("content-scripts/inject/module.js");
-
-(async () => {
-  await new Promise((resolve) => {
-    moduleScript.addEventListener("load", resolve);
-  });
+comlinkPromise.then(() =>
+  Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow))
+);
+Promise.all([comlinkPromise, loadScriptFromUrl("content-scripts/inject/module.js", true)]).then(() => {
   _page_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe3.contentWindow, comlinkIframe4.contentWindow));
-})();
-
-document.documentElement.appendChild(moduleScript);
+});
 
 let initialUrl = location.href;
 let path = new URL(initialUrl).pathname.substring(1);
 if (path[path.length - 1] !== "/") path += "/";
 const pathArr = path.split("/");
-if (pathArr[0] === "scratch-addons-extension" || pathArr[0] === "sa-ext") {
-  if (pathArr[1] === "settings") {
-    // todo
-  }
-}
 if (path === "discuss/3/topic/add/") {
   window.addEventListener("load", () => forumWarning("forumWarning"));
 } else if (path.startsWith("discuss/topic/")) {
@@ -507,7 +498,7 @@ async function forumWarning(key) {
     let reportLink = document.createElement("a");
     const uiLanguage = chrome.i18n.getUILanguage();
     const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-    const utm = `utm_source=extension&utm_medium=forumwarning&utm_campaign=v${manifest.version}`;
+    const utm = `utm_source=userscript&utm_medium=forumwarning&utm_campaign=v${manifest.version}`;
     reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${manifest.version}&${utm}`;
     reportLink.target = "_blank";
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
@@ -610,7 +601,7 @@ const showBanner = async () => {
   });
   const uiLanguage = chrome.i18n.getUILanguage();
   const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-  const utm = `utm_source=extension&utm_medium=updatenotification&utm_campaign=v${manifest.version}`;
+  const utm = `utm_source=userscript&utm_medium=updatenotification&utm_campaign=v${manifest.version}`;
   const notifFooterChangelog = Object.assign(document.createElement("a"), {
     href: `https://scratchaddons.com/${localeSlash}changelog?${utm}`,
     target: "_blank",
