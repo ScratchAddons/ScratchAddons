@@ -401,11 +401,9 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
   // Just in case, make sure the <head> loaded before injecting styles
   waitForDocumentHead().then(() => injectUserstyles(addonsWithUserstyles));
   if (!_page_) {
-    await new Promise((resolve) => {
-      // We're registering this load event after the load event that
-      // sets _page_, so we can guarantee _page_ exists now
-      modulePromise.addEventListener("load", resolve);
-    });
+    // We're registering this load event after the load event that
+    // sets _page_, so we can guarantee _page_ exists now
+    await modulePromise;
   }
 
   _page_.globalState = globalState;
