@@ -340,7 +340,7 @@ async function func() {
             this.addonToEnable && this.addonToEnable._addonId
           }`
         );
-        setTimeout(() => window.parent.close(), 100);
+        setTimeout(() => window.top.close(), 100);
       },
       hidePopup() {
         document.querySelector(".popup").style.animation = "closePopup 1.6s 1";

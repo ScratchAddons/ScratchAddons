@@ -22,7 +22,7 @@ let createdAnyBlockContextMenus = false;
 export default class Tab extends Listenable {
   constructor(info) {
     super();
-    if (!scratchAddons.sharedObserver) scratchAddons.sharedObserver = new SharedObserver();
+
     this._addonId = info.id;
     this.clientVersion = document.querySelector("meta[name='format-detection']")
       ? "scratch-www"
@@ -104,6 +104,7 @@ export default class Tab extends Listenable {
       this.redux.initialize();
       this.redux.addEventListener("statechanged", listener);
     }
+    if (!scratchAddons.sharedObserver) scratchAddons.sharedObserver = new SharedObserver();
     const promise = scratchAddons.sharedObserver.watch({
       query: selector,
       seen: markAsSeen ? this._waitForElementSet : null,

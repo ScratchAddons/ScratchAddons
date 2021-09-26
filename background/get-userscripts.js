@@ -1,3 +1,4 @@
+/*
 import changeAddonState from "./imports/change-addon-state.js";
 import { getMissingOptionalPermissions } from "./imports/util.js";
 
@@ -97,6 +98,7 @@ scratchAddons.localEvents.addEventListener("updateUserstylesSettingsChange", ({ 
     })
   );
 });
+*/
 
 async function getAddonData({ addonId, manifest, url }) {
   const promises = [];
@@ -136,7 +138,7 @@ async function getAddonData({ addonId, manifest, url }) {
   return { userscripts, userstyles, cssVariables: manifest.customCssVariables || [] };
 }
 
-async function getContentScriptInfo(url) {
+export default async function getContentScriptInfo(url) {
   const data = {
     url,
     httpStatusCode: null, // Set by webRequest onResponseStarted listener
@@ -144,20 +146,18 @@ async function getContentScriptInfo(url) {
     addonsWithUserscripts: [],
     addonsWithUserstyles: [],
   };
-  const promises = [];
-  const missingPermissions = await getMissingOptionalPermissions();
-  scratchAddons.manifests.forEach(async ({ addonId, manifest }, i) => {
+  // const missingPermissions = await getMissingOptionalPermissions();
+  const promises = scratchAddons.manifests.map(async ({ addonId, manifest }, i) => {
     if (!scratchAddons.localState.addonsEnabled[addonId]) return;
-    if (manifest.permissions?.some((p) => missingPermissions.includes(p))) {
+    /* if (manifest.permissions?.some((p) => missingPermissions.includes(p))) {
       changeAddonState(addonId, false);
       return;
-    }
+    } */
     const promise = getAddonData({ addonId, manifest, url });
-    promises.push(promise);
     const { userscripts, userstyles, cssVariables } = await promise;
-    if (userscripts.length) data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
+    if (userscripts.length) {
+      data.addonsWithUserscripts.push({ addonId, scripts: userscripts });
 
-    if (userstyles.length)
       data.addonsWithUserstyles.push({
         addonId,
         styles: userstyles,
@@ -165,8 +165,8 @@ async function getContentScriptInfo(url) {
         injectAsStyleElt: manifest.injectAsStyleElt,
         index: i,
       });
+    }
   });
-
   await Promise.all(promises);
   data.globalState = scratchAddons.globalState._target;
 
@@ -180,6 +180,7 @@ function createCsIdentity({ tabId, frameId, url }) {
 
 const csInfoCache = new Map();
 
+/*
 // Using this event to preload contentScriptInfo ASAP, since onBeforeRequest
 // obviously happens before the content script has a chance to send us a message.
 // However, SA should work just fine even if this event does not trigger
@@ -270,18 +271,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse(info);
       });
       return true;
-    }
-  } else {
-    // Wait until manifests and addon.settings are ready
-    scratchAddons.localEvents.addEventListener(
-      "ready",
-      async () => {
-        const info = await getContentScriptInfo(request.contentScriptReady.url);
+    } else {
+      // Wait until manifests and addon.settings are ready
+      scratchAddons.localEvents.addEventListener(
+        "ready",
+        async () => {
+          const info = await getContentScriptInfo(request.contentScriptReady.url);
         sendResponse(info);
       },
       { once: true }
-    );
-    return true;
+      );
+      return true;
   }
 });
 // In case a tab messaged us before we registered the event above,
@@ -293,6 +293,7 @@ chrome.tabs.query({}, (tabs) =>
     }
   })
 );
+*/
 
 // Pathname patterns. Make sure NOT to set global flag!
 // Don't forget ^ and $
@@ -322,7 +323,7 @@ function matchesIf(injectable, settings) {
   // settings keys are AND-ed
   // addonEnabled and settings values are OR-ed
 
-  /**
+  /*
    * Formula:
    * NOT (
    *  (addonEnabled exists AND all of the addons are disabled) OR

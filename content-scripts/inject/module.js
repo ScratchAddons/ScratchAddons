@@ -56,8 +56,10 @@ const page = {
   },
   set dataReady(val) {
     this._dataReady = val;
-    onDataReady(); // Assume set to true
-    this.refetchSession();
+    if (val) {
+      onDataReady();
+      this.refetchSession();
+    }
   },
 
   runAddonUserscripts, // Gets called by cs.js when addon enabled late
@@ -104,7 +106,7 @@ const page = {
     } catch (e) {
       d = {};
       scratchAddons.console.warn("Session fetch failed: ", e);
-      if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(), 60000);
+      if ((res && !res.ok) || !res) setTimeout(this.refetchSession, 60000);
     }
     scratchAddons.session = d;
     scratchAddons.eventTargets.auth.forEach((auth) => auth._update(d));
@@ -113,6 +115,7 @@ const page = {
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
 
+/* // Moved to Tab.js
 class SharedObserver {
   constructor() {
     this.inactive = true;
@@ -144,7 +147,7 @@ class SharedObserver {
    * @param {function=} opts.condition - a function that returns whether to resolve the selector or not.
    * @param {function=} opts.elementCondition - A function that returns whether to resolve the selector or not, given an element.
    * @returns {Promise<Node>} Promise that is resolved with modified element.
-   */
+   *\/
   watch(opts) {
     if (this.inactive) {
       this.inactive = false;
@@ -161,6 +164,7 @@ class SharedObserver {
     );
   }
 }
+*/
 
 async function requestMsgCount() {
   let count = null;
@@ -195,8 +199,6 @@ function onDataReady() {
     return _cs_.copyImage(dataURL);
   };
   scratchAddons.methods.getEnabledAddons = (tag) => _cs_.getEnabledAddons(tag);
-
-  scratchAddons.sharedObserver = new SharedObserver();
 
   const runUserscripts = () => {
     for (const addon of addons) {
@@ -335,7 +337,7 @@ if (location.pathname === "/discuss/3/topic/add/") {
   const checkUA = () => {
     if (!window.mySettings) return false;
     const ua = window.mySettings.markupSet.find((x) => x.className);
-    ua.openWith = window._simple_http_agent = ua.openWith.replace("version", "versions");
+    ua.openWith = window._simple_http_agent = ua.openWith.replace("version", "versions‌");
     const textarea = document.getElementById("id_body");
     if (textarea?.value) {
       textarea.value = ua.openWith;

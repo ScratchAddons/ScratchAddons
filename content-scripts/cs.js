@@ -1,5 +1,11 @@
+import chrome from "../libraries/common/chrome.js";
+import localStateProxy from "./imports/local-state.js";
+import loadManifests from "../background/load-addon-manifests.js";
+import globalStateProxy from "../background/imports/global-state.js";
+import getContentScriptInfo from "../background/get-userscripts.js"
+
 try {
-  if (window.parent.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
+  if (window.top.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
 } catch {
   throw "Scratch Addons: not first party iframe";
 }
@@ -22,6 +28,14 @@ const console = {
   error: _realConsole.error.bind(_realConsole, ...consoleOutput()),
 };
 
+const addonListPromise = loadManifests(false).then((manifests) => {
+  scratchAddons.manifests = manifests;
+  scratchAddons.localState.ready.manifests = true;
+  scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
+
+  return loadScriptFromUrl("background/get-addon-settings.js");
+});
+/*
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
 
 let receivedResponse = false;
@@ -46,6 +60,58 @@ const onResponse = (res) => {
   }
 };
 chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse);
+*/
+
+function loadScriptFromUrl(url) {
+  return new Promise((resolve, reject) => {
+    const script = Object.assign(document.createElement("script"), {
+      src: chrome.runtime.getURL(url),
+    });
+    script.addEventListener("load", () => {
+      resolve();
+    });
+    document.body.append(script);
+  });
+}
+
+(async function () {
+  scratchAddons.localState = localStateProxy;
+  const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js");
+  console.log(
+    "%cscratchAddons.localState",
+    "font-weight: bold;",
+    "initialized:\n",
+    JSON.parse(JSON.stringify(scratchAddons.localState))
+  );
+
+  scratchAddons.globalState = globalStateProxy;
+
+  console.log(
+    "%cscratchAddons.globalState",
+    "font-weight: bold;",
+    "initialized:\n",
+    JSON.parse(JSON.stringify(scratchAddons.globalState))
+  );
+
+  [, scratchAddons.manifests] = await Promise.all([handleAuthPromise, addonListPromise]);
+  if (scratchAddons.localState.allReady) {
+    getContentScriptInfo(location.href).then((info) => {
+      onInfoAvailable(info);
+    });
+    return true;
+  } else {
+    // Wait until manifests and addon.settings are ready
+    scratchAddons.localEvents.addEventListener(
+      "ready",
+      async () => {
+        const info = await getContentScriptInfo(location.href);
+        onInfoAvailable(info);
+      },
+      { once: true }
+    );
+    return true;
+  }
+})();
 
 const DOLLARS = ["$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9"];
 
@@ -134,11 +200,9 @@ let initialUrl = location.href;
 let path = new URL(initialUrl).pathname.substring(1);
 if (path[path.length - 1] !== "/") path += "/";
 const pathArr = path.split("/");
-if (pathArr[0] === "scratch-addons-extension") {
+if (pathArr[0] === "scratch-addons-extension" || pathArr[0] === "sa-ext") {
   if (pathArr[1] === "settings") {
-    let url = chrome.runtime.getURL(`webpages/settings/index.html${window.location.search}`);
-    if (location.hash) url += location.hash;
-    chrome.runtime.sendMessage({ replaceTabWithUrl: url });
+    // todo
   }
 }
 if (path === "discuss/3/topic/add/") {
@@ -151,14 +215,16 @@ if (path === "discuss/3/topic/add/") {
   });
 }
 
+/*
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("[Message from background]", request);
   if (request === "getInitialUrl") {
-    sendResponse(pseudoUrl || initialUrl);
+    sendResponse(initialUrl);
   } else if (request === "getLocationHref") {
     sendResponse(location.href);
   }
 });
+*/
 
 function addStyle(addon) {
   const allStyles = [...document.querySelectorAll(".scratch-addons-style")];
@@ -320,7 +386,7 @@ function waitForDocumentHead() {
 }
 
 function getL10NURLs() {
-  const langCode = /scratchlanguage=([\w-]+)/.exec(document.cookie)?.[1] || "en";
+  const langCode = /; scratchlanguage=([\w-]+); /.exec("; " + document.cookie + "; ")?.[1] || "en";
   const urls = [chrome.runtime.getURL(`addons-l10n/${langCode}`)];
   if (langCode === "pt") {
     urls.push(chrome.runtime.getURL(`addons-l10n/pt-br`));
@@ -354,6 +420,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
   _page_.addonsWithUserscripts = addonsWithUserscripts;
   _page_.dataReady = true;
 
+  /*
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.newGlobalState) {
       _page_.globalState = request.newGlobalState;
@@ -406,6 +473,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
       _page_.refetchSession();
     }
   });
+  */
 }
 
 const escapeHTML = (str) => str.replace(/([<>'"&])/g, (_, l) => `&#${l.charCodeAt(0)};`);

@@ -1,20 +1,22 @@
-(async function () {
+export default async function (translations = false) {
   const folderNames = [...new Set(await (await fetch(chrome.runtime.getURL("addons/addons.json"))).json())].filter(
     (folderName) => {
       return !folderName.startsWith("//");
     }
   );
 
-  await scratchAddons.l10n.load(folderNames);
-  const useDefault = scratchAddons.l10n.locale.startsWith("en");
+  if (translations) await scratchAddons.l10n?.load(folderNames);
+  const useDefault = scratchAddons.l10n?.locale?.startsWith("en") ?? true;
 
-  scratchAddons.manifests.push(
+  const manifests = [];
+
+  manifests.push(
     ...(await Promise.all(
       folderNames.map(async (folderName) => {
         return fetch(chrome.runtime.getURL(`addons/${folderName}/addon.json`))
           .then((res) => res.json())
           .then((manifest) => {
-            if (!useDefault) {
+            if (translations && !useDefault) {
               manifest._english = {};
               for (const prop of ["name", "description"]) {
                 if (manifest[prop]) {
@@ -28,7 +30,60 @@
               if (manifest.popup) {
                 manifest.popup.name = scratchAddons.l10n.get(`${folderName}/@popup-name`, {}, manifest.popup.name);
               }
+              for (const preset of manifest.presets || []) {
+                for (const prop of ["name", "description"]) {
+                  if (preset[prop]) {
+                    preset[prop] = scratchAddons.l10n.get(
+                      `${folderName}/@preset-${prop}-${preset.id}`,
+                      {},
+                      preset[prop]
+                    );
+                  }
+                }
+              }
+              for (const option of manifest.settings || []) {
+                option.name = scratchAddons.l10n.get(
+                  `${folderName}/@settings-name-${option.id}`,
+                  {
+                    commentIcon: "@comment.svg",
+                    forumIcon: "@forum.svg",
+                    heartIcon: "@heart.svg",
+                    starIcon: "@star.svg",
+                    followIcon: "@follow.svg",
+                    studioAddIcon: "@studio-add.svg",
+                    studioIcon: "@studio.svg",
+                    remixIcon: "@remix.svg",
+                    adminusersIcon: "@adminusers.svg",
+                    usersIcon: "@users.svg",
+                  },
+                  option.name
+                );
+
+                switch (option.type) {
+                  case "string":
+                    option.default = scratchAddons.l10n.get(
+                      `${folderName}/@settings-default-${option.id}`,
+                      {},
+                      option.default
+                    );
+                    break;
+                  case "select":
+                    option.potentialValues = option.potentialValues.map((value) => {
+                      if (value && value.id) {
+                        value.name = scratchAddons.l10n.get(
+                          `${folderName}/@settings-select-${option.id}-${value.id}`,
+                          {},
+                          value.name
+                        );
+                        return value;
+                      }
+                      return { name: value, id: value };
+                    });
+                    break;
+                }
+              }
             }
+
             for (const propName of ["userscripts", "userstyles"]) {
               for (const injectable of manifest[propName] || []) {
                 const { matches } = injectable;
@@ -46,65 +101,11 @@
                 }
               }
             }
-
-            for (const preset of manifest.presets || []) {
-              for (const prop of ["name", "description"]) {
-                if (preset[prop] && !useDefault) {
-                  preset[prop] = scratchAddons.l10n.get(`${folderName}/@preset-${prop}-${preset.id}`, {}, preset[prop]);
-                }
-              }
-            }
-            for (const option of manifest.settings || []) {
-              if (!useDefault) {
-                option.name = scratchAddons.l10n.get(
-                  `${folderName}/@settings-name-${option.id}`,
-                  {
-                    commentIcon: "@comment.svg",
-                    forumIcon: "@forum.svg",
-                    heartIcon: "@heart.svg",
-                    starIcon: "@star.svg",
-                    followIcon: "@follow.svg",
-                    studioAddIcon: "@studio-add.svg",
-                    studioIcon: "@studio.svg",
-                    remixIcon: "@remix.svg",
-                    adminusersIcon: "@adminusers.svg",
-                    usersIcon: "@users.svg",
-                  },
-                  option.name
-                );
-              }
-              switch (option.type) {
-                case "string":
-                  if (!useDefault) {
-                    option.default = scratchAddons.l10n.get(
-                      `${folderName}/@settings-default-${option.id}`,
-                      {},
-                      option.default
-                    );
-                  }
-                  break;
-                case "select":
-                  option.potentialValues = option.potentialValues.map((value) => {
-                    if (value && value.id) {
-                      if (!useDefault) {
-                        value.name = scratchAddons.l10n.get(
-                          `${folderName}/@settings-select-${option.id}-${value.id}`,
-                          {},
-                          value.name
-                        );
-                      }
-                      return value;
-                    }
-                    return { name: value, id: value };
-                  });
-                  break;
-              }
-            }
             return { addonId: folderName, manifest };
           });
       })
     ))
   );
-  scratchAddons.localState.ready.manifests = true;
-  scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
-})();
+
+  return manifests;
+}
