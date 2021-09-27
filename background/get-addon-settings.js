@@ -3,7 +3,11 @@ import createConsole from "../libraries/common/console.js";
 
 const console = createConsole("background");
 
-chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {}, addonsEnabled = {} }) => {
+const { addonSettings = {}, addonsEnabled = {} } = {
+  addonSettings: window.top.localStorage["SCRATCHADDONS__addonSettings"],
+  addonsEnabled: window.top.localStorage["SCRATCHADDONS__addonsEnabled"],
+};
+{
   const func = () => {
     let madeAnyChanges = false;
 
@@ -108,4 +112,4 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
 
   if (scratchAddons.localState.ready.manifests) func();
   else scratchAddons.localEvents.addEventListener("manifestsReady", func);
-});
+}
