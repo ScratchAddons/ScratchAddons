@@ -45,6 +45,44 @@ const onResponse = (res) => {
 chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse);
 */
 
+
+window.addEventListener("message", async (e) => {
+  if (typeof e.data.reqId === "string" || (e.source !== window) || !e.data.message)
+    return;
+
+  function sendResponse(res = {}) {
+    return e.source.postMessage({ res, reqId: e.data.id + "r" }, e.origin);
+  }
+
+  const data = e.data.message;
+
+  if (data.getFromStorage) {
+    return sendResponse(window.top.localStorage["SCRATCHADDONS__" + data.getFromStorage]);
+  }
+
+  if (data.setInStorage) {
+    return sendResponse(
+      (window.top.localStorage["SCRATCHADDONS__" + data.setInStorage[0]] = JSON.stringify(data.setInStorage[1]))
+    );
+  }
+
+  if (data.title) {
+    return sendResponse((document.title = window.top.document.title = data.title));
+  }
+
+  if (data === "waitForState") {
+    if (scratchAddons.localState.allReady) {
+      sendResponse();
+    } else {
+      scratchAddons.localEvents.addEventListener("ready", () => {
+        sendResponse();
+      });
+    }
+  }
+
+  return sendResponse();
+});
+
 function loadScriptFromUrl(url, module = false) {
   return new Promise((resolve, reject) => {
     const script = Object.assign(document.createElement("script"), {

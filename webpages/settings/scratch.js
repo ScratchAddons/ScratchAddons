@@ -39,5 +39,5 @@ window.addEventListener("message", async (e) => {
     }
   }
 
-  return sendResponse(undefined);
+  return sendResponse();
 });
