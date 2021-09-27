@@ -41,7 +41,7 @@
       ];
       const elements = scripts[0].map((script) => Object.assign(document.createElement("script"), script));
 
-      elements[0][elements[0].length - 1].addEventListener("load", () => {
+      elements[elements.length - 1].addEventListener("load", () => {
         const elements2 = scripts[1].map((script) => Object.assign(document.createElement("script"), script));
         document.head.append(...elements2);
       });
