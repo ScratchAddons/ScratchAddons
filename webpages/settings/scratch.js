@@ -3,6 +3,9 @@ import handleL10n from "../../background/handle-l10n.js";
 
 const iframe = document.querySelector("iframe");
 
+// not used here
+scratchAddons.localState.ready.i18n = scratchAddons.localState.ready.auth = true;
+
 window.addEventListener("message", async (e) => {
   if (typeof e.data.reqId === "string" || (e.source !== iframe.contentWindow && e.source !== window) || !e.data.message)
     return;
