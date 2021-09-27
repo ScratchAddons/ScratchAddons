@@ -61,34 +61,31 @@ function loadScriptFromUrl(url, module = false) {
 async function loadState() {
   if (typeof scratchAddons !== "object")
     await new Promise((resolve) => window.addEventListener("scratchAddons", resolve));
+
+  loadScriptFromUrl("background/get-addon-settings.js", true);
+  chrome.i18n.init().then(() => (scratchAddons.localState.ready.i18n = true));
   addonListPromise.then((manifests) => {
     scratchAddons.manifests = manifests;
     scratchAddons.localState.ready.manifests = true;
     scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
-
-    return loadScriptFromUrl("background/get-addon-settings.js", true);
   });
+
   scratchAddons.localState = localStateProxy;
-  const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js", true);
   console.log("scratchAddons.localState", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.localState)));
-
   scratchAddons.globalState = globalStateProxy;
-
+  loadScriptFromUrl("background/handle-auth.js", true).then(() => (scratchAddons.localState.ready.auth = true));
   console.log("scratchAddons.globalState", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.globalState)));
 
-  [, scratchAddons.manifests] = await Promise.all([handleAuthPromise, addonListPromise, chrome.i18n.init()]);
   if (scratchAddons.localState.allReady) {
-    getContentScriptInfo(location.href).then((info) => {
-      onInfoAvailable(info);
-    });
+    getContentScriptInfo(location.href).then(onInfoAvailable);
     return true;
   } else {
     // Wait until manifests and addon.settings are ready
     scratchAddons.localEvents.addEventListener(
       "ready",
       async () => {
-        const info = await getContentScriptInfo(location.href);
-        onInfoAvailable(info);
+        getContentScriptInfo(location.href).then(onInfoAvailable);
+        return true;
       },
       { once: true }
     );
@@ -167,7 +164,7 @@ const comlinkPromise = loadScriptFromUrl("libraries/thirdparty/cs/comlink.js", f
 comlinkPromise.then(() =>
   Comlink.expose(cs, Comlink.windowEndpoint(comlinkIframe1.contentWindow, comlinkIframe2.contentWindow))
 );
-modulePromise.then(loadState());
+modulePromise.then(loadState);
 Promise.all([comlinkPromise, modulePromise]).then(
   () => (_page_ = Comlink.wrap(Comlink.windowEndpoint(comlinkIframe3.contentWindow, comlinkIframe4.contentWindow)))
 );

@@ -9,6 +9,8 @@ const _localState = {
   ready: {
     manifests: false,
     addonSettings: false,
+    i18n: false,
+    auth: false,
   },
   allReady: false,
   addonsEnabled: {},
