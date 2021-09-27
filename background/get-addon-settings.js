@@ -3,9 +3,14 @@ import createConsole from "../libraries/common/console.js";
 
 const console = createConsole("background");
 
+const parseLocalStorage = (res) =>
+  typeof res === "string"
+    ? JSON.parse(res === "undefined" || res === "" || res.startsWith("[object") ? null : res)
+    : res;
+
 const { addonSettings = {}, addonsEnabled = {} } = {
-  addonSettings: window.top.localStorage["SCRATCHADDONS__addonSettings"],
-  addonsEnabled: window.top.localStorage["SCRATCHADDONS__addonsEnabled"],
+  addonSettings: parseLocalStorage(window.top.localStorage["SCRATCHADDONS__addonSettings"]),
+  addonsEnabled: parseLocalStorage(window.top.localStorage["SCRATCHADDONS__addonsEnabled"]),
 };
 {
   const func = () => {
