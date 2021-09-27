@@ -12,7 +12,7 @@ window.addEventListener("message", async (e) => {
     return;
 
   function sendResponse(res = {}) {
-    return e.source.postMessage({ res, reqId: e.data.id + "r" }, e.origin);
+    return e.source.postMessage({ res, reqId: e.data.id + "r" }, e.origin); // todo not anything
   }
 
   const data = e.data.message;
@@ -42,18 +42,11 @@ window.addEventListener("message", async (e) => {
       });
     }
   }
-  if (data === "waitForState") {
-    if (scratchAddons.localState.listeners) {
-      sendResponse();
-    } else {
-      scratchAddons.localEvents.addEventListener("listeners ready", () => {
-        sendResponse();
-      });
-    }
-  }
 
   return sendResponse();
 });
 
 scratchAddons.localState.ready.listeners = true;
 scratchAddons.localEvents.dispatchEvent(new CustomEvent("listeners ready"));
+
+iframe.contentWindow.postMessage("listeners ready","*");

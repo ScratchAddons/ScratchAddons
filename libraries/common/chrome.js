@@ -1,6 +1,26 @@
-/* global __scratchAddonsNextMsgId: writable */
+/* global __scratchAddonsChrome: writable */
 import createConsole from "./console.js";
 
+window.__scratchAddonsChrome = window.__scratchAddonsChrome || { listenersReady: false, nextMsgId: 0 };
+
+function waitForListeners() {
+  return new Promise(function (resolve, reject) {
+    if (__scratchAddonsChrome.listenersReady) return resolve();
+
+    window.addEventListener("message", (e) => {
+      if (
+        typeof e.data.reqId === "string" ||
+        !(e.source === window || e.source === window.top || e.source === window.parent || e.data.message)
+      )
+        return;
+
+      if (e.data === "listeners ready") {
+        __scratchAddonsChrome.listenersReady = true;
+        resolve();
+      }
+    });
+  });
+}
 const console = createConsole("chrome");
 
 const promisify =
@@ -34,11 +54,9 @@ const storage = {
   },
 };
 
-window.__scratchAddonsNextMsgId = window.__scratchAddonsNextMsgId || 0;
-
 function sendMessage(message, callback) {
   function run() {
-    const id = __scratchAddonsNextMsgId++;
+    const id = __scratchAddonsChrome.nextMsgId++;
     window.parent.postMessage({ id, message }, "*"); // todo not *
     if (callback) {
       const listener = (event) => {
@@ -52,7 +70,7 @@ function sendMessage(message, callback) {
     }
   }
 
-  chrome.runtime.sendMessage("waitFoListeners", run);
+  waitForListeners().then(run);
 }
 let manifest;
 
