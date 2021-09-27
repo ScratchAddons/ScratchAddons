@@ -1,4 +1,4 @@
-const isIframe = new URLSearchParams(window.location.search).get("popup");
+const isIframe =false
 
 export default async function ({ template }) {
   const AddonBody = Vue.extend({

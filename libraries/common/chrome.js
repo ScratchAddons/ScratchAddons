@@ -37,18 +37,23 @@ const storage = {
 window.__scratchAddonsNextMsgId = window.__scratchAddonsNextMsgId || 0;
 
 function sendMessage(message, callback) {
-  const id = __scratchAddonsNextMsgId++;
-  window.parent.postMessage({ id, message }, "*"); // todo not *
-  if (callback) {
-    const listener = (event) => {
-      console.log(event.source === window.parent, event.data, id);
-      if (event.source === window.parent && event.data.reqId === id + "r") {
-        window.removeEventListener("message", listener);
-        callback(event.data.res);
-      }
-    };
-    window.addEventListener("message", listener);
+  function run() {
+    const id = __scratchAddonsNextMsgId++;
+    window.parent.postMessage({ id, message }, "*"); // todo not *
+    if (callback) {
+      const listener = (event) => {
+        console.log(event.source === window.parent, event.data, id);
+        if (event.source === window.parent && event.data.reqId === id + "r") {
+          window.removeEventListener("message", listener);
+          callback(event.data.res);
+        }
+      };
+      window.addEventListener("message", listener);
+    }
   }
+
+  if (scratchAddons.localState.ready.listeners) run();
+  else scratchAddons.localEvents.addEventListener("listeners ready", run, { once: true });
 }
 let manifest;
 

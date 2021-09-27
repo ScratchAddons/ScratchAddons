@@ -15,11 +15,6 @@ if (window.parent === window) {
 chrome.i18n.init();
 
 let isIframe = false;
-if (new URLSearchParams(window.location.search).get("popup")) {
-  // We're in a popup!
-  document.body.classList.add("iframe");
-  isIframe = true;
-}
 
 let vue;
 let fuse;

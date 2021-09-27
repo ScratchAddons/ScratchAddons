@@ -1,6 +1,6 @@
 import tags from "../data/tags.js";
 
-const isIframe = new URLSearchParams(window.location.search).get("popup");
+const isIframe =false
 
 export default async function ({ template }) {
   const AddonTag = Vue.extend({

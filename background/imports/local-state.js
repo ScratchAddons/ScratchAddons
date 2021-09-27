@@ -1,6 +1,6 @@
 import createConsole from "../../libraries/common/console.js";
 
-const console=createConsole("local state")
+const console = createConsole("local state");
 
 // Local state is a JSON object where the background page stores data.
 // It is abstracted through a proxy in order to easily detect changes that should trigger events or side effects.
@@ -11,6 +11,7 @@ const _localState = {
     addonSettings: false,
     i18n: false,
     auth: false,
+    listeners: false,
   },
   allReady: false,
   addonsEnabled: {},

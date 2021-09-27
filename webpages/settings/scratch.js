@@ -5,9 +5,10 @@ const iframe = document.querySelector("iframe");
 
 // not used here
 scratchAddons.localState.ready.i18n = scratchAddons.localState.ready.auth = true;
+window.dispatchEvent(new CustomEvent(".i18n load"));
 
 window.addEventListener("message", async (e) => {
-  if (typeof e.data.reqId === "string" || (e.source !== iframe.contentWindow && e.source !== window) || !e.data.message)
+  if (typeof e.data.reqId === "string" || !(e.source === iframe.contentWindow || e.source === window || e.data.message))
     return;
 
   function sendResponse(res = {}) {
@@ -44,3 +45,6 @@ window.addEventListener("message", async (e) => {
 
   return sendResponse();
 });
+
+scratchAddons.localState.ready.listeners = true;
+scratchAddons.localEvents.dispatchEvent(new CustomEvent("listeners ready"));

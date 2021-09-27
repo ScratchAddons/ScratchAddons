@@ -45,10 +45,8 @@ const onResponse = (res) => {
 chrome.runtime.sendMessage({ contentScriptReady: { url: location.href } }, onResponse);
 */
 
-
 window.addEventListener("message", async (e) => {
-  if (typeof e.data.reqId === "string" || (e.source !== window) || !e.data.message)
-    return;
+  if (typeof e.data.reqId === "string" || e.source !== window || !e.data.message) return;
 
   function sendResponse(res = {}) {
     return e.source.postMessage({ res, reqId: e.data.id + "r" }, e.origin);
@@ -99,6 +97,8 @@ function loadScriptFromUrl(url, module = false) {
 async function loadState() {
   if (typeof scratchAddons !== "object")
     await new Promise((resolve) => window.addEventListener("scratchAddons", resolve));
+  scratchAddons.ready.listeners = true; // not used here
+  scratchAddons.localEvents.dispatchEvent(new CustomEvent("listeners ready"));
 
   loadScriptFromUrl("background/get-addon-settings.js", true);
   chrome.i18n.init().then(() => (scratchAddons.localState.ready.i18n = true));
