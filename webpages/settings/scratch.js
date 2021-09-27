@@ -42,6 +42,15 @@ window.addEventListener("message", async (e) => {
       });
     }
   }
+  if (data === "waitForState") {
+    if (scratchAddons.localState.listeners) {
+      sendResponse();
+    } else {
+      scratchAddons.localEvents.addEventListener("listeners ready", () => {
+        sendResponse();
+      });
+    }
+  }
 
   return sendResponse();
 });

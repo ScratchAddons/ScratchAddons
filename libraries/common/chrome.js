@@ -52,11 +52,7 @@ function sendMessage(message, callback) {
     }
   }
 
-  if ((window.scratchAddons || window.parent.scratchAddons).localState.ready.listeners) run();
-  else
-    (window.scratchAddons || window.parent.scratchAddons).localEvents.addEventListener("listeners ready", run, {
-      once: true,
-    });
+  chrome.runtime.sendMessage("waitFoListeners", run);
 }
 let manifest;
 
