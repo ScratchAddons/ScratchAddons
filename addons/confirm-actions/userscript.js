@@ -8,6 +8,8 @@ export default async function ({ addon, console, msg }) {
         e.target.closest("[class*='share-button_share-button']:not([class*='is-shared']), .banner-button")
       ) {
         cancelMessage = msg("share");
+      } else if (addon.settings.get("projectunsharing") && e.target.closest(".media-stats a.unshare")) {
+        cancelMessage = msg("unshare");
       } else if (addon.settings.get("followinguser") && e.target.closest("#profile-data .follow-button")) {
         cancelMessage = msg("follow");
       } else if (
