@@ -12,6 +12,8 @@ scratchAddons.eventTargets = {
   self: [],
 };
 scratchAddons.session = {};
+// Event target for local background page events
+scratchAddons.localEvents = new EventTarget();
 window.dispatchEvent(new CustomEvent("scratchAddons"));
 
 const pendingPromises = {};
