@@ -12,7 +12,7 @@ scratchAddons.eventTargets = {
   self: [],
 };
 scratchAddons.session = {};
-scratchAddons.console = console;
+window.dispatchEvent(new CustomEvent("scratchAddons"));
 
 const pendingPromises = {};
 pendingPromises.msgCount = [];
@@ -331,4 +331,3 @@ if (location.pathname === "/discuss/3/topic/add/") {
   };
   if (!checkUA()) window.addEventListener("DOMContentLoaded", () => checkUA(), { once: true });
 }
-console.log("module.js executed", Date.now());

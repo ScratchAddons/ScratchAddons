@@ -5,7 +5,7 @@ import globalStateProxy from "../background/imports/global-state.js";
 import getContentScriptInfo from "../background/get-userscripts.js";
 import createConsole from "../libraries/common/console.js";
 
-const console=createConsole("content script")
+const console = createConsole("content script");
 
 try {
   if (window.top.location.origin !== "https://scratch.mit.edu") throw "Scratch Addons: not first party iframe";
@@ -65,7 +65,9 @@ function loadScriptFromUrl(url, module = false) {
 }
 
 async function loadState() {
-  console.log("module.js loaded", Date.now());
+  if (typeof scratchAddons !== "object")
+    await new Promise((resolve) => window.addEventListener("scratchAddons", resolve));
+  
   scratchAddons.localState = localStateProxy;
   const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js", true);
   console.log(
