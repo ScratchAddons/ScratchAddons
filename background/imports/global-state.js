@@ -57,7 +57,7 @@ class StateProxy {
 function stateChange(parentObjectPath, key, value) {
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
-  console.log(`${objectPath}`, "is now: ", value);
+  console.log(`${objectPath}`, "is now: ", objectPathArr.includes("auth") ? "[redacted]" : value);
   if (objectPathArr[0] === "auth" && key !== "scratchLang") {
     // NOTE: Do not send to content script; this is handled in handle-auth.js
     scratchAddons.eventTargets.auth.forEach((eventTarget) => eventTarget.dispatchEvent(new CustomEvent("change")));

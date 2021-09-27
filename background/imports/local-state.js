@@ -42,7 +42,7 @@ class StateProxy {
 function stateChange(parentObjectPath, key, value) {
   const objectPath = `${parentObjectPath}.${key}`;
   const objectPathArr = objectPath.split(".").slice(2);
-  console.log(`${objectPath}`, "is now: ", value);
+  console.log(`${objectPath}`, "is now: ", objectPathArr.includes("auth") ? "[redacted]" : value);
   if (objectPathArr[0] === "ready" && Object.values(scratchAddons.localState.ready).every((x) => x === true)) {
     console.log("Everything ready!");
     _localState.allReady = true;
