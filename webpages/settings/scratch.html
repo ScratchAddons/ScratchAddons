@@ -26,13 +26,17 @@
       import chrome from "https://userscript.scratchaddons.cf/libraries/common/chrome.js";
 
       window.chrome = chrome;
+
+      const scripts = [
+        { src: "../set-lang.js", defer: true, async: true, type: "module" },
+        { src: "../check-unsupported.js", defer: true, async: true, type: "module" },
+        { src: "./scratch.js", defer: true, type: "module" },
+        { src: "../../background/declare-scratchaddons-object.js", type: "module" },
+        { src: "../../background/load-manifests.js", type: "module" },
+        { src: "../../background/get-addon-settings.js", defer: true, type: "module" },
+      ];
+      document.head.append(...scripts.map((script) => Object.assign(document.createElement("script"), script)));
     </script>
-    <script src="../set-lang.js" defer async type="module"></script>
-    <script src="../check-unsupported.js" defer async type="module"></script>
-    <script src="./scratch.js" defer type="module"></script>
-    <script src="../../background/declare-scratchaddons-object.js" type="module"></script>
-    <script src="../../background/load-manifests.js" type="module"></script>
-    <script src="../../background/get-addon-settings.js" defer type="module"></script>
   </head>
   <body>
     <iframe src="./index.html"></iframe>
