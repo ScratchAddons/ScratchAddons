@@ -47,7 +47,7 @@ function sendMessage(message, callback) {
         callback(event.data.res);
       }
     };
-    window.addEventListener("message", listener, { once: true });
+    window.addEventListener("message", listener);
   }
 }
 let manifest;
