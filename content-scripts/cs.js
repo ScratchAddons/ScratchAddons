@@ -13,17 +13,11 @@ try {
   throw "Scratch Addons: not first party iframe";
 }
 
-if (typeof scratchAddons !== "undefined") {
+if (typeof scratchAddons === "object") {
   console.log("Scratch Addons: extention running, stopping userscript");
 }
 
-const addonListPromise = loadManifests(false).then((manifests) => {
-  scratchAddons.manifests = manifests;
-  scratchAddons.localState.ready.manifests = true;
-  scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
-
-  return loadScriptFromUrl("background/get-addon-settings.js", true);
-});
+const addonListPromise = loadManifests(false);
 /*
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
 
@@ -67,22 +61,20 @@ function loadScriptFromUrl(url, module = false) {
 async function loadState() {
   if (typeof scratchAddons !== "object")
     await new Promise((resolve) => window.addEventListener("scratchAddons", resolve));
+  addonListPromise.then((manifests) => {
+    scratchAddons.manifests = manifests;
+    scratchAddons.localState.ready.manifests = true;
+    scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
 
+    return loadScriptFromUrl("background/get-addon-settings.js", true);
+  });
   scratchAddons.localState = localStateProxy;
   const handleAuthPromise = loadScriptFromUrl("background/handle-auth.js", true);
-  console.log(
-    "scratchAddons.localState",
-    "initialized:\n",
-    JSON.parse(JSON.stringify(scratchAddons.localState))
-  );
+  console.log("scratchAddons.localState", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.localState)));
 
   scratchAddons.globalState = globalStateProxy;
 
-  console.log(
-    "scratchAddons.globalState",
-    "initialized:\n",
-    JSON.parse(JSON.stringify(scratchAddons.globalState))
-  );
+  console.log("scratchAddons.globalState", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.globalState)));
 
   [, scratchAddons.manifests] = await Promise.all([handleAuthPromise, addonListPromise]);
   if (scratchAddons.localState.allReady) {
