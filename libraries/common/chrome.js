@@ -1,7 +1,7 @@
 /* global __scratchAddonsNextMsgId: writable */
 import createConsole from "./console.js";
 
-const console = createConsole("chrome");
+const console = typeof _realConsole === "object" ? createConsole("chrome") : console;
 
 const promisify =
   (callbackFn) =>
