@@ -10,7 +10,7 @@ const consoleOutput = (logAuthor) => {
 
 export default (logAuthor) => {
   return {
-    ..._realConsole,
+    ...(typeof _realConsole === "object" ? _realConsole : console),
     log: _realConsole.log.bind(_realConsole, ...consoleOutput(logAuthor)),
     warn: _realConsole.warn.bind(_realConsole, ...consoleOutput(logAuthor)),
     error: _realConsole.error.bind(_realConsole, ...consoleOutput(logAuthor)),
