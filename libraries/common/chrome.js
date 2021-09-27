@@ -52,8 +52,11 @@ function sendMessage(message, callback) {
     }
   }
 
-  if (scratchAddons.localState.ready.listeners) run();
-  else scratchAddons.localEvents.addEventListener("listeners ready", run, { once: true });
+  if ((window.scratchAddons || window.parent.scratchAddons).localState.ready.listeners) run();
+  else
+    (window.scratchAddons || window.parent.scratchAddons).localEvents.addEventListener("listeners ready", run, {
+      once: true,
+    });
 }
 let manifest;
 
