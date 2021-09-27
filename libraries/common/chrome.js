@@ -41,8 +41,8 @@ function sendMessage(message, callback) {
   window.parent.postMessage({ id, message }, "*"); // todo not *
   if (callback) {
     const listener = (event) => {
+      console.log(event.source === window.parent, event.data, id);
       if (event.source === window.parent && event.data.reqId === id + "r") {
-        console.log(event.source === window.parent, event.data, id);
         window.removeEventListener("message", listener);
         callback(event.data.res);
       }
