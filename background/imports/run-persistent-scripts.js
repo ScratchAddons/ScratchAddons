@@ -5,7 +5,7 @@ import changeAddonState from "./change-addon-state.js";
 import { getMissingOptionalPermissions } from "./util.js";
 import createConsole from "../../libraries/common/console.js";
 
-const console=createConsole("page")
+const console = createConsole("page");
 
 export default async function runPersistentScripts(addonId) {
   const manifest = scratchAddons.manifests.find((obj) => obj.addonId === addonId).manifest;
@@ -69,25 +69,25 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
 
   for (const scriptPath of scriptUrls) {
     const scriptUrl = chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`);
-    console.log(
-      `%cDebug addons/${addonId}/${scriptPath}: ${scriptUrl}`,
-      "color:red; font-weight: bold; font-size: 1.2em;"
-    );
+    console.logForAddon(`${addonId} [background]`)(`Running ${scriptUrl}`);
     const module = await import(chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`));
-    const log = console.log.bind(console, `%c[${addonId}]`, "color:darkorange; font-weight: bold;");
-    const warn = console.warn.bind(console, `%c[${addonId}]`, "color:darkorange font-weight: bold;");
+    const localConsole = {
+      log: console.logForAddon(addonId),
+      warn: console.warnForAddon(addonId),
+      error: console.errorForAddon(addonId),
+    };
     const msg = (key, placeholders) =>
       scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
     msg.locale = scratchAddons.l10n.locale;
     module.default({
       addon: addonObj,
       global: globalObj,
-      console: { ...console, log, warn },
+      console: { ...console, ...localConsole },
+      msg,
       setTimeout: setTimeoutFunc,
       setInterval: setIntervalFunc,
       clearTimeout: clearTimeoutFunc,
       clearInterval: clearIntervalFunc,
-      msg,
     });
   }
 }

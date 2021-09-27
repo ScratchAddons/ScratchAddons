@@ -8,13 +8,15 @@ const consoleOutput = (logAuthor) => {
   return [`%cSA%c[${logAuthor}]%c`, style.leftPrefix, style.rightPrefix, style.text];
 };
 
-export default (logAuthor)=>({
-  ..._realConsole,
-  log: _realConsole.log.bind(_realConsole, ...consoleOutput(logAuthor)),
-  warn: _realConsole.warn.bind(_realConsole, ...consoleOutput(logAuthor)),
-  error: _realConsole.error.bind(_realConsole, ...consoleOutput(logAuthor)),
+export default (logAuthor) => {
+  return {
+    ..._realConsole,
+    log: _realConsole.log.bind(_realConsole, ...consoleOutput(logAuthor)),
+    warn: _realConsole.warn.bind(_realConsole, ...consoleOutput(logAuthor)),
+    error: _realConsole.error.bind(_realConsole, ...consoleOutput(logAuthor)),
 
-  logForAddon: (addonId) => _realConsole.log.bind(_realConsole, ...consoleOutput(addonId)),
-  warnForAddon: (addonId) => _realConsole.warn.bind(_realConsole, ...consoleOutput(addonId)),
-  errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
-});
+    logForAddon: (addonId) => _realConsole.log.bind(_realConsole, ...consoleOutput(addonId)),
+    warnForAddon: (addonId) => _realConsole.warn.bind(_realConsole, ...consoleOutput(addonId)),
+    errorForAddon: (addonId) => _realConsole.error.bind(_realConsole, ...consoleOutput(addonId)),
+  };
+};

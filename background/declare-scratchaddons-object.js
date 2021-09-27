@@ -31,16 +31,14 @@ scratchAddons.l10n = new BackgroundLocalizationProvider();
 
 scratchAddons.globalState = globalStateProxy;
 console.log(
-  "%cscratchAddons.globalState",
-  "font-weight: bold;",
+  "scratchAddons.globalState",
   "initialized:\n",
   JSON.parse(JSON.stringify(scratchAddons.globalState))
 );
 
 scratchAddons.localState = localStateProxy;
 console.log(
-  "%cscratchAddons.localState",
-  "font-weight: bold;",
+  "scratchAddons.localState",
   "initialized:\n",
   JSON.parse(JSON.stringify(scratchAddons.localState))
 );
