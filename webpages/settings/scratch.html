@@ -28,14 +28,25 @@
       window.chrome = chrome;
 
       const scripts = [
-        { src: "../set-lang.js", defer: true, async: true, type: "module" },
-        { src: "../check-unsupported.js", defer: true, async: true, type: "module" },
-        { src: "./scratch.js", defer: true, type: "module" },
-        { src: "../../background/declare-scratchaddons-object.js", type: "module" },
-        { src: "../../background/load-manifests.js", type: "module" },
-        { src: "../../background/get-addon-settings.js", defer: true, type: "module" },
+        [
+          { src: "../set-lang.js", defer: true, async: true, type: "module" },
+          { src: "../check-unsupported.js", defer: true, async: true, type: "module" },
+          { src: "../../background/declare-scratchaddons-object.js", type: "module" },
+        ],
+        [
+          { src: "./scratch.js", defer: true, type: "module" },
+          { src: "../../background/load-manifests.js", type: "module" },
+          { src: "../../background/get-addon-settings.js", defer: true, type: "module" },
+        ],
       ];
-      document.head.append(...scripts.map((script) => Object.assign(document.createElement("script"), script)));
+      const elements = scripts[0].map((script) => Object.assign(document.createElement("script"), script));
+
+      elements[0][elements[0].length - 1].addEventListener("load", () => {
+        const elements2 = scripts[1].map((script) => Object.assign(document.createElement("script"), script));
+        document.head.append(...elements2);
+      });
+
+      document.head.append(...elements);
     </script>
   </head>
   <body>
