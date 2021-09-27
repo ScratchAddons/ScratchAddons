@@ -42,6 +42,7 @@ function sendMessage(message, callback) {
   if (callback) {
     const listener = (event) => {
       if (event.source === window.parent && event.data.reqId === id + "r") {
+        console.log(event.source === window.parent, event.data, id);
         window.removeEventListener("message", listener);
         callback(event.data.res);
       }
