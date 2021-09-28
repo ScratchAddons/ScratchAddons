@@ -1,0 +1,44 @@
+name: Validate addon manifest
+
+on:
+  push:
+    paths:
+      - addons/*/addon.json
+  pull_request:
+    paths:
+      - addons/*/addon.json
+  workflow_dispatch:
+
+jobs:
+  sv:
+    name: Validate
+    runs-on: ubuntu-latest
+    # if: ! (github.event_name == 'schedule' && github.repository_owner == 'ScratchAddons')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Find changed files (push, PR)
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        id: changed
+        uses: ScratchAddons/changed-files@master
+        with:
+          pattern: '^addons\/.*\/addon.json$'
+          repo-token: ${{ github.token }}
+
+      - name: Validate .json with schema (changed)
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        uses: ScratchAddons/validate-json-action@master
+        with:
+          schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json
+          jsons: |
+            ${{ steps.changed.outputs.files_created }}
+            ${{ steps.changed.outputs.files_updated }}
+
+      - name: Validate .json with schema (all)
+        if: "! (github.event_name == 'push' || github.event_name == 'pull_request')"
+        uses: ScratchAddons/validate-json-action@master
+        with:
+          schema: https://raw.githubusercontent.com/ScratchAddons/manifest-schema/dist/schema.json
+          jsons: addons/*/addon.json
