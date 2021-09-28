@@ -1,6 +1,6 @@
 {
     "name": "Remove Minifiers",
-    "description": "Removes minifiers on forum sections because its useless.",
+    "description": "Removes the minifier button in sections on the forums",
     "userscripts": [
         {
           "url": "userscript.js",
