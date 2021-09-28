@@ -97,7 +97,7 @@ function loadScriptFromUrl(url, module = false) {
 async function loadState() {
   if (typeof scratchAddons !== "object")
     await new Promise((resolve) => window.addEventListener("scratchAddons", resolve));
-  scratchAddons.ready.listeners = true; // not used here
+  scratchAddons.localState.ready.listeners = true; // not used here
   scratchAddons.localEvents.dispatchEvent(new CustomEvent("listeners ready"));
 
   loadScriptFromUrl("background/get-addon-settings.js", true);
