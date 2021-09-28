@@ -88,7 +88,9 @@ export default async function ({ template }) {
         this.fullScreenView = !this.fullScreenView;
       },
       cssVariables(obj) {
-        return Object.entries(obj).map(([name, value]) => `${name}: ${value};`).join("\n");
+        return Object.entries(obj)
+          .map(([name, value]) => `${name}: ${value};`)
+          .join("\n");
       },
     },
   });
