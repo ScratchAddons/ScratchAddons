@@ -1,7 +1,11 @@
 /* global __scratchAddonsChrome: writable */
 import createConsole from "./console.js";
 
-window.__scratchAddonsChrome = window.__scratchAddonsChrome || { listenersReady: false, nextMsgId: 0 };
+window.__scratchAddonsChrome = {
+  listenersReady: false,
+  nextMsgId: 0,
+  ...(window.__scratchAddonsChrome || {}),
+};
 
 function waitForListeners() {
   return new Promise(function (resolve, reject) {
