@@ -124,7 +124,9 @@ h4 {
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-clip: border-box;
 }
-.modal {
+.modal,
+.jqui-modal,
+.jqui-modal.ui-corner-all {
   background: #282828;
 }
 .modal .modal-header,
@@ -145,7 +147,9 @@ h4 {
 #email-resend-box .email-resend-subsection {
   color: white;
 }
-.modal .modal-footer {
+.modal .modal-footer,
+#email-resend-box .modal-footer,
+#new-scratcher-gallery-modal .modal-footer {
   background: #282828;
   border: none;
   box-shadow: none;
