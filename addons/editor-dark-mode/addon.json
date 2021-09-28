@@ -1031,6 +1031,34 @@
       }
     },
     {
+      "name": "Scratch 1.x",
+      "id": "scratch1",
+      "description": "A theme based on Scratch 1.x's colors.",
+      "values": {
+        "page": "#c0c3c6",
+        "primary": "#5498c7",
+        "highlightText": "#21211f",
+        "menuBar": "#c0c3c6",
+        "activeTab": "#b9d7e5",
+        "tab": "#adadb5",
+        "selector": "#6a6a6a",
+        "selector2": "#7c8083",
+        "selectorSelection": "#404143",
+        "accent": "#959a9f",
+        "input": "#5f6265",
+        "workspace": "#7c8083",
+        "categoryMenu": "#969a9f",
+        "palette": "#7c8083",
+        "fullscreen": "#000001",
+        "stageHeader": "#000001",
+        "border": "#0000006b",
+        "textShadow": false,
+        "dots": false,
+        "darkComments": false,
+        "darkScrollbars": false
+      }
+    },
+    {
       "name": "Scratch's default colors",
       "id": "scratch",
       "description": "The colors normally used by Scratch",
