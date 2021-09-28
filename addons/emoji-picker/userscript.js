@@ -237,7 +237,7 @@ export default async function ({ addon, global, console, msg }) {
     "br",
     "✈️",
     "⛵️",
-	"Ⓜ️",
+    "Ⓜ️",
     "⚓️",
     "⛽️",
     "⛲️",
@@ -352,31 +352,31 @@ export default async function ({ addon, global, console, msg }) {
     "◽️",
     "◾️",
   ];
-  
+
   const emojiPickerOffset = addon.tab.clientVersion === "scratchr2" ? 30 : 48;
-  
+
   //Functions
-  
-  const setEmojiPickerPos = function() {
-	emojiPicker.style.top = emojiPickerOffset + "px";
-	//scratchr2 makes the body and root <html>'s height value the size of the screen somehow so I have to do this
-	realDocumentBody =  addon.tab.clientVersion === "scratchr2" ? document.querySelector("#pagewrapper") : document.body;
-	if (emojiPicker.getBoundingClientRect().bottom > realDocumentBody.getBoundingClientRect().bottom - 48) {
-		//Emoji picker may be partially hidden, move up
-		emojiPicker.style.top = -emojiPicker.getBoundingClientRect().height + "px";
-	}
-  }
-  
+
+  const setEmojiPickerPos = function () {
+    emojiPicker.style.top = emojiPickerOffset + "px";
+    //scratchr2 makes the body and root <html>'s height value the size of the screen somehow so I have to do this
+    realDocumentBody = addon.tab.clientVersion === "scratchr2" ? document.querySelector("#pagewrapper") : document.body;
+    if (emojiPicker.getBoundingClientRect().bottom > realDocumentBody.getBoundingClientRect().bottom - 48) {
+      //Emoji picker may be partially hidden, move up
+      emojiPicker.style.top = -emojiPicker.getBoundingClientRect().height + "px";
+    }
+  };
+
   const showEmojiPicker = function (event) {
     if (!event.target.classList.contains("sa-emoji-button")) return; //Only attempt to show when clicking button, not picker
     unicodeContainer.style.display = "none";
     pickerDivider.style.display = "none";
-	
+
     setSeeMoreText();
-	
+
     this.appendChild(emojiPicker);
-	
-	setEmojiPickerPos();
+
+    setEmojiPickerPos();
   };
 
   const insertTextToTextArea = function (insertText, textBox) {
@@ -438,7 +438,7 @@ export default async function ({ addon, global, console, msg }) {
   var emojiPicker = document.createElement("div");
   emojiPicker.id = "sa-emoji-picker";
   addon.tab.displayNoneWhileDisabled(emojiPicker, { display: "inline-block" });
-  
+
   //Scratch emojis
   emojis.forEach((emoji) => {
     let container = document.createElement("span");
@@ -448,11 +448,14 @@ export default async function ({ addon, global, console, msg }) {
     container.onclick = addEmoji;
     let item = document.createElement("img");
     item.src = addon.tab.clientVersion === "scratch-www" ? emoji.image : emoji.imager2; //We have to do a check here so that better emojis works on the picker on profiles
-    item.classList.add(addon.tab.clientVersion === "scratch-www" ? "emoji" : "easter-egg", "sa-emoji-picker-item-inner");
+    item.classList.add(
+      addon.tab.clientVersion === "scratch-www" ? "emoji" : "easter-egg",
+      "sa-emoji-picker-item-inner"
+    );
     container.appendChild(item);
     emojiPicker.appendChild(container);
   });
-  
+
   //Unicode emojis
   let unicodeContainer = document.createElement("div");
   unicodeContainer.classList.add("sa-emoji-picker-unicode");
@@ -460,7 +463,7 @@ export default async function ({ addon, global, console, msg }) {
   pickerDivider.classList.add("sa-emoji-picker-divider");
   pickerDivider.style.display = "none";
   emojiPicker.appendChild(pickerDivider);
-  
+
   unicodeEmojis.forEach((emoji) => {
     if (emoji === "br") {
       let br = document.createElement("br");
@@ -491,11 +494,10 @@ export default async function ({ addon, global, console, msg }) {
     unicodeContainer.style.display = unicodeContainer.style.display === "none" ? "block" : "none";
     pickerDivider.style.display = unicodeContainer.style.display;
     setSeeMoreText();
-	setEmojiPickerPos();
+    setEmojiPickerPos();
   };
   setSeeMoreText();
   emojiPicker.appendChild(seeMoreButton);
-
 
   //Add emoji buttons
   while (true) {
@@ -523,8 +525,8 @@ export default async function ({ addon, global, console, msg }) {
       //Special classes for scratchr2 pages
       emojiButton.classList.add("button", "small", "sa-emoji-button-r2");
     } else {
-		emojiButton.classList.add("sa-emoji-button-www");
-	}
+      emojiButton.classList.add("sa-emoji-button-www");
+    }
     emojiButton.onclick = showEmojiPicker;
 
     let emojiButtonText;
