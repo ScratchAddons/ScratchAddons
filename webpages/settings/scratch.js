@@ -8,7 +8,11 @@ scratchAddons.localState.ready.i18n = scratchAddons.localState.ready.auth = true
 window.dispatchEvent(new CustomEvent(".i18n load"));
 
 window.addEventListener("message", async (e) => {
-  if (typeof e.data.reqId === "string" || !(e.source === iframe.contentWindow || e.source === window || e.data.message))
+  if (
+    !e?.data?.message ||
+    typeof e.data.reqId === "string" ||
+    !(e.source === iframe.contentWindow || e.source === window || e.data.message)
+  )
     return;
 
   function sendResponse(res = {}) {
