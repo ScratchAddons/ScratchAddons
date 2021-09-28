@@ -20,14 +20,6 @@
       "matches": ["projects", "studios", "profiles"]
     }
   ],
-  "settings": [
-    {
-      "name": "Show Unicode emojis in picker",
-      "id": "unicode",
-      "type": "boolean",
-      "default": true
-    }
-  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "",

@@ -8,6 +8,7 @@
   box-shadow: 0px 0px 5px #00000022;
   z-index: 1;
   padding: 5px;
+  padding-bottom: 0;
   overflow: hidden;
   line-height: 0px;
   font-size: 15px;
@@ -17,18 +18,6 @@
 }
 .sa-emoji-button-r2 #sa-emoji-picker {
   left: -10px;
-}
-.sa-emoji-button-www #sa-emoji-picker:not(.sa-emoji-picker-no-comments) {
-  top: 48px;
-}
-.sa-emoji-button-r2 #sa-emoji-picker:not(.sa-emoji-picker-no-comments) {
-  top: 30px;
-}
-.sa-emoji-button-r2 #sa-emoji-picker.sa-emoji-picker-no-comments {
-  bottom: 30px;
-}
-.sa-emoji-button-www #sa-emoji-picker.sa-emoji-picker-no-comments {
-  bottom: 50px;
 }
 .sa-emoji-picker-item {
   cursor: pointer;
@@ -84,4 +73,9 @@
 .sa-emoji-picker-see-more {
   width: 100%;
   margin-top: 5px;
+}
+.sa-emoji-button-r2 .sa-emoji-picker-see-more {
+	width: calc(100% - 2px);
+	margin-bottom: 7px;
+	margin-top: 4px;
 }

@@ -1,5 +1,4 @@
 export default async function ({ addon, global, console, msg }) {
-  //Emojis
   const emojis = [
     {
       text: "_meow_",
@@ -179,6 +178,9 @@ export default async function ({ addon, global, console, msg }) {
       imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/blm.png",
     },
   ];
+  //Scratch only supports Unicode emojis inside the Basic Multilingual Plane.
+  //This array contains all of those emojis.
+  //"br" is automatically converted to a line break.
   const unicodeEmojis = [
     "⌚️",
     "⏰",
@@ -219,7 +221,6 @@ export default async function ({ addon, global, console, msg }) {
     "☘️",
     "br",
     "☹️",
-    "Ⓜ️",
     "✌️",
     "☝️",
     "✍️",
@@ -236,6 +237,7 @@ export default async function ({ addon, global, console, msg }) {
     "br",
     "✈️",
     "⛵️",
+	"Ⓜ️",
     "⚓️",
     "⛽️",
     "⛲️",
@@ -350,26 +352,33 @@ export default async function ({ addon, global, console, msg }) {
     "◽️",
     "◾️",
   ];
-
+  
+  const emojiPickerOffset = addon.tab.clientVersion === "scratchr2" ? 30 : 48;
+  
   //Functions
-
-  //Function for showing the emoji picker
+  
+  const setEmojiPickerPos = function() {
+	emojiPicker.style.top = emojiPickerOffset + "px";
+	//scratchr2 makes the body and root <html>'s height value the size of the screen somehow so I have to do this
+	realDocumentBody =  addon.tab.clientVersion === "scratchr2" ? document.querySelector("#pagewrapper") : document.body;
+	if (emojiPicker.getBoundingClientRect().bottom > realDocumentBody.getBoundingClientRect().bottom - 48) {
+		//Emoji picker may be partially hidden, move up
+		emojiPicker.style.top = -emojiPicker.getBoundingClientRect().height + "px";
+	}
+  }
+  
   const showEmojiPicker = function (event) {
     if (!event.target.classList.contains("sa-emoji-button")) return; //Only attempt to show when clicking button, not picker
-    //Reset unicode emojis opened
     unicodeContainer.style.display = "none";
     pickerDivider.style.display = "none";
+	
     setSeeMoreText();
-    if (document.querySelector(".comment:not(.compose-row)")) {
-      emojiPicker.classList.remove("sa-emoji-picker-no-comments");
-    } else {
-      emojiPicker.classList.add("sa-emoji-picker-no-comments");
-    }
-    //Append
+	
     this.appendChild(emojiPicker);
+	
+	setEmojiPickerPos();
   };
 
-  //Function for inserting text into a textarea
   const insertTextToTextArea = function (insertText, textBox) {
     if (textBox.selectionStart === textBox.value.length && textBox.selectionEnd === textBox.value.length) {
       //Cursor is at the end
@@ -395,19 +404,16 @@ export default async function ({ addon, global, console, msg }) {
     }
   };
 
-  //Hide emoji picker when clicked outside of
   document.addEventListener("mouseup", function (event) {
     if (!emojiPicker.contains(event.target)) {
       emojiPicker.remove();
     }
   });
 
-  //Function for adding an emoji
   const addEmoji = function () {
     try {
       var textBox;
       if (addon.tab.clientVersion === "scratch-www") {
-        //scratch-www
         textBox =
           this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(
             'textarea[id*="frc-compose-comment"]'
@@ -428,66 +434,56 @@ export default async function ({ addon, global, console, msg }) {
 
   //Addon
 
-  //Create picker
+  //Create the emoji picker
   var emojiPicker = document.createElement("div");
   emojiPicker.id = "sa-emoji-picker";
   addon.tab.displayNoneWhileDisabled(emojiPicker, { display: "inline-block" });
-  //Create picker items
+  
   //Scratch emojis
   emojis.forEach((emoji) => {
-    //Container for emoji picker item
     let container = document.createElement("span");
     container.classList.add("sa-emoji-picker-item");
     container.dataset.text = emoji.text;
     container.title = emoji.text;
     container.onclick = addEmoji;
-    //The actual item
     let item = document.createElement("img");
     item.src = addon.tab.clientVersion === "scratch-www" ? emoji.image : emoji.imager2; //We have to do a check here so that better emojis works on the picker on profiles
-    item.classList.add(addon.tab.clientVersion === "scratch-www" ? "emoji" : "easter-egg");
-    item.classList.add("sa-emoji-picker-item-inner");
-    //Append
+    item.classList.add(addon.tab.clientVersion === "scratch-www" ? "emoji" : "easter-egg", "sa-emoji-picker-item-inner");
     container.appendChild(item);
     emojiPicker.appendChild(container);
   });
+  
   //Unicode emojis
   let unicodeContainer = document.createElement("div");
   unicodeContainer.classList.add("sa-emoji-picker-unicode");
-  //Divider between emoji types
   let pickerDivider = document.createElement("div");
   pickerDivider.classList.add("sa-emoji-picker-divider");
   pickerDivider.style.display = "none";
   emojiPicker.appendChild(pickerDivider);
-  //Unicode emojis
+  
   unicodeEmojis.forEach((emoji) => {
-    //Container for emoji picker item
     if (emoji === "br") {
-      //Line break
       let br = document.createElement("br");
       br.classList.add("sa-emoji-picker-break");
       unicodeContainer.appendChild(br);
     } else {
-      //Emoji
       let container = document.createElement("span");
       container.classList.add("sa-emoji-picker-item");
       container.dataset.text = emoji;
       container.onclick = addEmoji;
-      //The actual item
       let item = document.createElement("span");
       item.textContent = emoji;
       item.classList.add("sa-emoji-picker-item-inner");
-      //Append
       container.appendChild(item);
       unicodeContainer.appendChild(container);
     }
   });
   unicodeContainer.style.display = "none";
   emojiPicker.appendChild(unicodeContainer);
-  //Show More/Less button
+
   var seeMoreButton = document.createElement("button");
   seeMoreButton.type = "button";
-  seeMoreButton.classList.add("sa-emoji-picker-see-more");
-  seeMoreButton.classList.add("button");
+  seeMoreButton.classList.add("sa-emoji-picker-see-more", "button", "small");
   const setSeeMoreText = function () {
     seeMoreButton.textContent = unicodeContainer.style.display === "none" ? msg("show-more") : msg("show-less");
   };
@@ -495,14 +491,15 @@ export default async function ({ addon, global, console, msg }) {
     unicodeContainer.style.display = unicodeContainer.style.display === "none" ? "block" : "none";
     pickerDivider.style.display = unicodeContainer.style.display;
     setSeeMoreText();
+	setEmojiPickerPos();
   };
   setSeeMoreText();
   emojiPicker.appendChild(seeMoreButton);
 
+
   //Add emoji buttons
   while (true) {
     if (addon.tab.clientVersion === "scratch-www") {
-      //scratch-www
       var textBox = await addon.tab.waitForElement('textarea[id*="frc-compose-comment"]', {
         markAsSeen: true,
         reduxCondition: (state) => {
@@ -519,22 +516,19 @@ export default async function ({ addon, global, console, msg }) {
     const buttonAppend = textBox.parentElement.parentElement.parentElement.querySelector(
       ".compose-limit, .control-group.tooltip.right + .control-group"
     );
-    //The emoji button
+
     let emojiButton = document.createElement("div");
     emojiButton.classList.add("sa-emoji-button-container");
     if (addon.tab.clientVersion === "scratchr2") {
-      //Special classes for 2.0 pages
-      emojiButton.classList.add("button");
-      emojiButton.classList.add("small");
-      emojiButton.classList.add("sa-emoji-button-r2");
+      //Special classes for scratchr2 pages
+      emojiButton.classList.add("button", "small", "sa-emoji-button-r2");
     } else {
-      emojiButton.classList.add("sa-emoji-button-www");
-    }
+		emojiButton.classList.add("sa-emoji-button-www");
+	}
     emojiButton.onclick = showEmojiPicker;
-    //Text inside the emoji button
+
     let emojiButtonText;
     if (addon.tab.clientVersion === "scratch-www") {
-      //scratch-www
       emojiButtonText = document.createElement("button");
       emojiButtonText.classList.add("button");
     } else {
@@ -546,9 +540,7 @@ export default async function ({ addon, global, console, msg }) {
     emojiButtonText.classList.add("sa-emoji-button");
     emojiButton.appendChild(emojiButtonText);
     addon.tab.displayNoneWhileDisabled(emojiButton, { display: "inline-block" });
-    //Append
     if (addon.tab.clientVersion === "scratch-www") {
-      //scratch-www
       buttonAppend.appendChild(emojiButton);
     } else {
       //scratchr2
