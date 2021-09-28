@@ -101,6 +101,7 @@ const page = {
   },
 };
 Comlink.expose(page, Comlink.windowEndpoint(comlinkIframe4.contentWindow, comlinkIframe3.contentWindow));
+window.dispatchEvent(new CustomEvent("_page_"));
 
 /* // Moved to Tab.js
 class SharedObserver {

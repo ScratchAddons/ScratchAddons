@@ -110,7 +110,7 @@ async function loadState() {
   scratchAddons.localState.ready.listeners = true; // not used here
   scratchAddons.localEvents.dispatchEvent(new CustomEvent("listeners ready"));
   console.log("scratchAddons.localState", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.localState)));
-  
+
   scratchAddons.globalState = globalStateProxy;
   loadScriptFromUrl("background/handle-auth.js", true).then(() => (scratchAddons.localState.ready.auth = true));
   console.log("scratchAddons.globalState", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.globalState)));
@@ -416,11 +416,14 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
   setCssVariables(globalState.addonSettings, addonsWithUserstyles);
   // Just in case, make sure the <head> loaded before injecting styles
   waitForDocumentHead().then(() => injectUserstyles(addonsWithUserstyles));
-  if (!_page_) {
-    // We're registering this load event after the load event that
-    // sets _page_, so we can guarantee _page_ exists now
-    await modulePromise;
-  }
+
+  await new Promise(function (resolve, reject) {
+    if (_page_) return resolve();
+
+    window.addEventListener("message", (e) => {
+      if (e.source === window && e.data === "_page_") resolve();
+    });
+  });
 
   _page_.globalState = globalState;
   _page_.l10njson = getL10NURLs();
