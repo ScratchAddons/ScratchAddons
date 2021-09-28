@@ -1,4 +1,4 @@
-const isIframe =false
+const isIframe = false;
 
 export default async function ({ template }) {
   const AddonBody = Vue.extend({

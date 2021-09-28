@@ -1,6 +1,6 @@
 import createConsole from "../libraries/common/console.js";
 
-const console=createConsole("background")
+const console = createConsole("background");
 
 const COUNT_CHECK_INTERVAL = 30000;
 const MSGS_CHECK_INTERVAL = 120000; // Ignored if message count change has been seen

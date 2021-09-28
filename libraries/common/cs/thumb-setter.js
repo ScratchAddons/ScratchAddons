@@ -1,6 +1,6 @@
 import createConsole from "../console.js";
 
-const console=createConsole("thumb setter")
+const console = createConsole("thumb setter");
 
 export default class ThumbSetter {
   constructor(messagesFn, projectId) {

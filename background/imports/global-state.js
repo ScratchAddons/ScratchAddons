@@ -1,6 +1,6 @@
 import createConsole from "../../libraries/common/console.js";
 
-const console=createConsole("global state")
+const console = createConsole("global state");
 
 // Global state is a JSON object shared between all content scripts and the background page.
 // It is abstracted through a proxy in order to easily detect changes that should trigger events.

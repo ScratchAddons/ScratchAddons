@@ -1,7 +1,7 @@
 import Addon from "../../addon-api/content-script/Addon.js";
 import createConsole from "../../libraries/common/console.js";
 
-const console=createConsole("page")
+const console = createConsole("page");
 
 export default async function runAddonUserscripts({ addonId, scripts, enabledLate = false }) {
   const addonObj = new Addon({ id: addonId, enabledLate });

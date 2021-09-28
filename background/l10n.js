@@ -1,14 +1,14 @@
 import LocalizationProvider from "../libraries/common/cs/l10n.js";
 import createConsole from "../libraries/common/console.js";
 
-const console=createConsole("background")
+const console = createConsole("background");
 
 const ui = chrome.i18n.getUILanguage().toLowerCase();
 const locales = [ui];
 if (ui.includes("-")) locales.push(ui.split("-")[0]);
 if (ui.startsWith("pt") && ui !== "pt-br") locales.push("pt-br");
 if (!locales.includes("en")) locales.push("en");
-locales.splice(locales.indexOf("en") + 1)
+locales.splice(locales.indexOf("en") + 1);
 
 export default class BackgroundLocalizationProvider extends LocalizationProvider {
   constructor() {

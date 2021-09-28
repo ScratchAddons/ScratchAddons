@@ -3,7 +3,7 @@ import localStateProxy from "./imports/local-state.js";
 import BackgroundLocalizationProvider from "./l10n.js";
 import createConsole from "../libraries/common/console.js";
 
-const console=createConsole("background")
+const console = createConsole("background");
 
 window.scratchAddons = {};
 
@@ -30,18 +30,10 @@ scratchAddons.l10n = new BackgroundLocalizationProvider();
 // Can't load translations here.
 
 scratchAddons.globalState = globalStateProxy;
-console.log(
-  "scratchAddons.globalState",
-  "initialized:\n",
-  JSON.parse(JSON.stringify(scratchAddons.globalState))
-);
+console.log("scratchAddons.globalState", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.globalState)));
 
 scratchAddons.localState = localStateProxy;
-console.log(
-  "scratchAddons.localState",
-  "initialized:\n",
-  JSON.parse(JSON.stringify(scratchAddons.localState))
-);
+console.log("scratchAddons.localState", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.localState)));
 
 /**
  * @type {object.<string, Port[]>}

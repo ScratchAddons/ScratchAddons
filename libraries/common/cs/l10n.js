@@ -2,7 +2,7 @@ import { escapeHTML } from "./autoescaper.js";
 import { MessageFormatter, findClosingBracket } from "../../thirdparty/cs/icu-message-formatter.es.min.js";
 import createConsole from "../console.js";
 
-const console=createConsole("l10n")
+const console = createConsole("l10n");
 
 // This library is shared between background and userscript.
 // Subclasses are responsible for implementing methods to load translations.
