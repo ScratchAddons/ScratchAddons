@@ -1,10 +1,10 @@
 /*
  * Injects a search bar element into the page
  * and replaces the existing Sort by dropdown.
- * 
+ *
  * Searching is done by scanning the page for My Stuff entries
  * and reordering based on relevance, newest, or oldest.
- * 
+ *
  * This addon has many similarities to `forum-search`.
  */
 export default async function ({ addon, global, console, msg }) {
@@ -29,7 +29,7 @@ export default async function ({ addon, global, console, msg }) {
     dropdownOption.appendChild(document.createTextNode(msg(type)));
     searchDropdown.appendChild(dropdownOption);
   }
-  search.appendChild(searchDropdown); 
+  search.appendChild(searchDropdown);
 
   // Now remove the old "sort by" and add our new search elements
   await addon.tab.waitForElement(".dropdown.radio-style.button.grey.small");
@@ -41,7 +41,7 @@ export default async function ({ addon, global, console, msg }) {
   searchBar.addEventListener("input", (e) => {
     triggerNewSearch(searchBar.value, searchDropdown.value);
   });
-  
+
   // When a new filter is selected from the dropdown
   searchDropdown.addEventListener("change", (e) => {
     triggerNewSearch(searchBar.value, searchDropdown.value);
@@ -50,7 +50,5 @@ export default async function ({ addon, global, console, msg }) {
   // Searches the My Stuff page for matching project titles,
   // then reorders based on "sort by"
   // (relevance algorithm is the same as SA settings page)
-  function triggerNewSearch() {
-    
-  }
+  function triggerNewSearch() {}
 }
