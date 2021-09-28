@@ -156,3 +156,23 @@
   background: #fff;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
+#search-my-stuff-form {
+  align-items: center;
+  width: 471px;
+  margin: auto;
+  margin-top: 8px;
+  background: none;
+  border-top: none;
+}
+#search-my-stuff-input {
+  padding: 0 16px;
+  height: 48px;
+  font-size: 13px;
+}
+input:focus, textarea:focus {
+  box-shadow: 0 0 0 4px hsla(163, 85%, 40%, 0.25);
+  border-color: hsl(163, 85%, 40%);
+}
+#search-my-stuff-dropdown {
+  font-size: 13px;
+}

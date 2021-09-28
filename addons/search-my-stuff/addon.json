@@ -1,0 +1,26 @@
+{
+  "name": "Search bar on My Stuff",
+  "description": "Allows you to search your projects on the My Stuff page.",
+  "tags": ["community"],
+  "credits": [
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/mystuff"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/mystuff"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": false,
+  "enabledByDefault": false
+}
