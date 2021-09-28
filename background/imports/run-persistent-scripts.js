@@ -69,7 +69,7 @@ async function executePersistentScripts({ addonId, permissions, scriptUrls }) {
 
   for (const scriptPath of scriptUrls) {
     const scriptUrl = chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`);
-    console.logForAddon(`${addonId} [background]`)(`Running ${scriptUrl}`);
+    console.logForAddon(`${addonId}`)(`Running ${scriptUrl}`);
     const module = await import(chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`));
     const localConsole = {
       log: console.logForAddon(addonId),

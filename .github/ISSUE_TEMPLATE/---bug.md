@@ -29,9 +29,9 @@ Return to the last page: https://github.com/SA-Userscript/ScratchAddons/issues/n
 
 <!-- Provide an unambiguous set of steps to reproduce this bug, and/or a link to a live example. -->
 
-1.
-2.
-3.
+1. 
+2. 
+3. 
 
 ### Expected behaviour
 

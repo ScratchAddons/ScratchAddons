@@ -28,9 +28,10 @@ const onMessageBackgroundReady = (request, sender, sendResponse) => {
   }
 };
 chrome.runtime.onMessage.addListener(onMessageBackgroundReady);
+const bgConsole = createConsole("background");
 const onResponse = (res) => {
   if (res && !receivedResponse) {
-    console.log("[Message from background]", res);
+    bgConsole.log(res);
     chrome.runtime.onMessage.removeListener(onMessageBackgroundReady);
     if (res.httpStatusCode === null || String(res.httpStatusCode)[0] === "2") {
       onInfoAvailable(res);
@@ -226,7 +227,7 @@ if (path === "discuss/3/topic/add/") {
 
 /*
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("[Message from background]", request);
+  bgConsole.log(request);
   if (request === "getInitialUrl") {
     sendResponse(initialUrl);
   } else if (request === "getLocationHref") {
@@ -420,7 +421,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
   await new Promise(function (resolve, reject) {
     if (_page_) return resolve();
 
-    window.addEventListener("message", (e) => {
+    scratchAddons.localEvents.addEventListener("message", (e) => {
       if (e.source === window && e.data === "_page_") resolve();
     });
   });

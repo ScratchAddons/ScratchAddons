@@ -38,7 +38,6 @@ function func1() {
   const libraryParam = searchParams.get("libraries");
   if (typeof libraryParam !== "string") return;
   const libraries = libraryParam.split(",");
-  console.log(libraryLicenses, libraries);
   for (const library of libraries) {
     const licenseName = libraryLicenses[library];
     if (!licenseName) continue;
