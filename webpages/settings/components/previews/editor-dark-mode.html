@@ -5,41 +5,41 @@
     :data-setting-hovered="hoveredSettingId"
     @mouseenter="$emit('areahover', 'page')"
     @mouseleave="$emit('areahover', null)"
-    style="
-      --page: {{ settings.page }};
-      --page-text: {{ colors.pageText }};
-      --primary: {{ settings.primary }};
-      --primary-transparent: {{ colors.primaryTransparent }};
-      --primary-text: {{ colors.primaryText }};
-      --highlightText: {{ settings.highlightText }};
-      --menuBar: {{ settings.menuBar }};
-      --menuBar-text: {{ colors.menuBarText }};
-      --menuBar-border: {{ colors.menuBarBorder }};
-      --accent: {{ settings.accent }};
-      --accent-text: {{ colors.accentText }};
-      --accent-transparentText: {{ colors.accentTransparentText }};
-      --accent-artboard: {{ colors.accentArtboard }};
-      --accent-checkerboard: {{ colors.accentCheckerboard }};
-      --input: {{ settings.input }};
-      --input-transparent: {{ colors.inputTransparent }};
-      --input-text: {{ colors.inputText }};
-      --tab: {{ settings.tab }};
-      --tab-text: {{ colors.tabText }};
-      --activeTab: {{ settings.activeTab }};
-      --workspace: {{ settings.workspace }};
-      --categoryMenu: {{ settings.categoryMenu }};
-      --categoryMenu-text: {{ colors.categoryMenuText }};
-      --categoryMenu-selection: {{ colors.categoryMenuSelection }};
-      --palette: {{ colors.palette }};
-      --selector: {{ settings.selector }};
-      --selector-text: {{ colors.selectorText }};
-      --selector2: {{ settings.selector2 }};
-      --selector2-text: {{ colors.selector2Text }};
-      --selectorSelection: {{ settings.selectorSelection }};
-      --fullscreen: {{ settings.fullscreen }};
-      --stageHeader: {{ settings.stageHeader }};
-      --border: {{ hoveredSettingId === 'border' ? 'var(--brand-orange)' : settings.border }};
-    "
+    :style="cssVariables({
+      '--page': settings.page,
+      '--page-text': colors.pageText,
+      '--primary': settings.primary,
+      '--primary-transparent': colors.primaryTransparent,
+      '--primary-text': colors.primaryText,
+      '--highlightText': settings.highlightText,
+      '--menuBar': settings.menuBar,
+      '--menuBar-text': colors.menuBarText,
+      '--menuBar-border': colors.menuBarBorder,
+      '--accent': settings.accent,
+      '--accent-text': colors.accentText,
+      '--accent-transparentText': colors.accentTransparentText,
+      '--accent-artboard': colors.accentArtboard,
+      '--accent-checkerboard': colors.accentCheckerboard,
+      '--input': settings.input,
+      '--input-transparent': colors.inputTransparent,
+      '--input-text': colors.inputText,
+      '--tab': settings.tab,
+      '--tab-text': colors.tabText,
+      '--activeTab': settings.activeTab,
+      '--workspace': settings.workspace,
+      '--categoryMenu': settings.categoryMenu,
+      '--categoryMenu-text': colors.categoryMenuText,
+      '--categoryMenu-selection': colors.categoryMenuSelection,
+      '--palette': colors.palette,
+      '--selector': settings.selector,
+      '--selector-text': colors.selectorText,
+      '--selector2': settings.selector2,
+      '--selector2-text': colors.selector2Text,
+      '--selectorSelection': settings.selectorSelection,
+      '--fullscreen': settings.fullscreen,
+      '--stageHeader': settings.stageHeader,
+      '--border': hoveredSettingId === 'border' ? 'var(--brand-orange)' : settings.border,
+    })"
   >
     <div class="edm-menu-bar" @mouseenter="$emit('areahover', 'menuBar')" @mouseleave="$emit('areahover', 'page')">
       <div class="edm-logo-placeholder"></div>
@@ -86,7 +86,7 @@
             @click="selectTab(tab.id)"
           >
             <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
-            <div class="edm-text-placeholder" style="--length: {{ tab.textLength }};"></div>
+            <div class="edm-text-placeholder" :style="cssVariables({ '--length': tab.textLength })"></div>
           </div>
         </div>
         <div class="edm-tab-content edm-workspace" v-if="selectedTab === 'code'">
@@ -108,7 +108,7 @@
                 <div
                   v-for="wordLength of category.textLength"
                   class="edm-text-placeholder edm-text-placeholder-small"
-                  style="--length: {{ wordLength }};"
+                  :style="cssVariables({ '--length': wordLength })"
                 ></div>
               </div>
             </div>
@@ -427,7 +427,7 @@
                     <div
                       class="edm-text-placeholder edm-text-placeholder-small"
                       v-for="wordLength of effect.textLength"
-                      style="--length: {{ wordLength }};"
+                      :style="cssVariables({ '--length': wordLength })"
                     ></div>
                   </div>
                 </div>
