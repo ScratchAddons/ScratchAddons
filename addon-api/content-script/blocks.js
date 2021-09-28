@@ -46,6 +46,20 @@ const parseArguments = (code) =>
 const fixDisplayName = (displayName) => displayName.replace(/([^\s])(%[nbs])/g, (_, before, arg) => `${before} ${arg}`);
 const compareArrays = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
+let workspaceUpdateQueued = false;
+const queueWorkspaceUpdate = () => {
+  if (workspaceUpdateQueued) {
+    return;
+  }
+  workspaceUpdateQueued = true;
+  queueMicrotask(() => {
+    workspaceUpdateQueued = false;
+    if (vm.editingTarget) {
+      vm.emitWorkspaceUpdate();
+    }
+  });
+};
+
 export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
   if (getCustomBlock(proccode)) {
     return;
@@ -81,9 +95,7 @@ export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
   };
   customBlocks[proccode] = blockData;
   customBlockParamNamesIdsDefaults[proccode] = getNamesIdsDefaults(blockData);
-  if (vm.editingTarget) {
-    vm.emitWorkspaceUpdate();
-  }
+  queueWorkspaceUpdate();
 };
 
 export const removeBlock = (proccode) => {
@@ -194,9 +206,7 @@ const injectWorkspace = (ScratchBlocks) => {
   };
 
   // Workspace update may be required to make category appear in flyout
-  if (vm.editingTarget) {
-    vm.emitWorkspaceUpdate();
-  }
+  queueWorkspaceUpdate();
 };
 
 let inited = false;

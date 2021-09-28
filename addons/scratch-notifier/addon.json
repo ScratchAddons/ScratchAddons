@@ -100,6 +100,12 @@
       "id": "becomeownerstudio_notifications",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "@users.svg Notify studio host transfers",
+      "id": "becomehoststudio_notifications",
+      "type": "boolean",
+      "default": true
     }
   ],
   "versionAdded": "1.0.0",

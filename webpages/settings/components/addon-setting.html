@@ -148,27 +148,38 @@
   }
 
   .setting-input.check {
-    height: 20px;
-    width: 20px;
-    margin: 0;
-    padding: 0;
     appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-color: white;
-    background-size: 16px;
-    background-position: center center;
-    background-repeat: no-repeat;
-    border-radius: 4px;
+    display: block;
+    width: 40px;
+    height: 20px;
+    background-color: var(--switch-background);
+    border: none;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .setting-input.check::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: var(--switch-inner-background);
+    border-radius: 5px;
+    transition: all 0.25s ease;
   }
 
   .setting-input.check:checked {
     background-color: var(--blue);
-    background-image: url(/images/icons/check.svg);
   }
 
-  .setting-input.check:hover:not(:focus-visible):not([disabled]) {
-    border-color: var(--blue-variant);
+  .setting-input.check:checked::before {
+    background-color: var(--white-text);
+    left: 25px;
   }
 
   .setting-input.number {
