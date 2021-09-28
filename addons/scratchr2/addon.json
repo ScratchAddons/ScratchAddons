@@ -96,10 +96,6 @@
       "matches": ["isNotScratchWWW"]
     },
     {
-      "url": "scratchwww.css",
-      "matches": ["scratchWWWNoProject", "projects"]
-    },
-    {
       "url": "forums.css",
       "matches": ["https://scratch.mit.edu/discuss/*"]
     },
@@ -146,10 +142,6 @@
     {
       "url": "lightprimary_compatibility.css",
       "matches": ["isNotScratchWWW"]
-    },
-    {
-      "url": "lightprimary_scratchwww_compatibility.css",
-      "matches": ["scratchWWWNoProject", "projects"]
     },
     {
       "url": "lightprimary_mystuff_compatibility.css",

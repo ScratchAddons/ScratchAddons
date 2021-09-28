@@ -8,10 +8,699 @@
       "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
+  "customCssVariables": [
+    {
+      "name": "page-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-ideas",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        },
+        "r": 0.99,
+        "g": 0.99,
+        "b": 0.99
+      }
+    },
+    {
+      "name": "navbar-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
+      "name": "navbar-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 94, 117, 0.75)",
+        "white": "rgba(255, 255, 255, 0.75)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
+      "name": "navbar-filter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
+      "name": "navbar-border",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
+        "threshold": 60,
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
+      "name": "navbar-inputFocus",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.2)",
+        "white": "rgba(255, 255, 255, 0.2)",
+        "threshold": 60,
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        }
+      }
+    },
+    {
+      "name": "navbar-variant",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "navbar"
+        },
+        "r": 0.86,
+        "g": 0.85,
+        "b": 0.84
+      }
+    },
+    {
+      "name": "box-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.3)",
+        "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-inputPlaceholder",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 94, 117, 0.6)",
+        "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-filterInverted",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-border",
+      "value": {
+        "type": "alphaBlend",
+        "opaqueSource": {
+          "type": "settingValue",
+          "settingId": "box"
+        },
+        "transparentSource": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "border"
+          },
+          "a": 0.94
+        }
+      }
+    },
+    {
+      "name": "box-tab",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-tabHover",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.2)",
+        "white": "rgba(255, 255, 255, 0.2)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-buttonDisabled",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.2)",
+        "white": "rgba(255, 255, 255, 0.2)",
+        "threshold": 32,
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-messageIconOpacity",
+      "value": {
+        "type": "textColor",
+        "black": 0.25,
+        "white": 0.5,
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-studioReportTile",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.05)",
+        "white": "rgba(255, 255, 255, 0.05)",
+        "threshold": 32,
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-caret",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-caretBlack)",
+        "white": "var(--darkWww-caretWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "gray-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-boxHighlight",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "textColor",
+          "black": "#ffffff",
+          "white": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "gray"
+            },
+            "r": 0.87,
+            "g": 0.87,
+            "b": 0.87
+          },
+          "threshold": 224,
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          }
+        },
+        "white": "transparent",
+        "threshold": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-tab",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-tabHover",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.2)",
+        "white":"rgba(255, 255, 255, 0.2)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-caret",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-caretBlack)",
+        "white": "var(--darkWww-caretWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-caretHover",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-caretBlackHover)",
+        "white": "var(--darkWww-caretWhiteHover)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-darker",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.74,
+          "g": 0.74,
+          "b": 0.74
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "gray"
+          },
+          "r": 0.78,
+          "g": 0.78,
+          "b": 0.78
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "blue-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
+      "name": "blue-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
+      "name": "blue-tab",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.1)",
+        "white": "rgba(255, 255, 255, 0.1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
+      "name": "blue-studioTextareaBorder",
+      "value": {
+        "type": "makeHsv",
+        "h": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "s": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "v": {
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "blue"
+          },
+          "transparentSource": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "border"
+            },
+            "a": 0.79
+          }
+        }
+      }
+    },
+    {
+      "name": "blue-20",
+      "value": {
+        "type": "textColor",
+        "black": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "blue"
+          },
+          "r": 0.93,
+          "g": 0.96
+        },
+        "white": {
+          "type": "brighten",
+          "source": {
+            "type": "settingValue",
+            "settingId": "blue"
+          },
+          "r": 0.96,
+          "g": 0.96,
+          "b": 0.96
+        },
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        }
+      }
+    },
+    {
+      "name": "blue-opacity0",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "blue"
+        },
+        "a": 0
+      }
+    },
+    {
+      "name": "input-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(87, 94, 117, 0.6)",
+        "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-caret",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-caretBlack)",
+        "white": "var(--darkWww-caretWhite)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "input-caretHover",
+      "value": {
+        "type": "textColor",
+        "black": "var(--darkWww-caretBlackHover)",
+        "white": "var(--darkWww-caretWhiteHover)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        }
+      }
+    },
+    {
+      "name": "button-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
+      }
+    },
+    {
+      "name": "button-filter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
+      }
+    },
+    {
+      "name": "button-transparent10",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "a": 0.1
+      }
+    },
+    {
+      "name": "button-transparent15",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "a": 0.15
+      }
+    },
+    {
+      "name": "button-transparent25",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "a": 0.25
+      }
+    },
+    {
+      "name": "button-overlay",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "a": 0.7
+      }
+    },
+    {
+      "name": "button-variant",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "r": 0.86,
+        "g": 0.85,
+        "b": 0.84
+      }
+    },
+    {
+      "name": "link-hover",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        },
+        "r": 0.86,
+        "g": 0.85,
+        "b": 0.84
+      }
+    },
+    {
+      "name": "link-iconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "settingValue",
+          "settingId": "link"
+        }
+      }
+    },
+    {
+      "name": "footer-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "footer"
+        }
+      }
+    },
+    {
+      "name": "footer-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "footer"
+        }
+      }
+    },
+    {
+      "name": "border-5",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "a": 0.5
+      }
+    },
+    {
+      "name": "border-15",
+      "value": {
+        "type": "brighten",
+        "source": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "a": 0.94
+      }
+    },
+    {
+      "name": "border-20",
+      "value": {
+        "type": "brighten",
+        "source": {
+          "type": "settingValue",
+          "settingId": "border"
+        },
+        "a": 0.89
+      }
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.4.0",
+  "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {
       "url": "experimental_forums_preview.js",
@@ -21,7 +710,10 @@
   "userstyles": [
     {
       "url": "scrollbar.css",
-      "matches": ["https://scratch.mit.edu/*"]
+      "matches": ["https://scratch.mit.edu/*"],
+      "if": {
+        "settings": { "darkScrollbars": true }
+      }
     },
     {
       "url": "experimental_scratchr2.css",
@@ -30,6 +722,45 @@
     {
       "url": "experimental_scratchwww.css",
       "matches": ["scratchWWWNoProject", "projects"]
+    },
+    {
+      "url": "experimental_scratchwww_white_bg.css",
+      "matches": [
+        "https://scratch.mit.edu/ideas",
+        "https://scratch.mit.edu/annual-report"
+      ]
+    },
+    {
+      "url": "darker_banners.css",
+      "matches": ["scratchWWWNoProject"],
+      "if": {
+        "settings": { "darkBanners": "darker" }
+      }
+    },
+    {
+      "url": "desaturated_banners.css",
+      "matches": ["scratchWWWNoProject"],
+      "if": {
+        "settings": { "darkBanners": "desaturated" }
+      }
+    },
+    {
+      "url": "experimental_search.css",
+      "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/search/*"]
+    },
+    {
+      "url": "explore_desaturated_banner.css",
+      "matches": ["https://scratch.mit.edu/explore/*"],
+      "if": {
+        "settings": { "darkBanners": "desaturated" }
+      }
+    },
+    {
+      "url": "search_desaturated_banner.css",
+      "matches": ["https://scratch.mit.edu/search/*"],
+      "if": {
+        "settings": { "darkBanners": "desaturated" }
+      }
     },
     {
       "url": "experimental_forums.css",
@@ -78,6 +809,154 @@
     {
       "url": "pygments.css",
       "matches": ["forums"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Page background",
+      "id": "page",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Navigation bar background",
+      "id": "navbar",
+      "type": "color",
+      "default": "#4d97ff"
+    },
+    {
+      "name": "Content background",
+      "id": "box",
+      "type": "color",
+      "default": "#282828"
+    },
+    {
+      "name": "Gray background",
+      "id": "gray",
+      "type": "color",
+      "default": "#333333"
+    },
+    {
+      "name": "Blue background",
+      "id": "blue",
+      "type": "color",
+      "default": "#252c37"
+    },
+    {
+      "name": "Input background",
+      "id": "input",
+      "type": "color",
+      "default": "#202020"
+    },
+    {
+      "name": "Highlight color",
+      "id": "button",
+      "type": "color",
+      "default": "#4d97ff"
+    },
+    {
+      "name": "Link color",
+      "id": "link",
+      "type": "color",
+      "default": "#4d97ff"
+    },
+    {
+      "name": "Footer background",
+      "id": "footer",
+      "type": "color",
+      "default": "#333333"
+    },
+    {
+      "name": "Border color",
+      "id": "border",
+      "type": "color",
+      "allowTransparency": true,
+      "default": "#606060"
+    },
+    {
+      "name": "Colored areas",
+      "id": "darkBanners",
+      "type": "select",
+      "potentialValues": [
+        {
+          "id": "off",
+          "name": "Default"
+        },
+        {
+          "id": "darker",
+          "name": "Darker"
+        },
+        {
+          "id": "desaturated",
+          "name": "Darker and desaturated"
+        }
+      ],
+      "default": "off"
+    },
+    {
+      "name": "Dark scrollbars",
+      "id": "darkScrollbars",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "\"Experimental\" Dark",
+      "id": "experimentalDark",
+      "description": "A dark theme by Maximouse based on a userstyle. Not experimental",
+      "values": {
+        "page": "#202020",
+        "navbar": "#4d97ff",
+        "box": "#282828",
+        "gray": "#333333",
+        "blue": "#030b16",
+        "input": "#202020",
+        "button": "#4d97ff",
+        "link": "#4d97ff",
+        "footer": "#333333",
+        "border": "#606060",
+        "darkBanners": "darker",
+        "darkScrollbars": true
+      }
+    },
+    {
+      "name": "Dark WWW",
+      "id": "darkWww",
+      "description": "A dark theme by Ucrash",
+      "values": {
+        "page": "#242527",
+        "navbar": "#4d97ff",
+        "box": "#2f3137",
+        "gray": "#424346",
+        "blue": "#1b1d1f",
+        "input": "#3a3a3a",
+        "button": "#4d97ff",
+        "link": "#4d97ff",
+        "footer": "#17181a",
+        "border": "#000000",
+        "darkBanners": "desaturated",
+        "darkScrollbars": true
+      }
+    },
+    {
+      "name": "Scratch's default colors",
+      "id": "scratch",
+      "description": "The colors normally used by Scratch",
+      "values": {
+        "page": "#fcfcfc",
+        "navbar": "#4d97ff",
+        "box": "#ffffff",
+        "gray": "#f2f2f2",
+        "blue": "#e9f1fc",
+        "input": "#fafafa",
+        "button": "#4d97ff",
+        "link": "#4d97ff",
+        "footer": "#f2f2f2",
+        "border": "#0000001a",
+        "darkBanners": "off",
+        "darkScrollbars": false
+      }
     }
   ]
 }
