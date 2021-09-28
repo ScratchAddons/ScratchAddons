@@ -97,9 +97,8 @@ function loadScriptFromUrl(url, module = false) {
 async function loadState() {
   if (typeof scratchAddons !== "object")
     await new Promise((resolve) => window.addEventListener("scratchAddons", resolve));
-  scratchAddons.localState.ready.listeners = true; // not used here
-  scratchAddons.localEvents.dispatchEvent(new CustomEvent("listeners ready"));
 
+  scratchAddons.localState = localStateProxy;
   loadScriptFromUrl("background/get-addon-settings.js", true);
   chrome.i18n.init().then(() => (scratchAddons.localState.ready.i18n = true));
   addonListPromise.then((manifests) => {
@@ -108,8 +107,10 @@ async function loadState() {
     scratchAddons.localEvents.dispatchEvent(new CustomEvent("manifestsReady"));
   });
 
-  scratchAddons.localState = localStateProxy;
+  scratchAddons.localState.ready.listeners = true; // not used here
+  scratchAddons.localEvents.dispatchEvent(new CustomEvent("listeners ready"));
   console.log("scratchAddons.localState", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.localState)));
+  
   scratchAddons.globalState = globalStateProxy;
   loadScriptFromUrl("background/handle-auth.js", true).then(() => (scratchAddons.localState.ready.auth = true));
   console.log("scratchAddons.globalState", "initialized:\n", JSON.parse(JSON.stringify(scratchAddons.globalState)));
