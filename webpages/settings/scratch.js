@@ -35,12 +35,16 @@ window.addEventListener("message", async (e) => {
 
   if (data === "waitForState") {
     if (scratchAddons.localState.allReady) {
-      sendResponse();
+      return sendResponse();
     } else {
       scratchAddons.localEvents.addEventListener("ready", () => {
-        sendResponse();
+        return sendResponse();
       });
     }
+  }
+
+  if (data === "areListenersReady") {
+    return e.source.postMessage("listeners ready", e.origin); // todo not anything
   }
 
   return sendResponse();
@@ -49,4 +53,4 @@ window.addEventListener("message", async (e) => {
 scratchAddons.localState.ready.listeners = true;
 scratchAddons.localEvents.dispatchEvent(new CustomEvent("listeners ready"));
 
-iframe.contentWindow.postMessage("listeners ready","*");
+iframe.contentWindow.postMessage("listeners ready", "*");

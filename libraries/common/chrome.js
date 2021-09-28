@@ -6,15 +6,13 @@ window.__scratchAddonsChrome = window.__scratchAddonsChrome || { listenersReady:
 function waitForListeners() {
   return new Promise(function (resolve, reject) {
     if (__scratchAddonsChrome.listenersReady) return resolve();
+    window.parent.postMessage("areListenersReady", "*"); // todo not *
 
     window.addEventListener("message", (e) => {
       if (
-        typeof e.data.reqId === "string" ||
-        !(e.source === window || e.source === window.top || e.source === window.parent || e.data.message)
-      )
-        return;
-
-      if (e.data === "listeners ready") {
+        (e.source === window || e.source === window.top || e.source === window.parent) &&
+        e.data === "listeners ready"
+      ) {
         __scratchAddonsChrome.listenersReady = true;
         resolve();
       }
