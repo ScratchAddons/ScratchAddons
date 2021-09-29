@@ -25,7 +25,7 @@ jobs:
           git checkout master -- .;
 
       - name: Install
-        run: npm install terser posthtml-postcss htmlnano postcss-import postcss-sort-media-queries cssnano autoprefixer
+        run: npm install terser@5.9.0 posthtml-cli@0.10.0 postcss-cli@9.0.1 posthtml-postcss@0.5.0 htmlnano@1.1.1 postcss-import@14.0.2 cssnano@5.0.8 autoprefixer@10.3.6
 
       - name: Remove package files
         run: rm package-lock.json package.json
@@ -40,7 +40,7 @@ jobs:
         run: npx postcss-cli -r --env="production" "**.css"
 
       - name: PostHTML
-        run: npx posthtml-cli "**/*.html" -c .posthtmlrc
+        run: npx posthtml-cli "**/*.html" -c .posthtmlrc.js
 
       - name: Commit
         uses: stefanzweifel/git-auto-commit-action@v4.12.0

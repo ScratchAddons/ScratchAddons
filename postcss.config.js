@@ -13,7 +13,6 @@ module.exports = {
   map: false,
   plugins: [
     require("postcss-import"),
-    require("postcss-sort-media-queries"),
     require("cssnano")(cssNanoConfig),
     require("autoprefixer")({
       grid: "autoplace",
