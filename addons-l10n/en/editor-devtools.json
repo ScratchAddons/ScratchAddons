@@ -1,7 +1,7 @@
 {
   "editor-devtools/help-title": "Scratch 3 Developer Tools",
   "editor-devtools/help-by": "by {url} and Scratch Addons contributors & translators",
-  "editor-devtools/ctrl-space": "Ctrl + Space, Middle Click, or Alt + Click",
+  "editor-devtools/ctrl-space": "Ctrl + Space, Middle Click, or Shift + Click",
   "editor-devtools/ctrl-space-desc": "Pops up a floating input box where you can type the name of a block (or parts of it) and drag the block into the code to make use of it right there.",
   "editor-devtools/code-tab-features": "Code Tab Features",
   "editor-devtools/interactive-find-bar": "Interactive Find Bar (Ctrl + F)",
@@ -18,7 +18,7 @@
   "editor-devtools/swap-variable": "Swap Variable in Sprite",
   "editor-devtools/swap-variable-desc": "Right click a variable in your scripts for this new option. It allows you to switch all references to this variable in the current sprite all in one go to another variable. This is great for when you made a mistake and want to switch from one variable to another or need to change from a 'for all sprites' to a 'for this sprite only'. This option will not remove the old variable and will not affect any other sprites variables.",
   "editor-devtools/middleclick": "Jump To",
-  "editor-devtools/middleclick-desc": "Using the middle mouse button or Alt + Click on a variable or custom block allows you to jump to its definition or open it in the interactive find bar.",
+  "editor-devtools/middleclick-desc": "Using the middle mouse button or Shift + Click on a variable or custom block allows you to jump to its definition or open it in the interactive find bar.",
   "editor-devtools/ctrl-lr": "Ctrl + Left, Ctrl + Right",
   "editor-devtools/ctrl-lr-desc": "Navigate to previous / next visited position in the code area (after using the navigate to block or find bar). This allows you to middle click a custom block to go to its definition, then press ctrl + Left to go back to where you were before.",
   "editor-devtools/costume-tab-features": "Costumes Tab Features",

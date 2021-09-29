@@ -6,7 +6,7 @@ export default async function ({ addon, global, console }) {
     if (
       !this.flyout_ &&
       this.targetBlock_.type !== "procedures_definition" &&
-      this.mostRecentEvent_.shiftKey &&
+      this.mostRecentEvent_.altKey &&
       !addon.self.disabled
     ) {
       // Scratch will reset the group on its own when the drag ends

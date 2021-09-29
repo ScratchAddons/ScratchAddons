@@ -1,6 +1,6 @@
 {
-  "name": "Duplicate script with Shift key",
-  "description": "Quickly duplicate a script by dragging it while holding the Shift key. Hold Ctrl as well to only duplicate a single block instead of the entire stack attached below it.",
+  "name": "Duplicate script with Alt key",
+  "description": "Quickly duplicate a script by dragging it while holding the Alt key. Hold Ctrl as well to only duplicate a single block instead of the entire stack attached below it.",
   "credits": [
     {
       "name": "GarboMuffin"
@@ -9,7 +9,7 @@
   "info": [
     {
       "type": "notice",
-      "text": "On macOS, use the Cmd key instead of the Ctrl key.",
+      "text": "On macOS, use the Option key instead of the Alt key.",
       "id": "mac"
     }
   ],
