@@ -1,6 +1,6 @@
 {
   "name": "Capitalized Account Settings",
-  "description": "Changes \"Account settings\" in the account menu to \"Account Settings\".",
+  "description": "Changes \"Account settings\" and \"Sign out\" in the account menu to \"Account Settings\" and \"Sign Out\".",
   "userstyles": [
     {
       "url": "style.css",
