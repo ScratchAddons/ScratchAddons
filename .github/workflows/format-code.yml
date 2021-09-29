@@ -1,5 +1,9 @@
 name: Format code using Prettier
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - beta
+  pull_request:
 
 jobs:
   format:
