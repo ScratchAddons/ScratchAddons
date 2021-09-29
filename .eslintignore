@@ -1,5 +1,6 @@
-node_modules/*
-_locales/*
-.github/*
-addons-l10n/*
+!**
+
+.git
+node_modules
+
 libraries/thirdparty/*

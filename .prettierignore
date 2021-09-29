@@ -1,3 +1,8 @@
+!**
+
+.git
+node_modules
+
 libraries/thirdparty/*
 
 addons-l10n/*/*.json
