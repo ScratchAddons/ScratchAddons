@@ -28,7 +28,7 @@ module.exports = {
       collapseWhitespace: "aggressive",
       deduplicateAttributeValues: true,
       removeAttributeQuotes: true,
-      removeEmptyAttributes: true,
+      removeEmptyAttributes: false,
       minifyCss: false,
       minifyConditionalComments: true,
       removeRedundantAttributes: true,

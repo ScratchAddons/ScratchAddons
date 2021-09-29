@@ -4,23 +4,26 @@ import createConsole from "./console.js";
 window.__scratchAddonsChrome = {
   listenersReady: false,
   nextMsgId: 0,
+  manifest: undefined,
+  messages: undefined,
   ...(window.__scratchAddonsChrome || {}),
 };
 
 function waitForListeners() {
   return new Promise(function (resolve, reject) {
     if (__scratchAddonsChrome.listenersReady) return resolve();
-    window.parent.postMessage("areListenersReady", "*");
-
-    window.addEventListener("message", (e) => {
+    const listener = (e) => {
       if (
         (e.source === window || e.source === window.top || e.source === window.parent) &&
         e.data === "listeners ready"
       ) {
         __scratchAddonsChrome.listenersReady = true;
         resolve();
+        window.removeEventListener("message", listener);
       }
-    });
+    };
+    window.addEventListener("message", listener);
+    window.parent.postMessage("areListenersReady", "*");
   });
 }
 const console = createConsole("chrome");
@@ -57,7 +60,7 @@ const storage = {
 };
 
 function sendMessage(message, callback) {
-  function run() {
+  waitForListeners().then(() => {
     const id = __scratchAddonsChrome.nextMsgId++;
     window.parent.postMessage({ id, message }, "*");
     if (callback) {
@@ -69,28 +72,8 @@ function sendMessage(message, callback) {
       };
       window.addEventListener("message", listener);
     }
-  }
-
-  waitForListeners().then(run);
+  });
 }
-let manifest;
-
-const ui = navigator.language.toLowerCase().split("-");
-
-// Start with the chosen language
-const locales = [ui[0] + (ui[1] ? "_" + ui[1].toUpperCase() : "")];
-
-// Remove country code
-if (ui[1]) locales.push(ui[0]);
-
-// If non-Brazillian Portugese is chosen, add Brazilian as a fallback.
-if (ui[0] === "pt" && ui[1] !== "br") locales.push("pt_BR");
-
-// Add English as a fallback
-if (!locales.includes("en")) locales.push("en");
-locales.splice(locales.indexOf("en") + 1);
-
-let messages = {};
 
 export default {
   ...(window.browser || {}),
@@ -99,9 +82,9 @@ export default {
   storage: { sync: storage, local: storage },
   runtime: {
     async getManifest() {
-      if (manifest) return manifest;
+      if (__scratchAddonsChrome.manifest) return __scratchAddonsChrome.manifest;
       const response = await fetch(getURL("manifest.json"));
-      return (manifest = await response.json());
+      return (__scratchAddonsChrome.manifest = await response.json());
     },
     reload() {
       location.reload();
@@ -115,23 +98,40 @@ export default {
     },
   },
   i18n: {
-    ready: false,
+    ready: __scratchAddonsChrome.messages,
     async init() {
-      const localePromises = locales
-        .map((locale) => {
-          let res;
-          return fetch(getURL("_locales/" + locale + "/messages.json"))
-            .then((resp) => {
-              res = resp;
-              return resp.json();
-            })
-            .catch((e) => {
-              if (res?.status !== 404) console.error(e);
-            });
-        })
-        .reverse();
+      if (!__scratchAddonsChrome.messages) {
+        const ui = navigator.language.toLowerCase().split("-");
 
-      messages = Object.assign({}, ...(await Promise.all(localePromises)));
+        // Start with the chosen language
+        const locales = [ui[0] + (ui[1] ? "_" + ui[1].toUpperCase() : "")];
+
+        // Remove country code
+        if (ui[1]) locales.push(ui[0]);
+
+        // If non-Brazillian Portugese is chosen, add Brazilian as a fallback.
+        if (ui[0] === "pt" && ui[1] !== "br") locales.push("pt_BR");
+
+        // Add English as a fallback
+        if (!locales.includes("en")) locales.push("en");
+        locales.splice(locales.indexOf("en") + 1);
+
+        const localePromises = locales
+          .map((locale) => {
+            let res;
+            return fetch(getURL("_locales/" + locale + "/messages.json"))
+              .then((resp) => {
+                res = resp;
+                return resp.json();
+              })
+              .catch((e) => {
+                if (res?.status !== 404) console.error(e);
+              });
+          })
+          .reverse();
+
+        __scratchAddonsChrome.messages = Object.assign({}, ...(await Promise.all(localePromises)));
+      }
       window.dispatchEvent(new CustomEvent(".i18n load"));
       this.ready = true;
     },
@@ -143,7 +143,7 @@ export default {
         throw new ReferenceError("Call `await .i18n.init()` before `.i18n.getMessage(message, placeholders)`!");
       if (typeof placeholders === "string") placeholders = [placeholders];
 
-      return messages[message].message
+      return __scratchAddonsChrome.messages[message].message
         .replace(/\$(\d+)/g, (_, dollar) => placeholders[dollar - 1])
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -155,8 +155,7 @@ export default {
   },
 };
 
-function getURL(url, min = false) {
-  // todo min true
+function getURL(url) {
   const { href } = new URL("../../" + url, import.meta.url);
-  return min ? href.replace(/(?<!\.min)\.js$/, ".min.js").replace(/(?<!\.min)\.css$/, ".min.css") : href;
+  return href;
 }

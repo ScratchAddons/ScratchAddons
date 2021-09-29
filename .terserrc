@@ -1,7 +1,7 @@
 {
   "compress": {
     "arguments": true,
-    "ecma": 6,
+    "ecma": 8,
     "hoist_funs": true,
     "if_return": true,
     "inline": 3,
@@ -42,11 +42,11 @@
     "unsafe_undefined": true,
     "booleans_as_integers": true
   },
-  "ecma": 6,
+  "ecma": 8,
   "module": true,
   "format": {
     "comments": false,
-    "ecma": 6,
+    "ecma": 8,
     "indent_level": 0,
     "semicolons": false,
     "shebang": false,
@@ -86,7 +86,7 @@
     }
   },
   "parse": {
-    "ecma": 6,
+    "ecma": 8,
     "html5_comments": false,
     "shebang": false
   }
