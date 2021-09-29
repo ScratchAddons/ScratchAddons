@@ -21,7 +21,7 @@ jobs:
       - name: Switch branches
         run: |
           git fetch
-          git checkout beta;
+          git checkout prerelease;
           git checkout master -- .;
 
       - name: Install
@@ -43,7 +43,8 @@ jobs:
         run: npx posthtml-cli "**/*.html" -c .posthtmlrc.js
 
       - name: Commit
-        uses: stefanzweifel/git-auto-commit-action@v4.12.0
-        with:
-          commit_message: "Update"
-          branch: refs/remotes/origin/beta
+        run: |
+          git config user.email "actions@github.com";
+          git config user.name "GitHub Actions";
+          git commit -am "Update prerelease version";
+          git push;
