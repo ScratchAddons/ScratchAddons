@@ -7,6 +7,6 @@ export default {
     {
       name: "name",
       weight: 1,
-    }
-  ]
+    },
+  ],
 };

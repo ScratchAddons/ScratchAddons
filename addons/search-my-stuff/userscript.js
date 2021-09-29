@@ -8,7 +8,7 @@
  * This addon has many similarities to `forum-search`.
  */
 
-import Fuse from "../../libraries/thirdparty/fuse.esm.min.js"
+import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
 import fuseOptions from "./fuse-options.js";
 
 export default async function ({ addon, global, console, msg }) {
@@ -68,7 +68,7 @@ export default async function ({ addon, global, console, msg }) {
       });
       projects.push({
         name: project.querySelector(".media-info-item.title > a").innerText,
-        element: project
+        element: project,
       });
       fuse = new Fuse(projects, fuseOptions);
       // Refresh search if user clicks "load more" after searching
@@ -85,22 +85,21 @@ export default async function ({ addon, global, console, msg }) {
     let filter = searchDropdown.value;
     // Blank query should restore the original order
     if (query == "") {
-      projects.forEach(project => {
+      projects.forEach((project) => {
         project.element.remove();
         resultsContainer.appendChild(project.element);
       });
-      return
+      return;
     }
     const fuseSearch = fuse.search(query).sort((a, b) => {
       // Sort very good matches at the top no matter what
       if ((a.score < 0.1) ^ (b.score < 0.1)) return a.score < 0.1 ? -1 : 1;
     });
-    projects.forEach(project => {
+    projects.forEach((project) => {
       project.element.remove();
     });
-    fuseSearch.forEach(result => {
+    fuseSearch.forEach((result) => {
       resultsContainer.appendChild(result.item.element);
     });
   }
-
 }
