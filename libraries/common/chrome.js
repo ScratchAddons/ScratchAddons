@@ -10,7 +10,7 @@ window.__scratchAddonsChrome = {
 function waitForListeners() {
   return new Promise(function (resolve, reject) {
     if (__scratchAddonsChrome.listenersReady) return resolve();
-    window.parent.postMessage("areListenersReady", "*"); // todo not *
+    window.parent.postMessage("areListenersReady", "*");
 
     window.addEventListener("message", (e) => {
       if (
@@ -59,7 +59,7 @@ const storage = {
 function sendMessage(message, callback) {
   function run() {
     const id = __scratchAddonsChrome.nextMsgId++;
-    window.parent.postMessage({ id, message }, "*"); // todo not *
+    window.parent.postMessage({ id, message }, "*"); 
     if (callback) {
       const listener = (event) => {
         if (event.source === window.parent && event.data.reqId === id + "r") {
