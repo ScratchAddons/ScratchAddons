@@ -59,7 +59,7 @@ const storage = {
 function sendMessage(message, callback) {
   function run() {
     const id = __scratchAddonsChrome.nextMsgId++;
-    window.parent.postMessage({ id, message }, "*"); 
+    window.parent.postMessage({ id, message }, "*");
     if (callback) {
       const listener = (event) => {
         if (event.source === window.parent && event.data.reqId === id + "r") {
