@@ -27,6 +27,9 @@ jobs:
       - name: Install
         run: npm install terser posthtml-postcss htmlnano postcss-import postcss-sort-media-queries cssnano autoprefixer
 
+      - name: Remove package files
+        run: rm package-lock.json package.json
+
       - name: Terser
         run: node .github/workflows/minify/terser.mjs --trace-warnings --harmony
 
