@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.3.4
-        with:
-          ref: refs/remotes/origin/beta
 
       - name: Setup Node.JS
         uses: actions/setup-node@v2.4.0
@@ -21,8 +19,10 @@ jobs:
           node-version: 16
           cache: "npm"
 
-      - name: Update working tree
-        run: git checkout master -- .
+      - name: Switch branches
+        run: |
+          git checkout beta;
+          git checkout master -- .;
 
       - name: Install
         run: npm install terser posthtml-postcss htmlnano postcss-import postcss-sort-media-queries cssnano autoprefixer
