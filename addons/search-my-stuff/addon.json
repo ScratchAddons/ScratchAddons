@@ -20,6 +20,7 @@
       "matches": ["https://scratch.mit.edu/mystuff"]
     }
   ],
+  "libraries": ["fuse"],
   "dynamicEnable": true,
   "dynamicDisable": false,
   "enabledByDefault": false
