@@ -99,6 +99,10 @@
           }
         ]
       }
+    },
+    {
+      "files": ["**rc.js", "**.config.js", "*rc.js", "*.config.js", "*.mjs", "**.mjs", "*.cjs", "**.cjs"],
+      "env": { "node": true }
     }
   ]
 }

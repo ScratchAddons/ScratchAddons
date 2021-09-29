@@ -5,11 +5,11 @@ jobs:
   format:
     name: Format
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
       - name: Generate token
         uses: tibdex/github-app-token@v1
         id: generate-token
@@ -18,7 +18,7 @@ jobs:
         with:
           app_id: ${{ secrets.BOT_APP_ID }}
           private_key: ${{ secrets.BOT_PRIVATE_KEY }}
-          
+
       - name: Prettify code (ScratchAddons)
         if: steps.generate-token.outcome == 'success'
         uses: ScratchAddons/prettier_action@master
@@ -27,7 +27,7 @@ jobs:
           commit_message: Format code
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-          
+
       - name: Prettify code (outside ScratchAddons)
         if: steps.generate-token.outcome != 'success'
         uses: ScratchAddons/prettier_action@master

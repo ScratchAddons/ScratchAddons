@@ -1,4 +1,5 @@
 <img src="https://raw.githubusercontent.com/SA-Userscript/ScratchAddons/master/images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
+
 # Welcome to Scratch Addons' repository!
 
 [![](https://img.shields.io/github/stars/SA-Userscript/ScratchAddons?color=blue&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/stargazers)
@@ -66,6 +67,7 @@ No build is required. You may download the source code by doing one of these ste
 After downloading the extension to your computer, just load it by following these steps.
 
 - Google Chrome
+
   1. Open `chrome://extensions` to open the Extension Management page by typing it into your address bar.
   2. Enable Developer Mode by clicking the toggle switch next to Developer mode.
   3. Click the `Load unpacked` button on the top and select the extension directory which has the `manifest.json` file in it.

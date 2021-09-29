@@ -1,6 +1,7 @@
 # Used third-party libraries
 
 Third-party libraries included are:
+
 - [js-md5 0.7.3](https://raw.githubusercontent.com/emn178/js-md5/v0.7.3/build/md5.min.js) (MIT)
 - [scratchblocks 3.5.2](https://scratchblocks.github.io/js/scratchblocks-v3.5.2-min.js) (MIT)
 - [scratchblocks 3.5.2 translations](https://scratchblocks.github.io/js/translations-all-v3.5.2.js) (MIT)

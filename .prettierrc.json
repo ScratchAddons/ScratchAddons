@@ -1,4 +1,12 @@
 {
   "printWidth": 120,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": ["*.mjs", "*.cjs"],
+      "options": {
+        "parser": "babel"
+      }
+    }
+  ]
 }

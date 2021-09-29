@@ -1,9 +1,9 @@
 ---
 name: "➕ New addon"
-about: 'Suggest a new addon'
-title: ''
-labels: 'type: enhancement, new addon, scope: addon'
-assignees: ''
+about: "Suggest a new addon"
+title: ""
+labels: "type: enhancement, new addon, scope: addon"
+assignees: ""
 ---
 
 <!--

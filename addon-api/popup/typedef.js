@@ -1,5 +1,5 @@
 /** @typedef {import("./Addon.js").default} PopupAddon */
-// prettier-ignore
+
 /**
  * Popups must default-export an async function
  * that takes this object as a sole argument, e.g.

@@ -1,0 +1,46 @@
+name: Minify source code for production
+on:
+  workflow_dispatch:
+  push:
+    branches: master
+
+jobs:
+  run:
+    name: Minify
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.3.4
+        with:
+          ref: refs/remotes/origin/beta
+
+      - name: Setup Node.JS
+        uses: actions/setup-node@v2.4.0
+        with:
+          node-version: 16
+          cache: "npm"
+
+      - name: Update working tree
+        run: git checkout master -- .
+
+      - name: Install
+        run: npm install terser posthtml-postcss htmlnano postcss-import postcss-sort-media-queries cssnano autoprefixer
+
+      - name: Terser
+        run: node .github/workflows/minify/terser.mjs --trace-warnings --harmony
+
+      - name: JSON.stringify
+        run: node .github/workflows/minify/json.mjs --trace-warnings --harmony
+
+      - name: PostCSS
+        run: npx postcss-cli -r --env="production" "**.css"
+
+      - name: PostHTML
+        run: npx posthtml-cli "**/*.html" -c .posthtmlrc
+
+      - name: Commit
+        uses: stefanzweifel/git-auto-commit-action@v4.12.0
+        with:
+          commit_message: "Update"
+          branch: refs/remotes/origin/beta

@@ -1,9 +1,9 @@
 ---
 name: "✨ Feature"
-about: 'Request for a new feature'
-title: ''
-labels: 'type: enhancement, status: needs triage'
-assignees: ''
+about: "Request for a new feature"
+title: ""
+labels: "type: enhancement, status: needs triage"
+assignees: ""
 ---
 
 <!--

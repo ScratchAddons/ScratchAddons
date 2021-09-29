@@ -25,6 +25,7 @@ function updateAttrs(target, source) {
 
 if (/^\/(scratch\-addons\-extension|sa\-ext|sa|scratch-addons|)\/settings\/?$/i.test(location.pathname)) {
   fetch("https://raw.githubusercontent.com/SA-Userscript/ScratchAddons/master/webpages/settings/scratch.html")
+    // todo use jsdelivr
     .then((r) => r.text())
     .then(async (html) => {
       const dom = new DOMParser().parseFromString(html, "text/html");
