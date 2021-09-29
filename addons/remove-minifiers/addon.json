@@ -1,0 +1,19 @@
+{
+    "name": "Remove Minifiers",
+    "description": "Removes the minifier button in sections on the forums",
+    "userscripts": [
+        {
+          "url": "userscript.js",
+          "matches": ["https://scratch.mit.edu/discuss/"]
+        }
+    ],
+    "credits": [
+      {
+        "name": "Polygon",
+        "link": "https://scratch.mit.edu/users/PoIygon"
+      }
+    ],
+    "tags": ["community", "forums"],
+    "versionAdded": "1.21.0"   
+}
+  
