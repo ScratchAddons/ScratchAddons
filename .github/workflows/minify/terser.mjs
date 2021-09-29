@@ -7,7 +7,8 @@ import getInDir from "./getInDir.mjs";
 /* Javascript */
 const terserConfig = JSON.parse(readFileSync(resolve(process.cwd(), "./.terserrc")));
 
-getInDir({ path: "./", ext: ".js" }).forEach(async (filePath) => {
+getInDir({path: "./", ext: ".js"}).forEach(async (filePath) => {
+  console.log(`Minifying ${filePath}`);
   const source = await readFile(filePath, "utf8");
   const minfied = (await minifyJs(source, terserConfig)).code;
   writeFile(filePath, minfied);

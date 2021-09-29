@@ -3,6 +3,7 @@ import getInDir from "./getInDir.mjs";
 
 /* JSON */
 getInDir({ path: "./", ext: ".json" }).forEach(async (filePath) => {
+  console.log(`Minifying ${filePath}`);
   const source = await readFile(filePath, "utf8");
   let parsed = JSON.parse(source, terserConfig);
 
