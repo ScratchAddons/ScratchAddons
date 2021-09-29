@@ -20,6 +20,7 @@ jobs:
 
       - name: Switch branches
         run: |
+          git fetch
           git checkout beta;
           git checkout master -- .;
 
