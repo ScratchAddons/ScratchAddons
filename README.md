@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/SA-Userscript/ScratchAddons/master/images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
 
-# Welcome to Scratch Addons' repository!
+# Welcome to Scratch Addons Userscript' repository!
 
 [![](https://img.shields.io/github/stars/SA-Userscript/ScratchAddons?color=blue&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/stargazers)
 [![](https://img.shields.io/github/forks/SA-Userscript/ScratchAddons?color=blue&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/network/members)
@@ -8,10 +8,6 @@
 [![](https://img.shields.io/github/issues/SA-Userscript/ScratchAddons?color=green&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/issues)
 [![](https://img.shields.io/github/issues-pr/SA-Userscript/ScratchAddons?color=green&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/pulls)
 [![](https://img.shields.io/github/license/SA-Userscript/ScratchAddons?style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/blob/master/LICENSE) <!-- 2 spaces -->
-[![](https://img.shields.io/chrome-web-store/v/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=version&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
-[![](https://img.shields.io/chrome-web-store/users/fbeffbjdlemaoicjdapfpikkikjoneco?style=flat-square&logo=google-chrome&logoColor=white&label=users&color=4285F4)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
-[![](https://img.shields.io/amo/v/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=version&color=FF7139)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)
-[![](https://img.shields.io/amo/users/scratch-messaging-extension?style=flat-square&logo=firefox-browser&logoColor=white&label=users&color=FF7139)](https://addons.mozilla.org/firefox/addon/scratch-messaging-extension/)
 [![](https://img.shields.io/github/v/release/SA-Userscript/ScratchAddons?style=flat-square&logo=github&logoColor=white&label=version&color=181717)](https://github.com/SA-Userscript/ScratchAddons/releases)
 [![](https://img.shields.io/github/downloads/SA-Userscript/ScratchAddons/total?style=flat-square&logo=github&logoColor=white&label=downloads&color=181717)](https://github.com/SA-Userscript/ScratchAddons/releases)
 [![](https://img.shields.io/badge/discuss-on_github-181717.svg?style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/discussions)
@@ -20,7 +16,7 @@
 
 ## About
 
-Scratch Addons is a WebExtension (supports both Chrome and Firefox). Scratch Addons' mission is to combine all existing Scratch extensions, userscripts and userstyles into a single easy-to-access place, while still letting users choose which ones to enable.
+Scratch Addons Userscript is a userscript that has all the features of Scratch Addons' (supports both Chrome and Firefox). Scratch Addons' mission is to combine all existing Scratch extensions, userscripts and userstyles into a single easy-to-access place, while still letting users choose which ones to enable.
 
 ### What's actually an "addon"?
 
