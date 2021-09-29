@@ -82,7 +82,7 @@
       "ClipboardItem"
     ],
     "properties": {
-      "keep_quoted": "strict"
+      "regex": "^$"
     }
   },
   "parse": {
