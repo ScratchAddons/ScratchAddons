@@ -7,19 +7,19 @@ const iframe = document.querySelector("iframe");
 scratchAddons.localState.ready.i18n = scratchAddons.localState.ready.auth = true;
 window.dispatchEvent(new CustomEvent(".i18n load"));
 
-window.addEventListener("message", async (e) => {
+window.addEventListener("message", async (event) => {
   if (
-    !e?.data?.message ||
-    typeof e.data.reqId === "string" ||
-    !(e.source === iframe.contentWindow || e.source === window || e.data.message)
+    !event?.data?.message ||
+    typeof event.data.reqId === "string" ||
+    !(event.source === iframe.contentWindow || event.source === window || event.data.message)
   )
     return;
 
   function sendResponse(res = {}) {
-    return e.source.postMessage({ res, reqId: e.data.id + "r" }, e.origin); // todo not anything
+    return event.source.postMessage({ res, reqId: event.data.id + "r" }, event.origin); // todo not anything
   }
 
-  const data = e.data.message;
+  const data = event.data.message;
 
   if (handleSettings(data, sendResponse) || handleL10n(data, sendResponse)) return;
 
@@ -48,7 +48,7 @@ window.addEventListener("message", async (e) => {
   }
 
   if (data === "areListenersReady") {
-    return e.source.postMessage("listeners ready", e.origin); // todo not anything
+    return event.source.postMessage("listeners ready", event.origin); // todo not anything
   }
 
   return sendResponse();
