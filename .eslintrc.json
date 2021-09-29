@@ -1,5 +1,5 @@
 {
-  "root":true,
+  "root": true,
   "parserOptions": {
     "sourceType": "module"
   },
