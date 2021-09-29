@@ -22,6 +22,6 @@
   ],
   "libraries": ["fuse"],
   "dynamicEnable": true,
-  "dynamicDisable": false,
+  "dynamicDisable": true,
   "enabledByDefault": false
 }

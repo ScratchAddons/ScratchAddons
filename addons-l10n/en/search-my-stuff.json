@@ -1,14 +1,8 @@
 {
   "search-my-stuff/loading": "Loading...",
-  "search-my-stuff/error": "Error searching your projects!",
   "search-my-stuff/none": "Your search returned no results",
-  "search-my-stuff/username": "Username:",
-  "search-my-stuff/posts-here": "User Posts Here",
-  "search-my-stuff/posts-sitewide": "User Posts Site-wide",
-  "search-my-stuff/first-checked": "First Checked:",
-  "search-my-stuff/last-checked": "Last Checked:",
-  "search-my-stuff/last-edited-by": "Last edited by {username} ({datetime})",
-  "search-my-stuff/placeholder": "Search projects",
+  "search-my-stuff/project-placeholder": "Search projects",
+  "search-my-stuff/studio-placeholder": "Search studios",
   "search-my-stuff/relevance": "Relevance",
   "search-my-stuff/newest": "Newest",
   "search-my-stuff/oldest": "Oldest"
