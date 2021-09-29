@@ -2,7 +2,7 @@ name: Format code using Prettier
 on:
   push:
     branches-ignore:
-      - beta
+      - prerelease
   pull_request:
 
 jobs:
