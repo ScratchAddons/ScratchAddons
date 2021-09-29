@@ -6,7 +6,7 @@
  * and reordering based on relevance, newest, or oldest.
  *
  * This addon has many similarities to `forum-search`.
- * 
+ *
  * TO-DO:
  * - "No results" notice
  * - Filters
@@ -33,7 +33,7 @@ export default async function ({ addon, global, console, msg }) {
   search.addEventListener("submit", (e) => {
     e.preventDefault();
   });
-  
+
   // When the user makes a keystroke in the search bar
   searchBar.addEventListener("input", triggerNewSearch);
 
@@ -121,7 +121,7 @@ export default async function ({ addon, global, console, msg }) {
     }
   }
 
-  /** 
+  /**
    * Reorders based on "sort by"
    * (relevance algorithm is the same as SA settings page)
    */
