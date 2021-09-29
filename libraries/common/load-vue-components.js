@@ -2,7 +2,8 @@ const styles = {};
 
 /**
  * Loads Vue components.
- * @param {string[]} filenames - filenames of the components, without extensions.
+ *
+ * @param {string[]} filenames - Filenames of the components, without extensions.
  * @returns {Promise}
  */
 export default (filenames) =>
@@ -17,7 +18,7 @@ export default (filenames) =>
           const dom = new DOMParser().parseFromString(text, "text/html");
           const css = dom.querySelector("style")?.textContent;
           if (css) {
-            if ((await chrome.runtime.getManifest()).version_name.includes("-prerelease")) {
+            if (false) {
               const normalizedCss = css.replace("\n", "").trimEnd();
               const normalizedText = text.replace(/\r/g, "");
               const cssFirstLine = normalizedCss.substring(0, normalizedCss.indexOf("\n"));
