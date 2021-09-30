@@ -318,7 +318,7 @@ export default async ({ addon, console, msg }) => {
       }
       const delay = opts.delay || 0;
       for (let index = 0; index < delay; index++) {
-        recordElem.textContent = msg("starting-in",{secs:delay - index});
+        recordElem.textContent = msg("starting-in", { secs: delay - index });
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
       recordElem.textContent = msg("stop");
