@@ -316,13 +316,19 @@ export default async ({ addon, console, msg }) => {
         stopSignFunc = () => stopRecording();
         vm.runtime.once("PROJECT_STOP_ALL", stopSignFunc);
       }
+
+      // Delay
       const delay = opts.delay || 0;
-      for (let index = 0; index < delay; index++) {
-        recordElem.textContent = msg("starting-in", { secs: delay - index });
+      const roundedDelay = Math.floor(delay);
+      for (let index = 0; index < roundedDelay; index++) {
+        recordElem.textContent = msg("starting-in", { secs: roundedDelay - index });
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
-      recordElem.textContent = msg("stop");
-      recorder.start(1000);
+      setTimeout(() => {
+        recordElem.textContent = msg("stop");
+
+        recorder.start(1000);
+      }, delay - roundedDelay * 1000);
     };
     if (!recordElem) {
       recordElem = Object.assign(document.createElement("div"), {
