@@ -321,14 +321,16 @@ export default async ({ addon, console, msg }) => {
       const delay = opts.delay || 0;
       const roundedDelay = Math.floor(delay);
       for (let index = 0; index < roundedDelay; index++) {
+        console.log(roundedDelay - index);
         recordElem.textContent = msg("starting-in", { secs: roundedDelay - index });
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
+      console.log((delay - roundedDelay) * 1000);
       setTimeout(() => {
         recordElem.textContent = msg("stop");
 
         recorder.start(1000);
-      }, delay - roundedDelay * 1000);
+      }, (delay - roundedDelay) * 1000);
     };
     if (!recordElem) {
       recordElem = Object.assign(document.createElement("div"), {
