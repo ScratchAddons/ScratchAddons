@@ -32,7 +32,7 @@
   margin-right: 1rem;
 }
 
-#recordOptionSecondsInput {
+#recordOptionSecondsInput,#recordOptionDelayInput {
   width: 6rem;
 }
 
