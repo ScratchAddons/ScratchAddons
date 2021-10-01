@@ -66,7 +66,8 @@ const onReactContextMenu = function (e) {
       display: "block",
     });
 
-    itemElem.addEventListener("click", () => {
+    itemElem.addEventListener("click", (e) => {
+      e.stopPropagation();
       window.dispatchEvent(
         new CustomEvent("REACT_CONTEXTMENU_HIDE", {
           detail: {
