@@ -49,7 +49,8 @@
   color: var(--darkWww-navbar-text);
 }
 .report-modal-header .modal-title,
-.studio-report-modal .studio-report-title {
+.studio-report-modal .studio-report-title,
+.next-step-title {
   color: white;
 }
 #navigation .inner > ul > li.search .input[type="text"]::placeholder {
