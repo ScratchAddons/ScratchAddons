@@ -91,7 +91,9 @@ const onReactContextMenu = function (e) {
 const initialize = (tab) => {
   if (initialized) return;
   initialized = true;
-  document.body.addEventListener("contextmenu", (e) => onReactContextMenu.call(tab, e), { capture: true });
+  tab
+    .waitForElement("body")
+    .then((body) => body.addEventListener("contextmenu", (e) => onReactContextMenu.call(tab, e), { capture: true }));
 };
 
 export const addContextMenu = (tab, callback, opts) => {
