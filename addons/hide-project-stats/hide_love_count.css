@@ -1,21 +1,13 @@
 .project-loves {
   font-size: 0;
-  padding: 0;
+  padding-right: 1rem;
 }
 
 .project-loves.stat-display {
   font-size: 16px;
 }
 
-.sa-love-label {
-  padding-left: -0.5rem;
-  font-size: 16px;
-  font-weight: 700;
-  padding-right: 2rem;
-}
-
-.project-loves.hidden,
-.sa-love-label.hidden {
+.project-loves.hidden {
   display: none;
 }
 

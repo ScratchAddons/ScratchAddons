@@ -1,20 +1,12 @@
 .project-favorites {
   font-size: 0;
-  padding: 0;
+  padding-right: 1rem;
 }
 
 .project-favorites.stat-display {
   font-size: 16px;
 }
 
-.sa-favorite-label {
-  padding-left: -0.5rem;
-  font-size: 16px;
-  font-weight: 700;
-  padding-right: 2rem;
-}
-
-.project-favorites.hidden,
-.sa-favorite-label.hidden {
+.project-favorites.hidden {
   display: none;
 }
