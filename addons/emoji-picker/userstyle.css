@@ -48,7 +48,7 @@
   cursor: pointer;
   display: inline-block;
   position: relative;
-  margin-left: 0.5em;
+  margin-left: 1em;
 }
 .sa-emoji-picker-divider {
   height: 1px;
