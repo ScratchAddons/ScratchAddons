@@ -1,9 +1,5 @@
 {
-  "search-my-stuff/loading": "Loading...",
-  "search-my-stuff/none": "Your search returned no results",
   "search-my-stuff/project-placeholder": "Search projects",
   "search-my-stuff/studio-placeholder": "Search studios",
-  "search-my-stuff/relevance": "Relevance",
-  "search-my-stuff/newest": "Newest",
-  "search-my-stuff/oldest": "Oldest"
+  "search-my-stuff/trash-placeholder": "Search trash"
 }

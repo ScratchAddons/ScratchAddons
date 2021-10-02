@@ -1,25 +1,13 @@
-/* Shamelessly copied from forum-search */
-.dropdown.button.grey.small {
-  display: none;
-}
-
-#search-my-stuff-form {
+.inner {
   display: flex;
 }
 
+.inner > .dropdown.button.grey.small,
+.inner > .right {
+  align-self: center;
+  margin-left: 8px;
+}
+
 #search-my-stuff-input {
-  width: 50%;
-  margin-right: 8px;
-}
-
-#search-my-stuff-dropdown {
-  width: auto;
-}
-
-#search-my-stuff-dropdown:hover {
-  cursor: pointer;
-}
-
-#search-my-stuff-dropdown:focus {
-  outline: none;
+  margin-bottom: 0;
 }
