@@ -69,6 +69,7 @@
 .sa-emoji-picker-unicode .sa-emoji-picker-item {
   width: 20px;
   height: 20px;
+  color: black;
 }
 .sa-emoji-picker-see-more {
   width: 100%;

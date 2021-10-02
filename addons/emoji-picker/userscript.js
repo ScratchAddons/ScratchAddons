@@ -538,7 +538,6 @@ export default async function ({ addon, global, console, msg }) {
       emojiButtonText = document.createElement("a");
     }
     emojiButtonText.textContent = "🙂";
-    emojiButtonText.title = msg("emoji-button-hover");
     emojiButtonText.classList.add("sa-emoji-button");
     emojiButton.appendChild(emojiButtonText);
     addon.tab.displayNoneWhileDisabled(emojiButton, { display: "inline-block" });
