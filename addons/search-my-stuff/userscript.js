@@ -1,15 +1,6 @@
 /**
- * Injects a search bar element into the page
- * and replaces the existing Sort by dropdown.
- *
- * Searching is done by scanning the page for My Stuff entries
- * and reordering based on relevance, newest, or oldest.
- *
- * This addon has many similarities to `forum-search`.
- *
  * TO-DO:
  * - "No results" notice
- * - `/` and `enter` hotkeys
  * - Better handling for "Load more"
  */
 
@@ -24,10 +15,15 @@ export default async function ({ addon, global, console, msg }) {
   inject();
   indexPage();
 
-  // When the user hits enter in the search bar
-  // (we don't actually want anything to happen since searching is automatic)
+  // Keyboard shortcut for focusing search bar
+  document.addEventListener("keypress", (e) => {
+    searchBar.focus();
+  });
+
+  // Keyboard shortcut for visiting top hit
   search.addEventListener("submit", (e) => {
     e.preventDefault();
+    if (searchBar.value !== "" && resultsContainer.childNodes.length > 0) window.location.href = resultsContainer.childNodes[0].querySelector("a").href;
   });
 
   // When the user makes a keystroke in the search bar
@@ -88,6 +84,8 @@ export default async function ({ addon, global, console, msg }) {
     document.querySelector('.dropdown-menu.radio-style > [data-control="sort"]').addEventListener("click", () => {
       projects = [];
     });
+    // Auto-focus the search bar
+    searchBar.focus();
   }
 
   /**
@@ -105,7 +103,7 @@ export default async function ({ addon, global, console, msg }) {
       });
       fuse = new Fuse(projects, fuseOptions);
       // Refresh search results if user clicks "load more" or switches tabs with a query still in the search bar
-      if (searchBar.value != "") {
+      if (searchBar.value !== "") {
         triggerNewSearch();
       }
     }
@@ -118,7 +116,7 @@ export default async function ({ addon, global, console, msg }) {
     let query = searchBar.value;
     await resultsContainer;
     // Blank query should restore the original order
-    if (query == "") {
+    if (query === "") {
       projects.forEach((project) => {
         project.element.remove();
         resultsContainer.appendChild(project.element);

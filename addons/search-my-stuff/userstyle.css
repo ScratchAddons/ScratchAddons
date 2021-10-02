@@ -8,6 +8,11 @@
   margin-left: 8px;
 }
 
+#search-my-stuff-form {
+  align-self: center;
+}
+
 #search-my-stuff-input {
+  align-self: center;
   margin-bottom: 0;
 }
