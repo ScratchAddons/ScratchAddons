@@ -67,7 +67,7 @@ export default async ({ addon, console, msg }) => {
       const recordOptionDelay = document.createElement("p");
       const recordOptionDelayInput = Object.assign(document.createElement("input"), {
         type: "number",
-        min: 1,
+        min: 0,
         max: 300,
         defaultValue: 0,
         id: "recordOptionDelayInput",
@@ -321,11 +321,9 @@ export default async ({ addon, console, msg }) => {
       const delay = opts.delay || 0;
       const roundedDelay = Math.floor(delay);
       for (let index = 0; index < roundedDelay; index++) {
-        console.log(roundedDelay - index);
         recordElem.textContent = msg("starting-in", { secs: roundedDelay - index });
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
-      console.log((delay - roundedDelay) * 1000);
       setTimeout(() => {
         recordElem.textContent = msg("stop");
 
