@@ -23,7 +23,8 @@ export default async function ({ addon, global, console, msg }) {
   // Keyboard shortcut for visiting top hit
   search.addEventListener("submit", (e) => {
     e.preventDefault();
-    if (searchBar.value !== "" && resultsContainer.childNodes.length > 0) window.location.href = resultsContainer.childNodes[0].querySelector("a").href;
+    if (searchBar.value !== "" && resultsContainer.childNodes.length > 0)
+      window.location.href = resultsContainer.childNodes[0].querySelector("a").href;
   });
 
   // When the user makes a keystroke in the search bar
