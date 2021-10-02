@@ -65,7 +65,7 @@ export default async function ({ addon, global, console, msg }) {
 
   /**
    * Adds our new search bar.
-   * 
+   *
    * Since the My Stuff page reloads several elements when switching tabs or
    * filters, some things need to be reinjected or have their references
    * updated.
@@ -85,7 +85,7 @@ export default async function ({ addon, global, console, msg }) {
     // Update the element that stores the search results
     resultsContainer = await addon.tab.waitForElement(".media-list > .media-list");
     // Update the dropdown listener
-    document.querySelector(".dropdown-menu.radio-style > [data-control=\"sort\"]").addEventListener("click", () => {
+    document.querySelector('.dropdown-menu.radio-style > [data-control="sort"]').addEventListener("click", () => {
       projects = [];
     });
   }
