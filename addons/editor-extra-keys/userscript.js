@@ -1,26 +1,57 @@
 export default async function ({ addon, global, cons, msg }) {
   const Blockly = await addon.tab.traps.getBlockly();
+  const workspace = Blockly.getMainWorkspace();
 
-  function appendKeys(keys) {
+  function appendKeys(keys, enableShiftKeys) {
     keys.push(
       ...[
         ["-", "-"],
         [",", ","],
         [".", "."],
-
-        /*
-        ["`", "`"],
-        ["=", "="],
-        ["[", "["],
-        ["]", "]"],
-        ["\\", "\\"],
-        [";", ";"],
-        ["'", "'"],
-        ["/", "/"],
-        */
       ]
     );
     keys.splice(5, 0, [msg("enter-key"), "enter"]);
+    if (addon.settings.get("experimentalKeys")) {
+      keys.push(
+        ...[
+          ["`", "`"],
+          ["=", "="],
+          ["[", "["],
+          ["]", "]"],
+          ["\\", "\\"],
+          [";", ";"],
+          ["'", "'"],
+          ["/", "/"],
+        ]
+      );
+    }
+    if (enableShiftKeys && addon.settings.get("shiftKeys")) {
+      keys.push(
+        ...[
+          ["!", "!"],
+          ["@", "@"],
+          ["#", "#"],
+          ["$", "$"],
+          ["%", "%"],
+          ["^", "^"],
+          ["&", "&"],
+          ["*", "*"],
+          ["(", "("],
+          [")", ")"],
+          ["_", "_"],
+          ["+", "+"],
+          ["{", "{"],
+          ["}", "}"],
+          ["|", "|"],
+          [":", ":"],
+          ['"', '"'],
+          ["?", "?"],
+          ["<", "<"],
+          [">", ">"],
+          ["~", "~"],
+        ]
+      );
+    }
   }
 
   Blockly.Blocks["sensing_keyoptions"] = {
@@ -29,7 +60,7 @@ export default async function ({ addon, global, cons, msg }) {
     init: function () {
       if (this.jsonInitOriginal === undefined) this.jsonInitOriginal = this.jsonInit;
       this.jsonInit = function (obj) {
-        appendKeys(obj.args0[0].options);
+        appendKeys(obj.args0[0].options, false);
         this.jsonInitOriginal(obj);
       };
       this.initOriginal();
@@ -42,14 +73,13 @@ export default async function ({ addon, global, cons, msg }) {
     init: function () {
       if (this.jsonInitOriginal === undefined) this.jsonInitOriginal = this.jsonInit;
       this.jsonInit = function (obj) {
-        appendKeys(obj.args0[0].options);
+        appendKeys(obj.args0[0].options, true);
         this.jsonInitOriginal(obj);
       };
       this.initOriginal();
     },
   };
 
-  const workspace = Blockly.getMainWorkspace();
   if (workspace) {
     const allBlocks = [...workspace.getAllBlocks(), ...workspace.getFlyout().getWorkspace().getAllBlocks()];
     for (const block of allBlocks) {
@@ -64,7 +94,7 @@ export default async function ({ addon, global, cons, msg }) {
       if (!field) {
         continue;
       }
-      appendKeys(field.menuGenerator_);
+      appendKeys(field.menuGenerator_, block.type === "event_whenkeypressed");
     }
   }
 }
