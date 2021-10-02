@@ -16,7 +16,7 @@
     },
     {
       "type": "warning",
-      "text": "The \"shift keys\" include keys which typically require the shift key and a number key, like hashtag, exclamation mark and more. These keys only work with the \"when () key pressed\" block and do not work on all operating systems or keyboard layouts.",
+      "text": "The \"Shift keys\" include keys which typically require the Shift key and a number key, like hashtag, exclamation mark and more. These keys only work with the \"when () key pressed\" block and do not work on all operating systems or keyboard layouts.",
       "id": "shiftKeysWarn"
     }
   ],
@@ -28,7 +28,7 @@
       "default": false
     },
     {
-      "name": "Enable shift keys",
+      "name": "Enable Shift keys",
       "id": "shiftKeys",
       "type": "boolean",
       "default": false
