@@ -352,7 +352,7 @@ export default async function ({ addon, global, console, msg }) {
     "◾️",
   ];
 
-  const emojiPickerOffset = addon.tab.clientVersion === "scratchr2" ? 30 : 48;
+  const emojiPickerOffset = addon.tab.clientVersion === "scratchr2" ? 30 : 52;
 
   //Functions
 
