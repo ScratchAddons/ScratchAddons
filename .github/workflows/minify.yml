@@ -49,3 +49,4 @@ jobs:
           git config user.name "wgytbot";
           git commit -am "Update prerelease version";
           git push release HEAD:release;
+
