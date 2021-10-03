@@ -16,7 +16,7 @@
 
 ## About
 
-Scratch Addons Userscript is a userscript that has all the features of Scratch Addons' (supports both Chrome and Firefox). Scratch Addons' mission is to combine all existing Scratch extensions, userscripts and userstyles into a single easy-to-access place, while still letting users choose which ones to enable.
+Scratch Addons Userscript is a userscript that has all the features of Scratch Addons' extension. Scratch Addons' mission is to combine all existing Scratch extensions, userscripts and userstyles into a single easy-to-access place, while still letting users choose which ones to enable. Learn more about Scratch Addons [here](https://github.com/scratchaddons/scratchaddons#readme)
 
 ### What's actually an "addon"?
 
