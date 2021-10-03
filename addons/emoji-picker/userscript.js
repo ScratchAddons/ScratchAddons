@@ -412,15 +412,11 @@ export default async function ({ addon, global, console, msg }) {
 
   const addEmoji = function () {
       const textBox = addon.tab.clientVersion === "scratch-www" ? this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(
-            'textarea[id*="frc-compose-comment"]'
-          ) : textBox = this.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(
-          ".control-group.tooltip.right > textarea"
-        );
-		insertTextToTextArea(this.dataset.text, textBox);
-      //Simulate inputting so that Scratch doesn't consider
-      //emojis added from an empty comment using this button
-      //as an empty comment
-      textBox.dispatchEvent(new Event("input", { bubbles: true }));
+    insertTextToTextArea(this.dataset.text, textBox);
+    //Simulate inputting so that Scratch doesn't consider
+    //emojis added from an empty comment using this button
+    //as an empty comment
+    textBox.dispatchEvent(new Event("input", { bubbles: true }));
   };
 
   //Addon
@@ -492,15 +488,18 @@ export default async function ({ addon, global, console, msg }) {
 
   //Add emoji buttons
   while (true) {
-      const textBox = addon.tab.clientVersion === "scratch-www" ? await addon.tab.waitForElement('textarea[id*="frc-compose-comment"]', {
-        markAsSeen: true,
-        reduxCondition: (state) => {
-          if (!state.scratchGui) return true;
-          return state.scratchGui.mode.isPlayerOnly;
-        },
-      }) : await addon.tab.waitForElement("form > .control-group.tooltip.right > textarea", {
-        markAsSeen: true,
-      });
+    const textBox =
+      addon.tab.clientVersion === "scratch-www"
+        ? await addon.tab.waitForElement('textarea[id*="frc-compose-comment"]', {
+            markAsSeen: true,
+            reduxCondition: (state) => {
+              if (!state.scratchGui) return true;
+              return state.scratchGui.mode.isPlayerOnly;
+            },
+          })
+        : await addon.tab.waitForElement("form > .control-group.tooltip.right > textarea", {
+            markAsSeen: true,
+          });
     const buttonAppend = textBox.parentElement.parentElement.parentElement.querySelector(
       ".compose-limit, .control-group.tooltip.right + .control-group"
     );
