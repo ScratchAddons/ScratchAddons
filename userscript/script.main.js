@@ -1,7 +1,9 @@
-import("https://userscript.scratchaddons.cf/content-scripts/prototype-handler.js");
-import("https://userscript.scratchaddons.cf/content-scripts/load-redux.js");
-import("https://userscript.scratchaddons.cf/content-scripts/fix-console.js");
-import("https://userscript.scratchaddons.cf/libraries/common/cs/text-color.js");
+const promises = [
+  import("https://userscript.scratchaddons.cf/content-scripts/prototype-handler.js"),
+  import("https://userscript.scratchaddons.cf/content-scripts/load-redux.js"),
+  import("https://userscript.scratchaddons.cf/content-scripts/fix-console.js"),
+  import("https://userscript.scratchaddons.cf/libraries/common/cs/text-color.js"),
+];
 
 function updateAttrs(target, source) {
   Array.from(target.attributes).forEach((attr) => target.removeAttribute(attr.name));
@@ -10,8 +12,7 @@ function updateAttrs(target, source) {
 }
 
 if (/^\/(scratch\-addons\-extension|sa\-ext|sa|scratch-addons|)\/settings\/?$/i.test(location.pathname)) {
-  fetch("https://raw.githubusercontent.com/SA-Userscript/ScratchAddons/master/webpages/settings/scratch.html")
-    // todo use jsdelivr
+  fetch("https://userscript.scratchaddons.cf/webpages/settings/scratch.html")
     .then((r) => r.text())
     .then(async (html) => {
       const dom = new DOMParser().parseFromString(html, "text/html");
@@ -57,11 +58,12 @@ if (/^\/(scratch\-addons\-extension|sa\-ext|sa|scratch-addons|)\/settings\/?$/i.
       type: "module",
     })
   );
-
-  document.documentElement.append(
-    Object.assign(document.createElement("script"), {
-      src: "https://userscript.scratchaddons.cf/content-scripts/cs.js",
-      type: "module",
-    })
+  Promise.all(promises).then(() =>
+    document.documentElement.append(
+      Object.assign(document.createElement("script"), {
+        src: "https://userscript.scratchaddons.cf/content-scripts/cs.js",
+        type: "module",
+      })
+    )
   );
 }

@@ -2,7 +2,7 @@ import { writeFile, readFile } from "fs/promises";
 import getInDir from "./getInDir.mjs";
 
 /* JSON */
-getInDir({ path: "./", ext: ".json" }).forEach(async (filePath) => {
+getInDir({  ext: ".json" }).forEach(async (filePath) => {
   console.log(`Minifying ${filePath}`);
   const source = await readFile(filePath, "utf8").catch(console.error);
   let parsed = JSON.parse(source);
@@ -26,7 +26,7 @@ getInDir({ path: "./", ext: ".json" }).forEach(async (filePath) => {
   writeFile(filePath, minfied);
 });
 
-getInDir({ path: "./", ext: ".map" }).forEach(async (filePath) => {
+getInDir({  ext: ".map" }).forEach(async (filePath) => {
   console.log(`Minifying ${filePath}`);
   const source = await readFile(filePath, "utf8").catch(console.error);
   const parsed = JSON.parse(source);
