@@ -1,0 +1,50 @@
+name: Minify source code for production
+on:
+  workflow_dispatch:
+  push:
+    branches: master
+
+jobs:
+  run:
+    name: Minify
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.3.4
+
+      - name: Setup Node.JS
+        uses: actions/setup-node@v2.4.0
+        with:
+          node-version: 16
+
+      - name: Switch branches
+        run: |
+          git fetch
+          git checkout prerelease;
+          git checkout master -- .;
+
+      - name: Install
+        run: npm install terser@5.9.0 posthtml-cli@0.10.0 postcss-cli@9.0.1 posthtml-postcss@0.5.0 htmlnano@1.1.1 postcss-import@14.0.2 cssnano@5.0.8 autoprefixer@10.3.6
+
+      - name: Remove package files
+        run: rm package-lock.json package.json
+
+      - name: Terser
+        run: node .github/workflows/minify/terser.mjs --trace-warnings --harmony
+
+      - name: JSON.stringify
+        run: node .github/workflows/minify/json.mjs --trace-warnings --harmony
+
+      - name: PostCSS
+        run: npx postcss-cli -r --env="production" "**.css"
+
+      - name: PostHTML
+        run: npx posthtml-cli "**/*.html" -c .posthtmlrc.js
+
+      - name: Commit
+        run: |
+          git config user.email "actions@github.com";
+          git config user.name "GitHub Actions";
+          git commit -am "Update prerelease version";
+          git push;
