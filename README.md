@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/SA-Userscript/ScratchAddons/master/images/icon.svg" alt="Scratch Addons logo" align="right" width="128px"></img>
 
-# Welcome to Scratch Addons Userscript' repository!
+# Welcome to Scratch Addons Userscript's repository!
 
 [![](https://img.shields.io/github/stars/SA-Userscript/ScratchAddons?color=blue&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/stargazers)
 [![](https://img.shields.io/github/forks/SA-Userscript/ScratchAddons?color=blue&style=flat-square)](https://github.com/SA-Userscript/ScratchAddons/network/members)
