@@ -37,7 +37,7 @@
     "open_in_tab": true
   },
   "homepage_url": "https://scratchaddons.com",
-  "incognito": "not_allowed",
+  "incognito": "spanning",
   "permissions": [
     "https://scratch.mit.edu/*",
     "https://api.scratch.mit.edu/*",
