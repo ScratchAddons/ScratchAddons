@@ -25,7 +25,6 @@ jobs:
           git remote add release https://github.com/SA-Userscript/ScratchAddons-release.git;
           git fetch release;
           git branch -u release/release;
-          git pull release HEAD:release;
           git checkout master -- .;
 
       - name: Install
@@ -51,4 +50,4 @@ jobs:
           git config user.email "83586655+wgytbot@users.noreply.github.com";
           git config user.name "wgytbot";
           git commit -am "Update prerelease version";
-          git push release HEAD:release;
+          git push release HEAD:release --force;
