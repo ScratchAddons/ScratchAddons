@@ -12,6 +12,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.3.4
+          token: ${{ secrets.WGYTBOT }}
 
       - name: Setup Node.JS
         uses: actions/setup-node@v2.4.0
@@ -45,7 +46,7 @@ jobs:
 
       - name: Commit
         run: |
-          git config user.email "actions@github.com";
-          git config user.name "GitHub Actions";
+          git config user.email "83586655+wgytbot@users.noreply.github.com";
+          git config user.name "wgytbot";
           git commit -am "Update prerelease version";
           git push release HEAD:release;
