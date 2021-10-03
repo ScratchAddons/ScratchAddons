@@ -12,7 +12,7 @@ if (window.parent === window) {
   location.href = "https://scratch.mit.edu/scratch-addons-extention/settings";
 }
 
-chrome.i18n.init();
+const i18nPromise = chrome.i18n.init();
 
 let isIframe = false;
 
@@ -71,8 +71,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     },
   });
 
-  if (chrome.i18n.ready) func();
-  else window.addEventListener(".i18n load", func);
+  i18nPromise.then(func);
 })();
 
 async function func() {

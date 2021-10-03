@@ -132,7 +132,6 @@ export default {
 
         __scratchAddonsChrome.messages = Object.assign({}, ...(await Promise.all(localePromises)));
       }
-      window.dispatchEvent(new CustomEvent(".i18n load"));
       this.ready = true;
     },
     getUILanguage() {
