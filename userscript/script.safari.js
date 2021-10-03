@@ -1,2 +1,2 @@
-import('https://userscript.scratchaddons.cf/userscript/script.main.js')
-completion()
+import("https://userscript.scratchaddons.cf/userscript/script.main.js");
+completion();

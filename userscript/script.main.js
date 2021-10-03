@@ -1,7 +1,7 @@
-import('https://userscript.scratchaddons.cf/content-scripts/prototype-handler.js')
-import('https://userscript.scratchaddons.cf/content-scripts/load-redux.js')
-import('https://userscript.scratchaddons.cf/content-scripts/fix-console.js')
-import('https://userscript.scratchaddons.cf/libraries/common/cs/text-color.js')
+import("https://userscript.scratchaddons.cf/content-scripts/prototype-handler.js");
+import("https://userscript.scratchaddons.cf/content-scripts/load-redux.js");
+import("https://userscript.scratchaddons.cf/content-scripts/fix-console.js");
+import("https://userscript.scratchaddons.cf/libraries/common/cs/text-color.js");
 
 function updateAttrs(target, source) {
   Array.from(target.attributes).forEach((attr) => target.removeAttribute(attr.name));
