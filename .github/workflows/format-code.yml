@@ -1,9 +1,5 @@
 name: Format code using Prettier
-on:
-  push:
-    branches-ignore:
-      - prerelease
-  pull_request:
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   format:
@@ -13,30 +9,28 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.WGYTBOT || github.token }}
 
-      - name: Generate token
-        uses: tibdex/github-app-token@v1
-        id: generate-token
-        if: github.repository_owner == 'ScratchAddons'
-        continue-on-error: true
+      - name: Setup Node.JS
+        uses: actions/setup-node@v2.4.0
         with:
-          app_id: ${{ secrets.BOT_APP_ID }}
-          private_key: ${{ secrets.BOT_PRIVATE_KEY }}
+          node-version: 16
 
-      - name: Prettify code (ScratchAddons)
-        if: steps.generate-token.outcome == 'success'
-        uses: ScratchAddons/prettier_action@master
-        with:
-          prettier_options: --write .
-          commit_message: Format code
-        env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+      - name: Install
+        run: npm install prettier --global
 
       - name: Prettify code (outside ScratchAddons)
-        if: steps.generate-token.outcome != 'success'
-        uses: ScratchAddons/prettier_action@master
+        run: npx prettier --write .
+
+
+      - name: Commit
+        if: ${{ !cancelled() }}
+        uses: stefanzweifel/git-auto-commit-action@v4.12.0
         with:
-          prettier_options: --write .
-          commit_message: Format code
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          commit_message: "Lint and format code"
+          branch: ${{ github.head_ref }}
+          commit_options: "--signoff"
+          commit_user_name: wgytbot
+          commit_user_email: 83586655+wgytbot@users.noreply.github.com
+          commit_author: wgytbot <83586655+wgytbot@users.noreply.github.com>
