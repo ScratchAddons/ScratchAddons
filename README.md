@@ -18,6 +18,10 @@
 
 Scratch Addons Userscript is a userscript that has all the features of Scratch Addons' extension. Scratch Addons' mission is to combine all existing Scratch extensions, userscripts and userstyles into a single easy-to-access place, while still letting users choose which ones to enable. Learn more about Scratch Addons [here](https://github.com/scratchaddons/scratchaddons#readme)
 
+## Contribute
+
+If you found a bug, or want to suggest new features, please use the [issues tab](https://github.com/SA-Userscript/ScratchAddons/issues). If you want to help with the code or add a new addon, fork this repository, and then create a [pull request](https://github.com/SA-Userscript/ScratchAddons/pulls). Also, please read our [contributing guidelines](https://github.com/SA-Userscript/ScratchAddons/blob/master/CONTRIBUTING.md).
+
 ## License
 
 Scratch Addons is licensed under the terms of the [GNU General Public License v3.0](https://github.com/SA-Userscript/ScratchAddons/blob/master/LICENSE).
