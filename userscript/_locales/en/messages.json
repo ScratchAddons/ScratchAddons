@@ -1,0 +1,26 @@
+{
+  "scratchAddonsThemeDescription": {
+    "message": "This allows you to switch between light and dark themes for this settings page."
+  },
+  "forumWarning": {
+    "message": "Message added by the Scratch Addons userscript: make sure the bug you're about to report still happens when all browser extensions and userscripts are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
+  },
+  "forumWarningGeneral": {
+    "message": "Message from Scratch Addons userscript: Scratch policy forbids discussion about browser extensions and userscripts, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found a bug, please $1."
+  },
+  "extensionUpdate": {
+    "message": "Scratch Addons userscript update"
+  },
+  "captureCommentError": {
+    "message": "Message added by Scratch Addons userscript: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions or userscripts. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."
+  },
+  "extensionStoreDescription1": {
+    "message": "➖ scratch.mit.edu features ➖\n- Navigation bar customization: re-add the “discuss” button.\n- Make 2.0-styled pages look like 3.0.\n- Website and editor dark modes.\n- And more!"
+  },
+  "extensionStoreDescription3": {
+    "message": "Keep in mind, all features are togglable! To enable or disable them, go to the settings page by TODO."
+  },
+  "extensionStoreDescription5": {
+    "message": "This userscript is open source software licensed under GPL v3.\nTo contribute or check the source code: https://github.com/SA-Userscript\nFor more information, go to: ScratchAddons.com"
+  }
+}

@@ -156,7 +156,7 @@
     "message": "Scratch Addons theme"
   },
   "scratchAddonsThemeDescription": {
-    "message": "This allows you to switch between light and dark themes for this settings page."
+    "message": "This allows you to switch between light and dark themes for this settings page, and the extension's popup."
   },
   "light": {
     "message": "Light"
@@ -192,10 +192,10 @@
     "message": "report it here"
   },
   "forumWarning": {
-    "message": "Message added by the Scratch Addons userscript: make sure the bug you're about to report still happens when all browser extensions and userscripts are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
+    "message": "Message added by the Scratch Addons extension: make sure the bug you're about to report still happens when all browser extensions are disabled, including Scratch Addons. If you believe a bug is caused by Scratch Addons, please $1."
   },
   "forumWarningGeneral": {
-    "message": "Message from Scratch Addons userscript: Scratch policy forbids discussion about browser extensions and userscripts, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found a bug, please $1."
+    "message": "Message from Scratch Addons extension: Scratch policy forbids discussion about browser extensions, including Scratch Addons. Do not advertise Scratch Addons or any of its features. If you found a bug, please $1."
   },
   "search": {
     "message": "Search"
@@ -231,7 +231,7 @@
     "message": "Help Translate"
   },
   "extensionUpdate": {
-    "message": "Scratch Addons userscript update"
+    "message": "Scratch Addons extension update"
   },
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
@@ -315,7 +315,7 @@
     "description": "Placeholder is a number. Example: explore all 80+ addons"
   },
   "captureCommentError": {
-    "message": "Message added by Scratch Addons userscript: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions or userscripts. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."
+    "message": "Message added by Scratch Addons: it appears that your comment doesn't follow $1, which asks Scratchers not to advertise or name browser extensions. This comment wasn't posted because it will probably result in your account getting muted from commenting for 5 minutes."
   },
   "captureCommentPolicy": {
     "message": "Scratch Community's Browser Extension/Userscript Policy"
@@ -327,20 +327,20 @@
     "message": "Are you sure you want to post this comment? Scratch will probably mute your account from commenting anywhere on Scratch for at least 5 minutes."
   },
   "extensionStoreDescription1": {
-    "message": "➖ scratch.mit.edu features ➖\n- Navigation bar customization: re-add the “discuss” button.\n- Make 2.0-styled pages look like 3.0.\n- Website and editor dark modes.\n- And more!"
+    "message": "➖ scratch.mit.edu features ➖\n- Messaging: click the extension icon to get a summary of your messages.\n- Cloud games: see who's playing multiplayer games.\n- Notifier: get browser notifications when you get new messages.\n- Navigation bar customization: re-add the “discuss” button.\n- Make 2.0-styled pages look like 3.0.\n- Website and editor dark modes.\n- And more!"
   },
   "extensionStoreDescription2": {
     "message": "➖ Project editor features ➖\n- Developer tools: adds a find box and new menu options to the editor.\n- 60FPS player mode.\n- Pause button.\n- Onion skinning.\n- Auto-hide block palette.\n- Display stage on left side.\n- And more!"
   },
   "extensionStoreDescription3": {
-    "message": "Keep in mind, all features are togglable! To enable or disable them, go to the settings page by TODO."
+    "message": "Keep in mind, all features are togglable! To enable or disable them, go to the settings page by clicking this extension’s icon under “extensions” in the top-right corner of your browser, and then click the gear icon."
   },
   "extensionStoreDescription4": {
     "message": "No usernames or passwords are stored, and you are required to be signed into your Scratch account in your browser for some features to work.",
     "description": "NOTE: please only mention \"Scratch\" once on this string, do not repeat this word."
   },
   "extensionStoreDescription5": {
-    "message": "This userscript is open source software licensed under GPL v3.\nTo contribute or check the source code: https://github.com/SA-Userscript\nFor more information, go to: ScratchAddons.com"
+    "message": "This extension is open source software licensed under GPL v3.\nTo contribute or check the source code: https://github.com/ScratchAddons\nFor more information, go to: ScratchAddons.com"
   },
   "extensionStoreDescription6": {
     "message": "This project is not affiliated, associated, or in any way officially connected with the Scratch website, Team, Foundation, or any of its affiliates.",
