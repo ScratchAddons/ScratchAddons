@@ -22,9 +22,10 @@ jobs:
 
       - name: Switch branches
         run: |
-          git remote add release https://github.com/SA-Userscript/ScratchAddons-release.git
-          git fetch release
-          git branch -u release/release
+          git remote add release https://github.com/SA-Userscript/ScratchAddons-release.git;
+          git fetch release;
+          git branch -u release/release;
+          git pull release HEAD:release;
           git checkout master -- .;
 
       - name: Install
