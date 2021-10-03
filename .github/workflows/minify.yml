@@ -22,7 +22,7 @@ jobs:
         run: |
           git fetch
           git remote add release https://github.com/SA-Userscript/ScratchAddons-release.git
-          git checkout release;
+          git branch -u release/release
           git checkout master -- .;
 
       - name: Install
