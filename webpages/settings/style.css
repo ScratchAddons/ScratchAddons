@@ -133,6 +133,9 @@ h1 {
   border-color: var(--brand-orange);
   box-shadow: var(--input-focus-shadow);
 }
+.large-button > * {
+  vertical-align: middle;
+}
 
 .clear-button {
   padding-inline: 7px;

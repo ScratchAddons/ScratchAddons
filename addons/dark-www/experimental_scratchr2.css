@@ -124,16 +124,16 @@ h4 {
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-clip: border-box;
 }
+.modal,
 .jqui-modal,
-.jqui-modal.ui-corner-all,
-#new-scratcher-gallery-modal {
+.jqui-modal.ui-corner-all {
   background: #282828;
 }
 .modal .modal-header,
 .jqui-modal .ui-dialog-titlebar.ui-widget-header {
   background: var(--scratchr2-primaryColor, #4d97ff);
-  border-top-left-radius: inherit;
-  border-top-right-radius: inherit;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 .ui-widget-content a {
   color: #4d97ff;
@@ -147,12 +147,14 @@ h4 {
 #email-resend-box .email-resend-subsection {
   color: white;
 }
+.modal .modal-footer,
 #email-resend-box .modal-footer,
 #new-scratcher-gallery-modal .modal-footer {
   background: #282828;
+  border: none;
   box-shadow: none;
 }
-#new-scratcher-gallery-modal .modal-header {
+.modal .modal-header {
   border: none;
 }
 #page-404 .box-header h1 {
