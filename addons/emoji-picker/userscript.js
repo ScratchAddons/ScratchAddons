@@ -411,7 +411,9 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   const addEmoji = function () {
-      const textBox = addon.tab.clientVersion === "scratch-www" ? this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(
+    const textBox =
+      addon.tab.clientVersion === "scratch-www"
+        ? this.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(
             'textarea[id*="frc-compose-comment"]'
           )
         : (textBox = this.parentElement.parentElement.parentElement.parentElement.parentElement.querySelector(
