@@ -21,7 +21,8 @@ jobs:
       - name: Switch branches
         run: |
           git fetch
-          git checkout prerelease;
+          git remote add release https://github.com/SA-Userscript/ScratchAddons-release.git
+          git checkout release;
           git checkout master -- .;
 
       - name: Install
