@@ -11,7 +11,7 @@
     {
       "url": "userscript.js",
       "matches": ["projects", "studios", "profiles"],
-      "runAtComplete": false
+      "runAtComplete": true
     }
   ],
   "userstyles": [
