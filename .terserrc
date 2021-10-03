@@ -1,0 +1,93 @@
+{
+  "compress": {
+    "arguments": true,
+    "ecma": 8,
+    "hoist_funs": true,
+    "if_return": true,
+    "inline": 3,
+    "keep_fargs": false,
+    "keep_infinity": true,
+    "module": true,
+    "passes": 3,
+    "pure_getters": true,
+    "top_retain": [
+      "copy_paste",
+      "$",
+      "libraryLicenses",
+      "licenseNameToText",
+      "licensesReady",
+      "vue",
+      "__scratchAddonsChrome",
+      "chrome",
+      "scratchAddons",
+      "__scratchAddonsTraps",
+      "__scratchAddonsRedux",
+      "_realConsole",
+      "__scratchAddonsTextColor",
+      "Vue",
+      "md5",
+      "scratchblocks",
+      "tinycolor",
+      "Chart",
+      "Comlink",
+      "Scratch",
+      "Blockly",
+      "Clipboard",
+      "ClipboardItem"
+    ],
+    "unsafe_comps": true,
+    "unsafe_Function": true,
+    "unsafe_methods": true,
+    "unsafe_proto": true,
+    "unsafe_undefined": true,
+    "booleans_as_integers": true
+  },
+  "ecma": 8,
+  "module": true,
+  "format": {
+    "comments": false,
+    "ecma": 8,
+    "indent_level": 0,
+    "semicolons": false,
+    "shebang": false,
+    "webkit": true
+  },
+  "mangle": {
+    "eval": true,
+    "keep_fnames": false,
+    "module": true,
+    "reserved": [
+      "copy_paste",
+      "$",
+      "libraryLicenses",
+      "licenseNameToText",
+      "licensesReady",
+      "vue",
+      "__scratchAddonsChrome",
+      "chrome",
+      "scratchAddons",
+      "__scratchAddonsTraps",
+      "__scratchAddonsRedux",
+      "_realConsole",
+      "__scratchAddonsTextColor",
+      "Vue",
+      "md5",
+      "scratchblocks",
+      "tinycolor",
+      "Chart",
+      "Comlink",
+      "Scratch",
+      "Blockly",
+      "Clipboard",
+      "ClipboardItem"
+    ],
+    "properties": {
+      "regex": "^$"
+    }
+  },
+  "parse": {
+    "ecma": 8,
+    "html5_comments": false,
+    "shebang": false
+  }
+}
