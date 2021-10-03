@@ -322,7 +322,7 @@ export default async ({ addon, console, msg }) => {
       const roundedDelay = Math.floor(delay);
       for (let index = 0; index < roundedDelay; index++) {
         recordElem.textContent = msg("starting-in", { secs: roundedDelay - index });
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 975));
       }
       setTimeout(() => {
         recordElem.textContent = msg("stop");
