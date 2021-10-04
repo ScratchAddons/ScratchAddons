@@ -32,7 +32,7 @@ window.addEventListener("message", async (event) => {
   if (data === "waitForState") {
     return scratchAddons.localState.allReady
       ? sendResponse()
-      : scratchAddons.localEvents.addEventListener("ready", sendResponse);
+      : scratchAddons.localEvents.addEventListener("ready", () => sendResponse());
   }
 
   if (data === "areListenersReady") return event.source.postMessage("listeners ready", event.origin);
