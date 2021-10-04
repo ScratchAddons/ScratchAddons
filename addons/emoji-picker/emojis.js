@@ -5,14 +5,12 @@ export const emojis = [
   {
     text: "_meow_",
     image: "/images/emoji/meow.png",
-    imager2:
-      "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/meow.png",
+    imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/meow.png",
   },
   {
     text: "_gobo_",
     image: "/images/emoji/gobo.png",
-    imager2:
-      "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/gobo.png",
+    imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/gobo.png",
   },
   {
     text: "_:)_",
@@ -88,8 +86,7 @@ export const emojis = [
   {
     text: "_10mil_",
     image: "/images/emoji/10mil.png",
-    imager2:
-      "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/10mil.png",
+    imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/10mil.png",
   },
   {
     text: "_waffle_",
@@ -100,20 +97,17 @@ export const emojis = [
   {
     text: "_taco_",
     image: "/images/emoji/taco.png",
-    imager2:
-      "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/taco.png",
+    imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/taco.png",
   },
   {
     text: "_sushi_",
     image: "/images/emoji/sushi.png",
-    imager2:
-      "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/sushi.png",
+    imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/sushi.png",
   },
   {
     text: "_apple_",
     image: "/images/emoji/apple.png",
-    imager2:
-      "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/apple.png",
+    imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/apple.png",
   },
   {
     text: "_broccoli_",
@@ -124,8 +118,7 @@ export const emojis = [
   {
     text: "_pizza_",
     image: "/images/emoji/pizza.png",
-    imager2:
-      "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/pizza.png",
+    imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/pizza.png",
   },
   {
     text: "_candycorn_",
@@ -171,8 +164,7 @@ export const emojis = [
   {
     text: "_pride_",
     image: "/images/emoji/pride.png",
-    imager2:
-      "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/pride.png",
+    imager2: "//cdn.scratch.mit.edu/scratchr2/static/__9e4044de46c7852aec750b6571cceb92__/images/easter_eggs/pride.png",
   },
   {
     text: "_blm_",

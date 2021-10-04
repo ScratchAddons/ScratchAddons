@@ -1,8 +1,7 @@
 import { emojis, unicodeEmojis } from "./emojis.js";
 export default async function ({ addon, global, console, msg }) {
-  
   //Constants
-  
+
   const emojiPickerOffset = addon.tab.clientVersion === "scratchr2" ? 30 : 52;
 
   //Functions
