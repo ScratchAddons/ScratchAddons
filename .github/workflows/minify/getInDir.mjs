@@ -1,7 +1,7 @@
 import { readdirSync, statSync } from "fs";
 import { join, resolve } from "path";
 
-export default function getAllFiles({ path, arrayOfFiles = [], ext }) {
+export default function getAllFiles({ path = "./", arrayOfFiles = [], ext = "" } = {}) {
   let files = readdirSync(path);
   files.forEach((file) => {
     if (statSync(`${path}/${file}`).isDirectory() && ![".git", "node_modules"].includes(file)) {
