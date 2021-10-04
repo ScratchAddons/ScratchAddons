@@ -175,6 +175,8 @@ a.message-type-title-text {
 }
 .comment-content-text {
   margin-right: 10px;
+  /* For multi-line comments */
+  white-space: break-spaces;
 }
 .comment-content-text:after {
   /* So that empty comments take up a line */

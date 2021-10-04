@@ -53,9 +53,12 @@ export default class DevTools {
         oldCleanUpFunc.call(this);
       }
     };
+
+    let originalMsg = blockly.Msg.CLEAN_UP;
     if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
     this.addon.settings.addEventListener("change", () => {
       if (this.addon.settings.get("enableCleanUpPlus")) blockly.Msg.CLEAN_UP = this.m("clean-plus");
+      else blockly.Msg.CLEAN_UP = originalMsg;
     });
 
     this.addon.tab.createBlockContextMenu(
@@ -1502,7 +1505,7 @@ export default class DevTools {
       this.hideFloatDropDown();
     }
 
-    if (e.button === 1) {
+    if (e.button === 1 || e.shiftKey) {
       // Wheel button...
       try {
         this.middleClick(e);
@@ -1511,6 +1514,7 @@ export default class DevTools {
       }
     } else if (e.button === 2) {
       // Right click...
+      /*
       let spriteSelector = e.target.closest("#react-tabs-3 div[class*='sprite-selector-item_sprite-selector-item']");
       if (spriteSelector) {
         let contextMenu = spriteSelector.getElementsByTagName("nav")[0];
@@ -1534,6 +1538,7 @@ export default class DevTools {
           );
         }
       }
+      */
     } else {
       let chk = e.target;
       if (chk && chk.tagName !== "BUTTON" && chk.getAttribute && !chk.getAttribute("role")) {

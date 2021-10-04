@@ -1,1 +1,1 @@
-{"disable-stage-drag-select/@name":"Nich ziehbare Figuren im Editor","disable-stage-drag-select/@info-shift":"Halte die Umschalttaste gedrückt, um sie normal zu ziehen, auch wenn sie nicht auf ziehbar gesetzt wurde."}
+{"disable-stage-drag-select/@name":"Nich ziehbare Figuren im Editor","disable-stage-drag-select/@description":"Entfernt die Möglichkeit, Figuren auf der Bühne herumzuziehen, explizit ziehbare Figuren ausgenommen.","disable-stage-drag-select/@info-shift":"Halte die Umschalttaste gedrückt, um sie normal zu ziehen, auch wenn sie nicht auf ziehbar gesetzt wurde."}

@@ -1,6 +1,12 @@
 {
   "name": "Compact messages",
   "description": "Makes Scratch's messages page more compact and easier to read.",
+  "credits": [
+    {
+      "name": "LankyBox01",
+      "link": "https://lankybox01.glitch.me/"
+    }
+  ],
   "settings": [
     {
       "name": "Hide message type icons",
@@ -33,9 +39,10 @@
     {
       "url": "hide_icons.css",
       "matches": ["https://scratch.mit.edu/messages"],
-      "settingMatch": {
-        "id": "hide_icons",
-        "value": true
+      "if": {
+        "settings": {
+          "hide_icons": true
+        }
       }
     }
   ],
