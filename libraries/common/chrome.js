@@ -23,7 +23,7 @@ function waitForListeners() {
       }
     };
     window.addEventListener("message", listener);
-    window.parent.postMessage("areListenersReady", "*");
+    window.parent.postMessage({ message: "areListenersReady" }, "*");
   });
 }
 const console = createConsole("chrome");
