@@ -17,7 +17,9 @@ if (typeof scratchAddons === "object") {
   console.log("Scratch Addons: extention running, stopping userscript");
 }
 
-const addonListPromise = loadManifests(false);
+const addonListPromise = loadManifests(false),
+  i18nPromise = chrome.i18n.init();
+
 /*
 let pseudoUrl; // Fake URL to use if response code isn't 2xx
 
@@ -101,7 +103,7 @@ async function loadState() {
 
   scratchAddons.localState = localStateProxy;
   loadScriptFromUrl("background/get-addon-settings.js", true);
-  chrome.i18n.init().then(() => (scratchAddons.localState.ready.i18n = true));
+  i18nPromise.then(() => (scratchAddons.localState.ready.i18n = true));
   addonListPromise.then((manifests) => {
     scratchAddons.manifests = manifests;
     scratchAddons.localState.ready.manifests = true;
@@ -521,10 +523,7 @@ async function forumWarning(key) {
     const utm = `utm_source=userscript&utm_medium=forumwarning&utm_campaign=v${manifest.version}`;
     reportLink.href = `https://scratchaddons.com/${localeSlash}feedback/?ext_version=${manifest.version}&${utm}`;
     reportLink.target = "_blank";
-    if (!chrome.i18n.ready)
-      await new Promise((resolve, reject) => {
-        window.addEventListener(".i18n load", resolve);
-      });
+    if (!chrome.i18n.ready) await i18nPromise;
     reportLink.innerText = chrome.i18n.getMessage("reportItHere");
     let text1 = document.createElement("span");
     text1.innerHTML = escapeHTML(chrome.i18n.getMessage(key, DOLLARS)).replace("$1", reportLink.outerHTML);
@@ -557,10 +556,7 @@ const showBanner = async () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
-  if (!chrome.i18n.ready)
-    await new Promise((resolve, reject) => {
-      window.addEventListener(".i18n load", resolve);
-    });
+  if (!chrome.i18n.ready) await i18nPromise;
   /*
   const notifImageLink = Object.assign(document.createElement("a"), {
     href: "",
@@ -716,10 +712,7 @@ if (document.readyState !== "loading") {
     const extensionPolicyLink = document.createElement("a");
     extensionPolicyLink.href = "https://scratch.mit.edu/discuss/topic/284272/";
     extensionPolicyLink.target = "_blank";
-    if (!chrome.i18n.ready)
-      await new Promise((resolve, reject) => {
-        window.addEventListener(".i18n load", resolve);
-      });
+    if (!chrome.i18n.ready) await i18nPromise;
     extensionPolicyLink.innerText = chrome.i18n.getMessage("captureCommentPolicy");
     Object.assign(extensionPolicyLink.style, {
       textDecoration: "underline",

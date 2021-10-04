@@ -4,7 +4,6 @@ import handleL10n from "../../background/handle-l10n.js";
 const iframe = document.querySelector("iframe");
 
 scratchAddons.localState.ready.i18n = scratchAddons.localState.ready.auth = true; // Not used nor loaded on this page
-window.dispatchEvent(new CustomEvent(".i18n load"));
 
 window.addEventListener("message", async (event) => {
   if (![iframe.contentWindow, window].includes(event.source) || event.data.reqId || !event.data?.message) return;
@@ -33,7 +32,7 @@ window.addEventListener("message", async (event) => {
   if (data === "waitForState") {
     return scratchAddons.localState.allReady
       ? sendResponse()
-      : scratchAddons.localEvents.addEventListener("ready", sendResponse);
+      : scratchAddons.localEvents.addEventListener("ready", () => sendResponse());
   }
 
   if (data === "areListenersReady") return event.source.postMessage("listeners ready", event.origin);

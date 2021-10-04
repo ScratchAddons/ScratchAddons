@@ -1,5 +1,7 @@
 /* global libraryLicenses, licenseNameToText, licensesReady, vue */
 
+const i18nPromise = chrome.i18n.init();
+
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");
@@ -13,7 +15,7 @@ chrome.storage.sync.get(["globalTheme"], function (r) {
 });
 
 (async () => {
-  await chrome.i18n.init();
+  await i18nPromise;
 
   window.vue = new Vue({
     el: "body",

@@ -23,7 +23,7 @@ function waitForListeners() {
       }
     };
     window.addEventListener("message", listener);
-    window.parent.postMessage("areListenersReady", "*");
+    window.parent.postMessage({ message: "areListenersReady" }, "*");
   });
 }
 const console = createConsole("chrome");
@@ -132,7 +132,6 @@ export default {
 
         __scratchAddonsChrome.messages = Object.assign({}, ...(await Promise.all(localePromises)));
       }
-      window.dispatchEvent(new CustomEvent(".i18n load"));
       this.ready = true;
     },
     getUILanguage() {
