@@ -1,4 +1,6 @@
-export default () => [
+import chrome from "../../libraries/common/chrome.js";
+
+const categories = () => [
   {
     id: "all",
     icon: "list",
@@ -86,3 +88,8 @@ export default () => [
     marginBottom: true,
   },
 ];
+
+export default async () => {
+  await chrome.i18n.init();
+  return categories;
+};

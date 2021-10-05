@@ -1,4 +1,6 @@
-export default () => [
+import chrome from "../../libraries/common/chrome.js";
+
+const groups = () => [
   // Only popup:
   {
     id: "recentlyUsed",
@@ -91,3 +93,8 @@ export default () => [
     fullscreenShow: true,
   },
 ];
+
+export default async () => {
+  await chrome.i18n.init();
+  return groups;
+};

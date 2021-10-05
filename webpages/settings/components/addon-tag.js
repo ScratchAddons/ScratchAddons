@@ -1,8 +1,11 @@
+import chrome from "../../libraries/common/chrome.js";
+
 import tags from "../data/tags.js";
 
 const isIframe = false;
 
 export default async function ({ template }) {
+  await chrome.i18n.init();
   const AddonTag = Vue.extend({
     props: ["tag"],
     template,

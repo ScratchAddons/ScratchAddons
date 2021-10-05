@@ -7,6 +7,7 @@ import addonGroupsFunc from "./data/addon-groups.js";
 import categoriesFunc from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
+import chrome from "../../libraries/common/chrome.js"
 
 if (window.parent === window) {
   location.href = "https://scratch.mit.edu/scratch-addons-extention/settings";
@@ -77,8 +78,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
 async function func() {
   const manifest = await chrome.runtime.getManifest();
 
-  const addonGroups = addonGroupsFunc();
-  const categories = categoriesFunc();
+  const addonGroups = await addonGroupsFunc();
+  const categories = await categoriesFunc();
 
   const promisify =
     (callbackFn) =>

@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
     <link rel="icon" href="../../images/icon.png" />
-    <script type="module">
-      import chrome from "../../libraries/common/chrome.js";
-      window.chrome = chrome;
-    </script>
-
     <script src="../set-lang.js" defer async type="module"></script>
     <script src="../check-unsupported.js" defer async type="module"></script>
     <style>
@@ -21,12 +16,11 @@
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
     <script src="../../background/handle-licenses.js" defer></script>
-    <script src="./licenses.js" defer></script>
+    <script src="./licenses.js" defer type="module"></script>
   </head>
   <body class="licenses">
     <div class="navbar">
-      <a href="./scratch.html"><img src="../../images/icon.svg" class="logo" alt="Logo" /></a>
-      <!--todo update link-->
+      <a href="https://scratchaddons.com"><img src="../../images/icon.svg" class="logo" alt="Logo" /></a>
       <h1 v-cloak>{{ msg("licenses") }}</h1>
     </div>
     <div class="main">
