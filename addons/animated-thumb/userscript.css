@@ -1,3 +1,73 @@
-.sa-animated-thumb-input {
+.sa-animated-thumb-input,
+.sa-animated-thumb-popup-result-none {
   display: none;
+}
+
+.sa-animated-thumb-popup {
+  box-sizing: border-box;
+  width: 700px;
+  max-height: min(800px, 80vh);
+  max-width: 85%;
+  margin-top: 12vh;
+  overflow-y: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sa-animated-thumb-popup [class*="modal_header-item-title"] {
+  margin: 0; /* required because there is no close button */
+}
+
+.sa-animated-thumb-popup-content {
+  background-color: white;
+  padding: 1.5rem 2.25rem;
+}
+
+.sa-animated-thumb-popup p {
+  font-size: 1rem;
+  margin: 1rem auto;
+}
+
+.sa-animated-thumb-popup p :last-child {
+  margin-left: 1rem;
+}
+
+.sa-animated-thumb-popup[dir="rtl"] p :last-child {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+.sa-animated-thumb-popup-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.sa-animated-thumb-popup-actions button {
+  background: #ff7b26;
+  color: white;
+  margin: 0 2rem;
+}
+
+.sa-animated-thumb-popup-buttons {
+  margin-top: 1.5rem;
+}
+
+.sa-animated-thumb-popup-buttons button {
+  margin-left: 0.5rem;
+}
+
+.sa-animated-thumb-popup-result {
+  margin: 2rem 0;
+  border-radius: 2px;
+  height: auto;
+  width: auto;
+  padding: 1rem;
+}
+
+.sa-animated-thumb-popup-result-success {
+  border: 4px hsl(163, 85%, 40%) solid;
+}
+
+.sa-animated-thumb-popup-result-failure {
+  border: 4px hsl(38, 100%, 55%) solid;
 }

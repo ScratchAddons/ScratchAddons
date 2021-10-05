@@ -1,8 +1,18 @@
 export default class ThumbSetter {
-  constructor(messagesFn, projectId) {
+  constructor(projectId, beforeUpload) {
     this._input = null;
-    this.msg = messagesFn;
+    this._beforeUpload = beforeUpload;
     this.projectId = projectId || location.pathname.replace(/\D/g, "");
+    this.onFinished = (value) => value;
+  }
+
+  _initPromise() {
+    this._callback = null;
+    this._errorCallback = null;
+    this.finished = new Promise((resolve, reject) => {
+      this._callback = resolve;
+      this._errorCallback = reject;
+    });
   }
 
   addFileInput() {
@@ -11,6 +21,7 @@ export default class ThumbSetter {
     input.accept = "image/*";
     input.classList.add("sa-animated-thumb-input");
     input.addEventListener("change", this.onInput.bind(this), { once: true });
+    input.addEventListener("cancel", this.onCancel.bind(this), { once: true });
     document.body.appendChild(input);
   }
 
@@ -20,10 +31,23 @@ export default class ThumbSetter {
 
   onInput() {
     let promise = Promise.resolve();
-    if (this._input && this._input.files && this._input.files[0]) {
-      promise = this.upload(this._input.files[0]);
+    const file = this._input?.files?.[0];
+    if (file) {
+      if (this._beforeUpload) {
+        promise = this._beforeUpload(file).catch((e) => {
+          if (e !== "Aborted") throw e;
+        });
+      }
+      promise.then(() => this.upload(file));
     }
     promise.finally(() => this.removeFileInput());
+  }
+
+  onCancel() {
+    this.removeFileInput();
+    this._initPromise();
+    this.onFinished(this.finished);
+    this._callback(true);
   }
 
   removeFileInput() {
@@ -39,6 +63,8 @@ export default class ThumbSetter {
   }
 
   async upload(file) {
+    this._initPromise();
+    this.onFinished(this.finished);
     try {
       const resp = await fetch(`https://scratch.mit.edu/internalapi/project/thumbnail/${this.projectId}/set/`, {
         method: "POST",
@@ -55,20 +81,9 @@ export default class ThumbSetter {
       }
     } catch (e) {
       console.error("Error while uploading a thumbnail:", e.message);
-      switch (e.status) {
-        case 413:
-          alert(this.msg("thumb-error-413"));
-          break;
-        case 500:
-        case 503:
-          alert(this.msg("thumb-error-503"));
-          break;
-        default:
-          alert(this.msg("thumb-error"));
-          throw e;
-      }
+      this._errorCallback(e.status);
       return;
     }
-    alert(this.msg("thumb-success"));
+    this._callback();
   }
 }
