@@ -1,6 +1,6 @@
 {
-  "name": "Enhanced fullscreen",
-  "description": "Adds several tweaks and customization options to the project player's fullscreen mode, such as syncing with your browser's fullscreen mode (F11), darkening the background behind the project player, and hiding the green flag toolbar.",
+  "name": "Enhanced full screen",
+  "description": "Fixes some undesired effects in the project player's full screen mode, opens it in your browser's full screen mode, and hides the green flag toolbar. You can change the background and header colors in the \"Editor dark mode and customizable colors\" addon.",
   "credits": [
     {
       "name": "lisa_wolfgang",
@@ -10,39 +10,19 @@
   "info": [
     {
       "type": "notice",
-      "text": "If you hide the toolbar and don't have the fullscreen sync option enabled, you'll need to use the Esc key on your keyboard to exit the project player's fullscreen mode.",
+      "text": "If you choose to hide the toolbar, remember that you can use the Esc key to exit the project player's full screen mode.",
       "id": "hideToolbarNotice"
-    },
-    {
-      "type": "notice",
-      "text": "If you use the F11 key to enter fullscreen, the Esc key will not fully exit browser fullscreen. If you enable the editor fullscreen option and you're in the editor, when you use F11 and then click the stage button, neither the Esc key nor the stage button will exit browser fullscreen.",
-      "id": "escExitNotice"
     }
   ],
   "settings": [
     {
-      "name": "Sync browser's and Scratch's fullscreen modes",
+      "name": "Open full screen project player in full screen browser mode",
       "id": "browserFullscreen",
       "type": "boolean",
       "default": true
     },
     {
-      "name": "Only toggle browser fullscreen in editor with stage button",
-      "id": "editorFullscreen",
-      "type": "boolean",
-      "default": true,
-      "if": {
-        "settings": { "browserFullscreen": true }
-      }
-    },
-    {
-      "name": "Darken background",
-      "id": "darkenBg",
-      "type": "boolean",
-      "default": true
-    },
-    {
-      "name": "Hide toolbar",
+      "name": "Hide toolbar in full screen",
       "id": "hideToolbar",
       "type": "boolean",
       "default": false
@@ -79,13 +59,6 @@
       }
     },
     {
-      "url": "darkenBg.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "darkenBg": true }
-      }
-    },
-    {
       "url": "hideToolbar.css",
       "matches": ["projects"],
       "if": {
@@ -99,6 +72,7 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "theme", "projectPlayer"],
+  "tags": ["editor", "projectPlayer", "featured"],
+  "versionAdded": "1.21.0",
   "enabledByDefault": false
 }
