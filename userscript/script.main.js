@@ -12,13 +12,6 @@ function updateAttrs(target, source) {
 }
 
 if (/^\/(scratch\-addons\-extension|sa\-ext|sa|scratch-addons|)\/settings\/?$/i.test(location.pathname)) {
-  async function appendDarkBody() {
-    return document.head.append(
-      Object.assign(document.createElement("style", { textContent: "html,body{background:#000}" }))
-    );
-  }
-  appendDarkBody();
-
   fetch("https://userscript.scratchaddons.cf/webpages/settings/scratch.html")
     .then((r) => r.text())
     .then(async (html) => {
@@ -30,7 +23,6 @@ if (/^\/(scratch\-addons\-extension|sa\-ext|sa|scratch-addons|)\/settings\/?$/i.
       if (!document.head) document.documentElement.append(document.createElement("head"));
       updateAttrs(document.head, dom.head);
       document.head.innerHTML = "";
-      appendDarkBody();
       const deferred = [];
       for (const element of [...dom.head.children]) {
         if (element.tagName === "SCRIPT") {
