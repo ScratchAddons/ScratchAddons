@@ -22,8 +22,7 @@ export default async function ({ addon, global, console }) {
       // If browser fullscreen is disabled, then Scratch fullscreen should also
       // be disabled.
       if (
-        (document.fullscreenElement === null
-        || window.innerHeight !== window.screen.height) &&
+        (document.fullscreenElement === null || window.innerHeight !== window.screen.height) &&
         addon.tab.editorMode === "fullscreen"
       ) {
         addon.tab.redux.dispatch({
