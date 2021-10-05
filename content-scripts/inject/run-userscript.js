@@ -1,5 +1,6 @@
 import Addon from "../../addon-api/content-script/Addon.js";
 import createConsole from "../../libraries/common/console.js";
+import chrome from "../../libraries/common/chrome.js";
 
 const console = createConsole("page");
 
@@ -9,9 +10,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
   const globalObj = Object.create(null);
   for (const scriptInfo of scripts) {
     const { url: scriptPath, runAtComplete } = scriptInfo;
-    const scriptUrl = new URL("../../" + `addons/${addonId}/${scriptPath}`, import.meta.url).href
-      .replace(/(?<!\.min)\.js$/, ".js")
-      .replace(/(?<!\.min)\.css$/, ".css");
+    const scriptUrl = chrome.runtime.getURL(`addons/${addonId}/${scriptPath}`)
     const loadUserscript = async () => {
       await scratchAddons.l10n.loadByAddonId(addonId);
       const module = await import(scriptUrl);

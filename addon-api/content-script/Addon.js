@@ -2,6 +2,7 @@ import Addon from "../common/Addon.js";
 import Tab from "./Tab.js";
 import Auth from "./Auth.js";
 import Account from "./Account.js";
+import chrome from "../../libraries/common/chrome.js"
 
 /**
  * An addon that loads as a userscript.
@@ -14,7 +15,7 @@ export default class UserscriptAddon extends Addon {
   constructor(info) {
     super(info);
     this._addonId = info.id;
-    this.__path = `${new URL(import.meta.url).origin}/`;
+    this.__path = chrome.runtime.getURL("")
     this.tab = new Tab(info);
     this.auth.dispose();
     this.auth = new Auth(this);
