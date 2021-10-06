@@ -6,13 +6,17 @@ export default async function ({ addon, console }) {
       detail.action.type === "scratch-paint/clipboard/SET" ||
       detail.action.type === "scratch-paint/clipboard/INCREMENT_PASTE_OFFSET"
     ) {
-      addon.tab.redux.state.scratchPaint.clipboard.pasteOffset = 0;
+      addon.tab.redux.dispatch({ type: "scratch-paint/clipboard/CLEAR_PASTE_OFFSET" });
     }
   });
   addon.self.addEventListener("disabled", () => {
-    addon.tab.redux.state.scratchPaint.clipboard.pasteOffset = 1;
+    addon.tab.redux.dispatch({ type: "scratch-paint/clipboard/CLEAR_PASTE_OFFSET" });
+    addon.tab.redux.dispatch({ type: "scratch-paint/clipboard/INCREMENT_PASTE_OFFSET" });
   });
   addon.self.addEventListener("reenabled", () => {
-    addon.tab.redux.state.scratchPaint.clipboard.pasteOffset = 0;
+    addon.tab.redux.dispatch({ type: "scratch-paint/clipboard/CLEAR_PASTE_OFFSET" });
   });
+  if (addon.self.enabledLate) {
+    addon.tab.redux.dispatch({ type: "scratch-paint/clipboard/CLEAR_PASTE_OFFSET" });
+  }
 }
