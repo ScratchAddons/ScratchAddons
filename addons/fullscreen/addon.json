@@ -1,6 +1,6 @@
 {
   "name": "Enhanced full screen",
-  "description": "Fixes some undesired effects in the project player's full screen mode, opens it in your browser's full screen mode, and hides the green flag toolbar. You can change the background and header colors in the \"Editor dark mode and customizable colors\" addon.",
+  "description": "Fixes some undesired effects in the project player's full screen mode, opens it in your browser's full screen mode, and hides the green flag toolbar.",
   "credits": [
     {
       "name": "lisa_wolfgang",
