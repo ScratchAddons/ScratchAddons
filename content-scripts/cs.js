@@ -585,7 +585,7 @@ const showBanner = async () => {
     cursor: pointer;
     width: 24px;`,
     title: chrome.i18n.getMessage("close"),
-    src: chrome.runtime.getURL("../images/cs/close.svg"),
+    src: chrome.runtime.getURL("images/cs/close.svg"),
   });
   notifClose.addEventListener("click", () => notifInnerBody.remove(), { once: true });
 
