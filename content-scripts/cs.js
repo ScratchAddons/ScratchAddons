@@ -220,13 +220,21 @@ function injectUserstyles(addonsWithUserstyles) {
 }
 
 const textColorLib = __scratchAddonsTextColor;
+const existingCssVariables = [];
 function setCssVariables(addonSettings, addonsWithUserstyles) {
   const hyphensToCamelCase = (s) => s.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-  const setVar = (addonId, varName, value) =>
-    document.documentElement.style.setProperty(`--${hyphensToCamelCase(addonId)}-${varName}`, value);
+  const setVar = (addonId, varName, value) => {
+    const realVarName = `--${hyphensToCamelCase(addonId)}-${varName}`;
+    document.documentElement.style.setProperty(realVarName, value);
+    existingCssVariables.push(realVarName);
+  };
 
   const removeVar = (addonId, varName) =>
     document.documentElement.style.removeProperty(`--${hyphensToCamelCase(addonId)}-${varName}`);
+
+  // First remove all CSS variables, we add them all back anyway
+  existingCssVariables.forEach((varName) => document.documentElement.style.removeProperty(varName));
+  existingCssVariables.length = 0;
 
   const addonIds = addonsWithUserstyles.map((obj) => obj.addonId);
 
@@ -382,6 +390,7 @@ async function onInfoAvailable({ globalState: globalStateMsg, addonsWithUserscri
 
       removeAddonStyles(addonId);
       _page_.fireEvent({ name: "disabled", addonId, target: "self" });
+      setCssVariables(globalState.addonSettings, addonsWithUserstyles);
     } else if (request.updateUserstylesSettingsChange) {
       const { userstyles, addonId, injectAsStyleElt, index } = request.updateUserstylesSettingsChange;
       // Removing the addon styles and readding them works since the background
@@ -466,16 +475,19 @@ const showBanner = () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
+  /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=GrKHdKQq_hc",
+    href: "",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
   });
+  // Thumbnails were 100px height
+  */
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.jpg"),
-    style: "height: 100px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/single-block-grab.gif"),
+    style: "height: 175px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -505,7 +517,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_19", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_20", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -524,7 +536,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_19"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_20"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
@@ -573,9 +585,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  notifImageLink.appendChild(notifImage);
+  // notifImageLink.appendChild(notifImage);
 
-  notifInnerBody.appendChild(notifImageLink);
+  notifInnerBody.appendChild(notifImage);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);

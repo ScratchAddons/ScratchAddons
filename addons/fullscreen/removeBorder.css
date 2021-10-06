@@ -1,0 +1,5 @@
+[class*="stage-wrapper_full-screen"] [class*="stage_full-screen"],
+[class*="stage-wrapper_full-screen"] [class*="stage_green-flag-overlay-wrapper"] {
+  border: 0 !important;
+  border-radius: 0 !important;
+}

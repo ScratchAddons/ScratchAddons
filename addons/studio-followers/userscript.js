@@ -12,7 +12,7 @@ export default async function ({ addon, global, console, msg }) {
   const members = [...redux.state.managers.items, ...redux.state.curators.items].map((member) => member.username);
 
   // TODO: consider logging into another account within the same session, like studio-tools does
-  const isOwner = redux.state.studio.owner === redux.state.session.session?.user?.id;
+  const isOwner = (redux.state.studio.host || redux.state.studio.owner) === redux.state.session.session?.user?.id;
   const isManager = redux.state.studio.manager || isOwner;
   if (!isManager) return;
   const itemPageLimit = 28;

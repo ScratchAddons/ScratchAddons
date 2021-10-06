@@ -18,7 +18,7 @@ export default async ({ addon, console, msg }) => {
   let isCurator = false;
   let canLeave = false;
   const checkPermissions = () => {
-    isOwner = redux.state.studio.owner === redux.state.session.session?.user?.id;
+    isOwner = (redux.state.studio.host || redux.state.studio.owner) === redux.state.session.session?.user?.id;
     isManager = redux.state.studio.manager || isOwner;
     isCurator = redux.state.studio.curator;
     canLeave = (isCurator || isManager) && !isOwner;
@@ -125,28 +125,8 @@ export default async ({ addon, console, msg }) => {
           } catch (e) {}
           if (!isOkay(r, result)) return;
           alert(msg("promoted", { username: u }));
-
-          const curatorList = redux.state.curators.items;
-          const index = curatorList.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
-          const curatorItem = curatorList[index];
-          if (index !== -1)
-            redux.dispatch({
-              type: "curators_REMOVE",
-              index,
-            });
-
-          redux.dispatch({
-            type: "managers_CREATE",
-            item: curatorItem,
-            atEnd: true,
-          });
-
-          redux.dispatch({
-            type: "SET_INFO",
-            info: {
-              managers: redux.state.studio.managers + 1,
-            },
-          });
+          // we don't bother updating redux ourselves
+          location.reload();
         },
         () => {
           if (redux.state.studio.managers < MAX_MANAGERS) return null;
@@ -165,20 +145,8 @@ export default async ({ addon, console, msg }) => {
         });
         if (!isOkay(r)) return;
         alert(msg("removed", { username: u }));
-
-        let index = redux.state.curators.items.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
-        if (index === -1) {
-          index = redux.state.managers.items.findIndex((v) => v.username.toLowerCase() === u.toLowerCase());
-          index !== -1 &&
-            redux.dispatch({
-              type: "managers_REMOVE",
-              index,
-            });
-        } else
-          redux.dispatch({
-            type: "curators_REMOVE",
-            index,
-          });
+        // we don't bother updating redux ourselves
+        location.reload();
       });
 
       addon.tab.appendToSharedSpace({ space: "studioCuratorsTab", element: pSec, order: 1 });
@@ -223,7 +191,10 @@ export default async ({ addon, console, msg }) => {
   render();
   addon.tab.addEventListener("urlChange", render);
   redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "SET_ROLES") {
+    if (
+      e.detail.action.type === "SET_ROLES" ||
+      (e.detail.action.type === "SET_INFO" && (e.detail.action.info.host || e.detail.action.info.owner))
+    ) {
       checkPermissions();
       render();
     }

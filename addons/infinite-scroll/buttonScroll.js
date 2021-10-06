@@ -70,11 +70,14 @@ export default async function ({ addon, global, console }) {
     commentLoader(addon, "#view", ".studio-activity .studio-grid-load-more > button", "activity");
 
   // Enable scrolling for studio-followers
+  // Disabled, see #3238
+  /*
   if (isStudio && addon.settings.get("studioBrowseProjectScroll")) {
     addon.tab.waitForElement(".sa-followers-main .user-projects-modal-content").then((el) => {
       el.setAttribute("data-scrollable", "true");
     });
   }
+  */
 
   if (isStudio && addon.tab.redux.state) {
     // Fix vanilla bug causing unnecessary re-fetch

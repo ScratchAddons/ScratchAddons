@@ -1,0 +1,24 @@
+{
+  "name": "Unshare button in editor",
+  "description": "Replaces the \"Shared\" button next to the project title box with a button to unshare the project.",
+  "credits": [
+    {
+      "name": "9gr",
+      "link": "https://scratch.mit.edu/users/9gr/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "button.css",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "editorMenuBar"],
+  "versionAdded": "1.20.0"
+}
