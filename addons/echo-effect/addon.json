@@ -1,0 +1,14 @@
+{
+  "name": "Echo effect button",
+  "description": "Brings back the Echo button in the sound editor.",
+  "tags": ["editor"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.21.0"
+}

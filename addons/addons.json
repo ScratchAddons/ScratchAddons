@@ -101,6 +101,8 @@
   "hide-new-variables",
   "move-to-top-bottom",
   "fullscreen",
+  "echo-effect",
+  "block-duplicate",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
