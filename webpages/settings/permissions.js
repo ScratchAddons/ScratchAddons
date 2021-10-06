@@ -1,3 +1,7 @@
+import chrome from "../../libraries/common/chrome.js";
+
+const i18nPromise = chrome.i18n.init();
+
 const lightThemeLink = document.createElement("link");
 lightThemeLink.setAttribute("rel", "stylesheet");
 lightThemeLink.setAttribute("href", "light.css");

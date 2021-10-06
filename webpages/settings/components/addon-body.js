@@ -1,6 +1,9 @@
+import chrome from "../../libraries/common/chrome.js";
+
 const isIframe = false;
 
 export default async function ({ template }) {
+  await chrome.i18n.init();
   const AddonBody = Vue.extend({
     props: ["addon", "groupId", "groupExpanded", "visible"],
     template,

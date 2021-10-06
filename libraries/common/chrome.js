@@ -98,7 +98,7 @@ export default {
     },
   },
   i18n: {
-    ready: __scratchAddonsChrome.messages,
+    ready: !!__scratchAddonsChrome.messages,
     async init() {
       if (!__scratchAddonsChrome.messages) {
         const ui = navigator.language.toLowerCase().split("-");

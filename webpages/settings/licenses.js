@@ -1,5 +1,7 @@
 /* global libraryLicenses, licenseNameToText, licensesReady, vue */
 
+import chrome from "../../libraries/common/chrome.js";
+
 const i18nPromise = chrome.i18n.init();
 
 const lightThemeLink = document.createElement("link");
