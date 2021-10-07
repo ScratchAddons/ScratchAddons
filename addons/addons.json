@@ -103,6 +103,7 @@
   "fullscreen",
   "echo-effect",
   "block-duplicate",
+  "disable-paste-offset",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
