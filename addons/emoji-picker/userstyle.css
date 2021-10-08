@@ -1,4 +1,4 @@
-#sa-emoji-picker {
+.sa-emoji-picker {
   cursor: auto;
   position: absolute;
   width: 390px;
@@ -13,10 +13,10 @@
   line-height: 0px;
   font-size: 15px;
 }
-.sa-emoji-button-www #sa-emoji-picker {
+.sa-emoji-button-www .sa-emoji-picker {
   right: -7px;
 }
-.sa-emoji-button-r2 #sa-emoji-picker {
+.sa-emoji-button-r2 .sa-emoji-picker {
   left: -10px;
 }
 .sa-emoji-picker-item {

@@ -80,7 +80,7 @@ export default async function ({ addon, global, console, msg }) {
 
   //Create the emoji picker
   const emojiPicker = document.createElement("div");
-  emojiPicker.id = "sa-emoji-picker";
+  emojiPicker.className = "sa-emoji-picker";
   addon.tab.displayNoneWhileDisabled(emojiPicker, { display: "inline-block" });
 
   //Scratch emojis
