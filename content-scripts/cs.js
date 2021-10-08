@@ -3,6 +3,7 @@ try {
 } catch {
   throw "Scratch Addons: not first party iframe";
 }
+if (document.documentElement instanceof SVGElement) throw "Top-level SVG document (this can be ignored)";
 
 const _realConsole = window.console;
 const consoleOutput = (logAuthor = "[cs]") => {

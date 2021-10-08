@@ -1,3 +1,4 @@
+if (document.documentElement instanceof SVGElement) throw "Top-level SVG document (this can be ignored)";
 function injectPrototype() {
   const oldBind = Function.prototype.bind;
   // Use custom event target
