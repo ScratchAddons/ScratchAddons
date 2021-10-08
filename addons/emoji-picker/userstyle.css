@@ -3,6 +3,7 @@
   position: absolute;
   width: 390px;
   background-color: white;
+  color: black;
   border-radius: 8px;
   border: 2px solid rgba(0, 0, 0, 0.15);
   box-shadow: 0px 0px 5px #00000022;
@@ -68,7 +69,6 @@
 .sa-emoji-picker-unicode .sa-emoji-picker-item {
   width: 20px;
   height: 20px;
-  color: black;
 }
 .sa-emoji-picker-see-more {
   width: 100%;
