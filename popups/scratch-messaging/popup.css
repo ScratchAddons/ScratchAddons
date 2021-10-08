@@ -346,9 +346,13 @@ a.message-type-title-text {
 
 #buttons-container {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 #buttons-container > button {
+  height: auto;
   width: 45%;
   margin: 5px;
+  padding: 0.5rem;
 }
