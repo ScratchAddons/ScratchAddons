@@ -51,7 +51,8 @@
   position: relative;
   margin-left: auto;
 }
-.comments-container .sa-emoji-button-container, .studio-compose-container .sa-emoji-button-container {
+.comments-container .sa-emoji-button-container,
+.studio-compose-container .sa-emoji-button-container {
   margin-left: 1em;
 }
 .sa-emoji-picker-divider {
