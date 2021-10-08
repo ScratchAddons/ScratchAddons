@@ -10,7 +10,7 @@ export default async function ({ addon, global, console }) {
       this.mostRecentEvent_.altKey &&
       !addon.self.disabled
     ) {
-      // Will be rest when the drag ends
+      // Scratch will reset these when the drag ends
       if (!ScratchBlocks.Events.getGroup()) {
         ScratchBlocks.Events.setGroup(true);
       }
