@@ -185,7 +185,7 @@ export default async function ({ addon, global, console, msg }) {
     if (addon.tab.clientVersion === "scratch-www") {
       buttonAppend.appendChild(emojiButton);
     } else {
-      buttonAppend.insertBefore(emojiButton, buttonAppend.querySelector(".notification"));
+      buttonAppend.appendChild(emojiButton);
     }
   }
 }
