@@ -1,4 +1,3 @@
-if (document.documentElement instanceof SVGElement) throw "Top-level SVG document (this can be ignored)";
 function injectPrototype() {
   const oldBind = Function.prototype.bind;
   // Use custom event target
@@ -24,7 +23,7 @@ function injectPrototype() {
   };
 }
 
-if (location.pathname.split("/")[1] === "projects") {
+if (!(document.documentElement instanceof SVGElement) && location.pathname.split("/")[1] === "projects") {
   const injectPrototypeScript = document.createElement("script");
   injectPrototypeScript.append(document.createTextNode("(" + injectPrototype + ")()"));
   (document.head || document.documentElement).appendChild(injectPrototypeScript);
