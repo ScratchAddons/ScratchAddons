@@ -1,7 +1,4 @@
 # Files created during packaging
 .manifest.js.bak
 .dist
-
 node_modules
-
-CNAME
