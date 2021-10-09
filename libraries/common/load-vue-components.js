@@ -1,3 +1,4 @@
+import chrome from './chrome.js'
 const styles = {};
 
 /**

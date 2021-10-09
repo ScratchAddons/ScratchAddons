@@ -1,4 +1,5 @@
 import LocalizationProvider from "./cs/l10n.js";
+import chrome from './chrome.js'
 
 export default class WebsiteLocalizationProvider extends LocalizationProvider {
   async loadByAddonId(addonId) {
