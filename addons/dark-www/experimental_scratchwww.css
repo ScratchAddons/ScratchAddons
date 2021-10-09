@@ -283,3 +283,9 @@ body:not(.sa-body-editor) .select select option,
   --sa-oldstudio-collapsed-gradient: linear-gradient(rgba(32, 32, 32, 0), #202020);
   --sa-oldstudio-default-collapsed-gradient: linear-gradient(rgba(40, 40, 40, 0), #282828);
 }
+.comments-container .sa-emoji-picker,
+.studio-compose-container .sa-emoji-picker {
+  /* emoji-picker compatibility */
+  background-color: black;
+  color: white;
+}

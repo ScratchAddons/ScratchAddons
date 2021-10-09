@@ -1,0 +1,28 @@
+{
+  "name": "Emoji picker for comments",
+  "description": "Adds a button to insert emojis to comments on the website.",
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects", "studios", "profiles"],
+      "runAtComplete": true
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects", "studios", "profiles"]
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.21.0",
+  "tags": ["community", "comments", "featured"],
+  "enabledByDefault": false
+}
