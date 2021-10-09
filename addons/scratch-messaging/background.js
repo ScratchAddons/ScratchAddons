@@ -257,7 +257,8 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     }
 
     const res = await fetch(
-      `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}&nocache=${Date.now()}`
+      `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/?page=${page}&nocache=${Date.now()}`,
+      { credentials: "omit" }
     );
     const text = await res.text();
     const dom = parser.parseFromString(text, "text/html");
