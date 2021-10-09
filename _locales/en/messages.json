@@ -239,14 +239,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_20": {
-    "message": "New addon: \"grab single block with Ctrl key\", which adds the ability to drag a single block out of the middle of a script (instead of the entire stack attached below it) while holding the Ctrl key. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_21": {
+    "message": "New addon: \"duplicate script with Alt key\", which adds the ability to quickly duplicate a script by dragging it while holding the Alt key. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_20": {
-    "message": "The \"editor dark mode and customizable colors\" addon has a new \"Scratch 2.0\" color preset. Other new addons added this update are \"hide new variables\" and \"move costume to top or bottom\"."
+  "extensionUpdateInfo2_v1_21": {
+    "message": "Other new addons added this update are \"enhanced full screen\" and \"emoji picker for comments\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
