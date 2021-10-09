@@ -32,7 +32,7 @@ jobs:
         run: npm install terser@5.9.0 posthtml-cli@0.10.0 postcss-cli@9.0.1 posthtml-postcss@0.5.0 htmlnano@1.1.1 postcss-import@14.0.2 cssnano@5.0.8 autoprefixer@10.3.6
 
       - name: Remove package files
-        run: rm package-lock.json package.json
+        run: rm package-lock.json package.json node_modules -rf
 
       - name: Terser
         run: node .github/workflows/minify/terser.mjs --trace-warnings --harmony
@@ -51,5 +51,6 @@ jobs:
           echo userscript.scratchaddons.cf > CNAME;
           git config user.email "83586655+wgytbot@users.noreply.github.com";
           git config user.name "wgytbot";
+          git add CNAME;
           git commit -am "Update prerelease version";
           git push release HEAD:release --force;
