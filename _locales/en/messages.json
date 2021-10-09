@@ -152,6 +152,9 @@
   "presets": {
     "message": "Presets"
   },
+  "preview": {
+    "message": "Preview"
+  },
   "scratchAddonsTheme": {
     "message": "Scratch Addons theme"
   },

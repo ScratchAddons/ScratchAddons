@@ -12,6 +12,7 @@ try {
 } catch {
   throw "Scratch Addons: not first party iframe";
 }
+if (document.documentElement instanceof SVGElement) throw "Top-level SVG document (this can be ignored)";
 
 if (typeof scratchAddons === "object") {
   console.log("Scratch Addons: extention running, stopping userscript");
