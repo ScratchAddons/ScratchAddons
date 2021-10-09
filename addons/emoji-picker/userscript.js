@@ -5,7 +5,7 @@ export default async function ({ addon, global, console, msg }) {
   //Functions
 
   const setEmojiPickerPos = function () {
-	  emojiPicker.classList.remove("sa-emoji-picker-offscreen");
+    emojiPicker.classList.remove("sa-emoji-picker-offscreen");
     //scratchr2 makes the body and root <html>'s height value the size of the screen somehow so this has to be done
     const realDocumentBody =
       addon.tab.clientVersion === "scratchr2" ? document.querySelector("#pagewrapper") : document.body;
