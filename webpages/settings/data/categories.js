@@ -1,4 +1,4 @@
-import chrome from "../../libraries/common/chrome.js";
+import chrome from "../../../libraries/common/chrome.js";
 
 const categories = () => [
   {
