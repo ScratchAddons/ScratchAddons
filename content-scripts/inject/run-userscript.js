@@ -2,11 +2,11 @@ import Addon from "../../addon-api/content-script/Addon.js";
 
 export default async function runAddonUserscripts({ addonId, scripts, enabledLate = false }) {
   const localConsole = {
-        ...console,
-        log: scratchAddons.console.logForAddon(addonId),
-        warn: scratchAddons.console.warnForAddon(addonId),
-        error: scratchAddons.console.errorForAddon(addonId),
-      };
+    ...console,
+    log: scratchAddons.console.logForAddon(addonId),
+    warn: scratchAddons.console.warnForAddon(addonId),
+    error: scratchAddons.console.errorForAddon(addonId),
+  };
   const addonObj = new Addon({ id: addonId, enabledLate }, localConsole);
   addonObj.auth._update(scratchAddons.session);
   const globalObj = Object.create(null);
@@ -22,7 +22,7 @@ export default async function runAddonUserscripts({ addonId, scripts, enabledLat
       scratchAddons.console.logForAddon(`${addonId} [page]`)(
         `Running ${scriptUrl}, runAtComplete: ${runAtComplete}, enabledLate: ${enabledLate}`
       );
-      
+
       module.default({
         addon: addonObj,
         global: globalObj,
