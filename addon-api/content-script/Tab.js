@@ -23,7 +23,7 @@ export default class Tab extends Listenable {
   constructor(info, console) {
     super();
 
-    this._console = console
+    this._console = console;
     this._addonId = info.id;
     this.clientVersion = document.querySelector("meta[name='format-detection']")
       ? "scratch-www"
@@ -36,7 +36,7 @@ export default class Tab extends Listenable {
   }
   addBlock(...a) {
     blocks.init(this);
-    return blocks.addBlock(...a,this.console);
+    return blocks.addBlock(...a, this.console);
   }
   removeBlock(...a) {
     return blocks.removeBlock(...a);
