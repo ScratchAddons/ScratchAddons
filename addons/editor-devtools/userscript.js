@@ -53,6 +53,6 @@ export default async function ({ addon, global, console, msg, safeMsg: m }) {
 </div>
 `;
 
-  const devTools = new DevTools(addon, msg, m, helpHTML);
+  const devTools = new DevTools(addon, msg, m, helpHTML, console);
   devTools.init();
 }

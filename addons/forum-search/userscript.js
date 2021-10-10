@@ -21,7 +21,7 @@ const ALLOWED_TAGS = {
 
 class SanitizerFailed extends Error {}
 
-function cleanPost(post) {
+function cleanPost(post, console) {
   // Thanks Jeffalo
   const dom = new DOMParser();
   const readableDom = dom.parseFromString(post, "text/html");
@@ -56,16 +56,16 @@ function cleanPost(post) {
   return readableDom.body.cloneNode(true).childNodes;
 }
 
-function triggerNewSearch(searchContent, query, sort, msg) {
+function triggerNewSearch(searchContent, query, sort, msg, console) {
   searchContent.style.display = "block";
   while (searchContent.firstChild) {
     searchContent.removeChild(searchContent.firstChild);
   }
   currentQuery = query;
-  appendSearch(searchContent, query, 0, sort, msg);
+  appendSearch(searchContent, query, 0, sort, msg, console);
 }
 
-function appendSearch(box, query, page, term, msg) {
+function appendSearch(box, query, page, term, msg, console) {
   if (page * 50 > hits) return 0;
   isCurrentlyProcessing = true;
   let loading = document.createTextNode(msg("loading"));
@@ -153,7 +153,8 @@ function appendSearch(box, query, page, term, msg) {
               document.getElementById("forum-search-list"),
               document.getElementById("forum-search-input").value,
               document.getElementById("forum-search-dropdown").value,
-              msg
+              msg,
+              console
             );
           });
           postLeftDl.appendChild(userPostButton);
@@ -169,7 +170,8 @@ function appendSearch(box, query, page, term, msg) {
             document.getElementById("forum-search-list"),
             document.getElementById("forum-search-input").value,
             document.getElementById("forum-search-dropdown").value,
-            msg
+            msg,
+            console
           );
         });
         postLeftDl.appendChild(userGlobalButton);
@@ -195,7 +197,7 @@ function appendSearch(box, query, page, term, msg) {
 
         let postHTML = document.createElement("div");
         postHTML.classList = "post_body_html";
-        postHTML.append(...cleanPost(post.content.html));
+        postHTML.append(...cleanPost(post.content.html, console));
         postMsg.appendChild(postHTML);
 
         if (post.editor) {
@@ -279,7 +281,7 @@ export default async function ({ addon, global, console, msg }) {
     let et = e.target;
     if (et.scrollHeight - et.scrollTop === et.clientHeight) {
       if (!isCurrentlyProcessing) {
-        appendSearch(searchContent, currentQuery, currentPage + 1, currentSort, msg);
+        appendSearch(searchContent, currentQuery, currentPage + 1, currentSort, msg, console);
       }
     }
   });
@@ -293,13 +295,13 @@ export default async function ({ addon, global, console, msg }) {
   navIndex.after(search);
 
   search.addEventListener("submit", (e) => {
-    triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value, msg);
+    triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value, msg, console);
     e.preventDefault();
   });
 
   searchDropdown.addEventListener("change", (e) => {
     if (searchBar.value !== "") {
-      triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value, msg);
+      triggerNewSearch(searchContent, searchBar.value + locationQuery, searchDropdown.value, msg, console);
     }
   });
 }

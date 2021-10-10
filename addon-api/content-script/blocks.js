@@ -60,7 +60,7 @@ const queueWorkspaceUpdate = () => {
   });
 };
 
-export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
+export const addBlock = (proccode, { args, callback, hidden, displayName }, console) => {
   if (getCustomBlock(proccode)) {
     return;
   }

@@ -11,11 +11,11 @@ import Account from "./Account.js";
  * @property {Account} account
  */
 export default class UserscriptAddon extends Addon {
-  constructor(info) {
+  constructor(info, console) {
     super(info);
     this._addonId = info.id;
     this.__path = `${new URL(import.meta.url).origin}/`;
-    this.tab = new Tab(info);
+    this.tab = new Tab(info, console);
     this.auth.dispose();
     this.auth = new Auth(this);
     this.account.dispose();

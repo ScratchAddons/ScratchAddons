@@ -20,8 +20,10 @@ let createdAnyBlockContextMenus = false;
  * @property {ReduxHandler} redux
  */
 export default class Tab extends Listenable {
-  constructor(info) {
+  constructor(info, console) {
     super();
+
+    this._console = console
     this._addonId = info.id;
     this.clientVersion = document.querySelector("meta[name='format-detection']")
       ? "scratch-www"
@@ -34,7 +36,7 @@ export default class Tab extends Listenable {
   }
   addBlock(...a) {
     blocks.init(this);
-    return blocks.addBlock(...a);
+    return blocks.addBlock(...a,this.console);
   }
   removeBlock(...a) {
     return blocks.removeBlock(...a);
@@ -176,7 +178,7 @@ export default class Tab extends Listenable {
           return window._messages[locale][key];
         }
       }
-      console.warn("Unknown key: ", key);
+      this.console.warn("Unknown key: ", key);
       return "";
     }
     if (this.clientVersion === "scratchr2") {
@@ -601,7 +603,7 @@ export default class Tab extends Listenable {
             try {
               items = callback(items, block);
             } catch (e) {
-              console.error("Error while calling context menu callback: ", e);
+              this.console.error("Error while calling context menu callback: ", e);
             }
           }
         }
