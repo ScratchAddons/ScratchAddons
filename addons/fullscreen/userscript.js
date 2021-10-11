@@ -59,7 +59,8 @@ export default async function ({ addon, global, console }) {
   // Properly scale variable monitors on window resize
   let canvas = await addon.tab.waitForElement("canvas");
   setInterval(() => {
-    document.querySelector("[class*=monitor-list_monitor-list-scaler]")
-      .style.transform = `scale(${canvas.getBoundingClientRect().width / 480}, ${canvas.getBoundingClientRect().width / 480})`;
+    document.querySelector("[class*=monitor-list_monitor-list-scaler]").style.transform = `scale(${
+      canvas.getBoundingClientRect().width / 480
+    }, ${canvas.getBoundingClientRect().width / 480})`;
   }, 10);
 }
