@@ -41,9 +41,9 @@ export default async function ({ addon, global, console }) {
   addon.tab.addEventListener("urlChange", () => {
     updateBrowserFullscreen();
   });
-  // Changing to or from browser fullscreen is signified by a window resize
-  window.addEventListener("resize", () => {
-    updateScratchFullscreen();
+  // Changing to or from browser fullscreen is signified by the F11 key
+  window.addEventListener("keydown", (key) => {
+    if (key.code == "F11") updateScratchFullscreen();
   });
   // These handle the case of the user already being in Scratch fullscreen
   // (without being in browser fullscreen) when the addon or sync option are
@@ -56,4 +56,10 @@ export default async function ({ addon, global, console }) {
     updateBrowserFullscreen();
     updateScratchFullscreen();
   });
+  // Properly scale variable monitors on window resize
+  let canvas = await addon.tab.waitForElement("canvas");
+  setInterval(() => {
+    document.querySelector("[class*=monitor-list_monitor-list-scaler]")
+      .style.transform = `scale(${canvas.getBoundingClientRect().width / 480}, ${canvas.getBoundingClientRect().width / 480})`;
+  }, 10);
 }
