@@ -39,9 +39,7 @@
   "homepage_url": "https://scratchaddons.com",
   "incognito": "spanning",
   "permissions": [
-    "https://scratch.mit.edu/*",
-    "https://api.scratch.mit.edu/*",
-    "https://clouddata.scratch.mit.edu/*",
+    "activeTab",
     "cookies",
     "webRequest",
     "webRequestBlocking",
