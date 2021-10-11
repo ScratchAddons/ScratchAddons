@@ -476,19 +476,16 @@ const showBanner = () => {
     box-shadow: 0 0 20px 0px #0000009e;
     line-height: 1em;`,
   });
-  /*
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "",
+    href: "https://www.youtube.com/watch?v=QnvgB5ILZCg",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
   });
-  // Thumbnails were 100px height
-  */
   const notifImage = Object.assign(document.createElement("img"), {
     // alt: chrome.i18n.getMessage("hexColorPickerAlt"),
-    src: chrome.runtime.getURL("/images/cs/single-block-grab.gif"),
-    style: "height: 175px; border-radius: 5px; padding: 20px",
+    src: chrome.runtime.getURL("/images/cs/yt-thumbnail.jpg"),
+    style: "height: 100px; border-radius: 5px; padding: 20px",
   });
   const notifText = Object.assign(document.createElement("div"), {
     id: "sa-notification-text",
@@ -586,9 +583,9 @@ const showBanner = () => {
   notifText.appendChild(makeBr());
   notifText.appendChild(notifFooter);
 
-  // notifImageLink.appendChild(notifImage);
+  notifImageLink.appendChild(notifImage);
 
-  notifInnerBody.appendChild(notifImage);
+  notifInnerBody.appendChild(notifImageLink);
   notifInnerBody.appendChild(notifText);
 
   notifOuterBody.appendChild(notifInnerBody);
