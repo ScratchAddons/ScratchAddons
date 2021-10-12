@@ -7,9 +7,9 @@ export default async function ({ addon, global, console }) {
     if (addon.settings.get("browserFullscreen") && !addon.self.disabled) {
       // If Scratch fullscreen is enabled, then browser fullscreen should also
       // be enabled, and vice versa for disabling.
-      if (addon.tab.editorMode === "fullscreen" && window.innerHeight !== window.screen.height) {
+      if (addon.tab.redux.state.scratchGui.mode.isFullScreen && window.innerHeight !== window.screen.height) {
         document.documentElement.requestFullscreen();
-      } else if (addon.tab.editorMode !== "fullscreen") {
+      } else if (!addon.tab.redux.state.scratchGui.mode.isFullScreen) {
         document.exitFullscreen();
       }
     }
@@ -23,7 +23,7 @@ export default async function ({ addon, global, console }) {
       // be disabled.
       if (
         (document.fullscreenElement === null || window.innerHeight !== window.screen.height) &&
-        addon.tab.editorMode === "fullscreen"
+        addon.tab.redux.state.scratchGui.mode.isFullScreen
       ) {
         addon.tab.redux.dispatch({
           type: "scratch-gui/mode/SET_FULL_SCREEN",
@@ -37,13 +37,14 @@ export default async function ({ addon, global, console }) {
   // loading in Scratch fullscreen mode.
   updateBrowserFullscreen();
 
-  // Changing to or from Scratch fullscreen is signified by a URL change
-  addon.tab.addEventListener("urlChange", () => {
-    updateBrowserFullscreen();
+  // Changing to or from Scratch fullscreen is signified by a state change
+  // (URL change doesn't work when editing project without project page)
+  addon.tab.redux.addEventListener("statechanged", (e) => {
+    if (e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN") updateBrowserFullscreen();
   });
-  // Changing to or from browser fullscreen is signified by the F11 key
-  window.addEventListener("keydown", (key) => {
-    if (key.code == "F11") updateScratchFullscreen();
+  // Changing to or from browser fullscreen is signified by a window resize
+  window.addEventListener("resize", () => {
+    updateScratchFullscreen();
   });
   // These handle the case of the user already being in Scratch fullscreen
   // (without being in browser fullscreen) when the addon or sync option are
