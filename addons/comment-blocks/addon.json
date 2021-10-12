@@ -3,7 +3,8 @@
   "description": "Adds comment blocks as an alternative to vanilla comments.",
   "credits": [
     {
-      "name": "MrEgggga"
+      "name": "MrEgggga",
+      "link": "https://github.com/MrEgggga"
     }
   ],
   "userscripts": [
