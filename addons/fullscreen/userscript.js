@@ -51,11 +51,9 @@ export default async function ({ addon, global, console }) {
   // dynamically enabled.
   addon.settings.addEventListener("change", () => {
     updateBrowserFullscreen();
-    updateScratchFullscreen();
   });
   addon.self.addEventListener("reenabled", () => {
     updateBrowserFullscreen();
-    updateScratchFullscreen();
   });
   // Properly scale variable monitors on window resize
   let canvas = await addon.tab.waitForElement("canvas");
