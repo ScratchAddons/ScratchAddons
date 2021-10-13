@@ -15,3 +15,7 @@
 [class*="stage-wrapper_full-screen"] {
   padding: 0rem !important;
 }
+
+[class*="stage-wrapper_full-screen"] [class*="monitor-list_monitor-list"] {
+  overflow: visible;
+}
