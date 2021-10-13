@@ -603,7 +603,7 @@ export default class Tab extends Listenable {
             try {
               items = callback(items, block);
             } catch (e) {
-              scratchAddons.console.errorForAddon(`${addonId} [page]`)("Error while calling context menu callback:", e);
+              scratchAddons.console.errorForAddon(`${this._addonId} [page]`)("Error while calling context menu callback:", e);
             }
           }
         }
