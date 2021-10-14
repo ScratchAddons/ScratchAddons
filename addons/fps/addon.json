@@ -1,0 +1,32 @@
+{
+    "name": "FPS counter",
+    "description": "Adds a simple FPS counter above the stage.",
+    "credits": [
+        {
+            "name": "Tacodude7729",
+            "link": "https://github.com/Tacodude7729"
+        }
+    ],
+    "dynamicEnable": true,
+    "dynamicDisable": true,
+    "userscripts": [
+        {
+            "url": "userscript.js",
+            "matches": [
+                "projects"
+            ]
+        }
+    ],
+    "userstyles": [
+        {
+            "url": "userstyle.css",
+            "matches": [
+                "projects"
+            ]
+        }
+    ],
+    "tags": [
+        "editor",
+        "projectPlayer"
+    ]
+}
