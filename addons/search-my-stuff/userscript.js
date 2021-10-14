@@ -1,7 +1,6 @@
 /**
  * TO-DO:
- * - "No results" notice
- * - Better handling for "Load more"
+ * - Support for tabs (autoLoadMore)
  */
 
 import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
@@ -9,8 +8,18 @@ import fuseOptions from "./fuse-options.js";
 
 export default async function ({ addon, global, console, msg }) {
   // Inject our search bar
-  let search, searchBar, searchDropdown, resultsContainer, fuse;
+  let search,
+    searchBar,
+    searchDropdown,
+    loadMore,
+    loading,
+    originalDropdownText,
+    resultsContainer,
+    statusHeader,
+    statusTip,
+    fuse;
   let projects = [];
+  let currentPage = 1;
   initialize();
   inject();
   indexPage();
@@ -28,7 +37,9 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   // When the user makes a keystroke in the search bar
-  searchBar.addEventListener("input", triggerNewSearch);
+  searchBar.addEventListener("input", () => {
+    triggerNewSearch().then(determineLoadMore);
+  });
 
   // When the addon is disabled
   addon.self.addEventListener("disabled", () => {
@@ -56,8 +67,18 @@ export default async function ({ addon, global, console, msg }) {
     searchBar.setAttribute("type", "text");
     search.appendChild(searchBar);
     // Keep track of the dropdown
-    await addon.tab.waitForElement(".dropdown.button.grey.small");
-    searchDropdown = document.querySelector(".dropdown.button.grey.small");
+    searchDropdown = await addon.tab.waitForElement(".dropdown.button.grey.small");
+    originalDropdownText = searchDropdown.querySelector("span").innerText;
+    loadMore = await addon.tab.waitForElement('[data-control="load-more"]');
+    loadMore.addEventListener("click", () => {
+      autoLoadMore();
+    });
+    // Create status header
+    statusHeader = document.createElement("h2");
+    statusHeader.id = "search-my-stuff-header";
+    // Create tip beneath header
+    statusTip = document.createElement("span");
+    statusTip.id = "search-my-stuff-tip";
   }
 
   /**
@@ -105,7 +126,7 @@ export default async function ({ addon, global, console, msg }) {
       fuse = new Fuse(projects, fuseOptions);
       // Refresh search results if user clicks "load more" or switches tabs with a query still in the search bar
       if (searchBar.value !== "") {
-        triggerNewSearch();
+        triggerNewSearch().then(determineLoadMore);
       }
     }
   }
@@ -114,16 +135,20 @@ export default async function ({ addon, global, console, msg }) {
    * Reorders based on fuzzy search algorithm.
    */
   async function triggerNewSearch() {
-    let query = searchBar.value;
     await resultsContainer;
     // Blank query should restore the original order
-    if (query === "") {
+    if (searchBar.value === "") {
+      searchDropdown.querySelector("span.selected").innerText = originalDropdownText;
+      statusHeader.remove();
+      statusTip.remove();
+      loadMore.style.visibility = "visible";
       projects.forEach((project) => {
         project.element.remove();
         resultsContainer.appendChild(project.element);
       });
     } else {
-      const fuseSearch = fuse.search(query).sort((a, b) => {
+      searchDropdown.querySelector("span.selected").innerText = msg("search-by");
+      const fuseSearch = fuse.search(searchBar.value).sort((a, b) => {
         // Sort very good matches at the top no matter what
         if ((a.score < 0.1) ^ (b.score < 0.1)) return a.score < 0.1 ? -1 : 1;
       });
@@ -133,6 +158,83 @@ export default async function ({ addon, global, console, msg }) {
       fuseSearch.forEach((result) => {
         resultsContainer.appendChild(result.item.element);
       });
+    }
+  }
+
+  /**
+   * Determines if the page should automatically load more items.
+   * If so, `autoLoadMore()` is called.
+   */
+  function determineLoadMore() {
+    if (searchBar.value !== "" && !loading) {
+      if (resultsContainer.querySelectorAll("li").length === 0) {
+        autoLoadMore();
+      } else if (loadMore.style.display == "none") {
+        // End of results
+        statusHeader.innerText = msg("end-header");
+        statusTip.innerText = msg("end-tip");
+      } else {
+        // Prompt to load more
+        statusHeader.innerText = msg("load-more-header");
+        statusTip.innerText = msg("load-more-tip");
+        loadMore.style.visibility = "visible";
+      }
+      resultsContainer.appendChild(statusHeader);
+      resultsContainer.appendChild(statusTip);
+    }
+  }
+
+  /**
+   * Attempts to load more until results are found or everything has loaded.
+   */
+  async function autoLoadMore() {
+    if (searchBar.value !== "" && !loading) {
+      loading = true;
+      const initResultsCount = resultsContainer.querySelectorAll("li").length;
+      loadMore.style.visibility = "hidden";
+      // Begin the process of loading more projects
+      loadMore.click();
+      currentPage++;
+      // Display "Loading..." status
+      statusHeader.innerText = msg("progress-header");
+      statusTip.innerText = msg("progress-tip", { number: (currentPage - 2) * 40 });
+      // Detect if the next page of projects exists
+      await fetch(`https://scratch.mit.edu/site-api/projects/all/?page=${currentPage}&ascsort=&descsort=`)
+        .then(async (response) => {
+          // If so, wait until new results are available
+          if (response.ok) {
+            await resultsContainer[initResultsCount];
+          } else {
+            loading = false;
+          }
+        })
+        .catch(() => {
+          loading = false;
+        });
+      // If the previous page request was successful, keep trying to load more
+      if (loading) {
+        // Prevents API spam
+        setTimeout(() => {
+          loading = false;
+          autoLoadMore();
+        }, 500);
+      } else {
+        // If "Load more" can be clicked again
+        if (resultsContainer.querySelectorAll("li").length !== initResultsCount) {
+          // Prompt to load more
+          statusHeader.innerText = msg("load-more-header");
+          statusTip.innerText = msg("load-more-tip");
+          loadMore.style.visibility = "visible";
+        } else if (resultsContainer.querySelectorAll("li").length !== 0) {
+          // End of results
+          statusHeader.innerText = msg("end-header");
+          statusTip.innerText = msg("end-tip");
+        } else {
+          // No results
+          statusHeader.innerText = msg("no-results-header");
+          statusTip.innerText = msg("no-results-tip");
+        }
+      }
     }
   }
 }

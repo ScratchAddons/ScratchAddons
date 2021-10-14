@@ -16,3 +16,13 @@
   align-self: center;
   margin-bottom: 0;
 }
+
+#search-my-stuff-header,
+#search-my-stuff-tip {
+  text-align: center;
+}
+
+#search-my-stuff-tip {
+  display: block;
+  margin: 10px 15px 25px;
+}
