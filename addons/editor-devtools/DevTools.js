@@ -277,7 +277,7 @@ export default class DevTools {
         if (!procCode) {
           continue;
         }
-        const indexOfLabel = root.inputList.findIndex(i => i.fieldRow.length > 0);
+        const indexOfLabel = root.inputList.findIndex((i) => i.fieldRow.length > 0);
         if (indexOfLabel === -1) {
           continue;
         }
