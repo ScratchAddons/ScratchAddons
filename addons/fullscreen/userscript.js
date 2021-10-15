@@ -7,7 +7,7 @@ export default async function ({ addon, global, console }) {
     if (addon.settings.get("browserFullscreen") && !addon.self.disabled) {
       // If Scratch fullscreen is enabled, then browser fullscreen should also
       // be enabled, and vice versa for disabling.
-      if (addon.tab.redux.state.scratchGui.mode.isFullScreen && window.innerHeight !== window.screen.height) {
+      if (addon.tab.redux.state.scratchGui.mode.isFullScreen && document.fullscreenElement === null) {
         document.documentElement.requestFullscreen();
       } else if (!addon.tab.redux.state.scratchGui.mode.isFullScreen && document.fullscreenElement !== null) {
         document.exitFullscreen();
@@ -21,10 +21,7 @@ export default async function ({ addon, global, console }) {
     if (addon.settings.get("browserFullscreen") && !addon.self.disabled) {
       // If browser fullscreen is disabled, then Scratch fullscreen should also
       // be disabled.
-      if (
-        (document.fullscreenElement === null || window.innerHeight !== window.screen.height) &&
-        addon.tab.redux.state.scratchGui.mode.isFullScreen
-      ) {
+      if (document.fullscreenElement === null && addon.tab.redux.state.scratchGui.mode.isFullScreen) {
         addon.tab.redux.dispatch({
           type: "scratch-gui/mode/SET_FULL_SCREEN",
           isFullScreen: false,
@@ -64,6 +61,16 @@ export default async function ({ addon, global, console }) {
   // Changing to or from browser fullscreen is signified by a window resize.
   window.addEventListener("resize", () => {
     updateScratchFullscreen();
+  });
+  // Handles the case of F11 full screen AND document full screen being enabled
+  // at the same time.
+  document.addEventListener("fullscreenchange", () => {
+    if (document.fullscreenElement === null && addon.tab.redux.state.scratchGui.mode.isFullScreen) {
+      addon.tab.redux.dispatch({
+        type: "scratch-gui/mode/SET_FULL_SCREEN",
+        isFullScreen: false,
+      });
+    }
   });
   // These handle the case of the user already being in Scratch fullscreen
   // (without being in browser fullscreen) when the addon or sync option are
