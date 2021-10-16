@@ -58,6 +58,8 @@ export default async function ({ addon, console }) {
 
   // Change the colors of background layers
   const updateColors = () => {
+    // No need to update if costume editor is hidden
+    if (!paper.project) return;
     let artboardBackground;
     let workspaceBackground;
     let checkerboardColor;

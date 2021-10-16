@@ -5,6 +5,8 @@ export default {
     return {
       expanded: this.defaultExpanded,
       everExpanded: this.defaultExpanded,
+      hoveredSettingId: null,
+      highlightedSettingId: null,
     };
   },
   computed: {
@@ -103,6 +105,9 @@ export default {
     },
     msg(...params) {
       return this.$settingsContext.msg(...params);
+    },
+    highlightSetting(id) {
+      this.highlightedSettingId = id;
     },
   },
   watch: {
