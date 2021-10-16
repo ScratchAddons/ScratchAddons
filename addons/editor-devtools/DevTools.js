@@ -272,14 +272,18 @@ export default class DevTools {
 
     for (const root of topBlocks) {
       if (root.type === "procedures_definition") {
-        let fields = root.inputList[0];
-        let typeDesc = fields.fieldRow[0].getText();
-        let label = root.getChildren()[0];
-        let procCode = label.getProcCode();
+        const label = root.getChildren()[0];
+        const procCode = label.getProcCode();
         if (!procCode) {
           continue;
         }
-        addBlock("define", typeDesc + " " + procCode, root);
+        const indexOfLabel = root.inputList.findIndex((i) => i.fieldRow.length > 0);
+        if (indexOfLabel === -1) {
+          continue;
+        }
+        const translatedDefine = root.inputList[indexOfLabel].fieldRow[0].getText();
+        const message = indexOfLabel === 0 ? `${translatedDefine} ${procCode}` : `${procCode} ${translatedDefine}`;
+        addBlock("define", message, root);
         continue;
       }
 
