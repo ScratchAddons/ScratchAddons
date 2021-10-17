@@ -52,6 +52,7 @@ export default async function ({ addon, global, console }) {
 
   // Changing to or from Scratch fullscreen is signified by a state change
   // (URL change doesn't work when editing project without project page)
+  addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
     if (e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN") {
       initScaler();
