@@ -37,6 +37,9 @@ h1 {
   width: 100%;
   align-items: stretch;
   background: var(--page-background);
+  color: var(--content-text);
+  font-family: "Sora", sans-serif;
+  font-size: 12px;
 }
 
 .addons-block {
