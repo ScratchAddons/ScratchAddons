@@ -8,6 +8,11 @@
   margin-left: 8px;
 }
 
+/* Disable "hosted/curated by me" because the API endpoints are broken */
+.dropdown.select.button.grey.small {
+  display: none;
+}
+
 #search-my-stuff-form {
   align-self: center;
 }
@@ -24,5 +29,5 @@
 
 #search-my-stuff-tip {
   display: block;
-  margin: 10px 15px 25px;
+  padding: 0px 15px 25px;
 }

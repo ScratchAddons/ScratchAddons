@@ -1,8 +1,3 @@
-/**
- * TO-DO:
- * - Support for tabs (autoLoadMore)
- */
-
 import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
 import fuseOptions from "./fuse-options.js";
 
@@ -13,6 +8,7 @@ export default async function ({ addon, global, console, msg }) {
     searchDropdown,
     loadMore,
     loading,
+    allLoaded,
     originalDropdownText,
     resultsContainer,
     statusHeader,
@@ -52,10 +48,13 @@ export default async function ({ addon, global, console, msg }) {
   // When the user switches to a new tab (shared, unshared, etc.)
   addon.tab.addEventListener("urlChange", async () => {
     projects = [];
+    currentPage = 1;
+    allLoaded = false;
     resultsContainer = undefined;
     await addon.tab.waitForElement(".media-list > li");
     searchDropdown = document.querySelector(".dropdown.button.grey.small");
     inject();
+    originalDropdownText = searchDropdown.querySelector("span").innerText;
   });
 
   async function initialize() {
@@ -69,10 +68,6 @@ export default async function ({ addon, global, console, msg }) {
     // Keep track of the dropdown
     searchDropdown = await addon.tab.waitForElement(".dropdown.button.grey.small");
     originalDropdownText = searchDropdown.querySelector("span").innerText;
-    loadMore = await addon.tab.waitForElement('[data-control="load-more"]');
-    loadMore.addEventListener("click", () => {
-      autoLoadMore();
-    });
     // Create status header
     statusHeader = document.createElement("h2");
     statusHeader.id = "search-my-stuff-header";
@@ -104,7 +99,13 @@ export default async function ({ addon, global, console, msg }) {
     resultsContainer = await addon.tab.waitForElement(".media-list > .media-list");
     // Update the dropdown listener
     document.querySelector('.dropdown-menu.radio-style > [data-control="sort"]').addEventListener("click", () => {
+      currentPage = 1;
       projects = [];
+    });
+    // Store the element of the load more button
+    loadMore = await addon.tab.waitForElement('[data-control="load-more"]');
+    loadMore.addEventListener("click", () => {
+      autoLoadMore();
     });
     // Auto-focus the search bar
     searchBar.focus();
@@ -138,16 +139,16 @@ export default async function ({ addon, global, console, msg }) {
     await resultsContainer;
     // Blank query should restore the original order
     if (searchBar.value === "") {
-      searchDropdown.querySelector("span.selected").innerText = originalDropdownText;
+      searchDropdown.querySelector("span span").innerText = originalDropdownText;
       statusHeader.remove();
       statusTip.remove();
-      loadMore.style.visibility = "visible";
+      loadMore.style.display = "";
       projects.forEach((project) => {
         project.element.remove();
         resultsContainer.appendChild(project.element);
       });
     } else {
-      searchDropdown.querySelector("span.selected").innerText = msg("search-by");
+      searchDropdown.querySelector("span span").innerText = msg("search-by");
       const fuseSearch = fuse.search(searchBar.value).sort((a, b) => {
         // Sort very good matches at the top no matter what
         if ((a.score < 0.1) ^ (b.score < 0.1)) return a.score < 0.1 ? -1 : 1;
@@ -169,7 +170,7 @@ export default async function ({ addon, global, console, msg }) {
     if (searchBar.value !== "" && !loading) {
       if (resultsContainer.querySelectorAll("li").length === 0) {
         autoLoadMore();
-      } else if (loadMore.style.display == "none") {
+      } else if (allLoaded) {
         // End of results
         statusHeader.innerText = msg("end-header");
         statusTip.innerText = msg("end-tip");
@@ -177,7 +178,7 @@ export default async function ({ addon, global, console, msg }) {
         // Prompt to load more
         statusHeader.innerText = msg("load-more-header");
         statusTip.innerText = msg("load-more-tip");
-        loadMore.style.visibility = "visible";
+        loadMore.style.display = "";
       }
       resultsContainer.appendChild(statusHeader);
       resultsContainer.appendChild(statusTip);
@@ -191,7 +192,7 @@ export default async function ({ addon, global, console, msg }) {
     if (searchBar.value !== "" && !loading) {
       loading = true;
       const initResultsCount = resultsContainer.querySelectorAll("li").length;
-      loadMore.style.visibility = "hidden";
+      loadMore.style.display = "none";
       // Begin the process of loading more projects
       loadMore.click();
       currentPage++;
@@ -199,19 +200,50 @@ export default async function ({ addon, global, console, msg }) {
       statusHeader.innerText = msg("progress-header");
       statusTip.innerText = msg("progress-tip", { number: (currentPage - 2) * 40 });
       // Detect if the next page of projects exists
-      await fetch(`https://scratch.mit.edu/site-api/projects/all/?page=${currentPage}&ascsort=&descsort=`)
+      let fetchUrl;
+      let ascSort,
+        descSort = "";
+      let sort = document.querySelectorAll(".dropdown.button.grey.small");
+      if (window.location.href.includes("galleries")) {
+        // Ignore "hosted/curated by me" because the API endpoints are broken
+        sort = sort[1].querySelector("li.selected");
+        fetchUrl = "galleries/all";
+      } else {
+        sort = sort[0].querySelector("li.selected");
+        if (window.location.href.includes("trash")) {
+          fetchUrl = "trashed/all";
+        } else if (window.location.href.includes("shared")) {
+          fetchUrl = "projects/shared";
+        } else if (window.location.href.includes("unshared")) {
+          fetchUrl = "projects/notshared";
+        } else {
+          fetchUrl = "projects/all";
+        }
+      }
+      ascSort = sort.getAttribute("data-ascsort") || "";
+      descSort = sort.getAttribute("data-descsort") || "";
+      fetchUrl = `https://scratch.mit.edu/site-api/${fetchUrl}/?page=${currentPage}&ascsort=${ascSort}&descsort=${descSort}`;
+      await fetch(fetchUrl)
         .then(async (response) => {
-          // If so, wait until new results are available
+          // Determines whether or not new results were found
           if (response.ok) {
-            await resultsContainer[initResultsCount];
+            await projects[initResultsCount];
+            await triggerNewSearch().then(() => {
+              if (resultsContainer.querySelectorAll("li").length !== initResultsCount) {
+                // Do not keep loading more if new results were found
+                loading = false;
+              }
+            });
           } else {
+            // Do not keep loading more if we've reached the end of the page
             loading = false;
+            allLoaded = true;
           }
         })
         .catch(() => {
           loading = false;
         });
-      // If the previous page request was successful, keep trying to load more
+
       if (loading) {
         // Prevents API spam
         setTimeout(() => {
@@ -224,7 +256,7 @@ export default async function ({ addon, global, console, msg }) {
           // Prompt to load more
           statusHeader.innerText = msg("load-more-header");
           statusTip.innerText = msg("load-more-tip");
-          loadMore.style.visibility = "visible";
+          loadMore.style.display = "";
         } else if (resultsContainer.querySelectorAll("li").length !== 0) {
           // End of results
           statusHeader.innerText = msg("end-header");
@@ -234,6 +266,10 @@ export default async function ({ addon, global, console, msg }) {
           statusHeader.innerText = msg("no-results-header");
           statusTip.innerText = msg("no-results-tip");
         }
+        statusHeader.remove();
+        statusTip.remove();
+        resultsContainer.appendChild(statusHeader);
+        resultsContainer.appendChild(statusTip);
       }
     }
   }
