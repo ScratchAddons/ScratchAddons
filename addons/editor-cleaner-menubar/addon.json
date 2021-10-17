@@ -1,0 +1,19 @@
+{
+  "name": "Cleaner Menubar in Editor",
+  "description": "Makes more room in the editor menubar by removing the 'Tutorials' button.",
+  "credits": [
+    {
+      "name": "The Private I",
+      "link": "https://github.com/The-Private-I"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "editorMenuBar"],
+  "versionAdded": "1.22.0",
+  "enabledByDefault": false
+}
