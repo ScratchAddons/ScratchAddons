@@ -8,7 +8,9 @@
   text-align: center;
   padding: 20px;
   top: 0px;
-  color: white;
+  color: var(--content-text);
+  font-family: "Sora", sans-serif;
+  font-size: 12px;
   border-radius: 0px 0px 10px 10px;
   transition: top 300ms cubic-bezier(0.17, 0.04, 0.03, 0.94);
   display: flex;
