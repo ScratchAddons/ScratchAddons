@@ -60,6 +60,7 @@ h1 {
 }
 
 .addons-container {
+  flex: 1;
   overflow-y: auto;
   padding: 20px;
   padding-top: 10px;
