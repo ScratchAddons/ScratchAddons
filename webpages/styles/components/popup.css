@@ -6,15 +6,6 @@
   color: var(--content-text);
   background-color: var(--page-background);
 }
-.popup-container.fullscreen {
-  width: 55%;
-  margin: auto;
-  min-height: calc(100% - 2px);
-  height: auto;
-  border: 1px solid black;
-  font-family: Sora, sans-serif;
-  box-shadow: 0 -1px 7px rgba(0, 0, 0, 0.2);
-}
 
 .popup-container a {
   cursor: pointer;
