@@ -6,6 +6,7 @@ import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
+import "../../libraries/thirdparty/color-picker.js";
 
 const promisify =
   (callbackFn) =>
