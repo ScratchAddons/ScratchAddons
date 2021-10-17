@@ -51,7 +51,7 @@
       </div>
       <div
         class="preview-column"
-        v-if="addon.addonPreview && !isIframe"
+        v-if="addon.addonPreview && !$settingsContext.isInPopup"
         v-bind:class="[!addon._enabled ? 'disabled' : '']"
       >
         <div class="setting-label">{{ msg("preview") }}</div>
