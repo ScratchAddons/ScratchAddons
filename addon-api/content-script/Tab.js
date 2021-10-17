@@ -36,7 +36,7 @@ export default class Tab extends Listenable {
   }
   addBlock(...a) {
     blocks.init(this);
-    return blocks.addBlock(...a, this.console);
+    return blocks.addBlock(...a, this._console);
   }
   removeBlock(...a) {
     return blocks.removeBlock(...a);
@@ -178,7 +178,7 @@ export default class Tab extends Listenable {
           return window._messages[locale][key];
         }
       }
-      this.console.warn("Unknown key: ", key);
+      this._console.warn("Unknown key: ", key);
       return "";
     }
     if (this.clientVersion === "scratchr2") {
