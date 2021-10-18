@@ -1,10 +1,10 @@
 export default function () {
   const lightThemeLink = document.createElement("link");
   lightThemeLink.setAttribute("rel", "stylesheet");
-  lightThemeLink.setAttribute("href", "../styles/colors-light.css");
+  lightThemeLink.setAttribute("href", chrome.runtime.getURL("/webpages/styles/colors-light.css"));
   lightThemeLink.setAttribute("data-below-vue-components", "");
-  document.head.appendChild(lightThemeLink);
   lightThemeLink.media = "not all";
+  document.head.appendChild(lightThemeLink);
   return new Promise((resolve) => {
     chrome.storage.sync.get(["globalTheme"], ({ globalTheme = false }) => {
       // true = light, false = dark

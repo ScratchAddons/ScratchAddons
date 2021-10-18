@@ -1,6 +1,7 @@
 import "./set-lang.js";
 import Addon from "../addon-api/popup/Addon.js";
 import WebsiteLocalizationProvider from "../libraries/common/website-l10n.js";
+import globalTheme from "../../libraries/common/global-theme.js";
 
 const scratchAddons = (window.scratchAddons = {});
 // Store event targets for addon.* API events
@@ -97,15 +98,8 @@ scratchAddons.isLightMode = false;
   });
 })();
 
-const lightThemeLink = document.createElement("link");
-lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "../../webpages/styles/colors-light.css");
-
-chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
-  if (globalTheme === true) {
-    scratchAddons.isLightMode = true;
-    document.head.appendChild(lightThemeLink);
-  }
+globalTheme().then(({ theme }) => {
+  scratchAddons.isLightMode = theme;
 });
 
 if (window.parent === window) {
