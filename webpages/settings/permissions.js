@@ -12,7 +12,7 @@ const vue = new Vue({
   },
 });
 
-globalTheme().then((theme) => {
+globalTheme().then(({ theme }) => {
   if (theme) {
     vue.screenshotPath = "../../images/screenshots/permissions-light.png";
   }
