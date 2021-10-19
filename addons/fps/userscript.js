@@ -12,6 +12,7 @@ export default async function ({ addon, global, cons, msg }) {
     const renderTimes = [];
     var fps = "?";
     var lastFps = 0;
+    var firstTime = -1;
 
     renderer.ogDraw = renderer.draw;
     renderer.draw = function () {
@@ -20,6 +21,8 @@ export default async function ({ addon, global, cons, msg }) {
             renderTimes.shift();
         renderTimes.push(now);
         fps = Math.floor(renderTimes.length / 2);
+        if (firstTime === -1) firstTime = now;
+        if (now - firstTime <= 2500) fps = "?";
         if (fps !== lastFps)
             fpsCounterElement.innerText = msg("fpsCounter", { fps: lastFps = fps });
         addon.tab.displayNoneWhileDisabled(fpsCounterElement, { display: "flex" });
