@@ -8,11 +8,8 @@
     -ms-flex-align: center;
     align-items: center;
     padding: 0.25rem;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
-    color: #a065ff;
+    color: #0fbd8c;
     display: flex;
     align-items: center;
 }

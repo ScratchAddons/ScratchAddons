@@ -31,6 +31,6 @@ export default async function ({ addon, global, cons, msg }) {
             markAsSeen: true,
             reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
         });
-        addon.tab.appendToSharedSpace({ space: "afterStopButton", element: fpsCounterElement, order: 2 });
+        addon.tab.appendToSharedSpace({ space: "afterStopButton", element: fpsCounterElement, order: 3 });
     }
 }
