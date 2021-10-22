@@ -80,8 +80,10 @@ export default async function ({ addon, global, console }) {
         break;
       case "https://scratch.mit.edu/images/emoji/pizza-cat.png":
         el.src = addon.self.dir + "/images/pizza-cat.svg";
+        break;
       case "https://scratch.mit.edu/images/emoji/meow.png":
         el.src = addon.self.dir + "/images/meow.svg";
+        break;
       case "https://scratch.mit.edu/images/emoji/gobo.png":
         el.src = addon.self.dir + "/images/gobo.svg";
     }
