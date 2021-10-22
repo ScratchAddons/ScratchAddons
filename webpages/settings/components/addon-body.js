@@ -43,7 +43,7 @@ export default async function ({ template }) {
       loadPreset(preset) {
         if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
           for (const property of Object.keys(preset.values)) {
-            this.$root.addonSettings[property] = preset.values[property];
+            this.addonSettings[property] = preset.values[property];
           }
           this.$root.updateSettings(this.addon);
           console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
@@ -52,7 +52,7 @@ export default async function ({ template }) {
       loadDefaults() {
         if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
           for (const property of this.addon.settings) {
-            this.$root.addonSettings[property.id] = property.default;
+            this.addonSettings[property.id] = property.default;
           }
           this.$root.updateSettings(this.addon);
           console.log(`Loaded default values for ${this.addon._addonId}`);
