@@ -58,7 +58,7 @@
         <component
           :is="'preview-' + addon.addonPreview.type"
           :options="addon.addonPreview"
-          :settings="addonSettings[addon._addonId]"
+          :settings="addonSettings"
           :hovered-setting-id="hoveredSettingId"
           @areahover="highlightSetting"
         />
