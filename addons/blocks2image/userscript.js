@@ -247,7 +247,7 @@ export default async function ({ addon, global, console, msg }) {
     looks: "#774DCB",
     sounds: "#BD42BD",
     events: "#CC9900",
-    control: "#CF8B17"
+    control: "#CF8B17",
     sensing: "#2E8EB8",
     operators: "#389438",
     data: "#DB6E00",
