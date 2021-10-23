@@ -243,7 +243,7 @@ export default async function ({ addon, global, console, msg }) {
     };
   }
   const categories = {
-    motion: "#3373CC"
+    motion: "#3373CC",
     looks: "#774DCB",
     sounds: "#BD42BD",
     events: "#CC9900",
