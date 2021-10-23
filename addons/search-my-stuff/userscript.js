@@ -1,4 +1,4 @@
-import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
+import Fuse from "../../libraries/thirdparty/cs/fuse.esm.min.js";
 import fuseOptions from "./fuse-options.js";
 
 export default async function ({ addon, global, console, msg }) {
