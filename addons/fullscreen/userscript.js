@@ -1,5 +1,6 @@
 /**
- * Used for the automatic browser fullscreen setting.
+ * Used for the automatic browser full screen setting
+ * and for hiding the scrollbar in full screen.
  */
 export default async function ({ addon, global, console }) {
   // "Browser fullscreen" is defined as the mode that hides the browser UI.
@@ -30,6 +31,15 @@ export default async function ({ addon, global, console }) {
     }
   }
 
+  async function setPageScrollbar() {
+    const body = await addon.tab.waitForElement(".sa-body-editor");
+    if (addon.tab.redux.state.scratchGui.mode.isFullScreen) {
+      body.classList.add("sa-fullscreen");
+    } else {
+      body.classList.remove("sa-fullscreen");
+    }
+  }
+
   // Properly scale variable monitors on stage resize.
   let monitorScaler, resizeObserver, stage;
   async function initScaler() {
@@ -48,14 +58,17 @@ export default async function ({ addon, global, console }) {
 
   // Running this on page load handles the case of the project initially
   // loading in Scratch fullscreen mode.
+  setPageScrollbar();
   updateBrowserFullscreen();
 
   // Changing to or from Scratch fullscreen is signified by a state change
   // (URL change doesn't work when editing project without project page)
+  addon.tab.redux.initialize();
   addon.tab.redux.addEventListener("statechanged", (e) => {
     if (e.detail.action.type === "scratch-gui/mode/SET_FULL_SCREEN") {
       initScaler();
       updateBrowserFullscreen();
+      setPageScrollbar();
     }
   });
   // Changing to or from browser fullscreen is signified by a window resize.
