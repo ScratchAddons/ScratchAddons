@@ -40,6 +40,8 @@ export default async function ({ addon, global, console }) {
     if (el.src.includes("images/easter_eggs/pizza-cat.png")) el.src = addon.self.dir + "/images/pizza-cat.svg";
     if (el.src.includes("images/easter_eggs/meow.png")) el.src = addon.self.dir + "/images/meow.svg";
     if (el.src.includes("images/easter_eggs/gobo.png")) el.src = addon.self.dir + "/images/gobo.svg";
+    if (el.src.includes("images/easter_eggs/waffle.png")) el.src = addon.self.dir + "/images/waffle.svg";
+
 
   }
 
@@ -86,6 +88,10 @@ export default async function ({ addon, global, console }) {
         break;
       case "https://scratch.mit.edu/images/emoji/gobo.png":
         el.src = addon.self.dir + "/images/gobo.svg";
+        break;
+      case "https://scratch.mit.edu/images/emoji/waffle.png":
+        el.src = addon.self.dir + "/images/waffle.svg";
+        break;
     }
   }
 }
