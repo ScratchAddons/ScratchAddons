@@ -78,7 +78,7 @@ export default async function ({ addon, global, console, msg }) {
       const insertBeforeIndex =
         makeSpaceItemIndex !== -1
           ? // If "make space" button exists, add own items before it
-            makeSpaceItemIndex 
+            makeSpaceItemIndex
           : // If there's no such button, insert at end
             items.length;
 
@@ -245,52 +245,52 @@ export default async function ({ addon, global, console, msg }) {
   const categories = {
     motion: {
       color: "#4C97FF",
-      tertiaryColor: "#3373CC"
+      tertiaryColor: "#3373CC",
     },
     looks: {
       color: "#9966FF",
-      tertiaryColor: "#774DCB"
+      tertiaryColor: "#774DCB",
     },
     sounds: {
       color: "#CF63CF",
-      tertiaryColor: "#BD42BD"
+      tertiaryColor: "#BD42BD",
     },
     events: {
       color: "#DE9E2E",
-      tertiaryColor: "#CC9900"
+      tertiaryColor: "#CC9900",
     },
     control: {
       color: "#FFBF00",
-      tertiaryColor: "#CF8B17"
+      tertiaryColor: "#CF8B17",
     },
     sensing: {
       color: "#5CB1D6",
-      tertiaryColor: "#2E8EB8"
+      tertiaryColor: "#2E8EB8",
     },
     operators: {
       color: "#59C059",
-      tertiaryColor: "#389438"
+      tertiaryColor: "#389438",
     },
     data: {
       color: "#FF8C1A",
-      tertiaryColor: "#DB6E00"
+      tertiaryColor: "#DB6E00",
     },
     "data-lists": {
       color: "#FF661A",
-      tertiaryColor: "#E64D00"
+      tertiaryColor: "#E64D00",
     },
     custom: {
       color: "#FF6680",
-      tertiaryColor: "#FF6355"
+      tertiaryColor: "#FF6355",
     },
     Pen: {
       // For historical reasons, this is called "Pen".
       color: "#0FBD8C",
-      tertiaryColor: "#0B8E69"
+      tertiaryColor: "#0B8E69",
     },
     sa: {
       color: "#29beb8",
-      tertiaryColor: "#3aa8a4"
+      tertiaryColor: "#3aa8a4",
     },
   };
   const changedStyles = {};
