@@ -2,15 +2,9 @@ export default async function ({ addon, global, console, msg }) {
   let style = document.createElement("style");
   style.textContent = `
   .blocklyText {
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 12pt;
-  font-weight: 500;
-  }
-  .blocklyNonEditableText>text, .blocklyEditableText>text {
-  fill: #575E75;
-  }
-  .blocklyDropdownText {
-  fill: #fff !important;
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 12pt;
+      font-weight: 500;
   }
   `;
   let exSVG = document.createElement("svg");
@@ -50,8 +44,9 @@ export default async function ({ addon, global, console, msg }) {
       const insertBeforeIndex =
         pasteItemIndex !== -1
           ? // If "paste" button exists, add own items before it
-            pasteItemIndex // If there's no such button, insert at end
-          : items.length;
+            pasteItemIndex
+          : // If there's no such button, insert at end
+            items.length;
 
       items.splice(
         insertBeforeIndex,
@@ -75,9 +70,7 @@ export default async function ({ addon, global, console, msg }) {
       );
       return items;
     },
-    {
-      workspace: true,
-    }
+    { workspace: true }
   );
   addon.tab.createBlockContextMenu(
     (items, block) => {
@@ -85,8 +78,9 @@ export default async function ({ addon, global, console, msg }) {
       const insertBeforeIndex =
         makeSpaceItemIndex !== -1
           ? // If "make space" button exists, add own items before it
-            makeSpaceItemIndex // If there's no such button, insert at end
-          : items.length;
+            makeSpaceItemIndex 
+          : // If there's no such button, insert at end
+            items.length;
 
       items.splice(
         insertBeforeIndex,
@@ -110,9 +104,7 @@ export default async function ({ addon, global, console, msg }) {
       );
       return items;
     },
-    {
-      blocks: true,
-    }
+    { blocks: true }
   );
 
   function exportBlock(isExportPNG, block) {
@@ -202,9 +194,7 @@ export default async function ({ addon, global, console, msg }) {
     const saveLink = document.createElement("a");
     document.body.appendChild(saveLink);
 
-    const data = new Blob([text], {
-      type: "text",
-    });
+    const data = new Blob([text], { type: "text" });
     const url = window.URL.createObjectURL(data);
     saveLink.href = url;
 
@@ -255,58 +245,52 @@ export default async function ({ addon, global, console, msg }) {
   const categories = {
     motion: {
       color: "#4C97FF",
-      tertiaryColor: "#3373CC",
+      tertiaryColor: "#3373CC"
     },
     looks: {
       color: "#9966FF",
-      tertiaryColor: "#774DCB",
+      tertiaryColor: "#774DCB"
     },
     sounds: {
       color: "#CF63CF",
-      tertiaryColor: "#BD42BD",
-      alt: "sound",
+      tertiaryColor: "#BD42BD"
     },
     events: {
       color: "#DE9E2E",
-      tertiaryColor: "#CC9900",
+      tertiaryColor: "#CC9900"
     },
     control: {
       color: "#FFBF00",
-      tertiaryColor: "#CF8B17",
+      tertiaryColor: "#CF8B17"
     },
     sensing: {
       color: "#5CB1D6",
-      tertiaryColor: "#2E8EB8",
+      tertiaryColor: "#2E8EB8"
     },
     operators: {
       color: "#59C059",
-      tertiaryColor: "#389438",
+      tertiaryColor: "#389438"
     },
     data: {
       color: "#FF8C1A",
-      tertiaryColor: "#DB6E00",
-      alt: "variables",
+      tertiaryColor: "#DB6E00"
     },
     "data-lists": {
       color: "#FF661A",
-      tertiaryColor: "#E64D00",
-      alt: "lists",
-      var: "dataLists",
+      tertiaryColor: "#E64D00"
     },
     custom: {
       color: "#FF6680",
-      tertiaryColor: "#FF6355",
-      alt: "myBlocks",
+      tertiaryColor: "#FF6355"
     },
     Pen: {
       // For historical reasons, this is called "Pen".
       color: "#0FBD8C",
-      tertiaryColor: "#0B8E69",
-      alt: "pen",
+      tertiaryColor: "#0B8E69"
     },
     sa: {
       color: "#29beb8",
-      tertiaryColor: "#3aa8a4",
+      tertiaryColor: "#3aa8a4"
     },
   };
   const changedStyles = {};
@@ -339,7 +323,7 @@ export default async function ({ addon, global, console, msg }) {
     'path.blocklyBlockBackground[fill="#0FBD8C"] ~ [data-argument-type="text"] > path, path.blocklyBlockBackground[fill="#0FBD8C"] ~ g > line',
     'path.blocklyBlockBackground[fill="#29beb8"] ~ [data-argument-type="text"] > path',
   ].forEach((qs) => (changedStyles[qs] = ["stroke"]));
-  for (const [prop, { color, tertiaryColor, alt, var: catVar }] of Object.entries(categories)) {
+  for (const [prop, { color, tertiaryColor }] of Object.entries(categories)) {
     changedStyles[`g[data-category="${prop}"] > path.blocklyBlockBackground`] =
       changedStyles[
         `g[data-category="${prop}"] > .blocklyText, g[data-category="${prop}"] > g:not([data-id]) > .blocklyText`
