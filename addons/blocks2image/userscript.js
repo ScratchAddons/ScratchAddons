@@ -1,6 +1,4 @@
-export default async function ({
-  addon, global, console, msg
-}) {
+export default async function ({ addon, global, console, msg }) {
   let style = document.createElement("style");
   style.textContent = `
   .blocklyText {
@@ -50,10 +48,10 @@ export default async function ({
 
       const pasteItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
       const insertBeforeIndex =
-      pasteItemIndex !== -1
-      ? // If "paste" button exists, add own items before it
-      pasteItemIndex: // If there's no such button, insert at end
-      items.length;
+        pasteItemIndex !== -1
+          ? // If "paste" button exists, add own items before it
+            pasteItemIndex // If there's no such button, insert at end
+          : items.length;
 
       items.splice(
         insertBeforeIndex,
@@ -78,17 +76,17 @@ export default async function ({
       return items;
     },
     {
-      workspace: true
+      workspace: true,
     }
   );
   addon.tab.createBlockContextMenu(
     (items, block) => {
       const makeSpaceItemIndex = items.findIndex((obj) => obj._isDevtoolsFirstItem);
       const insertBeforeIndex =
-      makeSpaceItemIndex !== -1
-      ? // If "make space" button exists, add own items before it
-      makeSpaceItemIndex: // If there's no such button, insert at end
-      items.length;
+        makeSpaceItemIndex !== -1
+          ? // If "make space" button exists, add own items before it
+            makeSpaceItemIndex // If there's no such button, insert at end
+          : items.length;
 
       items.splice(
         insertBeforeIndex,
@@ -113,7 +111,7 @@ export default async function ({
       return items;
     },
     {
-      blocks: true
+      blocks: true,
     }
   );
 
@@ -164,9 +162,9 @@ export default async function ({
     let dataShapes = svgchild.getAttribute("data-shapes");
     svgchild.setAttribute(
       "transform",
-      `translate(0,${dataShapes === "hat" ? "18": "0"}) ${isExportPNG ? "scale(2)": ""}`
+      `translate(0,${dataShapes === "hat" ? "18" : "0"}) ${isExportPNG ? "scale(2)" : ""}`
     );
-    setCustomColors(svgchild)
+    setCustomColors(svgchild);
     svg.append(style);
     svg.append(svgchild);
     return svg;
@@ -184,14 +182,14 @@ export default async function ({
     svgchild.childNodes.forEach((g) => {
       let x = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[1] || 0;
       let y = g.getAttribute("transform").match(/translate\((.*?),(.*?)\)/)[2] || 0;
-      xArr.push(x * (isExportPNG ? 2: 1));
-      yArr.push(y * (isExportPNG ? 2: 1));
+      xArr.push(x * (isExportPNG ? 2 : 1));
+      yArr.push(y * (isExportPNG ? 2 : 1));
     });
 
     svgchild.setAttribute(
       "transform",
-      `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + 18 * (isExportPNG ? 2: 1)}) ${
-      isExportPNG ? "scale(2)": ""
+      `translate(${-Math.min(...xArr)},${-Math.min(...yArr) + 18 * (isExportPNG ? 2 : 1)}) ${
+        isExportPNG ? "scale(2)" : ""
       }`
     );
     setCustomColors(svgchild);
@@ -205,7 +203,7 @@ export default async function ({
     document.body.appendChild(saveLink);
 
     const data = new Blob([text], {
-      type: "text"
+      type: "text",
     });
     const url = window.URL.createObjectURL(data);
     saveLink.href = url;
@@ -227,10 +225,7 @@ export default async function ({
     // iframe.style.display = "none"
     document.body.append(iframe);
     iframe.contentDocument.write(div.innerHTML);
-    let {
-      width,
-      height
-    } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
+    let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
     height = height + 20 * 2; //  hat block height restore
     svg.setAttribute("width", width + "px");
     svg.setAttribute("height", height + "px");
@@ -315,7 +310,8 @@ export default async function ({
     },
   };
   const changedStyles = {};
-  ['path.blocklyBlockBackground[fill="#FF6680"]',
+  [
+    'path.blocklyBlockBackground[fill="#FF6680"]',
     'path.blocklyBlockBackground[fill="#5CB1D6"]',
     'path.blocklyBlockBackground[fill="#0FBD8C"]',
     'path.blocklyBlockBackground[fill="#29beb8"]',
@@ -329,39 +325,50 @@ export default async function ({
     'g[data-argument-type="dropdown"] > rect[fill="#FFBF00"] ~ .blocklyText, g[data-argument-type="dropdown"] > rect[fill="#CC9900"] ~ .blocklyText',
     'path.blocklyBlockBackground[fill="#0FBD8C"] ~ .blocklyText',
     'path.blocklyBlockBackground[fill="#0FBD8C"] ~ g[data-argument-type="dropdown"] > g > .blocklyDropdownText',
-    'path.blocklyBlockBackground[fill="#29beb8"] ~ .blocklyText'
-  ].forEach(qs => changedStyles[qs] = ["fill"]);
+    'path.blocklyBlockBackground[fill="#29beb8"] ~ .blocklyText',
+  ].forEach((qs) => (changedStyles[qs] = ["fill"]));
   [
     'g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable) > path, path[data-argument-type="boolean"][fill="#FF3355"]',
     'path.blocklyBlockBackground[fill="#5CB1D6"], g[data-argument-type="dropdown"] > rect[fill="#5CB1D6"]',
     'g[data-argument-type="dropdown"] > path[fill="#47A8D1"]',
     'path.blocklyBlockBackground[fill="#FFBF00"], g[data-argument-type="dropdown"] > rect[fill="#FFBF00"], g[data-argument-type="dropdown"] > rect[fill="#CC9900"]',
     'g[data-category] > path.blocklyBlockBackground[fill="#0FBD8C"]',
-    'g[data-argument-type="dropdown"] > path[fill="#0DA57A"]'
-  ].forEach(qs => changedStyles[qs] = ["fill", "stroke"]);
-  ['path.blocklyBlockBackground[fill="#0FBD8C"] ~ [data-argument-type="text"] > path, path.blocklyBlockBackground[fill="#0FBD8C"] ~ g > line',
-    'path.blocklyBlockBackground[fill="#29beb8"] ~ [data-argument-type="text"] > path'].forEach(qs => changedStyles[qs] = ["stroke"]);
-  for (const [prop, {
-    color, tertiaryColor, alt, var: catVar
-  }] of Object.entries(categories)) {
-
-    changedStyles[`g[data-category="${prop}"] > path.blocklyBlockBackground`] = changedStyles[`g[data-category="${prop}"] > .blocklyText, g[data-category="${prop}"] > g:not([data-id]) > .blocklyText`] = changedStyles[`g[data-category="${prop}"] > g[data-argument-type="dropdown"] > .blocklyDropdownText, g[data-category="${prop}"] > g[data-argument-type="variable"] > .blocklyDropdownText, g[data-category="${prop}"] > g[data-argument-type="dropdown"] > g > .blocklyDropdownText`] = ["fill"];
-    changedStyles[`.blocklyBubbleCanvas [stroke="${tertiaryColor}"]`] = changedStyles[`.blocklyBubbleCanvas [stroke="${tertiaryColor}"], g[data-category=${prop}] > g[data-argument-type*="text"] > path,
-      g[data-category=${prop}] > g > line`] = ["stroke"];
-    changedStyles[`g[data-category="${prop}"] > path.blocklyBlockBackground, g[data-category="${prop}"] > g[data-argument-type="dropdown"] > rect, g[data-category="${prop}"] > g[data-argument-type="variable"] > rect`] = changedStyles[`g[data-category="${prop}"] > g[data-argument-type="dropdown"] > path, g[data-category="${prop}"] > g[data-argument-type="variable"] > path, g[data-category="${prop}"] > path[data-argument-type="boolean"]`] = ['stroke',
-      'fill'];
+    'g[data-argument-type="dropdown"] > path[fill="#0DA57A"]',
+  ].forEach((qs) => (changedStyles[qs] = ["fill", "stroke"]));
+  [
+    'path.blocklyBlockBackground[fill="#0FBD8C"] ~ [data-argument-type="text"] > path, path.blocklyBlockBackground[fill="#0FBD8C"] ~ g > line',
+    'path.blocklyBlockBackground[fill="#29beb8"] ~ [data-argument-type="text"] > path',
+  ].forEach((qs) => (changedStyles[qs] = ["stroke"]));
+  for (const [prop, { color, tertiaryColor, alt, var: catVar }] of Object.entries(categories)) {
+    changedStyles[`g[data-category="${prop}"] > path.blocklyBlockBackground`] =
+      changedStyles[
+        `g[data-category="${prop}"] > .blocklyText, g[data-category="${prop}"] > g:not([data-id]) > .blocklyText`
+      ] =
+      changedStyles[
+        `g[data-category="${prop}"] > g[data-argument-type="dropdown"] > .blocklyDropdownText, g[data-category="${prop}"] > g[data-argument-type="variable"] > .blocklyDropdownText, g[data-category="${prop}"] > g[data-argument-type="dropdown"] > g > .blocklyDropdownText`
+      ] =
+        ["fill"];
+    changedStyles[`.blocklyBubbleCanvas [stroke="${tertiaryColor}"]`] = changedStyles[
+      `.blocklyBubbleCanvas [stroke="${tertiaryColor}"], g[data-category=${prop}] > g[data-argument-type*="text"] > path,
+      g[data-category=${prop}] > g > line`
+    ] = ["stroke"];
+    changedStyles[
+      `g[data-category="${prop}"] > path.blocklyBlockBackground, g[data-category="${prop}"] > g[data-argument-type="dropdown"] > rect, g[data-category="${prop}"] > g[data-argument-type="variable"] > rect`
+    ] = changedStyles[
+      `g[data-category="${prop}"] > g[data-argument-type="dropdown"] > path, g[data-category="${prop}"] > g[data-argument-type="variable"] > path, g[data-category="${prop}"] > path[data-argument-type="boolean"]`
+    ] = ["stroke", "fill"];
   }
   function setCustomColors(svg) {
     for (const [qs, attrs] of Object.entries(changedStyles)) {
-      const svgEls = svg.querySelectorAll(qs)
+      const svgEls = svg.querySelectorAll(qs);
       if (svgEls.length) {
-        const docEl = document.querySelector(qs)
+        const docEl = document.querySelector(qs);
         if (docEl) {
-          const computedStyles = getComputedStyle(docEl)
-          const newStyles = attrs.map(attr => [attr, computedStyles[attr]])
+          const computedStyles = getComputedStyle(docEl);
+          const newStyles = attrs.map((attr) => [attr, computedStyles[attr]]);
           for (const svgEl of svgEls) {
             for (const [attr, val] of newStyles) {
-              svgEl.setAttribute(attr, val)
+              svgEl.setAttribute(attr, val);
             }
           }
         }
