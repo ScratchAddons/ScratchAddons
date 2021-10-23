@@ -243,55 +243,18 @@ export default async function ({ addon, global, console, msg }) {
     };
   }
   const categories = {
-    motion: {
-      color: "#4C97FF",
-      tertiaryColor: "#3373CC",
-    },
-    looks: {
-      color: "#9966FF",
-      tertiaryColor: "#774DCB",
-    },
-    sounds: {
-      color: "#CF63CF",
-      tertiaryColor: "#BD42BD",
-    },
-    events: {
-      color: "#DE9E2E",
-      tertiaryColor: "#CC9900",
-    },
-    control: {
-      color: "#FFBF00",
-      tertiaryColor: "#CF8B17",
-    },
-    sensing: {
-      color: "#5CB1D6",
-      tertiaryColor: "#2E8EB8",
-    },
-    operators: {
-      color: "#59C059",
-      tertiaryColor: "#389438",
-    },
-    data: {
-      color: "#FF8C1A",
-      tertiaryColor: "#DB6E00",
-    },
-    "data-lists": {
-      color: "#FF661A",
-      tertiaryColor: "#E64D00",
-    },
-    custom: {
-      color: "#FF6680",
-      tertiaryColor: "#FF6355",
-    },
-    Pen: {
-      // For historical reasons, this is called "Pen".
-      color: "#0FBD8C",
-      tertiaryColor: "#0B8E69",
-    },
-    sa: {
-      color: "#29beb8",
-      tertiaryColor: "#3aa8a4",
-    },
+    motion: "#3373CC"
+    looks: "#774DCB",
+    sounds: "#BD42BD",
+    events: "#CC9900",
+    control: "#CF8B17"
+    sensing: "#2E8EB8",
+    operators: "#389438",
+    data: "#DB6E00",
+    "data-lists": "#E64D00",
+    custom: "#FF6355",
+    Pen: "#0B8E69",
+    sa: "#3aa8a4",
   };
   const changedStyles = {};
   [
@@ -323,7 +286,7 @@ export default async function ({ addon, global, console, msg }) {
     'path.blocklyBlockBackground[fill="#0FBD8C"] ~ [data-argument-type="text"] > path, path.blocklyBlockBackground[fill="#0FBD8C"] ~ g > line',
     'path.blocklyBlockBackground[fill="#29beb8"] ~ [data-argument-type="text"] > path',
   ].forEach((qs) => (changedStyles[qs] = ["stroke"]));
-  for (const [prop, { color, tertiaryColor }] of Object.entries(categories)) {
+  for (const [prop, tertiaryColor] of Object.entries(categories)) {
     changedStyles[`g[data-category="${prop}"] > path.blocklyBlockBackground`] =
       changedStyles[
         `g[data-category="${prop}"] > .blocklyText, g[data-category="${prop}"] > g:not([data-id]) > .blocklyText`
