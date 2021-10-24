@@ -840,7 +840,7 @@
       "name": "Blue background",
       "id": "blue",
       "type": "color",
-      "default": "#252c37"
+      "default": "#030b16"
     },
     {
       "name": "Input background",
@@ -891,7 +891,7 @@
           "name": "Darker and desaturated"
         }
       ],
-      "default": "off"
+      "default": "darker"
     },
     {
       "name": "Dark scrollbars",
