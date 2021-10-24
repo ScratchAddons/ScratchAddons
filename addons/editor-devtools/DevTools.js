@@ -460,7 +460,7 @@ export default class DevTools {
       this.hideFloatDropDown();
       return;
     }
-
+	
     let float = document.getElementById("s3devFloatingBar");
     if (float) {
       float.remove();
@@ -1498,16 +1498,19 @@ export default class DevTools {
 
   eventMouseDown(e) {
     this.updateMousePosition(e);
-
-    if (this.ddOut && this.ddOut.classList.contains("vis") && !e.target.closest("#s3devDDOut")) {
-      // If we click outside the dropdown, then instigate the hide code...
-      this.hideDropDown();
-    }
-
-    if (this.floatInp && !e.target.closest("#s3devIDDOut")) {
-      // If we click outside the dropdown, then instigate the hide code...
-      this.hideFloatDropDown();
-    }
+	
+	if (this.ddOut && this.ddOut.classList.contains("vis") && !e.target.closest("#s3devDDOut")) {
+	  // If we click outside the dropdown, then instigate the hide code...
+	  this.hideDropDown();
+	}
+	
+	let ctrlKey = e.ctrlKey || e.metaKey;
+	if (!ctrlKey || !document.getElementsByClassName("injectionDiv")[0].contains(e.target)) {
+		if (this.floatInp && !e.target.closest("#s3devIDDOut")) {
+		  // If we click outside the dropdown, then instigate the hide code...
+		  this.hideFloatDropDown();
+		}
+	}
 
     if (e.button === 1 || e.shiftKey) {
       // Wheel button...
@@ -1602,7 +1605,7 @@ export default class DevTools {
 
     e.cancelBubble = true;
     e.preventDefault();
-
+	
     let floatBar = document.getElementById("s3devFloatingBar");
     if (floatBar) {
       floatBar.remove();
@@ -2042,8 +2045,12 @@ export default class DevTools {
     x.appendChild(option.dom);
 
     let ids = Blockly.Xml.domToWorkspace(x, wksp);
-
-    this.reallyHideFloatDropDown(true);
+	
+	let ctrlKey = e.ctrlKey || e.metaKey;
+	
+	if (!ctrlKey) {
+		this.reallyHideFloatDropDown(true);
+	}
 
     let block = wksp.getBlockById(ids[0]);
 
@@ -2057,7 +2064,11 @@ export default class DevTools {
       }
     }
 
-    this.domHelpers.triggerDragAndDrop(block.svgPath_, null, { x: this.mouseXY.x, y: this.mouseXY.y });
+    this.domHelpers.triggerDragAndDrop(block.svgPath_, null, { x: this.mouseXY.x, y: this.mouseXY.y }, ctrlKey);
+	
+	if (ctrlKey) {
+		document.getElementById("s3devIInp").focus();
+	}
 
     this.blockCursor = block;
   }
