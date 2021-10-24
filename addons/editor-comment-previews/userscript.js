@@ -5,7 +5,7 @@ export default async function ({ addon, global, console }) {
     vm.runtime.once("PROJECT_LOADED", resolve);
   });
   const Blockly = await addon.tab.traps.getBlockly();
-  console.log(Blockly)
+  console.log(Blockly);
 
   const previewElement = document.createElement("div");
   previewElement.classList.add("sa-comment-preview");
@@ -62,7 +62,7 @@ export default async function ({ addon, global, console }) {
             hoverArea.addEventListener("mousedown", (e) => {
               previewElement.classList.add("sa-comment-preview-hidden");
             });
-            target = target.querySelector("g.blocklyDraggable")
+            target = target.querySelector("g.blocklyDraggable");
           } else {
             previewElement.classList.add("sa-comment-preview-hidden");
             target = null;
