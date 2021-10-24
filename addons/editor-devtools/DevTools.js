@@ -1505,9 +1505,8 @@ export default class DevTools {
     }
 
     if (this.floatInp && !e.target.closest("#s3devIDDOut")) {
-      let ctrlKey = e.ctrlKey || e.metaKey;
       if (
-        !ctrlKey ||
+        !e.shiftKey ||
         (!document.getElementsByClassName("injectionDiv")[0].contains(e.target) &&
           !e.target.classList.contains("blocklyHtmlInput")) ||
         e.target.matches(".blocklyFlyoutButton, .blocklyFlyoutButton *, .blocklyTouchTargetBackground")
@@ -2051,9 +2050,7 @@ export default class DevTools {
 
     let ids = Blockly.Xml.domToWorkspace(x, wksp);
 
-    let ctrlKey = e.ctrlKey || e.metaKey;
-
-    if (!ctrlKey) {
+    if (!e.shiftKey) {
       this.reallyHideFloatDropDown(true);
     }
 
@@ -2069,9 +2066,9 @@ export default class DevTools {
       }
     }
 
-    this.domHelpers.triggerDragAndDrop(block.svgPath_, null, { x: this.mouseXY.x, y: this.mouseXY.y }, ctrlKey);
+    this.domHelpers.triggerDragAndDrop(block.svgPath_, null, { x: this.mouseXY.x, y: this.mouseXY.y }, e.shiftKey);
 
-    if (ctrlKey) {
+    if (e.shiftKey) {
       document.getElementById("s3devIInp").focus();
     }
 
