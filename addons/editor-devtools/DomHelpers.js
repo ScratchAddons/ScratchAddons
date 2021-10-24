@@ -18,7 +18,7 @@ export default class DomHelpers {
    */
   triggerDragAndDrop(selectorDrag, selectorDrop, mouseXY, ctrlKey) {
     // function for triggering mouse events
-	ctrlKey = ctrlKey || false;
+    ctrlKey = ctrlKey || false;
     let fireMouseEvent = function (type, elem, centerX, centerY) {
       let evt = document.createEvent("MouseEvents");
       evt.initMouseEvent(type, true, true, window, 1, 1, 1, centerX, centerY, ctrlKey, false, false, false, 0, elem);
