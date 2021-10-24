@@ -1,0 +1,47 @@
+{
+  "name": "Editor comment previews",
+  "description": "Allows you to preview the contents of comments by hovering over collapsed comments and blocks.",
+  "tags": ["editor", "codeEditor"],
+  "credits": [
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/lisa_wolfgang"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["projects"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Hover collapsed comments to preview",
+      "id": "hover-view",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Hover blocks to preview attached comments",
+      "id": "hover-view-block",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Hover custom blocks to preview definition comments",
+      "id": "hover-view-procedure",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.23.0",
+  "enabledByDefault": false
+}
