@@ -1504,11 +1504,18 @@ export default class DevTools {
       this.hideDropDown();
     }
 
-    let ctrlKey = e.ctrlKey || e.metaKey;
-    if (!ctrlKey || !document.getElementsByClassName("injectionDiv")[0].contains(e.target)) {
-      if (this.floatInp && !e.target.closest("#s3devIDDOut")) {
-        // If we click outside the dropdown, then instigate the hide code...
-        this.hideFloatDropDown();
+    if (this.floatInp && !e.target.closest("#s3devIDDOut")) {
+		let ctrlKey = e.ctrlKey || e.metaKey;
+		if (
+			!ctrlKey
+			|| (
+				!document.getElementsByClassName("injectionDiv")[0].contains(e.target)
+				&& !e.target.classList.contains("blocklyHtmlInput")
+				)
+			|| e.target.matches(".blocklyFlyoutButton, .blocklyFlyoutButton *, .blocklyTouchTargetBackground")
+		) {
+			// If we click outside the dropdown, then instigate the hide code...
+			this.hideFloatDropDown();
       }
     }
 
