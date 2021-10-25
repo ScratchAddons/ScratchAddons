@@ -272,14 +272,18 @@ export default class DevTools {
 
     for (const root of topBlocks) {
       if (root.type === "procedures_definition") {
-        let fields = root.inputList[0];
-        let typeDesc = fields.fieldRow[0].getText();
-        let label = root.getChildren()[0];
-        let procCode = label.getProcCode();
+        const label = root.getChildren()[0];
+        const procCode = label.getProcCode();
         if (!procCode) {
           continue;
         }
-        addBlock("define", typeDesc + " " + procCode, root);
+        const indexOfLabel = root.inputList.findIndex((i) => i.fieldRow.length > 0);
+        if (indexOfLabel === -1) {
+          continue;
+        }
+        const translatedDefine = root.inputList[indexOfLabel].fieldRow[0].getText();
+        const message = indexOfLabel === 0 ? `${translatedDefine} ${procCode}` : `${procCode} ${translatedDefine}`;
+        addBlock("define", message, root);
         continue;
       }
 
@@ -1505,7 +1509,7 @@ export default class DevTools {
       this.hideFloatDropDown();
     }
 
-    if (e.button === 1 || e.altKey) {
+    if (e.button === 1 || e.shiftKey) {
       // Wheel button...
       try {
         this.middleClick(e);
@@ -1514,6 +1518,7 @@ export default class DevTools {
       }
     } else if (e.button === 2) {
       // Right click...
+      /*
       let spriteSelector = e.target.closest("#react-tabs-3 div[class*='sprite-selector-item_sprite-selector-item']");
       if (spriteSelector) {
         let contextMenu = spriteSelector.getElementsByTagName("nav")[0];
@@ -1537,6 +1542,7 @@ export default class DevTools {
           );
         }
       }
+      */
     } else {
       let chk = e.target;
       if (chk && chk.tagName !== "BUTTON" && chk.getAttribute && !chk.getAttribute("role")) {

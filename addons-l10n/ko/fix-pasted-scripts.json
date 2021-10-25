@@ -1,1 +1,1 @@
-{"fix-pasted-scripts/@name":"블럭을 복제한 뒤 자동으로 실행되는 버그 고치기"}
+{"fix-pasted-scripts/@name":"블럭을 복제한 뒤 자동으로 실행되는 버그 고치기","fix-pasted-scripts/@description":"스크래치 편집기에서 복제 뒤 블럭이 다른 블럭에 붙을 경우 실행되는 버그를 고칩니다."}

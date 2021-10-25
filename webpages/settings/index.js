@@ -48,6 +48,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     "webpages/settings/components/addon-group-header",
     "webpages/settings/components/addon-body",
     "webpages/settings/components/category-selector",
+    "webpages/settings/components/previews/editor-dark-mode",
+    "webpages/settings/components/previews/palette",
   ]);
 
   Vue.directive("click-outside", {

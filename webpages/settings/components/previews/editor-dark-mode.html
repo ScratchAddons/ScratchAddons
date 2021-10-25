@@ -1,0 +1,1326 @@
+<template>
+  <div
+    role="presentation"
+    class="edm-preview"
+    :data-setting-hovered="hoveredSettingId"
+    @mouseenter="$emit('areahover', 'page')"
+    @mouseleave="$emit('areahover', null)"
+    :style="cssVariables({
+      '--page': settings.page,
+      '--page-text': colors.pageText,
+      '--primary': settings.primary,
+      '--primary-transparent': colors.primaryTransparent,
+      '--primary-text': colors.primaryText,
+      '--highlightText': settings.highlightText,
+      '--menuBar': settings.menuBar,
+      '--menuBar-text': colors.menuBarText,
+      '--menuBar-border': colors.menuBarBorder,
+      '--accent': settings.accent,
+      '--accent-text': colors.accentText,
+      '--accent-transparentText': colors.accentTransparentText,
+      '--accent-artboard': colors.accentArtboard,
+      '--accent-checkerboard': colors.accentCheckerboard,
+      '--input': settings.input,
+      '--input-transparent': colors.inputTransparent,
+      '--input-text': colors.inputText,
+      '--tab': settings.tab,
+      '--tab-text': colors.tabText,
+      '--activeTab': settings.activeTab,
+      '--workspace': settings.workspace,
+      '--categoryMenu': settings.categoryMenu,
+      '--categoryMenu-text': colors.categoryMenuText,
+      '--categoryMenu-selection': colors.categoryMenuSelection,
+      '--palette': colors.palette,
+      '--selector': settings.selector,
+      '--selector-text': colors.selectorText,
+      '--selector2': settings.selector2,
+      '--selector2-text': colors.selector2Text,
+      '--selectorSelection': settings.selectorSelection,
+      '--fullscreen': settings.fullscreen,
+      '--stageHeader': settings.stageHeader,
+      '--border': hoveredSettingId === 'border' ? 'var(--brand-orange)' : settings.border,
+    })"
+  >
+    <div class="edm-menu-bar" @mouseenter="$emit('areahover', 'menuBar')" @mouseleave="$emit('areahover', 'page')">
+      <div class="edm-logo-placeholder"></div>
+      <div class="edm-menu-bar-menu edm-icon-placeholder edm-icon-placeholder-24px"><!-- Language --></div>
+      <div class="edm-menu-bar-menu edm-text-placeholder" style="--length: 4"><!-- File --></div>
+      <div class="edm-menu-bar-menu edm-text-placeholder" style="--length: 4"><!-- Edit --></div>
+      <div class="edm-menu-bar-separator"></div>
+      <div class="edm-menu-bar-menu edm-menu-bar-tutorials">
+        <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+        <div class="edm-text-placeholder" style="--length: 9"><!-- Tutorials --></div>
+      </div>
+      <div class="edm-menu-bar-separator"></div>
+      <div class="edm-menu-bar-input">
+        <!-- Project title -->
+        <div class="edm-text-placeholder" style="--length: 8"></div>
+        <div class="edm-text-placeholder" style="--length: 1"></div>
+      </div>
+      <div class="edm-menu-bar-button edm-menu-bar-share">
+        <div class="edm-text-placeholder" style="--length: 5"><!-- Share --></div>
+      </div>
+      <div class="edm-menu-bar-button">
+        <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+        <!-- See Project Page -->
+        <div class="edm-text-placeholder" style="--length: 3"></div>
+        <div class="edm-text-placeholder" style="--length: 7"></div>
+        <div class="edm-text-placeholder" style="--length: 4"></div>
+      </div>
+      <div class="edm-spacer"></div>
+      <div class="edm-menu-bar-menu edm-icon-placeholder edm-icon-placeholder-24px"><!-- My Stuff --></div>
+      <div class="edm-menu-bar-menu">
+        <div class="edm-menu-bar-button edm-avatar-placeholder"></div>
+        <div class="edm-text-placeholder" style="--length: 10"><!-- Account --></div>
+      </div>
+    </div>
+    <div class="edm-main">
+      <div class="edm-left">
+        <div class="edm-tabs">
+          <div
+            v-for="tab of tabs"
+            class="edm-tab"
+            :class="{'edm-tab-selected': selectedTab === tab.id}"
+            @mouseenter="$emit('areahover', selectedTab === tab.id ? 'activeTab' : 'tab')"
+            @mouseleave="$emit('areahover', 'page')"
+            @click="selectTab(tab.id)"
+          >
+            <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+            <div class="edm-text-placeholder" :style="cssVariables({ '--length': tab.textLength })"></div>
+          </div>
+        </div>
+        <div class="edm-tab-content edm-workspace" v-if="selectedTab === 'code'">
+          <div
+            class="edm-category-menu"
+            @mouseenter="$emit('areahover', 'categoryMenu')"
+            @mouseleave="$emit('areahover', 'page')"
+          >
+            <div
+              v-for="category of blockCategories"
+              class="edm-category"
+              :class="{'edm-category-selected': $index === 0}"
+            >
+              <div
+                class="edm-category-bubble"
+                :style="{backgroundColor: category.primary, borderColor: category.tertiary}"
+              ></div>
+              <div class="edm-category-label">
+                <div
+                  v-for="wordLength of category.textLength"
+                  class="edm-text-placeholder edm-text-placeholder-small"
+                  :style="cssVariables({ '--length': wordLength })"
+                ></div>
+              </div>
+            </div>
+            <div class="edm-spacer"></div>
+            <div
+              class="edm-add-extension"
+              @mouseenter="$emit('areahover', 'primary')"
+              @mouseleave="$emit('areahover', 'categoryMenu')"
+            >
+              <div class="edm-icon-placeholder edm-icon-placeholder-24px"><!-- Add Extension --></div>
+            </div>
+          </div>
+          <div
+            class="edm-palette"
+            @mouseenter="$emit('areahover', 'palette')"
+            @mouseleave="$emit('areahover', 'page')"
+          ></div>
+          <div
+            class="edm-workspace-hover-target"
+            @mouseenter="$emit('areahover', 'workspace')"
+            @mouseleave="$emit('areahover', 'page')"
+          ></div>
+        </div>
+        <div
+          v-else
+          class="edm-tab-content edm-asset-tab"
+          @mouseenter="$emit('areahover', 'accent')"
+          @mouseleave="$emit('areahover', 'page')"
+        >
+          <div
+            class="edm-asset-list"
+            :class="{'edm-sound-list': selectedTab === 'sounds'}"
+            @mouseenter="$emit('areahover', 'selector2')"
+            @mouseleave="$emit('areahover', 'accent')"
+          >
+            <div
+              class="edm-asset edm-asset-selected"
+              @mouseenter="$emit('areahover', 'selectorSelection')"
+              @mouseleave="$emit('areahover', 'selector2')"
+            >
+              <div class="edm-asset-image">
+                <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+              </div>
+              <div
+                class="edm-asset-name"
+                @mouseenter="$emit('areahover', 'primary')"
+                @mouseleave="$emit('areahover', 'selectorSelection')"
+              >
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"></div>
+              </div>
+              <div
+                class="edm-asset-delete"
+                @mouseenter="$emit('areahover', 'primary')"
+                @mouseleave="$emit('areahover', 'selectorSelection')"
+              >
+                <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+              </div>
+            </div>
+            <div class="edm-asset edm-asset">
+              <div class="edm-asset-image">
+                <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+              </div>
+              <div class="edm-asset-name">
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"></div>
+              </div>
+            </div>
+            <div class="edm-asset edm-asset">
+              <div class="edm-asset-image">
+                <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+              </div>
+              <div class="edm-asset-name">
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
+              </div>
+            </div>
+            <div
+              class="edm-asset-new"
+              @mouseenter="$emit('areahover', 'primary')"
+              @mouseleave="$emit('areahover', 'selector2')"
+            >
+              <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+            </div>
+          </div>
+          <div class="edm-asset-editor edm-tool-button-icons-not-affected" v-if="selectedTab === 'costumes'">
+            <div class="edm-toolbar">
+              <div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"><!-- Costume --></div>
+                <div
+                  class="edm-input"
+                  @mouseenter="$emit('areahover', 'input')"
+                  @mouseleave="$emit('areahover', 'accent')"
+                >
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8"></div>
+                </div>
+              </div>
+              <div>
+                <div class="edm-outlined-button edm-outlined-button-first edm-outlined-button-selected">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Undo --></div>
+                </div>
+                <div class="edm-outlined-button edm-outlined-button-last edm-outlined-button-selected">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Redo --></div>
+                </div>
+              </div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6"><!-- Group --></div>
+                </div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8">
+                    <!-- Ungroup -->
+                  </div>
+                </div>
+              </div>
+              <div class="edm-toolbar-separator"></div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7">
+                    <!-- Forward -->
+                  </div>
+                </div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8">
+                    <!-- Backward -->
+                  </div>
+                </div>
+              </div>
+              <div class="edm-toolbar-separator"></div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"><!-- Front --></div>
+                </div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Back --></div>
+                </div>
+              </div>
+            </div>
+            <div class="edm-toolbar">
+              <div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Fill --></div>
+                <div class="edm-outlined-button edm-outlined-button-first edm-paint-picker-color"></div>
+                <div class="edm-outlined-button edm-outlined-button-last edm-paint-picker-arrow"></div>
+              </div>
+              <div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"><!-- Outline --></div>
+                <div class="edm-outlined-button edm-outlined-button-first edm-paint-picker-color"></div>
+                <div class="edm-outlined-button edm-outlined-button-last edm-paint-picker-arrow"></div>
+                <div
+                  class="edm-input edm-input-number"
+                  @mouseenter="$emit('areahover', 'input')"
+                  @mouseleave="$emit('areahover', 'accent')"
+                >
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 2"></div>
+                </div>
+              </div>
+              <div class="edm-toolbar-separator"></div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Copy --></div>
+                </div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"><!-- Paste --></div>
+                </div>
+              </div>
+              <div class="edm-toolbar-separator"></div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6"><!-- Delete --></div>
+                </div>
+              </div>
+              <div class="edm-toolbar-separator"></div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div>
+                    <!-- Flip Horizontal -->
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 10"></div>
+                  </div>
+                </div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div>
+                    <!-- Flip Vertical -->
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 8"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="edm-paint-bottom">
+              <div class="edm-paint-tool-column">
+                <div
+                  class="edm-paint-tool edm-paint-tool-selected"
+                  @mouseenter="$emit('areahover', 'primary')"
+                  @mouseleave="$emit('areahover', 'accent')"
+                >
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                </div>
+                <div class="edm-paint-tool" v-for="item of [0, 1, 2, 3]">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                </div>
+              </div>
+              <div class="edm-paint-tool-column">
+                <div class="edm-paint-tool" v-for="item of [0, 1, 2, 3]">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                </div>
+              </div>
+              <div class="edm-paint-canvas-and-controls">
+                <div class="edm-paint-canvas"></div>
+                <div class="edm-paint-controls">
+                  <div
+                    class="edm-button"
+                    @mouseenter="$emit('areahover', 'primary')"
+                    @mouseleave="$emit('areahover', 'accent')"
+                  >
+                    <!-- Convert to Bitmap -->
+                    <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+                    <div class="edm-text-placeholder" style="--length: 7"></div>
+                    <div class="edm-text-placeholder" style="--length: 2"></div>
+                    <div class="edm-text-placeholder" style="--length: 6"></div>
+                  </div>
+                  <div class="edm-paint-zoom">
+                    <div class="edm-outlined-button edm-outlined-button-first">
+                      <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+                    </div>
+                    <div class="edm-outlined-button edm-outlined-button-middle">
+                      <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+                    </div>
+                    <div class="edm-outlined-button edm-outlined-button-last">
+                      <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="edm-asset-editor" v-if="selectedTab === 'sounds'">
+            <div class="edm-toolbar">
+              <div>
+                <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"><!-- Sound --></div>
+                <div
+                  class="edm-input"
+                  @mouseenter="$emit('areahover', 'input')"
+                  @mouseleave="$emit('areahover', 'accent')"
+                >
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4">
+                    <!-- sound name -->
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="edm-outlined-button edm-outlined-button-first edm-outlined-button-selected">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Undo --></div>
+                </div>
+                <div class="edm-outlined-button edm-outlined-button-last edm-outlined-button-selected">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Redo --></div>
+                </div>
+              </div>
+              <div class="edm-toolbar-separator"></div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"><!-- Copy --></div>
+                </div>
+              </div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"><!-- Paste --></div>
+                </div>
+              </div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div>
+                    <!-- Copy to New -->
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 4"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 2"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="edm-toolbar-separator"></div>
+              <div>
+                <div class="edm-tool-button">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 6"><!-- Delete --></div>
+                </div>
+              </div>
+            </div>
+            <div class="edm-waveform"></div>
+            <div class="edm-toolbar edm-sound-effects">
+              <div>
+                <div
+                  class="edm-play-button"
+                  @mouseenter="$emit('areahover', 'primary')"
+                  @mouseleave="$emit('areahover', 'accent')"
+                >
+                  <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+                </div>
+              </div>
+              <div class="edm-toolbar-separator"></div>
+              <div>
+                <div class="edm-tool-button" v-for="effect of soundEffects">
+                  <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+                  <div>
+                    <div
+                      class="edm-text-placeholder edm-text-placeholder-small"
+                      v-for="wordLength of effect.textLength"
+                      :style="cssVariables({ '--length': wordLength })"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="edm-backpack" @mouseenter="$emit('areahover', 'accent')" @mouseleave="$emit('areahover', 'page')">
+          <div class="edm-text-placeholder" style="--length: 8"></div>
+        </div>
+      </div>
+      <div class="edm-right">
+        <div class="edm-stage-header">
+          <div class="edm-icon-placeholder edm-icon-placeholder-20px edm-green-flag"><!-- Green flag --></div>
+          <div class="edm-icon-placeholder edm-icon-placeholder-20px edm-stop-sign"><!-- Stop --></div>
+          <div class="edm-spacer"></div>
+          <div
+            class="edm-outlined-button edm-outlined-button-first edm-outlined-button-selected"
+            @mouseenter="$emit('areahover', 'accent')"
+            @mouseleave="$emit('areahover', 'page')"
+          >
+            <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Small stage --></div>
+          </div>
+          <div
+            class="edm-outlined-button edm-outlined-button-last edm-outlined-button-unselected"
+            @mouseenter="$emit('areahover', 'accent')"
+            @mouseleave="$emit('areahover', 'page')"
+          >
+            <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Large stage --></div>
+          </div>
+          <div
+            class="edm-outlined-button edm-fullscreen-toggle"
+            @mouseenter="$emit('areahover', 'accent')"
+            @mouseleave="$emit('areahover', 'page')"
+            @click="toggleFullScreenView()"
+          >
+            <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Full screen --></div>
+          </div>
+        </div>
+        <div class="edm-stage" @mouseenter="$emit('areahover', null)" @mouseleave="$emit('areahover', 'page')"></div>
+        <div class="edm-targets">
+          <div class="edm-sprite-selector">
+            <div
+              class="edm-sprite-info"
+              @mouseenter="$emit('areahover', 'accent')"
+              @mouseleave="$emit('areahover', 'page')"
+            >
+              <div class="edm-sprite-info-row">
+                <div>
+                  <div class="edm-input">
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="edm-sprite-info-row">
+                <div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"><!-- x --></div>
+                  <div class="edm-input edm-input-number">
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
+                  <div class="edm-input edm-input-number">
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"><!-- y --></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="edm-sprite-list-container"
+              @mouseenter="$emit('areahover', 'selector')"
+              @mouseleave="$emit('areahover', 'page')"
+            >
+              <div class="edm-sprite-list">
+                <div
+                  class="edm-asset edm-asset-selected"
+                  @mouseenter="$emit('areahover', 'selectorSelection')"
+                  @mouseleave="$emit('areahover', 'selector')"
+                >
+                  <div class="edm-asset-image">
+                    <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  </div>
+                  <div
+                    class="edm-asset-name"
+                    @mouseenter="$emit('areahover', 'primary')"
+                    @mouseleave="$emit('areahover', 'selectorSelection')"
+                  >
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 7"></div>
+                  </div>
+                  <div
+                    class="edm-asset-delete"
+                    @mouseenter="$emit('areahover', 'primary')"
+                    @mouseleave="$emit('areahover', 'selectorSelection')"
+                  >
+                    <div class="edm-icon-placeholder edm-icon-placeholder-20px"></div>
+                  </div>
+                </div>
+                <div class="edm-asset edm-asset">
+                  <div class="edm-asset-image">
+                    <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  </div>
+                  <div class="edm-asset-name">
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"></div>
+                  </div>
+                </div>
+                <div class="edm-asset edm-asset">
+                  <div class="edm-asset-image">
+                    <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+                  </div>
+                  <div class="edm-asset-name">
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 3"></div>
+                    <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="edm-asset-new"
+                @mouseenter="$emit('areahover', 'primary')"
+                @mouseleave="$emit('areahover', 'selector')"
+              >
+                <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="edm-stage-selector"
+            @mouseenter="$emit('areahover', 'accent')"
+            @mouseleave="$emit('areahover', 'page')"
+          >
+            <div class="edm-stage-title">
+              <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 5"><!-- Stage --></div>
+            </div>
+            <div class="edm-stage-image"></div>
+            <div class="edm-stage-info">
+              <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 9"><!-- Backdrops --></div>
+            </div>
+            <div class="edm-stage-info">
+              <div class="edm-text-placeholder edm-text-placeholder-small" style="--length: 1"></div>
+            </div>
+            <div
+              class="edm-asset-new"
+              @mouseenter="$emit('areahover', 'primary')"
+              @mouseleave="$emit('areahover', 'accent')"
+            >
+              <div class="edm-icon-placeholder edm-icon-placeholder-24px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      v-if="fullScreenView"
+      class="edm-fullscreen-view"
+      @mouseenter="$emit('areahover', 'fullscreen')"
+      @mouseleave="$emit('areahover', 'page')"
+    >
+      <div
+        class="edm-fullscreen-controls"
+        @mouseenter="$emit('areahover', 'stageHeader')"
+        @mouseleave="$emit('areahover', 'fullscreen')"
+      >
+        <div class="edm-fullscreen-controls-inner">
+          <div>
+            <div class="edm-icon-placeholder edm-icon-placeholder-20px edm-green-flag"><!-- Green flag --></div>
+            <div class="edm-icon-placeholder edm-icon-placeholder-20px edm-stop-sign"><!-- Stop --></div>
+          </div>
+          <div
+            class="edm-outlined-button edm-fullscreen-toggle"
+            @mouseenter="$emit('areahover', 'accent')"
+            @mouseleave="$emit('areahover', 'stageHeader')"
+            @click="toggleFullScreenView()"
+          >
+            <div class="edm-icon-placeholder edm-icon-placeholder-20px"><!-- Exit full screen --></div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="edm-fullscreen-stage"
+        @mouseenter="$emit('areahover', null)"
+        @mouseleave="$emit('areahover', 'fullscreen')"
+      ></div>
+    </div>
+  </div>
+</template>
+
+<style>
+  .edm-preview {
+    margin-top: 10px;
+    width: 512px;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+    background-color: var(--page);
+    border: 1px solid var(--control-border);
+    border-radius: 4px;
+    transition: box-shadow 0.2s ease;
+  }
+  .edm-preview * {
+    transition: box-shadow 0.2s ease, filter 0.2s ease, border-color 0.2s ease;
+  }
+
+  .edm-preview[data-setting-hovered="page"],
+  .edm-preview[data-setting-hovered="menuBar"] .edm-menu-bar,
+  .edm-preview[data-setting-hovered="accent"] .edm-asset-editor,
+  .edm-preview[data-setting-hovered="accent"] .edm-sprite-info,
+  .edm-preview[data-setting-hovered="accent"] .edm-stage-selector,
+  .edm-preview[data-setting-hovered="selector"] .edm-sprite-list-container,
+  .edm-preview[data-setting-hovered="selector2"] .edm-asset-list,
+  .edm-preview[data-setting-hovered="workspace"] .edm-workspace-hover-target,
+  .edm-preview[data-setting-hovered="categoryMenu"] .edm-category-menu,
+  .edm-preview[data-setting-hovered="palette"] .edm-palette,
+  .edm-preview[data-setting-hovered="fullscreen"] .edm-fullscreen-view,
+  .edm-preview[data-setting-hovered="stageHeader"] .edm-fullscreen-controls,
+  .edm-preview[data-setting-hovered="affectPaper"] .edm-paint-canvas {
+    box-shadow: 0 0 8px inset var(--brand-orange);
+  }
+
+  .edm-preview[data-setting-hovered="page"] .edm-menu-bar,
+  .edm-preview[data-setting-hovered="primary"] .edm-button,
+  .edm-preview[data-setting-hovered="primary"] .edm-add-extension,
+  .edm-preview[data-setting-hovered="primary"] .edm-asset-selected,
+  .edm-preview[data-setting-hovered="primary"] .edm-asset-delete,
+  .edm-preview[data-setting-hovered="primary"] .edm-asset-new,
+  .edm-preview[data-setting-hovered="primary"] .edm-paint-tool-selected,
+  .edm-preview[data-setting-hovered="primary"] .edm-play-button,
+  .edm-preview[data-setting-hovered="highlightText"]
+    .edm-tab-selected
+    :is(.edm-text-placeholder, .edm-icon-placeholder),
+  .edm-preview[data-setting-hovered="highlightText"] .edm-outlined-button-selected .edm-icon-placeholder,
+  .edm-preview[data-setting-hovered="highlightText"]
+    .edm-tool-button:not(.edm-tool-button-icons-not-affected *)
+    .edm-icon-placeholder,
+  .edm-preview[data-setting-hovered="accent"] .edm-outlined-button,
+  .edm-preview[data-setting-hovered="accent"] .edm-backpack,
+  .edm-preview[data-setting-hovered="input"] .edm-input,
+  .edm-preview[data-setting-hovered="tab"] .edm-tab:not(.edm-tab-selected),
+  .edm-preview[data-setting-hovered="activeTab"] .edm-tab-selected,
+  .edm-preview[data-setting-hovered="selectorSelection"] .edm-asset-selected,
+  .edm-preview[data-setting-hovered="fullscreen"] .edm-fullscreen-controls {
+    filter: drop-shadow(0 0 4px var(--brand-orange));
+  }
+
+  .edm-icon-placeholder {
+    background-color: currentColor;
+    border-radius: 50%; /* circle */
+    opacity: 0.75;
+  }
+  .edm-icon-placeholder-20px {
+    width: 10px;
+    height: 10px;
+  }
+  .edm-icon-placeholder-24px {
+    width: 12px;
+    height: 12px;
+  }
+  .edm-text-placeholder {
+    width: calc(3px * var(--length));
+    min-width: 4px;
+    height: 4px;
+    background-color: currentColor;
+    border-radius: 2px;
+    opacity: 0.75;
+  }
+  .edm-text-placeholder-small {
+    width: calc(2px * var(--length));
+    min-width: 3px;
+    height: 3px;
+  }
+  .edm-icon-placeholder + .edm-text-placeholder,
+  .edm-text-placeholder + .edm-text-placeholder {
+    margin-inline-start: 3px;
+  }
+  .edm-text-placeholder-small + .edm-text-placeholder-small {
+    margin-inline-start: 2px;
+  }
+
+  .edm-spacer {
+    flex-grow: 1;
+  }
+
+  .edm-button {
+    height: 18px;
+    display: flex;
+    align-items: center;
+    padding-inline: 4px;
+    background-color: var(--primary);
+    border-radius: 3px;
+    color: var(--primary-text);
+  }
+
+  .edm-outlined-button {
+    width: 14px;
+    height: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--accent-text);
+  }
+  .edm-outlined-button-selected {
+    color: var(--highlightText);
+  }
+  .edm-outlined-button-unselected {
+    color: var(--accent-transparentText);
+  }
+  .edm-outlined-button-first {
+    border-radius: 3px 0 0 3px;
+  }
+  [dir="rtl"] .edm-outlined-button-first {
+    border-radius: 0 3px 3px 0;
+  }
+  .edm-outlined-button-middle {
+    border-inline-start: none;
+    border-radius: 0;
+  }
+  .edm-outlined-button-last {
+    border-inline-start: none;
+    border-radius: 0 3px 3px 0;
+  }
+  [dir="rtl"] .edm-outlined-button-last {
+    border-radius: 3px 0 0 3px;
+  }
+  .edm-outlined-button + .edm-outlined-button:not(.edm-outlined-button-middle):not(.edm-outlined-button-last) {
+    margin-inline-start: 3px;
+  }
+  .edm-icon-placeholder + .edm-outlined-button,
+  .edm-text-placeholder + .edm-outlined-button,
+  .edm-input + .edm-outlined-button {
+    margin-inline-start: 4px;
+  }
+
+  .edm-input {
+    width: 50px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    padding-inline: 6px;
+    background-color: var(--input);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--input-text);
+  }
+  .edm-input-number {
+    width: auto;
+    padding-inline: 8px;
+  }
+  .edm-icon-placeholder + .edm-input,
+  .edm-text-placeholder + .edm-input,
+  .edm-outlined-button + .edm-input {
+    margin-inline-start: 4px;
+  }
+
+  .edm-asset {
+    margin: 2px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .edm-asset-image {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .edm-asset:first-child .edm-asset-image {
+    color: #ffab19;
+  }
+  .edm-asset:nth-child(2) .edm-asset-image {
+    color: #ec1c2c;
+  }
+  .edm-asset:nth-child(3) .edm-asset-image {
+    color: #e29339;
+  }
+  .edm-asset-name {
+    display: flex;
+    justify-content: center;
+    padding: 2px;
+  }
+  .edm-asset-delete {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary);
+    border-radius: 7px;
+    color: var(--primary-text);
+    box-shadow: 0 0 0 1px var(--primary-transparent);
+  }
+  [dir="rtl"] .edm-asset-delete {
+    right: auto;
+    left: -5px;
+  }
+  .edm-asset-selected {
+    background-color: var(--selectorSelection);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-transparent);
+  }
+  .edm-asset-selected .edm-asset-name {
+    background-color: var(--primary);
+    color: var(--primary-text);
+  }
+  .edm-asset-new {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary);
+    border-radius: 11px;
+    color: var(--primary-text);
+    box-shadow: 0 0 0 2px var(--primary-transparent);
+  }
+
+  .edm-menu-bar {
+    height: 24px;
+    display: flex;
+    align-items: center;
+    background-color: var(--menuBar);
+    color: var(--menuBar-text);
+  }
+  .edm-logo-placeholder {
+    margin-inline: 6px;
+    width: 35px;
+    height: 6px;
+    background-color: #f9a83a;
+    border: 3px solid white;
+    border-radius: 6px;
+  }
+  .edm-menu-bar-menu {
+    margin-inline: 6px;
+    display: flex;
+    align-items: center;
+  }
+  .edm-menu-bar-tutorials {
+    margin-inline: 2px;
+  }
+  .edm-menu-bar-button,
+  .edm-menu-bar-input {
+    margin-inline: 2px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    padding-inline: 4px;
+    border-radius: 3px;
+  }
+  .edm-menu-bar-button {
+    border: 1px solid var(--menuBar-border);
+  }
+  .edm-menu-bar-share {
+    background-color: #ff8c1a;
+    border-color: #ff8c1a;
+    color: white;
+  }
+  .edm-avatar-placeholder {
+    width: 7px;
+    margin-inline-start: 0;
+    margin-inline-end: 3px;
+  }
+  .edm-menu-bar-input {
+    width: 86px;
+    background-color: var(--input-transparent);
+    border: 1px dashed var(--menuBar-border);
+  }
+  .edm-menu-bar-separator {
+    margin-inline: 4px;
+    height: 17px;
+    border-left: 1px dashed var(--menuBar-border);
+  }
+
+  .edm-main {
+    height: calc(100% - 24px);
+    display: flex;
+  }
+
+  .edm-left {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .edm-tabs {
+    height: 22px;
+    display: flex;
+    align-items: flex-end;
+  }
+  .edm-tab {
+    position: relative;
+    margin-inline-start: -4px; /* overlap */
+    margin-bottom: -1px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    padding-inline: 10px;
+    background-color: var(--tab);
+    border: 1px solid var(--border);
+    border-radius: 8px 8px 0 0;
+    color: var(--tab-text);
+    cursor: pointer;
+  }
+  .edm-tab:first-child {
+    z-index: 3;
+    margin-inline-start: 0;
+    border-inline-start: none;
+  }
+  .edm-tab:nth-child(2) {
+    z-index: 2;
+  }
+  .edm-tab:nth-child(3) {
+    z-index: 1;
+  }
+  .edm-tab:hover {
+    background-color: var(--page);
+    color: var(--page-text);
+  }
+  .edm-tab.edm-tab-selected {
+    height: 18px;
+    z-index: 4;
+    background-color: var(--activeTab);
+    color: var(--highlightText);
+  }
+  .edm-tab-content {
+    flex-grow: 1;
+    border: 1px solid var(--border);
+    border-inline-start: none;
+    border-radius: 0 4px 4px 0;
+  }
+  [dir="rtl"] .edm-tab-content {
+    border-radius: 4px 0 0 4px;
+  }
+  .edm-backpack {
+    margin-top: 4px;
+    height: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--accent);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-top-right-radius: 4px;
+    color: var(--accent-text);
+  }
+  [dir="rtl"] .edm-backpack {
+    border-top-right-radius: 0;
+    border-top-left-radius: 4px;
+  }
+
+  .edm-workspace {
+    background-color: var(--workspace);
+    display: flex;
+    overflow: hidden;
+  }
+  .edm-category-menu {
+    width: 29px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--categoryMenu);
+    border-inline-end: 1px solid var(--border);
+  }
+  .edm-category {
+    padding-block: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .edm-category-bubble {
+    margin-bottom: 3px;
+    width: 8px;
+    height: 8px;
+    border: 1px solid;
+    border-radius: 5px;
+  }
+  .edm-category-label {
+    display: flex;
+    color: var(--categoryMenu-text);
+  }
+  .edm-category-selected {
+    background-color: var(--categoryMenu-selection);
+  }
+  .edm-add-extension {
+    width: 30px;
+    height: 27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary);
+    color: var(--primary-text);
+  }
+  .edm-palette {
+    width: 124px;
+    background-color: var(--palette);
+    border-inline-end: 1px solid var(--border);
+  }
+  .edm-workspace-hover-target {
+    flex-grow: 1;
+  }
+
+  .edm-asset-tab {
+    display: flex;
+    background-color: var(--accent);
+    color: var(--accent-text);
+  }
+  .edm-asset-list {
+    display: flex;
+    flex-direction: column;
+    padding-block: 2px;
+    padding-inline: 14px;
+    position: relative;
+    background-color: var(--selector2);
+    color: var(--selector2-text);
+    border-inline-end: 1px solid var(--border);
+  }
+  .edm-sound-list .edm-asset .edm-asset-image {
+    color: inherit;
+  }
+  .edm-asset-editor {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+  }
+  .edm-toolbar,
+  .edm-toolbar > * {
+    display: flex;
+    align-items: center;
+  }
+  .edm-toolbar > * + * {
+    margin-inline-start: 6px;
+  }
+  .edm-toolbar + .edm-toolbar {
+    margin-top: 4px;
+  }
+  .edm-tool-button {
+    min-width: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px 3px;
+  }
+  .edm-tool-button .edm-icon-placeholder {
+    margin-bottom: 2px;
+    color: var(--highlightText);
+  }
+  .edm-tool-button-icons-not-affected .edm-tool-button .edm-icon-placeholder {
+    color: #4c97ff;
+  }
+  .edm-tool-button > .edm-text-placeholder {
+    margin: 0;
+  }
+  .edm-tool-button > * {
+    display: flex;
+  }
+  .edm-toolbar-separator {
+    align-self: stretch;
+    border-inline-start: 1px dashed var(--border);
+  }
+  .edm-paint-picker-color {
+    width: 14px;
+  }
+  .edm-paint-picker-arrow {
+    width: 7px;
+  }
+  .edm-paint-bottom {
+    margin-top: 4px;
+    flex-grow: 1;
+    display: flex;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+  .edm-paint-tool-column {
+    margin-inline-end: 6px;
+  }
+  .edm-paint-tool {
+    margin-bottom: 4px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+  }
+  .edm-paint-tool-selected {
+    background-color: var(--primary);
+    color: var(--primary-text);
+  }
+  .edm-paint-canvas-and-controls {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .edm-paint-canvas {
+    flex-grow: 1;
+    background-color: var(--accent-artboard);
+    background-image: linear-gradient(45deg, var(--accent-checkerboard) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--accent-checkerboard) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--accent-checkerboard) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--accent-checkerboard) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+  .edm-paint-controls {
+    margin-top: 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .edm-paint-zoom {
+    display: flex;
+  }
+  .edm-waveform {
+    margin-top: 16px;
+    aspect-ratio: 15 / 4;
+    background-color: rgba(207, 99, 207, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+  }
+  .edm-sound-effects {
+    margin-top: 16px;
+  }
+  .edm-sound-effects .edm-tool-button .edm-icon-placeholder {
+    color: #cf63cf;
+  }
+  .edm-play-button {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary);
+    background-clip: padding-box;
+    border: 2px solid var(--primary-transparent);
+    border-radius: 50%;
+    color: var(--primary-text);
+  }
+
+  .edm-right {
+    width: 130px;
+    display: flex;
+    flex-direction: column;
+    padding-inline: 4px;
+  }
+  .edm-stage-header {
+    height: 22px;
+    display: flex;
+    align-items: center;
+  }
+  .edm-green-flag {
+    margin-inline: 3px;
+    color: #4cbf56;
+  }
+  .edm-stop-sign {
+    margin-inline: 3px;
+    color: #e8a4ac;
+  }
+  .edm-fullscreen-toggle {
+    cursor: pointer;
+  }
+  .edm-stage {
+    height: 90px;
+    background-color: white;
+    background-clip: padding-box;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .edm-targets {
+    flex-grow: 1;
+    margin-top: 4px;
+    display: flex;
+  }
+  .edm-sprite-selector {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+  }
+  .edm-sprite-info {
+    padding: 6px;
+    background-color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    color: var(--accent-text);
+  }
+  .edm-sprite-info-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  .edm-sprite-info-row + .edm-sprite-info-row {
+    margin-top: 4px;
+  }
+  .edm-sprite-info-row > * {
+    display: flex;
+    align-items: center;
+  }
+  .edm-sprite-list-container {
+    flex-grow: 1;
+    padding: 2px;
+    position: relative;
+    background-color: var(--selector);
+    color: var(--selector-text);
+  }
+  .edm-sprite-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .edm-sprite-list-container .edm-asset-new {
+    left: auto;
+    right: 6px;
+    transform: none;
+  }
+  .edm-stage-selector {
+    margin-inline-start: 4px;
+    position: relative;
+    background-color: var(--accent);
+    background-clip: padding-box;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    color: var(--accent-text);
+  }
+  .edm-stage-title {
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .edm-stage-image {
+    margin: 2px;
+    width: 32px;
+    height: 24px;
+    background-color: white;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    box-shadow: 0 0 2px inset rgba(0, 0, 0, 0.15);
+  }
+  .edm-stage-info {
+    display: flex;
+    justify-content: center;
+    padding-block: 3px;
+  }
+
+  .edm-fullscreen-view {
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--fullscreen);
+  }
+  .edm-fullscreen-controls {
+    width: 100%;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    background-color: var(--stageHeader);
+  }
+  .edm-fullscreen-controls-inner {
+    width: 427px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .edm-fullscreen-controls-inner > * {
+    display: flex;
+  }
+  .edm-fullscreen-stage {
+    flex-grow: 1;
+    width: 427px;
+    margin-block: 2px;
+    background-color: white;
+    background-clip: padding-box;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+  }
+</style>

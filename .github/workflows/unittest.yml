@@ -18,6 +18,6 @@ jobs:
           app_id: ${{ secrets.BOT_APP_ID }}
           private_key: ${{ secrets.BOT_PRIVATE_KEY }}
       - name: Run unittest
-        uses: ScratchAddons/meow@master
+        uses: ScratchAddons/meow@main
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}

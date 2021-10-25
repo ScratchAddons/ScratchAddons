@@ -61,6 +61,18 @@ export default class Trap extends Listenable {
   }
 
   /**
+   * Gets react internal key.
+   * @param {HTMLElement} elem - the reference
+   * @returns {string} the key
+   */
+  getInternalKey(elem) {
+    if (!this._react_internal_key) {
+      this._react_internal_key = Object.keys(elem).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
+    }
+    return this._react_internal_key;
+  }
+
+  /**
    * Gets @scratch/paper instance.
    * @async
    * @throws when on non-project page or if paper couldn't be found.
@@ -76,10 +88,7 @@ export default class Trap extends Listenable {
     const modeSelector = await this._waitForElement("[class*='paint-editor_mode-selector']", {
       reduxCondition: (state) => state.scratchGui.editorTab.activeTabIndex === 1 && !state.scratchGui.mode.isPlayerOnly,
     });
-    if (!this._react_internal_key) {
-      this._react_internal_key = Object.keys(modeSelector).find((key) => key.startsWith(this.REACT_INTERNAL_PREFIX));
-    }
-    const internalState = modeSelector[this._react_internal_key].child;
+    const internalState = modeSelector[this.getInternalKey(modeSelector)].child;
     // .tool or .blob.tool only exists on the selected tool
     let toolState = internalState;
     let tool;

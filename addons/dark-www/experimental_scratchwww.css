@@ -32,7 +32,8 @@
 .addToStudio-modal-header,
 .social-modal-header,
 .user-projects-modal .user-projects-modal-title,
-.promote-modal .promote-title {
+.promote-modal .promote-title,
+.transfer-host-modal .transfer-host-title {
   background-color: var(--darkWww-navbar);
   color: var(--darkWww-navbar-text);
 }
@@ -145,7 +146,11 @@ body:not(.sa-body-editor) .select .join-flow-select,
 body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 body:not(.sa-body-editor) input.formik-radio-input,
 .extension-landing .screenshot,
-.wedo .project-card {
+.wedo .project-card,
+.transfer-host-modal .cancel-button,
+.transfer-host-modal .transfer-password-input,
+.comments-container .sa-emoji-picker,
+.studio-compose-container .sa-emoji-picker {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-text);
 }
@@ -231,7 +236,8 @@ body:not(.sa-body-editor) .stage-header_stage-button-icon_3zzFK,
   background-color: var(--darkWww-box-studioReportTile);
 }
 .action-button.disabled,
-.studio-report-modal .button:disabled {
+.studio-report-modal .button:disabled,
+.transfer-host-modal .button:disabled {
   background-color: var(--darkWww-box-buttonDisabled);
   color: white;
 }
@@ -291,7 +297,10 @@ p.callout,
 .supporters-section,
 .leadership-section,
 .extension-landing .blue,
-.extension-landing .tip-box {
+.extension-landing .tip-box,
+.transfer-host-modal .transfer-selection-heading,
+.transfer-host-modal .transfer-selection-scroll-pane,
+.transfer-host-modal .transfer-outcome {
   background-color: var(--darkWww-blue);
   color: var(--darkWww-blue-text);
 }
@@ -407,6 +416,10 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked,
 .studio-tile-added {
   border-color: var(--darkWww-button) !important;
 }
+.promote-modal .cancel-button,
+.transfer-host-modal .cancel-button {
+  box-shadow: 0 0 0 1px var(--darkWww-button);
+}
 .button img,
 .preview .see-inside-button::before,
 .subactions .action-buttons .action-button::before,
@@ -491,7 +504,8 @@ a.social-messages-profile-link:active,
 .promote-modal .cancel-button,
 .index .title-banner p a button,
 .financials-section .financials-button,
-.donate-section .donate-button {
+.donate-section .donate-button,
+.transfer-host-modal .cancel-button {
   color: var(--darkWww-link);
 }
 .studio-manager-count {
@@ -513,7 +527,8 @@ a:hover,
 .conf2019-panel-row-icon-image,
 .conf2017-panel-row-icon-image,
 img[src^="/images/annual-report/milestones/timeline_"],
-.financials-section .financials-button img {
+.financials-section .financials-button img,
+.transfer-host-modal .transfer-outcome-arrow {
   filter: var(--darkWww-link-iconFilter);
 }
 
@@ -605,7 +620,11 @@ body:not(.sa-body-editor) .stage-header_stage-button_hkl9B,
 body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .extension-landing hr,
 .extension-landing .screenshot,
-.extension-landing .project-card {
+.extension-landing .project-card,
+.transfer-host-modal .transfer-password-input,
+.comments-container .sa-emoji-picker,
+.studio-compose-container .sa-emoji-picker,
+.sa-emoji-picker-divider {
   border-color: var(--darkWww-border-15);
 }
 .compose-comment .textarea-row textarea:not(:focus),

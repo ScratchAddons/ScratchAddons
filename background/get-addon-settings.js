@@ -2,6 +2,12 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
   const func = () => {
     let madeAnyChanges = false;
 
+    if (addonsEnabled["editor-devtools"] === true && addonsEnabled["move-to-top-bottom"] === undefined) {
+      // Existing editor-devtools users should have move-to-top-bottom enabled.
+      addonsEnabled["move-to-top-bottom"] = true;
+      madeAnyChanges = true;
+    }
+
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};

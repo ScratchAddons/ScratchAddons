@@ -7,7 +7,7 @@ Third-party libraries included are:
 - [vue 1.0.28-csp](https://raw.githubusercontent.com/vuejs/vue/v1.0.28-csp/dist/vue.js) (BSD-3-Clause)
 - [icu-message-formatter 0.11.1](https://unpkg.com/@ultraq/icu-message-formatter@0.11.1/dist/icu-message-formatter.es.min.js) (Apache-2.0)
 - [tinycolor2 1.4.2](https://raw.githubusercontent.com/bgrins/TinyColor/1.4.2/dist/tinycolor-min.js) (MIT)
-- [text-field-edit 3.1.0](https://unpkg.com/text-field-edit@3.1.0/index.js)
+- [text-field-edit 3.1.1](https://unpkg.com/text-field-edit@3.1.1/index.js)
 - [Chart.js 2.9.4](https://unpkg.com/chart.js@2.9.4/dist/Chart.min.js) (MIT)
 - [color-picker-web-component 1.3.7](https://unpkg.com/color-picker-web-component@1.3.7/dist/color-picker-esm.min.js) (MIT)
 - [comlink 4.3.1](https://unpkg.com/comlink@4.3.1/dist/umd/comlink.js) (Apache-2.0)
