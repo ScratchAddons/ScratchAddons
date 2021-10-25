@@ -104,7 +104,8 @@ label,
 .nvtooltip /* statistics */,
 .help .faq .box,
 #email-resend-box .modal-footer,
-#new-scratcher-gallery-modal .modal-footer {
+#new-scratcher-gallery-modal .modal-footer,
+#comments .sa-emoji-picker {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-scratchr2Text);
 }
@@ -485,7 +486,9 @@ input.link.black:active,
 .header-text .profile-details .group,
 .slider-carousel .thumb img,
 #comments #comments-enabled-box,
-.table td {
+.table td,
+#comments .sa-emoji-picker,
+.sa-emoji-picker-divider {
   border-color: var(--darkWww-border-15);
 }
 .markItUpHeader ul ul li:hover {
