@@ -20,11 +20,35 @@
       }
     },
     {
+      "name": "page-transparentText",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.3)",
+        "white": "rgba(255, 255, 255, 0.4)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
       "name": "page-filter",
       "value": {
         "type": "textColor",
         "black": "none",
         "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "page"
+        }
+      }
+    },
+    {
+      "name": "page-eyeFilter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "invert(1)",
         "source": {
           "type": "settingValue",
           "settingId": "page"
@@ -254,6 +278,27 @@
         "source": {
           "type": "settingValue",
           "settingId": "box"
+        }
+      }
+    },
+    {
+      "name": "box-borderText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "transparentSource": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "border"
+            },
+            "a": 0.94
+          }
         }
       }
     },

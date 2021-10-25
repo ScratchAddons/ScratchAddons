@@ -8,6 +8,15 @@
       "link": "https://scratch.mit.edu/users/Maximouse/"
     }
   ],
+  "customCssVariables": [
+    {
+      "name": "defaultLinkIconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": "#4d97ff"
+      }
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
@@ -56,10 +65,6 @@
         "https://scratch.mit.edu/accounts/password_change/",
         "https://scratch.mit.edu/accounts/email_change/"
       ]
-    },
-    {
-      "url": "quotes.css",
-      "matches": ["https://scratch.mit.edu/info/quotes/"]
     }
   ]
 }

@@ -73,11 +73,11 @@ label,
 #topnav ul.site-nav li:hover,
 #topnav ul.account-nav > li.sign-in:hover,
 #topnav ul.account-nav > li.sign-in.open,
-#topnav ul.account-nav.logged-in li:hover {
+#topnav ul.account-nav.logged-in li:hover,
+#topnav li.logout.divider input:hover {
   background-color: var(--darkWww-navbar-scratchr2ItemHover);
 }
-#topnav ul.account-nav .logged-in-user.dropdown.open,
-#topnav li.logout.divider input:hover {
+#topnav ul.account-nav .logged-in-user.dropdown.open {
   background-color: var(--darkWww-navbar-scratchr2ItemHover) !important;
 }
 
@@ -305,10 +305,7 @@ button:hover,
 .tabs-index li:hover:not(.active) a {
   color: var(--darkWww-gray-scratchr2ButtonText);
 }
-#profile-box .doing .icon-xs.black,
-#profile-box .doing .icon-sm.black,
-#profile-box .doing .icon-xs.black,
-#profile-box .doing .icon-sm.black {
+#profile-box .doing .icon-xs.black {
   filter: var(--darkWww-gray-eyeFilter);
 }
 .box .box-head,
@@ -387,6 +384,7 @@ ul.pagination span /* mobile forums */ {
   color: var(--darkWww-button-scratchr2ButtonText);
 }
 .button a,
+.button a:hover,
 .button a:visited {
   color: inherit;
 }
@@ -552,6 +550,14 @@ ul.pagination span /* mobile forums */,
 }
 
 /* Miscellaneous styles */
+
+:root {
+  /* URLs defined here because addon.json can't use %addon-self-dir% */
+  --darkWww-caretBlack: url("%addon-self-dir%/assets/caret_transparent.svg");
+  --darkWww-caretWhite: url("%addon-self-dir%/assets/caret_white.svg");
+  --darkWww-caretBlackHover: url("%addon-self-dir%/assets/caret_transparent_hover.svg");
+  --darkWww-caretWhiteHover: url("%addon-self-dir%/assets/caret_white_hover.svg");
+}
 
 html,
 body {
