@@ -4,6 +4,7 @@
   max-height: calc(132px - 8px);
   padding: 8px;
   overflow: hidden;
+  z-index: 100000000;
 
   font-size: 12px;
   white-space: pre-wrap;

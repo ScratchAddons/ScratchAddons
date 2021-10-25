@@ -1,11 +1,22 @@
 export default async function ({ addon, global, console }) {
-  // Get traps
+  // Get VM
   const vm = addon.tab.traps.vm;
   await new Promise((resolve, reject) => {
     if (vm.editingTarget) return resolve();
     vm.runtime.once("PROJECT_LOADED", resolve);
   });
+
+  // Get Blockly and handle flyout safely
   const Blockly = await addon.tab.traps.getBlockly();
+  const workspace = await Blockly.getMainWorkspace();
+  if (vm.editingTarget) {
+    vm.emitWorkspaceUpdate();
+  }
+  const flyout = await workspace.getFlyout();
+  const flyoutWorkspace = flyout.getWorkspace();
+  Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
+  workspace.getToolbox().refreshSelection();
+  workspace.toolboxRefreshEnabled_ = true;
 
   // Create preview element (initially hidden)
   const previewElement = document.createElement("div");
@@ -50,8 +61,9 @@ export default async function ({ addon, global, console }) {
   // Listeners for blocks
   const isBlockElement = (element) => {
     if (
-      element.matches(".blocklyBlockCanvas g.blocklyDraggable") ||
-      element.parentElement.matches(".blocklyBlockCanvas g.blocklyDraggable")
+      element &&
+      (element.matches(".blocklyBlockCanvas g.blocklyDraggable") ||
+        element.parentElement.matches(".blocklyBlockCanvas g.blocklyDraggable"))
     ) {
       if (element.matches(".blocklyBlockCanvas g.blocklyDraggable")) {
         // We are directly hovering over one of the block's elements
@@ -76,22 +88,32 @@ export default async function ({ addon, global, console }) {
         if (elementType === "component") {
           element = element.parentElement;
         }
-        const blocks = vm.editingTarget.blocks._blocks;
-        const block = blocks[element.getAttribute("data-id")];
+        let blocks;
+        if (element.parentElement.parentElement.parentElement.matches(".blocklyFlyout")) {
+          blocks = flyout.workspace_.blockDB_;
+        } else {
+          blocks = vm.editingTarget.blocks._blocks;
+        }
+        let block = blocks[element.getAttribute("data-id")];
         if (block) {
           const comments = vm.editingTarget.comments;
           let commentObject = comments[block.comment];
           if (addon.settings.get("hover-view-block") && commentObject && commentObject.text !== "") {
             setPreview(e, commentObject, previewElement);
-          } else if (addon.settings.get("hover-view-procedure") && block.opcode === "procedures_call") {
-            const blockName = block.mutation.proccode;
+          } else if (
+            addon.settings.get("hover-view-procedure") &&
+            (block.opcode === "procedures_call" || block.procCode_)
+          ) {
+            let blockName;
+            if (block.mutation) blockName = block.mutation.proccode;
+            else blockName = block.procCode_;
             const prototypeBlock =
-              blocks[
-                Object.entries(blocks).find((i) => {
+              vm.editingTarget.blocks._blocks[
+                Object.entries(vm.editingTarget.blocks._blocks).find((i) => {
                   return i[1].opcode === "procedures_prototype" && i[1].mutation.proccode === blockName;
                 })[0]
               ];
-            const definitionBlock = blocks[prototypeBlock.parent];
+            const definitionBlock = vm.editingTarget.blocks._blocks[prototypeBlock.parent];
             commentObject = comments[definitionBlock.comment];
             if (commentObject.text !== "") {
               setPreview(e, commentObject, previewElement);
@@ -121,7 +143,6 @@ export default async function ({ addon, global, console }) {
   });
 
   function setTransparency() {
-    console.log("transparency set");
     if (addon.settings.get("reduce-transparency")) {
       previewElement.classList.add("sa-reduce-transparency");
     } else {
