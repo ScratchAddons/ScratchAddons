@@ -78,7 +78,7 @@
 #comments .comment .report,
 #comments .comment .delete {
   color: var(--darkWww-blue-text);
-  opacity: 0.5;
+  filter: opacity(0.5);
 }
 #comments .more-replies .pulldown {
   color: var(--darkWww-link, #4d97ff);
