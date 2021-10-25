@@ -70,7 +70,7 @@
 .box .box-head {
   border-radius: 0;
   border: none;
-  background: var(--scratchr2-primaryColor);
+  background: #4d97ff;
 }
 .box .box-head {
   width: 942px;
@@ -118,7 +118,7 @@
 .action-bar .inner .dropdown:focus,
 .action-bar .inner .dropdown.open {
   background-image: url("%addon-self-dir%/assets/caret_hover.svg");
-  border-color: var(--scratchr2-primaryColor);
+  border-color: #4d97ff;
 }
 .action-bar .inner .dropdown .dropdown-toggle {
   display: block;

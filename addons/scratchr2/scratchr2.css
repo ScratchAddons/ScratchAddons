@@ -8,7 +8,7 @@ a,
 input.link,
 .ui-widget-content a,
 #email-resend-box a {
-  color: var(--scratchr2-linkColor);
+  color: #4d97ff;
   font-weight: bold;
   text-decoration: none;
 }
@@ -33,7 +33,7 @@ input.link:hover,
 input.link:active,
 input.link.black:hover,
 input.link.black:active {
-  color: var(--scratchr2-activeColor);
+  color: #4280d7;
   text-decoration: none;
 }
 #content {
@@ -52,11 +52,11 @@ textarea {
 }
 input:focus {
   box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
-  border-color: var(--scratchr2-primaryColor);
+  border-color: #4d97ff;
 }
 textarea:focus {
   box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
-  border: 2px solid var(--scratchr2-primaryColor);
+  border: 2px solid #4d97ff;
 }
 .editable-empty,
 .editable.read,
@@ -92,7 +92,7 @@ button.grey,
 #email-resend-box input[type="button"]:hover {
   border-radius: 4px;
   border: none;
-  background: var(--scratchr2-primaryColor);
+  background: #4d97ff;
   box-shadow: none;
   font-family: inherit;
   font-weight: bold;
@@ -117,13 +117,13 @@ button.grey,
 .button.grey:not([data-control="load-more"]):hover,
 button.grey:hover {
   background: #fff;
-  color: var(--scratchr2-linkColor);
-  border: 1px solid var(--scratchr2-primaryColor);
+  color: #4d97ff;
+  border: 1px solid #4d97ff;
 }
 .button.grey:not([data-control="load-more"]):hover,
 button.grey:hover {
-  color: var(--scratchr2-activeColor);
-  border-color: var(--scratchr2-activeColor);
+  color: #4280d7;
+  border-color: #4280d7;
 }
 .button[data-control="load-more"] {
   display: block;
@@ -158,7 +158,7 @@ select:focus {
   background-image: url("%addon-self-dir%/assets/caret_hover.svg");
 }
 select:focus {
-  border-color: var(--scratchr2-primaryColor);
+  border-color: #4d97ff;
   outline: none;
 }
 h1,
@@ -178,10 +178,10 @@ h4 {
   border-color: #d9d9d9;
 }
 .slider-carousel .thumb span.owner a {
-  color: var(--scratchr2-linkColor);
+  color: #4d97ff;
 }
 .slider-carousel .thumb span.owner a:hover {
-  color: var(--scratchr2-activeColor);
+  color: #4280d7;
 }
 .dropdown .dropdown-menu {
   background-color: #fff;
@@ -189,7 +189,7 @@ h4 {
   font-weight: normal;
   top: 24px;
   left: -1px;
-  border: 1px solid var(--scratchr2-primaryColor);
+  border: 1px solid #4d97ff;
   box-shadow: none;
 }
 #footer {
@@ -223,7 +223,7 @@ h4 {
 #topnav .innerwrap {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
-  background: var(--scratchr2-primaryColor);
+  background: #4d97ff;
   height: 50px;
 }
 #topnav .logo {
@@ -323,11 +323,11 @@ h4 {
 }
 #topnav ul.account-nav .sign-in .popover {
   margin-top: 40px;
-  background-color: var(--scratchr2-primaryColor);
+  background-color: #4d97ff;
   cursor: auto;
 }
 #topnav ul.account-nav .sign-in .popover .arrow::after {
-  border-bottom-color: var(--scratchr2-primaryColor);
+  border-bottom-color: #4d97ff;
 }
 #login-dropdown .dropdown-menu {
   max-width: 1000px;
@@ -356,7 +356,7 @@ h4 {
   padding: 9.6px;
   height: auto;
   background: #fff;
-  color: var(--scratchr2-primaryColor);
+  color: #4d97ff;
   line-height: 24px;
 }
 #topnav ul.account-nav .sign-in form .forgot-password {
@@ -432,7 +432,7 @@ h4 {
   line-height: 24px;
 }
 #topnav ul.account-nav .logged-in-user .dropdown-menu {
-  background-color: var(--scratchr2-primaryColor);
+  background-color: #4d97ff;
   margin-top: 0;
   top: 50px;
   padding-top: 5px;
@@ -476,7 +476,7 @@ h4 {
 .modal-backdrop,
 .modal-backdrop.fade.in,
 .ui-widget-overlay {
-  background: var(--scratchr2-primaryColor);
+  background: #4d97ff;
   opacity: 0.7;
 }
 .modal,
@@ -493,8 +493,8 @@ h4 {
   padding-top: 8px;
   padding-right: 8px;
   border-radius: 16px 16px 0 0;
-  background: var(--scratchr2-primaryColor);
-  box-shadow: inset 0 -1px 0 0 var(--scratchr2-activeColor);
+  background: #4d97ff;
+  box-shadow: inset 0 -1px 0 0 #4280d7;
 }
 .modal .modal-header .close,
 .jqui-modal .ui-widget-header .ui-dialog-titlebar-close {
@@ -544,5 +544,5 @@ h4 {
 .modal-footer .btn:not(.blue) {
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: #fff;
-  color: var(--scratchr2-linkColor);
+  color: #4d97ff;
 }
