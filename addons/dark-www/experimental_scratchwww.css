@@ -430,6 +430,7 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button:checked,
 #footer .inner .media li img {
   filter: var(--darkWww-button-filter);
 }
+.forms-close-button img,
 .os-chooser .button:not(.active) img {
   filter: none;
 }
