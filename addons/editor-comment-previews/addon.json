@@ -38,6 +38,12 @@
       "id": "hover-view-procedure",
       "type": "boolean",
       "default": true
+    },
+    {
+      "name": "Reduce transparency",
+      "id": "reduce-transparency",
+      "type": "boolean",
+      "default": false
     }
   ],
   "dynamicEnable": true,
