@@ -300,7 +300,8 @@ p.callout,
 .extension-landing .tip-box,
 .transfer-host-modal .transfer-selection-heading,
 .transfer-host-modal .transfer-selection-scroll-pane,
-.transfer-host-modal .transfer-outcome {
+.transfer-host-modal .transfer-outcome,
+.filter-container {
   background-color: var(--darkWww-blue);
   color: var(--darkWww-blue-text);
 }
@@ -451,6 +452,9 @@ body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked::before {
   background: url("/svgs/forms/checkmark.svg") center;
   filter: var(--darkWww-button-filter);
 }
+.input_label:hover {
+  background-color: var(--darkWww-button-transparent10);
+}
 .user-projects-modal .user-projects-modal-nav button:hover,
 .user-projects-modal .user-projects-modal-nav button.active:hover {
   border-color: var(--darkWww-button-transparent10);
@@ -556,7 +560,8 @@ img.tips-icon {
 .about .body img,
 .about .body iframe,
 .preview .project-description,
-.avatar-item img {
+.avatar-item img,
+.filter-container {
   border-color: var(--darkWww-border-5);
 }
 body:not(.sa-body-editor) .select select,
