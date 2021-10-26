@@ -97,7 +97,7 @@
 #navigation .logo-a-image {
   border-color: var(--darkWww-navbar-border);
 }
-#navigation .inner > ul > li.search .input[type=text]:focus {
+#navigation .inner > ul > li.search .input[type="text"]:focus {
   background-color: var(--darkWww-navbar-inputFocus);
 }
 .addToStudio-modal-header,
@@ -380,7 +380,7 @@ body:not(.sa-body-editor) [type="checkbox"].formik-checkbox:checked,
 .info-button-message,
 .info-button-message::before,
 input[type="radio"].formik-radio-button:checked::after,
-.row .checkbox input[type=checkbox]:checked,
+.row .checkbox input[type="checkbox"]:checked,
 .row .col-sm-9 input[type="radio"]:checked,
 .tooltip .expand,
 .tooltip .expand::before {
@@ -393,7 +393,7 @@ input[type="radio"].formik-radio-button:checked::after,
 .banner-button {
   background-color: #ffab1a;
 }
-.row .checkbox input[type=checkbox]:checked::after {
+.row .checkbox input[type="checkbox"]:checked::after {
   color: var(--darkWww-button-text);
 }
 .row .col-sm-9 input[type="radio"]:checked::after {
@@ -640,7 +640,7 @@ body:not(.sa-body-editor) input[type="radio"].formik-radio-button,
 .studio-tab-nav,
 body:not(.sa-body-editor) .formik-input,
 body:not(.sa-body-editor) input[type="checkbox"].formik-checkbox:not(:checked),
-.row .checkbox input[type=checkbox]:not(:checked) {
+.row .checkbox input[type="checkbox"]:not(:checked) {
   border-color: var(--darkWww-border-20);
 }
 .studio-tab-nav a.nav_link.active > li,

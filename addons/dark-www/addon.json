@@ -763,7 +763,7 @@
       "value": {
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.2)",
-        "white":"rgba(255, 255, 255, 0.2)",
+        "white": "rgba(255, 255, 255, 0.2)",
         "source": {
           "type": "settingValue",
           "settingId": "gray"
@@ -913,7 +913,7 @@
         "type": "textColor",
         "black": "rgba(0, 0, 0, 0.45)",
         "white": "rgba(255, 255, 255, 0.75)",
-        "source":  {
+        "source": {
           "type": "settingValue",
           "settingId": "gray"
         }
@@ -1304,7 +1304,7 @@
       "value": {
         "type": "textColor",
         "black": "#666666",
-        "source":  {
+        "source": {
           "type": "brighten",
           "source": {
             "type": "multiply",
@@ -1648,10 +1648,7 @@
     },
     {
       "url": "experimental_scratchwww_white_bg.css",
-      "matches": [
-        "https://scratch.mit.edu/ideas",
-        "https://scratch.mit.edu/annual-report"
-      ]
+      "matches": ["https://scratch.mit.edu/ideas", "https://scratch.mit.edu/annual-report"]
     },
     {
       "url": "darker_banners.css",

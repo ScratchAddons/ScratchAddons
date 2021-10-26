@@ -101,7 +101,7 @@ function brighten(hex, c) {
     r: (1 - c.r) * 255 + c.r * r,
     g: (1 - c.g) * 255 + c.g * g,
     b: (1 - c.b) * 255 + c.b * b,
-    a: (1 - c.a) + c.a * a,
+    a: 1 - c.a + c.a * a,
   });
 }
 
