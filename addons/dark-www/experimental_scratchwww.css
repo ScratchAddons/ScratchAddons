@@ -301,7 +301,8 @@ p.callout,
 .transfer-host-modal .transfer-selection-heading,
 .transfer-host-modal .transfer-selection-scroll-pane,
 .transfer-host-modal .transfer-outcome,
-.filter-container {
+.filter-container,
+.tab-choice-selected-sa {
   background-color: var(--darkWww-blue);
   color: var(--darkWww-blue-text);
 }
@@ -561,7 +562,9 @@ img.tips-icon {
 .about .body iframe,
 .preview .project-description,
 .avatar-item img,
-.filter-container {
+.filter-container,
+.tab-choice-sa,
+.tab-choice-selected-sa {
   border-color: var(--darkWww-border-5);
 }
 body:not(.sa-body-editor) .select select,
