@@ -41,8 +41,6 @@ export default async function ({ addon, global, console }) {
     if (el.src.includes("images/easter_eggs/meow.png")) el.src = addon.self.dir + "/images/meow.svg";
     if (el.src.includes("images/easter_eggs/gobo.png")) el.src = addon.self.dir + "/images/gobo.svg";
     if (el.src.includes("images/easter_eggs/waffle.png")) el.src = addon.self.dir + "/images/waffle.svg";
-
-
   }
 
   function checkEmojiNew(el) {
