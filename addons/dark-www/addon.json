@@ -1853,5 +1853,9 @@
         "darkForumCode": false
       }
     }
-  ]
+  ],
+  "presetPreview": {
+    "type": "palette",
+    "colors": ["button", "navbar", "page", "box", "gray", "blue"]
+  }
 }
