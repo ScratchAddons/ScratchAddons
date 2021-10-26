@@ -339,6 +339,29 @@
       }
     },
     {
+      "name": "box-borderFilterInverted",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "alphaBlend",
+          "opaqueSource": {
+            "type": "settingValue",
+            "settingId": "box"
+          },
+          "transparentSource": {
+            "type": "brighten",
+            "source": {
+              "type": "settingValue",
+              "settingId": "border"
+            },
+            "a": 0.94
+          }
+        }
+      }
+    },
+    {
       "name": "box-border",
       "value": {
         "type": "alphaBlend",
@@ -768,11 +791,35 @@
       }
     },
     {
+      "name": "gray-filter",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
       "name": "gray-eyeFilter",
       "value": {
         "type": "textColor",
         "black": "none",
         "white": "invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
+      "name": "gray-filterInverted",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
         "source": {
           "type": "settingValue",
           "settingId": "gray"
@@ -1180,6 +1227,18 @@
       }
     },
     {
+      "name": "button-filterInverted",
+      "value": {
+        "type": "textColor",
+        "black": "none",
+        "white": "brightness(0) invert(1)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "button"
+        }
+      }
+    },
+    {
       "name": "button-transparent10",
       "value": {
         "type": "multiply",
@@ -1419,6 +1478,22 @@
         "source": {
           "type": "settingValue",
           "settingId": "link"
+        }
+      }
+    },
+    {
+      "name": "link-hoverIconFilter",
+      "value": {
+        "type": "recolorFilter",
+        "source": {
+          "type": "multiply",
+          "source": {
+            "type": "settingValue",
+            "settingId": "link"
+          },
+          "r": 0.86,
+          "g": 0.85,
+          "b": 0.84
         }
       }
     },
