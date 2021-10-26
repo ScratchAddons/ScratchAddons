@@ -1,11 +1,15 @@
 {
-  "name": "Website dark mode",
-  "description": "Dark theme for the Scratch website.",
+  "name": "Website dark mode and customizable colors",
+  "description": "Customize colors used by the Scratch website. Multiple dark themes by different authors available. If you don't need dark mode but want to change the default colors you can select the \"Scratch's default colors\" preset and tweak it.",
   "tags": ["community", "theme", "featured"],
   "credits": [
     {
-      "name": "Maximouse",
+      "name": "Maximouse (addon, \"Experimental\" Dark)",
       "link": "https://scratch.mit.edu/users/Maximouse/"
+    },
+    {
+      "name": "Ucrash (Dark WWW)",
+      "link": "https://github.com/gducrash"
     }
   ],
   "customCssVariables": [
