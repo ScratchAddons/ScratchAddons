@@ -13,4 +13,10 @@ export default async function ({ addon, console }) {
     content.style.backgroundColor = "white";
     content.style.color = "#575e75";
   }
+  window.testConfirm = async () => await addon.tab.confirm("Test Confirm", "Click OK or Cancel:", {
+    useEditorClasses: true,
+  });
+  window.testPrompt = async () => await addon.tab.prompt("Test Prompt", "Enter text below:", "Example input", {
+    useEditorClasses: true,
+  });
 }

@@ -780,10 +780,8 @@ export default class Tab extends Listenable {
     else backdrop.classList.add("hide");
     document.body.appendChild(backdrop);
     const modal = Object.assign(document.createElement("div"), {
-      className: "modal fade",
+      className: "modal fade hide",
     });
-    if (isOpen) modal.classList.add("in");
-    else modal.classList.add("hide");
     document.body.appendChild(modal);
     const header = Object.assign(document.createElement("div"), {
       className: "modal-header",
@@ -803,32 +801,38 @@ export default class Tab extends Listenable {
       className: "modal-body",
     });
     modal.appendChild(content);
+    const open = () => {
+      backdrop.classList.remove("hide");
+      modal.classList.remove("hide");
+      setTimeout(() => {
+        backdrop.classList.add("in");
+        modal.classList.add("in");
+      }, 300);
+    };
+    const close = () => {
+      modal.classList.remove("in");
+      setTimeout(() => {
+        modal.classList.add("hide");
+        backdrop.classList.remove("in");
+        setTimeout(() => {
+          backdrop.classList.add("hide");
+        }, 300);
+      }, 300);
+    };
+    if (isOpen) open();
     return {
       container: modal,
       content,
       backdrop,
       closeButton,
-      open: () => {
-        backdrop.classList.remove("hide");
-        modal.classList.remove("hide");
-        setTimeout(() => {
-          backdrop.classList.add("in");
-          modal.classList.add("in");
-        }, 300);
-      },
-      close: () => {
-        modal.classList.remove("in");
-        setTimeout(() => {
-          modal.classList.add("hide");
-          backdrop.classList.remove("in");
-          setTimeout(() => {
-            backdrop.classList.add("hide");
-          }, 300);
-        }, 300);
-      },
+      open: open,
+      close: close,
       remove: () => {
-        backdrop.remove();
-        modal.remove();
+        close();
+        setTimeout(() => {
+          backdrop.remove();
+          modal.remove();
+        }, 900);
       },
     };
   }
@@ -837,5 +841,124 @@ export default class Tab extends Listenable {
     if (this.editorMode !== null && useEditorClasses) return this._createEditorModal(title, { isOpen });
     if (this.clientVersion === "scratch-www") return this._createScratchWwwModal(title, { isOpen, useSizesClass });
     return this._createScratchr2Modal(title, { isOpen });
+  }
+
+  _createButtonRow(mode) {
+    const buttonRow = Object.assign(document.createElement("div"), {
+      className: {
+        editor: this.scratchClass("prompt_button-row"),
+        "scratch-www": "action-buttons",
+        scratchr2: "modal-footer",
+      }[mode],
+    });
+    const cancelButton = Object.assign(document.createElement("button"), {
+      className: { "scratch-www": "button action-button close-button white" }[mode] || "",
+      innerText: this.scratchMessage({
+        editor: "gui.prompt.cancel",
+        "scratch-www": "general.cancel",
+        scratchr2: "Cancel",
+      }[mode]),
+    });
+    buttonRow.appendChild(cancelButton);
+    const okButton = Object.assign(document.createElement("button"), {
+      className: {
+        editor: this.scratchClass("prompt_ok-button"),
+        "scratch-www": "button action-button submit-button",
+      }[mode],
+      innerText: this.scratchMessage({
+        editor: "gui.prompt.ok",
+        "scratch-www": "general.okay",
+        scratchr2: "OK",
+      }[mode]),
+    });
+    buttonRow.appendChild(okButton);
+    return { buttonRow, cancelButton, okButton };
+  }
+
+  confirm(title, message, { useEditorClasses = false } = {}) {
+    const { remove, container, content, backdrop, closeButton } = this.createModal(title, {
+      isOpen: true,
+      useEditorClasses: useEditorClasses,
+      useSizesClass: true,
+    });
+    const mode = this.editorMode !== null && useEditorClasses ? "editor" : this.clientVersion;
+    if (mode === "editor") {
+      container.classList.add(this.scratchClass("prompt_modal-content"));
+      content.classList.add(this.scratchClass("prompt_body"));
+    }
+    content.appendChild(Object.assign(document.createElement("div"), {
+      className: { editor: this.scratchClass("prompt_label") }[mode] || "",
+      style: { "scratch-www": "margin: .9375rem 0.8275rem 0 .8275rem" }[mode] || "",
+      innerText: message,
+    }));
+    const { buttonRow, cancelButton, okButton } = this._createButtonRow(mode);
+    if (mode === "scratchr2") container.appendChild(buttonRow);
+    else content.appendChild(buttonRow);
+    okButton.focus();
+    return new Promise((resolve) => {
+      const cancel = () => {
+        remove();
+        resolve(false);
+      };
+      const ok = () => {
+        remove();
+        resolve(true);
+      };
+      backdrop.addEventListener("click", cancel);
+      closeButton.addEventListener("click", cancel);
+      cancelButton.addEventListener("click", cancel);
+      okButton.addEventListener("click", ok);
+      container.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") ok();
+        if (e.key === "Escape") cancel();
+      });
+    });
+  }
+
+  prompt(title, message, defaultValue = "", { useEditorClasses = false } = {}) {
+    const { remove, container, content, backdrop, closeButton } = this.createModal(title, {
+      isOpen: true,
+      useEditorClasses: useEditorClasses,
+      useSizesClass: true,
+    });
+    const mode = this.editorMode !== null && useEditorClasses ? "editor" : this.clientVersion;
+    if (mode === "editor") {
+      container.classList.add(this.scratchClass("prompt_modal-content"));
+      content.classList.add(this.scratchClass("prompt_body"));
+    }
+    content.appendChild(Object.assign(document.createElement("div"), {
+      className: { editor: this.scratchClass("prompt_label") }[mode] || "",
+      style: { "scratch-www": "margin: .9375rem 0.8275rem 0 .8275rem" }[mode] || "",
+      innerText: message,
+    }));
+    const input = Object.assign(document.createElement("input"), {
+      className: { editor: this.scratchClass("prompt_variable-name-text-input"), "scratch-www": "input" }[mode] || "",
+      style: mode === "editor" ? "" : "width: 100%",
+      value: defaultValue,
+    });
+    content.appendChild(input);
+    input.focus();
+    input.select();
+    const { buttonRow, cancelButton, okButton } = this._createButtonRow(mode);
+    if (mode === "scratchr2") container.appendChild(buttonRow);
+    else content.appendChild(buttonRow);
+    return new Promise((resolve) => {
+      const cancel = () => {
+        remove();
+        resolve(null);
+      };
+      const ok = () => {
+        remove();
+        resolve(input.value);
+      };
+      backdrop.addEventListener("click", cancel);
+      closeButton.addEventListener("click", cancel);
+      cancelButton.addEventListener("click", cancel);
+      okButton.addEventListener("click", ok);
+      container.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") ok();
+        if (e.key === "Escape") cancel();
+      });
+    });
   }
 }
