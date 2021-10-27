@@ -328,9 +328,14 @@ export default async function ({ addon, global, console, msg }) {
   if (!paused) unpauseButton.style.display = "none";
   onPauseChanged((newPauseValue) => (unpauseButton.style.display = newPauseValue ? "" : "none"));
 
-  exportButton.addEventListener("click", (e) => {
+  exportButton.addEventListener("click", async (e) => {
     const defaultFormat = "{sprite}: {content} ({type})";
-    const exportFormat = e.shiftKey ? prompt(msg("enter-format"), defaultFormat) : defaultFormat;
+    const exportFormat = e.shiftKey ? await addon.tab.prompt(
+      msg("export"),
+      msg("enter-format"),
+      defaultFormat,
+      { useEditorClasses: true }
+    ) : defaultFormat;
     if (!exportFormat) return;
     closeDragElement();
     const targetInfoCache = Object.create(null);

@@ -747,8 +747,13 @@ export default async function ({ addon, global, console, msg }) {
           fixSoundOrder();
         }
       };
-      const renameFolder = () => {
-        let newName = prompt(msg("rename-folder-prompt"), data.folder);
+      const renameFolder = async () => {
+        let newName = await addon.tab.prompt(
+          msg("rename-folder-prompt-title"),
+          msg("rename-folder-prompt"),
+          data.folder,
+          { useEditorClasses: true }
+        );
         // Prompt cancelled, do not rename
         if (newName === null) {
           return;
@@ -806,8 +811,13 @@ export default async function ({ addon, global, console, msg }) {
         }
       };
 
-      const createFolder = () => {
-        const name = prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
+      const createFolder = async () => {
+        const name = await addon.tab.prompt(
+          msg("name-prompt-title"),
+          msg("name-prompt"),
+          getNameWithoutFolder(data.realName),
+          { useEditorClasses: true }
+        );
         if (name === null) {
           return;
         }
