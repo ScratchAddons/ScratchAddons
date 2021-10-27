@@ -1,6 +1,7 @@
 path.blocklyBlockBackground[fill="#FF6680"],
 path.blocklyBlockBackground[fill="#5CB1D6"],
 path.blocklyBlockBackground[fill="#FFBF00"],
+path.blocklyBlockBackground[fill="#29beb8"],
 g[data-category] > path.blocklyBlockBackground {
   stroke: #0003;
 }

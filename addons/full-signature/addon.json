@@ -47,18 +47,16 @@
     {
       "url": "working.js",
       "matches": ["https://scratch.mit.edu/users/*"],
-      "settingMatch": {
-        "id": "whatworkingon",
-        "value": true
+      "if": {
+        "settings": { "whatworkingon": true }
       }
     },
     {
       "url": "happen.js",
       "matches": ["https://scratch.mit.edu/"],
       "runAtComplete": false,
-      "settingMatch": {
-        "id": "whathappen",
-        "value": true
+      "if": {
+        "settings": { "whathappen": true }
       }
     }
   ],
@@ -66,33 +64,29 @@
     {
       "url": "signature.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*", "https://scratch.mit.edu/discuss/settings/*"],
-      "settingMatch": {
-        "id": "signature",
-        "value": true
+      "if": {
+        "settings": { "signature": true }
       }
     },
     {
       "url": "blocks.css",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "settingMatch": {
-        "id": "blocks",
-        "value": true
+      "if": {
+        "settings": { "blocks": true }
       }
     },
     {
       "url": "working.css",
       "matches": ["https://scratch.mit.edu/users/*"],
-      "settingMatch": {
-        "id": "whatworkingon",
-        "value": true
+      "if": {
+        "settings": { "whatworkingon": true }
       }
     },
     {
       "url": "happen.css",
       "matches": ["https://scratch.mit.edu/"],
-      "settingMatch": {
-        "id": "whathappen",
-        "value": true
+      "if": {
+        "settings": { "whathappen": true }
       }
     }
   ],

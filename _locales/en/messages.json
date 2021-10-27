@@ -44,6 +44,9 @@
   "recommended": {
     "message": "Recommended"
   },
+  "featured": {
+    "message": "Featured"
+  },
   "beta": {
     "message": "Beta"
   },
@@ -149,6 +152,9 @@
   "presets": {
     "message": "Presets"
   },
+  "preview": {
+    "message": "Preview"
+  },
   "scratchAddonsTheme": {
     "message": "Scratch Addons theme"
   },
@@ -233,20 +239,29 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_18": {
-    "message": "New addon: \"TurboWarp button\", which adds a button on project pages to play the project in TurboWarp.org. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_21": {
+    "message": "New addon: \"duplicate script with Alt key\", which adds the ability to quickly duplicate a script by dragging it while holding the Alt key. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_18": {
-    "message": "The new \"more items per row\" addon lets you see more than 3 projects per row in studios and other parts of the website. Other new addons added this update are \"Ctrl+Enter to post\" and \"customizable default project\"."
+  "extensionUpdateInfo2_v1_21": {
+    "message": "Other new addons added this update are \"enhanced full screen\" and \"emoji picker for comments\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
   "new": {
-    "message": "New!"
+    "message": "New!",
+    "description": "Tag for addons. Singular."
+  },
+  "newGroup": {
+    "message": "Other new addons",
+    "description": "Used as a category name for new addons"
+  },
+  "featuredNew": {
+    "message": "Featured new addons",
+    "description": "Used as a category name for featured new addons"
   },
   "enabled": {
     "message": "Enabled",

@@ -42,3 +42,8 @@
 #comments .easter-egg[src$="waffle.png"] {
   content: url(%addon-self-dir%/assets/waffle.png);
 }
+#comments .sa-emoji-picker {
+  /* emoji-picker compatibility */
+  background-color: black;
+  color: white;
+}

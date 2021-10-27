@@ -49,12 +49,29 @@
           >{{ msg("viewLicenses") }}</a
         >
       </div>
+      <div
+        class="preview-column"
+        v-if="addon.addonPreview && !isIframe"
+        v-bind:class="[!addon._enabled ? 'disabled' : '']"
+      >
+        <div class="setting-label">{{ msg("preview") }}</div>
+        <component
+          :is="'preview-' + addon.addonPreview.type"
+          :options="addon.addonPreview"
+          :settings="addonSettings[addon._addonId]"
+          :hovered-setting-id="hoveredSettingId"
+          @areahover="highlightSetting"
+        />
+      </div>
       <div class="settings-column" v-bind:class="[!addon._enabled ? 'disabled' : '']">
         <addon-setting
           v-for="setting of addon.settings"
+          :class="{'setting-highlighted': highlightedSettingId === setting.id}"
           :addon="addon"
           :setting="setting"
           :addon-settings="addonSettings"
+          @mouseenter="hoveredSettingId = setting.id"
+          @mouseleave="hoveredSettingId = null"
         ></addon-setting>
       </div>
       <div class="presets-column" v-if="addon.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
@@ -67,7 +84,16 @@
             @click="loadPreset(preset)"
             :title="preset.description"
           >
-            {{preset.name}}
+            <span class="preset-preview">
+              <component
+                v-if="addon.presetPreview"
+                :is="'preview-' + addon.presetPreview.type"
+                :options="addon.presetPreview"
+                :setting-data="addon.settings"
+                :settings="preset.values"
+              />
+            </span>
+            <span>{{preset.name}}</span>
           </button>
         </div>
       </div>
@@ -221,6 +247,21 @@
     padding-top: 5px;
     padding-inline: 20px;
   }
+  .addon-setting::after {
+    content: "";
+    position: absolute;
+    top: -7px;
+    bottom: -7px;
+    left: -7px;
+    right: -7px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    pointer-events: none;
+    transition: 0.2s ease;
+  }
+  .setting-highlighted::after {
+    border-color: var(--brand-orange);
+  }
 
   .presets-column,
   .settings-column {
@@ -229,16 +270,21 @@
     display: flex;
     flex-wrap: wrap;
   }
-
+  .preview-column {
+    margin: 10px 0;
+    padding-left: 10px;
+  }
   .presets-column {
     align-items: center;
-    margin: 10px 0;
   }
   .presets-column > .setting-label {
     margin-inline-start: 10px;
   }
   .addon-preset {
     margin-inline-end: 30px;
+  }
+  .preset-preview {
+    display: inline-flex;
   }
 
   .addon-check {

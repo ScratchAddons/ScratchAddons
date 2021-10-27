@@ -9,7 +9,8 @@ a:visited,
 .studio-member-tile .studio-member-name,
 .studio-thumb-edit-button,
 .studio-manager-count,
-.promote-modal .cancel-button {
+.promote-modal .cancel-button,
+.transfer-host-modal .cancel-button {
   color: var(--scratchr2-linkColor);
 }
 .studio-manager-count {
@@ -45,10 +46,12 @@ a:hover,
 .title-banner.mod-blue-bg,
 .title-banner.mod-conference,
 #footer .inner .media li,
-.wedo .top-banner {
+.wedo .top-banner,
+.transfer-host-modal .transfer-host-title {
   background-color: var(--scratchr2-primaryColor);
 }
-.promote-modal .cancel-button {
+.promote-modal .cancel-button,
+.transfer-host-modal .cancel-button {
   box-shadow: 0 0 0 1px var(--scratchr2-primaryColor);
 }
 .banner-button {

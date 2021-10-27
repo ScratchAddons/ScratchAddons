@@ -1,6 +1,10 @@
 /* Forums */
-#brdheader {
+#brdheader,
+div.content > article > header {
   background: #075e46;
+}
+div.content > article > header {
+  box-shadow: none;
 }
 #forum-search-form {
   background-color: inherit;
@@ -11,6 +15,16 @@
 }
 .forum-search-list .blockpost {
   color: #fff;
+}
+ul.pagination a > span {
+  /* Mobile forum pagination */
+  background: #606060;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+ul.pagination a.current > span,
+ul.pagination a:active > span {
+  background: #333;
 }
 .blockpost .box-content,
 .postright,
@@ -54,11 +68,21 @@
   box-shadow: 1px 0 #606060;
 }
 .djangobb blockquote,
-.code {
+.code,
+.post-content blockquote,
+.post-content div.code /* mobile */ {
   background: #333;
+}
+.post-content blockquote,
+.post-content div.code {
+  box-shadow: none;
 }
 .djangobb hr {
   background: #606060;
+}
+.post-content a,
+footer a {
+  color: var(--scratchr2-linkColor, #1aa0d8);
 }
 .markItUpHeader > ul > li,
 .markItUpHeader > ul > .markItUpDropMenu {

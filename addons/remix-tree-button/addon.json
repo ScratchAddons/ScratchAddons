@@ -23,13 +23,5 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "settings": [
-    {
-      "name": "Button Color",
-      "id": "buttonColor",
-      "type": "color",
-      "default": "#4d97ff"
-    }
-  ],
   "versionAdded": "1.2.0"
 }

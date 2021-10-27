@@ -1,15 +1,15 @@
-.u-contextmenu-colored .blocklyContextMenu {
-  background-color: var(--u-contextmenu-bg);
-  border-color: var(--u-contextmenu-border);
+.sa-contextmenu-colored .blocklyContextMenu {
+  background-color: var(--sa-contextmenu-bg);
+  border-color: var(--sa-contextmenu-border);
 }
-.u-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight,
-.u-contextmenu-colored .s3dev-mi:hover {
-  background-color: var(--u-contextmenu-hover);
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem-highlight,
+.sa-contextmenu-colored .s3dev-mi:hover {
+  background-color: var(--sa-contextmenu-hover);
   border-color: transparent !important;
 }
-.u-contextmenu-colored .blocklyContextMenu .goog-menuitem[style*="border-top"] {
-  border-top-color: var(--u-contextmenu-border) !important;
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem[style*="border-top"] {
+  border-top-color: var(--sa-contextmenu-border) !important;
 }
-.u-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
-  color: var(--u-contextmenu-text);
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
+  color: var(--sa-contextmenu-text);
 }

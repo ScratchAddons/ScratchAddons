@@ -6,8 +6,11 @@ export default async function ({ template }) {
     template,
     data() {
       return {
+        isIframe: isIframe,
         expanded: this.getDefaultExpanded(),
         everExpanded: this.getDefaultExpanded(),
+        hoveredSettingId: null,
+        highlightedSettingId: null,
       };
     },
     computed: {
@@ -101,6 +104,9 @@ export default async function ({ template }) {
               );
           } else toggle();
         } else toggle();
+      },
+      highlightSetting(id) {
+        this.highlightedSettingId = id;
       },
       msg(...params) {
         return this.$root.msg(...params);
