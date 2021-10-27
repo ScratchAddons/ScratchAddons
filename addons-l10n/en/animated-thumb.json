@@ -11,6 +11,5 @@
   "animated-thumb/server-error": "Thumbnail could not be uploaded due to server error. Please try again later.",
   "animated-thumb/error": "Thumbnail could not be uploaded.",
   "animated-thumb/too-big": "The file is too big.",
-  "animated-thumb/gif": "Projects with animated thumbnails might not appear on the front page or in the search result. Upload anyway?",
-  "animated-thumb/used-external-tools": "Thumbnail set using external tools."
+  "animated-thumb/gif": "Projects with animated thumbnails might not appear on the front page or in the search result. Upload anyway?"
 }

@@ -3,11 +3,9 @@ import dataURLToBlob from "../../libraries/common/cs/data-url-to-blob.js";
 import { init, saveConfig, isOverwritingEnabled, blockOverwriting } from "./persistent-thumb.js";
 
 export default async function ({ addon, global, console, msg }) {
-  await addon.tab.redux.waitForState((state) => state?.scratchGui?.projectState?.loadingState?.startsWith("SHOWING"));
   init(console);
-  const vm = addon.tab.traps.vm;
-  blockOverwriting(isOverwritingEnabled(vm));
-  vm.runtime.on("PROJECT_LOADED", () => blockOverwriting(isOverwritingEnabled(vm)));
+  let projectId = location.href.match(/\d+/)[0];
+  blockOverwriting(isOverwritingEnabled(projectId));
   const createModal = () => {
     // User Interface
     let ignoreClickOutside = false;
@@ -121,7 +119,7 @@ export default async function ({ addon, global, console, msg }) {
             if (canceled) return;
             modalResultArea.className = "sa-animated-thumb-popup-result sa-animated-thumb-popup-result-success";
             modalResultArea.textContent = msg("successful");
-            saveConfig(vm, stopOverwritingCheckbox.checked, msg("used-external-tools"));
+            saveConfig(projectId, stopOverwritingCheckbox.checked);
           },
           (status) => {
             modalResultArea.className = "sa-animated-thumb-popup-result sa-animated-thumb-popup-result-failure";
@@ -167,36 +165,29 @@ export default async function ({ addon, global, console, msg }) {
     document.body.appendChild(modalOverlay);
   };
 
+  addon.tab.addEventListener("urlChange", () => {
+    projectId = location.href.match(/\d+/)[0];
+    blockOverwriting(isOverwritingEnabled(projectId));
+  });
+
   while (true) {
-    let nav = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
+    await addon.tab.waitForElement("div.action-buttons", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
-      reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
     });
-    if (document.querySelector("[class*='project-title-input_title-field']")) {
-      let setthumb = document.createElement("div");
-      addon.tab.displayNoneWhileDisabled(setthumb, { display: "flex" });
-      setthumb.classList.add(addon.tab.scratchClass("menu-bar_menu-bar-item"));
-      setthumb.title = msg("added-by");
-      let thumbinner = document.createElement("span");
-      thumbinner.setAttribute(
-        "class",
-        addon.tab.scratchClass(
-          "button_outlined-button",
-          "menu-bar_menu-bar-button",
-          "community-button_community-button"
-        )
-      );
-      thumbinner.setAttribute("role", "button");
-      setthumb.append(thumbinner);
-      let thumbcontent = document.createElement("div");
-      setthumb.classList.add(addon.tab.scratchClass("button_content"));
-      thumbinner.append(thumbcontent);
-      let thumbspan = document.createElement("span");
-      thumbspan.textContent = msg("set-thumbnail");
-      thumbcontent.append(thumbspan);
-      nav.append(setthumb);
-      setthumb.addEventListener("click", () => createModal());
-    }
+    if (!document.querySelector(".form-group.project-title")) continue;
+    const element = Object.assign(document.createElement("button"), {
+      textContent: msg("set-thumbnail"),
+      className: "button action-button sa-set-thumbnail-button",
+      title: msg("added-by"),
+    });
+    addon.tab.displayNoneWhileDisabled(element);
+    element.addEventListener("click", () => createModal());
+    addon.tab.appendToSharedSpace({
+      space: "beforeProjectActionButtons",
+      order: 0,
+      element,
+    });
   }
 }
