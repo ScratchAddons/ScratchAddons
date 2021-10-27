@@ -330,12 +330,9 @@ export default async function ({ addon, global, console, msg }) {
 
   exportButton.addEventListener("click", async (e) => {
     const defaultFormat = "{sprite}: {content} ({type})";
-    const exportFormat = e.shiftKey ? await addon.tab.prompt(
-      msg("export"),
-      msg("enter-format"),
-      defaultFormat,
-      { useEditorClasses: true }
-    ) : defaultFormat;
+    const exportFormat = e.shiftKey
+      ? await addon.tab.prompt(msg("export"), msg("enter-format"), defaultFormat, { useEditorClasses: true })
+      : defaultFormat;
     if (!exportFormat) return;
     closeDragElement();
     const targetInfoCache = Object.create(null);

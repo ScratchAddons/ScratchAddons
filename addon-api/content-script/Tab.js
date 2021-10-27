@@ -653,7 +653,7 @@ export default class Tab extends Listenable {
    * @param {boolean=} opts.dangerous - whether to indicate the item as dangerous or not.
    * @param {Tab~EditorContextMenuItemCondition} opts.condition - a function to check if the item should be shown.
    */
-   createEditorContextMenu(...args) {
+  createEditorContextMenu(...args) {
     addContextMenu(this, ...args);
   }
 
@@ -853,11 +853,13 @@ export default class Tab extends Listenable {
     });
     const cancelButton = Object.assign(document.createElement("button"), {
       className: { "scratch-www": "button action-button close-button white" }[mode] || "",
-      innerText: this.scratchMessage({
-        editor: "gui.prompt.cancel",
-        "scratch-www": "general.cancel",
-        scratchr2: "Cancel",
-      }[mode]),
+      innerText: this.scratchMessage(
+        {
+          editor: "gui.prompt.cancel",
+          "scratch-www": "general.cancel",
+          scratchr2: "Cancel",
+        }[mode]
+      ),
     });
     buttonRow.appendChild(cancelButton);
     const okButton = Object.assign(document.createElement("button"), {
@@ -865,11 +867,13 @@ export default class Tab extends Listenable {
         editor: this.scratchClass("prompt_ok-button"),
         "scratch-www": "button action-button submit-button",
       }[mode],
-      innerText: this.scratchMessage({
-        editor: "gui.prompt.ok",
-        "scratch-www": "general.okay",
-        scratchr2: "OK",
-      }[mode]),
+      innerText: this.scratchMessage(
+        {
+          editor: "gui.prompt.ok",
+          "scratch-www": "general.okay",
+          scratchr2: "OK",
+        }[mode]
+      ),
     });
     buttonRow.appendChild(okButton);
     return { buttonRow, cancelButton, okButton };
@@ -886,11 +890,13 @@ export default class Tab extends Listenable {
       container.classList.add(this.scratchClass("prompt_modal-content"));
       content.classList.add(this.scratchClass("prompt_body"));
     }
-    content.appendChild(Object.assign(document.createElement("div"), {
-      className: { editor: this.scratchClass("prompt_label") }[mode] || "",
-      style: { "scratch-www": "margin: .9375rem 0.8275rem 0 .8275rem" }[mode] || "",
-      innerText: message,
-    }));
+    content.appendChild(
+      Object.assign(document.createElement("div"), {
+        className: { editor: this.scratchClass("prompt_label") }[mode] || "",
+        style: { "scratch-www": "margin: .9375rem 0.8275rem 0 .8275rem" }[mode] || "",
+        innerText: message,
+      })
+    );
     const { buttonRow, cancelButton, okButton } = this._createButtonRow(mode);
     if (mode === "scratchr2") container.appendChild(buttonRow);
     else content.appendChild(buttonRow);
@@ -926,17 +932,23 @@ export default class Tab extends Listenable {
       container.classList.add(this.scratchClass("prompt_modal-content"));
       content.classList.add(this.scratchClass("prompt_body"));
     }
-    content.appendChild(Object.assign(document.createElement("div"), {
-      className: { editor: this.scratchClass("prompt_label") }[mode] || "",
-      style: { "scratch-www": "margin: .9375rem 0.8275rem 1.125rem .8275rem" }[mode] || "",
-      innerText: message,
-    }));
+    content.appendChild(
+      Object.assign(document.createElement("div"), {
+        className: { editor: this.scratchClass("prompt_label") }[mode] || "",
+        style: { "scratch-www": "margin: .9375rem 0.8275rem 1.125rem .8275rem" }[mode] || "",
+        innerText: message,
+      })
+    );
     const input = Object.assign(document.createElement("input"), {
       className: { editor: this.scratchClass("prompt_variable-name-text-input"), "scratch-www": "input" }[mode] || "",
-      style: { "scratch-www": `
+      style:
+        {
+          "scratch-www": `
         width: calc(100% - 1.655rem);
         margin: 0 0.8275rem;
-      `, scratchr2: "width: calc(100% - 10px)" }[mode] || "",
+      `,
+          scratchr2: "width: calc(100% - 10px)",
+        }[mode] || "",
       value: defaultValue,
     });
     content.appendChild(input);
