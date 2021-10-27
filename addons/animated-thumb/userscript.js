@@ -10,25 +10,25 @@ export default async function ({ addon, global, console, msg }) {
     // User Interface
     let ignoreClickOutside = false;
     const modalOverlay = Object.assign(document.createElement("div"), {
-      className: addon.tab.scratchClass("modal_modal-overlay"),
+      className: "modal-overlay",
     });
     addon.tab.displayNoneWhileDisabled(modalOverlay);
     const modal = Object.assign(document.createElement("div"), {
-      className: addon.tab.scratchClass("modal_modal-content", { others: "sa-animated-thumb-popup" }),
+      className: "modal-content modal-sizes sa-animated-thumb-popup",
       dir: addon.tab.direction,
     });
     const modalHeader = Object.assign(document.createElement("div"), {
-      className: addon.tab.scratchClass("modal_header"),
+      className: "modal-header sa-animated-thumb-popup-header",
     });
     modalHeader.appendChild(
       Object.assign(document.createElement("div"), {
-        className: addon.tab.scratchClass("modal_header-item", "modal_header-item-title"),
+        className: "modal-title",
         textContent: msg("set-thumbnail"),
       })
     );
     modal.appendChild(modalHeader);
     const modalInner = Object.assign(document.createElement("div"), {
-      className: "sa-animated-thumb-popup-content",
+      className: "modal-inner-content sa-animated-thumb-popup-content",
     });
     modalInner.appendChild(
       Object.assign(document.createElement("p"), {
@@ -58,15 +58,15 @@ export default async function ({ addon, global, console, msg }) {
       })
     );
     const modalButtons = Object.assign(document.createElement("div"), {
-      className: addon.tab.scratchClass("prompt_button-row", { others: "sa-animated-thumb-popup-actions" }),
+      className: "flex-row action-buttons sa-animated-thumb-popup-actions",
     });
     const uploadFromFileButton = Object.assign(document.createElement("button"), {
       textContent: msg("select-file"),
-      className: "sa-animated-thumb-popup-action",
+      className: "button action-button sa-animated-thumb-popup-action",
     });
     const uploadFromStageButton = Object.assign(document.createElement("button"), {
       textContent: msg("use-stage"),
-      className: "sa-animated-thumb-popup-action",
+      className: "button action-button sa-animated-thumb-popup-action",
     });
     modalButtons.appendChild(uploadFromFileButton);
     modalButtons.appendChild(uploadFromStageButton);
@@ -91,6 +91,7 @@ export default async function ({ addon, global, console, msg }) {
       document.body.removeEventListener("click", handleClickOutside, {
         capture: true,
       });
+      document.body.classList.remove("overflow-hidden");
     };
     handleClickOutside = (e) => {
       if (ignoreClickOutside || modal.contains(e.target)) return;
@@ -99,12 +100,14 @@ export default async function ({ addon, global, console, msg }) {
     document.body.addEventListener("click", handleClickOutside, {
       capture: true,
     });
+    document.body.classList.add("overflow-hidden");
 
     const buttonRow = Object.assign(document.createElement("div"), {
       className: addon.tab.scratchClass("prompt_button-row", { others: "sa-animated-thumb-popup-buttons" }),
     });
     const closeButton = Object.assign(document.createElement("button"), {
       textContent: msg("close"),
+      className: "button action-button close-button white"
     });
     closeButton.addEventListener("click", closePopup, { once: true });
     buttonRow.appendChild(closeButton);
@@ -171,7 +174,7 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   while (true) {
-    await addon.tab.waitForElement("div.action-buttons", {
+    await addon.tab.waitForElement(".flex-row.subactions > .flex-row.action-buttons", {
       markAsSeen: true,
       reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => state.scratchGui.mode.isPlayerOnly,
