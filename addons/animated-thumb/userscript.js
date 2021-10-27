@@ -107,7 +107,7 @@ export default async function ({ addon, global, console, msg }) {
     });
     const closeButton = Object.assign(document.createElement("button"), {
       textContent: msg("close"),
-      className: "button action-button close-button white"
+      className: "button action-button close-button white",
     });
     closeButton.addEventListener("click", closePopup, { once: true });
     buttonRow.appendChild(closeButton);
