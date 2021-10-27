@@ -928,12 +928,15 @@ export default class Tab extends Listenable {
     }
     content.appendChild(Object.assign(document.createElement("div"), {
       className: { editor: this.scratchClass("prompt_label") }[mode] || "",
-      style: { "scratch-www": "margin: .9375rem 0.8275rem 0 .8275rem" }[mode] || "",
+      style: { "scratch-www": "margin: .9375rem 0.8275rem 1.125rem .8275rem" }[mode] || "",
       innerText: message,
     }));
     const input = Object.assign(document.createElement("input"), {
       className: { editor: this.scratchClass("prompt_variable-name-text-input"), "scratch-www": "input" }[mode] || "",
-      style: mode === "editor" ? "" : "width: 100%",
+      style: { "scratch-www": `
+        width: calc(100% - 1.655rem);
+        margin: 0 0.8275rem;
+      `, scratchr2: "width: calc(100% - 10px)" }[mode] || "",
       value: defaultValue,
     });
     content.appendChild(input);
