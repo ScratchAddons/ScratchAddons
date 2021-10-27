@@ -7,6 +7,7 @@ import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
+import globalTheme from "../../libraries/common/global-theme.js";
 
 let isIframe = false;
 if (window.parent !== window) {
@@ -18,28 +19,9 @@ if (window.parent !== window) {
 let vue;
 let fuse;
 
-let initialTheme;
-let initialThemePath;
-const lightThemeLink = document.createElement("link");
-lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "../styles/colors-light.css");
-lightThemeLink.setAttribute("data-below-vue-components", "");
-chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
-  if (globalTheme === true) {
-    document.head.appendChild(lightThemeLink);
-  }
-  const themePath = globalTheme ? "../../images/icons/moon.svg" : (initialThemePath = "../../images/icons/theme.svg");
-  if (vue) {
-    vue.theme = globalTheme;
-    vue.themePath = themePath;
-  } else {
-    initialTheme = globalTheme;
-    initialThemePath = themePath;
-  }
-  if (!isIframe) document.body.style.display = "";
-});
-
 (async () => {
+  const { theme: initialTheme, setGlobalTheme } = await globalTheme();
+
   await loadVueComponent([
     "webpages/settings/components/picker-component",
     "webpages/settings/components/reset-dropdown",
@@ -162,8 +144,7 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
     data() {
       return {
         smallMode: false,
-        theme: initialTheme ?? false,
-        themePath: initialThemePath ?? "",
+        theme: initialTheme,
         switchPath: "../../images/icons/switch.svg",
         isOpen: false,
         canCloseOutside: false,
@@ -200,6 +181,9 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
       };
     },
     computed: {
+      themePath() {
+        return this.theme ? "../../images/icons/moon.svg" : "../../images/icons/theme.svg";
+      },
       addonList() {
         if (!this.searchInput) {
           this.addonListObjs.forEach((obj) => {
@@ -273,20 +257,8 @@ chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
         this.searchInputReal = "";
       },
       setTheme(mode) {
-        chrome.storage.sync.get(["globalTheme"], function (r) {
-          let rr = mode ?? true;
-          chrome.storage.sync.set({ globalTheme: rr }, function () {
-            if (rr && r.globalTheme !== rr) {
-              document.head.appendChild(lightThemeLink);
-              vue.theme = true;
-              vue.themePath = "../../images/icons/moon.svg";
-            } else if (r.globalTheme !== rr) {
-              document.head.removeChild(lightThemeLink);
-              vue.theme = false;
-              vue.themePath = "../../images/icons/theme.svg";
-            }
-          });
-        });
+        setGlobalTheme(mode);
+        this.theme = mode;
       },
       stopPropagation(e) {
         e.stopPropagation();
