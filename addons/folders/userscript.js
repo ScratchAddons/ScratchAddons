@@ -1247,10 +1247,11 @@ export default async function ({ addon, global, console, msg }) {
       const dragInfo = args[0];
       const folderItems = dragInfo && dragInfo.payload && dragInfo.payload.sa_folder_items;
       if (Array.isArray(folderItems)) {
-        if (confirm(msg("confirm-backpack-folder"))) {
+        addon.tab.confirm("", msg("confirm-backpack-folder"), { useEditorClasses: true }).then((result) => {
+          if (!result) return;
           this.sa_queuedItems = folderItems;
           this.sa_loadNextItem();
-        }
+        });
         return;
       }
       return originalHandleDrop.call(this, ...args);
