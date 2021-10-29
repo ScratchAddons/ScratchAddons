@@ -1,7 +1,13 @@
 {
     "name": "Forum user agent",
-    "description": "Gets user agent of forum poster",
+    "description": "Gets user agent of forum post creators.",
     "tags": ["forums"],
+    "credits": [
+      {
+        "name": "god286",
+        "link": "https://scratch.mit.edu/users/god286"
+      }
+    ],
     "userscripts": [
         {
           "url": "forums.js",
