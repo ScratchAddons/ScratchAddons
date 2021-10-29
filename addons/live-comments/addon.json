@@ -17,5 +17,5 @@
       "matches": ["https://scratch.mit.edu/projects/*", "https://scratch.mit.edu/studios/*"]
     }
   ],
-  "tags": ["community", "studios", "projects"]
+  "tags": ["community", "studios", "projectPage"]
 }
