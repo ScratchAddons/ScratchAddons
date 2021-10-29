@@ -105,7 +105,7 @@
   "block-duplicate",
   "disable-paste-offset",
   "emoji-picker",
-
+  "forum-user-agent",
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
   "// because the first in the list gets their CSS injected first,",

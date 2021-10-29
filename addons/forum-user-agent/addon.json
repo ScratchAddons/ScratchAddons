@@ -1,0 +1,13 @@
+{
+    "name": "Forum user agent",
+    "description": "Gets user agent of forum poster",
+    "tags": ["forums"],
+    "userscripts": [
+        {
+          "url": "forums.js",
+          "matches": ["https://scratch.mit.edu/discuss/topic/*"]
+        }
+      ],
+    "enabledByDefault": false
+}
+  
