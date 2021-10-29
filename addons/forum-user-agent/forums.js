@@ -15,7 +15,7 @@ export default async function ({ addon, global, console, msg }) {
     uabutton.title = "When you click this button, the user agent will display here.";
     left.appendChild(line_br);
     left.appendChild(uabutton);
-    abutton.title = await fetchProjects(username);
+    uabutton.title = await fetchProjects(username);
     left.appendChild(uabutton)
   });
   async function grabAgent(projects) {
