@@ -12,28 +12,38 @@ export default async function ({ addon, global, console, msg }) {
     addon.tab.displayNoneWhileDisabled(line_br);
     uabutton.innerText = "Get user agent";
     uabutton.id = "user-agent-btn";
-    uabutton.title = "When you click this button, the user agent will display here.";
+    uabutton.title = `When you click this button, the user agent of ${username} will display here.`;
+    uabutton.onclick = async function () {
+      uabutton.title = await fetchProjects(username);
+      uabutton.innerText = "Hover to get user agent";
+    };
     left.appendChild(line_br);
     left.appendChild(uabutton);
-    uabutton.title = await fetchProjects(username);
-    left.appendChild(uabutton)
   });
   async function grabAgent(projects) {
-    for (let index = 0; index <= projects.length; index++) {
-      const project = array[index];
+    for (let index = 0; index < projects.length; index++) {
+      const project = projects[index];
       try {
-        const user_agent = await (
-          await fetch(`https://api.scratch.mit.edu/users/${username}/projects/?limit=5`)
-        ).json();
-      } catch {}
+        console.log("tried")
+        const user_agent_req = await fetch(`https://scratchdb.lefty.one/v3/project/info/${project.id}`);
+        const user_agent = await user_agent_req.json();
+        return user_agent.metadata["user_agent"];
+      } catch(err) {
+        if (index == projects.length) {
+          return "This user agent cannot be found. Try again later."
+          throw err;
+        } else {
+          console.log("User agent.")
+        }
+        
+      }
     }
-    
   }
   async function fetchProjects(username) {
     const limit = 3;
     const latest_projects = await (
       await fetch(`https://api.scratch.mit.edu/users/${username}/projects/?limit=${limit}`)
     ).json();
-    grabAgent(latest_projects);
+    return await grabAgent(latest_projects);
   }
 }
