@@ -44,7 +44,7 @@
 }
 
 .sa-animated-thumb-popup-actions button {
-  background: #ff7b26;
+  background: var(--scratchr2-primaryColor, #4d97ff);
   color: white;
   margin: 0 2rem;
 }
