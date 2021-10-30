@@ -1,0 +1,11 @@
+.sa-smart-error {
+    min-height: 100px;
+    max-width: 80%;
+    border: 5px solid #ffa500;
+    display: flex;
+    border-radius: 5px;
+    background-color: #f5c265;
+    justify-content: center;
+    text-align: center;
+    margin: 0 auto;
+}
