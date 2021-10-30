@@ -12,13 +12,13 @@
   "userscripts": [
     {
       "url": "smart.js",
-      "matches": ["https://scratch.mit.edu/404"]
+      "matches": ["https://scratch.mit.edu/*"]
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["https://scratch.mit.edu/404"]
+      "matches": ["https://scratch.mit.edu/*"]
     }
   ]
 }
