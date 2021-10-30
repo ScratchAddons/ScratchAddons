@@ -72,9 +72,34 @@ export default async function ({ addon, global, console, msg }) {
     modalButtons.appendChild(uploadFromStageButton);
     modalInner.appendChild(modalButtons);
     const modalResultArea = Object.assign(document.createElement("div"), {
-      className: "sa-animated-thumb-popup-result sa-animated-thumb-popup-result-none",
+      className: "sa-animated-thumb-popup-result",
+      hidden: true,
     });
     modalInner.appendChild(modalResultArea);
+
+    modalInner.appendChild(
+      Object.assign(document.createElement("p"), {
+        textContent: msg("successful"),
+        className: "sa-animated-thumb-text sa-animated-thumb-show-on-success",
+      })
+    );
+    const thumbImage = Object.assign(document.createElement("img"), {
+      alt: "",
+      className: "sa-animated-thumb-uploaded-thumb",
+      width: 360,
+      height: 240,
+    });
+    const thumbImageWrapper = Object.assign(document.createElement("p"), {
+      className: "sa-animated-thumb-show-on-success",
+    });
+    thumbImageWrapper.appendChild(thumbImage);
+    modalInner.appendChild(thumbImageWrapper);
+    modalInner.appendChild(
+      Object.assign(document.createElement("p"), {
+        textContent: msg("if-unsuccessful"),
+        className: "sa-animated-thumb-text sa-animated-thumb-show-on-success",
+      })
+    );
 
     // Logic
     const setter = new ThumbSetter(null, (file) => {
@@ -103,7 +128,7 @@ export default async function ({ addon, global, console, msg }) {
     document.body.classList.add("overflow-hidden");
 
     const buttonRow = Object.assign(document.createElement("div"), {
-      className: addon.tab.scratchClass("prompt_button-row", { others: "sa-animated-thumb-popup-buttons" }),
+      className: "flex-row action-buttons sa-animated-thumb-popup-buttons",
     });
     const closeButton = Object.assign(document.createElement("button"), {
       textContent: msg("close"),
@@ -120,12 +145,12 @@ export default async function ({ addon, global, console, msg }) {
         .then(
           (canceled) => {
             if (canceled) return;
-            modalResultArea.className = "sa-animated-thumb-popup-result sa-animated-thumb-popup-result-success";
-            modalResultArea.textContent = msg("successful");
+            thumbImage.src = `https://cdn2.scratch.mit.edu/get_image/project/${projectId}_480x360.png?nocache=${Date.now()}`;
+            modalInner.classList.add("sa-animated-thumb-successful");
             saveConfig(projectId, stopOverwritingCheckbox.checked);
           },
           (status) => {
-            modalResultArea.className = "sa-animated-thumb-popup-result sa-animated-thumb-popup-result-failure";
+            modalResultArea.hidden = false;
             switch (status) {
               case 503:
               case 500:

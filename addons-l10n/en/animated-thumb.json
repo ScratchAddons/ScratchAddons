@@ -7,9 +7,10 @@
   "animated-thumb/use-stage": "Use Stage",
   "animated-thumb/select-file": "Select File",
   "animated-thumb/close": "Close",
-  "animated-thumb/successful": "Thumbnail was uploaded. Note that it takes up to one day before users can see the new thumbnail.",
+  "animated-thumb/successful": "Thumbnail was uploaded.",
   "animated-thumb/server-error": "Thumbnail could not be uploaded due to server error. Please try again later.",
   "animated-thumb/error": "Thumbnail could not be uploaded.",
   "animated-thumb/too-big": "The file is too big.",
-  "animated-thumb/gif": "Projects with animated thumbnails might not appear on the front page or in the search result. Upload anyway?"
+  "animated-thumb/gif": "Projects with animated thumbnails might not appear on the front page or in the search result. Upload anyway?",
+  "animated-thumb/if-unsuccessful": "If this is not the thumbnail you uploaded just now, the server might be having a problem. Please wait a few days and try again."
 }
