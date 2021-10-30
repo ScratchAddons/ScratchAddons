@@ -11,15 +11,15 @@ export default async function ({ addon, global, console }) {
     // this code will just error out if there is not a 404 and should not cause any problems
     let smartbox = document.createElement("div");
     smartbox.className = "sa-smart-error";
-    let p = document.createElement("p");
-    p.innerText = "We think that you might be trying to find this: ";
-    p.style = "float: left;"
-    smartbox.append(p);
+    smartbox.title = "Message from Scratch Addons."
+    let span = document.createElement("span");
+    span.innerText = "We think that you might be trying to find this: ";
+    span.style = "display: inline;"
+    smartbox.append(span);
     let link = document.createElement("a");
     const showTip = calculateTip();
     link.href = showTip;
     link.innerText = " " + showTip;
-    link.style = "float: right;"
     smartbox.append(link);
     box.prepend(smartbox);
   }
