@@ -12,6 +12,7 @@
   overflow-y: auto;
   margin-left: auto;
   margin-right: auto;
+  background: white;
 }
 
 .sa-animated-thumb-popup-header {
@@ -20,7 +21,6 @@
 }
 
 .sa-animated-thumb-popup-content {
-  background-color: white;
   padding: 1.5rem 2.25rem;
 }
 
