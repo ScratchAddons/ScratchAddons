@@ -8,6 +8,14 @@
       "link": "https://scratch.mit.edu/users/god286"
     }
   ],
+  "settings": [
+    {
+      "name": "Automatic redirect to link",
+      "id": "redirect",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "enabledByDefault": false,
   "userscripts": [
     {

@@ -1,14 +1,23 @@
 export default async function ({ addon, global, console }) {
   if (addon.tab.clientVersion == "scratchr2") {
-    let box = document.getElementsByClassName("box-content")[0];
+    let box = document.getElementsByClassName("status-code")[0];
+/*     console.log(box) */
     runBox(box);
   } else {
     let box = document.getElementsByClassName("flex-row inner")[0];
+/*     console.log(box) */
     runBox(box);
   }
 
   function runBox(box) {
     // this code will just error out if there is not a 404 and should not cause any problems
+    if (addon.settings.get("redirect") === true && typeof box != "undefined") {
+        window.location.href = calculateTip();
+        return;
+    }
+    if (typeof box == "undefined") {
+        return;
+    }
     let smartbox = document.createElement("div");
     smartbox.className = "sa-smart-error";
     smartbox.title = "Message from Scratch Addons."
