@@ -1,6 +1,6 @@
 {
   "name": "Editor comment previews",
-  "description": "Allows you to preview the contents of comments by hovering over collapsed comments and blocks.",
+  "description": "Allows you to preview the contents of comments by hovering over collapsed comments and blocks. You can use this to view comments that are off-screen, identify a loop block from the bottom by its preview, fit many long comments in a small space, and more.",
   "tags": ["editor", "codeEditor"],
   "credits": [
     {
@@ -40,8 +40,34 @@
       "default": true
     },
     {
+      "name": "Delay duration",
+      "id": "delay",
+      "type": "select",
+      "potentialValues": [
+        {
+          "name": "None",
+          "id": "none"
+        },
+        {
+          "name": "Short",
+          "id": "short"
+        },
+        {
+          "name": "Long",
+          "id": "long"
+        }
+      ],
+      "default": "short"
+    },
+    {
       "name": "Reduce transparency",
       "id": "reduce-transparency",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "name": "Reduce animation",
+      "id": "reduce-animation",
       "type": "boolean",
       "default": false
     }

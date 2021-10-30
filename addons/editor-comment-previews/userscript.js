@@ -1,3 +1,9 @@
+/**
+ * TO-DO:
+ * - Refactor collapsed comment previews
+ * - Clean up everything
+ * - Fix block-to-block bug
+ */
 export default async function ({ addon, global, console }) {
   // Get VM
   const vm = addon.tab.traps.vm;
@@ -59,6 +65,8 @@ export default async function ({ addon, global, console }) {
   commentObserver.observe(workspaceElement, { childList: true, subtree: true });
 
   // Listeners for blocks
+  let mouseOver = false;
+  let mouseOverBlock = null;
   const isBlockElement = (element) => {
     if (
       element &&
@@ -77,80 +85,112 @@ export default async function ({ addon, global, console }) {
     }
   };
 
-  document.addEventListener("mousemove", (e) => {
-    if (
-      !addon.self.disabled &&
-      (addon.settings.get("hover-view-block") || addon.settings.get("hover-view-procedure"))
-    ) {
+  document.addEventListener("mouseover", (e) => {
+    if (!addon.self.disabled) {
       let element = e.target.parentElement;
       const elementType = isBlockElement(element);
-      if (elementType !== false) {
-        if (elementType === "component") {
-          element = element.parentElement;
-        }
-        let blocks;
-        if (element.parentElement.parentElement.parentElement.matches(".blocklyFlyout")) {
-          blocks = flyout.workspace_.blockDB_;
-        } else {
-          blocks = vm.editingTarget.blocks._blocks;
-        }
-        let block = blocks[element.getAttribute("data-id")];
-        if (block) {
-          const comments = vm.editingTarget.comments;
-          let commentObject = comments[block.comment];
-          if (addon.settings.get("hover-view-block") && commentObject && commentObject.text !== "") {
-            setPreview(e, commentObject, previewElement);
-          } else if (
-            addon.settings.get("hover-view-procedure") &&
-            (block.opcode === "procedures_call" || block.procCode_)
-          ) {
-            let blockName;
-            if (block.mutation) blockName = block.mutation.proccode;
-            else blockName = block.procCode_;
-            const prototypeBlock =
-              vm.editingTarget.blocks._blocks[
-                Object.entries(vm.editingTarget.blocks._blocks).find((i) => {
-                  return i[1].opcode === "procedures_prototype" && i[1].mutation.proccode === blockName;
-                })[0]
-              ];
-            const definitionBlock = vm.editingTarget.blocks._blocks[prototypeBlock.parent];
-            commentObject = comments[definitionBlock.comment];
-            if (commentObject.text !== "") {
-              setPreview(e, commentObject, previewElement);
+      if (mouseOver === false) {
+        if (addon.settings.get("hover-view-block") || addon.settings.get("hover-view-procedure")) {
+          if (elementType !== false) {
+            if (elementType === "component") {
+              element = element.parentElement;
+            }
+            let blocks;
+            if (element.matches(".blocklyFlyout *")) {
+              blocks = flyout.workspace_.blockDB_;
+            } else {
+              blocks = vm.editingTarget.blocks._blocks;
+            }
+            let block = blocks[element.getAttribute("data-id")];
+            if (block) {
+              const comments = vm.editingTarget.comments;
+              let commentObject = comments[block.comment];
+              if (addon.settings.get("hover-view-block") && commentObject && commentObject.text !== "") {
+                mouseOverBlock = block.id;
+                setPreview(e, commentObject, previewElement);
+              } else if (
+                addon.settings.get("hover-view-procedure") &&
+                (block.opcode === "procedures_call" || block.procCode_)
+              ) {
+                let blockName;
+                if (block.mutation) blockName = block.mutation.proccode;
+                else blockName = block.procCode_;
+                const prototypeBlock =
+                  vm.editingTarget.blocks._blocks[
+                    Object.entries(vm.editingTarget.blocks._blocks).find((i) => {
+                      return i[1].opcode === "procedures_prototype" && i[1].mutation.proccode === blockName;
+                    })[0]
+                  ];
+                const definitionBlock = vm.editingTarget.blocks._blocks[prototypeBlock.parent];
+                commentObject = comments[definitionBlock.comment];
+                if (commentObject.text !== "") {
+                  mouseOverBlock = block.id;
+                  setPreview(e, commentObject, previewElement);
+                }
+              }
             }
           }
         }
+      } else if (elementType === false) {
+        previewElement.classList.add("sa-comment-preview-hidden");
+        mouseOver = false;
+        mouseOverBlock = null;
       }
     }
   });
 
-  function setPreview(event, comment, element) {
-    element.style.left = event.pageX + 8 + "px";
-    element.style.top = event.pageY + 8 + "px";
-    element.innerText = comment.text;
-    if (element.innerText !== "") element.classList.remove("sa-comment-preview-hidden");
-  }
-
-  document.addEventListener("mouseout", (e) => {
-    const element = e.target.parentElement;
-    if (isBlockElement(element)) {
-      previewElement.classList.add("sa-comment-preview-hidden");
+  document.addEventListener("mousemove", (e) => {
+    if (
+      !addon.self.disabled &&
+      (addon.settings.get("delay") === "none" ||
+        (previewElement.classList.contains("sa-comment-preview-hidden") &&
+          window.getComputedStyle(previewElement).opacity < 0.001))
+    ) {
+      previewElement.style.left = e.pageX + 8 + "px";
+      previewElement.style.top = e.pageY + 8 + "px";
     }
+    if (e.target === previewElement) previewElement.classList.add("sa-comment-preview-hidden");
   });
+
+  function setPreview(e, comment, element) {
+    let timeout;
+    if (addon.settings.get("delay") === "long") timeout = 500;
+    else if (addon.settings.get("delay") === "short") timeout = 300;
+    else timeout = 0;
+    mouseOver = true;
+    element.innerText = comment.text;
+    setTimeout(() => {
+      if (element.innerText !== "" && mouseOver) {
+        element.classList.remove("sa-comment-preview-hidden");
+      }
+    }, timeout);
+  }
 
   document.addEventListener("click", (e) => {
     previewElement.classList.add("sa-comment-preview-hidden");
+    mouseOver = false;
+    mouseOverBlock = null;
   });
 
-  function setTransparency() {
-    if (addon.settings.get("reduce-transparency")) {
-      previewElement.classList.add("sa-reduce-transparency");
+  function setAppearance() {
+    if (addon.settings.get("delay") === "none") {
+      previewElement.classList.remove("sa-comment-preview-delay");
     } else {
-      previewElement.classList.remove("sa-reduce-transparency");
+      previewElement.classList.add("sa-comment-preview-delay");
+    }
+    if (addon.settings.get("reduce-transparency")) {
+      previewElement.classList.add("sa-comment-preview-reduce-transparency");
+    } else {
+      previewElement.classList.remove("sa-comment-preview-reduce-transparency");
+    }
+    if (addon.settings.get("reduce-animation")) {
+      previewElement.classList.remove("sa-comment-preview-fade");
+    } else {
+      previewElement.classList.add("sa-comment-preview-fade");
     }
   }
 
-  setTransparency();
+  setAppearance();
 
-  addon.settings.addEventListener("change", setTransparency);
+  addon.settings.addEventListener("change", setAppearance);
 }
