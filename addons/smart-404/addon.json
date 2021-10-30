@@ -1,12 +1,12 @@
 {
     "name": "Smart 404 Pages",
     "description": "This addon suggests alternative URLs for 404 pages.",
-    "tags": ["website"],
+    "tags": ["community"],
     "enabledByDefault": false,
     "userscripts": [
         {
             "url": "smart.js",
-            "matches": ["todo"]
+            "matches": ["https://scratch.mit.edu"]
         }
     ]
 }
