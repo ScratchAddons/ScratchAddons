@@ -17,6 +17,10 @@ export default async function ({ addon, msg, console }) {
       (block.fields.VARIABLE && block.fields.VARIABLE.id === id)
     )));
 
+  // https://github.com/LLK/scratch-vm/blob/7c6f1e44fb0a9b0d0279225cd4c62fbe59b6af54/src/engine/blocks.js#L388-L394
+  const getTargetsWithLocalVariableNamed = (name, type) => vm.runtime.targets
+    .filter((target) => target.isOriginal && target.lookupVariableByNameAndType(name, type, true));
+
   const getVmVariable = (id) => vm.editingTarget.variables[id] || vm.runtime.getTargetForStage().variables[id];
   const isStageSelected = () => vm.editingTarget.isStage;
 
@@ -109,6 +113,7 @@ export default async function ({ addon, msg, console }) {
       return;
     }
 
+    const editingTarget = vm.editingTarget;
     const newLocal = !oldBlocklyVariable.isLocal;
     if (newLocal) {
       // Stage cannot have local variables
@@ -119,7 +124,7 @@ export default async function ({ addon, msg, console }) {
       // Variables used by unfocused sprites cannot be made local
       // That includes cases where the variable is used by multiple sprites and where it's only used by an unfocused sprite
       const targets = getTargetsThatUseVariable(id);
-      if (!targets.every((i) => i === vm.editingTarget)) {
+      if (!targets.every((i) => i === editingTarget)) {
         if (targets.length > 1) {
           alert(msg('cant-convert-to-local', {
             sprites: targets.map(getTargetName).join(', ')
@@ -129,6 +134,15 @@ export default async function ({ addon, msg, console }) {
             sprite: getTargetName(targets[0])
           }));
         }
+        return;
+      }
+    } else {
+      // Global variables must not conflict with any local variables
+      const targets = getTargetsWithLocalVariableNamed(name, type).filter((target) => target !== editingTarget);
+      if (targets.length > 0) {
+        alert(msg('cant-convert-conflict', {
+          sprites: targets.map(getTargetName).join(', ')
+        }));
         return;
       }
     }
