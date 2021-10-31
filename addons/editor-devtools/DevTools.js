@@ -1511,7 +1511,7 @@ export default class DevTools {
         (!document.getElementsByClassName("injectionDiv")[0].contains(e.target) &&
           // Focused inputs are not part of the injectionDiv, but to the user they are part of the code area so make multi-inject work there
           !e.target.classList.contains("blocklyHtmlInput")) ||
-        // This selector targets workspace buttons (Make a Block etc.) and the extension (!) buttons, which most commonly triggers a popup window so always close the dropdown
+        // This selector targets workspace buttons (Make a Block etc.) and the extension (!) buttons, which most commonly trigger a popup window so always close the dropdown
         e.target.matches(".blocklyFlyoutButton, .blocklyFlyoutButton *, .blocklyTouchTargetBackground")
       ) {
         // If we click outside the dropdown, then instigate the hide code...
