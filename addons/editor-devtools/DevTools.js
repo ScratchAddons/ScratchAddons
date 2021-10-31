@@ -1507,9 +1507,12 @@ export default class DevTools {
     if (this.floatInp && !e.target.closest("#s3devIDDOut")) {
       if (
         !e.shiftKey ||
+		// Clicking on the code area should always make multi-inject work
         (!document.getElementsByClassName("injectionDiv")[0].contains(e.target) &&
+		// Focused inputs are not part of the injectionDiv to the user they are part of the code area so make multi-inject work there
           !e.target.classList.contains("blocklyHtmlInput")) ||
-        e.target.matches(".blocklyFlyoutButton, .blocklyFlyoutButton *, .blocklyTouchTargetBackground")
+		  // This selection targets workspace buttons (Make a Block etc.) and the extension (!) buttons, which most commonly triggers a popup window so always close the dropdown
+		  e.target.matches(".blocklyFlyoutButton, .blocklyFlyoutButton *, .blocklyTouchTargetBackground")
       ) {
         // If we click outside the dropdown, then instigate the hide code...
         this.hideFloatDropDown();
