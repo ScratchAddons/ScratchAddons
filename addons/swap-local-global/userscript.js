@@ -4,8 +4,8 @@ export default async function ({ addon, msg, console }) {
 
   const getTargetName = (target) => {
     if (target.isStage) {
-      // Stage always has an internal name of "Stage"
-      return msg('stage');
+      // Stage always has an internal name of "Stage", but we want a translatable name
+      return ScratchBlocks.ScratchMsgs.translate('SENSING_OF_STAGE', 'Stage');
     }
     return target.getName();
   };
@@ -21,7 +21,7 @@ export default async function ({ addon, msg, console }) {
   const getTargetsWithLocalVariableNamed = (name, type) => vm.runtime.targets
     .filter((target) => target.isOriginal && target.lookupVariableByNameAndType(name, type, true));
 
-  const getVmVariable = (id) => vm.editingTarget.variables[id] || vm.runtime.getTargetForStage().variables[id];
+  const getVmVariable = (id) => vm.editingTarget.lookupVariableById(id);
   const isStageSelected = () => vm.editingTarget.isStage;
 
   const deleteVariableWithoutDeletingBlocks = (workspace, variable) => {

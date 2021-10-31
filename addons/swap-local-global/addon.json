@@ -1,6 +1,6 @@
 {
   "name": "Convert variables and lists between \"For all sprites\" and \"For this sprite only\"",
-  "description": "Allows right-clicking on a variable or list to change it from \"For all sprites\" to \"For this sprite only\" or the other way around.",
+  "description": "Adds a right click context menu item on variable and list blocks to convert them from \"For all sprites\" to \"For this sprite only\" or the other way around.",
   "credits": [
     {
       "name": "GarboMuffin"
