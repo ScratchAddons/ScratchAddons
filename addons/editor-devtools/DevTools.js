@@ -1509,7 +1509,7 @@ export default class DevTools {
         !e.shiftKey ||
         // Clicking on the code area should always make multi-inject work
         (!document.getElementsByClassName("injectionDiv")[0].contains(e.target) &&
-          // Focused inputs are not part of the injectionDiv to the user they are part of the code area so make multi-inject work there
+          // Focused inputs are not part of the injectionDiv, but to the user they are part of the code area so make multi-inject work there
           !e.target.classList.contains("blocklyHtmlInput")) ||
         // This selection targets workspace buttons (Make a Block etc.) and the extension (!) buttons, which most commonly triggers a popup window so always close the dropdown
         e.target.matches(".blocklyFlyoutButton, .blocklyFlyoutButton *, .blocklyTouchTargetBackground")
