@@ -9,7 +9,7 @@ import { addContextMenu } from "./contextmenu.js";
 const DATA_PNG = "data:image/png;base64,";
 
 const contextMenuCallbacks = [];
-const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image"];
+const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
 
 /**

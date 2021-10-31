@@ -1,0 +1,20 @@
+{
+  "name": "Convert variables and lists between \"For all sprites\" and \"For this sprite only\"",
+  "description": "Allows right-clicking on a variable or list to change it from \"For all sprites\" to \"For this sprite only\" or the other way around.",
+  "credits": [
+    {
+      "name": "GarboMuffin"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "tags": ["editor", "codeEditor"],
+  "versionAdded": "1.22.0",
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "enabledByDefault": false
+}
