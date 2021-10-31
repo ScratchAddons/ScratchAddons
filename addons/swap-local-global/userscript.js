@@ -161,7 +161,7 @@ export default async function ({ addon, msg, console }) {
   };
 
   addon.tab.createBlockContextMenu((items, block) => {
-    if (!addon.self.disabled && block.getCategory() === "data" || block.getCategory() === "data-lists") {
+    if (!addon.self.disabled && (block.getCategory() === "data" || block.getCategory() === "data-lists")) {
       const variable = block.workspace.getVariableById(block.getVars()[0]);
       if (variable) {
         items.push({
