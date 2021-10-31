@@ -40,7 +40,7 @@ export default async function ({ addon, msg, console }) {
   const customUndoVarDelete = function (forward) {
     const workspace = this.getEventWorkspace_();
     if (forward) {
-      _undoRedoPreserveStateCallback = beginPreservingState(this.varId, !this.isLocal);
+      _undoRedoPreserveStateCallback = beginPreservingState(this.varId);
       deleteVariableWithoutDeletingBlocks(workspace, this.varId);
     } else {
       workspace.createVariable(this.varName, this.varType, this.varId, this.isLocal, this.isCloud);
@@ -55,14 +55,14 @@ export default async function ({ addon, msg, console }) {
       workspace.createVariable(this.varName, this.varType, this.varId, this.isLocal, this.isCloud);
       finishUndoRedoState();
     } else {
-      _undoRedoPreserveStateCallback = beginPreservingState(this.varId, this.isLocal);
+      _undoRedoPreserveStateCallback = beginPreservingState(this.varId);
       deleteVariableWithoutDeletingBlocks(workspace, this.varId);
     }
   };
 
   const flushBlocklyEventQueue = () => ScratchBlocks.Events.fireNow_();
 
-  const beginPreservingState = (id, isLocal) => {
+  const beginPreservingState = (id) => {
     // oldMonitorState is an instance of https://github.com/LLK/scratch-vm/blob/develop/src/engine/monitor-record.js or undefined
     const oldMonitorState = vm.runtime._monitorState.get(id);
     const oldVmVariable = getVmVariable(id);
@@ -82,6 +82,7 @@ export default async function ({ addon, msg, console }) {
             value: true
           });
         }
+        const isLocal = !vm.runtime.getTargetForStage().variables[id];
         let newMonitorState = oldMonitorState;
         if (isLocal) {
           const target = vm.editingTarget;
@@ -132,7 +133,7 @@ export default async function ({ addon, msg, console }) {
       }
     }
 
-    const finishPreservingState = beginPreservingState(id, newLocal);
+    const finishPreservingState = beginPreservingState(id);
 
     const workspace = oldBlocklyVariable.workspace;
     ScratchBlocks.Events.setGroup(true);
