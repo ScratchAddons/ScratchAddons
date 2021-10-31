@@ -20,6 +20,82 @@ export default async function ({ addon, msg, console }) {
   const getVmVariable = (id) => vm.editingTarget.variables[id] || vm.runtime.getTargetForStage().variables[id];
   const isStageSelected = () => vm.editingTarget.isStage;
 
+  const deleteVariableWithoutDeletingBlocks = (workspace, variable) => {
+    // variable can be an ID or an actual Blockly variable object
+    if (typeof variable === 'string') {
+      variable = workspace.getVariableById(variable);
+    }
+    workspace.variableMap_.deleteVariable(variable);
+  };
+
+  let _undoRedoPreserveStateCallback = null;
+  const finishUndoRedoState = () => {
+    if (_undoRedoPreserveStateCallback) {
+      _undoRedoPreserveStateCallback();
+      _undoRedoPreserveStateCallback = null;
+    }
+  };
+
+  // https://github.com/LLK/scratch-blocks/blob/0d6012df1e18e66d82c1247f1f6d772a719982a7/core/variable_events.js#L194
+  const customUndoVarDelete = function (forward) {
+    const workspace = this.getEventWorkspace_();
+    if (forward) {
+      _undoRedoPreserveStateCallback = beginPreservingState(this.varId, !this.isLocal);
+      deleteVariableWithoutDeletingBlocks(workspace, this.varId);
+    } else {
+      workspace.createVariable(this.varName, this.varType, this.varId, this.isLocal, this.isCloud);
+      finishUndoRedoState();
+    }
+  };
+
+  // https://github.com/LLK/scratch-blocks/blob/0d6012df1e18e66d82c1247f1f6d772a719982a7/core/variable_events.js#L131
+  const customUndoVarCreate = function (forward) {
+    const workspace = this.getEventWorkspace_();
+    if (forward) {
+      workspace.createVariable(this.varName, this.varType, this.varId, this.isLocal, this.isCloud);
+      finishUndoRedoState();
+    } else {
+      _undoRedoPreserveStateCallback = beginPreservingState(this.varId, this.isLocal);
+      deleteVariableWithoutDeletingBlocks(workspace, this.varId);
+    }
+  };
+
+  const flushBlocklyEventQueue = () => ScratchBlocks.Events.fireNow_();
+
+  const beginPreservingState = (id, isLocal) => {
+    // oldMonitorState is an instance of https://github.com/LLK/scratch-vm/blob/develop/src/engine/monitor-record.js or undefined
+    const oldMonitorState = vm.runtime._monitorState.get(id);
+    const oldVmVariable = getVmVariable(id);
+    return () => {
+      flushBlocklyEventQueue();
+
+      const newVmVariable = getVmVariable(id);
+      if (newVmVariable) {
+        newVmVariable.value = oldVmVariable.value;
+      }
+
+      if (oldMonitorState) {
+        if (oldMonitorState.visible) {
+          vm.runtime.monitorBlocks.changeBlock({
+            id,
+            element: 'checkbox',
+            value: true
+          });
+        }
+        let newMonitorState = oldMonitorState;
+        if (isLocal) {
+          const target = vm.editingTarget;
+          newMonitorState = newMonitorState.set('targetId', target.id)
+          newMonitorState = newMonitorState.set('spriteName', target.getName());
+        } else {
+          newMonitorState = newMonitorState.set('targetId', null);
+          newMonitorState = newMonitorState.set('spriteName', null);
+        }
+        vm.runtime.requestAddMonitor(newMonitorState);
+      }
+    };
+  };
+
   const convert = (oldBlocklyVariable) => {
     const name = oldBlocklyVariable.name;
     const id = oldBlocklyVariable.getId();
@@ -56,45 +132,32 @@ export default async function ({ addon, msg, console }) {
       }
     }
 
-    const oldVmVariable = getVmVariable(id);
-    // oldMonitorState is an instance of https://github.com/LLK/scratch-vm/blob/develop/src/engine/monitor-record.js or undefined
-    const oldMonitorState = vm.runtime._monitorState.get(id);
+    const finishPreservingState = beginPreservingState(id, newLocal);
+
     const workspace = oldBlocklyVariable.workspace;
     ScratchBlocks.Events.setGroup(true);
     try {
-      workspace.variableMap_.deleteVariable(oldBlocklyVariable);
+      deleteVariableWithoutDeletingBlocks(workspace, oldBlocklyVariable);
       workspace.createVariable(name, type, id, newLocal, /* isCloud */ false);
     } finally {
       ScratchBlocks.Events.setGroup(false);
     }
 
-    // The VM typically won't be notified of workspace updates until a setTimeout(fn, 0)
-    // We force it to be notified immediately to make changes safe while the project is running
-    ScratchBlocks.Events.fireNow_();
-    const newVmVariable = getVmVariable(id);
-    if (newVmVariable) {
-      newVmVariable.value = oldVmVariable.value;
+    // 2 items will be added to the queue: a variable create and delete
+    // override their undo handlers to make undo/redo work properly
+    flushBlocklyEventQueue();
+    const stack = workspace.undoStack_;
+    const createEvent = stack[stack.length - 1];
+    const deleteEvent = stack[stack.length - 2];
+    if (
+      (createEvent instanceof ScratchBlocks.Events.VarCreate) &&
+      (deleteEvent instanceof ScratchBlocks.Events.VarDelete)
+    ) {
+      createEvent.run = customUndoVarCreate;
+      deleteEvent.run = customUndoVarDelete;
     }
 
-    if (oldMonitorState) {
-      if (oldMonitorState.visible) {
-        vm.runtime.monitorBlocks.changeBlock({
-          id,
-          element: 'checkbox',
-          value: true
-        });
-      }
-      let newMonitorState = oldMonitorState;
-      if (newLocal) {
-        const target = vm.editingTarget;
-        newMonitorState = newMonitorState.set('targetId', target.id)
-        newMonitorState = newMonitorState.set('spriteName', target.getName());
-      } else {
-        newMonitorState = newMonitorState.set('targetId', null);
-        newMonitorState = newMonitorState.set('spriteName', null);
-      }
-      vm.runtime.requestAddMonitor(newMonitorState);
-    }
+    finishPreservingState();
   };
 
   addon.tab.createBlockContextMenu((items, block) => {
