@@ -4,12 +4,13 @@ export default async function ({addon, console, msg}) {
   });
   const buttons = document.querySelectorAll('.postfootright');
   buttons.forEach(function (elm) {
-    let lineNode = document.createTextNode('| ');
     let addBtn = document.createElement('li');
-    elm.querySelector('.postreport').prepend(lineNode);
-    addBtn.innerHTML = `<a href="#reply">${msg('add-btn')}</a>`;
+    let addBtnAElement = document.createElement('a');
+    addBtnAElement.href = '#reply';
+    addBtnAElement.textContent = msg('add-btn');
+    addBtn.appendChild(addBtnAElement);
     addBtn.addEventListener('click', addIDLink);
-    elm.querySelector('ul').prepend(addBtn);
+    addon.tab.appendToSharedSpace({space: 'forumsBeforePostReport', element: addBtn, scope: elm});
   });
   function addIDLink(e) {
     let textEditor = document.querySelector('.markItUpEditor');

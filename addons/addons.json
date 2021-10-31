@@ -1,5 +1,4 @@
 [
-  "forum-id",
   "editor-searchable-dropdowns",
   "editor-devtools",
   "forum-search",
@@ -96,6 +95,7 @@
   "paint-by-default",
   "hide-project-stats",
   "remix-button",
+  "forum-id",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
