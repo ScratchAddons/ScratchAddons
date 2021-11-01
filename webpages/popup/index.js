@@ -1,17 +1,8 @@
 import loadVueComponent from "../../libraries/common/load-vue-components.js";
 import loadPopup from "../popup-loader.js";
+import globalTheme from "../../libraries/common/global-theme.js";
 
-//theme switching
-const lightThemeLink = document.createElement("link");
-lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "../styles/colors-light.css");
-chrome.storage.sync.get(["globalTheme"], function (r) {
-  let rr = false; //true = light, false = dark
-  if (r.globalTheme) rr = r.globalTheme;
-  if (rr) {
-    document.head.appendChild(lightThemeLink);
-  }
-});
+globalTheme();
 
 function calculatePopupSize() {
   if (!window.innerWidth || !window.innerHeight) {
@@ -28,6 +19,7 @@ function calculatePopupSize() {
 window.addEventListener("load", () => setTimeout(calculatePopupSize, 0));
 
 chrome.runtime.sendMessage("getSettingsInfo", async (res) => {
+
   // If order unspecified, addon goes first. All new popups should be added here.
   const TAB_ORDER = ["scratch-messaging", "cloud-games"];
   const popupObjects = Object.keys(res.addonsEnabled)

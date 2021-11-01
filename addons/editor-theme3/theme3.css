@@ -15,7 +15,7 @@ g[data-shapes="c-block c-1 hat"] > g[data-shapes="stack"]:not(.blocklyDraggable)
 g[data-argument-type="dropdown"] > rect,
 g[data-argument-type="variable"] > rect {
   stroke: #0003;
-  fill: none;
+  fill: #0000;
 }
 g[data-argument-type*="text"] > path,
 [data-category] g > line {

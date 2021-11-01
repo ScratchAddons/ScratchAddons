@@ -1,1 +1,1 @@
-{"fix-pasted-scripts/@name":"Duplizierte Blöcke nicht automatisch ausführen","fix-pasted-scripts/@description":"Löst einen Bug im Scratch-Editor, der beim Duplizieren und Anfügen von Blöckenan ein Skript den Start des Skripts auslöst."}
+{"fix-pasted-scripts/@name":"Duplizierte Blöcke nicht automatisch ausführen","fix-pasted-scripts/@description":"Löst einen Bug im Scratch-Editor, der beim Duplizieren und Anfügen von Blöcken an ein Skript den Start des Skripts auslöst."}

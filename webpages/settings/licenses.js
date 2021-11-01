@@ -1,15 +1,7 @@
-const lightThemeLink = document.createElement("link");
-lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "../styles/colors-light.css");
-lightThemeLink.setAttribute("data-below-vue-components", "");
-await new Promise((resolve) => {
-  chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
-    if (globalTheme === true) {
-      document.head.appendChild(lightThemeLink);
-    }
-    resolve();
-  });
-});
+
+import globalTheme from "../../libraries/common/global-theme.js";
+
+globalTheme();
 
 const vue = new Vue({
   el: "body",

@@ -13,23 +13,24 @@ export default {
       }
     });
   },
-  methods: {
-    toggle() {
-      this.isOpen = !this.isOpen;
-      this.$settingsContext.closePickers({ isTrusted: true }, null, {
-        callCloseDropdowns: false,
-      });
-      this.$settingsContext.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
-    },
-    resetToDefault() {
-      this.$parent.addonSettings[this.addon._addonId][this.setting.id] = this.setting.default;
-      this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
-      this.toggle();
-    },
-    resetToPreset(preset) {
-      this.$parent.addonSettings[this.addon._addonId][this.setting.id] = preset.values[this.setting.id];
-      this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
-      this.toggle();
+    methods: {
+      toggle() {
+        this.isOpen = !this.isOpen;
+        this.$settingsContext.closePickers({ isTrusted: true }, null, {
+          callCloseDropdowns: false,
+        });
+        this.$settingsContext.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
+      },
+      resetToDefault() {
+        this.$parent.addonSettings[this.setting.id] = this.setting.default;
+        this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
+        this.toggle();
+      },
+      resetToPreset(preset) {
+        this.$parent.addonSettings[this.setting.id] = preset.values[this.setting.id];
+        this.$parent.updateSettings(this.addon, { settingId: this.setting.id });
+        this.toggle();
+      },
     },
   },
 };
