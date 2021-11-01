@@ -14,53 +14,52 @@ export default {
       highlightedSettingId: null,
     };
   },
-    computed: {
-      shouldShow() {
-        return this.visible && (this.$settingsContext.searchInput === "" ? this.groupExpanded : true);
-      },
-      addonIconSrc() {
-        const map = {
-          editor: "puzzle",
-          community: "web",
-          theme: "brush",
-          easterEgg: "egg-easter",
-          popup: "popup",
-        };
-        return `../../images/icons/${map[this.addon._icon]}.svg`;
-      },
-      addonSettings() {
-        return this.$settingsContext.addonSettings[this.addon._addonId];
-      },
-      defaultExpanded() {
-        return this.$settingsContext.isInPopup ? false : this.groupId === "enabled";
-      },
+  computed: {
+    shouldShow() {
+      return this.visible && (this.$settingsContext.searchInput === "" ? this.groupExpanded : true);
     },
-    methods: {
-      devShowAddonIds(event) {
-        if (!this.$root.versionName.endsWith("-prerelease") || !event.ctrlKey) return;
-        event.stopPropagation();
-        Vue.set(this.addon, "_displayedAddonId", this.addon._addonId);
-      },
-      loadPreset(preset) {
-        if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
-          for (const property of Object.keys(preset.values)) {
-            this.addonSettings[property] = preset.values[property];
-          }
-          this.$root.updateSettings(this.addon);
-          console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
+    addonIconSrc() {
+      const map = {
+        editor: "puzzle",
+        community: "web",
+        theme: "brush",
+        easterEgg: "egg-easter",
+        popup: "popup",
+      };
+      return `../../images/icons/${map[this.addon._icon]}.svg`;
+    },
+    addonSettings() {
+      return this.$settingsContext.addonSettings[this.addon._addonId];
+    },
+    defaultExpanded() {
+      return this.$settingsContext.isInPopup ? false : this.groupId === "enabled";
+    },
+  },
+  methods: {
+    devShowAddonIds(event) {
+      if (!this.$root.versionName.endsWith("-prerelease") || !event.ctrlKey) return;
+      event.stopPropagation();
+      Vue.set(this.addon, "_displayedAddonId", this.addon._addonId);
+    },
+    loadPreset(preset) {
+      if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
+        for (const property of Object.keys(preset.values)) {
+          this.addonSettings[property] = preset.values[property];
         }
-      },
-      loadDefaults() {
-        if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
-          for (const property of this.addon.settings) {
-            this.addonSettings[property.id] = property.default;
-          }
-          this.$root.updateSettings(this.addon);
-          console.log(`Loaded default values for ${this.addon._addonId}`);
+        this.$root.updateSettings(this.addon);
+        console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
+      }
+    },
+    loadDefaults() {
+      if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
+        for (const property of this.addon.settings) {
+          this.addonSettings[property.id] = property.default;
         }
-        this.$settingsContext.updateSettings(this.addon);
+        this.$root.updateSettings(this.addon);
         console.log(`Loaded default values for ${this.addon._addonId}`);
       }
+      this.$settingsContext.updateSettings(this.addon);
+      console.log(`Loaded default values for ${this.addon._addonId}`);
     },
     toggleAddonRequest(event) {
       const toggle = () => {

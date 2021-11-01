@@ -6,6 +6,7 @@ import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
 import exampleManifest from "./data/example-manifest.js";
 import fuseOptions from "./data/fuse-options.js";
+import globalTheme from "../../libraries/common/global-theme.js";
 import "../../libraries/thirdparty/color-picker.js";
 
 const promisify =
@@ -19,22 +20,7 @@ let versionName = chrome.runtime.getManifest().version_name;
 
 let isInPopup = window.location.pathname === "/webpages/popup/index.html";
 
-let initialTheme;
-let initialThemePath;
-const lightThemeLink = document.createElement("link");
-lightThemeLink.setAttribute("rel", "stylesheet");
-lightThemeLink.setAttribute("href", "../styles/colors-light.css");
-lightThemeLink.setAttribute("data-below-vue-components", "");
-await new Promise((resolve) => {
-  chrome.storage.sync.get(["globalTheme"], function ({ globalTheme = false }) {
-    if (globalTheme === true) {
-      document.head.appendChild(lightThemeLink);
-    }
-    initialTheme = globalTheme;
-    initialThemePath = globalTheme ? "../../images/icons/moon.svg" : "../../images/icons/theme.svg";
-    resolve();
-  });
-});
+const { theme: initialTheme, setGlobalTheme } = await globalTheme();
 
 let iframeData;
 if (isInPopup) {
@@ -92,8 +78,7 @@ export default {
       version,
       versionName,
       smallMode: false,
-      theme: initialTheme ?? false,
-      themePath: initialThemePath ?? "",
+      theme: initialTheme,
       switchPath: "../../images/icons/switch.svg",
       isOpen: false,
       canCloseOutside: false,
@@ -130,6 +115,9 @@ export default {
     };
   },
   computed: {
+    themePath() {
+      return this.theme ? "../../images/icons/moon.svg" : "../../images/icons/theme.svg";
+    },
     addonList() {
       if (!this.searchInput) {
         this.addonListObjs.forEach((obj) => {
@@ -197,20 +185,8 @@ export default {
       this.searchInputReal = "";
     },
     setTheme(mode) {
-      chrome.storage.sync.get(["globalTheme"], (r) => {
-        let rr = mode ?? true;
-        chrome.storage.sync.set({ globalTheme: rr }, () => {
-          if (rr && r.globalTheme !== rr) {
-            document.head.appendChild(lightThemeLink);
-            this.theme = true;
-            this.themePath = "../../images/icons/moon.svg";
-          } else if (r.globalTheme !== rr) {
-            document.head.removeChild(lightThemeLink);
-            this.theme = false;
-            this.themePath = "../../images/icons/theme.svg";
-          }
-        });
-      });
+      setGlobalTheme(mode);
+      this.theme = mode;
     },
     stopPropagation(e) {
       e.stopPropagation();
