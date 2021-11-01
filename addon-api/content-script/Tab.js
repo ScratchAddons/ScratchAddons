@@ -609,7 +609,7 @@ export default class Tab extends Listenable {
         oldShow.call(this, event, items, rtl);
 
         items.forEach((item, i) => {
-          if (item.separator) {
+          if (i !== 0 && item.separator) {
             const itemElt = document.querySelector(".blocklyContextMenu").children[i];
             itemElt.style.paddingTop = "2px";
             itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
