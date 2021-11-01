@@ -73,7 +73,6 @@ export default {
     },
     isOpen() {
       this.$els.pickr?._valueChanged();
-
     },
     loadColorPicker() {
       this.$options.ready[0].call(this);

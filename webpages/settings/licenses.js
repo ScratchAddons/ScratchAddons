@@ -1,4 +1,3 @@
-
 import globalTheme from "../../libraries/common/global-theme.js";
 
 globalTheme();

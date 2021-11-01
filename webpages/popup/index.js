@@ -19,7 +19,6 @@ function calculatePopupSize() {
 window.addEventListener("load", () => setTimeout(calculatePopupSize, 0));
 
 chrome.runtime.sendMessage("getSettingsInfo", async (res) => {
-
   // If order unspecified, addon goes first. All new popups should be added here.
   const TAB_ORDER = ["scratch-messaging", "cloud-games"];
   const popupObjects = Object.keys(res.addonsEnabled)
