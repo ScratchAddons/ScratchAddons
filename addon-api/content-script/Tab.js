@@ -581,10 +581,10 @@ export default class Tab extends Listenable {
     if (createdAnyBlockContextMenus) return;
     createdAnyBlockContextMenus = true;
 
-    this.traps.getBlockly().then((blockly) => {
-      const oldShow = blockly.ContextMenu.show;
-      blockly.ContextMenu.show = function (event, items, rtl) {
-        const gesture = blockly.mainWorkspace.currentGesture_;
+    this.traps.getBlockly().then((ScratchBlocks) => {
+      const oldShow = ScratchBlocks.ContextMenu.show;
+      ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
+        const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
         const block = gesture.targetBlock_;
 
         for (const { callback, workspace, blocks, flyout, comments } of contextMenuCallbacks) {
