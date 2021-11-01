@@ -32,6 +32,13 @@ export default async function ({ addon, msg, console }) {
     workspace.variableMap_.deleteVariable(variable);
   };
 
+  const syncBlockVariableNameWithActualVariableName = (workspace, id) => {
+    const variable = workspace.getVariableById(id);
+    for (const block of workspace.getAllBlocks()) {
+      block.updateVarName(variable);
+    }
+  };
+
   let _undoRedoPreserveStateCallback = null;
   const finishUndoRedoState = () => {
     if (_undoRedoPreserveStateCallback) {
@@ -44,7 +51,7 @@ export default async function ({ addon, msg, console }) {
   const customUndoVarDelete = function (forward) {
     const workspace = this.getEventWorkspace_();
     if (forward) {
-      _undoRedoPreserveStateCallback = beginPreservingState(this.varId);
+      _undoRedoPreserveStateCallback = beginPreservingState(workspace, this.varId);
       deleteVariableWithoutDeletingBlocks(workspace, this.varId);
     } else {
       workspace.createVariable(this.varName, this.varType, this.varId, this.isLocal, this.isCloud);
@@ -59,14 +66,14 @@ export default async function ({ addon, msg, console }) {
       workspace.createVariable(this.varName, this.varType, this.varId, this.isLocal, this.isCloud);
       finishUndoRedoState();
     } else {
-      _undoRedoPreserveStateCallback = beginPreservingState(this.varId);
+      _undoRedoPreserveStateCallback = beginPreservingState(workspace, this.varId);
       deleteVariableWithoutDeletingBlocks(workspace, this.varId);
     }
   };
 
   const flushBlocklyEventQueue = () => ScratchBlocks.Events.fireNow_();
 
-  const beginPreservingState = (id) => {
+  const beginPreservingState = (workspace, id) => {
     // oldMonitorState is an instance of https://github.com/LLK/scratch-vm/blob/develop/src/engine/monitor-record.js or undefined
     const oldMonitorState = vm.runtime._monitorState.get(id);
     const oldVmVariable = getVmVariable(id);
@@ -96,64 +103,86 @@ export default async function ({ addon, msg, console }) {
           newMonitorState = newMonitorState.set('targetId', null);
           newMonitorState = newMonitorState.set('spriteName', null);
         }
+        if (newVmVariable.name !== oldVmVariable.name) {
+          newMonitorState = newMonitorState.set('params', {
+            [newVmVariable.type === '' ? 'VARIABLE' : 'LIST']: newVmVariable.name
+          });
+          syncBlockVariableNameWithActualVariableName(workspace, id);
+        }
         vm.runtime.requestAddMonitor(newMonitorState);
       }
     };
   };
 
-  const convert = (oldBlocklyVariable) => {
+  const convertVariable = (oldBlocklyVariable, newLocal, newCloud) => {
+    const CLOUD_PREFIX = '☁ ';
+
     const name = oldBlocklyVariable.name;
     const id = oldBlocklyVariable.getId();
     const type = oldBlocklyVariable.type;
+    const isLocal = oldBlocklyVariable.isLocal;
     const isCloud = oldBlocklyVariable.isCloud;
+    if (isLocal === newLocal && isCloud === newCloud) {
+      return;
+    }
 
     // Cloud variables must always be global
-    if (isCloud) {
+    if (newCloud && newLocal) {
       alert(msg('cant-convert-cloud'));
       return;
     }
 
     const editingTarget = vm.editingTarget;
-    const newLocal = !oldBlocklyVariable.isLocal;
-    if (newLocal) {
-      // Stage cannot have local variables
-      if (isStageSelected()) {
-        alert(msg('cant-convert-stage'));
-        return;
-      }
-      // Variables used by unfocused sprites cannot be made local
-      // That includes cases where the variable is used by multiple sprites and where it's only used by an unfocused sprite
-      const targets = getTargetsThatUseVariable(id);
-      if (!targets.every((i) => i === editingTarget)) {
-        if (targets.length > 1) {
-          alert(msg('cant-convert-to-local', {
-            sprites: targets.map(getTargetName).join(', ')
-          }))
-        } else {
-          alert(msg('cant-convert-used-elsewhere', {
-            sprite: getTargetName(targets[0])
-          }));
+    if (isLocal !== newLocal) {
+      if (newLocal) {
+        // Stage cannot have local variables
+        if (isStageSelected()) {
+          alert(msg('cant-convert-stage'));
+          return;
         }
-        return;
-      }
-    } else {
-      // Global variables must not conflict with any local variables
-      const targets = getTargetsWithLocalVariableNamed(name, type).filter((target) => target !== editingTarget);
-      if (targets.length > 0) {
-        alert(msg('cant-convert-conflict', {
-          sprites: targets.map(getTargetName).join(', ')
-        }));
-        return;
+        // Variables used by unfocused sprites cannot be made local
+        // That includes cases where the variable is used by multiple sprites and where it's only used by an unfocused sprite
+        const targets = getTargetsThatUseVariable(id);
+        if (!targets.every((i) => i === editingTarget)) {
+          if (targets.length > 1) {
+            alert(msg('cant-convert-to-local', {
+              sprites: targets.map(getTargetName).join(', ')
+            }))
+          } else {
+            alert(msg('cant-convert-used-elsewhere', {
+              sprite: getTargetName(targets[0])
+            }));
+          }
+          return;
+        }
+      } else {
+        // Global variables must not conflict with any local variables
+        const targets = getTargetsWithLocalVariableNamed(name, type).filter((target) => target !== editingTarget);
+        if (targets.length > 0) {
+          alert(msg('cant-convert-conflict', {
+            sprites: targets.map(getTargetName).join(', ')
+          }));
+          return;
+        }
       }
     }
 
-    const finishPreservingState = beginPreservingState(id);
+    let newName = name;
+    if (isCloud !== newCloud) {
+      if (newCloud) {
+        newName = CLOUD_PREFIX + name;
+      } else if (name.startsWith(CLOUD_PREFIX)) {
+        newName = name.replace(CLOUD_PREFIX, '');
+      }
+    }
 
     const workspace = oldBlocklyVariable.workspace;
+    const finishPreservingState = beginPreservingState(workspace, id);
+
     ScratchBlocks.Events.setGroup(true);
     try {
       deleteVariableWithoutDeletingBlocks(workspace, oldBlocklyVariable);
-      workspace.createVariable(name, type, id, newLocal, /* isCloud */ false);
+      workspace.createVariable(newName, type, id, newLocal, newCloud);
     } finally {
       ScratchBlocks.Events.setGroup(false);
     }
@@ -175,6 +204,96 @@ export default async function ({ addon, msg, console }) {
     finishPreservingState();
   };
 
+  const addMoreOptionsToPrompt = (variable) => {
+    const promptBody = document.querySelector('[class^="prompt_body_"]');
+    if (!promptBody) {
+      return;
+    }
+
+    const root = document.createElement('div');
+
+    const createLabeledInput = (text, value) => {
+      const outer = document.createElement('label');
+      const input = document.createElement('input');
+      if (value === 'checkbox') {
+        input.type = 'checkbox';
+      } else {
+        input.name = 'variableScopeOption';
+        input.type = 'radio';
+        input.value = value;
+      }
+      outer.appendChild(input);
+      const label = document.createElement('span');
+      label.textContent = text;
+      outer.appendChild(label);
+      return {
+        outer,
+        label,
+        input
+      };
+    };
+    const promptDisabledClass = addon.tab.scratchClass('prompt_disabled-label');
+
+    const noLocalsInStageSection = document.createElement('div');
+    noLocalsInStageSection.className = addon.tab.scratchClass('prompt_info-message');
+    noLocalsInStageSection.appendChild(Object.assign(document.createElement('span'), {
+      textContent: addon.tab.scratchMessage('gui.gui.variablePromptAllSpritesMessage')
+    }));
+
+    const scopeSection = document.createElement('div');
+    scopeSection.className = addon.tab.scratchClass('prompt_options-row');
+    const forAllSprites = createLabeledInput(addon.tab.scratchMessage('gui.gui.variableScopeOptionAllSprites'), 'global');
+    const forThisSpriteOnly = createLabeledInput(addon.tab.scratchMessage('gui.gui.variableScopeOptionSpriteOnly'), 'local');
+    forAllSprites.input.checked = !variable.isLocal;
+    forThisSpriteOnly.input.checked = variable.isLocal;
+    scopeSection.appendChild(forAllSprites.outer);
+    scopeSection.appendChild(forThisSpriteOnly.outer);
+
+    const cloudSection = document.createElement('div');
+    cloudSection.className = addon.tab.scratchClass('prompt_cloud-option');
+    const cloudCheckbox = createLabeledInput(addon.tab.scratchMessage('gui.gui.cloudVariableOption'), 'checkbox');
+    cloudCheckbox.input.checked = variable.isCloud;
+    cloudSection.appendChild(cloudCheckbox.outer);
+    const updateDisabledInputs = () => {
+      const thisSpriteOnlyDisabled = cloudCheckbox.input.checked;
+      forThisSpriteOnly.input.disabled = thisSpriteOnlyDisabled;
+      forThisSpriteOnly.label.classList.toggle(promptDisabledClass, thisSpriteOnlyDisabled);
+      if (thisSpriteOnlyDisabled) {
+        forAllSprites.input.click();
+      }
+    };
+    cloudCheckbox.input.addEventListener('change', updateDisabledInputs);
+    updateDisabledInputs();
+
+    if (isStageSelected()) {
+      root.appendChild(noLocalsInStageSection);
+    } else {
+      root.appendChild(scopeSection);
+    }
+    if (variable.type === '') {
+      root.appendChild(cloudSection);
+    }
+    promptBody.insertBefore(root, promptBody.lastChild);
+
+    return {
+      isLocal: () => forThisSpriteOnly.input.checked,
+      isCloud: () => cloudCheckbox.input.checked
+    };
+  };
+
+  // https://github.com/LLK/scratch-blocks/blob/c5014f61e2e538e99601a9e0cb39e339e44c3910/core/variables.js#L470
+  const originalRenameVariable = ScratchBlocks.Variables.renameVariable;
+  ScratchBlocks.Variables.renameVariable = function (workspace, variable, opt_callback) {
+    const ret = originalRenameVariable.call(this, workspace, variable, (...args) => {
+      if (opt_callback) {
+        opt_callback(...args);
+      }
+      convertVariable(variable, prompt.isLocal(), prompt.isCloud());
+    });
+    const prompt = addMoreOptionsToPrompt(variable);
+    return ret;
+  };
+
   addon.tab.createBlockContextMenu((items, block) => {
     if (!addon.self.disabled && (block.getCategory() === "data" || block.getCategory() === "data-lists")) {
       const variable = block.workspace.getVariableById(block.getVars()[0]);
@@ -183,7 +302,7 @@ export default async function ({ addon, msg, console }) {
           enabled: true,
           separator: true,
           text: msg(`to-${variable.isLocal ? 'global' : 'local'}`),
-          callback: () => convert(variable)
+          callback: () => convertVariable(variable, !variable.isLocal, variable.isCloud)
         });
       }
     }
