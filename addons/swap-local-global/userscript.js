@@ -104,12 +104,16 @@ export default async function ({ addon, msg, console }) {
           newMonitorState = newMonitorState.set('spriteName', null);
         }
         if (newVmVariable.name !== oldVmVariable.name) {
+          // TODO: try to outsource this to VM
           newMonitorState = newMonitorState.set('params', {
             [newVmVariable.type === '' ? 'VARIABLE' : 'LIST']: newVmVariable.name
           });
-          syncBlockVariableNameWithActualVariableName(workspace, id);
         }
         vm.runtime.requestAddMonitor(newMonitorState);
+      }
+
+      if (newVmVariable.name !== oldVmVariable.name) {
+        syncBlockVariableNameWithActualVariableName(workspace, id);
       }
     };
   };
@@ -188,7 +192,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     // 2 items will be added to the queue: a variable create and delete
-    // override their undo handlers to make undo/redo work properly
+    // We override their undo handlers to make undo/redo work properly
     flushBlocklyEventQueue();
     const stack = workspace.undoStack_;
     const createEvent = stack[stack.length - 1];
