@@ -209,6 +209,10 @@ export default async function ({ addon, msg, console }) {
   };
 
   const addMoreOptionsToPrompt = (variable) => {
+    if (addon.self.disabled) {
+      return;
+    }
+
     const promptBody = document.querySelector('[class^="prompt_body_"]');
     if (!promptBody) {
       return;
@@ -310,7 +314,9 @@ export default async function ({ addon, msg, console }) {
       if (opt_callback) {
         opt_callback(...args);
       }
-      convertVariable(variable, prompt.isLocal(), prompt.isCloud());
+      if (prompt) {
+        convertVariable(variable, prompt.isLocal(), prompt.isCloud());
+      }
     });
     const prompt = addMoreOptionsToPrompt(variable);
     return ret;
