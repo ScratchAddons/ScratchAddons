@@ -1,0 +1,17 @@
+{
+  "name": "Benchmark angles on rotational input",
+  "description": "Hold shift while dragging the rotational input to set the angle to perfect benchmark angles (such as 45 degrees, 90 degrees, -45 degrees, or -90 degrees).",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "tags": ["editor"],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ]
+}
