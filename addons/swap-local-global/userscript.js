@@ -246,13 +246,15 @@ export default async function ({ addon, msg, console }) {
     const promptDisabledClass = addon.tab.scratchClass('prompt_disabled-label');
 
     const noLocalsInStageSection = document.createElement('div');
-    noLocalsInStageSection.className = addon.tab.scratchClass('prompt_info-message');
+    noLocalsInStageSection.className = addon.tab.scratchClass('prompt_info-message', 'prompt_cloud-option', {
+      others: 'sa-swap-local-global-stage'
+    });
     noLocalsInStageSection.appendChild(Object.assign(document.createElement('span'), {
       textContent: addon.tab.scratchMessage('gui.gui.variablePromptAllSpritesMessage')
     }));
 
     const scopeSection = document.createElement('div');
-    scopeSection.className = addon.tab.scratchClass('prompt_options-row');
+    scopeSection.className = addon.tab.scratchClass('prompt_options-row', 'prompt_cloud-option');
     const forAllSprites = createLabeledInput(addon.tab.scratchMessage('gui.gui.variableScopeOptionAllSprites'), 'global');
     const forThisSpriteOnly = createLabeledInput(addon.tab.scratchMessage('gui.gui.variableScopeOptionSpriteOnly'), 'local');
     forAllSprites.input.checked = !variable.isLocal;
@@ -276,13 +278,22 @@ export default async function ({ addon, msg, console }) {
     cloudCheckbox.input.addEventListener('change', updateDisabledInputs);
     updateDisabledInputs();
 
+    let isAnythingConfigurable = false;
     if (isStageSelected()) {
       root.appendChild(noLocalsInStageSection);
     } else {
+      isAnythingConfigurable = true;
       root.appendChild(scopeSection);
     }
     if (variable.type === '') {
+      isAnythingConfigurable = true;
       root.appendChild(cloudSection);
+    }
+    if (isAnythingConfigurable) {
+      root.prepend(Object.assign(document.createElement('div'), {
+        textContent: msg('edit'),
+        className: 'sa-swap-local-global-hint'
+      }));
     }
     promptBody.insertBefore(root, promptBody.lastChild);
 

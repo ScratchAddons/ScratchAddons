@@ -12,6 +12,12 @@
       "matches": ["projects"]
     }
   ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
   "tags": ["editor", "codeEditor"],
   "versionAdded": "1.22.0",
   "dynamicEnable": true,

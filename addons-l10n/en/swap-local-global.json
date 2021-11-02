@@ -9,5 +9,6 @@
   "swap-local-global/edit-variable-option": "Rename or edit variable",
   "swap-local-global/edit-list-option": "Rename or edit list",
   "swap-local-global/edit-variable-header": "Edit Variable",
-  "swap-local-global/edit-list-header": "Edit List"
+  "swap-local-global/edit-list-header": "Edit List",
+  "swap-local-global/edit": "Edit properties:"
 }
