@@ -1,6 +1,6 @@
 {
-  "name": "Convert variables and lists between \"For all sprites\" and \"For this sprite only\"",
-  "description": "Adds a right click context menu item on variable and list blocks to convert them from \"For all sprites\" to \"For this sprite only\" or the other way around.",
+  "name": "Change variable or list scope and toggle cloud variable",
+  "description": "Adds more options to the variable or list rename screen to allow changing between \"For all sprites\" and \"For this sprite only\" and toggling whether it is a cloud variable or not. Also adds a context menu on list and variable blocks to change scope.",
   "credits": [
     {
       "name": "GarboMuffin"
