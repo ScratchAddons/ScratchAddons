@@ -26,10 +26,12 @@ export default async function ({ addon, global, console, msg }) {
   });
 
   // Keyboard shortcut for visiting top hit
+  search.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.key === "Enter" && searchBar.value !== "" && resultsContainer.childNodes.length > 0)
+      window.location.href = resultsContainer.childNodes[0].querySelector("a").href;
+  });
   search.addEventListener("submit", (e) => {
     e.preventDefault();
-    if (searchBar.value !== "" && resultsContainer.childNodes.length > 0)
-      window.location.href = resultsContainer.childNodes[0].querySelector("a").href;
   });
 
   // When the user makes a keystroke in the search bar
@@ -93,7 +95,7 @@ export default async function ({ addon, global, console, msg }) {
       searchBar.setAttribute("placeholder", msg("project-placeholder"));
     }
     // Add new search elements
-    await searchDropdown;
+    await addon.tab.waitForElement(".dropdown.button.grey.small");
     searchDropdown.before(search);
     // Update the element that stores the search results
     resultsContainer = await addon.tab.waitForElement(".media-list > .media-list");
@@ -196,7 +198,7 @@ export default async function ({ addon, global, console, msg }) {
       // Begin the process of loading more projects
       loadMore.click();
       currentPage++;
-      // Display "Loading..." status
+      // Display "Searching..." status
       statusHeader.innerText = msg("progress-header");
       statusTip.innerText = msg("progress-tip", { number: (currentPage - 2) * 40 });
       // Detect if the next page of projects exists
@@ -212,10 +214,10 @@ export default async function ({ addon, global, console, msg }) {
         sort = sort[0].querySelector("li.selected");
         if (window.location.href.includes("trash")) {
           fetchUrl = "trashed/all";
-        } else if (window.location.href.includes("shared")) {
-          fetchUrl = "projects/shared";
         } else if (window.location.href.includes("unshared")) {
           fetchUrl = "projects/notshared";
+        } else if (window.location.href.includes("shared")) {
+          fetchUrl = "projects/shared";
         } else {
           fetchUrl = "projects/all";
         }

@@ -167,8 +167,7 @@
   height: 48px;
   font-size: 13px;
 }
-input:focus,
-textarea:focus {
+#search-my-stuff-input:focus {
   box-shadow: 0 0 0 4px hsla(163, 85%, 40%, 0.25);
   border-color: hsl(163, 85%, 40%);
 }
