@@ -10,7 +10,8 @@
   white-space: pre-wrap;
   pointer-events: none;
 
-  background-color: rgb(249 249 249 / 75%);
+  color: rgb(87, 94, 117);
+  background-color: rgb(255 255 255 / 75%);
   border-style: none;
   border-radius: 8px;
   filter: drop-shadow(0px 5px 5px rgb(0 0 0 / 10%));
@@ -30,10 +31,6 @@
 }
 
 .sa-comment-preview-reduce-transparency {
-  background-color: rgb(249 249 249);
-  border-style: solid;
-  border-width: 2px;
-  border-color: #c3ccd9;
-  filter: none;
+  background-color: rgb(255 255 255);
   backdrop-filter: none;
 }
