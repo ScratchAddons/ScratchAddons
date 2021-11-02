@@ -1665,6 +1665,22 @@
       }
     },
     {
+      "url": "darker_banners_scratchr2.css",
+      "matches": ["isNotScratchWWW"],
+      "if": {
+        "settings": { "darkBanners": "darker" },
+        "addonEnabled": ["scratchr2"]
+      }
+    },
+    {
+      "url": "desaturated_banners_scratchr2.css",
+      "matches": ["isNotScratchWWW"],
+      "if": {
+        "settings": { "darkBanners": "desaturated" },
+        "addonEnabled": ["scratchr2"]
+      }
+    },
+    {
       "url": "experimental_search.css",
       "matches": ["https://scratch.mit.edu/explore/*", "https://scratch.mit.edu/search/*"]
     },
