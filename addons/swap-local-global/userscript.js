@@ -214,6 +214,13 @@ export default async function ({ addon, msg, console }) {
       return;
     }
 
+    const headerTitle = promptBody.parentElement.querySelector('[class^="modal_header-item_2zQTd"]');
+    if (variable.type === '') {
+      headerTitle.textContent = msg('edit-variable-header');
+    } else {
+      headerTitle.textContent = msg('edit-list-header');
+    }
+
     const root = document.createElement('div');
 
     const createLabeledInput = (text, value) => {
@@ -302,6 +309,13 @@ export default async function ({ addon, msg, console }) {
     if (!addon.self.disabled && (block.getCategory() === "data" || block.getCategory() === "data-lists")) {
       const variable = block.workspace.getVariableById(block.getVars()[0]);
       if (variable) {
+        if (items.length > 0) {
+          if (items[0].text === ScratchBlocks.ScratchMsgs.translate('RENAME_VARIABLE')) {
+            items[0].text = msg('edit-variable-option');
+          } else if (items[0].text === ScratchBlocks.ScratchMsgs.translate('RENAME_LIST')) {
+            items[0].text = msg('edit-list-option');
+          }
+        }
         items.push({
           enabled: true,
           separator: true,
