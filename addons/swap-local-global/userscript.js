@@ -85,6 +85,7 @@ export default async function ({ addon, msg, console }) {
         newVmVariable.value = oldVmVariable.value;
       }
 
+      // Update the variable monitor (state is maintained separately)
       if (oldMonitorState) {
         if (oldMonitorState.visible) {
           vm.runtime.monitorBlocks.changeBlock({
@@ -104,10 +105,11 @@ export default async function ({ addon, msg, console }) {
           newMonitorState = newMonitorState.set('spriteName', null);
         }
         if (newVmVariable.name !== oldVmVariable.name) {
-          // TODO: try to outsource this to VM
-          newMonitorState = newMonitorState.set('params', {
-            [newVmVariable.type === '' ? 'VARIABLE' : 'LIST']: newVmVariable.name
-          });
+          const monitorBlocks = vm.runtime.monitorBlocks;
+          const block = monitorBlocks.getBlock(id);
+          if (block) {
+            newMonitorState = newMonitorState.set('params', monitorBlocks._getBlockParams(block));
+          }
         }
         vm.runtime.requestAddMonitor(newMonitorState);
       }
