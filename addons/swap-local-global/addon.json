@@ -1,6 +1,6 @@
 {
-  "name": "Change variable or list scope and toggle cloud variable",
-  "description": "Adds more options to the variable or list rename screen to allow changing between \"For all sprites\" and \"For this sprite only\" and toggling whether it is a cloud variable or not. Also adds a context menu on list and variable blocks to change scope.",
+  "name": "Switch variables between \"For all sprites\" and \"For this sprite only\"",
+  "description": "Adds more options when renaming an existing variable or list: allows changing between \"For all sprites\" and \"For this sprite only\" and whether variables are stored in the cloud. Also adds a new option when right clicking a variable/list to quickly change its scope.",
   "credits": [
     {
       "name": "GarboMuffin"
