@@ -106,6 +106,7 @@
   "block-duplicate",
   "disable-paste-offset",
   "emoji-picker",
+  "fix-editor-comments",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
