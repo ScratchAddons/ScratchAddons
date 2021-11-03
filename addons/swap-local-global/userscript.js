@@ -238,6 +238,7 @@ export default async function ({ addon, msg, console }) {
     }
 
     const root = document.createElement("div");
+    addon.tab.displayNoneWhileDisabled(root);
 
     const createLabeledInput = (text, value) => {
       const outer = document.createElement("label");
@@ -336,7 +337,7 @@ export default async function ({ addon, msg, console }) {
       if (opt_callback) {
         opt_callback(...args);
       }
-      if (prompt) {
+      if (!addon.self.disabled && prompt) {
         convertVariable(variable, prompt.isLocal(), prompt.isCloud());
       }
     });
