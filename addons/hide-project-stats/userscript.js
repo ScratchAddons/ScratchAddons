@@ -10,7 +10,10 @@ export default async function ({ addon, global, console }) {
    * Love and favorite counts are handled separately since they get custom
    * labels.
    */
-  function refreshLabels() {
+  async function refreshLabels() {
+    await addon.tab.waitForElement(".project-loves");
+    loves.buttonElement = document.querySelector(`.project-${loves.name}s`);
+    favorites.buttonElement = document.querySelector(`.project-${favorites.name}s`);
     refreshButton(loves);
     refreshButton(favorites);
     // If the user has the "show stats on my own projects" setting enabled, show the remix and view count if the user owns the project
@@ -53,9 +56,6 @@ export default async function ({ addon, global, console }) {
   }
 
   // Get the button elements
-  await addon.tab.waitForElement(".project-loves", { markAsSeen: true });
-  loves.buttonElement = document.querySelector(`.project-${loves.name}s`);
-  favorites.buttonElement = document.querySelector(`.project-${favorites.name}s`);
   refreshLabels();
 
   // Re-calculate visibility of various elements when settings change
@@ -68,10 +68,15 @@ export default async function ({ addon, global, console }) {
   addon.self.addEventListener("reenabled", () => {
     refreshLabels();
   });
+  // For the case of exiting and returning to the project page
+  addon.tab.addEventListener("urlChange", async () => {
+    refreshLabels();
+  });
 
   // Since the user can sign in during the same session, the login status always needs to be updated
   while (true) {
-    await addon.tab.waitForElement(".project-loves", { markAsSeen: true });
+    await addon.tab.waitForElement(".project-favorites", { markAsSeen: true });
     visitingOwnProject = username !== null && document.querySelector(".button.action-button.report-button") === null;
+    refreshLabels();
   }
 }
