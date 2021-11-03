@@ -666,215 +666,196 @@ export default async function ({ addon, global, console, msg }) {
     };
   };
 
-  const patchSpriteSelectorItem = (SpriteSelectorItem) => {
-    // SpriteSelectorItem should be: https://github.com/LLK/scratch-gui/blob/29d9851778febe4e69fa5111bf7559160611e366/src/containers/sprite-selector-item.jsx#L16
-
-    const closeContextMenu = () => {
-      document.body.dispatchEvent(new MouseEvent("mousedown", { relatedTarget: document.body, bubbles: true }));
-    };
-
-    const createMenuItem = (text, callback, border) => {
-      const el = document.createElement("div");
-      el.className = addon.tab.scratchClass(
-        "context-menu_menu-item",
-        border ? "context-menu_menu-item-bordered" : null,
-        {
-          others: ["react-contextmenu-item", "sa-folders-contextmenu-item"],
-        }
-      );
-      el.setAttribute("role", "menuitem");
-      el.setAttribute("tabindex", "-1");
-      el.setAttribute("aria-disabled", "false");
-      el.textContent = text;
-      el.addEventListener(
-        "click",
-        (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          closeContextMenu();
-          callback();
-        },
-        true
-      );
-      return el;
-    };
-
-    const getAllFolders = (component) => {
-      const result = new Set();
-      let items;
-      if (component.props.dragType === "SPRITE") {
-        items = currentSpriteItems;
-      } else {
-        items = currentAssetItems;
-      }
-      for (const item of items) {
-        const data = getItemData(item);
-        if (typeof data.folder === "string") {
-          result.add(data.folder);
-        }
-      }
-      return Array.from(result);
-    };
-
-    const addContextMenuItems = (component) => {
-      const data = getItemData(component.props);
-      if (!data) {
-        return;
-      }
-
-      const menu = component.ref.querySelector("nav[role=menu]");
-      if (!menu) {
-        return;
-      }
-
-      const oldContainer = menu.querySelector(".sa-folders-contextmenu-container");
-      if (oldContainer) {
-        oldContainer.remove();
-      }
-      const container = document.createElement("div");
-      container.className = "sa-folders-contextmenu-container";
-      menu.appendChild(container);
-
+  const getAllFolders = (component) => {
+    const result = new Set();
+    let items;
+    if (component.props.dragType === "SPRITE") {
+      items = currentSpriteItems;
+    } else {
+      items = currentAssetItems;
+    }
+    for (const item of items) {
+      const data = getItemData(item);
       if (typeof data.folder === "string") {
-        menu.setAttribute("sa-folders-context-type", "folder");
-
-        const renameItems = (newName) => {
-          const isOpen = isFolderOpen(component, data.folder);
-          setFolderOpen(component, data.folder, false);
-          if (isOpen && typeof newName === "string") {
-            setFolderOpen(component, newName, true);
-          }
-          if (component.props.dragType === "SPRITE") {
-            for (const target of vm.runtime.targets) {
-              if (target.isOriginal) {
-                if (getFolderFromName(target.getName()) === data.folder) {
-                  vm.renameSprite(target.id, ensureNotReserved(setFolderOfName(target.getName(), newName)));
-                }
-              }
-            }
-            vm.emitWorkspaceUpdate();
-            fixTargetOrder();
-          } else if (component.props.dragType === "COSTUME") {
-            for (let i = 0; i < vm.editingTarget.sprite.costumes.length; i++) {
-              const costume = vm.editingTarget.sprite.costumes[i];
-              if (getFolderFromName(costume.name) === data.folder) {
-                vm.renameCostume(i, setFolderOfName(costume.name, newName));
-              }
-            }
-            fixCostumeOrder();
-          } else if (component.props.dragType === "SOUND") {
-            for (let i = 0; i < vm.editingTarget.sprite.sounds.length; i++) {
-              const sound = vm.editingTarget.sprite.sounds[i];
-              if (getFolderFromName(sound.name) === data.folder) {
-                vm.renameSound(i, setFolderOfName(sound.name, newName));
-              }
-            }
-            fixSoundOrder();
-          }
-        };
-
-        const renameFolder = () => {
-          let newName = prompt(msg("rename-folder-prompt"), data.folder);
-          // Prompt cancelled, do not rename
-          if (newName === null) {
-            return;
-          }
-          if (!isValidFolderName(newName)) {
-            alert(msg("name-not-allowed"));
-            return;
-          }
-          // Empty name will remove the folder
-          if (!newName) {
-            newName = null;
-          }
-          renameItems(newName);
-        };
-
-        const removeFolder = () => {
-          renameItems(null);
-        };
-
-        container.appendChild(createMenuItem(msg("rename-folder"), renameFolder));
-        container.appendChild(createMenuItem(msg("remove-folder"), removeFolder));
-      } else {
-        menu.setAttribute("sa-folders-context-type", "asset");
-
-        const setFolder = (folder) => {
-          if (component.props.dragType === "SPRITE") {
-            const target = vm.runtime.getTargetById(component.props.id);
-            vm.renameSprite(component.props.id, ensureNotReserved(setFolderOfName(target.getName(), folder)));
-            fixTargetOrder();
-            vm.emitWorkspaceUpdate();
-          } else if (component.props.dragType === "COSTUME") {
-            const data = getItemData(component.props);
-            const index = data.realIndex;
-            const asset = vm.editingTarget.sprite.costumes[index];
-            vm.renameCostume(vm.editingTarget.sprite.costumes.indexOf(asset), setFolderOfName(asset.name, folder));
-            fixCostumeOrder();
-          } else if (component.props.dragType === "SOUND") {
-            const data = getItemData(component.props);
-            const index = data.realIndex;
-            const asset = vm.editingTarget.sprite.sounds[index];
-            vm.renameSound(vm.editingTarget.sprite.sounds.indexOf(asset), setFolderOfName(asset.name, folder));
-            fixSoundOrder();
-          }
-        };
-
-        const createFolder = () => {
-          const name = prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
-          if (name === null) {
-            return;
-          }
-          if (!isValidFolderName(name)) {
-            alert(msg("name-not-allowed"));
-            return;
-          }
-          setFolder(name);
-        };
-
-        container.appendChild(createMenuItem(msg("create-folder"), createFolder, true));
-
-        const currentFolder = data.inFolder;
-        if (typeof currentFolder === "string") {
-          container.appendChild(createMenuItem(msg("remove-from-folder"), () => setFolder(null)));
-        }
-        for (const folder of getAllFolders(component)) {
-          if (folder !== currentFolder) {
-            container.appendChild(
-              createMenuItem(
-                msg("add-to-folder", {
-                  folder,
-                }),
-                () => setFolder(folder)
-              )
-            );
-          }
-        }
+        result.add(data.folder);
       }
-    };
+    }
+    return Array.from(result);
+  };
 
-    const isFolderOpen = (component, folder) => {
-      const sortableHOCInstance = getSortableHOCFromElement(component.ref);
-      const folders = (sortableHOCInstance.state && sortableHOCInstance.state.folders) || [];
-      return folders.includes(folder);
-    };
+  const isFolderOpen = (component, folder) => {
+    const sortableHOCInstance = getSortableHOCFromElement(component.ref);
+    const folders = (sortableHOCInstance.state && sortableHOCInstance.state.folders) || [];
+    return folders.includes(folder);
+  };
 
-    const setFolderOpen = (component, folder, open) => {
-      const sortableHOCInstance = getSortableHOCFromElement(component.ref);
-      sortableHOCInstance.setState((prevState) => {
-        let folders = (prevState && prevState.folders) || [];
-        folders = folders.filter((i) => i !== folder);
-        if (open) {
-          return {
-            folders: [...folders, folder],
-          };
-        }
+  const setFolderOpen = (component, folder, open) => {
+    const sortableHOCInstance = getSortableHOCFromElement(component.ref);
+    sortableHOCInstance.setState((prevState) => {
+      let folders = (prevState && prevState.folders) || [];
+      folders = folders.filter((i) => i !== folder);
+      if (open) {
         return {
-          folders,
+          folders: [...folders, folder],
         };
-      });
-    };
+      }
+      return {
+        folders,
+      };
+    });
+  };
 
+  addon.tab.createEditorContextMenu((ctxType, ctx) => {
+    if (ctxType !== "sprite" && ctxType !== "costume" && ctxType !== "sound") return;
+    const component = ctx.target[addon.tab.traps.getInternalKey(ctx.target)].return.return.return.stateNode;
+    const data = getItemData(component.props);
+    if (!data) return;
+    if (typeof data.folder === "string") {
+      ctx.target.setAttribute("sa-folders-context-type", "folder");
+
+      const renameItems = (newName) => {
+        const isOpen = isFolderOpen(component, data.folder);
+        setFolderOpen(component, data.folder, false);
+        if (isOpen && typeof newName === "string") {
+          setFolderOpen(component, newName, true);
+        }
+        if (component.props.dragType === "SPRITE") {
+          for (const target of vm.runtime.targets) {
+            if (target.isOriginal) {
+              if (getFolderFromName(target.getName()) === data.folder) {
+                vm.renameSprite(target.id, ensureNotReserved(setFolderOfName(target.getName(), newName)));
+              }
+            }
+          }
+          vm.emitWorkspaceUpdate();
+          fixTargetOrder();
+        } else if (component.props.dragType === "COSTUME") {
+          for (let i = 0; i < vm.editingTarget.sprite.costumes.length; i++) {
+            const costume = vm.editingTarget.sprite.costumes[i];
+            if (getFolderFromName(costume.name) === data.folder) {
+              vm.renameCostume(i, setFolderOfName(costume.name, newName));
+            }
+          }
+          fixCostumeOrder();
+        } else if (component.props.dragType === "SOUND") {
+          for (let i = 0; i < vm.editingTarget.sprite.sounds.length; i++) {
+            const sound = vm.editingTarget.sprite.sounds[i];
+            if (getFolderFromName(sound.name) === data.folder) {
+              vm.renameSound(i, setFolderOfName(sound.name, newName));
+            }
+          }
+          fixSoundOrder();
+        }
+      };
+      const renameFolder = () => {
+        let newName = prompt(msg("rename-folder-prompt"), data.folder);
+        // Prompt cancelled, do not rename
+        if (newName === null) {
+          return;
+        }
+        if (!isValidFolderName(newName)) {
+          alert(msg("name-not-allowed"));
+          return;
+        }
+        // Empty name will remove the folder
+        if (!newName) {
+          newName = null;
+        }
+        renameItems(newName);
+      };
+
+      const removeFolder = () => {
+        renameItems(null);
+      };
+      return [
+        {
+          className: "sa-folders-rename-folder",
+          label: msg("rename-folder"),
+          callback: renameFolder,
+          position: "assetContextMenuAfterDelete",
+          order: 10,
+        },
+        {
+          className: "sa-folders-remove-folder",
+          label: msg("remove-folder"),
+          callback: removeFolder,
+          position: "assetContextMenuAfterDelete",
+          order: 11,
+        },
+      ];
+    } else {
+      ctx.target.setAttribute("sa-folders-context-type", "asset");
+      const setFolder = (folder) => {
+        if (component.props.dragType === "SPRITE") {
+          const target = vm.runtime.getTargetById(component.props.id);
+          vm.renameSprite(component.props.id, ensureNotReserved(setFolderOfName(target.getName(), folder)));
+          fixTargetOrder();
+          vm.emitWorkspaceUpdate();
+        } else if (component.props.dragType === "COSTUME") {
+          const data = getItemData(component.props);
+          const index = data.realIndex;
+          const asset = vm.editingTarget.sprite.costumes[index];
+          vm.renameCostume(vm.editingTarget.sprite.costumes.indexOf(asset), setFolderOfName(asset.name, folder));
+          fixCostumeOrder();
+        } else if (component.props.dragType === "SOUND") {
+          const data = getItemData(component.props);
+          const index = data.realIndex;
+          const asset = vm.editingTarget.sprite.sounds[index];
+          vm.renameSound(vm.editingTarget.sprite.sounds.indexOf(asset), setFolderOfName(asset.name, folder));
+          fixSoundOrder();
+        }
+      };
+
+      const createFolder = () => {
+        const name = prompt(msg("name-prompt"), getNameWithoutFolder(data.realName));
+        if (name === null) {
+          return;
+        }
+        if (!isValidFolderName(name)) {
+          alert(msg("name-not-allowed"));
+          return;
+        }
+        setFolder(name);
+      };
+      const base = [
+        {
+          border: true,
+          className: "sa-folders-create-folder",
+          label: msg("create-folder"),
+          callback: createFolder,
+          position: "assetContextMenuAfterDelete",
+          order: 13,
+        },
+      ];
+      const currentFolder = data.inFolder;
+      if (typeof currentFolder === "string") {
+        base.push({
+          className: "sa-folders-remove-from-folder",
+          label: msg("remove-from-folder"),
+          callback: () => setFolder(null),
+          position: "assetContextMenuAfterDelete",
+          order: 14,
+        });
+      }
+      return base.concat(
+        getAllFolders(component)
+          .filter((folder) => folder !== currentFolder)
+          .map((folder, i) => {
+            return {
+              className: "sa-folders-add-to-folder",
+              label: msg("add-to-folder", {
+                folder,
+              }),
+              callback: () => setFolder(folder),
+              position: "assetContextMenuAfterDelete",
+              order: 20 + i,
+            };
+          })
+      );
+    }
+  });
+
+  const patchSpriteSelectorItem = (SpriteSelectorItem) => {
     for (const method of ["handleDelete", "handleDuplicate", "handleExport"]) {
       const original = SpriteSelectorItem.prototype[method];
       SpriteSelectorItem.prototype[method] = function (...args) {
@@ -939,16 +920,6 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
       return originalHandleClick.call(this, ...args);
-    };
-
-    const originalSetRef = SpriteSelectorItem.prototype.setRef;
-    SpriteSelectorItem.prototype.setRef = function (ref) {
-      originalSetRef.call(this, ref);
-      if (ref) {
-        ref.elem.addEventListener("contextmenu", (e) => {
-          addContextMenuItems(this);
-        });
-      }
     };
 
     const originalRender = SpriteSelectorItem.prototype.render;

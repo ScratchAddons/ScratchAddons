@@ -101,6 +101,11 @@
   "hide-new-variables",
   "move-to-top-bottom",
   "search-my-stuff",
+  "fullscreen",
+  "echo-effect",
+  "block-duplicate",
+  "disable-paste-offset",
+  "emoji-picker",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

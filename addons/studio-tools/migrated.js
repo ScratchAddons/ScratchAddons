@@ -18,7 +18,7 @@ export default async ({ addon, console, msg }) => {
   let isCurator = false;
   let canLeave = false;
   const checkPermissions = () => {
-    isOwner = redux.state.studio.owner === redux.state.session.session?.user?.id;
+    isOwner = (redux.state.studio.host || redux.state.studio.owner) === redux.state.session.session?.user?.id;
     isManager = redux.state.studio.manager || isOwner;
     isCurator = redux.state.studio.curator;
     canLeave = (isCurator || isManager) && !isOwner;
@@ -190,8 +190,12 @@ export default async ({ addon, console, msg }) => {
   };
   render();
   addon.tab.addEventListener("urlChange", render);
+  redux.initialize();
   redux.addEventListener("statechanged", (e) => {
-    if (e.detail.action.type === "SET_ROLES" || (e.detail.action.type === "SET_INFO" && e.detail.action.info.owner)) {
+    if (
+      e.detail.action.type === "SET_ROLES" ||
+      (e.detail.action.type === "SET_INFO" && (e.detail.action.info.host || e.detail.action.info.owner))
+    ) {
       checkPermissions();
       render();
     }

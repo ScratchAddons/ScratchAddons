@@ -10,7 +10,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 16.x
       - name: Generate token
         uses: tibdex/github-app-token@v1
         id: generate-token
@@ -18,6 +18,6 @@ jobs:
           app_id: ${{ secrets.BOT_APP_ID }}
           private_key: ${{ secrets.BOT_PRIVATE_KEY }}
       - name: Run unittest
-        uses: ScratchAddons/meow@master
+        uses: ScratchAddons/meow@main
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
