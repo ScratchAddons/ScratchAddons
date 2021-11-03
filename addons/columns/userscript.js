@@ -8,16 +8,8 @@ export default async function ({ addon, msg, global, console }) {
   Blockly.Toolbox.prototype.position = function () {
     _ToolboxPosition.call(this);
 
-    var treeDiv = this.HtmlDiv;
-    if (!treeDiv) {
-      // Not initialized yet.
-      return;
-    }
-    // var svg = this.workspace_.getParentSvg();
-    // var svgSize = Blockly.svgSize(svg);
-
     // Update flyout position when category menu height changes.
-    if (!this.HtmlDiv._observer) {
+    if (this.HtmlDiv && !this.HtmlDiv._observer) {
       this.HtmlDiv._observer = new ResizeObserver(() => {
         this.flyout_.position();
       });
@@ -74,14 +66,16 @@ export default async function ({ addon, msg, global, console }) {
   const _VerticalFlyoutGetWidth = Blockly.VerticalFlyout.prototype.getWidth;
   Blockly.VerticalFlyout.prototype.getWidth = function () {
     // In RTL, this will be called by Blockly to position blocks inside the flyout.
-    if (addon.self.disabled) return _VerticalFlyoutGetWidth.call(this);
-    return _VerticalFlyoutGetWidth.call(this) + 60;
+    let width = _VerticalFlyoutGetWidth.call(this);
+    if (!addon.self.disabled) width += 60;
+    return width;
   };
 
   // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L595
   const _CategoryMenuCreateDom = Blockly.Toolbox.CategoryMenu.prototype.createDom;
   Blockly.Toolbox.CategoryMenu.prototype.createDom = function () {
     _CategoryMenuCreateDom.call(this);
+    if (addon.self.disabled) return;
     this.secondTable = document.createElement("div");
     this.secondTable.className =
       "scratchCategorySecondMenu " +
@@ -107,23 +101,27 @@ export default async function ({ addon, msg, global, console }) {
       "myBlocks",
     ];
     const extensionsNodes = [];
-    domTree.childNodes.forEach((child) => {
-      if (child.tagName === "category" && !Categories.includes(child.id)) {
-        extensionsNodes.push(child.cloneNode(true));
-        child.remove();
-      }
-    });
-    _CategoryMenuPopulate.call(this, domTree);
+    const extensionTree = domTree.cloneNode(true);
+    if (!addon.self.disabled) {
+      extensionTree.childNodes.forEach((child) => {
+        if (child.tagName === "category" && !Categories.includes(child.id)) {
+          extensionsNodes.push(child.cloneNode(true));
+          child.remove();
+        }
+      });
+    }
+    _CategoryMenuPopulate.call(this, extensionTree);
     for (const child of extensionsNodes) {
       const row = document.createElement("div");
       row.className = "scratchCategoryMenuRow";
       this.secondTable.appendChild(row);
       if (child) {
-        console.log(this, row, child);
         this.categories_.push(new Blockly.Toolbox.Category(this, row, child));
       }
     }
-    this.height_ = this.table.offsetHeight + this.secondTable.offsetHeight;
+    if (!addon.self.disabled) {
+      this.height_ = this.table.offsetHeight + this.secondTable.offsetHeight;
+    }
   };
 
   // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L639
