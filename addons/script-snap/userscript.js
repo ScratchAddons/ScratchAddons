@@ -1,8 +1,15 @@
 export default async function ({ addon, global, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
-  const workspace = await Blockly.getMainWorkspace();
+  let workspace = Blockly.getMainWorkspace();
+  // Handle this workspace on init as well as all future workspaces
+  const originalInit = Blockly.init_;
+  Blockly.init_ = function (...args) {
+    workspace = args[0];
+    if (!addon.self.disabled) setGrid(true);
+    return originalInit.call(this, ...args);
+  };
 
-  setGrid(true);
+  setGrid();
 
   addon.settings.addEventListener("change", () => setGrid(true));
   addon.self.addEventListener("disabled", () => setGrid(false));
