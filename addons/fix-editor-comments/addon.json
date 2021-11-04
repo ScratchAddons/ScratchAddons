@@ -1,7 +1,7 @@
 {
   "name": "Better editor comments",
   "description": "Makes numerous changes to comments in the Scratch editor: fixes a bug where comments attached to blocks don't save their positions correctly after dragging, adds a scroll bar on comments where text is clipped, and allows you to edit standalone comments by clicking directly where you want to start typing.",
-  "tags": ["editor", "codeEditor"],
+  "tags": ["editor", "codeEditor", "recommended"],
   "credits": [
     {
       "name": "GarboMuffin",
