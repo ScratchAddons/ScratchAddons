@@ -9,8 +9,14 @@
   column-gap: 0.5rem;
   padding: 0.25rem;
 }
+
 .scratchCategorySecondMenu {
   padding-bottom: 2.25rem;
+}
+
+.scratchCategorySecondMenu:empty {
+  padding-top: 0;
+  padding-bottom: 2rem;
 }
 
 .scratchCategoryMenuItem {
