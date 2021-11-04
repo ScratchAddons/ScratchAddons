@@ -1,7 +1,7 @@
 export default async function ({ addon, global, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
   let workspace = Blockly.getMainWorkspace();
-  // Handle this workspace on init as well as all future workspaces
+  // Handle future workspaces
   const originalInit = Blockly.init_;
   Blockly.init_ = function (...args) {
     workspace = args[0];
@@ -9,7 +9,7 @@ export default async function ({ addon, global, console }) {
     return originalInit.call(this, ...args);
   };
 
-  setGrid();
+  setGrid(true);
 
   addon.settings.addEventListener("change", () => setGrid(true));
   addon.self.addEventListener("disabled", () => setGrid(false));
@@ -17,7 +17,8 @@ export default async function ({ addon, global, console }) {
 
   function setGrid(enabled) {
     workspace.grid_.snapToGrid_ = enabled;
-    workspace.grid_.spacing_ = addon.settings.get("grid");
+    if (enabled) workspace.grid_.spacing_ = addon.settings.get("grid");
+    else workspace.grid_.spacing_ = 40;
     workspace.grid_.update(workspace.scale);
   }
 }
