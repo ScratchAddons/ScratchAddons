@@ -36,6 +36,20 @@ export default async function ({ addon, global, console, msg }) {
         className: "sa-animated-thumb-text",
       })
     );
+    const modalButtons = Object.assign(document.createElement("div"), {
+      className: "flex-row action-buttons sa-animated-thumb-popup-actions",
+    });
+    const uploadFromFileButton = Object.assign(document.createElement("button"), {
+      textContent: msg("select-file"),
+      className: "button action-button sa-animated-thumb-popup-action",
+    });
+    const uploadFromStageButton = Object.assign(document.createElement("button"), {
+      textContent: msg("use-stage"),
+      className: "button action-button sa-animated-thumb-popup-action",
+    });
+    modalButtons.appendChild(uploadFromFileButton);
+    modalButtons.appendChild(uploadFromStageButton);
+    modalInner.appendChild(modalButtons);
     const stopOverwritingRow = Object.assign(document.createElement("p"), {
       className: "sa-animated-thumb-text",
     });
@@ -57,20 +71,6 @@ export default async function ({ addon, global, console, msg }) {
         className: "sa-animated-thumb-text",
       })
     );
-    const modalButtons = Object.assign(document.createElement("div"), {
-      className: "flex-row action-buttons sa-animated-thumb-popup-actions",
-    });
-    const uploadFromFileButton = Object.assign(document.createElement("button"), {
-      textContent: msg("select-file"),
-      className: "button action-button sa-animated-thumb-popup-action",
-    });
-    const uploadFromStageButton = Object.assign(document.createElement("button"), {
-      textContent: msg("use-stage"),
-      className: "button action-button sa-animated-thumb-popup-action",
-    });
-    modalButtons.appendChild(uploadFromFileButton);
-    modalButtons.appendChild(uploadFromStageButton);
-    modalInner.appendChild(modalButtons);
     const modalResultArea = Object.assign(document.createElement("div"), {
       className: "sa-animated-thumb-popup-result",
       hidden: true,

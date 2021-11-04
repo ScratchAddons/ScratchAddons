@@ -26,7 +26,7 @@
 
 .sa-animated-thumb-popup p {
   font-size: 1rem;
-  margin: 0.5rem auto;
+  margin: 0.5rem auto 0.5rem 2rem;
 }
 
 .sa-animated-thumb-popup p :last-child {
