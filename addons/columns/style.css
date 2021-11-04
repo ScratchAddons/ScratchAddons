@@ -11,6 +11,9 @@
 }
 
 .scratchCategorySecondMenu {
+  columns: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   padding-bottom: 2.25rem;
 }
 
