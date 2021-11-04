@@ -154,6 +154,8 @@ export default async function ({ addon, global, console, msg }) {
       const fuseSearch = fuse.search(searchBar.value).sort((a, b) => {
         // Sort very good matches at the top no matter what
         if ((a.score < 0.1) ^ (b.score < 0.1)) return a.score < 0.1 ? -1 : 1;
+        // ES2019 guarantees stable sort
+        return 0;
       });
       projects.forEach((project) => {
         project.element.remove();
