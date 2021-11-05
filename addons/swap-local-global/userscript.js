@@ -220,6 +220,12 @@ export default async function ({ addon, msg, console }) {
     finishPreservingState();
   };
 
+  const canUserUseCloudVariables = () => {
+    const blocksWrapper = document.querySelector('[class^="gui_blocks-wrapper_1ccgf"]');
+    const internalNode = blocksWrapper[addon.tab.traps.getInternalKey(blocksWrapper)];
+    return internalNode.child.pendingProps.canUseCloud;
+  };
+
   const addMoreOptionsToPrompt = (variable) => {
     if (addon.self.disabled) {
       return;
@@ -291,6 +297,10 @@ export default async function ({ addon, msg, console }) {
     cloudSection.className = addon.tab.scratchClass("prompt_cloud-option");
     const cloudCheckbox = createLabeledInput(addon.tab.scratchMessage("gui.gui.cloudVariableOption"), "checkbox");
     cloudCheckbox.input.checked = variable.isCloud;
+    if (!vm.runtime.canAddCloudVariable() && !variable.isCloud) {
+      cloudCheckbox.input.disabled = true;
+      cloudSection.classList.add(promptDisabledClass);
+    }
     cloudSection.appendChild(cloudCheckbox.outer);
     const updateDisabledInputs = () => {
       const thisSpriteOnlyDisabled = cloudCheckbox.input.checked;
@@ -310,7 +320,7 @@ export default async function ({ addon, msg, console }) {
       isAnythingConfigurable = true;
       root.appendChild(scopeSection);
     }
-    if (variable.type === "") {
+    if (variable.type === "" && canUserUseCloudVariables()) {
       isAnythingConfigurable = true;
       root.appendChild(cloudSection);
     }
