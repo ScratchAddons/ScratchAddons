@@ -323,6 +323,11 @@ export default class Tab extends Listenable {
         from: () => [q("[class^='stop-all_stop-all']")],
         until: () => [],
       },
+      beforeProjectActionButtons: {
+        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        from: () => [],
+        until: () => [q(".report-button"), q(".action-buttons > div")],
+      },
       afterCopyLinkButton: {
         element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
         from: () => [q(".copy-link-button")],
