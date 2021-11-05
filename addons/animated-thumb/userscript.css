@@ -80,6 +80,18 @@ p.sa-animated-thumb-uploaded-thumb {
 .sa-set-thumbnail-button {
   position: relative;
 }
+.sa-set-thumbnail-button::before {
+  background-image: url(rectangle.svg);
+  display: inline-block;
+  margin-right: 0.25rem;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  width: 0.875rem;
+  height: 0.875rem;
+  vertical-align: bottom;
+  content: "";
+}
 
 .sa-animated-thumb-tooltip {
   transform: unset;
