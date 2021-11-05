@@ -76,3 +76,17 @@ p.sa-animated-thumb-uploaded-thumb {
   margin: 0.5rem auto;
   justify-content: center;
 }
+
+.sa-set-thumbnail-button {
+  position: relative;
+}
+
+.sa-animated-thumb-tooltip {
+  transform: unset;
+  top: 100%;
+  left: -75%;
+  right: -75%;
+  margin-left: 0;
+  min-width: 150%;
+  height: auto;
+}
