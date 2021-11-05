@@ -70,3 +70,9 @@
 :not(.sa-animated-thumb-successful) > .sa-animated-thumb-show-on-success {
   display: none;
 }
+
+p.sa-animated-thumb-uploaded-thumb {
+  display: flex;
+  margin: 0.5rem auto;
+  justify-content: center;
+}

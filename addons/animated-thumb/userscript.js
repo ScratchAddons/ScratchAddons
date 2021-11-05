@@ -85,12 +85,11 @@ export default async function ({ addon, global, console, msg }) {
     );
     const thumbImage = Object.assign(document.createElement("img"), {
       alt: "",
-      className: "sa-animated-thumb-uploaded-thumb",
       width: 360,
       height: 240,
     });
     const thumbImageWrapper = Object.assign(document.createElement("p"), {
-      className: "sa-animated-thumb-show-on-success",
+      className: "sa-animated-thumb-show-on-success sa-animated-thumb-uploaded-thumb",
     });
     thumbImageWrapper.appendChild(thumbImage);
     modalInner.appendChild(thumbImageWrapper);
