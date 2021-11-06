@@ -1,7 +1,5 @@
 export default async function ({ addon, msg, global, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
-  const workspace = Blockly.getMainWorkspace();
-  const toolbox = workspace.getToolbox();
 
   // https://github.com/LLK/scratch-blocks/blob/893c7e7ad5bfb416eaed75d9a1c93bdce84e36ab/core/toolbox.js#L235
   const _ToolboxPosition = Blockly.Toolbox.prototype.position;
@@ -134,19 +132,24 @@ export default async function ({ addon, msg, global, console }) {
     }
   };
 
-  // Reload the toolbox
   function updateToolbox() {
-    toolbox.dispose();
-    toolbox.workspace_ = workspace;
-    toolbox.init();
+    const workspace = Blockly.getMainWorkspace();
+    const toolbox = workspace.getToolbox();
+    if (!toolbox) return;
+    const categoryMenu = toolbox.categoryMenu_;
+    if (!categoryMenu) return;
 
-    // Connects events to VM
-    // https://github.com/LLK/scratch-gui/blob/ba76db7350bd43b79119cac2701bc10f6c511f0c/src/containers/blocks.jsx#L250-L254
-    const flyoutWorkspace = workspace.getFlyout().getWorkspace();
-    const vm = addon.tab.traps.vm;
-    flyoutWorkspace.addChangeListener(vm.flyoutBlockListener);
-    flyoutWorkspace.addChangeListener(vm.monitorBlockListener);
+    // Scratch may have already updated the toolbox for us, so no need to update it again.
+    if (categoryMenu.secondTable && !addon.self.disabled) return;
+    // Must dispose and createDom the category menu so we can run our polluted commands.
+    categoryMenu.dispose();
+    categoryMenu.createDom();
+    // Repopulate the category menu since we've just disposed it.
+    toolbox.populate_(workspace.options.languageTree);
+    // Repostion the toolbox, since it's likely our addon moved it.
+    toolbox.position();
   }
+
   updateToolbox();
   addon.self.addEventListener("disabled", updateToolbox);
   addon.self.addEventListener("reenabled", updateToolbox);
