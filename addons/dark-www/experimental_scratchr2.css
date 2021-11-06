@@ -590,7 +590,7 @@ div.content > article > header /* mobile forums */ {
 ul.pagination a:active:not(.current) span {
   box-shadow: 0 1px inset rgba(255, 255, 255, 0.33);
 }
-.registration a.why-we-ask:hover+div {
+.registration a.why-we-ask:hover + div {
   box-shadow: 1px 1px 6px 2px rgba(0, 0, 0, 0.13);
 }
 
