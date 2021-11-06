@@ -605,10 +605,6 @@ input.link.black {
   background-image: none;
 }
 
-#scratcher-promotion-wrapper {
-  color: #322f31;
-}
-
 /* Some images are designed for a light background */
 .markItUpHeader > ul > li > a {
   margin-right: 4px;
