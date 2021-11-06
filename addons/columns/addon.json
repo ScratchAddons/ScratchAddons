@@ -7,7 +7,7 @@
       "link": "https://scratch.mit.edu/TheColaber"
     }
   ],
-  "tags": ["editor"],
+  "tags": ["editor", "codeEditor", "featured"],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "userscripts": [
@@ -22,5 +22,6 @@
       "url": "style.css",
       "matches": ["projects"]
     }
-  ]
+  ],
+  "versionAdded": "1.22.0"
 }
