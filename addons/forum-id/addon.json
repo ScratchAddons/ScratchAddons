@@ -1,0 +1,20 @@
+{
+  "name": "Quote post number",
+  "description": "Click the \"quote post number\" button to include a link to the post in your reply.",
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["topics"],
+      "runAtComplete": true
+    }
+  ],
+  "versionAdded": "1.22.0",
+  "tags": ["community", "forums"],
+  "enabledByDefault": false,
+  "credits": [
+    {
+      "name": "itta611",
+      "link": "https://github.com/itta611/"
+    }
+  ]
+}
