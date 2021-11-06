@@ -1,70 +1,21 @@
 {
-  "name": "Modify Tutorials button",
-  "description": "Makes the Tutorials button in the editor menu bar open a link, or hides it entirely.",
+  "name": "Hide Tutorials button",
+  "description": "Hides the Tutorials button in the editor menu bar.",
   "tags": ["editor"],
   "credits": [
     {
-      "name": "The Private I"
-    },
-    {
       "name": "lisa_wolfgang",
-      "link": "https://scratch.mit.edu/users/lisa_wolfgang"
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
     }
   ],
   "userstyles": [
     {
       "url": "userstyle.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "mode": "hidden" }
-      }
-    }
-  ],
-  "userscripts": [
-    {
-      "url": "userscript.js",
       "matches": ["projects"]
-    }
-  ],
-  "settings": [
-    {
-      "name": "Button mode",
-      "id": "mode",
-      "type": "select",
-      "potentialValues": [
-        {
-          "name": "Open link",
-          "id": "open-link"
-        },
-        {
-          "name": "Hidden",
-          "id": "hidden"
-        }
-      ],
-      "default": "open-link"
-    },
-    {
-      "name": "Button label",
-      "id": "label",
-      "type": "string",
-      "default": "Griffpatch Tutorials",
-      "if": {
-        "settings": { "mode": "open-link" }
-      }
-    },
-    {
-      "name": "Button URL",
-      "id": "url",
-      "type": "string",
-      "default": "https://www.youtube.com/c/griffpatch",
-      "if": {
-        "settings": { "mode": "open-link" }
-      }
     }
   ],
   "versionAdded": "1.22.0",
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "updateUserstylesOnSettingsChange": true,
   "enabledByDefault": false
 }
