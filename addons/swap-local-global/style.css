@@ -1,0 +1,7 @@
+.sa-swap-local-global-hint {
+  padding-bottom: 1rem;
+}
+.sa-swap-local-global-stage {
+  /* resolves scratch class style conflict */
+  display: block;
+}

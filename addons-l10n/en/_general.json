@@ -1,8 +1,4 @@
 {
   "_locale": "en",
-  "_locale_name": "English",
-  "thumb-success": "Thumbnail uploaded.",
-  "thumb-error": "Failed to upload thumbnail.",
-  "thumb-error-413": "The file is too big.",
-  "thumb-error-503": "Thumbnail server is having a problem. Please wait and try again."
+  "_locale_name": "English"
 }

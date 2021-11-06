@@ -373,6 +373,18 @@
       }
     },
     {
+      "name": "accent-invertedFilter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
       "name": "accent-opacity0",
       "value": {
         "type": "multiply",
@@ -562,6 +574,18 @@
       "name": "categoryMenu-text",
       "value": {
         "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
+      "name": "categoryMenu-invertedFilter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
         "source": {
           "type": "settingValue",
           "settingId": "categoryMenu"
