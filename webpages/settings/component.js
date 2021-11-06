@@ -1,6 +1,6 @@
 import downloadBlob from "../../libraries/common/cs/download-blob.js";
 import getDirection from "../rtl-list.js";
-import Fuse from "../../libraries/thirdparty/fuse.esm.min.js";
+import Fuse from "../../libraries/thirdparty/cs/fuse.esm.min.js";
 import tags from "./data/tags.js";
 import addonGroups from "./data/addon-groups.js";
 import categories from "./data/categories.js";
