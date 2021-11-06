@@ -1,14 +1,14 @@
 {
-  "name": "Forum ID",
-  "description": "Add the forum ID to your head of the post to reply.",
+  "name": "Quote post number",
+  "description": "Click the \"quote post number\" button to include a link to the post in your reply.",
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["forums"],
-      "runAtComplete": false
+      "matches": ["topics"],
+      "runAtComplete": true
     }
   ],
-  "versionAdded": "1.19.1",
+  "versionAdded": "1.22.0",
   "tags": ["community", "forums"],
   "enabledByDefault": false,
   "credits": [
