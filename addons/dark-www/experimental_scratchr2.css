@@ -105,6 +105,8 @@ label,
 .help .faq .box,
 #email-resend-box .modal-footer,
 #new-scratcher-gallery-modal .modal-footer,
+.registration form,
+.registration a.why-we-ask:hover+div,
 #comments .sa-emoji-picker {
   background-color: var(--darkWww-box);
   color: var(--darkWww-box-scratchr2Text);
@@ -182,7 +184,8 @@ span.small-text,
 #comments .comment .info .time,
 #comments .comment .report,
 #comments .comment .delete,
-.box .box-content .pagination .disabled {
+.box .box-content .pagination .disabled,
+.registration a.why-we-ask {
   color: var(--darkWww-box-scratchr2TransparentText);
 }
 .dropdown span.dropdown-toggle.black span.caret {
@@ -397,7 +400,12 @@ ul.pagination span /* mobile forums */ {
     var(--darkWww-button-scratchr2ButtonGradientBottom)
   );
 }
-textarea:focus {
+input:focus,
+textarea:focus,
+.control-group.tooltip textarea:focus,
+.registration .modal-body input:focus,
+.registration .modal-body textarea:focus,
+.registration .modal-body select:focus {
   border-color: var(--darkWww-button-scratchr2InputFocusBorder);
   box-shadow: 0 1px 1px inset rgba(0, 0, 0, 0.08), 0 0 8px var(--darkWww-button-scratchr2InputFocusShadow);
 }
@@ -514,7 +522,8 @@ select,
 #comments .more-replies,
 #comments .more-replies .pulldown,
 .nvtooltip /* statistics */,
-.help .faq .box-content > div {
+.help .faq .box-content > div,
+.registration a.why-we-ask:hover+div {
   border-color: var(--darkWww-border-20);
 }
 .editable:hover,
@@ -580,6 +589,9 @@ div.content > article > header /* mobile forums */ {
 }
 ul.pagination a:active:not(.current) span {
   box-shadow: 0 1px inset rgba(255, 255, 255, 0.33);
+}
+.registration a.why-we-ask:hover+div {
+  box-shadow: 1px 1px 6px 2px rgba(0, 0, 0, 0.13);
 }
 
 a.black,
