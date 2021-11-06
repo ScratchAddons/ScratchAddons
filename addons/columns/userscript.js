@@ -136,18 +136,19 @@ export default async function ({ addon, msg, global, console }) {
 
   // Reload the toolbox
   function updateToolbox() {
-    toolbox.dispose();
-    toolbox.workspace_ = workspace;
-    toolbox.init();
-
-    // Connects events to VM
-    // https://github.com/LLK/scratch-gui/blob/ba76db7350bd43b79119cac2701bc10f6c511f0c/src/containers/blocks.jsx#L250-L254
-    const flyoutWorkspace = workspace.getFlyout().getWorkspace();
-    const vm = addon.tab.traps.vm;
-    flyoutWorkspace.addChangeListener(vm.flyoutBlockListener);
-    flyoutWorkspace.addChangeListener(vm.monitorBlockListener);
+    const categoryMenu = toolbox.categoryMenu_;
+    // Must dispose and createDom the category menu so we can run our polluted commands.
+    categoryMenu.dispose();
+    categoryMenu.createDom();
+    // Repopulate the category menu since we've just disposed it.
+    toolbox.populate_(workspace.options.languageTree);
+    // Repostion the toolbox, since it's likely our addon moved it.
+    toolbox.position();
   }
-  updateToolbox();
+  // Scratch may have already updated the toolbox for us, so no need to update it again.
+  if (toolbox.categoryMenu_.secondTable) {
+    updateToolbox();
+  }
   addon.self.addEventListener("disabled", updateToolbox);
   addon.self.addEventListener("reenabled", updateToolbox);
 
