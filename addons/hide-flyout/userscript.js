@@ -87,10 +87,6 @@ export default async function ({ addon, global, console }) {
             }
             if (toggleSetting === "category") toggle = !toggle;
           };
-          if (toggleSetting === "cathover") {
-            category.onmouseover = onmouseenter;
-            flyOut.onmouseleave = onmouseleave;
-          }
         }
       })();
     }
@@ -99,7 +95,6 @@ export default async function ({ addon, global, console }) {
   while (true) {
     flyOut = await addon.tab.waitForElement(".blocklyFlyout", {
       markAsSeen: true,
-      reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
       reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
     });
     let blocklySvg = document.querySelector(".blocklySvg");
@@ -127,10 +122,21 @@ export default async function ({ addon, global, console }) {
 
     if (toggleSetting === "hover") {
       placeHolderDiv.onmouseenter = onmouseenter;
+      document.querySelector(".blocklyToolboxDiv").onmouseenter = onmouseenter; // for columns
       blocklySvg.onmouseenter = onmouseleave;
     }
 
-    if (toggleSetting === "cathover") onmouseleave(null, 0);
+    if (toggleSetting === "cathover") {
+      onmouseleave(null, 0);
+
+      const toolbox = document.querySelector(".blocklyToolboxDiv");
+      const addExtensionButton = document.querySelector("[class^=gui_extension-button-container_]");
+
+      for (let e of [toolbox, addExtensionButton, flyOut, scrollBar]) {
+        e.onmouseenter = onmouseenter;
+        e.onmouseleave = onmouseleave;
+      }
+    }
 
     doOneTimeSetup();
   }

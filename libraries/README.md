@@ -5,7 +5,7 @@ Third-party libraries included are:
 - [scratchblocks 3.5.2](https://scratchblocks.github.io/js/scratchblocks-v3.5.2-min.js) (MIT)
 - [scratchblocks 3.5.2 translations](https://scratchblocks.github.io/js/translations-all-v3.5.2.js) (MIT)
 - [vue 1.0.28-csp](https://raw.githubusercontent.com/vuejs/vue/v1.0.28-csp/dist/vue.js) (BSD-3-Clause)
-- [icu-message-formatter 0.11.1](https://unpkg.com/@ultraq/icu-message-formatter@0.11.1/dist/icu-message-formatter.es.min.js) (Apache-2.0)
+- [icu-message-formatter 0.12.0](https://unpkg.com/@ultraq/icu-message-formatter@0.12.0/dist/icu-message-formatter.es.min.js) (Apache-2.0)
 - [tinycolor2 1.4.2](https://raw.githubusercontent.com/bgrins/TinyColor/1.4.2/dist/tinycolor-min.js) (MIT)
 - [text-field-edit 3.1.1](https://unpkg.com/text-field-edit@3.1.1/index.js)
 - [Chart.js 2.9.4](https://unpkg.com/chart.js@2.9.4/dist/Chart.min.js) (MIT)
