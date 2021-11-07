@@ -110,6 +110,10 @@ function alphaBlend(opaqueHex, transparentHex) {
   });
 }
 
+function removeAlpha(hex) {
+  return hex.substring(0, 7);
+}
+
 function makeHsv(hSource, sSource, vSource) {
   const h = typeof hSource === "number" ? hSource : convertToHsv(parseHex(hSource)).h;
   const s =
@@ -149,6 +153,7 @@ globalThis.__scratchAddonsTextColor = {
   multiply,
   brighten,
   alphaBlend,
+  removeAlpha,
   makeHsv,
   recolorFilter,
 };

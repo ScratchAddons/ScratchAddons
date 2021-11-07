@@ -8,6 +8,7 @@ const {
   multiply,
   brighten,
   alphaBlend,
+  removeAlpha,
   makeHsv,
   recolorFilter,
 } = globalThis.__scratchAddonsTextColor;
@@ -20,6 +21,7 @@ export {
   multiply,
   brighten,
   alphaBlend,
+  removeAlpha,
   makeHsv,
   recolorFilter,
 };

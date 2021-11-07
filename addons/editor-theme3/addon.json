@@ -10,10 +10,23 @@
       "link": "https://scratch.mit.edu/users/TheColaber"
     }
   ],
+  "customCssVariables": [
+    {
+      "name": "inputColor-text",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input-color"
+        }
+      }
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.2.0",
+  "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {
       "url": "theme3.js",
@@ -24,6 +37,27 @@
     {
       "url": "theme3.css",
       "matches": ["projects"]
+    },
+    {
+      "url": "black_text.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "black" }
+      }
+    },
+    {
+      "url": "color_on_white.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "colorOnWhite" }
+      }
+    },
+    {
+      "url": "color_on_black.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "text": "colorOnBlack" }
+      }
     }
   ],
   "settings": [
@@ -31,85 +65,73 @@
       "name": "motion",
       "id": "motion-color",
       "type": "color",
-      "default": "#4C97FF",
-      "allowTransparency": true
+      "default": "#4C97FF"
     },
     {
       "name": "looks",
       "id": "looks-color",
       "type": "color",
-      "default": "#9966FF",
-      "allowTransparency": true
+      "default": "#9966FF"
     },
     {
       "name": "sounds",
       "id": "sounds-color",
       "type": "color",
-      "default": "#CF63CF",
-      "allowTransparency": true
+      "default": "#CF63CF"
     },
     {
       "name": "events",
       "id": "events-color",
       "type": "color",
-      "default": "#FFBF00",
-      "allowTransparency": true
+      "default": "#FFBF00"
     },
     {
       "name": "control",
       "id": "control-color",
       "type": "color",
-      "default": "#FFAB19",
-      "allowTransparency": true
+      "default": "#FFAB19"
     },
     {
       "name": "sensing",
       "id": "sensing-color",
       "type": "color",
-      "default": "#5CB1D6",
-      "allowTransparency": true
+      "default": "#5CB1D6"
     },
     {
       "name": "operators",
       "id": "operators-color",
       "type": "color",
-      "default": "#59C059",
-      "allowTransparency": true
+      "default": "#59C059"
     },
     {
       "name": "variables",
       "id": "data-color",
       "type": "color",
-      "default": "#FF8C1A",
-      "allowTransparency": true
+      "default": "#FF8C1A"
     },
     {
       "name": "lists",
       "id": "data-lists-color",
       "type": "color",
-      "default": "#FF661A",
-      "allowTransparency": true
+      "default": "#FF661A"
     },
     {
       "name": "custom",
       "id": "custom-color",
       "type": "color",
-      "default": "#FF6680",
-      "allowTransparency": true
+      "default": "#FF6680"
     },
     {
       "name": "extensions",
       "id": "Pen-color",
       "type": "color",
-      "default": "#0FBD8C",
-      "allowTransparency": true
+      "default": "#0FBD8C"
     },
     {
       "name": "Scratch Addons blocks",
       "id": "sa-color",
       "type": "color",
       "default": "#29BEB8",
-      "allowTransparency": true,
       "if": {
         "addonEnabled": ["debugger"]
       }
