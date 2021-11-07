@@ -30,7 +30,7 @@ export default async function ({ addon, msg, global, console }) {
 
     // In RTL, subtract the total width of left and right workspace borders and the category menu border
     // from the workspace width.
-    var x = this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT ? targetWorkspaceMetrics.viewWidth - 3 : 0;
+    var x = this.toolboxPosition_ === Blockly.TOOLBOX_AT_RIGHT ? targetWorkspaceMetrics.viewWidth - 3 : 0;
     var y = this.parentToolbox_.HtmlDiv.offsetHeight;
 
     // Addon sets the width of the flyout to the width of the toolbox.
@@ -48,7 +48,7 @@ export default async function ({ addon, msg, global, console }) {
     if (this.scrollbar_) {
       // Set the scrollbars origin to be the top left of the flyout.
       this.scrollbar_.setOrigin(
-        x + (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT ? 0 : this.width_ - this.getWidth()),
+        x + (this.toolboxPosition_ === Blockly.TOOLBOX_AT_RIGHT ? 0 : this.width_ - this.getWidth()),
         y
       );
       this.scrollbar_.resize();
