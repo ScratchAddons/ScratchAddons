@@ -216,6 +216,14 @@ export default async function ({ addon, global, console, msg }) {
         textContent: msg("tooltip"),
         title: "",
       });
+      element.addEventListener(
+        "click",
+        () => {
+          localStorage.setItem("saAnimatedThumbShowTooltip", "1");
+          tooltip.remove();
+        },
+        { once: true }
+      );
       tooltip.addEventListener(
         "click",
         (e) => {
