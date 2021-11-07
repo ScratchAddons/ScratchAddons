@@ -176,11 +176,13 @@ export default async function ({ addon, global, console, msg }) {
     };
 
     uploadFromFileButton.addEventListener("click", () => {
+      upload();
       setter.addFileInput();
       ignoreClickOutside = true; // To stop modal from being closed
       setter.showInput();
     });
     uploadFromStageButton.addEventListener("click", () => {
+      upload();
       addon.tab.traps.vm.postIOData("video", { forceTransparentPreview: true });
       addon.tab.traps.vm.renderer.requestSnapshot((dataURL) => {
         addon.tab.traps.vm.postIOData("video", { forceTransparentPreview: false });
@@ -216,6 +218,14 @@ export default async function ({ addon, global, console, msg }) {
         textContent: msg("tooltip"),
         title: "",
       });
+      element.addEventListener(
+        "click",
+        () => {
+          localStorage.setItem("saAnimatedThumbShowTooltip", "1");
+          tooltip.remove();
+        },
+        { once: true }
+      );
       tooltip.addEventListener(
         "click",
         (e) => {
