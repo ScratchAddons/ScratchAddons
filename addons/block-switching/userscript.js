@@ -616,15 +616,6 @@ export default async function ({ addon, global, console, msg }) {
   buildSwitches();
   addon.settings.addEventListener("change", buildSwitches);
 
-  const genuid = () => {
-    const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
-    let result = "";
-    for (let i = 0; i < 20; i++) {
-      result += CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
-    }
-    return result;
-  };
-
   const menuCallbackFactory = (block, opcodeData) => () => {
     if (opcodeData.isNoop) {
       return;
@@ -704,36 +695,26 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
 
-    // Mark the latest event in the undo stack.
-    // This will be used later to group all of our events.
-    const undoStack = workspace.undoStack_;
-    if (undoStack.length) {
-      undoStack[undoStack.length - 1]._blockswitchingLastUndo = true;
-    }
+    try {
+      ScratchBlocks.Events.setGroup(true);
 
-    // Remove the old block and insert the new one.
-    block.dispose();
-    workspace.paste(xml);
-    for (const separateBlock of pasteSeparately) {
-      workspace.paste(separateBlock);
-    }
-    // The new block will have the same ID as the old one.
-    const newBlock = workspace.getBlockById(id);
-    if (parentConnection) {
-      // Search for the same type of connection on the new block as on the old block.
-      const newBlockConnections = newBlock.getConnections_();
-      const newBlockConnection = newBlockConnections.find((c) => c.type === blockConnectionType);
-      newBlockConnection.connect(parentConnection);
-    }
-
-    // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
-    // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
-    setTimeout(() => {
-      const group = genuid();
-      for (let i = undoStack.length - 1; i >= 0 && !undoStack[i]._blockswitchingLastUndo; i--) {
-        undoStack[i].group = group;
+      // Remove the old block and insert the new one.
+      block.dispose();
+      workspace.paste(xml);
+      for (const separateBlock of pasteSeparately) {
+        workspace.paste(separateBlock);
       }
-    }, 0);
+      // The new block will have the same ID as the old one.
+      const newBlock = workspace.getBlockById(id);
+      if (parentConnection) {
+        // Search for the same type of connection on the new block as on the old block.
+        const newBlockConnections = newBlock.getConnections_();
+        const newBlockConnection = newBlockConnections.find((c) => c.type === blockConnectionType);
+        newBlockConnection.connect(parentConnection);
+      }
+    } finally {
+      ScratchBlocks.Events.setGroup(false);
+    }
   };
 
   const uniques = (array) => [...new Set(array)];
