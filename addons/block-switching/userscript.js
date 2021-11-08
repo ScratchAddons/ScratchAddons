@@ -1,7 +1,7 @@
 import blockToDom from "./blockToDom.js";
 
 export default async function ({ addon, global, console, msg }) {
-  const blockly = await addon.tab.traps.getBlockly();
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
 
   let blockSwitches = {};
@@ -816,7 +816,7 @@ export default async function ({ addon, global, console, msg }) {
 
         if (addon.settings.get("border") && (block.type === "data_variable" || block.type === "data_listcontents")) {
           // Add top border to first variable (if it exists)
-          const delBlockIndex = items.findIndex((item) => item.text === blockly.Msg.DELETE_BLOCK);
+          const delBlockIndex = items.findIndex((item) => item.text === ScratchBlocks.Msg.DELETE_BLOCK);
           // firstVariableItem might be undefined, a variable to switch to,
           // or an item added by editor-devtools (or any addon before this one)
           const firstVariableItem = items[delBlockIndex + 1];
