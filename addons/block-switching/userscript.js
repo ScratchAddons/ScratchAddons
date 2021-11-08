@@ -831,7 +831,7 @@ export default async function ({ addon, global, console, msg }) {
         const stringArgs = [];
         const boolArgs = [];
         for (let i = 0; i < argumentNames.length; i++) {
-          if (parsedArguments[i] === '%b') {
+          if (parsedArguments[i] === "%b") {
             boolArgs.push(argumentNames[i]);
           } else {
             stringArgs.push(argumentNames[i]);
@@ -839,7 +839,7 @@ export default async function ({ addon, global, console, msg }) {
         }
         customBlocks[procCode] = {
           stringArgs,
-          boolArgs
+          boolArgs,
         };
       });
     return customBlocks;
