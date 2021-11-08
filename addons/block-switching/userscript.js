@@ -826,24 +826,38 @@ export default async function ({ addon, global, console, msg }) {
     { blocks: true }
   );
 
+  // https://github.com/LLK/scratch-blocks/blob/abbfe93136fef57fdfb9a077198b0bc64726f012/blocks_vertical/procedures.js#L207-L215
+  // Returns a list like ["%s", "%d"]
+  const parseArguments = (code) =>
+    code
+      .split(/(?=[^\\]%[nbs])/g)
+      .map((i) => i.trim())
+      .filter((i) => i.charAt(0) === "%")
+      .map((i) => i.substring(0, 2));
+
   const getCustomBlocks = () => {
     const customBlocks = {};
     const target = vm.editingTarget;
-    Object.entries(target.blocks._blocks)
-      .filter(([, block]) => block.opcode === "procedures_prototype")
-      .forEach(([id, block]) => {
-        let {
-          mutation: { proccode, argumentids, argumentnames, argumentdefaults },
-        } = block;
-        customBlocks[proccode] = { stringArgs: [], boolArgs: [] };
-        let [ids, names, defaults] = [argumentids, argumentnames, argumentdefaults].map(JSON.parse);
-        for (let i = 0; i < ids.length; i++) {
-          if (defaults[i] === "") {
-            customBlocks[proccode].stringArgs.push(names[i]);
+    Object.values(target.blocks._blocks)
+      .filter((block) => block.opcode === "procedures_prototype")
+      .forEach((block) => {
+        const procCode = block.mutation.proccode;
+        const argumentNames = JSON.parse(block.mutation.argumentnames);
+        // argumentdefaults is unreliable, so we have to parse the procedure code to determine argument types
+        const parsedArguments = parseArguments(procCode);
+        const stringArgs = [];
+        const boolArgs = [];
+        for (let i = 0; i < argumentNames.length; i++) {
+          if (parsedArguments[i] === '%b') {
+            boolArgs.push(argumentNames[i]);
           } else {
-            customBlocks[proccode].boolArgs.push(names[i]);
+            stringArgs.push(argumentNames[i]);
           }
         }
+        customBlocks[procCode] = {
+          stringArgs,
+          boolArgs
+        };
       });
     return customBlocks;
   };
