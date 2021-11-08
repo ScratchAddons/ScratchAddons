@@ -60,7 +60,7 @@ export default async function ({ addon, global, cons, msg }) {
     return keys;
   }
 
-  for (const opcode of ['sensing_keyoptions', 'event_whenkeypressed']) {
+  for (const opcode of ["sensing_keyoptions", "event_whenkeypressed"]) {
     const block = ScratchBlocks.Blocks[opcode];
     const originalInit = block.init;
     block.init = function (...args) {
@@ -90,7 +90,10 @@ export default async function ({ addon, global, cons, msg }) {
         if (!field) {
           continue;
         }
-        field.menuGenerator_ = appendKeys(defaultKeys ? [...defaultKeys] : field.menuGenerator_, block.type === "event_whenkeypressed");
+        field.menuGenerator_ = appendKeys(
+          defaultKeys ? [...defaultKeys] : field.menuGenerator_,
+          block.type === "event_whenkeypressed"
+        );
       }
     }
   };
