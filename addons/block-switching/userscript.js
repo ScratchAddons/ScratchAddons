@@ -736,6 +736,8 @@ export default async function ({ addon, global, console, msg }) {
     }, 0);
   };
 
+  const uniques = (array) => [...new Set(array)];
+
   addon.tab.createBlockContextMenu(
     (items, block) => {
       if (!addon.self.disabled) {
@@ -777,7 +779,7 @@ export default async function ({ addon, global, console, msg }) {
             }
           }
           const currentValue = block.getFieldValue("VALUE");
-          switches = switches.map((i) => ({
+          switches = uniques(switches).map((i) => ({
             isNoop: i === currentValue,
             fieldValue: i,
             msg: i,
