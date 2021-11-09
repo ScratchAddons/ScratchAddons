@@ -10,8 +10,8 @@
   ],
   "settings": [
     {
-      "name": "Resolution Multiplier (%)",
-      "id": "resMultiplier",
+      "name": "Dimension Multiplier (%)",
+      "id": "multiplier",
       "type": "integer",
       "min": 100,
       "max": 300,

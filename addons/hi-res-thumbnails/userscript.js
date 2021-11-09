@@ -64,7 +64,7 @@ export default async function ({ addon, console }) {
   }
 
   function scaleDimensions(width, height) {
-    const factor = 0.01 * addon.settings.get("resMultiplier");
+    const factor = 0.01 * addon.settings.get("multiplier");
 
     width *= factor;
     height *= factor;
