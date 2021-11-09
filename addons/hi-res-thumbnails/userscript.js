@@ -55,7 +55,9 @@ export default async function ({ addon, console }) {
 
     if (lazy) {
       image.dataset.original = newSrc;
-    } else {
+    }
+
+    if (image.src) {
       image.src = newSrc;
     }
   }
