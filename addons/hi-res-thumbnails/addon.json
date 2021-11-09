@@ -1,0 +1,42 @@
+{
+  "name": "Higher resolution thumbnails",
+  "description": "Replaces thumbnails across the website with higher resolution images. Useful on retina displays or browsing at >100% zoom.",
+  "info": [
+    {
+      "type": "warning",
+      "text": "Higher resolution images require larger filesizes. Take care not to accidentally incur data expenses if your network plan is limited.",
+      "id": "imagefilesize"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Resolution Multiplier (%)",
+      "id": "resMultiplier",
+      "type": "integer",
+      "min": 100,
+      "max": 300,
+      "default": 200
+    },
+    {
+      "name": "Fix initially low-res thumbnails?",
+      "id": "fixLowRes",
+      "type": "boolean",
+      "default": true
+    }
+  ],
+  "tags": ["community"],
+  "credits": [
+    {
+      "name": "_nix",
+      "link": "https://scratch.mit.edu/users/_nix/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/*"],
+      "runAtComplete": false
+    }
+  ],
+  "enabledByDefault": false
+}
