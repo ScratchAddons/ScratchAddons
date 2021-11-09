@@ -1,6 +1,4 @@
 export default async function ({ addon, console }) {
-  const DEBUG = true;
-
   main: while (true) {
     const image = await addon.tab.waitForElement("img", {
       markAsSeen: true,
@@ -18,11 +16,6 @@ export default async function ({ addon, console }) {
       height = cdn2[3];
     } else {
       continue main;
-    }
-
-    if (DEBUG) {
-      image.dataset.debugOriginalWidth = width;
-      image.dataset.debugOriginalHeight = height;
     }
 
     if (addon.settings.get("fixLowRes"))
@@ -48,10 +41,6 @@ export default async function ({ addon, console }) {
 
     if (cdn2) {
       newSrc = cdn2[1] + width + "x" + height + cdn2[4];
-    }
-
-    if (DEBUG) {
-      console.log(`Updated image source:\n<- ${src}\n-> ${newSrc}`, image);
     }
 
     if (lazy) {
