@@ -1739,7 +1739,7 @@
       "name": "Blue background",
       "id": "blue",
       "type": "color",
-      "default": "#030b16"
+      "default": "#252c37"
     },
     {
       "name": "Input background",
@@ -1815,7 +1815,7 @@
         "navbar": "#4d97ff",
         "box": "#282828",
         "gray": "#333333",
-        "blue": "#030b16",
+        "blue": "#252c37",
         "input": "#202020",
         "button": "#4d97ff",
         "link": "#4d97ff",
