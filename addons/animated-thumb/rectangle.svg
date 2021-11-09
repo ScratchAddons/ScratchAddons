@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="569 195 102 87">
-  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="matrix(7.454836, 0, 0, 7.164141, 545.45813, 166.972961)" style="">
-    <g id="backdrop-library">
-      <g id="backdrop-lib-icon" transform="translate(3.850000, 4.650000)" stroke="#FFFFFF" stroke-linecap="round" stroke-width="1.5">
-        <path d="M 12.294 8.131 L 9.836 5.598 C 9.484 5.236 8.899 5.175 8.489 5.537 L 5.445 8.01 C 4.976 8.372 4.332 8.312 3.981 7.829 L 3.688 7.467 C 3.337 6.985 2.635 6.924 2.225 7.286 L 0 9.156 C 0 10.008 0.691 10.699 1.543 10.699 L 10.353 10.699 C 11.458 10.699 12.353 9.803 12.353 8.699 L 12.353 8.131 L 12.294 8.131 Z" id="Shape" fill="#FFFFFF" stroke-linejoin="round"/>
-        <path d="M 12.353 1.772 L 12.353 8.824 C 12.353 9.798 11.563 10.588 10.588 10.588 L 1.765 10.588 C 0.79 10.588 0 9.798 0 8.824 L 0 1.765 C 0 0.79 0.79 0 1.765 0 L 10.616 0 C 11.444 0 12.358 0.883 12.362 1.756" id="Rectangle"/>
-      </g>
-    </g>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="569 195 102 87"><g stroke="#FFF" stroke-linecap="round" stroke-width="1.5" fill="none" fill-rule="evenodd"><path d="M12.294 8.131 9.836 5.598a.97.97 0 0 0-1.347-.061L5.445 8.01c-.469.362-1.113.302-1.464-.181l-.293-.362c-.351-.482-1.053-.543-1.463-.181L0 9.156c0 .852.691 1.543 1.543 1.543h8.81a2 2 0 0 0 2-2v-.568h-.059Z" fill="#FFF" stroke-linejoin="round" transform="matrix(7.45484 0 0 7.16414 574.16 200.286)"/><path d="M12.353 1.772v7.052c0 .974-.79 1.764-1.765 1.764H1.765C.79 10.588 0 9.798 0 8.824V1.765C0 .79.79 0 1.765 0h8.851c.828 0 1.742.883 1.746 1.756" transform="matrix(7.45484 0 0 7.16414 574.16 200.286)"/></g></svg>
