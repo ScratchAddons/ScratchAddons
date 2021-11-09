@@ -18,7 +18,7 @@
       "default": 200
     },
     {
-      "name": "Fix initially low-res thumbnails?",
+      "name": "Fix initially low-res thumbnails",
       "id": "fixLowRes",
       "type": "boolean",
       "default": true
