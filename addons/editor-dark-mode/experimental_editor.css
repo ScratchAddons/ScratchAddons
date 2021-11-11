@@ -600,3 +600,11 @@ img[src="/static/assets/26255153f92ea41df149a58d3c3fe2cf.svg"] /* record modal s
   /* Use the dark version of the browser's default button appearance. */
   color-scheme: dark;
 }
+/* For `editor-comment-previews` */
+.sa-comment-preview {
+  color: var(--editorDarkMode-input-text);
+  background-color: var(--editorDarkMode-input-transparent75);
+}
+.sa-comment-preview-reduce-transparency {
+  background-color: var(--editorDarkMode-input);
+}

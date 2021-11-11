@@ -1505,8 +1505,18 @@ export default class DevTools {
     }
 
     if (this.floatInp && !e.target.closest("#s3devIDDOut")) {
-      // If we click outside the dropdown, then instigate the hide code...
-      this.hideFloatDropDown();
+      if (
+        !e.shiftKey ||
+        // Clicking on the code area should always make multi-inject work
+        (!document.getElementsByClassName("injectionDiv")[0].contains(e.target) &&
+          // Focused inputs are not part of the injectionDiv, but to the user they are part of the code area so make multi-inject work there
+          !e.target.classList.contains("blocklyHtmlInput")) ||
+        // This selector targets workspace buttons (Make a Block etc.) and the extension (!) buttons, which most commonly trigger a popup window so always close the dropdown
+        e.target.matches(".blocklyFlyoutButton, .blocklyFlyoutButton *, .blocklyTouchTargetBackground")
+      ) {
+        // If we click outside the dropdown, then instigate the hide code...
+        this.hideFloatDropDown();
+      }
     }
 
     if (e.button === 1 || e.shiftKey) {
@@ -2043,7 +2053,9 @@ export default class DevTools {
 
     let ids = Blockly.Xml.domToWorkspace(x, wksp);
 
-    this.reallyHideFloatDropDown(true);
+    if (!e.shiftKey) {
+      this.reallyHideFloatDropDown(true);
+    }
 
     let block = wksp.getBlockById(ids[0]);
 
@@ -2057,7 +2069,11 @@ export default class DevTools {
       }
     }
 
-    this.domHelpers.triggerDragAndDrop(block.svgPath_, null, { x: this.mouseXY.x, y: this.mouseXY.y });
+    this.domHelpers.triggerDragAndDrop(block.svgPath_, null, { x: this.mouseXY.x, y: this.mouseXY.y }, e.shiftKey);
+
+    if (e.shiftKey) {
+      document.getElementById("s3devIInp").focus();
+    }
 
     this.blockCursor = block;
   }
