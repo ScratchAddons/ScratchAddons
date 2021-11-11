@@ -1,27 +1,21 @@
 {
-  "name": "Higher resolution thumbnails",
-  "description": "Replaces thumbnails across the website with higher resolution images. Useful on retina displays or browsing at >100% zoom.",
+  "name": "High resolution thumbnails",
+  "description": "Replaces thumbnails across the website with higher resolution images. Useful for retina displays and browsing at greater than 100% zoom, and scales up undersized thumbnails regardless of \"scale thumbnails\" setting.",
   "info": [
     {
       "type": "warning",
-      "text": "Higher resolution images require larger filesizes. Take care not to accidentally incur data expenses if your network plan is limited.",
+      "text": "Higher resolution images require larger filesizes. If your network's data plan is limited, take care not to cause extra expenses.",
       "id": "imagefilesize"
     }
   ],
   "settings": [
     {
-      "name": "Dimension Multiplier (%)",
+      "name": "Scale thumbnails (100-300%)",
       "id": "multiplier",
       "type": "integer",
       "min": 100,
       "max": 300,
       "default": 200
-    },
-    {
-      "name": "Fix initially low-res thumbnails",
-      "id": "fixLowRes",
-      "type": "boolean",
-      "default": true
     }
   ],
   "tags": ["community"],

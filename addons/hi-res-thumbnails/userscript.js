@@ -18,25 +18,7 @@ export default async function ({ addon, console }) {
       continue main;
     }
 
-    if (addon.settings.get("fixLowRes"))
-      fixLowRes: {
-        // Note this returns a value in CSS pixel units, i.e. it doesn't take into
-        // account browser scaling or high-DPI screens. That's good, because we
-        // want to leave the actual resolution-increase factor completely up to
-        // the addon user/settings!
-        const rect = image.getBoundingClientRect();
-
-        // Use greater of both scales to choose the dimension which needs the most
-        // scaling and to maintain the ratio between the rendered and loaded
-        // dimensions.
-        const scale = Math.max(rect.width / width, rect.height / height);
-
-        if (scale > 1) {
-          width *= scale;
-          height *= scale;
-        }
-      }
-
+    [width, height] = fixLowRes(width, height, image);
     [width, height] = scaleDimensions(width, height);
 
     if (cdn2) {
@@ -50,6 +32,26 @@ export default async function ({ addon, console }) {
     if (image.src) {
       image.src = newSrc;
     }
+  }
+
+  function fixLowRes(width, height, image) {
+    // Note this returns a value in CSS pixel units, i.e. it doesn't take into
+    // account browser scaling or high-DPI screens. That's good, because we
+    // want to leave the actual resolution-increase factor completely up to
+    // the addon user/settings!
+    const rect = image.getBoundingClientRect();
+
+    // Use greater of both scales to choose the dimension which needs the most
+    // scaling and to maintain the ratio between the rendered and loaded
+    // dimensions.
+    const scale = Math.max(rect.width / width, rect.height / height);
+
+    if (scale > 1) {
+      width *= scale;
+      height *= scale;
+    }
+
+    return [width, height];
   }
 
   function scaleDimensions(width, height) {
