@@ -1,6 +1,6 @@
 {
   "name": "High resolution thumbnails",
-  "description": "Replaces thumbnails across the website with higher resolution images. Useful for retina displays and browsing at greater than 100% zoom, and scales up undersized thumbnails regardless of \"scale thumbnails\" setting.",
+  "description": "Replaces thumbnails across the website with higher resolution images. Useful for Retina displays and browsing at greater than 100% zoom, and scales up thumbnails that are undersized by default.",
   "info": [
     {
       "type": "warning",
