@@ -85,15 +85,24 @@ export default async function ({ addon, global, console }) {
       return;
     }
 
-    let el = null;
+    const el = e.target.closest('.blocklyBubbleCanvas g, .blocklyBlockCanvas .blocklyDraggable[data-id]');
+    if (el === hoveredElement) {
+      // Nothing to do.
+      return;
+    }
+    if (!el) {
+      hidePreview();
+      return;
+    }
+
     let text = null;
-    if (addon.settings.get("hover-view") && (el = e.target.closest('.blocklyBubbleCanvas g'))) {
+    if (addon.settings.get("hover-view") && e.target.closest('.blocklyBubbleCanvas g')) {
       const collapsedText = el.querySelector('text.scratchCommentText');
       if (collapsedText.getAttribute('display') !== 'none') {
         const textarea = el.querySelector('textarea');
         text = textarea.value;
       }
-    } else if ((el = e.target.closest('.blocklyBlockCanvas .blocklyDraggable[data-id]'))) {
+    } else if (e.target.closest('.blocklyBlockCanvas .blocklyDraggable[data-id]')) {
       const id = el.dataset.id;
       const block = getBlock(id);
       const comment = getComment(block);
@@ -109,15 +118,13 @@ export default async function ({ addon, global, console }) {
       }
     }
 
-    if (hoveredElement !== el) {
-      if (text !== null && text.trim() !== '') {
-        showTimeout = afterDelay(() => {
-          hoveredElement = el;
-          setText(text);
-        });
-      } else {
-        hidePreview();
-      }
+    if (text !== null && text.trim() !== '') {
+      showTimeout = afterDelay(() => {
+        hoveredElement = el;
+        setText(text);
+      });
+    } else {
+      hidePreview();
     }
   });
 
