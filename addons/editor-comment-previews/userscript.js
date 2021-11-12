@@ -2,13 +2,13 @@ export default async function ({ addon, global, console }) {
   const vm = addon.tab.traps.vm;
 
   const updateStyles = () => {
-    previewElement.classList.toggle('sa-comment-preview-delay', addon.settings.get('delay') !== 'none');
-    previewElement.classList.toggle('sa-comment-preview-reduce-transparency', addon.settings.get('reduce-transparency'));
-    previewElement.classList.toggle('sa-comment-preview-fade', !addon.settings.get('reduce-animation'));
+    previewInner.classList.toggle('sa-comment-preview-delay', addon.settings.get('delay') !== 'none');
+    previewInner.classList.toggle('sa-comment-preview-reduce-transparency', addon.settings.get('reduce-transparency'));
+    previewInner.classList.toggle('sa-comment-preview-fade', !addon.settings.get('reduce-animation'));
   };
 
   const afterDelay = (cb) => {
-    if (!previewElement.classList.contains('sa-comment-preview-hidden')) {
+    if (!previewInner.classList.contains('sa-comment-preview-hidden')) {
       // If not hidden, updating immediately is preferred
       cb();
       return;
@@ -25,12 +25,17 @@ export default async function ({ addon, global, console }) {
   let mouseY = 0;
   let doNotShowUntilMoveMouse = false;
 
-  const previewElement = document.createElement("div");
-  previewElement.classList.add("sa-comment-preview");
-  previewElement.classList.add("sa-comment-preview-hidden");
+  const previewOuter = document.createElement('div');
+  previewOuter.classList.add('sa-comment-preview-outer');
+
+  const previewInner = document.createElement("div");
+  previewInner.classList.add("sa-comment-preview-inner");
+  previewInner.classList.add("sa-comment-preview-hidden");
   updateStyles();
   addon.settings.addEventListener("change", updateStyles);
-  document.body.appendChild(previewElement);
+
+  previewOuter.appendChild(previewInner);
+  document.body.appendChild(previewOuter);
 
   const getBlock = (id) => vm.editingTarget.blocks.getBlock(id) || vm.runtime.flyoutBlocks.getBlock(id);
   const getComment = (block) => block && block.comment && vm.editingTarget.comments[block.comment];
@@ -54,20 +59,19 @@ export default async function ({ addon, global, console }) {
   };
 
   const setText = (text) => {
-    previewElement.innerText = text;
-    previewElement.classList.remove('sa-comment-preview-hidden');
+    previewInner.innerText = text;
+    previewInner.classList.remove('sa-comment-preview-hidden');
     updateMousePosition();
   };
 
   const updateMousePosition = () => {
-    previewElement.style.top = `${mouseY + 8}px`;
-    previewElement.style.left = `${mouseX + 8}px`;
+    previewOuter.style.transform = `translate(${mouseX + 8}px, ${mouseY + 8}px)`;
   };
 
   const hidePreview = () => {
     if (hoveredElement) {
       hoveredElement = null;
-      previewElement.classList.add('sa-comment-preview-hidden');
+      previewInner.classList.add('sa-comment-preview-hidden');
     }
   };
 
@@ -121,7 +125,7 @@ export default async function ({ addon, global, console }) {
     mouseX = e.clientX;
     mouseY = e.clientY;
     doNotShowUntilMoveMouse = false;
-    if (addon.settings.get("follow-mouse")) {
+    if (addon.settings.get("follow-mouse") && !previewInner.classList.contains('sa-comment-preview-hidden')) {
       updateMousePosition();
     }
   });

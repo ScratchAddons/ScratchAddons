@@ -1,10 +1,15 @@
-.sa-comment-preview {
+.sa-comment-preview-outer {
   position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100000000;
+}
+
+.sa-comment-preview-inner {
   width: calc(200px - 16px);
   max-height: calc(132px - 8px);
   padding: 8px;
   overflow: hidden;
-  z-index: 100000000;
 
   font-size: 12px;
   white-space: pre-wrap;
@@ -20,7 +25,7 @@
 }
 
 @supports (backdrop-filter: blur(16px)) {
-  .sa-comment-preview {
+  .sa-comment-preview-inner {
     background-color: rgb(255 255 255 / 75%);
     backdrop-filter: blur(16px);
   }
