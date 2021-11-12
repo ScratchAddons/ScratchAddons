@@ -228,7 +228,7 @@ export default async function ({ addon, msg, console }) {
         return false;
       }
       const canUseCloud = internalNode.stateNode?.props?.canUseCloud;
-      if (typeof canUseCloud === 'boolean') {
+      if (typeof canUseCloud === "boolean") {
         return canUseCloud;
       }
       internalNode = internalNode.child;
