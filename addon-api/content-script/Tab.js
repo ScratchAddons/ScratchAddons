@@ -9,7 +9,7 @@ import { addContextMenu } from "./contextmenu.js";
 const DATA_PNG = "data:image/png;base64,";
 
 const contextMenuCallbacks = [];
-const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image"];
+const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
 
 /**
@@ -322,6 +322,11 @@ export default class Tab extends Listenable {
         element: () => q("[class^='controls_controls-container']"),
         from: () => [q("[class^='stop-all_stop-all']")],
         until: () => [],
+      },
+      beforeProjectActionButtons: {
+        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        from: () => [],
+        until: () => [q(".report-button"), q(".action-buttons > div")],
       },
       afterCopyLinkButton: {
         element: () => q(".flex-row.subactions > .flex-row.action-buttons"),

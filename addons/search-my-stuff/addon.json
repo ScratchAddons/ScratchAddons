@@ -1,0 +1,35 @@
+{
+  "name": "Search bar on My Stuff",
+  "description": "Allows you to search your projects, studios, and trash on the My Stuff page. Simply start typing anywhere on the page to start a search. You can also use Ctrl+Enter after searching to quickly open the top search result.",
+  "info": [
+    {
+      "type": "notice",
+      "text": "If you have a lot of projects or studios, the search might take a while.",
+      "id": "pleaseBePatient"
+    }
+  ],
+  "tags": ["community", "featured"],
+  "credits": [
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang/"
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "userstyle.css",
+      "matches": ["https://scratch.mit.edu/mystuff"]
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/mystuff"]
+    }
+  ],
+  "libraries": ["fuse"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.22.0",
+  "enabledByDefault": false
+}
