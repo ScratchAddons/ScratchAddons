@@ -38,7 +38,11 @@ export default class DevTools {
   async init() {
     this.addContextMenus();
     while (true) {
-      const root = await this.addon.tab.waitForElement("ul[class*=gui_tab-list_]", { markAsSeen: true });
+      const root = await this.addon.tab.waitForElement("ul[class*=gui_tab-list_]", {
+        markAsSeen: true,
+        reduxEvents: ["scratch-gui/mode/SET_PLAYER", "fontsLoaded/SET_FONTS_LOADED", "scratch-gui/locales/SELECT_LOCALE"],
+        reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
+      });
       this.initInner(root);
     }
   }
