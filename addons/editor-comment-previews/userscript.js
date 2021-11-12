@@ -32,13 +32,25 @@ export default async function ({ addon, global, console }) {
   addon.settings.addEventListener("change", updateStyles);
   document.body.appendChild(previewElement);
 
-  const getBlockAndComment = (id) => {
-    const block = vm.editingTarget.blocks.getBlock(id) || vm.runtime.flyoutBlocks.getBlock(id);
-    const comment = block && block.comment && vm.editingTarget.comments[block.comment];
-    return {
-      block,
-      comment
-    };
+  const getBlock = (id) => vm.editingTarget.blocks.getBlock(id) || vm.runtime.flyoutBlocks.getBlock(id);
+  const getComment = (block) => block && block.comment && vm.editingTarget.comments[block.comment];
+  const getProcedureDefinitionBlock = (procCode) => {
+    const procedurePrototype = Object.values(vm.editingTarget.blocks._blocks).find((i) => (
+      i.opcode === "procedures_prototype" && i.mutation.proccode === procCode
+    ));
+    if (procedurePrototype) {
+      // Usually `parent` will exist but sometimes it doesn't
+      if (procedurePrototype.parent) {
+        return getBlock(procedurePrototype.parent);
+      }
+      const id = procedurePrototype.id;
+      return Object.values(vm.editingTarget.blocks._blocks).find((i) => (
+        i.opcode === 'procedures_definition' &&
+        i.inputs.custom_block &&
+        i.inputs.custom_block.block === id
+      ));
+    }
+    return null;
   };
 
   const setText = (text) => {
@@ -79,16 +91,14 @@ export default async function ({ addon, global, console }) {
       }
     } else if ((el = e.target.closest('.blocklyBlockCanvas .blocklyDraggable[data-id]'))) {
       const id = el.dataset.id;
-      const {block, comment} = getBlockAndComment(id);
+      const block = getBlock(id);
+      const comment = getComment(block);
       if (addon.settings.get("hover-view-block") && comment) {
         text = comment.text;
       } else if (block && block.opcode === 'procedures_call' && addon.settings.get("hover-view-procedure")) {
         const procCode = block.mutation.proccode;
-        const procedurePrototype = Object.values(vm.editingTarget.blocks._blocks).find((i) => {
-          return i.opcode === "procedures_prototype" && i.mutation.proccode === procCode;
-        });
-        const procedureDefinition = procedurePrototype && procedurePrototype.parent;
-        const procedureComment = getBlockAndComment(procedureDefinition).comment;
+        const procedureDefinitionBlock = getProcedureDefinitionBlock(procCode);
+        const procedureComment = getComment(procedureDefinitionBlock);
         if (procedureComment) {
           text = procedureComment.text;
         }
