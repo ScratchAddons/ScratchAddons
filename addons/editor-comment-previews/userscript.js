@@ -1,20 +1,5 @@
 export default async function ({ addon, global, console }) {
-  // Get VM
   const vm = addon.tab.traps.vm;
-  await new Promise((resolve, reject) => {
-    if (vm.editingTarget) return resolve();
-    vm.runtime.once("PROJECT_LOADED", resolve);
-  });
-
-  // Get Blockly and handle flyout safely
-  const Blockly = await addon.tab.traps.getBlockly();
-  const workspace = await Blockly.getMainWorkspace();
-  if (vm.editingTarget) vm.emitWorkspaceUpdate();
-  const flyout = await workspace.getFlyout();
-  const flyoutWorkspace = flyout.getWorkspace();
-  Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.workspaceToDom(flyoutWorkspace), flyoutWorkspace);
-  workspace.getToolbox().refreshSelection();
-  workspace.toolboxRefreshEnabled_ = true;
 
   // Create comment preview element (initially hidden)
   const previewElement = document.createElement("div");
@@ -54,7 +39,7 @@ export default async function ({ addon, global, console }) {
           if (elementType === "component") element = element.parentElement;
           // Find this exact block instance in the database (checks both workspace and flyout)
           let blocks;
-          if (element.matches(".blocklyFlyout *")) blocks = flyout.workspace_.blockDB_;
+          if (element.matches(".blocklyFlyout *")) blocks = vm.runtime.flyoutBlocks._blocks;
           else blocks = vm.editingTarget.blocks._blocks;
           let block = blocks[element.getAttribute("data-id")];
           if (block) {
