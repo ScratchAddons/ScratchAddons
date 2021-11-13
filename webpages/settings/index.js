@@ -195,12 +195,17 @@ let fuse;
         }
 
         if (!fuse) return [];
-        const addonListObjs = Object.values(this.addonListObjs.reduce((acc, cur) => {
-          if (!acc[cur.manifest._addonId] || acc[cur.manifest._addonId] && cur.group.id !== "featuredNew" && cur.group.id !== "new") {
-            acc[cur.manifest._addonId] = cur;
-          }
-          return acc;
-        }, Object.create(null)));
+        const addonListObjs = Object.values(
+          this.addonListObjs.reduce((acc, cur) => {
+            if (
+              !acc[cur.manifest._addonId] ||
+              (acc[cur.manifest._addonId] && cur.group.id !== "featuredNew" && cur.group.id !== "new")
+            ) {
+              acc[cur.manifest._addonId] = cur;
+            }
+            return acc;
+          }, Object.create(null))
+        );
         const fuseSearch = fuse.search(this.searchInput).sort((a, b) => {
           // Sort very good matches at the top no matter what
           if ((a.score < 0.1) ^ (b.score < 0.1)) return a.score < 0.1 ? -1 : 1;
