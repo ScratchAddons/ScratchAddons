@@ -22,6 +22,19 @@ export default async function ({ addon, global, console, msg }) {
 
   // Keyboard shortcut for focusing search bar
   document.addEventListener("keypress", (e) => {
+    // Ignore input
+    // 1) in <input> or <textarea>
+    // 2) with Ctrl/Alt/Meta keys pressed (probably browser shortcut keys)
+    // 3) that is not represented by one alphanumeric key code (probably special letters)
+    if (
+      e.target instanceof HTMLInputElement ||
+      e.target instanceof HTMLTextAreaElement ||
+      e.ctrlKey ||
+      e.altKey ||
+      e.metaKey ||
+      !/^\w$/.test(e.key)
+    )
+      return;
     searchBar.focus();
   });
 
