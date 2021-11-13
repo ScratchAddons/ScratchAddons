@@ -1,0 +1,17 @@
+{
+  "name": "Block count",
+  "description": "Shows the total number of blocks in a project in the editor menu bar.",
+  "tags": ["editor", "editorMenuBar"],
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "blockcount.js",
+      "matches": ["projects"]
+    }
+  ]
+}
