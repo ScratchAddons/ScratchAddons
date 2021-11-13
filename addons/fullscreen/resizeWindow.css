@@ -19,3 +19,7 @@
 [class*="stage-wrapper_full-screen"] [class*="monitor-list_monitor-list"] {
   overflow: visible;
 }
+
+[class*="stage-wrapper_full-screen"] [class*="stage_question-wrapper"] {
+  width: auto !important;
+}
