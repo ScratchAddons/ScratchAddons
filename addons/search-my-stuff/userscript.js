@@ -152,6 +152,8 @@ export default async function ({ addon, global, console, msg }) {
    */
   async function triggerNewSearch() {
     await resultsContainer;
+    // Empty page, do nothing
+    if (!fuse) return;
     // Blank query should restore the original order
     if (searchBar.value === "") {
       searchDropdown.querySelector("span span").innerText = originalDropdownText;
@@ -184,7 +186,7 @@ export default async function ({ addon, global, console, msg }) {
    * If so, `autoLoadMore()` is called.
    */
   function determineLoadMore() {
-    if (searchBar.value !== "" && !loading) {
+    if (resultsContainer && searchBar.value !== "" && !loading) {
       if (resultsContainer.querySelectorAll("li").length === 0) {
         autoLoadMore();
       } else if (allLoaded) {
@@ -267,7 +269,7 @@ export default async function ({ addon, global, console, msg }) {
           loading = false;
           autoLoadMore();
         }, 500);
-      } else {
+      } else if (resultsContainer) {
         // If "Load more" can be clicked again
         if (resultsContainer.querySelectorAll("li").length !== initResultsCount) {
           // Prompt to load more
