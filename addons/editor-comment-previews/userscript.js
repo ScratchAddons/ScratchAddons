@@ -78,12 +78,16 @@ export default async function ({ addon, global, console }) {
               let blockName;
               if (block.mutation) blockName = block.mutation.proccode;
               else blockName = block.procCode_;
-              const prototypeBlock =
-                vm.editingTarget.blocks._blocks[
-                  Object.entries(vm.editingTarget.blocks._blocks).find((i) => {
-                    return i[1].opcode === "procedures_prototype" && i[1].mutation.proccode === blockName;
-                  })[0]
-                ];
+              const blockEntry = Object.entries(vm.editingTarget.blocks._blocks).find((i) => {
+                return i[1].opcode === "procedures_prototype" && i[1].mutation.proccode === blockName;
+              });
+              if (!blockEntry) {
+                // Orphaned blocks/debugger blocks do not have definition
+                previewElement.classList.add("sa-comment-preview-hidden");
+                mouseOver = null;
+                return;
+              }
+              const prototypeBlock = vm.editingTarget.blocks._blocks[blockEntry[0]];
               const definitionBlock = vm.editingTarget.blocks._blocks[prototypeBlock.parent];
               commentObject = comments[definitionBlock.comment];
               if (commentObject && commentObject.text !== "") {
