@@ -14,8 +14,7 @@ export default async function ({ addon, global, console, msg }) {
       fill: #fff !important;
   }
   `;
-  let exSVG = document.createElement("svg");
-  exSVG.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  let exSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   exSVG.setAttribute("xmlns:html", "http://www.w3.org/1999/xhtml");
   exSVG.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
   exSVG.setAttribute("version", "1.1");
@@ -145,9 +144,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     });
     if (!isExportPNG) {
-      let tmp = document.createElement("div");
-      tmp.appendChild(svg);
-      exportData(tmp.innerHTML);
+      exportData((new XMLSerializer()).serializeToString(svg));
     } else {
       exportPNG(svg);
     }
@@ -213,13 +210,12 @@ export default async function ({ addon, global, console, msg }) {
   }
 
   function exportPNG(svg) {
-    const div = document.createElement("div");
-    div.appendChild(svg);
+    const serializer = new XMLSerializer();
 
     const iframe = document.createElement("iframe");
     // iframe.style.display = "none"
     document.body.append(iframe);
-    iframe.contentDocument.write(div.innerHTML);
+    iframe.contentDocument.write(serializer.serializeToString(svg));
     let { width, height } = iframe.contentDocument.body.querySelector("svg g").getBoundingClientRect();
     height = height + 20 * 2; //  hat block height restore
     svg.setAttribute("width", width + "px");
@@ -230,7 +226,7 @@ export default async function ({ addon, global, console, msg }) {
 
     let img = document.createElement("img");
 
-    img.setAttribute("src", "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(div.innerHTML))));
+    img.setAttribute("src", "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(serializer.serializeToString(svg)))));
     img.onload = function () {
       canvas.height = img.height;
       canvas.width = img.width;
