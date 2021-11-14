@@ -6,6 +6,10 @@ const extensionsCategory = {
   colorId: "pen",
   devtoolsId: "extension",
 };
+const saCategory = {
+  settingId: "sa-color",
+  colorId: "sa"
+};
 const categories = [
   {
     id: "motion",
@@ -74,6 +78,11 @@ export default async function ({ addon, console }) {
   const Blockly = await addon.tab.traps.getBlockly();
 
   let originalColors = JSON.parse(JSON.stringify(Blockly.Colours));
+  originalColors.sa = {
+    primary: "#29beb8",
+    secondary: "#3aa8a4",
+    tertiary: "#3aa8a4",
+  };
 
   let textMode = addon.settings.get("text");
   const isColoredTextMode = () => !addon.self.disabled && (textMode === "colorOnWhite" || textMode === "colorOnBlack");
@@ -267,6 +276,11 @@ export default async function ({ addon, console }) {
       Blockly.Colours[category.colorId].secondary = secondaryColor(category);
       Blockly.Colours[category.colorId].tertiary = tertiaryColor(category);
     }
+    addon.tab.setBlockColor({
+      color: primaryColor(saCategory),
+      secondaryColor: secondaryColor(saCategory),
+      tertiaryColor: tertiaryColor(saCategory),
+    });
     Blockly.Colours.textField = otherColor("input-color", "textField");
     if (uncoloredTextColor() === "#575e75") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
 

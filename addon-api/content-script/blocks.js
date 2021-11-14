@@ -1,10 +1,14 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 
-const color = {
+let color = {
   color: "#29beb8",
   secondaryColor: "#3aa8a4",
   tertiaryColor: "#3aa8a4",
 };
+
+export const setBlockColor = (newColor) => {
+  color = Object.assign(color, newColor);
+}
 
 const ICON =
   "data:image/svg+xml;," +
@@ -85,9 +89,6 @@ export const addBlock = (proccode, { args, callback, hidden, displayName }) => {
 
   const blockData = {
     id: proccode,
-    color: color.color,
-    secondaryColor: color.secondaryColor,
-    tertiaryColor: color.tertiaryColor,
     args,
     handler: callback,
     hide: !!hidden,
@@ -132,9 +133,9 @@ const injectWorkspace = (ScratchBlocks) => {
     if (this.type === "procedures_call") {
       const block = this.procCode_ && getCustomBlock(this.procCode_);
       if (block) {
-        this.colour_ = block.color;
-        this.colourSecondary_ = block.secondaryColor;
-        this.colourTertiary_ = block.tertiaryColor;
+        this.colour_ = color.color;
+        this.colourSecondary_ = color.secondaryColor;
+        this.colourTertiary_ = color.tertiaryColor;
         this.customContextMenu = null;
       }
     }

@@ -39,6 +39,9 @@ export default class Tab extends Listenable {
   removeBlock(...a) {
     return blocks.removeBlock(...a);
   }
+  setBlockColor(...a) {
+    return blocks.setBlockColor(...a);
+  }
   /**
    * Loads a script by URL.
    * @param {string} url - script URL.
