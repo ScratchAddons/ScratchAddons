@@ -1,3 +1,9 @@
+.scratchCategoryItemBubble::after {
+  /* block-palette-icons */
+  filter: brightness(0);
+  opacity: 0.6;
+}
+
 .blocklyDropDownDiv .goog-menuitem {
   color: #575e75;
 }
