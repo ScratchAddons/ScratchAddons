@@ -129,7 +129,7 @@ export default async function ({ addon, global, console }) {
 
     if (toggleSetting === "hover") {
       placeHolderDiv.onmouseenter = (e) => onmouseenter(e);
-      placeHolderDiv.onmousedown = (e) => onmouseenter();
+      placeHolderDiv.onmouseup = (e) => onmouseenter();
       document.querySelector(".blocklyToolboxDiv").onmouseenter = (e) => onmouseenter(e); // for columns
       blocklySvg.onmouseenter = (e) => onmouseleave(e);
     }
