@@ -137,8 +137,8 @@ export default async function ({ addon, console }) {
     return {
       white: "#ffffff",
       black: "#575e75",
-      colorOnWhite: "#ffffff",
-      colorOnBlack: "#575e75",
+      colorOnWhite: "#575e75",
+      colorOnBlack: "#ffffff",
     }[textMode];
   };
   const otherColor = (settingId, colorId) => {
@@ -283,6 +283,7 @@ export default async function ({ addon, console }) {
     });
     Blockly.Colours.textField = otherColor("input-color", "textField");
     if (uncoloredTextColor() === "#575e75") Blockly.Colours.fieldShadow = "rgba(0, 0, 0, 0.15)";
+    else Blockly.Colours.fieldShadow = originalColors.fieldShadow;
 
     // Reload toolbox
     toolbox.dispose();
