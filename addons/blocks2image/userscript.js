@@ -1,19 +1,34 @@
 export default async function ({ addon, global, console, msg }) {
-  let style = document.createElement("style");
-  style.textContent = `
-  .blocklyText {
-      fill: #fff;
-      font-family: "Helvetica Neue", Helvetica, sans-serif;
-      font-size: 12pt;
-      font-weight: 500;
+  function makeStyle() {
+    let style = document.createElement("style");
+    style.textContent = `
+    .blocklyText {
+        fill: #fff;
+        font-family: "Helvetica Neue", Helvetica, sans-serif;
+        font-size: 12pt;
+        font-weight: 500;
+    }
+    .blocklyNonEditableText>text, .blocklyEditableText>text {
+        fill: #575E75;
+    }
+    .blocklyDropdownText {
+        fill: #fff !important;
+    }
+    `;
+    for (let userstyle of document.querySelectorAll(".scratch-addons-style[data-addon-id='editor-theme3']")) {
+      if (userstyle.disabled) continue;
+      style.textContent += userstyle.textContent;
+    }
+    return style;
   }
-  .blocklyNonEditableText>text, .blocklyEditableText>text {
-      fill: #575E75;
+
+  function setCSSVars(element) {
+    for (let property of document.documentElement.style) {
+      if (property.startsWith("--editorTheme3-"))
+        element.style.setProperty(property, document.documentElement.style.getPropertyValue(property));
+    }
   }
-  .blocklyDropdownText {
-      fill: #fff !important;
-  }
-  `;
+
   let exSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   exSVG.setAttribute("xmlns:html", "http://www.w3.org/1999/xhtml");
   exSVG.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -160,7 +175,8 @@ export default async function ({ addon, global, console, msg }) {
       "transform",
       `translate(0,${dataShapes === "hat" ? "18" : "0"}) ${isExportPNG ? "scale(2)" : ""}`
     );
-    svg.append(style);
+    setCSSVars(svg);
+    svg.append(makeStyle());
     svg.append(svgchild);
     return svg;
   }
@@ -187,7 +203,8 @@ export default async function ({ addon, global, console, msg }) {
         isExportPNG ? "scale(2)" : ""
       }`
     );
-    svg.append(style);
+    setCSSVars(svg);
+    svg.append(makeStyle());
     svg.append(svgchild);
     return svg;
   }
