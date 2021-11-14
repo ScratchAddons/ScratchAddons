@@ -159,7 +159,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     });
     if (!isExportPNG) {
-      exportData((new XMLSerializer()).serializeToString(svg));
+      exportData(new XMLSerializer().serializeToString(svg));
     } else {
       exportPNG(svg);
     }
@@ -243,7 +243,10 @@ export default async function ({ addon, global, console, msg }) {
 
     let img = document.createElement("img");
 
-    img.setAttribute("src", "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(serializer.serializeToString(svg)))));
+    img.setAttribute(
+      "src",
+      "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(serializer.serializeToString(svg))))
+    );
     img.onload = function () {
       canvas.height = img.height;
       canvas.width = img.width;
