@@ -56,7 +56,7 @@ const categories = [
     devtoolsId: "data",
   },
   {
-    id: null,
+    id: "lists",
     settingId: "data-lists-color",
     colorId: "data_lists",
     devtoolsId: "data-lists",
