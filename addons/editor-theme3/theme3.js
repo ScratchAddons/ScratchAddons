@@ -76,8 +76,7 @@ export default async function ({ addon, console }) {
   let originalColors = JSON.parse(JSON.stringify(Blockly.Colours));
 
   let textMode = addon.settings.get("text");
-  const isColoredTextMode = () =>
-    !addon.self.disabled && (textMode === "colorOnWhite" || textMode === "colorOnBlack");
+  const isColoredTextMode = () => !addon.self.disabled && (textMode === "colorOnWhite" || textMode === "colorOnBlack");
 
   const primaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].primary;
@@ -89,14 +88,13 @@ export default async function ({ addon, console }) {
   const secondaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].secondary;
     if (isColoredTextMode())
-      return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), {a: 0.15}));
-    return removeAlpha(multiply(addon.settings.get(category.settingId), {r: 0.9, g: 0.9, b: 0.9}));
+      return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), { a: 0.15 }));
+    return removeAlpha(multiply(addon.settings.get(category.settingId), { r: 0.9, g: 0.9, b: 0.9 }));
   };
   const tertiaryColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].tertiary;
-    if (isColoredTextMode())
-      return removeAlpha(addon.settings.get(category.settingId));
-    return removeAlpha(multiply(addon.settings.get(category.settingId), {r: 0.8, g: 0.8, b: 0.8}));
+    if (isColoredTextMode()) return removeAlpha(addon.settings.get(category.settingId));
+    return removeAlpha(multiply(addon.settings.get(category.settingId), { r: 0.8, g: 0.8, b: 0.8 }));
   };
   const fieldBackground = (category) => {
     // Background color for open dropdowns and Boolean inputs
@@ -107,12 +105,12 @@ export default async function ({ addon, console }) {
         let primary;
         if (block.isShadow() && block.getParent()) primary = block.getParent().getColour();
         else primary = block.getColour();
-        return alphaBlend(primary, multiply(block.getColourTertiary(), {a: 0.25}));
+        return alphaBlend(primary, multiply(block.getColourTertiary(), { a: 0.25 }));
       }
       return block.getColourTertiary();
     }
     if (isColoredTextMode())
-      return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), {a: 0.25}));
+      return alphaBlend(primaryColor(category), multiply(addon.settings.get(category.settingId), { a: 0.25 }));
     return tertiaryColor(category);
   };
   const textColor = (field) => {
@@ -124,16 +122,16 @@ export default async function ({ addon, console }) {
   const coloredTextColor = (category) => {
     if (addon.self.disabled) return originalColors[category.colorId].primary;
     return removeAlpha(addon.settings.get(category.settingId));
-  }
+  };
   const uncoloredTextColor = () => {
     if (addon.self.disabled) return "#ffffff";
     return {
       white: "#ffffff",
       black: "#575e75",
       colorOnWhite: "#ffffff",
-      colorOnBlack: "#575e75"
+      colorOnBlack: "#575e75",
     }[textMode];
-  }
+  };
   const otherColor = (settingId, colorId) => {
     if (addon.self.disabled) return originalColors[colorId];
     return removeAlpha(addon.settings.get(settingId));
@@ -144,10 +142,9 @@ export default async function ({ addon, console }) {
     // Category bubbles
     oldCategoryCreateDom.call(this);
     if (this.iconURI_) return;
-    const category = categories.find(item => item.id === this.id_);
+    const category = categories.find((item) => item.id === this.id_);
     if (!category) return;
-    this.bubble_.style.backgroundColor =
-      isColoredTextMode() ? fieldBackground(category) : primaryColor(category);
+    this.bubble_.style.backgroundColor = isColoredTextMode() ? fieldBackground(category) : primaryColor(category);
     this.bubble_.style.borderColor = tertiaryColor(category);
   };
 
@@ -171,7 +168,7 @@ export default async function ({ addon, console }) {
         input.outlinePath.setAttribute("fill", fieldBackground(this));
       }
     }
-  }
+  };
 
   const oldFieldLabelInit = Blockly.FieldLabel.prototype.init;
   Blockly.FieldLabel.prototype.init = function () {
@@ -187,7 +184,7 @@ export default async function ({ addon, console }) {
     if (this.sourceBlock_.isShadow()) return;
     // Labels in custom block editor
     this.box_.setAttribute("fill", fieldBackground(this));
-  }
+  };
 
   const oldFieldDropdownInit = Blockly.FieldDropdown.prototype.init;
   Blockly.FieldDropdown.prototype.init = function () {
@@ -214,7 +211,7 @@ export default async function ({ addon, console }) {
     if (isColoredTextMode()) {
       Blockly.DropDownDiv.getContentDiv().style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
     }
-  }
+  };
 
   const oldFieldVariableInit = Blockly.FieldVariable.prototype.init;
   Blockly.FieldVariable.prototype.init = function () {
@@ -242,14 +239,13 @@ export default async function ({ addon, console }) {
         this.fillMatrixNode_(this.ledThumbNodes_, i, uncoloredTextColor());
       }
     }
-  }
+  };
 
   const oldFieldMatrixCreateButton = Blockly.FieldMatrix.prototype.createButton_;
   Blockly.FieldMatrix.prototype.createButton_ = function (fill) {
-    if (fill === "#FFFFFF")
-      fill = uncoloredTextColor();
+    if (fill === "#FFFFFF") fill = uncoloredTextColor();
     return oldFieldMatrixCreateButton.call(this, fill);
-  }
+  };
 
   const updateColors = () => {
     const workspace = Blockly.getMainWorkspace();
