@@ -1,11 +1,15 @@
 {
   "name": "Better emojis",
-  "description": "Replaces the cat emojis in comments on the website with improved vector designs.",
+  "description": "Replaces the emojis in comments on the website with improved vector designs.",
   "tags": ["community", "comments"],
   "credits": [
     {
       "name": "getbent",
       "link": "https://scratch.mit.edu/users/getbent/"
+    },
+    {
+      "name": "kccuber",
+      "link": "https://scratch.mit.edu/users/kccuber/"
     }
   ],
   "userscripts": [

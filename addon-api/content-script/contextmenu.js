@@ -1,4 +1,5 @@
 let initialized = false;
+let hasDynamicContextMenu = false;
 let contextMenus = [];
 
 const onReactContextMenu = function (e) {
@@ -45,8 +46,11 @@ const onReactContextMenu = function (e) {
   Array.from(ctxMenu.children).forEach((existing) => {
     if (existing.classList.contains("sa-ctx-menu")) existing.remove();
   });
-  for (const item of contextMenus) {
-    if (!item.types.some((itemType) => type === itemType)) continue;
+  for (const item of hasDynamicContextMenu
+    ? contextMenus.flatMap((menu) => (typeof menu === "function" ? menu(type, ctx) : menu))
+    : contextMenus) {
+    if (!item) continue;
+    if (item.types && !item.types.some((itemType) => type === itemType)) continue;
     if (item.condition && !item.condition(ctx)) continue;
     const itemElem = document.createElement("div");
     const classes = ["context-menu_menu-item"];
@@ -62,7 +66,8 @@ const onReactContextMenu = function (e) {
       display: "block",
     });
 
-    itemElem.addEventListener("click", () => {
+    itemElem.addEventListener("click", (e) => {
+      e.stopPropagation();
       window.dispatchEvent(
         new CustomEvent("REACT_CONTEXTMENU_HIDE", {
           detail: {
@@ -86,13 +91,20 @@ const onReactContextMenu = function (e) {
 const initialize = (tab) => {
   if (initialized) return;
   initialized = true;
-  document.body.addEventListener("contextmenu", (e) => onReactContextMenu.call(tab, e), { capture: true });
+  tab
+    .waitForElement("body")
+    .then((body) => body.addEventListener("contextmenu", (e) => onReactContextMenu.call(tab, e), { capture: true }));
 };
 
 export const addContextMenu = (tab, callback, opts) => {
-  contextMenus.push({
-    ...opts,
-    callback,
-  });
+  if (typeof opts === "undefined") {
+    contextMenus.push(callback);
+    hasDynamicContextMenu = true;
+  } else {
+    contextMenus.push({
+      ...opts,
+      callback,
+    });
+  }
   initialize(tab);
 };

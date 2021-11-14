@@ -59,10 +59,40 @@ export default async function ({ addon, global, console, msg }) {
           if (reactionButton) reactionButton.className = "my-ocular-reaction-button";
           if (reactionButton) reactionButton.innerText = `${reaction.emoji} ${reaction.reactions.length}`;
 
+          if (reactionButton && reaction.emoji.startsWith(":") && reaction.emoji.endsWith(":")) {
+            // special case for "easter egg emojis", load the emoji from the emoji from https://ocular.jeffalo.net/emojis/:name.png
+
+            let emojiName = reaction.emoji.slice(1, -1);
+            let url = `https://ocular.jeffalo.net/emojis/${emojiName}.png`;
+
+            let img = document.createElement("img");
+            img.src = url;
+
+            reactionButton.innerText = "";
+            reactionButton.appendChild(img);
+
+            let reactionAmount = document.createElement("span");
+            reactionAmount.innerText = ` ${reaction.reactions.length}`;
+            reactionButton.appendChild(reactionAmount);
+          }
+
           let reactionMenuItem = document.createElement("a");
           reactionMenuItem.href = "";
           reactionMenuItem.className = "my-ocular-reaction-button";
           reactionMenuItem.innerText = reaction.emoji;
+
+          if (reaction.emoji.startsWith(":") && reaction.emoji.endsWith(":")) {
+            // special case for "easter egg emojis", load the emoji from the emoji from https://ocular.jeffalo.net/emojis/:name.png
+
+            let emojiName = reaction.emoji.slice(1, -1);
+            let url = `https://ocular.jeffalo.net/emojis/${emojiName}.png`;
+
+            let img = document.createElement("img");
+            img.src = url;
+
+            reactionMenuItem.innerText = "";
+            reactionMenuItem.appendChild(img);
+          }
 
           if (reaction.reactions.find((r) => r.user === username)) {
             if (reactionButton) reactionButton.classList.add("selected");

@@ -1,0 +1,36 @@
+.sa-comment-preview {
+  position: fixed;
+  width: calc(200px - 16px);
+  max-height: calc(132px - 8px);
+  padding: 8px;
+  overflow: hidden;
+  z-index: 100000000;
+
+  font-size: 12px;
+  white-space: pre-wrap;
+  pointer-events: none;
+
+  color: rgb(87, 94, 117);
+  background-color: rgb(255 255 255 / 75%);
+  border-style: none;
+  border-radius: 8px;
+  filter: drop-shadow(0px 5px 5px rgb(0 0 0 / 10%));
+  backdrop-filter: blur(16px);
+
+  transform: perspective(200px);
+}
+
+.sa-comment-preview-fade {
+  transition: opacity 0.1s, filter 0.1s, transform 0.1s linear;
+}
+
+.sa-comment-preview-hidden {
+  opacity: 0;
+  filter: none;
+  transform: perspective(200px) translateZ(-20px);
+}
+
+.sa-comment-preview-reduce-transparency {
+  background-color: rgb(255 255 255);
+  backdrop-filter: none;
+}

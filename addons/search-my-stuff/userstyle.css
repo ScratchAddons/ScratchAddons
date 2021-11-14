@@ -1,0 +1,33 @@
+.inner {
+  display: flex;
+}
+
+.inner > .dropdown.button.grey.small,
+.inner > .right {
+  align-self: center;
+  margin-left: 8px;
+}
+
+/* Disable "hosted/curated by me" because the API endpoints are broken */
+.dropdown.select.button.grey.small {
+  display: none;
+}
+
+#search-my-stuff-form {
+  align-self: center;
+}
+
+#search-my-stuff-input {
+  align-self: center;
+  margin-bottom: 0;
+}
+
+#search-my-stuff-header,
+#search-my-stuff-tip {
+  text-align: center;
+}
+
+#search-my-stuff-tip {
+  display: block;
+  padding: 0px 15px 25px;
+}
