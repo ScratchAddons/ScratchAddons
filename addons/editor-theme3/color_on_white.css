@@ -1,9 +1,9 @@
 .blocklyDropDownDiv .goog-menuitem {
-    color: #575e75;
+  color: #575e75;
 }
 
 .blocklyAngleDragHandle {
-    stroke: black;
-    stroke-opacity: 0.15;
-    paint-order: stroke fill;
+  stroke: black;
+  stroke-opacity: 0.15;
+  paint-order: stroke fill;
 }
