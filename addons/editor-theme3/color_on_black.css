@@ -1,3 +1,9 @@
+.u-dropdown-searchbar {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.u-dropdown-searchbar:focus {
+  background-color: var(--editorTheme3-hoveredItem);
+}
 .blocklyDropDownDiv .goog-menuitem-checkbox {
   filter: brightness(0) invert(1);
 }

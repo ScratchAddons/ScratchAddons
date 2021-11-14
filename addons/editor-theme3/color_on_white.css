@@ -4,9 +4,14 @@
   opacity: 0.6;
 }
 
+.u-dropdown-searchbar,
+.u-dropdown-searchbar:focus,
 .blocklyDropDownDiv .goog-menuitem,
 .sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
   color: #575e75;
+}
+.u-dropdown-searchbar:focus {
+  background-color: var(--editorTheme3-hoveredItem);
 }
 
 .blocklyAngleDragHandle {
