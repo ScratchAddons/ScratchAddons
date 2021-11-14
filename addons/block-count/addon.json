@@ -13,5 +13,6 @@
       "url": "blockcount.js",
       "matches": ["projects"]
     }
-  ]
+  ],
+  "versionAdded": "1.4.0"
 }
