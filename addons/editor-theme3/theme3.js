@@ -8,7 +8,7 @@ const extensionsCategory = {
 };
 const saCategory = {
   settingId: "sa-color",
-  colorId: "sa"
+  colorId: "sa",
 };
 const categories = [
   {
@@ -183,7 +183,7 @@ export default async function ({ addon, console }) {
   Blockly.BlockSvg.prototype.showContextMenu_ = function (e) {
     Blockly.WidgetDiv.DIV.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
     return oldBlockShowContextMenu.call(this, e);
-  }
+  };
 
   const oldFieldLabelInit = Blockly.FieldLabel.prototype.init;
   Blockly.FieldLabel.prototype.init = function () {

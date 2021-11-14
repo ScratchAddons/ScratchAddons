@@ -8,7 +8,7 @@ let color = {
 
 export const setBlockColor = (newColor) => {
   color = Object.assign(color, newColor);
-}
+};
 
 const ICON =
   "data:image/svg+xml;," +
