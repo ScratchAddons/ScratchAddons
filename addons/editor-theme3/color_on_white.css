@@ -4,7 +4,8 @@
   opacity: 0.6;
 }
 
-.blocklyDropDownDiv .goog-menuitem {
+.blocklyDropDownDiv .goog-menuitem,
+.sa-contextmenu-colored .blocklyContextMenu .goog-menuitem .goog-menuitem-content {
   color: #575e75;
 }
 

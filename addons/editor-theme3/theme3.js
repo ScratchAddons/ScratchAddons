@@ -170,6 +170,12 @@ export default async function ({ addon, console }) {
     }
   };
 
+  const oldBlockShowContextMenu = Blockly.BlockSvg.prototype.showContextMenu_;
+  Blockly.BlockSvg.prototype.showContextMenu_ = function (e) {
+    Blockly.WidgetDiv.DIV.style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
+    return oldBlockShowContextMenu.call(this, e);
+  }
+
   const oldFieldLabelInit = Blockly.FieldLabel.prototype.init;
   Blockly.FieldLabel.prototype.init = function () {
     // Labels
@@ -210,6 +216,8 @@ export default async function ({ addon, console }) {
     // Dropdown menus
     if (isColoredTextMode()) {
       Blockly.DropDownDiv.getContentDiv().style.setProperty("--editorTheme3-hoveredItem", fieldBackground(this));
+    } else {
+      Blockly.DropDownDiv.getContentDiv().style.removeProperty("--editorTheme3-hoveredItem");
     }
   };
 
