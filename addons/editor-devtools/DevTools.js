@@ -409,6 +409,31 @@ export default class DevTools {
 
     this.dom_removeChildren(this.dd);
 
+    async function getColorsForCls(addon, cls) {
+      if (cls === "flag") return {
+        text: "#4cbf56",
+        hoverBg: "#4cbf56",
+        hoverText: "white",
+      };
+      if (typeof window._devtoolsGetColorsForCls === "function") return window._devtoolsGetColorsForCls(cls);
+      const blockly = await addon.tab.traps.getBlockly();
+      const colorIds = {
+        receive: "event",
+        event: "event",
+        define: "more",
+        var: "data",
+        VAR: "data",
+        list: "data_lists",
+        LIST: "data_lists",
+        costume: "looks",
+      };
+      return {
+        text: blockly.Colours[colorIds[cls]].primary,
+        hoverBg: blockly.Colours[colorIds[cls]].primary,
+        hoverText: "white",
+      };
+    }
+
     let foundLi = null;
     /**
      * @type {[BlockItem]}
@@ -419,6 +444,11 @@ export default class DevTools {
       li.innerText = proc.procCode;
       li.data = proc;
       li.className = proc.cls;
+      getColorsForCls(this.addon, proc.cls).then(function (colors) {
+        li.style.setProperty("--text", colors.text);
+        li.style.setProperty("--hover-bg", colors.hoverBg);
+        li.style.setProperty("--hover-text", colors.hoverText);
+      });
       if (focusID) {
         if (proc.matchesID(focusID)) {
           foundLi = li;
@@ -1826,10 +1856,33 @@ export default class DevTools {
 
       count++;
 
+      async function getColorsForCategory(addon, category) {
+        if (typeof window._devtoolsGetColorsForCategory === "function") return window._devtoolsGetColorsForCategory(cls);
+        const blockly = await addon.tab.traps.getBlockly();
+        if (category === null) category = "more";
+        const colorIds = {
+          "data-lists": "data_lists",
+          events: "event",
+          extension: "pen",
+        };
+        return {
+          bg: blockly.Colours[colorIds[category] || category].primary,
+          text: "white",
+          hoverBg: blockly.Colours[colorIds[category] || category].tertiary,
+          hoverText: "white",
+        };
+      }
+
       li.innerText = desc;
       li.data = { text: desc, lower: " " + desc.toLowerCase(), option: option };
-      li.className =
-        "var " + (option.block.isScratchExtension ? "extension" : option.block.getCategory()) + " " + bType; // proc.cls;
+      const cls = option.block.isScratchExtension ? "extension" : option.block.getCategory();
+      li.className = "var " + cls + " " + bType; // proc.cls;
+      getColorsForCategory(this.addon, cls).then(function (colors) {
+        li.style.setProperty("--bg", colors.bg);
+        li.style.setProperty("--text", colors.text);
+        li.style.setProperty("--hover-bg", colors.hoverBg);
+        li.style.setProperty("--hover-text", colors.hoverText);
+      });
       if (count > DROPDOWN_BLOCK_LIST_MAX_ROWS) {
         // Limit maximum number of rows to prevent lag when no filter is applied
         li.style.display = "none";

@@ -4,7 +4,6 @@ const extensionsCategory = {
   id: null,
   settingId: "Pen-color",
   colorId: "pen",
-  devtoolsId: "extension",
 };
 const saCategory = {
   settingId: "sa-color",
@@ -15,61 +14,51 @@ const categories = [
     id: "motion",
     settingId: "motion-color",
     colorId: "motion",
-    devtoolsId: "motion",
   },
   {
     id: "looks",
     settingId: "looks-color",
     colorId: "looks",
-    devtoolsId: "looks",
   },
   {
     id: "sound",
     settingId: "sounds-color",
     colorId: "sounds",
-    devtoolsId: "sounds",
   },
   {
     id: "events",
     settingId: "events-color",
     colorId: "event",
-    devtoolsId: "events",
   },
   {
     id: "control",
     settingId: "control-color",
     colorId: "control",
-    devtoolsId: "control",
   },
   {
     id: "sensing",
     settingId: "sensing-color",
     colorId: "sensing",
-    devtoolsId: "sensing",
   },
   {
     id: "operators",
     settingId: "operators-color",
     colorId: "operators",
-    devtoolsId: "operators",
   },
   {
     id: "variables",
     settingId: "data-color",
     colorId: "data",
-    devtoolsId: "data",
   },
   {
     id: "lists",
     settingId: "data-lists-color",
     colorId: "data_lists",
-    devtoolsId: "data-lists",
   },
   {
     id: "myBlocks",
     settingId: "custom-color",
     colorId: "more",
-    devtoolsId: null,
   },
   extensionsCategory,
 ];
@@ -129,7 +118,7 @@ export default async function ({ addon, console }) {
     return "#000000";
   };
   const coloredTextColor = (category) => {
-    if (addon.self.disabled) return originalColors[category.colorId].primary;
+    if (!isColoredTextMode()) return originalColors[category.colorId].primary;
     return removeAlpha(addon.settings.get(category.settingId));
   };
   const uncoloredTextColor = () => {
@@ -263,6 +252,41 @@ export default async function ({ addon, console }) {
     if (fill === "#FFFFFF") fill = uncoloredTextColor();
     return oldFieldMatrixCreateButton.call(this, fill);
   };
+
+  window._devtoolsGetColorsForCls = (cls) => {
+    const colorIds = {
+      receive: "event",
+      event: "event",
+      define: "more",
+      var: "data",
+      VAR: "data",
+      list: "data_lists",
+      LIST: "data_lists",
+      costume: "looks",
+    };
+    const category = categories.find((item) => item.colorId === colorIds[cls]);
+    return {
+      text: coloredTextColor(category),
+      hoverBg: isColoredTextMode() ? fieldBackground(category) : primaryColor(category),
+      hoverText: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
+    };
+  }
+
+  window._devtoolsGetColorsForCategory = (categoryId) => {
+    if (categoryId === null) categoryId = "more";
+    const colorIds = {
+      "data-lists": "data_lists",
+      events: "event",
+      extension: "pen",
+    };
+    const category = categories.find((item) => item.colorId === (colorIds[categoryId] || categoryId));
+    return {
+      bg: isColoredTextMode() ? secondaryColor(category) : tertiaryColor(category),
+      text: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
+      hoverBg: isColoredTextMode() ? fieldBackground(category) : tertiaryColor(category),
+      hoverText: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
+    };
+  }
 
   const updateColors = () => {
     const workspace = Blockly.getMainWorkspace();
