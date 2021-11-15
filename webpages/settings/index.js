@@ -508,9 +508,7 @@ let fuse;
         const [addonMajor, addonMinor, __] = manifest.latestUpdate.version.split(".");
         if (extMajor === addonMajor && extMinor === addonMinor) {
           manifest.tags.push("updated");
-          manifest._groups.push(
-            manifest.latestUpdate.isMajor ? "featuredNew" : "new"
-          );
+          manifest._groups.push(manifest.latestUpdate.isMajor ? "featuredNew" : "new");
         }
       }
 
