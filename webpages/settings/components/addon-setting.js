@@ -33,8 +33,8 @@ export default async function ({ template }) {
         if (!(extMajor === addonMajor && extMinor === addonMinor)) return false;
 
         if (
-          this.addon.latestUpdate.updatedSettings &&
-          this.addon.latestUpdate.updatedSettings.includes(this.setting.id)
+          this.addon.latestUpdate.newSettings &&
+          this.addon.latestUpdate.newSettings.includes(this.setting.id)
         )
           return true;
         else return false;
