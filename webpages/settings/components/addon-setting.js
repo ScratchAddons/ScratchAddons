@@ -32,7 +32,11 @@ export default async function ({ template }) {
         const [addonMajor, addonMinor, __] = this.addon.latestUpdate.version.split(".");
         if (!(extMajor === addonMajor && extMinor === addonMinor)) return false;
 
-        if (this.addon.latestUpdate.updatedSettings && this.addon.latestUpdate.updatedSettings.includes(this.setting.id)) return true;
+        if (
+          this.addon.latestUpdate.updatedSettings &&
+          this.addon.latestUpdate.updatedSettings.includes(this.setting.id)
+        )
+          return true;
         else return false;
       },
     },
