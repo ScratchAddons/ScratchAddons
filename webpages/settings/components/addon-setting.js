@@ -25,6 +25,16 @@ export default async function ({ template }) {
 
         return false;
       },
+      isNewOption() {
+        if (!this.addon.latestUpdate) return false;
+
+        const [extMajor, extMinor, _] = window.vue.version.split(".");
+        const [addonMajor, addonMinor, __] = this.addon.latestUpdate.version.split(".");
+        if (!(extMajor === addonMajor && extMinor === addonMinor)) return false;
+
+        if (this.addon.latestUpdate.updatedSettings.includes(this.setting.id)) return true;
+        else return false;
+      },
     },
     methods: {
       settingsName(addon) {

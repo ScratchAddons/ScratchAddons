@@ -1,0 +1,73 @@
+{
+  "name": "Test to remove",
+  "description": "This is a test for the update label PR. It should be deleted before the PR is merged, and its entry in addons.json should also be removed.",
+  "tags": ["editor", "beta"],
+  "credits": [
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang"
+    }
+  ],
+  "settings": [
+    {
+      "name": "Test 1",
+      "id": "test-1",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Test 2",
+      "id": "test-2",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "This setting's name is really long",
+      "id": "test-3",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "Test 4",
+      "id": "test-4",
+      "type": "string",
+      "default": "Hello"
+    },
+    {
+      "name": "Test 5",
+      "id": "test-5",
+      "type": "integer",
+      "default": 1
+    },
+    {
+      "name": "Test 6",
+      "id": "test-6",
+      "type": "color",
+      "default": "#000000",
+      "allowTransparency": true
+    },
+    {
+      "name": "Test 7",
+      "id": "test-7",
+      "type": "select",
+      "potentialValues": [
+        {
+          "name": "Value 1",
+          "id": "value-1"
+        },
+        {
+          "name": "Value 2",
+          "id": "value-2"
+        }
+      ],
+      "default": "value-1"
+    }
+  ],
+  "versionAdded": "1.21.0",
+  "latestUpdate": {
+    "version": "1.22.0",
+    "isMajor": true,
+    "updatedSettings": ["test-2", "test-3", "test-4", "test-5", "test-6", "test-7"]
+  },
+  "enabledByDefault": false
+}

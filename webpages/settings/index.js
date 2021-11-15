@@ -503,6 +503,17 @@ let fuse;
         }
       }
 
+      if (manifest.latestUpdate) {
+        const [extMajor, extMinor, _] = vue.version.split(".");
+        const [addonMajor, addonMinor, __] = manifest.latestUpdate.version.split(".");
+        if (extMajor === addonMajor && extMinor === addonMinor) {
+          manifest.tags.push("updated");
+          manifest._groups.push(
+            manifest.latestUpdate.isMajor ? "featuredNew" : "new"
+          );
+        }
+      }
+
       // Sort tags to preserve consistent order
       const order = tags.map((obj) => obj.matchName);
       manifest.tags.sort((b, a) => order.indexOf(b) - order.indexOf(a));
@@ -545,7 +556,7 @@ let fuse;
       } else if (aHasTag && bHasTag) return manifestA.name.localeCompare(manifestB.name);
       else return null;
     };
-    const order = [["danger", "beta"], "editor", "community", "popup"];
+    const order = ["new", "updated", "beta", "danger", "editor", "community", "popup"];
 
     vue.addonGroups.forEach((group) => {
       group.addonIds = group.addonIds
