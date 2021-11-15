@@ -32,10 +32,7 @@ export default async function ({ template }) {
         const [addonMajor, addonMinor, __] = this.addon.latestUpdate.version.split(".");
         if (!(extMajor === addonMajor && extMinor === addonMinor)) return false;
 
-        if (
-          this.addon.latestUpdate.newSettings &&
-          this.addon.latestUpdate.newSettings.includes(this.setting.id)
-        )
+        if (this.addon.latestUpdate.newSettings && this.addon.latestUpdate.newSettings.includes(this.setting.id))
           return true;
         else return false;
       },
