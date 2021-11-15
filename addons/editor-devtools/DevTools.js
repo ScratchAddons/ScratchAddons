@@ -410,11 +410,12 @@ export default class DevTools {
     this.dom_removeChildren(this.dd);
 
     async function getColorsForCls(addon, cls) {
-      if (cls === "flag") return {
-        text: "#4cbf56",
-        hoverBg: "#4cbf56",
-        hoverText: "white",
-      };
+      if (cls === "flag")
+        return {
+          text: "#4cbf56",
+          hoverBg: "#4cbf56",
+          hoverText: "white",
+        };
       if (typeof window._devtoolsGetColorsForCls === "function") return window._devtoolsGetColorsForCls(cls);
       const blockly = await addon.tab.traps.getBlockly();
       const colorIds = {
@@ -1857,7 +1858,8 @@ export default class DevTools {
       count++;
 
       async function getColorsForCategory(addon, category) {
-        if (typeof window._devtoolsGetColorsForCategory === "function") return window._devtoolsGetColorsForCategory(cls);
+        if (typeof window._devtoolsGetColorsForCategory === "function")
+          return window._devtoolsGetColorsForCategory(cls);
         const blockly = await addon.tab.traps.getBlockly();
         if (category === null) category = "more";
         const colorIds = {

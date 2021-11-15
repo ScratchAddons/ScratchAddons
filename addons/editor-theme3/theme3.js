@@ -270,7 +270,7 @@ export default async function ({ addon, console }) {
       hoverBg: isColoredTextMode() ? fieldBackground(category) : primaryColor(category),
       hoverText: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
     };
-  }
+  };
 
   window._devtoolsGetColorsForCategory = (categoryId) => {
     if (categoryId === null) categoryId = "more";
@@ -286,7 +286,7 @@ export default async function ({ addon, console }) {
       hoverBg: isColoredTextMode() ? fieldBackground(category) : tertiaryColor(category),
       hoverText: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
     };
-  }
+  };
 
   const updateColors = () => {
     const workspace = Blockly.getMainWorkspace();
