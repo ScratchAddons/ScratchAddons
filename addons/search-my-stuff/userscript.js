@@ -42,12 +42,7 @@ export default async function ({ addon, global, console, msg }) {
 
   // Keyboard shortcut for visiting top hit
   search.addEventListener("keydown", (e) => {
-    if (
-      (e.ctrlKey || e.metaKey) &&
-      e.key === "Enter" &&
-      searchBar.value !== "" &&
-      resultsContainer.childNodes.length > 0
-    )
+    if (e.ctrlKey && e.key === "Enter" && searchBar.value !== "" && resultsContainer.childNodes.length > 0)
       window.location.href = resultsContainer.childNodes[0].querySelector("a").href;
   });
   search.addEventListener("submit", (e) => {
