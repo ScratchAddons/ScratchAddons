@@ -11,6 +11,16 @@
   "versionAdded": "1.22.0",
   "tags": ["community", "forums"],
   "enabledByDefault": false,
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "settings": [
+    {
+      "name": "Automatically add post number to quotes",
+      "id": "auto_add",
+      "type": "boolean",
+      "default": false
+    }
+  ],
   "credits": [
     {
       "name": "itta611",
