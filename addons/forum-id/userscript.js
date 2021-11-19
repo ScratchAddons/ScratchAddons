@@ -32,7 +32,7 @@ export default async function ({ addon, console, msg }) {
         "[quote=" +
           username +
           "][small](" +
-          getIDLink(id.substring(1), post["0"].querySelector(".box-head > .conr").textContent, false) +
+          getIDLink(id.substring(1), addon.settings.get("auto_add_use_number") ? post["0"].querySelector(".box-head > .conr").textContent : "View post", false) +
           ")[/small]\n" +
           data +
           "[/quote]\n"

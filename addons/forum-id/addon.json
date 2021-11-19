@@ -15,9 +15,20 @@
   "dynamicDisable": true,
   "settings": [
     {
-      "name": "Automatically add post number to quotes",
+      "name": "Automatically add post link to quotes",
       "id": "auto_add",
       "type": "boolean",
+      "default": false
+    },
+	{
+      "name": "Use post number when quoting",
+      "id": "auto_add_use_number",
+      "type": "boolean",
+	  "if": {
+		"settings": {
+			"auto_add": true
+		}			
+	  },
       "default": false
     }
   ],
