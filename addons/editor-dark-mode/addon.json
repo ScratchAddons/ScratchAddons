@@ -1033,7 +1033,7 @@
         "border": "#404040",
         "textShadow": false,
         "dots": true,
-        "darkComments": false,
+        "darkComments": true,
         "darkScrollbars": true
       }
     },
