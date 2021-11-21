@@ -31,7 +31,7 @@
       "id": "height",
       "type": "integer",
       "min": 3,
-      "max": 120,
+      "max": 25,
       "default": 5
     }
   ],
