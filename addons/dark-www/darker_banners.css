@@ -12,8 +12,18 @@
   background-color: #004099;
 }
 .sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text,
-.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text::before,
-.sa-annual-report-2019 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text::after {
+.sa-annual-report-2019
+  .initiatives-section
+  .initiatives-community
+  .community-quotes
+  .community-quote
+  .comment-text::before,
+.sa-annual-report-2019
+  .initiatives-section
+  .initiatives-community
+  .community-quotes
+  .community-quote
+  .comment-text::after {
   border-color: #004099;
 }
 .gradient1 {
