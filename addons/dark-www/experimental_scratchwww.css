@@ -131,6 +131,7 @@ body:not(.sa-body-editor) .modal-content,
 .comment .comment-body .comment-bubble::before,
 .milestones-section .milestone-box,
 .supporters-section .comment-text,
+.timeline-card,
 .card,
 .extension-landing .project-card,
 .promote-modal .cancel-button,
@@ -161,7 +162,8 @@ body:not(.sa-body-editor) .button.white,
 .button.mod-2019-conf-maillist-button,
 .index .title-banner p a button,
 .financials-section .financials-button,
-.donate-section .donate-button {
+.donate-section .donate-button,
+.initiatives-section .initiatives-subsection-content .bubble.inverted {
   background-color: var(--darkWww-box);
 }
 .expect .keynote .card {
@@ -171,6 +173,8 @@ body:not(.sa-body-editor) .button.white,
   background-color: #23be92;
 }
 .comment-text::after,
+.initiatives-section .initiatives-adaptation .community-quotes .community-quote .comment-text::after,
+.sa-annual-report-2020 .initiatives-section .initiatives-community .community-quotes .community-quote .comment-text::after,
 .wedo .project-card img {
   border-color: var(--darkWww-box);
 }
@@ -294,15 +298,16 @@ p.callout,
 .mission-section,
 .milestones-section,
 .initiatives-section .initiatives-tools .subsection-tag.collaborator,
-.supporters-section,
-.leadership-section,
+.sa-annual-report-2019 .supporters-section,
+.sa-annual-report-2019 .leadership-section,
 .extension-landing .blue,
 .extension-landing .tip-box,
 .transfer-host-modal .transfer-selection-heading,
 .transfer-host-modal .transfer-selection-scroll-pane,
 .transfer-host-modal .transfer-outcome,
 .filter-container,
-.tab-choice-selected-sa {
+.tab-choice-selected-sa,
+.initiatives-section .year-in-review {
   background-color: var(--darkWww-blue);
   color: var(--darkWww-blue-text);
 }
@@ -534,6 +539,7 @@ a:hover,
 .conf2017-panel-row-icon-image,
 img[src^="/images/annual-report/milestones/timeline_"],
 .financials-section .financials-button img,
+.initiatives-section .year-in-review .connector,
 .transfer-host-modal .transfer-outcome-arrow {
   filter: var(--darkWww-link-iconFilter);
 }

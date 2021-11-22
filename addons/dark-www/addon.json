@@ -1626,6 +1626,11 @@
   "updateUserstylesOnSettingsChange": true,
   "userscripts": [
     {
+      "url": "classes.js",
+      "matches": ["https://scratch.mit.edu/annual-report/*"],
+      "runAtComplete": false
+    },
+    {
       "url": "experimental_forums_preview.js",
       "matches": ["editingScreens"]
     }
