@@ -3,20 +3,19 @@
     <button
       :style="{'background-color': color }"
       class="setting-input color"
-      :class="{'action-disabled': !addon._enabled }"
-      @click="toggle(addon, setting, true)"
-    >
-      <template v-if="loadColorPicker">
-        <color-picker
-          :value="value"
-          id="picker"
-          v-show="isOpen"
-          v-el:pickr
-          :formats="formats"
-          :no_alpha="noAlphaString"
-          dir="ltr"
-        ></color-picker>
-      </template>
-    </button>
+      :class="{'action-disabled': !addon._enabled, 'open': isOpen }"
+      @click="toggle(addon, setting)"
+    ></button>
+    <template v-if="loadColorPicker">
+      <color-picker
+        :value="value"
+        id="picker"
+        v-show="isOpen"
+        v-el:pickr
+        :formats="formats"
+        :no_alpha="noAlphaString"
+        dir="ltr"
+      ></color-picker>
+    </template>
   </div>
 </template>

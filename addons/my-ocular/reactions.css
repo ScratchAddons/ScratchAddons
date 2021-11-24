@@ -72,6 +72,7 @@
 }
 
 .my-ocular-reaction-menu-button {
+  font-weight: normal;
   cursor: pointer;
   filter: grayscale(100%);
   transition: filter 0.2s ease;

@@ -45,7 +45,7 @@
     <link rel="modulepreload" href="../../libraries/common/cs/download-blob.js" />
     <link rel="modulepreload" href="../rtl-list.js" />
     <link rel="modulepreload" href="../../libraries/common/load-vue-components.js" />
-    <link rel="modulepreload" href="../../libraries/thirdparty/fuse.esm.min.js" />
+    <link rel="modulepreload" href="../../libraries/thirdparty/cs/fuse.esm.min.js" />
     <link rel="modulepreload" href="data/tags.js" />
     <link rel="modulepreload" href="data/addon-groups.js" />
     <link rel="modulepreload" href="data/categories.js" />
@@ -82,6 +82,10 @@
     <link rel="modulepreload" href="components/addon-body.js" />
     <link rel="preload" href="components/category-selector.html" as="fetch" crossorigin />
     <link rel="modulepreload" href="components/category-selector.js" />
+    <link rel="preload" href="components/previews/editor-dark-mode.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/editor-dark-mode.js" />
+    <link rel="preload" href="components/previews/palette.html" as="fetch" crossorigin />
+    <link rel="modulepreload" href="components/previews/palette.js" />
 
     <script src="../set-lang.js" type="module"></script>
     <script src="../check-unsupported.js" defer></script>
@@ -130,7 +134,8 @@
           v-cloak
           class="category category-small"
           style="margin-top: auto"
-          href="https://scratchaddons.com/contributors"
+          href="https://scratchaddons.com/contributors/"
+          :href="sidebarUrls.contributors"
           target="_blank"
         >
           <img src="../../images/icons/users.svg" />
@@ -149,7 +154,8 @@
         <a
           v-cloak
           class="category category-small"
-          href="https://scratchaddons.com/feedback/?version={{versionName}}"
+          href="https://scratchaddons.com/feedback/"
+          :href="sidebarUrls.feedback"
           target="_blank"
         >
           <img src="../../images/icons/comment.svg" />
@@ -254,7 +260,8 @@
           <p>
             {{ msg("extensionName") }}
             <a
-              href="https://scratchaddons.com/changelog?versionname={{ versionName }}"
+              href="https://scratchaddons.com/changelog"
+              :href="sidebarUrls.changelog"
               title="{{ msg('changelog') }}"
               target="_blank"
             >

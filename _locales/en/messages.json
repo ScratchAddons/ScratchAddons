@@ -44,6 +44,9 @@
   "recommended": {
     "message": "Recommended"
   },
+  "featured": {
+    "message": "Featured"
+  },
   "beta": {
     "message": "Beta"
   },
@@ -149,6 +152,9 @@
   "presets": {
     "message": "Presets"
   },
+  "preview": {
+    "message": "Preview"
+  },
   "scratchAddonsTheme": {
     "message": "Scratch Addons theme"
   },
@@ -233,20 +239,29 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_17": {
-    "message": "New addon: \"old studio layout\", which reverts the layout of the studio page back to the one used before the studio update. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_22": {
+    "message": "New addon: \"switch variables between 'For all sprites' and 'For this sprite only'\", which allows changing the scope of variables and lists and whether variables are stored in the cloud. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_17": {
-    "message": "The new \"browse followers button in studios\" addon brings back one click invites. Other new addons added this update are \"HD image uploads\" and \"non-draggable sprites in editor\"."
+  "extensionUpdateInfo2_v1_22": {
+    "message": "Other new addons added this update are \"better editor comments\", \"two-column category menu\" and \"search bar on My Stuff\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
   },
   "new": {
-    "message": "New!"
+    "message": "New!",
+    "description": "Tag for addons. Singular."
+  },
+  "newGroup": {
+    "message": "Other new addons",
+    "description": "Used as a category name for new addons"
+  },
+  "featuredNew": {
+    "message": "Featured new addons",
+    "description": "Used as a category name for featured new addons"
   },
   "enabled": {
     "message": "Enabled",

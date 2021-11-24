@@ -1,1 +1,1 @@
-{"fix-uploaded-svgs/@name":"Correggi errore caricamento file SVG","fix-uploaded-svgs/@description":"Risolve un errore nell'editor di Scratch che causa il fallimento del caricamento di file SVG creati con alcuni editor di immagini, come ad esempio Affinity Designer."}
+{"fix-uploaded-svgs/@name":"Correzione caricamento SVG","fix-uploaded-svgs/@description":"Risolve un bug nell'editor di Scratch che causa il fallimento del caricamento di file SVG creati con alcuni editor di immagini, come ad esempio Affinity Designer."}

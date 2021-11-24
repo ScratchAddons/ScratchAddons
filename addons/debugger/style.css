@@ -113,7 +113,7 @@
 .log > span:not(.console-variable) {
   flex-grow: 1;
 }
-.log a:not(.sa-debugger-feedback) {
+.log a {
   color: inherit;
   opacity: 0.5;
   text-decoration: underline;

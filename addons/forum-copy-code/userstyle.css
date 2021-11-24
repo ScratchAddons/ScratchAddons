@@ -1,0 +1,15 @@
+.sa-copyCodeDiv {
+  text-align: right;
+  height: 0px;
+}
+.sa-copyCodeButton {
+  opacity: 0.75;
+  cursor: pointer;
+  font-size: 80%;
+  position: relative;
+  bottom: 3px;
+  user-select: none;
+}
+.sa-copyCodeButton:active {
+  text-decoration: underline;
+}

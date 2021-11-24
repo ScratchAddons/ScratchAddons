@@ -6,8 +6,11 @@ export default async function ({ template }) {
     template,
     data() {
       return {
+        isIframe: isIframe,
         expanded: this.getDefaultExpanded(),
         everExpanded: this.getDefaultExpanded(),
+        hoveredSettingId: null,
+        highlightedSettingId: null,
       };
     },
     computed: {
@@ -25,7 +28,7 @@ export default async function ({ template }) {
         return `../../images/icons/${map[this.addon._icon]}.svg`;
       },
       addonSettings() {
-        return this.$root.addonSettings;
+        return this.$root.addonSettings[this.addon._addonId];
       },
     },
     methods: {
@@ -40,7 +43,7 @@ export default async function ({ template }) {
       loadPreset(preset) {
         if (window.confirm(chrome.i18n.getMessage("confirmPreset"))) {
           for (const property of Object.keys(preset.values)) {
-            this.$root.addonSettings[property] = preset.values[property];
+            this.addonSettings[property] = preset.values[property];
           }
           this.$root.updateSettings(this.addon);
           console.log(`Loaded preset ${preset.id} for ${this.addon._addonId}`);
@@ -49,11 +52,9 @@ export default async function ({ template }) {
       loadDefaults() {
         if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
           for (const property of this.addon.settings) {
-            let rootSettings = this.$root.addonSettings[this.addon._addonId];
-            console.log(property);
-            rootSettings[property.id] = property.default;
+            this.addonSettings[property.id] = property.default;
             if (property.type === "table") {
-              rootSettings[property.id] = rootSettings[property.id].map((defaultValues) => {
+              this.addonSettings[property.id] = this.addonSettings[property.id].map((defaultValues) => {
                 let info = {};
                 defaultValues.forEach((defaultValue, i) => (info[property.row[i].id] = defaultValue));
                 return info;
@@ -80,6 +81,7 @@ export default async function ({ template }) {
               ? false
               : newState;
           chrome.runtime.sendMessage({ changeEnabledState: { addonId: this.addon._addonId, newState } });
+          this.$emit("toggle-addon-request", newState);
         };
 
         const requiredPermissions = (this.addon.permissions || []).filter((value) =>
@@ -110,6 +112,9 @@ export default async function ({ template }) {
               );
           } else toggle();
         } else toggle();
+      },
+      highlightSetting(id) {
+        this.highlightedSettingId = id;
       },
       msg(...params) {
         return this.$root.msg(...params);

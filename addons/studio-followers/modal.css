@@ -23,3 +23,7 @@
 .studio-follower .studio-project-add-remove-image {
   margin: 3px;
 }
+
+#sa-studio-followers-btn.hidden {
+  display: none !important;
+}

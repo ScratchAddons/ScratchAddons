@@ -373,6 +373,18 @@
       }
     },
     {
+      "name": "accent-invertedFilter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
+        "source": {
+          "type": "settingValue",
+          "settingId": "accent"
+        }
+      }
+    },
+    {
       "name": "accent-opacity0",
       "value": {
         "type": "multiply",
@@ -471,6 +483,17 @@
       }
     },
     {
+      "name": "input-transparent75",
+      "value": {
+        "type": "multiply",
+        "source": {
+          "type": "settingValue",
+          "settingId": "input"
+        },
+        "a": 0.75
+      }
+    },
+    {
       "name": "input-transparent50",
       "value": {
         "type": "multiply",
@@ -551,6 +574,18 @@
       "name": "categoryMenu-text",
       "value": {
         "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "categoryMenu"
+        }
+      }
+    },
+    {
+      "name": "categoryMenu-invertedFilter",
+      "value": {
+        "type": "textColor",
+        "black": "brightness(0.4)",
+        "white": "none",
         "source": {
           "type": "settingValue",
           "settingId": "categoryMenu"
@@ -680,41 +715,43 @@
     {
       "url": "text-shadow.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "textShadow",
-        "value": true
+      "if": {
+        "settings": { "textShadow": true }
       }
     },
     {
       "url": "hide_dots.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "dots",
-        "value": false
+      "if": {
+        "settings": { "dots": false }
+      }
+    },
+    {
+      "url": "paper.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "affectPaper": true }
       }
     },
     {
       "url": "stage.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "affectStage",
-        "value": true
+      "if": {
+        "settings": { "affectStage": true }
       }
     },
     {
       "url": "dark_comments.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "darkComments",
-        "value": true
+      "if": {
+        "settings": { "darkComments": true }
       }
     },
     {
       "url": "scrollbar.css",
       "matches": ["projects"],
-      "settingMatch": {
-        "id": "darkScrollbars",
-        "value": true
+      "if": {
+        "settings": { "darkScrollbars": true }
       }
     }
   ],
@@ -833,6 +870,12 @@
       "id": "textShadow",
       "type": "boolean",
       "default": false
+    },
+    {
+      "name": "Change the costume editor background and selection borders",
+      "id": "affectPaper",
+      "type": "boolean",
+      "default": true
     },
     {
       "name": "Change the colors of variables, lists, speech bubbles, and answer inputs on the stage",
@@ -995,6 +1038,62 @@
       }
     },
     {
+      "name": "Scratch 2.0",
+      "id": "scratch2",
+      "description": "A theme based on Scratch 2.0's colors.",
+      "values": {
+        "page": "#ffffffff",
+        "primary": "#179fd7ff",
+        "highlightText": "#1e9ed6",
+        "menuBar": "#9c9ea2ff",
+        "activeTab": "#e6e8e8",
+        "tab": "#f1f2f2ff",
+        "selector": "#e6e8e8",
+        "selector2": "#e6e8e8",
+        "selectorSelection": "#d0d0d0ff",
+        "accent": "#f2f2f2",
+        "input": "#ffffffff",
+        "workspace": "#dddedeff",
+        "categoryMenu": "#e6e8e8ff",
+        "palette": "#e6e8e8ff",
+        "fullscreen": "#ffffffff",
+        "stageHeader": "#e6e8e8",
+        "border": "#d0d1d2",
+        "textShadow": false,
+        "dots": true,
+        "darkComments": false,
+        "darkScrollbars": false
+      }
+    },
+    {
+      "name": "Scratch 1.x",
+      "id": "scratch1",
+      "description": "A theme based on Scratch 1.x's colors.",
+      "values": {
+        "page": "#c0c3c6",
+        "primary": "#5498c7",
+        "highlightText": "#21211f",
+        "menuBar": "#c0c3c6",
+        "activeTab": "#b9d7e5",
+        "tab": "#adadb5",
+        "selector": "#6a6a6a",
+        "selector2": "#7c8083",
+        "selectorSelection": "#404143",
+        "accent": "#959a9f",
+        "input": "#5f6265",
+        "workspace": "#7c8083",
+        "categoryMenu": "#969a9f",
+        "palette": "#7c8083",
+        "fullscreen": "#000001",
+        "stageHeader": "#000001",
+        "border": "#0000006b",
+        "textShadow": false,
+        "dots": false,
+        "darkComments": false,
+        "darkScrollbars": false
+      }
+    },
+    {
       "name": "Scratch's default colors",
       "id": "scratch",
       "description": "The colors normally used by Scratch",
@@ -1023,6 +1122,13 @@
       }
     }
   ],
-  "tags": ["editor", "theme", "recommended"],
+  "addonPreview": {
+    "type": "editor-dark-mode"
+  },
+  "presetPreview": {
+    "type": "palette",
+    "colors": ["primary", "menuBar", "page", "accent", "workspace", "selector"]
+  },
+  "tags": ["editor", "theme", "featured"],
   "enabledByDefault": false
 }

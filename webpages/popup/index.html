@@ -11,18 +11,17 @@
     <link rel="stylesheet" href="style.css" />
     <link href="../../libraries/thirdparty/Sora.css" rel="stylesheet" />
     <script src="../../libraries/thirdparty/vue.js" defer></script>
-    <script src="./index.js" defer></script>
+    <script src="./index.js" type="module"></script>
     <link rel="preload" href="../styles/colors-light.css" as="style" />
   </head>
   <body class="loading">
     <div id="header">
       <div id="title">
         <img src="../../images/icon.svg" id="logo" alt="Logo" />
-        <span id="title-text" v-cloak
-          >{{ msg("extensionName") }}<a id="version" href="#" title="{{ msg('changelog') }}" @click="openChangelog()"
-            >v{{ version }}</a
-          ></span
-        >
+        <span id="title-text" v-cloak>
+          {{ msg("extensionName") }}
+          <a id="version" :href="changelogLink" target="_blank" title="{{ msg('changelog') }}">v{{ version }}</a>
+        </span>
       </div>
       <div id="settings" @click="openSettingsPage()">
         <img src="../../images/icons/settings.svg" id="settings-icon" title="{{ msg('settings') }}" />

@@ -77,3 +77,7 @@
 #comments .more-replies .pulldown {
   color: var(--scratchr2-linkColor);
 }
+#comments .comment form > .control-group:last-child {
+  /* emoji-picker compatibility */
+  width: auto;
+}

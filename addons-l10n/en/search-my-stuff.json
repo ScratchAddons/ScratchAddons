@@ -1,0 +1,14 @@
+{
+  "search-my-stuff/project-placeholder": "Search projects",
+  "search-my-stuff/studio-placeholder": "Search studios",
+  "search-my-stuff/trash-placeholder": "Search trash",
+  "search-my-stuff/search-by": "Search by",
+  "search-my-stuff/progress-header": "Searching...",
+  "search-my-stuff/progress-tip": "{number, plural, one {1 item searched so far.} other {# items searched so far.}}",
+  "search-my-stuff/load-more-header": "That's all we've found so far.",
+  "search-my-stuff/load-more-tip": "If you didn't find what you were looking for, try loading more or changing the Search By dropdown to search different sets of projects.\nIf you're getting a lot of unwanted results, try making your search more specific.",
+  "search-my-stuff/end-header": "That's all we found for your search.",
+  "search-my-stuff/end-tip": "If you didn't find what you were looking for, check for typos or change your search's wording.",
+  "search-my-stuff/no-results-header": "We couldn't find any matches for your search.",
+  "search-my-stuff/no-results-tip": "Check for typos or try changing your search terms."
+}

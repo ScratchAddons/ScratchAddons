@@ -18,6 +18,17 @@
       "matches": ["projects"]
     }
   ],
+  "settings": [
+    {
+      "id": "use-hd-upload",
+      "name": "Use HD uploads",
+      "type": "boolean",
+      "default": false,
+      "if": {
+        "addonEnabled": "better-img-uploads"
+      }
+    }
+  ],
   "dynamicEnable": true,
   "dynamicDisable": true,
   "versionAdded": "1.12.0",

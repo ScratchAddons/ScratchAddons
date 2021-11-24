@@ -157,6 +157,31 @@
           </div>
         </div>
 
+        <!-- Studio host transfer -->
+        <div class="message-type" v-show="studioHostTransfers.length">
+          <div
+            class="message-type-title hover-reverse"
+            @click="messageTypeExtended.studioHostTransfers = !messageTypeExtended.studioHostTransfers"
+          >
+            <div class="btn-dropdown">
+              <img
+                src="../../images/icons/expand.svg"
+                alt="v"
+                :class="{'reverted': messageTypeExtended.studioHostTransfers}"
+              />
+            </div>
+            <span class="message-type-title-text">{{ uiMessages.studioHostTransfersMsg }}</span>
+            <span class="float-right"
+              ><img class="small-icon" src="../../images/icons/users.svg" /> {{ studioHostTransfers.length }}</span
+            >
+          </div>
+          <div class="message-type-details" v-show="messageTypeExtended.studioHostTransfers">
+            <div class="thread-list" v-for="transfer of studioHostTransfers">
+              {{{ studioHostTransferHTML(transfer) }}}
+            </div>
+          </div>
+        </div>
+
         <!-- Forum activity -->
         <div class="message-type" v-show="forumActivity.length">
           <div

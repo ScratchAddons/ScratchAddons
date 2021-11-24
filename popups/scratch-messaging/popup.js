@@ -202,6 +202,7 @@ export default async ({ addon, msg, safeMsg }) => {
       follows: [],
       studioInvites: [],
       studioPromotions: [],
+      studioHostTransfers: [],
       forumActivity: [],
       studioActivity: [],
       remixes: [],
@@ -215,6 +216,7 @@ export default async ({ addon, msg, safeMsg }) => {
         follows: false,
         studioInvites: false,
         studioPromotions: false,
+        studioHostTransfers: false,
         forumActivity: false,
         studioActivity: false,
         remixes: false,
@@ -239,6 +241,7 @@ export default async ({ addon, msg, safeMsg }) => {
         markedAsReadMsg: msg("marked-as-read"),
         openMessagesMsg: msg("open-messages"),
         studioPromotionsMsg: msg("studio-promotions"),
+        studioHostTransfersMsg: msg("studio-host-transfers"),
       },
     },
     watch: {
@@ -248,6 +251,7 @@ export default async ({ addon, msg, safeMsg }) => {
         this.follows = [];
         this.studioInvites = [];
         this.studioPromotions = [];
+        this.studioHostTransfers = [];
         this.forumActivity = [];
         this.studioActivity = [];
         this.remixes = [];
@@ -463,6 +467,13 @@ export default async ({ addon, msg, safeMsg }) => {
               studioId: message.gallery_id,
               studioTitle: message.gallery_title,
             });
+          } else if (message.type === "becomehoststudio") {
+            this.studioHostTransfers.push({
+              actorAdmin: message.admin_actor,
+              actor: message.actor_username,
+              studioId: message.gallery_id,
+              studioTitle: message.gallery_title,
+            });
           } else if (message.type === "forumpost") {
             // We only want one message per forum topic
             if (!this.forumActivity.find((obj) => obj.topicId === message.topic_id)) {
@@ -569,6 +580,20 @@ export default async ({ addon, msg, safeMsg }) => {
             style="text-decoration: underline"
         >${escapeHTML(promotion.studioTitle)}</a>`;
         return safeMsg("studio-promotion", { actor, title });
+      },
+      studioHostTransferHTML(promotion) {
+        const actor = promotion.actorAdmin
+          ? safeMsg("st")
+          : `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/users/${escapeHTML(promotion.actor)}/"
+        >${escapeHTML(promotion.actor)}</a>`;
+        const title = `<a target="_blank"
+            rel="noopener noreferrer"
+            href="https://scratch.mit.edu/studios/${promotion.studioId}/"
+            style="text-decoration: underline"
+        >${escapeHTML(promotion.studioTitle)}</a>`;
+        return safeMsg("studio-host-transfer", { actor, title });
       },
       forumHTML(forumTopic) {
         const title = `<a target="_blank"

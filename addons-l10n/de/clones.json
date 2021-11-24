@@ -1,1 +1,1 @@
-{"clones/clones":"Klone: {cloneCount}","clones/@name":"Klonzähler"}
+{"clones/clones":"Klone: {cloneCount}","clones/@name":"Klonzähler","clones/@description":"Fügt einen Zähler zum Editor hinzu, der die Anzahl aller Klone anzeigt."}

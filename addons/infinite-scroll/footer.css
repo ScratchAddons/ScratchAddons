@@ -21,9 +21,13 @@ body, /* scratch-www */
   padding-top: 20px;
 }
 #footer:hover {
-  height: 300px;
+  height: var(--footer-hover-height);
 }
 
 .page > #view {
   margin-bottom: 0;
+}
+
+:root {
+  --footer-hover-height: 300px; /* How high the hovered footer is (for donor text fix) */
 }

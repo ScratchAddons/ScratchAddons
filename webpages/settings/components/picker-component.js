@@ -57,7 +57,7 @@ export default async function ({ template }) {
         this.$els.pickr._valueChanged();
         this.color = "#" + this.$els.pickr.hex8;
         if (this.value !== this.color) {
-          this.$parent.addonSettings[addon._addonId][setting.id] = "#" + this.$els.pickr.hex8;
+          this.$parent.addonSettings[setting.id] = "#" + this.$els.pickr.hex8;
           this.$parent.updateSettings(addon, { wait: 250, settingId: setting.id });
         }
         this.canCloseOutside = false;

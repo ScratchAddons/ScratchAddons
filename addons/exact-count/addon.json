@@ -38,25 +38,22 @@
     {
       "url": "user.js",
       "matches": ["https://scratch.mit.edu/users/*/"],
-      "settingMatch": {
-        "id": "user",
-        "value": true
+      "if": {
+        "settings": { "user": true }
       }
     },
     {
       "url": "studio.js",
       "matches": ["https://scratch.mit.edu/studios/*"],
-      "settingMatch": {
-        "id": "studio",
-        "value": true
+      "if": {
+        "settings": { "studio": true }
       }
     },
     {
       "url": "forum.js",
       "matches": ["https://scratch.mit.edu/discuss/topic/*"],
-      "settingMatch": {
-        "id": "forumuser",
-        "value": true
+      "if": {
+        "settings": { "forumuser": true }
       },
       "runAtComplete": false
     }

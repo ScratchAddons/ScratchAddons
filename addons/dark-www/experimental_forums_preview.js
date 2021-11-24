@@ -21,4 +21,9 @@ export default async function ({ addon, console }) {
     }
   });
   observer.observe(preview.contentDocument, { subtree: true, childList: true });
+  while (true) {
+    await new Promise((resolve) => preview.addEventListener("load", resolve, { once: true }));
+    observer.disconnect();
+    observer.observe(preview.contentDocument, { subtree: true, childList: true });
+  }
 }

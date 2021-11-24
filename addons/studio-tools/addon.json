@@ -26,9 +26,8 @@
     {
       "url": "mystuff.js",
       "matches": ["https://scratch.mit.edu/mystuff/*"],
-      "settingMatch": {
-        "id": "mystufftools",
-        "value": true
+      "if": {
+        "settings": { "mystufftools": true }
       }
     }
   ],
@@ -39,6 +38,8 @@
     }
   ],
   "tags": ["community", "studios", "recommended"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
   "versionAdded": "1.2.0",
   "enabledByDefault": true
 }

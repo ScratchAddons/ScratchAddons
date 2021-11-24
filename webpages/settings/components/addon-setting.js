@@ -7,6 +7,30 @@ export default async function ({ template }) {
         noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
       };
     },
+    computed: {
+      show() {
+        if (!this.setting.if) return true;
+
+        if (this.setting.if.addonEnabled) {
+          const arr = Array.isArray(this.setting.if.addonEnabled)
+            ? this.setting.if.addonEnabled
+            : [this.setting.if.addonEnabled];
+          if (arr.some((addon) => this.$root.manifestsById[addon]._enabled === true)) return true;
+        }
+
+        if (this.setting.if.settings) {
+          const anyMatches = Object.keys(this.setting.if.settings).some((settingName) => {
+            const arr = Array.isArray(this.setting.if.settings[settingName])
+              ? this.setting.if.settings[settingName]
+              : [this.setting.if.settings[settingName]];
+            return arr.some((possibleValue) => this.addonSettings[settingName] === possibleValue);
+          });
+          if (anyMatches === true) return true;
+        }
+
+        return false;
+      },
+    },
     methods: {
       settingsName(addon) {
         const name = this.setting.name;
@@ -28,7 +52,7 @@ export default async function ({ template }) {
         return (
           this.addon.presets &&
           this.addon.presets.some((preset) =>
-            preset.values.hasOwnProperty(this.setting.id) && this.setting.type === "color"
+            Object.prototype.hasOwnProperty.call(preset.values, this.setting.id) && this.setting.type === "color"
               ? preset.values[this.setting.id].toLowerCase() !== this.setting.default.toLowerCase()
               : preset.values[this.setting.id] !== this.setting.default
           )
@@ -122,6 +146,10 @@ export default async function ({ template }) {
             list.splice(event.newIndex, 0, list.splice(event.oldIndex, 1)[0]);
             this.vm.updateSettings();
           },
+          disabled: !this.vm.addon._enabled,
+        });
+        this.vm.$parent.$on("toggle-addon-request", (state) => {
+          sortable.option("disabled", !state);
         });
       },
     },

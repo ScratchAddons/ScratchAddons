@@ -1,5 +1,6 @@
 {
   "confirm-actions/share": "Scratch Addons:\nAre you sure you want to share?",
+  "confirm-actions/unshare": "Scratch Addons:\nAre you sure you want to unshare?",
   "confirm-actions/follow": "Scratch Addons:\nAre you sure you want to follow/unfollow this user?",
   "confirm-actions/joinstudio": "Scratch Addons:\nAre you sure you would like to join this studio?",
   "confirm-actions/closetopic": "Scratch Addons:\nAre you sure you want to close this topic?"

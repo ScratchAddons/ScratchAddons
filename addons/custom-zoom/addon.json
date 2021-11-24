@@ -1,7 +1,7 @@
 {
   "name": "Customizable code area zoom",
   "description": "Choose custom settings for the minimum, maximum, speed, and start size of the zoom of scripts in the code area, and autohide the controls.",
-  "tags": ["editor", "codeEditor"],
+  "tags": ["editor", "codeEditor", "featured"],
   "credits": [
     {
       "name": "ErrorGamer2000",
@@ -83,7 +83,10 @@
           "name": "Long"
         }
       ],
-      "default": "default"
+      "default": "default",
+      "if": {
+        "settings": { "autohide": true }
+      }
     }
   ]
 }

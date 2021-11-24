@@ -1,1 +1,1 @@
-{"fix-pasted-scripts/@name":"No ejecutar bloques duplicados automáticamente "}
+{"fix-pasted-scripts/@name":"No ejecutar bloques duplicados automáticamente ","fix-pasted-scripts/@description":"Arregla un error en el Scratch editor, en el que duplicar un bloque y engancharlo con una pila de bloques cause que la pila se ejecute."}

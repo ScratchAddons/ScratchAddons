@@ -96,6 +96,13 @@
 #brdfooter .box-content button {
   margin: 0;
 }
+.blockpost {
+  position: relative;
+}
+.blockpost > a[name] {
+  position: absolute;
+  top: -55px;
+}
 .blockpost div.box {
   background-color: #0fbd8c;
   border-top-color: #0fbd8c;
