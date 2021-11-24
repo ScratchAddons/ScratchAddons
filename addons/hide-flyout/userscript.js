@@ -21,8 +21,8 @@ export default async function ({ addon, global, console }) {
     // If a mouse event was passed, only open flyout if the workspace isn't being dragged
     if (
       !e ||
-      (e &&
-        (e.buttons === 0 || document.querySelector(".blocklyToolboxDiv").className.includes("blocklyToolboxDelete")))
+      e.buttons === 0 ||
+      document.querySelector(".blocklyToolboxDiv").className.includes("blocklyToolboxDelete")
     ) {
       speed = typeof speed === "object" ? getSpeedValue() : speed;
       flyOut.classList.remove("sa-flyoutClose");
