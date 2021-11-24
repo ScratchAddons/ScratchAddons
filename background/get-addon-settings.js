@@ -14,13 +14,13 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
       if (manifest.settings) {
-        if (addonId === "discuss-button" && !settings.items) {
-          // Transition v1.17.0 modes to v1.18.0 settings
+        if (addonId === "discuss-button" && !settings.items && settings.buttonName) {
+          // Transition v1.22.0 modes to v1.23.0 settings
           madeChangesToAddon = true;
           madeAnyChanges = true;
 
           let option = manifest.settings.find((option) => option.id === "items");
-          settings.items = Object.assign([], option.default);
+          settings.items = [...option.default];
           settings.items.splice(3, 0, [settings.buttonName, "/discuss"]);
           if (settings.removeIdeasBtn) settings.items.splice(2, 1);
 
@@ -39,11 +39,11 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               settings.version = "scratchr2";
               continue;
             }
-            settings[option.id] = Object.assign([], option.default);
+            settings[option.id] = JSON.parse(JSON.stringify(option.default));
             if (option.type === "table") {
               settings[option.id] = settings[option.id].map((items) => {
                 let setting = {};
-                items.forEach((item, i) => (setting[option.row[i].name] = item));
+                items.forEach((item, i) => (setting[option.row[i].id] = item));
                 return setting;
               });
             }

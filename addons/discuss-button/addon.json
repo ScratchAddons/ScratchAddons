@@ -33,7 +33,7 @@
       ]
     }
   ],
-  "versionAdded": "1.17.0",
-  "tags": ["community"],
+  "versionAdded": "1.23.0",
+  "tags": ["community", "recommended"],
   "enabledByDefault": false
 }
