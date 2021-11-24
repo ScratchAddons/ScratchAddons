@@ -10,7 +10,6 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
 
     for (const { manifest, addonId } of scratchAddons.manifests) {
       // TODO: we should be using Object.create(null) instead of {}
-      addonSettings[addonId] = undefined;
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
       if (manifest.settings) {
