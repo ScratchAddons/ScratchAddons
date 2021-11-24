@@ -66,6 +66,9 @@
 .studio-compose-container .sa-emoji-button-container {
   margin-left: 1em;
 }
+.sa-emoji-button-container {
+  font-weight: normal;
+}
 .sa-emoji-picker-divider {
   height: 1px;
   margin: 5px;
