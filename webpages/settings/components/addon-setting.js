@@ -96,26 +96,6 @@ export default async function ({ template }) {
         this.addonSettings[this.setting.id].push(settings);
         this.updateSettings();
       },
-      keySettingKeyDown(e) {
-        e.preventDefault();
-        e.target.value = e.ctrlKey
-          ? "Ctrl" +
-            (e.shiftKey ? " + Shift" : "") +
-            (e.key === "Control" || e.key === "Shift"
-              ? ""
-              : (e.ctrlKey ? " + " : "") +
-                (e.key.toUpperCase() === e.key
-                  ? e.code.includes("Digit")
-                    ? e.code.substring(5, e.code.length)
-                    : e.key
-                  : e.key.toUpperCase()))
-          : "";
-      },
-      keySettingKeyUp(e) {
-        // Ctrl by itself isn't a hotkey
-        if (e.target.value === "Ctrl") e.target.value = "";
-        this.updateOption(e.target.value);
-      },
       msg(...params) {
         return this.$root.msg(...params);
       },
