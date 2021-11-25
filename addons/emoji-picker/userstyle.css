@@ -13,8 +13,7 @@
   overflow: hidden;
   line-height: 0px;
   font-size: 15px;
-}
-.sa-emoji-picker {
+  font-weight: normal;
   right: -7px;
 }
 
@@ -54,6 +53,7 @@
 .sa-emoji-button {
   padding: 0.74rem 0.99rem;
   vertical-align: middle;
+  font-weight: bold;
 }
 .button.small.sa-emoji-button-container {
   user-select: none;
