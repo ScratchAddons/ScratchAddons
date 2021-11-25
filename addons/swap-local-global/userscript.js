@@ -246,10 +246,12 @@ export default async function ({ addon, msg, console }) {
     }
 
     const headerTitle = promptBody.parentElement.querySelector('[class^="modal_header-item_"]');
-    if (variable.type === "") {
-      headerTitle.textContent = msg("edit-variable-header");
-    } else {
-      headerTitle.textContent = msg("edit-list-header");
+    if (headerTitle) {
+      if (variable.type === "") {
+        headerTitle.textContent = msg("edit-variable-header");
+      } else {
+        headerTitle.textContent = msg("edit-list-header");
+      }
     }
 
     const root = document.createElement("div");
