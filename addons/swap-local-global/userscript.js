@@ -221,7 +221,7 @@ export default async function ({ addon, msg, console }) {
   };
 
   const canUserUseCloudVariables = () => {
-    const blocksWrapper = document.querySelector('[class^="gui_blocks-wrapper_1ccgf"]');
+    const blocksWrapper = document.querySelector('[class^="gui_blocks-wrapper_"]');
     let internalNode = blocksWrapper[addon.tab.traps.getInternalKey(blocksWrapper)];
     while (true) {
       if (!internalNode) {
@@ -245,7 +245,7 @@ export default async function ({ addon, msg, console }) {
       return;
     }
 
-    const headerTitle = promptBody.parentElement.querySelector('[class^="modal_header-item_2zQTd"]');
+    const headerTitle = promptBody.parentElement.querySelector('[class^="modal_header-item_"]');
     if (variable.type === "") {
       headerTitle.textContent = msg("edit-variable-header");
     } else {
