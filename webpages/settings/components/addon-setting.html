@@ -33,6 +33,21 @@
         <button :disabled="!addon._enabled" class="addon-buttons setting-table-add" @click="addTableRow">
           <img class="icon-type" src="../../images/icons/plus.svg" />
         </button>
+
+        <div class="presets-column" v-if="setting.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
+          <div class="setting-label">{{ msg("presets") }}</div>
+          <div class="addon-setting" v-for="preset of setting.presets">
+            <button
+              type="preset-button"
+              class="large-button"
+              :disabled="!addon._enabled"
+              @click="addTableRow(preset.items)"
+              :title="preset.description"
+            >
+              <span>{{preset.name}}</span>
+            </button>
+          </div>
+        </div>
       </div>
       <input
         v-if="setting.type === 'boolean'"

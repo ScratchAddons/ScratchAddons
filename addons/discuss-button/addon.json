@@ -30,6 +30,16 @@
           "id": "url",
           "type": "string"
         }
+      ],
+      "presets": [
+        {
+          "name": "Discuss Button",
+          "items": ["Discuss", "/discuss"]
+        },
+        {
+          "name": "Wiki Button",
+          "items": ["Wiki", "https://scratch-wiki.info/"]
+        }
       ]
     }
   ],
