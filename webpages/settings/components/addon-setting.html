@@ -30,11 +30,11 @@
             </div>
           </div>
         </div>
-        <div class="setting-table-add">
-          <button :disabled="!addon._enabled" class="addon-buttons addon-split-button" @click="addTableRow">
+        <div class="addon-split-button setting-table-dropdown" :class="{open: rowDropdownOpen}">
+          <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-button" @click="addTableRow">
             <img class="icon-type" src="../../images/icons/plus.svg" />
           </button>
-          <div :class="{'setting-table-dropdown': true, open: rowDropdownOpen}" v-click-outside="closeResetDropdowns">
+          <div v-click-outside="closeResetDropdowns">
             <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-dropdown" @click="toggleRowDropdown">
               <img class="icon-type" src="../../images/icons/expand.svg" />
             </button>
@@ -346,13 +346,18 @@
     flex-direction: column;
     justify-content: center;
   }
-  .setting-table-add {
+  .setting-table-dropdown {
+    align-self: flex-start;
     display: flex;
   }
   .setting-table-dropdown ul {
-    top: 40px;
     right: auto;
-    left: -32px;
+    left: 0;
     border-radius: 4px;
+    border-top-left-radius: 0;
+  }
+  [dir="rtl"] .setting-table-dropdown ul {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 0;
   }
 </style>

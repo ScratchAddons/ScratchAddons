@@ -23,6 +23,7 @@
   --warning-border: var(--red-variant);
 
   --hover-highlight: rgba(0, 0, 0, 0.05);
+  --hover-highlight-reduced: rgba(0, 0, 0, 0.02);
   --hover-darken: var(--hover-highlight);
 
   --content-border: #cfcfcf;
