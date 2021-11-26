@@ -22,9 +22,7 @@
             ><span :style="{backgroundColor: preset.values[setting.id]}"></span
           ></span>
           <span>{{ preset.name }}</span>
-          <span v-if="setting.type !== 'color'" class="text-preview"
-            >{{ preset.values[setting.id] }}</span
-          >
+          <span v-if="setting.type !== 'color'" class="text-preview">{{ preset.values[setting.id] }}</span>
         </li>
       </template>
     </ul>

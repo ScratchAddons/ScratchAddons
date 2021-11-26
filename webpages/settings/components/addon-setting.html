@@ -35,7 +35,11 @@
             <img class="icon-type" src="../../images/icons/plus.svg" />
           </button>
           <div v-click-outside="closeResetDropdowns">
-            <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-dropdown" @click="toggleRowDropdown">
+            <button
+              :disabled="!addon._enabled"
+              class="addon-buttons addon-split-button-dropdown"
+              @click="toggleRowDropdown"
+            >
               <img class="icon-type" src="../../images/icons/expand.svg" />
             </button>
             <ul>
