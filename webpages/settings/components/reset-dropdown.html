@@ -15,7 +15,7 @@
         <li
           v-if="preset.values.hasOwnProperty(setting.id) && setting.type === 'color'
             ? preset.values[setting.id].toLowerCase() != setting.default.toLowerCase()
-            : preset.values[this.setting.id] !== setting.default"
+            : preset.values[setting.id] !== setting.default"
           @click="resetToPreset(preset)"
         >
           <span v-if="setting.type === 'color'" class="color-preview"
