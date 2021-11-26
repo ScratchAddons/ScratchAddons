@@ -38,6 +38,16 @@ export default async function ({ template }) {
 
         return false;
       },
+      showResetDropdown() {
+        return (
+          this.addon.presets &&
+          this.addon.presets.some((preset) =>
+            Object.prototype.hasOwnProperty.call(preset.values, this.setting.id) && this.setting.type === "color"
+              ? preset.values[this.setting.id].toLowerCase() !== this.setting.default.toLowerCase()
+              : preset.values[this.setting.id] !== this.setting.default
+          )
+        );
+      },
     },
     methods: {
       settingsName(addon) {
@@ -54,17 +64,6 @@ export default async function ({ template }) {
             return `<img class="inline-icon" src="../../addons/${addon._addonId}/${icon.split("#")[1]}"/>`;
           }
         });
-      },
-
-      showResetDropdown() {
-        return (
-          this.addon.presets &&
-          this.addon.presets.some((preset) =>
-            Object.prototype.hasOwnProperty.call(preset.values, this.setting.id) && this.setting.type === "color"
-              ? preset.values[this.setting.id].toLowerCase() !== this.setting.default.toLowerCase()
-              : preset.values[this.setting.id] !== this.setting.default
-          )
-        );
       },
       checkValidity() {
         // Needed to get just changed input to enforce it's min, max, and integer rule if the user "manually" sets the input to a value.

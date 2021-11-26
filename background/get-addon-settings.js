@@ -32,19 +32,15 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
           if (settings[option.id] === undefined) {
             madeChangesToAddon = true;
             madeAnyChanges = true;
-            // Transition v1.16.5 to v1.17.0
-            // Users of scratchr2 addon will get "scratchr2" version of old-studio-layout
-            if (addonId === "old-studio-layout" && option.id === "version" && addonsEnabled.scratchr2) {
-              settings.version = "scratchr2";
-              continue;
-            }
-            settings[option.id] = JSON.parse(JSON.stringify(option.default));
+
             if (option.type === "table") {
-              settings[option.id] = settings[option.id].map((items) => {
+              settings[option.id] = JSON.parse(JSON.stringify(option.default)).map((items) => {
                 let setting = {};
                 items.forEach((item, i) => (setting[option.row[i].id] = item));
                 return setting;
               });
+            } else {
+              settings[option.id] = option.default;
             }
           } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number
@@ -57,6 +53,17 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               const newValue = Number.isNaN(number) ? option.default : number;
               settings[option.id] = newValue;
             }
+          } else if (option.type === "table") {
+            console.log(option.default);
+            settings[option.id].forEach((item, i) => {
+              option.row.forEach((row, j) => {
+                if (item[row.id] === undefined) {
+                  madeChangesToAddon = true;
+                  madeAnyChanges = true;
+                  item[row.id] = option.default[i][j];
+                }
+              });
+            });
           }
         }
       }

@@ -128,7 +128,7 @@
         ></picker>
       </template>
       <reset-dropdown
-        v-if="showResetDropdown()"
+        v-if="showResetDropdown"
         :setting="setting"
         :enabled="addon._enabled"
         :presets="addon.presets"
@@ -140,7 +140,7 @@
         class="large-button clear-button"
         :disabled="!addon._enabled"
         :title="msg('reset')"
-        @click="updateOption(setting.default)"
+        @click="updateOption(setting.default || '')"
       >
         <img src="../../images/icons/undo.svg" class="icon-type" />
       </button>
