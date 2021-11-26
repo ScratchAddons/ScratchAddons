@@ -43,5 +43,14 @@
         "color": "#000000"
       }
     }
+  ],
+  "credits":[
+    {
+      "name": "World_Languages"
+    },
+    {
+      "name": "William Horning",
+      "link": "https://wgyt.tk"
+    }
   ]
 }
