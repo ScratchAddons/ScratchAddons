@@ -54,15 +54,21 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               settings[option.id] = newValue;
             }
           } else if (option.type === "table") {
-            console.log(option.default);
             settings[option.id].forEach((item, i) => {
-              option.row.forEach((row, j) => {
-                if (item[row.id] === undefined) {
+              option.row.forEach((setting, j) => {
+                if (item[setting.id] === undefined) {
                   madeChangesToAddon = true;
                   madeAnyChanges = true;
-                  item[row.id] = option.default[i][j];
+                  item[setting.id] = option.default[i][j];
                 }
               });
+              for (const def in item) {
+                if (!option.row.find((setting) => setting.id === def)) {
+                  madeChangesToAddon = true;
+                  madeAnyChanges = true;
+                  delete item[def];
+                }
+              }
             });
           }
         }
