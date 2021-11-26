@@ -125,7 +125,7 @@ const localizeSettings = (addonId, setting, tableId) => {
           }
         }
         for (const localizedSetting of localizedSettings) {
-          if (typeof preset.values[localizedSettings] === "string") {
+          if (typeof preset.values[localizedSetting] === "string") {
             preset.values[localizedSetting] = scratchAddons.l10n.get(
               `${addonId}/@preset-value-${preset.id}-${localizedSetting}`,
               {},
