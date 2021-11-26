@@ -129,7 +129,7 @@
         ></picker>
       </template>
       <reset-dropdown
-        v-if="showResetDropdown"
+        v-if="showResetDropdown()"
         :setting="setting"
         :enabled="addon._enabled"
         :presets="addon.presets"
