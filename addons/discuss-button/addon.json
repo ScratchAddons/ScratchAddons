@@ -28,7 +28,7 @@
         {
           "name": "URL",
           "id": "url",
-          "type": "literal"
+          "type": "untranslated"
         }
       ],
       "presets": [
