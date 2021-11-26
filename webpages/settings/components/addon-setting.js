@@ -4,8 +4,16 @@ export default async function ({ template }) {
     template,
     data() {
       return {
+        rowDropdownOpen: false,
         noResetDropdown: ["table", "boolean", "select"].includes(this.setting.type),
       };
+    },
+    ready() {
+      this.$root.$on("close-reset-dropdowns", (except) => {
+        if (this.rowDropdownOpen && this !== except) {
+          this.rowDropdownOpen = false;
+        }
+      });
     },
     computed: {
       show() {
@@ -95,6 +103,14 @@ export default async function ({ template }) {
         this.setting.row.map((column) => column.id).forEach((id, i) => (settings[id] = items[i] || ""));
         this.addonSettings[this.setting.id].push(settings);
         this.updateSettings();
+        if (this.rowDropdownOpen) this.toggleRowDropdown();
+      },
+      toggleRowDropdown() {
+        this.rowDropdownOpen = !this.rowDropdownOpen;
+        this.$root.closePickers({ isTrusted: true }, null, {
+          callCloseDropdowns: false,
+        });
+        this.$root.closeResetDropdowns({ isTrusted: true }, this); // close other dropdowns
       },
       msg(...params) {
         return this.$root.msg(...params);

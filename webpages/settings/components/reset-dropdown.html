@@ -4,7 +4,7 @@
       <img src="../../images/icons/expand.svg" class="icon-type" />
     </button>
     <ul>
-      <li v-if="!tableDropdown" @click="resetToDefault">
+      <li @click="resetToDefault">
         <span v-if="setting.type === 'color'" class="color-preview"
           ><span :style="{backgroundColor: setting.default}"></span
         ></span>
@@ -22,7 +22,7 @@
             ><span :style="{backgroundColor: preset.values[setting.id]}"></span
           ></span>
           <span>{{ preset.name }}</span>
-          <span v-if="!tableDropdown && setting.type !== 'color'" class="text-preview"
+          <span v-if="setting.type !== 'color'" class="text-preview"
             >{{ preset.values[setting.id] }}</span
           >
         </li>

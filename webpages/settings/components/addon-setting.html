@@ -30,23 +30,18 @@
             </div>
           </div>
         </div>
-        <div style="display: flex">
-          <button
-            :disabled="!addon._enabled"
-            class="large-button"
-            @click="addTableRow"
-            style="border-radius: 4px 0 0 4px"
-          >
-            <img class="icon-type" src="../../images/icons/plus.svg" /> Create Item
+        <div class="setting-table-add">
+          <button :disabled="!addon._enabled" class="addon-buttons addon-split-button" @click="addTableRow">
+            <img class="icon-type" src="../../images/icons/plus.svg" />
           </button>
-          <reset-dropdown
-            v-if="setting.presets"
-            :table-dropdown="true"
-            :setting="setting"
-            :enabled="addon._enabled"
-            :presets="setting.presets"
-            v-click-outside="closeResetDropdowns"
-          ></reset-dropdown>
+          <div :class="{'setting-table-dropdown': true, open: rowDropdownOpen}" v-click-outside="closeResetDropdowns">
+            <button :disabled="!addon._enabled" class="addon-buttons addon-split-button-dropdown" @click="toggleRowDropdown">
+              <img class="icon-type" src="../../images/icons/expand.svg" />
+            </button>
+            <ul>
+              <li v-for="preset of setting.presets" @click="addTableRow(preset.values)">{{ preset.name }}</li>
+            </ul>
+          </div>
         </div>
       </div>
       <input
@@ -235,7 +230,8 @@
     margin-inline-end: 10px;
   }
 
-  .setting-dropdown {
+  .setting-dropdown,
+  .setting-table-dropdown {
     position: relative;
   }
   .setting-dropdown.open .clear-button {
@@ -252,7 +248,8 @@
   [dir="rtl"] .setting-dropdown.open .clear-button {
     border-bottom-left-radius: 4px;
   }
-  .setting-dropdown ul {
+  .setting-dropdown ul,
+  .setting-table-dropdown ul {
     position: absolute;
     top: calc(100% - 1px);
     right: 0;
@@ -282,10 +279,12 @@
     right: -100px;
     border-top-left-radius: 4px;
   }
-  .setting-dropdown.open ul {
+  .setting-dropdown.open ul,
+  .setting-table-dropdown.open ul {
     display: block;
   }
-  .setting-dropdown li {
+  .setting-dropdown li,
+  .setting-table-dropdown li {
     padding: 6px 12px;
     list-style: none;
     white-space: nowrap;
@@ -293,7 +292,8 @@
     transition: 0.2s ease;
     user-select: none;
   }
-  .setting-dropdown li:hover {
+  .setting-dropdown li:hover,
+  .setting-table-dropdown li:hover {
     background: var(--button-hover-background);
   }
   .setting-dropdown li > * {
@@ -345,5 +345,14 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+  .setting-table-add {
+    display: flex;
+  }
+  .setting-table-dropdown ul {
+    top: 40px;
+    right: auto;
+    left: -32px;
+    border-radius: 4px;
   }
 </style>
