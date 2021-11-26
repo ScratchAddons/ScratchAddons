@@ -33,12 +33,28 @@
       ],
       "presets": [
         {
+          "name": "Create Button",
+          "values": ["Create", "/projects/editor/"]
+        },
+        {
+          "name": "Explore Button",
+          "values": ["Explore", "/explore/projects/all"]
+        },
+        {
+          "name": "Ideas Button",
+          "values": ["Ideas", "/ideas"]
+        },
+        {
+          "name": "About Button",
+          "values": ["About", "/about"]
+        },
+        {
           "name": "Discuss Button",
-          "items": ["Discuss", "/discuss"]
+          "values": ["Discuss", "/discuss"]
         },
         {
           "name": "Wiki Button",
-          "items": ["Wiki", "https://scratch-wiki.info/"]
+          "values": ["Wiki", "https://scratch-wiki.info/"]
         }
       ]
     }

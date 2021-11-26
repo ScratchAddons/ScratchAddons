@@ -1,17 +1,17 @@
 <template>
   <div :class="{'setting-dropdown': true, open: isOpen}">
-    <button type="button" class="large-button clear-button" :disabled="!addon._enabled" @click="toggle" :title="label">
+    <button type="button" class="large-button clear-button" :disabled="!enabled" @click="toggle" :title="msg('reset')">
       <img src="../../images/icons/expand.svg" class="icon-type" />
     </button>
     <ul>
-      <li @click="resetToDefault">
+      <li v-if="!tableDropdown" @click="resetToDefault">
         <span v-if="setting.type === 'color'" class="color-preview"
           ><span :style="{backgroundColor: setting.default}"></span
         ></span>
-        <span>{{ defaultLabel }}</span>
+        <span>{{ msg("default") }}</span>
         <span v-if="setting.type !== 'color'" class="text-preview">{{ setting.default }}</span>
       </li>
-      <template v-for="preset in addon.presets">
+      <template v-for="preset in presets">
         <li
           v-if="preset.values.hasOwnProperty(setting.id) && setting.type === 'color'
             ? preset.values[setting.id].toLowerCase() != setting.default.toLowerCase()
@@ -22,7 +22,9 @@
             ><span :style="{backgroundColor: preset.values[setting.id]}"></span
           ></span>
           <span>{{ preset.name }}</span>
-          <span v-if="setting.type !== 'color'" class="text-preview">{{ preset.values[setting.id] }}</span>
+          <span v-if="!tableDropdown && setting.type !== 'color'" class="text-preview"
+            >{{ preset.values[setting.id] }}</span
+          >
         </li>
       </template>
     </ul>

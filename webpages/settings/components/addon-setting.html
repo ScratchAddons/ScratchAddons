@@ -30,23 +30,23 @@
             </div>
           </div>
         </div>
-        <button :disabled="!addon._enabled" class="addon-buttons setting-table-add" @click="addTableRow">
-          <img class="icon-type" src="../../images/icons/plus.svg" />
-        </button>
-
-        <div class="presets-column" v-if="setting.presets" v-bind:class="[!addon._enabled ? 'disabled' : '']">
-          <div class="setting-label">{{ msg("presets") }}</div>
-          <div class="addon-setting" v-for="preset of setting.presets">
-            <button
-              type="preset-button"
-              class="large-button"
-              :disabled="!addon._enabled"
-              @click="addTableRow(preset.items)"
-              :title="preset.description"
-            >
-              <span>{{preset.name}}</span>
-            </button>
-          </div>
+        <div style="display: flex">
+          <button
+            :disabled="!addon._enabled"
+            class="large-button"
+            @click="addTableRow"
+            style="border-radius: 4px 0 0 4px"
+          >
+            <img class="icon-type" src="../../images/icons/plus.svg" /> Create Item
+          </button>
+          <reset-dropdown
+            v-if="setting.presets"
+            :table-dropdown="true"
+            :setting="setting"
+            :enabled="addon._enabled"
+            :presets="setting.presets"
+            v-click-outside="closeResetDropdowns"
+          ></reset-dropdown>
         </div>
       </div>
       <input
@@ -129,11 +129,10 @@
         ></picker>
       </template>
       <reset-dropdown
-        v-if="showResetDropdown()"
+        v-if="showResetDropdown"
         :setting="setting"
-        :addon="addon"
-        :label="msg('reset')"
-        :default-label="msg('default')"
+        :enabled="addon._enabled"
+        :presets="addon.presets"
         v-click-outside="closeResetDropdowns"
       ></reset-dropdown>
       <button
@@ -346,8 +345,5 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
-  .setting-table-add {
-    width: 24px;
   }
 </style>
