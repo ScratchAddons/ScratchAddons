@@ -22,6 +22,8 @@ export default async function ({ addon, global, console }) {
           ScratchBlocks.Events.setGroup(true);
         }
         this.draggingBlock_.unplug(true);
+        // A separate field has to be updated to avoid dragging comments attached to blocks underneath this block.
+        this.dragIconData_ = this.dragIconData_.filter((i) => i.icon.block_ === this.draggingBlock_);
       }
     }
     return originalStartBlockDrag.call(this, ...args);
