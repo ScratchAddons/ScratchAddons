@@ -1,6 +1,6 @@
 export default async function ({ template }) {
   const AddonSetting = Vue.extend({
-    props: ["addon", "setting", "addon-settings"],
+    props: ["addon", "setting", "addon-settings", "parent-settings"],
     template,
     data() {
       return {
@@ -31,7 +31,10 @@ export default async function ({ template }) {
             const arr = Array.isArray(this.setting.if.settings[settingName])
               ? this.setting.if.settings[settingName]
               : [this.setting.if.settings[settingName]];
-            return arr.some((possibleValue) => this.addonSettings[settingName] === possibleValue);
+            return arr.some(
+              (possibleValue) =>
+                this.addonSettings[settingName] === possibleValue || this.parentSettings[settingName] === possibleValue
+            );
           });
           if (anyMatches === true) return true;
         }
@@ -97,9 +100,15 @@ export default async function ({ template }) {
         this.addonSettings[this.setting.id].splice(i, 1);
         this.updateSettings();
       },
-      addTableRow(items = []) {
-        let settings = {};
-        this.setting.row.map((column) => column.id).forEach((id, i) => (settings[id] = items[i] || ""));
+      addTableRow(items = {}) {
+        const settings = Object.assign(
+          {},
+          this.setting.row.reduce((acc, cur) => {
+            acc[cur.id] = cur.default;
+            return acc;
+          }, {}),
+          items
+        );
         this.addonSettings[this.setting.id].push(settings);
         this.updateSettings();
         if (this.rowDropdownOpen) this.toggleRowDropdown();

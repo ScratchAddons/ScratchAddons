@@ -52,14 +52,8 @@ export default async function ({ template }) {
       loadDefaults() {
         if (window.confirm(chrome.i18n.getMessage("confirmReset"))) {
           for (const property of this.addon.settings) {
-            this.addonSettings[property.id] = property.default;
-            if (property.type === "table") {
-              this.addonSettings[property.id] = this.addonSettings[property.id].map((defaultValues) => {
-                let info = {};
-                defaultValues.forEach((defaultValue, i) => (info[property.row[i].id] = defaultValue));
-                return info;
-              });
-            }
+            // Clone necessary for tables
+            this.addonSettings[property.id] = JSON.parse(JSON.stringify(property.default));
           }
           this.$root.updateSettings(this.addon);
           console.log(`Loaded default values for ${this.addon._addonId}`);

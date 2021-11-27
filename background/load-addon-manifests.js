@@ -84,36 +84,32 @@ const localizeSettings = (addonId, setting, tableId) => {
         if (setting.type === "string") {
           localizedSettings.push(setting.id);
         } else if (setting.type === "table") {
-          const localizedRows = {};
-          setting.row.forEach((row, i) => {
+          const localizedRows = [];
+          setting.row.forEach((row) => {
             localizeSettings(addonId, row, setting.id);
             if (row.type === "string") {
-              localizedRows[i] = row.id;
+              localizedRows.push(row.id);
             }
           });
           for (let i = 0; i < (setting.default || []).length; i++) {
             const defaultValues = setting.default[i];
-            for (let j = 0; j < defaultValues.length; j++) {
-              if (localizedRows[j]) {
-                defaultValues[j] = scratchAddons.l10n.get(
-                  `${addonId}/@settings-default-${setting.id}-${i}-${localizedRows[j]}`,
-                  {},
-                  defaultValues[j]
-                );
-              }
+            for (const localizedRow of localizedRows) {
+              defaultValues[localizedRow] = scratchAddons.l10n.get(
+                `${addonId}/@settings-default-${setting.id}-${i}-${localizedRows}`,
+                {},
+                defaultValues[localizedRow]
+              );
             }
           }
           for (let i = 0; i < (setting.presets || []).length; i++) {
             const preset = setting.presets[i];
             preset.name = scratchAddons.l10n.get(`${addonId}/@preset-${setting.id}-${i}`, {}, preset.name);
-            for (let j = 0; j < preset.values.length; j++) {
-              if (localizedRows[j]) {
-                preset.values[j] = scratchAddons.l10n.get(
-                  `${addonId}/@preset-value-${setting.id}-${i}-${localizedRows[j]}`,
-                  {},
-                  preset.values[j]
-                );
-              }
+            for (const localizedRow of localizedRows) {
+              preset.values[localizedRow] = scratchAddons.l10n.get(
+                `${addonId}/@preset-value-${setting.id}-${i}-${localizedRows}`,
+                {},
+                preset.values[localizedRow]
+              );
             }
           }
         }
