@@ -14,47 +14,49 @@
       "id": "items",
       "type": "table",
       "default": [
-        ["Create", "/projects/editor/"],
-        ["Explore", "/explore/projects/all"],
-        ["Ideas", "/ideas"],
-        ["About", "/about"]
+        { "name": "Create", "url": "/projects/editor/" },
+        { "name": "Explore", "url": "/explore/projects/all" },
+        { "name": "Ideas", "url": "/ideas" },
+        { "name": "About", "url": "/about" }
       ],
       "row": [
         {
           "name": "Name",
           "id": "name",
-          "type": "string"
+          "type": "string",
+          "default": ""
         },
         {
           "name": "URL",
           "id": "url",
-          "type": "untranslated"
+          "type": "untranslated",
+          "default": ""
         }
       ],
       "presets": [
         {
           "name": "Create",
-          "values": ["Create", "/projects/editor/"]
+          "values": { "name": "Create", "url": "/projects/editor/" }
         },
         {
           "name": "Explore",
-          "values": ["Explore", "/explore/projects/all"]
+          "values": { "name": "Explore", "url": "/explore/projects/all" }
         },
         {
           "name": "Ideas",
-          "values": ["Ideas", "/ideas"]
+          "values": { "name": "Ideas", "url": "/ideas" }
         },
         {
           "name": "About",
-          "values": ["About", "/about"]
+          "values": { "name": "About", "url": "/about" }
         },
         {
           "name": "Discuss",
-          "values": ["Discuss", "/discuss"]
+          "values": { "name": "Discuss", "url": "/discuss" }
         },
         {
           "name": "Wiki",
-          "values": ["Wiki", "https://scratch-wiki.info/"]
+          "values": { "name": "Wiki", "url": "https://scratch-wiki.info/" }
         }
       ]
     }

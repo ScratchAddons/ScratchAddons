@@ -13,17 +13,23 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
       if (manifest.settings) {
-        if (addonId === "discuss-button" && (settings.buttonName || settings.removeIdeasBtn)) {
+        if (
+          addonId === "discuss-button" &&
+          addonsEnabled["discuss-button"] === true &&
+          (settings.buttonName || settings.removeIdeasBtn)
+        ) {
           // Transition v1.22.0 modes to v1.23.0 settings
           madeChangesToAddon = true;
           madeAnyChanges = true;
 
           let option = manifest.settings.find((option) => option.id === "items");
           settings.items = [...option.default];
-          settings.items.splice(3, 0, [settings.buttonName, "/discuss"]);
+          settings.items.splice(3, 0, {
+            name: settings.buttonName,
+            url: "/discuss",
+          });
           if (settings.removeIdeasBtn) settings.items.splice(2, 1);
 
-          settings.items = settings.items.map((item) => ({ name: item[0], url: item[1] }));
           delete settings.removeIdeasBtn;
           delete settings.buttonName;
         }
@@ -33,15 +39,8 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             madeChangesToAddon = true;
             madeAnyChanges = true;
 
-            if (option.type === "table") {
-              settings[option.id] = JSON.parse(JSON.stringify(option.default)).map((items) => {
-                let setting = {};
-                items.forEach((item, i) => (setting[option.row[i].id] = item));
-                return setting;
-              });
-            } else {
-              settings[option.id] = option.default;
-            }
+            // cloning required for tables
+            settings[option.id] = JSON.parse(JSON.stringify(option.default));
           } else if (option.type === "positive_integer" || option.type === "integer") {
             // ^ else means typeof can't be "undefined", so it must be number
             if (typeof settings[option.id] !== "number") {
@@ -54,16 +53,17 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               settings[option.id] = newValue;
             }
           } else if (option.type === "table") {
+            const tableSettingIds = option.row.map((setting) => setting.id);
             settings[option.id].forEach((item, i) => {
-              option.row.forEach((setting, j) => {
+              option.row.forEach((setting) => {
                 if (item[setting.id] === undefined) {
                   madeChangesToAddon = true;
                   madeAnyChanges = true;
-                  item[setting.id] = option.default[i][j];
+                  item[setting.id] = option.default[i][setting.id];
                 }
               });
               for (const def in item) {
-                if (!option.row.find((setting) => setting.id === def)) {
+                if (!tableSettingIds.includes(def)) {
                   madeChangesToAddon = true;
                   madeAnyChanges = true;
                   delete item[def];

@@ -100,9 +100,15 @@ export default async function ({ template }) {
         this.addonSettings[this.setting.id].splice(i, 1);
         this.updateSettings();
       },
-      addTableRow(items = []) {
-        let settings = {};
-        this.setting.row.map((column) => column.id).forEach((id, i) => (settings[id] = items[i] || ""));
+      addTableRow(items = {}) {
+        const settings = Object.assign(
+          {},
+          this.setting.row.reduce((acc, cur) => {
+            acc[cur.id] = cur.default;
+            return acc;
+          }, {}),
+          items
+        );
         this.addonSettings[this.setting.id].push(settings);
         this.updateSettings();
         if (this.rowDropdownOpen) this.toggleRowDropdown();
