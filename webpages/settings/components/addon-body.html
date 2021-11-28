@@ -184,15 +184,18 @@
     border: none;
     transition: 0.2s ease;
   }
-  .addon-buttons:hover,
+  .addon-buttons:hover:not([disabled]),
   .addon-split-button.open .addon-split-button-dropdown,
   .addon-split-button.open:hover .addon-split-button-dropdown:not(:hover) {
     background: var(--hover-highlight);
   }
-  .addon-split-button:hover .addon-split-button-button:not(:hover),
-  .addon-split-button:hover .addon-split-button-dropdown:not(:hover),
+  .addon-split-button:hover:not([disabled]) .addon-split-button-button:not(:hover),
+  .addon-split-button:hover:not([disabled]) .addon-split-button-dropdown:not(:hover),
   .addon-split-button.open .addon-split-button-button {
     background: var(--hover-highlight-reduced);
+  }
+  [disabled] {
+    cursor: initial !important;
   }
   .addon-split-button-button {
     margin: 0;
