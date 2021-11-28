@@ -1,6 +1,6 @@
 export default async function ({ template }) {
   const AddonSetting = Vue.extend({
-    props: ["addon", "setting", "addon-settings", "parent-settings"],
+    props: ["addon", "setting", "addon-settings"],
     template,
     data() {
       return {
@@ -33,7 +33,8 @@ export default async function ({ template }) {
               : [this.setting.if.settings[settingName]];
             return arr.some(
               (possibleValue) =>
-                this.addonSettings[settingName] === possibleValue || this.parentSettings[settingName] === possibleValue
+                this.addonSettings[settingName] === possibleValue ||
+                this.$parent?.addonSettings?.[settingName] === possibleValue
             );
           });
           if (anyMatches === true) return true;
