@@ -3,8 +3,8 @@
   "description": "Replaces thumbnails across the website with higher resolution images. Useful for Retina displays and browsing at greater than 100% zoom, and scales up thumbnails that are undersized by default.",
   "info": [
     {
-      "type": "warning",
-      "text": "Higher resolution images require larger filesizes. If your network's data plan is limited, take care not to cause extra expenses.",
+      "type": "notice",
+      "text": "If your network's data plan is limited, keep in mind that higher resolution images require more data usage.",
       "id": "imagefilesize"
     }
   ],
