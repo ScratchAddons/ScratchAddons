@@ -24,6 +24,10 @@
     {
       "url": "theme3.css",
       "matches": ["projects"]
+    },
+    {
+      "url": "comments.css",
+      "matches": ["projects"]
     }
   ],
   "settings": [
@@ -115,13 +119,19 @@
       }
     },
     {
+      "name": "Comments",
+      "id": "comment-color",
+      "type": "color",
+      "default": "#FEF49C"
+    },
+    {
       "name": "Block inputs",
       "id": "input-color",
       "type": "color",
       "default": "#FFFFFF"
     },
     {
-      "name": "Text color",
+      "name": "Block text color",
       "id": "text",
       "type": "select",
       "default": "white",
@@ -145,6 +155,18 @@
       ]
     }
   ],
+  "customCssVariables": [
+    {
+      "name": "commentText",
+      "value": {
+        "type": "textColor",
+        "source": {
+          "type": "settingValue",
+          "settingId": "comment-color"
+        }
+      }
+    }
+  ],
   "tags": ["editor", "theme", "codeEditor", "featured"],
   "enabledByDefault": false,
   "presets": [
@@ -165,6 +187,7 @@
         "custom-color": "#5f49d8",
         "Pen-color": "#0FBD8C",
         "sa-color": "#29BEB8",
+        "comment-color": "#FEF49C",
         "input-color": "#FFFFFF",
         "text": "white"
       }
@@ -186,6 +209,7 @@
         "custom-color": "#632d99",
         "Pen-color": "#0e9a6c",
         "sa-color": "#29beb8",
+        "comment-color": "#FFFFD2",
         "input-color": "#ffffff",
         "text": "white"
       }
@@ -207,6 +231,7 @@
         "custom-color": "#99004d",
         "Pen-color": "#064734",
         "sa-color": "#166966",
+        "comment-color": "#4C4401",
         "input-color": "#202020",
         "text": "white"
       }
@@ -228,6 +253,7 @@
         "custom-color": "#FF6680",
         "Pen-color": "#0FBD8C",
         "sa-color": "#29BEB8",
+        "comment-color": "#202020",
         "input-color": "#202020",
         "text": "colorOnBlack"
       }
