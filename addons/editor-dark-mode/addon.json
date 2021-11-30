@@ -741,13 +741,6 @@
       }
     },
     {
-      "url": "dark_comments.css",
-      "matches": ["projects"],
-      "if": {
-        "settings": { "darkComments": true }
-      }
-    },
-    {
       "url": "scrollbar.css",
       "matches": ["projects"],
       "if": {
@@ -884,12 +877,6 @@
       "default": false
     },
     {
-      "name": "Dark comments",
-      "id": "darkComments",
-      "type": "boolean",
-      "default": true
-    },
-    {
       "name": "Dark scrollbars",
       "id": "darkScrollbars",
       "type": "boolean",
@@ -921,7 +908,6 @@
         "border": "#ffffff0d",
         "textShadow": false,
         "dots": false,
-        "darkComments": true,
         "darkScrollbars": true
       }
     },
@@ -949,7 +935,6 @@
         "border": "#00000026",
         "textShadow": false,
         "dots": false,
-        "darkComments": true,
         "darkScrollbars": true
       }
     },
@@ -977,7 +962,6 @@
         "border": "#111111",
         "textShadow": true,
         "dots": false,
-        "darkComments": true,
         "darkScrollbars": true
       }
     },
@@ -1005,7 +989,6 @@
         "border": "#444444",
         "textShadow": false,
         "dots": true,
-        "darkComments": true,
         "darkScrollbars": true
       }
     },
@@ -1033,7 +1016,6 @@
         "border": "#ffffff0d",
         "textShadow": false,
         "dots": true,
-        "darkComments": true,
         "darkScrollbars": true
       }
     },
@@ -1061,7 +1043,6 @@
         "border": "#d0d1d2",
         "textShadow": false,
         "dots": true,
-        "darkComments": false,
         "darkScrollbars": false
       }
     },
@@ -1089,7 +1070,6 @@
         "border": "#0000006b",
         "textShadow": false,
         "dots": false,
-        "darkComments": false,
         "darkScrollbars": false
       }
     },
@@ -1117,7 +1097,6 @@
         "border": "#00000026",
         "textShadow": false,
         "dots": true,
-        "darkComments": false,
         "darkScrollbars": false
       }
     }
