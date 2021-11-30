@@ -532,8 +532,12 @@ h4 {
   background: rgba(77, 151, 255, 0.1);
 }
 #featured-project-modal .project.thumb {
-  border: none;
+  border: 1px solid transparent;
   background: #fff;
+}
+#featured-project-modal .project.thumb.selected {
+  border: 1px solid #4d97ff !important;
+  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.35);
 }
 .modal-footer {
   border-radius: 0 0 16px 16px;

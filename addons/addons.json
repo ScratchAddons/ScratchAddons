@@ -97,6 +97,7 @@
   "hide-project-stats",
   "editor-extra-keys",
   "remix-button",
+  "forum-id",
   "block-cherry-picking",
   "hide-new-variables",
   "move-to-top-bottom",
@@ -106,8 +107,10 @@
   "block-duplicate",
   "disable-paste-offset",
   "emoji-picker",
+  "editor-comment-previews",
   "swap-local-global",
   "fix-editor-comments",
+  "tutorials-button",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",

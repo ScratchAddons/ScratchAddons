@@ -1,13 +1,16 @@
 export default async ({ addon, console }) => {
   const vm = addon.tab.traps.vm;
-  let shiftKeyPressed = false;
 
-  document.addEventListener("keydown", (event) => {
-    shiftKeyPressed = event.shiftKey;
-  });
-  document.addEventListener("keyup", (event) => {
-    shiftKeyPressed = event.shiftKey;
-  });
+  let shiftKeyPressed = false;
+  document.addEventListener(
+    "mousedown",
+    function (e) {
+      shiftKeyPressed = e.shiftKey;
+    },
+    {
+      capture: true,
+    }
+  );
 
   // Do not focus sprite after dragging it
   const oldStopDrag = vm.stopDrag;

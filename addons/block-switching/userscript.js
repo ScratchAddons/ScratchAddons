@@ -1,7 +1,7 @@
 import blockToDom from "./blockToDom.js";
 
 export default async function ({ addon, global, console, msg }) {
-  const blockly = await addon.tab.traps.getBlockly();
+  const ScratchBlocks = await addon.tab.traps.getBlockly();
   const vm = addon.tab.traps.vm;
 
   let blockSwitches = {};
@@ -616,15 +616,6 @@ export default async function ({ addon, global, console, msg }) {
   buildSwitches();
   addon.settings.addEventListener("change", buildSwitches);
 
-  const genuid = () => {
-    const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%()*+,-./:;=?@[]^_`{|}~";
-    let result = "";
-    for (let i = 0; i < 20; i++) {
-      result += CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
-    }
-    return result;
-  };
-
   const menuCallbackFactory = (block, opcodeData) => () => {
     if (opcodeData.isNoop) {
       return;
@@ -704,37 +695,29 @@ export default async function ({ addon, global, console, msg }) {
       }
     }
 
-    // Mark the latest event in the undo stack.
-    // This will be used later to group all of our events.
-    const undoStack = workspace.undoStack_;
-    if (undoStack.length) {
-      undoStack[undoStack.length - 1]._blockswitchingLastUndo = true;
-    }
+    try {
+      ScratchBlocks.Events.setGroup(true);
 
-    // Remove the old block and insert the new one.
-    block.dispose();
-    workspace.paste(xml);
-    for (const separateBlock of pasteSeparately) {
-      workspace.paste(separateBlock);
-    }
-    // The new block will have the same ID as the old one.
-    const newBlock = workspace.getBlockById(id);
-    if (parentConnection) {
-      // Search for the same type of connection on the new block as on the old block.
-      const newBlockConnections = newBlock.getConnections_();
-      const newBlockConnection = newBlockConnections.find((c) => c.type === blockConnectionType);
-      newBlockConnection.connect(parentConnection);
-    }
-
-    // Events (responsible for undoStack updates) are delayed with a setTimeout(f, 0)
-    // https://github.com/LLK/scratch-blocks/blob/f159a1779e5391b502d374fb2fdd0cb5ca43d6a2/core/events.js#L182
-    setTimeout(() => {
-      const group = genuid();
-      for (let i = undoStack.length - 1; i >= 0 && !undoStack[i]._blockswitchingLastUndo; i--) {
-        undoStack[i].group = group;
+      // Remove the old block and insert the new one.
+      block.dispose();
+      workspace.paste(xml);
+      for (const separateBlock of pasteSeparately) {
+        workspace.paste(separateBlock);
       }
-    }, 0);
+      // The new block will have the same ID as the old one.
+      const newBlock = workspace.getBlockById(id);
+      if (parentConnection) {
+        // Search for the same type of connection on the new block as on the old block.
+        const newBlockConnections = newBlock.getConnections_();
+        const newBlockConnection = newBlockConnections.find((c) => c.type === blockConnectionType);
+        newBlockConnection.connect(parentConnection);
+      }
+    } finally {
+      ScratchBlocks.Events.setGroup(false);
+    }
   };
+
+  const uniques = (array) => [...new Set(array)];
 
   addon.tab.createBlockContextMenu(
     (items, block) => {
@@ -777,7 +760,7 @@ export default async function ({ addon, global, console, msg }) {
             }
           }
           const currentValue = block.getFieldValue("VALUE");
-          switches = switches.map((i) => ({
+          switches = uniques(switches).map((i) => ({
             isNoop: i === currentValue,
             fieldValue: i,
             msg: i,
@@ -814,7 +797,7 @@ export default async function ({ addon, global, console, msg }) {
 
         if (addon.settings.get("border") && (block.type === "data_variable" || block.type === "data_listcontents")) {
           // Add top border to first variable (if it exists)
-          const delBlockIndex = items.findIndex((item) => item.text === blockly.Msg.DELETE_BLOCK);
+          const delBlockIndex = items.findIndex((item) => item.text === ScratchBlocks.Msg.DELETE_BLOCK);
           // firstVariableItem might be undefined, a variable to switch to,
           // or an item added by editor-devtools (or any addon before this one)
           const firstVariableItem = items[delBlockIndex + 1];
@@ -826,24 +809,38 @@ export default async function ({ addon, global, console, msg }) {
     { blocks: true }
   );
 
+  // https://github.com/LLK/scratch-blocks/blob/abbfe93136fef57fdfb9a077198b0bc64726f012/blocks_vertical/procedures.js#L207-L215
+  // Returns a list like ["%s", "%d"]
+  const parseArguments = (code) =>
+    code
+      .split(/(?=[^\\]%[nbs])/g)
+      .map((i) => i.trim())
+      .filter((i) => i.charAt(0) === "%")
+      .map((i) => i.substring(0, 2));
+
   const getCustomBlocks = () => {
     const customBlocks = {};
     const target = vm.editingTarget;
-    Object.entries(target.blocks._blocks)
-      .filter(([, block]) => block.opcode === "procedures_prototype")
-      .forEach(([id, block]) => {
-        let {
-          mutation: { proccode, argumentids, argumentnames, argumentdefaults },
-        } = block;
-        customBlocks[proccode] = { stringArgs: [], boolArgs: [] };
-        let [ids, names, defaults] = [argumentids, argumentnames, argumentdefaults].map(JSON.parse);
-        for (let i = 0; i < ids.length; i++) {
-          if (defaults[i] === "") {
-            customBlocks[proccode].stringArgs.push(names[i]);
+    Object.values(target.blocks._blocks)
+      .filter((block) => block.opcode === "procedures_prototype")
+      .forEach((block) => {
+        const procCode = block.mutation.proccode;
+        const argumentNames = JSON.parse(block.mutation.argumentnames);
+        // argumentdefaults is unreliable, so we have to parse the procedure code to determine argument types
+        const parsedArguments = parseArguments(procCode);
+        const stringArgs = [];
+        const boolArgs = [];
+        for (let i = 0; i < argumentNames.length; i++) {
+          if (parsedArguments[i] === "%b") {
+            boolArgs.push(argumentNames[i]);
           } else {
-            customBlocks[proccode].boolArgs.push(names[i]);
+            stringArgs.push(argumentNames[i]);
           }
         }
+        customBlocks[procCode] = {
+          stringArgs,
+          boolArgs,
+        };
       });
     return customBlocks;
   };

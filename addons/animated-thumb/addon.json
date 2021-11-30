@@ -15,7 +15,7 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "tags": ["editor", "editorMenuBar", "recommended"],
+  "tags": ["community", "projectPage", "recommended"],
   "versionAdded": "1.3.0",
   "enabledByDefault": true
 }
