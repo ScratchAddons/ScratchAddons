@@ -32,5 +32,6 @@
       "runAtComplete": false
     }
   ],
+  "versionAdded": "1.23.0",
   "enabledByDefault": false
 }
