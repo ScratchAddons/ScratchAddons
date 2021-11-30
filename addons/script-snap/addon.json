@@ -1,0 +1,61 @@
+{
+  "name": "Snap scripts to grid",
+  "description": "Drag a script to automatically align its position to the code area dots.",
+  "tags": ["editor", "codeEditor", "featured"],
+  "credits": [
+    {
+      "name": "CST1229",
+      "link": "https://github.com/CST1229"
+    },
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/users/TheColaber"
+    },
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Grid size (px)",
+      "id": "grid",
+      "type": "integer",
+      "min": 1,
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Whole-block",
+      "id": "whole-block",
+      "values": {
+        "grid": 48
+      }
+    },
+    {
+      "name": "Half-block",
+      "id": "half-block",
+      "values": {
+        "grid": 24
+      }
+    },
+    {
+      "name": "Default",
+      "id": "default",
+      "values": {
+        "grid": 40
+      }
+    }
+  ],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "versionAdded": "1.23.0",
+  "enabledByDefault": false
+}
