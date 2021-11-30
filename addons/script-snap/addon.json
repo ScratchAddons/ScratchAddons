@@ -1,6 +1,6 @@
 {
   "name": "Snap scripts to grid",
-  "description": "Drag a script to automatically align its position to the workspace dots.",
+  "description": "Drag a script to automatically align its position to the code area dots.",
   "tags": ["editor", "codeEditor"],
   "credits": [
     {
@@ -56,6 +56,6 @@
   ],
   "dynamicEnable": true,
   "dynamicDisable": true,
-  "versionAdded": "1.22.0",
+  "versionAdded": "1.23.0",
   "enabledByDefault": false
 }
