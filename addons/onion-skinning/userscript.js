@@ -164,27 +164,18 @@ export default async function ({ addon, global, console, msg }) {
     if (!project) {
       return;
     }
-    const onions = [];
-    for (const layer of project.layers) {
-      if (layer.data.sa_isOnionLayer) {
-        onions.push(layer);
-      }
+    const onionLayer = project.layers.find((i) => i.data.sa_isOnionLayer);
+    if (!onionLayer) {
+      return;
     }
-    onions.sort((a, b) => a.data.sa_onionIndex - b.data.sa_onionIndex);
     if (settings.layering === "front") {
-      for (const layer of onions) {
-        project.addLayer(layer);
-      }
+      project.addLayer(onionLayer);
     } else {
       const rasterLayer = project.layers.find((i) => i.data.isRasterLayer);
       if (rasterLayer.index === 0) {
-        for (const layer of onions) {
-          project.insertLayer(0, layer);
-        }
+        project.insertLayer(0, onionLayer);
       } else {
-        for (const layer of onions) {
-          project.insertLayer(1, layer);
-        }
+        project.insertLayer(1, onionLayer);
       }
     }
   };
@@ -451,9 +442,8 @@ export default async function ({ addon, global, console, msg }) {
         })
       );
 
-      for (const [index, item] of Object.entries(onions)) {
-        const layer = createOnionLayer();
-        layer.data.sa_onionIndex = index;
+      const layer = createOnionLayer();
+      for (const item of onions) {
         layer.addChild(item);
       }
 
