@@ -344,8 +344,8 @@ export default async function ({ addon, global, console, msg }) {
 
       const image = new Image();
       image.onload = () => {
-        const width = Math.min(960, image.width);
-        const height = Math.min(720, image.height);
+        const width = Math.min(paperCenter.x * 2, image.width);
+        const height = Math.min(paperCenter.y * 2, image.height);
 
         // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L151-L156
         if (typeof rotationCenterX === "undefined") {
