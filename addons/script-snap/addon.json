@@ -45,13 +45,6 @@
       "values": {
         "grid": 24
       }
-    },
-    {
-      "name": "Default",
-      "id": "default",
-      "values": {
-        "grid": 40
-      }
     }
   ],
   "dynamicEnable": true,
