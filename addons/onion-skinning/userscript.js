@@ -261,13 +261,13 @@ export default async function ({ addon, global, console, msg }) {
 
       paper.project.importSVG(asset, {
         expandShapes: true,
+        insert: false,
         onLoad: (root) => {
           if (!root) {
             reject(new Error("could not load onion skin"));
             return;
           }
 
-          root.remove();
           root.opacity = opacity;
 
           // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L274-L275
