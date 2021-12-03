@@ -126,14 +126,6 @@ export default async function ({ addon, global, console, msg }) {
     paperCanvas.importImage = PaperCanvas.prototype.importImage.bind(paperCanvas);
   };
 
-  const createCanvas = (width, height) => {
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    canvas.getContext("2d").imageSmoothingEnabled = false;
-    return canvas;
-  };
-
   const createOnionLayer = () => {
     const layer = new paper.Layer();
     layer.locked = true;
@@ -355,14 +347,13 @@ export default async function ({ addon, global, console, msg }) {
           rotationCenterY = height / 2;
         }
 
-        const raster = new paper.Raster(createCanvas(width, height));
+        const raster = new paper.Raster(image);
         raster.opacity = opacity;
         raster.guide = true;
         raster.locked = true;
         const x = width / 2 + (paperCenter.x - rotationCenterX);
         const y = height / 2 + (paperCenter.y - rotationCenterY);
         raster.position = new paper.Point(x, y);
-        raster.drawImage(image, 0, 0);
         raster.remove();
 
         if (settings.mode === "tint") {
