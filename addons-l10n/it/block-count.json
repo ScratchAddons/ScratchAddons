@@ -1,0 +1,1 @@
+{"block-count/blocks":"{num, plural, one {1 blocco} other {# blocchi}}","block-count/@name":"Numero dei blocchi","block-count/@description":"Mostra il numero totale di blocchi del progetto nella barra dei menu dell'editori. Incluso in precedenza in \"numero di sprite e di script\""}
