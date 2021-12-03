@@ -1,6 +1,6 @@
 {
   "name": "High resolution thumbnails",
-  "description": "Replaces thumbnails across the website with higher resolution images. Useful for Retina (high pixel density) displays displays and browsing at greater than 100% zoom.",
+  "description": "Replaces thumbnails across the website with higher resolution images. Useful for Retina (high pixel density) displays and browsing at greater than 100% zoom.",
   "info": [
     {
       "type": "notice",
