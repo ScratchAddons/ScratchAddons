@@ -372,6 +372,7 @@ export default async function ({ addon, global, console, msg }) {
         const y = height / 2 + (paperCenter.y - rotationCenterY);
         raster.position = new paper.Point(x, y);
         raster.drawImage(image, 0, 0);
+        raster.remove();
 
         if (settings.mode === "tint") {
           tintRaster(raster, isBefore);
