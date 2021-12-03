@@ -238,7 +238,7 @@ export default async function ({ addon, global, console, msg }) {
     context.putImageData(imageData, 0, 0);
   };
 
-  const makeVectorLayer = (layer, opacity, costume, asset, isBefore) =>
+  const makeVectorOnion = (opacity, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
       const { rotationCenterX, rotationCenterY } = costume;
       // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L196-L218
@@ -338,17 +338,16 @@ export default async function ({ addon, global, console, msg }) {
             // bound rect
             bounds
           );
-          raster.parent = layer;
           raster.guide = true;
           raster.locked = true;
           raster.position = root.position;
 
-          resolve();
+          resolve(raster);
         },
       });
     });
 
-  const makeRasterLayer = (layer, opacity, costume, asset, isBefore) =>
+  const makeRasterOnion = (opacity, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
       let { rotationCenterX, rotationCenterY } = costume;
 
@@ -367,7 +366,6 @@ export default async function ({ addon, global, console, msg }) {
 
         const raster = new paper.Raster(createCanvas(width, height));
         raster.opacity = opacity;
-        raster.parent = layer;
         raster.guide = true;
         raster.locked = true;
         const x = width / 2 + (paperCenter.x - rotationCenterX);
@@ -379,7 +377,7 @@ export default async function ({ addon, global, console, msg }) {
           tintRaster(raster, isBefore);
         }
 
-        resolve();
+        resolve(raster);
       };
       image.onerror = () => {
         reject(new Error("could not load image"));
@@ -412,50 +410,59 @@ export default async function ({ addon, global, console, msg }) {
     if (!vm) {
       return;
     }
-    const activeLayer = project.activeLayer;
+    const originalActiveLayer = project.activeLayer;
     const costumes = vm.editingTarget.sprite.costumes;
 
     const startIndex = Math.max(0, selectedCostumeIndex - settings.previous);
     const endIndex = Math.min(costumes.length - 1, selectedCostumeIndex + settings.next);
 
     try {
+      const layersToCreate = [];
       for (let i = startIndex; i <= endIndex; i++) {
         if (i === selectedCostumeIndex) {
           continue;
         }
-
         const isBefore = i < selectedCostumeIndex;
         const distance = Math.abs(i - selectedCostumeIndex) - 1;
         const opacity = (settings.opacity - settings.opacityStep * distance) / 100;
-
         if (opacity <= 0) {
           continue;
         }
-
-        const layer = createOnionLayer();
-        layer.data.sa_onionIndex = i;
-        relayerOnionLayers();
-
-        // Important: Make sure that we do not change the active layer of the editor as doing so can cause corruption.
-        activeLayer.activate();
-
-        const onionCostume = costumes[i];
-        const onionAsset = vm.getCostume(i);
-
-        if (onionCostume.dataFormat === "svg") {
-          await makeVectorLayer(layer, opacity, onionCostume, onionAsset, isBefore);
-        } else if (onionCostume.dataFormat === "png" || onionCostume.dataFormat === "jpg") {
-          await makeRasterLayer(layer, opacity, onionCostume, onionAsset, isBefore);
-        } else {
-          throw new Error(`Unknown data format: ${onionCostume.dataFormat}`);
-        }
+        layersToCreate.push({
+          index: i,
+          isBefore,
+          opacity
+        });
       }
+
+      const onions = await Promise.all(
+        layersToCreate.map(({index, isBefore, opacity}) => {
+          const onionCostume = costumes[index];
+          const onionAsset = vm.getCostume(index);
+
+          if (onionCostume.dataFormat === "svg") {
+            return makeVectorOnion(opacity, onionCostume, onionAsset, isBefore);
+          } else if (onionCostume.dataFormat === "png" || onionCostume.dataFormat === "jpg") {
+            return makeRasterOnion(opacity, onionCostume, onionAsset, isBefore);
+          } else {
+            throw new Error(`Unknown data format: ${onionCostume.dataFormat}`);
+          }
+        })
+      );
+
+      for (const [index, item] of Object.entries(onions)) {
+        const layer = createOnionLayer();
+        layer.data.sa_onionIndex = index;
+        layer.addChild(item);
+      }
+
+      relayerOnionLayers();
     } catch (e) {
       console.error(e);
     }
 
-    // Important: Regardless of any errors, we need to make sure the original active layer is still active.
-    activeLayer.activate();
+    // We must make sure to always reset the active layer to avoid corruption.
+    originalActiveLayer.activate();
   };
 
   const setEnabled = (_enabled) => {
