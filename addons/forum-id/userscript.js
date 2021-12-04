@@ -34,9 +34,7 @@ export default async function ({ addon, console, msg }) {
           "][small](" +
           getIDLink(
             id.substring(1),
-            addon.settings.get("auto_add_use_number")
-              ? post["0"].querySelector(".box-head > .conr").textContent
-              : "View post",
+            post["0"].querySelector(".box-head > .conr").textContent,
             false
           ) +
           ")[/small]\n" +
