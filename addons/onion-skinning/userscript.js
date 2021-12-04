@@ -221,6 +221,19 @@ export default async function ({ addon, global, console, msg }) {
     context.putImageData(imageData, 0, 0);
   };
 
+  const waitForAllRastersToLoad = (root) => {
+    const promises = [];
+    recursePaperItem(root, (item) => {
+      if (item instanceof paper.Raster) {
+        promises.push(new Promise((resolve, reject) => {
+          item.on('load', () => resolve());
+          item.on('error', () => reject(new Error('Raster inside SVG failed to load')));
+        }));
+      }
+    });
+    return Promise.all(promises);
+  };
+
   const makeVectorOnion = (opacity, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
       const { rotationCenterX, rotationCenterY } = costume;
@@ -242,6 +255,84 @@ export default async function ({ addon, global, console, msg }) {
         }
       }
 
+      const handleLoad = (root) => {
+        root.opacity = opacity;
+
+        // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L274-L275
+        recursePaperItem(root, (i) => {
+          if (i.className === "PathItem") {
+            i.clockwise = true;
+          }
+          if (i.className !== "PointText" && !i.children) {
+            if (i.strokeWidth) {
+              i.strokeWidth = i.strokeWidth * 2;
+            }
+          }
+          i.locked = true;
+          i.guide = true;
+        });
+        root.scale(2, new paper.Point(0, 0));
+
+        if (settings.mode === "tint") {
+          const gradients = new Set();
+          recursePaperItem(root, (i) => {
+            if (i.strokeColor) {
+              i.strokeColor = getPaperColorTint(i.strokeColor, isBefore);
+            }
+            if (i.fillColor) {
+              const gradient = i.fillColor.gradient;
+              if (gradient) {
+                if (gradients.has(gradient)) return;
+                gradients.add(gradient);
+                for (const stop of gradient.stops) {
+                  stop.color = getPaperColorTint(stop.color, isBefore);
+                }
+              } else {
+                i.fillColor = getPaperColorTint(i.fillColor, isBefore);
+              }
+            }
+            if (i.canvas) {
+              tintRaster(i, isBefore);
+            }
+          });
+        }
+
+        // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L277-L287
+        if (typeof rotationCenterX !== "undefined" && typeof rotationCenterY !== "undefined") {
+          let rotationPoint = new paper.Point(rotationCenterX, rotationCenterY);
+          if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
+            rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
+          }
+          root.translate(paperCenter.subtract(rotationPoint.multiply(2)));
+        } else {
+          root.translate(paperCenter.subtract(root.bounds.width, root.bounds.height));
+        }
+
+        const MAX_SIZE = 4096;
+        const bounds = root.strokeBounds;
+        let resolution = 5;
+        if (bounds.width * resolution > MAX_SIZE) {
+          resolution = MAX_SIZE / bounds.width;
+        }
+        if (bounds.height * resolution > MAX_SIZE) {
+          resolution = MAX_SIZE / bounds.height;
+        }
+
+        const raster = root.rasterize(
+          // resolution
+          72 * resolution,
+          // insert
+          false,
+          // bound rect
+          bounds
+        );
+        raster.guide = true;
+        raster.locked = true;
+        raster.position = root.position;
+
+        return raster;
+      };
+
       paper.project.importSVG(asset, {
         expandShapes: true,
         insert: false,
@@ -250,82 +341,7 @@ export default async function ({ addon, global, console, msg }) {
             reject(new Error("could not load onion skin"));
             return;
           }
-
-          root.opacity = opacity;
-
-          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L274-L275
-          recursePaperItem(root, (i) => {
-            if (i.className === "PathItem") {
-              i.clockwise = true;
-            }
-            if (i.className !== "PointText" && !i.children) {
-              if (i.strokeWidth) {
-                i.strokeWidth = i.strokeWidth * 2;
-              }
-            }
-            i.locked = true;
-            i.guide = true;
-          });
-          root.scale(2, new paper.Point(0, 0));
-
-          if (settings.mode === "tint") {
-            const gradients = new Set();
-            recursePaperItem(root, (i) => {
-              if (i.strokeColor) {
-                i.strokeColor = getPaperColorTint(i.strokeColor, isBefore);
-              }
-              if (i.fillColor) {
-                const gradient = i.fillColor.gradient;
-                if (gradient) {
-                  if (gradients.has(gradient)) return;
-                  gradients.add(gradient);
-                  for (const stop of gradient.stops) {
-                    stop.color = getPaperColorTint(stop.color, isBefore);
-                  }
-                } else {
-                  i.fillColor = getPaperColorTint(i.fillColor, isBefore);
-                }
-              }
-              if (i.canvas) {
-                tintRaster(i, isBefore);
-              }
-            });
-          }
-
-          // https://github.com/LLK/scratch-paint/blob/cdf0afc217633e6cfb8ba90ea4ae38b79882cf6c/src/containers/paper-canvas.jsx#L277-L287
-          if (typeof rotationCenterX !== "undefined" && typeof rotationCenterY !== "undefined") {
-            let rotationPoint = new paper.Point(rotationCenterX, rotationCenterY);
-            if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
-              rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
-            }
-            root.translate(paperCenter.subtract(rotationPoint.multiply(2)));
-          } else {
-            root.translate(paperCenter.subtract(root.bounds.width, root.bounds.height));
-          }
-
-          const MAX_SIZE = 4096;
-          const bounds = root.strokeBounds;
-          let resolution = 5;
-          if (bounds.width * resolution > MAX_SIZE) {
-            resolution = MAX_SIZE / bounds.width;
-          }
-          if (bounds.height * resolution > MAX_SIZE) {
-            resolution = MAX_SIZE / bounds.height;
-          }
-
-          const raster = root.rasterize(
-            // resolution
-            72 * resolution,
-            // insert
-            false,
-            // bound rect
-            bounds
-          );
-          raster.guide = true;
-          raster.locked = true;
-          raster.position = root.position;
-
-          resolve(raster);
+          resolve(waitForAllRastersToLoad(root).then(() => handleLoad(root)));
         },
       });
     });
