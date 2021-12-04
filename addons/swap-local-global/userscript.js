@@ -221,9 +221,18 @@ export default async function ({ addon, msg, console }) {
   };
 
   const canUserUseCloudVariables = () => {
-    const blocksWrapper = document.querySelector('[class^="gui_blocks-wrapper_1ccgf"]');
-    const internalNode = blocksWrapper[addon.tab.traps.getInternalKey(blocksWrapper)];
-    return internalNode.child.pendingProps.canUseCloud;
+    const blocksWrapper = document.querySelector('[class^="gui_blocks-wrapper_"]');
+    let internalNode = blocksWrapper[addon.tab.traps.getInternalKey(blocksWrapper)];
+    while (true) {
+      if (!internalNode) {
+        return false;
+      }
+      const canUseCloud = internalNode.stateNode?.props?.canUseCloud;
+      if (typeof canUseCloud === "boolean") {
+        return canUseCloud;
+      }
+      internalNode = internalNode.child;
+    }
   };
 
   const addMoreOptionsToPrompt = (variable) => {
@@ -236,11 +245,13 @@ export default async function ({ addon, msg, console }) {
       return;
     }
 
-    const headerTitle = promptBody.parentElement.querySelector('[class^="modal_header-item_2zQTd"]');
-    if (variable.type === "") {
-      headerTitle.textContent = msg("edit-variable-header");
-    } else {
-      headerTitle.textContent = msg("edit-list-header");
+    const headerTitle = promptBody.parentElement.querySelector('[class^="modal_header-item_"]');
+    if (headerTitle) {
+      if (variable.type === "") {
+        headerTitle.textContent = msg("edit-variable-header");
+      } else {
+        headerTitle.textContent = msg("edit-list-header");
+      }
     }
 
     const root = document.createElement("div");

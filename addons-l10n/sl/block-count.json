@@ -1,0 +1,1 @@
+{"block-count/blocks":"{num, plural, one {1 blok} two {2 bloka} few {# bloki} other {# blokov}}","block-count/@name":"Števec blokov","block-count/@description":"Pokaže skupno število blokov v projektu v menijski vrstici urejevalnika. Prej del dodatka \"število figur in skript\"."}

@@ -569,9 +569,13 @@ select:focus {
   background-color: var(--darkWww-blue, rgba(77, 151, 255, 0.1));
 }
 #featured-project-modal .project.thumb {
-  border: none;
+  border: 1px solid transparent;
   background-color: var(--darkWww-box, white);
   border-radius: 8px;
+}
+#featured-project-modal .project.thumb.selected {
+  border-color: var(--darkWww-button, #4d97ff) !important;
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
 }
 .modal-footer {
   border-radius: 0 0 16px 16px;
