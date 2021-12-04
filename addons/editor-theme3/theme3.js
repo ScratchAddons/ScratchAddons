@@ -237,8 +237,6 @@ export default async function ({ addon, console }) {
   Blockly.FieldMatrix.prototype.updateMatrix_ = function () {
     // Matrix inputs
     oldFieldMatrixUpdateMatrix.call(this);
-    console.log("updating matrix");
-    console.log("still updating matrix");
     for (let i = 0; i < this.matrix_.length; i++) {
       if (this.matrix_[i] !== "0") {
         this.fillMatrixNode_(this.ledButtons_, i, uncoloredTextColor());
