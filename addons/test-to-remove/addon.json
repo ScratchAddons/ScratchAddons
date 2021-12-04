@@ -1,7 +1,14 @@
 {
   "name": "Test to remove",
-  "description": "This is a test for the update label PR. It should be deleted before the PR is merged, and its entry in addons.json should also be removed.",
+  "description": "This is a test for the update label PR.",
   "tags": ["editor", "beta"],
+  "info": [
+    {
+      "type": "warning",
+      "text": "This addon should be deleted before the PR is merged, and its entry in addons.json should also be removed.",
+      "id": "wl-dont-forget"
+    }
+  ],
   "credits": [
     {
       "name": "lisa_wolfgang",
@@ -67,6 +74,7 @@
   "latestUpdate": {
     "version": "1.22.0",
     "isMajor": true,
+    "temporaryNotice": "You can now set a whole lotta new settings.",
     "newSettings": ["test-2", "test-3", "test-4", "test-5", "test-6", "test-7"]
   },
   "enabledByDefault": false
