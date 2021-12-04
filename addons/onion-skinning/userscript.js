@@ -132,7 +132,14 @@ export default async function ({ addon, global, console, msg }) {
     return layer;
   };
 
+  // Each onion layer update is given an ID
+  // Because updating layers is async, we need this to cancel all but the most recent update
+  let globalUpdateId = 0;
+  const cancelOngoingUpdatesAndGetNewId = () => ++globalUpdateId;
+
   const removeOnionLayers = () => {
+    cancelOngoingUpdatesAndGetNewId();
+
     const project = paper.project;
     if (!project) {
       return;
@@ -442,6 +449,8 @@ export default async function ({ addon, global, console, msg }) {
 
     removeOnionLayers();
 
+    const localUpdateId = cancelOngoingUpdatesAndGetNewId();
+
     const vm = addon.tab.traps.vm;
     if (!vm) {
       return;
@@ -486,12 +495,14 @@ export default async function ({ addon, global, console, msg }) {
         })
       );
 
-      const layer = createOnionLayer();
-      for (const item of onions) {
-        layer.addChild(item);
+      // Make sure we haven't been cancelled
+      if (globalUpdateId === localUpdateId) {
+        const layer = createOnionLayer();
+        for (const item of onions) {
+          layer.addChild(item);
+        }
+        relayerOnionLayers();
       }
-
-      relayerOnionLayers();
     } catch (e) {
       console.error(e);
     }
