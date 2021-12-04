@@ -558,8 +558,8 @@ export default async function ({ addon, global, console, msg }) {
     return el;
   };
 
-  const createButton = () => {
-    const el = document.createElement("span");
+  const createButton = ({ useButtonTag } = {}) => {
+    const el = document.createElement(useButtonTag ? "button" : "span");
     el.className = "sa-onion-button";
     el.setAttribute("role", "button");
     return el;
@@ -690,7 +690,7 @@ export default async function ({ addon, global, console, msg }) {
   modeLabel.textContent = msg("mode");
   const modeGroup = createGroup();
   modeContainer.appendChild(modeLabel);
-  const modeMergeButton = createButton();
+  const modeMergeButton = createButton({ useButtonTag: true });
   modeMergeButton.appendChild(document.createTextNode(msg("merge")));
   modeGroup.appendChild(modeMergeButton);
   modeMergeButton.addEventListener("click", (e) => {
@@ -700,7 +700,7 @@ export default async function ({ addon, global, console, msg }) {
     settingsChanged();
   });
   modeMergeButton.dataset.enabled = settings.mode === "merge";
-  const modeTintButton = createButton();
+  const modeTintButton = createButton({ useButtonTag: true });
   modeTintButton.appendChild(document.createTextNode(msg("tint")));
   modeGroup.appendChild(modeTintButton);
   modeTintButton.addEventListener("click", (e) => {
@@ -720,7 +720,7 @@ export default async function ({ addon, global, console, msg }) {
   layeringLabel.textContent = msg("layering");
   const layeringGroup = createGroup();
   layeringContainer.appendChild(layeringLabel);
-  const layeringFrontButton = createButton();
+  const layeringFrontButton = createButton({ useButtonTag: true });
   layeringFrontButton.appendChild(document.createTextNode(msg("front")));
   layeringGroup.appendChild(layeringFrontButton);
   layeringFrontButton.addEventListener("click", (e) => {
@@ -730,7 +730,7 @@ export default async function ({ addon, global, console, msg }) {
     settingsChanged(true);
   });
   layeringFrontButton.dataset.enabled = settings.layering === "front";
-  const layeringBehindButton = createButton();
+  const layeringBehindButton = createButton({ useButtonTag: true });
   layeringBehindButton.appendChild(document.createTextNode(msg("behind")));
   layeringGroup.appendChild(layeringBehindButton);
   layeringBehindButton.addEventListener("click", (e) => {
