@@ -11,7 +11,8 @@ export default async function ({ addon, global, console, msg }) {
     // The check can technically fail when Redux isn't supported (rare cases)
     // Just ignore in this case
   }
-  const paperCanvas = paintEditorCanvasContainer[addon.tab.traps.getInternalKey(paintEditorCanvasContainer)].child.child.child.stateNode;
+  const paperCanvas =
+    paintEditorCanvasContainer[addon.tab.traps.getInternalKey(paintEditorCanvasContainer)].child.child.child.stateNode;
 
   let paperCenter;
   const storedOnionLayers = [];
@@ -230,10 +231,12 @@ export default async function ({ addon, global, console, msg }) {
     const promises = [];
     recursePaperItem(root, (item) => {
       if (item instanceof paper.Raster) {
-        promises.push(new Promise((resolve, reject) => {
-          item.on('load', () => resolve());
-          item.on('error', () => reject(new Error('Raster inside SVG failed to load')));
-        }));
+        promises.push(
+          new Promise((resolve, reject) => {
+            item.on("load", () => resolve());
+            item.on("error", () => reject(new Error("Raster inside SVG failed to load")));
+          })
+        );
       }
     });
     return Promise.all(promises);
@@ -241,7 +244,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const rasterizeVector = (root) => {
     const bounds = root.strokeBounds;
-    const {width, height} = bounds;
+    const { width, height } = bounds;
 
     const MAX_SIZE = 4096;
     const maxScale = Math.min(MAX_SIZE / width, MAX_SIZE / height);
@@ -257,13 +260,7 @@ export default async function ({ addon, global, console, msg }) {
     const originalDraw = raster.draw;
     raster.draw = function (...args) {
       const displayedSize = this.getView().getZoom() * window.devicePixelRatio;
-      const newScale = Math.max(
-        1,
-        Math.min(
-          maxScale,
-          2 ** Math.ceil(Math.log2(displayedSize))
-        )
-      );
+      const newScale = Math.max(1, Math.min(maxScale, 2 ** Math.ceil(Math.log2(displayedSize))));
       if (newScale > renderedAtScale) {
         renderedAtScale = newScale;
         const canvas = this.canvas;
@@ -282,16 +279,15 @@ export default async function ({ addon, global, console, msg }) {
         const matrix = new paper.Matrix().scale(newScale).translate(topLeft.negate());
         ctx.save();
         matrix.applyToContext(ctx);
-        root.draw(ctx, new paper.Base({
-          matrices: [matrix]
-        }));
+        root.draw(
+          ctx,
+          new paper.Base({
+            matrices: [matrix],
+          })
+        );
         ctx.restore();
         this.matrix.reset();
-        this.transform(
-          new paper.Matrix()
-            .translate(topLeft.add(size.divide(2)))
-            .scale(1 / newScale)
-        );
+        this.transform(new paper.Matrix().translate(topLeft.add(size.divide(2))).scale(1 / newScale));
       }
 
       return originalDraw.call(this, ...args);
@@ -476,12 +472,12 @@ export default async function ({ addon, global, console, msg }) {
         layersToCreate.push({
           index: i,
           isBefore,
-          opacity
+          opacity,
         });
       }
 
       const onions = await Promise.all(
-        layersToCreate.map(({index, isBefore, opacity}) => {
+        layersToCreate.map(({ index, isBefore, opacity }) => {
           const onionCostume = costumes[index];
           const onionAsset = vm.getCostume(index);
 
