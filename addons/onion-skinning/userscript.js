@@ -249,7 +249,14 @@ export default async function ({ addon, global, console, msg }) {
     let renderedAtScale = 0;
     const originalDraw = raster.draw;
     raster.draw = function (...args) {
-      const newScale = Math.max(1, Math.min(maxScale, Math.ceil(this.getView().getZoom() * window.devicePixelRatio)));
+      const displayedSize = this.getView().getZoom() * window.devicePixelRatio;
+      const newScale = Math.max(
+        1,
+        Math.min(
+          maxScale,
+          2 ** Math.ceil(Math.log2(displayedSize))
+        )
+      );
       if (newScale > renderedAtScale) {
         renderedAtScale = newScale;
         const canvas = this.canvas;
