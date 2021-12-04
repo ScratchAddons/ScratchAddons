@@ -18,6 +18,7 @@ export default async function ({ addon, console, msg }) {
 
   const addLiveBlockCount = async () => {
     if (vm.editingTarget) {
+      let handler = null;
       while (true) {
         const topBar = await addon.tab.waitForElement("[class^='menu-bar_main-menu']", {
           markAsSeen: true,
@@ -33,12 +34,18 @@ export default async function ({ addon, console, msg }) {
         display.style.padding = "9px";
         display.innerText = msg("blocks", { num: getBlockCount().blockCount });
         let debounce; // debouncing values because of the way 'PROJECT_CHANGED' works
-        vm.on("PROJECT_CHANGED", async () => {
+        if (handler) {
+          vm.off("PROJECT_CHANGED", handler);
+          vm.runtime.off("PROJECT_LOADED", handler);
+        }
+        handler = async () => {
           clearTimeout(debounce);
           debounce = setTimeout(async () => {
             display.innerText = msg("blocks", { num: getBlockCount().blockCount });
           }, 1000);
-        });
+        };
+        vm.on("PROJECT_CHANGED", handler);
+        vm.runtime.on("PROJECT_LOADED", handler);
       }
     } else {
       let timeout = setTimeout(function () {
