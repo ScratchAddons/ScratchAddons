@@ -218,10 +218,10 @@ export default async function ({ addon, global, console, msg }) {
       if (alpha === 0) {
         continue;
       }
-      const [newRed, newGreen, newBlue] = getTint(red, green, blue, isBefore);
-      data[i + 0] = newRed;
-      data[i + 1] = newGreen;
-      data[i + 2] = newBlue;
+      const newTint = getTint(red, green, blue, isBefore);
+      data[i + 0] = newTint[0];
+      data[i + 1] = newTint[1];
+      data[i + 2] = newTint[2];
     }
     context.putImageData(imageData, 0, 0);
   };
