@@ -13,7 +13,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
       if (addonId === "project-info" && settings.editorCount) {
-        // Transition v1.12.0 modes to v1.13.0 presets
+        // Transition v1.22 to v1.23
         // project-info was split into 2 addons
         madeChangesToAddon = madeAnyChanges = true;
         delete settings.editorCount;
