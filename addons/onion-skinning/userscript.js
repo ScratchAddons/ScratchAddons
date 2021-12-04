@@ -610,7 +610,7 @@ export default async function ({ addon, global, console, msg }) {
 
   const layerInputs = {};
   for (const type of ["previous", "next", "opacity", "opacityStep"]) {
-    const container = document.createElement("div");
+    const container = document.createElement("label");
     container.className = "sa-onion-settings-line";
 
     const label = document.createElement("div");
