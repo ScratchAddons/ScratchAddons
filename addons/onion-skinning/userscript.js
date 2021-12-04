@@ -232,6 +232,32 @@ export default async function ({ addon, global, console, msg }) {
     return Promise.all(promises);
   };
 
+  const rasterizeVector = (root) => {
+    const MAX_SIZE = 4096;
+    const bounds = root.strokeBounds;
+    let resolution = 4;
+    if (bounds.width * resolution > MAX_SIZE) {
+      resolution = MAX_SIZE / bounds.width;
+    }
+    if (bounds.height * resolution > MAX_SIZE) {
+      resolution = MAX_SIZE / bounds.height;
+    }
+
+    const raster = root.rasterize(
+      // resolution
+      72 * resolution,
+      // insert
+      false,
+      // bound rect
+      bounds
+    );
+    raster.guide = true;
+    raster.locked = true;
+    raster.position = root.position;
+
+    return raster;
+  };
+
   const makeVectorOnion = (opacity, costume, asset, isBefore) =>
     new Promise((resolve, reject) => {
       const { rotationCenterX, rotationCenterY } = costume;
@@ -306,29 +332,7 @@ export default async function ({ addon, global, console, msg }) {
           root.translate(paperCenter.subtract(root.bounds.width, root.bounds.height));
         }
 
-        const MAX_SIZE = 4096;
-        const bounds = root.strokeBounds;
-        let resolution = 5;
-        if (bounds.width * resolution > MAX_SIZE) {
-          resolution = MAX_SIZE / bounds.width;
-        }
-        if (bounds.height * resolution > MAX_SIZE) {
-          resolution = MAX_SIZE / bounds.height;
-        }
-
-        const raster = root.rasterize(
-          // resolution
-          72 * resolution,
-          // insert
-          false,
-          // bound rect
-          bounds
-        );
-        raster.guide = true;
-        raster.locked = true;
-        raster.position = root.position;
-
-        return raster;
+        return rasterizeVector(root);
       };
 
       paper.project.importSVG(asset, {
