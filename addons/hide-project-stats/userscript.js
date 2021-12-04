@@ -75,7 +75,14 @@ export default async function ({ addon, global, console }) {
 
   // Since the user can sign in during the same session, the login status always needs to be updated
   while (true) {
-    await addon.tab.waitForElement(".project-favorites", { markAsSeen: true });
+    // Re-calculate visibility of elements when stats row is modified
+    const observer = new MutationObserver(() => refreshLabels());
+    observer.observe(document.querySelector(".flex-row.stats.noselect"), {
+      subtree: true,
+      childList: true,
+      characterData: true,
+    });
+    await addon.tab.waitForElement(".project-views", { markAsSeen: true });
     visitingOwnProject = username !== null && document.querySelector(".button.action-button.report-button") === null;
     refreshLabels();
   }
