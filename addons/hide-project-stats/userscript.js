@@ -2,7 +2,7 @@ export default async function ({ addon, global, console }) {
   let loves = { name: "love" };
   let favorites = { name: "favorite" };
   let username = await addon.auth.fetchUsername();
-  await addon.tab.waitForElement(".project-loves");
+  await addon.tab.waitForElement(".project-favorites");
   let visitingOwnProject = username !== null && document.querySelector(".button.action-button.report-button") === null;
 
   /**
@@ -11,7 +11,7 @@ export default async function ({ addon, global, console }) {
    * labels.
    */
   async function refreshLabels() {
-    await addon.tab.waitForElement(".project-loves");
+    await addon.tab.waitForElement(".project-favorites");
     loves.buttonElement = document.querySelector(`.project-${loves.name}s`);
     favorites.buttonElement = document.querySelector(`.project-${favorites.name}s`);
     refreshButton(loves);
