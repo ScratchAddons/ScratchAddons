@@ -7,6 +7,8 @@ export default async function ({ addon, console }) {
     const lazy = image.classList.contains("lazy");
     const src = lazy ? image.dataset.original : image.src;
 
+    if (src.startsWith("data:")) continue;
+
     let width, height, newSrc;
 
     const cdn2 = src.match(/(.*\/get_image\/.*?\/[0-9]+?_)([0-9]+?)x([0-9]+?)(\.[a-z]+)/);

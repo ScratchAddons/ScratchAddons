@@ -1,10 +1,10 @@
 a:visited {
-  color: var(--scratchr2-linkColor);
+  color: #4d97ff;
 }
 a:active,
 a:active:hover,
 a:visited:hover {
-  color: var(--scratchr2-activeColor);
+  color: #4280d7;
 }
 #zoomContainer {
   height: 24px;
@@ -39,16 +39,8 @@ a:visited:hover {
   content: url("https://scratch.mit.edu/static/assets/3cfc9b39a0d002246119d47f6756d77e.svg");
 }
 .box .box-head {
-  display: block;
-  clear: both;
-  margin: 0;
-  border-top: 1px solid white;
-  border-bottom: 1px solid #d9d9d9;
-  border-radius: 10px 10px 0 0;
-  background-color: #f2f2f2;
   padding: 8px 20px;
   height: 20px;
-  overflow: hidden;
 }
 h1 {
   line-height: 1.1rem;
