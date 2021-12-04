@@ -28,32 +28,36 @@
       "id": "maxZoom",
       "type": "integer",
       "min": 100,
-      "default": 300,
-      "max": 500
+      "max": 500,
+      "step": 10,
+      "default": 300
     },
     {
-      "name": "Minimum Zoom (1-100%)",
+      "name": "Minimum Zoom (10-100%)",
       "id": "minZoom",
       "type": "integer",
-      "min": 1,
-      "default": 30,
-      "max": 100
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "default": 30
     },
     {
       "name": "Start Zoom (50-500%)",
       "id": "startZoom",
       "type": "integer",
       "min": 50,
-      "default": 68,
-      "max": 500
+      "max": 500,
+      "step": 10,
+      "default": 70
     },
     {
       "name": "Zoom Speed (50-200%)",
       "id": "zoomSpeed",
       "type": "integer",
       "min": 50,
-      "default": 100,
-      "max": 200
+      "max": 200,
+      "step": 10,
+      "default": 100
     },
     {
       "name": "Autohide Zoom Controls",
