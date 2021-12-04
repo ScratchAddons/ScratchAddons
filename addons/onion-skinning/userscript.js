@@ -11,9 +11,7 @@ export default async function ({ addon, global, console, msg }) {
     // The check can technically fail when Redux isn't supported (rare cases)
     // Just ignore in this case
   }
-  const REACT_INTERNAL_PREFIX = "__reactInternalInstance$";
-  const reactInternalKey = Object.keys(paintEditorCanvasContainer).find((i) => i.startsWith(REACT_INTERNAL_PREFIX));
-  const paperCanvas = paintEditorCanvasContainer[reactInternalKey].child.child.child.stateNode;
+  const paperCanvas = paintEditorCanvasContainer[addon.tab.traps.getInternalKey(paintEditorCanvasContainer)].child.child.child.stateNode;
 
   let paperCenter;
   const storedOnionLayers = [];
