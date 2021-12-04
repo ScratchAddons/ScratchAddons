@@ -279,7 +279,7 @@ export default async function ({ addon, console }) {
     };
     const category = categories.find((item) => item.colorId === (colorIds[categoryId] || categoryId));
     return {
-      bg: isColoredTextMode() ? secondaryColor(category) : tertiaryColor(category),
+      bg: isColoredTextMode() ? secondaryColor(category) : primaryColor(category),
       text: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
       hoverBg: isColoredTextMode() ? fieldBackground(category) : tertiaryColor(category),
       hoverText: isColoredTextMode() ? tertiaryColor(category) : uncoloredTextColor(),
