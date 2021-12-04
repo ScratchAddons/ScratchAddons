@@ -38,7 +38,7 @@
       "type": "integer",
       "min": 50,
       "default": 100,
-      "step": 10,
+      "step": 5,
       "max": 200
     },
     {
@@ -56,7 +56,7 @@
       "type": "integer",
       "min": 0,
       "default": 100,
-      "step": 10,
+      "step": 5,
       "max": 150
     }
   ],
@@ -78,7 +78,7 @@
       "values": {
         "paddingSize": 70,
         "cornerSize": 150,
-        "notchSize": 70
+        "notchSize": 75
       }
     },
     {
