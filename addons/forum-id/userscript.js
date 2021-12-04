@@ -32,11 +32,7 @@ export default async function ({ addon, console, msg }) {
         "[quote=" +
           username +
           "][small](" +
-          getIDLink(
-            id.substring(1),
-            post["0"].querySelector(".box-head > .conr").textContent,
-            false
-          ) +
+          getIDLink(id.substring(1), post["0"].querySelector(".box-head > .conr").textContent, false) +
           ")[/small]\n" +
           data +
           "[/quote]\n"
