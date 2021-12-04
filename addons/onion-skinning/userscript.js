@@ -233,27 +233,60 @@ export default async function ({ addon, global, console, msg }) {
   };
 
   const rasterizeVector = (root) => {
-    const MAX_SIZE = 4096;
     const bounds = root.strokeBounds;
-    let resolution = 4;
-    if (bounds.width * resolution > MAX_SIZE) {
-      resolution = MAX_SIZE / bounds.width;
+    const {width, height} = bounds;
+
+    const MAX_SIZE = 4096;
+    let maxResolution = 5;
+    if (width * maxResolution > MAX_SIZE) {
+      maxResolution = MAX_SIZE / width;
     }
-    if (bounds.height * resolution > MAX_SIZE) {
-      resolution = MAX_SIZE / bounds.height;
+    if (height * maxResolution > MAX_SIZE) {
+      maxResolution = MAX_SIZE / height;
     }
 
-    const raster = root.rasterize(
-      // resolution
-      72 * resolution,
-      // insert
-      false,
-      // bound rect
-      bounds
-    );
+    const raster = new paper.Raster(new paper.Size(width, height));
+    raster.remove();
+
     raster.guide = true;
     raster.locked = true;
-    raster.position = root.position;
+
+    let renderedAtResolution = 0;
+    const originalDraw = raster.draw;
+    raster.draw = function (...args) {
+      const newResolution = Math.max(1, Math.min(maxResolution, Math.ceil(this.getView().getZoom())));
+      if (newResolution > renderedAtResolution) {
+        renderedAtResolution = newResolution;
+        const canvas = this.canvas;
+        const ctx = this.context;
+
+        // Based on https://github.com/LLK/paper.js/blob/16d5ff0267e3a0ef647c25e58182a27300afad20/src/item/Item.js#L1761
+        const scaledWidth = width * newResolution;
+        const scaledHeight = height * newResolution;
+        canvas.width = scaledWidth;
+        canvas.height = scaledHeight;
+
+        this._size = new paper.Size(scaledWidth, scaledHeight);
+        const topLeft = bounds.getTopLeft().floor();
+        const bottomRight = bounds.getBottomRight().ceil();
+        const size = new paper.Size(bottomRight.subtract(topLeft));
+        const matrix = new paper.Matrix().scale(newResolution).translate(topLeft.negate());
+        ctx.save();
+        matrix.applyToContext(ctx);
+        root.draw(ctx, new paper.Base({
+          matrices: [matrix]
+        }));
+        ctx.restore();
+        this.matrix.reset();
+        this.transform(
+          new paper.Matrix()
+            .translate(topLeft.add(size.divide(2)))
+            .scale(1 / newResolution)
+        );
+      }
+
+      return originalDraw.call(this, ...args);
+    };
 
     return raster;
   };
