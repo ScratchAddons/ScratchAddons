@@ -754,9 +754,9 @@ export default class Tab extends Listenable {
         height: 3rem;
         box-sizing: border-box;
         padding-top: 0.75rem;
-        background-color: var(--scratchr2-primaryColor, #4d97ff);
-        box-shadow: 0 -1px 0 0 inset #4280d7;
-        color: white;
+        background-color: var(--darkWww-navbar, #4d97ff);
+        box-shadow: 0 -1px 0 0 inset var(--darkWww-navbar-variant, #4280d7);
+        color: var(--darkWww-navbar-text, white);
         text-align: center;
         font-weight: bold;
       `,
