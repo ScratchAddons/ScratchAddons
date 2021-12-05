@@ -10,8 +10,6 @@ export default async function ({ addon, console }) {
   window.closeTestModal = close;
   if (addon.tab.editorMode !== null) {
     container.style.width = "500px";
-    content.style.backgroundColor = "white";
-    content.style.color = "#575e75";
   }
   window.testConfirm = async () =>
     await addon.tab.confirm("Test Confirm", "Click OK or Cancel:", {

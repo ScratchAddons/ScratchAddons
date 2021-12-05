@@ -156,8 +156,6 @@ div.s3devDDOut.vis,
 #s3devHelpContent,
 #s3devHelpContent h2,
 #s3devHelpContent p,
-.mediaRecorderPopupContent,
-.mediaRecorderPopupContent p,
 .slider-prompt_body_2ZkXL,
 .record-modal_body_2VO4l,
 .debug {
@@ -175,7 +173,8 @@ div.s3devDDOut.vis,
 .sound-editor_tool-button_2iNn9,
 .sound-editor_effect-button_2zuzT,
 .library-item_featured-extension-metadata_3D8E8,
-.record-modal_help-text_Jevsk {
+.record-modal_help-text_Jevsk,
+.sa-editor-modal-content p {
   color: var(--editorDarkMode-accent-text);
 }
 .blocklyFlyoutButton:hover {

@@ -699,7 +699,13 @@ export default class Tab extends Listenable {
         src: "/static/assets/cb666b99d3528f91b52f985dfb102afa.svg",
       })
     );
-    const content = document.createElement("div");
+    const content = Object.assign(document.createElement("div"), {
+      className: "sa-editor-modal-content",
+      style: `
+        background-color: var(--editorDarkMode-accent, white);
+        color: var(--editorDarkMode-accent-text, #575e75);
+      `,
+    });
     modal.appendChild(content);
     return {
       container: modal,

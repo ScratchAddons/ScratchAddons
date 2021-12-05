@@ -233,7 +233,7 @@ export default async function ({ addon, global, console, msg }) {
       }
     });
 
-    content.className = "sa-gamepad-popup-content";
+    content.classList.add("sa-gamepad-popup-content");
     if (GamepadLib.browserHasBrokenGamepadAPI()) {
       const warning = document.createElement("div");
       warning.textContent = msg("browser-support");

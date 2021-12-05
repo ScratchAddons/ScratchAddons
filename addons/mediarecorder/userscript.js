@@ -64,7 +64,7 @@ export default async ({ addon, console, msg }) => {
       });
       recordOptionDelay.appendChild(recordOptionDelayLabel);
       recordOptionDelay.appendChild(recordOptionDelayInput);
-      recordOptionInner.appendChild(recordOptionDelay);
+      content.appendChild(recordOptionDelay);
 
       // Audio
       const recordOptionAudio = document.createElement("p");
