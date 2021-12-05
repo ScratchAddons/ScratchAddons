@@ -1807,7 +1807,7 @@
       "name": "Dark code blocks on the forums",
       "id": "darkForumCode",
       "type": "boolean",
-      "default": "true"
+      "default": true
     }
   ],
   "presets": [
