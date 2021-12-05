@@ -263,7 +263,8 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
         let white = getColor(addonId, obj.white);
-        return textColorLib.textColor(hex, black, white, obj.threshold);
+        let threshold = getColor(addonId, obj.threshold);
+        return textColorLib.textColor(hex, black, white, threshold);
       }
       case "multiply": {
         hex = getColor(addonId, obj.source);
@@ -477,7 +478,7 @@ const showBanner = () => {
     line-height: 1em;`,
   });
   const notifImageLink = Object.assign(document.createElement("a"), {
-    href: "https://www.youtube.com/watch?v=QnvgB5ILZCg",
+    href: "https://www.youtube.com/watch?v=9y4IsQLz3rk",
     target: "_blank",
     rel: "noopener",
     referrerPolicy: "strict-origin-when-cross-origin",
@@ -515,7 +516,7 @@ const showBanner = () => {
   });
   const notifInnerText1 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_21", DOLLARS)).replace(
+    innerHTML: escapeHTML(chrome.i18n.getMessage("extensionUpdateInfo1_v1_22", DOLLARS)).replace(
       /\$(\d+)/g,
       (_, i) =>
         [
@@ -534,7 +535,7 @@ const showBanner = () => {
   });
   const notifInnerText2 = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,
-    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_21"),
+    textContent: chrome.i18n.getMessage("extensionUpdateInfo2_v1_22"),
   });
   const notifFooter = Object.assign(document.createElement("span"), {
     style: NOTIF_TEXT_STYLE,

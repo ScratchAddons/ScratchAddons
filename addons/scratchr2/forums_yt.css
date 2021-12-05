@@ -21,3 +21,7 @@
 #content > .cols > .col-6 > .box .box-head {
   padding-top: 0;
 }
+#content > .cols > .col-6 > .box .box-head h4,
+#content > .cols > .col-6 > .box .box-content {
+  color: var(--darkWww-page-text, #575e75);
+}

@@ -1,0 +1,109 @@
+[class*="blocks_blocks_"] .blocklyToolboxDiv {
+  width: 310px;
+  height: auto !important;
+}
+
+.scratchCategoryMenu {
+  width: 100%;
+  columns: 2;
+  column-gap: 0.5rem;
+  padding: 0.25rem;
+}
+
+.scratchCategorySecondMenu {
+  columns: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding-bottom: 2.25rem;
+}
+
+.scratchCategorySecondMenu:empty {
+  padding-top: 0;
+  padding-bottom: 2rem;
+}
+
+.scratchCategoryMenuItem {
+  display: inline-flex; /* inline so that it isn't split between both columns */
+  width: 100%;
+  padding: 0.25rem;
+  border-radius: 0.875rem;
+}
+
+.scratchCategoryItemBubble,
+.scratchCategoryItemIcon {
+  margin: 0;
+  margin-inline-end: 0.5rem;
+}
+
+.scratchCategoryMenuItemLabel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+[class*="gui_extension-button-container_"] {
+  top: var(--sa-add-extension-button-y);
+  bottom: auto;
+  margin-inline-start: 0.5rem;
+  width: calc(308px - 1rem);
+  height: calc(1.75rem - 2px);
+  background-color: transparent;
+  border-color: var(--editorDarkMode-border, rgba(0, 0, 0, 0.15));
+  border-radius: 0.25rem;
+}
+
+[class*="gui_extension-button-container_"]:hover {
+  background-color: var(--editorDarkMode-accent, white);
+}
+
+[class*="gui_extension-button-container_"]::before {
+  display: none;
+}
+
+[class*="gui_extension-button_"] {
+  display: flex;
+  align-items: center;
+  padding-inline: 0;
+}
+
+[class*="gui_extension-button-icon_"] {
+  filter: var(--editorDarkMode-categoryMenu-invertedFilter, brightness(0.4));
+}
+
+[class*="gui_extension-button-container_"]:hover [class*="gui_extension-button-icon_"] {
+  filter: var(--editorDarkMode-accent-invertedFilter, brightness(0.4));
+}
+
+.sa-add-extension-label {
+  color: var(--editorDarkMode-categoryMenu-text, #575e75);
+  font-size: 0.65rem;
+}
+
+[class*="gui_extension-button-container_"]:hover .sa-add-extension-label {
+  color: var(--editorDarkMode-accent-text, #575e75);
+  font-size: 0.65rem;
+}
+
+/* hide-flyout compatibility */
+
+.blocklyFlyout.sa-flyoutClose {
+  transform: translate(-320px, var(--sa-flyout-y)) !important;
+}
+
+.blocklyFlyoutScrollbar.sa-flyoutClose {
+  transform: translate(-25px, calc(var(--sa-flyout-y) + 2.5px)) !important;
+}
+
+.sa-lock-image.sa-flyoutClose {
+  transform: translateX(-320px);
+}
+
+.sa-flyout-placeHolder {
+  left: 0;
+  top: calc(var(--sa-flyout-y) + 44px);
+  width: 311px;
+}
+
+.sa-lock-image {
+  top: calc(var(--sa-flyout-y) + 46px);
+}

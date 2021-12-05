@@ -38,13 +38,6 @@ const vue = new Vue({
       chrome.runtime.openOptionsPage();
       this.closePopup();
     },
-    openChangelog() {
-      const uiLanguage = chrome.i18n.getUILanguage();
-      const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
-      const utm = `utm_source=extension&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
-      window.open(`https://scratchaddons.com/${localeSlash}changelog/?${utm}`);
-      this.closePopup();
-    },
     setPopup(popup) {
       if (this.currentPopup !== popup) {
         this.currentPopup = popup;
@@ -54,6 +47,14 @@ const vue = new Vue({
     },
     iframeSrc(addonId) {
       return vue.popups.find((addon) => addon._addonId === addonId).html;
+    },
+  },
+  computed: {
+    changelogLink() {
+      const uiLanguage = chrome.i18n.getUILanguage();
+      const localeSlash = uiLanguage.startsWith("en") ? "" : `${uiLanguage.split("-")[0]}/`;
+      const utm = `utm_source=extension&utm_medium=popup&utm_campaign=v${chrome.runtime.getManifest().version}`;
+      return `https://scratchaddons.com/${localeSlash}changelog/?${utm}`;
     },
   },
 });

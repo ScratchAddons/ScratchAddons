@@ -9,7 +9,7 @@ import { addContextMenu } from "./contextmenu.js";
 const DATA_PNG = "data:image/png;base64,";
 
 const contextMenuCallbacks = [];
-const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image"];
+const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
 let createdAnyBlockContextMenus = false;
 
 /**
@@ -323,6 +323,11 @@ export default class Tab extends Listenable {
         from: () => [q("[class^='stop-all_stop-all']")],
         until: () => [],
       },
+      beforeProjectActionButtons: {
+        element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
+        from: () => [],
+        until: () => [q(".report-button"), q(".action-buttons > div")],
+      },
       afterCopyLinkButton: {
         element: () => q(".flex-row.subactions > .flex-row.action-buttons"),
         from: () => [q(".copy-link-button")],
@@ -581,10 +586,10 @@ export default class Tab extends Listenable {
     if (createdAnyBlockContextMenus) return;
     createdAnyBlockContextMenus = true;
 
-    this.traps.getBlockly().then((blockly) => {
-      const oldShow = blockly.ContextMenu.show;
-      blockly.ContextMenu.show = function (event, items, rtl) {
-        const gesture = blockly.mainWorkspace.currentGesture_;
+    this.traps.getBlockly().then((ScratchBlocks) => {
+      const oldShow = ScratchBlocks.ContextMenu.show;
+      ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
+        const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
         const block = gesture.targetBlock_;
 
         for (const { callback, workspace, blocks, flyout, comments } of contextMenuCallbacks) {
@@ -608,9 +613,10 @@ export default class Tab extends Listenable {
 
         oldShow.call(this, event, items, rtl);
 
+        const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
         items.forEach((item, i) => {
-          if (item.separator) {
-            const itemElt = document.querySelector(".blocklyContextMenu").children[i];
+          if (i !== 0 && item.separator) {
+            const itemElt = blocklyContextMenu.children[i];
             itemElt.style.paddingTop = "2px";
             itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
           }
