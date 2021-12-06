@@ -180,12 +180,11 @@
   padding: 8px;
 }
 .my-ocular-reaction-button {
-  background-color: #f2f2f2;
   box-shadow: 0 0 2px #0fbd8c;
 }
 .my-ocular-reaction-button.selected {
   background-color: #0fbd8c;
 }
 .my-ocular-popup {
-  color: #575e75;
+  color: var(--darkWww-input-text, #575e75);
 }
