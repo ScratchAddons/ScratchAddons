@@ -108,6 +108,17 @@
 #brdfooter .box-content button {
   margin: 0;
 }
+.djangobb .box-head a.toggle {
+  width: 20px;
+  height: 20px;
+  transform: scaleY(-1);
+  background: url("https://scratch.mit.edu/images/dropdown.png") no-repeat center center;
+  background-size: 50%;
+  filter: var(--darkWww-box-filterInverted, brightness(0.4));
+}
+.djangobb .collapsed a.toggle {
+  transform: none;
+}
 .blockpost {
   position: relative;
 }
