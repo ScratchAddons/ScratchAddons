@@ -106,6 +106,7 @@ button.small,
 button:hover,
 .button.grey,
 button.grey,
+.button.grey:hover,
 .button[data-control="load-more"]:hover,
 .ui-widget button.ui-state-default,
 #email-resend-box input[type="button"],
@@ -131,19 +132,6 @@ button.dropdown.open,
 button.small.dropdown.open {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-}
-.button.grey:not([data-control="load-more"]),
-button.grey,
-.button.grey:not([data-control="load-more"]):hover,
-button.grey:hover {
-  background: var(--darkWww-box, white);
-  color: var(--darkWww-link, #4d97ff);
-  border: 1px solid var(--darkWww-button, #4d97ff);
-}
-.button.grey:not([data-control="load-more"]):hover,
-button.grey:hover {
-  color: var(--darkWww-link-hover, #4280d7);
-  border-color: var(--darkWww-link-hover, #4280d7);
 }
 .button[data-control="load-more"] {
   display: block;
