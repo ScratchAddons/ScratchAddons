@@ -60,7 +60,7 @@ body,
 .wedo2 .extension-header {
   background-color: #99004d;
 }
-.donate-banner,
+.hoc-banner,
 .developers .title-banner.masthead,
 .sa-annual-report-2019 .reach-section,
 .initiatives-section .initiatives-subsection-header.tools,
@@ -71,11 +71,13 @@ body,
 .microbit .extension-header {
   background-color: #064734;
 }
+.hoc-banner .hoc-banner-image,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text::before,
 .initiatives-section .initiatives-tools .abhi-quote .comment-text::after {
   border-color: #064734;
 }
+.donate-banner,
 .sa-annual-report-2019 .reach-scratch-jr {
   background-color: #05402f;
 }
