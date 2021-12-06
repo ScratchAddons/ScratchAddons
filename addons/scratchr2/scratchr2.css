@@ -208,14 +208,42 @@ select:focus {
   box-shadow: none;
 }
 #footer {
+  height: auto;
+  padding-top: 22.8px;
+  padding-bottom: 13px;
   background-color: var(--darkWww-footer, #f2f2f2);
   box-shadow: none;
 }
 #footer a {
   font-weight: normal;
 }
+#footer ul.footer-col {
+  margin-bottom: 28.8px;
+  display: flex;
+  justify-content: space-between;
+}
+#footer ul.footer-col::before,
+#footer ul.footer-col::after {
+  display: none;
+}
+#footer ul.footer-col li {
+  width: auto !important;
+}
 #footer ul.footer-col li h4 {
+  margin-bottom: 8px;
   color: var(--darkWww-footer-text, #575e75) !important;
+  font-size: 12.8px !important;
+  line-height: 24px;
+}
+#footer ul.footer-col li ul li {
+  display: block;
+  margin: 5px 0;
+  font-size: 12.8px;
+  line-height: 19.2px;
+}
+#footer #footer-menu li {
+  margin: 0;
+  padding: 0;
 }
 .control-group.tooltip textarea:focus {
   box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
