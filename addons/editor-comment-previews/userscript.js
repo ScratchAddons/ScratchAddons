@@ -91,7 +91,12 @@ export default async function ({ addon, global, console }) {
     }
 
     let text = null;
-    if (addon.settings.get("hover-view") && e.target.closest(".blocklyBubbleCanvas g")) {
+    if (
+      addon.settings.get("hover-view") &&
+      e.target.closest(".blocklyBubbleCanvas g") &&
+      // Hovering over the thin line that connects comments to blocks should never show a preview
+      !e.target.closest("line")
+    ) {
       const collapsedText = el.querySelector("text.scratchCommentText");
       if (collapsedText.getAttribute("display") !== "none") {
         const textarea = el.querySelector("textarea");
