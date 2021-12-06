@@ -499,6 +499,7 @@ select:focus {
   width: 100%;
   font-weight: bold;
   box-shadow: none;
+  cursor: default;
 }
 #topnav ul.account-nav ul.user-nav {
   margin: 0;
