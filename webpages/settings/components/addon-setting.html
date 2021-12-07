@@ -7,7 +7,10 @@
     'number-setting': setting.type === 'integer' || setting.type === 'positive_integer',
   }"
   >
-    <div class="setting-label" v-html="settingsName(addon)"></div>
+    <div class="setting-label-container">
+      <div class="setting-label" v-html="settingsName(addon)"></div>
+      <addon-tag v-if="isNewOption" tag="new"></addon-tag>
+    </div>
     <template v-if="setting.type === 'boolean'">
       <input
         type="checkbox"
@@ -135,6 +138,7 @@
     height: 32px;
     box-sizing: border-box;
     padding: 0 12px;
+    margin-left: auto;
     border-radius: 4px 0 0 4px;
     transition: 0.2s ease;
     transition-property: box-shadow, border;
@@ -196,13 +200,18 @@
     align-items: center;
   }
 
-  .setting-label {
+  .setting-label-container {
+    display: flex;
+    align-items: center;
     width: 200px;
+    margin-inline-end: 10px;
+  }
+
+  .setting-label {
     text-transform: uppercase;
     color: var(--label-text);
     font-weight: 600;
     font-size: 12px;
-    margin-inline-end: 10px;
   }
 
   .setting-dropdown {
