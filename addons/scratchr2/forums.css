@@ -330,7 +330,9 @@
   box-sizing: border-box;
   padding: 8px;
 }
-.my-ocular-reaction-button {
+.my-ocular-reaction-button,
+.my-ocular-reaction-button:hover {
+  color: var(--darkWww-gray-text, #575e75);
   box-shadow: 0 0 2px #0fbd8c;
 }
 .my-ocular-reaction-button.selected {
