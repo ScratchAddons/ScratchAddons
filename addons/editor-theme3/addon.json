@@ -14,6 +14,10 @@
   "dynamicDisable": true,
   "injectAsStyleElt": true,
   "versionAdded": "1.2.0",
+  "latestUpdate": {
+    "version": "1.23.0",
+    "newSettigs": ["comment-color"]
+  },
   "userscripts": [
     {
       "url": "theme3.js",
