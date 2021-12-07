@@ -565,7 +565,7 @@ let fuse;
       } else if (aHasTag && bHasTag) return manifestA.name.localeCompare(manifestB.name);
       else return null;
     };
-    const order = ["new", "updated", "beta", "danger", "editor", "community", "popup"];
+    const order = [["danger", "beta"], "editor", "community", "popup"];
 
     vue.addonGroups.forEach((group) => {
       group.addonIds = group.addonIds
