@@ -16,7 +16,7 @@
   "versionAdded": "1.2.0",
   "latestUpdate": {
     "version": "1.23.0",
-    "newSettigs": ["comment-color"]
+    "newSettings": ["comment-color"]
   },
   "userscripts": [
     {
