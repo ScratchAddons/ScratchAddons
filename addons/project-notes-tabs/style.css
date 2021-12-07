@@ -15,8 +15,7 @@
   cursor: pointer;
   border: 1px solid #000;
   border-radius: 12px 12px 0 0;
-  border-color: rgba(77, 151, 255, 0.1);
-  background-color: rgb(63 120 202 / 4%);
+  border-color: #f2f2f2;
   margin-left: 5px;
 }
 
@@ -27,6 +26,7 @@
 }
 
 .tab-choice-selected-sa {
+  border-color: rgba(77, 151, 255, 0.1);
   background-color: rgba(77, 151, 255, 0.1);
 }
 

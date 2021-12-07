@@ -12,6 +12,11 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       // TODO: we should be using Object.create(null) instead of {}
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
+      if (addonId === "project-info" && settings.editorCount) {
+        madeChangesToAddon = madeAnyChanges = true;
+        delete settings.editorCount;
+        addonsEnabled["block-count"] = true;
+      }
       if (manifest.settings) {
         if (
           addonId === "discuss-button" &&

@@ -43,6 +43,31 @@ const localizeSettings = (addonId, setting, tableId) => {
   for (const addonId of addonIds) {
     if (addonId.startsWith("//")) continue;
     const manifest = await (await fetch(`/addons/${addonId}/addon.json`)).json();
+    if (!useDefault) {
+      manifest._english = {};
+      for (const prop of ["name", "description"]) {
+        if (manifest[prop]) {
+          manifest._english[prop] = manifest[prop];
+          manifest[prop] = scratchAddons.l10n.get(`${addonId}/@${prop}`, {}, manifest[prop]);
+        }
+      }
+      if (manifest.info) {
+        for (const info of manifest.info || []) {
+          info.text = scratchAddons.l10n.get(`${addonId}/@info-${info.id}`, {}, info.text);
+        }
+      }
+      if (manifest.popup) {
+        manifest.popup.name = scratchAddons.l10n.get(`${addonId}/@popup-name`, {}, manifest.popup.name);
+      }
+      if (manifest.latestUpdate?.temporaryNotice) {
+        manifest.latestUpdate.temporaryNotice = scratchAddons.l10n.get(
+          `${addonId}/@update`,
+          {},
+          manifest.latestUpdate.temporaryNotice
+        );
+      }
+    }
+
     for (const propName of ["userscripts", "userstyles"]) {
       for (const injectable of manifest[propName] || []) {
         const { matches } = injectable;
