@@ -263,7 +263,8 @@ function setCssVariables(addonSettings, addonsWithUserstyles) {
         hex = getColor(addonId, obj.source);
         let black = getColor(addonId, obj.black);
         let white = getColor(addonId, obj.white);
-        return textColorLib.textColor(hex, black, white, obj.threshold);
+        let threshold = getColor(addonId, obj.threshold);
+        return textColorLib.textColor(hex, black, white, threshold);
       }
       case "multiply": {
         hex = getColor(addonId, obj.source);

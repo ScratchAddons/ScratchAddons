@@ -10,75 +10,10 @@
   ],
   "customCssVariables": [
     {
-      "name": "primaryColor-text",
+      "name": "defaultLinkIconFilter",
       "value": {
-        "type": "textColor",
-        "black": "#575e75",
-        "white": "#ffffff",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primaryColor"
-        }
-      }
-    },
-    {
-      "name": "primaryColor-transparentText",
-      "value": {
-        "type": "textColor",
-        "black": "#575e75b0",
-        "white": "#ffffffb0",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primaryColor"
-        }
-      }
-    },
-    {
-      "name": "primaryColor-filter",
-      "value": {
-        "type": "textColor",
-        "black": "brightness(0.4)",
-        "white": "none",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primaryColor"
-        }
-      }
-    },
-    {
-      "name": "primaryColor-reverseFilter",
-      "value": {
-        "type": "textColor",
-        "black": "none",
-        "white": "brightness(0) invert(1)",
-        "source": {
-          "type": "settingValue",
-          "settingId": "primaryColor"
-        }
-      }
-    },
-    {
-      "name": "activeColor-text",
-      "value": {
-        "type": "textColor",
-        "black": "#575e75",
-        "white": "#ffffff",
-        "source": {
-          "type": "settingValue",
-          "settingId": "activeColor"
-        }
-      }
-    },
-    {
-      "name": "activeColor-filter",
-      "value": {
-        "type": "textColor",
-        "black": "brightness(0.4)",
-        "white": "none",
-        "source": {
-          "type": "settingValue",
-          "settingId": "activeColor"
-        }
+        "type": "recolorFilter",
+        "source": "#4d97ff"
       }
     }
   ],
@@ -94,10 +29,6 @@
     {
       "url": "scratchr2_errors.css",
       "matches": ["isNotScratchWWW"]
-    },
-    {
-      "url": "scratchwww.css",
-      "matches": ["scratchWWWNoProject", "projects"]
     },
     {
       "url": "forums.css",
@@ -134,51 +65,6 @@
         "https://scratch.mit.edu/accounts/password_change/",
         "https://scratch.mit.edu/accounts/email_change/"
       ]
-    },
-    {
-      "url": "quotes.css",
-      "matches": ["https://scratch.mit.edu/info/quotes/"]
-    },
-    {
-      "url": "experimental_dark_compatibility.css",
-      "matches": ["https://scratch.mit.edu/*"]
-    },
-    {
-      "url": "lightprimary_compatibility.css",
-      "matches": ["isNotScratchWWW"]
-    },
-    {
-      "url": "lightprimary_scratchwww_compatibility.css",
-      "matches": ["scratchWWWNoProject", "projects"]
-    },
-    {
-      "url": "lightprimary_mystuff_compatibility.css",
-      "matches": [
-        "https://scratch.mit.edu/mystuff/",
-        "https://scratch.mit.edu/accounts/settings/",
-        "https://scratch.mit.edu/accounts/password_change/",
-        "https://scratch.mit.edu/accounts/email_change/"
-      ]
-    }
-  ],
-  "settings": [
-    {
-      "id": "primaryColor",
-      "name": "Primary color",
-      "type": "color",
-      "default": "#4d97ff"
-    },
-    {
-      "id": "linkColor",
-      "name": "Link color",
-      "type": "color",
-      "default": "#4d97ff"
-    },
-    {
-      "id": "activeColor",
-      "name": "Link hover color",
-      "type": "color",
-      "default": "#4280d7"
     }
   ]
 }
