@@ -255,7 +255,8 @@
   font-size: 16px;
 }
 .postavatar img {
-  border: 1px solid var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+  margin: 1px;
+  box-shadow: 0 0 0 1px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
   border-radius: 5px;
 }
 .postright,
