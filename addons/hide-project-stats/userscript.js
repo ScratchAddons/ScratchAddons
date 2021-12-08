@@ -52,6 +52,7 @@ export default async function ({ addon, global, console }) {
     } else {
       // Show the love/favorite count
       button.buttonElement.classList.add("stat-display");
+      button.buttonElement.classList.remove("hidden");
     }
   }
 
@@ -82,7 +83,8 @@ export default async function ({ addon, global, console }) {
       childList: true,
       characterData: true,
     });
-    await addon.tab.waitForElement(".project-views", { markAsSeen: true });
+    await addon.tab.waitForElement(".compose-row", { markAsSeen: true });
+    username = await addon.auth.fetchUsername();
     visitingOwnProject = username !== null && document.querySelector(".button.action-button.report-button") === null;
     refreshLabels();
   }
