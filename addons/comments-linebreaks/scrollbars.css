@@ -1,0 +1,4 @@
+.comment-content {
+  max-height: 100px;
+  overflow: auto !important;
+}
