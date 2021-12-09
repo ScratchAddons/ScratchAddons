@@ -4,6 +4,10 @@ export default async function ({ addon, global, console }) {
   while (true) {
     const comment = await addon.tab.waitForElement(".comment .content", { markAsSeen: true });
     comment.style.whiteSpace = "break-spaces";
+    if (scrollbars) {
+	  comment.style.maxHeight = "100px";
+	  comment.style.overflow = "auto";
+	}
     formatProfileComments(comment);
   }
 }
