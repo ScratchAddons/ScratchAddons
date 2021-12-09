@@ -20,44 +20,6 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         addonsEnabled["block-count"] = true;
       }
       if (manifest.settings) {
-        if (addonId === "editor-dark-mode") {
-          // Transition v1.12.0 modes to v1.13.0 presets
-
-          // If user had a selected mode (AKA was a v1.12.0 user)
-          // but has no "page" color set, do the transition
-          // This will happen on first v1.13.0 run only
-          if (settings.selectedMode && !settings.page) {
-            const usePreset = (presetId) => {
-              for (const option of manifest.settings) {
-                if (option.id === "textShadow" && settings.textShadow !== undefined) {
-                  // Exception: v1.12.0 already had this setting
-                  // and we want to preserve what the user had
-                  continue;
-                }
-                const presetValue = manifest.presets.find((preset) => preset.id === presetId).values[option.id];
-                if (presetValue !== undefined) settings[option.id] = presetValue;
-                else settings[option.id] = option.default;
-              }
-            };
-
-            const previousMode = settings.selectedMode;
-            usePreset(
-              {
-                "3-darker": "3darker",
-                "3-dark": "3dark",
-                "dark-editor": "darkEditor",
-                "experimental-dark": "experimentalDark",
-              }[previousMode] || /* Something went wrong, use 3.Darker */ "3darker"
-            );
-
-            addonSettings[addonId] = settings; // Note: IIRC this line doesn't actually do anything
-            madeAnyChanges = true;
-            console.log("Migrated editor-dark-mode to presets");
-            // Skip following code, continue with next addon
-            continue;
-          }
-        }
-
         for (const option of manifest.settings) {
           if (settings[option.id] === undefined) {
             madeChangesToAddon = true;
