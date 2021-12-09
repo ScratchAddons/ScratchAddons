@@ -12,6 +12,12 @@
       "url": "userscript.js",
       "matches": ["profiles"],
       "runAtComplete": false
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "break-spaces.css",
+      "matches": ["studios", "projects"]
     },
     {
       "url": "scrollbars.css",
@@ -21,12 +27,6 @@
           "scrollbars": true
         }
       }
-    }
-  ],
-  "userstyles": [
-    {
-      "url": "break-spaces.css",
-      "matches": ["studios", "projects"]
     }
   ],
   "settings": [
