@@ -1,3 +1,29 @@
+/**
+ Since presets can change independently of others, we have to keep track of
+ the versions separately. Current versions:
+
+ - editor-dark-mode 2 (bumped in v1.23 twice)
+ */
+
+const updatePresetIfMatching = (preset, settings, oldPreset, version) => {
+  if ((settings._version || 0) < version) {
+    /**
+     Version must be set even if transition is unnecessary;
+     1) User uses custom settings
+     2) User updates, transition aborts
+     3) User changes settings to old preset values
+     4) Without version, this change will revert after reload!
+     */
+    settings._version = version;
+    const map = {};
+    for (const key of Object.keys(oldPreset)) {
+      if (settings[key] !== oldPreset[key]) return;
+      map[key] = preset[key];
+    }
+    Object.assign(settings, map);
+  }
+};
+
 chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {}, addonsEnabled = {} }) => {
   const func = () => {
     let madeAnyChanges = false;
@@ -18,6 +44,59 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
         madeChangesToAddon = madeAnyChanges = true;
         delete settings.editorCount;
         addonsEnabled["block-count"] = true;
+      }
+      if (addonId === "editor-dark-mode") {
+        // Transition v1.22 to v1.23
+        // TurboWarp Dark preset changes:
+        updatePresetIfMatching(
+          manifest.presets.find((p) => p.id === "tw-dark"),
+          settings,
+          {
+            page: "#111111",
+            primary: "#ff4d4d",
+            highlightText: "#ff4d4d",
+            menuBar: "#333333",
+            activeTab: "#1e1e1e",
+            tab: "#2e2e2e",
+            selector: "#1e1e1e",
+            selector2: "#2e2e2e",
+            selectorSelection: "#111111",
+            accent: "#111111",
+            input: "#1e1e1e",
+            workspace: "#1e1e1e",
+            categoryMenu: "#111111",
+            palette: "#111111",
+            fullscreen: "#111111",
+            stageHeader: "#111111",
+            border: "#ffffff0d",
+          },
+          1
+        );
+        // Experimental Dark changes:
+        updatePresetIfMatching(
+          manifest.presets.find((p) => p.id === "experimentalDark"),
+          settings,
+          {
+            page: "#001533",
+            primary: "#4d97ff",
+            highlightText: "#4d97ff",
+            menuBar: "#4d97ff",
+            activeTab: "#282828",
+            tab: "#192f4d",
+            selector: "#030b16",
+            selector2: "#192f4d",
+            selectorSelection: "#282828",
+            accent: "#282828",
+            input: "#282828",
+            workspace: "#282828",
+            categoryMenu: "#282828",
+            palette: "#333333",
+            fullscreen: "#282828",
+            stageHeader: "#333333",
+            border: "#444444",
+          },
+          2
+        );
       }
       if (manifest.settings) {
         for (const option of manifest.settings) {
