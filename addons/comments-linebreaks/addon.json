@@ -12,12 +12,29 @@
       "url": "userscript.js",
       "matches": ["profiles"],
       "runAtComplete": false
+    },
+    {
+      "url": "scrollbars.css",
+      "matches": ["studios", "projects"],
+       "if": {
+        "settings": {
+          "scrollbars": true
+        }
+      }
     }
   ],
   "userstyles": [
     {
       "url": "break-spaces.css",
       "matches": ["studios", "projects"]
+    }
+  ],
+  "settings": [
+    {
+      "name": "Add scroll bars to tall comments",
+      "id": "scrollbars",
+      "type": "boolean",
+      "default": false
     }
   ],
   "dynamicEnable": true,
