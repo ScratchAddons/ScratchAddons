@@ -22,7 +22,7 @@
     {
       "url": "scrollbars.css",
       "matches": ["studios", "projects"],
-       "if": {
+      "if": {
         "settings": {
           "scrollbars": true
         }
