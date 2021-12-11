@@ -1,4 +1,4 @@
 .comment-content {
-  max-height: 120px;
+  max-height: calc(var(--commentsLinebreaks-height)*24px);
   overflow: auto !important;
 }
