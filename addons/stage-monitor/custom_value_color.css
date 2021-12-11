@@ -1,0 +1,10 @@
+.monitor_value_3Yexa,
+.monitor_large-value_P-rAm,
+.monitor_list-value_1zGfI {
+  background-color: var(--stageMonitor-value) !important;
+  color: var(--stageMonitor-valueText);
+}
+
+.monitor_list-input_3kw5o {
+  color: var(--stageMonitor-valueText);
+}
