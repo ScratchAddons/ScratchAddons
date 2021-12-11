@@ -1,0 +1,18 @@
+.monitor_monitor-container_2J9gl,
+.monitor_list-body_2OFZ6,
+.monitor_list-header_-cp0o,
+.monitor_list-footer_2HyG8 {
+  background-color: var(--stageMonitor-bg);
+  color: var(--stageMonitor-bgText);
+}
+.monitor_list-index_7tKdl {
+  color: var(--stageMonitor-bgText);
+}
+.monitor_label_ci1ok,
+.monitor_list-empty_1UKsB {
+  color: var(--stageMonitor-bgText) !important;
+}
+.monitor_list-header_-cp0o,
+.monitor_list-footer_2HyG8 {
+	filter: brightness(112%);
+}
