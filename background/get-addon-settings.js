@@ -100,17 +100,17 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
             delete scratchr2.linkColor;
           }
         }
-		if (addonId === "scratch-notifier") {
-		  if (typeof settings.notification_sound !== "Boolean") {
-			if (settings.notification_sound === "silent") {
-			  settings.notification_sound = false;
-			} else {
-				settings.notification_sound = true;
-			}
-			madeChangesToAddon = true;
-			madeAnyChanges = true;
-		  }
-		}
+        if (addonId === "scratch-notifier") {
+          if (typeof settings.notification_sound !== "Boolean") {
+            if (settings.notification_sound === "silent") {
+              settings.notification_sound = false;
+            } else {
+              settings.notification_sound = true;
+            }
+            madeChangesToAddon = true;
+            madeAnyChanges = true;
+          }
+        }
       }
 
       if (addonsEnabled[addonId] === undefined) addonsEnabled[addonId] = !!manifest.enabledByDefault;
