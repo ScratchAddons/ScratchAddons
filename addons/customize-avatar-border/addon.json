@@ -61,7 +61,8 @@
       "default": "#4d97ff40",
       "if": {
         "settings": {
-          "hide-outline": false
+          "hide-outline": false,
+		  "fill-transparent": true
         }
       }
     }
