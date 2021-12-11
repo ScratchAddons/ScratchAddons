@@ -35,15 +35,15 @@
       "id": "scrollbars",
       "type": "boolean",
       "default": false
-    }
+    },
     {
       "name": "Maximum number of lines",
       "id": "height",
       "type": "integer",
-	    "min": 1,
-	    "max": 50,
+      "min": 1,
+      "max": 50,
       "default": 6,
-	    "if": {
+      "if": {
         "settings": {
           "scrollbars": true
         }
