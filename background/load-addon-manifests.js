@@ -24,6 +24,13 @@
       if (manifest.popup) {
         manifest.popup.name = scratchAddons.l10n.get(`${folderName}/@popup-name`, {}, manifest.popup.name);
       }
+      if (manifest.latestUpdate?.temporaryNotice) {
+        manifest.latestUpdate.temporaryNotice = scratchAddons.l10n.get(
+          `${folderName}/@update`,
+          {},
+          manifest.latestUpdate.temporaryNotice
+        );
+      }
     }
     for (const propName of ["userscripts", "userstyles"]) {
       for (const injectable of manifest[propName] || []) {
@@ -64,6 +71,7 @@
             studioIcon: "@studio.svg",
             remixIcon: "@remix.svg",
             adminusersIcon: "@adminusers.svg",
+            usersIcon: "@users.svg",
           },
           option.name
         );

@@ -14,6 +14,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     remixproject: "remix",
     studioactivity: "studio",
     becomeownerstudio: "adminusers",
+    becomehoststudio: "users",
   };
 
   checkCount();
@@ -42,6 +43,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     title,
     element_id,
     parent_title,
+    admin_actor,
   }) {
     let text = "";
     let url;
@@ -111,6 +113,10 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         case "becomeownerstudio":
           notificationTitle = msg("notif-promotion", { actor, title });
           url = `https://scratch.mit.edu/studios/${element_id}/curators/`;
+          break;
+        case "becomehoststudio":
+          notificationTitle = msg("notif-host", { actor: admin_actor ? msg("st") : actor, title });
+          url = `https://scratch.mit.edu/studios/${element_id}/`;
           break;
         case "remixproject":
           notificationTitle = msg("notif-remix", { actor, parent_title, title });
@@ -264,6 +270,7 @@ export default async function ({ addon, global, console, setTimeout, setInterval
           emoji: emojis[message.type],
           messageType,
           actor: message.actor_username,
+          admin_actor: message.admin_actor || false, // Host transfer only
           fragment: htmlToText(message.comment_fragment), // Comments only
           commentee: message.commentee_username, // Comments only
           commentUrl, // Comments only

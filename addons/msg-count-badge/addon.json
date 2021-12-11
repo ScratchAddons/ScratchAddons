@@ -43,5 +43,18 @@
         "color": "#000000"
       }
     }
+  ],
+  "credits": [
+    {
+      "name": "World_Languages"
+    },
+    {
+      "name": "William Horning",
+      "link": "https://wgyt.tk/"
+    },
+    {
+      "name": "lisa_wolfgang",
+      "link": "https://scratch.mit.edu/users/lisa_wolfgang"
+    }
   ]
 }

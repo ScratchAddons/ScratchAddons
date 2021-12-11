@@ -88,6 +88,15 @@
       "default": true
     },
     {
+      "name": "Scratch Addons blocks",
+      "id": "sa",
+      "type": "boolean",
+      "default": true,
+      "if": {
+        "addonEnabled": ["debugger"]
+      }
+    },
+    {
       "name": "Custom block arguments",
       "id": "customargs",
       "type": "boolean",

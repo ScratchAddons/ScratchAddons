@@ -1,0 +1,27 @@
+{
+  "name": "Two-column category menu",
+  "description": "Splits the block category menu into two columns and moves it to the top of the block palette, like in Scratch 2.0.",
+  "credits": [
+    {
+      "name": "TheColaber",
+      "link": "https://scratch.mit.edu/TheColaber"
+    }
+  ],
+  "tags": ["editor", "codeEditor", "featured"],
+  "dynamicEnable": true,
+  "dynamicDisable": true,
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["projects"],
+      "runAtComplete": true
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "style.css",
+      "matches": ["projects"]
+    }
+  ],
+  "versionAdded": "1.22.0"
+}

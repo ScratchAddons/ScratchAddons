@@ -2,7 +2,7 @@
   background-color: transparent;
 }
 #comments form .small-text {
-  color: #575e75;
+  color: var(--darkWww-blue-text, #575e75);
 }
 #comments .comment {
   margin-left: 0;
@@ -19,13 +19,13 @@
 }
 #comments .comment .info .content {
   position: relative;
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--darkWww-border-15, #d9d9d9);
   border-bottom: none;
   border-top-right-radius: 5px;
   padding: 1rem;
   margin-left: 1rem;
   margin-bottom: 0;
-  background-color: #fff;
+  background-color: var(--darkWww-box, white);
   overflow: visible !important;
 }
 #comments .comment .info > div:not(.name):not(.content):not([data-content="reply-form"]) {
@@ -34,17 +34,17 @@
   padding-top: 0;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--darkWww-border-15, #d9d9d9);
   border-top: none;
-  background-color: #fff;
+  background-color: var(--darkWww-box, white);
 }
 #comments .content::after {
   display: block;
   position: absolute;
   top: 0;
   left: -12px;
-  border-bottom: 10px solid #fff;
-  border-left: 12px solid #fff;
+  border-bottom: 10px solid var(--darkWww-box, white);
+  border-left: 12px solid var(--darkWww-box, white);
   border-radius: 0 0 0 12px;
   width: 0;
   content: "";
@@ -54,26 +54,36 @@
   position: absolute;
   top: -1px;
   left: -13px;
-  border-bottom: 12px solid #d9d9d9;
-  border-left: 13px solid #d9d9d9;
+  border-bottom: 12px solid var(--darkWww-border-15, #d9d9d9);
+  border-left: 13px solid var(--darkWww-border-15, #d9d9d9);
   border-radius: 0 0 0 13px;
   width: 0;
   content: "";
 }
 #comments .highlighted {
-  background: rgba(77, 151, 255, 0.1);
-  box-shadow: 0 0 0 8px rgba(77, 151, 255, 0.1);
+  background: var(--darkWww-blue-20, rgba(77, 151, 255, 0.1));
+  color: var(--darkWww-box-text, #575e75);
+  box-shadow: 0 0 0 8px var(--darkWww-blue-20, rgba(77, 151, 255, 0.1));
   border-radius: 8px;
 }
 #comments .comment .info .name a {
-  color: var(--scratchr2-linkColor);
+  color: var(--darkWww-link, #4d97ff);
 }
 #comments .comment .info .name a:hover {
-  color: var(--scratchr2-activeColor);
+  color: var(--darkWww-link-hover, #4280d7);
 }
 #comments .comment .info .time {
-  color: #b3b3b3;
+  color: var(--darkWww-box-transparentText, #b3b3b3);
+}
+#comments .comment .report,
+#comments .comment .delete {
+  color: var(--darkWww-blue-text);
+  filter: opacity(0.5);
 }
 #comments .more-replies .pulldown {
-  color: var(--scratchr2-linkColor);
+  color: var(--darkWww-link, #4d97ff);
+}
+#comments .comment form > .control-group:last-child {
+  /* emoji-picker compatibility */
+  width: auto;
 }

@@ -152,6 +152,9 @@
   "presets": {
     "message": "Presets"
   },
+  "preview": {
+    "message": "Preview"
+  },
   "scratchAddonsTheme": {
     "message": "Scratch Addons theme"
   },
@@ -236,14 +239,14 @@
   "extensionHasUpdated": {
     "message": "Scratch Addons has updated to v$1"
   },
-  "extensionUpdateInfo1_v1_19": {
-    "message": "New addon: \"paint costume by default\", which lets you change the default action of \"Choose a Sprite/Costume/Backdrop/Sound\" buttons. Go to $1 to enable it."
+  "extensionUpdateInfo1_v1_22": {
+    "message": "New addon: \"switch variables between 'For all sprites' and 'For this sprite only'\", which allows changing the scope of variables and lists and whether variables are stored in the cloud. Go to $1 to enable it."
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
   },
-  "extensionUpdateInfo2_v1_19": {
-    "message": "The new \"name scripts before placing in backpack\" addon asks you to name scripts after you drag them into the backpack. Other new addons added this update are \"hide delete button\" and \"hide project stats\"."
+  "extensionUpdateInfo2_v1_22": {
+    "message": "Other new addons added this update are \"better editor comments\", \"two-column category menu\" and \"search bar on My Stuff\"."
   },
   "notAffiliated": {
     "message": "Scratch Addons is not affiliated with Scratch."
@@ -252,13 +255,17 @@
     "message": "New!",
     "description": "Tag for addons. Singular."
   },
+  "updated": {
+    "message": "New options",
+    "description": "Tag for addons with new features. Singular."
+  },
   "newGroup": {
-    "message": "Other new addons",
-    "description": "Used as a category name for new addons"
+    "message": "Other new addons and updates",
+    "description": "Used as a category name for new addons and updates"
   },
   "featuredNew": {
-    "message": "Featured new addons",
-    "description": "Used as a category name for featured new addons"
+    "message": "Featured new addons and updates",
+    "description": "Used as a category name for featured new addons and updates"
   },
   "enabled": {
     "message": "Enabled",

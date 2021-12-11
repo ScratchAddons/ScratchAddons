@@ -8,22 +8,27 @@ a,
 input.link,
 .ui-widget-content a,
 #email-resend-box a {
-  color: var(--scratchr2-linkColor);
+  color: var(--darkWww-link, #4d97ff);
   font-weight: bold;
   text-decoration: none;
 }
 html,
 body,
 #pagewrapper {
-  background: #fcfcfc;
-  color: #575e75;
+  background: var(--darkWww-page, #fcfcfc);
+  color: var(--darkWww-page-text, #575e75);
   text-shadow: none;
 }
-label,
+.box .box-head h1,
+.box .box-head h2,
+.box .box-head h3,
+.box .box-head h4 {
+  color: var(--darkWww-gray-text, #575e75);
+}
 a.black,
 a.black:visited,
 input.link.black {
-  color: #575e75;
+  color: inherit;
 }
 a:hover,
 a:active,
@@ -33,7 +38,7 @@ input.link:hover,
 input.link:active,
 input.link.black:hover,
 input.link.black:active {
-  color: var(--scratchr2-activeColor);
+  color: var(--darkWww-link-hover, #4280d7);
   text-decoration: none;
 }
 #content {
@@ -42,27 +47,37 @@ input.link.black:active {
 .container {
   width: 942px;
 }
-input,
+input {
+  box-shadow: none;
+  border-radius: 5px;
+  background-color: var(--darkWww-input, #fafafa);
+  color: var(--darkWww-input-text, #575e75);
+  border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
+}
+input::placeholder {
+  color: var(--darkWww-input-transparentText, rgba(87, 94, 117, 0.6));
+}
 textarea {
   box-shadow: none;
   border-radius: 8px;
-  background-color: #fafafa;
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  background-color: var(--darkWww-input, #fafafa);
+  color: var(--darkWww-input-text, #575e75);
+  border: 2px solid var(--darkWww-border-20, rgba(0, 0, 0, 0.2));
   resize: none;
 }
 input:focus {
-  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
-  border-color: var(--scratchr2-primaryColor);
+  box-shadow: none;
+  border-color: var(--darkWww-button, #4d97ff);
 }
 textarea:focus {
-  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
-  border: 2px solid var(--scratchr2-primaryColor);
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+  border: 2px solid var(--darkWww-button, #4d97ff);
 }
 .editable-empty,
 .editable.read,
 .editable.write,
 .editable:hover {
-  background-color: #fafafa;
+  background-color: var(--darkWww-input, #fafafa);
   border: 2px dashed rgba(77, 151, 255, 0.25) !important;
   border-radius: 8px;
   transition: all 0.2s ease;
@@ -80,6 +95,9 @@ textarea:focus {
   border-color: transparent;
   box-shadow: none;
 }
+.editable-empty [data-content="prompt"] {
+  color: var(--darkWww-input-transparentText);
+}
 .button,
 button,
 .button:hover,
@@ -92,18 +110,18 @@ button.grey,
 #email-resend-box input[type="button"]:hover {
   border-radius: 4px;
   border: none;
-  background: var(--scratchr2-primaryColor);
+  background: var(--darkWww-button, #4d97ff);
   box-shadow: none;
   font-family: inherit;
   font-weight: bold;
-  color: #fff;
+  color: var(--darkWww-button-text, white);
   text-shadow: none;
   cursor: pointer;
 }
-.button:not(.grey) a,
-.button:not(.grey) a:hover,
-.button:not(.grey) a:visited {
-  color: #fff;
+.button a,
+.button a:hover,
+.button a:visited {
+  color: inherit;
 }
 .button.dropdown.open,
 .button.small.dropdown.open,
@@ -116,14 +134,14 @@ button.small.dropdown.open {
 button.grey,
 .button.grey:not([data-control="load-more"]):hover,
 button.grey:hover {
-  background: #fff;
-  color: var(--scratchr2-linkColor);
-  border: 1px solid var(--scratchr2-primaryColor);
+  background: var(--darkWww-box, white);
+  color: var(--darkWww-link, #4d97ff);
+  border: 1px solid var(--darkWww-button, #4d97ff);
 }
 .button.grey:not([data-control="load-more"]):hover,
 button.grey:hover {
-  color: var(--scratchr2-activeColor);
-  border-color: var(--scratchr2-activeColor);
+  color: var(--darkWww-link-hover, #4280d7);
+  border-color: var(--darkWww-link-hover, #4280d7);
 }
 .button[data-control="load-more"] {
   display: block;
@@ -140,6 +158,7 @@ button.grey:hover {
   background: url("https://scratch.mit.edu/images/dropdown.png") no-repeat center center;
   background-size: 50%;
   opacity: 1;
+  filter: var(--darkWww-navbar-filter, none);
 }
 select {
   -webkit-appearance: none;
@@ -147,74 +166,59 @@ select {
   padding-left: 16px;
   padding-right: 64px;
   height: 48px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
   transition: border-color 0.5s ease;
-  background: #fafafa url("%addon-self-dir%/assets/caret.svg") no-repeat right center;
-  color: #575e75;
+  border-radius: 5px;
+  background-color: var(--darkWww-input, #fafafa);
+  background-image: var(--darkWww-input-caret, url("%addon-self-dir%/assets/caret.svg"));
+  background-repeat: no-repeat;
+  background-position: right center;
+  color: var(--darkWww-input-text, #575e75);
   font-size: 14px;
 }
 select:hover,
 select:focus {
-  background-image: url("%addon-self-dir%/assets/caret_hover.svg");
+  background-image: var(--darkWww-input-caretHover, url("%addon-self-dir%/assets/caret_hover.svg"));
 }
 select:focus {
-  border-color: var(--scratchr2-primaryColor);
+  border-color: var(--darkWww-button, #4d97ff);
   outline: none;
 }
-h1,
-h2,
-h3,
-h4 {
-  color: inherit;
-}
 .box {
-  background: #f2f2f2;
-  border-color: #d9d9d9;
+  background-color: var(--darkWww-gray, #f2f2f2);
+  border-color: var(--darkWww-box-border, #d9d9d9);
   box-shadow: none;
 }
 .box .box-content,
 .box .box-content .inner {
-  background: #fff;
-  border-color: #d9d9d9;
+  background-color: var(--darkWww-box, white);
+  border-color: var(--darkWww-box-border, #d9d9d9);
+  color: var(--darkWww-box-text, #575e75);
 }
+.slider-carousel .thumb span.owner,
 .slider-carousel .thumb span.owner a {
-  color: var(--scratchr2-linkColor);
-}
-.slider-carousel .thumb span.owner a:hover {
-  color: var(--scratchr2-activeColor);
+  color: var(--darkWww-box-text, #575e75);
 }
 .dropdown .dropdown-menu {
-  background-color: #fff;
-  color: #575e75;
+  color: var(--darkWww-box-text, #575e75);
   font-weight: normal;
   top: 24px;
   left: -1px;
-  border: 1px solid var(--scratchr2-primaryColor);
+  border: 1px solid #4d97ff;
   box-shadow: none;
 }
 #footer {
-  background-color: #f2f2f2;
+  background-color: var(--darkWww-footer, #f2f2f2);
   box-shadow: none;
 }
 #footer a {
   font-weight: normal;
 }
 #footer ul.footer-col li h4 {
-  color: #575e75;
+  color: var(--darkWww-footer-text, #575e75) !important;
 }
-.controls.tooltip input:focus,
-.control-group.tooltip input:focus,
-.controls.tooltip textarea:focus,
-.controls.tooltip .tooltip-target:focus,
-.control-group.tooltip textarea:focus,
-.control-group.tooltip .tooltip-target:focus,
-.controls.tooltip.force input,
-.control-group.tooltip.force input,
-.controls.tooltip.force textarea,
-.controls.tooltip.force .tooltip-target,
-.control-group.tooltip.force textarea,
-.control-group.tooltip.force .tooltip-target {
-  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
+.control-group.tooltip textarea:focus {
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
 }
 #topnav {
   height: 50px;
@@ -223,7 +227,7 @@ h4 {
 #topnav .innerwrap {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
-  background: var(--scratchr2-primaryColor);
+  background-color: var(--darkWww-navbar, #4d97ff);
   height: 50px;
 }
 #topnav .logo {
@@ -247,14 +251,14 @@ h4 {
 #topnav ul.site-nav li,
 #topnav ul.site-nav li.last {
   border: none;
-  line-height: 50px;
 }
 #topnav ul.site-nav li:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background-color: var(--darkWww-navbar-border, rgba(0, 0, 0, 0.1));
 }
 #topnav ul.site-nav li a {
   height: 33px;
   padding: 13px 15px 4px 15px;
+  color: var(--darkWww-navbar-text, white);
   font-size: 13.6px;
   line-height: 24px;
 }
@@ -276,6 +280,7 @@ h4 {
   opacity: 1;
   cursor: pointer;
   box-shadow: none;
+  filter: var(--darkWww-navbar-filter, none);
 }
 #topnav form.search input[type="text"] {
   width: calc(100% - 50px);
@@ -285,16 +290,16 @@ h4 {
   border-radius: 5px;
   font-family: inherit;
   font-size: 13.6px;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.1);
+  color: var(--darkWww-navbar-text, white);
+  background-color: var(--darkWww-navbar-border, rgba(0, 0, 0, 0.1));
   box-shadow: none;
   transition: background-color 0.15s ease;
 }
 #topnav form.search input[type="text"]:focus {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--darkWww-navbar-inputFocus, rgba(0, 0, 0, 0.2));
 }
 #topnav form.search input[type="text"]::placeholder {
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--darkWww-navbar-transparentText, rgba(255, 255, 255, 0.75));
 }
 #topnav ul.account-nav {
   margin-left: 0;
@@ -317,17 +322,31 @@ h4 {
   height: 33px;
   line-height: 24px;
 }
-#topnav ul.account-nav li.join-scratch,
+#topnav ul.account-nav li.join-scratch a,
+#topnav ul.account-nav > li.join-scratch:not(:hover) > a,
 #topnav ul.account-nav > li > span {
+  color: var(--darkWww-navbar-text, white);
   font-size: 13.6px;
 }
 #topnav ul.account-nav .sign-in .popover {
   margin-top: 40px;
-  background-color: var(--scratchr2-primaryColor);
+  background-color: var(--darkWww-navbar, #4d97ff);
+  border-color: rgba(0, 0, 0, 0.1);
   cursor: auto;
 }
+#topnav ul.account-nav .sign-in .popover .arrow {
+  top: -7px;
+  width: 14px;
+  height: 14px;
+  transform: rotate(45deg);
+  background-color: var(--darkWww-navbar, #4d97ff);
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
 #topnav ul.account-nav .sign-in .popover .arrow::after {
-  border-bottom-color: var(--scratchr2-primaryColor);
+  display: none;
 }
 #login-dropdown .dropdown-menu {
   max-width: 1000px;
@@ -335,35 +354,41 @@ h4 {
 #login-dropdown .popover-content {
   padding: 19px;
 }
-#login-dropdown form {
+#topnav ul.account-nav .sign-in form {
   width: 200px;
+  line-height: normal;
 }
 #topnav ul.account-nav .sign-in form label {
   padding-top: 5px;
-  color: #fff;
+  color: var(--darkWww-navbar-text, white);
   font-weight: bold;
   line-height: 24px;
 }
 #topnav ul.account-nav .sign-in form input {
+  margin-bottom: 32px;
   width: calc(100% - 30px);
   height: 36px;
   padding: 0 16px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 #login button {
   margin: 5px 0;
   margin-bottom: 6.4px;
   padding: 9.6px;
   height: auto;
-  background: #fff;
-  color: var(--scratchr2-primaryColor);
+  background-color: var(--darkWww-box, white);
+  border-radius: 8px;
+  color: var(--darkWww-link, #4d97ff);
+  font-size: 12.8px;
   line-height: 24px;
 }
 #topnav ul.account-nav .sign-in form .forgot-password {
   float: right;
+  margin: 15.3px 0;
+  font-size: 13px;
+  line-height: 24px;
 }
 #topnav ul.account-nav .sign-in form .forgot-password a {
-  color: #fff;
+  color: var(--darkWww-navbar-text, white);
 }
 #topnav ul.account-nav.logged-in > li {
   border-left: none;
@@ -381,6 +406,7 @@ h4 {
   width: 30px;
   height: 33px;
   padding: 13px 10px 4px 10px;
+  filter: var(--darkWww-navbar-filter, none);
 }
 #topnav ul.account-nav .messages .messages-icon {
   background-image: none;
@@ -400,6 +426,7 @@ h4 {
   right: 0;
   background: url("https://scratch.mit.edu/images/nav-notifications.png") no-repeat center center;
   background-size: 45%;
+  filter: var(--darkWww-navbar-filter, none);
 }
 #topnav ul.account-nav .my-stuff .mystuff-icon:hover,
 #topnav ul.account-nav .messages .messages-icon:hover::before {
@@ -432,7 +459,7 @@ h4 {
   line-height: 24px;
 }
 #topnav ul.account-nav .logged-in-user .dropdown-menu {
-  background-color: var(--scratchr2-primaryColor);
+  background-color: var(--darkWww-navbar, #4d97ff);
   margin-top: 0;
   top: 50px;
   padding-top: 5px;
@@ -449,17 +476,21 @@ h4 {
   margin: 0;
 }
 #topnav ul.account-nav .logged-in-user.dropdown.open {
-  background-color: rgba(0, 0, 0, 0.1) !important;
+  background-color: var(--darkWww-navbar-border, rgba(0, 0, 0, 0.1)) !important;
 }
 #topnav ul.account-nav ul.user-nav li {
-  margin: 0.75em 0;
+  margin: 9.75px 0;
+}
+#topnav ul.account-nav ul.user-nav li a {
+  color: var(--darkWww-navbar-text, white);
+  font-size: 13px;
 }
 #topnav ul.account-nav ul.user-nav li:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--darkWww-navbar-border, rgba(0, 0, 0, 0.1));
 }
 #topnav ul.account-nav ul.user-nav li.logout.divider {
   border-radius: 0;
-  border-top-color: rgba(0, 0, 0, 0.1);
+  border-top-color: var(--darkWww-navbar-border, rgba(0, 0, 0, 0.1));
   padding: 0;
 }
 #topnav li.logout.divider input,
@@ -467,6 +498,7 @@ h4 {
   border-radius: 0;
   background-color: transparent;
   padding-left: 10px;
+  color: var(--darkWww-navbar-text, white);
   font-weight: inherit;
   cursor: pointer;
 }
@@ -476,8 +508,8 @@ h4 {
 .modal-backdrop,
 .modal-backdrop.fade.in,
 .ui-widget-overlay {
-  background: var(--scratchr2-primaryColor);
-  opacity: 0.7;
+  background: var(--darkWww-button-overlay, rgba(77, 151, 255, 0.7));
+  opacity: 1;
 }
 .modal,
 .jqui-modal,
@@ -493,8 +525,10 @@ h4 {
   padding-top: 8px;
   padding-right: 8px;
   border-radius: 16px 16px 0 0;
-  background: var(--scratchr2-primaryColor);
-  box-shadow: inset 0 -1px 0 0 var(--scratchr2-activeColor);
+  background-color: var(--darkWww-navbar, #4d97ff);
+  border: none;
+  color: var(--darkWww-navbar-text, white);
+  box-shadow: inset 0 -1px 0 0 var(--darkWww-navbar-variant, #4280d7);
 }
 .modal .modal-header .close,
 .jqui-modal .ui-widget-header .ui-dialog-titlebar-close {
@@ -513,9 +547,12 @@ h4 {
 }
 .jqui-modal .ui-widget-header .ui-dialog-titlebar-close .ui-icon-closethick {
   background: url("https://scratch.mit.edu/svgs/modal/close-x.svg") no-repeat 0 0;
+  filter: var(--darkWww-navbar-filter, none);
 }
+.modal-header h3,
+.modal .modal-header .close,
 .modal-header label {
-  color: #fff;
+  color: var(--darkWww-navbar-text, white);
 }
 #featured-project-modal label {
   margin-top: 8px;
@@ -529,11 +566,16 @@ h4 {
   margin-top: 0;
 }
 #featured-project-modal .modal-body {
-  background: rgba(77, 151, 255, 0.1);
+  background-color: var(--darkWww-blue, rgba(77, 151, 255, 0.1));
 }
 #featured-project-modal .project.thumb {
-  border: none;
-  background: #fff;
+  border: 1px solid transparent;
+  background-color: var(--darkWww-box, white);
+  border-radius: 8px;
+}
+#featured-project-modal .project.thumb.selected {
+  border-color: var(--darkWww-button, #4d97ff) !important;
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
 }
 .modal-footer {
   border-radius: 0 0 16px 16px;
@@ -542,7 +584,7 @@ h4 {
   text-align: right;
 }
 .modal-footer .btn:not(.blue) {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background: #fff;
-  color: var(--scratchr2-linkColor);
+  border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
+  background: var(--darkWww-box, white);
+  color: var(--darkWww-link, #4d97ff);
 }
