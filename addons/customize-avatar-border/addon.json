@@ -62,7 +62,7 @@
       "if": {
         "settings": {
           "hide-outline": false,
-		  "fill-transparent": true
+          "fill-transparent": true
         }
       }
     }
