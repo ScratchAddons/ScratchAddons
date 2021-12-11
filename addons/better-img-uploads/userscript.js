@@ -115,6 +115,7 @@ export default async function ({ addon, console, msg }) {
       });
 
       let dim = { width: i.width, height: i.height };
+	  const originalDim = JSON.parse(JSON.stringify(dim));
 
       if (mode === "fit") {
         //Make sure the image fits completely in the stage
@@ -192,8 +193,9 @@ export default async function ({ addon, console, msg }) {
               style="mix-blend-mode: normal;"
           >
             <image
-                width="${dim.width}"
-                height="${dim.height}"
+                width="${originalDim.width}"
+                height="${originalDim.height}"
+				transform="scale(${dim.width / originalDim.width},${dim.height / originalDim.height})"
                 xlink:href="${blob}"
             />
           </g>
