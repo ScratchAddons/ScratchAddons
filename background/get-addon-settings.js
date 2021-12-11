@@ -101,7 +101,7 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
           }
         }
         if (addonId === "scratch-notifier") {
-          if (typeof settings.notification_sound !== "Boolean") {
+          if (typeof settings.notification_sound !== "boolean") {
             if (settings.notification_sound === "silent") {
               settings.notification_sound = false;
             } else {
