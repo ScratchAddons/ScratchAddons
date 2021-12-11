@@ -18,7 +18,7 @@ const updatePresetIfMatching = (preset, settings, oldPreset, version) => {
     const map = {};
     for (const key of Object.keys(oldPreset)) {
       if (settings[key] !== oldPreset[key]) return;
-      map[key] = preset[key];
+      map[key] = preset.values[key];
     }
     Object.assign(settings, map);
   }
