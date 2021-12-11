@@ -19,7 +19,7 @@
       "default": true
     },
     {
-      "name": "Notification sound",
+      "name": "Play sound",
       "id": "notification_sound",
       "type": "boolean",
       "default": true
