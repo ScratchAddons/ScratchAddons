@@ -240,7 +240,7 @@
     "message": "Scratch Addons has updated to v$1"
   },
   "extensionUpdateInfo1_v1_23": {
-    "message": "New addon: \"website dark mode and customizable colors\". Go to $1 to change specific colors, toggle dark scollbars, and more!"
+    "message": "New addon: \"website dark mode and customizable colors\". Go to $1 to change specific colors, toggle dark scrollbars, and more!"
   },
   "scratchAddonsSettings": {
     "message": "Scratch Addons settings"
