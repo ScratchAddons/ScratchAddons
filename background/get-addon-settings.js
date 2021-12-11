@@ -13,6 +13,8 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
       const settings = addonSettings[addonId] || {};
       let madeChangesToAddon = false;
       if (addonId === "project-info" && settings.editorCount) {
+        // Transition v1.22 to v1.23
+        // project-info was split into 2 addons
         madeChangesToAddon = madeAnyChanges = true;
         delete settings.editorCount;
         addonsEnabled["block-count"] = true;
@@ -78,6 +80,24 @@ chrome.storage.sync.get(["addonSettings", "addonsEnabled"], ({ addonSettings = {
               const newValue = Number.isNaN(number) ? option.default : number;
               settings[option.id] = newValue;
             }
+          }
+        }
+        if (addonId === "dark-www") {
+          // Transition v1.22.0 to v1.23.0
+          const scratchr2 = addonSettings.scratchr2 || {};
+          if (
+            (typeof scratchr2.primaryColor === "string" && scratchr2.primaryColor !== "#4d97ff") ||
+            (typeof scratchr2.linkColor === "string" && scratchr2.linkColor !== "#4d97ff")
+          ) {
+            if (addonsEnabled["dark-www"] !== true) {
+              addonsEnabled["dark-www"] = addonsEnabled.scratchr2 === true;
+              Object.assign(settings, manifest.presets.find((preset) => preset.id === "scratch").values);
+            }
+            madeAnyChanges = madeChangesToAddon = true;
+            if (typeof scratchr2.primaryColor === "string") settings.navbar = settings.button = scratchr2.primaryColor;
+            if (typeof scratchr2.linkColor === "string") settings.link = scratchr2.linkColor;
+            delete scratchr2.primaryColor;
+            delete scratchr2.linkColor;
           }
         }
       }

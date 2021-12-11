@@ -255,13 +255,17 @@
     "message": "New!",
     "description": "Tag for addons. Singular."
   },
+  "updated": {
+    "message": "New options",
+    "description": "Tag for addons with new features. Singular."
+  },
   "newGroup": {
-    "message": "Other new addons",
-    "description": "Used as a category name for new addons"
+    "message": "Other new addons and updates",
+    "description": "Used as a category name for new addons and updates"
   },
   "featuredNew": {
-    "message": "Featured new addons",
-    "description": "Used as a category name for featured new addons"
+    "message": "Featured new addons and updates",
+    "description": "Used as a category name for featured new addons and updates"
   },
   "enabled": {
     "message": "Enabled",

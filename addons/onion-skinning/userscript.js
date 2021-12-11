@@ -246,7 +246,8 @@ export default async function ({ addon, global, console, msg }) {
     const bounds = root.strokeBounds;
     const { width, height } = bounds;
 
-    const MAX_SIZE = 4096;
+    // Some browsers experience extremely poor performance when this value exceeds 3840.
+    const MAX_SIZE = 3000;
     const maxScale = Math.min(MAX_SIZE / width, MAX_SIZE / height);
 
     const raster = new paper.Raster(new paper.Size(width, height));
