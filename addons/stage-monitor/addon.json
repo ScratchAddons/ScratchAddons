@@ -3,20 +3,20 @@
   "description": "Changes the color of stage monitors.",
   "credits": [
     {
-	  "name": "Samq64",
-	  "link": "https://scratch.mit.edu/users/samq64/"
+      "name": "Samq64",
+      "link": "https://scratch.mit.edu/users/samq64/"
     }
   ],
   "userstyles": [
     {
-	  "url": "custom_bg_color.css",
-	  "matches": ["projects"]
-	},
-	{
-	  "url": "custom_value_color.css",
-	  "matches": ["projects"],
-	  "if": {
-        "settings": {"custom_value": true}
+      "url": "custom_bg_color.css",
+      "matches": ["projects"]
+    },
+    {
+      "url": "custom_value_color.css",
+      "matches": ["projects"],
+      "if": {
+        "settings": { "custom_value": true }
       }
     }
   ],
@@ -31,7 +31,7 @@
         }
       }
     },
-	{
+    {
       "name": "bgText",
       "value": {
         "type": "textColor",
@@ -45,68 +45,68 @@
   "settings": [
     {
       "name": "Make all values the same color",
-	  "id": "custom_value",
-	  "type": "boolean",
-	  "default": false
+      "id": "custom_value",
+      "type": "boolean",
+      "default": false
     },
-	{
+    {
       "name": "Background color",
-	  "id": "bg",
-	  "type": "color",
-	  "allowTransparency": true,
-	  "default": "#e5f0ff"
+      "id": "bg",
+      "type": "color",
+      "allowTransparency": true,
+      "default": "#e5f0ff"
     },
-	{
+    {
       "name": "Value color",
-	  "id": "value",
-	  "type": "color",
-	  "allowTransparency": true,
-	  "default": "#ff8c1a",
-	  "if": {
-        "settings": {"custom_value": true}
+      "id": "value",
+      "type": "color",
+      "allowTransparency": true,
+      "default": "#ff8c1a",
+      "if": {
+        "settings": { "custom_value": true }
       }
-	}
+    }
   ],
-  "presets": [	
-    {	
-      "name": "Dark values",	
-      "id": "black",	
-      "desctiption": "Makes the background of monitor values a dark gray.",	
-      "values": {	
-        "custom_value": true,	
-        "bg": "#e5f0ff",	
+  "presets": [
+    {
+      "name": "Dark values",
+      "id": "black",
+      "desctiption": "Makes the background of monitor values a dark gray.",
+      "values": {
+        "custom_value": true,
+        "bg": "#e5f0ff",
         "value": "#222"
-      }	
-    },	
-    {	
-      "name": "Dark monitors",	
-      "id": "dark",
-      "desctiption": "Makes the background of monitors a dark gray.",	
-      "values": {	
-        "custom_value": false,	
-        "bg": "#222",
-		"value": "000"
-      }	
+      }
     },
-    {	
-      "name": "Transparent values",	
-      "id": "transparent",	
-      "desctiption": "Makes the background of monitor values transparent.",	
-      "values": {	
-        "custom_value": true,	
-        "bg": "#e5f0ff",	
+    {
+      "name": "Dark monitors",
+      "id": "dark",
+      "desctiption": "Makes the background of monitors a dark gray.",
+      "values": {
+        "custom_value": false,
+        "bg": "#222",
+        "value": "000"
+      }
+    },
+    {
+      "name": "Transparent values",
+      "id": "transparent",
+      "desctiption": "Makes the background of monitor values transparent.",
+      "values": {
+        "custom_value": true,
+        "bg": "#e5f0ff",
         "value": "#ffffff00"
       }
     },
-	{	
-      "name": "Translucent black",	
-      "id": "translucent",	
-      "desctiption": "Makes monitors a translucent black like HTMLifier.",	
-      "values": {	
-        "custom_value": true,	
-        "bg": "#00000040",	
+    {
+      "name": "Translucent black",
+      "id": "translucent",
+      "desctiption": "Makes monitors a translucent black like HTMLifier.",
+      "values": {
+        "custom_value": true,
+        "bg": "#00000040",
         "value": "#00000040"
-      }	
+      }
     }
   ],
   "dynamicEnable": true,
