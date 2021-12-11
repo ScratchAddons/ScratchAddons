@@ -177,7 +177,9 @@ export default async function ({ addon, console, msg }) {
       processed.push(
         new File( //Create the svg file
           [
-            `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${dim.width},${dim.height}" width="${dim.width}" height="${dim.height}">
+            `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0,0,${
+              dim.width
+            },${dim.height}" width="${dim.width}" height="${dim.height}">
         <g>
           <g
               data-paper-data='{"isPaintingLayer":true}'
