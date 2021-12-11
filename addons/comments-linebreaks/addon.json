@@ -54,7 +54,7 @@
   "versionAdded": "1.8.0",
   "latestUpdate": {
     "version": "1.23.0",
-    "newSettings": ["scrollbars"]
+    "newSettings": ["scrollbars", "height"]
   },
   "tags": ["community", "comments"]
 }
