@@ -878,7 +878,7 @@
       "default": true
     },
     {
-      "name": "Change the colors of variables, lists, speech bubbles, and answer inputs on the stage",
+      "name": "Change the colors of speech bubbles and answer inputs on the stage",
       "id": "affectStage",
       "type": "boolean",
       "default": false
