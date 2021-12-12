@@ -71,7 +71,7 @@
     {
       "name": "Dark values",
       "id": "black",
-      "desctiption": "Makes the background of monitor values a dark gray.",
+      "description": "Makes the background of monitor values a dark gray.",
       "values": {
         "custom_value": true,
         "bg": "#e5f0ff",
@@ -81,7 +81,7 @@
     {
       "name": "Dark monitors",
       "id": "dark",
-      "desctiption": "Makes the background of monitors a dark gray.",
+      "description": "Makes the background of monitors a dark gray.",
       "values": {
         "custom_value": false,
         "bg": "#222",
@@ -91,7 +91,7 @@
     {
       "name": "Transparent values",
       "id": "transparent",
-      "desctiption": "Makes the background of monitor values transparent.",
+      "description": "Makes the background of monitor values transparent.",
       "values": {
         "custom_value": true,
         "bg": "#e5f0ff",
@@ -101,7 +101,7 @@
     {
       "name": "Translucent black",
       "id": "translucent",
-      "desctiption": "Makes monitors a translucent black like HTMLifier.",
+      "description": "Makes monitors a translucent black like HTMLifier.",
       "values": {
         "custom_value": true,
         "bg": "#00000040",
