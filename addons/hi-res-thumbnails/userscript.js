@@ -37,11 +37,25 @@ export default async function ({ addon, console }) {
   }
 
   function resizeToScreenRes(width, height, image) {
-    // Note this returns a value in CSS pixel units, i.e. it doesn't take into
+    // Note this returns values in CSS pixel units, i.e. it doesn't take into
     // account browser scaling or high-DPI screens. That's good, because we
     // want to leave the actual resolution-increase factor completely up to
     // the addon user/settings!
-    const rect = image.getBoundingClientRect();
+    let {
+      width: widthRect,
+      height: heightRect
+    } = image.getBoundingClientRect();
+
+    // If we've only got partial or no apparent displayed dimensions, and
+    // width/height HTML attributes are provided, fall back to those. For some
+    // reason, these attributes don't seem to always apply to the displayed
+    // image the instant it is added to the page DOM.
+    if (!widthRect || !heightRect) {
+      if (image.hasAttribute("width") && image.hasAttribute("height")) {
+        widthRect = +image.getAttribute("width");
+        heightRect = +image.getAttribute("height");
+      }
+    }
 
     // It's possible that the Scratch site is deliberately loading an image at
     // a greater resolution than it displays at - because with dynamic layout,
@@ -55,6 +69,8 @@ export default async function ({ addon, console }) {
     let widthMax, heightMax;
 
     if (image.classList.contains("studio-project-image")) {
+      // Studio project tiles are largest on (somewhat) thinner screens, since
+      // fewer columns are displayed.
       widthMax = 347;
       heightMax = 260;
     }
@@ -62,7 +78,7 @@ export default async function ({ addon, console }) {
     // Use greater of scales across both axes to choose the dimension which
     // needs the most scaling and to maintain the ratio between the rendered and
     // loaded dimensions.
-    let scale = Math.max(rect.width / width, rect.height / height);
+    let scale = Math.max(widthRect / width, heightRect / height);
 
     // Calculate scale for "maximum" dimensions, and use it instead - but only
     // if it's greater than the actual scale. Theoretically, max possible
