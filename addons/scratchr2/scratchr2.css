@@ -78,15 +78,15 @@ textarea:focus {
 .editable.write,
 .editable:hover {
   background-color: var(--darkWww-input, #fafafa);
-  border: 2px dashed rgba(77, 151, 255, 0.25) !important;
+  border: 2px dashed var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25)) !important;
   border-radius: 8px;
   transition: all 0.2s ease;
 }
 .editable.write,
 .editable-empty.write {
   border-style: solid !important;
-  border-color: #4d97ff !important;
-  box-shadow: 0 0 0 4px rgba(77, 151, 255, 0.25);
+  border-color: var(--darkWww-button, #4d97ff) !important;
+  box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
 }
 .editable textarea,
 .editable-empty textarea,
@@ -96,7 +96,8 @@ textarea:focus {
   box-shadow: none;
 }
 .editable-empty [data-content="prompt"] {
-  color: var(--darkWww-input-transparentText);
+  color: var(--darkWww-input-transparentText, rgba(87, 94, 117, 0.6));
+  font-style: italic;
 }
 .button,
 button,
@@ -137,8 +138,15 @@ button.small.dropdown.open {
   display: block;
   position: static !important;
   width: 942px;
+  height: auto;
   margin: auto;
   text-align: center;
+  font-size: 12.8px;
+}
+.button[data-control="load-more"] > span {
+  display: inline-block;
+  padding: 12.8px 16px;
+  line-height: normal;
 }
 .dropdown span.dropdown-toggle:not(.black) span.caret {
   width: 20px;
@@ -588,7 +596,10 @@ select:focus {
   background-color: var(--darkWww-blue, rgba(77, 151, 255, 0.1));
 }
 #featured-project-modal .project.thumb {
-  border: 1px solid transparent;
+  width: 144px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--darkWww-border-15, rgba(0, 0, 0, 0.15));
   background-color: var(--darkWww-box, white);
   border-radius: 8px;
 }
@@ -596,11 +607,28 @@ select:focus {
   border-color: var(--darkWww-button, #4d97ff) !important;
   box-shadow: 0 0 0 4px var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
 }
+#featured-project-modal .project.thumb img {
+  border: none;
+}
+#featured-project-modal .project.thumb span.title a {
+  padding: 6px 10px;
+}
 .modal-footer {
+  padding: 12.4px 12px;
   border-radius: 0 0 16px 16px;
   border: none;
   background: transparent;
   text-align: right;
+}
+.modal-footer .btn {
+  margin: 0;
+  height: auto;
+  padding: 12.8px 16px;
+  font-size: 12.8px;
+  line-height: normal;
+}
+.modal-footer .btn + .btn {
+  margin-left: 4px;
 }
 .modal-footer .btn:not(.blue) {
   border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
