@@ -12,6 +12,5 @@
   "animated-thumb/error": "Thumbnail could not be uploaded.",
   "animated-thumb/too-big": "The file is too big.",
   "animated-thumb/gif": "Projects with an animated thumbnail might not appear on the Scratch front page and search results. Upload anyway?",
-  "animated-thumb/if-unsuccessful": "If this is not the thumbnail you uploaded just now, the Scratch server might be having a problem. Please wait a few hours and try again.",
-  "animated-thumb/tooltip": "Scratch Addons browser extension allows uploading thumbnails from image files by using this button. Click to close."
+  "animated-thumb/if-unsuccessful": "If this is not the thumbnail you uploaded just now, the Scratch server might be having a problem. Please wait a few hours and try again."
 }
