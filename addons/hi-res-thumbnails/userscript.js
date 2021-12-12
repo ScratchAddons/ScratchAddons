@@ -54,7 +54,7 @@ export default async function ({ addon, console }) {
 
     let widthMax, heightMax;
 
-    if (image.classList.contains('studio-project-image')) {
+    if (image.classList.contains("studio-project-image")) {
       widthMax = 347;
       heightMax = 260;
     }
