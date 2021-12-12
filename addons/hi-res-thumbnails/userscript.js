@@ -14,15 +14,15 @@ export default async function ({ addon, console }) {
 
     // If the image is from uploads.scratch.mit.edu, reformat src so it looks
     // like a cdn2 URL.
-    if (src.includes('uploads.scratch.mit.edu')) {
+    if (src.includes("uploads.scratch.mit.edu")) {
       const id = src.match(/[0-9]+/);
-      if (src.includes('projects')) {
+      if (src.includes("projects")) {
         // Project thumbnails are always 480x360.
         src = `//cdn2.scratch.mit.edu/get_image/project/${id}_480x360.png`;
-      } else if (src.includes('users')) {
+      } else if (src.includes("users")) {
         // Max user avatar size is 500x500.
         src = `//cdn2.scratch.mit.edu/get_image/user/${id}_500x500.png`;
-      } else if (src.includes('galleries')) {
+      } else if (src.includes("galleries")) {
         // Max studio thumbnail size is 500x500.
         src = `//cdn2.scratch.mit.edu/get_image/gallery/${id}_500x500.png`;
       }
