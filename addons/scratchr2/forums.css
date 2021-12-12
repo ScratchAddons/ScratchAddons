@@ -241,7 +241,12 @@
   border-color: transparent;
   box-shadow: none;
 }
+.postleft,
+.postright {
+  position: relative;
+}
 .postleft {
+  z-index: 1;
   color: var(--darkWww-page-text, #575e75);
 }
 .djangobb .blockpost dl {
@@ -269,9 +274,6 @@
   padding: 12px 13px;
   background-color: var(--darkWww-box, white);
   border: 1px solid var(--darkWww-border, rgba(0, 0, 0, 0.1));
-}
-.postright {
-  position: relative;
 }
 .postright::before {
   content: "";
