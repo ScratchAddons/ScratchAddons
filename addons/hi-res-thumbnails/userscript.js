@@ -41,10 +41,7 @@ export default async function ({ addon, console }) {
     // account browser scaling or high-DPI screens. That's good, because we
     // want to leave the actual resolution-increase factor completely up to
     // the addon user/settings!
-    let {
-      width: widthRect,
-      height: heightRect
-    } = image.getBoundingClientRect();
+    let { width: widthRect, height: heightRect } = image.getBoundingClientRect();
 
     // If we've only got partial or no apparent displayed dimensions, and
     // width/height HTML attributes are provided, fall back to those. For some
