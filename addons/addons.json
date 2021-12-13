@@ -114,7 +114,6 @@
   "hi-res-thumbnails",
   "block-count",
   "script-snap",
-  "stage-monitor",
 
   "// NEW ADDONS ABOVE THIS ↑↑",
   "// Note: these themes need this exact order to work properly,",
@@ -130,6 +129,7 @@
   "better-featured-project",
   "// For editor:",
   "editor-dark-mode",
+  "stage-monitor",
   "editor-colored-context-menus",
   "editor-stage-left",
   "columns",
