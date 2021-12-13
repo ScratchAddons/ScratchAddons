@@ -17,7 +17,7 @@
       "matches": ["projects"]
     },
     {
-      "url": "custom_value_color.css",
+      "url": "value_color.css",
       "matches": ["projects"],
       "if": {
         "settings": { "custom-value": true }
@@ -120,9 +120,9 @@
     {
       "name": "2.0 monitors",
       "id": "scratch2",
-      "description": "Makes monitors look similar to the ones in Scratch 2.0",
+      "description": "Makes monitors look more like they did in Scratch 2.0",
       "values": {
-        "radius": 6,
+        "radius": 4,
         "value-radius": 4,
         "bg": "#c1c4c7",
         "header": "#c1c4c7",
@@ -132,7 +132,7 @@
     {
       "name": "Translucent black",
       "id": "translucent",
-      "description": "Translucent black monitors like HTMLifier.",
+      "description": "Translucent black monitors like in HTMLifier.",
       "values": {
         "radius": 4,
         "value-radius": 4,
