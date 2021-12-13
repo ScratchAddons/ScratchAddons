@@ -94,7 +94,7 @@
       "description": "Makes the background of monitor values a dark gray.",
       "values": {
         "custom_value": true,
-		"bg": "#e5f0ff",
+        "bg": "#e5f0ff",
         "value": "#222"
       }
     },
@@ -104,7 +104,7 @@
       "description": "Makes the background of monitor values transparent.",
       "values": {
         "custom_value": true,
-		"bg": "#e5f0ff",
+        "bg": "#e5f0ff",
         "value": "#ffffff00"
       }
     },
