@@ -50,6 +50,9 @@ Setting potential values can be translated:
 Popup names can be translated:
 - `popup.name` - `addon-id/@popup-name`
 
+Latest update temporary notices can be translated:
+- `latestUpdate.temporaryNotice` - `addon-id/@update`
+
 Note that in most cases you **do not have to do anything**, as English messages are fetched from the addon.json, not `addons-l10n/en`.
 
 ## Example
