@@ -1,6 +1,6 @@
 {
-  "name": "Customizable stgae monitor color",
-  "description": "Changes the color of stage monitors.",
+  "name": "Customizable stgae monitors",
+  "description": "Changes the color and border radius of stage monitors.",
   "credits": [
     {
       "name": "Samq64",
@@ -89,23 +89,13 @@
   ],
   "presets": [
     {
-      "name": "Dark values",
+      "name": "Black values",
       "id": "black",
       "description": "Makes the background of monitor values a dark gray.",
       "values": {
         "custom_value": true,
-        "bg": "#e5f0ff",
+		"bg": "#e5f0ff",
         "value": "#222"
-      }
-    },
-    {
-      "name": "Dark monitors",
-      "id": "dark",
-      "description": "Makes the background of monitors a dark gray.",
-      "values": {
-        "custom_value": false,
-        "bg": "#222",
-        "value": "000"
       }
     },
     {
@@ -114,7 +104,7 @@
       "description": "Makes the background of monitor values transparent.",
       "values": {
         "custom_value": true,
-        "bg": "#e5f0ff",
+		"bg": "#e5f0ff",
         "value": "#ffffff00"
       }
     },
@@ -133,7 +123,7 @@
   "dynamicDisable": true,
   "updateUserstylesOnSettingsChange": true,
   "injectAsStyleElt": true,
-  "tags": ["editor", "theme"],
-  "versionAdded": "1.23.0",
+  "tags": ["editor", "theme", "projectPlayer"],
+  "versionAdded": "1.24.0",
   "enabledByDefault": false
 }
