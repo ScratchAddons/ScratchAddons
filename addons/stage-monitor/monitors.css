@@ -1,7 +1,5 @@
 .monitor_monitor-container_2J9gl,
-.monitor_list-body_2OFZ6,
-.monitor_list-header_-cp0o,
-.monitor_list-footer_2HyG8 {
+.monitor_list-body_2OFZ6 {
   background-color: var(--stageMonitor-bg);
   color: var(--stageMonitor-bgText);
 }
@@ -17,7 +15,8 @@
 
 .monitor_list-header_-cp0o,
 .monitor_list-footer_2HyG8 {
-  filter: brightness(112%);
+  background-color: var(--stageMonitor-header);
+  color: var(--stageMonitor-headerText);
 }
 
 .monitor_monitor-container_2J9gl,
