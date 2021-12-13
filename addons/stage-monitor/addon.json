@@ -53,20 +53,20 @@
       "type": "boolean",
       "default": false
     },
-	{
+    {
       "name": "Border radius (px)",
       "id": "radius",
       "type": "integer",
-	  "min": 0,
-	  "max": 11,
+      "min": 0,
+      "max": 11,
       "default": 4
     },
-	{
+    {
       "name": "Value border radius (px)",
       "id": "value-radius",
       "type": "integer",
-	  "min": 0,
-	  "max": 11,
+      "min": 0,
+      "max": 11,
       "default": 4
     },
     {
