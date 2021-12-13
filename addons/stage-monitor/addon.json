@@ -1,6 +1,6 @@
 {
-  "name": "Customizable stgae monitors",
-  "description": "Changes the color and border radius of stage monitors.",
+  "name": "Customizable stage monitors",
+  "description": "Changes the color and border radius of variables and lists on the stage.",
   "credits": [
     {
       "name": "Samq64",
@@ -20,7 +20,7 @@
       "url": "custom_value_color.css",
       "matches": ["projects"],
       "if": {
-        "settings": { "custom_value": true }
+        "settings": { "custom-value": true }
       }
     }
   ],
@@ -58,12 +58,6 @@
   ],
   "settings": [
     {
-      "name": "Make all values the same color",
-      "id": "custom_value",
-      "type": "boolean",
-      "default": false
-    },
-    {
       "name": "Border radius (px)",
       "id": "radius",
       "type": "integer",
@@ -80,7 +74,7 @@
       "default": 4
     },
     {
-      "name": "Background color",
+      "name": "Monitor Color",
       "id": "bg",
       "type": "color",
       "allowTransparency": true,
@@ -93,48 +87,58 @@
       "allowTransparency": true,
       "default": "#ffffff"
     },
+	{
+      "name": "One value color",
+      "id": "custom-value",
+      "type": "boolean",
+      "default": false
+    },
     {
       "name": "Value color",
       "id": "value",
       "type": "color",
       "allowTransparency": true,
-      "default": "#ff8c1a",
+      "default": "#333333",
       "if": {
-        "settings": { "custom_value": true }
+        "settings": { "custom-value": true }
       }
     }
   ],
   "presets": [
     {
-      "name": "Black values",
-      "id": "black",
-      "description": "Makes the background of monitor values a dark gray.",
-      "values": {
-        "custom_value": true,
-		"bg": "#e5f0ff",
-		"header": "#ffffff",
-        "value": "#222"
-      }
-    },
-    {
       "name": "Transparent values",
       "id": "transparent",
-      "description": "Makes the background of monitor values transparent.",
+      "description": "Scratch's default monitors with transparent value backgrounds.",
       "values": {
-        "custom_value": true,
+		"radius": 4,
 		"bg": "#e5f0ff",
 		"header": "#ffffff",
+        "custom-value": true,
         "value": "#ffffff00"
+      }
+    },
+	{
+      "name": "2.0 monitors",
+      "id": "transparent",
+      "description": "Makes monitors look similar to the ones in Scratch 2.0",
+      "values": {
+		"radius": 6,
+		"value-radius": 4,
+		"bg": "#c1c4c7",
+		"header": "#c1c4c7",
+        "custom-value": false
       }
     },
     {
       "name": "Translucent black",
       "id": "translucent",
-      "description": "Makes monitors a translucent black like HTMLifier.",
+      "description": "Translucent black monitors like HTMLifier.",
       "values": {
-        "custom_value": true,
+        "radius": 4,
+		"value-radius": 4,
         "bg": "#00000040",
 		"header": "#00000040",
+		"custom-value": true,
         "value": "#00000040"
       }
     }
