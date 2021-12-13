@@ -114,12 +114,12 @@
 		"bg": "#e5f0ff",
 		"header": "#ffffff",
         "custom-value": true,
-        "value": "#000000ff"
+        "value": "#ffffff00"
       }
     },
 	{
       "name": "2.0 monitors",
-      "id": "transparent",
+      "id": "scratch2",
       "description": "Makes monitors look similar to the ones in Scratch 2.0",
       "values": {
 		"radius": 6,
