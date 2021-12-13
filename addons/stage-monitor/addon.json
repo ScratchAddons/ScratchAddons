@@ -13,7 +13,7 @@
   ],
   "userstyles": [
     {
-      "url": "custom_bg_color.css",
+      "url": "monitors.css",
       "matches": ["projects"]
     },
     {
