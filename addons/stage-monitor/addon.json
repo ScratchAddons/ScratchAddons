@@ -35,7 +35,7 @@
         }
       }
     },
-	{
+    {
       "name": "headerText",
       "value": {
         "type": "textColor",
@@ -80,14 +80,14 @@
       "allowTransparency": true,
       "default": "#e5f0ff"
     },
-	{
+    {
       "name": "List header color",
       "id": "header",
       "type": "color",
       "allowTransparency": true,
       "default": "#ffffff"
     },
-	{
+    {
       "name": "One value color",
       "id": "custom-value",
       "type": "boolean",
@@ -110,22 +110,22 @@
       "id": "transparent",
       "description": "Scratch's default monitors with transparent value backgrounds.",
       "values": {
-		"radius": 4,
-		"bg": "#e5f0ff",
-		"header": "#ffffff",
+        "radius": 4,
+        "bg": "#e5f0ff",
+        "header": "#ffffff",
         "custom-value": true,
         "value": "#000000ff"
       }
     },
-	{
+    {
       "name": "2.0 monitors",
       "id": "transparent",
       "description": "Makes monitors look similar to the ones in Scratch 2.0",
       "values": {
-		"radius": 6,
-		"value-radius": 4,
-		"bg": "#c1c4c7",
-		"header": "#c1c4c7",
+        "radius": 6,
+        "value-radius": 4,
+        "bg": "#c1c4c7",
+        "header": "#c1c4c7",
         "custom-value": false
       }
     },
@@ -135,10 +135,10 @@
       "description": "Translucent black monitors like HTMLifier.",
       "values": {
         "radius": 4,
-		"value-radius": 4,
+        "value-radius": 4,
         "bg": "#00000040",
-		"header": "#00000040",
-		"custom-value": true,
+        "header": "#00000040",
+        "custom-value": true,
         "value": "#00000040"
       }
     }
