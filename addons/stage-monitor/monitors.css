@@ -4,7 +4,7 @@
 .monitor_list-footer_2HyG8 {
   background-color: var(--stageMonitor-bg);
   color: var(--stageMonitor-bgText);
-  border-radius: calc(var(--stageMonitor-radius)*1px);
+  border-radius: calc(var(--stageMonitor-radius) * 1px);
 }
 .monitor_list-index_7tKdl {
   color: var(--stageMonitor-bgText);
@@ -21,5 +21,5 @@
 .monitor_value_3Yexa,
 .monitor_large-value_P-rAm,
 .monitor_list-value_1zGfI {
-   border-radius: calc(var(--stageMonitor-valueRadius)*1px);
+  border-radius: calc(var(--stageMonitor-valueRadius) * 1px);
 }
