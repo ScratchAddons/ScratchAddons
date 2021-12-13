@@ -1,3 +1,4 @@
+/* global $ */
 export default async function ({ addon, console, msg }) {
   const buttons = document.querySelectorAll(".postfootright");
   buttons.forEach(function (elm) {
@@ -28,7 +29,7 @@ export default async function ({ addon, console, msg }) {
     var post = $("#" + id);
     var username = post.find(".username").text();
     $.ajax("/discuss/post/" + id.substr(1) + "/source/").done(function (data) {
-      paste(
+      window.paste(
         "[quote=" +
           username +
           "][small](" +

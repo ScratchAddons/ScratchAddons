@@ -1,6 +1,9 @@
-*.md export-ignore
-LICENSE export-ignore
 .* export-ignore
 typedef.js export-ignore
+*.md export-ignore
 
-libraries/README.md -export-ignore
+addons-l10n/*/*.json linguist-generated=true
+addons-l10n/en/*.json linguist-generated=false
+
+_locales/*/messages.json linguist-generated=true
+_locales/en/messages.json linguist-generated=false

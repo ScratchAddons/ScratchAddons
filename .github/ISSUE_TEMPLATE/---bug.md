@@ -1,9 +1,9 @@
 ---
 name: "\U0001F41B Bug"
-about: 'Report a bug'
-title: ''
-labels: 'type: bug, status: needs triage'
-assignees: ''
+about: "Report a bug"
+title: ""
+labels: "type: bug, status: needs triage"
+assignees: ""
 ---
 
 <!--
