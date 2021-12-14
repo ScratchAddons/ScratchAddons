@@ -65,6 +65,19 @@
         "https://scratch.mit.edu/accounts/password_change/",
         "https://scratch.mit.edu/accounts/email_change/"
       ]
+    },
+    {
+      "url": "view_all.css",
+      "matches": [
+        "https://scratch.mit.edu/projects/*/remixes/",
+        "https://scratch.mit.edu/projects/*/studios/",
+        "https://scratch.mit.edu/users/*/projects/",
+        "https://scratch.mit.edu/users/*/favorites/",
+        "https://scratch.mit.edu/users/*/studios_following/",
+        "https://scratch.mit.edu/users/*/studios/",
+        "https://scratch.mit.edu/users/*/following/",
+        "https://scratch.mit.edu/users/*/followers/"
+      ]
     }
   ]
 }
