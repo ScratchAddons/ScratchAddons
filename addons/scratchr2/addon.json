@@ -39,6 +39,15 @@
       "matches": ["https://scratch.mit.edu/discuss/topic/*/"]
     },
     {
+      "url": "forums_subpage.css",
+      "matches": [
+        "https://scratch.mit.edu/discuss/*/topic/add/",
+        "https://scratch.mit.edu/discuss/post/*/edit/",
+        "https://scratch.mit.edu/discuss/misc/",
+        "https://scratch.mit.edu/discuss/settings/*/"
+      ]
+    },
+    {
       "url": "forums_yt.css",
       "matches": ["https://scratch.mit.edu/discuss/youtube/*/"]
     },
