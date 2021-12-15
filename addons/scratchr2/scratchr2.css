@@ -647,19 +647,19 @@ select:focus {
 /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
 @keyframes spin-intro {
   0% {
-      transform: scale(0);
-      opacity: 0;
+    transform: scale(0);
+    opacity: 0;
   }
   100% {
-      transform: scale(1);
-      opacity: 1;
+    transform: scale(1);
+    opacity: 1;
   }
 }
 @keyframes spin {
   0% {
-      transform: rotate(0);
+    transform: rotate(0);
   }
   100% {
-      transform: rotate(359deg);
+    transform: rotate(359deg);
   }
 }

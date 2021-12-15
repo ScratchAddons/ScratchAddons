@@ -21,9 +21,9 @@
   /* Spinner animation code */
   /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
   animation-name: spin-intro, spin;
-  animation-duration: .25s, 1s;
-  animation-timing-function: cubic-bezier(.3, -3, .6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
-  animation-delay: 0s, .25s;
+  animation-duration: 0.25s, 1s;
+  animation-timing-function: cubic-bezier(0.3, -3, 0.6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
+  animation-delay: 0s, 0.25s;
   animation-iteration-count: 1, infinite;
 }
 #comments #comments-loading::after {
