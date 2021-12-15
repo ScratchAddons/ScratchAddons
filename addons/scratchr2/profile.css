@@ -185,7 +185,11 @@
   vertical-align: middle;
   border-radius: 4px;
 }
-#profile-box .player [data-control="edit"] {
+#lfp-embed {
+  margin-bottom: 2px;
+}
+#profile-box .player [data-control="edit"],
+#lfp-change-featured {
   left: 8px;
   top: 8px;
   border-top-left-radius: 4px;
