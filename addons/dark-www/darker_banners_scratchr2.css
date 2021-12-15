@@ -2,6 +2,9 @@ body:not(.beta-opt-in, .password-change, .email-change) #content > .cols > .col-
 #content > .cols > .col-12 > .box .box-head {
   background-color: #004099;
 }
+html {
+  background-color: #003a8a !important;
+}
 #brdheader,
 .blockpost div.box {
   background-color: #064734 !important;
