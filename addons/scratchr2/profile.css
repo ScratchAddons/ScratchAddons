@@ -287,7 +287,8 @@
 }
 #comments #comment-form .button,
 #comments .comment form .button {
-  margin: 6.4px 0;
+  margin-top: 6.4px;
+  margin-bottom: 6.4px;
   height: auto;
   border-radius: 4px;
   font-size: 12.8px;
@@ -306,6 +307,9 @@
 #comments .comment form .button.grey {
   background-color: var(--darkWww-gray-darker, #b3b3b3);
   color: white;
+}
+.sa-emoji-button-r2 .sa-emoji-picker:not(.sa-emoji-picker-offscreen) {
+  top: 54px;
 }
 #comments .reply .comment form textarea {
   width: 784px;
