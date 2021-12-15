@@ -98,6 +98,7 @@
   height: 16px;
   background-image: url("/svgs/project/comment-reply.svg");
   background-size: cover;
+  filter: var(--darkWww-link-iconFilter);
 }
 #comments .comment .report,
 #comments .comment .delete {
