@@ -192,6 +192,22 @@ body > #pagewrapper {
 .linksb .follow-topic {
   bottom: -31px;
 }
+.follow-topic .loading {
+  content: url(/svgs/modal/spinner-blue.svg);
+  width: 22.8px;
+  height: 22.8px;
+  opacity: 1;
+  filter: var(--darkWww-link-iconFilter, none);
+}
+.follow-topic .loading:not([style="display: none;"]) {
+  /* Spinner animation code */
+  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+  animation-name: spin-intro, spin;
+  animation-duration: .25s, 1s;
+  animation-timing-function: cubic-bezier(.3, -3, .6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
+  animation-delay: 0s, .25s;
+  animation-iteration-count: 1, infinite;
+}
 .follow-button,
 .unfollow-button {
   margin: 0;

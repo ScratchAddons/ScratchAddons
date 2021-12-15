@@ -1,8 +1,40 @@
+#comments #comments-loading,
+#comments .posting {
+  background-image: none;
+  position: relative;
+}
 #comments #comments-loading {
   background-color: transparent;
 }
+#comments #comments-loading::after,
+#comments .posting::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: calc(50% - 10px);
+  left: calc(50% - 10px);
+  width: 22.8px;
+  height: 22.8px;
+  background-image: url(/svgs/modal/spinner-blue.svg);
+  background-size: 100%;
+  filter: var(--darkWww-link-iconFilter, none);
+  /* Spinner animation code */
+  /* From https://github.com/LLK/scratch-www/blob/develop/src/components/spinner/spinner.scss */
+  animation-name: spin-intro, spin;
+  animation-duration: .25s, 1s;
+  animation-timing-function: cubic-bezier(.3, -3, .6, 3), cubic-bezier(0.4, 0.1, 0.4, 1);
+  animation-delay: 0s, .25s;
+  animation-iteration-count: 1, infinite;
+}
+#comments #comments-loading::after {
+  top: 70px;
+}
 #comments form .small-text {
   color: var(--darkWww-blue-text, #575e75);
+}
+#comments .posting {
+  background-color: var(--darkWww-box, white);
+  color: transparent;
 }
 #comments .comment {
   margin: 0;
