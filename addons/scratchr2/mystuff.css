@@ -175,7 +175,7 @@ body:not(.beta-opt-in, .password-change, .email-change) #content > .cols > .col-
 }
 #search-my-stuff-input {
   padding: 0 16px;
-  height: 48px;
+  height: 46px;
   font-size: 13px;
 }
 #search-my-stuff-input:focus {
