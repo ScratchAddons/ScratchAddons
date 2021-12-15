@@ -100,6 +100,9 @@
   font-weight: normal;
   line-height: normal;
 }
+.sa-user-id {
+  color: var(--darkWww-page-transparentText, rgba(0, 0, 0, 0.3));
+}
 .header-text .profile-details {
   color: var(--darkWww-page-text, #575e75);
 }
