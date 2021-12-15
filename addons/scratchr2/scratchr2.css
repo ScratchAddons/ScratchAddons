@@ -148,7 +148,7 @@ button.small.dropdown.open {
   padding: 12.8px 16px;
   line-height: normal;
 }
-.dropdown span.dropdown-toggle:not(.black) span.caret {
+.dropdown span.dropdown-toggle span.caret {
   width: 20px;
   height: 20px;
   margin-left: 8px;
@@ -157,6 +157,11 @@ button.small.dropdown.open {
   background-size: 50%;
   opacity: 1;
   filter: var(--darkWww-navbar-filter, none);
+}
+.dropdown span.dropdown-toggle.black span.caret {
+  vertical-align: -6px;
+  border: none;
+  filter: var(--darkWww-button-filter, none);
 }
 select {
   -webkit-appearance: none;

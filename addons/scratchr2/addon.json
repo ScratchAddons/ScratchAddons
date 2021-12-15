@@ -55,6 +55,15 @@
       "matches": ["https://scratch.mit.edu/projects/*/remixtree/"]
     },
     {
+      "url": "v_tabs.css",
+      "matches": [
+        "https://scratch.mit.edu/mystuff/",
+        "https://scratch.mit.edu/accounts/settings/",
+        "https://scratch.mit.edu/accounts/password_change/",
+        "https://scratch.mit.edu/accounts/email_change/"
+      ]
+    },
+    {
       "url": "mystuff.css",
       "matches": ["https://scratch.mit.edu/mystuff/"]
     },
