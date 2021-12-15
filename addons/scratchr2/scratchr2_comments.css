@@ -8,6 +8,7 @@
   margin: 0;
   padding: 0;
   padding-bottom: 24px;
+  overflow: hidden;
 }
 #comments .comments li,
 #comments ul.comments ul li {
