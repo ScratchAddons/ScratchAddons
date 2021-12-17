@@ -1,7 +1,3 @@
-.sa-forum-toolbar-link {
-  background-image: unset !important;
-}
-
 .sa-forum-toolbar-link > a {
   background-image: url(https://cdn.scratch.mit.edu/scratchr2/static/djangobb_forum/js/markitup/sets/bbcode/images/link.png);
 }
