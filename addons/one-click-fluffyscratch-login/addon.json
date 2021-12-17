@@ -1,0 +1,24 @@
+{
+  "name": "One Click FluffyScratch Login",
+  "description": "Makes logging in to sites that use FluffyScratch F A S T.",
+  "credits": [
+    {
+      "name": "easrng",
+	  "link": "https://easrng.net/"
+    }
+  ],
+  "userscripts": [
+    {
+      "url": "userscript.js",
+      "matches": ["https://scratch.mit.edu/projects/514649494", "https://scratch.mit.edu/projects/514649494/*"]
+    }
+  ],
+  "userstyles": [
+    {
+      "url": "hideuntilscript.css",
+      "matches": ["https://scratch.mit.edu/projects/514649494", "https://scratch.mit.edu/projects/514649494/*"]
+    }
+  ],
+  "tags": [],
+  "enabledByDefault": true
+}

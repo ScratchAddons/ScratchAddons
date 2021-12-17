@@ -1,0 +1,3 @@
+body:not(.not-one-click) {
+  display: none;
+}

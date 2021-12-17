@@ -12,6 +12,7 @@ const _globalState = {
     scratchLang: null,
   },
   addonSettings: {},
+  temporary: {}
 };
 
 class StateProxy {
