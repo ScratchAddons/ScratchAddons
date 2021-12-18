@@ -1,0 +1,28 @@
+{
+    "name": "Search sprites in the editor",
+    "description": "Adds a search box to the editor to search for sprites by name.",
+    "credits": [
+      {
+        "name": "BarelySmooth",
+        "link": "https://scratch.mit.edu/users/BarelySmooth/"
+      }
+    ],
+  
+    "userstyles": [
+      {
+        "url": "search-bar.css",
+        "matches": ["projects"]
+      }
+    ],
+    "userscripts": [
+      {
+        "url": "userscript.js",
+        "matches": ["projects"]
+      }
+    ],
+    "dynamicEnable": true,
+    "dynamicDisable": true,
+    "versionAdded": "1.23.0",
+    "tags": ["editor"],
+    "enabledByDefault": false
+  }
