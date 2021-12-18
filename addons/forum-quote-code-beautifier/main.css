@@ -3,3 +3,6 @@
   border: none;
   border-left: 2px solid var(--forumQuoteCodeBeautifier-bordercolor);
 }
+.postmsg blockquote blockquote {
+  background-color: var(--darkWww-gray-forumTransparentQuote, rgba(0, 0, 0, 0.03));
+}
