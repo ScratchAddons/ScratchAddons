@@ -1300,6 +1300,74 @@
       }
     },
     {
+      "name": "button-banner",
+      "value": {
+        "type": "makeHsv",
+        "h": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "s": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.7,
+            "darker": 1,
+            "desaturated": 0.5
+          }
+        },
+        "v": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 1,
+            "darker": 0.6,
+            "desaturated": 0.4
+          }
+        }
+      }
+    },
+    {
+      "name": "button-bannerVariant",
+      "value": {
+        "type": "makeHsv",
+        "h": {
+          "type": "settingValue",
+          "settingId": "button"
+        },
+        "s": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.7,
+            "darker": 1,
+            "desaturated": 0.51
+          }
+        },
+        "v": {
+          "type": "map",
+          "source": {
+            "type": "settingValue",
+            "settingId": "darkBanners"
+          },
+          "options": {
+            "off": 0.84,
+            "darker": 0.54,
+            "desaturated": 0.3
+          }
+        }
+      }
+    },
+    {
       "name": "button-scratchr2ButtonText",
       "value": {
         "type": "textColor",
@@ -1672,6 +1740,13 @@
       "matches": ["scratchWWWNoProject"],
       "if": {
         "settings": { "darkBanners": "desaturated" }
+      }
+    },
+    {
+      "url": "blue_banners_scratchr2.css",
+      "matches": ["isNotScratchWWW"],
+      "if": {
+        "addonEnabled": ["scratchr2"]
       }
     },
     {
