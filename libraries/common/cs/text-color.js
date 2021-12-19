@@ -131,7 +131,7 @@ function recolorFilter(hex) {
   return `url("data:image/svg+xml,
     <svg xmlns='http://www.w3.org/2000/svg'>
       <filter id='recolor'>
-        <feColorMatrix values='
+        <feColorMatrix color-interpolation-filters='sRGB' values='
           0 0 0 0 ${r / 255}
           0 0 0 0 ${g / 255}
           0 0 0 0 ${b / 255}

@@ -1049,6 +1049,18 @@
       }
     },
     {
+      "name": "gray-forumTransparentQuote",
+      "value": {
+        "type": "textColor",
+        "black": "rgba(0, 0, 0, 0.03)",
+        "white": "rgba(255, 255, 255, 0.03)",
+        "source": {
+          "type": "settingValue",
+          "settingId": "gray"
+        }
+      }
+    },
+    {
       "name": "blue-text",
       "value": {
         "type": "textColor",
