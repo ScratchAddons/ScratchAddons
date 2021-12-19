@@ -4,9 +4,6 @@ body:not(.sa-body-editor) ::-webkit-scrollbar {
   height: 17px;
   background: transparent;
 }
-body:not(.sa-body-editor)::-webkit-scrollbar {
-  background: var(--darkWww-page);
-}
 body:not(.sa-body-editor)::-webkit-scrollbar-thumb,
 body:not(.sa-body-editor) ::-webkit-scrollbar-thumb {
   width: 8px;
