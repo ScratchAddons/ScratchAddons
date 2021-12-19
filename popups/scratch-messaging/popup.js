@@ -1,4 +1,23 @@
 import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
+import * as API from "./api.js";
+import fixCommentContent from "./fix-comment-content.js";
+
+const errorCodes =
+  {
+    isEmpty: "comment-error-empty",
+    // Two errors can be raised for rate limit;
+    // isFlood is the actual error, 429 is the status code
+    // ratelimit error will be unnecessary when #2505 is implemented
+    isFlood: "comment-error-ratelimit",
+    429: "comment-error-ratelimit",
+    isBad: "comment-error-filterbot-generic",
+    hasChatSite: "comment-error-filterbot-chat",
+    isSpam: "comment-error-filterbot-spam",
+    replyLimitReached: "comment-error-reply-limit",
+    // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
+    500: "comment-error-down",
+    503: "comment-error-down",
+  };
 
 export default async ({ addon, msg, safeMsg }) => {
   let dateNow = Date.now();
@@ -14,6 +33,11 @@ export default async ({ addon, msg, safeMsg }) => {
     },
     beforeDestroy() {
       this.$el.removeChild(this.element);
+    },
+    watch: {
+      element(newElement, oldElement) {
+        oldElement.replaceWith(newElement);
+      }
     }
   });
   Vue.component("dom-element-renderer", DOMElementRenderer);
@@ -27,6 +51,7 @@ export default async ({ addon, msg, safeMsg }) => {
         replying: false,
         replyBoxValue: "",
         deleted: false,
+        deleting: false,
         deleteStep: 0,
         postingComment: false,
         messages: {
@@ -37,6 +62,8 @@ export default async ({ addon, msg, safeMsg }) => {
           postingMsg: msg("posting"),
           postMsg: msg("post"),
           cancelMsg: msg("cancel"),
+          deletedMsg: msg("deleted"),
+          deletingMsg: msg("deleting"),
         },
       };
     },
@@ -53,71 +80,70 @@ export default async ({ addon, msg, safeMsg }) => {
         if (shouldCaptureComment(this.replyBoxValue)) {
           alert(
             chrome.i18n
-              .getMessage("captureCommentError", ["$1"])
-              .replace("$1", chrome.i18n.getMessage("captureCommentPolicy"))
+              .getMessage("captureCommentError", [chrome.i18n.getMessage("captureCommentPolicy")])
           );
           return;
         }
         this.postingComment = true;
         const parent_pseudo_id = this.isParent ? this.commentId : this.thisComment.childOf;
         const parent_id = Number(parent_pseudo_id.substring(2));
-        chrome.runtime.sendMessage(
-          {
-            scratchMessaging: {
-              postComment: {
-                resourceType: this.resourceType,
-                resourceId: this.resourceId,
-                content: this.replyBoxValue,
-                parent_id,
-                commentee_id: this.thisComment.authorId,
-                commenteeUsername: this.thisComment.author,
-              },
-            },
-          },
-          (res) => {
-            this.postingComment = false;
-            dateNow = Date.now();
-            if (res.error) {
-              const errorCode =
-                {
-                  isEmpty: "comment-error-empty",
-                  // Two errors can be raised for rate limit;
-                  // isFlood is the actual error, 429 is the status code
-                  // ratelimit error will be unnecessary when #2505 is implemented
-                  isFlood: "comment-error-ratelimit",
-                  429: "comment-error-ratelimit",
-                  isBad: "comment-error-filterbot-generic",
-                  hasChatSite: "comment-error-filterbot-chat",
-                  isSpam: "comment-error-filterbot-spam",
-                  replyLimitReached: "comment-error-reply-limit",
-                  // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
-                  500: "comment-error-down",
-                  503: "comment-error-down",
-                }[res.error] || "send-error";
-              let errorMsg = msg(errorCode);
-              if (res.muteStatus) {
-                errorMsg = msg("comment-mute") + " ";
-                errorMsg += msg("comment-cannot-post-for", {
-                  mins: Math.max(Math.ceil((res.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
-                });
-              }
-              alert(errorMsg);
-            } else {
-              this.replying = false;
-              const newCommentPseudoId = `${this.resourceType[0]}_${res.commentId}`;
-              Vue.set(this.commentsObj, newCommentPseudoId, {
-                author: res.username,
-                authorId: res.userId,
-                content: res.content,
-                date: new Date().toISOString(),
-                children: null,
-                childOf: parent_pseudo_id,
-              });
-              this.commentsObj[parent_pseudo_id].children.push(newCommentPseudoId);
-              this.replyBoxValue = "";
-            }
+        Promise.all([
+          addon.auth.fetchUsername(),
+          addon.auth.fetchUserId(),
+          API.sendComment(addon, {
+            resourceType: this.resourceType,
+            resourceId: this.resourceId,
+            content: this.replyBoxValue,
+            parentId: parent_id,
+            commenteeId: this.thisComment.authorId,
+          }),
+          addon.self.getEnabledAddons(),
+        ]).then(([username, userId, { id, content }, enabledAddons]) => {
+          this.replying = false;
+          let domContent = fixCommentContent(content, enabledAddons);
+          if (this.resourceType !== "user") {
+            // We need to append the replyee ourselves
+            const newElement = document.createElement("div");
+            newElement.append(Object.assign(document.createElement("a"), {
+              href: `https://scratch.mit.edu/users/${this.thisComment.author}`,
+              textContent: "@" + this.thisComment.author,
+            }));
+            newElement.append(" ");
+            newElement.append(...domContent.childNodes);
+            domContent = newElement;
           }
-        );
+          const newCommentPseudoId = `${this.resourceType[0]}_${id}`;
+          Vue.set(this.commentsObj, newCommentPseudoId, {
+            author: username,
+            authorId: userId,
+            content: domContent,
+            date: new Date().toISOString(),
+            children: null,
+            childOf: parent_pseudo_id,
+          });
+          this.commentsObj[parent_pseudo_id].children.push(newCommentPseudoId);
+          this.replyBoxValue = "";
+        }).catch((e) => {
+          // Error comes from sendComment
+          let errorMsg;
+          if (e instanceof API.DetailedError) {
+            if (e.details.muteStatus) {
+              errorMsg = msg("comment-mute") + " ";
+              errorMsg += msg("comment-cannot-post-for", {
+                mins: Math.max(Math.ceil((e.details.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
+              });
+            } else {
+              errorMsg = msg(errorCodes[e.details.error] || "send-error");
+            }
+          } else if (e instanceof API.HTTPError) {
+            errorMsg = msg(errorCodes[e.details.code] || "send-error");
+          } else {
+            errorMsg = e.toString();
+          }
+          alert(errorMsg);
+        }).finally(() => {
+          this.postingComment = false;
+        });
       },
       deleteComment() {
         if (this.deleteStep === 0) {
@@ -128,30 +154,21 @@ export default async ({ addon, msg, safeMsg }) => {
           return;
         }
         this.deleted = true;
-        const previousContent = this.thisComment.content;
-        this.thisComment.content = safeMsg("deleting");
-        chrome.runtime.sendMessage(
-          {
-            scratchMessaging: {
-              deleteComment: {
-                resourceType: this.resourceType,
-                resourceId: this.resourceId,
-                commentId: Number(this.commentId.substring(2)),
-              },
-            },
-          },
-          (res) => {
-            if (res.error) {
-              alert(msg("delete-error"));
-              this.thisComment.content = previousContent;
-              this.deleteStep = 0;
-              this.deleted = false;
-            } else {
-              if (this.isParent) this.thisComment.children = [];
-              this.thisComment.content = safeMsg("deleted");
-            }
-          }
-        );
+        this.deleting = true;
+        API.deleteComment(addon, {
+          resourceType: this.resourceType,
+          resourceId: this.resourceId,
+          commentId: Number(this.commentId.substring(2)),
+        }).then(() => {
+          if (this.isParent) this.thisComment.children = [];
+        }).catch((e) => {
+          console.error("Error while deleting a comment: ", e);
+          alert(msg("delete-error"));
+          this.deleteStep = 0;
+          this.deleted = false;
+        }).finally(() => {
+          this.deleting = false;
+        });
       },
     },
     computed: {
@@ -343,13 +360,11 @@ export default async ({ addon, msg, safeMsg }) => {
       dismissAlert(id) {
         const confirmation = confirm(msg("stMessagesConfirm"));
         if (!confirmation) return;
-        chrome.runtime.sendMessage({ scratchMessaging: { dismissAlert: id } }, (res) => {
-          if (res && !res.error) {
-            this.stMessages.splice(
-              this.stMessages.findIndex((alert) => alert.id === id),
-              1
-            );
-          }
+        API.dismissAlert(addon, id).then(() => {
+          this.stMessages.splice(
+            this.stMessages.findIndex((alert) => alert.id === id),
+            1
+          );
         });
       },
       reloadPage() {
@@ -434,6 +449,10 @@ export default async ({ addon, msg, safeMsg }) => {
               if (Object.keys(comments).length === 0) elementObject.unreadComments = 0;
               for (const commentId of Object.keys(comments)) {
                 const commentObject = comments[commentId];
+                // @todo fix
+                const tmplDiv = document.createElement("div");
+                tmplDiv.innerHTML = commentObject.content;
+                commentObject.content = tmplDiv;
                 Vue.set(this.comments, commentId, commentObject);
               }
 

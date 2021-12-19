@@ -45,7 +45,14 @@
         <bdo dir="ltr">
           <!-- prevents LTR comments from being messed up in RTL layout - not ideal, but consistent with Scratch -->
           <div class="comment-content" :class="{'comment-self' : thisComment.author === username}">
-            <span class="comment-content-text">{{{ thisComment.content }}}</span>
+            <div class="comment-content-text">
+              <span v-show="deleting">{{ messages.deletingMsg }}</span>
+              <span v-show="deleted && !deleting">{{ messages.deletedMsg }}</span>
+              <dom-element-renderer
+                :element="thisComment.content"
+                v-show="!deleted"
+              ></dom-element-renderer>
+            </div>
             <a
               class="reply-button-comment"
               @click="replying = true"

@@ -61,7 +61,11 @@ export async function dismissAlert(addon, alertId) {
   });
 }
 
-// Sending a comment is complex; splitting functions
+export async function sendComment(addon, { resourceType, resourceId, content, parentId, commenteeId }) {
+  if (resourceType === "user") return sendLegacyComment(addon, { resourceType, resourceId, content, parentId, commenteeId });
+  return sendMigratedComment(addon, { resourceType, resourceId, content, parentId, commenteeId });
+}
+
 export async function sendMigratedComment(addon, { resourceType, resourceId, content, parentId, commenteeId }) {
   const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
   const xToken = await addon.auth.fetchXToken();
