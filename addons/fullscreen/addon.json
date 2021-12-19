@@ -72,7 +72,7 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "player", "featured"],
+  "tags": ["player", "featured"],
   "versionAdded": "1.21.0",
   "enabledByDefault": false
 }

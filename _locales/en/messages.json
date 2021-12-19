@@ -62,6 +62,9 @@
   "forEditor": {
     "message": "For editor"
   },
+  "forPlayer": {
+    "message": "For project player"
+  },
   "forWebsite": {
     "message": "For website"
   },
@@ -89,14 +92,14 @@
   "codeEditorFeatures": {
     "message": "Code Editor"
   },
+  "playerFeatures": {
+    "message": "Project Player Features"
+  },
   "websiteFeatures": {
     "message": "Scratch Website Features"
   },
   "profilesFeatures": {
     "message": "Profiles"
-  },
-  "playerFeatures": {
-    "message": "Project Player"
   },
   "projectPageFeatures": {
     "message": "Project Pages"
@@ -112,6 +115,9 @@
   },
   "websiteThemes": {
     "message": "Website Themes"
+  },
+  "playerThemes": {
+    "message": "Project Player Themes"
   },
   "popupFeatures": {
     "message": "Extension Popup Features"

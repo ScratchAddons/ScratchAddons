@@ -22,16 +22,15 @@ export default [
     name: chrome.i18n.getMessage("costumeEditorFeatures"),
   },
   {
-    id: "player",
-    parent: "editor",
-    icon: "player",
-    name: chrome.i18n.getMessage("playerFeatures"),
-  },
-  {
     id: "editorOthers",
     parent: "editor",
     icon: "dots",
     name: chrome.i18n.getMessage("others"),
+  },
+  {
+    id: "player",
+    icon: "player",
+    name: chrome.i18n.getMessage("playerFeatures"),
   },
   {
     id: "community",
@@ -72,6 +71,12 @@ export default [
     parent: "theme",
     icon: "puzzle",
     name: chrome.i18n.getMessage("editorThemes"),
+  },
+  {
+    id: "themesForPlayer",
+    parent: "theme",
+    icon: "player",
+    name: chrome.i18n.getMessage("playerThemes"),
   },
   {
     id: "themesForWebsite",

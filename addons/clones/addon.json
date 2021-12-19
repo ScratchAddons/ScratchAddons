@@ -21,6 +21,6 @@
       "matches": ["projects"]
     }
   ],
-  "tags": ["editor", "player", "recommended"],
+  "tags": ["player", "recommended"],
   "enabledByDefault": false
 }
