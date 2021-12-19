@@ -343,3 +343,7 @@ a.message-type-title-text {
   opacity: 1;
   filter: none;
 }
+
+.dom-element-renderer {
+  display: contents;
+}

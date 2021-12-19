@@ -3,6 +3,21 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 export default async ({ addon, msg, safeMsg }) => {
   let dateNow = Date.now();
 
+  // <dom-element-renderer> component
+  // This component renders an element.
+  // Inspired by DOMElementRenderer in scratch-gui
+  const DOMElementRenderer = Vue.extend({
+    template: document.querySelector("template#dom-element-renderer-component").innerHTML,
+    props: ["element"],
+    compiled() {
+      this.$el.appendChild(this.element);
+    },
+    beforeDestroy() {
+      this.$el.removeChild(this.element);
+    }
+  });
+  Vue.component("dom-element-renderer", DOMElementRenderer);
+
   // <comment> component
   const Comment = Vue.extend({
     template: document.querySelector("template#comment-component").innerHTML,
