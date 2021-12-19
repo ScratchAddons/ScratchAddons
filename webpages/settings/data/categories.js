@@ -22,10 +22,10 @@ export default [
     name: chrome.i18n.getMessage("costumeEditorFeatures"),
   },
   {
-    id: "projectPlayer",
+    id: "player",
     parent: "editor",
     icon: "player",
-    name: chrome.i18n.getMessage("projectPlayerFeatures"),
+    name: chrome.i18n.getMessage("playerFeatures"),
   },
   {
     id: "editorOthers",

@@ -485,7 +485,7 @@ let fuse;
             },
           ]);
       } else if (manifest._categories[0] === "editor") {
-        const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor", "projectPlayer"]);
+        const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor", "player"]);
         if (addedCategories === 0) manifest._categories.push("editorOthers");
       } else if (manifest._categories[0] === "community") {
         const addedCategories = addCategoryIfTag(["profiles", "projectPage", "forums"]);

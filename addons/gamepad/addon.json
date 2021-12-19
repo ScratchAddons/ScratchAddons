@@ -30,7 +30,7 @@
       "id": "hide"
     }
   ],
-  "tags": ["editor", "projectPlayer", "featured"],
+  "tags": ["editor", "player", "featured"],
   "enabledByDefault": false,
   "versionAdded": "1.14.0",
   "dynamicEnable": true,
