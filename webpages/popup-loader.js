@@ -58,16 +58,17 @@ scratchAddons.isLightMode = false;
       scratchAddons._pending.getMsgCount.push(resolve);
       chrome.runtime.sendMessage("getMsgCount");
     });
-  scratchAddons.methods.getEnabledAddons = (tag) => new Promise((resolve) => {
-    chrome.runtime.sendMessage(
-      {
-        getEnabledAddons: {
-          tag,
+  scratchAddons.methods.getEnabledAddons = (tag) =>
+    new Promise((resolve) => {
+      chrome.runtime.sendMessage(
+        {
+          getEnabledAddons: {
+            tag,
+          },
         },
-      },
-      (res) => resolve(res)
-    );
-  });
+        (res) => resolve(res)
+      );
+    });
   port.onMessage.addListener((request) => {
     if (request.setMsgCount) {
       const { count } = request.setMsgCount;

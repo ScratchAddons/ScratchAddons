@@ -176,7 +176,8 @@ a.message-type-title-text {
 .comment-content-text {
   display: inline-block;
 }
-.comment-content-text > span, .comment-content-text .dom-element-renderer > * {
+.comment-content-text > span,
+.comment-content-text .dom-element-renderer > * {
   margin-right: 10px;
   /* For multi-line comments */
   white-space: break-spaces;

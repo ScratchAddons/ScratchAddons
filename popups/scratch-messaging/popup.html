@@ -16,8 +16,7 @@
 
     <!-- <dom-element-renderer> element template -->
     <template id="dom-element-renderer-component">
-      <div class="dom-element-renderer">
-      </div>
+      <div class="dom-element-renderer"></div>
     </template>
 
     <!-- <comment> element template -->
@@ -48,10 +47,7 @@
             <div class="comment-content-text">
               <span v-show="deleting">{{ messages.deletingMsg }}</span>
               <span v-show="deleted && !deleting">{{ messages.deletedMsg }}</span>
-              <dom-element-renderer
-                :element="thisComment.content"
-                v-show="!deleted"
-              ></dom-element-renderer>
+              <dom-element-renderer :element="thisComment.content" v-show="!deleted"></dom-element-renderer>
             </div>
             <a
               class="reply-button-comment"

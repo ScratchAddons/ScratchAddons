@@ -36,4 +36,4 @@ export default (value, enabledAddons) => {
   }
   pingifyTextNode(node);
   return node;
-}
+};

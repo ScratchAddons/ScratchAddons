@@ -2,22 +2,21 @@ import { escapeHTML } from "../../libraries/common/cs/autoescaper.js";
 import * as API from "./api.js";
 import fixCommentContent from "./fix-comment-content.js";
 
-const errorCodes =
-  {
-    isEmpty: "comment-error-empty",
-    // Two errors can be raised for rate limit;
-    // isFlood is the actual error, 429 is the status code
-    // ratelimit error will be unnecessary when #2505 is implemented
-    isFlood: "comment-error-ratelimit",
-    429: "comment-error-ratelimit",
-    isBad: "comment-error-filterbot-generic",
-    hasChatSite: "comment-error-filterbot-chat",
-    isSpam: "comment-error-filterbot-spam",
-    replyLimitReached: "comment-error-reply-limit",
-    // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
-    500: "comment-error-down",
-    503: "comment-error-down",
-  };
+const errorCodes = {
+  isEmpty: "comment-error-empty",
+  // Two errors can be raised for rate limit;
+  // isFlood is the actual error, 429 is the status code
+  // ratelimit error will be unnecessary when #2505 is implemented
+  isFlood: "comment-error-ratelimit",
+  429: "comment-error-ratelimit",
+  isBad: "comment-error-filterbot-generic",
+  hasChatSite: "comment-error-filterbot-chat",
+  isSpam: "comment-error-filterbot-spam",
+  replyLimitReached: "comment-error-reply-limit",
+  // isDisallowed, isIPMuted, isTooLong, isNotPermitted use default error
+  500: "comment-error-down",
+  503: "comment-error-down",
+};
 
 export default async ({ addon, msg, safeMsg }) => {
   let dateNow = Date.now();
@@ -37,8 +36,8 @@ export default async ({ addon, msg, safeMsg }) => {
     watch: {
       element(newElement, oldElement) {
         oldElement.replaceWith(newElement);
-      }
-    }
+      },
+    },
   });
   Vue.component("dom-element-renderer", DOMElementRenderer);
 
@@ -78,10 +77,7 @@ export default async ({ addon, msg, safeMsg }) => {
           return regex.test(limitedValue);
         };
         if (shouldCaptureComment(this.replyBoxValue)) {
-          alert(
-            chrome.i18n
-              .getMessage("captureCommentError", [chrome.i18n.getMessage("captureCommentPolicy")])
-          );
+          alert(chrome.i18n.getMessage("captureCommentError", [chrome.i18n.getMessage("captureCommentPolicy")]));
           return;
         }
         this.postingComment = true;
@@ -98,52 +94,57 @@ export default async ({ addon, msg, safeMsg }) => {
             commenteeId: this.thisComment.authorId,
           }),
           addon.self.getEnabledAddons(),
-        ]).then(([username, userId, { id, content }, enabledAddons]) => {
-          this.replying = false;
-          let domContent = fixCommentContent(content, enabledAddons);
-          if (this.resourceType !== "user") {
-            // We need to append the replyee ourselves
-            const newElement = document.createElement("div");
-            newElement.append(Object.assign(document.createElement("a"), {
-              href: `https://scratch.mit.edu/users/${this.thisComment.author}`,
-              textContent: "@" + this.thisComment.author,
-            }));
-            newElement.append(" ");
-            newElement.append(...domContent.childNodes);
-            domContent = newElement;
-          }
-          const newCommentPseudoId = `${this.resourceType[0]}_${id}`;
-          Vue.set(this.commentsObj, newCommentPseudoId, {
-            author: username,
-            authorId: userId,
-            content: domContent,
-            date: new Date().toISOString(),
-            children: null,
-            childOf: parent_pseudo_id,
-          });
-          this.commentsObj[parent_pseudo_id].children.push(newCommentPseudoId);
-          this.replyBoxValue = "";
-        }).catch((e) => {
-          // Error comes from sendComment
-          let errorMsg;
-          if (e instanceof API.DetailedError) {
-            if (e.details.muteStatus) {
-              errorMsg = msg("comment-mute") + " ";
-              errorMsg += msg("comment-cannot-post-for", {
-                mins: Math.max(Math.ceil((e.details.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
-              });
-            } else {
-              errorMsg = msg(errorCodes[e.details.error] || "send-error");
+        ])
+          .then(([username, userId, { id, content }, enabledAddons]) => {
+            this.replying = false;
+            let domContent = fixCommentContent(content, enabledAddons);
+            if (this.resourceType !== "user") {
+              // We need to append the replyee ourselves
+              const newElement = document.createElement("div");
+              newElement.append(
+                Object.assign(document.createElement("a"), {
+                  href: `https://scratch.mit.edu/users/${this.thisComment.author}`,
+                  textContent: "@" + this.thisComment.author,
+                })
+              );
+              newElement.append(" ");
+              newElement.append(...domContent.childNodes);
+              domContent = newElement;
             }
-          } else if (e instanceof API.HTTPError) {
-            errorMsg = msg(errorCodes[e.details.code] || "send-error");
-          } else {
-            errorMsg = e.toString();
-          }
-          alert(errorMsg);
-        }).finally(() => {
-          this.postingComment = false;
-        });
+            const newCommentPseudoId = `${this.resourceType[0]}_${id}`;
+            Vue.set(this.commentsObj, newCommentPseudoId, {
+              author: username,
+              authorId: userId,
+              content: domContent,
+              date: new Date().toISOString(),
+              children: null,
+              childOf: parent_pseudo_id,
+            });
+            this.commentsObj[parent_pseudo_id].children.push(newCommentPseudoId);
+            this.replyBoxValue = "";
+          })
+          .catch((e) => {
+            // Error comes from sendComment
+            let errorMsg;
+            if (e instanceof API.DetailedError) {
+              if (e.details.muteStatus) {
+                errorMsg = msg("comment-mute") + " ";
+                errorMsg += msg("comment-cannot-post-for", {
+                  mins: Math.max(Math.ceil((e.details.muteStatus.muteExpiresAt - Date.now() / 1000) / 60), 1),
+                });
+              } else {
+                errorMsg = msg(errorCodes[e.details.error] || "send-error");
+              }
+            } else if (e instanceof API.HTTPError) {
+              errorMsg = msg(errorCodes[e.details.code] || "send-error");
+            } else {
+              errorMsg = e.toString();
+            }
+            alert(errorMsg);
+          })
+          .finally(() => {
+            this.postingComment = false;
+          });
       },
       deleteComment() {
         if (this.deleteStep === 0) {
@@ -159,16 +160,19 @@ export default async ({ addon, msg, safeMsg }) => {
           resourceType: this.resourceType,
           resourceId: this.resourceId,
           commentId: Number(this.commentId.substring(2)),
-        }).then(() => {
-          if (this.isParent) this.thisComment.children = [];
-        }).catch((e) => {
-          console.error("Error while deleting a comment: ", e);
-          alert(msg("delete-error"));
-          this.deleteStep = 0;
-          this.deleted = false;
-        }).finally(() => {
-          this.deleting = false;
-        });
+        })
+          .then(() => {
+            if (this.isParent) this.thisComment.children = [];
+          })
+          .catch((e) => {
+            console.error("Error while deleting a comment: ", e);
+            alert(msg("delete-error"));
+            this.deleteStep = 0;
+            this.deleted = false;
+          })
+          .finally(() => {
+            this.deleting = false;
+          });
       },
     },
     computed: {
