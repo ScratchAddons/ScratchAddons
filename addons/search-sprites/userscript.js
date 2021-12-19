@@ -43,7 +43,8 @@ export default async function({ addon, global, console }) {
           reduxCondition: (state) => !state.scratchGui.mode.isPlayerOnly,
         });
 
-        let sprite_selector_container = document.getElementsByClassName('sprite-selector_scroll-wrapper_3NNnc')[0];
+        sprites_container = document.getElementsByClassName('sprite-selector_items-wrapper_4bcOj')[0];
+        sprite_selector_container = document.getElementsByClassName('sprite-selector_scroll-wrapper_3NNnc')[0];
         sprite_selector_container.insertBefore(search_box, document.getElementsByClassName('sprite-selector_items-wrapper_4bcOj')[0]);
     }    
 }
