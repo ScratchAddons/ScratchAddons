@@ -456,7 +456,7 @@ let fuse;
         ? "theme"
         : manifest.tags.includes("community")
         ? "community"
-		: manifest.tags.includes("player")
+        : manifest.tags.includes("player")
         ? "player"
         : "editor";
 
@@ -486,12 +486,12 @@ let fuse;
               category: "themesForWebsite",
             },
           ]) ||
-		  addCategoryIfTag([
+          addCategoryIfTag([
             {
               tag: "player",
               category: "themesForPlayer",
             },
-          ])
+          ]);
       } else if (manifest._categories[0] === "editor") {
         const addedCategories = addCategoryIfTag(["codeEditor", "costumeEditor"]);
         if (addedCategories === 0) manifest._categories.push("editorOthers");

@@ -20,7 +20,7 @@ export default async function ({ template }) {
       addonIconSrc() {
         const map = {
           editor: "puzzle",
-		  player: "player",
+          player: "player",
           community: "web",
           theme: "brush",
           easterEgg: "egg-easter",
