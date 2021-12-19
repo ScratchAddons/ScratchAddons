@@ -10,13 +10,13 @@
   "userscripts": [
     {
       "url": "userscript.js",
-      "matches": ["https://scratch.mit.edu/projects/514649494", "https://scratch.mit.edu/projects/514649494/*"]
+      "matches": ["https://scratch.mit.edu/projects/413751680", "https://scratch.mit.edu/projects/413751680/*"]
     }
   ],
   "userstyles": [
     {
       "url": "hideuntilscript.css",
-      "matches": ["https://scratch.mit.edu/projects/514649494", "https://scratch.mit.edu/projects/514649494/*"]
+      "matches": ["https://scratch.mit.edu/projects/413751680", "https://scratch.mit.edu/projects/413751680/*"]
     }
   ],
   "tags": [],

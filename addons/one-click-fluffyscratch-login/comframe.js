@@ -1,4 +1,5 @@
 const FLUFFYSCRATCH_ORIGIN = "https://fluffyscratch.hampton.pw";
+const { projectId } = (await(await fetch("consts.json")).json());
 window.parent.postMessage({oneClickFluffyScratchLogin: true, loaded: true}, FLUFFYSCRATCH_ORIGIN)
 let username;
 chrome.runtime.sendMessage({contentScriptReady:{url:location.href}}, ({globalState: {auth}}) => {
@@ -21,6 +22,6 @@ window.addEventListener("message", e=>{
       setTemporaryState:true,
       key,
       value: {publicCode: e.data.publicCode, redirect: e.data.redirect}
-    }, () => window.top.location.href = "https://scratch.mit.edu/projects/514649494/#" + key)
+    }, () => window.top.location.href = "https://scratch.mit.edu/projects/"+projectId+"/#" + key)
   }
 })
