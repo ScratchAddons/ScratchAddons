@@ -1,4 +1,4 @@
-if(location.href === "https://scratch.mit.edu/projects/618552781/embed") {
+if (location.href === "https://scratch.mit.edu/projects/618552781/embed") {
   location.href = chrome.runtime.getURL("addons/one-click-fluffyscratch-login/comframe.html");
 }
 
