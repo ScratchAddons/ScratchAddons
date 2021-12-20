@@ -156,8 +156,8 @@ export async function fetchMigratedComments(
   }
   const getCommentUrl = (commId) =>
     resourceType === "project"
-      ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}&sareferer`
-      : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}&sareferer`;
+      ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}?sareferer`
+      : `https://api.scratch.mit.edu/studios/${resourceId}/comments/${commId}?sareferer`;
   const getRepliesUrl = (commId, offset) =>
     resourceType === "project"
       ? `https://api.scratch.mit.edu/users/${projectAuthor}/projects/${resourceId}/comments/${commId}/replies?offset=${offset}&limit=40&nocache=${Date.now()}&sareferer`
