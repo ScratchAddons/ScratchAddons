@@ -280,6 +280,7 @@
 }
 #comments #comment-form form {
   margin-left: 16px;
+  width: calc(100% - 62px);
 }
 #comments .comment form {
   margin-left: 8px;
@@ -288,8 +289,9 @@
 }
 #comments #comment-form textarea,
 #comments .comment form textarea {
-  width: 844px;
-  height: 84px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 112px;
   padding: 12px 16px;
 }
 #comments #comment-form .button,
@@ -317,9 +319,6 @@
 }
 .sa-emoji-button-r2 .sa-emoji-picker:not(.sa-emoji-picker-offscreen) {
   top: 54px;
-}
-#comments .reply .comment form textarea {
-  width: 784px;
 }
 #comments .more-replies {
   background-color: var(--darkWww-blue, #eaf1fc);
