@@ -21,6 +21,9 @@ body,
   color: var(--darkWww-page-text, #575e75);
   text-shadow: none;
 }
+::selection {
+  background-color: var(--darkWww-button-transparent25, rgba(77, 151, 255, 0.25));
+}
 .box .box-head h1,
 .box .box-head h2,
 .box .box-head h3,

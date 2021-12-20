@@ -313,6 +313,11 @@ body > #pagewrapper {
   border-bottom: none;
   border-top-right-radius: 8px;
 }
+.postmsg ::selection {
+  /* Don't break [color=transparent] hidden text */
+  background-color: var(--darkWww-button-variant, #4280d7);
+  color: var(--darkWww-button-text, white);
+}
 .blockpost .clearer {
   display: none;
 }
