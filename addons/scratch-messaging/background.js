@@ -119,9 +119,6 @@ export default async function ({ addon, global, console, setTimeout, setInterval
         .fetchIsLoggedIn()
         .then((isLoggedIn) => sendResponse(data.ready ? data : { error: isLoggedIn ? "notReady" : "loggedOut" }));
       return true;
-    } else if (popupRequest.postComment) {
-      sendComment(popupRequest.postComment).then((status) => sendResponse(status));
-      return true;
     } else if (popupRequest.retrieveComments) {
       const { resourceType, resourceId, commentIds } = popupRequest.retrieveComments;
       retrieveComments(resourceType, resourceId, commentIds)
@@ -135,17 +132,6 @@ export default async function ({ addon, global, console, setTimeout, setInterval
       return true;
     } else if (popupRequest === "markAsRead") {
       addon.account.clearMessages();
-    } else if (popupRequest.deleteComment) {
-      const { resourceType, resourceId, commentId } = popupRequest.deleteComment;
-      deleteComment({ resourceType, resourceId, commentId })
-        .then((res) => sendResponse(res))
-        .catch((err) => sendResponse(err));
-      return true;
-    } else if (popupRequest.dismissAlert) {
-      dismissAlert(popupRequest.dismissAlert)
-        .then((res) => sendResponse(res))
-        .catch((err) => sendResponse(err));
-      return true;
     }
   };
   chrome.runtime.onMessage.addListener(messageListener);
@@ -365,120 +351,5 @@ export default async function ({ addon, global, console, setTimeout, setInterval
     }
     pingifyTextNode(node);
     return node.innerHTML.trimStart();
-  }
-
-  async function sendComment({ resourceType, resourceId, content, parent_id, commentee_id, commenteeUsername }) {
-    const xToken = await addon.auth.fetchXToken();
-    const username = await addon.auth.fetchUsername();
-    const userId = await addon.auth.fetchUserId();
-    if (resourceType === "project" || resourceType === "gallery") {
-      const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
-      const res = await fetch(`https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}?sareferer`, {
-        headers: {
-          "content-type": "application/json",
-          "x-csrftoken": addon.auth.csrfToken,
-          "x-token": xToken,
-        },
-        body: JSON.stringify({ content, parent_id, commentee_id }),
-        method: "POST",
-      });
-      if (res.ok) {
-        const json = await res.json();
-        if (json.rejected)
-          return {
-            error: json.rejected,
-            muteStatus: json.status?.mute_status || null,
-          };
-        const mention = `<a href=\"https://scratch.mit.edu/users/${commenteeUsername}\">@${commenteeUsername}</a>`;
-        return {
-          commentId: json.id,
-          username: username,
-          userId: userId,
-          content: `${mention} ${fixCommentContent(json.content)}`,
-        };
-      } else {
-        return { error: res.status };
-      }
-    }
-    return new Promise((resolve) => {
-      // For some weird reason, this only works with XHR in Chrome...
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/add/?sareferer`, true);
-      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
-      xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
-
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          try {
-            const dom = parser.parseFromString(xhr.responseText, "text/html");
-            const comment = dom.querySelector(".comment ");
-            const error = dom.querySelector("script#error-data");
-            if (comment) {
-              const commentId = Number(comment.getAttribute("data-comment-id"));
-              const content = fixCommentContent(dom.querySelector(".content"));
-              resolve({ commentId, username: username, userId: userId, content });
-            } else if (error) {
-              const json = JSON.parse(error.textContent);
-              resolve({
-                error: json.error,
-                muteStatus: json.status?.mute_status || null,
-              });
-            } else resolve({ error: 200 }); // Shouldn't ever happen, just in case
-          } catch (err) {
-            resolve({ error: err });
-          }
-        } else resolve({ error: xhr.status });
-      };
-
-      xhr.send(JSON.stringify({ content, parent_id, commentee_id }));
-    });
-  }
-
-  async function deleteComment({ resourceType, resourceId, commentId }) {
-    const xToken = await addon.auth.fetchXToken();
-    if (resourceType === "project" || resourceType === "gallery") {
-      const resourceTypeUrl = resourceType === "project" ? "project" : "studio";
-      const res = await fetch(
-        `https://api.scratch.mit.edu/proxy/comments/${resourceTypeUrl}/${resourceId}/comment/${commentId}?sareferer`,
-        {
-          headers: {
-            "content-type": "application/json",
-            "x-csrftoken": addon.auth.csrfToken,
-            "x-token": xToken,
-          },
-          method: "DELETE",
-        }
-      );
-      if (res.ok) return 200;
-      else return { error: res.status };
-    }
-    return new Promise((resolve) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", `https://scratch.mit.edu/site-api/comments/${resourceType}/${resourceId}/del/?sareferer`, true);
-      xhr.setRequestHeader("x-csrftoken", addon.auth.csrfToken);
-      xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
-
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          resolve(200);
-        } else resolve({ error: xhr.status });
-      };
-
-      xhr.send(JSON.stringify({ id: String(commentId) }));
-    });
-  }
-
-  async function dismissAlert(alertId) {
-    const res = await fetch("https://scratch.mit.edu/site-api/messages/messages-delete/?sareferer", {
-      headers: {
-        "content-type": "application/json",
-        "x-csrftoken": addon.auth.csrfToken,
-        "x-requested-with": "XMLHttpRequest",
-      },
-      body: JSON.stringify({ alertType: "notification", alertId }),
-      method: "POST",
-    });
-    if (!res.ok) return { error: res.status };
-    return { success: true };
   }
 }
