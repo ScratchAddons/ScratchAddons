@@ -18,13 +18,60 @@ scratchAddons._pending = {
 };
 scratchAddons.l10n = new WebsiteLocalizationProvider();
 scratchAddons.isLightMode = false;
+scratchAddons.cookies = new Map();
+
+const promisify =
+  (callbackFn) =>
+  (...args) =>
+    new Promise((resolve) => callbackFn(...args, resolve));
+
+function getCookieValue(name) {
+  return new Promise((resolve) => {
+    chrome.cookies.get(
+      {
+        url: "https://scratch.mit.edu/",
+        name,
+      },
+      (cookie) => {
+        if (cookie && cookie.value) resolve(cookie.value);
+        else resolve(null);
+      }
+    );
+  });
+}
+
+async function refetchCookies() {
+  const scratchLang = (await getCookieValue("scratchlanguage")) || navigator.language;
+  const csrfToken = await getCookieValue("scratchcsrftoken");
+  scratchAddons.cookies.set("scratchlanguage", scratchLang);
+  scratchAddons.cookies.set("scratchcsrftoken", csrfToken);
+}
+
+async function refetchSession(addon) {
+  let res;
+  let d;
+  if (scratchAddons.isFetchingSession) return;
+  scratchAddons.isFetchingSession = true;
+  addon.auth._refresh();
+  try {
+    res = await fetch("https://scratch.mit.edu/session/?sareferer", {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+    d = await res.json();
+  } catch (e) {
+    d = {};
+    scratchAddons.console.warn("Session fetch failed: ", e);
+    if ((res && !res.ok) || !res) setTimeout(() => this.refetchSession(addon), 60000);
+  }
+  scratchAddons.session = d;
+  addon.auth._update(d);
+  scratchAddons.isFetchingSession = false;
+}
 
 (async () => {
   const addonId = location.pathname.split("/")[2];
-  const promisify =
-    (callbackFn) =>
-    (...args) =>
-      new Promise((resolve) => callbackFn(...args, resolve));
 
   const sendMessage = promisify(chrome.runtime.sendMessage.bind(chrome.runtime));
   const popupData = await sendMessage({
@@ -33,7 +80,6 @@ scratchAddons.isLightMode = false;
     },
   });
   scratchAddons.globalState = {
-    auth: popupData.auth,
     addonSettings: popupData.settings,
   };
 
@@ -59,16 +105,18 @@ scratchAddons.isLightMode = false;
       chrome.runtime.sendMessage("getMsgCount");
     });
   scratchAddons.methods.getEnabledAddons = (tag) =>
-    new Promise((resolve) => {
-      chrome.runtime.sendMessage(
-        {
-          getEnabledAddons: {
-            tag,
-          },
-        },
-        (res) => resolve(res)
-      );
+    sendMessage({
+      getEnabledAddons: {
+        tag,
+      },
     });
+
+  await refetchCookies();
+
+  const addon = new Addon({
+    id: addonId,
+  });
+
   port.onMessage.addListener((request) => {
     if (request.setMsgCount) {
       const { count } = request.setMsgCount;
@@ -86,13 +134,15 @@ scratchAddons.isLightMode = false;
       );
       return;
     }
+    if (request.refetchSession) {
+      refetchCookies().then(() => refetchSession(addon));
+      return;
+    }
   });
 
-  const addon = new Addon({
-    id: addonId,
-  });
   const globalObj = Object.create(null);
   await scratchAddons.l10n.loadByAddonId(addonId);
+  refetchSession(addon); // No await intended; session fetched asynchronously
   const msg = (key, placeholders) =>
     scratchAddons.l10n.get(key.startsWith("/") ? key.slice(1) : `${addonId}/${key}`, placeholders);
   msg.locale = scratchAddons.l10n.locale;

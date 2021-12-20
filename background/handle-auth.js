@@ -35,7 +35,7 @@ chrome.cookies.onChanged.addListener(({ cookie, cause }) => {
     } else if (cookie.storeId === scratchAddons.cookieStoreId) {
       checkSession();
     }
-    notifyContentScripts(cookie);
+    notify(cookie);
   }
 });
 
@@ -103,7 +103,7 @@ async function checkSession() {
   isChecking = false;
 }
 
-function notifyContentScripts(cookie) {
+function notify(cookie) {
   if (cookie.name === "scratchlanguage") return;
   const storeId = cookie.storeId;
   const cond = {};
@@ -116,4 +116,6 @@ function notifyContentScripts(cookie) {
   chrome.tabs.query(cond, (tabs) =>
     tabs.forEach((tab) => chrome.tabs.sendMessage(tab.id, "refetchSession", () => void chrome.runtime.lastError))
   );
+  // Notify popups, since they also fetch sessions independently
+  scratchAddons.sendToPopups({ refetchSession: true });
 }
