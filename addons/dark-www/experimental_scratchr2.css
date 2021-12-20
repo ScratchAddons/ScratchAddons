@@ -613,7 +613,11 @@ input.link.black {
   height: 12px;
   background-color: white;
   background-position: 1px 1px;
+  background-size: 16px !important;
   border-radius: 3px;
+}
+.markItUp .markItUpButton1 a {
+  height: 12px !important;
 }
 .markItUpHeader > ul > .markItUpDropMenu {
   background-image: none !important;
@@ -632,9 +636,15 @@ input.link.black {
     no-repeat 115% 60%;
   pointer-events: none;
 }
+.markItUpHeader > ul > .sa-forum-toolbar-link::after {
+  content: none;
+}
 .markItUpHeader > ul > .markItUpDropMenu > a {
   width: 16px;
   margin-right: 1px;
+}
+.sa-forum-toolbar-link > a {
+  width: 12px !important;
 }
 .markItUp .browser-os-button a {
   margin-left: 2px;
