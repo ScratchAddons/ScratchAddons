@@ -224,6 +224,7 @@ export default async ({ addon, msg, safeMsg }) => {
       messages: [],
       comments: {},
       error: null,
+      hasCustomError: false,
 
       username: null,
       msgCount: null,
@@ -268,6 +269,11 @@ export default async ({ addon, msg, safeMsg }) => {
         yourProfileMsg: msg("your-profile"),
         loadingMsg: msg("loading"),
         loggedOutMsg: msg("logged-out"),
+        serverErrorMsg: msg("server-error"),
+        networkErrorMsg: msg("network-error"),
+        unknownFatalErrorMsg: msg("unknown-fatal-error"),
+        reportBugMsg: msg("report-bug"),
+        copyMsg: msg("copy"),
         loadingCommentsMsg: msg("loading-comments"),
         reloadMsg: msg("reload"),
         dismissMsg: msg("dismiss"),
@@ -298,6 +304,10 @@ export default async ({ addon, msg, safeMsg }) => {
       },
     },
     computed: {
+      feedbackUrl() {
+        const manifest = chrome.runtime.getManifest();
+        return `https://scratchaddons.com/feedback/?ext_version=${manifest.version_name}&utm_source=extension&utm_medium=messagingcrash&utm_campaign=v${manifest.versions}`;
+      },
       profilesOrdered() {
         // Own profile first, then others
         return [
@@ -316,6 +326,7 @@ export default async ({ addon, msg, safeMsg }) => {
         return (
           this.messagesReady &&
           this.commentsReady &&
+          !this.error &&
           this.showAllMessages === false &&
           this.messages.length > this.showingMessagesAmt
         );
@@ -373,6 +384,9 @@ export default async ({ addon, msg, safeMsg }) => {
       },
       reloadPage() {
         location.reload();
+      },
+      copyToClipboard(message) {
+        navigator.clipboard.writeText(message);
       },
 
       // Objects
@@ -480,13 +494,17 @@ export default async ({ addon, msg, safeMsg }) => {
             elementObject.loadedComments = true;
           })
           .catch((e) => {
-            if (e instanceof API.HTTPError || String(e).includes("NetworkError")) {
-              console.warn(e);
-              this.error = "loggedOut";
+            if (e instanceof API.HTTPError) {
+              console.warn(e, e.code);
+              this.error = e.code < 500 ? "loggedOut" : "serverError";
+              return;
+            } else if (String(e).includes("NetworkError")) {
+              this.error = "networkError";
               return;
             }
             console.error(e);
-            this.error = "loggedOut";
+            this.error = String(e);
+            this.hasCustomError = true;
           });
       },
 

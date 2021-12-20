@@ -410,9 +410,20 @@
 
       <!-- Show errors, loading, etc. -->
       <div class="status-container">
-        <span v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</span>
-        <span v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</span>
-        <span v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</span>
+        <p v-show="error === 'notReady'">{{ uiMessages.loadingMsg }}</p>
+        <p v-show="error === 'loggedOut'">{{ uiMessages.loggedOutMsg }}</p>
+        <p v-show="error === 'serverError'">{{ uiMessages.serverErrorMsg }}</p>
+        <p v-show="error === 'networkError'">{{ uiMessages.networkErrorMsg }}</p>
+        <p v-show="messagesReady && !commentsReady">{{ uiMessages.loadingCommentsMsg }}</p>
+        <p v-show="hasCustomError">
+          {{ uiMessages.unknownFatalErrorMsg }}
+          <a target="_blank" :href="feedbackUrl" rel="noopener noreferrer"> {{ uiMessages.reportBugMsg }} </a>
+          <br />
+          <code class="error-message">{{ error }}</code>
+          (
+          <a @click="copyToClipboard(error)">{{ uiMessages.copyMsg }}</a>
+          )
+        </p>
         <button @click="reloadPage()" v-show="commentsReady && !canShowMoreMessages">
           <img class="small-icon" src="../../images/icons/reload.svg" /><span>{{ uiMessages.reloadMsg }}</span>
         </button>
