@@ -3,8 +3,6 @@ export default async function ({ addon, global, console, setTimeout, setInterval
   let data;
   let pendingAuthChange = false;
   let addonEnabled = true;
-  // reuse one DOMParser
-  const parser = new DOMParser();
   const defaultUsername = await addon.auth.fetchUsername();
 
   const getDefaultData = (username) => ({
